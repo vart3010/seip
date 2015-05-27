@@ -1,0 +1,21 @@
+pequiven_unrealized_production_create:
+    path: /{productReport}/create
+    defaults:
+        _controller: pequiven.controller.unrealized_production:createAction
+        _sylius:
+            form: pequiven_seipbundle_dataload_production_unrealizedproduction
+    methods: [GET|POST]
+    
+pequiven_unrealized_production_update:
+    path: /{id}/update
+    defaults:
+        _controller: pequiven.controller.unrealized_production:updateAction
+        _sylius:
+            form: pequiven_seipbundle_dataload_production_unrealizedproduction
+    methods: [GET|POST|PUT]
+    
+pequiven_unrealized_production_delete:
+    path: /{id}/delete
+    defaults:
+        _controller: pequiven.controller.unrealized_production:deleteAction
+    methods: [GET|DELETE]

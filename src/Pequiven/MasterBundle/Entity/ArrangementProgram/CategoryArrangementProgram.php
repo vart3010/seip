@@ -3,14 +3,16 @@
 namespace Pequiven\MasterBundle\Entity\ArrangementProgram;
 
 use Doctrine\ORM\Mapping as ORM;
+use Pequiven\MasterBundle\Model\ArrangementProgram\CategoryArrangementProgram as modelCategoryArrangementProgram;
 
 /**
  * Categoria del programa de gestion
  *
  * @ORM\Table("seip_c_category_arrangement_program")
+ * @ORM\Entity(repositoryClass="Pequiven\MasterBundle\Repository\ArrangementProgram\CategoryArrangementProgram")
  * @ORM\Entity
  */
-class CategoryArrangementProgram
+class CategoryArrangementProgram extends modelCategoryArrangementProgram
 {
     /**
      * @var integer

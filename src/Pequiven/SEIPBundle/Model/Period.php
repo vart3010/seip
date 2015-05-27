@@ -18,6 +18,22 @@ namespace Pequiven\SEIPBundle\Model;
  */
 abstract class Period implements PeriodInterface
 {
+    
+    /**
+     * Se ven todos los períodos
+     */
+    const VIEW_ALL_PERIODS = 0;
+    
+    /**
+     * 
+     */
+    const VIEW_ONLY_PERIOD_ACTIVE = 1;
+    
+    function isActive()
+    {
+        return $this->getStatus();
+    }
+    
     function getYear()
     {
         return $this->getDateStart()->format('Y');

@@ -3,7 +3,27 @@ pequiven_seip:
   #Index
     seip: Sistema Estadístico de Información Petroquímica
     home: Página de inicio
-
+    name: Nombre
+    type_report: Tipo de reporte
+    add: Añadir
+    products: Productos
+    ref: Referencia
+    total: Total
+    totalPlan: Total planificado
+    totalReal: Total real
+    totalStops: Total dias de paradas
+    totalHours: Total de horas
+    days: Dias
+    plan_n: "Plan Dia %n%:"
+    real_n: "Real Dia %n%:"
+    day_n: "Dia %n%:"
+    percentage: Porcentaje
+    gross: Bruta
+    net: Neta
+    hours_n: %n% Horas
+    details: Detalles
+    plants: Plantas
+    
     #Login
     sign_in: Ingresar
     remind_me: Recuerdame
@@ -43,6 +63,13 @@ pequiven_seip:
     direction: Dirección
     rol: Rol
     users: Usuarios SEIP
+    period: Periodo
+    pre_planning_user:
+        status:
+            draft: Borrador
+            imported: Importado
+            in_review: En revisión
+            approved: Aprobado
     user:
         user: Usuario
         localization:
@@ -64,11 +91,17 @@ pequiven_seip:
         gerenciaSecond:  Gerencia de 2da linea
         rol: Rol
         actions: Acciones
+        totalPlan: TP
+        totalReal: TR
+        percentage: "%"
     results:
         results: Resultados
         resultsStrategics: Resultados Estratégicos
+        resultsIndicatorsStrategics: Indicadores Estratégicos
+        resultsObjetivesStrategics: Objetivos Estratégicos
         resultsByGerencia: Resultados %gerencia%
-        result: Resultado
+        resultsByLineStrategic: Resultados %linea_estrategica%
+        result: Aporte al objetivo
         weight: Peso
         no_results: No hay resultados asociados al objetivo.
         type_result: 
@@ -115,6 +148,11 @@ pequiven_seip:
         export_xls: Exportar
         export_result: Exportar Resultados
         refresh: Refrescar
+        run_planning: Ejecutar planificación
+        run_plant: Ejecutar planificación de planta
+    question:
+        want_create_production_details_from_planning: ¿Desea crear los detalles de producción a partir del presupuesto de producción?
+        want_create_plant_from_planning: ¿Desea crear los detalles de servicios de la planta?
     edit: Editar
     save: Guardar
     cancel: Cancelar
@@ -147,6 +185,12 @@ pequiven_seip:
     selected: Seleccionado(s)
     all: Todos
     search: Buscar
+    product:
+        type:
+            product: Producto
+            service: Servicio
+            products: Productos
+            services: Servicios
     notify:
         one_similar_notification: Una notificación similar
         n_similar_notifications: %d notificaciones similares
@@ -186,6 +230,8 @@ pequiven_seip:
         user_not_quantity_items: El usuario "%user%" no tiene ningún item asociado para su evaluación.
         the_user_is_not_assigned_second_line_management: El usuario "%user%" no tiene asignada la gerencia de segunda línea.
         the_user_is_not_assigned_first_line_management: El usuario "%user%" no tiene asignada la gerencia de primera línea.
+        the_first_line_management_no_audit: La gerencia de primera línea "%gerenciaFirst%", no tiene auditoria.
+        the_second_line_management_no_audit: La gerencia de segunda línea "%gerenciaSecond%", no tiene auditoria.
     pre_planning:
         pre_planning: Planificación %period%
         list: Lista
@@ -198,9 +244,13 @@ pequiven_seip:
             in_review: En revisión
             approved: Aprobado
             required: Requerido
+            imported_and_deleted: Eliminado
         pre_pre_planning_management_x: Pre-planificando gerencia "%gerencia%".
     pdf:
         pageFooter: Página %page%/%totalPage%
+    cumulative: Acumulado
+    form:
+        dayX: Día %x%
     security:
         permission_denied: Permiso denegado!
         403:
@@ -274,7 +324,77 @@ pequiven_seip:
             role_seip_planning_operation_recalculate_result: Usted no tiene permiso para realizar la operación de recalcular resultados.
         error:
             the_pre_planning_is_not_enabled: La pre-planificacion no se encuentra habilitada.
+    fail:
+        type:
+            internal: Interna
+            external: Externa
+    report_template:
+        report_template: Planificación de producción
+        type:
+            production: Producción
+            inventory: Inventario
+            consumption_services: Consumo de servicios
+            raw_materials: Consumo de materia prima
+        raw_material: Consumo de Materia prima
+        details_raw_material: Detalle de consumo de materia prima
+    product_report:
+        product_report: Producto
+        inventory:
+            inventory: Inventario
+            inventorys: Inventario
+        type:
+            final: Producto final
+            byproduct: Sub-Producto
+        product_detail_daily_months: Detalles de producción
+        product_detail_daily_month: Detalle de producción
+        unrealized_production:
+            unrealized_production: Producción No Realizada
+        question:
+            delete: Desea eliminar este detalle de producción
+    raw_material:
+        type:
+            internal: Interna
+            external: Externa
+    raw_material_consumption_planning:
+        raw_material_consumption_planning: Presupuesto de consumo de materia prima
+        question:
+            delete: Desea eliminar este detalle de consumo de materia prima
+    range:
+        range: Rango de distribución
+        ranges: Rangos de distribución
+        type:
+            fixed_value: Valor fijo
+            capacity_factor: Factor de capacidad
+            percentage_budget: Porcentaje de presupuesto
+        question:
+            delete: Desea eliminar este rango de distribución
+    product_planning:
+        product_planning: Presupuesto de producción
+        without_stopping_day: Sin días de parada.
+    plant_report:
+        plant_report: Reporte de planta
+        plant_stop_planning: Planificacion de parada
+    consumer_planning_service:
+        consumer_planning_service: Consumo de servicios
+        details_consumer_planning_service: Detalle de consumo de servicios
+
+    month:
+        0: Enero
+        1: Febrero
+        2: Marzo
+        3: Abril
+        4: Mayo
+        5: Junio
+        6: Julio
+        7: Agosto
+        8: Septiembre
+        9: Octubre
+        10: Noviembre
+        11: Diciembre
         
+    day_stop:
+        day_stop: Dia de parada
+            
 "Bad credentials": Nombre de usuario o contraseña invalida
 "User account is disabled.": Cuenta de usuario desactivada
                     
@@ -340,9 +460,11 @@ result:
         columnGerenciaSecond: Gerencia 2da Línea
     results: Resultados
     objetiveOperative: Objetivos Operativos
+    objetiveStrategics: Objetivos Estratégicos
     not_objetives_in_level: No existen objetivos asociados en este nivel
     captionObjetiveOperative: Resultados Objetivos Operativos
     captionObjetiveTactical: Resultados Objetivos Tacticos
+    captionObjetiveStrategic: Resultados Objetivos Estratégicos
     subCaptionObjetiveOperative: Período 2014
     
 pequiven_seip_box_arrangementprogram_summary: Programas de gestión pendientes.
@@ -351,9 +473,80 @@ pequiven_seip_box_tactic_summaryindicatorcharged: Indicadores tacticos.
 pequiven_seip_box_tactic_summaryindicatorchargedbygroup: Indicadores tacticos por gerencia.
 pequiven_seip_box_operative_summaryindicatorcharged: Indicadores operativos.
 pequiven_seip_box_operative_summaryindicatorchargedbygroup: Indicadores operativos por gerencia.
-pequiven_seip_box_operative_genericdashboard: Bienvenida general a los usuarios.
-pequiven_seip_box_dashboard_planningdashboard: Bienvenida para los trabajadores de planificacion.
+pequiven_seip_box_genericdashboardbox: Bienvenida general a los usuarios.
+pequiven_seip_box_dashboard_planningdashboard: Bienvenida para los trabajadores de planificación
+pequiven_seip_box_linestrategic_icons_indicator_dashboard: Indcadores Estratégicos (Íconos)
+pequiven_seip_box_linestrategic_icons_indicator_by_line_dashboard: Indicadores Estratégicos por Línea Estratégica
+pequiven_seip_box_linestrategic_icons_dashboard: Línea Estratégicas (Íconos)
+pequiven_seip_box_linestrategic_iconsnavbar : Línea Estratégicas (Barra de Navegación)
+pequiven_indicator_box_iconssummary: Indicadores Estratégicos (Librito)
 
 miscellaneous:
     noCharged: No Cargado
     noApply: No Aplica
+
+statisticsAndInformation: Estadística e Información
+internalAudit: Auditoría Interna
+
+        
+empty:
+    features_indicator: No hay ningún punto de atención.
+    product_report: No hay productos agregados.
+    product_planning: No hay ningún presupuesto de producción.
+    range: No hay rango de distribucion.
+    product_detail_daily_months: No hay detalles de producción.
+    no_raw_material: Sin materia prima.
+    no_details_raw_material: No hay detalles de consumo de materia prima.
+    plant_reports: No hay plantas agregadas.
+    plant_stop_planning: No hay planificación de paradas.
+    no_service: Sin servicios.
+    consumer_planning_services: No hay servicios.
+    no_details_service: No hay detalles del consumo de servicios.
+    inventorys: No hay detalles de inventario.
+    unrealized_productions: No hay detalles de producción no realizada.
+    day_stops: No hay detalles de paradas.
+        
+chart:
+    type:
+        indicatorsAssociatedDoughnut: Indicadores Asociados con resultados (Dona).
+        indicatorsAssociatedRealPlanWithResult: Indicadores Asociados con real, plan y resultados (Columna y 2 ejes).
+        resultsOfIndicator: Resultados Asociados al Indicador (2 parámetros).
+        resultsOfVariable: Resultados de Variables y que forman parte de un mismo valor (Acumuladas).
+
+Name: Nombre
+nro: "#"
+"Production line": Linea De Negocio
+"Type report": Tipo De Reporte
+"Is raw material": ¿Es Materia Prima?
+"Is final product": ¿Es Producto Final?
+"Product unit": Unidad Del Producto
+"Product": Producto
+"Plant": Planta
+"Enabled": ¿Activo?
+"Company": Empresa
+"Location": Localidad
+"Type product": Tipo De Producto
+"Raw material": Materia Prima
+"Month": Mes
+"Total month": Presupuesto De Producción Del Mes
+"Design capacity": Capacidad De Diseño
+"Daily production capacity": Capacidad De Producción Diaria
+"Days stops": Dias De Paradas
+"Date from": Fecha Inicio
+"Date end": Fecha Fin
+"Type": Tipo
+"Value": Valor
+"Raw materials": Materias primas
+"Day": Dia
+"Hours": Horas
+"Ranges": Rangos
+"Product report": Reporte de producto
+"Month budget": Presupuesto del mes
+"Entity": Entidad
+"Report template": Plantilla del complejo
+"Plant report": Reporte de planta
+"Day stops": Dias de parada
+"Services": Servicios
+"Service": Servicio
+'Stop time': Tiempo de parada
+'Other time': Otro

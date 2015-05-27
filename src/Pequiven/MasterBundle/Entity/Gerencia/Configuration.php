@@ -86,6 +86,42 @@ class Configuration
     private $arrangementProgramUsersToNotify;
     
     /**
+     * Usuarios que revisan el programa de gestión de Hallazgos SIG
+     * 
+     * @var \Pequiven\SEIPBundle\Entity\User
+     * @ORM\ManyToMany(targetEntity="\Pequiven\SEIPBundle\Entity\User")
+     * @ORM\JoinTable(name="ConfigurationSIG_ArrangementProgram_Reviser",
+     *      joinColumns={@ORM\JoinColumn(name="configuration_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")}
+     *      )
+     */
+    private $arrangementProgramSigUsersToReviser;
+    
+    /**
+     * Usuarios que aprueban el programa de gestión de Hallazgos SIG
+     * 
+     * @var \Pequiven\SEIPBundle\Entity\User
+     * @ORM\ManyToMany(targetEntity="\Pequiven\SEIPBundle\Entity\User")
+     * @ORM\JoinTable(name="ConfigurationSIG_ArrangementProgram_Approve",
+     *      joinColumns={@ORM\JoinColumn(name="configuration_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")}
+     *      )
+     */
+    private $arrangementProgramSigUsersToApprove;
+    
+    /**
+     * Usuarios que notifican los avances en el programa de gestión de Hallazgos SIG
+     * 
+     * @var \Pequiven\SEIPBundle\Entity\User
+     * @ORM\ManyToMany(targetEntity="\Pequiven\SEIPBundle\Entity\User")
+     * @ORM\JoinTable(name="ConfigurationSIG_ArrangementProgram_Notify",
+     *      joinColumns={@ORM\JoinColumn(name="configuration_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")}
+     *      )
+     */
+    private $arrangementProgramSigUsersToNotify;
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -185,8 +221,6 @@ class Configuration
         return $this->arrangementProgramUserToRevisers;
     }
 
-    
-
     /**
      * Add arrangementProgramUsersToApproveTactical
      *
@@ -284,5 +318,104 @@ class Configuration
     public function getArrangementProgramUsersToNotify()
     {
         return $this->arrangementProgramUsersToNotify;
+    }
+    
+    /**
+     * Add arrangementProgramSigUsersToReviser
+     *
+     * @param \Pequiven\SEIPBundle\Entity\User $arrangementProgramSigUsersToReviser
+     * @return Configuration
+     */
+    public function addArrangementProgramSigUsersToReviser(\Pequiven\SEIPBundle\Entity\User $arrangementProgramSigUsersToReviser)
+    {
+        $this->arrangementProgramSigUsersToReviser->add($arrangementProgramSigUsersToReviser);
+
+        return $this;
+    }
+
+    /**
+     * Remove arrangementProgramSigUsersToReviser
+     *
+     * @param \Pequiven\SEIPBundle\Entity\User $arrangementProgramSigUsersToReviser
+     */
+    public function removeArrangementProgramSigUsersToReviser(\Pequiven\SEIPBundle\Entity\User $arrangementProgramSigUsersToReviser)
+    {
+        $this->arrangementProgramSigUsersToReviser->removeElement($arrangementProgramSigUsersToReviser);
+    }
+
+    /**
+     * Get arrangementProgramSigUsersToReviser
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getArrangementProgramSigUsersToReviser()
+    {
+        return $this->arrangementProgramSigUsersToReviser;
+    }
+    
+        /**
+     * Add arrangementProgramSigUsersToApprove
+     *
+     * @param \Pequiven\SEIPBundle\Entity\User $arrangementProgramSigUsersToApprove
+     * @return Configuration
+     */
+    public function addArrangementProgramSigUsersToApprove(\Pequiven\SEIPBundle\Entity\User $arrangementProgramSigUsersToApprove)
+    {
+        $this->arrangementProgramSigUsersToApprove->add($arrangementProgramSigUsersToApprove);
+
+        return $this;
+    }
+
+    /**
+     * Remove arrangementProgramSigUsersToApprove
+     *
+     * @param \Pequiven\SEIPBundle\Entity\User $arrangementProgramSigUsersToApprove
+     */
+    public function removeArrangementProgramSigUsersToApprove(\Pequiven\SEIPBundle\Entity\User $arrangementProgramSigUsersToApprove)
+    {
+        $this->arrangementProgramSigUsersToApprove->removeElement($arrangementProgramSigUsersToApprove);
+    }
+
+    /**
+     * Get arrangementProgramSigUsersToApprove
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getArrangementProgramSigUsersToApprove()
+    {
+        return $this->arrangementProgramSigUsersToApprove;
+    }
+    
+    /**
+     * Add arrangementProgramSigUsersToNotify
+     *
+     * @param \Pequiven\SEIPBundle\Entity\User $arrangementProgramSigUsersToNotify
+     * @return Configuration
+     */
+    public function addArrangementProgramSigUsersToNotify(\Pequiven\SEIPBundle\Entity\User $arrangementProgramSigUsersToNotify)
+    {
+        $this->arrangementProgramSigUsersToNotify->add($arrangementProgramSigUsersToNotify);
+
+        return $this;
+    }
+
+    /**
+     * Remove arrangementProgramSigUsersToNotify
+     *
+     * @param \Pequiven\SEIPBundle\Entity\User $arrangementProgramSigUsersToNotify
+     */
+    public function removeArrangementProgramSigUsersToNotify(\Pequiven\SEIPBundle\Entity\User $arrangementProgramSigUsersToNotify)
+    {
+        $this->arrangementProgramSigUsersToNotify->removeElement($arrangementProgramSigUsersToNotify);
+    }
+
+    /**
+     * Get arrangementProgramSigUsersToNotify
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getArrangementProgramSigUsersToNotify()
+    {
+        return $this->arrangementProgramSigUsersToNotify;
     }
 }

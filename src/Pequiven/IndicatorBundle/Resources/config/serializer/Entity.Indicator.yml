@@ -55,3 +55,15 @@ Pequiven\IndicatorBundle\Entity\Indicator:
         valuesIndicator:
             expose: true
             groups: [valuesIndicator]
+        progressToDate:
+            expose: true
+            groups: [resultIndicator]
+        resultReal:
+            expose: true
+            groups: [resultIndicator]
+        arrangementRange:
+            expose: true
+            groups: [arrangementRange]
+        featuresIndicator:
+            expose: true
+            groups: [featuresIndicator]

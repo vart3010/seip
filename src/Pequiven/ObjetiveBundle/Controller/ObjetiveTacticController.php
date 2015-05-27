@@ -30,8 +30,8 @@ use Pequiven\MasterBundle\Entity\Rol;
  *
  * @author matias
  */
-class ObjetiveTacticController extends baseController {
-
+class ObjetiveTacticController extends baseController 
+{
     /**
      * Función que retorna la vista con la lista de los objetivos tácticos
      * @Template("PequivenObjetiveBundle:Tactic:list.html.twig")
@@ -51,18 +51,33 @@ class ObjetiveTacticController extends baseController {
     public function showAction(Request $request) 
     {
         $securityService = $this->getSecurityService();
-        $securityService->checkSecurity(array('ROLE_SEIP_OBJECTIVE_VIEW_TACTIC','ROLE_SEIP_PLANNING_VIEW_OBJECTIVE_TACTIC'));
-        
+        $securityService->checkSecurity(array('ROLE_SEIP_OBJECTIVE_VIEW_TACTIC','ROLE_SEIP_PLANNING_VIEW_OBJECTIVE_TACTIC','ROLE_SEIP_SIG_OBJECTIVE_VIEW_TACTIC'));
+
         $resource = $this->findOr404($request);
         if(!$securityService->isGranted('ROLE_SEIP_PLANNING_VIEW_OBJECTIVE_TACTIC')){
-            $securityService->checkSecurity('ROLE_SEIP_OBJECTIVE_VIEW_TACTIC',$resource);
+            if(!$securityService->isGranted('ROLE_SEIP_SIG_OBJECTIVE_VIEW_TACTIC')){
+                $securityService->checkSecurity('ROLE_SEIP_OBJECTIVE_VIEW_TACTIC',$resource);
+            } else{
+                $securityService->checkSecurity('ROLE_SEIP_SIG_OBJECTIVE_VIEW_TACTIC',$resource);
+            }
         }
+
+        $indicatorService = $this->getIndicatorService();
+        $hasPermissionToApproved = $securityService->isGrantedFull("ROLE_SEIP_OBJECTIVE_APPROVED_TACTIC",$resource);
+        $hasPermissionToUpdate = $securityService->isGrantedFull("ROLE_SEIP_OBJECTIVE_EDIT_TACTIC",$resource);
+        $isAllowToDelete = $securityService->isGrantedFull("ROLE_SEIP_OBJECTIVE_DELETE_TACTIC",$resource);
         
         $view = $this
             ->view()
             ->setTemplate('PequivenObjetiveBundle:Tactic:show.html.twig')
             ->setTemplateVar('entity')
-            ->setData($resource)
+            ->setData(array(
+                'entity' => $resource,
+                'indicatorService' => $indicatorService,
+                'hasPermissionToUpdate' => $hasPermissionToUpdate,
+                'isAllowToDelete' => $isAllowToDelete,
+                'hasPermissionToApproved' => $hasPermissionToApproved,
+            ))
         ;
 
         $groups = array_merge(array('id','api_list','gerencia','gerenciaSecond'), $request->get('_groups',array()));
@@ -75,7 +90,8 @@ class ObjetiveTacticController extends baseController {
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
-    public function objetiveListAction(Request $request) {
+    public function objetiveListAction(Request $request) 
+    {
         $this->getSecurityService()->checkSecurity('ROLE_SEIP_OBJECTIVE_LIST_TACTIC');
         
         $criteria = $request->get('filter', $this->config->getCriteria());
@@ -128,7 +144,10 @@ class ObjetiveTacticController extends baseController {
      * @return type
      * @throws \Pequiven\ObjetiveBundle\Controller\Exception
      */
-    public function createAction(Request $request) {
+    public function createAction(Request $request) 
+    {
+        $this->getPeriodService()->checkIsOpen();
+        
         $this->getSecurityService()->checkSecurity('ROLE_SEIP_OBJECTIVE_CREATE_TACTIC');
         
         $form = $this->createForm($this->get('pequiven_objetive.tactic.registration.form.type'));
@@ -142,6 +161,8 @@ class ObjetiveTacticController extends baseController {
 
         $em->getConnection()->beginTransaction();
         if ($request->isMethod('POST') && $form->submit($request)->isValid()) {
+//            var_dump('epale');
+//            die();
             $object = $form->getData();
             $data = $this->container->get('request')->get("pequiven_objetive_tactic_registration");
 
@@ -160,8 +181,7 @@ class ObjetiveTacticController extends baseController {
 
             //Si el usuario tiene rol Directivo
             if ($securityContext->isGranted(array('ROLE_DIRECTIVE', 'ROLE_DIRECTIVE_AUX'))) {
-                //En caso de que las gerencias a impactar por el objetivo sean seleccionadas en el select
-                if (!isset($data['check_gerencia'])) {
+                if (!isset($data['check_gerencia'])) {//En caso de que las gerencias a impactar por el objetivo sean seleccionadas en el select
                     $totalRef = $this->setRef(array('objetiveStrategics' => $data['parents'], 'totalGerencias' => count($data['gerencia'])));
                     if($totalRef[0] != $data['ref']){
                         $this->updateIndicatorRef($data, $totalRef);
@@ -263,8 +283,9 @@ class ObjetiveTacticController extends baseController {
 
             //Obtenemos el o los últimos objetivos guardados y le añadimos el rango de gestión o semáforo
             foreach ($totalRef as $value) {
-                $objetives = $em->getRepository('PequivenObjetiveBundle:Objetive')->findBy(array('ref' => $value));
+                $objetives = $em->getRepository('PequivenObjetiveBundle:Objetive')->findBy(array('ref' => $value, 'period' => $period->getId()));
                 foreach($objetives as $objetive){
+                    $this->addObjetiveParents($objetive,$data['parents']);
                     $this->createArrangementRange($objetive, $data);
                 }
             }
@@ -287,6 +308,40 @@ class ObjetiveTacticController extends baseController {
             'form' => $form->createView(),
             'role_name' => $role[0]
         );
+    }
+    
+    /**
+     * Función que guarda en la tabla intermedia el(los) objetivo(s) creado(s) junto con el objetivo padre
+     * @param Objetive $objetive
+     * @param type $parents
+     * @return boolean
+     * @throws \Pequiven\ObjetiveBundle\Controller\Exception
+     */
+    public function addObjetiveParents(Objetive $objetive, $parents = array()) {
+        
+        $em = $this->getDoctrine()->getManager();
+        $period = $this->getPeriodService()->getPeriodActive();
+        
+        $objetivesStrategics = $em->getRepository('PequivenObjetiveBundle:Objetive')->findBy(array('id' => $parents,'period' => $period));
+        
+        $totalObjetivesStrategics = count($objetivesStrategics);
+        $em->getConnection()->beginTransaction();
+        if ($totalObjetivesStrategics > 0) {
+            foreach ($objetivesStrategics as $objetiveStrategic) {
+                $objetiveStrategic->addChildren($objetive);
+                $em->persist($objetiveStrategic);
+            }
+        }
+
+        try {
+            $em->flush();
+            $em->getConnection()->commit();
+        } catch (Exception $e) {
+            $em->getConnection()->rollback();
+            throw $e;
+        }
+
+        return true;
     }
 
     /**
@@ -597,7 +652,7 @@ class ObjetiveTacticController extends baseController {
         //En caso de que la variable de línea estratégica sea un número
         if (is_array($lineStrategicArray)) {
             //$results = $em->getRepository('PequivenObjetiveBundle:Objetive')->findBy(array('lineStrategics' => $lineStrategicArray,'objetiveLevel' => $objetiveLevelId));
-            $results = $em->getRepository('PequivenObjetiveBundle:Objetive')->getByLineStrategic($lineStrategicArray);
+            $results = $this->get('pequiven.repository.objetive')->getByLineStrategic($lineStrategicArray);
             $totalResults = count($results);
             if (is_array($results) && $totalResults > 0) {
                 foreach ($results as $result) {
@@ -711,11 +766,14 @@ class ObjetiveTacticController extends baseController {
         $em = $this->getDoctrine()->getManager();
         $objetivesStrategics = explode(',', $options['objetiveStrategics']);
         $totalObjetivesStrategics = count($objetivesStrategics);
+        $period = $this->getPeriodService()->getPeriodActive();
 
-        $objetiveStrategic = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $objetivesStrategics[$totalObjetivesStrategics - 1]));
+        $objetiveStrategic = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $objetivesStrategics[$totalObjetivesStrategics - 1],'period' => $period));
         $refObjetiveStrategic = $objetiveStrategic->getRef();
 
-        $results = $this->get('pequiven.repository.objetivetactic')->getByParent($objetivesStrategics[$totalObjetivesStrategics - 1], array('searchByRef' => true));
+        $em->getFilters()->disable('softdeleteable');
+        $results = $this->get('pequiven.repository.objetivetactic')->getByParent($objetivesStrategics[$totalObjetivesStrategics - 1], array('searchByRef' => true,'viewAll' => true));
+        $em->getFilters()->enable('softdeleteable');
         $total = count($results);
 
         if (is_array($results) && $total > 0) {
@@ -737,6 +795,7 @@ class ObjetiveTacticController extends baseController {
      * @param array $options
      */
     public function setRef($options = array()) {
+        $period = $this->getPeriodService()->getPeriodActive();
         $em = $this->getDoctrine()->getManager();
         $objetivesStrategics = $options['objetiveStrategics'];
         $totalObjetivesStrategics = count($objetivesStrategics);
@@ -744,8 +803,10 @@ class ObjetiveTacticController extends baseController {
 
         $objetiveStrategic = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $objetivesStrategics[$totalObjetivesStrategics - 1]));
         $refObjetiveStrategic = $objetiveStrategic->getRef();
-
-        $results = $this->get('pequiven.repository.objetivetactic')->getByParent($objetivesStrategics[$totalObjetivesStrategics - 1], array('searchByRef' => true, 'setRef' => true));
+        
+        $em->getFilters()->disable('softdeleteable');
+        $results = $this->get('pequiven.repository.objetivetactic')->getByParent($objetivesStrategics[$totalObjetivesStrategics - 1], array('searchByRef' => true, 'setRef' => true, 'viewALL' => true));
+        $em->getFilters()->enable('softdeleteable');
         $total = count($results);
 
         for ($i = 0; $i < $options['totalGerencias']; $i++) {
@@ -793,9 +854,9 @@ class ObjetiveTacticController extends baseController {
     /**
      * @return \Pequiven\SEIPBundle\Service\PeriodService
      */
-    private function getPeriodService()
+    protected function getPeriodService()
     {
-        return $this->container->get('pequiven_arrangement_program.service.period');
+        return $this->container->get('pequiven_seip.service.period');
     }
 
     /**
@@ -805,5 +866,14 @@ class ObjetiveTacticController extends baseController {
     protected function getSecurityService()
     {
         return $this->container->get('seip.service.security');
+    }
+    
+    /**
+     * 
+     * @return \Pequiven\IndicatorBundle\Service\IndicatorService
+     */
+    private function getIndicatorService()
+    {
+        return $this->container->get('pequiven_indicator.service.inidicator');
     }
 }

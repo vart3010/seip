@@ -12,6 +12,16 @@ use Doctrine\ORM\Mapping as ORM;
 abstract class Indicator implements IndicatorInterface
 {
     /**
+     * Estatus borrador
+     */
+    const STATUS_DRAFT = 0;
+    
+    /**
+     * Estatus Aprobado
+     */
+    const STATUS_APPROVED = 1;
+    
+    /**
      * Tipo de calculo por formula y valores de las variables manuales
      */
     const TYPE_CALCULATION_FORMULA_MANUALLY = 0;
@@ -20,6 +30,11 @@ abstract class Indicator implements IndicatorInterface
      * Tipo de calculo por formula y valores de las variables automaticos
      */
     const TYPE_CALCULATION_FORMULA_AUTOMATIC = 1;
+    
+    /**
+     * Tipo de calculo por formula y valores de las variables automaticos desde ecuacion con las variables de lo hijos
+     */
+    const TYPE_CALCULATION_FORMULA_AUTOMATIC_FROM_EQ = 2;
     
     /**
      * Indicador con fórmula asociada
@@ -42,6 +57,35 @@ abstract class Indicator implements IndicatorInterface
     const INDICATOR_WITHOUT_RESULT = 'INDICATOR_WITHOUT_RESULT';
     
     /**
+     * Tipo de detalle (Ninguno)
+     */
+    const TYPE_DETAIL_NONE = 0;
+    
+    /**
+     * Tipo de detalle (Carga diara de produccion)
+     */
+    const TYPE_DETAIL_DAILY_LOAD_PRODUCTION = 1;
+    
+    /**
+     * Metodo de calculo tradicional donde se acumulan las variables
+     */
+    const CALCULATION_METHOD_ACCUMULATION_OF_VARIABLES = 0;
+    /**
+     * Metodo de calculo por promedio de los resultados de cada hijos en sus resultados
+     */
+    const CALCULATION_METHOD_AVERAGE_BASED_ON_NUMBER_CHILDREN = 1;
+    /**
+     * Metodo de calculo por promedio del plan y real acumulado de los hijos
+     */
+    const CALCULATION_METHOD_AVERAGE_PLAN_REAL_CHILDREN = 2;
+    /**
+     * Metodo de calculo por promedio ponderado del resultado de los hijos
+     */
+    const CALCULATION_METHOD_WEIGHTED_AVERAGE_RESULT_CHILDREN = 3;
+    
+    const TYPE_OBJECT = 'indicator';
+    
+    /**
      * @var integer
      * 
      * @ORM\Column(name="typeOfCalculation", type="integer", nullable=false)
@@ -62,6 +106,22 @@ abstract class Indicator implements IndicatorInterface
      */
     protected $labelSummary = '';
     
+    /**
+     * Tipo de detalle
+     * 
+     * @var integer
+     * @ORM\Column(name="typeDetailValue",type="integer")
+     */
+    protected $typeDetailValue = self::TYPE_DETAIL_NONE;
+    
+    /**
+     * Metodos de calculo
+     * 
+     * @var integer
+     * @ORM\Column(name="calculationMethod",type="integer")
+     */
+    protected $calculationMethod = self::CALCULATION_METHOD_ACCUMULATION_OF_VARIABLES;
+
     /**
      * Set indicatorLevel
      *
@@ -117,6 +177,7 @@ abstract class Indicator implements IndicatorInterface
         static $typesOfCalculation = array(
             self::TYPE_CALCULATION_FORMULA_MANUALLY => 'pequiven_indicator.type_calculation.formula_manually',
             self::TYPE_CALCULATION_FORMULA_AUTOMATIC => 'pequiven_indicator.type_calculation.formula_automatic',
+            self::TYPE_CALCULATION_FORMULA_AUTOMATIC_FROM_EQ => 'pequiven_indicator.type_calculation.formula_automatic_from_eq',
         );
         return $typesOfCalculation;
     }
@@ -183,5 +244,93 @@ abstract class Indicator implements IndicatorInterface
             }
         }
         return $result;
+    }
+    
+    /**
+     * Etiquetas de los tipos de detalles del indicador
+     * @staticvar array $labelTypeDetail
+     * @return string
+     */
+    static function getLabelsTypeDetail()
+    {
+        static $labelTypeDetail = array(
+            self::TYPE_DETAIL_NONE => 'pequiven_indicator.type_detail.none',
+            self::TYPE_DETAIL_DAILY_LOAD_PRODUCTION => 'pequiven_indicator.type_detail.daily_load_production',
+        );
+        return $labelTypeDetail;
+    }
+    
+    /**
+     * Retorna las etiquetas de cada metodo de calculo
+     * @return type
+     */
+    static function getLabelsCalculationMethod()
+    {
+        return array(
+            self::CALCULATION_METHOD_ACCUMULATION_OF_VARIABLES => 'pequiven_indicator.calculation_method.accumulation_of_variables',
+            self::CALCULATION_METHOD_AVERAGE_BASED_ON_NUMBER_CHILDREN => 'pequiven_indicator.calculation_method.average_based_number_children',
+            self::CALCULATION_METHOD_AVERAGE_PLAN_REAL_CHILDREN => 'pequiven_indicator.calculation_method.average_plan_real_children',
+            self::CALCULATION_METHOD_WEIGHTED_AVERAGE_RESULT_CHILDREN => 'pequiven_indicator.calculation_method.weighted_average_result_children',
+        );
+    }
+    
+    /**
+     * 
+     * @return Retorna la etiqueta del meotod de calculo del indicador
+     */
+    public function getLabelCalculationMethod() 
+    {
+        $labels = self::getLabelsCalculationMethod();
+        if(isset($labels[$this->calculationMethod])){
+            return $labels[$this->calculationMethod];
+        }
+    }
+    
+    /**
+     * Retorna la etiqueta del detalle del valor de indicador
+     * @return type
+     */
+    public function getLabelTypeDetailValue()
+    {
+        $labels = self::getLabelsTypeDetail();
+        if(isset($labels[$this->typeDetailValue])){
+            return $labels[$this->typeDetailValue];
+        }
+    }
+    
+    /**
+     * Set typeDetailValue
+     *
+     * @param integer $typeDetailValue
+     * @return Indicator
+     */
+    public function setTypeDetailValue($typeDetailValue)
+    {
+        $this->typeDetailValue = $typeDetailValue;
+
+        return $this;
+    }
+
+    /**
+     * Get typeDetailValue
+     *
+     * @return integer 
+     */
+    public function getTypeDetailValue()
+    {
+        return $this->typeDetailValue;
+    }
+    
+    /**
+     * Retorna las etiquetas de cada metodo de calculo
+     * @return type
+     */
+    static function getLabelsByLevelIndicator()
+    {
+        return array(
+            \Pequiven\IndicatorBundle\Entity\IndicatorLevel::LEVEL_ESTRATEGICO => 'pequiven_indicator.indicator_strategic',
+            \Pequiven\IndicatorBundle\Entity\IndicatorLevel::LEVEL_TACTICO => 'pequiven_indicator.indicator_tactic',
+            \Pequiven\IndicatorBundle\Entity\IndicatorLevel::LEVEL_OPERATIVO => 'pequiven_indicator.indicator_operative',
+        );
     }
 }

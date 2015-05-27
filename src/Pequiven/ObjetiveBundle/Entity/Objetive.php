@@ -171,7 +171,7 @@ class Objetive extends modelObjetive implements ResultItemInterface,PeriodItemIn
     private $gerenciaSecond;
 
     /**
-     * @ORM\ManyToMany(targetEntity="\Pequiven\ObjetiveBundle\Entity\Objetive", inversedBy="parents", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="\Pequiven\ObjetiveBundle\Entity\Objetive", inversedBy="parents", cascade={"persist","remove"})
      * @ORM\JoinTable(name="seip_objetives_parents",
      *      joinColumns={@ORM\JoinColumn(name="parent_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="children_id", referencedColumnName="id")})
@@ -238,7 +238,7 @@ class Objetive extends modelObjetive implements ResultItemInterface,PeriodItemIn
      * @var integer
      * @ORM\Column(name="status", type="integer")
      */
-    private $status = 0;
+    protected $status = self::STATUS_DRAFT;
     
     /**
      * @var \Pequiven\SEIPBundle\Entity\Result\Result Description
@@ -281,13 +281,19 @@ class Objetive extends modelObjetive implements ResultItemInterface,PeriodItemIn
     protected $requiredToImport = false;
     
     /**
-     * ¿Impacta a SIG?
+    * @ORM\ManyToMany(targetEntity="Pequiven\SIGBundle\Entity\ManagementSystem", inversedBy="objetives", cascade={"persist","remove"})
+    * @ORM\JoinTable(name="seip_objetives_management_systems")
+    */
+    private $managementSystems;
+    
+    /**
+     * Detalles del objetivo
      * 
-     * @var boolean
-     * @ORM\Column(name="impactToSIG",type="boolean")
+     * @var \Pequiven\ObjetiveBundle\Entity\Objetive\ObjetiveDetails
+     * @ORM\OneToOne(targetEntity="Pequiven\ObjetiveBundle\Entity\Objetive\ObjetiveDetails",cascade={"persist","remove"})
      */
-    protected $impactToSIG = false;
-
+    protected $details;
+    
     /**
      * Constructor
      */
@@ -297,6 +303,7 @@ class Objetive extends modelObjetive implements ResultItemInterface,PeriodItemIn
         $this->indicators = new \Doctrine\Common\Collections\ArrayCollection();
         $this->lineStrategics = new \Doctrine\Common\Collections\ArrayCollection();
         $this->results = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->managementSystems = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -759,7 +766,9 @@ class Objetive extends modelObjetive implements ResultItemInterface,PeriodItemIn
      */
     public function addParent(\Pequiven\ObjetiveBundle\Entity\Objetive $parents)
     {
-        $this->parents->add($parents);
+        if(!$this->parents->contains($parents)){
+            $this->parents->add($parents);
+        }
 
         return $this;
     }
@@ -1140,13 +1149,7 @@ class Objetive extends modelObjetive implements ResultItemInterface,PeriodItemIn
     
     public function __toString() 
     {
-        $description = $this->getDescription();
-        $limit = 80;
-        if(strlen($description) > $limit)
-        {
-            $description = mb_substr($this->getDescription(), 0,$limit,'UTF-8').'...';
-
-        }
+        $description = \Pequiven\SEIPBundle\Service\ToolService::truncate($this->getDescription());
         $toString = $this->getRef().' '.$description;
         return $toString?:'-';
     }
@@ -1200,25 +1203,58 @@ class Objetive extends modelObjetive implements ResultItemInterface,PeriodItemIn
     }
 
     /**
-     * Set impactToSIG
+     * Set details
      *
-     * @param boolean $impactToSIG
+     * @param \Pequiven\ObjetiveBundle\Entity\Objetive\ObjetiveDetails $details
      * @return Objetive
      */
-    public function setImpactToSIG($impactToSIG)
+    public function setDetails(\Pequiven\ObjetiveBundle\Entity\Objetive\ObjetiveDetails $details = null)
     {
-        $this->impactToSIG = $impactToSIG;
+        $this->details = $details;
 
         return $this;
     }
 
     /**
-     * Get impactToSIG
+     * Get details
      *
-     * @return boolean 
+     * @return \Pequiven\ObjetiveBundle\Entity\Objetive\ObjetiveDetails 
      */
-    public function getImpactToSIG()
+    public function getDetails()
     {
-        return $this->impactToSIG;
+        return $this->details;
+    }
+    
+    /**
+     * Add managementSystems
+     *
+     * @param \Pequiven\SIGBundle\Entity\ManagementSystem $managementSystems
+     * @return Objetive
+     */
+    public function addManagementSystem(\Pequiven\SIGBundle\Entity\ManagementSystem $managementSystems)
+    {
+        $this->managementSystems[] = $managementSystems;
+
+        return $this;
+    }
+
+    /**
+     * Remove managementSystems
+     *
+     * @param \Pequiven\SIGBundle\Entity\ManagementSystem $managementSystems
+     */
+    public function removeManagementSystem(\Pequiven\SIGBundle\Entity\ManagementSystem $managementSystems)
+    {
+        $this->managementSystems->removeElement($managementSystems);
+    }
+
+    /**
+     * Get managementSystems
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getManagementSystems()
+    {
+        return $this->managementSystems;
     }
 }

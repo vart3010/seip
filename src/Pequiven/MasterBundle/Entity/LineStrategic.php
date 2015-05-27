@@ -14,6 +14,7 @@ use Pequiven\MasterBundle\Model\LineStrategic as modelLineStrategic;
  * @ORM\Table(name="seip_c_line_strategic")
  * @ORM\Entity(repositoryClass="Pequiven\MasterBundle\Repository\LineStrategicRepository")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
+ * @ORM\HasLifecycleCallbacks()
  */
 class LineStrategic extends modelLineStrategic
 {
@@ -114,6 +115,13 @@ class LineStrategic extends modelLineStrategic
      * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
      */
     private $deletedAt;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="orderShow", type="integer")
+     */
+    private $orderShow;
 
 
     /**
@@ -451,6 +459,15 @@ class LineStrategic extends modelLineStrategic
         return $this->indicators;
     }
     
+    public function getOrderShow() {
+        return $this->orderShow;
+    }
+
+    public function setOrderShow($orderShow) {
+        $this->orderShow = $orderShow;
+    }
+
+        
     /**
      * 
      * @return string

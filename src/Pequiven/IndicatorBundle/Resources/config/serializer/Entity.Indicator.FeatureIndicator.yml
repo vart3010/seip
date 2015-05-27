@@ -1,0 +1,18 @@
+Pequiven\IndicatorBundle\Entity\Indicator\FeatureIndicator:
+    exclusion_policy: ALL
+    properties:
+        id:
+            expose: true
+            groups: [id]
+        description:
+            expose: true
+            groups: [api_list]
+        typeFeatureIndicator:
+            expose: true
+            groups: [api_list]
+        typeFeatureIndicator:
+            expose: true
+            groups: [api_list]
+        createdBy:
+            expose: true
+            groups: [api_list]

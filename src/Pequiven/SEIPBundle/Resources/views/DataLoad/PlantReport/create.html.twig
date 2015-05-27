@@ -1,0 +1,21 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayout.html.twig' %}
+
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
+
+{% block before_body %}
+    {{ contentHeader(
+        ("pequiven_seip.plant_report.plant_report"|trans ),
+        ( 'pequiven.add'|trans({},'messages') )
+    ) }}
+{% endblock %}
+
+{% block body -%}
+    <form method="POST" action="{{ path("pequiven_plant_report_create",{reportTemplate:app.request.get("reportTemplate") }) }}">
+       <br /><br />
+       {% include 'PequivenSEIPBundle:DataLoad/PlantReport:_form.html.twig' %}
+       {{ actions.create() }}
+       {{ form_rest(form) }}
+   </form>
+{% endblock %}

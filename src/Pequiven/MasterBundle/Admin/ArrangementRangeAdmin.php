@@ -53,8 +53,16 @@ class ArrangementRangeAdmin extends Admin implements \Symfony\Component\Dependen
     
     protected function configureFormFields(FormMapper $form) {
         $form
-            ->add('objetive')
-            ->add('indicator')
+            ->add('objetive','sonata_type_model_autocomplete',array(
+                'property' => array('ref','description'),
+                'multiple' => false,
+                "required" => false,
+             ))
+            ->add('indicator','sonata_type_model_autocomplete',array(
+                'property' => array('ref','description'),
+                'multiple' => false,
+                "required" => false,
+             ))
             ->add('typeRangeTop')
             ->add('opRankTopBasic')
             ->add('rankTopBasic')
@@ -89,8 +97,13 @@ class ArrangementRangeAdmin extends Admin implements \Symfony\Component\Dependen
     
     protected function configureDatagridFilters(DatagridMapper $filter) {
         $filter
-            ->add('objetive')
-            ->add('indicator')
+            ->add('objetive','doctrine_orm_model_autocomplete',array(),null,array(
+                'property' => array('ref','description')
+            ))
+            ->add('indicator','doctrine_orm_model_autocomplete',array(),null,array(
+                'property' => array('ref','description')
+            ))
+            ->add("period")
             ;
     }
     
@@ -129,9 +142,9 @@ class ArrangementRangeAdmin extends Admin implements \Symfony\Component\Dependen
     /**
      * @return \Pequiven\SEIPBundle\Service\PeriodService
      */
-    private function getPeriodService()
+    protected function getPeriodService()
     {
-        return $this->container->get('pequiven_arrangement_program.service.period');
+        return $this->container->get('pequiven_seip.service.period');
     }
     
     public function setContainer(\Symfony\Component\DependencyInjection\ContainerInterface $container = null) {

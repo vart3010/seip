@@ -2,7 +2,7 @@ pequiven_objetive_home:
     path: /arrangement_strategic/objetives/{type}/{action}
     defaults: {_controller: PequivenObjetiveBundle:Objetive:showHome}
     methods: [GET]
-
+    
 pequiven_objetive_list:
     path: /objetive/list
     defaults: {_controller: PequivenObjetiveBundle:Objetive:list}

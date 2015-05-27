@@ -3,6 +3,11 @@
 
 {% trans_default_domain 'PequivenSEIPBundle' %}
 
+{% block stylesheets_base %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('bundles/pequivenseip/icons/imageMap.css') }}">
+{% endblock %}
+
 {% block body %}
     <br/>
     {% if is_granted('ROLE_PREVIOUS_ADMIN') %}
@@ -32,9 +37,9 @@
     {{ parent() }}
     <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/fusioncharts.js') }}"></script>
     <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/themes/fusioncharts.theme.fint.js') }}"></script>
+    <script src="{{  asset('bundles/pequivenseip/imageMapResizer/js/imageMapResizer.min.js') }}"></script>
 {% endblock %}
 
 {% block javascript %}
     {{ parent() }}
-
 {% endblock %}

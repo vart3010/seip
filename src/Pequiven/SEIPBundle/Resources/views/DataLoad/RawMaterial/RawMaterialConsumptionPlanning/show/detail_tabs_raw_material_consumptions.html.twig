@@ -1,0 +1,18 @@
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+<h3 class="thin underline">{{ title_top }}</h3>
+<div class="standard-tabs margin-bottom" id="add-tabs">
+    <ul class="tabs">
+        {% for detail in details %}
+            <li class="{{ loop.first ? "active" : "" }}"><a href="#tab-{{ loop.index }}">{{ detail.getMonthLabel|trans }}</a></li>
+        {% endfor %}
+    </ul>
+
+    <div class="tabs-content">
+        {% for detail in details %}
+            <div id="tab-{{ loop.index }}" class="with-padding">
+                {% include 'PequivenSEIPBundle:DataLoad/RawMaterial/RawMaterialConsumptionPlanning:show/details.html.twig' %}
+            </div>
+        {% endfor %}
+    </div>
+</div>

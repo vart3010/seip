@@ -1,3 +1,62 @@
-<div class="four-columns-tablet six-columns-mobile" style="max-width:100%; margin-bottom: -3px; margin-top: 4px" >
-    <img width="200%" src="{{ asset('bundles/pequivenseip/logotipos-pqv/estadisticas.jpg') }}" style="margin-left: 15%" />
+<div class="with-padding">
+    <div class="columns">
+        <div id="div_line" class="twelve-columns six-columns-tablet six-columns-mobile imageMap" {#style="max-width:100%; margin-bottom: -3px; margin-top: 4px"#} style="display:inline-block;" >
+        {#    <img width="200%" src="{{ asset('bundles/pequivenseip/logotipos-pqv/estadisticas.jpg') }}" style="margin-left: 15%" />#}
+            <div style="text-align: center;" {#class="hotspots"#}>
+                <input type="hidden" id="hidden_before">
+                <img id="image_line" width="50%" height="50%" src="{{ asset('bundles/pequivenseip/logotipos-pqv/logo_lineas_estrategicas.jpg') }}" usemap="#linemap" />
+                <input type="hidden" id="hidden_after">
+                {#<div>
+                    <a href="#line" class="circle_logo_line" aria-haspopup="false"></a>
+                </div>#}
+                <map name="linemap">
+                  <area id="circle_line" shape="circle" {#coords="233,234,150"#} href="{{ path('pequiven_line_strategic_view_dashboard') }}" >
+                </map>
+            </div>
+        </div>
+    </div>
 </div>
+                
+{% block javascript %}
+    <script type="text/javascript">
+        $(document).ready(function(){
+            var circle_line = document.querySelector('#circle_line');
+            var widthWindowIni = 0;
+{#            $('map').imageMapResize();#}
+            var img = new Image();
+            img.onload = function() {
+                widthWindowIni = window.innerWidth;
+                
+                {#console.log(widthWindowIni);
+                console.log($("#hidden_before").offset);
+                console.log($("#hidden_before").offset().rigth);#}
+                
+{#                circle_line.setAttribute('coords',window.innerWidth*0.365*0.5+','+window.innerWidth*0.365*0.5+','+window.innerWidth*0.365*0.321);#}
+{#                $('map').imageMapResize();#}
+                circle_line.setAttribute('coords',((window.innerWidth*0.78)-60)*0.5*0.5+','+((window.innerWidth*0.78)-60)*0.5*0.5+','+((window.innerWidth*0.78)-60)*0.5*0.5*0.7);
+                {#console.log(img.height*0.50);
+                console.log(img.naturalHeight);#}
+            };
+            img.src = "{{ asset('bundles/pequivenseip/logotipos-pqv/logo_lineas_estrategicas.jpg') }}";
+            window.onresize = function() {
+{#                $('map').imageMapResize();#}
+{#                console.log($("#main").position());#}
+    
+{#                console.log(window.innerWidth);#}
+                
+                var newWidthWindow = window.innerWidth;
+                if(newWidthWindow > 990){
+                    circle_line.setAttribute('coords',((window.innerWidth*0.78)-60)*0.5*0.5+','+((window.innerWidth*0.78)-60)*0.5*0.5+','+((window.innerWidth*0.78)-60)*0.5*0.5*0.7);
+                } else{
+                    circle_line.setAttribute('coords',window.innerWidth*0.78*0.5*0.5+','+window.innerWidth*0.78*0.5*0.5+','+window.innerWidth*0.5*0.5*0.7);
+                }
+                {#if(newWidthWindow <= widthWindowIni){
+                    circle_line.setAttribute('coords',window.innerWidth*0.78*0.5*0.9+','+window.innerWidth*0.78*0.5*0.9+','+window.innerWidth*0.365*0.321);
+                } else{
+                    widthWindowIni = window.innerWidth;
+                    circle_line.setAttribute('coords',widthWindowIni*0.365*0.5+','+widthWindowIni*0.365*0.5+','+widthWindowIni*0.365*0.321);
+                }#}
+            };
+        });
+    </script>
+{% endblock %}

@@ -8,10 +8,13 @@ pequiven_seip_arrangementprogram_template_index:
     methods: [GET]
     
 pequiven_arrangementprogram_template_create:
-    path: /{type}/create
-    defaults: { _controller: pequiven_seip.controller.arrangementprogram_template:createAction }
+    path: /{type}/{associate}/create
+    defaults: 
+        _controller: pequiven_seip.controller.arrangementprogram_template:createAction
+        associate: 2
     requirements:
         type: 1|2
+        associate: 1|2
     methods: [GET|POST]
     
 pequiven_seip_arrangementprogram_template_show:

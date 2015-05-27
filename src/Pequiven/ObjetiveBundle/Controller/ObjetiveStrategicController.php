@@ -20,15 +20,13 @@ class ObjetiveStrategicController extends baseController {
 
     /**
      * Función que retorna la vista con la lista de los objetivos estratégicos
-     * @Template("PequivenObjetiveBundle:Strategic:list.html.twig")
      * @return type
      */
     public function listAction() 
     {
         $this->getSecurityService()->checkSecurity('ROLE_SEIP_OBJECTIVE_LIST_STRATEGIC');
         
-        return array(
-        );
+        return $this->render("PequivenObjetiveBundle:Strategic:list.html.twig");
     }
     
     /**
@@ -53,8 +51,17 @@ class ObjetiveStrategicController extends baseController {
             $securityService->checkSecurity('ROLE_SEIP_OBJECTIVE_VIEW_STRATEGIC',$entity);
         }
         
+        $indicatorService = $this->getIndicatorService();
+        $hasPermissionToApproved = $securityService->isGrantedFull("ROLE_SEIP_OBJECTIVE_APPROVED_STRATEGIC",$entity);
+        $hasPermissionToUpdate = $securityService->isGrantedFull("ROLE_SEIP_OBJECTIVE_EDIT_STRATEGIC",$entity);
+        $isAllowToDelete = $securityService->isGrantedFull("ROLE_SEIP_OBJECTIVE_DELETE_STRATEGIC",$entity);
+        
         return array(
-            'entity'      => $entity
+            'entity'      => $entity,
+            'indicatorService' => $indicatorService,
+            'hasPermissionToUpdate' => $hasPermissionToUpdate,
+            'isAllowToDelete' => $isAllowToDelete,
+            'hasPermissionToApproved' => $hasPermissionToApproved,
         );
     }
 
@@ -66,7 +73,7 @@ class ObjetiveStrategicController extends baseController {
     public function objetiveListAction(Request $request)
     {
         $this->getSecurityService()->checkSecurity('ROLE_SEIP_OBJECTIVE_LIST_STRATEGIC');
-
+        
         $criteria = $request->get('filter', $this->config->getCriteria());
         $sorting = $request->get('sorting', $this->config->getSorting());
         $repository = $this->getRepository();
@@ -109,10 +116,14 @@ class ObjetiveStrategicController extends baseController {
      * @return type
      * @throws \Pequiven\ObjetiveBundle\Controller\Exception
      */
-    public function createAction(Request $request) {
+    public function createAction(Request $request) 
+    {
+        $this->getPeriodService()->checkIsOpen();
+        
         $this->getSecurityService()->checkSecurity('ROLE_SEIP_OBJECTIVE_CREATE_STRATEGIC');
         
         $form = $this->createForm($this->get('pequiven_objetive.strategic.registration.form.type'));
+        
         //Obtenemos el valor del nivel del objetivo
         $em = $this->getDoctrine()->getManager();
         $securityContext = $this->container->get('security.context');
@@ -305,9 +316,9 @@ class ObjetiveStrategicController extends baseController {
     /**
      * @return \Pequiven\SEIPBundle\Service\PeriodService
      */
-    private function getPeriodService()
+    protected function getPeriodService()
     {
-        return $this->container->get('pequiven_arrangement_program.service.period');
+        return $this->container->get('pequiven_seip.service.period');
     }
     
     /**
@@ -317,5 +328,14 @@ class ObjetiveStrategicController extends baseController {
     protected function getSecurityService()
     {
         return $this->container->get('seip.service.security');
+    }
+    
+    /**
+     * 
+     * @return \Pequiven\IndicatorBundle\Service\IndicatorService
+     */
+    private function getIndicatorService()
+    {
+        return $this->container->get('pequiven_indicator.service.inidicator');
     }
 }

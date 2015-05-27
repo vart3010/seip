@@ -1,0 +1,178 @@
+{% trans_default_domain 'PequivenSEIPBundle' %}
+{{ form_errors(form) }}
+
+<fieldset class="fieldset fields-list">
+    <legend class="legend">{{ 'pequiven_seip.product_planning.product_planning'|trans }}</legend>
+    <div class="field-block button-height">
+        {{ form_label(form.month) }}
+        {{ form_widget(form.month) }}
+        {{ form_errors(form.month) }}
+    </div>
+    <div class="field-block button-height">
+        {{ form_label(form.totalMonth) }}
+        {{ form_widget(form.totalMonth) }}
+        {{ form_errors(form.totalMonth) }}
+    </div>
+    <div class="field-block button-height">
+        {{ form_label(form.dailyProductionCapacity) }}
+        {{ form_widget(form.dailyProductionCapacity) }}
+        {{ form_errors(form.dailyProductionCapacity) }}
+    </div>
+    <div class="field-block button-height">
+        {{ form_label(form.ranges) }}
+        <ul class="ranges unstyled-list padding-left-40" data-prototype="{% filter escape %}{% include 'PequivenSEIPBundle:DataLoad/Production/Range:_form.html.twig' with {form: form.ranges.vars.prototype} %}{% endfilter %}">
+            {% for range in form.ranges %}
+                <li>
+                    {% include 'PequivenSEIPBundle:DataLoad/Production/Range:_form.html.twig' with {form: range} %}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</fieldset>
+<script type="text/javascript">
+    var $collectionHolderRange;
+
+    // setup an "Añadir rango de distribucion" link
+    var $addTagLinkRange = $('<a href="#" class="add_tag_link">Añadir rango de distribucion</a>');
+    var $newLinkLiRange = $('<li></li>').append($addTagLinkRange);
+    
+    var dateFormat = "dd-mm-yy";
+
+    jQuery(document).ready(function() {
+        var selectMonth = $("#pequiven_seipbundle_dataload_production_productplanning_month");
+        
+        var applyChange = function(){
+            var type = $(this).find("select").val();
+            var divs = $(this).parent().find('fieldset');
+            
+            var typeValue = $(this).parent().find(".type-value");
+            var typeValue = $(this).parent().parent().find("span.type-value");
+            if(type == "{{ constant('Pequiven\\SEIPBundle\\Model\\DataLoad\\Production\\Range::TYPE_CAPACITY_FACTOR') }}"){
+                typeValue.html("%");
+            }else{
+                typeValue.html("");
+            }
+        };
+        
+        //Rangos
+        var lastDateEnd = null;
+        function addRangeForm($collectionHolderRange, $newLinkLiRange) {
+            // Get the data-prototype explained earlier
+            var prototype = $collectionHolderRange.data('prototype');
+
+            // get the new index
+            var index = $collectionHolderRange.data('index');
+
+            // Replace '__name__' in the prototype's HTML to
+            // instead be a number based on how many items we have
+            var newForm = prototype.replace(/__name__/g, index);
+
+            // increase the index with one for the next item
+            $collectionHolderRange.data('index', index + 1);
+
+            // Display the form in the page in an li, before the "Add a tag" link li
+            var $newFormLi = $('<li></li>').append(newForm);
+            $newLinkLiRange.before($newFormLi);
+            
+            // add a delete link to the new form
+            addRangeFormDeleteLink($newFormLi);
+            var idDateFrom = "pequiven_seipbundle_dataload_production_productplanning_ranges_"+index+"_dateFrom";
+            var idDateEnd = "pequiven_seipbundle_dataload_production_productplanning_ranges_"+index+"_dateEnd";
+            var idRangeType = "pequiven_seipbundle_dataload_production_productplanning_ranges_"+index+"_type";
+            
+            var monthOfPlanning = selectMonth.val();
+            var date = new Date();
+            if(monthOfPlanning != ""){
+                date.setMonth(monthOfPlanning);
+            }
+            
+            $( "#"+idDateFrom ).datepicker({
+              defaultDate: date,
+              changeMonth: false,
+              numberOfMonths: 1,
+              stepMonths: 0,
+              onClose: function( selectedDate ) {
+                 $( "#"+idDateEnd ).datepicker( "option", "minDate", selectedDate );
+              },
+              dateFormat: dateFormat
+            });
+            $( "#"+idDateEnd ).datepicker({
+              defaultDate: date,
+              changeMonth: false,
+              numberOfMonths: 1,
+              stepMonths: 0,
+              onClose: function( selectedDate ) {
+                $( "#"+idDateFrom ).datepicker( "option", "maxDate", selectedDate );
+              },
+              dateFormat: dateFormat
+            });
+            if(lastDateEnd != null){
+                var formatFrom = "dd-MM-yyyy";
+                var dateString = lastDateEnd.val();
+                var myDate = getDateFromFormat(dateString,formatFrom);
+                var m = new Date(myDate);
+                m.setDate(m.getDate() + 1);
+                if(myDate === 0){
+                    myDate = dateString;
+                }
+                $( "#"+idDateFrom ).datepicker( "option", "minDate", m );
+            }
+
+            lastDateEnd = $( "#"+idDateEnd );
+            //$('#'+idRangeType).change(applyChange);
+        }
+        
+        function addRangeFormDeleteLink($tagFormLi) {
+            var $removeFormA = $('<a href="#">Eliminar este rango</a>');
+            $tagFormLi.append($removeFormA);
+
+            $removeFormA.on('click', function(e) {
+                // prevent the link from creating a "#" on the URL
+                e.preventDefault();
+
+                // remove the li for the tag form
+                $tagFormLi.remove();
+            });
+        }
+        
+        // Get the ul that holds the collection of ranges
+        $collectionHolderRange = $('ul.ranges');
+        
+        // add a delete link to all of the existing tag form li elements
+        $collectionHolderRange.find('li').each(function() {
+            addRangeFormDeleteLink($(this));
+        });
+
+        // add the "add a tag" anchor and li to the ranges ul
+        $collectionHolderRange.append($newLinkLiRange);
+
+        // count the current form inputs we have (e.g. 2), use that as the new
+        // index when inserting a new item (e.g. 2)
+        $collectionHolderRange.data('index', $collectionHolderRange.find(':input').length);
+        
+        $addTagLinkRange.on('click', function(e) {
+            // prevent the link from creating a "#" on the URL
+            e.preventDefault();
+
+            // add a new tag form (see next code block)
+            addRangeForm($collectionHolderRange, $newLinkLiRange);
+        });
+        $( ".date-from").datepicker({
+          changeMonth: false,
+          numberOfMonths: 1,
+          dateFormat: dateFormat
+        });
+        $( ".date-end").datepicker({
+          changeMonth: false,
+          numberOfMonths: 1,
+          dateFormat: dateFormat
+        });
+        $( ".date-day").datepicker({
+          changeMonth: false,
+          numberOfMonths: 1,
+          dateFormat: dateFormat
+        });
+        
+        //$(".select-range-type").change(applyChange);
+    });
+</script>

@@ -5,6 +5,7 @@ imports:
     - { resource: config/sonata.yml }
     - { resource: config/sylius_resource.yml }
     - { resource: @PequivenSEIPBundle/Resources/config/admin.yml }
+    - { resource: @TecnocreacionesVzlaEntityBundle/Resources/config/admin.yml }
 
 framework:
     #esi:             ~
@@ -36,6 +37,7 @@ twig:
         resources:
             - 'PequivenSEIPBundle:Template:Form/fields.html.twig'
             - 'SonataCoreBundle:Form:datepicker.html.twig'
+            - 'TecnocreacionesToolsBundle:ExtraFormTypes:fields.html.twig'
 
 # Assetic Configuration
 assetic:
@@ -43,6 +45,7 @@ assetic:
     use_controller: false
 #    bundles:        ['FOSJsRoutingBundle']
     #java: /usr/bin/java
+    node: "%bin_node%"
     filters:
         cssrewrite: ~
         uglifyjs2:
@@ -131,17 +134,17 @@ tecnocreaciones_vzla_government:
     config:
         main_route: 'pequiven_seip_default_index'
 
-#ext_direct:
-#    resource: "%kernel.root_dir%/config/template/extdirect_routing.yml"
-
 tpg_extjs:
     entities:
         - @PequivenArrangementProgramBundle/Entity/
         - @PequivenSEIPBundle/Entity/PrePlanning/
+        - @PequivenSEIPBundle/Entity/CEI/
+        - @PequivenIndicatorBundle/Entity/Indicator/ValueIndicator/Detail/
     remoting:
         bundles:
             - PequivenArrangementProgramBundle
             - PequivenSEIPBundle
+            - PequivenIndicatorBundle
     
 bazinga_js_translation:
     locale_fallback: "%locale%"
@@ -182,6 +185,20 @@ tecnocreaciones_tools:
     role_pattern_voter:
         enable: true
         role_pattern_voter_prefix: ROLE_SEIP_
+    extra_form_types:
+        enable: true
+        autocomplete_entities:
+            products_alias:
+                class: Pequiven\SEIPBundle\Entity\CEI\Product
+#                role: ROLE_ADMIN
+                search: contains
+                form: pequiven_seipbundle_dataload_productreport
+                field: product
+            plants_alias:
+                class: Pequiven\SEIPBundle\Entity\CEI\Plant
+                search: contains
+                field: plant
+                form: pequiven_seipbundle_dataload_productreport
                 
 fos_oauth_server:
     db_driver: orm       # Driver availables: orm, mongodb, or propel
@@ -198,3 +215,6 @@ simple_things_entity_audit:
             - updated_at
             - deletedAt
             - createdAt
+
+genemu_form:
+    select2: ~

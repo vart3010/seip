@@ -1,0 +1,134 @@
+{% extends "PequivenSEIPBundle:Template:Developer/Common/tableFormat1.html.twig" %}
+
+{% trans_default_domain 'PequivenIndicatorBundle' %}
+
+{% block title %}- {{ 'pequiven_indicator.indicatorsWithError'|trans }}{% endblock %}
+
+{% set levelStrategic = constant('Pequiven\\IndicatorBundle\\Entity\\IndicatorLevel::LEVEL_ESTRATEGICO') %}
+{% set levelTactic = constant('Pequiven\\IndicatorBundle\\Entity\\IndicatorLevel::LEVEL_TACTICO') %}
+{% set levelOperative = constant('Pequiven\\IndicatorBundle\\Entity\\IndicatorLevel::LEVEL_OPERATIVO') %}
+
+{% block before_body %}
+    {{ contentHeader(
+        ('pequiven_indicator.indicatorsWithError'|trans)
+    ) }}
+{% endblock %}
+
+{% block body %}
+    <div ng-controller="TableFormatController">
+        <div ng-controller="TableIndicatorWithErrorController">
+            <details class="details margin-bottom" open="">
+                <summary role="button" aria-expanded="true">
+                    {{ 'pequiven.filters'|trans({},'messages') }}
+                </summary>
+                
+                <div class="with-padding">
+                    <div class="columns">
+                        <!-- Filtro Localidad -->
+                        {#<div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                            <label class="bold">{{ 'pequiven_seip.filters.complejo'|trans({},'PequivenSEIPBundle') }}</label>
+                            <br/>
+                            <div class="with-mid-padding">
+                                <select class="select2 input-xlarge" id="selectComplejos" ng-model="model.complejo" ng-change="getFirstLineManagement()" ng-options="value as value.description for (key,value) in data.complejos">
+                                    <option value=''></option>
+                                </select>
+                            </div>
+                        </div>#}
+                        <!-- Filtro Gerencia 1ra Línea -->
+                        {#<div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                            <label class="bold">{{ 'pequiven_seip.filters.first_line_management'|trans({},'PequivenSEIPBundle') }}</label>
+                            <br/>
+                            <div class="with-mid-padding">
+                                <select class="select2 input-xlarge" id="selectFirstLineManagement" {% if (level > levelTactic) %} ng-change="getSecondLineManagement()" {% endif %} ng-model="model.firstLineManagement" ng-options="value as value.description group by model.complejo.description for (key,value) in data.first_line_managements" >
+                                    <option value=''></option>
+                                </select>
+                            </div>
+                        </div>#}
+                        <!-- Filtro Gerencia 2da Línea -->
+                        {#<div class="new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                            <label class="bold">{{ 'pequiven_seip.filters.management_second_line'|trans({},'PequivenSEIPBundle') }}</label>
+                            <br/>
+                            <div class="with-mid-padding">
+                                <select class="select2 input-xlarge" id="selectSecondLineManagement" ng-model="model.secondLineManagement" ng-options="value as value.description group by (value.complejo.ref + ' - '+value.gerencia.description) for (key,value) in data.second_line_managements" >
+                                    <option value=''></option>
+                                </select>
+                            </div>
+                        </div>#}
+                        <!-- Filtro para las diferentes -->
+                        {#<div class="new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                            <label class="bold">{{ 'pequiven_seip.filters.miscellaneous'|trans({},'PequivenSEIPBundle') }}</label>
+                            <br/>
+                            <div class="with-mid-padding">
+                                <select class="select2 input-xlarge" id="selectMiscellaneous" ng-model="model.indicatorMiscellaneous" ng-options="value as value.description for (key,value) in data.indicatorSummaryLabels">
+                                    <option value=''></option>
+                                </select>
+                            </div>
+                        </div>#}
+                        <!-- Checkbox Gerencias de Aooyo -->
+                        {#<div class="new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                            <span id ="sectionExcludeGerenciaSecondSupport" class="hide">
+                                <label class="bold">{{ 'pequiven_seip.filters.excludeGerenciaSecondSupport'|trans({},'PequivenSEIPBundle') }}</label>&nbsp;<input id="excludeGerenciaSecondSupport" type="checkbox" ng-click="excludeGerenciaSecondSupport()">
+                            </span>
+                            <br/>
+                            <span id ="sectionIncludeGerenciaSecondSupport" class="hide">
+                                <label class="bold">{{ 'pequiven_seip.filters.includeGerenciaSecondSupport'|trans({},'PequivenSEIPBundle') }}</label>&nbsp;<input id="includeGerenciaSecondSupport" type="checkbox" ng-click="includeGerenciaSecondSupport()">
+                            </span>
+                        </div>#}
+                    </div>
+                </div>
+
+            </details>
+            
+            <div loading-container="tableParams.settings().$loading">
+                <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager" template-header="custom/header" api-data-url="{{ apiDataUrl }}" export-csv="csv" class="table table-responsive table-extra-info" ng-init="data.indicatorSummaryLabels = {{ labelsSummary|serialize }}" >
+                    <tbody>
+                        <tr ng-repeat="result in $data" data="{$ result|json $}">
+                            <td data-title="'{{ 'pequiven_indicator.indicators'|trans }}'" sortable="'ref'" filter="{'description' : 'text'}">
+                                <a href="{$ result._links.self.href $}">{$ result.ref+result.description $} {#({$ result.gerenciaSecond $})#}</a>
+                            </td>
+                            <td data-title="'{{ 'pequiven_indicator.contributionToTheObjective'|trans }}'" sortable="'progressToDate'">
+                                <a href="{$ result._links.self.href $}">{$ result.progressToDate|myNumberFormat $} {#({$ result.gerenciaSecond $})#}</a>
+                            </td>
+                            <td data-title="'{{ 'pequiven_indicator.measuring'|trans }}'" sortable="'resultReal'">
+                                <a href="{$ result._links.self.href $}">{$ result.resultReal|myNumberFormat $} {#({$ result.gerenciaSecond $})#}</a>
+                            </td>
+                            <td data-title="'{{ 'form.tendency'|trans }}'" filter="{'tendency' : 'text'}">
+                                <a href="{$ result._links.self.href $}">{$ result.tendency.description $} {#({$ result.gerenciaSecond $})#}</a>
+                            </td>
+                            <td data-title="'{{ 'pequiven_indicator.error'|trans }}'">
+                                <a href="{$ result._links.self.href $}">{$ result.errorText $} {#({$ result.gerenciaSecond $})#}</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+    <script type="text/javascript">
+        
+        $(document).ready(function()
+        {
+            {#charge();
+            
+            function charge(){
+               $('.select2').select2({
+                allowClear: true
+                });
+            }#}
+        });
+        
+        function getTableExtraInfo(data)
+            {
+                var response = '';
+
+                response = response + 'Fórmula: ' + data.formula.equation;
+                
+                return response;
+            }
+    </script>
+    
+{% endblock %}

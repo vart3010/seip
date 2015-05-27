@@ -9,4 +9,7 @@ Pequiven\ArrangementProgramBundle\Model\ArrangementProgram:
             groups: [period]
         categoryArrangementProgram:
             expose: true
-            groups: [api_list]
+            groups: [categoryArrangementProgram]
+        managementSystem:
+            expose: true
+            groups: [managementSystem]

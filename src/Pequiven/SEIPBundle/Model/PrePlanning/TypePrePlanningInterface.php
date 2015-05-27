@@ -85,6 +85,11 @@ interface TypePrePlanningInterface
      */
     const TYPE_OBJECT_INDICATOR_LEVEL = 13;
     
+    /**
+     * Tipo de objeto de tag de indicador
+     */
+    const TYPE_OBJECT_TAG_INDICATOR = 14;
+    
     public function setIdSourceObject($idSourceObject);
     
     public function setTypeObject($typeObject);

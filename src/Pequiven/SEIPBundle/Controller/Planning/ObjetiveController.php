@@ -82,10 +82,18 @@ class ObjetiveController extends ResourceController
         ;
         $view->getSerializationContext()->setGroups(array('id','api_list','indicators','formula','gerenciaSecond'));
         if ($request->get('_format') == 'html') {
+            $labelsStatus = array();
+            foreach (\Pequiven\ObjetiveBundle\Entity\Objetive::getLabelsStatus() as $key => $value) {
+                $labelsStatus[] = array(
+                    'id' => $key,
+                    'description' => $this->trans($value,array(),'PequivenObjetiveBundle'),
+                );
+            }
             $data = array(
                 'apiDataUrl' => $apiDataUrl,
                 $this->config->getPluralResourceName() => $resources,
                 'level' => $level,
+                'labelsStatus' => $labelsStatus,
             );
             $view->setData($data);
         } else {
@@ -208,6 +216,85 @@ class ObjetiveController extends ResourceController
         return $response;
     }
     
+    public function updateAction(Request $request) 
+    {
+        $resource = $this->findOr404($request);
+        $form = $this->getForm($resource);
+
+        if (($request->isMethod('PUT') || $request->isMethod('POST')) && $form->submit($request)->isValid()) {
+
+            $this->domainManager->update($resource);
+
+            return $this->redirectHandler->redirect($this->generateLinkUrlOnly($resource));
+        }
+
+        if ($this->config->isApiRequest()) {
+            return $this->handleView($this->view($form));
+        }
+
+        $view = $this
+            ->view()
+            ->setTemplate($this->config->getTemplate('update.html'))
+            ->setData(array(
+                $this->config->getResourceName() => $resource,
+                'form'                           => $form->createView()
+            ))
+        ;
+
+        return $this->handleView($view);
+    }
+    /**
+     * Aprueba un objetivo
+     * @param Request $request
+     * @return type
+     */
+    public function approvedAction(Request $request) 
+    {
+        $resource = $this->findOr404($request);
+        
+        $securityService = $this->getSecurityService();
+        $roleByLevel = array(
+            ObjetiveLevel::LEVEL_ESTRATEGICO => array('ROLE_SEIP_OBJECTIVE_APPROVED_STRATEGIC'),
+            ObjetiveLevel::LEVEL_TACTICO => array('ROLE_SEIP_OBJECTIVE_APPROVED_TACTIC'),
+            ObjetiveLevel::LEVEL_OPERATIVO => array('ROLE_SEIP_OBJECTIVE_APPROVED_OPERATIVE'),
+        );
+        
+        $level = $resource->getObjetiveLevel()->getLevel();
+        if(isset($roleByLevel[$level])){
+            $rol = $roleByLevel[$level];
+        }
+        
+        $securityService->checkSecurity($rol,$resource);
+        
+        $details = $resource->getDetails();
+        if($details === null){
+            $details = new \Pequiven\ObjetiveBundle\Entity\Objetive\ObjetiveDetails();
+        }
+        $details->setApprovalDate(new \DateTime());
+        $details->setApprovedBy($this->getUser());
+        $resource->setDetails($details);
+        
+        $resource->setStatus(\Pequiven\ObjetiveBundle\Entity\Objetive::STATUS_APPROVED);
+        
+        $this->domainManager->update($resource, 'approved');
+        
+        return $this->redirectHandler->redirect($this->generateLinkUrlOnly($resource));
+    }
+    
+    /**
+     * Elimina un objetivo
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function deleteAction(Request $request) 
+    {
+        $redirectUrl = $request->get("redirectUrl");
+        $resource = $this->findOr404($request);
+        $this->domainManager->delete($resource);
+
+        return $this->redirectHandler->redirect($redirectUrl);
+    }
+    
     /**
      * 
      * @return \Pequiven\SEIPBundle\Service\SecurityService
@@ -215,5 +302,17 @@ class ObjetiveController extends ResourceController
     protected function getSecurityService()
     {
         return $this->container->get('seip.service.security');
+    }
+    
+    /**
+     * Genera solo la url de el objeto
+     * 
+     * @param type $entity
+     * @param type $type
+     * @return type
+     */
+    protected function generateLinkUrlOnly($entity,$type = \Pequiven\SEIPBundle\Service\LinkGenerator::TYPE_LINK_DEFAULT,array $parameters = array())
+    {
+        return $this->container->get('seip.service.link_generator')->generateOnlyUrl($entity,$type,$parameters);
     }
 }

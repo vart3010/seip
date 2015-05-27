@@ -11,6 +11,11 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class ValueIndicatorController extends \Pequiven\SEIPBundle\Controller\SEIPController
 {
+    /**
+     * Añade o actualiza un valor del indicador
+     * @param Request $request
+     * @return type
+     */
     function addAction(Request $request)
     {
         $indicator = $this->findIndicatorOr404($request);
@@ -37,7 +42,6 @@ class ValueIndicatorController extends \Pequiven\SEIPBundle\Controller\SEIPContr
                     ->setLastFormulaUsed($formula)
                     ;
             
-            
             $valueIndicator = $this->resourceResolver->getResource(
                 $this->getRepository(),
                 'findOneBy',
@@ -47,8 +51,6 @@ class ValueIndicatorController extends \Pequiven\SEIPBundle\Controller\SEIPContr
                 $valueIndicator = new \Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator();
             }else{
             }
-            $resultService = $this->container->get('seip.service.result');
-            $resultService->refreshValueIndicator($indicator);
             
             $valueIndicator
                 ->setFormulaParameters($data)
@@ -81,11 +83,8 @@ class ValueIndicatorController extends \Pequiven\SEIPBundle\Controller\SEIPContr
 
                 $this->domainManager->dispatchEvent('post_update', $event);
             }
-            //Refrescar resultados del indicador padre.
-            if($indicator->getParent() !== null){
-                $resultService->refreshValueIndicator($indicator->getParent());
-            }
-            
+            $resultService = $this->container->get('seip.service.result');
+            $resultService->refreshValueIndicator($indicator);
         }
         
         $view = $this
@@ -126,6 +125,7 @@ class ValueIndicatorController extends \Pequiven\SEIPBundle\Controller\SEIPContr
                 'valueIndicator' => $valueIndicator
             ))
         ;
+        $view->getSerializationContext()->setGroups(array('id','api_list'));
         return $view;
     }
     
@@ -156,6 +156,222 @@ class ValueIndicatorController extends \Pequiven\SEIPBundle\Controller\SEIPContr
     }
     
     /**
+     * Muestra los detalles de un valor de indicador, ya sea el formulario o solo el show
+     * @param Request $request
+     * @return type
+     */
+    public function showDetailAction(Request $request)
+    {
+        $numResult = $request->get('numResult');
+        $valueIndicator = $this->findOr404($request);
+        $valueIndicatorDetail = $valueIndicator->getValueIndicatorDetail();
+        $indicator = $valueIndicator->getIndicator();
+        $valueIndicatorConfig = $indicator->getValueIndicatorConfig();
+        
+        $template = '';
+        $dataApi = array();
+        $groupSerialization = array('id','api_list');
+        $data = array(
+            'numResult' => $numResult,
+            'indicator' => $indicator,
+            'valueIndicator' => $valueIndicator,
+            'valueIndicatorDetail' => $valueIndicatorDetail,
+        );
+        if($indicator->getTypeDetailValue() == \Pequiven\IndicatorBundle\Entity\Indicator::TYPE_DETAIL_DAILY_LOAD_PRODUCTION)
+        {
+            if(!$valueIndicatorDetail){
+                $em = $this->getDoctrine()->getManager();
+                $products = $valueIndicatorConfig->getProducts();
+                
+                $valueIndicatorDetail = new \Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\ValueIndicatorDetail();
+                $valueIndicatorDetail->setValueIndicator($valueIndicator);
+                $valueIndicator->setValueIndicatorDetail($valueIndicatorDetail);
+                foreach ($products as $product) {
+                    $productDetailDailyMonth = new \Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\Detail\ProductDetailDailyMonth();
+                    $productDetailDailyMonth->setProduct($product);
+                    $productDetailDailyMonth->setMonth($numResult);
+                    
+                    if(count($product->getComponents()) > 0){
+                        foreach ($product->getComponents() as $component) {
+                            $productDetailDailyMonthComponent = new \Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\Detail\ProductDetailDailyMonth();
+                            $productDetailDailyMonthComponent->setProduct($component);
+                            $productDetailDailyMonthComponent->setMonth($numResult);
+                            
+                            $productDetailDailyMonth->addComponent($productDetailDailyMonthComponent);
+                        }
+                    }
+                    
+                    $valueIndicatorDetail->addProductsDetailDailyMonth($productDetailDailyMonth);
+                }
+                $em->persist($valueIndicatorDetail);
+                $em->flush();
+            }
+            $dataApi = $valueIndicatorDetail->getProductsDetailDailyMonth();
+            $groupSerialization[] = 'product';
+            $groupSerialization[] = 'components';
+            
+            $template = 'PequivenSEIPBundle:Planning:Indicator/ValueIndicator/Detail/productDetailDailyMonth.html.twig';
+        }
+        
+        if ($this->config->isApiRequest()) {
+            $products = $services = $productsGroups = array();
+            foreach ($dataApi as $value) {
+                $typeOf = $value->getProduct()->getTypeOf();
+                if(!isset($productsGroups[$typeOf])){
+                    $productsGroups[$typeOf] = array();
+                }
+                $productsGroups[$typeOf][] = $value;
+            }
+            $productTypesLabel = \Pequiven\SEIPBundle\Entity\CEI\Product::getTypesLabel();
+            $leafByGroup = array();
+            foreach ($productsGroups as $key => $group) {
+                $leaf = $this->buildLeaft(array(
+                    "leaf"  => false,
+                    "expanded" => true
+                ));
+                if(isset($productTypesLabel[$key])){
+                    $leaf['name'] = $this->trans($productTypesLabel[$key].'s',array(),"PequivenSEIPBundle");
+                }
+                if($key == \Pequiven\SEIPBundle\Entity\CEI\Product::TYPE_PRODUCT){
+                    $leaf["iconCls"] = "fa fa-cubes";
+                }else if($key == \Pequiven\SEIPBundle\Entity\CEI\Product::TYPE_SERVICE){
+                    $leaf["iconCls"] = "fa fa-cogs";
+                }
+                $leaf['children'] = $this->getStructureTree($group);
+                $leafByGroup[] = $leaf;
+            }
+            $data = array(
+                "success" => true,
+                "text" =>  "Root",
+                "children"=> $leafByGroup,
+            );
+        }
+        
+        $view = $this
+            ->view()
+            ->setTemplate($template)
+            ->setData($data)
+        ;
+        $view->getSerializationContext()->setGroups($groupSerialization);
+        return $view;
+    }
+    
+    /**
+     * @deprecated since version number
+     * @param Request $request
+     * @return type
+     * @throws type
+     */
+    function updateDetailAction(Request $request) 
+    {
+        $valueIndicator = $this->getRepository()->find($request->get("id"));
+        $valueIndicatorDetail = $valueIndicator->getValueIndicatorDetail();
+        $indicator = $valueIndicator->getIndicator();
+        
+        $result = array("data" => null);
+        
+        if($indicator->getTypeDetailValue() == \Pequiven\IndicatorBundle\Entity\Indicator::TYPE_DETAIL_DAILY_LOAD_PRODUCTION)
+        {
+            $repository = $this->get("pequiven.repository.product_detail_daily_month");
+            $slug = $request->get("slug");
+
+            $productDetailDailyMonth = $repository->find($slug);
+
+            if(!$productDetailDailyMonth){
+                throw $this->createNotFoundException("The product_detail_daily_month not found.");
+            }
+
+            $dataRequest = $request->request->all();
+            unset($dataRequest['id']);
+            unset($dataRequest['null']);
+
+            $form = $this->createForm(new \Pequiven\IndicatorBundle\Form\Indicator\ValueIndicator\Detail\ProductDetailDailyMonthType(),$productDetailDailyMonth);
+            $form->submit($dataRequest,false);
+            $success = false;
+
+            if($form->isValid()){
+                $this->save($productDetailDailyMonth,true);
+
+                $parent = $productDetailDailyMonth->getParent();
+                if($parent !== null){
+                    $parent->updateParentTotals();
+                    $this->save($parent,true);
+                }
+                $serializationContext = \JMS\Serializer\SerializationContext::create()->setGroups(array('id','api_list'));
+                $result["children"] = $child = json_decode($this->getSerializer()->serialize($productDetailDailyMonth, 'json',$serializationContext),true);
+                $success = true;
+            }
+        }
+        
+        
+        $result["success"] = $success;
+        $result["total"] = 1;
+        $result["message"] = 1;
+        
+        $groupSerialization = array('id','api_list','product','components');
+        
+        $view = $this->view();
+        $view->setData($result);
+        $view->getSerializationContext()->setGroups($groupSerialization);
+        return $view;
+    }
+    
+    private function getStructureTree($objects,$limitCurrentLevel = 0) 
+    {
+        $tree = array();
+        foreach ($objects as $child) {
+           $tree[] = $this->getLeaf($child,$limitCurrentLevel);
+        }
+        return $tree;
+    }
+    
+    private function getLeaf(\Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\Detail\ProductDetailDailyMonth $item,$limitCurrentLevel)
+    {
+        $serializationContext = \JMS\Serializer\SerializationContext::create()->setGroups(array('id','api_list'));
+        $child = json_decode($this->getSerializer()->serialize($item, 'json',$serializationContext),true);
+        $child['name'] = $item->getProduct()->getName();
+        $child['iconCls'] = null;
+        if($item->getProduct()->getTypeOf() == \Pequiven\SEIPBundle\Entity\CEI\Product::TYPE_SERVICE){
+            $child['iconCls'] = "fa fa-cog";
+        }
+        else if($item->getProduct()->getTypeOf() == \Pequiven\SEIPBundle\Entity\CEI\Product::TYPE_PRODUCT){
+            $child['iconCls'] = "fa fa-cube";
+        }
+        $child['parentId'] = null;
+        $child['leaf'] = true;
+        
+        if(count($item->getComponents()) > 0){
+            $child['parentId'] = $item->getId();
+            $limitLevel = 5;
+            $child['leaf'] = false;
+            $child['iconCls'] = "fa fa-sort-amount-asc";
+            if($limitCurrentLevel < $limitLevel){
+                $child['expanded'] = true;
+                $child['children'] = $this->getStructureTree($item->getComponents(), ($limitCurrentLevel+1));
+            }else{
+                $child['expanded'] = false;
+            }
+        }else{
+            $child['expanded'] = false;
+        }
+        return $child;
+    }
+    
+    private function buildLeaft(array $parameters = array())
+    {
+        $default = array(
+            'name' => 'Name',
+            'iconCls' => "fa fa-cubes",
+            'leaf' => true,
+            "parentId" => null,
+            "expanded" => false,
+        );
+        
+        return array_merge($default,$parameters);
+    }
+
+
+    /**
      * Construye el formulario de la formula
      * @param \Pequiven\MasterBundle\Entity\Formula $formula
      * @return type
@@ -174,23 +390,33 @@ class ValueIndicatorController extends \Pequiven\SEIPBundle\Controller\SEIPContr
         if($formula){
             $variables = $formula->getVariables();
             foreach ($variables as $variable) {
+                $editable = true;
+                if($variable->isFromEQ() === true){
+//                    continue;
+                    $editable = false;
+                }
                 $name = $variable->getName();
                 
                 $formulaDetail = $indicator->getFormulaDetailByVariable($variable);
                 $unit = '';
+                $description = $variable->getDescription();
                 if($formulaDetail){
+                    if($formulaDetail->getVariableDescription()!= ""){
+                        $description = $formulaDetail->getVariableDescription();
+                    }
                     $unit = '('.$formulaDetail->getUnit().')';
                 }
                 
                 $type = 'text';
                 $parameters = array(
-                    'label' => $variable->getDescription() .' '.$unit,
+                    'label' => $description .' '.$unit,
                     'label_attr' => array(
                         'class' => 'label'
                     ),
                     'attr' => array(
                         'class' => 'input'
-                    )
+                    ),
+                    'disabled' => !$editable,
                 );
                 $form->add($name,$type,$parameters);
             }
@@ -231,5 +457,14 @@ class ValueIndicatorController extends \Pequiven\SEIPBundle\Controller\SEIPContr
     private function getUnitConverter()
     {
         return $this->container->get('tecnocreaciones_tools.unit_converter');
+    }
+    
+    /**
+     * 
+     * @return \JMS\Serializer\Serializer
+     */
+    private function getSerializer()
+    {
+        return $this->container->get('jms_serializer');
     }
 }

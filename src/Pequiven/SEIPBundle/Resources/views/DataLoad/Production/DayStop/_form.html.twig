@@ -1,0 +1,27 @@
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+<fieldset class="fieldset fields-list">
+    <legend class="legend">{{ 'pequiven_seip.day_stop.day_stop'|trans }}</legend>
+    <div class="field-block button-height">
+        {{ form_label(form.day) }}
+        {{ form_widget(form.day) }}
+        {{ form_errors(form.day) }}
+    </div>
+    <div class="field-block button-height ¡">
+        {{ form_label(form.stopTime) }}
+        <p class="inline-div">
+            {{ form_widget(form.stopTime) }}
+            {{ form_errors(form.stopTime) }}
+        </p>
+        <p class="hidden">
+            {{ form_widget(form.hours) }}
+            {{ form_errors(form.hours) }}
+        </p>
+        
+        {{ form_label(form.otherTime) }}
+        {{ form_widget(form.otherTime) }}
+    </div>
+    <div class="field-block button-height hidden">
+        
+    </div>
+</fieldset>

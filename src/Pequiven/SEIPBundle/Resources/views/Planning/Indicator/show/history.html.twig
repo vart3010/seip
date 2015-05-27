@@ -6,6 +6,9 @@
         <li class="active"><a href="#tab-1">{{ 'pequiven.details'|trans({},'messages') }}</a></li>
         <li><a href="#tab-2">{{ 'pequiven.events'|trans({},'messages') }}</a></li>
         <li><a href="#tab-3">{{ 'pequiven.observations'|trans({},'messages') }}</a></li>
+        {% if indicator.valueIndicatorConfig is not null %}
+            <li><a href="#tab-4">{{ 'pequiven_indicator.details_value_config'|trans }}</a></li>
+        {% endif %}
     </ul>
 
     <div class="tabs-content">
@@ -47,6 +50,39 @@
         <div id="tab-3" class="with-padding">
             {% include 'PequivenSEIPBundle:Template:Developer/Common/history/observations.html.twig' %}
         </div>
+        {% if indicator.valueIndicatorConfig is not null %}
+            <div id="tab-4" class="with-padding">
+                <table class="simple-table responsive-table tables-extras" >
+                    <thead>
+                        <tr>
+                            <th scope="col" width="100%">{{ 'seip.table.header.products'|trans({},'PequivenArrangementProgramBundle') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for product in indicator.valueIndicatorConfig.products %}
+                            <tr>
+                                <th scope="row">
+                                    {{ product.name }}
+                                    {% if (product.components|length) > 0 %}
+                                        <ul>
+                                            {% for component in product.components %}
+                                                <li>{{ component }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    {% endif %}
+                                </th>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="1" class="empty_row">
+                                    {{ "seip.table.empty.products"|trans({},'PequivenArrangementProgramBundle') }}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif%}
     </div>
 
 </div>

@@ -1,7 +1,51 @@
+#Ficha del indicador
 pequiven_indicator_show:
     path: /{id}.{_format}
     defaults:
         _controller: pequiven.controller.indicator:showAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+        id: \d+
+    methods: [GET]
+    
+pequiven_indicator_update:
+    path: /{id}/update.{_format}
+    defaults:
+        _controller: pequiven.controller.indicator:updateAction
+        _format: html
+        _sylius:
+            form: pequiven_indicatorbundle_indicator
+    requirements:
+        _format: html|json|xml
+        id: \d+
+    methods: [GET|POST]
+    
+pequiven_indicator_approved:
+    path: /{id}/approved.{_format}
+    defaults:
+        _controller: pequiven.controller.indicator:approvedAction
+        _format: html
+    requirements:
+        _format: html
+        id: \d+
+    methods: [POST]
+    
+pequiven_indicator_delete:
+    path: /{id}/delete.{_format}
+    defaults:
+        _controller: pequiven.controller.indicator:deleteAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+        id: \d+
+    methods: [POST|DELETE]
+    
+#Vista de los Indicadores Hijos
+pequiven_indicator_show_dashboard:
+    path: /{id}/dashboard.{_format}
+    defaults:
+        _controller: pequiven.controller.indicator:showDashboardAction
         _format: html
     requirements:
         _format: html|json|xml
@@ -28,6 +72,16 @@ pequiven_indicator_add_observation:
         id: \d+
     methods: [POST]
     
+pequiven_indicator_remove_values:
+    path: /{id}/remove-values
+    defaults:
+        _controller: pequiven.controller.indicator:removeValuesAction
+        _format: html
+    requirements:
+        _format: html
+        id: \d+
+    methods: [POST]
+    
 #Select que devuelve las Gerencias de 1ra Línea para la visualización de objetivos a nivel Táctico
 indicatorGerenciaFirstTactic:
     path: /indicator/indicatorGerenciaFirstTactic
@@ -39,3 +93,13 @@ indicatorGerenciaSecondOperative:
     path: /indicator/indicatorGerenciaSecondOperative
     defaults:
         _controller: pequiven.controller.indicator:selectGerenciaSecondListAction
+        
+pequiven_indicator_list_error:
+    path: /listError.{_format}
+    defaults:
+        _controller: pequiven.controller.indicator:listErrorAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+        level: 1|2|3
+    methods: [GET]

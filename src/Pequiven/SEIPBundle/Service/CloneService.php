@@ -85,20 +85,14 @@ class CloneService extends ContainerAware
      * @param type $object
      * @return type
      */
-    public function findCloneInstance($object) 
+    public function findCloneInstance($object,$throwException = false) 
     {
         $em = $this->getDoctrine()->getManager();
-        $periodActive = $this->getPeriodService()->getPeriodActive();
-        $idSourceObject = $object->getId();
         
         $className = ClassUtils::getRealClass(get_class($object));
         $typeObject = PrePlanning::getTypeByClass($className);
         
-        $prePlanningCloneEntityInstance = $em->getRepository('Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanningItemClone')->findOneBy(array(
-            'idSourceObject' => $idSourceObject,
-            'typeObject' => $typeObject,
-            'period' => $periodActive
-        ));
+        $prePlanningCloneEntityInstance = $this->findPrePlanningItemForObject($object);
         $entity = $classNameClonned = null;
         if($prePlanningCloneEntityInstance){
             $typeObject = $prePlanningCloneEntityInstance->getTypeObject();
@@ -110,10 +104,30 @@ class CloneService extends ContainerAware
         if($entity){
             $this->addToCache($entity,$this->generateId($object));
             $this->addToCache($entity,$this->generateId($entity));
+        }else if($throwException){
+            throw new Exception(sprintf('The object instance for "%s" not found!',$className));
         }
         return $entity;
     }
     
+    private function findPrePlanningItemForObject($object)
+    {
+        $className = ClassUtils::getRealClass(get_class($object));
+        $typeObject = PrePlanning::getTypeByClass($className);
+        
+        $em = $this->getDoctrine()->getManager();
+        $periodActive = $this->getPeriodService()->getPeriodActive();
+        $idSourceObject = $object->getId();
+        
+        $prePlanningCloneEntityInstance = $em->getRepository('Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanningItemClone')->findOneBy(array(
+            'idSourceObject' => $idSourceObject,
+            'typeObject' => $typeObject,
+            'period' => $periodActive
+        ));
+        return $prePlanningCloneEntityInstance;
+    }
+
+
     private function cloneObjetive(Objetive $objetive)
     {
         $entity = $this->findCloneInstance($objetive);
@@ -172,6 +186,7 @@ class CloneService extends ContainerAware
         $entity = $this->findCloneInstance($indicator);
         if(!$entity){
             $objetives = new ArrayCollection($indicator->getObjetives()->toArray());
+            $tagsIndicator = new ArrayCollection($indicator->getTagsIndicator()->toArray());
             
             $entity = $this->_clone($indicator);
             
@@ -192,9 +207,6 @@ class CloneService extends ContainerAware
             if($entity->getFrequencyNotificationIndicator()){
                 $entity->setFrequencyNotificationIndicator($this->cloneObject($entity->getFrequencyNotificationIndicator()));
             }
-            if($indicator->getParent()){
-                $indicator->setParent($this->cloneObject($indicator->getParent()));
-            }
             if($entity->getParent()){
                 $entity->setParent($this->cloneObject($entity->getParent()));
             }
@@ -210,6 +222,12 @@ class CloneService extends ContainerAware
             }
             
             $this->saveClone($entity, $indicator,$andFlush);
+            
+            foreach ($tagsIndicator as $tagIndicator) 
+            {
+                $tagIndicator->setIndicator($entity);
+                $indicator->addTagsIndicator($this->cloneObject($tagIndicator,true));
+            }
         }
         return $entity;
     }
@@ -406,6 +424,19 @@ class CloneService extends ContainerAware
         return $entity;
     }
     
+    private function cloneTagIndicator(Indicator\TagIndicator $tagIndicator,$andFlush = true)
+    {
+        $entity = $this->findCloneInstance($tagIndicator);
+        if(!$entity){
+//            $indicator = $tagIndicator->getIndicator();
+            $entity = $this->_clone($tagIndicator);
+//            $entity->setIndicator($this->findCloneInstance($indicator,true));
+            
+            $this->saveClone($entity, $tagIndicator,$andFlush);
+        }
+        return $entity;
+    }
+    
     private function cloneExample(\Pequiven\MasterBundle\Entity\Operator $operator,$andFlush = true)
     {
         throw new Exception('IMPLEMENTAME '.__FUNCTION__);
@@ -414,7 +445,10 @@ class CloneService extends ContainerAware
     private function saveClone(&$cloneObject,&$sourceObject,$andFlush = true)
     {
         
-        $prePlanningItemClone = new PrePlanningItemClone();
+        $prePlanningItemClone = $this->findPrePlanningItemForObject($sourceObject);
+        if(!$prePlanningItemClone){
+            $prePlanningItemClone = new PrePlanningItemClone();
+        }
         $cloneObject->setPeriod($this->getPeriodToClone());
         
         $this->persist($cloneObject,$andFlush);
@@ -459,6 +493,7 @@ class CloneService extends ContainerAware
             PrePlanning::TYPE_OBJECT_FREQUENCY_NOTIFICATION_INDICATOR => 'cloneFrequencyNotificationIndicator',
             PrePlanning::TYPE_OBJECT_VARIABLE => 'cloneVariable',
             PrePlanning::TYPE_OBJECT_INDICATOR_LEVEL => 'cloneIndicatorLevel',
+            PrePlanning::TYPE_OBJECT_TAG_INDICATOR => 'cloneTagIndicator',
         );
         $method = $supportObjects[$typeObject];
         $entity = $this->getFromCache($sourceObject);
@@ -522,9 +557,9 @@ class CloneService extends ContainerAware
         /**
      * @return PeriodService
      */
-    private function getPeriodService()
+    protected function getPeriodService()
     {
-        return $this->container->get('pequiven_arrangement_program.service.period');
+        return $this->container->get('pequiven_seip.service.period');
     }
     
     /**

@@ -45,6 +45,7 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeGerencia', 'class' => 'Pequiven\MasterBundle\Entity\Gerencia', 'format' => 'json'),
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeGerenciaSecond', 'class' => 'Pequiven\MasterBundle\Entity\GerenciaSecond', 'format' => 'json'),
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeGoal', 'class' => 'Pequiven\ArrangementProgramBundle\Entity\Goal', 'format' => 'json'),
+            array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeReportTemplate', 'class' => 'Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate', 'format' => 'json'),
         );
     }
 
@@ -109,6 +110,19 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
             }
         }
         $visitor->addData('_links',$links);
+        
+        $arrangementRangeService = $this->getArrangementRangeService();
+        $errorArrangementRange = '';
+        if($indicator->getArrangementRange() !== null){//En caso de que el indicador tenga un rango de gestión asignado, se procede a evaluar la definición del rango
+            $errorArrangementRange = $arrangementRangeService->validateArrangementRange($indicator->getArrangementRange(), $indicator->getTendency());
+            if($errorArrangementRange == null){
+                $errorArrangementRange = $this->trans('pequiven_indicator.indicatorsWithoutErrorText', array(), 'PequivenIndicatorBundle');
+            }
+        } else{//En caso de que el indicador no tenga un rango de gestión asignado se setea el mensaje de error
+            $errorArrangementRange = $this->trans('pequiven_indicator.errors.arrangementRange_not_assigned', array(), 'PequivenIndicatorBundle');
+        }
+        
+        $visitor->addData('errorText',$errorArrangementRange);
     }
     
     public function onPostSerializeGoalDetails(ObjectEvent $event) {
@@ -550,6 +564,17 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
         $event->getVisitor()->addData('rol',$rol);
     }
     
+    public function onPostSerializeReportTemplate(ObjectEvent $event)
+    {
+        $object = $event->getObject();
+        $links = array(
+            "self" => array(),
+        );
+        $links['self']['show'] = $this->generateUrl('pequiven_report_template_show', array('id' => $object->getId()));
+        $links['self']['update'] = $this->generateUrl('pequiven_report_template_update', array('id' => $object->getId()));
+        $event->getVisitor()->addData('_links',$links);
+    }
+    
     public function onPostSerializeGerencia(ObjectEvent $event) {
         $object = $event->getObject();
         $links = array(
@@ -600,6 +625,24 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
     private function getArrangementProgramManager()
     {
         return $this->container->get('seip.arrangement_program.manager');
+    }
+    
+    /**
+     * 
+     * @return \Pequiven\ArrangementBundle\Service\ArrangementRangeService
+     */
+    protected function getArrangementRangeService()
+    {
+        return $this->container->get('pequiven_arrangement.service.arrangementrange');
+    }
+    
+    /**
+     * 
+     * @return \Pequiven\SEIPBundle\Service\ResultService
+     */
+    protected function getResultService()
+    {
+        return $this->container->get('seip.service.result');
     }
     
     /**

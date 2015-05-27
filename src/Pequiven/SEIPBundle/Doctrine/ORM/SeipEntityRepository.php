@@ -16,20 +16,56 @@ use Pequiven\SEIPBundle\Service\PeriodService;
 use Tecnocreaciones\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
 
 /**
- * Description of SeipEntityRepository
+ * Repositorio base para entidades seip
  *
  * @author Carlos Mendoza <inhack20@gmail.com>
  */
 class SeipEntityRepository extends EntityRepository
 {
+    /**
+     * 
+     * @return QueryBuilder
+     */
+    public function getQueryAllEnabled()
+    {
+        $qb = $this->getQueryBuilder();
+        $qb
+            ->andWhere($this->getAlias().'.enabled = :enabled')
+            ->setParameter('enabled', true)
+            ;
+        return $qb;
+    }
+    
+    public function getAllEnabled()
+    {
+        $qb = $this->getQueryAllEnabled();
+        return $qb->getQuery()->getResult();
+    }
+
+
     protected function applyPeriodCriteria(QueryBuilder &$queryBuilder, $alias = null) 
     {
         if($alias === null){
             $alias = $this->getAlias();
         }
-        
+        $periodId = $this->getRequest()->get("_period");
         $queryBuilder->andWhere($alias.'.period = :period');
-        $this->setParameterPeriod($queryBuilder);
+        
+        $periodValid = null;
+        if($periodId !== null){
+            $periodService = $this->getPeriodService();
+            $period = $periodService->find($periodId);
+            if($period !== null){
+                $periodValid = $period;
+            }
+        }
+        if($periodValid !== null){
+            $queryBuilder
+            ->setParameter('period',$periodValid)
+            ;
+        }else{
+            $this->setParameterPeriod($queryBuilder);
+        }
     }
     
     protected function setParameterPeriod(QueryBuilder &$queryBuilder)
@@ -44,6 +80,15 @@ class SeipEntityRepository extends EntityRepository
      */
     protected function getPeriodService()
     {
-        return $this->container->get('pequiven_arrangement_program.service.period');
+        return $this->container->get('pequiven_seip.service.period');
+    }
+    
+    /**
+     * 
+     * @return \Symfony\Component\HttpFoundation\Request
+     */
+    private function getRequest()
+    {
+        return $this->container->get('request_stack')->getCurrentRequest();
     }
 }

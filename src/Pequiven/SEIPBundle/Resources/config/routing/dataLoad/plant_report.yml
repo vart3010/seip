@@ -1,0 +1,42 @@
+pequiven_plant_report_index:
+    path: /.{_format}
+    defaults:
+        _controller: pequiven.controller.plant_report:indexAction
+        _format: html
+    requirements:
+        _format: json|html
+    methods: [GET]
+    
+pequiven_plant_report_create:
+    path: /{reportTemplate}/create
+    defaults:
+        _controller: pequiven.controller.plant_report:createAction
+        _sylius:
+            form: pequiven_seipbundle_dataload_plantreport
+    methods: [GET|POST]
+    
+pequiven_plant_report_show:
+    path: /{id}/show
+    defaults:
+        _controller: pequiven.controller.plant_report:showAction
+    methods: [GET]
+    
+pequiven_plant_report_update:
+    path: /{id}/update
+    defaults:
+        _controller: pequiven.controller.plant_report:updateAction
+        _sylius:
+            form: pequiven_seipbundle_dataload_plantreport
+    methods: [GET|POST|PUT]
+    
+pequiven_plant_report_delete:
+    path: /{id}/delete
+    defaults:
+        _controller: pequiven.controller.plant_report:deleteAction
+    methods: [GET|DELETE]
+    
+pequiven_plant_report_run:
+    path: /{id}/run
+    defaults:
+        _controller: pequiven.controller.plant_report:runAction
+    methods: [GET]

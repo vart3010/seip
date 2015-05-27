@@ -1,0 +1,109 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}
+
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
+
+{% block before_body %}
+    {{ contentHeader(
+        ("pequiven_seip.product_report.product_detail_daily_month"|trans )
+    ) }}
+{% endblock %}
+
+{% block body %}
+    {% set productReport = product_detail_daily_month.productReport %}
+    {% set typeProductionGross = "&nbsp;("~("pequiven_seip.gross"|trans)~")" %}
+    {% set typeProductionNet = "&nbsp;("~("pequiven_seip.net"|trans)~")" %}
+    <fieldset class="fieldset">
+        <legend class="legend">{{ 'pequiven_seip.product_report.product_detail_daily_month'|trans }}</legend>
+        <div class="columns">
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'pequiven_seip.product_report.product_report'|trans }}</label>
+                    {{ generateLink(productReport) }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'Month'|trans }}</label>
+                    {{ generateLink(product_detail_daily_month) }}
+                </p>
+            </div>
+            <div class="new-row twelve-columns twelve-columns-tablet twelve-columns-mobile">
+                <h3 class="thin underline">{{ typeProductionGross|raw }}</h3>
+                <div class="columns">
+                    <div class="new-row-mobile three-columns three-columns-tablet twelve-columns-mobile">
+                        <p class="inline-label">
+                            <label class="label">{{ 'pequiven_seip.totalPlan'|trans }}</label>
+                            {{ product_detail_daily_month.totalGrossPlan|myNumberFormat }}&nbsp;{{ productReport.product.productUnit }}
+                        </p>
+                    </div>
+                    <div class="new-row-mobile three-columns three-columns-tablet twelve-columns-mobile">
+                        <p class="inline-label">
+                            <label class="label">{{ 'pequiven_seip.totalReal'|trans }}</label>
+                            {{ product_detail_daily_month.totalGrossReal|myNumberFormat }}&nbsp;{{ productReport.product.productUnit }}
+                        </p>
+                    </div>
+                    <div class="new-row-mobile three-columns three-columns-tablet twelve-columns-mobile">
+                        <p class="inline-label">
+                            <label class="label">{{ 'pequiven_seip.percentage'|trans }}</label>
+                            {{ product_detail_daily_month.grossPercentage|myNumberFormat }}&nbsp;%
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="new-row twelve-columns twelve-columns-tablet twelve-columns-mobile">
+                <h3 class="thin underline">{{ typeProductionNet|raw }}</h3>
+                <div class="columns">
+                    <div class="new-row-mobile three-columns three-columns-tablet twelve-columns-mobile">
+                        <p class="inline-label">
+                            <label class="label">{{ 'pequiven_seip.totalPlan'|trans }}</label>
+                            {{ product_detail_daily_month.totalNetPlan|myNumberFormat }}&nbsp;{{ productReport.product.productUnit }}
+                        </p>
+                    </div>
+                    <div class="new-row-mobile three-columns three-columns-tablet twelve-columns-mobile">
+                        <p class="inline-label">
+                            <label class="label">{{ 'pequiven_seip.totalReal'|trans }}</label>
+                            {{ product_detail_daily_month.totalNetReal|myNumberFormat }}&nbsp;{{ productReport.product.productUnit }}
+                        </p>
+                    </div>
+                    <div class="new-row-mobile three-columns three-columns-tablet twelve-columns-mobile">
+                        <p class="inline-label">
+                            <label class="label">{{ 'pequiven_seip.percentage'|trans }}</label>
+                            {{ product_detail_daily_month.netPercentage|myNumberFormat }}&nbsp;%
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+                
+    <div class="standard-tabs margin-bottom" id="add-tabs">
+        <ul class="tabs">
+                <li class="active"><a href="#tab-1">{{ "pequiven_seip.gross"|trans }}</a></li>
+                <li><a href="#tab-2">{{ "pequiven_seip.net"|trans }}</a></li>
+        </ul>
+
+        <div class="tabs-content">
+            <div id="tab-1" class="with-padding">
+                {% set prefix = "Gross" %}
+                {% set typeProduction = ("pequiven_seip.gross"|trans) %}
+                {% include 'PequivenSEIPBundle:DataLoad/Production/ProductDetailDailyMonth:show/details.html.twig' %}
+            </div>
+
+            <div id="tab-2" class="with-padding">
+                {% set prefix = "Net" %}
+                {% set typeProduction = ("pequiven_seip.net"|trans) %}
+                {% include 'PequivenSEIPBundle:DataLoad/Production/ProductDetailDailyMonth:show/details.html.twig' %}
+            </div>
+        </div>
+    </div>
+    
+    <br /><br />
+        
+    <p class="button-height align-right">
+        {{ buttons.generic(path('pequiven_product_detail_daily_month_update', { 'id': product_detail_daily_month.id }),('pequiven.edit'|trans({},'messages'))) }}
+        &nbsp;
+        {{ buttons.delete(path('pequiven_product_detail_daily_month_delete', { 'id': product_detail_daily_month.id })) }}
+    </p>
+{% endblock %}

@@ -34,6 +34,7 @@ class GerenciaSecondAdmin extends Admin
             ->add('operationalObjectives')
             ->add('gerenciaVinculants')
             ->add('gerenciaSupports')
+            ->add('validAudit')
             ->add('createdAt')
             ->add('enabled')
             ;
@@ -44,26 +45,36 @@ class GerenciaSecondAdmin extends Admin
             ->add('ref')
             ->add('abbreviation')
             ->add('description')
-            ->add('gerencia')
+            ->add('gerencia',null,array(
+                'required' => true,
+            ))
             ->add('complejo','sonata_type_model_autocomplete',array(
                 'property' => array('description')
             ))
             ->add('operationalObjectives','sonata_type_model_autocomplete',array(
                 'required' => false,
                 'property' => array('ref','description'),
-                'multiple' => true
+                'multiple' => true,
+                'required' => false,
             ))
             ->add('gerenciaVinculants','sonata_type_model_autocomplete',array(
                 'required' => false,
                 'property' => array('ref','description'),
-                'multiple' => true
+                'multiple' => true,
+                'required' => false,
             ))
             ->add('gerenciaSupports','sonata_type_model_autocomplete',array(
                 'required' => false,
                 'property' => array('ref','description'),
-                'multiple' => true
+                'multiple' => true,
+                'required' => false,
             ))
-            ->add('enabled')
+            ->add('validAudit',null,array(
+                'required' => false,
+            ))
+            ->add('enabled',null,array(
+                'required' => false,
+            ))
             ;
     }
     
@@ -74,6 +85,7 @@ class GerenciaSecondAdmin extends Admin
             ->add('abbreviation')
             ->add('description')
             ->add('gerencia')
+            ->add('validAudit')
             ->add('enabled')
             ;
     }

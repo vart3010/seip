@@ -48,17 +48,33 @@ class ObjetiveOperativeController extends baseController
     public function showAction(Request $request)
     {
         $securityService = $this->getSecurityService();
-        $securityService->checkSecurity(array('ROLE_SEIP_OBJECTIVE_VIEW_OPERATIVE','ROLE_SEIP_PLANNING_VIEW_OBJECTIVE_OPERATIVE'));
+        $securityService->checkSecurity(array('ROLE_SEIP_OBJECTIVE_VIEW_OPERATIVE','ROLE_SEIP_PLANNING_VIEW_OBJECTIVE_OPERATIVE','ROLE_SEIP_SIG_OBJECTIVE_VIEW_OPERATIVE'));
         $resource = $this->findOr404($request);
         
         if(!$securityService->isGranted('ROLE_SEIP_PLANNING_VIEW_OBJECTIVE_OPERATIVE')){
-            $securityService->checkSecurity('ROLE_SEIP_OBJECTIVE_VIEW_OPERATIVE',$resource);
+            if(!$securityService->isGranted('ROLE_SEIP_SIG_OBJECTIVE_VIEW_OPERATIVE')){
+                $securityService->checkSecurity('ROLE_SEIP_OBJECTIVE_VIEW_OPERATIVE',$resource);
+            } else{
+                $securityService->checkSecurity('ROLE_SEIP_SIG_OBJECTIVE_VIEW_OPERATIVE',$resource);
+            }
         }
+        $indicatorService = $this->getIndicatorService();
+        
+        $hasPermissionToApproved = $securityService->isGrantedFull("ROLE_SEIP_OBJECTIVE_APPROVED_OPERATIVE",$resource);
+        $hasPermissionToUpdate = $securityService->isGrantedFull("ROLE_SEIP_OBJECTIVE_EDIT_OPERATIVE",$resource);
+        $isAllowToDelete = $securityService->isGrantedFull("ROLE_SEIP_OBJECTIVE_DELETE_OPERATIVE",$resource);
+        
         $view = $this
             ->view()
             ->setTemplate('PequivenObjetiveBundle:Operative:show.html.twig')
             ->setTemplateVar('entity')
-            ->setData($resource)
+            ->setData(array(
+                'entity' => $resource,
+                'indicatorService' => $indicatorService,
+                'hasPermissionToUpdate' => $hasPermissionToUpdate,
+                'hasPermissionToApproved' => $hasPermissionToApproved,
+                'isAllowToDelete' => $isAllowToDelete,
+            ))
         ;
         $groups = array_merge(array('id','api_list','gerencia','gerenciaSecond'), $request->get('_groups',array()));
         $view->getSerializationContext()->setGroups($groups);
@@ -176,6 +192,8 @@ class ObjetiveOperativeController extends baseController
      */
     public function createAction(Request $request) 
     {
+        $this->getPeriodService()->checkIsOpen();
+        
         $this->getSecurityService()->checkSecurity('ROLE_SEIP_OBJECTIVE_CREATE_OPERATIVE');
         
         $form = $this->createForm($this->get('pequiven_objetive.operative.registration.form.type'));
@@ -448,8 +466,9 @@ class ObjetiveOperativeController extends baseController
 
             //Obtenemos el o los últimos objetivos guardados y le añadimos el rango de gestión o semáforo
             foreach($totalRef as $value){
-                $objetives = $em->getRepository('PequivenObjetiveBundle:Objetive')->findBy(array('ref' => $value));
+                $objetives = $em->getRepository('PequivenObjetiveBundle:Objetive')->findBy(array('ref' => $value, 'period' => $period->getId()));
                 foreach($objetives as $objetive){
+                    $this->addObjetiveParents($objetive,$data['parents']);
                     $this->createArrangementRange($objetive, $data);
                 }
             }
@@ -473,6 +492,40 @@ class ObjetiveOperativeController extends baseController
             'form' => $form->createView(),
             'role_name' => $role[0]
         );
+    }
+    
+    /**
+     * Función que guarda en la tabla intermedia el(los) objetivo(s) creado(s) junto con el objetivo padre
+     * @param Objetive $objetive
+     * @param type $parents
+     * @return boolean
+     * @throws \Pequiven\ObjetiveBundle\Controller\Exception
+     */
+    public function addObjetiveParents(Objetive $objetive, $parents = array()) {
+        
+        $em = $this->getDoctrine()->getManager();
+        $period = $this->getPeriodService()->getPeriodActive();
+        
+        $objetivesTactics = $em->getRepository('PequivenObjetiveBundle:Objetive')->findBy(array('id' => $parents,'period' => $period));
+        
+        $totalObjetivesTactics = count($objetivesTactics);
+        $em->getConnection()->beginTransaction();
+        if ($totalObjetivesTactics > 0) {
+            foreach ($objetivesTactics as $objetiveTactic) {
+                $objetiveTactic->addChildren($objetive);
+                $em->persist($objetiveTactic);
+            }
+        }
+
+        try {
+            $em->flush();
+            $em->getConnection()->commit();
+        } catch (Exception $e) {
+            $em->getConnection()->rollback();
+            throw $e;
+        }
+
+        return true;
     }
     
     /**
@@ -633,7 +686,7 @@ class ObjetiveOperativeController extends baseController
      */
     public function createIndicator($data = array(),$options = array(), $totalRef = array()){
         
-        $periodService = $this->get('pequiven_arrangement_program.service.period');
+        $periodService = $this->get('pequiven_seip.service.period');
         $period = $periodService->getPeriodActive();
         $nameObject = 'object';
         $totalGerencias = $options['totalGerencia'];//Total de Gerencias de 1ra Línea que abarca el Objetivo Operativo a crear
@@ -1196,8 +1249,10 @@ class ObjetiveOperativeController extends baseController
 
         $objetiveTactic = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $objetivesTactics[$totalObjetivesTactics - 1]));
         $refObjetiveTactic = $objetiveTactic->getRef();
-
-        $results = $this->get('pequiven.repository.objetiveoperative')->getByParent($objetivesTactics[$totalObjetivesTactics - 1], array('searchByRef' => true));
+        
+        $em->getFilters()->disable('softdeleteable');
+        $results = $this->get('pequiven.repository.objetiveoperative')->getByParent($objetivesTactics[$totalObjetivesTactics - 1], array('searchByRef' => true, 'viewAll' => true));
+        $em->getFilters()->enable('softdeleteable');
         $total = count($results);
         if (is_array($results) && $total > 0) {
             $ref = $refObjetiveTactic . ($total + 1) . '.';
@@ -1216,12 +1271,14 @@ class ObjetiveOperativeController extends baseController
         $em = $this->getDoctrine()->getManager();
         $objetivesTactics = $options['objetiveTactics'];
         $totalObjetivesTactics = count($objetivesTactics);
+        $period = $this->getPeriodService()->getPeriodActive();
         $totalRef = array();
 
         $objetiveTactic = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $objetivesTactics[$totalObjetivesTactics - 1]));
         $refObjetiveTactic = $objetiveTactic->getRef();
-
-        $results = $this->get('pequiven.repository.objetiveoperative')->getByParent($objetivesTactics[$totalObjetivesTactics - 1], array('searchByRef' => true));
+        $em->getFilters()->disable('softdeleteable');
+        $results = $this->get('pequiven.repository.objetiveoperative')->getByParent($objetivesTactics[$totalObjetivesTactics - 1], array('searchByRef' => true, 'viewAll' => true));
+        $em->getFilters()->enable('softdeleteable');
         $total = count($results);
         
         for($i = 0; $i < $options['totalGerencias']; $i++){
@@ -1269,9 +1326,9 @@ class ObjetiveOperativeController extends baseController
     /**
      * @return \Pequiven\SEIPBundle\Service\PeriodService
      */
-    private function getPeriodService()
+    protected function getPeriodService()
     {
-        return $this->container->get('pequiven_arrangement_program.service.period');
+        return $this->container->get('pequiven_seip.service.period');
     }
     
     /**
@@ -1281,5 +1338,14 @@ class ObjetiveOperativeController extends baseController
     protected function getSecurityService()
     {
         return $this->container->get('seip.service.security');
+    }
+    
+    /**
+     * 
+     * @return \Pequiven\IndicatorBundle\Service\IndicatorService
+     */
+    private function getIndicatorService()
+    {
+        return $this->container->get('pequiven_indicator.service.inidicator');
     }
 }

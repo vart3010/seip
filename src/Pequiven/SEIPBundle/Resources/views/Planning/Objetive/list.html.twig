@@ -21,18 +21,82 @@
     <input type="hidden" id="level" value="{{ level }}">
     <div ng-controller="TableFormatController">
         <div ng-controller="TableObjetiveController">
+            <details class="details margin-bottom" open="">
+                <summary role="button" aria-expanded="true">
+                    {{ 'pequiven.filters'|trans({},'messages') }}
+
+                </summary>
+                <div class="with-padding">
+                    <div class="columns">
+
+                         <div class="new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                            <label class="bold">{{ 'pequiven_objetive.status.status'|trans }}</label>
+                            <br/>
+                            <div class="with-mid-padding">
+                                <select class="select2 input-xlarge" id="selectStatus" ng-model="model.objetiveStatus" ng-options="value as value.description for (key,value) in data.objetiveStatusLabels">
+                                    <option value=''></option>
+                                </select>
+                            </div>
+                        </div>
+                            
+                        {% if (level > 1) %}
+                            <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                                <label class="bold">{{ 'pequiven_seip.filters.complejo'|trans({},'PequivenSEIPBundle') }}</label>
+                                <br/>
+                                <div class="with-mid-padding">
+                                    <select class="select2 input-xlarge" id="selectComplejos" ng-model="model.complejo" ng-change="getFirstLineManagement(model.complejo.id);getSecondLineManagement()" ng-options="value as value.description for (key,value) in data.complejos">
+                                        <option value=''></option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                                <label class="bold">{{ 'pequiven_seip.filters.first_line_management'|trans({},'PequivenSEIPBundle') }}</label>
+                                <br/>
+                                <div class="with-mid-padding">
+                                    <select class="select2 input-xlarge" id="firstLineManagement" ng-model="model.firstLineManagement" ng-change="getSecondLineManagement(model.firstLineManagement.id);getTactics(model.firstLineManagement.id)" ng-options="value as value.description group by value.complejo.description for (key,value) in data.first_line_managements">
+                                        <option value=''></option>
+                                    </select>
+                                </div>
+                            </div>
+                            {#<div class="new-row new-row-mobile-portrait six-columns twelve-columns-tablet twelve-columns-mobile-landscape twelve-columns-mobile-portrait">
+                                <label class="bold">{{ 'pequiven_seip.gerenciaFirst'|trans({},'PequivenSEIPBundle') }}</label>
+                                <br/>
+                                <div class="with-mid-padding">
+                                    <select ng-model="gerenciaFirst" id="selectGerenciaFirst" class="select2-offscreen populate" style="width:300px;">
+                                    </select>
+                                </div>
+                            </div>#}
+                        {% endif %}
+                        
+                        {% if (level == 3) %}
+                            <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                                <label class="bold">{{ 'pequiven_seip.filters.management_second_line'|trans({},'PequivenSEIPBundle') }}</label>
+                                <br/>
+                                <div class="with-mid-padding">
+                                    <select class="select2 input-xlarge" id="secondLineManagement" ng-model="model.secondLineManagement" ng-options="value as value.description group by (value.complejo.ref + ' - '+value.gerencia.description) for (key,value) in data.second_line_managements">
+                                        <option value=''></option>
+                                    </select>
+                                </div>
+                            </div>
+                            {#<div class="new-row-mobile six-columns twelve-columns-tablet twelve-columns-mobile">
+                                <label class="bold">{{ 'pequiven_seip.gerenciaSecond'|trans({},'PequivenSEIPBundle') }}</label>
+                                <br/>
+                                <div class="with-mid-padding">
+                                    <select ng-model="gerenciaSecond" id="selectGerenciaSecond" class="select2-offscreen populate" style="width:300px;">                                        
+                                    </select>
+                                </div>
+                            </div>#}
+                        {% endif %}
+                    </div>
+                </div>
+            </details>
+            
             <div loading-container="tableParams.settings().$loading">
-                <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager" template-header="custom/header" api-data-url="{{ apiDataUrl }}" export-csv="csv" class="table table-responsive table-extra-info">
-                    {% if (level > 1) %}
-                        <h3>Gerencia 1ra Línea: </h3><select ng-model="gerenciaFirst" id="selectGerenciaFirst" class="select2-offscreen populate" style="width:300px;"></select>
-                    {% endif %}
-                    {% if (level == 3) %}
-                        <h3>Gerencia 2da Línea: </h3><select ng-model="gerenciaSecond" id="selectGerenciaSecond" class="select2-offscreen populate" style="width:300px;"></select>
-                    {% endif %}
+                <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager" ng-init="data.objetiveStatusLabels = {{ labelsStatus|serialize }}" template-header="custom/header" api-data-url="{{ apiDataUrl }}" export-csv="csv" class="table table-responsive table-extra-info">
                     <tbody>
                         <tr ng-repeat="result in $data" data="{$ result|json $}">
                             <td data-title="'{{ (labelHeader[level])|trans }}'" sortable="'ref'" filter="{'description' : 'text'}">
-                                <a href="{$ result._links.self.href $}">{$ result.ref+result.description $}</a>
+                                <a href="{$ result._links.self.href $}">{$ result.ref+result.description $}{%if (level == 3) %} ({$ result.gerenciaSecond.description $}) {% endif %}</a>
                             </td>
                         </tr>
                     </tbody>
@@ -57,6 +121,9 @@
             charge();
             
             function charge(){
+                $('.select2').select2({
+                    allowClear: true
+                });
                chargeSelectGerenciaFirst();
                selectGerenciaSecond.select2({
 

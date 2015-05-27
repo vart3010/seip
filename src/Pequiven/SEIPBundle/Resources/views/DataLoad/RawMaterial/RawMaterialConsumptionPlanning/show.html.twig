@@ -1,0 +1,53 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}
+
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
+
+{% block before_body %}
+    {{ contentHeader(
+        ("pequiven_seip.raw_material_consumption_planning.raw_material_consumption_planning"|trans )
+    ) }}
+{% endblock %}
+
+{% block body %}
+    {% set productReport = raw_material_consumption_planning.productReport %}
+    <fieldset class="fieldset">
+        <legend class="legend">{{ 'pequiven_seip.raw_material_consumption_planning.raw_material_consumption_planning'|trans }}</legend>
+        <div class="columns">
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'pequiven_seip.product_report.product_report'|trans }}</label>
+                    {{ generateLink(productReport) }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'Raw material'|trans }}</label>
+                    {{ raw_material_consumption_planning.product }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'Type'|trans }}</label>
+                    {{ raw_material_consumption_planning.typeLabel|trans }}
+                </p>
+            </div>
+        </div>
+    </fieldset>
+                
+    <br /><br />
+    {% include 'PequivenSEIPBundle:DataLoad/RawMaterial/RawMaterialConsumptionPlanning:show/detail_raw_material_consumptions.html.twig' %}
+    <br /><br />
+    
+    {% set details = raw_material_consumption_planning.detailRawMaterialConsumptions %}
+    {% set product = raw_material_consumption_planning.product %}
+    {% set title_top = ('pequiven_seip.report_template.details_raw_material'|trans) %}
+    {% include 'PequivenSEIPBundle:DataLoad/RawMaterial/RawMaterialConsumptionPlanning:show/detail_tabs_raw_material_consumptions.html.twig' %}
+    <br /><br />
+    <p class="button-height align-right">
+        {{ buttons.generic(path('pequiven_raw_material_consumption_planning_update', { 'id': raw_material_consumption_planning.id }),('pequiven.edit'|trans({},'messages'))) }}
+        &nbsp;
+        {{ buttons.delete(path('pequiven_raw_material_consumption_planning_delete', { 'id': raw_material_consumption_planning.id })) }}
+    </p>
+{% endblock %}

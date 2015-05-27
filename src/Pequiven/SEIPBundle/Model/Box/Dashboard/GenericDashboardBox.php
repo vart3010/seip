@@ -21,7 +21,7 @@ use Tecnocreaciones\Bundle\BoxBundle\Model\GenericBox;
 class GenericDashboardBox extends GenericBox
 {
     public function getName() {
-        return 'pequiven_seip_box_operative_genericdashboard';
+        return 'pequiven_seip_box_genericdashboardbox';
     }
     
     public function getTemplateName() {

@@ -80,7 +80,7 @@ app:
                             list: Lista
                             add: Cargar
                     planning:
-                        main: Estadística e información
+                        main: %titulo%
                         objetives:
                             main: Objetivos
                             strategic: Estratégico
@@ -91,6 +91,10 @@ app:
                             strategic: Estratégico
                             tactic: Táctico
                             operative: Operativo
+                            withError: Con errores
+                        arrangement_programs:
+                            main: Programas de Gestión
+                            list: Lista
                         matriz: Matriz de Objetivos
                         results:
                             main: Resultados
@@ -101,6 +105,15 @@ app:
                         operations:
                             main: Operaciones
                             recalculate_results: Recalcular resultados
+                        monitor:
+                            main: Monitor de Carga
+                            objective_tactic: Objetivos Tácticos
+                            objective_operative: Objetivos Operativos
+                            arrangement_program: Programas de Gestión
+                    users:
+                        main: Usuarios SEIP
+                        real: Lista
+                        aux: Auxiliares
                     objetives:
                         main: Objetivos
                         visualize:
@@ -110,14 +123,38 @@ app:
                             operative: Operativo
                         matrices_objectives:
                             Matrices de objetivos
+                    sig:
+                        main: Sistema Integrado de Gestión
+                        objective:
+                            main: Objetivos
+                            visualize: Visualizar
+                            matrices_objectives:
+                                Matrices de objetivos
+                        indicator:
+                            main: Indicadores
+                            visualize: Visualizar
+                        arrangement_program: 
+                            main: Programas de Gestión
+                            add:
+                                main: Cargar
+                                tactic: Táctico
+                                operative: Operativo
+                            visualize:
+                                main: Visualizar
+                                listAll: Lista
                     results:
                         main: Resultados
                         visualize:
                             main: Visualizar
                             strategics: Estratégicos
+                            indicator:
+                                strategics: Indicadores Estratégicos
+                            objetive:
+                                strategics: Objetivos Estratégicos
                             tactic: Táctico
                             operative: Operativo
                             by_gerencia: Por gerencia
+                            by_lineStrategic: Por Línea Estratégica
                         notify:
                             main: Notificar
                             indicators: Indicadores
@@ -126,9 +163,22 @@ app:
                             main: Periodo
                             objetives: Objetivos
                             indicators: Indicadores
+                            indicators: Indicadores
+                            arrangement_programs: Programas de Gestión
+                            level:
+                                strategic: Estratégico
+                                tactic: Táctico
+                                operative: Operativo
                     pre_planning:
                         main: Planificación %period%
                         tactic: Táctico
                         operative: Operativo
                         planning: Planificación
                         statistics: Estadística
+                    data_load:
+                        main: Planificación
+                        production: Producción
+                        sales: Ventas
+                        finance: Finanzas
+                        notification: Notificación
+                            

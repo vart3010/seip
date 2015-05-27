@@ -147,8 +147,16 @@ class Formula extends modelFormula implements \Pequiven\SEIPBundle\Entity\Period
      */
     private $period;
     
+    /**
+     *
+     * @var \Pequiven\IndicatorBundle\Entity\Indicator
+     * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator",mappedBy="formula")
+     */
+    private $indicators;
+
     public function __construct() {
         $this->variables = new ArrayCollection();
+        $this->indicators = new ArrayCollection();
     }
 
     /**
@@ -489,8 +497,10 @@ class Formula extends modelFormula implements \Pequiven\SEIPBundle\Entity\Period
         return $this;
     }
 
-    public function __toString() {
-        return $this->getEquation() ?: '-';
+    public function __toString() 
+    {
+        $toString = \Pequiven\SEIPBundle\Service\ToolService::truncate($this->getEquation());
+        return $toString != '' ? $toString : '-';
     }
     
     function setVariables($variables) {
@@ -517,5 +527,38 @@ class Formula extends modelFormula implements \Pequiven\SEIPBundle\Entity\Period
             
             $this->period = null;
         }
+    }
+    
+    /**
+     * Add indicators
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator $indicators
+     * @return Formula
+     */
+    public function addIndicator(\Pequiven\IndicatorBundle\Entity\Indicator $indicators)
+    {
+        $this->indicators->add($indicators);
+
+        return $this;
+    }
+
+    /**
+     * Remove indicators
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator $indicators
+     */
+    public function removeIndicator(\Pequiven\IndicatorBundle\Entity\Indicator $indicators)
+    {
+        $this->indicators->removeElement($indicators);
+    }
+
+    /**
+     * Get indicators
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getIndicators()
+    {
+        return $this->indicators;
     }
 }

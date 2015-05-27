@@ -12,6 +12,16 @@ use Doctrine\ORM\Mapping as ORM;
 abstract class Objetive implements ObjetiveInterface
 {
     /**
+     * Estatus borrador
+     */
+    const STATUS_DRAFT = 0;
+    
+    /**
+     * Estatus Aprobado
+     */
+    const STATUS_APPROVED = 1;
+    
+    /**
      * Nivel de objetivo
      * 
      * @var \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel
@@ -35,6 +45,8 @@ abstract class Objetive implements ObjetiveInterface
      * @ORM\OneToMany(targetEntity="Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram",mappedBy="operationalObjective",cascade={"remove"})
      */
     protected $operationalArrangementPrograms;
+    
+    const TYPE_OBJECT = 'objetive';
     
     public function create(){
         
@@ -167,5 +179,32 @@ abstract class Objetive implements ObjetiveInterface
             $gerencia = $this->getGerenciaSecond()->getGerencia();
         }
         return $gerencia;
+    }
+    
+    /**
+     * Retorna las etiquetas definidas para los estatus del objetivo
+     * 
+     * @staticvar array $labelsStatus
+     * @return string
+     */
+    static function getLabelsStatus()
+    {
+        static $labelsStatus = array(
+            self::STATUS_DRAFT => 'pequiven_objetive.status.draft',
+            self::STATUS_APPROVED => 'pequiven_objetive.status.approved',
+        );
+        return $labelsStatus;
+    }
+    
+    /**
+     * Retorna la etiqueta que corresponde a un estatus del objetivo
+     * @return string
+     */
+    function getLabelStatus()
+    {
+        $labels = $this->getLabelsStatus();
+        if(isset($labels[$this->status])){
+            return $labels[$this->status];
+        }
     }
 }

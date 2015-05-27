@@ -60,6 +60,7 @@ class ResultAdmin extends Admin implements \Symfony\Component\DependencyInjectio
             ->add('typeResult')
             ->add('typeCalculation')
             ->add('objetive')
+            ->add('period')
             ;
     }
     
@@ -95,8 +96,8 @@ class ResultAdmin extends Admin implements \Symfony\Component\DependencyInjectio
     /**
      * @return \Pequiven\SEIPBundle\Service\PeriodService
      */
-    private function getPeriodService()
+    protected function getPeriodService()
     {
-        return $this->container->get('pequiven_arrangement_program.service.period');
+        return $this->container->get('pequiven_seip.service.period');
     }
 }

@@ -15,7 +15,8 @@
             <thead>
                 <tr>
                     <th scope="col" width="2%" class="header">{{ 'seip.table.header.nro'|trans({},'PequivenArrangementProgramBundle') }}</th>
-                    <th scope="col" width="15%" class="header">{{ 'seip.table.header.value'|trans({},'PequivenArrangementProgramBundle') }}</th>
+                    <th scope="col" width="15%" class="header">
+                        {{ 'seip.table.header.value'|trans({},'PequivenArrangementProgramBundle') }}</th>
                     <th scope="col" width="15%" class="hide-on-tablet header">{{ 'seip.table.header.created_at'|trans({},'PequivenArrangementProgramBundle') }}</th>
                     <th scope="col" width="30%" class="hide-on-mobile-portrait header">{{ 'seip.table.header.created_by'|trans({},'PequivenArrangementProgramBundle') }}</th>
                     {% if is_granted('ROLE_WORKER_PLANNING') %}
@@ -28,7 +29,13 @@
                 <tr ng-repeat="valueIndicator in indicator.valuesIndicator" >
                     <td>{$ ($index + 1) $}</td>
                     <th scope="row">
-                        {$ valueIndicator.valueOfIndicator | myNumberFormat:3 $}
+                        {% if isValueIndicatorConfig == true %}
+                            <a href="#" ng-click="openPopUp(getUrlForValueIndicator(valueIndicator,$index))" class="showPopup">
+                        {% endif %}
+                            {$ valueIndicator.valueOfIndicator | myNumberFormat:2 $}
+                        {% if isValueIndicatorConfig == true %}
+                            </a>
+                        {% endif %}
                     </th>
                     <td>{$ valueIndicator.createdAt | myDateTime $}</td>
                     <td>

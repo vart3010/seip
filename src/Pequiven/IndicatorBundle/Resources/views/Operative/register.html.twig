@@ -26,7 +26,7 @@
         <fieldset class="fieldset fields-list">
             <legend class="legend">{{ 'pequiven_indicator.indicators'|trans }}</legend>
             
-            <input type="hidden" id="rolDirective" value="{{ is_granted(['ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX']) }}">
+            <input type="hidden" id="rolDirective" value="{{ is_granted(['ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX','ROLE_WORKER_PLANNING']) }}">
             <input type="hidden" id="rolGerenciaGeneral" value="{{ is_granted(['ROLE_GENERAL_COMPLEJO','ROLE_GENERAL_COMPLEJO_AUX']) }}">
             <input type="hidden" id="rolGerenciaFirst" value="{{ is_granted(['ROLE_MANAGER_FIRST','ROLE_ROLE_MANAGER_FIRST_AUX']) }}">
             <input type="hidden" id="rolGerenciaSecond" value="{{ is_granted(['ROLE_MANAGER_SECOND','ROLE_MANAGER_SECOND_AUX']) }}">
@@ -69,7 +69,7 @@
             {% if (false == is_granted(['ROLE_MANAGER_SECOND','ROLE_MANAGER_SECOND_AUX'])) %}
                 <fieldset class="fieldset">
                     <legend class="legend">{{ 'form.selectionOfObjetiveOperative'|trans }}</legend>
-                {% if (is_granted(['ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX'])) %}
+                {% if (is_granted(['ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX','ROLE_WORKER_PLANNING'])) %}
                         <!-- Localidad -->
                         <div id="complejo" class="field-block button-height">
                             {{ form_label(form.complejo) }}

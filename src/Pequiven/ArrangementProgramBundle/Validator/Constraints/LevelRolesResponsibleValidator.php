@@ -22,42 +22,56 @@ class LevelRolesResponsibleValidator extends ConstraintValidator implements Cont
     private $container;
     
     public function validate($object, Constraint $constraint){
-        $responsibles = $object->getResponsibles();
-        $topLevel = 0;
-        $userTopLevel = null;
-        foreach ($responsibles as $r) {
-            foreach ($r->getGroups() as $group) {
-                if($group->getLevel() > $topLevel){
-                    $topLevel = $group->getLevel();
-                    $userTopLevel = $r;
-                }
-            }
-        }
         
-        $responsible = $userTopLevel;
-        $timeline = $object->getTimeline();
-        //Sino se asigno ninguna meta al crear el programa de gestion
-        if(!$timeline){
-            return;
-        }
-        $goals = $timeline->getGoals();
-        $errors = array();
-        if($responsible){
-            foreach ($responsible->getGroups() as $group) {
-                foreach ($goals as $goal) {
-                    foreach ($goal->getResponsibles() as $goalResponsible) {
-                        foreach ($goalResponsible->getGroups() as $groupResponsibleGoal) {
-                            if($groupResponsibleGoal->getLevel() > $group->getLevel()){
-                                $errors[$goalResponsible->getId()] = array('%responsibleProgram%' => $responsible,'%responsibleGoals%' => $goalResponsible, '%goal%' => $goal);
-                            }
-                        }
+        if($object->getCategoryArrangementProgram()->getId() == \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::ASSOCIATE_ARRANGEMENT_PROGRAM_PLA){
+
+            $responsibles = $object->getResponsibles();
+            $topLevel = 0;
+            $userTopLevel = null;
+            foreach ($responsibles as $r) {
+                foreach ($r->getGroups() as $group) {
+                    if($group->getTypeRol() == \Pequiven\MasterBundle\Entity\Rol::TYPE_ROL_SPECIAL){//En caso de que sea algún rol especial no se toma en cuenta para la validación
+                        continue;
+                    }
+                    if($group->getLevel() > $topLevel){
+                        $topLevel = $group->getLevel();
+                        $userTopLevel = $r;
                     }
                 }
             }
 
-            foreach ($errors as $error) {
-                $this->context->addViolation($constraint->message,$error);
+            $responsible = $userTopLevel;
+            $timeline = $object->getTimeline();
+            //Sino se asigno ninguna meta al crear el programa de gestion
+            if(!$timeline){
+                return;
             }
+            $goals = $timeline->getGoals();
+            $errors = array();
+            if($responsible){
+                foreach ($responsible->getGroups() as $group) {
+                    if($group->getTypeRol() == \Pequiven\MasterBundle\Entity\Rol::TYPE_ROL_SPECIAL){//En caso de que sea algún rol especial no se toma en cuenta para la validación
+                        continue;
+                    }
+                    foreach ($goals as $goal) {
+                        foreach ($goal->getResponsibles() as $goalResponsible) {
+                            foreach ($goalResponsible->getGroups() as $groupResponsibleGoal) {
+                                if($groupResponsibleGoal->getLevel() == 7000 || $groupResponsibleGoal->getLevel() == 8000 || $groupResponsibleGoal->getTypeRol() == \Pequiven\MasterBundle\Entity\Rol::TYPE_ROL_SPECIAL){
+                                    continue;
+                                }
+                                if($groupResponsibleGoal->getLevel() > $group->getLevel()){
+                                    $errors[$goalResponsible->getId()] = array('%responsibleProgram%' => $responsible,'%responsibleGoals%' => $goalResponsible, '%goal%' => $goal);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                foreach ($errors as $error) {
+                    $this->context->addViolation($constraint->message,$error);
+                }
+            }
+            
         }
     }
     

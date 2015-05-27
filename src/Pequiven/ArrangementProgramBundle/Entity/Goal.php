@@ -127,6 +127,7 @@ class Goal implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface
     
     /**
      * Avance de la meta
+     * 
      * @ORM\Column(name="advance",type="float")
      */
     private $advance = 0;
@@ -410,11 +411,7 @@ class Goal implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface
     
     public function __toString() 
     {
-        $limit = 80;
-        $toString = $this->getName();
-        if(strlen($toString) > $limit){
-            $toString = mb_substr($toString, 0,$limit,'UTF-8').'...';
-        }
+        $toString = \Pequiven\SEIPBundle\Service\ToolService::truncate($this->getName());
         return $toString?:'-';
     }
     
@@ -490,6 +487,8 @@ class Goal implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface
            
            $this->goalDetails = clone($this->goalDetails);
            $this->goalDetails->setGoal($this);
+           $this->advance = 0;
+           $this->resultReal = 0;
         }
     }
 }

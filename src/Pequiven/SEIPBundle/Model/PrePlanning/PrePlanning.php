@@ -56,6 +56,11 @@ abstract class PrePlanning extends PrePlanningTypeObject implements PrePlanningI
     const STATUS_REQUIRED = 4;
     
     /**
+     * Estatus importado y eliminado posteriormente
+     */
+    const STATUS_IMPORTED_AND_DELETED = 5;
+    
+    /**
      * No se ha seleccionado nada (Vacio)
      */
     const TO_IMPORT_DEFAULT = 0;
@@ -103,6 +108,7 @@ abstract class PrePlanning extends PrePlanningTypeObject implements PrePlanningI
             self::STATUS_IN_REVIEW => 'pequiven_seip.pre_planning.status.in_review',
             self::STATUS_APPROVED => 'pequiven_seip.pre_planning.status.approved',
             self::STATUS_REQUIRED => 'pequiven_seip.pre_planning.status.required',
+            self::STATUS_IMPORTED_AND_DELETED => 'pequiven_seip.pre_planning.status.imported_and_deleted',
         );
     }
 }

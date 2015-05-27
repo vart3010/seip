@@ -1,0 +1,47 @@
+{% trans_default_domain 'PequivenSEIPBundle' %}
+                
+<div class="block">
+    <div class="block-title">
+        <h3> {{ 'pequiven_seip.plants'|trans }}&nbsp;({{ report_template.plantReports|length }})</h3>
+        <div class="button-group absolute-right compact">
+            <a class="button icon-list-add" href="{{ path('pequiven_plant_report_create',{reportTemplate: app.request.get('id')}) }}">{{ 'pequiven.add'|trans({},'messages') }}</a>
+        </div>
+    </div>
+    <div class="with-padding">
+        <table class="simple-table responsive-table tables-extras" id="sorting-example2">
+            <thead>
+                <tr>
+                    <th scope="col" width="35%">{{ 'Plant'|trans }}</th>
+                    <th scope="col" width="10%" class="hide-on-mobile-portrait">{{ 'Entity'|trans }}</th>
+                    <th scope="col" width="10%" class="hide-on-tablet">{{ 'pequiven_seip.products'|trans }}</th>
+                    <th scope="col" width="10%">&nbsp;</th>
+                </tr>
+            </thead>
+            {% set colspan = 6 %}
+            <tbody>
+
+                {% for plantReport in report_template.plantReports %}
+                    <tr>
+                        <td>{{ loop.index }} - 
+                            {{ generateLink(plantReport) }}
+                        </td>
+                        <th scope="row">
+                            {{ plantReport.entity }}
+                        </th>
+                        <td>{{ plantReport.productsReport|length }}</td>
+                        <td class="low-padding align-center">
+                            <a href="{{ path("pequiven_plant_report_update",{id: plantReport.id}) }}" class="button compact icon-pencil">{{ "pequiven_seip.actions.edit"|trans }}</a>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr >
+                        <td colspan="{{ colspan }}" class="empty_row">
+                            {{ "empty.plant_reports"|trans }}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+    </div>
+</div>

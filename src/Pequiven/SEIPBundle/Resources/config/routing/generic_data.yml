@@ -30,3 +30,39 @@ pequiven_seip_second_line_management:
     methods: [GET]
     options:
         expose: true
+        
+pequiven_seip_location_by_company:
+    path: /get-location-by-company.{_format}
+    defaults: 
+        _controller: pequiven_seip.controller.generic_data:getLocationByAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+        
+pequiven_seip_entity_by_location:
+    path: /entity-by-location.{_format}
+    defaults: 
+        _controller: pequiven_seip.controller.generic_data:getEntityByLocationAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+        
+pequiven_seip_plant_by_entity:
+    path: /plant-by-entity.{_format}
+    defaults: 
+        _controller: pequiven_seip.controller.generic_data:getPlantByEntityAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+        
+pequiven_seip_product_by_plant:
+    path: /product-by-plant.{_format}
+    defaults: 
+        _controller: pequiven_seip.controller.generic_data:getProductByPlantAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]

@@ -19,38 +19,45 @@ class UserRepository extends EntityRepository
      * @return type
      */
     function findQueryToAssingTacticArrangementProgram($criteria = array()){
+        $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
+        
         $qb = $this->getQueryBuilder();
         $user = $this->getUser();
         $level = $user->getLevelRealByGroup();
         
+        $categoryArrangementProgramId = $criteria['categoryArrangementProgramId'];
+        
         $qb
             ->innerJoin('u.groups','g')
-            ->andWhere($qb->expr()->orX('g.level <= :level','u.id = :user'))
-            ->andWhere('g.level >= :minLevel')
             ->andWhere('g.typeRol = :typeRol')
-            ->setParameter('minLevel', \Pequiven\MasterBundle\Entity\Rol::ROLE_WORKER_PQV)
-            ->setParameter('user', $user)
             ->setParameter('typeRol', \Pequiven\MasterBundle\Entity\Rol::TYPE_ROL_OWNER)
-            ;
-        if($level == \Pequiven\MasterBundle\Entity\Rol::ROLE_DIRECTIVE){
-            $qb
-                ->andWhere($qb->expr()->isNotNull('u.gerencia'))
-                ->andWhere("u.gerencia != ''")
-                ->setParameter('level', $level)
                 ;
-        }elseif($this->getSecurityContext()->isGranted('ROLE_ARRANGEMENT_PROGRAM_EDIT') == true){
-            $qb->setParameter('level', \Pequiven\MasterBundle\Entity\Rol::ROLE_DIRECTIVE);
-        }else{
-            if($this->getSecurityContext()->isGranted('ROLE_ARRANGEMENT_PROGRAM_EDIT') == false){
+        if($categoryArrangementProgramId == \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::ASSOCIATE_ARRANGEMENT_PROGRAM_PLA){
+            $qb
+                ->andWhere($qb->expr()->orX('g.level <= :level','u.id = :user'))
+                ->andWhere('g.level >= :minLevel')
+                ->setParameter('minLevel', \Pequiven\MasterBundle\Entity\Rol::ROLE_WORKER_PQV)
+                ->setParameter('user', $user)
+                ;
+            if($level == \Pequiven\MasterBundle\Entity\Rol::ROLE_DIRECTIVE){
                 $qb
-                    ->andWhere('u.gerencia = :gerencia')
-                    ->setParameter('gerencia', $user->getGerencia())
+                    ->andWhere($qb->expr()->isNotNull('u.gerencia'))
+                    ->andWhere("u.gerencia != ''")
                     ->setParameter('level', $level)
                     ;
+            }elseif($this->getSecurityContext()->isGranted('ROLE_ARRANGEMENT_PROGRAM_EDIT') == true){
+                $qb->setParameter('level', \Pequiven\MasterBundle\Entity\Rol::ROLE_DIRECTIVE);
+            }else{
+                if($this->getSecurityContext()->isGranted('ROLE_ARRANGEMENT_PROGRAM_EDIT') == false){
+                    $qb
+                        ->andWhere('u.gerencia = :gerencia')
+                        ->setParameter('gerencia', $user->getGerencia())
+                        ->setParameter('level', $level)
+                        ;
+                }
             }
         }
         
-        $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
         $orX = $qb->expr()->orX();
         if( ($firstname = $criteria->remove('firstname')) ){
             $orX->add($qb->expr()->like('u.firstname', "'%".$firstname."%'"));
@@ -69,24 +76,27 @@ class UserRepository extends EntityRepository
             $qb->setParameter('gerencia', $gerencia);
         }
         
-        $qbUserConfiguration = $this->getQueryBuilder();
+        if($categoryArrangementProgramId == \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::ASSOCIATE_ARRANGEMENT_PROGRAM_PLA){
         
-        $qbUserConfiguration
-            ->select('u.id')
-            ->innerJoin('u.configuration', 'u_c')
-            ->innerJoin('u_c.localizations', 'u_c_l')
-            ->innerJoin('u_c_l.gerencia', 'u_c_l_g')
-            ->andWhere('u_c_l_g.id = :gerencia')
-            ->setParameter('gerencia', $user->getGerencia())
-            ;
-            $resultUserConfiguration = $qbUserConfiguration->getQuery()->getResult();
-            $idUsersConfiguration = array();
-            foreach ($resultUserConfiguration as $value) {
-                $idUsersConfiguration[$value['id']] = $value['id'];
-            }
-            if(count($idUsersConfiguration) > 0){
-                $qb->orWhere($qb->expr()->in('u.id', $idUsersConfiguration));
-            }
+            $qbUserConfiguration = $this->getQueryBuilder();
+
+            $qbUserConfiguration
+                ->select('u.id')
+                ->innerJoin('u.configuration', 'u_c')
+                ->innerJoin('u_c.localizations', 'u_c_l')
+                ->innerJoin('u_c_l.gerencia', 'u_c_l_g')
+                ->andWhere('u_c_l_g.id = :gerencia')
+                ->setParameter('gerencia', $user->getGerencia())
+                ;
+                $resultUserConfiguration = $qbUserConfiguration->getQuery()->getResult();
+                $idUsersConfiguration = array();
+                foreach ($resultUserConfiguration as $value) {
+                    $idUsersConfiguration[$value['id']] = $value['id'];
+                }
+                if(count($idUsersConfiguration) > 0){
+                    $qb->orWhere($qb->expr()->in('u.id', $idUsersConfiguration));
+                }
+        }
        
         $qb->andWhere($orX);
         
@@ -109,25 +119,34 @@ class UserRepository extends EntityRepository
      * @return type
      */
     function findQueryToAssingTacticArrangementProgramGoal(array $users,array $criteria = array()){
-        $qb = $this->getQueryBuilder();
-        $level = 0;
-        $usersId = array();
-        foreach ($users as $user) {
-            if($user->getLevelRealByGroup() > $level){
-                $level = $user->getLevelRealByGroup();
-            }
-            $usersId[] = $user->getId();
-        }
-        $qb
-            ->innerJoin('u.groups','g')
-            ->andWhere($qb->expr()->orX('g.level <= :level',$qb->expr()->in('u.id', $usersId)))
-//            ->andWhere('u.gerencia = :gerencia')
-            ->andWhere('g.typeRol = :typeRol')
-            ->setParameter('level', $level)
-            ->setParameter('typeRol', \Pequiven\MasterBundle\Entity\Rol::TYPE_ROL_OWNER)
-//            ->setParameter('gerencia', $user->getGerencia())
-            ;
+        
         $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
+        $categoryArrangementProgramId = $criteria['categoryArrangementProgramId'];
+        $qb = $this->getQueryBuilder();
+        
+        $qb
+                ->innerJoin('u.groups','g')
+                ->andWhere('g.typeRol = :typeRol')
+                ->setParameter('typeRol', \Pequiven\MasterBundle\Entity\Rol::TYPE_ROL_OWNER)
+                ;
+        
+        if($categoryArrangementProgramId == \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::ASSOCIATE_ARRANGEMENT_PROGRAM_PLA){
+            $level = 0;
+            $usersId = array();
+            foreach ($users as $user) {
+                if($user->getLevelRealByGroup() > $level){
+                    $level = $user->getLevelRealByGroup();
+                }
+                $usersId[] = $user->getId();
+            }
+            $qb
+                ->andWhere($qb->expr()->orX('g.level <= :level',$qb->expr()->in('u.id', $usersId)))
+    //            ->andWhere('u.gerencia = :gerencia')
+                ->setParameter('level', $level)
+    //            ->setParameter('gerencia', $user->getGerencia())
+                ;
+        }
+        
         $orX = $qb->expr()->orX();
         if( ($firstname = $criteria->remove('firstname')) ){
             $orX->add($qb->expr()->like('u.firstname', "'%".$firstname."%'"));

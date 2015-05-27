@@ -62,6 +62,12 @@
                 <argument type="service" id="service_container" />
             </call>
         </service>
+        <service id="seip.listener.entity" class="Pequiven\SEIPBundle\EventListener\EntitySubscriber">
+            <tag name="kernel.event_subscriber" />
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
         <service id="seip.listener.result" class="Pequiven\SEIPBundle\EventListener\ResultListerner">
             <tag name="kernel.event_subscriber" />
             <call method="setContainer">
@@ -93,9 +99,6 @@
         </service>
         
         <service id="pequiven.repository.user" class="Pequiven\SEIPBundle\Repository\UserRepository">
-            <call method="setContainer">
-                <argument type="service" id="service_container" />
-            </call>
             <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\User" />
         </service>
         <service id="pequiven.repository.period" class="Pequiven\SEIPBundle\Repository\PeriodRepository">
@@ -106,6 +109,12 @@
         </service>
         <service id="pequiven.repository.pre_planning_user" class="Pequiven\SEIPBundle\Repository\PrePlanning\PrePlanningUserRepository">
             <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanningUser" />
+        </service>
+        <service id="pequiven.repository.company" class="Pequiven\SEIPBundle\Repository\CEI\CompanyRepository">
+            <tag name="app.repository" class="Pequiven\SEIPBundle\Repository\CEI\Company" />
+        </service>
+        <service id="pequiven.repository.location" class="Pequiven\SEIPBundle\Entity\CEI\Location">
+            <tag name="app.repository" class="Pequiven\SEIPBundle\Repository\CEI\LocationRepository" />
         </service>
         <service id="twig.extension.seip.core" class="Pequiven\SEIPBundle\Twig\Extension\CoreExtension" public="false">
             <tag name="twig.extension" />
@@ -148,15 +157,15 @@
             <tag name="tecnocreaciones_box.box" />
         </service>
         <!-- Modelo de Caja Indicadores Operativos por Grupo de Gerencia de 1ra Línea -->
-        <service id="oeprative.summary_box_indicator_charged_by_group" class="Pequiven\SEIPBundle\Model\Box\Indicator\Operative\SummaryBoxIndicatorChargedByGroup">
+        <service id="operative.summary_box_indicator_charged_by_group" class="Pequiven\SEIPBundle\Model\Box\Indicator\Operative\SummaryBoxIndicatorChargedByGroup">
             <tag name="tecnocreaciones_box.box" />
         </service>
         <!-- Box de dashboard de planificacion -->
-        <service id="operative.box.planningdashboardbox" class="Pequiven\SEIPBundle\Model\Box\Dashboard\PlanningDashboardBox">
+        <service id="pequiven_seip.box.planningdashboardbox" class="Pequiven\SEIPBundle\Model\Box\Dashboard\PlanningDashboardBox">
             <tag name="tecnocreaciones_box.box" />
         </service>
         <!-- Box de dashboard generico -->
-        <service id="operative.box.genericdashboardbox" class="Pequiven\SEIPBundle\Model\Box\Dashboard\GenericDashboardBox">
+        <service id="pequiven_seip.box.genericdashboardbox" class="Pequiven\SEIPBundle\Model\Box\Dashboard\GenericDashboardBox">
             <tag name="tecnocreaciones_box.box" />
         </service>
         <!-- Box donde se definen las Áreas del sistema para en un futuro separar todo tipo frames -->
@@ -173,8 +182,24 @@
         <service id="pequiven_seip.area.adapter.box_default" class="Pequiven\SEIPBundle\Model\Box\BoxDefaultAdapter">
             <tag name="tecnocreaciones_box.area.adapter" />
         </service>
-        <!-- Box donde se renderizan las líneas estratégicas en formato de íconos para el dashboard a nivel estratégico -->
+        <!-- Box donde se renderizan los indicatores estratégicos en formato de íconos -->
+        <service id="pequiven_seip.box.linestrategic.icons_indicator_dashboard" class="Pequiven\SEIPBundle\Model\Box\Indicator\IndicatorsIconsBox">
+            <tag name="tecnocreaciones_box.box" />
+        </service>
+        <!-- Box donde se renderizan los indicatores estratégicos en formato de íconos de acuerdo a una línea estratégica seleccionada -->
+        <service id="pequiven_seip.box.linestrategic.icons_indicator_by_line_dashboard" class="Pequiven\SEIPBundle\Model\Box\Indicator\IndicatorsIconsByLineBox">
+            <tag name="tecnocreaciones_box.box" />
+        </service>
+        <!-- Box con la base del dashboard de un indicador -->
+        <service id="pequiven_seip.box.indicators_dashboard" class="Pequiven\SEIPBundle\Model\Box\Indicator\IndicatorsDashboardBox">
+            <tag name="tecnocreaciones_box.box" />
+        </service>
+         <!-- Box donde se renderizan las líneas estratégicas en formato de íconos para el dashboard a nivel estratégico --> 
         <service id="pequiven_seip.box.linestrategic.icons_dashboard" class="Pequiven\SEIPBundle\Model\Box\LineStrategic\IconsBox">
+            <tag name="tecnocreaciones_box.box" />
+        </service>
+         <!-- Box donde se renderizan las líneas estratégicas en formato de barra de navegación --> 
+        <service id="pequiven_seip.box.linestrategic.icons_nav_bar" class="Pequiven\SEIPBundle\Model\Box\LineStrategic\IconsNavBarBox">
             <tag name="tecnocreaciones_box.box" />
         </service>
         
@@ -203,7 +228,49 @@
         <service id="pequiven_arrangement_program.form.preplanningconfiguration" class="Pequiven\SEIPBundle\Form\User\PrePlanningConfigurationType">
             <tag name="form.type" alias="pequiven_seipbundle_user_pre_planning_configuration" />
         </service>
-        <service id="pequiven_arrangement_program.service.period" class="Pequiven\SEIPBundle\Service\PeriodService">
+        <service id="pequiven.indicator.form.value_indicator_config" class="Pequiven\IndicatorBundle\Form\Indicator\ValueIndicator\ValueIndicatorConfigType">
+            <tag name="form.type" alias="pequiven_indicatorbundle_indicator_valueindicator_valueindicatorconfig" />
+        </service>
+        <service id="pequiven.form.report_template" class="Pequiven\SEIPBundle\Form\DataLoad\ReportTemplateType">
+            <tag name="form.type" alias="pequiven_seipbundle_dataload_reporttemplate" />
+        </service>
+        <service id="pequiven.form.product_report" class="Pequiven\SEIPBundle\Form\DataLoad\ProductReportType">
+            <tag name="form.type" alias="pequiven_seipbundle_dataload_productreport" />
+        </service>
+        <service id="pequiven.form.product_planning" class="Pequiven\SEIPBundle\Form\DataLoad\Production\ProductPlanningType">
+            <tag name="form.type" alias="pequiven_seipbundle_dataload_production_productplanning" />
+        </service>
+        <service id="pequiven.form.range" class="Pequiven\SEIPBundle\Form\DataLoad\Production\RangeType">
+            <tag name="form.type" alias="range" />
+        </service>
+        <service id="pequiven.form.production_product_detail_daily_month" class="Pequiven\SEIPBundle\Form\DataLoad\Production\ProductDetailDailyMonthType">
+            <tag name="form.type" alias="pequiven_seipbundle_dataload_production_productdetaildailymonth" />
+        </service>
+        <service id="pequiven.form.raw_material_consumption_planning" class="Pequiven\SEIPBundle\Form\DataLoad\RawMaterial\RawMaterialConsumptionPlanningType">
+            <tag name="form.type" alias="pequiven_seipbundle_dataload_rawmaterial_rawmaterialconsumptionplanning" />
+        </service>
+        <service id="pequiven.form.detail_raw_material_consumption_planning" class="Pequiven\SEIPBundle\Form\DataLoad\RawMaterial\DetailRawMaterialConsumptionType">
+            <tag name="form.type" alias="pequiven_seipbundle_dataload_production_detailrawmaterialconsumption" />
+        </service>
+        <service id="pequiven.form.plant_report" class="Pequiven\SEIPBundle\Form\DataLoad\PlantReportType">
+            <tag name="form.type" alias="pequiven_seipbundle_dataload_plantreport" />
+        </service>
+        <service id="pequiven.form.plant_stop_planning" class="Pequiven\SEIPBundle\Form\DataLoad\Plant\PlantStopPlanningType">
+            <tag name="form.type" alias="pequiven_seipbundle_dataload_plant_plantstopplanning" />
+        </service>
+        <service id="pequiven.form.consumer_planning_service" class="Pequiven\SEIPBundle\Form\DataLoad\Service\ConsumerPlanningServiceType">
+            <tag name="form.type" alias="pequiven_seipbundle_dataload_service_consumerplanningservice" />
+        </service>
+        <service id="pequiven.form.inventory" class="Pequiven\SEIPBundle\Form\DataLoad\Inventory\InventoryType">
+            <tag name="form.type" alias="pequiven_seipbundle_dataload_inventory_inventory" />
+        </service>
+        <service id="pequiven.form.unrealized_production" class="Pequiven\SEIPBundle\Form\DataLoad\Production\UnrealizedProductionType">
+            <tag name="form.type" alias="pequiven_seipbundle_dataload_production_unrealizedproduction" />
+        </service>
+        <service id="pequiven.form.detail_consumer_planning_service" class="Pequiven\SEIPBundle\Form\DataLoad\Service\DetailConsumerPlanningServiceType">
+            <tag name="form.type" alias="pequiven_seipbundle_dataload_service_detailconsumerplanningservice" />
+        </service>
+        <service id="pequiven_seip.service.period" class="Pequiven\SEIPBundle\Service\PeriodService">
             <call method="setContainer">
                 <argument type="service" id="service_container" />
             </call>
@@ -227,6 +294,40 @@
             <call method="setContainer">
                 <argument type="service" id="service_container" />
             </call>
+        </service>
+        <service id="app.twig_string_loader" class="Twig_Loader_String"></service>
+        <service id="app.twig_string" class="%twig.class%">
+            <argument type="service" id="app.twig_string_loader" />
+            <argument>%twig.options%</argument>
+        </service>
+        <service id="tecnocreaciones_tools.unit_converter.currency" class="Tecnocreaciones\Bundle\ToolsBundle\Service\UnitConverter\Type\CurrencyUnitType">
+            <tag name="tecnocreaciones_tools.unit_converter.unit" />
+        </service>
+        
+        <!-- Repositorio de Gráficos -->
+        <service id="pequiven.repository.seipchart" class="Pequiven\SEIPBundle\Repository\ChartRepository">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+            <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\Chart" />
+        </service>
+        <service id="pequiven.repository.unit_measure" class="Pequiven\SEIPBundle\Repository\CEI\UnitMeasureRepository">
+            <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\CEI\UnitMeasure" />
+        </service>
+        <service id="pequiven.repository.plant" class="Pequiven\SEIPBundle\Repository\CEI\PlantRepository">
+            <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\CEI\Plant" />
+        </service>
+        <service id="pequiven.repository.report_template" class="Pequiven\SEIPBundle\Repository\DataLoad\ReportTemplateRepository">
+            <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate" />
+        </service>
+        <service id="pequiven.repository.region" class="Pequiven\SEIPBundle\Repository\CEI\RegionRepository">
+            <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\CEI\Region" />
+        </service>
+        <service id="pequiven.repository.service" class="Pequiven\SEIPBundle\Repository\CEI\ServiceRepository">
+            <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\CEI\Service" />
+        </service>
+        <service id="pequiven.repository.entity" class="Pequiven\SEIPBundle\Repository\CEI\EntityRepository">
+            <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\CEI\Entity" />
         </service>
     </services>
 </container>

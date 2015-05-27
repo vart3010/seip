@@ -1,19 +1,28 @@
 # Login
 pequiven_master:
-                #Legend
-                gerencia_first: Gerencia 1ra Línea
-                gerencia_second: Gerencia 2da Línea
-                gerencia_second_vinculant: Gerencias Vinculantes
-                gerencia_second_support: Gerencias de Apoyo
-                add: Añadir
-                registerIndicator: Registrar Indicador
-                list: Lista
-                popup:
-                    complejo: Complejo
-                    description: Descripción
-                    created_at: Creado el
-                    updated_at: Actualizado el
-                    vinculatedToZIV: Esta gerencia esta vinculada a ZIV
+    #Legend
+    gerencia_first: Gerencia 1ra Línea
+    gerencia_second: Gerencia 2da Línea
+    gerencia_second_vinculant: Gerencias Vinculantes
+    gerencia_second_support: Gerencias de Apoyo
+    add: Añadir
+    registerIndicator: Registrar Indicador
+    list: Lista
+    popup:
+        complejo: Complejo
+        description: Descripción
+        created_at: Creado el
+        updated_at: Actualizado el
+        vinculatedToZIV: Esta gerencia esta vinculada a ZIV
+    filters:
+        managementSystem: Sistemas de gestión
+    company:
+        type:
+            matriz: Matriz
+            affiliated: Filial
+            mixta: Mixta
+        process:
+            production: Producción
 
 form:
     #Botones formulario

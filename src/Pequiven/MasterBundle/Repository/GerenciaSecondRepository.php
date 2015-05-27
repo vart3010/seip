@@ -166,6 +166,11 @@ class GerenciaSecondRepository extends EntityRepository
             $queryBuilder
                     ->setParameter('gerencia', $gerencia)
                     ;
+        } elseif(($complejo = $criteria->remove('complejo')) != null){
+            $queryBuilder
+                ->andWhere('gs.complejo = :complejo')
+                ->setParameter('complejo', $complejo)
+                ;
         }
         
         return $queryBuilder->getQuery()->getResult();

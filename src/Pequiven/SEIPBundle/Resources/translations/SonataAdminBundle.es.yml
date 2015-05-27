@@ -1,1 +1,38 @@
 sonata_administration: Administración
+Name: Nombre
+"Type Fail": Tipo de falla
+"Fail List": Lista de fallas
+Enabled: ¿Activo?
+Components: Componentes
+"Type Of": Tipo
+Production Line: Linea de negocio
+Plant: Planta
+"Is Raw Material": ¿Es materia prima?
+"Is Final Product": ¿Es producto final?
+"Product Unit": Unidad del producto
+"Product": Producto
+"Type": Tipo
+"Raw Material List": Lista de materia prima
+"Nro Day": Número del día
+"Design Capacity": Capacidad de diseño
+"Plant List": Lista de plantas
+"Unit": Unidad
+"Unit Measure List": Lista de unidades
+"Unit Measure": Unidad de medida
+"Location": Localidad
+"Region List": Lista de regiones
+"Location List": Lista de localidades
+Dashboard: Inicio
+"Raw Materials": Materia prima(s)
+"Type Product": Tipo de producto
+"Products": Productos
+"Services": Servicios
+"Service Unit": Unidad del servicio
+"Service List": Lista de servicios
+"Company": Empresa
+"Type Location": Tipo de sede
+"State": Estado
+"Entity": Entidad
+Hours: Horas
+'Stop Time List': Lista de días de paradas
+'Product List': Lista de productos

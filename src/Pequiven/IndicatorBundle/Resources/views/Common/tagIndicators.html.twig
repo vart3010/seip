@@ -1,0 +1,14 @@
+<div class="columns">
+    <div class="new-row-mobile twelve-columns twelve-columns-tablet twelve-columns-mobile">
+        <ul {#class="fa-ul"#}>
+        {% set tagsIndicator = indicatorService.getTagIndicatorByOrder(indicator) %}
+        {% for tagIndicator in tagsIndicator %}
+            <li class="inline-label">
+                <label class="label">{{ tagIndicator.description }}:</label>{% if tagIndicator.typeTag == constant('Pequiven\\IndicatorBundle\\Entity\\Indicator\\TagIndicator::TAG_TYPE_NUMERIC') %} {{ tagIndicator.valueOfTag|myNumberFormat }} {% else %} {{ tagIndicator.textOfTag }} {% endif %}
+                {% if tagIndicator.unitResult != "" %}{{ tagIndicator.getUnitResultValue|upper }}{% endif %}
+        {#        {{ generateLink(indicator) }}{% if indicator.weight > 0 %}&nbsp;({{ 'pequiven_seip.results.weight'|trans({},'PequivenSEIPBundle') }} {{ indicator.weight }}%){% endif %} - {{ indicatorService.resultWithArrangementRangeColor(indicator)|raw }}#}    
+            </li>
+        {% endfor  %}
+        </ul>
+    </div>
+</div>

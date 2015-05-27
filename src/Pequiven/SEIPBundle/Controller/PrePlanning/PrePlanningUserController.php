@@ -67,8 +67,11 @@ class PrePlanningUserController extends SEIPController
             ->setTemplateVar($this->config->getPluralResourceName())
         ;
         if($request->get('_format') == 'html'){
+            $labelsStatus = PrePlanningUser::getLabelsStatus();
             $view->setData(
-                    array($this->config->getPluralResourceName() => $resources,
+                    array(
+                        $this->config->getPluralResourceName() => $resources,
+                        'labels_status' => $labelsStatus,
                     ));
         }else{
             $formatData = $request->get('_formatData','default');
@@ -86,9 +89,9 @@ class PrePlanningUserController extends SEIPController
     /**
      * @return PeriodService
      */
-    private function getPeriodService()
+    protected function getPeriodService()
     {
-        return $this->container->get('pequiven_arrangement_program.service.period');
+        return $this->container->get('pequiven_seip.service.period');
     }
     
 }

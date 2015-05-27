@@ -22,6 +22,10 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
     const RESULT_NO_ITEMS = 2;
     const RESULT_NUM_PERSONAL_NOT_EXIST = 3;
     const RESULT_INVALID_CONFIGURATION = 4;
+    /**
+     * No tiene auditoria
+     */
+    const RESULT_NO_AUDIT = 5;
     
     private $errors;
     
@@ -67,8 +71,7 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
                 '%period%' => $periodName
             ));
         }
-        $canBeEvaluated = true;
-        
+        $canBeEvaluated = $isValidAudit = true;
         if(count($this->errors) == 0){
             //Repositorios
             $goalRepository = $this->container->get('pequiven_seip.repository.arrangementprogram_goal');
@@ -118,9 +121,22 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
                     ),
                 );
             }
-
+            
+            $gerenciaFirst = $user->getGerencia();
+            $gerenciaSecond = $user->getGerenciaSecond();
+            
+            if($gerenciaFirst && $gerenciaFirst->isValidAudit() === false){
+               $isValidAudit = false; 
+               $this->addErrorTrans('pequiven_seip.errors.the_first_line_management_no_audit',array("%gerenciaFirst%" => $gerenciaFirst));
+               $status = self::RESULT_NO_AUDIT;
+            }
+            if($gerenciaSecond && $gerenciaSecond->isValidAudit() === false){
+               $isValidAudit = false; 
+               $this->addErrorTrans('pequiven_seip.errors.the_second_line_management_no_audit',array("%gerenciaSecond%" => $gerenciaSecond->getGerencia()));
+               $status = self::RESULT_NO_AUDIT;
+            }
+            
             if($user->getLevelRealByGroup() == \Pequiven\MasterBundle\Model\Rol::ROLE_MANAGER_FIRST || $user->getLevelRealByGroup() == \Pequiven\MasterBundle\Model\Rol::ROLE_GENERAL_COMPLEJO) {
-                $gerenciaFirst = $user->getGerencia();
                 if($gerenciaFirst){
                     foreach ($gerenciaFirst->getTacticalObjectives() as $objetive) {
                         $objetives[$objetive->getId()] = $objetive;
@@ -132,7 +148,6 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
                     $status = self::RESULT_INVALID_CONFIGURATION;
                 }
             } else if($user->getLevelRealByGroup() == \Pequiven\MasterBundle\Model\Rol::ROLE_MANAGER_SECOND) {
-                $gerenciaSecond = $user->getGerenciaSecond();
                 if($gerenciaSecond){
                     foreach ($gerenciaSecond->getOperationalObjectives() as $objetive) {
                         $objetives[$objetive->getId()] = $objetive;

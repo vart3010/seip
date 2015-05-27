@@ -11,6 +11,10 @@ pequiven:
         write_observation: Escriba una observación
         arrangement_program: Programa de Gestión
         arrangement_programs: Programas de Gestión
+        description_none: Ninguna
+        description: Descripción
+        nameOfProgram: Nombre del Programa
+        managementSystem: Sistema de Calidad
         period: Período
         process: Proceso
         management: Gerencia
@@ -47,6 +51,7 @@ pequiven:
         list_template: Lista de plantillas
         template: Plantilla
         list: Lista
+        listSig: Programas de Gestión SIG
         observations: Observaciones al programa
         include_responsible_management: Incluir los responsables de la
         responsible_management: Responsables de la gerencia
@@ -108,6 +113,7 @@ pequiven:
     form:
         template_description: Descripción de la plantilla
         category_arrangement_program: Asociado a
+        managementSystem: Sistema de Gestión
         tactical_objective: Objetivo Táctico
         operational_objective: Objetivo Operativo
         operating_indicator: Indicador Operativo
@@ -126,6 +132,8 @@ pequiven:
         goal:
             name: Meta
             responsible: Responsable(s) de la Meta
+        description: Descripción
+        nameOfProgram: Nombre del Programa
     goals:
         goal: Meta
         goals: Meta(s)
@@ -135,6 +143,7 @@ pequiven:
         abbr_planned: P
         abbr_real: R
         summary: Avances
+        percentaje: %
 seip:
     table:
         header:
@@ -153,8 +162,11 @@ seip:
             updated_by: Actualizado por
             value: Valor
             parameters: Parametros
+            products: Productos y Servicios
+            description_feature_indicator: Nota o comentario
         empty:
             goals: No Hay Metas Cargadas.
             observations: No Hay Observaciones.
             events: No Hay Eventos Registrados.
             results: No Hay Resultados Cargados.
+            products: No Hay Productos y Servicios Configurados.

@@ -53,10 +53,13 @@ pequiven_seip_arrangementprogram_for_notifying:
     methods: [GET]
     
 pequiven_arrangementprogram_create:
-    path: /{type}/create
-    defaults: { _controller: pequiven_seip.controller.arrangementprogram:createAction }
+    path: /{type}/{associate}/create
+    defaults:
+        _controller: pequiven_seip.controller.arrangementprogram:createAction
+        associate: 1
     requirements:
         type: 1|2
+        associate: 1|2
     methods: [GET|POST]
     options:
         expose: true

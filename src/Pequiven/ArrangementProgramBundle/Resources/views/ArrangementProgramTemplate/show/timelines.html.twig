@@ -10,15 +10,15 @@
     <div class="with-padding">
         <table class="simple-table responsive-table tables-extras" id="sorting-example2">
         <thead>
-                <tr>
-                    <th scope="col" width="25%">{{ 'seip.table.header.name'|trans }}</th>
-                    {% if appConfiguration.isSupportIntegratedManagementSystem == true %}
-                        <th scope="col" width="10%" class="hide-on-mobile">{{ 'seip.table.header.type_goal'|trans }}</th>
-                    {% endif %}
-                    <th scope="col" width="15%" class="hide-on-mobile-portrait">{{ 'seip.table.header.start_date'|trans }}</th>
-                    <th scope="col" width="15%" class="hide-on-tablet">{{ 'seip.table.header.end_date'|trans }}</th>
-                    <th scope="col" width="10%" class="hide-on-tablet">{{ 'seip.table.header.weight'|trans }}</th>
-                </tr>
+            <tr>
+                <th scope="col" width="25%">{{ 'seip.table.header.name'|trans }}</th>
+                {% if appConfiguration.isSupportIntegratedManagementSystem == true %}
+                    <th scope="col" width="10%" class="hide-on-mobile">{{ 'seip.table.header.type_goal'|trans }}</th>
+                {% endif %}
+                <th scope="col" width="15%" class="hide-on-mobile-portrait">{{ 'seip.table.header.start_date'|trans }}</th>
+                <th scope="col" width="15%" class="hide-on-tablet">{{ 'seip.table.header.end_date'|trans }}</th>
+                <th scope="col" width="10%" class="hide-on-tablet">{{ 'seip.table.header.weight'|trans }}</th>
+            </tr>
         </thead>
         {% set colspan = 5 %}
         {% if appConfiguration.isSupportIntegratedManagementSystem == true %}

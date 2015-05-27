@@ -1,0 +1,33 @@
+pequiven_product_report_create:
+    path: /{plantReport}/create
+    defaults:
+        _controller: pequiven.controller.product_report:createAction
+        _sylius:
+            form: pequiven_seipbundle_dataload_productreport
+    methods: [GET|POST]
+    
+pequiven_product_report_show:
+    path: /{id}/show
+    defaults:
+        _controller: pequiven.controller.product_report:showAction
+    methods: [GET]
+    
+pequiven_product_report_update:
+    path: /{id}/update
+    defaults:
+        _controller: pequiven.controller.product_report:updateAction
+        _sylius:
+            form: pequiven_seipbundle_dataload_productreport
+    methods: [GET|POST]
+    
+pequiven_product_report_delete:
+    path: /{id}/delete
+    defaults:
+        _controller: pequiven.controller.product_report:deleteAction
+    methods: [GET|DELETE]
+    
+pequiven_product_report_run_planning:
+    path: /{id}/run-planning
+    defaults:
+        _controller: pequiven.controller.product_report:runPlanningAction
+    methods: [GET|POST]

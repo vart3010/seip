@@ -1,0 +1,32 @@
+pequiven_feature_indicator_get_form:
+    path: /{idIndicator}/get-form.{_format}
+    defaults:
+        _controller: pequiven.controller.feature_indicator:getFormAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET]
+    options:
+        expose: true
+        
+pequiven_feature_indicator_add:
+    path: /{idIndicator}/add.{_format}
+    defaults:
+        _controller: pequiven.controller.feature_indicator:addAction
+        _format: json
+    requirements:
+        _format: json
+    methods: [POST]
+    options:
+        expose: true
+        
+pequiven_feature_indicator_delete:
+    path: /{id}/delete.{_format}
+    defaults:
+        _controller: pequiven.controller.feature_indicator:deleteAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET]
+    options:
+        expose: true

@@ -1,7 +1,15 @@
 pequiven_indicator:
+    empty: El indicador no tiene indicadores asociados ni etiquetas de descripción
     value: Valor
     #Registrar
     indicators: Indicadores
+    tagIndicators: Etiquetas del Indicador
+    indicatorsWithError: Indicadores con errores
+    indicatorsWithoutError: Indicadores sin errores
+    indicatorsWithoutErrorText: Nada que reseñar
+    error: Error
+    measuring: Medición
+    contributionToTheObjective: Aporte al Objetivo
     add: Añadir
     list: Lista
     strategic: Estratégico
@@ -13,8 +21,16 @@ pequiven_indicator:
     indicator_strategic: Indicador Estratégico
     indicator_tactic: Indicador Táctico
     indicator_operative: Indicador Operativo
+    details_value_config: Detalles de valores
     indicator:
         add_observation: Agrege una observación al indicador
+        remove_values: Si elimina todos los resultados perdera los valores cargados ¿Desea continuar?
+        details_results: Detalles
+        buttons:
+            remove_values: Eliminar resultados
+            configure_details_results: Configurar detalles
+        feature:
+            title: Puntos de atención
     indicator_details:
         source_result_all: Todos los resultados
         source_result_last_valid: Ultimo resultado valido (Con valor)
@@ -35,11 +51,20 @@ pequiven_indicator:
         main: Tipo de calculo
         formula_manually: Fórmula manual
         formula_automatic: Fórmula automatica
+        formula_automatic_from_eq: Fórmula automatica (Ecuación)
         simple_average: Promedio simple
         real_and_plan_automatic: Plan y Real automático
         real_automatic: Real automático
         accumulate: Acumulativo de cada carga
         real_and_plan_from_eq: Plan y real a partir de ecuación
+    type_detail:
+        none: Ninguno
+        daily_load_production: Producción diaria
+    calculation_method:
+        accumulation_of_variables: Acumulación de variables
+        average_based_number_children: Promedio en base a número de hijos
+        average_plan_real_children: Promedio de las variables plan y real en base a número de hijos
+        weighted_average_result_children: Promedio ponderado de los resultadosa de los hijos
     results: Resultado(s)
     value_indicator:
         enter_values_variables: Ingrese los valores de las variables
@@ -68,6 +93,14 @@ pequiven_indicator:
         arrangementRange_not_assigned: Rango de Gestión no Asignado.
         the_formula_should_only_have_two_defined_variables: La fórmula solo debe tener dos variables definidas (plan y real).
         the_formula_must_have_the_variables_defined_plan_and_real: La fórmula debe tener las variables definidas plan y real.
+        the_indicator_xrequires_configuration_details_results: La "%typeDetailValue%", requiere la configuración de los detalles de resultados.
+        indicatorNoEvaluateInPeriod: El indicador no será evaludo en el período actual
+    type_tag:
+        tagNumeric: Numérica
+        tagText: Texto
+    type_value_tag:
+        fromEquation: A partir de ecuación
+        fromInput: Ingresado manualmente
         
 form:
     ref: Nro. de Referencia
@@ -81,7 +114,7 @@ form:
     line_strategic: Línea Estratégica
     lineStrategic: Línea Estratégica
     frequencyNotificationIndicator: Frecuencia de notificación
-    resultReal: Resultado Gestión
+    resultReal: Resultado de la medición
     location: Localidad
     complejo: Complejo
     gerencia: Gerencia
@@ -98,6 +131,7 @@ form:
     formulaIndicatorTactic: Fórmula del Indicador Táctico
     formulaIndicatorOperative: Fórmula del Indicador Operativo
     tendency: Tendencia
+    typeDetailValue: Detalle de valores
     conduct: Comportamiento
     indicatorStrategic: Indicador Estratégico
     indicatorTactic: Indicador Táctico
@@ -160,6 +194,12 @@ form:
         registerIndicatorOperative: ¿Desea guardar el Indicador Operativo?
     
     info:
+        indicator:
+            description: Escriba o actualice el enunciado del indicador.
+            weight: Peso del indicador respecto al objetivo, sino lo conoce coloque cero (0).
+            goal: Meta anual del indicador, este valor normalmente es cien (100) pero sino lo conoce coloque cero (0).
+            total_plan: Plan anual del indicador, este valor normalmente es cien (100) pero sino lo conoce coloque cero (0).
+            summary: Resumen del enunciado, este debe ser lo mas corto posible.
         lineStrategic: Línea estratégica que seguirá el objetivo
         objetiveStrategic: Objetivo estratégico que seguirá el objetivo
         objetiveTactic: Objetivo táctico que seguirá el objetivo
@@ -266,7 +306,10 @@ form:
         addIndicatorStrategic: Registro Indicador Estratégico
         addIndicatorTactic: Registro Indicador Táctico
         addIndicatorOperative: Registro Indicador Operativo
-
+    products: Productos
+    description_feature_indicator: Nota o Comentario
+    feature_indicator: Punto de atención
+        
 action:
     messages:    
         registerIndicatorStrategicSuccessfull: Indicador Estratégico registrado exitosamente

@@ -82,10 +82,12 @@ class MonitorRepository extends EntityRepository
             $queryBuilder->addSelect('SUM(o.objTacticOriginal) AS PlanObjTactic');
             $queryBuilder->addSelect('SUM(o.objTacticOriginalReal) AS RealObjTactic');
             $queryBuilder->innerJoin('o.typeGroup', 'gg');
+            $queryBuilder->andWhere("o.objTacticOriginal > 0");
             $queryBuilder->groupBy('o.typeGroup');
         } else{
-            $queryBuilder->select('o.objTacticOriginal AS PlanObjTactic,o.objTacticOriginalReal AS RealObjTactic,g.description AS Gerencia,g.ref AS Ref,gg.groupName AS Grupo,g.id AS idGerencia');
+            $queryBuilder->select('o.objTacticOriginal AS PlanObjTactic,o.objTacticOriginalReal AS RealObjTactic,g.description AS Gerencia,g.ref AS Ref,gg.groupName AS Grupo,g.id AS idGerencia,g.resume AS Resume');
             $queryBuilder->andWhere("gg.groupName = '" . $options['typeGroup'] . "'");
+            $queryBuilder->andWhere("o.objTacticOriginal > 0");
             $queryBuilder->innerJoin('o.typeGroup', 'gg');
             $queryBuilder->innerJoin('o.gerencia', 'g');
         }
@@ -108,10 +110,12 @@ class MonitorRepository extends EntityRepository
             $queryBuilder->addSelect('SUM(o.objOperativeOriginal) AS PlanObjOperative');
             $queryBuilder->addSelect('SUM(o.objOperativeOriginalReal) AS RealObjOperative');
             $queryBuilder->innerJoin('o.typeGroup', 'gg');
+            $queryBuilder->andWhere("o.objOperativeOriginal > 0");
             $queryBuilder->groupBy('o.typeGroup');
         } else{
-            $queryBuilder->select('o.objOperativeOriginal AS PlanObjOperative,o.objOperativeOriginalReal AS RealObjOperative,g.description AS Gerencia,g.ref AS Ref,gg.groupName AS Grupo,g.id AS idGerencia');
+            $queryBuilder->select('o.objOperativeOriginal AS PlanObjOperative,o.objOperativeOriginalReal AS RealObjOperative,g.description AS Gerencia,g.ref AS Ref,gg.groupName AS Grupo,g.id AS idGerencia,g.resume AS Resume');
             $queryBuilder->andWhere("gg.groupName = '" . $options['typeGroup'] . "'");
+            $queryBuilder->andWhere("o.objOperativeOriginal > 0");
             $queryBuilder->innerJoin('o.typeGroup', 'gg');
             $queryBuilder->innerJoin('o.gerencia', 'g');
         }
@@ -189,7 +193,7 @@ class MonitorRepository extends EntityRepository
             $queryBuilder->innerJoin('o.typeGroup', 'gg');
             $queryBuilder->groupBy('o.typeGroup');
         } else{
-            $queryBuilder->select('SUM(o.arrangementProgramTactic + o.arrangementProgramOperative) AS PlanArrPro,SUM(o.arrangementProgramTacticReal + o.arrangementProgramOperativeReal) AS RealArrPro,g.description AS Gerencia,g.ref AS Ref,gg.groupName AS Grupo,g.id AS idGerencia');
+            $queryBuilder->select('SUM(o.arrangementProgramTactic + o.arrangementProgramOperative) AS PlanArrPro,SUM(o.arrangementProgramTacticReal + o.arrangementProgramOperativeReal) AS RealArrPro,g.description AS Gerencia,g.ref AS Ref,gg.groupName AS Grupo,g.id AS idGerencia,g.resume AS Resume');
             $queryBuilder->andWhere("gg.groupName = '" . $options['typeGroup'] . "'");
             $queryBuilder->innerJoin('o.typeGroup', 'gg');
             $queryBuilder->innerJoin('o.gerencia', 'g');

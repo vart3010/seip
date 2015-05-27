@@ -14,6 +14,9 @@ abstract class ArrangementProgram
     const TYPE_ARRANGEMENT_PROGRAM_TACTIC = 1;
     const TYPE_ARRANGEMENT_PROGRAM_OPERATIVE = 2;
     
+    const ASSOCIATE_ARRANGEMENT_PROGRAM_SIG = 1;
+    const ASSOCIATE_ARRANGEMENT_PROGRAM_PLA = 2;
+    
     /**
      * Resumen Tipo "Cargados"
      */
@@ -90,6 +93,14 @@ abstract class ArrangementProgram
      * @ORM\Column(name="type", type="integer", nullable=false)
      */
     protected $type;
+    
+    /**
+     * Sistema de Calidad Asociado.
+     * @var \Pequiven\SIGBundle\Entity\ManagementSystem
+     *
+     * @ORM\ManyToOne(targetEntity="Pequiven\SIGBundle\Entity\ManagementSystem")
+     */
+    protected $managementSystem;
     
     /**
      * Retorna la etiqueta del tipo de programa de gestion
@@ -457,7 +468,7 @@ abstract class ArrangementProgram
     }
     
     /**
-     * Revuelve el objetivo dependiendo del tipo de programa de gestion
+     * Devuelve el objetivo dependiendo del tipo de programa de gestion
      */
     function getObjetiveByType() {
         $objetive = null;
@@ -481,5 +492,29 @@ abstract class ArrangementProgram
      */
     public function getOperationalObjective(){
         
+    }
+    
+    
+    /**
+     * Set ManagementSystem
+     *
+     * @param \Pequiven\SIGBundle\Entity\ManagementSystem $managementSystem
+     * @return ArrangementProgram
+     */
+    public function setManagementSystem(\Pequiven\SIGBundle\Entity\ManagementSystem $managementSystem = null)
+    {
+        $this->managementSystem = $managementSystem;
+
+        return $this;
+    }
+
+    /**
+     * Get getManagementSystem
+     *
+     * @return \Pequiven\SIGBundle\Entity\ManagementSystem 
+     */
+    public function getManagementSystem()
+    {
+        return $this->managementSystem;
     }
 }

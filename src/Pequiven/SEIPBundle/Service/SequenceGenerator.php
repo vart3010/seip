@@ -54,13 +54,14 @@ class SequenceGenerator
         ));
     }
     
-    function getNextTempArrangementProgram()
+    public function getNextTempArrangementProgram()
     {
         $qb = $this->sequenceGenerator->createQueryBuilder();
         $qb->from('Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram', 'ap')
             ;
         return $this->sequenceGenerator->generateNextTemp($qb,'ref');
     }
+    
     
     /**
      * Genera la referencia del objetivo
@@ -275,6 +276,24 @@ class SequenceGenerator
         return $this->sequenceGenerator->generateNext($qb,$mask,'ref',array(
             'gerencia' => strtoupper($gerencia),
             'type' => $type,
+            'year' => $year,
+        ));
+    }
+    
+    /**
+     * Genera la secuencia de plantilla de reporte
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate $reportTemplate
+     * @return type
+     */
+    public function getNextRefReportTemplate(\Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate $reportTemplate)
+    {
+        $qb = $this->sequenceGenerator->createQueryBuilder();
+        $qb
+            ->from('Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate', 'rt')
+            ;
+        $mask = 'R-{year}-{000}';
+        $year = $reportTemplate->getPeriod()->getYear();
+        return $this->sequenceGenerator->generateNext($qb,$mask,'ref',array(
             'year' => $year,
         ));
     }

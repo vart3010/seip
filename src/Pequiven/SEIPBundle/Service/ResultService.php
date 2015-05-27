@@ -375,7 +375,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
      */
     public function refreshValueIndicator(\Pequiven\IndicatorBundle\Entity\Indicator $indicator,$andFlush = true)
     {
-        
+        $em = $this->getDoctrine()->getManager();
         $details = $indicator->getDetails();
         if(!$details){
             $details = new \Pequiven\IndicatorBundle\Entity\Indicator\IndicatorDetails();
@@ -385,31 +385,50 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         $details
                 ->setPreviusValue($previusValue)
                 ;
+        if($indicator->getFrequencyNotificationIndicator() === null){
+            throw new \Exception(sprintf('El indicador "%s" no tiene frecuencia de notificacion asignada. #%s',(string)$indicator,$indicator->getId()));
+        }
         
         $indicatorService = $this->getIndicatorService();
         $arrangementRangeService = $this->getArrangementRangeService();
 
         $formula = $indicator->getFormula();
         if($formula !== null && $indicatorService->validateFormula($formula) === null){
-            $typeOfCalculation = $formula->getTypeOfCalculation();
             if($indicator->getTypeOfCalculation() == Indicator::TYPE_CALCULATION_FORMULA_MANUALLY){
-                if($typeOfCalculation == Formula::TYPE_CALCULATION_SIMPLE_AVERAGE){
-                    $this->calculateFormulaSimpleAverage($indicator);
-                }elseif($typeOfCalculation == Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC){
-                    $this->calculateFormulaRealPlanAutomatic($indicator);
-                }elseif($typeOfCalculation == Formula::TYPE_CALCULATION_REAL_AUTOMATIC){
-                    $this->calculateFormulaRealAutomatic($indicator);
-                }elseif($typeOfCalculation == Formula::TYPE_CALCULATION_ACCUMULATE){
-                    $this->calculateFormulaAccumulate($indicator);
-                }elseif($typeOfCalculation == Formula::TYPE_CALCULATION_REAL_AND_PLAN_FROM_EQ){
-                    $this->calculateFormulaRealPlanAutomaticFromEQ($indicator);
-                }
-            }else{
+                $this->evaluateIndicatorByFormula($indicator);
+            } elseif ($indicator->getTypeOfCalculation() == Indicator::TYPE_CALCULATION_FORMULA_AUTOMATIC){
                 $this->calculateFormulaRealPlanAutomaticFromChild($indicator);
+            } elseif ($indicator->getTypeOfCalculation() == Indicator::TYPE_CALCULATION_FORMULA_AUTOMATIC_FROM_EQ){
+                $this->calculateFormulaAutomaticFromEQFromChild($indicator);
+            }
+        }
+        //Refrescando los valores de cada resultado del indicador
+        foreach ($indicator->getValuesIndicator() as $valueIndicator) {
+            $formulaParameters = $valueIndicator->getFormulaParameters();
+            if(is_array($formulaParameters)){
+                $valueOfIndicator = $indicatorService->calculateFormulaValue($formula, $formulaParameters);
+                $valueIndicator->setValueOfIndicator($valueOfIndicator);
+                $em->persist($valueIndicator);
             }
         }
         
+        $snippetPlan = $indicator->getSnippetPlan();
+        $snippetReal = $indicator->getSnippetReal();
+        
+        $parametersForTemplate = array(
+            'indicator' => $indicator,
+        );
+        if($snippetPlan !== null){
+            $snippetPlanValue = trim($this->renderString($snippetPlan,$parametersForTemplate));
+            $indicator->setTotalPlan($snippetPlanValue);
+        }
+        if($snippetReal !== null){
+            $snippetRealValue = trim($this->renderString($snippetReal,$parametersForTemplate));
+            $indicator->setValueFinal($snippetRealValue);
+        }
+        
         $indicator->updateLastDateCalculateResult();
+        
         $tendenty = $indicator->getTendency();
         if(!$tendenty){
             throw new \LogicException(sprintf('El indicador "%s(%s)" no tiene una tendencia definida.',$indicator->getRef(),$indicator->getId()));
@@ -428,12 +447,28 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             $indicator->setResultReal($result);
             
             if($error == null){
-                if($this->calculateRangeGood($indicator,$tendenty)){//Rango Verde R*100% (Máximo 100)
-                    $result = 100;
-                } else if($this->calculateRangeMiddle($indicator,$tendenty)){//Rango Medio R*50%
-                    $result = $this->recalculateResultByRange($indicator,$tendenty);
-                    $result = $result / 2;
-                } else if($this->calculateRangeBad($indicator,$tendenty)){//Rango Rojo R*0%
+                if($indicator->hasNotification()){
+                    if($this->calculateRangeGood($indicator,$tendenty)){//Rango Verde R*100% (Máximo 100)
+                        if($result > 100){
+                            $result = 100;
+                        }
+                    } else if($this->calculateRangeMiddle($indicator,$tendenty)){//Rango Medio R*50%
+                        $result = $this->recalculateResultByRange($indicator,$tendenty);
+                        $value = $result;
+                        $varMulti = 10*$result;
+                        $varDiv = bcdiv($varMulti, 100, 2);
+                        $result = bcsub($value, $varDiv, 2);
+                    } else if($this->calculateRangeBad($indicator,$tendenty)){//Rango Rojo R*0%
+                        $result = $this->recalculateResultByRange($indicator,$tendenty);
+                        $value = $result;
+                        $varMulti = 20*$result;
+                        $varDiv = bcdiv($varMulti, 100, 2);
+                        $result = bcsub($value, $varDiv, 2);
+                        if($result < 0){
+                            $result = 0;
+                        }
+                    }
+                } else{
                     $result = 0;
                 }
             } else{
@@ -447,15 +482,32 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             $indicator->setResultReal($result);
             
             if($error == null){
-                if($this->calculateRangeGood($indicator,$tendenty)){//Rango Verde R*100% (Máximo 100)
-                    if($result > 100){
-                        $result = 100;
+                if($indicator->hasNotification()){
+                    if($this->calculateRangeGood($indicator,$tendenty)){//Rango Verde R*100% (Máximo 100)
+                        if($result > 100){
+                            $result = 100;
+                        }
+                        $result = 100 - $result;
+                        if($result > 100){
+                            $result = 100;
+                        }
+                    } else if($this->calculateRangeMiddle($indicator,$tendenty)){//Rango Medio R*50%
+                        $result = 100 - $result;
+                        $varMulti = 10*$result;
+                        $varDiv = bcdiv($varMulti, 100, 2);
+                        $result = bcsub($result, $varDiv, 2);
+//                        $result = $result/2;
+                    } else if($this->calculateRangeBad($indicator,$tendenty)){//Rango Rojo R*0%
+                        $result = 100 - $result;
+                        $varMulti = 20*$result;
+                        $varDiv = bcdiv($varMulti, 100, 2);
+                        $result = bcsub($result, $varDiv, 2);
+                        if($result < 0){
+                            $result = 0;
+                        }
+//                        $result = 0;
                     }
-                    $result = 100 - $result;
-                } else if($this->calculateRangeMiddle($indicator,$tendenty)){//Rango Medio R*50%
-                    $result = 100 - $result;
-                    $result = $result/2;
-                } else if($this->calculateRangeBad($indicator,$tendenty)){//Rango Rojo R*0%
+                } else{
                     $result = 0;
                 }
             } else{
@@ -468,12 +520,29 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             $indicator->setResultReal($result);
             
             if($error == null){
-                if($this->calculateRangeGood($indicator,$tendenty)){//Rango Verde R*100% (Máximo 100)
-                      $result = $this->recalculateResultByRange($indicator,$tendenty);
-                } else if($this->calculateRangeMiddle($indicator,$tendenty)){//Rango Medio R*50%
-                    $result = $this->recalculateResultByRange($indicator,$tendenty);
-                    $result = $result / 2;
-                } else if($this->calculateRangeBad($indicator,$tendenty)){//Rango Rojo R*0%
+                if($indicator->hasNotification()){
+                    if($this->calculateRangeGood($indicator,$tendenty)){//Rango Verde R*100% (Máximo 100)
+                          $result = $this->recalculateResultByRange($indicator,$tendenty);
+                          if($result > 100){
+                              $result = 100;
+                          }
+                    } else if($this->calculateRangeMiddle($indicator,$tendenty)){//Rango Medio R*50%
+                        $result = $this->recalculateResultByRange($indicator,$tendenty);
+                        $varMulti = 10*$result;
+                        $varDiv = bcdiv($varMulti, 100, 2);
+                        $result = bcsub($result, $varDiv, 2);
+//                        $result = $result / 2;
+                    } else if($this->calculateRangeBad($indicator,$tendenty)){//Rango Rojo R*0%
+                        $result = $this->recalculateResultByRange($indicator,$tendenty);
+                        $varMulti = 20*$result;
+                        $varDiv = bcdiv($varMulti, 100, 2);
+                        $result = bcsub($result, $varDiv, 2);
+                        if($result < 0){
+                            $result = 0;
+                        }
+//                        $result = 0;
+                    }
+                } else{
                     $result = 0;
                 }
             } else{
@@ -486,27 +555,49 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         if($indicator->isCouldBePenalized() && ($periodService->isPenaltyInResult($lastNotificationAt) === true || $indicator->isForcePenalize() === true)){
             $amountPenalty = $periodService->getPeriodActive()->getPercentagePenalty();
         }
-        
+        if($result == 0){
+            $amountPenalty = 0;
+        }
         $indicator->setResult($result - $amountPenalty);
-        
-        $em = $this->getDoctrine()->getManager();
         
         $em->persist($indicator);
         $em->persist($details);
         if($andFlush){
             $em->flush();
         }
-        
         $objetives = $indicator->getObjetives();
         
         $this->updateResultOfObjects($objetives);
+        
+//        $indicatorService->updateTagIndicator($indicator);
         
         if($indicator->getParent() !== null){
             $this->refreshValueIndicator($indicator->getParent(),true);
         }
     }
     
-    
+    /**
+     * Evalua el resultado del indicador de acuerdo al tipo de calculo de la formula
+     * @param Indicator $indicator
+     */
+    private function evaluateIndicatorByFormula(Indicator &$indicator)
+    {
+        $formula = $indicator->getFormula();
+        $typeOfCalculation = $formula->getTypeOfCalculation();
+        if($typeOfCalculation == Formula::TYPE_CALCULATION_SIMPLE_AVERAGE){
+            $this->calculateFormulaSimpleAverage($indicator);
+        }elseif($typeOfCalculation == Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC){
+            $this->calculateFormulaRealPlanAutomatic($indicator);
+        }elseif($typeOfCalculation == Formula::TYPE_CALCULATION_REAL_AUTOMATIC){
+            $this->calculateFormulaRealAutomatic($indicator);
+        }elseif($typeOfCalculation == Formula::TYPE_CALCULATION_ACCUMULATE){
+            $this->calculateFormulaAccumulate($indicator);
+        }elseif($typeOfCalculation == Formula::TYPE_CALCULATION_REAL_AND_PLAN_FROM_EQ){
+            $this->calculateFormulaRealPlanAutomaticFromEQ($indicator);
+        }
+    }
+
+
     /**
      * Función que recalcula el resultado para el rango verde
      * @param Indicator $indicator
@@ -973,10 +1064,24 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         
         $totalPlan = $totalReal = $value = 0.0;
         foreach ($valuesIndicator as $valueIndicator) {
-            $formulaParameters = $valueIndicator->getFormulaParameters();
-            $totalPlan += $formulaParameters[$variableToPlanValueName];
-            $totalReal += $formulaParameters[$variableToRealValueName];
             $i++;
+            $formulaParameters = $valueIndicator->getFormulaParameters();
+            $plan = $formulaParameters[$variableToPlanValueName];
+            $real = $formulaParameters[$variableToRealValueName];
+            
+            if($details){
+                if($details->getSourceResult() == \Pequiven\IndicatorBundle\Model\Indicator\IndicatorDetails::SOURCE_RESULT_LAST_VALID){
+                    if(($plan != 0 || $real != 0)){
+                        $totalPlan = $plan;
+                        $totalReal = $real;
+                    }
+                    continue;
+                }elseif($details->getSourceResult() == \Pequiven\IndicatorBundle\Model\Indicator\IndicatorDetails::SOURCE_RESULT_LAST && $i !== $valuesIndicatorQuantity){
+                    continue;
+                }
+            }
+            $totalPlan += $plan;
+            $totalReal += $real;
         }
 //        die;
         $value = $totalReal;
@@ -990,37 +1095,48 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
      * 
      * @param Indicator $indicator
      */
-    private function calculateFormulaRealPlanAutomaticFromChild(\Pequiven\IndicatorBundle\Entity\Indicator &$indicator) 
+    private function calculateFormulaRealPlanAutomaticFromChild(\Pequiven\IndicatorBundle\Entity\Indicator &$indicator)
     {
         $childrens = $indicator->getChildrens();
         $indicatorService = $this->getIndicatorService();
         
         $resultsItems = array();
+        $formula = $indicator->getFormula();
         //Obtener los valores de los hijos
         foreach ($childrens as $child) {
             $i = 0;
-            $formula = $child->getFormula();
             
             foreach ($child->getValuesIndicator() as $valueIndicator) {
-                if(!isset($resultsItems[$i])){
-                    $resultsItems[$i] = array('plan' => 0.0,'real' => 0.0);
-                }
+                
                 $plan = $real = 0.0;
                 $formulaParameters = $valueIndicator->getFormulaParameters();
                 
                     if($formula->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC){
                         $variableToPlanValueName = $formula->getVariableToPlanValue()->getName();
                         $variableToRealValueName = $formula->getVariableToRealValue()->getName();
-                        $plan = $formulaParameters[$variableToPlanValueName];
-                        $real = $formulaParameters[$variableToRealValueName];
+                        if(!isset($resultsItems[$i])){
+                            $resultsItems[$i] = array($variableToPlanValueName => 0.0,$variableToRealValueName => 0.0);
+                        }
+                        if(isset($formulaParameters[$variableToPlanValueName])){
+                            $plan = $formulaParameters[$variableToPlanValueName];
+                        }
+                        if(isset($formulaParameters[$variableToRealValueName])){
+                            $real = $formulaParameters[$variableToRealValueName];
+                        }
+                        
+                        $resultsItems[$i][$variableToPlanValueName] = $resultsItems[$i][$variableToPlanValueName] + $plan;
+                        $resultsItems[$i][$variableToRealValueName] = $resultsItems[$i][$variableToRealValueName] + $real;
                     }elseif($formula->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_FROM_EQ){
+                        if(!isset($resultsItems[$i])){
+                            $resultsItems[$i] = array(Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN => 0.0,Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL => 0.0);
+                        }
                         $result = $this->getFormulaResultFromEQ($formula, $formulaParameters);
-                        $plan = $result['plan'];
-                        $real = $result['real'];
+                        $plan = $result[Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN];
+                        $real = $result[Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL];
+                        
+                        $resultsItems[$i][Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN] = $resultsItems[$i][Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN] + $plan;
+                        $resultsItems[$i][Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL] = $resultsItems[$i][Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL] + $real;
                     }
-                
-                $resultsItems[$i]['plan'] = $resultsItems[$i]['plan'] + $plan;
-                $resultsItems[$i]['real'] = $resultsItems[$i]['real'] + $real;
                 $i++;
                 
             }//fin for each
@@ -1035,24 +1151,26 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             $i++;
             if($details){
                 if($details->getSourceResult() == \Pequiven\IndicatorBundle\Model\Indicator\IndicatorDetails::SOURCE_RESULT_LAST_VALID){
-                    if(($resultItem['plan'] != 0 || $resultItem['real'] != 0)){
-                        $totalPlan = $resultItem['plan'];
-                        $totalReal = $resultItem['real'];
+                    if(($resultItem[Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN] != 0 || $resultItem[Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL] != 0)){
+                        $totalPlan = $resultItem[Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN];
+                        $totalReal = $resultItem[Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL];
                     }
                     continue;
                 }elseif($details->getSourceResult() == \Pequiven\IndicatorBundle\Model\Indicator\IndicatorDetails::SOURCE_RESULT_LAST && $i !== $valuesIndicatorQuantity){
                     continue;
                 }
             }
-            $totalPlan += $resultItem['plan'];
-            $totalReal += $resultItem['real'];
+            if($formula->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC){
+                $totalPlan += $resultItem[$formula->getVariableToPlanValue()->getName()];
+                $totalReal += $resultItem[$formula->getVariableToRealValue()->getName()];
+            } else{
+                $totalPlan += $resultItem[Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN];
+                $totalReal += $resultItem[Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL];
+            }
         }
-//        var_dump($totalPlan);
-//        var_dump($totalReal);
         $frequencyNotificationIndicator = $indicator->getFrequencyNotificationIndicator();
         
         //Actualizar valores de los resultados del indicador padre.
-        $formula = $indicator->getFormula();
         if($formula->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC){
             $variableToPlanValueName = $formula->getVariableToPlanValue()->getName();
             $variableToRealValueName = $formula->getVariableToRealValue()->getName();
@@ -1060,6 +1178,97 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             $variableToPlanValueName = Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN;
             $variableToRealValueName = Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL;
         }
+        
+        //Completar la cantidad de resultados de acuerdo a la frecuencia
+        $valuesIndicator = $indicator->getValuesIndicator();
+        if(count($valuesIndicator) != $frequencyNotificationIndicator->getNumberResultsFrequency()){
+            $user = $this->getUser();
+            $em = $this->getDoctrine()->getManager();
+            foreach ($indicator->getValuesIndicator() as $valueIndicator) {
+                $indicator->removeValuesIndicator($valueIndicator);
+                $em->remove($valueIndicator);
+            }
+            $em->flush();
+            for($i= 0;$i < $frequencyNotificationIndicator->getNumberResultsFrequency();$i++){
+                $valueIndicator = new Indicator\ValueIndicator();
+                $valueIndicator
+                    ->setFormula($formula)
+                    ->setCreatedBy($user)
+                ;
+                $vars = array();
+                foreach($formula->getVariables() as $variable){
+                    $vars[$variable->getName()] = 0.0;
+                }
+                $valueIndicator->setFormulaParameters($vars);
+                $indicator->addValuesIndicator($valueIndicator);
+            }
+        }
+        $i = 0;
+        foreach ($indicator->getValuesIndicator() as $valueIndicator) {
+            $formulaUsed = $valueIndicator->getFormula();
+            $formulaParameters = $valueIndicator->getFormulaParameters();
+            $variableToPlanValueName = $formulaUsed->getVariableToPlanValue();
+            $variableToRealValueName = $formulaUsed->getVariableToRealValue();
+            $plan = $real = 0.0;
+
+            if(isset($resultsItems[$i])){
+                if($formula->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC){
+                    $plan = $resultsItems[$i][$variableToPlanValueName->getName()];
+                    $real = $resultsItems[$i][$variableToRealValueName->getName()];
+                } else{
+                    $plan = $resultsItems[$i][Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN];
+                    $real = $resultsItems[$i][Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL];
+                }
+            }
+            if($formula->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC){
+                $valueIndicator->setParameter($variableToPlanValueName->getName(), $plan);
+                $valueIndicator->setParameter($variableToRealValueName->getName(), $real);
+            } else{
+                $valueIndicator->setParameter($variableToPlanValueName, $plan);
+                $valueIndicator->setParameter($variableToRealValueName, $real);
+            }
+            $value = $indicatorService->calculateFormulaValue($formulaUsed, $valueIndicator->getFormulaParameters());
+            $valueIndicator->setValueOfIndicator($value);
+            $valueIndicator->setFormula($formula);
+            $i++;
+        }
+        $indicator
+            ->setTotalPlan($totalPlan)
+            ->setValueFinal($totalReal);
+    }
+    
+    /**
+     * Calcula el resultado del indicador automáticamente a partir de la ecuación definida en la fórmula y el valor de las variables a partir de la formula de los indicadores 
+     * 
+     * @param Indicator $indicator
+     */
+    private function calculateFormulaAutomaticFromEQFromChild(\Pequiven\IndicatorBundle\Entity\Indicator &$indicator)
+    {
+        $childrens = $indicator->getChildrens();
+        $indicatorService = $this->getIndicatorService();
+
+        $resultsItems = array();
+        //Obtener los valores de los hijos
+        $formula = $indicator->getFormula();
+        foreach ($childrens as $child) {
+            $numberResult = 0;
+            foreach ($child->getValuesIndicator() as $valueIndicator) 
+            {
+                if(!isset($resultsItems[$numberResult])){
+                    $resultsItems[$numberResult] = array();
+                }
+                $resultsItems[$numberResult][] = $valueIndicator;
+                $numberResult++;
+                
+            }//fin for each
+        }//fin for each childrens
+        
+        $details = $indicator->getDetails();
+        $valuesIndicatorQuantity = count($resultsItems);
+        
+        $i = 0;
+        $totalPlan = $totalReal = 0.0;
+        $frequencyNotificationIndicator = $indicator->getFrequencyNotificationIndicator();
         
         //Completar la cantidad de resultados de acuerdo a la frecuencia
         $valuesIndicator = $indicator->getValuesIndicator();
@@ -1081,24 +1290,162 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 $indicator->addValuesIndicator($valueIndicator);
             }
         }
+        
+        $variableToPlanValueName = Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN;
+        $variableToRealValueName = Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL;
         $i = 0;
-        foreach ($indicator->getValuesIndicator() as $valueIndicator) {
-            $formulaUsed = $valueIndicator->getFormula();
-            $formulaParameters = $valueIndicator->getFormulaParameters();
-            $plan = $real = 0.0;
-            if(isset($resultsItems[$i])){
-                $plan = $resultsItems[$i]['plan'];
-                $real = $resultsItems[$i]['real'];
+        $calculationMethod = $indicator->getCalculationMethod();
+        $formulaUsed = $indicator->getFormula();
+        foreach ($indicator->getValuesIndicator() as $valueIndicator) 
+        {
+            $typeOfCalculation = $formulaUsed->getTypeOfCalculation();
+            if($calculationMethod == Indicator::CALCULATION_METHOD_ACCUMULATION_OF_VARIABLES){
+                foreach ($formulaUsed->getVariables() as $variable) 
+                {
+                    if(isset($resultsItems[$i]) == false){
+                        continue;
+                    }
+                    $nameParameter = $variable->getName();
+                    $valueParameter = $valueIndicator->getParameter($nameParameter,0);
+                    $results = $resultsItems[$i];
+                    if($variable->isFromEQ()){
+                        $parametersForTemplate = array(
+                            'indicator' => $indicator,
+                            'result_number' => ($i + 1),
+                            'results' => $results,
+                        );
+                        $valueParameter = trim($this->renderString($variable->getEquation(),$parametersForTemplate));
+                    }else{
+                        if(!$variable->isStaticValue()){
+                            $valueParameter = 0;
+                        }
+                        foreach ($results as $resultItem)
+                        {
+                            $childValueParameter = $resultItem->getParameter($nameParameter);
+                            if($childValueParameter !== null)
+                            {
+                                if($variable->isStaticValue()){//En caso de que la variable sea "estática" y tenga que obtener el valor del indicador hijo
+                                    $valueParameter = $childValueParameter;
+                                } else{
+                                    $valueParameter += $childValueParameter;
+                                }
+                            }
+                        }
+                    }
+                    $valueIndicator->setParameter($nameParameter,$valueParameter);
+                }
+            }else if($calculationMethod == Indicator::CALCULATION_METHOD_AVERAGE_BASED_ON_NUMBER_CHILDREN){
+                if(isset($resultsItems[$i]) == false){
+                    continue;
+                }
+                $results = $resultsItems[$i];
+                $totalRealChild = 0.0;
+                $totalPlanChild = 0;
+                foreach ($results as $childValueIndicator) {
+                    $formulaChild = $childValueIndicator->getIndicator()->getFormula();
+                    $value = $indicatorService->calculateFormulaValue($formulaChild, $childValueIndicator->getFormulaParameters());
+                    $totalRealChild += $value;
+                    $totalPlanChild++;
+                }
+                $valueIndicator->setParameter($variableToPlanValueName,$totalPlanChild);
+                $valueIndicator->setParameter($variableToRealValueName,$totalRealChild);
+            }else if($calculationMethod == Indicator::CALCULATION_METHOD_AVERAGE_PLAN_REAL_CHILDREN){
+                if(isset($resultsItems[$i]) == false){
+                    continue;
+                }
+                $results = $resultsItems[$i];
+                $totalRealChild = $totalPlanChild = 0.0;
+                $totalChild = count($results);
+                foreach ($results as $childValueIndicator) {
+                    $formulaChild = $childValueIndicator->getIndicator()->getFormula();
+                    $value = $indicatorService->calculateFormulaValue($formulaChild, $childValueIndicator->getFormulaParameters());
+                    if($formulaUsed->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC){
+                        $planVariableName = $formulaUsed->getVariableToPlanValue()->getName();
+                        $realVariableName = $formulaUsed->getVariableToRealValue()->getName();
+                    }else {
+                        $planVariableName = $variableToPlanValueName;
+                        $realVariableName = $variableToRealValueName;
+                    }
+                    $valuePlan = $childValueIndicator->getParameter($planVariableName);
+                    $valueReal = $childValueIndicator->getParameter($realVariableName);
+                    $totalPlanChild += (float)$valuePlan;
+                    $totalRealChild += (float)$valueReal;
+                }
+                
+                $totalPlanAcumulated = ($totalPlanChild / $totalChild);
+                $totalRealAcumulated = ($totalRealChild / $totalChild);
+                if($formulaUsed->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC){
+                    $planVariableName = $formulaUsed->getVariableToPlanValue()->getName();
+                    $realVariableName = $formulaUsed->getVariableToRealValue()->getName();
+                    $valueIndicator->setParameter($planVariableName,$totalPlanAcumulated);
+                    $valueIndicator->setParameter($realVariableName, $totalRealAcumulated);
+                }
+                
+                $valueIndicator->setParameter($variableToPlanValueName,$totalPlanAcumulated);
+                $valueIndicator->setParameter($variableToRealValueName, $totalRealAcumulated);
+            }else if($calculationMethod == Indicator::CALCULATION_METHOD_WEIGHTED_AVERAGE_RESULT_CHILDREN){
+                if(isset($resultsItems[$i]) == false){
+                    continue;
+                }
+                $results = $resultsItems[$i];
+//                var_dump($results);
+                $totalRealChild = $totalPlanChild = 0.0;
+                $totalChild = count($results);
+//                $j = 0;
+                foreach ($results as $childValueIndicator) {
+                    $formulaChild = $childValueIndicator->getIndicator()->getFormula();
+                    $value = $indicatorService->calculateFormulaValue($formulaChild, $childValueIndicator->getFormulaParameters());
+                    if($formulaUsed->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC){
+                        $planVariableName = $formulaUsed->getVariableToPlanValue()->getName();
+                        $realVariableName = $formulaUsed->getVariableToRealValue()->getName();
+                    }else {
+                        $planVariableName = $variableToPlanValueName;
+                        $realVariableName = $variableToRealValueName;
+                    }
+                    $valuePlan = $childValueIndicator->getParameter($planVariableName);
+                    $valueReal = $childValueIndicator->getParameter($realVariableName);
+//                    var_dump($valuePlan);
+//                    var_dump($valueReal);
+                    $totalPlanChild += (float)$valuePlan;
+                    $totalRealChild += (float)$valueReal;
+                }
+//                var_dump($totalChild);
+//                var_dump($totalPlanChild);
+                $totalPlanAcumulated = ($totalPlanChild / $totalChild);
+                $totalRealAcumulated = ($totalRealChild / $totalChild);
+                if($formulaUsed->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC){
+                    $planVariableName = $formulaUsed->getVariableToPlanValue()->getName();
+                    $realVariableName = $formulaUsed->getVariableToRealValue()->getName();
+                    $valueIndicator->setParameter($planVariableName,$totalPlanAcumulated);
+                    $valueIndicator->setParameter($realVariableName, $totalRealAcumulated);
+                }
+                
+                
+                
+                $valueIndicator->setParameter($variableToPlanValueName,$totalPlanAcumulated);
+                $valueIndicator->setParameter($variableToRealValueName, $totalRealAcumulated);
+
             }
-            $valueIndicator->setParameter($variableToPlanValueName, $plan);
-            $valueIndicator->setParameter($variableToRealValueName, $real);
+            $i++;
+            
             $value = $indicatorService->calculateFormulaValue($formulaUsed, $valueIndicator->getFormulaParameters());
             $valueIndicator->setValueOfIndicator($value);
-            $i++;
         }
-        $indicator
-            ->setTotalPlan($totalPlan)
-            ->setValueFinal($totalReal);
+        $this->evaluateIndicatorByFormula($indicator);
+        
+        if($calculationMethod == Indicator::CALCULATION_METHOD_WEIGHTED_AVERAGE_RESULT_CHILDREN){
+            $resultTotalChilds = 0.0;
+            foreach ($childrens as $child) {
+                $weight = $child->getIndicatorWeight();
+//                var_dump(sprintf("(%s / 100) * %s = %s",$child->getResultReal(),$weight,($child->getResultReal() / 100) * $weight));
+                $resultTotalChilds += ($child->getResultReal() / 100) * $weight;
+            }
+//            var_dump($resultTotalChilds);
+            $indicator
+                ->setTotalPlan(100)
+                ->setValueFinal($resultTotalChilds);
+        }
+//        die;
     }
     
     /**
@@ -1109,18 +1456,35 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
     private function calculateFormulaRealPlanAutomaticFromEQ(\Pequiven\IndicatorBundle\Entity\Indicator &$indicator) 
     {
         $formula = $indicator->getFormula();
-        
+        $details = $indicator->getDetails();
         $valuesIndicator = $indicator->getValuesIndicator();
         $totalPlan = $totalReal = $value = $equation_real = $equation_plan = 0.0;
         
+        $valuesIndicatorQuantity = count($valuesIndicator);
+        $i = 0;
         foreach ($valuesIndicator as $valueIndicator) {
             $formulaParameters = $valueIndicator->getFormulaParameters();
+            $resultItem = $this->getFormulaResultFromEQ($formula, $formulaParameters);
+            $valueIndicator->setParameter(Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN, $resultItem[Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN]);
+            $valueIndicator->setParameter(Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL, $resultItem[Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL]);
+            $i++;
+            if($details){
+                if($details->getSourceResult() == \Pequiven\IndicatorBundle\Model\Indicator\IndicatorDetails::SOURCE_RESULT_LAST_VALID){
+                    if(($resultItem[Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN] != 0 || $resultItem[Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL] != 0)){
+                        $totalPlan = $resultItem[Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN];
+                        $totalReal = $resultItem[Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL];
+                    }
+                    continue;
+                }elseif($details->getSourceResult() == \Pequiven\IndicatorBundle\Model\Indicator\IndicatorDetails::SOURCE_RESULT_LAST && $i !== $valuesIndicatorQuantity){
+                    
+                    continue;
+                }
+            }
             
-            $result = $this->getFormulaResultFromEQ($formula, $formulaParameters);
-            $totalPlan += $result['plan'];
-            $totalReal += $result['real'];
+            $totalPlan += $resultItem[Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN];
+            $totalReal += $resultItem[Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL];
         }
-        
+
         $value = $totalReal;
         $indicator
                 ->setTotalPlan($totalPlan)
@@ -1136,24 +1500,24 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
     private function getFormulaResultFromEQ(Formula $formula,$formulaParameters)
     {
         $equation_real = $equation_plan = 0.0;
-        
         $indicatorService = $this->getIndicatorService();
         $sourceEquationPlan = $indicatorService->parseFormulaVars($formula,$formula->getSourceEquationPlan());
         $sourceEquationReal = $indicatorService->parseFormulaVars($formula,$formula->getSourceEquationReal());
-        
+        if(!is_array($formulaParameters)){
+            $formulaParameters = array();
+        }
         foreach ($formulaParameters as $name => $value) {
                 $$name = 0;
                 if(isset($formulaParameters[$name])){
                     $$name = $value;
                 }
-            }
-            
-        eval(sprintf('$equation_real = %s;',$sourceEquationReal));
-        eval(sprintf('$equation_plan = %s;',$sourceEquationPlan));
-        
+        }
+        @eval(sprintf('$equation_real = %s;',$sourceEquationReal));
+        @eval(sprintf('$equation_plan = %s;',$sourceEquationPlan));
+      
         return array(
-            'real' => $equation_real,
-            'plan' => $equation_plan,
+        Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL => $equation_real,
+        Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN => $equation_plan,
         );
     }
 
@@ -1247,10 +1611,8 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
     public function validateAdvanceOfObjetives($objetives,$valid = true) {
         
         $limitErrors = 10;
-//        var_dump('Pasados - '.count($objetives));
         foreach ($objetives as $objetive) {
             $childrens = $objetive->getChildrens();
-//            var_dump('Padre - '.$objetive->getRef().' - Hijos - '.count($childrens));
             $arrangementPrograms = $objetive->getArrangementPrograms();
             //Se evalua que los programas de gestion tengan notificacion.
             foreach ($arrangementPrograms as $arrangementProgram) {
@@ -1313,14 +1675,12 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
      */
     public function getDataChartWidget(Indicator $indicator){
         $data = array();
-        $data["caption"] = number_format($indicator->getResultReal(), 2, ',', '.');
+        $data["caption"] = $indicator->hasNotification() == true ? number_format($indicator->getResultReal(), 2, ',', '.') : $this->trans('pequiven_indicator.summary.without_result', array(), 'PequivenIndicatorBundle');
         $data["captionOnTop"] = "1";
         $data["bgcolor"] = "FFFFFF";
         $data["bordercolor"] = "DCCEA1";
         $data["charttopmargin"] = "0";
         $data["chartbottommargin"] =  "0";
-//        $data["upperlimit"] = "131";
-//        $data["lowerlimit"] = "69";
         $data["tickmarkdistance"] = "3";
         $data["valuepadding"] = "-2";
         $data["pointerradius"] = "0";
@@ -1342,14 +1702,58 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         $data["showborder"] = "0";
         
         $tendency = $indicator->getTendency();
-        if($this->calculateRangeGood($indicator, $tendency, CommonObject::TYPE_RESULT_ARRANGEMENT)){
-            $data["captionFontColor"] = "#1aaf5d";
-        } elseif($this->calculateRangeMiddle($indicator, $tendency, CommonObject::TYPE_RESULT_ARRANGEMENT)){
-            $data["captionFontColor"] = "#f2c500";
-        } elseif($this->calculateRangeBad($indicator, $tendency, CommonObject::TYPE_RESULT_ARRANGEMENT)){
-            $data["captionFontColor"] = "#c02d00";
+        if($indicator->hasNotification()){
+            if($this->calculateRangeGood($indicator, $tendency, CommonObject::TYPE_RESULT_ARRANGEMENT)){
+                $data["captionFontColor"] = "#1aaf5d";
+            } elseif($this->calculateRangeMiddle($indicator, $tendency, CommonObject::TYPE_RESULT_ARRANGEMENT)){
+                $data["captionFontColor"] = "#f2c500";
+            } elseif($this->calculateRangeBad($indicator, $tendency, CommonObject::TYPE_RESULT_ARRANGEMENT)){
+                $data["captionFontColor"] = "#c02d00";
+            }
+        } else{
+            $data["captionFontColor"] = "#000000";
         }
         return $data;
+    }
+    
+    /**
+     * Evalua un valor en el rango estándar
+     * @param type $value
+     * @return type
+     */
+    public function evaluateRangeStandar($value){
+        $type = CommonObject::TYPE_RANGE_GOOD;
+        $rangeTop = (float)70;
+        $rangeMiddle = (float)40;
+        
+        if($value < $rangeMiddle){
+            $type = CommonObject::TYPE_RANGE_BAD;
+        } elseif($value >= $rangeMiddle && $value < $rangeTop){
+            $type = CommonObject::TYPE_RANGE_MIDDLE;
+        }
+        
+        return $type;
+    }
+    
+    /**
+     * Evalua un valor de acuerdo a los rangos de gestión de un total de items en especifico en especifico 
+     * @param type $value
+     * @return type
+     */
+    public function evaluateRangeByTotal($value,$total = 1){
+        $type = CommonObject::TYPE_RANGE_GOOD;
+        $rangeTop = (float)1;
+        $rangeMiddle = (float)2.5;
+        
+        $div = $value/$total;
+        
+        if($div > $rangeMiddle){
+            $type = CommonObject::TYPE_RANGE_BAD;
+        } elseif($div > $rangeTop && $div < $rangeMiddle){
+            $type = CommonObject::TYPE_RANGE_MIDDLE;
+        }
+        
+        return $type;
     }
     
     private function addErrorTrans($error,array $parameters = array()) {
@@ -1461,6 +1865,25 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
      */
     protected function getPeriodService()
     {
-        return $this->container->get('pequiven_arrangement_program.service.period');
+        return $this->container->get('pequiven_seip.service.period');
+    }
+    
+    /**
+     * Renders a string view.
+     *
+     * @param string   $view       The view name
+     * @param array    $parameters An array of parameters to pass to the view
+     * @param Response $response   A response instance
+     *
+     * @return String twig
+     */
+    private function renderString($string, array $parameters = array())
+    {
+        $toolService = new ToolService();
+        $parameters = array_merge($parameters,array(
+            'tool_service' => $toolService,
+            'date_now' => new \DateTime(),
+        ));
+        return $this->container->get('app.twig_string')->render($string, $parameters);
     }
 }

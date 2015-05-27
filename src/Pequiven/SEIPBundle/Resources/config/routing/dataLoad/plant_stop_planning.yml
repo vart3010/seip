@@ -1,0 +1,33 @@
+pequiven_plant_stop_planning_create:
+    path: /{plantReport}/create
+    defaults:
+        _controller: pequiven.controller.plant_stop_planning:createAction
+        _sylius:
+            form: pequiven_seipbundle_dataload_plant_plantstopplanning
+    methods: [GET|POST]
+    
+pequiven_plant_stop_planning_show:
+    path: /{id}/show
+    defaults:
+        _controller: pequiven.controller.plant_stop_planning:showAction
+    methods: [GET]
+    
+pequiven_plant_stop_planning_update:
+    path: /{id}/update
+    defaults:
+        _controller: pequiven.controller.plant_stop_planning:updateAction
+        _sylius:
+            form: pequiven_seipbundle_dataload_plant_plantstopplanning
+    methods: [GET|POST]
+    
+pequiven_plant_stop_planning_delete:
+    path: /{id}/delete
+    defaults:
+        _controller: pequiven.controller.plant_stop_planning:deleteAction
+    methods: [GET|DELETE]
+    
+pequiven_plant_stop_planning_run_planning:
+    path: /{id}/run-planning
+    defaults:
+        _controller: pequiven.controller.plant_stop_planning:runPlanningAction
+    methods: [GET|POST]

@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Pequiven\IndicatorBundle\Model\Indicator as modelIndicator;
+use Pequiven\IndicatorBundle\Model\Indicator as ModelIndicator;
 use Pequiven\SEIPBundle\Entity\PeriodItemInterface;
 
 /**
@@ -17,7 +17,7 @@ use Pequiven\SEIPBundle\Entity\PeriodItemInterface;
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  * @ORM\HasLifecycleCallbacks()
  */
-class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Result\ResultItemInterface,PeriodItemInterface
+class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Result\ResultItemInterface,PeriodItemInterface
 {
     /**
      * @var integer
@@ -124,7 +124,7 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     /**
      * Formula
      * @var \Pequiven\MasterBundle\Entity\Formula
-     * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Formula")
+     * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Formula",inversedBy="indicators")
      * @ORM\JoinColumn(name="fk_formula", referencedColumnName="id")
      */
     private $formula;
@@ -268,7 +268,7 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     private $forcePenalize = false;
     
     /**
-     * ¿Es requerido para importacion?
+     * ¿Es requerido para importacion? Quiere decir que es obligatorio para el siguiente período a planificar.
      * 
      * @var boolean
      * @ORM\Column(name="requiredToImport",type="boolean")
@@ -290,6 +290,150 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     private $backward = false;
     
     /**
+     * Configuracion de origen de datos de los detalles de los valores de indicadores
+     * 
+     * @var \Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\ValueIndicatorConfig
+     * @ORM\OneToOne(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\ValueIndicatorConfig",inversedBy="indicator")
+     */
+    private $valueIndicatorConfig;
+    
+    /**
+     * Etiquetas del indicador
+     * 
+     * @var \Pequiven\IndicatorBundle\Entity\Indicator\TagIndicator
+     * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\TagIndicator",mappedBy="indicator",cascade={"persist","remove"})
+     */
+    protected $tagsIndicator;
+    
+    /**
+     * ¿El resultado del indicador se calcula en tipo Porcentaje?
+     * @var boolean
+     * @ORM\Column(name="resultInPercentage",type="boolean")
+     */
+    private $resultInPercentage = true;
+    
+    /**
+     * ¿Se mostrará la etiqueta en vez del resultado de medición?
+     * @var boolean
+     * @ORM\Column(name="showTagInResult",type="boolean")
+     */
+    private $showTagInResult = false;
+    
+    /**
+     * ¿Mostar etiqueta "valor" en la ficha del indicador?
+     * @var boolean
+     * @ORM\Column(name="showRealValue",type="boolean")
+     */
+    private $showRealValue = true;
+    
+    /**
+     * ¿Mostar etiqueta "Plan anual" en la ficha del indicador?
+     * @var boolean
+     * @ORM\Column(name="showPlanValue",type="boolean")
+     */
+    private $showPlanValue = true;
+    
+    /**
+     * ¿Mostar resultados del indicador?
+     * @var boolean
+     * @ORM\Column(name="showResults",type="boolean")
+     */
+    private $showResults = true;
+    
+    /**
+     * ¿Mostar puntos de atencion del indicador?
+     * @var boolean
+     * @ORM\Column(name="showFeatures",type="boolean")
+     */
+    private $showFeatures = false;
+    
+    /**
+     * ¿Mostar los gráficos del indicador en la página de dashboard?
+     * @var boolean
+     * @ORM\Column(name="showCharts",type="boolean")
+     */
+    private $showCharts = true;
+    
+    /**
+     * ¿Mostar las etiquetas del indicador en la página del dashboard?
+     * @var boolean
+     * @ORM\Column(name="showTags",type="boolean")
+     */
+    private $showTags = false;
+    
+    /**
+     * @var float
+     * 
+     * @ORM\Column(name="indicatorWeight", type="float", nullable=true)
+     */
+    private $indicatorWeight = 0;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="summary", type="text", nullable=true)
+     */
+    private $summary;
+    
+    /**
+     * ¿Será medido en el período actual?
+     * @var boolean
+     * @ORM\Column(name="evaluetaInPeriod",type="boolean")
+     */
+    private $evaluateInPeriod = true;
+    
+    /**
+     * Snippet para calcular el plan
+     * @var string
+     * @ORM\Column(name="snippetPlan",type="text",nullable=true)
+     */
+    protected $snippetPlan;
+    
+    /**
+     * Snippet para calcular el real
+     * @var string
+     * @ORM\Column(name="snippetReal",type="text",nullable=true)
+     */
+    protected $snippetReal;
+    
+    /**
+     * Puntos de atencion
+     * @var Indicator\FeatureIndicator
+     * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\FeatureIndicator",mappedBy="indicator")
+     */
+    protected $featuresIndicator;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="orderShowFromParent", type="integer")
+     */
+    private $orderShowFromParent = 1;
+    
+    /**
+     * Estatus del programa de gestion
+     * @var integer
+     *
+     * @ORM\Column(name="status", type="integer")
+     */
+    protected $status = self::STATUS_DRAFT;
+    
+    /**
+     * Charts
+     * 
+     * @var \Pequiven\SEIPBundle\Entity\Chart
+     * @ORM\ManyToMany(targetEntity="\Pequiven\SEIPBundle\Entity\Chart", inversedBy="indicators")
+     * @ORM\JoinTable(name="seip_indicators_charts")
+     */
+    private $charts;
+    
+    /**
+    * @ORM\ManyToMany(targetEntity="Pequiven\SIGBundle\Entity\ManagementSystem", inversedBy="indicators", cascade={"persist","remove"})
+    * @ORM\JoinTable(name="seip_indicators_management_systems")
+    */
+    private $managementSystems;
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -297,8 +441,12 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
         $this->objetives = new \Doctrine\Common\Collections\ArrayCollection();
         $this->lineStrategics = new \Doctrine\Common\Collections\ArrayCollection();
         $this->valuesIndicator = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->tagsIndicator = new \Doctrine\Common\Collections\ArrayCollection();
         $this->childrens=  new \Doctrine\Common\Collections\ArrayCollection();
         $this->formulaDetails = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->featuresIndicator = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->charts = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->managementSystems = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -758,8 +906,14 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     public function setValueFinal($valueFinal)
     {
         $this->progressToDate = 0;
-        if($this->totalPlan > 0){
-            $this->progressToDate = ($valueFinal / $this->totalPlan) * 100;
+        if($this->totalPlan != 0){//En caso de que el valor plan sea diferente de cero
+            if($this->resultInPercentage){//En caso de que el resultado del indicador tenga que convertirse en valor porcentual
+                $this->progressToDate = ($valueFinal / $this->totalPlan) * 100;
+            } else{
+                $this->progressToDate = ($valueFinal / $this->totalPlan);
+            }
+        } else{
+            $this->progressToDate = $valueFinal;
         }
         $this->valueFinal = $valueFinal;
 
@@ -780,7 +934,8 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * 
      * @return string
      */
-    public function __toString() {
+    public function __toString()
+    {
         return $this->getDescription() ? $this->getRef().' - '.$this->getDescription() : '-';
     }
 
@@ -1013,7 +1168,11 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
             $this->valuesIndicator = new ArrayCollection();
             
             $this->valueFinal = 0;
+            $this->totalPlan = 0;
+            $this->progressToDate = 0;
+            $this->resultReal = 0;
             
+            $this->featuresIndicator = new ArrayCollection();
             $this->histories = new ArrayCollection();
             $this->observations = new ArrayCollection();
             $this->details = new Indicator\IndicatorDetails();
@@ -1021,7 +1180,6 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
             $this->objetives = new ArrayCollection();
             
             $this->childrens = new ArrayCollection();
-            $this->progressToDate = 0;
         }
     }
     
@@ -1189,12 +1347,539 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     {
         return $this->backward;
     }
-    
+
     /**
      * @ORM\PrePersist()
      */
     function prePersist()
     {
         $this->details = new Indicator\IndicatorDetails;
+    }
+
+    /**
+     * Set valueIndicatorConfig
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\ValueIndicatorConfig $valueIndicatorConfig
+     * @return Indicator
+     */
+    public function setValueIndicatorConfig(\Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\ValueIndicatorConfig $valueIndicatorConfig = null)
+    {
+        $this->valueIndicatorConfig = $valueIndicatorConfig;
+
+        return $this;
+    }
+
+    /**
+     * Get valueIndicatorConfig
+     *
+     * @return \Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\ValueIndicatorConfig 
+     */
+    public function getValueIndicatorConfig()
+    {
+        return $this->valueIndicatorConfig;
+    }
+    
+    public function getDescriptionWithStrPad($pad_length){
+        return str_pad($this->description, $pad_length, ' ',STR_PAD_RIGHT);
+    }
+
+    /**
+     * Set calculationMethod
+     *
+     * @param integer $calculationMethod
+     * @return Indicator
+     */
+    public function setCalculationMethod($calculationMethod)
+    {
+        $this->calculationMethod = $calculationMethod;
+
+        return $this;
+    }
+
+    /**
+     * Get calculationMethod
+     *
+     * @return integer 
+     */
+    public function getCalculationMethod()
+    {
+        return $this->calculationMethod;
+    }
+    
+    /**
+     * Add tagsIndicator
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator\TagIndicator $tagsIndicator
+     * @return Indicator
+     */
+    public function addTagsIndicator(\Pequiven\IndicatorBundle\Entity\Indicator\TagIndicator $tagsIndicator)
+    {
+        $tagsIndicator->setIndicator($this);
+        
+        $this->tagsIndicator->add($tagsIndicator);
+
+        return $this;
+    }
+
+    /**
+     * Remove tagsIndicator
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator\TagIndicator $tagsIndicator
+     */
+    public function removeTagsIndicator(\Pequiven\IndicatorBundle\Entity\Indicator\TagIndicator $tagsIndicator)
+    {
+        $this->tagsIndicator->removeElement($tagsIndicator);
+    }
+
+    /**
+     * Get tagsIndicator
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getTagsIndicator()
+    {
+        return $this->tagsIndicator;
+    }
+    
+    /**
+     * Set resultInPercentage
+     *
+     * @param boolean $resultInPercentage
+     * @return Indicator
+     */
+    public function setResultInPercentage($resultInPercentage)
+    {
+        $this->resultInPercentage = $resultInPercentage;
+
+        return $this;
+    }
+
+    /**
+     * Get resultInPercentage
+     *
+     * @return boolean 
+     */
+    public function getResultInPercentage()
+    {
+        return $this->resultInPercentage;
+    }
+    
+    /**
+     * Set showTagInResult
+     *
+     * @param boolean $showTagInResult
+     * @return Indicator
+     */
+    public function setShowTagInResult($showTagInResult)
+    {
+        $this->showTagInResult = $showTagInResult;
+
+        return $this;
+    }
+
+    /**
+     * Get showTagInResult
+     *
+     * @return boolean 
+     */
+    public function getShowTagInResult()
+    {
+        return $this->showTagInResult;
+    }
+    
+    function getIndicatorWeight() {
+        return $this->indicatorWeight;
+    }
+
+    function setIndicatorWeight($indicatorWeight) {
+        $this->indicatorWeight = $indicatorWeight;
+    }
+
+    public function showResultOfIndicator(){
+        if(!$this->showTagInResult){
+            return $this->resultReal;
+        } else{
+            foreach ($this->getTagsIndicator() as $tagIndicator){
+                if($tagIndicator->getShowInIndicatorResult()){
+                    if($tagIndicator->getTypeTag() == Indicator\TagIndicator::TAG_TYPE_NUMERIC){
+                        return $tagIndicator->getValueOfTag();
+                    } else{
+                        return $tagIndicator->getTextOfTag();
+                    }
+                }
+            }
+        }
+    }
+    
+    /**
+     * Set summary
+     *
+     * @param string $summary
+     * @return Indicator
+     */
+    public function setSummary($summary)
+    {
+        $this->summary = $summary;
+
+        return $this;
+    }
+
+    /**
+     * Get summary
+     *
+     * @return string 
+     */
+    public function getSummary()
+    {
+        return $this->summary;
+    }
+    
+    function getShowRealValue() 
+    {
+        return $this->showRealValue;
+    }
+
+    function getShowPlanValue() 
+    {
+        return $this->showPlanValue;
+    }
+    
+    function isShowRealValue() 
+    {
+        return $this->showRealValue;
+    }
+
+    function isShowPlanValue() 
+    {
+        return $this->showPlanValue;
+    }
+
+    function setShowRealValue($showRealValue) 
+    {
+        $this->showRealValue = $showRealValue;
+    }
+
+    function setShowPlanValue($showPlanValue) 
+    {
+        $this->showPlanValue = $showPlanValue;
+    }
+    
+    function getEvaluateInPeriod() {
+        return $this->evaluateInPeriod;
+    }
+
+    function setEvaluateInPeriod($evaluateInPeriod) {
+        $this->evaluateInPeriod = $evaluateInPeriod;
+    }
+
+
+    /**
+     * Get forcePenalize
+     *
+     * @return boolean 
+     */
+    public function getForcePenalize()
+    {
+        return $this->forcePenalize;
+    }
+
+    /**
+     * Set snippetPlan
+     *
+     * @param string $snippetPlan
+     * @return Indicator
+     */
+    public function setSnippetPlan($snippetPlan)
+    {
+        $this->snippetPlan = $snippetPlan;
+
+        return $this;
+    }
+
+    /**
+     * Get snippetPlan
+     *
+     * @return string 
+     */
+    public function getSnippetPlan()
+    {
+        return $this->snippetPlan;
+    }
+
+    /**
+     * Set snippetReal
+     *
+     * @param string $snippetReal
+     * @return Indicator
+     */
+    public function setSnippetReal($snippetReal)
+    {
+        $this->snippetReal = $snippetReal;
+
+        return $this;
+    }
+
+    /**
+     * Get snippetReal
+     *
+     * @return string 
+     */
+    public function getSnippetReal()
+    {
+        return $this->snippetReal;
+    }
+    
+    /**
+     * Set showResults
+     *
+     * @param boolean $showResults
+     * @return Indicator
+     */
+    public function setShowResults($showResults)
+    {
+        $this->showResults = $showResults;
+
+        return $this;
+    }
+
+    /**
+     * Get showResults
+     *
+     * @return boolean 
+     */
+    public function getShowResults()
+    {
+        return $this->showResults;
+    }
+
+    /**
+     * Get showResults
+     *
+     * @return boolean 
+     */
+    public function isShowResults()
+    {
+        return $this->showResults;
+    }
+
+    /**
+     * Set showFeatures
+     *
+     * @param boolean $showFeatures
+     * @return Indicator
+     */
+    public function setShowFeatures($showFeatures)
+    {
+        $this->showFeatures = $showFeatures;
+
+        return $this;
+    }
+
+    /**
+     * Get showFeatures
+     *
+     * @return boolean 
+     */
+    public function getShowFeatures()
+    {
+        return $this->showFeatures;
+    }
+
+    /**
+     * Get showFeatures
+     *
+     * @return boolean 
+     */
+    public function isShowFeatures()
+    {
+        return $this->showFeatures;
+    }
+    
+    /**
+     * Add featuresIndicator
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator\FeatureIndicator $featuresIndicator
+     * @return Indicator
+     */
+    public function addFeaturesIndicator(\Pequiven\IndicatorBundle\Entity\Indicator\FeatureIndicator $featuresIndicator)
+    {
+        $featuresIndicator->setIndicator($this);
+        $this->featuresIndicator->add($featuresIndicator);
+
+        return $this;
+    }
+
+    /**
+     * Remove featuresIndicator
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator\FeatureIndicator $featuresIndicator
+     */
+    public function removeFeaturesIndicator(\Pequiven\IndicatorBundle\Entity\Indicator\FeatureIndicator $featuresIndicator)
+    {
+        $this->featuresIndicator->removeElement($featuresIndicator);
+    }
+
+    /**
+     * Get featuresIndicator
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getFeaturesIndicator()
+    {
+        return $this->featuresIndicator;
+    }
+
+    /**
+     * Set indicatorLevel
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\IndicatorLevel $indicatorLevel
+     * @return Indicator
+     */
+    public function setIndicatorLevel(\Pequiven\IndicatorBundle\Entity\IndicatorLevel $indicatorLevel)
+    {
+        $this->indicatorLevel = $indicatorLevel;
+
+        return $this;
+    }
+    
+    function getOrderShowFromParent() {
+        return $this->orderShowFromParent;
+    }
+
+    function setOrderShowFromParent($orderShowFromParent) {
+        $this->orderShowFromParent = $orderShowFromParent;
+    }
+    
+    /**
+     * 
+     * @return integer
+     */
+    function getStatus() 
+    {
+        return $this->status;
+    }
+
+    /**
+     * Establecer status Indicator::STATUS_*
+     * @param type $status
+     * @return \Pequiven\IndicatorBundle\Entity\Indicator
+     */
+    function setStatus($status) 
+    {
+        $this->status = $status;
+        
+        return $this;
+    }
+    
+    /**
+     * Add charts
+     *
+     * @param \Pequiven\SEIPBundle\Entity\Chart $charts
+     * @return Indicator
+     */
+    public function addChart(\Pequiven\SEIPBundle\Entity\Chart $charts)
+    {
+        $this->charts[] = $charts;
+
+        return $this;
+    }
+
+    /**
+     * Remove charts
+     *
+     * @param \Pequiven\SEIPBundle\Entity\Chart $charts
+     */
+    public function removeChart(\Pequiven\SEIPBundle\Entity\Chart $charts)
+    {
+        $this->charts->removeElement($charts);
+    }
+
+    /**
+     * Get charts
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getCharts()
+    {
+        return $this->charts;
+    }
+
+    /**
+     * Set showCharts
+     *
+     * @param boolean $showCharts
+     * @return Indicator
+     */
+    public function setShowCharts($showCharts)
+    {
+        $this->showCharts = $showCharts;
+
+        return $this;
+    }
+
+    /**
+     * Get showCharts
+     *
+     * @return boolean 
+     */
+    public function getShowCharts()
+    {
+        return $this->showCharts;
+    }
+
+    /**
+     * Set showTags
+     *
+     * @param boolean $showTags
+     * @return Indicator
+     */
+    public function setShowTags($showTags)
+    {
+        $this->showTags = $showTags;
+
+        return $this;
+    }
+
+    /**
+     * Get showTags
+     *
+     * @return boolean 
+     */
+    public function getShowTags()
+    {
+        return $this->showTags;
+    }
+    
+    /**
+     * Add managementSystems
+     *
+     * @param \Pequiven\SIGBundle\Entity\ManagementSystem $managementSystems
+     * @return Indicator
+     */
+    public function addManagementSystem(\Pequiven\SIGBundle\Entity\ManagementSystem $managementSystems)
+    {
+        $this->managementSystems[] = $managementSystems;
+
+        return $this;
+    }
+
+    /**
+     * Remove managementSystems
+     *
+     * @param \Pequiven\SIGBundle\Entity\ManagementSystem $managementSystems
+     */
+    public function removeManagementSystem(\Pequiven\SIGBundle\Entity\ManagementSystem $managementSystems)
+    {
+        $this->managementSystems->removeElement($managementSystems);
+    }
+
+    /**
+     * Get managementSystems
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getManagementSystems()
+    {
+        return $this->managementSystems;
     }
 }

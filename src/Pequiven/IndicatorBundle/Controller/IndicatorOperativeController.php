@@ -17,14 +17,12 @@ use Tecnocreaciones\Bundle\ResourceBundle\Controller\ResourceController as baseC
  */
 class IndicatorOperativeController extends baseController {
     /**
-     * @Template("PequivenIndicatorBundle:Operative:list.html.twig")
      * @return type
      */
     public function listAction() {
         $this->getSecurityService()->checkSecurity('ROLE_SEIP_INDICATOR_LIST_OPERATIVE');
         
-        return array(
-        );
+        return $this->render("PequivenIndicatorBundle:Operative:list.html.twig");
     }
 
     /**
@@ -40,6 +38,7 @@ class IndicatorOperativeController extends baseController {
         $repository = $this->getRepository();
 
         $criteria['indicatorLevel'] = IndicatorLevel::LEVEL_OPERATIVO;
+        $criteria['applyPeriodCriteria'] = true;
         $criteria['gerencia'] = $request->get('gerencia');
 
         if ($this->config->isPaginated()) {
@@ -87,9 +86,11 @@ class IndicatorOperativeController extends baseController {
      */
     public function createAction(Request $request) 
     {
+        $this->getPeriodService()->checkIsOpen();
+        
         $this->getSecurityService()->checkSecurity('ROLE_SEIP_INDICATOR_CREATE_OPERATIVE');
         
-        $periodService = $this->get('pequiven_arrangement_program.service.period');
+        $periodService = $this->get('pequiven_seip.service.period');
         $period = $periodService->getPeriodActive();
         $form = $this->createForm($this->get('pequiven_indicator.operative.registration.form.type'));
 
@@ -106,13 +107,14 @@ class IndicatorOperativeController extends baseController {
         if ($request->isMethod('POST') && $form->submit($request)->isValid()) {
             $object = $form->getData();
             $data = $this->container->get('request')->get("pequiven_indicator_operative_registration");
+            $object->setSummary($data['description']);
 
             if(strlen($data['gerenciaSecond']) == 0){
                 $em->getConnection()->rollback();
                 $this->get('session')->getFlashBag()->add('success', 'error falta gerencia 2da línea');
             }
 
-            $objetive = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $data['parentOperative']));
+            $objetive = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $data['parentOperative'],'period'=>$period));
             $object->setRefParent($objetive->getRef());
             $refIndicator = $data['ref'];
             $object->setPeriod($period);
@@ -143,7 +145,7 @@ class IndicatorOperativeController extends baseController {
             }
 
             //Obtenemos el último indicador guardado y le añadimos el rango de gestión o semáforo
-            $lastObjectInsert = $this->get("pequiven.repository.indicator")->findOneBy(array('ref' => $refIndicator));
+            $lastObjectInsert = $this->get("pequiven.repository.indicator")->findOneBy(array('ref' => $refIndicator,'period' => $period->getId(),'refParent' => $objetive->getRef()));
             $this->createArrangementRange($lastObjectInsert, $data);
 
             //Guardamos la relación entre el indicador y el objetivo
@@ -318,7 +320,7 @@ class IndicatorOperativeController extends baseController {
     public function createObjetiveIndicator(Indicator $indicator) {
 
         $em = $this->getDoctrine()->getManager();
-        $objetives = $em->getRepository('PequivenObjetiveBundle:Objetive')->findBy(array('ref' => $indicator->getRefParent()));
+        $objetives = $em->getRepository('PequivenObjetiveBundle:Objetive')->findBy(array('ref' => $indicator->getRefParent(),'period' => $indicator->getPeriod()->getId()));
         $totalObjetives = count($objetives);
         $em->getConnection()->beginTransaction();
         if ($totalObjetives > 0) {
@@ -383,7 +385,7 @@ class IndicatorOperativeController extends baseController {
         $securityContext = $this->container->get('security.context');
         $user = $securityContext->getToken()->getUser();
 
-        if ($securityContext->isGranted(array('ROLE_DIRECTIVE', 'ROLE_DIRECTIVE_AUX'))) {
+        if ($securityContext->isGranted(array('ROLE_DIRECTIVE', 'ROLE_DIRECTIVE_AUX','ROLE_WORKER_PLANNING'))) {
             $gerencia = $request->request->get('gerencia');
             $results = $this->get('pequiven.repository.gerenciasecond')->findBy(array('enabled' => true, 'gerencia' => $gerencia));
         } elseif ($securityContext->isGranted(array('ROLE_MANAGER_FIRST', 'ROLE_MANAGER_FIRST_AUX'))) {
@@ -460,6 +462,7 @@ class IndicatorOperativeController extends baseController {
         $objetiveOperativeId = $request->request->get('objetiveOperativeId');
         $options['refParent'] = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $objetiveOperativeId))->getRef();
         $options['type'] = 'OPERATIVE';
+        $options['idObjetive'] = $objetiveOperativeId;
         $ref = $this->setNewRef($options);
 
         $data[] = array('ref' => $ref);
@@ -493,8 +496,11 @@ class IndicatorOperativeController extends baseController {
      * @param type $options
      */
     public function setNewRef($options = array()) {
-
-        $results = $this->get('pequiven.repository.indicatortactic')->getByOptionRefParent($options);
+        $em = $this->getDoctrine()->getManager();
+        $em->getFilters()->disable('softdeleteable');
+//        $results = $this->get('pequiven.repository.indicatortactic')->getByOptionRefParent($options);
+        $results = $this->get('pequiven.repository.indicatortactic')->getByParent($options);
+        $em->getFilters()->enable('softdeleteable');
         $refIndicator = 'IO-' . $options['refParent'];
         $total = count($results);
         if (is_array($results) && $total > 0) {
@@ -509,9 +515,9 @@ class IndicatorOperativeController extends baseController {
     /**
      * @return \Pequiven\SEIPBundle\Service\PeriodService
      */
-    private function getPeriodService()
+    protected function getPeriodService()
     {
-        return $this->container->get('pequiven_arrangement_program.service.period');
+        return $this->container->get('pequiven_seip.service.period');
     }
     
     /**

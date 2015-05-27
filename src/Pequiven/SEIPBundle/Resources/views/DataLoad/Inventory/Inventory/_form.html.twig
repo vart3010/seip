@@ -1,0 +1,27 @@
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+<fieldset class="fieldset fields-list">
+    <legend class="legend">{{ 'pequiven_seip.product_report.inventory.inventory'|trans }}</legend>
+    <div class="field-block button-height">
+        {{ form_label(form.month) }}
+        {{ form_widget(form.month) }}
+        {{ form_errors(form.month) }}
+    </div>
+    
+    {% for i in 1..31 %}
+        <div class="field-block button-height">
+            {% set planN = "day"~ i %}
+            <div class="columns">
+                <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                    <p class="inline-label">
+                        <label class="label">{{ 'pequiven_seip.day_n'|trans({"%n%":i}) }}</label>
+                        {% set currentFormPlan = attribute(form,planN) %}
+                        {#{{ form_label(currentFormPlan) }}#}
+                        {{ form_widget(currentFormPlan) }}
+                        {{ form_errors(currentFormPlan) }}
+                    </p>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</fieldset>

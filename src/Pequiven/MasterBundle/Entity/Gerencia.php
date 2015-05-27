@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Pequiven\MasterBundle\Model\Gerencia as modelGerencia;
+use Pequiven\MasterBundle\Model\Evaluation\AuditableInterface;
 
 /**
  * Gerencia de primera linea
@@ -15,7 +16,7 @@ use Pequiven\MasterBundle\Model\Gerencia as modelGerencia;
  * @ORM\Entity(repositoryClass="Pequiven\MasterBundle\Repository\GerenciaRepository")
  * @author matias
  */
-class Gerencia extends modelGerencia
+class Gerencia extends modelGerencia implements AuditableInterface
 {
     /**
      * @var integer
@@ -152,6 +153,20 @@ class Gerencia extends modelGerencia
      */
     private $gerenciaSecondSupports;
     
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="resume", type="string", length=50, nullable=true)
+     */
+    private $resume;
+    
+    /**
+     * Es valida la uditoria para ser evaluado
+     * @var boolean
+     * @ORM\Column(name="validAudit",type="boolean")
+     */
+    private $validAudit = true;
+
     /**
      * Constructor
      */
@@ -579,5 +594,55 @@ class Gerencia extends modelGerencia
     public function getGerenciaSecondSupports()
     {
         return $this->gerenciaSecondSupports;
+    }
+    
+    /**
+     * Get Resume
+     * @return type
+     */
+    function getResume() {
+        return $this->resume;
+    }
+
+    /**
+     * Set Resume
+     * @param type $resume
+     */
+    function setResume($resume) {
+        $this->resume = $resume;
+    }
+    
+
+    /**
+     * Set validAudit
+     *
+     * @param boolean $validAudit
+     * @return Gerencia
+     */
+    public function setValidAudit($validAudit)
+    {
+        $this->validAudit = $validAudit;
+
+        return $this;
+    }
+
+    /**
+     * Get validAudit
+     *
+     * @return boolean 
+     */
+    public function getValidAudit()
+    {
+        return $this->validAudit;
+    }
+
+    /**
+     * Is validAudit
+     *
+     * @return boolean 
+     */
+    public function isValidAudit()
+    {
+        return $this->validAudit;
     }
 }

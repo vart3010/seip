@@ -14,7 +14,7 @@ namespace Pequiven\SEIPBundle\Service;
 use Symfony\Component\DependencyInjection\ContainerAware;
 
 /**
- * Servicio para obtener datos del periodo (pequiven_arrangement_program.service.period)
+ * Servicio para obtener datos del periodo (pequiven_seip.service.period)
  * @author Carlos Mendoza <inhack20@gmail.com>
  */
 class PeriodService extends ContainerAware 
@@ -86,7 +86,7 @@ class PeriodService extends ContainerAware
      * Retorna el periodo activo
      * @return \Pequiven\SEIPBundle\Entity\Period
      */
-    public function getPeriodActive($originalEntity = false)
+    public function getPeriodActive($type = \Pequiven\SEIPBundle\Entity\Period::VIEW_ALL_PERIODS)
     {
         $request = $this->getRequest();
         $session = $request->getSession();
@@ -103,7 +103,7 @@ class PeriodService extends ContainerAware
 //                }
 //            }
 //        }
-        if(!$period){
+        if(!$period && $type == \Pequiven\SEIPBundle\Entity\Period::VIEW_ALL_PERIODS){
             $period = $this->getUser()->getPeriod();
         }
         if(!$period){
@@ -145,6 +145,33 @@ class PeriodService extends ContainerAware
 //        return $periodRepository->find($period->getId());
         return $period;
     }
+
+    /**
+     * Retornando si esta abierto o no, el periodo activo
+     * @return type
+     * @throws Exception
+     */
+    public function isOpened()
+    {
+        $periodActive = $this->getPeriodActive(\Pequiven\SEIPBundle\Entity\Period::VIEW_ONLY_PERIOD_ACTIVE);
+        if($periodActive === null){
+            throw new Exception("No hay periodo activo.");
+        }
+        
+        return $periodActive->isOpened();
+    }
+    
+    /**
+     * Lanza una excepcion de seguridad si el periodo no se encuentra abierto
+     * 
+     * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
+     */
+    public function checkIsOpen()
+    {
+        if($this->isOpened() === false){
+            throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException(sprintf('El periodo "%s", se encuentra cerrado.',(string)$this->getPeriodActive()));
+        }
+    }
     
     /**
      * Limpia de la cache el periodo selecionado
@@ -179,15 +206,25 @@ class PeriodService extends ContainerAware
         return $this->getRepository()->findAll();
     }
     
-    public function getListArrayPeriodsAvailableConsultation()
+    public function getListArrayPeriodsAvailableConsultation($type = \Pequiven\SEIPBundle\Entity\Period::VIEW_ALL_PERIODS)
     {
         $request = $this->getRequest();
         $session = $request->getSession();
-        $listArrayPeriods = $session->get('listPeriods');
+        if($type == \Pequiven\SEIPBundle\Entity\Period::VIEW_ALL_PERIODS){
+            $listArrayPeriods = $session->get('listPeriods');
+        } else{
+            $listArrayPeriods = array();
+        }
         if($listArrayPeriods !== null){
             return $listArrayPeriods;
         }
-        $periods = $this->getPeriodsAvailableConsultation();
+        
+        if($type == \Pequiven\SEIPBundle\Entity\Period::VIEW_ALL_PERIODS){
+            $periods = $this->getPeriodsAvailableConsultation();
+        } else{
+            $periods = $this->getPeriodActive($type);
+        }
+        
         foreach ($periods as $period) {
             $listArrayPeriods[] = array(
                 'id' => $period->getId(),
@@ -196,6 +233,11 @@ class PeriodService extends ContainerAware
         }
         $session->set('listPeriods',$listArrayPeriods);
         return $listArrayPeriods;
+    }
+    
+    public function find($id)
+    {
+        return $this->getRepository()->find($id);
     }
     
     /**

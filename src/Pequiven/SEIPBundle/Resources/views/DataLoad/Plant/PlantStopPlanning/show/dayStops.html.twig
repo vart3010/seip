@@ -1,0 +1,38 @@
+{% trans_default_domain 'PequivenSEIPBundle' %}
+                
+<div class="block">
+    <div class="block-title">
+        <h3> {{ 'Days stops'|trans }}&nbsp;({{ plant_stop_planning.dayStops|length }})</h3>
+    </div>
+    <div class="with-padding">
+        <table class="simple-table responsive-table tables-extras" id="sorting-example2">
+            <thead>
+                <tr>
+                    <th scope="col" width="35%">{{ 'pequiven_seip.day_stop.day_stop'|trans }}</th>
+                    <th scope="col" width="10%" class="hide-on-tablet">{{ 'Hours'|trans }}</th>
+                </tr>
+            </thead>
+            {% set colspan = 2 %}
+            <tbody>
+
+                {% for dayStop in plant_stop_planning.dayStops %}
+                    <tr>
+                        <td>{{ loop.index }} - 
+                            {{ dayStop.day|myFormatDate }}
+                        </td>
+                        <th scope="row">
+                            {{ dayStop.hours }}&nbsp;h
+                        </th>
+                    </tr>
+                {% else %}
+                    <tr >
+                        <td colspan="{{ colspan }}" class="empty_row">
+                            {{ "empty.day_stops"|trans }}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+    </div>
+</div>

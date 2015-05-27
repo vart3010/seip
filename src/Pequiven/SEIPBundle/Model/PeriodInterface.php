@@ -23,4 +23,6 @@ interface PeriodInterface
      * @return \DateTime 
      */
     public function getDateStart();
+    
+    public function getStatus();
 }

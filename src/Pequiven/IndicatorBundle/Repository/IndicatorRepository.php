@@ -18,8 +18,8 @@ use Pequiven\SEIPBundle\Doctrine\ORM\SeipEntityRepository as EntityRepository;
  *
  * @author matias
  */
-class IndicatorRepository extends EntityRepository {
-    
+class IndicatorRepository extends EntityRepository 
+{
     public function getByOptionRef($options = array()){
     
         $em = $this->getEntityManager();
@@ -73,6 +73,28 @@ class IndicatorRepository extends EntityRepository {
         return $q->getResult();
     }
     
+    public function getByParent($options = array()){
+        $securityContext = $this->getSecurityContext();
+        $em = $this->getEntityManager();
+        
+        $query = $this->getQueryBuilder();
+        
+        $query->innerJoin('i.objetives', 'o');
+        $query->andWhere('o.id = '.$options['idObjetive']);
+        
+//        if($options['type'] === 'STRATEGIC'){
+//            $query->andWhere('i.indicatorLevel = ' . IndicatorLevel::LEVEL_ESTRATEGICO);
+//        } elseif($options['type'] === 'TACTIC'){
+//            $query->andWhere('i.indicatorLevel = ' . IndicatorLevel::LEVEL_TACTICO);
+//        } elseif($options['type'] === 'OPERATIVE'){
+//            $query->andWhere('i.indicatorLevel = ' . IndicatorLevel::LEVEL_OPERATIVO);
+//        }
+        
+        $q = $query->getQuery();
+
+        return $q->getResult();
+    }
+    
     function getQueryChildrenLevel($level) {
         $queryBuilder = $this->getQueryBuilder();
         $queryBuilder
@@ -98,6 +120,19 @@ class IndicatorRepository extends EntityRepository {
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
     function createPaginatorByLevel(array $criteria = null, array $orderBy = null) {
+        $criteria['for_view'] = true;
+        $orderBy['i.ref'] = 'ASC';
+        return $this->createPaginator($criteria, $orderBy);
+    }
+    
+    /**
+     * Crea un paginador para la vista de todos los indicadores, sin importar su nivel
+     * 
+     * @param array $criteria
+     * @param array $orderBy
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    function createPaginatorForAll(array $criteria = null, array $orderBy = null) {
         $criteria['for_view'] = true;
         return $this->createPaginator($criteria, $orderBy);
     }
@@ -164,6 +199,8 @@ class IndicatorRepository extends EntityRepository {
         }
         
         if($securityContext->isGranted(array('ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX','ROLE_GENERAL_COMPLEJO','ROLE_GENERAL_COMPLEJO_AUX','ROLE_INDICATOR_ADD_RESULT')) && !isset($criteria['gerencia'])){
+            $queryBuilder->andWhere('ob.gerencia = '.$user->getGerencia()->getId());
+        } elseif($user->getGerencia()){
             $queryBuilder->andWhere('ob.gerencia = '.$user->getGerencia()->getId());
         }
         
@@ -239,7 +276,7 @@ class IndicatorRepository extends EntityRepository {
                 $queryBuilder->andWhere('gs.modular =:modular');
                 $queryBuilder->setParameter('modular', true);
             }
-        } elseif($securityContext->isGranted(array('ROLE_INDICATOR_ADD_RESULT'))){
+        } elseif($securityContext->isGranted(array('ROLE_INDICATOR_ADD_RESULT')) || $user->getGerencia()){
             $queryBuilder->andWhere('ob.gerencia = '.$user->getGerencia()->getId());
         }
         
@@ -289,6 +326,63 @@ class IndicatorRepository extends EntityRepository {
         return $qb->getQuery()->getResult();
     }
     
+    /**
+     * Retorna los Indicadores de acuerdo a una Línea Estratégica seleccionada
+     * @return type
+     */
+    public function findByLineStrategic($idLineStrategic){
+        $qb = $this->getQueryBuilder();
+        $qb
+                ->innerJoin('i.lineStrategics','ls')
+                ->andWhere("ls.id = :idLineStrategic")
+                ->andWhere("i.deletedAt IS NULL")
+                ->setParameter('idLineStrategic', $idLineStrategic)
+        ;
+        
+        return $qb->getQuery()->getResult();
+    }
+    
+    /**
+     * Retorna los indicadores de acuerdo a una Línea EStratégica seleccioanda y ordenados de acuerdo a como se mostrarán
+     * @param type $idLineStrategic
+     * @param type $orderBy
+     */
+    public function findByLineStrategicAndOrderShowFromParent($idLineStrategic, $orderBy = 'ASC'){
+        $qb = $this->getQueryBuilder();
+        $qb
+                ->innerJoin('i.lineStrategics','ls')
+                ->andWhere("ls.id = :idLineStrategic")
+                ->andWhere("i.deletedAt IS NULL")
+                ->setParameter('idLineStrategic', $idLineStrategic)
+                ->orderBy('i.orderShowFromParent', $orderBy)
+        ;
+        $this->applyPeriodCriteria($qb);
+        
+        return $qb->getQuery()->getResult();
+    }
+    
+    /**
+     * 
+     * @param type $idParent
+     * @param type $orderBy
+     * @return type
+     */
+    function findByParentAndOrderShow($idParent,$orderBy = 'ASC') {
+        $queryBuilder = $this->getQueryBuilder();
+        $queryBuilder
+                ->innerJoin('i.parent', 'ip')
+                ->andWhere("ip.id = :idParent")
+                ->andWhere("i.deletedAt IS NULL")
+                ->andWhere("ip.deletedAt IS NULL")
+                ->setParameter('idParent', $idParent)
+                ->orderBy('i.orderShowFromParent', $orderBy)
+                ;
+        
+        return $queryBuilder->getQuery()->getResult();
+    }
+    
+    
+    
     public function findQueryWithResultNull(\Pequiven\SEIPBundle\Entity\Period $period)
     {
         $qb = $this->getQueryBuilder();
@@ -323,6 +417,12 @@ class IndicatorRepository extends EntityRepository {
         //Filtro por referencia o descripción
         if(($description = $criteria->remove('description')) !== null){
             $queryBuilder->andWhere($queryBuilder->expr()->orX($queryBuilder->expr()->like('i.description', "'%".$description."%'"),$queryBuilder->expr()->like('i.ref', "'%".$description."%'")));
+        }
+        
+        //Filtro por Tendencia
+        if(($tendency = $criteria->remove('tendency')) !== null){
+            $queryBuilder->innerJoin('i.tendency', 't');
+            $queryBuilder->andWhere($queryBuilder->expr()->like('t.description', "'%".$tendency."%'"));
         }
         
         //Filtro nivel del Indicador
@@ -394,13 +494,21 @@ class IndicatorRepository extends EntityRepository {
                 }
             }
         }
-        
+        $applyPeriodCriteria = $criteria->remove('applyPeriodCriteria');
         parent::applyCriteria($queryBuilder, $criteria->toArray());
         
-        $this->applyPeriodCriteria($queryBuilder);
+        if($applyPeriodCriteria){
+            $this->applyPeriodCriteria($queryBuilder);
+        }
     }
     
     protected function applySorting(\Doctrine\ORM\QueryBuilder $queryBuilder, array $sorting = null) {
+//        $sorting = new \Doctrine\Common\Collections\ArrayCollection($sorting);
+//        
+//        if(($sortByResultReal = $sorting->remove('resultReal')) !== null){
+//            $queryBuilder->orderBy("i.resultReal",  strtoupper($sortByResultReal));
+//        }
+        
         parent::applySorting($queryBuilder, $sorting);
     }
     

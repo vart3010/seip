@@ -6,6 +6,10 @@ pequiven_indicator:
     resource: "@PequivenSEIPBundle/Resources/config/routing/planning/indicator.yml"
     prefix:   /indicator
     
+pequiven_indicator_feature:
+    resource: "@PequivenSEIPBundle/Resources/config/routing/indicator/feature_indicator.yml"
+    prefix:   /indicator/feature-indicator
+    
 pequiven_value_indicator:
     resource: "@PequivenSEIPBundle/Resources/config/routing/value_indicator.yml"
     prefix:   /value-indicator
@@ -36,3 +40,19 @@ pequiven_pre_planning_main:
 pequiven_line_strategic:
     resource: "@PequivenSEIPBundle/Resources/config/routing/planning/line_strategic.yml"
     prefix:   /line-strategic
+
+pequiven_planning_arrangement_program:
+    resource: "@PequivenSEIPBundle/Resources/config/routing/planning/arrangement_program.yml"
+    prefix:   /arrangementprogram
+    
+pequiven_data_load:
+    resource: "@PequivenSEIPBundle/Resources/config/routing/dataLoad/data_load.yml"
+    prefix:   /data-load
+
+pequiven_chart:
+    resource: "@PequivenSEIPBundle/Resources/config/routing/chart.yml"
+    prefix:   /chart
+    
+pequiven_data_load:
+    resource: "@PequivenSEIPBundle/Resources/config/routing/dataLoad/main.yml"
+    prefix:   /data-load

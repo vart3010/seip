@@ -1,0 +1,12 @@
+Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\ValueIndicatorDetail:
+    exclusion_policy: ALL
+    properties:
+        id:
+            expose: true
+            groups: [id]
+        createdAt:
+            expose: true
+            groups: [api_list]
+        updatedAt:
+            expose: true
+            groups: [api_list]

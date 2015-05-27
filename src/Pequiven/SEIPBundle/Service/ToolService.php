@@ -71,4 +71,60 @@ class ToolService
     {
         return '' === $name || null === $name || preg_match('/^[a-zA-Z0-9_]*$/D', $name);
     }
+    
+    /**
+     * Trunca un texto
+     * @param string $description
+     * @param array $parameters
+     * limit: 80<br/>
+     * sufix: ...<br/>
+     * @return string
+     */
+    public static function truncate($description,array $parameters = array()) 
+    {
+        $limit = 80;
+        $sufix = '...';
+        if(isset($parameters['limit'])){
+            $limit = (int)$parameters['limit'];
+        }
+        if(isset($parameters['sufix'])){
+            $sufix = $parameters['sufix'];
+        }
+        
+        if(strlen($description) > $limit)
+        {
+            $description = mb_substr($description, 0,$limit,'UTF-8').$sufix;
+        }
+        return $description;
+    }
+    
+    /**
+     * Elimina los acentos de una cadena
+     * @param type $str
+     * @return type
+     */
+    public static function normalizeStr($str) 
+    {
+        $invalid = array('Š'=>'S', 'š'=>'s', 'Ž'=>'Z', 'ž'=>'z', 'À'=>'A', 'Á'=>'A', 'Â'=>'A', 'Ã'=>'A', 'Ä'=>'A', 'Å'=>'A', 'Æ'=>'A', 'Ç'=>'C', 'È'=>'E', 'É'=>'E',
+                            'Ê'=>'E', 'Ë'=>'E', 'Ì'=>'I', 'Í'=>'I', 'Î'=>'I', 'Ï'=>'I', 'Ñ'=>'N', 'Ò'=>'O', 'Ó'=>'O', 'Ô'=>'O', 'Õ'=>'O', 'Ö'=>'O', 'Ø'=>'O', 'Ù'=>'U',
+                            'Ú'=>'U', 'Û'=>'U', 'Ü'=>'U', 'Ý'=>'Y', 'Þ'=>'B', 'ß'=>'Ss', 'à'=>'a', 'á'=>'a', 'â'=>'a', 'ã'=>'a', 'ä'=>'a', 'å'=>'a', 'æ'=>'a', 'ç'=>'c',
+                            'è'=>'e', 'é'=>'e', 'ê'=>'e', 'ë'=>'e', 'ì'=>'i', 'í'=>'i', 'î'=>'i', 'ï'=>'i', 'ð'=>'o', 'ñ'=>'n', 'ò'=>'o', 'ó'=>'o', 'ô'=>'o', 'õ'=>'o',
+                            'ö'=>'o', 'ø'=>'o', 'ù'=>'u', 'ú'=>'u', 'û'=>'u', 'ý'=>'y', 'ý'=>'y', 'þ'=>'b', 'ÿ'=>'y');
+        $str = str_replace(array_keys($invalid), array_values($invalid), $str);
+
+        return $str;
+    }
+    
+    /**
+     * Retorna los meses del año con las etiquetas
+     * @return type
+     */
+    public static function getMonthsLabels()
+    {
+        $months = array();
+        for($i = 0; $i <= 11; $i++){
+            $months[$i] = sprintf("pequiven_seip.month.%s",$i);
+        }
+        return $months;
+    }
 }

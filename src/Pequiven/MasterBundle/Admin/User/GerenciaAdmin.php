@@ -35,6 +35,7 @@ class GerenciaAdmin extends Admin
             ->add('gerenciaSecondVinculants')
             ->add('gerenciaSecondSupports')
             ->add('gerenciaGroup')
+            ->add('validAudit')
             ->add('enabled')
             ;
     }
@@ -56,15 +57,23 @@ class GerenciaAdmin extends Admin
             ->add('gerenciaSecondVinculants','sonata_type_model_autocomplete',array(
                 'property' => array('ref','description'),
                 'multiple' => true,
+                'required' => false,
             ))
             ->add('gerenciaSecondSupports','sonata_type_model_autocomplete',array(
                 'property' => array('ref','description'),
                 'multiple' => true,
+                'required' => false,
             ))
             ->add('gerenciaGroup','sonata_type_model_autocomplete',array(
                 'property' => array('description'),
+                'required' => false,
             ))
-            ->add('enabled')
+            ->add('validAudit',null,array(
+                'required' => false,
+            ))
+            ->add('enabled',null,array(
+                'required' => false,
+            ))
             ;
     }
     protected function configureDatagridFilters(DatagridMapper $filter) {
@@ -75,6 +84,7 @@ class GerenciaAdmin extends Admin
             ->add('description')
             ->add('complejo')
             ->add('gerenciaGroup')
+            ->add('validAudit')
             ->add('enabled')
             ;
     }

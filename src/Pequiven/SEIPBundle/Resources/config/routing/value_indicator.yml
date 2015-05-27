@@ -1,10 +1,10 @@
 pequiven_value_indicator_get_form:
-    path: /{idIndicator}/get-form
+    path: /{idIndicator}/get-form.{_format}
     defaults:
         _controller: pequiven.controller.value_indicator:getFormAction
         _format: html
     requirements:
-        _format: html
+        _format: html|json
     methods: [GET]
     options:
         expose: true
@@ -28,5 +28,25 @@ pequiven_value_indicator_add:
     requirements:
         _format: json
     methods: [POST]
+    options:
+        expose: true
+        
+pequiven_value_indicator_show_detail:
+    path: /{id}/show-detail.{_format}
+    defaults:
+        _controller: pequiven.controller.value_indicator:showDetailAction
+        _format: html
+    requirements:
+        _format: html|json
+    options:
+        expose: true
+        
+pequiven_value_indicator_update_detail:
+    path: /{id}/show-detail.{_format}/{slug}
+    defaults:
+        _controller: pequiven.controller.value_indicator:updateDetailAction
+        _format: html
+    requirements:
+        _format: json
     options:
         expose: true

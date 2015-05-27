@@ -26,3 +26,5 @@ pequiven_gerenciafirst_export:
     requirements:
         id: "\d+"
     methods: [GET]
+    options:
+        expose: true

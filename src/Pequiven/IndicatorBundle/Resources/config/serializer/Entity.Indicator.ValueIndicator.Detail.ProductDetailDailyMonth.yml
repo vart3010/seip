@@ -1,0 +1,210 @@
+Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\Detail\ProductDetailDailyMonth:
+    exclusion_policy: ALL
+    properties:
+        id:
+            expose: true
+            groups: [id]
+        product:
+            expose: true
+            groups: [product]
+        month:
+            expose: true
+            groups: [api_list]
+        components:
+            expose: true
+            groups: [components]
+        totalPlan:
+            expose: true
+            groups: [api_list]
+        totalReal:
+            expose: true
+            groups: [api_list]
+        percentage:
+            expose: true
+            groups: [api_list]
+        day1Plan:
+            expose: true
+            groups: [api_list]
+        day1Real:
+            expose: true
+            groups: [api_list]
+        day2Plan:
+            expose: true
+            groups: [api_list]
+        day2Real:
+            expose: true
+            groups: [api_list]
+        day3Plan:
+            expose: true
+            groups: [api_list]
+        day3Real:
+            expose: true
+            groups: [api_list]
+        day4Plan:
+            expose: true
+            groups: [api_list]
+        day4Real:
+            expose: true
+            groups: [api_list]
+        day5Plan:
+            expose: true
+            groups: [api_list]
+        day5Real:
+            expose: true
+            groups: [api_list]
+        day6Plan:
+            expose: true
+            groups: [api_list]
+        day6Real:
+            expose: true
+            groups: [api_list]
+        day7Plan:
+            expose: true
+            groups: [api_list]
+        day7Real:
+            expose: true
+            groups: [api_list]
+        day8Plan:
+            expose: true
+            groups: [api_list]
+        day8Real:
+            expose: true
+            groups: [api_list]
+        day9Plan:
+            expose: true
+            groups: [api_list]
+        day9Real:
+            expose: true
+            groups: [api_list]
+        day10Plan:
+            expose: true
+            groups: [api_list]
+        day10Real:
+            expose: true
+            groups: [api_list]
+        day11Plan:
+            expose: true
+            groups: [api_list]
+        day11Real:
+            expose: true
+            groups: [api_list]
+        day12Plan:
+            expose: true
+            groups: [api_list]
+        day12Real:
+            expose: true
+            groups: [api_list]
+        day13Plan:
+            expose: true
+            groups: [api_list]
+        day13Real:
+            expose: true
+            groups: [api_list]
+        day14Plan:
+            expose: true
+            groups: [api_list]
+        day14Real:
+            expose: true
+            groups: [api_list]
+        day15Plan:
+            expose: true
+            groups: [api_list]
+        day15Real:
+            expose: true
+            groups: [api_list]
+        day16Plan:
+            expose: true
+            groups: [api_list]
+        day16Real:
+            expose: true
+            groups: [api_list]
+        day17Plan:
+            expose: true
+            groups: [api_list]
+        day17Real:
+            expose: true
+            groups: [api_list]
+        day18Plan:
+            expose: true
+            groups: [api_list]
+        day18Real:
+            expose: true
+            groups: [api_list]
+        day19Plan:
+            expose: true
+            groups: [api_list]
+        day19Real:
+            expose: true
+            groups: [api_list]
+        day20Plan:
+            expose: true
+            groups: [api_list]
+        day20Real:
+            expose: true
+            groups: [api_list]
+        day21Plan:
+            expose: true
+            groups: [api_list]
+        day21Real:
+            expose: true
+            groups: [api_list]
+        day22Plan:
+            expose: true
+            groups: [api_list]
+        day22Real:
+            expose: true
+            groups: [api_list]
+        day23Plan:
+            expose: true
+            groups: [api_list]
+        day23Real:
+            expose: true
+            groups: [api_list]
+        day24Plan:
+            expose: true
+            groups: [api_list]
+        day24Real:
+            expose: true
+            groups: [api_list]
+        day25Plan:
+            expose: true
+            groups: [api_list]
+        day25Real:
+            expose: true
+            groups: [api_list]
+        day26Plan:
+            expose: true
+            groups: [api_list]
+        day26Real:
+            expose: true
+            groups: [api_list]
+        day27Plan:
+            expose: true
+            groups: [api_list]
+        day27Real:
+            expose: true
+            groups: [api_list]
+        day28Plan:
+            expose: true
+            groups: [api_list]
+        day28Real:
+            expose: true
+            groups: [api_list]
+        day29Plan:
+            expose: true
+            groups: [api_list]
+        day29Real:
+            expose: true
+            groups: [api_list]
+        day30Plan:
+            expose: true
+            groups: [api_list]
+        day30Real:
+            expose: true
+            groups: [api_list]
+        day31Plan:
+            expose: true
+            groups: [api_list]
+        day31Real:
+            expose: true
+            groups: [api_list]

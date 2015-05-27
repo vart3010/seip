@@ -26,7 +26,7 @@ class ObjetiveAdmin extends Admin
             ->add('gerenciaSecond')
             ->add('parents')
             ->add('indicators')
-             ->add('objetiveLevel')
+            ->add('objetiveLevel')
             ->add('period')
             ->add('evalObjetive')
             ->add('evalIndicator')
@@ -34,48 +34,71 @@ class ObjetiveAdmin extends Admin
             ->add('evalSimpleAverage')
             ->add('evalWeightedAverage')
             ->add('requiredToImport')
-            ->add('impactToSIG')
             ->add('enabled')
+            ->add('status','choice',array(
+                'choices' => \Pequiven\ObjetiveBundle\Entity\Objetive::getLabelsStatus(),
+                'translation_domain' => 'PequivenObjetiveBundle'
+            ))
              ;
     }
     
     protected function configureFormFields(FormMapper $form) {
         $form
-            ->add('description')
-            ->add('ref')
-            ->add('weight')
-            ->add('goal')
-            ->add('complejo')
-            ->add('gerencia')
-            ->add('gerenciaSecond')
-            ->add('parents')
-            ->add('indicators')
-            ->add('objetiveLevel')
-            ->add('period')
-            ->add('evalObjetive',null,array(
-                'required' => false,
-            ))
-            ->add('evalIndicator',null,array(
-                'required' => false,
-            ))
-            ->add('evalArrangementProgram',null,array(
-                'required' => false,
-            ))
-            ->add('evalSimpleAverage',null,array(
-                'required' => false,
-            ))
-            ->add('evalWeightedAverage',null,array(
-                'required' => false,
-            ))
-            ->add('requiredToImport',null,array(
-                'required' => false,
-            ))
-            ->add('impactToSIG',null,array(
-                'required' => false,
-            ))
-            ->add('enabled',null,array(
-                'required' => false,
-            ))
+            ->tab('General')
+                    ->add('description')
+                    ->add('ref')
+                    ->add('weight')
+                    ->add('goal')
+                    ->add('complejo')
+                    ->add('gerencia')
+                    ->add('gerenciaSecond')
+                    ->add('childrens','sonata_type_model_autocomplete',array(
+                        'property' => array('period','ref'),
+                        'multiple' => true,
+                        'required' => false,
+                    ))
+                    ->add('indicators','sonata_type_model_autocomplete',array(
+                        'property' => array('ref','description'),
+                        'multiple' => true,
+                        'required' => false,
+                    ))
+                    ->add('objetiveLevel')
+                    ->add('period')
+                ->end()
+            ->end()
+            ->tab('Details')
+                    ->add('managementSystems','sonata_type_model_autocomplete',array(
+                        'property' => array('description'),
+                        'multiple' => true,
+                        'required' => false,
+                    ))
+                    ->add('evalObjetive',null,array(
+                        'required' => false,
+                    ))
+                    ->add('evalIndicator',null,array(
+                        'required' => false,
+                    ))
+                    ->add('evalArrangementProgram',null,array(
+                        'required' => false,
+                    ))
+                    ->add('evalSimpleAverage',null,array(
+                        'required' => false,
+                    ))
+                    ->add('evalWeightedAverage',null,array(
+                        'required' => false,
+                    ))
+                    ->add('requiredToImport',null,array(
+                        'required' => false,
+                    ))
+                    ->add('enabled',null,array(
+                        'required' => false,
+                    ))
+                    ->add('status','choice',array(
+                        'choices' => \Pequiven\ObjetiveBundle\Entity\Objetive::getLabelsStatus(),
+                        'translation_domain' => 'PequivenObjetiveBundle'
+                    ))
+                ->end()
+            ->end()
         ;
     }
     
@@ -85,8 +108,12 @@ class ObjetiveAdmin extends Admin
             ->add('description')
             ->add('weight')
             ->add('requiredToImport')
-            ->add('impactToSIG')
+            ->add('period')
             ->add('enabled')
+            ->add('status',null,array(),'choice',array(
+                'choices' => \Pequiven\ObjetiveBundle\Entity\Objetive::getLabelsStatus(),
+                'translation_domain' => 'PequivenObjetiveBundle'
+            ))
             ;
     }
     
@@ -95,12 +122,21 @@ class ObjetiveAdmin extends Admin
             ->addIdentifier('ref')
             ->add('description')
             ->add('weight')
-            ->add('enabled')
+            ->add('status')
             ;
     }
     
     protected function configureRoutes(\Sonata\AdminBundle\Route\RouteCollection $collection) 
     {
         $collection->remove('create');
+    }
+    
+    public function toString($object) 
+    {
+        $toString = '-';
+        if($object->getId() > 0){
+            $toString = $object->getPeriod()->getDescription().' - '.$object->getRef().' - '.$object->getDescription();
+        }
+        return \Pequiven\SEIPBundle\Service\ToolService::truncate($toString,array('limit' => 50));
     }
 }

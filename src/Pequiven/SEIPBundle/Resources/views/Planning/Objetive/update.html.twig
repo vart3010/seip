@@ -1,0 +1,78 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayout.html.twig' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
+
+{% trans_default_domain 'PequivenObjetiveBundle' %}
+
+{% set labelHeader = {
+    (constant('Pequiven\\ObjetiveBundle\\Model\\ObjetiveLevel::LEVEL_ESTRATEGICO')):'pequiven_objetive.objetive_strategic',
+    (constant('Pequiven\\ObjetiveBundle\\Model\\ObjetiveLevel::LEVEL_TACTICO')):'pequiven_objetive.objetive_tactic',
+    (constant('Pequiven\\ObjetiveBundle\\Model\\ObjetiveLevel::LEVEL_OPERATIVO')):'pequiven_objetive.objetive_operative',
+} %}
+
+{% block title %}- {{ (labelHeader[objetive.objetiveLevel.level])|trans }}{% endblock %}
+
+{% block before_body %}
+    {{ contentHeader(
+        ((labelHeader[objetive.objetiveLevel.level])|trans),
+        { (generateLinkUrlOnly(objetive)) : (objetive.ref) },
+        ('pequiven.update'|trans({},"messages"))
+    ) }}
+{% endblock %}
+
+{% block body %}
+{#    {{ dump(_context|keys) }}#}
+<form method="POST" action="{{ path("pequiven_objetive_update",{id:objetive.id}) }}">
+    <fieldset class="fieldset fields-list">
+            <legend class="legend">{{ 'pequiven_objetive.objetives'|trans }}</legend>
+            {% if objetive.lineStrategics|length > 0 %}
+                <div class="field-block button-height">
+                    <label class="label">{{ "form.lineStrategic"|trans({},"PequivenObjetiveBundle") }}</label>
+                    {% for line in objetive.lineStrategics %}
+                        {{ line }}{% if loop.last %}.{% else %},{% endif %}&nbsp;
+                    {% endfor %}
+                </div>
+            {% endif %}
+            {% if objetive.parents|length > 0 %}
+                <div class="field-block button-height">
+                    <label class="label">{{ "form.objetive_parents"|trans({},"PequivenObjetiveBundle") }}</label>
+                    {% for parent in objetive.parents %}
+                        {{ generateLink(parent) }}{% if loop.last %}.{% else %},{% endif %}&nbsp;
+                    {% endfor %}
+                </div>
+            {% endif %}
+            <div class="field-block button-height">
+                {{ form_label(form.description) }}
+                {{ form_widget(form.description) }}
+                {{ form_errors(form.description) }}
+                <span class="info-spot">
+                    <span class="icon-info-round"></span>
+                    <span class="info-bubble">{{ 'form.info.objetive_description'|trans }}</span>
+                </span>
+            </div>
+{#            {% if objetive.objetiveLevel.level == constant('Pequiven\\ObjetiveBundle\\Model\\ObjetiveLevel::LEVEL_OPERATIVO') %}#}
+                <div class="field-block button-height">
+                    {{ form_label(form.weight) }}
+                    {{ form_widget(form.weight) }}
+                    {{ form_errors(form.weight) }}
+                    <span class="info-spot">
+                        <span class="icon-info-round"></span>
+                        <span class="info-bubble">{{ 'form.info.weight'|trans }}</span>
+                    </span>
+                </div>
+{#            {% endif %}#}
+            <div class="field-block button-height">
+                {{ form_label(form.goal) }}
+                {{ form_widget(form.goal) }}
+                {{ form_errors(form.goal) }}
+                <span class="info-spot">
+                    <span class="icon-info-round"></span>
+                    <span class="info-bubble">{{ 'form.info.goal'|trans }}</span>
+                </span>
+            </div>
+                {{ actions.update() }}
+    </fieldset>
+    {{ form_rest(form) }}
+</form>
+    
+{% endblock body %}

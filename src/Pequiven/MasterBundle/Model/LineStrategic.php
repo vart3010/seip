@@ -8,12 +8,15 @@
 
 namespace Pequiven\MasterBundle\Model;
 
+use Doctrine\ORM\Mapping as ORM;
+
+
 /**
  * Description of LineStrategic
  *
  * @author matias
  */
-class LineStrategic {
+abstract class LineStrategic {
     //put your code here
     const LINE_DEFAULT = 0;
     const LINE_EFICIENCIA_CALIDAD = 1;
@@ -52,6 +55,26 @@ class LineStrategic {
      * @return string
      */
     static function getIcons()
+    {
+        static $icons = array(
+            self::LINE_EFICIENCIA_CALIDAD => 'bundles/pequivenseip/icons/icon_mind.png',
+            self::LINE_SOST_FINANCIERA => 'bundles/pequivenseip/icons/icon_coin.png',
+            self::LINE_COMERCIALIZACION => 'bundles/pequivenseip/icons/icon_businessmen.png',
+            self::LINE_CRECIMIENTO => 'bundles/pequivenseip/icons/icon_graphic.png',
+            self::LINE_SHA => 'bundles/pequivenseip/icons/icon_worker.png',
+            self::LINE_GESTION_TALENTO => 'bundles/pequivenseip/icons/icon_connected.png',
+            self::LINE_RESP_SOCIAL => 'bundles/pequivenseip/icons/icon_family.png',
+        );
+        return $icons;
+    }
+    
+    /**
+     * Retorna los íconos de cada Línea Estratégica
+     * 
+     * @staticvar array $icons
+     * @return string
+     */
+    static function getIconsMin()
     {
         static $icons = array(
             self::LINE_EFICIENCIA_CALIDAD => 'bundles/pequivenseip/icons/icon_mind.png',

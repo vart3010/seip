@@ -37,6 +37,9 @@ pequiven_objetive:
     complejo: Localidad
     gerenciaFirst: Gerencia 1ra Línea
     gerenciaSecond: Gerencia 2da Línea
+    question:
+        approved: ¿Desea aprobar el contenido de este objetivo?
+        approved_indicator: ¿Desea aprobar el contenido de este indicador?
 
     popup:
         description: Descripción
@@ -44,6 +47,10 @@ pequiven_objetive:
         indicators: Indicadores
         created_at: Creado el
         updated_at: Actualizado el
+    status:
+        status: Estatus
+        draft: Borrador
+        approved: Aprobado
 
     #Buttons
     edit: Editar
@@ -55,9 +62,14 @@ form:
     objetive: Objetivo
     objetive_level: Nivel de objetivo
     lineStrategic: Línea estratégica
+    objetive_statement: Enunciado
+    objetive_parents: Objetivos padres
     location: Localidad
     complejo: Complejo
     gerencia: Gerencia
+    indicator:
+        summary: Resúmen
+        total_plan: Plan anual
     gerenciaFirst: Gerencia 1ra línea
     gerenciaSecond: Gerencia 2da línea
     objetiveStrategic: Objetivo Estratégico

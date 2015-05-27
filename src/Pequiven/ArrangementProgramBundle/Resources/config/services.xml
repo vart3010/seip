@@ -36,6 +36,12 @@
                 <argument type="service" id="service_container" />
             </call>
         </service>
+        <service id="pequiven.orm.validator.valid_product_planning" class="Pequiven\SEIPBundle\Validator\Constraints\ValidProductPlanningValidator">
+            <tag name="validator.constraint_validator" alias="pequiven.orm.validator.valid_product_planning" />
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
         <service id="seip.arrangement_program.listener.mailer_listerner" class="Pequiven\ArrangementProgramBundle\EventListener\MailerEventListerner">
             <tag name="kernel.event_subscriber" />
             <call method="setContainer">
@@ -64,6 +70,15 @@
                 <argument type="service" id="service_container" />
             </call>
             <tag name="form.type" alias="pequiven_seip_arrangementprogram_template" />
+        </service>
+        <service id="peqquiven.type.objetive" class="Pequiven\ObjetiveBundle\Form\Type\ObjetiveFormType">
+            <tag name="form.type" alias="pequiven_objetive_form" />
+        </service>
+        <service id="peqquiven.type.indicator" class="Pequiven\IndicatorBundle\Form\IndicatorType">
+            <tag name="form.type" alias="pequiven_indicatorbundle_indicator" />
+        </service>
+        <service id="pequiven_arrangement_program.form.value_indicator_config" class="Pequiven\IndicatorBundle\Form\Indicator\ValueIndicator\ValueIndicatorConfigType">
+            <tag name="form.type" alias="pequiven_indicatorbundle_indicator_valueindicator_valueindicatorconfig" />
         </service>
     </services>
 </container>

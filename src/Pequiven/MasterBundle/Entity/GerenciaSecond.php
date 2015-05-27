@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Pequiven\MasterBundle\Model\GerenciaSecond as modelGerenciaSecond;
+use Pequiven\MasterBundle\Model\Evaluation\AuditableInterface;
 
 /**
  * Gerencia de segunda linea
@@ -14,7 +15,8 @@ use Pequiven\MasterBundle\Model\GerenciaSecond as modelGerenciaSecond;
  * @ORM\Entity(repositoryClass="Pequiven\MasterBundle\Repository\GerenciaSecondRepository")
  * @author matias
  */
-class GerenciaSecond extends modelGerenciaSecond {
+class GerenciaSecond extends modelGerenciaSecond 
+{
     
     /**
      * @var integer
@@ -143,6 +145,13 @@ class GerenciaSecond extends modelGerenciaSecond {
      * @ORM\ManyToMany(targetEntity="\Pequiven\MasterBundle\Entity\Gerencia", mappedBy="gerenciaSecondSupports")
      */
     private $gerenciaSupports;
+    
+    /**
+     * Es valida la uditoria para ser evaluado
+     * @var boolean
+     * @ORM\Column(name="validAudit",type="boolean")
+     */
+    private $validAudit = true;
 
     public function __construct() {
         parent::__construct();
@@ -559,5 +568,38 @@ class GerenciaSecond extends modelGerenciaSecond {
     public function getGerenciaSupports()
     {
         return $this->gerenciaSupports;
+    }
+    
+    /**
+     * Set validAudit
+     *
+     * @param boolean $validAudit
+     * @return GerenciaSecond
+     */
+    public function setValidAudit($validAudit)
+    {
+        $this->validAudit = $validAudit;
+
+        return $this;
+    }
+
+    /**
+     * Get validAudit
+     *
+     * @return boolean 
+     */
+    public function getValidAudit()
+    {
+        return $this->validAudit;
+    }
+
+    /**
+     * Is validAudit
+     *
+     * @return boolean 
+     */
+    public function isValidAudit()
+    {
+        return $this->validAudit;
     }
 }
