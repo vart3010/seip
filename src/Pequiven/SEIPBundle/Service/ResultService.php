@@ -1107,29 +1107,36 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             $i = 0;
             
             foreach ($child->getValuesIndicator() as $valueIndicator) {
-                if(!isset($resultsItems[$i])){
-                    $resultsItems[$i] = array(Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN => 0.0,Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL => 0.0);
-                }
+                
                 $plan = $real = 0.0;
                 $formulaParameters = $valueIndicator->getFormulaParameters();
                 
                     if($formula->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC){
                         $variableToPlanValueName = $formula->getVariableToPlanValue()->getName();
                         $variableToRealValueName = $formula->getVariableToRealValue()->getName();
+                        if(!isset($resultsItems[$i])){
+                            $resultsItems[$i] = array($variableToPlanValueName => 0.0,$variableToRealValueName => 0.0);
+                        }
                         if(isset($formulaParameters[$variableToPlanValueName])){
                             $plan = $formulaParameters[$variableToPlanValueName];
                         }
                         if(isset($formulaParameters[$variableToRealValueName])){
                             $real = $formulaParameters[$variableToRealValueName];
                         }
+                        
+                        $resultsItems[$i][$variableToPlanValueName] = $resultsItems[$i][$variableToPlanValueName] + $plan;
+                        $resultsItems[$i][$variableToRealValueName] = $resultsItems[$i][$variableToRealValueName] + $real;
                     }elseif($formula->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_FROM_EQ){
+                        if(!isset($resultsItems[$i])){
+                            $resultsItems[$i] = array(Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN => 0.0,Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL => 0.0);
+                        }
                         $result = $this->getFormulaResultFromEQ($formula, $formulaParameters);
                         $plan = $result[Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN];
                         $real = $result[Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL];
+                        
+                        $resultsItems[$i][Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN] = $resultsItems[$i][Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN] + $plan;
+                        $resultsItems[$i][Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL] = $resultsItems[$i][Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL] + $real;
                     }
-                
-                $resultsItems[$i][Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN] = $resultsItems[$i][Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN] + $plan;
-                $resultsItems[$i][Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL] = $resultsItems[$i][Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL] + $real;
                 $i++;
                 
             }//fin for each
@@ -1153,8 +1160,13 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                     continue;
                 }
             }
-            $totalPlan += $resultItem[Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN];
-            $totalReal += $resultItem[Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL];
+            if($formula->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC){
+                $totalPlan += $resultItem[$formula->getVariableToPlanValue()->getName()];
+                $totalReal += $resultItem[$formula->getVariableToRealValue()->getName()];
+            } else{
+                $totalPlan += $resultItem[Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN];
+                $totalReal += $resultItem[Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL];
+            }
         }
         $frequencyNotificationIndicator = $indicator->getFrequencyNotificationIndicator();
         
@@ -1177,13 +1189,17 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 $em->remove($valueIndicator);
             }
             $em->flush();
-            
             for($i= 0;$i < $frequencyNotificationIndicator->getNumberResultsFrequency();$i++){
                 $valueIndicator = new Indicator\ValueIndicator();
                 $valueIndicator
                     ->setFormula($formula)
                     ->setCreatedBy($user)
                 ;
+                $vars = array();
+                foreach($formula->getVariables() as $variable){
+                    $vars[$variable->getName()] = 0.0;
+                }
+                $valueIndicator->setFormulaParameters($vars);
                 $indicator->addValuesIndicator($valueIndicator);
             }
         }
@@ -1194,12 +1210,23 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             $variableToPlanValueName = $formulaUsed->getVariableToPlanValue();
             $variableToRealValueName = $formulaUsed->getVariableToRealValue();
             $plan = $real = 0.0;
+
             if(isset($resultsItems[$i])){
-                $plan = $resultsItems[$i][Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN];
-                $real = $resultsItems[$i][Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL];
+                if($formula->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC){
+                    $plan = $resultsItems[$i][$variableToPlanValueName->getName()];
+                    $real = $resultsItems[$i][$variableToRealValueName->getName()];
+                } else{
+                    $plan = $resultsItems[$i][Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN];
+                    $real = $resultsItems[$i][Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL];
+                }
             }
-            $valueIndicator->setParameter($variableToPlanValueName, $plan);
-            $valueIndicator->setParameter($variableToRealValueName, $real);
+            if($formula->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC){
+                $valueIndicator->setParameter($variableToPlanValueName->getName(), $plan);
+                $valueIndicator->setParameter($variableToRealValueName->getName(), $real);
+            } else{
+                $valueIndicator->setParameter($variableToPlanValueName, $plan);
+                $valueIndicator->setParameter($variableToRealValueName, $real);
+            }
             $value = $indicatorService->calculateFormulaValue($formulaUsed, $valueIndicator->getFormulaParameters());
             $valueIndicator->setValueOfIndicator($value);
             $valueIndicator->setFormula($formula);

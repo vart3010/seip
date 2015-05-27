@@ -46,11 +46,12 @@ class ArrangementProgramType extends AbstractType implements \Symfony\Component\
                 'cascade_validation' => true,
             ))
             ->add('description',null,array(
-                'label' => 'pequiven.form.description',
+                'label' => 'pequiven.form.nameOfProgram',
                 'label_attr' => array('class' => 'label'),
                 'attr' => array(
-                    'class' => "input input-xlarge validate[required]"
+                    'class' => "input input-xlarge"
                 ),
+                'required' => false,
             ))
         ;
         

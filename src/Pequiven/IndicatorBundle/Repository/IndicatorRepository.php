@@ -73,6 +73,28 @@ class IndicatorRepository extends EntityRepository
         return $q->getResult();
     }
     
+    public function getByParent($options = array()){
+        $securityContext = $this->getSecurityContext();
+        $em = $this->getEntityManager();
+        
+        $query = $this->getQueryBuilder();
+        
+        $query->innerJoin('i.objetives', 'o');
+        $query->andWhere('o.id = '.$options['idObjetive']);
+        
+//        if($options['type'] === 'STRATEGIC'){
+//            $query->andWhere('i.indicatorLevel = ' . IndicatorLevel::LEVEL_ESTRATEGICO);
+//        } elseif($options['type'] === 'TACTIC'){
+//            $query->andWhere('i.indicatorLevel = ' . IndicatorLevel::LEVEL_TACTICO);
+//        } elseif($options['type'] === 'OPERATIVE'){
+//            $query->andWhere('i.indicatorLevel = ' . IndicatorLevel::LEVEL_OPERATIVO);
+//        }
+        
+        $q = $query->getQuery();
+
+        return $q->getResult();
+    }
+    
     function getQueryChildrenLevel($level) {
         $queryBuilder = $this->getQueryBuilder();
         $queryBuilder
