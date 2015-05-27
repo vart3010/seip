@@ -120,6 +120,7 @@
                                                          <td>
                                                              {% for unrealizedProduction in productReport.unrealizedProductions %}
                                                                  {{ form_widget(attribute(unrealizedProduction,dayN)) }}
+                                                                 &nbsp;<a href="#"><i class="fa fa-cog fa-2x"></i></a>
                                                                  {{ form_errors(attribute(unrealizedProduction,dayN)) }}
                                                              {% endfor %}
                                                          </td>
