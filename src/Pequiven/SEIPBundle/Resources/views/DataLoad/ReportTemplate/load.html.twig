@@ -84,7 +84,7 @@
                  <summary><strong class="font-20">{{ "Plant"|trans }}&nbsp;-&nbsp;{{ plantReport.vars.data }}</strong></summary>
                  <dl class="accordion same-height">
                      {% for productReport in plantReport.productsReport %}
-                         <dt><i class="fa fa-cog"></i>&nbsp;<strong>{{ "Product"|trans }}&nbsp;-&nbsp;{{ productReport.vars.data }}</strong></dt>
+                         <dt><i class="fa fa-cog"></i>&nbsp;<strong>{{ "Product"|trans }}&nbsp;-&nbsp;{{ productReport.vars.data }}&nbsp;({{ productReport.vars.data.product.productionLine }})</strong></dt>
                          <dd>
                              <div class="with-padding">
                                  <div class="columns">
