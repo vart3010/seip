@@ -69,6 +69,7 @@ class AppKernel extends Kernel
             new Pequiven\ArrangementBundle\PequivenArrangementBundle(),
             new Pequiven\ArrangementProgramBundle\PequivenArrangementProgramBundle(),
             new Tecnocreaciones\Bundle\BoxBundle\TecnocreacionesBoxBundle(),
+            new CoreSphere\ConsoleBundle\CoreSphereConsoleBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
