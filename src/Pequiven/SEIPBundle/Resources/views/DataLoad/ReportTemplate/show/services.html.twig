@@ -18,32 +18,30 @@
                     <th scope="col" width="35%">{{ 'Service'|trans }}</th>
                     <th scope="col" width="10%" class="">{{ 'Plan'|trans }}</th>
                     <th scope="col" width="10%" class="">{{ 'Real'|trans }}</th>
-                    <th scope="col" width="10%">&nbsp;</th>
                 </tr>
             </thead>
-            {% set colspan = 6 %}
+            {% set colspan = 3 %}
             <tbody>
-                {% for plantReport in report_template.plantReports %}
+                {% for plantReport in form.plantReports %}
                     <tr>
                         <td class="text-center bold" colspan="{{ colspan }}">
-                            <strong>{{ "Plant"|trans }}&nbsp;-&nbsp;{{ plantReport }}</strong>
+                            <strong>{{ "Plant"|trans }}&nbsp;-&nbsp;{{ plantReport.vars.data }}</strong>
                         </td>
                     </tr>
                         {% for consumerPlanningService in plantReport.consumerPlanningServices %}
-                            <tr>
-                                <td>{{ loop.index }} - 
-                                    {{ consumerPlanningService }}
-                                </td>
-                                <th scope="row">
-                                    0 {{ consumerPlanningService.service.serviceUnit }}
-                                </th>
-                                <td>
-                                    <input type="text" class="input input-mini"/>
-                                </td>
-                                <td class="low-padding align-center">
-                                    <a href="{{ path("pequiven_consumer_planning_service_update",{id: consumerPlanningService.id}) }}" class="button compact icon-pencil">{{ "pequiven_seip.actions.edit"|trans }}</a>
-                                </td>
-                            </tr>
+                            {% for detailConsumerPlanningService in consumerPlanningService.detailConsumerPlanningServices %}
+                                <tr>
+                                    <td>
+                                        {{ consumerPlanningService.vars.data }}
+                                    </td>
+                                    <th scope="row">
+                                        {{ attribute(detailConsumerPlanningService.vars.data,dayNPlan) }} {{ consumerPlanningService.vars.data.service.serviceUnit }}
+                                    </th>
+                                    <td>
+                                        {{ form_widget(attribute(detailConsumerPlanningService,dayNReal)) }}
+                                    </td>
+                                </tr>
+                            {% endfor %}
                         {% else %}
                             <tr>
                                 <td colspan="{{ colspan }}" class="empty_row">

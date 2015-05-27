@@ -21,11 +21,11 @@ class ProductDetailDailyMonthType extends BaseNotification
         
         $builder
             // Bruta
-            ->add(sprintf("day%sGrossPlan",$day),null,$paramateretsDaysDisabled)
+//            ->add(sprintf("day%sGrossPlan",$day),null,$paramateretsDaysDisabled)
             ->add(sprintf('day%sGrossReal',$day),null,$paramateretsDays)
             
 //            Neta
-            ->add(sprintf('day%sNetPlan',$day),null,$paramateretsDaysDisabled)
+//            ->add(sprintf('day%sNetPlan',$day),null,$paramateretsDaysDisabled)
             ->add(sprintf('day%sNetReal',$day),null,$paramateretsDays)
             
             //Observacion del dia

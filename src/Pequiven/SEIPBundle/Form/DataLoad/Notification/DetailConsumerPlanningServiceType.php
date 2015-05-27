@@ -13,13 +13,13 @@ class DetailConsumerPlanningServiceType extends BaseNotification
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $parametersDisabled =  $this->getParametersDisabled();
+//        $parametersDisabled =  $this->getParametersDisabled();
         $paramateretsDays = $this->getParametersStandard();
         
         $day = $this->getDayNotification();
         $builder
             
-            ->add(sprintf('day%sPlan',$day),null,$parametersDisabled)
+//            ->add(sprintf('day%sPlan',$day),null,$parametersDisabled)
             ->add(sprintf('day%sReal',$day),null,$paramateretsDays)
             
         ;

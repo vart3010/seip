@@ -19,8 +19,6 @@ class ReportTemplateType extends BaseNotification
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $entity = $builder->getData();
-        
         $builder
            ->add("plantReports",'collection',array(
                'type' => new PlantReportType($this->dateNotification,  $this->reportTemplate),

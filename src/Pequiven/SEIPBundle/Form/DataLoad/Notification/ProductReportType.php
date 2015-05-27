@@ -15,9 +15,9 @@ class ProductReportType extends BaseNotification
     {
         //$entity = new \Pequiven\SEIPBundle\Entity\DataLoad\ProductReport();
         
-        $paramateretsDaysDisabled = $this->getParametersDisabled();
+//        $paramateretsDaysDisabled = $this->getParametersDisabled();
         $builder
-            ->add('product',null,$paramateretsDaysDisabled)
+//            ->add('product',null,$paramateretsDaysDisabled)
             ->add('productDetailDailyMonths','collection',array(
                 'type' => new ProductDetailDailyMonthType($this->dateNotification, $this->reportTemplate)
             ))

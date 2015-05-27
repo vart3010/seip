@@ -63,14 +63,27 @@
             <a href="{{ path("pequiven_report_template_load",{id:report_template.id, dateNotification: (dateNotification|date_modify("+1 day")|date('d/m/Y'))}) }}" class="navigate-date"><i class="fa fa-chevron-right fa-2x"></i></a>
         </p>
     </div>
-            
-            {% for plantReport in report_template.plantReports %}
+    {% set day = dateNotification|date('d')|round %}
+    {{ day }}
+    {% set grossPlan = 'day' ~ day ~ 'GrossPlan' %}
+    {% set grossReal = 'day' ~ day ~ 'GrossReal' %}
+    
+    {% set netPlan = 'day' ~ day ~ 'NetPlan' %}
+    {% set netReal = 'day' ~ day ~ 'NetReal' %}
+    
+    {% set observation = 'day' ~ day ~ 'Observation' %}
+    {% set dayN = 'day' ~ day %}
+    {% set dayNPlan = 'day' ~ day ~ 'Plan' %}
+    {% set dayNReal = 'day' ~ day ~ 'Real' %}
+    
+    
+            {% for plantReport in form.plantReports %}
         
                 <details class="details margin-bottom" open>
-                    <summary><strong class="font-20">{{ "Plant"|trans }}&nbsp;-&nbsp;{{ plantReport }}</strong></summary>
+                    <summary><strong class="font-20">{{ "Plant"|trans }}&nbsp;-&nbsp;{{ plantReport.vars.data }}</strong></summary>
                     <dl class="accordion same-height">
                         {% for productReport in plantReport.productsReport %}
-                            <dt><i class="fa fa-cog"></i>&nbsp;<strong>{{ "Product"|trans }}&nbsp;-&nbsp;{{ productReport }}</strong></dt>
+                            <dt><i class="fa fa-cog"></i>&nbsp;<strong>{{ "Product"|trans }}&nbsp;-&nbsp;{{ productReport.vars.data }}</strong></dt>
                             <dd>
                                 <div class="with-padding">
                                     <div class="columns">
@@ -93,14 +106,16 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr>
-                                                        <th scope="row">
-                                                            0
-                                                        </th>
-                                                        <td class=""><input type="text" class="input input-mini"></td>
-                                                        <td class="">0</td>
-                                                        <td class=""><small class="tag red-bg">0</small><small class="tag green-bg">0</small></td>
-                                                    </tr>
+                                                    {% for productDetailDailyMonth in productReport.productDetailDailyMonths %}
+                                                        <tr>
+                                                            <th scope="row">
+                                                                {{ attribute(productDetailDailyMonth.vars.data,grossPlan) }}
+                                                            </th>
+                                                            <td>{{ form_widget(attribute(productDetailDailyMonth,grossReal)) }}</td>
+                                                            <td>TODO</td>
+                                                            <td><small class="tag red-bg">0</small><small class="tag green-bg">0</small></td>
+                                                        </tr>
+                                                    {% endfor %}
                                                 </tbody>
                                             </table>
                                         </div>
@@ -117,13 +132,15 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr>
-                                                        <th scope="row">
-                                                            0
-                                                        </th>
-                                                        <td class=""><input type="text" class="input input-mini"></td>
-                                                        <td class="">0</td>
-                                                    </tr>
+                                                    {% for productDetailDailyMonth in productReport.productDetailDailyMonths %}
+                                                        <tr>
+                                                            <th scope="row">
+                                                                {{ attribute(productDetailDailyMonth.vars.data,netPlan) }}
+                                                            </th>
+                                                            <td>{{ form_widget(attribute(productDetailDailyMonth,netReal)) }}</td>
+                                                            <td class="">0</td>
+                                                        </tr>
+                                                    {% endfor %}
                                                 </tbody>
                                             </table>
                                         </div>
@@ -131,20 +148,20 @@
                                             <table class="simple-table responsive-table responsive-table-on" id="sorting-example2">
                                                 <thead>
                                                     <tr>
-                                                        <th class="header text-center grey-gradient" colspan="2" >{{ "pequiven_seip.inventory"|trans }}</th>
+                                                        <th class="header text-center grey-gradient" >{{ "pequiven_seip.inventory"|trans }}</th>
                                                     </tr>
                                                     <tr>
-                                                        <th scope="col" style="width: 7%">Plan</th>
                                                         <th scope="col" style="width: 7%" class=" header">Real</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr>
-                                                        <th scope="row">
-                                                            0
-                                                        </th>
-                                                        <td class=""><input type="text" class="input input-mini"></td>
-                                                    </tr>
+                                                    {% for inventory in productReport.inventorys %}
+                                                        <tr>
+                                                            <th scope="row">
+                                                                {{ form_widget(attribute(inventory,dayN)) }}
+                                                            </th>
+                                                        </tr>
+                                                    {% endfor %}
                                                 </tbody>
                                             </table>
                                         </div>
@@ -169,13 +186,15 @@
                                                 </thead>
                                                 <tbody>
                                                     {% for rawMaterialConsumptionPlanning in productReport.rawMaterialConsumptionPlannings %}
-                                                        <tr>
-                                                            <th scope="row">
-                                                                {{ rawMaterialConsumptionPlanning }}
-                                                            </th>
-                                                            <td >0</td>
-                                                            <td class=""><input type="text" class="input input-mini"></td>
-                                                        </tr>
+                                                        {% for detailRawMaterialConsumption in rawMaterialConsumptionPlanning.detailRawMaterialConsumptions %}
+                                                            <tr>
+                                                                <th scope="row">
+                                                                    {{ rawMaterialConsumptionPlanning.vars.data }}&nbsp;({{ rawMaterialConsumptionPlanning.vars.data.type }})
+                                                                </th>
+                                                                <td>{{ attribute(detailRawMaterialConsumption.vars.data,dayNPlan) }}</td>
+                                                                <td>{{ form_widget(attribute(detailRawMaterialConsumption,dayNReal)) }}</td>
+                                                            </tr>
+                                                        {% endfor %}
                                                     {% else %}
                                                         <tr>
                                                             <td colspan="3" class="empty_row">
@@ -187,9 +206,9 @@
                                             </table>
                                         </div>
                                         <div class="seven-columns twelve-columns-mobile">
-                                            <textarea cols="40" rows="10" placeholder="Observaciones...">
-                                                
-                                            </textarea>
+                                            {% for productDetailDailyMonth in productReport.productDetailDailyMonths %}
+                                                {{ form_widget(attribute(productDetailDailyMonth,observation)) }}
+                                            {% endfor %}
                                         </div>
                                     </div>
                                 </div>

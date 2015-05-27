@@ -15,12 +15,6 @@ class PlantReportType extends BaseNotification
     {
         //$entity = new \Pequiven\SEIPBundle\Entity\DataLoad\PlantReport();
         
-        $parametersToSet = array(
-            'label_attr' => array('class' => 'label'),
-            "empty_value" => "",
-            "attr" => array("class" => "select2 input-large"),
-        );
-        
         $builder
             ->add('productsReport','collection',[
                 'type' => new ProductReportType($this->dateNotification, $this->reportTemplate)

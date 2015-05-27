@@ -14,10 +14,7 @@ class ConsumerPlanningServiceType extends BaseNotification
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $parametersDisabled = $this->getParametersDisabled();
-        
         $builder
-            ->add('service',null,$parametersDisabled)
             ->add('detailConsumerPlanningServices','collection',[
                 'type' => new DetailConsumerPlanningServiceType($this->dateNotification, $this->reportTemplate)
             ])

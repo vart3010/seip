@@ -16,11 +16,11 @@ class DetailRawMaterialConsumptionType extends BaseNotification
     {
         $day = $this->getDayNotification();
         $paramateretsDays = $this->getParametersStandard();
-        $parametersDisabled = $this->getParametersDisabled();
+//        $parametersDisabled = $this->getParametersDisabled();
         
         $builder
             
-            ->add(sprintf('day%sPlan',$day),null,$parametersDisabled)
+//            ->add(sprintf('day%sPlan',$day),null,$parametersDisabled)
             ->add(sprintf('day%sReal',$day),null,$paramateretsDays)
         ;
     }

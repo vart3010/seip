@@ -16,10 +16,6 @@ class RawMaterialConsumptionPlanningType extends BaseNotification
     {
         $parametersDisabled = $this->getParametersDisabled();
         $builder
-            ->add('type',"choice",  array_merge($parametersDisabled,array(
-                "choices" => RawMaterialConsumptionPlanning::getTypeLabels()
-            )))
-            ->add('product',null,$parametersDisabled)
             ->add('detailRawMaterialConsumptions','collection',[
                 'type' => new DetailRawMaterialConsumptionType($this->dateNotification, $this->reportTemplate)
             ])

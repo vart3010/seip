@@ -50,7 +50,7 @@ abstract class BaseNotification extends SeipAbstractForm
     {
         return array(
             'label_attr' => array('class' => 'label'),
-            "attr" => array("class" => "input-unstyled"),
+            "attr" => array("class" => "input-unstyled input-mini"),
             "disabled" => true,
         );
     }
