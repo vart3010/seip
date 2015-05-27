@@ -516,6 +516,7 @@ empty:
     no_handles_inventory: 'No presupuestó inventario.'
     no_details_of_production: 'No hay detalles de producción.'
     no_details_of_raw_material: 'No hay detalles de materia prima.'
+    no_details_of_services: 'No hay detalles de servicios.'
         
 chart:
     type:
