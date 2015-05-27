@@ -17,16 +17,19 @@ class ProductDetailDailyMonthType extends BaseNotification
         $day = $this->getDayNotification();
         
         $paramateretsDays = $this->getParametersStandard();
-        $paramateretsDaysDisabled = $this->getParametersDisabled();
         
         $builder
             // Bruta
-//            ->add(sprintf("day%sGrossPlan",$day),null,$paramateretsDaysDisabled)
-            ->add(sprintf('day%sGrossReal',$day),null,$paramateretsDays)
+            ->add(sprintf('day%sGrossReal',$day),null,array(
+                'label_attr' => array('class' => 'label'),
+                "attr" => array("class" => "input input-mini grossReal"),
+            ))
             
 //            Neta
-//            ->add(sprintf('day%sNetPlan',$day),null,$paramateretsDaysDisabled)
-            ->add(sprintf('day%sNetReal',$day),null,$paramateretsDays)
+            ->add(sprintf('day%sNetReal',$day),null,array(
+                'label_attr' => array('class' => 'label'),
+                "attr" => array("class" => "input input-mini netReal"),
+            ))
             
             //Observacion del dia
             ->add(sprintf('day%sObservation',$day),null,[
