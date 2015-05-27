@@ -106,7 +106,8 @@ class ProductAdmin extends BaseAdmin
     {
         $list
             ->addIdentifier('name')
-            ->add('typeOf')
+            ->add('isRawMaterial', null, array('editable' => true))
+            ->add('productUnit')
             ;
         parent::configureListFields($list);
     }

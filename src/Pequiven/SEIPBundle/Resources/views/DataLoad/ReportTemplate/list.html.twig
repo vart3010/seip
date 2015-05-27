@@ -20,7 +20,7 @@
                 <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager"  template-header="custom/header" api-data-url="{{ path('pequiven_report_template_index',{_format:'json' }) }}" export-csv="csv" class="table table-responsive">
                     <tr ng-repeat="result in $data | filter:tableParams.search" data="{$ result|json $}">
                         <td data-title="'{{ 'pequiven.ref'|trans({},'messages') }}'" sortable="'ref'" filter="{ 'rt.ref': 'text' }">
-                            <a href="{$ result._links.self.show $}">{$ result.ref $}</a>
+                            <a href="{$ result._links.self.load $}">{$ result.ref $}</a>
                         </td>
                         <td data-title="'{{ 'pequiven_seip.name'|trans }}'" sortable="'period'" filter="{ 'rt.name': 'text' }">
                             {$ result.name $}
@@ -42,8 +42,4 @@
             </div>
         </div>
     </div>
-    <br/><br/>
-    <p class="button-height align-right">
-        {{ buttons.generic(path('pequiven_report_template_create'),('pequiven.add'|trans({},'messages')),'icon-tick' ) }}
-    </p>
 {% endblock %}

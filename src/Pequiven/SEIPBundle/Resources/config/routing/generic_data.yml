@@ -66,3 +66,91 @@ pequiven_seip_product_by_plant:
     requirements:
         _format: "json|xml"
     methods: [GET]
+    
+pequiven_seip_search_service:
+    path: /search-service.{_format}
+    defaults: 
+        _controller: pequiven_seip.controller.generic_data:searchServiceAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
+        
+pequiven_seip_search_product:
+    path: /search-product.{_format}
+    defaults: 
+        _controller: pequiven_seip.controller.generic_data:searchProductAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
+        
+pequiven_seip_search_entity:
+    path: /search-entity.{_format}
+    defaults: 
+        _controller: pequiven_seip.controller.generic_data:searchEntityAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
+        
+pequiven_seip_search_plant:
+    path: /search-plant.{_format}
+    defaults: 
+        _controller: pequiven_seip.controller.generic_data:searchPlantAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
+        
+pequiven_seip_search_region:
+    path: /search-region.{_format}
+    defaults: 
+        _controller: pequiven_seip.controller.generic_data:searchRegionAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
+        
+pequiven_seip_search_location:
+    path: /search-location.{_format}
+    defaults: 
+        _controller: pequiven_seip.controller.generic_data:searchLocationAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
+        
+pequiven_seip_search_company:
+    path: /search-company.{_format}
+    defaults: 
+        _controller: pequiven_seip.controller.generic_data:searchCompanyAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
+        
+pequiven_seip_search_period:
+    path: /search-period.{_format}
+    defaults: 
+        _controller: pequiven_seip.controller.generic_data:searchPeriodAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true

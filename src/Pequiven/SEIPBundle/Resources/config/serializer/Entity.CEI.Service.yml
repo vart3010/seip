@@ -1,0 +1,12 @@
+Pequiven\SEIPBundle\Entity\CEI\Service:
+    exclusion_policy: ALL
+    properties:
+        id:
+            expose: true
+            groups: [id]
+        name:
+            expose: true
+            groups: [api_list]
+        serviceUnit:
+            expose: true
+            groups: [service_unit]

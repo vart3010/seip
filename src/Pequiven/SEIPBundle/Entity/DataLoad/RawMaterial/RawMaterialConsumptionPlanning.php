@@ -299,7 +299,11 @@ class RawMaterialConsumptionPlanning extends BaseModel
             $totalPlan += $detailRawMaterialConsumption->getTotalPlan();
             $totalReal += $detailRawMaterialConsumption->getTotalReal();
         }
-        $percentage = ($totalReal * 100) / $totalPlan;
+        if($totalPlan > 0){
+            $percentage = ($totalReal * 100) / $totalPlan;
+        }else{
+            $percentage = 0;
+        }
         
         $this->setTotalPlan($totalPlan);
         $this->setTotalReal($totalReal);

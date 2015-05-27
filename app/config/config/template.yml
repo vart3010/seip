@@ -1,14 +1,14 @@
-lunetics_locale:
-    allowed_locales:
-        - es
-    strict_mode: true # defaults to false
-    guessing_order:
-        - query
-        - router
-        - session
-        - cookie
-    switcher:
-        show_current_locale: true
+#lunetics_locale:
+#    allowed_locales:
+#        - es
+#    strict_mode: true # defaults to false
+#    guessing_order:
+#        - query
+#        - router
+#        - session
+#        - cookie
+#    switcher:
+#        show_current_locale: true
 
 fos_user:
     db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
@@ -29,17 +29,20 @@ fos_user:
         user_manager: sonata.user.orm.user_manager
 
 fos_rest:
+    allowed_methods_listener: true
+#    allowed_methods_listener: false TODO Quitar @Template del codigo
     service:
         serializer: tpg_extjs.serializer
-    allowed_methods_listener: true
     routing_loader:
         default_format: json
     view:
+        formats:
+            json: true
         view_response_listener: force
+#        view_response_listener: force TODO Quitar @Template del codigo para descomantar
     access_denied_listener:
         # all requests using the 'json' format will return a 403 on an access denied violation
         json: true
-    param_fetcher_listener: true
         
 sensio_framework_extra:
     view:    { annotations: false }
