@@ -211,14 +211,14 @@
                                      </div>
                                  </div>
                                  <div class="columns">
-                                     <div class="five-columns twelve-columns-mobile">
+                                     <div class="six-columns twelve-columns-mobile">
                                          <table class="simple-table responsive-table responsive-table-on" id="sorting-example2">
                                              <thead>
                                                  <tr>
                                                      <th class="header text-center silver-gradient" colspan="4">{{ "pequiven_seip.report_template.raw_material"|trans }}</th>
                                                  </tr>
                                                  <tr>
-                                                     <th scope="col" style="width: 7%">{{ "Product"|trans }}</th>
+                                                     <th scope="col" style="width: 15%">{{ "Product"|trans }}</th>
                                                      <th scope="col" style="width: 7%">Plan</th>
                                                      <th scope="col" style="width: 7%" class=" header">Real</th>
                                                      <th scope="col" style="width: 7%" class=" header">%</th>
@@ -230,7 +230,7 @@
                                                      {% for detailRawMaterialConsumption in rawMaterialConsumptionPlanning.detailRawMaterialConsumptions %}
                                                          <tr>
                                                              <th scope="row">
-                                                                 {{ rawMaterialConsumptionPlanning.vars.data }}&nbsp;({{ rawMaterialConsumptionPlanning.vars.data.type }})
+                                                                 {{ rawMaterialConsumptionPlanning.vars.data }}&nbsp;({{ rawMaterialConsumptionPlanning.vars.data.getTypeLabel|trans }})
                                                              </th>
                                                              <td>{{ attribute(detailRawMaterialConsumption.vars.data,dayNPlan) }}</td>
                                                              <td>
@@ -259,7 +259,7 @@
                                              </tbody>
                                          </table>
                                      </div>
-                                     <div class="seven-columns twelve-columns-mobile">
+                                     <div class="six-columns twelve-columns-mobile">
                                          {% for productDetailDailyMonth in productReport.productDetailDailyMonths %}
                                              {{ form_widget(attribute(productDetailDailyMonth,observation)) }}
                                              {{ form_errors(attribute(productDetailDailyMonth,observation)) }}
