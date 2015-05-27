@@ -44,6 +44,6 @@ class DetailRawMaterialConsumptionType extends BaseNotification
      */
     public function getName()
     {
-        return 'pequiven_seipbundle_dataload_production_detailrawmaterialconsumption';
+        return 'production_detailrawmaterialconsumption';
     }
 }

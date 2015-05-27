@@ -41,6 +41,6 @@ class InventoryType extends BaseNotification
      */
     public function getName()
     {
-        return 'pequiven_seipbundle_dataload_inventory_inventory';
+        return 'inventory';
     }
 }

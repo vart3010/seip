@@ -46,6 +46,6 @@ class ProductReportType extends BaseNotification
      */
     public function getName()
     {
-        return 'pequiven_seipbundle_dataload_productreport';
+        return 'productreport';
     }
 }

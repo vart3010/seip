@@ -42,6 +42,6 @@ class RawMaterialConsumptionPlanningType extends BaseNotification
      */
     public function getName()
     {
-        return 'pequiven_seipbundle_dataload_rawmaterial_rawmaterialconsumptionplanning';
+        return 'rawmaterialconsumptionplanning';
     }
 }

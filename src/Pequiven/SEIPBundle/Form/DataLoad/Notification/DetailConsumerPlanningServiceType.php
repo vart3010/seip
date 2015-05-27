@@ -44,6 +44,6 @@ class DetailConsumerPlanningServiceType extends BaseNotification
      */
     public function getName()
     {
-        return 'pequiven_seipbundle_dataload_service_detailconsumerplanningservice';
+        return 'service_detailconsumerplanningservice';
     }
 }

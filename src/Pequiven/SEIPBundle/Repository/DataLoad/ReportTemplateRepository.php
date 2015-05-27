@@ -24,12 +24,16 @@ use Pequiven\SEIPBundle\Doctrine\ORM\SeipEntityRepository;
  */
 class ReportTemplateRepository extends SeipEntityRepository 
 {
+    /**
+     * Busca un reporte con todos los datos pre establecidos
+     * @param type $id
+     * @param DateTime $dateNotification
+     * @return type
+     */
     public function findToNotify($id,  DateTime $dateNotification)
     {
         $month = $dateNotification->format("m");
         
-//        var_dump($month);
-//        die;
         $qb = $this->getQueryBuilder();
         $qb
             ->addSelect('rt_pr')
@@ -37,6 +41,7 @@ class ReportTemplateRepository extends SeipEntityRepository
             ->addSelect('rt_pr_cps')
             ->addSelect('rt_pr_cps_dcps')
             ->addSelect('rt_pr_pr_rcp')
+            ->addSelect('rt_pr_pr_rcp_drmc')
             ->addSelect('rt_pr_pr_pddm')
             ->addSelect('rt_pr_pr_i')
                 
@@ -54,8 +59,6 @@ class ReportTemplateRepository extends SeipEntityRepository
             ->leftJoin('rt_pr_pr.inventorys','rt_pr_pr_i', Join::WITH,'rt_pr_pr_i.month = :month')
                 
             ->andWhere('rt.id = :id')
-//            ->andWhere('rt_pr_pr_pddm.month = :month')
-//            ->andWhere('rt_pr_pr_i.month = :month')
                 
             ->setParameter('id', $id)
             ->setParameter('month', $month)
