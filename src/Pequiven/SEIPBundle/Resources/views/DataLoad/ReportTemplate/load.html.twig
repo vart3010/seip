@@ -209,6 +209,7 @@
         &nbsp;
         {{ buttons.delete(path('pequiven_report_template_delete', { 'id': report_template.id })) }}
     </p>#}
+    {{ form_rest(form) }}
 {% endblock %}
 
 {% block javascript %}

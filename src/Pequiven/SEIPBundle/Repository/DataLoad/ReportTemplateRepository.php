@@ -11,6 +11,10 @@
 
 namespace Pequiven\SEIPBundle\Repository\DataLoad;
 
+use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Query\Expr\Join;
+use Doctrine\ORM\QueryBuilder;
 use Pequiven\SEIPBundle\Doctrine\ORM\SeipEntityRepository;
 
 /**
@@ -20,8 +24,43 @@ use Pequiven\SEIPBundle\Doctrine\ORM\SeipEntityRepository;
  */
 class ReportTemplateRepository extends SeipEntityRepository 
 {
-    protected function applyCriteria(\Doctrine\ORM\QueryBuilder $queryBuilder, array $criteria = null) {
-        $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
+    public function findToNotify($id,  DateTime $dateNotification)
+    {
+        $month = $dateNotification->format("m");
+        
+//        var_dump($month);
+//        die;
+        $qb = $this->getQueryBuilder();
+        $qb
+            ->addSelect('rt_pr')
+            ->addSelect('rt_pr_pr')
+            ->addSelect('rt_pr_cps')
+            ->addSelect('rt_pr_pr_rcp')
+            ->addSelect('rt_pr_pr_pddm')
+            ->addSelect('rt_pr_pr_i')
+                
+            ->innerJoin('rt.plantReports','rt_pr')
+            ->innerJoin('rt_pr.productsReport','rt_pr_pr')
+            ->innerJoin('rt_pr.consumerPlanningServices','rt_pr_cps')
+                
+            ->leftJoin('rt_pr_pr.rawMaterialConsumptionPlannings','rt_pr_pr_rcp')
+            ->leftJoin('rt_pr_pr.productDetailDailyMonths','rt_pr_pr_pddm',Join::WITH,'rt_pr_pr_pddm.month = :month')
+                
+            ->leftJoin('rt_pr_pr.inventorys','rt_pr_pr_i', Join::WITH,'rt_pr_pr_i.month = :month')
+                
+            ->andWhere('rt.id = :id')
+//            ->andWhere('rt_pr_pr_pddm.month = :month')
+//            ->andWhere('rt_pr_pr_i.month = :month')
+                
+            ->setParameter('id', $id)
+            ->setParameter('month', $month)
+            ;
+        
+        return $qb->getQuery()->getOneOrNullResult();
+    }
+    
+    protected function applyCriteria(QueryBuilder $queryBuilder, array $criteria = null) {
+        $criteria = new ArrayCollection($criteria);
         //
         
         if(($ref = $criteria->remove("rt.ref")))

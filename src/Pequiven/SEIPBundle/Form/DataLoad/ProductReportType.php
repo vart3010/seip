@@ -15,7 +15,7 @@ class ProductReportType extends SeipAbstractForm
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $entity = new \Pequiven\SEIPBundle\Entity\DataLoad\ProductReport();
+        //$entity = new \Pequiven\SEIPBundle\Entity\DataLoad\ProductReport();
         $entity = $builder->getData();
         
         $plantReport = $entity->getPlantReport();

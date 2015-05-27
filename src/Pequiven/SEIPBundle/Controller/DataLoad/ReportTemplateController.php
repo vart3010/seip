@@ -93,7 +93,6 @@ class ReportTemplateController extends SEIPController
     
     public function loadAction(Request $request) 
     {
-        $resource = $this->findOr404($request);
         $dateString = $request->get('dateNotification',null);
         $dateNotification = null;
         if($dateString !== null){
@@ -102,14 +101,21 @@ class ReportTemplateController extends SEIPController
         if($dateNotification === null){
             $dateNotification = new \DateTime();
         }
-//        var_dump($dateNotification);die;
+        $resource = $this->getRepository()->findToNotify($request->get("id"),$dateNotification);
+        
+        if(!$resource){
+            throw $this->createNotFoundException('No se encontro la planificacion');
+        }
+        
+        $form = $this->createForm(new \Pequiven\SEIPBundle\Form\DataLoad\Notification\ReportTemplateType($dateNotification,$resource),$resource);
         $view = $this
             ->view()
             ->setTemplate($this->config->getTemplate('load.html'))
             ->setTemplateVar($this->config->getResourceName())
             ->setData(array(
                 $this->config->getResourceName() => $resource,
-                'dateNotification' => $dateNotification
+                'dateNotification' => $dateNotification,
+                'form' => $form->createView(),
             ))
         ;
 

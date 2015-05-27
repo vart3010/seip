@@ -32,7 +32,7 @@
                         {% for consumerPlanningService in plantReport.consumerPlanningServices %}
                             <tr>
                                 <td>{{ loop.index }} - 
-                                    {{ generateLink(consumerPlanningService) }}
+                                    {{ consumerPlanningService }}
                                 </td>
                                 <th scope="row">
                                     0 {{ consumerPlanningService.service.serviceUnit }}
