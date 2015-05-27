@@ -14,10 +14,10 @@ class RawMaterialConsumptionPlanningType extends BaseNotification
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $parametersDisabled = $this->getParametersDisabled();
         $builder
             ->add('detailRawMaterialConsumptions','collection',[
-                'type' => new DetailRawMaterialConsumptionType($this->dateNotification, $this->reportTemplate)
+                'type' => new DetailRawMaterialConsumptionType($this->dateNotification, $this->reportTemplate),
+                'cascade_validation' => true,
             ])
         ;
     }
@@ -30,6 +30,7 @@ class RawMaterialConsumptionPlanningType extends BaseNotification
         $resolver->setDefaults(array(
             'data_class' => 'Pequiven\SEIPBundle\Entity\DataLoad\RawMaterial\RawMaterialConsumptionPlanning',
             "translation_domain" => "PequivenSEIPBundle",
+            'cascade_validation' => true,
         ));
     }
 

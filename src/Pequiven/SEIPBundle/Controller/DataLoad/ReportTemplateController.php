@@ -111,8 +111,14 @@ class ReportTemplateController extends SEIPController
         
         if($request->isMethod('PUT') && $form->submit($request,false)->isValid()){
 //            var_dump("todo bello");
+//            var_dump($dateString);
 //            die;
+            $this->domainManager->update($resource);
             
+            return $this->redirect($this->generateUrl('pequiven_report_template_load',[
+                'id' => $resource->getId(),
+                'dateNotification' => $dateNotification->format('d/m/Y')
+            ]));
         }
         
         $view = $this

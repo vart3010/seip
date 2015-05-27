@@ -22,6 +22,7 @@ class ReportTemplateType extends BaseNotification
         $builder
            ->add("plantReports",'collection',array(
                'type' => new PlantReportType($this->dateNotification,  $this->reportTemplate),
+               'cascade_validation' => true,
             ))
         ;
     }
@@ -33,7 +34,8 @@ class ReportTemplateType extends BaseNotification
     {
         $resolver->setDefaults(array(
             'data_class' => 'Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate',
-            "translation_domain" => "PequivenSEIPBundle"
+            "translation_domain" => "PequivenSEIPBundle",
+            'cascade_validation' => true,
         ));
     }
 

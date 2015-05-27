@@ -28,6 +28,8 @@
                             <strong>{{ "Plant"|trans }}&nbsp;-&nbsp;{{ plantReport.vars.data }}</strong>
                         </td>
                     </tr>
+                        {% set renderedError = false %}
+                        
                         {% for consumerPlanningService in plantReport.consumerPlanningServices %}
                             {% for detailConsumerPlanningService in consumerPlanningService.detailConsumerPlanningServices %}
                                 <tr>
@@ -41,7 +43,16 @@
                                         {{ form_widget(attribute(detailConsumerPlanningService,dayNReal)) }}
                                     </td>
                                 </tr>
-                            {% endfor %}
+                            {% else %}
+                                {% if renderedError == false %}
+                                     {% set renderedError = true %}
+                                    <tr>
+                                        <td colspan="{{ colspan }}" class="empty_row">
+                                            {{ "empty.no_details_of_production"|trans }}
+                                        </td>
+                                    </tr>
+                                {% endif %}
+                           {% endfor %}
                         {% else %}
                             <tr>
                                 <td colspan="{{ colspan }}" class="empty_row">

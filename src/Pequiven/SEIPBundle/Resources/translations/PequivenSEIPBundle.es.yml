@@ -511,6 +511,11 @@ empty:
     inventorys: No hay detalles de inventario.
     unrealized_productions: No hay detalles de producción no realizada.
     day_stops: No hay detalles de paradas.
+    not_budgeted_gross_production: 'No presupuestó producción bruta.'
+    not_budgeted_net_production: 'No presupuestó producción neta.'
+    no_handles_inventory: 'No presupuestó inventario.'
+    no_details_of_production: 'No hay detalles de producción.'
+    no_details_of_raw_material: 'No hay detalles de materia prima.'
         
 chart:
     type:

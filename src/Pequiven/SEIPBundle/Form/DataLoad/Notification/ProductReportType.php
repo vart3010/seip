@@ -19,16 +19,20 @@ class ProductReportType extends BaseNotification
         $builder
 //            ->add('product',null,$paramateretsDaysDisabled)
             ->add('productDetailDailyMonths','collection',array(
-                'type' => new ProductDetailDailyMonthType($this->dateNotification, $this->reportTemplate)
+                'type' => new ProductDetailDailyMonthType($this->dateNotification, $this->reportTemplate),
+                'cascade_validation' => true,
             ))
             ->add('inventorys','collection',array(
-                'type' => new InventoryType($this->dateNotification, $this->reportTemplate)
+                'type' => new InventoryType($this->dateNotification, $this->reportTemplate),
+                'cascade_validation' => true,
             ))
             ->add('rawMaterialConsumptionPlannings','collection',[
-                'type' => new RawMaterialConsumptionPlanningType($this->dateNotification, $this->reportTemplate)
+                'type' => new RawMaterialConsumptionPlanningType($this->dateNotification, $this->reportTemplate),
+                'cascade_validation' => true,
             ])
             ->add('unrealizedProductions','collection',[
-                'type' => new UnrealizedProductionType($this->dateNotification, $this->reportTemplate)
+                'type' => new UnrealizedProductionType($this->dateNotification, $this->reportTemplate),
+                'cascade_validation' => true,
             ])
         ;
     }
@@ -41,6 +45,7 @@ class ProductReportType extends BaseNotification
         $resolver->setDefaults(array(
             'data_class' => 'Pequiven\SEIPBundle\Entity\DataLoad\ProductReport',
             "translation_domain" => "PequivenSEIPBundle",
+            'cascade_validation' => true,
         ));
     }
 

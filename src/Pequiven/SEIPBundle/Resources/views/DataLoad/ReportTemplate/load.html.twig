@@ -55,8 +55,6 @@
         </div>
     </fieldset>
                     
-    {#{% include 'PequivenSEIPBundle:DataLoad:ReportTemplate/show/plants.html.twig' %}#}
-    
     <form action="{{ path('pequiven_report_template_load',{id: report_template.id}) }}" method="POST">
         <input type="hidden" name="_method" value="PUT">
         {{ form_errors(form) }}
@@ -69,7 +67,6 @@
              </p>
          </div>
          {% set day = dateNotification|date('d')|round %}
-         {{ day }}
          {% set grossPlan = 'day' ~ day ~ 'GrossPlan' %}
          {% set grossReal = 'day' ~ day ~ 'GrossReal' %}
 
@@ -123,6 +120,12 @@
                                                              {% endfor %}
                                                          </td>
                                                      </tr>
+                                                 {% else %}
+                                                     <tr>
+                                                        <td colspan="4" class="empty_row">
+                                                            {{ "empty.not_budgeted_gross_production"|trans }}
+                                                        </td>
+                                                    </tr>
                                                  {% endfor %}
                                              </tbody>
                                          </table>
@@ -146,8 +149,14 @@
                                                              {{ attribute(productDetailDailyMonth.vars.data,netPlan) }}
                                                          </th>
                                                          <td>{{ form_widget(attribute(productDetailDailyMonth,netReal)) }}</td>
-                                                         <td class="">0</td>
+                                                         <td>TODO</td>
                                                      </tr>
+                                                 {% else %}
+                                                     <tr>
+                                                        <td colspan="3" class="empty_row">
+                                                            {{ "empty.not_budgeted_net_production"|trans }}
+                                                        </td>
+                                                    </tr>
                                                  {% endfor %}
                                              </tbody>
                                          </table>
@@ -169,6 +178,12 @@
                                                              {{ form_widget(attribute(inventory,dayN)) }}
                                                          </th>
                                                      </tr>
+                                                 {% else %}
+                                                     <tr>
+                                                        <td class="empty_row">
+                                                            {{ "empty.no_handles_inventory"|trans }}
+                                                        </td>
+                                                    </tr>
                                                  {% endfor %}
                                              </tbody>
                                          </table>
@@ -193,6 +208,7 @@
                                                  </tr>
                                              </thead>
                                              <tbody>
+                                                 {% set renderedError = false %}
                                                  {% for rawMaterialConsumptionPlanning in productReport.rawMaterialConsumptionPlannings %}
                                                      {% for detailRawMaterialConsumption in rawMaterialConsumptionPlanning.detailRawMaterialConsumptions %}
                                                          <tr>
@@ -202,11 +218,20 @@
                                                              <td>{{ attribute(detailRawMaterialConsumption.vars.data,dayNPlan) }}</td>
                                                              <td>{{ form_widget(attribute(detailRawMaterialConsumption,dayNReal)) }}</td>
                                                          </tr>
+                                                         {% else %}
+                                                             {% if renderedError == false %}
+                                                                 {% set renderedError = true %}
+                                                                 <tr>
+                                                                    <td colspan="3" class="empty_row">
+                                                                        {{ "empty.no_details_of_production"|trans }}
+                                                                    </td>
+                                                                </tr>
+                                                            {% endif %}
                                                      {% endfor %}
                                                  {% else %}
                                                      <tr>
                                                          <td colspan="3" class="empty_row">
-                                                             {{ "empty.no_raw_material"|trans }}
+                                                             {{ "empty.no_details_of_raw_material"|trans }}
                                                          </td>
                                                      </tr>
                                                  {% endfor %}

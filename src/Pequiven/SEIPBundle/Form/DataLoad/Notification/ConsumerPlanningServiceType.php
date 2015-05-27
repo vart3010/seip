@@ -16,7 +16,8 @@ class ConsumerPlanningServiceType extends BaseNotification
     {
         $builder
             ->add('detailConsumerPlanningServices','collection',[
-                'type' => new DetailConsumerPlanningServiceType($this->dateNotification, $this->reportTemplate)
+                'type' => new DetailConsumerPlanningServiceType($this->dateNotification, $this->reportTemplate),
+                'cascade_validation' => true,
             ])
         ;
     }
@@ -29,6 +30,7 @@ class ConsumerPlanningServiceType extends BaseNotification
         $resolver->setDefaults(array(
             'data_class' => 'Pequiven\SEIPBundle\Entity\DataLoad\Service\ConsumerPlanningService',
             "translation_domain" => "PequivenSEIPBundle",
+            'cascade_validation' => true,
         ));
     }
 

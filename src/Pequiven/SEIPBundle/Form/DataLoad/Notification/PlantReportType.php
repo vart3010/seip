@@ -17,10 +17,12 @@ class PlantReportType extends BaseNotification
         
         $builder
             ->add('productsReport','collection',[
-                'type' => new ProductReportType($this->dateNotification, $this->reportTemplate)
+                'type' => new ProductReportType($this->dateNotification, $this->reportTemplate),
+                'cascade_validation' => true,
             ])
             ->add('consumerPlanningServices','collection',[
-                'type' => new ConsumerPlanningServiceType($this->dateNotification, $this->reportTemplate)
+                'type' => new ConsumerPlanningServiceType($this->dateNotification, $this->reportTemplate),
+                'cascade_validation' => true,
             ])
         ;
     }
@@ -33,6 +35,7 @@ class PlantReportType extends BaseNotification
         $resolver->setDefaults(array(
             'data_class' => 'Pequiven\SEIPBundle\Entity\DataLoad\PlantReport',
             "translation_domain" => "PequivenSEIPBundle",
+            'cascade_validation' => true,
         ));
     }
 

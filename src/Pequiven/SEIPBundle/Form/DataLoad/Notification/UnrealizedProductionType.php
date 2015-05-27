@@ -37,6 +37,6 @@ class UnrealizedProductionType extends BaseNotification
      */
     public function getName()
     {
-        return 'pequiven_seipbundle_dataload_production_unrealizedproduction';
+        return 'production_unrealizedproduction';
     }
 }
