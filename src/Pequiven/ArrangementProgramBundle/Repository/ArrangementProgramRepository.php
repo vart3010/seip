@@ -155,6 +155,7 @@ class ArrangementProgramRepository extends EntityRepository
                 ->andWhere('ap.status = :status')
                 ->setParameter('status', $status);
         }
+        $this->applyPeriodCriteria($qb);
         
         return $qb->getQuery()->getResult();
     }
@@ -184,6 +185,8 @@ class ArrangementProgramRepository extends EntityRepository
                 $qb->andWhere('ap.totalAdvance > 0');
             }
         } 
+        
+        $this->applyPeriodCriteria($qb);
         
         return $qb->getQuery()->getResult();
     }
