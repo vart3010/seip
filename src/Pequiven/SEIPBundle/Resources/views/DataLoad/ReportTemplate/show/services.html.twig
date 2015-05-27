@@ -18,14 +18,15 @@
                     <th scope="col" width="35%">{{ 'Service'|trans }}</th>
                     <th scope="col" width="10%" class="">{{ 'Plan'|trans }}</th>
                     <th scope="col" width="10%" class="">{{ 'Real'|trans }}</th>
+                    <th scope="col" style="width: 7%" class=" header">%</th>
                 </tr>
             </thead>
-            {% set colspan = 3 %}
+            {% set colspan = 4 %}
             <tbody>
                 {% for plantReport in form.plantReports %}
                     <tr>
                         <td class="text-center bold" colspan="{{ colspan }}">
-                            <strong>{{ "Plant"|trans }}&nbsp;-&nbsp;{{ plantReport.vars.data }}</strong>
+                            <strong class="font-20">{{ "Plant"|trans }}&nbsp;-&nbsp;{{ plantReport.vars.data }}</strong>
                         </td>
                     </tr>
                         {% set renderedError = false %}
@@ -42,6 +43,7 @@
                                     <td>
                                         {{ form_widget(attribute(detailConsumerPlanningService,dayNReal)) }}
                                     </td>
+                                    <td>{{ attribute(detailConsumerPlanningService.vars.data,'getTotalPercentajeOf',[day])|myNumberFormat }}</td>
                                 </tr>
                             {% else %}
                                 {% if renderedError == false %}

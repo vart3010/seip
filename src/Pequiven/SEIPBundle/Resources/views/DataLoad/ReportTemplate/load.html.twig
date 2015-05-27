@@ -199,12 +199,13 @@
                                          <table class="simple-table responsive-table responsive-table-on" id="sorting-example2">
                                              <thead>
                                                  <tr>
-                                                     <th class="header text-center silver-gradient" colspan="3">{{ "pequiven_seip.report_template.raw_material"|trans }}</th>
+                                                     <th class="header text-center silver-gradient" colspan="4">{{ "pequiven_seip.report_template.raw_material"|trans }}</th>
                                                  </tr>
                                                  <tr>
                                                      <th scope="col" style="width: 7%">{{ "Product"|trans }}</th>
                                                      <th scope="col" style="width: 7%">Plan</th>
                                                      <th scope="col" style="width: 7%" class=" header">Real</th>
+                                                     <th scope="col" style="width: 7%" class=" header">%</th>
                                                  </tr>
                                              </thead>
                                              <tbody>
@@ -217,12 +218,13 @@
                                                              </th>
                                                              <td>{{ attribute(detailRawMaterialConsumption.vars.data,dayNPlan) }}</td>
                                                              <td>{{ form_widget(attribute(detailRawMaterialConsumption,dayNReal)) }}</td>
+                                                             <td>{{ attribute(detailRawMaterialConsumption.vars.data,'getTotalPercentajeOf',[day])|myNumberFormat }}</td>
                                                          </tr>
                                                          {% else %}
                                                              {% if renderedError == false %}
                                                                  {% set renderedError = true %}
                                                                  <tr>
-                                                                    <td colspan="3" class="empty_row">
+                                                                    <td colspan="4" class="empty_row">
                                                                         {{ "empty.no_details_of_production"|trans }}
                                                                     </td>
                                                                 </tr>
@@ -230,7 +232,7 @@
                                                      {% endfor %}
                                                  {% else %}
                                                      <tr>
-                                                         <td colspan="3" class="empty_row">
+                                                         <td colspan="4" class="empty_row">
                                                              {{ "empty.no_details_of_raw_material"|trans }}
                                                          </td>
                                                      </tr>

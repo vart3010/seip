@@ -2114,6 +2114,26 @@ abstract class Detail extends BaseModel
 //        die;
     }
     
+    /**
+     * Retorna el total del avance de un dia
+     * @param type $day
+     * @param type $prefix
+     * @return int
+     */
+    public function getTotalPercentajeOf($day) 
+    {
+        $nameReal = 'getDay'.$day.'Real';
+        $namePlan = 'getDay'.$day.'Plan';
+        $plan = $this->$namePlan();
+        $real = $this->$nameReal();
+        if($plan != 0){
+            $total = ($real * 100 / $plan);
+        }else{
+            $total = 0;
+        }
+        return $total;
+    }
+    
     public function __toString() {
         $_toString = "";
         if($this->getId() > 0){
