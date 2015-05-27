@@ -112,11 +112,15 @@
                                                          <th scope="row">
                                                              {{ attribute(productDetailDailyMonth.vars.data,grossPlan) }}
                                                          </th>
-                                                         <td>{{ form_widget(attribute(productDetailDailyMonth,grossReal)) }}</td>
+                                                         <td>
+                                                             {{ form_widget(attribute(productDetailDailyMonth,grossReal)) }}
+                                                             {{ form_errors(attribute(productDetailDailyMonth,grossReal)) }}
+                                                         </td>
                                                          <td>{{ attribute(productDetailDailyMonth.vars.data,'getTotalPercentajeOf',[day,'Gross'])|myNumberFormat }}</td>
                                                          <td>
                                                              {% for unrealizedProduction in productReport.unrealizedProductions %}
                                                                  {{ form_widget(attribute(unrealizedProduction,dayN)) }}
+                                                                 {{ form_errors(attribute(unrealizedProduction,dayN)) }}
                                                              {% endfor %}
                                                          </td>
                                                      </tr>
@@ -148,7 +152,10 @@
                                                          <th scope="row">
                                                              {{ attribute(productDetailDailyMonth.vars.data,netPlan) }}
                                                          </th>
-                                                         <td>{{ form_widget(attribute(productDetailDailyMonth,netReal)) }}</td>
+                                                         <td>
+                                                             {{ form_widget(attribute(productDetailDailyMonth,netReal)) }}
+                                                             {{ form_errors(attribute(productDetailDailyMonth,netReal)) }}
+                                                         </td>
                                                          <td>{{ attribute(productDetailDailyMonth.vars.data,'getTotalPercentajeOf',[day,'Net'])|myNumberFormat }}</td>
                                                      </tr>
                                                  {% else %}
@@ -172,19 +179,28 @@
                                                  </tr>
                                              </thead>
                                              <tbody>
-                                                 {% for inventory in productReport.inventorys %}
-                                                     <tr>
-                                                         <th scope="row">
-                                                             {{ form_widget(attribute(inventory,dayN)) }}
-                                                         </th>
-                                                     </tr>
+                                                 {% if productReport.productDetailDailyMonths|length > 0 %}
+                                                     {% for inventory in productReport.inventorys %}
+                                                         <tr>
+                                                             <th scope="row">
+                                                                 {{ form_widget(attribute(inventory,dayN)) }}
+                                                                 {{ form_errors(attribute(inventory,dayN)) }}
+                                                             </th>
+                                                         </tr>
+                                                     {% else %}
+                                                         <tr>
+                                                            <td class="empty_row">
+                                                                {{ "empty.no_handles_inventory"|trans }}
+                                                            </td>
+                                                        </tr>
+                                                     {% endfor %}
                                                  {% else %}
                                                      <tr>
                                                         <td class="empty_row">
-                                                            {{ "empty.no_handles_inventory"|trans }}
+                                                            {{ "empty.no_details_of_production"|trans }}
                                                         </td>
                                                     </tr>
-                                                 {% endfor %}
+                                                 {% endif %}
                                              </tbody>
                                          </table>
                                      </div>
@@ -217,7 +233,10 @@
                                                                  {{ rawMaterialConsumptionPlanning.vars.data }}&nbsp;({{ rawMaterialConsumptionPlanning.vars.data.type }})
                                                              </th>
                                                              <td>{{ attribute(detailRawMaterialConsumption.vars.data,dayNPlan) }}</td>
-                                                             <td>{{ form_widget(attribute(detailRawMaterialConsumption,dayNReal)) }}</td>
+                                                             <td>
+                                                                 {{ form_widget(attribute(detailRawMaterialConsumption,dayNReal)) }}
+                                                                 {{ form_errors(attribute(detailRawMaterialConsumption,dayNReal)) }}
+                                                             </td>
                                                              <td>{{ attribute(detailRawMaterialConsumption.vars.data,'getTotalPercentajeOf',[day])|myNumberFormat }}</td>
                                                          </tr>
                                                          {% else %}
@@ -243,6 +262,7 @@
                                      <div class="seven-columns twelve-columns-mobile">
                                          {% for productDetailDailyMonth in productReport.productDetailDailyMonths %}
                                              {{ form_widget(attribute(productDetailDailyMonth,observation)) }}
+                                             {{ form_errors(attribute(productDetailDailyMonth,observation)) }}
                                          {% endfor %}
                                      </div>
                                  </div>
@@ -263,7 +283,9 @@
              &nbsp;
              {{ buttons.delete(path('pequiven_report_template_delete', { 'id': report_template.id })) }}#}
 {#         </p>#}
-         {{ form_rest(form) }}
+        <div class="hidden">
+             {{ form_rest(form) }}
+        </div>
     </form>
 {% endblock %}
 
