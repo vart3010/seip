@@ -113,7 +113,7 @@
                                                              {{ attribute(productDetailDailyMonth.vars.data,grossPlan) }}
                                                          </th>
                                                          <td>{{ form_widget(attribute(productDetailDailyMonth,grossReal)) }}</td>
-                                                         <td>TODO</td>
+                                                         <td>{{ attribute(productDetailDailyMonth.vars.data,'getTotalPercentajeOf',[day,'Gross'])|myNumberFormat }}</td>
                                                          <td>
                                                              {% for unrealizedProduction in productReport.unrealizedProductions %}
                                                                  {{ form_widget(attribute(unrealizedProduction,dayN)) }}
@@ -149,7 +149,7 @@
                                                              {{ attribute(productDetailDailyMonth.vars.data,netPlan) }}
                                                          </th>
                                                          <td>{{ form_widget(attribute(productDetailDailyMonth,netReal)) }}</td>
-                                                         <td>TODO</td>
+                                                         <td>{{ attribute(productDetailDailyMonth.vars.data,'getTotalPercentajeOf',[day,'Net'])|myNumberFormat }}</td>
                                                      </tr>
                                                  {% else %}
                                                      <tr>
