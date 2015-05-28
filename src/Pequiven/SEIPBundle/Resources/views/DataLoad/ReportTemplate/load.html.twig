@@ -129,8 +129,35 @@
                                                                  {{ form_errors(attribute(unrealizedProduction,dayN)) }}
                                                                  <div id="{{ idPnrForm }}" title="Create new user">
                                                                     <p class="validateTips">All form fields are required.</p>
-                                                                        {{ form_widget(attribute(unrealizedProduction,dayNDetails)) }}
-                                                                    
+                                                                    {% set dayDetails = attribute(unrealizedProduction,dayNDetails) %}
+                                                                    <ul class="internalCauses">
+                                                                        {% for internalCause in dayDetails.internalCauses %}
+                                                                            <li>
+                                                                                {{ form_widget(internalCause) }}
+                                                                            </li>
+                                                                        {% endfor %}
+                                                                    </ul>
+                                                                    <ul class="externalCauses">
+                                                                        {% for externalCause in dayDetails.externalCauses %}
+                                                                            <li>
+                                                                                {{ form_widget(externalCause) }}
+                                                                            </li>
+                                                                        {% endfor %}
+                                                                    </ul>
+                                                                    <ul class="internalCausesMp">
+                                                                        {% for internalCauseMp in dayDetails.internalCausesMp %}
+                                                                            <li>
+                                                                                {{ form_widget(internalCauseMp) }}
+                                                                            </li>
+                                                                        {% endfor %}
+                                                                    </ul>
+                                                                    <ul class="externalCausesMp">
+                                                                        {% for externalCauseMp in dayDetails.externalCausesMp%}
+                                                                            <li>
+                                                                                {{ form_widget(externalCauseMp) }}
+                                                                            </li>
+                                                                        {% endfor %}
+                                                                    </ul>
                                                                   </div>
                                                                  <script type="text/javascript">
                                                                      $(function(){

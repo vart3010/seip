@@ -53,7 +53,7 @@ class UnrealizedProductionDay
      * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Production\UnrealizedProductionDay\RawMaterialRequired",cascade={"persist","remove"})
      * @ORM\JoinTable(name="unrealizedproductionday_internalcauses_mp")
      */
-    private $internalCauseMp;
+    private $internalCausesMp;
     
     /**
      * Causa interna por materia prima
@@ -61,7 +61,7 @@ class UnrealizedProductionDay
      * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Production\UnrealizedProductionDay\RawMaterialRequired",cascade={"persist","remove"})
      * @ORM\JoinTable(name="unrealizedproductionday_externalcauses_mp")
      */
-    private $externalCauseMp;
+    private $externalCausesMp;
      
     /**
      * Constructor
@@ -70,8 +70,8 @@ class UnrealizedProductionDay
     {
         $this->internalCauses = new \Doctrine\Common\Collections\ArrayCollection();
         $this->externalCauses = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->internalCauseMp = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->externalCauseMp = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->internalCausesMp = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->externalCausesMp = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -83,6 +83,8 @@ class UnrealizedProductionDay
     {
         return $this->id;
     }
+
+    
 
     /**
      * Add internalCauses
@@ -151,68 +153,68 @@ class UnrealizedProductionDay
     }
 
     /**
-     * Add internalCauseMp
+     * Add internalCausesMp
      *
-     * @param \Pequiven\SEIPBundle\Entity\DataLoad\Production\UnrealizedProductionDay\RawMaterialRequired $internalCauseMp
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\Production\UnrealizedProductionDay\RawMaterialRequired $internalCausesMp
      * @return UnrealizedProductionDay
      */
-    public function addInternalCauseMp(\Pequiven\SEIPBundle\Entity\DataLoad\Production\UnrealizedProductionDay\RawMaterialRequired $internalCauseMp)
+    public function addInternalCausesMp(\Pequiven\SEIPBundle\Entity\DataLoad\Production\UnrealizedProductionDay\RawMaterialRequired $internalCausesMp)
     {
-        $this->internalCauseMp->add($internalCauseMp);
+        $this->internalCausesMp->add($internalCausesMp);
 
         return $this;
     }
 
     /**
-     * Remove internalCauseMp
+     * Remove internalCausesMp
      *
-     * @param \Pequiven\SEIPBundle\Entity\DataLoad\Production\UnrealizedProductionDay\RawMaterialRequired $internalCauseMp
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\Production\UnrealizedProductionDay\RawMaterialRequired $internalCausesMp
      */
-    public function removeInternalCauseMp(\Pequiven\SEIPBundle\Entity\DataLoad\Production\UnrealizedProductionDay\RawMaterialRequired $internalCauseMp)
+    public function removeInternalCausesMp(\Pequiven\SEIPBundle\Entity\DataLoad\Production\UnrealizedProductionDay\RawMaterialRequired $internalCausesMp)
     {
-        $this->internalCauseMp->removeElement($internalCauseMp);
+        $this->internalCausesMp->removeElement($internalCausesMp);
     }
 
     /**
-     * Get internalCauseMp
+     * Get internalCausesMp
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getInternalCauseMp()
+    public function getInternalCausesMp()
     {
-        return $this->internalCauseMp;
+        return $this->internalCausesMp;
     }
 
     /**
-     * Add externalCauseMp
+     * Add externalCausesMp
      *
-     * @param \Pequiven\SEIPBundle\Entity\DataLoad\Production\UnrealizedProductionDay\RawMaterialRequired $externalCauseMp
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\Production\UnrealizedProductionDay\RawMaterialRequired $externalCausesMp
      * @return UnrealizedProductionDay
      */
-    public function addExternalCauseMp(\Pequiven\SEIPBundle\Entity\DataLoad\Production\UnrealizedProductionDay\RawMaterialRequired $externalCauseMp)
+    public function addExternalCausesMp(\Pequiven\SEIPBundle\Entity\DataLoad\Production\UnrealizedProductionDay\RawMaterialRequired $externalCausesMp)
     {
-        $this->externalCauseMp->add($externalCauseMp);
+        $this->externalCausesMp->add($externalCausesMp);
 
         return $this;
     }
 
     /**
-     * Remove externalCauseMp
+     * Remove externalCausesMp
      *
-     * @param \Pequiven\SEIPBundle\Entity\DataLoad\Production\UnrealizedProductionDay\RawMaterialRequired $externalCauseMp
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\Production\UnrealizedProductionDay\RawMaterialRequired $externalCausesMp
      */
-    public function removeExternalCauseMp(\Pequiven\SEIPBundle\Entity\DataLoad\Production\UnrealizedProductionDay\RawMaterialRequired $externalCauseMp)
+    public function removeExternalCausesMp(\Pequiven\SEIPBundle\Entity\DataLoad\Production\UnrealizedProductionDay\RawMaterialRequired $externalCausesMp)
     {
-        $this->externalCauseMp->removeElement($externalCauseMp);
+        $this->externalCausesMp->removeElement($externalCausesMp);
     }
 
     /**
-     * Get externalCauseMp
+     * Get externalCausesMp
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getExternalCauseMp()
+    public function getExternalCausesMp()
     {
-        return $this->externalCauseMp;
+        return $this->externalCausesMp;
     }
 }

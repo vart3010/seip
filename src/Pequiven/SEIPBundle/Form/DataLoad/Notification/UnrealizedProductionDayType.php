@@ -28,13 +28,13 @@ class UnrealizedProductionDayType extends BaseNotification
                 'by_reference' => false,
                 'allow_delete' => true,
             ])
-            ->add('internalCauseMp','collection',[
+            ->add('internalCausesMp','collection',[
                 'type' => new RawMaterialRequiredType(),
                 'allow_add'    => true,
                 'by_reference' => false,
                 'allow_delete' => true,
             ])
-            ->add('externalCauseMp','collection',[
+            ->add('externalCausesMp','collection',[
                 'type' => new RawMaterialRequiredType(),
                 'allow_add'    => true,
                 'by_reference' => false,
