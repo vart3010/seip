@@ -442,6 +442,16 @@
                 var $newLinkLi = $('<li></li>').append($addInternalCauseLink);
                 buildCollection($(value),$newLinkLi,$addInternalCauseLink);
             });
+            $.each($('ul.internalCausesMp'),function(key,value){
+                var $addInternalCauseLink = $('<a href="#" class="add_internal_causes_mp_link icon-list-add icon-size2 tracked">{{ 'pequiven_seip.buttons.add_internal_cause_mp'|trans }}</a>');
+                var $newLinkLi = $('<li></li>').append($addInternalCauseLink);
+                buildCollection($(value),$newLinkLi,$addInternalCauseLink);
+            });
+            $.each($('ul.externalCausesMp'),function(key,value){
+                var $addInternalCauseLink = $('<a href="#" class="add_internal_causes_mp_link icon-list-add icon-size2 tracked">{{ 'pequiven_seip.buttons.add_external_cause_mp'|trans }}</a>');
+                var $newLinkLi = $('<li></li>').append($addInternalCauseLink);
+                buildCollection($(value),$newLinkLi,$addInternalCauseLink);
+            });
         });
     </script>
 {% endblock %}

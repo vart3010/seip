@@ -155,6 +155,8 @@ pequiven_seip:
         run_plant: Ejecutar planificación de planta
         add_internal_cause: Añadir causa interna
         add_external_cause: Añadir causa externa
+        add_internal_cause_mp: Añadir causa interna (Materia Prima)
+        add_external_cause_mp: Añadir causa externa (Materia Prima)
         delete_cause: 'Eliminar esta causa'
     question:
         want_create_production_details_from_planning: ¿Desea crear los detalles de producción a partir del presupuesto de producción?
@@ -570,3 +572,6 @@ Region: 'Región'
 Product: 'Producto'
 Fail: Falla
 Mount: Cantidad
+'Required amount': 'Cantidad Requerida'
+'Amount not available': 'Cantidad No Disponible'
+'Unit measure': 'Unidad de Medida'
