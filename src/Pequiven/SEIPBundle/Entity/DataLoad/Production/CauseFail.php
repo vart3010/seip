@@ -45,4 +45,60 @@ class CauseFail
      * @ORM\Column(name="mount",type="float")
      */
     private $mount;
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set mount
+     *
+     * @param float $mount
+     * @return CauseFail
+     */
+    public function setMount($mount)
+    {
+        $this->mount = $mount;
+
+        return $this;
+    }
+
+    /**
+     * Get mount
+     *
+     * @return float 
+     */
+    public function getMount()
+    {
+        return $this->mount;
+    }
+
+    /**
+     * Set fail
+     *
+     * @param \Pequiven\SEIPBundle\Entity\CEI\Fail $fail
+     * @return CauseFail
+     */
+    public function setFail(\Pequiven\SEIPBundle\Entity\CEI\Fail $fail)
+    {
+        $this->fail = $fail;
+
+        return $this;
+    }
+
+    /**
+     * Get fail
+     *
+     * @return \Pequiven\SEIPBundle\Entity\CEI\Fail 
+     */
+    public function getFail()
+    {
+        return $this->fail;
+    }
 }

@@ -1,11 +1,12 @@
 <?php
 
-namespace Pequiven\SEIPBundle\Form\DataLoad\Notification;
+namespace Pequiven\SEIPBundle\Form\DataLoad\Production\UnrealizedProductionDay;
 
+use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class UnrealizedProductionType extends BaseNotification
+class RawMaterialRequiredType extends AbstractType
 {
         /**
      * @param FormBuilderInterface $builder
@@ -13,11 +14,11 @@ class UnrealizedProductionType extends BaseNotification
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $day = $this->getDayNotification();
-        $paramateretsDays = $this->getParametersStandard();
         $builder
-            ->add(sprintf('day%s',$day),null,$paramateretsDays)
-            ->add(sprintf('day%sDetails',$day),new UnrealizedProductionDayType($this->dateNotification, $this->reportTemplate))
+            ->add('rawMaterial')
+            ->add('requiredAmount')
+            ->add('amountNotAvailable')
+            ->add('unitMeasure')
         ;
     }
     
@@ -27,8 +28,7 @@ class UnrealizedProductionType extends BaseNotification
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Pequiven\SEIPBundle\Entity\DataLoad\Production\UnrealizedProduction',
-            "translation_domain" => "PequivenSEIPBundle",
+            'data_class' => 'Pequiven\SEIPBundle\Entity\DataLoad\Production\UnrealizedProductionDay\RawMaterialRequired'
         ));
     }
 
@@ -37,6 +37,6 @@ class UnrealizedProductionType extends BaseNotification
      */
     public function getName()
     {
-        return 'production_unrealizedproduction';
+        return 'pequiven_seipbundle_dataload_production_unrealizedproductionday_rawmaterialrequired';
     }
 }
