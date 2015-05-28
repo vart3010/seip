@@ -144,17 +144,13 @@
                                                                     <br/>
                                                                     <ul class="internalCausesMp unstyled-list" data-prototype="{% filter escape %}{% include 'PequivenSEIPBundle:DataLoad/ReportTemplate/load:raw_material_required.html.twig' with {form: dayDetails.internalCausesMp.vars.prototype} %}{% endfilter %}" >
                                                                         {% for internalCauseMp in dayDetails.internalCausesMp %}
-                                                                            <li>
-                                                                                <li>{% include 'PequivenSEIPBundle:DataLoad/ReportTemplate/load:raw_material_required.html.twig' with {form: internalCauseMp} %}</li>
-                                                                            </li>
+                                                                            <li>{% include 'PequivenSEIPBundle:DataLoad/ReportTemplate/load:raw_material_required.html.twig' with {form: internalCauseMp} %}</li>
                                                                         {% endfor %}
                                                                     </ul>
                                                                     <br/>
                                                                     <ul class="externalCausesMp unstyled-list" data-prototype="{% filter escape %}{% include 'PequivenSEIPBundle:DataLoad/ReportTemplate/load:raw_material_required.html.twig' with {form: dayDetails.externalCausesMp.vars.prototype} %}{% endfilter %}">
                                                                         {% for externalCauseMp in dayDetails.externalCausesMp %}
-                                                                            <li>
-                                                                                <li>{% include 'PequivenSEIPBundle:DataLoad/ReportTemplate/load:raw_material_required.html.twig' with {form: externalCauseMp} %}</li>
-                                                                            </li>
+                                                                            <li>{% include 'PequivenSEIPBundle:DataLoad/ReportTemplate/load:raw_material_required.html.twig' with {form: externalCauseMp} %}</li>
                                                                         {% endfor %}
                                                                     </ul>
                                                                   </div>
@@ -367,10 +363,7 @@
                 window.location.href = url;
             });
             
-            
-            
             //internalCauses
-            
             var buildCollection = function ($collectionHolder,newLinkLi,$addXLink){
                  // add a delete link to all of the existing tag form li elements
                 $collectionHolder.find('li').each(function() {
@@ -423,7 +416,6 @@
             function addTagFormDeleteLink($tagFormLi) {
                 var $removeFormA = $('<a href="#" class="float-right icon-trash icon-size2">{{ "pequiven_seip.buttons.delete_cause"|trans }}</a>');
                 $tagFormLi.append($removeFormA);
-
                 $removeFormA.on('click', function(e) {
                     // prevent the link from creating a "#" on the URL
                     e.preventDefault();
@@ -434,24 +426,28 @@
             }
             
             $.each($('ul.internalCauses'),function(key,value){
+                var $collectionHolder = $(value);
                 var $addInternalCauseLink = $('<a href="#" class="add_internal_cause_link icon-list-add icon-size2 tracked">{{ 'pequiven_seip.buttons.add_internal_cause'|trans }}</a>');
                 var $newLinkLi = $('<li></li>').append($addInternalCauseLink);
-                buildCollection($(value),$newLinkLi,$addInternalCauseLink);
+                buildCollection($collectionHolder,$newLinkLi,$addInternalCauseLink);
             });
             $.each($('ul.externalCauses'),function(key,value){
+                var $collectionHolder = $(value);
                 var $addInternalCauseLink = $('<a href="#" class="add_external_cause_link icon-list-add icon-size2 tracked">{{ 'pequiven_seip.buttons.add_external_cause'|trans }}</a>');
                 var $newLinkLi = $('<li></li>').append($addInternalCauseLink);
-                buildCollection($(value),$newLinkLi,$addInternalCauseLink);
+                buildCollection($collectionHolder,$newLinkLi,$addInternalCauseLink);
             });
             $.each($('ul.internalCausesMp'),function(key,value){
+                var $collectionHolder = $(value);
                 var $addInternalCauseLink = $('<a href="#" class="add_internal_causes_mp_link icon-list-add icon-size2 tracked">{{ 'pequiven_seip.buttons.add_internal_cause_mp'|trans }}</a>');
                 var $newLinkLi = $('<li></li>').append($addInternalCauseLink);
-                buildCollection($(value),$newLinkLi,$addInternalCauseLink);
+                buildCollection($collectionHolder,$newLinkLi,$addInternalCauseLink);
             });
             $.each($('ul.externalCausesMp'),function(key,value){
+                var $collectionHolder = $(value);
                 var $addInternalCauseLink = $('<a href="#" class="add_internal_causes_mp_link icon-list-add icon-size2 tracked">{{ 'pequiven_seip.buttons.add_external_cause_mp'|trans }}</a>');
                 var $newLinkLi = $('<li></li>').append($addInternalCauseLink);
-                buildCollection($(value),$newLinkLi,$addInternalCauseLink);
+                buildCollection($collectionHolder,$newLinkLi,$addInternalCauseLink);
             });
             $('.select-cause-fail').select2();
         });
