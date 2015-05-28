@@ -87,6 +87,12 @@ select_objetiveTacticIndicator:
     defaults:
         _controller: pequiven.controller.indicatortactic:selectObjetiveTacticAction
         
+#Select que devuelve los Objetivos Tácticos de acuerdo al Objetivo Estratégico seleccionado
+select_objetiveTacticFromObjetiveStrategic_operative:
+    path: /arrangement_strategic/indicator/select_objetiveTacticFromObjetiveStrategic_operative
+    defaults:
+        _controller: pequiven.controller.indicatoroperative:selectObjetiveTacticFromObjetiveStrategicAction
+        
 #Select que devuelve los Objetivos Operativos de acuerdo al objetivo táctico y la gerencia de 2da línea seleccionada
 select_objetiveOperativeIndicator:
     path: /arrangement_strategic/indicator/select_objetiveOperativeIndicator
