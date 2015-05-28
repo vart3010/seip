@@ -131,24 +131,20 @@
                                                                     {% set dayDetails = attribute(unrealizedProduction,dayNDetails) %}
                                                                     <ul class="internalCauses unstyled-list" data-prototype="{% filter escape %}{% include 'PequivenSEIPBundle:DataLoad/ReportTemplate/load:cause_fail.html.twig' with {form: dayDetails.internalCauses.vars.prototype, type: constant('Pequiven\\SEIPBundle\\Model\\CEI\\Fail::TYPE_FAIL_INTERNAL')} %}{% endfilter %}" >
                                                                         {% for internalCause in dayDetails.internalCauses %}
-                                                                            <li>
-                                                                                {{ form_widget(internalCause) }}
-                                                                            </li>
+                                                                            <li>{% include 'PequivenSEIPBundle:DataLoad/ReportTemplate/load:cause_fail.html.twig' with {form: internalCause, type: constant('Pequiven\\SEIPBundle\\Model\\CEI\\Fail::TYPE_FAIL_INTERNAL')} %}</li>
                                                                         {% endfor %}
                                                                     </ul>
                                                                     <br/>
                                                                     <ul class="externalCauses unstyled-list" data-prototype="{% filter escape %}{% include 'PequivenSEIPBundle:DataLoad/ReportTemplate/load:cause_fail.html.twig' with {form: dayDetails.externalCauses.vars.prototype, type: constant('Pequiven\\SEIPBundle\\Model\\CEI\\Fail::TYPE_FAIL_EXTERNAL') } %}{% endfilter %}">
                                                                         {% for externalCause in dayDetails.externalCauses %}
-                                                                            <li>
-                                                                                {{ form_widget(externalCause) }}
-                                                                            </li>
+                                                                            <li>{% include 'PequivenSEIPBundle:DataLoad/ReportTemplate/load:cause_fail.html.twig' with {form: externalCause, type: constant('Pequiven\\SEIPBundle\\Model\\CEI\\Fail::TYPE_FAIL_EXTERNAL')} %}</li>
                                                                         {% endfor %}
                                                                     </ul>
                                                                     <br/>
                                                                     <ul class="internalCausesMp unstyled-list" data-prototype="{% filter escape %}{% include 'PequivenSEIPBundle:DataLoad/ReportTemplate/load:raw_material_required.html.twig' with {form: dayDetails.internalCausesMp.vars.prototype} %}{% endfilter %}" >
                                                                         {% for internalCauseMp in dayDetails.internalCausesMp %}
                                                                             <li>
-                                                                                {{ form_widget(internalCauseMp) }}
+                                                                                <li>{% include 'PequivenSEIPBundle:DataLoad/ReportTemplate/load:raw_material_required.html.twig' with {form: internalCauseMp} %}</li>
                                                                             </li>
                                                                         {% endfor %}
                                                                     </ul>
@@ -156,7 +152,7 @@
                                                                     <ul class="externalCausesMp unstyled-list" data-prototype="{% filter escape %}{% include 'PequivenSEIPBundle:DataLoad/ReportTemplate/load:raw_material_required.html.twig' with {form: dayDetails.externalCausesMp.vars.prototype} %}{% endfilter %}">
                                                                         {% for externalCauseMp in dayDetails.externalCausesMp %}
                                                                             <li>
-                                                                                {{ form_widget(externalCauseMp) }}
+                                                                                <li>{% include 'PequivenSEIPBundle:DataLoad/ReportTemplate/load:raw_material_required.html.twig' with {form: externalCauseMp} %}</li>
                                                                             </li>
                                                                         {% endfor %}
                                                                     </ul>
