@@ -78,6 +78,8 @@
          {% set dayNPlan = 'day' ~ day ~ 'Plan' %}
          {% set dayNReal = 'day' ~ day ~ 'Real' %}
 
+         {% set dayNDetails = 'day' ~ day ~ 'Details' %}
+         
          {% for plantReport in form.plantReports %}
 
              <details class="details margin-bottom" open>
@@ -127,20 +129,8 @@
                                                                  {{ form_errors(attribute(unrealizedProduction,dayN)) }}
                                                                  <div id="{{ idPnrForm }}" title="Create new user">
                                                                     <p class="validateTips">All form fields are required.</p>
-
-                                                                    <form>
-                                                                      <fieldset>
-                                                                        <label for="name">Name</label>
-                                                                        <input type="text" name="name" id="name" value="Jane Smith" class="text ui-widget-content ui-corner-all">
-                                                                        <label for="email">Email</label>
-                                                                        <input type="text" name="email" id="email" value="jane@smith.com" class="text ui-widget-content ui-corner-all">
-                                                                        <label for="password">Password</label>
-                                                                        <input type="password" name="password" id="password" value="xxxxxxx" class="text ui-widget-content ui-corner-all">
-
-                                                                        <!-- Allow form submission with keyboard without duplicating the dialog button -->
-                                                                        <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
-                                                                      </fieldset>
-                                                                    </form>
+                                                                        {{ form_widget(attribute(unrealizedProduction,dayNDetails)) }}
+                                                                    
                                                                   </div>
                                                                  <script type="text/javascript">
                                                                      $(function(){

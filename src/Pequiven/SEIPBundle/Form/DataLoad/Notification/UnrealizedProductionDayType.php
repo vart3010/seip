@@ -2,6 +2,7 @@
 
 namespace Pequiven\SEIPBundle\Form\DataLoad\Notification;
 
+use Pequiven\SEIPBundle\Form\DataLoad\Production\CauseFailType;
 use Pequiven\SEIPBundle\Form\DataLoad\Production\UnrealizedProductionDay\RawMaterialRequiredType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -16,16 +17,28 @@ class UnrealizedProductionDayType extends BaseNotification
     {
         $builder
             ->add('internalCauses','collection',[
-                'type' => new \Pequiven\SEIPBundle\Form\DataLoad\Production\CauseFailType(),
+                'type' => new CauseFailType(),
+                'allow_add'    => true,
+                'by_reference' => false,
+                'allow_delete' => true,
             ])
             ->add('externalCauses','collection',[
-                'type' => new \Pequiven\SEIPBundle\Form\DataLoad\Production\CauseFailType(),
+                'type' => new CauseFailType(),
+                'allow_add'    => true,
+                'by_reference' => false,
+                'allow_delete' => true,
             ])
             ->add('internalCauseMp','collection',[
-                'type' => new RawMaterialRequiredType()
+                'type' => new RawMaterialRequiredType(),
+                'allow_add'    => true,
+                'by_reference' => false,
+                'allow_delete' => true,
             ])
             ->add('externalCauseMp','collection',[
-                'type' => new RawMaterialRequiredType()
+                'type' => new RawMaterialRequiredType(),
+                'allow_add'    => true,
+                'by_reference' => false,
+                'allow_delete' => true,
             ])
         ;
     }
