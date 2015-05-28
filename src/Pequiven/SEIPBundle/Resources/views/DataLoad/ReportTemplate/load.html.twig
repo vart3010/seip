@@ -124,6 +124,7 @@
                                                                  {{ form_widget(attribute(unrealizedProduction,dayN)) }}
                                                                  {% set idPnrForm = 'dialog-form-pnr-' ~ unrealizedProduction.vars.data.id %}
                                                                  {% set idPnrButtom = 'dialog-button-pnr-' ~ unrealizedProduction.vars.data.id %}
+                                                                 {% set idPnrDiv = 'dialog-button-div-' ~ unrealizedProduction.vars.data.id %}
                                                                  
                                                                  &nbsp;<a href="#" id="{{ idPnrButtom }}"><i class="fa fa-cog fa-2x"></i></a>
                                                                  {{ form_errors(attribute(unrealizedProduction,dayN)) }}
@@ -165,7 +166,10 @@
                                                                             width: 650,
                                                                             modal: true,
                                                                             buttons: {
-                                                                              "{{ "pequiven_seip.save"|trans }}": function(){dialog.dialog( "close" );},
+                                                                              "{{ "pequiven_seip.save"|trans }}": function(){
+                                                                                  dialog.dialog( "close" );
+                                                                                  $("#{{ idPnrDiv }}").html(dialog.html());
+                                                                              },
                                                                               "{{ "pequiven_seip.cancel"|trans }}": function() {
                                                                                 dialog.dialog( "close" );
                                                                               }
@@ -182,6 +186,7 @@
                                                                            
                                                                      });
                                                                  </script>
+                                                                 <div id="{{ idPnrDiv }}" class="hidden"></div>
                                                              {% endfor %}
                                                          </td>
                                                      </tr>

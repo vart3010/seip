@@ -34,7 +34,7 @@ class UnrealizedProductionDay
     /**
      * Causas interna de falla
      * @var CauseFail
-     * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Production\CauseFail")
+     * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Production\CauseFail",cascade={"persist","remove"})
      * @ORM\JoinTable(name="unrealizedproductionday_internalcauses")
      */
     private $internalCauses;
@@ -42,7 +42,7 @@ class UnrealizedProductionDay
     /**
      * Causas externa de falla
      * @var CauseFail
-     * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Production\CauseFail")
+     * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Production\CauseFail",cascade={"persist","remove"})
      * @ORM\JoinTable(name="unrealizedproductionday_externalcauses")
      */
     private $externalCauses;

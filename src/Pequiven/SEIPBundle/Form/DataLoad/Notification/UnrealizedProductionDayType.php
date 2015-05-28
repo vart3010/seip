@@ -54,7 +54,7 @@ class UnrealizedProductionDayType extends BaseNotification
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Pequiven\SEIPBundle\Entity\DataLoad\Production\UnrealizedProduction',
+            'data_class' => 'Pequiven\SEIPBundle\Entity\DataLoad\Production\UnrealizedProductionDay',
             "translation_domain" => "PequivenSEIPBundle",
             'cascade_validation' => true,
         ));

@@ -36,7 +36,7 @@ class UnrealizedProduction extends DetailValue
     /**
      * Dia 1 (Detalles de PNR)
      * @var UnrealizedProductionDay
-     * @ORM\OneToOne(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Production\UnrealizedProductionDay")
+     * @ORM\OneToOne(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Production\UnrealizedProductionDay",cascade={"persist","remove"})
      */
     protected $day1Details;
     
