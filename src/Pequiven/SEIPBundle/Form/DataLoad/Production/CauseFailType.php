@@ -27,7 +27,7 @@ class CauseFailType extends SeipAbstractForm
                 'class' => 'Pequiven\SEIPBundle\Entity\CEI\Fail',
                 'label_attr' => array('class' => 'label'),
                 "empty_value" => "",
-                "attr" => array("class" => "select2 input-large"),
+                "attr" => array("class" => "select2 input-large select-cause-fail"),
                 'required' => false,
                 'query_builder' => function (\Pequiven\SEIPBundle\Repository\CEI\FailRepository $repository) use ($typeFail)
                 {

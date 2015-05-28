@@ -19,7 +19,7 @@ class RawMaterialRequiredType extends SeipAbstractForm
             ->add('rawMaterial',null,array(
                 'label_attr' => array('class' => 'label'),
                 "empty_value" => "",
-                "attr" => array("class" => "input-large"),
+                "attr" => array("class" => "input-large select-cause-fail"),
                 "query_builder" => $queryBuilderEnable,
             ))
             ->add('requiredAmount',null,[
@@ -32,7 +32,9 @@ class RawMaterialRequiredType extends SeipAbstractForm
             ])
             ->add('unitMeasure',null,[
                 'label_attr' => array('class' => 'label'),
-                "attr" => array("class" => "input-large"),
+                "empty_value" => "",
+                "query_builder" => $queryBuilderEnable,
+                "attr" => array("class" => "input-large select-cause-fail"),
             ])
         ;
     }
