@@ -56,6 +56,6 @@ class CauseFailType extends SeipAbstractForm
      */
     public function getName()
     {
-        return 'pequiven_seipbundle_dataload_production_causefail';
+        return 'production_causefail';
     }
 }

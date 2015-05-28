@@ -55,6 +55,7 @@ class ProductPlanningType extends AbstractType
                 "allow_add"    => true,
                 'by_reference' => false,
                 'allow_delete' => true,
+                'cascade_validation' => true,
             ))
         ;
     }
@@ -67,6 +68,7 @@ class ProductPlanningType extends AbstractType
         $resolver->setDefaults(array(
             'data_class' => 'Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductPlanning',
             "translation_domain" => "PequivenSEIPBundle",
+            'cascade_validation' => true,
         ));
     }
 

@@ -22,24 +22,28 @@ class UnrealizedProductionDayType extends BaseNotification
                 'allow_add'    => true,
                 'by_reference' => false,
                 'allow_delete' => true,
+                'cascade_validation' => true,
             ])
             ->add('externalCauses','collection',[
                 'type' => new CauseFailType(Fail::TYPE_FAIL_EXTERNAL),
                 'allow_add'    => true,
                 'by_reference' => false,
                 'allow_delete' => true,
+                'cascade_validation' => true,
             ])
             ->add('internalCausesMp','collection',[
                 'type' => new RawMaterialRequiredType(),
                 'allow_add'    => true,
                 'by_reference' => false,
                 'allow_delete' => true,
+                'cascade_validation' => true,
             ])
             ->add('externalCausesMp','collection',[
                 'type' => new RawMaterialRequiredType(),
                 'allow_add'    => true,
                 'by_reference' => false,
                 'allow_delete' => true,
+                'cascade_validation' => true,
             ])
         ;
     }
@@ -52,6 +56,7 @@ class UnrealizedProductionDayType extends BaseNotification
         $resolver->setDefaults(array(
             'data_class' => 'Pequiven\SEIPBundle\Entity\DataLoad\Production\UnrealizedProduction',
             "translation_domain" => "PequivenSEIPBundle",
+            'cascade_validation' => true,
         ));
     }
 
