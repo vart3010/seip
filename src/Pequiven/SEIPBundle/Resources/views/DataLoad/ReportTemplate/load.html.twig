@@ -127,32 +127,34 @@
                                                                  
                                                                  &nbsp;<a href="#" id="{{ idPnrButtom }}"><i class="fa fa-cog fa-2x"></i></a>
                                                                  {{ form_errors(attribute(unrealizedProduction,dayN)) }}
-                                                                 <div id="{{ idPnrForm }}" title="Create new user">
-                                                                    <p class="validateTips">All form fields are required.</p>
+                                                                 <div id="{{ idPnrForm }}" title="{{ 'pequiven_seip.cause_of_PNR'|trans }}">
                                                                     {% set dayDetails = attribute(unrealizedProduction,dayNDetails) %}
-                                                                    <ul class="internalCauses">
+                                                                    <ul class="internalCauses unstyled-list" data-prototype="{% filter escape %}{% include 'PequivenSEIPBundle:DataLoad/ReportTemplate/load:cause_fail.html.twig' with {form: dayDetails.internalCauses.vars.prototype, type: constant('Pequiven\\SEIPBundle\\Model\\CEI\\Fail::TYPE_FAIL_INTERNAL')} %}{% endfilter %}" >
                                                                         {% for internalCause in dayDetails.internalCauses %}
                                                                             <li>
                                                                                 {{ form_widget(internalCause) }}
                                                                             </li>
                                                                         {% endfor %}
                                                                     </ul>
-                                                                    <ul class="externalCauses">
+                                                                    <br/>
+                                                                    <ul class="externalCauses unstyled-list" data-prototype="{% filter escape %}{% include 'PequivenSEIPBundle:DataLoad/ReportTemplate/load:cause_fail.html.twig' with {form: dayDetails.externalCauses.vars.prototype, type: constant('Pequiven\\SEIPBundle\\Model\\CEI\\Fail::TYPE_FAIL_EXTERNAL') } %}{% endfilter %}">
                                                                         {% for externalCause in dayDetails.externalCauses %}
                                                                             <li>
                                                                                 {{ form_widget(externalCause) }}
                                                                             </li>
                                                                         {% endfor %}
                                                                     </ul>
-                                                                    <ul class="internalCausesMp">
+                                                                    <br/>
+                                                                    <ul class="internalCausesMp unstyled-list" data-prototype="{% filter escape %}{% include 'PequivenSEIPBundle:DataLoad/ReportTemplate/load:raw_material_required.html.twig' with {form: dayDetails.internalCausesMp.vars.prototype} %}{% endfilter %}" >
                                                                         {% for internalCauseMp in dayDetails.internalCausesMp %}
                                                                             <li>
                                                                                 {{ form_widget(internalCauseMp) }}
                                                                             </li>
                                                                         {% endfor %}
                                                                     </ul>
-                                                                    <ul class="externalCausesMp">
-                                                                        {% for externalCauseMp in dayDetails.externalCausesMp%}
+                                                                    <br/>
+                                                                    <ul class="externalCausesMp unstyled-list" data-prototype="{% filter escape %}{% include 'PequivenSEIPBundle:DataLoad/ReportTemplate/load:raw_material_required.html.twig' with {form: dayDetails.externalCausesMp.vars.prototype} %}{% endfilter %}">
+                                                                        {% for externalCauseMp in dayDetails.externalCausesMp %}
                                                                             <li>
                                                                                 {{ form_widget(externalCauseMp) }}
                                                                             </li>
@@ -163,12 +165,12 @@
                                                                      $(function(){
                                                                          var dialog = $( "#{{ idPnrForm }}" ).dialog({
                                                                             autoOpen: false,
-                                                                            height: 300,
-                                                                            width: 350,
+                                                                            height: 600,
+                                                                            width: 650,
                                                                             modal: true,
                                                                             buttons: {
-                                                                              "Create an account": function(){console.log("aaaa")},
-                                                                              Cancel: function() {
+                                                                              "{{ "pequiven_seip.save"|trans }}": function(){dialog.dialog( "close" );},
+                                                                              "{{ "pequiven_seip.cancel"|trans }}": function() {
                                                                                 dialog.dialog( "close" );
                                                                               }
                                                                             },
@@ -181,6 +183,7 @@
                                                                            $( "#{{ idPnrButtom }}" ).on( "click", function() {
                                                                               dialog.dialog( "open" );
                                                                            });
+                                                                           
                                                                      });
                                                                  </script>
                                                              {% endfor %}
@@ -361,6 +364,83 @@
                 var changeToDate = $(this).val();
                 var url = Routing.generate("pequiven_report_template_load",{id: "{{ report_template.id }}" ,dateNotification:changeToDate });
                 window.location.href = url;
+            });
+            
+            
+            
+            //internalCauses
+            
+            var buildCollection = function ($collectionHolder,newLinkLi,$addXLink){
+                 // add a delete link to all of the existing tag form li elements
+                $collectionHolder.find('li').each(function() {
+                    addTagFormDeleteLink($(this));
+                });
+
+                // add the "add a tag" anchor and li to the tags ul
+                $collectionHolder.append(newLinkLi);
+                
+
+                // count the current form inputs we have (e.g. 2), use that as the new
+                // index when inserting a new item (e.g. 2)
+                $collectionHolder.data('index', $collectionHolder.find(':input').length);
+                
+                $addXLink.on('click', function(e) {
+                    // prevent the link from creating a "#" on the URL
+                    e.preventDefault();
+
+                    // add a new tag form (see next code block)
+                    addTagForm($collectionHolder, newLinkLi);
+                });
+                
+            };
+            
+            function addTagForm($collectionHolder, newLinkLi) {
+                // Get the data-prototype explained earlier
+                var prototype = $collectionHolder.data('prototype');
+
+                // get the new index
+                var index = $collectionHolder.data('index');
+
+                // Replace '__name__' in the prototype's HTML to
+                // instead be a number based on how many items we have
+                var newForm = prototype.replace(/__name__/g, index);
+
+                // increase the index with one for the next item
+                $collectionHolder.data('index', index + 1);
+
+                // Display the form in the page in an li, before the "Add a tag" link li
+                var $newFormLi = $('<li></li>').append(newForm);
+                $newFormLi.find('select').select2();
+                
+                // add a delete link to the new form
+                addTagFormDeleteLink($newFormLi);
+                
+                newLinkLi.before($newFormLi);
+                
+            }
+            
+            function addTagFormDeleteLink($tagFormLi) {
+                var $removeFormA = $('<a href="#" class="float-right icon-trash icon-size2">{{ "pequiven_seip.buttons.delete_cause"|trans }}</a>');
+                $tagFormLi.append($removeFormA);
+
+                $removeFormA.on('click', function(e) {
+                    // prevent the link from creating a "#" on the URL
+                    e.preventDefault();
+
+                    // remove the li for the tag form
+                    $tagFormLi.remove();
+                });
+            }
+            
+            $.each($('ul.internalCauses'),function(key,value){
+                var $addInternalCauseLink = $('<a href="#" class="add_internal_cause_link icon-list-add icon-size2 tracked">{{ 'pequiven_seip.buttons.add_internal_cause'|trans }}</a>');
+                var $newLinkLi = $('<li></li>').append($addInternalCauseLink);
+                buildCollection($(value),$newLinkLi,$addInternalCauseLink);
+            });
+            $.each($('ul.externalCauses'),function(key,value){
+                var $addInternalCauseLink = $('<a href="#" class="add_external_cause_link icon-list-add icon-size2 tracked">{{ 'pequiven_seip.buttons.add_external_cause'|trans }}</a>');
+                var $newLinkLi = $('<li></li>').append($addInternalCauseLink);
+                buildCollection($(value),$newLinkLi,$addInternalCauseLink);
             });
         });
     </script>

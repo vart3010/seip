@@ -25,7 +25,8 @@ pequiven_seip:
     plants: Plantas
     inventory: Inventario
     date_of_notification: Fecha de notificación
-    
+    cause_of_PNR: 'Causa de PNR'
+        
     #Login
     sign_in: Ingresar
     remind_me: Recuerdame
@@ -152,6 +153,9 @@ pequiven_seip:
         refresh: Refrescar
         run_planning: Ejecutar planificación
         run_plant: Ejecutar planificación de planta
+        add_internal_cause: Añadir causa interna
+        add_external_cause: Añadir causa externa
+        delete_cause: 'Eliminar esta causa'
     question:
         want_create_production_details_from_planning: ¿Desea crear los detalles de producción a partir del presupuesto de producción?
         want_create_plant_from_planning: ¿Desea crear los detalles de servicios de la planta?
@@ -564,3 +568,5 @@ nro: "#"
 'Other time': Otro
 Region: 'Región'
 Product: 'Producto'
+Fail: Falla
+Mount: Cantidad

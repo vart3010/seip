@@ -24,6 +24,7 @@ class CoreExtension extends \Twig_Extension
             new \Twig_SimpleFunction('contentHeader', array($this,'contentHeader'), array('is_safe' => array('html'))),
             new \Twig_SimpleFunction('generateLink', array($this,'generateLink'), array('is_safe' => array('html'))),
             new \Twig_SimpleFunction('generateLinkUrlOnly', array($this,'generateLinkUrlOnly'), array('is_safe' => array('html'))),
+            new \Twig_SimpleFunction('call_static_method',array($this, 'call_static_method'))
         );
     }
     
@@ -165,6 +166,11 @@ class CoreExtension extends \Twig_Extension
         }
         return $dateFormated;
     }
+    
+    public function call_static_method($object, $method,array $args)
+     {
+        return call_user_func_array(array($object, $method), $args);
+     }
     
     /**
      * Returns the name of the extension.
