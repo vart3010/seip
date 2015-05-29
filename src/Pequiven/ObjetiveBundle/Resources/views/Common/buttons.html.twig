@@ -21,10 +21,10 @@
     &nbsp;
     {{ buttons.generic_modal(path('pequiven_objetive_approved', { 'id': entity.id }),('pequiven.arrangement_program.buttons.approved'|trans({},'PequivenArrangementProgramBundle')), {content:("pequiven_objetive.question.approved"|trans({},"PequivenObjetiveBundle")),icon: "icon-tick",gradient:"green-gradient"}) }}
 {% endif %}
-{% if  hasPermissionToUpdate == true %}
+{#{% if  hasPermissionToUpdate == true %}#}
     &nbsp;
     {{ buttons.generic(path('pequiven_objetive_update', { 'id': entity.id }),('pequiven.edit'|trans({},'messages'))) }}
-{% endif %}
+{#{% endif %}#}
 
 {% if isAllowToDelete == true %}
     &nbsp;
