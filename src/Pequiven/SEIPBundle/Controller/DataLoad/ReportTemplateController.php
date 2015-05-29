@@ -110,15 +110,13 @@ class ReportTemplateController extends SEIPController
         $form = $this->createForm(new \Pequiven\SEIPBundle\Form\DataLoad\Notification\ReportTemplateType($dateNotification,$resource),$resource);
         
         if($request->isMethod('PUT') && $form->submit($request,false)->isValid()){
-//            var_dump("todo bello");
-//            var_dump($dateString);
-//            die;
             $this->domainManager->update($resource);
             
-            return $this->redirect($this->generateUrl('pequiven_report_template_load',[
-                'id' => $resource->getId(),
-                'dateNotification' => $dateNotification->format('d/m/Y')
-            ]));
+            return $this->redirect($this->generateUrl('pequiven_report_template_list'));
+//            return $this->redirect($this->generateUrl('pequiven_report_template_load',[
+//                'id' => $resource->getId(),
+//                'dateNotification' => $dateNotification->format('d/m/Y')
+//            ]));
         }
         
         $view = $this

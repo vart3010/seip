@@ -340,12 +340,7 @@
          <br /><br />
 
          {{ actions.update() }}
-{#         <p class="button-height align-right">#}
-             {#{{ buttons.generic(path('pequiven_report_template_update', { 'id': report_template.id }),('pequiven.edit'|trans({},'messages'))) }}
-             &nbsp;
-             {{ buttons.delete(path('pequiven_report_template_delete', { 'id': report_template.id })) }}#}
-{#         </p>#}
-        <div class="">
+        <div class="hidden">
              {{ form_rest(form) }}
         </div>
     </form>
