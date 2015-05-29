@@ -38,7 +38,7 @@
                                         {{ consumerPlanningService.vars.data }}
                                     </td>
                                     <th scope="row">
-                                        {{ attribute(detailConsumerPlanningService.vars.data,dayNPlan) }}
+                                        <span>{{ attribute(detailConsumerPlanningService.vars.data,dayNPlan) }}</span> {{ consumerPlanningService.vars.data.service.serviceUnit }}
                                     </th>
                                     <td>
                                         {{ form_widget(attribute(detailConsumerPlanningService,dayNReal)) }}

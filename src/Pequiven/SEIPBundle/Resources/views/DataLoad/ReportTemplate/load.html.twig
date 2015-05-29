@@ -489,7 +489,7 @@
                 var $this = $(this);
                 var tr = $this.closest("tr").children();
                 var real = parseFloat($this.val());
-                var plan = parseFloat($(tr[1]).html());
+                var plan = parseFloat($(tr[1]).find('span').html());
                 var percentaje = 0;
                 percentaje = (real * 100 / plan);
                 $(tr[3]).html(myNumberFormat(percentaje));
