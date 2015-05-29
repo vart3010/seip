@@ -126,7 +126,9 @@
                                                                  {% set idPnrButtom = 'dialog-button-pnr-' ~ unrealizedProduction.vars.data.id %}
                                                                  {% set idPnrDiv = 'dialog-button-div-' ~ unrealizedProduction.vars.data.id %}
                                                                  
-                                                                 &nbsp;<a href="#" id="{{ idPnrButtom }}"><i class="fa fa-cog fa-2x"></i></a>
+                                                                 {% set pnrDay = attribute(unrealizedProduction.vars.data,dayN) %}
+                                                                 
+                                                                 &nbsp;<a href="#" id="{{ idPnrButtom }}" class="btn-open-pnr {% if pnrDay <= 0 %}hidden{% endif %}"><i class="fa fa-cog fa-2x"></i></a>
                                                                  {{ form_errors(attribute(unrealizedProduction,dayN)) }}
                                                                  <div id="{{ idPnrForm }}" title="{{ 'pequiven_seip.cause_of_PNR'|trans }}">
                                                                     {% set dayDetails = attribute(unrealizedProduction,dayNDetails) %}
@@ -456,6 +458,14 @@
                 var percentaje = 0;
                 percentaje = (real * 100 / plan);
                 var pnr = plan - real;
+                if(pnr > 0){
+                    $(tr[3]).find('.btn-open-pnr').removeClass("hidden");
+                }else{
+                    $(tr[3]).find('.btn-open-pnr').addClass("hidden");
+                }
+                if(isNaN(pnr)){
+                    pnr = 0;
+                }
                 $(tr[2]).html(myNumberFormat(percentaje));
                 $(tr[3]).find('input').val(pnr);
             });
