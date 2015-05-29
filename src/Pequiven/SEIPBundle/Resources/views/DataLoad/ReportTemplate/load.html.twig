@@ -110,7 +110,8 @@
                                              </thead>
                                              <tbody>
                                                  {% for productDetailDailyMonth in productReport.productDetailDailyMonths %}
-                                                     <tr>
+                                                     {% set productDetailDailyMonthIdTR = "gross-product-detail-daily-month-" ~ productDetailDailyMonth.vars.data.id %}
+                                                     <tr id="{{ productDetailDailyMonthIdTR }}">
                                                          <th scope="row">
                                                              {{ attribute(productDetailDailyMonth.vars.data,grossPlan) }}
                                                          </th>
@@ -131,6 +132,10 @@
                                                                  &nbsp;<a href="#" id="{{ idPnrButtom }}" class="btn-open-pnr {% if pnrDay <= 0 %}hidden{% endif %}"><i class="fa fa-cog fa-2x"></i></a>
                                                                  {{ form_errors(attribute(unrealizedProduction,dayN)) }}
                                                                  <div id="{{ idPnrForm }}" title="{{ 'pequiven_seip.cause_of_PNR'|trans }}">
+                                                                     <p>{{ "pequiven_seip.total_pnr"|trans }}:&nbsp;
+                                                                         <b><span>0</span>/<span id="span-{{ productDetailDailyMonthIdTR }}">0</span></b>
+                                                                     </p>
+                                                                     
                                                                     {% set dayDetails = attribute(unrealizedProduction,dayNDetails) %}
                                                                     <ul class="internalCauses unstyled-list" data-prototype="{% filter escape %}{% include 'PequivenSEIPBundle:DataLoad/ReportTemplate/load:cause_fail.html.twig' with {form: dayDetails.internalCauses.vars.prototype, type: constant('Pequiven\\SEIPBundle\\Model\\CEI\\Fail::TYPE_FAIL_INTERNAL')} %}{% endfilter %}" >
                                                                         {% for internalCause in dayDetails.internalCauses %}
@@ -179,9 +184,11 @@
                                                                           });
                                                                           
                                                                            $( "#{{ idPnrButtom }}" ).on( "click", function() {
+                                                                              var tr = $("#{{ productDetailDailyMonthIdTR }}").children();
+                                                                              var pnr = $(tr[3]).find('input').val();
+                                                                              $("#span-{{ productDetailDailyMonthIdTR }}").html(pnr);
                                                                               dialog.dialog( "open" );
                                                                            });
-                                                                           
                                                                      });
                                                                  </script>
                                                                  <div id="{{ idPnrDiv }}" class="hidden"></div>
@@ -360,6 +367,31 @@
                 window.location.href = url;
             });
             
+            var calculateTotalPnrAcumulate = function(data,useData){
+                    var $this = $(this);
+                    
+                    if(useData == true){
+                        $this = data;
+                    }
+                    var parent = $this.closest('ul').closest('div');
+                    var total = 0;
+                    var totalChild = 0;
+                    $.each(parent.find('ul.internalCauses').children(),function(index,object){
+                        totalChild = $(object).find('input.cause-fail').val();
+                        if(totalChild != undefined){
+                           total = total +  parseFloat(totalChild);
+                        }
+                    });
+                    $.each(parent.find('ul.externalCauses').children(),function(index,object){
+                        totalChild = $(object).find('input.cause-fail').val();
+                        if(totalChild != undefined){
+                           total = total +  parseFloat(totalChild);
+                        }
+                    });
+                    var spanTotal = parent.find('p > b').children();
+                    $(spanTotal[0]).html(myNumberFormat(parseFloat(total)));
+                };
+            
             //internalCauses
             var buildCollection = function ($collectionHolder,newLinkLi,$addXLink){
                  // add a delete link to all of the existing tag form li elements
@@ -402,6 +434,7 @@
                 // Display the form in the page in an li, before the "Add a tag" link li
                 var $newFormLi = $('<li></li>').append(newForm);
                 $newFormLi.find('select').select2();
+                $newFormLi.find('.cause-fail').on("keyup",calculateTotalPnrAcumulate);
                 
                 // add a delete link to the new form
                 addTagFormDeleteLink($newFormLi);
@@ -417,8 +450,11 @@
                     // prevent the link from creating a "#" on the URL
                     e.preventDefault();
 
+                    var parent = $tagFormLi.parent();
                     // remove the li for the tag form
                     $tagFormLi.remove();
+                    
+                    calculateTotalPnrAcumulate(parent,true);
                 });
             }
             

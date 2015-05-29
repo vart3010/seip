@@ -36,7 +36,7 @@ class CauseFailType extends SeipAbstractForm
                 ])
             ->add('mount',null,[
                 'label_attr' => array('class' => 'label'),
-                "attr" => array("class" => "input input-large"),
+                "attr" => array("class" => "input input-large cause-fail"),
 //                'required' => false,
             ])
         ;
