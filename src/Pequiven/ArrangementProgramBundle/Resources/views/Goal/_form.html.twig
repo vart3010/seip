@@ -21,7 +21,7 @@
         {{ form_widget(goal.endDate) }}
         {{ form_errors(goal.endDate) }}
     </div>
-{#    {% if goal.responsibles is defined %}#}
+    {% if goal.includeResponsibleManagement is defined %}
         <div class="field-block button-height">
             <label class="label">{{ 'pequiven.form.goal.responsible'|trans({},'PequivenArrangementProgramBundle') }}</label>
             <div id="div_goal_responsibles" style='width: 270px'></div>
@@ -32,7 +32,7 @@
             </span>
 {#            {{ form_errors(goal.responsibles) }}#}
         </div>
-{#    {% endif %}#}
+    {% endif %}
     <div class="field-block button-height">
         {{ form_label(goal.weight) }}
         {{ form_widget(goal.weight) }}
