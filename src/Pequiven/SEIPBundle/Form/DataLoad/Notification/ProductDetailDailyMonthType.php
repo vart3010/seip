@@ -50,6 +50,7 @@ class ProductDetailDailyMonthType extends BaseNotification
         $resolver->setDefaults(array(
             'data_class' => 'Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductDetailDailyMonth',
             "translation_domain" => "PequivenSEIPBundle",
+            "validation_groups" => array("load"),
         ));
     }
 

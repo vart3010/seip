@@ -42,6 +42,12 @@
                 <argument type="service" id="service_container" />
             </call>
         </service>
+        <service id="pequiven.orm.validator.product_detail_daily_month" class="Pequiven\SEIPBundle\Validator\Constraints\DataLoad\ProductDetailDailyMonthValidator">
+            <tag name="validator.constraint_validator" alias="pequiven.orm.validator.product_detail_daily_month" />
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
         <service id="seip.arrangement_program.listener.mailer_listerner" class="Pequiven\ArrangementProgramBundle\EventListener\MailerEventListerner">
             <tag name="kernel.event_subscriber" />
             <call method="setContainer">

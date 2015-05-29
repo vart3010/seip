@@ -230,3 +230,15 @@ Pequiven\ArrangementProgramBundle\Entity\GoalDetails:
                 minMessage: pequiven.validators.goals_details.min_value
                 max: 100
                 maxMessage: pequiven.validators.goals_details.max_value
+                
+Pequiven\ObjetiveBundle\Entity\Objetive:
+    properties:
+        lineStrategics:
+            - NotNull:
+                message: pequiven.validators.arrangement_program.responsible_person
+                groups: [base]
+                
+Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductDetailDailyMonth:
+    constraints:
+        - Pequiven\SEIPBundle\Validator\Constraints\DataLoad\ProductDetailDailyMonth:
+                groups: [load]
