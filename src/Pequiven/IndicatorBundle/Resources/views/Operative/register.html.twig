@@ -26,10 +26,10 @@
         <fieldset class="fieldset fields-list">
             <legend class="legend">{{ 'pequiven_indicator.indicators'|trans }}</legend>
             
-            <input type="hidden" id="rolDirective" value="{{ is_granted(['ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX','ROLE_WORKER_PLANNING']) }}">
-            <input type="hidden" id="rolGerenciaGeneral" value="{{ is_granted(['ROLE_GENERAL_COMPLEJO','ROLE_GENERAL_COMPLEJO_AUX']) }}">
-            <input type="hidden" id="rolGerenciaFirst" value="{{ is_granted(['ROLE_MANAGER_FIRST','ROLE_ROLE_MANAGER_FIRST_AUX']) }}">
-            <input type="hidden" id="rolGerenciaSecond" value="{{ is_granted(['ROLE_MANAGER_SECOND','ROLE_MANAGER_SECOND_AUX']) }}">
+            <input type="hidden" id="rolDirective" value="{{ is_granted(['ROLE_DIRECTIVE','ROLE_WORKER_PLANNING']) }}">
+            <input type="hidden" id="rolGerenciaGeneral" value="{{ is_granted(['ROLE_GENERAL_COMPLEJO']) }}">
+            <input type="hidden" id="rolGerenciaFirst" value="{{ is_granted(['ROLE_MANAGER_FIRST']) }}">
+            <input type="hidden" id="rolGerenciaSecond" value="{{ is_granted(['ROLE_MANAGER_SECOND']) }}">
             
             <!-- Línea Estratégica -->
             <div id="lineStrategic" class="field-block button-height">
@@ -804,7 +804,7 @@
             };
             $.ajax({
                 type: 'post',
-                url: '{{ path("select_objetiveTacticFromObjetiveStrategic") }}',
+                url: '{{ path("select_objetiveTacticFromObjetiveStrategic_operative") }}',
                 data: data,
                 success: function(data) {
                     selectObjetiveTactic.select2("enable",true);
