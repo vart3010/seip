@@ -6,6 +6,9 @@ use Pequiven\SEIPBundle\Form\SeipAbstractForm;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
+/**
+ * Formulario de materia prima requerido (PNR)
+ */
 class RawMaterialRequiredType extends SeipAbstractForm
 {
     /**
