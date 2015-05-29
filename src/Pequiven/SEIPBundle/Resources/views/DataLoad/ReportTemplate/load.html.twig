@@ -336,7 +336,7 @@
 
          {% endfor %}
 
-         {% include 'PequivenSEIPBundle:DataLoad:ReportTemplate/show/services.html.twig' %}
+         {% include 'PequivenSEIPBundle:DataLoad:ReportTemplate/load/services.html.twig' %}
          <br /><br />
 
          {{ actions.update() }}
@@ -450,6 +450,50 @@
                 buildCollection($collectionHolder,$newLinkLi,$addInternalCauseLink);
             });
             $('.select-cause-fail').select2();
+            
+            //Calculos
+            //Calculo produccion bruta
+            $('.grossReal').on('keyup',function(){
+                var $this = $(this);
+                var tr = $this.closest("tr").children();
+                var real = parseFloat($this.val());
+                var plan = parseFloat($(tr[0]).html());
+                var percentaje = 0;
+                percentaje = (real * 100 / plan);
+                var pnr = plan - real;
+                $(tr[2]).html(myNumberFormat(percentaje));
+                $(tr[3]).find('input').val(pnr);
+            });
+            //Calculo produccion neta
+            $('.netReal').on('keyup',function(){
+                var $this = $(this);
+                var tr = $this.closest("tr").children();
+                var real = parseFloat($this.val());
+                var plan = parseFloat($(tr[0]).html());
+                var percentaje = 0;
+                percentaje = (real * 100 / plan);
+                $(tr[2]).html(myNumberFormat(percentaje));
+            });
+            //Calculo consumo de materia prima
+            $('.rawMaterialConsumption').on('keyup',function(){
+                var $this = $(this);
+                var tr = $this.closest("tr").children();
+                var real = parseFloat($this.val());
+                var plan = parseFloat($(tr[1]).html());
+                var percentaje = 0;
+                percentaje = (real * 100 / plan);
+                $(tr[3]).html(myNumberFormat(percentaje));
+            });
+            //Calculo de consumo de servicios
+            $('.consumerPlanningService').on('keyup',function(){
+                var $this = $(this);
+                var tr = $this.closest("tr").children();
+                var real = parseFloat($this.val());
+                var plan = parseFloat($(tr[1]).html());
+                var percentaje = 0;
+                percentaje = (real * 100 / plan);
+                $(tr[3]).html(myNumberFormat(percentaje));
+            });
         });
     </script>
 {% endblock %}
