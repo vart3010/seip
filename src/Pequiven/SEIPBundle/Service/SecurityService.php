@@ -342,6 +342,10 @@ class SecurityService implements ContainerAwareInterface
             }
         }
         
+        if($this->isGranted('ROLE_SEIP_INDICATOR_VIEW_OPERATIVE')){
+            $valid = true;
+        }
+        
         if(!$valid){
             $this->checkSecurity();
         } else{
