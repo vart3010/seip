@@ -74,3 +74,9 @@ action:
 Objetive: Objetivo
 Indicator: Indicador
 TypeRangeTop: Rango Alto
+
+roles:
+    rol_owner: Propetario
+    rol_aux: Auxiliar
+    rol_special: Especial
+    

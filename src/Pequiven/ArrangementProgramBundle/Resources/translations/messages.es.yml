@@ -18,6 +18,8 @@ pequiven:
         third: III Trimestre
         fourth: IV Trimestre
     name: Nombre
+    level: Nivel
+    typeRol: Tipo de Rol
     start_date: Fecha inicio
     end_date: Fecha fin
     weight: Peso de la meta

@@ -13,64 +13,63 @@ use Pequiven\IndicatorBundle\Entity\IndicatorLevel;
  *
  * @author Carlos Mendoza<inhack20@gmail.com>
  */
-class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjection\ContainerAwareInterface
-{   
+class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjection\ContainerAwareInterface {
+
     private $container;
-    
+
     protected function configureShowFields(\Sonata\AdminBundle\Show\ShowMapper $show) {
         $show
-            ->add('ref')
-            ->add('description')
-            ->add('typeOfCalculation','choice',array(
-                'choices' => \Pequiven\IndicatorBundle\Entity\Indicator::getTypesOfCalculation(),
-                'translation_domain' => 'PequivenIndicatorBundle'
-            ))
-            ->add('typeDetailValue','choice',array(
-                'choices' => \Pequiven\IndicatorBundle\Entity\Indicator::getLabelsTypeDetail(),
-                'translation_domain' => 'PequivenIndicatorBundle'
-            ))
-            ->add('calculationMethod','choice',array(
-                'choices' => \Pequiven\IndicatorBundle\Entity\Indicator::getLabelsCalculationMethod(),
-                'translation_domain' => 'PequivenIndicatorBundle'
-            ))
-            ->add('refParent')
-            ->add('totalPlan')
-            ->add('weight')
-            ->add('indicatorWeight')
-            ->add('goal')
-            ->add('formula')
-            ->add('tendency')
-            ->add('summary')
-            ->add('arrangementRange')
-            ->add('frequencyNotificationIndicator')
-            ->add('valueFinal')
-            ->add('childrens')
-            ->add('valuesIndicator')
-            ->add('couldBePenalized')
-            ->add('forcePenalize')
-            ->add('resultInPercentage')
-            ->add('showRealValue')
-            ->add('showPlanValue')
-            ->add('showResults')
-            ->add('showFeatures')
-            ->add('showCharts')
-            ->add('showTags')
-            ->add('requiredToImport')
-            ->add('details')
-            ;
+                ->add('ref')
+                ->add('description')
+                ->add('typeOfCalculation', 'choice', array(
+                    'choices' => \Pequiven\IndicatorBundle\Entity\Indicator::getTypesOfCalculation(),
+                    'translation_domain' => 'PequivenIndicatorBundle'
+                ))
+                ->add('typeDetailValue', 'choice', array(
+                    'choices' => \Pequiven\IndicatorBundle\Entity\Indicator::getLabelsTypeDetail(),
+                    'translation_domain' => 'PequivenIndicatorBundle'
+                ))
+                ->add('calculationMethod', 'choice', array(
+                    'choices' => \Pequiven\IndicatorBundle\Entity\Indicator::getLabelsCalculationMethod(),
+                    'translation_domain' => 'PequivenIndicatorBundle'
+                ))
+                ->add('refParent')
+                ->add('totalPlan')
+                ->add('weight')
+                ->add('indicatorWeight')
+                ->add('goal')
+                ->add('formula')
+                ->add('tendency')
+                ->add('summary')
+                ->add('arrangementRange')
+                ->add('frequencyNotificationIndicator')
+                ->add('valueFinal')
+                ->add('childrens')
+                ->add('valuesIndicator')
+                ->add('couldBePenalized')
+                ->add('forcePenalize')
+                ->add('resultInPercentage')
+                ->add('showRealValue')
+                ->add('showPlanValue')
+                ->add('showResults')
+                ->add('showFeatures')
+                ->add('showCharts')
+                ->add('showTags')
+                ->add('requiredToImport')
+                ->add('details')
+        ;
     }
-    
-    protected function configureFormFields(FormMapper $form) 
-    {
+
+    protected function configureFormFields(FormMapper $form) {
         $object = $this->getSubject();
         $childrensParameters = array(
             'class' => 'Pequiven\IndicatorBundle\Entity\Indicator',
             'multiple' => true,
             'required' => false,
-            "property" => array("ref","description"),
+            "property" => array("ref", "description"),
         );
         $id = null;
-        if($object != null && $object->getId() !== null){
+        if ($object != null && $object->getId() !== null) {
             $indicatorLevel = $object->getIndicatorLevel();
             $level = $indicatorLevel->getLevel();
 //            $childrensParameters['query_builder'] = function(\Pequiven\IndicatorBundle\Repository\IndicatorRepository $repository) use ($level){
@@ -87,25 +86,25 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
             };
             $id = $object->getId();
         }
-        
+
         $form
-            ->tab('General')
+                ->tab('General')
                 ->add('ref')
                 ->add('description')
-                ->add('summary',null,array(
+                ->add('summary', null, array(
                     'required' => false,
                 ))
                 ->add('lineStrategics')
                 ->add('orderShowFromParent')
-                ->add('typeOfCalculation','choice',array(
+                ->add('typeOfCalculation', 'choice', array(
                     'choices' => \Pequiven\IndicatorBundle\Entity\Indicator::getTypesOfCalculation(),
                     'translation_domain' => 'PequivenIndicatorBundle'
                 ))
-                ->add('calculationMethod','choice',array(
+                ->add('calculationMethod', 'choice', array(
                     'choices' => \Pequiven\IndicatorBundle\Entity\Indicator::getLabelsCalculationMethod(),
                     'translation_domain' => 'PequivenIndicatorBundle'
                 ))
-                ->add('typeDetailValue','choice',array(
+                ->add('typeDetailValue', 'choice', array(
                     'choices' => \Pequiven\IndicatorBundle\Entity\Indicator::getLabelsTypeDetail(),
                     'translation_domain' => 'PequivenIndicatorBundle'
                 ))
@@ -118,204 +117,194 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                 ->add('tendency')
                 ->add('frequencyNotificationIndicator')
                 ->add('valueFinal')
-                ->add('charts','sonata_type_model_autocomplete',array(
-                    'property' => array('alias','description'),
+                ->add('charts', 'sonata_type_model_autocomplete', array(
+                    'property' => array('alias', 'description'),
                     'multiple' => true,
                     'required' => false,
                 ))
-                ->add('childrens','sonata_type_model_autocomplete',$childrensParameters);
-                if($object != null && $object->getId() !== null){
-                    if($object->getIndicatorLevel()->getLevel() == IndicatorLevel::LEVEL_ESTRATEGICO){
-                        $form->add('lineStrategics');
-                    }
-                }
+                ->add('childrens', 'sonata_type_model_autocomplete', $childrensParameters);
+        if ($object != null && $object->getId() !== null) {
+            if ($object->getIndicatorLevel()->getLevel() == IndicatorLevel::LEVEL_ESTRATEGICO) {
+                $form->add('lineStrategics');
+            }
+        }
         $form
-                ->add('formulaDetails','sonata_type_collection',
-                    array(
-                         'cascade_validation' => true,
-                         'by_reference' => false,
-    //                    'type_options' => array(
-    //                        'delete' => true,
-    //                    ),
-                    ),
-                    array(
-                        'edit'   => 'inline',
-                        'inline' => 'table',
-    //                    'sortable' => 'position',
-                        'link_parameters' => array('indicator_id' => $id)
-                    ),
-                    array(
-                    )
-                )    
-                ->add('couldBePenalized',null,array(
+                ->add('formulaDetails', 'sonata_type_collection', array(
+                    'cascade_validation' => true,
+                    'by_reference' => false,
+                        //                    'type_options' => array(
+                        //                        'delete' => true,
+                        //                    ),
+                        ), array(
+                    'edit' => 'inline',
+                    'inline' => 'table',
+                    //                    'sortable' => 'position',
+                    'link_parameters' => array('indicator_id' => $id)
+                        ), array(
+                        )
+                )
+                ->add('couldBePenalized', null, array(
                     'required' => false,
                 ))
-                ->add('evaluateInPeriod',null,array(
+                ->add('evaluateInPeriod', null, array(
                     'required' => false,
                 ))
-                ->add('forcePenalize',null,array(
+                ->add('forcePenalize', null, array(
                     'required' => false,
                 ))
-                ->add('resultInPercentage',null,array(
+                ->add('resultInPercentage', null, array(
                     'required' => false,
                 ))
-                ->add('showTagInResult',null,array(
+                ->add('showTagInResult', null, array(
                     'required' => false,
                 ))
-                ->add('showRealValue',null,array(
+                ->add('showRealValue', null, array(
                     'required' => false,
                 ))
-                ->add('showPlanValue',null,array(
+                ->add('showPlanValue', null, array(
                     'required' => false,
                 ))
-                ->add('requiredToImport',null,array(
+                ->add('requiredToImport', null, array(
                     'required' => false,
                 ))
-                ->add('enabled',null,array(
+                ->add('enabled', null, array(
                     'required' => false,
                 ))
-                ->add('backward',null,array(
+                ->add('backward', null, array(
                     'required' => false,
                 ))
                 ->end()
-            ->end()
-            ;
-        
+                ->end()
+        ;
+
         $form
-            ->tab("Details")
+                ->tab("Details")
                 ->with('Details')
-                    ->add('managementSystems','sonata_type_model_autocomplete',array(
-                        'property' => array('description'),
-                        'multiple' => true,
-                        'required' => false,
-                    ))
-                    ->add('details','sonata_type_admin',array(
-                         'cascade_validation' => true,
-                         'delete' => false,
-                    ),
-                    array(
-                        'edit'   => 'inline',
-                        'inline' => 'table',
-                    ))
+                ->add('managementSystems', 'sonata_type_model_autocomplete', array(
+                    'property' => array('description'),
+                    'multiple' => true,
+                    'required' => false,
+                ))
+                ->add('details', 'sonata_type_admin', array(
+                    'cascade_validation' => true,
+                    'delete' => false,
+                        ), array(
+                    'edit' => 'inline',
+                    'inline' => 'table',
+                ))
                 ->end()
                 ->with('Snippets')
-                    ->add("snippetPlan",null,array(
-                        "attr" => array("rows" => 4,)
-                    ))
-                    ->add("snippetReal",null,array(
-                        "attr" => array("rows" => 4,)
-                    ))
+                ->add("snippetPlan", null, array(
+                    "attr" => array("rows" => 4,)
+                ))
+                ->add("snippetReal", null, array(
+                    "attr" => array("rows" => 4,)
+                ))
                 ->end()
                 ->with('Opciones de visualizacion en la ficha')
-                    ->add('showResults',null,array(
-                        'required' => false,
-                    ))
-                    ->add('showFeatures',null,array(
-                        'required' => false,
-                    ))
+                ->add('showResults', null, array(
+                    'required' => false,
+                ))
+                ->add('showFeatures', null, array(
+                    'required' => false,
+                ))
                 ->end()
                 ->with('Opciones de visualizacion en el dashboard')
-                    ->add('showCharts',null,array(
-                        'required' => false,
-                    ))
-                    ->add('showTags',null,array(
-                        'required' => false,
-                    ))
+                ->add('showCharts', null, array(
+                    'required' => false,
+                ))
+                ->add('showTags', null, array(
+                    'required' => false,
+                ))
                 ->end()
-            ->end()
-            ;
+                ->end()
+        ;
     }
-    
+
     protected function configureDatagridFilters(DatagridMapper $filter) {
         $filter
-            ->add('ref')
-            ->add('description')
-            ->add('formula')
-            ->add('typeOfCalculation',null,array(),'choice',array(
-                'choices' => \Pequiven\IndicatorBundle\Entity\Indicator::getTypesOfCalculation(),
-                'translation_domain' => 'PequivenIndicatorBundle'
-            ))
-            ->add('tendency')
-            ->add('frequencyNotificationIndicator')
-            ->add('valueFinal')
-            ->add('couldBePenalized')
-            ->add('forcePenalize')
-            ->add('resultInPercentage')
-            ->add('requiredToImport')
-            ->add('period')
-            ->add('enabled')
-            ;
+                ->add('ref')
+                ->add('description')
+                ->add('formula')
+                ->add('typeOfCalculation', null, array(), 'choice', array(
+                    'choices' => \Pequiven\IndicatorBundle\Entity\Indicator::getTypesOfCalculation(),
+                    'translation_domain' => 'PequivenIndicatorBundle'
+                ))
+                
+                ->add('tendency')
+                ->add('frequencyNotificationIndicator')
+                ->add('valueFinal')
+                ->add('couldBePenalized')
+                ->add('forcePenalize')
+                ->add('resultInPercentage')
+                ->add('requiredToImport')
+                ->add('period')
+                ->add('enabled')
+        ;
     }
-    
+
     protected function configureListFields(ListMapper $list) {
         $list
-            ->addIdentifier('ref')
-            ->add('description')
-            ->add('formula')
-            ->add('frequencyNotificationIndicator')
-            ->add('valueFinal')
-            ->add('tendency')
-            ->add('arrangementRange')
-            ->add('enabled')
-            ;
+                ->addIdentifier('ref')
+                ->add('description')
+                ->add('formula')
+                ->add('frequencyNotificationIndicator')
+                ->add('valueFinal')
+                ->add('tendency')
+                ->add('arrangementRange')
+                ->add('enabled')
+        ;
     }
-    
-    public function prePersist($object) 
-    {
-        
+
+    public function prePersist($object) {
+
         $object->setPeriod($this->getPeriodService()->getPeriodActive());
-        if($object->isCouldBePenalized() === false){
+        if ($object->isCouldBePenalized() === false) {
             $object->setForcePenalize(false);
         }
-        foreach ($object->getFormulaDetails() as $formulaDetails)
-        {
+        foreach ($object->getFormulaDetails() as $formulaDetails) {
             $formulaDetails->setIndicator($object);
         }
     }
-    
-    public function preUpdate($object) 
-    {
-        foreach ($object->getFormulaDetails() as $formulaDetails)
-        {
+
+    public function preUpdate($object) {
+        foreach ($object->getFormulaDetails() as $formulaDetails) {
             $formulaDetails->setIndicator($object);
         }
-        if($object->isCouldBePenalized() === false){
+        if ($object->isCouldBePenalized() === false) {
             $object->setForcePenalize(false);
         }
     }
-    
+
     /**
      * Servicio que calcula los resultados
      * @return \Pequiven\SEIPBundle\Service\ResultService
      */
-    public function getResultService()
-    {
+    public function getResultService() {
         return $this->container->get('seip.service.result');
     }
-    
+
     /**
      * @return \Pequiven\SEIPBundle\Service\PeriodService
      */
-    protected function getPeriodService()
-    {
+    protected function getPeriodService() {
         return $this->container->get('pequiven_seip.service.period');
     }
-    
+
     public function setContainer(\Symfony\Component\DependencyInjection\ContainerInterface $container = null) {
         $this->container = $container;
     }
-    
-    protected function configureRoutes(\Sonata\AdminBundle\Route\RouteCollection $collection) 
-    {
+
+    protected function configureRoutes(\Sonata\AdminBundle\Route\RouteCollection $collection) {
         $collection->remove('create');
     }
-    
-    public function toString($object) 
-    {
+
+    public function toString($object) {
         $toString = '-';
-        if($object->getId() > 0){
-            $toString = $object->getPeriod()->getDescription().' - '.$object->getRef().' - '.$object->getDescription();
+        if ($object->getId() > 0) {
+            $toString = $object->getPeriod()->getDescription() . ' - ' . $object->getRef() . ' - ' . $object->getDescription();
         }
-        return \Pequiven\SEIPBundle\Service\ToolService::truncate($toString,array('limit' => 50));
+        return \Pequiven\SEIPBundle\Service\ToolService::truncate($toString, array('limit' => 50));
     }
+
 }
