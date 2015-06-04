@@ -71,7 +71,7 @@ class PlantStopPlanning extends ModelBaseMaster
     /**
      * Rangos de paradas
      * @var \Pequiven\SEIPBundle\Entity\DataLoad\Plant\Range
-     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Plant\Range",mappedBy="plantStopPlanning")
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Plant\Range",mappedBy="plantStopPlanning",cascade={"persist","remove"})
      */
     private $ranges;
 
@@ -263,7 +263,7 @@ class PlantStopPlanning extends ModelBaseMaster
         $totalHours = 0.0;
         
         $dayStops = $this->getDayStops();
-        $totalStops = $dayStops->count();
+//        $totalStops = $dayStops->count();
         
         foreach ($dayStops as $dayStop) {
             $dayStop->calculate();
@@ -271,7 +271,7 @@ class PlantStopPlanning extends ModelBaseMaster
         }
         
         $this->totalHours = $totalHours;
-        $this->totalStops = $totalStops;
+//        $this->totalStops = $totalStops;
     }
     
     public function getMonthLabel()
@@ -291,5 +291,19 @@ class PlantStopPlanning extends ModelBaseMaster
             $_toString = $this->getMonthLabel();
         }
         return $_toString;
+    }
+    
+    /**
+     * Get dayStops
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getDayStopsByDay()
+    {
+        $days = array();
+        foreach ($this->dayStops as $dayStop) {
+            $days[$dayStop->getNroDay()] = $dayStop;
+        }
+        return $days;
     }
 }

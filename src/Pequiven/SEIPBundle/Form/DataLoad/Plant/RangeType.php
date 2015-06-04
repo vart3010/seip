@@ -58,6 +58,6 @@ class RangeType extends AbstractType
      */
     public function getName()
     {
-        return 'pequiven_seipbundle_dataload_plant_range';
+        return 'plant_range';
     }
 }

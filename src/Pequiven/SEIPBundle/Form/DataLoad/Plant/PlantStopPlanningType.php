@@ -27,6 +27,10 @@ class PlantStopPlanningType extends AbstractType
                 "choices" => \Pequiven\SEIPBundle\Service\ToolService::getMonthsLabels(),
                 "empty_value" => "",
             ))
+            ->add('totalStops',null,array(
+                'label_attr' => array('class' => 'label'),
+                "attr" => array("class" => "input input-mini"),
+            ))
             ->add('dayStops',"collection",array(
                 "type" => new \Pequiven\SEIPBundle\Form\DataLoad\Production\DayStopType(),
                 'label_attr' => array('class' => 'label'),

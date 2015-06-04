@@ -49,7 +49,7 @@ class Range extends BaseModel
     /**
      * Horas de la parada
      * @var float
-     * @ORM\Column(name="hours",type="float")
+     * @ORM\Column(name="hours",type="float",nullable=true)
      */
     private $hours = 0;
     
