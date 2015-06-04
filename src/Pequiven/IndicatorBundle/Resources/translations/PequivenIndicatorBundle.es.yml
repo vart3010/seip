@@ -142,6 +142,7 @@ form:
     associated_indicators: Indicadores asociados
     parent_indicator: Indicador padre
     total_plan: Plan anual
+    frequencyNotification : Frecuencia de Notificación
     
     arrangementRangeType: Tipo de Rango
     arrangementRangeTypeTop: Tipo de Rango Alto
@@ -200,6 +201,7 @@ form:
             goal: Meta anual del indicador, este valor normalmente es cien (100) pero sino lo conoce coloque cero (0).
             total_plan: Plan anual del indicador, este valor normalmente es cien (100) pero sino lo conoce coloque cero (0).
             summary: Resumen del enunciado, este debe ser lo mas corto posible.
+            frequencyNotification : Frecuencia de Notificación
         lineStrategic: Línea estratégica que seguirá el objetivo
         objetiveStrategic: Objetivo estratégico que seguirá el objetivo
         objetiveTactic: Objetivo táctico que seguirá el objetivo
@@ -241,6 +243,7 @@ form:
         rankBottomBottom: Rango bajo-bajo del semáforo de evaluación de gestión
         evalSimpleAverage: Seleccione si el resultado será obtenido por un promedio simple
         evalWeightedAverage: Seleccione si el resultado será obtenido por el promedio ponderado (peso)
+        
     
     ref_info: Nro. de Referencia del indicador
     description_info: Nombre del indicador
