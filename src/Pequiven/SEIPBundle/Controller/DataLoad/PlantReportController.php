@@ -88,4 +88,16 @@ class PlantReportController extends SEIPController
         $this->flush();
         return $this->redirectHandler->redirectTo($resource);
     }
+    
+    public function deleteAction(Request $request) 
+    {
+        $resource = $this->findOr404($request);
+        
+        $url = $this->generateUrl("pequiven_report_template_show",array(
+            "id" => $resource->getReportTemplate()->getId(),
+        ));
+        
+        $this->domainManager->delete($resource);
+        return $this->redirect($url);
+    }
 }
