@@ -13,17 +13,36 @@
         {{ form_errors(form.month) }}
     </div>
     <div class="field-block button-height">
-        {{ form_label(form.dayStops) }}
-        <ul class="dayStops unstyled-list padding-left-40" data-prototype="{% filter escape %}{% include 'PequivenSEIPBundle:DataLoad/Production/DayStop:_form.html.twig' with {form: form.dayStops.vars.prototype} %}{% endfilter %}">
-            {% for daysStop in form.dayStops %}
-                <li>{% include 'PequivenSEIPBundle:DataLoad/Production/DayStop:_form.html.twig' with {form: daysStop} %}</li>
-            {% endfor %}
-        </ul>
-    </div>
-    <div class="field-block button-height">
         {{ form_label(form.enabled) }}
         {{ form_widget(form.enabled) }}
         {{ form_errors(form.enabled) }}
+    </div>
+    <div class="field-block button-height">
+        <div class="standard-tabs margin-bottom" id="add-tabs">
+            <ul class="tabs">
+                    <li class="active"><a href="#tab-1">{{ "Day stops"|trans }}</a></li>
+                    <li><a href="#tab-2">{{ "Ranges stops"|trans }}</a></li>
+            </ul>
+            <div class="tabs-content">
+                <div id="tab-1" class="with-padding">
+                    <ul class="dayStops unstyled-list padding-left-40" data-prototype="{% filter escape %}{% include 'PequivenSEIPBundle:DataLoad/Production/DayStop:_form.html.twig' with {form: form.dayStops.vars.prototype} %}{% endfilter %}">
+                        {% for daysStop in form.dayStops %}
+                            <li>{% include 'PequivenSEIPBundle:DataLoad/Production/DayStop:_form.html.twig' with {form: daysStop} %}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div id="tab-2" class="with-padding">
+                    {{ form_label(form.ranges) }}
+                    <ul class="ranges unstyled-list padding-left-40" data-prototype="{% filter escape %}{% include 'PequivenSEIPBundle:DataLoad/Plant/PlantStopPlanning:_range.html.twig' with {form: form.ranges.vars.prototype} %}{% endfilter %}">
+                        {% for range in form.ranges %}
+                            <li>
+                                {% include 'PequivenSEIPBundle:DataLoad/Plant/PlantStopPlanning:_range.html.twig' with {form: range} %}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+        </div>
+        </div>
     </div>
 </fieldset>
 <script type="text/javascript">

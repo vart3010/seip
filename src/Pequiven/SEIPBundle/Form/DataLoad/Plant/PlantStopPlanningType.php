@@ -39,6 +39,14 @@ class PlantStopPlanningType extends AbstractType
                 "attr" => array("class" => "switch medium mid-margin-right","data-text-on"=>"Si","data-text-off"=>"No"),
                 "required" => false,
             ))
+            ->add("ranges","collection",array(
+                'label_attr' => array('class' => 'label'),
+                "type" => new RangeType(),
+                "allow_add"    => true,
+                'by_reference' => false,
+                'allow_delete' => true,
+                'cascade_validation' => true,
+            ))
         ;
     }
     

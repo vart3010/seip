@@ -3,7 +3,7 @@
 /*
  * This file is part of the TecnoCreaciones package.
  * 
- * (c) www.tecnocreaciones.com.ve
+ * (c) www.tecnocreaciones.com
  * 
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,17 +12,16 @@
 namespace Pequiven\SEIPBundle\Entity\DataLoad\Plant;
 
 use Doctrine\ORM\Mapping as ORM;
-use Pequiven\SEIPBundle\Model\BaseModel;
+use Pequiven\SEIPBundle\Model\DataLoad\Plant\Range as BaseModel;
 
 /**
- * Dias de paradas
+ * Rango de los dias de paradas
  *
  * @author Carlos Mendoza <inhack20@gmail.com>
- * @ORM\Table(name="seip_report_product_report_day_stop")
+ * @ORM\Table(name="seip_report_data_load_plant_range")
  * @ORM\Entity()
- * @ORM\HasLifecycleCallbacks()
  */
-class DayStop extends BaseModel
+class Range extends BaseModel
 {
     /**
      * @var integer
@@ -34,11 +33,18 @@ class DayStop extends BaseModel
     private $id;
     
     /**
-     * Dia de la parada
+     * Fecha de inicio
      * @var \DateTime
-     * @ORM\Column(name="day",type="datetime")
+     * @ORM\Column(name="date_from",type="date")
      */
-    private $day;
+    private $dateFrom;
+    
+    /**
+     * Fecha fin
+     * @var \DateTime
+     * @ORM\Column(name="date_end",type="date")
+     */
+    private $dateEnd;
     
     /**
      * Horas de la parada
@@ -62,10 +68,9 @@ class DayStop extends BaseModel
     private $otherTime = false;
     
     /**
-     * Planificacion de parada de planta
-     * 
-     * @var PlantStopPlanning
-     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Plant\PlantStopPlanning",inversedBy="dayStops")
+     * Planificacion de paradas
+     * @var \Pequiven\SEIPBundle\Entity\DataLoad\Plant\PlantStopPlanning
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Plant\PlantStopPlanning",inversedBy="ranges")
      * @ORM\JoinColumn(nullable=false)
      */
     private $plantStopPlanning;
@@ -81,33 +86,56 @@ class DayStop extends BaseModel
     }
 
     /**
-     * Set day
+     * Set dateFrom
      *
-     * @param \DateTime $day
-     * @return DayStop
+     * @param \DateTime $dateFrom
+     * @return Range
      */
-    public function setDay($day)
+    public function setDateFrom($dateFrom)
     {
-        $this->day = $day;
+        $this->dateFrom = $dateFrom;
 
         return $this;
     }
 
     /**
-     * Get day
+     * Get dateFrom
      *
      * @return \DateTime 
      */
-    public function getDay()
+    public function getDateFrom()
     {
-        return $this->day;
+        return $this->dateFrom;
+    }
+
+    /**
+     * Set dateEnd
+     *
+     * @param \DateTime $dateEnd
+     * @return Range
+     */
+    public function setDateEnd($dateEnd)
+    {
+        $this->dateEnd = $dateEnd;
+
+        return $this;
+    }
+
+    /**
+     * Get dateEnd
+     *
+     * @return \DateTime 
+     */
+    public function getDateEnd()
+    {
+        return $this->dateEnd;
     }
 
     /**
      * Set hours
      *
      * @param float $hours
-     * @return DayStop
+     * @return Range
      */
     public function setHours($hours)
     {
@@ -125,35 +153,12 @@ class DayStop extends BaseModel
     {
         return $this->hours;
     }
-    
-    /**
-     * Set plantStopPlanning
-     *
-     * @param \Pequiven\SEIPBundle\Entity\DataLoad\Plant\PlantStopPlanning $plantStopPlanning
-     * @return DayStop
-     */
-    public function setPlantStopPlanning(\Pequiven\SEIPBundle\Entity\DataLoad\Plant\PlantStopPlanning $plantStopPlanning)
-    {
-        $this->plantStopPlanning = $plantStopPlanning;
 
-        return $this;
-    }
-
-    /**
-     * Get plantStopPlanning
-     *
-     * @return \Pequiven\SEIPBundle\Entity\DataLoad\Plant\PlantStopPlanning 
-     */
-    public function getPlantStopPlanning()
-    {
-        return $this->plantStopPlanning;
-    }
-    
     /**
      * Set otherTime
      *
      * @param boolean $otherTime
-     * @return DayStop
+     * @return Range
      */
     public function setOtherTime($otherTime)
     {
@@ -176,7 +181,7 @@ class DayStop extends BaseModel
      * Set stopTime
      *
      * @param \Pequiven\SEIPBundle\Entity\CEI\StopTime $stopTime
-     * @return DayStop
+     * @return Range
      */
     public function setStopTime(\Pequiven\SEIPBundle\Entity\CEI\StopTime $stopTime = null)
     {
@@ -194,22 +199,27 @@ class DayStop extends BaseModel
     {
         return $this->stopTime;
     }
-    
-    public function getNroDay()
-    {
-        return $this->day->format("d");
-    }
-    
+
     /**
-     * @ORM\PrePersist()
-     * @ORM\PreUpdate()
+     * Set plantStopPlanning
+     *
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\Plant\PlantStopPlanning $plantStopPlanning
+     * @return Range
      */
-    public function calculate()
+    public function setPlantStopPlanning(\Pequiven\SEIPBundle\Entity\DataLoad\Plant\PlantStopPlanning $plantStopPlanning)
     {
-        $hours = $this->hours;
-        if($this->otherTime === false && $this->stopTime !== null){
-            $hours = $this->stopTime->getHours();
-        }
-        $this->hours = $hours;
+        $this->plantStopPlanning = $plantStopPlanning;
+
+        return $this;
+    }
+
+    /**
+     * Get plantStopPlanning
+     *
+     * @return \Pequiven\SEIPBundle\Entity\DataLoad\Plant\PlantStopPlanning 
+     */
+    public function getPlantStopPlanning()
+    {
+        return $this->plantStopPlanning;
     }
 }

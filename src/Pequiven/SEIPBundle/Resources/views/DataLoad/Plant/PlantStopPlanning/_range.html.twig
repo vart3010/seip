@@ -1,0 +1,32 @@
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+<fieldset class="fieldset fields-list">
+    <legend class="legend">{{ 'pequiven_seip.range.range'|trans }}</legend>
+    <div class="field-block button-height">
+        {{ form_label(form.dateFrom) }}
+        {{ form_widget(form.dateFrom) }}
+        {{ form_errors(form.dateFrom) }}
+    </div>
+    <div class="field-block button-height">
+        {{ form_label(form.dateEnd) }}
+        {{ form_widget(form.dateEnd) }}
+        {{ form_errors(form.dateEnd) }}
+    </div>
+    <div class="field-block button-height ¡">
+        {{ form_label(form.stopTime) }}
+        <p class="inline-div">
+            {{ form_widget(form.stopTime) }}
+            {{ form_errors(form.stopTime) }}
+        </p>
+        <p class="hidden">
+            {{ form_widget(form.hours) }}
+            {{ form_errors(form.hours) }}
+        </p>
+        
+        {{ form_label(form.otherTime) }}
+        {{ form_widget(form.otherTime) }}
+    </div>
+    <div class="field-block button-height hidden">
+        
+    </div>
+</fieldset>

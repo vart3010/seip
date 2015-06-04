@@ -67,6 +67,13 @@ class PlantStopPlanning extends ModelBaseMaster
      * @ORM\JoinColumn(nullable=false)
      */
     private $plantReport;
+    
+    /**
+     * Rangos de paradas
+     * @var \Pequiven\SEIPBundle\Entity\DataLoad\Plant\Range
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Plant\Range",mappedBy="plantStopPlanning")
+     */
+    private $ranges;
 
     /**
      * Constructor
@@ -74,6 +81,7 @@ class PlantStopPlanning extends ModelBaseMaster
     public function __construct()
     {
         $this->dayStops = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->ranges = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -210,6 +218,40 @@ class PlantStopPlanning extends ModelBaseMaster
     public function getPlantReport()
     {
         return $this->plantReport;
+    }
+    
+    /**
+     * Add ranges
+     *
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\Plant\Range $ranges
+     * @return PlantStopPlanning
+     */
+    public function addRange(\Pequiven\SEIPBundle\Entity\DataLoad\Plant\Range $ranges)
+    {
+        $ranges->setPlantStopPlanning($this);
+        $this->ranges->add($ranges);
+
+        return $this;
+    }
+
+    /**
+     * Remove ranges
+     *
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\Plant\Range $ranges
+     */
+    public function removeRange(\Pequiven\SEIPBundle\Entity\DataLoad\Plant\Range $ranges)
+    {
+        $this->ranges->removeElement($ranges);
+    }
+
+    /**
+     * Get ranges
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getRanges()
+    {
+        return $this->ranges;
     }
     
     /**
