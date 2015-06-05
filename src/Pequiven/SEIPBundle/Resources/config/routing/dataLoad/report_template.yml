@@ -34,3 +34,17 @@ pequiven_report_template_delete:
     defaults:
         _controller: pequiven.controller.report_template:deleteAction
     methods: [GET|DELETE]
+    
+pequiven_report_template_list:
+    path: /list
+    defaults:
+        _controller: pequiven.controller.report_template:listAction
+    methods: [GET]
+    
+pequiven_report_template_load:
+    path: /{id}/load
+    defaults:
+        _controller: pequiven.controller.report_template:loadAction
+    methods: [GET|POST|PUT]
+    options:
+        expose: true

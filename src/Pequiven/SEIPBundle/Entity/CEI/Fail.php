@@ -12,11 +12,11 @@ use Doctrine\ORM\Mapping as ORM;
 use Pequiven\SEIPBundle\Model\CEI\Fail as BaseModel;
 
 /**
- * Falla
+ * Falla o causa de PNR
  *
  * @author Carlos Mendoza <inhack20@gmail.com>
  * @ORM\Table(name="seip_cei_fail")
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\CEI\FailRepository")
  */
 class Fail extends BaseModel
 {

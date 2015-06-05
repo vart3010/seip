@@ -31,6 +31,14 @@ var setDataSelect2 = function(select,data,callData){
     }
 };
 
+var myNumberFormat = function(numberToFormat,limit){
+    if(limit == undefined){
+        var limit = 2;
+    }
+    var numberFormat = $.number(numberToFormat, limit, ',', '.');
+    return numberFormat;
+};
+
 $(function() {
         $('a.showPopup').click(function(e) {
             e.preventDefault();

@@ -572,6 +572,7 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
         );
         $links['self']['show'] = $this->generateUrl('pequiven_report_template_show', array('id' => $object->getId()));
         $links['self']['update'] = $this->generateUrl('pequiven_report_template_update', array('id' => $object->getId()));
+        $links['self']['load'] = $this->generateUrl('pequiven_report_template_load', array('id' => $object->getId()));
         $event->getVisitor()->addData('_links',$links);
     }
     

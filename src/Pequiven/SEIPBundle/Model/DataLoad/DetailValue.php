@@ -1046,7 +1046,7 @@ abstract class DetailValue extends BaseModel
         $reflection = new \ReflectionClass($this);
         $methods = $reflection->getMethods();
         
-        $nameMatch = '^getDay\w+$';
+        $nameMatch = '^getDay\d+$';
         
         $total = $totalPlan = 0.0;
         foreach ($methods as $method) {

@@ -83,9 +83,68 @@ class PlantReportController extends SEIPController
                     }
                 }
             }
+            foreach ($resource->getPlantStopPlannings() as $plantStopPlanning)
+            {
+                $ranges = $plantStopPlanning->getRanges();
+                if($ranges->count()){
+                    foreach ($plantStopPlanning->getRanges() as $range) {
 
+                        $totalHours = 0;
+                        if($range->getOtherTime() === true){
+                            $totalHours = $range->getHours();
+                        }else{
+                            if($range->getStopTime()){
+                                $totalHours = $range->getStopTime()->getHours();
+                            }
+                        }
+                        $dateFrom = $range->getDateFrom();
+                        $dateEnd = $range->getDateEnd();
+                        
+                        $startDay = $dateFrom->format("d");
+                        $endDay = $dateEnd->format("d");
+                        for($i = $startDay; $i <= $endDay; $i++){
+                            $dayStop = new \Pequiven\SEIPBundle\Entity\DataLoad\Plant\DayStop();
+                            $day = clone($dateFrom);
+                            $day->setDate($day->format('Y'), $day->format('m'), $i);
+                            $dayStop->setDay($day);
+                            $dayStop->setOtherTime($range->getOtherTime());
+                            $dayStop->setStopTime($range->getStopTime());
+                            $dayStops[] = $dayStop;
+                        }
+                    }
+                    $dayStopsByDay = $plantStopPlanning->getDayStopsByDay();
+                    foreach ($dayStops as $dayStop) {
+                        if(!isset($dayStopsByDay[$dayStop->getNroDay()])){
+                            $plantStopPlanning->addDayStop($dayStop);
+                        }
+                    }
+                    $dayStopsCount = count($plantStopPlanning->getDayStopsByDay());
+                    $totalStops = $plantStopPlanning->getTotalStops();
+                    if($dayStopsCount > $totalStops){
+                        $month = $this->trans($plantStopPlanning->getMonthLabel(),array(),'PequivenSEIPBundle');
+                        $this->setFlash('error', 'pequiven.error.total_number_stops_no_be_greater_than_indicated',array(
+                            "%totalDaysStops%" => $dayStopsCount,
+                            "%totalStops%" => $totalStops,
+                            "%month%" => $month,
+                        )
+                        );
+                    }
+                }
+            }
         }
         $this->flush();
         return $this->redirectHandler->redirectTo($resource);
+    }
+    
+    public function deleteAction(Request $request) 
+    {
+        $resource = $this->findOr404($request);
+        
+        $url = $this->generateUrl("pequiven_report_template_show",array(
+            "id" => $resource->getReportTemplate()->getId(),
+        ));
+        
+        $this->domainManager->delete($resource);
+        return $this->redirect($url);
     }
 }

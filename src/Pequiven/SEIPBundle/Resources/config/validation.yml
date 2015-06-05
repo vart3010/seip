@@ -230,3 +230,26 @@ Pequiven\ArrangementProgramBundle\Entity\GoalDetails:
                 minMessage: pequiven.validators.goals_details.min_value
                 max: 100
                 maxMessage: pequiven.validators.goals_details.max_value
+                
+Pequiven\ObjetiveBundle\Entity\Objetive:
+    properties:
+        lineStrategics:
+            - NotNull:
+                message: pequiven.validators.arrangement_program.responsible_person
+                groups: [base]
+                
+Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductDetailDailyMonth:
+    constraints:
+        - Pequiven\SEIPBundle\Validator\Constraints\DataLoad\ProductDetailDailyMonth:
+                groups: [load]
+                
+Pequiven\SEIPBundle\Entity\DataLoad\Plant\PlantStopPlanning:
+    constraints:
+        - Pequiven\SEIPBundle\Validator\Constraints\DataLoad\Plant\PlantStopPlanning:
+    properties:
+        totalStops:
+             - Range:
+                min: 1
+                max: 31
+                minMessage: 'El minimo de dias de parada es 1.'
+                maxMessage: 'El maximo de dias de parada es 31.'

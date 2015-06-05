@@ -41,6 +41,21 @@ class SeipEntityRepository extends EntityRepository
         $qb = $this->getQueryAllEnabled();
         return $qb->getQuery()->getResult();
     }
+    
+    public function findSearch(array $criteria,$options = array())
+    {
+        $name = $criteria['name'];
+        $property = 'name';
+        if(isset($options['property'])){
+            $property = $options['property'];
+        }
+        $qb = $this->getQueryAllEnabled();
+        $qb
+            ->andWhere($qb->expr()->like($this->getAlias().".".$property, "'%$name%'"))
+            ;
+        $qb->setMaxResults(20);
+        return $qb->getQuery()->getResult();
+    }
 
 
     protected function applyPeriodCriteria(QueryBuilder &$queryBuilder, $alias = null) 
@@ -75,6 +90,7 @@ class SeipEntityRepository extends EntityRepository
                 ->setParameter('period', $periodService->getPeriodActive())
                 ;
     }
+    
     /**
      * @return PeriodService
      */

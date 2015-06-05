@@ -84,3 +84,7 @@ pequiven:
         create: El detalle de consumo de servicio se agrego correctamente.
         update: El detalle de consumo de servicio se actualizo correctamente.
         delete: El detalle de consumo de servicio se elimino correctamente.
+    consumer_planning_service:
+        create: El consumo de servicio se agrego correctamente.
+        update: El consumo de servicio se actualizo correctamente.
+        delete: El consumo de servicio se elimino correctamente.

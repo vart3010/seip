@@ -85,14 +85,14 @@ class PlantReport extends ModelBaseMaster
     /**
      * Planificacion de paradas
      * @var Plant\PlantStopPlanning
-     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Plant\PlantStopPlanning",mappedBy="plantReport")
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Plant\PlantStopPlanning",mappedBy="plantReport",cascade={"remove"})
      */
     private $plantStopPlannings;
     
     /**
      * Planificacion de consumo de servicios
      * @var Service\ConsumerPlanningService
-     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Service\ConsumerPlanningService",mappedBy="plantReport")
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Service\ConsumerPlanningService",mappedBy="plantReport",cascade={"remove"})
      */
     private $consumerPlanningServices;
 

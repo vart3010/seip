@@ -79,3 +79,6 @@ select.xxlarge {
 .inline-div {
     display: inline-block;
 }
+.font-20 {
+    font-size: 20px;
+}

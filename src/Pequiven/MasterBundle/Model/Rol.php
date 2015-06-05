@@ -16,7 +16,7 @@ class Rol extends BaseGroup {
      * Propietario
      */
     const TYPE_ROL_OWNER = 0;
-    
+
     /**
      * Rol Creado Especial
      */
@@ -130,6 +130,16 @@ class Rol extends BaseGroup {
             self::ROLE_DIRECTIVE_AUX => 'ROLE_DIRECTIVE_AUX',
         );
         return $rolesNames;
+    }
+
+    static function getTypeOfRol() {
+        static $typesOfRol = array(
+            self::TYPE_ROL_AUX => "roles.rol_aux",
+            self::TYPE_ROL_OWNER => "roles.rol_owner",
+            self::TYPE_ROL_SPECIAL => "roles.rol_special"
+        );
+
+        return $typesOfRol;
     }
 
 }

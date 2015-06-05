@@ -97,4 +97,13 @@ class GerenciaSecondAdmin extends Admin
             ->add('description')
             ;
     }
+    
+    public function toString($object) 
+    {
+        $toString = '-';
+        if($object->getId() > 0){
+            $toString = $object->getDescription().' ('.$object->getGerencia()->getDescription().')';
+        }
+        return \Pequiven\SEIPBundle\Service\ToolService::truncate($toString,array('limit' => 100));
+    }
 }

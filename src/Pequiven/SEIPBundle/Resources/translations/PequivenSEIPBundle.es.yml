@@ -23,7 +23,11 @@ pequiven_seip:
     hours_n: %n% Horas
     details: Detalles
     plants: Plantas
-    
+    inventory: Inventario
+    date_of_notification: Fecha de notificación
+    cause_of_PNR: 'Causa de PNR'
+    total_pnr: 'Total de PNR'
+        
     #Login
     sign_in: Ingresar
     remind_me: Recuerdame
@@ -150,6 +154,11 @@ pequiven_seip:
         refresh: Refrescar
         run_planning: Ejecutar planificación
         run_plant: Ejecutar planificación de planta
+        add_internal_cause: Añadir causa interna
+        add_external_cause: Añadir causa externa
+        add_internal_cause_mp: Añadir causa interna (Materia Prima)
+        add_external_cause_mp: Añadir causa externa (Materia Prima)
+        delete_cause: 'Eliminar esta causa'
     question:
         want_create_production_details_from_planning: ¿Desea crear los detalles de producción a partir del presupuesto de producción?
         want_create_plant_from_planning: ¿Desea crear los detalles de servicios de la planta?
@@ -209,6 +218,7 @@ pequiven_seip:
         miscellaneous: Misceláneo
         excludeGerenciaSecondSupport: Excluir Gerencias de Apoyo
         includeGerenciaSecondSupport: Incluir Gerencias de Apoyo
+        period: Periodo
     tooltips:
         click_to_show: Click para ver
     area:
@@ -330,6 +340,9 @@ pequiven_seip:
             external: Externa
     report_template:
         report_template: Planificación de producción
+        load:
+            notification: Notificacion
+            production: Producción
         type:
             production: Producción
             inventory: Inventario
@@ -379,18 +392,18 @@ pequiven_seip:
         details_consumer_planning_service: Detalle de consumo de servicios
 
     month:
-        0: Enero
-        1: Febrero
-        2: Marzo
-        3: Abril
-        4: Mayo
-        5: Junio
-        6: Julio
-        7: Agosto
-        8: Septiembre
-        9: Octubre
-        10: Noviembre
-        11: Diciembre
+        1: Enero
+        2: Febrero
+        3: Marzo
+        4: Abril
+        5: Mayo
+        6: Junio
+        7: Julio
+        8: Agosto
+        9: Septiembre
+        10: Octubre
+        11: Noviembre
+        12: Diciembre
         
     day_stop:
         day_stop: Dia de parada
@@ -505,6 +518,12 @@ empty:
     inventorys: No hay detalles de inventario.
     unrealized_productions: No hay detalles de producción no realizada.
     day_stops: No hay detalles de paradas.
+    not_budgeted_gross_production: 'No presupuestó producción bruta.'
+    not_budgeted_net_production: 'No presupuestó producción neta.'
+    no_handles_inventory: 'No presupuestó inventario.'
+    no_details_of_production: 'No hay detalles de producción.'
+    no_details_of_raw_material: 'No hay detalles de materia prima.'
+    no_details_of_services: 'No hay detalles de servicios.'
         
 chart:
     type:
@@ -550,3 +569,12 @@ nro: "#"
 "Service": Servicio
 'Stop time': Tiempo de parada
 'Other time': Otro
+Region: 'Región'
+Product: 'Producto'
+Fail: Falla
+Mount: Cantidad
+'Required amount': 'Cantidad Requerida'
+'Amount not available': 'Cantidad No Disponible'
+'Unit measure': 'Unidad de Medida'
+"Ranges stops": 'Rangos de paradas'
+'Total stops': 'Total Días de Paradas'

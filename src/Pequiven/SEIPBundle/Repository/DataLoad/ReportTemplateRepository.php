@@ -11,6 +11,10 @@
 
 namespace Pequiven\SEIPBundle\Repository\DataLoad;
 
+use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Query\Expr\Join;
+use Doctrine\ORM\QueryBuilder;
 use Pequiven\SEIPBundle\Doctrine\ORM\SeipEntityRepository;
 
 /**
@@ -20,8 +24,53 @@ use Pequiven\SEIPBundle\Doctrine\ORM\SeipEntityRepository;
  */
 class ReportTemplateRepository extends SeipEntityRepository 
 {
-    protected function applyCriteria(\Doctrine\ORM\QueryBuilder $queryBuilder, array $criteria = null) {
-        $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
+    /**
+     * Busca un reporte con todos los datos pre establecidos
+     * @param type $id
+     * @param DateTime $dateNotification
+     * @return type
+     */
+    public function findToNotify($id,  DateTime $dateNotification)
+    {
+        $month = $dateNotification->format("m");
+        
+        $qb = $this->getQueryBuilder();
+        $qb
+            ->addSelect('rt_pr')
+            ->addSelect('rt_pr_pr')
+            ->addSelect('rt_pr_pr_up')
+            ->addSelect('rt_pr_cps')
+            ->addSelect('rt_pr_cps_dcps')
+            ->addSelect('rt_pr_pr_rcp')
+            ->addSelect('rt_pr_pr_rcp_drmc')
+            ->addSelect('rt_pr_pr_pddm')
+            ->addSelect('rt_pr_pr_i')
+                
+            ->innerJoin('rt.plantReports','rt_pr')
+            ->innerJoin('rt_pr.productsReport','rt_pr_pr')
+            ->innerJoin('rt_pr_pr.unrealizedProductions','rt_pr_pr_up',Join::WITH,'rt_pr_pr_up.month = :month')
+                
+            ->leftJoin('rt_pr.consumerPlanningServices','rt_pr_cps')
+            ->leftJoin('rt_pr_cps.detailConsumerPlanningServices','rt_pr_cps_dcps',Join::WITH,'rt_pr_cps_dcps.month = :month')
+                
+            ->leftJoin('rt_pr_pr.rawMaterialConsumptionPlannings','rt_pr_pr_rcp')
+            ->leftJoin('rt_pr_pr_rcp.detailRawMaterialConsumptions','rt_pr_pr_rcp_drmc',Join::WITH,'rt_pr_pr_rcp_drmc.month = :month')
+                
+            ->leftJoin('rt_pr_pr.productDetailDailyMonths','rt_pr_pr_pddm',Join::WITH,'rt_pr_pr_pddm.month = :month')
+                
+            ->leftJoin('rt_pr_pr.inventorys','rt_pr_pr_i', Join::WITH,'rt_pr_pr_i.month = :month')
+                
+            ->andWhere('rt.id = :id')
+                
+            ->setParameter('id', $id)
+            ->setParameter('month', $month)
+            ;
+        
+        return $qb->getQuery()->getOneOrNullResult();
+    }
+    
+    protected function applyCriteria(QueryBuilder $queryBuilder, array $criteria = null) {
+        $criteria = new ArrayCollection($criteria);
         //
         
         if(($ref = $criteria->remove("rt.ref")))
@@ -30,7 +79,54 @@ class ReportTemplateRepository extends SeipEntityRepository
         }
         if(($name = $criteria->remove("rt.name")))
         {
-            $queryBuilder->andWhere($queryBuilder->expr()->like("rt.name","'%".$name."%'"));        }
+            $queryBuilder->andWhere($queryBuilder->expr()->like("rt.name","'%".$name."%'"));
+        }
+        if(($plant = $criteria->remove("plant")))
+        {
+            $queryBuilder
+                    ->innerJoin("rt.plantReports","rt_pr")
+                    ->innerJoin("rt_pr.plant","rt_pr_p")
+                    ->andWhere("rt_pr_p.id = :plant")
+                    ->setParameter('plant', $plant)
+                    ;
+        }
+        if(($entity = $criteria->remove("entity")))
+        {
+            $queryBuilder
+                    ->innerJoin("rt.plantReports","rt_pr")
+                    ->innerJoin("rt_pr.entity","rt_pr_e")
+                    ->andWhere("rt_pr_e.id = :entity")
+                    ->setParameter('entity', $entity)
+                    ;
+        }
+        if(($product = $criteria->remove("product")))
+        {
+            if(!is_array($product)){
+                $product = json_decode($product);
+            }
+            if(count($product) > 0){
+                $queryBuilder
+                        ->innerJoin("rt.plantReports","rt_pr")
+                        ->innerJoin("rt_pr.productsReport","rt_pr_pr")
+                        ->innerJoin("rt_pr_pr.product","rt_pr_pr_p")
+                        ->andWhere($queryBuilder->expr()->in("rt_pr_pr_p.id", $product))
+                        ;
+            }
+        }
+        if(($service = $criteria->remove("service")))
+        {
+            if(!is_array($service)){
+                $service = json_decode($service);
+            }
+            if(count($service) > 0){
+                $queryBuilder
+                        ->innerJoin("rt.plantReports","rt_pr")
+                        ->innerJoin("rt_pr.consumerPlanningServices","rt_pr_cps")
+                        ->innerJoin("rt_pr_cps.service","rt_pr_cps_s")
+                        ->andWhere($queryBuilder->expr()->in("rt_pr_cps_s.id", $service))
+                        ;
+            }
+        }
         
         return parent::applyCriteria($queryBuilder, $criteria->toArray());
     }

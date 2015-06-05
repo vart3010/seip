@@ -63,6 +63,7 @@ class DayStop extends BaseModel
     
     /**
      * Planificacion de parada de planta
+     * 
      * @var PlantStopPlanning
      * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Plant\PlantStopPlanning",inversedBy="dayStops")
      * @ORM\JoinColumn(nullable=false)
@@ -203,7 +204,7 @@ class DayStop extends BaseModel
      * @ORM\PrePersist()
      * @ORM\PreUpdate()
      */
-    public function calculateDays()
+    public function calculate()
     {
         $hours = $this->hours;
         if($this->otherTime === false && $this->stopTime !== null){

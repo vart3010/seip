@@ -21,7 +21,7 @@ class AppKernel extends Kernel
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             
             
-            new Lunetics\LocaleBundle\LuneticsLocaleBundle(),//Manejador pagina multi-lenguaje
+//            new Lunetics\LocaleBundle\LuneticsLocaleBundle(),//Manejador pagina multi-lenguaje
             new Knp\Bundle\MenuBundle\KnpMenuBundle(),//Contructor del menu
             
             new FOS\UserBundle\FOSUserBundle(),//Manejador de usuario
@@ -69,6 +69,7 @@ class AppKernel extends Kernel
             new Pequiven\ArrangementBundle\PequivenArrangementBundle(),
             new Pequiven\ArrangementProgramBundle\PequivenArrangementProgramBundle(),
             new Tecnocreaciones\Bundle\BoxBundle\TecnocreacionesBoxBundle(),
+            new CoreSphere\ConsoleBundle\CoreSphereConsoleBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

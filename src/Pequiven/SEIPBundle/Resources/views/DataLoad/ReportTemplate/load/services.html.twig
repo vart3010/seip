@@ -1,0 +1,70 @@
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+{% set planningServices = [] %}
+{% for plantReport in report_template.plantReports %}
+    {% for consumerPlanningService in plantReport.consumerPlanningServices %}
+        {% set planningServices = planningServices|merge([consumerPlanningService]) %}
+    {% endfor %}
+{% endfor %}
+
+<div class="block">
+    <div class="block-title">
+        <h3><i class="fa fa-cogs"></i>&nbsp;{{ 'Services'|trans }}&nbsp;({{ planningServices|length }})</h3>
+    </div>
+    <div class="with-padding">
+        <table class="simple-table responsive-table tables-extras" id="sorting-example2">
+            <thead>
+                <tr>
+                    <th scope="col" width="35%">{{ 'Service'|trans }}</th>
+                    <th scope="col" width="10%" class="">{{ 'Plan'|trans }}</th>
+                    <th scope="col" width="10%" class="">{{ 'Real'|trans }}</th>
+                    <th scope="col" style="width: 7%" class=" header">%</th>
+                </tr>
+            </thead>
+            {% set colspan = 4 %}
+            <tbody>
+                {% for plantReport in form.plantReports %}
+                    <tr>
+                        <td class="text-center bold" colspan="{{ colspan }}">
+                            <strong class="font-20">{{ "Plant"|trans }}&nbsp;-&nbsp;{{ plantReport.vars.data }}</strong>
+                        </td>
+                    </tr>
+                        {% set renderedError = false %}
+                        
+                        {% for consumerPlanningService in plantReport.consumerPlanningServices %}
+                            {% for detailConsumerPlanningService in consumerPlanningService.detailConsumerPlanningServices %}
+                                <tr>
+                                    <td>
+                                        {{ consumerPlanningService.vars.data }}
+                                    </td>
+                                    <th scope="row">
+                                        <span>{{ attribute(detailConsumerPlanningService.vars.data,dayNPlan) }}</span> {{ consumerPlanningService.vars.data.service.serviceUnit }}
+                                    </th>
+                                    <td>
+                                        {{ form_widget(attribute(detailConsumerPlanningService,dayNReal)) }}
+                                    </td>
+                                    <td>{{ attribute(detailConsumerPlanningService.vars.data,'getTotalPercentajeOf',[day])|myNumberFormat }}</td>
+                                </tr>
+                            {% else %}
+                                {% if renderedError == false %}
+                                     {% set renderedError = true %}
+                                    <tr>
+                                        <td colspan="{{ colspan }}" class="empty_row">
+                                            {{ "empty.no_details_of_services"|trans }}
+                                        </td>
+                                    </tr>
+                                {% endif %}
+                           {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="{{ colspan }}" class="empty_row">
+                                    {{ "empty.consumer_planning_services"|trans }}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                {% endfor %}
+            </tbody>
+        </table>
+        
+    </div>
+</div>

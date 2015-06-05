@@ -411,6 +411,37 @@ class IndicatorOperativeController extends baseController {
 
         return $response;
     }
+    
+    /**
+     * Devuelve los Objetivos Tácticos de acuerdo al Objetivo Estratégico seleccionado
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     */
+    public function selectObjetiveTacticFromObjetiveStrategicAction(Request $request) {
+        $response = new JsonResponse();
+        $objetiveChildrenTactic = array();
+
+        $objetiveStrategicId = explode(',', $request->request->get('objetiveStrategicId'));
+
+        if (is_array($objetiveStrategicId)) {
+            $results = $this->get('pequiven.repository.objetiveoperative')->getByParent($objetiveStrategicId,array('enabled' => true,'fromIndicator' => true));
+
+            $totalResults = count($results);
+            if (is_array($results) && $totalResults > 0) {
+                foreach ($results as $result) {
+                    $objetiveChildrenTactic[] = array("id" => $result->getId(), "description" => $result->getRef() . ' ' . $result->getDescription());
+                }
+            } else {
+                $objetiveChildrenTactic[] = array("empty" => true);
+            }
+        } else {
+            $objetiveChildrenTactic[] = array("empty" => true, "initial" => true);
+        }
+
+        $response->setData($objetiveChildrenTactic);
+
+        return $response;
+    }
 
     /**
      * Devuelve los objetivos operativos de acuerdo a el objetivo táctico y la gerencia de 2da línea seleccionada

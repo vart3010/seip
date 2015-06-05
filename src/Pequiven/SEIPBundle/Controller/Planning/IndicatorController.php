@@ -51,6 +51,7 @@ class IndicatorController extends ResourceController
         }
         
         $errorFormula = null;
+        
         if($resource->getFormula() !== null){
             $indicatorService = $this->getIndicatorService();
             $formula = $resource->getFormula();

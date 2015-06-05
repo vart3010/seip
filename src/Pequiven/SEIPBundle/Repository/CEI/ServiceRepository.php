@@ -20,6 +20,11 @@ use Pequiven\SEIPBundle\Doctrine\ORM\SeipEntityRepository;
  */
 class ServiceRepository extends SeipEntityRepository
 {
+    /**
+     * Retorna una constructora de consulta de buscar por planta
+     * @param type $plant
+     * @return type
+     */
     public function findQueryByPlant($plant) 
     {
         $qb = $this->getQueryAllEnabled();

@@ -30,6 +30,11 @@ class CompanyRepository extends SeipEntityRepository
         return $qb;
     }
     
+    public function findSearch(array $criteria, $options = array()) 
+    {
+        return parent::findSearch($criteria, array('property' => 'description'));
+    }
+    
     protected function getAlias() 
     {
         return "c";

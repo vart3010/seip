@@ -12,6 +12,7 @@
 namespace Pequiven\SEIPBundle\Controller\DataLoad;
 
 use Pequiven\SEIPBundle\Controller\SEIPController;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Controlador de plantilla de reporte
@@ -20,5 +21,115 @@ use Pequiven\SEIPBundle\Controller\SEIPController;
  */
 class ReportTemplateController extends SEIPController 
 {
+    public function indexAction(Request $request) 
+    {
+        $criteria = $request->get('filter',$this->config->getCriteria());
+        $sorting = $request->get('sorting',$this->config->getSorting());
+        $repository = $this->getRepository();
+
+            $resources = $this->resourceResolver->getResource(
+                $repository,
+                'createPaginator',
+                array($criteria, $sorting)
+            );
+            $maxPerPage = $this->config->getPaginationMaxPerPage();
+            if(($limit = $request->query->get('limit')) && $limit > 0){
+                if($limit > 100){
+                    $limit = 100;
+                }
+                $maxPerPage = $limit;
+            }
+            $resources->setCurrentPage($request->get('page', 1), true, true);
+            $resources->setMaxPerPage($maxPerPage);
+        
+        $view = $this
+            ->view()
+            ->setTemplate($this->config->getTemplate('index.html'))
+            ->setTemplateVar($this->config->getPluralResourceName())
+        ;
+        if($request->get('_format') == 'html'){
+            $view->setData($resources);
+        }else{
+            $formatData = $request->get('_formatData','default');
+            $view->setData($resources->toArray($this->config->getRedirectRoute('index'),array(),$formatData));
+        }
+        return $this->handleView($view);
+    }
     
+    public function listAction(Request $request) 
+    {
+        $criteria = $request->get('filter',$this->config->getCriteria());
+        $sorting = $request->get('sorting',$this->config->getSorting());
+        $repository = $this->getRepository();
+
+            $resources = $this->resourceResolver->getResource(
+                $repository,
+                'createPaginator',
+                array($criteria, $sorting)
+            );
+            $maxPerPage = $this->config->getPaginationMaxPerPage();
+            if(($limit = $request->query->get('limit')) && $limit > 0){
+                if($limit > 100){
+                    $limit = 100;
+                }
+                $maxPerPage = $limit;
+            }
+            $resources->setCurrentPage($request->get('page', 1), true, true);
+            $resources->setMaxPerPage($maxPerPage);
+        
+        $view = $this
+            ->view()
+            ->setTemplate($this->config->getTemplate('list.html'))
+            ->setTemplateVar($this->config->getPluralResourceName())
+        ;
+        if($request->get('_format') == 'html'){
+            $view->setData($resources);
+        }else{
+            $formatData = $request->get('_formatData','default');
+            $view->setData($resources->toArray($this->config->getRedirectRoute('list'),array(),$formatData));
+        }
+        return $this->handleView($view);
+    }
+    
+    public function loadAction(Request $request) 
+    {
+        $dateString = $request->get('dateNotification',null);
+        $dateNotification = null;
+        if($dateString !== null){
+            $dateNotification = \DateTime::createFromFormat('d/m/Y', $dateString);
+        }
+        if($dateNotification === null){
+            $dateNotification = new \DateTime();
+        }
+        $resource = $this->getRepository()->findToNotify($request->get("id"),$dateNotification);
+        
+        if(!$resource){
+            throw $this->createNotFoundException('No se encontro la planificacion');
+        }
+        
+        $form = $this->createForm(new \Pequiven\SEIPBundle\Form\DataLoad\Notification\ReportTemplateType($dateNotification,$resource),$resource);
+        
+        if($request->isMethod('PUT') && $form->submit($request,false)->isValid()){
+            $this->domainManager->update($resource);
+            
+            return $this->redirect($this->generateUrl('pequiven_report_template_list'));
+//            return $this->redirect($this->generateUrl('pequiven_report_template_load',[
+//                'id' => $resource->getId(),
+//                'dateNotification' => $dateNotification->format('d/m/Y')
+//            ]));
+        }
+        
+        $view = $this
+            ->view()
+            ->setTemplate($this->config->getTemplate('load.html'))
+            ->setTemplateVar($this->config->getResourceName())
+            ->setData(array(
+                $this->config->getResourceName() => $resource,
+                'dateNotification' => $dateNotification,
+                'form' => $form->createView(),
+            ))
+        ;
+
+        return $this->handleView($view);
+    }
 }
