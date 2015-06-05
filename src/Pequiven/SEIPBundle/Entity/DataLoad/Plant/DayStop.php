@@ -63,6 +63,7 @@ class DayStop extends BaseModel
     
     /**
      * Planificacion de parada de planta
+     * 
      * @var PlantStopPlanning
      * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Plant\PlantStopPlanning",inversedBy="dayStops")
      * @ORM\JoinColumn(nullable=false)

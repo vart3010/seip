@@ -22,19 +22,29 @@ class ObjetiveFormType extends AbstractType
 {
     public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options) 
     {
+        $entity = new \Pequiven\ObjetiveBundle\Entity\Objetive();
+        $entity = $builder->getData();
+        
+        $hasWeigth = false;
+        if($entity->getObjetiveLevel()->getLevel() == \Pequiven\ObjetiveBundle\Model\ObjetiveLevel::LEVEL_OPERATIVO){
+            $hasWeigth = true;
+        }
+        
         $builder->add("description","textarea",array(
              'label' => 'form.objetive_statement',
              'label_attr' => array('class' => 'label'), 
              'translation_domain' => 'PequivenObjetiveBundle',
              'attr' => array('cols' => 50, 'rows' => 5,'class' => 'input small-margin-right validate[required]')
-         ))
-        ->add("weight",null,array(
-            'label' => 'form.weight',
-            'label_attr' => array('class' => 'label'), 
-            'translation_domain' => 'PequivenObjetiveBundle',
-            'attr' => array('class' => 'input small-margin-right'),
-        ))
-        ->add("goal",null,array(
+         ));
+        if($hasWeigth === true){
+            $builder->add("weight",null,array(
+                'label' => 'form.weight',
+                'label_attr' => array('class' => 'label'), 
+                'translation_domain' => 'PequivenObjetiveBundle',
+                'attr' => array('class' => 'input small-margin-right'),
+            ));
+        }
+        $builder->add("goal",null,array(
             'label' => 'form.goal',
             'label_attr' => array('class' => 'label'), 
             'translation_domain' => 'PequivenObjetiveBundle',

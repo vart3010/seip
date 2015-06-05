@@ -33,4 +33,14 @@ abstract class Fail extends BaseModel
             self::TYPE_FAIL_EXTERNAL => "pequiven_seip.fail.type.external",
         );
     }
+    
+    public static function getTypeFilLabelByType($type)
+    {
+        $label = "";
+        $typeFailsLabels = self::getTypeFailsLabels();
+        if(isset($typeFailsLabels[$type])){
+            $label = $typeFailsLabels[$type];
+        }
+        return $label;
+    }
 }

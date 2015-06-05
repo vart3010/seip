@@ -1119,7 +1119,8 @@ class ObjetiveOperativeController extends baseController
         $securityContext = $this->container->get('security.context');
         $user = $securityContext->getToken()->getUser();
         $gerenciasObjectArray = array();
-
+        
+        $results = array();
         if ($securityContext->isGranted(array('ROLE_DIRECTIVE', 'ROLE_DIRECTIVE_AUX'))) {
             $gerencia = $request->request->get('gerencia');
             if((int)$gerencia == 0){

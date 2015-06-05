@@ -45,7 +45,11 @@ class TagIndicatorAdmin extends Admin implements \Symfony\Component\DependencyIn
             ->add('orderShow')
             ->add('valueOfTag')
             ->add('textOfTag')
-            ->add('indicator')
+            ->add('indicator','sonata_type_model_autocomplete',array(
+                'property' => array('ref','description'),
+                'multiple' => false,
+                "required" => true,
+             ))
             ->add('equationReal',null,array(
                 'attr' => array(
                     'rows' => 10
@@ -69,7 +73,9 @@ class TagIndicatorAdmin extends Admin implements \Symfony\Component\DependencyIn
     
     protected function configureDatagridFilters(DatagridMapper $filter) {
         $filter
-            ->add('indicator')
+            ->add('indicator','doctrine_orm_model_autocomplete',array(),null,array(
+                'property' => array('ref','description')
+            ))
             ->add('description')
             ->add('period')
             ;
@@ -86,19 +92,10 @@ class TagIndicatorAdmin extends Admin implements \Symfony\Component\DependencyIn
             ;
     }
     
-    protected function configureRoutes(\Sonata\AdminBundle\Route\RouteCollection $collection) 
+    public function prePersist($object) 
     {
-//        $collection->remove('create');
+        $object->setPeriod($this->getPeriodService()->getPeriodActive());
     }
-    
-//    public function toString($object) 
-//    {
-//        $toString = '-';
-//        if($object->getId() > 0){
-//            $toString = $object->getPeriod()->getDescription().' - '.$object->getRef().' - '.$object->getDescription();
-//        }
-//        return \Pequiven\SEIPBundle\Service\ToolService::truncate($toString,array('limit' => 50));
-//    }
     
     public function setContainer(\Symfony\Component\DependencyInjection\ContainerInterface $container = null) 
     {
@@ -112,5 +109,13 @@ class TagIndicatorAdmin extends Admin implements \Symfony\Component\DependencyIn
     private function getUnitConverter()
     {
         return $this->container->get('tecnocreaciones_tools.unit_converter');
+    }
+    
+    /**
+     * @return \Pequiven\SEIPBundle\Service\PeriodService
+     */
+    protected function getPeriodService()
+    {
+        return $this->container->get('pequiven_seip.service.period');
     }
 }

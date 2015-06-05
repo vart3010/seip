@@ -33,6 +33,7 @@
         {{ form_errors(form.enabled) }}
     </div>
 </fieldset>
+{#        {{ dump(_context|keys) }}#}
 <script type="text/javascript">
     var dateFormat = "dd-mm-yy";
     $(document).ready(function(){
@@ -45,8 +46,9 @@
         selectEntity.on("change",function(){
             ajaxToSelect2(urlGetPlant,selectPlant,{ entity: selectEntity.val() });
         });
-        
-        selectPlant.empty();
-        selectPlant.select2('disable');
+        {% if plant_report.id <= 0 %}
+            selectPlant.empty();
+            selectPlant.select2('disable');
+        {% endif  %}
     });
 </script>

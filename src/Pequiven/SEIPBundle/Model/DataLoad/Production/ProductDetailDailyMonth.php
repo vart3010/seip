@@ -50,4 +50,44 @@ abstract class ProductDetailDailyMonth extends BaseModel implements ProductDetai
         }
         return $total;
     }
+    
+    /**
+     * Retorna el valor de la produccion bruta de un dia
+     * @param type $day
+     * @return type
+     */
+    public function getValueGrossByDay($day)
+    {
+        //Real de la bruta
+        $nameRealGross = 'getDay'.$day.'GrossReal';
+        return $this->$nameRealGross();
+    }
+    
+    /**
+     * Retorna el valor de la produccion neta de un dia
+     * @param type $day
+     * @return type
+     */
+    public function getValueNetByDay($day)
+    {
+        //Real de la neta
+        $nameRealNet = 'getDay'.$day.'NetReal';
+        return $this->$nameRealNet();
+    }
+    
+    /**
+     * Valida que el valor de la produccion neta no sea mayor a la bruta
+     * @param type $day
+     * @return boolean
+     */
+    public function isValidNet($day)
+    {
+        $realGross = $this->getValueGrossByDay($day);
+        $realNet = $this->getValueNetByDay($day);
+        
+        if($realNet > $realGross){
+            return false;
+        }
+        return true;
+    }
 }

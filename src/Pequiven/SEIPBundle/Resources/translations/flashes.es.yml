@@ -1,6 +1,7 @@
 pequiven:
     error:
         empty_comment: Debe añadir un comentario.
+        total_number_stops_no_be_greater_than_indicated: 'El total de paradas(%totalDaysStops%) no puede ser mayor al indicado(%totalStops%) en el mes "%month%".'
     result:
         success:
             update: El resultado se actualizo correctamente.

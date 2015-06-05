@@ -186,8 +186,8 @@ class ProductReportController extends SEIPController
     {
         $resource = $this->findOr404($request);
         
-        $url = $this->generateUrl("pequiven_report_template_show",array(
-            "id" => $resource->getReportTemplate()->getId(),
+        $url = $this->generateUrl("pequiven_plant_report_show",array(
+            "id" => $resource->getPlantReport()->getId(),
         ));
         
         $this->domainManager->delete($resource);

@@ -67,6 +67,13 @@ class PlantStopPlanning extends ModelBaseMaster
      * @ORM\JoinColumn(nullable=false)
      */
     private $plantReport;
+    
+    /**
+     * Rangos de paradas
+     * @var \Pequiven\SEIPBundle\Entity\DataLoad\Plant\Range
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Plant\Range",mappedBy="plantStopPlanning",cascade={"persist","remove"})
+     */
+    private $ranges;
 
     /**
      * Constructor
@@ -74,6 +81,7 @@ class PlantStopPlanning extends ModelBaseMaster
     public function __construct()
     {
         $this->dayStops = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->ranges = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -213,6 +221,40 @@ class PlantStopPlanning extends ModelBaseMaster
     }
     
     /**
+     * Add ranges
+     *
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\Plant\Range $ranges
+     * @return PlantStopPlanning
+     */
+    public function addRange(\Pequiven\SEIPBundle\Entity\DataLoad\Plant\Range $ranges)
+    {
+        $ranges->setPlantStopPlanning($this);
+        $this->ranges->add($ranges);
+
+        return $this;
+    }
+
+    /**
+     * Remove ranges
+     *
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\Plant\Range $ranges
+     */
+    public function removeRange(\Pequiven\SEIPBundle\Entity\DataLoad\Plant\Range $ranges)
+    {
+        $this->ranges->removeElement($ranges);
+    }
+
+    /**
+     * Get ranges
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getRanges()
+    {
+        return $this->ranges;
+    }
+    
+    /**
      * @ORM\PrePersist
      * @ORM\PreUpdate
      */
@@ -221,7 +263,7 @@ class PlantStopPlanning extends ModelBaseMaster
         $totalHours = 0.0;
         
         $dayStops = $this->getDayStops();
-        $totalStops = $dayStops->count();
+//        $totalStops = $dayStops->count();
         
         foreach ($dayStops as $dayStop) {
             $dayStop->calculate();
@@ -229,7 +271,7 @@ class PlantStopPlanning extends ModelBaseMaster
         }
         
         $this->totalHours = $totalHours;
-        $this->totalStops = $totalStops;
+//        $this->totalStops = $totalStops;
     }
     
     public function getMonthLabel()
@@ -249,5 +291,19 @@ class PlantStopPlanning extends ModelBaseMaster
             $_toString = $this->getMonthLabel();
         }
         return $_toString;
+    }
+    
+    /**
+     * Get dayStops
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getDayStopsByDay()
+    {
+        $days = array();
+        foreach ($this->dayStops as $dayStop) {
+            $days[$dayStop->getNroDay()] = $dayStop;
+        }
+        return $days;
     }
 }

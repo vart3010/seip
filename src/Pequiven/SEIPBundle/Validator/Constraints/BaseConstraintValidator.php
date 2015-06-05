@@ -27,6 +27,17 @@ abstract class BaseConstraintValidator extends ConstraintValidator implements \S
         return $this->container->get('translator')->trans($id, $parameters, $domain);
     }
     
+    /**
+     * Shortcut to return the request service.
+     *
+     * @return \Symfony\Component\HttpFoundation\Request
+     *
+     */
+    public function getRequest()
+    {
+        return $this->container->get('request_stack')->getCurrentRequest();
+    }
+    
     public function setContainer(\Symfony\Component\DependencyInjection\ContainerInterface $container = null) {
         $this->container = $container;
     }

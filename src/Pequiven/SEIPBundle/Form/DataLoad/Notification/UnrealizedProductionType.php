@@ -2,7 +2,6 @@
 
 namespace Pequiven\SEIPBundle\Form\DataLoad\Notification;
 
-use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
@@ -18,6 +17,7 @@ class UnrealizedProductionType extends BaseNotification
         $paramateretsDays = $this->getParametersStandard();
         $builder
             ->add(sprintf('day%s',$day),null,$paramateretsDays)
+            ->add(sprintf('day%sDetails',$day),new UnrealizedProductionDayType($this->dateNotification, $this->reportTemplate))
         ;
     }
     

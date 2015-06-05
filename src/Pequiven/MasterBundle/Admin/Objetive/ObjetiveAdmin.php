@@ -51,7 +51,10 @@ class ObjetiveAdmin extends Admin
                     ->add('goal')
                     ->add('complejo')
                     ->add('gerencia')
-                    ->add('gerenciaSecond')
+                    ->add('gerenciaSecond','sonata_type_model_autocomplete',array(
+                        'property' => array('description'),
+                        'required' => false,
+                    ))
                     ->add('childrens','sonata_type_model_autocomplete',array(
                         'property' => array('period','ref'),
                         'multiple' => true,

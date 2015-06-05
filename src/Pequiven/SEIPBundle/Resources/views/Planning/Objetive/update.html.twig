@@ -50,7 +50,7 @@
                     <span class="info-bubble">{{ 'form.info.objetive_description'|trans }}</span>
                 </span>
             </div>
-{#            {% if objetive.objetiveLevel.level == constant('Pequiven\\ObjetiveBundle\\Model\\ObjetiveLevel::LEVEL_OPERATIVO') %}#}
+            {% if form.weight is defined %}
                 <div class="field-block button-height">
                     {{ form_label(form.weight) }}
                     {{ form_widget(form.weight) }}
@@ -60,7 +60,7 @@
                         <span class="info-bubble">{{ 'form.info.weight'|trans }}</span>
                     </span>
                 </div>
-{#            {% endif %}#}
+            {% endif %}
             <div class="field-block button-height">
                 {{ form_label(form.goal) }}
                 {{ form_widget(form.goal) }}

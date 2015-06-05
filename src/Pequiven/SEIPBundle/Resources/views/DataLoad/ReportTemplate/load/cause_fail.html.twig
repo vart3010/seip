@@ -1,0 +1,17 @@
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+{% set label = call_static_method('Pequiven\\SEIPBundle\\Model\\CEI\\Fail','getTypeFilLabelByType',[type]) %}
+
+<fieldset class="fieldset fields-list">
+    <legend class="legend">{{ 'pequiven_seip.cause_of_PNR'|trans }}&nbsp;<b>({{ label|trans }})</b></legend>
+    <div class="field-block button-height">
+        {{ form_label(form.fail) }}
+        {{ form_widget(form.fail) }}
+        {{ form_errors(form.fail) }}
+    </div>
+    <div class="field-block button-height">
+        {{ form_label(form.mount) }}
+        {{ form_widget(form.mount) }}
+        {{ form_errors(form.mount) }}
+    </div>
+</fieldset>

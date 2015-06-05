@@ -78,6 +78,8 @@
          {% set dayNPlan = 'day' ~ day ~ 'Plan' %}
          {% set dayNReal = 'day' ~ day ~ 'Real' %}
 
+         {% set dayNDetails = 'day' ~ day ~ 'Details' %}
+         
          {% for plantReport in form.plantReports %}
 
              <details class="details margin-bottom" open>
@@ -108,7 +110,8 @@
                                              </thead>
                                              <tbody>
                                                  {% for productDetailDailyMonth in productReport.productDetailDailyMonths %}
-                                                     <tr>
+                                                     {% set productDetailDailyMonthIdTR = "gross-product-detail-daily-month-" ~ productDetailDailyMonth.vars.data.id %}
+                                                     <tr id="{{ productDetailDailyMonthIdTR }}">
                                                          <th scope="row">
                                                              {{ attribute(productDetailDailyMonth.vars.data,grossPlan) }}
                                                          </th>
@@ -120,8 +123,75 @@
                                                          <td>
                                                              {% for unrealizedProduction in productReport.unrealizedProductions %}
                                                                  {{ form_widget(attribute(unrealizedProduction,dayN)) }}
-                                                                 &nbsp;<a href="#"><i class="fa fa-cog fa-2x"></i></a>
+                                                                 {% set idPnrForm = 'dialog-form-pnr-' ~ unrealizedProduction.vars.data.id %}
+                                                                 {% set idPnrButtom = 'dialog-button-pnr-' ~ unrealizedProduction.vars.data.id %}
+                                                                 {% set idPnrDiv = 'dialog-button-div-' ~ unrealizedProduction.vars.data.id %}
+                                                                 
+                                                                 {% set pnrDay = attribute(unrealizedProduction.vars.data,dayN) %}
+                                                                 
+                                                                 &nbsp;<a href="#" id="{{ idPnrButtom }}" class="btn-open-pnr {% if pnrDay <= 0 %}hidden{% endif %}"><i class="fa fa-cog fa-2x"></i></a>
                                                                  {{ form_errors(attribute(unrealizedProduction,dayN)) }}
+                                                                 <div id="{{ idPnrForm }}" title="{{ 'pequiven_seip.cause_of_PNR'|trans }}">
+                                                                     <p>{{ "pequiven_seip.total_pnr"|trans }}:&nbsp;
+                                                                         <b><span>0</span>/<span id="span-{{ productDetailDailyMonthIdTR }}">0</span></b>
+                                                                     </p>
+                                                                     
+                                                                    {% set dayDetails = attribute(unrealizedProduction,dayNDetails) %}
+                                                                    <ul class="internalCauses unstyled-list" data-prototype="{% filter escape %}{% include 'PequivenSEIPBundle:DataLoad/ReportTemplate/load:cause_fail.html.twig' with {form: dayDetails.internalCauses.vars.prototype, type: constant('Pequiven\\SEIPBundle\\Model\\CEI\\Fail::TYPE_FAIL_INTERNAL')} %}{% endfilter %}" >
+                                                                        {% for internalCause in dayDetails.internalCauses %}
+                                                                            <li>{% include 'PequivenSEIPBundle:DataLoad/ReportTemplate/load:cause_fail.html.twig' with {form: internalCause, type: constant('Pequiven\\SEIPBundle\\Model\\CEI\\Fail::TYPE_FAIL_INTERNAL')} %}</li>
+                                                                        {% endfor %}
+                                                                    </ul>
+                                                                    <br/>
+                                                                    <ul class="externalCauses unstyled-list" data-prototype="{% filter escape %}{% include 'PequivenSEIPBundle:DataLoad/ReportTemplate/load:cause_fail.html.twig' with {form: dayDetails.externalCauses.vars.prototype, type: constant('Pequiven\\SEIPBundle\\Model\\CEI\\Fail::TYPE_FAIL_EXTERNAL') } %}{% endfilter %}">
+                                                                        {% for externalCause in dayDetails.externalCauses %}
+                                                                            <li>{% include 'PequivenSEIPBundle:DataLoad/ReportTemplate/load:cause_fail.html.twig' with {form: externalCause, type: constant('Pequiven\\SEIPBundle\\Model\\CEI\\Fail::TYPE_FAIL_EXTERNAL')} %}</li>
+                                                                        {% endfor %}
+                                                                    </ul>
+                                                                    <br/>
+                                                                    <ul class="internalCausesMp unstyled-list" data-prototype="{% filter escape %}{% include 'PequivenSEIPBundle:DataLoad/ReportTemplate/load:raw_material_required.html.twig' with {form: dayDetails.internalCausesMp.vars.prototype} %}{% endfilter %}" >
+                                                                        {% for internalCauseMp in dayDetails.internalCausesMp %}
+                                                                            <li>{% include 'PequivenSEIPBundle:DataLoad/ReportTemplate/load:raw_material_required.html.twig' with {form: internalCauseMp} %}</li>
+                                                                        {% endfor %}
+                                                                    </ul>
+                                                                    <br/>
+                                                                    <ul class="externalCausesMp unstyled-list" data-prototype="{% filter escape %}{% include 'PequivenSEIPBundle:DataLoad/ReportTemplate/load:raw_material_required.html.twig' with {form: dayDetails.externalCausesMp.vars.prototype} %}{% endfilter %}">
+                                                                        {% for externalCauseMp in dayDetails.externalCausesMp %}
+                                                                            <li>{% include 'PequivenSEIPBundle:DataLoad/ReportTemplate/load:raw_material_required.html.twig' with {form: externalCauseMp} %}</li>
+                                                                        {% endfor %}
+                                                                    </ul>
+                                                                  </div>
+                                                                 <script type="text/javascript">
+                                                                     $(function(){
+                                                                         var dialog = $( "#{{ idPnrForm }}" ).dialog({
+                                                                            autoOpen: false,
+                                                                            height: 600,
+                                                                            width: 650,
+                                                                            modal: true,
+                                                                            buttons: {
+                                                                              "{{ "pequiven_seip.save"|trans }}": function(){
+                                                                                  dialog.dialog( "close" );
+                                                                                  $("#{{ idPnrDiv }}").html(dialog);
+                                                                              },
+                                                                              "{{ "pequiven_seip.cancel"|trans }}": function() {
+                                                                                dialog.dialog( "close" );
+                                                                              }
+                                                                            },
+                                                                            close: function() {
+                                                                              //form[ 0 ].reset();
+                                                                              //allFields.removeClass( "ui-state-error" );
+                                                                            }
+                                                                          });
+                                                                          
+                                                                           $( "#{{ idPnrButtom }}" ).on( "click", function() {
+                                                                              var tr = $("#{{ productDetailDailyMonthIdTR }}").children();
+                                                                              var pnr = $(tr[3]).find('input').val();
+                                                                              $("#span-{{ productDetailDailyMonthIdTR }}").html(pnr);
+                                                                              dialog.dialog( "open" );
+                                                                           });
+                                                                     });
+                                                                 </script>
+                                                                 <div id="{{ idPnrDiv }}" class="hidden"></div>
                                                              {% endfor %}
                                                          </td>
                                                      </tr>
@@ -275,15 +345,10 @@
 
          {% endfor %}
 
-         {% include 'PequivenSEIPBundle:DataLoad:ReportTemplate/show/services.html.twig' %}
+         {% include 'PequivenSEIPBundle:DataLoad:ReportTemplate/load/services.html.twig' %}
          <br /><br />
 
          {{ actions.update() }}
-{#         <p class="button-height align-right">#}
-             {#{{ buttons.generic(path('pequiven_report_template_update', { 'id': report_template.id }),('pequiven.edit'|trans({},'messages'))) }}
-             &nbsp;
-             {{ buttons.delete(path('pequiven_report_template_delete', { 'id': report_template.id })) }}#}
-{#         </p>#}
         <div class="hidden">
              {{ form_rest(form) }}
         </div>
@@ -300,6 +365,175 @@
                 var changeToDate = $(this).val();
                 var url = Routing.generate("pequiven_report_template_load",{id: "{{ report_template.id }}" ,dateNotification:changeToDate });
                 window.location.href = url;
+            });
+            
+            var calculateTotalPnrAcumulate = function(data,useData){
+                    var $this = $(this);
+                    
+                    if(useData == true){
+                        $this = data;
+                    }
+                    var parent = $this.closest('ul').closest('div');
+                    var total = 0;
+                    var totalChild = 0;
+                    $.each(parent.find('ul.internalCauses').children(),function(index,object){
+                        totalChild = $(object).find('input.cause-fail').val();
+                        if(totalChild != undefined){
+                           total = total +  parseFloat(totalChild);
+                        }
+                    });
+                    $.each(parent.find('ul.externalCauses').children(),function(index,object){
+                        totalChild = $(object).find('input.cause-fail').val();
+                        if(totalChild != undefined){
+                           total = total +  parseFloat(totalChild);
+                        }
+                    });
+                    var spanTotal = parent.find('p > b').children();
+                    $(spanTotal[0]).html(myNumberFormat(parseFloat(total)));
+                };
+            
+            //internalCauses
+            var buildCollection = function ($collectionHolder,newLinkLi,$addXLink){
+                 // add a delete link to all of the existing tag form li elements
+                $collectionHolder.find('li').each(function() {
+                    addTagFormDeleteLink($(this));
+                });
+
+                // add the "add a tag" anchor and li to the tags ul
+                $collectionHolder.append(newLinkLi);
+                
+
+                // count the current form inputs we have (e.g. 2), use that as the new
+                // index when inserting a new item (e.g. 2)
+                $collectionHolder.data('index', $collectionHolder.find(':input').length);
+                
+                $addXLink.on('click', function(e) {
+                    // prevent the link from creating a "#" on the URL
+                    e.preventDefault();
+
+                    // add a new tag form (see next code block)
+                    addTagForm($collectionHolder, newLinkLi);
+                });
+                
+            };
+            
+            function addTagForm($collectionHolder, newLinkLi) {
+                // Get the data-prototype explained earlier
+                var prototype = $collectionHolder.data('prototype');
+
+                // get the new index
+                var index = $collectionHolder.data('index');
+
+                // Replace '__name__' in the prototype's HTML to
+                // instead be a number based on how many items we have
+                var newForm = prototype.replace(/__name__/g, index);
+
+                // increase the index with one for the next item
+                $collectionHolder.data('index', index + 1);
+
+                // Display the form in the page in an li, before the "Add a tag" link li
+                var $newFormLi = $('<li></li>').append(newForm);
+                $newFormLi.find('select').select2();
+                $newFormLi.find('.cause-fail').on("keyup",calculateTotalPnrAcumulate);
+                
+                // add a delete link to the new form
+                addTagFormDeleteLink($newFormLi);
+                
+                newLinkLi.before($newFormLi);
+                
+            }
+            
+            function addTagFormDeleteLink($tagFormLi) {
+                var $removeFormA = $('<a href="#" class="float-right icon-trash icon-size2">{{ "pequiven_seip.buttons.delete_cause"|trans }}</a>');
+                $tagFormLi.append($removeFormA);
+                $removeFormA.on('click', function(e) {
+                    // prevent the link from creating a "#" on the URL
+                    e.preventDefault();
+
+                    var parent = $tagFormLi.parent();
+                    // remove the li for the tag form
+                    $tagFormLi.remove();
+                    
+                    calculateTotalPnrAcumulate(parent,true);
+                });
+            }
+            
+            $.each($('ul.internalCauses'),function(key,value){
+                var $collectionHolder = $(value);
+                var $addInternalCauseLink = $('<a href="#" class="add_internal_cause_link icon-list-add icon-size2 tracked">{{ 'pequiven_seip.buttons.add_internal_cause'|trans }}</a>');
+                var $newLinkLi = $('<li></li>').append($addInternalCauseLink);
+                buildCollection($collectionHolder,$newLinkLi,$addInternalCauseLink);
+            });
+            $.each($('ul.externalCauses'),function(key,value){
+                var $collectionHolder = $(value);
+                var $addInternalCauseLink = $('<a href="#" class="add_external_cause_link icon-list-add icon-size2 tracked">{{ 'pequiven_seip.buttons.add_external_cause'|trans }}</a>');
+                var $newLinkLi = $('<li></li>').append($addInternalCauseLink);
+                buildCollection($collectionHolder,$newLinkLi,$addInternalCauseLink);
+            });
+            $.each($('ul.internalCausesMp'),function(key,value){
+                var $collectionHolder = $(value);
+                var $addInternalCauseLink = $('<a href="#" class="add_internal_causes_mp_link icon-list-add icon-size2 tracked">{{ 'pequiven_seip.buttons.add_internal_cause_mp'|trans }}</a>');
+                var $newLinkLi = $('<li></li>').append($addInternalCauseLink);
+                buildCollection($collectionHolder,$newLinkLi,$addInternalCauseLink);
+            });
+            $.each($('ul.externalCausesMp'),function(key,value){
+                var $collectionHolder = $(value);
+                var $addInternalCauseLink = $('<a href="#" class="add_internal_causes_mp_link icon-list-add icon-size2 tracked">{{ 'pequiven_seip.buttons.add_external_cause_mp'|trans }}</a>');
+                var $newLinkLi = $('<li></li>').append($addInternalCauseLink);
+                buildCollection($collectionHolder,$newLinkLi,$addInternalCauseLink);
+            });
+            $('.select-cause-fail').select2();
+            
+            //Calculos
+            //Calculo produccion bruta
+            $('.grossReal').on('keyup',function(){
+                var $this = $(this);
+                var tr = $this.closest("tr").children();
+                var real = parseFloat($this.val());
+                var plan = parseFloat($(tr[0]).html());
+                var percentaje = 0;
+                percentaje = (real * 100 / plan);
+                var pnr = plan - real;
+                if(pnr > 0){
+                    $(tr[3]).find('.btn-open-pnr').removeClass("hidden");
+                }else{
+                    $(tr[3]).find('.btn-open-pnr').addClass("hidden");
+                }
+                if(isNaN(pnr)){
+                    pnr = 0;
+                }
+                $(tr[2]).html(myNumberFormat(percentaje));
+                $(tr[3]).find('input').val(pnr);
+            });
+            //Calculo produccion neta
+            $('.netReal').on('keyup',function(){
+                var $this = $(this);
+                var tr = $this.closest("tr").children();
+                var real = parseFloat($this.val());
+                var plan = parseFloat($(tr[0]).html());
+                var percentaje = 0;
+                percentaje = (real * 100 / plan);
+                $(tr[2]).html(myNumberFormat(percentaje));
+            });
+            //Calculo consumo de materia prima
+            $('.rawMaterialConsumption').on('keyup',function(){
+                var $this = $(this);
+                var tr = $this.closest("tr").children();
+                var real = parseFloat($this.val());
+                var plan = parseFloat($(tr[1]).html());
+                var percentaje = 0;
+                percentaje = (real * 100 / plan);
+                $(tr[3]).html(myNumberFormat(percentaje));
+            });
+            //Calculo de consumo de servicios
+            $('.consumerPlanningService').on('keyup',function(){
+                var $this = $(this);
+                var tr = $this.closest("tr").children();
+                var real = parseFloat($this.val());
+                var plan = parseFloat($(tr[1]).find('span').html());
+                var percentaje = 0;
+                percentaje = (real * 100 / plan);
+                $(tr[3]).html(myNumberFormat(percentaje));
             });
         });
     </script>
