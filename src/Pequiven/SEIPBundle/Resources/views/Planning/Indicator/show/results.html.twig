@@ -19,7 +19,7 @@
                         {{ 'seip.table.header.value'|trans({},'PequivenArrangementProgramBundle') }}</th>
                     <th scope="col" width="15%" class="hide-on-tablet header">{{ 'seip.table.header.created_at'|trans({},'PequivenArrangementProgramBundle') }}</th>
                     <th scope="col" width="30%" class="hide-on-mobile-portrait header">{{ 'seip.table.header.created_by'|trans({},'PequivenArrangementProgramBundle') }}</th>
-                    {% if is_granted('ROLE_WORKER_PLANNING') %}
+                    {% if is_granted(['ROLE_WORKER_PLANNING','ROLE_INDICATOR_EDIT']) %}
                         {% set colspan = 6 %}
                         <th scope="col" width="15%" class="hide-on-mobile-portrait header">&nbsp;</th>
                     {% endif %}
@@ -41,7 +41,7 @@
                     <td>
                         {$ valueIndicator.createdBy.firstname + " "+ valueIndicator.createdBy.lastname $} <small class="tag">{$ " ("+valueIndicator.createdBy.username+")" $}</small>
                     </td>
-                    {% if is_granted('ROLE_WORKER_PLANNING','ROLE_INDICATOR_EDIT','ROLE_INDICATOR_ADD_RESULT') %}
+                    {% if is_granted(['ROLE_WORKER_PLANNING','ROLE_INDICATOR_EDIT','ROLE_INDICATOR_ADD_RESULT']) %}
                         <td class="align-right vertical-center">
                             <span class="select compact">
                                 <a href class="select-value form-edit">{{ 'pequiven.actions'|trans({},'messages') }}</a>
