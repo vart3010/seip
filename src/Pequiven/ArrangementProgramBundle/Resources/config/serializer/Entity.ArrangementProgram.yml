@@ -36,4 +36,7 @@ Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram:
             groups: [details]
         progressToDate:
             expose: true
-            groups: [api_result]
+            groups: [api_result] 
+        description: 
+            expose: true
+            groups: [api_list]

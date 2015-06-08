@@ -523,6 +523,10 @@ class ArrangementProgramRepository extends EntityRepository
             $queryBuilder->andWhere($queryBuilder->expr()->like('p.name',"'%".$period."%'"));
         }
         
+        if(($prog_description = $criteria->remove('ap.description'))){
+            $queryBuilder->andWhere($queryBuilder->expr()->like('ap.description',"'%".$prog_description."%'"));
+        }
+        
         if(($complejo = $criteria->remove('complejo')) != null && $complejo > 0){
             $queryBuilder
                     ->andWhere('to_g.complejo = :complejo')
@@ -574,8 +578,7 @@ class ArrangementProgramRepository extends EntityRepository
         if(($secondLineManagement = $criteria->remove('secondLineManagement')) != null){
             $queryBuilder
                     ->andWhere('gs.id = :secondLineManagement')
-                ->setParameter('secondLineManagement', $secondLineManagement)
-                ;
+                ->setParameter('secondLineManagement', $secondLineManagement);
         }
         //Filtro de gerencia de segunda linea modular y vinculante
         if(($typeManagement = $criteria->remove('typeManagement')) != null){

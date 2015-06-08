@@ -11,11 +11,12 @@ pequiven:
         write_observation: Escriba una observación
         arrangement_program: Programa de Gestión
         arrangement_programs: Programas de Gestión
-        description_none: Ninguna
+        description_none: No cargado
         description: Descripción
         nameOfProgram: Nombre del Programa
         managementSystem: Sistema de Calidad
         period: Período
+        prog_description: Descripción del Programa
         process: Proceso
         management: Gerencia
         management_second_line: Gerencia de segunda línea
