@@ -33,11 +33,34 @@ class ProductReportController extends SEIPController
         return $entity;
     }
     
+    /**
+     * Ejecuta el presupuesto de produccion bruta para calcular lo demas
+     * @param Request $request
+     * @return type
+     */
     public function runPlanningAction(Request $request)
     {
         $resource = $this->findOr404($request);
+        $productPlanningsNet = $resource->getProductPlanningsNet();//Presupuesto de produccion neto
+        $productPlanningsGross = $resource->getProductPlanningsGross();//Presupuesto de bruta
+        
+        //Construir o completar presupuesto neta en base a bruta
+        foreach ($productPlanningsGross as $productPlanningGross) {
+            if(!isset($productPlanningsNet[$productPlanningGross->getMonth()])){
+                $cloneNet = clone $productPlanningGross;
+                $cloneNet->setType(\Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductPlanning::TYPE_NET);
+                $productPlanningsNet[$productPlanningGross->getMonth()] = $cloneNet;
+                $resource->addProductPlanning($cloneNet);
+            }
+        }
+        $this->save($resource);
+        
+        //Planificacion de productos
         $productPlannings = $resource->getProductPlannings();
+        //Planificacion de Paradas por mes
         $plantStopPlanningsByMonths = $resource->getPlantReport()->getPlantStopPlanningSortByMonth();
+        //Planificacion de Consumo de materia prima por productos
+        $rawMaterialConsumptionPlannings = $resource->getRawMaterialConsumptionPlannings();
         
         $propertyAccessor = \Symfony\Component\PropertyAccess\PropertyAccess::createPropertyAccessor();
         
@@ -48,6 +71,7 @@ class ProductReportController extends SEIPController
             $month = $productPlanning->getMonth();
             if(isset($plantStopPlanningsByMonths[$month])){
                 $daysStops = $plantStopPlanningsByMonths[$month];
+                //Dias de paradas del mes
                 foreach ($daysStops as $daysStop) {
                     $daysStopsArray[] = $daysStop->getNroDay();
                 }
@@ -90,12 +114,46 @@ class ProductReportController extends SEIPController
                 
                 for($day = $dayFrom; $day < $dayEnd; $day++){
                     $dayInt = (int)$day;
-                    $propertyPath = sprintf("day%s%sPlan",$dayInt,$prefix);
+                    $propertyDayPlanProduction = sprintf("day%s%sPlan",$dayInt,$prefix);
+                    $propertyDayPlan = sprintf("day%sPlan",$dayInt);
+                    $dayInStop = false;//Es dia de parada
                     if(in_array($dayInt,$daysStopsArray)){
-                        $propertyAccessor->setValue($productDetailDailyMonth, $propertyPath, 0);
+                        $dayInStop = true;
+                    }
+                    
+                    //Recorremos las meterias primas para calcular el valor por el alicuota
+                    foreach ($rawMaterialConsumptionPlannings as $rawMaterialConsumptionPlanning) {
+                        //Detalle de consumo de materia prima por mes
+                        $detailRawMaterialConsumptions = $rawMaterialConsumptionPlanning->getDetailByMonth();
+                        if(!isset($detailRawMaterialConsumptions[$month])){
+                            //Si no esta el mes de consumo declarado lo creamos
+                            $detailRawMaterialConsumption = new \Pequiven\SEIPBundle\Entity\DataLoad\RawMaterial\DetailRawMaterialConsumption();
+                            $detailRawMaterialConsumption
+                                    ->setMonth($month)
+                                    ;
+                            $rawMaterialConsumptionPlanning->addDetailRawMaterialConsumption($detailRawMaterialConsumption);
+                        }else{
+                            //Tomamos el mes que ya existe para actualizar los valores del plan
+                            $detailRawMaterialConsumption = $detailRawMaterialConsumptions[$month];
+                        }
+                        if($dayInStop === true){
+                            $propertyAccessor->setValue($detailRawMaterialConsumption, $propertyDayPlan, 0);
+                        }else{
+                            //Calcular el consumo de materia prima del dia en base la alicuota
+                            $aliquot = $rawMaterialConsumptionPlanning->getAliquot();
+                            $totalByAliquot = $value * $aliquot;
+                            $propertyAccessor->setValue($detailRawMaterialConsumption, $propertyDayPlan, $totalByAliquot);
+                        }
+                        $detailRawMaterialConsumption->totalize();
+                        $rawMaterialConsumptionPlanning->calculate();
+                        $this->save($rawMaterialConsumptionPlanning);
+                    }
+                    
+                    if($dayInStop === true){
+                        $propertyAccessor->setValue($productDetailDailyMonth, $propertyDayPlanProduction, 0);
                         continue;
                     }
-                    $propertyAccessor->setValue($productDetailDailyMonth, $propertyPath, $value);
+                    $propertyAccessor->setValue($productDetailDailyMonth, $propertyDayPlanProduction, $value);
                 }
             }
             $countProduct++;
@@ -128,54 +186,55 @@ class ProductReportController extends SEIPController
             }
         }
         
-        //Consumo de materia prima por productos
-        $rawMaterialConsumptionPlannings = $resource->getRawMaterialConsumptionPlannings();
-        foreach ($rawMaterialConsumptionPlannings as $rawMaterialConsumptionPlanning) {
-            $detailRawMaterialConsumptions = $rawMaterialConsumptionPlanning->getDetailRawMaterialConsumptions();
-            foreach ($detailRawMaterialConsumptions as $detailRawMaterialConsumption) 
-            {
-                $daysStopsArray = array();
-                $month = $detailRawMaterialConsumption->getMonth();
-                if(isset($plantStopPlanningsByMonths[$month])){
-                    $daysStops = $plantStopPlanningsByMonths[$month];
-                    foreach ($daysStops as $daysStop) {
-                        $daysStopsArray[] = $daysStop->getNroDay();
-                    }
-                }
-                $ranges = $detailRawMaterialConsumption->getRanges();
-                
-                foreach ($ranges as $range) {
-                    $monthBudget = $detailRawMaterialConsumption->getMonthBudget();
-                    $dateFrom = $range->getDateFrom();
-                    $dateEnd = $range->getDateEnd();
-
-                    $dayFrom = $dateFrom->format("d");
-                    $dayEnd = $dateEnd->format("d");
-                    $type = $range->getType();
-                    $originalValue = $range->getValue();
-                    $value = 0;
-
-                    if($type === \Pequiven\SEIPBundle\Model\DataLoad\RawMaterial\Range::TYPE_FIXED_VALUE){
-                        $value = $originalValue;
-                    }else if($type === \Pequiven\SEIPBundle\Model\DataLoad\RawMaterial\Range::TYPE_PERCENTAGE_BUDGET){
-                        $value = ($monthBudget / 100) * $originalValue;
-                    }
-
-                    for($day = $dayFrom; $day < $dayEnd; $day++){
-                        $dayInt = (int)$day;
-                        $propertyPath = sprintf("day%sPlan",$dayInt);
-                        if(in_array($dayInt,$daysStopsArray)){
-                            $propertyAccessor->setValue($detailRawMaterialConsumption, $propertyPath, 0);
-                            continue;
-                        }
-                        $propertyAccessor->setValue($detailRawMaterialConsumption, $propertyPath, $value);
-                        $this->save($detailRawMaterialConsumption);
-                    }
-                }
-            }
-            $rawMaterialConsumptionPlanning->calculate();
-            $this->save($rawMaterialConsumptionPlanning);
-        }
+        //Planificacion de Consumo de materia prima por productos
+//        $rawMaterialConsumptionPlannings = $resource->getRawMaterialConsumptionPlannings();
+//        foreach ($rawMaterialConsumptionPlannings as $rawMaterialConsumptionPlanning) {
+//            //Detalle de consumo de materia prima
+//            $detailRawMaterialConsumptions = $rawMaterialConsumptionPlanning->getDetailByMonth();
+//            foreach ($detailRawMaterialConsumptions as $detailRawMaterialConsumption) 
+//            {
+//                $daysStopsArray = array();
+//                $month = $detailRawMaterialConsumption->getMonth();
+//                if(isset($plantStopPlanningsByMonths[$month])){
+//                    $daysStops = $plantStopPlanningsByMonths[$month];
+//                    foreach ($daysStops as $daysStop) {
+//                        $daysStopsArray[] = $daysStop->getNroDay();
+//                    }
+//                }
+//                $ranges = $detailRawMaterialConsumption->getRanges();
+//                
+//                foreach ($ranges as $range) {
+//                    $monthBudget = $detailRawMaterialConsumption->getMonthBudget();
+//                    $dateFrom = $range->getDateFrom();
+//                    $dateEnd = $range->getDateEnd();
+//
+//                    $dayFrom = $dateFrom->format("d");
+//                    $dayEnd = $dateEnd->format("d");
+//                    $type = $range->getType();
+//                    $originalValue = $range->getValue();
+//                    $value = 0;
+//
+//                    if($type === \Pequiven\SEIPBundle\Model\DataLoad\RawMaterial\Range::TYPE_FIXED_VALUE){
+//                        $value = $originalValue;
+//                    }else if($type === \Pequiven\SEIPBundle\Model\DataLoad\RawMaterial\Range::TYPE_PERCENTAGE_BUDGET){
+//                        $value = ($monthBudget / 100) * $originalValue;
+//                    }
+//
+//                    for($day = $dayFrom; $day < $dayEnd; $day++){
+//                        $dayInt = (int)$day;
+//                        $propertyPath = sprintf("day%sPlan",$dayInt);
+//                        if(in_array($dayInt,$daysStopsArray)){
+//                            $propertyAccessor->setValue($detailRawMaterialConsumption, $propertyPath, 0);
+//                            continue;
+//                        }
+//                        $propertyAccessor->setValue($detailRawMaterialConsumption, $propertyPath, $value);
+//                        $this->save($detailRawMaterialConsumption);
+//                    }
+//                }
+//            }
+//            $rawMaterialConsumptionPlanning->calculate();
+//            $this->save($rawMaterialConsumptionPlanning);
+//        }
         
         $this->flush();
         

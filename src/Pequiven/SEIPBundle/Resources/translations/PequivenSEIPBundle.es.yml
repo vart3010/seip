@@ -578,3 +578,6 @@ Mount: Cantidad
 'Unit measure': 'Unidad de Medida'
 "Ranges stops": 'Rangos de paradas'
 'Total stops': 'Total Días de Paradas'
+Aliquot: Alícuota
+'Current capacity': 'Capacidad actual'
+'Percentage current capacity': 'Porcentaje capacidad actual'

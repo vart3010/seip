@@ -20,6 +20,7 @@ use Pequiven\MasterBundle\Model\Base\ModelBaseMaster;
  * @author Carlos Mendoza <inhack20@gmail.com>
  * @ORM\Table(name="seip_report_plant")
  * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\DataLoad\PlantReportRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class PlantReport extends ModelBaseMaster
 {
@@ -95,6 +96,20 @@ class PlantReport extends ModelBaseMaster
      * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Service\ConsumerPlanningService",mappedBy="plantReport",cascade={"remove"})
      */
     private $consumerPlanningServices;
+    
+    /**
+     * Porcentaje de la capacidad actual
+     * @var float
+     * @ORM\Column(name="currentCapacity",type="float")
+     */
+    private $currentCapacity;
+    
+    /**
+     * Porcentaje de capacidad actual
+     * @var float
+     * @ORM\Column(name="percentageCurrentCapacity",type="float")
+     */
+    private $percentageCurrentCapacity;
 
     /**
      * Constructor
@@ -332,6 +347,24 @@ class PlantReport extends ModelBaseMaster
         return $this->consumerPlanningServices;
     }
     
+    function getCurrentCapacity() {
+        return $this->currentCapacity;
+    }
+
+    function setCurrentCapacity($currentCapacity) {
+        $this->currentCapacity = $currentCapacity;
+        
+        return $this;
+    }
+    
+    function getPercentageCurrentCapacity() {
+        return $this->percentageCurrentCapacity;
+    }
+
+    function setPercentageCurrentCapacity($percentageCurrentCapacity) {
+        $this->percentageCurrentCapacity = $percentageCurrentCapacity;
+    }
+
     public function __toString() 
     {
         $_toString = "-";
@@ -339,6 +372,17 @@ class PlantReport extends ModelBaseMaster
             $_toString = (string)$this->getPlant();
         }
         return $_toString;
+    }
+    /**
+     * @ORM\PrePersist()
+     * @ORM\PreUpdate()
+     */
+    public function calculate()
+    {
+        $designCapacity = $this->getPlant()->getDesignCapacity();
+        $currentCapacity = ($designCapacity * $this->percentageCurrentCapacity) / 100;
+        
+        $this->currentCapacity = $currentCapacity;
     }
     
     public function init(\Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate $reportTemplate)

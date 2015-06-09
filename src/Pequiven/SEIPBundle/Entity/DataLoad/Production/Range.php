@@ -195,4 +195,11 @@ class Range extends BaseModel
         }
         return $_toString;
     }
+    
+    public function __clone() {
+        if($this->id > 0){
+            $this->id = null;
+            $this->productPlanning = null;
+        }
+    }
 }

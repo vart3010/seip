@@ -45,6 +45,10 @@ class PlantReportType extends SeipAbstractForm
                 },
             ))
             ->add('plant',null,$parametersToSet)
+            ->add('percentageCurrentCapacity',null,array(
+                'label_attr' => array('class' => 'label'),
+                "attr" => array("class" => "input"),
+            ))
             ->add('enabled',null,array(
                 'label_attr' => array('class' => 'label'),
                 "attr" => array("class" => "switch medium mid-margin-right","data-text-on"=>"Si","data-text-off"=>"No"),

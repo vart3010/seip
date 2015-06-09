@@ -48,4 +48,15 @@ abstract class RawMaterialConsumptionPlanning extends BaseModel
         }
         return $label;
     }
+    
+    function getDetailByMonth()
+    {
+        $detailRawMaterialConsumptions = $this->getDetailRawMaterialConsumptions();
+        $result = array();
+        foreach ($detailRawMaterialConsumptions as $detailRawMaterialConsumption) {
+            $result[$detailRawMaterialConsumption->getMonth()] = $detailRawMaterialConsumption;
+        }
+        ksort($result);
+        return $result;
+    }
 }

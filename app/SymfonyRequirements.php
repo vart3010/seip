@@ -625,15 +625,15 @@ class SymfonyRequirements extends RequirementCollection
             'Install and enable the <strong>intl</strong> extension (used for validators).'
         );
 
-        if (class_exists('Collator')) {
+        if (extension_loaded('intl')) {
+            // in some WAMP server installations, new Collator() returns null
             $this->addRecommendation(
                 null !== new Collator('fr_FR'),
                 'intl extension should be correctly configured',
                 'The intl extension does not behave properly. This problem is typical on PHP 5.3.X x64 WIN builds.'
             );
-        }
 
-        if (class_exists('Locale')) {
+            // check for compatible ICU versions (only done when you have the intl extension)
             if (defined('INTL_ICU_VERSION')) {
                 $version = INTL_ICU_VERSION;
             } else {
@@ -652,7 +652,6 @@ class SymfonyRequirements extends RequirementCollection
                 'intl ICU version should be at least 4+',
                 'Upgrade your <strong>intl</strong> extension with a newer ICU version (4+).'
             );
-        }
 
             $this->addPhpIniRecommendation(
                 'intl.error_level',
@@ -661,6 +660,7 @@ class SymfonyRequirements extends RequirementCollection
                 'intl.error_level should be 0 in php.ini',
                 'Set "<strong>intl.error_level</strong>" to "<strong>0</strong>" in php.ini<a href="#phpini">*</a> to inhibit the messages when an error occurs in ICU functions.'
             );
+        }
 
         $accelerator =
             (extension_loaded('eaccelerator') && ini_get('eaccelerator.enable'))
