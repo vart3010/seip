@@ -33,9 +33,28 @@ class ProductReportController extends SEIPController
         return $entity;
     }
     
+    /**
+     * Ejecuta el presupuesto de produccion bruta para calcular lo demas
+     * @param Request $request
+     * @return type
+     */
     public function runPlanningAction(Request $request)
     {
         $resource = $this->findOr404($request);
+        $productPlanningsNet = $resource->getProductPlanningsNet();//Presupuesto de produccion neto
+        $productPlanningsGross = $resource->getProductPlanningsGross();//Presupuesto de bruta
+        
+        //Construir o completar presupuesto neta en base a bruta
+        foreach ($productPlanningsGross as $productPlanningGross) {
+            if(!isset($productPlanningsNet[$productPlanningGross->getMonth()])){
+                $cloneNet = clone $productPlanningGross;
+                $cloneNet->setType(\Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductPlanning::TYPE_NET);
+                $productPlanningsNet[$productPlanningGross->getMonth()] = $cloneNet;
+                $resource->addProductPlanning($cloneNet);
+            }
+        }
+        $this->save($resource);
+        
         $productPlannings = $resource->getProductPlannings();
         $plantStopPlanningsByMonths = $resource->getPlantReport()->getPlantStopPlanningSortByMonth();
         
@@ -48,6 +67,7 @@ class ProductReportController extends SEIPController
             $month = $productPlanning->getMonth();
             if(isset($plantStopPlanningsByMonths[$month])){
                 $daysStops = $plantStopPlanningsByMonths[$month];
+                //Dias de paradas del mes
                 foreach ($daysStops as $daysStop) {
                     $daysStopsArray[] = $daysStop->getNroDay();
                 }

@@ -60,7 +60,7 @@ class ProductReport extends BaseModel
     /**
      * Planificacion de productos
      * @var Production\ProductPlanning
-     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductPlanning",mappedBy="productReport",cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductPlanning",mappedBy="productReport",cascade={"remove","persist"})
      */
     protected $productPlannings;
     
