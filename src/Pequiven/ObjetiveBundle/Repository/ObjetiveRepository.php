@@ -343,10 +343,10 @@ class ObjetiveRepository extends EntityRepository {
         } elseif ($securityContext->isGranted(array('ROLE_MANAGER_SECOND', 'ROLE_MANAGER_SECOND_AUX'))) {
             $queryBuilder->andWhere('o.gerenciaSecond = ' . $user->getGerenciaSecond()->getId());
         } elseif ($securityContext->isGranted(array('ROLE_GENERAL_COMPLEJO', 'ROLE_GENERAL_COMPLEJO_AUX'))) {
-            $queryBuilder->innerJoin('o.gerenciaSecond', 'gs');
+//            $queryBuilder->innerJoin('o.gerenciaSecond', 'gs');
             $queryBuilder->andWhere('o.gerencia = ' . $user->getGerencia()->getId());
-            $queryBuilder->andWhere('gs.modular =:modular');
-            $queryBuilder->setParameter('modular', true);
+//            $queryBuilder->andWhere('gs.modular =:modular');
+//            $queryBuilder->setParameter('modular', true);
         } elseif($user->getGerencia()){
             $queryBuilder->andWhere('o.gerencia = ' . $user->getGerencia()->getId());
         }
