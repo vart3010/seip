@@ -115,8 +115,11 @@
 
                             <a href="{$ result._links.self.href $}">{$ result.ref $}</a>
                         </td>
-                        <td data-title="'{{ 'pequiven.arrangement_program.period'|trans }}'" sortable="'period'" filter="{ 'ap.period': 'text' }">
+                        {#<td data-title="'{{ 'pequiven.arrangement_program.period'|trans }}'" sortable="'period'" filter="{ 'ap.period': 'text' }">
                             {$ result.period.name $}
+                        </td>#}
+                        <td data-title="'{{ 'pequiven.arrangement_program.prog_description'|trans }}'" sortable="'description'" filter="{ 'ap.description': 'text' }" >
+                            {$ result.name_program $}
                         </td>
                         <td data-title="'{{ 'pequiven.arrangement_program.management'|trans }}'">
                             <span ng-if="result.type == {{ constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC') }}">{$ result.tacticalObjective.gerencia.description $}</span>

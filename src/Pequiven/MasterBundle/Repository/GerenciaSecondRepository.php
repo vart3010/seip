@@ -188,6 +188,8 @@ class GerenciaSecondRepository extends EntityRepository
             $qb->andWhere('gs.gerencia = '.$options['gerencia']);
             $qb->leftJoin('gs.gerenciaVinculants', 'gv');
             $qb->orWhere('gv.id = '.$options['gerencia']);
+            $qb->leftJoin('gs.gerenciaSupports', 'gsp');
+            $qb->orWhere('gsp.id = '.$options['gerencia']);
         }
         
         $qb
