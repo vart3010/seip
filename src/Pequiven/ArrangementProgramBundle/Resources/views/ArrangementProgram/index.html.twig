@@ -10,12 +10,12 @@
 {% endblock %}
 
 {% block body -%}
-   <div ng-controller="TableFormatController">
-       <div ng-controller="ReportArrangementProgramController">
+    <div ng-controller="TableFormatController">
+        <div ng-controller="ReportArrangementProgramController">
             <details class="details margin-bottom" open="">
                 <summary role="button" aria-expanded="true">
                     {{ 'pequiven.filters'|trans({},'messages') }}
-                    
+
                 </summary>
                 <div class="with-padding">
                     <div class="columns">
@@ -37,7 +37,7 @@
                                 </select>
                             </div>
                         </div>
-                            
+
                         <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
                             <label class="bold">{{ 'pequiven_seip.filters.management_second_line'|trans({},'PequivenSEIPBundle') }}</label>
                             <br/>
@@ -47,7 +47,7 @@
                                 </select>
                             </div>
                         </div>
-                         <div class="new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                        <div class="new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
                             <label class="bold">{{ 'pequiven.arrangement_program.status.status'|trans }}</label>
                             <br/>
                             <div class="with-mid-padding">
@@ -56,8 +56,8 @@
                                 </select>
                             </div>
                         </div>
-                            
-                            
+
+
                         <div class="new-row new-row-mobile-portrait six-columns twelve-columns-tablet twelve-columns-mobile-landscape twelve-columns-mobile-portrait">
                             <label class="bold">{{ 'pequiven.arrangement_program.tactical_objective'|trans({},'PequivenArrangementProgramBundle') }}</label>
                             <br/>
@@ -77,7 +77,7 @@
                                 </select>
                             </div>
                         </div>
-                            
+
                         <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
                             <label class="bold">{{ 'pequiven_seip.filters.responsibles_pg'|trans({},'PequivenSEIPBundle') }}</label>
                             <br/>
@@ -94,87 +94,92 @@
                         </div>
                         {% if isAllowFilterTypeManagement == true %}
                             <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
-                            <label class="bold">{{ 'pequiven.arrangement_program.type_management.type_management'|trans({},'PequivenArrangementProgramBundle') }}</label>
-                            <br/>
-                            <div class="with-mid-padding">
-                                <select class="select2 input-xlarge" ng-model="model.typeManagement" ng-change="getSecondLineManagement()" ng-init="data.typesManagement = {{ typesManagement|json_encode() }}" ng-options="value as value.label for (key,value) in data.typesManagement">
-                                    <option value=''></option>
-                                </select>
+                                <label class="bold">{{ 'pequiven.arrangement_program.type_management.type_management'|trans({},'PequivenArrangementProgramBundle') }}</label>
+                                <br/>
+                                <div class="with-mid-padding">
+                                    <select class="select2 input-xlarge" ng-model="model.typeManagement" ng-change="getSecondLineManagement()" ng-init="data.typesManagement = {{ typesManagement|json_encode() }}" ng-options="value as value.label for (key,value) in data.typesManagement">
+                                        <option value=''></option>
+                                    </select>
+                                </div>
                             </div>
-                        </div>
                         {% endif %}
                     </div>
                 </div>
             </details>
-                <div loading-container="tableParams.settings().$loading" ng-init="data.arrangementProgramStatusLabels = {{ labelsStatus|serialize }}">
-                    <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager"  template-header="custom/header" api-data-url="{{ path('pequiven_seip_arrangementprogram_index',{_format:'json',_period: app.request.get("_period") }) }}" export-csv="csv" class="table table-responsive">
-                        <tr ng-repeat="result in $data | filter:tableParams.search" data="{$ result|json $}">
-                            <td data-title="'{{ 'pequiven.ref'|trans({},'messages') }}'" sortable="'ref'" filter="{ 'ap.ref': 'text' }">
-                                <img ng-if="result._data.summary.advances < 50" src="{{ asset('bundles/pequivenseip/logotipos/bullet_red.png') }}" class="semaphore">
-                                <img ng-if="result._data.summary.advances >= 50 && result._data.summary.advances < 100"src="{{ asset('bundles/pequivenseip/logotipos/bullet_yellow.png') }}" class="semaphore">
-                                <img ng-if="result._data.summary.advances == 100" src="{{ asset('bundles/pequivenseip/logotipos/bullet_green.png') }}" class="semaphore">
+            <div loading-container="tableParams.settings().$loading" ng-init="data.arrangementProgramStatusLabels = {{ labelsStatus|serialize }}">
+                <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager"  template-header="custom/header" api-data-url="{{ path('pequiven_seip_arrangementprogram_index',{_format:'json',_period: app.request.get("_period") }) }}" export-csv="csv" class="table table-responsive">
+                    <tr ng-repeat="result in $data | filter:tableParams.search" data="{$ result|json $}">
+                        <td data-title="'{{ 'pequiven.ref'|trans({},'messages') }}'" sortable="'ref'" filter="{ 'ap.ref': 'text' }">
+                            <img ng-if="result._data.summary.advances < 50" src="{{ asset('bundles/pequivenseip/logotipos/bullet_red.png') }}" class="semaphore">
+                            <img ng-if="result._data.summary.advances >= 50 && result._data.summary.advances < 100"src="{{ asset('bundles/pequivenseip/logotipos/bullet_yellow.png') }}" class="semaphore">
+                            <img ng-if="result._data.summary.advances == 100" src="{{ asset('bundles/pequivenseip/logotipos/bullet_green.png') }}" class="semaphore">
 
-                                <a href="{$ result._links.self.href $}">{$ result.ref $}</a>
-                            </td>
-                            <td data-title="'{{ 'pequiven.arrangement_program.period'|trans }}'" sortable="'period'" filter="{ 'ap.period': 'text' }">
-                                {$ result.period.name $}
-                            </td>
-                            <td data-title="'{{ 'pequiven.arrangement_program.management'|trans }}'">
-                                <span ng-if="result.type == {{ constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC') }}">{$ result.tacticalObjective.gerencia.description $}</span>
-                                <span ng-if="result.type == {{ constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE') }}">{$ result.operationalObjective.gerenciaSecond.description $}</span>
-                            </td>
-                            <td data-title="'{{ 'pequiven.arrangement_program.location'|trans }}'">
-                                {$ result.tacticalObjective.gerencia.complejo.description $}
-                            </td>
-                            <td data-title="'{{ 'pequiven.arrangement_program.status.status'|trans }}'" sortable="'status'" >
-                                {$ data.arrangementProgramStatusLabels[result.status].description $}
-                            </td>
-                            <td data-title="'{{ 'monitor.advances'|trans({},'PequivenSEIPBundle') }}'">
-                                <span>
-                                    {$ result._data.summary.advances|myNumberFormat $}/{$ result._data.summary.weight|myNumberFormat $}%
-                                </span>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
+                            <a href="{$ result._links.self.href $}">{$ result.ref $}</a>
+                        </td>
+                        <td data-title="'{{ 'pequiven.arrangement_program.period'|trans }}'" sortable="'period'" filter="{ 'ap.period': 'text' }">
+                            {$ result.period.name $}
+                        </td>
+                        <td data-title="'{{ 'pequiven.arrangement_program.prog_description'|trans }}'" sortable="'description'" filter="{ 'ap.description': 'text' }" >
+                             {$ result.name_program $}
+                        </td>
+                        <td data-title="'{{ 'pequiven.arrangement_program.management'|trans }}'">
+                            <span ng-if="result.type == {{ constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC') }}">{$ result.tacticalObjective.gerencia.description $}</span>
+                            <span ng-if="result.type == {{ constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE') }}">{$ result.operationalObjective.gerenciaSecond.description $}</span>
+                        </td>
+                        <td data-title="'{{ 'pequiven.arrangement_program.location'|trans }}'">
+                            {$ result.tacticalObjective.gerencia.complejo.description $}
+                        </td>
+                        <td data-title="'{{ 'pequiven.arrangement_program.status.status'|trans }}'" sortable="'status'" >
+                            {$ data.arrangementProgramStatusLabels[result.status].description $}
+                        </td>
+                        <td data-title="'{{ 'monitor.advances'|trans({},'PequivenSEIPBundle') }}'">
+                            <span>
+                                {$ result._data.summary.advances|myNumberFormat $}/{$ result._data.summary.weight|myNumberFormat $}%
+                            </span>
+                        </td>
+                    </tr>
+                </table>
             </div>
         </div>
+    </div>
 {% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
     <script type="text/javascript">
-        $(document).ready(function(){
+        $(document).ready(function () {
             $('.select2').select2({
                 allowClear: true
             });
             var urlResponsibles = '{{ path('pequiven_user_search') }}';
             var parametersSelectResponsibles = {
-                    minimumInputLength: 1,
-                    multiple: true,
-                    allowClear: true,
-                    ajax: { // instead of writing the function to execute the request we use Select2's convenient helper
-                        url: urlResponsibles,
-                        dataType: 'json',
-                        quietMillis: 250,
-                        data: function (term, page) {
-                            return {
-                                query: term, // search term
-                            };
-                        },
-                        results: function (data, page) { // parse the results into the format expected by Select2.
-                            // since we are using custom formatting functions we do not need to alter the remote JSON data
-                            return { results: data };
-                        },
-                        cache: true
+                minimumInputLength: 1,
+                multiple: true,
+                allowClear: true,
+                ajax: {// instead of writing the function to execute the request we use Select2's convenient helper
+                    url: urlResponsibles,
+                    dataType: 'json',
+                    quietMillis: 250,
+                    data: function (term, page) {
+                        return {
+                            query: term, // search term
+                        };
                     },
-                    initSelection: function(element, callback){
+                    results: function (data, page) { // parse the results into the format expected by Select2.
+                        // since we are using custom formatting functions we do not need to alter the remote JSON data
+                        return {results: data};
                     },
-                    formatResult: responsiblesFormatResult, // omitted for brevity, see the source of this page
-                    formatSelection: responsiblesFormatResult,  // omitted for brevity, see the source of this page
-                    escapeMarkup: function (m) { return m; } // we do not want to escape markup since we are displaying html in results
-             };
-                    
+                    cache: true
+                },
+                initSelection: function (element, callback) {
+                },
+                formatResult: responsiblesFormatResult, // omitted for brevity, see the source of this page
+                formatSelection: responsiblesFormatResult, // omitted for brevity, see the source of this page
+                escapeMarkup: function (m) {
+                    return m;
+                } // we do not want to escape markup since we are displaying html in results
+            };
+
             $('#responsibles').select2(parametersSelectResponsibles);
             $('#responsiblesGoals').select2(parametersSelectResponsibles);
         });
