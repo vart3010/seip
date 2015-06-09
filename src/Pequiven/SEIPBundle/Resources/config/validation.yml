@@ -14,7 +14,14 @@ Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductPlanning:
         validCapacity:
             - "True":
                 message: pequiven.validators.valid_product_planning.incorrect_valid_capacity
-            
+    properties:
+        netProductionPercentage:
+             - Range:
+                min: 0
+                max: 100
+                minMessage: 'El valor minimo es 0%'
+                maxMessage: 'El valor maximo es 100%'
+                
 Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram:
     constraints:
         - Pequiven\ArrangementProgramBundle\Validator\Constraints\MaximumGoalResponsible:

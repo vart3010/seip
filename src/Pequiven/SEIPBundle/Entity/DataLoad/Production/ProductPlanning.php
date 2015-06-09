@@ -61,6 +61,13 @@ class ProductPlanning extends BaseModel
     private $dailyProductionCapacity;
     
     /**
+     * Porcentaje de produccion bruta que va para la neta
+     * @var float
+     * @ORM\Column(name="net_production_percentage",type="float")
+     */
+    private $netProductionPercentage;
+    
+    /**
      * @var \Pequiven\SEIPBundle\Entity\DataLoad\ProductReport
      * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\ProductReport",inversedBy="productPlannings")
      * @ORM\JoinColumn(nullable=false)
@@ -227,6 +234,16 @@ class ProductPlanning extends BaseModel
     public function getType()
     {
         return $this->type;
+    }
+    
+    function getNetProductionPercentage() {
+        return $this->netProductionPercentage;
+    }
+
+    function setNetProductionPercentage($netProductionPercentage) {
+        $this->netProductionPercentage = $netProductionPercentage;
+        
+        return $this;
     }
     
     public function __toString() 
