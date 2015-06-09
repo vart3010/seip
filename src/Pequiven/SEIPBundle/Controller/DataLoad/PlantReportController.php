@@ -34,55 +34,118 @@ class PlantReportController extends SEIPController
         return $entity;
     }
     
+    /**
+     * Ejecuta la planificacion de la planta
+     * @param Request $request
+     * @return type
+     */
     public function runAction(Request $request)
     {
         $resource = $this->findOr404($request);
-        
+        $productsReport = $resource->getProductsReport();
         $plantStopPlanningsByMonths = $resource->getPlantStopPlanningSortByMonth();
         $consumerPlanningServices = $resource->getConsumerPlanningServices();
         $propertyAccessor = \Symfony\Component\PropertyAccess\PropertyAccess::createPropertyAccessor();
         
-        foreach ($consumerPlanningServices as $consumerPlanningService) {
-            $details = $consumerPlanningService->getDetails();
-            foreach ($details as $detail) {
-                $daysStopsArray = array();
-                $month = $detail->getMonth();
-                if(isset($plantStopPlanningsByMonths[$month])){
-                    $daysStops = $plantStopPlanningsByMonths[$month];
-                    foreach ($daysStops as $daysStop) {
-                        $daysStopsArray[] = $daysStop->getNroDay();
-                    }
-                }
-                $ranges = $detail->getRanges();
-                foreach ($ranges as $range) {
-                    $monthBudget = $detail->getMonthBudget();
-                    $dateFrom = $range->getDateFrom();
-                    $dateEnd = $range->getDateEnd();
-
-                    $dayFrom = $dateFrom->format("d");
-                    $dayEnd = $dateEnd->format("d");
-                    $type = $range->getType();
-                    $originalValue = $range->getValue();
-                    $value = 0;
-
-                    if($type === \Pequiven\SEIPBundle\Model\DataLoad\RawMaterial\Range::TYPE_FIXED_VALUE){
-                        $value = $originalValue;
-                    }else if($type === \Pequiven\SEIPBundle\Model\DataLoad\RawMaterial\Range::TYPE_PERCENTAGE_BUDGET){
-                        $value = ($monthBudget / 100) * $originalValue;
-                    }
-
-                    for($day = $dayFrom; $day < $dayEnd; $day++){
-                        $dayInt = (int)$day;
-                        $propertyPath = sprintf("day%sPlan",$dayInt);
-                        if(in_array($dayInt,$daysStopsArray)){
-                            $propertyAccessor->setValue($details, $propertyPath, 0);
-                            continue;
-                        }
-                        $propertyAccessor->setValue($detail, $propertyPath, $value);
-                        $this->save($detail);
-                    }
+        $getDayStops = function($month) use ($plantStopPlanningsByMonths){
+            $daysStopsArray = array();
+            if(isset($plantStopPlanningsByMonths[$month])){
+                $daysStops = $plantStopPlanningsByMonths[$month];
+                foreach ($daysStops as $daysStop) {
+                    $daysStopsArray[] = $daysStop->getNroDay();
                 }
             }
+            return $daysStopsArray;
+        };
+        
+        foreach ($consumerPlanningServices as $consumerPlanningService) {
+            $details = $consumerPlanningService->getDetails();
+            $aliquot = $consumerPlanningService->getAliquot();
+            $detailsByMonth = $consumerPlanningService->getDetailsByMonth();
+            foreach ($details as $detail) {
+                $month = $detail->getMonth();
+                $daysStopsArray = $getDayStops($month);
+                
+                $ranges = $detail->getRanges();
+                    foreach ($ranges as $range) {
+                        $monthBudget = $detail->getMonthBudget();
+                        $dateFrom = $range->getDateFrom();
+                        $dateEnd = $range->getDateEnd();
+
+                        $dayFrom = $dateFrom->format("d");
+                        $dayEnd = $dateEnd->format("d");
+                        $type = $range->getType();
+                        $originalValue = $range->getValue();
+                        $value = 0;
+
+                        if($type === \Pequiven\SEIPBundle\Model\DataLoad\RawMaterial\Range::TYPE_FIXED_VALUE){
+                            $value = $originalValue;
+                        }else if($type === \Pequiven\SEIPBundle\Model\DataLoad\RawMaterial\Range::TYPE_PERCENTAGE_BUDGET){
+                            $value = ($monthBudget / 100) * $originalValue;
+                        }
+
+                        for($day = $dayFrom; $day <= $dayEnd; $day++){
+                            $dayInt = (int)$day;
+                            $propertyPath = sprintf("day%sPlan",$dayInt);
+                            $propertyPathGross = sprintf("day%sGrossPlan",$dayInt);
+                            if(in_array($dayInt,$daysStopsArray)){
+                                $propertyAccessor->setValue($detail, $propertyPath, 0);
+                                continue;
+                            }
+
+                            $totalPlan = 0.0;
+                            //Recorremos los productos para calcular el plan del dia
+                            foreach ($productsReport as $productReport) {
+                                $productDetailDailyMonths = $productReport->getProductDetailDailyMonthsSortByMonth();
+                                if(isset($productDetailDailyMonths[$month])){
+                                    $dayPlan = $propertyAccessor->getValue($productDetailDailyMonths[$month], $propertyPathGross);
+                                    $totalPlan = $totalPlan + $dayPlan;
+                                }
+                            }
+                            $total = $aliquot * $totalPlan;
+                            $propertyAccessor->setValue($detail, $propertyPath, $total);
+                            $this->save($detail);
+                        }
+                    }
+                
+            }//Fin for
+            
+            //Completar los meses que no estan definidos
+            for($month = 1; $month <= 12; $month++){
+                if(!isset($detailsByMonth[$month])){
+                    $daysStopsArray = $getDayStops($month);
+                    
+                    $detail = new \Pequiven\SEIPBundle\Entity\DataLoad\Service\DetailConsumerPlanningService();
+                    $detail->setMonth($month);
+                    $consumerPlanningService->addDetailConsumerPlanningService($detail);
+
+                    for($day = 1; $day <= 31; $day++){
+                        $dayInt = (int)$day;
+                        $propertyPath = sprintf("day%sPlan",$dayInt);
+                        $propertyPathGross = sprintf("day%sGrossPlan",$dayInt);
+                        if(in_array($dayInt,$daysStopsArray)){
+                            $propertyAccessor->setValue($detail, $propertyPath, 0);
+                            continue;
+                        }
+
+                        $totalPlan = 0.0;
+                        //Recorremos los productos para calcular el plan del dia
+                        foreach ($productsReport as $productReport) {
+                            $productDetailDailyMonths = $productReport->getProductDetailDailyMonthsSortByMonth();
+                            if(isset($productDetailDailyMonths[$month])){
+                                $dayPlan = $propertyAccessor->getValue($productDetailDailyMonths[$month], $propertyPathGross);
+                                $totalPlan = $totalPlan + $dayPlan;
+                            }
+                        }
+                        $total = $aliquot * $totalPlan;
+                        $propertyAccessor->setValue($detail, $propertyPath, $total);
+                        $this->save($detail);
+                    }
+
+                    $this->save($consumerPlanningService);
+                }
+            }
+            
             foreach ($resource->getPlantStopPlannings() as $plantStopPlanning)
             {
                 $ranges = $plantStopPlanning->getRanges();

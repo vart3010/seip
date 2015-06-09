@@ -51,7 +51,7 @@ class ConsumerPlanningService extends BaseModel
     /**
      * Detalles
      * @var DetailConsumerPlanningService
-     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Service\DetailConsumerPlanningService",mappedBy="consumerPlanningService")
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Service\DetailConsumerPlanningService",mappedBy="consumerPlanningService",cascade={"persist","remove"})
      */
     private $detailConsumerPlanningServices;
     
@@ -136,7 +136,7 @@ class ConsumerPlanningService extends BaseModel
     public function addDetailConsumerPlanningService(\Pequiven\SEIPBundle\Entity\DataLoad\Service\DetailConsumerPlanningService $detailConsumerPlanningServices)
     {
         $detailConsumerPlanningServices->setConsumerPlanningService($this);
-        $this->detailConsumerPlanningServices[] = $detailConsumerPlanningServices;
+        $this->detailConsumerPlanningServices->add($detailConsumerPlanningServices);
 
         return $this;
     }
@@ -164,6 +164,15 @@ class ConsumerPlanningService extends BaseModel
     public function getDetails()
     {
         return $this->detailConsumerPlanningServices;
+    }
+    
+    public function getDetailsByMonth() 
+    {
+        $details = array();
+        foreach ($this->getDetails() as $detail) {
+            $details[$detail->getMonth()] = $detail;
+        }
+        return $details;
     }
     
     function getAliquot() {
