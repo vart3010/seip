@@ -31,4 +31,16 @@ class ConsumerPlanningServiceController extends SEIPController
         }
         return $entity;
     }
+    
+    public function deleteAction(\Symfony\Component\HttpFoundation\Request $request) 
+    {
+        $resource = $this->findOr404($request);
+        
+        $url = $this->generateUrl("pequiven_plant_report_show",array(
+            "id" => $resource->getPlantReport()->getId(),
+        ));
+        
+        $this->domainManager->delete($resource);
+        return $this->redirect($url);
+    }
 }
