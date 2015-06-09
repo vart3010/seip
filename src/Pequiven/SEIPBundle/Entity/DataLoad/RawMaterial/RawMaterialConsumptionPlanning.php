@@ -87,6 +87,13 @@ class RawMaterialConsumptionPlanning extends BaseModel
      * @ORM\Column(name="percentage",type="float")
      */
     private $percentage = 0;
+    
+    /**
+     * Alicuota de lo que se necesita para una tonelada
+     * @var float
+     * @ORM\Column(name="aliquot",type="float")
+     */
+    private $aliquot = 0;
 
     /**
      * Constructor
@@ -279,6 +286,18 @@ class RawMaterialConsumptionPlanning extends BaseModel
         return $this->productReport;
     }
     
+    function getAliquot() {
+        return $this->aliquot;
+    }
+
+    function setAliquot($aliquot) 
+    {
+        $this->aliquot = $aliquot;
+        
+        return $this;
+    }
+
+        
     public function __toString() {
         $_toString = "-";
         if($this->getProduct()){
