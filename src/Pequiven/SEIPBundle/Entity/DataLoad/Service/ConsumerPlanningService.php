@@ -54,6 +54,14 @@ class ConsumerPlanningService extends BaseModel
      * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Service\DetailConsumerPlanningService",mappedBy="consumerPlanningService")
      */
     private $detailConsumerPlanningServices;
+    
+    
+    /**
+     * Alicuota de lo que se necesita para una tonelada
+     * @var float
+     * @ORM\Column(name="aliquot",type="float")
+     */
+    private $aliquot = 0;
 
     /**
      * Constructor
@@ -158,6 +166,14 @@ class ConsumerPlanningService extends BaseModel
         return $this->detailConsumerPlanningServices;
     }
     
+    function getAliquot() {
+        return $this->aliquot;
+    }
+
+    function setAliquot($aliquot) {
+        $this->aliquot = $aliquot;
+    }
+        
     public function __toString() {
         $_toString = "-";
         if($this->getService()){

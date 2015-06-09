@@ -19,6 +19,11 @@
         {{ form_errors(form.dailyProductionCapacity) }}
     </div>
     <div class="field-block button-height">
+        {{ form_label(form.netProductionPercentage) }}
+        {{ form_widget(form.netProductionPercentage) }}%
+        {{ form_errors(form.netProductionPercentage) }}
+    </div>
+    <div class="field-block button-height">
         {{ form_label(form.ranges) }}
         <ul class="ranges unstyled-list padding-left-40" data-prototype="{% filter escape %}{% include 'PequivenSEIPBundle:DataLoad/Production/Range:_form.html.twig' with {form: form.ranges.vars.prototype} %}{% endfilter %}">
             {% for range in form.ranges %}

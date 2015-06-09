@@ -27,7 +27,7 @@ abstract class Detail extends BaseModel
      * @var float
      * @ORM\Column(name="month_budget",type="float")
      */
-    protected $monthBudget;
+    protected $monthBudget = 0;
     
     /**
      * Mes

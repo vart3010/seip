@@ -49,6 +49,10 @@ class ProductPlanningType extends AbstractType
                 'label_attr' => array('class' => 'label'),
                 "attr" => array("class" => "input input-large"),
             ))
+            ->add('netProductionPercentage',null,array(
+                'label_attr' => array('class' => 'label'),
+                "attr" => array("class" => "input input-mini"),
+            ))
             ->add("ranges","collection",array(
                 'label_attr' => array('class' => 'label'),
                 "type" => new RangeType(),

@@ -61,6 +61,13 @@ class ProductPlanning extends BaseModel
     private $dailyProductionCapacity;
     
     /**
+     * Porcentaje de produccion bruta que va para la neta
+     * @var float
+     * @ORM\Column(name="net_production_percentage",type="float")
+     */
+    private $netProductionPercentage;
+    
+    /**
      * @var \Pequiven\SEIPBundle\Entity\DataLoad\ProductReport
      * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\ProductReport",inversedBy="productPlannings")
      * @ORM\JoinColumn(nullable=false)
@@ -229,6 +236,16 @@ class ProductPlanning extends BaseModel
         return $this->type;
     }
     
+    function getNetProductionPercentage() {
+        return $this->netProductionPercentage;
+    }
+
+    function setNetProductionPercentage($netProductionPercentage) {
+        $this->netProductionPercentage = $netProductionPercentage;
+        
+        return $this;
+    }
+    
     public function __toString() 
     {
         $_toString = "-";
@@ -241,5 +258,18 @@ class ProductPlanning extends BaseModel
     public function isValidCapacity()
     {
         return !($this->dailyProductionCapacity > $this->totalMonth);
+    }
+    
+    public function __clone() 
+    {
+        if($this->id > 0){
+            $this->id = null;
+            $this->type = null;
+            $ranges = $this->ranges;
+            $this->ranges = new \Doctrine\Common\Collections\ArrayCollection();
+            foreach ($ranges as $range) {
+                $this->addRange(clone($range));
+            }
+        }
     }
 }
