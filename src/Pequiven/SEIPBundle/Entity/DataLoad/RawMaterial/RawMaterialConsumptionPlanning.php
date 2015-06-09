@@ -54,7 +54,7 @@ class RawMaterialConsumptionPlanning extends BaseModel
      * Presupuesto de Materias prima
      * @var \Pequiven\SEIPBundle\Entity\DataLoad\RawMaterial\DetailRawMaterialConsumption
      *
-     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\RawMaterial\DetailRawMaterialConsumption",mappedBy="rawMaterialConsumptionPlanning")
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\RawMaterial\DetailRawMaterialConsumption",mappedBy="rawMaterialConsumptionPlanning",cascade={"remove","persist"})
      */
     private $detailRawMaterialConsumptions;
     
