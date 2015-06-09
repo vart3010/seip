@@ -242,4 +242,17 @@ class ProductPlanning extends BaseModel
     {
         return !($this->dailyProductionCapacity > $this->totalMonth);
     }
+    
+    public function __clone() 
+    {
+        if($this->id > 0){
+            $this->id = null;
+            $this->type = null;
+            $ranges = $this->ranges;
+            $this->ranges = new \Doctrine\Common\Collections\ArrayCollection();
+            foreach ($ranges as $range) {
+                $this->addRange(clone($range));
+            }
+        }
+    }
 }

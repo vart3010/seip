@@ -39,7 +39,11 @@ class DetailRawMaterialConsumptionController extends SEIPController
 
         if ($request->isMethod('POST') && $form->submit($request)->isValid()) {
             $resource = $this->domainManager->create($resource);
-
+            
+            $rawMaterialConsumptionPlanning = $resource->getRawMaterialConsumptionPlanning();
+            $rawMaterialConsumptionPlanning->calculate();
+            $this->save($rawMaterialConsumptionPlanning,true);
+            
             return $this->redirectHandler->redirect($this->generateUrl("pequiven_raw_material_consumption_planning_show",array(
                 "id" => $resource->getRawMaterialConsumptionPlanning()->getId(),
             )));
@@ -91,5 +95,25 @@ class DetailRawMaterialConsumptionController extends SEIPController
         ;
 
         return $this->handleView($view);
+    }
+    
+    public function deleteAction(\Symfony\Component\HttpFoundation\Request $request) {
+        if($request->isXmlHttpRequest()){
+            $resource = $this->findOr404($request);
+            $this->domainManager->delete($resource);
+            
+            $rawMaterialConsumptionPlanning = $resource->getRawMaterialConsumptionPlanning();
+            $rawMaterialConsumptionPlanning->calculate();
+            $this->save($rawMaterialConsumptionPlanning,true);
+            
+            /** @var FlashBag $flashBag */
+            $flashBag = $this->get('session')->getBag('flashes');
+            $data = array(
+                'message' => $flashBag->get('success'),
+            );
+            return new \Symfony\Component\HttpFoundation\JsonResponse($data);
+        }else{
+            return parent::deleteAction($request);
+        }
     }
 }
