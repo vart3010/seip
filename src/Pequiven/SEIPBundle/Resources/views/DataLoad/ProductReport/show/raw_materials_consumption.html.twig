@@ -30,7 +30,8 @@
                 {% for rawMaterialConsumptionPlanning in product_report.rawMaterialConsumptionPlannings %}
                     {% set tableIdRow = "row-rawMaterialConsumptionPlanning-"~rawMaterialConsumptionPlanning.id %}
                     <tr id="{{ tableIdRow }}">
-                        <th scope="row">{{ loop.index }} - 
+                        <th scope="row">
+                            {{ loop.index }} - 
                             {{ generateLink(rawMaterialConsumptionPlanning) }}
                         </th>
                         <td>{{ rawMaterialConsumptionPlanning.totalPlan|myNumberFormat }}</td>

@@ -1,0 +1,34 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}
+
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
+
+
+{% block before_body %}
+    {{ contentHeader(("pequiven_seip.product_report.product_detail_daily_month"|trans ))}}
+{% endblock %}
+
+{%  set mes  = 'pequiven_seip.month.' ~ unrealized_production.month %}
+
+{% block body %}
+
+    <fieldset class="fieldset">
+        <legend class="legend">{{ 'pequiven_seip.product_report.product_detail_daily_month'|trans }}</legend>
+        <div class="columns">
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'pequiven_seip.product_report.product_report'|trans }}</label>
+                    {{ unrealized_production.productReport }} 
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'Month'|trans }}</label>
+                    {{ mes|trans }}
+                </p>
+            </div>
+        </div>
+    </fieldset>
+
+{% endblock %}

@@ -33,7 +33,8 @@
                 {% for productDetailDailyMonth in product_report.getProductDetailDailyMonthsSortByMonth %}
                     {% set tableIdRow = "row-productDetailDailyMonth-"~productDetailDailyMonth.id %}
                     <tr id="{{ tableIdRow }}">
-                        <th scope="row">{{ loop.index }} - 
+                        <th scope="row">
+                            {{ loop.index }} - 
                             {{ generateLink(productDetailDailyMonth) }}
                         </th>
                         <td>{{ productDetailDailyMonth.totalGrossPlan|myNumberFormat }}</td>

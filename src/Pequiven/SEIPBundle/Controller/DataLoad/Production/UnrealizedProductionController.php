@@ -18,31 +18,29 @@ use Pequiven\SEIPBundle\Controller\SEIPController;
  *
  * @author Carlos Mendoza <inhack20@gmail.com>
  */
-class UnrealizedProductionController extends SEIPController
-{
-    public function createNew() 
-    {
+class UnrealizedProductionController extends SEIPController {
+
+    public function createNew() {
         $entity = parent::createNew();
         $request = $this->getRequest();
         $productReportId = $request->get("productReport");
-        if($productReportId > 0){
+        if ($productReportId > 0) {
             $em = $this->getDoctrine()->getManager();
             $productReport = $em->getRepository("Pequiven\SEIPBundle\Entity\DataLoad\ProductReport")->find($productReportId);
             $entity->setProductReport($productReport);
         }
         return $entity;
     }
-    
-    public function createAction(\Symfony\Component\HttpFoundation\Request $request) 
-    {
+
+    public function createAction(\Symfony\Component\HttpFoundation\Request $request) {
         $resource = $this->createNew();
-        
+
         $form = $this->getForm($resource);
 
         if ($request->isMethod('POST') && $form->submit($request)->isValid()) {
             $resource = $this->domainManager->create($resource);
 
-            $url = $this->generateUrl("pequiven_product_report_show",array(
+            $url = $this->generateUrl("pequiven_product_report_show", array(
                 "id" => $resource->getProductReport()->getId(),
             ));
 
@@ -54,19 +52,18 @@ class UnrealizedProductionController extends SEIPController
         }
 
         $view = $this
-            ->view()
-            ->setTemplate($this->config->getTemplate('create.html'))
-            ->setData(array(
-                $this->config->getResourceName() => $resource,
-                'form'                           => $form->createView()
-            ))
+                ->view()
+                ->setTemplate($this->config->getTemplate('create.html'))
+                ->setData(array(
+            $this->config->getResourceName() => $resource,
+            'form' => $form->createView()
+                ))
         ;
 
         return $this->handleView($view);
     }
-    
-    public function updateAction(\Symfony\Component\HttpFoundation\Request $request) 
-    {
+
+    public function updateAction(\Symfony\Component\HttpFoundation\Request $request) {
         $resource = $this->findOr404($request);
         $form = $this->getForm($resource);
 
@@ -74,7 +71,7 @@ class UnrealizedProductionController extends SEIPController
 
             $this->domainManager->update($resource);
 
-            $url = $this->generateUrl("pequiven_product_report_show",array(
+            $url = $this->generateUrl("pequiven_product_report_show", array(
                 "id" => $resource->getProductReport()->getId(),
             ));
 
@@ -86,26 +83,39 @@ class UnrealizedProductionController extends SEIPController
         }
 
         $view = $this
-            ->view()
-            ->setTemplate($this->config->getTemplate('update.html'))
-            ->setData(array(
-                $this->config->getResourceName() => $resource,
-                'form'                           => $form->createView()
-            ))
+                ->view()
+                ->setTemplate($this->config->getTemplate('update.html'))
+                ->setData(array(
+            $this->config->getResourceName() => $resource,
+            'form' => $form->createView()
+                ))
         ;
 
         return $this->handleView($view);
     }
-    
-    public function deleteAction(\Symfony\Component\HttpFoundation\Request $request) 
-    {
+
+    public function deleteAction(\Symfony\Component\HttpFoundation\Request $request) {
         $resource = $this->findOr404($request);
-        
-        $url = $this->generateUrl("pequiven_product_report_show",array(
+
+        $url = $this->generateUrl("pequiven_product_report_show", array(
             "id" => $resource->getProductReport()->getId(),
         ));
-        
+
         $this->domainManager->delete($resource);
         return $this->redirect($url);
     }
+
+    public function showAction(\Symfony\Component\HttpFoundation\Request $request) {
+        $resource = $this->findOr404($request);
+        $view = $this
+                ->view()
+                ->setTemplate($this->config->getTemplate('show.html'))
+                ->setData(array(
+                    $this->config->getResourceName() => $resource
+                ))
+        ;
+
+        return $this->handleView($view);
+    }
+
 }
