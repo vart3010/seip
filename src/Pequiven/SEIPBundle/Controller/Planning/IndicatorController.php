@@ -302,7 +302,7 @@ class IndicatorController extends ResourceController
     }
     
     /**
-     * @Security("is_granted('ROLE_WORKER_PLANNING')")
+     * @Security("is_granted(['ROLE_WORKER_PLANNING','ROLE_SEIP_INDICATOR_ADD_OBSERVATION'])")
      * @param Request $request
      * @return type
      */
