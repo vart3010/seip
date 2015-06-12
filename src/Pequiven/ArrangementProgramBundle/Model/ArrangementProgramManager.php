@@ -115,7 +115,7 @@ class ArrangementProgramManager implements ContainerAwareInterface
         $user = $this->getUser();
         $valid = false;
         if( (($entity->getStatus() === ArrangementProgram::STATUS_IN_REVIEW) &&
-                ($entity->getCreatedBy() === $user || $this->isAllowToReview($entity) === true || $this->isAllowToApprove($entity) === true)) || ($user->isAllowSuperAdmin()) 
+                ($entity->getCreatedBy() === $user || $this->isAllowToReview($entity) === true || $this->isAllowToApprove($entity) === true)) || ($user->isAllowSuperAdmin() || $this->isGranted(array('ROLE_SEIP_ARRANGEMENT_PROGRAM_RETURN_TO_DRAFT'))) 
             ){
             $valid = true;
         }
