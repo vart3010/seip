@@ -20,6 +20,7 @@
                 <p class="inline-label">
                     <label class="label">{{ 'pequiven_seip.product_report.product_report'|trans }}</label>
                     {{ unrealized_production.productReport }} 
+
                 </p>
             </div>
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
@@ -27,6 +28,124 @@
                     <label class="label">{{ 'Month'|trans }}</label>
                     {{ mes|trans }}
                 </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'Company'|trans }}</label>
+                    {{ unrealized_production.productReport.plantReport.company }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'Location'|trans }}</label>
+                    {{ unrealized_production.productReport.plantReport.location }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'Entity'|trans }}</label>
+                    {{ unrealized_production.productReport.plantReport.entity }}
+                </p>
+            </div>
+            <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'Raw material'|trans }}</label>
+                    {%  for rawMaterial in unrealized_production.productReport.product.rawMaterials %}
+                        {{ rawMaterial }}{% if loop.last %}.{% else %},{% endif %}
+                    {% endfor %}    
+                </p>
+            </div>
+
+        </div>
+    </fieldset>
+
+    <fieldset class="fieldset">
+        <legend class="legend">{{ 'pequiven_seip.product_report.unrealized_production.unrealized_production'|trans }}</legend>
+        <div class="standard-tabs margin-bottom" id="add-tabs">
+            <ul class="tabs">
+                <li class="active"><a href="#tab-1">{{ "pequiven_seip.product_report.unrealized_production.internal"|trans }}</a></li>
+                <li><a href="#tab-2">{{ "pequiven_seip.product_report.unrealized_production.external"|trans }}</a></li>
+            </ul>
+
+            <div class="tabs-content">
+                <div id="tab-1" class="with-padding">
+
+                    <table class="simple-table responsive-table tables-extras" id="sorting-example2">
+                        <thead>
+                            <tr>
+                                <th scope="col" width="10%">{{  "Day" |trans }}</th>
+
+                                {% for interc in internalCauses %}
+                                    <th scope="col" width="auto">{{interc}}</th>
+                                    {% endfor %}
+                                <th scope="col" width="10%" class="hide-on-mobile-portrait">{{ 'Mount'|trans }}</th>
+                            </tr>
+                        </thead>
+                        {% set colspan = 5 %}
+                        {% set total = 0 %}
+
+                        {% set routeTable = "unrealized_production.UnrealizedProductionDay" %}
+                        <tbody>
+                            {% for lista in  unrealized_production.getListMonth %}
+                                <tr>
+                                    <td>{{ loop.index }}</td>
+
+                                    {% for mounts in causeFailService.getCauseFail(unrealized_production,{"paramDay":loop.index,"typeCause":"InternalCauses"}) %}
+                                        <td>{{ mounts }}</td>
+                                    {% endfor %}
+                                    <td>{{ lista }}</td>
+                                <tr>
+                                    {% set total = total + lista %}
+                                {% endfor %}
+                            <tr>
+                                <th>{{ "pequiven_seip.total" | trans }}</th>
+                                    {% for interc in internalCauses %}
+                                    <th></th>
+                                    {% endfor %}
+                                <th>{{ total }}</th>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div id="tab-2" class="with-padding">
+                    <table class="simple-table responsive-table tables-extras" id="sorting-example2">
+                        <thead>
+                            <tr>
+                                <th scope="col" width="10%">{{  "Day" |trans }}</th>
+
+                                {% for interc in externalCauses %}
+                                    <th scope="col" width="auto">{{interc}}</th>
+                                    {% endfor %}
+                                <th scope="col" width="10%" class="hide-on-mobile-portrait">{{ 'Mount'|trans }}</th>
+                            </tr>
+                        </thead>
+                        {% set colspan = 5 %}
+                        {% set total = 0 %}
+
+                        {% set routeTable = "unrealized_production.UnrealizedProductionDay" %}
+                        <tbody>
+                            {% for lista in  unrealized_production.getListMonth %}
+                                <tr>
+                                    <td>{{ loop.index }}</td>
+
+                                    {% for mounts in causeFailService.getCauseFail(unrealized_production,{"paramDay":loop.index,"typeCause":"ExternalCauses"}) %}
+                                        <td>{{ mounts }}</td>
+                                    {% endfor %}
+                                    <td>{{ lista }}</td>
+                                <tr>
+                                    {% set total = total + lista %}
+                                {% endfor %}
+                            <tr>
+                                <th>{{ "pequiven_seip.total" | trans }}</th>
+                                    {% for interc in externalCauses %}
+                                    <th></th>
+                                    {% endfor %}
+                                <th>{{ total }}</th>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </fieldset>
