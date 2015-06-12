@@ -107,15 +107,47 @@ class UnrealizedProductionController extends SEIPController {
 
     public function showAction(\Symfony\Component\HttpFoundation\Request $request) {
         $resource = $this->findOr404($request);
+
+        $em = $this->getDoctrine()->getManager();
+        $fails = array();
+        $failsNames = array();
+        $cont = 0;
+        
+        $fails[0] = $em->getRepository('PequivenSEIPBundle:CEI\Fail')->findQueryByTypeResult(\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL);
+        $fails[1] = $em->getRepository('PequivenSEIPBundle:CEI\Fail')->findQueryByTypeResult(\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL);
+
+
+        foreach ($fails as $fail) {
+            $rs = array();
+            foreach ($fail as $f) {
+                array_push($rs, $f->getname());
+            }
+            array_push($failsNames, $rs);
+            $cont++;
+        }
+
+        $causeFailService = $this->getCauseFailService();
+        
         $view = $this
                 ->view()
                 ->setTemplate($this->config->getTemplate('show.html'))
                 ->setData(array(
-                    $this->config->getResourceName() => $resource
+            $this->config->getResourceName() => $resource,
+                    "internalCauses"=>$failsNames[0],
+                    "externalCauses"=>$failsNames[1],
+                    "causeFailService" => $causeFailService
                 ))
         ;
 
         return $this->handleView($view);
     }
 
+    /**
+     * 
+     * @return \Pequiven\SEIPBundle\Service\CEI\CauseFailService
+     */
+    protected function getCauseFailService()
+    {
+        return $this->container->get('seip.service.causefail');
+    }
 }

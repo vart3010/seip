@@ -101,4 +101,8 @@ class CauseFail
     {
         return $this->fail;
     }
+    
+    public function __toString() {
+        return $this->id;
+    }
 }
