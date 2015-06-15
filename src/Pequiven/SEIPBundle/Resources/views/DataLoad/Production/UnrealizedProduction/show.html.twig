@@ -63,88 +63,105 @@
         <legend class="legend">{{ 'pequiven_seip.product_report.unrealized_production.unrealized_production'|trans }}</legend>
         <div class="standard-tabs margin-bottom" id="add-tabs">
             <ul class="tabs">
-                <li class="active"><a href="#tab-1">{{ "pequiven_seip.product_report.unrealized_production.internal"|trans }}</a></li>
-                <li><a href="#tab-2">{{ "pequiven_seip.product_report.unrealized_production.external"|trans }}</a></li>
+                <li class="active"><a style="font-weight: bold;" href="#tab-1">{{ "pequiven_seip.product_report.unrealized_production.internal"|trans }}</a></li>
+                <li><a style="font-weight: bold;" href="#tab-2">{{ "pequiven_seip.product_report.unrealized_production.external"|trans }}</a></li>
             </ul>
 
             <div class="tabs-content">
                 <div id="tab-1" class="with-padding">
 
-                    <table class="simple-table responsive-table tables-extras" id="sorting-example2">
-                        <thead>
-                            <tr>
-                                <th scope="col" width="10%">{{  "Day" |trans }}</th>
+                    <div class="columns">
+                        <div class="six-columns">
+                            <table class="simple-table responsive-table tables-extras" id="sorting-example2" >
+                                <thead>
+                                    <tr>
+                                        <th scope="col" width="5%">{{  "Day" |trans }}</th>
 
-                                {% for interc in internalCauses %}
-                                    <th scope="col" width="auto">{{interc}}</th>
-                                    {% endfor %}
-                                <th scope="col" width="10%" class="hide-on-mobile-portrait">{{ 'Mount'|trans }}</th>
-                            </tr>
-                        </thead>
-                        {% set colspan = 5 %}
-                        {% set total = 0 %}
+                                        {% for interc in internalCauses %}
+                                            <th scope="col" width="5%">{{interc}}</th>
+                                            {% endfor %}
+                                        <th scope="col" width="5%" class="hide-on-mobile-portrait">{{ 'Mount'|trans }}</th>
+                                    </tr>
+                                </thead>
+                                {% set colspan = 5 %}
+                                {% set total = 0 %}
 
-                        {% set routeTable = "unrealized_production.UnrealizedProductionDay" %}
-                        <tbody>
-                            {% for lista in  unrealized_production.getListMonth %}
-                                <tr>
-                                    <td>{{ loop.index }}</td>
-
-                                    {% for mounts in causeFailService.getCauseFail(unrealized_production,{"paramDay":loop.index,"typeCause":"InternalCauses"}) %}
-                                        <td>{{ mounts }}</td>
-                                    {% endfor %}
-                                    <td>{{ lista }}</td>
-                                <tr>
-                                    {% set total = total + lista %}
-                                {% endfor %}
-                            <tr>
-                                <th>{{ "pequiven_seip.total" | trans }}</th>
-                                    {% for interc in internalCauses %}
-                                    <th></th>
-                                    {% endfor %}
-                                <th>{{ total }}</th>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                                {% set routeTable = "unrealized_production.UnrealizedProductionDay" %}
+                                <tbody>
+                                    {% for lista in  unrealized_production.getListMonth %}
+                                        {% set i = 0 %}
+                                        <tr>
+                                            <td>{{ loop.index }}</td>
+                                            {% set causeFailMounts = causeFailService.getCauseFail(unrealized_production,{"paramDay":loop.index,"typeCause":"InternalCauses"}) %}
+                                            {% for mounts in causeFailMounts %}
+                                                <td>{{ mounts }}</td>
+                                            {% endfor %}
+                                            <td>{{ lista }}</td>
+                                        <tr>
+                                            {% set total = total + lista %}
+                                        {% endfor %}
+                                    <tr>
+                                        <th>{{ "pequiven_seip.total" | trans }}</th>
+                                            {% set totalsCatInt = causeFailService.getTotalsCategoriesFails(unrealized_production,{"typeCause":"InternalCauses"}) %}
+                                            {% for tc in totalsCatInt %}
+                                            <th>{{ tc }}</th>
+                                            {% endfor %}
+                                        <th>{{ total }}</th>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="six-columns">
+                            
+                        </div>
+                    </div>
+                </div>          
 
                 <div id="tab-2" class="with-padding">
-                    <table class="simple-table responsive-table tables-extras" id="sorting-example2">
-                        <thead>
-                            <tr>
-                                <th scope="col" width="10%">{{  "Day" |trans }}</th>
+                    <div class="columns">
+                        <div class="six-columns">
+                            <table class="simple-table responsive-table tables-extras" id="sorting-example2" style="width:50%">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" width="10%">{{  "Day" |trans }}</th>
 
-                                {% for interc in externalCauses %}
-                                    <th scope="col" width="auto">{{interc}}</th>
-                                    {% endfor %}
-                                <th scope="col" width="10%" class="hide-on-mobile-portrait">{{ 'Mount'|trans }}</th>
-                            </tr>
-                        </thead>
-                        {% set colspan = 5 %}
-                        {% set total = 0 %}
+                                        {% for interc in externalCauses %}
+                                            <th scope="col" width="auto">{{interc}}</th>
+                                            {% endfor %}
+                                        <th scope="col" width="10%" class="hide-on-mobile-portrait">{{ 'Mount'|trans }}</th>
+                                    </tr>
+                                </thead>
+                                {% set colspan = 5 %}
+                                {% set total = 0 %}
 
-                        {% set routeTable = "unrealized_production.UnrealizedProductionDay" %}
-                        <tbody>
-                            {% for lista in  unrealized_production.getListMonth %}
-                                <tr>
-                                    <td>{{ loop.index }}</td>
+                                {% set routeTable = "unrealized_production.UnrealizedProductionDay" %}
+                                <tbody>
+                                    {% for lista in  unrealized_production.getListMonth %}
+                                        <tr>
+                                            <td>{{ loop.index }}</td>
 
-                                    {% for mounts in causeFailService.getCauseFail(unrealized_production,{"paramDay":loop.index,"typeCause":"ExternalCauses"}) %}
-                                        <td>{{ mounts }}</td>
-                                    {% endfor %}
-                                    <td>{{ lista }}</td>
-                                <tr>
-                                    {% set total = total + lista %}
-                                {% endfor %}
-                            <tr>
-                                <th>{{ "pequiven_seip.total" | trans }}</th>
-                                    {% for interc in externalCauses %}
-                                    <th></th>
-                                    {% endfor %}
-                                <th>{{ total }}</th>
-                            </tr>
-                        </tbody>
-                    </table>
+                                            {% for mounts in causeFailService.getCauseFail(unrealized_production,{"paramDay":loop.index,"typeCause":"ExternalCauses"}) %}
+                                                <td>{{ mounts }}</td>
+                                            {% endfor %}
+                                            <td>{{ lista }}</td>
+                                        <tr>
+                                            {% set total = total + lista %}
+                                        {% endfor %}
+                                    <tr>
+                                        <th>{{ "pequiven_seip.total" | trans }}</th>
+                                            {% set totalsCatExt = causeFailService.getTotalsCategoriesFails(unrealized_production,{"typeCause":"ExternalCauses"}) %}
+                                            {% for tc in totalsCatExt %}
+                                            <th>{{ tc }}</th>
+                                            {% endfor %}
+                                        <th>{{ total }}</th>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="six-columns"> 
+
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
