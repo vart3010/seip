@@ -621,7 +621,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                     $menuObjetives->addChild($visualize);
                 }
             
-                if($this->isGranted('ROLE_SEIP_OBJECTIVE_CREATE_*')){
+                if($this->isGranted('ROLE_SEIP_OBJECTIVE_CREATE_*') && $this->getPeriodService()->isAllowLoadObjetive()){
                     $thirdchild = $this->factory->createItem('arrangement_strategic.objetives.add',
                             $this->getSubLevelOptions(array(
                                 'uri' => 'add',

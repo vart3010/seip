@@ -45,6 +45,8 @@ class PeriodAdmin extends Admin
             ->add('dateEndNotificationArrangementProgram')
             ->add('dateStartLoadArrangementProgram')
             ->add('dateEndLoadArrangementProgram')
+            ->add('dateStartLoadObjetive')
+            ->add('dateEndLoadObjetive')
             ->add('dateStartClearanceNotificationArrangementProgram')
             ->add('dateEndClearanceNotificationArrangementProgram')
             ->add('percentagePenalty')
@@ -77,6 +79,8 @@ class PeriodAdmin extends Admin
                 ->setDateEndNotificationArrangementProgram($dateEnd)
                 ->setDateStartLoadArrangementProgram($dateStart)
                 ->setDateEndLoadArrangementProgram($dateEnd)
+                ->setDateStartLoadObjetive($dateStart)
+                ->setDateEndLoadObjetive($dateEnd)
                 ->setDateStartClearanceNotificationArrangementProgram($dateStart)
                 ->setDateEndClearanceNotificationArrangementProgram($dateEnd)
                 ;
@@ -123,6 +127,10 @@ class PeriodAdmin extends Admin
             ->add('dateStartLoadArrangementProgram','sonata_type_date_picker',array(
             ))
             ->add('dateEndLoadArrangementProgram','sonata_type_date_picker',array(
+            ))
+            ->add('dateStartLoadObjetive','sonata_type_date_picker',array(
+            ))
+            ->add('dateEndLoadObjetive','sonata_type_date_picker',array(
             ))
             ->add('dateStartClearanceNotificationArrangementProgram','sonata_type_date_picker',array(
             ))

@@ -83,6 +83,23 @@ class PeriodService extends ContainerAware
     }
     
     /**
+     * Retorna si se encuetra habilitada la carga de objetivos para el periodo activo.
+     * @return boolean
+     */
+    function isAllowLoadObjetive()
+    {
+        $result = false;
+        $period = $this->getPeriodActive();
+        $now = new \DateTime();
+        
+        if($now >= $period->getDateStartLoadObjetive() && $now <= $period->getDateEndLoadObjetive()){
+            $result = true;
+        }
+        
+        return $result;
+    }
+    
+    /**
      * Retorna el periodo activo
      * @return \Pequiven\SEIPBundle\Entity\Period
      */

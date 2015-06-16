@@ -103,6 +103,22 @@ class Period extends Base implements \Serializable
      * @ORM\Column(name="dateEndLoadArrangementProgram", type="date", nullable=true)
      */
     private $dateEndLoadArrangementProgram;
+    
+    /**
+     * Fecha inicio de carga de objetivos.
+     * @var \DateTime
+     *
+     * @ORM\Column(name="dateStartLoadObjetive", type="date", nullable=true)
+     */
+    private $dateStartLoadObjetive;
+
+    /**
+     * Fecha fin de carga de objetivos.
+     * @var \DateTime
+     *
+     * @ORM\Column(name="dateEndLoadObjetive", type="date", nullable=true)
+     */
+    private $dateEndLoadObjetive;
 
     /**
      * Fecha inicio de holgura de notificación de programas de gestion
@@ -371,6 +387,52 @@ class Period extends Base implements \Serializable
     public function getDateEndLoadArrangementProgram()
     {
         return $this->dateEndLoadArrangementProgram;
+    }
+    
+    /**
+     * Set dateStartLoadObjetive
+     *
+     * @param \DateTime $dateStartLoadObjetive
+     * @return Period
+     */
+    public function setDateStartLoadObjetive($dateStartLoadObjetive)
+    {
+        $this->dateStartLoadObjetive = $dateStartLoadObjetive;
+
+        return $this;
+    }
+
+    /**
+     * Get dateStartLoadObjetive
+     *
+     * @return \DateTime 
+     */
+    public function getDateStartLoadObjetive()
+    {
+        return $this->dateStartLoadObjetive;
+    }
+    
+    /**
+     * Set dateEndLoadObjetive
+     *
+     * @param \DateTime $dateEndLoadObjetive
+     * @return Period
+     */
+    public function setDateEndLoadObjetive($dateEndLoadObjetive)
+    {
+        $this->dateEndLoadObjetive = $dateEndLoadObjetive;
+
+        return $this;
+    }
+
+    /**
+     * Get dateEndLoadObjetive
+     *
+     * @return \DateTime 
+     */
+    public function getDateEndLoadObjetive()
+    {
+        return $this->dateEndLoadObjetive;
     }
 
     /**
