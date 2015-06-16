@@ -17,9 +17,11 @@ class ProductReportType extends SeipAbstractForm
     {
         //$entity = new \Pequiven\SEIPBundle\Entity\DataLoad\ProductReport();
         $entity = $builder->getData();
-        
-        $plantReport = $entity->getPlantReport();
-        $plant = $plantReport->getPlant();
+        $plantReport = $plant = null;
+        if($entity != null){
+            $plantReport = $entity->getPlantReport();
+            $plant = $plantReport->getPlant();
+        }
         
         $queryBuilderEnable = $this->getQueryBuilderEnabled();
         $builder
@@ -39,6 +41,17 @@ class ProductReportType extends SeipAbstractForm
                 //"callback" => $queryBuilderEnable
                 "query_builder" => function(\Pequiven\SEIPBundle\Repository\CEI\ProductRepository $repository) use ($plant){
                     return $repository->findQueryByPlant($plant);
+                },
+            ))
+            ->add('indicator','tecno_ajax_autocomplete',array(
+                'label_attr' => array('class' => 'label'),
+                'entity_alias' => 'indicator_product_report_alias',
+                'attr' => array(
+                        "class" => "input input-xlarge validate[required]"
+                    ),
+                "property" => array("description","ref"),
+                "callback" => function(\Pequiven\IndicatorBundle\Repository\IndicatorRepository $repository) use ($plant){
+                    return $repository->getQueryPeriod();
                 },
             ))
             ->add('enabled',null,array(

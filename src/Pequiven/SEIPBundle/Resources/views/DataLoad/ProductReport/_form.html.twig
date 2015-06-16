@@ -13,6 +13,11 @@
         {{ form_errors(form.product) }}
     </div>
     <div class="field-block button-height">
+        {{ form_label(form.indicator) }}
+        {{ form_widget(form.indicator) }}
+        {{ form_errors(form.indicator) }}
+    </div>
+    <div class="field-block button-height">
         {{ form_label(form.enabled) }}
         {{ form_widget(form.enabled) }}
         {{ form_errors(form.enabled) }}

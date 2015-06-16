@@ -84,6 +84,13 @@ class ProductReport extends BaseModel
      * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Production\UnrealizedProduction",mappedBy="productReport")
      */
     private $unrealizedProductions;
+    
+    /**
+     * Indicador
+     * @var \Pequiven\IndicatorBundle\Entity\Indicator
+     * @ORM\ManyToOne(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator")
+     */
+    private $indicator;
 
     public function __construct() {
         $this->productPlannings = new \Doctrine\Common\Collections\ArrayCollection();
@@ -364,6 +371,29 @@ class ProductReport extends BaseModel
         }
         ksort($sorted);
         return $sorted;
+    }
+
+    /**
+     * Set indicator
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator $indicator
+     * @return ProductReport
+     */
+    public function setIndicator(\Pequiven\IndicatorBundle\Entity\Indicator $indicator = null)
+    {
+        $this->indicator = $indicator;
+
+        return $this;
+    }
+
+    /**
+     * Get indicator
+     *
+     * @return \Pequiven\IndicatorBundle\Entity\Indicator 
+     */
+    public function getIndicator()
+    {
+        return $this->indicator;
     }
     
     public function __toString() 
