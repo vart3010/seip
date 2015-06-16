@@ -94,6 +94,7 @@ class ReportTemplateController extends SEIPController
     public function loadAction(Request $request) 
     {
         $dateString = $request->get('dateNotification',null);
+        $plantReport = $request->get('plant_report',null);
         $dateNotification = null;
         if($dateString !== null){
             $dateNotification = \DateTime::createFromFormat('d/m/Y', $dateString);
@@ -101,7 +102,7 @@ class ReportTemplateController extends SEIPController
         if($dateNotification === null){
             $dateNotification = new \DateTime();
         }
-        $resource = $this->getRepository()->findToNotify($request->get("id"),$dateNotification);
+        $resource = $this->getRepository()->findToNotify($request->get("id"),$dateNotification,$plantReport);
         
         if(!$resource){
             throw $this->createNotFoundException('No se encontro la planificacion');

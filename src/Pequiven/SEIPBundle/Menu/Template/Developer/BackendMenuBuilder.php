@@ -1016,7 +1016,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
         
              $list = $this->factory->createItem('indicators.data_load.notification.production',
                     $this->getSubLevelOptions(array(
-                        "route" => "pequiven_report_template_list",
+                        "route" => "pequiven_plant_report_index",
                     ))
                 )->setLabel($this->translate(sprintf('app.backend.menu.%s.data_load.production', $section)));
         

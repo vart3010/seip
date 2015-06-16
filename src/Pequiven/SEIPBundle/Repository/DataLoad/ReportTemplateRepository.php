@@ -30,7 +30,7 @@ class ReportTemplateRepository extends SeipEntityRepository
      * @param DateTime $dateNotification
      * @return type
      */
-    public function findToNotify($id,  DateTime $dateNotification)
+    public function findToNotify($id,  DateTime $dateNotification,$plantReport = null)
     {
         $month = $dateNotification->format("m");
         
@@ -65,7 +65,12 @@ class ReportTemplateRepository extends SeipEntityRepository
             ->setParameter('id', $id)
             ->setParameter('month', $month)
             ;
-        
+        if($plantReport !== null){
+            $qb
+                ->andWhere("rt_pr.id = :plantReport")
+                ->setParameter("plantReport", $plantReport)
+                ;
+        }
         return $qb->getQuery()->getOneOrNullResult();
     }
     

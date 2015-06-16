@@ -20,5 +20,34 @@ use Pequiven\SEIPBundle\Doctrine\ORM\SeipEntityRepository;
  */
 class PlantReportRepository extends SeipEntityRepository 
 {
+    protected function applyCriteria(\Doctrine\ORM\QueryBuilder $queryBuilder, array $criteria = null) 
+    {
+        $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
+        $plantName = $criteria->remove("pr.plant.name");
+        if($plantName != null){
+            $queryBuilder
+                    ->innerJoin('pr.plant', 'pr_p')
+                    ->andWhere($queryBuilder->expr()->like("pr_p.name", $queryBuilder->expr()->literal("%".$plantName."%")))
+                ;
+        }
+        $reportTemplate = $criteria->remove("pr.reportTemplate");
+        if($reportTemplate != null){
+            $queryBuilder
+                    ->innerJoin('pr.reportTemplate', 'pr_rt')
+                    ->andWhere(
+                            $queryBuilder->expr()->orX(
+                                    $queryBuilder->expr()->like("pr_rt.name", $queryBuilder->expr()->literal("%".$reportTemplate."%")),
+                                    $queryBuilder->expr()->like("pr_rt.ref", $queryBuilder->expr()->literal("%".$reportTemplate."%"))
+                                )
+                        )
+                ;
+        }
+        
+        parent::applyCriteria($queryBuilder,$criteria->toArray());
+    }
     
+    protected function getAlias() 
+    {
+        return 'pr';
+    }
 }

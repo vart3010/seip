@@ -329,5 +329,11 @@
         <service id="pequiven.repository.entity" class="Pequiven\SEIPBundle\Repository\CEI\EntityRepository">
             <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\CEI\Entity" />
         </service>
+        <service id="pequiven.repository.plant_report" class="Pequiven\SEIPBundle\Repository\DataLoad\PlantReportRepository">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+            <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\DataLoad\PlantReport" />
+        </service>
     </services>
 </container>
