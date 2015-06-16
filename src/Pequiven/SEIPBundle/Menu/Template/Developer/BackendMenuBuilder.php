@@ -696,7 +696,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                     $menuIndicators->addChild($thirdchild);
                 }
                     
-                if($this->isGranted('ROLE_SEIP_INDICATOR_CREATE_*')){
+                if($this->isGranted('ROLE_SEIP_INDICATOR_CREATE_*') && $this->getPeriodService()->isAllowLoadIndicator()){
                     //Menú Nivel 3: Registro de Indicadores
                         $thirdchild = $this->factory->createItem('arrangement_strategic.indicators.add',
                                 $this->getSubLevelOptions(array(

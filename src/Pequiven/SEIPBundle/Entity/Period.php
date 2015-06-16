@@ -119,6 +119,22 @@ class Period extends Base implements \Serializable
      * @ORM\Column(name="dateEndLoadObjetive", type="date", nullable=true)
      */
     private $dateEndLoadObjetive;
+    
+       /**
+     * Fecha inicio de carga de indicadores.
+     * @var \DateTime
+     *
+     * @ORM\Column(name="dateStartLoadIndicator", type="date", nullable=true)
+     */
+    private $dateStartLoadIndicator;
+    
+    /**
+     * Fecha fin de carga de indicadores.
+     * @var \DateTime
+     *
+     * @ORM\Column(name="dateEndLoadIndicator", type="date", nullable=true)
+     */
+    private $dateEndLoadIndicator;
 
     /**
      * Fecha inicio de holgura de notificación de programas de gestion
@@ -433,6 +449,52 @@ class Period extends Base implements \Serializable
     public function getDateEndLoadObjetive()
     {
         return $this->dateEndLoadObjetive;
+    }
+    
+        /**
+     * Set dateStartLoadIndicator
+     *
+     * @param \DateTime $dateStartLoadIndicator
+     * @return Period
+     */
+    public function setDateStartLoadIndicator($dateStartLoadIndicator)
+    {
+        $this->dateStartLoadIndicator= $dateStartLoadIndicator;
+
+        return $this;
+    }
+
+    /**
+     * Get dateStartLoadIndicator
+     *
+     * @return \DateTime 
+     */
+    public function getDateStartLoadIndicator()
+    {
+        return $this->dateStartLoadIndicator;
+    }
+    
+    /**
+     * Set dateEndLoadIndicator
+     *
+     * @param \DateTime $dateEndLoadIndicator
+     * @return Period
+     */
+    public function setDateEndLoadIndicator($dateEndLoadIndicator)
+    {
+        $this->dateEndLoadIndicator = $dateEndLoadIndicator;
+
+        return $this;
+    }
+
+    /**
+     * Get dateEndLoadIndicator
+     *
+     * @return \DateTime 
+     */
+    public function getDateEndLoadIndicator()
+    {
+        return $this->dateEndLoadIndicator;
     }
 
     /**

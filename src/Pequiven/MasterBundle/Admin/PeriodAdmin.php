@@ -132,6 +132,12 @@ class PeriodAdmin extends Admin
             ))
             ->add('dateEndLoadObjetive','sonata_type_date_picker',array(
             ))
+                
+            ->add('dateStartLoadIndicator','sonata_type_date_picker',array(
+            ))  
+            ->add('dateEndLoadIndicator','sonata_type_date_picker',array(
+            ))
+                
             ->add('dateStartClearanceNotificationArrangementProgram','sonata_type_date_picker',array(
             ))
             ->add('dateEndClearanceNotificationArrangementProgram','sonata_type_date_picker',array())
