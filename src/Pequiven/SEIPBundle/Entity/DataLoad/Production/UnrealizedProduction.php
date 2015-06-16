@@ -19,7 +19,7 @@ use Pequiven\SEIPBundle\Model\DataLoad\DetailValue;
  *
  * @author Carlos Mendoza <inhack20@gmail.com>
  * @ORM\Table(name="seip_report_product_unrealized_production")
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\DataLoad\Production\UnrealizedProductionRepository")
  * @ORM\HasLifecycleCallbacks()
  */
 class UnrealizedProduction extends DetailValue {

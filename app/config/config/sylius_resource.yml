@@ -304,6 +304,7 @@ sylius_resource:
             classes:
                 model: Pequiven\SEIPBundle\Entity\DataLoad\Production\UnrealizedProduction
                 controller: Pequiven\SEIPBundle\Controller\DataLoad\Production\UnrealizedProductionController
+                repository: Pequiven\SEIPBundle\Repository\DataLoad\Production\UnrealizedProductionRepository
         pequiven.detail_consumer_planning_service:
             driver: doctrine/orm
             templates: PequivenSEIPBundle:DataLoad/Service/DetailConsumerPlanningService

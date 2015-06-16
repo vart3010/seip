@@ -112,7 +112,12 @@
                             </table>
                         </div>
                         <div class="six-columns">
-                            
+
+                            {#                                {{ boxRender.renderBox('pequiven_seip.box.unrealized_production')|raw }}#}
+                            <div  ng-controller="DashboardController" ng-init="renderChartPie2d('unrelizedInternal', {{ dataInternal }},'100%','500')">
+                                <span id="unrelizedInternal"></span>
+                            </div>
+
                         </div>
                     </div>
                 </div>          
@@ -159,7 +164,9 @@
                             </table>
                         </div>
                         <div class="six-columns"> 
-
+                            <div  ng-controller="DashboardController" ng-init="renderChartPie2d('unrelizedExternal',{{ dataExternal }},'100%','500')">
+                                <span id="unrelizedExternal"></span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -167,4 +174,10 @@
         </div>
     </fieldset>
 
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/fusioncharts.js') }}"></script>
+    <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/themes/fusioncharts.theme.fint.js') }}"></script>
 {% endblock %}

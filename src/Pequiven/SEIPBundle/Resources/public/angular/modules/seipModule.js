@@ -2808,6 +2808,25 @@ angular.module('seipModule.controllers', [])
                 })
             }
             
+            //Gráfico en forma tacómetro (Usado para mostrar el resultado de los indicadores estratégicos en el dashboard)
+            $scope.renderChartPie2d = function(id,data,width,height){
+                FusionCharts.ready(function() {
+                    var chartPie2d = new FusionCharts({
+                        "type": "pie2d",
+                        "renderAt": id,
+                        "width": width,
+                        "height": height,
+                        "dataFormat": "json",
+                        "dataSource": {
+                            "chart": data.dataSource.chart,
+                            "data": data.dataSource.data
+                        }
+                    });
+                    chartPie2d.setTransparent(true);
+                    chartPie2d.render();
+                });
+            }
+            
             $scope.renderChartStackedSingleAxis = function(id){
                 FusionCharts.ready(function() {
                     var chartStackedSingleAxis = new FusionCharts({

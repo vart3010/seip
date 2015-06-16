@@ -112,7 +112,7 @@ class UnrealizedProductionController extends SEIPController {
         $fails = array();
         $failsNames = array();
         $cont = 0;
-        
+
         $fails[0] = $em->getRepository('PequivenSEIPBundle:CEI\Fail')->findQueryByTypeResult(\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL);
         $fails[1] = $em->getRepository('PequivenSEIPBundle:CEI\Fail')->findQueryByTypeResult(\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL);
 
@@ -127,17 +127,24 @@ class UnrealizedProductionController extends SEIPController {
         }
 
         $causeFailService = $this->getCauseFailService();
+
+        $datosServices = array("causeFailService" => $causeFailService, "fails" => $fails, "failNames" => $failsNames);
+        $datachar = $causeFailService->generatePieTotals($resource, $datosServices);
+
         
+
+
         $view = $this
                 ->view()
                 ->setTemplate($this->config->getTemplate('show.html'))
                 ->setData(array(
             $this->config->getResourceName() => $resource,
-                    "internalCauses"=>$failsNames[0],
-                    "externalCauses"=>$failsNames[1],
-                    "causeFailService" => $causeFailService
-                ))
-        ;
+            "internalCauses" => $failsNames[0],
+            "externalCauses" => $failsNames[1],
+            "causeFailService" => $causeFailService,
+            "dataInternal" => json_encode($datachar[0]), //DATOS[0] => INTERNAS DATOS[1]=>EXTERNAS
+            "dataExternal" => json_encode($datachar[1]) //DATOS[0] => INTERNAS DATOS[1]=>EXTERNAS
+        ));
 
         return $this->handleView($view);
     }
@@ -146,8 +153,9 @@ class UnrealizedProductionController extends SEIPController {
      * 
      * @return \Pequiven\SEIPBundle\Service\CEI\CauseFailService
      */
-    protected function getCauseFailService()
-    {
+    protected function getCauseFailService() {
         return $this->container->get('seip.service.causefail');
     }
+    
+
 }

@@ -1,0 +1,14 @@
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+<div  ng-controller="DashboardController" ng-init="renderChartPie2d('unrelizedp',{{ data }})">
+
+    <a target="_blank" href="#">
+        <span title="{{ title }}">
+            <p style="text-align: center;margin-bottom: -2px;"><b>{{ title }}</b></p>
+        </span>
+    </a>
+    <span id="unrelizedp"></span>
+</div>
+
+        
+      
