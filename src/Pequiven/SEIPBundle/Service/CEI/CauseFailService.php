@@ -230,8 +230,9 @@ class CauseFailService implements ContainerAwareInterface {
 //                $tp["value"] = $totalCatValues[$c];
 //                $tp["displayValue"] = $totalCatValues[$c];
 
-                $tp["label"] = $cat." <br>(".$totalCatValues[$c].")";
+                $tp["label"] = $cat." (".$totalCatValues[$c].")";
                 $tp["value"] = $totalCatValues[$c];
+                $tp["toolText"] = $cat." (".$totalCatValues[$c].")";;
                 $tp["displayValue"] = \Pequiven\SEIPBundle\Service\ToolService::truncate($cat,array("limit"=>"10"));
 
                 $total = $total + $totalCatValues[$c];
