@@ -12,6 +12,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * 
  * @ORM\Table(name="ArrangementProgramObservation")
  * @ORM\Entity()
+ * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
 class Observation
 {
@@ -54,6 +55,11 @@ class Observation
      * @ORM\JoinColumn(nullable=false)
      */
     protected $arrangementProgram;
+    
+    /**
+     * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
+     */
+    private $deletedAt;
     
 
     /**
@@ -156,5 +162,16 @@ class Observation
     public function getArrangementProgram()
     {
         return $this->arrangementProgram;
+    }
+    
+    function getDeletedAt() 
+    {
+        return $this->deletedAt;
+    }
+
+    function setDeletedAt($deletedAt) 
+    {
+        $this->deletedAt = $deletedAt;
+        return $this;
     }
 }
