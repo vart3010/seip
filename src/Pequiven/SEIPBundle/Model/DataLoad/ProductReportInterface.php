@@ -22,4 +22,8 @@ interface ProductReportInterface
      * @return \Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductDetailDailyMonth Description
      */
     public function getProductDetailDailyMonthsSortByMonth();
+    /**
+     * @return \Pequiven\SEIPBundle\Entity\DataLoad\RawMaterial\RawMaterialConsumptionPlanning Description
+     */
+    public function getRawMaterialConsumptionPlannings();
 }

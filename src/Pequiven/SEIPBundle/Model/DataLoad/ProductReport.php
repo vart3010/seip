@@ -88,8 +88,6 @@ abstract class ProductReport extends BaseModel implements ProductReportInterface
     
     public function getTotalToDay()
     {
-        
-        
         $now = new \DateTime();
         $month = (int)$now->format("m");
         $day = (int)$now->format("d");
@@ -134,7 +132,44 @@ abstract class ProductReport extends BaseModel implements ProductReportInterface
             'percentage_net' => $percentageNet,
             
         );
-//        die;
+        return $total;
+    }
+    
+    function getTotalToDayRawMaterial()
+    {
+        $now = new \DateTime();
+        $month = (int)$now->format("m");
+        $day = (int)$now->format("d");
+        
+        $rawMaterialConsumptionPlannings = $this->getRawMaterialConsumptionPlannings();
+        $totalPlan = $totalReal = 0.0;
+        foreach ($rawMaterialConsumptionPlannings as $rawMaterialConsumptionPlanning) {
+            $detailByMonth = $rawMaterialConsumptionPlanning->getDetailByMonth();
+            foreach ($detailByMonth as $monthDetail => $detail) {
+                if($monthDetail > $month){
+                    break;
+                }
+
+                if($month == $monthDetail){
+                    $totalToDay = $detail->getTotalToDay($day);
+                    $totalPlan = $totalPlan + $totalToDay['tp'];
+                    $totalReal = $totalReal + $totalToDay['tr'];
+                }else{
+                    $totalPlan = $totalPlan + $detail->getTotalPlan();
+                    $totalReal = $totalReal + $detail->getTotalReal();
+                }
+            }
+        }
+        $percentage = 0;
+        if($totalPlan > 0){
+            $percentage = ($totalReal * 100) / $totalPlan;
+        }
+        $total = array(
+            'tp' => $totalPlan,
+            'tr' => $totalReal,
+            'percentage' => $percentage,
+            
+        );
         return $total;
     }
 }
