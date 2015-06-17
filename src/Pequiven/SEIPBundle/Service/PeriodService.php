@@ -99,6 +99,24 @@ class PeriodService extends ContainerAware
         return $result;
     }
     
+    
+    /**
+     * Retorna si se encuetra habilitada la carga de indicadores para el periodo activo.
+     * @return boolean
+     */
+    function isAllowLoadIndicator()
+    {
+        $result = false;
+        $period = $this->getPeriodActive();
+        $now = new \DateTime();
+        
+        if($now >= $period->getDateStartLoadIndicator() && $now <= $period->getDateEndLoadIndicator()){
+            $result = true;
+        }
+        
+        return $result;
+    }
+    
     /**
      * Retorna el periodo activo
      * @return \Pequiven\SEIPBundle\Entity\Period
