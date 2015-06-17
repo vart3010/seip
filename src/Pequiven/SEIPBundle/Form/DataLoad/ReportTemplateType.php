@@ -17,6 +17,11 @@ class ReportTemplateType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $entity = $builder->getData();
+        $disabled = true;
+        if($entity !== null && $entity->getId() > 0){
+            $disabled = false;
+        }
         $builder
             ->add('name',null,array(
                 'label_attr' => array('class' => 'label'),

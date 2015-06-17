@@ -60,6 +60,13 @@ class RawMaterialRequired
      * @ORM\JoinColumn(nullable=false)
      */
     private $unitMeasure;
+    
+    /**
+     * Cantidad
+     * @var float
+     * @ORM\Column(name="mount",type="float")
+     */
+    private $mount;
 
     /**
      * Get id
@@ -161,5 +168,28 @@ class RawMaterialRequired
     public function getUnitMeasure()
     {
         return $this->unitMeasure;
+    }
+    
+    /**
+     * Set mount
+     *
+     * @param float $mount
+     * @return CauseFail
+     */
+    public function setMount($mount)
+    {
+        $this->mount = $mount;
+
+        return $this;
+    }
+
+    /**
+     * Get mount
+     *
+     * @return float 
+     */
+    public function getMount()
+    {
+        return $this->mount;
     }
 }

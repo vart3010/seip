@@ -51,6 +51,48 @@ class PlantStopPlanningController extends SEIPController
         return $this->handleView($view);
     }
     
+    public function updateAction(Request $request) 
+    {
+        $resource = $this->findOr404($request);
+        
+        $originalDaysStops = new \Doctrine\Common\Collections\ArrayCollection();
+        // Create an ArrayCollection of the current Tag objects in the database
+        foreach ($resource->getDayStops() as $daysStop) {
+            $originalDaysStops->add($daysStop);
+        }
+        
+        $form = $this->getForm($resource);
+
+        if (($request->isMethod('PUT') || $request->isMethod('POST')) && $form->submit($request)->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            foreach ($originalDaysStops as $daysStop) {
+                if(false === $resource->getDayStops()->contains($daysStop)){
+                    $resource->getDayStops()->removeElement($daysStop);
+                    $em->remove($daysStop);
+                }
+            }
+            
+            $this->domainManager->update($resource);
+
+            return $this->redirectHandler->redirectTo($resource);
+        }
+
+        if ($this->config->isApiRequest()) {
+            return $this->handleView($this->view($form));
+        }
+
+        $view = $this
+            ->view()
+            ->setTemplate($this->config->getTemplate('update.html'))
+            ->setData(array(
+                $this->config->getResourceName() => $resource,
+                'form'                           => $form->createView()
+            ))
+        ;
+
+        return $this->handleView($view);
+    }
+    
     public function deleteAction(Request $request) 
     {
         $resource = $this->findOr404($request);

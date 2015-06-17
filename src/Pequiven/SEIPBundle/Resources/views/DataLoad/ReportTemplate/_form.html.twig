@@ -1,5 +1,4 @@
 {% trans_default_domain 'PequivenSEIPBundle' %}
-
 <fieldset class="fieldset fields-list">
     <legend class="legend">{{ 'pequiven_seip.report_template.report_template'|trans }}</legend>
     <div class="field-block button-height">
@@ -33,8 +32,9 @@
         selectCompany.on("change",function(){
             ajaxToSelect2(urlGetLocation,selectLocation,{ company: selectCompany.val() });
         });
-        
-        selectLocation.empty();
-        selectLocation.select2('disable');
+        {% if report_template.id <= 0 %}
+            selectLocation.empty();
+            selectLocation.select2('disable');
+        {% endif  %}
     });
 </script>

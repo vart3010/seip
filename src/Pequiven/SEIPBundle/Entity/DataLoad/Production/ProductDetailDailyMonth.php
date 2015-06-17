@@ -4950,6 +4950,31 @@ class ProductDetailDailyMonth extends BaseModel
         $this->totalizeByType("Net");
     }
     
+    public function getTotalGrossToDay($day) 
+    {
+        return $this->getTotalToDay('Gross',$day);
+    }
+    
+    public function getTotalNetToDay($day) 
+    {
+        return $this->getTotalToDay('Net',$day);
+    }
+    
+    private function getTotalToDay($prefix,$day) 
+    {
+        $totalReal = $totalPlan = 0.0;
+        for($i=1; $i <= $day; $i++) {
+            $methodNameReal =  sprintf('getDay%s%sReal',$i,$prefix);
+            $methodNamePlan =  sprintf('getDay%s%sPlan',$i,$prefix);
+            $totalReal +=  $this->$methodNameReal();
+            $totalPlan +=  $this->$methodNamePlan();
+        }
+        return array(
+            'tp' => $totalPlan,
+            'tr' => $totalReal,
+        );
+    }
+    
     private function totalizeByType($prefix) 
     {
         $reflection = new \ReflectionClass($this);

@@ -110,6 +110,13 @@ class PlantReport extends ModelBaseMaster
      * @ORM\Column(name="percentageCurrentCapacity",type="float")
      */
     private $percentageCurrentCapacity;
+    
+    /**
+     * Usuarios
+     * @var type 
+     * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\User",mappedBy="plantReports")
+     */
+    private $users;
 
     /**
      * Constructor
@@ -119,6 +126,7 @@ class PlantReport extends ModelBaseMaster
         $this->productsReport = new \Doctrine\Common\Collections\ArrayCollection();
         $this->plantStopPlannings = new \Doctrine\Common\Collections\ArrayCollection();
         $this->consumerPlanningServices = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->users = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**

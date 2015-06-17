@@ -1,0 +1,30 @@
+Pequiven\SEIPBundle\Entity\DataLoad\PlantReport:
+    exclusion_policy: ALL
+    properties:
+        id:
+            expose: true
+            groups: [id]
+        reportTemplate:
+            expose: true
+            groups: [api_report_template]
+        company:
+            expose: true
+            groups: [api_list]
+        location:
+            expose: true
+            groups: [api_list]
+        entity:
+            expose: true
+            groups: [api_list]
+        plant:
+            expose: true
+            groups: [api_list]
+        productsReport:
+            expose: true
+            groups: [api_products_report]
+        currentCapacity:
+            expose: true
+            groups: [api_list]
+        percentageCurrentCapacity:
+            expose: true
+            groups: [api_list]

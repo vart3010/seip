@@ -29,6 +29,10 @@ class RawMaterialRequiredType extends SeipAbstractForm
                 'label_attr' => array('class' => 'label'),
                 "attr" => array("class" => "input input-large"),
             ])
+            ->add('mount',null,[
+                'label_attr' => array('class' => 'label'),
+                "attr" => array("class" => "input input-large"),
+            ])
             ->add('amountNotAvailable',null,[
                 'label_attr' => array('class' => 'label'),
                 "attr" => array("class" => "input input-large"),
