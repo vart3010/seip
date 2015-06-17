@@ -22,6 +22,13 @@ use Tecnocreaciones\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
  */
 class SeipEntityRepository extends EntityRepository
 {
+    public function getQueryPeriod()
+    {
+        $qb = $this->getQueryBuilder();
+        $this->applyPeriodCriteria($qb);
+        return $qb;
+    }
+    
     /**
      * 
      * @return QueryBuilder

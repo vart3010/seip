@@ -59,4 +59,9 @@ abstract class RawMaterialConsumptionPlanning extends BaseModel
         ksort($result);
         return $result;
     }
+    
+    public function getTotalToDay()
+    {
+        
+    }
 }

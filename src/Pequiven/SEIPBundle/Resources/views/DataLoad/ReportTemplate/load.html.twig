@@ -54,16 +54,20 @@
             </div>
         </div>
     </fieldset>
-                    
+    {% set hasPermission = is_granted("ROLE_SEIP_DATA_LOAD_CHANGE_DATE") %}
     <form action="{{ path('pequiven_report_template_load',{id: report_template.id}) }}" method="POST">
         <input type="hidden" name="_method" value="PUT">
         {{ form_errors(form) }}
         
         <div class="with-padding">
              <p class="inline-label"><label class="label">{{ "pequiven_seip.date_of_notification"|trans }}</label>
-                 <a href="{{ path("pequiven_report_template_load",{id:report_template.id, dateNotification: (dateNotification|date_modify("-1 day")|date('d/m/Y'))}) }}" ><i class="fa fa-chevron-left fa-2x"></i></a>&nbsp;
+                 {% if hasPermission %}
+                     <a href="{{ path("pequiven_report_template_load",{id:report_template.id, dateNotification: (dateNotification|date_modify("-1 day")|date('d/m/Y'))}) }}" ><i class="fa fa-chevron-left fa-2x"></i></a>&nbsp;
+                 {% endif %}
                  <input type="text" id="dateNotification" name="dateNotification" class="input" value="{{ dateNotification|date('d/m/Y') }}" />&nbsp;
-                 <a href="{{ path("pequiven_report_template_load",{id:report_template.id, dateNotification: (dateNotification|date_modify("+1 day")|date('d/m/Y'))}) }}" class="navigate-date"><i class="fa fa-chevron-right fa-2x"></i></a>
+                 {% if hasPermission %}
+                     <a href="{{ path("pequiven_report_template_load",{id:report_template.id, dateNotification: (dateNotification|date_modify("+1 day")|date('d/m/Y'))}) }}" class="navigate-date"><i class="fa fa-chevron-right fa-2x"></i></a>
+                 {% endif %}
              </p>
          </div>
          {% set day = dateNotification|date('d')|round %}
@@ -358,14 +362,16 @@
 {% block javascript %}
     <script type="text/javascript">
         $(document).ready(function(){
-            $('#dateNotification').datepicker({
-                 changeMonth: true,
-                 dateFormat: "dd/mm/yy"
-            }).on("change",function(){
-                var changeToDate = $(this).val();
-                var url = Routing.generate("pequiven_report_template_load",{id: "{{ report_template.id }}" ,dateNotification:changeToDate });
-                window.location.href = url;
-            });
+            {% if is_granted("ROLE_SEIP_DATA_LOAD_CHANGE_DATE") %}
+                $('#dateNotification').datepicker({
+                     changeMonth: true,
+                     dateFormat: "dd/mm/yy"
+                }).on("change",function(){
+                    var changeToDate = $(this).val();
+                    var url = Routing.generate("pequiven_report_template_load",{id: "{{ report_template.id }}" ,dateNotification:changeToDate });
+                    window.location.href = url;
+                });
+            {% endif %}
             
             var calculateTotalPnrAcumulate = function(data,useData){
                     var $this = $(this);

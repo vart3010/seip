@@ -233,7 +233,7 @@ class ProductPlanning extends BaseModel
      */
     public function getType()
     {
-        return $this->type;
+        return (int)$this->type;
     }
     
     function getNetProductionPercentage() {

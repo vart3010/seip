@@ -2134,6 +2134,28 @@ abstract class Detail extends BaseModel
         return $total;
     }
     
+    /**
+     * Retorna el total del avance de un dia
+     * @param type $day
+     * @param type $prefix
+     * @return int
+     */
+    public function getTotalToDay($day) 
+    {
+        $plan = $real = 0.0;
+        for($i=1; $i <= $day; $i++){
+            $nameReal = 'getDay'.$i.'Real';
+            $namePlan = 'getDay'.$i.'Plan';
+            $plan = $plan + $this->$namePlan();
+            $real = $real + $this->$nameReal();
+        }
+        
+        return [
+            'tp' => $plan,
+            'tr' => $real,
+        ];
+    }
+    
     public function __toString() {
         $_toString = "";
         if($this->getId() > 0){

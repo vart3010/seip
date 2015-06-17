@@ -91,9 +91,19 @@ class ReportTemplateController extends SEIPController
         return $this->handleView($view);
     }
     
+    /**
+     * Notificar produccion
+     * @param Request $request
+     * @return type
+     * @throws type
+     */
     public function loadAction(Request $request) 
     {
-        $dateString = $request->get('dateNotification',null);
+        $dateString = null;
+        if($this->getSecurityService()->isGranted('ROLE_SEIP_DATA_LOAD_CHANGE_DATE')){
+            $dateString = $request->get('dateNotification',null);
+        }
+        $plantReport = $request->get('plant_report',null);
         $dateNotification = null;
         if($dateString !== null){
             $dateNotification = \DateTime::createFromFormat('d/m/Y', $dateString);
@@ -101,7 +111,7 @@ class ReportTemplateController extends SEIPController
         if($dateNotification === null){
             $dateNotification = new \DateTime();
         }
-        $resource = $this->getRepository()->findToNotify($request->get("id"),$dateNotification);
+        $resource = $this->getRepository()->findToNotify($request->get("id"),$dateNotification,$plantReport);
         
         if(!$resource){
             throw $this->createNotFoundException('No se encontro la planificacion');
@@ -113,10 +123,6 @@ class ReportTemplateController extends SEIPController
             $this->domainManager->update($resource);
             
             return $this->redirect($this->generateUrl('pequiven_report_template_list'));
-//            return $this->redirect($this->generateUrl('pequiven_report_template_load',[
-//                'id' => $resource->getId(),
-//                'dateNotification' => $dateNotification->format('d/m/Y')
-//            ]));
         }
         
         $view = $this

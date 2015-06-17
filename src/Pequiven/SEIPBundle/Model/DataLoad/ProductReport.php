@@ -85,4 +85,91 @@ abstract class ProductReport extends BaseModel implements ProductReportInterface
         ksort($result);
         return $result;
     }
+    
+    public function getTotalToDay()
+    {
+        $now = new \DateTime();
+        $month = (int)$now->format("m");
+        $day = (int)$now->format("d");
+        $productDetailDailyMonths = $this->getProductDetailDailyMonthsSortByMonth();
+        $totalGrossPlan = $totalGrossReal = $totalNetPlan = $totalNetReal = 0.0;
+        foreach ($productDetailDailyMonths as $monthDetail => $productDetailDailyMonth) {
+            if($monthDetail > $month){
+                break;
+            }
+            
+            if($month == $monthDetail){
+                $totalGrossToDay = $productDetailDailyMonth->getTotalGrossToDay($day);
+                $totalGrossPlan = $totalGrossPlan + $totalGrossToDay['tp'];
+                $totalGrossReal = $totalGrossReal + $totalGrossToDay['tr'];
+
+                $totalNetToDay = $productDetailDailyMonth->getTotalNetToDay($day);
+                $totalNetPlan = $totalNetPlan + $totalNetToDay['tp'];
+                $totalNetReal = $totalNetReal + $totalNetToDay['tr'];
+            }else{
+                $totalGrossPlan = $totalGrossPlan + $productDetailDailyMonth->getTotalGrossPlan();
+                $totalGrossReal = $totalGrossReal + $productDetailDailyMonth->getTotalGrossReal();
+
+                $totalNetPlan = $totalNetPlan + $productDetailDailyMonth->getTotalNetPlan();
+                $totalNetReal = $totalNetReal + $productDetailDailyMonth->getTotalNetReal();
+            }
+            
+        }
+        $percentageGross = $percentageNet = 0.0;
+        if($totalGrossReal > 0){
+            $percentageGross = ($totalGrossReal * 100) / $totalGrossPlan;
+        }
+        if($totalNetReal > 0){
+            $percentageNet = ($totalNetReal * 100) / $totalNetPlan;
+        }
+        $total = array(
+            'tp_gross' => $totalGrossPlan,
+            'tr_gross' => $totalGrossReal,
+            'percentage_gross' => $percentageGross,
+            
+            'tp_net' => $totalNetPlan,
+            'tr_net' => $totalNetReal,
+            'percentage_net' => $percentageNet,
+            
+        );
+        return $total;
+    }
+    
+    function getTotalToDayRawMaterial()
+    {
+        $now = new \DateTime();
+        $month = (int)$now->format("m");
+        $day = (int)$now->format("d");
+        
+        $rawMaterialConsumptionPlannings = $this->getRawMaterialConsumptionPlannings();
+        $totalPlan = $totalReal = 0.0;
+        foreach ($rawMaterialConsumptionPlannings as $rawMaterialConsumptionPlanning) {
+            $detailByMonth = $rawMaterialConsumptionPlanning->getDetailByMonth();
+            foreach ($detailByMonth as $monthDetail => $detail) {
+                if($monthDetail > $month){
+                    break;
+                }
+
+                if($month == $monthDetail){
+                    $totalToDay = $detail->getTotalToDay($day);
+                    $totalPlan = $totalPlan + $totalToDay['tp'];
+                    $totalReal = $totalReal + $totalToDay['tr'];
+                }else{
+                    $totalPlan = $totalPlan + $detail->getTotalPlan();
+                    $totalReal = $totalReal + $detail->getTotalReal();
+                }
+            }
+        }
+        $percentage = 0;
+        if($totalPlan > 0){
+            $percentage = ($totalReal * 100) / $totalPlan;
+        }
+        $total = array(
+            'tp' => $totalPlan,
+            'tr' => $totalReal,
+            'percentage' => $percentage,
+            
+        );
+        return $total;
+    }
 }
