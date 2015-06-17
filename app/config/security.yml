@@ -137,6 +137,7 @@ security:
             - ROLE_SEIP_PLANNING_MONITOR_ARRANGEMENT_PROGRAM
             
             - ROLE_SEIP_DATA_LOAD_REPORT
+            - ROLE_SEIP_DATA_LOAD_CHANGE_DATE
             
             - ROLE_SEIP_SIG_MENU
             - ROLE_SEIP_SIG_OBJECTIVE

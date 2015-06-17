@@ -91,9 +91,18 @@ class ReportTemplateController extends SEIPController
         return $this->handleView($view);
     }
     
+    /**
+     * Notificar produccion
+     * @param Request $request
+     * @return type
+     * @throws type
+     */
     public function loadAction(Request $request) 
     {
-        $dateString = $request->get('dateNotification',null);
+        $dateString = null;
+        if($this->getSecurityService()->isGranted('ROLE_SEIP_DATA_LOAD_CHANGE_DATE')){
+            $dateString = $request->get('dateNotification',null);
+        }
         $plantReport = $request->get('plant_report',null);
         $dateNotification = null;
         if($dateString !== null){
@@ -114,10 +123,6 @@ class ReportTemplateController extends SEIPController
             $this->domainManager->update($resource);
             
             return $this->redirect($this->generateUrl('pequiven_report_template_list'));
-//            return $this->redirect($this->generateUrl('pequiven_report_template_load',[
-//                'id' => $resource->getId(),
-//                'dateNotification' => $dateNotification->format('d/m/Y')
-//            ]));
         }
         
         $view = $this
