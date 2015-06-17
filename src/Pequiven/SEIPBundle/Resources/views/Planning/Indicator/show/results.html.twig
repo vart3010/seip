@@ -2,13 +2,15 @@
 <div class="block" ng-init="urlValueIndicatorForm='{{ path('pequiven_value_indicator_get_form',{'idIndicator':indicator.id}) }}'">
     <div class="block-title">
         <h3 class="ng-binding">{$ indicator.valuesIndicator.length $} {{ 'pequiven_indicator.results'|trans }}</h3>
-{#        {% if is_granted(['ROLE_WORKER_PLANNING','ROLE_INDICATOR_ADD_RESULT']) and indicator.typeOfCalculation == constant('Pequiven\\IndicatorBundle\\Model\\Indicator::TYPE_CALCULATION_FORMULA_MANUALLY')  %}#}
-        {#{% if is_granted(['ROLE_WORKER_PLANNING']) and indicator.typeOfCalculation == constant('Pequiven\\IndicatorBundle\\Model\\Indicator::TYPE_CALCULATION_FORMULA_MANUALLY')  %}
+        {#        {% if is_granted(['ROLE_WORKER_PLANNING','ROLE_INDICATOR_ADD_RESULT']) and indicator.typeOfCalculation == constant('Pequiven\\IndicatorBundle\\Model\\Indicator::TYPE_CALCULATION_FORMULA_MANUALLY')  %}#}
+        
+        {% if is_granted(['ROLE_SEIP_INDICATOR_ADD_NOTIFICATION_SPECIAL']) and indicator.typeOfCalculation == constant('Pequiven\\IndicatorBundle\\Model\\Indicator::TYPE_CALCULATION_FORMULA_MANUALLY')  %}
             {% set textAbbr = indicator.frequencyNotificationIndicator ? indicator.frequencyNotificationIndicator.textAbbr : '' %}
             <div class="button-group absolute-right compact">
                 <a class="button icon-list-add " href="" ng-click="loadTemplateValueIndicator()" title="">{{ 'pequiven.add'|trans({},'messages') ~ ' ' ~ (textAbbr|lower) }}&nbsp;#{$ (indicator.valuesIndicator.length + 1) $}</a>
             </div>
-        {% endif %}#}
+        {% endif %}
+        
     </div>
     <div class="with-padding">
         {% set colspan = 5 %}
@@ -20,10 +22,10 @@
                         {{ 'seip.table.header.value'|trans({},'PequivenArrangementProgramBundle') }}</th>
                     <th scope="col" width="15%" class="hide-on-tablet header">{{ 'seip.table.header.created_at'|trans({},'PequivenArrangementProgramBundle') }}</th>
                     <th scope="col" width="30%" class="hide-on-mobile-portrait header">{{ 'seip.table.header.created_by'|trans({},'PequivenArrangementProgramBundle') }}</th>
-                    {% if is_granted(['ROLE_WORKER_PLANNING','ROLE_INDICATOR_EDIT']) %}
-                        {% set colspan = 6 %}
+                        {% if is_granted(['ROLE_WORKER_PLANNING','ROLE_INDICATOR_EDIT']) %}
+                            {% set colspan = 6 %}
                         <th scope="col" width="15%" class="hide-on-mobile-portrait header">&nbsp;</th>
-                    {% endif %}
+                        {% endif %}
                 </tr>
             </thead>
             <tbody>
@@ -32,9 +34,9 @@
                     <th scope="row">
                         {% if isValueIndicatorConfig == true %}
                             <a href="#" ng-click="openPopUp(getUrlForValueIndicator(valueIndicator,$index))" class="showPopup">
-                        {% endif %}
+                            {% endif %}
                             {$ valueIndicator.valueOfIndicator | myNumberFormat:2 $}
-                        {% if isValueIndicatorConfig == true %}
+                            {% if isValueIndicatorConfig == true %}
                             </a>
                         {% endif %}
                     </th>
@@ -42,20 +44,20 @@
                     <td>
                         {$ valueIndicator.createdBy.firstname + " "+ valueIndicator.createdBy.lastname $} <small class="tag">{$ " ("+valueIndicator.createdBy.username+")" $}</small>
                     </td>
-{#                    {% if is_granted(['ROLE_WORKER_PLANNING','ROLE_INDICATOR_EDIT','ROLE_INDICATOR_ADD_RESULT']) %}#}
-                    {% if is_granted(['ROLE_WORKER_PLANNING']) %}
+                    {#                    {% if is_granted(['ROLE_WORKER_PLANNING','ROLE_INDICATOR_EDIT','ROLE_INDICATOR_ADD_RESULT']) %}#}
+                    {% if is_granted(['ROLE_SEIP_INDICATOR_ADD_NOTIFICATION_SPECIAL']) %}
                         <td class="align-right vertical-center">
-                            {#<span class="select compact">
+                            <span class="select compact">
                                 <a href class="select-value form-edit">{{ 'pequiven.actions'|trans({},'messages') }}</a>
                                 <span class="select-arrow"></span>
                                 <span class="drop-down">
                                     <a href ng-click="loadTemplateValueIndicator(valueIndicator)" class="button icon-pencil">{{ "pequiven.actions.edit"|trans({},"messages") }}</a>
                                 </span>
-                            </span>#}
+                            </span>
                         </td>
                     {% endif %}
                 </tr>
-                    
+
                 <tr ng-if="indicator.valuesIndicator.length == 0">
                     <td colspan="{{ colspan }}" class="empty_row">
                         {{ "seip.table.empty.results"|trans({},'PequivenArrangementProgramBundle') }}
@@ -63,6 +65,6 @@
                 </tr>
             </tbody>
         </table>
-        
+
     </div>
 </div>
