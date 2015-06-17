@@ -176,6 +176,13 @@ class User extends BaseUser implements UserInterface,UserBoxInterface,  PeriodIt
     private $period;
     
     /**
+     * Reportes de plantas que puede cargar el usuario
+     * @var DataLoad\PlantReport
+     * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\PlantReport")
+     */
+    private $plantReports;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -188,6 +195,7 @@ class User extends BaseUser implements UserInterface,UserBoxInterface,  PeriodIt
         $this->supervised = new \Doctrine\Common\Collections\ArrayCollection();
         $this->boxes = new \Doctrine\Common\Collections\ArrayCollection();
         $this->groups = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->plantReports = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**
@@ -779,5 +787,38 @@ class User extends BaseUser implements UserInterface,UserBoxInterface,  PeriodIt
         $this->period = $period;
         
         return $this;
+    }
+
+    /**
+     * Add plantReports
+     *
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\PlantReport $plantReports
+     * @return User
+     */
+    public function addPlantReport(\Pequiven\SEIPBundle\Entity\DataLoad\PlantReport $plantReports)
+    {
+        $this->plantReports[] = $plantReports;
+
+        return $this;
+    }
+
+    /**
+     * Remove plantReports
+     *
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\PlantReport $plantReports
+     */
+    public function removePlantReport(\Pequiven\SEIPBundle\Entity\DataLoad\PlantReport $plantReports)
+    {
+        $this->plantReports->removeElement($plantReports);
+    }
+
+    /**
+     * Get plantReports
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getPlantReports()
+    {
+        return $this->plantReports;
     }
 }
