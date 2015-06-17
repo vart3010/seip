@@ -178,7 +178,7 @@ class User extends BaseUser implements UserInterface,UserBoxInterface,  PeriodIt
     /**
      * Reportes de plantas que puede cargar el usuario
      * @var DataLoad\PlantReport
-     * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\PlantReport")
+     * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\PlantReport",inversedBy="users")
      */
     private $plantReports;
 

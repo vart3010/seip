@@ -20,6 +20,23 @@ use Pequiven\SEIPBundle\Doctrine\ORM\SeipEntityRepository;
  */
 class PlantReportRepository extends SeipEntityRepository 
 {
+    public function createPaginatorByUser(array $criteria = null, array $orderBy = null) 
+    {
+        $queryBuilder = $this->getCollectionQueryBuilder();
+        $user = $this->getUser();
+
+        $queryBuilder
+                ->innerJoin("pr.users", 'pr_u')
+                ->andWhere("pr_u.id = :user")
+                ->setParameter("user", $user)
+                ;
+        
+        $this->applyCriteria($queryBuilder, $criteria);
+        $this->applySorting($queryBuilder, $orderBy);
+
+        return $this->getPaginator($queryBuilder);
+    }
+    
     protected function applyCriteria(\Doctrine\ORM\QueryBuilder $queryBuilder, array $criteria = null) 
     {
         $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);

@@ -77,6 +77,8 @@ class ReportTemplateRepository extends SeipEntityRepository
     protected function applyCriteria(QueryBuilder $queryBuilder, array $criteria = null) {
         $criteria = new ArrayCollection($criteria);
         //
+        $queryBuilder
+                    ->innerJoin("rt.plantReports","rt_pr");
         
         if(($ref = $criteria->remove("rt.ref")))
         {
@@ -89,7 +91,6 @@ class ReportTemplateRepository extends SeipEntityRepository
         if(($plant = $criteria->remove("plant")))
         {
             $queryBuilder
-                    ->innerJoin("rt.plantReports","rt_pr")
                     ->innerJoin("rt_pr.plant","rt_pr_p")
                     ->andWhere("rt_pr_p.id = :plant")
                     ->setParameter('plant', $plant)
@@ -98,7 +99,6 @@ class ReportTemplateRepository extends SeipEntityRepository
         if(($entity = $criteria->remove("entity")))
         {
             $queryBuilder
-                    ->innerJoin("rt.plantReports","rt_pr")
                     ->innerJoin("rt_pr.entity","rt_pr_e")
                     ->andWhere("rt_pr_e.id = :entity")
                     ->setParameter('entity', $entity)
@@ -111,7 +111,6 @@ class ReportTemplateRepository extends SeipEntityRepository
             }
             if(count($product) > 0){
                 $queryBuilder
-                        ->innerJoin("rt.plantReports","rt_pr")
                         ->innerJoin("rt_pr.productsReport","rt_pr_pr")
                         ->innerJoin("rt_pr_pr.product","rt_pr_pr_p")
                         ->andWhere($queryBuilder->expr()->in("rt_pr_pr_p.id", $product))
@@ -125,7 +124,6 @@ class ReportTemplateRepository extends SeipEntityRepository
             }
             if(count($service) > 0){
                 $queryBuilder
-                        ->innerJoin("rt.plantReports","rt_pr")
                         ->innerJoin("rt_pr.consumerPlanningServices","rt_pr_cps")
                         ->innerJoin("rt_pr_cps.service","rt_pr_cps_s")
                         ->andWhere($queryBuilder->expr()->in("rt_pr_cps_s.id", $service))
