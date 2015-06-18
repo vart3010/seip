@@ -23,14 +23,21 @@ abstract class Chart
     const TYPE_CHART_COLUMN_REAL_PLAN = 1;
     
     /**
+     * Gráfico tipo dona para mostrar las variables de la fórmula del indicador.
+     */
+    const TYPE_CHART_VARIABLES_DOUGHNUT = 2;
+    
+    /**
      * Gráfico tipo barras vertical para mostrar el real/plan de los parámetros de cada mes. Sólo para el caso en que sean 2 parámetros (Bien sea plan y real automático o plan y real automático a partir de ecuación)
      */
-    const TYPE_CHART_COLUMN_FROM_FORMULA_PARAMETERS = 2;
+    const TYPE_CHART_COLUMN_FROM_FORMULA_PARAMETERS = 3;
     
     /**
      * Gráfico para mostrar los resultados de diferentes variables y que forman parte de un mismo valor
      */
-    const TYPE_CHART_PIE_FROM_TAGS = 3;
+    const TYPE_CHART_PIE_FROM_TAGS = 4;
+    
+    // NOMBRES DE LOS GRÁFICOS
     
     /**
      * Nombre del gráfico para mostrar los indicadores asociados
@@ -41,6 +48,11 @@ abstract class Chart
      * Gráfico para poder mostrar el real, plan y resultado de los indicadores asociados
      */
     const CHART_INDICATORS_ASSOCIATED_REAL_PLAN_WITH_RESULT = 'CHART_INDICATORS_ASSOCIATED_REAL_PLAN_WITH_RESULT';
+    
+    /**
+     * Nombre del gráfico para mostrar las variables de los indicadores 
+     */
+    const CHART_INDICATORS_WITH_VARIABLES = 'CHART_INDICATORS_WITH_VARIABLES';
     
     /**
      * @var integer
@@ -80,6 +92,7 @@ abstract class Chart
          static $typesOfChart = array(
             self::TYPE_CHART_INDICATORS_ASSOCIATED => 'chart.type.indicatorsAssociatedDoughnut',
             self::TYPE_CHART_COLUMN_REAL_PLAN => 'chart.type.indicatorsAssociatedRealPlanWithResult',
+            self::TYPE_CHART_VARIABLES_DOUGHNUT => 'chart.type.indicatorsDoughnutWithVariables',
             self::TYPE_CHART_COLUMN_FROM_FORMULA_PARAMETERS => 'chart.type.resultsOfIndicator',
             self::TYPE_CHART_PIE_FROM_TAGS => 'chart.type.resultsOfVariable',
         );
