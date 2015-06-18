@@ -92,6 +92,15 @@
                                     dataSource="{$chartDoughnut2dWithVariables$}" >
                                 </div>
                             {% endif %}
+                            {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::CHART_INDICATORS_VARIABLES_OR_TAGS_IN_PIE')  %}
+                                <div id="tab-{{ chart.typeOfChart }}" ng-init="chargeChartPieVariablesOrTags({{ indicator.id }})" fusioncharts
+                                    width="100%"
+                                    height="500"
+                                    type="{{ chart.alias }}"
+                                    dataFormat= "json"
+                                    dataSource="{$chartPieVariablesOrTags$}" >
+                                </div>
+                            {% endif %}
                         {% endfor %}
                         </div>
                     </div>

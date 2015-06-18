@@ -2450,6 +2450,18 @@ angular.module('seipModule.controllers', [])
                 });
             }
             
+            //Gráfico en forma de dona para mostrar las variables de la fórmula del indicador
+            $scope.chargeChartPieVariablesOrTags = function(indicatorId){
+                var getDataChartPieVariablesOrTags = Routing.generate("getDataChartPieVariablesOrTags", {id: indicatorId});
+                $scope.chartPieVariablesOrTags = {};
+                $http.get(getDataChartPieVariablesOrTags).success(function(data) {
+                    $scope.chartPieVariablesOrTags = {
+                        "chart": data.dataSource.chart,
+                        "data": data.dataSource.data
+                    }
+                });
+            }
+            
         })
         
         .controller('DashboardController', function($scope, ngTableParams, $http, sfTranslator, notifyService) {
