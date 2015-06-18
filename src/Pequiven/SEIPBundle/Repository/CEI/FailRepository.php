@@ -31,6 +31,7 @@ class FailRepository extends SeipEntityRepository
      * @param \Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_* $typeFail
      * @return type
      */
+    
     public function findQueryByType($typeFail) 
     {
         $qb = $this->getQueryAllEnabled();
@@ -40,6 +41,8 @@ class FailRepository extends SeipEntityRepository
             ;
         return $qb;
     }
+    
+   
     
     protected function getAlias() 
     {

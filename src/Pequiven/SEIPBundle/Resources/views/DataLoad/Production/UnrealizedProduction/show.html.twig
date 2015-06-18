@@ -5,6 +5,7 @@
 {% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
 
 
+
 {% block before_body %}
     {{ contentHeader(("pequiven_seip.product_report.product_detail_daily_month"|trans ))}}
 {% endblock %}
@@ -12,6 +13,7 @@
 {%  set mes  = 'pequiven_seip.month.' ~ unrealized_production.month %}
 
 {% block body %}
+    
 
     <fieldset class="fieldset">
         <legend class="legend">{{ 'pequiven_seip.product_report.product_detail_daily_month'|trans }}</legend>
@@ -81,7 +83,8 @@
 
                                         {% for interc in internalCauses %}
                                             <th scope="col" width="5%">{{interc}}</th>
-                                            {% endfor %}
+                                        {% endfor %}
+{#                                        <th scope="col" width="5%">MP</th>#}
                                         <th scope="col" width="5%" class="hide-on-mobile-portrait">{{ 'Mount'|trans }}</th>
                                     </tr>
                                 </thead>
@@ -95,6 +98,7 @@
                                         <tr>
                                             <td>{{ loop.index }}</td>
                                             {% set causeFailMounts = causeFailService.getCauseFail(unrealized_production,{"paramDay":loop.index,"typeCause":"InternalCauses"}) %}
+                                            {#{{ dump(causeFailMounts) }}#}
                                             {% for mounts in causeFailMounts %}
                                                 <td>{{ mounts }}</td>
                                             {% endfor %}
@@ -108,6 +112,7 @@
                                             {% for tc in totalsCatInt %}
                                             <th>{{ tc }}</th>
                                             {% endfor %}
+{#                                            <th> MP </th>#}
                                         <th>{{ total }}</th>
                                     </tr>
                                 </tbody>
@@ -134,7 +139,8 @@
 
                                         {% for interc in externalCauses %}
                                             <th scope="col" width="auto">{{interc}}</th>
-                                            {% endfor %}
+                                        {% endfor %}
+{#                                        <th scope="col" width="5%">MP</th>#}
                                         <th scope="col" width="10%" class="hide-on-mobile-portrait">{{ 'Mount'|trans }}</th>
                                     </tr>
                                 </thead>
@@ -160,6 +166,7 @@
                                             {% for tc in totalsCatExt %}
                                             <th>{{ tc }}</th>
                                             {% endfor %}
+{#                                        <th> MP </th>#}
                                         <th>{{ total }}</th>
                                     </tr>
                                 </tbody>
