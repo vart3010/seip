@@ -548,10 +548,10 @@ class IndicatorService implements ContainerAwareInterface {
     /**
      * Función que devuelve la data para el widget de tipo dona en el dashboard del indicador
      * @param Indicator $indicator
-     * @return string
-     * @author Matias Jimenez
+     * @param type $options
+     * @return type
      */
-    public function getDataDashboardWidgetDoughnut(Indicator $indicator) {
+    public function getDataDashboardWidgetDoughnut(Indicator $indicator,$options = array()) {
         $data = array(
             'dataSource' => array(
                 'chart' => array(),

@@ -532,6 +532,7 @@ chart:
     type:
         indicatorsAssociatedDoughnut: Indicadores Asociados con resultados (Dona).
         indicatorsAssociatedRealPlanWithResult: Indicadores Asociados con real, plan y resultados (Columna y 2 ejes).
+        indicatorsDoughnutWithVariables: Indicadores con resultados de variables (Dona).
         resultsOfIndicator: Resultados Asociados al Indicador (2 parámetros).
         resultsOfVariable: Resultados de Variables y que forman parte de un mismo valor (Acumuladas).
 
