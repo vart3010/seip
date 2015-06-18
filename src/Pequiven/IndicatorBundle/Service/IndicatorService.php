@@ -595,32 +595,134 @@ class IndicatorService implements ContainerAwareInterface {
 
         $totalNumChildrens = count($indicator->getChildrens()); //Número de indicadores asociados
 //        $numDiv = $totalNumChildrens > 0 ? bcdiv(100, $totalNumChildrens,2) : 100;
+        if(isset($options['childrens']) && array_key_exists('childrens', $options)){
+            if ($totalNumChildrens > 0) {
+                $sumResultChildren = 0; //Suma de resultados de medición de los hijos
+                $indicatorsChildrens = $this->container->get('pequiven.repository.indicator')->findByParentAndOrderShow($indicator->getId()); //Obtenemos los indicadores asociados
+                foreach ($indicatorsChildrens as $indicatorChildren) {
+                    $sumResultChildren+= $indicatorChildren->getResultReal();
+                }
 
-        if ($totalNumChildrens > 0) {
-            $sumResultChildren = 0; //Suma de resultados de medición de los hijos
-            $indicatorsChildrens = $this->container->get('pequiven.repository.indicator')->findByParentAndOrderShow($indicator->getId()); //Obtenemos los indicadores asociados
-            foreach ($indicatorsChildrens as $indicatorChildren) {
-                $sumResultChildren+= $indicatorChildren->getResultReal();
+                foreach ($indicatorsChildrens as $indicatorChildren) {
+                    $set = array();
+                    $set["label"] = $indicatorChildren->getSummary() . ': ' . number_format($indicatorChildren->getResultReal(), 2, ',', '.') . '%';
+                    $set["value"] = $sumResultChildren != 0 ? bcdiv($indicatorChildren->getResultReal(), $sumResultChildren, 2) : bcadd(0, 0, 2);
+                    $set["displayValue"] = $indicatorChildren->getRef() . ' - ' . number_format($indicatorChildren->getResultReal(), 2, ',', '.') . '%';
+                    $set["toolText"] = $indicatorChildren->getSummary() . ':{br}' . number_format($indicatorChildren->getResultReal(), 2, ',', '.') . '%';
+                    $set["color"] = $this->getColorOfResult($indicatorChildren);
+                    $set["labelLink"] = $this->generateUrl('pequiven_indicator_show', array('id' => $indicatorChildren->getId()));
+                    $set["link"] = $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicatorChildren->getId()));
+                    $dataSet[] = $set;
+                }
             }
-
-            foreach ($indicatorsChildrens as $indicatorChildren) {
+        } elseif(isset($options['withVariables']) && array_key_exists('withVariables', $options)){
+            $arrayVariables = $this->getArrayVariablesFormulaWithData($indicator);
+            
+            foreach ($arrayVariables as $ind => $key){
                 $set = array();
-                $set["label"] = $indicatorChildren->getSummary() . ': ' . number_format($indicatorChildren->getResultReal(), 2, ',', '.') . '%';
-                $set["value"] = $sumResultChildren != 0 ? bcdiv($indicatorChildren->getResultReal(), $sumResultChildren, 2) : bcadd(0, 0, 2);
-                $set["displayValue"] = $indicatorChildren->getRef() . ' - ' . number_format($indicatorChildren->getResultReal(), 2, ',', '.') . '%';
-                $set["toolText"] = $indicatorChildren->getSummary() . ':{br}' . number_format($indicatorChildren->getResultReal(), 2, ',', '.') . '%';
-                $set["color"] = $this->getColorOfResult($indicatorChildren);
-                $set["labelLink"] = $this->generateUrl('pequiven_indicator_show', array('id' => $indicatorChildren->getId()));
-//                if($indicator->getIndicatorLevel()->getLevel() < IndicatorLevel::LEVEL_TACTICO){
-                $set["link"] = $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicatorChildren->getId()));
-//                }
+                $set["label"] = $ind . ': ' . number_format($key, 2, ',', '.') . '%';
+                $set["value"] = bcadd($key, 0, 2);
+//                $set["value"] = $sumResultChildren != 0 ? bcdiv($indicatorChildren->getResultReal(), $sumResultChildren, 2) : bcadd(0, 0, 2);
+//                $set["displayValue"] = $indicatorChildren->getRef() . ' - ' . number_format($indicatorChildren->getResultReal(), 2, ',', '.') . '%';
+//                $set["toolText"] = $indicatorChildren->getSummary() . ':{br}' . number_format($indicatorChildren->getResultReal(), 2, ',', '.') . '%';
+//                $set["color"] = $this->getColorOfResult($indicatorChildren);
+//                $set["labelLink"] = $this->generateUrl('pequiven_indicator_show', array('id' => $indicatorChildren->getId()));
+//                $set["link"] = $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicatorChildren->getId()));
                 $dataSet[] = $set;
             }
+
         }
 
         $data['dataSource']['chart'] = $chart;
         $data['dataSource']['dataSet'] = $dataSet;
         return $data;
+    }
+    
+    /**
+     * Función que devuelve la data para el widget de tipo dona en el dashboard del indicador
+     * @param Indicator $indicator
+     * @param type $options
+     * @return type
+     */
+    public function getDataDashboardPie(Indicator $indicator,$options = array()) {
+        $data = array(
+            'dataSource' => array(
+                'chart' => array(),
+                'data' => array(
+                ),
+            ),
+        );
+        
+        $chart = array();
+
+        $chart["caption"] = $indicator->getSummary();;
+
+        $chart["paletteColors"] = "#0075c2,#1aaf5d,#f2c500,#f45b00,#8e0000";
+        $chart["bgColor"] = "ffffff";
+        $chart["showBorder"] = "0";
+        $chart["use3DLighting"] = "1";
+        $chart["showShadow"] = "0";
+        $chart["enableSmartLabels"] = "1";
+        $chart["startingAngle"] = "0";
+        $chart["showPercentValues"] = "0";
+        $chart["showPercentInTooltip"] = "0";
+        $chart["decimals"] = "1";
+        $chart["captionFontSize"] = "14";
+        $chart["subcaptionFontSize"] = "14";
+        $chart["subcaptionFontBold"] = "1";
+        $chart["showPercentInTooltip"] = "0";
+        $chart["toolTipColor"] = "#ffffff";
+        $chart["toolTipBorderThickness"] = "0";
+        $chart["toolTipBgColor"] = "#000000";
+        $chart["toolTipBgAlpha"] = "80";
+        $chart["toolTipBorderRadius"] = "2";
+        $chart["toolTipPadding"] = "5";
+        $chart["showHoverEffect"] = "0";
+        $chart["showLegend"] = "1";
+        $chart["legendBgColor"] = "#ffffff";
+        $chart["legendBorderAlpha"] = "0";
+        $chart["legendShadow"] = "0";
+        $chart["legendItemFontSize"] = "12";
+        $chart["legendItemFontColor"] = "#666666";
+        
+        $dataChart = array();
+        
+        $arrayVariables = $this->getArrayVariablesFormulaWithData($indicator, array());
+        
+        foreach ($arrayVariables as $ind => $key){
+            $set = array();
+            $set["label"] = $ind . ': ' . number_format($key, 2, ',', '.') . '%';
+            $set["value"] = bcadd($key, 0, 2);
+            $dataChart[] = $set;
+        }
+
+        $data['dataSource']['chart'] = $chart;
+        $data['dataSource']['data'] = $dataChart;
+        
+        return $data;
+    }
+    
+    /**
+     * Función para 
+     * @param Indicator $indicator
+     * @return type
+     */
+    public function getArrayVariablesFormulaWithData(Indicator $indicator,$options = array()){
+        $formula = $indicator->getFormula();
+        $valuesIndicator = $indicator->getValuesIndicator();
+        $arrayVariables = array();
+        foreach ($formula->getVariables() as $variable) {
+            $arrayVariables[$variable->getName()] = 0.0;
+        }
+
+        foreach ($valuesIndicator as $valueIndicator){
+            foreach ($formula->getVariables() as $variable) {
+                $nameParameter = $variable->getName();
+                $arrayVariables[$nameParameter] = $arrayVariables[$nameParameter] + $valueIndicator->getParameter($nameParameter);
+            }
+        }
+        
+        return $arrayVariables;
     }
 
     /**

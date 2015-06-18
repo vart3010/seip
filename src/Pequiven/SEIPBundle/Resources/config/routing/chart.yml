@@ -11,7 +11,7 @@ getDataChartDoughnut:
         expose: true
         
 getDataChartDoughnutWithVariables:
-    path: /getDataChartDoughnut/{id}
+    path: /getDataChartDoughnutWithVariables/{id}
     defaults:
         _controller: pequiven.controller.seipchart:getDataChartTypeDoughnutWithVariablesAction
         _format: json
@@ -25,6 +25,17 @@ getDataChartColumnLineDualAxis:
     path: /getDataChartColumnLineDualAxis/{id}
     defaults:
         _controller: pequiven.controller.seipchart:getDataChartTypeColumnLineDualAxisAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
+        
+getDataChartPieVariablesOrTags:
+    path: /getDataChartPieVariablesOrTags/{id}
+    defaults:
+        _controller: pequiven.controller.seipchart:getDataChartTypePieVariablesOrTagsAction
         _format: json
     requirements:
         _format: "json|xml"
