@@ -596,7 +596,6 @@ class IndicatorService implements ContainerAwareInterface {
         $totalNumChildrens = count($indicator->getChildrens()); //Número de indicadores asociados
 //        $numDiv = $totalNumChildrens > 0 ? bcdiv(100, $totalNumChildrens,2) : 100;
         if(isset($options['childrens']) && array_key_exists('childrens', $options)){
-            unset($options['childrens']);
             if ($totalNumChildrens > 0) {
                 $sumResultChildren = 0; //Suma de resultados de medición de los hijos
                 $indicatorsChildrens = $this->container->get('pequiven.repository.indicator')->findByParentAndOrderShow($indicator->getId()); //Obtenemos los indicadores asociados
@@ -617,7 +616,6 @@ class IndicatorService implements ContainerAwareInterface {
                 }
             }
         } elseif(isset($options['withVariables']) && array_key_exists('withVariables', $options)){
-            unset($options['withVariables']);
             $arrayVariables = $this->getArrayVariablesFormulaWithData($indicator);
 
             foreach ($arrayVariables as $ind => $key) {
@@ -649,13 +647,14 @@ class IndicatorService implements ContainerAwareInterface {
         $data = array(
             'dataSource' => array(
                 'chart' => array(),
-                'data' => array(),
+                'data' => array(
+                ),
             ),
         );
 
         $chart = array();
 
-        $chart["caption"] = $indicator->getSummary();
+        $chart["caption"] = $indicator->getSummary();;
 
         $chart["paletteColors"] = "#0075c2,#1aaf5d,#f2c500,#f45b00,#8e0000";
         $chart["bgColor"] = "ffffff";
@@ -695,13 +694,10 @@ class IndicatorService implements ContainerAwareInterface {
             $set["value"] = bcadd($key, 0, 2);
             $dataChart[] = $set;
         }
-        
-        $dataChart[]['label'] = 'epale';
-        $dataChart[]['value'] = 5.5;
 
         $data['dataSource']['chart'] = $chart;
         $data['dataSource']['data'] = $dataChart;
-
+        
         return $data;
     }
 
