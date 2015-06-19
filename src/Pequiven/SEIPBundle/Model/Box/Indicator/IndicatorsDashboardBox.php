@@ -112,9 +112,9 @@ class IndicatorsDashboardBox extends GenericBox {
 
         $rs = array();
         $type = $indicator->getCharts();
-        foreach ($type as $t) {
-            array_push($rs, $t->);
-        }
+//        foreach ($type as $t) {
+//            array_push($rs, $t->);
+//        }
 
         return array(
             'iconsLineStrategic' => $iconsLineStrategic,
