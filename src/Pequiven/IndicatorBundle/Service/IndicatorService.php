@@ -706,12 +706,8 @@ class IndicatorService implements ContainerAwareInterface {
         $data = array(
             'dataSource' => array(
                 'chart' => array(),
-                'categories' => array(
-                    'category' => array()
-                ),
+                'categories' => array(),
                 'dataset' => array(
-                    'seriesname' => "test1",
-                    'data' => array(),
                 )
             ),
         );
@@ -725,20 +721,65 @@ class IndicatorService implements ContainerAwareInterface {
         $char["numberprefix"] = "$";
         $char["theme"] = "fint";
 
-        $category = array();
+
+
+//        $category = array();
+//        $values = array();
+//
+//        $c = array();
+//        array_push($category, array("label" => "cat1"));
+//        array_push($category, array("label" => "cat2"));
+//        array_push($category, array("label" => "cat3"));
+//
+//
+//        $v = array();
+//        array_push($values, array("value" => "150"));
+//        array_push($values, array("value" => "200"));
+//        array_push($values, array("value" => "20"));
+//
+//        $data["dataSource"]["chart"] = $char;
+//        $data["dataSource"]["categories"][]["category"] = $category;
+//        $data["dataSource"]["dataset"][]["data"][] = $values;
+//        $data["dataSource"]["dataset"][]["data"][] = $values;
+//        $data["dataSource"]["dataset"][]["data"][] = $values;
+        $category = $dataSetReal = $dataSetPlan = $medition  = $dataReal = array();
+        for($i = 1;$i <=3; $i++){
+            $dataReal["value"] = "200";
+
+            $dataSetReal["data"][] = $dataReal;
+            $dataSetPlan["data"][] = $dataReal;
+            $medition["data"][] = $dataReal;
+        }
         
-        $data2 = array();
+//        array_push($values, array("value" => "150"));
+//        array_push($values, array("value" => "200"));
+//        array_push($values, array("value" => "20"));
         
-        $rs = array();
-        array_push($rs, array("value"=>"150"));
-        array_push($rs, array("value"=>"200"));
-        array_push($rs, array("value"=>"20"));
         
-        array_push($data2,$rs);
+        $dataSetReal["seriesname"] = "Real";
+        $dataSetPlan["seriesname"] = "Plan";
+        $dataSetPlan["renderas"] = "area";
+        $medition["seriesname"] = "% Cumplimiento";
+        $medition["renderas"] = "line";
+
         
-        $data["dataSource"]["chart"] = $char;
-        $data["dataSource"]["categories"]["category"] = $data2;
-        $data["dataSource"]["dataset"]["data"] = "";
+            $label1 = $label2 = $label3 = $dataReal = $dataPlan = $dataMedition = array();
+            $label1["label"] = 'area barra 1';
+            $label2["label"] = 'area barra 2';
+            $label3["label"] = 'area barra 3';
+
+            $category[] = $label1;
+            $category[] = $label2;
+            $category[] = $label3;
+            $dataSetReal["data"][] = $dataReal;
+            $dataSetPlan["data"][] = $dataPlan;
+            $medition["data"][] = $dataMedition;
+
+        $data['dataSource']['chart'] = $char;
+        $data['dataSource']['categories'][]["category"] = $category;
+        $data['dataSource']['dataset'][] = $dataSetReal;
+        $data['dataSource']['dataset'][] = $dataSetPlan;
+        $data['dataSource']['dataset'][] = $medition;
 
         return $data;
     }
@@ -775,10 +816,8 @@ class IndicatorService implements ContainerAwareInterface {
         $data = array(
             'dataSource' => array(
                 'chart' => array(),
-                'categories' => array(
-                ),
-                'dataSet' => array(
-                ),
+                'categories' => array(),
+                'dataSet' => array(),
             ),
         );
         $chart = array();
