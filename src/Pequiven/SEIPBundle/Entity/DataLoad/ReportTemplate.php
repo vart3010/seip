@@ -85,7 +85,7 @@ class ReportTemplate extends BaseModel
     /**
      * Plantillas de plantas
      * @var \Pequiven\SEIPBundle\Entity\DataLoad\PlantReport
-     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\PlantReport",mappedBy="reportTemplate")
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\PlantReport",mappedBy="reportTemplate",cascade={"remove"})
      */
     private $plantReports;
 

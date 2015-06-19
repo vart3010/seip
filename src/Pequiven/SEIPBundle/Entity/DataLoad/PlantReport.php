@@ -388,9 +388,9 @@ class PlantReport extends ModelBaseMaster
     public function calculate()
     {
         $designCapacity = $this->getPlant()->getDesignCapacity();
-        $currentCapacity = ($designCapacity * $this->percentageCurrentCapacity) / 100;
+        $percentageCurrentCapacity = ($this->currentCapacity * 100) / $designCapacity;
         
-        $this->currentCapacity = $currentCapacity;
+        $this->percentageCurrentCapacity = $percentageCurrentCapacity;
     }
     
     public function init(\Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate $reportTemplate)

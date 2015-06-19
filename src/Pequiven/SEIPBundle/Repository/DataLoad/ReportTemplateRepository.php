@@ -76,9 +76,8 @@ class ReportTemplateRepository extends SeipEntityRepository
     
     protected function applyCriteria(QueryBuilder $queryBuilder, array $criteria = null) {
         $criteria = new ArrayCollection($criteria);
-        //
         $queryBuilder
-                    ->innerJoin("rt.plantReports","rt_pr");
+                    ->leftJoin("rt.plantReports","rt_pr");
         
         if(($ref = $criteria->remove("rt.ref")))
         {
