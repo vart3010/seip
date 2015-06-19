@@ -42,6 +42,11 @@ abstract class Chart
      */
     const TYPE_CHART_PIE_FROM_TAGS = 5;
     
+    /**
+     * Gráfico para mostrar los resultados de diferentes variables y que forman parte de un mismo valor
+     */
+    const TYPE_CHART_BARS_AREA = 6;
+    
     // NOMBRES DE LOS GRÁFICOS
     
     /**
@@ -63,6 +68,13 @@ abstract class Chart
      * Nombre del gráfico para mostrar las variables o etiquetas de los indicadores en forma de torta
      */
     const CHART_INDICATORS_VARIABLES_OR_TAGS_IN_PIE = 'CHART_INDICATORS_VARIABLES_OR_TAGS_IN_PIE';
+    
+    /**
+     * Nombre del gráfico para mostrar las variables o etiquetas de los indicadores en forma de Barra t Area
+     */
+    const CHART_INDICATORS_BARS_AREA = 'CHART_INDICATORS_BARS_AREA';
+    
+    
     
     /**
      * @var integer
@@ -106,6 +118,7 @@ abstract class Chart
             self::TYPE_CHART_PIE_VARIABLES_OR_TAGS => 'chart.type.indicatorsVariablesOrTagsInPie',
             self::TYPE_CHART_COLUMN_FROM_FORMULA_PARAMETERS => 'chart.type.resultsOfIndicator',
             self::TYPE_CHART_PIE_FROM_TAGS => 'chart.type.resultsOfVariable',
+            self::TYPE_CHART_BARS_AREA => 'chart.type.indicatorsBarArea'
         );
          
          return $typesOfChart;

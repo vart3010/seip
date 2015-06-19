@@ -18,7 +18,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @author Carlos Mendoza <inhack20@gmail.com>
  * @ORM\Table(name="seip_report_product_unrealized_production_day")
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\DataLoad\Production\UnrealizedProductionDayRepository")
  */
 class UnrealizedProductionDay {
 

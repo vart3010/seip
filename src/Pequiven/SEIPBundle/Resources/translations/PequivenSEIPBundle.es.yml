@@ -362,7 +362,7 @@ pequiven_seip:
         product_detail_daily_month: Detalle de producción
         unrealized_production:
             unrealized_production: Producción No Realizada
-            internal: Intena
+            internal: Interna
             external: Externa
         question:
             delete: Desea eliminar este detalle de producción
