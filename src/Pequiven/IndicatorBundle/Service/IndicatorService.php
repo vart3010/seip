@@ -595,7 +595,7 @@ class IndicatorService implements ContainerAwareInterface {
 
         $totalNumChildrens = count($indicator->getChildrens()); //Número de indicadores asociados
 //        $numDiv = $totalNumChildrens > 0 ? bcdiv(100, $totalNumChildrens,2) : 100;
-        if(isset($options['childrens']) && array_key_exists('childrens', $options)){
+        if (isset($options['childrens']) && array_key_exists('childrens', $options)) {
             if ($totalNumChildrens > 0) {
                 $sumResultChildren = 0; //Suma de resultados de medición de los hijos
                 $indicatorsChildrens = $this->container->get('pequiven.repository.indicator')->findByParentAndOrderShow($indicator->getId()); //Obtenemos los indicadores asociados
@@ -615,7 +615,7 @@ class IndicatorService implements ContainerAwareInterface {
                     $dataSet[] = $set;
                 }
             }
-        } elseif(isset($options['withVariables']) && array_key_exists('withVariables', $options)){
+        } elseif (isset($options['withVariables']) && array_key_exists('withVariables', $options)) {
             $arrayVariables = $this->getArrayVariablesFormulaWithData($indicator);
 
             foreach ($arrayVariables as $ind => $key) {
@@ -654,7 +654,8 @@ class IndicatorService implements ContainerAwareInterface {
 
         $chart = array();
 
-        $chart["caption"] = $indicator->getSummary();;
+        $chart["caption"] = $indicator->getSummary();
+        ;
 
         $chart["paletteColors"] = "#0075c2,#1aaf5d,#f2c500,#f45b00,#8e0000";
         $chart["bgColor"] = "ffffff";
@@ -697,7 +698,7 @@ class IndicatorService implements ContainerAwareInterface {
 
         $data['dataSource']['chart'] = $chart;
         $data['dataSource']['data'] = $dataChart;
-        
+
         return $data;
     }
 
@@ -725,24 +726,19 @@ class IndicatorService implements ContainerAwareInterface {
         $char["theme"] = "fint";
 
         $category = array();
-
-        $category["label"] = "ene";
-        $category["label"] = "feb";
-        $category["label"] = "mar";
-        $category["label"] = "abr";
-        $category["label"] = "may";
-
+        
         $data2 = array();
-
-        $data2["value"] = "100";
-        $data2["value"] = "200";
-        $data2["value"] = "300";
-        $data2["value"] = "50";
-        $data2["value"] = "10";
-
+        
+        $rs = array();
+        array_push($rs, array("value"=>"150"));
+        array_push($rs, array("value"=>"200"));
+        array_push($rs, array("value"=>"20"));
+        
+        array_push($data2,$rs);
+        
         $data["dataSource"]["chart"] = $char;
-        $data["dataSource"]["categories"]["category"] = $category;
-        $data["dataSource"]["dataset"]["data"] = $data2;
+        $data["dataSource"]["categories"]["category"] = $data2;
+        $data["dataSource"]["dataset"]["data"] = "";
 
         return $data;
     }

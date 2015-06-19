@@ -2463,6 +2463,19 @@ angular.module('seipModule.controllers', [])
                 });
             }
             
+            
+            //Gráfico en forma de dona para mostrar las variables de la fórmula del indicador
+            $scope.chargeChartBarsArea = function(indicatorId){
+                var getDataChartBarsArea = Routing.generate("getDataChartBarsArea", {id: indicatorId});
+                $scope.chartPieBarsArea= {};
+                $http.get(getDataChartBarsArea).success(function(data) {
+                    console.log(data.dataSource.data);
+                    $scope.chartPieBarsArea = {
+                        "dataSource": data
+                    }
+                });
+            }
+            
         })
         
         .controller('DashboardController', function($scope, ngTableParams, $http, sfTranslator, notifyService) {
