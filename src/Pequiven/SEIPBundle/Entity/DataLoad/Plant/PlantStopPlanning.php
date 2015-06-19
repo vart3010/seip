@@ -171,8 +171,10 @@ class PlantStopPlanning extends ModelBaseMaster
      */
     public function addDayStop(\Pequiven\SEIPBundle\Entity\DataLoad\Plant\DayStop $dayStops)
     {
-        $dayStops->setPlantStopPlanning($this);
-        $this->dayStops->add($dayStops);
+        if(!$this->dayStops->contains($dayStops)){
+            $dayStops->setPlantStopPlanning($this);
+            $this->dayStops->add($dayStops);
+        }
 
         return $this;
     }

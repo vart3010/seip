@@ -13,7 +13,7 @@
 
 {% block body -%}
     <form method="POST" action="{{ path("pequiven_plant_stop_planning_update",{id:plant_stop_planning.id}) }}">
-        <input type="hidden" name="_metod" value="PUT" />
+{#        <input type="hidden" name="_metod" value="PUT" />#}
        <br /><br />
        {% include 'PequivenSEIPBundle:DataLoad/Plant/PlantStopPlanning:_form.html.twig' %}
        {{ actions.update() }}

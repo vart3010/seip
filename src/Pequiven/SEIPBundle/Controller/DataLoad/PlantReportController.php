@@ -85,6 +85,7 @@ class PlantReportController extends SEIPController
         $consumerPlanningServices = $resource->getConsumerPlanningServices();
         $propertyAccessor = \Symfony\Component\PropertyAccess\PropertyAccess::createPropertyAccessor();
         
+        //Funcion que retorna los dias de paradas
         $getDayStops = function($month) use ($plantStopPlanningsByMonths){
             $daysStopsArray = array();
             if(isset($plantStopPlanningsByMonths[$month])){
@@ -149,6 +150,7 @@ class PlantReportController extends SEIPController
             }//Fin for
             
             //Completar los meses que no estan definidos
+            //Los planes de consumo de servicios
             for($month = 1; $month <= 12; $month++){
                 if(!isset($detailsByMonth[$month])){
                     $daysStopsArray = $getDayStops($month);
@@ -183,11 +185,12 @@ class PlantReportController extends SEIPController
                     $this->save($consumerPlanningService);
                 }
             }
-            
+            //Validar los dias de paradas
             foreach ($resource->getPlantStopPlannings() as $plantStopPlanning)
             {
                 $ranges = $plantStopPlanning->getRanges();
                 if($ranges->count()){
+                    $dayStops = array();
                     foreach ($plantStopPlanning->getRanges() as $range) {
 
                         $totalHours = 0;
@@ -200,9 +203,11 @@ class PlantReportController extends SEIPController
                         }
                         $dateFrom = $range->getDateFrom();
                         $dateEnd = $range->getDateEnd();
-                        
                         $startDay = $dateFrom->format("d");
                         $endDay = $dateEnd->format("d");
+//                        var_dump($plantStopPlanning->getMonth());
+//                        var_dump($startDay);
+//                        var_dump($endDay);
                         for($i = $startDay; $i <= $endDay; $i++){
                             $dayStop = new \Pequiven\SEIPBundle\Entity\DataLoad\Plant\DayStop();
                             $day = clone($dateFrom);
@@ -213,9 +218,12 @@ class PlantReportController extends SEIPController
                             $dayStops[] = $dayStop;
                         }
                     }
+//                    var_dump($plantStopPlanning->getMonth());
+//                    var_dump($dayStops);
                     $dayStopsByDay = $plantStopPlanning->getDayStopsByDay();
                     foreach ($dayStops as $dayStop) {
                         if(!isset($dayStopsByDay[$dayStop->getNroDay()])){
+//                            var_dump('add aja '.$dayStop->getNroDay());
                             $plantStopPlanning->addDayStop($dayStop);
                         }
                     }
@@ -233,6 +241,7 @@ class PlantReportController extends SEIPController
                 }
             }
         }
+//        die;
         $this->flush();
         return $this->redirectHandler->redirectTo($resource);
     }

@@ -60,10 +60,9 @@ class PlantStopPlanningController extends SEIPController
         foreach ($resource->getDayStops() as $daysStop) {
             $originalDaysStops->add($daysStop);
         }
-        
         $form = $this->getForm($resource);
-
-        if (($request->isMethod('PUT') || $request->isMethod('POST')) && $form->submit($request)->isValid()) {
+        $form->handleRequest($request);
+        if (($request->isMethod('PUT') || $request->isMethod('POST')) && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             foreach ($originalDaysStops as $daysStop) {
                 if(false === $resource->getDayStops()->contains($daysStop)){

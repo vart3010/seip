@@ -584,8 +584,8 @@ Mount: Cantidad
 "Ranges stops": 'Rangos de paradas'
 'Total stops': 'Total Días de Paradas'
 Aliquot: Alícuota
-'Current capacity': 'Capacidad actual'
-'Percentage current capacity': 'Porcentaje Capacidad Actual'
+'Current capacity': 'Capacidad Operativa'
+'Percentage current capacity': 'Porcentaje Capacidad Operativa'
 'Net production percentage': 'Porcentaje de Producción Neta'
 'Indicator': Indicador
 'Plant reports': 'Reportes de plantas'
