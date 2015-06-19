@@ -139,9 +139,7 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
             if($user->getLevelRealByGroup() == \Pequiven\MasterBundle\Model\Rol::ROLE_MANAGER_FIRST || $user->getLevelRealByGroup() == \Pequiven\MasterBundle\Model\Rol::ROLE_GENERAL_COMPLEJO) {
                 if($gerenciaFirst){
                     foreach ($gerenciaFirst->getTacticalObjectives() as $objetive) {
-                        if($objetive->getPeriod()->getId() == $period->getId()){
-                            $objetives[$objetive->getId()] = $objetive;
-                        }
+                        $objetives[$objetive->getId()] = $objetive;
                     }
                 }else{
                     $this->addErrorTrans('pequiven_seip.errors.the_user_is_not_assigned_first_line_management',array(
@@ -152,9 +150,7 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
             } else if($user->getLevelRealByGroup() == \Pequiven\MasterBundle\Model\Rol::ROLE_MANAGER_SECOND) {
                 if($gerenciaSecond){
                     foreach ($gerenciaSecond->getOperationalObjectives() as $objetive) {
-                        if($objetive->getPeriod()->getId() == $period->getId()){
-                            $objetives[$objetive->getId()] = $objetive;
-                        }
+                        $objetives[$objetive->getId()] = $objetive;
                     }
                 }else{
                     $this->addErrorTrans('pequiven_seip.errors.the_user_is_not_assigned_second_line_management',array(
@@ -165,9 +161,7 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
             }else if($user->getLevelRealByGroup() == \Pequiven\MasterBundle\Model\Rol::ROLE_DIRECTIVE){
                 $objetivesStrategic = $this->get('pequiven.repository.objetive')->findAllStrategicByPeriod($period);
                 foreach ($objetivesStrategic as $objetive) {
-                    if($objetive->getPeriod()->getId() == $period->getId()){
-                        $objetives[$objetive->getId()] = $objetive;
-                    }
+                    $objetives[$objetive->getId()] = $objetive;
                 }
             }
             
