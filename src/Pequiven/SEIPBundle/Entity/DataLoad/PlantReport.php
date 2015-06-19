@@ -388,7 +388,10 @@ class PlantReport extends ModelBaseMaster
     public function calculate()
     {
         $designCapacity = $this->getPlant()->getDesignCapacity();
-        $percentageCurrentCapacity = ($this->currentCapacity * 100) / $designCapacity;
+        $percentageCurrentCapacity = 0;
+        if($designCapacity > 0){
+            $percentageCurrentCapacity = ($this->currentCapacity * 100) / $designCapacity;
+        }
         
         $this->percentageCurrentCapacity = $percentageCurrentCapacity;
     }
