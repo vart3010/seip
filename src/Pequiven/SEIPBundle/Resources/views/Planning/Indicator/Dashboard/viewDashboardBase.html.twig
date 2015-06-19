@@ -108,6 +108,7 @@
                         </ul>
                         <div class="tabs-content" {#style="min-height: 500px;"#}>
                             {% for chart in Charts %}
+                                {{ chart.typeOfChart }}
                                 {% if  chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_INDICATORS_ASSOCIATED') %}
                                     <div id="tab-{{ chart.typeOfChart }}" ng-init="chargeChartDoughnut2d({{ indicator.id }})" fusioncharts
                                          width="100%"
@@ -132,10 +133,10 @@
                                          height="500"
                                          type="{{ chart.alias }}"
                                          dataFormat= "json"
-                                         dataSource="{$chartDoughnut2dWithVariables$}" >
+                                         dataSource="{$chartDoughnutdosdWithVariables$}" >
                                     </div>
                                 {% endif %}
-                                {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::CHART_INDICATORS_VARIABLES_OR_TAGS_IN_PIE')  %}
+                                {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_PIE_VARIABLES_OR_TAGS')  %}
                                     <div id="tab-{{ chart.typeOfChart }}" ng-init="chargeChartPieVariablesOrTags({{ indicator.id }})" fusioncharts
                                          width="100%"
                                          height="500"
@@ -144,7 +145,6 @@
                                          dataSource="{$chartPieVariablesOrTags$}" >
                                     </div>
                                 {% endif %}
-
                                 {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::CHART_INDICATORS_BARS_AREA')  %}
                                     <div id="tab-{{ chart.typeOfChart }}" ng-init="chargeChartBarsArea({{ indicator.id }})" fusioncharts
                                          width="100%"

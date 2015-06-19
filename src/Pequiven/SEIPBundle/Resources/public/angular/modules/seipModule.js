@@ -2439,16 +2439,16 @@ angular.module('seipModule.controllers', [])
             }
             
             //Gráfico en forma de dona para mostrar las variables de la fórmula del indicador
-            $scope.chargeChartDoughnut2dWithVariables = function(indicatorId){
-                var getDataChartDoughnutWithVariables = Routing.generate("getDataChartDoughnutWithVariables", {id: indicatorId});
-                $scope.chartDoughnut2dWithVariables = {};
-                $http.get(getDataChartDoughnutWithVariables).success(function(data) {
-                    $scope.chartDoughnut2dWithVariables = {
-                        "chart": data.dataSource.chart,
-                        "data": data.dataSource.dataSet
-                    }
-                });
-            }
+//            $scope.chargeChartDoughnut2dWithVariables = function(indicatorId){
+//                var getDataChartDoughnutWithVariables = Routing.generate("getDataChartDoughnutWithVariables", {id: indicatorId});
+//                $scope.chartDoughnut2dWithVariables = {};
+//                $http.get(getDataChartDoughnutWithVariables).success(function(data) {
+//                    $scope.chartDoughnut2dWithVariables = {
+//                        "chart": data.dataSource.chart,
+//                        "data": data.dataSource.dataSet
+//                    }
+//                });
+//            }
             
             //Gráfico en forma de dona para mostrar las variables de la fórmula del indicador
             $scope.chargeChartPieVariablesOrTags = function(indicatorId){
