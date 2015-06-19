@@ -551,7 +551,7 @@ class IndicatorService implements ContainerAwareInterface {
      * @param type $options
      * @return type
      */
-    public function getDataDashboardWidgetDoughnut(Indicator $indicator,$options = array()) {
+    public function getDataDashboardWidgetDoughnut(Indicator $indicator, $options = array()) {
         $data = array(
             'dataSource' => array(
                 'chart' => array(),
@@ -595,7 +595,7 @@ class IndicatorService implements ContainerAwareInterface {
 
         $totalNumChildrens = count($indicator->getChildrens()); //Número de indicadores asociados
 //        $numDiv = $totalNumChildrens > 0 ? bcdiv(100, $totalNumChildrens,2) : 100;
-        if(isset($options['childrens']) && array_key_exists('childrens', $options)){
+        if (isset($options['childrens']) && array_key_exists('childrens', $options)) {
             if ($totalNumChildrens > 0) {
                 $sumResultChildren = 0; //Suma de resultados de medición de los hijos
                 $indicatorsChildrens = $this->container->get('pequiven.repository.indicator')->findByParentAndOrderShow($indicator->getId()); //Obtenemos los indicadores asociados
@@ -615,10 +615,10 @@ class IndicatorService implements ContainerAwareInterface {
                     $dataSet[] = $set;
                 }
             }
-        } elseif(isset($options['withVariables']) && array_key_exists('withVariables', $options)){
+        } elseif (isset($options['withVariables']) && array_key_exists('withVariables', $options)) {
             $arrayVariables = $this->getArrayVariablesFormulaWithData($indicator);
-            
-            foreach ($arrayVariables as $ind => $key){
+
+            foreach ($arrayVariables as $ind => $key) {
                 $set = array();
                 $set["label"] = $ind . ': ' . number_format($key, 2, ',', '.') . '%';
                 $set["value"] = bcadd($key, 0, 2);
@@ -630,21 +630,20 @@ class IndicatorService implements ContainerAwareInterface {
 //                $set["link"] = $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicatorChildren->getId()));
                 $dataSet[] = $set;
             }
-
         }
 
         $data['dataSource']['chart'] = $chart;
         $data['dataSource']['dataSet'] = $dataSet;
         return $data;
     }
-    
+
     /**
      * Función que devuelve la data para el widget de tipo dona en el dashboard del indicador
      * @param Indicator $indicator
      * @param type $options
      * @return type
      */
-    public function getDataDashboardPie(Indicator $indicator,$options = array()) {
+    public function getDataDashboardPie(Indicator $indicator, $options = array()) {
         $data = array(
             'dataSource' => array(
                 'chart' => array(),
@@ -652,10 +651,11 @@ class IndicatorService implements ContainerAwareInterface {
                 ),
             ),
         );
-        
+
         $chart = array();
 
-        $chart["caption"] = $indicator->getSummary();;
+        $chart["caption"] = $indicator->getSummary();
+        ;
 
         $chart["paletteColors"] = "#0075c2,#1aaf5d,#f2c500,#f45b00,#8e0000";
         $chart["bgColor"] = "ffffff";
@@ -684,12 +684,12 @@ class IndicatorService implements ContainerAwareInterface {
         $chart["legendShadow"] = "0";
         $chart["legendItemFontSize"] = "12";
         $chart["legendItemFontColor"] = "#666666";
-        
+
         $dataChart = array();
-        
+
         $arrayVariables = $this->getArrayVariablesFormulaWithData($indicator, array());
-        
-        foreach ($arrayVariables as $ind => $key){
+
+        foreach ($arrayVariables as $ind => $key) {
             $set = array();
             $set["label"] = $ind . ': ' . number_format($key, 2, ',', '.') . '%';
             $set["value"] = bcadd($key, 0, 2);
@@ -698,16 +698,62 @@ class IndicatorService implements ContainerAwareInterface {
 
         $data['dataSource']['chart'] = $chart;
         $data['dataSource']['data'] = $dataChart;
-        
+
         return $data;
     }
-    
+
+    public function getDataDashboardBarsArea() {
+        $data = array(
+            'dataSource' => array(
+                'chart' => array(),
+                'categories' => array(
+                    'category' => array()
+                ),
+                'dataset' => array(
+                    'seriesname' => "test1",
+                    'data' => array(),
+                )
+            ),
+        );
+
+        $char = array();
+
+        $char["caption"] = "TITLE";
+        $char["subcaption"] = "last year";
+        $char["xaxisname"] = "Mount";
+        $char["yaxisname"] = "Amount";
+        $char["numberprefix"] = "$";
+        $char["theme"] = "fint";
+
+        $category = array();
+
+        $category["label"] = "ene";
+        $category["label"] = "feb";
+        $category["label"] = "mar";
+        $category["label"] = "abr";
+        $category["label"] = "may";
+
+        $data2 = array();
+
+        $data2["value"] = "100";
+        $data2["value"] = "200";
+        $data2["value"] = "300";
+        $data2["value"] = "50";
+        $data2["value"] = "10";
+
+        $data["dataSource"]["chart"] = $char;
+        $data["dataSource"]["categories"]["category"] = $category;
+        $data["dataSource"]["dataset"]["data"] = $data2;
+
+        return $data;
+    }
+
     /**
      * Función para 
      * @param Indicator $indicator
      * @return type
      */
-    public function getArrayVariablesFormulaWithData(Indicator $indicator,$options = array()){
+    public function getArrayVariablesFormulaWithData(Indicator $indicator, $options = array()) {
         $formula = $indicator->getFormula();
         $valuesIndicator = $indicator->getValuesIndicator();
         $arrayVariables = array();
@@ -715,13 +761,13 @@ class IndicatorService implements ContainerAwareInterface {
             $arrayVariables[$variable->getName()] = 0.0;
         }
 
-        foreach ($valuesIndicator as $valueIndicator){
+        foreach ($valuesIndicator as $valueIndicator) {
             foreach ($formula->getVariables() as $variable) {
                 $nameParameter = $variable->getName();
                 $arrayVariables[$nameParameter] = $arrayVariables[$nameParameter] + $valueIndicator->getParameter($nameParameter);
             }
         }
-        
+
         return $arrayVariables;
     }
 

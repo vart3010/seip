@@ -69,6 +69,8 @@ security:
             - ROLE_SEIP_ARRANGEMENT_PROGRAM_CHARGE_PLAN
             - ROLE_SEIP_ARRANGEMENT_PROGRAM_RETURN_TO_DRAFT
             
+            - ROLE_SEIP_ARRANGEMENT_PROGRAM_CREATE_SPECIAL
+            
 #            Menu indicadores
             - ROLE_SEIP_INDICATOR_LIST_STRATEGIC
             - ROLE_SEIP_INDICATOR_LIST_TACTIC
@@ -98,6 +100,8 @@ security:
             - ROLE_SEIP_INDICATOR_ADD_OBSERVATION
             
             - ROLE_SEIP_INDICATOR_ADD_NOTIFICATION_SPECIAL
+            
+            
             
 #            Menu de resultados
             - ROLE_SEIP_RESULT_LIST_BY_MANAGEMENT
