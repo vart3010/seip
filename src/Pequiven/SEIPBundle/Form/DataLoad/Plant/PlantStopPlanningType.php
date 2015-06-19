@@ -35,8 +35,9 @@ class PlantStopPlanningType extends AbstractType
                 "type" => new \Pequiven\SEIPBundle\Form\DataLoad\Production\DayStopType(),
                 'label_attr' => array('class' => 'label'),
                 "allow_add"    => true,
-                'by_reference' => false,
                 'allow_delete' => true,
+                'by_reference' => false,
+                'cascade_validation' => true,
             ))
             ->add('enabled',null,array(
                 'label_attr' => array('class' => 'label'),
@@ -47,8 +48,8 @@ class PlantStopPlanningType extends AbstractType
                 'label_attr' => array('class' => 'label'),
                 "type" => new RangeType(),
                 "allow_add"    => true,
-                'by_reference' => false,
                 'allow_delete' => true,
+                'by_reference' => false,
                 'cascade_validation' => true,
             ))
         ;
