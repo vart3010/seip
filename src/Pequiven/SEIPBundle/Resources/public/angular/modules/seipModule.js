@@ -2351,12 +2351,9 @@ angular.module('seipModule.controllers', [])
             $scope.chargeChartPieVariablesOrTags = function (indicatorId) {
                 var getDataChartPieVariablesOrTags = Routing.generate("getDataChartPieVariablesOrTags", {id: indicatorId});
                 $scope.chartPieVariablesOrTags = {};
-<<<<<<< HEAD
                 $http.get(getDataChartPieVariablesOrTags).success(function (data) {
-=======
                 $http.get(getDataChartPieVariablesOrTags).success(function(data) {
                     console.log(data.dataSource.data);
->>>>>>> e10352f1aaf3d3bb9c5084b8049c5868ad2b86b6
                     $scope.chartPieVariablesOrTags = {
                         "chart": data.dataSource.chart,
                         "data": data.dataSource.data
