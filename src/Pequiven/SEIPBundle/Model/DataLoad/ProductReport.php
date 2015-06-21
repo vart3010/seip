@@ -177,4 +177,34 @@ abstract class ProductReport extends BaseModel implements ProductReportInterface
         );
         return $total;
     }
+    
+    public function getTotalToDayUnrealizedProductions()
+    {
+        $now = new \DateTime();
+        $month = (int)$now->format("m");
+        $day = (int)$now->format("d");
+        
+        $unrealizedProductions = $this->getUnrealizedProductionsSortByMonth();
+        $totalReal = $totalMonthBefore = 0.0;
+        foreach ($unrealizedProductions as $unrealizedProduction) {
+            $monthDetail = $unrealizedProduction->getMonth();
+            if($monthDetail > $month){
+                break;
+            }
+
+            if($month == $monthDetail){
+                $totalToDay = $unrealizedProduction->getTotalToDay($day);
+                $totalReal = $totalReal + $totalToDay;
+            }else{
+                $totalMonthBefore = $totalMonthBefore + $unrealizedProduction->getTotal();
+                $totalReal = $totalReal + $unrealizedProduction->getTotal();
+            }
+        }
+        $total = array(
+            'tr' => $totalReal,
+            
+            'total_month_before' => $totalMonthBefore,//Total mes anterior
+        );
+        return $total;
+    }
 }

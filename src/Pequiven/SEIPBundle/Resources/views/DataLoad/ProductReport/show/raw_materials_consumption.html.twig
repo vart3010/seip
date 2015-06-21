@@ -29,13 +29,14 @@
                 {% set totalsRaw = product_report.getTotalToDayRawMaterial %}
                 {% for rawMaterialConsumptionPlanning in product_report.rawMaterialConsumptionPlannings %}
                     {% set tableIdRow = "row-rawMaterialConsumptionPlanning-"~rawMaterialConsumptionPlanning.id %}
+                    {% set productUnit = rawMaterialConsumptionPlanning.product.productUnit %}
                     <tr id="{{ tableIdRow }}">
                         <th scope="row">
                             {{ loop.index }} - 
                             {{ generateLink(rawMaterialConsumptionPlanning) }}
                         </th>
-                        <td>{{ rawMaterialConsumptionPlanning.totalPlan|myNumberFormat }}</td>
-                        <td>{{ rawMaterialConsumptionPlanning.totalReal|myNumberFormat }}</td>
+                        <td>{{ rawMaterialConsumptionPlanning.totalPlan|myNumberFormat }}&nbsp;{{ productUnit }}</td>
+                        <td>{{ rawMaterialConsumptionPlanning.totalReal|myNumberFormat }}&nbsp;{{ productUnit }}</td>
                         <td>{{ rawMaterialConsumptionPlanning.percentage|myNumberFormat }}&nbsp;%</td>
                         <td>{{ rawMaterialConsumptionPlanning.aliquot|myNumberFormat }}</td>
                         <td class="low-padding align-center">

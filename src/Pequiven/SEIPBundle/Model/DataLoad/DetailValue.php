@@ -20,8 +20,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @author Carlos Mendoza <inhack20@gmail.com>
  * @ORM\MappedSuperclass()
  */
-abstract class DetailValue extends BaseModel {
-
+abstract class DetailValue extends BaseModel 
+{
     /**
      * Mes
      * @var integer
@@ -1005,14 +1005,12 @@ abstract class DetailValue extends BaseModel {
     public function getListMonth() {
         $reflection = new \ReflectionClass($this);
         $methods = $reflection->getMethods();
-
         $nameMatch = '/^getDay\d+$/';
 
         $rs = array();
         $cont = 0;
         
         $days = $this->getDaysPerMonth($this->getMonth());
-        
         
         foreach ($methods as $m) {
             
@@ -1026,11 +1024,19 @@ abstract class DetailValue extends BaseModel {
                 }
             }
         }
-        
-        
         return $rs;
-        
     }
+    
+    public function getTotalToDay($day) 
+    {
+        $real = 0.0;
+        for($i=1; $i <= $day; $i++){
+            $nameReal = 'getDay'.$i;
+            $real = $real + $this->$nameReal();
+        }
+        return $real;
+    }
+    
     /**
      * Retorna la cantidad de dias de un mes basado en un calendario (CAL_GREGORIAN) 
      * @param type $mes
@@ -1043,5 +1049,4 @@ abstract class DetailValue extends BaseModel {
         }
         return cal_days_in_month(CAL_GREGORIAN, $mes, $ano);
     }
-
 }

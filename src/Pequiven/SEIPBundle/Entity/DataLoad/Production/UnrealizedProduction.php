@@ -22,7 +22,8 @@ use Pequiven\SEIPBundle\Model\DataLoad\DetailValue;
  * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\DataLoad\Production\UnrealizedProductionRepository")
  * @ORM\HasLifecycleCallbacks()
  */
-class UnrealizedProduction extends DetailValue {
+class UnrealizedProduction extends DetailValue 
+{
 
     /**
      * @var integer

@@ -26,4 +26,9 @@ interface ProductReportInterface
      * @return \Pequiven\SEIPBundle\Entity\DataLoad\RawMaterial\RawMaterialConsumptionPlanning Description
      */
     public function getRawMaterialConsumptionPlannings();
+    
+    /**
+     * @return \Pequiven\SEIPBundle\Entity\DataLoad\Production\UnrealizedProduction Description
+     */
+    public function getUnrealizedProductionsSortByMonth();
 }
