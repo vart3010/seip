@@ -92,7 +92,7 @@ abstract class ProductReport extends BaseModel implements ProductReportInterface
         $month = (int)$now->format("m");
         $day = (int)$now->format("d");
         $productDetailDailyMonths = $this->getProductDetailDailyMonthsSortByMonth();
-        $totalGrossPlan = $totalGrossReal = $totalNetPlan = $totalNetReal = 0.0;
+        $totalGrossPlan = $totalGrossReal = $totalNetPlan = $totalNetReal = $totalMonthBefore = 0.0;
         foreach ($productDetailDailyMonths as $monthDetail => $productDetailDailyMonth) {
             if($monthDetail > $month){
                 break;
@@ -107,6 +107,8 @@ abstract class ProductReport extends BaseModel implements ProductReportInterface
                 $totalNetPlan = $totalNetPlan + $totalNetToDay['tp'];
                 $totalNetReal = $totalNetReal + $totalNetToDay['tr'];
             }else{
+                $totalMonthBefore = $totalMonthBefore + $productDetailDailyMonth->getTotalGrossPlan();
+                
                 $totalGrossPlan = $totalGrossPlan + $productDetailDailyMonth->getTotalGrossPlan();
                 $totalGrossReal = $totalGrossReal + $productDetailDailyMonth->getTotalGrossReal();
 
@@ -131,6 +133,7 @@ abstract class ProductReport extends BaseModel implements ProductReportInterface
             'tr_net' => $totalNetReal,
             'percentage_net' => $percentageNet,
             
+            'total_month_before' => $totalMonthBefore,//Total mes anterior
         );
         return $total;
     }
