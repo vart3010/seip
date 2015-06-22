@@ -147,6 +147,7 @@
                     </p>
                 </div>
 
+
                 <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                     <p class="inline-label">
                         <label class="label">{{ 'form.typeDetailValue'|trans }}</label>
@@ -158,6 +159,13 @@
                     </p>
                 </div>
 
+                <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                    <p class="inline-label">
+                        <label class="label">{{ 'form.gerencia'|trans }}</label>
+                        {% set lo = indicator.objetives | length %}
+                        {{ indicator.objetives[lo-1].getGerencia() }} 
+                    </p>
+                </div>
 
                 {% set resultReal = indicator.resultReal %}
                 <div class="new-row-mobile twelve-columns six-columns-tablet twelve-columns-mobile" {% if resultReal is not null and errorArrangementRange is null %} ng-controller="DashboardController" ng-init="renderWidgetRange('chartContainerResult',{{ data|json_encode() }})" {% endif %}>
