@@ -15,6 +15,8 @@ pequiven_report_template_vizualice:
     requirements:
         _format: json|html
     methods: [GET]
+    options:
+        expose: true
     
 pequiven_report_template_create:
     path: /create

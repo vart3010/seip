@@ -162,3 +162,20 @@
      </div>
              
 {% endblock body %}
+
+{% block javascript %}
+    <script type="text/javascript">
+        $(document).ready(function(){
+            {% if is_granted("ROLE_SEIP_DATA_LOAD_CHANGE_DATE") %}
+                $('#dateReport').datepicker({
+                     changeMonth: true,
+                     dateFormat: "dd/mm/yy"
+                }).on("change",function(){
+                    var changeToDate = $(this).val();
+                    var url = Routing.generate("pequiven_report_template_vizualice",{dateReport:changeToDate });
+                    window.location.href = url;
+                });
+            {% endif %}
+        });
+    </script>
+{% endblock %}
