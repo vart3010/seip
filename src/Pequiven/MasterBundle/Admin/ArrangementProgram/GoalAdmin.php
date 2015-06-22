@@ -33,11 +33,18 @@ class GoalAdmin extends Admin
             ->add('goalDetails')
             ->add('observations')
             ->add('responsibles')
-            ;
+                ;
+        if ($this->isGranted('ROLE_SEIP_UPDATE_RESULT_OBJECTS')){
+            $show
+                ->add('updateResultByAdmin')
+                ->add('resultModified')
+                    ;
+        }
     }
     
     protected function configureFormFields(FormMapper $form) 
     {
+        $object = $this->getSubject();
         $form
             ->add('name')
             ->add('startDate','sonata_type_date_picker',array())
@@ -49,6 +56,16 @@ class GoalAdmin extends Admin
             ))
             ->add('observations')
             ;
+        if ($this->isGranted('ROLE_SEIP_UPDATE_RESULT_OBJECTS')){
+            $form->add('updateResultByAdmin', null, array(
+                'required' => false,
+            ));
+            if ($object != null && $object->getId() !== null) {
+                if ($object->getUpdateResultByAdmin()) {
+                    $form->add('resultModified');
+                }
+            }
+        }
     }
     
     protected function configureDatagridFilters(DatagridMapper $filter)
@@ -59,7 +76,10 @@ class GoalAdmin extends Admin
             ->add('endDate')
             ->add('weight')
             ->add("period")
-            ;
+                ;
+        if ($this->isGranted('ROLE_SEIP_UPDATE_RESULT_OBJECTS')){
+            $filter->add('updateResultByAdmin');
+        }
     }
     
     protected function configureListFields(ListMapper $list)
@@ -69,7 +89,10 @@ class GoalAdmin extends Admin
             ->add('startDate')
             ->add('endDate')
             ->add('weight')
-            ;
+                ;
+        if ($this->isGranted('ROLE_SEIP_UPDATE_RESULT_OBJECTS')){
+            $list->add('updateResultByAdmin',null, array('editable' => true));
+        }
     }
     
     protected function configureRoutes(\Sonata\AdminBundle\Route\RouteCollection $collection) {
