@@ -37,7 +37,7 @@
                         <td>{{ rawMaterialConsumptionPlanning.totalPlan|myNumberFormat }}</td>
                         <td>{{ rawMaterialConsumptionPlanning.totalReal|myNumberFormat }}</td>
                         <td>{{ rawMaterialConsumptionPlanning.percentage|myNumberFormat }}&nbsp;%</td>
-                        <td>{{ rawMaterialConsumptionPlanning.aliquot|myNumberFormat }}</td>
+                        <td>{{ rawMaterialConsumptionPlanning.aliquot|number_format(5, ',', '.') }}</td>
                         <td class="low-padding align-center">
                             <p class="button-height">
                                 <span class="button-group">
