@@ -20,8 +20,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @author Carlos Mendoza <inhack20@gmail.com>
  * @ORM\MappedSuperclass()
  */
-abstract class DetailValue extends BaseModel {
-
+abstract class DetailValue extends BaseModel 
+{
     /**
      * Mes
      * @var integer
@@ -1005,14 +1005,12 @@ abstract class DetailValue extends BaseModel {
     public function getListMonth() {
         $reflection = new \ReflectionClass($this);
         $methods = $reflection->getMethods();
-
         $nameMatch = '/^getDay\d+$/';
 
         $rs = array();
         $cont = 0;
         
         $days = $this->getDaysPerMonth($this->getMonth());
-        
         
         foreach ($methods as $m) {
             
@@ -1026,22 +1024,79 @@ abstract class DetailValue extends BaseModel {
                 }
             }
         }
-        
-        
         return $rs;
-        
     }
+    
+    public function getTotalToDay($day) 
+    {
+        $real = 0.0;
+        for($i=1; $i <= $day; $i++){
+            $nameReal = 'getDay'.$i;
+            $real = $real + $this->$nameReal();
+        }
+        return $real;
+    }
+    
+    /**
+     * Obtiene el ultimo del dia del mes
+     * @return type
+     */
+    public function getLastDay() 
+    {
+        $year = $this->getCreatedAt()->format('Y');
+        $i = $this->getDaysPerMonth($this->getMonth(), $year);
+        $nameReal = 'getDay'.$i;
+        $real = $this->$nameReal();
+        return $real;
+    }
+    
+    /**
+     * Retorna el valor de ayer
+     * @return type
+     */
+    public function getYesterDay() 
+    {
+        $now = new \DateTime();
+        $day = (int)$now->format("d");
+        if($day > 1){
+            $day--;
+        }
+        $nameReal = 'getDay'.$day;
+        $real = $this->$nameReal();
+        return $real;
+    }
+    
+    public function getTotalInventory() 
+    {
+        static $day = null;
+        static $currentMonth = null;
+        $month = $this->getMonth();
+        if($day === null){
+            $now = new \DateTime();
+            $day = (int)$now->format("d");
+            $currentMonth = (int)$now->format("m");
+        }
+        
+        $total = 0.0;
+        if($month == $currentMonth){
+            $total = $this->getYesterDay();
+        }else{
+            $total = $this->getLastDay();
+        }
+        return $total;
+    }
+    
     /**
      * Retorna la cantidad de dias de un mes basado en un calendario (CAL_GREGORIAN) 
      * @param type $mes
      * @param type $ano
      * @return type
      */
-    public function getDaysPerMonth($mes = "", $ano = "") {
+    public function getDaysPerMonth($mes = "", $ano = "") 
+    {
         if ($ano == "") {
             $ano = date("Y");
         }
         return cal_days_in_month(CAL_GREGORIAN, $mes, $ano);
     }
-
 }

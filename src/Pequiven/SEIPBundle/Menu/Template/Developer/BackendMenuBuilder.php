@@ -438,6 +438,11 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
 
                 $visualize->addChild($subchild);
             }//Fin sub Ver - menu objetivos
+            
+            //Menu de carga de datos
+            if($this->isGranted('ROLE_SEIP_DATA_LOAD_*')){
+                $this->addListDataLoad($visualize, $section);
+            }
             $child->addChild($visualize);
         }
                 
@@ -871,43 +876,6 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                 $menuResults->addChild($visualize);
              }
                 
-                
-//                    $thirdchild = $this->factory->createItem('results.notify',
-//                            $this->getSubLevelOptions(array(
-//                                'uri' => 'add',
-//                            )))->setLabel($this->translate(sprintf('app.backend.menu.%s.results.notify.main',$section)));
-//                    
-//                    //Menu y sub menu de notificar indicadores
-//                    $itemNotifyIndicators = $this->factory->createItem('results.notify.indicators', $this->getSubLevelOptions())->setLabel($this->translate(sprintf('app.backend.menu.%s.results.notify.indicators', $section)));
-//                    
-//                    $itemIndicatorsStrategic = $this->factory->createItem('results.notify.indicators.strategic', array(
-//                        'route' => 'pequiven_seip_result_notify_indicator_strategic',
-//                    ))->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.indicators.list.strategic', $section)));
-//                    
-//                    $itemIndicatorsTactic = $this->factory->createItem('results.notify.indicators.tactic', array(
-//                        'route' => 'pequiven_seip_result_notify_indicator_tactic',
-//                    ))->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.indicators.list.tactic', $section)));
-//                    
-//                    $itemIndicatorsOperative = $this->factory->createItem('results.notify.indicators.operative', array(
-//                        'route' => 'pequiven_seip_result_notify_indicator_operative',
-//                    ))->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.indicators.list.operative', $section)));
-//                    
-//                    $itemNotifyIndicators->addChild($itemIndicatorsStrategic);
-//
-//                    $itemNotifyIndicators->addChild($itemIndicatorsTactic);
-//
-//                    $itemNotifyIndicators->addChild($itemIndicatorsOperative);
-//                    
-//                    
-//                    $itemNotifyArrangementPrograms = $this->factory->createItem('results.notify.arrangement_programs', array(
-//                            'route' => 'pequiven_seip_result_notify_arrangementprogram',
-//                        ))->setLabel($this->translate(sprintf('app.backend.menu.%s.results.notify.arrangement_programs', $section)));
-//                    
-//                    $thirdchild->addChild($itemNotifyIndicators);
-//                    $thirdchild->addChild($itemNotifyArrangementPrograms);
-//                        
-//                    $menuResults->addChild($thirdchild);
-               
         $menu->addChild($menuResults);
     }
     
@@ -938,71 +906,42 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                     ))
                 )->setLabel($this->translate(sprintf('app.backend.menu.%s.data_load.finance', $section)));
         $child->addChild($listAdd);
+                 
+        $menu->addChild($child);
+    }
+    
+    /**
+     * Agregando lista de carga de data
+     * @param ItemInterface $menu
+     * @param type $section
+     */
+    private function addListDataLoad(ItemInterface $menu, $section)
+    {
+        $child = $this->factory->createItem('data_load',
+                    $this->getSubLevelOptions(array(
+                        'uri' => null,
+                    ))
+                )->setLabel($this->translate(sprintf('app.backend.menu.%s.data_load.main', $section)));
         
-//        $em = $this->getDoctrine()->getManager();
-//        $locationRepository = $em->getRepository("Pequiven\SEIPBundle\Entity\CEI\Location");
-//        $locationsProduction = $locationRepository->findByCodeTypeLocation(\Pequiven\SEIPBundle\Model\CEI\TypeLocation::CODE_PLANT_PRODUCTION);
-//        $locationsByTypeCompany = array();
-//        foreach ($locationsProduction as $locationProduction) {
-//            $typeOfCompany = $locationProduction->getCompany()->getTypeOfCompany();
-//            if(!isset($locationsByTypeCompany[$typeOfCompany])){
-//                $locationsByTypeCompany[$typeOfCompany] = array();
-//            }
-//            $locationsByTypeCompany[$typeOfCompany][] = $locationProduction;
-//        }
-//                //Proceso de produccion
-//                 $processProduction = $this->factory->createItem('data_load.process_production',
-//                        $this->getSubLevelOptions(array(
-//                        ))
-//                    )->setLabel($this->translate(sprintf('app.backend.menu.%s.data_load.process.production.main', $section)));
-//                 
-//                 $processProductionMatriz = $this->factory->createItem('data_load.process_production.matriz',
-//                        $this->getSubLevelOptions(array(
-//                        ))
-//                    )->setLabel($this->translate(sprintf('app.backend.menu.%s.data_load.process.production.matriz', $section)));
-//                 if(isset($locationsByTypeCompany[Company::TYPE_OF_COMPANY_MATRIZ]) && is_array($locationsByTypeCompany[Company::TYPE_OF_COMPANY_MATRIZ]))
-//                 {
-//                     $companies = $locationsByTypeCompany[Company::TYPE_OF_COMPANY_MATRIZ];
-//                     foreach ($companies as $company) {
-//                         $processProductionMatriz->addChild('data_load.process_production.matriz.'.$company->getId(), array(
-//                            'route' => 'pequiven_master_menu_list_gerenciaFirst',
-//                        ))->setLabel($company->getAlias());
-//                     }
-//                 }
-//                 
-//                 $processProduction->addChild($processProductionMatriz);
-//                 
-//                 $processProductionAffiliated = $this->factory->createItem('data_load.process.production.affiliated',
-//                        $this->getSubLevelOptions(array(
-//                        ))
-//                    )->setLabel($this->translate(sprintf('app.backend.menu.%s.data_load.process.production.affiliated', $section)));
-//                 if(isset($locationsByTypeCompany[Company::TYPE_OF_COMPANY_AFFILIATED]) && is_array($locationsByTypeCompany[Company::TYPE_OF_COMPANY_AFFILIATED]))
-//                 {
-//                     $companies = $locationsByTypeCompany[Company::TYPE_OF_COMPANY_AFFILIATED];
-//                     foreach ($companies as $company) {
-//                         $processProductionAffiliated->addChild('data_load.process_production.affiliated.'.$company->getId(), array(
-//                            'route' => 'pequiven_master_menu_list_gerenciaFirst',
-//                        ))->setLabel($company->getAlias());
-//                     }
-//                 }
-//                 $processProduction->addChild($processProductionAffiliated);
-//                 
-//                 $processProductionMixta = $this->factory->createItem('data_load.process.production.mixta',
-//                        $this->getSubLevelOptions(array(
-//                        ))
-//                    )->setLabel($this->translate(sprintf('app.backend.menu.%s.data_load.process.production.mixta', $section)));
-//                 if(isset($locationsByTypeCompany[Company::TYPE_OF_COMPANY_MIXTA]) && is_array($locationsByTypeCompany[Company::TYPE_OF_COMPANY_MIXTA]))
-//                 {
-//                     $companies = $locationsByTypeCompany[Company::TYPE_OF_COMPANY_MIXTA];
-//                     foreach ($companies as $company) {
-//                         $processProductionMixta->addChild('data_load.process_production.mixta.'.$company->getId(), array(
-//                            'route' => 'pequiven_master_menu_list_gerenciaFirst',
-//                        ))->setLabel($company->getAlias());
-//                     }
-//                 }
-//                 $processProduction->addChild($processProductionMixta);
-//                 
-//         $child->addChild($processProduction);
+             $list = $this->factory->createItem('indicators.data_load.production',
+                    $this->getSubLevelOptions(array(
+                        "route" => "pequiven_report_template_vizualice",
+                    ))
+                )->setLabel($this->translate(sprintf('app.backend.menu.%s.data_load.production', $section)));
+        
+        $child->addChild($list);
+        
+        $listAdd = $this->factory->createItem('indicators.data_load.reports.sales',
+                    $this->getSubLevelOptions(array(
+                    ))
+                )->setLabel($this->translate(sprintf('app.backend.menu.%s.data_load.sales', $section)));
+        $child->addChild($listAdd);
+        
+        $listAdd = $this->factory->createItem('indicators.data_load.reports.finance',
+                    $this->getSubLevelOptions(array(
+                    ))
+                )->setLabel($this->translate(sprintf('app.backend.menu.%s.data_load.finance', $section)));
+        $child->addChild($listAdd);
                  
         $menu->addChild($child);
     }
