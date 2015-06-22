@@ -2311,7 +2311,7 @@ angular.module('seipModule.controllers', [])
         .controller('ChartsDashboardController', function ($scope, $http) {
 
             //Gráfico en forma de dona para mostrar los indicadores asociados (Resumen, Referencia y Resultado de la Medición)
-            $scope.chargeChartDoughnut2d = function (indicatorId,render,width,height) {
+            $scope.chargeChartDoughnut2d = function (indicatorId, render, width, height) {
 //                var getDataChartDoughnut = Routing.generate("getDataChartDoughnut", {id: indicatorId});
 //                $scope.chartDoughnut2d = {};
 //                $http.get(getDataChartDoughnut).success(function (data) {
@@ -2320,15 +2320,13 @@ angular.module('seipModule.controllers', [])
 //                        "data": data.dataSource.dataSet
 //                    }
 //                });
-
                 var getDataChartDoughnut = Routing.generate("getDataChartDoughnut", {id: indicatorId});
                 $http.get(getDataChartDoughnut).success(function (data) {
-                   // console.log(data);
                     FusionCharts.ready(function () {
                         var revenueChartTactic = new FusionCharts({
                             "type": "doughnut2d",
                             "renderAt": render,
-                            "width": width+"%",
+                            "width": width + "%",
                             "height": height,
                             "dataFormat": "json",
                             "dataSource": {
@@ -2340,61 +2338,41 @@ angular.module('seipModule.controllers', [])
                         revenueChartTactic.render();
                     });
                 });
-
             }
 
             //Gráfico para mostrar información de 2 variables (respecto al eje izquierdo) y el resultado de la medición (respecto al eje derecho en valor porcentual)
-            $scope.chargeChartColumnLineDualAxis = function (indicatorId) {
+            $scope.chargeChartColumnLineDualAxis = function (indicatorId, render, width, height) {
                 var getDataChartColumnLineDualAxis = Routing.generate("getDataChartColumnLineDualAxis", {id: indicatorId});
-                $scope.chartColumnLineDualAxis = {};
                 $http.get(getDataChartColumnLineDualAxis).success(function (data) {
-                    $scope.chartColumnLineDualAxis = {
-                        "chart": data.dataSource.chart,
-                        "categories": data.dataSource.categories,
-                        "dataset": data.dataSource.dataset,
-                    }
-                });
-            }
-
-            //Gráfico en forma de dona para mostrar las variables de la fórmula del indicador
-
-            $scope.chargeChartDoughnut2dWithVariables = function (indicatorId) {
-                var getDataChartDoughnutWithVariables = Routing.generate("getDataChartDoughnutWithVariables", {id: indicatorId});
-                $scope.chartDoughnut2dWithVariables = {};
-                $http.get(getDataChartDoughnutWithVariables).success(function (data) {
-                    $scope.chartDoughnut2dWithVariables = {
-                        "chart": data.dataSource.chart,
-                        "data": data.dataSource.dataSet
-                    }
-                });
-            }
-
-            //Gráfico en forma de dona para mostrar las variables de la fórmula del indicador
-            $scope.chargeChartPieVariablesOrTags = function (indicatorId) {
-                var getDataChartPieVariablesOrTags = Routing.generate("getDataChartPieVariablesOrTags", {id: indicatorId});
-                $scope.chartPieVariablesOrTags = {};
-                $http.get(getDataChartPieVariablesOrTags).success(function (data) {
-                    //console.log(data.dataSource.data);
-                    $scope.chartPieVariablesOrTags = {
-                        "chart": data.dataSource.chart,
-                        "data": data.dataSource.data
-                    }
-                });
-            }
-
-
-            //Gráfico en forma de barras con area
-            $scope.chargeChartBarsArea = function (indicatorId,render,width) {
-
-                var getdataBarsArea = Routing.generate("getDataChartBarsArea", {id: indicatorId});
-                $http.get(getdataBarsArea).success(function (data) {
-                    //console.log(data);
                     FusionCharts.ready(function () {
                         var revenueChartTactic = new FusionCharts({
                             "type": "mscolumn3dlinedy",
                             "renderAt": render,
-                            "width": width,
-                            "height":"400",
+                            "width": width + "%",
+                            "height": height,
+                            "dataFormat": "json",
+                            "dataSource": {
+                                "chart": data.dataSource.chart,
+                                "data": data.dataSource.dataSet
+                            }
+                        });
+                        revenueChartTactic.setTransparent(true);
+                        revenueChartTactic.render();
+                    });
+                });
+            }
+
+            //Gráfico en forma de dona para mostrar las variables de la fórmula del indicador
+
+            $scope.chargeChartDoughnut2dWithVariables = function (indicatorId, render, width, height)  {
+                var getdataChartDoughnut2dWithVariables = Routing.generate("getDataChartDoughnutWithVariables", {id: indicatorId});
+                $http.get(getdataChartDoughnut2dWithVariables).success(function (data) {
+                    FusionCharts.ready(function () {
+                        var revenueChartTactic = new FusionCharts({
+                            "type": "doughnut2d",
+                            "renderAt": render,
+                            "width": width + "%",
+                            "height": height,
                             "dataFormat": "json",
                             "dataSource": {
                                 "chart": data.dataSource.chart,
@@ -2406,10 +2384,54 @@ angular.module('seipModule.controllers', [])
                         revenueChartTactic.render();
                     });
                 });
-
-
             }
 
+            //Gráfico en forma de dona para mostrar las variables de la fórmula del indicador
+            $scope.chargeChartPieVariablesOrTags = function (indicatorId, render, width, height) {
+                var getDataChartPieVariablesOrTags = Routing.generate("getDataChartPieVariablesOrTags", {id: indicatorId});
+                $http.get(getDataChartPieVariablesOrTags).success(function (data) {
+                    FusionCharts.ready(function () {
+                        var revenueChartTactic = new FusionCharts({
+                            "type": "pie2d",
+                            "renderAt": render,
+                            "width": width + "%",
+                            "height": height,
+                            "dataFormat": "json",
+                            "dataSource": {
+                                "chart": data.dataSource.chart,
+                                "categories": data.dataSource.categories,
+                                "dataset": data.dataSource.dataset
+                            }
+                        });
+                        revenueChartTactic.setTransparent(true);
+                        revenueChartTactic.render();
+                    });
+                });
+            }
+
+
+            //Gráfico en forma de barras con area
+            $scope.chargeChartBarsArea = function (indicatorId, render, width, height) {
+                var getdataBarsArea = Routing.generate("getDataChartBarsArea", {id: indicatorId});
+                $http.get(getdataBarsArea).success(function (data) {
+                    FusionCharts.ready(function () {
+                        var revenueChartTactic = new FusionCharts({
+                            "type": "mscolumn3dlinedy",
+                            "renderAt": render,
+                            "width": width + "%",
+                            "height": height,
+                            "dataFormat": "json",
+                            "dataSource": {
+                                "chart": data.dataSource.chart,
+                                "categories": data.dataSource.categories,
+                                "dataset": data.dataSource.dataset
+                            }
+                        });
+                        revenueChartTactic.setTransparent(true);
+                        revenueChartTactic.render();
+                    });
+                });
+            }
         })
 
         .controller('DashboardController', function ($scope, ngTableParams, $http, sfTranslator, notifyService) {

@@ -65,17 +65,19 @@
                         <ul class="tabs">
                             {% set cont = 1 %}
                             {% for chart in Charts %}
+                                {% set grafico = "grafico"~loop.index %}
                                 <li {% if cont == 1 %} class="active" {% endif %}>
-                                    <a style="color: #000000;" href="#tab-{{ chart.typeOfChart }}">{{ chart.shortDescription }} </a>
+                                    <a style="color: #000000;" href="#tab-{{ grafico }}">{{ chart.shortDescription }} </a>
                                 </li>
                                 {% set cont = cont + 1 %}
                             {% endfor %}
                         </ul>
                         <div class="tabs-content" {#style="min-height: 500px;"#}>
                             {% for chart in Charts %}
+                                {% set grafico = "grafico"~loop.index %}
                                 {% if  chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_INDICATORS_ASSOCIATED') %}
-                                    <div id="tab-{{ chart.typeOfChart }}"  ng-controller="DashboardController" ng-init="chargeChartDoughnut2d({{ indicator.id }},'dona2d','100','500')">
-                                        <span id="dona2d"></span>
+                                    <div id="tab-{{ grafico }}"  ng-controller="DashboardController" ng-init="chargeChartDoughnut2d({{ indicator.id }},'{{ grafico }}','100','500')">
+                                        <span id="{{ grafico }}"></span>
                                     </div>
                                     {#<div id="tab-{{ chart.typeOfChart }}" ng-init="chargeChartDoughnut2d({{ indicator.id }})" fusioncharts
                                          width="100%"
@@ -86,45 +88,24 @@
                                     </div>#}
                                 {% endif %}
                                 {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_COLUMN_REAL_PLAN')  %}
-                                    <div id="tab-{{ chart.typeOfChart }}" ng-init="chargeChartColumnLineDualAxis({{ indicator.id }})" fusioncharts
-                                         width="100%"
-                                         height="500"
-                                         type="{{ chart.alias }}"
-                                         dataFormat= "json"
-                                         dataSource="{$chartColumnLineDualAxis$}" >
+                                    <div id="tab-{{ grafico }}"  ng-controller="DashboardController" ng-init="chargeChartColumnLineDualAxis({{ indicator.id }},'{{ grafico }}','100','500')">
+                                        <span id="{{ grafico }}"></span>
                                     </div>
                                 {% endif %}
                                 {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_VARIABLES_DOUGHNUT')  %}
-                                    <div id="tab-{{ chart.typeOfChart }}" ng-init="chargeChartDoughnut2dWithVariables({{ indicator.id }})" fusioncharts
-                                         width="100%"
-                                         height="500"
-                                         type="{{ chart.alias }}"
-                                         dataFormat= "json"
-                                         dataSource="{$chartDoughnutdosdWithVariables$}" >
+                                    <div id="tab-{{ grafico }}"  ng-controller="DashboardController" ng-init="chargeChartDoughnut2dWithVariables({{ indicator.id }},'{{ grafico }}','100','500')">
+                                        <span id="{{ grafico }}"></span>
                                     </div>
                                 {% endif %}
                                 {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_PIE_VARIABLES_OR_TAGS')  %}
-                                    <div id="tab-{{ chart.typeOfChart }}" ng-init="chargeChartPieVariablesOrTags({{ indicator.id }})" fusioncharts
-                                         width="100%"
-                                         height="500"
-                                         type="{{ chart.alias }}"
-                                         dataFormat= "json"
-                                         dataSource="{$chartPieVariablesOrTags$}" >
+                                    <div id="tab-{{ grafico }}"  ng-controller="DashboardController" ng-init="chargeChartPieVariablesOrTags({{ indicator.id }},'{{ grafico }}','100','500')">
+                                        <span id="{{ grafico }}"></span>
                                     </div>
                                 {% endif %}
-
                                 {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_BARS_AREA')  %}
-                                    <div id="tab-{{ chart.typeOfChart }}"  ng-controller="DashboardController" ng-init="chargeChartBarsArea({{ indicator.id }},'barArea','100%')">
-                                        <span id="barArea"></span>
+                                    <div id="tab-{{ grafico }}"  ng-controller="DashboardController" ng-init="chargeChartBarsArea({{ indicator.id }},'{{ grafico }}','100','500')">
+                                        <span id="{{ grafico }}"></span>
                                     </div>
-
-                                    {#<div id="tab-{{ chart.typeOfChart }}" ng-init="chargeChartBarsArea({{ indicator.id }})" fusioncharts
-                                         width="100%"
-                                         height="500"
-                                         type="{{ chart.alias }}"
-                                         dataFormat= "json"
-                                         dataSource="{$chargeChartBarsArea$}" >
-                                    </div>#}
                                 {% endif %}
                             {% endfor %}
                         </div>
