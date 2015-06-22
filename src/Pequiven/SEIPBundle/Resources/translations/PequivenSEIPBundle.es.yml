@@ -538,7 +538,7 @@ chart:
         indicatorsVariablesOrTagsInPie: Resultados de variables (sumativas al real o al plan) o etiquetas (de un tipo en especifico, texto o numéricas).
         resultsOfIndicator: Resultados Asociados al Indicador (2 parámetros).
         resultsOfVariable: Resultados de Variables y que forman parte de un mismo valor (Acumuladas).
-        indicatorsBarArea: PRUEBA DE GRAFICO
+        indicatorsBarArea: Indicadores mostrados por barras y areas 
 
 Name: Nombre
 nro: "#"

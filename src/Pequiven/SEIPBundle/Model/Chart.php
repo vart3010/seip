@@ -70,7 +70,7 @@ abstract class Chart
     const CHART_INDICATORS_VARIABLES_OR_TAGS_IN_PIE = 'CHART_INDICATORS_VARIABLES_OR_TAGS_IN_PIE';
     
     /**
-     * Nombre del gráfico para mostrar las variables o etiquetas de los indicadores en forma de Barra t Area
+     * Gráfico para mostrar las variables de los indicadores en forma de barra y area 
      */
     const CHART_INDICATORS_BARS_AREA = 'CHART_INDICATORS_BARS_AREA';
     
