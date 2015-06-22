@@ -118,6 +118,7 @@ form:
     location: Localidad
     complejo: Complejo
     gerencia: Gerencia
+    gerenciaSecond: Gerencia 2da Línea
     weight: Peso
     weightIndicatorStrategic: Peso del Indicador Estratégico
     weightIndicatorTactic: Peso del Indicador Táctico

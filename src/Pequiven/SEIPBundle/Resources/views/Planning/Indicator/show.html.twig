@@ -159,13 +159,25 @@
                     </p>
                 </div>
 
-                <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
-                    <p class="inline-label">
-                        <label class="label">{{ 'form.gerencia'|trans }}</label>
-                        {% set lo = indicator.objetives | length %}
-                        {{ indicator.objetives[lo-1].getGerencia() }} 
-                    </p>
-                </div>
+                {% if level > constant('Pequiven\\IndicatorBundle\\Model\\IndicatorLevel::LEVEL_ESTRATEGICO') %}
+                    <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                        <p class="inline-label">
+                            <label class="label">{{ 'form.gerencia'|trans }}</label>
+                            {% set lo = indicator.objetives | length %}
+                            {{ indicator.objetives[lo-1].getGerencia() }} 
+                        </p>
+                    </div>
+                {% endif%}
+                
+                {% if level == constant('Pequiven\\IndicatorBundle\\Model\\IndicatorLevel::LEVEL_OPERATIVO') %}
+                    <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                        <p class="inline-label">
+                            <label class="label">{{ 'form.gerenciaSecond'|trans }}</label>
+                            {% set lo = indicator.objetives | length %}
+                            {{ indicator.objetives[lo-1].getGerenciaSecond() }} 
+                        </p>
+                    </div>
+                {% endif%}
 
                 {% set resultReal = indicator.resultReal %}
                 <div class="new-row-mobile twelve-columns six-columns-tablet twelve-columns-mobile" {% if resultReal is not null and errorArrangementRange is null %} ng-controller="DashboardController" ng-init="renderWidgetRange('chartContainerResult',{{ data|json_encode() }})" {% endif %}>
