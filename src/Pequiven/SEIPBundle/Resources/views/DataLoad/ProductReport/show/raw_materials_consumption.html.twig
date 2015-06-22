@@ -29,13 +29,14 @@
                 {% set totalsRaw = product_report.getTotalToDayRawMaterial %}
                 {% for rawMaterialConsumptionPlanning in product_report.rawMaterialConsumptionPlannings %}
                     {% set tableIdRow = "row-rawMaterialConsumptionPlanning-"~rawMaterialConsumptionPlanning.id %}
+                    {% set productUnit = rawMaterialConsumptionPlanning.product.productUnit %}
                     <tr id="{{ tableIdRow }}">
                         <th scope="row">
                             {{ loop.index }} - 
                             {{ generateLink(rawMaterialConsumptionPlanning) }}
                         </th>
-                        <td>{{ rawMaterialConsumptionPlanning.totalPlan|myNumberFormat }}</td>
-                        <td>{{ rawMaterialConsumptionPlanning.totalReal|myNumberFormat }}</td>
+                        <td>{{ rawMaterialConsumptionPlanning.totalPlan|myNumberFormat }}&nbsp;{{ productUnit }}</td>
+                        <td>{{ rawMaterialConsumptionPlanning.totalReal|myNumberFormat }}&nbsp;{{ productUnit }}</td>
                         <td>{{ rawMaterialConsumptionPlanning.percentage|myNumberFormat }}&nbsp;%</td>
                         <td>{{ rawMaterialConsumptionPlanning.aliquot|number_format(5, ',', '.') }}</td>
                         <td class="low-padding align-center">
@@ -58,7 +59,7 @@
             </tbody>
             <tfoot>
                 <tr>
-                    <th scope="col" width="10%">&nbsp;</th>
+                    <th scope="col" width="10%">{{ 'Total month before'|trans }}&nbsp;{{ totalsRaw['total_month_before']|myNumberFormat }}</th>
                     <th scope="col" width="10%" class="hide-on-mobile-portrait with-tooltip" title="{{ 'pequiven_seip.totalPlan'|trans }}">{{ totalsRaw['tp']|myNumberFormat }}</th>
                     <th scope="col" width="10%" class="hide-on-tablet with-tooltip" title="{{ 'pequiven_seip.totalReal'|trans }}">{{ totalsRaw['tr']|myNumberFormat }}</th>
                     <th scope="col" width="10%" class="hide-on-tablet with-tooltip" title="{{ 'pequiven_seip.percentage'|trans }}">{{ totalsRaw['percentage']|myNumberFormat }}%</th>

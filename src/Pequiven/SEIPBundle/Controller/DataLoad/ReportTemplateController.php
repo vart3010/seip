@@ -138,4 +138,28 @@ class ReportTemplateController extends SEIPController
 
         return $this->handleView($view);
     }
+    
+    public function vizualiceAction(Request $request)
+    {
+        $dateString = $request->get('dateReport',null);
+        if($dateString !== null){
+            $dateReport = \DateTime::createFromFormat('d/m/Y', $dateString);
+        }else {
+            $dateReport = new \DateTime();
+        }
+        $plantReport = $this->get('pequiven.repository.plant_report')->find(15);
+        $plantReports = array($plantReport);
+        
+        $data = array(
+            'dateReport' => $dateReport,
+            'plantReports' => $plantReports,
+        );
+
+        $view = $this
+                ->view()
+                ->setTemplate($this->config->getTemplate('vizualice.html'))
+                ;
+        $view->setData($data);
+        return $this->handleView($view);
+    }
 }
