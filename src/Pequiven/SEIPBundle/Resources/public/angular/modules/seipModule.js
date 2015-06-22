@@ -2473,12 +2473,82 @@ angular.module('seipModule.controllers', [])
                 $scope.chartBarsArea = {};
                 $http.get(getDataChartBarsArea).success(function (data) {
 
-                    console.log(data.dataSource.dataset);
+                   
                     $scope.chartBarsArea = {
-                        "chart": data.dataSource.chart,
-                        "categories": data.dataSource.categories,
-                        "dataset": data.dataSource.dataset,
+                        "chart": {
+                            "caption": "Actual Revenues, Targeted Revenues & Profits",
+                            "subcaption": "Last year",
+                            "xaxisname": "Month",
+                            "yaxisname": "Amount (In USD)",
+                            "numberprefix": "$",
+                            "theme": "fint"
+                        },
+                        "categories": [
+                            {
+                                "category": [
+                                    {
+                                        "label": "area barra 1"
+                                    },
+                                    {
+                                        "label": "area barra 2"
+                                    },
+                                    {
+                                        "label": "area barra 3"
+                                    }
+                                ]
+                            }
+                        ],
+                        "dataset": [
+                            {
+                                "seriesname": "Actual Revenue",
+                                "data": [
+                                    {
+                                        "value": "16000"
+                                    },
+                                    {
+                                        "value": "20000"
+                                    },
+                                    {
+                                        "value": "18000"
+                                    }
+                                ]
+                            },
+                            {
+                                "seriesname": "Projected Revenue",
+                                "renderas": "line",
+                                "showvalues": "0",
+                                "data": [
+                                    {
+                                        "value": "15000"
+                                    },
+                                    {
+                                        "value": "16000"
+                                    },
+                                    {
+                                        "value": "17000"
+                                    }
+                                ]
+                            },
+                            {
+                                "seriesname": "Profit",
+                                "renderas": "area",
+                                "showvalues": "0",
+                                "data": [
+                                    {
+                                        "value": "4000"
+                                    },
+                                    {
+                                        "value": "5000"
+                                    },
+                                    {
+                                        "value": "3000"
+                                    }
+                                ]
+                            }
+                        ],
                     }
+                    
+                    console.log($scope.chartBarsArea);
                 });
             }
 

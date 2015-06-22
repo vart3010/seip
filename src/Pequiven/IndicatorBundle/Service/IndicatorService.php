@@ -707,8 +707,7 @@ class IndicatorService implements ContainerAwareInterface {
             'dataSource' => array(
                 'chart' => array(),
                 'categories' => array(),
-                'dataset' => array(
-                )
+                'dataset' => array()
             ),
         );
 
@@ -777,9 +776,9 @@ class IndicatorService implements ContainerAwareInterface {
 
         $data['dataSource']['chart'] = $char;
         $data['dataSource']['categories'][]["category"] = $category;
-        $data['dataSource']['dataset'][] = $dataSetReal;
-        $data['dataSource']['dataset'][] = $dataSetPlan;
-        $data['dataSource']['dataset'][] = $medition;
+//        $data['dataSource']['dataset'][] = $dataSetReal;
+//        $data['dataSource']['dataset'][] = $dataSetPlan;
+//        $data['dataSource']['dataset'][] = $medition;
 
         return $data;
     }
