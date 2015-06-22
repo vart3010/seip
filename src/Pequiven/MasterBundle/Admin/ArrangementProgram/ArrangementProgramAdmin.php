@@ -36,10 +36,17 @@ class ArrangementProgramAdmin extends Admin
             ->add('couldBePenalized')
             ->add('forcePenalize')
             ;
+        if ($this->isGranted('ROLE_SEIP_UPDATE_RESULT_OBJECTS')){
+            $show
+                ->add('updateResultByAdmin')
+                ->add('resultModified')
+                    ;
+        }
     }
     
     protected function configureFormFields(FormMapper $form) 
     {
+        $object = $this->getSubject();
         $form
             ->add('ref')
             ->add('period')
@@ -61,6 +68,16 @@ class ArrangementProgramAdmin extends Admin
                 'required' => false,
             ))
             ;
+        if ($this->isGranted('ROLE_SEIP_UPDATE_RESULT_OBJECTS')){
+            $form->add('updateResultByAdmin', null, array(
+                'required' => false,
+            ));
+            if ($object != null && $object->getId() !== null) {
+                if ($object->getUpdateResultByAdmin()) {
+                    $form->add('resultModified');
+                }
+            }
+        }
     }
     
     protected function configureDatagridFilters(DatagridMapper $filter) {
@@ -74,6 +91,9 @@ class ArrangementProgramAdmin extends Admin
             ->add('forcePenalize')
             ->add('period')
             ;
+        if ($this->isGranted('ROLE_SEIP_UPDATE_RESULT_OBJECTS')){
+            $filter->add('updateResultByAdmin');
+        }
     }
     
     protected function configureListFields(ListMapper $list) {
@@ -82,6 +102,9 @@ class ArrangementProgramAdmin extends Admin
             ->add('period')
             ->add('description')
             ;
+        if ($this->isGranted('ROLE_SEIP_UPDATE_RESULT_OBJECTS')){
+            $list->add('updateResultByAdmin',null, array('editable' => true));
+        }
     }
     
     protected function configureRoutes(\Sonata\AdminBundle\Route\RouteCollection $collection) {
