@@ -46,43 +46,6 @@
         <div class="nine-columns nine-columns-tablet six-columns-mobile new-row-mobile">
 
 
-            {#<div class="standard-tabs margin-bottom" >
-                <ul class="tabs">
-                    <li class="active"><a href="#tab-8">Selected tab</a></li>
-                    <li><a href="#tab-5">Another tab</a></li>
-                    <li><a href="#tab-2">Another tab</a></li>
-                    <li class="disabled"><a href="#tab-4">Disabled tab</a></li>
-                    <li>Non-active</li>
-                </ul>
-
-                <div class="tabs-content">
-
-                    <div id="tab-5" class="with-padding">
-
-                        Selected tab
-
-                    </div>
-
-                    <div id="tab-8" class="with-padding">
-
-                        Alternate tab 1
-
-                    </div>
-
-                    <div id="tab-2" class="with-padding">
-
-                        Alternate tab 2
-
-                    </div>
-
-                    <div id="tab-4" class="with-padding">
-
-                        Disabled tab
-
-                    </div>
-
-                </div>
-            </div>#}
 
             {#<div ng-controller="DashboardController" ng-init="renderWidgetMultiLevelPie('pie',{{ dataMultiLevelPie|json_encode() }},'100%','400')">
                 <span id="pie"></span>
@@ -110,15 +73,17 @@
                         </ul>
                         <div class="tabs-content" {#style="min-height: 500px;"#}>
                             {% for chart in Charts %}
-                                {{ chart.typeOfChart }}
                                 {% if  chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_INDICATORS_ASSOCIATED') %}
-                                    <div id="tab-{{ chart.typeOfChart }}" ng-init="chargeChartDoughnut2d({{ indicator.id }})" fusioncharts
+                                    <div id="tab-{{ chart.typeOfChart }}"  ng-controller="DashboardController" ng-init="chargeChartDoughnut2d({{ indicator.id }},'dona2d','100','500')">
+                                        <span id="dona2d"></span>
+                                    </div>
+                                    {#<div id="tab-{{ chart.typeOfChart }}" ng-init="chargeChartDoughnut2d({{ indicator.id }})" fusioncharts
                                          width="100%"
                                          height="400"
                                          type="{{ chart.alias }}"
                                          dataFormat= "json"
                                          dataSource="{$chartDoughnut2d$}" >
-                                    </div>
+                                    </div>#}
                                 {% endif %}
                                 {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_COLUMN_REAL_PLAN')  %}
                                     <div id="tab-{{ chart.typeOfChart }}" ng-init="chargeChartColumnLineDualAxis({{ indicator.id }})" fusioncharts
@@ -147,15 +112,19 @@
                                          dataSource="{$chartPieVariablesOrTags$}" >
                                     </div>
                                 {% endif %}
-                                
+
                                 {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_BARS_AREA')  %}
-                                    <div id="tab-{{ chart.typeOfChart }}" ng-init="chargeChartBarsArea({{ indicator.id }})" fusioncharts
+                                    <div id="tab-{{ chart.typeOfChart }}"  ng-controller="DashboardController" ng-init="chargeChartBarsArea({{ indicator.id }},'barArea','100%')">
+                                        <span id="barArea"></span>
+                                    </div>
+
+                                    {#<div id="tab-{{ chart.typeOfChart }}" ng-init="chargeChartBarsArea({{ indicator.id }})" fusioncharts
                                          width="100%"
                                          height="500"
                                          type="{{ chart.alias }}"
                                          dataFormat= "json"
                                          dataSource="{$chargeChartBarsArea$}" >
-                                    </div>
+                                    </div>#}
                                 {% endif %}
                             {% endfor %}
                         </div>

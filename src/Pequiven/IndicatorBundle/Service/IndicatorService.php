@@ -741,44 +741,46 @@ class IndicatorService implements ContainerAwareInterface {
 //        $data["dataSource"]["dataset"][]["data"][] = $values;
 //        $data["dataSource"]["dataset"][]["data"][] = $values;
 //        $data["dataSource"]["dataset"][]["data"][] = $values;
-        $category = $dataSetReal = $dataSetPlan = $medition  = $dataReal = array();
-        for($i = 1;$i <=3; $i++){
+        $category = $dataSetReal = $dataSetPlan = $medition = $dataReal = array();
+        for ($i = 1; $i <= 4; $i++) {
             $dataReal["value"] = "200";
 
             $dataSetReal["data"][] = $dataReal;
             $dataSetPlan["data"][] = $dataReal;
             $medition["data"][] = $dataReal;
         }
-        
+
 //        array_push($values, array("value" => "150"));
 //        array_push($values, array("value" => "200"));
 //        array_push($values, array("value" => "20"));
-        
-        
+
+
         $dataSetReal["seriesname"] = "Real";
         $dataSetPlan["seriesname"] = "Plan";
         $dataSetPlan["renderas"] = "area";
         $medition["seriesname"] = "% Cumplimiento";
         $medition["renderas"] = "line";
 
-        
-            $label1 = $label2 = $label3 = $dataReal = $dataPlan = $dataMedition = array();
-            $label1["label"] = 'area barra 1';
-            $label2["label"] = 'area barra 2';
-            $label3["label"] = 'area barra 3';
 
-            $category[] = $label1;
-            $category[] = $label2;
-            $category[] = $label3;
-            $dataSetReal["data"][] = $dataReal;
-            $dataSetPlan["data"][] = $dataPlan;
-            $medition["data"][] = $dataMedition;
+        $label1 = $label2 = $label3  = $dataPlan = $dataMedition = array();
+        $label1["label"] = 'area barra 1';
+        $label2["label"] = 'area barra 2';
+        $label3["label"] = 'area barra 3';
+        $label4["label"] = 'area barra 4';
+
+        $category[] = $label1;
+        $category[] = $label2;
+        $category[] = $label3;
+        $category[] = $label4;
+        //$dataSetReal["data"][] = $dataReal;
+        //$dataSetPlan["data"][] = $dataPlan;
+        //$medition["data"][] = $dataMedition;
 
         $data['dataSource']['chart'] = $char;
         $data['dataSource']['categories'][]["category"] = $category;
-//        $data['dataSource']['dataset'][] = $dataSetReal;
-//        $data['dataSource']['dataset'][] = $dataSetPlan;
-//        $data['dataSource']['dataset'][] = $medition;
+        $data['dataSource']['dataset'][] = $dataSetReal;
+        $data['dataSource']['dataset'][] = $dataSetPlan;
+        $data['dataSource']['dataset'][] = $medition;
 
         return $data;
     }

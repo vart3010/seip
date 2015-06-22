@@ -1,5 +1,4 @@
 'use strict';
-
 // Declare app level module which depends on filters, and services
 var seipModule = angular.module('seipModule', [
     'ng-fusioncharts',
@@ -8,7 +7,6 @@ var seipModule = angular.module('seipModule', [
     'notificationBarModule',
     'ngCookies'
 ]);
-
 seipModule
         .filter('myNumberFormat', function () {
             return function (numberToFormat, limit) {
@@ -19,7 +17,6 @@ seipModule
                 return numberFormat;
             };
         });
-
 function confirm() {
 
 }
@@ -52,7 +49,6 @@ $.fn.serializeObject = function ()
     });
     return o;
 };
-
 //Establece el valor de un select2
 function setValueSelect2(idSelect2, idEntity, data, callBack) {
     var selected = null;
@@ -112,15 +108,12 @@ angular.module('seipModule.controllers', [])
                 managementSystem: null
             };
             $scope.templateOptions.setModel(model);
-
             var arrangementprogramResponsibles = angular.element('#arrangementprogram_responsibles');
-
             //Se ejecuta cuando le da click a incluir los responsables de las gerencia
             var changeIncludeResponsibleManagement = changeIncludeResponsibleManagement = function () {
                 if ($scope.model.goal.includeResponsibleManagement) {
                     var reponsibleId = arrangementprogramResponsibles.val();
                     var urlResponsiblesByGerencia = Routing.generate("pequiven_arrangementprogram_data_responsible_goals", {responsibles: reponsibleId, gerencia: $scope.gerenciaOfObjetive.id});
-
                     $("#div_goal_responsibles").select2('data', []);
                     notificationBarService.getLoadStatus().loading();
                     $http.get(urlResponsiblesByGerencia).success(function (data) {
@@ -132,7 +125,6 @@ angular.module('seipModule.controllers', [])
                 }
             };
             $scope.templateOptions.setVar('changeIncludeResponsibleManagement', changeIncludeResponsibleManagement);
-
             //Inicializar modelo de meta
             $scope.initModelGoal = function (goal) {
                 $scope.model.goal = {
@@ -176,7 +168,6 @@ angular.module('seipModule.controllers', [])
                     var endDate = angular.element('#goal_endDate').val();
                     $scope.model.goal.startDate = startDate;
                     $scope.model.goal.endDate = endDate;
-
                     if (startDate == endDate) {
                         $scope.model.goal.endDate = $scope.model.goal.startDate;
                     }
@@ -190,7 +181,6 @@ angular.module('seipModule.controllers', [])
                 }
                 return valid;
             };
-
             $scope.validFormTypeGoal = function () {
                 var valid = $('#goalForms').validationEngine('validate');
                 if (valid) {
@@ -228,8 +218,6 @@ angular.module('seipModule.controllers', [])
                 }
                 return 'meter ' + className;
             };
-
-
             //Funcion que carga el template de la meta
             $scope.loadTemplateMeta = function (goal, index) {
                 $scope.model.goalCount = index;
@@ -256,18 +244,15 @@ angular.module('seipModule.controllers', [])
 
                 }
             };
-
             //Setea la data del formulario
             $scope.setDataFormGoal = function (goal) {
                 $scope.initModelGoal(goal);
             };
-
             $scope.removeGoal = function (goal) {
                 $scope.openModalConfirm('pequiven.modal.confirm.goal.delete_this_goal', function () {
                     $scope.goals.remove(goal);
                 });
             };
-
             $scope.getTypeGoal = function (c) {
                 if (c) {
                     notificationBarService.getLoadStatus().loading();
@@ -279,12 +264,10 @@ angular.module('seipModule.controllers', [])
                     $scope.data.typeGoals = null;
                 }
             };
-
             var urlGoal = Routing.generate("goal_get_form", {}, true);
             var initCallBack = function () {
                 return false;
             };
-
             var managementSystem = angular.element('#arrangementprogram_managementSystem');
             var tacticalObjective = angular.element('#arrangementprogram_tacticalObjective');
             var operationalObjective = angular.element('#arrangementprogram_operationalObjective');
@@ -309,7 +292,6 @@ angular.module('seipModule.controllers', [])
                     operationalObjective.select2('enable', false);
                 }
             };
-
             managementSystem.on('change', function (e) {
                 if (e.val) {
                     var managementSystemId = e.val;
@@ -371,12 +353,10 @@ angular.module('seipModule.controllers', [])
                 $timeout(function () {
                     $scope.$apply();
                 });
-
                 var reponsibleId = object.val;
                 $scope.validButtomAddGoal();
                 $scope.getResponsiblesGoal(reponsibleId);
             });
-
             $scope.validButtomAddGoal = function () {
 
                 if (arrangementprogramResponsibles.val() != null && arrangementprogramResponsibles.val().length > 0) {
@@ -397,7 +377,6 @@ angular.module('seipModule.controllers', [])
 //                    });
                 }
             };
-
             $scope.getLocationByTactical = function (value) {
                 if (value != '') {
                     notificationBarService.getLoadStatus().loading();
@@ -418,7 +397,6 @@ angular.module('seipModule.controllers', [])
                     });
                 }
             };
-
             $scope.setEntityType = function (entity) {
                 $scope.entityType = entity;
                 if ($scope.entityType == 1) {
@@ -428,7 +406,6 @@ angular.module('seipModule.controllers', [])
                     $scope.getLocationByOperative(operationalObjective.val());
                 }
             };
-
             $scope.formReady = false;
             var form = angular.element('#formArrangementProgram');
             form.submit(function (e) {
@@ -462,7 +439,6 @@ angular.module('seipModule.controllers', [])
                 }
                 e.preventDefault();
             });
-
             $scope.sendMessageError = function (message, id) {
                 if (message === null) {
                     message = 'pequiven.validations.blank_text';
@@ -484,7 +460,6 @@ angular.module('seipModule.controllers', [])
                 });
                 return total;
             };
-
             $scope.templates = [
                 {
                     name: 'pequiven.modal.title.goal',
@@ -506,7 +481,6 @@ angular.module('seipModule.controllers', [])
                 }
                 $scope.validButtomAddGoal();
             };
-
             $scope.init();
         })
         .controller("ArrangementProgramTemplateController", function ($scope, notificationBarService, $http, $filter, $timeout, $cookies) {
@@ -516,7 +490,6 @@ angular.module('seipModule.controllers', [])
             $scope.data.typeGoals = null;
             $scope.data.operationalObjectives = null;
             $scope.model.goalCount = null;
-
             $scope.model.arrangementProgram = {
                 categoryArrangementProgram: null
             };
@@ -560,7 +533,6 @@ angular.module('seipModule.controllers', [])
                 }
                 return valid;
             };
-
             $scope.validFormTypeGoal = function () {
                 var valid = true;
                 return valid;
@@ -568,8 +540,6 @@ angular.module('seipModule.controllers', [])
             $scope.cancelEditGoal = function () {
                 return $scope.validFormTypeGoal();
             };
-
-
             //Funcion que carga el template de la meta
             $scope.loadTemplateMeta = function (goal, index) {
                 $scope.model.goalCount = index;
@@ -582,18 +552,15 @@ angular.module('seipModule.controllers', [])
                     $scope.openModalAuto();
                 }
             };
-
             //Setea la dta del formulario
             $scope.setDataFormGoal = function (goal) {
                 $scope.initModelGoal(goal);
             };
-
             $scope.removeGoal = function (goal) {
                 $scope.openModalConfirm('pequiven.modal.confirm.goal.delete_this_goal', function () {
                     $scope.goals.remove(goal);
                 });
             };
-
             $scope.getTypeGoal = function (c) {
                 if (c) {
                     notificationBarService.getLoadStatus().loading();
@@ -605,12 +572,10 @@ angular.module('seipModule.controllers', [])
                     $scope.data.typeGoals = null;
                 }
             };
-
             var urlGoal = Routing.generate("goal_get_form", {typeForm: 'template'}, true);
             var initCallBack = function () {
                 return false;
             };
-
             $scope.formReady = false;
             var form = angular.element('#formArrangementProgram');
             form.submit(function (e) {
@@ -633,7 +598,6 @@ angular.module('seipModule.controllers', [])
                 }
                 e.preventDefault();
             });
-
             $scope.sendMessageError = function (message, id) {
                 if (message === null) {
                     message = 'pequiven.validations.blank_text';
@@ -655,7 +619,6 @@ angular.module('seipModule.controllers', [])
                 });
                 return total;
             };
-
             $scope.templates = [
                 {
                     name: 'pequiven.modal.title.goal',
@@ -667,7 +630,6 @@ angular.module('seipModule.controllers', [])
                 }
             ];
             $scope.templateOptions.setTemplate($scope.templates[0]);
-
         })
         .controller('ReportArrangementProgramTemplateController', function ($scope, $http) {
             $scope.createProgramFrom = function (arrangementProgramTemplate) {
@@ -682,7 +644,6 @@ angular.module('seipModule.controllers', [])
         .controller('ReportArrangementProgramController', function ($scope, $http) {
             var planning = angular.element('#planning');
             var isPlanning = (planning.val() != undefined) ? true : false;
-
             $scope.data = {
                 tacticals: null,
                 operatives: null,
@@ -709,7 +670,6 @@ angular.module('seipModule.controllers', [])
                 selectsDisable.push(id);
                 angular.element('#' + id).select('enable', false);
             };
-
             var setEnableSelect = function (id, enabled) {
                 var i;
                 var isEnable = true;
@@ -724,7 +684,6 @@ angular.module('seipModule.controllers', [])
                     angular.element('#selectComplejos').select2("enable", false)
                 }
             };
-
             //Objetivo Táctico
             if (!isPlanning) {
                 var parameters = {
@@ -767,7 +726,6 @@ angular.module('seipModule.controllers', [])
                         });
             };
             $scope.getOperatives();
-
             //Gerencia Primera Línea
             if (isPlanning) {
                 var complejo = angular.element('#idComplejo');
@@ -821,9 +779,7 @@ angular.module('seipModule.controllers', [])
                             }
                         });
             };
-
             $scope.getSecondLineManagement();
-
             //Carga de Filtro Localidad
             if (!isPlanning) {
                 $http.get(Routing.generate('pequiven_arrangementprogram_data_complejos'))
@@ -862,7 +818,6 @@ angular.module('seipModule.controllers', [])
                     .success(function (data) {
                         $scope.data.responsibles = data;
                     });
-
             //Programas de Gestión Notificados, No Notificados y con Proceso de Notificación sin cerrar
             $scope.viewNotified = function (type) {
                 $scope.tableParams.$params.filter['view_planning'] = true;
@@ -883,8 +838,6 @@ angular.module('seipModule.controllers', [])
                 selectStatus.select2("val", status);
                 $scope.resetViewNotified();
             };
-
-
             $scope.$watch("model.complejo", function (newParams, oldParams) {
                 if ($scope.model.complejo != null && $scope.model.complejo.id != undefined) {
 
@@ -1021,9 +974,7 @@ angular.module('seipModule.controllers', [])
                         ;
                 select.attr('multiple', myData.multiple);
                 return select;
-
             };
-
             var urlSearchService = Routing.generate('pequiven_seip_search_service');
             var urlSearchProduct = Routing.generate('pequiven_seip_search_product');
             var urlSearchEntity = Routing.generate('pequiven_seip_search_entity');
@@ -1032,7 +983,6 @@ angular.module('seipModule.controllers', [])
             var urlSearchLocation = Routing.generate('pequiven_seip_search_location');
             var urlSearchCompany = Routing.generate('pequiven_seip_search_company');
             var urlSearchPeriod = Routing.generate('pequiven_seip_search_period');
-
             function getDefaultSelect(data) {
                 var dataDefault = {
                     placeholder: ' ',
@@ -1065,7 +1015,6 @@ angular.module('seipModule.controllers', [])
                         return m;
                     } // we do not want to escape markup since we are displaying html in results
                 };
-
                 var result = $.extend(dataDefault, data);
                 return result;
             }
@@ -1073,16 +1022,13 @@ angular.module('seipModule.controllers', [])
                 url: urlSearchService,
                 multiple: true
             });
-
             buldSelect2('select-product', {
                 url: urlSearchProduct,
                 multiple: true
             });
-
             buldSelect2('select-entity', {
                 url: urlSearchEntity
             });
-
             buldSelect2('select-plant', {
                 url: urlSearchPlant
             });
@@ -1092,15 +1038,12 @@ angular.module('seipModule.controllers', [])
             buldSelect2('select-location', {
                 url: urlSearchLocation
             });
-
             buldSelect2('select-company', {
                 url: urlSearchCompany
             });
-
             buldSelect2('select-period', {
                 url: urlSearchPeriod
             });
-
         })
         .controller('ReportArrangementProgramAllController', function ($scope, $http) {
             $scope.data = {
@@ -1129,7 +1072,6 @@ angular.module('seipModule.controllers', [])
                 selectsDisable.push(id);
                 angular.element('#' + id).select('enable', false);
             };
-
             var setEnableSelect = function (id, enabled) {
                 var i;
                 var isEnable = true;
@@ -1144,7 +1086,6 @@ angular.module('seipModule.controllers', [])
                     angular.element('#selectComplejos').select2("enable", false)
                 }
             };
-
             //Carga de Filtro Localidad
             $http.get(Routing.generate('pequiven_arrangementprogram_data_complejos'))
                     .success(function (data) {
@@ -1161,7 +1102,6 @@ angular.module('seipModule.controllers', [])
                             });
                         }
                     });
-
             // Filtro Gerencia 1ra Línea
             $scope.getFirstLineManagement = function (complejo) {
                 var parameters = {
@@ -1188,7 +1128,6 @@ angular.module('seipModule.controllers', [])
                 var parameters = {
                     filter: {}
                 };
-
                 if (gerencia != undefined) {
                     parameters.filter['gerencia'] = gerencia;
                 } else {
@@ -1207,7 +1146,6 @@ angular.module('seipModule.controllers', [])
                         });
             };
             $scope.getSecondLineManagement();
-
             //Objetivo Táctico
             $scope.getTactics = function (gerencia) {
                 var parameters = {
@@ -1224,7 +1162,6 @@ angular.module('seipModule.controllers', [])
                         });
             };
             $scope.getTactics();
-
             // Objetivo Operativo
             $scope.getOperatives = function (objetiveTactical) {
                 var parameters = {
@@ -1243,12 +1180,10 @@ angular.module('seipModule.controllers', [])
                         });
             };
             $scope.getOperatives();
-
             $http.get(Routing.generate('pequiven_arrangementprogram_data_responsibles'))
                     .success(function (data) {
                         $scope.data.responsibles = data;
                     });
-
             //Ver el resumen de programas de gestión por status
             $scope.viewByStatus = function (status) {
                 $scope.tableParams.$params.filter['status'] = status;
@@ -1375,7 +1310,6 @@ angular.module('seipModule.controllers', [])
                 selectsDisable.push(id);
                 angular.element('#' + id).select('enable', false);
             };
-
             //Carga de Sistemas de Calidad
             $http.get(Routing.generate('pequiven_arrangementprogram_data_management_system'))
                     .success(function (data) {
@@ -1386,12 +1320,10 @@ angular.module('seipModule.controllers', [])
                             });
                         }
                     });
-
             $http.get(Routing.generate('pequiven_arrangementprogram_data_responsibles'))
                     .success(function (data) {
                         $scope.data.responsibles = data;
                     });
-
             //Ver el resumen de programas de gestión por status
             $scope.viewByStatus = function (status) {
                 $scope.tableParams.$params.filter['status'] = status;
@@ -1458,7 +1390,6 @@ angular.module('seipModule.controllers', [])
             $scope.urlValueIndicatorForm = null;
             $scope.indicator = null;
             var isInit = false;
-
             //Carga el formulario de los valores del indicador
             $scope.loadTemplateValueIndicator = function (resource) {
                 $scope.initForm(resource);
@@ -1475,7 +1406,6 @@ angular.module('seipModule.controllers', [])
                     $scope.openModalAuto();
                 }
             };
-
             //Carga el formulario de los los puntos de atencion del indicador
             $scope.loadTemplateFeatureIndicator = function (resource) {
                 $scope.initForm(resource);
@@ -1502,7 +1432,6 @@ angular.module('seipModule.controllers', [])
                         headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'}  // set the headers so angular passing info as form data (not request payload)
                     }).success(function (data) {
                         $scope.templateOptions.setVar("form", {errors: {}});
-
                         $scope.indicator.featuresIndicator.remove(featureIndicator);
                         notificationBarService.getLoadStatus().done();
                         return true;
@@ -1519,8 +1448,6 @@ angular.module('seipModule.controllers', [])
                         notificationBarService.getLoadStatus().done();
                         return false;
                     });
-
-
                 });
             };
             var evaluateFormula = function (save, successCallBack) {
@@ -1599,7 +1526,6 @@ angular.module('seipModule.controllers', [])
             $scope.templateOptions.setVar('evaluateFormula', evaluateFormula);
             $scope.templateOptions.setVar('sendFeatureIndicator', sendFeatureIndicator);
             $scope.templateOptions.setVar('evaluationResult', 0);
-
             var confirmCallBack = function () {
                 evaluateFormula(true, function (data) {
                     $scope.indicator = data.indicator;
@@ -1612,7 +1538,6 @@ angular.module('seipModule.controllers', [])
                 });
                 return true;
             };
-
             $scope.initForm = function (resource) {
                 var d = new Date();
                 var numero = d.getTime();
@@ -1639,11 +1564,9 @@ angular.module('seipModule.controllers', [])
                 ];
                 $scope.templateOptions.setTemplate($scope.templates[0]);
             };
-
             var initCallBack = function () {
                 return false;
             };
-
             $scope.getUrlForValueIndicator = function (valueIndicator, numResult)
             {
                 var url = Routing.generate('pequiven_value_indicator_show_detail', {id: valueIndicator.id, numResult: (numResult + 1)});
@@ -1668,7 +1591,6 @@ angular.module('seipModule.controllers', [])
                     }
                 }).width(width - horizontalPadding).height(heigth - verticalPadding);
             };
-
         })
         .controller("MainContentController", function ($scope, notificationBarService, sfTranslator, $timeout) {
 
@@ -1693,7 +1615,6 @@ angular.module('seipModule.controllers', [])
                     }
                     i++;
                 });
-
                 $("#" + idSelect2).select2('val', j);
                 if (callBack) {
                     callBack(data[j]);
@@ -1718,7 +1639,6 @@ angular.module('seipModule.controllers', [])
                     $scope.$apply();
                 });
             };
-
             //Funcion para remover un elemento de un array
             Array.prototype.remove = function (value) {
                 var idx = this.indexOf(value);
@@ -1735,7 +1655,6 @@ angular.module('seipModule.controllers', [])
                 }
                 return false;
             };
-
             $scope.template = {
                 name: null,
                 url: null,
@@ -1775,7 +1694,6 @@ angular.module('seipModule.controllers', [])
             $scope.templateOptions.getTemplate = function () {
                 return $scope.template;
             };
-
             var modalOpen, modalConfirm;
             jQuery(document).ready(function () {
                 var angular = jQuery("#dialog-form");
@@ -1812,7 +1730,6 @@ angular.module('seipModule.controllers', [])
                     }
                 });
             });
-
             $scope.templateLoad = function (template) {
                 template.load = true;
                 if (template.initCallBack) {
@@ -1823,14 +1740,12 @@ angular.module('seipModule.controllers', [])
                     return openModal();
                 }
             };
-
             $scope.openModalAuto = function (callback) {
                 notificationBarService.getLoadStatus().loading();
                 if ($scope.template.load == true) {
                     openModal(callback);
                 }
             };
-
             function openModal(callback) {
                 if ($scope.template.name) {
                     modalOpen.dialog("option", "title", sfTranslator.trans($scope.template.name));
@@ -1897,7 +1812,6 @@ angular.module('seipModule.controllers', [])
 
             $scope.openModalConfirm = function (content, confirmCallBack, cancelCallBack) {
                 $scope.dialog.confirm.content = sfTranslator.trans(content);
-
                 // setter
                 modalConfirm.dialog("option", "buttons", [
                     {text: "Si", click: function () {
@@ -1917,11 +1831,9 @@ angular.module('seipModule.controllers', [])
                         }
                     }
                 ]);
-
                 modalConfirm.dialog("open");
                 notificationBarService.getLoadStatus().done();
             };
-
             $scope.printFormErrors = function (formErrors) {
                 if (formErrors !== undefined && formErrors.errors !== undefined) {
                     var divError = '<div class="alert alert-danger">';
@@ -1933,7 +1845,6 @@ angular.module('seipModule.controllers', [])
                     return divError;
                 }
             };
-
         })
         .controller('TableObjetiveController', function ($scope, ngTableParams, $http, sfTranslator, notifyService) {
             $scope.data = {
@@ -1942,14 +1853,12 @@ angular.module('seipModule.controllers', [])
                 second_line_managements: null,
                 complejos: null
             };
-
             $scope.model = {
                 objetiveStatus: null,
                 complejo: null,
                 firstLineManagement: null,
                 secondLineManagement: null
             };
-
             //Carga de Filtro Localidad
             $http.get(Routing.generate('pequiven_arrangementprogram_data_complejos'))
                     .success(function (data) {
@@ -1966,7 +1875,6 @@ angular.module('seipModule.controllers', [])
                             });
                         }
                     });
-
             // Filtro Gerencia 1ra Línea
             $scope.getFirstLineManagement = function (complejo) {
                 var parameters = {
@@ -1993,7 +1901,6 @@ angular.module('seipModule.controllers', [])
                 var parameters = {
                     filter: {}
                 };
-
                 if (gerencia != undefined) {
                     parameters.filter['gerencia'] = gerencia;
                     console.log(gerencia);
@@ -2013,7 +1920,6 @@ angular.module('seipModule.controllers', [])
                         });
             };
             $scope.getSecondLineManagement();
-
             $scope.$watch("model.complejo", function (newParams, oldParams) {
                 if ($scope.model.complejo != null && $scope.model.complejo.id != undefined) {
                     $scope.tableParams.$params.filter['complejo'] = $scope.model.complejo.id;
@@ -2045,7 +1951,6 @@ angular.module('seipModule.controllers', [])
                     $scope.tableParams.$params.filter['status'] = null;
                 }
             });
-
 //            $scope.gerenciaSecond = null;
 //            $scope.gerenciaFirst = null;
 //            var gerencia = 0;
@@ -2072,7 +1977,6 @@ angular.module('seipModule.controllers', [])
         })
         .controller("ObjetiveStrategicController", function ($scope, notificationBarService, $http, $filter, $timeout) {
             var form = angular.element('#registerObjetiveStrategicForm');
-
         })
         .controller('TableObjetiveStrategicController', function ($scope, ngTableParams, $http, sfTranslator, notifyService) {
 
@@ -2123,7 +2027,6 @@ angular.module('seipModule.controllers', [])
             var selectInclude = angular.element('#includeGerenciaSecondSupport');
             var sectionExcludeGerenciaSecondSupport = angular.element("#sectionExcludeGerenciaSecondSupport");
             var sectionIncludeGerenciaSecondSupport = angular.element("#sectionIncludeGerenciaSecondSupport");
-
             $scope.data = {
                 complejos: null,
                 first_line_managements: null,
@@ -2136,14 +2039,11 @@ angular.module('seipModule.controllers', [])
                 secondLineManagement: null,
                 indicatorMiscellaneous: null
             };
-
             //Carga de Configuración por defecto
             $scope.initPage = function () {
                 selectSecondLineManagement.select2("enable", false);
             };
-
             $scope.initPage();
-
             //Busca las localidades
             $scope.getComplejos = function () {
                 var parameters = {
@@ -2159,7 +2059,6 @@ angular.module('seipModule.controllers', [])
                             }
                         });
             };
-
             //Busca las Gerencias de 1ra Línea
             $scope.getFirstLineManagement = function (complejo) {
                 var parameters = {
@@ -2178,7 +2077,6 @@ angular.module('seipModule.controllers', [])
                             }
                         });
             };
-
             //Busca las Gerencias de 2da Línea
             $scope.getSecondLineManagement = function (gerencia) {
                 var parameters = {
@@ -2212,7 +2110,6 @@ angular.module('seipModule.controllers', [])
                             }
                         });
             };
-
             //Al hacer click en el check de exclusión de gerencias de apoyo
             $scope.excludeGerenciaSecondSupport = function () {
                 if (selectExclude.is(':checked')) {
@@ -2229,7 +2126,6 @@ angular.module('seipModule.controllers', [])
                     $scope.tableParams.$params.filter['type_gerencia_support'] = null;
                 }
             };
-
             $scope.includeGerenciaSecondSupport = function () {
                 if (selectInclude.is(':checked')) {
                     $scope.getSecondLineManagement();
@@ -2241,7 +2137,6 @@ angular.module('seipModule.controllers', [])
                     $scope.tableParams.$params.filter['type_gerencia_support'] = null;
                 }
             };
-
             if (level == 1) {
 
             } else if (level > 1) {
@@ -2416,15 +2311,36 @@ angular.module('seipModule.controllers', [])
         .controller('ChartsDashboardController', function ($scope, $http) {
 
             //Gráfico en forma de dona para mostrar los indicadores asociados (Resumen, Referencia y Resultado de la Medición)
-            $scope.chargeChartDoughnut2d = function (indicatorId) {
+            $scope.chargeChartDoughnut2d = function (indicatorId,render,width,height) {
+//                var getDataChartDoughnut = Routing.generate("getDataChartDoughnut", {id: indicatorId});
+//                $scope.chartDoughnut2d = {};
+//                $http.get(getDataChartDoughnut).success(function (data) {
+//                    $scope.chartDoughnut2d = {
+//                        "chart": data.dataSource.chart,
+//                        "data": data.dataSource.dataSet
+//                    }
+//                });
+
                 var getDataChartDoughnut = Routing.generate("getDataChartDoughnut", {id: indicatorId});
-                $scope.chartDoughnut2d = {};
                 $http.get(getDataChartDoughnut).success(function (data) {
-                    $scope.chartDoughnut2d = {
-                        "chart": data.dataSource.chart,
-                        "data": data.dataSource.dataSet
-                    }
+                   // console.log(data);
+                    FusionCharts.ready(function () {
+                        var revenueChartTactic = new FusionCharts({
+                            "type": "doughnut2d",
+                            "renderAt": render,
+                            "width": width+"%",
+                            "height": height,
+                            "dataFormat": "json",
+                            "dataSource": {
+                                "chart": data.dataSource.chart,
+                                "data": data.dataSource.dataSet
+                            }
+                        });
+                        revenueChartTactic.setTransparent(true);
+                        revenueChartTactic.render();
+                    });
                 });
+
             }
 
             //Gráfico para mostrar información de 2 variables (respecto al eje izquierdo) y el resultado de la medición (respecto al eje derecho en valor porcentual)
@@ -2458,7 +2374,7 @@ angular.module('seipModule.controllers', [])
                 var getDataChartPieVariablesOrTags = Routing.generate("getDataChartPieVariablesOrTags", {id: indicatorId});
                 $scope.chartPieVariablesOrTags = {};
                 $http.get(getDataChartPieVariablesOrTags).success(function (data) {
-                    console.log(data.dataSource.data);
+                    //console.log(data.dataSource.data);
                     $scope.chartPieVariablesOrTags = {
                         "chart": data.dataSource.chart,
                         "data": data.dataSource.data
@@ -2468,88 +2384,30 @@ angular.module('seipModule.controllers', [])
 
 
             //Gráfico en forma de barras con area
-            $scope.chargeChartBarsArea = function (indicatorId) {
-                var getDataChartBarsArea = Routing.generate("getDataChartBarsArea", {id: indicatorId});
-                $scope.chartBarsArea = {};
-                $http.get(getDataChartBarsArea).success(function (data) {
+            $scope.chargeChartBarsArea = function (indicatorId,render,width) {
 
-                   
-                    $scope.chartBarsArea = {
-                        "chart": {
-                            "caption": "Actual Revenues, Targeted Revenues & Profits",
-                            "subcaption": "Last year",
-                            "xaxisname": "Month",
-                            "yaxisname": "Amount (In USD)",
-                            "numberprefix": "$",
-                            "theme": "fint"
-                        },
-                        "categories": [
-                            {
-                                "category": [
-                                    {
-                                        "label": "area barra 1"
-                                    },
-                                    {
-                                        "label": "area barra 2"
-                                    },
-                                    {
-                                        "label": "area barra 3"
-                                    }
-                                ]
+                var getdataBarsArea = Routing.generate("getDataChartBarsArea", {id: indicatorId});
+                $http.get(getdataBarsArea).success(function (data) {
+                    //console.log(data);
+                    FusionCharts.ready(function () {
+                        var revenueChartTactic = new FusionCharts({
+                            "type": "mscolumn3dlinedy",
+                            "renderAt": render,
+                            "width": width,
+                            "height":"400",
+                            "dataFormat": "json",
+                            "dataSource": {
+                                "chart": data.dataSource.chart,
+                                "categories": data.dataSource.categories,
+                                "dataset": data.dataSource.dataset
                             }
-                        ],
-                        "dataset": [
-                            {
-                                "seriesname": "Actual Revenue",
-                                "data": [
-                                    {
-                                        "value": "16000"
-                                    },
-                                    {
-                                        "value": "20000"
-                                    },
-                                    {
-                                        "value": "18000"
-                                    }
-                                ]
-                            },
-                            {
-                                "seriesname": "Projected Revenue",
-                                "renderas": "line",
-                                "showvalues": "0",
-                                "data": [
-                                    {
-                                        "value": "15000"
-                                    },
-                                    {
-                                        "value": "16000"
-                                    },
-                                    {
-                                        "value": "17000"
-                                    }
-                                ]
-                            },
-                            {
-                                "seriesname": "Profit",
-                                "renderas": "area",
-                                "showvalues": "0",
-                                "data": [
-                                    {
-                                        "value": "4000"
-                                    },
-                                    {
-                                        "value": "5000"
-                                    },
-                                    {
-                                        "value": "3000"
-                                    }
-                                ]
-                            }
-                        ],
-                    }
-                    
-                    console.log($scope.chartBarsArea);
+                        });
+                        revenueChartTactic.setTransparent(true);
+                        revenueChartTactic.render();
+                    });
                 });
+
+
             }
 
         })
@@ -2611,7 +2469,6 @@ angular.module('seipModule.controllers', [])
                     revenueChartTactic.render();
                 })
             };
-
             $scope.renderChartOperative = function (id, categories, dataPlanOperative, dataRealOperative, dataPorcOperative, caption, typeLabelDisplay) {
                 FusionCharts.ready(function () {
                     var revenueChartOperative = new FusionCharts({
@@ -2664,12 +2521,10 @@ angular.module('seipModule.controllers', [])
                             ]
                         }
                     });
-
                     revenueChartOperative.setTransparent(true);
                     revenueChartOperative.render();
                 })
             };
-
             $scope.renderChartArrangementProgram = function (id, categories, dataPlan, dataReal, dataPorc, caption, typeLabelDisplay) {
                 FusionCharts.ready(function () {
                     var revenueChart = new FusionCharts({
@@ -2727,7 +2582,6 @@ angular.module('seipModule.controllers', [])
                     revenueChart.render();
                 })
             };
-
             $scope.renderChartResult = function (id, data, gerencia, url) {
                 FusionCharts.ready(function () {
                     var revenueChart = new FusionCharts({
@@ -2778,7 +2632,6 @@ angular.module('seipModule.controllers', [])
                     revenueChart.render();
                 })
             };
-
             //Widget de los rangos de gestión de los indicadores
             $scope.renderWidgetRange = function (id, data) {
                 FusionCharts.ready(function () {
@@ -2799,7 +2652,6 @@ angular.module('seipModule.controllers', [])
                     revenueChart.render();
                 })
             };
-
             //Widget de los indicadores en forma de bulbo (Por ejemplo en el dashboard de los indicadores estratégicos)
             $scope.renderWidgetIndicatorStrategic = function (id, data, width, height) {
                 FusionCharts.ready(function () {
@@ -2821,7 +2673,6 @@ angular.module('seipModule.controllers', [])
                     revenueChart.render();
                 })
             };
-
             $scope.renderWidgetMultiLevelPie = function (id, data, width, height) {
                 FusionCharts.ready(function () {
                     var widgetMultiLevelPieChart = new FusionCharts({
@@ -2839,7 +2690,6 @@ angular.module('seipModule.controllers', [])
                     widgetMultiLevelPieChart.render();
                 })
             };
-
             //Gráfico en forma de dona para mostrar los indicadores asociados (Resumen, Referencia y Resultado de la Medición)
             $scope.renderWidgetDoughnut2d = function (id, data, width, height) {
                 FusionCharts.ready(function () {
@@ -2858,7 +2708,6 @@ angular.module('seipModule.controllers', [])
                     widgetDoughnut2d.render();
                 })
             };
-
             //Gráfico para mostrar información de 2 variables (respecto al eje izquierdo) y el resultado de la medición (respecto al eje derecho en valor porcentual)
             $scope.renderChartColumnLineDualAxis = function (id, data) {
                 FusionCharts.ready(function () {
@@ -3128,7 +2977,6 @@ angular.module('seipModule.controllers', [])
                 arrangementProgramSigUsersToNotify: []
             };
             $scope.templateOptions.setModel(model);
-
             var arrangementProgramUsersToApproveTactical = angular.element('#gerencia_configuration_arrangementProgramUsersToApproveTactical');
             arrangementProgramUsersToApproveTactical.change(function () {
                 var data = arrangementProgramUsersToApproveTactical.select2('data');
@@ -3137,7 +2985,6 @@ angular.module('seipModule.controllers', [])
                     $scope.$apply();
                 });
             });
-
             var arrangementProgramUserToRevisers = angular.element('#gerencia_configuration_arrangementProgramUserToRevisers');
             arrangementProgramUserToRevisers.change(function () {
                 var data = arrangementProgramUserToRevisers.select2('data');
@@ -3146,7 +2993,6 @@ angular.module('seipModule.controllers', [])
                     $scope.$apply();
                 });
             });
-
             var arrangementProgramUsersToApproveOperative = angular.element('#gerencia_configuration_arrangementProgramUsersToApproveOperative');
             arrangementProgramUsersToApproveOperative.change(function () {
                 var data = arrangementProgramUsersToApproveOperative.select2('data');
@@ -3155,7 +3001,6 @@ angular.module('seipModule.controllers', [])
                     $scope.$apply();
                 });
             });
-
             var arrangementProgramUsersToNotify = angular.element('#gerencia_configuration_arrangementProgramUsersToNotify');
             arrangementProgramUsersToNotify.change(function () {
                 var data = arrangementProgramUsersToNotify.select2('data');
@@ -3164,7 +3009,6 @@ angular.module('seipModule.controllers', [])
                     $scope.$apply();
                 });
             });
-
             var arrangementProgramSigUsersToReviser = angular.element('#gerencia_configuration_arrangementProgramSigUsersToReviser');
             arrangementProgramSigUsersToReviser.change(function () {
                 var data = arrangementProgramSigUsersToReviser.select2('data');
@@ -3173,7 +3017,6 @@ angular.module('seipModule.controllers', [])
                     $scope.$apply();
                 });
             });
-
             var arrangementProgramSigUsersToApprove = angular.element('#gerencia_configuration_arrangementProgramSigUsersToApprove');
             arrangementProgramSigUsersToApprove.change(function () {
                 var data = arrangementProgramSigUsersToApprove.select2('data');
@@ -3182,7 +3025,6 @@ angular.module('seipModule.controllers', [])
                     $scope.$apply();
                 });
             });
-
             var arrangementProgramSigUsersToNotify = angular.element('#gerencia_configuration_arrangementProgramSigUsersToNotify');
             arrangementProgramSigUsersToNotify.change(function () {
                 var data = arrangementProgramSigUsersToNotify.select2('data');
@@ -3196,7 +3038,6 @@ angular.module('seipModule.controllers', [])
             $scope.model = {
                 ManagementSystem: []
             };
-
             $scope.exportToXLS = function (id)
             {
                 var parameters = {
