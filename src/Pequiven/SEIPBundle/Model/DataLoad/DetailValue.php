@@ -1038,6 +1038,55 @@ abstract class DetailValue extends BaseModel
     }
     
     /**
+     * Obtiene el ultimo del dia del mes
+     * @return type
+     */
+    public function getLastDay() 
+    {
+        $year = $this->getCreatedAt()->format('Y');
+        $i = $this->getDaysPerMonth($this->getMonth(), $year);
+        $nameReal = 'getDay'.$i;
+        $real = $this->$nameReal();
+        return $real;
+    }
+    
+    /**
+     * Retorna el valor de ayer
+     * @return type
+     */
+    public function getYesterDay() 
+    {
+        $now = new \DateTime();
+        $day = (int)$now->format("d");
+        if($day > 1){
+            $day--;
+        }
+        $nameReal = 'getDay'.$day;
+        $real = $this->$nameReal();
+        return $real;
+    }
+    
+    public function getTotalInventory() 
+    {
+        static $day = null;
+        static $currentMonth = null;
+        $month = $this->getMonth();
+        if($day === null){
+            $now = new \DateTime();
+            $day = (int)$now->format("d");
+            $currentMonth = (int)$now->format("m");
+        }
+        
+        $total = 0.0;
+        if($month == $currentMonth){
+            $total = $this->getYesterDay();
+        }else{
+            $total = $this->getLastDay();
+        }
+        return $total;
+    }
+    
+    /**
      * Retorna la cantidad de dias de un mes basado en un calendario (CAL_GREGORIAN) 
      * @param type $mes
      * @param type $ano

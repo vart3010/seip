@@ -18,14 +18,14 @@
             </thead>
             {% set colspan = 6 %}
             <tbody>
-
+                {% set productUnit = product_report.product.productUnit %}
                 {% for inventory in product_report.getInventorySortByMonth %}
                     <tr>
                         <td>{{ loop.index }} - 
                             {{ inventory|trans }}
                         </td>
                         <th scope="row">
-                            {{ inventory.total }}
+                            {{ inventory.getTotalInventory|myNumberFormat }}&nbsp;{{ productUnit }}
                         </th>
                         <td class="low-padding align-center">
                             <a href="{{ path("pequiven_inventory_update",{id: inventory.id}) }}" class="button compact icon-pencil">{{ "pequiven_seip.actions.edit"|trans }}</a>
