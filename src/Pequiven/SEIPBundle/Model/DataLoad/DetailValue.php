@@ -1092,7 +1092,8 @@ abstract class DetailValue extends BaseModel
      * @param type $ano
      * @return type
      */
-    public function getDaysPerMonth($mes = "", $ano = "") {
+    public function getDaysPerMonth($mes = "", $ano = "") 
+    {
         if ($ano == "") {
             $ano = date("Y");
         }

@@ -166,6 +166,10 @@ class ConsumerPlanningService extends BaseModel
         return $this->detailConsumerPlanningServices;
     }
     
+    /**
+     * 
+     * @return DetailConsumerPlanningService
+     */
     public function getDetailsByMonth() 
     {
         $details = array();
@@ -189,5 +193,42 @@ class ConsumerPlanningService extends BaseModel
             $_toString = (string)$this->getService();
         }
         return $_toString;
+    }
+    
+    function getTotalToDay()
+    {
+        $now = new \DateTime();
+        $month = (int)$now->format("m");
+        $day = (int)$now->format("d");
+        
+        $details = $this->getDetailsByMonth();
+        $totalPlan = $totalReal = $totalMonthBefore = 0.0;
+        foreach ($details as $monthDetail => $detail) {
+                if($monthDetail > $month){
+                    break;
+                }
+
+                if($month == $monthDetail){
+                    $totalToDay = $detail->getTotalToDay($day);
+                    $totalPlan = $totalPlan + $totalToDay['tp'];
+                    $totalReal = $totalReal + $totalToDay['tr'];
+                }else{
+                    $totalMonthBefore = $totalMonthBefore + $detail->getTotalReal();
+                    $totalPlan = $totalPlan + $detail->getTotalPlan();
+                    $totalReal = $totalReal + $detail->getTotalReal();
+                }
+        }
+        $percentage = 0;
+        if($totalPlan > 0){
+            $percentage = ($totalReal * 100) / $totalPlan;
+        }
+        $total = array(
+            'tp' => $totalPlan,
+            'tr' => $totalReal,
+            'percentage' => $percentage,
+            
+            'total_month_before' => $totalMonthBefore,//Total mes anterior
+        );
+        return $total;
     }
 }

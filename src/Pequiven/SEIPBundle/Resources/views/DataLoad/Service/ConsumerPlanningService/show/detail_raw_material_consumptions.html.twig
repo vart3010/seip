@@ -24,15 +24,16 @@
             </thead>
             {% set colspan = 9 %}
             <tbody>
-
+                {% set unit = consumer_planning_service.service.serviceUnit %}
+                {% set totals = consumer_planning_service.getTotalToDay %}
                 {% for detail in consumer_planning_service.detailConsumerPlanningServices %}
                     {% set tableIdRow = "row-detail-"~detail.id %}
                     <tr id="{{ tableIdRow }}">
                         <th scope="row">{{ loop.index }} - 
                             {{ detail|trans }}
                         </th>
-                        <td>{{ detail.totalPlan|myNumberFormat }}</td>
-                        <td>{{ detail.totalReal|myNumberFormat }}</td>
+                        <td>{{ detail.totalPlan|myNumberFormat }}&nbsp;{{ unit }}</td>
+                        <td>{{ detail.totalReal|myNumberFormat }}&nbsp;{{ unit }}</td>
                         <td>{{ detail.percentage|myNumberFormat }}&nbsp;%</td>
                         <td class="low-padding align-center">
                             <p class="button-height">
@@ -52,6 +53,15 @@
                     </tr>
                 {% endfor %}
             </tbody>
+            <tfoot>
+                <tr>
+                    <th scope="col" width="10%">{{ 'Total month before'|trans }}&nbsp;{{ totals['total_month_before']|myNumberFormat }}&nbsp;{{ unit }}</th>
+                    <th scope="col" width="10%" class="hide-on-mobile-portrait with-tooltip" title="{{ 'pequiven_seip.totalPlan'|trans }}">{{ totals['tp']|myNumberFormat }}&nbsp;{{ unit }}</th>
+                    <th scope="col" width="10%" class="hide-on-tablet with-tooltip" title="{{ 'pequiven_seip.totalReal'|trans }}">{{ totals['tr']|myNumberFormat }}&nbsp;{{ unit }}</th>
+                    <th scope="col" width="10%" class="hide-on-tablet with-tooltip" title="{{ 'pequiven_seip.percentage'|trans }}">{{ totals['percentage']|myNumberFormat }}&nbsp;{{ unit }}</th>
+                    <th scope="col" width="10%">&nbsp;</th>
+                </tr>
+            </tfoot>
         </table>
         
     </div>
