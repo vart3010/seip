@@ -7,6 +7,15 @@ pequiven_report_template_index:
         _format: json|html
     methods: [GET]
     
+pequiven_report_template_vizualice:
+    path: /vizualice.{_format}
+    defaults:
+        _controller: pequiven.controller.report_template:vizualiceAction
+        _format: html
+    requirements:
+        _format: json|html
+    methods: [GET]
+    
 pequiven_report_template_create:
     path: /create
     defaults:

@@ -25,6 +25,7 @@ pequiven_seip:
     plants: Plantas
     inventory: Inventario
     date_of_notification: Fecha de notificación
+    date_of_report: Fecha de reporte
     cause_of_PNR: 'Causa de PNR'
     total_pnr: 'Total de PNR'
         
