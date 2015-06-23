@@ -195,6 +195,32 @@ class Period extends Base implements \Serializable
      * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
      */
     private $deletedAt;
+    
+    
+    //****CHECKS PARA ACTIVAR O DESACTIVAR UN TRIMESTRE***/////
+    /**
+     * @ORM\Column(name="isLoadIndicatorTrim1", type="boolean", nullable=true)
+     */
+    private $isLoadIndicatorTrim1 = false;
+    
+    /**
+     * @ORM\Column(name="isLoadIndicatorTrim2", type="boolean", nullable=true)
+     */
+    private $isLoadIndicatorTrim2 = false;
+    
+    /**
+     * @ORM\Column(name="isLoadIndicatorTrim3", type="boolean", nullable=true)
+     */
+    private $isLoadIndicatorTrim3 = false;
+    
+    /**
+     * @ORM\Column(name="isLoadIndicatorTrim4", type="boolean", nullable=true)
+     */
+    private $isLoadIndicatorTrim4 = false;
+    
+    //********************************************//
+    
+    
 
     /**
      * Get id
@@ -680,6 +706,80 @@ class Period extends Base implements \Serializable
     {
         return $this->percentagePenalty;
     }
+    
+    
+    /**
+     * 
+     * @return type
+     */
+    public function getIsLoadIndicatorTrim1()
+    {
+        return $this->isLoadIndicatorTrim1;
+    }
+    /**
+     * 
+     * @param type $isLoadIndicatorTrim1
+     */
+    public function setIsLoadIndicatorTrim1($isLoadIndicatorTrim1)
+    {
+        $this->isLoadIndicatorTrim1 = $isLoadIndicatorTrim1;
+    }
+    
+    /**
+     * 
+     * @return type
+     */
+    public function getIsLoadIndicatorTrim2()
+    {
+        return $this->isLoadIndicatorTrim2;
+    }
+    /**
+     * 
+     * @param type $isLoadIndicatorTrim2
+     */
+    public function setIsLoadIndicatorTrim2($isLoadIndicatorTrim2)
+    {
+        $this->isLoadIndicatorTrim2 = $isLoadIndicatorTrim2;
+    }
+    
+    /**
+     * 
+     * @return type
+     */
+    public function getIsLoadIndicatorTrim3()
+    {
+        return $this->isLoadIndicatorTrim3;
+    }
+    /**
+     * 
+     * @param type $isLoadIndicatorTrim3
+     */
+    public function setIsLoadIndicatorTrim3($isLoadIndicatorTrim3)
+    {
+        $this->isLoadIndicatorTrim3 = $isLoadIndicatorTrim3;
+    }
+    
+    /**
+     * 
+     * @return type
+     */
+    public function getIsLoadIndicatorTrim4()
+    {
+        return $this->isLoadIndicatorTrim4;
+    }
+    
+    /**
+     * 
+     * @param type $isLoadIndicatorTrim4
+     */
+    public function setIsLoadIndicatorTrim4($isLoadIndicatorTrim4)
+    {
+        $this->isLoadIndicatorTrim4 = $isLoadIndicatorTrim4;
+    }
+    
+    
+    
+    
     //TODO Objeto falla al ser serializado
     public function serialize() {
         $data = serialize(array(
