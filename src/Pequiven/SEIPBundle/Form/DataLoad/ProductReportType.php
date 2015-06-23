@@ -47,9 +47,11 @@ class ProductReportType extends SeipAbstractForm
                 'label_attr' => array('class' => 'label'),
                 'entity_alias' => 'indicator_product_report_alias',
                 'attr' => array(
-                        "class" => "input input-xlarge validate[required]"
+                        //"class" => "input input-xlarge validate[required]"
+                        "class" => "input input-xlarge "
                     ),
                 "property" => array("description","ref"),
+                "required" => false,
                 "callback" => function(\Pequiven\IndicatorBundle\Repository\IndicatorRepository $repository) use ($plant){
                     return $repository->getQueryPeriod();
                 },
