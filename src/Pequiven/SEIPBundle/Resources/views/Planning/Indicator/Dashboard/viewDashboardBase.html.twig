@@ -92,8 +92,8 @@
                                         <span id="{{ grafico }}"></span>
                                     </div>
                                 {% endif %}
-                                {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_VARIABLES_DOUGHNUT')  %}
-                                    <div id="tab-{{ grafico }}"  ng-controller="DashboardController" ng-init="chargeChartDoughnut2dWithVariables({{ indicator.id }},'{{ grafico }}','100','500')">
+                                {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_VARIABLES_FROM_EQUATION_DOUGHNUT')  %}
+                                    <div id="tab-{{ grafico }}"  ng-controller="DashboardController" ng-init="chargeChartDoughnut2dWithVariablesFromEquation({{ indicator.id }},'{{ grafico }}','100','500')">
                                         <span id="{{ grafico }}"></span>
                                     </div>
                                 {% endif %}

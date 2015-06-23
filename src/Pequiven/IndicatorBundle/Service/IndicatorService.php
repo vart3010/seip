@@ -615,7 +615,7 @@ class IndicatorService implements ContainerAwareInterface {
                     $dataSet[] = $set;
                 }
             }
-        } elseif (isset($options['withVariables']) && array_key_exists('withVariables', $options)) {
+        } elseif (isset($options['withVariables']) && array_key_exists('withVariables', $options)) {//Para que muestre las variables de acuerdo a 
             $arrayVariables = $this->getArrayVariablesFormulaWithData($indicator);
 
             foreach ($arrayVariables as $ind => $key) {
@@ -795,13 +795,27 @@ class IndicatorService implements ContainerAwareInterface {
         $valuesIndicator = $indicator->getValuesIndicator();
         $arrayVariables = array();
         foreach ($formula->getVariables() as $variable) {
-            $arrayVariables[$variable->getName()] = 0.0;
+            $arrayVariables[$variable->getName()]['value'] = 0.0;
+            $arrayVariables[$variable->getName()]['description'] = $variable->getDescription();
         }
+        
+        if(isset($options['viewVariablesRealPlanFromEquation']) && $options['viewVariablesRealPlanFromEquation']){
+            
+        }
+        
+        foreach($valuesIndicator as $valueIndicator){
+            $parameters = $valueIndicator->getFormulaParameters();
+            foreach($parameters as $parameter => $key){
+                var_dump($parameter);
+                var_dump($key);
+            }
+        }
+        die();
 
         foreach ($valuesIndicator as $valueIndicator) {
             foreach ($formula->getVariables() as $variable) {
                 $nameParameter = $variable->getName();
-                $arrayVariables[$nameParameter] = $arrayVariables[$nameParameter] + $valueIndicator->getParameter($nameParameter);
+                $arrayVariables[$nameParameter]['value'] = $arrayVariables[$nameParameter]['value'] + $valueIndicator->getParameter($nameParameter);
             }
         }
 
