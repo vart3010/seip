@@ -101,7 +101,8 @@ abstract class ProductReport extends BaseModel implements ProductReportInterface
         $month = (int)$now->format("m");
         $day = (int)$now->format("d");
         $productDetailDailyMonths = $this->getProductDetailDailyMonthsSortByMonth();
-        $totalGrossPlan = $totalGrossReal = $totalNetPlan = $totalNetReal = $totalMonthBefore = 0.0;
+        $totalGrossPlan = $totalGrossReal = $totalNetPlan = $totalNetReal = 
+                $totalGrossPlanBefore = $totalGrossRealBefore = $totalNetPlanBefore = $totalNetRealBefore = 0.0;
         foreach ($productDetailDailyMonths as $monthDetail => $productDetailDailyMonth) {
             if($monthDetail > $month){
                 break;
@@ -116,22 +117,33 @@ abstract class ProductReport extends BaseModel implements ProductReportInterface
                 $totalNetPlan = $totalNetPlan + $totalNetToDay['tp'];
                 $totalNetReal = $totalNetReal + $totalNetToDay['tr'];
             }else{
-                $totalMonthBefore = $totalMonthBefore + $productDetailDailyMonth->getTotalGrossReal();
                 
                 $totalGrossPlan = $totalGrossPlan + $productDetailDailyMonth->getTotalGrossPlan();
                 $totalGrossReal = $totalGrossReal + $productDetailDailyMonth->getTotalGrossReal();
 
                 $totalNetPlan = $totalNetPlan + $productDetailDailyMonth->getTotalNetPlan();
                 $totalNetReal = $totalNetReal + $productDetailDailyMonth->getTotalNetReal();
+                
+                $totalGrossPlanBefore = $totalGrossPlan;
+                $totalGrossRealBefore = $totalGrossReal;
+                
+                $totalNetPlanBefore = $totalNetPlan;
+                $totalNetRealBefore = $totalNetReal;
             }
             
         }
-        $percentageGross = $percentageNet = 0.0;
-        if($totalGrossReal > 0){
+        $percentageGross = $percentageNet = $percentageGrossBefore = $percentageNetBefore = 0.0;
+        if($totalGrossPlan > 0){
             $percentageGross = ($totalGrossReal * 100) / $totalGrossPlan;
         }
-        if($totalNetReal > 0){
+        if($totalGrossPlanBefore > 0){
+            $percentageGrossBefore = ($totalGrossRealBefore * 100) / $totalGrossPlanBefore;
+        }
+        if($totalNetPlan > 0){
             $percentageNet = ($totalNetReal * 100) / $totalNetPlan;
+        }
+        if($totalNetPlanBefore > 0){
+            $percentageNetBefore = ($totalNetRealBefore * 100) / $totalNetPlanBefore;
         }
         $total = array(
             'tp_gross' => $totalGrossPlan,
@@ -142,7 +154,13 @@ abstract class ProductReport extends BaseModel implements ProductReportInterface
             'tr_net' => $totalNetReal,
             'percentage_net' => $percentageNet,
             
-            'total_month_before' => $totalMonthBefore,//Total mes anterior
+            'tp_gross_b' => $totalGrossPlanBefore,//Total plan mes anterior
+            'tr_gross_b' => $totalGrossRealBefore,
+            'percentage_gross_b' => $percentageGrossBefore,
+            
+            'tp_net_b' => $totalNetPlanBefore,
+            'tr_net_b' => $totalNetRealBefore,
+            'percentage_net_b' => $percentageNetBefore,
         );
         return $total;
     }
@@ -158,7 +176,7 @@ abstract class ProductReport extends BaseModel implements ProductReportInterface
         $day = (int)$now->format("d");
         
         $rawMaterialConsumptionPlannings = $this->getRawMaterialConsumptionPlannings();
-        $totalPlan = $totalReal = $totalMonthBefore = 0.0;
+        $totalPlan = $totalReal = $totalPlanBefore = $totalRealBefore = 0.0;
         foreach ($rawMaterialConsumptionPlannings as $rawMaterialConsumptionPlanning) {
             $detailByMonth = $rawMaterialConsumptionPlanning->getDetailByMonth();
             foreach ($detailByMonth as $monthDetail => $detail) {
@@ -171,22 +189,29 @@ abstract class ProductReport extends BaseModel implements ProductReportInterface
                     $totalPlan = $totalPlan + $totalToDay['tp'];
                     $totalReal = $totalReal + $totalToDay['tr'];
                 }else{
-                    $totalMonthBefore = $totalMonthBefore + $detail->getTotalReal();
                     $totalPlan = $totalPlan + $detail->getTotalPlan();
                     $totalReal = $totalReal + $detail->getTotalReal();
+                    
+                    $totalPlanBefore = $totalPlan;
+                    $totalRealBefore = $totalReal;
                 }
             }
         }
-        $percentage = 0;
+        $percentage = $percentageBefore = 0;
         if($totalPlan > 0){
             $percentage = ($totalReal * 100) / $totalPlan;
+        }
+        if($totalPlanBefore > 0){
+            $percentageBefore = ($totalRealBefore * 100) / $totalPlanBefore;
         }
         $total = array(
             'tp' => $totalPlan,
             'tr' => $totalReal,
             'percentage' => $percentage,
             
-            'total_month_before' => $totalMonthBefore,//Total mes anterior
+            'tp_b' => $totalPlanBefore,
+            'tr_b' => $totalRealBefore,
+            'percentage_b' => $percentageBefore,
         );
         return $total;
     }
@@ -202,7 +227,7 @@ abstract class ProductReport extends BaseModel implements ProductReportInterface
         $day = (int)$now->format("d");
         
         $unrealizedProductions = $this->getUnrealizedProductionsSortByMonth();
-        $totalReal = $totalMonthBefore = 0.0;
+        $totalReal = $totalRealBefore = 0.0;
         foreach ($unrealizedProductions as $unrealizedProduction) {
             $monthDetail = $unrealizedProduction->getMonth();
             if($monthDetail > $month){
@@ -213,14 +238,14 @@ abstract class ProductReport extends BaseModel implements ProductReportInterface
                 $totalToDay = $unrealizedProduction->getTotalToDay($day);
                 $totalReal = $totalReal + $totalToDay;
             }else{
-                $totalMonthBefore = $totalMonthBefore + $unrealizedProduction->getTotal();
                 $totalReal = $totalReal + $unrealizedProduction->getTotal();
+                $totalRealBefore = $totalReal;
             }
         }
         $total = array(
             'tr' => $totalReal,
             
-            'total_month_before' => $totalMonthBefore,//Total mes anterior
+            'tr_b' => $totalRealBefore,//Total mes anterior
         );
         return $total;
     }

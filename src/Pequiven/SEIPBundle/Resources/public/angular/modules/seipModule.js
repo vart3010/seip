@@ -2364,11 +2364,11 @@ angular.module('seipModule.controllers', [])
 
             //Gráfico en forma de dona para mostrar las variables de la fórmula del indicador
 
-            $scope.chargeChartDoughnut2dWithVariables = function (indicatorId, render, width, height)  {
-                var getdataChartDoughnut2dWithVariables = Routing.generate("getDataChartDoughnutWithVariables", {id: indicatorId});
-                $http.get(getdataChartDoughnut2dWithVariables).success(function (data) {
+            $scope.chargeChartDoughnut2dWithVariablesFromEquation = function (indicatorId, render, width, height)  {
+                var getdataChartDoughnut2dWithVariablesFromEquation = Routing.generate("getDataChartDoughnutWithVariablesFromEquation", {id: indicatorId});
+                $http.get(getdataChartDoughnut2dWithVariablesFromEquation).success(function (data) {
                     FusionCharts.ready(function () {
-                        var revenueChartTactic = new FusionCharts({
+                        var revenueChartDoughnut2dWithVariablesFromEquation = new FusionCharts({
                             "type": "doughnut2d",
                             "renderAt": render,
                             "width": width + "%",
@@ -2376,12 +2376,11 @@ angular.module('seipModule.controllers', [])
                             "dataFormat": "json",
                             "dataSource": {
                                 "chart": data.dataSource.chart,
-                                "categories": data.dataSource.categories,
-                                "dataset": data.dataSource.dataset
+                                "data": data.dataSource.dataset
                             }
                         });
-                        revenueChartTactic.setTransparent(true);
-                        revenueChartTactic.render();
+                        revenueChartDoughnut2dWithVariablesFromEquation.setTransparent(true);
+                        revenueChartDoughnut2dWithVariablesFromEquation.render();
                     });
                 });
             }

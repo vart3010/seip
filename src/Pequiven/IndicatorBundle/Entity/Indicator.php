@@ -434,6 +434,34 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     private $managementSystems;
     
     /**
+     * @var string
+     *
+     * @ORM\Column(name="showByRealValue", type="string", length=50, nullable=true)
+     */
+    private $showByRealValue;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="showByPlanValue", type="string", length=50, nullable=true)
+     */
+    private $showByPlanValue;
+       
+    /**
+     * ¿Será renderizado en un gráfico tipo Pie, y las variables que conforman el equation_real y equation_plan?
+     * @var boolean
+     * @ORM\Column(name="viewVariablesFromEquationInDashboardPie",type="boolean")
+     */
+    private $viewVariablesFromEquationInDashboardPie = false;
+    
+    /**
+     * ¿Las variables que conforman el equation_real y equation_plan, se complementan o son por separadas?
+     * @var boolean
+     * @ORM\Column(name="variablesRealPlanComplement",type="boolean")
+     */
+    private $variablesRealPlanComplement = false;
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -1882,4 +1910,97 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     {
         return $this->managementSystems;
     }
+    
+    /**
+     * Set viewVariablesFromEquationInDashboardPie
+     *
+     * @param boolean $viewVariablesFromEquationInDashboardPie
+     * @return Indicator
+     */
+    public function setViewVariablesFromEquationInDashboardPie($viewVariablesFromEquationInDashboardPie)
+    {
+        $this->viewVariablesFromEquationInDashboardPie = $viewVariablesFromEquationInDashboardPie;
+
+        return $this;
+    }
+
+    /**
+     * Get viewVariablesFromEquationInDashboardPie
+     *
+     * @return boolean 
+     */
+    public function getViewVariablesFromEquationInDashboardPie()
+    {
+        return $this->viewVariablesFromEquationInDashboardPie;
+    }
+    
+    /**
+     * Set showByRealValue
+     *
+     * @param string $showByRealValue
+     * @return Indicator
+     */
+    public function setShowByRealValue($showByRealValue)
+    {
+        $this->showByRealValue = $showByRealValue;
+
+        return $this;
+    }
+
+    /**
+     * Get showByRealValue
+     *
+     * @return string 
+     */
+    public function getShowByRealValue()
+    {
+        return $this->showByRealValue;
+    }
+    
+    /**
+     * Set showByPlanValue
+     *
+     * @param string $showByPlanValue
+     * @return Indicator
+     */
+    public function setShowByPlanValue($showByPlanValue)
+    {
+        $this->showByPlanValue = $showByPlanValue;
+
+        return $this;
+    }
+
+    /**
+     * Get showByPlanValue
+     *
+     * @return string 
+     */
+    public function getShowByPlanValue()
+    {
+        return $this->showByPlanValue;
+    }
+    
+    /**
+     * Set variablesRealPlanComplement
+     *
+     * @param boolean $variablesRealPlanComplement
+     * @return Indicator
+     */
+    public function setVariablesRealPlanComplement($variablesRealPlanComplement)
+    {
+        $this->variablesRealPlanComplement = $variablesRealPlanComplement;
+
+        return $this;
+    }
+
+    /**
+     * Get variablesRealPlanComplement
+     *
+     * @return boolean 
+     */
+    public function getVariablesRealPlanComplement()
+    {
+        return $this->variablesRealPlanComplement;
+    }
+
 }

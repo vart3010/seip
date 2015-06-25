@@ -59,7 +59,15 @@
             </tbody>
             <tfoot>
                 <tr>
-                    <th scope="col" width="10%">{{ 'Total month before'|trans }}&nbsp;{{ totalsRaw['total_month_before']|myNumberFormat }}</th>
+                    <th scope="col" width="10%">{{ 'Total month before'|trans }}</th>
+                    <th scope="col" width="10%" class="hide-on-mobile-portrait with-tooltip" title="{{ 'pequiven_seip.totalPlan'|trans }}">{{ totalsRaw['tp_b']|myNumberFormat }}</th>
+                    <th scope="col" width="10%" class="hide-on-tablet with-tooltip" title="{{ 'pequiven_seip.totalReal'|trans }}">{{ totalsRaw['tr_b']|myNumberFormat }}</th>
+                    <th scope="col" width="10%" class="hide-on-tablet with-tooltip" title="{{ 'pequiven_seip.percentage'|trans }}">{{ totalsRaw['percentage_b']|myNumberFormat }}%</th>
+                    <th scope="col" width="10%" class="hide-on-tablet">&nbsp;</th>
+                    <th scope="col" width="10%">&nbsp;</th>
+                </tr>
+                <tr>
+                    <th scope="col" width="10%">{{ 'Total accumulated'|trans }}</th>
                     <th scope="col" width="10%" class="hide-on-mobile-portrait with-tooltip" title="{{ 'pequiven_seip.totalPlan'|trans }}">{{ totalsRaw['tp']|myNumberFormat }}</th>
                     <th scope="col" width="10%" class="hide-on-tablet with-tooltip" title="{{ 'pequiven_seip.totalReal'|trans }}">{{ totalsRaw['tr']|myNumberFormat }}</th>
                     <th scope="col" width="10%" class="hide-on-tablet with-tooltip" title="{{ 'pequiven_seip.percentage'|trans }}">{{ totalsRaw['percentage']|myNumberFormat }}%</th>

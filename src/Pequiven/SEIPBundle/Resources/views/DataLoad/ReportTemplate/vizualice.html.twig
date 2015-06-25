@@ -12,23 +12,32 @@
     {% set hasPermission = is_granted("ROLE_SEIP_DATA_LOAD_CHANGE_DATE") %}
     
     <div class="with-padding">
-         <p class="inline-label"><label class="label">{{ "pequiven_seip.date_of_report"|trans }}</label>
-             {% if hasPermission %}
-                 <a href="{{ path("pequiven_report_template_vizualice",{ dateReport: (dateReport|date_modify("-1 day")|date('d/m/Y'))}) }}" ><i class="fa fa-chevron-left fa-2x"></i></a>&nbsp;
-             {% endif %}
-             <input type="text" id="dateReport" name="dateReport" class="input" value="{{ dateReport|date('d/m/Y') }}" />&nbsp;
-             {% if hasPermission %}
-                 <a href="{{ path("pequiven_report_template_vizualice",{ dateReport: (dateReport|date_modify("+1 day")|date('d/m/Y'))}) }}" class="navigate-date"><i class="fa fa-chevron-right fa-2x"></i></a>
-             {% endif %}
-         </p>
+        <div class="columns">
+            <div class="six-columns">
+                {{ form_label(form.plantReport) }}
+                {{ form_widget(form.plantReport) }}
+                {{ form_errors(form.plantReport) }}
+            </div>
+            <div class="six-columns">
+                 <p class="inline-label"><label class="label">{{ "pequiven_seip.date_of_report"|trans }}</label>
+                     {% if hasPermission %}
+                         <a href="{{ path("pequiven_report_template_vizualice",{ dateReport: (dateReport|date_modify("-1 day")|date('d/m/Y')),plantReport: plantReportId }) }}" ><i class="fa fa-chevron-left fa-2x"></i></a>&nbsp;
+                     {% endif %}
+                     <input type="text" id="dateReport" name="dateReport" class="input" value="{{ dateReport|date('d/m/Y') }}" />&nbsp;
+                     {% if hasPermission %}
+                         <a href="{{ path("pequiven_report_template_vizualice",{ dateReport: (dateReport|date_modify("+1 day")|date('d/m/Y')),plantReport: plantReportId }) }}" class="navigate-date"><i class="fa fa-chevron-right fa-2x"></i></a>
+                     {% endif %}
+                 </p>
+            </div>
+        </div>
      </div>
      <div class="with-padding">
-         <div class="columns">
-             <div class="twelve-columns twelve-columns-mobile">
-                 <h3 class="thin underline text-center">PRESUPUESTO</h3>
-             </div>
-         </div>
          {% for plantReport in plantReports %}
+             <div class="columns">
+                 <div class="twelve-columns twelve-columns-mobile">
+                     <h3 class="thin underline text-center">PRESUPUESTO</h3>
+                 </div>
+             </div>
              {% set productsReport = plantReport.productsReport %}
              {% set consumerPlanningServices = plantReport.consumerPlanningServices %}
                  <div class="columns">
@@ -153,11 +162,17 @@
                                         <th scope="col" style="width: 7%" class=" header">{{ summary['total_month']|myNumberFormat }}</th>
                                         <th scope="col" style="width: 7%" class=" header">{{ summary['total_year']|myNumberFormat }}</th>
                                     </tr>
+                                {% else %}
+                                    <tr>
+                                        <td colspan="4" class="empty_row">{{ "No service planning"|trans }}</td>
+                                    </tr>
                                 {% endfor %}
                             </tbody>
                         </table>
                      </div>
                  </div>
+         {% else %}
+             <h2 class="text-center">{{ "Select the plant"|trans }}</h2>
          {% endfor %}
      </div>
              
@@ -166,16 +181,22 @@
 {% block javascript %}
     <script type="text/javascript">
         $(document).ready(function(){
+            var plantReport = $("#form_plantReport");
+            var eventChange = function(){
+                var changeToDate = $('#dateReport').val();
+                var url = Routing.generate("pequiven_report_template_vizualice",{dateReport:changeToDate,plantReport: plantReport.val() });
+                window.location.href = url;
+            };
             {% if is_granted("ROLE_SEIP_DATA_LOAD_CHANGE_DATE") %}
                 $('#dateReport').datepicker({
                      changeMonth: true,
                      dateFormat: "dd/mm/yy"
                 }).on("change",function(){
-                    var changeToDate = $(this).val();
-                    var url = Routing.generate("pequiven_report_template_vizualice",{dateReport:changeToDate });
-                    window.location.href = url;
+                    eventChange();
                 });
             {% endif %}
+            plantReport.on("change",eventChange);
+            $(".select2").select2();
         });
     </script>
 {% endblock %}
