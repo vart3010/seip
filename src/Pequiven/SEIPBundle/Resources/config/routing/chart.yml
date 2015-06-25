@@ -43,6 +43,17 @@ getDataChartPieVariablesOrTags:
     options:
         expose: true
         
+getDataChartPieVariablesPlanFromEquation:
+    path: /getDataChartPieVariablesPlanFromEquation/{id}
+    defaults:
+        _controller: pequiven.controller.seipchart:getDataChartPieVariablesPlanFromEquationAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
+        
 getDataChartBarsArea:
     path: /getDataChartBarsArea/{id}
     defaults:

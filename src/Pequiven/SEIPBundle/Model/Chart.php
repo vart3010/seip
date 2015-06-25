@@ -11,6 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 abstract class Chart
 {
+    //TIPOS DE GRÁFICOS
     
     /**
      * Gráfico tipo dona para mostrar los indicadores asociados de acuerdo y junto con el resultado de medición
@@ -47,9 +48,15 @@ abstract class Chart
      */
     const TYPE_CHART_BARS_AREA = 6;
     
+    /**
+     * Gráfico para mostrar las variables (sumativas al plan) de un indicador con fórmula a partir de ecuación
+     */
+    const TYPE_CHART_PIE_VARIABLES_PLAN_FROM_EQUATION = 7;
     
-    
-    
+    /**
+     * Gráfico para mostrar las variables (sumativas al real) de un indicador con fórmula a partir de ecuación
+     */
+    const TYPE_CHART_PIE_VARIABLES_REAL_FROM_EQUATION = 8;
     
     
     
@@ -61,7 +68,7 @@ abstract class Chart
     const CHART_INDICATORS_ASSOCIATED_WITH_RESULT = 'CHART_INDICATORS_ASSOCIATED_WITH_RESULT';
     
     /**
-     * Gráfico para poder mostrar el real, plan y resultado de los indicadores asociados
+     * Nombre del gráfico para poder mostrar el real, plan y resultado de los indicadores asociados
      */
     const CHART_INDICATORS_ASSOCIATED_REAL_PLAN_WITH_RESULT = 'CHART_INDICATORS_ASSOCIATED_REAL_PLAN_WITH_RESULT';
     
@@ -76,9 +83,14 @@ abstract class Chart
     const CHART_INDICATORS_VARIABLES_OR_TAGS_IN_PIE = 'CHART_INDICATORS_VARIABLES_OR_TAGS_IN_PIE';
     
     /**
-     * Gráfico para mostrar las variables de los indicadores en forma de barra y area 
+     * Nombre del gráfico para mostrar las variables de los indicadores en forma de barra y area 
      */
     const CHART_INDICATORS_BARS_AREA = 'CHART_INDICATORS_BARS_AREA';
+    
+    /**
+     * Nombre del gráfico para mostrar las variables (sumativas al plan) de un indicador con fórmula a partir de ecuación
+     */
+    const CHART_INDICATORS_VARIABLES_PLAN_FROM_EQUATION = 'CHART_INDICATORS_VARIABLES_PLAN_FROM_EQUATION';
     
     
     
@@ -124,7 +136,8 @@ abstract class Chart
             self::TYPE_CHART_PIE_VARIABLES_OR_TAGS => 'chart.type.indicatorsVariablesOrTagsInPie',
             self::TYPE_CHART_COLUMN_FROM_FORMULA_PARAMETERS => 'chart.type.resultsOfIndicator',
             self::TYPE_CHART_PIE_FROM_TAGS => 'chart.type.resultsOfVariable',
-            self::TYPE_CHART_BARS_AREA => 'chart.type.indicatorsBarArea'
+            self::TYPE_CHART_BARS_AREA => 'chart.type.indicatorsBarArea',
+            self::TYPE_CHART_PIE_VARIABLES_PLAN_FROM_EQUATION => 'chart.type.indicatorsVariablesPlanFromEquationInPie'
         );
          
          return $typesOfChart;

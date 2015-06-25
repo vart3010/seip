@@ -455,7 +455,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     private $viewVariablesFromEquationInDashboardPie = false;
     
     /**
-     * ¿Las variables que conforman el equation_real y equation_plan, se complementan o son por separadas?
+     * ¿Las variables que conforman el equation_real y equation_plan, se complementan o son por separadas, es decir en un mismo gráfico o separando las de real y plan en 2 gráficos?
      * @var boolean
      * @ORM\Column(name="variablesRealPlanComplement",type="boolean")
      */

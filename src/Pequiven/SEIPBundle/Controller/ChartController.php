@@ -80,12 +80,33 @@ class ChartController extends SEIPController {
         $response = new JsonResponse();
 
         $idIndicator = $request->get('id');
+        $typeVariable = $request->get('typeVariable');
+        
+        $indicatorService = $this->getIndicatorService(); //Obtenemos el servicio del indicador
 
+        $indicator = $this->get('pequiven.repository.indicator')->find($idIndicator,array($typeVariable => true)); //Obtenemos el indicador
+
+        $dataChart = $indicatorService->getDataDashboardPie($indicator, array()); //Obtenemos la data del gráfico de acuerdo al indicador
+
+        $response->setData($dataChart); //Seteamos la data del gráfico en Json
+
+        return $response;
+    }
+    
+    /**
+     * Función que retorna la data para un gráfico de tipo columna y con 2 ejes verticales.
+     * @return JsonResponse
+     */
+    public function getDataChartPieVariablesPlanFromEquationAction(Request $request) {
+        $response = new JsonResponse();
+
+        $idIndicator = $request->get('id');
+        
         $indicatorService = $this->getIndicatorService(); //Obtenemos el servicio del indicador
 
         $indicator = $this->get('pequiven.repository.indicator')->find($idIndicator); //Obtenemos el indicador
 
-        $dataChart = $indicatorService->getDataDashboardPie($indicator, array()); //Obtenemos la data del gráfico de acuerdo al indicador
+        $dataChart = $indicatorService->getDataDashboardPie($indicator, array('viewVariablesFromPlanEquation' => true)); //Obtenemos la data del gráfico de acuerdo al indicador
 
         $response->setData($dataChart); //Seteamos la data del gráfico en Json
 

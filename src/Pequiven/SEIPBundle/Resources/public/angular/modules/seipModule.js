@@ -2362,8 +2362,7 @@ angular.module('seipModule.controllers', [])
                 });
             }
 
-            //Gráfico en forma de dona para mostrar las variables de la fórmula del indicador
-
+            //Gráfico en forma de dona para mostrar las variables plan y real a partir de ecuación de la fórmula del indicador
             $scope.chargeChartDoughnut2dWithVariablesFromEquation = function (indicatorId, render, width, height)  {
                 var getdataChartDoughnut2dWithVariablesFromEquation = Routing.generate("getDataChartDoughnutWithVariablesFromEquation", {id: indicatorId});
                 $http.get(getdataChartDoughnut2dWithVariablesFromEquation).success(function (data) {
@@ -2376,7 +2375,7 @@ angular.module('seipModule.controllers', [])
                             "dataFormat": "json",
                             "dataSource": {
                                 "chart": data.dataSource.chart,
-                                "data": data.dataSource.dataset
+                                "data": data.dataSource.dataSet
                             }
                         });
                         revenueChartDoughnut2dWithVariablesFromEquation.setTransparent(true);
@@ -2408,14 +2407,13 @@ angular.module('seipModule.controllers', [])
                 });
             }
 
-
-            //Gráfico en forma de barras con area
-            $scope.chargeChartBarsArea = function (indicatorId, render, width, height) {
-                var getdataBarsArea = Routing.generate("getDataChartBarsArea", {id: indicatorId});
-                $http.get(getdataBarsArea).success(function (data) {
+            //Gráfico en forma de 
+            $scope.chargeChartPieVariablesPlanFromEquation = function (indicatorId, render, width, height) {
+                var getDataChartPieVariablesPlanFromEquation = Routing.generate("getDataChartPieVariablesPlanFromEquation", {id: indicatorId});
+                $http.get(getDataChartPieVariablesPlanFromEquation).success(function (data) {
                     FusionCharts.ready(function () {
-                        var revenueChartTactic = new FusionCharts({
-                            "type": "mscolumn3dlinedy",
+                        var revenueChartPieVariablesPlanFromEquation = new FusionCharts({
+                            "type": "pie2d",
                             "renderAt": render,
                             "width": width + "%",
                             "height": height,
@@ -2426,8 +2424,30 @@ angular.module('seipModule.controllers', [])
                                 "dataset": data.dataSource.dataset
                             }
                         });
-                        revenueChartTactic.setTransparent(true);
-                        revenueChartTactic.render();
+                        revenueChartPieVariablesPlanFromEquation.setTransparent(true);
+                        revenueChartPieVariablesPlanFromEquation.render();
+                    });
+                });
+            }
+            
+            //Gráfico en forma de dona para mostrar las variables plan y real a partir de ecuación de la fórmula del indicador
+            $scope.chargeChartDoughnut2dWithVariablesFromEquation = function (indicatorId, render, width, height)  {
+                var getdataChartDoughnut2dWithVariablesFromEquation = Routing.generate("getDataChartDoughnutWithVariablesFromEquation", {id: indicatorId});
+                $http.get(getdataChartDoughnut2dWithVariablesFromEquation).success(function (data) {
+                    FusionCharts.ready(function () {
+                        var revenueChartDoughnut2dWithVariablesFromEquation = new FusionCharts({
+                            "type": "doughnut2d",
+                            "renderAt": render,
+                            "width": width + "%",
+                            "height": height,
+                            "dataFormat": "json",
+                            "dataSource": {
+                                "chart": data.dataSource.chart,
+                                "data": data.dataSource.dataSet
+                            }
+                        });
+                        revenueChartDoughnut2dWithVariablesFromEquation.setTransparent(true);
+                        revenueChartDoughnut2dWithVariablesFromEquation.render();
                     });
                 });
             }

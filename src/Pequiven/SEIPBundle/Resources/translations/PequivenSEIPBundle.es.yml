@@ -539,6 +539,8 @@ chart:
         resultsOfIndicator: Resultados Asociados al Indicador (2 parámetros).
         resultsOfVariable: Resultados de Variables y que forman parte de un mismo valor (Acumuladas).
         indicatorsBarArea: Indicadores mostrados por barras y areas 
+        indicatorsVariablesPlanFromEquationInPie: Resultados de las variables asociadas al plan de la fórmula a partir de ecuación
+        indicatorsVariablesRealFromEquationInPie: Resultados de las variables asociadas al real de la fórmula a partir de ecuación
 
 Name: Nombre
 nro: "#"

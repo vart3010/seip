@@ -115,6 +115,53 @@ class IndicatorService implements ContainerAwareInterface {
 
         return $formulaPaser;
     }
+    
+    /**
+     * Toma una ecuacion y la transforma a variales php validas en un string para evaluarlas.
+     * 
+     * @param Formula $formula
+     * @return type
+     */
+    public function getArrayVars(Formula $formula, $equationSource) {
+        $vars = array();
+        $especialCaracter = array(
+            '(',
+            ')',
+            '+',
+            '-',
+            '*',
+            '/',
+            ' ',
+            '  ',
+            '   ',
+        );
+        $numbers = array('0', '1', '2', '3', '4', '5', '6', '7', '8', '9');
+//        $equationReal = '6 + ( num_hoja_entrada_servicios_entregadas / num_valuaciones_solicitadas ) * 100 + casa - 1';
+        $stringSplit = str_split($equationSource);
+        $newEquation = $varEquation = '';
+        
+        foreach ($stringSplit as $key => $char) {
+            if (in_array($char, $especialCaracter, true)) {
+                $newEquation .= $char;
+                continue;
+            }
+            $nextKey = $key + 1;
+            $nextChar = isset($stringSplit[$nextKey]) ? $stringSplit[$nextKey] : null;
+            $varEquation .= $char;
+            if (in_array($nextChar, $especialCaracter, true)) {
+                if (in_array($varEquation[0], $numbers)) {
+                    
+                } else {
+                    $newEquation .= '$';
+                }
+                $newEquation .= $varEquation;
+                array_push($vars, $varEquation);
+                $varEquation = '';
+            }
+        }
+
+        return $vars;
+    }
 
     /**
      * Valida la configuracion de una formula
@@ -579,7 +626,7 @@ class IndicatorService implements ContainerAwareInterface {
         $chart["centerLabelBold"] = "1";
         $chart["manageLabelOverflow"] = "1";
         $chart["useEllipsesWhenOverflow"] = "1";
-        $chart["showTooltip"] = "1";
+//        $chart["showTooltip"] = "1";
         $chart["decimals"] = "0";
         $chart["captionFontSize"] = "14";
         $chart["captionPadding"] = "-10";
@@ -626,17 +673,15 @@ class IndicatorService implements ContainerAwareInterface {
                     }
                 }
             }
-            
             foreach ($arrayVariables as $arrayVariable) {
                 $set = array();
-                $set["label"] = $arrayVariable['description'] . ': ' . number_format($arrayVariable['value'], 2, ',', '.') . '%';
-                $set["value"] = bcadd(0.5, 0, 2);
-//                $set["value"] = $sumResultChildren != 0 ? bcdiv($indicatorChildren->getResultReal(), $sumResultChildren, 2) : bcadd(0, 0, 2);
-//                $set["displayValue"] = $indicatorChildren->getRef() . ' - ' . number_format($indicatorChildren->getResultReal(), 2, ',', '.') . '%';
+                $set["label"] = $arrayVariable['description'] . ': ' . number_format($arrayVariable['value'], 2, ',', '.');
+                $set["value"] = $arrayVariable['value'];
+                $set["displayValue"] = number_format($arrayVariable['value'], 2, ',', '.');
 //                $set["toolText"] = $indicatorChildren->getSummary() . ':{br}' . number_format($indicatorChildren->getResultReal(), 2, ',', '.') . '%';
 //                $set["color"] = $this->getColorOfResult($indicatorChildren);
-//                $set["labelLink"] = $this->generateUrl('pequiven_indicator_show', array('id' => $indicatorChildren->getId()));
-//                $set["link"] = $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicatorChildren->getId()));
+//                $set["labelLink"] = $this->generateUrl('pequiven_indicator_show', array('id' => $indicator->getId()));
+//                $set["link"] = $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicator->getId()));
                 $dataSet[] = $set;
             }
         }
@@ -695,14 +740,25 @@ class IndicatorService implements ContainerAwareInterface {
         $chart["legendItemFontColor"] = "#666666";
 
         $dataChart = array();
-
-        $arrayVariables = $this->getArrayVariablesFormulaWithData($indicator, array());
-
-        foreach ($arrayVariables as $ind => $key) {
-            $set = array();
-            $set["label"] = $ind . ': ' . number_format($key, 2, ',', '.') . '%';
-            $set["value"] = bcadd($key, 0, 2);
-            $dataChart[] = $set;
+        
+        if(isset($options['viewVariablesFromPlanEquation']) && array_key_exists('viewVariablesFromPlanEquation', $options)){
+            unset($options['viewVariablesFromPlanEquation']);
+            $arrayVariables = $this->getArrayVariablesFormulaWithData($indicator, array('viewVariablesFromPlanEquation' => true));
+            foreach ($arrayVariables as $ind => $key) {
+                $set = array();
+                $set["label"] = $ind . ': ' . number_format($key, 2, ',', '.') . '%';
+                $set["value"] = bcadd($key, 0, 2);
+                $dataChart[] = $set;
+            }
+        } else{
+            $arrayVariables = $this->getArrayVariablesFormulaWithData($indicator, array());
+            
+            foreach ($arrayVariables as $ind => $key) {
+                $set = array();
+                $set["label"] = $ind . ': ' . number_format($key, 2, ',', '.') . '%';
+                $set["value"] = bcadd($key, 0, 2);
+                $dataChart[] = $set;
+            }
         }
 
         $data['dataSource']['chart'] = $chart;
@@ -805,6 +861,7 @@ class IndicatorService implements ContainerAwareInterface {
         $arrayVariables = array();
         
         if(isset($options['viewVariablesRealPlanFromEquation']) && $options['viewVariablesRealPlanFromEquation']){
+            unset($options['viewVariablesRealPlanFromEquation']);
             foreach($valuesIndicator as $valueIndicator){
                 $parameters = $valueIndicator->getFormulaParameters();
                 foreach($parameters as $parameter => $key){
@@ -821,11 +878,21 @@ class IndicatorService implements ContainerAwareInterface {
                 $arrayVariables[$variable->getName()]['description'] = $variable->getDescription();
             }
             
-            foreach ($valuesIndicator as $valueIndicator) {
-                foreach ($formula->getVariables() as $variable) {
-                    $nameParameter = $variable->getName();
-                    $arrayVariables[$nameParameter]['value'] = $arrayVariables[$nameParameter]['value'] + $valueIndicator->getParameter($nameParameter);
+            if(isset($options['viewVariablesFromPlanEquation']) && $options['viewVariablesFromPlanEquation']){
+                unset($options['viewVariablesFromPlanEquation']);
+                $vars = $this->getArrayVars($formula, $formula->getSourceEquationPlan());
+                
+                foreach ($valuesIndicator as $valueIndicator) {
+                    foreach ($variables as $variable) {
+                        if(array_search($variable->getName(), $vars)){
+                            var_dump($variable->getName());
+                        }
+                        $nameParameter = $variable->getName();
+                        $arrayVariables[$nameParameter]['value'] = $arrayVariables[$nameParameter]['value'] + $valueIndicator->getParameter($nameParameter);
+                    }
                 }
+                var_dump($vars);
+                die();
             }
         }
 
