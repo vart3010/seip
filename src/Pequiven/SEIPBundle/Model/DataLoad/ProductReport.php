@@ -133,16 +133,16 @@ abstract class ProductReport extends BaseModel implements ProductReportInterface
             
         }
         $percentageGross = $percentageNet = $percentageGrossBefore = 0.0;
-        if($totalGrossReal > 0){
+        if($totalGrossPlan > 0){
             $percentageGross = ($totalGrossReal * 100) / $totalGrossPlan;
         }
-        if($totalGrossRealBefore > 0){
+        if($totalGrossPlanBefore > 0){
             $percentageGrossBefore = ($totalGrossRealBefore * 100) / $totalGrossPlanBefore;
         }
-        if($totalNetReal > 0){
+        if($totalNetPlan > 0){
             $percentageNet = ($totalNetReal * 100) / $totalNetPlan;
         }
-        if($totalNetRealBefore > 0){
+        if($totalNetPlanBefore > 0){
             $percentageNetBefore = ($totalNetRealBefore * 100) / $totalNetPlanBefore;
         }
         $total = array(
@@ -176,7 +176,7 @@ abstract class ProductReport extends BaseModel implements ProductReportInterface
         $day = (int)$now->format("d");
         
         $rawMaterialConsumptionPlannings = $this->getRawMaterialConsumptionPlannings();
-        $totalPlan = $totalReal = $totalMonthBefore = 0.0;
+        $totalPlan = $totalReal = $totalPlanBefore = $totalRealBefore = 0.0;
         foreach ($rawMaterialConsumptionPlannings as $rawMaterialConsumptionPlanning) {
             $detailByMonth = $rawMaterialConsumptionPlanning->getDetailByMonth();
             foreach ($detailByMonth as $monthDetail => $detail) {
@@ -189,9 +189,11 @@ abstract class ProductReport extends BaseModel implements ProductReportInterface
                     $totalPlan = $totalPlan + $totalToDay['tp'];
                     $totalReal = $totalReal + $totalToDay['tr'];
                 }else{
-                    $totalMonthBefore = $totalMonthBefore + $detail->getTotalReal();
                     $totalPlan = $totalPlan + $detail->getTotalPlan();
                     $totalReal = $totalReal + $detail->getTotalReal();
+                    
+                    $totalPlanBefore = $totalPlan;
+                    $totalRealBefore = $totalReal;
                 }
             }
         }
@@ -199,12 +201,17 @@ abstract class ProductReport extends BaseModel implements ProductReportInterface
         if($totalPlan > 0){
             $percentage = ($totalReal * 100) / $totalPlan;
         }
+        if($totalPlanBefore > 0){
+            $percentageBefore = ($totalRealBefore * 100) / $totalPlanBefore;
+        }
         $total = array(
             'tp' => $totalPlan,
             'tr' => $totalReal,
             'percentage' => $percentage,
             
-            'total_month_before' => $totalMonthBefore,//Total mes anterior
+            'tp_b' => $totalPlanBefore,
+            'tr_b' => $totalRealBefore,
+            'percentage_b' => $percentageBefore,
         );
         return $total;
     }
@@ -220,7 +227,7 @@ abstract class ProductReport extends BaseModel implements ProductReportInterface
         $day = (int)$now->format("d");
         
         $unrealizedProductions = $this->getUnrealizedProductionsSortByMonth();
-        $totalReal = $totalMonthBefore = 0.0;
+        $totalReal = $totalRealBefore = 0.0;
         foreach ($unrealizedProductions as $unrealizedProduction) {
             $monthDetail = $unrealizedProduction->getMonth();
             if($monthDetail > $month){
@@ -231,14 +238,14 @@ abstract class ProductReport extends BaseModel implements ProductReportInterface
                 $totalToDay = $unrealizedProduction->getTotalToDay($day);
                 $totalReal = $totalReal + $totalToDay;
             }else{
-                $totalMonthBefore = $totalMonthBefore + $unrealizedProduction->getTotal();
                 $totalReal = $totalReal + $unrealizedProduction->getTotal();
+                $totalRealBefore = $totalReal;
             }
         }
         $total = array(
             'tr' => $totalReal,
             
-            'total_month_before' => $totalMonthBefore,//Total mes anterior
+            'tr_b' => $totalRealBefore,//Total mes anterior
         );
         return $total;
     }
