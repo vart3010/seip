@@ -47,6 +47,12 @@ abstract class Chart
      */
     const TYPE_CHART_BARS_AREA = 6;
     
+    
+    
+    
+    
+    
+    
     // NOMBRES DE LOS GRÁFICOS
     
     /**
