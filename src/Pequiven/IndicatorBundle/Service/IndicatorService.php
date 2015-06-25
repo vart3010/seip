@@ -630,7 +630,7 @@ class IndicatorService implements ContainerAwareInterface {
             foreach ($arrayVariables as $arrayVariable) {
                 $set = array();
                 $set["label"] = $arrayVariable['description'] . ': ' . number_format($arrayVariable['value'], 2, ',', '.') . '%';
-                $set["value"] = bcadd($arrayVariable['value'], 0, 2);
+                $set["value"] = bcadd(0.5, 0, 2);
 //                $set["value"] = $sumResultChildren != 0 ? bcdiv($indicatorChildren->getResultReal(), $sumResultChildren, 2) : bcadd(0, 0, 2);
 //                $set["displayValue"] = $indicatorChildren->getRef() . ' - ' . number_format($indicatorChildren->getResultReal(), 2, ',', '.') . '%';
 //                $set["toolText"] = $indicatorChildren->getSummary() . ':{br}' . number_format($indicatorChildren->getResultReal(), 2, ',', '.') . '%';
