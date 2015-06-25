@@ -203,6 +203,22 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
      */
     protected $resultReal = 0;
     
+    /**
+     * ¿El resultado que irá a evaluaciones, será colocado manualmente? Quiere decir que de acuerdo a previa solicitud y justificación se puede editar el resultado del programa de gestión.
+     * 
+     * @var boolean
+     * @ORM\Column(name="updateResultByAdmin",type="boolean")
+     */
+    protected $updateResultByAdmin = false;
+    
+    /**
+     * Resultado modificado
+     * 
+     * @var float
+     * @ORM\Column(name="resultModified",type="float")
+     */
+    protected $resultModified = 0; 
+    
     public function __construct() {
         $this->responsibles = new \Doctrine\Common\Collections\ArrayCollection();
         $this->histories = new \Doctrine\Common\Collections\ArrayCollection();
@@ -710,6 +726,51 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
         $this->forcePenalize = $forcePenalize;
         
         return $this;
+    }
+    
+    /**
+     * Set updateResultByAdmin
+     *
+     * @param boolean $updateResultByAdmin
+     * @return ArrangementProgram
+     */
+    public function setUpdateResultByAdmin($updateResultByAdmin)
+    {
+        $this->updateResultByAdmin = $updateResultByAdmin;
+
+        return $this;
+    }
+
+    /**
+     * Get updateResultByAdmin
+     *
+     * @return boolean 
+     */
+    public function getUpdateResultByAdmin()
+    {
+        return $this->updateResultByAdmin;
+    }
+    
+    /**
+     * Set resultModified
+     * @param float $resultModified
+     * @return ArrangementProgram
+     */
+    public function setResultModified($resultModified)
+    {
+        $this->resultModified = $resultModified;
+
+        return $this;
+    }
+
+    /**
+     * Get resultModified
+     *
+     * @return float 
+     */
+    public function getResultModified()
+    {
+        return $this->resultModified;
     }
 
     public function __clone() 

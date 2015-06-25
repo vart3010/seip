@@ -110,7 +110,7 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
                 $arrangementPrograms[$key] = array(
                     'id' => sprintf('PG-%s',$arrangementProgram->getId()),
                     'description' => $arrangementProgram->getRef(),
-                    'result' => $this->formatResult($arrangementProgram->getResult()),
+                    'result' => $arrangementProgram->getUpdateResultByAdmin() ? $this->formatResult($arrangementProgram->getResultModified()) : $this->formatResult($arrangementProgram->getResult()),
                     'dateStart' => array(
                         'plan' => $this->formatDateTime($planDateStart),
                         'real' => $this->formatDateTime($realDateStart)
@@ -175,13 +175,13 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
                     $allArrangementPrograms[$arrangementProgram->getId()] = $arrangementProgram;
                 }
                 foreach ($objetive->getIndicators() as $indicator) {
-                    $allIndicators[$indicator->getId()] = $indicator;;
+                    $allIndicators[$indicator->getId()] = $indicator;
                 }
                 
                 $data = array(
                     'id' => sprintf('OB-%s',$objetive->getId()),
                     'description' => $objetive->getDescription(),
-                    'result' => $this->formatResult($objetive->getResult()),
+                    'result' => $objetive->getUpdateResultByAdmin() ? $this->formatResult($objetive->getResultModified()) : $this->formatResult($objetive->getResult()),
                     'dateStart' => array(
                         'plan' => $this->formatDateTime($planDateStart),
                         'real' => $this->formatDateTime($planDateStart)
@@ -216,7 +216,7 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
                 $goals[$key] = array(
                     'id' => sprintf('ME-%s',$goal->getId()),
                     'description' => $goal->getName(),
-                    'result' => $this->formatResult($goal->getResult()),
+                    'result' => $goal->getUpdateResultByAdmin() ? $this->formatResult($goal->getResultModified()) : $this->formatResult($goal->getResult()),
                     'dateStart' => array(
                         'plan' => $this->formatDateTime($planDateStart),
                         'real' => $this->formatDateTime($realDateStart)

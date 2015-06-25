@@ -25,7 +25,7 @@ abstract class Chart
     /**
      * Gráfico tipo dona para mostrar las variables de la fórmula del indicador.
      */
-    const TYPE_CHART_VARIABLES_DOUGHNUT = 2;
+    const TYPE_CHART_VARIABLES_FROM_EQUATION_DOUGHNUT = 2;
     
     /**
      * Gráfico para mostrar las variables (sumativas al real o al plan) o etiquetas (de un tipo en especifico, texto o numéricas)
@@ -47,6 +47,12 @@ abstract class Chart
      */
     const TYPE_CHART_BARS_AREA = 6;
     
+    
+    
+    
+    
+    
+    
     // NOMBRES DE LOS GRÁFICOS
     
     /**
@@ -62,7 +68,7 @@ abstract class Chart
     /**
      * Nombre del gráfico para mostrar las variables de los indicadores 
      */
-    const CHART_INDICATORS_WITH_VARIABLES = 'CHART_INDICATORS_WITH_VARIABLES';
+    const CHART_INDICATORS_WITH_VARIABLES_FROM_EQUATION = 'CHART_INDICATORS_WITH_VARIABLES';
     
     /**
      * Nombre del gráfico para mostrar las variables o etiquetas de los indicadores en forma de torta
@@ -70,7 +76,7 @@ abstract class Chart
     const CHART_INDICATORS_VARIABLES_OR_TAGS_IN_PIE = 'CHART_INDICATORS_VARIABLES_OR_TAGS_IN_PIE';
     
     /**
-     * Nombre del gráfico para mostrar las variables o etiquetas de los indicadores en forma de Barra t Area
+     * Gráfico para mostrar las variables de los indicadores en forma de barra y area 
      */
     const CHART_INDICATORS_BARS_AREA = 'CHART_INDICATORS_BARS_AREA';
     
@@ -114,7 +120,7 @@ abstract class Chart
          static $typesOfChart = array(
             self::TYPE_CHART_INDICATORS_ASSOCIATED => 'chart.type.indicatorsAssociatedDoughnut',
             self::TYPE_CHART_COLUMN_REAL_PLAN => 'chart.type.indicatorsAssociatedRealPlanWithResult',
-            self::TYPE_CHART_VARIABLES_DOUGHNUT => 'chart.type.indicatorsDoughnutWithVariables',
+            self::TYPE_CHART_VARIABLES_FROM_EQUATION_DOUGHNUT => 'chart.type.indicatorsDoughnutWithVariables',
             self::TYPE_CHART_PIE_VARIABLES_OR_TAGS => 'chart.type.indicatorsVariablesOrTagsInPie',
             self::TYPE_CHART_COLUMN_FROM_FORMULA_PARAMETERS => 'chart.type.resultsOfIndicator',
             self::TYPE_CHART_PIE_FROM_TAGS => 'chart.type.resultsOfVariable',

@@ -40,9 +40,17 @@ class ObjetiveAdmin extends Admin
                 'translation_domain' => 'PequivenObjetiveBundle'
             ))
              ;
+         
+         if ($this->isGranted('ROLE_SEIP_UPDATE_RESULT_OBJECTS')){
+            $show
+                ->add('updateResultByAdmin')
+                ->add('resultModified')
+                    ;
+        }
     }
     
     protected function configureFormFields(FormMapper $form) {
+        $object = $this->getSubject();
         $form
             ->tab('General')
                     ->add('description')
@@ -103,6 +111,26 @@ class ObjetiveAdmin extends Admin
                 ->end()
             ->end()
         ;
+        if ($this->isGranted('ROLE_SEIP_UPDATE_RESULT_OBJECTS')){
+            $form
+                ->tab('Details')
+                    ->add('updateResultByAdmin', null, array(
+                'required' => false,
+            ))
+                    ->end()
+                ->end()
+            ;
+            if ($object != null && $object->getId() !== null) {
+                if ($object->getUpdateResultByAdmin()) {
+                    $form
+                        ->tab('Details')
+                            ->add('resultModified')
+                            ->end()
+                        ->end()
+                    ;
+                }
+            }
+        }
     }
     
     protected function configureDatagridFilters(DatagridMapper $filter) {
@@ -118,6 +146,9 @@ class ObjetiveAdmin extends Admin
                 'translation_domain' => 'PequivenObjetiveBundle'
             ))
             ;
+        if ($this->isGranted('ROLE_SEIP_UPDATE_RESULT_OBJECTS')){
+            $filter->add('updateResultByAdmin');
+        }
     }
     
     protected function configureListFields(ListMapper $list) {
@@ -127,6 +158,9 @@ class ObjetiveAdmin extends Admin
             ->add('weight')
             ->add('status')
             ;
+        if ($this->isGranted('ROLE_SEIP_UPDATE_RESULT_OBJECTS')){
+            $list->add('updateResultByAdmin',null, array('editable' => true));
+        }
     }
     
     protected function configureRoutes(\Sonata\AdminBundle\Route\RouteCollection $collection) 

@@ -46,43 +46,6 @@
         <div class="nine-columns nine-columns-tablet six-columns-mobile new-row-mobile">
 
 
-            {#<div class="standard-tabs margin-bottom" >
-                <ul class="tabs">
-                    <li class="active"><a href="#tab-8">Selected tab</a></li>
-                    <li><a href="#tab-5">Another tab</a></li>
-                    <li><a href="#tab-2">Another tab</a></li>
-                    <li class="disabled"><a href="#tab-4">Disabled tab</a></li>
-                    <li>Non-active</li>
-                </ul>
-
-                <div class="tabs-content">
-
-                    <div id="tab-5" class="with-padding">
-
-                        Selected tab
-
-                    </div>
-
-                    <div id="tab-8" class="with-padding">
-
-                        Alternate tab 1
-
-                    </div>
-
-                    <div id="tab-2" class="with-padding">
-
-                        Alternate tab 2
-
-                    </div>
-
-                    <div id="tab-4" class="with-padding">
-
-                        Disabled tab
-
-                    </div>
-
-                </div>
-            </div>#}
 
             {#<div ng-controller="DashboardController" ng-init="renderWidgetMultiLevelPie('pie',{{ dataMultiLevelPie|json_encode() }},'100%','400')">
                 <span id="pie"></span>
@@ -102,59 +65,46 @@
                         <ul class="tabs">
                             {% set cont = 1 %}
                             {% for chart in Charts %}
+                                {% set grafico = "grafico"~loop.index %}
                                 <li {% if cont == 1 %} class="active" {% endif %}>
-                                    <a style="color: #000000;" href="#tab-{{ chart.typeOfChart }}">{{ chart.shortDescription }} </a>
+                                    <a style="color: #000000;" href="#tab-{{ grafico }}">{{ chart.shortDescription }} </a>
                                 </li>
                                 {% set cont = cont + 1 %}
                             {% endfor %}
                         </ul>
                         <div class="tabs-content" {#style="min-height: 500px;"#}>
                             {% for chart in Charts %}
-                                {{ chart.typeOfChart }}
+                                {% set grafico = "grafico"~loop.index %}
                                 {% if  chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_INDICATORS_ASSOCIATED') %}
-                                    <div id="tab-{{ chart.typeOfChart }}" ng-init="chargeChartDoughnut2d({{ indicator.id }})" fusioncharts
+                                    <div id="tab-{{ grafico }}"  ng-controller="DashboardController" ng-init="chargeChartDoughnut2d({{ indicator.id }},'{{ grafico }}','100','500')">
+                                        <span id="{{ grafico }}"></span>
+                                    </div>
+                                    {#<div id="tab-{{ chart.typeOfChart }}" ng-init="chargeChartDoughnut2d({{ indicator.id }})" fusioncharts
                                          width="100%"
                                          height="400"
                                          type="{{ chart.alias }}"
                                          dataFormat= "json"
                                          dataSource="{$chartDoughnut2d$}" >
-                                    </div>
+                                    </div>#}
                                 {% endif %}
                                 {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_COLUMN_REAL_PLAN')  %}
-                                    <div id="tab-{{ chart.typeOfChart }}" ng-init="chargeChartColumnLineDualAxis({{ indicator.id }})" fusioncharts
-                                         width="100%"
-                                         height="500"
-                                         type="{{ chart.alias }}"
-                                         dataFormat= "json"
-                                         dataSource="{$chartColumnLineDualAxis$}" >
+                                    <div id="tab-{{ grafico }}"  ng-controller="DashboardController" ng-init="chargeChartColumnLineDualAxis({{ indicator.id }},'{{ grafico }}','100','500')">
+                                        <span id="{{ grafico }}"></span>
                                     </div>
                                 {% endif %}
-                                {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_VARIABLES_DOUGHNUT')  %}
-                                    <div id="tab-{{ chart.typeOfChart }}" ng-init="chargeChartDoughnut2dWithVariables({{ indicator.id }})" fusioncharts
-                                         width="100%"
-                                         height="500"
-                                         type="{{ chart.alias }}"
-                                         dataFormat= "json"
-                                         dataSource="{$chartDoughnutdosdWithVariables$}" >
+                                {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_VARIABLES_FROM_EQUATION_DOUGHNUT')  %}
+                                    <div id="tab-{{ grafico }}"  ng-controller="DashboardController" ng-init="chargeChartDoughnut2dWithVariablesFromEquation({{ indicator.id }},'{{ grafico }}','100','500')">
+                                        <span id="{{ grafico }}"></span>
                                     </div>
                                 {% endif %}
                                 {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_PIE_VARIABLES_OR_TAGS')  %}
-                                    <div id="tab-{{ chart.typeOfChart }}" ng-init="chargeChartPieVariablesOrTags({{ indicator.id }})" fusioncharts
-                                         width="100%"
-                                         height="500"
-                                         type="{{ chart.alias }}"
-                                         dataFormat= "json"
-                                         dataSource="{$chartPieVariablesOrTags$}" >
+                                    <div id="tab-{{ grafico }}"  ng-controller="DashboardController" ng-init="chargeChartPieVariablesOrTags({{ indicator.id }},'{{ grafico }}','100','500')">
+                                        <span id="{{ grafico }}"></span>
                                     </div>
                                 {% endif %}
-                                
                                 {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_BARS_AREA')  %}
-                                    <div id="tab-{{ chart.typeOfChart }}" ng-init="chargeChartBarsArea({{ indicator.id }})" fusioncharts
-                                         width="100%"
-                                         height="500"
-                                         type="{{ chart.alias }}"
-                                         dataFormat= "json"
-                                         dataSource="{$chargeChartBarsArea$}" >
+                                    <div id="tab-{{ grafico }}"  ng-controller="DashboardController" ng-init="chargeChartBarsArea({{ indicator.id }},'{{ grafico }}','100','500')">
+                                        <span id="{{ grafico }}"></span>
                                     </div>
                                 {% endif %}
                             {% endfor %}

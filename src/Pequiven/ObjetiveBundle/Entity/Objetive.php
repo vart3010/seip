@@ -295,6 +295,22 @@ class Objetive extends modelObjetive implements ResultItemInterface,PeriodItemIn
     protected $details;
     
     /**
+     * ¿El resultado que irá a evaluaciones, será colocado manualmente? Quiere decir que de acuerdo a previa solicitud y justificación se puede editar el resultado del objetivo.
+     * 
+     * @var boolean
+     * @ORM\Column(name="updateResultByAdmin",type="boolean")
+     */
+    protected $updateResultByAdmin = false;
+    
+    /**
+     * Resultado modificado
+     * 
+     * @var float
+     * @ORM\Column(name="resultModified",type="float")
+     */
+    protected $resultModified = 0; 
+    
+    /**
      * Constructor
      */
     public function __construct() {
@@ -1256,5 +1272,50 @@ class Objetive extends modelObjetive implements ResultItemInterface,PeriodItemIn
     public function getManagementSystems()
     {
         return $this->managementSystems;
+    }
+    
+    /**
+     * Set updateResultByAdmin
+     *
+     * @param boolean $updateResultByAdmin
+     * @return Objetive
+     */
+    public function setUpdateResultByAdmin($updateResultByAdmin)
+    {
+        $this->updateResultByAdmin = $updateResultByAdmin;
+
+        return $this;
+    }
+
+    /**
+     * Get updateResultByAdmin
+     *
+     * @return boolean 
+     */
+    public function getUpdateResultByAdmin()
+    {
+        return $this->updateResultByAdmin;
+    }
+    
+    /**
+     * Set resultModified
+     * @param float $resultModified
+     * @return Objetive
+     */
+    public function setResultModified($resultModified)
+    {
+        $this->resultModified = $resultModified;
+
+        return $this;
+    }
+
+    /**
+     * Get resultModified
+     *
+     * @return float 
+     */
+    public function getResultModified()
+    {
+        return $this->resultModified;
     }
 }
