@@ -549,7 +549,7 @@ class User extends BaseUser implements UserInterface,UserBoxInterface,  PeriodIt
                 Rol::ROLE_SUPER_ADMIN
             );
             foreach ($groups as $group) {
-                if($group->getLevel() > $level && !in_array($group->getLevel(), $groupsLevelAdmin))
+                if($group->getLevel() > $level && !in_array($group->getLevel(), $groupsLevelAdmin) && $group->getTypeRol() == Rol::TYPE_ROL_OWNER)
                 {
                     $level = $group->getLevel();
                 }
