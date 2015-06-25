@@ -132,7 +132,7 @@ abstract class ProductReport extends BaseModel implements ProductReportInterface
             }
             
         }
-        $percentageGross = $percentageNet = $percentageGrossBefore = 0.0;
+        $percentageGross = $percentageNet = $percentageGrossBefore = $percentageNetBefore = 0.0;
         if($totalGrossPlan > 0){
             $percentageGross = ($totalGrossReal * 100) / $totalGrossPlan;
         }
@@ -197,7 +197,7 @@ abstract class ProductReport extends BaseModel implements ProductReportInterface
                 }
             }
         }
-        $percentage = 0;
+        $percentage = $percentageBefore = 0;
         if($totalPlan > 0){
             $percentage = ($totalReal * 100) / $totalPlan;
         }
