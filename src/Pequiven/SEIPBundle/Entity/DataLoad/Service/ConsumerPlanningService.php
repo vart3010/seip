@@ -202,7 +202,7 @@ class ConsumerPlanningService extends BaseModel
         $day = (int)$now->format("d");
         
         $details = $this->getDetailsByMonth();
-        $totalPlan = $totalReal = $totalMonthBefore = 0.0;
+        $totalPlan = $totalReal = $totalPlanBefore = $totalRealBefore = 0.0;
         foreach ($details as $monthDetail => $detail) {
                 if($monthDetail > $month){
                     break;
@@ -213,21 +213,28 @@ class ConsumerPlanningService extends BaseModel
                     $totalPlan = $totalPlan + $totalToDay['tp'];
                     $totalReal = $totalReal + $totalToDay['tr'];
                 }else{
-                    $totalMonthBefore = $totalMonthBefore + $detail->getTotalReal();
                     $totalPlan = $totalPlan + $detail->getTotalPlan();
                     $totalReal = $totalReal + $detail->getTotalReal();
+                    
+                    $totalPlanBefore = $totalPlan;
+                    $totalRealBefore = $totalReal;
                 }
         }
-        $percentage = 0;
+        $percentage = $percentageBefore = 0;
         if($totalPlan > 0){
             $percentage = ($totalReal * 100) / $totalPlan;
+        }
+        if($totalPlanBefore > 0){
+            $percentageBefore = ($totalRealBefore * 100) / $totalPlanBefore;
         }
         $total = array(
             'tp' => $totalPlan,
             'tr' => $totalReal,
             'percentage' => $percentage,
             
-            'total_month_before' => $totalMonthBefore,//Total mes anterior
+            'tp_b' => $totalPlanBefore,
+            'tr_b' => $totalRealBefore,
+            'percentage_b' => $percentageBefore,
         );
         return $total;
     }

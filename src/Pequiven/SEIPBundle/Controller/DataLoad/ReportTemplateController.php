@@ -142,17 +142,45 @@ class ReportTemplateController extends SEIPController
     public function vizualiceAction(Request $request)
     {
         $dateString = $request->get('dateReport',null);
+        $plantReportId = (int)$request->get('plantReport',null);
         if($dateString !== null){
             $dateReport = \DateTime::createFromFormat('d/m/Y', $dateString);
         }else {
             $dateReport = new \DateTime();
         }
-        $plantReport = $this->get('pequiven.repository.plant_report')->find(15);
-        $plantReports = array($plantReport);
+        if(!$this->getSecurityService()->isGranted('ROLE_SEIP_DATA_LOAD_CHANGE_DATE')){
+            $dateReport = new \DateTime();
+        }
+        $plantReport = $this->get('pequiven.repository.plant_report')->find($plantReportId);
+        $plantReports = array();
+        if($plantReport){
+            $plantReports[] = $plantReport;
+        }
         
+        $form = $this
+            ->createFormBuilder()
+            ->add('plantReport','entity',array(
+                'label_attr' => array('class' => 'label bold'),
+                'class' => 'Pequiven\SEIPBundle\Entity\DataLoad\PlantReport',
+                'property' => 'plant',
+                'required' => true,
+                'empty_data' => $plantReport,
+                'empty_value' => $plantReport,
+                'translation_domain' => 'PequivenSEIPBundle',
+                'attr' => array('class' => 'select2 input-xlarge'),
+                'multiple' => false,
+                'group_by' => 'reportTemplate'
+                )
+            )->getForm();
+        
+        if($request->isMethod('POST') && $form->submit($request)){
+            
+        }
         $data = array(
             'dateReport' => $dateReport,
             'plantReports' => $plantReports,
+            'plantReportId' => $plantReportId,
+            'form' => $form->createView(),
         );
 
         $view = $this
