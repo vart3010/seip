@@ -762,7 +762,7 @@ class IndicatorService implements ContainerAwareInterface {
         $medition["renderas"] = "line";
 
 
-        $label1 = $label2 = $label3  = $dataPlan = $dataMedition = array();
+        $label1 = $label2 = $label3 = $dataPlan = $dataMedition = array();
         $label1["label"] = 'area barra 1';
         $label2["label"] = 'area barra 2';
         $label3["label"] = 'area barra 3';
@@ -1293,6 +1293,57 @@ class IndicatorService implements ContainerAwareInterface {
 
         //var_dump($band);
         return $band;
+    }
+
+    public function isGrantedButton(Indicator $indicator) {
+        $freq = $indicator->getFrequencyNotificationIndicator()->getDays();
+        $rs = 360 / $freq;
+
+        $valuesIndicator = count($indicator->getValuesIndicator());
+
+        if ($rs == $valuesIndicator) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public function isGrantToEdit(Indicator $indicator,$indice) {
+        $freq = $indicator->getFrequencyNotificationIndicator()->getDays();
+
+        $trim[0] = $indicator->getPeriod()->getIsLoadIndicatorTrim1();
+        $trim[1] = $indicator->getPeriod()->getIsLoadIndicatorTrim2();
+        $trim[2] = $indicator->getPeriod()->getIsLoadIndicatorTrim3();
+        $trim[3] = $indicator->getPeriod()->getIsLoadIndicatorTrim4();
+        
+        $x = $indice*$freq;
+        
+        var_dump($indice);
+        
+        $rs = array();  
+        $lastRs=30;
+        $conTri = 1;
+        $tiempo_trimestre=0;
+        foreach ($trim as $t) {
+            //$limitTrim = 3*($conTri+1)*30;
+            $tiempo_trimestre = $conTri*30*3;
+            
+            if($x <= $tiempo_trimestre && $t) {
+                    
+            }
+//             
+//            if ($t) {
+//                if ($x <= $limitTrim) {
+//                    //$rs[] = "true";
+//                }
+//            }
+//            else {
+//                $rs[] = "false";
+//            }
+            $conTri++;
+            $lastRs = $tiempo_trimestre;
+        }
+        
     }
 
 }
