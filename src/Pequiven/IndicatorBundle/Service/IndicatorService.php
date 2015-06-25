@@ -1340,10 +1340,22 @@ class IndicatorService implements ContainerAwareInterface {
         $trim[2] = $indicator->getPeriod()->getIsLoadIndicatorTrim3();
         $trim[3] = $indicator->getPeriod()->getIsLoadIndicatorTrim4();
         
-        $x = $indice*$freq;
         
+        
+        for($g=0;$g<strlen($indice);$g++) {
+            $indice =  $indice[$g];
+        }
         var_dump($indice);
         
+        //$x = bcmul(substr($indice, 0,1), bcadd($freq,0),2);
+        $x = $indice*$freq;
+        
+        
+       
+        
+        
+        
+         
         $rs = array();  
         $lastRs=30;
         $conTri = 1;
@@ -1351,9 +1363,9 @@ class IndicatorService implements ContainerAwareInterface {
         foreach ($trim as $t) {
             //$limitTrim = 3*($conTri+1)*30;
             $tiempo_trimestre = $conTri*30*3;
-            
+            //echo $x."-".$tiempo_trimestre;
             if($x <= $tiempo_trimestre && $t) {
-                    
+                 ///   var_dump("true");
             }
 //             
 //            if ($t) {
