@@ -101,7 +101,8 @@ abstract class ProductReport extends BaseModel implements ProductReportInterface
         $month = (int)$now->format("m");
         $day = (int)$now->format("d");
         $productDetailDailyMonths = $this->getProductDetailDailyMonthsSortByMonth();
-        $totalGrossPlan = $totalGrossReal = $totalNetPlan = $totalNetReal = $totalMonthBefore = 0.0;
+        $totalGrossPlan = $totalGrossReal = $totalNetPlan = $totalNetReal = 
+                $totalGrossPlanBefore = $totalGrossRealBefore = $totalNetPlanBefore = $totalNetRealBefore = 0.0;
         foreach ($productDetailDailyMonths as $monthDetail => $productDetailDailyMonth) {
             if($monthDetail > $month){
                 break;
@@ -116,22 +117,33 @@ abstract class ProductReport extends BaseModel implements ProductReportInterface
                 $totalNetPlan = $totalNetPlan + $totalNetToDay['tp'];
                 $totalNetReal = $totalNetReal + $totalNetToDay['tr'];
             }else{
-                $totalMonthBefore = $totalMonthBefore + $productDetailDailyMonth->getTotalGrossReal();
                 
                 $totalGrossPlan = $totalGrossPlan + $productDetailDailyMonth->getTotalGrossPlan();
                 $totalGrossReal = $totalGrossReal + $productDetailDailyMonth->getTotalGrossReal();
 
                 $totalNetPlan = $totalNetPlan + $productDetailDailyMonth->getTotalNetPlan();
                 $totalNetReal = $totalNetReal + $productDetailDailyMonth->getTotalNetReal();
+                
+                $totalGrossPlanBefore = $totalGrossPlan;
+                $totalGrossRealBefore = $totalGrossReal;
+                
+                $totalNetPlanBefore = $totalNetPlan;
+                $totalNetRealBefore = $totalNetReal;
             }
             
         }
-        $percentageGross = $percentageNet = 0.0;
+        $percentageGross = $percentageNet = $percentageGrossBefore = 0.0;
         if($totalGrossReal > 0){
             $percentageGross = ($totalGrossReal * 100) / $totalGrossPlan;
         }
+        if($totalGrossRealBefore > 0){
+            $percentageGrossBefore = ($totalGrossRealBefore * 100) / $totalGrossPlanBefore;
+        }
         if($totalNetReal > 0){
             $percentageNet = ($totalNetReal * 100) / $totalNetPlan;
+        }
+        if($totalNetRealBefore > 0){
+            $percentageNetBefore = ($totalNetRealBefore * 100) / $totalNetPlanBefore;
         }
         $total = array(
             'tp_gross' => $totalGrossPlan,
@@ -142,7 +154,13 @@ abstract class ProductReport extends BaseModel implements ProductReportInterface
             'tr_net' => $totalNetReal,
             'percentage_net' => $percentageNet,
             
-            'total_month_before' => $totalMonthBefore,//Total mes anterior
+            'tp_gross_b' => $totalGrossPlanBefore,//Total plan mes anterior
+            'tr_gross_b' => $totalGrossRealBefore,
+            'percentage_gross_b' => $percentageGrossBefore,
+            
+            'tp_net_b' => $totalNetPlanBefore,
+            'tr_net_b' => $totalNetRealBefore,
+            'percentage_net_b' => $percentageNetBefore,
         );
         return $total;
     }
