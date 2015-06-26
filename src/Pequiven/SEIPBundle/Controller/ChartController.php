@@ -108,6 +108,7 @@ class ChartController extends SEIPController {
         return $response;
     }
 
+   
     /**
      * Servicio de los Indicadores
      * @return \Pequiven\IndicatorBundle\Service\IndicatorService
