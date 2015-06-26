@@ -112,15 +112,28 @@
                 {% if indicator.isShowRealValue == true %}
                     <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                         <p class="inline-label">
-                            <label class="label">{{ 'pequiven_indicator.value'|trans }}</label>
-                            {$ indicator.valueFinal|myNumberFormat:2 $}&nbsp;{% if indicatorDetails.resultRealUnit != '' %}({{ indicatorDetails.resultRealUnit }}){% endif %}
+                            <label class="label">
+                                {% if indicator.getIsValueFromTextReal == true  %} 
+                                    {{ indicator.getTextValueFromVariableReal }}
+                                {% else %}
+                                    {{ 'pequiven_indicator.value'|trans }}
+                                {% endif %}
+                            </label>
+                            {$ indicator.valueFinal|myNumberFormat:2 $}&nbsp;
+                            {% if indicatorDetails.resultRealUnit != '' %}({{ indicatorDetails.resultRealUnit }}){% endif %}
                         </p>
                     </div>
                 {% endif %}
                 {% if indicator.isShowPlanValue == true %}
                     <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                         <p class="inline-label">
-                            <label class="label">{{ 'form.total_plan'|trans }}</label>
+                            <label class="label">
+                                {% if indicator.getIsValueFromTextPlan == true  %} 
+                                    {{ indicator.getTextValueFromVariablePlan }}
+                                {% else %}
+                                    {{ 'form.total_plan'|trans }}
+                                {% endif%}
+                            </label>
                             {% if indicator.totalPlan != 0 %}
                                 {{ indicator.totalPlan|myNumberFormat }}&nbsp;{% if indicatorDetails.resultPlanUnit != '' %}({{ indicatorDetails.resultPlanUnit }}){% endif %}
                             {% else %}
@@ -168,7 +181,7 @@
                         </p>
                     </div>
                 {% endif%}
-                
+
                 {% if level == constant('Pequiven\\IndicatorBundle\\Model\\IndicatorLevel::LEVEL_OPERATIVO') %}
                     <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                         <p class="inline-label">

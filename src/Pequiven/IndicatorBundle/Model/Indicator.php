@@ -125,6 +125,12 @@ abstract class Indicator implements IndicatorInterface {
     protected $calculationMethod = self::CALCULATION_METHOD_ACCUMULATION_OF_VARIABLES;
 
     /**
+     * Variable que se va mostrar en plantilla de indicador
+     * @var type 
+     */
+    protected $variableToShow;
+
+    /**
      * Set indicatorLevel
      *
      * @param \Pequiven\IndicatorBundle\Entity\IndicatorLevel $indicatorLevel
@@ -180,7 +186,6 @@ abstract class Indicator implements IndicatorInterface {
         return $typesOfCalculation;
     }
 
-   
     function getTypeOfCalculationLabel() {
         $typesOfCalculation = self::getTypesOfCalculation();
         if (isset($typesOfCalculation[$this->typeOfCalculation]) === false) {
@@ -320,4 +325,5 @@ abstract class Indicator implements IndicatorInterface {
         );
     }
 
+    
 }

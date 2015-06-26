@@ -173,6 +173,20 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                 ->add('backward', null, array(
                     'required' => false,
                 ))
+                ->add('isValueFromTextReal', null, array(
+                    'required' => false,
+                ))
+                ->add('textValueFromVariableReal',null,array(
+                    'required' => false,
+                ))
+                
+                ->add('isValueFromTextPlan', null, array(
+                    'required' => false,
+                ))
+                ->add('textValueFromVariablePlan',null,array(
+                    'required' => false,
+                ))
+                
                 ->end()
                 ->end()
         ;

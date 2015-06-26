@@ -461,6 +461,38 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      */
     private $variablesRealPlanComplement = false;
     
+    
+    /**
+     * 
+     * @var boolean
+     * @ORM\Column(name="isValueFromTextReal",type="boolean")
+     */
+    private $isValueFromTextReal = false;
+    
+    /**
+     * 
+     * @var type 
+     * @ORM\Column(name="textValueFromVariableReal",type="text")
+     */
+    private $textValueFromVariableReal;
+    
+    
+     /**
+     * 
+     * @var boolean
+     * @ORM\Column(name="isValueFromTextPlan",type="boolean")
+     */
+    private $isValueFromTextPlan = false;
+    
+    /**
+     * @var type 
+     * @ORM\Column(name="textValueFromVariablePlan",type="text")
+     */
+    private $textValueFromVariablePlan;
+    
+    
+    
+    
     /**
      * Constructor
      */
@@ -2003,4 +2035,105 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
         return $this->variablesRealPlanComplement;
     }
 
+    
+    /**
+     * 
+     * @param type $isValueFromTextReal
+     * @return \Pequiven\IndicatorBundle\Entity\Indicator
+     */
+     public function setIsValueFromTextReal($isValueFromTextReal)
+    {
+        $this->isValueFromTextReal= $isValueFromTextReal;
+
+        return $this;
+    }
+    
+    
+    /**
+     * 
+     * @return type
+     */
+    public function getIsValueFromTextReal()
+    {
+        return $this->isValueFromTextReal;
+    }
+    
+    
+    /**
+     * 
+     * @param type $TextValueFromVariableReal
+     * @return \Pequiven\IndicatorBundle\Entity\Indicator
+     */
+     public function setTextValueFromVariableReal($TextValueFromVariableReal)
+    {
+        $this->textValueFromVariableReal= $TextValueFromVariableReal;
+
+        return $this;
+    }
+    
+    /**
+     * 
+     * @return type
+     */
+    public function getTextValueFromVariableReal()
+    {
+        return $this->textValueFromVariableReal;
+    }
+    
+    
+    
+    /**
+     * 
+     * @param type $isValueFromTextPlan
+     * @return \Pequiven\IndicatorBundle\Entity\Indicator
+     */
+     public function setIsValueFromTextPlan($isValueFromTextplan)
+    {
+        $this->isValueFromTextPlan= $isValueFromTextplan;
+
+        return $this;
+    }
+    
+    
+    /**
+     * 
+     * @return type
+     */
+    public function getIsValueFromTextPlan()
+    {
+        return $this->isValueFromTextPlan;
+    }
+    
+    
+    
+    
+    
+    /**
+     * 
+     * @param type $TextValueFromVariablePlan
+     * @return \Pequiven\IndicatorBundle\Entity\Indicator
+     */
+     public function setTextValueFromVariablePlan($TextValueFromVariablePlan)
+    {
+        $this->textValueFromVariablePlan = $TextValueFromVariablePlan;
+
+        return $this;
+    }
+    
+    /**
+     * 
+     * @return type
+     */
+    public function getTextValueFromVariablePlan()
+    {
+        return $this->textValueFromVariablePlan;
+    }
+    
+    
+    
+    
+    
+            
+            
+            
 }
