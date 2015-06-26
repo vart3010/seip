@@ -2363,11 +2363,11 @@ angular.module('seipModule.controllers', [])
             }
 
             //Gráfico en forma de dona para mostrar las variables plan y real a partir de ecuación de la fórmula del indicador
-            $scope.chargeChartDoughnut2dWithVariablesFromEquation = function (indicatorId, render, width, height)  {
-                var getdataChartDoughnut2dWithVariablesFromEquation = Routing.generate("getDataChartDoughnutWithVariablesFromEquation", {id: indicatorId});
-                $http.get(getdataChartDoughnut2dWithVariablesFromEquation).success(function (data) {
+            $scope.chargeChartDoughnut2dWithVariablesRealPlan = function (indicatorId, render, width, height)  {
+                var getdataChartDoughnut2dWithVariablesRealPlan = Routing.generate("getDataChartDoughnutWithVariablesRealPlan", {id: indicatorId});
+                $http.get(getdataChartDoughnut2dWithVariablesRealPlan).success(function (data) {
                     FusionCharts.ready(function () {
-                        var revenueChartDoughnut2dWithVariablesFromEquation = new FusionCharts({
+                        var revenueChartDoughnut2dWithVariablesRealPlan = new FusionCharts({
                             "type": "doughnut2d",
                             "renderAt": render,
                             "width": width + "%",
@@ -2378,8 +2378,8 @@ angular.module('seipModule.controllers', [])
                                 "data": data.dataSource.dataSet
                             }
                         });
-                        revenueChartDoughnut2dWithVariablesFromEquation.setTransparent(true);
-                        revenueChartDoughnut2dWithVariablesFromEquation.render();
+                        revenueChartDoughnut2dWithVariablesRealPlan.setTransparent(true);
+                        revenueChartDoughnut2dWithVariablesRealPlan.render();
                     });
                 });
             }

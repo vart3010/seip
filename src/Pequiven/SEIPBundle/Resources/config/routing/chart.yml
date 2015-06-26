@@ -10,10 +10,10 @@ getDataChartDoughnut:
     options:
         expose: true
         
-getDataChartDoughnutWithVariablesFromEquation:
-    path: /getDataChartDoughnutWithVariablesFromEquation/{id}
+getDataChartDoughnutWithVariablesRealPlan:
+    path: /getDataChartDoughnutWithVariablesRealPlan/{id}
     defaults:
-        _controller: pequiven.controller.seipchart:getDataChartTypeDoughnutWithVariablesFromEquationAction
+        _controller: pequiven.controller.seipchart:getDataChartTypeDoughnutWithVariablesRealPlanAction
         _format: json
     requirements:
         _format: "json|xml"
