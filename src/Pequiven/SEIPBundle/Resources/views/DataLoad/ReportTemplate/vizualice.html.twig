@@ -10,27 +10,47 @@
 
 {% block body %}
     {% set hasPermission = is_granted("ROLE_SEIP_DATA_LOAD_CHANGE_DATE") %}
-    
-    <div class="with-padding">
-        <div class="columns">
-            <div class="six-columns">
-                {{ form_label(form.plantReport) }}
-                {{ form_widget(form.plantReport) }}
-                {{ form_errors(form.plantReport) }}
+    <form action="{{ path("pequiven_report_template_vizualice") }}" method="POST">
+        {{ form_errors(form) }}
+        <div class="with-padding">
+            <div class="columns">
+                <div class="six-columns">
+                    {{ form_label(form.plantReport) }}&nbsp;
+                    {{ form_widget(form.plantReport) }}
+                    {{ form_errors(form.plantReport) }}
+                </div>
+                <div class="six-columns">
+                    {{ form_label(form.dateReport) }}&nbsp;
+                    {{ form_widget(form.dateReport) }}
+                    {{ form_errors(form.dateReport) }}
+                </div>
+                <div class="six-columns">
+                    {{ form_label(form.productsReport) }}&nbsp;
+                    {{ form_widget(form.productsReport) }}
+                    {{ form_errors(form.productsReport) }}
+                </div>
             </div>
-            <div class="six-columns">
-                 <p class="inline-label"><label class="label">{{ "pequiven_seip.date_of_report"|trans }}</label>
-                     {% if hasPermission %}
-                         <a href="{{ path("pequiven_report_template_vizualice",{ dateReport: (dateReport|date_modify("-1 day")|date('d/m/Y')),plantReport: plantReportId }) }}" ><i class="fa fa-chevron-left fa-2x"></i></a>&nbsp;
-                     {% endif %}
-                     <input type="text" id="dateReport" name="dateReport" class="input" value="{{ dateReport|date('d/m/Y') }}" />&nbsp;
-                     {% if hasPermission %}
-                         <a href="{{ path("pequiven_report_template_vizualice",{ dateReport: (dateReport|date_modify("+1 day")|date('d/m/Y')),plantReport: plantReportId }) }}" class="navigate-date"><i class="fa fa-chevron-right fa-2x"></i></a>
-                     {% endif %}
-                 </p>
+            <div class="columns">
+                <div class="two-columns">
+                    {{ form_label(form.showDay) }}&nbsp;
+                    {{ form_widget(form.showDay) }}
+                    {{ form_errors(form.showDay) }}
+                </div>
+                <div class="two-columns">
+                    {{ form_label(form.showMonth) }}&nbsp;
+                    {{ form_widget(form.showMonth) }}
+                    {{ form_errors(form.showMonth) }}
+                </div>
+                <div class="two-columns">
+                    {{ form_label(form.showYear) }}&nbsp;
+                    {{ form_widget(form.showYear) }}
+                    {{ form_errors(form.showYear) }}
+                </div>
             </div>
-        </div>
-     </div>
+            {{ form_rest(form) }}
+            <input type="submit" class="button" value="Refrescar" />
+         </div>
+    </form>
      <div class="with-padding">
          {% for plantReport in plantReports %}
              <div class="columns">
@@ -188,14 +208,14 @@
                 window.location.href = url;
             };
             {% if is_granted("ROLE_SEIP_DATA_LOAD_CHANGE_DATE") %}
-                $('#dateReport').datepicker({
+                $('#form_dateReport').datepicker({
                      changeMonth: true,
                      dateFormat: "dd/mm/yy"
                 }).on("change",function(){
-                    eventChange();
+{#                    eventChange();#}
                 });
             {% endif %}
-            plantReport.on("change",eventChange);
+{#            plantReport.on("change",eventChange);#}
             $(".select2").select2();
         });
     </script>
