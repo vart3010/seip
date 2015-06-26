@@ -103,3 +103,15 @@ pequiven_indicator_list_error:
         _format: html|json|xml
         level: 1|2|3
     methods: [GET]
+    
+    
+getIsGrantEditButton:
+    path: /getIsGrantEditButton/{id}/{index}
+    defaults:
+        _controller: pequiven.controller.indicator:getIsGrantEditButtonAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true

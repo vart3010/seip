@@ -667,11 +667,11 @@ class IndicatorService implements ContainerAwareInterface {
             }
         } elseif (isset($options['withVariablesFromEquation']) && array_key_exists('withVariablesFromEquation', $options)) {//Para que muestre las variables de acuerdo a 
             unset($options['withVariablesFromEquation']);
-            $arrayVariables = $this->getArrayVariablesFormulaWithData($indicator,array('viewVariablesRealPlanFromEquation' => true));
+            $arrayVariables = $this->getArrayVariablesFormulaWithData($indicator, array('viewVariablesRealPlanFromEquation' => true));
             $valueMax = 0;
-            if(!$indicator->getVariablesRealPlanComplement()){
+            if (!$indicator->getVariablesRealPlanComplement()) {
                 foreach ($arrayVariables as $arrayVariable) {
-                    if($arrayVariable['value'] > $valueMax){
+                    if ($arrayVariable['value'] > $valueMax) {
                         $valueMax = $arrayVariable['value'];
                     }
                 }
@@ -881,14 +881,14 @@ class IndicatorService implements ContainerAwareInterface {
             unset($options['viewVariablesRealPlanFromEquation']);
             foreach($valuesIndicator as $valueIndicator){
                 $parameters = $valueIndicator->getFormulaParameters();
-                foreach($parameters as $parameter => $key){
-                    if($parameter == 'real_from_equation' || $parameter == 'plan_from_equation'){
+                foreach ($parameters as $parameter => $key) {
+                    if ($parameter == 'real_from_equation' || $parameter == 'plan_from_equation') {
                         $arrayVariables[$parameter]['value'] = $key;
                         $arrayVariables[$parameter]['description'] = $parameter == 'real_from_equation' ? $indicator->getShowByRealValue() : $indicator->getShowByPlanValue();
                     }
                 }
             }
-        } else{
+        } else {
             $variables = $formula->getVariables();
             
             if(isset($options['viewVariablesFromPlanEquation']) && $options['viewVariablesFromPlanEquation']){
@@ -1425,54 +1425,44 @@ class IndicatorService implements ContainerAwareInterface {
         }
     }
 
-    public function isGrantToEdit(Indicator $indicator,$indice) {
+    public function isGrantToEdit(Indicator $indicator, $indice) {
         $freq = $indicator->getFrequencyNotificationIndicator()->getDays();
+        if ($freq != 360) { //SI ES ANUAL ES REGISTRO SIEMPRE SERA EDITABLE
+            $trim[] = $indicator->getPeriod()->getIsLoadIndicatorTrim1();
+            $trim[] = $indicator->getPeriod()->getIsLoadIndicatorTrim2();
+            $trim[] = $indicator->getPeriod()->getIsLoadIndicatorTrim3();
+            $trim[] = $indicator->getPeriod()->getIsLoadIndicatorTrim4();
 
-        $trim[0] = $indicator->getPeriod()->getIsLoadIndicatorTrim1();
-        $trim[1] = $indicator->getPeriod()->getIsLoadIndicatorTrim2();
-        $trim[2] = $indicator->getPeriod()->getIsLoadIndicatorTrim3();
-        $trim[3] = $indicator->getPeriod()->getIsLoadIndicatorTrim4();
-        
-        
-        
-        for($g=0;$g<strlen($indice);$g++) {
-            $indice =  $indice[$g];
-        }
-        var_dump($indice);
-        
-        //$x = bcmul(substr($indice, 0,1), bcadd($freq,0),2);
-        $x = $indice*$freq;
-        
-        
-       
-        
-        
-        
-         
-        $rs = array();  
-        $lastRs=30;
-        $conTri = 1;
-        $tiempo_trimestre=0;
-        foreach ($trim as $t) {
-            //$limitTrim = 3*($conTri+1)*30;
-            $tiempo_trimestre = $conTri*30*3;
-            //echo $x."-".$tiempo_trimestre;
-            if($x <= $tiempo_trimestre && $t) {
-                 ///   var_dump("true");
+            $x = $indice * $freq;
+
+            $liminf = $x - $freq;
+
+            $rs = array();
+            $lastRs = 0;
+            $conTri = 1;
+            $tiempo_trimestre = 0;
+            $flag = false;
+
+            foreach ($trim as $t) {
+
+                $tiempo_trimestre = $conTri * 30 * 3;
+
+                if ((($x > $lastRs && $x <= $tiempo_trimestre ) || ($liminf >= $lastRs && $liminf < $tiempo_trimestre)) && ($t == 1)) {
+                    $flag = true;
+                }
+
+                $conTri++;
+                $lastRs = $tiempo_trimestre;
             }
-//             
-//            if ($t) {
-//                if ($x <= $limitTrim) {
-//                    //$rs[] = "true";
-//                }
-//            }
-//            else {
-//                $rs[] = "false";
-//            }
-            $conTri++;
-            $lastRs = $tiempo_trimestre;
+
+            if ($flag) {
+                return 1;
+            } else {
+                return 0;
+            }
+        } else {
+            return 1;
         }
-        
     }
 
 }

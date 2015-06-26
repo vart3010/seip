@@ -2472,6 +2472,24 @@ angular.module('seipModule.controllers', [])
                     });
                 });
             }
+
+
+        })
+
+        .controller('ToolsController', function ($scope, ngTableParams, $http, sfTranslator, notifyService) {
+            $scope.isGrantedButtonEdit = function (id,index) {
+                //index = index+1;
+                var data;;
+                var getdataBarsArea = Routing.generate("getIsGrantEditButton", {id: id,index:index});
+                $http.get(getdataBarsArea).success(function (data) {
+                    //console.log(index+"->"+data);
+                    //console.log(data);
+                    if(data=="1") {
+                        $("div#target_"+index).show();
+                    } 
+                });
+
+            }
         })
 
         .controller('DashboardController', function ($scope, ngTableParams, $http, sfTranslator, notifyService) {
