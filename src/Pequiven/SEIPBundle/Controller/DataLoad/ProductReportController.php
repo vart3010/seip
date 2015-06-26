@@ -73,7 +73,6 @@ class ProductReportController extends SEIPController
         $rawMaterialConsumptionPlannings = $resource->getRawMaterialConsumptionPlannings();
         
         $propertyAccessor = \Symfony\Component\PropertyAccess\PropertyAccess::createPropertyAccessor();
-        
         $countProduct = 0;
         $productDetailDailyMonthsCache = $resource->getProductDetailDailyMonthsSortByMonth();
         //Iteramos la planificacion de la produccion
@@ -83,7 +82,8 @@ class ProductReportController extends SEIPController
             $month = $productPlanning->getMonth();
             //Buscamos los dias de paradas del mes
             if(isset($plantStopPlanningsByMonths[$month])){
-                $daysStops = $plantStopPlanningsByMonths[$month];
+                $plantStopPlanning = $plantStopPlanningsByMonths[$month];
+                $daysStops = $plantStopPlanning->getDayStopsByDay();
                 //Dias de paradas del mes
                 foreach ($daysStops as $daysStop) {
                     $daysStopsArray[] = $daysStop->getNroDay();
@@ -173,6 +173,7 @@ class ProductReportController extends SEIPController
                     $propertyAccessor->setValue($productDetailDailyMonth, $propertyDayPlanProduction, $value);
                 }
             }
+            $this->save($productDetailDailyMonth,false);
             $countProduct++;
         }
         if($countProduct > 0){
@@ -202,56 +203,6 @@ class ProductReportController extends SEIPController
                 $this->save($unrealizedProduction,false);
             }
         }
-        
-        //Planificacion de Consumo de materia prima por productos
-//        $rawMaterialConsumptionPlannings = $resource->getRawMaterialConsumptionPlannings();
-//        foreach ($rawMaterialConsumptionPlannings as $rawMaterialConsumptionPlanning) {
-//            //Detalle de consumo de materia prima
-//            $detailRawMaterialConsumptions = $rawMaterialConsumptionPlanning->getDetailByMonth();
-//            foreach ($detailRawMaterialConsumptions as $detailRawMaterialConsumption) 
-//            {
-//                $daysStopsArray = array();
-//                $month = $detailRawMaterialConsumption->getMonth();
-//                if(isset($plantStopPlanningsByMonths[$month])){
-//                    $daysStops = $plantStopPlanningsByMonths[$month];
-//                    foreach ($daysStops as $daysStop) {
-//                        $daysStopsArray[] = $daysStop->getNroDay();
-//                    }
-//                }
-//                $ranges = $detailRawMaterialConsumption->getRanges();
-//                
-//                foreach ($ranges as $range) {
-//                    $monthBudget = $detailRawMaterialConsumption->getMonthBudget();
-//                    $dateFrom = $range->getDateFrom();
-//                    $dateEnd = $range->getDateEnd();
-//
-//                    $dayFrom = $dateFrom->format("d");
-//                    $dayEnd = $dateEnd->format("d");
-//                    $type = $range->getType();
-//                    $originalValue = $range->getValue();
-//                    $value = 0;
-//
-//                    if($type === \Pequiven\SEIPBundle\Model\DataLoad\RawMaterial\Range::TYPE_FIXED_VALUE){
-//                        $value = $originalValue;
-//                    }else if($type === \Pequiven\SEIPBundle\Model\DataLoad\RawMaterial\Range::TYPE_PERCENTAGE_BUDGET){
-//                        $value = ($monthBudget / 100) * $originalValue;
-//                    }
-//
-//                    for($day = $dayFrom; $day < $dayEnd; $day++){
-//                        $dayInt = (int)$day;
-//                        $propertyPath = sprintf("day%sPlan",$dayInt);
-//                        if(in_array($dayInt,$daysStopsArray)){
-//                            $propertyAccessor->setValue($detailRawMaterialConsumption, $propertyPath, 0);
-//                            continue;
-//                        }
-//                        $propertyAccessor->setValue($detailRawMaterialConsumption, $propertyPath, $value);
-//                        $this->save($detailRawMaterialConsumption);
-//                    }
-//                }
-//            }
-//            $rawMaterialConsumptionPlanning->calculate();
-//            $this->save($rawMaterialConsumptionPlanning);
-//        }
         
         $this->flush();
         
