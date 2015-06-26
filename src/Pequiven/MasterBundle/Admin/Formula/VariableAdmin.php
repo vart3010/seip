@@ -20,6 +20,7 @@ class VariableAdmin extends Admin implements \Symfony\Component\DependencyInject
             ->add('name')
             ->add('description')
             ->add('equation')
+            ->add('summary')
             ;
     }
     
@@ -37,6 +38,9 @@ class VariableAdmin extends Admin implements \Symfony\Component\DependencyInject
                 'attr' => array(
                     'rows' => 10
                 )
+            ))
+            ->add('summary', null, array(
+                'required' => false,
             ))
             ;
     }

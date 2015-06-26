@@ -66,6 +66,15 @@ pequiven_seip_product_by_plant:
     requirements:
         _format: "json|xml"
     methods: [GET]
+        
+pequiven_seip_product_report_by_plant_report:
+    path: /product-report-by-plant-report.{_format}
+    defaults: 
+        _controller: pequiven_seip.controller.generic_data:getProductReportByPlantReportAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
     
 pequiven_seip_search_service:
     path: /search-service.{_format}

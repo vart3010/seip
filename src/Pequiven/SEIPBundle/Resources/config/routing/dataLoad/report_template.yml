@@ -14,7 +14,7 @@ pequiven_report_template_vizualice:
         _format: html
     requirements:
         _format: json|html
-    methods: [GET]
+    methods: [GET|POST]
     options:
         expose: true
     

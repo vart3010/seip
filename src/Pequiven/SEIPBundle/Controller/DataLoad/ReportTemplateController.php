@@ -141,22 +141,24 @@ class ReportTemplateController extends SEIPController
     
     public function vizualiceAction(Request $request)
     {
-        $dateString = $request->get('dateReport',null);
-        $plantReportId = (int)$request->get('plantReport',null);
-        if($dateString !== null){
-            $dateReport = \DateTime::createFromFormat('d/m/Y', $dateString);
-        }else {
-            $dateReport = new \DateTime();
+        $plantReportId = null;
+        if($request->isMethod("POST")){
+            $formData = $request->get("form");
+            $plantReportId = (int)$formData['plantReport'];
         }
+        
+        $dateReport = new \DateTime();
         if(!$this->getSecurityService()->isGranted('ROLE_SEIP_DATA_LOAD_CHANGE_DATE')){
             $dateReport = new \DateTime();
         }
         $plantReport = $this->get('pequiven.repository.plant_report')->find($plantReportId);
-        $plantReports = array();
+        $plantReports = $productsReport = array();
+        $emptyValue = "Seleccione";
         if($plantReport){
             $plantReports[] = $plantReport;
+            $productsReport = $plantReport->getProductsReport()->toArray();
         }
-        
+        $showDay = $showMonth = $showYear = $defaultShow = true;
         $form = $this
             ->createFormBuilder()
             ->add('plantReport','entity',array(
@@ -164,23 +166,77 @@ class ReportTemplateController extends SEIPController
                 'class' => 'Pequiven\SEIPBundle\Entity\DataLoad\PlantReport',
                 'property' => 'plant',
                 'required' => true,
-                'empty_data' => $plantReport,
-                'empty_value' => $plantReport,
+                'empty_value' => $emptyValue,
                 'translation_domain' => 'PequivenSEIPBundle',
                 'attr' => array('class' => 'select2 input-xlarge'),
                 'multiple' => false,
                 'group_by' => 'reportTemplate'
                 )
-            )->getForm();
+            )
+            ->add('dateReport','date',[
+                'format' => 'd/M/y',
+                'widget' => 'single_text',
+                'translation_domain' => 'PequivenSEIPBundle',
+                'attr' => array('class' => 'input'),
+                'data' => $dateReport,
+            ])
+            ->add('productsReport','entity',[
+                'label_attr' => array('class' => 'label bold'),
+                'class' => 'Pequiven\SEIPBundle\Entity\DataLoad\ProductReport',
+                'multiple' => true,
+                'translation_domain' => 'PequivenSEIPBundle',
+                'required' => false,
+                'attr' => array('class' => 'select2 input-xlarge'),
+            ])
+            ->add('showDay','checkbox',[
+                'label_attr' => array('class' => 'label bold'),
+                'required' => false,
+                'translation_domain' => 'PequivenSEIPBundle',
+                'data' => $defaultShow,
+            ])
+            ->add('showMonth','checkbox',[
+                'label_attr' => array('class' => 'label bold'),
+                'required' => false,
+                'translation_domain' => 'PequivenSEIPBundle',
+                'data' => $defaultShow,
+            ])
+            ->add('showYear','checkbox',[
+                'label_attr' => array('class' => 'label bold'),
+                'required' => false,
+                'translation_domain' => 'PequivenSEIPBundle',
+                'data' => $defaultShow,
+            ])
+            ->getForm();
         
-        if($request->isMethod('POST') && $form->submit($request)){
+        if($request->isMethod('POST') && $form->submit($request)->isValid()){
+            $data = $form->getData();
+            $showDay = $data['showDay'];
+            $showMonth = $data['showMonth'];
+            $showYear = $data['showYear'];
+            $productsReport = $data['productsReport'];
+            if($productsReport && count($productsReport) > 0){
+                foreach ($productsReport as $productReport) {
+                    $productsReportId[] = $productReport->getId();
+                }
+                    foreach ($plantReport->getProductsReport() as $productReport) {
+                        if(!in_array($productReport->getId(), $productsReportId)){
+                            $plantReport->getProductsReport()->removeElement($productReport);
+                            continue;
+                        }
+                    }
+                    $plantReports = [$plantReport];
+            }
             
+//            die;
         }
         $data = array(
             'dateReport' => $dateReport,
             'plantReports' => $plantReports,
             'plantReportId' => $plantReportId,
             'form' => $form->createView(),
+            'showDay' => $showDay,
+            'showMonth' => $showMonth,
+            'showYear' => $showYear,
         );
 
         $view = $this

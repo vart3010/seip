@@ -45,22 +45,11 @@
 
         <div class="nine-columns nine-columns-tablet six-columns-mobile new-row-mobile">
 
-
-
-            {#<div ng-controller="DashboardController" ng-init="renderWidgetMultiLevelPie('pie',{{ dataMultiLevelPie|json_encode() }},'100%','400')">
-                <span id="pie"></span>
-            </div>#}
-
             {{ indicatorService.getArrowOfIndicator(indicator)|raw }}
 
             {% if indicator.showCharts %}{# En caso de que sólo se necesite ver el gráfico #}
                 <div ng-controller="ChartsDashboardController" >
                     {% set Charts = indicator.getCharts %}
-                    {#                    {{ dump(chartest) }}#}
-
-
-
-
                     <div class="standard-tabs margin-bottom" {#style="height: 600px;"#}>
                         <ul class="tabs">
                             {% set cont = 1 %}
@@ -92,8 +81,8 @@
                                         <span id="{{ grafico }}"></span>
                                     </div>
                                 {% endif %}
-                                {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_VARIABLES_FROM_EQUATION_DOUGHNUT')  %}
-                                    <div id="tab-{{ grafico }}"  ng-controller="DashboardController" ng-init="chargeChartDoughnut2dWithVariablesFromEquation({{ indicator.id }},'{{ grafico }}','100','500')">
+                                {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_VARIABLES_REAL_PLAN_DOUGHNUT')  %}
+                                    <div id="tab-{{ grafico }}"  ng-controller="DashboardController" ng-init="chargeChartDoughnut2dWithVariablesRealPlan({{ indicator.id }},'{{ grafico }}','100','500')">
                                         <span id="{{ grafico }}"></span>
                                     </div>
                                 {% endif %}
@@ -104,6 +93,16 @@
                                 {% endif %}
                                 {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_BARS_AREA')  %}
                                     <div id="tab-{{ grafico }}"  ng-controller="DashboardController" ng-init="chargeChartBarsArea({{ indicator.id }},'{{ grafico }}','100','500')">
+                                        <span id="{{ grafico }}"></span>
+                                    </div>
+                                {% endif %}
+                                {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_PIE_VARIABLES_PLAN_FROM_EQUATION')  %}
+                                    <div id="tab-{{ grafico }}"  ng-controller="DashboardController" ng-init="chargeChartPieVariablesPlanFromEquation({{ indicator.id }},'{{ grafico }}','100','500')">
+                                        <span id="{{ grafico }}"></span>
+                                    </div>
+                                {% endif %}
+                                {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_PIE_VARIABLES_REAL_FROM_EQUATION')  %}
+                                    <div id="tab-{{ grafico }}"  ng-controller="DashboardController" ng-init="chargeChartPieVariablesRealFromEquation({{ indicator.id }},'{{ grafico }}','100','500')">
                                         <span id="{{ grafico }}"></span>
                                     </div>
                                 {% endif %}

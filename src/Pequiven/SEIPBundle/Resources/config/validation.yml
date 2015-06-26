@@ -261,11 +261,11 @@ Pequiven\SEIPBundle\Entity\DataLoad\Plant\PlantStopPlanning:
                 minMessage: 'El minimo de dias de parada es 1.'
                 maxMessage: 'El maximo de dias de parada es 31.'
                 
-Pequiven\SEIPBundle\Entity\DataLoad\PlantReport:
-    properties:
-        percentageCurrentCapacity:
-             - Range:
-                min: 0
-                max: 100
-                minMessage: 'El valor minimo de la capacidad es 0%'
-                maxMessage: 'El valor maximo de la capacidad es 100%'
+#Pequiven\SEIPBundle\Entity\DataLoad\PlantReport:
+#    properties:
+#        percentageCurrentCapacity:
+#             - Range:
+#                min: 0
+#                max: 100
+#                minMessage: 'El valor minimo de la capacidad es 0%'
+#                maxMessage: 'El valor maximo de la capacidad es 100%'

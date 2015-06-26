@@ -539,6 +539,8 @@ chart:
         resultsOfIndicator: Resultados Asociados al Indicador (2 parámetros).
         resultsOfVariable: Resultados de Variables y que forman parte de un mismo valor (Acumuladas).
         indicatorsBarArea: Indicadores mostrados por barras y areas 
+        indicatorsVariablesPlanFromEquationInPie: Resultados de las variables asociadas al plan de la fórmula a partir de ecuación
+        indicatorsVariablesRealFromEquationInPie: Resultados de las variables asociadas al real de la fórmula a partir de ecuación
 
 Name: Nombre
 nro: "#"
@@ -598,3 +600,8 @@ Unit: Unidad
 'Total accumulated': 'Total Acumulado'
 'Select the plant': 'Debe seleccionar una planta.'
 'No service planning': 'No hay planificación de servicios.'
+'Show day': 'Mostrar día'
+'Show month': Mostrar mes
+'Show year': Mostrar año
+'Products report': Productos de la planta
+'Date report': Fecha de reporte

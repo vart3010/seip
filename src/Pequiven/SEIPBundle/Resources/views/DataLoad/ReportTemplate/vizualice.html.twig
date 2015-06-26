@@ -10,27 +10,47 @@
 
 {% block body %}
     {% set hasPermission = is_granted("ROLE_SEIP_DATA_LOAD_CHANGE_DATE") %}
-    
-    <div class="with-padding">
-        <div class="columns">
-            <div class="six-columns">
-                {{ form_label(form.plantReport) }}
-                {{ form_widget(form.plantReport) }}
-                {{ form_errors(form.plantReport) }}
+    <form action="{{ path("pequiven_report_template_vizualice") }}" method="POST">
+        {{ form_errors(form) }}
+        <div class="with-padding">
+            <div class="columns">
+                <div class="six-columns">
+                    {{ form_label(form.plantReport) }}&nbsp;
+                    {{ form_widget(form.plantReport) }}
+                    {{ form_errors(form.plantReport) }}
+                </div>
+                <div class="six-columns">
+                    {{ form_label(form.dateReport) }}&nbsp;
+                    {{ form_widget(form.dateReport) }}
+                    {{ form_errors(form.dateReport) }}
+                </div>
+                <div class="six-columns">
+                    {{ form_label(form.productsReport) }}&nbsp;
+                    {{ form_widget(form.productsReport) }}
+                    {{ form_errors(form.productsReport) }}
+                </div>
             </div>
-            <div class="six-columns">
-                 <p class="inline-label"><label class="label">{{ "pequiven_seip.date_of_report"|trans }}</label>
-                     {% if hasPermission %}
-                         <a href="{{ path("pequiven_report_template_vizualice",{ dateReport: (dateReport|date_modify("-1 day")|date('d/m/Y')),plantReport: plantReportId }) }}" ><i class="fa fa-chevron-left fa-2x"></i></a>&nbsp;
-                     {% endif %}
-                     <input type="text" id="dateReport" name="dateReport" class="input" value="{{ dateReport|date('d/m/Y') }}" />&nbsp;
-                     {% if hasPermission %}
-                         <a href="{{ path("pequiven_report_template_vizualice",{ dateReport: (dateReport|date_modify("+1 day")|date('d/m/Y')),plantReport: plantReportId }) }}" class="navigate-date"><i class="fa fa-chevron-right fa-2x"></i></a>
-                     {% endif %}
-                 </p>
+            <div class="columns">
+                <div class="two-columns">
+                    {{ form_label(form.showDay) }}&nbsp;
+                    {{ form_widget(form.showDay) }}
+                    {{ form_errors(form.showDay) }}
+                </div>
+                <div class="two-columns">
+                    {{ form_label(form.showMonth) }}&nbsp;
+                    {{ form_widget(form.showMonth) }}
+                    {{ form_errors(form.showMonth) }}
+                </div>
+                <div class="two-columns">
+                    {{ form_label(form.showYear) }}&nbsp;
+                    {{ form_widget(form.showYear) }}
+                    {{ form_errors(form.showYear) }}
+                </div>
             </div>
-        </div>
-     </div>
+            {{ form_rest(form) }}
+            <input type="submit" class="button" value="Refrescar" />
+         </div>
+    </form>
      <div class="with-padding">
          {% for plantReport in plantReports %}
              <div class="columns">
@@ -41,6 +61,7 @@
              {% set productsReport = plantReport.productsReport %}
              {% set consumerPlanningServices = plantReport.consumerPlanningServices %}
                  <div class="columns">
+                     {% if showDay  %}
                      <div class="six-columns twelve-columns-mobile">
                         <table class="simple-table responsive-table responsive-table-on">
                             <thead>
@@ -69,37 +90,41 @@
                             </tbody>
                         </table>
                      </div>
-                     <div class="six-columns twelve-columns-mobile">
-                         <table class="simple-table responsive-table responsive-table-on">
-                             <thead>
-                                 <tr>
-                                     <th class="header text-center white-gradient" colspan="6">MES</th>
-                                 </tr>
-                                 <tr>
-                                     <th scope="col" style="width: 7%" class="header">PPTO-MES</th>
-                                     <th scope="col" style="width: 7%" class="header">PPTO-ACUM</th>
-                                     <th scope="col" style="width: 7%" class="header">REAL-ACUM</th>
-                                     <th scope="col" style="width: 7%" class=" header">EJEC&nbsp;(%)</th>
-                                     <th scope="col" style="width: 7%" class=" header">VAR</th>
-                                     <th scope="col" width="15%" class=" header">META</th>
-                                 </tr>
-                             </thead>
-                             <tbody>
-                                 {% for productReport in productsReport %}
-                                     {% set summary = productReport.getSummaryMonth(dateReport) %}
-                                     <tr>
-                                         <th scope="col" style="width: 7%" class="header">{{ summary['plan_month']|myNumberFormat }}</th>
-                                         <th scope="col" style="width: 7%" class="header">{{ summary['plan_acumulated']|myNumberFormat }}</th>
-                                         <th scope="col" style="width: 7%" class=" header">{{ summary['real_acumulated']|myNumberFormat }}</th>
-                                         <th scope="col" style="width: 7%" class=" header">{{ summary['percentage']|myNumberFormat }}</th>
-                                         <th scope="col" style="width: 7%"class=" header">{{ summary['pnr']|myNumberFormat }}</th>
-                                         <th scope="col" style="width: 7%" class=" header">TODO</th>
-                                     </tr>
-                                 {% endfor %}
-                             </tbody>
-                         </table>
-                     </div>
+                    {% endif %}
+                    {% if showMonth %}
+                        <div class="six-columns twelve-columns-mobile">
+                            <table class="simple-table responsive-table responsive-table-on">
+                                <thead>
+                                    <tr>
+                                        <th class="header text-center white-gradient" colspan="6">MES</th>
+                                    </tr>
+                                    <tr>
+                                        <th scope="col" style="width: 7%" class="header">PPTO-MES</th>
+                                        <th scope="col" style="width: 7%" class="header">PPTO-ACUM</th>
+                                        <th scope="col" style="width: 7%" class="header">REAL-ACUM</th>
+                                        <th scope="col" style="width: 7%" class=" header">EJEC&nbsp;(%)</th>
+                                        <th scope="col" style="width: 7%" class=" header">VAR</th>
+                                        <th scope="col" width="15%" class=" header">META</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for productReport in productsReport %}
+                                        {% set summary = productReport.getSummaryMonth(dateReport) %}
+                                        <tr>
+                                            <th scope="col" style="width: 7%" class="header">{{ summary['plan_month']|myNumberFormat }}</th>
+                                            <th scope="col" style="width: 7%" class="header">{{ summary['plan_acumulated']|myNumberFormat }}</th>
+                                            <th scope="col" style="width: 7%" class=" header">{{ summary['real_acumulated']|myNumberFormat }}</th>
+                                            <th scope="col" style="width: 7%" class=" header">{{ summary['percentage']|myNumberFormat }}</th>
+                                            <th scope="col" style="width: 7%"class=" header">{{ summary['pnr']|myNumberFormat }}</th>
+                                            <th scope="col" style="width: 7%" class=" header">TODO</th>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                     {% endif %}
                  </div>
+                 {% if showYear  %}
                  <div class="columns">
                      <div class="six-columns twelve-columns-mobile">
                          <table class="simple-table responsive-table responsive-table-on">
@@ -134,6 +159,7 @@
                          </table>
                      </div>
                  </div>
+                 {% endif %}
                  <div class="columns">
                      <div class="twelve-columns twelve-columns-mobile">
                          <h3 class="thin underline text-center">CONSUMOS</h3>
@@ -144,13 +170,19 @@
                          <table class="simple-table responsive-table responsive-table-on">
                             <thead>
                                 <tr>
-                                    <th class="header text-center white-gradient" colspan="5">DÍA</th>
+                                    <th class="header text-center white-gradient" colspan="5">CONSUMO DE MATERIA PRIMA</th>
                                 </tr>
                                 <tr>
                                     <th scope="col" style="width: 7%" class="header">PRODUCTO</th>
-                                    <th scope="col" style="width: 7%" class="header">DÍA</th>
-                                    <th scope="col" style="width: 7%" class=" header">MES</th>
-                                    <th scope="col" style="width: 7%" class=" header">AÑO</th>
+                                    {%  if showDay %}
+                                        <th scope="col" style="width: 7%" class="header">DÍA</th>
+                                    {% endif %}
+                                    {%  if showMonth %}
+                                        <th scope="col" style="width: 7%" class=" header">MES</th>
+                                    {% endif %}
+                                    {%  if showYear %}
+                                        <th scope="col" style="width: 7%" class=" header">AÑO</th>
+                                    {% endif %}
                                 </tr>
                             </thead>
                             <tbody>
@@ -158,9 +190,103 @@
                                     {% set summary = consumerPlanningService.getSummary(dateReport) %}
                                     <tr>
                                         <th scope="col" style="width: 7%" class="header">{{ consumerPlanningService.service|upper }}</th>
-                                        <th scope="col" style="width: 7%" class="header">{{ summary['total_day']|myNumberFormat }}</th>
-                                        <th scope="col" style="width: 7%" class=" header">{{ summary['total_month']|myNumberFormat }}</th>
-                                        <th scope="col" style="width: 7%" class=" header">{{ summary['total_year']|myNumberFormat }}</th>
+                                        {%  if showDay %}
+                                            <th scope="col" style="width: 7%" class="header">{{ summary['total_day']|myNumberFormat }}</th>
+                                        {% endif %}
+                                        {%  if showMonth %}
+                                            <th scope="col" style="width: 7%" class=" header">{{ summary['total_month']|myNumberFormat }}</th>
+                                        {% endif %}
+                                        {%  if showYear %}
+                                            <th scope="col" style="width: 7%" class=" header">{{ summary['total_year']|myNumberFormat }}</th>
+                                        {% endif %}
+                                    </tr>
+                                {% else %}
+                                    <tr>
+                                        <td colspan="4" class="empty_row">{{ "No service planning"|trans }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                     </div>
+                 </div>
+                 <div class="columns">
+                     <div class="twelve-columns-mobile">
+                         <table class="simple-table responsive-table responsive-table-on">
+                            <thead>
+                                <tr>
+                                    <th class="header text-center white-gradient" colspan="5">PRODUCCIÓN NO REALIZADA</th>
+                                </tr>
+                                <tr>
+                                    <th scope="col" style="width: 7%" class="header">PRODUCTO</th>
+                                    {%  if showDay %}
+                                        <th scope="col" style="width: 7%" class="header">DÍA</th>
+                                    {% endif %}
+                                    {%  if showMonth %}
+                                        <th scope="col" style="width: 7%" class=" header">MES</th>
+                                    {% endif %}
+                                    {%  if showYear %}
+                                        <th scope="col" style="width: 7%" class=" header">AÑO</th>
+                                    {% endif %}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for productReport in productsReport %}
+                                    {% set summary = productReport.getSummaryUnrealizedProductions(dateReport) %}
+                                    <tr>
+                                        <th scope="col" style="width: 7%" class="header">{{ productReport.product|upper }}</th>
+                                        {%  if showDay %}
+                                            <th scope="col" style="width: 7%" class="header">{{ summary['total_day']|myNumberFormat }}</th>
+                                        {% endif %}
+                                        {%  if showMonth %}
+                                            <th scope="col" style="width: 7%" class=" header">{{ summary['total_month']|myNumberFormat }}</th>
+                                        {% endif %}
+                                        {%  if showYear %}
+                                            <th scope="col" style="width: 7%" class=" header">{{ summary['total_year']|myNumberFormat }}</th>
+                                        {% endif %}
+                                    </tr>
+                                {% else %}
+                                    <tr>
+                                        <td colspan="4" class="empty_row">{{ "No service planning"|trans }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                     </div>
+                 </div>
+                 <div class="columns">
+                     <div class="twelve-columns-mobile">
+                         <table class="simple-table responsive-table responsive-table-on">
+                            <thead>
+                                <tr>
+                                    <th class="header text-center white-gradient" colspan="5">INVENTARIO</th>
+                                </tr>
+                                <tr>
+                                    <th scope="col" style="width: 7%" class="header">PRODUCTO</th>
+                                    {%  if showDay %}
+                                        <th scope="col" style="width: 7%" class="header">DÍA</th>
+                                    {% endif %}
+                                    {%  if showMonth %}
+                                        <th scope="col" style="width: 7%" class=" header">MES</th>
+                                    {% endif %}
+                                    {%  if showYear %}
+                                        <th scope="col" style="width: 7%" class=" header">AÑO</th>
+                                    {% endif %}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for productReport in productsReport %}
+                                    {% set summary = productReport.getSummaryInventory(dateReport) %}
+                                    <tr>
+                                        <th scope="col" style="width: 7%" class="header">{{ productReport.product|upper }}</th>
+                                        {%  if showDay %}
+                                            <th scope="col" style="width: 7%" class="header">{{ summary['total_day']|myNumberFormat }}</th>
+                                        {% endif %}
+                                        {%  if showMonth %}
+                                            <th scope="col" style="width: 7%" class=" header">{{ summary['total_month']|myNumberFormat }}</th>
+                                        {% endif %}
+                                        {%  if showYear %}
+                                            <th scope="col" style="width: 7%" class=" header">{{ summary['total_year']|myNumberFormat }}</th>
+                                        {% endif %}
                                     </tr>
                                 {% else %}
                                     <tr>
@@ -188,15 +314,35 @@
                 window.location.href = url;
             };
             {% if is_granted("ROLE_SEIP_DATA_LOAD_CHANGE_DATE") %}
-                $('#dateReport').datepicker({
+                $('#form_dateReport').datepicker({
                      changeMonth: true,
                      dateFormat: "dd/mm/yy"
                 }).on("change",function(){
-                    eventChange();
+{#                    eventChange();#}
                 });
             {% endif %}
-            plantReport.on("change",eventChange);
+{#            plantReport.on("change",eventChange);#}
             $(".select2").select2();
+            
+            var selectPlant = plantReport;
+            var selectProduct = $("#form_productsReport");
+            
+            var urlGetProduct = "{{ path("pequiven_seip_product_report_by_plant_report") }}";
+            ajaxToSelect.formaterData = function(response){
+                return response.product.name;
+            };
+            ajaxToSelect.addEmptyValue = false;
+            
+            selectPlant.on("change",function(){
+                ajaxToSelect2(urlGetProduct,selectProduct,{ plantReport: selectPlant.val() });
+            });
+{#            console.log(selectPlant.val());#}
+            if(selectPlant.val() != ""){
+{#                ajaxToSelect2(urlGetProduct,selectProduct,{ plantReport: selectPlant.val() });#}
+            }else{
+                selectProduct.empty();
+                selectProduct.select2('disable');
+            }
         });
     </script>
 {% endblock %}

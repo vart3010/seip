@@ -199,6 +199,8 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                     'multiple' => true,
                     'required' => false,
                 ))
+                ->add('showByRealValue')
+                ->add('showByPlanValue')
                 ->add('details', 'sonata_type_admin', array(
                     'cascade_validation' => true,
                     'delete' => false,

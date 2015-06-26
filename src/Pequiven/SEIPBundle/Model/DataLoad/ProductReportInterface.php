@@ -31,4 +31,9 @@ interface ProductReportInterface
      * @return \Pequiven\SEIPBundle\Entity\DataLoad\Production\UnrealizedProduction Description
      */
     public function getUnrealizedProductionsSortByMonth();
+    
+    /**
+     * @return \Pequiven\SEIPBundle\Entity\DataLoad\Inventory\Inventory Description
+     */
+    public function getInventorySortByMonth();
 }

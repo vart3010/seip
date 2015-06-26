@@ -19,7 +19,7 @@ use Pequiven\SEIPBundle\Model\DataLoad\ProductReport as BaseModel;
  *
  * @author Carlos Mendoza <inhack20@gmail.com>
  * @ORM\Table(name="seip_report_product_report")
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\DataLoad\ProductReportRepository")
  */
 class ProductReport extends BaseModel
 {
@@ -44,7 +44,7 @@ class ProductReport extends BaseModel
     /**
      * Producto
      * @var \Pequiven\SEIPBundle\Entity\CEI\Product
-     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Product")
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Product",inversedBy="productReports")
      * @ORM\JoinColumn(nullable=false)
      */
     private $product;
