@@ -30,6 +30,14 @@ class CauseFailService implements ContainerAwareInterface {
         $fails = $em->getRepository('PequivenSEIPBundle:CEI\Fail')->findQueryByTypeResult($type);
         return $fails;
     }
+    
+    
+    public function getFailsMp() {
+        $em = $this->container->get('doctrine')->getManager();
+        $fails = $em->getRepository('PequivenSEIPBundle:DataLoad\Production\UnrealizedProductionDay')->findQueryByType();
+        return $fails;
+    }
+    
 
     /**
      * Function usada para armar las listas de PNR interna y externa, devuelve un vector con la cantidad de paradas 
@@ -43,10 +51,6 @@ class CauseFailService implements ContainerAwareInterface {
         $reflection = new \ReflectionClass($unrealizedProduction);
         $methods = $reflection->getMethods();
 
-
-
-
-
         if ($options["paramDay"] != "") {
             $Match = "getDay" . $options["paramDay"] . "Details";
             $nameMatch = "/^" . $Match . "+$/";
@@ -56,20 +60,26 @@ class CauseFailService implements ContainerAwareInterface {
 
         if ($options["typeCause"] == "InternalCauses") {
             $methodGetType = "getInternalCauses";
+            $methodGetMp = "getInternalCausesMp";
             $typeFail = \Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL;
         } else if ($options["typeCause"] == "ExternalCauses") {
             $methodGetType = "getExternalCauses";
+            $methodGetMp = "getExternalCausesMp";
             $typeFail = \Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL;
         }
 
 
         $totalFails = count($this->getFails($typeFail));
-
+        
+//        $totalFailsMp = count($this->getFailsMp());
+//        
+//        var_dump($totalFailsMp);
+//        die();
 
         $cont = 0;
         $mounts = array();
         $days = $unrealizedProduction->getDaysPerMonth($unrealizedProduction->getMonth());
-
+        //$mpc = 0;
         foreach ($methods as $m) {
 
             $methodName = $m->getName();
@@ -78,27 +88,40 @@ class CauseFailService implements ContainerAwareInterface {
                 $metodsDetails = $unrealizedProduction->$methodName();
 
                 if ($metodsDetails != "") {
+
+
                     $contFails = 0;
-                    foreach ($metodsDetails->$methodGetType() as $md) {
+                    foreach ($metodsDetails->$methodGetType() as $md) { //CAUSAS INTO EXT
                         array_push($mounts, $md->getMount());
                         $contFails++;
                     }
+                    
+                    //CAUSAS POR MP, FALTA AGREGARLO
+//                    foreach ($metodsDetails->$methodGetMp() as $causesMp) { //CAUSAS POR MATERIA PRIMA INT EXT
+//                        array_push($mounts, $causesMp->getMount());
+//                        //$mpc++;
+//                        $contFails++;
+//                    }
+
                     if ($totalFails != $contFails) {
                         for ($x = $contFails; $x < $totalFails; $x++) {
                             $mounts[$x] = "0";
                         }
                     }
                 } else {
-                    for ($i = 0; $i < $totalFails; $i++) {
+                    for ($i = 0; $i < ($totalFails); $i++) {
                         array_push($mounts, "0");
                     }
+                    //array_push($mounts, "0");
                 }
+
                 $cont++;
                 if ($cont == $days) {
                     break;
                 }
             }
         }
+
         return $mounts;
     }
 
@@ -230,10 +253,11 @@ class CauseFailService implements ContainerAwareInterface {
 //                $tp["value"] = $totalCatValues[$c];
 //                $tp["displayValue"] = $totalCatValues[$c];
 
-                $tp["label"] = $cat." (".$totalCatValues[$c].")";
+                $tp["label"] = $cat . " (" . $totalCatValues[$c] . ")";
                 $tp["value"] = $totalCatValues[$c];
-                $tp["toolText"] = $cat." (".$totalCatValues[$c].")";;
-                $tp["displayValue"] = \Pequiven\SEIPBundle\Service\ToolService::truncate($cat,array("limit"=>"10"));
+                $tp["toolText"] = $cat . " (" . $totalCatValues[$c] . ")";
+                ;
+                $tp["displayValue"] = \Pequiven\SEIPBundle\Service\ToolService::truncate($cat, array("limit" => "10"));
 
                 $total = $total + $totalCatValues[$c];
                 $c++;

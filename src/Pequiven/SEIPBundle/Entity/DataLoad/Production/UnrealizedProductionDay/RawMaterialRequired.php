@@ -192,4 +192,9 @@ class RawMaterialRequired
     {
         return $this->mount;
     }
+    
+    public function __toString() {
+        $toString = "0";
+        return $toString;
+    }
 }

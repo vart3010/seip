@@ -192,7 +192,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                 
                 //Añadir
                 if($this->isGranted('ROLE_SEIP_SIG_ARRANGEMENT_PROGRAM_CREATE_*')){
-
+                    if($this->isGranted('ROLE_SEIP_ARRANGEMENT_PROGRAM_CREATE_SPECIAL')){
                     $subchild = $this->factory->createItem('sig.arrangement_program.add.main',
                         $this->getSubLevelOptions(array(
                         'uri' => null,
@@ -217,6 +217,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                     }
 
                     $arrangementProgram->addChild($subchild);
+                    }
                 }
 
                 $menuSig->addChild($arrangementProgram);
@@ -1049,7 +1050,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
             }
             
             if($this->isGranted('ROLE_SEIP_ARRANGEMENT_PROGRAM_CREATE_*')){
-                
+                if($this->isGranted('ROLE_SEIP_ARRANGEMENT_PROGRAM_CREATE_SPECIAL')){
                 $subchild = $this->factory->createItem('arrangement_programs.add.main',
                     $this->getSubLevelOptions(array(
                     'uri' => null,
@@ -1081,6 +1082,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                 }
                 
                 $child->addChild($subchild);
+                }
             }
             
             $menu->addChild($child);

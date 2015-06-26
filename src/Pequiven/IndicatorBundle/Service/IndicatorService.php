@@ -115,6 +115,54 @@ class IndicatorService implements ContainerAwareInterface {
 
         return $formulaPaser;
     }
+    
+    /**
+     * Toma una ecuacion y la transforma a variales php validas en un string para evaluarlas.
+     * 
+     * @param Formula $formula
+     * @return type
+     */
+    public function getArrayVars(Formula $formula, $equationSource) {
+        $vars = array();
+        $especialCaracter = array(
+            '(',
+            ')',
+            '+',
+            '-',
+            '*',
+            '/',
+            ' ',
+            '  ',
+            '   ',
+        );
+        $numbers = array('0', '1', '2', '3', '4', '5', '6', '7', '8', '9');
+//        $equationReal = '6 + ( num_hoja_entrada_servicios_entregadas / num_valuaciones_solicitadas ) * 100 + casa - 1';
+        $stringSplit = str_split($equationSource);
+        $newEquation = $varEquation = '';
+        
+        foreach ($stringSplit as $key => $char) {
+            if (in_array($char, $especialCaracter, true)) {
+                $newEquation .= $char;
+                continue;
+            }
+            $nextKey = $key + 1;
+            $nextChar = isset($stringSplit[$nextKey]) ? $stringSplit[$nextKey] : null;
+            $varEquation .= $char;
+            if (in_array($nextChar, $especialCaracter, true)) {
+                if (in_array($varEquation[0], $numbers)) {
+                    
+                } else {
+                    $newEquation .= '$';
+                }
+                $newEquation .= $varEquation;
+//                array_push($vars, $varEquation);
+                $vars[] = $varEquation;
+                $varEquation = '';
+            }
+        }
+
+        return $vars;
+    }
 
     /**
      * Valida la configuracion de una formula
@@ -551,7 +599,7 @@ class IndicatorService implements ContainerAwareInterface {
      * @param type $options
      * @return type
      */
-    public function getDataDashboardWidgetDoughnut(Indicator $indicator,$options = array()) {
+    public function getDataDashboardWidgetDoughnut(Indicator $indicator, $options = array()) {
         $data = array(
             'dataSource' => array(
                 'chart' => array(),
@@ -579,7 +627,7 @@ class IndicatorService implements ContainerAwareInterface {
         $chart["centerLabelBold"] = "1";
         $chart["manageLabelOverflow"] = "1";
         $chart["useEllipsesWhenOverflow"] = "1";
-        $chart["showTooltip"] = "1";
+//        $chart["showTooltip"] = "1";
         $chart["decimals"] = "0";
         $chart["captionFontSize"] = "14";
         $chart["captionPadding"] = "-10";
@@ -595,8 +643,7 @@ class IndicatorService implements ContainerAwareInterface {
 
         $totalNumChildrens = count($indicator->getChildrens()); //Número de indicadores asociados
 //        $numDiv = $totalNumChildrens > 0 ? bcdiv(100, $totalNumChildrens,2) : 100;
-        if(isset($options['childrens']) && array_key_exists('childrens', $options)){
-            unset($options['childrens']);
+        if (isset($options['childrens']) && array_key_exists('childrens', $options)) {
             if ($totalNumChildrens > 0) {
                 $sumResultChildren = 0; //Suma de resultados de medición de los hijos
                 $indicatorsChildrens = $this->container->get('pequiven.repository.indicator')->findByParentAndOrderShow($indicator->getId()); //Obtenemos los indicadores asociados
@@ -616,47 +663,54 @@ class IndicatorService implements ContainerAwareInterface {
                     $dataSet[] = $set;
                 }
             }
-        } elseif(isset($options['withVariables']) && array_key_exists('withVariables', $options)){
-            unset($options['withVariables']);
-            $arrayVariables = $this->getArrayVariablesFormulaWithData($indicator);
-            
-            foreach ($arrayVariables as $ind => $key){
+        } elseif (isset($options['withVariablesFromEquation']) && array_key_exists('withVariablesFromEquation', $options)) {//Para que muestre las variables de acuerdo a 
+            unset($options['withVariablesFromEquation']);
+            $arrayVariables = $this->getArrayVariablesFormulaWithData($indicator,array('viewVariablesRealPlanFromEquation' => true));
+            $valueMax = 0;
+            if(!$indicator->getVariablesRealPlanComplement()){
+                foreach ($arrayVariables as $arrayVariable) {
+                    if($arrayVariable['value'] > $valueMax){
+                        $valueMax = $arrayVariable['value'];
+                    }
+                }
+            }
+            foreach ($arrayVariables as $arrayVariable) {
                 $set = array();
-                $set["label"] = $ind . ': ' . number_format($key, 2, ',', '.') . '%';
-                $set["value"] = bcadd($key, 0, 2);
-//                $set["value"] = $sumResultChildren != 0 ? bcdiv($indicatorChildren->getResultReal(), $sumResultChildren, 2) : bcadd(0, 0, 2);
-//                $set["displayValue"] = $indicatorChildren->getRef() . ' - ' . number_format($indicatorChildren->getResultReal(), 2, ',', '.') . '%';
+                $set["label"] = $arrayVariable['description'] . ': ' . number_format($arrayVariable['value'], 2, ',', '.');
+                $set["value"] = $arrayVariable['value'];
+                $set["displayValue"] = number_format($arrayVariable['value'], 2, ',', '.');
 //                $set["toolText"] = $indicatorChildren->getSummary() . ':{br}' . number_format($indicatorChildren->getResultReal(), 2, ',', '.') . '%';
 //                $set["color"] = $this->getColorOfResult($indicatorChildren);
-//                $set["labelLink"] = $this->generateUrl('pequiven_indicator_show', array('id' => $indicatorChildren->getId()));
-//                $set["link"] = $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicatorChildren->getId()));
+//                $set["labelLink"] = $this->generateUrl('pequiven_indicator_show', array('id' => $indicator->getId()));
+//                $set["link"] = $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicator->getId()));
                 $dataSet[] = $set;
             }
-
         }
 
         $data['dataSource']['chart'] = $chart;
         $data['dataSource']['dataSet'] = $dataSet;
         return $data;
     }
-    
+
     /**
      * Función que devuelve la data para el widget de tipo dona en el dashboard del indicador
      * @param Indicator $indicator
      * @param type $options
      * @return type
      */
-    public function getDataDashboardPie(Indicator $indicator,$options = array()) {
+    public function getDataDashboardPie(Indicator $indicator, $options = array()) {
         $data = array(
             'dataSource' => array(
                 'chart' => array(),
-                'data' => array(),
+                'data' => array(
+                ),
             ),
         );
-        
+
         $chart = array();
 
         $chart["caption"] = $indicator->getSummary();
+        ;
 
         $chart["paletteColors"] = "#0075c2,#1aaf5d,#f2c500,#f45b00,#8e0000";
         $chart["bgColor"] = "ffffff";
@@ -685,50 +739,164 @@ class IndicatorService implements ContainerAwareInterface {
         $chart["legendShadow"] = "0";
         $chart["legendItemFontSize"] = "12";
         $chart["legendItemFontColor"] = "#666666";
-        
+
         $dataChart = array();
         
-        $arrayVariables = $this->getArrayVariablesFormulaWithData($indicator, array());
-        
-        foreach ($arrayVariables as $ind => $key){
-            $set = array();
-            $set["label"] = $ind . ': ' . number_format($key, 2, ',', '.') . '%';
-            $set["value"] = bcadd($key, 0, 2);
-            $dataChart[] = $set;
+        if(isset($options['viewVariablesFromPlanEquation']) && array_key_exists('viewVariablesFromPlanEquation', $options)){
+            unset($options['viewVariablesFromPlanEquation']);
+            $arrayVariables = $this->getArrayVariablesFormulaWithData($indicator, array('viewVariablesFromPlanEquation' => true));
+            foreach ($arrayVariables as $ind => $key) {
+                $set = array();
+                $set["label"] = $ind . ': ' . number_format($key, 2, ',', '.') . '%';
+                $set["value"] = bcadd($key, 0, 2);
+                $dataChart[] = $set;
+            }
+        } else{
+            $arrayVariables = $this->getArrayVariablesFormulaWithData($indicator, array());
+            
+            foreach ($arrayVariables as $ind => $key) {
+                $set = array();
+                $set["label"] = $ind . ': ' . number_format($key, 2, ',', '.') . '%';
+                $set["value"] = bcadd($key, 0, 2);
+                $dataChart[] = $set;
+            }
         }
-        
-        $dataChart[]['label'] = 'epale';
-        $dataChart[]['value'] = 5.5;
 
         $data['dataSource']['chart'] = $chart;
         $data['dataSource']['data'] = $dataChart;
-        
-//        print_r(json_encode($data));
-//        die();
-        
+
         return $data;
     }
-    
+
+    public function getDataDashboardBarsArea() {
+        $data = array(
+            'dataSource' => array(
+                'chart' => array(),
+                'categories' => array(),
+                'dataset' => array()
+            ),
+        );
+
+        $char = array();
+
+        $char["caption"] = "TITLE";
+        $char["subcaption"] = "last year";
+        $char["xaxisname"] = "Mount";
+        $char["yaxisname"] = "Amount";
+        $char["numberprefix"] = "$";
+        $char["theme"] = "fint";
+
+
+
+//        $category = array();
+//        $values = array();
+//
+//        $c = array();
+//        array_push($category, array("label" => "cat1"));
+//        array_push($category, array("label" => "cat2"));
+//        array_push($category, array("label" => "cat3"));
+//
+//
+//        $v = array();
+//        array_push($values, array("value" => "150"));
+//        array_push($values, array("value" => "200"));
+//        array_push($values, array("value" => "20"));
+//
+//        $data["dataSource"]["chart"] = $char;
+//        $data["dataSource"]["categories"][]["category"] = $category;
+//        $data["dataSource"]["dataset"][]["data"][] = $values;
+//        $data["dataSource"]["dataset"][]["data"][] = $values;
+//        $data["dataSource"]["dataset"][]["data"][] = $values;
+        $category = $dataSetReal = $dataSetPlan = $medition = $dataReal = array();
+        for ($i = 1; $i <= 4; $i++) {
+            $dataReal["value"] = "200";
+
+            $dataSetReal["data"][] = $dataReal;
+            $dataSetPlan["data"][] = $dataReal;
+            $medition["data"][] = $dataReal;
+        }
+
+//        array_push($values, array("value" => "150"));
+//        array_push($values, array("value" => "200"));
+//        array_push($values, array("value" => "20"));
+
+
+        $dataSetReal["seriesname"] = "Real";
+        $dataSetPlan["seriesname"] = "Plan";
+        $dataSetPlan["renderas"] = "area";
+        $medition["seriesname"] = "% Cumplimiento";
+        $medition["renderas"] = "line";
+
+
+        $label1 = $label2 = $label3 = $dataPlan = $dataMedition = array();
+        $label1["label"] = 'area barra 1';
+        $label2["label"] = 'area barra 2';
+        $label3["label"] = 'area barra 3';
+        $label4["label"] = 'area barra 4';
+
+        $category[] = $label1;
+        $category[] = $label2;
+        $category[] = $label3;
+        $category[] = $label4;
+        //$dataSetReal["data"][] = $dataReal;
+        //$dataSetPlan["data"][] = $dataPlan;
+        //$medition["data"][] = $dataMedition;
+
+        $data['dataSource']['chart'] = $char;
+        $data['dataSource']['categories'][]["category"] = $category;
+        $data['dataSource']['dataset'][] = $dataSetReal;
+        $data['dataSource']['dataset'][] = $dataSetPlan;
+        $data['dataSource']['dataset'][] = $medition;
+
+        return $data;
+    }
+
     /**
      * Función para 
      * @param Indicator $indicator
      * @return type
      */
-    public function getArrayVariablesFormulaWithData(Indicator $indicator,$options = array()){
+    public function getArrayVariablesFormulaWithData(Indicator $indicator, $options = array()) {
         $formula = $indicator->getFormula();
         $valuesIndicator = $indicator->getValuesIndicator();
         $arrayVariables = array();
-        foreach ($formula->getVariables() as $variable) {
-            $arrayVariables[$variable->getName()] = 0.0;
-        }
-
-        foreach ($valuesIndicator as $valueIndicator){
-            foreach ($formula->getVariables() as $variable) {
-                $nameParameter = $variable->getName();
-                $arrayVariables[$nameParameter] = $arrayVariables[$nameParameter] + $valueIndicator->getParameter($nameParameter);
+        
+        if(isset($options['viewVariablesRealPlanFromEquation']) && $options['viewVariablesRealPlanFromEquation']){
+            unset($options['viewVariablesRealPlanFromEquation']);
+            foreach($valuesIndicator as $valueIndicator){
+                $parameters = $valueIndicator->getFormulaParameters();
+                foreach($parameters as $parameter => $key){
+                    if($parameter == 'real_from_equation' || $parameter == 'plan_from_equation'){
+                        $arrayVariables[$parameter]['value'] = $key;
+                        $arrayVariables[$parameter]['description'] = $parameter == 'real_from_equation' ? $indicator->getShowByRealValue() : $indicator->getShowByPlanValue();
+                    }
+                }
+            }
+        } else{
+            $variables = $formula->getVariables();
+            foreach ($variables as $variable) {
+                $arrayVariables[$variable->getName()]['value'] = 0.0;
+                $arrayVariables[$variable->getName()]['description'] = $variable->getDescription();
+            }
+            
+            if(isset($options['viewVariablesFromPlanEquation']) && $options['viewVariablesFromPlanEquation']){
+                unset($options['viewVariablesFromPlanEquation']);
+                $vars = $this->getArrayVars($formula, $formula->getSourceEquationPlan());
+                
+                foreach ($valuesIndicator as $valueIndicator) {
+                    foreach ($variables as $variable) {
+                        if(array_search($variable->getName(), $vars) >= 0){
+                            var_dump($variable->getName());
+                            $nameParameter = $variable->getName();
+                            $arrayVariables[$nameParameter]['value'] = $arrayVariables[$nameParameter]['value'] + $valueIndicator->getParameter($nameParameter);
+                        }
+                    }
+                }
+                var_dump($arrayVariables);
+                die();
             }
         }
-        
+
         return $arrayVariables;
     }
 
@@ -741,10 +909,8 @@ class IndicatorService implements ContainerAwareInterface {
         $data = array(
             'dataSource' => array(
                 'chart' => array(),
-                'categories' => array(
-                ),
-                'dataSet' => array(
-                ),
+                'categories' => array(),
+                'dataSet' => array(),
             ),
         );
         $chart = array();
@@ -1219,6 +1385,69 @@ class IndicatorService implements ContainerAwareInterface {
 
         //var_dump($band);
         return $band;
+    }
+
+    public function isGrantedButton(Indicator $indicator) {
+        $freq = $indicator->getFrequencyNotificationIndicator()->getDays();
+        $rs = 360 / $freq;
+
+        $valuesIndicator = count($indicator->getValuesIndicator());
+
+        if ($rs == $valuesIndicator) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public function isGrantToEdit(Indicator $indicator,$indice) {
+        $freq = $indicator->getFrequencyNotificationIndicator()->getDays();
+
+        $trim[0] = $indicator->getPeriod()->getIsLoadIndicatorTrim1();
+        $trim[1] = $indicator->getPeriod()->getIsLoadIndicatorTrim2();
+        $trim[2] = $indicator->getPeriod()->getIsLoadIndicatorTrim3();
+        $trim[3] = $indicator->getPeriod()->getIsLoadIndicatorTrim4();
+        
+        
+        
+        for($g=0;$g<strlen($indice);$g++) {
+            $indice =  $indice[$g];
+        }
+        var_dump($indice);
+        
+        //$x = bcmul(substr($indice, 0,1), bcadd($freq,0),2);
+        $x = $indice*$freq;
+        
+        
+       
+        
+        
+        
+         
+        $rs = array();  
+        $lastRs=30;
+        $conTri = 1;
+        $tiempo_trimestre=0;
+        foreach ($trim as $t) {
+            //$limitTrim = 3*($conTri+1)*30;
+            $tiempo_trimestre = $conTri*30*3;
+            //echo $x."-".$tiempo_trimestre;
+            if($x <= $tiempo_trimestre && $t) {
+                 ///   var_dump("true");
+            }
+//             
+//            if ($t) {
+//                if ($x <= $limitTrim) {
+//                    //$rs[] = "true";
+//                }
+//            }
+//            else {
+//                $rs[] = "false";
+//            }
+            $conTri++;
+            $lastRs = $tiempo_trimestre;
+        }
+        
     }
 
 }

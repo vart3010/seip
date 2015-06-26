@@ -364,7 +364,7 @@ pequiven_seip:
         product_detail_daily_month: Detalle de producción
         unrealized_production:
             unrealized_production: Producción No Realizada
-            internal: Intena
+            internal: Interna
             external: Externa
         question:
             delete: Desea eliminar este detalle de producción
@@ -538,6 +538,9 @@ chart:
         indicatorsVariablesOrTagsInPie: Resultados de variables (sumativas al real o al plan) o etiquetas (de un tipo en especifico, texto o numéricas).
         resultsOfIndicator: Resultados Asociados al Indicador (2 parámetros).
         resultsOfVariable: Resultados de Variables y que forman parte de un mismo valor (Acumuladas).
+        indicatorsBarArea: Indicadores mostrados por barras y areas 
+        indicatorsVariablesPlanFromEquationInPie: Resultados de las variables asociadas al plan de la fórmula a partir de ecuación
+        indicatorsVariablesRealFromEquationInPie: Resultados de las variables asociadas al real de la fórmula a partir de ecuación
 
 Name: Nombre
 nro: "#"
