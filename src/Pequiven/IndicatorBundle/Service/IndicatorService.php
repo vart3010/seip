@@ -155,7 +155,8 @@ class IndicatorService implements ContainerAwareInterface {
                     $newEquation .= '$';
                 }
                 $newEquation .= $varEquation;
-                array_push($vars, $varEquation);
+//                array_push($vars, $varEquation);
+                $vars[] = $varEquation;
                 $varEquation = '';
             }
         }
@@ -884,14 +885,14 @@ class IndicatorService implements ContainerAwareInterface {
                 
                 foreach ($valuesIndicator as $valueIndicator) {
                     foreach ($variables as $variable) {
-                        if(array_search($variable->getName(), $vars)){
+                        if(array_search($variable->getName(), $vars) >= 0){
                             var_dump($variable->getName());
+                            $nameParameter = $variable->getName();
+                            $arrayVariables[$nameParameter]['value'] = $arrayVariables[$nameParameter]['value'] + $valueIndicator->getParameter($nameParameter);
                         }
-                        $nameParameter = $variable->getName();
-                        $arrayVariables[$nameParameter]['value'] = $arrayVariables[$nameParameter]['value'] + $valueIndicator->getParameter($nameParameter);
                     }
                 }
-                var_dump($vars);
+                var_dump($arrayVariables);
                 die();
             }
         }
