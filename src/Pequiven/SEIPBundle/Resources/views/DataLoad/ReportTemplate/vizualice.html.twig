@@ -61,6 +61,7 @@
              {% set productsReport = plantReport.productsReport %}
              {% set consumerPlanningServices = plantReport.consumerPlanningServices %}
                  <div class="columns">
+                     {% if showDay  %}
                      <div class="six-columns twelve-columns-mobile">
                         <table class="simple-table responsive-table responsive-table-on">
                             <thead>
@@ -89,37 +90,41 @@
                             </tbody>
                         </table>
                      </div>
-                     <div class="six-columns twelve-columns-mobile">
-                         <table class="simple-table responsive-table responsive-table-on">
-                             <thead>
-                                 <tr>
-                                     <th class="header text-center white-gradient" colspan="6">MES</th>
-                                 </tr>
-                                 <tr>
-                                     <th scope="col" style="width: 7%" class="header">PPTO-MES</th>
-                                     <th scope="col" style="width: 7%" class="header">PPTO-ACUM</th>
-                                     <th scope="col" style="width: 7%" class="header">REAL-ACUM</th>
-                                     <th scope="col" style="width: 7%" class=" header">EJEC&nbsp;(%)</th>
-                                     <th scope="col" style="width: 7%" class=" header">VAR</th>
-                                     <th scope="col" width="15%" class=" header">META</th>
-                                 </tr>
-                             </thead>
-                             <tbody>
-                                 {% for productReport in productsReport %}
-                                     {% set summary = productReport.getSummaryMonth(dateReport) %}
-                                     <tr>
-                                         <th scope="col" style="width: 7%" class="header">{{ summary['plan_month']|myNumberFormat }}</th>
-                                         <th scope="col" style="width: 7%" class="header">{{ summary['plan_acumulated']|myNumberFormat }}</th>
-                                         <th scope="col" style="width: 7%" class=" header">{{ summary['real_acumulated']|myNumberFormat }}</th>
-                                         <th scope="col" style="width: 7%" class=" header">{{ summary['percentage']|myNumberFormat }}</th>
-                                         <th scope="col" style="width: 7%"class=" header">{{ summary['pnr']|myNumberFormat }}</th>
-                                         <th scope="col" style="width: 7%" class=" header">TODO</th>
-                                     </tr>
-                                 {% endfor %}
-                             </tbody>
-                         </table>
-                     </div>
+                    {% endif %}
+                    {% if showMonth %}
+                        <div class="six-columns twelve-columns-mobile">
+                            <table class="simple-table responsive-table responsive-table-on">
+                                <thead>
+                                    <tr>
+                                        <th class="header text-center white-gradient" colspan="6">MES</th>
+                                    </tr>
+                                    <tr>
+                                        <th scope="col" style="width: 7%" class="header">PPTO-MES</th>
+                                        <th scope="col" style="width: 7%" class="header">PPTO-ACUM</th>
+                                        <th scope="col" style="width: 7%" class="header">REAL-ACUM</th>
+                                        <th scope="col" style="width: 7%" class=" header">EJEC&nbsp;(%)</th>
+                                        <th scope="col" style="width: 7%" class=" header">VAR</th>
+                                        <th scope="col" width="15%" class=" header">META</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for productReport in productsReport %}
+                                        {% set summary = productReport.getSummaryMonth(dateReport) %}
+                                        <tr>
+                                            <th scope="col" style="width: 7%" class="header">{{ summary['plan_month']|myNumberFormat }}</th>
+                                            <th scope="col" style="width: 7%" class="header">{{ summary['plan_acumulated']|myNumberFormat }}</th>
+                                            <th scope="col" style="width: 7%" class=" header">{{ summary['real_acumulated']|myNumberFormat }}</th>
+                                            <th scope="col" style="width: 7%" class=" header">{{ summary['percentage']|myNumberFormat }}</th>
+                                            <th scope="col" style="width: 7%"class=" header">{{ summary['pnr']|myNumberFormat }}</th>
+                                            <th scope="col" style="width: 7%" class=" header">TODO</th>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                     {% endif %}
                  </div>
+                 {% if showYear  %}
                  <div class="columns">
                      <div class="six-columns twelve-columns-mobile">
                          <table class="simple-table responsive-table responsive-table-on">
@@ -154,6 +159,7 @@
                          </table>
                      </div>
                  </div>
+                 {% endif %}
                  <div class="columns">
                      <div class="twelve-columns twelve-columns-mobile">
                          <h3 class="thin underline text-center">CONSUMOS</h3>
@@ -168,9 +174,15 @@
                                 </tr>
                                 <tr>
                                     <th scope="col" style="width: 7%" class="header">PRODUCTO</th>
-                                    <th scope="col" style="width: 7%" class="header">DÍA</th>
-                                    <th scope="col" style="width: 7%" class=" header">MES</th>
-                                    <th scope="col" style="width: 7%" class=" header">AÑO</th>
+                                    {%  if showDay %}
+                                        <th scope="col" style="width: 7%" class="header">DÍA</th>
+                                    {% endif %}
+                                    {%  if showMonth %}
+                                        <th scope="col" style="width: 7%" class=" header">MES</th>
+                                    {% endif %}
+                                    {%  if showYear %}
+                                        <th scope="col" style="width: 7%" class=" header">AÑO</th>
+                                    {% endif %}
                                 </tr>
                             </thead>
                             <tbody>
@@ -178,9 +190,15 @@
                                     {% set summary = consumerPlanningService.getSummary(dateReport) %}
                                     <tr>
                                         <th scope="col" style="width: 7%" class="header">{{ consumerPlanningService.service|upper }}</th>
-                                        <th scope="col" style="width: 7%" class="header">{{ summary['total_day']|myNumberFormat }}</th>
-                                        <th scope="col" style="width: 7%" class=" header">{{ summary['total_month']|myNumberFormat }}</th>
-                                        <th scope="col" style="width: 7%" class=" header">{{ summary['total_year']|myNumberFormat }}</th>
+                                        {%  if showDay %}
+                                            <th scope="col" style="width: 7%" class="header">{{ summary['total_day']|myNumberFormat }}</th>
+                                        {% endif %}
+                                        {%  if showMonth %}
+                                            <th scope="col" style="width: 7%" class=" header">{{ summary['total_month']|myNumberFormat }}</th>
+                                        {% endif %}
+                                        {%  if showYear %}
+                                            <th scope="col" style="width: 7%" class=" header">{{ summary['total_year']|myNumberFormat }}</th>
+                                        {% endif %}
                                     </tr>
                                 {% else %}
                                     <tr>
@@ -200,9 +218,15 @@
                                 </tr>
                                 <tr>
                                     <th scope="col" style="width: 7%" class="header">PRODUCTO</th>
-                                    <th scope="col" style="width: 7%" class="header">DÍA</th>
-                                    <th scope="col" style="width: 7%" class=" header">MES</th>
-                                    <th scope="col" style="width: 7%" class=" header">AÑO</th>
+                                    {%  if showDay %}
+                                        <th scope="col" style="width: 7%" class="header">DÍA</th>
+                                    {% endif %}
+                                    {%  if showMonth %}
+                                        <th scope="col" style="width: 7%" class=" header">MES</th>
+                                    {% endif %}
+                                    {%  if showYear %}
+                                        <th scope="col" style="width: 7%" class=" header">AÑO</th>
+                                    {% endif %}
                                 </tr>
                             </thead>
                             <tbody>
@@ -210,9 +234,15 @@
                                     {% set summary = productReport.getSummaryUnrealizedProductions(dateReport) %}
                                     <tr>
                                         <th scope="col" style="width: 7%" class="header">{{ productReport.product|upper }}</th>
-                                        <th scope="col" style="width: 7%" class="header">{{ summary['total_day']|myNumberFormat }}</th>
-                                        <th scope="col" style="width: 7%" class=" header">{{ summary['total_month']|myNumberFormat }}</th>
-                                        <th scope="col" style="width: 7%" class=" header">{{ summary['total_year']|myNumberFormat }}</th>
+                                        {%  if showDay %}
+                                            <th scope="col" style="width: 7%" class="header">{{ summary['total_day']|myNumberFormat }}</th>
+                                        {% endif %}
+                                        {%  if showMonth %}
+                                            <th scope="col" style="width: 7%" class=" header">{{ summary['total_month']|myNumberFormat }}</th>
+                                        {% endif %}
+                                        {%  if showYear %}
+                                            <th scope="col" style="width: 7%" class=" header">{{ summary['total_year']|myNumberFormat }}</th>
+                                        {% endif %}
                                     </tr>
                                 {% else %}
                                     <tr>
@@ -232,9 +262,15 @@
                                 </tr>
                                 <tr>
                                     <th scope="col" style="width: 7%" class="header">PRODUCTO</th>
-                                    <th scope="col" style="width: 7%" class="header">DÍA</th>
-                                    <th scope="col" style="width: 7%" class=" header">MES</th>
-                                    <th scope="col" style="width: 7%" class=" header">AÑO</th>
+                                    {%  if showDay %}
+                                        <th scope="col" style="width: 7%" class="header">DÍA</th>
+                                    {% endif %}
+                                    {%  if showMonth %}
+                                        <th scope="col" style="width: 7%" class=" header">MES</th>
+                                    {% endif %}
+                                    {%  if showYear %}
+                                        <th scope="col" style="width: 7%" class=" header">AÑO</th>
+                                    {% endif %}
                                 </tr>
                             </thead>
                             <tbody>
@@ -242,9 +278,15 @@
                                     {% set summary = productReport.getSummaryInventory(dateReport) %}
                                     <tr>
                                         <th scope="col" style="width: 7%" class="header">{{ productReport.product|upper }}</th>
-                                        <th scope="col" style="width: 7%" class="header">{{ summary['total_day']|myNumberFormat }}</th>
-                                        <th scope="col" style="width: 7%" class=" header">{{ summary['total_month']|myNumberFormat }}</th>
-                                        <th scope="col" style="width: 7%" class=" header">{{ summary['total_year']|myNumberFormat }}</th>
+                                        {%  if showDay %}
+                                            <th scope="col" style="width: 7%" class="header">{{ summary['total_day']|myNumberFormat }}</th>
+                                        {% endif %}
+                                        {%  if showMonth %}
+                                            <th scope="col" style="width: 7%" class=" header">{{ summary['total_month']|myNumberFormat }}</th>
+                                        {% endif %}
+                                        {%  if showYear %}
+                                            <th scope="col" style="width: 7%" class=" header">{{ summary['total_year']|myNumberFormat }}</th>
+                                        {% endif %}
                                     </tr>
                                 {% else %}
                                     <tr>

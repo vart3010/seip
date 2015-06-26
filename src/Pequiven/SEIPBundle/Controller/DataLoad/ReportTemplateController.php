@@ -158,8 +158,7 @@ class ReportTemplateController extends SEIPController
             $plantReports[] = $plantReport;
             $productsReport = $plantReport->getProductsReport()->toArray();
         }
-        $defaultShow = true;
-        
+        $showDay = $showMonth = $showYear = $defaultShow = true;
         $form = $this
             ->createFormBuilder()
             ->add('plantReport','entity',array(
@@ -212,6 +211,9 @@ class ReportTemplateController extends SEIPController
         
         if($request->isMethod('POST') && $form->submit($request)->isValid()){
             $data = $form->getData();
+            $showDay = $data['showDay'];
+            $showMonth = $data['showMonth'];
+            $showYear = $data['showYear'];
 //            var_dump($data);
 //            die;
         }
@@ -220,6 +222,9 @@ class ReportTemplateController extends SEIPController
             'plantReports' => $plantReports,
             'plantReportId' => $plantReportId,
             'form' => $form->createView(),
+            'showDay' => $showDay,
+            'showMonth' => $showMonth,
+            'showYear' => $showYear,
         );
 
         $view = $this
