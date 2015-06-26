@@ -115,7 +115,7 @@ class IndicatorService implements ContainerAwareInterface {
 
         return $formulaPaser;
     }
-    
+
     /**
      * Toma una ecuacion y la transforma a variales php validas en un string para evaluarlas.
      * 
@@ -667,7 +667,12 @@ class IndicatorService implements ContainerAwareInterface {
             }
         } elseif (isset($options['withVariablesRealPLan']) && array_key_exists('withVariablesRealPLan', $options)) {//Para que muestre las variables de acuerdo a 
             unset($options['withVariablesRealPLan']);
-            $arrayVariables = $this->getArrayVariablesFormulaWithData($indicator, array('viewVariablesRealPlan' => true));
+            $arrayVariables = array();
+            if($indicator->getFormula()->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_FROM_EQ){
+                $arrayVariables = $this->getArrayVariablesFormulaWithData($indicator, array('viewVariablesRealPlan' => true));
+            } elseif($indicator->getFormula()->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC){
+                $arrayVariables = $this->getArrayVariablesFormulaWithData($indicator, array('viewVariablesRealPlanAutomatic' => true));
+            }
 //            $valueMax = 0;
 //            if (!$indicator->getVariablesRealPlanComplement()) {
 //                foreach ($arrayVariables as $arrayVariable) {
@@ -676,7 +681,7 @@ class IndicatorService implements ContainerAwareInterface {
 //                    }
 //                }
 //            }
-            foreach ($arrayVariables as $arrayVariable) {
+                foreach ($arrayVariables as $arrayVariable) {
                 $set = array();
                 $set["label"] = $arrayVariable['description'] . ': ' . number_format($arrayVariable['value'], 2, ',', '.');
                 $set["value"] = $arrayVariable['value'];
@@ -744,7 +749,7 @@ class IndicatorService implements ContainerAwareInterface {
         $chart["legendItemFontColor"] = "#666666";
 
         $dataChart = array();
-        
+
         if(isset($options['viewVariablesFromPlanEquation']) && array_key_exists('viewVariablesFromPlanEquation', $options)){//Para el caso de que se muestren las variables sumativas al plan del indicador cuyo cálculo es a partir de ecuación
             unset($options['viewVariablesFromPlanEquation']);
             $arrayVariables = $this->getArrayVariablesFormulaWithData($indicator, array('viewVariablesFromPlanEquation' => true));
@@ -766,13 +771,13 @@ class IndicatorService implements ContainerAwareInterface {
                 $dataChart[] = $set;
             }
         } else{
-            $arrayVariables = $this->getArrayVariablesFormulaWithData($indicator, array());
-            foreach ($arrayVariables as $ind => $key) {
-                $set = array();
+        $arrayVariables = $this->getArrayVariablesFormulaWithData($indicator, array());
+        foreach ($arrayVariables as $ind => $key) {
+            $set = array();
                 $set["label"] = $ind;// . ': ' . number_format($key, 2, ',', '.');
-                $set["value"] = bcadd($key, 0, 2);
-                $dataChart[] = $set;
-            }
+            $set["value"] = bcadd($key, 0, 2);
+            $dataChart[] = $set;
+        }
         }
 
         $data['dataSource']['chart'] = $chart;
@@ -874,47 +879,53 @@ class IndicatorService implements ContainerAwareInterface {
         $valuesIndicator = $indicator->getValuesIndicator();
         $arrayVariables = array();
         
-        if($formula->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_FROM_EQ){
-            if(isset($options['viewVariablesRealPlan']) && $options['viewVariablesRealPlan']){
+        
+        if(isset($options['viewVariablesRealPlan']) && $options['viewVariablesRealPlan']){
                 unset($options['viewVariablesRealPlan']);
-                foreach($valuesIndicator as $valueIndicator){
-                    $parameters = $valueIndicator->getFormulaParameters();
+            foreach($valuesIndicator as $valueIndicator){
+                $parameters = $valueIndicator->getFormulaParameters();
                     foreach ($parameters as $parameter => $key) {
                         if ($parameter == 'real_from_equation' || $parameter == 'plan_from_equation') {
-                            $arrayVariables[$parameter]['value'] = $key;
-                            $arrayVariables[$parameter]['description'] = $parameter == 'real_from_equation' ? $indicator->getShowByRealValue() : $indicator->getShowByPlanValue();
+                        $arrayVariables[$parameter]['value'] = $key;
+                        $arrayVariables[$parameter]['description'] = $parameter == 'real_from_equation' ? $indicator->getShowByRealValue() : $indicator->getShowByPlanValue();
+                    }
+                }
+            }
+        } elseif(isset($options['viewVariablesRealPlanAutomatic']) && $options['viewVariablesRealPlanAutomatic']){
+                $varReal = $formula->getVariableToRealValue();
+                $arrayVariables[$varReal->getName()]['value'] = $indicator->getValueFinal();
+                $arrayVariables[$varReal->getName()]['description'] = $varReal->getDescription();
+                $varPlan = $formula->getVariableToPlanValue();
+                $arrayVariables[$varPlan->getName()]['value'] = $indicator->getTotalPlan();
+                $arrayVariables[$varPlan->getName()]['description'] = $varPlan->getDescription();
+        } else{
+            $variables = $formula->getVariables();
+
+            if(isset($options['viewVariablesFromPlanEquation']) && $options['viewVariablesFromPlanEquation']){
+                unset($options['viewVariablesFromPlanEquation']);
+                $vars = $this->getArrayVars($formula, $formula->getSourceEquationPlan());
+
+                foreach ($valuesIndicator as $valueIndicator) {
+                    foreach ($variables as $variable) {
+                        if(array_search($variable->getName(), $vars)){
+                            $nameParameter = $variable->getName();
+                            $arrayVariables[$nameParameter]['value'] = $valueIndicator->getParameter($nameParameter);
+                            $arrayVariables[$nameParameter]['description'] = $variable->getDescription();
+                            $arrayVariables[$nameParameter]['summary'] = $variable->getSummary();
                         }
                     }
                 }
-            } else {
-                $variables = $formula->getVariables();
+            } elseif(isset($options['viewVariablesFromRealEquation']) && $options['viewVariablesFromRealEquation']){
+                unset($options['viewVariablesFromRealEquation']);
+                $vars = $this->getArrayVars($formula, $formula->getSourceEquationReal());
 
-                if(isset($options['viewVariablesFromPlanEquation']) && $options['viewVariablesFromPlanEquation']){
-                    unset($options['viewVariablesFromPlanEquation']);
-                    $vars = $this->getArrayVars($formula, $formula->getSourceEquationPlan());
-
-                    foreach ($valuesIndicator as $valueIndicator) {
-                        foreach ($variables as $variable) {
-                            if(array_search($variable->getName(), $vars)){
-                                $nameParameter = $variable->getName();
-                                $arrayVariables[$nameParameter]['value'] = $valueIndicator->getParameter($nameParameter);
-                                $arrayVariables[$nameParameter]['description'] = $variable->getDescription();
-                                $arrayVariables[$nameParameter]['summary'] = $variable->getSummary();
-                            }
-                        }
-                    }
-                } elseif(isset($options['viewVariablesFromRealEquation']) && $options['viewVariablesFromRealEquation']){
-                    unset($options['viewVariablesFromRealEquation']);
-                    $vars = $this->getArrayVars($formula, $formula->getSourceEquationReal());
-
-                    foreach ($valuesIndicator as $valueIndicator) {
-                        foreach ($variables as $variable) {
-                            if(array_search($variable->getName(), $vars)){
-                                $nameParameter = $variable->getName();
-                                $arrayVariables[$nameParameter]['value'] = $valueIndicator->getParameter($nameParameter);
-                                $arrayVariables[$nameParameter]['description'] = $variable->getDescription();
-                                $arrayVariables[$nameParameter]['summary'] = $variable->getSummary();
-                            }
+                foreach ($valuesIndicator as $valueIndicator) {
+                    foreach ($variables as $variable) {
+                        if(array_search($variable->getName(), $vars)){
+                            $nameParameter = $variable->getName();
+                            $arrayVariables[$nameParameter]['value'] = $valueIndicator->getParameter($nameParameter);
+                            $arrayVariables[$nameParameter]['description'] = $variable->getDescription();
+                            $arrayVariables[$nameParameter]['summary'] = $variable->getSummary();
                         }
                     }
                 }
@@ -1421,7 +1432,7 @@ class IndicatorService implements ContainerAwareInterface {
             return false;
         } else {
             return true;
-        }
+}
     }
 
     public function isGrantToEdit(Indicator $indicator, $indice) {
