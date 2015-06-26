@@ -686,7 +686,7 @@ class IndicatorService implements ContainerAwareInterface {
                 $set["label"] = $arrayVariable['description'] . ': ' . number_format($arrayVariable['value'], 2, ',', '.');
                 $set["value"] = $arrayVariable['value'];
                 $set["displayValue"] = number_format($arrayVariable['value'], 2, ',', '.');
-//                $set["toolText"] = $indicatorChildren->getSummary() . ':{br}' . number_format($indicatorChildren->getResultReal(), 2, ',', '.') . '%';
+                $set["toolText"] = number_format($arrayVariable['value'], 2, ',', '.') . 'Bs';
 //                $set["color"] = $this->getColorOfResult($indicatorChildren);
 //                $set["labelLink"] = $this->generateUrl('pequiven_indicator_show', array('id' => $indicator->getId()));
 //                $set["link"] = $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicator->getId()));
