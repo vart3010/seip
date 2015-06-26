@@ -20,6 +20,22 @@ use Pequiven\SEIPBundle\Doctrine\ORM\SeipEntityRepository;
  */
 class PlantReportRepository extends SeipEntityRepository 
 {
+    public function findInnerProductsReport($plantReport,$productsReport) 
+    {
+        $qb = $this->getQueryBuilder();
+        $qb
+            ->addSelect('pr_pr')
+            ->addSelect('pr_pr_p')
+                
+            ->innerJoin('pr.productsReport','pr_pr')
+            ->innerJoin('pr_pr.product','pr_pr_p')
+                
+//            ->andWhere($qb->expr()->in('pr_pr_p.id',array(2107)))
+            ->andWhere('pr.id = :id')
+            ->setParameter('id', $plantReport)
+            ;
+        return $qb->getQuery()->getOneOrNullResult();
+    }
     public function createPaginatorByUser(array $criteria = null, array $orderBy = null) 
     {
         $queryBuilder = $this->getCollectionQueryBuilder();

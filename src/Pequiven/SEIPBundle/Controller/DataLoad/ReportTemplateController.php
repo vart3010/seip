@@ -180,10 +180,9 @@ class ReportTemplateController extends SEIPController
                 'attr' => array('class' => 'input'),
                 'data' => $dateReport,
             ])
-            ->add('productsReport','choice',[
+            ->add('productsReport','entity',[
                 'label_attr' => array('class' => 'label bold'),
-                'choices' => $productsReport,
-                'empty_value' => 'Seleccione',
+                'class' => 'Pequiven\SEIPBundle\Entity\DataLoad\ProductReport',
                 'multiple' => true,
                 'translation_domain' => 'PequivenSEIPBundle',
                 'required' => false,
@@ -214,7 +213,20 @@ class ReportTemplateController extends SEIPController
             $showDay = $data['showDay'];
             $showMonth = $data['showMonth'];
             $showYear = $data['showYear'];
-//            var_dump($data);
+            $productsReport = $data['productsReport'];
+            if($productsReport && count($productsReport) > 0){
+                foreach ($productsReport as $productReport) {
+                    $productsReportId[] = $productReport->getId();
+                }
+                    foreach ($plantReport->getProductsReport() as $productReport) {
+                        if(!in_array($productReport->getId(), $productsReportId)){
+                            $plantReport->getProductsReport()->removeElement($productReport);
+                            continue;
+                        }
+                    }
+                    $plantReports = [$plantReport];
+            }
+            
 //            die;
         }
         $data = array(

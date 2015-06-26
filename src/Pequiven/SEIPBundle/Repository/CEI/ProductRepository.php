@@ -50,6 +50,18 @@ class ProductRepository extends SeipEntityRepository
         return $this->findQueryByPlant($plant)->getQuery()->getResult();
         
     }
+    public function findByPlantReport($plantReport) 
+    {
+        $qb = $this->getQueryAllEnabled();
+        $qb
+            ->innerJoin("p.productReports", "p_pr")
+            ->innerJoin("p_pr.plantReport", "p_pr_pr")
+            ->andWhere("p_pr_pr.id = :plantReport")
+            ->setParameter("plantReport", $plantReport)
+            ;
+        return $qb->getQuery()->getResult();
+        
+    }
     
     public function findIn($products)
     {

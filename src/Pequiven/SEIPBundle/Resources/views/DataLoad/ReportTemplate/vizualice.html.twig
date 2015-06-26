@@ -323,6 +323,26 @@
             {% endif %}
 {#            plantReport.on("change",eventChange);#}
             $(".select2").select2();
+            
+            var selectPlant = plantReport;
+            var selectProduct = $("#form_productsReport");
+            
+            var urlGetProduct = "{{ path("pequiven_seip_product_report_by_plant_report") }}";
+            ajaxToSelect.formaterData = function(response){
+                return response.product.name;
+            };
+            ajaxToSelect.addEmptyValue = false;
+            
+            selectPlant.on("change",function(){
+                ajaxToSelect2(urlGetProduct,selectProduct,{ plantReport: selectPlant.val() });
+            });
+{#            console.log(selectPlant.val());#}
+            if(selectPlant.val() != ""){
+{#                ajaxToSelect2(urlGetProduct,selectProduct,{ plantReport: selectPlant.val() });#}
+            }else{
+                selectProduct.empty();
+                selectProduct.select2('disable');
+            }
         });
     </script>
 {% endblock %}
