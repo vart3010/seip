@@ -114,6 +114,19 @@ class GenericDataController extends SEIPController
         return $this->handleView($view);
     }
     
+    public function getProductReportByPlantReportAction(Request $request)
+    {
+        $plantReport = $request->get("plantReport");
+        $em = $this->getDoctrine()->getManager();
+        $repository = $em->getRepository("Pequiven\SEIPBundle\Entity\DataLoad\ProductReport");
+        $results = $repository->findByPlantReport($plantReport);
+        
+        $view = $this->view();
+        $view->setData($results);
+        $view->getSerializationContext()->setGroups(array('id','api_list'));
+        return $this->handleView($view);
+    }
+    
     public function searchServiceAction(Request $request) 
     {
         return $this->getResponseSearch("Pequiven\SEIPBundle\Entity\CEI\Service", $request);

@@ -93,11 +93,19 @@ class Product extends BaseModel
      * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Plant",mappedBy="products")
      */
     private $plants;
+    
+    /**
+     * Reporte de productos
+     * @var \Pequiven\SEIPBundle\Entity\DataLoad\ProductReport
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\ProductReport",mappedBy="product")
+     */
+    private $productReports;
 
     public function __construct() 
     {
         $this->components = new \Doctrine\Common\Collections\ArrayCollection();
         $this->plants = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->ProductReport = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**

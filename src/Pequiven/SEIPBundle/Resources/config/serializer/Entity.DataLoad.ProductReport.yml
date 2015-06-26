@@ -1,0 +1,9 @@
+Pequiven\SEIPBundle\Entity\DataLoad\ProductReport:
+    exclusion_policy: ALL
+    properties:
+        id:
+            expose: true
+            groups: [id]
+        product:
+            expose: true
+            groups: [api_list]
