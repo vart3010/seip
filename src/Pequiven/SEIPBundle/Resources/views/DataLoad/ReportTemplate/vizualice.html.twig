@@ -164,7 +164,7 @@
                          <table class="simple-table responsive-table responsive-table-on">
                             <thead>
                                 <tr>
-                                    <th class="header text-center white-gradient" colspan="5">DÍA</th>
+                                    <th class="header text-center white-gradient" colspan="5">CONSUMO DE MATERIA PRIMA</th>
                                 </tr>
                                 <tr>
                                     <th scope="col" style="width: 7%" class="header">PRODUCTO</th>
@@ -178,6 +178,70 @@
                                     {% set summary = consumerPlanningService.getSummary(dateReport) %}
                                     <tr>
                                         <th scope="col" style="width: 7%" class="header">{{ consumerPlanningService.service|upper }}</th>
+                                        <th scope="col" style="width: 7%" class="header">{{ summary['total_day']|myNumberFormat }}</th>
+                                        <th scope="col" style="width: 7%" class=" header">{{ summary['total_month']|myNumberFormat }}</th>
+                                        <th scope="col" style="width: 7%" class=" header">{{ summary['total_year']|myNumberFormat }}</th>
+                                    </tr>
+                                {% else %}
+                                    <tr>
+                                        <td colspan="4" class="empty_row">{{ "No service planning"|trans }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                     </div>
+                 </div>
+                 <div class="columns">
+                     <div class="twelve-columns-mobile">
+                         <table class="simple-table responsive-table responsive-table-on">
+                            <thead>
+                                <tr>
+                                    <th class="header text-center white-gradient" colspan="5">PRODUCCIÓN NO REALIZADA</th>
+                                </tr>
+                                <tr>
+                                    <th scope="col" style="width: 7%" class="header">PRODUCTO</th>
+                                    <th scope="col" style="width: 7%" class="header">DÍA</th>
+                                    <th scope="col" style="width: 7%" class=" header">MES</th>
+                                    <th scope="col" style="width: 7%" class=" header">AÑO</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for productReport in productsReport %}
+                                    {% set summary = productReport.getSummaryUnrealizedProductions(dateReport) %}
+                                    <tr>
+                                        <th scope="col" style="width: 7%" class="header">{{ productReport.product|upper }}</th>
+                                        <th scope="col" style="width: 7%" class="header">{{ summary['total_day']|myNumberFormat }}</th>
+                                        <th scope="col" style="width: 7%" class=" header">{{ summary['total_month']|myNumberFormat }}</th>
+                                        <th scope="col" style="width: 7%" class=" header">{{ summary['total_year']|myNumberFormat }}</th>
+                                    </tr>
+                                {% else %}
+                                    <tr>
+                                        <td colspan="4" class="empty_row">{{ "No service planning"|trans }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                     </div>
+                 </div>
+                 <div class="columns">
+                     <div class="twelve-columns-mobile">
+                         <table class="simple-table responsive-table responsive-table-on">
+                            <thead>
+                                <tr>
+                                    <th class="header text-center white-gradient" colspan="5">INVENTARIO</th>
+                                </tr>
+                                <tr>
+                                    <th scope="col" style="width: 7%" class="header">PRODUCTO</th>
+                                    <th scope="col" style="width: 7%" class="header">DÍA</th>
+                                    <th scope="col" style="width: 7%" class=" header">MES</th>
+                                    <th scope="col" style="width: 7%" class=" header">AÑO</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for productReport in productsReport %}
+                                    {% set summary = productReport.getSummaryInventory(dateReport) %}
+                                    <tr>
+                                        <th scope="col" style="width: 7%" class="header">{{ productReport.product|upper }}</th>
                                         <th scope="col" style="width: 7%" class="header">{{ summary['total_day']|myNumberFormat }}</th>
                                         <th scope="col" style="width: 7%" class=" header">{{ summary['total_month']|myNumberFormat }}</th>
                                         <th scope="col" style="width: 7%" class=" header">{{ summary['total_year']|myNumberFormat }}</th>

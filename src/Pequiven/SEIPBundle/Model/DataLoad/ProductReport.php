@@ -346,4 +346,64 @@ abstract class ProductReport extends BaseModel implements ProductReportInterface
         );
         return $total;
     }
+    
+    public function getSummaryUnrealizedProductions(\DateTime $date) 
+    {
+        $month = (int)$date->format("m");
+        $day = (int)$date->format("d");
+        
+        $totalDay = $totalMonth = $totalYear = 0.0;
+        
+        $unrealizedProductions = $this->getUnrealizedProductionsSortByMonth();
+        foreach ($unrealizedProductions as $monthDetail => $detail) {
+            $totalYear = $totalYear + $detail->getTotal();
+            
+            if($monthDetail > $month){
+                break;
+            }
+            
+            if($month == $monthDetail){
+                $totalDayName = 'getDay'.$day;
+                $totalDay = $detail->$totalDayName();
+                $totalMonth = $totalMonth + $detail->getTotal();
+            }
+        }
+        
+        $total = array(
+            'total_day' => $totalDay,
+            'total_month' => $totalMonth,
+            'total_year' => $totalYear,
+        );
+        return $total;
+    }
+    
+    public function getSummaryInventory(\DateTime $date) 
+    {
+        $month = (int)$date->format("m");
+        $day = (int)$date->format("d");
+        
+        $totalDay = $totalMonth = $totalYear = 0.0;
+        
+        $inventorys = $this->getInventorySortByMonth();
+        foreach ($inventorys as $monthDetail => $detail) {
+            $totalYear = $detail->getTotalInventory();
+            
+            if($monthDetail > $month){
+                break;
+            }
+            
+            if($month == $monthDetail){
+                $totalDayName = 'getDay'.$day;
+                $totalDay = $detail->$totalDayName();
+                $totalMonth = $detail->getYesterDay();
+            }
+        }
+        
+        $total = array(
+            'total_day' => $totalDay,
+            'total_month' => $totalMonth,
+            'total_year' => $totalYear,
+        );
+        return $total;
+    }
 }
