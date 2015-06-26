@@ -16,12 +16,12 @@ abstract class Chart
     /**
      * Gráfico tipo dona para mostrar los indicadores asociados de acuerdo y junto con el resultado de medición
      */
-    const TYPE_CHART_INDICATORS_ASSOCIATED = 0;
+    const TYPE_CHART_INDICATORS_ASSOCIATED_DOUGHNUT = 0;
     
     /**
-     * Gráfico tipo barras vertical para mostrar el real/plan de los indicadores asociados respecto al eje izquierdo y el resultado de la medición en valor porcentual respecto al lado derecho
+     * Gráfico tipo barras vertical para mostrar el real/plan de los indicadores asociados respecto al eje izquierdo y el resultado de la medición en valor porcentual respecto al lado derecho de los indicadores hijos
      */
-    const TYPE_CHART_COLUMN_REAL_PLAN = 1;
+    const TYPE_CHART_COLUMN_REAL_PLAN_FROM_CHILDRENS = 1;
     
     /**
      * Gráfico tipo dona para mostrar las variables de la fórmula del indicador.
@@ -58,12 +58,17 @@ abstract class Chart
      */
     const TYPE_CHART_PIE_VARIABLES_REAL_FROM_EQUATION = 8;
     
+    /**
+     * Gráfico tipo barras vertical para mostrar el real/plan de los resultados respecto al eje izquierdo y el resultado de la medición en valor porcentual respecto al lado derecho
+     */
+    const TYPE_CHART_COLUMN_REAL_PLAN_BY_FREQUENCY_NOTIFICATION = 9;
+    
     
     
     // NOMBRES DE LOS GRÁFICOS
     
     /**
-     * Nombre del gráfico para mostrar los indicadores asociados
+     * Nombre del gráfico tipo dona para mostrar los indicadores hijos con el resultado de medición
      */
     const CHART_INDICATORS_ASSOCIATED_WITH_RESULT = 'CHART_INDICATORS_ASSOCIATED_WITH_RESULT';
     
@@ -75,7 +80,7 @@ abstract class Chart
     /**
      * Nombre del gráfico para mostrar las variables de los indicadores 
      */
-    const CHART_INDICATORS_WITH_VARIABLES_REAL_PLAN = 'CHART_INDICATORS_WITH_VARIABLES';
+    const CHART_INDICATORS_WITH_VARIABLES_REAL_PLAN = 'CHART_INDICATORS_WITH_VARIABLES_REAL_PLAN';
     
     /**
      * Nombre del gráfico para mostrar las variables o etiquetas de los indicadores en forma de torta
@@ -97,6 +102,11 @@ abstract class Chart
      */
     const CHART_INDICATORS_VARIABLES_REAL_FROM_EQUATION = 'CHART_INDICATORS_VARIABLES_REAL_FROM_EQUATION';
     
+    /**
+     * Nombre del gráfico tipo barras vertical para mostrar el real/plan de los resultados respecto al eje izquierdo y el resultado de la medición en valor porcentual respecto al lado derecho
+     */
+    const CHART_INDICATORS_REAL_PLAN_BY_FREQUENCY_NOTIFICATION = 'CHART_INDICATORS_REAL_PLAN_BY_FREQUENCY_NOTIFICATION';
+    
     
     
     /**
@@ -104,7 +114,7 @@ abstract class Chart
      * 
      * @ORM\Column(name="typeOfChart", type="integer", nullable=false)
      */
-    protected $typeOfChart = self::TYPE_CHART_INDICATORS_ASSOCIATED;
+    protected $typeOfChart = self::TYPE_CHART_INDICATORS_ASSOCIATED_DOUGHNUT;
     
     
     /**
@@ -135,8 +145,8 @@ abstract class Chart
     static function getLabelsTypeOfChart()
     {
          static $typesOfChart = array(
-            self::TYPE_CHART_INDICATORS_ASSOCIATED => 'chart.type.indicatorsAssociatedDoughnut',
-            self::TYPE_CHART_COLUMN_REAL_PLAN => 'chart.type.indicatorsAssociatedRealPlanWithResult',
+            self::TYPE_CHART_INDICATORS_ASSOCIATED_DOUGHNUT => 'chart.type.indicatorsAssociatedDoughnut',
+            self::TYPE_CHART_COLUMN_REAL_PLAN_FROM_CHILDRENS => 'chart.type.indicatorsAssociatedRealPlanWithResult',
             self::TYPE_CHART_VARIABLES_REAL_PLAN_DOUGHNUT => 'chart.type.indicatorsDoughnutWithVariables',
             self::TYPE_CHART_PIE_VARIABLES_OR_TAGS => 'chart.type.indicatorsVariablesOrTagsInPie',
             self::TYPE_CHART_COLUMN_FROM_FORMULA_PARAMETERS => 'chart.type.resultsOfIndicator',
