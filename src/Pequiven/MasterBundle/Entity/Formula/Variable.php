@@ -90,6 +90,13 @@ class Variable extends Model implements \Pequiven\SEIPBundle\Entity\PeriodItemIn
     private $usedOnlyByTag = false;
     
     /**
+     * @var string
+     *
+     * @ORM\Column(name="summary", type="text", nullable=true)
+     */
+    private $summary;
+    
+    /**
      * Get staticValue
      *
      * @return boolean 
@@ -317,5 +324,28 @@ class Variable extends Model implements \Pequiven\SEIPBundle\Entity\PeriodItemIn
      */
     public function setUsedOnlyByTag($usedOnlyByTag) {
         $this->usedOnlyByTag = $usedOnlyByTag;
+    }
+    
+        /**
+     * Set summary
+     *
+     * @param string $summary
+     * @return Indicator
+     */
+    public function setSummary($summary)
+    {
+        $this->summary = $summary;
+
+        return $this;
+    }
+
+    /**
+     * Get summary
+     *
+     * @return string 
+     */
+    public function getSummary()
+    {
+        return $this->summary;
     }
 }

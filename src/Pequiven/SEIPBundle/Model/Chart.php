@@ -92,6 +92,11 @@ abstract class Chart
      */
     const CHART_INDICATORS_VARIABLES_PLAN_FROM_EQUATION = 'CHART_INDICATORS_VARIABLES_PLAN_FROM_EQUATION';
     
+    /**
+     * Nombre del gráfico para mostrar las variables (sumativas al real) de un indicador con fórmula a partir de ecuación
+     */
+    const CHART_INDICATORS_VARIABLES_REAL_FROM_EQUATION = 'CHART_INDICATORS_VARIABLES_REAL_FROM_EQUATION';
+    
     
     
     /**
@@ -137,7 +142,8 @@ abstract class Chart
             self::TYPE_CHART_COLUMN_FROM_FORMULA_PARAMETERS => 'chart.type.resultsOfIndicator',
             self::TYPE_CHART_PIE_FROM_TAGS => 'chart.type.resultsOfVariable',
             self::TYPE_CHART_BARS_AREA => 'chart.type.indicatorsBarArea',
-            self::TYPE_CHART_PIE_VARIABLES_PLAN_FROM_EQUATION => 'chart.type.indicatorsVariablesPlanFromEquationInPie'
+            self::TYPE_CHART_PIE_VARIABLES_PLAN_FROM_EQUATION => 'chart.type.indicatorsVariablesPlanFromEquationInPie',
+            self::TYPE_CHART_PIE_VARIABLES_REAL_FROM_EQUATION => 'chart.type.indicatorsVariablesRealFromEquationInPie',
         );
          
          return $typesOfChart;

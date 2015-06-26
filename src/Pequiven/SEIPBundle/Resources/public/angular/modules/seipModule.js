@@ -2407,25 +2407,46 @@ angular.module('seipModule.controllers', [])
                 });
             }
 
-            //Gráfico en forma de 
+            //Gráfico para mostrar las variables (sumativas al plan) de un indicador con fórmula a partir de ecuación
             $scope.chargeChartPieVariablesPlanFromEquation = function (indicatorId, render, width, height) {
                 var getDataChartPieVariablesPlanFromEquation = Routing.generate("getDataChartPieVariablesPlanFromEquation", {id: indicatorId});
                 $http.get(getDataChartPieVariablesPlanFromEquation).success(function (data) {
                     FusionCharts.ready(function () {
                         var revenueChartPieVariablesPlanFromEquation = new FusionCharts({
-                            "type": "pie2d",
+                            "type": "pie3d",
                             "renderAt": render,
                             "width": width + "%",
                             "height": height,
                             "dataFormat": "json",
                             "dataSource": {
                                 "chart": data.dataSource.chart,
-                                "categories": data.dataSource.categories,
-                                "dataset": data.dataSource.dataset
+                                "data": data.dataSource.data,
                             }
                         });
                         revenueChartPieVariablesPlanFromEquation.setTransparent(true);
                         revenueChartPieVariablesPlanFromEquation.render();
+                    });
+                });
+            }
+            
+            //Gráfico para mostrar las variables (sumativas al real) de un indicador con fórmula a partir de ecuación
+            $scope.chargeChartPieVariablesRealFromEquation = function (indicatorId, render, width, height) {
+                var getDataChartPieVariablesRealFromEquation = Routing.generate("getDataChartPieVariablesRealFromEquation", {id: indicatorId});
+                $http.get(getDataChartPieVariablesRealFromEquation).success(function (data) {
+                    FusionCharts.ready(function () {
+                        var revenueChartPieVariablesRealFromEquation = new FusionCharts({
+                            "type": "pie3d",
+                            "renderAt": render,
+                            "width": width + "%",
+                            "height": height,
+                            "dataFormat": "json",
+                            "dataSource": {
+                                "chart": data.dataSource.chart,
+                                "data": data.dataSource.data,
+                            }
+                        });
+                        revenueChartPieVariablesRealFromEquation.setTransparent(true);
+                        revenueChartPieVariablesRealFromEquation.render();
                     });
                 });
             }
