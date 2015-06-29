@@ -66,6 +66,9 @@ class TagIndicatorAdmin extends Admin implements \Symfony\Component\DependencyIn
             ->add('showInIndicatorResult',null,array(
                 'required' => false,
             ))
+            ->add('showTag', null, array(
+                'required' => false,
+            ))
             ->add('sourceResult')
             ->add('unitResult',"choice",$selectUnitParameters)
             ;
