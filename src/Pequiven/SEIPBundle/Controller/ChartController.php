@@ -168,6 +168,26 @@ class ChartController extends SEIPController {
 
         return $response;
     }
+    
+    /**
+     * Función que retorna la data para un gráfico de tipo columna y con 2 ejes verticales. Sólo para un indicador con fórmula real/plan (automático o a partir de ecuación)
+     * @return JsonResponse
+     */
+    public function getDataChartColumnLineDualAxisByFrequencyNotificationAction(Request $request) {
+        $response = new JsonResponse();
+
+        $idIndicator = $request->get('id');
+
+        $indicatorService = $this->getIndicatorService(); //Obtenemos el servicio del indicador
+
+        $indicator = $this->get('pequiven.repository.indicator')->find($idIndicator); //Obtenemos el indicador
+
+        $dataChart = $indicatorService->getChartColumnLineDualAxis($indicator, array('byFrequencyNotification' => true)); //Obtenemos la data del gráfico de acuerdo al indicador
+
+        $response->setData($dataChart); //Seteamos la data del gráfico en Json
+
+        return $response;
+    }
 
    
     /**

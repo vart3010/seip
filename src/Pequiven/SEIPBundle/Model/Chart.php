@@ -59,7 +59,7 @@ abstract class Chart
     const TYPE_CHART_PIE_VARIABLES_REAL_FROM_EQUATION = 8; //ACTIVO Y USADO
     
     /**
-     * Gráfico tipo barras vertical para mostrar el real/plan de los resultados respecto al eje izquierdo y el resultado de la medición en valor porcentual respecto al lado derecho
+     * Gráfico tipo barras vertical para mostrar el real/plan de los resultados respecto al eje izquierdo y el resultado de la medición en valor porcentual respecto al lado derecho, de acuerdo a la frecuencia de notificación
      */
     const TYPE_CHART_COLUMN_REAL_PLAN_BY_FREQUENCY_NOTIFICATION = 9;
        
@@ -108,6 +108,7 @@ abstract class Chart
             self::TYPE_CHART_BARS_AREA => 'chart.type.indicatorsBarArea',
             self::TYPE_CHART_PIE_VARIABLES_PLAN_FROM_EQUATION => 'chart.type.indicatorsVariablesPlanFromEquationInPie',
             self::TYPE_CHART_PIE_VARIABLES_REAL_FROM_EQUATION => 'chart.type.indicatorsVariablesRealFromEquationInPie',
+            self::TYPE_CHART_COLUMN_REAL_PLAN_BY_FREQUENCY_NOTIFICATION => 'chart.type.indicatorsVariablesRealPlanByFrequencyNotification',
         );
          
          return $typesOfChart;

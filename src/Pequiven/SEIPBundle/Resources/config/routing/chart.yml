@@ -86,8 +86,14 @@ getDataChartBarsArea:
     methods: [GET]
     options:
         expose: true
-        
-        
 
-        
-        
+getDataChartColumnLineDualAxisByFrequencyNotification:
+    path: /getDataChartColumnLineDualAxisByFrequencyNotification/{id}
+    defaults:
+        _controller: pequiven.controller.seipchart:getDataChartColumnLineDualAxisByFrequencyNotificationAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true

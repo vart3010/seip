@@ -2496,6 +2496,29 @@ angular.module('seipModule.controllers', [])
                     });
                 });
             }
+            
+            //Gráfico para mostrar información de 2 variables (respecto al eje izquierdo) y el resultado de la medición (respecto al eje derecho en valor porcentual), del indicador
+            $scope.chargeChartColumnLineDualAxisByFrequencyNotification = function (indicatorId, render, width, height) {
+                var getDataChartColumnLineDualAxisByFrequencyNotification = Routing.generate("getDataChartColumnLineDualAxisByFrequencyNotification", {id: indicatorId});
+                $http.get(getDataChartColumnLineDualAxisByFrequencyNotification).success(function (data) {
+                    FusionCharts.ready(function () {
+                        var revenueChartColumnLineDualAxisByFrequencyNotification = new FusionCharts({
+                            "type": "mscolumn3dlinedy",
+                            "renderAt": render,
+                            "width": width + "%",
+                            "height": height,
+                            "dataFormat": "json",
+                            "dataSource": {
+                                "chart": data.dataSource.chart,
+                                "categories": data.dataSource.categories,
+                                "dataset": data.dataSource.dataset
+                            }
+                        });
+                        revenueChartColumnLineDualAxisByFrequencyNotification.setTransparent(true);
+                        revenueChartColumnLineDualAxisByFrequencyNotification.render();
+                    });
+                });
+            }
         })
 
         .controller('ToolsController', function ($scope, ngTableParams, $http, sfTranslator, notifyService) {

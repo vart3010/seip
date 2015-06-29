@@ -882,7 +882,7 @@ class IndicatorService implements ContainerAwareInterface {
         
         
         if(isset($options['viewVariablesRealPlan']) && $options['viewVariablesRealPlan']){
-                unset($options['viewVariablesRealPlan']);
+            unset($options['viewVariablesRealPlan']);
             foreach($valuesIndicator as $valueIndicator){
                 $parameters = $valueIndicator->getFormulaParameters();
                     foreach ($parameters as $parameter => $key) {
@@ -899,6 +899,20 @@ class IndicatorService implements ContainerAwareInterface {
                 $varPlan = $formula->getVariableToPlanValue();
                 $arrayVariables[$varPlan->getName()]['value'] = $indicator->getTotalPlan();
                 $arrayVariables[$varPlan->getName()]['description'] = $varPlan->getDescription();
+        } elseif(isset($options['viewVariablesRealPlanAutomaticByFrequencyNotification']) && $options['viewVariablesRealPlanAutomaticByFrequencyNotification']){
+            $varReal = $formula->getVariableToRealValue();
+            $varPlan = $formula->getVariableToPlanValue();
+            $nameParameterReal = $varReal->getName();
+            $nameParameterPlan = $varPlan->getName();
+            $arrayVariables['descriptionReal'] = $varReal->getDescription();
+            $arrayVariables['summaryReal'] = $varReal->getSummary();
+            $arrayVariables['descriptionPlan'] = $varPlan->getDescription();
+            $arrayVariables['summaryPlan'] = $varPlan->getSummary();
+            foreach ($valuesIndicator as $valueIndicator) {
+                $arrayVariables['valueReal'][] = $valueIndicator->getParameter($nameParameterReal);
+                $arrayVariables['valuePlan'][] = $valueIndicator->getParameter($nameParameterPlan);
+                $arrayVariables['medition'][] = $valueIndicator->getValueOfIndicator();
+            }
         } else{
             $variables = $formula->getVariables();
 
@@ -986,7 +1000,7 @@ class IndicatorService implements ContainerAwareInterface {
         $chart["decimals"] = "2";
 
         $totalNumChildrens = count($indicator->getChildrens()); //Número de indicadores asociados
-
+        
         $category = $dataSetReal = $dataSetPlan = $medition = array();
         $dataSetReal["seriesname"] = "Real";
         $dataSetPlan["seriesname"] = "Plan";
@@ -1030,6 +1044,38 @@ class IndicatorService implements ContainerAwareInterface {
             $dataSetReal["data"][] = $dataReal;
             $dataSetPlan["data"][] = $dataPlan;
             $medition["data"][] = $dataMedition;
+        } elseif(isset($options['byFrequencyNotification']) && array_key_exists('byFrequencyNotification', $options)){
+            unset($options['byFrequencyNotification']);
+            $arrayVariables = array();
+            if($indicator->getFormula()->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_FROM_EQ){
+                $arrayVariables = $this->getArrayVariablesFormulaWithData($indicator, array('viewVariablesRealPlan' => true));
+            } elseif($indicator->getFormula()->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC){
+                $arrayVariables = $this->getArrayVariablesFormulaWithData($indicator, array('viewVariablesRealPlanAutomaticByFrequencyNotification' => true));
+            }
+            
+            $dataSetReal["seriesname"] = $arrayVariables['descriptionReal'];
+            $dataSetPlan["seriesname"] = $arrayVariables['descriptionPlan'];
+            $medition["seriesname"] = $indicator->getSummary();
+            $medition["renderas"] = "line";
+            $medition["parentYAxis"] = "S";
+            $medition["showValues"] = "0";
+
+            $totalValueIndicators = count($indicator->getValuesIndicator());
+            for ($i = 0;$i < $totalValueIndicators; $i++) {
+                $label = $dataReal = $dataPlan = $dataMedition = array();
+                $label["label"] = $i;
+//                $label["link"] = $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicatorChildren->getId()));
+                $dataReal["value"] = number_format($arrayVariables['valueReal'][$i], 2, ',', '.');
+//                $dataReal["link"] = $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicatorChildren->getId()));
+                $dataPlan["value"] = number_format($arrayVariables['valuePlan'][$i], 2, ',', '.');
+//                $dataPlan["link"] = $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicatorChildren->getId()));
+                $dataMedition["value"] = number_format($arrayVariables['medition'][$i], 2, ',', '.');
+
+                $category[] = $label;
+                $dataSetReal["data"][] = $dataReal;
+                $dataSetPlan["data"][] = $dataPlan;
+                $medition["data"][] = $dataMedition;
+            }
         }
 
         $data['dataSource']['chart'] = $chart;
