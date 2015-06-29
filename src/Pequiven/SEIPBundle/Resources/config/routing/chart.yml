@@ -1,8 +1,8 @@
 
-getDataChartDoughnut:
-    path: /getDataChartDoughnut/{id}
+getDataChartDoughnutIndicatorsAssociated:
+    path: /getDataChartDoughnutIndicatorsAssociated/{id}
     defaults:
-        _controller: pequiven.controller.seipchart:getDataChartTypeDoughnutAction
+        _controller: pequiven.controller.seipchart:getDataChartTypeDoughnutIndicatorsAssociatedAction
         _format: json
     requirements:
         _format: "json|xml"

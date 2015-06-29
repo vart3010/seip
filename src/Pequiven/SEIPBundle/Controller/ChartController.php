@@ -13,10 +13,10 @@ use Symfony\Component\HttpFoundation\Request;
 class ChartController extends SEIPController {
 
     /**
-     * Función que retorna la data para un gráfico de tipo dona. Ejemplo para los indicadores estratégicos y muestre como está constituido el mismo
+     * Función que retorna la data de los indicadores asociados en un gráfico de tipo dona.
      * @return JsonResponse
      */
-    public function getDataChartTypeDoughnutAction(Request $request) {
+    public function getDataChartTypeDoughnutIndicatorsAssociatedAction(Request $request) {
         $response = new JsonResponse();
 
         $idIndicator = $request->get('id');

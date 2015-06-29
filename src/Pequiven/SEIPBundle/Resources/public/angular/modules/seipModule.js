@@ -2311,7 +2311,7 @@ angular.module('seipModule.controllers', [])
         .controller('ChartsDashboardController', function ($scope, $http) {
 
             //Gráfico en forma de dona para mostrar los indicadores asociados (Resumen, Referencia y Resultado de la Medición)
-            $scope.chargeChartDoughnut2d = function (indicatorId, render, width, height) {
+            $scope.chargeChartDoughnut2dIndicatorsAssociated = function (indicatorId, render, width, height) {
 //                var getDataChartDoughnut = Routing.generate("getDataChartDoughnut", {id: indicatorId});
 //                $scope.chartDoughnut2d = {};
 //                $http.get(getDataChartDoughnut).success(function (data) {
@@ -2320,10 +2320,10 @@ angular.module('seipModule.controllers', [])
 //                        "data": data.dataSource.dataSet
 //                    }
 //                });
-                var getDataChartDoughnut = Routing.generate("getDataChartDoughnut", {id: indicatorId});
-                $http.get(getDataChartDoughnut).success(function (data) {
+                var getDataChartDoughnutIndicatorsAssociated = Routing.generate("getDataChartDoughnutIndicatorsAssociated", {id: indicatorId});
+                $http.get(getDataChartDoughnutIndicatorsAssociated).success(function (data) {
                     FusionCharts.ready(function () {
-                        var revenueChartTactic = new FusionCharts({
+                        var revenueChartDoughnutIndicatorsAssociated = new FusionCharts({
                             "type": "doughnut2d",
                             "renderAt": render,
                             "width": width + "%",
@@ -2334,8 +2334,8 @@ angular.module('seipModule.controllers', [])
                                 "data": data.dataSource.dataSet
                             }
                         });
-                        revenueChartTactic.setTransparent(true);
-                        revenueChartTactic.render();
+                        revenueChartDoughnutIndicatorsAssociated.setTransparent(true);
+                        revenueChartDoughnutIndicatorsAssociated.render();
                     });
                 });
             }
