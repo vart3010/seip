@@ -536,7 +536,7 @@ chart:
         indicatorsAssociatedRealPlanWithResult: Indicadores Asociados con real, plan y resultados (Columna y 2 ejes).
         indicatorsDoughnutWithVariables: Indicadores con resultados de variables (Dona).
         indicatorsVariablesOrTagsInPie: Resultados de variables (sumativas al real o al plan) o etiquetas (de un tipo en especifico, texto o numéricas).
-        resultsOfIndicator: Resultados Asociados al Indicador (2 parámetros).
+        resultsOfIndicator: Real, plan y resultado de medición del Indicador.
         resultsOfVariable: Resultados de Variables y que forman parte de un mismo valor (Acumuladas).
         indicatorsBarArea: Indicadores mostrados por barras y areas 
         indicatorsVariablesPlanFromEquationInPie: Resultados de las variables asociadas al plan de la fórmula a partir de ecuación

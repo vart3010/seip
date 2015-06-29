@@ -21,10 +21,10 @@ getDataChartDoughnutWithVariablesRealPlan:
     options:
         expose: true
         
-getDataChartColumnLineDualAxis:
-    path: /getDataChartColumnLineDualAxis/{id}
+getDataChartColumnLineDualAxisIndicatorsAssociated:
+    path: /getDataChartColumnLineDualAxisIndicatorsAssociated/{id}
     defaults:
-        _controller: pequiven.controller.seipchart:getDataChartTypeColumnLineDualAxisAction
+        _controller: pequiven.controller.seipchart:getDataChartTypeColumnLineDualAxisIndicatorsAssociatedAction
         _format: json
     requirements:
         _format: "json|xml"
@@ -36,6 +36,17 @@ getDataChartPieVariablesOrTags:
     path: /getDataChartPieVariablesOrTags/{id}
     defaults:
         _controller: pequiven.controller.seipchart:getDataChartTypePieVariablesOrTagsAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
+        
+getDataChartColumnLineDualAxisRealPlan:
+    path: /getDataChartColumnLineDualAxisRealPlan/{id}
+    defaults:
+        _controller: pequiven.controller.seipchart:getDataChartTypeColumnLineDualAxisRealPlanAction
         _format: json
     requirements:
         _format: "json|xml"

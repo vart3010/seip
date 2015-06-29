@@ -941,12 +941,12 @@ class IndicatorService implements ContainerAwareInterface {
      * @param Indicator $indicator
      * @return type
      */
-    public function getChartColumnLineDualAxis(Indicator $indicator) {
+    public function getChartColumnLineDualAxis(Indicator $indicator, $options = array()) {
         $data = array(
             'dataSource' => array(
                 'chart' => array(),
                 'categories' => array(),
-                'dataSet' => array(),
+                'dataset' => array(),
             ),
         );
         $chart = array();
@@ -995,26 +995,28 @@ class IndicatorService implements ContainerAwareInterface {
         $medition["parentYAxis"] = "S";
         $medition["showValues"] = "0";
 
-        
-        
-        if ($totalNumChildrens > 0) {//La info a mostrar es de los indicadores asociados
-            $indicatorsChildrens = $this->container->get('pequiven.repository.indicator')->findByParentAndOrderShow($indicator->getId()); //Obtenemos los indicadores asociados
-            foreach ($indicatorsChildrens as $indicatorChildren) {
-                $label = $dataReal = $dataPlan = $dataMedition = array();
-                $label["label"] = $indicatorChildren->getSummary();
-                $label["link"] = $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicatorChildren->getId()));
-                $dataReal["value"] = number_format($indicatorChildren->getValueFinal(), 2, ',', '.');
-                $dataReal["link"] = $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicatorChildren->getId()));
-                $dataPlan["value"] = number_format($indicatorChildren->getTotalPlan(), 2, ',', '.');
-                $dataPlan["link"] = $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicatorChildren->getId()));
-                $dataMedition["value"] = number_format($indicatorChildren->getResultReal(), 2, ',', '.');
+        if(isset($options['childrens']) && array_key_exists('childrens', $options)){
+            unset($options['childrens']);
+            if ($totalNumChildrens > 0) {//La info a mostrar es de los indicadores asociados
+                $indicatorsChildrens = $this->container->get('pequiven.repository.indicator')->findByParentAndOrderShow($indicator->getId()); //Obtenemos los indicadores asociados
+                foreach ($indicatorsChildrens as $indicatorChildren) {
+                    $label = $dataReal = $dataPlan = $dataMedition = array();
+                    $label["label"] = $indicatorChildren->getSummary();
+                    $label["link"] = $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicatorChildren->getId()));
+                    $dataReal["value"] = number_format($indicatorChildren->getValueFinal(), 2, ',', '.');
+                    $dataReal["link"] = $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicatorChildren->getId()));
+                    $dataPlan["value"] = number_format($indicatorChildren->getTotalPlan(), 2, ',', '.');
+                    $dataPlan["link"] = $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicatorChildren->getId()));
+                    $dataMedition["value"] = number_format($indicatorChildren->getResultReal(), 2, ',', '.');
 
-                $category[] = $label;
-                $dataSetReal["data"][] = $dataReal;
-                $dataSetPlan["data"][] = $dataPlan;
-                $medition["data"][] = $dataMedition;
+                    $category[] = $label;
+                    $dataSetReal["data"][] = $dataReal;
+                    $dataSetPlan["data"][] = $dataPlan;
+                    $medition["data"][] = $dataMedition;
+                }
             }
-        } else {//La info a mostrar es de los resultados propios en base al real o plan
+        } elseif(isset($options['withVariablesRealPLan']) && array_key_exists('withVariablesRealPLan', $options)) {//La info a mostrar es de los resultados propios en base al real o plan
+            unset($options['withVariablesRealPLan']);
             $label = $dataReal = $dataPlan = $dataMedition = array();
             $label["label"] = $indicator->getSummary();
             $label["link"] = $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicator->getId()));
