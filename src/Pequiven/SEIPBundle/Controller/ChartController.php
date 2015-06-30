@@ -53,7 +53,7 @@ class ChartController extends SEIPController {
     }
 
     /**
-     * Función que retorna la data para un gráfico de tipo columna y con 2 ejes verticales.
+     * Función que retorna la data para un gráfico tipo barras vertical para mostrar el real/plan de los indicadores asociados respecto al eje izquierdo y el resultado de la medición en valor porcentual respecto al lado derecho de los indicadores hijos.
      * @return JsonResponse
      */
     public function getDataChartTypeColumnLineDualAxisIndicatorsAssociatedAction(Request $request) {
@@ -94,7 +94,7 @@ class ChartController extends SEIPController {
     }
     
     /**
-     * Función que retorna la data para un gráfico de tipo columna y con 2 ejes verticales.
+     * Función que retorna la data para un gráfico tipo barras vertical para mostrar el real/plan de los parámetros de cada mes. Sólo para el caso en que sean 2 parámetros (Bien sea plan y real automático o plan y real automático a partir de ecuación).
      * @return JsonResponse
      */
     public function getDataChartTypeColumnLineDualAxisRealPlanAction(Request $request) {

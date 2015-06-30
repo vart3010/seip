@@ -881,7 +881,7 @@ class IndicatorService implements ContainerAwareInterface {
         $arrayVariables = array();
         
         
-        if(isset($options['viewVariablesRealPlan']) && $options['viewVariablesRealPlan']){
+        if(isset($options['viewVariablesRealPlan']) && array_key_exists('viewVariablesRealPlan',$options)){
             unset($options['viewVariablesRealPlan']);
             foreach($valuesIndicator as $valueIndicator){
                 $parameters = $valueIndicator->getFormulaParameters();
@@ -892,14 +892,16 @@ class IndicatorService implements ContainerAwareInterface {
                     }
                 }
             }
-        } elseif(isset($options['viewVariablesRealPlanAutomatic']) && $options['viewVariablesRealPlanAutomatic']){
+        } elseif(isset($options['viewVariablesRealPlanAutomatic']) && array_key_exists('viewVariablesRealPlanAutomatic', $options)){
+            unset($options['viewVariablesRealPlanAutomatic']);
                 $varReal = $formula->getVariableToRealValue();
                 $arrayVariables[$varReal->getName()]['value'] = $indicator->getValueFinal();
                 $arrayVariables[$varReal->getName()]['description'] = $varReal->getDescription();
                 $varPlan = $formula->getVariableToPlanValue();
                 $arrayVariables[$varPlan->getName()]['value'] = $indicator->getTotalPlan();
                 $arrayVariables[$varPlan->getName()]['description'] = $varPlan->getDescription();
-        } elseif(isset($options['viewVariablesRealPlanAutomaticByFrequencyNotification']) && $options['viewVariablesRealPlanAutomaticByFrequencyNotification']){
+        } elseif(isset($options['viewVariablesRealPlanAutomaticByFrequencyNotification']) && array_key_exists('viewVariablesRealPlanAutomaticByFrequencyNotification', $options)){
+            unset($options['viewVariablesRealPlanAutomaticByFrequencyNotification']);
             $varReal = $formula->getVariableToRealValue();
             $varPlan = $formula->getVariableToPlanValue();
             $nameParameterReal = $varReal->getName();
@@ -913,10 +915,25 @@ class IndicatorService implements ContainerAwareInterface {
                 $arrayVariables['valuePlan'][] = $valueIndicator->getParameter($nameParameterPlan);
                 $arrayVariables['medition'][] = $valueIndicator->getValueOfIndicator();
             }
+        } elseif(isset($options['viewVariablesRealPlanFromEquationByFrequencyNotification']) && array_key_exists('viewVariablesRealPlanFromEquationByFrequencyNotification', $options)){
+            unset($options['viewVariablesRealPlanFromEquationByFrequencyNotification']);
+            $arrayVariables['descriptionReal'] = $indicator->getShowByRealValue();
+            $arrayVariables['descriptionPlan'] = $indicator->getShowByPlanValue();
+            foreach($valuesIndicator as $valueIndicator){
+                $parameters = $valueIndicator->getFormulaParameters();
+                foreach ($parameters as $parameter => $key) {
+                    if ($parameter == 'real_from_equation') {
+                        $arrayVariables['valueReal'][] = $key;
+                    } elseif($parameter == 'plan_from_equation'){
+                        $arrayVariables['valuePlan'][] = $key;
+                    }
+                }
+                $arrayVariables['medition'][] = $valueIndicator->getValueOfIndicator();
+            }
         } else{
             $variables = $formula->getVariables();
 
-            if(isset($options['viewVariablesFromPlanEquation']) && $options['viewVariablesFromPlanEquation']){
+            if(isset($options['viewVariablesFromPlanEquation']) && array_key_exists('viewVariablesFromPlanEquation', $options)){
                 unset($options['viewVariablesFromPlanEquation']);
                 $vars = $this->getArrayVars($formula, $formula->getSourceEquationPlan());
 
@@ -930,7 +947,7 @@ class IndicatorService implements ContainerAwareInterface {
                         }
                     }
                 }
-            } elseif(isset($options['viewVariablesFromRealEquation']) && $options['viewVariablesFromRealEquation']){
+            } elseif(isset($options['viewVariablesFromRealEquation']) && array_key_exists('viewVariablesFromRealEquation', $options)){
                 unset($options['viewVariablesFromRealEquation']);
                 $vars = $this->getArrayVars($formula, $formula->getSourceEquationReal());
 
@@ -1048,7 +1065,7 @@ class IndicatorService implements ContainerAwareInterface {
             unset($options['byFrequencyNotification']);
             $arrayVariables = array();
             if($indicator->getFormula()->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_FROM_EQ){
-                $arrayVariables = $this->getArrayVariablesFormulaWithData($indicator, array('viewVariablesRealPlan' => true));
+                $arrayVariables = $this->getArrayVariablesFormulaWithData($indicator, array('viewVariablesRealPlanFromEquationByFrequencyNotification' => true));
             } elseif($indicator->getFormula()->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC){
                 $arrayVariables = $this->getArrayVariablesFormulaWithData($indicator, array('viewVariablesRealPlanAutomaticByFrequencyNotification' => true));
             }
