@@ -31,22 +31,22 @@ abstract class Chart
     /**
      * Gráfico para mostrar las variables (sumativas al real o al plan) o etiquetas (de un tipo en especifico, texto o numéricas)
      */
-    const TYPE_CHART_PIE_VARIABLES_OR_TAGS = 3; //ACTIVO Y NO USADO
+    const TYPE_CHART_PIE_VARIABLES_OR_TAGS = 3; //NO USADO
     
     /**
-     * Gráfico tipo barras vertical para mostrar el real/plan de los parámetros de cada mes. Sólo para el caso en que sean 2 parámetros (Bien sea plan y real automático o plan y real automático a partir de ecuación)
+     * Gráfico tipo barras vertical para mostrar el real/plan en el eje izquierdo y el resultado de la medición en el eje derecho del indicador.
      */
-    const TYPE_CHART_COLUMN_VARIABLES_REAL_PLAN = 4; //ACTIVO Y NO USADO
-    
-    /**
-     * Gráfico para mostrar los resultados de diferentes variables y que forman parte de un mismo valor
-     */
-    const TYPE_CHART_PIE_FROM_TAGS = 5;
+    const TYPE_CHART_COLUMN_VARIABLES_REAL_PLAN = 4; //NO USADO
     
     /**
      * Gráfico para mostrar los resultados de diferentes variables y que forman parte de un mismo valor
      */
-    const TYPE_CHART_BARS_AREA = 6; //ACTIVO Y NO USADO
+    const TYPE_CHART_PIE_FROM_TAGS = 5; //NO USADO
+    
+    /**
+     * Gráfico tipo barra vertical/área para mostrar el real/plan de acuerdo a la frecuencia de notificación
+     */
+    const TYPE_CHART_BARS_AREA_VARIABLES_REAL_PLAN_BY_FREQUENCY_NOTIFICATION = 6; //ACTIVO Y USADO
     
     /**
      * Gráfico para mostrar las variables (sumativas al plan) de un indicador con fórmula a partir de ecuación
@@ -61,7 +61,7 @@ abstract class Chart
     /**
      * Gráfico tipo barras vertical para mostrar el real/plan de los resultados respecto al eje izquierdo y el resultado de la medición en valor porcentual respecto al lado derecho, de acuerdo a la frecuencia de notificación
      */
-    const TYPE_CHART_COLUMN_REAL_PLAN_BY_FREQUENCY_NOTIFICATION = 9;
+    const TYPE_CHART_COLUMN_REAL_PLAN_BY_FREQUENCY_NOTIFICATION = 9; // ACTIVO Y USADO
        
     /**
      * @var integer
@@ -105,7 +105,7 @@ abstract class Chart
             self::TYPE_CHART_PIE_VARIABLES_OR_TAGS => 'chart.type.indicatorsVariablesOrTagsInPie',
             self::TYPE_CHART_COLUMN_VARIABLES_REAL_PLAN => 'chart.type.resultsOfIndicator',
             self::TYPE_CHART_PIE_FROM_TAGS => 'chart.type.resultsOfVariable',
-            self::TYPE_CHART_BARS_AREA => 'chart.type.indicatorsBarArea',
+            self::TYPE_CHART_BARS_AREA_VARIABLES_REAL_PLAN_BY_FREQUENCY_NOTIFICATION => 'chart.type.indicatorsVariablesRealPlanBarAreaByFrequencyNotification',
             self::TYPE_CHART_PIE_VARIABLES_PLAN_FROM_EQUATION => 'chart.type.indicatorsVariablesPlanFromEquationInPie',
             self::TYPE_CHART_PIE_VARIABLES_REAL_FROM_EQUATION => 'chart.type.indicatorsVariablesRealFromEquationInPie',
             self::TYPE_CHART_COLUMN_REAL_PLAN_BY_FREQUENCY_NOTIFICATION => 'chart.type.indicatorsVariablesRealPlanByFrequencyNotification',

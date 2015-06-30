@@ -871,7 +871,7 @@ class IndicatorService implements ContainerAwareInterface {
     }
 
     /**
-     * Función para 
+     * Función para obtener las variables de la fórmula del indicador de acuerdo a 
      * @param Indicator $indicator
      * @return type
      */

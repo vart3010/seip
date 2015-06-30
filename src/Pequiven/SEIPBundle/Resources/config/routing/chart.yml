@@ -32,17 +32,6 @@ getDataChartColumnLineDualAxisIndicatorsAssociated:
     options:
         expose: true
         
-getDataChartPieVariablesOrTags:
-    path: /getDataChartPieVariablesOrTags/{id}
-    defaults:
-        _controller: pequiven.controller.seipchart:getDataChartTypePieVariablesOrTagsAction
-        _format: json
-    requirements:
-        _format: "json|xml"
-    methods: [GET]
-    options:
-        expose: true
-        
 getDataChartColumnLineDualAxisRealPlan:
     path: /getDataChartColumnLineDualAxisRealPlan/{id}
     defaults:

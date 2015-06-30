@@ -538,7 +538,7 @@ chart:
         indicatorsVariablesOrTagsInPie: Resultados de variables (sumativas al real o al plan) o etiquetas (de un tipo en especifico, texto o numéricas).
         resultsOfIndicator: Real, plan y resultado de medición del Indicador.
         resultsOfVariable: Resultados de Variables y que forman parte de un mismo valor (Acumuladas).
-        indicatorsBarArea: Indicadores mostrados por barras y areas 
+        indicatorsVariablesRealPlanBarAreaByFrequencyNotification: Indicadores mostrados por barras y areas, mostrando las variables real y plan de acuerdo a la frecuencia de notificación
         indicatorsVariablesPlanFromEquationInPie: Resultados de las variables asociadas al plan de la fórmula a partir de ecuación
         indicatorsVariablesRealFromEquationInPie: Resultados de las variables asociadas al real de la fórmula a partir de ecuación
         indicatorsVariablesRealPlanByFrequencyNotification: Real, plan y resultado de medición del Indicador de acuerdo a la frecuencia de notificación

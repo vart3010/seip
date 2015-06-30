@@ -2384,7 +2384,7 @@ angular.module('seipModule.controllers', [])
                     });
                 });
             }
-            
+
             //Gráfico para mostrar información de 2 variables (respecto al eje izquierdo) y el resultado de la medición (respecto al eje derecho en valor porcentual), del indicador
             $scope.chargeChartColumnLineDualAxisRealPlan = function (indicatorId, render, width, height) {
                 var getDataChartColumnLineDualAxisRealPlan = Routing.generate("getDataChartColumnLineDualAxisRealPlan", {id: indicatorId});
@@ -2426,29 +2426,6 @@ angular.module('seipModule.controllers', [])
                         });
                         revenueChartDoughnut2dWithVariablesRealPlan.setTransparent(true);
                         revenueChartDoughnut2dWithVariablesRealPlan.render();
-                    });
-                });
-            }
-
-            //Gráfico en forma de dona para mostrar las variables de la fórmula del indicador
-            $scope.chargeChartPieVariablesOrTags = function (indicatorId, render, width, height) {
-                var getDataChartPieVariablesOrTags = Routing.generate("getDataChartPieVariablesOrTags", {id: indicatorId});
-                $http.get(getDataChartPieVariablesOrTags).success(function (data) {
-                    FusionCharts.ready(function () {
-                        var revenueChartTactic = new FusionCharts({
-                            "type": "pie2d",
-                            "renderAt": render,
-                            "width": width + "%",
-                            "height": height,
-                            "dataFormat": "json",
-                            "dataSource": {
-                                "chart": data.dataSource.chart,
-                                "categories": data.dataSource.categories,
-                                "dataset": data.dataSource.dataset
-                            }
-                        });
-                        revenueChartTactic.setTransparent(true);
-                        revenueChartTactic.render();
                     });
                 });
             }
