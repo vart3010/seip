@@ -2429,6 +2429,29 @@ angular.module('seipModule.controllers', [])
                     });
                 });
             }
+            
+            //Gráfico para mostrar información de 2 variables (respecto al eje izquierdo) y el resultado de la medición (respecto al eje derecho en valor porcentual), del indicador
+            $scope.chargeChartBarsAreaVariablesRealPlanByFrequencyNotification = function (indicatorId, render, width, height) {
+                var getDataChartBarsAreaVariablesRealPlanByFrequencyNotification = Routing.generate("getDataChartBarsAreaVariablesRealPlanByFrequencyNotification", {id: indicatorId});
+                $http.get(getDataChartBarsAreaVariablesRealPlanByFrequencyNotification).success(function (data) {
+                    FusionCharts.ready(function () {
+                        var revenueChartBarsAreaVariablesRealPlanByFrequencyNotification = new FusionCharts({
+                            "type": "mscombi2d",
+                            "renderAt": render,
+                            "width": width + "%",
+                            "height": height,
+                            "dataFormat": "json",
+                            "dataSource": {
+                                "chart": data.dataSource.chart,
+                                "categories": data.dataSource.categories,
+                                "dataset": data.dataSource.dataset
+                            }
+                        });
+                        revenueChartBarsAreaVariablesRealPlanByFrequencyNotification.setTransparent(true);
+                        revenueChartBarsAreaVariablesRealPlanByFrequencyNotification.render();
+                    });
+                });
+            }
 
             //Gráfico para mostrar las variables (sumativas al plan) de un indicador con fórmula a partir de ecuación
             $scope.chargeChartPieVariablesPlanFromEquation = function (indicatorId, render, width, height) {

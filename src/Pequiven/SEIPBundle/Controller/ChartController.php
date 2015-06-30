@@ -153,7 +153,7 @@ class ChartController extends SEIPController {
         return $response;
     }
 
-    public function getDataChartBarsAreaAction(Request $request) {
+    public function getDataChartBarsAreaVariablesRealPlanByFrequencyNotificationAction(Request $request) {
         $response = new JsonResponse();
 
         $idIndicator = $request->get('id');
@@ -162,7 +162,7 @@ class ChartController extends SEIPController {
 
         $indicator = $this->get('pequiven.repository.indicator')->find($idIndicator); //Obtenemos el indicador
 
-        $dataChart = $indicatorService->getDataDashboardBarsArea($indicator, array()); //Obtenemos la data del gráfico de acuerdo al indicador
+        $dataChart = $indicatorService->getDataDashboardBarsArea($indicator, array('byFrequencyNotification' => true)); //Obtenemos la data del gráfico de acuerdo al indicador
 
         $response->setData($dataChart); //Seteamos la data del gráfico en Json
 

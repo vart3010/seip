@@ -65,10 +65,10 @@ getDataChartPieVariablesRealFromEquation:
     options:
         expose: true
         
-getDataChartBarsArea:
-    path: /getDataChartBarsArea/{id}
+getDataChartBarsAreaVariablesRealPlanByFrequencyNotification:
+    path: /getDataChartBarsAreaVariablesRealPlanByFrequencyNotification/{id}
     defaults:
-        _controller: pequiven.controller.seipchart:getDataChartBarsAreaAction
+        _controller: pequiven.controller.seipchart:getDataChartBarsAreaVariablesRealPlanByFrequencyNotificationAction
         _format: json
     requirements:
         _format: "json|xml"

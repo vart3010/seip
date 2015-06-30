@@ -787,85 +787,89 @@ class IndicatorService implements ContainerAwareInterface {
         return $data;
     }
 
-    public function getDataDashboardBarsArea() {
+    /**
+     * 
+     * @param Indicator $indicator
+     * @param type $options
+     * @return string
+     */
+    public function getDataDashboardBarsArea(Indicator $indicator, $options = array()) {
         $data = array(
             'dataSource' => array(
                 'chart' => array(),
                 'categories' => array(),
-                'dataset' => array()
+                'dataset' => array(),
             ),
         );
+        $chart = array();
 
-        $char = array();
+        $chart["caption"] = $indicator->getSummary();
+        $chart["subCaption"] = "Sales analysis of last year";
+        $chart["xAxisname"] = "Month";
+        $chart["yAxisName"] = "Amount (In USD)";
+        $chart["numberPrefix"] = "$";
+        $chart["showBorder"] = "0";
+        $chart["showValues"] = "0";
+        $chart["paletteColors"] = "#0075c2,#1aaf5d,#f2c500";
+        $chart["bgColor"] = "#ffffff";
+        $chart["showCanvasBorder"] = "0";
+        $chart["canvasBgColor"] = "#ffffff";
+        $chart["captionFontSize"] = "14";
+        $chart["subcaptionFontSize"] = "14";
+        $chart["subcaptionFontBold"] = "0";
+        $chart["divlineColor"] = "#999999";
+        $chart["divLineDashed"] = "1";
+        $chart["divLineDashLen"] = "1";
+        $chart["divLineGapLen"] = "1";
+        $chart["showAlternateHGridColor"] = "0";
+        $chart["usePlotGradientColor"] = "0";
+        $chart["toolTipColor"] = "#ffffff";
+        $chart["toolTipBorderThickness"] = "0";
+        $chart["toolTipBgColor"] = "#000000";
+        $chart["toolTipBgAlpha"] = "80";
+        $chart["toolTipBorderRadius"] = "2";
+        $chart["toolTipPadding"] = "5";
+        $chart["legendBgColor"] = "#ffffff";
+        $chart["legendBorderAlpha"] = "0";
+        $chart["legendShadow"] = "0";
+        $chart["legendItemFontSize"] = "10";
+        $chart["legendItemFontColor"] = "#666666";
+        
+        $totalNumChildrens = count($indicator->getChildrens()); //Número de indicadores asociados
+        
+        $category = $dataSetReal = $dataSetPlan = $medition = array();
+        
+        if(isset($options['byFrequencyNotification']) && array_key_exists('byFrequencyNotification', $options)){
+            unset($options['byFrequencyNotification']);
+            $arrayVariables = array();
+            if($indicator->getFormula()->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_FROM_EQ){
+                $arrayVariables = $this->getArrayVariablesFormulaWithData($indicator, array('viewVariablesRealPlanFromEquationByFrequencyNotification' => true));
+            } elseif($indicator->getFormula()->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC){
+                $arrayVariables = $this->getArrayVariablesFormulaWithData($indicator, array('viewVariablesRealPlanAutomaticByFrequencyNotification' => true));
+            }
+            
+            $dataSetPlan["seriesname"] = $arrayVariables['descriptionPlan'];
+            $dataSetPlan["showValues"] = "1";
+            $dataSetReal["seriesname"] = $arrayVariables['descriptionReal'];
+            $dataSetReal["renderas"] = "area";
 
-        $char["caption"] = "TITLE";
-        $char["subcaption"] = "last year";
-        $char["xaxisname"] = "Mount";
-        $char["yaxisname"] = "Amount";
-        $char["numberprefix"] = "$";
-        $char["theme"] = "fint";
+            $totalValueIndicators = count($indicator->getValuesIndicator());
+            for ($i = 0;$i < $totalValueIndicators; $i++) {
+                $label = $dataReal = $dataPlan = $dataMedition = array();
+                $label["label"] = $i;
+                $dataReal["value"] = number_format($arrayVariables['valueReal'][$i], 2, ',', '.');
+                $dataPlan["value"] = number_format($arrayVariables['valuePlan'][$i], 2, ',', '.');
 
-
-
-//        $category = array();
-//        $values = array();
-//
-//        $c = array();
-//        array_push($category, array("label" => "cat1"));
-//        array_push($category, array("label" => "cat2"));
-//        array_push($category, array("label" => "cat3"));
-//
-//
-//        $v = array();
-//        array_push($values, array("value" => "150"));
-//        array_push($values, array("value" => "200"));
-//        array_push($values, array("value" => "20"));
-//
-//        $data["dataSource"]["chart"] = $char;
-//        $data["dataSource"]["categories"][]["category"] = $category;
-//        $data["dataSource"]["dataset"][]["data"][] = $values;
-//        $data["dataSource"]["dataset"][]["data"][] = $values;
-//        $data["dataSource"]["dataset"][]["data"][] = $values;
-        $category = $dataSetReal = $dataSetPlan = $medition = $dataReal = array();
-        for ($i = 1; $i <= 4; $i++) {
-            $dataReal["value"] = "200";
-
-            $dataSetReal["data"][] = $dataReal;
-            $dataSetPlan["data"][] = $dataReal;
-            $medition["data"][] = $dataReal;
+                $category[] = $label;
+                $dataSetReal["data"][] = $dataReal;
+                $dataSetPlan["data"][] = $dataPlan;
+            }
         }
-
-//        array_push($values, array("value" => "150"));
-//        array_push($values, array("value" => "200"));
-//        array_push($values, array("value" => "20"));
-
-
-        $dataSetReal["seriesname"] = "Real";
-        $dataSetPlan["seriesname"] = "Plan";
-        $dataSetPlan["renderas"] = "area";
-        $medition["seriesname"] = "% Cumplimiento";
-        $medition["renderas"] = "line";
-
-
-        $label1 = $label2 = $label3 = $dataPlan = $dataMedition = array();
-        $label1["label"] = 'area barra 1';
-        $label2["label"] = 'area barra 2';
-        $label3["label"] = 'area barra 3';
-        $label4["label"] = 'area barra 4';
-
-        $category[] = $label1;
-        $category[] = $label2;
-        $category[] = $label3;
-        $category[] = $label4;
-        //$dataSetReal["data"][] = $dataReal;
-        //$dataSetPlan["data"][] = $dataPlan;
-        //$medition["data"][] = $dataMedition;
-
-        $data['dataSource']['chart'] = $char;
+        
+        $data['dataSource']['chart'] = $chart;
         $data['dataSource']['categories'][]["category"] = $category;
         $data['dataSource']['dataset'][] = $dataSetReal;
         $data['dataSource']['dataset'][] = $dataSetPlan;
-        $data['dataSource']['dataset'][] = $medition;
 
         return $data;
     }
