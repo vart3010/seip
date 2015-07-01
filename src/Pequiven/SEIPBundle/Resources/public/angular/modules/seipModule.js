@@ -2541,6 +2541,29 @@ angular.module('seipModule.controllers', [])
                     });
                 });
             }
+            
+            //10-Gráfico para mostrar información de 2 variables (respecto al eje izquierdo) y el resultado de la medición (respecto al eje derecho en valor porcentual), del indicador (Variables marcadas como real/plan)
+            $scope.chargeChartColumnLineDualAxisVariablesMarkedRealPlan = function (indicatorId, render, width, height) {
+                var getDataChartColumnLineDualAxisVariablesMarkedRealPlan = Routing.generate("getDataChartColumnLineDualAxisVariablesMarkedRealPlan", {id: indicatorId});
+                $http.get(getDataChartColumnLineDualAxisVariablesMarkedRealPlan).success(function (data) {
+                    FusionCharts.ready(function () {
+                        var revenueChartColumnLineDualAxisVariablesMarkedRealPlan = new FusionCharts({
+                            "type": "mscolumn3dlinedy",
+                            "renderAt": render,
+                            "width": width + "%",
+                            "height": height,
+                            "dataFormat": "json",
+                            "dataSource": {
+                                "chart": data.dataSource.chart,
+                                "categories": data.dataSource.categories,
+                                "dataset": data.dataSource.dataset
+                            }
+                        });
+                        revenueChartColumnLineDualAxisVariablesMarkedRealPlan.setTransparent(true);
+                        revenueChartColumnLineDualAxisVariablesMarkedRealPlan.render();
+                    });
+                });
+            }
         })
 
         .controller('ToolsController', function ($scope, ngTableParams, $http, sfTranslator, notifyService) {

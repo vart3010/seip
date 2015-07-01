@@ -97,18 +97,32 @@ class Variable extends Model implements \Pequiven\SEIPBundle\Entity\PeriodItemIn
     private $summary;
     
     /**
-     * ¿La Variable será utilizada como real en el dashboard del indicador?
+     * ¿La Variable será utilizada como real en el dashboard tipo pie del indicador?
      * @var boolean
-     * @ORM\Column(name="showRealInDashboard",type="boolean")
+     * @ORM\Column(name="showRealInDashboardPie",type="boolean")
      */
-    private $showRealInDashboard = false;
+    private $showRealInDashboardPie = false;
     
     /**
-     * ¿La Variable será utilizada como plan en el dashboard del indicador?
+     * ¿La Variable será utilizada como plan en el dashboard tipo pie del indicador?
      * @var boolean
-     * @ORM\Column(name="showPlanInDashboard",type="boolean")
+     * @ORM\Column(name="showPlanInDashboardPie",type="boolean")
      */
-    private $showPlanInDashboard = false;
+    private $showPlanInDashboardPie = false;
+    
+    /**
+     * ¿La Variable será utilizada como real en el dashboard tipo columna+tendencia con 2 ejes verticales del indicador?
+     * @var boolean
+     * @ORM\Column(name="showRealInDashboardColumn",type="boolean")
+     */
+    private $showRealInDashboardColumn = false;
+    
+    /**
+     * ¿La Variable será utilizada como plan en el dashboard tipo columna+tendencia con 2 ejes verticales del indicador?
+     * @var boolean
+     * @ORM\Column(name="showPlanInDashboardColumn",type="boolean")
+     */
+    private $showPlanInDashboardColumn = false;
     
     /**
      * Get staticValue
@@ -364,41 +378,79 @@ class Variable extends Model implements \Pequiven\SEIPBundle\Entity\PeriodItemIn
     }
     
     /**
-     * Get showRealInDashboard
+     * Get showRealInDashboardPie
      *
      * @return boolean 
      */
-    public function getShowRealInDashboard()
+    public function getShowRealInDashboardPie()
     {
-        return $this->showRealInDashboard;
+        return $this->showRealInDashboardPie;
     }
 
     /**
-     * Set showRealInDashboard
-     * @param type $showRealInDashboard
+     * Set showRealInDashboardPie
+     * @param type $showRealInDashboardPie
      * @return Variable
      */
-    public function setShowRealInDashboard($showRealInDashboard) {
-        $this->showRealInDashboard = $showRealInDashboard;
+    public function setShowRealInDashboardPie($showRealInDashboardPie) {
+        $this->showRealInDashboardPie = $showRealInDashboardPie;
     }
     
     /**
-     * Get showPlanInDashboard
+     * Get showPlanInDashboardPie
      *
      * @return boolean 
      */
-    public function getShowPlanInDashboard()
+    public function getShowPlanInDashboardPie()
     {
-        return $this->showPlanInDashboard;
+        return $this->showPlanInDashboardPie;
     }
 
     /**
-     * Set showPlanInDashboard
-     * @param type $showPlanInDashboard
+     * Set showPlanInDashboardPie
+     * @param type $showPlanInDashboardPie
      * @return Variable
      */
-    public function setShowPlanInDashboard($showPlanInDashboard) {
-        $this->showPlanInDashboard = $showPlanInDashboard;
+    public function setShowPlanInDashboardPie($showPlanInDashboardPie) {
+        $this->showPlanInDashboardPie = $showPlanInDashboardPie;
+    }
+    
+    /**
+     * Get showRealInDashboardColumn
+     *
+     * @return boolean 
+     */
+    public function getShowRealInDashboardColumn()
+    {
+        return $this->showRealInDashboardColumn;
+    }
+
+    /**
+     * Set showRealInDashboardColumn
+     * @param type $showRealInDashboardColumn
+     * @return Variable
+     */
+    public function setShowRealInDashboardColumn($showRealInDashboardColumn) {
+        $this->showRealInDashboardColumn = $showRealInDashboardColumn;
+    }
+    
+    /**
+     * Get showPlanInDashboardColumn
+     *
+     * @return boolean 
+     */
+    public function getShowPlanInDashboardColumn()
+    {
+        return $this->showPlanInDashboardColumn;
+    }
+
+    /**
+     * Set showPlanInDashboardColumn
+     * @param type $showPlanInDashboardColumn
+     * @return Variable
+     */
+    public function setShowPlanInDashboardColumn($showPlanInDashboardColumn) {
+        $this->showPlanInDashboardColumn = $showPlanInDashboardColumn;
     }
     
 }

@@ -31,7 +31,7 @@ abstract class Chart
     /**
      * Gráfico para mostrar las variables de un indicador que esten marcadas como "real"
      */
-    const TYPE_CHART_PIE_VARIABLES_MARKED_REAL = 3; //NO USADO
+    const TYPE_CHART_PIE_VARIABLES_MARKED_REAL = 3; //ACTIVO Y USADO
     
     /**
      * Gráfico tipo barras vertical para mostrar el real/plan en el eje izquierdo y el resultado de la medición en el eje derecho del indicador.
@@ -41,7 +41,7 @@ abstract class Chart
     /**
      * Gráfico para mostrar las variables de un indicador que esten marcadas como "plan"
      */
-    const TYPE_CHART_PIE_VARIABLES_MARKED_PLAN = 5; //NO USADO
+    const TYPE_CHART_PIE_VARIABLES_MARKED_PLAN = 5; //ACTIVO Y USADO
     
     /**
      * Gráfico tipo barra vertical/área para mostrar el real/plan de acuerdo a la frecuencia de notificación
@@ -62,6 +62,11 @@ abstract class Chart
      * Gráfico tipo barras vertical para mostrar el real/plan de los resultados respecto al eje izquierdo y el resultado de la medición en valor porcentual respecto al lado derecho, de acuerdo a la frecuencia de notificación
      */
     const TYPE_CHART_COLUMN_REAL_PLAN_BY_FREQUENCY_NOTIFICATION = 9; // ACTIVO Y USADO
+    
+    /**
+     * Gráfico tipo barras vertical para mostrar el real/plan en el eje izquierdo y el resultado de la medición en el eje derecho del indicador. Las variables marcadas como real/plan.
+     */
+    const TYPE_CHART_COLUMN_VARIABLES_MARKED_REAL_PLAN = 10; // NO USADO
        
     /**
      * @var integer
@@ -109,6 +114,7 @@ abstract class Chart
             self::TYPE_CHART_PIE_VARIABLES_PLAN_FROM_EQUATION => 'chart.type.indicatorsVariablesPlanFromEquationInPie',
             self::TYPE_CHART_PIE_VARIABLES_REAL_FROM_EQUATION => 'chart.type.indicatorsVariablesRealFromEquationInPie',
             self::TYPE_CHART_COLUMN_REAL_PLAN_BY_FREQUENCY_NOTIFICATION => 'chart.type.indicatorsVariablesRealPlanByFrequencyNotification',
+            self::TYPE_CHART_COLUMN_VARIABLES_MARKED_REAL_PLAN => 'chart.type.indicatorsColumnAxisVariablesMarkedRealPlan',
         );
          
          return $typesOfChart;

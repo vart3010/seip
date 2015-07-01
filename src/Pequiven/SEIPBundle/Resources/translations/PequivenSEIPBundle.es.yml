@@ -543,6 +543,7 @@ chart:
         indicatorsVariablesPlanFromEquationInPie: Resultados de las variables asociadas al plan de la fórmula a partir de ecuación
         indicatorsVariablesRealFromEquationInPie: Resultados de las variables asociadas al real de la fórmula a partir de ecuación
         indicatorsVariablesRealPlanByFrequencyNotification: Real, plan y resultado de medición del Indicador de acuerdo a la frecuencia de notificación
+        indicatorsColumnAxisVariablesMarkedRealPlan: Real, plan y resultado de medición de las variables marcadas como real/plan de la fórmula del indicador
 
 Name: Nombre
 nro: "#"

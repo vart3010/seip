@@ -58,7 +58,7 @@ getDataChartColumnLineDualAxisRealPlan:
     options:
         expose: true
         
-#3
+#5
 getDataChartPieVariablesMarkedPlan:
     path: /getDataChartPieVariablesMarkedPlan/{id}
     defaults:
@@ -111,6 +111,18 @@ getDataChartColumnLineDualAxisByFrequencyNotification:
     path: /getDataChartColumnLineDualAxisByFrequencyNotification/{id}
     defaults:
         _controller: pequiven.controller.seipchart:getDataChartColumnLineDualAxisByFrequencyNotificationAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
+        
+#10
+getDataChartColumnLineDualAxisVariablesMarkedRealPlan:
+    path: /getDataChartColumnLineDualAxisVariablesMarkedRealPlan/{id}
+    defaults:
+        _controller: pequiven.controller.seipchart:getDataChartColumnLineDualAxisVariablesMarkedRealPlanAction
         _format: json
     requirements:
         _format: "json|xml"

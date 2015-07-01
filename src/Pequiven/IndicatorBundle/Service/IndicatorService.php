@@ -958,7 +958,7 @@ class IndicatorService implements ContainerAwareInterface {
             unset($options['viewVariablesMarkedReal']);
             $variables = $formula->getVariables();
             foreach($variables as $variable){
-                if($variable->getShowRealInDashboard()){
+                if($variable->getShowRealInDashboardPie()){
                     $nameParameter = $variable->getName();
                     $arrayVariables[$nameParameter]['value'] = 0.0;
                     $arrayVariables[$nameParameter]['description'] = $variable->getDescription();
@@ -967,7 +967,7 @@ class IndicatorService implements ContainerAwareInterface {
             }
             foreach($valuesIndicator as $valueIndicator){
                 foreach($variables as $variable){
-                    if($variable->getShowRealInDashboard()){
+                    if($variable->getShowRealInDashboardPie()){
                         $nameParameter = $variable->getName();
                         $arrayVariables[$nameParameter]['value'] = $arrayVariables[$nameParameter]['value'] + $valueIndicator->getParameter($nameParameter);
                     }
@@ -977,7 +977,7 @@ class IndicatorService implements ContainerAwareInterface {
             unset($options['viewVariablesMarkedPlan']);
             $variables = $formula->getVariables();
             foreach($variables as $variable){
-                if($variable->getShowPlanInDashboard()){
+                if($variable->getShowPlanInDashboardPie()){
                     $nameParameter = $variable->getName();
                     $arrayVariables[$nameParameter]['value'] = 0.0;
                     $arrayVariables[$nameParameter]['description'] = $variable->getDescription();
@@ -986,7 +986,7 @@ class IndicatorService implements ContainerAwareInterface {
             }
             foreach($valuesIndicator as $valueIndicator){
                 foreach($variables as $variable){
-                    if($variable->getShowPlanInDashboard()){
+                    if($variable->getShowPlanInDashboardPie()){
                         $nameParameter = $variable->getName();
                         $arrayVariables[$nameParameter]['value'] = $arrayVariables[$nameParameter]['value'] + $valueIndicator->getParameter($nameParameter);
                     }
@@ -1123,6 +1123,11 @@ class IndicatorService implements ContainerAwareInterface {
             $dataSetReal["data"][] = $dataReal;
             $dataSetPlan["data"][] = $dataPlan;
             $medition["data"][] = $dataMedition;
+        } elseif(isset($options['withVariablesMarkedRealPLan']) && array_key_exists('withVariablesMarkedRealPLan', $options)){
+            unset($options['withVariablesMarkedRealPLan']);
+            $label = $dataReal = $dataPlan = $dataMedition = array();
+            
+            
         } elseif(isset($options['byFrequencyNotification']) && array_key_exists('byFrequencyNotification', $options)){
             unset($options['byFrequencyNotification']);
             $arrayVariables = array();

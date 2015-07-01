@@ -34,10 +34,10 @@ class VariableAdmin extends Admin implements \Symfony\Component\DependencyInject
             ->add('usedOnlyByTag',null,array(
                 'required' => false,
             ))
-            ->add('showRealInDashboard',null,array(
+            ->add('showRealInDashboardPie',null,array(
                 'required' => false,
             ))
-            ->add('showPlanInDashboard',null,array(
+            ->add('showPlanInDashboardPie',null,array(
                 'required' => false,
             ))
             ->add('equation',null,array(
@@ -57,8 +57,8 @@ class VariableAdmin extends Admin implements \Symfony\Component\DependencyInject
             ->add('description')
             ->add('staticValue')
             ->add('usedOnlyByTag')
-            ->add('showRealInDashboard')
-            ->add('showPlanInDashboard')
+            ->add('showRealInDashboardPie')
+            ->add('showPlanInDashboardPie')
             ;
     }
     
