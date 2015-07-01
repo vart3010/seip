@@ -535,7 +535,8 @@ chart:
         indicatorsAssociatedDoughnut: Indicadores Asociados con resultados (Dona).
         indicatorsAssociatedRealPlanWithResult: Indicadores Asociados con real, plan y resultados (Columna y 2 ejes).
         indicatorsDoughnutWithVariables: Indicadores con resultados de variables (Dona).
-        indicatorsVariablesOrTagsInPie: Resultados de variables (sumativas al real o al plan) o etiquetas (de un tipo en especifico, texto o numéricas).
+        indicatorsVariablesMarkedRealInPie: Resultados de las variables marcadas como real de la fórmula del indicador
+        indicatorsVariablesMarkedPlanInPie: Resultados de las variables marcadas como plan de la fórmula del indicador
         resultsOfIndicator: Real, plan y resultado de medición del Indicador.
         resultsOfVariable: Resultados de Variables y que forman parte de un mismo valor (Acumuladas).
         indicatorsVariablesRealPlanBarAreaByFrequencyNotification: Indicadores mostrados por barras y areas, mostrando las variables real y plan de acuerdo a la frecuencia de notificación

@@ -29,19 +29,19 @@ abstract class Chart
     const TYPE_CHART_VARIABLES_REAL_PLAN_DOUGHNUT = 2; //ACTIVO Y USADO
     
     /**
-     * Gráfico para mostrar las variables (sumativas al real o al plan) o etiquetas (de un tipo en especifico, texto o numéricas)
+     * Gráfico para mostrar las variables de un indicador que esten marcadas como "real"
      */
-    const TYPE_CHART_PIE_VARIABLES_OR_TAGS = 3; //NO USADO
+    const TYPE_CHART_PIE_VARIABLES_MARKED_REAL = 3; //NO USADO
     
     /**
      * Gráfico tipo barras vertical para mostrar el real/plan en el eje izquierdo y el resultado de la medición en el eje derecho del indicador.
      */
-    const TYPE_CHART_COLUMN_VARIABLES_REAL_PLAN = 4; //NO USADO
+    const TYPE_CHART_COLUMN_VARIABLES_REAL_PLAN = 4; //ACTIVO Y USADO
     
     /**
-     * Gráfico para mostrar los resultados de diferentes variables y que forman parte de un mismo valor
+     * Gráfico para mostrar las variables de un indicador que esten marcadas como "plan"
      */
-    const TYPE_CHART_PIE_FROM_TAGS = 5; //NO USADO
+    const TYPE_CHART_PIE_VARIABLES_MARKED_PLAN = 5; //NO USADO
     
     /**
      * Gráfico tipo barra vertical/área para mostrar el real/plan de acuerdo a la frecuencia de notificación
@@ -102,9 +102,9 @@ abstract class Chart
             self::TYPE_CHART_INDICATORS_ASSOCIATED_DOUGHNUT => 'chart.type.indicatorsAssociatedDoughnut',
             self::TYPE_CHART_COLUMN_REAL_PLAN_INDICATORS_ASSOCIATED => 'chart.type.indicatorsAssociatedRealPlanWithResult',
             self::TYPE_CHART_VARIABLES_REAL_PLAN_DOUGHNUT => 'chart.type.indicatorsDoughnutWithVariables',
-            self::TYPE_CHART_PIE_VARIABLES_OR_TAGS => 'chart.type.indicatorsVariablesOrTagsInPie',
+            self::TYPE_CHART_PIE_VARIABLES_MARKED_REAL => 'chart.type.indicatorsVariablesMarkedRealInPie',
             self::TYPE_CHART_COLUMN_VARIABLES_REAL_PLAN => 'chart.type.resultsOfIndicator',
-            self::TYPE_CHART_PIE_FROM_TAGS => 'chart.type.resultsOfVariable',
+            self::TYPE_CHART_PIE_VARIABLES_MARKED_PLAN => 'chart.type.indicatorsVariablesMarkedPĺanInPie',
             self::TYPE_CHART_BARS_AREA_VARIABLES_REAL_PLAN_BY_FREQUENCY_NOTIFICATION => 'chart.type.indicatorsVariablesRealPlanBarAreaByFrequencyNotification',
             self::TYPE_CHART_PIE_VARIABLES_PLAN_FROM_EQUATION => 'chart.type.indicatorsVariablesPlanFromEquationInPie',
             self::TYPE_CHART_PIE_VARIABLES_REAL_FROM_EQUATION => 'chart.type.indicatorsVariablesRealFromEquationInPie',

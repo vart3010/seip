@@ -97,6 +97,20 @@ class Variable extends Model implements \Pequiven\SEIPBundle\Entity\PeriodItemIn
     private $summary;
     
     /**
+     * ¿La Variable será utilizada como real en el dashboard del indicador?
+     * @var boolean
+     * @ORM\Column(name="showRealInDashboard",type="boolean")
+     */
+    private $showRealInDashboard = false;
+    
+    /**
+     * ¿La Variable será utilizada como plan en el dashboard del indicador?
+     * @var boolean
+     * @ORM\Column(name="showPlanInDashboard",type="boolean")
+     */
+    private $showPlanInDashboard = false;
+    
+    /**
      * Get staticValue
      *
      * @return boolean 
@@ -348,4 +362,43 @@ class Variable extends Model implements \Pequiven\SEIPBundle\Entity\PeriodItemIn
     {
         return $this->summary;
     }
+    
+    /**
+     * Get showRealInDashboard
+     *
+     * @return boolean 
+     */
+    public function getShowRealInDashboard()
+    {
+        return $this->showRealInDashboard;
+    }
+
+    /**
+     * Set showRealInDashboard
+     * @param type $showRealInDashboard
+     * @return Variable
+     */
+    public function setShowRealInDashboard($showRealInDashboard) {
+        $this->showRealInDashboard = $showRealInDashboard;
+    }
+    
+    /**
+     * Get showPlanInDashboard
+     *
+     * @return boolean 
+     */
+    public function getShowPlanInDashboard()
+    {
+        return $this->showPlanInDashboard;
+    }
+
+    /**
+     * Set showPlanInDashboard
+     * @param type $showPlanInDashboard
+     * @return Variable
+     */
+    public function setShowPlanInDashboard($showPlanInDashboard) {
+        $this->showPlanInDashboard = $showPlanInDashboard;
+    }
+    
 }

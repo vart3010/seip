@@ -1,4 +1,4 @@
-
+#0
 getDataChartDoughnutIndicatorsAssociated:
     path: /getDataChartDoughnutIndicatorsAssociated/{id}
     defaults:
@@ -9,18 +9,8 @@ getDataChartDoughnutIndicatorsAssociated:
     methods: [GET]
     options:
         expose: true
-        
-getDataChartDoughnutWithVariablesRealPlan:
-    path: /getDataChartDoughnutWithVariablesRealPlan/{id}
-    defaults:
-        _controller: pequiven.controller.seipchart:getDataChartTypeDoughnutWithVariablesRealPlanAction
-        _format: json
-    requirements:
-        _format: "json|xml"
-    methods: [GET]
-    options:
-        expose: true
-        
+
+#1        
 getDataChartColumnLineDualAxisIndicatorsAssociated:
     path: /getDataChartColumnLineDualAxisIndicatorsAssociated/{id}
     defaults:
@@ -31,7 +21,32 @@ getDataChartColumnLineDualAxisIndicatorsAssociated:
     methods: [GET]
     options:
         expose: true
+
+#2
+getDataChartDoughnutWithVariablesRealPlan:
+    path: /getDataChartDoughnutWithVariablesRealPlan/{id}
+    defaults:
+        _controller: pequiven.controller.seipchart:getDataChartTypeDoughnutWithVariablesRealPlanAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
+
+#3
+getDataChartPieVariablesMarkedReal:
+    path: /getDataChartPieVariablesMarkedReal/{id}
+    defaults:
+        _controller: pequiven.controller.seipchart:getDataChartPieVariablesMarkedRealAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
         
+#4
 getDataChartColumnLineDualAxisRealPlan:
     path: /getDataChartColumnLineDualAxisRealPlan/{id}
     defaults:
@@ -43,28 +58,7 @@ getDataChartColumnLineDualAxisRealPlan:
     options:
         expose: true
         
-getDataChartPieVariablesPlanFromEquation:
-    path: /getDataChartPieVariablesPlanFromEquation/{id}
-    defaults:
-        _controller: pequiven.controller.seipchart:getDataChartPieVariablesPlanFromEquationAction
-        _format: json
-    requirements:
-        _format: "json|xml"
-    methods: [GET]
-    options:
-        expose: true
-        
-getDataChartPieVariablesRealFromEquation:
-    path: /getDataChartPieVariablesRealFromEquation/{id}
-    defaults:
-        _controller: pequiven.controller.seipchart:getDataChartPieVariablesRealFromEquationAction
-        _format: json
-    requirements:
-        _format: "json|xml"
-    methods: [GET]
-    options:
-        expose: true
-        
+#6
 getDataChartBarsAreaVariablesRealPlanByFrequencyNotification:
     path: /getDataChartBarsAreaVariablesRealPlanByFrequencyNotification/{id}
     defaults:
@@ -76,6 +70,31 @@ getDataChartBarsAreaVariablesRealPlanByFrequencyNotification:
     options:
         expose: true
 
+#7
+getDataChartPieVariablesPlanFromEquation:
+    path: /getDataChartPieVariablesPlanFromEquation/{id}
+    defaults:
+        _controller: pequiven.controller.seipchart:getDataChartPieVariablesPlanFromEquationAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
+
+#8
+getDataChartPieVariablesRealFromEquation:
+    path: /getDataChartPieVariablesRealFromEquation/{id}
+    defaults:
+        _controller: pequiven.controller.seipchart:getDataChartPieVariablesRealFromEquationAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
+
+#9
 getDataChartColumnLineDualAxisByFrequencyNotification:
     path: /getDataChartColumnLineDualAxisByFrequencyNotification/{id}
     defaults:

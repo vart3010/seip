@@ -771,6 +771,16 @@ class IndicatorService implements ContainerAwareInterface {
                 $set["displayValue"] = number_format($arrayVariable['value'], 2, ',', '.');
                 $dataChart[] = $set;
             }
+        } elseif(isset($options['viewVariablesMarkedReal']) && array_key_exists('viewVariablesMarkedReal', $options)){
+            unset($options['viewVariablesMarkedReal']);
+            $arrayVariables = $this->getArrayVariablesFormulaWithData($indicator, array('viewVariablesMarkedReal' => true));
+            foreach ($arrayVariables as $arrayVariable) {
+                $set = array();
+                $set["label"] = $arrayVariable['description'] . ': ' . number_format($arrayVariable['value'], 2, ',', '.');
+                $set["value"] = bcadd($arrayVariable['value'], 0, 2);
+                $set["displayValue"] = number_format($arrayVariable['value'], 2, ',', '.');
+                $dataChart[] = $set;
+            }
         } else{
         $arrayVariables = $this->getArrayVariablesFormulaWithData($indicator, array());
         foreach ($arrayVariables as $ind => $key) {
@@ -933,6 +943,25 @@ class IndicatorService implements ContainerAwareInterface {
                     }
                 }
                 $arrayVariables['medition'][] = $valueIndicator->getValueOfIndicator();
+            }
+        } elseif(isset($options['viewVariablesMarkedReal']) && array_key_exists('viewVariablesMarkedReal', $options)){
+            unset($options['viewVariablesMarkedReal']);
+            $variables = $formula->getVariables();
+            foreach($variables as $variable){
+                if($variable->getShowRealInDashboard()){
+                    $nameParameter = $variable->getName();
+                    $arrayVariables[$nameParameter]['value'] = 0.0;
+                    $arrayVariables[$nameParameter]['description'] = $variable->getDescription();
+                    $arrayVariables[$nameParameter]['summary'] = $variable->getSummary();
+                }
+            }
+            foreach($valuesIndicator as $valueIndicator){
+                foreach($variables as $variable){
+                    if($variable->getShowRealInDashboard()){
+                        $nameParameter = $variable->getName();
+                        $arrayVariables[$nameParameter]['value'] = $arrayVariables[$nameParameter]['value'] + $valueIndicator->getParameter($nameParameter);
+                    }
+                }
             }
         } else{
             $variables = $formula->getVariables();
