@@ -111,18 +111,18 @@ class Variable extends Model implements \Pequiven\SEIPBundle\Entity\PeriodItemIn
     private $showPlanInDashboardPie = false;
     
     /**
-     * ¿La Variable será utilizada como real en el dashboard tipo columna+tendencia con 2 ejes verticales del indicador?
+     * ¿La Variable será utilizada como real en el dashboard tipo barra/área del indicador?
      * @var boolean
-     * @ORM\Column(name="showRealInDashboardColumn",type="boolean")
+     * @ORM\Column(name="showRealInDashboardBarArea",type="boolean")
      */
-    private $showRealInDashboardColumn = false;
+    private $showRealInDashboardBarArea = false;
     
     /**
-     * ¿La Variable será utilizada como plan en el dashboard tipo columna+tendencia con 2 ejes verticales del indicador?
+     * ¿La Variable será utilizada como plan en el dashboard tipo barra/área del indicador?
      * @var boolean
-     * @ORM\Column(name="showPlanInDashboardColumn",type="boolean")
+     * @ORM\Column(name="showPlanInDashboardBarArea",type="boolean")
      */
-    private $showPlanInDashboardColumn = false;
+    private $showPlanInDashboardBarArea = false;
     
     /**
      * Get staticValue
@@ -416,41 +416,41 @@ class Variable extends Model implements \Pequiven\SEIPBundle\Entity\PeriodItemIn
     }
     
     /**
-     * Get showRealInDashboardColumn
+     * Get showRealInDashboardBarArea
      *
      * @return boolean 
      */
-    public function getShowRealInDashboardColumn()
+    public function getShowRealInDashboardBarArea()
     {
-        return $this->showRealInDashboardColumn;
+        return $this->showRealInDashboardBarArea;
     }
 
     /**
-     * Set showRealInDashboardColumn
-     * @param type $showRealInDashboardColumn
+     * Set showRealInDashboardBarArea
+     * @param type $showRealInDashboardBarArea
      * @return Variable
      */
-    public function setShowRealInDashboardColumn($showRealInDashboardColumn) {
-        $this->showRealInDashboardColumn = $showRealInDashboardColumn;
+    public function setShowRealInDashboardBarArea($showRealInDashboardBarArea) {
+        $this->showRealInDashboardBarArea = $showRealInDashboardBarArea;
     }
     
     /**
-     * Get showPlanInDashboardColumn
+     * Get showPlanInDashboardBarArea
      *
      * @return boolean 
      */
-    public function getShowPlanInDashboardColumn()
+    public function getShowPlanInDashboardBarArea()
     {
-        return $this->showPlanInDashboardColumn;
+        return $this->showPlanInDashboardBarArea;
     }
 
     /**
-     * Set showPlanInDashboardColumn
-     * @param type $showPlanInDashboardColumn
+     * Set showPlanInDashboardBarArea
+     * @param type $showPlanInDashboardBarArea
      * @return Variable
      */
-    public function setShowPlanInDashboardColumn($showPlanInDashboardColumn) {
-        $this->showPlanInDashboardColumn = $showPlanInDashboardColumn;
+    public function setShowPlanInDashboardBarArea($showPlanInDashboardBarArea) {
+        $this->showPlanInDashboardBarArea = $showPlanInDashboardBarArea;
     }
     
 }

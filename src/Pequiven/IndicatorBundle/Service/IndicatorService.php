@@ -656,7 +656,7 @@ class IndicatorService implements ContainerAwareInterface {
 
                 foreach ($indicatorsChildrens as $indicatorChildren) {
                     $set = array();
-                    $set["label"] = $indicatorChildren->getSummary() . ': ' . number_format($indicatorChildren->getResultReal(), 2, ',', '.') . '%';
+                    $set["label"] = $indicatorChildren->getRef().' '.$indicatorChildren->getSummary() . ': ' . number_format($indicatorChildren->getResultReal(), 2, ',', '.') . '%';
                     $set["value"] = $sumResultChildren != 0 ? bcdiv($indicatorChildren->getResultReal(), $sumResultChildren, 2) : bcadd(0, 0, 2);
                     $set["displayValue"] = $indicatorChildren->getRef() . ' - ' . number_format($indicatorChildren->getResultReal(), 2, ',', '.') . '%';
                     $set["toolText"] = $indicatorChildren->getSummary() . ':{br}' . number_format($indicatorChildren->getResultReal(), 2, ',', '.') . '%';
@@ -756,7 +756,7 @@ class IndicatorService implements ContainerAwareInterface {
             $arrayVariables = $this->getArrayVariablesFormulaWithData($indicator, array('viewVariablesFromPlanEquation' => true));
             foreach ($arrayVariables as $arrayVariable) {
                 $set = array();
-                $set["label"] = $arrayVariable['description'] . ': ' . number_format($arrayVariable['value'], 2, ',', '.');
+                $set["label"] = $arrayVariable['description'];
                 $set["value"] = bcadd($arrayVariable['value'], 0, 2);
                 $set["displayValue"] = number_format($arrayVariable['value'], 2, ',', '.');
                 $dataChart[] = $set;
@@ -766,7 +766,7 @@ class IndicatorService implements ContainerAwareInterface {
             $arrayVariables = $this->getArrayVariablesFormulaWithData($indicator, array('viewVariablesFromRealEquation' => true));
             foreach ($arrayVariables as $arrayVariable) {
                 $set = array();
-                $set["label"] = $arrayVariable['description'] . ': ' . number_format($arrayVariable['value'], 2, ',', '.');
+                $set["label"] = $arrayVariable['description'];
                 $set["value"] = bcadd($arrayVariable['value'], 0, 2);
                 $set["displayValue"] = number_format($arrayVariable['value'], 2, ',', '.');
                 $dataChart[] = $set;
@@ -776,7 +776,7 @@ class IndicatorService implements ContainerAwareInterface {
             $arrayVariables = $this->getArrayVariablesFormulaWithData($indicator, array('viewVariablesMarkedReal' => true));
             foreach ($arrayVariables as $arrayVariable) {
                 $set = array();
-                $set["label"] = $arrayVariable['description'] . ': ' . number_format($arrayVariable['value'], 2, ',', '.');
+                $set["label"] = $arrayVariable['description'];
                 $set["value"] = bcadd($arrayVariable['value'], 0, 2);
                 $set["displayValue"] = number_format($arrayVariable['value'], 2, ',', '.');
                 $dataChart[] = $set;
@@ -786,7 +786,7 @@ class IndicatorService implements ContainerAwareInterface {
             $arrayVariables = $this->getArrayVariablesFormulaWithData($indicator, array('viewVariablesMarkedPlan' => true));
             foreach ($arrayVariables as $arrayVariable) {
                 $set = array();
-                $set["label"] = $arrayVariable['description'] . ': ' . number_format($arrayVariable['value'], 2, ',', '.');
+                $set["label"] = $arrayVariable['description'];
                 $set["value"] = bcadd($arrayVariable['value'], 0, 2);
                 $set["displayValue"] = number_format($arrayVariable['value'], 2, ',', '.');
                 $dataChart[] = $set;
@@ -1067,7 +1067,7 @@ class IndicatorService implements ContainerAwareInterface {
         $chart["divLineDashed"] = "1";
         $chart["divLineDashLen"] = "1";
         $chart["divLineGapLen"] = "1";
-        $chart["labelDisplay"] = "ROTATE";
+//        $chart["labelDisplay"] = "ROTATE";
         $chart["canvasBgColor"] = "#ffffff";
         $chart["captionFontSize"] = "14";
         $chart["subcaptionFontSize"] = "14";
