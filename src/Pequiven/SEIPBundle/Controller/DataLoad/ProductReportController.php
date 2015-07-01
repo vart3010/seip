@@ -60,6 +60,14 @@ class ProductReportController extends SEIPController
                 //Calcular produccion neta en base al porcentaje de la bruta
                 $total = ($dailyProductionCapacity * $netProductionPercentage) / 100;
                 $cloneNet->setDailyProductionCapacity($total);
+                
+                foreach ($cloneNet->getRanges() as $range) {
+                    if($range->getType() == \Pequiven\SEIPBundle\Model\DataLoad\Production\Range::TYPE_FIXED_VALUE){
+                        $range->setValue($total);
+                    }elseif($range->getType() == \Pequiven\SEIPBundle\Model\DataLoad\Production\Range::TYPE_CAPACITY_FACTOR){
+                        $range->setValue($netProductionPercentage);
+                    }
+                }
                 $resource->addProductPlanning($cloneNet);
             }
         }
