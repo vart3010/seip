@@ -2430,6 +2430,28 @@ angular.module('seipModule.controllers', [])
                 });
             }
             
+            //5-Gráfico para mostrar las variables de un indicador que esten marcadas como "plan"
+            $scope.chargeChartPieVariablesMarkedPlan = function (indicatorId, render, width, height) {
+                var getDataChartPieVariablesMarkedPlan = Routing.generate("getDataChartPieVariablesMarkedPlan", {id: indicatorId});
+                $http.get(getDataChartPieVariablesMarkedPlan).success(function (data) {
+                    FusionCharts.ready(function () {
+                        var revenueChartPieVariablesMarkedPlan = new FusionCharts({
+                            "type": "pie3d",
+                            "renderAt": render,
+                            "width": width + "%",
+                            "height": height,
+                            "dataFormat": "json",
+                            "dataSource": {
+                                "chart": data.dataSource.chart,
+                                "data": data.dataSource.data,
+                            }
+                        });
+                        revenueChartPieVariablesMarkedPlan.setTransparent(true);
+                        revenueChartPieVariablesMarkedPlan.render();
+                    });
+                });
+            }
+            
             //6-Gráfico para mostrar información de 2 variables (respecto al eje izquierdo) y el resultado de la medición (respecto al eje derecho en valor porcentual), del indicador
             $scope.chargeChartBarsAreaVariablesRealPlanByFrequencyNotification = function (indicatorId, render, width, height) {
                 var getDataChartBarsAreaVariablesRealPlanByFrequencyNotification = Routing.generate("getDataChartBarsAreaVariablesRealPlanByFrequencyNotification", {id: indicatorId});

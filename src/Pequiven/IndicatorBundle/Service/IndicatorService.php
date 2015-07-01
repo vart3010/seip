@@ -781,14 +781,24 @@ class IndicatorService implements ContainerAwareInterface {
                 $set["displayValue"] = number_format($arrayVariable['value'], 2, ',', '.');
                 $dataChart[] = $set;
             }
+        } elseif(isset($options['viewVariablesMarkedPlan']) && array_key_exists('viewVariablesMarkedPlan', $options)){
+            unset($options['viewVariablesMarkedReal']);
+            $arrayVariables = $this->getArrayVariablesFormulaWithData($indicator, array('viewVariablesMarkedPlan' => true));
+            foreach ($arrayVariables as $arrayVariable) {
+                $set = array();
+                $set["label"] = $arrayVariable['description'] . ': ' . number_format($arrayVariable['value'], 2, ',', '.');
+                $set["value"] = bcadd($arrayVariable['value'], 0, 2);
+                $set["displayValue"] = number_format($arrayVariable['value'], 2, ',', '.');
+                $dataChart[] = $set;
+            }
         } else{
-        $arrayVariables = $this->getArrayVariablesFormulaWithData($indicator, array());
-        foreach ($arrayVariables as $ind => $key) {
-            $set = array();
-                $set["label"] = $ind;// . ': ' . number_format($key, 2, ',', '.');
-            $set["value"] = bcadd($key, 0, 2);
-            $dataChart[] = $set;
-        }
+            $arrayVariables = $this->getArrayVariablesFormulaWithData($indicator, array());
+            foreach ($arrayVariables as $ind => $key) {
+                $set = array();
+                    $set["label"] = $ind;// . ': ' . number_format($key, 2, ',', '.');
+                $set["value"] = bcadd($key, 0, 2);
+                $dataChart[] = $set;
+            }
         }
 
         $data['dataSource']['chart'] = $chart;
@@ -958,6 +968,25 @@ class IndicatorService implements ContainerAwareInterface {
             foreach($valuesIndicator as $valueIndicator){
                 foreach($variables as $variable){
                     if($variable->getShowRealInDashboard()){
+                        $nameParameter = $variable->getName();
+                        $arrayVariables[$nameParameter]['value'] = $arrayVariables[$nameParameter]['value'] + $valueIndicator->getParameter($nameParameter);
+                    }
+                }
+            }
+        } elseif(isset($options['viewVariablesMarkedPlan']) && array_key_exists('viewVariablesMarkedPlan', $options)){
+            unset($options['viewVariablesMarkedPlan']);
+            $variables = $formula->getVariables();
+            foreach($variables as $variable){
+                if($variable->getShowPlanInDashboard()){
+                    $nameParameter = $variable->getName();
+                    $arrayVariables[$nameParameter]['value'] = 0.0;
+                    $arrayVariables[$nameParameter]['description'] = $variable->getDescription();
+                    $arrayVariables[$nameParameter]['summary'] = $variable->getSummary();
+                }
+            }
+            foreach($valuesIndicator as $valueIndicator){
+                foreach($variables as $variable){
+                    if($variable->getShowPlanInDashboard()){
                         $nameParameter = $variable->getName();
                         $arrayVariables[$nameParameter]['value'] = $arrayVariables[$nameParameter]['value'] + $valueIndicator->getParameter($nameParameter);
                     }

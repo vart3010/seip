@@ -104,7 +104,7 @@ abstract class Chart
             self::TYPE_CHART_VARIABLES_REAL_PLAN_DOUGHNUT => 'chart.type.indicatorsDoughnutWithVariables',
             self::TYPE_CHART_PIE_VARIABLES_MARKED_REAL => 'chart.type.indicatorsVariablesMarkedRealInPie',
             self::TYPE_CHART_COLUMN_VARIABLES_REAL_PLAN => 'chart.type.resultsOfIndicator',
-            self::TYPE_CHART_PIE_VARIABLES_MARKED_PLAN => 'chart.type.indicatorsVariablesMarkedPĺanInPie',
+            self::TYPE_CHART_PIE_VARIABLES_MARKED_PLAN => 'chart.type.indicatorsVariablesMarkedPlanInPie',
             self::TYPE_CHART_BARS_AREA_VARIABLES_REAL_PLAN_BY_FREQUENCY_NOTIFICATION => 'chart.type.indicatorsVariablesRealPlanBarAreaByFrequencyNotification',
             self::TYPE_CHART_PIE_VARIABLES_PLAN_FROM_EQUATION => 'chart.type.indicatorsVariablesPlanFromEquationInPie',
             self::TYPE_CHART_PIE_VARIABLES_REAL_FROM_EQUATION => 'chart.type.indicatorsVariablesRealFromEquationInPie',

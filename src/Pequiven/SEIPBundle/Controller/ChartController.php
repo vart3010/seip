@@ -113,6 +113,26 @@ class ChartController extends SEIPController {
     }
     
     /**
+     * 3-Función que retorna la data para un gráfico para mostrar las variables de un indicador que esten marcadas como "plan".
+     * @return JsonResponse
+     */
+    public function getDataChartPieVariablesMarkedPlanAction(Request $request) {
+        $response = new JsonResponse();
+
+        $idIndicator = $request->get('id');
+        
+        $indicatorService = $this->getIndicatorService(); //Obtenemos el servicio del indicador
+
+        $indicator = $this->get('pequiven.repository.indicator')->find($idIndicator); //Obtenemos el indicador
+
+        $dataChart = $indicatorService->getDataDashboardPie($indicator, array('viewVariablesMarkedPlan' => true)); //Obtenemos la data del gráfico de acuerdo al indicador
+
+        $response->setData($dataChart); //Seteamos la data del gráfico en Json
+
+        return $response;
+    }
+    
+    /**
      * 6-Función que retorna la data para un gráfico tipo barra vertical/área para mostrar el real/plan de acuerdo a la frecuencia de notificación
      * @param Request $request
      * @return JsonResponse
