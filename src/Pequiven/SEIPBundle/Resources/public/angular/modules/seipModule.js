@@ -2666,18 +2666,18 @@ angular.module('seipModule.controllers', [])
                                                 "fillalpha": "100,100",
                                                 "fillratio": "95,5"
                                             },
-                                            {
-                                                "type": "circle",
-                                                "x": "0",
-                                                "y": "0",
-                                                "radius": "120",
-                                                "showborder": "1",
-                                                "bordercolor": "cccccc",
-                                                "fillasgradient": "1",
-                                                "fillcolor": "#ffffff,#000000",
-                                                "fillalpha": "50,100",
-                                                "fillratio": "1,99"
-                                            }
+//                                            {
+//                                                "type": "circle",
+//                                                "x": "0",
+//                                                "y": "0",
+//                                                "radius": "120",
+//                                                "showborder": "1",
+//                                                "bordercolor": "cccccc",
+//                                                "fillasgradient": "1",
+//                                                "fillcolor": "#ffffff,#000000",
+//                                                "fillalpha": "50,100",
+//                                                "fillratio": "1,99"
+//                                            }
                                         ]
                                     },
                                     {
