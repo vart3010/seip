@@ -214,10 +214,10 @@ class ChartController extends SEIPController {
     }
     
     /**
-     * 4-Función que retorna la data para un gráfico tipo barras vertical para mostrar el real/plan de los parámetros de cada mes. Sólo para el caso en que sean 2 parámetros (Bien sea plan y real automático o plan y real automático a partir de ecuación).
+     * 10-Función que retorna la data para un gráfico tipo barras vertical para mostrar el real/plan de los parámetros de cada mes. Sólo para el caso en que sean 2 parámetros (Bien sea plan y real automático o plan y real automático a partir de ecuación).
      * @return JsonResponse
      */
-    public function getDataChartColumnLineDualAxisVariablesMarkedRealPlanAction(Request $request) {
+    public function getDataChartBarsAreaVariablesMarkedRealPlanByFrequencyNotificationAction(Request $request) {
         $response = new JsonResponse();
 
         $idIndicator = $request->get('id');
@@ -226,7 +226,7 @@ class ChartController extends SEIPController {
 
         $indicator = $this->get('pequiven.repository.indicator')->find($idIndicator); //Obtenemos el indicador
 
-        $dataChart = $indicatorService->getChartColumnLineDualAxis($indicator, array('withVariablesMarkedRealPLan' => true)); //Obtenemos la data del gráfico de acuerdo al indicador
+        $dataChart = $indicatorService->getDataDashboardBarsArea($indicator, array('withVariablesMarkedRealPlanByFrequencyNotification' => true)); //Obtenemos la data del gráfico de acuerdo al indicador
 
         $response->setData($dataChart); //Seteamos la data del gráfico en Json
 

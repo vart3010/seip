@@ -2543,12 +2543,12 @@ angular.module('seipModule.controllers', [])
             }
             
             //10-Gráfico para mostrar información de 2 variables (respecto al eje izquierdo) y el resultado de la medición (respecto al eje derecho en valor porcentual), del indicador (Variables marcadas como real/plan)
-            $scope.chargeChartColumnLineDualAxisVariablesMarkedRealPlan = function (indicatorId, render, width, height) {
-                var getDataChartColumnLineDualAxisVariablesMarkedRealPlan = Routing.generate("getDataChartColumnLineDualAxisVariablesMarkedRealPlan", {id: indicatorId});
-                $http.get(getDataChartColumnLineDualAxisVariablesMarkedRealPlan).success(function (data) {
+            $scope.chargeChartBarsAreaVariablesMarkedRealPlanByFrequencyNotification = function (indicatorId, render, width, height) {
+                var getDataChartBarsAreaVariablesMarkedRealPlanByFrequencyNotification = Routing.generate("getDataChartBarsAreaVariablesMarkedRealPlanByFrequencyNotification", {id: indicatorId});
+                $http.get(getDataChartBarsAreaVariablesMarkedRealPlanByFrequencyNotification).success(function (data) {
                     FusionCharts.ready(function () {
-                        var revenueChartColumnLineDualAxisVariablesMarkedRealPlan = new FusionCharts({
-                            "type": "mscolumn3dlinedy",
+                        var revenueChartBarsAreaVariablesMarkedRealPlanByFrequencyNotification = new FusionCharts({
+                            "type": "mscombi2d",
                             "renderAt": render,
                             "width": width + "%",
                             "height": height,
@@ -2559,8 +2559,8 @@ angular.module('seipModule.controllers', [])
                                 "dataset": data.dataSource.dataset
                             }
                         });
-                        revenueChartColumnLineDualAxisVariablesMarkedRealPlan.setTransparent(true);
-                        revenueChartColumnLineDualAxisVariablesMarkedRealPlan.render();
+                        revenueChartBarsAreaVariablesMarkedRealPlanByFrequencyNotification.setTransparent(true);
+                        revenueChartBarsAreaVariablesMarkedRealPlanByFrequencyNotification.render();
                     });
                 });
             }

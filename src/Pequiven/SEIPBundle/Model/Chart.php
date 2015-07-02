@@ -64,9 +64,9 @@ abstract class Chart
     const TYPE_CHART_COLUMN_REAL_PLAN_BY_FREQUENCY_NOTIFICATION = 9; // ACTIVO Y USADO
     
     /**
-     * Gráfico tipo barras vertical para mostrar el real/plan en el eje izquierdo y el resultado de la medición en el eje derecho del indicador. Las variables marcadas como real/plan.
+     * Gráfico tipo barra vertical/área para mostrar las variables marcadas como real en área y plan como barra, de acuerdo a la frecuencia de notificación.
      */
-    const TYPE_CHART_COLUMN_VARIABLES_MARKED_REAL_PLAN = 10; // NO USADO
+    const TYPE_CHART_BARS_AREA_VARIABLES_MARKED_REAL_PLAN_BY_FREQUENCY_NOTIFICATION = 10; // NO USADO
        
     /**
      * @var integer
@@ -114,7 +114,7 @@ abstract class Chart
             self::TYPE_CHART_PIE_VARIABLES_PLAN_FROM_EQUATION => 'chart.type.indicatorsVariablesPlanFromEquationInPie',
             self::TYPE_CHART_PIE_VARIABLES_REAL_FROM_EQUATION => 'chart.type.indicatorsVariablesRealFromEquationInPie',
             self::TYPE_CHART_COLUMN_REAL_PLAN_BY_FREQUENCY_NOTIFICATION => 'chart.type.indicatorsVariablesRealPlanByFrequencyNotification',
-            self::TYPE_CHART_COLUMN_VARIABLES_MARKED_REAL_PLAN => 'chart.type.indicatorsColumnAxisVariablesMarkedRealPlan',
+            self::TYPE_CHART_BARS_AREA_VARIABLES_MARKED_REAL_PLAN_BY_FREQUENCY_NOTIFICATION => 'chart.type.indicatorsBarAreaVariablesMarkedRealPlanByFrequencyNotification',
         );
          
          return $typesOfChart;

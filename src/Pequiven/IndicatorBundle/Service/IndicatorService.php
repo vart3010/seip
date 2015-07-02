@@ -884,6 +884,27 @@ class IndicatorService implements ContainerAwareInterface {
                 $dataSetReal["data"][] = $dataReal;
                 $dataSetPlan["data"][] = $dataPlan;
             }
+        } elseif(isset($options['withVariablesMarkedRealPlanByFrequencyNotification']) && array_key_exists('withVariablesMarkedRealPlanByFrequencyNotification',$options)){
+            unset($options['withVariablesMarkedRealPlanByFrequencyNotification']);
+            $arrayVariables = array();
+            $arrayVariables = $this->getArrayVariablesFormulaWithData($indicator, array('withVariablesMarkedRealPlanByFrequencyNotification' => true));
+         
+            $dataSetPlan["seriesname"] = $arrayVariables['descriptionPlan'];
+            $dataSetPlan["showValues"] = "1";
+            $dataSetReal["seriesname"] = $arrayVariables['descriptionReal'];
+            $dataSetReal["renderas"] = "area";
+
+            $totalValueIndicators = count($indicator->getValuesIndicator());
+            for ($i = 0;$i < $totalValueIndicators; $i++) {
+                $label = $dataReal = $dataPlan = $dataMedition = array();
+                $label["label"] = $i;
+                $dataReal["value"] = number_format($arrayVariables['valueReal'][$i], 2, ',', '.');
+                $dataPlan["value"] = number_format($arrayVariables['valuePlan'][$i], 2, ',', '.');
+
+                $category[] = $label;
+                $dataSetReal["data"][] = $dataReal;
+                $dataSetPlan["data"][] = $dataPlan;
+            }
         }
         
         $data['dataSource']['chart'] = $chart;
@@ -991,6 +1012,26 @@ class IndicatorService implements ContainerAwareInterface {
                         $arrayVariables[$nameParameter]['value'] = $arrayVariables[$nameParameter]['value'] + $valueIndicator->getParameter($nameParameter);
                     }
                 }
+            }
+        } elseif(isset($options['withVariablesMarkedRealPlanByFrequencyNotification']) && array_key_exists('withVariablesMarkedRealPlanByFrequencyNotification', $options)){
+            unset($options['withVariablesMarkedRealPlanByFrequencyNotification']);
+            $variables = $formula->getVariables();
+            $varReal = $varPlan = '';
+            foreach($variables as $variable){
+                if($variable->getShowRealInDashboardBarArea()){
+                    $varReal = $variable->getName();
+                    $arrayVariables['descriptionReal'] = $variable->getDescription();
+                    $arrayVariables['summaryReal'] = $variable->getSummary();
+                } elseif($variable->getShowPlanInDashboardBarArea()){
+                    $varPlan = $variable->getName();
+                    $arrayVariables['descriptionPlan'] = $variable->getDescription();
+                    $arrayVariables['summaryPlan'] = $variable->getSummary();
+                }
+            }
+            
+            foreach($valuesIndicator as $valueIndicator){
+                $arrayVariables['valueReal'][] = $valueIndicator->getParameter($varReal);
+                $arrayVariables['valuePlan'][] = $valueIndicator->getParameter($varPlan);
             }
         } else{
             $variables = $formula->getVariables();
@@ -1123,11 +1164,6 @@ class IndicatorService implements ContainerAwareInterface {
             $dataSetReal["data"][] = $dataReal;
             $dataSetPlan["data"][] = $dataPlan;
             $medition["data"][] = $dataMedition;
-        } elseif(isset($options['withVariablesMarkedRealPLan']) && array_key_exists('withVariablesMarkedRealPLan', $options)){
-            unset($options['withVariablesMarkedRealPLan']);
-            $label = $dataReal = $dataPlan = $dataMedition = array();
-            
-            
         } elseif(isset($options['byFrequencyNotification']) && array_key_exists('byFrequencyNotification', $options)){
             unset($options['byFrequencyNotification']);
             $arrayVariables = array();

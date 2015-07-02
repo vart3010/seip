@@ -119,10 +119,10 @@ getDataChartColumnLineDualAxisByFrequencyNotification:
         expose: true
         
 #10
-getDataChartColumnLineDualAxisVariablesMarkedRealPlan:
-    path: /getDataChartColumnLineDualAxisVariablesMarkedRealPlan/{id}
+getDataChartBarsAreaVariablesMarkedRealPlanByFrequencyNotification:
+    path: /getDataChartBarsAreaVariablesMarkedRealPlanByFrequencyNotification/{id}
     defaults:
-        _controller: pequiven.controller.seipchart:getDataChartColumnLineDualAxisVariablesMarkedRealPlanAction
+        _controller: pequiven.controller.seipchart:getDataChartBarsAreaVariablesMarkedRealPlanByFrequencyNotificationAction
         _format: json
     requirements:
         _format: "json|xml"
