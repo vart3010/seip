@@ -544,6 +544,8 @@ chart:
         indicatorsVariablesRealFromEquationInPie: Resultados de las variables asociadas al real de la fórmula a partir de ecuación
         indicatorsVariablesRealPlanByFrequencyNotification: Real, plan y resultado de medición del Indicador de acuerdo a la frecuencia de notificación
         indicatorsBarAreaVariablesMarkedRealPlanByFrequencyNotification: Barra/Área variables marcadas como real/plan de la fórmula del indicador de acuerdo a la frecuencia de notificación
+        indicatorsColumnMultiSeriesVariablesMarkedRealPlanByFrequencyNotification: Variables marcadas como real/plan de la fórmula del indicador de acuerdo a la frecuencia de notificación, en columnas 3d.
+        example: Ejemplo
 
 Name: Nombre
 nro: "#"

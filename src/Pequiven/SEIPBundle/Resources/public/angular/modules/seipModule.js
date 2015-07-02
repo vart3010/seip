@@ -2564,6 +2564,146 @@ angular.module('seipModule.controllers', [])
                     });
                 });
             }
+            
+            //11-Gráfico tipo barras vertical para mostrar las variables marcadas como real/plan de la fórmula del indicador respecto al eje izquierdo, de acuerdo a la frecuencia de notificación
+            $scope.chargeChartColumnVariablesMarkedRealPlanByFrequencyNotification = function (indicatorId, render, width, height) {
+                var getDataChartColumnVariablesMarkedRealPlanByFrequencyNotification = Routing.generate("getDataChartColumnVariablesMarkedRealPlanByFrequencyNotification", {id: indicatorId});
+                $http.get(getDataChartColumnVariablesMarkedRealPlanByFrequencyNotification).success(function (data) {
+                    FusionCharts.ready(function () {
+                        var revenueChartColumnVariablesMarkedRealPlanByFrequencyNotification = new FusionCharts({
+                            "type": "mscolumn3d",
+                            "renderAt": render,
+                            "width": width + "%",
+                            "height": height,
+                            "dataFormat": "json",
+                            "dataSource": {
+                                "chart": data.dataSource.chart,
+                                "categories": data.dataSource.categories,
+                                "dataset": data.dataSource.dataset
+                            }
+                        });
+                        revenueChartColumnVariablesMarkedRealPlanByFrequencyNotification.setTransparent(true);
+                        revenueChartColumnVariablesMarkedRealPlanByFrequencyNotification.render();
+                    });
+                });
+            }
+            
+            //Gráfico en forma tacómetro (Usado para mostrar el resultado de los indicadores estratégicos en el dashboard)
+            $scope.renderChartExample = function (indicatorId, render, width, height) {
+                FusionCharts.ready(function () {
+                    var chartAngularGauge = new FusionCharts({
+                        "type": "angulargauge",
+                        "renderAt": render,
+                        "width": width + "%",
+                        "height": height,
+                        "dataFormat": "json",
+                        "dataSource": {
+                            "chart": {
+                                "caption": "Speedometer",
+                                "captionFont": "Arial",
+                                "captionFontColor": "#333333",
+                                "manageresize": "1",
+                                "origw": "320",
+                                "origh": "320",
+                                "tickvaluedistance": "-10",
+                                "bgcolor": "#FFFFFF",
+                                "upperlimit": "240",
+                                "lowerlimit": "0",
+                                "basefontcolor": "#FFFFFF",
+                                "majortmnumber": "9",
+                                "majortmcolor": "#FFFFFF",
+                                "majortmheight": "8",
+                                "majortmthickness": "5",
+                                "minortmnumber": "5",
+                                "minortmcolor": "#FFFFFF",
+                                "minortmheight": "3",
+                                "minortmthickness": "2",
+                                "pivotradius": "10",
+                                "pivotbgcolor": "#000000",
+                                "pivotbordercolor": "#FFFFFF",
+                                "pivotborderthickness": "2",
+                                "tooltipbordercolor": "#FFFFFF",
+                                "tooltipbgcolor": "#333333",
+                                "gaugeouterradius": "115",
+                                "gaugestartangle": "240",
+                                "gaugeendangle": "-60",
+                                "gaugealpha": "0",
+                                "decimals": "0",
+                                "showcolorrange": "0",
+                                "placevaluesinside": "1",
+                                "pivotfillmix": "",
+                                "showpivotborder": "1",
+                                "annrenderdelay": "0",
+                                "gaugeoriginx": "160",
+                                "gaugeoriginy": "160",
+                                "showborder": "0"
+                            },
+                            "dials": {
+                                "dial": [
+                                    {
+                                        "value": "65",
+                                        "bgcolor": "000000",
+                                        "bordercolor": "#FFFFFF",
+                                        "borderalpha": "100",
+                                        "basewidth": "4",
+                                        "topwidth": "4",
+                                        "borderthickness": "2",
+                                        "valuey": "260"
+                                    }
+                                ]
+                            },
+                            "annotations": {
+                                "groups": [
+                                    {
+                                        "x": "160",
+                                        "y": "160",
+                                        "items": [
+                                            {
+                                                "type": "circle",
+                                                "radius": "130",
+                                                "fillasgradient": "1",
+                                                "fillcolor": "#4B4B4B,#AAAAAA",
+                                                "fillalpha": "100,100",
+                                                "fillratio": "95,5"
+                                            },
+                                            {
+                                                "type": "circle",
+                                                "x": "0",
+                                                "y": "0",
+                                                "radius": "120",
+                                                "showborder": "1",
+                                                "bordercolor": "cccccc",
+                                                "fillasgradient": "1",
+                                                "fillcolor": "#ffffff,#000000",
+                                                "fillalpha": "50,100",
+                                                "fillratio": "1,99"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "x": "160",
+                                        "y": "160",
+                                        "showbelow": "0",
+                                        "scaletext": "1",
+                                        "items": [
+                                            {
+                                                "type": "text",
+                                                "y": "100",
+                                                "label": "KPH",
+                                                "fontcolor": "#FFFFFF",
+                                                "fontsize": "14",
+                                                "bold": "1"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        }
+                    });
+                    chartAngularGauge.setTransparent(true);
+                    chartAngularGauge.render();
+                })
+            }
         })
 
         .controller('ToolsController', function ($scope, ngTableParams, $http, sfTranslator, notifyService) {

@@ -125,6 +125,20 @@ class Variable extends Model implements \Pequiven\SEIPBundle\Entity\PeriodItemIn
     private $showPlanInDashboardBarArea = false;
     
     /**
+     * ¿La Variable será utilizada como real en el dashboard tipo columna multi series 3d del indicador?
+     * @var boolean
+     * @ORM\Column(name="showRealInDashboardColumn",type="boolean")
+     */
+    private $showRealInDashboardColumn = false;
+    
+    /**
+     * ¿La Variable será utilizada como plan en el dashboard tipo columna multi series 3d del indicador?
+     * @var boolean
+     * @ORM\Column(name="showPlanInDashboardColumn",type="boolean")
+     */
+    private $showPlanInDashboardColumn = false;
+    
+    /**
      * Get staticValue
      *
      * @return boolean 
@@ -451,6 +465,44 @@ class Variable extends Model implements \Pequiven\SEIPBundle\Entity\PeriodItemIn
      */
     public function setShowPlanInDashboardBarArea($showPlanInDashboardBarArea) {
         $this->showPlanInDashboardBarArea = $showPlanInDashboardBarArea;
+    }
+    
+    /**
+     * Get showRealInDashboardColumn
+     *
+     * @return boolean 
+     */
+    public function getShowRealInDashboardColumn()
+    {
+        return $this->showRealInDashboardColumn;
+    }
+
+    /**
+     * Set showRealInDashboardColumn
+     * @param type $showRealInDashboardColumn
+     * @return Variable
+     */
+    public function setShowRealInDashboardColumn($showRealInDashboardColumn) {
+        $this->showRealInDashboardColumn = $showRealInDashboardColumn;
+    }
+    
+    /**
+     * Get showPlanInDashboardColumn
+     *
+     * @return boolean 
+     */
+    public function getShowPlanInDashboardColumn()
+    {
+        return $this->showPlanInDashboardColumn;
+    }
+
+    /**
+     * Set showPlanInDashboardColumn
+     * @param type $showPlanInDashboardColumn
+     * @return Variable
+     */
+    public function setShowPlanInDashboardColumn($showPlanInDashboardColumn) {
+        $this->showPlanInDashboardColumn = $showPlanInDashboardColumn;
     }
     
 }

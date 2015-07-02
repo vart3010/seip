@@ -126,6 +126,11 @@
                                         <span id="{{ grafico }}"></span>
                                     </div>
                                 {% endif %}
+                                {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_COLUMN_VARIABLES_MARKED_REAL_PLAN_BY_FREQUENCY_NOTIFICATION')  %}
+                                    <div id="tab-{{ grafico }}"  ng-controller="DashboardController" ng-init="chargeChartColumnVariablesMarkedRealPlanByFrequencyNotification({{ indicator.id }},'{{ grafico }}','100','500')">
+                                        <span id="{{ grafico }}"></span>
+                                    </div>
+                                {% endif %}
                             {% endfor %}
                         </div>
 

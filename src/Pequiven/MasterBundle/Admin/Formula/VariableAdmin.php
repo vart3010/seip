@@ -46,6 +46,12 @@ class VariableAdmin extends Admin implements \Symfony\Component\DependencyInject
             ->add('showPlanInDashboardBarArea',null,array(
                 'required' => false,
             ))
+            ->add('showRealInDashboardColumn',null,array(
+                'required' => false,
+            ))
+            ->add('showPlanInDashboardColumn',null,array(
+                'required' => false,
+            ))
             ->add('equation',null,array(
                 'attr' => array(
                     'rows' => 10
@@ -67,6 +73,8 @@ class VariableAdmin extends Admin implements \Symfony\Component\DependencyInject
             ->add('showPlanInDashboardPie')
             ->add('showRealInDashboardBarArea')
             ->add('showPlanInDashboardBarArea')
+            ->add('showRealInDashboardColumn')
+            ->add('showPlanInDashboardColumn')
             ;
     }
     

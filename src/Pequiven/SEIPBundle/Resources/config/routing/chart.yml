@@ -129,3 +129,15 @@ getDataChartBarsAreaVariablesMarkedRealPlanByFrequencyNotification:
     methods: [GET]
     options:
         expose: true
+        
+#11
+getDataChartColumnVariablesMarkedRealPlanByFrequencyNotification:
+    path: /getDataChartColumnVariablesMarkedRealPlanByFrequencyNotification/{id}
+    defaults:
+        _controller: pequiven.controller.seipchart:getDataChartColumnVariablesMarkedRealPlanByFrequencyNotificationAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true

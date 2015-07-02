@@ -914,6 +914,89 @@ class IndicatorService implements ContainerAwareInterface {
 
         return $data;
     }
+    
+    /**
+     * 
+     * @param Indicator $indicator
+     * @param type $options
+     * @return array
+     */
+    public function getDataChartColumnMultiSeries3d(Indicator $indicator, $options = array()){
+        
+        $data = array(
+            'dataSource' => array(
+                'chart' => array(),
+                'categories' => array(),
+                'dataset' => array(),
+            ),
+        );
+        
+        $chart = array();
+        
+        $chart["caption"] = $indicator->getSummary();
+        $chart["subCaption"] = "Sales by quarter";
+        $chart["xAxisName"] = "Indicador";
+        $chart["yAxisName"] = "TM";
+        $chart["paletteColors"] = "#0075c2,#1aaf5d,#f2c500";
+        $chart["bgColor"] = "#ffffff";
+        $chart["showBorder"] = "0";
+        $chart["showCanvasBorder"] = "0";
+        $chart["usePlotGradientColor"] = "0";
+        $chart["plotBorderAlpha"] = "10";
+        $chart["legendBorderAlpha"] = "0";
+        $chart["legendBgAlpha"] = "0";
+        $chart["legendShadow"] = "0";
+        $chart["showHoverEffect"] = "1";
+        $chart["valueFontColor"] = "#000000";
+        $chart["valuePosition"] = "ABOVE";
+        $chart["rotateValues"] = "1";
+        $chart["placeValuesInside"] = "0";
+        $chart["divlineColor"] = "#999999";
+        $chart["divLineDashed"] = "1";
+        $chart["divLineDashLen"] = "1";
+        $chart["divLineGapLen"] = "1";
+        $chart["canvasBgColor"] = "#ffffff";
+        $chart["captionFontSize"] = "14";
+        $chart["subcaptionFontSize"] = "14";
+        $chart["subcaptionFontBold"] = "0";
+        $chart["decimalSeparator"] = ",";
+        $chart["thousandSeparator"] = ".";
+        $chart["inDecimalSeparator"] = ",";
+        $chart["inThousandSeparator"] = ".";
+        $chart["decimals"] = "2";
+        
+        $category = $dataSetReal = $dataSetPlan = $medition = array();
+        
+        if(isset($options['withVariablesMarkedRealPlanByFrequencyNotification']) && array_key_exists('withVariablesMarkedRealPlanByFrequencyNotification', $options)){
+            unset($options['withVariablesMarkedRealPlanByFrequencyNotification']);
+            $arrayVariables = array();
+            $arrayVariables = $this->getArrayVariablesFormulaWithData($indicator, array('withVariablesMarkedRealPlanByFrequencyNotificationColumnMultiSeries' => true));
+         
+            $dataSetPlan["seriesname"] = $arrayVariables['descriptionPlan'];
+            $dataSetPlan["showValues"] = "1";
+            $dataSetReal["seriesname"] = $arrayVariables['descriptionReal'];
+            $dataSetReal["showValues"] = "1";
+
+            $totalValueIndicators = count($indicator->getValuesIndicator());
+            for ($i = 0;$i < $totalValueIndicators; $i++) {
+                $label = $dataReal = $dataPlan = $dataMedition = array();
+                $label["label"] = $i;
+                $dataReal["value"] = number_format($arrayVariables['valueReal'][$i], 2, ',', '.');
+                $dataPlan["value"] = number_format($arrayVariables['valuePlan'][$i], 2, ',', '.');
+
+                $category[] = $label;
+                $dataSetReal["data"][] = $dataReal;
+                $dataSetPlan["data"][] = $dataPlan;
+            }
+        }
+        
+        $data['dataSource']['chart'] = $chart;
+        $data['dataSource']['categories'][]["category"] = $category;
+        $data['dataSource']['dataset'][] = $dataSetReal;
+        $data['dataSource']['dataset'][] = $dataSetPlan;
+
+        return $data;
+    }
 
     /**
      * Función para obtener las variables de la fórmula del indicador de acuerdo a 
@@ -1023,6 +1106,26 @@ class IndicatorService implements ContainerAwareInterface {
                     $arrayVariables['descriptionReal'] = $variable->getDescription();
                     $arrayVariables['summaryReal'] = $variable->getSummary();
                 } elseif($variable->getShowPlanInDashboardBarArea()){
+                    $varPlan = $variable->getName();
+                    $arrayVariables['descriptionPlan'] = $variable->getDescription();
+                    $arrayVariables['summaryPlan'] = $variable->getSummary();
+                }
+            }
+            
+            foreach($valuesIndicator as $valueIndicator){
+                $arrayVariables['valueReal'][] = $valueIndicator->getParameter($varReal);
+                $arrayVariables['valuePlan'][] = $valueIndicator->getParameter($varPlan);
+            }
+        } elseif(isset($options['withVariablesMarkedRealPlanByFrequencyNotificationColumnMultiSeries']) && array_key_exists('withVariablesMarkedRealPlanByFrequencyNotificationColumnMultiSeries', $options)){
+            unset($options['withVariablesMarkedRealPlanByFrequencyNotificationColumnMultiSeries']);
+            $variables = $formula->getVariables();
+            $varReal = $varPlan = '';
+            foreach($variables as $variable){
+                if($variable->getShowRealInDashboardColumn()){
+                    $varReal = $variable->getName();
+                    $arrayVariables['descriptionReal'] = $variable->getDescription();
+                    $arrayVariables['summaryReal'] = $variable->getSummary();
+                } elseif($variable->getShowPlanInDashboardColumn()){
                     $varPlan = $variable->getName();
                     $arrayVariables['descriptionPlan'] = $variable->getDescription();
                     $arrayVariables['summaryPlan'] = $variable->getSummary();
