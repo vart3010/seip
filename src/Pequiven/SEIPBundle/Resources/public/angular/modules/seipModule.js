@@ -2310,8 +2310,8 @@ angular.module('seipModule.controllers', [])
         //Controlador para los gráficos a mostrar en el dashboard del indicador
         .controller('ChartsDashboardController', function ($scope, $http) {
 
-            //Gráfico en forma de dona para mostrar los indicadores asociados (Resumen, Referencia y Resultado de la Medición)
-            $scope.chargeChartDoughnut2d = function (indicatorId, render, width, height) {
+            //0-Gráfico en forma de dona para mostrar los indicadores asociados (Resumen, Referencia y Resultado de la Medición)
+            $scope.chargeChartDoughnut2dIndicatorsAssociated = function (indicatorId, render, width, height) {
 //                var getDataChartDoughnut = Routing.generate("getDataChartDoughnut", {id: indicatorId});
 //                $scope.chartDoughnut2d = {};
 //                $http.get(getDataChartDoughnut).success(function (data) {
@@ -2320,10 +2320,10 @@ angular.module('seipModule.controllers', [])
 //                        "data": data.dataSource.dataSet
 //                    }
 //                });
-                var getDataChartDoughnut = Routing.generate("getDataChartDoughnut", {id: indicatorId});
-                $http.get(getDataChartDoughnut).success(function (data) {
+                var getDataChartDoughnutIndicatorsAssociated = Routing.generate("getDataChartDoughnutIndicatorsAssociated", {id: indicatorId});
+                $http.get(getDataChartDoughnutIndicatorsAssociated).success(function (data) {
                     FusionCharts.ready(function () {
-                        var revenueChartTactic = new FusionCharts({
+                        var revenueChartDoughnutIndicatorsAssociated = new FusionCharts({
                             "type": "doughnut2d",
                             "renderAt": render,
                             "width": width + "%",
@@ -2334,18 +2334,18 @@ angular.module('seipModule.controllers', [])
                                 "data": data.dataSource.dataSet
                             }
                         });
-                        revenueChartTactic.setTransparent(true);
-                        revenueChartTactic.render();
+                        revenueChartDoughnutIndicatorsAssociated.setTransparent(true);
+                        revenueChartDoughnutIndicatorsAssociated.render();
                     });
                 });
             }
 
-            //Gráfico para mostrar información de 2 variables (respecto al eje izquierdo) y el resultado de la medición (respecto al eje derecho en valor porcentual)
-            $scope.chargeChartColumnLineDualAxis = function (indicatorId, render, width, height) {
-                var getDataChartColumnLineDualAxis = Routing.generate("getDataChartColumnLineDualAxis", {id: indicatorId});
-                $http.get(getDataChartColumnLineDualAxis).success(function (data) {
+            //1-Gráfico para mostrar información de 2 variables (respecto al eje izquierdo) y el resultado de la medición (respecto al eje derecho en valor porcentual), de los indicadores asociados
+            $scope.chargeChartColumnLineDualAxisIndicatorsAssociated = function (indicatorId, render, width, height) {
+                var getDataChartColumnLineDualAxisIndicatorsAssociated = Routing.generate("getDataChartColumnLineDualAxisIndicatorsAssociated", {id: indicatorId});
+                $http.get(getDataChartColumnLineDualAxisIndicatorsAssociated).success(function (data) {
                     FusionCharts.ready(function () {
-                        var revenueChartTactic = new FusionCharts({
+                        var revenueChartColumnLineDualAxisIndicatorsAssociated = new FusionCharts({
                             "type": "mscolumn3dlinedy",
                             "renderAt": render,
                             "width": width + "%",
@@ -2353,16 +2353,17 @@ angular.module('seipModule.controllers', [])
                             "dataFormat": "json",
                             "dataSource": {
                                 "chart": data.dataSource.chart,
-                                "data": data.dataSource.dataSet
+                                "categories": data.dataSource.categories,
+                                "dataset": data.dataSource.dataset
                             }
                         });
-                        revenueChartTactic.setTransparent(true);
-                        revenueChartTactic.render();
+                        revenueChartColumnLineDualAxisIndicatorsAssociated.setTransparent(true);
+                        revenueChartColumnLineDualAxisIndicatorsAssociated.render();
                     });
                 });
             }
-
-            //Gráfico en forma de dona para mostrar las variables plan y real a partir de ecuación de la fórmula del indicador
+            
+            //2-Gráfico en forma de dona para mostrar las variables plan y real a partir de ecuación de la fórmula del indicador
             $scope.chargeChartDoughnut2dWithVariablesRealPlan = function (indicatorId, render, width, height)  {
                 var getdataChartDoughnut2dWithVariablesRealPlan = Routing.generate("getDataChartDoughnutWithVariablesRealPlan", {id: indicatorId});
                 $http.get(getdataChartDoughnut2dWithVariablesRealPlan).success(function (data) {
@@ -2383,14 +2384,36 @@ angular.module('seipModule.controllers', [])
                     });
                 });
             }
-
-            //Gráfico en forma de dona para mostrar las variables de la fórmula del indicador
-            $scope.chargeChartPieVariablesOrTags = function (indicatorId, render, width, height) {
-                var getDataChartPieVariablesOrTags = Routing.generate("getDataChartPieVariablesOrTags", {id: indicatorId});
-                $http.get(getDataChartPieVariablesOrTags).success(function (data) {
+            
+            //3-Gráfico para mostrar las variables de un indicador que esten marcadas como "real"
+            $scope.chargeChartPieVariablesMarkedReal = function (indicatorId, render, width, height) {
+                var getDataChartPieVariablesMarkedReal = Routing.generate("getDataChartPieVariablesMarkedReal", {id: indicatorId});
+                $http.get(getDataChartPieVariablesMarkedReal).success(function (data) {
                     FusionCharts.ready(function () {
-                        var revenueChartTactic = new FusionCharts({
-                            "type": "pie2d",
+                        var revenueChartPieVariablesMarkedReal = new FusionCharts({
+                            "type": "pie3d",
+                            "renderAt": render,
+                            "width": width + "%",
+                            "height": height,
+                            "dataFormat": "json",
+                            "dataSource": {
+                                "chart": data.dataSource.chart,
+                                "data": data.dataSource.data,
+                            }
+                        });
+                        revenueChartPieVariablesMarkedReal.setTransparent(true);
+                        revenueChartPieVariablesMarkedReal.render();
+                    });
+                });
+            }
+
+            //4-Gráfico para mostrar información de 2 variables (respecto al eje izquierdo) y el resultado de la medición (respecto al eje derecho en valor porcentual), del indicador
+            $scope.chargeChartColumnLineDualAxisRealPlan = function (indicatorId, render, width, height) {
+                var getDataChartColumnLineDualAxisRealPlan = Routing.generate("getDataChartColumnLineDualAxisRealPlan", {id: indicatorId});
+                $http.get(getDataChartColumnLineDualAxisRealPlan).success(function (data) {
+                    FusionCharts.ready(function () {
+                        var revenueChartColumnLineDualAxisRealPlan = new FusionCharts({
+                            "type": "mscolumn3dlinedy",
                             "renderAt": render,
                             "width": width + "%",
                             "height": height,
@@ -2401,13 +2424,58 @@ angular.module('seipModule.controllers', [])
                                 "dataset": data.dataSource.dataset
                             }
                         });
-                        revenueChartTactic.setTransparent(true);
-                        revenueChartTactic.render();
+                        revenueChartColumnLineDualAxisRealPlan.setTransparent(true);
+                        revenueChartColumnLineDualAxisRealPlan.render();
+                    });
+                });
+            }
+            
+            //5-Gráfico para mostrar las variables de un indicador que esten marcadas como "plan"
+            $scope.chargeChartPieVariablesMarkedPlan = function (indicatorId, render, width, height) {
+                var getDataChartPieVariablesMarkedPlan = Routing.generate("getDataChartPieVariablesMarkedPlan", {id: indicatorId});
+                $http.get(getDataChartPieVariablesMarkedPlan).success(function (data) {
+                    FusionCharts.ready(function () {
+                        var revenueChartPieVariablesMarkedPlan = new FusionCharts({
+                            "type": "pie3d",
+                            "renderAt": render,
+                            "width": width + "%",
+                            "height": height,
+                            "dataFormat": "json",
+                            "dataSource": {
+                                "chart": data.dataSource.chart,
+                                "data": data.dataSource.data,
+                            }
+                        });
+                        revenueChartPieVariablesMarkedPlan.setTransparent(true);
+                        revenueChartPieVariablesMarkedPlan.render();
+                    });
+                });
+            }
+            
+            //6-Gráfico para mostrar información de 2 variables (respecto al eje izquierdo) y el resultado de la medición (respecto al eje derecho en valor porcentual), del indicador
+            $scope.chargeChartBarsAreaVariablesRealPlanByFrequencyNotification = function (indicatorId, render, width, height) {
+                var getDataChartBarsAreaVariablesRealPlanByFrequencyNotification = Routing.generate("getDataChartBarsAreaVariablesRealPlanByFrequencyNotification", {id: indicatorId});
+                $http.get(getDataChartBarsAreaVariablesRealPlanByFrequencyNotification).success(function (data) {
+                    FusionCharts.ready(function () {
+                        var revenueChartBarsAreaVariablesRealPlanByFrequencyNotification = new FusionCharts({
+                            "type": "mscombi2d",
+                            "renderAt": render,
+                            "width": width + "%",
+                            "height": height,
+                            "dataFormat": "json",
+                            "dataSource": {
+                                "chart": data.dataSource.chart,
+                                "categories": data.dataSource.categories,
+                                "dataset": data.dataSource.dataset
+                            }
+                        });
+                        revenueChartBarsAreaVariablesRealPlanByFrequencyNotification.setTransparent(true);
+                        revenueChartBarsAreaVariablesRealPlanByFrequencyNotification.render();
                     });
                 });
             }
 
-            //Gráfico para mostrar las variables (sumativas al plan) de un indicador con fórmula a partir de ecuación
+            //7-Gráfico para mostrar las variables (sumativas al plan) de un indicador con fórmula a partir de ecuación
             $scope.chargeChartPieVariablesPlanFromEquation = function (indicatorId, render, width, height) {
                 var getDataChartPieVariablesPlanFromEquation = Routing.generate("getDataChartPieVariablesPlanFromEquation", {id: indicatorId});
                 $http.get(getDataChartPieVariablesPlanFromEquation).success(function (data) {
@@ -2429,7 +2497,7 @@ angular.module('seipModule.controllers', [])
                 });
             }
             
-            //Gráfico para mostrar las variables (sumativas al real) de un indicador con fórmula a partir de ecuación
+            //8-Gráfico para mostrar las variables (sumativas al real) de un indicador con fórmula a partir de ecuación
             $scope.chargeChartPieVariablesRealFromEquation = function (indicatorId, render, width, height) {
                 var getDataChartPieVariablesRealFromEquation = Routing.generate("getDataChartPieVariablesRealFromEquation", {id: indicatorId});
                 $http.get(getDataChartPieVariablesRealFromEquation).success(function (data) {
@@ -2451,29 +2519,191 @@ angular.module('seipModule.controllers', [])
                 });
             }
             
-            //Gráfico en forma de dona para mostrar las variables plan y real a partir de ecuación de la fórmula del indicador
-            $scope.chargeChartDoughnut2dWithVariablesFromEquation = function (indicatorId, render, width, height)  {
-                var getdataChartDoughnut2dWithVariablesFromEquation = Routing.generate("getDataChartDoughnutWithVariablesFromEquation", {id: indicatorId});
-                $http.get(getdataChartDoughnut2dWithVariablesFromEquation).success(function (data) {
+            //9-Gráfico para mostrar información de 2 variables (respecto al eje izquierdo) y el resultado de la medición (respecto al eje derecho en valor porcentual), del indicador
+            $scope.chargeChartColumnLineDualAxisByFrequencyNotification = function (indicatorId, render, width, height) {
+                var getDataChartColumnLineDualAxisByFrequencyNotification = Routing.generate("getDataChartColumnLineDualAxisByFrequencyNotification", {id: indicatorId});
+                $http.get(getDataChartColumnLineDualAxisByFrequencyNotification).success(function (data) {
                     FusionCharts.ready(function () {
-                        var revenueChartDoughnut2dWithVariablesFromEquation = new FusionCharts({
-                            "type": "doughnut2d",
+                        var revenueChartColumnLineDualAxisByFrequencyNotification = new FusionCharts({
+                            "type": "mscolumn3dlinedy",
                             "renderAt": render,
                             "width": width + "%",
                             "height": height,
                             "dataFormat": "json",
                             "dataSource": {
                                 "chart": data.dataSource.chart,
-                                "data": data.dataSource.dataSet
+                                "categories": data.dataSource.categories,
+                                "dataset": data.dataSource.dataset
                             }
                         });
-                        revenueChartDoughnut2dWithVariablesFromEquation.setTransparent(true);
-                        revenueChartDoughnut2dWithVariablesFromEquation.render();
+                        revenueChartColumnLineDualAxisByFrequencyNotification.setTransparent(true);
+                        revenueChartColumnLineDualAxisByFrequencyNotification.render();
                     });
                 });
             }
-
-
+            
+            //10-Gráfico para mostrar información de 2 variables (respecto al eje izquierdo) y el resultado de la medición (respecto al eje derecho en valor porcentual), del indicador (Variables marcadas como real/plan)
+            $scope.chargeChartBarsAreaVariablesMarkedRealPlanByFrequencyNotification = function (indicatorId, render, width, height) {
+                var getDataChartBarsAreaVariablesMarkedRealPlanByFrequencyNotification = Routing.generate("getDataChartBarsAreaVariablesMarkedRealPlanByFrequencyNotification", {id: indicatorId});
+                $http.get(getDataChartBarsAreaVariablesMarkedRealPlanByFrequencyNotification).success(function (data) {
+                    FusionCharts.ready(function () {
+                        var revenueChartBarsAreaVariablesMarkedRealPlanByFrequencyNotification = new FusionCharts({
+                            "type": "mscombi2d",
+                            "renderAt": render,
+                            "width": width + "%",
+                            "height": height,
+                            "dataFormat": "json",
+                            "dataSource": {
+                                "chart": data.dataSource.chart,
+                                "categories": data.dataSource.categories,
+                                "dataset": data.dataSource.dataset
+                            }
+                        });
+                        revenueChartBarsAreaVariablesMarkedRealPlanByFrequencyNotification.setTransparent(true);
+                        revenueChartBarsAreaVariablesMarkedRealPlanByFrequencyNotification.render();
+                    });
+                });
+            }
+            
+            //11-Gráfico tipo barras vertical para mostrar las variables marcadas como real/plan de la fórmula del indicador respecto al eje izquierdo, de acuerdo a la frecuencia de notificación
+            $scope.chargeChartColumnVariablesMarkedRealPlanByFrequencyNotification = function (indicatorId, render, width, height) {
+                var getDataChartColumnVariablesMarkedRealPlanByFrequencyNotification = Routing.generate("getDataChartColumnVariablesMarkedRealPlanByFrequencyNotification", {id: indicatorId});
+                $http.get(getDataChartColumnVariablesMarkedRealPlanByFrequencyNotification).success(function (data) {
+                    FusionCharts.ready(function () {
+                        var revenueChartColumnVariablesMarkedRealPlanByFrequencyNotification = new FusionCharts({
+                            "type": "mscolumn3d",
+                            "renderAt": render,
+                            "width": width + "%",
+                            "height": height,
+                            "dataFormat": "json",
+                            "dataSource": {
+                                "chart": data.dataSource.chart,
+                                "categories": data.dataSource.categories,
+                                "dataset": data.dataSource.dataset
+                            }
+                        });
+                        revenueChartColumnVariablesMarkedRealPlanByFrequencyNotification.setTransparent(true);
+                        revenueChartColumnVariablesMarkedRealPlanByFrequencyNotification.render();
+                    });
+                });
+            }
+            
+            //Gráfico en forma tacómetro (Usado para mostrar el resultado de los indicadores estratégicos en el dashboard)
+            $scope.renderChartExample = function (indicatorId, render, width, height) {
+                FusionCharts.ready(function () {
+                    var chartAngularGauge = new FusionCharts({
+                        "type": "angulargauge",
+                        "renderAt": render,
+                        "width": width + "%",
+                        "height": height,
+                        "dataFormat": "json",
+                        "dataSource": {
+                            "chart": {
+                                "caption": "Speedometer",
+                                "captionFont": "Arial",
+                                "captionFontColor": "#333333",
+                                "manageresize": "1",
+                                "origw": "320",
+                                "origh": "320",
+                                "tickvaluedistance": "-10",
+                                "bgcolor": "#FFFFFF",
+                                "upperlimit": "240",
+                                "lowerlimit": "0",
+                                "basefontcolor": "#FFFFFF",
+                                "majortmnumber": "9",
+                                "majortmcolor": "#FFFFFF",
+                                "majortmheight": "8",
+                                "majortmthickness": "5",
+                                "minortmnumber": "5",
+                                "minortmcolor": "#FFFFFF",
+                                "minortmheight": "3",
+                                "minortmthickness": "2",
+                                "pivotradius": "10",
+                                "pivotbgcolor": "#000000",
+                                "pivotbordercolor": "#FFFFFF",
+                                "pivotborderthickness": "2",
+                                "tooltipbordercolor": "#FFFFFF",
+                                "tooltipbgcolor": "#333333",
+                                "gaugeouterradius": "115",
+                                "gaugestartangle": "240",
+                                "gaugeendangle": "-60",
+                                "gaugealpha": "0",
+                                "decimals": "0",
+                                "showcolorrange": "0",
+                                "placevaluesinside": "1",
+                                "pivotfillmix": "",
+                                "showpivotborder": "1",
+                                "annrenderdelay": "0",
+                                "gaugeoriginx": "160",
+                                "gaugeoriginy": "160",
+                                "showborder": "0"
+                            },
+                            "dials": {
+                                "dial": [
+                                    {
+                                        "value": "65",
+                                        "bgcolor": "000000",
+                                        "bordercolor": "#FFFFFF",
+                                        "borderalpha": "100",
+                                        "basewidth": "4",
+                                        "topwidth": "4",
+                                        "borderthickness": "2",
+                                        "valuey": "260"
+                                    }
+                                ]
+                            },
+                            "annotations": {
+                                "groups": [
+                                    {
+                                        "x": "160",
+                                        "y": "160",
+                                        "items": [
+                                            {
+                                                "type": "circle",
+                                                "radius": "130",
+                                                "fillasgradient": "1",
+                                                "fillcolor": "#4B4B4B,#AAAAAA",
+                                                "fillalpha": "100,100",
+                                                "fillratio": "95,5"
+                                            },
+                                            {
+                                                "type": "circle",
+                                                "x": "0",
+                                                "y": "0",
+                                                "radius": "120",
+                                                "showborder": "1",
+                                                "bordercolor": "cccccc",
+                                                "fillasgradient": "1",
+                                                "fillcolor": "#ffffff,#000000",
+                                                "fillalpha": "50,100",
+                                                "fillratio": "1,99"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "x": "160",
+                                        "y": "160",
+                                        "showbelow": "0",
+                                        "scaletext": "1",
+                                        "items": [
+                                            {
+                                                "type": "text",
+                                                "y": "100",
+                                                "label": "KPH",
+                                                "fontcolor": "#FFFFFF",
+                                                "fontsize": "14",
+                                                "bold": "1"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        }
+                    });
+                    chartAngularGauge.setTransparent(true);
+                    chartAngularGauge.render();
+                })
+            }
         })
 
         .controller('ToolsController', function ($scope, ngTableParams, $http, sfTranslator, notifyService) {

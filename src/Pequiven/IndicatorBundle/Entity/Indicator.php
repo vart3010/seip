@@ -472,7 +472,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     /**
      * 
      * @var type 
-     * @ORM\Column(name="textValueFromVariableReal",type="text")
+     * @ORM\Column(name="textValueFromVariableReal",type="text", nullable=true)
      */
     private $textValueFromVariableReal;
     
@@ -486,7 +486,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     
     /**
      * @var type 
-     * @ORM\Column(name="textValueFromVariablePlan",type="text")
+     * @ORM\Column(name="textValueFromVariablePlan",type="text", nullable=true)
      */
     private $textValueFromVariablePlan;
     

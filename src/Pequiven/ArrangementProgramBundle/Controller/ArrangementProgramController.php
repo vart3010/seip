@@ -33,7 +33,7 @@ class ArrangementProgramController extends SEIPController
         $sorting = $request->get('sorting',$this->config->getSorting());
         $repository = $this->getRepository();
         $user = $this->getUser();
-        $level = $user->getLevelRealByGroup();
+        $level = $user->getLevelAllByGroup();
         if($level >= \Pequiven\MasterBundle\Entity\Rol::ROLE_GENERAL_COMPLEJO){
             if(isset($criteria['typeManagement']) && $criteria['typeManagement'] == \Pequiven\MasterBundle\Entity\GerenciaSecond::TYPE_MANAGEMENT_BINDING){
                 unset($criteria['firstLineManagement']);

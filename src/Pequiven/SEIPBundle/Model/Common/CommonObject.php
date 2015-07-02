@@ -16,6 +16,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class CommonObject implements \Symfony\Component\DependencyInjection\ContainerAwareInterface {
 
+    /* NIVELES ESTRUCTURA ORGANIZACIONAL */
     /**
      * Nivel Complejo
      */
@@ -29,6 +30,7 @@ class CommonObject implements \Symfony\Component\DependencyInjection\ContainerAw
      */
     const LEVEL_GERENCIA_SECOND = 3;
     
+    /* STATUS TRABAJADORES */
     /**
      * Trabajador Activo
      */
@@ -56,6 +58,7 @@ class CommonObject implements \Symfony\Component\DependencyInjection\ContainerAw
      */
     const STATUS_WORKER_SPECIAL_RESERVE = 6;
     
+    /* TIPOS DE RESULTADOS */
     /**
      * Resultado para la evaluación
      */
@@ -66,6 +69,7 @@ class CommonObject implements \Symfony\Component\DependencyInjection\ContainerAw
      */
     const TYPE_RESULT_ARRANGEMENT = 'ARRANGEMENT';
     
+    /* TIPOS DE RANGOS DE GESTIÓN (PARA LOS SEMÁFOROS) */
     /**
      * Rango Bueno (Verde)
      */
@@ -81,11 +85,12 @@ class CommonObject implements \Symfony\Component\DependencyInjection\ContainerAw
      */
     const TYPE_RANGE_BAD = 'BAD';
     
+    /* TIPO DE ABERTURA DE LAS URL */
     const OPEN_URL_OTHER_WINDOW = 0;
     
     const OPEN_URL_SAME_WINDOW = 1;
     
-    //Tipos de holgura para mostrar el rango de gestión en forma gráfica
+    /* TIPOS DE HOLGURA PARA MOSTRAR EL RANGO DE GESTIÓN EN FORMA GRÁFICA */
    /**
     * Rango de Gestión con holgura en los extremos
     */
@@ -94,6 +99,17 @@ class CommonObject implements \Symfony\Component\DependencyInjection\ContainerAw
      * Rango de Gestión sin holgura en los extremos
      */
     const ARRANGEMENT_RANGE_WITHOUT_CLEARANCE = 1;
+    
+    /* TIPO DE NIVELES PARA LOS USUARIOS */
+    /**
+     * Roles del usuario sólo del tipo propietario
+     */
+    const TYPE_LEVEL_USER_ONLY_OWNER = 0;
+    
+    /**
+     * Roles del usuario sin importar el tipo de rol
+     */
+    const TYPE_LEVEL_USER_ALL = 1;
     
     protected $months = array();
     

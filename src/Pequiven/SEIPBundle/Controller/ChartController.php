@@ -13,10 +13,10 @@ use Symfony\Component\HttpFoundation\Request;
 class ChartController extends SEIPController {
 
     /**
-     * Función que retorna la data para un gráfico de tipo dona. Ejemplo para los indicadores estratégicos y muestre como está constituido el mismo
+     * 0-Función que retorna la data de los indicadores asociados en un gráfico de tipo dona.
      * @return JsonResponse
      */
-    public function getDataChartTypeDoughnutAction(Request $request) {
+    public function getDataChartTypeDoughnutIndicatorsAssociatedAction(Request $request) {
         $response = new JsonResponse();
 
         $idIndicator = $request->get('id');
@@ -31,9 +31,29 @@ class ChartController extends SEIPController {
 
         return $response;
     }
+    
+    /**
+     * 1-Función que retorna la data para un gráfico tipo barras vertical para mostrar el real/plan de los indicadores asociados respecto al eje izquierdo y el resultado de la medición en valor porcentual respecto al lado derecho de los indicadores hijos.
+     * @return JsonResponse
+     */
+    public function getDataChartTypeColumnLineDualAxisIndicatorsAssociatedAction(Request $request) {
+        $response = new JsonResponse();
+
+        $idIndicator = $request->get('id');
+
+        $indicatorService = $this->getIndicatorService(); //Obtenemos el servicio del indicador
+
+        $indicator = $this->get('pequiven.repository.indicator')->find($idIndicator); //Obtenemos el indicador
+
+        $dataChart = $indicatorService->getChartColumnLineDualAxis($indicator, array('childrens' => true)); //Obtenemos la data del gráfico de acuerdo al indicador
+
+        $response->setData($dataChart); //Seteamos la data del gráfico en Json
+
+        return $response;
+    }
 
     /**
-     * Función que retorna la data para un gráfico de tipo dona. Muestra en la dona el valor de las variables de la fórmula del indicador
+     * 2-Función que retorna la data para un gráfico de tipo dona. Muestra en la dona el valor de las variables de la fórmula del indicador
      * @return JsonResponse
      */
     public function getDataChartTypeDoughnutWithVariablesRealPLanAction(Request $request) {
@@ -51,12 +71,32 @@ class ChartController extends SEIPController {
 
         return $response;
     }
-
+    
     /**
-     * Función que retorna la data para un gráfico de tipo columna y con 2 ejes verticales.
+     * 3-Función que retorna la data para un gráfico para mostrar las variables de un indicador que esten marcadas como "real".
      * @return JsonResponse
      */
-    public function getDataChartTypeColumnLineDualAxisAction(Request $request) {
+    public function getDataChartPieVariablesMarkedRealAction(Request $request) {
+        $response = new JsonResponse();
+
+        $idIndicator = $request->get('id');
+        
+        $indicatorService = $this->getIndicatorService(); //Obtenemos el servicio del indicador
+
+        $indicator = $this->get('pequiven.repository.indicator')->find($idIndicator); //Obtenemos el indicador
+
+        $dataChart = $indicatorService->getDataDashboardPie($indicator, array('viewVariablesMarkedReal' => true)); //Obtenemos la data del gráfico de acuerdo al indicador
+
+        $response->setData($dataChart); //Seteamos la data del gráfico en Json
+
+        return $response;
+    }
+    
+    /**
+     * 4-Función que retorna la data para un gráfico tipo barras vertical para mostrar el real/plan de los parámetros de cada mes. Sólo para el caso en que sean 2 parámetros (Bien sea plan y real automático o plan y real automático a partir de ecuación).
+     * @return JsonResponse
+     */
+    public function getDataChartTypeColumnLineDualAxisRealPlanAction(Request $request) {
         $response = new JsonResponse();
 
         $idIndicator = $request->get('id');
@@ -65,28 +105,7 @@ class ChartController extends SEIPController {
 
         $indicator = $this->get('pequiven.repository.indicator')->find($idIndicator); //Obtenemos el indicador
 
-        $dataChart = $indicatorService->getChartColumnLineDualAxis($indicator); //Obtenemos la data del gráfico de acuerdo al indicador
-
-        $response->setData($dataChart); //Seteamos la data del gráfico en Json
-
-        return $response;
-    }
-
-    /**
-     * Función que retorna la data para un gráfico de tipo columna y con 2 ejes verticales.
-     * @return JsonResponse
-     */
-    public function getDataChartTypePieVariablesOrTagsAction(Request $request) {
-        $response = new JsonResponse();
-
-        $idIndicator = $request->get('id');
-        $typeVariable = $request->get('typeVariable');
-        
-        $indicatorService = $this->getIndicatorService(); //Obtenemos el servicio del indicador
-
-        $indicator = $this->get('pequiven.repository.indicator')->find($idIndicator,array($typeVariable => true)); //Obtenemos el indicador
-
-        $dataChart = $indicatorService->getDataDashboardPie($indicator, array()); //Obtenemos la data del gráfico de acuerdo al indicador
+        $dataChart = $indicatorService->getChartColumnLineDualAxis($indicator, array('withVariablesRealPLan' => true)); //Obtenemos la data del gráfico de acuerdo al indicador
 
         $response->setData($dataChart); //Seteamos la data del gráfico en Json
 
@@ -94,7 +113,48 @@ class ChartController extends SEIPController {
     }
     
     /**
-     * Función que retorna la data para un gráfico de tipo pie y sólo las variable sumativas a la parte plan de una fórmula a partir de ecuación.
+     * 3-Función que retorna la data para un gráfico para mostrar las variables de un indicador que esten marcadas como "plan".
+     * @return JsonResponse
+     */
+    public function getDataChartPieVariablesMarkedPlanAction(Request $request) {
+        $response = new JsonResponse();
+
+        $idIndicator = $request->get('id');
+        
+        $indicatorService = $this->getIndicatorService(); //Obtenemos el servicio del indicador
+
+        $indicator = $this->get('pequiven.repository.indicator')->find($idIndicator); //Obtenemos el indicador
+
+        $dataChart = $indicatorService->getDataDashboardPie($indicator, array('viewVariablesMarkedPlan' => true)); //Obtenemos la data del gráfico de acuerdo al indicador
+
+        $response->setData($dataChart); //Seteamos la data del gráfico en Json
+
+        return $response;
+    }
+    
+    /**
+     * 6-Función que retorna la data para un gráfico tipo barra vertical/área para mostrar el real/plan de acuerdo a la frecuencia de notificación
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function getDataChartBarsAreaVariablesRealPlanByFrequencyNotificationAction(Request $request) {
+        $response = new JsonResponse();
+
+        $idIndicator = $request->get('id');
+
+        $indicatorService = $this->getIndicatorService(); //Obtenemos el servicio del indicador
+
+        $indicator = $this->get('pequiven.repository.indicator')->find($idIndicator); //Obtenemos el indicador
+
+        $dataChart = $indicatorService->getDataDashboardBarsArea($indicator, array('byFrequencyNotification' => true)); //Obtenemos la data del gráfico de acuerdo al indicador
+
+        $response->setData($dataChart); //Seteamos la data del gráfico en Json
+
+        return $response;
+    }
+    
+    /**
+     * 7-Función que retorna la data para un gráfico de tipo pie y sólo las variable sumativas a la parte plan de una fórmula a partir de ecuación.
      * @return JsonResponse
      */
     public function getDataChartPieVariablesPlanFromEquationAction(Request $request) {
@@ -113,8 +173,8 @@ class ChartController extends SEIPController {
         return $response;
     }
     
-    /**
-     * Función que retorna la data para un gráfico de tipo pie y sólo las variable sumativas a la parte real de una fórmula a partir de ecuación.
+        /**
+     * 8-Función que retorna la data para un gráfico de tipo pie y sólo las variable sumativas a la parte real de una fórmula a partir de ecuación.
      * @return JsonResponse
      */
     public function getDataChartPieVariablesRealFromEquationAction(Request $request) {
@@ -132,8 +192,12 @@ class ChartController extends SEIPController {
 
         return $response;
     }
-
-    public function getDataChartBarsAreaAction(Request $request) {
+    
+    /**
+     * 9-Función que retorna la data para un gráfico de tipo columna y con 2 ejes verticales. Sólo para un indicador con fórmula real/plan (automático o a partir de ecuación)
+     * @return JsonResponse
+     */
+    public function getDataChartColumnLineDualAxisByFrequencyNotificationAction(Request $request) {
         $response = new JsonResponse();
 
         $idIndicator = $request->get('id');
@@ -142,13 +206,52 @@ class ChartController extends SEIPController {
 
         $indicator = $this->get('pequiven.repository.indicator')->find($idIndicator); //Obtenemos el indicador
 
-        $dataChart = $indicatorService->getDataDashboardBarsArea($indicator, array()); //Obtenemos la data del gráfico de acuerdo al indicador
+        $dataChart = $indicatorService->getChartColumnLineDualAxis($indicator, array('byFrequencyNotification' => true)); //Obtenemos la data del gráfico de acuerdo al indicador
 
         $response->setData($dataChart); //Seteamos la data del gráfico en Json
 
         return $response;
     }
+    
+    /**
+     * 10-Función que retorna la data para un gráfico tipo barras vertical para mostrar el real/plan de los parámetros de cada mes. Sólo para el caso en que sean 2 parámetros (Bien sea plan y real automático o plan y real automático a partir de ecuación).
+     * @return JsonResponse
+     */
+    public function getDataChartBarsAreaVariablesMarkedRealPlanByFrequencyNotificationAction(Request $request) {
+        $response = new JsonResponse();
 
+        $idIndicator = $request->get('id');
+
+        $indicatorService = $this->getIndicatorService(); //Obtenemos el servicio del indicador
+
+        $indicator = $this->get('pequiven.repository.indicator')->find($idIndicator); //Obtenemos el indicador
+
+        $dataChart = $indicatorService->getDataDashboardBarsArea($indicator, array('withVariablesMarkedRealPlanByFrequencyNotification' => true)); //Obtenemos la data del gráfico de acuerdo al indicador
+
+        $response->setData($dataChart); //Seteamos la data del gráfico en Json
+
+        return $response;
+    }
+    
+    /**
+     * 11-Función que retorna la data para un gráfico tipo barras vertical para mostrar las variables marcadas como real/plan de la fórmula del indicador respecto al eje izquierdo, de acuerdo a la frecuencia de notificación.
+     * @return JsonResponse
+     */
+    public function getDataChartColumnVariablesMarkedRealPlanByFrequencyNotificationAction(Request $request) {
+        $response = new JsonResponse();
+
+        $idIndicator = $request->get('id');
+
+        $indicatorService = $this->getIndicatorService(); //Obtenemos el servicio del indicador
+
+        $indicator = $this->get('pequiven.repository.indicator')->find($idIndicator); //Obtenemos el indicador
+
+        $dataChart = $indicatorService->getDataChartColumnMultiSeries3d($indicator, array('withVariablesMarkedRealPlanByFrequencyNotification' => true)); //Obtenemos la data del gráfico de acuerdo al indicador
+
+        $response->setData($dataChart); //Seteamos la data del gráfico en Json
+
+        return $response;
+    }
    
     /**
      * Servicio de los Indicadores
