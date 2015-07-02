@@ -55,22 +55,26 @@ class IndicatorDetailsAdmin extends Admin implements \Symfony\Component\Dependen
 
 
         $indicatorService = $this->getIndicatorService();
+        
         $indicatorDetails = $this->getSubject();
-        $indicator = $indicatorDetails->getIndicator();
-        //$variables = $indicatorService->getArrayVariablesFormulaWithData($indicator->getIndicator(),array("viewVariablesRealPlan","viewVariablesRealPlan"));
-        $variables = $indicatorService->getVariablesInArray($indicator);
+        
+        if ($indicatorDetails != null && $indicatorDetails->getId() !== null) {
+            $indicator = $indicatorDetails->getIndicator();
+            //$variables = $indicatorService->getArrayVariablesFormulaWithData($indicator->getIndicator(),array("viewVariablesRealPlan","viewVariablesRealPlan"));
+            $variables = $indicatorService->getVariablesInArray($indicator);
 
-        
 
-        $varsIndicator["choices"] = $variables;
-        $varsIndicator["empty_value"] = '';
-        
-        //$entity = new \Pequiven\MasterBundle\Entity\Formula();
-       // $query = $this->modelManager->getEntityManager($entity)->createQuery('SELECT s FROM Pequiven\MasterBundle\Entity\Formula s ');
-        
-        
 
-        $query = $this->container->get('pequiven.repository.variable')->getVariablesByFormula($indicator->getFormula()->getId());
+            $varsIndicator["choices"] = $variables;
+            $varsIndicator["empty_value"] = '';
+
+            //$entity = new \Pequiven\MasterBundle\Entity\Formula();
+           // $query = $this->modelManager->getEntityManager($entity)->createQuery('SELECT s FROM Pequiven\MasterBundle\Entity\Formula s ');
+
+
+
+            $query = $this->container->get('pequiven.repository.variable')->getVariablesByFormula($indicator->getFormula()->getId());
+        }
         
         
         $form
@@ -87,25 +91,30 @@ class IndicatorDetailsAdmin extends Admin implements \Symfony\Component\Dependen
 
                 //->add('varIndicatorReal', 'entity', $varsIndicator)
                 
-                ->add('varIndicatorReal', 'sonata_type_model', array(
-                    'class'=> 'Pequiven\MasterBundle\Entity\Formula\Variable',
-                    'multiple' => false,
-                    "required" => true,
-                    "query"=>$query,
-                    "btn_add"=>false
-                ))
-                
                 ->add('isCheckPlan', null, array(
                     'required' => false,
                 ))
         
-                 ->add('varIndicatorPlan', 'sonata_type_model', array(
-                    'class'=> 'Pequiven\MasterBundle\Entity\Formula\Variable',
-                    'multiple' => false,
-                    "required" => true,
-                    "query"=>$query,
-                    "btn_add"=>false
-                ));
+                 ;
+        
+        if ($indicatorDetails != null && $indicatorDetails->getId() !== null) {
+            $form
+                    ->add('varIndicatorReal', 'sonata_type_model', array(
+                        'class'=> 'Pequiven\MasterBundle\Entity\Formula\Variable',
+                        'multiple' => false,
+                        "required" => true,
+                        "query"=>$query,
+                        "btn_add"=>false
+                        ))
+                    ->add('varIndicatorPlan', 'sonata_type_model', array(
+                        'class'=> 'Pequiven\MasterBundle\Entity\Formula\Variable',
+                        'multiple' => false,
+                        "required" => true,
+                        "query"=>$query,
+                        "btn_add"=>false
+                        ))
+                ;
+        }
     }
 
     protected function configureDatagridFilters(DatagridMapper $filter) {
