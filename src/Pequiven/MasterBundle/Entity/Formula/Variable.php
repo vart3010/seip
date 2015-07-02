@@ -9,7 +9,7 @@ use Pequiven\MasterBundle\Model\Formula\Variable as  Model;
  * Variable
  *
  * @ORM\Table()
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Pequiven\MasterBundle\Repository\VariableRepository")
  */
 class Variable extends Model implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface
 {   

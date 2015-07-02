@@ -21,82 +21,132 @@ use Sonata\AdminBundle\Form\FormMapper;
  *
  * @author Carlos Mendoza <inhack20@gmail.com>
  */
-class IndicatorDetailsAdmin extends Admin implements \Symfony\Component\DependencyInjection\ContainerAwareInterface
-{
+class IndicatorDetailsAdmin extends Admin implements \Symfony\Component\DependencyInjection\ContainerAwareInterface {
+
     /**
      *
      * @var ContainerAware
      */
     private $container;
-    
-    protected function configureShowFields(\Sonata\AdminBundle\Show\ShowMapper $show) 
-    {
+
+    protected function configureShowFields(\Sonata\AdminBundle\Show\ShowMapper $show) {
         $show
-            ->add('previusValue')
-            ->add('lastNotificationBy')
-            ->add('lastNotificationAt')
-            ->add('lastFormulaUsed')
-            ->add('resultPlanUnitGroup')
-            ->add('sourceResult','choice',array(
-                'choices' => \Pequiven\IndicatorBundle\Model\Indicator\IndicatorDetails::getSourceResultLabels(),
-                'translation_domain' => 'PequivenIndicatorBundle',
-            ))
-            ;
+                ->add('previusValue')
+                ->add('lastNotificationBy')
+                ->add('lastNotificationAt')
+                ->add('lastFormulaUsed')
+                ->add('resultPlanUnitGroup')
+                ->add('sourceResult', 'choice', array(
+                    'choices' => \Pequiven\IndicatorBundle\Model\Indicator\IndicatorDetails::getSourceResultLabels(),
+                    'translation_domain' => 'PequivenIndicatorBundle',
+                ))
+        ;
     }
-    
-    protected function configureFormFields(FormMapper $form) 
-    {
+
+    protected function configureFormFields(FormMapper $form) {
         $selectUnitParameters = array();
-        
+
         $unitConverter = $this->getUnitConverter();
         $selectUnits = $unitConverter->toArray();
-        
+
         $selectUnitParameters['choices'] = $selectUnits;
         $selectUnitParameters['empty_value'] = '';
         $selectUnitParameters['required'] = false;
+
+
+        $indicatorService = $this->getIndicatorService();
+        $indicatorDetails = $this->getSubject();
+        $indicator = $indicatorDetails->getIndicator();
+        //$variables = $indicatorService->getArrayVariablesFormulaWithData($indicator->getIndicator(),array("viewVariablesRealPlan","viewVariablesRealPlan"));
+        $variables = $indicatorService->getVariablesInArray($indicator);
+
+        
+
+        $varsIndicator["choices"] = $variables;
+        $varsIndicator["empty_value"] = '';
+        
+        //$entity = new \Pequiven\MasterBundle\Entity\Formula();
+       // $query = $this->modelManager->getEntityManager($entity)->createQuery('SELECT s FROM Pequiven\MasterBundle\Entity\Formula s ');
+        
+        
+
+        $query = $this->container->get('pequiven.repository.variable')->getVariablesByFormula($indicator->getFormula()->getId());
+        
+        
         $form
-            ->add('resultPlanUnitGroup','choice',$selectUnitParameters)
-            ->add('resultRealUnitGroup','choice',$selectUnitParameters)
-            ->add('resultManagementUnitGroup','choice',$selectUnitParameters)
-            ->add('sourceResult','choice',array(
-                'choices' => \Pequiven\IndicatorBundle\Model\Indicator\IndicatorDetails::getSourceResultLabels(),
-                'translation_domain' => 'PequivenIndicatorBundle',
-            ))
-            ;
+                ->add('resultPlanUnitGroup', 'choice', $selectUnitParameters)
+                ->add('resultRealUnitGroup', 'choice', $selectUnitParameters)
+                ->add('resultManagementUnitGroup', 'choice', $selectUnitParameters)
+                ->add('sourceResult', 'choice', array(
+                    'choices' => \Pequiven\IndicatorBundle\Model\Indicator\IndicatorDetails::getSourceResultLabels(),
+                    'translation_domain' => 'PequivenIndicatorBundle',
+                ))
+                ->add('isCheckReal', null, array(
+                    'required' => false,
+                ))
+
+                //->add('varIndicatorReal', 'entity', $varsIndicator)
+                
+                ->add('varIndicatorReal', 'sonata_type_model', array(
+                    'class'=> 'Pequiven\MasterBundle\Entity\Formula\Variable',
+                    'multiple' => false,
+                    "required" => true,
+                    "query"=>$query,
+                    "btn_add"=>false
+                ))
+                
+                ->add('isCheckPlan', null, array(
+                    'required' => false,
+                ))
+        
+                 ->add('varIndicatorPlan', 'sonata_type_model', array(
+                    'class'=> 'Pequiven\MasterBundle\Entity\Formula\Variable',
+                    'multiple' => false,
+                    "required" => true,
+                    "query"=>$query,
+                    "btn_add"=>false
+                ));
     }
-    
-    protected function configureDatagridFilters(DatagridMapper $filter) 
-    {
+
+    protected function configureDatagridFilters(DatagridMapper $filter) {
         $filter
-            ->add('indicator','doctrine_orm_model_autocomplete',array(),null,array(
-                'property' => array('ref','description')
-            ))
-            ;
+                ->add('indicator', 'doctrine_orm_model_autocomplete', array(), null, array(
+                    'property' => array('ref', 'description')
+                ))
+        ;
     }
-    protected function configureListFields(ListMapper $list) 
-    {
+
+    protected function configureListFields(ListMapper $list) {
         $list
-            ->addIdentifier('id')
-            ->add('indicator')
-            ;
+                ->addIdentifier('id')
+                ->add('indicator')
+        ;
     }
-    protected function configureRoutes(\Sonata\AdminBundle\Route\RouteCollection $collection) 
-    {
+
+    protected function configureRoutes(\Sonata\AdminBundle\Route\RouteCollection $collection) {
         $collection->remove('create');
         $collection->remove('delete');
     }
-    
+
     /**
      * 
      * @return \Tecnocreaciones\Bundle\ToolsBundle\Service\UnitConverter
      */
-    private function getUnitConverter()
-    {
+    private function getUnitConverter() {
         return $this->container->get('tecnocreaciones_tools.unit_converter');
     }
+
+    private function getIndicatorService() {
+        return $this->container->get('pequiven_indicator.service.inidicator');
+    }
     
-    public function setContainer(\Symfony\Component\DependencyInjection\ContainerInterface $container = null) 
-    {
+    public function setContainer(\Symfony\Component\DependencyInjection\ContainerInterface $container = null) {
         $this->container = $container;
     }
+    
+    
+    private function getDoctrineService() {
+        return $this->container->get('doctrine');
+    }
+
 }

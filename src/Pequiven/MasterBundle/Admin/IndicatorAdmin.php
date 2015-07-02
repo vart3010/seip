@@ -176,39 +176,45 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                 ->add('isValueFromTextReal', null, array(
                     'required' => false,
                 ))
-                ->add('textValueFromVariableReal',null,array(
+                ->add('textValueFromVariableReal', null, array(
                     'required' => false,
                 ))
-                
                 ->add('isValueFromTextPlan', null, array(
                     'required' => false,
                 ))
-                ->add('textValueFromVariablePlan',null,array(
+                ->add('textValueFromVariablePlan', null, array(
                     'required' => false,
                 ))
-                
                 ->end()
                 ->end()
         ;
-
+        
+        
         $form
                 ->tab("Details")
                 ->with('Details')
-                ->add('managementSystems', 'sonata_type_model_autocomplete', array(
-                    'property' => array('description'),
-                    'multiple' => true,
-                    'required' => false,
-                ))
-                ->add('showByRealValue')
-                ->add('showByPlanValue')
-                ->add('details', 'sonata_type_admin', array(
-                    'cascade_validation' => true,
-                    'delete' => false,
-                        ), array(
-                    'edit' => 'inline',
-                    'inline' => 'table',
-                ))
+                    ->add('managementSystems', 'sonata_type_model_autocomplete', array(
+                        'property' => array('description'),
+                        'multiple' => true,
+                        'required' => false,
+                    ))
+                    ->add('showByRealValue')
+                    ->add('showByPlanValue')
+
+                    ->add('details', 'sonata_type_admin', array(
+                        'cascade_validation' => true,
+                        'delete' => false,
+                            ), array(
+                        'edit' => 'inline',
+                        'inline' => 'standard',
+                    ))
+                
                 ->end()
+                
+        
+                
+                
+                
                 ->with('Snippets')
                 ->add("snippetPlan", null, array(
                     "attr" => array("rows" => 4,)
@@ -246,7 +252,6 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                     'choices' => \Pequiven\IndicatorBundle\Entity\Indicator::getTypesOfCalculation(),
                     'translation_domain' => 'PequivenIndicatorBundle'
                 ))
-                
                 ->add('tendency')
                 ->add('frequencyNotificationIndicator')
                 ->add('valueFinal')
@@ -299,6 +304,15 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
     public function getResultService() {
         return $this->container->get('seip.service.result');
     }
+    
+    /**
+     * 
+     * @return type
+     */
+     private function getIndicatorService() {
+        return $this->container->get('pequiven_indicator.service.inidicator');
+    }
+    
 
     /**
      * @return \Pequiven\SEIPBundle\Service\PeriodService

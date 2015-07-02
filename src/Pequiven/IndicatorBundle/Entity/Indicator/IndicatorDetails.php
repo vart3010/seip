@@ -15,8 +15,8 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @ORM\HasLifecycleCallbacks()
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
-class IndicatorDetails extends Model
-{
+class IndicatorDetails extends Model {
+
     /**
      * @var integer
      *
@@ -25,7 +25,7 @@ class IndicatorDetails extends Model
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-    
+
     /**
      * Ultimo valor del indicador
      * 
@@ -33,7 +33,7 @@ class IndicatorDetails extends Model
      * @ORM\Column(name="previusValue", type="float",precision = 3)
      */
     private $previusValue = 0;
-    
+
     /**
      * Persona que notifico la ultima vez valor al indicador
      * 
@@ -41,7 +41,7 @@ class IndicatorDetails extends Model
      * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\User")
      */
     private $lastNotificationBy;
-    
+
     /**
      * Fecha de ultima notificacion
      * 
@@ -49,7 +49,7 @@ class IndicatorDetails extends Model
      * @ORM\Column(name="lastNotificationAt", type="datetime",nullable=true)
      */
     private $lastNotificationAt;
-    
+
     /**
      * Ultimos parametros de las variables de la formula
      * 
@@ -57,91 +57,91 @@ class IndicatorDetails extends Model
      * @ORM\Column(name="lastNotificationParameters",type="array")
      */
     private $lastNotificationParameters;
-    
+
     /**
      * Formula
      * @var \Pequiven\MasterBundle\Entity\Formula
      * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Formula")
      */
     private $lastFormulaUsed;
-    
+
     /**
      * Tipo de unidad (Resultado de gestion)
      * @var string
      * @ORM\Column(name="resultManagementUnitType",type="string",length=50, nullable=true)
      */
     private $resultManagementUnitType;
-    
+
     /**
      * Unidad (Resultado de gestion)
      * @var string
      * @ORM\Column(name="resultManagementUnit",type="string",length=90, nullable=true)
      */
     private $resultManagementUnit;
-    
+
     /**
      * Unidad concatenada (Resultado de gestion)
      * @var string
      * @ORM\Column(name="resultManagementUnitGroup",type="string",length=90, nullable=true)
      */
     private $resultManagementUnitGroup;
-    
+
     /**
      * Tipo de unidad (Resultado del plan)
      * @var string
      * @ORM\Column(name="resultPlanUnitType",type="string",length=50, nullable=true)
      */
     private $resultPlanUnitType;
-    
+
     /**
      * Unidad (Resultado del plan)
      * @var string
      * @ORM\Column(name="resultPlanUnit",type="string",length=90, nullable=true)
      */
     private $resultPlanUnit;
-    
+
     /**
      * Unidad concatenada (Resultado del plan)
      * @var string
      * @ORM\Column(name="resultPlanUnitGroup",type="string",length=90, nullable=true)
      */
     private $resultPlanUnitGroup;
-    
+
     /**
      * Tipo de unidad (Resultado del real)
      * @var string
      * @ORM\Column(name="resultRealUnitType",type="string",length=50, nullable=true)
      */
     private $resultRealUnitType;
-    
+
     /**
      * Unidad (Resultado del real)
      * @var string
      * @ORM\Column(name="resultRealUnit",type="string",length=90, nullable=true)
      */
     private $resultRealUnit;
-    
+
     /**
      * Unidad concatenada (Resultado del real)
      * @var string
      * @ORM\Column(name="resultRealUnitGroup",type="string",length=90, nullable=true)
      */
     private $resultRealUnitGroup;
-    
+
     /**
      *
      * @var \Pequiven\IndicatorBundle\Entity\Indicator
      * @ORM\OneToOne(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator",mappedBy="details",cascade={"persist","remove"})
      */
     private $indicator;
-    
+
     /**
      * Origen de resultado
      * @var integer
      * @ORM\Column(name="sourceResult",type="integer")
      */
     private $sourceResult = self::SOURCE_RESULT_ALL;
-    
+
     /**
      * Aprobado por
      * @var \Pequiven\SEIPBundle\Entity\User
@@ -157,19 +157,63 @@ class IndicatorDetails extends Model
      * @ORM\Column(name="approvalDate", type="datetime",nullable=true)
      */
     private $approvalDate;
-    
+
     /**
      * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
      */
     private $deletedAt;
 
     /**
+     *
+     * @var type 
+     * @ORM\Column(name="showlValueReal",type="boolean", nullable=true)
+     */
+    //private $showlValueReal = false;
+
+    /** Variable de la formula del indicador para mostrar Valor Real
+     * @var string
+     * @ORM\Column(name="varIndicatorReal",type="string",length=90, nullable=true)
+     * */
+    
+    
+    
+     /**
+     * Formulas que usan esta variable
+     * 
+     * @var \Pequiven\MasterBundle\Entity\Formula
+     * @ORM\ManyToOne(targetEntity="Pequiven\MasterBundle\Entity\Formula\Variable")
+     */
+    private $varIndicatorReal;
+
+    /**
+     *
+     * @var type 
+     * @ORM\Column(name="isCheckReal",type="boolean", nullable=true)
+     */
+    private $isCheckReal = false;
+
+    /**
+     *
+     * @var type 
+     * @ORM\Column(name="isCheckPlan",type="boolean", nullable=true)
+     */
+    private $isCheckPlan = false;
+
+    
+    /**
+     * Formulas que usan esta variable
+     * 
+     * @var \Pequiven\MasterBundle\Entity\Formula
+     * @ORM\ManyToOne(targetEntity="Pequiven\MasterBundle\Entity\Formula\Variable")
+     */
+    private $varIndicatorPlan;
+
+    /**
      * Get id
      *
      * @return integer 
      */
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
 
@@ -179,8 +223,7 @@ class IndicatorDetails extends Model
      * @param integer $previusValue
      * @return IndicatorDetails
      */
-    public function setPreviusValue($previusValue)
-    {
+    public function setPreviusValue($previusValue) {
         $this->previusValue = $previusValue;
 
         return $this;
@@ -191,8 +234,7 @@ class IndicatorDetails extends Model
      *
      * @return integer 
      */
-    public function getPreviusValue()
-    {
+    public function getPreviusValue() {
         return $this->previusValue;
     }
 
@@ -202,8 +244,7 @@ class IndicatorDetails extends Model
      * @param \DateTime $lastNotificationAt
      * @return IndicatorDetails
      */
-    public function setLastNotificationAt($lastNotificationAt)
-    {
+    public function setLastNotificationAt($lastNotificationAt) {
         $this->lastNotificationAt = $lastNotificationAt;
 
         return $this;
@@ -214,8 +255,7 @@ class IndicatorDetails extends Model
      *
      * @return \DateTime 
      */
-    public function getLastNotificationAt()
-    {
+    public function getLastNotificationAt() {
         return $this->lastNotificationAt;
     }
 
@@ -225,8 +265,7 @@ class IndicatorDetails extends Model
      * @param \Pequiven\SEIPBundle\Entity\User $lastNotificationBy
      * @return IndicatorDetails
      */
-    public function setLastNotificationBy(\Pequiven\SEIPBundle\Entity\User $lastNotificationBy = null)
-    {
+    public function setLastNotificationBy(\Pequiven\SEIPBundle\Entity\User $lastNotificationBy = null) {
         $this->lastNotificationBy = $lastNotificationBy;
 
         return $this;
@@ -237,8 +276,7 @@ class IndicatorDetails extends Model
      *
      * @return \Pequiven\SEIPBundle\Entity\User 
      */
-    public function getLastNotificationBy()
-    {
+    public function getLastNotificationBy() {
         return $this->lastNotificationBy;
     }
 
@@ -248,8 +286,7 @@ class IndicatorDetails extends Model
      * @param array $lastNotificationParameters
      * @return IndicatorDetails
      */
-    public function setLastNotificationParameters($lastNotificationParameters)
-    {
+    public function setLastNotificationParameters($lastNotificationParameters) {
         $this->lastNotificationParameters = $lastNotificationParameters;
 
         return $this;
@@ -260,20 +297,17 @@ class IndicatorDetails extends Model
      *
      * @return array 
      */
-    public function getLastNotificationParameters()
-    {
+    public function getLastNotificationParameters() {
         return $this->lastNotificationParameters;
     }
-    
-    function getLastFormulaUsed() 
-    {
+
+    function getLastFormulaUsed() {
         return $this->lastFormulaUsed;
     }
 
-    function setLastFormulaUsed(\Pequiven\MasterBundle\Entity\Formula $lastFormulaUsed) 
-    {
+    function setLastFormulaUsed(\Pequiven\MasterBundle\Entity\Formula $lastFormulaUsed) {
         $this->lastFormulaUsed = $lastFormulaUsed;
-        
+
         return $this;
     }
 
@@ -283,8 +317,7 @@ class IndicatorDetails extends Model
      * @param string $resultManagementUnitType
      * @return IndicatorDetails
      */
-    public function setResultManagementUnitType($resultManagementUnitType)
-    {
+    public function setResultManagementUnitType($resultManagementUnitType) {
         $this->resultManagementUnitType = $resultManagementUnitType;
 
         return $this;
@@ -295,8 +328,7 @@ class IndicatorDetails extends Model
      *
      * @return string 
      */
-    public function getResultManagementUnitType()
-    {
+    public function getResultManagementUnitType() {
         return $this->resultManagementUnitType;
     }
 
@@ -306,8 +338,7 @@ class IndicatorDetails extends Model
      * @param string $resultManagementUnit
      * @return IndicatorDetails
      */
-    public function setResultManagementUnit($resultManagementUnit)
-    {
+    public function setResultManagementUnit($resultManagementUnit) {
         $this->resultManagementUnit = $resultManagementUnit;
 
         return $this;
@@ -318,8 +349,7 @@ class IndicatorDetails extends Model
      *
      * @return string 
      */
-    public function getResultManagementUnit()
-    {
+    public function getResultManagementUnit() {
         return $this->resultManagementUnit;
     }
 
@@ -329,8 +359,7 @@ class IndicatorDetails extends Model
      * @param string $resultManagementUnitGroup
      * @return IndicatorDetails
      */
-    public function setResultManagementUnitGroup($resultManagementUnitGroup)
-    {
+    public function setResultManagementUnitGroup($resultManagementUnitGroup) {
         $this->resultManagementUnitGroup = $resultManagementUnitGroup;
 
         return $this;
@@ -341,8 +370,7 @@ class IndicatorDetails extends Model
      *
      * @return string 
      */
-    public function getResultManagementUnitGroup()
-    {
+    public function getResultManagementUnitGroup() {
         return $this->resultManagementUnitGroup;
     }
 
@@ -352,8 +380,7 @@ class IndicatorDetails extends Model
      * @param string $resultPlanUnitType
      * @return IndicatorDetails
      */
-    public function setResultPlanUnitType($resultPlanUnitType)
-    {
+    public function setResultPlanUnitType($resultPlanUnitType) {
         $this->resultPlanUnitType = $resultPlanUnitType;
 
         return $this;
@@ -364,8 +391,7 @@ class IndicatorDetails extends Model
      *
      * @return string 
      */
-    public function getResultPlanUnitType()
-    {
+    public function getResultPlanUnitType() {
         return $this->resultPlanUnitType;
     }
 
@@ -375,8 +401,7 @@ class IndicatorDetails extends Model
      * @param string $resultPlanUnit
      * @return IndicatorDetails
      */
-    public function setResultPlanUnit($resultPlanUnit)
-    {
+    public function setResultPlanUnit($resultPlanUnit) {
         $this->resultPlanUnit = $resultPlanUnit;
 
         return $this;
@@ -387,8 +412,7 @@ class IndicatorDetails extends Model
      *
      * @return string 
      */
-    public function getResultPlanUnit()
-    {
+    public function getResultPlanUnit() {
         return $this->resultPlanUnit;
     }
 
@@ -398,8 +422,7 @@ class IndicatorDetails extends Model
      * @param string $resultPlanUnitGroup
      * @return IndicatorDetails
      */
-    public function setResultPlanUnitGroup($resultPlanUnitGroup)
-    {
+    public function setResultPlanUnitGroup($resultPlanUnitGroup) {
         $this->resultPlanUnitGroup = $resultPlanUnitGroup;
 
         return $this;
@@ -410,8 +433,7 @@ class IndicatorDetails extends Model
      *
      * @return string 
      */
-    public function getResultPlanUnitGroup()
-    {
+    public function getResultPlanUnitGroup() {
         return $this->resultPlanUnitGroup;
     }
 
@@ -421,8 +443,7 @@ class IndicatorDetails extends Model
      * @param string $resultRealUnitType
      * @return IndicatorDetails
      */
-    public function setResultRealUnitType($resultRealUnitType)
-    {
+    public function setResultRealUnitType($resultRealUnitType) {
         $this->resultRealUnitType = $resultRealUnitType;
 
         return $this;
@@ -433,8 +454,7 @@ class IndicatorDetails extends Model
      *
      * @return string 
      */
-    public function getResultRealUnitType()
-    {
+    public function getResultRealUnitType() {
         return $this->resultRealUnitType;
     }
 
@@ -444,8 +464,7 @@ class IndicatorDetails extends Model
      * @param string $resultRealUnit
      * @return IndicatorDetails
      */
-    public function setResultRealUnit($resultRealUnit)
-    {
+    public function setResultRealUnit($resultRealUnit) {
         $this->resultRealUnit = $resultRealUnit;
 
         return $this;
@@ -456,8 +475,7 @@ class IndicatorDetails extends Model
      *
      * @return string 
      */
-    public function getResultRealUnit()
-    {
+    public function getResultRealUnit() {
         return $this->resultRealUnit;
     }
 
@@ -467,8 +485,7 @@ class IndicatorDetails extends Model
      * @param string $resultRealUnitGroup
      * @return IndicatorDetails
      */
-    public function setResultRealUnitGroup($resultRealUnitGroup)
-    {
+    public function setResultRealUnitGroup($resultRealUnitGroup) {
         $this->resultRealUnitGroup = $resultRealUnitGroup;
 
         return $this;
@@ -479,8 +496,7 @@ class IndicatorDetails extends Model
      *
      * @return string 
      */
-    public function getResultRealUnitGroup()
-    {
+    public function getResultRealUnitGroup() {
         return $this->resultRealUnitGroup;
     }
 
@@ -490,8 +506,7 @@ class IndicatorDetails extends Model
      * @param \Pequiven\IndicatorBundle\Entity\Indicator $indicator
      * @return IndicatorDetails
      */
-    public function setIndicator(\Pequiven\IndicatorBundle\Entity\Indicator $indicator = null)
-    {
+    public function setIndicator(\Pequiven\IndicatorBundle\Entity\Indicator $indicator = null) {
         $this->indicator = $indicator;
 
         return $this;
@@ -502,51 +517,48 @@ class IndicatorDetails extends Model
      *
      * @return \Pequiven\IndicatorBundle\Entity\Indicator 
      */
-    public function getIndicator()
-    {
+    public function getIndicator() {
         return $this->indicator;
     }
-    
+
     /**
      * @ORM\PrePersist()
      */
-    public function prePersist()
-    {
+    public function prePersist() {
         $this->updateValues();
     }
+
     /**
      * @ORM\PreUpdate()
      */
-    public function preUpdate()
-    {
+    public function preUpdate() {
         $this->updateValues();
     }
-    private function updateValues()
-    {
-        if($this->resultManagementUnitGroup){
+
+    private function updateValues() {
+        if ($this->resultManagementUnitGroup) {
             $unitGroup = json_decode($this->resultManagementUnitGroup);
             $this->resultManagementUnitType = $unitGroup->unitType;
             $this->resultManagementUnit = $unitGroup->unit;
         }
-        
-        if($this->resultPlanUnitGroup){
+
+        if ($this->resultPlanUnitGroup) {
             $unitGroup = json_decode($this->resultPlanUnitGroup);
             $this->resultPlanUnitType = $unitGroup->unitType;
             $this->resultPlanUnit = $unitGroup->unit;
         }
-        
-        if($this->resultRealUnitGroup){
+
+        if ($this->resultRealUnitGroup) {
             $unitGroup = json_decode($this->resultRealUnitGroup);
             $this->resultRealUnitType = $unitGroup->unitType;
             $this->resultRealUnit = $unitGroup->unit;
         }
     }
-    
-    public function __toString() 
-    {
+
+    public function __toString() {
         $toString = '-';
-        if($this->id > 0){
-            $toString = $this->id .'';
+        if ($this->id > 0) {
+            $toString = $this->id . '';
         }
         return $toString;
     }
@@ -557,8 +569,7 @@ class IndicatorDetails extends Model
      * @param integer $sourceResult
      * @return IndicatorDetails
      */
-    public function setSourceResult($sourceResult)
-    {
+    public function setSourceResult($sourceResult) {
         $this->sourceResult = $sourceResult;
 
         return $this;
@@ -569,19 +580,17 @@ class IndicatorDetails extends Model
      *
      * @return integer 
      */
-    public function getSourceResult()
-    {
+    public function getSourceResult() {
         return $this->sourceResult;
     }
-    
+
     /**
      * Set approvalDate
      *
      * @param \DateTime $approvalDate
      * @return ObjetiveDetails
      */
-    public function setApprovalDate($approvalDate)
-    {
+    public function setApprovalDate($approvalDate) {
         $this->approvalDate = $approvalDate;
 
         return $this;
@@ -592,8 +601,7 @@ class IndicatorDetails extends Model
      *
      * @return \DateTime 
      */
-    public function getApprovalDate()
-    {
+    public function getApprovalDate() {
         return $this->approvalDate;
     }
 
@@ -603,8 +611,7 @@ class IndicatorDetails extends Model
      * @param \DateTime $deletedAt
      * @return ObjetiveDetails
      */
-    public function setDeletedAt($deletedAt)
-    {
+    public function setDeletedAt($deletedAt) {
         $this->deletedAt = $deletedAt;
 
         return $this;
@@ -615,8 +622,7 @@ class IndicatorDetails extends Model
      *
      * @return \DateTime 
      */
-    public function getDeletedAt()
-    {
+    public function getDeletedAt() {
         return $this->deletedAt;
     }
 
@@ -626,8 +632,7 @@ class IndicatorDetails extends Model
      * @param \Pequiven\SEIPBundle\Entity\User $approvedBy
      * @return ObjetiveDetails
      */
-    public function setApprovedBy(\Pequiven\SEIPBundle\Entity\User $approvedBy = null)
-    {
+    public function setApprovedBy(\Pequiven\SEIPBundle\Entity\User $approvedBy = null) {
         $this->approvedBy = $approvedBy;
 
         return $this;
@@ -638,8 +643,77 @@ class IndicatorDetails extends Model
      *
      * @return \Pequiven\SEIPBundle\Entity\User 
      */
-    public function getApprovedBy()
-    {
+    public function getApprovedBy() {
         return $this->approvedBy;
     }
+
+    /**
+     * 
+     * @param \Pequiven\MasterBundle\Entity\Formula\Variable $varIndicatorReal
+     * @return \Pequiven\IndicatorBundle\Entity\Indicator\IndicatorDetails
+     */
+    public function setVarIndicatorReal(\Pequiven\MasterBundle\Entity\Formula\Variable $varIndicatorReal) {
+        $this->varIndicatorReal = $varIndicatorReal;
+        //return $this;
+    }
+    
+    /**
+     * 
+     * @return type
+     */
+    public function getVarIndicatorReal() {
+        return $this->varIndicatorReal;
+    }
+
+    
+    /**
+     * 
+     * @param \Pequiven\MasterBundle\Entity\Formula\Variable $varIndicatorPlan
+     * @return \Pequiven\IndicatorBundle\Entity\Indicator\IndicatorDetails
+     */
+    public function setVarIndicatorPlan(\Pequiven\MasterBundle\Entity\Formula\Variable $varIndicatorPlan) {
+        $this->varIndicatorPlan = $varIndicatorPlan;
+        return $this;
+    }
+    
+    /**
+     * 
+     * @return type
+     */
+    public function getVarIndicatorPlan() {
+        return $this->varIndicatorPlan;
+    }
+
+    /**
+     * 
+     * @param type $isCheckReal
+     */
+    public function setIsCheckReal($isCheckReal) {
+        $this->isCheckReal = $isCheckReal;
+    }
+    /**
+     * 
+     * @return type
+     */
+    public function getIsCheckReal() {
+        return $this->isCheckReal;
+    }
+
+    
+    /**
+     * 
+     * @param type $isCheckPlan
+     */
+    public function setIsCheckPlan($isCheckPlan) {
+        $this->isCheckPlan = $isCheckPlan;
+    }
+
+    /**
+     * 
+     * @return type
+     */
+    public function getIsCheckPlan() {
+        return $this->isCheckPlan;
+    }
+
 }

@@ -169,7 +169,10 @@ class ResultController extends ResourceController
         if(!$securityService->isGranted($rol[1])){
             $securityService->checkSecurity($rol[0],$entity);
         }
-        $subCaption = $this->trans('result.subCaptionObjetiveOperative',array(),'PequivenSEIPBundle');
+        //$subCaption = $this->trans('result.subCaptionObjetiveOperative',array(),'PequivenSEIPBundle');
+        $period = $this->getPeriodService()->getEntityPeriodActive();
+        $subCaption = $period->getDescription();
+        
         $data = array(
             'dataSource' => array(
                 'chart' => array(

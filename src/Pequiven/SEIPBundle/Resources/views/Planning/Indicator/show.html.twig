@@ -109,6 +109,10 @@
                         {% endif %}
                     </p>
                 </div>
+
+                {#                {{ dump(indicator.getDetails.getIsCheckReal) }}#}
+                {#                {{ indicatorService.getValueOfVariableFromValueIndicator(indicator,indicator.getDetails.getVarIndicatorReal) }}#}
+
                 {% if indicator.isShowRealValue == true %}
                     <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                         <p class="inline-label">
@@ -119,11 +123,19 @@
                                     {{ 'pequiven_indicator.value'|trans }}
                                 {% endif %}
                             </label>
-                            {$ indicator.valueFinal|myNumberFormat:2 $}&nbsp;
-                            {% if indicatorDetails.resultRealUnit != '' %}({{ indicatorDetails.resultRealUnit }}){% endif %}
+                            {% if indicator.getDetails.getIsCheckReal == true %}
+                                {{ indicatorService.getValueOfVariableFromValueIndicator(indicator,indicator.getDetails.getVarIndicatorReal)|myNumberFormat }}
+                            {% else %}
+                                {$ indicator.valueFinal|myNumberFormat:2 $}&nbsp;
+                                {% if indicatorDetails.resultRealUnit != '' %}({{ indicatorDetails.resultRealUnit }}){% endif %}
+                            {% endif %}
+
                         </p>
                     </div>
                 {% endif %}
+
+
+                {#                {{ indicatorService.getValueOfVariableFromValueIndicator(indicator,indicator.getDetails.getVarIndicatorPlan) }}#}
                 {% if indicator.isShowPlanValue == true %}
                     <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                         <p class="inline-label">
@@ -134,8 +146,13 @@
                                     {{ 'form.total_plan'|trans }}
                                 {% endif%}
                             </label>
+
                             {% if indicator.totalPlan != 0 %}
-                                {{ indicator.totalPlan|myNumberFormat }}&nbsp;{% if indicatorDetails.resultPlanUnit != '' %}({{ indicatorDetails.resultPlanUnit }}){% endif %}
+                                {% if  indicator.getDetails.getIsCheckPlan == false %}
+                                    {{ indicator.totalPlan|myNumberFormat }}&nbsp;{% if indicatorDetails.resultPlanUnit != '' %}({{ indicatorDetails.resultPlanUnit }}){% endif %}
+                                {% else %}
+                                    {{ indicatorService.getValueOfVariableFromValueIndicator(indicator,indicator.getDetails.getVarIndicatorPlan)|myNumberFormat }}
+                                {% endif %}
                             {% else %}
                                 <span class="tag red-bg">{{ ('pequiven.no_assigned'|trans({},'messages')) }}</span>
                             {% endif %}
@@ -322,7 +339,7 @@
 {% block javascript %}
     <script type="text/javascript">
 jQuery(document).ready(function () {
-    // Progress
+// Progress
     $('.progress').progress();
 });
     </script>
