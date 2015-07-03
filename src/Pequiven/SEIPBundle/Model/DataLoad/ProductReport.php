@@ -257,12 +257,15 @@ abstract class ProductReport extends BaseModel implements ProductReportInterface
         
         $productDetailDailyMonths = $this->getProductDetailDailyMonthsSortByMonth();
         $plan = $real = 0.0;
+        $observation = null;
         if(isset($productDetailDailyMonths[$month])){
             $detail = $productDetailDailyMonths[$month];
             $namePlan = sprintf('getDay%sGrossPlan',$day);
             $nameReal = sprintf('getDay%sGrossReal',$day);
+            $nameObservation = sprintf('getDay%sObservation',$day);
             $plan = $detail->$namePlan();
             $real = $detail->$nameReal();
+            $observation = $detail->$nameObservation();
         }
         $percentage = 0;
         $pnr = $plan - $real;
@@ -274,6 +277,7 @@ abstract class ProductReport extends BaseModel implements ProductReportInterface
             'real' => $real,
             'percentage' => $percentage,
             'pnr' => $pnr,
+            'observation' => $observation,
         );
         return $total;
     }
