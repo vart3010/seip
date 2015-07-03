@@ -684,9 +684,9 @@ class IndicatorService implements ContainerAwareInterface {
 //            }
             foreach ($arrayVariables as $arrayVariable) {
                 $set = array();
-                $set["label"] = $arrayVariable['description'] . ': ' . number_format($arrayVariable['value'], 2, ',', '.');
+                $set["label"] = $arrayVariable['description'];
                 $set["value"] = $arrayVariable['value'];
-                $set["displayValue"] = number_format($arrayVariable['value'], 2, ',', '.');
+                $set["displayValue"] = number_format($arrayVariable['value'], 2, ',', '.').' '.$arrayVariable['unit'];
                 $set["toolText"] = number_format($arrayVariable['value'], 2, ',', '.') . 'Bs';
 //                $set["color"] = $this->getColorOfResult($indicatorChildren);
 //                $set["labelLink"] = $this->generateUrl('pequiven_indicator_show', array('id' => $indicator->getId()));
@@ -1030,12 +1030,18 @@ class IndicatorService implements ContainerAwareInterface {
         
         if(isset($options['viewVariablesRealPlan']) && array_key_exists('viewVariablesRealPlan',$options)){
             unset($options['viewVariablesRealPlan']);
+            $unit = '';
             foreach($valuesIndicator as $valueIndicator){
                 $parameters = $valueIndicator->getFormulaParameters();
                 foreach ($parameters as $parameter => $key) {
                     if ($parameter == 'real_from_equation' || $parameter == 'plan_from_equation') {
                         $arrayVariables[$parameter]['value'] = $key;
                         $arrayVariables[$parameter]['description'] = $parameter == 'real_from_equation' ? $indicator->getShowByRealValue() : $indicator->getShowByPlanValue();
+                        $arrayVariables[$parameter]['unit'] = '';
+                        if($indicator->getDetails()){
+                            $unit = $parameter == 'real_from_equation' ? $indicator->getDetails()->getResultRealUnit() : $indicator->getDetails()->getResultPlanUnit();
+                            $arrayVariables[$parameter]['unit'] = $unit;
+                        }
                     }
                 }
             }

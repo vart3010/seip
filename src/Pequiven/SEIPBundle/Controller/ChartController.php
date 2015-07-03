@@ -113,7 +113,7 @@ class ChartController extends SEIPController {
     }
     
     /**
-     * 3-Función que retorna la data para un gráfico para mostrar las variables de un indicador que esten marcadas como "plan".
+     * 5-Función que retorna la data para un gráfico para mostrar las variables de un indicador que esten marcadas como "plan".
      * @return JsonResponse
      */
     public function getDataChartPieVariablesMarkedPlanAction(Request $request) {
