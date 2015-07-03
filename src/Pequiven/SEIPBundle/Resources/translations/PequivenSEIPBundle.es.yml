@@ -28,6 +28,7 @@ pequiven_seip:
     date_of_report: Fecha de reporte
     cause_of_PNR: 'Causa de PNR'
     total_pnr: 'Total de PNR'
+    comment_none: 'Ningúna observación.'
         
     #Login
     sign_in: Ingresar
@@ -151,6 +152,7 @@ pequiven_seip:
     #Buttons
     buttons:
         export_xls: Exportar
+        export_pdf: Exportar
         export_result: Exportar Resultados
         refresh: Refrescar
         run_planning: Ejecutar planificación

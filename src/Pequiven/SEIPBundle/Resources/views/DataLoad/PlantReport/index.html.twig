@@ -23,7 +23,7 @@
                             <a href="{$ result._links.load $}">{$ result.plant.name $}</a>
                         </td>
                         <td data-title="'{{ 'pequiven.ref'|trans({},'messages') }}'" filter="{ 'pr.reportTemplate': 'text' }">
-                            <a href="{$ result.reportTemplate._links.self.load $}">{$ result.reportTemplate.ref $}&nbsp;({$ result.reportTemplate.name $})</a>
+                            <a href="{$ result._links.load $}">{$ result.reportTemplate.ref $}&nbsp;({$ result.reportTemplate.name $})</a>
                         </td>
                         <td data-title="'{{ 'Location'|trans }}'">
                             {$ result.location.name $}

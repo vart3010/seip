@@ -139,6 +139,13 @@ class Variable extends Model implements \Pequiven\SEIPBundle\Entity\PeriodItemIn
     private $showPlanInDashboardColumn = false;
     
     /**
+     * Unidad del resultado
+     * @var string
+     * @ORM\Column(name="unitResult",type="string",length=90, nullable=true)
+     */
+    private $unitResult;
+    
+    /**
      * Get staticValue
      *
      * @return boolean 
@@ -503,6 +510,37 @@ class Variable extends Model implements \Pequiven\SEIPBundle\Entity\PeriodItemIn
      */
     public function setShowPlanInDashboardColumn($showPlanInDashboardColumn) {
         $this->showPlanInDashboardColumn = $showPlanInDashboardColumn;
+    }
+    
+    /**
+     * Get unitResult
+     * 
+     * @return String
+     */
+    function getUnitResult() {
+        return $this->unitResult;
+    }
+
+    /**
+     * Set unitResult
+     * 
+     * @param type $unitResult
+     * @return Variable
+     */
+    function setUnitResult($unitResult) {
+        $this->unitResult = $unitResult;
+    }
+    
+    function getUnitResultValue()
+    {
+        $result = "";
+        if($this->unitResult != ""){
+            $unit = @json_decode($this->unitResult);
+            if($unit->unit){
+                $result = $unit->unit;
+            }
+        }
+        return $result;
     }
     
 }

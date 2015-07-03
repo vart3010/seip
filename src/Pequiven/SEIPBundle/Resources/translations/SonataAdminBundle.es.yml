@@ -36,3 +36,6 @@ Dashboard: Inicio
 Hours: Horas
 'Stop Time List': Lista de días de paradas
 'Product List': Lista de productos
+'Date Start Planning Report': 'Fecha inicio de planificacion de plantas'
+'Date End Planning Report': 'Fecha fin de planificacion de plantas'
+'Is Planning Report Enabled': '¿La planificacion de planta esta habilitada?'

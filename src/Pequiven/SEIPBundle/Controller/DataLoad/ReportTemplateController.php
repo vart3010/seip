@@ -104,6 +104,9 @@ class ReportTemplateController extends SEIPController
             $dateString = $request->get('dateNotification',null);
         }
         $plantReport = $request->get('plant_report',null);
+        if($plantReport === null){
+            return $this->redirect($this->generateUrl('pequiven_plant_report_index'));
+        }
         $dateNotification = null;
         if($dateString !== null){
             $dateNotification = \DateTime::createFromFormat('d/m/Y', $dateString);
@@ -119,9 +122,8 @@ class ReportTemplateController extends SEIPController
         
         $form = $this->createForm(new \Pequiven\SEIPBundle\Form\DataLoad\Notification\ReportTemplateType($dateNotification,$resource),$resource);
         
-        if($request->isMethod('PUT') && $form->submit($request,false)->isValid()){
+        if($request->isMethod('POST') && $form->submit($request,false)->isValid()){
             $this->domainManager->update($resource);
-            
             return $this->redirect($this->generateUrl('pequiven_report_template_list'));
         }
         
@@ -139,6 +141,11 @@ class ReportTemplateController extends SEIPController
         return $this->handleView($view);
     }
     
+    /**
+     * Vizualizar la planificacion
+     * @param Request $request
+     * @return type
+     */
     public function vizualiceAction(Request $request)
     {
         $plantReportId = null;
@@ -152,15 +159,27 @@ class ReportTemplateController extends SEIPController
             $dateReport = new \DateTime();
         }
         $plantReport = $this->get('pequiven.repository.plant_report')->find($plantReportId);
-        $plantReports = $productsReport = array();
+        $productsReport = array();
+        $plantReports = new \Doctrine\Common\Collections\ArrayCollection();
         $emptyValue = "Seleccione";
         if($plantReport){
-            $plantReports[] = $plantReport;
+            $plantReports->add($plantReport);
             $productsReport = $plantReport->getProductsReport()->toArray();
         }
         $showDay = $showMonth = $showYear = $defaultShow = true;
         $form = $this
             ->createFormBuilder()
+            ->add('reportTemplate','entity',array(
+                'label_attr' => array('class' => 'label bold'),
+                'class' => 'Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate',
+                'property' => 'reportTemplateWithName',
+                'required' => false,
+                'empty_value' => $emptyValue,
+                'translation_domain' => 'PequivenSEIPBundle',
+                'attr' => array('class' => 'select2 input-xlarge'),
+                'multiple' => true,
+                )
+            )
             ->add('plantReport','entity',array(
                 'label_attr' => array('class' => 'label bold'),
                 'class' => 'Pequiven\SEIPBundle\Entity\DataLoad\PlantReport',
@@ -170,7 +189,7 @@ class ReportTemplateController extends SEIPController
                 'translation_domain' => 'PequivenSEIPBundle',
                 'attr' => array('class' => 'select2 input-xlarge'),
                 'multiple' => false,
-                'group_by' => 'reportTemplate'
+                'group_by' => 'reportTemplateWithName'
                 )
             )
             ->add('dateReport','date',[
@@ -206,6 +225,15 @@ class ReportTemplateController extends SEIPController
                 'translation_domain' => 'PequivenSEIPBundle',
                 'data' => $defaultShow,
             ])
+            ->add('typeReport','choice',[
+                'choices' => [
+                    'Gross' => 'Bruta',
+                    'Net' => 'Neta',
+                ],
+                'data' => 'Gross',
+                'attr' => array('class' => 'select2 input-xlarge'),
+                'translation_domain' => 'PequivenSEIPBundle',
+            ])
             ->getForm();
         
         if($request->isMethod('POST') && $form->submit($request)->isValid()){
@@ -224,19 +252,73 @@ class ReportTemplateController extends SEIPController
                             continue;
                         }
                     }
-                    $plantReports = [$plantReport];
+                    $plantReports->add($plantReport);
             }
             
-//            die;
         }
+        $data = $form->getData();
+        $typeReport = $data['typeReport'];
+        if($typeReport === null){
+            $typeReport = 'Gross';
+        }
+        $dateReport = $data['dateReport'];
+        $reportTemplates = $data['reportTemplate'];
+        if($reportTemplates){
+            foreach ($reportTemplates as $reportTemplate) {
+                foreach ($reportTemplate->getPlantReports() as $plantReport) {
+                    if(!$plantReports->contains($plantReport)){
+                        $plantReports->add($plantReport);
+                    }
+                }
+            }
+        }
+        
+        $productsReport = new \Doctrine\Common\Collections\ArrayCollection();
+        $consumerPlanningServices = new \Doctrine\Common\Collections\ArrayCollection();
+        $productsReportByIdProduct = $consumerPlanningServicesByIdService = array();
+        foreach ($plantReports as $plantReport) {
+            foreach ($plantReport->getProductsReport() as $productReport) {
+                $product = $productReport->getProduct();
+                if(!isset($productsReportByIdProduct[$product->getId()])){
+                    $productsReportByIdProduct[$product->getId()] = array();
+                }
+                $productsReportByIdProduct[$product->getId()][] = $productReport;
+                
+            }
+            foreach ($plantReport->getConsumerPlanningServices() as $consumerPlanningService) {
+                $service = $consumerPlanningService->getService();
+                if(!isset($consumerPlanningServicesByIdService[$service->getId()])){
+                    $consumerPlanningServicesByIdService[$service->getId()] = array();
+                }
+                $consumerPlanningServicesByIdService[$service->getId()][] = $consumerPlanningService;
+                
+            }
+        }
+        foreach ($productsReportByIdProduct as $id => $groups) {
+            foreach ($groups as $productReport) {
+                if(!$productsReport->contains($productReport)){
+                    $productsReport->add($productReport);
+                }
+            }
+        }
+        foreach ($consumerPlanningServicesByIdService as $id => $groups) {
+            foreach ($groups as $consumerPlanningService) {
+                if(!$consumerPlanningServices->contains($consumerPlanningService)){
+                    $consumerPlanningServices->add($consumerPlanningService);
+                }
+            }
+        }
+        
         $data = array(
             'dateReport' => $dateReport,
-            'plantReports' => $plantReports,
+            'productsReport' => $productsReport,
+            'consumerPlanningServices' => $consumerPlanningServices,
             'plantReportId' => $plantReportId,
             'form' => $form->createView(),
             'showDay' => $showDay,
             'showMonth' => $showMonth,
             'showYear' => $showYear,
+            'typeReport' => $typeReport,
         );
 
         $view = $this
@@ -244,6 +326,54 @@ class ReportTemplateController extends SEIPController
                 ->setTemplate($this->config->getTemplate('vizualice.html'))
                 ;
         $view->setData($data);
+        
+        $exportToPdf = $request->get('exportToPdf',false);
+        if($exportToPdf == true){
+            $pdf = new \Pequiven\SEIPBundle\Model\PDF\SeipPdf('L', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+            $pdf->setContainer($this->container);
+            $pdf->setPeriod($this->getPeriodService()->getPeriodActive());
+            $pdf->setFooterText($this->trans('pequiven_seip.message_footer',array(), 'PequivenSEIPBundle'));
+
+            // set document information
+            $pdf->SetCreator(PDF_CREATOR);
+            $pdf->SetAuthor('SEIP');
+            $pdf->setTitle('Reporte del día');
+            $pdf->SetSubject('Resultados SEIP');
+            $pdf->SetKeywords('PDF, SEIP, Resultados');
+
+            $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+            $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+
+            // set default monospaced font
+            $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+
+            // set margins
+            $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+            $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+            $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+
+            // set auto page breaks
+            $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+
+            // set image scale factor
+            $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+
+            // set font
+//            $pdf->SetFont('times', 'BI', 12);
+
+            // add a page
+            $pdf->AddPage();
+
+            // set some text to print
+            $html = $this->renderView('PequivenSEIPBundle:DataLoad/ReportTemplate:vizualice_data.html.twig',$data);
+
+            // print a block of text using Write()
+            $pdf->writeHTML($html, true, false, true, false, '');
+
+//            $pdf->Output('Reporte del dia'.'.pdf', 'I');
+            $pdf->Output('Reporte del dia'.'.pdf', 'D');
+        }
+        
         return $this->handleView($view);
     }
 }

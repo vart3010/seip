@@ -82,16 +82,18 @@
     {% include 'PequivenSEIPBundle:DataLoad:PlantReport/show/services.html.twig' %}
     <br /><br />
     <p class="button-height align-right">
-        {{ buttons.generic_confirm(path("pequiven_plant_report_run",{ id: plant_report.id }),"pequiven_seip.buttons.run_plant",{
-            content: ("pequiven_seip.question.want_create_plant_from_planning"|trans),
-            translation_domain: "PequivenSEIPBundle",
-            icon: "icon-extract"
-            }) 
-        }}
-        &nbsp;
-        {{ buttons.generic(path('pequiven_plant_report_update', { 'id': plant_report.id }),('pequiven.edit'|trans({},'messages'))) }}
-        &nbsp;
-        {{ buttons.delete(path('pequiven_plant_report_delete', { 'id': plant_report.id })) }}
+        {% if periodService().isAllowPlanningReport %}
+            {{ buttons.generic_confirm(path("pequiven_plant_report_run",{ id: plant_report.id }),"pequiven_seip.buttons.run_plant",{
+                content: ("pequiven_seip.question.want_create_plant_from_planning"|trans),
+                translation_domain: "PequivenSEIPBundle",
+                icon: "icon-extract"
+                }) 
+            }}
+            &nbsp;
+            {{ buttons.generic(path('pequiven_plant_report_update', { 'id': plant_report.id }),('pequiven.edit'|trans({},'messages'))) }}
+            &nbsp;
+            {{ buttons.delete(path('pequiven_plant_report_delete', { 'id': plant_report.id })) }}
+        {% endif %}
     </p>
                     
 {% endblock %}

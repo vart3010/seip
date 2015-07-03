@@ -8,7 +8,9 @@
     <div class="block-title">
         <h3> {{ 'pequiven_seip.product_report.product_detail_daily_months'|trans }}&nbsp;({{ product_report.productDetailDailyMonths|length }})</h3>
         <div class="button-group absolute-right compact">
-            <a class="button icon-list-add" href="{{ path("pequiven_product_detail_daily_month_create",{productReport:product_report.id}) }}">{{ 'pequiven.add'|trans({},'messages') }}</a>
+            {% if isAllowPlanningReport %}
+                <a class="button icon-list-add" href="{{ path("pequiven_product_detail_daily_month_create",{productReport:product_report.id}) }}">{{ 'pequiven.add'|trans({},'messages') }}</a>
+            {% endif %}
         </div>
     </div>
     {% set typeProductionGross = "&nbsp;("~("pequiven_seip.gross"|trans)~")" %}
@@ -47,9 +49,11 @@
                         <td class="low-padding align-center">
                             <p class="button-height">
                                 <span class="button-group">
-                                    <a href="{{ path("pequiven_product_detail_daily_month_update",{id: productDetailDailyMonth.id}) }}" class="button icon-pencil">{{ "pequiven_seip.actions.edit"|trans }}</a>
-                                    {% set deleteUrl = path("pequiven_product_detail_daily_month_delete",{id: productDetailDailyMonth.id}) %}
-                                    {{ buttons.delete_mini(deleteUrl,message,tableIdRow) }}
+                                    {% if isAllowPlanningReport %}
+                                        <a href="{{ path("pequiven_product_detail_daily_month_update",{id: productDetailDailyMonth.id}) }}" class="button icon-pencil">{{ "pequiven_seip.actions.edit"|trans }}</a>
+                                        {% set deleteUrl = path("pequiven_product_detail_daily_month_delete",{id: productDetailDailyMonth.id}) %}
+                                        {{ buttons.delete_mini(deleteUrl,message,tableIdRow) }}
+                                    {% endif %}
                                 </span>
                             </p>
                         </td>

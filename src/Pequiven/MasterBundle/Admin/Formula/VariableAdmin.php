@@ -21,10 +21,18 @@ class VariableAdmin extends Admin implements \Symfony\Component\DependencyInject
             ->add('description')
             ->add('equation')
             ->add('summary')
+            ->add('unitResult')
             ;
     }
     
     protected function configureFormFields(FormMapper $form) {
+        $unitConverter = $this->getUnitConverter();
+        $selectUnits = $unitConverter->toArray();
+        
+        $selectUnitParameters['choices'] = $selectUnits;
+        $selectUnitParameters['empty_value'] = '';
+        $selectUnitParameters['required'] = false;
+        
         $form
             ->add('name')
             ->add('description')
@@ -60,6 +68,7 @@ class VariableAdmin extends Admin implements \Symfony\Component\DependencyInject
             ->add('summary', null, array(
                 'required' => false,
             ))
+            ->add('unitResult',"choice",$selectUnitParameters)
             ;
     }
     
@@ -103,6 +112,15 @@ class VariableAdmin extends Admin implements \Symfony\Component\DependencyInject
     protected function getPeriodService()
     {
         return $this->container->get('pequiven_seip.service.period');
+    }
+    
+    /**
+     * 
+     * @return \Tecnocreaciones\Bundle\ToolsBundle\Service\UnitConverter
+     */
+    private function getUnitConverter()
+    {
+        return $this->container->get('tecnocreaciones_tools.unit_converter');
     }
     
     public function preUpdate($object) {

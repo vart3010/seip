@@ -277,6 +277,12 @@ class ReportTemplate extends BaseModel
     {
         return $this->plantReports;
     }
+
+    public function getReportTemplateWithName()
+    {
+        $full = sprintf("%s (%s)",$this->getName(),$this->getRef());
+        return $full;
+    }
     
     public function __toString() 
     {

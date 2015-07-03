@@ -52,8 +52,10 @@
         {% include 'PequivenSEIPBundle:DataLoad:Production/ProductPlanning/show/ranges.html.twig' %}
     <br /><br />
     <p class="button-height align-right">
-        {{ buttons.generic(path('pequiven_product_planning_update', { 'id': product_planning.id }),('pequiven.edit'|trans({},'messages'))) }}
-        &nbsp;
-        {{ buttons.delete(path('pequiven_product_planning_delete', { 'id': product_planning.id })) }}
+        {% if periodService().isAllowPlanningReport %}
+            {{ buttons.generic(path('pequiven_product_planning_update', { 'id': product_planning.id }),('pequiven.edit'|trans({},'messages'))) }}
+            &nbsp;
+            {{ buttons.delete(path('pequiven_product_planning_delete', { 'id': product_planning.id })) }}
+        {% endif %}
     </p>
 {% endblock %}

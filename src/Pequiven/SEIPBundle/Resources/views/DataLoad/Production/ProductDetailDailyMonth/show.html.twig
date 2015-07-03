@@ -102,8 +102,10 @@
     <br /><br />
         
     <p class="button-height align-right">
-        {{ buttons.generic(path('pequiven_product_detail_daily_month_update', { 'id': product_detail_daily_month.id }),('pequiven.edit'|trans({},'messages'))) }}
-        &nbsp;
-        {{ buttons.delete(path('pequiven_product_detail_daily_month_delete', { 'id': product_detail_daily_month.id })) }}
+        {% if periodService().isAllowPlanningReport %}
+            {{ buttons.generic(path('pequiven_product_detail_daily_month_update', { 'id': product_detail_daily_month.id }),('pequiven.edit'|trans({},'messages'))) }}
+            &nbsp;
+            {{ buttons.delete(path('pequiven_product_detail_daily_month_delete', { 'id': product_detail_daily_month.id })) }}
+        {% endif %}
     </p>
 {% endblock %}
