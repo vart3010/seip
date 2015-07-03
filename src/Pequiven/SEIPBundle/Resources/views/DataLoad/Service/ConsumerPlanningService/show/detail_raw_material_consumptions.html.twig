@@ -8,7 +8,9 @@
     <div class="block-title">
         <h3> {{ 'Services'|trans }}&nbsp;({{ consumer_planning_service.detailConsumerPlanningServices|length }})</h3>
         <div class="button-group absolute-right compact">
-            <a class="button icon-list-add" href="{{ path("pequiven_detail_consumer_planning_service_create",{consumerPlanningService:consumer_planning_service.id}) }}">{{ 'pequiven.add'|trans({},'messages') }}</a>
+            {% if periodService().isAllowPlanningReport %}
+                <a class="button icon-list-add" href="{{ path("pequiven_detail_consumer_planning_service_create",{consumerPlanningService:consumer_planning_service.id}) }}">{{ 'pequiven.add'|trans({},'messages') }}</a>
+            {% endif %}
         </div>
     </div>
     <div class="with-padding">
@@ -38,9 +40,11 @@
                         <td class="low-padding align-center">
                             <p class="button-height">
                                 <span class="button-group">
-                                    <a href="{{ path("pequiven_detail_consumer_planning_service_update",{id: detail.id}) }}" class="button icon-pencil">{{ "pequiven_seip.actions.edit"|trans }}</a>
-                                    {% set deleteUrl = path("pequiven_detail_consumer_planning_service_delete",{id: detail.id}) %}
-                                    {{ buttons.delete_mini(deleteUrl,message,tableIdRow) }}
+                                    {% if periodService().isAllowPlanningReport %}
+                                        <a href="{{ path("pequiven_detail_consumer_planning_service_update",{id: detail.id}) }}" class="button icon-pencil">{{ "pequiven_seip.actions.edit"|trans }}</a>
+                                        {% set deleteUrl = path("pequiven_detail_consumer_planning_service_delete",{id: detail.id}) %}
+                                        {{ buttons.delete_mini(deleteUrl,message,tableIdRow) }}
+                                    {% endif %}
                                 </span>
                             </p>
                         </td>

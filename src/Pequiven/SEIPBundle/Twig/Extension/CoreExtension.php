@@ -24,7 +24,8 @@ class CoreExtension extends \Twig_Extension
             new \Twig_SimpleFunction('contentHeader', array($this,'contentHeader'), array('is_safe' => array('html'))),
             new \Twig_SimpleFunction('generateLink', array($this,'generateLink'), array('is_safe' => array('html'))),
             new \Twig_SimpleFunction('generateLinkUrlOnly', array($this,'generateLinkUrlOnly'), array('is_safe' => array('html'))),
-            new \Twig_SimpleFunction('call_static_method',array($this, 'call_static_method'))
+            new \Twig_SimpleFunction('call_static_method',array($this, 'call_static_method')),
+            new \Twig_SimpleFunction('periodService',array($this, 'getPeriodService'),array('is_safe' => array('html'))),
         );
     }
     
@@ -240,7 +241,7 @@ class CoreExtension extends \Twig_Extension
      * 
      * @return \Pequiven\SEIPBundle\Service\PeriodService
      */
-    protected function getPeriodService()
+    public function getPeriodService()
     {
         return $this->container->get('pequiven_seip.service.period');
     }

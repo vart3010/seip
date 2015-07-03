@@ -52,6 +52,9 @@ class PeriodAdmin extends Admin {
                 ->add('percentagePenalty')
                 ->add('dateStartPenalty')
                 ->add('dateEndPenalty')
+                ->add('dateStartPlanningReport')
+                ->add('dateEndPlanningReport')
+                ->add('isPlanningReportEnabled')
                 ->add('parent')
                 
         ;
@@ -153,6 +156,11 @@ class PeriodAdmin extends Admin {
                     'required' => false,
                 ))
                 ->add('isLoadIndicatorTrim4', null, array(
+                    'required' => false,
+                ))
+                ->add('dateStartPlanningReport','sonata_type_date_picker')
+                ->add('dateEndPlanningReport','sonata_type_date_picker')
+                ->add('isPlanningReportEnabled', null, array(
                     'required' => false,
                 ))
         ;
