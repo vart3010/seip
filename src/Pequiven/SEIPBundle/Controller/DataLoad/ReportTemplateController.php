@@ -159,15 +159,27 @@ class ReportTemplateController extends SEIPController
             $dateReport = new \DateTime();
         }
         $plantReport = $this->get('pequiven.repository.plant_report')->find($plantReportId);
-        $plantReports = $productsReport = array();
+        $productsReport = array();
+        $plantReports = new \Doctrine\Common\Collections\ArrayCollection();
         $emptyValue = "Seleccione";
         if($plantReport){
-            $plantReports[] = $plantReport;
+            $plantReports->add($plantReport);
             $productsReport = $plantReport->getProductsReport()->toArray();
         }
         $showDay = $showMonth = $showYear = $defaultShow = true;
         $form = $this
             ->createFormBuilder()
+            ->add('reportTemplate','entity',array(
+                'label_attr' => array('class' => 'label bold'),
+                'class' => 'Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate',
+                'property' => 'reportTemplateWithName',
+                'required' => false,
+                'empty_value' => $emptyValue,
+                'translation_domain' => 'PequivenSEIPBundle',
+                'attr' => array('class' => 'select2 input-xlarge'),
+                'multiple' => true,
+                )
+            )
             ->add('plantReport','entity',array(
                 'label_attr' => array('class' => 'label bold'),
                 'class' => 'Pequiven\SEIPBundle\Entity\DataLoad\PlantReport',
@@ -240,7 +252,7 @@ class ReportTemplateController extends SEIPController
                             continue;
                         }
                     }
-                    $plantReports = [$plantReport];
+                    $plantReports->add($plantReport);
             }
             
         }
@@ -250,9 +262,37 @@ class ReportTemplateController extends SEIPController
             $typeReport = 'Gross';
         }
         $dateReport = $data['dateReport'];
+        $reportTemplates = $data['reportTemplate'];
+        if($reportTemplates){
+            foreach ($reportTemplates as $reportTemplate) {
+                foreach ($reportTemplate->getPlantReports() as $plantReport) {
+                    if(!$plantReports->contains($plantReport)){
+                        $plantReports->add($plantReport);
+                    }
+                }
+            }
+        }
+        
+        $productsReport = new \Doctrine\Common\Collections\ArrayCollection();
+        $consumerPlanningServices = new \Doctrine\Common\Collections\ArrayCollection();
+        
+        foreach ($plantReports as $plantReport) {
+            foreach ($plantReport->getProductsReport() as $productReport) {
+                if(!$productsReport->contains($productReport)){
+                    $productsReport->add($productReport);
+                }
+            }
+            foreach ($plantReport->getConsumerPlanningServices() as $consumerPlanningService) {
+                if(!$consumerPlanningServices->contains($consumerPlanningService)){
+                    $consumerPlanningServices->add($consumerPlanningService);
+                }
+            }
+        }
+        
         $data = array(
             'dateReport' => $dateReport,
-            'plantReports' => $plantReports,
+            'productsReport' => $productsReport,
+            'consumerPlanningServices' => $consumerPlanningServices,
             'plantReportId' => $plantReportId,
             'form' => $form->createView(),
             'showDay' => $showDay,

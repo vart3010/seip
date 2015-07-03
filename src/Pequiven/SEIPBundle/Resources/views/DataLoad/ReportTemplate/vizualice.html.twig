@@ -33,9 +33,9 @@
                     {{ form_errors(form.productsReport) }}
                 </div>
                 <div class="six-columns">
-                    {{ form_label(form.typeReport) }}&nbsp;
-                    {{ form_widget(form.typeReport) }}
-                    {{ form_errors(form.typeReport) }}
+                    {{ form_label(form.reportTemplate) }}&nbsp;
+                    {{ form_widget(form.reportTemplate) }}
+                    {{ form_errors(form.reportTemplate) }}
                 </div>
             </div>
             <div class="columns">
@@ -54,20 +54,23 @@
                     {{ form_widget(form.showYear) }}
                     {{ form_errors(form.showYear) }}
                 </div>
+                <div class="six-columns">
+                    {{ form_label(form.typeReport) }}&nbsp;
+                    {{ form_widget(form.typeReport) }}
+                    {{ form_errors(form.typeReport) }}
+                </div>
             </div>
             {{ form_rest(form) }}
             <a id="btnRefresh" href="#" class="button" >Refrescar</a>
          </div>
     </form>
      <div class="with-padding">
-         {% for plantReport in plantReports %}
-     <div class="columns">
-         <div class="twelve-columns twelve-columns-mobile">
-             <h3 class="thin underline text-center">OPERACIÓN</h3>
+     {% if productsReport is not empty %}
+         <div class="columns">
+             <div class="twelve-columns twelve-columns-mobile">
+                 <h3 class="thin underline text-center">OPERACIÓN</h3>
+             </div>
          </div>
-     </div>
-     {% set productsReport = plantReport.productsReport %}
-     {% set consumerPlanningServices = plantReport.consumerPlanningServices %}
          <div class="columns">
              {% if showDay  %}
              <div class="six-columns twelve-columns-mobile">
@@ -107,24 +110,24 @@
                                 <th class="header text-center white-gradient" colspan="6">MES</th>
                             </tr>
                             <tr>
+                                <th scope="col" style="width: 7%" class="header">PRODUCTO</th>
                                 <th scope="col" style="width: 7%" class="header">PPTO-MES</th>
                                 <th scope="col" style="width: 7%" class="header">PPTO-ACUM</th>
                                 <th scope="col" style="width: 7%" class="header">REAL-ACUM</th>
                                 <th scope="col" style="width: 7%" class=" header">EJEC&nbsp;(%)</th>
                                 <th scope="col" style="width: 7%" class=" header">VAR</th>
-                                <th scope="col" width="15%" class=" header">META</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for productReport in productsReport %}
                                 {% set summary = productReport.getSummaryMonth(dateReport,typeReport) %}
                                 <tr>
+                                    <th scope="col" style="width: 7%" class="header">{{ productReport.product|upper }}</th>
                                     <th scope="col" style="width: 7%" class="header">{{ summary['plan_month']|myNumberFormat }}</th>
                                     <th scope="col" style="width: 7%" class="header">{{ summary['plan_acumulated']|myNumberFormat }}</th>
                                     <th scope="col" style="width: 7%" class=" header">{{ summary['real_acumulated']|myNumberFormat }}</th>
                                     <th scope="col" style="width: 7%" class=" header">{{ summary['percentage']|myNumberFormat }}</th>
                                     <th scope="col" style="width: 7%"class=" header">{{ summary['pnr']|myNumberFormat }}</th>
-                                    <th scope="col" style="width: 7%" class=" header">TODO</th>
                                 </tr>
                             {% endfor %}
                         </tbody>
@@ -141,26 +144,24 @@
                              <th class="header text-center white-gradient" colspan="7">AÑO</th>
                          </tr>
                          <tr>
+                             <th scope="col" style="width: 7%" class="header">PRODUCTO</th>
                              <th scope="col" style="width: 7%" class="header">PPTO-AÑO</th>
                              <th scope="col" style="width: 7%" class="header">PPTO-ACUM</th>
                              <th scope="col" style="width: 7%" class="header">REAL-ACUM</th>
                              <th scope="col" style="width: 7%" class=" header">EJEC&nbsp;(%)</th>
                              <th scope="col" style="width: 7%" class=" header">VAR</th>
-                             <th scope="col" style="width: 7%" class=" header">META</th>
-                             <th scope="col" style="width: 7%" class=" header">PROM</th>
                          </tr>
                      </thead>
                      <tbody>
                          {% for productReport in productsReport %}
                              {% set summary = productReport.getSummaryYear(dateReport,typeReport) %}
                              <tr>
+                                 <th scope="col" style="width: 7%" class="header">{{ productReport.product|upper }}</th>
                                  <th scope="col" style="width: 7%" class="header">{{ summary['plan_year']|myNumberFormat }}</th>
                                  <th scope="col" style="width: 7%" class="header">{{ summary['plan_acumulated']|myNumberFormat }}</th>
                                  <th scope="col" style="width: 7%" class=" header">{{ summary['real_acumulated']|myNumberFormat }}</th>
                                  <th scope="col" style="width: 7%" class=" header">{{ summary['percentage']|myNumberFormat }}</th>
                                  <th scope="col" style="width: 7%"class=" header">{{ summary['pnr']|myNumberFormat }}</th>
-                                 <th scope="col" style="width: 7%" class=" header">TODO</th>
-                                 <th scope="col" style="width: 7%" class=" header">TODO</th>
                              </tr>
                          {% endfor %}
                      </tbody>
@@ -340,7 +341,7 @@
         </p>
  {% else %}
      <h2 class="text-center">{{ "Select the plant"|trans }}</h2>
- {% endfor %}
+ {% endif %}
      </div>
              
 {% endblock body %}

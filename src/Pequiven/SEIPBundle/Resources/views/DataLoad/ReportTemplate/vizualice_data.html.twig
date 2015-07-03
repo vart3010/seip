@@ -20,9 +20,7 @@
         color: #4a4a4a;
     }
 </style>
-{% for plantReport in plantReports %}
-     {% set productsReport = plantReport.productsReport %}
-     {% set consumerPlanningServices = plantReport.consumerPlanningServices %}
+{% if productsReport is not empty %}
          <div class="columns">
              {% if showDay  %}
              <div class="six-columns twelve-columns-mobile">
@@ -62,24 +60,24 @@
                                 <th class="text-center white-gradient" colspan="6">MES</th>
                             </tr>
                             <tr class="header-tr">
+                                <th  style="width: 16%" class="header">PRODUCTO</th>
                                 <th  style="width: 16%" class="header">PPTO-MES</th>
                                 <th  style="width: 16%" class="header">PPTO-ACUM</th>
                                 <th  style="width: 16%" class="header">REAL-ACUM</th>
                                 <th  style="width: 16%" class=" header">EJEC&nbsp;(%)</th>
                                 <th  style="width: 16%" class=" header">VAR</th>
-                                <th  style="width: 16%" class=" header">META</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for productReport in productsReport %}
                                 {% set summary = productReport.getSummaryMonth(dateReport,typeReport) %}
                                 <tr>
+                                    <td  style="width: 16%" class="content">{{ productReport.product|upper }}</td>
                                     <td  style="width: 16%" class="content">{{ summary['plan_month']|myNumberFormat }}</td>
                                     <td  style="width: 16%" class="content">{{ summary['plan_acumulated']|myNumberFormat }}</td>
                                     <td  style="width: 16%" class=" content">{{ summary['real_acumulated']|myNumberFormat }}</td>
                                     <td  style="width: 16%" class=" content">{{ summary['percentage']|myNumberFormat }}</td>
                                     <td  style="width: 16%"class=" content">{{ summary['pnr']|myNumberFormat }}</td>
-                                    <td  style="width: 16%" class=" content">TODO</td>
                                 </tr>
                             {% endfor %}
                         </tbody>
@@ -96,26 +94,24 @@
                              <th class="text-center white-gradient" colspan="7">AÑO</th>
                          </tr>
                          <tr class="header-tr">
-                             <th  style="width: 14%" class="header">PPTO-AÑO</th>
-                             <th  style="width: 14%" class="header">PPTO-ACUM</th>
-                             <th  style="width: 14%" class="header">REAL-ACUM</th>
-                             <th  style="width: 14%" class=" header">EJEC&nbsp;(%)</th>
-                             <th  style="width: 14%" class=" header">VAR</th>
-                             <th  style="width: 14%" class=" header">META</th>
-                             <th  style="width: 14%" class=" header">PROM</th>
+                             <th  style="width: 15%" class="header">PRODUCTO</th>
+                             <th  style="width: 15%" class="header">PPTO-AÑO</th>
+                             <th  style="width: 15%" class="header">PPTO-ACUM</th>
+                             <th  style="width: 15%" class="header">REAL-ACUM</th>
+                             <th  style="width: 15%" class=" header">EJEC&nbsp;(%)</th>
+                             <th  style="width: 15%" class=" header">VAR</th>
                          </tr>
                      </thead>
                      <tbody>
                          {% for productReport in productsReport %}
                              {% set summary = productReport.getSummaryYear(dateReport,typeReport) %}
                              <tr>
-                                 <td  style="width: 14%" class="content">{{ summary['plan_year']|myNumberFormat }}</td>
-                                 <td  style="width: 14%" class="content">{{ summary['plan_acumulated']|myNumberFormat }}</td>
-                                 <td  style="width: 14%" class=" content">{{ summary['real_acumulated']|myNumberFormat }}</td>
-                                 <td  style="width: 14%" class=" content">{{ summary['percentage']|myNumberFormat }}</td>
-                                 <td  style="width: 14%"class=" content">{{ summary['pnr']|myNumberFormat }}</td>
-                                 <td  style="width: 14%" class=" content">TODO</td>
-                                 <td  style="width: 14%" class=" content">TODO</td>
+                                 <td  class="content">{{ productReport.product|upper }}</td>
+                                 <td  class="content">{{ summary['plan_year']|myNumberFormat }}</td>
+                                 <td  class="content">{{ summary['plan_acumulated']|myNumberFormat }}</td>
+                                 <td  class=" content">{{ summary['real_acumulated']|myNumberFormat }}</td>
+                                 <td  class=" content">{{ summary['percentage']|myNumberFormat }}</td>
+                                 <td  class=" content">{{ summary['pnr']|myNumberFormat }}</td>
                              </tr>
                          {% endfor %}
                      </tbody>
@@ -283,4 +279,4 @@
          </div>
  {% else %}
      <h2 class="text-center">{{ "Select the plant"|trans }}</h2>
- {% endfor %}
+ {% endif %}
