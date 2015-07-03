@@ -104,6 +104,9 @@ class ReportTemplateController extends SEIPController
             $dateString = $request->get('dateNotification',null);
         }
         $plantReport = $request->get('plant_report',null);
+        if($plantReport === null){
+            return $this->redirect($this->generateUrl('pequiven_plant_report_index'));
+        }
         $dateNotification = null;
         if($dateString !== null){
             $dateNotification = \DateTime::createFromFormat('d/m/Y', $dateString);
