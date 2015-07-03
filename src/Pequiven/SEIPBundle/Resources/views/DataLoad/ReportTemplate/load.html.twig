@@ -508,6 +508,9 @@
                 if(isNaN(pnr)){
                     pnr = 0;
                 }
+                if(pnr < 0){
+                    pnr = 0;
+                }
                 $(tr[2]).html(myNumberFormat(percentaje));
                 $(tr[3]).find('input').val(pnr);
             });
