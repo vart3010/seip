@@ -277,6 +277,9 @@ abstract class ProductReport extends BaseModel implements ProductReportInterface
         if($plan > 0){
             $percentage = ($real * 100) / $plan;
         }
+        if($pnr < 0){
+            $pnr = 0;
+        }
         $total = array(
             'plan' => $plan,
             'real' => $real,
@@ -313,6 +316,9 @@ abstract class ProductReport extends BaseModel implements ProductReportInterface
         $pnr = $planAcumulated - $realAcumulated;
         if($planAcumulated > 0){
             $percentage = ($realAcumulated * 100) / $planAcumulated;
+        }
+        if($pnr < 0){
+            $pnr = 0;
         }
         $total = array(
             'plan_month' => $planMonth,
@@ -361,6 +367,9 @@ abstract class ProductReport extends BaseModel implements ProductReportInterface
         $pnr = $planAcumulated - $realAcumulated;
         if($planAcumulated > 0){
             $percentage = ($realAcumulated * 100) / $planAcumulated;
+        }
+        if($pnr < 0){
+            $pnr = 0;
         }
         $total = array(
             'plan_year' => $planYear,
