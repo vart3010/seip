@@ -177,7 +177,7 @@ class ReportTemplateController extends SEIPController
                 'translation_domain' => 'PequivenSEIPBundle',
                 'attr' => array('class' => 'select2 input-xlarge'),
                 'multiple' => false,
-                'group_by' => 'reportTemplate'
+                'group_by' => 'reportTemplateWithName'
                 )
             )
             ->add('dateReport','date',[
