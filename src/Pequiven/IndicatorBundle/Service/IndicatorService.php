@@ -778,7 +778,7 @@ class IndicatorService implements ContainerAwareInterface {
                 $set = array();
                 $set["label"] = $arrayVariable['description'];
                 $set["value"] = bcadd($arrayVariable['value'], 0, 2);
-                $set["displayValue"] = number_format($arrayVariable['value'], 2, ',', '.');
+                $set["displayValue"] = number_format($arrayVariable['value'], 2, ',', '.') . ' ' . $arrayVariable['unit'];
                 $dataChart[] = $set;
             }
         } elseif(isset($options['viewVariablesMarkedPlan']) && array_key_exists('viewVariablesMarkedPlan', $options)){
@@ -788,7 +788,7 @@ class IndicatorService implements ContainerAwareInterface {
                 $set = array();
                 $set["label"] = $arrayVariable['description'];
                 $set["value"] = bcadd($arrayVariable['value'], 0, 2);
-                $set["displayValue"] = number_format($arrayVariable['value'], 2, ',', '.');
+                $set["displayValue"] = number_format($arrayVariable['value'], 2, ',', '.') . ' ' . $arrayVariable['unit'];
                 $dataChart[] = $set;
             }
         } else {
@@ -1099,6 +1099,7 @@ class IndicatorService implements ContainerAwareInterface {
                     $arrayVariables[$nameParameter]['value'] = 0.0;
                     $arrayVariables[$nameParameter]['description'] = $variable->getDescription();
                     $arrayVariables[$nameParameter]['summary'] = $variable->getSummary();
+                    $arrayVariables[$nameParameter]['unit'] = $variable->getUnitResultValue();
                 }
             }
             foreach($valuesIndicator as $valueIndicator){
@@ -1118,6 +1119,7 @@ class IndicatorService implements ContainerAwareInterface {
                     $arrayVariables[$nameParameter]['value'] = 0.0;
                     $arrayVariables[$nameParameter]['description'] = $variable->getDescription();
                     $arrayVariables[$nameParameter]['summary'] = $variable->getSummary();
+                    $arrayVariables[$nameParameter]['unit'] = $variable->getUnitResultValue();
                 }
             }
             foreach($valuesIndicator as $valueIndicator){
