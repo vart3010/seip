@@ -825,7 +825,7 @@ class IndicatorService implements ContainerAwareInterface {
 
         $chart["caption"] = $indicator->getSummary();
 //        $chart["subCaption"] = "Sales analysis of last year";
-        $chart["xAxisname"] = "Month";
+//        $chart["xAxisname"] = "Month";
         $chart["yAxisName"] = "Amount (In USD)";
         $chart["numberPrefix"] = "$";
         $chart["showBorder"] = "0";
@@ -945,7 +945,7 @@ class IndicatorService implements ContainerAwareInterface {
         
         $chart["caption"] = $indicator->getSummary();
 //        $chart["subCaption"] = "Sales by quarter";
-        $chart["xAxisName"] = "Indicador";
+//        $chart["xAxisName"] = "Indicador";
         $chart["yAxisName"] = "TM";
         $chart["paletteColors"] = "#0075c2,#1aaf5d,#f2c500";
         $chart["bgColor"] = "#ffffff";
@@ -1250,7 +1250,7 @@ class IndicatorService implements ContainerAwareInterface {
         $chart = array();
 
         $chart["caption"] = $indicator->getSummary();
-        $chart["xAxisname"] = "Indicador";
+//        $chart["xAxisname"] = "Indicador";
         $chart["pYAxisName"] = "TM";
         $chart["sYAxisName"] = "% Cumplimiento";
         $chart["sNumberSuffix"] = "%";
@@ -1354,9 +1354,11 @@ class IndicatorService implements ContainerAwareInterface {
             $medition["showValues"] = "0";
 
             $totalValueIndicators = count($indicator->getValuesIndicator());
+            $labelsFrequencyNotificationArray = $this->getLabelsByIndicatorFrequencyNotification($indicator);
             for ($i = 0;$i < $totalValueIndicators; $i++) {
                 $label = $dataReal = $dataPlan = $dataMedition = array();
-                $label["label"] = $i;
+//                $label["label"] = $i;
+                $label["label"] = $labelsFrequencyNotificationArray[($i+1)];
 //                $label["link"] = $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicatorChildren->getId()));
                 $dataReal["value"] = number_format($arrayVariables['valueReal'][$i], 2, ',', '.');
 //                $dataReal["link"] = $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicatorChildren->getId()));
@@ -1378,6 +1380,30 @@ class IndicatorService implements ContainerAwareInterface {
         $data['dataSource']['dataset'][] = $medition;
 
         return $data;
+    }
+    
+    /**
+     * 
+     * @param Indicator $indicator
+     * @return array
+     */
+    public function getLabelsByIndicatorFrequencyNotification(Indicator $indicator){
+        $frequency = $indicator->getFrequencyNotificationIndicator();
+        $labelsFrequencyArray = array();
+        
+        if($frequency->getDays() == 30){
+            $labelsFrequencyArray = CommonObject::getLabelsMonths();
+        } elseif($frequency->getDays() == 60){
+            $labelsFrequencyArray = CommonObject::getLabelsBimonthly();
+        } elseif($frequency->getDays() == 90){
+            $labelsFrequencyArray = CommonObject::getLabelsTrimonthly();
+        } elseif($frequency->getDays() == 120){
+            $labelsFrequencyArray = CommonObject::getLabelsFourmonthly();
+        } elseif($frequency->getDays() == 180){
+            $labelsFrequencyArray = CommonObject::getLabelsSixmonthly();
+        }
+        
+        return $labelsFrequencyArray;
     }
 
     /**

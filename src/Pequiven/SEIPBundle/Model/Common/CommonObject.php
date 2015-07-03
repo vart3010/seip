@@ -156,18 +156,18 @@ class CommonObject implements \Symfony\Component\DependencyInjection\ContainerAw
      */
     static function getLabelsMonths(){
         static $labelsMonths = array(
-            "1" => 'Enero',
-            "2" => 'Febrero',
-            "3" => 'Marzo',
-            "4" => 'Abril',
-            "5" => 'Mayo',
-            "6" => 'Junio',
-            "7" => 'Julio',
-            "8" => 'Agosto',
-            "9" => 'Septiembre',
-            "10" => 'Octubre',
-            "11" => 'Noviembre',
-            "12" => 'Diciembre',
+            1 => 'Enero',
+            2 => 'Febrero',
+            3 => 'Marzo',
+            4 => 'Abril',
+            5 => 'Mayo',
+            6 => 'Junio',
+            7 => 'Julio',
+            8 => 'Agosto',
+            9 => 'Septiembre',
+            10 => 'Octubre',
+            11 => 'Noviembre',
+            12 => 'Diciembre',
         );
         
         return $labelsMonths;
@@ -180,12 +180,12 @@ class CommonObject implements \Symfony\Component\DependencyInjection\ContainerAw
      */
     static function getLabelsBimonthly(){
         static $labelsBimonthly = array(
-            "1" => 'Ene-Feb',
-            "2" => 'Mar-Abr',
-            "3" => 'May-Jun',
-            "4" => 'Jul-Ago',
-            "5" => 'Sep-Oct',
-            "6" => 'Nov-Dic',
+            1 => 'Ene-Feb',
+            2 => 'Mar-Abr',
+            3 => 'May-Jun',
+            4 => 'Jul-Ago',
+            5 => 'Sep-Oct',
+            6 => 'Nov-Dic',
         );
         
         return $labelsBimonthly;
@@ -198,10 +198,10 @@ class CommonObject implements \Symfony\Component\DependencyInjection\ContainerAw
      */
     static function getLabelsTrimonthly(){
         static $labelsTrimonthly = array(
-            "1" => 'Ene-Mar',
-            "2" => 'Abr-Jun',
-            "3" => 'Jul-Sep',
-            "4" => 'Oct-Dic',
+            1 => 'Ene-Mar',
+            2 => 'Abr-Jun',
+            3 => 'Jul-Sep',
+            4 => 'Oct-Dic',
         );
         
         return $labelsTrimonthly;
@@ -214,9 +214,9 @@ class CommonObject implements \Symfony\Component\DependencyInjection\ContainerAw
      */
     static function getLabelsFourmonthly(){
         static $labelsFourmonthly = array(
-            "1" => 'Ene-Abr',
-            "2" => 'May-Ago',
-            "3" => 'Sep-Dic',
+            1 => 'Ene-Abr',
+            2 => 'May-Ago',
+            3 => 'Sep-Dic',
         );
         
         return $labelsFourmonthly;
@@ -229,8 +229,8 @@ class CommonObject implements \Symfony\Component\DependencyInjection\ContainerAw
      */
     static function getLabelsSixmonthly(){
         static $labelsSixmonthly = array(
-            "1" => 'Ene-Jun',
-            "2" => 'Jul-Dic',
+            1 => 'Ene-Jun',
+            2 => 'Jul-Dic',
         );
         
         return $labelsSixmonthly;
