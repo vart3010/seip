@@ -9,7 +9,9 @@
         <h3> {{ 'pequiven_seip.report_template.raw_material'|trans }}&nbsp;({{ product_report.rawMaterialConsumptionPlannings|length }})</h3>
         {% set hasRawMaterials = (product_report.product.rawMaterials|length > 0 ? true : false) %}
         <div class="button-group absolute-right compact">
-            <a class="button icon-list-add {% if hasRawMaterials == false %}disabled{% endif %}" href="{% if hasRawMaterials == true %}{{ path("pequiven_raw_material_consumption_planning_create",{productReport:product_report.id}) }}{% else %}#{% endif %}">{{ 'pequiven.add'|trans({},'messages') }}</a>
+            {% if isAllowPlanningReport %}
+                <a class="button icon-list-add {% if hasRawMaterials == false %}disabled{% endif %}" href="{% if hasRawMaterials == true %}{{ path("pequiven_raw_material_consumption_planning_create",{productReport:product_report.id}) }}{% else %}#{% endif %}">{{ 'pequiven.add'|trans({},'messages') }}</a>
+            {% endif %}
         </div>
     </div>
     <div class="with-padding">
@@ -42,9 +44,11 @@
                         <td class="low-padding align-center">
                             <p class="button-height">
                                 <span class="button-group">
-                                    <a href="{{ path("pequiven_raw_material_consumption_planning_update",{id: rawMaterialConsumptionPlanning.id}) }}" class="button icon-pencil">{{ "pequiven_seip.actions.edit"|trans }}</a>
-                                    {% set deleteUrl = path("pequiven_raw_material_consumption_planning_delete",{id: rawMaterialConsumptionPlanning.id}) %}
-                                    {{ buttons.delete_mini(deleteUrl,message,tableIdRow) }}
+                                    {% if isAllowPlanningReport %}
+                                        <a href="{{ path("pequiven_raw_material_consumption_planning_update",{id: rawMaterialConsumptionPlanning.id}) }}" class="button icon-pencil">{{ "pequiven_seip.actions.edit"|trans }}</a>
+                                        {% set deleteUrl = path("pequiven_raw_material_consumption_planning_delete",{id: rawMaterialConsumptionPlanning.id}) %}
+                                        {{ buttons.delete_mini(deleteUrl,message,tableIdRow) }}
+                                    {% endif %}
                                 </span>
                             </p>
                         </td>

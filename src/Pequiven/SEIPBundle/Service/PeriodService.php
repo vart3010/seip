@@ -118,6 +118,23 @@ class PeriodService extends ContainerAware
     }
     
     /**
+     * Retorna si se encuetra habilitada la carga de planificacion de plantas
+     * @return boolean
+     */
+    function isAllowPlanningReport()
+    {
+        $result = false;
+        $period = $this->getPeriodActive();
+        $now = new \DateTime();
+        
+        if($period->getIsPlanningReportEnabled() === true && $now >= $period->getDateStartPlanningReport() && $now <= $period->getDateEndPlanningReport()){
+            $result = true;
+        }
+        
+        return $result;
+    }
+    
+    /**
      * Retorna el periodo activo
      * @return \Pequiven\SEIPBundle\Entity\Period
      */

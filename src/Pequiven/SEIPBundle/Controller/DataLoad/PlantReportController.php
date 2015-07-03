@@ -178,12 +178,14 @@ class PlantReportController extends SEIPController
                             }
                         }
                         $total = $aliquot * $totalPlan;
+//                        var_dump($aliquot);
+//                        var_dump($totalPlan);
                         $propertyAccessor->setValue($detail, $propertyPath, $total);
                         $this->save($detail);
                     }
 
                     $this->save($consumerPlanningService);
-                }
+            }
             }
             //Validar los dias de paradas
             foreach ($resource->getPlantStopPlannings() as $plantStopPlanning)

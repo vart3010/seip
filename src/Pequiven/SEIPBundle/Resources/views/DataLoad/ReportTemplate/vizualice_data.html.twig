@@ -1,0 +1,286 @@
+{% trans_default_domain 'PequivenSEIPBundle' %}
+<style>
+    
+    .white-gradient {
+        background-color: #535353;
+        color: #ffffff;
+    }
+    .header {
+        
+    }
+    .text-center {
+        text-align: center;
+    }
+    .header-tr {
+        border-bottom: #E4E7EB;
+        border-style: solid;
+        border-bottom-style: dotted;
+    }
+    .content {
+        color: #4a4a4a;
+    }
+</style>
+{% for plantReport in plantReports %}
+     {% set productsReport = plantReport.productsReport %}
+     {% set consumerPlanningServices = plantReport.consumerPlanningServices %}
+         <div class="columns">
+             {% if showDay  %}
+             <div class="six-columns twelve-columns-mobile">
+                <table class="simple-table responsive-table responsive-table-on">
+                    <thead>
+                        <tr>
+                            <th class="text-center white-gradient"  colspan="5">DÍA</th>
+                        </tr>
+                        <tr class="header-tr">
+                            <th  style="width: 20%" class="header">PRODUCTO</th>
+                            <th  style="width: 20%" class="header">PPTO</th>
+                            <th  style="width: 20%" class=" header">REAL</th>
+                            <th  style="width: 20%" class=" header">EJEC&nbsp;(%)</th>
+                            <th  style="width: 20%" class=" header">VAR</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for productReport in productsReport %}
+                            {% set summary = productReport.getSummaryDay(dateReport,typeReport) %}
+                            <tr>
+                                <td  style="width: 20%" class="content">{{ productReport.product|upper }}</td>
+                                <td  style="width: 20%" class="content">{{ summary['plan']|myNumberFormat }}</td>
+                                <td  style="width: 20%" class=" content">{{ summary['real']|myNumberFormat }}</td>
+                                <td  style="width: 20%" class=" content">{{ summary['percentage']|myNumberFormat }}</td>
+                                <td  style="width: 20%" class=" content">{{ summary['pnr']|myNumberFormat }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+             </div>
+            {% endif %}
+            {% if showMonth %}
+                <div class="six-columns twelve-columns-mobile">
+                    <table class="simple-table responsive-table responsive-table-on">
+                        <thead>
+                            <tr>
+                                <th class="text-center white-gradient" colspan="6">MES</th>
+                            </tr>
+                            <tr class="header-tr">
+                                <th  style="width: 16%" class="header">PPTO-MES</th>
+                                <th  style="width: 16%" class="header">PPTO-ACUM</th>
+                                <th  style="width: 16%" class="header">REAL-ACUM</th>
+                                <th  style="width: 16%" class=" header">EJEC&nbsp;(%)</th>
+                                <th  style="width: 16%" class=" header">VAR</th>
+                                <th  style="width: 16%" class=" header">META</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for productReport in productsReport %}
+                                {% set summary = productReport.getSummaryMonth(dateReport,typeReport) %}
+                                <tr>
+                                    <td  style="width: 16%" class="content">{{ summary['plan_month']|myNumberFormat }}</td>
+                                    <td  style="width: 16%" class="content">{{ summary['plan_acumulated']|myNumberFormat }}</td>
+                                    <td  style="width: 16%" class=" content">{{ summary['real_acumulated']|myNumberFormat }}</td>
+                                    <td  style="width: 16%" class=" content">{{ summary['percentage']|myNumberFormat }}</td>
+                                    <td  style="width: 16%"class=" content">{{ summary['pnr']|myNumberFormat }}</td>
+                                    <td  style="width: 16%" class=" content">TODO</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+             {% endif %}
+         </div>
+         {% if showYear  %}
+         <div class="columns">
+             <div class="six-columns twelve-columns-mobile">
+                 <table class="simple-table responsive-table responsive-table-on">
+                     <thead>
+                         <tr>
+                             <th class="text-center white-gradient" colspan="7">AÑO</th>
+                         </tr>
+                         <tr class="header-tr">
+                             <th  style="width: 14%" class="header">PPTO-AÑO</th>
+                             <th  style="width: 14%" class="header">PPTO-ACUM</th>
+                             <th  style="width: 14%" class="header">REAL-ACUM</th>
+                             <th  style="width: 14%" class=" header">EJEC&nbsp;(%)</th>
+                             <th  style="width: 14%" class=" header">VAR</th>
+                             <th  style="width: 14%" class=" header">META</th>
+                             <th  style="width: 14%" class=" header">PROM</th>
+                         </tr>
+                     </thead>
+                     <tbody>
+                         {% for productReport in productsReport %}
+                             {% set summary = productReport.getSummaryYear(dateReport,typeReport) %}
+                             <tr>
+                                 <td  style="width: 14%" class="content">{{ summary['plan_year']|myNumberFormat }}</td>
+                                 <td  style="width: 14%" class="content">{{ summary['plan_acumulated']|myNumberFormat }}</td>
+                                 <td  style="width: 14%" class=" content">{{ summary['real_acumulated']|myNumberFormat }}</td>
+                                 <td  style="width: 14%" class=" content">{{ summary['percentage']|myNumberFormat }}</td>
+                                 <td  style="width: 14%"class=" content">{{ summary['pnr']|myNumberFormat }}</td>
+                                 <td  style="width: 14%" class=" content">TODO</td>
+                                 <td  style="width: 14%" class=" content">TODO</td>
+                             </tr>
+                         {% endfor %}
+                     </tbody>
+                 </table>
+             </div>
+         </div>
+         {% endif %}
+         <div class="columns">
+             <div class="twelve-columns-mobile">
+                 <table class="simple-table responsive-table responsive-table-on">
+                    <thead>
+                        <tr>
+                            <th class="text-center white-gradient" colspan="5">CONSUMO DE MATERIA PRIMA</th>
+                        </tr>
+                        <tr class="header-tr">
+                            <th  style="width: 30%" class="header">PRODUCTO</th>
+                            {%  if showDay %}
+                                <th  style="width: 23%" class="header">DÍA</th>
+                            {% endif %}
+                            {%  if showMonth %}
+                                <th  style="width: 23%" class=" header">MES</th>
+                            {% endif %}
+                            {%  if showYear %}
+                                <th  style="width: 23%" class=" header">AÑO</th>
+                            {% endif %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for consumerPlanningService in consumerPlanningServices %}
+                            {% set summary = consumerPlanningService.getSummary(dateReport) %}
+                            <tr>
+                                <td  style="width: 30%" class="content">{{ consumerPlanningService.service|upper }}</td>
+                                {%  if showDay %}
+                                    <td  style="width: 23%" class="content">{{ summary['total_day']|myNumberFormat }}</td>
+                                {% endif %}
+                                {%  if showMonth %}
+                                    <td  style="width: 23%" class=" content">{{ summary['total_month']|myNumberFormat }}</td>
+                                {% endif %}
+                                {%  if showYear %}
+                                    <td  style="width: 23%" class=" content">{{ summary['total_year']|myNumberFormat }}</td>
+                                {% endif %}
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="4" class="empty_row">{{ "No service planning"|trans }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+             </div>
+         </div>
+         <div class="columns">
+             <div class="twelve-columns-mobile">
+                 <table class="simple-table responsive-table responsive-table-on">
+                    <thead>
+                        <tr>
+                            <th class="text-center white-gradient" colspan="5">PRODUCCIÓN NO REALIZADA</th>
+                        </tr>
+                        <tr class="header-tr">
+                            <th  style="width: 30%" class="header">PRODUCTO</th>
+                            {%  if showDay %}
+                                <th  style="width: 23%" class="header">DÍA</th>
+                            {% endif %}
+                            {%  if showMonth %}
+                                <th  style="width: 23%" class=" header">MES</th>
+                            {% endif %}
+                            {%  if showYear %}
+                                <th  style="width: 23%" class=" header">AÑO</th>
+                            {% endif %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for productReport in productsReport %}
+                            {% set summary = productReport.getSummaryUnrealizedProductions(dateReport) %}
+                            <tr>
+                                <td  style="width: 30%" class="content">{{ productReport.product|upper }}</td>
+                                {%  if showDay %}
+                                    <td  style="width: 23%" class="content">{{ summary['total_day']|myNumberFormat }}</td>
+                                {% endif %}
+                                {%  if showMonth %}
+                                    <td  style="width: 23%" class=" content">{{ summary['total_month']|myNumberFormat }}</td>
+                                {% endif %}
+                                {%  if showYear %}
+                                    <td  style="width: 23%" class=" content">{{ summary['total_year']|myNumberFormat }}</td>
+                                {% endif %}
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="4" class="empty_row">{{ "No service planning"|trans }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+             </div>
+         </div>
+         <div class="columns">
+             <div class="twelve-columns-mobile">
+                 <table class="simple-table responsive-table responsive-table-on">
+                    <thead>
+                        <tr>
+                            <th class="text-center white-gradient" colspan="5">INVENTARIO</th>
+                        </tr>
+                        <tr class="header-tr">
+                            <th  style="width: 30%" class="header">PRODUCTO</th>
+                            {%  if showDay %}
+                                <th  style="width: 23%" class="header">DÍA</th>
+                            {% endif %}
+                            {%  if showMonth %}
+                                <th  style="width: 23%" class=" header">MES</th>
+                            {% endif %}
+                            {%  if showYear %}
+                                <th  style="width: 23%" class=" header">AÑO</th>
+                            {% endif %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for productReport in productsReport %}
+                            {% set summary = productReport.getSummaryInventory(dateReport) %}
+                            <tr>
+                                <td  style="width: 30%" class="content">{{ productReport.product|upper }}</td>
+                                {%  if showDay %}
+                                    <td  style="width: 23%" class="content">{{ summary['total_day']|myNumberFormat }}</td>
+                                {% endif %}
+                                {%  if showMonth %}
+                                    <td  style="width: 23%" class=" content">{{ summary['total_month']|myNumberFormat }}</td>
+                                {% endif %}
+                                {%  if showYear %}
+                                    <td  style="width: 23%" class=" content">{{ summary['total_year']|myNumberFormat }}</td>
+                                {% endif %}
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="4" class="empty_row">{{ "No service planning"|trans }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+             </div>
+         </div>
+        <div class="columns">
+            {% if showDay  %}
+            <div class="twelve-columns twelve-columns-mobile">
+               <table class="simple-table responsive-table responsive-table-on">
+                   <thead>
+                       <tr>
+                           <th class="header text-center white-gradient" colspan="5">OBSERVACIONES DEL DÍA</th>
+                       </tr>
+                       <tr>
+                           <th scope="col" style="width: 20%" class="header">PRODUCTO</th>
+                           <th scope="col" style="width: 80%" class="header">OBSERVACIÓN</th>
+                       </tr>
+                   </thead>
+                   <tbody>
+                       {% for productReport in productsReport %}
+                           {% set summary = productReport.getSummaryDay(dateReport,typeReport) %}
+                           <tr>
+                               <th scope="col" style="width: 20%" class="header">{{ productReport.product|upper }}</th>
+                               <th scope="col" style="width: 80%" class="header">{{ (summary['observation'] is null ? ("pequiven_seip.comment_none"|trans):summary['observation']) |upper }}</th>
+                           </tr>
+                       {% endfor %}
+                   </tbody>
+               </table>
+            </div>
+           {% endif %}
+         </div>
+ {% else %}
+     <h2 class="text-center">{{ "Select the plant"|trans }}</h2>
+ {% endfor %}

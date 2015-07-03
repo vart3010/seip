@@ -403,6 +403,10 @@ class PlantReport extends ModelBaseMaster
         $this->setLocation($reportTemplate->getLocation());
     }
     
+    /**
+     * Obtiene las paradas de plantas por mes
+     * @return type
+     */
     public function getPlantStopPlanningSortByMonth()
     {
         $plantStopPlannings = $this->getPlantStopPlannings();
@@ -412,5 +416,11 @@ class PlantReport extends ModelBaseMaster
         }
         ksort($sorted);
         return $sorted;
+    }
+    
+    public function getReportTemplateWithName()
+    {
+        $full = sprintf("%s (%s)",$this->reportTemplate->getName(),$this->reportTemplate->getRef());
+        return $full;
     }
 }

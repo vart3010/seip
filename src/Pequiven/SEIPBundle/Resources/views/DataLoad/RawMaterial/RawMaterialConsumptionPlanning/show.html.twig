@@ -52,8 +52,10 @@
     {% include 'PequivenSEIPBundle:DataLoad/RawMaterial/RawMaterialConsumptionPlanning:show/detail_tabs_raw_material_consumptions.html.twig' %}
     <br /><br />
     <p class="button-height align-right">
-        {{ buttons.generic(path('pequiven_raw_material_consumption_planning_update', { 'id': raw_material_consumption_planning.id }),('pequiven.edit'|trans({},'messages'))) }}
-        &nbsp;
-        {{ buttons.delete(path('pequiven_raw_material_consumption_planning_delete', { 'id': raw_material_consumption_planning.id })) }}
+        {% if periodService().isAllowPlanningReport %}
+            {{ buttons.generic(path('pequiven_raw_material_consumption_planning_update', { 'id': raw_material_consumption_planning.id }),('pequiven.edit'|trans({},'messages'))) }}
+            &nbsp;
+            {{ buttons.delete(path('pequiven_raw_material_consumption_planning_delete', { 'id': raw_material_consumption_planning.id })) }}
+        {% endif %}
     </p>
 {% endblock %}

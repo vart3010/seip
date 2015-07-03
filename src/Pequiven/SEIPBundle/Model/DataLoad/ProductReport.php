@@ -250,19 +250,27 @@ abstract class ProductReport extends BaseModel implements ProductReportInterface
         return $total;
     }
     
-    public function getSummaryDay(\DateTime $date) 
+    /**
+     * Resumen del dia
+     * @param \DateTime $date
+     * @return type
+     */
+    public function getSummaryDay(\DateTime $date,$prefix) 
     {
         $month = (int)$date->format("m");
         $day = (int)$date->format("d");
         
         $productDetailDailyMonths = $this->getProductDetailDailyMonthsSortByMonth();
         $plan = $real = 0.0;
+        $observation = null;
         if(isset($productDetailDailyMonths[$month])){
             $detail = $productDetailDailyMonths[$month];
-            $namePlan = sprintf('getDay%sGrossPlan',$day);
-            $nameReal = sprintf('getDay%sGrossReal',$day);
+            $namePlan = sprintf('getDay%s%sPlan',$day,$prefix);
+            $nameReal = sprintf('getDay%s%sReal',$day,$prefix);
+            $nameObservation = sprintf('getDay%sObservation',$day);
             $plan = $detail->$namePlan();
             $real = $detail->$nameReal();
+            $observation = $detail->$nameObservation();
         }
         $percentage = 0;
         $pnr = $plan - $real;
@@ -274,11 +282,18 @@ abstract class ProductReport extends BaseModel implements ProductReportInterface
             'real' => $real,
             'percentage' => $percentage,
             'pnr' => $pnr,
+            'observation' => $observation,
         );
         return $total;
     }
     
-    public function getSummaryMonth(\DateTime $date) 
+    /**
+     * Resumen del mes
+     * @param \DateTime $date
+     * @param type $prefix
+     * @return type
+     */
+    public function getSummaryMonth(\DateTime $date,$prefix) 
     {
         $month = (int)$date->format("m");
         $day = (int)$date->format("d");
@@ -287,8 +302,10 @@ abstract class ProductReport extends BaseModel implements ProductReportInterface
         $planMonth = $planAcumulated = $realAcumulated = 0.0;
         if(isset($productDetailDailyMonths[$month])){
             $detail = $productDetailDailyMonths[$month];
-            $planMonth = $detail->getTotalGrossPlan();
-            $totals = $detail->getTotalGrossToDay($day);
+            $totalNamePlan = sprintf('getTotal%sPlan',$prefix);
+            $totalNameToDay = sprintf('getTotal%sToDay',$prefix);
+            $planMonth = $detail->$totalNamePlan();
+            $totals = $detail->$totalNameToDay($day);
             $planAcumulated = $totals['tp'];
             $realAcumulated = $totals['tr'];
         }
@@ -308,7 +325,13 @@ abstract class ProductReport extends BaseModel implements ProductReportInterface
         return $total;
     }
     
-    public function getSummaryYear(\DateTime $date) 
+    /**
+     * Resumen del año
+     * @param \DateTime $date
+     * @param type $prefix
+     * @return type
+     */
+    public function getSummaryYear(\DateTime $date,$prefix) 
     {
         $month = (int)$date->format("m");
         $day = (int)$date->format("d");
@@ -316,19 +339,22 @@ abstract class ProductReport extends BaseModel implements ProductReportInterface
         $productDetailDailyMonths = $this->getProductDetailDailyMonthsSortByMonth();
         $planYear = $planAcumulated = $realAcumulated = 0.0;
         
+        $totalNamePlan = sprintf('getTotal%sPlan',$prefix);
+        $totalNameReal = sprintf('getTotal%sReal',$prefix);
+        $totalNameToDay = sprintf('getTotal%sToDay',$prefix);
         foreach ($productDetailDailyMonths as $monthDetail => $detail) {
-            $planYear = $planYear + $detail->getTotalGrossPlan();
+            $planYear = $planYear + $detail->$totalNamePlan();
             if($monthDetail > $month){
                 break;
             }
 
             if($month == $monthDetail){
-                $totalToDay = $detail->getTotalGrossToDay($day);
+                $totalToDay = $detail->$totalNameToDay($day);
                 $planAcumulated = $planAcumulated + $totalToDay['tp'];
                 $realAcumulated = $realAcumulated + $totalToDay['tr'];
             }else{
-                $planAcumulated = $planAcumulated + $detail->getTotalGrossPlan();
-                $realAcumulated = $realAcumulated + $detail->getTotalGrossReal();
+                $planAcumulated = $planAcumulated + $detail->$totalNamePlan();
+                $realAcumulated = $realAcumulated + $detail->$totalNameReal();
             }
         }
         $percentage = 0;

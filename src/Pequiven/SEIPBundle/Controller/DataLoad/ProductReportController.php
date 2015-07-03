@@ -33,6 +33,23 @@ class ProductReportController extends SEIPController
         return $entity;
     }
     
+    public function showAction(Request $request) 
+    {
+        $periodService = $this->getPeriodService();
+        
+        $view = $this
+            ->view()
+            ->setTemplate($this->config->getTemplate('show.html'))
+            ->setTemplateVar($this->config->getResourceName())
+            ->setData([
+                $this->config->getResourceName() => $this->findOr404($request),
+                'isAllowPlanningReport' => $periodService->isAllowPlanningReport(),
+            ])
+        ;
+
+        return $this->handleView($view);
+    }
+    
     /**
      * Ejecuta el presupuesto de produccion bruta para calcular lo demas
      * @param Request $request
@@ -172,12 +189,13 @@ class ProductReportController extends SEIPController
                             $rawMaterialConsumptionPlanning->calculate();
                             $this->save($rawMaterialConsumptionPlanning);
                         }
-                    }
+                    }//Fin de calculo de materia prima
                     
                     if($dayInStop === true){
                         $propertyAccessor->setValue($productDetailDailyMonth, $propertyDayPlanProduction, 0);
                         continue;
                     }
+                    //Sete o actualiza el valor
                     $propertyAccessor->setValue($productDetailDailyMonth, $propertyDayPlanProduction, $value);
                 }
             }
@@ -196,6 +214,7 @@ class ProductReportController extends SEIPController
         $inventorys = $resource->getInventorySortByMonth();
         $unrealizedProductions = $resource->getUnrealizedProductionsSortByMonth();
         foreach ($months as $month => $label) {
+            //Si el inventario no esta lo agrega
             if(!isset($inventorys[$month])){
                 $inventory = new \Pequiven\SEIPBundle\Entity\DataLoad\Inventory\Inventory();
                 $inventory->setMonth($month);
@@ -203,6 +222,7 @@ class ProductReportController extends SEIPController
                 
                 $this->save($inventory,false);
             }
+            //Si la pnr no esta lo agrega
             if(!isset($unrealizedProductions[$month])){
                 $unrealizedProduction = new \Pequiven\SEIPBundle\Entity\DataLoad\Production\UnrealizedProduction();
                 $unrealizedProduction->setMonth($month);

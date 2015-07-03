@@ -56,17 +56,17 @@
     </fieldset>
     {% set hasPermission = is_granted("ROLE_SEIP_DATA_LOAD_CHANGE_DATE") %}
     <form action="{{ path('pequiven_report_template_load',{id: report_template.id}) }}" method="POST">
-        <input type="hidden" name="_method" value="PUT">
+        <input type="hidden" name="plant_report" value="{{ app.request.get("plant_report") }}">
         {{ form_errors(form) }}
         
         <div class="with-padding">
              <p class="inline-label"><label class="label">{{ "pequiven_seip.date_of_notification"|trans }}</label>
                  {% if hasPermission %}
-                     <a href="{{ path("pequiven_report_template_load",{id:report_template.id, dateNotification: (dateNotification|date_modify("-1 day")|date('d/m/Y'))}) }}" ><i class="fa fa-chevron-left fa-2x"></i></a>&nbsp;
+                     <a href="{{ path("pequiven_report_template_load",{id:report_template.id, dateNotification: (dateNotification|date_modify("-1 day")|date('d/m/Y')),plant_report: app.request.get("plant_report") } ) }}" ><i class="fa fa-chevron-left fa-2x"></i></a>&nbsp;
                  {% endif %}
                  <input type="text" id="dateNotification" name="dateNotification" class="input" value="{{ dateNotification|date('d/m/Y') }}" />&nbsp;
                  {% if hasPermission %}
-                     <a href="{{ path("pequiven_report_template_load",{id:report_template.id, dateNotification: (dateNotification|date_modify("+1 day")|date('d/m/Y'))}) }}" class="navigate-date"><i class="fa fa-chevron-right fa-2x"></i></a>
+                     <a href="{{ path("pequiven_report_template_load",{id:report_template.id, dateNotification: (dateNotification|date_modify("+1 day")|date('d/m/Y')),plant_report: app.request.get("plant_report") }) }}" class="navigate-date"><i class="fa fa-chevron-right fa-2x"></i></a>
                  {% endif %}
              </p>
          </div>
@@ -368,7 +368,7 @@
                      dateFormat: "dd/mm/yy"
                 }).on("change",function(){
                     var changeToDate = $(this).val();
-                    var url = Routing.generate("pequiven_report_template_load",{id: "{{ report_template.id }}" ,dateNotification:changeToDate });
+                    var url = Routing.generate("pequiven_report_template_load",{id: "{{ report_template.id }}" ,dateNotification:changeToDate,plant_report: "{{ app.request.get("plant_report") }}" });
                     window.location.href = url;
                 });
             {% endif %}
@@ -506,6 +506,9 @@
                     $(tr[3]).find('.btn-open-pnr').addClass("hidden");
                 }
                 if(isNaN(pnr)){
+                    pnr = 0;
+                }
+                if(pnr < 0){
                     pnr = 0;
                 }
                 $(tr[2]).html(myNumberFormat(percentaje));

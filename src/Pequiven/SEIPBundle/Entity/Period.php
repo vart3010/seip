@@ -220,7 +220,25 @@ class Period extends Base implements \Serializable
     
     //********************************************//
     
+    /**
+     * Fecha inicio de planificacion de reportes
+     * @var \DateTime
+     * @ORM\Column(name="dateStartPlanningReport", type="date", nullable=true)
+     */
+    private $dateStartPlanningReport;
     
+    /**
+     * Fecha fin de planificacion de reportes
+     * @var \DateTime
+     * @ORM\Column(name="dateEndPlanningReport", type="date", nullable=true)
+     */
+    private $dateEndPlanningReport;
+    
+    /**
+     * ¿Habilita la planificacion?
+     * @ORM\Column(name="isPlanningReportEnabled", type="boolean", nullable=true)
+     */
+    private $isPlanningReportEnabled = false;
 
     /**
      * Get id
@@ -857,6 +875,31 @@ class Period extends Base implements \Serializable
         $this->opened = $opened;
     }
     
+    function getDateStartPlanningReport() {
+        return $this->dateStartPlanningReport;
+    }
+
+    function getDateEndPlanningReport() {
+        return $this->dateEndPlanningReport;
+    }
+
+    function getIsPlanningReportEnabled() {
+        return $this->isPlanningReportEnabled;
+    }
+
+    function setDateStartPlanningReport(\DateTime $dateStartPlanningReport) {
+        $this->dateStartPlanningReport = $dateStartPlanningReport;
+    }
+
+    function setDateEndPlanningReport(\DateTime $dateEndPlanningReport) {
+        $this->dateEndPlanningReport = $dateEndPlanningReport;
+    }
+
+    function setIsPlanningReportEnabled($isPlanningReportEnabled) {
+        $this->isPlanningReportEnabled = $isPlanningReportEnabled;
+    }
+
+        
     public function __toString() {
         return $this->getDescription()?:'-';
     }
