@@ -25,10 +25,17 @@
                     {{ form_widget(form.dateReport) }}
                     {{ form_errors(form.dateReport) }}
                 </div>
+            </div>
+            <div class="columns">
                 <div class="six-columns">
                     {{ form_label(form.productsReport) }}&nbsp;
                     {{ form_widget(form.productsReport) }}
                     {{ form_errors(form.productsReport) }}
+                </div>
+                <div class="six-columns">
+                    {{ form_label(form.typeReport) }}&nbsp;
+                    {{ form_widget(form.typeReport) }}
+                    {{ form_errors(form.typeReport) }}
                 </div>
             </div>
             <div class="columns">
@@ -79,7 +86,7 @@
                     </thead>
                     <tbody>
                         {% for productReport in productsReport %}
-                            {% set summary = productReport.getSummaryDay(dateReport) %}
+                            {% set summary = productReport.getSummaryDay(dateReport,typeReport) %}
                             <tr>
                                 <th scope="col" style="width: 7%" class="header">{{ productReport.product|upper }}</th>
                                 <th scope="col" style="width: 7%" class="header">{{ summary['plan']|myNumberFormat }}</th>
@@ -110,7 +117,7 @@
                         </thead>
                         <tbody>
                             {% for productReport in productsReport %}
-                                {% set summary = productReport.getSummaryMonth(dateReport) %}
+                                {% set summary = productReport.getSummaryMonth(dateReport,typeReport) %}
                                 <tr>
                                     <th scope="col" style="width: 7%" class="header">{{ summary['plan_month']|myNumberFormat }}</th>
                                     <th scope="col" style="width: 7%" class="header">{{ summary['plan_acumulated']|myNumberFormat }}</th>
@@ -145,7 +152,7 @@
                      </thead>
                      <tbody>
                          {% for productReport in productsReport %}
-                             {% set summary = productReport.getSummaryYear(dateReport) %}
+                             {% set summary = productReport.getSummaryYear(dateReport,typeReport) %}
                              <tr>
                                  <th scope="col" style="width: 7%" class="header">{{ summary['plan_year']|myNumberFormat }}</th>
                                  <th scope="col" style="width: 7%" class="header">{{ summary['plan_acumulated']|myNumberFormat }}</th>
@@ -313,7 +320,7 @@
                    </thead>
                    <tbody>
                        {% for productReport in productsReport %}
-                           {% set summary = productReport.getSummaryDay(dateReport) %}
+                           {% set summary = productReport.getSummaryDay(dateReport,typeReport) %}
                            <tr>
                                <th scope="col" style="width: 20%" class="header">{{ productReport.product|upper }}</th>
                                <th scope="col" style="width: 80%" class="header">{{ (summary['observation'] is null ? ("pequiven_seip.comment_none"|trans):summary['observation']) |upper }}</th>

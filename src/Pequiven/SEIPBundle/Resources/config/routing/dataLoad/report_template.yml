@@ -18,14 +18,6 @@ pequiven_report_template_vizualice:
     options:
         expose: true
 
-pequiven_report_template_vizualice_export:
-    path: /export-vizualice
-    defaults:
-        _controller: pequiven.controller.report_template:exportVizualiceAction
-    methods: [POST]
-    options:
-        expose: true
-    
 pequiven_report_template_create:
     path: /create
     defaults:

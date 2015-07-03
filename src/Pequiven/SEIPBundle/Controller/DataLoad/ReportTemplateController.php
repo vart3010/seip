@@ -213,6 +213,15 @@ class ReportTemplateController extends SEIPController
                 'translation_domain' => 'PequivenSEIPBundle',
                 'data' => $defaultShow,
             ])
+            ->add('typeReport','choice',[
+                'choices' => [
+                    'Gross' => 'Bruta',
+                    'Net' => 'Neta',
+                ],
+                'data' => 'Gross',
+                'attr' => array('class' => 'select2 input-xlarge'),
+                'translation_domain' => 'PequivenSEIPBundle',
+            ])
             ->getForm();
         
         if($request->isMethod('POST') && $form->submit($request)->isValid()){
@@ -235,6 +244,11 @@ class ReportTemplateController extends SEIPController
             }
             
         }
+        $data = $form->getData();
+        $typeReport = $data['typeReport'];
+        if($typeReport === null){
+            $typeReport = 'Gross';
+        }
         $data = array(
             'dateReport' => $dateReport,
             'plantReports' => $plantReports,
@@ -243,6 +257,7 @@ class ReportTemplateController extends SEIPController
             'showDay' => $showDay,
             'showMonth' => $showMonth,
             'showYear' => $showYear,
+            'typeReport' => $typeReport,
         );
 
         $view = $this
@@ -299,10 +314,5 @@ class ReportTemplateController extends SEIPController
         }
         
         return $this->handleView($view);
-    }
-    
-    public function exportVizualiceAction(Request $request) 
-    {
-        
     }
 }
