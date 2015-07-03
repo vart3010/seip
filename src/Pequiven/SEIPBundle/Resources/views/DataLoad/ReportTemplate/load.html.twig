@@ -56,7 +56,7 @@
     </fieldset>
     {% set hasPermission = is_granted("ROLE_SEIP_DATA_LOAD_CHANGE_DATE") %}
     <form action="{{ path('pequiven_report_template_load',{id: report_template.id}) }}" method="POST">
-        <input type="hidden" name="_method" value="PUT">
+        <input type="hidden" name="plant_report" value="{{ app.request.get("plant_report") }}">
         {{ form_errors(form) }}
         
         <div class="with-padding">
