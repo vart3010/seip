@@ -824,7 +824,7 @@ class IndicatorService implements ContainerAwareInterface {
         $chart = array();
 
         $chart["caption"] = $indicator->getSummary();
-        $chart["subCaption"] = "Sales analysis of last year";
+//        $chart["subCaption"] = "Sales analysis of last year";
         $chart["xAxisname"] = "Month";
         $chart["yAxisName"] = "Amount (In USD)";
         $chart["numberPrefix"] = "$";
@@ -861,6 +861,11 @@ class IndicatorService implements ContainerAwareInterface {
         
         if(isset($options['byFrequencyNotification']) && array_key_exists('byFrequencyNotification', $options)){
             unset($options['byFrequencyNotification']);
+            
+            if($indicator->getDetails()){
+                $chart["yAxisName"] = $indicator->getDetails()->getResultManagementUnit();
+            }
+            
             $arrayVariables = array();
             if($indicator->getFormula()->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_FROM_EQ){
                 $arrayVariables = $this->getArrayVariablesFormulaWithData($indicator, array('viewVariablesRealPlanFromEquationByFrequencyNotification' => true));
@@ -886,6 +891,11 @@ class IndicatorService implements ContainerAwareInterface {
             }
         } elseif(isset($options['withVariablesMarkedRealPlanByFrequencyNotification']) && array_key_exists('withVariablesMarkedRealPlanByFrequencyNotification',$options)){
             unset($options['withVariablesMarkedRealPlanByFrequencyNotification']);
+            
+            if($indicator->getDetails()){
+                $chart["yAxisName"] = $indicator->getDetails()->getResultManagementUnit();
+            }
+            
             $arrayVariables = array();
             $arrayVariables = $this->getArrayVariablesFormulaWithData($indicator, array('withVariablesMarkedRealPlanByFrequencyNotification' => true));
          
@@ -934,7 +944,7 @@ class IndicatorService implements ContainerAwareInterface {
         $chart = array();
         
         $chart["caption"] = $indicator->getSummary();
-        $chart["subCaption"] = "Sales by quarter";
+//        $chart["subCaption"] = "Sales by quarter";
         $chart["xAxisName"] = "Indicador";
         $chart["yAxisName"] = "TM";
         $chart["paletteColors"] = "#0075c2,#1aaf5d,#f2c500";
@@ -969,6 +979,11 @@ class IndicatorService implements ContainerAwareInterface {
         
         if(isset($options['withVariablesMarkedRealPlanByFrequencyNotification']) && array_key_exists('withVariablesMarkedRealPlanByFrequencyNotification', $options)){
             unset($options['withVariablesMarkedRealPlanByFrequencyNotification']);
+            
+            if($indicator->getDetails()){
+                $chart["yAxisName"] = $indicator->getDetails()->getResultManagementUnit();
+            }
+            
             $arrayVariables = array();
             $arrayVariables = $this->getArrayVariablesFormulaWithData($indicator, array('withVariablesMarkedRealPlanByFrequencyNotificationColumnMultiSeries' => true));
          
