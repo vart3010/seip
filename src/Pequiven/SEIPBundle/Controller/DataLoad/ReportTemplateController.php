@@ -249,6 +249,7 @@ class ReportTemplateController extends SEIPController
         if($typeReport === null){
             $typeReport = 'Gross';
         }
+        $dateReport = $data['dateReport'];
         $data = array(
             'dateReport' => $dateReport,
             'plantReports' => $plantReports,
@@ -298,7 +299,7 @@ class ReportTemplateController extends SEIPController
             $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
 
             // set font
-            $pdf->SetFont('times', 'BI', 12);
+//            $pdf->SetFont('times', 'BI', 12);
 
             // add a page
             $pdf->AddPage();

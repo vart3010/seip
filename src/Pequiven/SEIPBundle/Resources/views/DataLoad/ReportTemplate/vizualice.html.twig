@@ -56,7 +56,7 @@
                 </div>
             </div>
             {{ form_rest(form) }}
-            <input type="submit" class="button" value="Refrescar" />
+            <a id="btnRefresh" href="#" class="button" >Refrescar</a>
          </div>
     </form>
      <div class="with-padding">
@@ -352,6 +352,11 @@
             $("#btnExportToPdf").on("click",function(e){
                 e.preventDefault();
                 $("#exportToPdf").val("1");
+                eventChange();
+            });
+            $("#btnRefresh").on("click",function(e){
+                e.preventDefault();
+                $("#exportToPdf").val("0");
                 eventChange();
             });
             
