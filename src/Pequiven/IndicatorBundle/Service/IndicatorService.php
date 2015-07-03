@@ -686,8 +686,8 @@ class IndicatorService implements ContainerAwareInterface {
                 $set = array();
                 $set["label"] = $arrayVariable['description'];
                 $set["value"] = $arrayVariable['value'];
-                $set["displayValue"] = number_format($arrayVariable['value'], 2, ',', '.').' '.$arrayVariable['unit'];
-                $set["toolText"] = number_format($arrayVariable['value'], 2, ',', '.') . 'Bs';
+                $set["displayValue"] = number_format($arrayVariable['value'], 2, ',', '.').' ' . $arrayVariable['unit'];
+                $set["toolText"] = number_format($arrayVariable['value'], 2, ',', '.') . ' ' . $arrayVariable['unit'];
 //                $set["color"] = $this->getColorOfResult($indicatorChildren);
 //                $set["labelLink"] = $this->generateUrl('pequiven_indicator_show', array('id' => $indicator->getId()));
 //                $set["link"] = $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicator->getId()));
@@ -758,7 +758,7 @@ class IndicatorService implements ContainerAwareInterface {
                 $set = array();
                 $set["label"] = $arrayVariable['description'];
                 $set["value"] = bcadd($arrayVariable['value'], 0, 2);
-                $set["displayValue"] = number_format($arrayVariable['value'], 2, ',', '.');
+                $set["displayValue"] = number_format($arrayVariable['value'], 2, ',', '.').' '.$arrayVariable['unit'];;
                 $dataChart[] = $set;
             }
         } elseif (isset($options['viewVariablesFromRealEquation']) && array_key_exists('viewVariablesFromRealEquation', $options)) {
@@ -768,7 +768,7 @@ class IndicatorService implements ContainerAwareInterface {
                 $set = array();
                 $set["label"] = $arrayVariable['description'];
                 $set["value"] = bcadd($arrayVariable['value'], 0, 2);
-                $set["displayValue"] = number_format($arrayVariable['value'], 2, ',', '.');
+                $set["displayValue"] = number_format($arrayVariable['value'], 2, ',', '.').' '.$arrayVariable['unit'];
                 $dataChart[] = $set;
             }
         } elseif(isset($options['viewVariablesMarkedReal']) && array_key_exists('viewVariablesMarkedReal', $options)){
@@ -1047,12 +1047,19 @@ class IndicatorService implements ContainerAwareInterface {
             }
         } elseif(isset($options['viewVariablesRealPlanAutomatic']) && array_key_exists('viewVariablesRealPlanAutomatic', $options)){
             unset($options['viewVariablesRealPlanAutomatic']);
-                $varReal = $formula->getVariableToRealValue();
-                $arrayVariables[$varReal->getName()]['value'] = $indicator->getValueFinal();
-                $arrayVariables[$varReal->getName()]['description'] = $varReal->getDescription();
-                $varPlan = $formula->getVariableToPlanValue();
-                $arrayVariables[$varPlan->getName()]['value'] = $indicator->getTotalPlan();
-                $arrayVariables[$varPlan->getName()]['description'] = $varPlan->getDescription();
+            $unit = '';
+            $varReal = $formula->getVariableToRealValue();
+            $arrayVariables[$varReal->getName()]['value'] = $indicator->getValueFinal();
+            $arrayVariables[$varReal->getName()]['description'] = $varReal->getDescription();
+            $arrayVariables[$varReal->getName()]['unit'] = '';
+            $varPlan = $formula->getVariableToPlanValue();
+            $arrayVariables[$varPlan->getName()]['value'] = $indicator->getTotalPlan();
+            $arrayVariables[$varPlan->getName()]['description'] = $varPlan->getDescription();
+            $arrayVariables[$varPlan->getName()]['unit'] = '';
+            if($indicator->getDetails()){
+                $arrayVariables[$varReal->getName()]['unit'] = $indicator->getDetails()->getResultRealUnit();
+                $arrayVariables[$varPlan->getName()]['unit'] = $indicator->getDetails()->getResultPlanUnit();
+            }
         } elseif(isset($options['viewVariablesRealPlanAutomaticByFrequencyNotification']) && array_key_exists('viewVariablesRealPlanAutomaticByFrequencyNotification', $options)){
             unset($options['viewVariablesRealPlanAutomaticByFrequencyNotification']);
             $varReal = $formula->getVariableToRealValue();
@@ -1175,6 +1182,7 @@ class IndicatorService implements ContainerAwareInterface {
                             $arrayVariables[$nameParameter]['value'] = $valueIndicator->getParameter($nameParameter);
                             $arrayVariables[$nameParameter]['description'] = $variable->getDescription();
                             $arrayVariables[$nameParameter]['summary'] = $variable->getSummary();
+                            $arrayVariables[$nameParameter]['unit'] = $variable->getUnitResultValue();
                         }
                     }
                 }
@@ -1189,6 +1197,7 @@ class IndicatorService implements ContainerAwareInterface {
                             $arrayVariables[$nameParameter]['value'] = $valueIndicator->getParameter($nameParameter);
                             $arrayVariables[$nameParameter]['description'] = $variable->getDescription();
                             $arrayVariables[$nameParameter]['summary'] = $variable->getSummary();
+                            $arrayVariables[$nameParameter]['unit'] = $variable->getUnitResultValue();
                         }
                     }
                 }
