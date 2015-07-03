@@ -141,6 +141,11 @@ class ReportTemplateController extends SEIPController
         return $this->handleView($view);
     }
     
+    /**
+     * Vizualizar la planificacion
+     * @param Request $request
+     * @return type
+     */
     public function vizualiceAction(Request $request)
     {
         $plantReportId = null;
@@ -229,7 +234,6 @@ class ReportTemplateController extends SEIPController
                     $plantReports = [$plantReport];
             }
             
-//            die;
         }
         $data = array(
             'dateReport' => $dateReport,
@@ -246,6 +250,59 @@ class ReportTemplateController extends SEIPController
                 ->setTemplate($this->config->getTemplate('vizualice.html'))
                 ;
         $view->setData($data);
+        
+        $exportToPdf = $request->get('exportToPdf',false);
+        if($exportToPdf == true){
+            $pdf = new \Pequiven\SEIPBundle\Model\PDF\SeipPdf('L', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+            $pdf->setContainer($this->container);
+            $pdf->setPeriod($this->getPeriodService()->getPeriodActive());
+            $pdf->setFooterText($this->trans('pequiven_seip.message_footer',array(), 'PequivenSEIPBundle'));
+
+            // set document information
+            $pdf->SetCreator(PDF_CREATOR);
+            $pdf->SetAuthor('SEIP');
+            $pdf->setTitle('Reporte del día');
+            $pdf->SetSubject('Resultados SEIP');
+            $pdf->SetKeywords('PDF, SEIP, Resultados');
+
+            $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+            $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+
+            // set default monospaced font
+            $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+
+            // set margins
+            $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+            $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+            $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+
+            // set auto page breaks
+            $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+
+            // set image scale factor
+            $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+
+            // set font
+            $pdf->SetFont('times', 'BI', 12);
+
+            // add a page
+            $pdf->AddPage();
+
+            // set some text to print
+            $html = $this->renderView('PequivenSEIPBundle:DataLoad/ReportTemplate:vizualice_data.html.twig',$data);
+
+            // print a block of text using Write()
+            $pdf->writeHTML($html, true, false, true, false, '');
+
+//            $pdf->Output('Reporte del dia'.'.pdf', 'I');
+            $pdf->Output('Reporte del dia'.'.pdf', 'D');
+        }
+        
         return $this->handleView($view);
+    }
+    
+    public function exportVizualiceAction(Request $request) 
+    {
+        
     }
 }
