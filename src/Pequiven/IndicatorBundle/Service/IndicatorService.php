@@ -1280,6 +1280,9 @@ class IndicatorService implements ContainerAwareInterface {
             unset($options['childrens']);
             if ($totalNumChildrens > 0) {//La info a mostrar es de los indicadores asociados
                 $indicatorsChildrens = $this->container->get('pequiven.repository.indicator')->findByParentAndOrderShow($indicator->getId()); //Obtenemos los indicadores asociados
+                if($indicator->getDetails()){
+                    $chart["pYAxisName"] = $indicator->getDetails()->getResultManagementUnit();
+                }
                 foreach ($indicatorsChildrens as $indicatorChildren) {
                     $label = $dataReal = $dataPlan = $dataMedition = array();
                     $label["label"] = $indicatorChildren->getSummary();

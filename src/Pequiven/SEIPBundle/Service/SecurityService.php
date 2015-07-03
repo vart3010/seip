@@ -284,7 +284,8 @@ class SecurityService implements ContainerAwareInterface
     {
         $valid = false;
         $user = $this->getUser();
-        $rol = $user->getLevelRealByGroup();
+//        $rol = $user->getLevelRealByGroup();
+        $rol = $user->getLevelAllByGroup();
         if($rol === Rol::ROLE_DIRECTIVE){
             $valid = true;
         }else{
