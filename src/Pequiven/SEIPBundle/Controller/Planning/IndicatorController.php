@@ -476,7 +476,7 @@ class IndicatorController extends ResourceController {
      * 
      * @param Request $request
      * @return type
-     */    
+     */
     public function getIsGrantEditButtonAction(Request $request) {
 
         $id = $request->get('id');
@@ -498,13 +498,28 @@ class IndicatorController extends ResourceController {
      */
     public function removeValuesAction(Request $request) {
         $resource = $this->findOr404($request);
+        $indicatorService = $indicatorService = $this->getIndicatorService();
 
         $em = $this->getDoctrine()->getManager();
+        $freq = $resource->getFrequencyNotificationIndicator()->getDays();
+        $cantResultados = $freq / 360;
+
+        $cont = 0;
+        $flag = false;
         foreach ($resource->getValuesIndicator() as $valueIndicator) {
-            $em->remove($valueIndicator);
+            $cont++;
+            if ($flag == false) {
+                $registro = $indicatorService->isGrantToEdit($resource, $cont);
+                if ($registro) {
+                    $flag = true;
+                    $em->remove($valueIndicator);
+                }
+            } else {
+                $em->remove($valueIndicator);
+            }
         }
         $em->flush();
-
+        
         return $this->redirectHandler->redirectTo($resource);
     }
 
