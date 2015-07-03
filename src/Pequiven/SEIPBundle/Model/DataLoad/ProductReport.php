@@ -368,7 +368,7 @@ abstract class ProductReport extends BaseModel implements ProductReportInterface
             'real_acumulated' => $realAcumulated,
             'percentage' => $percentage,
             'pnr' => $pnr,
-            'meta' => $pnr,
+            'meta' => 0,
         );
         return $total;
     }
