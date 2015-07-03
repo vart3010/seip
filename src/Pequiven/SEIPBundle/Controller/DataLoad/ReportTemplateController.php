@@ -275,14 +275,34 @@ class ReportTemplateController extends SEIPController
         
         $productsReport = new \Doctrine\Common\Collections\ArrayCollection();
         $consumerPlanningServices = new \Doctrine\Common\Collections\ArrayCollection();
-        
+        $productsReportByIdProduct = $consumerPlanningServicesByIdService = array();
         foreach ($plantReports as $plantReport) {
             foreach ($plantReport->getProductsReport() as $productReport) {
+                $product = $productReport->getProduct();
+                if(!isset($productsReportByIdProduct[$product->getId()])){
+                    $productsReportByIdProduct[$product->getId()] = array();
+                }
+                $productsReportByIdProduct[$product->getId()][] = $productReport;
+                
+            }
+            foreach ($plantReport->getConsumerPlanningServices() as $consumerPlanningService) {
+                $service = $consumerPlanningService->getService();
+                if(!isset($consumerPlanningServicesByIdService[$service->getId()])){
+                    $consumerPlanningServicesByIdService[$service->getId()] = array();
+                }
+                $consumerPlanningServicesByIdService[$service->getId()][] = $consumerPlanningService;
+                
+            }
+        }
+        foreach ($productsReportByIdProduct as $id => $groups) {
+            foreach ($groups as $productReport) {
                 if(!$productsReport->contains($productReport)){
                     $productsReport->add($productReport);
                 }
             }
-            foreach ($plantReport->getConsumerPlanningServices() as $consumerPlanningService) {
+        }
+        foreach ($consumerPlanningServicesByIdService as $id => $groups) {
+            foreach ($groups as $consumerPlanningService) {
                 if(!$consumerPlanningServices->contains($consumerPlanningService)){
                     $consumerPlanningServices->add($consumerPlanningService);
                 }

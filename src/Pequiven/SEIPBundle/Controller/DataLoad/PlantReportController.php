@@ -97,6 +97,7 @@ class PlantReportController extends SEIPController
             return $daysStopsArray;
         };
         
+        //Servicios
         foreach ($consumerPlanningServices as $consumerPlanningService) {
             $details = $consumerPlanningService->getDetails();
             $aliquot = $consumerPlanningService->getAliquot();
@@ -185,7 +186,34 @@ class PlantReportController extends SEIPController
                     }
 
                     $this->save($consumerPlanningService);
-            }
+                }else{
+                    //Actualizar valores
+                    $detail = $detailsByMonth[$month];
+                    for($day = 1; $day <= 31; $day++){
+                        $dayInt = (int)$day;
+                        $propertyPath = sprintf("day%sPlan",$dayInt);
+                        $propertyPathGross = sprintf("day%sGrossPlan",$dayInt);
+                        if(in_array($dayInt,$daysStopsArray)){
+                            $propertyAccessor->setValue($detail, $propertyPath, 0);
+                            continue;
+                        }
+
+                        $totalPlan = 0.0;
+                        //Recorremos los productos para calcular el plan del dia
+                        foreach ($productsReport as $productReport) {
+                            $productDetailDailyMonths = $productReport->getProductDetailDailyMonthsSortByMonth();
+                            if(isset($productDetailDailyMonths[$month])){
+                                $dayPlan = $propertyAccessor->getValue($productDetailDailyMonths[$month], $propertyPathGross);
+                                $totalPlan = $totalPlan + $dayPlan;
+                            }
+                        }
+                        $total = $aliquot * $totalPlan;
+                        $propertyAccessor->setValue($detail, $propertyPath, $total);
+                        $this->save($detail);
+                    }
+
+                    $this->save($consumerPlanningService);
+                }
             }
             //Validar los dias de paradas
             foreach ($resource->getPlantStopPlannings() as $plantStopPlanning)
