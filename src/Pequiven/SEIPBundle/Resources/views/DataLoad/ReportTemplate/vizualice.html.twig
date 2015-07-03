@@ -201,12 +201,12 @@
                                     {% endif %}
                                     
                                     <tr>
-                                        <th scope="col" style="width: 7%" class="header">{{ productReport.product|upper }}</th>
-                                        <th scope="col" style="width: 7%" class="header">{{ current_plan_month|myNumberFormat }}</th>
-                                        <th scope="col" style="width: 7%" class="header">{{ current_plan_acumulated|myNumberFormat }}</th>
-                                        <th scope="col" style="width: 7%" class=" header">{{ current_real_acumulated|myNumberFormat }}</th>
-                                        <th scope="col" style="width: 7%" class=" header">{{ current_percentage|myNumberFormat }}</th>
-                                        <th scope="col" style="width: 7%"class=" header">{{ current_pnr|myNumberFormat }}</th>
+                                        <th class="header">{{ productReport.product|upper }}</th>
+                                        <th class="header">{{ current_plan_month|myNumberFormat }}</th>
+                                        <th class="header">{{ current_plan_acumulated|myNumberFormat }}</th>
+                                        <th class=" header">{{ current_real_acumulated|myNumberFormat }}</th>
+                                        <th class=" header">{{ current_percentage|myNumberFormat }}</th>
+                                        <th class=" header">{{ current_pnr|myNumberFormat }}</th>
                                     </tr>
                                     {% set plan_month = 0 %}
                                     {% set plan_acumulated = 0 %}
@@ -351,15 +351,15 @@
                                 {% set current_total_month = current_total_month + total_month %}
                                 {% set current_total_year = current_total_year + total_year %}
                                 <tr>
-                                    <th scope="col" style="width: 7%" class="header">{{ consumerPlanningService.service|upper }}</th>
+                                    <th class="header">{{ consumerPlanningService.service|upper }}</th>
                                     {%  if showDay %}
-                                        <th scope="col" style="width: 7%" class="header">{{ current_total_day|myNumberFormat }}</th>
+                                        <th class="header">{{ current_total_day|myNumberFormat }}</th>
                                     {% endif %}
                                     {%  if showMonth %}
-                                        <th scope="col" style="width: 7%" class=" header">{{ current_total_month|myNumberFormat }}</th>
+                                        <th class=" header">{{ current_total_month|myNumberFormat }}</th>
                                     {% endif %}
                                     {%  if showYear %}
-                                        <th scope="col" style="width: 7%" class=" header">{{ current_total_year|myNumberFormat }}</th>
+                                        <th class=" header">{{ current_total_year|myNumberFormat }}</th>
                                     {% endif %}
                                 </tr>
                                 {% set total_day = 0 %}
@@ -428,15 +428,15 @@
                                 {% set current_total_year = current_total_year + total_year %}
                                 
                                 <tr>
-                                    <th scope="col" style="width: 7%" class="header">{{ productReport.product|upper }}</th>
+                                    <th class="header">{{ productReport.product|upper }}</th>
                                     {%  if showDay %}
-                                        <th scope="col" style="width: 7%" class="header">{{ current_total_day|myNumberFormat }}</th>
+                                        <th class="header">{{ current_total_day|myNumberFormat }}</th>
                                     {% endif %}
                                     {%  if showMonth %}
-                                        <th scope="col" style="width: 7%" class=" header">{{ current_total_month|myNumberFormat }}</th>
+                                        <th  class=" header">{{ current_total_month|myNumberFormat }}</th>
                                     {% endif %}
                                     {%  if showYear %}
-                                        <th scope="col" style="width: 7%" class=" header">{{ current_total_year|myNumberFormat }}</th>
+                                        <th  class=" header">{{ current_total_year|myNumberFormat }}</th>
                                     {% endif %}
                                 </tr>
                                 
@@ -505,15 +505,15 @@
                                 {% set current_total_year = current_total_year + total_year %}
                                 
                                 <tr>
-                                    <th scope="col" style="width: 7%" class="header">{{ productReport.product|upper }}</th>
+                                    <th  class="header">{{ productReport.product|upper }}</th>
                                     {%  if showDay %}
-                                        <th scope="col" style="width: 7%" class="header">{{ current_total_day|myNumberFormat }}</th>
+                                        <th  class="header">{{ current_total_day|myNumberFormat }}</th>
                                     {% endif %}
                                     {%  if showMonth %}
-                                        <th scope="col" style="width: 7%" class=" header">{{ current_total_month|myNumberFormat }}</th>
+                                        <th  class=" header">{{ current_total_month|myNumberFormat }}</th>
                                     {% endif %}
                                     {%  if showYear %}
-                                        <th scope="col" style="width: 7%" class=" header">{{ current_total_year|myNumberFormat }}</th>
+                                        <th  class=" header">{{ current_total_year|myNumberFormat }}</th>
                                     {% endif %}
                                 </tr>
                             {% endif %}
