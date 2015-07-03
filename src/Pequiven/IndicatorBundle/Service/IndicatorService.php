@@ -1303,6 +1303,9 @@ class IndicatorService implements ContainerAwareInterface {
             }
         } elseif(isset($options['withVariablesRealPLan']) && array_key_exists('withVariablesRealPLan', $options)) {//La info a mostrar es de los resultados propios en base al real o plan
             unset($options['withVariablesRealPLan']);
+            if($indicator->getDetails()){
+                $chart["pYAxisName"] = $indicator->getDetails()->getResultManagementUnit();
+            }
             $label = $dataReal = $dataPlan = $dataMedition = array();
             $label["label"] = $indicator->getSummary();
             $label["link"] = $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicator->getId()));
@@ -1318,6 +1321,9 @@ class IndicatorService implements ContainerAwareInterface {
             $medition["data"][] = $dataMedition;
         } elseif(isset($options['byFrequencyNotification']) && array_key_exists('byFrequencyNotification', $options)){
             unset($options['byFrequencyNotification']);
+            if($indicator->getDetails()){
+                $chart["pYAxisName"] = $indicator->getDetails()->getResultManagementUnit();
+            }
             $arrayVariables = array();
             if($indicator->getFormula()->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_FROM_EQ){
                 $arrayVariables = $this->getArrayVariablesFormulaWithData($indicator, array('viewVariablesRealPlanFromEquationByFrequencyNotification' => true));
