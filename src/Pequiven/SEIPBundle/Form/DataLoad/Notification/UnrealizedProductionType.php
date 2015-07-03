@@ -16,7 +16,15 @@ class UnrealizedProductionType extends BaseNotification
         $day = $this->getDayNotification();
         $paramateretsDays = $this->getParametersStandard();
         $builder
-            ->add(sprintf('day%s',$day),null,$paramateretsDays)
+            ->add(sprintf('day%s',$day),null,array(
+            'label_attr' => array('class' => 'label'),
+            "attr" => array("class" => "input input-mini",'min' => '0'),
+            'constraints' => array(
+                new \Symfony\Component\Validator\Constraints\Range(array(
+                    'min' => 0,
+                ))
+            ),
+            ))
             ->add(sprintf('day%sDetails',$day),new UnrealizedProductionDayType($this->dateNotification, $this->reportTemplate))
         ;
     }

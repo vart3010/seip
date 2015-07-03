@@ -33,9 +33,9 @@
                     {{ form_errors(form.productsReport) }}
                 </div>
                 <div class="six-columns">
-                    {{ form_label(form.typeReport) }}&nbsp;
-                    {{ form_widget(form.typeReport) }}
-                    {{ form_errors(form.typeReport) }}
+                    {{ form_label(form.reportTemplate) }}&nbsp;
+                    {{ form_widget(form.reportTemplate) }}
+                    {{ form_errors(form.reportTemplate) }}
                 </div>
             </div>
             <div class="columns">
@@ -54,20 +54,23 @@
                     {{ form_widget(form.showYear) }}
                     {{ form_errors(form.showYear) }}
                 </div>
+                <div class="six-columns">
+                    {{ form_label(form.typeReport) }}&nbsp;
+                    {{ form_widget(form.typeReport) }}
+                    {{ form_errors(form.typeReport) }}
+                </div>
             </div>
             {{ form_rest(form) }}
-            <input type="submit" class="button" value="Refrescar" />
+            <a id="btnRefresh" href="#" class="button" >Refrescar</a>
          </div>
     </form>
      <div class="with-padding">
-         {% for plantReport in plantReports %}
-     <div class="columns">
-         <div class="twelve-columns twelve-columns-mobile">
-             <h3 class="thin underline text-center">OPERACIÓN</h3>
+     {% if productsReport is not empty %}
+         <div class="columns">
+             <div class="twelve-columns twelve-columns-mobile">
+                 <h3 class="thin underline text-center">OPERACIÓN</h3>
+             </div>
          </div>
-     </div>
-     {% set productsReport = plantReport.productsReport %}
-     {% set consumerPlanningServices = plantReport.consumerPlanningServices %}
          <div class="columns">
              {% if showDay  %}
              <div class="six-columns twelve-columns-mobile">
@@ -85,15 +88,64 @@
                         </tr>
                     </thead>
                     <tbody>
+                        {% set plan = 0 %}
+                        {% set real = 0 %}
+                        {% set percentage = 0 %}
+                        {% set pnr = 0 %}
+                        
+                        {% set items = productsReport %}
+                        {% set previous_item = null %}
+                        {% set next_item = null %}
+                        
                         {% for productReport in productsReport %}
                             {% set summary = productReport.getSummaryDay(dateReport,typeReport) %}
-                            <tr>
-                                <th scope="col" style="width: 7%" class="header">{{ productReport.product|upper }}</th>
-                                <th scope="col" style="width: 7%" class="header">{{ summary['plan']|myNumberFormat }}</th>
-                                <th scope="col" style="width: 7%" class=" header">{{ summary['real']|myNumberFormat }}</th>
-                                <th scope="col" style="width: 7%" class=" header">{{ summary['percentage']|myNumberFormat }}</th>
-                                <th scope="col" width="15%" class=" header">{{ summary['pnr']|myNumberFormat }}</th>
-                            </tr>
+                            
+                            {% set current_plan = summary['plan'] %}
+                            {% set current_real = summary['real'] %}
+                            {% set current_percentage = summary['percentage'] %}
+                            {% set current_pnr = summary['pnr'] %}
+                            
+                            {% set is_next_equals = false %}
+                            {% if loop.length > 1 %}
+                                {% if loop.first == false %}
+                                  {% set previous_item = items[loop.index0 - 1] %}
+                                {% endif %}
+                                {% if loop.last == false %}
+                                  {% set next_item = items[loop.index0 + 1] %}
+                                {% endif %}
+                            {% endif %}
+                            
+                            {% if next_item %}
+                                {% if productReport.product == next_item.product %}
+                                    {% set is_next_equals = true %}
+                                    {% set next_summary = next_item.getSummaryDay(dateReport,typeReport) %}
+                                    
+                                    {% set plan = plan + next_summary['plan'] + current_plan %}
+                                    {% set real = real + next_summary['real'] + current_real %}
+                                    {% set percentage = percentage + next_summary['percentage'] + current_percentage %}
+                                    {% set pnr = pnr + next_summary['pnr'] + current_pnr%}
+                                    
+                                    {% set current_plan = plan %}
+                                    {% set current_real = real %}
+                                    {% set current_percentage = percentage %}
+                                    {% set current_pnr = pnr %}
+                                    
+                                {% endif %}
+                            {% endif  %}
+                            {% if is_next_equals == false %}
+                                <tr>
+                                    <th scope="col" style="width: 7%" class="header">{{ productReport.product|upper }}</th>
+                                    <th scope="col" style="width: 7%" class="header">{{ current_plan|myNumberFormat }}</th>
+                                    <th scope="col" style="width: 7%" class=" header">{{ current_real|myNumberFormat }}</th>
+                                    <th scope="col" style="width: 7%" class=" header">{{ current_percentage|myNumberFormat }}</th>
+                                    <th scope="col" width="15%" class=" header">{{ current_pnr|myNumberFormat }}</th>
+                                </tr>
+                                
+                                {% set plan = 0 %}
+                                {% set real = 0 %}
+                                {% set percentage = 0 %}
+                                {% set pnr = 0 %}
+                            {% endif %}
                         {% endfor %}
                     </tbody>
                 </table>
@@ -107,24 +159,24 @@
                                 <th class="header text-center white-gradient" colspan="6">MES</th>
                             </tr>
                             <tr>
+                                <th scope="col" style="width: 7%" class="header">PRODUCTO</th>
                                 <th scope="col" style="width: 7%" class="header">PPTO-MES</th>
                                 <th scope="col" style="width: 7%" class="header">PPTO-ACUM</th>
                                 <th scope="col" style="width: 7%" class="header">REAL-ACUM</th>
                                 <th scope="col" style="width: 7%" class=" header">EJEC&nbsp;(%)</th>
                                 <th scope="col" style="width: 7%" class=" header">VAR</th>
-                                <th scope="col" width="15%" class=" header">META</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for productReport in productsReport %}
                                 {% set summary = productReport.getSummaryMonth(dateReport,typeReport) %}
                                 <tr>
+                                    <th scope="col" style="width: 7%" class="header">{{ productReport.product|upper }}</th>
                                     <th scope="col" style="width: 7%" class="header">{{ summary['plan_month']|myNumberFormat }}</th>
                                     <th scope="col" style="width: 7%" class="header">{{ summary['plan_acumulated']|myNumberFormat }}</th>
                                     <th scope="col" style="width: 7%" class=" header">{{ summary['real_acumulated']|myNumberFormat }}</th>
                                     <th scope="col" style="width: 7%" class=" header">{{ summary['percentage']|myNumberFormat }}</th>
                                     <th scope="col" style="width: 7%"class=" header">{{ summary['pnr']|myNumberFormat }}</th>
-                                    <th scope="col" style="width: 7%" class=" header">TODO</th>
                                 </tr>
                             {% endfor %}
                         </tbody>
@@ -141,26 +193,24 @@
                              <th class="header text-center white-gradient" colspan="7">AÑO</th>
                          </tr>
                          <tr>
+                             <th scope="col" style="width: 7%" class="header">PRODUCTO</th>
                              <th scope="col" style="width: 7%" class="header">PPTO-AÑO</th>
                              <th scope="col" style="width: 7%" class="header">PPTO-ACUM</th>
                              <th scope="col" style="width: 7%" class="header">REAL-ACUM</th>
                              <th scope="col" style="width: 7%" class=" header">EJEC&nbsp;(%)</th>
                              <th scope="col" style="width: 7%" class=" header">VAR</th>
-                             <th scope="col" style="width: 7%" class=" header">META</th>
-                             <th scope="col" style="width: 7%" class=" header">PROM</th>
                          </tr>
                      </thead>
                      <tbody>
                          {% for productReport in productsReport %}
                              {% set summary = productReport.getSummaryYear(dateReport,typeReport) %}
                              <tr>
+                                 <th scope="col" style="width: 7%" class="header">{{ productReport.product|upper }}</th>
                                  <th scope="col" style="width: 7%" class="header">{{ summary['plan_year']|myNumberFormat }}</th>
                                  <th scope="col" style="width: 7%" class="header">{{ summary['plan_acumulated']|myNumberFormat }}</th>
                                  <th scope="col" style="width: 7%" class=" header">{{ summary['real_acumulated']|myNumberFormat }}</th>
                                  <th scope="col" style="width: 7%" class=" header">{{ summary['percentage']|myNumberFormat }}</th>
                                  <th scope="col" style="width: 7%"class=" header">{{ summary['pnr']|myNumberFormat }}</th>
-                                 <th scope="col" style="width: 7%" class=" header">TODO</th>
-                                 <th scope="col" style="width: 7%" class=" header">TODO</th>
                              </tr>
                          {% endfor %}
                      </tbody>
@@ -194,20 +244,62 @@
                         </tr>
                     </thead>
                     <tbody>
+                        {% set total_day = 0 %}
+                        {% set total_month = 0 %}
+                        {% set total_year = 0 %}
+                        
+                        {% set items = consumerPlanningServices %}
+                        {% set previous_item = null %}
+                        {% set next_item = null %}
+                        
                         {% for consumerPlanningService in consumerPlanningServices %}
                             {% set summary = consumerPlanningService.getSummary(dateReport) %}
-                            <tr>
-                                <th scope="col" style="width: 7%" class="header">{{ consumerPlanningService.service|upper }}</th>
-                                {%  if showDay %}
-                                    <th scope="col" style="width: 7%" class="header">{{ summary['total_day']|myNumberFormat }}</th>
+                            
+                            {% set current_total_day = summary['total_day'] %}
+                            {% set current_total_month = summary['total_month'] %}
+                            {% set current_total_year = summary['total_year'] %}
+                            
+                            {% set is_next_equals = false %}
+                            {% if loop.length > 1 %}
+                                {% if loop.first == false %}
+                                  {% set previous_item = items[loop.index0 - 1] %}
                                 {% endif %}
-                                {%  if showMonth %}
-                                    <th scope="col" style="width: 7%" class=" header">{{ summary['total_month']|myNumberFormat }}</th>
+                                {% if loop.last == false %}
+                                  {% set next_item = items[loop.index0 + 1] %}
                                 {% endif %}
-                                {%  if showYear %}
-                                    <th scope="col" style="width: 7%" class=" header">{{ summary['total_year']|myNumberFormat }}</th>
+                            {% endif %}
+                            
+                            {% if next_item %}
+                                {% if consumerPlanningService.service == next_item.service %}
+                                    {% set is_next_equals = true %}
+                                    
+                                    {% set total_day = total_day + summary['total_day'] %}
+                                    {% set total_month = total_month + summary['total_month'] %}
+                                    {% set total_year = total_year + summary['total_year'] %}
+                                    
+                                    {% set current_total_day = total_day %}
+                                    {% set current_total_month = total_month %}
+                                    {% set current_total_year = total_year %}
                                 {% endif %}
-                            </tr>
+                            {% endif  %}
+                            
+                            {% if is_next_equals == false %}
+                                <tr>
+                                    <th scope="col" style="width: 7%" class="header">{{ consumerPlanningService.service|upper }}</th>
+                                    {%  if showDay %}
+                                        <th scope="col" style="width: 7%" class="header">{{ current_total_day|myNumberFormat }}</th>
+                                    {% endif %}
+                                    {%  if showMonth %}
+                                        <th scope="col" style="width: 7%" class=" header">{{ current_total_month|myNumberFormat }}</th>
+                                    {% endif %}
+                                    {%  if showYear %}
+                                        <th scope="col" style="width: 7%" class=" header">{{ current_total_year|myNumberFormat }}</th>
+                                    {% endif %}
+                                </tr>
+                                {% set total_day = 0 %}
+                                {% set total_month = 0 %}
+                                {% set total_year = 0 %}
+                            {% endif %}
                         {% else %}
                             <tr>
                                 <td colspan="4" class="empty_row">{{ "No service planning"|trans }}</td>
@@ -340,7 +432,7 @@
         </p>
  {% else %}
      <h2 class="text-center">{{ "Select the plant"|trans }}</h2>
- {% endfor %}
+ {% endif %}
      </div>
              
 {% endblock body %}
@@ -352,6 +444,11 @@
             $("#btnExportToPdf").on("click",function(e){
                 e.preventDefault();
                 $("#exportToPdf").val("1");
+                eventChange();
+            });
+            $("#btnRefresh").on("click",function(e){
+                e.preventDefault();
+                $("#exportToPdf").val("0");
                 eventChange();
             });
             
