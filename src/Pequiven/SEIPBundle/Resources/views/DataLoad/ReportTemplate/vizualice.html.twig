@@ -324,6 +324,10 @@
                         {% set total_month = 0 %}
                         {% set total_year = 0 %}
                         
+                        {% set summary_total_day = 0 %}
+                        {% set summary_total_month = 0 %}
+                        {% set summary_total_year = 0 %}
+                        
                         {% set items = consumerPlanningServices %}
                         
                         {% for consumerPlanningService in consumerPlanningServices %}
@@ -365,7 +369,19 @@
                                 {% set total_day = 0 %}
                                 {% set total_month = 0 %}
                                 {% set total_year = 0 %}
+                                
+                                {% set summary_total_day = summary_total_day + current_total_day %}
+                                {% set summary_total_month = summary_total_month + current_total_month %}
+                                {% set summary_total_year = summary_total_year + current_total_year %}
                             {% endif %}
+                            {% if loop.last %}
+                                <tr>
+                                    <td>TOTALES</td>
+                                    <td>{{ summary_total_day|myNumberFormat }}</td>
+                                    <td>{{ summary_total_month|myNumberFormat }}</td>
+                                    <td>{{ summary_total_year|myNumberFormat }}</td>
+                                </tr>
+                            {% endif  %}
                         {% else %}
                             <tr>
                                 <td colspan="4" class="empty_row">{{ "No service planning"|trans }}</td>
