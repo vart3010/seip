@@ -382,6 +382,11 @@ abstract class ProductReport extends BaseModel implements ProductReportInterface
         return $total;
     }
     
+    /**
+     * Retorna el resumen de la pnr
+     * @param \DateTime $date
+     * @return type
+     */
     public function getSummaryUnrealizedProductions(\DateTime $date) 
     {
         $month = (int)$date->format("m");
@@ -412,6 +417,11 @@ abstract class ProductReport extends BaseModel implements ProductReportInterface
         return $total;
     }
     
+    /**
+     * Retorna el resumen del inventario
+     * @param \DateTime $date
+     * @return type
+     */
     public function getSummaryInventory(\DateTime $date) 
     {
         $month = (int)$date->format("m");

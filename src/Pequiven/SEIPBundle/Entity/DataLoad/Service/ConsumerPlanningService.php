@@ -239,6 +239,11 @@ class ConsumerPlanningService extends BaseModel
         return $total;
     }
     
+    /**
+     * Retorna el resumen
+     * @param \DateTime $date
+     * @return type
+     */
     public function getSummary(\DateTime $date)
     {
         $month = (int)$date->format("m");

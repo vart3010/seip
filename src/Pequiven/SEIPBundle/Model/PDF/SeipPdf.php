@@ -23,7 +23,8 @@ class SeipPdf extends TCPDF implements ContainerAwareInterface{
     
     protected $footerText;
     
-    
+    private $printLineFooter = true;
+
     //Header del documento pdf de resultados
     public function Header() {
         // Logo SEIP
@@ -57,7 +58,9 @@ class SeipPdf extends TCPDF implements ContainerAwareInterface{
         
         //Línea HR
         $lineRed = array('width' => 1.0, 'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(255, 0, 0));
-        $this->Line(0, 190, 300, 190, $lineRed);
+        if($this->printLineFooter === true){
+            $this->Line(0, 190, 300, 190, $lineRed);
+        }
 
     }
     
@@ -101,5 +104,9 @@ class SeipPdf extends TCPDF implements ContainerAwareInterface{
     public function setContainer(ContainerInterface $container = null) {
         $this->container = $container
         ;
+    }
+    
+    function setPrintLineFooter($printLineFooter) {
+        $this->printLineFooter = $printLineFooter;
     }
 }

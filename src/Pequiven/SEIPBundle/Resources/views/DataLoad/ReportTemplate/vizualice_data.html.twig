@@ -249,7 +249,89 @@
                  <table class="simple-table responsive-table responsive-table-on">
                     <thead>
                         <tr>
-                            <th class="text-center white-gradient" colspan="5">CONSUMO DE MATERIA PRIMA</th>
+                            <th class="header text-center white-gradient" colspan="5">CONSUMO DE MATERIA PRIMA</th>
+                        </tr>
+                        <tr>
+                            <th style="width: 30%" class="header">PRODUCTO</th>
+                            {%  if showDay %}
+                                <th style="width: 23%" class="header">DÍA</th>
+                            {% endif %}
+                            {%  if showMonth %}
+                                <th style="width: 23%" class=" header">MES</th>
+                            {% endif %}
+                            {%  if showYear %}
+                                <th style="width: 23%" class=" header">AÑO</th>
+                            {% endif %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% set total_day = 0 %}
+                        {% set total_month = 0 %}
+                        {% set total_year = 0 %}
+                        
+                        {% set summary_total_day = 0 %}
+                        {% set summary_total_month = 0 %}
+                        {% set summary_total_year = 0 %}
+                        
+                        {% set items = rawMaterialConsumptionPlannings %}
+                        
+                        {% for rawMaterialConsumptionPlanning in rawMaterialConsumptionPlannings %}
+                            {% set summary = rawMaterialConsumptionPlanning.getSummary(dateReport) %}
+                            
+                            {% set current_total_day = summary['total_day'] %}
+                            {% set current_total_month = summary['total_month'] %}
+                            {% set current_total_year = summary['total_year'] %}
+                            
+                            {% set is_next_equals = false %}
+                            {% set next_item = get_next_item(loop,items) %}
+                            
+                            {% if next_item %}
+                                {% if rawMaterialConsumptionPlanning.product == next_item.product %}
+                                    {% set is_next_equals = true %}
+                                {% endif %}
+                            {% endif  %}
+                            
+                            {% if is_next_equals == true %}
+                                {% set total_day = total_day + summary['total_day'] %}
+                                {% set total_month = total_month + summary['total_month'] %}
+                                {% set total_year = total_year + summary['total_year'] %}
+                            {% else %}
+                                {% set current_total_day = current_total_day + total_day %}
+                                {% set current_total_month = current_total_month + total_month %}
+                                {% set current_total_year = current_total_year + total_year %}
+                                <tr>
+                                    <th style="width: 30%" class="header">{{ rawMaterialConsumptionPlanning.product|upper }}</th>
+                                    {%  if showDay %}
+                                        <th style="width: 23%" class="header">{{ current_total_day|myNumberFormat }}</th>
+                                    {% endif %}
+                                    {%  if showMonth %}
+                                        <th style="width: 23%" class=" header">{{ current_total_month|myNumberFormat }}</th>
+                                    {% endif %}
+                                    {%  if showYear %}
+                                        <th style="width: 23%" class=" header">{{ current_total_year|myNumberFormat }}</th>
+                                    {% endif %}
+                                </tr>
+                                {% set total_day = 0 %}
+                                {% set total_month = 0 %}
+                                {% set total_year = 0 %}
+                                
+                                {% set summary_total_day = summary_total_day + current_total_day %}
+                                {% set summary_total_month = summary_total_month + current_total_month %}
+                                {% set summary_total_year = summary_total_year + current_total_year %}
+                            {% endif %}
+                        {% else %}
+                            <tr>
+                                <td colspan="4" class="empty_row">{{ "No raw material planning"|trans }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+             </div>
+             <div class="twelve-columns-mobile">
+                 <table class="simple-table responsive-table responsive-table-on">
+                    <thead>
+                        <tr>
+                            <th class="text-center white-gradient" colspan="5">CONSUMO DE SERVICIOS</th>
                         </tr>
                         <tr class="header-tr">
                             <th  style="width: 30%" class="header">PRODUCTO</th>
