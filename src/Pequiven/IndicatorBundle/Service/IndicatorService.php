@@ -1224,6 +1224,12 @@ class IndicatorService implements ContainerAwareInterface {
         return $arrayVariables;
     }
 
+    /**
+     * Función que retorna el valor acumulado de una variable, de acuerdo a las notificaciones qiue tenga el indicador
+     * @param Indicator $indicator
+     * @param \Pequiven\MasterBundle\Entity\Formula\Variable $variable
+     * @return type
+     */
     public function getValueOfVariableFromValueIndicator(Indicator $indicator, \Pequiven\MasterBundle\Entity\Formula\Variable $variable) {
         $valueVariable = 0.0;
         $valuesIndicator = $indicator->getValuesIndicator();
@@ -1383,7 +1389,7 @@ class IndicatorService implements ContainerAwareInterface {
     }
     
     /**
-     * 
+     * Función que retorna las etiquetas de los rangos de la frecuencia de notificación del indicador
      * @param Indicator $indicator
      * @return array
      */

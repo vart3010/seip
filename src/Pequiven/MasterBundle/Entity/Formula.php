@@ -138,6 +138,22 @@ class Formula extends modelFormula implements \Pequiven\SEIPBundle\Entity\Period
      */
     private $sourceEquationPlan;
     
+    /**
+     * Ecuacion para calcular el valor real a mostrar en los gráficos tipo dona, r/p por frecuencia de notificación (Se pueden usar las variables de la formula)
+     * 
+     * @var string
+     * @ORM\Column(name="dashboardEquationReal", type="text",nullable=true)
+     */
+    private $dashboardEquationReal;
+    
+    /**
+     * Ecuacion para calcular el valor plan a mostrar en los gráficos tipo dona, r/p por frecuencia de notificación (Se pueden usar las variables de la formula)
+     * 
+     * @var string
+     * @ORM\Column(name="dashboardEquationPlan", type="text",nullable=true)
+     */
+    private $dashboardEquationPlan;
+    
      /**
      * Periodo.
      * 
@@ -560,5 +576,51 @@ class Formula extends modelFormula implements \Pequiven\SEIPBundle\Entity\Period
     public function getIndicators()
     {
         return $this->indicators;
+    }
+    
+    /**
+     * Set dashboardEquationReal
+     *
+     * @param text $dashboardEquationReal
+     * @return Formula
+     */
+    public function setDashboardEquationReal($dashboardEquationReal)
+    {
+        $this->dashboardEquationReal = $dashboardEquationReal;
+
+        return $this;
+    }
+
+    /**
+     * Get dashboardEquationReal
+     *
+     * @return text
+     */
+    public function getDashboardEquationReal()
+    {
+        return $this->dashboardEquationReal;
+    }
+    
+    /**
+     * Set dashboardEquationPlan
+     *
+     * @param text $dashboardEquationPlan
+     * @return Formula
+     */
+    public function setDashboardEquationPlan($dashboardEquationPlan)
+    {
+        $this->dashboardEquationPlan = $dashboardEquationPlan;
+
+        return $this;
+    }
+
+    /**
+     * Get dashboardEquationPlan
+     *
+     * @return text
+     */
+    public function getDashboardEquationPlan()
+    {
+        return $this->dashboardEquationPlan;
     }
 }
