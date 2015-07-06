@@ -427,12 +427,10 @@ abstract class ProductReport extends BaseModel implements ProductReportInterface
         $month = (int)$date->format("m");
         $day = (int)$date->format("d");
         
-        $totalDay = $totalMonth = $totalYear = 0.0;
+        $totalDay = $totalMonth = 0.0;
         
         $inventorys = $this->getInventorySortByMonth();
         foreach ($inventorys as $monthDetail => $detail) {
-            $totalYear = $detail->getTotalInventory();
-            
             if($monthDetail > $month){
                 break;
             }
@@ -447,7 +445,6 @@ abstract class ProductReport extends BaseModel implements ProductReportInterface
         $total = array(
             'total_day' => $totalDay,
             'total_month' => $totalMonth,
-            'total_year' => $totalYear,
         );
         return $total;
     }
