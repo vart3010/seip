@@ -1066,6 +1066,12 @@ abstract class DetailValue extends BaseModel
         return $real;
     }
     
+    /**
+     * Retorna el dia actual o total
+     * @staticvar type $day
+     * @staticvar type $currentMonth
+     * @return type
+     */
     public function getTotalInventory() 
     {
         static $day = null;

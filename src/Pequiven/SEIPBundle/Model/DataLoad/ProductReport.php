@@ -382,6 +382,11 @@ abstract class ProductReport extends BaseModel implements ProductReportInterface
         return $total;
     }
     
+    /**
+     * Retorna el resumen de la pnr
+     * @param \DateTime $date
+     * @return type
+     */
     public function getSummaryUnrealizedProductions(\DateTime $date) 
     {
         $month = (int)$date->format("m");
@@ -412,17 +417,20 @@ abstract class ProductReport extends BaseModel implements ProductReportInterface
         return $total;
     }
     
+    /**
+     * Retorna el resumen del inventario
+     * @param \DateTime $date
+     * @return type
+     */
     public function getSummaryInventory(\DateTime $date) 
     {
         $month = (int)$date->format("m");
         $day = (int)$date->format("d");
         
-        $totalDay = $totalMonth = $totalYear = 0.0;
+        $totalDay = $totalMonth = 0.0;
         
         $inventorys = $this->getInventorySortByMonth();
         foreach ($inventorys as $monthDetail => $detail) {
-            $totalYear = $detail->getTotalInventory();
-            
             if($monthDetail > $month){
                 break;
             }
@@ -437,7 +445,6 @@ abstract class ProductReport extends BaseModel implements ProductReportInterface
         $total = array(
             'total_day' => $totalDay,
             'total_month' => $totalMonth,
-            'total_year' => $totalYear,
         );
         return $total;
     }

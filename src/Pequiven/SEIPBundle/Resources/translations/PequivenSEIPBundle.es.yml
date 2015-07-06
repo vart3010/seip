@@ -579,7 +579,7 @@ nro: "#"
 "Product report": Reporte de producto
 "Month budget": Presupuesto del mes
 "Entity": Entidad
-"Report template": Plantilla del complejo
+"Report template": Reporte del complejo
 "Plant report": Reporte de planta
 "Day stops": Dias de parada
 "Services": Servicios
@@ -612,3 +612,4 @@ Unit: Unidad
 'Show year': Mostrar año
 'Products report': Productos de la planta
 'Date report': Fecha de reporte
+'No raw material planning': 'No hay consumo de materia prima.'

@@ -60,8 +60,37 @@ abstract class RawMaterialConsumptionPlanning extends BaseModel
         return $result;
     }
     
-    public function getTotalToDay()
+    /**
+     * Retorna un resumen
+     * @param \DateTime $date
+     * @return type
+     */
+    public function getSummary(\DateTime $date)
     {
+        $month = (int)$date->format("m");
+        $day = (int)$date->format("d");
         
+        $totalDay = $totalMonth = $totalYear = 0.0;
+        $details = $this->getDetailByMonth();
+        foreach ($details as $monthDetail => $detail) {
+                $totalYear = $totalYear + $detail->getTotalReal();
+                
+                if($monthDetail > $month){
+                    break;
+                }
+
+                if($month == $monthDetail){
+                    $totalDayName = 'getDay'.$day.'Real';
+                    $totalDay = $detail->$totalDayName();
+                    $totalMonth = $totalMonth + $detail->getTotalReal();
+                }
+        }
+        
+        $total = array(
+            'total_day' => $totalDay,
+            'total_month' => $totalMonth,
+            'total_year' => $totalYear,
+        );
+        return $total;
     }
 }
