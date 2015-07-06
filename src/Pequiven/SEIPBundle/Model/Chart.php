@@ -21,52 +21,52 @@ abstract class Chart
     /**
      * Gráfico tipo barras vertical para mostrar el real/plan de los indicadores asociados respecto al eje izquierdo y el resultado de la medición en valor porcentual respecto al lado derecho de los indicadores hijos
      */
-    const TYPE_CHART_COLUMN_REAL_PLAN_INDICATORS_ASSOCIATED = 1; //ACTIVO Y USADO
+    const TYPE_CHART_COLUMN_REAL_PLAN_INDICATORS_ASSOCIATED = 1;
     
     /**
      * Gráfico tipo dona para mostrar las variables de la fórmula del indicador.
      */
-    const TYPE_CHART_VARIABLES_REAL_PLAN_DOUGHNUT = 2; //ACTIVO Y USADO
+    const TYPE_CHART_VARIABLES_REAL_PLAN_DOUGHNUT = 2;
     
     /**
      * Gráfico para mostrar las variables de un indicador que esten marcadas como "real"
      */
-    const TYPE_CHART_PIE_VARIABLES_MARKED_REAL = 3; //ACTIVO Y USADO
+    const TYPE_CHART_PIE_VARIABLES_MARKED_REAL = 3;
     
     /**
      * Gráfico tipo barras vertical para mostrar el real/plan en el eje izquierdo y el resultado de la medición en el eje derecho del indicador.
      */
-    const TYPE_CHART_COLUMN_VARIABLES_REAL_PLAN = 4; //ACTIVO Y USADO
+    const TYPE_CHART_COLUMN_VARIABLES_REAL_PLAN = 4;
     
     /**
      * Gráfico para mostrar las variables de un indicador que esten marcadas como "plan"
      */
-    const TYPE_CHART_PIE_VARIABLES_MARKED_PLAN = 5; //ACTIVO Y USADO
+    const TYPE_CHART_PIE_VARIABLES_MARKED_PLAN = 5;
     
     /**
      * Gráfico tipo barra vertical/área para mostrar el real/plan de acuerdo a la frecuencia de notificación
      */
-    const TYPE_CHART_BARS_AREA_VARIABLES_REAL_PLAN_BY_FREQUENCY_NOTIFICATION = 6; //ACTIVO Y USADO
+    const TYPE_CHART_BARS_AREA_VARIABLES_REAL_PLAN_BY_FREQUENCY_NOTIFICATION = 6;
     
     /**
      * Gráfico para mostrar las variables (sumativas al plan) de un indicador con fórmula a partir de ecuación
      */
-    const TYPE_CHART_PIE_VARIABLES_PLAN_FROM_EQUATION = 7; //ACTIVO Y USADO
+    const TYPE_CHART_PIE_VARIABLES_PLAN_FROM_EQUATION = 7;
     
     /**
      * Gráfico para mostrar las variables (sumativas al real) de un indicador con fórmula a partir de ecuación
      */
-    const TYPE_CHART_PIE_VARIABLES_REAL_FROM_EQUATION = 8; //ACTIVO Y USADO
+    const TYPE_CHART_PIE_VARIABLES_REAL_FROM_EQUATION = 8;
     
     /**
      * Gráfico tipo barras vertical para mostrar el real/plan de los resultados respecto al eje izquierdo y el resultado de la medición en valor porcentual respecto al lado derecho, de acuerdo a la frecuencia de notificación
      */
-    const TYPE_CHART_COLUMN_REAL_PLAN_BY_FREQUENCY_NOTIFICATION = 9; // ACTIVO Y USADO
+    const TYPE_CHART_COLUMN_REAL_PLAN_BY_FREQUENCY_NOTIFICATION = 9;
     
     /**
      * Gráfico tipo barra vertical/área para mostrar las variables marcadas como real en área y plan como barra, de acuerdo a la frecuencia de notificación.
      */
-    const TYPE_CHART_BARS_AREA_VARIABLES_MARKED_REAL_PLAN_BY_FREQUENCY_NOTIFICATION = 10; // NO USADO
+    const TYPE_CHART_BARS_AREA_VARIABLES_MARKED_REAL_PLAN_BY_FREQUENCY_NOTIFICATION = 10;
     
     /**
      * Gráfico tipo columna 3d para mostrar las variables marcadas como real/plan de la fórmula del indicador respecto al eje izquierdo, de acuerdo a la frecuencia de notificación
@@ -76,7 +76,12 @@ abstract class Chart
     /**
      * Gráfico tipo dona para mostrar el resultado real/plan a partir de la ecuación para gráficos de la fórmula del indicador.
      */
-    const TYPE_CHART_VARIABLES_REAL_PLAN_FROM_DASHBOARD_EQUATION_DOUGHNUT = 12; //ACTIVO Y USADO
+    const TYPE_CHART_VARIABLES_REAL_PLAN_FROM_DASHBOARD_EQUATION_DOUGHNUT = 12;
+    
+    /**
+     * Gráfico tipo columna 3d para mostrar el resultado real/plan de la ecuación para gráficos de la fórmula del indicador respecto al eje izquierdo, de cada indicador asociado
+     */
+    const TYPE_CHART_COLUMN_REAL_PLAN_INDICATORS_ASSOCIATED_FROM_DASHBOARD_EQUATION = 13;
     
     const TYPE_EXAMPLE = 20;
        
@@ -129,6 +134,7 @@ abstract class Chart
             self::TYPE_CHART_BARS_AREA_VARIABLES_MARKED_REAL_PLAN_BY_FREQUENCY_NOTIFICATION => 'chart.type.indicatorsBarAreaVariablesMarkedRealPlanByFrequencyNotification',
             self::TYPE_CHART_COLUMN_VARIABLES_MARKED_REAL_PLAN_BY_FREQUENCY_NOTIFICATION => 'chart.type.indicatorsColumnMultiSeriesVariablesMarkedRealPlanByFrequencyNotification',
             self::TYPE_CHART_VARIABLES_REAL_PLAN_FROM_DASHBOARD_EQUATION_DOUGHNUT => 'chart.type.indicatorsDoughnutWithVariablesRealPlanFromDashboardEquation',
+            self::TYPE_CHART_COLUMN_REAL_PLAN_INDICATORS_ASSOCIATED_FROM_DASHBOARD_EQUATION => 'chart.type.indicatorsAssociatedColumnMultiSeriesRealPlanFromDashboardEquation',
             self::TYPE_EXAMPLE => 'chart.type.example',
         );
          

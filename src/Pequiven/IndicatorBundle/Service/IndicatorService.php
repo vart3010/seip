@@ -1063,6 +1063,33 @@ class IndicatorService implements ContainerAwareInterface {
                 $dataSetReal["data"][] = $dataReal;
                 $dataSetPlan["data"][] = $dataPlan;
             }
+        } elseif(isset($options['withVariablesRealPlanFromDashboardEquationFromChildrens']) && array_key_exists('withVariablesRealPlanFromDashboardEquationFromChildrens', $options)){
+            unset($options['withVariablesRealPlanFromDashboardEquationFromChildrens']);
+            
+            $arrayVariables = array();
+            $arrayVariables = $this->getArrayVariablesFormulaWithData($indicator, array('withVariablesRealPlanFromDashboardEquationFromChildrensMultiSeries' => true));
+            
+            if($indicator->getDetails()){
+                $chart["yAxisName"] = $indicator->getDetails()->getResultManagementUnit();
+            }
+         
+            $dataSetPlan["seriesname"] = $indicator->getShowByPlanValue();
+            $dataSetPlan["showValues"] = "1";
+            $dataSetReal["seriesname"] = $indicator->getShowByRealValue();
+            $dataSetReal["showValues"] = "1";
+            
+            $childrens = $indicator->getChildrens();
+            
+            foreach($childrens as $children){
+                $label = $dataReal = $dataPlan = array();
+                $label["label"] = $children->getSummary();
+                $dataReal["value"] = number_format($arrayVariables[$children->getRef()]['dashboardEquationReal']['value'], 2, ',', '.');
+                $dataPlan["value"] = number_format($arrayVariables[$children->getRef()]['dashboardEquationPlan']['value'], 2, ',', '.');
+
+                $category[] = $label;
+                $dataSetReal["data"][] = $dataReal;
+                $dataSetPlan["data"][] = $dataPlan;
+            }
         }
         
         $data['dataSource']['chart'] = $chart;
@@ -1265,6 +1292,24 @@ class IndicatorService implements ContainerAwareInterface {
                 $arrayVariables['dashboardEquationPlan']['value'] = $arrayVariables['dashboardEquationPlan']['value'] + $valuesFromDashboardEquation['dashboardEquationPlan'];
             }
             
+        } elseif(isset($options['withVariablesRealPlanFromDashboardEquationFromChildrensMultiSeries']) && array_key_exists('withVariablesRealPlanFromDashboardEquationFromChildrensMultiSeries', $options)){
+            unset($options['withVariablesRealPlanFromDashboardEquationFromChildrensMultiSeries']);
+            
+            $childrens = $indicator->getChildrens();
+            
+            foreach($childrens as $children){//Inicializamos en 0, los valores para el gráfico
+                $arrayVariables[$children->getRef()]['dashboardEquationReal']['value'] = $arrayVariables[$children->getRef()]['dashboardEquationPlan']['value'] = 0.0;
+            }
+            
+            foreach($childrens as $children){
+                $childrenValuesIndicator = $children->getValuesIndicator();
+                $formulaChildren = $children->getFormula();
+                foreach($childrenValuesIndicator as $childrenValueIndicator){
+                    $valuesFromDashboardEquation = $this->calculateFormulaValueFromDashboardEquation($formulaChildren,$childrenValueIndicator->getFormulaParameters());
+                    $arrayVariables[$children->getRef()]['dashboardEquationReal']['value'] = $arrayVariables[$children->getRef()]['dashboardEquationReal']['value'] + $valuesFromDashboardEquation['dashboardEquationReal'];
+                    $arrayVariables[$children->getRef()]['dashboardEquationPlan']['value'] = $arrayVariables[$children->getRef()]['dashboardEquationPlan']['value'] + $valuesFromDashboardEquation['dashboardEquationPlan'];
+                }
+            }
         } else{
             $variables = $formula->getVariables();
 

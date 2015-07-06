@@ -2610,6 +2610,29 @@ angular.module('seipModule.controllers', [])
                 });
             }
             
+            //13-Gráfico tipo barras vertical para mostrar los resultados real/plan de la fórmula del indicador respecto al eje izquierdo, de los indicadores asociados.
+            $scope.chargeChartColumnRealPlanIndicatorsAssociatedFromDashboardEquation = function (indicatorId, render, width, height) {
+                var getDataChartColumnRealPlanIndicatorsAssociatedFromDashboardEquation = Routing.generate("getDataChartColumnRealPlanIndicatorsAssociatedFromDashboardEquation", {id: indicatorId});
+                $http.get(getDataChartColumnRealPlanIndicatorsAssociatedFromDashboardEquation).success(function (data) {
+                    FusionCharts.ready(function () {
+                        var revenueChartColumnRealPlanIndicatorsAssociatedFromDashboardEquation = new FusionCharts({
+                            "type": "mscolumn3d",
+                            "renderAt": render,
+                            "width": width + "%",
+                            "height": height,
+                            "dataFormat": "json",
+                            "dataSource": {
+                                "chart": data.dataSource.chart,
+                                "categories": data.dataSource.categories,
+                                "dataset": data.dataSource.dataset
+                            }
+                        });
+                        revenueChartColumnRealPlanIndicatorsAssociatedFromDashboardEquation.setTransparent(true);
+                        revenueChartColumnRealPlanIndicatorsAssociatedFromDashboardEquation.render();
+                    });
+                });
+            }
+            
             //Gráfico en forma tacómetro (Usado para mostrar el resultado de los indicadores estratégicos en el dashboard)
             $scope.renderChartExample = function (indicatorId, render, width, height) {
                 FusionCharts.ready(function () {
