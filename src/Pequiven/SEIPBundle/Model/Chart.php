@@ -73,6 +73,11 @@ abstract class Chart
      */
     const TYPE_CHART_COLUMN_VARIABLES_MARKED_REAL_PLAN_BY_FREQUENCY_NOTIFICATION = 11;
     
+    /**
+     * Gráfico tipo dona para mostrar el resultado real/plan a partir de la ecuación parta gráficos de la fórmula del indicador.
+     */
+    const TYPE_CHART_VARIABLES_REAL_PLAN_FROM_DASHBOARD_EQUATION_DOUGHNUT = 12; //ACTIVO Y USADO
+    
     const TYPE_EXAMPLE = 20;
        
     /**
@@ -123,6 +128,7 @@ abstract class Chart
             self::TYPE_CHART_COLUMN_REAL_PLAN_BY_FREQUENCY_NOTIFICATION => 'chart.type.indicatorsVariablesRealPlanByFrequencyNotification',
             self::TYPE_CHART_BARS_AREA_VARIABLES_MARKED_REAL_PLAN_BY_FREQUENCY_NOTIFICATION => 'chart.type.indicatorsBarAreaVariablesMarkedRealPlanByFrequencyNotification',
             self::TYPE_CHART_COLUMN_VARIABLES_MARKED_REAL_PLAN_BY_FREQUENCY_NOTIFICATION => 'chart.type.indicatorsColumnMultiSeriesVariablesMarkedRealPlanByFrequencyNotification',
+            self::TYPE_CHART_VARIABLES_REAL_PLAN_FROM_DASHBOARD_EQUATION_DOUGHNUT => 'chart.type.indicatorsDoughnutWithVariablesRealPlanFromDashboardEquation',
             self::TYPE_EXAMPLE => 'chart.type.example',
         );
          
