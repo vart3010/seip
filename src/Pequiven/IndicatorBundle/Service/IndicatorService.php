@@ -62,6 +62,48 @@ class IndicatorService implements ContainerAwareInterface {
         }
         return $result;
     }
+    
+    /**
+     * 
+     * @param Formula $formula
+     * @param array $data
+     * @return type
+     */
+    public function calculateFormulaValueFromDashboardEquation(Formula $formula, $data){
+        if (!is_array($data)) {
+            $data = array();
+        }
+        $variables = $formula->getVariables();
+        foreach ($variables as $variable) {
+            $name = $variable->getName();
+            $$name = 0;
+            if (isset($data[$name])) {
+                $$name = $data[$name];
+            }
+        }
+        $dashboardEquationReal = $dashboardEquationPlan = 0.0;
+        $result = array();
+        
+        $dashboardEquationReal = $this->parseFormulaVars($formula, $formula->getDashboardEquationReal());
+        $dashboardEquationPlan = $this->parseFormulaVars($formula, $formula->getDashboardEquationPlan());
+        
+        $result_equation_real = $result_equation_plan = 0.0;
+        try {
+            @eval(sprintf('$result_equation_real = %s;', $dashboardEquationReal));
+            @eval(sprintf('$result_equation_plan = %s;', $dashboardEquationPlan));
+        } catch (ErrorException $exc) {
+//            echo 'Excepción capturada 1 : ',  $e->getMessage(), "\n";
+        } catch (Exception $exc) {
+//            echo $exc->getTraceAsString();
+//            echo 'Excepción capturada 2: ',  $e->getMessage(), "\n";
+            $result_equation_real = $result_equation_plan = 0.0;
+        }
+        
+        $result['dashboardEquationReal'] = $result_equation_real;
+        $result['dashboardEquationPlan'] = $result_equation_plan;
+        
+        return $result;
+    }
 
     /**
      * Toma una ecuacion y la transforma a variales php validas en un string para evaluarlas.
@@ -693,6 +735,24 @@ class IndicatorService implements ContainerAwareInterface {
 //                $set["link"] = $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicator->getId()));
                 $dataSet[] = $set;
             }
+        } elseif(isset($options['withVariablesRealPlanFromDashboardEquation']) && array_key_exists('withVariablesRealPlanFromDashboardEquation', $options)){
+            unset($options['withVariablesRealPlanFromDashboardEquation']);
+            $arrayVariables = array();
+            $arrayVariables = $this->getArrayVariablesFormulaWithData($indicator, array('withVariablesRealPlanFromDashboardEquation' => true));
+            
+            $set = array();
+            $set["label"] = $arrayVariables['dashboardEquationReal']['description'];
+            $set["value"] = $arrayVariables['dashboardEquationReal']['value'];
+            $set["displayValue"] = number_format($arrayVariables['dashboardEquationReal']['value'], 2, ',', '.').' ' . $arrayVariables['dashboardEquationReal']['unit'];
+            $set["toolText"] = number_format($arrayVariables['dashboardEquationReal']['value'], 2, ',', '.') . ' ' . $arrayVariables['dashboardEquationReal']['unit'];
+            $dataSet[] = $set;
+            
+            $set = array();
+            $set["label"] = $arrayVariables['dashboardEquationPlan']['description'];
+            $set["value"] = $arrayVariables['dashboardEquationPlan']['value'];
+            $set["displayValue"] = number_format($arrayVariables['dashboardEquationPlan']['value'], 2, ',', '.').' ' . $arrayVariables['dashboardEquationPlan']['unit'];
+            $set["toolText"] = number_format($arrayVariables['dashboardEquationPlan']['value'], 2, ',', '.') . ' ' . $arrayVariables['dashboardEquationPlan']['unit'];
+            $dataSet[] = $set;
         }
 
         $data['dataSource']['chart'] = $chart;
@@ -1185,6 +1245,26 @@ class IndicatorService implements ContainerAwareInterface {
                 $arrayVariables['valueReal'][] = $valueIndicator->getParameter($varReal);
                 $arrayVariables['valuePlan'][] = $valueIndicator->getParameter($varPlan);
             }
+        } elseif(isset($options['withVariablesRealPlanFromDashboardEquation']) && array_key_exists('withVariablesRealPlanFromDashboardEquation', $options)){
+            unset($options['withVariablesRealPlanFromDashboardEquation']);
+            
+            $arrayVariables['dashboardEquationReal']['value'] = $arrayVariables['dashboardEquationPlan']['value'] = 0.0;
+            $arrayVariables['dashboardEquationReal']['unit'] = $arrayVariables['dashboardEquationPlan']['unti'] = '';
+            $arrayVariables['dashboardEquationReal']['description'] = $arrayVariables['dashboardEquationPlan']['description'] = '';
+            
+            $arrayVariables['dashboardEquationReal']['description'] = $indicator->getShowByRealValue();
+            $arrayVariables['dashboardEquationPlan']['description'] = $indicator->getShowByPlanValue();
+            if($indicator->getDetails()){
+                $arrayVariables['dashboardEquationReal']['unit'] = $indicator->getDetails()->getResultRealUnit();
+                $arrayVariables['dashboardEquationPlan']['unit'] = $indicator->getDetails()->getResultPlanUnit();
+            }
+            
+            foreach($valuesIndicator as $valueIndicator){
+                $valuesFromDashboardEquation = $this->calculateFormulaValueFromDashboardEquation($formula,$valueIndicator->getFormulaParameters());
+                $arrayVariables['dashboardEquationReal']['value'] = $arrayVariables['dashboardEquationReal']['value'] + $valuesFromDashboardEquation['dashboardEquationReal'];
+                $arrayVariables['dashboardEquationPlan']['value'] = $arrayVariables['dashboardEquationPlan']['value'] + $valuesFromDashboardEquation['dashboardEquationPlan'];
+            }
+            
         } else{
             $variables = $formula->getVariables();
 

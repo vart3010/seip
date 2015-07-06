@@ -252,6 +252,26 @@ class ChartController extends SEIPController {
 
         return $response;
     }
+    
+    /**
+     * 12-Función que retorna la data para un gráfico tipo dona para mostrar el resultado real/plan a partir de la ecuación para gráficos de la fórmula del indicador.
+     * @return JsonResponse
+     */
+    public function getDataChartVariablesRealPlanFromDashboardEquationDoughnutAction(Request $request) {
+        $response = new JsonResponse();
+
+        $idIndicator = $request->get('id');
+
+        $indicatorService = $this->getIndicatorService(); //Obtenemos el servicio del indicador
+
+        $indicator = $this->get('pequiven.repository.indicator')->find($idIndicator); //Obtenemos el indicador
+
+        $dataChart = $indicatorService->getDataDashboardWidgetDoughnut($indicator, array('withVariablesRealPlanFromDashboardEquation' => true)); //Obtenemos la data del gráfico de acuerdo al indicador
+
+        $response->setData($dataChart); //Seteamos la data del gráfico en Json
+
+        return $response;
+    }
    
     /**
      * Servicio de los Indicadores

@@ -2588,6 +2588,28 @@ angular.module('seipModule.controllers', [])
                 });
             }
             
+            //12-Gráfico en forma de dona para mostrar los resultados real/plan a partir de la ecuación para gráficos de la fórmula del indicador
+            $scope.chargeChartVariablesRealPlanFromDashboardEquationDoughnut = function (indicatorId, render, width, height)  {
+                var getdataChartVariablesRealPlanFromDashboardEquationDoughnut = Routing.generate("getDataChartVariablesRealPlanFromDashboardEquationDoughnut", {id: indicatorId});
+                $http.get(getdataChartVariablesRealPlanFromDashboardEquationDoughnut).success(function (data) {
+                    FusionCharts.ready(function () {
+                        var revenueChartVariablesRealPlanFromDashboardEquationDoughnut = new FusionCharts({
+                            "type": "doughnut2d",
+                            "renderAt": render,
+                            "width": width + "%",
+                            "height": height,
+                            "dataFormat": "json",
+                            "dataSource": {
+                                "chart": data.dataSource.chart,
+                                "data": data.dataSource.dataSet
+                            }
+                        });
+                        revenueChartVariablesRealPlanFromDashboardEquationDoughnut.setTransparent(true);
+                        revenueChartVariablesRealPlanFromDashboardEquationDoughnut.render();
+                    });
+                });
+            }
+            
             //Gráfico en forma tacómetro (Usado para mostrar el resultado de los indicadores estratégicos en el dashboard)
             $scope.renderChartExample = function (indicatorId, render, width, height) {
                 FusionCharts.ready(function () {
