@@ -288,4 +288,11 @@ class ReportTemplate extends BaseModel
     {
         return $this->getRef() ?: "-";
     }
+    
+    public function recalculate()
+    {
+        foreach ($this->plantReports as $plantReport) {
+            $plantReport->recalculate();
+        }
+    }
 }

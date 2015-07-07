@@ -265,7 +265,6 @@ class PlantStopPlanning extends ModelBaseMaster
         $totalHours = 0.0;
         
         $dayStops = $this->getDayStops();
-//        $totalStops = $dayStops->count();
         
         foreach ($dayStops as $dayStop) {
             $dayStop->calculate();
@@ -273,7 +272,6 @@ class PlantStopPlanning extends ModelBaseMaster
         }
         
         $this->totalHours = $totalHours;
-//        $this->totalStops = $totalStops;
     }
     
     public function getMonthLabel()
