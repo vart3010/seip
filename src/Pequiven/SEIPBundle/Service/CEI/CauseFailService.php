@@ -31,11 +31,11 @@ class CauseFailService implements ContainerAwareInterface {
         return $fails;
     }
 
-    public function getFailsMp() {
-        $em = $this->container->get('doctrine')->getManager();
-        $fails = $em->getRepository('PequivenSEIPBundle:DataLoad\Production\UnrealizedProductionDay')->findQueryByType();
-        return $fails;
-    }
+//    public function getFailsMp() {
+//        $em = $this->container->get('doctrine')->getManager();
+//        $fails = $em->getRepository('PequivenSEIPBundle:DataLoad\Production\UnrealizedProductionDay')->findQueryByType();
+//        return $fails;
+//    }
 
     public function getDaysMonth(UnrealizedProduction $unrealizedProduction) {
         return $unrealizedProduction->getDaysPerMonth($unrealizedProduction->getMonth());
@@ -49,7 +49,7 @@ class CauseFailService implements ContainerAwareInterface {
         foreach ($categories as $cat) {
             $total_cat = 0;
             $cant_total = 0;
-            for ($d = 1; $d < $days; $d++) {
+            for ($d = 1; $d <= $days; $d++) {
                 $total_cat = $total_cat + $arrayCauses[$cat][$d];
                 $cant_total = $cant_total + $arrayCauses['total'][$d];
             }
@@ -59,6 +59,38 @@ class CauseFailService implements ContainerAwareInterface {
         $totals['total'] = $cant_total;
 
         return $totals;
+    }
+
+    public function getFailsCauseMp(UnrealizedProduction $unrealizedProduction) {
+        $reflection = new \ReflectionClass($unrealizedProduction);
+        $methods = $reflection->getMethods();
+        $nameMatch = '/^getDay\d+Details+$/';
+
+        $daysMonth = $this->getDaysMonth($unrealizedProduction);
+
+        $methodTypeCauses = array(
+            "getInternalCausesMp",
+            "getExternalCausesMp"
+        );
+        $cont = 0;
+        foreach ($methods as $m) {
+
+            $methodName = $m->getName();
+            if (preg_match($nameMatch, $methodName)) {    //filtra los metodos getDayXXDetails
+                $unrealizedProductionDay = $unrealizedProduction->$methodName();
+                var_dump($methodName);
+                
+                if ($unrealizedProductionDay != "") {
+                    foreach ($methodTypeCauses as $key) { //RECORRE EL ARRAY DE CAUSAS
+                        var_dump($key);
+                        foreach ($unrealizedProductionDay->$key() as $fails) {
+                            var_dump($fails->getMount());
+                        }
+                    }
+                }
+                $cont++;
+            }
+        }
     }
 
     public function getFailsCause(UnrealizedProduction $unrealizedProduction) {
@@ -101,7 +133,7 @@ class CauseFailService implements ContainerAwareInterface {
             }
         }
 
-//Rellenar el vector de las internas y externas por defecto $array[]
+        //Rellenar el vector de las internas y externas por defecto $array[]
         //$causes_array_rs = array();
         $cont = 1;
 

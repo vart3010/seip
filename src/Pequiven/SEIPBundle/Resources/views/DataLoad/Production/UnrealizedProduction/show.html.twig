@@ -73,7 +73,7 @@
                 <li><a style="font-weight: bold;" href="#tab-4">{{ "pequiven_seip.product_report.unrealized_production.materiaPrimaExt"|trans }}</a></li>
             </ul>
 
-{#            {% set causes = causeFailService.getFailsCause(unrealized_production) %}#}
+            {#            {% set causes = causeFailService.getFailsCause(unrealized_production) %}#}
             {% set daysMonth = causeFailService.getDaysMonth(unrealized_production) %}
 
 
@@ -169,7 +169,18 @@
                 </div>
 
                 <div id="tab-3" class="with-padding">
+                    <div class="columns">
+                        <div class="six-columns">
+                            
+                        </div>
+                        <div class="six-columns">
 
+                           {# <div  ng-controller="DashboardController" ng-init="renderChartPie2d('unrelizedInternal', {{ dataInternal }},'100%','500')">
+                                <span id="unrelizedInternal"></span>
+                            </div>#}
+
+                        </div>
+                    </div>
 
                 </div>  
                 <div id="tab-4" class="with-padding">
