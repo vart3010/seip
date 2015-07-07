@@ -275,7 +275,9 @@ class ReportTemplateController extends SEIPController
         
         $productsReport = new \Doctrine\Common\Collections\ArrayCollection();
         $consumerPlanningServices = new \Doctrine\Common\Collections\ArrayCollection();
-        $productsReportByIdProduct = $consumerPlanningServicesByIdService = array();
+        $rawMaterialConsumptionPlannings = new \Doctrine\Common\Collections\ArrayCollection();
+        
+        $productsReportByIdProduct = $consumerPlanningServicesByIdService = $rawMaterialConsumptionPlanningsById = array();
         foreach ($plantReports as $plantReport) {
             foreach ($plantReport->getProductsReport() as $productReport) {
                 $product = $productReport->getProduct();
@@ -284,7 +286,16 @@ class ReportTemplateController extends SEIPController
                 }
                 $productsReportByIdProduct[$product->getId()][] = $productReport;
                 
+                foreach ($productReport->getRawMaterialConsumptionPlannings() as $rawMaterialConsumptionPlanning) {
+                    $product = $rawMaterialConsumptionPlanning->getProduct();
+                    if(!isset($rawMaterialConsumptionPlanningsById[$product->getId()])){
+                        $rawMaterialConsumptionPlanningsById[$product->getId()] = array();
+                    }
+                    $rawMaterialConsumptionPlanningsById[$product->getId()][] = $rawMaterialConsumptionPlanning;
+                }
+                
             }
+            
             foreach ($plantReport->getConsumerPlanningServices() as $consumerPlanningService) {
                 $service = $consumerPlanningService->getService();
                 if(!isset($consumerPlanningServicesByIdService[$service->getId()])){
@@ -309,10 +320,19 @@ class ReportTemplateController extends SEIPController
             }
         }
         
+        foreach ($rawMaterialConsumptionPlanningsById as $id => $groups) {
+            foreach ($groups as $rawMaterialConsumptionPlanning) {
+                if(!$rawMaterialConsumptionPlannings->contains($rawMaterialConsumptionPlanning)){
+                    $rawMaterialConsumptionPlannings->add($rawMaterialConsumptionPlanning);
+                }
+            }
+        }
+        
         $data = array(
             'dateReport' => $dateReport,
             'productsReport' => $productsReport,
             'consumerPlanningServices' => $consumerPlanningServices,
+            'rawMaterialConsumptionPlannings' => $rawMaterialConsumptionPlannings,
             'plantReportId' => $plantReportId,
             'form' => $form->createView(),
             'showDay' => $showDay,
@@ -329,7 +349,8 @@ class ReportTemplateController extends SEIPController
         
         $exportToPdf = $request->get('exportToPdf',false);
         if($exportToPdf == true){
-            $pdf = new \Pequiven\SEIPBundle\Model\PDF\SeipPdf('L', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+            $pdf = new \Pequiven\SEIPBundle\Model\PDF\SeipPdf('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+            $pdf->setPrintLineFooter(false);
             $pdf->setContainer($this->container);
             $pdf->setPeriod($this->getPeriodService()->getPeriodActive());
             $pdf->setFooterText($this->trans('pequiven_seip.message_footer',array(), 'PequivenSEIPBundle'));

@@ -131,6 +131,16 @@
                                         <span id="{{ grafico }}"></span>
                                     </div>
                                 {% endif %}
+                                {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_VARIABLES_REAL_PLAN_FROM_DASHBOARD_EQUATION_DOUGHNUT')  %}
+                                    <div id="tab-{{ grafico }}"  ng-controller="DashboardController" ng-init="chargeChartVariablesRealPlanFromDashboardEquationDoughnut({{ indicator.id }},'{{ grafico }}','100','500')">
+                                        <span id="{{ grafico }}"></span>
+                                    </div>
+                                {% endif %}
+                                {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_COLUMN_REAL_PLAN_INDICATORS_ASSOCIATED_FROM_DASHBOARD_EQUATION')  %}
+                                    <div id="tab-{{ grafico }}"  ng-controller="DashboardController" ng-init="chargeChartColumnRealPlanIndicatorsAssociatedFromDashboardEquation({{ indicator.id }},'{{ grafico }}','100','500')">
+                                        <span id="{{ grafico }}"></span>
+                                    </div>
+                                {% endif %}
                                 {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_EXAMPLE')  %}
                                     <div id="tab-{{ grafico }}"  ng-controller="DashboardController" ng-init="renderChartExample({{ indicator.id }},'{{ grafico }}','100','500')">
                                         <span id="{{ grafico }}"></span>

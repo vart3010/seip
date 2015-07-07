@@ -141,3 +141,27 @@ getDataChartColumnVariablesMarkedRealPlanByFrequencyNotification:
     methods: [GET]
     options:
         expose: true
+        
+#12
+getDataChartVariablesRealPlanFromDashboardEquationDoughnut:
+    path: /getDataChartVariablesRealPlanFromDashboardEquationDoughnut/{id}
+    defaults:
+        _controller: pequiven.controller.seipchart:getDataChartVariablesRealPlanFromDashboardEquationDoughnutAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
+        
+#13
+getDataChartColumnRealPlanIndicatorsAssociatedFromDashboardEquation:
+    path: /getDataChartColumnRealPlanIndicatorsAssociatedFromDashboardEquation/{id}
+    defaults:
+        _controller: pequiven.controller.seipchart:getDataChartColumnRealPlanIndicatorsAssociatedFromDashboardEquationAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true

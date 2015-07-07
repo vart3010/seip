@@ -2587,7 +2587,52 @@ angular.module('seipModule.controllers', [])
                     });
                 });
             }
-
+            
+            //12-Gráfico en forma de dona para mostrar los resultados real/plan a partir de la ecuación para gráficos de la fórmula del indicador
+            $scope.chargeChartVariablesRealPlanFromDashboardEquationDoughnut = function (indicatorId, render, width, height)  {
+                var getdataChartVariablesRealPlanFromDashboardEquationDoughnut = Routing.generate("getDataChartVariablesRealPlanFromDashboardEquationDoughnut", {id: indicatorId});
+                $http.get(getdataChartVariablesRealPlanFromDashboardEquationDoughnut).success(function (data) {
+                    FusionCharts.ready(function () {
+                        var revenueChartVariablesRealPlanFromDashboardEquationDoughnut = new FusionCharts({
+                            "type": "doughnut2d",
+                            "renderAt": render,
+                            "width": width + "%",
+                            "height": height,
+                            "dataFormat": "json",
+                            "dataSource": {
+                                "chart": data.dataSource.chart,
+                                "data": data.dataSource.dataSet
+                            }
+                        });
+                        revenueChartVariablesRealPlanFromDashboardEquationDoughnut.setTransparent(true);
+                        revenueChartVariablesRealPlanFromDashboardEquationDoughnut.render();
+                    });
+                });
+            }
+            
+            //13-Gráfico tipo barras vertical para mostrar los resultados real/plan de la fórmula del indicador respecto al eje izquierdo, de los indicadores asociados.
+            $scope.chargeChartColumnRealPlanIndicatorsAssociatedFromDashboardEquation = function (indicatorId, render, width, height) {
+                var getDataChartColumnRealPlanIndicatorsAssociatedFromDashboardEquation = Routing.generate("getDataChartColumnRealPlanIndicatorsAssociatedFromDashboardEquation", {id: indicatorId});
+                $http.get(getDataChartColumnRealPlanIndicatorsAssociatedFromDashboardEquation).success(function (data) {
+                    FusionCharts.ready(function () {
+                        var revenueChartColumnRealPlanIndicatorsAssociatedFromDashboardEquation = new FusionCharts({
+                            "type": "mscolumn3d",
+                            "renderAt": render,
+                            "width": width + "%",
+                            "height": height,
+                            "dataFormat": "json",
+                            "dataSource": {
+                                "chart": data.dataSource.chart,
+                                "categories": data.dataSource.categories,
+                                "dataset": data.dataSource.dataset
+                            }
+                        });
+                        revenueChartColumnRealPlanIndicatorsAssociatedFromDashboardEquation.setTransparent(true);
+                        revenueChartColumnRealPlanIndicatorsAssociatedFromDashboardEquation.render();
+                    });
+                });
+            }
+            
             //Gráfico en forma tacómetro (Usado para mostrar el resultado de los indicadores estratégicos en el dashboard)
             $scope.renderChartExample = function (indicatorId, render, width, height) {
                 FusionCharts.ready(function () {
