@@ -28,7 +28,7 @@
             <tbody>
                 {% set unit = consumer_planning_service.service.serviceUnit %}
                 {% set totals = consumer_planning_service.getTotalToDay %}
-                {% for detail in consumer_planning_service.detailConsumerPlanningServices %}
+                {% for detail in consumer_planning_service.getDetailsByMonth %}
                     {% set tableIdRow = "row-detail-"~detail.id %}
                     <tr id="{{ tableIdRow }}">
                         <th scope="row">{{ loop.index }} - 
