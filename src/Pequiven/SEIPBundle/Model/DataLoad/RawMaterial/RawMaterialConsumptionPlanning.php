@@ -76,7 +76,7 @@ abstract class RawMaterialConsumptionPlanning extends BaseModel
                 $totalYear = $totalYear + $detail->getTotalReal();
                 
                 if($monthDetail > $month){
-                    break;
+                    continue;
                 }
 
                 if($month == $monthDetail){
