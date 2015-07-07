@@ -176,6 +176,7 @@ class ConsumerPlanningService extends BaseModel
         foreach ($this->getDetails() as $detail) {
             $details[$detail->getMonth()] = $detail;
         }
+        ksort($details);
         return $details;
     }
     
