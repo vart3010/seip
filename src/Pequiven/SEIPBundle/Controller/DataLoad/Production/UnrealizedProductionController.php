@@ -127,11 +127,16 @@ class UnrealizedProductionController extends SEIPController {
         }
 
         $causeFailService = $this->getCauseFailService();
+        $causes = $causeFailService->getFailsCause($resource);
 
-        $datosServices = array("causeFailService" => $causeFailService, "fails" => $fails, "failNames" => $failsNames);
-        $datachar = $causeFailService->generatePieTotals($resource, $datosServices);
 
-        
+        //$datosServices = array("causeFailService" => $causeFailService, "fails" => $causes, "failNames" => $failsNames);
+        $datosServicesInternal  = array("data"=>$causeFailService->getArrayTotals($resource,$causes["TYPE_FAIL_INTERNAL"],$failsNames[0]));
+        $datacharInternal = $causeFailService->generatePieTotals($resource, $datosServicesInternal);
+
+        $datosServicesExternal  = array("data"=>$causeFailService->getArrayTotals($resource,$causes["TYPE_FAIL_EXTERNAL"],$failsNames[1]));
+        $datacharExternal = $causeFailService->generatePieTotals($resource, $datosServicesExternal);
+
 
 
         $view = $this
@@ -142,8 +147,9 @@ class UnrealizedProductionController extends SEIPController {
             "internalCauses" => $failsNames[0],
             "externalCauses" => $failsNames[1],
             "causeFailService" => $causeFailService,
-            "dataInternal" => json_encode($datachar[0]), //DATOS[0] => INTERNAS DATOS[1]=>EXTERNAS
-            "dataExternal" => json_encode($datachar[1]) //DATOS[0] => INTERNAS DATOS[1]=>EXTERNAS
+            "causes" => $causes,
+            "dataInternal" => json_encode($datacharInternal), //DATOS[0] => INTERNAS DATOS[1]=>EXTERNAS
+            "dataExternal" => json_encode($datacharExternal) //DATOS[0] => INTERNAS DATOS[1]=>EXTERNAS
         ));
 
         return $this->handleView($view);
@@ -156,6 +162,5 @@ class UnrealizedProductionController extends SEIPController {
     protected function getCauseFailService() {
         return $this->container->get('seip.service.causefail');
     }
-    
 
 }

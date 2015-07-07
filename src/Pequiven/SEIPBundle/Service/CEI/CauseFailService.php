@@ -30,14 +30,115 @@ class CauseFailService implements ContainerAwareInterface {
         $fails = $em->getRepository('PequivenSEIPBundle:CEI\Fail')->findQueryByTypeResult($type);
         return $fails;
     }
-    
-    
+
     public function getFailsMp() {
         $em = $this->container->get('doctrine')->getManager();
         $fails = $em->getRepository('PequivenSEIPBundle:DataLoad\Production\UnrealizedProductionDay')->findQueryByType();
         return $fails;
     }
-    
+
+    public function getDaysMonth(UnrealizedProduction $unrealizedProduction) {
+        return $unrealizedProduction->getDaysPerMonth($unrealizedProduction->getMonth());
+    }
+
+    public function getArrayTotals(UnrealizedProduction $unrealizedProduction, $arrayCauses, $categories) {
+        $days = $this->getDaysMonth($unrealizedProduction);
+        $totals = array();
+
+
+        foreach ($categories as $cat) {
+            $total_cat = 0;
+            $cant_total = 0;
+            for ($d = 1; $d < $days; $d++) {
+                $total_cat = $total_cat + $arrayCauses[$cat][$d];
+                $cant_total = $cant_total + $arrayCauses['total'][$d];
+            }
+            //array_push($totals, $total_cat);
+            $totals[$cat] = $total_cat;
+        }
+        $totals['total'] = $cant_total;
+
+        return $totals;
+    }
+
+    public function getFailsCause(UnrealizedProduction $unrealizedProduction) {
+        //OBTIENE METODOS DE UNREALIZED_PRODUCTION
+        $reflection = new \ReflectionClass($unrealizedProduction);
+        $methods = $reflection->getMethods();
+
+        $nameMatch = '/^getDay\d+Details+$/';
+
+        $regs = array();
+
+        $categoriesInternal = $this->getFails(\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL);
+        $categoriesExternal = $this->getFails(\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL);
+
+        $causes_array = array(
+            "getInternalCauses" => count($categoriesInternal),
+            "getExternalCauses" => count($categoriesExternal)
+//            "getInternalCausesMp",
+//            "getExternalCausesMp"
+        );
+
+        $causes = array(
+            \Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL => 'TYPE_FAIL_INTERNAL',
+            \Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL => 'TYPE_FAIL_EXTERNAL',
+        );
+
+        $daysMonth = $this->getDaysMonth($unrealizedProduction);
+        //Internas
+        foreach ($categoriesInternal as $categorieInternal) {
+            for ($day = 1; $day <= $daysMonth; $day++) {
+                $regs[$causes[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$categorieInternal->getName()][$day] = 0.0;
+                $regs[$causes[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]]['total'][$day] = 0.0;
+            }
+        }
+        //Externas
+        foreach ($categoriesExternal as $categorieExternal) {
+            for ($day = 1; $day <= $daysMonth; $day++) {
+                $regs[$causes[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL]][$categorieExternal->getName()][$day] = 0.0;
+                $regs[$causes[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL]]['total'][$day] = 0.0;
+            }
+        }
+
+//Rellenar el vector de las internas y externas por defecto $array[]
+        //$causes_array_rs = array();
+        $cont = 1;
+
+        //RECORRE LOS METODOS DE UNREALIZED_PRODUCTION
+        foreach ($methods as $m) {
+
+            $methodName = $m->getName();
+            if (preg_match($nameMatch, $methodName)) {    //filtra los metodos getDayXXDetails
+                $unrealizedProductionDay = $unrealizedProduction->$methodName();
+                //var_dump($methodName);
+
+                if ($unrealizedProductionDay != "") {
+                    foreach ($causes_array as $key => $cantidad) { //RECORRE EL ARRAY DE CAUSAS
+                        //var_dump($key);
+                        foreach ($unrealizedProductionDay->$key() as $fails) {
+                            //var_dump($fails->getMount());
+                            if ($key == 'getInternalCauses') {
+                                $regs[$causes[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$fails->getFail()->getName()][$cont] = $fails->getMount();
+                                $regs[$causes[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]]['total'][$cont] = $regs[$causes[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]]['total'][$cont] + $fails->getMount();
+                            } else if ($key == 'getExternalCauses') {
+                                $regs[$causes[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL]][$fails->getFail()->getName()][$cont] = $fails->getMount();
+                                $regs[$causes[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL]]['total'][$cont] = $regs[$causes[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL]]['total'][$cont] + $fails->getMount();
+                            }
+                        }
+                    }
+                }
+
+                //var_dump($regs);
+                //array_push($causes_array_rs, $regs);
+                $cont++;
+            }
+        }
+        //var_dump($causes_array_rs);
+//        var_dump($regs);
+//        die();
+        return $regs;
+    }
 
     /**
      * Function usada para armar las listas de PNR interna y externa, devuelve un vector con la cantidad de paradas 
@@ -70,7 +171,7 @@ class CauseFailService implements ContainerAwareInterface {
 
 
         $totalFails = count($this->getFails($typeFail));
-        
+
 //        $totalFailsMp = count($this->getFailsMp());
 //        
 //        var_dump($totalFailsMp);
@@ -89,13 +190,12 @@ class CauseFailService implements ContainerAwareInterface {
 
                 if ($metodsDetails != "") {
 
-
                     $contFails = 0;
                     foreach ($metodsDetails->$methodGetType() as $md) { //CAUSAS INTO EXT
                         array_push($mounts, $md->getMount());
                         $contFails++;
                     }
-                    
+
                     //CAUSAS POR MP, FALTA AGREGARLO
 //                    foreach ($metodsDetails->$methodGetMp() as $causesMp) { //CAUSAS POR MATERIA PRIMA INT EXT
 //                        array_push($mounts, $causesMp->getMount());
@@ -230,56 +330,66 @@ class CauseFailService implements ContainerAwareInterface {
         $chart["legendItemFontColor"] = "#666666";
 
 
-
-
-
-        $causeFailService = $options["causeFailService"];
-        $total = 0;
-        $char = array();
-        for ($x = 0; $x < count($options["fails"]); $x++) {
-            if ($x == 0) {
-                $type = "InternalCauses";
-            } else if ($x == 1) {
-                $type = "ExternalCauses";
-            }
-            $totalCatValues = $causeFailService->getTotalsCategoriesFails($unrealizedProduction, array("typeCause" => $type));
-
-            $finalValues = array();
-            $c = 0;
-
-            foreach ($options["failNames"][$x] as $cat) {
-
-//                $tp["label"] = \Pequiven\SEIPBundle\Service\ToolService::truncate($cat,array("limit"=>"7"));
-//                $tp["value"] = $totalCatValues[$c];
-//                $tp["displayValue"] = $totalCatValues[$c];
-
-                $tp["label"] = $cat . " (" . $totalCatValues[$c] . ")";
-                $tp["value"] = $totalCatValues[$c];
-                $tp["toolText"] = $cat . " (" . $totalCatValues[$c] . ")";
-                ;
-                $tp["displayValue"] = \Pequiven\SEIPBundle\Service\ToolService::truncate($cat, array("limit" => "10"));
-
-                $total = $total + $totalCatValues[$c];
-                $c++;
-                array_push($finalValues, $tp);
-            }
-            $char[$x] = $finalValues;
+        $data = $options["data"];
+        $totalPnr = $data["total"];
+        unset($data["total"]);
+        $rs = array();
+        foreach ($data as $key => $value) {
+            array_push($rs, array(
+                "label" => $key . " (" . $value . ")",
+                "value" => $value,
+                "toolText" => $key . " (" . $value . ")",
+                "displayValue" => \Pequiven\SEIPBundle\Service\ToolService::truncate($key, array("limit" => "7"))
+            ));
         }
 
-        $chart["subcaption"] = number_format($total, 2, ',', '.');
+//
+//        $causeFailService = $options["causeFailService"];
+//        $total = 0;
+//        $char = array();
+//        for ($x = 0; $x < count($options["fails"]); $x++) {
+//            if ($x == 0) {
+//                $type = "InternalCauses";
+//            } else if ($x == 1) {
+//                $type = "ExternalCauses";
+//            }
+//            $totalCatValues = $causeFailService->getTotalsCategoriesFails($unrealizedProduction, array("typeCause" => $type));
+//
+//            $finalValues = array();
+//            $c = 0;
+//
+//            foreach ($options["failNames"][$x] as $cat) {
+//
+////                $tp["label"] = \Pequiven\SEIPBundle\Service\ToolService::truncate($cat,array("limit"=>"7"));
+////                $tp["value"] = $totalCatValues[$c];
+////                $tp["displayValue"] = $totalCatValues[$c];
+//
+//                $tp["label"] = $cat . " (" . $totalCatValues[$c] . ")";
+//                $tp["value"] = $totalCatValues[$c];
+//                $tp["toolText"] = $cat . " (" . $totalCatValues[$c] . ")";
+//                ;
+//                $tp["displayValue"] = \Pequiven\SEIPBundle\Service\ToolService::truncate($cat, array("limit" => "10"));
+//
+//                $total = $total + $totalCatValues[$c];
+//                $c++;
+//                array_push($finalValues, $tp);
+//            }
+//            $char[$x] = $finalValues;
+//        }
+        $chart["subcaption"] = number_format($totalPnr, 2, ',', '.');
 
 
-        $pie[0] = array(
+//        $pie[0] = array(
+//            'dataSource' => array(
+//                'chart' => $chart,
+//                'data' => $char[0],
+//            ),
+//        );
+
+        $pie = array(
             'dataSource' => array(
                 'chart' => $chart,
-                'data' => $char[0],
-            ),
-        );
-
-        $pie[1] = array(
-            'dataSource' => array(
-                'chart' => $chart,
-                'data' => $char[1],
+                'data' => $rs
             ),
         );
 

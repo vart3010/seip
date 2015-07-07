@@ -29,6 +29,9 @@ pequiven_seip:
     cause_of_PNR: 'Causa de PNR'
     total_pnr: 'Total de PNR'
     comment_none: 'Ningúna observación.'
+    
+    day: Día
+    totals: Totales
         
     #Login
     sign_in: Ingresar
@@ -368,6 +371,8 @@ pequiven_seip:
             unrealized_production: Producción No Realizada
             internal: Interna
             external: Externa
+            materiaPrimaInt: Materia Prima Interna
+            materiaPrimaExt: Materia Prima Externa
         question:
             delete: Desea eliminar este detalle de producción
             

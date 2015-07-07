@@ -1024,6 +1024,8 @@ abstract class DetailValue extends BaseModel
                 }
             }
         }
+        
+        
         return $rs;
     }
     
