@@ -105,7 +105,7 @@ abstract class ProductReport extends BaseModel implements ProductReportInterface
                 $totalGrossPlanBefore = $totalGrossRealBefore = $totalNetPlanBefore = $totalNetRealBefore = 0.0;
         foreach ($productDetailDailyMonths as $monthDetail => $productDetailDailyMonth) {
             if($monthDetail > $month){
-                break;
+                continue;
             }
             
             if($month == $monthDetail){
@@ -181,7 +181,7 @@ abstract class ProductReport extends BaseModel implements ProductReportInterface
             $detailByMonth = $rawMaterialConsumptionPlanning->getDetailByMonth();
             foreach ($detailByMonth as $monthDetail => $detail) {
                 if($monthDetail > $month){
-                    break;
+                    continue;
                 }
 
                 if($month == $monthDetail){
@@ -231,7 +231,7 @@ abstract class ProductReport extends BaseModel implements ProductReportInterface
         foreach ($unrealizedProductions as $unrealizedProduction) {
             $monthDetail = $unrealizedProduction->getMonth();
             if($monthDetail > $month){
-                break;
+                continue;
             }
 
             if($month == $monthDetail){
@@ -348,10 +348,12 @@ abstract class ProductReport extends BaseModel implements ProductReportInterface
         $totalNamePlan = sprintf('getTotal%sPlan',$prefix);
         $totalNameReal = sprintf('getTotal%sReal',$prefix);
         $totalNameToDay = sprintf('getTotal%sToDay',$prefix);
+//        var_dump((string)$this->getProduct());
         foreach ($productDetailDailyMonths as $monthDetail => $detail) {
             $planYear = $planYear + $detail->$totalNamePlan();
+//            var_dump(sprintf("method %s, mes %s, total %s",$totalNamePlan,$monthDetail,$detail->$totalNamePlan()));
             if($monthDetail > $month){
-                break;
+                continue;
             }
 
             if($month == $monthDetail){
@@ -399,7 +401,7 @@ abstract class ProductReport extends BaseModel implements ProductReportInterface
             $totalYear = $totalYear + $detail->getTotal();
             
             if($monthDetail > $month){
-                break;
+                continue;
             }
             
             if($month == $monthDetail){
@@ -432,7 +434,7 @@ abstract class ProductReport extends BaseModel implements ProductReportInterface
         $inventorys = $this->getInventorySortByMonth();
         foreach ($inventorys as $monthDetail => $detail) {
             if($monthDetail > $month){
-                break;
+                continue;
             }
             
             if($month == $monthDetail){
