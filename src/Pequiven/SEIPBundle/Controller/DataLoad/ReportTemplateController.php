@@ -123,6 +123,8 @@ class ReportTemplateController extends SEIPController
         $form = $this->createForm(new \Pequiven\SEIPBundle\Form\DataLoad\Notification\ReportTemplateType($dateNotification,$resource),$resource);
         
         if($request->isMethod('POST') && $form->submit($request,false)->isValid()){
+            $data = $form->getData();
+            $data->recalculate();
             $this->domainManager->update($resource);
             return $this->redirect($this->generateUrl('pequiven_report_template_list'));
         }

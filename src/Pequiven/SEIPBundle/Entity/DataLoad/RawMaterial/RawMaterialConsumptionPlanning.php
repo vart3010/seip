@@ -314,7 +314,9 @@ class RawMaterialConsumptionPlanning extends BaseModel
     {
         $detailRawMaterialConsumptions = $this->getDetailRawMaterialConsumptions();
         $totalPlan = $totalReal = 0.0;
-        foreach ($detailRawMaterialConsumptions as $detailRawMaterialConsumption) {
+        foreach ($detailRawMaterialConsumptions as $detailRawMaterialConsumption) 
+        {
+            $detailRawMaterialConsumption->totalize();
             $totalPlan += $detailRawMaterialConsumption->getTotalPlan();
             $totalReal += $detailRawMaterialConsumption->getTotalReal();
         }
@@ -327,9 +329,5 @@ class RawMaterialConsumptionPlanning extends BaseModel
         $this->setTotalPlan($totalPlan);
         $this->setTotalReal($totalReal);
         $this->setPercentage($percentage);
-//        var_dump($totalPlan);
-//        var_dump($totalReal);
-//        var_dump($percentage);
-//        die;
     }
 }
