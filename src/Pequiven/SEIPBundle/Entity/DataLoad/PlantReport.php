@@ -423,4 +423,12 @@ class PlantReport extends ModelBaseMaster
         $full = sprintf("%s (%s)",$this->reportTemplate->getName(),$this->reportTemplate->getRef());
         return $full;
     }
+    
+    public function recalculate()
+    {
+        $this->calculate();
+        foreach ($this->productsReport as $productReport) {
+            $productReport->recalculate();
+        }
+    }
 }

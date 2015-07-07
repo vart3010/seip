@@ -46,7 +46,7 @@ class CompanyAdmin extends \Pequiven\MasterBundle\Admin\BaseAdmin
         
         $parameters = array();
         
-        if($object != null){
+        if($object !== null && $object->getId() > 0){
             $parameters['query_builder'] = function(\Doctrine\ORM\EntityRepository $repository) use ($object){
                 return $repository->getQueryNotMe($object);
             };

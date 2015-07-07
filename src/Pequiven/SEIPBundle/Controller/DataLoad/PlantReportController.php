@@ -79,6 +79,8 @@ class PlantReportController extends SEIPController
      */
     public function runAction(Request $request)
     {
+        set_time_limit(400);
+        
         $resource = $this->findOr404($request);
         $productsReport = $resource->getProductsReport();
         $plantStopPlanningsByMonths = $resource->getPlantStopPlanningSortByMonth();
@@ -182,6 +184,7 @@ class PlantReportController extends SEIPController
 //                        var_dump($aliquot);
 //                        var_dump($totalPlan);
                         $propertyAccessor->setValue($detail, $propertyPath, $total);
+                        $detail->totalize();
                         $this->save($detail);
                     }
 
@@ -209,6 +212,7 @@ class PlantReportController extends SEIPController
                         }
                         $total = $aliquot * $totalPlan;
                         $propertyAccessor->setValue($detail, $propertyPath, $total);
+                        $detail->totalize();
                         $this->save($detail);
                     }
 

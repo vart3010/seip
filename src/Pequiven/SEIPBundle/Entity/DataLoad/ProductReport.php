@@ -396,6 +396,13 @@ class ProductReport extends BaseModel
         return $this->indicator;
     }
     
+    public function recalculate()
+    {
+        foreach ($this->rawMaterialConsumptionPlannings as $value) {
+            $value->calculate();
+        }
+    }
+    
     public function __toString() 
     {
         $_toString = "-";
