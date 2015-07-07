@@ -2362,9 +2362,9 @@ angular.module('seipModule.controllers', [])
                     });
                 });
             }
-            
+
             //2-Gráfico en forma de dona para mostrar las variables plan y real a partir de ecuación de la fórmula del indicador
-            $scope.chargeChartDoughnut2dWithVariablesRealPlan = function (indicatorId, render, width, height)  {
+            $scope.chargeChartDoughnut2dWithVariablesRealPlan = function (indicatorId, render, width, height) {
                 var getdataChartDoughnut2dWithVariablesRealPlan = Routing.generate("getDataChartDoughnutWithVariablesRealPlan", {id: indicatorId});
                 $http.get(getdataChartDoughnut2dWithVariablesRealPlan).success(function (data) {
                     FusionCharts.ready(function () {
@@ -2384,7 +2384,7 @@ angular.module('seipModule.controllers', [])
                     });
                 });
             }
-            
+
             //3-Gráfico para mostrar las variables de un indicador que esten marcadas como "real"
             $scope.chargeChartPieVariablesMarkedReal = function (indicatorId, render, width, height) {
                 var getDataChartPieVariablesMarkedReal = Routing.generate("getDataChartPieVariablesMarkedReal", {id: indicatorId});
@@ -2429,7 +2429,7 @@ angular.module('seipModule.controllers', [])
                     });
                 });
             }
-            
+
             //5-Gráfico para mostrar las variables de un indicador que esten marcadas como "plan"
             $scope.chargeChartPieVariablesMarkedPlan = function (indicatorId, render, width, height) {
                 var getDataChartPieVariablesMarkedPlan = Routing.generate("getDataChartPieVariablesMarkedPlan", {id: indicatorId});
@@ -2451,7 +2451,7 @@ angular.module('seipModule.controllers', [])
                     });
                 });
             }
-            
+
             //6-Gráfico para mostrar información de 2 variables (respecto al eje izquierdo) y el resultado de la medición (respecto al eje derecho en valor porcentual), del indicador
             $scope.chargeChartBarsAreaVariablesRealPlanByFrequencyNotification = function (indicatorId, render, width, height) {
                 var getDataChartBarsAreaVariablesRealPlanByFrequencyNotification = Routing.generate("getDataChartBarsAreaVariablesRealPlanByFrequencyNotification", {id: indicatorId});
@@ -2496,7 +2496,7 @@ angular.module('seipModule.controllers', [])
                     });
                 });
             }
-            
+
             //8-Gráfico para mostrar las variables (sumativas al real) de un indicador con fórmula a partir de ecuación
             $scope.chargeChartPieVariablesRealFromEquation = function (indicatorId, render, width, height) {
                 var getDataChartPieVariablesRealFromEquation = Routing.generate("getDataChartPieVariablesRealFromEquation", {id: indicatorId});
@@ -2518,7 +2518,7 @@ angular.module('seipModule.controllers', [])
                     });
                 });
             }
-            
+
             //9-Gráfico para mostrar información de 2 variables (respecto al eje izquierdo) y el resultado de la medición (respecto al eje derecho en valor porcentual), del indicador
             $scope.chargeChartColumnLineDualAxisByFrequencyNotification = function (indicatorId, render, width, height) {
                 var getDataChartColumnLineDualAxisByFrequencyNotification = Routing.generate("getDataChartColumnLineDualAxisByFrequencyNotification", {id: indicatorId});
@@ -2541,7 +2541,7 @@ angular.module('seipModule.controllers', [])
                     });
                 });
             }
-            
+
             //10-Gráfico para mostrar información de 2 variables (respecto al eje izquierdo) y el resultado de la medición (respecto al eje derecho en valor porcentual), del indicador (Variables marcadas como real/plan)
             $scope.chargeChartBarsAreaVariablesMarkedRealPlanByFrequencyNotification = function (indicatorId, render, width, height) {
                 var getDataChartBarsAreaVariablesMarkedRealPlanByFrequencyNotification = Routing.generate("getDataChartBarsAreaVariablesMarkedRealPlanByFrequencyNotification", {id: indicatorId});
@@ -2564,7 +2564,7 @@ angular.module('seipModule.controllers', [])
                     });
                 });
             }
-            
+
             //11-Gráfico tipo barras vertical para mostrar las variables marcadas como real/plan de la fórmula del indicador respecto al eje izquierdo, de acuerdo a la frecuencia de notificación
             $scope.chargeChartColumnVariablesMarkedRealPlanByFrequencyNotification = function (indicatorId, render, width, height) {
                 var getDataChartColumnVariablesMarkedRealPlanByFrequencyNotification = Routing.generate("getDataChartColumnVariablesMarkedRealPlanByFrequencyNotification", {id: indicatorId});
@@ -2587,7 +2587,7 @@ angular.module('seipModule.controllers', [])
                     });
                 });
             }
-            
+
             //Gráfico en forma tacómetro (Usado para mostrar el resultado de los indicadores estratégicos en el dashboard)
             $scope.renderChartExample = function (indicatorId, render, width, height) {
                 FusionCharts.ready(function () {
@@ -2707,16 +2707,17 @@ angular.module('seipModule.controllers', [])
         })
 
         .controller('ToolsController', function ($scope, ngTableParams, $http, sfTranslator, notifyService) {
-            $scope.isGrantedButtonEdit = function (id,index) {
+            $scope.isGrantedButtonEdit = function (id, index) {
                 //index = index+1;
-                var data;;
-                var getdataBarsArea = Routing.generate("getIsGrantEditButton", {id: id,index:index});
+                var data;
+                ;
+                var getdataBarsArea = Routing.generate("getIsGrantEditButton", {id: id, index: index});
                 $http.get(getdataBarsArea).success(function (data) {
                     //console.log(index+"->"+data);
                     //console.log(data);
-                    if(data=="1") {
-                        $("div#target_"+index).show();
-                    } 
+                    if (data == "1") {
+                        $("div#target_" + index).show();
+                    }
                 });
 
             }
@@ -3085,7 +3086,7 @@ angular.module('seipModule.controllers', [])
             $scope.renderChartPie2d = function (id, data, width, height) {
                 FusionCharts.ready(function () {
                     var chartPie2d = new FusionCharts({
-                        "type": "pie2d",
+                        "type": "pie3d",
                         "renderAt": id,
                         "width": width,
                         "height": height,
