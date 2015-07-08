@@ -130,15 +130,40 @@ class UnrealizedProductionController extends SEIPController {
         $causes = $causeFailService->getFailsCause($resource);
 
 
+
         //$datosServices = array("causeFailService" => $causeFailService, "fails" => $causes, "failNames" => $failsNames);
-        $datosServicesInternal  = array("data"=>$causeFailService->getArrayTotals($resource,$causes["TYPE_FAIL_INTERNAL"],$failsNames[0]));
+        $datosServicesInternal = array("data" => $causeFailService->getArrayTotals($resource, $causes["TYPE_FAIL_INTERNAL"], $failsNames[0]));
         $datacharInternal = $causeFailService->generatePieTotals($resource, $datosServicesInternal);
 
-        $datosServicesExternal  = array("data"=>$causeFailService->getArrayTotals($resource,$causes["TYPE_FAIL_EXTERNAL"],$failsNames[1]));
+        $datosServicesExternal = array("data" => $causeFailService->getArrayTotals($resource, $causes["TYPE_FAIL_EXTERNAL"], $failsNames[1]));
         $datacharExternal = $causeFailService->generatePieTotals($resource, $datosServicesExternal);
 
 
+        $mp = $causeFailService->getFailsCauseMp($resource);
+        if (count($mp) > 0) {
+            $InternalCategoriesMp = array();
+            $ExternalCategoriesMp = array();
+            foreach ($mp["getInternalCausesMp"] as $key => $values) {
+                if ($key != "total") {
+                    array_push($InternalCategoriesMp, $key);
+                }
+            }
+            foreach ($mp["getExternalCausesMp"] as $key => $values) {
+                if ($key != "total") {
+                    array_push($ExternalCategoriesMp, $key);
+                }
+            }
 
+
+            $datosServicesInternalMp = array("data" => $causeFailService->getArrayTotals($resource, $mp["getInternalCausesMp"], $InternalCategoriesMp));
+            $datacharInternalMp = $causeFailService->generatePieTotals($resource, $datosServicesInternalMp);
+
+            $datosServicesInternalMp = array("data" => $causeFailService->getArrayTotals($resource, $mp["getExternalCausesMp"], $ExternalCategoriesMp));
+            $datacharExternalMp = $causeFailService->generatePieTotals($resource, $datosServicesInternalMp);
+        } else {
+            $datacharInternalMp = "";
+            $datacharExternalMp = "";
+        }
         $view = $this
                 ->view()
                 ->setTemplate($this->config->getTemplate('show.html'))
@@ -148,8 +173,11 @@ class UnrealizedProductionController extends SEIPController {
             "externalCauses" => $failsNames[1],
             "causeFailService" => $causeFailService,
             "causes" => $causes,
-            "dataInternal" => json_encode($datacharInternal), //DATOS[0] => INTERNAS DATOS[1]=>EXTERNAS
-            "dataExternal" => json_encode($datacharExternal) //DATOS[0] => INTERNAS DATOS[1]=>EXTERNAS
+            "mp" => $mp,
+            "dataInternal" => json_encode($datacharInternal),
+            "dataExternal" => json_encode($datacharExternal),
+            "dataInternalMp" => json_encode($datacharInternalMp),
+            "dataExternalMp" => json_encode($datacharExternalMp)
         ));
 
         return $this->handleView($view);

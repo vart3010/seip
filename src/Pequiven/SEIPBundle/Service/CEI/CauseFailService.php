@@ -41,6 +41,33 @@ class CauseFailService implements ContainerAwareInterface {
         return $unrealizedProduction->getDaysPerMonth($unrealizedProduction->getMonth());
     }
 
+    public function getArrayTotalsMp(UnrealizedProduction $unrealizedProduction, $mp, $type) {
+        $days = $this->getDaysMonth($unrealizedProduction);
+
+        $totals = array();
+
+        //var_dump($mp[$type]["total"]);
+        $total = 0;
+        foreach ($mp[$type] as $key => $product) {
+
+            if ($key == "total") {
+                
+                for ($d = 1; $d < $days; $d++) {
+                    $total = $total + $product[$d];
+                }
+            } else {
+                $sumaCat = 0;
+                for ($d = 1; $d < $days; $d++) {
+                    $sumaCat = $sumaCat + $product[$d];
+                }
+                array_push($totals, $sumaCat);
+            }
+        }
+        array_push($totals, $total);
+        //var_dump($totals);
+        return $totals;
+    }
+
     public function getArrayTotals(UnrealizedProduction $unrealizedProduction, $arrayCauses, $categories) {
         $days = $this->getDaysMonth($unrealizedProduction);
         $totals = array();
@@ -72,25 +99,84 @@ class CauseFailService implements ContainerAwareInterface {
             "getInternalCausesMp",
             "getExternalCausesMp"
         );
+
+        //Obtenemos la materia prima por la cual no se realizo la producciòn
+        $productsInternalMp = array();
+        $productsExternalMp = array();
         $cont = 0;
         foreach ($methods as $m) {
 
             $methodName = $m->getName();
             if (preg_match($nameMatch, $methodName)) {    //filtra los metodos getDayXXDetails
                 $unrealizedProductionDay = $unrealizedProduction->$methodName();
-                var_dump($methodName);
-                
+//                var_dump($methodName);
+
                 if ($unrealizedProductionDay != "") {
                     foreach ($methodTypeCauses as $key) { //RECORRE EL ARRAY DE CAUSAS
-                        var_dump($key);
+//                        var_dump($key);
                         foreach ($unrealizedProductionDay->$key() as $fails) {
-                            var_dump($fails->getMount());
+                            if ($key == "getInternalCausesMp") {
+                                if (!array_key_exists($fails->getRawMaterial()->getName(), $productsInternalMp)) {
+                                    $productsInternalMp[$fails->getRawMaterial()->getName()] = $fails->getRawMaterial();
+                                }
+                            }
+                            if ($key == "getExternalCausesMp") {
+                                if (!array_key_exists($fails->getRawMaterial()->getName(), $productsExternalMp)) {
+                                    $productsExternalMp[$fails->getRawMaterial()->getName()] = $fails->getRawMaterial();
+                                }
+                            }
+
+//                            var_dump($fails->getRawMaterial()->getName());
+//                            $mp[$key][$fails->getRawMaterial()->getName()][$cont] = 0;
                         }
                     }
                 }
                 $cont++;
             }
         }
+        //var_dump($productsExternalMp);
+        $mp = array();
+
+        foreach ($productsInternalMp as $InternalMp) {
+            for ($x = 1; $x <= $daysMonth; $x++) {
+                $mp["getInternalCausesMp"][$InternalMp->getName()][$x] = 0.0;
+                $mp["getInternalCausesMp"]["total"][$x] = 0.0;
+            }
+        }
+
+        foreach ($productsExternalMp as $ExternaMp) {
+            for ($x = 1; $x <= $daysMonth; $x++) {
+                $mp["getExternalCausesMp"][$ExternaMp->getName()][$x] = 0.0;
+                $mp["getExternalCausesMp"]["total"][$x] = 0.0;
+            }
+        }
+
+        //var_dump($productsInternalMp);
+        //Obtenemos nuestra matriz [tipo_pnr_mp][producto][dia]
+        $cont = 0;
+        foreach ($methods as $m) {
+
+            $methodName = $m->getName();
+            if (preg_match($nameMatch, $methodName)) {    //filtra los metodos getDayXXDetails
+                $unrealizedProductionDay = $unrealizedProduction->$methodName();
+                //var_dump($methodName);
+
+                if ($unrealizedProductionDay != "") {
+                    foreach ($methodTypeCauses as $key) { //RECORRE EL ARRAY DE CAUSAS
+                        //var_dump($key);
+                        foreach ($unrealizedProductionDay->$key() as $fails) {
+                            //var_dump($fails->getRawMaterial()->getName());
+                            $mp[$key][$fails->getRawMaterial()->getName()][$cont] = $fails->getMount();
+                            $mp[$key]["total"][$cont] = $mp[$key]["total"][$cont] + $fails->getMount();
+                        }
+                    }
+                }
+                $cont++;
+            }
+        }
+        //var_dump($mp["getInternalCausesMp"]);
+        
+        return $mp;
     }
 
     public function getFailsCause(UnrealizedProduction $unrealizedProduction) {
@@ -358,8 +444,9 @@ class CauseFailService implements ContainerAwareInterface {
         $chart["legendBgColor"] = "#ffffff";
         $chart["legendBorderAlpha"] = "0";
         $chart["legendShadow"] = "0";
-        $chart["legendItemFontSize"] = "12";
+        $chart["legendItemFontSize"] = "14";
         $chart["legendItemFontColor"] = "#666666";
+        $chart["valueFontSize"] = "14";
 
 
         $data = $options["data"];
