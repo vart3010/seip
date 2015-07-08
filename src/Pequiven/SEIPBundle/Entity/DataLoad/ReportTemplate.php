@@ -88,13 +88,21 @@ class ReportTemplate extends BaseModel
      * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\PlantReport",mappedBy="reportTemplate",cascade={"remove"})
      */
     private $plantReports;
-
+    
+    /**
+     * Usuarios
+     * @var type 
+     * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\User",mappedBy="reportTemplates")
+     */
+    private $users;
+    
     /**
      * Constructor
      */
     public function __construct()
     {
         $this->plantReports = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->users = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**

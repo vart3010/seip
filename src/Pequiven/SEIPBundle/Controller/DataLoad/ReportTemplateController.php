@@ -29,7 +29,7 @@ class ReportTemplateController extends SEIPController
 
             $resources = $this->resourceResolver->getResource(
                 $repository,
-                'createPaginator',
+                'createPaginatorByUser',
                 array($criteria, $sorting)
             );
             $maxPerPage = $this->config->getPaginationMaxPerPage();

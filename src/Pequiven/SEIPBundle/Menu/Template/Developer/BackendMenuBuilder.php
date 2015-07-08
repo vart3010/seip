@@ -90,6 +90,11 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
             $this->addPlanningMenu($menu, $section);
         }
         
+        //Menú Operaciones
+        if($this->isGranted('ROLE_SEIP_OPERATION_*')){
+            $this->addMenuOperation($menu, $section);
+        }
+        
         //Menú SIG
         if($this->isGranted('ROLE_SEIP_SIG_MENU')){
             $this->addMenuSIG($menu, $section);
@@ -877,6 +882,35 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
              }
                 
         $menu->addChild($menuResults);
+    }
+    
+    private function addMenuOperation(ItemInterface $menu, $section){
+        $menuOperations = $this->factory->createItem('results',
+                $this->getSubLevelOptions(array(
+                    'uri' => null,
+                    'labelAttributes' => array('icon' => '',),
+                ))
+                )
+                ->setLabel($this->translate(sprintf('app.backend.menu.%s.operations.main', $section)));
+        
+            $reports = $this->factory->createItem('operations.reports',
+                        $this->getSubLevelOptions(array(
+                        'uri' => null,
+                        'labelAttributes' => array('icon' => '',),
+                        ))
+                    )->setLabel($this->translate(sprintf('app.backend.menu.%s.operations.reports.main', $section)));
+            
+                $production = $this->factory->createItem('operations.reports.production',
+                    $this->getSubLevelOptions(array(
+                        "route" => "pequiven_report_template_index",
+                    ))
+                )->setLabel($this->translate(sprintf('app.backend.menu.%s.operations.reports.production', $section)));
+        
+                $reports->addChild($production);
+                
+            $menuOperations->addChild($reports);
+            
+        $menu->addChild($menuOperations);
     }
     
     private function addDataLoad(ItemInterface $menu, $section)

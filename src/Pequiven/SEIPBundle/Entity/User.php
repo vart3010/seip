@@ -181,7 +181,14 @@ class User extends BaseUser implements UserInterface,UserBoxInterface,  PeriodIt
      * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\PlantReport",inversedBy="users")
      */
     private $plantReports;
-
+    
+    /**
+     * Reportes de plantas que puede cargar el usuario
+     * @var DataLoad\ReportTemplate
+     * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate",inversedBy="users")
+     */
+    private $reportTemplates;
+    
     /**
      * Constructor
      */
@@ -196,6 +203,7 @@ class User extends BaseUser implements UserInterface,UserBoxInterface,  PeriodIt
         $this->boxes = new \Doctrine\Common\Collections\ArrayCollection();
         $this->groups = new \Doctrine\Common\Collections\ArrayCollection();
         $this->plantReports = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->reportTemplates = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**
@@ -839,5 +847,38 @@ class User extends BaseUser implements UserInterface,UserBoxInterface,  PeriodIt
     public function getPlantReports()
     {
         return $this->plantReports;
+    }
+    
+    /**
+     * Add reportTemplates
+     *
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\PlantReport $reportTemplates
+     * @return User
+     */
+    public function addReportTemplates(\Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate $reportTemplates)
+    {
+        $this->reportTemplates[] = $reportTemplates;
+
+        return $this;
+    }
+
+    /**
+     * Remove reportTemplates
+     *
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate $reportTemplates
+     */
+    public function removeReportTemplates(\Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate $reportTemplates)
+    {
+        $this->reportTemplates->removeElement($reportTemplates);
+    }
+
+    /**
+     * Get reportTemplates
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getReportTemplates()
+    {
+        return $this->reportTemplates;
     }
 }

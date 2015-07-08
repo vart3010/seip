@@ -55,6 +55,18 @@ class User extends AbstractType {
                 'group_by' => 'reportTemplate'
                 )
             )
+            ->add('reportTemplates','entity',array(
+                'class' => 'Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate',
+                'property' => 'name',
+                'required' => false,
+                'empty_data' => null,
+                'empty_value' => 'Ninguna',
+//                'label' => 'pequiven_seip.gerenciaFirst',
+                'translation_domain' => 'PequivenSEIPBundle',
+                'attr' => array('class' => 'select2 input-xlarge'),
+                'multiple' => true,
+                )
+            )
             ->add('groups','entity',$parametersUser)
             ->add('roles', 'choice', array(
                 'label' => 'pequiven_seip.group_roles',
