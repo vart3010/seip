@@ -1839,6 +1839,15 @@ class IndicatorService implements ContainerAwareInterface {
     protected function trans($id, array $parameters = array(), $domain = 'messages') {
         return $this->container->get('translator')->trans($id, $parameters, $domain);
     }
+    
+    public function getSecurityContext()
+    {
+        if (!$this->container->has('security.context')) {
+            throw new \LogicException('The SecurityBundle is not registered in your application.');
+        }
+
+        return $this->container->get('security.context');
+    }
 
     /**
      * Generates a URL from the given parameters.
@@ -1929,12 +1938,12 @@ class IndicatorService implements ContainerAwareInterface {
 
         $valuesIndicator = count($indicator->getValuesIndicator());
 
-        if ($rs == $valuesIndicator) {
-            return false;
-        } else {
-            return true;
+            if ($rs == $valuesIndicator) {
+                return false;
+            } else {
+                return true;
+            }
         }
-    }
 
     public function isGrantToEdit(Indicator $indicator, $indice) {
         $freq = $indicator->getFrequencyNotificationIndicator()->getDays();
