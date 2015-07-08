@@ -444,8 +444,9 @@ class CauseFailService implements ContainerAwareInterface {
         $chart["legendBgColor"] = "#ffffff";
         $chart["legendBorderAlpha"] = "0";
         $chart["legendShadow"] = "0";
-        $chart["legendItemFontSize"] = "12";
+        $chart["legendItemFontSize"] = "14";
         $chart["legendItemFontColor"] = "#666666";
+        $chart["valueFontSize"] = "14";
 
 
         $data = $options["data"];
