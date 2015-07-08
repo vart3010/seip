@@ -401,6 +401,12 @@ class ProductReport extends BaseModel
         foreach ($this->rawMaterialConsumptionPlannings as $value) {
             $value->calculate();
         }
+        foreach ($this->inventorys as $value) {
+            $value->calculate();
+        }
+        foreach ($this->unrealizedProductions as $value) {
+            $value->calculate();
+        }
     }
     
     public function __toString() 

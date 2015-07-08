@@ -140,29 +140,34 @@ class UnrealizedProductionController extends SEIPController {
 
 
         $mp = $causeFailService->getFailsCauseMp($resource);
+        $datacharInternalMp = $datacharExternalMp = "";
         if (count($mp) > 0) {
             $InternalCategoriesMp = array();
             $ExternalCategoriesMp = array();
-            foreach ($mp["getInternalCausesMp"] as $key => $values) {
-                if ($key != "total") {
-                    array_push($InternalCategoriesMp, $key);
+            if(isset($mp["getInternalCausesMp"])){
+                foreach ($mp["getInternalCausesMp"] as $key => $values) {
+                    if ($key != "total") {
+                        array_push($InternalCategoriesMp, $key);
+                    }
                 }
             }
-            foreach ($mp["getExternalCausesMp"] as $key => $values) {
-                if ($key != "total") {
-                    array_push($ExternalCategoriesMp, $key);
+            if(isset($mp["getExternalCausesMp"])){
+                foreach ($mp["getExternalCausesMp"] as $key => $values) {
+                    if ($key != "total") {
+                        array_push($ExternalCategoriesMp, $key);
+                    }
                 }
             }
 
 
-            $datosServicesInternalMp = array("data" => $causeFailService->getArrayTotals($resource, $mp["getInternalCausesMp"], $InternalCategoriesMp));
-            $datacharInternalMp = $causeFailService->generatePieTotals($resource, $datosServicesInternalMp);
-
-            $datosServicesInternalMp = array("data" => $causeFailService->getArrayTotals($resource, $mp["getExternalCausesMp"], $ExternalCategoriesMp));
-            $datacharExternalMp = $causeFailService->generatePieTotals($resource, $datosServicesInternalMp);
-        } else {
-            $datacharInternalMp = "";
-            $datacharExternalMp = "";
+            if(isset($mp["getInternalCausesMp"])){
+                $datosServicesInternalMp = array("data" => $causeFailService->getArrayTotals($resource, $mp["getInternalCausesMp"], $InternalCategoriesMp));
+                $datacharInternalMp = $causeFailService->generatePieTotals($resource, $datosServicesInternalMp);
+            }
+            if(isset($mp["getExternalCausesMp"])){
+                $datosServicesInternalMp = array("data" => $causeFailService->getArrayTotals($resource, $mp["getExternalCausesMp"], $ExternalCategoriesMp));
+                $datacharExternalMp = $causeFailService->generatePieTotals($resource, $datosServicesInternalMp);
+            }
         }
         $view = $this
                 ->view()

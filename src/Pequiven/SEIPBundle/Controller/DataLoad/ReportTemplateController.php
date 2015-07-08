@@ -103,8 +103,8 @@ class ReportTemplateController extends SEIPController
         if($this->getSecurityService()->isGranted('ROLE_SEIP_DATA_LOAD_CHANGE_DATE')){
             $dateString = $request->get('dateNotification',null);
         }
-        $plantReport = $request->get('plant_report',null);
-        if($plantReport === null){
+        $plantReportToLoad = $request->get('plant_report',null);
+        if($plantReportToLoad === null){
             return $this->redirect($this->generateUrl('pequiven_plant_report_index'));
         }
         $dateNotification = null;
@@ -114,17 +114,109 @@ class ReportTemplateController extends SEIPController
         if($dateNotification === null){
             $dateNotification = new \DateTime();
         }
-        $resource = $this->getRepository()->findToNotify($request->get("id"),$dateNotification,$plantReport);
+        $resource = $this->getRepository()->findToNotify($request->get("id"),$dateNotification,$plantReportToLoad);
         
         if(!$resource){
             throw $this->createNotFoundException('No se encontro la planificacion');
         }
+        $month = (int)$dateNotification->format("m");
+        $methodDetailPnr = sprintf("getDay%sDetails",(int)$dateNotification->format("d"));
+        
+        $originalInternalCauses = new \Doctrine\Common\Collections\ArrayCollection();
+        $originalExternalCauses = new \Doctrine\Common\Collections\ArrayCollection();
+        $originalInternalCausesMp = new \Doctrine\Common\Collections\ArrayCollection();
+        $originalExternalCausesMp = new \Doctrine\Common\Collections\ArrayCollection();
+        
+        foreach ($resource->getPlantReports() as $plantReport)
+        {
+            if($plantReport->getId() !== (int)$plantReportToLoad){
+                continue;
+            }
+            foreach ($plantReport->getProductsReport() as $productReport) 
+            {
+                $unrealizedProductionsSortByMonth = $productReport->getUnrealizedProductionsSortByMonth();
+                if(!isset($unrealizedProductionsSortByMonth[$month])){
+                    break;
+                }
+                $unrealizedProduction = $unrealizedProductionsSortByMonth[$month];
+                $unrealizedProductionDay = $unrealizedProduction->$methodDetailPnr();
+                if(!$unrealizedProductionDay){
+                    break;
+                }
+                
+                foreach ($unrealizedProductionDay->getInternalCauses() as $value) {
+                    $originalInternalCauses->add($value);
+                }
+                foreach ($unrealizedProductionDay->getExternalCauses() as $value) {
+                    $originalExternalCauses->add($value);
+                }
+                foreach ($unrealizedProductionDay->getInternalCausesMp() as $value) {
+                    $originalInternalCausesMp->add($value);
+                }
+                foreach ($unrealizedProductionDay->getExternalCausesMp() as $value) {
+                    $originalExternalCausesMp->add($value);
+                }
+            }
+        }//fin for
+        
         
         $form = $this->createForm(new \Pequiven\SEIPBundle\Form\DataLoad\Notification\ReportTemplateType($dateNotification,$resource),$resource);
         
-        if($request->isMethod('POST') && $form->submit($request,false)->isValid()){
-            $data = $form->getData();
-            $data->recalculate();
+        if($request->isMethod('POST') && $form->submit($request,true)->isValid()){
+            $em = $this->getDoctrine()->getManager();
+            foreach ($resource->getPlantReports() as $plantReport)
+            {
+                if($plantReport->getId() !== (int)$plantReportToLoad){
+                    continue;
+                }
+                foreach ($plantReport->getProductsReport() as $productReport) 
+                {
+                    $unrealizedProductionsSortByMonth = $productReport->getUnrealizedProductionsSortByMonth();
+                    if(!isset($unrealizedProductionsSortByMonth[$month])){
+                        break;
+                    }
+                    $unrealizedProduction = $unrealizedProductionsSortByMonth[$month];
+                    $unrealizedProductionDay = $unrealizedProduction->$methodDetailPnr();
+                    if(!$unrealizedProductionDay){
+                        break;
+                    }
+
+                    foreach ($originalInternalCauses as $original) {
+                        if(false === $unrealizedProductionDay->getInternalCauses()->contains($original))
+                        {
+                            $unrealizedProductionDay->getInternalCauses()->removeElement($original);
+                            $em->remove($original);
+                        }
+                    }
+                    
+                    foreach ($originalExternalCauses as $original) {
+                        if(false === $unrealizedProductionDay->getExternalCauses()->contains($original))
+                        {
+                            $unrealizedProductionDay->getExternalCauses()->removeElement($original);
+                            $em->remove($original);
+                        }
+                    }
+                    
+                    foreach ($originalInternalCausesMp as $original) {
+                        if(false === $unrealizedProductionDay->getInternalCausesMp()->contains($original))
+                        {
+                            $unrealizedProductionDay->getInternalCausesMp()->removeElement($original);
+                            $em->remove($original);
+                        }
+                    }
+                    
+                    foreach ($originalExternalCausesMp as $original) {
+                        if(false === $unrealizedProductionDay->getExternalCausesMp()->contains($original))
+                        {
+                            $unrealizedProductionDay->getExternalCausesMp()->removeElement($original);
+                            $em->remove($original);
+                        }
+                    }
+                }
+            }//fin for
+            $em->flush();
+            
+            $resource->recalculate();
             $this->domainManager->update($resource);
             return $this->redirect($this->generateUrl('pequiven_report_template_list'));
         }
