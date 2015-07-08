@@ -204,6 +204,7 @@ class UnrealizedProductionController extends SEIPController {
 
         return $this->handleView($view);
     }
+    }
 
     /**
      * 
