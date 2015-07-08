@@ -85,7 +85,7 @@ class ReportTemplateRepository extends SeipEntityRepository
         $queryBuilder = $this->getCollectionQueryBuilder();
         $user = $this->getUser();
         
-       if(!$this->getSecurityContext()->isGranted(array('ROLE_SEIP_OPERATION_VIEW_REPORT_PRODUCTION_TEMPLATES_ALL'))){
+       if(!$this->getSecurityContext()->isGranted(array('ROLE_SEIP_OPERATION_LIST_PLANNING_PRODUCTION_TEMPLATES_ALL'))){
            $queryBuilder
                 ->innerJoin("rt.users", 'rt_u')
                 ->andWhere("rt_u.id = :user")

@@ -186,4 +186,10 @@ app:
                         reports:
                             main: Reportes
                             production: Producción
+                        planning:
+                            main: Planificación
+                            production: Producción
+                        notification:
+                            main: Notificación
+                            production: Producción
                             
