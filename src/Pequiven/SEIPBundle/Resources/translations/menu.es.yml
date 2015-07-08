@@ -181,4 +181,9 @@ app:
                         sales: Ventas
                         finance: Finanzas
                         notification: Notificación
+                    operations:
+                        main: Operaciones
+                        reports:
+                            main: Reportes
+                            production: Producción
                             

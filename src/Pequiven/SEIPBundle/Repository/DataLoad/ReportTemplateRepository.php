@@ -74,6 +74,31 @@ class ReportTemplateRepository extends SeipEntityRepository
         return $qb->getQuery()->getOneOrNullResult();
     }
     
+    /**
+     * Retorna las plantillas a las cuales el usuario tiene acceso
+     * @param array $criteria
+     * @param array $orderBy
+     * @return type
+     */
+    public function createPaginatorByUser(array $criteria = null, array $orderBy = null) 
+    {
+        $queryBuilder = $this->getCollectionQueryBuilder();
+        $user = $this->getUser();
+        
+       if(!$this->getSecurityContext()->isGranted(array('ROLE_SEIP_OPERATION_VIEW_REPORT_PRODUCTION_TEMPLATES_ALL'))){
+           $queryBuilder
+                ->innerJoin("rt.users", 'rt_u')
+                ->andWhere("rt_u.id = :user")
+                ->setParameter("user", $user)
+                ;
+       }
+       
+        $this->applyCriteria($queryBuilder, $criteria);
+        $this->applySorting($queryBuilder, $orderBy);
+
+        return $this->getPaginator($queryBuilder);
+    }
+    
     protected function applyCriteria(QueryBuilder $queryBuilder, array $criteria = null) {
         $criteria = new ArrayCollection($criteria);
         $queryBuilder
