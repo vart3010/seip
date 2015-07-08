@@ -167,12 +167,14 @@
                     </div>
                 </div>
 
-                {% set mp = causeFailService.getFailsCauseMp(unrealized_production) %}
-
+                {#{% set mp = causeFailService.getFailsCauseMp(unrealized_production) %}#}
+              
+                 
                 <div id="tab-3" class="with-padding">
-                    <div class="columns">
-
-                        {% if(mp|length)>0 %}
+                    <div class="columns">   
+                       
+                          
+                        {% if mp["getInternalCausesMp"] is defined %}
                             <div class="six-columns">
 
                                 <table class="simple-table responsive-table tables-extras"  >
@@ -210,8 +212,8 @@
                                 </table>
                             </div>
                             <div class="six-columns">
-
-                                <div  ng-controller="DashboardController" ng-init="renderChartPie2d('unrelizedInternalMp', {{ dataInternalMp }},'100%','500')">
+                                  
+                                <div  ng-controller="DashboardController" ng-init="renderChartPie2d('unrelizedInternalMp', {{ dataInternalMp|json_encode() }},'100%','500')">
                                     <span id="unrelizedInternalMp"></span>
                                 </div>
 
@@ -228,7 +230,8 @@
                 </div>  
                 <div id="tab-4" class="with-padding">
                     <div class="columns">
-                        {% if(mp|length)>0 %}
+                        
+                        {% if mp["getExternalCausesMp"] is defined %}
                             <div class="six-columns">
                                 {% set mp = causeFailService.getFailsCauseMp(unrealized_production) %}
 
@@ -266,7 +269,7 @@
                             </div>
                             <div class="six-columns">
 
-                                <div  ng-controller="DashboardController" ng-init="renderChartPie2d('unrelizedExternalMp', {{ dataExternalMp }},'100%','500')">
+                                <div  ng-controller="DashboardController" ng-init="renderChartPie2d('unrelizedExternalMp', {{ dataExternalMp|json_encode() }},'100%','500')">
                                     <span id="unrelizedExternalMp"></span>
                                 </div>
 
