@@ -382,7 +382,7 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
             }
         }
         
-        if($arrangementProgram->getTacticalObjective()->getGerencia()->getId() == 22 || $arrangementProgram->getOperationalObjective()->getGerencia()->getId() == 22){
+        if($arrangementProgram->getTacticalObjective()->getGerencia()->getId() == 22 || $arrangementProgram->getOperationalObjective()->getGerenciaSecond()->getGerencia()->getId() == 22){
             $data['januaryReal']['isEnabled'] = true;
             $data['februaryReal']['isEnabled'] = true;
             $data['marchReal']['isEnabled'] = true;
