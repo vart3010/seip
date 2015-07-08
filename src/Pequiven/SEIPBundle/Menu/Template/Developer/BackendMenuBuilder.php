@@ -885,7 +885,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
     }
     
     private function addMenuOperation(ItemInterface $menu, $section){
-        $menuOperations = $this->factory->createItem('results',
+        $menuOperations = $this->factory->createItem('operations',
                 $this->getSubLevelOptions(array(
                     'uri' => null,
                     'labelAttributes' => array('icon' => '',),
