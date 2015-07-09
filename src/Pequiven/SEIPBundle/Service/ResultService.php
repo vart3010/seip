@@ -1148,9 +1148,6 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         $totalPlan = $totalReal = 0.0;
         //Calcular el total plan y real.
         foreach ($resultsItems as $resultItem) {
-            if($indicator->getId() == 1358){
-            var_dump($resultItem);
-        }
             $i++;
             if($details){
                 if($details->getSourceResult() == \Pequiven\IndicatorBundle\Model\Indicator\IndicatorDetails::SOURCE_RESULT_LAST_VALID){

@@ -1084,7 +1084,9 @@ class IndicatorService implements ContainerAwareInterface {
                 $label = $dataReal = $dataPlan = array();
                 $label["label"] = $children->getSummary();
                 $dataReal["value"] = number_format($arrayVariables[$children->getRef()]['dashboardEquationReal']['value'], 2, ',', '.');
+                $dataReal["link"] = $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $children->getId()));
                 $dataPlan["value"] = number_format($arrayVariables[$children->getRef()]['dashboardEquationPlan']['value'], 2, ',', '.');
+                $dataPlan["link"] = $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $children->getId()));
 
                 $category[] = $label;
                 $dataSetReal["data"][] = $dataReal;

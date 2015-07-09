@@ -294,7 +294,7 @@ class ChartController extends SEIPController {
     }
     
     /**
-     * 13-Función que retorna la data para un gráfico tipo columna 3d para mostrar el resultado real/plan de la ecuación para gráficos de la fórmula del indicador respecto al eje izquierdo, de acuerdo a la frecuencia de notificación
+     * 14-Función que retorna la data para un gráfico tipo columna 3d para mostrar el resultado real/plan de la ecuación para gráficos de la fórmula del indicador respecto al eje izquierdo, de acuerdo a la frecuencia de notificación
      * @return JsonResponse
      */
     public function getDataChartColumnRealPlanByFrequencyNotificationFromDashboardEquationAction(Request $request) {
