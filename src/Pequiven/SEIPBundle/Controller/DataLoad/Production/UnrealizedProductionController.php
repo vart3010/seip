@@ -185,7 +185,7 @@ class UnrealizedProductionController extends SEIPController {
 
 
 
-
+}
         $view = $this
                 ->view()
                 ->setTemplate($this->config->getTemplate('show.html'))
@@ -203,7 +203,7 @@ class UnrealizedProductionController extends SEIPController {
         ));
 
         return $this->handleView($view);
-    }
+    
     }
 
     /**
