@@ -18,6 +18,11 @@
         {{ form_errors(form.aliquot) }}
     </div>
     <div class="field-block button-height">
+        {{ form_label(form.automaticCalculationPlan) }}
+        {{ form_widget(form.automaticCalculationPlan) }}
+        {{ form_errors(form.automaticCalculationPlan) }}
+    </div>
+    <div class="field-block button-height">
         {{ form_label(form.productReport) }}
         {{ form_widget(form.productReport) }}
         {{ form_errors(form.productReport) }}

@@ -11,6 +11,7 @@ tecnocreaciones_vzla_government:
 pequiven:
     yes: Si
     no: No
+    calculate: Calcular
     description: Descripción
     history: Historial
     details: Detalles

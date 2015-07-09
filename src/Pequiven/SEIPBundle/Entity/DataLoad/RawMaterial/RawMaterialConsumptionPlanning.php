@@ -94,6 +94,13 @@ class RawMaterialConsumptionPlanning extends BaseModel
      * @ORM\Column(name="aliquot",type="float")
      */
     private $aliquot = 0;
+    
+    /**
+     * ¿Cálculo de plan automático?
+     * @var boolean 
+     * @ORM\Column(name="automaticCalculationPlan",type="boolean")
+     */
+    private $automaticCalculationPlan = true;
 
     /**
      * Constructor
@@ -284,6 +291,19 @@ class RawMaterialConsumptionPlanning extends BaseModel
     public function getProductReport()
     {
         return $this->productReport;
+    }
+    
+    function getAutomaticCalculationPlan() {
+        return $this->automaticCalculationPlan;
+    }
+    function isAutomaticCalculationPlan() {
+        return $this->automaticCalculationPlan;
+    }
+
+    function setAutomaticCalculationPlan($automaticCalculationPlan) {
+        $this->automaticCalculationPlan = $automaticCalculationPlan;
+        
+        return $this;
     }
     
     function getAliquot() {
