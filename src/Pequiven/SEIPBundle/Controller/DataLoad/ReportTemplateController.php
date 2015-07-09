@@ -403,13 +403,19 @@ class ReportTemplateController extends SEIPController {
             }
         }
         $reportService = $this->getProductReportService();
-        $dataGraphicsDay = $reportService->getArray($productsReport,$dateReport,$typeReport,"getSummaryDay");
-        $graphicsDay = $reportService->generatePie(array("array"=>$dataGraphicsDay,"caption"=>"Productos por Dia","subCaption"=>""));
-        
-        
-        $dataGraphicsMonth = $reportService->getArray($productsReport,$dateReport,$typeReport,"getSummaryMonth","plan_month");
-        $graphicsMonth = $reportService->generatePie(array("array"=>$dataGraphicsMonth,"caption"=>"Productos por Mes","subCaption"=>""));
-        
+
+//        $dataGraphicsDay = $reportService->getArray($productsReport,$dateReport,$typeReport,"getSummaryDay");
+//        $graphicsDay = $reportService->generatePie(array("array"=>$dataGraphicsDay,"caption"=>"Productos por Dia","subCaption"=>""));
+        //$planDay = $reportService->getArray($productsReport, $dateReport, $typeReport, "getSummaryDay", "plan");
+        //$realDay = $reportService->getArray($productsReport, $dateReport, $typeReport, "getSummaryDay", "real");
+
+        $graphicsDays = $reportService->generateColumn3dLinery(array("caption"=>"Producción por Dia","subCaption"=>"Valores Expresados en MTM"),$productsReport, $dateReport, $typeReport, "getSummaryDay", "plan", "real");
+        $graphicsMonth = $reportService->generateColumn3dLinery(array("caption"=>"Producción por Mes","subCaption"=>"Valores Expresados en MTM"),$productsReport, $dateReport, $typeReport, "getSummaryMonth", "plan_acumulated", "real_acumulated");
+        $graphicsYear = $reportService->generateColumn3dLinery(array("caption"=>"Producción por Año","subCaption"=>"Valores Expresados en MTM"),$productsReport, $dateReport, $typeReport, "getSummaryYear", "plan_acumulated", "real_acumulated");
+
+//        $dataGraphicsMonth = $reportService->getArray($productsReport,$dateReport,$typeReport,"getSummaryMonth","plan_month");
+//        $graphicsMonth = $reportService->generatePie(array("array"=>$dataGraphicsMonth,"caption"=>"Productos por Mes","subCaption"=>""));
+
         $data = array(
             'dateReport' => $dateReport,
             'productsReport' => $productsReport,
@@ -421,8 +427,11 @@ class ReportTemplateController extends SEIPController {
             'showMonth' => $showMonth,
             'showYear' => $showYear,
             'typeReport' => $typeReport,
-            "graphicDay" => json_encode($graphicsDay),
-            "graphicMonth" => json_encode($graphicsMonth)
+//            "graphicDay" => json_encode($graphicsDay),
+//            "graphicMonth" => json_encode($graphicsMonth),
+            "graphicsDays" => $graphicsDays,
+            "graphicsMonth" => $graphicsMonth,
+            "graphicsYear" => $graphicsYear
         );
 
         $view = $this

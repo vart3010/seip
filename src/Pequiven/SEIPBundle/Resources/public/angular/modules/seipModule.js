@@ -2587,9 +2587,9 @@ angular.module('seipModule.controllers', [])
                     });
                 });
             }
-            
+
             //12-Gráfico en forma de dona para mostrar los resultados real/plan a partir de la ecuación para gráficos de la fórmula del indicador
-            $scope.chargeChartVariablesRealPlanFromDashboardEquationDoughnut = function (indicatorId, render, width, height)  {
+            $scope.chargeChartVariablesRealPlanFromDashboardEquationDoughnut = function (indicatorId, render, width, height) {
                 var getdataChartVariablesRealPlanFromDashboardEquationDoughnut = Routing.generate("getDataChartVariablesRealPlanFromDashboardEquationDoughnut", {id: indicatorId});
                 $http.get(getdataChartVariablesRealPlanFromDashboardEquationDoughnut).success(function (data) {
                     FusionCharts.ready(function () {
@@ -2609,7 +2609,7 @@ angular.module('seipModule.controllers', [])
                     });
                 });
             }
-            
+
             //13-Gráfico tipo barras vertical para mostrar los resultados real/plan de la fórmula del indicador respecto al eje izquierdo, de los indicadores asociados.
             $scope.chargeChartColumnRealPlanIndicatorsAssociatedFromDashboardEquation = function (indicatorId, render, width, height) {
                 var getDataChartColumnRealPlanIndicatorsAssociatedFromDashboardEquation = Routing.generate("getDataChartColumnRealPlanIndicatorsAssociatedFromDashboardEquation", {id: indicatorId});
@@ -2632,7 +2632,7 @@ angular.module('seipModule.controllers', [])
                     });
                 });
             }
-            
+
             //Gráfico en forma tacómetro (Usado para mostrar el resultado de los indicadores estratégicos en el dashboard)
             $scope.renderChartExample = function (indicatorId, render, width, height) {
                 FusionCharts.ready(function () {
@@ -2769,6 +2769,8 @@ angular.module('seipModule.controllers', [])
         })
 
         .controller('DashboardController', function ($scope, ngTableParams, $http, sfTranslator, notifyService) {
+
+
 
             $scope.renderChartTactic = function (id, categories, dataPlanTactic, dataRealTactic, dataPorcTactic, caption, typeLabelDisplay) {
                 FusionCharts.ready(function () {
@@ -3316,6 +3318,32 @@ angular.module('seipModule.controllers', [])
                 })
             }
         })
+
+        .controller('ProductionController', function ($scope, ngTableParams, $http, sfTranslator, notifyService) {
+
+
+            $scope.renderChartColumn3dLinedy = function (id, data, width, height) {
+                FusionCharts.ready(function () {
+                    var renderChartColumn3dLinedy = new FusionCharts({
+                        "type": "mscolumn3dlinedy",
+                        "renderAt": id,
+                        "width": width + "%",
+                        "height": height,
+                        "dataFormat": "json",
+                        "dataSource": {
+                            "chart": data.dataSource.chart,
+                            "categories": data.dataSource.categories,
+                            "dataset": data.dataSource.dataset
+                    }
+
+
+                    });
+                    renderChartColumn3dLinedy.setTransparent(true);
+                    renderChartColumn3dLinedy.render();
+                });
+            }
+        })
+
         .controller('TableMonitorOperativeController', function ($scope, ngTableParams, $http, sfTranslator, notifyService) {
 
         })
@@ -3391,8 +3419,7 @@ angular.module('seipModule.controllers', [])
             });
         })
         .controller('TableGerenciaController', function ($scope) {
-            $scope.model = {
-                ManagementSystem: []
+            $scope.model = {ManagementSystem: []
             };
             $scope.exportToXLS = function (id)
             {

@@ -31,7 +31,7 @@ class ChartController extends SEIPController {
 
         return $response;
     }
-    
+
     /**
      * 1-Función que retorna la data para un gráfico tipo barras vertical para mostrar el real/plan de los indicadores asociados respecto al eje izquierdo y el resultado de la medición en valor porcentual respecto al lado derecho de los indicadores hijos.
      * @return JsonResponse
@@ -71,7 +71,7 @@ class ChartController extends SEIPController {
 
         return $response;
     }
-    
+
     /**
      * 3-Función que retorna la data para un gráfico para mostrar las variables de un indicador que esten marcadas como "real".
      * @return JsonResponse
@@ -80,7 +80,7 @@ class ChartController extends SEIPController {
         $response = new JsonResponse();
 
         $idIndicator = $request->get('id');
-        
+
         $indicatorService = $this->getIndicatorService(); //Obtenemos el servicio del indicador
 
         $indicator = $this->get('pequiven.repository.indicator')->find($idIndicator); //Obtenemos el indicador
@@ -91,7 +91,7 @@ class ChartController extends SEIPController {
 
         return $response;
     }
-    
+
     /**
      * 4-Función que retorna la data para un gráfico tipo barras vertical para mostrar el real/plan de los parámetros de cada mes. Sólo para el caso en que sean 2 parámetros (Bien sea plan y real automático o plan y real automático a partir de ecuación).
      * @return JsonResponse
@@ -111,7 +111,7 @@ class ChartController extends SEIPController {
 
         return $response;
     }
-    
+
     /**
      * 5-Función que retorna la data para un gráfico para mostrar las variables de un indicador que esten marcadas como "plan".
      * @return JsonResponse
@@ -120,7 +120,7 @@ class ChartController extends SEIPController {
         $response = new JsonResponse();
 
         $idIndicator = $request->get('id');
-        
+
         $indicatorService = $this->getIndicatorService(); //Obtenemos el servicio del indicador
 
         $indicator = $this->get('pequiven.repository.indicator')->find($idIndicator); //Obtenemos el indicador
@@ -131,7 +131,7 @@ class ChartController extends SEIPController {
 
         return $response;
     }
-    
+
     /**
      * 6-Función que retorna la data para un gráfico tipo barra vertical/área para mostrar el real/plan de acuerdo a la frecuencia de notificación
      * @param Request $request
@@ -152,7 +152,7 @@ class ChartController extends SEIPController {
 
         return $response;
     }
-    
+
     /**
      * 7-Función que retorna la data para un gráfico de tipo pie y sólo las variable sumativas a la parte plan de una fórmula a partir de ecuación.
      * @return JsonResponse
@@ -161,7 +161,7 @@ class ChartController extends SEIPController {
         $response = new JsonResponse();
 
         $idIndicator = $request->get('id');
-        
+
         $indicatorService = $this->getIndicatorService(); //Obtenemos el servicio del indicador
 
         $indicator = $this->get('pequiven.repository.indicator')->find($idIndicator); //Obtenemos el indicador
@@ -172,8 +172,8 @@ class ChartController extends SEIPController {
 
         return $response;
     }
-    
-        /**
+
+    /**
      * 8-Función que retorna la data para un gráfico de tipo pie y sólo las variable sumativas a la parte real de una fórmula a partir de ecuación.
      * @return JsonResponse
      */
@@ -181,7 +181,7 @@ class ChartController extends SEIPController {
         $response = new JsonResponse();
 
         $idIndicator = $request->get('id');
-        
+
         $indicatorService = $this->getIndicatorService(); //Obtenemos el servicio del indicador
 
         $indicator = $this->get('pequiven.repository.indicator')->find($idIndicator); //Obtenemos el indicador
@@ -192,7 +192,7 @@ class ChartController extends SEIPController {
 
         return $response;
     }
-    
+
     /**
      * 9-Función que retorna la data para un gráfico de tipo columna y con 2 ejes verticales. Sólo para un indicador con fórmula real/plan (automático o a partir de ecuación)
      * @return JsonResponse
@@ -212,7 +212,7 @@ class ChartController extends SEIPController {
 
         return $response;
     }
-    
+
     /**
      * 10-Función que retorna la data para un gráfico tipo barras vertical para mostrar el real/plan de los parámetros de cada mes. Sólo para el caso en que sean 2 parámetros (Bien sea plan y real automático o plan y real automático a partir de ecuación).
      * @return JsonResponse
@@ -232,7 +232,7 @@ class ChartController extends SEIPController {
 
         return $response;
     }
-    
+
     /**
      * 11-Función que retorna la data para un gráfico tipo barras vertical para mostrar las variables marcadas como real/plan de la fórmula del indicador respecto al eje izquierdo, de acuerdo a la frecuencia de notificación.
      * @return JsonResponse
@@ -252,7 +252,7 @@ class ChartController extends SEIPController {
 
         return $response;
     }
-    
+
     /**
      * 12-Función que retorna la data para un gráfico tipo dona para mostrar el resultado real/plan a partir de la ecuación para gráficos de la fórmula del indicador.
      * @return JsonResponse
@@ -272,7 +272,7 @@ class ChartController extends SEIPController {
 
         return $response;
     }
-    
+
     /**
      * 13-Función que retorna la data para un gráfico tipo columna 3d para mostrar el resultado real/plan de la ecuación para gráficos de la fórmula del indicador respecto al eje izquierdo, de cada indicador asociado
      * @return JsonResponse
@@ -292,7 +292,8 @@ class ChartController extends SEIPController {
 
         return $response;
     }
-   
+
+    
     /**
      * Servicio de los Indicadores
      * @return \Pequiven\IndicatorBundle\Service\IndicatorService
@@ -308,5 +309,6 @@ class ChartController extends SEIPController {
     public function getResultService() {
         return $this->container->get('seip.service.result');
     }
+    
 
 }

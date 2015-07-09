@@ -64,6 +64,8 @@
             <a id="btnRefresh" href="#" class="button" >Refrescar</a>
         </div>
     </form>
+
+
     <div class="with-padding">
         {% if productsReport is not empty %}
 
@@ -88,23 +90,30 @@
                         <div class="tabs-content">
 
                             <div id="tab-1" class="with-padding">
+
                                 <div class="twelve-columns"> 
-                                    <div  ng-controller="DashboardController" ng-init="renderChartPie2d('graphicDay',{{ graphicDay }},'100%','500')">
+                                    <div  ng-controller="ProductionController" ng-init="renderChartColumn3dLinedy('graphicDay',{{ graphicsDays }},'100%','500')">
                                         <span id="graphicDay"></span>
                                     </div>
                                 </div>
                             </div>
 
                             <div id="tab-2" class="with-padding">
+
+
                                 <div class="twelve-columns"> 
-                                    <div  ng-controller="DashboardController" ng-init="renderChartPie2d('graphicMonth',{{ graphicMonth }},'100%','500')">
+                                    <div  ng-controller="ProductionController" ng-init="renderChartColumn3dLinedy('graphicMonth',{{ graphicsMonth }},'100%','500')">
                                         <span id="graphicMonth"></span>
                                     </div>
                                 </div>
                             </div>
 
                             <div id="tab-3" class="with-padding">
-                                
+                                <div class="twelve-columns"> 
+                                    <div  ng-controller="ProductionController" ng-init="renderChartColumn3dLinedy('graphicsYear',{{ graphicsYear }},'100%','500')">
+                                        <span id="graphicsYear"></span>
+                                    </div>
+                                </div>
                             </div>
 
 

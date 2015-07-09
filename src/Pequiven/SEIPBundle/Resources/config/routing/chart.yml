@@ -165,3 +165,4 @@ getDataChartColumnRealPlanIndicatorsAssociatedFromDashboardEquation:
     methods: [GET]
     options:
         expose: true
+        
