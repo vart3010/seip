@@ -39,6 +39,12 @@
                     {{ raw_material_consumption_planning.aliquot|myNumberFormat }}
                 </p>
             </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'Automatic calculation plan'|trans }}</label>
+                    {{ raw_material_consumption_planning.automaticCalculationPlan|render_yes_no }}
+                </p>
+            </div>
         </div>
     </fieldset>
                 
@@ -53,6 +59,8 @@
     <br /><br />
     <p class="button-height align-right">
         {% if periodService().isAllowPlanningReport %}
+            {{ buttons.generic(path('pequiven_raw_material_consumption_planning_calculate', { 'id': raw_material_consumption_planning.id }),('pequiven.calculate'|trans({},'messages')),'icon-redo') }}
+            &nbsp;
             {{ buttons.generic(path('pequiven_raw_material_consumption_planning_update', { 'id': raw_material_consumption_planning.id }),('pequiven.edit'|trans({},'messages'))) }}
             &nbsp;
             {{ buttons.delete(path('pequiven_raw_material_consumption_planning_delete', { 'id': raw_material_consumption_planning.id })) }}

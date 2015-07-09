@@ -180,13 +180,14 @@ class ProductReportController extends SEIPController
                             if($dayInStop === true){
                                 $propertyAccessor->setValue($detailRawMaterialConsumption, $propertyDayPlan, 0);
                             }else{
-                                //Calcular el consumo de materia prima del dia en base la alicuota
-                                $aliquot = $rawMaterialConsumptionPlanning->getAliquot();
-                                $totalByAliquot = $value * $aliquot;
-                                $propertyAccessor->setValue($detailRawMaterialConsumption, $propertyDayPlan, $totalByAliquot);
+                                if($rawMaterialConsumptionPlanning->isAutomaticCalculationPlan() === true){
+                                    //Calcular el consumo de materia prima del dia en base la alicuota
+                                    $aliquot = $rawMaterialConsumptionPlanning->getAliquot();
+                                    $totalByAliquot = $value * $aliquot;
+                                    $propertyAccessor->setValue($detailRawMaterialConsumption, $propertyDayPlan, $totalByAliquot);
+                                }
                             }
-                            $detailRawMaterialConsumption->totalize();
-                            $rawMaterialConsumptionPlanning->calculate();
+//                            $rawMaterialConsumptionPlanning->calculate();
                             $this->save($rawMaterialConsumptionPlanning);
                         }
                     }//Fin de calculo de materia prima
@@ -208,7 +209,10 @@ class ProductReportController extends SEIPController
             }
             $this->flush();
         }
-        
+        foreach ($rawMaterialConsumptionPlannings as $rawMaterialConsumptionPlanning) {
+            $rawMaterialConsumptionPlanning->calculate();
+            $this->save($rawMaterialConsumptionPlanning);
+        }
         $months = \Pequiven\SEIPBundle\Service\ToolService::getMonthsLabels();
         //Completar los inventarios
         $inventorys = $resource->getInventorySortByMonth();

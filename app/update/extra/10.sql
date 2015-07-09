@@ -1,0 +1,2 @@
+ALTER TABLE seip_report_product_raw_material_consumption_planning ADD automaticCalculationPlan TINYINT(1) NOT NULL;
+UPDATE `seip_report_product_raw_material_consumption_planning` SET `automaticCalculationPlan`=1 WHERE 1;
