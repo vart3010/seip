@@ -1141,7 +1141,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 
             }//fin for each
         }//fin for each childrens
-        
+
         $details = $indicator->getDetails();
         $valuesIndicatorQuantity = count($resultsItems);
         $i = 0;
@@ -1151,15 +1151,20 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             $i++;
             if($details){
                 if($details->getSourceResult() == \Pequiven\IndicatorBundle\Model\Indicator\IndicatorDetails::SOURCE_RESULT_LAST_VALID){
-                    if(($resultItem[Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN] != 0 || $resultItem[Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL] != 0)){
+                    if($formula->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_FROM_EQ && ($resultItem[Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN] != 0 || $resultItem[Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL] != 0)){
                         $totalPlan = $resultItem[Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN];
                         $totalReal = $resultItem[Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL];
+                    } elseif($formula->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC && ($resultItem[$formula->getVariableToPlanValue()->getName()] != 0 || $resultItem[$formula->getVariableToRealValue()->getName()] != 0)){
+                        $totalPlan = $resultItem[$formula->getVariableToPlanValue()->getName()];
+                        $totalReal = $resultItem[$formula->getVariableToRealValue()->getName()];
                     }
                     continue;
                 }elseif($details->getSourceResult() == \Pequiven\IndicatorBundle\Model\Indicator\IndicatorDetails::SOURCE_RESULT_LAST && $i !== $valuesIndicatorQuantity){
                     continue;
                 }
             }
+            
+            //Para cuando la fórmula del indicador es real/plan automático
             if($formula->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC){
                 $totalPlan += $resultItem[$formula->getVariableToPlanValue()->getName()];
                 $totalReal += $resultItem[$formula->getVariableToRealValue()->getName()];
@@ -1168,6 +1173,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 $totalReal += $resultItem[Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL];
             }
         }
+
         $frequencyNotificationIndicator = $indicator->getFrequencyNotificationIndicator();
         
         //Actualizar valores de los resultados del indicador padre.

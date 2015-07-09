@@ -166,3 +166,14 @@ getDataChartColumnRealPlanIndicatorsAssociatedFromDashboardEquation:
     options:
         expose: true
         
+#14
+getDataChartColumnRealPlanByFrequencyNotificationFromDashboardEquation:
+    path: /getDataChartColumnRealPlanByFrequencyNotificationFromDashboardEquation/{id}
+    defaults:
+        _controller: pequiven.controller.seipchart:getDataChartColumnRealPlanByFrequencyNotificationFromDashboardEquationAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
