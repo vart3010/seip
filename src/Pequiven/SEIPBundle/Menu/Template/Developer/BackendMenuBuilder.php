@@ -445,9 +445,9 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
             }//Fin sub Ver - menu objetivos
             
             //Menu de carga de datos
-            if($this->isGranted('ROLE_SEIP_DATA_LOAD_*')){
-                $this->addListDataLoad($visualize, $section);
-            }
+//            if($this->isGranted('ROLE_SEIP_DATA_LOAD_*')){
+//                $this->addListDataLoad($visualize, $section);
+//            }
             $child->addChild($visualize);
         }
                 
@@ -498,9 +498,9 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
         }
         
         //Menu de carga de datos
-        if($this->isGranted('ROLE_SEIP_DATA_LOAD_*')){
-            $this->addDataLoad($child, $section);
-        }
+//        if($this->isGranted('ROLE_SEIP_DATA_LOAD_*')){
+//            $this->addDataLoad($child, $section);
+//        }
         
         $menu->addChild($child);
     }
@@ -735,9 +735,9 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                 }
         
             //Menu de carga de notificaciones
-            if($this->isGranted('ROLE_SEIP_DATA_LOAD_*')){
-                $this->addDataLoadNotification($menuIndicators, $section);
-            }
+//            if($this->isGranted('ROLE_SEIP_DATA_LOAD_*')){
+//                $this->addDataLoadNotification($menuIndicators, $section);
+//            }
         
         $menu->addChild($menuIndicators);
     }
@@ -888,7 +888,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
         $menuOperations = $this->factory->createItem('operations',
                 $this->getSubLevelOptions(array(
                     'uri' => null,
-                    'labelAttributes' => array('icon' => '',),
+                    'labelAttributes' => array('icon' => 'fa fa-cogs',),
                 ))
                 )
                 ->setLabel($this->translate(sprintf('app.backend.menu.%s.operations.main', $section)));
