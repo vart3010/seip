@@ -1090,6 +1090,33 @@ class IndicatorService implements ContainerAwareInterface {
                 $dataSetReal["data"][] = $dataReal;
                 $dataSetPlan["data"][] = $dataPlan;
             }
+        } elseif(isset($options['withVariablesRealPlanByFrequencyNotificationFromDashboardEquation']) && array_key_exists('withVariablesRealPlanByFrequencyNotificationFromDashboardEquation', $options)){
+            unset($options['withVariablesRealPlanByFrequencyNotificationFromDashboardEquation']);
+            
+            $arrayVariables = array();
+            $arrayVariables = $this->getArrayVariablesFormulaWithData($indicator, array('withVariablesRealPlanByFrequencyNotificationFromDashboardEquationMultiSeries' => true));
+            
+            if($indicator->getDetails()){
+                $chart["yAxisName"] = $indicator->getDetails()->getResultManagementUnit();
+            }
+         
+            $dataSetPlan["seriesname"] = $arrayVariables['dashboardEquationPlan']['description'];
+            $dataSetPlan["showValues"] = "1";
+            $dataSetReal["seriesname"] = $arrayVariables['dashboardEquationReal']['description'];
+            $dataSetReal["showValues"] = "1";
+            
+            $labelsFrequencyNotificationArray = $this->getLabelsByIndicatorFrequencyNotification($indicator);
+            $totalValueIndicators = count($indicator->getValuesIndicator());
+            for ($i = 0;$i < $totalValueIndicators; $i++) {
+                $label = $dataReal = $dataPlan = array();
+                $label["label"] = $labelsFrequencyNotificationArray[($i+1)];
+                $dataReal["value"] = number_format($arrayVariables['dashboardEquationReal']['value'][$i], 2, ',', '.');
+                $dataPlan["value"] = number_format($arrayVariables['dashboardEquationPlan']['value'][$i], 2, ',', '.');
+
+                $category[] = $label;
+                $dataSetReal["data"][] = $dataReal;
+                $dataSetPlan["data"][] = $dataPlan;
+            }
         }
         
         $data['dataSource']['chart'] = $chart;
@@ -1309,6 +1336,25 @@ class IndicatorService implements ContainerAwareInterface {
                     $arrayVariables[$children->getRef()]['dashboardEquationReal']['value'] = $arrayVariables[$children->getRef()]['dashboardEquationReal']['value'] + $valuesFromDashboardEquation['dashboardEquationReal'];
                     $arrayVariables[$children->getRef()]['dashboardEquationPlan']['value'] = $arrayVariables[$children->getRef()]['dashboardEquationPlan']['value'] + $valuesFromDashboardEquation['dashboardEquationPlan'];
                 }
+            }
+        } elseif(isset($options['withVariablesRealPlanByFrequencyNotificationFromDashboardEquationMultiSeries']) && array_key_exists('withVariablesRealPlanByFrequencyNotificationFromDashboardEquationMultiSeries', $options)){
+            unset($options['withVariablesRealPlanByFrequencyNotificationFromDashboardEquationMultiSeries']);
+            
+//            $arrayVariables['dashboardEquationReal']['value'] = $arrayVariables['dashboardEquationPlan']['value'] = 0.0;
+            $arrayVariables['dashboardEquationReal']['unit'] = $arrayVariables['dashboardEquationPlan']['unti'] = '';
+            $arrayVariables['dashboardEquationReal']['description'] = $arrayVariables['dashboardEquationPlan']['description'] = '';
+            
+            $arrayVariables['dashboardEquationReal']['description'] = $indicator->getShowByRealValue();
+            $arrayVariables['dashboardEquationPlan']['description'] = $indicator->getShowByPlanValue();
+            if($indicator->getDetails()){
+                $arrayVariables['dashboardEquationReal']['unit'] = $indicator->getDetails()->getResultRealUnit();
+                $arrayVariables['dashboardEquationPlan']['unit'] = $indicator->getDetails()->getResultPlanUnit();
+            }
+            
+            foreach($valuesIndicator as $valueIndicator){
+                $valuesFromDashboardEquation = $this->calculateFormulaValueFromDashboardEquation($formula,$valueIndicator->getFormulaParameters());
+                $arrayVariables['dashboardEquationReal']['value'][] = $valuesFromDashboardEquation['dashboardEquationReal'];
+                $arrayVariables['dashboardEquationPlan']['value'][] = $valuesFromDashboardEquation['dashboardEquationPlan'];
             }
         } else{
             $variables = $formula->getVariables();

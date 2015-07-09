@@ -83,6 +83,11 @@ abstract class Chart
      */
     const TYPE_CHART_COLUMN_REAL_PLAN_INDICATORS_ASSOCIATED_FROM_DASHBOARD_EQUATION = 13;
     
+    /**
+     * Gráfico tipo columna 3d para mostrar el resultado real/plan de la ecuación para gráficos de la fórmula del indicador respecto al eje izquierdo, de acuerdo a la frecuencia de notificación
+     */
+    const TYPE_CHART_COLUMN_REAL_PLAN_BY_FREQUENCY_NOTIFICATION_FROM_DASHBOARD_EQUATION = 14;
+    
     const TYPE_EXAMPLE = 20;
        
     /**
@@ -135,6 +140,7 @@ abstract class Chart
             self::TYPE_CHART_COLUMN_VARIABLES_MARKED_REAL_PLAN_BY_FREQUENCY_NOTIFICATION => 'chart.type.indicatorsColumnMultiSeriesVariablesMarkedRealPlanByFrequencyNotification',
             self::TYPE_CHART_VARIABLES_REAL_PLAN_FROM_DASHBOARD_EQUATION_DOUGHNUT => 'chart.type.indicatorsDoughnutWithVariablesRealPlanFromDashboardEquation',
             self::TYPE_CHART_COLUMN_REAL_PLAN_INDICATORS_ASSOCIATED_FROM_DASHBOARD_EQUATION => 'chart.type.indicatorsAssociatedColumnMultiSeriesRealPlanFromDashboardEquation',
+            self::TYPE_CHART_COLUMN_REAL_PLAN_BY_FREQUENCY_NOTIFICATION_FROM_DASHBOARD_EQUATION => 'chart.type.resultsOfIndicatorColumnMultiSeriesRealPlanByFrequencyNotificationFromDashboardEquation',
             self::TYPE_EXAMPLE => 'chart.type.example',
         );
          

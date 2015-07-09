@@ -2633,6 +2633,29 @@ angular.module('seipModule.controllers', [])
                 });
             }
             
+            //14-Gráfico tipo columna 3d para mostrar el resultado real/plan de la ecuación para gráficos de la fórmula del indicador respecto al eje izquierdo, de acuerdo a la frecuencia de notificación.
+            $scope.chargeChartColumnRealPlanByFrequencyNotificationFromDashboardEquation = function (indicatorId, render, width, height) {
+                var getDataChartColumnRealPlanByFrequencyNotificationFromDashboardEquation = Routing.generate("getDataChartColumnRealPlanByFrequencyNotificationFromDashboardEquation", {id: indicatorId});
+                $http.get(getDataChartColumnRealPlanByFrequencyNotificationFromDashboardEquation).success(function (data) {
+                    FusionCharts.ready(function () {
+                        var revenueChartColumnRealPlanByFrequencyNotificationFromDashboardEquation = new FusionCharts({
+                            "type": "mscolumn3d",
+                            "renderAt": render,
+                            "width": width + "%",
+                            "height": height,
+                            "dataFormat": "json",
+                            "dataSource": {
+                                "chart": data.dataSource.chart,
+                                "categories": data.dataSource.categories,
+                                "dataset": data.dataSource.dataset
+                            }
+                        });
+                        revenueChartColumnRealPlanByFrequencyNotificationFromDashboardEquation.setTransparent(true);
+                        revenueChartColumnRealPlanByFrequencyNotificationFromDashboardEquation.render();
+                    });
+                });
+            }
+            
             //Gráfico en forma tacómetro (Usado para mostrar el resultado de los indicadores estratégicos en el dashboard)
             $scope.renderChartExample = function (indicatorId, render, width, height) {
                 FusionCharts.ready(function () {
