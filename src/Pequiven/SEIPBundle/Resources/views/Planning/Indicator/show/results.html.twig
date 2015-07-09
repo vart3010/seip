@@ -70,7 +70,7 @@
                         <td class="align-right vertical-center">
                             <div ng-controller="ToolsController" ng-init="isGrantedButtonEdit({{ indicator.id }},paso+1)"></div>
 
-                            <div style="{% if is_granted(['ROLE_SEIP_INDICATOR_EDIT_SPECIAL']) %} display: block; {% else %} display: none;{% endif %}" id="target_{$ paso+1 $}">
+                            <div style="display: none;" id="target_{$ paso+1 $}">
 
                                 <span class="select compact">
                                     <a href class="select-value form-edit">{{ 'pequiven.actions'|trans({},'messages') }}</a>
