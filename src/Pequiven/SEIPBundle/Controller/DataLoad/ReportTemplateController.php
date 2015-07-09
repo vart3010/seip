@@ -19,131 +19,122 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * @author Carlos Mendoza <inhack20@gmail.com>
  */
-class ReportTemplateController extends SEIPController 
-{
-    public function indexAction(Request $request) 
-    {
-        $criteria = $request->get('filter',$this->config->getCriteria());
-        $sorting = $request->get('sorting',$this->config->getSorting());
+class ReportTemplateController extends SEIPController {
+
+    public function indexAction(Request $request) {
+        $criteria = $request->get('filter', $this->config->getCriteria());
+        $sorting = $request->get('sorting', $this->config->getSorting());
         $repository = $this->getRepository();
 
-            $resources = $this->resourceResolver->getResource(
-                $repository,
-                'createPaginatorByUser',
-                array($criteria, $sorting)
-            );
-            $maxPerPage = $this->config->getPaginationMaxPerPage();
-            if(($limit = $request->query->get('limit')) && $limit > 0){
-                if($limit > 100){
-                    $limit = 100;
-                }
-                $maxPerPage = $limit;
+        $resources = $this->resourceResolver->getResource(
+                $repository, 'createPaginatorByUser', array($criteria, $sorting)
+        );
+        $maxPerPage = $this->config->getPaginationMaxPerPage();
+        if (($limit = $request->query->get('limit')) && $limit > 0) {
+            if ($limit > 100) {
+                $limit = 100;
             }
-            $resources->setCurrentPage($request->get('page', 1), true, true);
-            $resources->setMaxPerPage($maxPerPage);
-        
+            $maxPerPage = $limit;
+        }
+        $resources->setCurrentPage($request->get('page', 1), true, true);
+        $resources->setMaxPerPage($maxPerPage);
+
         $view = $this
-            ->view()
-            ->setTemplate($this->config->getTemplate('index.html'))
-            ->setTemplateVar($this->config->getPluralResourceName())
+                ->view()
+                ->setTemplate($this->config->getTemplate('index.html'))
+                ->setTemplateVar($this->config->getPluralResourceName())
         ;
-        if($request->get('_format') == 'html'){
+        if ($request->get('_format') == 'html') {
             $view->setData($resources);
-        }else{
-            $formatData = $request->get('_formatData','default');
-            $view->setData($resources->toArray($this->config->getRedirectRoute('index'),array(),$formatData));
+        } else {
+            $formatData = $request->get('_formatData', 'default');
+            $view->setData($resources->toArray($this->config->getRedirectRoute('index'), array(), $formatData));
         }
         return $this->handleView($view);
     }
-    
-    public function listAction(Request $request) 
-    {
-        $criteria = $request->get('filter',$this->config->getCriteria());
-        $sorting = $request->get('sorting',$this->config->getSorting());
+
+    public function listAction(Request $request) {
+        $criteria = $request->get('filter', $this->config->getCriteria());
+        $sorting = $request->get('sorting', $this->config->getSorting());
         $repository = $this->getRepository();
 
-            $resources = $this->resourceResolver->getResource(
-                $repository,
-                'createPaginator',
-                array($criteria, $sorting)
-            );
-            $maxPerPage = $this->config->getPaginationMaxPerPage();
-            if(($limit = $request->query->get('limit')) && $limit > 0){
-                if($limit > 100){
-                    $limit = 100;
-                }
-                $maxPerPage = $limit;
+        $resources = $this->resourceResolver->getResource(
+                $repository, 'createPaginator', array($criteria, $sorting)
+        );
+        $maxPerPage = $this->config->getPaginationMaxPerPage();
+        if (($limit = $request->query->get('limit')) && $limit > 0) {
+            if ($limit > 100) {
+                $limit = 100;
             }
-            $resources->setCurrentPage($request->get('page', 1), true, true);
-            $resources->setMaxPerPage($maxPerPage);
-        
+            $maxPerPage = $limit;
+        }
+        $resources->setCurrentPage($request->get('page', 1), true, true);
+        $resources->setMaxPerPage($maxPerPage);
+
         $view = $this
-            ->view()
-            ->setTemplate($this->config->getTemplate('list.html'))
-            ->setTemplateVar($this->config->getPluralResourceName())
+                ->view()
+                ->setTemplate($this->config->getTemplate('list.html'))
+                ->setTemplateVar($this->config->getPluralResourceName())
         ;
-        if($request->get('_format') == 'html'){
+        if ($request->get('_format') == 'html') {
             $view->setData($resources);
-        }else{
-            $formatData = $request->get('_formatData','default');
-            $view->setData($resources->toArray($this->config->getRedirectRoute('list'),array(),$formatData));
+        } else {
+            $formatData = $request->get('_formatData', 'default');
+            $view->setData($resources->toArray($this->config->getRedirectRoute('list'), array(), $formatData));
         }
         return $this->handleView($view);
     }
-    
+
     /**
      * Notificar produccion
      * @param Request $request
      * @return type
      * @throws type
      */
-    public function loadAction(Request $request) 
-    {
+    public function loadAction(Request $request) {
         $dateString = null;
-        if($this->getSecurityService()->isGranted('ROLE_SEIP_DATA_LOAD_CHANGE_DATE')){
-            $dateString = $request->get('dateNotification',null);
+        if ($this->getSecurityService()->isGranted('ROLE_SEIP_DATA_LOAD_CHANGE_DATE')) {
+            $dateString = $request->get('dateNotification', null);
         }
-        $plantReportToLoad = $request->get('plant_report',null);
-        if($plantReportToLoad === null){
+        $plantReportToLoad = $request->get('plant_report', null);
+        if ($plantReportToLoad === null) {
             return $this->redirect($this->generateUrl('pequiven_plant_report_index'));
         }
         $dateNotification = null;
-        if($dateString !== null){
+        if ($dateString !== null) {
             $dateNotification = \DateTime::createFromFormat('d/m/Y', $dateString);
         }
-        if($dateNotification === null){
+        if ($dateNotification === null) {
             $dateNotification = new \DateTime();
         }
-        $resource = $this->getRepository()->findToNotify($request->get("id"),$dateNotification,$plantReportToLoad);
-        
-        if(!$resource){
+        $resource = $this->getRepository()->findToNotify($request->get("id"), $dateNotification, $plantReportToLoad);
+
+        if (!$resource) {
             throw $this->createNotFoundException('No se encontro la planificacion');
         }
-        $month = (int)$dateNotification->format("m");
-        $methodDetailPnr = sprintf("getDay%sDetails",(int)$dateNotification->format("d"));
-        
+        $month = (int) $dateNotification->format("m");
+        $methodDetailPnr = sprintf("getDay%sDetails", (int) $dateNotification->format("d"));
+
         $originalInternalCauses = new \Doctrine\Common\Collections\ArrayCollection();
         $originalExternalCauses = new \Doctrine\Common\Collections\ArrayCollection();
         $originalInternalCausesMp = new \Doctrine\Common\Collections\ArrayCollection();
         $originalExternalCausesMp = new \Doctrine\Common\Collections\ArrayCollection();
-        
-        foreach ($resource->getPlantReports() as $plantReport)
-        {
-            if($plantReport->getId() !== (int)$plantReportToLoad){
+
+        foreach ($resource->getPlantReports() as $plantReport) {
+            if ($plantReport->getId() !== (int) $plantReportToLoad) {
                 continue;
             }
-            foreach ($plantReport->getProductsReport() as $productReport) 
-            {
+            foreach ($plantReport->getProductsReport() as $productReport) {
                 $unrealizedProductionsSortByMonth = $productReport->getUnrealizedProductionsSortByMonth();
-                if(!isset($unrealizedProductionsSortByMonth[$month])){
+                if (!isset($unrealizedProductionsSortByMonth[$month])) {
                     break;
                 }
                 $unrealizedProduction = $unrealizedProductionsSortByMonth[$month];
                 $unrealizedProductionDay = $unrealizedProduction->$methodDetailPnr();
-                if(!$unrealizedProductionDay){
+                if (!$unrealizedProductionDay) {
                     break;
                 }
-                
+
                 foreach ($unrealizedProductionDay->getInternalCauses() as $value) {
                     $originalInternalCauses->add($value);
                 }
@@ -158,56 +149,50 @@ class ReportTemplateController extends SEIPController
                 }
             }
         }//fin for
-        
-        
-        $form = $this->createForm(new \Pequiven\SEIPBundle\Form\DataLoad\Notification\ReportTemplateType($dateNotification,$resource),$resource);
-        
-        if($request->isMethod('POST') && $form->submit($request,true)->isValid()){
+
+
+        $form = $this->createForm(new \Pequiven\SEIPBundle\Form\DataLoad\Notification\ReportTemplateType($dateNotification, $resource), $resource);
+
+        if ($request->isMethod('POST') && $form->submit($request, true)->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            foreach ($resource->getPlantReports() as $plantReport)
-            {
-                if($plantReport->getId() !== (int)$plantReportToLoad){
+            foreach ($resource->getPlantReports() as $plantReport) {
+                if ($plantReport->getId() !== (int) $plantReportToLoad) {
                     continue;
                 }
-                foreach ($plantReport->getProductsReport() as $productReport) 
-                {
+                foreach ($plantReport->getProductsReport() as $productReport) {
                     $unrealizedProductionsSortByMonth = $productReport->getUnrealizedProductionsSortByMonth();
-                    if(!isset($unrealizedProductionsSortByMonth[$month])){
+                    if (!isset($unrealizedProductionsSortByMonth[$month])) {
                         break;
                     }
                     $unrealizedProduction = $unrealizedProductionsSortByMonth[$month];
                     $unrealizedProductionDay = $unrealizedProduction->$methodDetailPnr();
-                    if(!$unrealizedProductionDay){
+                    if (!$unrealizedProductionDay) {
                         break;
                     }
 
                     foreach ($originalInternalCauses as $original) {
-                        if(false === $unrealizedProductionDay->getInternalCauses()->contains($original))
-                        {
+                        if (false === $unrealizedProductionDay->getInternalCauses()->contains($original)) {
                             $unrealizedProductionDay->getInternalCauses()->removeElement($original);
                             $em->remove($original);
                         }
                     }
-                    
+
                     foreach ($originalExternalCauses as $original) {
-                        if(false === $unrealizedProductionDay->getExternalCauses()->contains($original))
-                        {
+                        if (false === $unrealizedProductionDay->getExternalCauses()->contains($original)) {
                             $unrealizedProductionDay->getExternalCauses()->removeElement($original);
                             $em->remove($original);
                         }
                     }
-                    
+
                     foreach ($originalInternalCausesMp as $original) {
-                        if(false === $unrealizedProductionDay->getInternalCausesMp()->contains($original))
-                        {
+                        if (false === $unrealizedProductionDay->getInternalCausesMp()->contains($original)) {
                             $unrealizedProductionDay->getInternalCausesMp()->removeElement($original);
                             $em->remove($original);
                         }
                     }
-                    
+
                     foreach ($originalExternalCausesMp as $original) {
-                        if(false === $unrealizedProductionDay->getExternalCausesMp()->contains($original))
-                        {
+                        if (false === $unrealizedProductionDay->getExternalCausesMp()->contains($original)) {
                             $unrealizedProductionDay->getExternalCausesMp()->removeElement($original);
                             $em->remove($original);
                         }
@@ -215,212 +200,215 @@ class ReportTemplateController extends SEIPController
                 }
             }//fin for
             $em->flush();
-            
+
             $resource->recalculate();
             $this->domainManager->update($resource);
             return $this->redirect($this->generateUrl('pequiven_report_template_list'));
         }
-        
+
         $view = $this
-            ->view()
-            ->setTemplate($this->config->getTemplate('load.html'))
-            ->setTemplateVar($this->config->getResourceName())
-            ->setData(array(
-                $this->config->getResourceName() => $resource,
-                'dateNotification' => $dateNotification,
-                'form' => $form->createView(),
-            ))
+                ->view()
+                ->setTemplate($this->config->getTemplate('load.html'))
+                ->setTemplateVar($this->config->getResourceName())
+                ->setData(array(
+            $this->config->getResourceName() => $resource,
+            'dateNotification' => $dateNotification,
+            'form' => $form->createView(),
+                ))
         ;
 
         return $this->handleView($view);
     }
-    
+
     /**
      * Vizualizar la planificacion
      * @param Request $request
      * @return type
      */
-    public function vizualiceAction(Request $request)
-    {
+    public function vizualiceAction(Request $request) {
         $plantReportId = null;
-        if($request->isMethod("POST")){
+        if ($request->isMethod("POST")) {
             $formData = $request->get("form");
-            $plantReportId = (int)$formData['plantReport'];
+            $plantReportId = (int) $formData['plantReport'];
         }
-        
+
         $dateReport = new \DateTime();
-        if(!$this->getSecurityService()->isGranted('ROLE_SEIP_DATA_LOAD_CHANGE_DATE')){
+        if (!$this->getSecurityService()->isGranted('ROLE_SEIP_DATA_LOAD_CHANGE_DATE')) {
             $dateReport = new \DateTime();
         }
         $plantReport = $this->get('pequiven.repository.plant_report')->find($plantReportId);
         $productsReport = array();
         $plantReports = new \Doctrine\Common\Collections\ArrayCollection();
         $emptyValue = "Seleccione";
-        if($plantReport){
+        if ($plantReport) {
             $plantReports->add($plantReport);
             $productsReport = $plantReport->getProductsReport()->toArray();
         }
         $showDay = $showMonth = $showYear = $defaultShow = true;
         $form = $this
-            ->createFormBuilder()
-            ->add('reportTemplate','entity',array(
-                'label_attr' => array('class' => 'label bold'),
-                'class' => 'Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate',
-                'property' => 'reportTemplateWithName',
-                'required' => false,
-                'empty_value' => $emptyValue,
-                'translation_domain' => 'PequivenSEIPBundle',
-                'attr' => array('class' => 'select2 input-xlarge'),
-                'multiple' => true,
+                ->createFormBuilder()
+                ->add('reportTemplate', 'entity', array(
+                    'label_attr' => array('class' => 'label bold'),
+                    'class' => 'Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate',
+                    'property' => 'reportTemplateWithName',
+                    'required' => false,
+                    'empty_value' => $emptyValue,
+                    'translation_domain' => 'PequivenSEIPBundle',
+                    'attr' => array('class' => 'select2 input-xlarge'),
+                    'multiple' => true,
+                        )
                 )
-            )
-            ->add('plantReport','entity',array(
-                'label_attr' => array('class' => 'label bold'),
-                'class' => 'Pequiven\SEIPBundle\Entity\DataLoad\PlantReport',
-                'property' => 'plant',
-                'required' => true,
-                'empty_value' => $emptyValue,
-                'translation_domain' => 'PequivenSEIPBundle',
-                'attr' => array('class' => 'select2 input-xlarge'),
-                'multiple' => false,
-                'group_by' => 'reportTemplateWithName'
+                ->add('plantReport', 'entity', array(
+                    'label_attr' => array('class' => 'label bold'),
+                    'class' => 'Pequiven\SEIPBundle\Entity\DataLoad\PlantReport',
+                    'property' => 'plant',
+                    'required' => true,
+                    'empty_value' => $emptyValue,
+                    'translation_domain' => 'PequivenSEIPBundle',
+                    'attr' => array('class' => 'select2 input-xlarge'),
+                    'multiple' => false,
+                    'group_by' => 'reportTemplateWithName'
+                        )
                 )
-            )
-            ->add('dateReport','date',[
-                'format' => 'd/M/y',
-                'widget' => 'single_text',
-                'translation_domain' => 'PequivenSEIPBundle',
-                'attr' => array('class' => 'input'),
-                'data' => $dateReport,
-            ])
-            ->add('productsReport','entity',[
-                'label_attr' => array('class' => 'label bold'),
-                'class' => 'Pequiven\SEIPBundle\Entity\DataLoad\ProductReport',
-                'multiple' => true,
-                'translation_domain' => 'PequivenSEIPBundle',
-                'required' => false,
-                'attr' => array('class' => 'select2 input-xlarge'),
-            ])
-            ->add('showDay','checkbox',[
-                'label_attr' => array('class' => 'label bold'),
-                'required' => false,
-                'translation_domain' => 'PequivenSEIPBundle',
-                'data' => $defaultShow,
-            ])
-            ->add('showMonth','checkbox',[
-                'label_attr' => array('class' => 'label bold'),
-                'required' => false,
-                'translation_domain' => 'PequivenSEIPBundle',
-                'data' => $defaultShow,
-            ])
-            ->add('showYear','checkbox',[
-                'label_attr' => array('class' => 'label bold'),
-                'required' => false,
-                'translation_domain' => 'PequivenSEIPBundle',
-                'data' => $defaultShow,
-            ])
-            ->add('typeReport','choice',[
-                'choices' => [
-                    'Gross' => 'Bruta',
-                    'Net' => 'Neta',
-                ],
-                'data' => 'Gross',
-                'attr' => array('class' => 'select2 input-xlarge'),
-                'translation_domain' => 'PequivenSEIPBundle',
-            ])
-            ->getForm();
-        
-        if($request->isMethod('POST') && $form->submit($request)->isValid()){
+                ->add('dateReport', 'date', [
+                    'format' => 'd/M/y',
+                    'widget' => 'single_text',
+                    'translation_domain' => 'PequivenSEIPBundle',
+                    'attr' => array('class' => 'input'),
+                    'data' => $dateReport,
+                ])
+                ->add('productsReport', 'entity', [
+                    'label_attr' => array('class' => 'label bold'),
+                    'class' => 'Pequiven\SEIPBundle\Entity\DataLoad\ProductReport',
+                    'multiple' => true,
+                    'translation_domain' => 'PequivenSEIPBundle',
+                    'required' => false,
+                    'attr' => array('class' => 'select2 input-xlarge'),
+                ])
+                ->add('showDay', 'checkbox', [
+                    'label_attr' => array('class' => 'label bold'),
+                    'required' => false,
+                    'translation_domain' => 'PequivenSEIPBundle',
+                    'data' => $defaultShow,
+                ])
+                ->add('showMonth', 'checkbox', [
+                    'label_attr' => array('class' => 'label bold'),
+                    'required' => false,
+                    'translation_domain' => 'PequivenSEIPBundle',
+                    'data' => $defaultShow,
+                ])
+                ->add('showYear', 'checkbox', [
+                    'label_attr' => array('class' => 'label bold'),
+                    'required' => false,
+                    'translation_domain' => 'PequivenSEIPBundle',
+                    'data' => $defaultShow,
+                ])
+                ->add('typeReport', 'choice', [
+                    'choices' => [
+                        'Gross' => 'Bruta',
+                        'Net' => 'Neta',
+                    ],
+                    'data' => 'Gross',
+                    'attr' => array('class' => 'select2 input-xlarge'),
+                    'translation_domain' => 'PequivenSEIPBundle',
+                ])
+                ->getForm();
+
+        if ($request->isMethod('POST') && $form->submit($request)->isValid()) {
             $data = $form->getData();
             $showDay = $data['showDay'];
             $showMonth = $data['showMonth'];
             $showYear = $data['showYear'];
             $productsReport = $data['productsReport'];
-            if($productsReport && count($productsReport) > 0){
+            if ($productsReport && count($productsReport) > 0) {
                 foreach ($productsReport as $productReport) {
                     $productsReportId[] = $productReport->getId();
                 }
-                    foreach ($plantReport->getProductsReport() as $productReport) {
-                        if(!in_array($productReport->getId(), $productsReportId)){
-                            $plantReport->getProductsReport()->removeElement($productReport);
-                            continue;
-                        }
+                foreach ($plantReport->getProductsReport() as $productReport) {
+                    if (!in_array($productReport->getId(), $productsReportId)) {
+                        $plantReport->getProductsReport()->removeElement($productReport);
+                        continue;
                     }
-                    $plantReports->add($plantReport);
+                }
+                $plantReports->add($plantReport);
             }
-            
         }
         $data = $form->getData();
         $typeReport = $data['typeReport'];
-        if($typeReport === null){
+        if ($typeReport === null) {
             $typeReport = 'Gross';
         }
         $dateReport = $data['dateReport'];
         $reportTemplates = $data['reportTemplate'];
-        if($reportTemplates){
+        if ($reportTemplates) {
             foreach ($reportTemplates as $reportTemplate) {
                 foreach ($reportTemplate->getPlantReports() as $plantReport) {
-                    if(!$plantReports->contains($plantReport)){
+                    if (!$plantReports->contains($plantReport)) {
                         $plantReports->add($plantReport);
                     }
                 }
             }
         }
-        
+
         $productsReport = new \Doctrine\Common\Collections\ArrayCollection();
         $consumerPlanningServices = new \Doctrine\Common\Collections\ArrayCollection();
         $rawMaterialConsumptionPlannings = new \Doctrine\Common\Collections\ArrayCollection();
-        
+
         $productsReportByIdProduct = $consumerPlanningServicesByIdService = $rawMaterialConsumptionPlanningsById = array();
         foreach ($plantReports as $plantReport) {
             foreach ($plantReport->getProductsReport() as $productReport) {
                 $product = $productReport->getProduct();
-                if(!isset($productsReportByIdProduct[$product->getId()])){
+                if (!isset($productsReportByIdProduct[$product->getId()])) {
                     $productsReportByIdProduct[$product->getId()] = array();
                 }
                 $productsReportByIdProduct[$product->getId()][] = $productReport;
-                
+
                 foreach ($productReport->getRawMaterialConsumptionPlannings() as $rawMaterialConsumptionPlanning) {
                     $product = $rawMaterialConsumptionPlanning->getProduct();
-                    if(!isset($rawMaterialConsumptionPlanningsById[$product->getId()])){
+                    if (!isset($rawMaterialConsumptionPlanningsById[$product->getId()])) {
                         $rawMaterialConsumptionPlanningsById[$product->getId()] = array();
                     }
                     $rawMaterialConsumptionPlanningsById[$product->getId()][] = $rawMaterialConsumptionPlanning;
                 }
-                
             }
-            
+
             foreach ($plantReport->getConsumerPlanningServices() as $consumerPlanningService) {
                 $service = $consumerPlanningService->getService();
-                if(!isset($consumerPlanningServicesByIdService[$service->getId()])){
+                if (!isset($consumerPlanningServicesByIdService[$service->getId()])) {
                     $consumerPlanningServicesByIdService[$service->getId()] = array();
                 }
                 $consumerPlanningServicesByIdService[$service->getId()][] = $consumerPlanningService;
-                
             }
         }
         foreach ($productsReportByIdProduct as $id => $groups) {
             foreach ($groups as $productReport) {
-                if(!$productsReport->contains($productReport)){
+                if (!$productsReport->contains($productReport)) {
                     $productsReport->add($productReport);
                 }
             }
         }
         foreach ($consumerPlanningServicesByIdService as $id => $groups) {
             foreach ($groups as $consumerPlanningService) {
-                if(!$consumerPlanningServices->contains($consumerPlanningService)){
+                if (!$consumerPlanningServices->contains($consumerPlanningService)) {
                     $consumerPlanningServices->add($consumerPlanningService);
                 }
             }
         }
-        
+
         foreach ($rawMaterialConsumptionPlanningsById as $id => $groups) {
             foreach ($groups as $rawMaterialConsumptionPlanning) {
-                if(!$rawMaterialConsumptionPlannings->contains($rawMaterialConsumptionPlanning)){
+                if (!$rawMaterialConsumptionPlannings->contains($rawMaterialConsumptionPlanning)) {
                     $rawMaterialConsumptionPlannings->add($rawMaterialConsumptionPlanning);
                 }
             }
         }
+        $reportService = $this->getProductReportService();
+        $dataGraphicsDay = $reportService->getArray($productsReport,$dateReport,$typeReport,"getSummaryDay");
+        $graphicsDay = $reportService->generatePie(array("array"=>$dataGraphicsDay,"caption"=>"Productos por Dia","subCaption"=>""));
+        
+        
+        $dataGraphicsMonth = $reportService->getArray($productsReport,$dateReport,$typeReport,"getSummaryMonth","plan_month");
+        $graphicsMonth = $reportService->generatePie(array("array"=>$dataGraphicsMonth,"caption"=>"Productos por Mes","subCaption"=>""));
         
         $data = array(
             'dateReport' => $dateReport,
@@ -433,21 +421,23 @@ class ReportTemplateController extends SEIPController
             'showMonth' => $showMonth,
             'showYear' => $showYear,
             'typeReport' => $typeReport,
+            "graphicDay" => json_encode($graphicsDay),
+            "graphicMonth" => json_encode($graphicsMonth)
         );
 
         $view = $this
                 ->view()
                 ->setTemplate($this->config->getTemplate('vizualice.html'))
-                ;
+        ;
         $view->setData($data);
-        
-        $exportToPdf = $request->get('exportToPdf',false);
-        if($exportToPdf == true){
+
+        $exportToPdf = $request->get('exportToPdf', false);
+        if ($exportToPdf == true) {
             $pdf = new \Pequiven\SEIPBundle\Model\PDF\SeipPdf('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
             $pdf->setPrintLineFooter(false);
             $pdf->setContainer($this->container);
             $pdf->setPeriod($this->getPeriodService()->getPeriodActive());
-            $pdf->setFooterText($this->trans('pequiven_seip.message_footer',array(), 'PequivenSEIPBundle'));
+            $pdf->setFooterText($this->trans('pequiven_seip.message_footer', array(), 'PequivenSEIPBundle'));
 
             // set document information
             $pdf->SetCreator(PDF_CREATOR);
@@ -475,20 +465,24 @@ class ReportTemplateController extends SEIPController
 
             // set font
 //            $pdf->SetFont('times', 'BI', 12);
-
             // add a page
             $pdf->AddPage();
 
             // set some text to print
-            $html = $this->renderView('PequivenSEIPBundle:DataLoad/ReportTemplate:vizualice_data.html.twig',$data);
+            $html = $this->renderView('PequivenSEIPBundle:DataLoad/ReportTemplate:vizualice_data.html.twig', $data);
 
             // print a block of text using Write()
             $pdf->writeHTML($html, true, false, true, false, '');
 
 //            $pdf->Output('Reporte del dia'.'.pdf', 'I');
-            $pdf->Output('Reporte del dia'.'.pdf', 'D');
+            $pdf->Output('Reporte del dia' . '.pdf', 'D');
         }
-        
+
         return $this->handleView($view);
     }
+
+    protected function getProductReportService() {
+        return $this->container->get('seip.service.productReport');
+    }
+
 }
