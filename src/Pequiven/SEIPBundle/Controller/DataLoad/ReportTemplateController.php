@@ -261,9 +261,8 @@ class ReportTemplateController extends SEIPController
             $productsReport = $plantReport->getProductsReport()->toArray();
         }
         $showDay = $showMonth = $showYear = $defaultShow = true;
-        $form = $this
-            ->createFormBuilder()
-            ->add('reportTemplate','entity',array(
+        
+        $parametersReportTemplate = array(
                 'label_attr' => array('class' => 'label bold'),
                 'class' => 'Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate',
                 'property' => 'reportTemplateWithName',
@@ -272,9 +271,13 @@ class ReportTemplateController extends SEIPController
                 'translation_domain' => 'PequivenSEIPBundle',
                 'attr' => array('class' => 'select2 input-xlarge'),
                 'multiple' => true,
-                )
-            )
-            ->add('plantReport','entity',array(
+                );
+        $qb = function (\Pequiven\SEIPBundle\Repository\DataLoad\ReportTemplateRepository $repository){
+            return $repository->getQueryBuilderByUser();
+        };
+        $parametersReportTemplate['query_builder'] = $qb;
+        
+        $parametersPlantReport = array(
                 'label_attr' => array('class' => 'label bold'),
                 'class' => 'Pequiven\SEIPBundle\Entity\DataLoad\PlantReport',
                 'property' => 'plant',
@@ -284,8 +287,16 @@ class ReportTemplateController extends SEIPController
                 'attr' => array('class' => 'select2 input-xlarge'),
                 'multiple' => false,
                 'group_by' => 'reportTemplateWithName'
-                )
-            )
+                );
+        $qb = function (\Pequiven\SEIPBundle\Repository\DataLoad\PlantReportRepository $repository){
+            return $repository->getQueryBuilderByUser();
+        };
+        $parametersPlantReport['query_builder'] = $qb;
+        
+        $form = $this
+            ->createFormBuilder()
+            ->add('reportTemplate','entity',$parametersReportTemplate)
+            ->add('plantReport','entity',$parametersPlantReport)
             ->add('dateReport','date',[
                 'format' => 'd/M/y',
                 'widget' => 'single_text',

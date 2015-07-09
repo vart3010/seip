@@ -53,6 +53,22 @@ class PlantReportRepository extends SeipEntityRepository
         return $this->getPaginator($queryBuilder);
     }
     
+    public function getQueryBuilderByUser(){
+        $queryBuilder = $this->getCollectionQueryBuilder();
+        $user = $this->getUser();
+
+        if(!$this->getSecurityContext()->isGranted(array('ROLE_SEIP_OPERATION_LIST_PLANNING_PRODUCTION_TEMPLATES_ALL'))){
+            $queryBuilder
+                ->innerJoin("pr.reportTemplate", 'rt')
+                ->innerJoin("rt.users", 'rt_u')
+                ->andWhere("rt_u.id = :user")
+                ->setParameter("user", $user)
+                ;
+        }
+        
+        return $queryBuilder;
+    }
+    
     protected function applyCriteria(\Doctrine\ORM\QueryBuilder $queryBuilder, array $criteria = null) 
     {
         $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
