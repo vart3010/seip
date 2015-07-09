@@ -187,7 +187,6 @@ class ProductReportController extends SEIPController
                                     $propertyAccessor->setValue($detailRawMaterialConsumption, $propertyDayPlan, $totalByAliquot);
                                 }
                             }
-//                            $rawMaterialConsumptionPlanning->calculate();
                             $this->save($rawMaterialConsumptionPlanning);
                         }
                     }//Fin de calculo de materia prima
