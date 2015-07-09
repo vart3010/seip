@@ -902,7 +902,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                         ))
                     )->setLabel($this->translate(sprintf('app.backend.menu.%s.operations.reports.main', $section)));
                 
-                if($this->isGranted('ROLE_SEIP_OPERATION_LIST_REPORT_PRODUCTION')){
+                if($this->isGranted(array('ROLE_SEIP_OPERATION_LIST_REPORT_PRODUCTION','ROLE_SEIP_OPERATION_LIST_REPORT_PRODUCTION_TEMPLATES_ALL'))){
                     $production = $this->factory->createItem('operations.reports.production',
                         $this->getSubLevelOptions(array(
                             "route" => "pequiven_report_template_vizualice",
@@ -923,7 +923,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                         ))
                     )->setLabel($this->translate(sprintf('app.backend.menu.%s.operations.planning.main', $section)));
                 
-                if($this->isGranted('ROLE_SEIP_OPERATION_LIST_PLANNING_PRODUCTION')){
+                if($this->isGranted(array('ROLE_SEIP_OPERATION_LIST_PLANNING_PRODUCTION','ROLE_SEIP_OPERATION_LIST_PLANNING_PRODUCTION_TEMPLATES_ALL'))){
                     $production = $this->factory->createItem('operations.planning.production',
                         $this->getSubLevelOptions(array(
                             "route" => "pequiven_report_template_index",
@@ -944,7 +944,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                         ))
                     )->setLabel($this->translate(sprintf('app.backend.menu.%s.operations.notification.main', $section)));
                 
-                if($this->isGranted('ROLE_SEIP_OPERATION_LIST_NOTIFICATION_PRODUCTION')){
+                if($this->isGranted(array('ROLE_SEIP_OPERATION_LIST_NOTIFICATION_PRODUCTION','ROLE_SEIP_OPERATION_LIST_NOTIFICATION_PRODUCTION_TEMPLATES_ALL'))){
                     $production = $this->factory->createItem('operations.notification.production',
                         $this->getSubLevelOptions(array(
                             "route" => "pequiven_plant_report_index",
