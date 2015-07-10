@@ -233,7 +233,7 @@
 
                                 {% for productReport in productsReport %}
                                     {% set summary = productReport.getSummaryMonth(dateReport,typeReport) %}
-
+{#                                    {{ dump(summary) }}#}
                                     {% set current_plan_month = summary['plan_month'] %}
                                     {% set current_plan_acumulated = summary['plan_acumulated'] %}
                                     {% set current_real_acumulated = summary['real_acumulated'] %}
