@@ -232,9 +232,11 @@ class ReportTemplateController extends SEIPController {
             $plantReportId = (int) $formData['plantReport'];
         }
 
-        $dateReport = new \DateTime();
+//        $dateReport = new \DateTime();
+        $dateReport = new \DateTime(date("Y-m-d", strtotime("-1 day")));
         if (!$this->getSecurityService()->isGranted('ROLE_SEIP_DATA_LOAD_CHANGE_DATE')) {
-            $dateReport = new \DateTime();
+//            $dateReport = new \DateTime();
+            $dateReport = new \DateTime(date("Y-m-d", strtotime("-1 day")));
         }
         $plantReport = $this->get('pequiven.repository.plant_report')->find($plantReportId);
         $productsReport = array();
