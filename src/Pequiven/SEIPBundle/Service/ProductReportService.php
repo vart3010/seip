@@ -94,7 +94,7 @@ class productReportService implements ContainerAwareInterface {
         return $pie;
     }
 
-    public function generateColumn3dLinery($titles, $productReport, $dateReport, $typeReport, $methodFrecuency, $plan, $real) {
+    public function generateColumn3dLinery($titles, $productReport, $dateReport, $typeReport, $methodFrecuency, $plan, $real, $division = 1) {
         $data = array(
             'dataSource' => array(
                 'chart' => array(),
@@ -108,7 +108,11 @@ class productReportService implements ContainerAwareInterface {
         $chart["caption"] = $titles["caption"];
         $chart["subCaption"] = $titles["subCaption"];
         //        $chart["xAxisName"] = "Indicador";
-        $chart["yAxisName"] = "TM";
+        if ($division == 1) {
+            $chart["pYAxisName"] = "Cantidad (TM)";
+        } else if ($division == 1000) {
+            $chart["pYAxisName"] = "Cantidad (MTM)";
+        }
         $chart["sYAxisName"] = "% Ejecucion";
         $chart["sNumberSuffix"] = "%";
         $chart["sYAxisMaxValue"] = "100";
@@ -140,35 +144,106 @@ class productReportService implements ContainerAwareInterface {
         $chart["inThousandSeparator"] = ".";
         $chart["decimals"] = "2";
         //$chart["legendItemFontSize"] = "15";
-        
+
 
         $rs = array();
-        $categories = array();
+        $categoriesGraphic = array();
         $valuesReal = array();
         $valuesPlan = array();
         $percentaje = array();
+        $lastReal = 0;
+        $lastPlan = 0;
+        $lastCategory = "";
 
-
+        $arrayCategories = array();
+        $arrayPlan = array();
+        $arrayReal = array();
 
         foreach ($productReport as $product) {
             if ($product->getProduct()->getIsCheckToReportProduction()) {
-                $typeVar = $product->$methodFrecuency($dateReport, $typeReport);
-                //$rs[$product->getProduct()->getName()] = $typeVar["plan"+$var];
 
-                $categories[] = array("label" => $product->getProduct()->getName());
-                $valuesReal[] = array("value" => number_format($typeVar[$real] / 1000, 2, ',', '.'));
-                $valuesPlan[] = array("value" => number_format($typeVar[$plan] / 1000, 2, ',', '.'));
-                $perc = 0;
-                if ($typeVar[$plan] > 0) {
-                    $perc = ($typeVar[$real] * 100) / $typeVar[$plan];
-                }
-                $percentaje[] = array("value" => number_format($perc, 2, ',', '.'));
+                $typeVar = $product->$methodFrecuency($dateReport, $typeReport);
+
+                array_push($arrayCategories, $product->getProduct()->getName());
+                array_push($arrayPlan, $typeVar[$plan]);
+                array_push($arrayReal, $typeVar[$real]);
             }
         }
 
+        $cont = 0;
+        foreach (array_unique($arrayCategories) as $categories) {
+            $categoriesGraphic[] = array("label" => $categories);
+
+            $rep = array_keys($arrayCategories, $categories);
+            if (count($rep) > 1) {
+                $totalPlan = 0;
+                $totalReal = 0;
+                $totalPerc = 0;
+                foreach ($rep as $r) {
+                    $totalPlan = $totalPlan + $arrayPlan[$r];
+                    $totalReal = $totalReal + $arrayReal[$r];
+                }
+                if ($arrayPlan[$r] > 0) {
+                    $totalPerc = ($totalReal * 100) / $totalPlan;
+                }
+                $percentaje[] = array("value" => number_format($totalPerc, 2, ',', '.'));
+
+                $valuesReal[] = array("value" => number_format($totalReal / $division, 2, ',', '.'));
+                $valuesPlan[] = array("value" => number_format($totalPlan / $division, 2, ',', '.'));
+            } else {
+                $valuesReal[] = array("value" => number_format($arrayReal[$cont] / $division, 2, ',', '.'));
+                $valuesPlan[] = array("value" => number_format($arrayPlan[$cont] / $division, 2, ',', '.'));
+                $perc = 0;
+                if ($arrayPlan[$cont] > 0) {
+                    $perc = ($arrayReal[$cont] * 100) / $arrayPlan[$cont];
+                }
+                $percentaje[] = array("value" => number_format($perc, 2, ',', '.'));
+            }
+            $cont++;
+        }
+
+
+//
+//        $cont = 0;
+//        foreach ($productReport as $product) {
+//            if ($product->getProduct()->getIsCheckToReportProduction()) {
+//                $typeVar = $product->$methodFrecuency($dateReport, $typeReport);
+//
+//                //if ($product->getProduct()->getName() == $lastCategory) {
+////                if (in_array($product->getProduct()->getName(), $arrayCategories)) {
+////                    unset($valuesReal[$cont - 1]);
+////                    unset($valuesPlan[$cont - 1]);
+////                    unset($percentaje[$cont - 1]);
+////                    $valuesReal[] = array("value" => number_format(($typeVar[$real] + $lastReal) / $division, 2, ',', '.'));
+////                    $valuesPlan[] = array("value" => number_format(($typeVar[$plan] + $lastPlan) / $division, 2, ',', '.'));
+////                }
+//
+//                if ($product->getProduct()->getName() == $lastCategory) {
+//                    
+//                }
+//                array_push($arrayCategories, $product->getProduct()->getName());
+//                $categories[] = array("label" => $product->getProduct()->getName());
+//
+//
+//                $valuesReal[] = array("value" => number_format($typeVar[$real] / $division, 2, ',', '.'));
+//                $valuesPlan[] = array("value" => number_format($typeVar[$plan] / $division, 2, ',', '.'));
+//                $lastReal = $typeVar[$real];
+//                $lastPlan = $typeVar[$plan];
+//
+//                $perc = 0;
+//                if ($typeVar[$plan] > 0) {
+//                    $perc = ($typeVar[$real] * 100) / $typeVar[$plan];
+//                }
+//                $percentaje[] = array("value" => number_format($perc, 2, ',', '.'));
+//                $cont++;
+//
+//                $lastCategory = $product->getProduct()->getName();
+//            }
+//        }
+
 
         $data["dataSource"]["chart"] = $chart;
-        $data["dataSource"]["categories"][]["category"] = $categories;
+        $data["dataSource"]["categories"][]["category"] = $categoriesGraphic;
         $data["dataSource"]["dataset"][] = array(
             "seriesname" => "Plan",
             "data" => $valuesPlan
