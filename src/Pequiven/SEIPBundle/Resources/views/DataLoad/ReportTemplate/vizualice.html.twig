@@ -90,28 +90,31 @@
                         <div class="tabs-content">
 
                             <div id="tab-1" class="with-padding">
-
-                                <div class="twelve-columns"> 
-                                    <div  ng-controller="ProductionController" ng-init="renderChartColumn3dLinedy('graphicDay',{{ graphicsDays }},'100%','500')">
-                                        <span id="graphicDay"></span>
+                                <div class="columns">
+                                    <div class="twelve-columns"> 
+                                        <div  ng-controller="ProductionController" ng-init="renderChartColumn3dLinedy('graphicDay',{{ graphicsDays }},'100','500')">
+                                            <span id="graphicDay"></span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
 
                             <div id="tab-2" class="with-padding">
-
-
-                                <div class="twelve-columns"> 
-                                    <div  ng-controller="ProductionController" ng-init="renderChartColumn3dLinedy('graphicMonth',{{ graphicsMonth }},'100%','500')">
-                                        <span id="graphicMonth"></span>
+                                <div class="columns">
+                                    <div class="twelve-columns"> 
+                                        <div  ng-controller="ProductionController" ng-init="renderChartColumn3dLinedy('graphicMonth',{{ graphicsMonth }},'100','500')">
+                                            <span id="graphicMonth"></span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
 
                             <div id="tab-3" class="with-padding">
-                                <div class="twelve-columns"> 
-                                    <div  ng-controller="ProductionController" ng-init="renderChartColumn3dLinedy('graphicsYear',{{ graphicsYear }},'100%','500')">
-                                        <span id="graphicsYear"></span>
+                                <div class="columns">
+                                    <div class="twelve-columns"> 
+                                        <div  ng-controller="ProductionController" ng-init="renderChartColumn3dLinedy('graphicsYear',{{ graphicsYear }},'100','500')">
+                                            <span id="graphicsYear"></span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

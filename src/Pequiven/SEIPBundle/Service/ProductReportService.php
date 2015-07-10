@@ -107,8 +107,11 @@ class productReportService implements ContainerAwareInterface {
 
         $chart["caption"] = $titles["caption"];
         $chart["subCaption"] = $titles["subCaption"];
-//        $chart["xAxisName"] = "Indicador";
+        //        $chart["xAxisName"] = "Indicador";
         $chart["yAxisName"] = "TM";
+        $chart["sYAxisName"] = "% Ejecucion";
+        $chart["sNumberSuffix"] = "%";
+        $chart["sYAxisMaxValue"] = "100";
         $chart["paletteColors"] = "#0075c2,#1aaf5d,#f2c500";
         $chart["bgColor"] = "#ffffff";
         $chart["showBorder"] = "0";
@@ -120,7 +123,7 @@ class productReportService implements ContainerAwareInterface {
         $chart["legendShadow"] = "0";
         $chart["showHoverEffect"] = "1";
         $chart["valueFontColor"] = "#000000";
-        $chart["valuePosition"] = "center";
+        $chart["valuePosition"] = "ABOVE";
         $chart["rotateValues"] = "1";
         $chart["placeValuesInside"] = "0";
         $chart["divlineColor"] = "#999999";
@@ -136,7 +139,8 @@ class productReportService implements ContainerAwareInterface {
         $chart["inDecimalSeparator"] = ",";
         $chart["inThousandSeparator"] = ".";
         $chart["decimals"] = "2";
-        $chart["legendItemFontSize"] = "15";
+        //$chart["legendItemFontSize"] = "15";
+        
 
         $rs = array();
         $categories = array();
