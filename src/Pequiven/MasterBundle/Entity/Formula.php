@@ -154,6 +154,22 @@ class Formula extends modelFormula implements \Pequiven\SEIPBundle\Entity\Period
      */
     private $dashboardEquationPlan;
     
+    /**
+     * Ecuacion para calcular el valor real a mostrar en los gráficos tipo dona, r/p por frecuencia de notificación (Se pueden usar las variables de la formula)
+     * 
+     * @var string
+     * @ORM\Column(name="cardEquationReal", type="text",nullable=true)
+     */
+    private $cardEquationReal;
+    
+    /**
+     * Ecuacion para calcular el valor plan a mostrar en los gráficos tipo dona, r/p por frecuencia de notificación (Se pueden usar las variables de la formula)
+     * 
+     * @var string
+     * @ORM\Column(name="cardEquationPlan", type="text",nullable=true)
+     */
+    private $cardEquationPlan;
+    
      /**
      * Periodo.
      * 
@@ -622,5 +638,51 @@ class Formula extends modelFormula implements \Pequiven\SEIPBundle\Entity\Period
     public function getDashboardEquationPlan()
     {
         return $this->dashboardEquationPlan;
+    }
+    
+    /**
+     * Set cardEquationReal
+     *
+     * @param text $cardEquationReal
+     * @return Formula
+     */
+    public function setCardEquationReal($cardEquationReal)
+    {
+        $this->cardEquationReal = $cardEquationReal;
+
+        return $this;
+    }
+
+    /**
+     * Get cardEquationReal
+     *
+     * @return text
+     */
+    public function getCardEquationReal()
+    {
+        return $this->cardEquationReal;
+    }
+    
+    /**
+     * Set cardEquationPlan
+     *
+     * @param text $cardEquationPlan
+     * @return Formula
+     */
+    public function setCardEquationPlan($cardEquationPlan)
+    {
+        $this->cardEquationPlan = $cardEquationPlan;
+
+        return $this;
+    }
+
+    /**
+     * Get cardEquationPlan
+     *
+     * @return text
+     */
+    public function getCardEquationPlan()
+    {
+        return $this->cardEquationPlan;
     }
 }
