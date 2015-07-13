@@ -103,6 +103,8 @@
         
     <p class="button-height align-right">
         {% if periodService().isAllowPlanningReport %}
+            {{ buttons.generic(path('pequiven_product_detail_daily_month_calculate', { 'id': product_detail_daily_month.id }),('pequiven.calculate'|trans({},'messages')),'icon-redo') }}
+            &nbsp;
             {{ buttons.generic(path('pequiven_product_detail_daily_month_update', { 'id': product_detail_daily_month.id }),('pequiven.edit'|trans({},'messages'))) }}
             &nbsp;
             {{ buttons.delete(path('pequiven_product_detail_daily_month_delete', { 'id': product_detail_daily_month.id })) }}
