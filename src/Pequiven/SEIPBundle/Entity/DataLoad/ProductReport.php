@@ -91,6 +91,8 @@ class ProductReport extends BaseModel
      * @ORM\ManyToOne(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator")
      */
     private $indicator;
+    
+    private $name = '';
 
     public function __construct() {
         $this->productPlannings = new \Doctrine\Common\Collections\ArrayCollection();
@@ -409,12 +411,21 @@ class ProductReport extends BaseModel
         }
     }
     
+    public function getName(){
+        $name = '';
+        if($this->getProduct() && $this->getPlantReport()){
+            $name = $this->getPlantReport()->getPlant()->getName().' - '.$this->getProduct()->getName();
+        }
+        return $name;
+    }
+    
     public function __toString() 
     {
         $_toString = "-";
         if($this->getProduct()){
             $_toString = sprintf("%s",(string)$this->getProduct());
         }
+        
         return $_toString;
     }
 }
