@@ -416,7 +416,8 @@ class ProductReport extends BaseModel
         if($this->getProduct() && $this->getPlantReport()){
             $name = $this->getPlantReport()->getPlant()->getName().' - '.$this->getProduct()->getName();
         }
-        return $name;
+        $this->name = $name;
+        return $this->name;
     }
     
     public function __toString() 
