@@ -233,7 +233,7 @@
 
                                 {% for productReport in productsReport %}
                                     {% set summary = productReport.getSummaryMonth(dateReport,typeReport) %}
-{#                                    {{ dump(summary) }}#}
+                                    {#                                    {{ dump(summary) }}#}
                                     {% set current_plan_month = summary['plan_month'] %}
                                     {% set current_plan_acumulated = summary['plan_acumulated'] %}
                                     {% set current_real_acumulated = summary['real_acumulated'] %}
@@ -715,73 +715,93 @@
                 {% endif %}
             </div>
             <div class="columns">
-                <p class="button-height float-right">
-                    <a id="btnExportToPdf" href="#" class="button">
+                <p style="padding: 5px;" class="button-height float-right">
+                    <a id="btnExportToPdf" data="" href="#" class="button">
                         <span class="button-icon"><span class="icon-download"></span></span>
                             {{ "pequiven_seip.buttons.export_pdf"|trans }}
                     </a>
                 </p>
-            {% else %}
-                <h2 class="text-center">{{ "Select the plant"|trans }}</h2>
-            {% endif %}
-        </div>
+                {#<p style="padding: 5px;"  class="button-height float-right">
+                    <a id="btnExportToExcel" data="pequiven_report_template_vizualice" href="#" class="button">
+                        <span class="button-icon"><span class="icon-download"></span></span>
+                            {{ "pequiven_seip.buttons.export_xls"|trans }}
+                    </a>
+                </p>#}
+            </div>
 
-    {% endblock body %}
+        {% else %}
+            <h2 class="text-center">{{ "Select the plant"|trans }}</h2>
+        {% endif %}
+    </div>
 
-    {% block javascript %}
-        <script type="text/javascript">
-            $(document).ready(function () {
-                var plantReport = $("#form_plantReport");
-                $("#btnExportToPdf").on("click", function (e) {
-                    e.preventDefault();
-                    $("#exportToPdf").val("1");
-                    eventChange();
+{% endblock body %}
+
+{% block javascript %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var formActionDefault = $("#frmFilter").attr("action");
+            var plantReport = $("#form_plantReport");
+            
+            $("#btnExportToExcel").on("click", function (e) {
+                e.preventDefault();
+                $("#exportToPdf").val("0");
+                var url = $(this).attr("data");
+                $("#frmFilter").attr("action",'{{ path("pequiven_report_export_excel") }}');
+                eventChange();
+            });
+            
+            $("#btnExportToPdf").on("click", function (e) {
+                e.preventDefault();
+                $("#exportToPdf").val("1");
+                eventChange();
+            });
+            
+            $("#btnRefresh").on("click", function (e) {
+                $("#frmFilter").attr("action",formActionDefault);
+                e.preventDefault();
+                $("#exportToPdf").val("0");
+                eventChange();
+            });
+
+            var eventChange = function () {
+                $("#frmFilter").submit();
+            };
+        {% if is_granted("ROLE_SEIP_DATA_LOAD_CHANGE_DATE") %}
+                $('#form_dateReport').datepicker({
+                    changeMonth: true,
+                    dateFormat: "dd/mm/yy"
+                }).on("change", function () {
                 });
-                $("#btnRefresh").on("click", function (e) {
-                    e.preventDefault();
-                    $("#exportToPdf").val("0");
-                    eventChange();
-                });
+        {% endif %}
+                $(".select2").select2();
 
-                var eventChange = function () {
-                    $("#frmFilter").submit();
+                var selectPlant = plantReport;
+                var selectProduct = $("#form_productsReport");
+
+                var urlGetProduct = "{{ path("pequiven_seip_product_report_by_plant_report") }}";
+                ajaxToSelect.formaterData = function (response) {
+                    return response.product.name;
                 };
-            {% if is_granted("ROLE_SEIP_DATA_LOAD_CHANGE_DATE") %}
-                    $('#form_dateReport').datepicker({
-                        changeMonth: true,
-                        dateFormat: "dd/mm/yy"
-                    }).on("change", function () {
-                    });
-            {% endif %}
-                    $(".select2").select2();
+                ajaxToSelect.addEmptyValue = false;
 
-                    var selectPlant = plantReport;
-                    var selectProduct = $("#form_productsReport");
-
-                    var urlGetProduct = "{{ path("pequiven_seip_product_report_by_plant_report") }}";
-                    ajaxToSelect.formaterData = function (response) {
-                        return response.product.name;
-                    };
-                    ajaxToSelect.addEmptyValue = false;
-
-                    selectPlant.on("change", function () {
-                        ajaxToSelect2(urlGetProduct, selectProduct, {plantReport: selectPlant.val()});
-                    });
-            {#            console.log(selectPlant.val());#}
-                    if (selectPlant.val() != "") {
-            {#                ajaxToSelect2(urlGetProduct,selectProduct,{ plantReport: selectPlant.val() });#}
-                    } else {
-                        selectProduct.empty();
-                        selectProduct.select2('disable');
-                    }
+                selectPlant.on("change", function () {
+                    ajaxToSelect2(urlGetProduct, selectProduct, {plantReport: selectPlant.val()});
                 });
-        </script>
-    {% endblock %}
+        {#            console.log(selectPlant.val());#}
+                if (selectPlant.val() != "") {
+        {#                ajaxToSelect2(urlGetProduct,selectProduct,{ plantReport: selectPlant.val() });#}
+                } else {
+                    selectProduct.empty();
+                    selectProduct.select2('disable');
+                }
+            });
+    </script>
+{% endblock %}
 
 
 
-    {% block javascripts %}
-        {{ parent() }}
-        <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/fusioncharts.js') }}"></script>
-        <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/themes/fusioncharts.theme.fint.js') }}"></script>
-    {% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/fusioncharts.js') }}"></script>
+    <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/themes/fusioncharts.theme.fint.js') }}"></script>
+{% endblock %}

@@ -154,8 +154,8 @@ pequiven_seip:
 
     #Buttons
     buttons:
-        export_xls: Exportar
-        export_pdf: Exportar
+        export_xls: Exportar a Excel
+        export_pdf: Exportar a PDF
         export_result: Exportar Resultados
         refresh: Refrescar
         run_planning: Ejecutar planificación

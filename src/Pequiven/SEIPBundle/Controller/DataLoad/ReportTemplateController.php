@@ -247,87 +247,87 @@ class ReportTemplateController extends SEIPController {
             $productsReport = $plantReport->getProductsReport()->toArray();
         }
         $showDay = $showMonth = $showYear = $defaultShow = true;
-        
+
         $parametersReportTemplate = array(
-                'label_attr' => array('class' => 'label bold'),
-                'class' => 'Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate',
-                'property' => 'reportTemplateWithName',
-                'required' => false,
-                'empty_value' => $emptyValue,
-                'translation_domain' => 'PequivenSEIPBundle',
-                'attr' => array('class' => 'select2 input-xlarge'),
-                'multiple' => true,
-                );
-        $qb = function (\Pequiven\SEIPBundle\Repository\DataLoad\ReportTemplateRepository $repository){
+            'label_attr' => array('class' => 'label bold'),
+            'class' => 'Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate',
+            'property' => 'reportTemplateWithName',
+            'required' => false,
+            'empty_value' => $emptyValue,
+            'translation_domain' => 'PequivenSEIPBundle',
+            'attr' => array('class' => 'select2 input-xlarge'),
+            'multiple' => true,
+        );
+        $qb = function (\Pequiven\SEIPBundle\Repository\DataLoad\ReportTemplateRepository $repository) {
             return $repository->getQueryBuilderByUser();
         };
         $parametersReportTemplate['query_builder'] = $qb;
-        
+
         $parametersPlantReport = array(
-                'label_attr' => array('class' => 'label bold'),
-                'class' => 'Pequiven\SEIPBundle\Entity\DataLoad\PlantReport',
-                'property' => 'plant',
-                'required' => true,
-                'empty_value' => $emptyValue,
-                'translation_domain' => 'PequivenSEIPBundle',
-                'attr' => array('class' => 'select2 input-xlarge'),
-                'multiple' => false,
-                'group_by' => 'reportTemplateWithName'
-                );
-        $qb = function (\Pequiven\SEIPBundle\Repository\DataLoad\PlantReportRepository $repository){
+            'label_attr' => array('class' => 'label bold'),
+            'class' => 'Pequiven\SEIPBundle\Entity\DataLoad\PlantReport',
+            'property' => 'plant',
+            'required' => true,
+            'empty_value' => $emptyValue,
+            'translation_domain' => 'PequivenSEIPBundle',
+            'attr' => array('class' => 'select2 input-xlarge'),
+            'multiple' => false,
+            'group_by' => 'reportTemplateWithName'
+        );
+        $qb = function (\Pequiven\SEIPBundle\Repository\DataLoad\PlantReportRepository $repository) {
             return $repository->getQueryBuilderByUser();
         };
         $parametersPlantReport['query_builder'] = $qb;
-        
+
         $form = $this
-            ->createFormBuilder()
-            ->add('reportTemplate','entity',$parametersReportTemplate)
-            ->add('plantReport','entity',$parametersPlantReport)
-            ->add('dateReport','date',[
-                'format' => 'd/M/y',
-                'widget' => 'single_text',
-                'translation_domain' => 'PequivenSEIPBundle',
-                'attr' => array('class' => 'input'),
-                'data' => $dateReport,
-            ])
-            ->add('productsReport','entity',[
-                'label_attr' => array('class' => 'label bold'),
-                'class' => 'Pequiven\SEIPBundle\Entity\DataLoad\ProductReport',
-                'multiple' => true,
-                'translation_domain' => 'PequivenSEIPBundle',
-                'required' => false,
-                'attr' => array('class' => 'select2 input-xlarge'),
-            ])
-            ->add('showDay','checkbox',[
-                'label_attr' => array('class' => 'label bold'),
-                'required' => false,
-                'translation_domain' => 'PequivenSEIPBundle',
-                'data' => $defaultShow,
-            ])
-            ->add('showMonth','checkbox',[
-                'label_attr' => array('class' => 'label bold'),
-                'required' => false,
-                'translation_domain' => 'PequivenSEIPBundle',
-                'data' => $defaultShow,
-            ])
-            ->add('showYear','checkbox',[
-                'label_attr' => array('class' => 'label bold'),
-                'required' => false,
-                'translation_domain' => 'PequivenSEIPBundle',
-                'data' => $defaultShow,
-            ])
-            ->add('typeReport','choice',[
-                'choices' => [
-                    'Gross' => 'Bruta',
-                    'Net' => 'Neta',
-                ],
-                'data' => 'Gross',
-                'attr' => array('class' => 'select2 input-xlarge'),
-                'translation_domain' => 'PequivenSEIPBundle',
-            ])
-            ->getForm();
-        
-        if($request->isMethod('POST') && $form->submit($request)->isValid()){
+                ->createFormBuilder()
+                ->add('reportTemplate', 'entity', $parametersReportTemplate)
+                ->add('plantReport', 'entity', $parametersPlantReport)
+                ->add('dateReport', 'date', [
+                    'format' => 'd/M/y',
+                    'widget' => 'single_text',
+                    'translation_domain' => 'PequivenSEIPBundle',
+                    'attr' => array('class' => 'input'),
+                    'data' => $dateReport,
+                ])
+                ->add('productsReport', 'entity', [
+                    'label_attr' => array('class' => 'label bold'),
+                    'class' => 'Pequiven\SEIPBundle\Entity\DataLoad\ProductReport',
+                    'multiple' => true,
+                    'translation_domain' => 'PequivenSEIPBundle',
+                    'required' => false,
+                    'attr' => array('class' => 'select2 input-xlarge'),
+                ])
+                ->add('showDay', 'checkbox', [
+                    'label_attr' => array('class' => 'label bold'),
+                    'required' => false,
+                    'translation_domain' => 'PequivenSEIPBundle',
+                    'data' => $defaultShow,
+                ])
+                ->add('showMonth', 'checkbox', [
+                    'label_attr' => array('class' => 'label bold'),
+                    'required' => false,
+                    'translation_domain' => 'PequivenSEIPBundle',
+                    'data' => $defaultShow,
+                ])
+                ->add('showYear', 'checkbox', [
+                    'label_attr' => array('class' => 'label bold'),
+                    'required' => false,
+                    'translation_domain' => 'PequivenSEIPBundle',
+                    'data' => $defaultShow,
+                ])
+                ->add('typeReport', 'choice', [
+                    'choices' => [
+                        'Gross' => 'Bruta',
+                        'Net' => 'Neta',
+                    ],
+                    'data' => 'Gross',
+                    'attr' => array('class' => 'select2 input-xlarge'),
+                    'translation_domain' => 'PequivenSEIPBundle',
+                ])
+                ->getForm();
+
+        if ($request->isMethod('POST') && $form->submit($request)->isValid()) {
             $data = $form->getData();
             $showDay = $data['showDay'];
             $showMonth = $data['showMonth'];
@@ -422,9 +422,9 @@ class ReportTemplateController extends SEIPController {
         //$planDay = $reportService->getArray($productsReport, $dateReport, $typeReport, "getSummaryDay", "plan");
         //$realDay = $reportService->getArray($productsReport, $dateReport, $typeReport, "getSummaryDay", "real");
 
-        $graphicsDays = $reportService->generateColumn3dLinery(array("caption"=>"Producción por Dia","subCaption"=>"Valores Expresados en TM"),$productsReport, $dateReport, $typeReport, "getSummaryDay", "plan", "real");
-        $graphicsMonth = $reportService->generateColumn3dLinery(array("caption"=>"Producción por Mes","subCaption"=>"Valores Expresados en TM"),$productsReport, $dateReport, $typeReport, "getSummaryMonth", "plan_acumulated", "real_acumulated");
-        $graphicsYear = $reportService->generateColumn3dLinery(array("caption"=>"Producción por Año","subCaption"=>"Valores Expresados en MTM"),$productsReport, $dateReport, $typeReport, "getSummaryYear", "plan_acumulated", "real_acumulated",1000);
+        $graphicsDays = $reportService->generateColumn3dLinery(array("caption" => "Producción por Dia", "subCaption" => "Valores Expresados en TM"), $productsReport, $dateReport, $typeReport, "getSummaryDay", "plan", "real");
+        $graphicsMonth = $reportService->generateColumn3dLinery(array("caption" => "Producción por Mes", "subCaption" => "Valores Expresados en TM"), $productsReport, $dateReport, $typeReport, "getSummaryMonth", "plan_acumulated", "real_acumulated");
+        $graphicsYear = $reportService->generateColumn3dLinery(array("caption" => "Producción por Año", "subCaption" => "Valores Expresados en MTM"), $productsReport, $dateReport, $typeReport, "getSummaryYear", "plan_acumulated", "real_acumulated", 1000);
 
 //        $dataGraphicsMonth = $reportService->getArray($productsReport,$dateReport,$typeReport,"getSummaryMonth","plan_month");
 //        $graphicsMonth = $reportService->generatePie(array("array"=>$dataGraphicsMonth,"caption"=>"Productos por Mes","subCaption"=>""));
@@ -501,6 +501,10 @@ class ReportTemplateController extends SEIPController {
         }
 
         return $this->handleView($view);
+    }
+
+    public function exportExcelAction(Request $request) {
+        
     }
 
     protected function getProductReportService() {
