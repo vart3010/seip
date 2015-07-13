@@ -250,7 +250,7 @@
                                     {% if is_next_equals == true %}
                                         {% set plan_month = plan_month + summary['plan_month'] %}
                                         {% set plan_acumulated = plan_acumulated + summary['plan_acumulated'] %}
-                                        {% set real_acumulated = real_acumulated + summary['plan_month'] %}
+                                        {% set real_acumulated = real_acumulated + summary['real_acumulated'] %}
                                     {% else %}
                                         {% set current_plan_month = current_plan_month + plan_month %}
                                         {% set current_plan_acumulated = current_plan_acumulated + plan_acumulated %}
