@@ -86,6 +86,10 @@ class ProductReportController extends SEIPController
                     }
                 }
                 $resource->addProductPlanning($cloneNet);
+                if($netProductionPercentage == 0)
+                {
+                    $cloneNet->setTotalMonth(0);
+                }
             }
         }
         $this->save($resource);

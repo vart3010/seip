@@ -165,6 +165,7 @@ pequiven_seip:
         add_internal_cause_mp: Añadir causa interna (Materia Prima)
         add_external_cause_mp: Añadir causa externa (Materia Prima)
         delete_cause: 'Eliminar esta causa'
+        save_slope: 'Guardar pendiente'
     question:
         want_create_production_details_from_planning: ¿Desea crear los detalles de producción a partir del presupuesto de producción?
         want_create_plant_from_planning: ¿Desea crear los detalles de servicios de la planta?
