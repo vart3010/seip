@@ -154,6 +154,22 @@ class Formula extends modelFormula implements \Pequiven\SEIPBundle\Entity\Period
      */
     private $dashboardEquationPlan;
     
+    /**
+     * Ecuacion para calcular el valor real a mostrar en la ficha del indicador, para cuando este activado el isValueRealFromEquationRealFormula del indicador
+     * 
+     * @var string
+     * @ORM\Column(name="cardEquationReal", type="text",nullable=true)
+     */
+    private $cardEquationReal;
+    
+    /**
+     * Ecuacion para calcular el valor plan a mostrar en la ficha del indicador, para cuando este activado el isValuePlanFromEquationPlanFormula del indicador
+     * 
+     * @var string
+     * @ORM\Column(name="cardEquationPlan", type="text",nullable=true)
+     */
+    private $cardEquationPlan;
+    
      /**
      * Periodo.
      * 
@@ -622,5 +638,51 @@ class Formula extends modelFormula implements \Pequiven\SEIPBundle\Entity\Period
     public function getDashboardEquationPlan()
     {
         return $this->dashboardEquationPlan;
+    }
+    
+    /**
+     * Set cardEquationReal
+     *
+     * @param text $cardEquationReal
+     * @return Formula
+     */
+    public function setCardEquationReal($cardEquationReal)
+    {
+        $this->cardEquationReal = $cardEquationReal;
+
+        return $this;
+    }
+
+    /**
+     * Get cardEquationReal
+     *
+     * @return text
+     */
+    public function getCardEquationReal()
+    {
+        return $this->cardEquationReal;
+    }
+    
+    /**
+     * Set cardEquationPlan
+     *
+     * @param text $cardEquationPlan
+     * @return Formula
+     */
+    public function setCardEquationPlan($cardEquationPlan)
+    {
+        $this->cardEquationPlan = $cardEquationPlan;
+
+        return $this;
+    }
+
+    /**
+     * Get cardEquationPlan
+     *
+     * @return text
+     */
+    public function getCardEquationPlan()
+    {
+        return $this->cardEquationPlan;
     }
 }

@@ -55,7 +55,7 @@
         </div>
     </fieldset>
     {% set hasPermission = is_granted("ROLE_SEIP_DATA_LOAD_CHANGE_DATE") %}
-    <form action="{{ path('pequiven_report_template_load',{id: report_template.id}) }}" method="POST">
+    <form id="template-load" action="{{ path('pequiven_report_template_load',{id: report_template.id}) }}" method="POST">
         <input type="hidden" name="plant_report" value="{{ app.request.get("plant_report") }}">
         {{ form_errors(form) }}
         
@@ -351,8 +351,19 @@
 
          {% include 'PequivenSEIPBundle:DataLoad:ReportTemplate/load/services.html.twig' %}
          <br /><br />
-
-         {{ actions.update() }}
+         <div class="field-block button-height">
+             <a id="btn-save" class="button glossy mid-margin-right save">
+                 <span class="button-icon green-gradient"><span class="icon-tick"></span></span>{{ 'pequiven_seip.save'|trans }}</a>
+             &nbsp;
+             <a id="btn-save-slope" class="button glossy mid-margin-right save">
+                <span class="button-icon"><span class="icon-tick"></span></span>
+                {{ "pequiven_seip.buttons.save_slope"|trans }}
+            </a>
+            <a href="{{ path("pequiven_plant_report_index") }}" class="button glossy cancel">
+                <span class="button-icon red-gradient"><span class="icon-cross-round"></span></span>
+                {{ 'pequiven_seip.cancel'|trans }}
+            </a>
+         </div>
         <div class="hidden">
              {{ form_rest(form) }}
         </div>
@@ -362,6 +373,15 @@
 {% block javascript %}
     <script type="text/javascript">
         $(document).ready(function(){
+            var form = $("#template-load");
+            $("#btn-save").on("click",function(){
+                $('.detail-status').val(2);
+                form.submit();
+            });
+            $("#btn-save-slope").on("click",function(){
+                $('.detail-status').val(1);
+                form.submit();
+            });
             {% if is_granted("ROLE_SEIP_DATA_LOAD_CHANGE_DATE") %}
                 $('#dateNotification').datepicker({
                      changeMonth: true,

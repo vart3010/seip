@@ -29,8 +29,8 @@ class ProductRepository extends SeipEntityRepository
     {
         $qb = $this->getQueryAllEnabled();
         $qb
-            ->andWhere('p.typeOf = :typeOf')
-            ->setParameter('typeOf', Product::TYPE_PRODUCT)
+            ->andWhere('p.typeProduct = :typeProduct')
+            ->setParameter('typeProduct', Product::TYPE_PRODUCT_FINAL)
             ;
         return $qb;
     }

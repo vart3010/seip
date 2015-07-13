@@ -30,6 +30,11 @@ class ProductDetailDailyMonthType extends BaseNotification
                 'label_attr' => array('class' => 'label'),
                 "attr" => array("class" => "input input-mini netReal"),
             ))
+//          Status del dia
+            ->add(sprintf('day%sStatus',$day),'hidden',array(
+                'label_attr' => array('class' => 'label'),
+                "attr" => array("class" => "input input-mini detail-status"),
+            ))
             
             //Observacion del dia
             ->add(sprintf('day%sObservation',$day),null,[
