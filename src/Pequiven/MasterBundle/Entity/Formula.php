@@ -155,7 +155,7 @@ class Formula extends modelFormula implements \Pequiven\SEIPBundle\Entity\Period
     private $dashboardEquationPlan;
     
     /**
-     * Ecuacion para calcular el valor real a mostrar en los gráficos tipo dona, r/p por frecuencia de notificación (Se pueden usar las variables de la formula)
+     * Ecuacion para calcular el valor real a mostrar en la ficha del indicador, para cuando este activado el isValueRealFromEquationRealFormula del indicador
      * 
      * @var string
      * @ORM\Column(name="cardEquationReal", type="text",nullable=true)
@@ -163,7 +163,7 @@ class Formula extends modelFormula implements \Pequiven\SEIPBundle\Entity\Period
     private $cardEquationReal;
     
     /**
-     * Ecuacion para calcular el valor plan a mostrar en los gráficos tipo dona, r/p por frecuencia de notificación (Se pueden usar las variables de la formula)
+     * Ecuacion para calcular el valor plan a mostrar en la ficha del indicador, para cuando este activado el isValuePlanFromEquationPlanFormula del indicador
      * 
      * @var string
      * @ORM\Column(name="cardEquationPlan", type="text",nullable=true)

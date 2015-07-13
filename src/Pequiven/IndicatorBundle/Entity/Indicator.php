@@ -461,9 +461,8 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      */
     private $variablesRealPlanComplement = false;
     
-    
     /**
-     * 
+     * ¿Se quiere mostrar el valor de una variable en lugar del valor real en la ficha del indicador?
      * @var boolean
      * @ORM\Column(name="isValueFromTextReal",type="boolean")
      */
@@ -478,20 +477,32 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     
     
      /**
-     * 
+     * ¿Se quiere mostrar el valor de una variable en lugar del valor plan en la ficha del indicador?
      * @var boolean
      * @ORM\Column(name="isValueFromTextPlan",type="boolean")
      */
     private $isValueFromTextPlan = false;
     
     /**
+     * 
      * @var type 
      * @ORM\Column(name="textValueFromVariablePlan",type="text", nullable=true)
      */
     private $textValueFromVariablePlan;
     
+    /**
+     * ¿Se quiere mostrar el valor de una ecuación en lugar del valor real en la ficha del indicador?
+     * @var boolean
+     * @ORM\Column(name="isValueRealFromEquationRealFormula",type="boolean")
+     */
+    private $isValueRealFromEquationRealFormula;
     
-    
+    /**
+     * ¿Se quiere mostrar el valor de una ecuación en lugar del valor plan en la ficha del indicador?
+     * @var boolean
+     * @ORM\Column(name="isValuePlanFromEquationPlanFormula",type="boolean")
+     */
+    private $isValuePlanFromEquationPlanFormula;
     
     /**
      * Constructor
@@ -2072,7 +2083,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     }
     
     /**
-     * 
+     * Get
      * @return type
      */
     public function getTextValueFromVariableReal()
@@ -2080,10 +2091,8 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
         return $this->textValueFromVariableReal;
     }
     
-    
-    
     /**
-     * 
+     * Set isValueFromTextPlan
      * @param type $isValueFromTextPlan
      * @return \Pequiven\IndicatorBundle\Entity\Indicator
      */
@@ -2094,23 +2103,18 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
         return $this;
     }
     
-    
     /**
-     * 
-     * @return type
+     * Get isValueFromTextPlan
+     * @return boolean
      */
     public function getIsValueFromTextPlan()
     {
         return $this->isValueFromTextPlan;
     }
     
-    
-    
-    
-    
     /**
-     * 
-     * @param type $TextValueFromVariablePlan
+     * Set textValueFromVariablePlan
+     * @param String $TextValueFromVariablePlan
      * @return \Pequiven\IndicatorBundle\Entity\Indicator
      */
      public function setTextValueFromVariablePlan($TextValueFromVariablePlan)
@@ -2121,7 +2125,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     }
     
     /**
-     * 
+     * Get textValueFromVariablePlan
      * @return type
      */
     public function getTextValueFromVariablePlan()
@@ -2129,11 +2133,50 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
         return $this->textValueFromVariablePlan;
     }
     
+    /**
+     * Set isValueRealFromEquationRealFormula
+     *
+     * @param boolean $isValueRealFromEquationRealFormula
+     * @return Indicator
+     */
+    public function setIsValueRealFromEquationRealFormula($isValueRealFromEquationRealFormula)
+    {
+        $this->isValueRealFromEquationRealFormula = $isValueRealFromEquationRealFormula;
+
+        return $this;
+    }
+
+    /**
+     * Get isValueRealFromEquationRealFormula
+     *
+     * @return boolean 
+     */
+    public function getIsValueRealFromEquationRealFormula()
+    {
+        return $this->isValueRealFromEquationRealFormula;
+    }
     
+    /**
+     * Set isValuePlanFromEquationPlanFormula
+     *
+     * @param boolean $isValuePlanFromEquationPlanFormula
+     * @return Indicator
+     */
+    public function setIsValuePlanFromEquationPlanFormula($isValuePlanFromEquationPlanFormula)
+    {
+        $this->isValuePlanFromEquationPlanFormula = $isValuePlanFromEquationPlanFormula;
+
+        return $this;
+    }
+
+    /**
+     * Get isValuePlanFromEquationPlanFormula
+     *
+     * @return boolean 
+     */
+    public function getIsValuePlanFromEquationPlanFormula()
+    {
+        return $this->isValuePlanFromEquationPlanFormula;
+    }
     
-    
-    
-            
-            
-            
 }

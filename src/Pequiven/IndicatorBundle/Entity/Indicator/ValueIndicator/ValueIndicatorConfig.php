@@ -48,11 +48,20 @@ class ValueIndicatorConfig
     private $products;
     
     /**
+     * ProductReport
+     * 
+     * @var \Pequiven\SEIPBundle\Entity\DataLoad\ProductReport
+     * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\ProductReport")
+     */
+    private $productReports;
+    
+    /**
      * Constructor
      */
     public function __construct()
     {
         $this->products = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->productReports = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -120,5 +129,38 @@ class ValueIndicatorConfig
     public function getProducts()
     {
         return $this->products;
+    }
+    
+    /**
+     * Add productReports
+     *
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\ProductReport $productReports
+     * @return IndicatorConfigDetailValue
+     */
+    public function addProductReports(\Pequiven\SEIPBundle\Entity\CEI\Product $productReports)
+    {
+        $this->productReports[] = $productReports;
+
+        return $this;
+    }
+
+    /**
+     * Remove productReports
+     *
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\ProductReport $productReports
+     */
+    public function removeProductReports(\Pequiven\SEIPBundle\Entity\DataLoad\ProductReport $productReports)
+    {
+        $this->productReports->removeElement($productReports);
+    }
+
+    /**
+     * Get productReports
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getProductReports()
+    {
+        return $this->productReports;
     }
 }
