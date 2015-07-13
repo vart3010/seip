@@ -1181,6 +1181,222 @@ class ProductDetailDailyMonth extends BaseModel
     private $day31Observation;
     
     /**
+     * Dia 1 (Status)
+     * @var string
+     * @ORM\Column(name="day1_status",type="integer",nullable=true)
+     */
+    private $day1Status;
+    
+    /**
+     * Dia 2 (Status)
+     * @var string
+     * @ORM\Column(name="day2_status",type="integer",nullable=true)
+     */
+    private $day2Status;
+    
+    /**
+     * Dia 3 (Status)
+     * @var string
+     * @ORM\Column(name="day3_status",type="integer",nullable=true)
+     */
+    private $day3Status;
+    
+    /**
+     * Dia 4 (Status)
+     * @var string
+     * @ORM\Column(name="day4_status",type="integer",nullable=true)
+     */
+    private $day4Status;
+    
+    /**
+     * Dia 5 (Status)
+     * @var string
+     * @ORM\Column(name="day5_status",type="integer",nullable=true)
+     */
+    private $day5Status;
+    
+    /**
+     * Dia 6 (Status)
+     * @var string
+     * @ORM\Column(name="day6_status",type="integer",nullable=true)
+     */
+    private $day6Status;
+    
+    /**
+     * Dia 7 (Status)
+     * @var string
+     * @ORM\Column(name="day7_status",type="integer",nullable=true)
+     */
+    private $day7Status;
+    
+    /**
+     * Dia 8 (Status)
+     * @var string
+     * @ORM\Column(name="day8_status",type="integer",nullable=true)
+     */
+    private $day8Status;
+    
+    /**
+     * Dia 9 (Status)
+     * @var string
+     * @ORM\Column(name="day9_status",type="integer",nullable=true)
+     */
+    private $day9Status;
+    
+    /**
+     * Dia 10 (Status)
+     * @var string
+     * @ORM\Column(name="day10_status",type="integer",nullable=true)
+     */
+    private $day10Status;
+    
+    /**
+     * Dia 11 (Status)
+     * @var string
+     * @ORM\Column(name="day11_status",type="integer",nullable=true)
+     */
+    private $day11Status;
+    
+    /**
+     * Dia 12 (Status)
+     * @var string
+     * @ORM\Column(name="day12_status",type="integer",nullable=true)
+     */
+    private $day12Status;
+    
+    /**
+     * Dia 13 (Status)
+     * @var string
+     * @ORM\Column(name="day13_status",type="integer",nullable=true)
+     */
+    private $day13Status;
+    
+    /**
+     * Dia 14 (Status)
+     * @var string
+     * @ORM\Column(name="day14_status",type="integer",nullable=true)
+     */
+    private $day14Status;
+    
+    /**
+     * Dia 15 (Status)
+     * @var string
+     * @ORM\Column(name="day15_status",type="integer",nullable=true)
+     */
+    private $day15Status;
+    
+    /**
+     * Dia 16 (Status)
+     * @var string
+     * @ORM\Column(name="day16_status",type="integer",nullable=true)
+     */
+    private $day16Status;
+    
+    /**
+     * Dia 17 (Status)
+     * @var string
+     * @ORM\Column(name="day17_status",type="integer",nullable=true)
+     */
+    private $day17Status;
+    
+    /**
+     * Dia 18 (Status)
+     * @var string
+     * @ORM\Column(name="day18_status",type="integer",nullable=true)
+     */
+    private $day18Status;
+    
+    /**
+     * Dia 19 (Status)
+     * @var string
+     * @ORM\Column(name="day19_status",type="integer",nullable=true)
+     */
+    private $day19Status;
+    
+    /**
+     * Dia 20 (Status)
+     * @var string
+     * @ORM\Column(name="day20_status",type="integer",nullable=true)
+     */
+    private $day20Status;
+    
+    /**
+     * Dia 21 (Status)
+     * @var string
+     * @ORM\Column(name="day21_status",type="integer",nullable=true)
+     */
+    private $day21Status;
+    
+    /**
+     * Dia 22 (Status)
+     * @var string
+     * @ORM\Column(name="day22_status",type="integer",nullable=true)
+     */
+    private $day22Status;
+    
+    /**
+     * Dia 23 (Status)
+     * @var string
+     * @ORM\Column(name="day23_status",type="integer",nullable=true)
+     */
+    private $day23Status;
+    
+    /**
+     * Dia 24 (Status)
+     * @var string
+     * @ORM\Column(name="day24_status",type="integer",nullable=true)
+     */
+    private $day24Status;
+    
+    /**
+     * Dia 25 (Status)
+     * @var string
+     * @ORM\Column(name="day25_status",type="integer",nullable=true)
+     */
+    private $day25Status;
+    
+    /**
+     * Dia 26 (Status)
+     * @var string
+     * @ORM\Column(name="day26_status",type="integer",nullable=true)
+     */
+    private $day26Status;
+    
+    /**
+     * Dia 27 (Status)
+     * @var string
+     * @ORM\Column(name="day27_status",type="integer",nullable=true)
+     */
+    private $day27Status;
+    
+    /**
+     * Dia 28 (Status)
+     * @var string
+     * @ORM\Column(name="day28_status",type="integer",nullable=true)
+     */
+    private $day28Status;
+    
+    /**
+     * Dia 29 (Status)
+     * @var string
+     * @ORM\Column(name="day29_status",type="integer",nullable=true)
+     */
+    private $day29Status;
+    
+    /**
+     * Dia 30 (Status)
+     * @var string
+     * @ORM\Column(name="day30_status",type="integer",nullable=true)
+     */
+    private $day30Status;
+    /**
+     * Dia 31 (Status)
+     * @var string
+     * @ORM\Column(name="day31_status",type="integer",nullable=true)
+     */
+    private $day31Status;
+    
+    /**
      * Get id
      *
      * @return integer 
@@ -4937,6 +5153,719 @@ class ProductDetailDailyMonth extends BaseModel
     public function getDay31Observation()
     {
         return $this->day31Observation;
+    }
+
+    /**
+     * Set day1Status
+     *
+     * @param integer $day1Status
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay1Status($day1Status)
+    {
+        $this->day1Status = $day1Status;
+
+        return $this;
+    }
+
+    /**
+     * Get day1Status
+     *
+     * @return integer 
+     */
+    public function getDay1Status()
+    {
+        return $this->day1Status;
+    }
+
+    /**
+     * Set day2Status
+     *
+     * @param integer $day2Status
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay2Status($day2Status)
+    {
+        $this->day2Status = $day2Status;
+
+        return $this;
+    }
+
+    /**
+     * Get day2Status
+     *
+     * @return integer 
+     */
+    public function getDay2Status()
+    {
+        return $this->day2Status;
+    }
+
+    /**
+     * Set day3Status
+     *
+     * @param integer $day3Status
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay3Status($day3Status)
+    {
+        $this->day3Status = $day3Status;
+
+        return $this;
+    }
+
+    /**
+     * Get day3Status
+     *
+     * @return integer 
+     */
+    public function getDay3Status()
+    {
+        return $this->day3Status;
+    }
+
+    /**
+     * Set day4Status
+     *
+     * @param integer $day4Status
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay4Status($day4Status)
+    {
+        $this->day4Status = $day4Status;
+
+        return $this;
+    }
+
+    /**
+     * Get day4Status
+     *
+     * @return integer 
+     */
+    public function getDay4Status()
+    {
+        return $this->day4Status;
+    }
+
+    /**
+     * Set day5Status
+     *
+     * @param integer $day5Status
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay5Status($day5Status)
+    {
+        $this->day5Status = $day5Status;
+
+        return $this;
+    }
+
+    /**
+     * Get day5Status
+     *
+     * @return integer 
+     */
+    public function getDay5Status()
+    {
+        return $this->day5Status;
+    }
+
+    /**
+     * Set day6Status
+     *
+     * @param integer $day6Status
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay6Status($day6Status)
+    {
+        $this->day6Status = $day6Status;
+
+        return $this;
+    }
+
+    /**
+     * Get day6Status
+     *
+     * @return integer 
+     */
+    public function getDay6Status()
+    {
+        return $this->day6Status;
+    }
+
+    /**
+     * Set day7Status
+     *
+     * @param integer $day7Status
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay7Status($day7Status)
+    {
+        $this->day7Status = $day7Status;
+
+        return $this;
+    }
+
+    /**
+     * Get day7Status
+     *
+     * @return integer 
+     */
+    public function getDay7Status()
+    {
+        return $this->day7Status;
+    }
+
+    /**
+     * Set day8Status
+     *
+     * @param integer $day8Status
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay8Status($day8Status)
+    {
+        $this->day8Status = $day8Status;
+
+        return $this;
+    }
+
+    /**
+     * Get day8Status
+     *
+     * @return integer 
+     */
+    public function getDay8Status()
+    {
+        return $this->day8Status;
+    }
+
+    /**
+     * Set day9Status
+     *
+     * @param integer $day9Status
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay9Status($day9Status)
+    {
+        $this->day9Status = $day9Status;
+
+        return $this;
+    }
+
+    /**
+     * Get day9Status
+     *
+     * @return integer 
+     */
+    public function getDay9Status()
+    {
+        return $this->day9Status;
+    }
+
+    /**
+     * Set day10Status
+     *
+     * @param integer $day10Status
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay10Status($day10Status)
+    {
+        $this->day10Status = $day10Status;
+
+        return $this;
+    }
+
+    /**
+     * Get day10Status
+     *
+     * @return integer 
+     */
+    public function getDay10Status()
+    {
+        return $this->day10Status;
+    }
+
+    /**
+     * Set day11Status
+     *
+     * @param integer $day11Status
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay11Status($day11Status)
+    {
+        $this->day11Status = $day11Status;
+
+        return $this;
+    }
+
+    /**
+     * Get day11Status
+     *
+     * @return integer 
+     */
+    public function getDay11Status()
+    {
+        return $this->day11Status;
+    }
+
+    /**
+     * Set day12Status
+     *
+     * @param integer $day12Status
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay12Status($day12Status)
+    {
+        $this->day12Status = $day12Status;
+
+        return $this;
+    }
+
+    /**
+     * Get day12Status
+     *
+     * @return integer 
+     */
+    public function getDay12Status()
+    {
+        return $this->day12Status;
+    }
+
+    /**
+     * Set day13Status
+     *
+     * @param integer $day13Status
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay13Status($day13Status)
+    {
+        $this->day13Status = $day13Status;
+
+        return $this;
+    }
+
+    /**
+     * Get day13Status
+     *
+     * @return integer 
+     */
+    public function getDay13Status()
+    {
+        return $this->day13Status;
+    }
+
+    /**
+     * Set day14Status
+     *
+     * @param integer $day14Status
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay14Status($day14Status)
+    {
+        $this->day14Status = $day14Status;
+
+        return $this;
+    }
+
+    /**
+     * Get day14Status
+     *
+     * @return integer 
+     */
+    public function getDay14Status()
+    {
+        return $this->day14Status;
+    }
+
+    /**
+     * Set day15Status
+     *
+     * @param integer $day15Status
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay15Status($day15Status)
+    {
+        $this->day15Status = $day15Status;
+
+        return $this;
+    }
+
+    /**
+     * Get day15Status
+     *
+     * @return integer 
+     */
+    public function getDay15Status()
+    {
+        return $this->day15Status;
+    }
+
+    /**
+     * Set day16Status
+     *
+     * @param integer $day16Status
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay16Status($day16Status)
+    {
+        $this->day16Status = $day16Status;
+
+        return $this;
+    }
+
+    /**
+     * Get day16Status
+     *
+     * @return integer 
+     */
+    public function getDay16Status()
+    {
+        return $this->day16Status;
+    }
+
+    /**
+     * Set day17Status
+     *
+     * @param integer $day17Status
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay17Status($day17Status)
+    {
+        $this->day17Status = $day17Status;
+
+        return $this;
+    }
+
+    /**
+     * Get day17Status
+     *
+     * @return integer 
+     */
+    public function getDay17Status()
+    {
+        return $this->day17Status;
+    }
+
+    /**
+     * Set day18Status
+     *
+     * @param integer $day18Status
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay18Status($day18Status)
+    {
+        $this->day18Status = $day18Status;
+
+        return $this;
+    }
+
+    /**
+     * Get day18Status
+     *
+     * @return integer 
+     */
+    public function getDay18Status()
+    {
+        return $this->day18Status;
+    }
+
+    /**
+     * Set day19Status
+     *
+     * @param integer $day19Status
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay19Status($day19Status)
+    {
+        $this->day19Status = $day19Status;
+
+        return $this;
+    }
+
+    /**
+     * Get day19Status
+     *
+     * @return integer 
+     */
+    public function getDay19Status()
+    {
+        return $this->day19Status;
+    }
+
+    /**
+     * Set day20Status
+     *
+     * @param integer $day20Status
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay20Status($day20Status)
+    {
+        $this->day20Status = $day20Status;
+
+        return $this;
+    }
+
+    /**
+     * Get day20Status
+     *
+     * @return integer 
+     */
+    public function getDay20Status()
+    {
+        return $this->day20Status;
+    }
+
+    /**
+     * Set day21Status
+     *
+     * @param integer $day21Status
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay21Status($day21Status)
+    {
+        $this->day21Status = $day21Status;
+
+        return $this;
+    }
+
+    /**
+     * Get day21Status
+     *
+     * @return integer 
+     */
+    public function getDay21Status()
+    {
+        return $this->day21Status;
+    }
+
+    /**
+     * Set day22Status
+     *
+     * @param integer $day22Status
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay22Status($day22Status)
+    {
+        $this->day22Status = $day22Status;
+
+        return $this;
+    }
+
+    /**
+     * Get day22Status
+     *
+     * @return integer 
+     */
+    public function getDay22Status()
+    {
+        return $this->day22Status;
+    }
+
+    /**
+     * Set day23Status
+     *
+     * @param integer $day23Status
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay23Status($day23Status)
+    {
+        $this->day23Status = $day23Status;
+
+        return $this;
+    }
+
+    /**
+     * Get day23Status
+     *
+     * @return integer 
+     */
+    public function getDay23Status()
+    {
+        return $this->day23Status;
+    }
+
+    /**
+     * Set day24Status
+     *
+     * @param integer $day24Status
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay24Status($day24Status)
+    {
+        $this->day24Status = $day24Status;
+
+        return $this;
+    }
+
+    /**
+     * Get day24Status
+     *
+     * @return integer 
+     */
+    public function getDay24Status()
+    {
+        return $this->day24Status;
+    }
+
+    /**
+     * Set day25Status
+     *
+     * @param integer $day25Status
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay25Status($day25Status)
+    {
+        $this->day25Status = $day25Status;
+
+        return $this;
+    }
+
+    /**
+     * Get day25Status
+     *
+     * @return integer 
+     */
+    public function getDay25Status()
+    {
+        return $this->day25Status;
+    }
+
+    /**
+     * Set day26Status
+     *
+     * @param integer $day26Status
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay26Status($day26Status)
+    {
+        $this->day26Status = $day26Status;
+
+        return $this;
+    }
+
+    /**
+     * Get day26Status
+     *
+     * @return integer 
+     */
+    public function getDay26Status()
+    {
+        return $this->day26Status;
+    }
+
+    /**
+     * Set day27Status
+     *
+     * @param integer $day27Status
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay27Status($day27Status)
+    {
+        $this->day27Status = $day27Status;
+
+        return $this;
+    }
+
+    /**
+     * Get day27Status
+     *
+     * @return integer 
+     */
+    public function getDay27Status()
+    {
+        return $this->day27Status;
+    }
+
+    /**
+     * Set day28Status
+     *
+     * @param integer $day28Status
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay28Status($day28Status)
+    {
+        $this->day28Status = $day28Status;
+
+        return $this;
+    }
+
+    /**
+     * Get day28Status
+     *
+     * @return integer 
+     */
+    public function getDay28Status()
+    {
+        return $this->day28Status;
+    }
+
+    /**
+     * Set day29Status
+     *
+     * @param integer $day29Status
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay29Status($day29Status)
+    {
+        $this->day29Status = $day29Status;
+
+        return $this;
+    }
+
+    /**
+     * Get day29Status
+     *
+     * @return integer 
+     */
+    public function getDay29Status()
+    {
+        return $this->day29Status;
+    }
+
+    /**
+     * Set day30Status
+     *
+     * @param integer $day30Status
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay30Status($day30Status)
+    {
+        $this->day30Status = $day30Status;
+
+        return $this;
+    }
+
+    /**
+     * Get day30Status
+     *
+     * @return integer 
+     */
+    public function getDay30Status()
+    {
+        return $this->day30Status;
+    }
+
+    /**
+     * Set day31Status
+     *
+     * @param integer $day31Status
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay31Status($day31Status)
+    {
+        $this->day31Status = $day31Status;
+
+        return $this;
+    }
+
+    /**
+     * Get day31Status
+     *
+     * @return integer 
+     */
+    public function getDay31Status()
+    {
+        return $this->day31Status;
     }
 
     /**
