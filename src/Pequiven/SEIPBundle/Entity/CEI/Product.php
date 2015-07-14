@@ -212,9 +212,10 @@ class Product extends BaseModel
      */
     public function setTypeProduct($typeProduct)
     {
-        $this->typeProduct = $typeProduct->add('isRawMaterial', null, array(
-                    'required' => false,
-                ));
+        $this->typeProduct = $typeProduct;
+//        $this->typeProduct = $typeProduct->add('isRawMaterial', null, array(
+//                    'required' => false,
+//                ));
 
         return $this;
     }
