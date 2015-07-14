@@ -25,6 +25,11 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                     'choices' => \Pequiven\IndicatorBundle\Entity\Indicator::getTypesOfCalculation(),
                     'translation_domain' => 'PequivenIndicatorBundle'
                 ))
+                ->add('typeOfResultSection', 'choice', array(
+                    'choices' => \Pequiven\IndicatorBundle\Entity\Indicator::getTypesOfResultSection(),
+                    'translation_domain' => 'PequivenIndicatorBundle',
+                    'required' => false,
+                ))
                 ->add('typeDetailValue', 'choice', array(
                     'choices' => \Pequiven\IndicatorBundle\Entity\Indicator::getLabelsTypeDetail(),
                     'translation_domain' => 'PequivenIndicatorBundle'
@@ -99,6 +104,11 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                 ->add('typeOfCalculation', 'choice', array(
                     'choices' => \Pequiven\IndicatorBundle\Entity\Indicator::getTypesOfCalculation(),
                     'translation_domain' => 'PequivenIndicatorBundle'
+                ))
+                ->add('typeOfResultSection', 'choice', array(
+                    'choices' => \Pequiven\IndicatorBundle\Entity\Indicator::getTypesOfResultSection(),
+                    'translation_domain' => 'PequivenIndicatorBundle',
+                    'required' => false,
                 ))
                 ->add('calculationMethod', 'choice', array(
                     'choices' => \Pequiven\IndicatorBundle\Entity\Indicator::getLabelsCalculationMethod(),
@@ -251,6 +261,11 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                 ->add('typeOfCalculation', null, array(), 'choice', array(
                     'choices' => \Pequiven\IndicatorBundle\Entity\Indicator::getTypesOfCalculation(),
                     'translation_domain' => 'PequivenIndicatorBundle'
+                ))
+                ->add('typeOfResultSection', null, array(), 'choice', array(
+                    'choices' => \Pequiven\IndicatorBundle\Entity\Indicator::getTypesOfResultSection(),
+                    'translation_domain' => 'PequivenIndicatorBundle',
+                    'required' => false,
                 ))
                 ->add('tendency')
                 ->add('frequencyNotificationIndicator')

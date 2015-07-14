@@ -28,14 +28,16 @@
         <p class="wrapped align-center button-height">
             <b>{{ 'pequiven_indicator.value_indicator.result'|trans }}:</b>&nbsp;&nbsp;{$ evaluationResult |myNumberFormat:3 $}
         </p>
-        <p class="align-center">
-            <button type="button" ng-click="evaluateFormula()" class="button blue-gradient glossy">Evaluar formula</button>
-        </p>
-        {#{% if isValueIndicatorConfig == true %}
-            <p class="align-center">
+        <div class="align-center">
+            <div class="align-center inline-div">
                 <button type="button" ng-click="evaluateFormula()" class="button blue-gradient glossy">Evaluar formula</button>
-            </p>
-        {% endif %}#}
+            </div>
+            {% if indicator.valueIndicatorConfig is not null and indicator.typeDetailValue == constant('Pequiven\\IndicatorBundle\\Model\\Indicator::TYPE_DETAIL_DAILY_LOAD_PRODUCTION') %}
+                <div class="align-right inline-div">
+                    <button type="button" ng-click="obtainValues()" class="button blue-gradient glossy">Obtener Valores</button>
+                </div>
+            {% endif %}
+        </div>
     {% endif %}
     <br/><br/>
 {% endif %}

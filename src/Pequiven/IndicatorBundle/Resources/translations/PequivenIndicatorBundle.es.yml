@@ -48,7 +48,7 @@ pequiven_indicator:
     save: Guardar
     cancel: Cancelar
     type_calculation:
-        main: Tipo de calculo
+        main: Tipo de cálculo
         formula_manually: Fórmula manual
         formula_automatic: Fórmula automatica
         formula_automatic_from_eq: Fórmula automatica (Ecuación)
@@ -57,6 +57,12 @@ pequiven_indicator:
         real_automatic: Real automático
         accumulate: Acumulativo de cada carga
         real_and_plan_from_eq: Plan y real a partir de ecuación
+    type_result_section:
+        main: Sección de resultados
+        production_gross: Producción Bruta
+        production_net: Producción Neta
+        unrealized_production: Producción No Realizada
+        raw_material: Materia Prima
     type_detail:
         none: Ninguno
         daily_load_production: Producción diaria

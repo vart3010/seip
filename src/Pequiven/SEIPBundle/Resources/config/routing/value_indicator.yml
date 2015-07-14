@@ -19,6 +19,17 @@ pequiven_value_indicator_calculate:
     methods: [POST]
     options:
         expose: true
+
+pequiven_value_indicator_obtain_values:
+    path: /{idIndicator}/obtain_values.{_format}
+    defaults:
+        _controller: pequiven.controller.value_indicator:obtainValuesAction
+        _format: json
+    requirements:
+        _format: json
+    methods: [POST]
+    options:
+        expose: true
         
 pequiven_value_indicator_add:
     path: /{idIndicator}/add.{_format}

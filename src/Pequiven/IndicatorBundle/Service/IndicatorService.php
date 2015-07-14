@@ -342,6 +342,20 @@ class IndicatorService implements ContainerAwareInterface {
 
         return $error;
     }
+    
+    /**
+     * 
+     * @param Indicator $indicator
+     * @param type $options
+     */
+    public function getResultFromReportTemplate(Indicator $indicator, $options = array()){
+        $results = array();
+        //Obtenemos el productReport a partir del Detalle de configuracion
+        $productsReports = $indicator->getValueIndicatorConfig()->getProductReports();
+        
+        //Separamos el tipo de sección de resultado del indicador
+//        if($indicator->gett)
+    }
 
     /**
      * Función que devuelve la data para el widget de tipo bulbo en el dashboard de los resultados estratégicos
