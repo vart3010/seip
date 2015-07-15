@@ -369,8 +369,10 @@ class IndicatorService implements ContainerAwareInterface {
                 }
                 foreach($productsReports as $productReport){
                     $productDetailDailyMonths = $productReport->getProductDetailDailyMonthsSortByMonth();
-                    $results[$varRealName] = $results[$varRealName] + $productDetailDailyMonths[$month]->getTotalGrossReal();
-                    $results[$varPlanName] = $results[$varPlanName] + $productDetailDailyMonths[$month]->getTotalGrossPlan();
+                    $valueReal = array_key_exists($month, $productDetailDailyMonths) == true ? $productDetailDailyMonths[$month]->getTotalGrossReal() : 0;
+                    $valuePlan = array_key_exists($month, $productDetailDailyMonths) == true ? $productDetailDailyMonths[$month]->getTotalGrossPlan() : 0;
+                    $results[$varRealName] = $results[$varRealName] + $valueReal;
+                    $results[$varPlanName] = $results[$varPlanName] + $valuePlan;
                 }
             }
         } elseif($options['typeOfResultSection'] == Indicator::TYPE_RESULT_SECTION_PRODUCTION_NET){
@@ -382,8 +384,10 @@ class IndicatorService implements ContainerAwareInterface {
                 }
                 foreach($productsReports as $productReport){
                     $productDetailDailyMonths = $productReport->getProductDetailDailyMonthsSortByMonth();
-                    $results[$varRealName] = $results[$varRealName] + $productDetailDailyMonths[$month]->getTotalNetReal();
-                    $results[$varPlanName] = $results[$varPlanName] + $productDetailDailyMonths[$month]->getTotalNetPlan();
+                    $valueReal = array_key_exists($month, $productDetailDailyMonths) == true ? $productDetailDailyMonths[$month]->getTotalNetReal() : 0;
+                    $valuePlan = array_key_exists($month, $productDetailDailyMonths) == true ? $productDetailDailyMonths[$month]->getTotalNetPlan() : 0;
+                    $results[$varRealName] = $results[$varRealName] + $valueReal;
+                    $results[$varPlanName] = $results[$varPlanName] + $valuePlan;
                 }
             }
         }
