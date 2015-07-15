@@ -202,53 +202,60 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
         
         $form
                 ->tab("Details")
-                ->with('Details')
-                    ->add('managementSystems', 'sonata_type_model_autocomplete', array(
-                        'property' => array('description'),
-                        'multiple' => true,
-                        'required' => false,
-                    ))
-                    ->add('showByRealValue')
-                    ->add('showByPlanValue')
+                    ->with('Details')
+                        ->add('managementSystems', 'sonata_type_model_autocomplete', array(
+                            'property' => array('description'),
+                            'multiple' => true,
+                            'required' => false,
+                        ))
+                        ->add('showByRealValue')
+                        ->add('showByPlanValue')
 
-                    ->add('details', 'sonata_type_admin', array(
-                        'cascade_validation' => true,
-                        'delete' => false,
-                            ), array(
-                        'edit' => 'inline',
-                        'inline' => 'standard',
-                    ))
+                        ->add('details', 'sonata_type_admin', array(
+                            'cascade_validation' => true,
+                            'delete' => false,
+                                ), array(
+                            'edit' => 'inline',
+                            'inline' => 'standard',
+                        ))
+
+                    ->end()
+
+                    ->with('Ficha Indicador')
+                        ->add('isValueRealFromEquationRealFormula', null, array(
+                            'required' => false,
+                        ))
+                        ->add('isValuePlanFromEquationPlanFormula', null, array(
+                            'required' => false,
+                        ))
+                    ->end()
+
+                    ->with('Snippets')
+                        ->add("snippetPlan", null, array(
+                            "attr" => array("rows" => 4,)
+                        ))
+                        ->add("snippetReal", null, array(
+                            "attr" => array("rows" => 4,)
+                        ))
+                    ->end()
                 
-                ->end()
+                    ->with('Opciones de visualizacion en la ficha')
+                        ->add('showResults', null, array(
+                            'required' => false,
+                        ))
+                        ->add('showFeatures', null, array(
+                            'required' => false,
+                        ))
+                    ->end()
                 
-        
-                
-                
-                
-                ->with('Snippets')
-                ->add("snippetPlan", null, array(
-                    "attr" => array("rows" => 4,)
-                ))
-                ->add("snippetReal", null, array(
-                    "attr" => array("rows" => 4,)
-                ))
-                ->end()
-                ->with('Opciones de visualizacion en la ficha')
-                ->add('showResults', null, array(
-                    'required' => false,
-                ))
-                ->add('showFeatures', null, array(
-                    'required' => false,
-                ))
-                ->end()
-                ->with('Opciones de visualizacion en el dashboard')
-                ->add('showCharts', null, array(
-                    'required' => false,
-                ))
-                ->add('showTags', null, array(
-                    'required' => false,
-                ))
-                ->end()
+                    ->with('Opciones de visualizacion en el dashboard')
+                        ->add('showCharts', null, array(
+                            'required' => false,
+                        ))
+                        ->add('showTags', null, array(
+                            'required' => false,
+                        ))
+                    ->end()
                 ->end()
         ;
     }

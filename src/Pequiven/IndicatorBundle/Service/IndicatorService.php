@@ -104,6 +104,44 @@ class IndicatorService implements ContainerAwareInterface {
 
         return $result;
     }
+    
+    /**
+     * 
+     * @param Formula $formula
+     * @param array $data
+     * @return type
+     */
+    public function calculateFormulaValueFromCardEquation(Formula $formula, $data, $options = array()) {
+        if (!is_array($data)) {
+            $data = array();
+        }
+        $variables = $formula->getVariables();
+        foreach ($variables as $variable) {
+            $name = $variable->getName();
+            $$name = 0;
+            if (isset($data[$name])) {
+                $$name = $data[$name];
+            }
+        }
+        $cardEquation = 0.0;
+        $result = array();
+
+        
+        $cardEquation = $options['typeValue'] == 'real' ? $this->parseFormulaVars($formula, $formula->getCardEquationReal()) : $this->parseFormulaVars($formula, $formula->getCardEquationPlan());
+
+        $result_equation = 0.0;
+        try {
+            @eval(sprintf('$result_equation = %s;', $cardEquation));
+        } catch (ErrorException $exc) {
+//            echo 'Excepción capturada 1 : ',  $e->getMessage(), "\n";
+        } catch (Exception $exc) {
+//            echo $exc->getTraceAsString();
+//            echo 'Excepción capturada 2: ',  $e->getMessage(), "\n";
+            $result_equation = 0.0;
+        }
+
+        return $result_equation;
+    }
 
     /**
      * Toma una ecuacion y la transforma a variales php validas en un string para evaluarlas.
@@ -1229,6 +1267,43 @@ class IndicatorService implements ContainerAwareInterface {
         }
 
         return $arr;
+    }
+    
+    /**
+     * 
+     * @param Indicator $indicator
+     * @param type $options
+     * @return type
+     */
+    public function getValueFromEquationFormula(Indicator $indicator, $options = array()){
+        $formula = $indicator->getFormula();
+        $valuesIndicator = $indicator->getValuesIndicator();
+        $details = $indicator->getDetails();
+        $value = 0.0;
+        $totalValuesIndicator = count($valuesIndicator);
+        
+        $contValue = 0;
+        foreach ($valuesIndicator as $valueIndicator) {
+            $contValue++;
+            if($details->getSourceResult() == Indicator\IndicatorDetails::SOURCE_RESULT_LAST && $contValue != $totalValuesIndicator){
+                continue;
+            } elseif($details->getSourceResult() == Indicator\IndicatorDetails::SOURCE_RESULT_LAST_VALID){
+                if($formula->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC){
+                    if($valueIndicator->getParameter($formula->getVariableToRealValue()) == 0 && $valueIndicator->getParameter($formula->getVariableToPlanValue()) == 0){
+                        continue;
+                    }
+                } elseif($formula->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_FROM_EQ){
+                    if($valueIndicator->getParameter(Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL) == 0 && $valueIndicator->getParameter(Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN) == 0){
+                        continue;
+                    }
+                }
+            }
+            
+            $valueFromCardEquation = $this->calculateFormulaValueFromCardEquation($formula, $valueIndicator->getFormulaParameters(),$options);
+            $value = $value + $valueFromCardEquation;
+        }
+        
+        return $value;
     }
 
     /**
