@@ -1315,22 +1315,39 @@ class IndicatorService implements ContainerAwareInterface {
         $formula = $indicator->getFormula();
         $valuesIndicator = $indicator->getValuesIndicator();
         $arrayVariables = array();
+        $totalValuesIndicator = count($valuesIndicator);
+        $details = $indicator->getDetails();
 
 
         if (isset($options['viewVariablesRealPlan']) && array_key_exists('viewVariablesRealPlan', $options)) {
             unset($options['viewVariablesRealPlan']);
             $unit = '';
+            $arrayVariables['real_from_equation']['value'] = $arrayVariables['plan_from_equation']['value'] = 0.0;
+            $arrayVariables['plan_from_equation']['unit'] = $arrayVariables['plan_from_equation']['unit'] = '';
+            $arrayVariables['real_from_equation']['description'] = $indicator->getShowByRealValue();
+            $arrayVariables['plan_from_equation']['description'] = $indicator->getShowByPlanValue();
+            if ($indicator->getDetails()) {
+                $arrayVariables['real_from_equation']['unit'] = $indicator->getDetails()->getResultRealUnit();
+                $arrayVariables['plan_from_equation']['unit'] = $indicator->getDetails()->getResultPlanUnit();
+            }
             foreach ($valuesIndicator as $valueIndicator) {
+                if($details->getSourceResult() == Indicator\IndicatorDetails::SOURCE_RESULT_LAST && $contValue != $totalValuesIndicator){
+                    continue;
+                } elseif($details->getSourceResult() == Indicator\IndicatorDetails::SOURCE_RESULT_LAST_VALID){
+                    if($formula->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC){
+                        if($valueIndicator->getParameter($formula->getVariableToRealValue()) == 0 && $valueIndicator->getParameter($formula->getVariableToPlanValue()) == 0){
+                            continue;
+                        }
+                    } elseif($formula->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_FROM_EQ){
+                        if($valueIndicator->getParameter(Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL) == 0 && $valueIndicator->getParameter(Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN) == 0){
+                            continue;
+                        }
+                    }
+                }
                 $parameters = $valueIndicator->getFormulaParameters();
                 foreach ($parameters as $parameter => $key) {
                     if ($parameter == 'real_from_equation' || $parameter == 'plan_from_equation') {
-                        $arrayVariables[$parameter]['value'] = $key;
-                        $arrayVariables[$parameter]['description'] = $parameter == 'real_from_equation' ? $indicator->getShowByRealValue() : $indicator->getShowByPlanValue();
-                        $arrayVariables[$parameter]['unit'] = '';
-                        if ($indicator->getDetails()) {
-                            $unit = $parameter == 'real_from_equation' ? $indicator->getDetails()->getResultRealUnit() : $indicator->getDetails()->getResultPlanUnit();
-                            $arrayVariables[$parameter]['unit'] = $unit;
-                        }
+                        $arrayVariables[$parameter]['value'] = $arrayVariables[$parameter]['value'] + $key;
                     }
                 }
             }
