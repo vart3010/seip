@@ -390,6 +390,21 @@ class IndicatorService implements ContainerAwareInterface {
                     $results[$varPlanName] = $results[$varPlanName] + $valuePlan;
                 }
             }
+        } elseif($options['typeOfResultSection'] == Indicator::TYPE_RESULT_SECTION_UNREALIZED_PRODUCTION){
+            if($indicator->getFrequencyNotificationIndicator()->getNumberResultsFrequency() == 12){
+                if(!$valueIndicator->getId()){
+                    $month = count($indicator->getValuesIndicator()) + 1;
+                } else{
+                    $month = $this->getOrderOfValueIndicator($indicator, $valueIndicator);
+                }
+            }
+            foreach($productsReports as $productReport){
+                $productDetailDailyMonths = $productReport->getProductDetailDailyMonthsSortByMonth();
+                $valueReal = array_key_exists($month, $productDetailDailyMonths) == true ? $productDetailDailyMonths[$month]->getTotalNetReal() : 0;
+                $valuePlan = array_key_exists($month, $productDetailDailyMonths) == true ? $productDetailDailyMonths[$month]->getTotalNetPlan() : 0;
+                $results[$varRealName] = $results[$varRealName] + $valueReal;
+                $results[$varPlanName] = $results[$varPlanName] + $valuePlan;
+            }
         }
         
         return $results;

@@ -893,6 +893,30 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                 )
                 ->setLabel($this->translate(sprintf('app.backend.menu.%s.operations.main', $section)));
         
+        //Monitor de carga por día
+        if($this->isGranted('ROLE_SEIP_OPERATION_LIST_MONITOR_*')){
+                
+                $monitor = $this->factory->createItem('operations.monitor',
+                        $this->getSubLevelOptions(array(
+                        'uri' => null,
+                        'labelAttributes' => array('icon' => '',),
+                        ))
+                    )->setLabel($this->translate(sprintf('app.backend.menu.%s.operations.monitor.main', $section)));
+                
+                if($this->isGranted(array('ROLE_SEIP_OPERATION_LIST_MONITOR_PRODUCTION'))){
+                    $production = $this->factory->createItem('operations.monitor.production',
+                        $this->getSubLevelOptions(array(
+                            "route" => "",
+                        ))
+                    )->setLabel($this->translate(sprintf('app.backend.menu.%s.operations.monitor.production', $section)));
+
+                    $monitor->addChild($production);
+                }
+
+                $menuOperations->addChild($monitor);
+            }
+        
+            //Sección de Reportes
             if($this->isGranted('ROLE_SEIP_OPERATION_LIST_REPORT_*')){
                 
                 $reports = $this->factory->createItem('operations.reports',
@@ -915,6 +939,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                 $menuOperations->addChild($reports);
             }
             
+            //Sección de Planificación de Plantillas
             if($this->isGranted('ROLE_SEIP_OPERATION_LIST_PLANNING_*')){
                 $planning = $this->factory->createItem('operations.planning',
                         $this->getSubLevelOptions(array(
@@ -936,6 +961,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                 $menuOperations->addChild($planning);
             }
             
+            //Sección de Notificación
             if($this->isGranted('ROLE_SEIP_OPERATION_LIST_NOTIFICATION_*')){
                 $notification = $this->factory->createItem('operations.notification',
                         $this->getSubLevelOptions(array(
