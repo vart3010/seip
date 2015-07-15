@@ -173,14 +173,20 @@ class ValueIndicatorController extends \Pequiven\SEIPBundle\Controller\SEIPContr
             'findOneBy',
             array(array('id' => $request->get('id',0))));
         
+        if(!$valueIndicator){
+            $valueIndicator = new \Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator();
+        }
+        
         //Método para obtener el orden del valor del indicador
+        $options['typeOfResultSection'] = $indicator->getTypeOfResultSection();
+        $results = $indicatorService->getValuesFromReportTemplate($indicator, $valueIndicator, $options);
         
         $view = $this
             ->view()
             ->setData(array(
                 'result' => 0,
-                'real' => 100.00,
-                'plan' => 110.10,
+                'real' => $results[$varRealName],
+                'plan' => $results[$varPlanName],
                 'varRealName' => $varRealName,
                 'varPlanName' => $varPlanName,
             ))

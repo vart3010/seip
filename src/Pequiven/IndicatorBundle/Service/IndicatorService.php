@@ -348,13 +348,61 @@ class IndicatorService implements ContainerAwareInterface {
      * @param Indicator $indicator
      * @param type $options
      */
-    public function getResultFromReportTemplate(Indicator $indicator, $options = array()){
+    public function getValuesFromReportTemplate(Indicator $indicator, Indicator\ValueIndicator $valueIndicator, $options = array()){
         $results = array();
         //Obtenemos el productReport a partir del Detalle de configuracion
         $productsReports = $indicator->getValueIndicatorConfig()->getProductReports();
         
+        $formula = $indicator->getFormula();
+        
+        $varRealName = $formula->getVariableToRealValue()->getName();
+        $varPlanName = $formula->getVariableToPlanValue()->getName();
+        $results[$varRealName] = $results[$varPlanName] = 0.0;
+        
         //Separamos el tipo de sección de resultado del indicador
-//        if($indicator->gett)
+        if($options['typeOfResultSection'] == Indicator::TYPE_RESULT_SECTION_PRODUCTION_GROSS){
+            if($indicator->getFrequencyNotificationIndicator()->getNumberResultsFrequency() == 12){
+                if(!$valueIndicator->getId()){
+                    $month = count($indicator->getValuesIndicator()) + 1;
+                } else{
+                    $month = $this->getOrderOfValueIndicator($indicator, $valueIndicator);
+                }
+                foreach($productsReports as $productReport){
+                    $productDetailDailyMonths = $productReport->getProductDetailDailyMonthsSortByMonth();
+                    $results[$varRealName] = $results[$varRealName] + $productDetailDailyMonths[$month]->getTotalGrossReal();
+                    $results[$varPlanName] = $results[$varPlanName] + $productDetailDailyMonths[$month]->getTotalGrossPlan();
+                }
+            }
+        } elseif($options['typeOfResultSection'] == Indicator::TYPE_RESULT_SECTION_PRODUCTION_NET){
+            if($indicator->getFrequencyNotificationIndicator()->getNumberResultsFrequency() == 12){
+                if(!$valueIndicator->getId()){
+                    $month = count($indicator->getValuesIndicator()) + 1;
+                } else{
+                    $month = $this->getOrderOfValueIndicator($indicator, $valueIndicator);
+                }
+                foreach($productsReports as $productReport){
+                    $productDetailDailyMonths = $productReport->getProductDetailDailyMonthsSortByMonth();
+                    $results[$varRealName] = $results[$varRealName] + $productDetailDailyMonths[$month]->getTotalNetReal();
+                    $results[$varPlanName] = $results[$varPlanName] + $productDetailDailyMonths[$month]->getTotalNetPlan();
+                }
+            }
+        }
+        
+        return $results;
+    }
+    
+    /**
+     * Retorna el orden del valor del indicador, respecto a los demás
+     * @param Indicator $indicator
+     */
+    public function getOrderOfValueIndicator(Indicator $indicator, \Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator $valueIndicator){
+        $cont = 1;
+        foreach($indicator->getValuesIndicator() as $valIndicator){
+            if($valIndicator->getId() == $valueIndicator->getId()){
+                return $cont;
+            }
+            $cont++;
+        }
     }
 
     /**
