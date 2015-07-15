@@ -963,7 +963,7 @@ class IndicatorService implements ContainerAwareInterface {
                 $dataChart[] = $set;
             }
         } elseif (isset($options['viewVariablesMarkedPlan']) && array_key_exists('viewVariablesMarkedPlan', $options)) {
-            unset($options['viewVariablesMarkedReal']);
+            unset($options['viewVariablesMarkedPlan']);
             $arrayVariables = $this->getArrayVariablesFormulaWithData($indicator, array('viewVariablesMarkedPlan' => true));
             foreach ($arrayVariables as $arrayVariable) {
                 $set = array();
@@ -1330,7 +1330,9 @@ class IndicatorService implements ContainerAwareInterface {
                 $arrayVariables['real_from_equation']['unit'] = $indicator->getDetails()->getResultRealUnit();
                 $arrayVariables['plan_from_equation']['unit'] = $indicator->getDetails()->getResultPlanUnit();
             }
+            $contValue = 0;
             foreach ($valuesIndicator as $valueIndicator) {
+                $contValue++;
                 if($details->getSourceResult() == Indicator\IndicatorDetails::SOURCE_RESULT_LAST && $contValue != $totalValuesIndicator){
                     continue;
                 } elseif($details->getSourceResult() == Indicator\IndicatorDetails::SOURCE_RESULT_LAST_VALID){
@@ -1408,7 +1410,22 @@ class IndicatorService implements ContainerAwareInterface {
                     $arrayVariables[$nameParameter]['unit'] = $variable->getUnitResultValue();
                 }
             }
+            $contValue = 0;
             foreach ($valuesIndicator as $valueIndicator) {
+                $contValue++;
+                if($details->getSourceResult() == Indicator\IndicatorDetails::SOURCE_RESULT_LAST && $contValue != $totalValuesIndicator){
+                    continue;
+                } elseif($details->getSourceResult() == Indicator\IndicatorDetails::SOURCE_RESULT_LAST_VALID){
+                    if($formula->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC){
+                        if($valueIndicator->getParameter($formula->getVariableToRealValue()) == 0 && $valueIndicator->getParameter($formula->getVariableToPlanValue()) == 0){
+                            continue;
+                        }
+                    } elseif($formula->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_FROM_EQ){
+                        if($valueIndicator->getParameter(Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL) == 0 && $valueIndicator->getParameter(Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN) == 0){
+                            continue;
+                        }
+                    }
+                }
                 foreach ($variables as $variable) {
                     if ($variable->getShowRealInDashboardPie()) {
                         $nameParameter = $variable->getName();
@@ -1428,7 +1445,22 @@ class IndicatorService implements ContainerAwareInterface {
                     $arrayVariables[$nameParameter]['unit'] = $variable->getUnitResultValue();
                 }
             }
+            $contValue = 0;
             foreach ($valuesIndicator as $valueIndicator) {
+                $contValue++;
+                if($details->getSourceResult() == Indicator\IndicatorDetails::SOURCE_RESULT_LAST && $contValue != $totalValuesIndicator){
+                    continue;
+                } elseif($details->getSourceResult() == Indicator\IndicatorDetails::SOURCE_RESULT_LAST_VALID){
+                    if($formula->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC){
+                        if($valueIndicator->getParameter($formula->getVariableToRealValue()) == 0 && $valueIndicator->getParameter($formula->getVariableToPlanValue()) == 0){
+                            continue;
+                        }
+                    } elseif($formula->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_FROM_EQ){
+                        if($valueIndicator->getParameter(Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL) == 0 && $valueIndicator->getParameter(Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN) == 0){
+                            continue;
+                        }
+                    }
+                }
                 foreach ($variables as $variable) {
                     if ($variable->getShowPlanInDashboardPie()) {
                         $nameParameter = $variable->getName();
