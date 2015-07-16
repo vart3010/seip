@@ -570,8 +570,8 @@
                         {% endif %}
                     {% endif  %}
                     
-                    {% if is_next_equals == true %}
-                    {% else %}
+                    {#{% if is_next_equals == true %}
+                    {% else %}#}
                         {% if loop.first %}
                             <tr>
                                 <td colspan="7" class="text-center bold">
@@ -579,7 +579,7 @@
                                 </td>
                             </tr>
                         {% endif %}
-                    {% endif %}
+{#                    {% endif %}#}
                     
                     {% for dateReportInt in range(dateFrom|date('U'), dateEnd|date('U'), 86400 ) %}
                         {% set dateReport = date(dateReportInt) %}

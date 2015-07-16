@@ -244,7 +244,7 @@ class ReportTemplateController extends SEIPController {
             $plantReports->add($plantReport);
             $productsReport = $plantReport->getProductsReport()->toArray();
         }
-        $showDay = $showMonth = $showYear = $defaultShow = $byRange = true;
+        $showDay = $showMonth = $showYear = $defaultShow = $byRange = $withDetails = true;
         $dateFrom = $dateEnd = new \DateTime();
         $parametersReportTemplate = array(
                 'label_attr' => array('class' => 'label bold'),
@@ -322,6 +322,11 @@ class ReportTemplateController extends SEIPController {
                 'translation_domain' => 'PequivenSEIPBundle',
                 'data' => $defaultShow,
             ])
+            ->add('withDetails','checkbox',[
+                'label_attr' => array('class' => 'label bold'),
+                'required' => false,
+                'translation_domain' => 'PequivenSEIPBundle',
+            ])
             ->add('dateFrom','date',[
                 'label_attr' => array('class' => 'label bold'),
                 'format' => 'd/M/y',
@@ -353,6 +358,7 @@ class ReportTemplateController extends SEIPController {
         if($request->isMethod('POST') && $form->submit($request)->isValid()){
             $data = $form->getData();
             $byRange = $data['byRange'];
+            $withDetails = $data['withDetails'];
             $showDay = $data['showDay'];
             $showMonth = $data['showMonth'];
             $showYear = $data['showYear'];
@@ -471,6 +477,7 @@ class ReportTemplateController extends SEIPController {
             'showMonth' => $showMonth,
             'showYear' => $showYear,
             'byRange' => $byRange,
+            'withDetails' => $withDetails,
             'dateFrom' => $dateFrom,
             'dateEnd' => $dateEnd,
             'typeReport' => $typeReport,
