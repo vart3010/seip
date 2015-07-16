@@ -1,3 +1,5 @@
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
 {% if productsReport is not empty %}
 
 <div class="columns">
@@ -713,6 +715,13 @@
     <a id="btnExportToPdf" href="#" class="button">
         <span class="button-icon"><span class="icon-download"></span></span>
             {{ "pequiven_seip.buttons.export_pdf"|trans }}
+    </a>
+</p>
+
+<p class="button-height float-right">
+    <a id="btnExportToExcel" href="#" class="button">
+        <span class="button-icon"><span class="icon-download"></span></span>
+            {{ "pequiven_seip.buttons.export_xls"|trans }}
     </a>
 </p>
 {% else %}
