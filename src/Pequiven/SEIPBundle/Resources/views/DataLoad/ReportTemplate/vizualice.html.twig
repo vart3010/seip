@@ -110,6 +110,13 @@
                     $("#exportToPdf").val("1");
                     eventChange();
                 });
+                
+                $("#btnExportToExcel").on("click", function (e) {
+                    e.preventDefault();
+                    $("#exportToPdf").val("2");
+                    eventChange();
+                });
+                
                 $("#btnRefresh").on("click", function (e) {
                     e.preventDefault();
                     $("#exportToPdf").val("0");

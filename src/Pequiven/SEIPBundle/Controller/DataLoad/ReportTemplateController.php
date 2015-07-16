@@ -247,36 +247,36 @@ class ReportTemplateController extends SEIPController {
         $showDay = $showMonth = $showYear = $defaultShow = $byRange = $withDetails = true;
         $dateFrom = $dateEnd = new \DateTime();
         $parametersReportTemplate = array(
-                'label_attr' => array('class' => 'label bold'),
-                'class' => 'Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate',
-                'property' => 'reportTemplateWithName',
-                'required' => false,
-                'empty_value' => $emptyValue,
-                'translation_domain' => 'PequivenSEIPBundle',
-                'attr' => array('class' => 'select2 input-xlarge'),
-                'multiple' => true,
-                );
-        $qb = function (\Pequiven\SEIPBundle\Repository\DataLoad\ReportTemplateRepository $repository){
+            'label_attr' => array('class' => 'label bold'),
+            'class' => 'Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate',
+            'property' => 'reportTemplateWithName',
+            'required' => false,
+            'empty_value' => $emptyValue,
+            'translation_domain' => 'PequivenSEIPBundle',
+            'attr' => array('class' => 'select2 input-xlarge'),
+            'multiple' => true,
+        );
+        $qb = function (\Pequiven\SEIPBundle\Repository\DataLoad\ReportTemplateRepository $repository) {
             return $repository->getQueryBuilderByUser();
         };
         $parametersReportTemplate['query_builder'] = $qb;
-        
+
         $parametersPlantReport = array(
-                'label_attr' => array('class' => 'label bold'),
-                'class' => 'Pequiven\SEIPBundle\Entity\DataLoad\PlantReport',
-                'property' => 'plant',
-                'required' => true,
-                'empty_value' => $emptyValue,
-                'translation_domain' => 'PequivenSEIPBundle',
-                'attr' => array('class' => 'select2 input-xlarge'),
-                'multiple' => false,
-                'group_by' => 'reportTemplateWithName'
-                );
-        $qb = function (\Pequiven\SEIPBundle\Repository\DataLoad\PlantReportRepository $repository){
+            'label_attr' => array('class' => 'label bold'),
+            'class' => 'Pequiven\SEIPBundle\Entity\DataLoad\PlantReport',
+            'property' => 'plant',
+            'required' => true,
+            'empty_value' => $emptyValue,
+            'translation_domain' => 'PequivenSEIPBundle',
+            'attr' => array('class' => 'select2 input-xlarge'),
+            'multiple' => false,
+            'group_by' => 'reportTemplateWithName'
+        );
+        $qb = function (\Pequiven\SEIPBundle\Repository\DataLoad\PlantReportRepository $repository) {
             return $repository->getQueryBuilderByUser();
         };
         $parametersPlantReport['query_builder'] = $qb;
-        
+
         $form = $this
             ->createFormBuilder()
             ->add('reportTemplate','entity',$parametersReportTemplate)
@@ -471,6 +471,7 @@ class ReportTemplateController extends SEIPController {
         $data = array(
             'dateReport' => $dateReport,
             'productsReport' => $productsReport,
+            'typeReport' => $typeReport,
             'consumerPlanningServices' => $consumerPlanningServices,
             'rawMaterialConsumptionPlannings' => $rawMaterialConsumptionPlannings,
             'plantReportId' => $plantReportId,
@@ -496,7 +497,7 @@ class ReportTemplateController extends SEIPController {
         $view->setData($data);
 
         $exportToPdf = $request->get('exportToPdf', false);
-        if ($exportToPdf == true) {
+        if ($exportToPdf == "1") {
             $pdf = new \Pequiven\SEIPBundle\Model\PDF\SeipPdf('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
             $pdf->setPrintLineFooter(false);
             $pdf->setContainer($this->container);
@@ -540,12 +541,483 @@ class ReportTemplateController extends SEIPController {
 
 //            $pdf->Output('Reporte del dia'.'.pdf', 'I');
             $pdf->Output('Reporte del dia' . '.pdf', 'D');
+        } else if ($exportToPdf == "2") {
+
+            $this->exportExcelAction($productsReport, $typeReport, $dateReport, $rawMaterialConsumptionPlannings, $consumerPlanningServices);
         }
 
         return $this->handleView($view);
     }
 
-    protected function getProductReportService() {
+    public function exportExcelAction($productsReport, $typeReport, $dateReport, $rawMaterialConsumptionPlannings, $consumerPlanningServices) {
+
+
+        $path = $this->get('kernel')->locateResource('@PequivenObjetiveBundle/Resources/skeleton/reporte_produccion.xls');
+        $now = new \DateTime();
+        $objPHPExcel = \PHPExcel_IOFactory::load($path);
+        $objPHPExcel
+                ->getProperties()
+                ->setCreator("SEIP")
+                ->setTitle('SEIP - Reporte De Producción')
+                ->setCreated()
+                ->setLastModifiedBy('SEIP')
+                ->setModified()
+        ;
+        $objPHPExcel->setActiveSheetIndex(0);
+        $activeSheet = $objPHPExcel->getActiveSheet();
+
+        $productReportService = $this->getProductReportService();
+
+        $arrayCategories = array();
+        $arrayPlan = array();
+        $arrayReal = array();
+
+        $impressOperacion = array(
+            "getSummaryDay" => array(
+                "title" => "Producción Diaria",
+                "col" => array("B", "C", "D", "E", "F"),
+                "campos" => array("Producto", "PPTO", "REAL", "EJEC(%)", "VAR"),
+                "rowStart" => 7,
+                "plan" => "plan",
+                "real" => "real",
+                "color" => "55b34a"
+            ),
+            "getSummaryMonth" => array(
+                "title" => "Producción Mensual",
+                "col" => array("B", "C", "D", "E", "F", "G"),
+                "campos" => array("Producto", "PPTO", "PPTO-MES", "REAL", "EJEC(%)", "VAR"),
+                "rowStart" => 7,
+                "plan_time" => "plan_month",
+                "plan" => "plan_acumulated",
+                "real" => "real_acumulated",
+                "color" => "ffff15"
+            )
+            ,
+            "getSummaryYear" => array(
+                "title" => "Producción Anual",
+                "col" => array("B", "C", "D", "E", "F", "G"),
+                "campos" => array("Producto", "PPTO", "PPTO-MES", "REAL", "EJEC(%)", "VAR"),
+                "rowStart" => 7,
+                "plan_time" => "plan_year",
+                "plan" => "plan_acumulated",
+                "real" => "real_acumulated",
+                "color" => "e56666"
+            )
+        );
+        $rowCont = 3;
+        $row = 0;
+        foreach ($impressOperacion as $key => $imp) {
+            $rs = array();
+            foreach ($productsReport as $productReport) {
+
+                if ($productReport->getProduct()->getIsCheckToReportProduction()) {
+                    $rowData = array();
+                    $row = $imp["rowStart"];
+
+                    $typeVar = $productReport->$key($dateReport, $typeReport);
+                    array_push($rowData, $productReport->getProduct()->getName());
+
+                    if (array_key_exists("plan_time", $imp)) {
+                        array_push($rowData, $typeVar[$imp["plan_time"]]);
+                    }
+
+                    array_push($rowData, $typeVar[$imp["plan"]]);
+
+
+                    array_push($rowData, $typeVar[$imp["real"]]);
+                    if ($typeVar[$imp["plan"]] > 0) {
+                        array_push($rowData, ($typeVar[$imp["real"]] * 100) / $typeVar[$imp["plan"]]);
+                    } else {
+                        array_push($rowData, 0);
+                    }
+
+                    $var = $typeVar[$imp["plan"]] - $typeVar[$imp["real"]];
+                    if ($var < 0) {
+                        array_push($rowData, 0);
+                    } else {
+                        array_push($rowData, $var);
+                    }
+
+                    array_push($rs, $rowData);
+                }
+            }
+
+            /** SET TITLES** */
+            $this->setFormatTitle($imp, $activeSheet, $rowCont);
+            $rowCont = $this->setTitlesRows($activeSheet, $imp, $rowCont);
+
+            foreach ($rs as $registros) {
+                $mat = array();
+                $g = 0;
+                foreach ($registros as $regs) {
+                    $mat[$imp["col"][$g] . $rowCont] = $regs;
+                    $activeSheet->setCellValue($imp["col"][$g] . $rowCont, $regs);
+                    $g++;
+                }
+                $rowCont++;
+            }
+        }
+
+
+
+        /** CONSUMO DE MATERIA PRIMA * */
+        $matPrima = $this->getDataRawMateria($rawMaterialConsumptionPlannings, $dateReport);
+
+        $dataMateriaPrima = array(
+            "row" => $rowCont,
+            "title" => "Consumo Materia Prima",
+            "col" => array("B", "C", "D", "E"),
+            "campos" => array("Producto", "DIA", "MES", "AÑO"),
+            "color" => "ffaa15"
+        );
+
+        $this->setFormatTitle($dataMateriaPrima, $activeSheet, $rowCont);
+        $rowCont = $this->setTitlesRows($activeSheet, $dataMateriaPrima, $rowCont);
+        //$activeSheet->setCellValue("B".$rowCont,"holas");
+
+        $c = 0;
+        foreach ($dataMateriaPrima["col"] as $cols) {
+            $contCol = $rowCont;
+            foreach ($matPrima[$c] as $cons) {
+                //var_dump($cols.$contCol."=>".$cons);
+                $activeSheet->setCellValue($cols . $contCol, $cons);
+                $contCol++;
+            }
+            $c++;
+        }
+        $rowCont = $contCol;
+        /*         * ****************************** */
+
+
+        /** CONSUMO DE SERVICIOS * */
+        $consumos = $this->getDataConsumerPlanning($consumerPlanningServices, $dateReport);
+
+        $dataConsumo = array(
+            "row" => $rowCont + 1,
+            "title" => "Servicios",
+            "col" => array("B", "C", "D", "E"),
+            "campos" => array("Producto", "DIA", "MES", "AÑO"),
+            "color" => "98bfbf"
+        );
+
+        $this->setFormatTitle($dataConsumo, $activeSheet, $rowCont);
+        $rowCont = $this->setTitlesRows($activeSheet, $dataConsumo, $rowCont);
+
+        $c = 0;
+        foreach ($dataConsumo["col"] as $cols) {
+            $contCol = $rowCont;
+            foreach ($consumos[$c] as $cons) {
+                //var_dump($cols.$contCol."=>".$cons);
+                $activeSheet->setCellValue($cols . $contCol, $cons);
+                $contCol++;
+            }
+            $c++;
+        }
+        $rowCont = $contCol;
+        /*         * ****************************** */
+
+
+        ///****PRODUCCION NO REALIZADA **//////////
+        $unrealizedProduction = $this->getDataUnrealizedProduction($productsReport, $dateReport);
+
+        $dataUnrealized = array(
+            "row" => $rowCont + 1,
+            "title" => "Producción No Realizada",
+            "col" => array("B", "C", "D", "E"),
+            "campos" => array("Producto", "DIA", "MES", "AÑO"),
+            "color" => "62cf5a"
+        );
+        $this->setFormatTitle($dataUnrealized, $activeSheet, $rowCont);
+        $rowCont = $this->setTitlesRows($activeSheet, $dataUnrealized, $rowCont);
+
+        $c = 0;
+        foreach ($dataUnrealized["col"] as $cols) {
+            $contCol = $rowCont;
+            foreach ($unrealizedProduction[$c] as $cons) {
+                //var_dump($cols.$contCol."=>".$cons);
+                $activeSheet->setCellValue($cols . $contCol, $cons);
+                $contCol++;
+            }
+            $c++;
+        }
+        $rowCont = $contCol;
+        /*         * ****************************** */
+
+        ///****INVENTARIO  **//////////
+        $inventario = $this->getDataInventario($productsReport, $dateReport);
+
+        $dataInventario = array(
+            "row" => $rowCont,
+            "title" => "Inventario",
+            "col" => array("B", "C", "D", "E"),
+            "campos" => array("Producto", "DIA", "MES", "AÑO"),
+            "color" => "ddbb15"
+        );
+        $this->setFormatTitle($dataInventario, $activeSheet, $rowCont);
+        $rowCont = $this->setTitlesRows($activeSheet, $dataInventario, $rowCont);
+
+        $c = 0;
+        foreach ($dataInventario["col"] as $cols) {
+            $contCol = $rowCont;
+            foreach ($inventario[$c] as $cons) {
+                //var_dump($cols.$contCol."=>".$cons);
+                $activeSheet->setCellValue($cols . $contCol, $cons);
+                $contCol++;
+            }
+            $c++;
+        }
+        $rowCont = $contCol;
+        /*         * ****************************** */
+
+
+
+        ///**** OBSERVACIONES  **//////////
+        $observaciones = $this->getDataInventario($productsReport, $dateReport);
+        $dataObservaciones = array(
+            "title" => "Observaciones",
+            "row" => $rowCont,
+            "col" => array("B", "C"),
+            "campos" => array("Producto", "Observación"),
+            "color" => "c7c7b3"
+        );
+        $observaciones = array();
+        $name = array();
+        $obs = array();
+
+        foreach ($productsReport as $productReport) {
+            $name[] = $productReport->getProduct()->getName();
+            $det = $productReport->getSummaryDay($dateReport, $typeReport);
+            if ($det["observation"] != "") {
+                $obs[] = $det["observation"];
+            } else {
+                $obs[] = "NINGÚNA OBSERVACIÓN.";
+            }
+        }
+        $observaciones[] = $name;
+        $observaciones[] = $obs;
+
+        $this->setFormatTitle($dataObservaciones, $activeSheet, $rowCont);
+        $rowCont = $this->setTitlesRows($activeSheet, $dataObservaciones, $rowCont);
+
+
+        $c = 0;
+        foreach ($dataObservaciones["col"] as $cols) {
+            $contCol = $rowCont;
+            foreach ($observaciones[$c] as $cons) {
+                //var_dump($cols . $contCol . "=>" . $cons);
+                $activeSheet->setCellValue($cols . $contCol, $cons);
+                $contCol++;
+            }
+            $c++;
+        }
+        $rowCont = $contCol;
+        /*         * ****************************** */
+
+
+        
+        $fileName = sprintf("Reporte de Producción ".date("d-m-Y").".xls");
+
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="' . $fileName . '"');
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+
+        // If you're serving to IE over SSL, then the following may be needed
+        header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT'); // always modified
+        header('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header('Pragma: public'); // HTTP/1.0
+
+        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+        $objWriter->save('php://output');
+        exit;
+    }
+
+    public function setFormatTitle($imp, $activeSheet, $rowCont) {
+        $styleArray = array(
+            'font' => array(
+                'bold' => true,
+            ),
+            'alignment' => array(
+                'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                'vertical' => \PHPExcel_Style_Alignment::VERTICAL_CENTER
+            ),
+            'fill' => array(
+                'type' => \PHPExcel_Style_Fill::FILL_SOLID,
+                'startcolor' => array(
+                    'rgb' => $imp["color"]
+                )
+            )
+        );
+
+        $rowCont = $rowCont + 1;
+        $totalCol = count($imp["col"]);
+        $ini = $imp["col"][0] . $rowCont;
+        $fin = $imp["col"][$totalCol - 1] . $rowCont;
+        $activeSheet->getRowDimension($rowCont)->setRowHeight(20);
+        $activeSheet->mergeCells($ini . ":" . $fin);
+        $activeSheet->getStyle($ini)->applyFromArray($styleArray);
+        $activeSheet->setCellValue($imp["col"][0] . $rowCont, $imp["title"]);
+    }
+
+    public function setTitlesRows($activeSheet, $imp, $rowCont) {
+        $styleArray = array(
+            'font' => array(
+                'bold' => true,
+            ),
+            'alignment' => array(
+                'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                'vertical' => \PHPExcel_Style_Alignment::VERTICAL_CENTER
+            )
+        );
+
+        $rowCont = $rowCont + 2;
+        //$activeSheet->setCellValue("B".$rowCont,"hola");
+        $camp = 0;
+        foreach ($imp["campos"] as $campos) {
+            $col = $imp["col"][$camp];
+            //var_dump($col . $rowCont, $campos);
+            $activeSheet->setCellValue($col . $rowCont, $campos);
+            $activeSheet->getStyle($col . $rowCont)->applyFromArray($styleArray);
+            $camp++;
+        }
+        $rowCont = $rowCont + 2;
+
+        return $rowCont;
+    }
+
+    public function getDataRawMateria($rawMaterial, $dateReport) {
+
+        $productos = array();
+        $totalDay = array();
+        $totalMonth = array();
+        $totalYear = array();
+
+        foreach ($rawMaterial as $rs) {
+            $productos[] = $rs->getProduct()->getName();
+            //$productos[] = $rs->$name;
+            array_push($totalDay, $rs->getSummary($dateReport)["total_day"]);
+            array_push($totalMonth, $rs->getSummary($dateReport)["total_month"]);
+            array_push($totalYear, $rs->getSummary($dateReport)["total_year"]);
+            //var_dump($rawMaterialConsumption->getSummary($dateReport));
+        }
+
+        return $this->getArrayTable($rawMaterial, $dateReport, $productos, $totalDay, $totalMonth, $totalYear);
+    }
+
+    public function getDataConsumerPlanning($consumerPlanning, $dateReport) {
+
+        $productos = array();
+        $totalDay = array();
+        $totalMonth = array();
+        $totalYear = array();
+
+        foreach ($consumerPlanning as $rs) {
+            $productos[] = $rs->getService()->getName();
+            //$productos[] = $rs->$name;
+            array_push($totalDay, $rs->getSummary($dateReport)["total_day"]);
+            array_push($totalMonth, $rs->getSummary($dateReport)["total_month"]);
+            array_push($totalYear, $rs->getSummary($dateReport)["total_year"]);
+            //var_dump($rawMaterialConsumption->getSummary($dateReport));
+        }
+
+
+
+        return $this->getArrayTable($consumerPlanning, $dateReport, $productos, $totalDay, $totalMonth, $totalYear);
+    }
+
+    public function getDataUnrealizedProduction($productsReport, $dateReport) {
+
+        $productos = array();
+        $totalDay = array();
+        $totalMonth = array();
+        $totalYear = array();
+
+        foreach ($productsReport as $rs) {
+            $productos[] = $rs->getProduct()->getName();
+            //$productos[] = $rs->$name;
+            array_push($totalDay, $rs->getSummaryUnrealizedProductions($dateReport)["total_day"]);
+            array_push($totalMonth, $rs->getSummaryUnrealizedProductions($dateReport)["total_month"]);
+            array_push($totalYear, $rs->getSummaryUnrealizedProductions($dateReport)["total_year"]);
+            //var_dump($rawMaterialConsumption->getSummary($dateReport));
+        }
+
+
+
+        return $this->getArrayTable($productsReport, $dateReport, $productos, $totalDay, $totalMonth, $totalYear);
+    }
+
+    public function getDataInventario($productsReport, $dateReport) {
+
+        $productos = array();
+        $totalDay = array();
+        $totalMonth = array();
+        $totalYear = array();
+
+        foreach ($productsReport as $rs) {
+            $productos[] = $rs->getProduct()->getName();
+            //$productos[] = $rs->$name;
+            array_push($totalDay, $rs->getSummaryInventory($dateReport)["total_day"]);
+            array_push($totalMonth, $rs->getSummaryInventory($dateReport)["total_month"]);
+
+            //var_dump($rawMaterialConsumption->getSummary($dateReport));
+        }
+
+
+
+        return $this->getArrayTable($productsReport, $dateReport, $productos, $totalDay, $totalMonth, $totalMonth, $totalYear);
+    }
+
+    /**
+     * 
+     * @param type $arrayData
+     * @return array
+     */
+    public function getArrayTable($arrayData, $dateReport, $productos, $totalDay, $totalMonth, $totalYear) {
+
+        $consumos = array();
+
+        $day = array();
+        $month = array();
+        $year = array();
+
+        foreach (array_unique($productos) as $prod) {
+            $rep = array_keys($productos, $prod);
+            $tDay = 0;
+            $tMonth = 0;
+            $tYear = 0;
+            if ($rep > 0) {
+                foreach ($rep as $r) {
+                    $tDay = $tDay + $totalDay[$r];
+                    $tMonth = $tMonth + $totalMonth[$r];
+                    if (count($totalYear) > 0) {
+                        $tYear = $tYear + $totalYear[$r];
+                    }
+                }
+                $day[] = $tDay;
+                $month[] = $tMonth;
+                if (count($totalYear) > 0) {
+                    $year[] = $tYear;
+                }
+            } else {
+                $day[] = $totalDay[$r];
+                $month[] = $totalMonth[$r];
+                if (count($totalYear) > 0) {
+                    $year[] = $totalYear[$r];
+                }
+            }
+        }
+        $consumos[] = array_unique($productos);
+        $consumos[] = $day;
+        $consumos[] = $month;
+        $consumos[] = $year;
+
+        return $consumos;
+    }
+
+    protected
+            function getProductReportService() {
         return $this->container->get('seip.service.productReport');
     }
 

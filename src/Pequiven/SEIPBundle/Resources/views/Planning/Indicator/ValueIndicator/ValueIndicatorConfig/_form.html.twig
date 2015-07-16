@@ -2,11 +2,18 @@
 {{ form_top(form) }}
 <fieldset class="fieldset fields-list">
    <legend class="legend">{{ 'pequiven_indicator.indicator.details_results'|trans }}&nbsp;<b>({{ labelTypeDetailValue }})</b></legend>
-   {% if form.products is defined %}
+   {#{% if form.products is defined %}
        <div class="field-block button-height">
             {{ form_label(form.products) }}
             {{ form_widget(form.products) }}
             {{ form_errors(form.products) }}
+       </div>
+   {% endif %}#}
+   {% if form.productReports is defined %}
+       <div class="field-block button-height">
+            {{ form_label(form.productReports) }}
+            {{ form_widget(form.productReports) }}
+            {{ form_errors(form.productReports) }}
        </div>
    {% endif %}
 </fieldset>
