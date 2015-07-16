@@ -324,15 +324,15 @@ class ReportTemplateController extends SEIPController {
                 'translation_domain' => 'PequivenSEIPBundle',
             ])
             ->getForm();
-        
+        $productsReportConsulting = [];
         if($request->isMethod('POST') && $form->submit($request)->isValid()){
             $data = $form->getData();
             $showDay = $data['showDay'];
             $showMonth = $data['showMonth'];
             $showYear = $data['showYear'];
-            $productsReport = $data['productsReport'];
-            if ($productsReport && count($productsReport) > 0) {
-                foreach ($productsReport as $productReport) {
+            $productsReportConsulting = $data['productsReport'];
+            if ($productsReportConsulting && count($productsReportConsulting) > 0) {
+                foreach ($productsReportConsulting as $productReport) {
                     $productsReportId[] = $productReport->getId();
                 }
                 foreach ($plantReport->getProductsReport() as $productReport) {
@@ -413,19 +413,22 @@ class ReportTemplateController extends SEIPController {
                 }
             }
         }
+        //Filtrar productos que quiere el usuario
+        if($productsReportConsulting && count($productsReportConsulting) > 0){
+            foreach ($productsReport as $productReport) {
+                if(!$productsReportConsulting->contains($productReport)){
+                    $productsReport->removeElement($productReport);
+                }
+                
+            }
+        }
+        
         $reportService = $this->getProductReportService();
 
-//        $dataGraphicsDay = $reportService->getArray($productsReport,$dateReport,$typeReport,"getSummaryDay");
-//        $graphicsDay = $reportService->generatePie(array("array"=>$dataGraphicsDay,"caption"=>"Productos por Dia","subCaption"=>""));
-        //$planDay = $reportService->getArray($productsReport, $dateReport, $typeReport, "getSummaryDay", "plan");
-        //$realDay = $reportService->getArray($productsReport, $dateReport, $typeReport, "getSummaryDay", "real");
-
+        
         $graphicsDays = $reportService->generateColumn3dLinery(array("caption"=>"Producción por Dia","subCaption"=>"Valores Expresados en TM"),$productsReport, $dateReport, $typeReport, "getSummaryDay", "plan", "real");
         $graphicsMonth = $reportService->generateColumn3dLinery(array("caption"=>"Producción por Mes","subCaption"=>"Valores Expresados en TM"),$productsReport, $dateReport, $typeReport, "getSummaryMonth", "plan_acumulated", "real_acumulated");
         $graphicsYear = $reportService->generateColumn3dLinery(array("caption"=>"Producción por Año","subCaption"=>"Valores Expresados en MTM"),$productsReport, $dateReport, $typeReport, "getSummaryYear", "plan_acumulated", "real_acumulated",1000);
-
-//        $dataGraphicsMonth = $reportService->getArray($productsReport,$dateReport,$typeReport,"getSummaryMonth","plan_month");
-//        $graphicsMonth = $reportService->generatePie(array("array"=>$dataGraphicsMonth,"caption"=>"Productos por Mes","subCaption"=>""));
 
         $data = array(
             'dateReport' => $dateReport,
@@ -438,8 +441,6 @@ class ReportTemplateController extends SEIPController {
             'showMonth' => $showMonth,
             'showYear' => $showYear,
             'typeReport' => $typeReport,
-//            "graphicDay" => json_encode($graphicsDay),
-//            "graphicMonth" => json_encode($graphicsMonth),
             "graphicsDays" => $graphicsDays,
             "graphicsMonth" => $graphicsMonth,
             "graphicsYear" => $graphicsYear
