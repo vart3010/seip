@@ -1285,30 +1285,22 @@ class IndicatorService implements ContainerAwareInterface {
         $contValue = 0;
         foreach ($valuesIndicator as $valueIndicator) {
             $contValue++;
-            $flagLastResultValid = false;
             if($details->getSourceResult() == Indicator\IndicatorDetails::SOURCE_RESULT_LAST && $contValue != $totalValuesIndicator){
                 continue;
             } elseif($details->getSourceResult() == Indicator\IndicatorDetails::SOURCE_RESULT_LAST_VALID){
                 if($formula->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC){
                     if($valueIndicator->getParameter($formula->getVariableToRealValue()) == 0 && $valueIndicator->getParameter($formula->getVariableToPlanValue()) == 0){
                         continue;
-                    } else{
-                        $flagLastResultValid = true;
                     }
                 } elseif($formula->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_FROM_EQ){
                     if($valueIndicator->getParameter(Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL) == 0 && $valueIndicator->getParameter(Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN) == 0){
                         continue;
-                    } else{
-                        $flagLastResultValid = true;
                     }
                 }
             }
+            
             $valueFromCardEquation = $this->calculateFormulaValueFromCardEquation($formula, $valueIndicator->getFormulaParameters(),$options);
-            if($details->getSourceResult() == Indicator\IndicatorDetails::SOURCE_RESULT_LAST_VALID && $flagLastResultValid == true){
-                $value = $valueFromCardEquation;
-            } else{
-                $value = $value + $valueFromCardEquation;
-            }
+            $value = $value + $valueFromCardEquation;
         }
         
         return $value;
@@ -1341,33 +1333,23 @@ class IndicatorService implements ContainerAwareInterface {
             $contValue = 0;
             foreach ($valuesIndicator as $valueIndicator) {
                 $contValue++;
-                $flagLastResultValid = false;
                 if($details->getSourceResult() == Indicator\IndicatorDetails::SOURCE_RESULT_LAST && $contValue != $totalValuesIndicator){
                     continue;
                 } elseif($details->getSourceResult() == Indicator\IndicatorDetails::SOURCE_RESULT_LAST_VALID){
                     if($formula->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC){
                         if($valueIndicator->getParameter($formula->getVariableToRealValue()) == 0 && $valueIndicator->getParameter($formula->getVariableToPlanValue()) == 0){
                             continue;
-                        } else{
-                            $flagLastResultValid = true;
                         }
                     } elseif($formula->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_FROM_EQ){
                         if($valueIndicator->getParameter(Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL) == 0 && $valueIndicator->getParameter(Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN) == 0){
                             continue;
-                        } else{
-                            $flagLastResultValid = true;
                         }
                     }
                 }
-                
                 $parameters = $valueIndicator->getFormulaParameters();
                 foreach ($parameters as $parameter => $key) {
                     if ($parameter == 'real_from_equation' || $parameter == 'plan_from_equation') {
-                        if($details->getSourceResult() == Indicator\IndicatorDetails::SOURCE_RESULT_LAST_VALID && $flagLastResultValid == true){
-                            $arrayVariables[$parameter]['value'] = $key;
-                        } else{
-                            $arrayVariables[$parameter]['value'] = $arrayVariables[$parameter]['value'] + $key;
-                        }
+                        $arrayVariables[$parameter]['value'] = $arrayVariables[$parameter]['value'] + $key;
                     }
                 }
             }
@@ -1431,32 +1413,23 @@ class IndicatorService implements ContainerAwareInterface {
             $contValue = 0;
             foreach ($valuesIndicator as $valueIndicator) {
                 $contValue++;
-                $flagLastResultValid = false;
                 if($details->getSourceResult() == Indicator\IndicatorDetails::SOURCE_RESULT_LAST && $contValue != $totalValuesIndicator){
                     continue;
                 } elseif($details->getSourceResult() == Indicator\IndicatorDetails::SOURCE_RESULT_LAST_VALID){
                     if($formula->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC){
                         if($valueIndicator->getParameter($formula->getVariableToRealValue()) == 0 && $valueIndicator->getParameter($formula->getVariableToPlanValue()) == 0){
                             continue;
-                        } else{
-                            $flagLastResultValid = true;
                         }
                     } elseif($formula->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_FROM_EQ){
                         if($valueIndicator->getParameter(Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL) == 0 && $valueIndicator->getParameter(Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN) == 0){
                             continue;
-                        } else{
-                            $flagLastResultValid = true;
                         }
                     }
                 }
                 foreach ($variables as $variable) {
                     if ($variable->getShowRealInDashboardPie()) {
                         $nameParameter = $variable->getName();
-                        if($details->getSourceResult() == Indicator\IndicatorDetails::SOURCE_RESULT_LAST_VALID && $flagLastResultValid == true){
-                            $arrayVariables[$nameParameter]['value'] = $valueIndicator->getParameter($nameParameter);
-                        } else{
-                            $arrayVariables[$nameParameter]['value'] = $arrayVariables[$nameParameter]['value'] + $valueIndicator->getParameter($nameParameter);
-                        }
+                        $arrayVariables[$nameParameter]['value'] = $arrayVariables[$nameParameter]['value'] + $valueIndicator->getParameter($nameParameter);
                     }
                 }
             }
@@ -1475,32 +1448,23 @@ class IndicatorService implements ContainerAwareInterface {
             $contValue = 0;
             foreach ($valuesIndicator as $valueIndicator) {
                 $contValue++;
-                $flagLastResultValid = false;
                 if($details->getSourceResult() == Indicator\IndicatorDetails::SOURCE_RESULT_LAST && $contValue != $totalValuesIndicator){
                     continue;
                 } elseif($details->getSourceResult() == Indicator\IndicatorDetails::SOURCE_RESULT_LAST_VALID){
                     if($formula->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC){
                         if($valueIndicator->getParameter($formula->getVariableToRealValue()) == 0 && $valueIndicator->getParameter($formula->getVariableToPlanValue()) == 0){
                             continue;
-                        } else{
-                            $flagLastResultValid = true;
                         }
                     } elseif($formula->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_FROM_EQ){
                         if($valueIndicator->getParameter(Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL) == 0 && $valueIndicator->getParameter(Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN) == 0){
                             continue;
-                        } else{
-                            $flagLastResultValid = true;
                         }
                     }
                 }
                 foreach ($variables as $variable) {
                     if ($variable->getShowPlanInDashboardPie()) {
                         $nameParameter = $variable->getName();
-                        if($details->getSourceResult() == Indicator\IndicatorDetails::SOURCE_RESULT_LAST_VALID && $flagLastResultValid == true){
-                            $arrayVariables[$nameParameter]['value'] = $valueIndicator->getParameter($nameParameter);
-                        } else{
-                            $arrayVariables[$nameParameter]['value'] = $arrayVariables[$nameParameter]['value'] + $valueIndicator->getParameter($nameParameter);
-                        }
+                        $arrayVariables[$nameParameter]['value'] = $arrayVariables[$nameParameter]['value'] + $valueIndicator->getParameter($nameParameter);
                     }
                 }
             }
@@ -1557,35 +1521,11 @@ class IndicatorService implements ContainerAwareInterface {
                 $arrayVariables['dashboardEquationReal']['unit'] = $indicator->getDetails()->getResultRealUnit();
                 $arrayVariables['dashboardEquationPlan']['unit'] = $indicator->getDetails()->getResultPlanUnit();
             }
-            $contValue = 0;
+
             foreach ($valuesIndicator as $valueIndicator) {
-                $contValue++;
-                $flagLastResultValid = false;
-                if($details->getSourceResult() == Indicator\IndicatorDetails::SOURCE_RESULT_LAST && $contValue != $totalValuesIndicator){
-                    continue;
-                } elseif($details->getSourceResult() == Indicator\IndicatorDetails::SOURCE_RESULT_LAST_VALID){
-                    if($formula->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC){
-                        if($valueIndicator->getParameter($formula->getVariableToRealValue()) == 0 && $valueIndicator->getParameter($formula->getVariableToPlanValue()) == 0){
-                            continue;
-                        } else{
-                            $flagLastResultValid = true;
-                        }
-                    } elseif($formula->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_FROM_EQ){
-                        if($valueIndicator->getParameter(Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL) == 0 && $valueIndicator->getParameter(Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN) == 0){
-                            continue;
-                        } else{
-                            $flagLastResultValid = true;
-                        }
-                    }
-                }
                 $valuesFromDashboardEquation = $this->calculateFormulaValueFromDashboardEquation($formula, $valueIndicator->getFormulaParameters());
-                if($details->getSourceResult() == Indicator\IndicatorDetails::SOURCE_RESULT_LAST_VALID && $flagLastResultValid == true){
-                    $arrayVariables['dashboardEquationReal']['value'] = $valuesFromDashboardEquation['dashboardEquationReal'];
-                    $arrayVariables['dashboardEquationPlan']['value'] = $valuesFromDashboardEquation['dashboardEquationPlan'];
-                } else{
-                    $arrayVariables['dashboardEquationReal']['value'] = $arrayVariables['dashboardEquationReal']['value'] + $valuesFromDashboardEquation['dashboardEquationReal'];
-                    $arrayVariables['dashboardEquationPlan']['value'] = $arrayVariables['dashboardEquationPlan']['value'] + $valuesFromDashboardEquation['dashboardEquationPlan'];
-                }
+                $arrayVariables['dashboardEquationReal']['value'] = $arrayVariables['dashboardEquationReal']['value'] + $valuesFromDashboardEquation['dashboardEquationReal'];
+                $arrayVariables['dashboardEquationPlan']['value'] = $arrayVariables['dashboardEquationPlan']['value'] + $valuesFromDashboardEquation['dashboardEquationPlan'];
             }
         } elseif (isset($options['withVariablesRealPlanFromDashboardEquationFromChildrensMultiSeries']) && array_key_exists('withVariablesRealPlanFromDashboardEquationFromChildrensMultiSeries', $options)) {
             unset($options['withVariablesRealPlanFromDashboardEquationFromChildrensMultiSeries']);
@@ -1599,37 +1539,10 @@ class IndicatorService implements ContainerAwareInterface {
             foreach ($childrens as $children) {
                 $childrenValuesIndicator = $children->getValuesIndicator();
                 $formulaChildren = $children->getFormula();
-                $totalChildrenValuesIndicator = count($childrenValuesIndicator);
-                $contValue = 0;
-                $detailsChildren = $children->getDetails();
                 foreach ($childrenValuesIndicator as $childrenValueIndicator) {
-                    $contValue++;
-                    $flagLastResultValid = false;
-                    if($detailsChildren->getSourceResult() == Indicator\IndicatorDetails::SOURCE_RESULT_LAST && $contValue != $totalChildrenValuesIndicator){
-                        continue;
-                    } elseif($detailsChildren->getSourceResult() == Indicator\IndicatorDetails::SOURCE_RESULT_LAST_VALID){
-                        if($formulaChildren->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC){
-                            if($childrenValueIndicator->getParameter($formulaChildren->getVariableToRealValue()) == 0 && $childrenValueIndicator->getParameter($formulaChildren->getVariableToPlanValue()) == 0){
-                                continue;
-                            } else{
-                                $flagLastResultValid = true;
-                            }
-                        } elseif($formulaChildren->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_FROM_EQ){
-                            if($childrenValueIndicator->getParameter(Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL) == 0 && $childrenValueIndicator->getParameter(Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN) == 0){
-                                continue;
-                            } else{
-                                $flagLastResultValid = true;
-                            }
-                        }
-                    }
                     $valuesFromDashboardEquation = $this->calculateFormulaValueFromDashboardEquation($formulaChildren, $childrenValueIndicator->getFormulaParameters());
-                    if($detailsChildren->getSourceResult() == Indicator\IndicatorDetails::SOURCE_RESULT_LAST_VALID && $flagLastResultValid == true){
-                        $arrayVariables[$children->getRef()]['dashboardEquationReal']['value'] = $valuesFromDashboardEquation['dashboardEquationReal'];
-                        $arrayVariables[$children->getRef()]['dashboardEquationPlan']['value'] = $valuesFromDashboardEquation['dashboardEquationPlan'];
-                    } else{
-                        $arrayVariables[$children->getRef()]['dashboardEquationReal']['value'] = $arrayVariables[$children->getRef()]['dashboardEquationReal']['value'] + $valuesFromDashboardEquation['dashboardEquationReal'];
-                        $arrayVariables[$children->getRef()]['dashboardEquationPlan']['value'] = $arrayVariables[$children->getRef()]['dashboardEquationPlan']['value'] + $valuesFromDashboardEquation['dashboardEquationPlan'];
-                    }
+                    $arrayVariables[$children->getRef()]['dashboardEquationReal']['value'] = $arrayVariables[$children->getRef()]['dashboardEquationReal']['value'] + $valuesFromDashboardEquation['dashboardEquationReal'];
+                    $arrayVariables[$children->getRef()]['dashboardEquationPlan']['value'] = $arrayVariables[$children->getRef()]['dashboardEquationPlan']['value'] + $valuesFromDashboardEquation['dashboardEquationPlan'];
                 }
             }
         } elseif (isset($options['withVariablesRealPlanByFrequencyNotificationFromDashboardEquationMultiSeries']) && array_key_exists('withVariablesRealPlanByFrequencyNotificationFromDashboardEquationMultiSeries', $options)) {
@@ -1651,96 +1564,36 @@ class IndicatorService implements ContainerAwareInterface {
                 $arrayVariables['dashboardEquationReal']['value'][] = $valuesFromDashboardEquation['dashboardEquationReal'];
                 $arrayVariables['dashboardEquationPlan']['value'][] = $valuesFromDashboardEquation['dashboardEquationPlan'];
             }
-        } elseif(isset($options['viewVariablesFromPlanEquation']) && array_key_exists('viewVariablesFromPlanEquation', $options)){
-            unset($options['viewVariablesFromPlanEquation']);
-            $vars = $this->getArrayVars($formula, $formula->getSourceEquationPlan());
+        } else {
             $variables = $formula->getVariables();
 
-            foreach ($variables as $variable) {
-                if (array_search($variable->getName(), $vars)) {
-                    $nameParameter = $variable->getName();
-                    $arrayVariables[$nameParameter]['value'] = 0.0;
-                    $arrayVariables[$nameParameter]['description'] = $variable->getDescription();
-                    $arrayVariables[$nameParameter]['summary'] = $variable->getSummary();
-                    $arrayVariables[$nameParameter]['unit'] = $variable->getUnitResultValue();
-                }
-            }
-            
-            $contValue = 0;
-            foreach ($valuesIndicator as $valueIndicator) {
-                $contValue++;
-                $flagLastResultValid = false;
-                if($details->getSourceResult() == Indicator\IndicatorDetails::SOURCE_RESULT_LAST && $contValue != $totalValuesIndicator){
-                    continue;
-                } elseif($details->getSourceResult() == Indicator\IndicatorDetails::SOURCE_RESULT_LAST_VALID){
-                    if($formula->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC){
-                        if($valueIndicator->getParameter($formula->getVariableToRealValue()) == 0 && $valueIndicator->getParameter($formula->getVariableToPlanValue()) == 0){
-                            continue;
-                        } else{
-                            $flagLastResultValid = true;
-                        }
-                    } elseif($formula->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_FROM_EQ){
-                        if($valueIndicator->getParameter(Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL) == 0 && $valueIndicator->getParameter(Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN) == 0){
-                            continue;
-                        } else{
-                            $flagLastResultValid = true;
-                        }
-                    }
-                }
-                foreach ($variables as $variable) {
-                    if (array_search($variable->getName(), $vars)) {
-                        $nameParameter = $variable->getName();
-                        if($details->getSourceResult() == Indicator\IndicatorDetails::SOURCE_RESULT_LAST_VALID && $flagLastResultValid == true){
-                            $arrayVariables[$nameParameter]['value'] = $valueIndicator->getParameter($nameParameter);
-                        } else{
-                            $arrayVariables[$nameParameter]['value'] = $arrayVariables[$nameParameter]['value'] + $valueIndicator->getParameter($nameParameter);
-                        }
-                    }
-                }
-            }
-        } elseif(isset($options['viewVariablesFromRealEquation']) && array_key_exists('viewVariablesFromRealEquation', $options)){
-            unset($options['viewVariablesFromRealEquation']);
-            $vars = $this->getArrayVars($formula, $formula->getSourceEquationReal());
-            $variables = $formula->getVariables();
-            
-            foreach ($variables as $variable) {
-                if (array_search($variable->getName(), $vars)) {
-                    $nameParameter = $variable->getName();
-                    $arrayVariables[$nameParameter]['value'] = 0.0;
-                    $arrayVariables[$nameParameter]['description'] = $variable->getDescription();
-                    $arrayVariables[$nameParameter]['summary'] = $variable->getSummary();
-                    $arrayVariables[$nameParameter]['unit'] = $variable->getUnitResultValue();
-                }
-            }
+            if (isset($options['viewVariablesFromPlanEquation']) && array_key_exists('viewVariablesFromPlanEquation', $options)) {
+                unset($options['viewVariablesFromPlanEquation']);
+                $vars = $this->getArrayVars($formula, $formula->getSourceEquationPlan());
 
-            $contValue = 0;
-            foreach ($valuesIndicator as $valueIndicator) {
-                $contValue++;
-                $flagLastResultValid = false;
-                if($details->getSourceResult() == Indicator\IndicatorDetails::SOURCE_RESULT_LAST && $contValue != $totalValuesIndicator){
-                    continue;
-                } elseif($details->getSourceResult() == Indicator\IndicatorDetails::SOURCE_RESULT_LAST_VALID){
-                    if($formula->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC){
-                        if($valueIndicator->getParameter($formula->getVariableToRealValue()) == 0 && $valueIndicator->getParameter($formula->getVariableToPlanValue()) == 0){
-                            continue;
-                        } else{
-                            $flagLastResultValid = true;
-                        }
-                    } elseif($formula->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_FROM_EQ){
-                        if($valueIndicator->getParameter(Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL) == 0 && $valueIndicator->getParameter(Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN) == 0){
-                            continue;
-                        } else{
-                            $flagLastResultValid = true;
+                foreach ($valuesIndicator as $valueIndicator) {
+                    foreach ($variables as $variable) {
+                        if (array_search($variable->getName(), $vars)) {
+                            $nameParameter = $variable->getName();
+                            $arrayVariables[$nameParameter]['value'] = $valueIndicator->getParameter($nameParameter);
+                            $arrayVariables[$nameParameter]['description'] = $variable->getDescription();
+                            $arrayVariables[$nameParameter]['summary'] = $variable->getSummary();
+                            $arrayVariables[$nameParameter]['unit'] = $variable->getUnitResultValue();
                         }
                     }
                 }
-                foreach ($variables as $variable) {
-                    if (array_search($variable->getName(), $vars)) {
-                        $nameParameter = $variable->getName();
-                        if($details->getSourceResult() == Indicator\IndicatorDetails::SOURCE_RESULT_LAST_VALID && $flagLastResultValid == true){
+            } elseif (isset($options['viewVariablesFromRealEquation']) && array_key_exists('viewVariablesFromRealEquation', $options)) {
+                unset($options['viewVariablesFromRealEquation']);
+                $vars = $this->getArrayVars($formula, $formula->getSourceEquationReal());
+
+                foreach ($valuesIndicator as $valueIndicator) {
+                    foreach ($variables as $variable) {
+                        if (array_search($variable->getName(), $vars)) {
+                            $nameParameter = $variable->getName();
                             $arrayVariables[$nameParameter]['value'] = $valueIndicator->getParameter($nameParameter);
-                        } else{
-                            $arrayVariables[$nameParameter]['value'] = $arrayVariables[$nameParameter]['value'] + $valueIndicator->getParameter($nameParameter);
+                            $arrayVariables[$nameParameter]['description'] = $variable->getDescription();
+                            $arrayVariables[$nameParameter]['summary'] = $variable->getSummary();
+                            $arrayVariables[$nameParameter]['unit'] = $variable->getUnitResultValue();
                         }
                     }
                 }
