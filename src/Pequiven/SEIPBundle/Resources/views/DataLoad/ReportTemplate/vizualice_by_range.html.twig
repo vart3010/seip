@@ -560,16 +560,7 @@
                 {% set items = consumerPlanningServices %}
 
                 {% for consumerPlanningService in consumerPlanningServices %}
-                    {% set summary = consumerPlanningService.getSummary(dateReport) %}
-
-                    {% set current_total_day = summary['total_day'] %}
-                    {% set current_total_month = summary['total_month'] %}
-                    {% set current_total_year = summary['total_year'] %}
                     
-                    {% set current_total_day_plan = summary['total_day_plan'] %}
-                    {% set current_total_month_plan = summary['total_month_plan'] %}
-                    {% set current_total_year_plan = summary['total_year_plan'] %}
-
                     {% set is_next_equals = false %}
                     {% set next_item = get_next_item(loop,items) %}
 
@@ -578,17 +569,31 @@
                             {% set is_next_equals = true %}
                         {% endif %}
                     {% endif  %}
-
+                    
                     {% if is_next_equals == true %}
-                        {% set total_day = total_day + summary['total_day'] %}
-                        {% set total_month = total_month + summary['total_month'] %}
-                        {% set total_year = total_year + summary['total_year'] %}
-                        
-                        {% set total_day_plan = total_day_plan + summary['total_day_plan'] %}
-                        {% set total_month_plan = total_month_plan + summary['total_month_plan'] %}
-                        {% set total_year_plan = total_year_plan + summary['total_year_plan'] %}
-                        
                     {% else %}
+                        {% if loop.first %}
+                            <tr>
+                                <td colspan="7" class="text-center bold">
+                                    {{ consumerPlanningService.service|upper }}
+                                </td>
+                            </tr>
+                        {% endif %}
+                    {% endif %}
+                    
+                    {% for dateReportInt in range(dateFrom|date('U'), dateEnd|date('U'), 86400 ) %}
+                        {% set dateReport = date(dateReportInt) %}
+                    
+                        {% set summary = consumerPlanningService.getSummary(dateReport) %}
+
+                        {% set current_total_day = summary['total_day'] %}
+                        {% set current_total_month = summary['total_month'] %}
+                        {% set current_total_year = summary['total_year'] %}
+
+                        {% set current_total_day_plan = summary['total_day_plan'] %}
+                        {% set current_total_month_plan = summary['total_month_plan'] %}
+                        {% set current_total_year_plan = summary['total_year_plan'] %}
+
                         {% set current_total_day = current_total_day + total_day %}
                         {% set current_total_month = current_total_month + total_month %}
                         {% set current_total_year = current_total_year + total_year %}
@@ -599,7 +604,7 @@
                         
                         <tr>
                             {% set serviceUnit = consumerPlanningService.service.serviceUnit %}
-                            <th class="header">{{ consumerPlanningService.service|upper }}</th>
+                            <th class="header">{{ dateReport|date('d/m/Y') }}&nbsp;-&nbsp;{{ consumerPlanningService.plantReport|upper }}</th>
                                 {%  if showDay %}
                                 <th class="header">{{ current_total_day_plan|myNumberFormat }}&nbsp;{{ serviceUnit }}</th>
                                 <th class="header">{{ current_total_day|myNumberFormat }}&nbsp;{{ serviceUnit }}</th>
@@ -620,7 +625,19 @@
                         {% set total_day_plan = 0 %}
                         {% set total_month_plan = 0 %}
                         {% set total_year_plan = 0 %}
+                    {% endfor %}
+                    
+                    {% if is_next_equals == true %}
+                    {% else %}
+                        {% if next_item %}
+                            <tr>
+                                <td colspan="7" class="text-center bold">
+                                    {{ next_item.service|upper }}
+                                </td>
+                            </tr>
+                        {% endif %}
                     {% endif %}
+                    
                 {% else %}
                     <tr>
                         <td colspan="4" class="empty_row">{{ "No service planning"|trans }}</td>
@@ -827,12 +844,12 @@
         </div>
     {% endif %}
 </div>
-<p class="button-height float-right">
+{#<p class="button-height float-right">
     <a id="btnExportToPdf" href="#" class="button">
         <span class="button-icon"><span class="icon-download"></span></span>
             {{ "pequiven_seip.buttons.export_pdf"|trans }}
     </a>
-</p>
+</p>#}
 {% else %}
     <h2 class="text-center">{{ "Select the plant"|trans }}</h2>
 {% endif %}
