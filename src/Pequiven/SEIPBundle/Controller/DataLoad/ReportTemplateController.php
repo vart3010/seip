@@ -465,7 +465,9 @@ class ReportTemplateController extends SEIPController {
         $graphicsDays = $reportService->generateColumn3dLinery(array("caption"=>"Producción por Dia","subCaption"=>"Valores Expresados en TM"),$productsReport, $dateReport, $typeReport, "getSummaryDay", "plan", "real");
         $graphicsMonth = $reportService->generateColumn3dLinery(array("caption"=>"Producción por Mes","subCaption"=>"Valores Expresados en TM"),$productsReport, $dateReport, $typeReport, "getSummaryMonth", "plan_acumulated", "real_acumulated");
         $graphicsYear = $reportService->generateColumn3dLinery(array("caption"=>"Producción por Año","subCaption"=>"Valores Expresados en MTM"),$productsReport, $dateReport, $typeReport, "getSummaryYear", "plan_acumulated", "real_acumulated",1000);
-
+       
+        $tools = new \Pequiven\SEIPBundle\Service\ToolService();
+        
         $data = array(
             'dateReport' => $dateReport,
             'productsReport' => $productsReport,
@@ -483,7 +485,8 @@ class ReportTemplateController extends SEIPController {
             'typeReport' => $typeReport,
             "graphicsDays" => $graphicsDays,
             "graphicsMonth" => $graphicsMonth,
-            "graphicsYear" => $graphicsYear
+            "graphicsYear" => $graphicsYear,
+            "tools" => $tools,
         );
 
         $view = $this
