@@ -721,12 +721,14 @@
                             {{ "pequiven_seip.buttons.export_pdf"|trans }}
                     </a>
                 </p>
-                {#<p style="padding: 5px;"  class="button-height float-right">
-                    <a id="btnExportToExcel" data="pequiven_report_template_vizualice" href="#" class="button">
-                        <span class="button-icon"><span class="icon-download"></span></span>
-                            {{ "pequiven_seip.buttons.export_xls"|trans }}
-                    </a>
-                </p>#}
+                {% if(is_granted(["ROLE_SEIP_OPERATION_EXPORT_EXCEL_PRODUCTION"])) %}
+                    <p style="padding: 5px;"  class="button-height float-right">
+                        <a id="btnExportToExcel" data="" href="#" class="button">
+                            <span class="button-icon"><span class="icon-download"></span></span>
+                                {{ "pequiven_seip.buttons.export_xls"|trans }}
+                        </a>
+                    </p>
+                {% endif %}
             </div>
 
         {% else %}
@@ -741,23 +743,24 @@
         $(document).ready(function () {
             var formActionDefault = $("#frmFilter").attr("action");
             var plantReport = $("#form_plantReport");
-            
+
             $("#btnExportToExcel").on("click", function (e) {
                 e.preventDefault();
-                $("#exportToPdf").val("0");
-                var url = $(this).attr("data");
-                $("#frmFilter").attr("action",'{{ path("pequiven_report_export_excel") }}');
+                $("#exportToPdf").val("2");
+
+
+                //alert($("#frmFilter").attr("action"));
                 eventChange();
             });
-            
+
             $("#btnExportToPdf").on("click", function (e) {
                 e.preventDefault();
                 $("#exportToPdf").val("1");
                 eventChange();
             });
-            
+
             $("#btnRefresh").on("click", function (e) {
-                $("#frmFilter").attr("action",formActionDefault);
+                $("#frmFilter").attr("action", formActionDefault);
                 e.preventDefault();
                 $("#exportToPdf").val("0");
                 eventChange();
