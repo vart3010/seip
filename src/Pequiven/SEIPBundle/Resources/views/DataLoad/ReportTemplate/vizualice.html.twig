@@ -73,7 +73,7 @@
                 <div class="twelve-columns twelve-columns-mobile">
                     <h3 class="thin underline text-center">Graficas</h3>
                 </div>
-            </div>
+                    </div>
 
             <div class="columns">
                 <div class="twelve-columns twelve-columns-mobile">
@@ -94,10 +94,10 @@
                                     <div class="twelve-columns"> 
                                         <div  ng-controller="ProductionController" ng-init="renderChartColumn3dLinedy('graphicDay',{{ graphicsDays }},'100','500')">
                                             <span id="graphicDay"></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
                             <div id="tab-2" class="with-padding">
                                 <div class="columns">
@@ -180,13 +180,13 @@
                                         {% set plan = plan + summary['plan'] %}
                                         {% set real = real + summary['real'] %}
 
-                                    {% else %}
+        {% else %}
                                         {% set current_plan = current_plan + plan %}
                                         {% set current_real = current_real + real %}
                                         {% set current_percentage = 0 %}
                                         {% if current_plan > 0 %}
                                             {% set current_percentage = (current_real * 100) / current_plan %}
-                                        {% endif %}
+        {% endif %}
                                         {% set current_pnr = current_plan - current_real %}
                                         {% if current_pnr < 0 %}
                                             {% set current_pnr = 0 %}
@@ -206,7 +206,7 @@
                                 {% endfor %}
                             </tbody>
                         </table>
-                    </div>
+    </div>
                 {% endif %}
                 {% if showMonth %}
                     <div class="six-columns twelve-columns-mobile">
@@ -251,7 +251,7 @@
                                         {% set plan_month = plan_month + summary['plan_month'] %}
                                         {% set plan_acumulated = plan_acumulated + summary['plan_acumulated'] %}
                                         {% set real_acumulated = real_acumulated + summary['real_acumulated'] %}
-                                    {% else %}
+        {% else %}
                                         {% set current_plan_month = current_plan_month + plan_month %}
                                         {% set current_plan_acumulated = current_plan_acumulated + plan_acumulated %}
                                         {% set current_real_acumulated = current_real_acumulated + real_acumulated %}
@@ -785,19 +785,19 @@
                 ajaxToSelect.formaterData = function (response) {
                     return response.product.name;
                 };
-                ajaxToSelect.addEmptyValue = false;
+                    ajaxToSelect.addEmptyValue = false;
 
-                selectPlant.on("change", function () {
-                    ajaxToSelect2(urlGetProduct, selectProduct, {plantReport: selectPlant.val()});
-                });
-        {#            console.log(selectPlant.val());#}
-                if (selectPlant.val() != "") {
-        {#                ajaxToSelect2(urlGetProduct,selectProduct,{ plantReport: selectPlant.val() });#}
-                } else {
-                    selectProduct.empty();
-                    selectProduct.select2('disable');
-                }
-            });
+                    selectPlant.on("change", function () {
+                        ajaxToSelect2(urlGetProduct, selectProduct, {plantReport: selectPlant.val()});
+                    });
+            {#            console.log(selectPlant.val());#}
+                    if (selectPlant.val() != "") {
+            {#                ajaxToSelect2(urlGetProduct,selectProduct,{ plantReport: selectPlant.val() });#}
+                    } else {
+                        selectProduct.empty();
+                        selectProduct.select2('disable');
+                    }
+                    });
     </script>
 {% endblock %}
 
