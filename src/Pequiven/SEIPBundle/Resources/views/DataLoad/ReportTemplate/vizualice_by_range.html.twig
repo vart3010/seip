@@ -32,10 +32,8 @@
                     {% set items = productsReport %}
 
                     {% for productReport in productsReport %}
-                        {% set print_header = false %}
-                        
                         {% set is_next_equals = false %}
-                            {% set next_item = get_next_item(loop,items) %}
+                        {% set next_item = get_next_item(loop,items) %}
 
                         {% if next_item %}
                             {% if productReport.product == next_item.product %}
@@ -151,12 +149,7 @@
                     {% set items = productsReport %}
 
                     {% for productReport in productsReport %}
-                        {% set summary = productReport.getSummaryMonth(dateReport,typeReport) %}
-{#                                    {{ dump(summary) }}#}
-                        {% set current_plan_month = summary['plan_month'] %}
-                        {% set current_plan_acumulated = summary['plan_acumulated'] %}
-                        {% set current_real_acumulated = summary['real_acumulated'] %}
-
+                        
                         {% set is_next_equals = false %}
                         {% set next_item = get_next_item(loop,items) %}
 
@@ -165,41 +158,69 @@
                                 {% set is_next_equals = true %}
                             {% endif %}
                         {% endif  %}
-
+                        
                         {% if is_next_equals == true %}
-                            {% set plan_month = plan_month + summary['plan_month'] %}
-                            {% set plan_acumulated = plan_acumulated + summary['plan_acumulated'] %}
-                            {% set real_acumulated = real_acumulated + summary['real_acumulated'] %}
+
                         {% else %}
-                            {% set current_plan_month = current_plan_month + plan_month %}
-                            {% set current_plan_acumulated = current_plan_acumulated + plan_acumulated %}
-                            {% set current_real_acumulated = current_real_acumulated + real_acumulated %}
-
-                            {% set current_percentage = 0 %}
-                            {% if current_plan_acumulated > 0 %}
-                                {% set current_percentage = (current_real_acumulated * 100) / current_plan_acumulated %}
+                            {% if loop.first %}
+                                <tr>
+                                    <td colspan="6" class="text-center bold">
+                                        {{ productReport.product|upper }}
+                                    </td>
+                                </tr>
                             {% endif %}
-                            {% set current_pnr = current_plan_acumulated - current_real_acumulated %}
-                            {% if current_pnr < 0 %}
-                                {% set current_pnr = 0 %}
-                            {% endif %}
-
-                            {# Totalizar#}
-                            {% set total_plan_month = total_plan_month + current_plan_month %}
-                            {% set total_plan_acumulated = total_plan_acumulated + current_plan_acumulated %}
-                            {% set total_real_acumulated = total_real_acumulated + current_real_acumulated %}
-                            <tr>
-                                <th class="header">{{ productReport.product|upper }}</th>
-                                <th class="header">{{ current_plan_month|myNumberFormat }}</th>
-                                <th class="header">{{ current_plan_acumulated|myNumberFormat }}</th>
-                                <th class=" header">{{ current_real_acumulated|myNumberFormat }}</th>
-                                <th class=" header">{{ current_percentage|myNumberFormat }}%</th>
-                                <th class=" header">{{ current_pnr|myNumberFormat }}</th>
-                            </tr>
-                            {% set plan_month = 0 %}
-                            {% set plan_acumulated = 0 %}
-                            {% set real_acumulated = 0 %}
                         {% endif %}
+                        
+                        {% for dateReportInt in range(dateFrom|date('U'), dateEnd|date('U'), 86400 ) %}
+                            {% set dateReport = date(dateReportInt) %}
+                        
+                            {% set summary = productReport.getSummaryMonth(dateReport,typeReport) %}
+                            {% set current_plan_month = summary['plan_month'] %}
+                            {% set current_plan_acumulated = summary['plan_acumulated'] %}
+                            {% set current_real_acumulated = summary['real_acumulated'] %}
+
+                                {% set current_plan_month = current_plan_month + plan_month %}
+                                {% set current_plan_acumulated = current_plan_acumulated + plan_acumulated %}
+                                {% set current_real_acumulated = current_real_acumulated + real_acumulated %}
+
+                                {% set current_percentage = 0 %}
+                                {% if current_plan_acumulated > 0 %}
+                                    {% set current_percentage = (current_real_acumulated * 100) / current_plan_acumulated %}
+                                {% endif %}
+                                {% set current_pnr = current_plan_acumulated - current_real_acumulated %}
+                                {% if current_pnr < 0 %}
+                                    {% set current_pnr = 0 %}
+                                {% endif %}
+
+                                {# Totalizar#}
+                                {% set total_plan_month = total_plan_month + current_plan_month %}
+                                {% set total_plan_acumulated = total_plan_acumulated + current_plan_acumulated %}
+                                {% set total_real_acumulated = total_real_acumulated + current_real_acumulated %}
+                                <tr>
+                                    <th class="header">{{ dateReport|date('d/m/Y') }}&nbsp;-&nbsp;{{ productReport.plantReport|upper }}</th>
+                                    <th class="header">{{ current_plan_month|myNumberFormat }}</th>
+                                    <th class="header">{{ current_plan_acumulated|myNumberFormat }}</th>
+                                    <th class=" header">{{ current_real_acumulated|myNumberFormat }}</th>
+                                    <th class=" header">{{ current_percentage|myNumberFormat }}%</th>
+                                    <th class=" header">{{ current_pnr|myNumberFormat }}</th>
+                                </tr>
+                                {% set plan_month = 0 %}
+                                {% set plan_acumulated = 0 %}
+                                {% set real_acumulated = 0 %}
+                        {% endfor %}
+                        
+                        {% if is_next_equals == true %}
+                                
+                        {% else %}
+                            {% if next_item %}
+                                <tr>
+                                    <td colspan="6" class="text-center bold">
+                                        {{ next_item.product|upper }}
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        {% endif %}
+                        
                     {% endfor %}
                 </tbody>
                 {% set current_percentage = 0 %}
@@ -252,12 +273,7 @@
                     {% set items = productsReport %}
 
                     {% for productReport in productsReport %}
-                        {% set summary = productReport.getSummaryYear(dateReport,typeReport) %}
-
-                        {% set current_plan_year = summary['plan_year'] %}
-                        {% set current_plan_acumulated = summary['plan_acumulated'] %}
-                        {% set current_real_acumulated = summary['real_acumulated'] %}
-
+                        
                         {% set is_next_equals = false %}
                         {% set next_item = get_next_item(loop,items) %}
 
@@ -266,43 +282,72 @@
                                 {% set is_next_equals = true %}
                             {% endif %}
                         {% endif  %}
-
+                        
                         {% if is_next_equals == true %}
-                            {% set plan_year = plan_year + summary['plan_year'] %}
-                            {% set plan_acumulated = plan_acumulated + summary['plan_acumulated'] %}
-                            {% set real_acumulated = real_acumulated + summary['real_acumulated'] %}
+
                         {% else %}
-                            {% set current_plan_year = current_plan_year + plan_year %}
-                            {% set current_plan_acumulated = current_plan_acumulated + plan_acumulated %}
-                            {% set current_real_acumulated = current_real_acumulated + real_acumulated %}
-
-                            {% set current_percentage = 0 %}
-                            {% if current_plan_acumulated > 0 %}
-                                {% set current_percentage = (current_real_acumulated * 100) / current_plan_acumulated %}
+                            {% if loop.first %}
+                                <tr>
+                                    <td colspan="6" class="text-center bold">
+                                        {{ productReport.product|upper }}
+                                    </td>
+                                </tr>
                             {% endif %}
-                            {% set current_pnr = current_plan_acumulated - current_real_acumulated %}
-                            {% if current_pnr < 0 %}
-                                {% set current_pnr = 0 %}
-                            {% endif %}
-
-                            {# Totalizar#}
-                            {% set total_plan_year = total_plan_year + current_plan_year %}
-                            {% set total_plan_acumulated = total_plan_acumulated + current_plan_acumulated %}
-                            {% set total_real_acumulated = total_real_acumulated + current_real_acumulated %}
-
-                            <tr>
-                                <th scope="col" style="width: 7%" class="header">{{ productReport.product|upper }}</th>
-                                <th scope="col" style="width: 7%" class="header">{{ current_plan_year|myNumberFormat }}</th>
-                                <th scope="col" style="width: 7%" class="header">{{ current_plan_acumulated|myNumberFormat }}</th>
-                                <th scope="col" style="width: 7%" class=" header">{{ current_real_acumulated|myNumberFormat }}</th>
-                                <th scope="col" style="width: 7%" class=" header">{{ current_percentage|myNumberFormat }}%</th>
-                                <th scope="col" style="width: 7%"class=" header">{{ current_pnr|myNumberFormat }}</th>
-                            </tr>
-
-                            {% set plan_year = 0 %}
-                            {% set plan_acumulated = 0 %}
-                            {% set real_acumulated = 0 %}
                         {% endif %}
+                        
+                        {% for dateReportInt in range(dateFrom|date('U'), dateEnd|date('U'), 86400 ) %}
+                            {% set dateReport = date(dateReportInt) %}
+                        
+                            {% set summary = productReport.getSummaryYear(dateReport,typeReport) %}
+
+                            {% set current_plan_year = summary['plan_year'] %}
+                            {% set current_plan_acumulated = summary['plan_acumulated'] %}
+                            {% set current_real_acumulated = summary['real_acumulated'] %}
+
+                                {% set current_plan_year = current_plan_year + plan_year %}
+                                {% set current_plan_acumulated = current_plan_acumulated + plan_acumulated %}
+                                {% set current_real_acumulated = current_real_acumulated + real_acumulated %}
+
+                                {% set current_percentage = 0 %}
+                                {% if current_plan_acumulated > 0 %}
+                                    {% set current_percentage = (current_real_acumulated * 100) / current_plan_acumulated %}
+                                {% endif %}
+                                {% set current_pnr = current_plan_acumulated - current_real_acumulated %}
+                                {% if current_pnr < 0 %}
+                                    {% set current_pnr = 0 %}
+                                {% endif %}
+
+                                {# Totalizar#}
+                                {% set total_plan_year = total_plan_year + current_plan_year %}
+                                {% set total_plan_acumulated = total_plan_acumulated + current_plan_acumulated %}
+                                {% set total_real_acumulated = total_real_acumulated + current_real_acumulated %}
+
+                                <tr>
+                                    <th scope="col" style="width: 7%" class="header">{{ dateReport|date('d/m/Y') }}&nbsp;-&nbsp;{{ productReport.plantReport|upper }}</th>
+                                    <th scope="col" style="width: 7%" class="header">{{ current_plan_year|myNumberFormat }}</th>
+                                    <th scope="col" style="width: 7%" class="header">{{ current_plan_acumulated|myNumberFormat }}</th>
+                                    <th scope="col" style="width: 7%" class=" header">{{ current_real_acumulated|myNumberFormat }}</th>
+                                    <th scope="col" style="width: 7%" class=" header">{{ current_percentage|myNumberFormat }}%</th>
+                                    <th scope="col" style="width: 7%"class=" header">{{ current_pnr|myNumberFormat }}</th>
+                                </tr>
+
+                                {% set plan_year = 0 %}
+                                {% set plan_acumulated = 0 %}
+                                {% set real_acumulated = 0 %}
+                        {% endfor %}
+                        
+                        {% if is_next_equals == true %}
+                                
+                        {% else %}
+                            {% if next_item %}
+                                <tr>
+                                    <td colspan="6" class="text-center bold">
+                                        {{ next_item.product|upper }}
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        {% endif %}
+                        
                     {% endfor %}
                 </tbody>
                 {% set current_percentage = 0 %}
