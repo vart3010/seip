@@ -245,7 +245,7 @@ class ReportTemplateController extends SEIPController {
             $productsReport = $plantReport->getProductsReport()->toArray();
         }
         $showDay = $showMonth = $showYear = $defaultShow = $byRange = true;
-        
+        $dateFrom = $dateEnd = new \DateTime();
         $parametersReportTemplate = array(
             'label_attr' => array('class' => 'label bold'),
             'class' => 'Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate',
@@ -356,6 +356,10 @@ class ReportTemplateController extends SEIPController {
             $showDay = $data['showDay'];
             $showMonth = $data['showMonth'];
             $showYear = $data['showYear'];
+            
+            $dateFrom = $data['dateFrom'];
+            $dateEnd = $data['dateEnd'];
+            
             $productsReportConsulting = $data['productsReport'];
             if ($productsReportConsulting && count($productsReportConsulting) > 0) {
                 foreach ($productsReportConsulting as $productReport) {
@@ -468,6 +472,8 @@ class ReportTemplateController extends SEIPController {
             'showMonth' => $showMonth,
             'showYear' => $showYear,
             'byRange' => $byRange,
+            'dateFrom' => $dateFrom,
+            'dateEnd' => $dateEnd,
             'typeReport' => $typeReport,
             "graphicsDays" => $graphicsDays,
             "graphicsMonth" => $graphicsMonth,
