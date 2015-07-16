@@ -244,7 +244,7 @@ class ReportTemplateController extends SEIPController {
             $plantReports->add($plantReport);
             $productsReport = $plantReport->getProductsReport()->toArray();
         }
-        $showDay = $showMonth = $showYear = $defaultShow = true;
+        $showDay = $showMonth = $showYear = $defaultShow = $byRange = true;
         
         $parametersReportTemplate = array(
                 'label_attr' => array('class' => 'label bold'),
@@ -282,11 +282,13 @@ class ReportTemplateController extends SEIPController {
             ->add('reportTemplate','entity',$parametersReportTemplate)
             ->add('plantReport','entity',$parametersPlantReport)
             ->add('dateReport','date',[
+                'label_attr' => array('class' => 'label bold'),
                 'format' => 'd/M/y',
                 'widget' => 'single_text',
                 'translation_domain' => 'PequivenSEIPBundle',
                 'attr' => array('class' => 'input'),
                 'data' => $dateReport,
+                'required' => false,
             ])
             ->add('productsReport','entity',[
                 'label_attr' => array('class' => 'label bold'),
@@ -314,7 +316,30 @@ class ReportTemplateController extends SEIPController {
                 'translation_domain' => 'PequivenSEIPBundle',
                 'data' => $defaultShow,
             ])
+            ->add('byRange','checkbox',[
+                'label_attr' => array('class' => 'label bold'),
+                'required' => false,
+                'translation_domain' => 'PequivenSEIPBundle',
+                'data' => $defaultShow,
+            ])
+            ->add('dateFrom','date',[
+                'label_attr' => array('class' => 'label bold'),
+                'format' => 'd/M/y',
+                'widget' => 'single_text',
+                'translation_domain' => 'PequivenSEIPBundle',
+                'attr' => array('class' => 'input'),
+                'required' => false,
+            ])
+            ->add('dateEnd','date',[
+                'label_attr' => array('class' => 'label bold'),
+                'format' => 'd/M/y',
+                'widget' => 'single_text',
+                'translation_domain' => 'PequivenSEIPBundle',
+                'attr' => array('class' => 'input'),
+                'required' => false,
+            ])
             ->add('typeReport','choice',[
+                'label_attr' => array('class' => 'label bold'),
                 'choices' => [
                     'Gross' => 'Bruta',
                     'Net' => 'Neta',
@@ -327,6 +352,7 @@ class ReportTemplateController extends SEIPController {
         $productsReportConsulting = [];
         if($request->isMethod('POST') && $form->submit($request)->isValid()){
             $data = $form->getData();
+            $byRange = $data['byRange'];
             $showDay = $data['showDay'];
             $showMonth = $data['showMonth'];
             $showYear = $data['showYear'];
@@ -440,6 +466,7 @@ class ReportTemplateController extends SEIPController {
             'showDay' => $showDay,
             'showMonth' => $showMonth,
             'showYear' => $showYear,
+            'byRange' => $byRange,
             'typeReport' => $typeReport,
             "graphicsDays" => $graphicsDays,
             "graphicsMonth" => $graphicsMonth,
