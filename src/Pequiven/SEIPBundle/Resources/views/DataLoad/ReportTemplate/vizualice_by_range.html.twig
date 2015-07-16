@@ -697,15 +697,15 @@
                 </tr>
                 <tr>
                     <th scope="col" style="width: 7%" class="header">PRODUCTO</th>
-                        {%  if showDay %}
+                    {%  if showDay %}
                         <th scope="col" style="width: 7%" class="header">DÍA</th>
-                        {% endif %}
-                        {%  if showMonth %}
+                    {% endif %}
+                    {%  if showMonth %}
                         <th scope="col" style="width: 7%" class=" header">MES</th>
-                        {% endif %}
-                        {%  if showYear %}
+                    {% endif %}
+                    {%  if showYear %}
                         <th scope="col" style="width: 7%" class=" header">AÑO</th>
-                        {% endif %}
+                    {% endif %}
                 </tr>
             </thead>
             <tbody>
@@ -720,12 +720,7 @@
                 {% set items = productsReport %}
 
                 {% for productReport in productsReport %}
-                    {% set summary = productReport.getSummaryUnrealizedProductions(dateReport) %}
-
-                    {% set current_total_day = summary['total_day'] %}
-                    {% set current_total_month = summary['total_month'] %}
-                    {% set current_total_year = summary['total_year'] %}
-
+                    
                     {% set is_next_equals = false %}
                     {% set next_item = get_next_item(loop,items) %}
 
@@ -734,51 +729,91 @@
                             {% set is_next_equals = true %}
                         {% endif %}
                     {% endif  %}
-
-                    {% if is_next_equals == true %}
-                        {% set total_day = total_day + summary['total_day'] %}
-                        {% set total_month = total_month + summary['total_month'] %}
-                        {% set total_year = total_year + summary['total_year'] %}
-                    {% else %}
-                        {% set current_total_day = current_total_day + total_day %}
-                        {% set current_total_month = current_total_month + total_month %}
-                        {% set current_total_year = current_total_year + total_year %}
-
+                    
+                    {% if withDetails == true and loop.first %}
                         <tr>
-                            <th class="header">{{ productReport.product|upper }}</th>
+                            <td colspan="4" class="text-center bold">
+                                {{ productReport.product|upper }}
+                            </td>
+                        </tr>
+                    {% endif %}
+                    
+                    {% for dateReportInt in range(dateFrom|date('U'), dateEnd|date('U'), 86400 ) %}
+                        {% set dateReport = date(dateReportInt) %}
+                        {% set summary = productReport.getSummaryUnrealizedProductions(dateReport) %}
+
+                        {% set current_total_day = summary['total_day'] %}
+                        {% set current_total_month = summary['total_month'] %}
+                        {% set current_total_year = summary['total_year'] %}
+
+                        {% set total_day = current_total_day + total_day %}
+                        {% set total_month = current_total_month + total_month %}
+                        {% set total_year = current_total_year + total_year %}
+
+                        {% if withDetails %}
+                            <tr>
+                                <th class="header">{{ dateReport|date('d/m/Y') }}&nbsp;-&nbsp;{{ productReport.plantReport|upper }}</th>
                                 {%  if showDay %}
-                                <th class="header">{{ current_total_day|myNumberFormat }}</th>
+                                    <th class="header">{{ current_total_day|myNumberFormat }}</th>
                                 {% endif %}
                                 {%  if showMonth %}
-                                <th  class=" header">{{ current_total_month|myNumberFormat }}</th>
+                                    <th  class=" header">{{ current_total_month|myNumberFormat }}</th>
                                 {% endif %}
                                 {%  if showYear %}
-                                <th  class=" header">{{ current_total_year|myNumberFormat }}</th>
+                                    <th  class=" header">{{ current_total_year|myNumberFormat }}</th>
                                 {% endif %}
-                        </tr>
-
-                        {% set total_day = 0 %}
-                        {% set total_month = 0 %}
-                        {% set total_year = 0 %}
-
+                            </tr>
+                        {% endif %}
+                        
+                        {# Totalizar #}
                         {% set summary_total_day = summary_total_day + current_total_day %}
                         {% set summary_total_month = summary_total_month + current_total_month %}
                         {% set summary_total_year = summary_total_year + current_total_year %}
-                        {% if loop.last %}
+                    {% endfor %}
+                    
+                    {% if is_next_equals == false %}
+                        {% if withDetails %}
+                            {% if next_item %}
+                                <tr>
+                                    <td colspan="4" class="text-center bold">
+                                        {{ next_item.product|upper }}
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        {% else %}
                             <tr>
-                                <td>TOTALES</td>
-                                <td>{{ summary_total_day|myNumberFormat }}</td>
-                                <td>{{ summary_total_month|myNumberFormat }}</td>
-                                <td>{{ summary_total_year|myNumberFormat }}</td>
+                                <th class="header">{{ productReport.product|upper }}</th>
+                                {%  if showDay %}
+                                    <th class="header">{{ total_day|myNumberFormat }}</th>
+                                {% endif %}
+                                {%  if showMonth %}
+                                    <th  class=" header">{{ total_month|myNumberFormat }}</th>
+                                {% endif %}
+                                {%  if showYear %}
+                                    <th  class=" header">{{ total_year|myNumberFormat }}</th>
+                                {% endif %}
                             </tr>
-                        {% endif  %}
+                            
+                            {% set total_day = 0 %}
+                            {% set total_month = 0 %}
+                            {% set total_year = 0 %}
+                        {% endif %}
                     {% endif %}
+                    
                 {% else %}
                     <tr>
                         <td colspan="4" class="empty_row">{{ "No service planning"|trans }}</td>
                     </tr>
                 {% endfor %}
             </tbody>
+            <tfoot>
+                <tr>
+                    <td>TOTALES</td>
+                    <td>{{ summary_total_day|myNumberFormat }}</td>
+                    <td>{{ summary_total_month|myNumberFormat }}</td>
+                    <td>{{ summary_total_year|myNumberFormat }}</td>
+                </tr>
+            </tfoot>
         </table>
     </div>
 </div>
@@ -787,7 +822,7 @@
         <table class="simple-table responsive-table responsive-table-on">
             <thead>
                 <tr>
-                    <th class="header text-center white-gradient" colspan="5">INVENTARIO</th>
+                    <th class="header text-center white-gradient" colspan="4">INVENTARIO</th>
                 </tr>
                 <tr>
                     <th scope="col" style="width: 7%" class="header">PRODUCTO</th>
@@ -802,7 +837,6 @@
             <tbody>
                 {% set total_day = 0 %}
                 {% set total_month = 0 %}
-                {% set total_year = 0 %}
 
                 {% set summary_total_day = 0 %}
                 {% set summary_total_month = 0 %}
@@ -810,11 +844,7 @@
                 {% set items = productsReport %}
 
                 {% for productReport in productsReport %}
-                    {% set summary = productReport.getSummaryInventory(dateReport) %}
-
-                    {% set current_total_day = summary['total_day'] %}
-                    {% set current_total_month = summary['total_month'] %}
-
+                    
                     {% set is_next_equals = false %}
                     {% set next_item = get_next_item(loop,items) %}
 
@@ -823,39 +853,79 @@
                             {% set is_next_equals = true %}
                         {% endif %}
                     {% endif  %}
-                    {% if is_next_equals == true %}
-                        {% set total_day = total_day + summary['total_day'] %}
-                        {% set total_month = total_month + summary['total_month'] %}
-                    {% else %}
-                        {% set current_total_day = current_total_day + total_day %}
-                        {% set current_total_month = current_total_month + total_month %}
-
+                    
+                    {% if withDetails == true and loop.first %}
                         <tr>
-                            <th  class="header">{{ productReport.product|upper }}</th>
-                                {%  if showDay %}
-                                <th  class="header">{{ current_total_day|myNumberFormat }}</th>
-                                {% endif %}
-                                {%  if showMonth %}
-                                <th  class=" header">{{ current_total_month|myNumberFormat }}</th>
-                                {% endif %}
+                            <td colspan="4" class="text-center bold">
+                                {{ productReport.product|upper }}
+                            </td>
                         </tr>
                     {% endif %}
+                    
+                    {% for dateReportInt in range(dateFrom|date('U'), dateEnd|date('U'), 86400 ) %}
+                        {% set dateReport = date(dateReportInt) %}
+                        {% set summary = productReport.getSummaryInventory(dateReport) %}
 
-                    {% set summary_total_day = summary_total_day + current_total_day %}
-                    {% set summary_total_month = summary_total_month + current_total_month %}
-                    {% if loop.last %}
-                        <tr>
-                            <td>TOTALES</td>
-                            <td>{{ summary_total_day|myNumberFormat }}</td>
-                            <td>{{ summary_total_month|myNumberFormat }}</td>
-                        </tr>
-                    {% endif  %}
+                        {% set current_total_day = summary['total_day'] %}
+                        {% set current_total_month = summary['total_month'] %}
+
+                        {% if withDetails %}
+                            <tr>
+                                <th  class="header">{{ dateReport|date('d/m/Y') }}&nbsp;-&nbsp;{{ productReport.plantReport|upper }}</th>
+                                {%  if showDay %}
+                                    <th  class="header">{{ current_total_day|myNumberFormat }}</th>
+                                {% endif %}
+                                {%  if showMonth %}
+                                    <th  class=" header">{{ current_total_month|myNumberFormat }}</th>
+                                {% endif %}
+                            </tr>
+                        {% endif %}
+
+                        {# Totalizar #}
+                        {% set total_day = current_total_day + total_day %}
+                        {% set total_month = current_total_month + total_month %}
+                        
+                        {% set summary_total_day = summary_total_day + current_total_day %}
+                        {% set summary_total_month = summary_total_month + current_total_month %}
+                    {% endfor %}
+                    
+                    {% if is_next_equals == false %}
+                        {% if withDetails %}
+                            {% if next_item %}
+                                <tr>
+                                    <td colspan="4" class="text-center bold">
+                                        {{ next_item.product|upper }}
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        {% else %}
+                            <tr>
+                                <th  class="header">{{ productReport.product|upper }}</th>
+                                {%  if showDay %}
+                                    <th  class="header">{{ total_day|myNumberFormat }}</th>
+                                {% endif %}
+                                {%  if showMonth %}
+                                    <th  class=" header">{{ total_month|myNumberFormat }}</th>
+                                {% endif %}
+                            </tr>
+                            {% set total_day = 0 %}
+                            {% set total_month = 0 %}
+                        {% endif %}
+                    {% endif %}
+                    
                 {% else %}
                     <tr>
                         <td colspan="4" class="empty_row">{{ "No inventory planning"|trans }}</td>
                     </tr>
                 {% endfor %}
             </tbody>
+            <tfoot>
+                <tr>
+                    <td>TOTALES</td>
+                    <td>{{ summary_total_day|myNumberFormat }}</td>
+                    <td>{{ summary_total_month|myNumberFormat }}</td>
+                </tr>
+            </tfoot>
         </table>
     </div>
 </div>
@@ -865,7 +935,7 @@
             <table class="simple-table responsive-table responsive-table-on">
                 <thead>
                     <tr>
-                        <th class="header text-center white-gradient" colspan="5">OBSERVACIONES DEL DÍA</th>
+                        <th class="header text-center white-gradient" colspan="2">OBSERVACIONES DEL DÍA</th>
                     </tr>
                     <tr>
                         <th scope="col" style="width: 20%" class="header">PRODUCTO</th>
@@ -874,11 +944,15 @@
                 </thead>
                 <tbody>
                     {% for productReport in productsReport %}
-                        {% set summary = productReport.getSummaryDay(dateReport,typeReport) %}
-                        <tr>
-                            <th scope="col" style="width: 20%" class="header">{{ productReport.product|upper }}</th>
-                            <th scope="col" style="width: 80%" class="header">{{ (summary['observation'] is null ? ("pequiven_seip.comment_none"|trans):summary['observation']) |upper }}</th>
-                        </tr>
+                        
+                        {% for dateReportInt in range(dateFrom|date('U'), dateEnd|date('U'), 86400 ) %}
+                            {% set dateReport = date(dateReportInt) %}
+                            {% set summary = productReport.getSummaryDay(dateReport,typeReport) %}
+                            <tr>
+                                <th scope="col" style="width: 20%" class="header">{{ dateReport|date('d/m/Y') }}&nbsp;-&nbsp;{{ productReport.product|upper }}</th>
+                                <th scope="col" style="width: 80%" class="header">{{ (summary['observation'] is null ? ("pequiven_seip.comment_none"|trans):summary['observation']) |upper }}</th>
+                            </tr>
+                        {% endfor %}
                     {% endfor %}
                 </tbody>
             </table>
