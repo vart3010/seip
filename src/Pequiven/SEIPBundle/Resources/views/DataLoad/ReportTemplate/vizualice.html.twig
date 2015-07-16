@@ -83,8 +83,6 @@
                             <li {% if showDay %} class="" {% else %} class="disabled" {% endif %}><a href="#tab-1">Dia</a></li>
                             <li {% if showMonth %} class="" {% else %} class="disabled" {% endif %}><a href="#tab-2">Mes</a></li>
                             <li {% if showYear %} class="" {% else %} class="disabled" {% endif %}><a href="#tab-3">Año</a></li>
-
-
                         </ul>
 
                         <div class="tabs-content">
@@ -124,11 +122,6 @@
 
                     </div>
                 </div>
-
-
-
-
-
             </div>
             <div class="columns">
                 <div class="twelve-columns twelve-columns-mobile">
@@ -137,7 +130,7 @@
             </div>
             <div class="columns">
                 {% if showDay  %}
-                    <div class="six-columns twelve-columns-mobile">
+                    <div class="twelve-columns twelve-columns-mobile">
                         <table class="simple-table responsive-table responsive-table-on">
                             <thead>
                                 <tr>
@@ -152,6 +145,8 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                {% set total_plan = 0 %}
+                                {% set total_real = 0 %}
                                 {% set plan = 0 %}
                                 {% set real = 0 %}
                                 {% set pnr = 0 %}
@@ -191,12 +186,15 @@
                                         {% if current_pnr < 0 %}
                                             {% set current_pnr = 0 %}
                                         {% endif %}
-
+                                        
+                                        {# Totalizar#}
+                                        {% set total_plan = total_plan + current_plan %}
+                                        {% set total_real = total_real + current_real %}
                                         <tr>
                                             <th scope="col" style="width: 7%" class="header">{{ productReport.product|upper }}</th>
                                             <th scope="col" style="width: 7%" class="header">{{ current_plan|myNumberFormat }}</th>
                                             <th scope="col" style="width: 7%" class=" header">{{ current_real|myNumberFormat }}</th>
-                                            <th scope="col" style="width: 7%" class=" header">{{ current_percentage|myNumberFormat }}</th>
+                                            <th scope="col" style="width: 7%" class=" header">{{ current_percentage|myNumberFormat }}%</th>
                                             <th scope="col" width="15%" class=" header">{{ current_pnr|myNumberFormat }}</th>
                                         </tr>
 
@@ -205,11 +203,28 @@
                                     {% endif %}
                                 {% endfor %}
                             </tbody>
+                            {% set total_percentage = 0 %}
+                            {% if total_plan > 0 %}
+                                {% set total_percentage = (total_real * 100) / total_plan %}
+                            {% endif %}
+                            {% set total_pnr = total_plan - total_real %}
+                            {% if total_pnr < 0 %}
+                                {% set total_pnr = 0 %}
+                            {% endif %}
+                            <tfoot>
+                                <tr>
+                                    <th scope="col" style="width: 7%" class="header">TOTALES</th>
+                                    <th scope="col" style="width: 7%" class="header">{{ total_plan|myNumberFormat }}</th>
+                                    <th scope="col" style="width: 7%" class=" header">{{ total_real|myNumberFormat }}</th>
+                                    <th scope="col" style="width: 7%" class=" header">{{ total_percentage|myNumberFormat }}%</th>
+                                    <th scope="col" width="15%" class=" header">{{ total_pnr|myNumberFormat }}</th>
+                                </tr>
+                            </tfoot>
                         </table>
                     </div>
                 {% endif %}
                 {% if showMonth %}
-                    <div class="six-columns twelve-columns-mobile">
+                    <div class="twelve-columns twelve-columns-mobile">
                         <table class="simple-table responsive-table responsive-table-on">
                             <thead>
                                 <tr>
@@ -225,6 +240,9 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                {% set total_plan_month = 0 %}
+                                {% set total_plan_acumulated = 0 %}
+                                {% set total_real_acumulated = 0 %}
                                 {% set plan_month = 0 %}
                                 {% set plan_acumulated = 0 %}
                                 {% set real_acumulated = 0 %}
@@ -264,13 +282,17 @@
                                         {% if current_pnr < 0 %}
                                             {% set current_pnr = 0 %}
                                         {% endif %}
-
+                                        
+                                        {# Totalizar#}
+                                        {% set total_plan_month = total_plan_month + current_plan_month %}
+                                        {% set total_plan_acumulated = total_plan_acumulated + current_plan_acumulated %}
+                                        {% set total_real_acumulated = total_real_acumulated + current_real_acumulated %}
                                         <tr>
                                             <th class="header">{{ productReport.product|upper }}</th>
                                             <th class="header">{{ current_plan_month|myNumberFormat }}</th>
                                             <th class="header">{{ current_plan_acumulated|myNumberFormat }}</th>
                                             <th class=" header">{{ current_real_acumulated|myNumberFormat }}</th>
-                                            <th class=" header">{{ current_percentage|myNumberFormat }}</th>
+                                            <th class=" header">{{ current_percentage|myNumberFormat }}%</th>
                                             <th class=" header">{{ current_pnr|myNumberFormat }}</th>
                                         </tr>
                                         {% set plan_month = 0 %}
@@ -279,6 +301,24 @@
                                     {% endif %}
                                 {% endfor %}
                             </tbody>
+                            {% set current_percentage = 0 %}
+                            {% if total_plan_acumulated > 0 %}
+                                {% set current_percentage = (total_real_acumulated * 100) / total_plan_acumulated %}
+                            {% endif %}
+                            {% set current_pnr = total_plan_acumulated - total_real_acumulated %}
+                            {% if current_pnr < 0 %}
+                                {% set current_pnr = 0 %}
+                            {% endif %}
+                            <tfoot>
+                                <tr>
+                                    <th class="header">TOTALES</th>
+                                    <th class="header">{{ total_plan_month|myNumberFormat }}</th>
+                                    <th class="header">{{ total_plan_acumulated|myNumberFormat }}</th>
+                                    <th class=" header">{{ total_real_acumulated|myNumberFormat }}</th>
+                                    <th class=" header">{{ current_percentage|myNumberFormat }}%</th>
+                                    <th class=" header">{{ current_pnr|myNumberFormat }}</th>
+                                </tr>
+                            </tfoot>
                         </table>
                     </div>
                 {% endif %}
@@ -301,6 +341,9 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                {% set total_plan_year = 0 %}
+                                {% set total_plan_acumulated = 0 %}
+                                {% set total_real_acumulated = 0 %}
                                 {% set plan_year = 0 %}
                                 {% set plan_acumulated = 0 %}
                                 {% set real_acumulated = 0 %}
@@ -340,12 +383,18 @@
                                         {% if current_pnr < 0 %}
                                             {% set current_pnr = 0 %}
                                         {% endif %}
+                                        
+                                        {# Totalizar#}
+                                        {% set total_plan_year = total_plan_year + current_plan_year %}
+                                        {% set total_plan_acumulated = total_plan_acumulated + current_plan_acumulated %}
+                                        {% set total_real_acumulated = total_real_acumulated + current_real_acumulated %}
+                                        
                                         <tr>
                                             <th scope="col" style="width: 7%" class="header">{{ productReport.product|upper }}</th>
                                             <th scope="col" style="width: 7%" class="header">{{ current_plan_year|myNumberFormat }}</th>
                                             <th scope="col" style="width: 7%" class="header">{{ current_plan_acumulated|myNumberFormat }}</th>
                                             <th scope="col" style="width: 7%" class=" header">{{ current_real_acumulated|myNumberFormat }}</th>
-                                            <th scope="col" style="width: 7%" class=" header">{{ current_percentage|myNumberFormat }}</th>
+                                            <th scope="col" style="width: 7%" class=" header">{{ current_percentage|myNumberFormat }}%</th>
                                             <th scope="col" style="width: 7%"class=" header">{{ current_pnr|myNumberFormat }}</th>
                                         </tr>
 
@@ -355,6 +404,24 @@
                                     {% endif %}
                                 {% endfor %}
                             </tbody>
+                            {% set current_percentage = 0 %}
+                            {% if total_plan_acumulated > 0 %}
+                                {% set current_percentage = (total_real_acumulated * 100) / total_plan_acumulated %}
+                            {% endif %}
+                            {% set current_pnr = total_plan_acumulated - total_real_acumulated %}
+                            {% if current_pnr < 0 %}
+                                {% set current_pnr = 0 %}
+                            {% endif %}
+                            <tfoot>
+                                <tr>
+                                    <th class="header">TOTALES</th>
+                                    <th class="header">{{ total_plan_year|myNumberFormat }}</th>
+                                    <th class="header">{{ total_plan_acumulated|myNumberFormat }}</th>
+                                    <th class=" header">{{ total_real_acumulated|myNumberFormat }}</th>
+                                    <th class=" header">{{ current_percentage|myNumberFormat }}%</th>
+                                    <th class=" header">{{ current_pnr|myNumberFormat }}</th>
+                                </tr>
+                            </tfoot>
                         </table>
                     </div>
                 </div>
@@ -388,10 +455,6 @@
                             {% set total_day = 0 %}
                             {% set total_month = 0 %}
                             {% set total_year = 0 %}
-
-                            {% set summary_total_day = 0 %}
-                            {% set summary_total_month = 0 %}
-                            {% set summary_total_year = 0 %}
 
                             {% set items = rawMaterialConsumptionPlannings %}
 
@@ -434,19 +497,7 @@
                                     {% set total_day = 0 %}
                                     {% set total_month = 0 %}
                                     {% set total_year = 0 %}
-
-                                    {% set summary_total_day = summary_total_day + current_total_day %}
-                                    {% set summary_total_month = summary_total_month + current_total_month %}
-                                    {% set summary_total_year = summary_total_year + current_total_year %}
                                 {% endif %}
-                                {% if loop.last %}
-                                    <tr>
-                                        <td>TOTALES</td>
-                                        <td>{{ summary_total_day|myNumberFormat }}</td>
-                                        <td>{{ summary_total_month|myNumberFormat }}</td>
-                                        <td>{{ summary_total_year|myNumberFormat }}</td>
-                                    </tr>
-                                {% endif  %}
                             {% else %}
                                 <tr>
                                     <td colspan="4" class="empty_row">{{ "No raw material planning"|trans }}</td>
@@ -478,10 +529,6 @@
                             {% set total_day = 0 %}
                             {% set total_month = 0 %}
                             {% set total_year = 0 %}
-
-                            {% set summary_total_day = 0 %}
-                            {% set summary_total_month = 0 %}
-                            {% set summary_total_year = 0 %}
 
                             {% set items = consumerPlanningServices %}
 
@@ -524,19 +571,7 @@
                                     {% set total_day = 0 %}
                                     {% set total_month = 0 %}
                                     {% set total_year = 0 %}
-
-                                    {% set summary_total_day = summary_total_day + current_total_day %}
-                                    {% set summary_total_month = summary_total_month + current_total_month %}
-                                    {% set summary_total_year = summary_total_year + current_total_year %}
                                 {% endif %}
-                                {% if loop.last %}
-                                    <tr>
-                                        <td>TOTALES</td>
-                                        <td>{{ summary_total_day|myNumberFormat }}</td>
-                                        <td>{{ summary_total_month|myNumberFormat }}</td>
-                                        <td>{{ summary_total_year|myNumberFormat }}</td>
-                                    </tr>
-                                {% endif  %}
                             {% else %}
                                 <tr>
                                     <td colspan="4" class="empty_row">{{ "No service planning"|trans }}</td>
@@ -570,7 +605,11 @@
                             {% set total_day = 0 %}
                             {% set total_month = 0 %}
                             {% set total_year = 0 %}
-
+                            
+                            {% set summary_total_day = 0 %}
+                            {% set summary_total_month = 0 %}
+                            {% set summary_total_year = 0 %}
+                            
                             {% set items = productsReport %}
 
                             {% for productReport in productsReport %}
@@ -614,6 +653,18 @@
                                     {% set total_day = 0 %}
                                     {% set total_month = 0 %}
                                     {% set total_year = 0 %}
+                                    
+                                    {% set summary_total_day = summary_total_day + current_total_day %}
+                                    {% set summary_total_month = summary_total_month + current_total_month %}
+                                    {% set summary_total_year = summary_total_year + current_total_year %}
+                                    {% if loop.last %}
+                                        <tr>
+                                            <td>TOTALES</td>
+                                            <td>{{ summary_total_day|myNumberFormat }}</td>
+                                            <td>{{ summary_total_month|myNumberFormat }}</td>
+                                            <td>{{ summary_total_year|myNumberFormat }}</td>
+                                        </tr>
+                                    {% endif  %}
                                 {% endif %}
                             {% else %}
                                 <tr>
@@ -646,6 +697,9 @@
                             {% set total_month = 0 %}
                             {% set total_year = 0 %}
 
+                            {% set summary_total_day = 0 %}
+                            {% set summary_total_month = 0 %}
+                            
                             {% set items = productsReport %}
 
                             {% for productReport in productsReport %}
@@ -679,6 +733,16 @@
                                             {% endif %}
                                     </tr>
                                 {% endif %}
+                                
+                                {% set summary_total_day = summary_total_day + current_total_day %}
+                                {% set summary_total_month = summary_total_month + current_total_month %}
+                                {% if loop.last %}
+                                    <tr>
+                                        <td>TOTALES</td>
+                                        <td>{{ summary_total_day|myNumberFormat }}</td>
+                                        <td>{{ summary_total_month|myNumberFormat }}</td>
+                                    </tr>
+                                {% endif  %}
                             {% else %}
                                 <tr>
                                     <td colspan="4" class="empty_row">{{ "No inventory planning"|trans }}</td>
