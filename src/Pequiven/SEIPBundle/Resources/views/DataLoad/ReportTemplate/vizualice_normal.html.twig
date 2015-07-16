@@ -414,15 +414,16 @@
                         {% set current_total_month = current_total_month + total_month %}
                         {% set current_total_year = current_total_year + total_year %}
                         <tr>
+                            {% set productUnit = rawMaterialConsumptionPlanning.product.productUnit %}
                             <th class="header">{{ rawMaterialConsumptionPlanning.product|upper }}</th>
                                 {%  if showDay %}
-                                <th class="header">{{ current_total_day|myNumberFormat }}</th>
+                                <th class="header">{{ current_total_day|myNumberFormat }}&nbsp;{{ productUnit }}</th>
                                 {% endif %}
                                 {%  if showMonth %}
-                                <th class=" header">{{ current_total_month|myNumberFormat }}</th>
+                                <th class=" header">{{ current_total_month|myNumberFormat }}&nbsp;{{ productUnit }}</th>
                                 {% endif %}
                                 {%  if showYear %}
-                                <th class=" header">{{ current_total_year|myNumberFormat }}</th>
+                                <th class=" header">{{ current_total_year|myNumberFormat }}&nbsp;{{ productUnit }}</th>
                                 {% endif %}
                         </tr>
                         {% set total_day = 0 %}
@@ -488,15 +489,16 @@
                         {% set current_total_month = current_total_month + total_month %}
                         {% set current_total_year = current_total_year + total_year %}
                         <tr>
+                            {% set serviceUnit = consumerPlanningService.service.serviceUnit %}
                             <th class="header">{{ consumerPlanningService.service|upper }}</th>
                                 {%  if showDay %}
-                                <th class="header">{{ current_total_day|myNumberFormat }}</th>
+                                <th class="header">{{ current_total_day|myNumberFormat }}&nbsp;{{ serviceUnit }}</th>
                                 {% endif %}
                                 {%  if showMonth %}
-                                <th class=" header">{{ current_total_month|myNumberFormat }}</th>
+                                <th class=" header">{{ current_total_month|myNumberFormat }}&nbsp;{{ serviceUnit }}</th>
                                 {% endif %}
                                 {%  if showYear %}
-                                <th class=" header">{{ current_total_year|myNumberFormat }}</th>
+                                <th class=" header">{{ current_total_year|myNumberFormat }}&nbsp;{{ serviceUnit }}</th>
                                 {% endif %}
                         </tr>
                         {% set total_day = 0 %}
