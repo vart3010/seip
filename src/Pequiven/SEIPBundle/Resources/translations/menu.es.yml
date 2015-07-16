@@ -192,4 +192,7 @@ app:
                         notification:
                             main: Notificación
                             production: Producción
+                        monitor:
+                            main: Monitor
+                            production: Producción
                             

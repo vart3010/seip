@@ -59,13 +59,13 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for product in indicator.valueIndicatorConfig.products %}
+                        {% for productReport in indicator.valueIndicatorConfig.productReports %}
                             <tr>
                                 <th scope="row">
-                                    {{ product.name }}
-                                    {% if (product.components|length) > 0 %}
+                                    {{ productReport.product.name }}
+                                    {% if (productReport.product.components|length) > 0 %}
                                         <ul>
-                                            {% for component in product.components %}
+                                            {% for component in productReport.product.components %}
                                                 <li>{{ component }}</li>
                                             {% endfor %}
                                         </ul>

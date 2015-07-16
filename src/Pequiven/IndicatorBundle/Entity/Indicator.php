@@ -495,14 +495,14 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @var boolean
      * @ORM\Column(name="isValueRealFromEquationRealFormula",type="boolean")
      */
-    private $isValueRealFromEquationRealFormula;
+    private $isValueRealFromEquationRealFormula = false;
     
     /**
      * ¿Se quiere mostrar el valor de una ecuación en lugar del valor plan en la ficha del indicador?
      * @var boolean
      * @ORM\Column(name="isValuePlanFromEquationPlanFormula",type="boolean")
      */
-    private $isValuePlanFromEquationPlanFormula;
+    private $isValuePlanFromEquationPlanFormula = false;
     
     /**
      * Constructor

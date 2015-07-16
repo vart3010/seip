@@ -35,6 +35,26 @@ abstract class Indicator implements IndicatorInterface {
      * Tipo de calculo por formula y valores de las variables automaticos desde ecuacion con las variables de lo hijos
      */
     const TYPE_CALCULATION_FORMULA_AUTOMATIC_FROM_EQ = 2;
+    
+    // TIPOS DE SECCIONES DE RESULTADOS A PARTIR DE LAS PLANTILLAS DE REPORTE
+    
+    /**
+     * Sección Producción Bruta
+     */
+    const TYPE_RESULT_SECTION_PRODUCTION_GROSS = 1;
+    /**
+     * Sección Producción Neta
+     */
+    const TYPE_RESULT_SECTION_PRODUCTION_NET = 2;
+    /**
+     * Sección Producción No Realizada
+     */
+    const TYPE_RESULT_SECTION_UNREALIZED_PRODUCTION = 3;
+    /**
+     * Sección Materia Prima
+     */
+    const TYPE_RESULT_SECTION_RAW_MATERIAL = 4;
+    
 
     /**
      * Indicador con fórmula asociada
@@ -129,6 +149,13 @@ abstract class Indicator implements IndicatorInterface {
      * @var type 
      */
     protected $variableToShow;
+    
+    /**
+     * 
+     * @var integer
+     * @ORM\Column(name="typeOfResultSection", type="integer", nullable=false)
+     */
+    protected $typeOfResultSection = self::TYPE_CALCULATION_FORMULA_MANUALLY;
 
     /**
      * Set indicatorLevel
@@ -324,6 +351,49 @@ abstract class Indicator implements IndicatorInterface {
             \Pequiven\IndicatorBundle\Entity\IndicatorLevel::LEVEL_OPERATIVO => 'pequiven_indicator.indicator_operative',
         );
     }
+    
+    /**
+     * Retorna la sección de tipo de resultado del indicador
+     * @return integer
+     */
+    function getTypeOfResultSection() {
+        return $this->typeOfResultSection;
+    }
 
+    /**
+     * Establece la sección de tipo de resultado del indicador
+     * 
+     * @param integer $typeOfResultSection
+     * @return \Pequiven\IndicatorBundle\Model\Indicator
+     */
+    function setTypeOfResultSection($typeOfResultSection) {
+        $this->typeOfResultSection = $typeOfResultSection;
+
+        return $this;
+    }
+    
+    /**
+     * Retorna las secciones de tipo de resultado del indicador
+     * 
+     * @staticvar array $typesOfResultSection
+     * @return array
+     */
+    static function getTypesOfResultSection() {
+        static $typesOfResultSection = array(
+            self::TYPE_RESULT_SECTION_PRODUCTION_GROSS => 'pequiven_indicator.type_result_section.production_gross',
+            self::TYPE_RESULT_SECTION_PRODUCTION_NET => 'pequiven_indicator.type_result_section.production_net',
+            self::TYPE_RESULT_SECTION_UNREALIZED_PRODUCTION => 'pequiven_indicator.type_result_section.unrealized_production',
+            self::TYPE_RESULT_SECTION_RAW_MATERIAL => 'pequiven_indicator.type_result_section.raw_material',
+        );
+        return $typesOfResultSection;
+    }
+    
+    function getTypeOfResultSectionLabel() {
+        $typesOfResultSection = self::getTypesOfResultSection();
+        if (isset($typesOfResultSection[$this->typeOfResultSection]) === false) {
+            throw new Exception(sprintf('The type of result section "%s" dont exist', $this->typeOfResultSection));
+        }
+        return $typesOfResultSection[$this->typeOfResultSection];
+    }
     
 }

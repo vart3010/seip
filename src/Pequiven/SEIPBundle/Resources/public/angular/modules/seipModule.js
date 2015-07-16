@@ -1490,6 +1490,47 @@ angular.module('seipModule.controllers', [])
                     return false;
                 });
             };
+            var obtainValues = function (save, successCallBack) {
+                var formValueIndicator = angular.element('#form_value_indicator');
+                var formData = formValueIndicator.serialize();
+                
+                var url = Routing.generate('pequiven_value_indicator_obtain_values', {idIndicator: $scope.indicator.id});
+                
+                notificationBarService.getLoadStatus().loading();
+                return $http({
+                    method: 'POST',
+                    url: url,
+                    data: formData,
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'}  // set the headers so angular passing info as form data (not request payload)
+                }).success(function (data) {
+                    $scope.templateOptions.setVar("form", {errors: {}});
+                    $scope.templateOptions.setVar('evaluationResult', data.result);
+                    var formVarRealName = '#form_'+data.varRealName;
+                    var formVarPlanName = '#form_'+data.varPlanName;
+                    angular.element(formVarRealName).val(data.real);
+                    angular.element(formVarPlanName).val(data.plan);
+                    $scope.templateOptions.setVar('real', data.real);
+                    $scope.templateOptions.setVar('plan', data.plan);
+                    if (successCallBack) {
+                        successCallBack(data);
+                    }
+                    notificationBarService.getLoadStatus().done();
+                    return true;
+                }).error(function (data, status, headers, config) {
+                    $scope.templateOptions.setVar("form", {errors: {}});
+                    if (data.errors) {
+                        if (data.errors.errors) {
+                            $.each(data.errors.errors, function (index, value) {
+                                notifyService.error(Translator.trans(value));
+                            });
+                        }
+                        $scope.templateOptions.setVar("form", {errors: data.errors.children});
+                    }
+                    $scope.templateOptions.setVar('evaluationResult', 0);
+                    notificationBarService.getLoadStatus().done();
+                    return false;
+                });
+            };
             var sendFeatureIndicator = function (successCallBack) {
                 var formValueIndicator = angular.element('#form_feature_indicator');
                 var formData = formValueIndicator.serialize();
@@ -1524,10 +1565,14 @@ angular.module('seipModule.controllers', [])
                 });
             };
             $scope.templateOptions.setVar('evaluateFormula', evaluateFormula);
+            $scope.templateOptions.setVar('obtainValues', obtainValues);
             $scope.templateOptions.setVar('sendFeatureIndicator', sendFeatureIndicator);
             $scope.templateOptions.setVar('evaluationResult', 0);
             var confirmCallBack = function () {
                 evaluateFormula(true, function (data) {
+                    $scope.indicator = data.indicator;
+                });
+                obtainValues(true, function (data) {
                     $scope.indicator = data.indicator;
                 });
                 return true;
