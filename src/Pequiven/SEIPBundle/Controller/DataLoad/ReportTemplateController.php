@@ -654,7 +654,7 @@ class ReportTemplateController extends SEIPController {
             "title" => "Servicios",
             "col" => array("B", "C", "D", "E"),
             "campos" => array("Producto", "DIA", "MES", "AÑO"),
-            "color" => "ffaa15"
+            "color" => "98bfbf"
         );
 
         $this->setFormatTitle($dataConsumo, $activeSheet, $rowCont);
@@ -682,7 +682,7 @@ class ReportTemplateController extends SEIPController {
             "title" => "Producción No Realizada",
             "col" => array("B", "C", "D", "E"),
             "campos" => array("Producto", "DIA", "MES", "AÑO"),
-            "color" => "ffbb15"
+            "color" => "62cf5a"
         );
         $this->setFormatTitle($dataUnrealized, $activeSheet, $rowCont);
         $rowCont = $this->setTitlesRows($activeSheet, $dataUnrealized, $rowCont);
@@ -735,7 +735,7 @@ class ReportTemplateController extends SEIPController {
             "row" => $rowCont,
             "col" => array("B", "C"),
             "campos" => array("Producto", "Observación"),
-            "color" => "ddbb15"
+            "color" => "c7c7b3"
         );
         $observaciones = array();
         $name = array();
@@ -771,8 +771,8 @@ class ReportTemplateController extends SEIPController {
         /*         * ****************************** */
 
 
-
-        $fileName = sprintf("archivo.xls");
+        
+        $fileName = sprintf("Reporte de Producción ".date("d-m-Y").".xls");
 
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="' . $fileName . '"');
