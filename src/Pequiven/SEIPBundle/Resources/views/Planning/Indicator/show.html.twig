@@ -271,7 +271,19 @@
         <br /><br />
         {% include 'PequivenSEIPBundle:Planning:Indicator/show/history.html.twig' with {'entity':indicator} %}
     </div>
+
     <p class="button-height align-right">
+
+    <!-- Visulaizacion de Indice de evolucion -->
+
+        {% if  is_granted('ROLE_SEIP_SIG_INDICATOR_VIEW') %}
+        &nbsp;
+            {{ buttons.generic_ext(path('pequiven_indicator_evolution', { 'id': indicator.id }),('pequiven.evolution'|trans({},'messages'))) }}
+        {% endif %}
+        &nbsp;
+        
+    <!-- end -->
+
         {% if is_granted(['ROLE_WORKER_PLANNING','ROLE_SEIP_INDICATOR_ADD_OBSERVATION']) %}
             {% set filedObservation = '<br/><br/><textarea name="observation" class="input" placeholder="' ~ ('pequiven.arrangement_program.write_observation'|trans({},'PequivenArrangementProgramBundle')) ~ '" required="required" cols="28" rows="10" ></textarea>' %}
 

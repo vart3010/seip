@@ -151,21 +151,57 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                     ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.objective.matrices_objectives', $section)));
 
                 $menuSig->addChild($objective);
-                
+
+                //Indicator                
                 $indicator = $this->factory->createItem('indicator.main',
                         $this->getSubLevelOptions(array(
-                        'uri' => 'indicator',
+                        'uri'             => 'indicator',
                         'labelAttributes' => array('icon' => '',),
                         ))
                     )->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.indicator.main', $section)));
+                //Nivel 2
+                if($this->isGranted('ROLE_SEIP_SIG_MENU'))
+                {
                //Ver 
-                $indicator->addChild('sig.indicator.list', array(
-                        'route' => '',
+                    $visualize = $this->factory->createItem('sig.indicator.list',
+                        $this->getSubLevelOptions(array(
+                        'uri'             => 'null',
+                        'labelAttributes' => array('icon' => '',),
                     ))
-                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.indicator.visualize', $section)));
+                    )->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.indicator.visualize', $section)));
+                    //Nivel 3
+                    if($this->isGranted('ROLE_SEIP_SIG_MENU'))
+                    {
+                        $itemStrategic = $this->factory->createItem('arrangement_strategic.indicators.list.strategic', array(
+                            'route' => 'pequiven_indicator_menu_list_strategic',
+                        ))
+                        ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.indicators.list.strategic', $section)));
+                         $visualize->addChild($itemStrategic);
+                    }
+                    if($this->isGranted('ROLE_SEIP_SIG_MENU'))
+                    {
+                        $itemTactic = $this->factory->createItem('arrangement_strategic.indicators.list.tactic', array(
+                            'route' => 'pequiven_indicator_menu_list_tactic',
+                        ))
+                        ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.indicators.list.tactic', $section)));
+                         $visualize->addChild($itemTactic);
+                    } 
+                    if($this->isGranted('ROLE_SEIP_SIG_MENU'))
+                    {
+                        $itemOperative = $this->factory->createItem('arrangement_strategic.indicators.list.operative', array(
+                            'route' => 'pequiven_indicator_menu_list_operative',
+                        ))
+                        ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.indicators.list.operative', $section)));
+                         $visualize->addChild($itemOperative);
+                    } 
+
+                $indicator->addChild($visualize);                
+
+                }
 
                 $menuSig->addChild($indicator);
-                
+                //Fin indicadores
+
                 
                 //Sección Programas de Gestión
                 $arrangementProgram = $this->factory->createItem('arrangement_program.main',

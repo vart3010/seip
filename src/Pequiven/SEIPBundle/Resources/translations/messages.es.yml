@@ -31,6 +31,7 @@ pequiven:
     delete: Eliminar
     show: Ver
     details: Detalles
+    evolution: Informe de Evolución
     dialog:
         confirm: Confirmar
     advances:

@@ -41,6 +41,18 @@ pequiven_indicator_delete:
         id: \d+
     methods: [POST|DELETE]
     
+pequiven_indicator_evolution:
+    path: /{id}/evolution.{_format}
+    defaults:
+        _controller: pequiven.controller.indicator:evolutionAction
+        _format: html
+        _sylius:
+            form: pequiven_indicatorbundle_indicator
+    requirements:
+        _format: html|json|xml
+        id: \d+
+    methods: [GET|POST]
+
 #Vista de los Indicadores Hijos
 pequiven_indicator_show_dashboard:
     path: /{id}/dashboard.{_format}

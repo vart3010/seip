@@ -1,0 +1,32 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayout.html.twig' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
+
+{% trans_default_domain 'PequivenIndicatorBundle' %}
+
+{% set labelHeader = {
+        (constant('Pequiven\\IndicatorBundle\\Model\\IndicatorLevel::LEVEL_ESTRATEGICO')):'pequiven_indicator.indicator_strategic',
+        (constant('Pequiven\\IndicatorBundle\\Model\\IndicatorLevel::LEVEL_TACTICO')):'pequiven_indicator.indicator_tactic',
+        (constant('Pequiven\\IndicatorBundle\\Model\\IndicatorLevel::LEVEL_OPERATIVO')):'pequiven_indicator.indicator_operative',
+    } %}
+
+{% set level = indicator.indicatorLevel.level %}
+
+{% block before_body %}
+    {{ contentHeader(
+        {(path('pequiven_indicator_list',{'level':level})):(labelHeader[level])|trans},
+        { (path('pequiven_indicator_show',{'id':indicator.id})): (indicator.ref)},
+        ('pequiven.evolution'|trans({},'messages'))
+    ) }}
+{% endblock %}
+
+{% block body %}
+
+    <form action="">
+        <fieldset class="fieldset fields-list">
+            <legend class="legend">{{ 'pequiven.evolution'|trans ({}, 'messages') }}</legend>
+
+        </fieldset>
+    </form>
+
+{% endblock body %}
