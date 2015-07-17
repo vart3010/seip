@@ -146,6 +146,11 @@
                                         <span id="{{ grafico }}"></span>
                                     </div>
                                 {% endif %}
+                                {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_STACKED_COLUMN_VARIABLE_BY_FREQUENCY_NOTIFICATION_WITH_TOTAL')  %}
+                                    <div id="tab-{{ grafico }}"  ng-controller="DashboardController" ng-init="chargeChartStackedColumnVariableByFrequencyNotificationWithTotal({{ indicator.id }},'{{ grafico }}','100','500')">
+                                        <span id="{{ grafico }}"></span>
+                                    </div>
+                                {% endif %}
                                 {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_EXAMPLE')  %}
                                     <div id="tab-{{ grafico }}"  ng-controller="DashboardController" ng-init="renderChartExample({{ indicator.id }},'{{ grafico }}','100','500')">
                                         <span id="{{ grafico }}"></span>

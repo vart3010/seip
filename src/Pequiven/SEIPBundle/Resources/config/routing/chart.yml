@@ -177,3 +177,15 @@ getDataChartColumnRealPlanByFrequencyNotificationFromDashboardEquation:
     methods: [GET]
     options:
         expose: true
+        
+#15
+getDataChartStackedColumnVariableByFrequencyNotificationWithTotal:
+    path: /getDataChartStackedColumnVariableByFrequencyNotificationWithTotal/{id}
+    defaults:
+        _controller: pequiven.controller.seipchart:getDataChartStackedColumnVariableByFrequencyNotificationWithTotalAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true

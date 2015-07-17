@@ -2701,6 +2701,30 @@ angular.module('seipModule.controllers', [])
                 });
             }
             
+            //15-Gráfico tipo stacked column 3d para mostrar el resultado , de acuerdo a la frecuencia de notificación de los indicadores asociados, además del total del indicador padre.
+            $scope.chargeChartStackedColumnVariableByFrequencyNotificationWithTotal = function (indicatorId, render, width, height) {
+                var getDataChartStackedColumnVariableByFrequencyNotificationWithTotal = Routing.generate("getDataChartStackedColumnVariableByFrequencyNotificationWithTotal", {id: indicatorId});
+                $http.get(getDataChartStackedColumnVariableByFrequencyNotificationWithTotal).success(function (data) {
+                    FusionCharts.ready(function () {
+                        var revenueChartStackedColumnVariableByFrequencyNotificationWithTotal = new FusionCharts({
+                            "type": "stackedcolumn3d",
+                            "renderAt": render,
+                            "width": width + "%",
+                            "height": height,
+                            "dataFormat": "json",
+                            "dataSource": {
+                                "chart": data.dataSource.chart,
+                                "categories": data.dataSource.categories,
+                                "dataset": data.dataSource.dataset
+                            }
+                        });
+                        revenueChartStackedColumnVariableByFrequencyNotificationWithTotal.setTransparent(true);
+                        revenueChartStackedColumnVariableByFrequencyNotificationWithTotal.render();
+                    });
+                });
+            }
+            
+            
             //Gráfico en forma tacómetro (Usado para mostrar el resultado de los indicadores estratégicos en el dashboard)
             $scope.renderChartExample = function (indicatorId, render, width, height) {
                 FusionCharts.ready(function () {

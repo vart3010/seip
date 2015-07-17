@@ -556,6 +556,7 @@ chart:
         indicatorsDoughnutWithVariablesRealPlanFromDashboardEquation: Resultado de la ecuación real y plan para gráficos de la fórmula del indicador, en forma de dona.
         indicatorsAssociatedColumnMultiSeriesRealPlanFromDashboardEquation: Resultado de la ecuación real y plan para gráficos de la fórmula del indicador, de cada indicador asociado.
         resultsOfIndicatorColumnMultiSeriesRealPlanByFrequencyNotificationFromDashboardEquation: Resultado de la ecuación real y plan para gráficos de la fórmula del indicador, de acuerdo a la frecuencia de notificación.
+        indicatorVariablesStackedColumnByFrequencyNotificationWithTotal: Variables del indicador, en stacked column, además del acumulado como columna final.
         example: Ejemplo
 
 Name: Nombre

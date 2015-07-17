@@ -88,6 +88,11 @@ abstract class Chart
      */
     const TYPE_CHART_COLUMN_REAL_PLAN_BY_FREQUENCY_NOTIFICATION_FROM_DASHBOARD_EQUATION = 14;
     
+    /**
+     * Gráfico tipo stacked column 3d para mostrar el resultado , de acuerdo a la frecuencia de notificación de los indicadores asociados, además del total del indicador padre
+     */
+    const TYPE_CHART_STACKED_COLUMN_VARIABLE_BY_FREQUENCY_NOTIFICATION_WITH_TOTAL = 15;
+    
     const TYPE_EXAMPLE = 20;
        
     /**
@@ -141,6 +146,7 @@ abstract class Chart
             self::TYPE_CHART_VARIABLES_REAL_PLAN_FROM_DASHBOARD_EQUATION_DOUGHNUT => 'chart.type.indicatorsDoughnutWithVariablesRealPlanFromDashboardEquation',
             self::TYPE_CHART_COLUMN_REAL_PLAN_INDICATORS_ASSOCIATED_FROM_DASHBOARD_EQUATION => 'chart.type.indicatorsAssociatedColumnMultiSeriesRealPlanFromDashboardEquation',
             self::TYPE_CHART_COLUMN_REAL_PLAN_BY_FREQUENCY_NOTIFICATION_FROM_DASHBOARD_EQUATION => 'chart.type.resultsOfIndicatorColumnMultiSeriesRealPlanByFrequencyNotificationFromDashboardEquation',
+            self::TYPE_CHART_STACKED_COLUMN_VARIABLE_BY_FREQUENCY_NOTIFICATION_WITH_TOTAL => 'chart.type.indicatorVariablesStackedColumnByFrequencyNotificationWithTotal',
             self::TYPE_EXAMPLE => 'chart.type.example',
         );
          

@@ -1249,6 +1249,102 @@ class IndicatorService implements ContainerAwareInterface {
 
         return $data;
     }
+    
+    public function getDataChartStackedColumn3d(Indicator $indicator, $options = array()) {
+
+        $data = array(
+            'dataSource' => array(
+                'chart' => array(),
+                'categories' => array(),
+                'dataset' => array(),
+            ),
+        );
+
+        $chart = array();
+
+        $chart["caption"] = $indicator->getSummary();
+//        $chart["subCaption"] = "Sales by quarter";
+//        $chart["xAxisName"] = "Indicador";
+        $chart["yAxisName"] = "TM";
+        $chart["paletteColors"] = "#0075c2,#1aaf5d,#f2c500";
+        $chart["bgColor"] = "#ffffff";
+        $chart["showBorder"] = "0";
+        $chart["showCanvasBorder"] = "0";
+        $chart["usePlotGradientColor"] = "0";
+        $chart["plotBorderAlpha"] = "10";
+        $chart["legendBorderAlpha"] = "0";
+        $chart["legendBgAlpha"] = "0";
+        $chart["legendShadow"] = "0";
+        $chart["showHoverEffect"] = "1";
+        $chart["valueFontColor"] = "#000000";
+        $chart["valuePosition"] = "ABOVE";
+        $chart["rotateValues"] = "1";
+        $chart["placeValuesInside"] = "0";
+        $chart["divlineColor"] = "#999999";
+        $chart["divLineDashed"] = "1";
+        $chart["divLineDashLen"] = "1";
+        $chart["divLineGapLen"] = "1";
+        $chart["canvasBgColor"] = "#ffffff";
+        $chart["captionFontSize"] = "14";
+        $chart["subcaptionFontSize"] = "14";
+        $chart["subcaptionFontBold"] = "0";
+        $chart["decimalSeparator"] = ",";
+        $chart["thousandSeparator"] = ".";
+        $chart["inDecimalSeparator"] = ",";
+        $chart["inThousandSeparator"] = ".";
+        $chart["decimals"] = "2";
+
+        $category = $dataSetValues = array();
+
+        if (isset($options['variablesByFrequencyNotificationWithTotal']) && array_key_exists('variablesByFrequencyNotificationWithTotal', $options)) {
+            unset($options['variablesByFrequencyNotificationWithTotal']);
+
+            if ($indicator->getDetails()) {
+                $chart["yAxisName"] = $indicator->getDetails()->getResultManagementUnit();
+            }
+
+            $arrayVariables = array();
+            $arrayVariables = $this->getArrayVariablesFormulaWithData($indicator, array('variablesByFrequencyNotificationWithTotal' => true));
+
+            $totalValueIndicators = count($indicator->getValuesIndicator());
+            $labelsFrequencyNotificationArray = $this->getLabelsByIndicatorFrequencyNotification($indicator);
+            
+            $variables = $indicator->getFormula()->getVariables();
+            $contVariables = count($variables);
+
+            //Añadimos los valores, por frecuencia de notificación
+            for ($i = 0; $i < $totalValueIndicators; $i++) {
+                $label =  array();
+                $label["label"] = $labelsFrequencyNotificationArray[($i+1)];
+                
+                foreach($variables as $variable){
+                    $dataSetValues[$variable->getName()]['data'][] = number_format($arrayVariables[$variable->getName()][$i], 2, ',', '.');
+                }
+
+                $category[] = $label;
+            }
+            
+            //Añadimos el acumulado
+            foreach($variables as $variable){
+                $dataSetValues[$variable->getName()]['data'][] = number_format($arrayVariables[$variable->getName()]['total'], 2, ',', '.');
+                $dataSetValues[$variable->getName()]['seriesname'] = $arrayVariables[$variable->getName()]['description'];
+                $dataSetValues[$variable->getName()]['showValues'] = "1";
+            }
+            
+            foreach($indicator->getFormula()->getVariables() as $variable){
+                $data['dataSource']['dataset'][] = $dataSetValues[$variable->getName()];
+            }
+            
+            $category[] = 'ACUMUL';
+        }
+
+        $data['dataSource']['chart'] = $chart;
+        $data['dataSource']['categories'][]["category"] = $category;
+//        $data['dataSource']['dataset'][] = $dataSetReal;
+//        $data['dataSource']['dataset'][] = $dataSetPlan;
+
+        return $data;
+    }
 
     /**
      *  RETORNA LA LISTA DE VARIABLES DE LA FORMULA DE UN INDICADOR EN FORMA DE ARREGLO INDEXADO
@@ -1743,6 +1839,23 @@ class IndicatorService implements ContainerAwareInterface {
                             $arrayVariables[$nameParameter]['value'] = $arrayVariables[$nameParameter]['value'] + $valueIndicator->getParameter($nameParameter);
                         }
                     }
+                }
+            }
+        } elseif(isset($options['variablesByFrequencyNotificationWithTotal']) && array_key_exists('variablesByFrequencyNotificationWithTotal', $options)){
+            $variables = $formula->getVariables();
+            
+            foreach($variables as $variable){
+                $nameParameter = $variable->getName();
+                $arrayVariables[$nameParameter]['total'] = 0.0;
+                $arrayVariables[$nameParameter]['description'] = $variable->getDescription();
+            }
+            
+            foreach ($valuesIndicator as $valueIndicator) {
+                foreach($variables as $variable){
+                    $nameParameter = $variable->getName();
+                    $valVariableIndicator = $valueIndicator->getParameter($nameParameter);
+                    $arrayVariables[$nameParameter][] = $valVariableIndicator;
+                    $arrayVariables[$nameParameter]['total'] = $arrayVariables[$nameParameter]['total'] + $valVariableIndicator;
                 }
             }
         }
