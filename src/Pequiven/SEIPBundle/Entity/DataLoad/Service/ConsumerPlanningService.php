@@ -250,10 +250,11 @@ class ConsumerPlanningService extends BaseModel
         $month = (int)$date->format("m");
         $day = (int)$date->format("d");
         
-        $totalDay = $totalMonth = $totalYear = 0.0;
+        $totalDay = $totalMonth = $totalYear = $totalDayPlan = $totalMonthPlan = $totalYearPlan = 0.0;
         $details = $this->getDetailsByMonth();
         foreach ($details as $monthDetail => $detail) {
                 $totalYear = $totalYear + $detail->getTotalReal();
+                $totalYearPlan = $totalYearPlan + $detail->getTotalPlan();
                 
                 if($monthDetail > $month){
                     break;
@@ -261,8 +262,13 @@ class ConsumerPlanningService extends BaseModel
 
                 if($month == $monthDetail){
                     $totalDayName = 'getDay'.$day.'Real';
+                    $totalDayPlanName = 'getDay'.$day.'Plan';
+                    
                     $totalDay = $detail->$totalDayName();
+                    $totalDayPlan = $detail->$totalDayPlanName();
+                    
                     $totalMonth = $totalMonth + $detail->getTotalReal();
+                    $totalMonthPlan = $totalMonthPlan + $detail->getTotalPlan();
                 }
         }
         
@@ -270,6 +276,10 @@ class ConsumerPlanningService extends BaseModel
             'total_day' => $totalDay,
             'total_month' => $totalMonth,
             'total_year' => $totalYear,
+            
+            'total_day_plan' => $totalDayPlan,
+            'total_month_plan' => $totalMonthPlan,
+            'total_year_plan' => $totalYearPlan,
         );
         return $total;
     }

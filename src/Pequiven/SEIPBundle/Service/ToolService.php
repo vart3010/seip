@@ -127,4 +127,19 @@ class ToolService
         }
         return $months;
     }
+    
+     public function calculatePnr($plan,$real){
+        $pnr = $plan - $real;
+        if($pnr < 0){
+            $pnr = 0;
+        }
+        return $pnr;
+    }
+    public function calculatePercentaje($plan,$real){
+        $percentaje = 0;
+        if($plan > 0){
+            $percentaje = ($real * 100) / $plan;
+        }
+        return $percentaje;
+    }
 }
