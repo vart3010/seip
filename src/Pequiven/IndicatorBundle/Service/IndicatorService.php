@@ -1278,7 +1278,7 @@ class IndicatorService implements ContainerAwareInterface {
         $chart["showHoverEffect"] = "1";
         $chart["valueFontColor"] = "#000000";
         $chart["valuePosition"] = "ABOVE";
-        $chart["rotateValues"] = "1";
+        $chart["rotateValues"] = "0";
         $chart["placeValuesInside"] = "0";
         $chart["divlineColor"] = "#999999";
         $chart["divLineDashed"] = "1";
@@ -1318,7 +1318,8 @@ class IndicatorService implements ContainerAwareInterface {
                 $label["label"] = $labelsFrequencyNotificationArray[($i+1)];
                 
                 foreach($variables as $variable){
-                    $dataSetValues[$variable->getName()]['data'][] = number_format($arrayVariables[$variable->getName()][$i], 2, ',', '.');
+                    $showValue = $arrayVariables[$variable->getName()][$i] == 0 ? 0 : 1;
+                    $dataSetValues[$variable->getName()]['data'][] = array('value' => number_format($arrayVariables[$variable->getName()][$i], 2, ',', '.'), 'showValue' => $showValue);
                 }
 
                 $category[] = $label;
@@ -1326,16 +1327,17 @@ class IndicatorService implements ContainerAwareInterface {
             
             //Añadimos el acumulado
             foreach($variables as $variable){
-                $dataSetValues[$variable->getName()]['data'][] = number_format($arrayVariables[$variable->getName()]['total'], 2, ',', '.');
+                $showValue = $arrayVariables[$variable->getName()]['total'] == 0 ? 0 : 1;
                 $dataSetValues[$variable->getName()]['seriesname'] = $arrayVariables[$variable->getName()]['description'];
                 $dataSetValues[$variable->getName()]['showValues'] = "1";
+                $dataSetValues[$variable->getName()]['data'][] = array('value' => number_format($arrayVariables[$variable->getName()]['total'], 2, ',', '.'), 'showValue' => $showValue);
             }
             
             foreach($indicator->getFormula()->getVariables() as $variable){
                 $data['dataSource']['dataset'][] = $dataSetValues[$variable->getName()];
             }
             
-            $category[] = 'ACUMUL';
+            $category[] = array('label' => 'ACUMUL');
         }
 
         $data['dataSource']['chart'] = $chart;
