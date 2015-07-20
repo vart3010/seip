@@ -420,6 +420,9 @@ pequiven_seip:
         
     day_stop:
         day_stop: Dia de parada
+        
+    visualizePnrTime:
+        reportPnr: "Producción no Realizada"
             
 "Bad credentials": Nombre de usuario o contraseña invalida
 "User account is disabled.": Cuenta de usuario desactivada
@@ -624,3 +627,4 @@ Unit: Unidad
 'No raw material planning': 'No hay consumo de materia prima.'
 'Automatic calculation plan': '¿Cálculo de plan automático?'
 'By range': 'Por rango'
+

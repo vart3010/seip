@@ -1,0 +1,79 @@
+{# empty Twig template #}
+{#@author Victor Tortolero <vart.10.30@gmail.com>#}
+
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}
+
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+{% block before_body %}
+    {{ contentHeader(
+        ("pequiven_seip.visualizePnrTime.reportPnr"|trans )
+    ) }}
+{% endblock %}
+
+{% block body %}
+    
+    {{ dump(causes) }}
+    <fieldset class="fieldset">
+        <legend class="legend">Informacion</legend>
+        <div class="columns">
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ "Product" |trans }}</label>
+                    {{ product.getname }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ "Plant" |trans }}</label>
+                    {% if(plant!="null") %}
+                        {{ plant }}
+                    {% else %}
+                        {% for p in product.getPlants  %}
+                            {{ p }} - {{ p.getEntity }}<br>
+                        {% endfor %}
+                    {% endif %}
+                </p>    
+            </div>
+        </div>
+    </fieldset>
+
+    <fieldset class="fieldset">
+        <legend class="legend">Detalle</legend>
+        <p class="inline-label">
+
+        <table class="simple-table responsive-table" id="">
+            <thead>
+                <tr>
+                    <th scope="col">Origen</th>
+                    <th scope="col" width="23%" class="">Dia</th>
+                    <th scope="col" width="23%" class="">Mes</th>
+                    <th scope="col" width="23%" class="">Año</th>
+                </tr>
+            </thead>
+
+            {#<tfoot>
+                <tr>
+                    <td colspan="5">
+                        6 entries found
+                    </td>
+                </tr>
+            </tfoot>#}
+
+            <tbody>
+                <tr>
+                    <th scope="row">
+                        John Doe<br>
+                        <small>Founder</small>
+                    </th>
+                    <td>Jul 5, 2011</td>
+                    <td>Enabled</td>
+                    <td>Enabled</td>
+
+                </tr>
+            </tbody>
+        </table>
+
+    </p>
+</fieldset>
+{% endblock%}

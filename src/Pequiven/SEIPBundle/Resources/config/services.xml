@@ -340,6 +340,13 @@
                 <argument type="service" id="service_container" />
             </call>
         </service>
+        
+         <service id="seip.service.unrealizedProduction" class="Pequiven\SEIPBundle\Service\DataLoad\UnrealizedProductionService">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
+        
         <service id="seip.service.productReport" class="Pequiven\SEIPBundle\Service\ProductReportService">
             <call method="setContainer">
                 <argument type="service" id="service_container" />

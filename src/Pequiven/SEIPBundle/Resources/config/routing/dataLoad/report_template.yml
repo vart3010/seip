@@ -70,3 +70,12 @@ pequiven_report_template_load:
     methods: [GET|POST|PUT]
     options:
         expose: true
+        
+pequiven_report_template_visualize_pnr_time:
+    path: /{idProduct}/{plant}/visualizePnr
+    defaults:
+        _controller: pequiven.controller.report_template:visualizePnrProduct
+    methods: [GET|POST|PUT]
+    options:
+        expose: true
+        
