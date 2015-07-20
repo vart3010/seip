@@ -79,6 +79,10 @@
                         {{ form_label(form.dateEnd) }}&nbsp;
                         {{ form_widget(form.dateEnd) }}
                         {{ form_errors(form.dateEnd) }}
+                        &nbsp;&nbsp;
+                        {{ form_label(form.withDetails) }}&nbsp;
+                        {{ form_widget(form.withDetails) }}
+                        {{ form_errors(form.withDetails) }}
                     </div>
                 </div>
             </div>
@@ -182,6 +186,7 @@
                          $("#byDateReport").removeClass("hidden");
                          $("#byRange").removeClass("hidden");
                     });
+                    $("#form_byRange").change();
                 });
         </script>
     {% endblock %}
