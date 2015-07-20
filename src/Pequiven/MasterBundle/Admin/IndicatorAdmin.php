@@ -62,6 +62,11 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                 ->add('showTags')
                 ->add('requiredToImport')
                 ->add('details')
+                ->add('typeOfCompany','choice',array(
+                    "choices" => \Pequiven\IndicatorBundle\Entity\Indicator::getTypesOfCompanies(),
+                    "translation_domain" => "PequivenMasterBundle",
+                    'required' => false,
+                ))
         ;
     }
 
@@ -236,6 +241,14 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                         ))
                         ->add("snippetReal", null, array(
                             "attr" => array("rows" => 4,)
+                        ))
+                    ->end()
+                
+                    ->with('Tipo de Compañia')
+                        ->add('typeOfCompany','choice',array(
+                            "choices" => \Pequiven\IndicatorBundle\Entity\Indicator::getTypesOfCompanies(),
+                            "translation_domain" => "PequivenMasterBundle",
+                            'required' => false,
                         ))
                     ->end()
                 

@@ -89,9 +89,19 @@ abstract class Chart
     const TYPE_CHART_COLUMN_REAL_PLAN_BY_FREQUENCY_NOTIFICATION_FROM_DASHBOARD_EQUATION = 14;
     
     /**
-     * Gráfico tipo stacked column 3d para mostrar el resultado , de acuerdo a la frecuencia de notificación de los indicadores asociados, además del total del indicador padre
+     * Gráfico tipo stacked column 3d para mostrar el resultado , de acuerdo a la frecuencia de notificación de las variables asociadas a la fórmula del indicador, con el total acumulado por variables al final
      */
     const TYPE_CHART_STACKED_COLUMN_VARIABLE_BY_FREQUENCY_NOTIFICATION_WITH_TOTAL = 15;
+    
+    /**
+     * Gráfico tipo column 3d para mostrar el resultado de un mes (Ideado para aquellos indicadores con fórmula acumulativo de cada carga) de los indicadores asociados, con el total acumulado al final
+     */
+    const TYPE_CHART_COLUMN_RESULT_INDICATORS_ASSOCIATED_WITH_TOTAL_BY_MONTH = 16;
+    
+    /**
+     * Gráfico tipo column 3d para mostrar el resultado de un mes (Ideado para aquellos indicadores con fórmula acumulativo de cada carga) de los indicadores asociados agrupados por tipo de empresa, con el total acumulado al final
+     */
+    const TYPE_CHART_COLUMN_RESULT_INDICATORS_ASSOCIATED_GROUP_BY_TYPE_COMPANY_WITH_TOTAL_BY_MONTH = 17;
     
     const TYPE_EXAMPLE = 20;
        
@@ -147,6 +157,8 @@ abstract class Chart
             self::TYPE_CHART_COLUMN_REAL_PLAN_INDICATORS_ASSOCIATED_FROM_DASHBOARD_EQUATION => 'chart.type.indicatorsAssociatedColumnMultiSeriesRealPlanFromDashboardEquation',
             self::TYPE_CHART_COLUMN_REAL_PLAN_BY_FREQUENCY_NOTIFICATION_FROM_DASHBOARD_EQUATION => 'chart.type.resultsOfIndicatorColumnMultiSeriesRealPlanByFrequencyNotificationFromDashboardEquation',
             self::TYPE_CHART_STACKED_COLUMN_VARIABLE_BY_FREQUENCY_NOTIFICATION_WITH_TOTAL => 'chart.type.indicatorVariablesStackedColumnByFrequencyNotificationWithTotal',
+            self::TYPE_CHART_COLUMN_RESULT_INDICATORS_ASSOCIATED_WITH_TOTAL_BY_MONTH => 'chart.type.indicatorsAssociatedColumnWithTotalByMonth',
+            self::TYPE_CHART_COLUMN_RESULT_INDICATORS_ASSOCIATED_GROUP_BY_TYPE_COMPANY_WITH_TOTAL_BY_MONTH => 'chart.type.indicatorsAssociatedColumnGroupByTypeCompanyWithTotalByMonth',
             self::TYPE_EXAMPLE => 'chart.type.example',
         );
          

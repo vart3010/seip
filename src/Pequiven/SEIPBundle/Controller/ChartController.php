@@ -314,7 +314,7 @@ class ChartController extends SEIPController {
     }
     
     /**
-     * 15-Función que retorna la data para un gráfico tipo columna 3d para mostrar el resultado real/plan de la ecuación para gráficos de la fórmula del indicador respecto al eje izquierdo, de acuerdo a la frecuencia de notificación
+     * 15-Función que retorna la data para un gráfico tipo stacked column 3d para mostrar el resultado , de acuerdo a la frecuencia de notificación de las variables asociadas a la fórmula del indicador, con el total acumulado por variables al final
      * @return JsonResponse
      */
     public function getDataChartStackedColumnVariableByFrequencyNotificationWithTotalAction(Request $request) {
@@ -327,6 +327,48 @@ class ChartController extends SEIPController {
         $indicator = $this->get('pequiven.repository.indicator')->find($idIndicator); //Obtenemos el indicador
 
         $dataChart = $indicatorService->getDataChartStackedColumn3d($indicator, array('variablesByFrequencyNotificationWithTotal' => true)); //Obtenemos la data del gráfico de acuerdo al indicador
+
+        $response->setData($dataChart); //Seteamos la data del gráfico en Json
+
+        return $response;
+    }
+    
+    /**
+     * 16-Función que retorna la data para un gráfico tipo column 3d para mostrar el resultado de un mes (Ideado para aquellos indicadores con fórmula acumulativo de cada carga) de los indicadores asociados, con el total acumulado al final
+     * @return JsonResponse
+     */
+    public function getDataChartColumnResultIndicatorsAssociatedWithTotalByMonthAction(Request $request) {
+        $response = new JsonResponse();
+
+        $idIndicator = $request->get('id');
+        $month = $request->get('month', date("n"));
+
+        $indicatorService = $this->getIndicatorService(); //Obtenemos el servicio del indicador
+
+        $indicator = $this->get('pequiven.repository.indicator')->find($idIndicator); //Obtenemos el indicador
+
+        $dataChart = $indicatorService->getDataChartColumn3d($indicator, array('resultIndicatorsAssociatedWithTotalByMonth' => true, 'month' => $month)); //Obtenemos la data del gráfico de acuerdo al indicador
+
+        $response->setData($dataChart); //Seteamos la data del gráfico en Json
+
+        return $response;
+    }
+    
+    /**
+     * 17-Función que retorna la data para un gráfico tipo column 3d para mostrar el resultado de un mes (Ideado para aquellos indicadores con fórmula acumulativo de cada carga) de los indicadores asociados agrupados por tipo de empresa, con el total acumulado al final
+     * @return JsonResponse
+     */
+    public function getDataChartColumnResultIndicatorsAssociatedGroupByTypeCompanyWithTotalByMonthAction(Request $request) {
+        $response = new JsonResponse();
+
+        $idIndicator = $request->get('id');
+        $month = $request->get('month', date("n"));
+
+        $indicatorService = $this->getIndicatorService(); //Obtenemos el servicio del indicador
+
+        $indicator = $this->get('pequiven.repository.indicator')->find($idIndicator); //Obtenemos el indicador
+
+        $dataChart = $indicatorService->getDataChartColumn3d($indicator, array('resultIndicatorsAssociatedGroupByTypeCompanyWithTotalByMonth' => true, 'month' => $month)); //Obtenemos la data del gráfico de acuerdo al indicador
 
         $response->setData($dataChart); //Seteamos la data del gráfico en Json
 

@@ -1250,6 +1250,92 @@ class IndicatorService implements ContainerAwareInterface {
         return $data;
     }
     
+    /**
+     * 
+     * @param Indicator $indicator
+     * @param type $options
+     * @return array
+     */
+    public function getDataChartColumn3d(Indicator $indicator, $options = array()) {
+
+        $data = array(
+            'dataSource' => array(
+                'chart' => array(),
+                'data' => array(),
+            ),
+        );
+
+        $chart = array();
+
+        $chart["caption"] = $indicator->getSummary();
+//        $chart["subCaption"] = "Sales by quarter";
+        $chart["xAxisName"] = "Mes";
+//        $chart["yAxisName"] = "TM";
+        $chart["paletteColors"] = "#0075c2,#1aaf5d,#f2c500";
+        $chart["bgColor"] = "#ffffff";
+        $chart["showBorder"] = "0";
+        $chart["valueFontColor"] = "#000000";
+        $chart["showCanvasBorder"] = "0";
+        $chart["usePlotGradientColor"] = "0";
+        $chart["plotBorderAlpha"] = "10";
+        $chart["legendBorderAlpha"] = "0";
+        $chart["legendBgAlpha"] = "0";
+        $chart["legendShadow"] = "0";
+        $chart["showHoverEffect"] = "1";
+        $chart["valuePosition"] = "ABOVE";
+        $chart["rotateValues"] = "0";
+        $chart["placeValuesInside"] = "0";
+        $chart["showShadow"] = "0";
+        $chart["divlineColor"] = "#999999";
+        $chart["divLineDashed"] = "1";
+        $chart["divLineDashLen"] = "1";
+        $chart["divLineGapLen"] = "1";
+        $chart["divlineThickness"] = "1";
+        $chart["canvasBgColor"] = "#ffffff";
+        $chart["captionFontSize"] = "14";
+        $chart["decimalSeparator"] = ",";
+        $chart["thousandSeparator"] = ".";
+        $chart["inDecimalSeparator"] = ",";
+        $chart["inThousandSeparator"] = ".";
+        $chart["decimals"] = "2";
+        
+        if(isset($options['resultIndicatorsAssociatedWithTotalByMonth']) && array_key_exists('resultIndicatorsAssociatedWithTotalByMonth', $options)){
+            unset($options['resultIndicatorsAssociatedWithTotalByMonth']);
+            $month = $options['month'];
+            $labelsMonths = CommonObject::getLabelsMonths();
+            
+            $arrayVariables = array();
+            $arrayVariables = $this->getArrayVariablesFormulaWithData($indicator, array('resultIndicatorsAssociatedWithTotalByMonth' => true,'month' => $month));
+            
+            $childrens = $indicator->getChildrens();
+            foreach($childrens as $children){
+                if($children->getTypeOfCompany() == Indicator::TYPE_OF_COMPANY_MATRIZ){
+                    $data['dataSource']['data'][] = $arrayVariables[$children->getId()];
+                }
+            }
+            $data['dataSource']['data'][] = $arrayVariables['total'];
+            
+            $chart["xAxisName"] = $labelsMonths[$month];
+        } elseif(isset($options['resultIndicatorsAssociatedGroupByTypeCompanyWithTotalByMonth']) && array_key_exists('resultIndicatorsAssociatedGroupByTypeCompanyWithTotalByMonth', $options)){
+            unset($options['resultIndicatorsAssociatedGroupByTypeCompanyWithTotalByMonth']);
+            $month = $options['month'];
+            $labelsMonths = CommonObject::getLabelsMonths();
+            
+            $arrayVariables = array();
+            $arrayVariables = $this->getArrayVariablesFormulaWithData($indicator, array('resultIndicatorsAssociatedGroupByTypeCompanyWithTotalByMonth' => true,'month' => $month));
+            
+            $data['dataSource']['data'][] = $arrayVariables[Indicator::TYPE_OF_COMPANY_MATRIZ];
+            $data['dataSource']['data'][] = $arrayVariables[Indicator::TYPE_OF_COMPANY_AFFILIATED_MIXTA];
+            $data['dataSource']['data'][] = $arrayVariables['total'];
+            
+            $chart["xAxisName"] = $labelsMonths[$month];
+        }
+        
+        $data['dataSource']['chart'] = $chart;
+        
+        return $data;
+    }
+    
     public function getDataChartStackedColumn3d(Indicator $indicator, $options = array()) {
 
         $data = array(
@@ -1860,6 +1946,71 @@ class IndicatorService implements ContainerAwareInterface {
                     $arrayVariables[$nameParameter]['total'] = $arrayVariables[$nameParameter]['total'] + $valVariableIndicator;
                 }
             }
+        } elseif(isset($options['resultIndicatorsAssociatedWithTotalByMonth']) && array_key_exists('resultIndicatorsAssociatedWithTotalByMonth', $options)){
+            unset($options['resultIndicatorsAssociatedWithTotalByMonth']);
+            
+            $month = $options['month'];
+            $childrens = $indicator->getChildrens();
+            $total = 0.0;
+            $variables = $formula->getVariables();
+            
+            foreach($childrens as $children){
+                if($children->getTypeOfCompany() == Indicator::TYPE_OF_COMPANY_MATRIZ){
+                    $arrayVariables[$children->getId()] = array('label' => $children->getSummary(), 'value' => 0.0);
+                }
+            }
+            
+            foreach($childrens as $children){
+                if($children->getTypeOfCompany() == Indicator::TYPE_OF_COMPANY_MATRIZ){
+                    $childrenValuesIndicator = $children->getValuesIndicator();
+                    $contChildrenValueIndicator = 1;
+                    $variablesChildren = $children->getFormula()->getVariables();
+                    foreach ($childrenValuesIndicator as $childrenValueIndicator) {
+                        if($contChildrenValueIndicator == $month){
+                            foreach($variablesChildren as $variableChildren){
+                                $nameParameter = $variableChildren->getName();
+                                $valVariableChildren = $childrenValueIndicator->getParameter($nameParameter);
+                                $arrayVariables[$children->getId()]['value'] = $arrayVariables[$children->getId()]['value'] + $valVariableChildren;
+                                $total = $total + $valVariableChildren;
+                            }
+                        }
+                        $contChildrenValueIndicator++;
+                    }
+                }
+            }
+            
+            $arrayVariables['total'] = array('label' => 'Total Pequiven', 'value' => $total);
+        } elseif(isset($options['resultIndicatorsAssociatedGroupByTypeCompanyWithTotalByMonth']) && array_key_exists('resultIndicatorsAssociatedGroupByTypeCompanyWithTotalByMonth', $options)){
+            unset($options['resultIndicatorsAssociatedGroupByTypeCompanyWithTotalByMonth']);
+            
+            $month = $options['month'];
+            $childrens = $indicator->getChildrens();
+            $total = 0.0;
+            $variables = $formula->getVariables();
+            
+            $labelsTypesOfCompanies = Indicator::getTypesOfCompanies();
+            
+            $arrayVariables[Indicator::TYPE_OF_COMPANY_MATRIZ] = array('label' => $this->trans($labelsTypesOfCompanies[Indicator::TYPE_OF_COMPANY_MATRIZ], array(),'PequivenMasterBundle'), 'value' => 0.0);
+            $arrayVariables[Indicator::TYPE_OF_COMPANY_AFFILIATED_MIXTA] = array('label' => $this->trans($labelsTypesOfCompanies[Indicator::TYPE_OF_COMPANY_AFFILIATED_MIXTA], array(),'PequivenMasterBundle'), 'value' => 0.0);
+            
+            foreach($childrens as $children){
+                $childrenValuesIndicator = $children->getValuesIndicator();
+                $contChildrenValueIndicator = 1;
+                $variablesChildren = $children->getFormula()->getVariables();
+                foreach ($childrenValuesIndicator as $childrenValueIndicator) {
+                    if($contChildrenValueIndicator == $month){
+                        foreach($variablesChildren as $variableChildren){
+                            $nameParameter = $variableChildren->getName();
+                            $valVariableChildren = $childrenValueIndicator->getParameter($nameParameter);
+                            $arrayVariables[$children->getTypeOfCompany()]['value'] = $arrayVariables[$children->getTypeOfCompany()]['value'] + $valVariableChildren;
+                            $total = $total + $valVariableChildren;
+                        }
+                    }
+                    $contChildrenValueIndicator++;
+                }
+            }
+            
+            $arrayVariables['total'] = array('label' => 'Corporación', 'value' => $total);
         }
 
         return $arrayVariables;

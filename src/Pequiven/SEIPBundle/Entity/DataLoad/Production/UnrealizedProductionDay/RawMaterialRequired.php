@@ -57,7 +57,7 @@ class RawMaterialRequired
      * Unidad de medida del requerimiento
      * @var \Pequiven\SEIPBundle\Entity\CEI\UnitMeasure
      * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\UnitMeasure")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $unitMeasure;
     

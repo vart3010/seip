@@ -557,6 +557,8 @@ chart:
         indicatorsAssociatedColumnMultiSeriesRealPlanFromDashboardEquation: Resultado de la ecuación real y plan para gráficos de la fórmula del indicador, de cada indicador asociado.
         resultsOfIndicatorColumnMultiSeriesRealPlanByFrequencyNotificationFromDashboardEquation: Resultado de la ecuación real y plan para gráficos de la fórmula del indicador, de acuerdo a la frecuencia de notificación.
         indicatorVariablesStackedColumnByFrequencyNotificationWithTotal: Variables del indicador, en stacked column, además del acumulado como columna final.
+        indicatorsAssociatedColumnWithTotalByMonth: Resultado de los indicadores asociados, en column 3D, además del acumulado como columna final.
+        indicatorsAssociatedColumnGroupByTypeCompanyWithTotalByMonth: Resultado de los indicadores asociados agrupados por tipo de compañia, en column 3D, además del acumulado como columna final.
         example: Ejemplo
 
 Name: Nombre

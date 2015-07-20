@@ -48,7 +48,7 @@
             {{ indicatorService.getArrowOfIndicator(indicator)|raw }}
 
             {% if indicator.showCharts %}{# En caso de que sólo se necesite ver el gráfico #}
-                <div ng-controller="ChartsDashboardController" >
+                <div ng-controller="ChartsDashboardController">
                     {% set Charts = indicator.getCharts %}
                     <div class="standard-tabs margin-bottom" {#style="height: 600px;"#}>
                         <ul class="tabs">
@@ -151,6 +151,26 @@
                                         <span id="{{ grafico }}"></span>
                                     </div>
                                 {% endif %}
+                                {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_COLUMN_RESULT_INDICATORS_ASSOCIATED_WITH_TOTAL_BY_MONTH')  %}
+                                    <div id="tab-{{ grafico }}"  ng-controller="DashboardController" ng-init="chargeChartColumnResultIndicatorsAssociatedWithTotalByMonth({{ indicator.id }},'{{ "now"|date("n") }}','{{ grafico }}','100','500')">
+                                        <div ng-init="data.monthsLabels = {{ labelsMonths|serialize }}" class="with-mid-padding">
+                                            <select id='month' class="select2 input-xlarge" ng-model="model.months" ng-options="value as value.description for (key,value) in data.monthsLabels | orderBy:'id'" ng-init="model.months = {{ "now"|date("n") }}" ng-click="chargeChartColumnResultIndicatorsAssociatedWithTotalByMonth({{ indicator.id }},model.months.id,'{{ grafico }}','100','500')">
+                                                <option value='0'>Seleccione un mes</option>
+                                            </select>
+                                        </div>
+                                        <span id="{{ grafico }}"></span>
+                                    </div>
+                                {% endif %}
+                                {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_COLUMN_RESULT_INDICATORS_ASSOCIATED_GROUP_BY_TYPE_COMPANY_WITH_TOTAL_BY_MONTH')  %}
+                                    <div id="tab-{{ grafico }}"  ng-controller="DashboardController" ng-init="chargeChartColumnResultIndicatorsAssociatedGroupByTypeCompanyWithTotalByMonth({{ indicator.id }},'{{ "now"|date("n") }}','{{ grafico }}','100','500')">
+                                        <div ng-init="data.monthsLabels = {{ labelsMonths|serialize }}" class="with-mid-padding">
+                                            <select id='monthsGroupByCompany' class="select2 input-xlarge" ng-model="model.monthsGroupByCompany" ng-options="value as value.description for (key,value) in data.monthsLabels | orderBy:'id'" ng-init="model.monthsGroupByCompany = {{ "now"|date("n") }}" ng-click="chargeChartColumnResultIndicatorsAssociatedGroupByTypeCompanyWithTotalByMonth({{ indicator.id }},model.monthsGroupByCompany.id,'{{ grafico }}','100','500')">
+                                                <option value='0'>Seleccione un mes</option>
+                                            </select>
+                                        </div>
+                                        <span id="{{ grafico }}"></span>
+                                    </div>
+                                {% endif %}
                                 {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_EXAMPLE')  %}
                                     <div id="tab-{{ grafico }}"  ng-controller="DashboardController" ng-init="renderChartExample({{ indicator.id }},'{{ grafico }}','100','500')">
                                         <span id="{{ grafico }}"></span>
@@ -195,6 +215,9 @@
 
         $(document).ready(function () {
             $("#chartDetail").hide();
+            $('.select2').select2({
+                allowClear: true
+            });
         });
     </script>
 {% endblock javascript %}

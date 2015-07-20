@@ -189,3 +189,39 @@ getDataChartStackedColumnVariableByFrequencyNotificationWithTotal:
     methods: [GET]
     options:
         expose: true
+        
+#16
+getDataChartColumnResultIndicatorsAssociatedWithTotalByMonth:
+    path: /getDataChartColumnResultIndicatorsAssociatedWithTotalByMonth/{id}/{month}
+    defaults:
+        _controller: pequiven.controller.seipchart:getDataChartColumnResultIndicatorsAssociatedWithTotalByMonthAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
+        
+#16
+getDataChartColumnResultIndicatorsAssociatedWithTotalByMonth:
+    path: /getDataChartColumnResultIndicatorsAssociatedWithTotalByMonth/{id}/{month}
+    defaults:
+        _controller: pequiven.controller.seipchart:getDataChartColumnResultIndicatorsAssociatedWithTotalByMonthAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
+        
+#17
+getDataChartColumnResultIndicatorsAssociatedGroupByTypeCompanyWithTotalByMonth:
+    path: /getDataChartColumnResultIndicatorsAssociatedGroupByTypeCompanyWithTotalByMonth/{id}/{month}
+    defaults:
+        _controller: pequiven.controller.seipchart:getDataChartColumnResultIndicatorsAssociatedGroupByTypeCompanyWithTotalByMonthAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true

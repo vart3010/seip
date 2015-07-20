@@ -2355,6 +2355,27 @@ angular.module('seipModule.controllers', [])
         //Controlador para los gráficos a mostrar en el dashboard del indicador
         .controller('ChartsDashboardController', function ($scope, $http) {
 
+//        var month = 0;
+            $scope.data = {
+                monthsLabels: null,
+            };
+            
+            $scope.model = {
+                months: null,
+                monthsGroupByCompany: null,
+            };
+            
+            $scope.$watch("model.months", function (newParams, oldParams) {
+                if ($scope.model.months != null && $scope.model.months.id != undefined) {
+//                    setValueSelect2("month", $scope.model.months.id, $scope.data.monthsLabel);
+                }
+            });
+            $scope.$watch("model.monthsGroupByCompany", function (newParams, oldParams) {
+                if ($scope.model.monthsGroupByCompany != null && $scope.model.monthsGroupByCompany.id != undefined) {
+//                    setValueSelect2("month2", $scope.model.months2.id, $scope.data.monthsLabel);
+                }
+            });
+
             //0-Gráfico en forma de dona para mostrar los indicadores asociados (Resumen, Referencia y Resultado de la Medición)
             $scope.chargeChartDoughnut2dIndicatorsAssociated = function (indicatorId, render, width, height) {
 //                var getDataChartDoughnut = Routing.generate("getDataChartDoughnut", {id: indicatorId});
@@ -2720,6 +2741,50 @@ angular.module('seipModule.controllers', [])
                         });
                         revenueChartStackedColumnVariableByFrequencyNotificationWithTotal.setTransparent(true);
                         revenueChartStackedColumnVariableByFrequencyNotificationWithTotal.render();
+                    });
+                });
+            }
+            
+            //16-Gráfico tipo column 3d para mostrar el resultado de un mes (Ideado para aquellos indicadores con fórmula acumulativo de cada carga) de los indicadores asociados, con el total acumulado al final
+            $scope.chargeChartColumnResultIndicatorsAssociatedWithTotalByMonth = function (indicatorId, month, render, width, height) {
+                var getDataChartColumnResultIndicatorsAssociatedWithTotalByMonth = Routing.generate("getDataChartColumnResultIndicatorsAssociatedWithTotalByMonth", {id: indicatorId, month: month});
+                $http.get(getDataChartColumnResultIndicatorsAssociatedWithTotalByMonth).success(function (data) {
+                    FusionCharts.ready(function () {
+                        var revenueChartColumnResultIndicatorsAssociatedWithTotalByMonth = new FusionCharts({
+                            "type": "column3d",
+                            "renderAt": render,
+                            "width": width + "%",
+                            "height": height,
+                            "dataFormat": "json",
+                            "dataSource": {
+                                "chart": data.dataSource.chart,
+                                "data": data.dataSource.data
+                            }
+                        });
+                        revenueChartColumnResultIndicatorsAssociatedWithTotalByMonth.setTransparent(true);
+                        revenueChartColumnResultIndicatorsAssociatedWithTotalByMonth.render();
+                    });
+                });
+            }
+            
+            //17-Gráfico tipo column 3d para mostrar el resultado de un mes (Ideado para aquellos indicadores con fórmula acumulativo de cada carga) de los indicadores asociados agrupados por tipo de empresa, con el total acumulado al final
+            $scope.chargeChartColumnResultIndicatorsAssociatedGroupByTypeCompanyWithTotalByMonth = function (indicatorId, month, render, width, height) {
+                var getDataChartColumnResultIndicatorsAssociatedGroupByTypeCompanyWithTotalByMonth = Routing.generate("getDataChartColumnResultIndicatorsAssociatedGroupByTypeCompanyWithTotalByMonth", {id: indicatorId, month: month});
+                $http.get(getDataChartColumnResultIndicatorsAssociatedGroupByTypeCompanyWithTotalByMonth).success(function (data) {
+                    FusionCharts.ready(function () {
+                        var revenueChartColumnResultIndicatorsAssociatedGroupByTypeCompanyWithTotalByMonth = new FusionCharts({
+                            "type": "column3d",
+                            "renderAt": render,
+                            "width": width + "%",
+                            "height": height,
+                            "dataFormat": "json",
+                            "dataSource": {
+                                "chart": data.dataSource.chart,
+                                "data": data.dataSource.data
+                            }
+                        });
+                        revenueChartColumnResultIndicatorsAssociatedGroupByTypeCompanyWithTotalByMonth.setTransparent(true);
+                        revenueChartColumnResultIndicatorsAssociatedGroupByTypeCompanyWithTotalByMonth.render();
                     });
                 });
             }
