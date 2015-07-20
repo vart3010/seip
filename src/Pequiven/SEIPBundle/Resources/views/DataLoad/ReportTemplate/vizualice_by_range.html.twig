@@ -75,7 +75,7 @@
                                 {% set total_real = total_real + current_real %}
                                 {% if withDetails %}
                                     <tr>
-                                        <th scope="col" style="width: 7%" class="header">{{ dateReport|date('d/m/Y') }}&nbsp;-&nbsp;{{ productReport.plantReport|upper }}</th>
+                                        <th scope="col" style="width: 7%" class="header">{{ dateReport|date('d/m/Y') }}&nbsp;-&nbsp;{{ productReport.plantReport|upper }}&nbsp;({{ productReport.product.productUnit }})</th>
                                         <th scope="col" style="width: 7%" class="header">{{ current_plan|myNumberFormat }}</th>
                                         <th scope="col" style="width: 7%" class=" header">{{ current_real|myNumberFormat }}</th>
                                         <th scope="col" style="width: 7%" class=" header">{{ current_percentage|myNumberFormat }}%</th>
@@ -99,7 +99,7 @@
                                 {% set total_percentage = tools.calculatePercentaje(sub_total_plan,sub_total_real) %}
                                 {% set sub_total_pnr = tools.calculatePnr(sub_total_plan,sub_total_real) %}
                                 <tr>
-                                    <th scope="col" style="width: 7%" class="header">{{ productReport.product|upper }}</th>
+                                    <th scope="col" style="width: 7%" class="header">{{ productReport.product|upper }}&nbsp;({{ productReport.product.productUnit }})</th>
                                     <th scope="col" style="width: 7%" class="header">{{ sub_total_plan|myNumberFormat }}</th>
                                     <th scope="col" style="width: 7%" class=" header">{{ sub_total_real|myNumberFormat }}</th>
                                     <th scope="col" style="width: 7%" class=" header">{{ total_percentage|myNumberFormat }}%</th>
@@ -474,18 +474,18 @@
                             {% if withDetails %}
                                 <tr>
                                     {% set productUnit = rawMaterialConsumptionPlanning.product.productUnit %}
-                                    <th class="header">{{ dateReport|date('d/m/Y') }}&nbsp;-&nbsp;{{ rawMaterialConsumptionPlanning.productReport.plantReport|upper }}</th>
+                                    <th class="header">{{ dateReport|date('d/m/Y') }}&nbsp;-&nbsp;{{ rawMaterialConsumptionPlanning.productReport.plantReport|upper }}&nbsp;({{ productUnit }})</th>
                                     {%  if showDay %}
-                                        <th class="header">{{ current_total_day_plan|myNumberFormat }}&nbsp;{{ productUnit }}</th>
-                                        <th class="header">{{ current_total_day|myNumberFormat }}&nbsp;{{ productUnit }}</th>
+                                        <th class="header">{{ current_total_day_plan|myNumberFormat }}</th>
+                                        <th class="header">{{ current_total_day|myNumberFormat }}</th>
                                     {% endif %}
                                     {%  if showMonth %}
-                                        <th class=" header">{{ current_total_month_plan|myNumberFormat }}&nbsp;{{ productUnit }}</th>
-                                        <th class=" header">{{ current_total_month|myNumberFormat }}&nbsp;{{ productUnit }}</th>
+                                        <th class=" header">{{ current_total_month_plan|myNumberFormat }}</th>
+                                        <th class=" header">{{ current_total_month|myNumberFormat }}</th>
                                     {% endif %}
                                     {%  if showYear %}
-                                        <th class=" header">{{ current_total_year_plan|myNumberFormat }}&nbsp;{{ productUnit }}</th>
-                                        <th class=" header">{{ current_total_year|myNumberFormat }}&nbsp;{{ productUnit }}</th>
+                                        <th class=" header">{{ current_total_year_plan|myNumberFormat }}</th>
+                                        <th class=" header">{{ current_total_year|myNumberFormat }}</th>
                                     {% endif %}
                                 </tr>
                             {% endif %}
@@ -503,18 +503,18 @@
                         {% else %}
                             <tr>
                                 {% set productUnit = rawMaterialConsumptionPlanning.product.productUnit %}
-                                <th class="header">{{ rawMaterialConsumptionPlanning.productReport.product|upper }}</th>
+                                <th class="header">{{ rawMaterialConsumptionPlanning.productReport.product|upper }}&nbsp;({{ productUnit }})</th>
                                 {%  if showDay %}
-                                    <th class="header">{{ total_day_plan|myNumberFormat }}&nbsp;{{ productUnit }}</th>
-                                    <th class="header">{{ total_day|myNumberFormat }}&nbsp;{{ productUnit }}</th>
+                                    <th class="header">{{ total_day_plan|myNumberFormat }}</th>
+                                    <th class="header">{{ total_day|myNumberFormat }}</th>
                                 {% endif %}
                                 {%  if showMonth %}
-                                    <th class=" header">{{ total_month_plan|myNumberFormat }}&nbsp;{{ productUnit }}</th>
-                                    <th class=" header">{{ total_month|myNumberFormat }}&nbsp;{{ productUnit }}</th>
+                                    <th class=" header">{{ total_month_plan|myNumberFormat }}</th>
+                                    <th class=" header">{{ total_month|myNumberFormat }}</th>
                                 {% endif %}
                                 {%  if showYear %}
-                                    <th class=" header">{{ total_year_plan|myNumberFormat }}&nbsp;{{ productUnit }}</th>
-                                    <th class=" header">{{ total_year|myNumberFormat }}&nbsp;{{ productUnit }}</th>
+                                    <th class=" header">{{ total_year_plan|myNumberFormat }}</th>
+                                    <th class=" header">{{ total_year|myNumberFormat }}</th>
                                 {% endif %}
                             </tr>
                             {% set total_day = 0 %}
@@ -624,18 +624,18 @@
                         {% if withDetails %}
                             <tr>
                                 {% set serviceUnit = consumerPlanningService.service.serviceUnit %}
-                                    <th class="header">{{ dateReport|date('d/m/Y') }}&nbsp;-&nbsp;{{ consumerPlanningService.plantReport|upper }}</th>
+                                    <th class="header">{{ dateReport|date('d/m/Y') }}&nbsp;-&nbsp;{{ consumerPlanningService.plantReport|upper }}&nbsp;({{ serviceUnit }})</th>
                                 {%  if showDay %}
-                                    <th class="header">{{ current_total_day_plan|myNumberFormat }}&nbsp;{{ serviceUnit }}</th>
-                                    <th class="header">{{ current_total_day|myNumberFormat }}&nbsp;{{ serviceUnit }}</th>
+                                    <th class="header">{{ current_total_day_plan|myNumberFormat }}</th>
+                                    <th class="header">{{ current_total_day|myNumberFormat }}</th>
                                 {% endif %}
                                 {%  if showMonth %}
-                                    <th class=" header">{{ current_total_month_plan|myNumberFormat }}&nbsp;{{ serviceUnit }}</th>
-                                    <th class=" header">{{ current_total_month|myNumberFormat }}&nbsp;{{ serviceUnit }}</th>
+                                    <th class=" header">{{ current_total_month_plan|myNumberFormat }}</th>
+                                    <th class=" header">{{ current_total_month|myNumberFormat }}</th>
                                 {% endif %}
                                 {%  if showYear %}
-                                    <th class=" header">{{ current_total_year_plan|myNumberFormat }}&nbsp;{{ serviceUnit }}</th>
-                                    <th class=" header">{{ current_total_year|myNumberFormat }}&nbsp;{{ serviceUnit }}</th>
+                                    <th class=" header">{{ current_total_year_plan|myNumberFormat }}</th>
+                                    <th class=" header">{{ current_total_year|myNumberFormat }}</th>
                                 {% endif %}
                             </tr>
                         {% endif %}
@@ -654,18 +654,18 @@
                         {% else %}
                             <tr>
                                 {% set serviceUnit = consumerPlanningService.service.serviceUnit %}
-                                    <th class="header">{{ consumerPlanningService.service|upper }}</th>
+                                    <th class="header">{{ consumerPlanningService.service|upper }}&nbsp;({{ serviceUnit }})</th>
                                 {%  if showDay %}
-                                    <th class="header">{{ total_day_plan|myNumberFormat }}&nbsp;{{ serviceUnit }}</th>
-                                    <th class="header">{{ total_day|myNumberFormat }}&nbsp;{{ serviceUnit }}</th>
+                                    <th class="header">{{ total_day_plan|myNumberFormat }}</th>
+                                    <th class="header">{{ total_day|myNumberFormat }}</th>
                                 {% endif %}
                                 {%  if showMonth %}
-                                    <th class=" header">{{ total_month_plan|myNumberFormat }}&nbsp;{{ serviceUnit }}</th>
-                                    <th class=" header">{{ total_month|myNumberFormat }}&nbsp;{{ serviceUnit }}</th>
+                                    <th class=" header">{{ total_month_plan|myNumberFormat }}</th>
+                                    <th class=" header">{{ total_month|myNumberFormat }}</th>
                                 {% endif %}
                                 {%  if showYear %}
-                                    <th class=" header">{{ total_year_plan|myNumberFormat }}&nbsp;{{ serviceUnit }}</th>
-                                    <th class=" header">{{ total_year|myNumberFormat }}&nbsp;{{ serviceUnit }}</th>
+                                    <th class=" header">{{ total_year_plan|myNumberFormat }}</th>
+                                    <th class=" header">{{ total_year|myNumberFormat }}</th>
                                 {% endif %}
                             </tr>
                             
@@ -696,9 +696,9 @@
                     <th class="header text-center white-gradient" colspan="5">PRODUCCIÓN NO REALIZADA</th>
                 </tr>
                 <tr>
-                    <th scope="col" style="width: 7%" class="header">PRODUCTO</th>
+                    <th scope="col" style="width: 20%" class="header">PRODUCTO</th>
                     {%  if showDay %}
-                        <th scope="col" style="width: 7%" class="header">DÍA</th>
+                        <th scope="col" style="width: 80%" class="header">DÍA</th>
                     {% endif %}
                     {%  if showMonth %}
                         <th scope="col" style="width: 7%" class=" header">MES</th>
@@ -752,7 +752,7 @@
 
                         {% if withDetails %}
                             <tr>
-                                <th class="header">{{ dateReport|date('d/m/Y') }}&nbsp;-&nbsp;{{ productReport.plantReport|upper }}</th>
+                                <th class="header">{{ dateReport|date('d/m/Y') }}&nbsp;-&nbsp;{{ productReport.plantReport|upper }}&nbsp;({{ productReport.product.productUnit }})</th>
                                 {%  if showDay %}
                                     <th class="header">{{ current_total_day|myNumberFormat }}</th>
                                 {% endif %}
@@ -782,7 +782,7 @@
                             {% endif %}
                         {% else %}
                             <tr>
-                                <th class="header">{{ productReport.product|upper }}</th>
+                                <th class="header">{{ productReport.product|upper }}&nbsp;({{ productReport.product.productUnit }})</th>
                                 {%  if showDay %}
                                     <th class="header">{{ total_day|myNumberFormat }}</th>
                                 {% endif %}
@@ -810,8 +810,12 @@
                 <tr>
                     <td>TOTALES</td>
                     <td>{{ summary_total_day|myNumberFormat }}</td>
-                    <td>{{ summary_total_month|myNumberFormat }}</td>
-                    <td>{{ summary_total_year|myNumberFormat }}</td>
+                    {%  if showMonth %}
+                        <td>{{ summary_total_month|myNumberFormat }}</td>
+                    {% endif %}
+                    {%  if showYear %}
+                        <td>{{ summary_total_year|myNumberFormat }}</td>
+                    {% endif %}
                 </tr>
             </tfoot>
         </table>
@@ -825,9 +829,9 @@
                     <th class="header text-center white-gradient" colspan="4">INVENTARIO</th>
                 </tr>
                 <tr>
-                    <th scope="col" style="width: 7%" class="header">PRODUCTO</th>
+                    <th scope="col" style="width: 20%" class="header">PRODUCTO</th>
                         {%  if showDay %}
-                        <th scope="col" style="width: 7%" class="header">DÍA</th>
+                        <th scope="col" style="width: 80%" class="header">DÍA</th>
                         {% endif %}
                         {%  if showMonth %}
                         <th scope="col" style="width: 7%" class=" header">DÍA ANTERIOR</th>
@@ -871,7 +875,7 @@
 
                         {% if withDetails %}
                             <tr>
-                                <th  class="header">{{ dateReport|date('d/m/Y') }}&nbsp;-&nbsp;{{ productReport.plantReport|upper }}</th>
+                                <th  class="header">{{ dateReport|date('d/m/Y') }}&nbsp;-&nbsp;{{ productReport.plantReport|upper }}&nbsp;({{ productReport.product.productUnit }})</th>
                                 {%  if showDay %}
                                     <th  class="header">{{ current_total_day|myNumberFormat }}</th>
                                 {% endif %}
@@ -900,7 +904,7 @@
                             {% endif %}
                         {% else %}
                             <tr>
-                                <th  class="header">{{ productReport.product|upper }}</th>
+                                <th  class="header">{{ productReport.product|upper }}&nbsp;({{ productReport.product.productUnit }})</th>
                                 {%  if showDay %}
                                     <th  class="header">{{ total_day|myNumberFormat }}</th>
                                 {% endif %}
@@ -923,7 +927,9 @@
                 <tr>
                     <td>TOTALES</td>
                     <td>{{ summary_total_day|myNumberFormat }}</td>
-                    <td>{{ summary_total_month|myNumberFormat }}</td>
+                    {%  if showMonth %}
+                        <td>{{ summary_total_month|myNumberFormat }}</td>
+                    {% endif %}
                 </tr>
             </tfoot>
         </table>
