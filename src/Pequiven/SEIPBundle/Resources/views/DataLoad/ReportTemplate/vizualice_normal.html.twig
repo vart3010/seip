@@ -653,9 +653,9 @@
 
                             <tr>
                                 <th class="header">
-{#                                    <a href="{{ path("pequiven_report_template_visualize_pnr_time",{idProduct:productReport.product.id,idReportTemplate:productReport.plantReport.reportTemplate.id,dateReport: (dateReport|date('d/m/Y'))}) }}">#}
+                                    <a href="{{ path("pequiven_report_template_visualize_pnr_time",{idProduct:productReport.product.id,idReportTemplate: (productReport.plantReport.reportTemplate.id),idProductReport: (productReport.id),dateReport: (dateReport|date('d/m/Y'))}) }}">
                                         {{ productReport.product|upper }}&nbsp;({{ productReport.product.productUnit }})
-{#                                    </a>#}
+                                    </a>
 
                                 </th>
                                 {%  if showDay %}

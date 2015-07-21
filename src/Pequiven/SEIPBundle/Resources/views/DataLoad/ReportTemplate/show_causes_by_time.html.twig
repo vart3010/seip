@@ -45,10 +45,10 @@
         <table class="simple-table responsive-table" id="">
             <thead>
                 <tr>
-                    <th scope="col">Origen</th>
-                    <th scope="col" width="23%" class="">Dia</th>
-                    <th scope="col" width="23%" class="">Mes</th>
-                    <th scope="col" width="23%" class="">Año</th>
+                    <th scope="col">{{ 'pequiven_seip.cause_of_PNR' | trans }}</th>
+                    <th scope="col" width="23%" class="">{{ "Day" | trans }}</th>
+                    <th scope="col" width="23%" class="">{{ "Month" | trans }}</th>
+                    <th scope="col" width="23%" class="">{{ "Year" | trans }}</th>
                 </tr>
             </thead>
 
@@ -61,15 +61,45 @@
             </tfoot>#}
 
             <tbody>
+                <!-- CAUSAS INTERNAS -->
                 <tr>
                     <th scope="row">
-                        John Doe<br>
-                        <small>Founder</small>
+                        <span class="bold">{{ labelsTypesFailsPNR[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_INTERNAL')] | trans }}</span>
                     </th>
-                    <td>Jul 5, 2011</td>
-                    <td>Enabled</td>
-                    <td>Enabled</td>
-
+                    <td colspan="3"></td>
+                </tr>
+                {% for failInternal in failsInternal %}
+                    <tr>
+                        <th scope="row">
+                            <span>{{ failInternal.name }}</span>
+                        </th>
+                        <td>{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_INTERNAL')][failInternal.name]['day'] }}</td>
+                        <td>{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_INTERNAL')][failInternal.name]['month'] }}</td>
+                        <td>{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_INTERNAL')][failInternal.name]['year'] }}</td>
+                    </tr>
+                {% endfor %}
+                <tr>
+                    <td colspan="4"></td>
+                </tr>
+                <!-- CAUSAS EXTERNAS -->
+                <tr>
+                    <th scope="row">
+                        <span class="bold">{{ labelsTypesFailsPNR[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_EXTERNAL')] | trans }}</span>
+                    </th>
+                    <td colspan="3"></td>
+                </tr>
+                {% for failExternal in failsExternal %}
+                    <tr>
+                        <th scope="row">
+                            <span>{{ failExternal.name }}</span>
+                        </th>
+                        <td>{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_EXTERNAL')][failExternal.name]['day'] }}</td>
+                        <td>{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_EXTERNAL')][failExternal.name]['month'] }}</td>
+                        <td>{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_EXTERNAL')][failExternal.name]['year'] }}</td>
+                    </tr>
+                {% endfor %}
+                <tr>
+                    <td colspan="4"></td>
                 </tr>
             </tbody>
         </table>

@@ -345,6 +345,8 @@ pequiven_seip:
         type:
             internal: Interna
             external: Externa
+            internal_mp: Interna MP
+            external_mp: Externa MP
     report_template:
         report_template: Planificación de producción
         report_day: Reporte del día
@@ -588,7 +590,8 @@ nro: "#"
 "Type": Tipo
 "Value": Valor
 "Raw materials": Materias primas
-"Day": Dia
+"Day": Día
+"Year": Año
 "Hours": Horas
 "Ranges": Rangos
 "Product report": Reporte de producto

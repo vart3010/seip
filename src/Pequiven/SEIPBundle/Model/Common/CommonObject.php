@@ -235,4 +235,18 @@ class CommonObject implements \Symfony\Component\DependencyInjection\ContainerAw
         
         return $labelsSixmonthly;
     }
+    
+    /**
+     * Retorna la cantidad de dias de un mes basado en un calendario (CAL_GREGORIAN) 
+     * @param type $mes
+     * @param type $ano
+     * @return type
+     */
+    static function getDaysPerMonth($mes = "", $ano = "") 
+    {
+        if ($ano == "") {
+            $ano = date("Y");
+        }
+        return cal_days_in_month(CAL_GREGORIAN, $mes, $ano);
+    }
 }
