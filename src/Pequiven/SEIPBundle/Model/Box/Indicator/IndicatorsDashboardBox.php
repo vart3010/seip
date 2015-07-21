@@ -30,6 +30,16 @@ class IndicatorsDashboardBox extends GenericBox {
         $idLineStrategic = ''; //Id de la Línea Estratégica
         $indicatorsGroup = $dataWidget = array(); //Grupo de Indicadores a mostrar en la barra lateral izquierda de la plantilla
         $indicatorService = $this->getIndicatorService();
+        $labelsMonths = array();
+        foreach (\Pequiven\SEIPBundle\Model\Common\CommonObject::getLabelsMonths() as $key => $value) {
+            $labelsMonths[$key] = array(
+                'id' => $key,
+                'description' => $value,
+            );
+        }
+        ksort($labelsMonths);
+//        var_dump($labelsMonths);
+//        die();
 
         //Comparamos el nivel del indicador y asi obtener el id de la Línea Estratégica a la cual esta alineada el mismo
         if ($indicator->getIndicatorLevel()->getLevel() == IndicatorLevel::LEVEL_ESTRATEGICO) {
@@ -132,6 +142,7 @@ class IndicatorsDashboardBox extends GenericBox {
             'seeInColumn' => $seeInColumn,
             'seeInColumnSingleAxis' => $seeInColumnSingleAxis,
             'dataChartColumn' => $dataChartColumn,
+            'labelsMonths' => $labelsMonths,
         );
     }
 

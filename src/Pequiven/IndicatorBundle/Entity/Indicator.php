@@ -175,7 +175,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\Column(name="valueFinal", type="float",precision = 3)
      */
     protected $valueFinal = 0;
-    
+
     /**
      * Frecuencia de notificacion del indicador
      * 
@@ -503,6 +503,13 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\Column(name="isValuePlanFromEquationPlanFormula",type="boolean")
      */
     private $isValuePlanFromEquationPlanFormula = false;
+    
+    /**
+     * Tipo de empresa
+     * @var integer
+     * @ORM\Column(name="typeOfCompany",type="integer")
+     */
+    private $typeOfCompany = self::TYPE_OF_COMPANY_MATRIZ;
     
     /**
      * Constructor
@@ -2177,6 +2184,29 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     public function getIsValuePlanFromEquationPlanFormula()
     {
         return $this->isValuePlanFromEquationPlanFormula;
+    }
+    
+    /**
+     * Set typeOfCompany
+     *
+     * @param integer $typeOfCompany
+     * @return Indicator
+     */
+    public function setTypeOfCompany($typeOfCompany)
+    {
+        $this->typeOfCompany = $typeOfCompany;
+
+        return $this;
+    }
+
+    /**
+     * Get typeOfCompany
+     *
+     * @return integer 
+     */
+    public function getTypeOfCompany()
+    {
+        return $this->typeOfCompany;
     }
     
 }
