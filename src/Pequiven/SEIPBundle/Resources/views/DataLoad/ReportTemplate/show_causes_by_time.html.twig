@@ -12,8 +12,8 @@
 {% endblock %}
 
 {% block body %}
-    
-    
+
+
     <fieldset class="fieldset">
         <legend class="legend">Informacion</legend>
         <div class="columns">
@@ -104,6 +104,12 @@
             </tbody>
         </table>
 
+    </p>
+    <p class="button-height float-right">
+        <a id="btnExportToExcel" href="#" class="button">
+            <span class="button-icon"><span class="icon-download"></span></span>
+                {{ "pequiven_seip.buttons.export_xls"|trans }}
+        </a>
     </p>
 </fieldset>
 {% endblock%}

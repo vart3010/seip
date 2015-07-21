@@ -229,12 +229,12 @@ class ReportTemplateController extends SEIPController {
         $pnrByCausesIntExt = $pnrByCausesMP = array();
         //Obtenemos las etiquetas de los tipos de falla por PRN
         $labelsTypesFailsPNR = \Pequiven\SEIPBundle\Entity\CEI\Fail::getTypeFailsLabels();
-        
+
         $result = array();
-        
+
         //SECCIÓN FECHA
         $dateReport = $request->get('dateReport', null);
-        
+
         $dateNotification = null;
         if ($dateReport !== null) {
             $dateNotification = \DateTime::createFromFormat('d/m/Y', $dateReport);
@@ -243,85 +243,85 @@ class ReportTemplateController extends SEIPController {
             $dateNotification = new \DateTime();
         }
         $dateReport = $dateNotification;
-        
-        $day = date_format($dateReport,'j');
-        $month = date_format($dateReport,'n');
+
+        $day = date_format($dateReport, 'j');
+        $month = date_format($dateReport, 'n');
         $monthWithZero = date_format($dateReport, 'm');
         $year = date_format($dateReport, 'Y');
-        
+
         //Obtenemos la plantilla del reporte
         $reportTemplateId = $request->get('idReportTemplate');
         $reportTemplate = $this->container->get('pequiven.repository.report_template')->findOneBy(array('id' => $reportTemplateId));
 
         //Obtenemos el producto
         $product = $em->getRepository("Pequiven\SEIPBundle\Entity\CEI\Product")->find($request->get("idProduct"));
-        
+
         //Obtenemos el Reporte del Producto
         $productReportId = $request->get('idProductReport');
         $productReport = $this->container->get('pequiven.repository.product_report')->find($productReportId);
-        
+
         //Obtenemos las producciones no realizadas, asociadas al Reporte del Producto
         $unrealizedProductions = $productReport->getUnrealizedProductions();
-        
+
         //Obtenemos las categorías de las causas de PNR por fallas por tipo Interna y Externa
         $failsInternal = $causeFailService->getFails(\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL);
         $failsExternal = $causeFailService->getFails(\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL);
-        
-        
-        
-        
+
+
+
+
         //Seteamos en el arreglo, la sección Causas Internas
-        foreach($failsInternal as $failInternal){
+        foreach ($failsInternal as $failInternal) {
             $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL][$failInternal->getName()]['day'] = 0.0;
             $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL][$failInternal->getName()]['month'] = 0.0;
             $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL][$failInternal->getName()]['year'] = 0.0;
         }
         //Seteamos en el arreglo, la sección Causas Externas
-        foreach($failsExternal as $failExternal){
+        foreach ($failsExternal as $failExternal) {
             $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL][$failExternal->getName()]['day'] = 0.0;
             $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL][$failExternal->getName()]['month'] = 0.0;
             $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL][$failExternal->getName()]['year'] = 0.0;
         }
-        
-        
-        
-        
-        foreach($unrealizedProductions as $unrealizedProduction){
+
+
+
+
+        foreach ($unrealizedProductions as $unrealizedProduction) {
             $monthUnrealizedProduction = $unrealizedProduction->getMonth();
-            
+
             //Seteamos el valor dia y mes
-            if($month == $unrealizedProduction->getMonth()){
+            if ($month == $unrealizedProduction->getMonth()) {
                 $pnrByCausesIntExt = $causeFailService->getFailsCause($unrealizedProduction);
-                foreach($failsInternal as $failInternal){
+                foreach ($failsInternal as $failInternal) {
                     $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL][$failInternal->getName()]['day'] = $pnrByCausesIntExt["TYPE_FAIL_INTERNAL"][$failInternal->getName()][$day];
-                    for($dayMonth = 1; $dayMonth <= $day; $dayMonth++){
+                    for ($dayMonth = 1; $dayMonth <= $day; $dayMonth++) {
                         $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL][$failInternal->getName()]['month'] = $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL][$failInternal->getName()]['month'] + $pnrByCausesIntExt["TYPE_FAIL_INTERNAL"][$failInternal->getName()][$dayMonth];
                     }
                 }
-                foreach($failsExternal as $failExternal){
+                foreach ($failsExternal as $failExternal) {
                     $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL][$failExternal->getName()]['day'] = $pnrByCausesIntExt["TYPE_FAIL_EXTERNAL"][$failExternal->getName()][$day];
-                    for($dayMonth = 1; $dayMonth <= $day; $dayMonth++){
+                    for ($dayMonth = 1; $dayMonth <= $day; $dayMonth++) {
                         $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL][$failExternal->getName()]['month'] = $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL][$failExternal->getName()]['month'] + $pnrByCausesIntExt["TYPE_FAIL_EXTERNAL"][$failExternal->getName()][$dayMonth];
                     }
                 }
             }
-            
-            
+
+
             //Seteamos el valor año
-            if($monthUnrealizedProduction <= $month){
+            if ($monthUnrealizedProduction <= $month) {
                 $pnrByCausesIntExt = $causeFailService->getFailsCause($unrealizedProduction);
-                foreach($failsInternal as $failInternal){
-                    for($dayMonth = 1; $dayMonth <= \Pequiven\SEIPBundle\Model\Common\CommonObject::getDaysPerMonth($monthUnrealizedProduction, $year); $dayMonth++){
+                foreach ($failsInternal as $failInternal) {
+                    for ($dayMonth = 1; $dayMonth <= \Pequiven\SEIPBundle\Model\Common\CommonObject::getDaysPerMonth($monthUnrealizedProduction, $year); $dayMonth++) {
                         $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL][$failInternal->getName()]['year'] = $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL][$failInternal->getName()]['year'] + $pnrByCausesIntExt["TYPE_FAIL_INTERNAL"][$failInternal->getName()][$dayMonth];
                     }
                 }
-                foreach($failsExternal as $failExternal){
-                    for($dayMonth = 1; $dayMonth <= \Pequiven\SEIPBundle\Model\Common\CommonObject::getDaysPerMonth($monthUnrealizedProduction, $year); $dayMonth++){
-                        if($month == $monthUnrealizedProduction){
-                            if($dayMonth <= $day){
+                foreach ($failsExternal as $failExternal) {
+                    for ($dayMonth = 1; $dayMonth <= \Pequiven\SEIPBundle\Model\Common\CommonObject::getDaysPerMonth($monthUnrealizedProduction, $year); $dayMonth++) {
+                        if ($month == $monthUnrealizedProduction) {
+                            if ($dayMonth <= $day) {
                                 $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL][$failExternal->getName()]['year'] = $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL][$failExternal->getName()]['year'] + $pnrByCausesIntExt["TYPE_FAIL_EXTERNAL"][$failExternal->getName()][$dayMonth];
                             }
-                        } else{
+                        } else {
                             $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL][$failExternal->getName()]['year'] = $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL][$failExternal->getName()]['year'] + $pnrByCausesIntExt["TYPE_FAIL_EXTERNAL"][$failExternal->getName()][$dayMonth];
                         }
                     }
@@ -695,6 +695,11 @@ class ReportTemplateController extends SEIPController {
         }
 
         return $this->handleView($view);
+    }
+
+    public function exportExcelPnr() {
+        var_dump("hola mundo");
+        die();
     }
 
     public function exportExcelAction($productsReport, $typeReport, $dateReport, $rawMaterialConsumptionPlannings, $consumerPlanningServices) {
@@ -1171,10 +1176,9 @@ class ReportTemplateController extends SEIPController {
     protected function getUnrealizedProductionService() {
         return $this->container->get('seip.service.unrealizedProduction');
     }
-    
-     protected function getCauseFailService() {
+
+    protected function getCauseFailService() {
         return $this->container->get('seip.service.causefail');
     }
-    
 
 }
