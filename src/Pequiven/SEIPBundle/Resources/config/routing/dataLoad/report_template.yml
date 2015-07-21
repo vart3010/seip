@@ -18,6 +18,17 @@ pequiven_report_template_vizualice:
     options:
         expose: true
         
+pequiven_report_template_export_excel_pnr:
+    path: /.{_format}
+    defaults:
+        _controller: pequiven.controller.report_template:exportExcelPnr
+        _format: html
+    requirements:
+        _format: json|html
+    methods: [GET|POST]
+    options:
+        expose: true
+        
 #pequiven_report_export_excel:
 #    path: /exportExcel/{report}
 #    defaults:

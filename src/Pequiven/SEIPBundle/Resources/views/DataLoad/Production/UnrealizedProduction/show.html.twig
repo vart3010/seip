@@ -7,7 +7,8 @@
 
 
 {% block before_body %}
-    {{ contentHeader(("pequiven_seip.product_report.product_detail_daily_month"|trans ))}}
+    {{ contentHeader(({(path("pequiven_product_report_show",{id: productReportId})):("Reporte de Producto"|trans)}),
+                        ("pequiven_seip.product_report.product_detail_daily_month"|trans )  )}}
 {% endblock %}
 
 {%  set mes  = 'pequiven_seip.month.' ~ unrealized_production.month %}

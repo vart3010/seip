@@ -7,13 +7,13 @@
 
 {% block before_body %}
     {{ contentHeader(
-        ("pequiven_seip.visualizePnrTime.reportPnr"|trans )
+        {(path('pequiven_report_template_vizualice')):("Product Report"|trans)},("pequiven_seip.visualizePnrTime.reportPnr"|trans )
     ) }}
 {% endblock %}
 
 {% block body %}
-    
-    
+
+
     <fieldset class="fieldset">
         <legend class="legend">Informacion</legend>
         <div class="columns">
@@ -125,5 +125,23 @@
         </table>
 
     </p>
+    <form id="frmPnr" action="{{ path("pequiven_report_template_export_excel_pnr") }}" method="POST"></form>
+
+    <p class="button-height float-right">
+        <a id="btnExportToExcelPnr" href="#" class="button">
+            <span class="button-icon"><span class="icon-download"></span></span>
+                {{ "pequiven_seip.buttons.export_xls"|trans }}
+        </a>
+    </p>
 </fieldset>
 {% endblock%}
+
+{% block javascript %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#btnExportToExcelPnr").click(function(){
+               $("#frmPnr").submit(); 
+            });
+        });
+    </script>
+{% endblock %}
