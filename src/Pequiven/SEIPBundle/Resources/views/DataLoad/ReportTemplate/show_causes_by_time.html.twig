@@ -7,7 +7,7 @@
 
 {% block before_body %}
     {{ contentHeader(
-        ("pequiven_seip.visualizePnrTime.reportPnr"|trans )
+        {(path('pequiven_report_template_vizualice')):("Product Report"|trans)},("pequiven_seip.visualizePnrTime.reportPnr"|trans )
     ) }}
 {% endblock %}
 

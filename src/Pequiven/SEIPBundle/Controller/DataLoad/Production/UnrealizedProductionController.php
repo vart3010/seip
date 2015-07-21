@@ -108,6 +108,8 @@ class UnrealizedProductionController extends SEIPController {
     public function showAction(\Symfony\Component\HttpFoundation\Request $request) {
         $resource = $this->findOr404($request);
 
+        $productReportId = $request->get("productReportId");
+
 
         $urealizedService = $this->getUnrealizedProductionService();
         $failsNames = $urealizedService->getCauseValueDay();
@@ -130,14 +132,14 @@ class UnrealizedProductionController extends SEIPController {
         if (count($mp) > 0) {
             $InternalCategoriesMp = array();
             $ExternalCategoriesMp = array();
-            if(isset($mp["getInternalCausesMp"])){
+            if (isset($mp["getInternalCausesMp"])) {
                 foreach ($mp["getInternalCausesMp"] as $key => $values) {
                     if ($key != "total") {
                         array_push($InternalCategoriesMp, $key);
                     }
                 }
             }
-            if(isset($mp["getExternalCausesMp"])){
+            if (isset($mp["getExternalCausesMp"])) {
                 foreach ($mp["getExternalCausesMp"] as $key => $values) {
                     if ($key != "total") {
                         array_push($ExternalCategoriesMp, $key);
@@ -159,19 +161,16 @@ class UnrealizedProductionController extends SEIPController {
                 $datacharExternalMp = $causeFailService->generatePieTotals($resource, $datosServicesExternalMp);
             } else {
 
-            if(isset($mp["getInternalCausesMp"])){
-                $datosServicesInternalMp = array("data" => $causeFailService->getArrayTotals($resource, $mp["getInternalCausesMp"], $InternalCategoriesMp));
-                $datacharInternalMp = $causeFailService->generatePieTotals($resource, $datosServicesInternalMp);
-            }
-            if(isset($mp["getExternalCausesMp"])){
-                $datosServicesInternalMp = array("data" => $causeFailService->getArrayTotals($resource, $mp["getExternalCausesMp"], $ExternalCategoriesMp));
-                $datacharExternalMp = $causeFailService->generatePieTotals($resource, $datosServicesInternalMp);
+                if (isset($mp["getInternalCausesMp"])) {
+                    $datosServicesInternalMp = array("data" => $causeFailService->getArrayTotals($resource, $mp["getInternalCausesMp"], $InternalCategoriesMp));
+                    $datacharInternalMp = $causeFailService->generatePieTotals($resource, $datosServicesInternalMp);
+                }
+                if (isset($mp["getExternalCausesMp"])) {
+                    $datosServicesInternalMp = array("data" => $causeFailService->getArrayTotals($resource, $mp["getExternalCausesMp"], $ExternalCategoriesMp));
+                    $datacharExternalMp = $causeFailService->generatePieTotals($resource, $datosServicesInternalMp);
+                }
             }
         }
-
-
-
-}
         $view = $this
                 ->view()
                 ->setTemplate($this->config->getTemplate('show.html'))
@@ -185,11 +184,11 @@ class UnrealizedProductionController extends SEIPController {
             "dataInternal" => json_encode($datacharInternal),
             "dataExternal" => json_encode($datacharExternal),
             "dataInternalMp" => ($datacharInternalMp),
-            "dataExternalMp" => ($datacharExternalMp)
+            "dataExternalMp" => ($datacharExternalMp),
+            "productReportId" => $productReportId
         ));
 
         return $this->handleView($view);
-    
     }
 
     /**
@@ -199,10 +198,9 @@ class UnrealizedProductionController extends SEIPController {
     protected function getCauseFailService() {
         return $this->container->get('seip.service.causefail');
     }
-    
-    
+
     protected function getUnrealizedProductionService() {
         return $this->container->get('seip.service.unrealizedProduction');
-    }        
+    }
 
 }

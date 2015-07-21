@@ -21,7 +21,7 @@ pequiven_unrealized_production_delete:
     methods: [GET|DELETE]
     
 pequiven_unrealized_production_show:
-    path: /{id}/show
+    path: /{id}/{productReportId}/show
     defaults:
         _controller: pequiven.controller.unrealized_production:showAction
     methods: [GET]   

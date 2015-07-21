@@ -20,7 +20,7 @@
 {% block before_body %}
     {{ contentHeader(
         {(path('pequiven_indicator_list',{'level':level})):(labelHeader[level])|trans},
-        { (path('pequiven_indicator_show',{'id':indicator.id})): (indicator.ref)},
+        {(path('pequiven_indicator_show',{'id':indicator.id})): (indicator.ref)},
         ('pequiven.show'|trans({},'messages'))
     ) }}
 {% endblock %}

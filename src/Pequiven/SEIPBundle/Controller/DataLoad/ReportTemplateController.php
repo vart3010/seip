@@ -263,9 +263,12 @@ class ReportTemplateController extends SEIPController {
         //Obtenemos las producciones no realizadas, asociadas al Reporte del Producto
         $unrealizedProductions = $productReport->getUnrealizedProductions();
         
-        //Obtenemos las cetagorías de las causas de PNR por fallas por tipo Interna y Externa
+        //Obtenemos las categorías de las causas de PNR por fallas por tipo Interna y Externa
         $failsInternal = $causeFailService->getFails(\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL);
         $failsExternal = $causeFailService->getFails(\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL);
+        
+        
+        
         
         //Seteamos en el arreglo, la sección Causas Internas
         foreach($failsInternal as $failInternal){
@@ -279,6 +282,9 @@ class ReportTemplateController extends SEIPController {
             $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL][$failExternal->getName()]['month'] = 0.0;
             $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL][$failExternal->getName()]['year'] = 0.0;
         }
+        
+        
+        
         
         foreach($unrealizedProductions as $unrealizedProduction){
             $monthUnrealizedProduction = $unrealizedProduction->getMonth();
