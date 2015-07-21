@@ -30,6 +30,64 @@ class CauseFailService implements ContainerAwareInterface {
         $fails = $em->getRepository('PequivenSEIPBundle:CEI\Fail')->findQueryByTypeResult($type);
         return $fails;
     }
+    
+    public function getRawMaterialsByFails(UnrealizedProduction $unrealizedProduction){
+        
+        $rawMaterials = array(
+            \Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL_MP => array(),  
+            \Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL_MP => array(),  
+        );
+        $reflection = new \ReflectionClass($unrealizedProduction);
+        $methods = $reflection->getMethods();
+        $nameMatch = '/^getDay\d+Details+$/';
+
+        $daysMonth = $this->getDaysMonth($unrealizedProduction);
+
+        $methodTypeCauses = array(
+            "getInternalCausesMp",
+            "getExternalCausesMp"
+        );
+
+        //Obtenemos la materia prima por la cual no se realizo la producciòn
+        $productsInternalMp = array();
+        $productsExternalMp = array();
+        $cont = 0;
+        foreach ($methods as $m) {
+
+            $methodName = $m->getName();
+            if (preg_match($nameMatch, $methodName)) {    //filtra los metodos getDayXXDetails
+                $unrealizedProductionDay = $unrealizedProduction->$methodName();
+//                var_dump($methodName);
+
+                if ($unrealizedProductionDay != "") {
+                    foreach ($methodTypeCauses as $key) { //RECORRE EL ARRAY DE CAUSAS
+//                        var_dump($key);
+                        foreach ($unrealizedProductionDay->$key() as $fails) {
+                            if ($key == "getInternalCausesMp") {
+                                    if (!array_key_exists($fails->getRawMaterial()->getName(), $productsInternalMp)) {
+                                    $productsInternalMp[$fails->getRawMaterial()->getName()] = $fails->getRawMaterial();
+                                }
+                            }
+                            if ($key == "getExternalCausesMp") {
+                                if (!array_key_exists($fails->getRawMaterial()->getName(), $productsExternalMp)) {
+                                    $productsExternalMp[$fails->getRawMaterial()->getName()] = $fails->getRawMaterial();
+                                }
+                            }
+
+//                            var_dump($fails->getRawMaterial()->getName());
+//                            $mp[$key][$fails->getRawMaterial()->getName()][$cont] = 0;
+                        }
+                    }
+                }
+                $cont++;
+            }
+        }
+        
+        $rawMaterials[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL_MP] = $productsInternalMp;
+        $rawMaterials[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL_MP] = $productsExternalMp;
+        
+        return $rawMaterials;
+    }
 
 //    public function getFailsMp() {
 //        $em = $this->container->get('doctrine')->getManager();

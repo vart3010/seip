@@ -227,6 +227,12 @@ class ReportTemplateController extends SEIPController {
         $em = $this->getDoctrine()->getManager();
         $causeFailService = $this->getCauseFailService();
         $pnrByCausesIntExt = $pnrByCausesMP = array();
+        
+        $rawMaterials = array(
+            \Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL_MP => array(),  
+            \Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL_MP => array(),  
+        );
+        
         //Obtenemos las etiquetas de los tipos de falla por PRN
         $labelsTypesFailsPNR = \Pequiven\SEIPBundle\Entity\CEI\Fail::getTypeFailsLabels();
         
@@ -280,6 +286,31 @@ class ReportTemplateController extends SEIPController {
             $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL][$failExternal->getName()]['year'] = 0.0;
         }
         
+        //
+        foreach($unrealizedProductions as $unrealizedProduction){
+            if($unrealizedProduction->getMonth() <= $month){
+                $rawMaterialsArray = $causeFailService->getRawMaterialsByFails($unrealizedProduction);
+                $externalRawMaterials = $rawMaterialsArray[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL_MP];
+                $internalRawMaterials = $rawMaterialsArray[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL_MP];
+
+                if(count($externalRawMaterials) > 0){
+                    foreach($externalRawMaterials as $key => $rawMaterial){
+                        if(!array_key_exists($key, $rawMaterials[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL_MP])){
+                            $rawMaterials[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL_MP][$key] = $rawMaterial;
+                        }
+                    }
+                }
+                if(count($internalRawMaterials) > 0){
+                    foreach($internalRawMaterials as $key => $rawMaterial){
+                        if(!array_key_exists($key, $rawMaterials[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL_MP])){
+                            $rawMaterials[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL_MP][$key] = $rawMaterial;
+                        }
+                    }
+                }
+            }
+        }
+        
+        //Recorremos las producciones no realizadas
         foreach($unrealizedProductions as $unrealizedProduction){
             $monthUnrealizedProduction = $unrealizedProduction->getMonth();
             
@@ -321,7 +352,9 @@ class ReportTemplateController extends SEIPController {
                     }
                 }
             }
-//            $pnrByCausesMP = $causeFailService->getFailsCauseMp($unrealizedProduction);   
+            
+            //Sección Causas por Materia Prima
+//            $pnrByCausesMP = $causeFailService->getFailsCauseMp($unrealizedProduction);
         }
 
         $data = array(
