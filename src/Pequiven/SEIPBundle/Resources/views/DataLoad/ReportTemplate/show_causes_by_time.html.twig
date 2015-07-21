@@ -105,7 +105,9 @@
         </table>
 
     </p>
-    <form id="frmPnr" action="{{ path("pequiven_report_template_export_excel_pnr") }}" method="POST"></form>
+    <form id="frmPnr" action="{{ path("pequiven_report_template_visualize_pnr_time") }}" method="POST">
+        <input type="hidden" name="exportExcel" id="exportExcel" value="0">
+    </form>
 
     <p class="button-height float-right">
         <a id="btnExportToExcelPnr" href="#" class="button">
@@ -120,6 +122,7 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $("#btnExportToExcelPnr").click(function(){
+               $("#exportExcel").val("1");
                $("#frmPnr").submit(); 
             });
         });
