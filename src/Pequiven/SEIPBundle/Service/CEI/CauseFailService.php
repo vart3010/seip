@@ -88,6 +88,11 @@ class CauseFailService implements ContainerAwareInterface {
         return $totals;
     }
 
+    /**
+     * Retorna un arreglo del tipo [tipo de causa de materia prima][materia prima][día]
+     * @param UnrealizedProduction $unrealizedProduction
+     * @return type
+     */
     public function getFailsCauseMp(UnrealizedProduction $unrealizedProduction) {
         $reflection = new \ReflectionClass($unrealizedProduction);
         $methods = $reflection->getMethods();
@@ -179,6 +184,11 @@ class CauseFailService implements ContainerAwareInterface {
         return $mp;
     }
 
+    /**
+     * Retorna un arreglo del tipo [tipo de pnr:interna o externa][categoría del tipo de PNR][día]
+     * @param UnrealizedProduction $unrealizedProduction
+     * @return type
+     */
     public function getFailsCause(UnrealizedProduction $unrealizedProduction) {
         //OBTIENE METODOS DE UNREALIZED_PRODUCTION
         $reflection = new \ReflectionClass($unrealizedProduction);

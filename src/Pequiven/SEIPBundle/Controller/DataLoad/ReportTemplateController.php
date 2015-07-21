@@ -225,8 +225,19 @@ class ReportTemplateController extends SEIPController {
      */
     public function visualizePnrProduct(Request $request) {
 
-
-        $dateReport = new \DateTime(date("Y-m-d", strtotime("-1 day")));
+        $dateReport = $request->get('dateReport', null);
+        
+        $dateNotification = null;
+        if ($dateReport !== null) {
+            $dateNotification = \DateTime::createFromFormat('d/m/Y', $dateReport);
+        }
+        if ($dateNotification === null) {
+            $dateNotification = new \DateTime();
+        }
+        $dateReport = $dateNotification;
+        
+        $reportTemplateId = $request->get('idReportTemplate');
+        $reportTemplate = $this->container->get('pequiven.repository.report_template')->findOneBy(array('id' => $reportTemplateId));
 
         $em = $this->getDoctrine()->getManager();
         $product = $em->getRepository("Pequiven\SEIPBundle\Entity\CEI\Product")->find($request->get("idProduct"));
@@ -254,7 +265,7 @@ class ReportTemplateController extends SEIPController {
         $data = array(
             "product" => $product,
             "dateReport" => $dateReport,
-            "plant" => $request->get("plant"),
+            "reportTemplate" => $reportTemplate,
             "causes" => $unrealizedService->getCauseValueDay()
         );
 
