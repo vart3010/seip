@@ -224,12 +224,13 @@ class ReportTemplateController extends SEIPController {
      * Vista para mostrar la PNR de un producto desde reporte de produccion
      */
     public function visualizePnrProduct(Request $request) {
+        $labelsTypesFailsPNR = \Pequiven\SEIPBundle\Entity\CEI\Fail::getTypeFailsLabels();
+        
         $em = $this->getDoctrine()->getManager();
         $causeFailService = $this->getCauseFailService();
         $pnrByCausesIntExt = $pnrByCausesMP = array();
         //Obtenemos las etiquetas de los tipos de falla por PRN
-        $labelsTypesFailsPNR = \Pequiven\SEIPBundle\Entity\CEI\Fail::getTypeFailsLabels();
-
+        
         $result = array();
 
         //SECCIÓN FECHA
@@ -698,8 +699,38 @@ class ReportTemplateController extends SEIPController {
     }
 
     public function exportExcelPnr() {
-        var_dump("hola mundo");
-        die();
+        $path = $this->get('kernel')->locateResource('@PequivenObjetiveBundle/Resources/skeleton/reporte_produccion.xls');
+        $now = new \DateTime();
+        $objPHPExcel = \PHPExcel_IOFactory::load($path);
+        $objPHPExcel
+                ->getProperties()
+                ->setCreator("SEIP")
+                ->setTitle('SEIP - Reporte De Producción')
+                ->setCreated()
+                ->setLastModifiedBy('SEIP')
+                ->setModified()
+        ;
+        
+        
+
+
+        $fileName = sprintf("Reporte de Producción " . date("d-m-Y") . ".xls");
+
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="' . $fileName . '"');
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+
+        // If you're serving to IE over SSL, then the following may be needed
+        header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT'); // always modified
+        header('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header('Pragma: public'); // HTTP/1.0
+
+        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+        $objWriter->save('php://output');
+        exit;
     }
 
     public function exportExcelAction($productsReport, $typeReport, $dateReport, $rawMaterialConsumptionPlannings, $consumerPlanningServices) {

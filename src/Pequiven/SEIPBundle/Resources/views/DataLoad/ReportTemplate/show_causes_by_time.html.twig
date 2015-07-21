@@ -105,11 +105,23 @@
         </table>
 
     </p>
-    {#<p class="button-height float-right">
-        <a id="btnExportToExcel" href="{{ path}}" class="button">
+    <form id="frmPnr" action="{{ path("pequiven_report_template_export_excel_pnr") }}" method="POST"></form>
+
+    <p class="button-height float-right">
+        <a id="btnExportToExcelPnr" href="#" class="button">
             <span class="button-icon"><span class="icon-download"></span></span>
                 {{ "pequiven_seip.buttons.export_xls"|trans }}
         </a>
-    </p>#}
+    </p>
 </fieldset>
 {% endblock%}
+
+{% block javascript %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#btnExportToExcelPnr").click(function(){
+               $("#frmPnr").submit(); 
+            });
+        });
+    </script>
+{% endblock %}
