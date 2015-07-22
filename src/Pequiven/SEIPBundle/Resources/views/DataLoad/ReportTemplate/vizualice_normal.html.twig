@@ -803,13 +803,14 @@
                 {{ "pequiven_seip.buttons.export_pdf"|trans }}
         </a>
     </p>
-
-    <p class="button-height float-right">
-        <a id="btnExportToExcel" href="#" class="button">
-            <span class="button-icon"><span class="icon-download"></span></span>
-                {{ "pequiven_seip.buttons.export_xls"|trans }}
-        </a>
-    </p>
+    {% if is_granted(['ROLE_SEIP_OPERATION_EXPORT_EXCEL_PRODUCTION']) %}
+        <p class="button-height float-right">
+            <a id="btnExportToExcel" href="#" class="button">
+                <span class="button-icon"><span class="icon-download"></span></span>
+                    {{ "pequiven_seip.buttons.export_xls"|trans }}
+            </a>
+        </p>
+    {% endif %}
 {% else %}
     <h2 class="text-center">{{ "Select the plant"|trans }}</h2>
 {% endif %}
