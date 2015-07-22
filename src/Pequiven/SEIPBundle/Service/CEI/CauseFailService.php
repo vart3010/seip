@@ -134,7 +134,7 @@ class CauseFailService implements ContainerAwareInterface {
 //        die();
         
         //Obtenemos nuestra matriz [tipo_pnr_mp][producto][dia]
-        $cont = 0;
+        $cont = 1;
         foreach ($methods as $m) {
 
             $methodName = $m->getName();
