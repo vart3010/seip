@@ -158,6 +158,9 @@ class ArrangementProgramManager implements ContainerAwareInterface
 //        if($this->getSecurityConext()->isGranted('ROLE_ARRANGEMENT_PROGRAM_EDIT')){
 //            $permission = true;
 //        }
+        if($this->getSecurityConext()->isGranted('ROLE_SEIP_PLANNING_ARRANGEMENT_PROGRAM_EDIT')){
+            $permission = true;
+        }
         return $permission;
     }
     
