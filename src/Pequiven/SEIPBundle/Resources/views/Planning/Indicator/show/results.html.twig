@@ -75,7 +75,7 @@
 
                         <td class="align-right vertical-center">
                             <div ng-controller="ToolsController" ng-init="isGrantedButtonEdit({{ indicator.id }},paso+1)">
-                                <form id="form_{$ valueIndicator.id $}" action="{{ path("pequiven_indicator_show",{id:indicator.id,uploadFile:(true)}) }}" method="POST" enctype="multipart/form-data">
+                                <form style="display: none" id="form_{$ valueIndicator.id $}" action="{{ path("pequiven_indicator_show",{id:indicator.id,uploadFile:(true)}) }}" method="POST" enctype="multipart/form-data">
                                     <input name="archivo" onChange="submitUploadFile(this.id)" id="indicatorFilePdf_{$ valueIndicator.id $}" type="file">
 {#                                    <input name="submit" type="submit" value="submit">#}
                                     
