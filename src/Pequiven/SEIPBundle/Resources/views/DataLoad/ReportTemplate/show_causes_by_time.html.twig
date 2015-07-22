@@ -81,6 +81,16 @@
                     </tr>
                 {% endfor %}
                 <tr>
+                    <th scope="row" >
+                        <span style="margin-left: 18px;font-size: 15px;" class="bold">
+                            {{ 'pequiven_seip.total' | trans }}
+                        </span>
+                    </th>
+                    <td><span class="bold">{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_INTERNAL')]['total']['day'] }}</span></td>
+                    <td><span class="bold">{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_INTERNAL')]['total']['month'] }}</span></td>
+                    <td><span class="bold">{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_INTERNAL')]['total']['year'] }}</span></td>
+                </tr>
+                <tr>
                     <td colspan="4"></td>
                 </tr>
                 
@@ -103,6 +113,16 @@
                         <td>{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_EXTERNAL')][failExternal.name]['year'] }}</td>
                     </tr>
                 {% endfor %}
+                <tr>
+                    <th scope="row" >
+                        <span style="margin-left: 18px;font-size: 15px;" class="bold">
+                            {{ 'pequiven_seip.total' | trans }}
+                        </span>
+                    </th>
+                    <td><span class="bold">{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_EXTERNAL')]['total']['day'] }}</span></td>
+                    <td><span class="bold">{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_EXTERNAL')]['total']['month'] }}</span></td>
+                    <td><span class="bold">{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_EXTERNAL')]['total']['year'] }}</span></td>
+                </tr>
                 <tr>
                     <td colspan="4"></td>
                 </tr>
@@ -138,6 +158,16 @@
                     </tr>
                 {% endif %}
                 <tr>
+                    <th scope="row" >
+                        <span style="margin-left: 18px;font-size: 15px;" class="bold">
+                            {{ 'pequiven_seip.total' | trans }}
+                        </span>
+                    </th>
+                    <td><span class="bold">{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_INTERNAL_MP')]['total']['day'] }}</span></td>
+                    <td><span class="bold">{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_INTERNAL_MP')]['total']['month'] }}</span></td>
+                    <td><span class="bold">{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_INTERNAL_MP')]['total']['year'] }}</span></td>
+                </tr>
+                <tr>
                     <td colspan="4"></td>
                 </tr>
                 
@@ -171,6 +201,16 @@
                         <td>{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_EXTERNAL_MP')]['empty']['year'] }}</td>
                     </tr>
                 {% endif %}
+                <tr>
+                    <th scope="row" >
+                        <span style="margin-left: 18px;font-size: 15px;" class="bold">
+                            {{ 'pequiven_seip.total' | trans }}
+                        </span>
+                    </th>
+                    <td><span class="bold">{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_EXTERNAL_MP')]['total']['day'] }}</span></td>
+                    <td><span class="bold">{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_EXTERNAL_MP')]['total']['month'] }}</span></td>
+                    <td><span class="bold">{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_EXTERNAL_MP')]['total']['year'] }}</span></td>
+                </tr>
                 <tr>
                     <td colspan="4"></td>
                 </tr>
