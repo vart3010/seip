@@ -125,7 +125,7 @@
         </table>
 
     </p>
-    <form id="frmPnr" action="{{ path("pequiven_report_template_visualize_pnr_time") }}" method="POST">
+    <form id="frmPnr" action="{{ path("pequiven_report_template_visualize_pnr_time",{idProduct:productReport.product.id,idReportTemplate: (productReport.plantReport.reportTemplate.id),idProductReport: (productReport.id),dateReport: (dateReport|date('d/m/Y'))}) }}" method="POST">
         <input type="hidden" name="exportExcel" id="exportExcel" value="0">
     </form>
 
@@ -141,9 +141,9 @@
 {% block javascript %}
     <script type="text/javascript">
         $(document).ready(function () {
-            $("#btnExportToExcelPnr").click(function(){
-               $("#exportExcel").val("1");
-               $("#frmPnr").submit(); 
+            $("#btnExportToExcelPnr").click(function () {
+                $("#exportExcel").val("1");
+                $("#frmPnr").submit();
             });
         });
     </script>
