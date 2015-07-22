@@ -1493,9 +1493,9 @@ angular.module('seipModule.controllers', [])
             var obtainValues = function (save, successCallBack) {
                 var formValueIndicator = angular.element('#form_value_indicator');
                 var formData = formValueIndicator.serialize();
-                
+
                 var url = Routing.generate('pequiven_value_indicator_obtain_values', {idIndicator: $scope.indicator.id});
-                
+
                 notificationBarService.getLoadStatus().loading();
                 return $http({
                     method: 'POST',
@@ -1505,8 +1505,8 @@ angular.module('seipModule.controllers', [])
                 }).success(function (data) {
                     $scope.templateOptions.setVar("form", {errors: {}});
                     $scope.templateOptions.setVar('evaluationResult', data.result);
-                    var formVarRealName = '#form_'+data.varRealName;
-                    var formVarPlanName = '#form_'+data.varPlanName;
+                    var formVarRealName = '#form_' + data.varRealName;
+                    var formVarPlanName = '#form_' + data.varPlanName;
                     angular.element(formVarRealName).val(data.real);
                     angular.element(formVarPlanName).val(data.plan);
                     $scope.templateOptions.setVar('real', data.real);
@@ -2359,12 +2359,12 @@ angular.module('seipModule.controllers', [])
             $scope.data = {
                 monthsLabels: null,
             };
-            
+
             $scope.model = {
                 months: null,
                 monthsGroupByCompany: null,
             };
-            
+
             $scope.$watch("model.months", function (newParams, oldParams) {
                 if ($scope.model.months != null && $scope.model.months.id != undefined) {
 //                    setValueSelect2("month", $scope.model.months.id, $scope.data.monthsLabel);
@@ -2698,7 +2698,7 @@ angular.module('seipModule.controllers', [])
                     });
                 });
             }
-            
+
             //14-Gráfico tipo columna 3d para mostrar el resultado real/plan de la ecuación para gráficos de la fórmula del indicador respecto al eje izquierdo, de acuerdo a la frecuencia de notificación.
             $scope.chargeChartColumnRealPlanByFrequencyNotificationFromDashboardEquation = function (indicatorId, render, width, height) {
                 var getDataChartColumnRealPlanByFrequencyNotificationFromDashboardEquation = Routing.generate("getDataChartColumnRealPlanByFrequencyNotificationFromDashboardEquation", {id: indicatorId});
@@ -2721,7 +2721,7 @@ angular.module('seipModule.controllers', [])
                     });
                 });
             }
-            
+
             //15-Gráfico tipo stacked column 3d para mostrar el resultado , de acuerdo a la frecuencia de notificación de los indicadores asociados, además del total del indicador padre.
             $scope.chargeChartStackedColumnVariableByFrequencyNotificationWithTotal = function (indicatorId, render, width, height) {
                 var getDataChartStackedColumnVariableByFrequencyNotificationWithTotal = Routing.generate("getDataChartStackedColumnVariableByFrequencyNotificationWithTotal", {id: indicatorId});
@@ -2744,7 +2744,7 @@ angular.module('seipModule.controllers', [])
                     });
                 });
             }
-            
+
             //16-Gráfico tipo column 3d para mostrar el resultado de un mes (Ideado para aquellos indicadores con fórmula acumulativo de cada carga) de los indicadores asociados, con el total acumulado al final
             $scope.chargeChartColumnResultIndicatorsAssociatedWithTotalByMonth = function (indicatorId, month, render, width, height) {
                 var getDataChartColumnResultIndicatorsAssociatedWithTotalByMonth = Routing.generate("getDataChartColumnResultIndicatorsAssociatedWithTotalByMonth", {id: indicatorId, month: month});
@@ -2766,7 +2766,7 @@ angular.module('seipModule.controllers', [])
                     });
                 });
             }
-            
+
             //17-Gráfico tipo column 3d para mostrar el resultado de un mes (Ideado para aquellos indicadores con fórmula acumulativo de cada carga) de los indicadores asociados agrupados por tipo de empresa, con el total acumulado al final
             $scope.chargeChartColumnResultIndicatorsAssociatedGroupByTypeCompanyWithTotalByMonth = function (indicatorId, month, render, width, height) {
                 var getDataChartColumnResultIndicatorsAssociatedGroupByTypeCompanyWithTotalByMonth = Routing.generate("getDataChartColumnResultIndicatorsAssociatedGroupByTypeCompanyWithTotalByMonth", {id: indicatorId, month: month});
@@ -2788,8 +2788,8 @@ angular.module('seipModule.controllers', [])
                     });
                 });
             }
-            
-            
+
+
             //Gráfico en forma tacómetro (Usado para mostrar el resultado de los indicadores estratégicos en el dashboard)
             $scope.renderChartExample = function (indicatorId, render, width, height) {
                 FusionCharts.ready(function () {
@@ -2909,6 +2909,8 @@ angular.module('seipModule.controllers', [])
         })
 
         .controller('ToolsController', function ($scope, ngTableParams, $http, sfTranslator, notifyService) {
+            $scope.data ="none";
+    
             $scope.isGrantedButtonEdit = function (id, index) {
                 //index = index+1;
                 var data;
@@ -2923,6 +2925,20 @@ angular.module('seipModule.controllers', [])
                 });
 
             }
+
+            $scope.uploadFile = function () {
+                alert("hola");
+                var f = document.getElementById('form_archivo').files[0],
+                        r = new FileReader();
+                r.onloadend = function (e) {
+                     $scope.data = e.target.result;
+                    //send you binary data via $http or $resource or do anything else with it
+                }
+                r.readAsBinaryString(f);
+
+            }
+
+
         })
 
         .controller('DashboardController', function ($scope, ngTableParams, $http, sfTranslator, notifyService) {
@@ -3491,7 +3507,7 @@ angular.module('seipModule.controllers', [])
                             "chart": data.dataSource.chart,
                             "categories": data.dataSource.categories,
                             "dataset": data.dataSource.dataset
-                    }
+                        }
 
 
                     });

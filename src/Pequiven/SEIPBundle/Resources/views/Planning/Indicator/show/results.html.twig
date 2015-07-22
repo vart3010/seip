@@ -1,4 +1,6 @@
 {% trans_default_domain 'PequivenIndicatorBundle' %}
+
+
 <div class="block" ng-init="urlValueIndicatorForm='{{ path('pequiven_value_indicator_get_form',{'idIndicator':indicator.id}) }}'">
     <div class="block-title">
         <h3 class="ng-binding">{$ indicator.valuesIndicator.length $} {{ 'pequiven_indicator.results'|trans }}</h3>
@@ -20,11 +22,10 @@
         </div>
 
         {% endif %}
-
-
-         
-            
         </div>
+
+
+
         <div class="with-padding">
             {% set colspan = 5 %}
             <table class="simple-table responsive-table tables-extras" id="sorting-example2">
@@ -64,7 +65,7 @@
                         {#                    {% if is_granted(['ROLE_WORKER_PLANNING','ROLE_INDICATOR_EDIT','ROLE_INDICATOR_ADD_RESULT']) %}#}
                         {#                    {% if is_granted(['ROLE_SEIP_INDICATOR_ADD_NOTIFICATION_SPECIAL']) %}#}
                         {#                        {% if is_granted(['ROLE_SEIP_INDICATOR_ADD_NOTIFICATION_SPECIAL','ROLE_INDICATOR_EDIT','ROLE_INDICATOR_ADD_RESULT']) %}#}
-                   {% if ( 
+                        {% if ( 
                             ((is_granted(['ROLE_INDICATOR_EDIT']) and  indicatorService.isIndicatorHasParents(indicator) != true) 
                                or 
                               (is_granted(['ROLE_SEIP_INDICATOR_ADD_NOTIFICATION_SPECIAL']) and (indicatorService.isIndicatorHasParents(indicator))) 
@@ -73,7 +74,11 @@
                         ) %}
 
                         <td class="align-right vertical-center">
-                            <div ng-controller="ToolsController" ng-init="isGrantedButtonEdit({{ indicator.id }},paso+1)"></div>
+                            <div ng-controller="ToolsController" ng-init="isGrantedButtonEdit({{ indicator.id }},paso+1)">
+                                <form action="#" method="post" {{ form_enctype(form) }}>
+                                    {{ form_widget(form) }}
+                                </form>
+                            </div>
 
                             <div style="display: none;" id="target_{$ paso+1 $}">
 
@@ -82,11 +87,16 @@
                                     <span class="select-arrow"></span>
                                     <span class="drop-down">
                                         <a href ng-click="loadTemplateValueIndicator(valueIndicator)" class="button icon-pencil">{{ "pequiven.actions.edit"|trans({},"messages") }}</a>
+                                        {% if(is_granted(['ROLE_SEIP_PLANNING_INDICATOR_UPLOAD_FILE'])) %}
+                                            <a href="#"  class="uploadFileButton button icon-outbox">{{ "pequiven.actions.upload_file"|trans({},"messages") }}</a>
+                                        {% endif %}
                                     </span>
+
+
                                 </span>
                             </div>
                         </td>
-                {% endif %}
+                        {% endif %}
 
 
 

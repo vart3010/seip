@@ -88,6 +88,14 @@ class IndicatorController extends ResourceController {
         } else {//En caso de que el indicador no tenga un rango de gestión asignado se setea el mensaje de error
             $errorArrangementRange = $this->trans('pequiven_indicator.errors.arrangementRange_not_assigned', array(), 'PequivenIndicatorBundle');
         }
+
+
+        $form = $this->createFormBuilder()
+                ->add('archivo', 'file')
+                ->getForm()
+        ;
+
+
         $view = $this
                 ->view()
                 ->setTemplate($this->config->getTemplate('show.html'))
@@ -101,6 +109,7 @@ class IndicatorController extends ResourceController {
             'hasPermissionToUpdate' => $hasPermissionToUpdate,
             'isAllowToDelete' => $isAllowToDelete,
             'hasPermissionToApproved' => $hasPermissionToApproved,
+            'form' => $form->createView()
                 ))
         ;
         $view->getSerializationContext()->setGroups(array('id', 'api_list', 'valuesIndicator', 'api_details', 'sonata_api_read'));
@@ -519,7 +528,7 @@ class IndicatorController extends ResourceController {
             }
         }
         $em->flush();
-        
+
         return $this->redirectHandler->redirectTo($resource);
     }
 
