@@ -273,9 +273,6 @@ class ReportTemplateController extends SEIPController {
         $failsInternal = $causeFailService->getFails(\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL);
         $failsExternal = $causeFailService->getFails(\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL);
         
-        
-        
-        
         //Seteamos en el arreglo, la sección Causas Internas
         foreach($failsInternal as $failInternal){
             $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL][$failInternal->getName()]['day'] = 0.0;
@@ -289,12 +286,14 @@ class ReportTemplateController extends SEIPController {
             $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL][$failExternal->getName()]['year'] = 0.0;
         }
         
-        //
+        //Seteamos los productos de materia prima, por los cuales existió PNR.
         foreach($unrealizedProductions as $unrealizedProduction){
             if($unrealizedProduction->getMonth() <= $month){
                 $rawMaterialsArray = $causeFailService->getRawMaterialsByFails($unrealizedProduction);
                 $externalRawMaterials = $rawMaterialsArray[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL_MP];
                 $internalRawMaterials = $rawMaterialsArray[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL_MP];
+                
+//                var_dump($rawMaterialsArray);
 
                 if(count($externalRawMaterials) > 0){
                     foreach($externalRawMaterials as $key => $rawMaterial){
@@ -310,8 +309,10 @@ class ReportTemplateController extends SEIPController {
                         }
                     }
                 }
+//                var_dump($unrealizedProduction->getMonth());
             }
         }
+//        die();
         
         //Recorremos las producciones no realizadas
         foreach($unrealizedProductions as $unrealizedProduction){
@@ -355,10 +356,13 @@ class ReportTemplateController extends SEIPController {
                     }
                 }
                 //Sección Causas por Materia Prima
-//            $pnrByCausesMP = $causeFailService->getFailsCauseMp($unrealizedProduction);
+//                var_dump($unrealizedProduction->getMonth());
+//                var_dump($rawMaterials);
+            $pnrByCausesMP = $causeFailService->getPNRByFailsCauseMp($unrealizedProduction,$rawMaterials);
+//            var_dump($pnrByCausesMP);
             }
         }
-
+//die();
         $data = array(
             "product" => $product,
             "dateReport" => $dateReport,
