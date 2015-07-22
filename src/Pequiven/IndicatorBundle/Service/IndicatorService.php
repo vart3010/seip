@@ -2080,6 +2080,7 @@ class IndicatorService implements ContainerAwareInterface {
         $chart["inDecimalSeparator"] = ",";
         $chart["inThousandSeparator"] = ".";
         $chart["decimals"] = "2";
+        $chart["formatNumberScale"] = "0";
 
         $totalNumChildrens = count($indicator->getChildrens()); //Número de indicadores asociados
 
