@@ -108,6 +108,25 @@
                     </th>
                     <td colspan="3"></td>
                 </tr>
+                {% if rawMaterials[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_INTERNAL_MP')]|length > 0 %}
+                    {% for key in rawMaterials[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_INTERNAL_MP')]|keys %}
+                        <tr>
+                            <th scope="row">
+                                <span class="bold">{{ key }}</span>
+                            </th>
+                            <td colspan="3"></td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <th scope="row">
+                            <span class="bold">{{ 'Ninguna' | trans }}</span>
+                        </th>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                    </tr>
+                {% endif %}
                 <tr>
                     <td colspan="4"></td>
                 </tr>
@@ -118,6 +137,25 @@
                     </th>
                     <td colspan="3"></td>
                 </tr>
+                {% if rawMaterials[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_EXTERNAL_MP')]|length > 0 %}
+                    {% for key in rawMaterials[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_EXTERNAL_MP')]|keys %}
+                        <tr>
+                            <th scope="row">
+                                <span class="bold">{{ key }}</span>
+                            </th>
+                            <td colspan="3"></td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <th scope="row">
+                            <span class="bold">{{ 'Ninguna' | trans }}</span>
+                        </th>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                    </tr>
+                {% endif %}
                 <tr>
                     <td colspan="4"></td>
                 </tr>

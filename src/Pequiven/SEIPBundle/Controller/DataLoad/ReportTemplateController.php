@@ -354,10 +354,9 @@ class ReportTemplateController extends SEIPController {
                         }
                     }
                 }
-            }
-
-            //Sección Causas por Materia Prima
+                //Sección Causas por Materia Prima
 //            $pnrByCausesMP = $causeFailService->getFailsCauseMp($unrealizedProduction);
+            }
         }
 
         $data = array(
@@ -369,6 +368,7 @@ class ReportTemplateController extends SEIPController {
             "failsExternal" => $failsExternal,
             "failsInternal" => $failsInternal,
             "labelsTypesFailsPNR" => $labelsTypesFailsPNR,
+            "rawMaterials" => $rawMaterials,
         );
 
         //VERIFICA SI VIENE DE REPORTE DE PRODUCCION O SE LE DA AL BOTON PARA GENERAR REPORTE
