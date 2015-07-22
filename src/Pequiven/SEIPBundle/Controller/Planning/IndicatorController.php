@@ -27,8 +27,7 @@ class IndicatorController extends ResourceController {
             $archivo["type"] = $_FILES["archivo"]["type"];
             $archivo["tmp_name"] = $_FILES["archivo"]["tmp_name"];
             $archivo["size"] = $_FILES["archivo"]["size"];
-            var_dump($archivo);
-            die();
+           
         }
 
         $level = $resource->getIndicatorLevel()->getLevel();
