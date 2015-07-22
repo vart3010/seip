@@ -75,9 +75,9 @@
 
                         <td class="align-right vertical-center">
                             <div ng-controller="ToolsController" ng-init="isGrantedButtonEdit({{ indicator.id }},paso+1)">
-                                <form action="#" method="post" {{ form_enctype(form) }}>
+                                {#<form action="#" method="post" {{ form_enctype(form) }}>
                                     {{ form_widget(form) }}
-                                </form>
+                                </form>#}
                             </div>
 
                             <div style="display: none;" id="target_{$ paso+1 $}">
