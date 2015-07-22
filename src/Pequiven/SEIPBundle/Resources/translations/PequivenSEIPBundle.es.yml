@@ -13,6 +13,10 @@ pequiven_seip:
     totalReal: Total real
     totalStops: Total dias de paradas
     totalHours: Total de horas
+    totalCauseFailInternal: Total Causas Internas
+    totalCauseFailExternal: Total Causas Externas
+    totalCauseFailInternalMP: Total Causas Internas Materia Prima
+    totalCauseFailExternalMP: Total Causas Externas Materia Prima
     days: Dias
     plan_n: "Plan Dia %n%:"
     real_n: "Real Dia %n%:"
