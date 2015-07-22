@@ -110,13 +110,15 @@
                     </th>
                     <td colspan="3"></td>
                 </tr>
-                {% if rawMaterials[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_INTERNAL_MP')]|length > 0 %}
-                    {% for key in rawMaterials[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_INTERNAL_MP')]|keys %}
+                {% if internalRawMaterials|length > 0 %}
+                    {% for internalRawMaterial in internalRawMaterials %}
                         <tr>
                             <th scope="row">
-                                <span class="bold">{{ key }}</span>
+                                <span class="bold">{{ internalRawMaterial }}</span>
                             </th>
-                            <td colspan="3"></td>
+                            <td>{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_INTERNAL_MP')][internalRawMaterial.name]['day'] }}</td>
+                            <td>{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_INTERNAL_MP')][internalRawMaterial.name]['month'] }}</td>
+                            <td>{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_INTERNAL_MP')][internalRawMaterial.name]['year'] }}</td>
                         </tr>
                     {% endfor %}
                 {% else %}
@@ -124,9 +126,9 @@
                         <th scope="row">
                             <span class="bold">{{ 'Ninguna' | trans }}</span>
                         </th>
-                        <td>0</td>
-                        <td>0</td>
-                        <td>0</td>
+                        <td>{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_INTERNAL_MP')]['empty']['day'] }}</td>
+                        <td>{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_INTERNAL_MP')]['empty']['month'] }}</td>
+                        <td>{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_INTERNAL_MP')]['empty']['year'] }}</td>
                     </tr>
                 {% endif %}
                 <tr>
@@ -140,13 +142,15 @@
                     </th>
                     <td colspan="3"></td>
                 </tr>
-                {% if rawMaterials[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_EXTERNAL_MP')]|length > 0 %}
-                    {% for key in rawMaterials[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_EXTERNAL_MP')]|keys %}
+                {% if externalRawMaterials|length > 0 %}
+                    {% for externalRawMaterial in externalRawMaterials %}
                         <tr>
                             <th scope="row">
-                                <span class="bold">{{ key }}</span>
+                                <span class="bold">{{ externalRawMaterial }}</span>
                             </th>
-                            <td colspan="3"></td>
+                            <td>{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_EXTERNAL_MP')][externalRawMaterial.name]['day'] }}</td>
+                            <td>{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_EXTERNAL_MP')][externalRawMaterial.name]['month'] }}</td>
+                            <td>{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_EXTERNAL_MP')][externalRawMaterial.name]['year'] }}</td>
                         </tr>
                     {% endfor %}
                 {% else %}
@@ -154,9 +158,9 @@
                         <th scope="row">
                             <span class="bold">{{ 'Ninguna' | trans }}</span>
                         </th>
-                        <td>0</td>
-                        <td>0</td>
-                        <td>0</td>
+                        <td>{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_EXTERNAL_MP')]['empty']['day'] }}</td>
+                        <td>{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_EXTERNAL_MP')]['empty']['month'] }}</td>
+                        <td>{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_EXTERNAL_MP')]['empty']['year'] }}</td>
                     </tr>
                 {% endif %}
                 <tr>
