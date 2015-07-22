@@ -29,10 +29,10 @@
     {% set labelTypeDetailValue = indicator.getLabelTypeDetailValue|trans %}
     {% set showIndicatorConfigButton = false %}
     {% set isValueIndicatorConfig = false %}
-    
-    
-    
-    
+
+
+
+
     <div ng-controller="IndicatorResultController">
         {% if indicator.typeDetailValue != constant('Pequiven\\IndicatorBundle\\Model\\Indicator::TYPE_DETAIL_NONE') and indicator.valueIndicatorConfig is null %}
             {% set errorFormula = 'pequiven_indicator.errors.the_indicator_xrequires_configuration_details_results'|trans({'%typeDetailValue%': (labelTypeDetailValue|lower) }) %}
@@ -264,6 +264,10 @@
                 {% include 'PequivenIndicatorBundle:Common:tagIndicators.html.twig' %}
             </fieldset>
         {% endif %}
+
+
+
+
         {% if indicator.showResults %}
             <br /><br />
             {% include 'PequivenSEIPBundle:Planning:Indicator/show/results.html.twig' %}
@@ -348,6 +352,10 @@
 jQuery(document).ready(function () {
 // Progress
     $('.progress').progress();
+
+    $("a.uploadFileButton").click(function () {
+        alert("hola");
+    });
 });
     </script>
 {% endblock javascript %}
