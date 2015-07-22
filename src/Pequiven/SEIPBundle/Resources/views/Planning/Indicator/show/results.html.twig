@@ -75,9 +75,11 @@
 
                         <td class="align-right vertical-center">
                             <div ng-controller="ToolsController" ng-init="isGrantedButtonEdit({{ indicator.id }},paso+1)">
-                                {#<form action="#" method="post" {{ form_enctype(form) }}>
-                                    {{ form_widget(form) }}
-                                </form>#}
+                                <form style="display: none" id="form_{$ valueIndicator.id $}" action="{{ path("pequiven_indicator_show",{id:indicator.id,uploadFile:(true)}) }}" method="POST" enctype="multipart/form-data">
+                                    <input name="archivo" onChange="submitUploadFile(this.id)" id="indicatorFilePdf_{$ valueIndicator.id $}" type="file">
+{#                                    <input name="submit" type="submit" value="submit">#}
+                                    
+                                </form>
                             </div>
 
                             <div style="display: none;" id="target_{$ paso+1 $}">
@@ -88,7 +90,9 @@
                                     <span class="drop-down">
                                         <a href ng-click="loadTemplateValueIndicator(valueIndicator)" class="button icon-pencil">{{ "pequiven.actions.edit"|trans({},"messages") }}</a>
                                         {% if(is_granted(['ROLE_SEIP_PLANNING_INDICATOR_UPLOAD_FILE'])) %}
-                                            <a href="#"  class="uploadFileButton button icon-outbox">{{ "pequiven.actions.upload_file"|trans({},"messages") }}</a>
+                                            <span class=" button icon-outbox" id="{$ valueIndicator.id $}" onClick="uploadFilePdf(this.id)">{{ "pequiven.actions.upload_file"|trans({},"messages") }}
+{#                                                <a href="#"  class=" button icon-outbox">{{ "pequiven.actions.upload_file"|trans({},"messages") }}</a>#}
+                                            </span>
                                         {% endif %}
                                     </span>
 

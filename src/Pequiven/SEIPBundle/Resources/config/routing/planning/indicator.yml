@@ -7,7 +7,7 @@ pequiven_indicator_show:
     requirements:
         _format: html|json|xml
         id: \d+
-    methods: [GET]
+    methods: [GET|POST]
     
 pequiven_indicator_update:
     path: /{id}/update.{_format}

@@ -349,13 +349,25 @@
 
 {% block javascript %}
     <script type="text/javascript">
-jQuery(document).ready(function () {
+function uploadFilePdf(valueIndicatorId) {
+    $("input#indicatorFilePdf_"+valueIndicatorId).click();
+    //$("#form_"+valueIndicatorId).submit();
+
+}
+
+function submitUploadFile(valueIndicatorId) {
+    valueIndicatorId = valueIndicatorId.split("_");
+    $("#form_"+valueIndicatorId[1]).submit();
+}
+
+$(document).ready(function () {
+
 // Progress
     $('.progress').progress();
 
-    $("a.uploadFileButton").click(function () {
-        alert("hola");
-    });
-});
+        {#$("a.uploadFileButton").click(function () {
+            alert("hola");
+        });#}
+            });
     </script>
 {% endblock javascript %}

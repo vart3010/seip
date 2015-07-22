@@ -19,6 +19,16 @@ class IndicatorController extends ResourceController {
 
     public function showAction(Request $request) {
         $resource = $this->findOr404($request);
+        $uploadFile = $request->get("uploadFile");
+        $archivo = array();
+        //SI SE SUBIO EL ARCHIVO SE PROCEDE A GUARDARLO
+        if ($uploadFile != null) {
+            $archivo["name"] = $_FILES["archivo"]["name"];
+            $archivo["type"] = $_FILES["archivo"]["type"];
+            $archivo["tmp_name"] = $_FILES["archivo"]["tmp_name"];
+            $archivo["size"] = $_FILES["archivo"]["size"];
+           
+        }
 
         $level = $resource->getIndicatorLevel()->getLevel();
 
@@ -90,10 +100,6 @@ class IndicatorController extends ResourceController {
         }
 
 
-        $form = $this->createFormBuilder()
-                ->add('archivo', 'file')
-                ->getForm()
-        ;
 
 
         $view = $this
@@ -108,8 +114,7 @@ class IndicatorController extends ResourceController {
             'indicatorRange' => $indicatorRange,
             'hasPermissionToUpdate' => $hasPermissionToUpdate,
             'isAllowToDelete' => $isAllowToDelete,
-            'hasPermissionToApproved' => $hasPermissionToApproved,
-            'form' => $form->createView()
+            'hasPermissionToApproved' => $hasPermissionToApproved
                 ))
         ;
         $view->getSerializationContext()->setGroups(array('id', 'api_list', 'valuesIndicator', 'api_details', 'sonata_api_read'));
