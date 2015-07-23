@@ -2076,13 +2076,15 @@ angular.module('seipModule.controllers', [])
                 complejos: null,
                 first_line_managements: null,
                 second_line_managements: null,
-                indicatorSummaryLabels: null
+                indicatorSummaryLabels: null,
+                frequency_notification: null
             };
             $scope.model = {
                 complejo: null,
                 firstLineManagement: null,
                 secondLineManagement: null,
-                indicatorMiscellaneous: null
+                indicatorMiscellaneous: null,
+                frequencyNotification: null
             };
             //Carga de Configuración por defecto
             $scope.initPage = function () {
@@ -2155,6 +2157,21 @@ angular.module('seipModule.controllers', [])
                             }
                         });
             };
+            //Busca las frecuencias de notificación
+//            $scope.getFrequencyNotifications = function () {
+//                var parameters = {
+//                    filter: {}
+//                };
+//                $http.get(Routing.generate('pequiven_seip_complejos', parameters))
+//                        .success(function (data) {
+//                            $scope.data.complejos = data;
+//                            if ($scope.model.complejo != null) {
+//                                $scope.setValueSelect2("selectComplejos", $scope.model.complejo, $scope.data.complejos, function (selected) {
+//                                    $scope.model.complejo = selected;
+//                                });
+//                            }
+//                        });
+//            };
             //Al hacer click en el check de exclusión de gerencias de apoyo
             $scope.excludeGerenciaSecondSupport = function () {
                 if (selectExclude.is(':checked')) {
