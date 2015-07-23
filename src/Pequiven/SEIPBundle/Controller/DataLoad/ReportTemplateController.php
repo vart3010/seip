@@ -320,7 +320,7 @@ class ReportTemplateController extends SEIPController {
                 'label_attr' => array('class' => 'label bold'),
                 'required' => false,
                 'translation_domain' => 'PequivenSEIPBundle',
-                'data' => $defaultShow,
+                'data' => false,
             ])
             ->add('withDetails','checkbox',[
                 'label_attr' => array('class' => 'label bold'),
@@ -395,6 +395,10 @@ class ReportTemplateController extends SEIPController {
                     }
                 }
             }
+        }
+        if($byRange === true){
+            $showMonth = false;
+            $showYear = false;
         }
 
         $productsReport = new \Doctrine\Common\Collections\ArrayCollection();
