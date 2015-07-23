@@ -230,6 +230,7 @@ pequiven_seip:
         excludeGerenciaSecondSupport: Excluir Gerencias de Apoyo
         includeGerenciaSecondSupport: Incluir Gerencias de Apoyo
         period: Periodo
+        frequencyNotifications: Frecuencias de Notificación
     tooltips:
         click_to_show: Click para ver
     area:

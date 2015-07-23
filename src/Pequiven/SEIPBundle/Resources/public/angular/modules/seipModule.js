@@ -2077,7 +2077,7 @@ angular.module('seipModule.controllers', [])
                 first_line_managements: null,
                 second_line_managements: null,
                 indicatorSummaryLabels: null,
-                frequency_notification: null
+                frequency_notifications: null
             };
             $scope.model = {
                 complejo: null,
@@ -2158,20 +2158,20 @@ angular.module('seipModule.controllers', [])
                         });
             };
             //Busca las frecuencias de notificación
-//            $scope.getFrequencyNotifications = function () {
-//                var parameters = {
-//                    filter: {}
-//                };
-//                $http.get(Routing.generate('pequiven_seip_complejos', parameters))
-//                        .success(function (data) {
-//                            $scope.data.complejos = data;
-//                            if ($scope.model.complejo != null) {
-//                                $scope.setValueSelect2("selectComplejos", $scope.model.complejo, $scope.data.complejos, function (selected) {
-//                                    $scope.model.complejo = selected;
-//                                });
-//                            }
-//                        });
-//            };
+            $scope.getFrequencyNotifications = function () {
+                var parameters = {
+                    filter: {}
+                };
+                $http.get(Routing.generate('pequiven_seip_frequency_notification', parameters))
+                        .success(function (data) {
+                            $scope.data.frequency_notifications = data;
+                            if ($scope.model.frequencyNotification != null) {
+                                $scope.setValueSelect2("selectFrequencyNotifications", $scope.model.frequencyNotification, $scope.data.frequency_notifications, function (selected) {
+                                    $scope.model.frequencyNotification = selected;
+                                });
+                            }
+                        });
+            };
             //Al hacer click en el check de exclusión de gerencias de apoyo
             $scope.excludeGerenciaSecondSupport = function () {
                 if (selectExclude.is(':checked')) {
@@ -2204,6 +2204,7 @@ angular.module('seipModule.controllers', [])
             } else if (level > 1) {
                 $scope.getComplejos();
                 $scope.getFirstLineManagement();
+                $scope.getFrequencyNotifications();
             } else if (level > 2) {
                 $scope.getSecondLineManagement();
             }
@@ -2270,12 +2271,20 @@ angular.module('seipModule.controllers', [])
                     $scope.tableParams.$params.filter['type_gerencia_support'] = null;
                 }
             });
-            //Scope de Misceláneo                                                              
+            //Scope de Misceláneo
             $scope.$watch("model.indicatorMiscellaneous", function (newParams, oldParams) {
                 if ($scope.model.indicatorMiscellaneous != null && $scope.model.indicatorMiscellaneous.id != undefined) {
                     $scope.tableParams.$params.filter['miscellaneous'] = $scope.model.indicatorMiscellaneous.id;
                 } else {
                     $scope.tableParams.$params.filter['miscellaneous'] = null;
+                }
+            });
+            //Scope de Frecuencias de Notificación
+            $scope.$watch("model.frequencyNotification", function (newParams, oldParams) {
+                if ($scope.model.frequencyNotification != null && $scope.model.frequencyNotification.id != undefined) {
+                    $scope.tableParams.$params.filter['frequencyNotification'] = $scope.model.frequencyNotification.id;
+                } else {
+                    $scope.tableParams.$params.filter['frequencyNotification'] = null;
                 }
             });
         })

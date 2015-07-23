@@ -75,6 +75,11 @@ abstract class Indicator implements IndicatorInterface {
      * Indicador sin resultado
      */
     const INDICATOR_WITHOUT_RESULT = 'INDICATOR_WITHOUT_RESULT';
+    
+    /**
+     * Indicador sin Frecuencia de Notificación
+     */
+    const INDICATOR_WITHOUT_FREQUENCY_NOTIFICATION = 'INDICATOR_WITHOUT_FREQUENCY_NOTIFICATION';
 
     /**
      * Tipo de detalle (Ninguno)
@@ -262,6 +267,7 @@ abstract class Indicator implements IndicatorInterface {
             self::INDICATOR_WITHOUT_FORMULA => 'pequiven_indicator.summary.without_formula',
             self::INDICATOR_WITH_RESULT => 'pequiven_indicator.summary.with_result',
             self::INDICATOR_WITHOUT_RESULT => 'pequiven_indicator.summary.without_result',
+            self::INDICATOR_WITHOUT_FREQUENCY_NOTIFICATION => 'pequiven_indicator.summary.without_frequency_notification',
         );
         return $labelsStatus;
     }
