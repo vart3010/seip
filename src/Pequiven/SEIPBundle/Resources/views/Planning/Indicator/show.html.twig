@@ -357,6 +357,7 @@ function uploadFilePdf(valueIndicatorId) {
 
 function submitUploadFile(valueIndicatorId) {
     valueIndicatorId = valueIndicatorId.split("_");
+    $("#field_"+valueIndicatorId[1]).val(valueIndicatorId[1]);
     $("#form_"+valueIndicatorId[1]).submit();
 }
 

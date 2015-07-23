@@ -17,18 +17,44 @@ use Pequiven\SEIPBundle\Model\Common\CommonObject;
  */
 class IndicatorController extends ResourceController {
 
+    public function createValueIndicatorFile(Indicator $indicator, Request $request) {
+        $valueIndicatorFile = new Indicator\ValueIndicator\ValueIndicatorFile();
+        $fileUploaded = false;
+        $valuesIndicator = $indicator->getValuesIndicator();
+        foreach ($valuesIndicator as $valueIndicator) {
+            if ($valueIndicator->getId() == $request->get("valueIndicatorId")) {
+                $valueIndicatorFile->setValueIndicator($valueIndicator);
+                foreach ($request->files as $file) {
+                    //SE GUARDAN LOS CAMPOS EN BD
+                    $valueIndicatorFile->setCreatedBy($this->getUser());
+                    $valueIndicatorFile->setNameFile($file->getClientOriginalName());
+                    $valueIndicatorFile->setPath(Indicator\ValueIndicator\ValueIndicatorFile::getUploadDir());
+                    $valueIndicatorFile->setExtensionFile($file->guessExtension());
+
+                    //SE MUIEVE EL ARCHIVO AL SERVIDOR
+                    $file->move($this->container->getParameter("kernel.root_dir") . '/../web/' . Indicator\ValueIndicator\ValueIndicatorFile::getUploadDir(), Indicator\ValueIndicator\ValueIndicatorFile::NAME_FILE . $valueIndicator->getId());
+                    $fileUploaded = $file->isValid();
+                }
+            }
+        }
+        if (!$fileUploaded) {
+            $em = $this->getDoctrine()->getEntityManager();
+            $em->persist($valueIndicatorFile);
+            $em->flush();
+        }
+    }
+
     public function showAction(Request $request) {
         $resource = $this->findOr404($request);
         $uploadFile = $request->get("uploadFile");
         $archivo = array();
+
+
         //SI SE SUBIO EL ARCHIVO SE PROCEDE A GUARDARLO
         if ($uploadFile != null) {
-            $archivo["name"] = $_FILES["archivo"]["name"];
-            $archivo["type"] = $_FILES["archivo"]["type"];
-            $archivo["tmp_name"] = $_FILES["archivo"]["tmp_name"];
-            $archivo["size"] = $_FILES["archivo"]["size"];
-           
+            $this->createValueIndicatorFile($resource, $request);
         }
+
 
         $level = $resource->getIndicatorLevel()->getLevel();
 
