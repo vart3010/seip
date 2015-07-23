@@ -443,6 +443,12 @@ class IndicatorRepository extends EntityRepository
             $queryBuilder->andWhere('o.gerencia = ' . $gerencia);
         }
         
+        //Filtro Frecuencia de Notificación del Indicador
+        if(($frequencyNotification = $criteria->remove('frequencyNotification')) !== null){
+            $queryBuilder->leftJoin('i.frequencyNotificationIndicator', 'fn');
+            $queryBuilder->andWhere("i.frequencyNotificationIndicator = " . $frequencyNotification);
+        }
+        
         //Filtro Gerencia 2da Línea
         if(($gerenciaSecond = $criteria->remove('secondLineManagement')) !== null){
             $queryBuilder->andWhere("o.gerenciaSecond = " . $gerenciaSecond);
@@ -457,6 +463,11 @@ class IndicatorRepository extends EntityRepository
             } elseif($miscellaneous == Indicator::INDICATOR_WITHOUT_RESULT){
                 $queryBuilder->andWhere('i.progressToDate = 0');
                 $queryBuilder->andWhere('i.lastDateCalculateResult IS NULL');
+            } elseif($miscellaneous == Indicator::INDICATOR_WITHOUT_FREQUENCY_NOTIFICATION){
+                if($frequencyNotification == null){
+                    $queryBuilder->leftJoin('i.frequencyNotificationIndicator', 'fn');
+                }
+                $queryBuilder->andWhere('i.frequencyNotificationIndicator IS NULL');
             }
             
         }

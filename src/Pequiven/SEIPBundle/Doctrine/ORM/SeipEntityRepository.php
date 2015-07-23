@@ -43,6 +43,16 @@ class SeipEntityRepository extends EntityRepository
         return $qb;
     }
     
+    /**
+     * @return array
+     */
+    public function getAllActive()
+    {
+        return $this
+            ->getQueryBuilder()
+        ;
+    }
+    
     public function getAllEnabled()
     {
         $qb = $this->getQueryAllEnabled();

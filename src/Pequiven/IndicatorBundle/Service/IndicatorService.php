@@ -1035,6 +1035,7 @@ class IndicatorService implements ContainerAwareInterface {
         $chart["legendShadow"] = "0";
         $chart["legendItemFontSize"] = "10";
         $chart["legendItemFontColor"] = "#666666";
+        $chart["formatNumberScale"] = "0";
 
         $totalNumChildrens = count($indicator->getChildrens()); //Número de indicadores asociados
 
@@ -1155,6 +1156,7 @@ class IndicatorService implements ContainerAwareInterface {
         $chart["inDecimalSeparator"] = ",";
         $chart["inThousandSeparator"] = ".";
         $chart["decimals"] = "2";
+        $chart["formatNumberScale"] = "0";
 
         $category = $dataSetReal = $dataSetPlan = $medition = array();
 
@@ -1298,6 +1300,7 @@ class IndicatorService implements ContainerAwareInterface {
         $chart["inDecimalSeparator"] = ",";
         $chart["inThousandSeparator"] = ".";
         $chart["decimals"] = "2";
+        $chart["formatNumberScale"] = "0";
         
         if(isset($options['resultIndicatorsAssociatedWithTotalByMonth']) && array_key_exists('resultIndicatorsAssociatedWithTotalByMonth', $options)){
             unset($options['resultIndicatorsAssociatedWithTotalByMonth']);
@@ -1379,6 +1382,7 @@ class IndicatorService implements ContainerAwareInterface {
         $chart["inDecimalSeparator"] = ",";
         $chart["inThousandSeparator"] = ".";
         $chart["decimals"] = "2";
+        $chart["formatNumberScale"] = "0";
 
         $category = $dataSetValues = array();
 
@@ -2080,6 +2084,7 @@ class IndicatorService implements ContainerAwareInterface {
         $chart["inDecimalSeparator"] = ",";
         $chart["inThousandSeparator"] = ".";
         $chart["decimals"] = "2";
+        $chart["formatNumberScale"] = "0";
 
         $totalNumChildrens = count($indicator->getChildrens()); //Número de indicadores asociados
 
