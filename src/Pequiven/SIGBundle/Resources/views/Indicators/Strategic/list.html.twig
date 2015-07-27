@@ -1,0 +1,77 @@
+{#% extends "::base.html.twig" %#}
+{% extends "PequivenSEIPBundle:Template:Developer/Common/tableFormat1.html.twig" %}
+{% trans_default_domain 'PequivenIndicatorBundle' %}
+{% block title %}- {{ 'pequiven_indicator.indicator_strategic'|trans }}{% endblock %}
+
+{% set route_index = 'pequiven_indicator_menu_list_strategic' %}
+{% if allow_create is not defined %}
+    {% set allow_create = false %}
+{% endif %}
+
+{% block before_body %}
+    {{ contentHeader
+    (
+        { ( path(route_index) ) : ( 'pequiven_indicator.indicator_strategic'|trans ) },
+        ( 'pequiven_indicator.list'|trans )
+    ) }}
+{% endblock %}
+
+{% block body %}
+    <div ng-controller="TableGroupingFormatController">
+        <div ng-controller="TableIndicatorStrategicController">
+            {% set filterYesNo = [
+                { 'id':0,'name': ('sigtec.no'|trans)},
+                { 'id':1,'name': ('sigtec.yes'|trans)},
+            ] %}
+            {% set filterActiveInactive = [
+                { 'id':1,'name': ('sigtec.active'|trans)},
+                { 'id':0,'name': ('sigtec.inactive'|trans)},
+            ] %}
+            <div loading-container="tableParams.settings().$loading">
+                <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager" template-header="custom/header" api-data-url="{{ path('indicatorStrategicList',{_format:'json',_period: app.request.get("_period") }) }}" export-csv="csv" class="table table-responsive table-extra-info">
+                    <tbody ng-repeat="group in $groups">
+                        <tr class="ng-table-group">
+                            <td colspan="{$ $columns.length $}">
+                                <a href="" ng-click="group.$hideRows = !group.$hideRows">
+                                    <span class="glyphicon" ng-class="{ 'glyphicon-chevron-right': group.$hideRows, 'glyphicon-chevron-down': !group.$hideRows }"></span>
+                                    <strong>{$ group.value $}</strong>
+                                </a>
+                            </td>
+                        </tr>
+                        <tr ng-hide="group.$hideRows" ng-repeat="result in group.data" data="{$ result|json $}">
+                            <td data-title="'{{ 'form.indicatorStrategic'|trans }}'" sortable="'ref'" filter="{'description' : 'text'}">
+                                <a href="{$ result._links.self.href $}">{$ result.ref+result.description $}</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+    <script type="text/javascript">
+        function getTableExtraInfo(data)
+            {
+                var response = '';
+
+                response = response + 'Fórmula: ' + data.formula.equation;
+                
+                {#var totalIndicators = data.indicators.length;
+                if(totalIndicators > 0){
+                    response = response + '<strong>{{ 'pequiven_objetive.popup.indicators'|trans }}:</strong><br>';
+                    for(var i = 0; i < totalIndicators; i++){
+                        response = response + data.indicators[i].ref + data.indicators[i].description;
+                        if(data.indicators[i].formula){
+                            response = response + '&nbsp;Fórmula: ' + data.indicators[i].formula.equation;
+                        }
+                        response = response + '<br>';
+                    }
+                }#}
+                return response;
+            }
+    </script>
+    
+{% endblock %}

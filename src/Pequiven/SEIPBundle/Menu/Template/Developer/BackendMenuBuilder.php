@@ -172,8 +172,8 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                     //Nivel 3
                     if($this->isGranted('ROLE_SEIP_SIG_MENU'))
                     {
-                        $itemStrategic = $this->factory->createItem('arrangement_strategic.indicators.list.strategic', array(
-                            'route' => 'pequiven_indicator_menu_list_strategic',
+                        $itemStrategic = $this->factory->createItem('sig.indicators.list.strategic', array(
+                            'route' => 'sig_indicators_strategic',
                         ))
                         ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.indicators.list.strategic', $section)));
                          $visualize->addChild($itemStrategic);
@@ -181,7 +181,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                     if($this->isGranted('ROLE_SEIP_SIG_MENU'))
                     {
                         $itemTactic = $this->factory->createItem('arrangement_strategic.indicators.list.tactic', array(
-                            'route' => 'pequiven_indicator_menu_list_tactic',
+                            'route' => 'sig_indicators_tactic',
                         ))
                         ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.indicators.list.tactic', $section)));
                          $visualize->addChild($itemTactic);
@@ -189,7 +189,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                     if($this->isGranted('ROLE_SEIP_SIG_MENU'))
                     {
                         $itemOperative = $this->factory->createItem('arrangement_strategic.indicators.list.operative', array(
-                            'route' => 'pequiven_indicator_menu_list_operative',
+                            'route' => 'sig_indicators_operative',
                         ))
                         ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.indicators.list.operative', $section)));
                          $visualize->addChild($itemOperative);

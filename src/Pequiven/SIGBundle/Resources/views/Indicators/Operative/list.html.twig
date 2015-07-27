@@ -1,0 +1,251 @@
+{#% extends "::base.html.twig" %#}
+{% extends "PequivenSEIPBundle:Template:Developer/Common/tableFormat1.html.twig" %}
+{% trans_default_domain 'PequivenIndicatorBundle' %}
+{% block title %}- {{ 'pequiven_indicator.indicator_operative'|trans }}{% endblock %}
+
+{% set route_index = 'pequiven_indicator_menu_list_operative' %}
+{% if allow_create is not defined %}
+    {% set allow_create = false %}
+{% endif %}
+
+{% block before_body %}
+    {{ contentHeader
+    (
+        { ( path(route_index) ): ( 'pequiven_indicator.indicator_operative'|trans ) },
+         ( 'pequiven_indicator.list'|trans )
+    ) }}
+{% endblock %}
+
+{% block body %}
+    <input type="hidden" id="rolUser" value="{{ app.user.getRoles[0] }}">
+    
+    <div ng-controller="TableGroupingFormatController">
+        <div ng-controller="TableIndicatorOperativeController">
+            {% set filterYesNo = [
+                { 'id':0,'name': ('sigtec.no'|trans)},
+                { 'id':1,'name': ('sigtec.yes'|trans)},
+            ] %}
+            {% set filterActiveInactive = [
+                { 'id':1,'name': ('sigtec.active'|trans)},
+                { 'id':0,'name': ('sigtec.inactive'|trans)},
+            ] %}
+            <div loading-container="tableParams.settings().$loading">
+                <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager" template-header="custom/header" api-data-url="{{ path('indicatorOperativeList',{_format:'json',_period: app.request.get("_period") }) }}" export-csv="csv" class="table table-responsive table-extra-info">
+                    {% if (app.user.getRoles[0] == 'ROLE_DIRECTIVE' or app.user.getRoles[0] == 'ROLE_DIRECTIVE_AUX') %}
+                        <h3>Gerencia 1ra Línea: </h3><select ng-model="gerenciaFirst" id="selectGerenciaFirst" class="select2-offscreen populate" style="width:300px;"></select>
+                    {% endif %}
+                    {% if (app.user.getRoles[0] == 'ROLE_DIRECTIVE' or app.user.getRoles[0] == 'ROLE_DIRECTIVE_AUX' or app.user.getRoles[0] == 'ROLE_GENERAL_COMPLEJO' or app.user.getRoles[0] == 'ROLE_GENERAL_COMPLEJO_AUX' or app.user.getRoles[0] == 'ROLE_MANAGER_FIRST' or app.user.getRoles[0] == 'ROLE_MANAGER_FIRST_AUX') %}
+                        <h3>Gerencia 2da Línea: </h3><select ng-model="gerenciaSecond" id="selectGerenciaSecond" class="select2-offscreen populate" style="width:300px;"></select>
+                    {% endif %}
+                    <tbody ng-repeat="group in $groups">
+                        <tr class="ng-table-group">
+                            <td colspan="{$ $columns.length $}">
+                                <a href="" ng-click="group.$hideRows = !group.$hideRows">
+                                    <span class="glyphicon" ng-class="{ 'glyphicon-chevron-right': group.$hideRows, 'glyphicon-chevron-down': !group.$hideRows }"></span>
+                                    <strong>{$ group.value $}</strong>
+                                </a>
+                            </td>
+                        </tr>
+                        <tr ng-hide="group.$hideRows" ng-repeat="result in group.data" data="{$ result|json $}">
+                            <td data-title="'{{ 'form.indicatorOperative'|trans }}'" sortable="'ref'" filter="{'description' : 'text'}">
+                                <a href="{$ result._links.self.href $}">{$ result.ref+result.description $} ({$ result.gerenciaSecond $})</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+    <script type="text/javascript">
+        var selectGerenciaSecond =  $("#selectGerenciaSecond"),//Select de Gerencia de 2da Línea
+            selectGerenciaFirst =  $("#selectGerenciaFirst"),//Select de Gerencia de 1ra Línea
+            inputHiddenRoleName = $("#rolUser")//
+        ;
+        
+        $(document).ready(function()
+        {
+            
+            charge();
+            
+            function charge(){
+                chargeSelectGerenciaFirst();
+                
+                if(inputHiddenRoleName.val() === 'ROLE_DIRECTIVE' || inputHiddenRoleName.val() === 'ROLE_DIRECTIVE_AUX'){
+                   selectGerenciaSecond.select2({
+                       
+                   });
+                   selectGerenciaSecond.select2("enable",false);
+               } else{
+                   chargeSelectGerenciaSecond();
+               }
+            }
+        });
+        
+        selectGerenciaFirst.on("select2-selecting", function(e) {
+            chargeSelectGerenciaSecond(e);
+            //chargeList(e);
+            //displayObjetiveStrategicFromLineStrategic();//Actualizamos los Objetivos Estratégicos
+        })
+        
+        selectGerenciaFirst.change(function(){
+            selectGerenciaSecond.select2("val",'');
+        });
+        
+        selectGerenciaSecond.on("select2-selecting", function(e) {
+            //chargeList(e);
+            //displayObjetiveStrategicFromLineStrategic();//Actualizamos los Objetivos Estratégicos
+        })
+        
+        //Función que actualiza el select de indicadores en caso de que se cambie la lína estratégica o se agregue un nuevo indicador a partir de este formulario
+        function chargeSelectGerenciaFirst(){
+            var data = {
+            };
+            $.ajax({
+                type: 'post',
+                url: '{{ path("select_gerenciaFirstTacticOperative") }}',
+                data: data,
+                success: function(data) {
+                    {#$('#gerenciaFirst option[value]').remove();
+                    $('#gerenciaFirst').select2("val",'');#}
+
+                    if(typeof data[0].empty === 'undefined'){
+                        var cantidad = data.length;
+                        var text = '';
+                        text = text + '<option value="0">Todas</option>';
+                        text = text + '<optgroup label="' + data[0].optGroup + '">';
+
+                        for(var i=0, total = data.length; i<total; i++){
+                            if(i == 0){
+                                text = text + '<option value="' + data[i].id + '" >' + data[i].description + '</option>';
+                            } else if (data[i].idComplejo != data[i-1].idComplejo && (i + 1) < cantidad ){
+                                text = text + '</optgroup> <optgroup label="' + data[i].optGroup + '">' +'<option value="' + data[i].id + '" >' + data[i].description + '</option>';
+                            } else if (data[i].idComplejo != data[i-1].idComplejo && (i + 1) == cantidad ){
+                                text = text + '</optgroup> <optgroup label="' + data[i].optGroup + '">' +'<option value="' + data[i].id + '" >' + data[i].description + '</option> </optgroup>';
+                            } else if ((i+1) == cantidad){
+                                text = text +'<option value="' + data[i].id + '" >' + data[i].description + '</option> </optgroup>';
+                            } else{
+                                text = text + '<option value="' + data[i].id + '" >' + data[i].description + '</option>';
+                            }
+                        }
+                        //selectGerenciaFirst.append("<option></option>");
+                        selectGerenciaFirst.append(text);
+                        chargeSelect2GerenciaFirst("full");
+                    } else{
+                        chargeSelect2GerenciaFirst("empty");
+                    }
+                }
+            });
+        }
+        
+        //Función que carga el select2 de Gerencia de 1ra Línea
+        function chargeSelect2GerenciaFirst(type){
+            selectGerenciaFirst.select2({
+                placeholder: '{{ 'form.messages.selectObjetiveStrategicPlaceholder'|trans }}',
+                formatNoMatches: function(term) {
+                    if(type == 'full'){
+                        return "{{ 'form.messages.selectObjetiveStrategicFormatNoMatcher'|trans }}";
+                    } else if (type == 'empty'){
+                        return "{{ 'form.messages.selectObjetiveStrategicFormatNoResult'|trans }}";
+                    } else {
+                        return "{{ 'form.messages.selectObjetiveStrategicFormatNoMatcher'|trans }}";
+                    }
+                }
+            });
+        }
+        
+        function chargeSelectGerenciaSecond(e){
+            var data = '';
+            if(inputHiddenRoleName.val() === 'ROLE_DIRECTIVE' || inputHiddenRoleName.val() === 'ROLE_DIRECTIVE_AUX'){
+                data = {
+                    gerencia: $.trim(e.val),
+                };
+            } else{
+                data = {
+                };
+            }
+            $.ajax({
+                type: 'post',
+                url: '{{ path("select_gerenciaSecondOperativeList") }}',
+                data: data,
+                success: function(data) {
+                    {#$('#gerenciaFirst option[value]').remove();
+                    $('#gerenciaFirst').select2("val",'');#}
+                                    
+                    $("#selectGerenciaSecond optgroup").remove();
+                    $("#selectGerenciaSecond option[value]").remove();
+
+                    if(typeof data[0].empty === 'undefined'){
+                        var cantidad = data.length;
+                        var text = '';
+                        text = text + '<option value="0">Todas</option>';
+                        
+                        text = text + '<optgroup label="' + data[0].optGroup + '">';
+
+                        for(var i=0, total = data.length; i<total; i++){
+                            if(i == 0){
+                                text = text + '<option value="' + data[i].id + '">' + data[i].description + '</option>';
+                            } else if (data[i].idGroup != data[i-1].idGroup && (i + 1) < cantidad ){
+                                text = text + '</optgroup> <optgroup label="' + data[i].optGroup + '">' +'<option value="' + data[i].id + '">' + data[i].description + '</option>';
+                            } else if (data[i].idGroup != data[i-1].idGroup && (i + 1) == cantidad ){
+                                text = text + '</optgroup> <optgroup label="' + data[i].optGroup + '">' +'<option value="' + data[i].id + '" >' + data[i].description + '</option> </optgroup>';
+                            } else if ((i+1) == cantidad){
+                                text = text +'<option value="' + data[i].id + '">' + data[i].description + '</option> </optgroup>';
+                            } else{
+                                text = text + '<option value="' + data[i].id + '">' + data[i].description + '</option>';
+                            }
+                        }
+                        //selectGerenciaFirst.append("<option></option>");
+                        selectGerenciaSecond.append(text);
+                        selectGerenciaSecond.select2({
+                        });
+                        selectGerenciaSecond.select2("enable",true);
+{#                        chargeSelect2GerenciaSecond("full");#}
+                    } else{
+                        chargeSelect2GerenciaSecond("empty");
+                    }
+                }
+            });
+        }
+        
+        //Función que carga el select2 de Gerencia de 2da Línea
+        function chargeSelect2GerenciaSecond(type){
+            selectGerenciaSecond.select2({
+                placeholder: '{{ 'form.messages.selectObjetiveStrategicPlaceholder'|trans }}',
+                formatNoMatches: function(term) {
+                    if(type == 'full'){
+                        return "{{ 'form.messages.selectObjetiveStrategicFormatNoMatcher'|trans }}";
+                    } else if (type == 'empty'){
+                        return "{{ 'form.messages.selectObjetiveStrategicFormatNoResult'|trans }}";
+                    } else {
+                        return "{{ 'form.messages.selectObjetiveStrategicFormatNoMatcher'|trans }}";
+                    }
+                }
+            });
+        }
+        
+        function getTableExtraInfo(data)
+            {
+                var response = '';
+
+                response = response + 'Fórmula: ' + data.formula.equation;
+                
+                {#var totalIndicators = data.indicators.length;
+                if(totalIndicators > 0){
+                    response = response + '<strong>{{ 'pequiven_objetive.popup.indicators'|trans }}:</strong><br>';
+                    for(var i = 0; i < totalIndicators; i++){
+                        response = response + data.indicators[i].ref + data.indicators[i].description;
+                        if(data.indicators[i].formula){
+                            response = response + '&nbsp;Fórmula: ' + data.indicators[i].formula.equation;
+                        }
+                        response = response + '<br>';
+                    }
+                }#}
+                return response;
+            }
+    </script>
+    
+{% endblock %}

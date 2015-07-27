@@ -6,12 +6,15 @@ use Pequiven\SEIPBundle\Controller\SEIPController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
+use Tecnocreaciones\Bundle\ResourceBundle\Controller\ResourceController as baseController;
+
+
 /**
  * Controlador de Sistemas de Gestión del SIG
  *
  */
  
-class ManagementSystemController extends SEIPController 
+class ManagementSystemController extends baseController 
 {
     
     /**
