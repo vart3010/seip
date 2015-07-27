@@ -225,3 +225,15 @@ getDataChartColumnResultIndicatorsAssociatedGroupByTypeCompanyWithTotalByMonth:
     methods: [GET]
     options:
         expose: true
+        
+#18
+getDataChartMultiSeriesLineIndicatorPersonalInjuryWithAccumulatedTime:
+    path: /getDataChartMultiSeriesLineIndicatorPersonalInjuryWithAccumulatedTime/{id}
+    defaults:
+        _controller: pequiven.controller.seipchart:getDataChartMultiSeriesLineIndicatorPersonalInjuryWithAccumulatedTimeAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
