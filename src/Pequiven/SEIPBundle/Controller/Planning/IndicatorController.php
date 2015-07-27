@@ -42,13 +42,13 @@ class IndicatorController extends ResourceController {
             $em->persist($valueIndicatorFile);
             $em->flush();
         }
+        $request->request->set("uploadFile", "");
+        $this->redirect($this->generateUrl("pequiven_indicator_show", array("id" => $indicator->getId())));
     }
 
     public function showAction(Request $request) {
         $resource = $this->findOr404($request);
         $uploadFile = $request->get("uploadFile");
-        $archivo = array();
-
 
         //SI SE SUBIO EL ARCHIVO SE PROCEDE A GUARDARLO
         if ($uploadFile != null) {
@@ -563,6 +563,22 @@ class IndicatorController extends ResourceController {
         return $this->redirectHandler->redirectTo($resource);
     }
 
+    public function vizualiceFileAction(Request $request) {
+        $securityService = $this->getSecurityService();
+        if ($securityService->isGranted(array("ROLE_SEIP_PLANNING_INDICATOR_SHOW_FILE"))) {
+            $path = Indicator\ValueIndicator\ValueIndicatorFile::LOCATION_UPLOAD_FILE;
+            $name = Indicator\ValueIndicator\ValueIndicatorFile::NAME_FILE;
+            $ruta = $this->container->getParameter("kernel.root_dir") . '/../web/' . $path . "/" . $name . $request->get("id");
+
+            header('Content-type: application/pdf');
+            readfile($ruta);
+        } else {
+            $em = $this->getDoctrine();
+            $entity = $em->getRepository("\Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator")->find($request->get("id"));
+            $securityService->checkSecurity('ROLE_SEIP_PLANNING_INDICATOR_SHOW_FILE', $entity);
+        }
+    }
+
     public function deleteAction(Request $request) {
         $redirectUrl = $request->get("redirectUrl");
 
@@ -570,6 +586,29 @@ class IndicatorController extends ResourceController {
         $this->domainManager->delete($resource);
 
         return $this->redirectHandler->redirect($redirectUrl);
+    }
+
+    public function generateUrlFile(Request $request) {
+
+        $response = new JsonResponse();
+        $data = array();
+        $data["url"] = $this->generateUrl("pequiven_indicator_vizualice_file", array("id" => $request->get("id")));
+        $response->setData($data);
+        return $response;
+    }
+
+    public function showButtonDownload(Request $request) {
+        
+        $em = $this->getDoctrine();
+        $valueIndicator = $em->getRepository("\Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator")->find($request->get("id"));
+        
+        $archivo = $valueIndicator->getValueIndicatorFile();
+        
+        if ($archivo) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**

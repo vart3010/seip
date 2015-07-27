@@ -46,9 +46,7 @@
 
                     <tr ng-repeat="valueIndicator in indicator.valuesIndicator"  ng-init="paso=$index;">
 
-                        {#                        <td>{$ (paso + 1) $}</td>#}
                         <td>{$ (paso+1) $}</td>
-
                         <th scope="row">
                             {% if isValueIndicatorConfig == true %}
                                 <a href="#" ng-click="openPopUp(getUrlForValueIndicator(valueIndicator,paso))" class="showPopup">
@@ -77,12 +75,11 @@
                             <div ng-controller="ToolsController" ng-init="isGrantedButtonEdit({{ indicator.id }},paso+1)">
                                 <form style="display: none" id="form_{$ valueIndicator.id $}" action="{{ path("pequiven_indicator_show",{id:indicator.id,uploadFile:(true)}) }}" method="POST" enctype="multipart/form-data">
                                     <input name="archivo" onChange="submitUploadFile(this.id)" id="indicatorFilePdf_{$ valueIndicator.id $}" type="file">
-{#                                    <input name="submit" type="submit" value="submit">#}
+                                    {#                                    <input name="submit" type="submit" value="submit">#}
                                     <input type="hidden" name="valueIndicatorId" id="field_{$ valueIndicator.id $}" value="">
                                 </form>
                             </div>
-
-                            <div style="display: none;" id="target_{$ paso+1 $}">
+                            <div ng-controller="ToolsController" style="display: none;" id="target_{$ paso+1 $}">
 
                                 <span class="select compact">
                                     <a href class="select-value form-edit">{{ 'pequiven.actions'|trans({},'messages') }}</a>
@@ -90,8 +87,11 @@
                                     <span class="drop-down">
                                         <a href ng-click="loadTemplateValueIndicator(valueIndicator)" class="button icon-pencil">{{ "pequiven.actions.edit"|trans({},"messages") }}</a>
                                         {% if(is_granted(['ROLE_SEIP_PLANNING_INDICATOR_UPLOAD_FILE'])) %}
-                                            <span class=" button icon-outbox" id="{$ valueIndicator.id $}" onClick="uploadFilePdf(this.id)">{{ "pequiven.actions.upload_file"|trans({},"messages") }}
-{#                                                <a href="#"  class=" button icon-outbox">{{ "pequiven.actions.upload_file"|trans({},"messages") }}</a>#}
+                                            <span class=" button icon-outbox" id="{$ valueIndicator.id $}" onClick="uploadFilePdf(this.id)">{{ "pequiven.actions.upload_file"|trans({},"messages") }}</span>
+                                        {% endif %}
+                                        {% if(is_granted(['ROLE_SEIP_PLANNING_INDICATOR_SHOW_FILE'])) %}
+                                            <span ng-app ng-init="validLoad(valueIndicator.id)" class=" button icon-download" onClick="openFile(this.id)" id="open_{$ valueIndicator.id $}">
+                                                {{ "pequiven.actions.download_file"|trans({},"messages") }}
                                             </span>
                                         {% endif %}
                                     </span>
