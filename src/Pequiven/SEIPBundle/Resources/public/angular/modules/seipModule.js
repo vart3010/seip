@@ -2958,8 +2958,8 @@ angular.module('seipModule.controllers', [])
         })
 
         .controller('ToolsController', function ($scope, ngTableParams, $http, sfTranslator, notifyService) {
-            $scope.data ="none";
-    
+            $scope.data = "none";
+
             $scope.isGrantedButtonEdit = function (id, index) {
                 //index = index+1;
                 var data;
@@ -2980,11 +2980,20 @@ angular.module('seipModule.controllers', [])
                 var f = document.getElementById('form_archivo').files[0],
                         r = new FileReader();
                 r.onloadend = function (e) {
-                     $scope.data = e.target.result;
+                    $scope.data = e.target.result;
                     //send you binary data via $http or $resource or do anything else with it
                 }
                 r.readAsBinaryString(f);
+            }
 
+            $scope.validLoad = function (valueIndicatorId) {
+                var getValidLoad = Routing.generate("showButtonDownload", {id: valueIndicatorId});
+                $http.get(getValidLoad).success(function (data) {
+                    console.log(data);
+                    if (data != "true") {
+                        $("span#open_" + valueIndicatorId).hide();
+                    }
+                });
             }
 
 

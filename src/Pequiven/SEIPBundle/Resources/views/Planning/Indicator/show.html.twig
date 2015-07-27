@@ -350,15 +350,39 @@
 {% block javascript %}
     <script type="text/javascript">
 function uploadFilePdf(valueIndicatorId) {
-    $("input#indicatorFilePdf_"+valueIndicatorId).click();
+    $("input#indicatorFilePdf_" + valueIndicatorId).click();
     //$("#form_"+valueIndicatorId).submit();
+}
+function openFile(valueIndicatorId) {
+    //var obj = $("span#" + valueIndicatorId);
+    //var url = obj.attr("data");
+    valueIndicatorId = valueIndicatorId.split("_");
 
+    var data = {
+        id: valueIndicatorId[1]
+    };
+    $.ajax({
+        type: 'get',
+        url: '{{ path("pequiven_indicator_get_url_file") }}',
+        data: data,
+        success: function (data) {
+            //alert(data["url"]);
+            window.open(data["url"]);
+        }
+    });
+
+}
+
+function getUrl(data) {
+    var rs;
+
+    return rs;
 }
 
 function submitUploadFile(valueIndicatorId) {
     valueIndicatorId = valueIndicatorId.split("_");
-    $("#field_"+valueIndicatorId[1]).val(valueIndicatorId[1]);
-    $("#form_"+valueIndicatorId[1]).submit();
+    $("#field_" + valueIndicatorId[1]).val(valueIndicatorId[1]);
+    $("#form_" + valueIndicatorId[1]).submit();
 }
 
 $(document).ready(function () {

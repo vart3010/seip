@@ -11,7 +11,7 @@ use Pequiven\IndicatorBundle\Model\Indicator\ValueIndicator as Model;
  *
  * @author Carlos Mendoza<inhack20@gmail.com>
  * @ORM\Table(name="seip_indicator_value")
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="Pequiven\IndicatorBundle\Repository\Indicator\ValueIndicatorRepository")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
 class ValueIndicator extends Model {
