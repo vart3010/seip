@@ -53,7 +53,7 @@ class ProductReport extends BaseModel
      * Presupuesto de Materias prima
      * @var \Pequiven\SEIPBundle\Entity\DataLoad\RawMaterial\RawMaterialConsumptionPlanning
      *
-     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\RawMaterial\RawMaterialConsumptionPlanning",mappedBy="productReport")
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\RawMaterial\RawMaterialConsumptionPlanning",mappedBy="productReport",cascade={"remove"})
      */
     private $rawMaterialConsumptionPlannings;
     
@@ -74,14 +74,14 @@ class ProductReport extends BaseModel
     /**
      * Inventarios
      * @var Inventory\Inventory
-     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Inventory\Inventory",mappedBy="productReport")
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Inventory\Inventory",mappedBy="productReport",cascade={"remove"})
      */
     private $inventorys;
     
     /**
      * Produccion no realizada
      * @var Production\UnrealizedProduction
-     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Production\UnrealizedProduction",mappedBy="productReport")
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Production\UnrealizedProduction",mappedBy="productReport",cascade={"remove"})
      */
     private $unrealizedProductions;
     

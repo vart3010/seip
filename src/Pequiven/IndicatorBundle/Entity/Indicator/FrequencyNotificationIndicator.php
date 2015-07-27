@@ -10,6 +10,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * @author Carlos Mendoza<inhack20@gmail.com>
  * @ORM\Table(name="seip_c_indicator_frequency_notification")
+ * @ORM\Entity(repositoryClass="Pequiven\IndicatorBundle\Entity\Indicator\FrequencyNotificationIndicatorRepository")
  * @ORM\Entity()
  */
 class FrequencyNotificationIndicator implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface

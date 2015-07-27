@@ -27,6 +27,7 @@ pequiven:
     actions:
         edit: Editar
         delete: Eliminar
+        upload_file: Subir Archivo
     modal:
         title:
             goal: Meta

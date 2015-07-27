@@ -1493,9 +1493,9 @@ angular.module('seipModule.controllers', [])
             var obtainValues = function (save, successCallBack) {
                 var formValueIndicator = angular.element('#form_value_indicator');
                 var formData = formValueIndicator.serialize();
-                
+
                 var url = Routing.generate('pequiven_value_indicator_obtain_values', {idIndicator: $scope.indicator.id});
-                
+
                 notificationBarService.getLoadStatus().loading();
                 return $http({
                     method: 'POST',
@@ -1505,8 +1505,8 @@ angular.module('seipModule.controllers', [])
                 }).success(function (data) {
                     $scope.templateOptions.setVar("form", {errors: {}});
                     $scope.templateOptions.setVar('evaluationResult', data.result);
-                    var formVarRealName = '#form_'+data.varRealName;
-                    var formVarPlanName = '#form_'+data.varPlanName;
+                    var formVarRealName = '#form_' + data.varRealName;
+                    var formVarPlanName = '#form_' + data.varPlanName;
                     angular.element(formVarRealName).val(data.real);
                     angular.element(formVarPlanName).val(data.plan);
                     $scope.templateOptions.setVar('real', data.real);
@@ -2076,13 +2076,15 @@ angular.module('seipModule.controllers', [])
                 complejos: null,
                 first_line_managements: null,
                 second_line_managements: null,
-                indicatorSummaryLabels: null
+                indicatorSummaryLabels: null,
+                frequency_notifications: null
             };
             $scope.model = {
                 complejo: null,
                 firstLineManagement: null,
                 secondLineManagement: null,
-                indicatorMiscellaneous: null
+                indicatorMiscellaneous: null,
+                frequencyNotification: null
             };
             //Carga de Configuración por defecto
             $scope.initPage = function () {
@@ -2155,6 +2157,21 @@ angular.module('seipModule.controllers', [])
                             }
                         });
             };
+            //Busca las frecuencias de notificación
+            $scope.getFrequencyNotifications = function () {
+                var parameters = {
+                    filter: {}
+                };
+                $http.get(Routing.generate('pequiven_seip_frequency_notification', parameters))
+                        .success(function (data) {
+                            $scope.data.frequency_notifications = data;
+                            if ($scope.model.frequencyNotification != null) {
+                                $scope.setValueSelect2("selectFrequencyNotifications", $scope.model.frequencyNotification, $scope.data.frequency_notifications, function (selected) {
+                                    $scope.model.frequencyNotification = selected;
+                                });
+                            }
+                        });
+            };
             //Al hacer click en el check de exclusión de gerencias de apoyo
             $scope.excludeGerenciaSecondSupport = function () {
                 if (selectExclude.is(':checked')) {
@@ -2187,6 +2204,7 @@ angular.module('seipModule.controllers', [])
             } else if (level > 1) {
                 $scope.getComplejos();
                 $scope.getFirstLineManagement();
+                $scope.getFrequencyNotifications();
             } else if (level > 2) {
                 $scope.getSecondLineManagement();
             }
@@ -2253,12 +2271,20 @@ angular.module('seipModule.controllers', [])
                     $scope.tableParams.$params.filter['type_gerencia_support'] = null;
                 }
             });
-            //Scope de Misceláneo                                                              
+            //Scope de Misceláneo
             $scope.$watch("model.indicatorMiscellaneous", function (newParams, oldParams) {
                 if ($scope.model.indicatorMiscellaneous != null && $scope.model.indicatorMiscellaneous.id != undefined) {
                     $scope.tableParams.$params.filter['miscellaneous'] = $scope.model.indicatorMiscellaneous.id;
                 } else {
                     $scope.tableParams.$params.filter['miscellaneous'] = null;
+                }
+            });
+            //Scope de Frecuencias de Notificación
+            $scope.$watch("model.frequencyNotification", function (newParams, oldParams) {
+                if ($scope.model.frequencyNotification != null && $scope.model.frequencyNotification.id != undefined) {
+                    $scope.tableParams.$params.filter['frequencyNotification'] = $scope.model.frequencyNotification.id;
+                } else {
+                    $scope.tableParams.$params.filter['frequencyNotification'] = null;
                 }
             });
         })
@@ -2359,12 +2385,12 @@ angular.module('seipModule.controllers', [])
             $scope.data = {
                 monthsLabels: null,
             };
-            
+
             $scope.model = {
                 months: null,
                 monthsGroupByCompany: null,
             };
-            
+
             $scope.$watch("model.months", function (newParams, oldParams) {
                 if ($scope.model.months != null && $scope.model.months.id != undefined) {
 //                    setValueSelect2("month", $scope.model.months.id, $scope.data.monthsLabel);
@@ -2698,7 +2724,7 @@ angular.module('seipModule.controllers', [])
                     });
                 });
             }
-            
+
             //14-Gráfico tipo columna 3d para mostrar el resultado real/plan de la ecuación para gráficos de la fórmula del indicador respecto al eje izquierdo, de acuerdo a la frecuencia de notificación.
             $scope.chargeChartColumnRealPlanByFrequencyNotificationFromDashboardEquation = function (indicatorId, render, width, height) {
                 var getDataChartColumnRealPlanByFrequencyNotificationFromDashboardEquation = Routing.generate("getDataChartColumnRealPlanByFrequencyNotificationFromDashboardEquation", {id: indicatorId});
@@ -2721,7 +2747,7 @@ angular.module('seipModule.controllers', [])
                     });
                 });
             }
-            
+
             //15-Gráfico tipo stacked column 3d para mostrar el resultado , de acuerdo a la frecuencia de notificación de los indicadores asociados, además del total del indicador padre.
             $scope.chargeChartStackedColumnVariableByFrequencyNotificationWithTotal = function (indicatorId, render, width, height) {
                 var getDataChartStackedColumnVariableByFrequencyNotificationWithTotal = Routing.generate("getDataChartStackedColumnVariableByFrequencyNotificationWithTotal", {id: indicatorId});
@@ -2744,7 +2770,7 @@ angular.module('seipModule.controllers', [])
                     });
                 });
             }
-            
+
             //16-Gráfico tipo column 3d para mostrar el resultado de un mes (Ideado para aquellos indicadores con fórmula acumulativo de cada carga) de los indicadores asociados, con el total acumulado al final
             $scope.chargeChartColumnResultIndicatorsAssociatedWithTotalByMonth = function (indicatorId, month, render, width, height) {
                 var getDataChartColumnResultIndicatorsAssociatedWithTotalByMonth = Routing.generate("getDataChartColumnResultIndicatorsAssociatedWithTotalByMonth", {id: indicatorId, month: month});
@@ -2766,7 +2792,7 @@ angular.module('seipModule.controllers', [])
                     });
                 });
             }
-            
+
             //17-Gráfico tipo column 3d para mostrar el resultado de un mes (Ideado para aquellos indicadores con fórmula acumulativo de cada carga) de los indicadores asociados agrupados por tipo de empresa, con el total acumulado al final
             $scope.chargeChartColumnResultIndicatorsAssociatedGroupByTypeCompanyWithTotalByMonth = function (indicatorId, month, render, width, height) {
                 var getDataChartColumnResultIndicatorsAssociatedGroupByTypeCompanyWithTotalByMonth = Routing.generate("getDataChartColumnResultIndicatorsAssociatedGroupByTypeCompanyWithTotalByMonth", {id: indicatorId, month: month});
@@ -2788,8 +2814,8 @@ angular.module('seipModule.controllers', [])
                     });
                 });
             }
-            
-            
+
+
             //Gráfico en forma tacómetro (Usado para mostrar el resultado de los indicadores estratégicos en el dashboard)
             $scope.renderChartExample = function (indicatorId, render, width, height) {
                 FusionCharts.ready(function () {
@@ -2909,6 +2935,8 @@ angular.module('seipModule.controllers', [])
         })
 
         .controller('ToolsController', function ($scope, ngTableParams, $http, sfTranslator, notifyService) {
+            $scope.data ="none";
+    
             $scope.isGrantedButtonEdit = function (id, index) {
                 //index = index+1;
                 var data;
@@ -2923,6 +2951,20 @@ angular.module('seipModule.controllers', [])
                 });
 
             }
+
+            $scope.uploadFile = function () {
+                alert("hola");
+                var f = document.getElementById('form_archivo').files[0],
+                        r = new FileReader();
+                r.onloadend = function (e) {
+                     $scope.data = e.target.result;
+                    //send you binary data via $http or $resource or do anything else with it
+                }
+                r.readAsBinaryString(f);
+
+            }
+
+
         })
 
         .controller('DashboardController', function ($scope, ngTableParams, $http, sfTranslator, notifyService) {
@@ -3491,7 +3533,7 @@ angular.module('seipModule.controllers', [])
                             "chart": data.dataSource.chart,
                             "categories": data.dataSource.categories,
                             "dataset": data.dataSource.dataset
-                    }
+                        }
 
 
                     });

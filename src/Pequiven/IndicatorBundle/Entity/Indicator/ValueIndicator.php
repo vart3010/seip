@@ -14,8 +14,8 @@ use Pequiven\IndicatorBundle\Model\Indicator\ValueIndicator as Model;
  * @ORM\Entity()
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
-class ValueIndicator extends Model
-{
+class ValueIndicator extends Model {
+
     /**
      * @var integer
      *
@@ -24,6 +24,8 @@ class ValueIndicator extends Model
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+
+    
 
     /**
      * @var \DateTime
@@ -38,7 +40,7 @@ class ValueIndicator extends Model
      * @ORM\Column(name="updated_at", type="datetime")
      */
     private $updatedAt;
-    
+
     /**
      * Usuario que ingreso el valor
      * 
@@ -55,7 +57,7 @@ class ValueIndicator extends Model
      * @ORM\ManyToOne(targetEntity="\Pequiven\SEIPBundle\Entity\User")
      */
     private $updatedBy;
-    
+
     /**
      * Valor del indicador
      * 
@@ -72,7 +74,7 @@ class ValueIndicator extends Model
      * @ORM\JoinColumn(nullable=false)
      */
     private $indicator;
-    
+
     /**
      * Formula
      * @var \Pequiven\MasterBundle\Entity\Formula
@@ -80,12 +82,12 @@ class ValueIndicator extends Model
      * @ORM\JoinColumn(name="fk_formula", referencedColumnName="id",nullable=false)
      */
     private $formula;
-    
+
     /**
      * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
      */
     private $deletedAt;
-    
+
     /**
      * Detalles de valores de los indicadores
      * @var ValueIndicator\ValueIndicatorDetail
@@ -94,14 +96,23 @@ class ValueIndicator extends Model
     private $valueIndicatorDetail;
 
     /**
+     * Relacion de la fichas que se suben en la plantilla del indicador
+     * 
+     * @var Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\ValueIndicatorFile
+     * @ORM\OneToOne(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\ValueIndicatorFile",inversedBy="valueIndicator")
+     */
+    private $valueIndicatorFile;
+
+    /**
      * Get id
      *
      * @return integer 
      */
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
+
+    
 
     /**
      * Set createdAt
@@ -109,8 +120,7 @@ class ValueIndicator extends Model
      * @param \DateTime $createdAt
      * @return IndicatorSimpleValue
      */
-    public function setCreatedAt($createdAt)
-    {
+    public function setCreatedAt($createdAt) {
         $this->createdAt = $createdAt;
 
         return $this;
@@ -121,8 +131,7 @@ class ValueIndicator extends Model
      *
      * @return \DateTime 
      */
-    public function getCreatedAt()
-    {
+    public function getCreatedAt() {
         return $this->createdAt;
     }
 
@@ -132,8 +141,7 @@ class ValueIndicator extends Model
      * @param \DateTime $updatedAt
      * @return IndicatorSimpleValue
      */
-    public function setUpdatedAt($updatedAt)
-    {
+    public function setUpdatedAt($updatedAt) {
         $this->updatedAt = $updatedAt;
 
         return $this;
@@ -144,8 +152,7 @@ class ValueIndicator extends Model
      *
      * @return \DateTime 
      */
-    public function getUpdatedAt()
-    {
+    public function getUpdatedAt() {
         return $this->updatedAt;
     }
 
@@ -155,8 +162,7 @@ class ValueIndicator extends Model
      * @param \Pequiven\SEIPBundle\Entity\User $createdBy
      * @return IndicatorSimpleValue
      */
-    public function setCreatedBy(\Pequiven\SEIPBundle\Entity\User $createdBy)
-    {
+    public function setCreatedBy(\Pequiven\SEIPBundle\Entity\User $createdBy) {
         $this->createdBy = $createdBy;
 
         return $this;
@@ -167,8 +173,7 @@ class ValueIndicator extends Model
      *
      * @return \Pequiven\SEIPBundle\Entity\User 
      */
-    public function getCreatedBy()
-    {
+    public function getCreatedBy() {
         return $this->createdBy;
     }
 
@@ -178,8 +183,7 @@ class ValueIndicator extends Model
      * @param \Pequiven\SEIPBundle\Entity\User $updatedBy
      * @return IndicatorSimpleValue
      */
-    public function setUpdatedBy(\Pequiven\SEIPBundle\Entity\User $updatedBy = null)
-    {
+    public function setUpdatedBy(\Pequiven\SEIPBundle\Entity\User $updatedBy = null) {
         $this->updatedBy = $updatedBy;
 
         return $this;
@@ -190,8 +194,7 @@ class ValueIndicator extends Model
      *
      * @return \Pequiven\SEIPBundle\Entity\User 
      */
-    public function getUpdatedBy()
-    {
+    public function getUpdatedBy() {
         return $this->updatedBy;
     }
 
@@ -201,8 +204,7 @@ class ValueIndicator extends Model
      * @param \Pequiven\IndicatorBundle\Entity\Indicator $indicator
      * @return IndicatorSimpleValue
      */
-    public function setIndicator(\Pequiven\IndicatorBundle\Entity\Indicator $indicator)
-    {
+    public function setIndicator(\Pequiven\IndicatorBundle\Entity\Indicator $indicator) {
         $this->indicator = $indicator;
 
         return $this;
@@ -213,8 +215,7 @@ class ValueIndicator extends Model
      *
      * @return \Pequiven\IndicatorBundle\Entity\Indicator 
      */
-    public function getIndicator()
-    {
+    public function getIndicator() {
         return $this->indicator;
     }
 
@@ -224,8 +225,7 @@ class ValueIndicator extends Model
      * @param string $valueOfIndicator
      * @return SimpleValueIndicator
      */
-    public function setValueOfIndicator($valueOfIndicator)
-    {
+    public function setValueOfIndicator($valueOfIndicator) {
         $this->valueOfIndicator = $valueOfIndicator;
 
         return $this;
@@ -236,8 +236,7 @@ class ValueIndicator extends Model
      *
      * @return string 
      */
-    public function getValueOfIndicator()
-    {
+    public function getValueOfIndicator() {
         return $this->valueOfIndicator;
     }
 
@@ -247,8 +246,7 @@ class ValueIndicator extends Model
      * @param array $formulaParameters
      * @return ValueIndicator
      */
-    public function setFormulaParameters($formulaParameters)
-    {
+    public function setFormulaParameters($formulaParameters) {
         $this->formulaParameters = $formulaParameters;
 
         return $this;
@@ -259,19 +257,17 @@ class ValueIndicator extends Model
      *
      * @return array 
      */
-    public function getFormulaParameters()
-    {
+    public function getFormulaParameters() {
         return $this->formulaParameters;
     }
-    
+
     /**
      * Set formula
      *
      * @param \Pequiven\MasterBundle\Entity\Formula $formula
      * @return Indicator
      */
-    public function setFormula(\Pequiven\MasterBundle\Entity\Formula $formula = null)
-    {
+    public function setFormula(\Pequiven\MasterBundle\Entity\Formula $formula = null) {
         $this->formula = $formula;
 
         return $this;
@@ -282,35 +278,41 @@ class ValueIndicator extends Model
      *
      * @return \Pequiven\MasterBundle\Entity\Formula 
      */
-    public function getFormula()
-    {
+    public function getFormula() {
         return $this->formula;
     }
-    
-    function getDeletedAt()
-    {
+
+    function getDeletedAt() {
         return $this->deletedAt;
     }
 
-    function setDeletedAt($deletedAt) 
-    {
+    function setDeletedAt($deletedAt) {
         $this->deletedAt = $deletedAt;
         return $this;
     }
-    
+
+    function getValueIndicatorFile() {
+        return $this->valueIndicatorFile;
+    }
+
+    function setValueIndicatorFile($valueIndicatorFile) {
+        $this->valueIndicatorFile = $valueIndicatorFile;
+        return $this;
+    }
+
     public function __toString() {
         $toString = '';
-        if($this->id){
-            $toString .= $this->id.')   ';
+        if ($this->id) {
+            $toString .= $this->id . ')   ';
         }
-        $toString.= ' '.$this->valueOfIndicator.' ';
-        if(count($this->formulaParameters) > 0){
+        $toString.= ' ' . $this->valueOfIndicator . ' ';
+        if (count($this->formulaParameters) > 0) {
             $toString.= '   ';
             foreach ($this->formulaParameters as $key => $value) {
-                $toString.= sprintf('[%s => %s]',$key,$value);
+                $toString.= sprintf('[%s => %s]', $key, $value);
             }
         }
-        return $toString ?:'-';
+        return $toString ? : '-';
     }
 
     /**
@@ -319,8 +321,7 @@ class ValueIndicator extends Model
      * @param \Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\ValueIndicatorDetail $valueIndicatorDetail
      * @return ValueIndicator
      */
-    public function setValueIndicatorDetail(\Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\ValueIndicatorDetail $valueIndicatorDetail = null)
-    {
+    public function setValueIndicatorDetail(\Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\ValueIndicatorDetail $valueIndicatorDetail = null) {
         $this->valueIndicatorDetail = $valueIndicatorDetail;
 
         return $this;
@@ -331,8 +332,8 @@ class ValueIndicator extends Model
      *
      * @return \Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\ValueIndicatorDetail 
      */
-    public function getValueIndicatorDetail()
-    {
+    public function getValueIndicatorDetail() {
         return $this->valueIndicatorDetail;
     }
+
 }

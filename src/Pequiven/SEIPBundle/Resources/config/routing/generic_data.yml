@@ -31,6 +31,17 @@ pequiven_seip_second_line_management:
     options:
         expose: true
         
+pequiven_seip_frequency_notification:
+    path: /frequency-notification.{_format}
+    defaults: 
+        _controller: pequiven_seip.controller.generic_data:getFrequencyNotificationIndicatorsAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
+        
 pequiven_seip_location_by_company:
     path: /get-location-by-company.{_format}
     defaults: 

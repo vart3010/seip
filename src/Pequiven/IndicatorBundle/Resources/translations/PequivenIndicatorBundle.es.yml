@@ -88,6 +88,7 @@ pequiven_indicator:
         without_formula: Sin Fórmula de Evaluación
         with_result: Con Resultado Notificados
         without_result: Sin Resultados Notificados
+        without_frequency_notification: Sin Frecuencia de Notificación
     errors:
         frequency_not_assigned_parent: Frecuencia no asignada al padre.
         formula_unassigned_parent: Fórmula no asignada al padre.

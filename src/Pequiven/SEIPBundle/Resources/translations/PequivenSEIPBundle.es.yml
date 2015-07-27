@@ -13,6 +13,10 @@ pequiven_seip:
     totalReal: Total real
     totalStops: Total dias de paradas
     totalHours: Total de horas
+    totalCauseFailInternal: Total Causas Internas
+    totalCauseFailExternal: Total Causas Externas
+    totalCauseFailInternalMP: Total Causas Internas Materia Prima
+    totalCauseFailExternalMP: Total Causas Externas Materia Prima
     days: Dias
     plan_n: "Plan Dia %n%:"
     real_n: "Real Dia %n%:"
@@ -226,6 +230,7 @@ pequiven_seip:
         excludeGerenciaSecondSupport: Excluir Gerencias de Apoyo
         includeGerenciaSecondSupport: Incluir Gerencias de Apoyo
         period: Periodo
+        frequencyNotifications: Frecuencias de Notificación
     tooltips:
         click_to_show: Click para ver
     area:
@@ -345,6 +350,8 @@ pequiven_seip:
         type:
             internal: Interna
             external: Externa
+            internal_mp: Interna MP
+            external_mp: Externa MP
     report_template:
         report_template: Planificación de producción
         report_day: Reporte del día
@@ -588,7 +595,8 @@ nro: "#"
 "Type": Tipo
 "Value": Valor
 "Raw materials": Materias primas
-"Day": Dia
+"Day": Día
+"Year": Año
 "Hours": Horas
 "Ranges": Rangos
 "Product report": Reporte de producto
@@ -631,3 +639,4 @@ Unit: Unidad
 'Automatic calculation plan': '¿Cálculo de plan automático?'
 'By range': 'Por rango'
 'With details': '¿Con detalles?'
+'Product Report': Reporte De Producción

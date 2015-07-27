@@ -25,7 +25,7 @@
                 {% for unrealizedProduction in product_report.getUnrealizedProductionsSortByMonth %}
                     <tr>
                         <td>{{ loop.index }} - 
-                            <a href="{{ path("pequiven_unrealized_production_show",{id: unrealizedProduction.id }) }}">
+                            <a href="{{ path("pequiven_unrealized_production_show",{id: unrealizedProduction.id,productReportId:product_report.id }) }}">
                                 {{ unrealizedProduction | trans }}
                             </a>
                         </td>

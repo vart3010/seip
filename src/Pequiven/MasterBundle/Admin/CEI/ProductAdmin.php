@@ -52,9 +52,9 @@ class ProductAdmin extends BaseAdmin {
                         $qb
                         ->andWhere($alias . '.enabled = :enabled')
                         ->setParameter('enabled', true)
-                        ->andWhere($alias . '.typeOf = :typeOf')
+                        ->andWhere($alias . '.typeProduct = :typeOf')
                         ->andWhere($qb->expr()->like($alias . '.name', "'%" . $value . "%'"))
-                        ->setParameter('typeOf', Product::TYPE_PRODUCT)
+                        ->setParameter('typeOf', Product::TYPE_PRODUCT_FINAL)
                         ;
                     },
                 ))

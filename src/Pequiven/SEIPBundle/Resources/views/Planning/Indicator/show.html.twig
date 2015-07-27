@@ -20,7 +20,7 @@
 {% block before_body %}
     {{ contentHeader(
         {(path('pequiven_indicator_list',{'level':level})):(labelHeader[level])|trans},
-        { (path('pequiven_indicator_show',{'id':indicator.id})): (indicator.ref)},
+        {(path('pequiven_indicator_show',{'id':indicator.id})): (indicator.ref)},
         ('pequiven.show'|trans({},'messages'))
     ) }}
 {% endblock %}
@@ -29,10 +29,10 @@
     {% set labelTypeDetailValue = indicator.getLabelTypeDetailValue|trans %}
     {% set showIndicatorConfigButton = false %}
     {% set isValueIndicatorConfig = false %}
-    
-    
-    
-    
+
+
+
+
     <div ng-controller="IndicatorResultController">
         {% if indicator.typeDetailValue != constant('Pequiven\\IndicatorBundle\\Model\\Indicator::TYPE_DETAIL_NONE') and indicator.valueIndicatorConfig is null %}
             {% set errorFormula = 'pequiven_indicator.errors.the_indicator_xrequires_configuration_details_results'|trans({'%typeDetailValue%': (labelTypeDetailValue|lower) }) %}
@@ -276,6 +276,10 @@
                 {% include 'PequivenIndicatorBundle:Common:tagIndicators.html.twig' %}
             </fieldset>
         {% endif %}
+
+
+
+
         {% if indicator.showResults %}
             <br /><br />
             {% include 'PequivenSEIPBundle:Planning:Indicator/show/results.html.twig' %}
@@ -369,9 +373,26 @@
 
 {% block javascript %}
     <script type="text/javascript">
-jQuery(document).ready(function () {
+function uploadFilePdf(valueIndicatorId) {
+    $("input#indicatorFilePdf_"+valueIndicatorId).click();
+    //$("#form_"+valueIndicatorId).submit();
+
+}
+
+function submitUploadFile(valueIndicatorId) {
+    valueIndicatorId = valueIndicatorId.split("_");
+    $("#field_"+valueIndicatorId[1]).val(valueIndicatorId[1]);
+    $("#form_"+valueIndicatorId[1]).submit();
+}
+
+$(document).ready(function () {
+
 // Progress
     $('.progress').progress();
-});
+
+        {#$("a.uploadFileButton").click(function () {
+            alert("hola");
+        });#}
+            });
     </script>
 {% endblock javascript %}

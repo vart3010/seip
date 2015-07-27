@@ -17,8 +17,44 @@ use Pequiven\SEIPBundle\Model\Common\CommonObject;
  */
 class IndicatorController extends ResourceController {
 
+    public function createValueIndicatorFile(Indicator $indicator, Request $request) {
+        $valueIndicatorFile = new Indicator\ValueIndicator\ValueIndicatorFile();
+        $fileUploaded = false;
+        $valuesIndicator = $indicator->getValuesIndicator();
+        foreach ($valuesIndicator as $valueIndicator) {
+            if ($valueIndicator->getId() == $request->get("valueIndicatorId")) {
+                $valueIndicatorFile->setValueIndicator($valueIndicator);
+                foreach ($request->files as $file) {
+                    //SE GUARDAN LOS CAMPOS EN BD
+                    $valueIndicatorFile->setCreatedBy($this->getUser());
+                    $valueIndicatorFile->setNameFile($file->getClientOriginalName());
+                    $valueIndicatorFile->setPath(Indicator\ValueIndicator\ValueIndicatorFile::getUploadDir());
+                    $valueIndicatorFile->setExtensionFile($file->guessExtension());
+
+                    //SE MUIEVE EL ARCHIVO AL SERVIDOR
+                    $file->move($this->container->getParameter("kernel.root_dir") . '/../web/' . Indicator\ValueIndicator\ValueIndicatorFile::getUploadDir(), Indicator\ValueIndicator\ValueIndicatorFile::NAME_FILE . $valueIndicator->getId());
+                    $fileUploaded = $file->isValid();
+                }
+            }
+        }
+        if (!$fileUploaded) {
+            $em = $this->getDoctrine()->getEntityManager();
+            $em->persist($valueIndicatorFile);
+            $em->flush();
+        }
+    }
+
     public function showAction(Request $request) {
         $resource = $this->findOr404($request);
+        $uploadFile = $request->get("uploadFile");
+        $archivo = array();
+
+
+        //SI SE SUBIO EL ARCHIVO SE PROCEDE A GUARDARLO
+        if ($uploadFile != null) {
+            $this->createValueIndicatorFile($resource, $request);
+        }
+
 
         $level = $resource->getIndicatorLevel()->getLevel();
 
@@ -88,6 +124,10 @@ class IndicatorController extends ResourceController {
         } else {//En caso de que el indicador no tenga un rango de gestión asignado se setea el mensaje de error
             $errorArrangementRange = $this->trans('pequiven_indicator.errors.arrangementRange_not_assigned', array(), 'PequivenIndicatorBundle');
         }
+
+
+
+
         $view = $this
                 ->view()
                 ->setTemplate($this->config->getTemplate('show.html'))
@@ -100,7 +140,7 @@ class IndicatorController extends ResourceController {
             'indicatorRange' => $indicatorRange,
             'hasPermissionToUpdate' => $hasPermissionToUpdate,
             'isAllowToDelete' => $isAllowToDelete,
-            'hasPermissionToApproved' => $hasPermissionToApproved,
+            'hasPermissionToApproved' => $hasPermissionToApproved
                 ))
         ;
         $view->getSerializationContext()->setGroups(array('id', 'api_list', 'valuesIndicator', 'api_details', 'sonata_api_read'));
@@ -519,7 +559,7 @@ class IndicatorController extends ResourceController {
             }
         }
         $em->flush();
-        
+
         return $this->redirectHandler->redirectTo($resource);
     }
 
