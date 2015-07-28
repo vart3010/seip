@@ -1,9 +1,9 @@
 {% trans_default_domain 'TecnocreacionesVzlaGovernmentBundle' %}
 
 {% macro show(url, message) %}
-<a href="{{ url }}" class="btn btn-default">
-   <i class="glyphicon glyphicon-book"></i><span>{{ message is empty ? 'sms_facilito.show'|trans : message }}</span>
-</a>
+    <a href="{{ url }}" class="btn btn-default">
+        <i class="glyphicon glyphicon-book"></i><span>{{ message is empty ? 'sms_facilito.show'|trans : message }}</span>
+    </a>
 {% endmacro %}
 
 {% macro generic(url, message='generic', icon = 'icon-pencil', parameters = {}) %}
@@ -17,7 +17,7 @@
     {% endif  %}
     <a href="{{ url }}" class="button">
         <span class="button-icon left-side {{ gradient }}"><span class="{{ icon }}"></span></span>
-        {{ message|trans({},translation_domain) }}
+            {{ message|trans({},translation_domain) }}
     </a>
 {% endmacro %}
 
@@ -41,25 +41,25 @@
     {% set idForm = url|hash %}
     <button type="button" class="button" onclick="openPopUp_{{ idForm }}('{{ idForm }}')">
         <span class="button-icon left-side {{ gradient }}"><span class="{{ icon }}"></span></span>
-        {{ message|trans({},translation_domain) }}
+            {{ message|trans({},translation_domain) }}
     </button>
-        <script type="text/javascript">
-            function openPopUp_{{ idForm }}(idForm){
-                var content = '<form action="{{ url }}" id="{{ idForm }}" method="post" novalidate>{{ content|raw }}</form>';
-                    //$.modal.showForm(area,confirmFormModal,cancelFormModal,options);
-                     $.modal.confirm(content,function(){
-                            $('#'+idForm).submit();
-                        },function(){
+    <script type="text/javascript">
+        function openPopUp_{{ idForm }}(idForm) {
+            var content = '<form action="{{ url }}" id="{{ idForm }}" method="post" novalidate>{{ content|raw }}</form>';
+            //$.modal.showForm(area,confirmFormModal,cancelFormModal,options);
+            $.modal.confirm(content, function () {
+                $('#' + idForm).submit();
+            }, function () {
 
-                        },
-                        {
-                            title: ' ',
-                            textConfirm: '{{ 'tecnocreaciones_vzla_government.yes'|trans({},'messages') }}',
-                            textCancel: '{{ 'tecnocreaciones_vzla_government.no'|trans({},'messages') }}',
-                        }
-                    );   
-            }
-        </script>
+            },
+                    {
+                        title: ' ',
+                        textConfirm: '{{ 'tecnocreaciones_vzla_government.yes'|trans({},'messages') }}',
+                        textCancel: '{{ 'tecnocreaciones_vzla_government.no'|trans({},'messages') }}',
+                    }
+            );
+        }
+    </script>
 {% endmacro %}
 
 {% macro generic_confirm(url, message='generic', parameters = {}) %}
@@ -80,153 +80,186 @@
         {% set icon = parameters['icon'] %}
     {% endif  %}
     {% set idForm = (url ~ message)|hash %}
-        <button type="button" class="button" onclick="openPopUpConfirm_{{ idForm }}('{{ idForm }}')">
-            <span class="button-icon left-side {{ gradient }}"><span class="{{ icon }}"></span></span>
+    <button type="button" class="button" onclick="openPopUpConfirm_{{ idForm }}('{{ idForm }}')">
+        <span class="button-icon left-side {{ gradient }}"><span class="{{ icon }}"></span></span>
             {{ message|trans({},translation_domain) }}
-        </button>
-        <script type="text/javascript">
-            function openPopUpConfirm_{{ idForm }}(){
-                $.modal.confirm('{{ content|trans({},translation_domain) }}',
-                    function(){
+    </button>
+    <script type="text/javascript">
+        function openPopUpConfirm_{{ idForm }}() {
+            $.modal.confirm('{{ content|trans({},translation_domain) }}',
+                    function () {
                         window.location.href = '{{ url }}';
-                    }, 
-                    function(){                    
+                    },
+                    function () {
                     },
                     {
                         textConfirm: '{{ 'tecnocreaciones_vzla_government.yes'|trans({},'messages') }}',
                         textCancel: '{{ 'tecnocreaciones_vzla_government.no'|trans({},'messages') }}',
                         title: ' '
                     }
-                );
-            }
-        </script>
+            );
+        }
+    </script>
 {% endmacro %}
 
 {% macro create(url, message) %}
-<a href="{{ url }}" class="btn btn-sm btn-primary">
-    <i class="glyphicon glyphicon-plus-sign"></i><span>{{ message is empty ? 'sms_facilito.new'|trans : message }}</span>
-</a>
+    <a href="{{ url }}" class="btn btn-sm btn-primary">
+        <i class="glyphicon glyphicon-plus-sign"></i><span>{{ message is empty ? 'sms_facilito.new'|trans : message }}</span>
+    </a>
 {% endmacro %}
 
 {% macro show(url, message) %}
-<a class="blue pull-left" href="{{ url }}" class="tooltip-info" data-rel="tooltip" title="{{ 'sms_facilito.view'|trans }}">
-    <i class="icon-zoom-in bigger-130"></i>
-</a>
+    <a class="blue pull-left" href="{{ url }}" class="tooltip-info" data-rel="tooltip" title="{{ 'sms_facilito.view'|trans }}">
+        <i class="icon-zoom-in bigger-130"></i>
+    </a>
 {% endmacro %}
 {% macro edit(url, message) %}
-<a href="{{ url }}" class="button">
-    <span class="button-icon left-side"><span class="icon-pencil"></span></span>
-    {{ 'tecnocreaciones_vzla_government.edit'|trans }}
-</a>
+    <a href="{{ url }}" class="button">
+        <span class="button-icon left-side"><span class="icon-pencil"></span></span>
+            {{ 'tecnocreaciones_vzla_government.edit'|trans }}
+    </a>
 {% endmacro %}
 {% macro edit_mini(url, message) %}
-<a class="green pull-left" href="{{ url }}" class="tooltip-success" data-rel="tooltip" title="{{ 'sms_facilito.edit'|trans }}">
-    <i class="icon-pencil bigger-130"></i>
-</a>
+    <a class="green pull-left" href="{{ url }}" class="tooltip-success" data-rel="tooltip" title="{{ 'sms_facilito.edit'|trans }}">
+        <i class="icon-pencil bigger-130"></i>
+    </a>
 {% endmacro %}
 
 {% macro delete_mini(url, message, tableIdRow = null) %}
-{% set idForm = url|hash %}
-    <a href="" class="button icon-trash with-tooltip confirm" onclick="openDeleteAjax('{{ url }}','{{ tableIdRow }}')" title="{{ 'tecnocreaciones_vzla_government.delete'|trans }}"></a>
-    
+    {% set idForm = url|hash %}
+    <a href="" class="button icon-trash with-tooltip confirm" onclick="openDeleteAjax('{{ url }}', '{{ tableIdRow }}')" title="{{ 'tecnocreaciones_vzla_government.delete'|trans }}"></a>
+
     <script type="text/javascript">
-        function openDeleteAjax(url,tableIdRow)
+        function openDeleteAjax(url, tableIdRow)
         {
-                $.modal.confirm('¿{{ message is empty ? 'tecnocreaciones_vzla_government.question.delete'|trans({},'messages') : message }}?', function()
-                {
-                    $.ajax({
-                      type: "POST",
-                      url: url,
-                      data: { _method:'DELETE' }
-                    }).done(function(data){
-                        if(tableIdRow != ''){
-                            $('#'+tableIdRow).remove();
-                        }
-                        $.each(data.message,function(index,value){
-                            notify(value,'', {
-                                    system:		false,   
-                                    autoClose:		4000,
-                                    icon:               ConfApp.assetPath + 'bundles/tecnocreacionesvzlagovernment/template/developer/img/icons/icon-success.png',
-                                    iconOutside:        false,
-                                    closeButton:        true,
-                                    showCloseOnHover:	false,
-                                    groupSimilar:	true
-                                });
-                        });
-                    }).error(function(data,textStatus,errorThrown){
-                        if(data.status != undefined && data.status == 403){
-                           notify('{{ 'Permission Denied!'|trans({},'messages') }}','', {
-                                    system:		false,   
-                                    autoClose:		4000,
-                                    icon:               ConfApp.assetPath + 'bundles/tecnocreacionesvzlagovernment/template/developer/img/icons/icon-error.png',
-                                    iconOutside:        false,
-                                    closeButton:        true,
-                                    showCloseOnHover:	false,
-                                    groupSimilar:	true
-                                });
-                        }
-                        $.each(data.message,function(index,value){
-                            notify(value,'', {
-                                    system:		false,   
-                                    autoClose:		4000,
-                                    icon:               ConfApp.assetPath + 'bundles/tecnocreacionesvzlagovernment/template/developer/img/icons/icon-error.png',
-                                    iconOutside:        false,
-                                    closeButton:        true,
-                                    showCloseOnHover:	false,
-                                    groupSimilar:	true
-                                });
+            $.modal.confirm('¿{{ message is empty ? 'tecnocreaciones_vzla_government.question.delete'|trans({},'messages') : message }}?', function ()
+            {
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: {_method: 'DELETE'}
+                }).done(function (data) {
+                    if (tableIdRow != '') {
+                        $('#' + tableIdRow).remove();
+                    }
+                    $.each(data.message, function (index, value) {
+                        notify(value, '', {
+                            system: false,
+                            autoClose: 4000,
+                            icon: ConfApp.assetPath + 'bundles/tecnocreacionesvzlagovernment/template/developer/img/icons/icon-success.png',
+                            iconOutside: false,
+                            closeButton: true,
+                            showCloseOnHover: false,
+                            groupSimilar: true
                         });
                     });
-
-                }, function()
-                {
-                        
-                },
-                {
-                    textConfirm: '{{ 'tecnocreaciones_vzla_government.yes'|trans }}',
-                    textCancel: '{{ 'tecnocreaciones_vzla_government.no'|trans }}'
+                }).error(function (data, textStatus, errorThrown) {
+                    if (data.status != undefined && data.status == 403) {
+                        notify('{{ 'Permission Denied!'|trans({},'messages') }}', '', {
+                            system: false,
+                            autoClose: 4000,
+                            icon: ConfApp.assetPath + 'bundles/tecnocreacionesvzlagovernment/template/developer/img/icons/icon-error.png',
+                            iconOutside: false,
+                            closeButton: true,
+                            showCloseOnHover: false,
+                            groupSimilar: true
+                        });
+                    }
+                    $.each(data.message, function (index, value) {
+                        notify(value, '', {
+                            system: false,
+                            autoClose: 4000,
+                            icon: ConfApp.assetPath + 'bundles/tecnocreacionesvzlagovernment/template/developer/img/icons/icon-error.png',
+                            iconOutside: false,
+                            closeButton: true,
+                            showCloseOnHover: false,
+                            groupSimilar: true
+                        });
+                    });
                 });
-        };
+
+            }, function ()
+            {
+
+            },
+                    {
+                        textConfirm: '{{ 'tecnocreaciones_vzla_government.yes'|trans }}',
+                        textCancel: '{{ 'tecnocreaciones_vzla_government.no'|trans }}'
+                    });
+        }
+        ;
     </script>
 {% endmacro %}
 
 {% macro delete(url, message, disabled=false, modal=true) %}
-{% if disabled %}
-<span class="btn btn-sm btn-danger disabled">
-    <i class="glyphicon glyphicon-trash"></i><span>{{ message is empty ? 'tecnocreaciones_vzla_government.delete'|trans : message }}</span>
-</span>
-{% else %}
-    {% set idForm = url|hash %}
-    <button type="button" class="button" onclick="openDelete('{{ idForm }}')">
-        <span class="button-icon red-gradient left-side"><span class="icon-trash"></span></span>
-        {{ 'tecnocreaciones_vzla_government.delete'|trans }}
-        <form action="{{ url }}" id="{{ idForm }}" method="post" novalidate>
-            <input type="hidden" name="_method" value="DELETE">
-        </form>
-    </button>
-    <script type="text/javascript">
-        // Demo confirm
-        function openDelete(idForm)
-        {
-                $.modal.confirm('¿{{ message is empty ? 'tecnocreaciones_vzla_government.question.delete'|trans({},'messages') : message }}?', function()
+    {% if disabled %}
+        <span class="btn btn-sm btn-danger disabled">
+            <i class="glyphicon glyphicon-trash"></i><span>{{ message is empty ? 'tecnocreaciones_vzla_government.delete'|trans : message }}</span>
+        </span>
+    {% else %}
+        {% set idForm = url|hash %}
+        <button type="button" class="button" onclick="openDelete('{{ idForm }}')">
+            <span class="button-icon red-gradient left-side"><span class="icon-trash"></span></span>
+                {{ 'tecnocreaciones_vzla_government.delete'|trans }}
+            <form action="{{ url }}" id="{{ idForm }}" method="post" novalidate>
+                <input type="hidden" name="_method" value="DELETE">
+            </form>
+        </button>
+        <script type="text/javascript">
+            // Demo confirm
+            function openDelete(idForm)
+            {
+                $.modal.confirm('¿{{ message is empty ? 'tecnocreaciones_vzla_government.question.delete'|trans({},'messages') : message }}?', function ()
                 {
-                    $('#'+idForm).submit();
+                    $('#' + idForm).submit();
 
-                }, function()
+                }, function ()
                 {
-                        
+
                 },
-                {
-                    textConfirm: '{{ 'tecnocreaciones_vzla_government.yes'|trans }}',
-                    textCancel: '{{ 'tecnocreaciones_vzla_government.no'|trans }}'
-                });
-        };
-    </script>
-{% endif %}
+                        {
+                            textConfirm: '{{ 'tecnocreaciones_vzla_government.yes'|trans }}',
+                            textCancel: '{{ 'tecnocreaciones_vzla_government.no'|trans }}'
+                        });
+            }
+            ;
+        </script>
+    {% endif %}
 {% endmacro %}
 
 {% macro manage(url, message) %}
-<a href="{{ url }}" class="btn btn-sm btn-success">
-    <i class="glyphicon glyphicon-folder-open"></i><span>{{ message is empty ? 'sms_facilito.manage'|trans : message }}</span>
-</a>
+    <a href="{{ url }}" class="btn btn-sm btn-success">
+        <i class="glyphicon glyphicon-folder-open"></i><span>{{ message is empty ? 'sms_facilito.manage'|trans : message }}</span>
+    </a>
 {% endmacro %}
+
+
+{% macro downloadLastFile(valueIndicatorId, message, disabled=false, modal=true) %}
+
+    
+    <button type="button" class="button" onclick="downloadFile('{{ valueIndicatorId }}')">
+        <span class="button-icon blue-gradient left-side"><span class="icon-download"></span></span>
+          {{ 'tecnocreaciones_vzla_government.question.downloadLast'|trans({},'messages') }}
+        <form target="_blank" action="" id="{{ valueIndicatorId }}" method="post" novalidate>
+            {#            <input type="hidden" name="_method" value="DELETE">#}
+        </form>
+    </button>
+    <script type="text/javascript">
+        function downloadFile(valueIndicatorId) {
+            
+            var data = {
+                id: valueIndicatorId
+            };
+            $.ajax({
+                type: 'get',
+                url: '{{ path("pequiven_indicator_get_url_file") }}',
+                data: data,
+                success: function (data) {
+                    window.open(data["url"]);
+                    //$("form#" + valueIndicatorId).attr("action", data["url"]);
+                    //$("form#" + valueIndicatorId).submit();
+                }
+            });
+        }
+    </script>
+{% endmacro %}           

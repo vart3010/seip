@@ -44,7 +44,7 @@ class IndicatorController extends ResourceController {
             $em = $this->getDoctrine()->getEntityManager();
             $em->persist($valueIndicatorFile);
             $em->flush();
-            
+
             $this->get('session')->getFlashBag()->add('success', $this->trans('action.messages.saveFileSuccess', array(), 'PequivenIndicatorBundle'));
             $request->request->set("uploadFile", "");
             $this->redirect($this->generateUrl("pequiven_indicator_show", array("id" => $indicator->getId())));
@@ -62,7 +62,7 @@ class IndicatorController extends ResourceController {
 
         //SI SE SUBIO EL ARCHIVO SE PROCEDE A GUARDARLO
         if ($uploadFile != null) {
-            
+
             $band = false;
             //VALIDACION QUE SEA UN ARCHIVO PERMITIDO
             foreach ($request->files as $file) {
@@ -97,15 +97,15 @@ class IndicatorController extends ResourceController {
         $securityService = $this->getSecurityService();
 
         $hasPermissionToUpdate = $isAllowToDelete = $hasPermissionToApproved = false;
-        
-        if(!$this->getSecurityService()->isGranted(array('ROLE_SEIP_VIEW_RESULT_BY_LINE_STRATEGIC_SPECIAL'))){
-            
+
+        if (!$this->getSecurityService()->isGranted(array('ROLE_SEIP_VIEW_RESULT_BY_LINE_STRATEGIC_SPECIAL'))) {
+
             if (isset($roleByLevel[$level])) {
                 $rol = $roleByLevel[$level];
                 $hasPermissionToUpdate = $securityService->isGrantedFull($roleEditDeleteByLevel[$level][0], $resource);
                 $isAllowToDelete = $securityService->isGrantedFull($roleEditDeleteByLevel[$level][1], $resource);
             }
-        
+
             $securityService->checkSecurity($rol);
 
             if (!$securityService->isGranted($rol[1])) {
@@ -121,7 +121,7 @@ class IndicatorController extends ResourceController {
             $errorFormula = $indicatorService->validateFormula($formula);
         }
 
-        if(!$this->getSecurityService()->isGranted(array('ROLE_SEIP_VIEW_RESULT_BY_LINE_STRATEGIC_SPECIAL'))){
+        if (!$this->getSecurityService()->isGranted(array('ROLE_SEIP_VIEW_RESULT_BY_LINE_STRATEGIC_SPECIAL'))) {
             $hasPermissionToApproved = $securityService->isGrantedFull($roleEditDeleteByLevel[$level][2], $resource);
         }
 
@@ -156,7 +156,8 @@ class IndicatorController extends ResourceController {
         }
 
 
-
+        $isAllowToDownload =  $indicatorService->validFileIndicator($resource);
+        $valueIndicatorId = $indicatorService->validFileIndicator($resource,true);
 
         $view = $this
                 ->view()
@@ -170,6 +171,8 @@ class IndicatorController extends ResourceController {
             'indicatorRange' => $indicatorRange,
             'hasPermissionToUpdate' => $hasPermissionToUpdate,
             'isAllowToDelete' => $isAllowToDelete,
+            'isAllowToDownload' => $isAllowToDownload,
+            'valueIndicatorIdDownload'=>$valueIndicatorId,
             'hasPermissionToApproved' => $hasPermissionToApproved
                 ))
         ;
@@ -202,9 +205,9 @@ class IndicatorController extends ResourceController {
             $rol = $roleByLevel[$level];
         }
 
-        if(!$this->getSecurityService()->isGranted(array('ROLE_SEIP_VIEW_RESULT_BY_LINE_STRATEGIC_SPECIAL'))){
+        if (!$this->getSecurityService()->isGranted(array('ROLE_SEIP_VIEW_RESULT_BY_LINE_STRATEGIC_SPECIAL'))) {
             $securityService->checkSecurity($rol);
-            
+
             if (!$securityService->isGranted($rol[1])) {
                 $securityService->checkSecurity($rol[0], $resource);
             }
@@ -619,6 +622,8 @@ class IndicatorController extends ResourceController {
 
         return $this->redirectHandler->redirect($redirectUrl);
     }
+    
+    
 
     public function generateUrlFile(Request $request) {
 

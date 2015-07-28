@@ -913,9 +913,9 @@ class ReportTemplateController extends SEIPController {
 //        }
         
 
-        $graphicsDays = $reportService->generateColumn3dLinery(array("caption" => "Producción por Dia", "subCaption" => "Valores Expresados en TM"), $productsReport, array("range"=>true,"dateFrom"=>$dateFrom,"dateEnd"=>$dateEnd), $dateReport, $typeReport, "getSummaryDay", "plan", "real");
-        $graphicsMonth = $reportService->generateColumn3dLinery(array("caption" => "Producción por Mes", "subCaption" => "Valores Expresados en TM"), $productsReport, array("range"=>false), $dateReport, $typeReport, "getSummaryMonth", "plan_acumulated", "real_acumulated");
-        $graphicsYear = $reportService->generateColumn3dLinery(array("caption" => "Producción por Año", "subCaption" => "Valores Expresados en MTM"), $productsReport, array("range"=>false), $dateReport, $typeReport, "getSummaryYear", "plan_acumulated", "real_acumulated", 1000);
+        $graphicsDays = $reportService->generateColumn3dLinery(array("caption" => "Producción por Dia", "subCaption" => "Valores Expresados en TM"), $productsReport, array("range"=>$byRange,"dateFrom"=>$dateFrom,"dateEnd"=>$dateEnd), $dateReport, $typeReport, "getSummaryDay", "plan", "real");
+        $graphicsMonth = $reportService->generateColumn3dLinery(array("caption" => "Producción por Mes", "subCaption" => "Valores Expresados en TM"), $productsReport, array("range"=>$byRange,"dateFrom"=>$dateFrom,"dateEnd"=>$dateEnd), $dateReport, $typeReport, "getSummaryMonth", "plan_acumulated", "real_acumulated");
+        $graphicsYear = $reportService->generateColumn3dLinery(array("caption" => "Producción por Año", "subCaption" => "Valores Expresados en MTM"), $productsReport, array("range"=>$byRange,"dateFrom"=>$dateFrom,"dateEnd"=>$dateEnd), $dateReport, $typeReport, "getSummaryYear", "plan_acumulated", "real_acumulated", 1000);
 
 
 

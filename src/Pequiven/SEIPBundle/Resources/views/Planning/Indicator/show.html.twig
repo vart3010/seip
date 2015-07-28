@@ -271,7 +271,7 @@
         {% endif %}
 
 
-
+        {{ dump(isAllowToDownload) }}
 
         {% if indicator.showResults %}
             <br /><br />
@@ -325,6 +325,11 @@
 
         {% if hasPermissionToApproved is not defined %}
             {% set hasPermissionToApproved = false %}
+        {% endif %}
+
+        {% if isAllowToDownload == true %}
+            &nbsp;
+            {{ buttons.downloadLastFile(valueIndicatorIdDownload) }}
         {% endif %}
 
         {% if  hasPermissionToApproved == true %}
