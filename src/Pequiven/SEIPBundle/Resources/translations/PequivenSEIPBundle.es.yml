@@ -570,6 +570,8 @@ chart:
         indicatorVariablesStackedColumnByFrequencyNotificationWithTotal: Variables del indicador, en stacked column, además del acumulado como columna final.
         indicatorsAssociatedColumnWithTotalByMonth: Resultado de los indicadores asociados, en column 3D, además del acumulado como columna final.
         indicatorsAssociatedColumnGroupByTypeCompanyWithTotalByMonth: Resultado de los indicadores asociados agrupados por tipo de compañia, en column 3D, además del acumulado como columna final.
+        indicatorPersonalInjuryWithAccumulatedTime: Lesionados personales con tiempo acumulado de los indicadores asociados agrupados por tipo de compañia, en linea, además del valor del actual y del año pasado.
+        indicatorPersonalInjuryWithoutAccumulatedTime: Lesionados personales sin tiempo acumulado de los indicadores asociados agrupados por tipo de compañia, en linea, además del valor del actual y del año pasado.
         example: Ejemplo
 
 Name: Nombre
