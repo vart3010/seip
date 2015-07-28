@@ -237,6 +237,7 @@ getDataChartMultiSeriesLineIndicatorPersonalInjuryWithAccumulatedTimeFromChildre
     methods: [GET]
     options:
         expose: true
+
         
 #20
 getDataChartMultiSeriesLineIndicatorPersonalInjuryWithAndWithoutAccumulatedTimeFromChildrens:
