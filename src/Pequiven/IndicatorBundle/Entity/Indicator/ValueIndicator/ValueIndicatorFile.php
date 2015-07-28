@@ -267,5 +267,9 @@ class ValueIndicatorFile extends Model {
     public function getValueIndicator() {
         return $this->valueIndicator;
     }
+    
+    public function __toString() {
+        return $this->getNameFile();
+    }
 
 }

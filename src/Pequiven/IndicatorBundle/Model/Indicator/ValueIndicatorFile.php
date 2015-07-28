@@ -14,16 +14,20 @@ use Doctrine\ORM\Mapping as ORM;
  * @author Carlos Mendoza <inhack20@gmail.com>
  */
 abstract class ValueIndicatorFile {
-    
+
     const NAME_FILE = "FICHA_";
     const LOCATION_UPLOAD_FILE = "uploads/documents/indicator_files";
+//TODO: Investigar para colocarlo en esta varaible, los tipos de archivos permitidos, y colocarlo por el administrador
+//    protected $type_file = array("pdf");
 
-    
+    static function getTypesFile() {
+        return array("pdf");
+    }
 
     public function getUploadRootDir() {
         // the absolute directory path where uploaded
         // documents should be saved
-        return basename( __DIR__ );
+        return basename(__DIR__);
     }
 
     static function getUploadDir() {
