@@ -326,3 +326,6 @@ action:
         registerIndicatorStrategicSuccessfull: Indicador Estratégico registrado exitosamente
         registerIndicatorTacticSuccessfull: Indicador Táctico registrado exitosamente
         registerIndicatorOperativeSuccessfull: Indicador Operativo registrado exitosamente
+        InvalidFile: Tipo de archivo invalido
+        saveFileSuccess: Archivo guardado correctamente
+        errorFileUpload: Error al subir archivo
