@@ -171,6 +171,21 @@
                                         <span id="{{ grafico }}"></span>
                                     </div>
                                 {% endif %}
+                                {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_MULTI_SERIES_LINE_INDICATOR_PERSONAL_INJURY_WITH_ACCUMULATED_TIME_FROM_CHILDRENS')  %}
+                                    <div id="tab-{{ grafico }}"  ng-controller="DashboardController" ng-init="chargeChartMultiSeriesLineIndicatorPersonalInjuryWithAccumulatedTimeFromChildrens({{ indicator.id }},'{{ grafico }}','100','500')">
+                                        <span id="{{ grafico }}"></span>
+                                    </div>
+                                {% endif %}
+                                {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_MULTI_SERIES_LINE_INDICATOR_PERSONAL_INJURY_WHIT_AND_WITHOUT_ACCUMULATED_TIME_FROM_CHILDRENS')  %}
+                                    <div id="tab-{{ grafico }}"  ng-controller="DashboardController" ng-init="chargeChartMultiSeriesLineIndicatorPersonalInjuryWithAndWithoutAccumulatedTimeFromChildrens({{ indicator.id }},'{{ grafico }}','100','500')">
+                                        <span id="{{ grafico }}"></span>
+                                    </div>
+                                {% endif %}
+                                {#{% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_MULTI_SERIES_LINE_INDICATOR_PERSONAL_INJURY_WITHOUT_ACCUMULATED_TIME')  %}
+                                    <div id="tab-{{ grafico }}"  ng-controller="DashboardController" ng-init="chargeChartMultiSeriesLineIndicatorPersonalInjuryWithoutAccumulatedTime({{ indicator.id }},'{{ grafico }}','100','500')">
+                                        <span id="{{ grafico }}"></span>
+                                    </div>
+                                {% endif %}#}
                                 {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_EXAMPLE')  %}
                                     <div id="tab-{{ grafico }}"  ng-controller="DashboardController" ng-init="renderChartExample({{ indicator.id }},'{{ grafico }}','100','500')">
                                         <span id="{{ grafico }}"></span>

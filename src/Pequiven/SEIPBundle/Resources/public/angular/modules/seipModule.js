@@ -2814,6 +2814,52 @@ angular.module('seipModule.controllers', [])
                     });
                 });
             }
+            
+            //18-Gráfico tipo column 3d para mostrar el resultado de un mes (Ideado para aquellos indicadores con fórmula acumulativo de cada carga) de los indicadores asociados agrupados por tipo de empresa, con el total acumulado al final
+            $scope.chargeChartMultiSeriesLineIndicatorPersonalInjuryWithAccumulatedTimeFromChildrens = function (indicatorId, render, width, height) {
+                var getDataChartMultiSeriesLineIndicatorPersonalInjuryWithAccumulatedTimeFromChildrens = Routing.generate("getDataChartMultiSeriesLineIndicatorPersonalInjuryWithAccumulatedTimeFromChildrens", {id: indicatorId});
+                $http.get(getDataChartMultiSeriesLineIndicatorPersonalInjuryWithAccumulatedTimeFromChildrens).success(function (data) {
+                    FusionCharts.ready(function () {
+                        var revenueChartMultiSeriesLineIndicatorPersonalInjuryWithAccumulatedTimeFromChildrens = new FusionCharts({
+                            "type": "msline",
+                            "renderAt": render,
+                            "width": width + "%",
+                            "height": height,
+                            "dataFormat": "json",
+                            "dataSource": {
+                                "chart": data.dataSource.chart,
+                                "categories": data.dataSource.categories,
+                                "dataset": data.dataSource.dataset
+                            }
+                        });
+                        revenueChartMultiSeriesLineIndicatorPersonalInjuryWithAccumulatedTimeFromChildrens.setTransparent(true);
+                        revenueChartMultiSeriesLineIndicatorPersonalInjuryWithAccumulatedTimeFromChildrens.render();
+                    });
+                });
+            }
+            
+            //20-Gráfico tipo column 3d para mostrar el resultado de un mes (Ideado para aquellos indicadores con fórmula acumulativo de cada carga) de los indicadores asociados agrupados por tipo de empresa, con el total acumulado al final
+            $scope.chargeChartMultiSeriesLineIndicatorPersonalInjuryWithAndWithoutAccumulatedTimeFromChildrens = function (indicatorId, render, width, height) {
+                var getDataChartMultiSeriesLineIndicatorPersonalInjuryWithAndWithoutAccumulatedTimeFromChildrens = Routing.generate("getDataChartMultiSeriesLineIndicatorPersonalInjuryWithAndWithoutAccumulatedTimeFromChildrens", {id: indicatorId});
+                $http.get(getDataChartMultiSeriesLineIndicatorPersonalInjuryWithAndWithoutAccumulatedTimeFromChildrens).success(function (data) {
+                    FusionCharts.ready(function () {
+                        var revenueChartMultiSeriesLineIndicatorPersonalInjuryWithAndWithoutAccumulatedTimeFromChildrens = new FusionCharts({
+                            "type": "msline",
+                            "renderAt": render,
+                            "width": width + "%",
+                            "height": height,
+                            "dataFormat": "json",
+                            "dataSource": {
+                                "chart": data.dataSource.chart,
+                                "categories": data.dataSource.categories,
+                                "dataset": data.dataSource.dataset
+                            }
+                        });
+                        revenueChartMultiSeriesLineIndicatorPersonalInjuryWithAndWithoutAccumulatedTimeFromChildrens.setTransparent(true);
+                        revenueChartMultiSeriesLineIndicatorPersonalInjuryWithAndWithoutAccumulatedTimeFromChildrens.render();
+                    });
+                });
+            }
 
 
             //Gráfico en forma tacómetro (Usado para mostrar el resultado de los indicadores estratégicos en el dashboard)
@@ -2935,8 +2981,8 @@ angular.module('seipModule.controllers', [])
         })
 
         .controller('ToolsController', function ($scope, ngTableParams, $http, sfTranslator, notifyService) {
-            $scope.data ="none";
-    
+            $scope.data = "none";
+
             $scope.isGrantedButtonEdit = function (id, index) {
                 //index = index+1;
                 var data;
@@ -2957,11 +3003,20 @@ angular.module('seipModule.controllers', [])
                 var f = document.getElementById('form_archivo').files[0],
                         r = new FileReader();
                 r.onloadend = function (e) {
-                     $scope.data = e.target.result;
+                    $scope.data = e.target.result;
                     //send you binary data via $http or $resource or do anything else with it
                 }
                 r.readAsBinaryString(f);
+            }
 
+            $scope.validLoad = function (valueIndicatorId) {
+                var getValidLoad = Routing.generate("showButtonDownload", {id: valueIndicatorId});
+                $http.get(getValidLoad).success(function (data) {
+                    console.log(data);
+                    if (data != "true") {
+                        $("span#open_" + valueIndicatorId).hide();
+                    }
+                });
             }
 
 

@@ -345,6 +345,7 @@ pequiven_seip:
             role_seip_planning_view_result_tactic: Usted no tiene permiso para ver los resultados a nivel tactico.
             role_seip_planning_view_result_operative: Usted no tiene permiso para ver los resultados a nivel operativo.
             role_seip_planning_operation_recalculate_result: Usted no tiene permiso para realizar la operación de recalcular resultados.
+            role_seip_planning_indicator_show_file: Usted no tiene permiso para visualizar los archivos
         error:
             the_pre_planning_is_not_enabled: La pre-planificacion no se encuentra habilitada.
     fail:
@@ -570,6 +571,9 @@ chart:
         indicatorVariablesStackedColumnByFrequencyNotificationWithTotal: Variables del indicador, en stacked column, además del acumulado como columna final.
         indicatorsAssociatedColumnWithTotalByMonth: Resultado de los indicadores asociados, en column 3D, además del acumulado como columna final.
         indicatorsAssociatedColumnGroupByTypeCompanyWithTotalByMonth: Resultado de los indicadores asociados agrupados por tipo de compañia, en column 3D, además del acumulado como columna final.
+        indicatorPersonalInjuryWithAccumulatedTime: Lesionados personales con tiempo acumulado de los indicadores asociados agrupados por tipo de compañia, en linea, además del valor del actual y del año pasado.
+        indicatorPersonalInjuryWithoutAccumulatedTime: Lesionados personales sin tiempo acumulado de los indicadores asociados agrupados por tipo de compañia, en linea, además del valor del actual y del año pasado.
+        indicatorPersonalInjuryWithAndWithoutAccumulatedTimeFromChildrens: Lesionados personales con y sin tiempo acumulado de los indicadores asociados agrupados por tipo de compañia, en linea, además del valor del actual y del año pasado.
         example: Ejemplo
 
 Name: Nombre

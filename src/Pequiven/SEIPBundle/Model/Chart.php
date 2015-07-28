@@ -103,7 +103,22 @@ abstract class Chart
      */
     const TYPE_CHART_COLUMN_RESULT_INDICATORS_ASSOCIATED_GROUP_BY_TYPE_COMPANY_WITH_TOTAL_BY_MONTH = 17;
     
-    const TYPE_EXAMPLE = 20;
+    /**
+     * Gráfico tipo multiseries de línea, para las lesiones personales con tiempo, acumulados, sólo de indicador
+     */
+    const TYPE_CHART_MULTI_SERIES_LINE_INDICATOR_PERSONAL_INJURY_WITH_ACCUMULATED_TIME_FROM_CHILDRENS = 18;
+    
+    /**
+     * Gráfico tipo multiseries de línea, para las lesiones personales sin tiempo, sólo del indicador
+     */
+    const TYPE_CHART_MULTI_SERIES_LINE_INDICATOR_PERSONAL_INJURY_WITHOUT_ACCUMULATED_TIME_FROM_CHILDRENS = 19;
+    
+    /**
+     * Gráfico tipo multiseries de línea, para las lesiones personales con y sin tiempo, acumulados, de los hijos del indicador
+     */
+    const TYPE_CHART_MULTI_SERIES_LINE_INDICATOR_PERSONAL_INJURY_WHIT_AND_WITHOUT_ACCUMULATED_TIME_FROM_CHILDRENS = 20;
+    
+    const TYPE_EXAMPLE = 100;
        
     /**
      * @var integer
@@ -159,6 +174,9 @@ abstract class Chart
             self::TYPE_CHART_STACKED_COLUMN_VARIABLE_BY_FREQUENCY_NOTIFICATION_WITH_TOTAL => 'chart.type.indicatorVariablesStackedColumnByFrequencyNotificationWithTotal',
             self::TYPE_CHART_COLUMN_RESULT_INDICATORS_ASSOCIATED_WITH_TOTAL_BY_MONTH => 'chart.type.indicatorsAssociatedColumnWithTotalByMonth',
             self::TYPE_CHART_COLUMN_RESULT_INDICATORS_ASSOCIATED_GROUP_BY_TYPE_COMPANY_WITH_TOTAL_BY_MONTH => 'chart.type.indicatorsAssociatedColumnGroupByTypeCompanyWithTotalByMonth',
+            self::TYPE_CHART_MULTI_SERIES_LINE_INDICATOR_PERSONAL_INJURY_WITH_ACCUMULATED_TIME_FROM_CHILDRENS => 'chart.type.indicatorPersonalInjuryWithAccumulatedTime',
+            self::TYPE_CHART_MULTI_SERIES_LINE_INDICATOR_PERSONAL_INJURY_WITHOUT_ACCUMULATED_TIME_FROM_CHILDRENS => 'chart.type.indicatorPersonalInjuryWithoutAccumulatedTime',
+            self::TYPE_CHART_MULTI_SERIES_LINE_INDICATOR_PERSONAL_INJURY_WHIT_AND_WITHOUT_ACCUMULATED_TIME_FROM_CHILDRENS => 'chart.type.indicatorPersonalInjuryWithAndWithoutAccumulatedTimeFromChildrens',
             self::TYPE_EXAMPLE => 'chart.type.example',
         );
          

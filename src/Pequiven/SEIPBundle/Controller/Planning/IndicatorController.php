@@ -20,39 +20,62 @@ class IndicatorController extends ResourceController {
     public function createValueIndicatorFile(Indicator $indicator, Request $request) {
         $valueIndicatorFile = new Indicator\ValueIndicator\ValueIndicatorFile();
         $fileUploaded = false;
+
         $valuesIndicator = $indicator->getValuesIndicator();
         foreach ($valuesIndicator as $valueIndicator) {
             if ($valueIndicator->getId() == $request->get("valueIndicatorId")) {
                 $valueIndicatorFile->setValueIndicator($valueIndicator);
                 foreach ($request->files as $file) {
+                    //VALIDA QUE EL ARCHIVO SEA UN PDF
                     //SE GUARDAN LOS CAMPOS EN BD
                     $valueIndicatorFile->setCreatedBy($this->getUser());
                     $valueIndicatorFile->setNameFile($file->getClientOriginalName());
                     $valueIndicatorFile->setPath(Indicator\ValueIndicator\ValueIndicatorFile::getUploadDir());
                     $valueIndicatorFile->setExtensionFile($file->guessExtension());
 
-                    //SE MUIEVE EL ARCHIVO AL SERVIDOR
+                    //SE MUEVE EL ARCHIVO AL SERVIDOR
                     $file->move($this->container->getParameter("kernel.root_dir") . '/../web/' . Indicator\ValueIndicator\ValueIndicatorFile::getUploadDir(), Indicator\ValueIndicator\ValueIndicatorFile::NAME_FILE . $valueIndicator->getId());
                     $fileUploaded = $file->isValid();
                 }
             }
         }
+
         if (!$fileUploaded) {
             $em = $this->getDoctrine()->getEntityManager();
             $em->persist($valueIndicatorFile);
             $em->flush();
+            
+            $this->get('session')->getFlashBag()->add('success', $this->trans('action.messages.saveFileSuccess', array(), 'PequivenIndicatorBundle'));
+            $request->request->set("uploadFile", "");
+            $this->redirect($this->generateUrl("pequiven_indicator_show", array("id" => $indicator->getId())));
+        } else {
+            $this->get('session')->getFlashBag()->add('error', $this->trans('action.messages.errorFileUpload', array(), 'PequivenIndicatorBundle'));
+            $request->request->set("uploadFile", "");
+            $this->redirect($this->generateUrl("pequiven_indicator_show", array("id" => $indicator->getId())));
         }
     }
 
     public function showAction(Request $request) {
         $resource = $this->findOr404($request);
         $uploadFile = $request->get("uploadFile");
-        $archivo = array();
 
 
         //SI SE SUBIO EL ARCHIVO SE PROCEDE A GUARDARLO
         if ($uploadFile != null) {
-            $this->createValueIndicatorFile($resource, $request);
+            
+            $band = false;
+            //VALIDACION QUE SEA UN ARCHIVO PERMITIDO
+            foreach ($request->files as $file) {
+                if (in_array($file->guessExtension(), \Pequiven\IndicatorBundle\Model\Indicator\ValueIndicatorFile::getTypesFile())) {
+                    $band = true;
+                }
+            }
+            if ($band) {
+                $this->createValueIndicatorFile($resource, $request);
+            } else {
+                $this->get('session')->getFlashBag()->add('error', $this->trans('action.messages.InvalidFile', array(), 'PequivenIndicatorBundle'));
+                $this->redirect($this->generateUrl("pequiven_indicator_show", array("id" => $request->get("id"))));
+            }
         }
 
 
@@ -645,6 +668,22 @@ class IndicatorController extends ResourceController {
         return $this->redirectHandler->redirectTo($resource);
     }
 
+    public function vizualiceFileAction(Request $request) {
+        $securityService = $this->getSecurityService();
+        if ($securityService->isGranted(array("ROLE_SEIP_PLANNING_INDICATOR_SHOW_FILE"))) {
+            $path = Indicator\ValueIndicator\ValueIndicatorFile::LOCATION_UPLOAD_FILE;
+            $name = Indicator\ValueIndicator\ValueIndicatorFile::NAME_FILE;
+            $ruta = $this->container->getParameter("kernel.root_dir") . '/../web/' . $path . "/" . $name . $request->get("id");
+
+            header('Content-type: application/pdf');
+            readfile($ruta);
+        } else {
+            $em = $this->getDoctrine();
+            $entity = $em->getRepository("\Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator")->find($request->get("id"));
+            $securityService->checkSecurity('ROLE_SEIP_PLANNING_INDICATOR_SHOW_FILE', $entity);
+        }
+    }
+
     public function deleteAction(Request $request) {
         $redirectUrl = $request->get("redirectUrl");
 
@@ -652,6 +691,28 @@ class IndicatorController extends ResourceController {
         $this->domainManager->delete($resource);
 
         return $this->redirectHandler->redirect($redirectUrl);
+    }
+
+    public function generateUrlFile(Request $request) {
+
+        $response = new JsonResponse();
+        $data = array();
+        $data["url"] = $this->generateUrl("pequiven_indicator_vizualice_file", array("id" => $request->get("id")));
+        $response->setData($data);
+        return $response;
+    }
+
+    public function showButtonDownload(Request $request) {
+        $em = $this->getDoctrine();
+        $valueIndicator = $em->getRepository("\Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator")->find($request->get("id"));
+
+        $archivo = $valueIndicator->getValueIndicatorFile();
+
+        if ($archivo) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
