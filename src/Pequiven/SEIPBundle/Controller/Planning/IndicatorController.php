@@ -195,10 +195,12 @@ class IndicatorController extends ResourceController {
             $rol = $roleByLevel[$level];
         }
 
-        $securityService->checkSecurity($rol);
-
-        if (!$securityService->isGranted($rol[1])) {
-            $securityService->checkSecurity($rol[0], $resource);
+        if(!$this->getSecurityService()->isGranted(array('ROLE_SEIP_VIEW_RESULT_BY_LINE_STRATEGIC_SPECIAL'))){
+            $securityService->checkSecurity($rol);
+            
+            if (!$securityService->isGranted($rol[1])) {
+                $securityService->checkSecurity($rol[0], $resource);
+            }
         }
 
         //Sección dónde se define el haeder del showDashboard
