@@ -1484,15 +1484,15 @@ class IndicatorService implements ContainerAwareInterface {
         $chart["formatNumberScale"] = "0";
         $chart["showAxisLines"] = "0";
         $chart["showAlternateHGridColor"] = "0";
-        $chart["showValues"] = "0";
+//        $chart["showValues"] = "1";
 
         $category = $dataSetValues = array();
         
-        if(isset($options['resultIndicatorPersonalInjuryWithAccumulatedTime']) && array_key_exists('resultIndicatorPersonalInjuryWithAccumulatedTime', $options)){
-            unset($options['resultIndicatorPersonalInjuryWithAccumulatedTime']);
+        if(isset($options['resultIndicatorPersonalInjuryWithAndWithoutAccumulatedTimeFromChildrens']) && array_key_exists('resultIndicatorPersonalInjuryWithAndWithoutAccumulatedTimeFromChildrens', $options)){
+            unset($options['resultIndicatorPersonalInjuryWithAndWithoutAccumulatedTimeFromChildrens']);
             
             $arrayVariables = array();
-            $arrayVariables = $this->getArrayVariablesFormulaWithData($indicator, array('resultIndicatorPersonalInjuryWithAccumulatedTime' => true));
+            $arrayVariables = $this->getArrayVariablesFormulaWithData($indicator, array('resultIndicatorPersonalInjuryWithAndWithoutAccumulatedTimeFromChildrens' => true));
             
             $numberResults = $indicator->getFrequencyNotificationIndicator()->getNumberResultsFrequency();
             $labelsFrequencyNotificationArray = $this->getLabelsByIndicatorFrequencyNotification($indicator);
@@ -2102,8 +2102,8 @@ class IndicatorService implements ContainerAwareInterface {
             }
 
             $arrayVariables['total'] = array('label' => 'Corporación', 'value' => $total);
-        } elseif(isset($options['resultIndicatorPersonalInjuryWithAccumulatedTime']) && array_key_exists('resultIndicatorPersonalInjuryWithAccumulatedTime', $options)){
-            unset($options['resultIndicatorPersonalInjuryWithAccumulatedTime']);
+        } elseif(isset($options['resultIndicatorPersonalInjuryWithAndWithoutAccumulatedTimeFromChildrens']) && array_key_exists('resultIndicatorPersonalInjuryWithAndWithoutAccumulatedTimeFromChildrens', $options)){
+            unset($options['resultIndicatorPersonalInjuryWithAndWithoutAccumulatedTimeFromChildrens']);
             
             $childrens = $indicator->getChildrens();
             $variables = $formula->getVariables();
@@ -2115,7 +2115,7 @@ class IndicatorService implements ContainerAwareInterface {
             $arrayVariables['PERIODO_ACTUAL'] = array('seriesname' => $indicator->getPeriod()->getName(), 'data' => array());
             $arrayVariables['PERIODO_ANTERIOR'] = array('seriesname' => $indicator->getPeriod()->getParent()->getName(), 'data' => array());
             
-            $arrayVarsSpecific = array("lesionados_con_tiempo_perdido" => true, "lesiones_con_tiempo_perdido" => true);
+            $arrayVarsSpecific = array("lesionados_con_tiempo_perdido" => true, "lesiones_con_tiempo_perdido" => true, "lesionados_sin_tiempo_perdido" => true);
             $numberResults = $indicator->getFrequencyNotificationIndicator()->getNumberResultsFrequency();
             
             //Seteamos por defecto los valores por número de resultados totales
@@ -2183,11 +2183,16 @@ class IndicatorService implements ContainerAwareInterface {
             }
             
             //Seteamos el arreglo a devolver para cada serie
+            $showUntilMonth = 6;//TODO: Ponerlo por el administrador del indicador
+            $showValue = 1;
             for($i = 1; $i <= $numberResults; $i++){
-                $arrayVariables['MATRIZ']['data'][] = array('value' => $result['MATRIZ']['value'][$i]);
-                $arrayVariables['AFILIADA_MIXTA']['data'][] = array('value' =>  $result['AFILIADA_MIXTA']['value'][$i]);
-                $arrayVariables['PERIODO_ACTUAL']['data'][] =  array('value' =>  $result['PERIODO_ACTUAL']['value'][$i]);
-                $arrayVariables['PERIODO_ANTERIOR']['data'][] = array('value' =>  $result['PERIODO_ANTERIOR']['value'][$i]);
+//                $showValue = $i <= $showUntilMonth ? 1 : 0;
+                if($i <= $showUntilMonth){
+                    $arrayVariables['MATRIZ']['data'][] = array('value' => $result['MATRIZ']['value'][$i], 'showValue' => $showValue);
+                    $arrayVariables['AFILIADA_MIXTA']['data'][] = array('value' =>  $result['AFILIADA_MIXTA']['value'][$i], 'showValue' => $showValue);
+                    $arrayVariables['PERIODO_ACTUAL']['data'][] =  array('value' =>  $result['PERIODO_ACTUAL']['value'][$i], 'showValue' => $showValue);
+                }
+                $arrayVariables['PERIODO_ANTERIOR']['data'][] = array('value' =>  $result['PERIODO_ANTERIOR']['value'][$i], 'showValue' => $showValue);
             }
         }
 
