@@ -2815,6 +2815,29 @@ angular.module('seipModule.controllers', [])
                 });
             }
             
+            //18-Gráfico tipo column 3d para mostrar el resultado de un mes (Ideado para aquellos indicadores con fórmula acumulativo de cada carga) de los indicadores asociados agrupados por tipo de empresa, con el total acumulado al final
+            $scope.chargeChartMultiSeriesLineIndicatorPersonalInjuryWithAccumulatedTimeFromChildrens = function (indicatorId, render, width, height) {
+                var getDataChartMultiSeriesLineIndicatorPersonalInjuryWithAccumulatedTimeFromChildrens = Routing.generate("getDataChartMultiSeriesLineIndicatorPersonalInjuryWithAccumulatedTimeFromChildrens", {id: indicatorId});
+                $http.get(getDataChartMultiSeriesLineIndicatorPersonalInjuryWithAccumulatedTimeFromChildrens).success(function (data) {
+                    FusionCharts.ready(function () {
+                        var revenueChartMultiSeriesLineIndicatorPersonalInjuryWithAccumulatedTimeFromChildrens = new FusionCharts({
+                            "type": "msline",
+                            "renderAt": render,
+                            "width": width + "%",
+                            "height": height,
+                            "dataFormat": "json",
+                            "dataSource": {
+                                "chart": data.dataSource.chart,
+                                "categories": data.dataSource.categories,
+                                "dataset": data.dataSource.dataset
+                            }
+                        });
+                        revenueChartMultiSeriesLineIndicatorPersonalInjuryWithAccumulatedTimeFromChildrens.setTransparent(true);
+                        revenueChartMultiSeriesLineIndicatorPersonalInjuryWithAccumulatedTimeFromChildrens.render();
+                    });
+                });
+            }
+            
             //20-Gráfico tipo column 3d para mostrar el resultado de un mes (Ideado para aquellos indicadores con fórmula acumulativo de cada carga) de los indicadores asociados agrupados por tipo de empresa, con el total acumulado al final
             $scope.chargeChartMultiSeriesLineIndicatorPersonalInjuryWithAndWithoutAccumulatedTimeFromChildrens = function (indicatorId, render, width, height) {
                 var getDataChartMultiSeriesLineIndicatorPersonalInjuryWithAndWithoutAccumulatedTimeFromChildrens = Routing.generate("getDataChartMultiSeriesLineIndicatorPersonalInjuryWithAndWithoutAccumulatedTimeFromChildrens", {id: indicatorId});

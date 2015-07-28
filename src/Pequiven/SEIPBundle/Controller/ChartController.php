@@ -379,17 +379,16 @@ class ChartController extends SEIPController {
      * 18-Función que retorna la data para un gráfico tipo multiseries de línea, para las lesiones personales con tiempo, acumulados
      * @return JsonResponse
      */
-    public function getDataChartMultiSeriesLineIndicatorPersonalInjuryWithAccumulatedTimeAction(Request $request) {
+    public function getDataChartMultiSeriesLineIndicatorPersonalInjuryWithAccumulatedTimeFromChildrensAction(Request $request) {
         $response = new JsonResponse();
 
         $idIndicator = $request->get('id');
-        $month = $request->get('month', date("n"));
 
         $indicatorService = $this->getIndicatorService(); //Obtenemos el servicio del indicador
 
         $indicator = $this->get('pequiven.repository.indicator')->find($idIndicator); //Obtenemos el indicador
 
-        $dataChart = $indicatorService->getDataChartLineMultiSeries($indicator, array('resultIndicatorPersonalInjuryWithAccumulatedTime' => true)); //Obtenemos la data del gráfico de acuerdo al indicador
+        $dataChart = $indicatorService->getDataChartLineMultiSeries($indicator, array('resultIndicatorPersonalInjuryWithAccumulatedTimeFromChildrens' => true)); //Obtenemos la data del gráfico de acuerdo al indicador
 
         $response->setData($dataChart); //Seteamos la data del gráfico en Json
 
