@@ -54,16 +54,20 @@
             </div>
         </div>
     </fieldset>
-                    
-    <form action="{{ path('pequiven_report_template_load',{id: report_template.id}) }}" method="POST">
-        <input type="hidden" name="_method" value="PUT">
+    {% set hasPermission = is_granted("ROLE_SEIP_DATA_LOAD_CHANGE_DATE") %}
+    <form id="template-load" action="{{ path('pequiven_report_template_load',{id: report_template.id}) }}" method="POST">
+        <input type="hidden" name="plant_report" value="{{ app.request.get("plant_report") }}">
         {{ form_errors(form) }}
         
         <div class="with-padding">
              <p class="inline-label"><label class="label">{{ "pequiven_seip.date_of_notification"|trans }}</label>
-                 <a href="{{ path("pequiven_report_template_load",{id:report_template.id, dateNotification: (dateNotification|date_modify("-1 day")|date('d/m/Y'))}) }}" ><i class="fa fa-chevron-left fa-2x"></i></a>&nbsp;
+                 {% if hasPermission %}
+                     <a href="{{ path("pequiven_report_template_load",{id:report_template.id, dateNotification: (dateNotification|date_modify("-1 day")|date('d/m/Y')),plant_report: app.request.get("plant_report") } ) }}" ><i class="fa fa-chevron-left fa-2x"></i></a>&nbsp;
+                 {% endif %}
                  <input type="text" id="dateNotification" name="dateNotification" class="input" value="{{ dateNotification|date('d/m/Y') }}" />&nbsp;
-                 <a href="{{ path("pequiven_report_template_load",{id:report_template.id, dateNotification: (dateNotification|date_modify("+1 day")|date('d/m/Y'))}) }}" class="navigate-date"><i class="fa fa-chevron-right fa-2x"></i></a>
+                 {% if hasPermission %}
+                     <a href="{{ path("pequiven_report_template_load",{id:report_template.id, dateNotification: (dateNotification|date_modify("+1 day")|date('d/m/Y')),plant_report: app.request.get("plant_report") }) }}" class="navigate-date"><i class="fa fa-chevron-right fa-2x"></i></a>
+                 {% endif %}
              </p>
          </div>
          {% set day = dateNotification|date('d')|round %}
@@ -347,8 +351,19 @@
 
          {% include 'PequivenSEIPBundle:DataLoad:ReportTemplate/load/services.html.twig' %}
          <br /><br />
-
-         {{ actions.update() }}
+         <div class="field-block button-height">
+             <a id="btn-save" class="button glossy mid-margin-right save">
+                 <span class="button-icon green-gradient"><span class="icon-tick"></span></span>{{ 'pequiven_seip.save'|trans }}</a>
+             &nbsp;
+             <a id="btn-save-slope" class="button glossy mid-margin-right save">
+                <span class="button-icon"><span class="icon-tick"></span></span>
+                {{ "pequiven_seip.buttons.save_slope"|trans }}
+            </a>
+            <a href="{{ path("pequiven_plant_report_index") }}" class="button glossy cancel">
+                <span class="button-icon red-gradient"><span class="icon-cross-round"></span></span>
+                {{ 'pequiven_seip.cancel'|trans }}
+            </a>
+         </div>
         <div class="hidden">
              {{ form_rest(form) }}
         </div>
@@ -358,14 +373,25 @@
 {% block javascript %}
     <script type="text/javascript">
         $(document).ready(function(){
-            $('#dateNotification').datepicker({
-                 changeMonth: true,
-                 dateFormat: "dd/mm/yy"
-            }).on("change",function(){
-                var changeToDate = $(this).val();
-                var url = Routing.generate("pequiven_report_template_load",{id: "{{ report_template.id }}" ,dateNotification:changeToDate });
-                window.location.href = url;
+            var form = $("#template-load");
+            $("#btn-save").on("click",function(){
+                $('.detail-status').val(2);
+                form.submit();
             });
+            $("#btn-save-slope").on("click",function(){
+                $('.detail-status').val(1);
+                form.submit();
+            });
+            {% if is_granted("ROLE_SEIP_DATA_LOAD_CHANGE_DATE") %}
+                $('#dateNotification').datepicker({
+                     changeMonth: true,
+                     dateFormat: "dd/mm/yy"
+                }).on("change",function(){
+                    var changeToDate = $(this).val();
+                    var url = Routing.generate("pequiven_report_template_load",{id: "{{ report_template.id }}" ,dateNotification:changeToDate,plant_report: "{{ app.request.get("plant_report") }}" });
+                    window.location.href = url;
+                });
+            {% endif %}
             
             var calculateTotalPnrAcumulate = function(data,useData){
                     var $this = $(this);
@@ -500,6 +526,9 @@
                     $(tr[3]).find('.btn-open-pnr').addClass("hidden");
                 }
                 if(isNaN(pnr)){
+                    pnr = 0;
+                }
+                if(pnr < 0){
                     pnr = 0;
                 }
                 $(tr[2]).html(myNumberFormat(percentaje));

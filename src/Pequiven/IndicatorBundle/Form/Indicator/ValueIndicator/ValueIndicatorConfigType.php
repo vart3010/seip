@@ -19,22 +19,52 @@ class ValueIndicatorConfigType extends AbstractType
 //        $data = $builder->getData();
 //        $typeDetailValue = $data->getIndicator()->getTypeDetailValue();
 //        if($typeDetailValue == Indicator::TYPE_DETAIL_DAILY_LOAD_PRODUCTION){
+        $emptyValue = "Seleccione";
+//            $builder
+//                ->add('products','entity',array(
+//                    'label_attr' => array('class' => 'label bold'),
+//                    'class' => 'Pequiven\SEIPBundle\Entity\CEI\Product',
+//                    'property' => 'name',
+//                    'required' => true,
+//                    'empty_value' => $emptyValue,
+//                    'translation_domain' => 'PequivenSEIPBundle',
+//                    'attr' => array('class' => 'select2 input-xlarge'),
+//                    'multiple' => true,
+//                    'query_builder' => function (\Pequiven\SEIPBundle\Repository\CEI\ProductRepository $qb)
+//                        {
+//                            return $qb->getQueryAllComponents();
+//                        }
+//                        ))
+//                                    ;
+
+//                ->add('products','tecno_ajax_autocomplete',array(
+//                    'label' => 'form.products',
+//                    'entity_alias' => 'products_alias',
+//                    'label_attr' => array('class' => 'label'),
+//                    'attr' => array(
+//                        "class" => "input input-xlarge validate[required]"
+//                    ),
+//                    "property" => array("name"),
+//                    "multiple" => true,
+//                    "callback" => function (\Pequiven\SEIPBundle\Repository\CEI\ProductRepository $qb)
+//                    {
+//                        return $qb->getQueryAllComponents();
+//                    }
+//                ))
+                    
+                        
             $builder
-                ->add('products','tecno_ajax_autocomplete',array(
-                    'label' => 'form.products',
-                    'entity_alias' => 'products_alias',
-                    'label_attr' => array('class' => 'label'),
-                    'attr' => array(
-                        "class" => "input input-xlarge validate[required]"
-                    ),
-                    "property" => array("name"),
-                    "multiple" => true,
-                    "callback" => function (\Pequiven\SEIPBundle\Repository\CEI\ProductRepository $qb)
-                    {
-                        return $qb->getQueryAllComponents();
-                    }
-                ))
-            ;
+                ->add('productReports','entity',array(
+                    'label_attr' => array('class' => 'label bold'),
+                    'class' => 'Pequiven\SEIPBundle\Entity\DataLoad\ProductReport',
+                    'property' => 'name',
+                    'required' => false,
+                    'empty_value' => $emptyValue,
+                    'translation_domain' => 'PequivenSEIPBundle',
+                    'attr' => array('class' => 'select2 input-xlarge'),
+                    'multiple' => true,
+                        ))
+                        ;
 //        }
     }
     

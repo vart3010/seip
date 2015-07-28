@@ -93,11 +93,26 @@ class Product extends BaseModel
      * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Plant",mappedBy="products")
      */
     private $plants;
+    
+    /**
+     * Reporte de productos
+     * @var \Pequiven\SEIPBundle\Entity\DataLoad\ProductReport
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\ProductReport",mappedBy="product")
+     */
+    private $productReports;
+    
+    /**
+     * ¿va a estar en los graficos de reporte de produccion?
+     * @var boolean
+     * @ORM\Column(name="isCheckToReportProduction",type="boolean",nullable=false)
+     */
+    private $isCheckToReportProduction = false;
 
     public function __construct() 
     {
         $this->components = new \Doctrine\Common\Collections\ArrayCollection();
         $this->plants = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->ProductReport = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**
@@ -198,6 +213,9 @@ class Product extends BaseModel
     public function setTypeProduct($typeProduct)
     {
         $this->typeProduct = $typeProduct;
+//        $this->typeProduct = $typeProduct->add('isRawMaterial', null, array(
+//                    'required' => false,
+//                ));
 
         return $this;
     }
@@ -323,6 +341,32 @@ class Product extends BaseModel
     {
         return $this->plants;
     }
+    
+    
+    public function setIsCheckToReportProduction($isCheckToReportProduction)
+    {
+        $this->isCheckToReportProduction = $isCheckToReportProduction;
+        
+        return $this;
+    }
+    
+    
+    /**
+     * 
+     * @return type
+     */
+    public function getIsCheckToReportProduction()
+    {
+        return $this->isCheckToReportProduction;
+    }
+    
+    public function getProductReports() {
+        return $this->productReports;
+    }
+    
+    
+            
+            
     
     public function __toString() 
     {

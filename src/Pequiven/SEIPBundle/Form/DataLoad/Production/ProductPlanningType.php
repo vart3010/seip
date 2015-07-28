@@ -2,6 +2,8 @@
 
 namespace Pequiven\SEIPBundle\Form\DataLoad\Production;
 
+use Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductPlanning;
+use Pequiven\SEIPBundle\Service\ToolService;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -16,7 +18,9 @@ class ProductPlanningType extends AbstractType
     {
         $entity = $builder->getData();
         $monthsReady = array();
-        if($entity instanceof \Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductPlanning){
+        $typeGross = false;
+        
+        if($entity instanceof ProductPlanning){
             $productReport = $entity->getProductReport();
             $myMonth = null;
             if($entity->getId() > 0){
@@ -32,8 +36,11 @@ class ProductPlanningType extends AbstractType
                     $monthsReady[$month] = $month;
                 }
             }
+            if($entity->getType() === ProductPlanning::TYPE_GROSS){
+                $typeGross = true;
+            }
         }
-        $monthsDiff = array_diff_key(\Pequiven\SEIPBundle\Service\ToolService::getMonthsLabels(),$monthsReady);
+        $monthsDiff = array_diff_key(ToolService::getMonthsLabels(),$monthsReady);
         $builder
             ->add('month',"choice",array(
                 'label_attr' => array('class' => 'label'),
@@ -49,10 +56,6 @@ class ProductPlanningType extends AbstractType
                 'label_attr' => array('class' => 'label'),
                 "attr" => array("class" => "input input-large"),
             ))
-            ->add('netProductionPercentage',null,array(
-                'label_attr' => array('class' => 'label'),
-                "attr" => array("class" => "input input-mini"),
-            ))
             ->add("ranges","collection",array(
                 'label_attr' => array('class' => 'label'),
                 "type" => new RangeType(),
@@ -62,6 +65,13 @@ class ProductPlanningType extends AbstractType
                 'cascade_validation' => true,
             ))
         ;
+        if($typeGross === true){
+            $builder->add('netProductionPercentage',null,array(
+                'label_attr' => array('class' => 'label'),
+                "attr" => array("class" => "input input-mini"),
+                "required"=>false
+            ));
+        }
     }
     
     /**

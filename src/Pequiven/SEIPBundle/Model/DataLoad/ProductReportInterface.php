@@ -18,4 +18,22 @@ namespace Pequiven\SEIPBundle\Model\DataLoad;
 interface ProductReportInterface 
 {
     public function getProductPlannings();
+    /**
+     * @return \Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductDetailDailyMonth Description
+     */
+    public function getProductDetailDailyMonthsSortByMonth();
+    /**
+     * @return \Pequiven\SEIPBundle\Entity\DataLoad\RawMaterial\RawMaterialConsumptionPlanning Description
+     */
+    public function getRawMaterialConsumptionPlannings();
+    
+    /**
+     * @return \Pequiven\SEIPBundle\Entity\DataLoad\Production\UnrealizedProduction Description
+     */
+    public function getUnrealizedProductionsSortByMonth();
+    
+    /**
+     * @return \Pequiven\SEIPBundle\Entity\DataLoad\Inventory\Inventory Description
+     */
+    public function getInventorySortByMonth();
 }

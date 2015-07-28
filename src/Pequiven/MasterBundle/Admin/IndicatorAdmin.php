@@ -25,6 +25,11 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                     'choices' => \Pequiven\IndicatorBundle\Entity\Indicator::getTypesOfCalculation(),
                     'translation_domain' => 'PequivenIndicatorBundle'
                 ))
+                ->add('typeOfResultSection', 'choice', array(
+                    'choices' => \Pequiven\IndicatorBundle\Entity\Indicator::getTypesOfResultSection(),
+                    'translation_domain' => 'PequivenIndicatorBundle',
+                    'required' => false,
+                ))
                 ->add('typeDetailValue', 'choice', array(
                     'choices' => \Pequiven\IndicatorBundle\Entity\Indicator::getLabelsTypeDetail(),
                     'translation_domain' => 'PequivenIndicatorBundle'
@@ -57,6 +62,11 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                 ->add('showTags')
                 ->add('requiredToImport')
                 ->add('details')
+                ->add('typeOfCompany','choice',array(
+                    "choices" => \Pequiven\IndicatorBundle\Entity\Indicator::getTypesOfCompanies(),
+                    "translation_domain" => "PequivenMasterBundle",
+                    'required' => false,
+                ))
         ;
     }
 
@@ -99,6 +109,11 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                 ->add('typeOfCalculation', 'choice', array(
                     'choices' => \Pequiven\IndicatorBundle\Entity\Indicator::getTypesOfCalculation(),
                     'translation_domain' => 'PequivenIndicatorBundle'
+                ))
+                ->add('typeOfResultSection', 'choice', array(
+                    'choices' => \Pequiven\IndicatorBundle\Entity\Indicator::getTypesOfResultSection(),
+                    'translation_domain' => 'PequivenIndicatorBundle',
+                    'required' => false,
                 ))
                 ->add('calculationMethod', 'choice', array(
                     'choices' => \Pequiven\IndicatorBundle\Entity\Indicator::getLabelsCalculationMethod(),
@@ -173,50 +188,91 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                 ->add('backward', null, array(
                     'required' => false,
                 ))
+                ->add('isValueFromTextReal', null, array(
+                    'required' => false,
+                ))
+                ->add('textValueFromVariableReal', null, array(
+                    'required' => false,
+                ))
+                ->add('isValueFromTextPlan', null, array(
+                    'required' => false,
+                ))
+                ->add('textValueFromVariablePlan', null, array(
+                    'required' => false,
+                ))
                 ->end()
                 ->end()
         ;
-
+        
+        
         $form
                 ->tab("Details")
-                ->with('Details')
-                ->add('managementSystems', 'sonata_type_model_autocomplete', array(
-                    'property' => array('description'),
-                    'multiple' => true,
-                    'required' => false,
-                ))
-                ->add('details', 'sonata_type_admin', array(
-                    'cascade_validation' => true,
-                    'delete' => false,
-                        ), array(
-                    'edit' => 'inline',
-                    'inline' => 'table',
-                ))
-                ->end()
-                ->with('Snippets')
-                ->add("snippetPlan", null, array(
-                    "attr" => array("rows" => 4,)
-                ))
-                ->add("snippetReal", null, array(
-                    "attr" => array("rows" => 4,)
-                ))
-                ->end()
-                ->with('Opciones de visualizacion en la ficha')
-                ->add('showResults', null, array(
-                    'required' => false,
-                ))
-                ->add('showFeatures', null, array(
-                    'required' => false,
-                ))
-                ->end()
-                ->with('Opciones de visualizacion en el dashboard')
-                ->add('showCharts', null, array(
-                    'required' => false,
-                ))
-                ->add('showTags', null, array(
-                    'required' => false,
-                ))
-                ->end()
+                    ->with('Details')
+                        ->add('managementSystems', 'sonata_type_model_autocomplete', array(
+                            'property' => array('description'),
+                            'multiple' => true,
+                            'required' => false,
+                        ))
+                        ->add('showByRealValue')
+                        ->add('showByPlanValue')
+
+                        ->add('details', 'sonata_type_admin', array(
+                            'cascade_validation' => true,
+                            'delete' => false,
+                                ), array(
+                            'edit' => 'inline',
+                            'inline' => 'standard',
+                        ))
+
+                    ->end()
+
+                    ->with('Ficha Indicador')
+                        ->add('isValueRealFromEquationRealFormula', null, array(
+                            'required' => false,
+                        ))
+                        ->add('isValuePlanFromEquationPlanFormula', null, array(
+                            'required' => false,
+                        ))
+                    ->end()
+
+                    ->with('Snippets')
+                        ->add("snippetPlan", null, array(
+                            "attr" => array("rows" => 4,)
+                        ))
+                        ->add("snippetReal", null, array(
+                            "attr" => array("rows" => 4,)
+                        ))
+                    ->end()
+                
+                    ->with('Tipo de Compañia')
+                        ->add('typeOfCompany','choice',array(
+                            "choices" => \Pequiven\IndicatorBundle\Entity\Indicator::getTypesOfCompanies(),
+                            "translation_domain" => "PequivenMasterBundle",
+                            'required' => false,
+                        ))
+                    ->end()
+                
+                    ->with('Opciones de visualizacion en la ficha')
+                        ->add('showResults', null, array(
+                            'required' => false,
+                        ))
+                        ->add('showFeatures', null, array(
+                            'required' => false,
+                        ))
+                        
+                    ->end()
+                
+                    ->with('Opciones de visualizacion en el dashboard')
+                        ->add('showCharts', null, array(
+                            'required' => false,
+                        ))
+                        ->add('showTags', null, array(
+                            'required' => false,
+                        ))
+                        ->add('showRange', null, array(
+                            'required' => false
+                        ))
+                    ->end()
                 ->end()
         ;
     }
@@ -230,7 +286,11 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                     'choices' => \Pequiven\IndicatorBundle\Entity\Indicator::getTypesOfCalculation(),
                     'translation_domain' => 'PequivenIndicatorBundle'
                 ))
-                
+                ->add('typeOfResultSection', null, array(), 'choice', array(
+                    'choices' => \Pequiven\IndicatorBundle\Entity\Indicator::getTypesOfResultSection(),
+                    'translation_domain' => 'PequivenIndicatorBundle',
+                    'required' => false,
+                ))
                 ->add('tendency')
                 ->add('frequencyNotificationIndicator')
                 ->add('valueFinal')
@@ -283,6 +343,15 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
     public function getResultService() {
         return $this->container->get('seip.service.result');
     }
+    
+    /**
+     * 
+     * @return type
+     */
+     private function getIndicatorService() {
+        return $this->container->get('pequiven_indicator.service.inidicator');
+    }
+    
 
     /**
      * @return \Pequiven\SEIPBundle\Service\PeriodService

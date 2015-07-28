@@ -20,11 +20,18 @@ use Pequiven\SEIPBundle\Doctrine\ORM\SeipEntityRepository;
  */
 class FailRepository extends SeipEntityRepository
 {
+    
+    public function findQueryByTypeResult($typeFail){
+        $queryBuilder = $this->findQueryByType($typeFail);
+        return $queryBuilder->getQuery()->getResult();
+    }
+    
     /**
      * Tipo de falla
      * @param \Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_* $typeFail
      * @return type
      */
+    
     public function findQueryByType($typeFail) 
     {
         $qb = $this->getQueryAllEnabled();
@@ -34,6 +41,8 @@ class FailRepository extends SeipEntityRepository
             ;
         return $qb;
     }
+    
+   
     
     protected function getAlias() 
     {

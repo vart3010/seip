@@ -31,6 +31,17 @@ pequiven_seip_second_line_management:
     options:
         expose: true
         
+pequiven_seip_frequency_notification:
+    path: /frequency-notification.{_format}
+    defaults: 
+        _controller: pequiven_seip.controller.generic_data:getFrequencyNotificationIndicatorsAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
+        
 pequiven_seip_location_by_company:
     path: /get-location-by-company.{_format}
     defaults: 
@@ -62,6 +73,15 @@ pequiven_seip_product_by_plant:
     path: /product-by-plant.{_format}
     defaults: 
         _controller: pequiven_seip.controller.generic_data:getProductByPlantAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+        
+pequiven_seip_product_report_by_plant_report:
+    path: /product-report-by-plant-report.{_format}
+    defaults: 
+        _controller: pequiven_seip.controller.generic_data:getProductReportByPlantReportAction
         _format: json
     requirements:
         _format: "json|xml"

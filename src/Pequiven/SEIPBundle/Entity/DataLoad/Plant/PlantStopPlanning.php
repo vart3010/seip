@@ -171,8 +171,10 @@ class PlantStopPlanning extends ModelBaseMaster
      */
     public function addDayStop(\Pequiven\SEIPBundle\Entity\DataLoad\Plant\DayStop $dayStops)
     {
-        $dayStops->setPlantStopPlanning($this);
-        $this->dayStops->add($dayStops);
+        if(!$this->dayStops->contains($dayStops)){
+            $dayStops->setPlantStopPlanning($this);
+            $this->dayStops->add($dayStops);
+        }
 
         return $this;
     }
@@ -263,7 +265,6 @@ class PlantStopPlanning extends ModelBaseMaster
         $totalHours = 0.0;
         
         $dayStops = $this->getDayStops();
-//        $totalStops = $dayStops->count();
         
         foreach ($dayStops as $dayStop) {
             $dayStop->calculate();
@@ -271,7 +272,6 @@ class PlantStopPlanning extends ModelBaseMaster
         }
         
         $this->totalHours = $totalHours;
-//        $this->totalStops = $totalStops;
     }
     
     public function getMonthLabel()

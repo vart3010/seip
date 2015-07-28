@@ -24,6 +24,7 @@ use Tpg\ExtjsBundle\Annotation as Extjs;
  * @Extjs\Model()
  * @Extjs\ModelProxy("/api/indicator-value/product-detail-daily-month")
  * @ORM\HasLifecycleCallbacks()
+ * @deprecated since version number
  */
 class ProductDetailDailyMonth extends BaseModel
 {

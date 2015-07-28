@@ -110,6 +110,13 @@ class PlantReport extends ModelBaseMaster
      * @ORM\Column(name="percentageCurrentCapacity",type="float")
      */
     private $percentageCurrentCapacity;
+    
+    /**
+     * Usuarios
+     * @var type 
+     * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\User",mappedBy="plantReports")
+     */
+    private $users;
 
     /**
      * Constructor
@@ -119,6 +126,7 @@ class PlantReport extends ModelBaseMaster
         $this->productsReport = new \Doctrine\Common\Collections\ArrayCollection();
         $this->plantStopPlannings = new \Doctrine\Common\Collections\ArrayCollection();
         $this->consumerPlanningServices = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->users = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -380,9 +388,12 @@ class PlantReport extends ModelBaseMaster
     public function calculate()
     {
         $designCapacity = $this->getPlant()->getDesignCapacity();
-        $currentCapacity = ($designCapacity * $this->percentageCurrentCapacity) / 100;
+        $percentageCurrentCapacity = 0;
+        if($designCapacity > 0){
+            $percentageCurrentCapacity = ($this->currentCapacity * 100) / $designCapacity;
+        }
         
-        $this->currentCapacity = $currentCapacity;
+        $this->percentageCurrentCapacity = $percentageCurrentCapacity;
     }
     
     public function init(\Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate $reportTemplate)
@@ -392,6 +403,10 @@ class PlantReport extends ModelBaseMaster
         $this->setLocation($reportTemplate->getLocation());
     }
     
+    /**
+     * Obtiene las paradas de plantas por mes
+     * @return type
+     */
     public function getPlantStopPlanningSortByMonth()
     {
         $plantStopPlannings = $this->getPlantStopPlannings();
@@ -401,5 +416,19 @@ class PlantReport extends ModelBaseMaster
         }
         ksort($sorted);
         return $sorted;
+    }
+    
+    public function getReportTemplateWithName()
+    {
+        $full = sprintf("%s (%s)",$this->reportTemplate->getName(),$this->reportTemplate->getRef());
+        return $full;
+    }
+    
+    public function recalculate()
+    {
+        $this->calculate();
+        foreach ($this->productsReport as $productReport) {
+            $productReport->recalculate();
+        }
     }
 }

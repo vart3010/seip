@@ -57,9 +57,16 @@ class RawMaterialRequired
      * Unidad de medida del requerimiento
      * @var \Pequiven\SEIPBundle\Entity\CEI\UnitMeasure
      * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\UnitMeasure")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $unitMeasure;
+    
+    /**
+     * Cantidad
+     * @var float
+     * @ORM\Column(name="mount",type="float")
+     */
+    private $mount;
 
     /**
      * Get id
@@ -161,5 +168,33 @@ class RawMaterialRequired
     public function getUnitMeasure()
     {
         return $this->unitMeasure;
+    }
+    
+    /**
+     * Set mount
+     *
+     * @param float $mount
+     * @return CauseFail
+     */
+    public function setMount($mount)
+    {
+        $this->mount = $mount;
+
+        return $this;
+    }
+
+    /**
+     * Get mount
+     *
+     * @return float 
+     */
+    public function getMount()
+    {
+        return $this->mount;
+    }
+    
+    public function __toString() {
+        $toString = "0";
+        return $toString;
     }
 }

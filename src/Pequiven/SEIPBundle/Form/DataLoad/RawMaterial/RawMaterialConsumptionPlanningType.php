@@ -41,6 +41,11 @@ class RawMaterialConsumptionPlanningType extends SeipAbstractForm
                 'label_attr' => array('class' => 'label'),
                 "attr" => array("class" => "input"),
             ))
+            ->add('automaticCalculationPlan',null,array(
+                'label_attr' => array('class' => 'label'),
+                "attr" => array("class" => "input"),
+                "required" => false,
+            ))
             ->add('productReport',null,array(
                 'label_attr' => array('class' => 'label'),
                 "attr" => array("class" => "select2 input-large"),

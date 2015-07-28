@@ -304,9 +304,20 @@ sylius_resource:
             classes:
                 model: Pequiven\SEIPBundle\Entity\DataLoad\Production\UnrealizedProduction
                 controller: Pequiven\SEIPBundle\Controller\DataLoad\Production\UnrealizedProductionController
+                repository: Pequiven\SEIPBundle\Repository\DataLoad\Production\UnrealizedProductionRepository
         pequiven.detail_consumer_planning_service:
             driver: doctrine/orm
             templates: PequivenSEIPBundle:DataLoad/Service/DetailConsumerPlanningService
             classes:
                 model: Pequiven\SEIPBundle\Entity\DataLoad\Service\DetailConsumerPlanningService
                 controller: Pequiven\SEIPBundle\Controller\DataLoad\Service\DetailConsumerPlanningServiceController
+        pequiven.formula:
+            driver: doctrine/orm
+            classes:
+                model: Pequiven\Pequiven\MasterBundle\Entity\Formula
+                repository: Pequiven\MasterBundle\Repository\FormulaRepository
+        pequiven.variable:
+            driver: doctrine/orm
+            classes:
+                model: Pequiven\MasterBundle\Entity\Formula\Variable
+                repository: Pequiven\MasterBundle\Repository\VariableRepository

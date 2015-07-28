@@ -41,7 +41,7 @@ class ResultController extends ResourceController
         
         if(!$securityService->isGranted('ROLE_SEIP_PLANNING_LIST_RESULT_ALL')){
             $user = $this->getUser();
-            $rol = $user->getLevelRealByGroup();
+            $rol = $user->getLevelByGroup(\Pequiven\SEIPBundle\Model\Common\CommonObject::TYPE_LEVEL_USER_ALL);
             if($rol == Rol::ROLE_MANAGER_SECOND || $rol == Rol::ROLE_SUPERVISER || $rol == Rol::ROLE_WORKER_PQV){
                 $criteria['gerenciaSecondId'] = $user->getGerenciaSecond();
             }elseif ($rol == Rol::ROLE_MANAGER_FIRST) {
@@ -169,7 +169,10 @@ class ResultController extends ResourceController
         if(!$securityService->isGranted($rol[1])){
             $securityService->checkSecurity($rol[0],$entity);
         }
-        $subCaption = $this->trans('result.subCaptionObjetiveOperative',array(),'PequivenSEIPBundle');
+        //$subCaption = $this->trans('result.subCaptionObjetiveOperative',array(),'PequivenSEIPBundle');
+        $period = $this->getPeriodService()->getEntityPeriodActive();
+        $subCaption = $period->getDescription();
+        
         $data = array(
             'dataSource' => array(
                 'chart' => array(

@@ -36,6 +36,18 @@ class FormulaAdmin extends Admin implements \Symfony\Component\DependencyInjecti
             ->add('sourceEquationPlan',null,array(
                 'label' => 'Source Equation Plan (equation_plan)'
             ))
+            ->add('dashboardEquationReal',null,array(
+                'label' => 'Dashboard Equation Real'
+            ))
+            ->add('dashboardEquationPlan',null,array(
+                'label' => 'Dashboard Equation Plan'
+            ))
+            ->add('cardEquationReal',null,array(
+                'label' => 'Ficha Equation Real'
+            ))
+            ->add('cardEquationPlan',null,array(
+                'label' => 'Ficha Equation Plan'
+            ))
             ->add('indicators')
             ;
         
@@ -60,6 +72,18 @@ class FormulaAdmin extends Admin implements \Symfony\Component\DependencyInjecti
             ))
             ->add('sourceEquationPlan',null,array(
                 'label' => 'Source Equation Plan (equation_plan)'
+            ))
+            ->add('dashboardEquationReal',null,array(
+                'label' => 'Dashboard Equation Real'
+            ))
+            ->add('dashboardEquationPlan',null,array(
+                'label' => 'Dashboard Equation Plan'
+            ))
+            ->add('cardEquationReal',null,array(
+                'label' => 'Ficha Equation Real'
+            ))
+            ->add('cardEquationPlan',null,array(
+                'label' => 'Ficha Equation Plan'
             ))
         ;
     }

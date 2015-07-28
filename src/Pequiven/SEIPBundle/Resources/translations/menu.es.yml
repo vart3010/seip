@@ -181,4 +181,18 @@ app:
                         sales: Ventas
                         finance: Finanzas
                         notification: Notificación
+                    operations:
+                        main: Operaciones
+                        reports:
+                            main: Reportes
+                            production: Producción
+                        planning:
+                            main: Planificación
+                            production: Producción
+                        notification:
+                            main: Notificación
+                            production: Producción
+                        monitor:
+                            main: Monitor
+                            production: Producción
                             

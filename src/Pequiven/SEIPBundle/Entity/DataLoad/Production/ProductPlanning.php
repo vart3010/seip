@@ -65,7 +65,7 @@ class ProductPlanning extends BaseModel
      * @var float
      * @ORM\Column(name="net_production_percentage",type="float")
      */
-    private $netProductionPercentage;
+    private $netProductionPercentage = 0.0;
     
     /**
      * @var \Pequiven\SEIPBundle\Entity\DataLoad\ProductReport
@@ -233,7 +233,7 @@ class ProductPlanning extends BaseModel
      */
     public function getType()
     {
-        return $this->type;
+        return (int)$this->type;
     }
     
     function getNetProductionPercentage() {

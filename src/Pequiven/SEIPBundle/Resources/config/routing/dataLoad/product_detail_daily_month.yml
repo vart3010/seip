@@ -12,6 +12,12 @@ pequiven_product_detail_daily_month_show:
         _controller: pequiven.controller.product_detail_daily_month:showAction
     methods: [GET]
     
+pequiven_product_detail_daily_month_calculate:
+    path: /{id}/calculate
+    defaults:
+        _controller: pequiven.controller.product_detail_daily_month:calculateAction
+    methods: [GET]
+    
 pequiven_product_detail_daily_month_update:
     path: /{id}/update
     defaults:

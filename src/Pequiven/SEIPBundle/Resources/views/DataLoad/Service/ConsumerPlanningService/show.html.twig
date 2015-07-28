@@ -29,6 +29,12 @@
             </div>
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
+                    <label class="label">{{ 'Unit'|trans }}</label>
+                    {{ consumer_planning_service.service.serviceUnit }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
                     <label class="label">{{ 'Aliquot'|trans }}</label>
                     {{ consumer_planning_service.aliquot|myNumberFormat }}
                 </p>
@@ -39,13 +45,16 @@
     <br /><br />
     {% include 'PequivenSEIPBundle:DataLoad/Service/ConsumerPlanningService:show/detail_raw_material_consumptions.html.twig' %}
     <br /><br />
-    {% set details = consumer_planning_service.detailConsumerPlanningServices %}
+    {% set details = consumer_planning_service.getDetailsByMonth %}
     {% set title_top = ('pequiven_seip.report_template.details_raw_material'|trans) %}
+    {% set unit = consumer_planning_service.service.serviceUnit %}
     {% include 'PequivenSEIPBundle:DataLoad/RawMaterial/RawMaterialConsumptionPlanning:show/detail_tabs_raw_material_consumptions.html.twig' %}
     <br /><br />
     <p class="button-height align-right">
-        {{ buttons.generic(path('pequiven_consumer_planning_service_update', { 'id': consumer_planning_service.id }),('pequiven.edit'|trans({},'messages'))) }}
-        &nbsp;
-        {{ buttons.delete(path('pequiven_consumer_planning_service_delete', { 'id': consumer_planning_service.id })) }}
+        {% if periodService().isAllowPlanningReport %}
+            {{ buttons.generic(path('pequiven_consumer_planning_service_update', { 'id': consumer_planning_service.id }),('pequiven.edit'|trans({},'messages'))) }}
+            &nbsp;
+            {{ buttons.delete(path('pequiven_consumer_planning_service_delete', { 'id': consumer_planning_service.id })) }}
+        {% endif %}
     </p>
 {% endblock %}

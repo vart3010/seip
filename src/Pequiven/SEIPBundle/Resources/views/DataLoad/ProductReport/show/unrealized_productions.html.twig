@@ -1,10 +1,12 @@
 {% trans_default_domain 'PequivenSEIPBundle' %}
-                
+
 <div class="block">
     <div class="block-title">
         <h3> {{ 'pequiven_seip.product_report.unrealized_production.unrealized_production'|trans }}&nbsp;({{ product_report.unrealizedProductions|length }})</h3>
         <div class="button-group absolute-right compact">
-            <a class="button icon-list-add" href="{{ path('pequiven_unrealized_production_create',{productReport: product_report.id}) }}">{{ 'pequiven.add'|trans({},'messages') }}</a>
+            {% if isAllowPlanningReport %}
+                <a class="button icon-list-add" href="{{ path('pequiven_unrealized_production_create',{productReport: product_report.id}) }}">{{ 'pequiven.add'|trans({},'messages') }}</a>
+            {% endif %}
         </div>
     </div>
     <div class="with-padding">
@@ -17,18 +19,23 @@
                 </tr>
             </thead>
             {% set colspan = 6 %}
+            {% set totals = product_report.getTotalToDayUnrealizedProductions %}
+            {% set productUnit = product_report.product.productUnit %}
             <tbody>
-
                 {% for unrealizedProduction in product_report.getUnrealizedProductionsSortByMonth %}
                     <tr>
                         <td>{{ loop.index }} - 
-                            {{ unrealizedProduction|trans }}
+                            <a href="{{ path("pequiven_unrealized_production_show",{id: unrealizedProduction.id,productReportId:product_report.id }) }}">
+                                {{ unrealizedProduction | trans }}
+                            </a>
                         </td>
                         <th scope="row">
-                            {{ unrealizedProduction.total }}
+                            {{ unrealizedProduction.total }}&nbsp;{{ productUnit }}
                         </th>
                         <td class="low-padding align-center">
-                            <a href="{{ path("pequiven_unrealized_production_update",{id: unrealizedProduction.id}) }}" class="button compact icon-pencil">{{ "pequiven_seip.actions.edit"|trans }}</a>
+                            {% if isAllowPlanningReport %}
+                                <a href="{{ path("pequiven_unrealized_production_update",{id: unrealizedProduction.id}) }}" class="button compact icon-pencil">{{ "pequiven_seip.actions.edit"|trans }}</a>
+                            {% endif %}
                         </td>
                     </tr>
                 {% else %}
@@ -39,7 +46,19 @@
                     </tr>
                 {% endfor %}
             </tbody>
+            <tfoot>
+                <tr>
+                    <th scope="col" width="35%">{{ 'Total month before'|trans }}</th>
+                    <th scope="col" width="10%" class="hide-on-mobile-portrait">{{ totals['tr_b']|myNumberFormat }}&nbsp;{{ productUnit }}</th>
+                    <th scope="col" width="10%">&nbsp;</th>
+                </tr>
+                <tr>
+                    <th scope="col" width="35%">{{ 'Total accumulated'|trans }}</th>
+                    <th scope="col" width="10%" class="hide-on-mobile-portrait">{{ totals['tr']|myNumberFormat }}&nbsp;{{ productUnit }}</th>
+                    <th scope="col" width="10%">&nbsp;</th>
+                </tr>
+            </tfoot>
         </table>
-        
+
     </div>
 </div>

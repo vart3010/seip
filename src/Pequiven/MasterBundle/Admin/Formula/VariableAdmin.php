@@ -20,10 +20,19 @@ class VariableAdmin extends Admin implements \Symfony\Component\DependencyInject
             ->add('name')
             ->add('description')
             ->add('equation')
+            ->add('summary')
+            ->add('unitResult')
             ;
     }
     
     protected function configureFormFields(FormMapper $form) {
+        $unitConverter = $this->getUnitConverter();
+        $selectUnits = $unitConverter->toArray();
+        
+        $selectUnitParameters['choices'] = $selectUnits;
+        $selectUnitParameters['empty_value'] = '';
+        $selectUnitParameters['required'] = false;
+        
         $form
             ->add('name')
             ->add('description')
@@ -33,11 +42,33 @@ class VariableAdmin extends Admin implements \Symfony\Component\DependencyInject
             ->add('usedOnlyByTag',null,array(
                 'required' => false,
             ))
+            ->add('showRealInDashboardPie',null,array(
+                'required' => false,
+            ))
+            ->add('showPlanInDashboardPie',null,array(
+                'required' => false,
+            ))
+            ->add('showRealInDashboardBarArea',null,array(
+                'required' => false,
+            ))
+            ->add('showPlanInDashboardBarArea',null,array(
+                'required' => false,
+            ))
+            ->add('showRealInDashboardColumn',null,array(
+                'required' => false,
+            ))
+            ->add('showPlanInDashboardColumn',null,array(
+                'required' => false,
+            ))
             ->add('equation',null,array(
                 'attr' => array(
                     'rows' => 10
                 )
             ))
+            ->add('summary', null, array(
+                'required' => false,
+            ))
+            ->add('unitResult',"choice",$selectUnitParameters)
             ;
     }
     
@@ -47,6 +78,12 @@ class VariableAdmin extends Admin implements \Symfony\Component\DependencyInject
             ->add('description')
             ->add('staticValue')
             ->add('usedOnlyByTag')
+            ->add('showRealInDashboardPie')
+            ->add('showPlanInDashboardPie')
+            ->add('showRealInDashboardBarArea')
+            ->add('showPlanInDashboardBarArea')
+            ->add('showRealInDashboardColumn')
+            ->add('showPlanInDashboardColumn')
             ;
     }
     
@@ -75,6 +112,15 @@ class VariableAdmin extends Admin implements \Symfony\Component\DependencyInject
     protected function getPeriodService()
     {
         return $this->container->get('pequiven_seip.service.period');
+    }
+    
+    /**
+     * 
+     * @return \Tecnocreaciones\Bundle\ToolsBundle\Service\UnitConverter
+     */
+    private function getUnitConverter()
+    {
+        return $this->container->get('tecnocreaciones_tools.unit_converter');
     }
     
     public function preUpdate($object) {

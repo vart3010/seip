@@ -7,7 +7,7 @@ pequiven:
         may: May
         june: Jun
         july: Jul
-        august: Ago
+        august: Agoº
         september: Sep
         october: Oct
         november: Nov
@@ -27,6 +27,8 @@ pequiven:
     actions:
         edit: Editar
         delete: Eliminar
+        upload_file: Subir Archivo
+        download_file: Descargar Archivo
     modal:
         title:
             goal: Meta

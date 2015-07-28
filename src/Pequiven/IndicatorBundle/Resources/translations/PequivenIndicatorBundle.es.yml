@@ -48,7 +48,7 @@ pequiven_indicator:
     save: Guardar
     cancel: Cancelar
     type_calculation:
-        main: Tipo de calculo
+        main: Tipo de cálculo
         formula_manually: Fórmula manual
         formula_automatic: Fórmula automatica
         formula_automatic_from_eq: Fórmula automatica (Ecuación)
@@ -57,6 +57,12 @@ pequiven_indicator:
         real_automatic: Real automático
         accumulate: Acumulativo de cada carga
         real_and_plan_from_eq: Plan y real a partir de ecuación
+    type_result_section:
+        main: Sección de resultados
+        production_gross: Producción Bruta
+        production_net: Producción Neta
+        unrealized_production: Producción No Realizada
+        raw_material: Materia Prima
     type_detail:
         none: Ninguno
         daily_load_production: Producción diaria
@@ -82,6 +88,7 @@ pequiven_indicator:
         without_formula: Sin Fórmula de Evaluación
         with_result: Con Resultado Notificados
         without_result: Sin Resultados Notificados
+        without_frequency_notification: Sin Frecuencia de Notificación
     errors:
         frequency_not_assigned_parent: Frecuencia no asignada al padre.
         formula_unassigned_parent: Fórmula no asignada al padre.
@@ -118,6 +125,7 @@ form:
     location: Localidad
     complejo: Complejo
     gerencia: Gerencia
+    gerenciaSecond: Gerencia 2da Línea
     weight: Peso
     weightIndicatorStrategic: Peso del Indicador Estratégico
     weightIndicatorTactic: Peso del Indicador Táctico
@@ -318,3 +326,6 @@ action:
         registerIndicatorStrategicSuccessfull: Indicador Estratégico registrado exitosamente
         registerIndicatorTacticSuccessfull: Indicador Táctico registrado exitosamente
         registerIndicatorOperativeSuccessfull: Indicador Operativo registrado exitosamente
+        InvalidFile: Tipo de archivo invalido
+        saveFileSuccess: Archivo guardado correctamente
+        errorFileUpload: Error al subir archivo

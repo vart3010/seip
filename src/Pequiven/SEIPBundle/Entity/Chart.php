@@ -74,13 +74,6 @@ class Chart extends ModelChart
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=50)
-     */
-    private $name;
-    
-    /**
-     * @var string
-     *
      * @ORM\Column(name="alias", type="string", length=25)
      */
     private $alias;

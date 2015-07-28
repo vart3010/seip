@@ -4,7 +4,9 @@
     <div class="block-title">
         <h3> {{ 'pequiven_seip.products'|trans }}&nbsp;({{ plant_report.productsReport|length }})</h3>
         <div class="button-group absolute-right compact">
-            <a class="button icon-list-add" href="{{ path('pequiven_product_report_create',{plantReport: plant_report.id}) }}">{{ 'pequiven.add'|trans({},'messages') }}</a>
+            {% if periodService().isAllowPlanningReport %}
+                <a class="button icon-list-add" href="{{ path('pequiven_product_report_create',{plantReport: plant_report.id}) }}">{{ 'pequiven.add'|trans({},'messages') }}</a>
+            {% endif %}
         </div>
     </div>
     <div class="with-padding">
@@ -30,7 +32,9 @@
                         </th>
                         <td>{{ productReport.product.productUnit }}</td>
                         <td class="low-padding align-center">
-                            <a href="{{ path("pequiven_product_report_update",{id: productReport.id}) }}" class="button compact icon-pencil">{{ "pequiven_seip.actions.edit"|trans }}</a>
+                            {% if periodService().isAllowPlanningReport %}
+                                <a href="{{ path("pequiven_product_report_update",{id: productReport.id}) }}" class="button compact icon-pencil">{{ "pequiven_seip.actions.edit"|trans }}</a>
+                            {% endif %}
                         </td>
                     </tr>
                 {% else %}

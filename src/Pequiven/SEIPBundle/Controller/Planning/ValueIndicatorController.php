@@ -156,6 +156,45 @@ class ValueIndicatorController extends \Pequiven\SEIPBundle\Controller\SEIPContr
     }
     
     /**
+     * 
+     * @param Request $request
+     * @return type
+     */
+    public function obtainValuesAction(Request $request){
+        $indicator = $this->findIndicatorOr404($request);
+        $indicatorService = $this->getIndicatorService();
+        $formula = $indicator->getFormula();
+        
+        $varRealName = $formula->getVariableToRealValue()->getName();
+        $varPlanName = $formula->getVariableToPlanValue()->getName();
+        
+        $valueIndicator = $this->resourceResolver->getResource(
+            $this->getRepository(),
+            'findOneBy',
+            array(array('id' => $request->get('id',0))));
+        
+        if(!$valueIndicator){
+            $valueIndicator = new \Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator();
+        }
+        
+        //Método para obtener el orden del valor del indicador
+        $options['typeOfResultSection'] = $indicator->getTypeOfResultSection();
+        $results = $indicatorService->getValuesFromReportTemplate($indicator, $valueIndicator, $options);
+        
+        $view = $this
+            ->view()
+            ->setData(array(
+                'result' => 0,
+                'real' => $results[$varRealName],
+                'plan' => $results[$varPlanName],
+                'varRealName' => $varRealName,
+                'varPlanName' => $varPlanName,
+            ))
+        ;
+        return $view;
+    }
+    
+    /**
      * Muestra los detalles de un valor de indicador, ya sea el formulario o solo el show
      * @param Request $request
      * @return type

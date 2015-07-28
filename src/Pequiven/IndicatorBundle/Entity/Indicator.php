@@ -17,8 +17,8 @@ use Pequiven\SEIPBundle\Entity\PeriodItemInterface;
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  * @ORM\HasLifecycleCallbacks()
  */
-class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Result\ResultItemInterface,PeriodItemInterface
-{
+class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Result\ResultItemInterface, PeriodItemInterface {
+
     /**
      * @var integer
      *
@@ -70,28 +70,28 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\Column(name="description", type="text")
      */
     private $description;
-    
+
     /**
      * @var string
      *
      * @ORM\Column(name="ref", type="string", length=15, nullable=true)
      */
     private $ref;
-    
+
     /**
      * @var string
      *
      * @ORM\Column(name="refParent", type="string", length=15, nullable=true)
      */
     private $refParent;
-    
+
     /**
      * @var float
      * 
      * @ORM\Column(name="weight", type="float", nullable=true)
      */
     private $weight;
-    
+
     /**
      * Total planificado
      * 
@@ -106,21 +106,21 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\Column(name="goal", type="float", nullable=true)
      */
     private $goal;
-    
+
     /**
      * @var boolean
      *
      * @ORM\Column(name="enabled", type="boolean")
      */
     private $enabled = true;
-    
+
     /**
      * @var boolean
      *
      * @ORM\Column(name="tmp", type="boolean")
      */
     private $tmp = false;
-    
+
     /**
      * Formula
      * @var \Pequiven\MasterBundle\Entity\Formula
@@ -128,7 +128,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\JoinColumn(name="fk_formula", referencedColumnName="id")
      */
     private $formula;
-    
+
     /**
      * Tendency
      * @var \Pequiven\MasterBundle\Entity\Tendency
@@ -136,12 +136,12 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\JoinColumn(name="fk_tendency", referencedColumnName="id")
      */
     private $tendency;
-    
+
     /**
      * @ORM\ManyToMany(targetEntity="\Pequiven\ObjetiveBundle\Entity\Objetive", mappedBy="indicators")
      */
     private $objetives;
-    
+
     /**
      * LineStrategic
      * 
@@ -150,7 +150,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\JoinTable(name="seip_indicators_linestrategics")
      */
     private $lineStrategics;
-    
+
     /**
      * Periodo.
      * 
@@ -159,7 +159,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\JoinColumn(nullable=false)
      */
     private $period;
-    
+
     /**
      * Valores del indicador
      * 
@@ -167,7 +167,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator",mappedBy="indicator",cascade={"persist","remove"})
      */
     protected $valuesIndicator;
-    
+
     /**
      * Valor (Evaluado a partir de todos los valores y formula)
      * 
@@ -175,16 +175,16 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\Column(name="valueFinal", type="float",precision = 3)
      */
     protected $valueFinal = 0;
-    
+
     /**
      * Frecuencia de notificacion del indicador
      * 
      * @var \Pequiven\IndicatorBundle\Entity\Indicator\FrequencyNotificationIndicator
      * @ORM\ManyToOne(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\FrequencyNotificationIndicator")
-     
+
      */
     protected $frequencyNotificationIndicator;
-    
+
     /**
      * Historiales o Eventos
      * 
@@ -192,7 +192,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\Historical",cascade={"persist","remove"})
      */
     protected $histories;
-    
+
     /**
      * Observaciones
      * 
@@ -200,7 +200,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\Observation",cascade={"persist","remove"})
      */
     protected $observations;
-    
+
     /**
      * Detalles del indicador
      * 
@@ -208,7 +208,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\OneToOne(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\IndicatorDetails",inversedBy="indicator",cascade={"persist","remove"})
      */
     protected $details;
-    
+
     /**
      * Indicador al que suma este indicador (Para el cálculo de resultados)
      * 
@@ -216,7 +216,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\ManyToOne(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator",inversedBy="childrens",cascade={"persist"})
      */
     protected $parent;
-    
+
     /**
      * Indicadores que suman a este indicador (Para el cálculo de resultados)
      * 
@@ -224,7 +224,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator",mappedBy="parent",cascade={"persist"}))
      */
     protected $childrens;
-    
+
     /**
      * Avance del indicador
      * 
@@ -232,7 +232,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\Column(name="progressToDate",type="float")
      */
     protected $progressToDate = 0;
-    
+
     /**
      * Resultado arrojado por la fórmula de evaluación del indicador
      * 
@@ -240,7 +240,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\Column(name="resultReal",type="float")
      */
     protected $resultReal = 0;
-    
+
     /**
      *
      * @var \Pequiven\ArrangementBundle\Entity\ArrangementRange
@@ -252,21 +252,21 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
      */
     private $deletedAt;
-    
+
     /**
      * ¿Se puede penalizar el resultado?
      * @var boolean
      * @ORM\Column(name="couldBePenalized",type="boolean")
      */
     private $couldBePenalized = true;
-    
+
     /**
      * ¿Forzar la penalizacion del resultado?
      * @var boolean
      * @ORM\Column(name="forcePenalize",type="boolean")
      */
     private $forcePenalize = false;
-    
+
     /**
      * ¿Es requerido para importacion? Quiere decir que es obligatorio para el siguiente período a planificar.
      * 
@@ -274,21 +274,21 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\Column(name="requiredToImport",type="boolean")
      */
     protected $requiredToImport = false;
-    
+
     /**
      * Detalles de la formula del indicador
      * @var \Pequiven\MasterBundle\Entity\Formula\FormulaDetail
      * @ORM\OneToMany(targetEntity="Pequiven\MasterBundle\Entity\Formula\FormulaDetail",mappedBy="indicator",cascade={"persist","remove"}, orphanRemoval=true)
      */
     protected $formulaDetails;
-    
+
     /**
      * @var boolean
      *
      * @ORM\Column(name="backward", type="boolean")
      */
     private $backward = false;
-    
+
     /**
      * Configuracion de origen de datos de los detalles de los valores de indicadores
      * 
@@ -296,7 +296,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\OneToOne(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\ValueIndicatorConfig",inversedBy="indicator")
      */
     private $valueIndicatorConfig;
-    
+
     /**
      * Etiquetas del indicador
      * 
@@ -304,63 +304,63 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\TagIndicator",mappedBy="indicator",cascade={"persist","remove"})
      */
     protected $tagsIndicator;
-    
+
     /**
      * ¿El resultado del indicador se calcula en tipo Porcentaje?
      * @var boolean
      * @ORM\Column(name="resultInPercentage",type="boolean")
      */
     private $resultInPercentage = true;
-    
+
     /**
      * ¿Se mostrará la etiqueta en vez del resultado de medición?
      * @var boolean
      * @ORM\Column(name="showTagInResult",type="boolean")
      */
     private $showTagInResult = false;
-    
+
     /**
      * ¿Mostar etiqueta "valor" en la ficha del indicador?
      * @var boolean
      * @ORM\Column(name="showRealValue",type="boolean")
      */
     private $showRealValue = true;
-    
+
     /**
      * ¿Mostar etiqueta "Plan anual" en la ficha del indicador?
      * @var boolean
      * @ORM\Column(name="showPlanValue",type="boolean")
      */
     private $showPlanValue = true;
-    
+
     /**
      * ¿Mostar resultados del indicador?
      * @var boolean
      * @ORM\Column(name="showResults",type="boolean")
      */
     private $showResults = true;
-    
+
     /**
      * ¿Mostar puntos de atencion del indicador?
      * @var boolean
      * @ORM\Column(name="showFeatures",type="boolean")
      */
     private $showFeatures = false;
-    
+
     /**
      * ¿Mostar los gráficos del indicador en la página de dashboard?
      * @var boolean
      * @ORM\Column(name="showCharts",type="boolean")
      */
     private $showCharts = true;
-    
+
     /**
      * ¿Mostar las etiquetas del indicador en la página del dashboard?
      * @var boolean
      * @ORM\Column(name="showTags",type="boolean")
      */
     private $showTags = false;
-    
+
     /**
      * @var float
      * 
@@ -374,42 +374,42 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\Column(name="summary", type="text", nullable=true)
      */
     private $summary;
-    
+
     /**
      * ¿Será medido en el período actual?
      * @var boolean
      * @ORM\Column(name="evaluetaInPeriod",type="boolean")
      */
     private $evaluateInPeriod = true;
-    
+
     /**
      * Snippet para calcular el plan
      * @var string
      * @ORM\Column(name="snippetPlan",type="text",nullable=true)
      */
     protected $snippetPlan;
-    
+
     /**
      * Snippet para calcular el real
      * @var string
      * @ORM\Column(name="snippetReal",type="text",nullable=true)
      */
     protected $snippetReal;
-    
+
     /**
      * Puntos de atencion
      * @var Indicator\FeatureIndicator
      * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\FeatureIndicator",mappedBy="indicator")
      */
     protected $featuresIndicator;
-    
+
     /**
      * @var integer
      *
      * @ORM\Column(name="orderShowFromParent", type="integer")
      */
     private $orderShowFromParent = 1;
-    
+
     /**
      * Estatus del programa de gestion
      * @var integer
@@ -417,7 +417,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\Column(name="status", type="integer")
      */
     protected $status = self::STATUS_DRAFT;
-    
+
     /**
      * Charts
      * 
@@ -426,23 +426,106 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\JoinTable(name="seip_indicators_charts")
      */
     private $charts;
-    
+
     /**
-    * @ORM\ManyToMany(targetEntity="Pequiven\SIGBundle\Entity\ManagementSystem", inversedBy="indicators", cascade={"persist","remove"})
-    * @ORM\JoinTable(name="seip_indicators_management_systems")
-    */
+     * @ORM\ManyToMany(targetEntity="Pequiven\SIGBundle\Entity\ManagementSystem", inversedBy="indicators", cascade={"persist","remove"})
+     * @ORM\JoinTable(name="seip_indicators_management_systems")
+     */
     private $managementSystems;
-    
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="showByRealValue", type="string", length=50, nullable=true)
+     */
+    private $showByRealValue;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="showByPlanValue", type="string", length=50, nullable=true)
+     */
+    private $showByPlanValue;
+
+    /**
+     * ¿Será renderizado en un gráfico tipo Pie, y las variables que conforman el equation_real y equation_plan?
+     * @var boolean
+     * @ORM\Column(name="viewVariablesFromEquationInDashboardPie",type="boolean")
+     */
+    private $viewVariablesFromEquationInDashboardPie = false;
+
+    /**
+     * ¿Las variables que conforman el equation_real y equation_plan, se complementan o son por separadas, es decir en un mismo gráfico o separando las de real y plan en 2 gráficos?
+     * @var boolean
+     * @ORM\Column(name="variablesRealPlanComplement",type="boolean")
+     */
+    private $variablesRealPlanComplement = false;
+
+    /**
+     * ¿Se quiere mostrar el valor de una variable en lugar del valor real en la ficha del indicador?
+     * @var boolean
+     * @ORM\Column(name="isValueFromTextReal",type="boolean")
+     */
+    private $isValueFromTextReal = false;
+
+    /**
+     * 
+     * @var type 
+     * @ORM\Column(name="textValueFromVariableReal",type="text", nullable=true)
+     */
+    private $textValueFromVariableReal;
+
+    /**
+     * ¿Se quiere mostrar el valor de una variable en lugar del valor plan en la ficha del indicador?
+     * @var boolean
+     * @ORM\Column(name="isValueFromTextPlan",type="boolean")
+     */
+    private $isValueFromTextPlan = false;
+
+    /**
+     * 
+     * @var type 
+     * @ORM\Column(name="textValueFromVariablePlan",type="text", nullable=true)
+     */
+    private $textValueFromVariablePlan;
+
+    /**
+     * ¿Se quiere mostrar el valor de una ecuación en lugar del valor real en la ficha del indicador?
+     * @var boolean
+     * @ORM\Column(name="isValueRealFromEquationRealFormula",type="boolean")
+     */
+    private $isValueRealFromEquationRealFormula = false;
+
+    /**
+     * ¿Se quiere mostrar el valor de una ecuación en lugar del valor plan en la ficha del indicador?
+     * @var boolean
+     * @ORM\Column(name="isValuePlanFromEquationPlanFormula",type="boolean")
+     */
+    private $isValuePlanFromEquationPlanFormula = false;
+
+    /**
+     * ¿Se puede mostrar el rango?
+     * @var boolean
+     * @ORM\Column(name="showRange",type="boolean")
+     */
+    private $showRange = true;
+
+    /**
+     * Tipo de empresa
+     * @var integer
+     * @ORM\Column(name="typeOfCompany",type="integer")
+     */
+    private $typeOfCompany = self::TYPE_OF_COMPANY_MATRIZ;
+
     /**
      * Constructor
      */
-    public function __construct()
-    {
+    public function __construct() {
         $this->objetives = new \Doctrine\Common\Collections\ArrayCollection();
         $this->lineStrategics = new \Doctrine\Common\Collections\ArrayCollection();
         $this->valuesIndicator = new \Doctrine\Common\Collections\ArrayCollection();
         $this->tagsIndicator = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->childrens=  new \Doctrine\Common\Collections\ArrayCollection();
+        $this->childrens = new \Doctrine\Common\Collections\ArrayCollection();
         $this->formulaDetails = new \Doctrine\Common\Collections\ArrayCollection();
         $this->featuresIndicator = new \Doctrine\Common\Collections\ArrayCollection();
         $this->charts = new \Doctrine\Common\Collections\ArrayCollection();
@@ -454,8 +537,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      *
      * @return integer 
      */
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
 
@@ -465,8 +547,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @param \DateTime $createdAt
      * @return Indicator
      */
-    public function setCreatedAt($createdAt)
-    {
+    public function setCreatedAt($createdAt) {
         $this->createdAt = $createdAt;
 
         return $this;
@@ -477,8 +558,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      *
      * @return \DateTime 
      */
-    public function getCreatedAt()
-    {
+    public function getCreatedAt() {
         return $this->createdAt;
     }
 
@@ -488,8 +568,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @param \DateTime $updatedAt
      * @return Indicator
      */
-    public function setUpdatedAt($updatedAt)
-    {
+    public function setUpdatedAt($updatedAt) {
         $this->updatedAt = $updatedAt;
 
         return $this;
@@ -500,8 +579,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      *
      * @return \DateTime 
      */
-    public function getUpdatedAt()
-    {
+    public function getUpdatedAt() {
         return $this->updatedAt;
     }
 
@@ -511,8 +589,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @param string $description
      * @return Indicator
      */
-    public function setDescription($description)
-    {
+    public function setDescription($description) {
         $this->description = $description;
 
         return $this;
@@ -523,8 +600,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      *
      * @return string 
      */
-    public function getDescription()
-    {
+    public function getDescription() {
         return $this->description;
     }
 
@@ -534,8 +610,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @param string $ref
      * @return Indicator
      */
-    public function setRef($ref)
-    {
+    public function setRef($ref) {
         $this->ref = $ref;
 
         return $this;
@@ -546,8 +621,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      *
      * @return string 
      */
-    public function getRef()
-    {
+    public function getRef() {
         return $this->ref;
     }
 
@@ -557,8 +631,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @param float $weight
      * @return Indicator
      */
-    public function setWeight($weight)
-    {
+    public function setWeight($weight) {
         $this->weight = $weight;
 
         return $this;
@@ -570,8 +643,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @param float $goal
      * @return Indicator
      */
-    public function setGoal($goal)
-    {
+    public function setGoal($goal) {
         $this->goal = $goal;
 
         return $this;
@@ -582,8 +654,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      *
      * @return float 
      */
-    public function getGoal()
-    {
+    public function getGoal() {
         return $this->goal;
     }
 
@@ -593,8 +664,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @param boolean $enabled
      * @return Indicator
      */
-    public function setEnabled($enabled)
-    {
+    public function setEnabled($enabled) {
         $this->enabled = $enabled;
 
         return $this;
@@ -605,8 +675,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      *
      * @return boolean 
      */
-    public function getEnabled()
-    {
+    public function getEnabled() {
         return $this->enabled;
     }
 
@@ -616,8 +685,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @param \Pequiven\SEIPBundle\Entity\User $userCreatedAt
      * @return Indicator
      */
-    public function setUserCreatedAt(\Pequiven\SEIPBundle\Entity\User $userCreatedAt = null)
-    {
+    public function setUserCreatedAt(\Pequiven\SEIPBundle\Entity\User $userCreatedAt = null) {
         $this->userCreatedAt = $userCreatedAt;
 
         return $this;
@@ -628,8 +696,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      *
      * @return \Pequiven\SEIPBundle\Entity\User 
      */
-    public function getUserCreatedAt()
-    {
+    public function getUserCreatedAt() {
         return $this->userCreatedAt;
     }
 
@@ -639,8 +706,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @param \Pequiven\SEIPBundle\Entity\User $userUpdatedAt
      * @return Indicator
      */
-    public function setUserUpdatedAt(\Pequiven\SEIPBundle\Entity\User $userUpdatedAt = null)
-    {
+    public function setUserUpdatedAt(\Pequiven\SEIPBundle\Entity\User $userUpdatedAt = null) {
         $this->userUpdatedAt = $userUpdatedAt;
 
         return $this;
@@ -651,8 +717,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      *
      * @return \Pequiven\SEIPBundle\Entity\User 
      */
-    public function getUserUpdatedAt()
-    {
+    public function getUserUpdatedAt() {
         return $this->userUpdatedAt;
     }
 
@@ -662,8 +727,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @param \Pequiven\MasterBundle\Entity\Formula $formula
      * @return Indicator
      */
-    public function setFormula(\Pequiven\MasterBundle\Entity\Formula $formula = null)
-    {
+    public function setFormula(\Pequiven\MasterBundle\Entity\Formula $formula = null) {
         $this->formula = $formula;
 
         return $this;
@@ -674,8 +738,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      *
      * @return \Pequiven\MasterBundle\Entity\Formula 
      */
-    public function getFormula()
-    {
+    public function getFormula() {
         return $this->formula;
     }
 
@@ -685,8 +748,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @param \Pequiven\MasterBundle\Entity\Tendency $tendency
      * @return Indicator
      */
-    public function setTendency(\Pequiven\MasterBundle\Entity\Tendency $tendency = null)
-    {
+    public function setTendency(\Pequiven\MasterBundle\Entity\Tendency $tendency = null) {
         $this->tendency = $tendency;
 
         return $this;
@@ -697,8 +759,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      *
      * @return \Pequiven\MasterBundle\Entity\Tendency 
      */
-    public function getTendency()
-    {
+    public function getTendency() {
         return $this->tendency;
     }
 
@@ -708,8 +769,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @param boolean $tmp
      * @return Indicator
      */
-    public function setTmp($tmp)
-    {
+    public function setTmp($tmp) {
         $this->tmp = $tmp;
 
         return $this;
@@ -720,8 +780,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      *
      * @return boolean 
      */
-    public function getTmp()
-    {
+    public function getTmp() {
         return $this->tmp;
     }
 
@@ -731,8 +790,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @param \Pequiven\ObjetiveBundle\Entity\Objetive $objetives
      * @return Indicator
      */
-    public function addObjetive(\Pequiven\ObjetiveBundle\Entity\Objetive $objetives)
-    {
+    public function addObjetive(\Pequiven\ObjetiveBundle\Entity\Objetive $objetives) {
         $objetives->addIndicator($this);
         $this->objetives->add($objetives);
 
@@ -744,8 +802,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      *
      * @param \Pequiven\ObjetiveBundle\Entity\Objetive $objetives
      */
-    public function removeObjetive(\Pequiven\ObjetiveBundle\Entity\Objetive $objetives)
-    {
+    public function removeObjetive(\Pequiven\ObjetiveBundle\Entity\Objetive $objetives) {
         $this->objetives->removeElement($objetives);
     }
 
@@ -754,11 +811,9 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getObjetives()
-    {
+    public function getObjetives() {
         return $this->objetives;
     }
-    
 
     /**
      * Set arrangementRange
@@ -766,8 +821,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @param \Pequiven\ArrangementBundle\Entity\ArrangementRange $arrangementRange
      * @return Indicator
      */
-    public function setArrangementRange(\Pequiven\ArrangementBundle\Entity\ArrangementRange $arrangementRange = null)
-    {
+    public function setArrangementRange(\Pequiven\ArrangementBundle\Entity\ArrangementRange $arrangementRange = null) {
         $this->arrangementRange = $arrangementRange;
 
         return $this;
@@ -778,19 +832,17 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      *
      * @return \Pequiven\ArrangementBundle\Entity\ArrangementRange 
      */
-    public function getArrangementRange()
-    {
+    public function getArrangementRange() {
         return $this->arrangementRange;
     }
-    
+
     /**
      * Set refParent
      *
      * @param string $refParent
      * @return Indicator
      */
-    public function setRefParent($refParent)
-    {
+    public function setRefParent($refParent) {
         $this->refParent = $refParent;
 
         return $this;
@@ -801,8 +853,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      *
      * @return string 
      */
-    public function getRefParent()
-    {
+    public function getRefParent() {
         return $this->refParent;
     }
 
@@ -812,8 +863,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @param \Pequiven\SEIPBundle\Entity\Period $period
      * @return Indicator
      */
-    public function setPeriod(\Pequiven\SEIPBundle\Entity\Period $period)
-    {
+    public function setPeriod(\Pequiven\SEIPBundle\Entity\Period $period) {
         $this->period = $period;
 
         return $this;
@@ -824,19 +874,17 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      *
      * @return \Pequiven\SEIPBundle\Entity\Period 
      */
-    public function getPeriod()
-    {
+    public function getPeriod() {
         return $this->period;
     }
-    
-   /**
+
+    /**
      * Set frequencyNotificationIndicator
      *
      * @param \Pequiven\IndicatorBundle\Entity\Indicator\FrequencyNotificationIndicator $frequencyNotificationIndicator
      * @return Indicator
      */
-    public function setFrequencyNotificationIndicator(\Pequiven\IndicatorBundle\Entity\Indicator\FrequencyNotificationIndicator $frequencyNotificationIndicator = null)
-    {
+    public function setFrequencyNotificationIndicator(\Pequiven\IndicatorBundle\Entity\Indicator\FrequencyNotificationIndicator $frequencyNotificationIndicator = null) {
         $this->frequencyNotificationIndicator = $frequencyNotificationIndicator;
 
         return $this;
@@ -847,21 +895,19 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      *
      * @return \Pequiven\IndicatorBundle\Entity\Indicator\FrequencyNotificationIndicator 
      */
-    public function getFrequencyNotificationIndicator()
-    {
+    public function getFrequencyNotificationIndicator() {
         return $this->frequencyNotificationIndicator;
     }
-    
+
     /**
      * Add valuesIndicator
      *
      * @param \Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator $valuesIndicator
      * @return Indicator
      */
-    public function addValuesIndicator(\Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator $valuesIndicator)
-    {
+    public function addValuesIndicator(\Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator $valuesIndicator) {
         $valuesIndicator->setIndicator($this);
-        
+
         $this->valuesIndicator->add($valuesIndicator);
 
         return $this;
@@ -872,8 +918,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      *
      * @param \Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator $valuesIndicator
      */
-    public function removeValuesIndicator(\Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator $valuesIndicator)
-    {
+    public function removeValuesIndicator(\Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator $valuesIndicator) {
         $this->valuesIndicator->removeElement($valuesIndicator);
     }
 
@@ -882,8 +927,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getValuesIndicator()
-    {
+    public function getValuesIndicator() {
         return $this->valuesIndicator;
     }
 
@@ -892,27 +936,25 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      *
      * @return \Pequiven\IndicatorBundle\Entity\IndicatorLevel 
      */
-    public function getIndicatorLevel()
-    {
+    public function getIndicatorLevel() {
         return $this->indicatorLevel;
     }
-    
+
     /**
      * Set valueFinal
      *
      * @param string $valueFinal
      * @return Indicator
      */
-    public function setValueFinal($valueFinal)
-    {
+    public function setValueFinal($valueFinal) {
         $this->progressToDate = 0;
-        if($this->totalPlan != 0){//En caso de que el valor plan sea diferente de cero
-            if($this->resultInPercentage){//En caso de que el resultado del indicador tenga que convertirse en valor porcentual
+        if ($this->totalPlan != 0) {//En caso de que el valor plan sea diferente de cero
+            if ($this->resultInPercentage) {//En caso de que el resultado del indicador tenga que convertirse en valor porcentual
                 $this->progressToDate = ($valueFinal / $this->totalPlan) * 100;
-            } else{
+            } else {
                 $this->progressToDate = ($valueFinal / $this->totalPlan);
             }
-        } else{
+        } else {
             $this->progressToDate = $valueFinal;
         }
         $this->valueFinal = $valueFinal;
@@ -925,18 +967,16 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      *
      * @return string 
      */
-    public function getValueFinal()
-    {
+    public function getValueFinal() {
         return $this->valueFinal;
     }
-    
+
     /**
      * 
      * @return string
      */
-    public function __toString()
-    {
-        return $this->getDescription() ? $this->getRef().' - '.$this->getDescription() : '-';
+    public function __toString() {
+        return $this->getDescription() ? $this->getRef() . ' - ' . $this->getDescription() : '-';
     }
 
     /**
@@ -945,8 +985,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @param \Pequiven\SEIPBundle\Entity\Historical $histories
      * @return Indicator
      */
-    public function addHistory(\Pequiven\SEIPBundle\Entity\Historical $histories)
-    {
+    public function addHistory(\Pequiven\SEIPBundle\Entity\Historical $histories) {
         $this->histories->add($histories);
 
         return $this;
@@ -957,8 +996,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      *
      * @param \Pequiven\SEIPBundle\Entity\Historical $histories
      */
-    public function removeHistory(\Pequiven\SEIPBundle\Entity\Historical $histories)
-    {
+    public function removeHistory(\Pequiven\SEIPBundle\Entity\Historical $histories) {
         $this->histories->removeElement($histories);
     }
 
@@ -967,8 +1005,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getHistories()
-    {
+    public function getHistories() {
         return $this->histories;
     }
 
@@ -978,8 +1015,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @param \Pequiven\SEIPBundle\Entity\Observation $observations
      * @return Indicator
      */
-    public function addObservation(\Pequiven\SEIPBundle\Entity\Observation $observations)
-    {
+    public function addObservation(\Pequiven\SEIPBundle\Entity\Observation $observations) {
         $this->observations->add($observations);
 
         return $this;
@@ -990,8 +1026,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      *
      * @param \Pequiven\SEIPBundle\Entity\Observation $observations
      */
-    public function removeObservation(\Pequiven\SEIPBundle\Entity\Observation $observations)
-    {
+    public function removeObservation(\Pequiven\SEIPBundle\Entity\Observation $observations) {
         $this->observations->removeElement($observations);
     }
 
@@ -1000,8 +1035,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getObservations()
-    {
+    public function getObservations() {
         return $this->observations;
     }
 
@@ -1011,8 +1045,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @param \Pequiven\IndicatorBundle\Entity\Indicator\IndicatorDetails $details
      * @return Indicator
      */
-    public function setDetails(\Pequiven\IndicatorBundle\Entity\Indicator\IndicatorDetails $details = null)
-    {
+    public function setDetails(\Pequiven\IndicatorBundle\Entity\Indicator\IndicatorDetails $details = null) {
         $this->details = $details;
 
         return $this;
@@ -1023,18 +1056,17 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      *
      * @return \Pequiven\IndicatorBundle\Entity\Indicator\IndicatorDetails
      */
-    public function getDetails()
-    {
+    public function getDetails() {
         return $this->details;
     }
-    
+
     function getTotalPlan() {
         return $this->totalPlan;
     }
 
     function setTotalPlan($totalPlan) {
         $this->totalPlan = $totalPlan;
-        
+
         return $this;
     }
 
@@ -1044,8 +1076,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @param \Pequiven\IndicatorBundle\Entity\Indicator $parent
      * @return Indicator
      */
-    public function setParent(\Pequiven\IndicatorBundle\Entity\Indicator $parent = null)
-    {
+    public function setParent(\Pequiven\IndicatorBundle\Entity\Indicator $parent = null) {
         $this->parent = $parent;
 
         return $this;
@@ -1056,8 +1087,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      *
      * @return \Pequiven\IndicatorBundle\Entity\Indicator 
      */
-    public function getParent()
-    {
+    public function getParent() {
         return $this->parent;
     }
 
@@ -1067,8 +1097,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @param \Pequiven\IndicatorBundle\Entity\Indicator $childrens
      * @return Indicator
      */
-    public function addChildren(\Pequiven\IndicatorBundle\Entity\Indicator $childrens)
-    {
+    public function addChildren(\Pequiven\IndicatorBundle\Entity\Indicator $childrens) {
         $childrens->setParent($this);
         $this->childrens->add($childrens);
 
@@ -1080,8 +1109,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      *
      * @param \Pequiven\IndicatorBundle\Entity\Indicator $childrens
      */
-    public function removeChildren(\Pequiven\IndicatorBundle\Entity\Indicator $childrens)
-    {
+    public function removeChildren(\Pequiven\IndicatorBundle\Entity\Indicator $childrens) {
         $this->childrens->removeElement($childrens);
     }
 
@@ -1090,26 +1118,23 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getChildrens()
-    {
+    public function getChildrens() {
         return $this->childrens;
     }
-    
-    function getProgressToDate() 
-    {
+
+    function getProgressToDate() {
         return $this->progressToDate;
     }
-    
+
     /**
      * Get weight
      *
      * @return float 
      */
-    public function getWeight()
-    {
+    public function getWeight() {
         return $this->weight;
     }
-    
+
     /**
      * Devuelve el valor que sera tomado en cuenta para los resuldatos
      * @return type
@@ -1122,80 +1147,75 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
         $result = ( $this->getResult() * $this->getWeight()) / 100;
         return $result;
     }
-    
-    public function updateLastDateCalculateResult() 
-    {
+
+    public function updateLastDateCalculateResult() {
         $this->lastDateCalculateResult = new \DateTime();
     }
-    
-    public function clearLastDateCalculateResult() 
-    {
+
+    public function clearLastDateCalculateResult() {
         $this->lastDateCalculateResult = null;
     }
-    
-    public function isAvailableInResult() 
-    {
+
+    public function isAvailableInResult() {
         return true;
     }
-    
+
     function getDeletedAt() {
         return $this->deletedAt;
     }
 
     function setDeletedAt($deletedAt) {
         $this->deletedAt = $deletedAt;
-        
+
         return $this;
     }
-    
+
     function setProgressToDate($progressToDate) {
         $this->progressToDate = $progressToDate;
     }
-    
+
     public function __clone() {
-        if($this->id > 0){
+        if ($this->id > 0) {
             $this->id = null;
-            
+
             $this->ref = null;
             $this->createdAt = null;
             $this->lastDateCalculateResult = null;
             $this->updatedAt = null;
             $this->userCreatedAt = null;
             $this->userUpdatedAt = null;
-            
+
             $this->period = null;
-            
+
             $this->valuesIndicator = new ArrayCollection();
-            
+
             $this->valueFinal = 0;
             $this->totalPlan = 0;
             $this->progressToDate = 0;
             $this->resultReal = 0;
-            
+
             $this->featuresIndicator = new ArrayCollection();
             $this->histories = new ArrayCollection();
             $this->observations = new ArrayCollection();
             $this->details = new Indicator\IndicatorDetails();
-            
+
             $this->objetives = new ArrayCollection();
-            
+
             $this->childrens = new ArrayCollection();
         }
     }
-    
-    public function setResult($result) 
-    {
+
+    public function setResult($result) {
         $this->progressToDate = $result;
     }
-    
+
     /**
      * Set resultReal
-     *indicators
+     * indicators
      * @param float $resultReal
      * @return Indicator
      */
-    public function setResultReal($resultReal)
-    {
+    public function setResultReal($resultReal) {
         $this->resultReal = $resultReal;
 
         return $this;
@@ -1206,43 +1226,37 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      *
      * @return float 
      */
-    public function getResultReal()
-    {
+    public function getResultReal() {
         return $this->resultReal;
     }
-    
-    function isCouldBePenalized() 
-    {
+
+    function isCouldBePenalized() {
         return $this->couldBePenalized;
     }
 
-    function isForcePenalize() 
-    {
+    function isForcePenalize() {
         return $this->forcePenalize;
     }
 
-    function setCouldBePenalized($couldBePenalized) 
-    {
+    function setCouldBePenalized($couldBePenalized) {
         $this->couldBePenalized = $couldBePenalized;
-        
+
         return $this;
     }
 
-    function setForcePenalize($forcePenalize) 
-    {
+    function setForcePenalize($forcePenalize) {
         $this->forcePenalize = $forcePenalize;
-        
+
         return $this;
     }
-    
+
     /**
      * Set requiredToImport
      *
      * @param boolean $requiredToImport
      * @return Objetive
      */
-    public function setRequiredToImport($requiredToImport)
-    {
+    public function setRequiredToImport($requiredToImport) {
         $this->requiredToImport = $requiredToImport;
 
         return $this;
@@ -1253,19 +1267,17 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      *
      * @return boolean 
      */
-    public function getRequiredToImport()
-    {
+    public function getRequiredToImport() {
         return $this->requiredToImport;
     }
-    
+
     /**
      * Add lineStrategics
      *
      * @param \Pequiven\MasterBundle\Entity\LineStrategic $lineStrategics
      * @return Indicator
      */
-    public function addLineStrategic(\Pequiven\MasterBundle\Entity\LineStrategic $lineStrategics)
-    {
+    public function addLineStrategic(\Pequiven\MasterBundle\Entity\LineStrategic $lineStrategics) {
         $this->lineStrategics[] = $lineStrategics;
 
         return $this;
@@ -1276,8 +1288,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      *
      * @param \Pequiven\MasterBundle\Entity\LineStrategic $lineStrategics
      */
-    public function removeLineStrategic(\Pequiven\MasterBundle\Entity\LineStrategic $lineStrategics)
-    {
+    public function removeLineStrategic(\Pequiven\MasterBundle\Entity\LineStrategic $lineStrategics) {
         $this->lineStrategics->removeElement($lineStrategics);
     }
 
@@ -1286,19 +1297,17 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getLineStrategics()
-    {
+    public function getLineStrategics() {
         return $this->lineStrategics;
     }
-    
+
     /**
      * Add formulaDetails
      *
      * @param \Pequiven\MasterBundle\Entity\Formula\FormulaDetail $formulaDetails
      * @return Indicator
      */
-    public function addFormulaDetail(\Pequiven\MasterBundle\Entity\Formula\FormulaDetail $formulaDetails)
-    {
+    public function addFormulaDetail(\Pequiven\MasterBundle\Entity\Formula\FormulaDetail $formulaDetails) {
         $formulaDetails->setIndicator($this);
         $this->formulaDetails->add($formulaDetails);
 
@@ -1310,8 +1319,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      *
      * @param \Pequiven\MasterBundle\Entity\Formula\FormulaDetail $formulaDetails
      */
-    public function removeFormulaDetail(\Pequiven\MasterBundle\Entity\Formula\FormulaDetail $formulaDetails)
-    {
+    public function removeFormulaDetail(\Pequiven\MasterBundle\Entity\Formula\FormulaDetail $formulaDetails) {
         $this->formulaDetails->removeElement($formulaDetails);
     }
 
@@ -1320,19 +1328,17 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getFormulaDetails()
-    {
+    public function getFormulaDetails() {
         return $this->formulaDetails;
     }
-    
+
     /**
      * Set backward
      *
      * @param boolean $backward
      * @return Indicator
      */
-    public function setBackward($backward)
-    {
+    public function setBackward($backward) {
         $this->backward = $backward;
 
         return $this;
@@ -1343,16 +1349,14 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      *
      * @return boolean 
      */
-    public function getBackward()
-    {
+    public function getBackward() {
         return $this->backward;
     }
 
     /**
      * @ORM\PrePersist()
      */
-    function prePersist()
-    {
+    function prePersist() {
         $this->details = new Indicator\IndicatorDetails;
     }
 
@@ -1362,8 +1366,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @param \Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\ValueIndicatorConfig $valueIndicatorConfig
      * @return Indicator
      */
-    public function setValueIndicatorConfig(\Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\ValueIndicatorConfig $valueIndicatorConfig = null)
-    {
+    public function setValueIndicatorConfig(\Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\ValueIndicatorConfig $valueIndicatorConfig = null) {
         $this->valueIndicatorConfig = $valueIndicatorConfig;
 
         return $this;
@@ -1374,13 +1377,12 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      *
      * @return \Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\ValueIndicatorConfig 
      */
-    public function getValueIndicatorConfig()
-    {
+    public function getValueIndicatorConfig() {
         return $this->valueIndicatorConfig;
     }
-    
-    public function getDescriptionWithStrPad($pad_length){
-        return str_pad($this->description, $pad_length, ' ',STR_PAD_RIGHT);
+
+    public function getDescriptionWithStrPad($pad_length) {
+        return str_pad($this->description, $pad_length, ' ', STR_PAD_RIGHT);
     }
 
     /**
@@ -1389,8 +1391,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @param integer $calculationMethod
      * @return Indicator
      */
-    public function setCalculationMethod($calculationMethod)
-    {
+    public function setCalculationMethod($calculationMethod) {
         $this->calculationMethod = $calculationMethod;
 
         return $this;
@@ -1401,21 +1402,19 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      *
      * @return integer 
      */
-    public function getCalculationMethod()
-    {
+    public function getCalculationMethod() {
         return $this->calculationMethod;
     }
-    
+
     /**
      * Add tagsIndicator
      *
      * @param \Pequiven\IndicatorBundle\Entity\Indicator\TagIndicator $tagsIndicator
      * @return Indicator
      */
-    public function addTagsIndicator(\Pequiven\IndicatorBundle\Entity\Indicator\TagIndicator $tagsIndicator)
-    {
+    public function addTagsIndicator(\Pequiven\IndicatorBundle\Entity\Indicator\TagIndicator $tagsIndicator) {
         $tagsIndicator->setIndicator($this);
-        
+
         $this->tagsIndicator->add($tagsIndicator);
 
         return $this;
@@ -1426,8 +1425,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      *
      * @param \Pequiven\IndicatorBundle\Entity\Indicator\TagIndicator $tagsIndicator
      */
-    public function removeTagsIndicator(\Pequiven\IndicatorBundle\Entity\Indicator\TagIndicator $tagsIndicator)
-    {
+    public function removeTagsIndicator(\Pequiven\IndicatorBundle\Entity\Indicator\TagIndicator $tagsIndicator) {
         $this->tagsIndicator->removeElement($tagsIndicator);
     }
 
@@ -1436,19 +1434,17 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getTagsIndicator()
-    {
+    public function getTagsIndicator() {
         return $this->tagsIndicator;
     }
-    
+
     /**
      * Set resultInPercentage
      *
      * @param boolean $resultInPercentage
      * @return Indicator
      */
-    public function setResultInPercentage($resultInPercentage)
-    {
+    public function setResultInPercentage($resultInPercentage) {
         $this->resultInPercentage = $resultInPercentage;
 
         return $this;
@@ -1459,19 +1455,17 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      *
      * @return boolean 
      */
-    public function getResultInPercentage()
-    {
+    public function getResultInPercentage() {
         return $this->resultInPercentage;
     }
-    
+
     /**
      * Set showTagInResult
      *
      * @param boolean $showTagInResult
      * @return Indicator
      */
-    public function setShowTagInResult($showTagInResult)
-    {
+    public function setShowTagInResult($showTagInResult) {
         $this->showTagInResult = $showTagInResult;
 
         return $this;
@@ -1482,11 +1476,10 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      *
      * @return boolean 
      */
-    public function getShowTagInResult()
-    {
+    public function getShowTagInResult() {
         return $this->showTagInResult;
     }
-    
+
     function getIndicatorWeight() {
         return $this->indicatorWeight;
     }
@@ -1495,30 +1488,29 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
         $this->indicatorWeight = $indicatorWeight;
     }
 
-    public function showResultOfIndicator(){
-        if(!$this->showTagInResult){
+    public function showResultOfIndicator() {
+        if (!$this->showTagInResult) {
             return $this->resultReal;
-        } else{
-            foreach ($this->getTagsIndicator() as $tagIndicator){
-                if($tagIndicator->getShowInIndicatorResult()){
-                    if($tagIndicator->getTypeTag() == Indicator\TagIndicator::TAG_TYPE_NUMERIC){
+        } else {
+            foreach ($this->getTagsIndicator() as $tagIndicator) {
+                if ($tagIndicator->getShowInIndicatorResult()) {
+                    if ($tagIndicator->getTypeTag() == Indicator\TagIndicator::TAG_TYPE_NUMERIC) {
                         return $tagIndicator->getValueOfTag();
-                    } else{
+                    } else {
                         return $tagIndicator->getTextOfTag();
                     }
                 }
             }
         }
     }
-    
+
     /**
      * Set summary
      *
      * @param string $summary
      * @return Indicator
      */
-    public function setSummary($summary)
-    {
+    public function setSummary($summary) {
         $this->summary = $summary;
 
         return $this;
@@ -1529,41 +1521,34 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      *
      * @return string 
      */
-    public function getSummary()
-    {
+    public function getSummary() {
         return $this->summary;
     }
-    
-    function getShowRealValue() 
-    {
+
+    function getShowRealValue() {
         return $this->showRealValue;
     }
 
-    function getShowPlanValue() 
-    {
+    function getShowPlanValue() {
         return $this->showPlanValue;
     }
-    
-    function isShowRealValue() 
-    {
+
+    function isShowRealValue() {
         return $this->showRealValue;
     }
 
-    function isShowPlanValue() 
-    {
+    function isShowPlanValue() {
         return $this->showPlanValue;
     }
 
-    function setShowRealValue($showRealValue) 
-    {
+    function setShowRealValue($showRealValue) {
         $this->showRealValue = $showRealValue;
     }
 
-    function setShowPlanValue($showPlanValue) 
-    {
+    function setShowPlanValue($showPlanValue) {
         $this->showPlanValue = $showPlanValue;
     }
-    
+
     function getEvaluateInPeriod() {
         return $this->evaluateInPeriod;
     }
@@ -1572,14 +1557,12 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
         $this->evaluateInPeriod = $evaluateInPeriod;
     }
 
-
     /**
      * Get forcePenalize
      *
      * @return boolean 
      */
-    public function getForcePenalize()
-    {
+    public function getForcePenalize() {
         return $this->forcePenalize;
     }
 
@@ -1589,8 +1572,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @param string $snippetPlan
      * @return Indicator
      */
-    public function setSnippetPlan($snippetPlan)
-    {
+    public function setSnippetPlan($snippetPlan) {
         $this->snippetPlan = $snippetPlan;
 
         return $this;
@@ -1601,8 +1583,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      *
      * @return string 
      */
-    public function getSnippetPlan()
-    {
+    public function getSnippetPlan() {
         return $this->snippetPlan;
     }
 
@@ -1612,8 +1593,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @param string $snippetReal
      * @return Indicator
      */
-    public function setSnippetReal($snippetReal)
-    {
+    public function setSnippetReal($snippetReal) {
         $this->snippetReal = $snippetReal;
 
         return $this;
@@ -1624,19 +1604,17 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      *
      * @return string 
      */
-    public function getSnippetReal()
-    {
+    public function getSnippetReal() {
         return $this->snippetReal;
     }
-    
+
     /**
      * Set showResults
      *
      * @param boolean $showResults
      * @return Indicator
      */
-    public function setShowResults($showResults)
-    {
+    public function setShowResults($showResults) {
         $this->showResults = $showResults;
 
         return $this;
@@ -1647,8 +1625,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      *
      * @return boolean 
      */
-    public function getShowResults()
-    {
+    public function getShowResults() {
         return $this->showResults;
     }
 
@@ -1657,8 +1634,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      *
      * @return boolean 
      */
-    public function isShowResults()
-    {
+    public function isShowResults() {
         return $this->showResults;
     }
 
@@ -1668,8 +1644,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @param boolean $showFeatures
      * @return Indicator
      */
-    public function setShowFeatures($showFeatures)
-    {
+    public function setShowFeatures($showFeatures) {
         $this->showFeatures = $showFeatures;
 
         return $this;
@@ -1680,8 +1655,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      *
      * @return boolean 
      */
-    public function getShowFeatures()
-    {
+    public function getShowFeatures() {
         return $this->showFeatures;
     }
 
@@ -1690,19 +1664,17 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      *
      * @return boolean 
      */
-    public function isShowFeatures()
-    {
+    public function isShowFeatures() {
         return $this->showFeatures;
     }
-    
+
     /**
      * Add featuresIndicator
      *
      * @param \Pequiven\IndicatorBundle\Entity\Indicator\FeatureIndicator $featuresIndicator
      * @return Indicator
      */
-    public function addFeaturesIndicator(\Pequiven\IndicatorBundle\Entity\Indicator\FeatureIndicator $featuresIndicator)
-    {
+    public function addFeaturesIndicator(\Pequiven\IndicatorBundle\Entity\Indicator\FeatureIndicator $featuresIndicator) {
         $featuresIndicator->setIndicator($this);
         $this->featuresIndicator->add($featuresIndicator);
 
@@ -1714,8 +1686,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      *
      * @param \Pequiven\IndicatorBundle\Entity\Indicator\FeatureIndicator $featuresIndicator
      */
-    public function removeFeaturesIndicator(\Pequiven\IndicatorBundle\Entity\Indicator\FeatureIndicator $featuresIndicator)
-    {
+    public function removeFeaturesIndicator(\Pequiven\IndicatorBundle\Entity\Indicator\FeatureIndicator $featuresIndicator) {
         $this->featuresIndicator->removeElement($featuresIndicator);
     }
 
@@ -1724,8 +1695,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getFeaturesIndicator()
-    {
+    public function getFeaturesIndicator() {
         return $this->featuresIndicator;
     }
 
@@ -1735,13 +1705,12 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @param \Pequiven\IndicatorBundle\Entity\IndicatorLevel $indicatorLevel
      * @return Indicator
      */
-    public function setIndicatorLevel(\Pequiven\IndicatorBundle\Entity\IndicatorLevel $indicatorLevel)
-    {
+    public function setIndicatorLevel(\Pequiven\IndicatorBundle\Entity\IndicatorLevel $indicatorLevel) {
         $this->indicatorLevel = $indicatorLevel;
 
         return $this;
     }
-    
+
     function getOrderShowFromParent() {
         return $this->orderShowFromParent;
     }
@@ -1749,13 +1718,12 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     function setOrderShowFromParent($orderShowFromParent) {
         $this->orderShowFromParent = $orderShowFromParent;
     }
-    
+
     /**
      * 
      * @return integer
      */
-    function getStatus() 
-    {
+    function getStatus() {
         return $this->status;
     }
 
@@ -1764,21 +1732,19 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @param type $status
      * @return \Pequiven\IndicatorBundle\Entity\Indicator
      */
-    function setStatus($status) 
-    {
+    function setStatus($status) {
         $this->status = $status;
-        
+
         return $this;
     }
-    
+
     /**
      * Add charts
      *
      * @param \Pequiven\SEIPBundle\Entity\Chart $charts
      * @return Indicator
      */
-    public function addChart(\Pequiven\SEIPBundle\Entity\Chart $charts)
-    {
+    public function addChart(\Pequiven\SEIPBundle\Entity\Chart $charts) {
         $this->charts[] = $charts;
 
         return $this;
@@ -1789,8 +1755,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      *
      * @param \Pequiven\SEIPBundle\Entity\Chart $charts
      */
-    public function removeChart(\Pequiven\SEIPBundle\Entity\Chart $charts)
-    {
+    public function removeChart(\Pequiven\SEIPBundle\Entity\Chart $charts) {
         $this->charts->removeElement($charts);
     }
 
@@ -1799,8 +1764,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getCharts()
-    {
+    public function getCharts() {
         return $this->charts;
     }
 
@@ -1810,8 +1774,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @param boolean $showCharts
      * @return Indicator
      */
-    public function setShowCharts($showCharts)
-    {
+    public function setShowCharts($showCharts) {
         $this->showCharts = $showCharts;
 
         return $this;
@@ -1822,8 +1785,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      *
      * @return boolean 
      */
-    public function getShowCharts()
-    {
+    public function getShowCharts() {
         return $this->showCharts;
     }
 
@@ -1833,8 +1795,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @param boolean $showTags
      * @return Indicator
      */
-    public function setShowTags($showTags)
-    {
+    public function setShowTags($showTags) {
         $this->showTags = $showTags;
 
         return $this;
@@ -1845,19 +1806,17 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      *
      * @return boolean 
      */
-    public function getShowTags()
-    {
+    public function getShowTags() {
         return $this->showTags;
     }
-    
+
     /**
      * Add managementSystems
      *
      * @param \Pequiven\SIGBundle\Entity\ManagementSystem $managementSystems
      * @return Indicator
      */
-    public function addManagementSystem(\Pequiven\SIGBundle\Entity\ManagementSystem $managementSystems)
-    {
+    public function addManagementSystem(\Pequiven\SIGBundle\Entity\ManagementSystem $managementSystems) {
         $this->managementSystems[] = $managementSystems;
 
         return $this;
@@ -1868,8 +1827,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      *
      * @param \Pequiven\SIGBundle\Entity\ManagementSystem $managementSystems
      */
-    public function removeManagementSystem(\Pequiven\SIGBundle\Entity\ManagementSystem $managementSystems)
-    {
+    public function removeManagementSystem(\Pequiven\SIGBundle\Entity\ManagementSystem $managementSystems) {
         $this->managementSystems->removeElement($managementSystems);
     }
 
@@ -1878,8 +1836,250 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getManagementSystems()
-    {
+    public function getManagementSystems() {
         return $this->managementSystems;
     }
+
+    /**
+     * Set viewVariablesFromEquationInDashboardPie
+     *
+     * @param boolean $viewVariablesFromEquationInDashboardPie
+     * @return Indicator
+     */
+    public function setViewVariablesFromEquationInDashboardPie($viewVariablesFromEquationInDashboardPie) {
+        $this->viewVariablesFromEquationInDashboardPie = $viewVariablesFromEquationInDashboardPie;
+
+        return $this;
+    }
+
+    /**
+     * Get viewVariablesFromEquationInDashboardPie
+     *
+     * @return boolean 
+     */
+    public function getViewVariablesFromEquationInDashboardPie() {
+        return $this->viewVariablesFromEquationInDashboardPie;
+    }
+
+    /**
+     * Set showByRealValue
+     *
+     * @param string $showByRealValue
+     * @return Indicator
+     */
+    public function setShowByRealValue($showByRealValue) {
+        $this->showByRealValue = $showByRealValue;
+
+        return $this;
+    }
+
+    /**
+     * Get showByRealValue
+     *
+     * @return string 
+     */
+    public function getShowByRealValue() {
+        return $this->showByRealValue;
+    }
+
+    /**
+     * Set showByPlanValue
+     *
+     * @param string $showByPlanValue
+     * @return Indicator
+     */
+    public function setShowByPlanValue($showByPlanValue) {
+        $this->showByPlanValue = $showByPlanValue;
+
+        return $this;
+    }
+
+    /**
+     * Get showByPlanValue
+     *
+     * @return string 
+     */
+    public function getShowByPlanValue() {
+        return $this->showByPlanValue;
+    }
+
+    /**
+     * Set variablesRealPlanComplement
+     *
+     * @param boolean $variablesRealPlanComplement
+     * @return Indicator
+     */
+    public function setVariablesRealPlanComplement($variablesRealPlanComplement) {
+        $this->variablesRealPlanComplement = $variablesRealPlanComplement;
+
+        return $this;
+    }
+
+    /**
+     * Get variablesRealPlanComplement
+     *
+     * @return boolean 
+     */
+    public function getVariablesRealPlanComplement() {
+        return $this->variablesRealPlanComplement;
+    }
+
+    /**
+     * 
+     * @param type $isValueFromTextReal
+     * @return \Pequiven\IndicatorBundle\Entity\Indicator
+     */
+    public function setIsValueFromTextReal($isValueFromTextReal) {
+        $this->isValueFromTextReal = $isValueFromTextReal;
+
+        return $this;
+    }
+
+    /**
+     * 
+     * @return type
+     */
+    public function getIsValueFromTextReal() {
+        return $this->isValueFromTextReal;
+    }
+
+    /**
+     * 
+     * @param type $TextValueFromVariableReal
+     * @return \Pequiven\IndicatorBundle\Entity\Indicator
+     */
+    public function setTextValueFromVariableReal($TextValueFromVariableReal) {
+        $this->textValueFromVariableReal = $TextValueFromVariableReal;
+
+        return $this;
+    }
+
+    /**
+     * Get
+     * @return type
+     */
+    public function getTextValueFromVariableReal() {
+        return $this->textValueFromVariableReal;
+    }
+
+    /**
+     * Set isValueFromTextPlan
+     * @param type $isValueFromTextPlan
+     * @return \Pequiven\IndicatorBundle\Entity\Indicator
+     */
+    public function setIsValueFromTextPlan($isValueFromTextplan) {
+        $this->isValueFromTextPlan = $isValueFromTextplan;
+
+        return $this;
+    }
+
+    /**
+     * Get isValueFromTextPlan
+     * @return boolean
+     */
+    public function getIsValueFromTextPlan() {
+        return $this->isValueFromTextPlan;
+    }
+
+    /**
+     * Set textValueFromVariablePlan
+     * @param String $TextValueFromVariablePlan
+     * @return \Pequiven\IndicatorBundle\Entity\Indicator
+     */
+    public function setTextValueFromVariablePlan($TextValueFromVariablePlan) {
+        $this->textValueFromVariablePlan = $TextValueFromVariablePlan;
+
+        return $this;
+    }
+
+    /**
+     * Get textValueFromVariablePlan
+     * @return type
+     */
+    public function getTextValueFromVariablePlan() {
+        return $this->textValueFromVariablePlan;
+    }
+
+    /**
+     * Set isValueRealFromEquationRealFormula
+     *
+     * @param boolean $isValueRealFromEquationRealFormula
+     * @return Indicator
+     */
+    public function setIsValueRealFromEquationRealFormula($isValueRealFromEquationRealFormula) {
+        $this->isValueRealFromEquationRealFormula = $isValueRealFromEquationRealFormula;
+
+        return $this;
+    }
+
+    /**
+     * Get isValueRealFromEquationRealFormula
+     *
+     * @return boolean 
+     */
+    public function getIsValueRealFromEquationRealFormula() {
+        return $this->isValueRealFromEquationRealFormula;
+    }
+
+    /**
+     * Set isValuePlanFromEquationPlanFormula
+     *
+     * @param boolean $isValuePlanFromEquationPlanFormula
+     * @return Indicator
+     */
+    public function setIsValuePlanFromEquationPlanFormula($isValuePlanFromEquationPlanFormula) {
+        $this->isValuePlanFromEquationPlanFormula = $isValuePlanFromEquationPlanFormula;
+
+        return $this;
+    }
+
+    /**
+     * Get isValuePlanFromEquationPlanFormula
+     *
+     * @return boolean 
+     */
+    public function getIsValuePlanFromEquationPlanFormula() {
+        return $this->isValuePlanFromEquationPlanFormula;
+    }
+
+    /**
+     * 
+     * @param type $isShowRange
+     * @return \Pequiven\IndicatorBundle\Entity\Indicator
+     */    
+    public function setShowRange($showRange) {
+        $this->showRange = $showRange;
+
+        return $this;
+    }
+
+    /**
+     * 
+     * @return type
+     */
+    public function getShowRange() {
+        return $this->showRange;
+    }
+
+    /**
+     * Set typeOfCompany
+     *
+     * @param integer $typeOfCompany
+     * @return Indicator
+     */
+    public function setTypeOfCompany($typeOfCompany) {
+        $this->typeOfCompany = $typeOfCompany;
+
+        return $this;
+    }
+
+    /**
+     * Get typeOfCompany
+     *
+     * @return integer 
+     */
+    public function getTypeOfCompany() {
+        return $this->typeOfCompany;
+    }
+
 }

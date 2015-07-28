@@ -71,6 +71,8 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
                 '%period%' => $periodName
             ));
         }
+        
+        $periodActual = $period;
         $canBeEvaluated = $isValidAudit = true;
         if(count($this->errors) == 0){
             //Repositorios
@@ -110,7 +112,7 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
                 $arrangementPrograms[$key] = array(
                     'id' => sprintf('PG-%s',$arrangementProgram->getId()),
                     'description' => $arrangementProgram->getRef(),
-                    'result' => $this->formatResult($arrangementProgram->getResult()),
+                    'result' => $arrangementProgram->getUpdateResultByAdmin() ? $this->formatResult($arrangementProgram->getResultModified()) : $this->formatResult($arrangementProgram->getResult()),
                     'dateStart' => array(
                         'plan' => $this->formatDateTime($planDateStart),
                         'real' => $this->formatDateTime($realDateStart)
@@ -135,11 +137,13 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
                $this->addErrorTrans('pequiven_seip.errors.the_second_line_management_no_audit',array("%gerenciaSecond%" => $gerenciaSecond->getGerencia()));
                $status = self::RESULT_NO_AUDIT;
             }
-            
-            if($user->getLevelRealByGroup() == \Pequiven\MasterBundle\Model\Rol::ROLE_MANAGER_FIRST || $user->getLevelRealByGroup() == \Pequiven\MasterBundle\Model\Rol::ROLE_GENERAL_COMPLEJO) {
+
+            if(($user->getLevelRealByGroup() == \Pequiven\MasterBundle\Model\Rol::ROLE_MANAGER_FIRST ) || $user->getLevelRealByGroup() == \Pequiven\MasterBundle\Model\Rol::ROLE_GENERAL_COMPLEJO) {
                 if($gerenciaFirst){
                     foreach ($gerenciaFirst->getTacticalObjectives() as $objetive) {
-                        $objetives[$objetive->getId()] = $objetive;
+                        if($objetive->getPeriod()->getId() == $periodActual->getId()){
+                            $objetives[$objetive->getId()] = $objetive;
+                        }
                     }
                 }else{
                     $this->addErrorTrans('pequiven_seip.errors.the_user_is_not_assigned_first_line_management',array(
@@ -150,7 +154,9 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
             } else if($user->getLevelRealByGroup() == \Pequiven\MasterBundle\Model\Rol::ROLE_MANAGER_SECOND) {
                 if($gerenciaSecond){
                     foreach ($gerenciaSecond->getOperationalObjectives() as $objetive) {
-                        $objetives[$objetive->getId()] = $objetive;
+                        if($objetive->getPeriod()->getId() == $periodActual->getId()){
+                            $objetives[$objetive->getId()] = $objetive;
+                        }
                     }
                 }else{
                     $this->addErrorTrans('pequiven_seip.errors.the_user_is_not_assigned_second_line_management',array(
@@ -161,7 +167,9 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
             }else if($user->getLevelRealByGroup() == \Pequiven\MasterBundle\Model\Rol::ROLE_DIRECTIVE){
                 $objetivesStrategic = $this->get('pequiven.repository.objetive')->findAllStrategicByPeriod($period);
                 foreach ($objetivesStrategic as $objetive) {
-                    $objetives[$objetive->getId()] = $objetive;
+                    if($objetive->getPeriod()->getId() == $periodActual->getId()){
+                        $objetives[$objetive->getId()] = $objetive;
+                    }
                 }
             }
             
@@ -175,13 +183,13 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
                     $allArrangementPrograms[$arrangementProgram->getId()] = $arrangementProgram;
                 }
                 foreach ($objetive->getIndicators() as $indicator) {
-                    $allIndicators[$indicator->getId()] = $indicator;;
+                    $allIndicators[$indicator->getId()] = $indicator;
                 }
                 
                 $data = array(
                     'id' => sprintf('OB-%s',$objetive->getId()),
                     'description' => $objetive->getDescription(),
-                    'result' => $this->formatResult($objetive->getResult()),
+                    'result' => $objetive->getUpdateResultByAdmin() ? $this->formatResult($objetive->getResultModified()) : $this->formatResult($objetive->getResult()),
                     'dateStart' => array(
                         'plan' => $this->formatDateTime($planDateStart),
                         'real' => $this->formatDateTime($planDateStart)
@@ -216,7 +224,7 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
                 $goals[$key] = array(
                     'id' => sprintf('ME-%s',$goal->getId()),
                     'description' => $goal->getName(),
-                    'result' => $this->formatResult($goal->getResult()),
+                    'result' => $goal->getUpdateResultByAdmin() ? $this->formatResult($goal->getResultModified()) : $this->formatResult($goal->getResult()),
                     'dateStart' => array(
                         'plan' => $this->formatDateTime($planDateStart),
                         'real' => $this->formatDateTime($realDateStart)

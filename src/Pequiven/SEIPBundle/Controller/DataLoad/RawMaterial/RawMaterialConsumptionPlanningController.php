@@ -63,6 +63,40 @@ class RawMaterialConsumptionPlanningController extends SEIPController
         return $this->handleView($view);
     }
     
+    public function updateAction(\Symfony\Component\HttpFoundation\Request $request) {
+        $resource = $this->findOr404($request);
+        $form = $this->getForm($resource);
+
+        if (($request->isMethod('PUT') || $request->isMethod('POST')) && $form->submit($request)->isValid()) {
+            $resource->calculate();
+            $this->domainManager->update($resource);
+
+            return $this->redirectHandler->redirectTo($resource);
+        }
+
+        if ($this->config->isApiRequest()) {
+            return $this->handleView($this->view($form));
+        }
+
+        $view = $this
+            ->view()
+            ->setTemplate($this->config->getTemplate('update.html'))
+            ->setData(array(
+                $this->config->getResourceName() => $resource,
+                'form'                           => $form->createView()
+            ))
+        ;
+
+        return $this->handleView($view);
+    }
+    
+    public function calculateAction(\Symfony\Component\HttpFoundation\Request $request) {
+        $rawMaterialConsumptionPlanning = $this->findOr404($request);
+        $rawMaterialConsumptionPlanning->calculate();
+        $this->save($rawMaterialConsumptionPlanning);
+        return $this->redirectHandler->redirectTo($rawMaterialConsumptionPlanning);
+    }
+    
     public function deleteAction(\Symfony\Component\HttpFoundation\Request $request) 
     {
         $resource = $this->findOr404($request);

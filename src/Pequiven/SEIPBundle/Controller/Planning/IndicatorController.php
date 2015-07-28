@@ -15,51 +15,109 @@ use Pequiven\SEIPBundle\Model\Common\CommonObject;
  *
  * @author Carlos Mendoza<inhack20@gmail.com>
  */
-class IndicatorController extends ResourceController
-{
-    public function showAction(Request $request) 
-    {
+class IndicatorController extends ResourceController {
+
+    public function createValueIndicatorFile(Indicator $indicator, Request $request) {
+        $valueIndicatorFile = new Indicator\ValueIndicator\ValueIndicatorFile();
+        $fileUploaded = false;
+
+        $valuesIndicator = $indicator->getValuesIndicator();
+        foreach ($valuesIndicator as $valueIndicator) {
+            if ($valueIndicator->getId() == $request->get("valueIndicatorId")) {
+                $valueIndicatorFile->setValueIndicator($valueIndicator);
+                foreach ($request->files as $file) {
+                    //VALIDA QUE EL ARCHIVO SEA UN PDF
+                    //SE GUARDAN LOS CAMPOS EN BD
+                    $valueIndicatorFile->setCreatedBy($this->getUser());
+                    $valueIndicatorFile->setNameFile($file->getClientOriginalName());
+                    $valueIndicatorFile->setPath(Indicator\ValueIndicator\ValueIndicatorFile::getUploadDir());
+                    $valueIndicatorFile->setExtensionFile($file->guessExtension());
+
+                    //SE MUEVE EL ARCHIVO AL SERVIDOR
+                    $file->move($this->container->getParameter("kernel.root_dir") . '/../web/' . Indicator\ValueIndicator\ValueIndicatorFile::getUploadDir(), Indicator\ValueIndicator\ValueIndicatorFile::NAME_FILE . $valueIndicator->getId());
+                    $fileUploaded = $file->isValid();
+                }
+            }
+        }
+
+        if (!$fileUploaded) {
+            $em = $this->getDoctrine()->getEntityManager();
+            $em->persist($valueIndicatorFile);
+            $em->flush();
+            
+            $this->get('session')->getFlashBag()->add('success', $this->trans('action.messages.saveFileSuccess', array(), 'PequivenIndicatorBundle'));
+            $request->request->set("uploadFile", "");
+            $this->redirect($this->generateUrl("pequiven_indicator_show", array("id" => $indicator->getId())));
+        } else {
+            $this->get('session')->getFlashBag()->add('error', $this->trans('action.messages.errorFileUpload', array(), 'PequivenIndicatorBundle'));
+            $request->request->set("uploadFile", "");
+            $this->redirect($this->generateUrl("pequiven_indicator_show", array("id" => $indicator->getId())));
+        }
+    }
+
+    public function showAction(Request $request) {
         $resource = $this->findOr404($request);
-        
+        $uploadFile = $request->get("uploadFile");
+
+
+        //SI SE SUBIO EL ARCHIVO SE PROCEDE A GUARDARLO
+        if ($uploadFile != null) {
+            
+            $band = false;
+            //VALIDACION QUE SEA UN ARCHIVO PERMITIDO
+            foreach ($request->files as $file) {
+                if (in_array($file->guessExtension(), \Pequiven\IndicatorBundle\Model\Indicator\ValueIndicatorFile::getTypesFile())) {
+                    $band = true;
+                }
+            }
+            if ($band) {
+                $this->createValueIndicatorFile($resource, $request);
+            } else {
+                $this->get('session')->getFlashBag()->add('error', $this->trans('action.messages.InvalidFile', array(), 'PequivenIndicatorBundle'));
+                $this->redirect($this->generateUrl("pequiven_indicator_show", array("id" => $request->get("id"))));
+            }
+        }
+
+
         $level = $resource->getIndicatorLevel()->getLevel();
-        
+
         $rol = null;
         $roleByLevel = array(
-            IndicatorLevel::LEVEL_ESTRATEGICO => array('ROLE_SEIP_INDICATOR_VIEW_STRATEGIC','ROLE_SEIP_PLANNING_VIEW_INDICATOR_STRATEGIC'),
-            IndicatorLevel::LEVEL_TACTICO => array('ROLE_SEIP_INDICATOR_VIEW_TACTIC','ROLE_SEIP_PLANNING_VIEW_INDICATOR_TACTIC'),
-            IndicatorLevel::LEVEL_OPERATIVO => array('ROLE_SEIP_INDICATOR_VIEW_OPERATIVE','ROLE_SEIP_PLANNING_VIEW_INDICATOR_OPERATIVE')
+            IndicatorLevel::LEVEL_ESTRATEGICO => array('ROLE_SEIP_INDICATOR_VIEW_STRATEGIC', 'ROLE_SEIP_PLANNING_VIEW_INDICATOR_STRATEGIC'),
+            IndicatorLevel::LEVEL_TACTICO => array('ROLE_SEIP_INDICATOR_VIEW_TACTIC', 'ROLE_SEIP_PLANNING_VIEW_INDICATOR_TACTIC'),
+            IndicatorLevel::LEVEL_OPERATIVO => array('ROLE_SEIP_INDICATOR_VIEW_OPERATIVE', 'ROLE_SEIP_PLANNING_VIEW_INDICATOR_OPERATIVE')
         );
-        
+
         $roleEditDeleteByLevel = array(
-            IndicatorLevel::LEVEL_ESTRATEGICO => array('ROLE_SEIP_INDICATOR_EDIT_STRATEGIC',"ROLE_SEIP_INDICATOR_DELETE_STRATEGIC","ROLE_SEIP_INDICATOR_APPROVED_STRATEGIC"),
-            IndicatorLevel::LEVEL_TACTICO => array('ROLE_SEIP_INDICATOR_EDIT_TACTIC',"ROLE_SEIP_INDICATOR_DELETE_TACTIC","ROLE_SEIP_INDICATOR_APPROVED_TACTIC"),
-            IndicatorLevel::LEVEL_OPERATIVO => array('ROLE_SEIP_INDICATOR_EDIT_OPERATIVE',"ROLE_SEIP_INDICATOR_DELETE_OPERATIVE","ROLE_SEIP_INDICATOR_APPROVED_OPERATIVE")
+            IndicatorLevel::LEVEL_ESTRATEGICO => array('ROLE_SEIP_INDICATOR_EDIT_STRATEGIC', "ROLE_SEIP_INDICATOR_DELETE_STRATEGIC", "ROLE_SEIP_INDICATOR_APPROVED_STRATEGIC"),
+            IndicatorLevel::LEVEL_TACTICO => array('ROLE_SEIP_INDICATOR_EDIT_TACTIC', "ROLE_SEIP_INDICATOR_DELETE_TACTIC", "ROLE_SEIP_INDICATOR_APPROVED_TACTIC"),
+            IndicatorLevel::LEVEL_OPERATIVO => array('ROLE_SEIP_INDICATOR_EDIT_OPERATIVE', "ROLE_SEIP_INDICATOR_DELETE_OPERATIVE", "ROLE_SEIP_INDICATOR_APPROVED_OPERATIVE")
         );
-        
+
         $securityService = $this->getSecurityService();
-        
+
         $hasPermissionToUpdate = $isAllowToDelete = false;
-        if(isset($roleByLevel[$level])){
+        if (isset($roleByLevel[$level])) {
             $rol = $roleByLevel[$level];
-            $hasPermissionToUpdate = $securityService->isGrantedFull($roleEditDeleteByLevel[$level][0],$resource);
-            $isAllowToDelete = $securityService->isGrantedFull($roleEditDeleteByLevel[$level][1],$resource);
+            $hasPermissionToUpdate = $securityService->isGrantedFull($roleEditDeleteByLevel[$level][0], $resource);
+            $isAllowToDelete = $securityService->isGrantedFull($roleEditDeleteByLevel[$level][1], $resource);
         }
         $securityService->checkSecurity($rol);
-        
-        if(!$securityService->isGranted($rol[1])){
-            $securityService->checkSecurity($rol[0],$resource);
+
+        if (!$securityService->isGranted($rol[1])) {
+            $securityService->checkSecurity($rol[0], $resource);
         }
-        
+
         $errorFormula = null;
-        
-        if($resource->getFormula() !== null){
+
+        if ($resource->getFormula() !== null) {
             $indicatorService = $this->getIndicatorService();
             $formula = $resource->getFormula();
             $errorFormula = $indicatorService->validateFormula($formula);
         }
-        
-        $hasPermissionToApproved = $securityService->isGrantedFull($roleEditDeleteByLevel[$level][2],$resource);
-        
+
+        $hasPermissionToApproved = $securityService->isGrantedFull($roleEditDeleteByLevel[$level][2], $resource);
+
         $data = array(
             'dataSource' => array(
                 'chart' => array(),
@@ -68,16 +126,16 @@ class IndicatorController extends ResourceController
                 ),
             ),
         );
-        
-            $indicatorService->updateTagIndicator($resource);
-        
+
+        $indicatorService->updateTagIndicator($resource);
+
         $resultService = $this->getResultService();
         $arrangementRangeService = $this->getArrangementRangeService();
         $indicatorRange = array();
         $errorArrangementRange = null;
-        if($resource->getArrangementRange() !== null){//En caso de que el indicador tenga un rango de gestión asignado, se procede a evaluar la definición del rango
+        if ($resource->getArrangementRange() !== null) {//En caso de que el indicador tenga un rango de gestión asignado, se procede a evaluar la definición del rango
             $errorArrangementRange = $arrangementRangeService->validateArrangementRange($resource->getArrangementRange(), $resource->getTendency());
-            if($errorArrangementRange == null){
+            if ($errorArrangementRange == null) {
                 $tendency = $resource->getTendency();
                 $indicatorRange['good'] = $resultService->calculateRangeGood($resource, $tendency, CommonObject::TYPE_RESULT_ARRANGEMENT);
                 $indicatorRange['middle'] = $resultService->calculateRangeMiddle($resource, $tendency, CommonObject::TYPE_RESULT_ARRANGEMENT);
@@ -86,163 +144,164 @@ class IndicatorController extends ResourceController
                 $color = $arrangementRangeService->getDataColorRangeWidget($resource->getArrangementRange(), $resource->getTendency());
                 $data['dataSource']['colorRange']['color'] = $color;
             }
-        } else{//En caso de que el indicador no tenga un rango de gestión asignado se setea el mensaje de error
+        } else {//En caso de que el indicador no tenga un rango de gestión asignado se setea el mensaje de error
             $errorArrangementRange = $this->trans('pequiven_indicator.errors.arrangementRange_not_assigned', array(), 'PequivenIndicatorBundle');
         }
+
+
+
+
         $view = $this
-            ->view()
-            ->setTemplate($this->config->getTemplate('show.html'))
-            ->setData(array(
-                $this->config->getResourceName() => $resource,
-                'errorFormula' => $errorFormula,
-                'errorArrangementRange' => $errorArrangementRange,
-                'indicatorService' => $indicatorService,
-                'data' => $data,
-                'indicatorRange' => $indicatorRange,
-                'hasPermissionToUpdate' => $hasPermissionToUpdate,
-                'isAllowToDelete' => $isAllowToDelete,
-                'hasPermissionToApproved' => $hasPermissionToApproved,
-            ))
+                ->view()
+                ->setTemplate($this->config->getTemplate('show.html'))
+                ->setData(array(
+            $this->config->getResourceName() => $resource,
+            'errorFormula' => $errorFormula,
+            'errorArrangementRange' => $errorArrangementRange,
+            'indicatorService' => $indicatorService,
+            'data' => $data,
+            'indicatorRange' => $indicatorRange,
+            'hasPermissionToUpdate' => $hasPermissionToUpdate,
+            'isAllowToDelete' => $isAllowToDelete,
+            'hasPermissionToApproved' => $hasPermissionToApproved
+                ))
         ;
-        $view->getSerializationContext()->setGroups(array('id','api_list','valuesIndicator','api_details','sonata_api_read'));
+        $view->getSerializationContext()->setGroups(array('id', 'api_list', 'valuesIndicator', 'api_details', 'sonata_api_read'));
         return $this->handleView($view);
     }
-    
+
     /**
      * Vista en modo dashboard del indicador seleccionado
      * @param Request $request
      * @return type
      */
-    public function showDashboardAction(Request $request) 
-    {
+    public function showDashboardAction(Request $request) {
         $resource = $this->findOr404($request);
         $securityService = $this->getSecurityService();
         $indicatorService = $this->getIndicatorService();
         $urlParent = $textParent = '';
         $boxRender = $this->get('tecnocreaciones_box.render');
-        
+
         //Obtenemos el nivel del indicador
         $level = $resource->getIndicatorLevel()->getLevel();
-        
+
         $rol = null;
         $roleByLevel = array(
-            IndicatorLevel::LEVEL_ESTRATEGICO => array('ROLE_SEIP_INDICATOR_VIEW_STRATEGIC','ROLE_SEIP_PLANNING_VIEW_INDICATOR_STRATEGIC'),
-            IndicatorLevel::LEVEL_TACTICO => array('ROLE_SEIP_INDICATOR_VIEW_TACTIC','ROLE_SEIP_PLANNING_VIEW_INDICATOR_TACTIC'),
-            IndicatorLevel::LEVEL_OPERATIVO => array('ROLE_SEIP_INDICATOR_VIEW_OPERATIVE','ROLE_SEIP_PLANNING_VIEW_INDICATOR_OPERATIVE')
+            IndicatorLevel::LEVEL_ESTRATEGICO => array('ROLE_SEIP_INDICATOR_VIEW_STRATEGIC', 'ROLE_SEIP_PLANNING_VIEW_INDICATOR_STRATEGIC'),
+            IndicatorLevel::LEVEL_TACTICO => array('ROLE_SEIP_INDICATOR_VIEW_TACTIC', 'ROLE_SEIP_PLANNING_VIEW_INDICATOR_TACTIC'),
+            IndicatorLevel::LEVEL_OPERATIVO => array('ROLE_SEIP_INDICATOR_VIEW_OPERATIVE', 'ROLE_SEIP_PLANNING_VIEW_INDICATOR_OPERATIVE')
         );
-        if(isset($roleByLevel[$level])){
+        if (isset($roleByLevel[$level])) {
             $rol = $roleByLevel[$level];
         }
-        
+
         $securityService->checkSecurity($rol);
-        
-        if(!$securityService->isGranted($rol[1])){
-            $securityService->checkSecurity($rol[0],$resource);
+
+        if (!$securityService->isGranted($rol[1])) {
+            $securityService->checkSecurity($rol[0], $resource);
         }
-        
+
         //Sección dónde se define el haeder del showDashboard
-        $labelsByLevel = Indicator::getLabelsByLevelIndicator();//Obtenemos las etiquetas de los indicadores por nivel
-        if($level == IndicatorLevel::LEVEL_ESTRATEGICO){
-            foreach($resource->getLineStrategics() as $lineStrategic){
+        $labelsByLevel = Indicator::getLabelsByLevelIndicator(); //Obtenemos las etiquetas de los indicadores por nivel
+        if ($level == IndicatorLevel::LEVEL_ESTRATEGICO) {
+            foreach ($resource->getLineStrategics() as $lineStrategic) {
                 $urlParent = $this->generateUrl('pequiven_line_strategic_show', array('id' => $lineStrategic->getId()));
                 $textParent = $lineStrategic->getDescription();
             }
-        } else{
-            if($resource->getParent()){
+        } else {
+            if ($resource->getParent()) {
                 $urlParent = $this->generateUrl('pequiven_indicator_show', array('id' => $resource->getParent()->getId()));
                 $textParent = $resource->getParent()->getRef();
-            } else{
-                $textParent = $this->trans($labelsByLevel[$level],array(),'PequivenIndicatorBundle');
+            } else {
+                $textParent = $this->trans($labelsByLevel[$level], array(), 'PequivenIndicatorBundle');
             }
         }
-        
+
         //Actualizamos las posibles etiquetas del indicador
         $indicatorService->updateTagIndicator($resource);
-        
+
         $resultService = $this->getResultService();
         $arrangementRangeService = $this->getArrangementRangeService();
 
         $view = $this
-            ->view()
-            ->setTemplate($this->config->getTemplate('showDashboard.html'))
-            ->setData(array(
-                $this->config->getResourceName() => $resource,
-                'indicatorService' => $indicatorService,
-                'urlParent' => $urlParent,
-                'boxRender' => $boxRender,
-                'textParent' => $textParent,
-            ))
+                ->view()
+                ->setTemplate($this->config->getTemplate('showDashboard.html'))
+                ->setData(array(
+            $this->config->getResourceName() => $resource,
+            'indicatorService' => $indicatorService,
+            'urlParent' => $urlParent,
+            'boxRender' => $boxRender,
+            'textParent' => $textParent,
+                ))
         ;
-        $view->getSerializationContext()->setGroups(array('id','api_list','valuesIndicator','api_details','sonata_api_read'));
+        $view->getSerializationContext()->setGroups(array('id', 'api_list', 'valuesIndicator', 'api_details', 'sonata_api_read'));
         return $this->handleView($view);
     }
-    
+
     /**
      * Aprueba un indicador
      * 
      * @param Request $request
      * @return type
      */
-    public function approvedAction(Request $request) 
-    {
+    public function approvedAction(Request $request) {
         $resource = $this->findOr404($request);
-        
+
         $securityService = $this->getSecurityService();
         $roleByLevel = array(
             \Pequiven\IndicatorBundle\Model\IndicatorLevel::LEVEL_ESTRATEGICO => 'ROLE_SEIP_INDICATOR_APPROVED_STRATEGIC',
             \Pequiven\IndicatorBundle\Model\IndicatorLevel::LEVEL_TACTICO => 'ROLE_SEIP_INDICATOR_APPROVED_TACTIC',
             \Pequiven\IndicatorBundle\Model\IndicatorLevel::LEVEL_OPERATIVO => 'ROLE_SEIP_INDICATOR_APPROVED_OPERATIVE',
         );
-        
+
         $level = $resource->getIndicatorLevel()->getLevel();
-        if(isset($roleByLevel[$level])){
+        if (isset($roleByLevel[$level])) {
             $rol = $roleByLevel[$level];
         }
-        
-        $securityService->checkSecurity($rol,$resource);
-        
+
+        $securityService->checkSecurity($rol, $resource);
+
         $details = $resource->getDetails();
-        if($details === null){
+        if ($details === null) {
             $details = new Indicator\IndicatorDetails();
         }
         $details->setApprovalDate(new \DateTime());
         $details->setApprovedBy($this->getUser());
         $resource->setDetails($details);
-        
+
         $resource->setStatus(\Pequiven\IndicatorBundle\Entity\Indicator::STATUS_APPROVED);
-        
+
         $this->domainManager->update($resource, 'approved');
-        
+
         return $this->redirectHandler->redirectTo($resource);
     }
-    
+
     /**
      * Lista de Indicadores por nivel(Estratégico, Táctico u Operativo)
      * 
      * @param Request $request
      * @return type
      */
-    function listAction(Request $request)
-    {
+    function listAction(Request $request) {
         $level = $request->get('level');
-        
-        
+
+
         $rol = null;
         $roleByLevel = array(
-            IndicatorLevel::LEVEL_ESTRATEGICO => array('ROLE_SEIP_INDICATOR_VIEW_STRATEGIC','ROLE_SEIP_PLANNING_LIST_INDICATOR_STRATEGIC'),
-            IndicatorLevel::LEVEL_TACTICO => array('ROLE_SEIP_INDICATOR_VIEW_TACTIC','ROLE_SEIP_PLANNING_LIST_INDICATOR_TACTIC'),
-            IndicatorLevel::LEVEL_OPERATIVO => array('ROLE_SEIP_INDICATOR_VIEW_OPERATIVE','ROLE_SEIP_PLANNING_LIST_INDICATOR_OPERATIVE')
+            IndicatorLevel::LEVEL_ESTRATEGICO => array('ROLE_SEIP_INDICATOR_VIEW_STRATEGIC', 'ROLE_SEIP_PLANNING_LIST_INDICATOR_STRATEGIC'),
+            IndicatorLevel::LEVEL_TACTICO => array('ROLE_SEIP_INDICATOR_VIEW_TACTIC', 'ROLE_SEIP_PLANNING_LIST_INDICATOR_TACTIC'),
+            IndicatorLevel::LEVEL_OPERATIVO => array('ROLE_SEIP_INDICATOR_VIEW_OPERATIVE', 'ROLE_SEIP_PLANNING_LIST_INDICATOR_OPERATIVE')
         );
-        if(isset($roleByLevel[$level])){
+        if (isset($roleByLevel[$level])) {
             $rol = $roleByLevel[$level];
         }
-        
+
         $this->getSecurityService()->checkSecurity($rol);
-        
+
         $criteria = $request->get('filter', $this->config->getCriteria());
         $sorting = $request->get('sorting', $this->config->getSorting());
         $repository = $this->getRepository();
-        
+
         $criteria['indicatorLevel'] = $level;
         $criteria['applyPeriodCriteria'] = true;
 
@@ -269,23 +328,23 @@ class IndicatorController extends ResourceController
             '_format' => 'json',
             'level' => $level,
         );
-        $apiDataUrl = $this->generateUrl('pequiven_indicator_list',$routeParameters);
-        
+        $apiDataUrl = $this->generateUrl('pequiven_indicator_list', $routeParameters);
+
         $view = $this
                 ->view()
                 ->setTemplate($this->config->getTemplate('list.html'))
                 ->setTemplateVar($this->config->getPluralResourceName())
         ;
-        $view->getSerializationContext()->setGroups(array('id','api_list','valuesIndicator','api_details','sonata_api_read','formula'));
+        $view->getSerializationContext()->setGroups(array('id', 'api_list', 'valuesIndicator', 'api_details', 'sonata_api_read', 'formula'));
         if ($request->get('_format') == 'html') {
             $labelsSummary = array();
             foreach (Indicator::getLabelsSummary() as $key => $value) {
                 $labelsSummary[] = array(
                     'id' => $key,
-                    'description' => $this->trans($value,array(),'PequivenIndicatorBundle'),
+                    'description' => $this->trans($value, array(), 'PequivenIndicatorBundle'),
                 );
             }
-            
+
             $data = array(
                 'apiDataUrl' => $apiDataUrl,
                 $this->config->getPluralResourceName() => $resources,
@@ -300,45 +359,43 @@ class IndicatorController extends ResourceController
         }
         return $this->handleView($view);
     }
-    
+
     /**
-     * @Security("is_granted('ROLE_WORKER_PLANNING')")
+     * @Security("is_granted(['ROLE_WORKER_PLANNING','ROLE_SEIP_INDICATOR_ADD_OBSERVATION'])")
      * @param Request $request
      * @return type
      */
-    function addObservationAction(Request $request)
-    {
+    function addObservationAction(Request $request) {
         $resource = $this->findOr404($request);
-        
+
         $comment = $request->get('observation');
-        if($comment == ''){
+        if ($comment == '') {
             $this->setFlash('error', 'pequiven.error.empty_comment');
             return $this->redirectHandler->redirectTo($resource);
         }
-                
-            $observation = new \Pequiven\SEIPBundle\Entity\Observation();
-            $observation
+
+        $observation = new \Pequiven\SEIPBundle\Entity\Observation();
+        $observation
                 ->setDescription($comment)
                 ->setCreatedBy($this->getUser())
-                ;
-            $resource->addObservation($observation);
+        ;
+        $resource->addObservation($observation);
 
-            $this->domainManager->dispatchEvent('pre_add_observation', new \Sylius\Bundle\ResourceBundle\Event\ResourceEvent($resource));
-            $this->domainManager->update($resource);
-            
-            $this->setFlash('success', 'pequiven.indicator.add_observation');
-                
+        $this->domainManager->dispatchEvent('pre_add_observation', new \Sylius\Bundle\ResourceBundle\Event\ResourceEvent($resource));
+        $this->domainManager->update($resource);
+
+        $this->setFlash('success', 'pequiven.indicator.add_observation');
+
         return $this->redirectHandler->redirectTo($resource);
     }
-    
+
     /**
      * Lista de Errores en las fichas de Indicadores 
      * 
      * @param Request $request
      * @return type
      */
-    function listErrorAction(Request $request)
-    {   
+    function listErrorAction(Request $request) {
         $criteria = $request->get('filter', $this->config->getCriteria());
         $sorting = $request->get('sorting', $this->config->getSorting());
         $repository = $this->getRepository();
@@ -365,23 +422,23 @@ class IndicatorController extends ResourceController
         $routeParameters = array(
             '_format' => 'json',
         );
-        $apiDataUrl = $this->generateUrl('pequiven_indicator_list_error',$routeParameters);
-        
+        $apiDataUrl = $this->generateUrl('pequiven_indicator_list_error', $routeParameters);
+
         $view = $this
                 ->view()
                 ->setTemplate($this->config->getTemplate('listError.html'))
                 ->setTemplateVar($this->config->getPluralResourceName())
         ;
-        $view->getSerializationContext()->setGroups(array('id','api_list','api_details','sonata_api_read','resultIndicator','tendency'));
+        $view->getSerializationContext()->setGroups(array('id', 'api_list', 'api_details', 'sonata_api_read', 'resultIndicator', 'tendency'));
         if ($request->get('_format') == 'html') {
             $labelsSummary = array();
             foreach (Indicator::getLabelsSummary() as $key => $value) {
                 $labelsSummary[] = array(
                     'id' => $key,
-                    'description' => $this->trans($value,array(),'PequivenIndicatorBundle'),
+                    'description' => $this->trans($value, array(), 'PequivenIndicatorBundle'),
                 );
             }
-            
+
             $data = array(
                 'apiDataUrl' => $apiDataUrl,
                 $this->config->getPluralResourceName() => $resources,
@@ -395,21 +452,21 @@ class IndicatorController extends ResourceController
         }
         return $this->handleView($view);
     }
-    
+
     /**
      * A
      * @param \Pequiven\IndicatorBundle\Entity\Indicator $entity
      * @param type $description
      */
-    private function addObservation(\Pequiven\IndicatorBundle\Entity\Indicator $entity,$description) {
+    private function addObservation(\Pequiven\IndicatorBundle\Entity\Indicator $entity, $description) {
         $observation = new \Pequiven\SEIPBundle\Entity\Observation();
-            $observation
+        $observation
                 ->setDescription($description)
                 ->setCreatedBy($this->getUser())
-                ;
-            $entity->addObservation($observation);
+        ;
+        $entity->addObservation($observation);
     }
-    
+
     /**
      * Gerencias de 1ra línea para la tabla de visualización del menú de planificación
      * @param \Symfony\Component\HttpFoundation\Request $request
@@ -422,7 +479,7 @@ class IndicatorController extends ResourceController
         $em = $this->getDoctrine()->getManager();
         $securityContext = $this->container->get('security.context');
         $user = $securityContext->getToken()->getUser();
-        
+
         $results = $this->get('pequiven.repository.gerenciafirst')->getGerenciaOptions();
 
         $totalResults = count($results);
@@ -445,7 +502,7 @@ class IndicatorController extends ResourceController
 
         return $response;
     }
-    
+
     /**
      * Función que devuelve la(s) gerencias de 2da línea asociada a las gerencias de 1ra línea cargadas de acuerdo al objetivo táctico seleccionado
      * @param \Symfony\Component\HttpFoundation\Request $request
@@ -457,7 +514,7 @@ class IndicatorController extends ResourceController
         $em = $this->getDoctrine()->getManager();
         $securityContext = $this->container->get('security.context');
         $user = $securityContext->getToken()->getUser();
-            
+
         $gerencia = $request->request->get('gerencia');
 
         $results = $this->get('pequiven.repository.gerenciasecond')->findByGerenciaFirst(array('gerencia' => $gerencia));
@@ -477,69 +534,135 @@ class IndicatorController extends ResourceController
 
         return $response;
     }
-    
+
+    /**
+     * 
+     * @param Request $request
+     * @return type
+     */
+    public function getIsGrantEditButtonAction(Request $request) {
+
+        $id = $request->get('id');
+        $index = $request->get('index');
+
+        $indicatorService = $this->getIndicatorService();
+
+        $indicator = $this->get('pequiven.repository.indicator')->find($id); //Obtenemos el indicador
+
+        $rs = $indicatorService->isGrantToEdit($indicator, $index);
+
+        return $rs;
+    }
+
     /**
      * Elimina todos los valores cargados en un indicador
      * @param Request $request
      * @return type
      */
-    public function removeValuesAction(Request $request) 
-    {
+    public function removeValuesAction(Request $request) {
         $resource = $this->findOr404($request);
-        
+        $indicatorService = $indicatorService = $this->getIndicatorService();
+
         $em = $this->getDoctrine()->getManager();
-        foreach ($resource->getValuesIndicator() as $valueIndicator)
-        {
-            $em->remove($valueIndicator); 
+        $freq = $resource->getFrequencyNotificationIndicator()->getDays();
+        $cantResultados = $freq / 360;
+
+        $cont = 0;
+        $flag = false;
+        foreach ($resource->getValuesIndicator() as $valueIndicator) {
+            $cont++;
+            if ($flag == false) {
+                $registro = $indicatorService->isGrantToEdit($resource, $cont);
+                if ($registro) {
+                    $flag = true;
+                    $em->remove($valueIndicator);
+                }
+            } else {
+                $em->remove($valueIndicator);
+            }
         }
         $em->flush();
-        
+
         return $this->redirectHandler->redirectTo($resource);
     }
-    
-    public function deleteAction(Request $request) 
-    {
+
+    public function vizualiceFileAction(Request $request) {
+        $securityService = $this->getSecurityService();
+        if ($securityService->isGranted(array("ROLE_SEIP_PLANNING_INDICATOR_SHOW_FILE"))) {
+            $path = Indicator\ValueIndicator\ValueIndicatorFile::LOCATION_UPLOAD_FILE;
+            $name = Indicator\ValueIndicator\ValueIndicatorFile::NAME_FILE;
+            $ruta = $this->container->getParameter("kernel.root_dir") . '/../web/' . $path . "/" . $name . $request->get("id");
+
+            header('Content-type: application/pdf');
+            readfile($ruta);
+        } else {
+            $em = $this->getDoctrine();
+            $entity = $em->getRepository("\Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator")->find($request->get("id"));
+            $securityService->checkSecurity('ROLE_SEIP_PLANNING_INDICATOR_SHOW_FILE', $entity);
+        }
+    }
+
+    public function deleteAction(Request $request) {
         $redirectUrl = $request->get("redirectUrl");
-        
+
         $resource = $this->findOr404($request);
         $this->domainManager->delete($resource);
 
         return $this->redirectHandler->redirect($redirectUrl);
     }
-    
+
+    public function generateUrlFile(Request $request) {
+
+        $response = new JsonResponse();
+        $data = array();
+        $data["url"] = $this->generateUrl("pequiven_indicator_vizualice_file", array("id" => $request->get("id")));
+        $response->setData($data);
+        return $response;
+    }
+
+    public function showButtonDownload(Request $request) {
+        $em = $this->getDoctrine();
+        $valueIndicator = $em->getRepository("\Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator")->find($request->get("id"));
+
+        $archivo = $valueIndicator->getValueIndicatorFile();
+
+        if ($archivo) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     /**
      * 
      * @return \Pequiven\SEIPBundle\Service\SecurityService
      */
-    protected function getSecurityService()
-    {
+    protected function getSecurityService() {
         return $this->container->get('seip.service.security');
     }
-    
+
     /**
      * 
      * @return \Pequiven\ArrangementBundle\Service\ArrangementRangeService
      */
-    protected function getArrangementRangeService()
-    {
+    protected function getArrangementRangeService() {
         return $this->container->get('pequiven_arrangement.service.arrangementrange');
     }
-    
+
     /**
      * 
      * @return \Pequiven\SEIPBundle\Service\ResultService
      */
-    protected function getResultService()
-    {
+    protected function getResultService() {
         return $this->container->get('seip.service.result');
     }
-    
+
     /**
      * 
      * @return \Pequiven\IndicatorBundle\Service\IndicatorService
      */
-    protected function getIndicatorService()
-    {
+    protected function getIndicatorService() {
         return $this->container->get('pequiven_indicator.service.inidicator');
     }
+
 }

@@ -138,8 +138,24 @@ class Goal implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface
      * @var float
      * @ORM\Column(name="resultReal",type="float")
      */
-    protected $resultReal = 0;
+    protected $resultReal = 0; 
     
+    /**
+     * ¿El resultado que irá a evaluaciones, será colocado manualmente? Quiere decir que de acuerdo a previa solicitud y justificación se puede editar el resultado de la meta.
+     * 
+     * @var boolean
+     * @ORM\Column(name="updateResultByAdmin",type="boolean")
+     */
+    protected $updateResultByAdmin = false;
+    
+    /**
+     * Resultado modificado
+     * 
+     * @var float
+     * @ORM\Column(name="resultModified",type="float")
+     */
+    protected $resultModified = 0; 
+   
     public function __construct() {
         $this->responsibles = new \Doctrine\Common\Collections\ArrayCollection();
     }
@@ -479,6 +495,51 @@ class Goal implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface
         $this->resultReal = $resultReal;
 
         return $this;
+    }
+    
+    /**
+     * Set updateResultByAdmin
+     *
+     * @param boolean $updateResultByAdmin
+     * @return Goal
+     */
+    public function setUpdateResultByAdmin($updateResultByAdmin)
+    {
+        $this->updateResultByAdmin = $updateResultByAdmin;
+
+        return $this;
+    }
+
+    /**
+     * Get updateResultByAdmin
+     *
+     * @return boolean 
+     */
+    public function getUpdateResultByAdmin()
+    {
+        return $this->updateResultByAdmin;
+    }
+    
+    /**
+     * Set resultModified
+     * @param float $resultModified
+     * @return Goal
+     */
+    public function setResultModified($resultModified)
+    {
+        $this->resultModified = $resultModified;
+
+        return $this;
+    }
+
+    /**
+     * Get resultModified
+     *
+     * @return float 
+     */
+    public function getResultModified()
+    {
+        return $this->resultModified;
     }
     
     public function __clone() {

@@ -62,6 +62,20 @@ class GenericDataController extends SEIPController
         return $this->handleView($view);
     }
     
+    /**
+     * Retorna las frecuencias de notificación del indicador
+     * @param type $param
+     */
+    function getFrequencyNotificationIndicatorsAction(Request $request) {
+        $em = $this->getDoctrine()->getManager();
+        $repository = $em->getRepository("Pequiven\IndicatorBundle\Entity\Indicator\FrequencyNotificationIndicator");
+        $results = $repository->findBy(array(),array('days' => "ASC"));
+        $view = $this->view();
+        $view->setData($results);
+//        $view->getSerializationContext()->setGroups(array('id','api_list','gerencias'));
+        return $this->handleView($view);
+    }
+    
     public function getLocationByAction(Request $request)
     {
         $company = $request->get("company");
@@ -107,6 +121,19 @@ class GenericDataController extends SEIPController
         $em = $this->getDoctrine()->getManager();
         $repository = $em->getRepository("Pequiven\SEIPBundle\Entity\CEI\Product");
         $results = $repository->findByPlant($plant);
+        
+        $view = $this->view();
+        $view->setData($results);
+        $view->getSerializationContext()->setGroups(array('id','api_list'));
+        return $this->handleView($view);
+    }
+    
+    public function getProductReportByPlantReportAction(Request $request)
+    {
+        $plantReport = $request->get("plantReport");
+        $em = $this->getDoctrine()->getManager();
+        $repository = $em->getRepository("Pequiven\SEIPBundle\Entity\DataLoad\ProductReport");
+        $results = $repository->findByPlantReport($plantReport);
         
         $view = $this->view();
         $view->setData($results);

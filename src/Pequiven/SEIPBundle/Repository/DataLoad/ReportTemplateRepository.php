@@ -30,7 +30,7 @@ class ReportTemplateRepository extends SeipEntityRepository
      * @param DateTime $dateNotification
      * @return type
      */
-    public function findToNotify($id,  DateTime $dateNotification)
+    public function findToNotify($id,  DateTime $dateNotification,$plantReport = null)
     {
         $month = $dateNotification->format("m");
         
@@ -65,13 +65,62 @@ class ReportTemplateRepository extends SeipEntityRepository
             ->setParameter('id', $id)
             ->setParameter('month', $month)
             ;
-        
+        if($plantReport !== null){
+            $qb
+                ->andWhere("rt_pr.id = :plantReport")
+                ->setParameter("plantReport", $plantReport)
+                ;
+        }
         return $qb->getQuery()->getOneOrNullResult();
+    }
+    
+    /**
+     * Retorna las plantillas a las cuales el usuario tiene acceso
+     * @param array $criteria
+     * @param array $orderBy
+     * @return type
+     */
+    public function createPaginatorByUser(array $criteria = null, array $orderBy = null) 
+    {
+        $queryBuilder = $this->getCollectionQueryBuilder();
+        $user = $this->getUser();
+        
+       if(!$this->getSecurityContext()->isGranted(array('ROLE_SEIP_OPERATION_LIST_PLANNING_PRODUCTION_TEMPLATES_ALL'))){
+           $queryBuilder
+                ->innerJoin("rt.users", 'rt_u')
+                ->andWhere("rt_u.id = :user")
+                ->setParameter("user", $user)
+                ;
+       }
+       
+        $this->applyCriteria($queryBuilder, $criteria);
+        $this->applySorting($queryBuilder, $orderBy);
+
+        return $this->getPaginator($queryBuilder);
+    }
+    
+    /**
+     * 
+     */
+    public function getQueryBuilderByUser(){
+        $queryBuilder = $this->getCollectionQueryBuilder();
+        $user = $this->getUser();
+        
+       if(!$this->getSecurityContext()->isGranted(array('ROLE_SEIP_OPERATION_LIST_PLANNING_PRODUCTION_TEMPLATES_ALL'))){
+           $queryBuilder
+                ->innerJoin("rt.users", 'rt_u')
+                ->andWhere("rt_u.id = :user")
+                ->setParameter("user", $user)
+                ;
+       }
+       
+       return $queryBuilder;
     }
     
     protected function applyCriteria(QueryBuilder $queryBuilder, array $criteria = null) {
         $criteria = new ArrayCollection($criteria);
-        //
+        $queryBuilder
+                    ->leftJoin("rt.plantReports","rt_pr");
         
         if(($ref = $criteria->remove("rt.ref")))
         {
@@ -84,7 +133,6 @@ class ReportTemplateRepository extends SeipEntityRepository
         if(($plant = $criteria->remove("plant")))
         {
             $queryBuilder
-                    ->innerJoin("rt.plantReports","rt_pr")
                     ->innerJoin("rt_pr.plant","rt_pr_p")
                     ->andWhere("rt_pr_p.id = :plant")
                     ->setParameter('plant', $plant)
@@ -93,7 +141,6 @@ class ReportTemplateRepository extends SeipEntityRepository
         if(($entity = $criteria->remove("entity")))
         {
             $queryBuilder
-                    ->innerJoin("rt.plantReports","rt_pr")
                     ->innerJoin("rt_pr.entity","rt_pr_e")
                     ->andWhere("rt_pr_e.id = :entity")
                     ->setParameter('entity', $entity)
@@ -106,7 +153,6 @@ class ReportTemplateRepository extends SeipEntityRepository
             }
             if(count($product) > 0){
                 $queryBuilder
-                        ->innerJoin("rt.plantReports","rt_pr")
                         ->innerJoin("rt_pr.productsReport","rt_pr_pr")
                         ->innerJoin("rt_pr_pr.product","rt_pr_pr_p")
                         ->andWhere($queryBuilder->expr()->in("rt_pr_pr_p.id", $product))
@@ -120,7 +166,6 @@ class ReportTemplateRepository extends SeipEntityRepository
             }
             if(count($service) > 0){
                 $queryBuilder
-                        ->innerJoin("rt.plantReports","rt_pr")
                         ->innerJoin("rt_pr.consumerPlanningServices","rt_pr_cps")
                         ->innerJoin("rt_pr_cps.service","rt_pr_cps_s")
                         ->andWhere($queryBuilder->expr()->in("rt_pr_cps_s.id", $service))

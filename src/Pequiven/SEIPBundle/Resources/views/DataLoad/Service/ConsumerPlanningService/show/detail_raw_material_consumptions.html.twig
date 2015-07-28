@@ -8,7 +8,9 @@
     <div class="block-title">
         <h3> {{ 'Services'|trans }}&nbsp;({{ consumer_planning_service.detailConsumerPlanningServices|length }})</h3>
         <div class="button-group absolute-right compact">
-            <a class="button icon-list-add" href="{{ path("pequiven_detail_consumer_planning_service_create",{consumerPlanningService:consumer_planning_service.id}) }}">{{ 'pequiven.add'|trans({},'messages') }}</a>
+            {% if periodService().isAllowPlanningReport %}
+                <a class="button icon-list-add" href="{{ path("pequiven_detail_consumer_planning_service_create",{consumerPlanningService:consumer_planning_service.id}) }}">{{ 'pequiven.add'|trans({},'messages') }}</a>
+            {% endif %}
         </div>
     </div>
     <div class="with-padding">
@@ -24,22 +26,25 @@
             </thead>
             {% set colspan = 9 %}
             <tbody>
-
-                {% for detail in consumer_planning_service.detailConsumerPlanningServices %}
+                {% set unit = consumer_planning_service.service.serviceUnit %}
+                {% set totals = consumer_planning_service.getTotalToDay %}
+                {% for detail in consumer_planning_service.getDetailsByMonth %}
                     {% set tableIdRow = "row-detail-"~detail.id %}
                     <tr id="{{ tableIdRow }}">
                         <th scope="row">{{ loop.index }} - 
                             {{ detail|trans }}
                         </th>
-                        <td>{{ detail.totalPlan|myNumberFormat }}</td>
-                        <td>{{ detail.totalReal|myNumberFormat }}</td>
+                        <td>{{ detail.totalPlan|myNumberFormat }}&nbsp;{{ unit }}</td>
+                        <td>{{ detail.totalReal|myNumberFormat }}&nbsp;{{ unit }}</td>
                         <td>{{ detail.percentage|myNumberFormat }}&nbsp;%</td>
                         <td class="low-padding align-center">
                             <p class="button-height">
                                 <span class="button-group">
-                                    <a href="{{ path("pequiven_detail_consumer_planning_service_update",{id: detail.id}) }}" class="button icon-pencil">{{ "pequiven_seip.actions.edit"|trans }}</a>
-                                    {% set deleteUrl = path("pequiven_detail_consumer_planning_service_delete",{id: detail.id}) %}
-                                    {{ buttons.delete_mini(deleteUrl,message,tableIdRow) }}
+                                    {% if periodService().isAllowPlanningReport %}
+                                        <a href="{{ path("pequiven_detail_consumer_planning_service_update",{id: detail.id}) }}" class="button icon-pencil">{{ "pequiven_seip.actions.edit"|trans }}</a>
+                                        {% set deleteUrl = path("pequiven_detail_consumer_planning_service_delete",{id: detail.id}) %}
+                                        {{ buttons.delete_mini(deleteUrl,message,tableIdRow) }}
+                                    {% endif %}
                                 </span>
                             </p>
                         </td>
@@ -52,6 +57,22 @@
                     </tr>
                 {% endfor %}
             </tbody>
+            <tfoot>
+                <tr>
+                    <th scope="col" width="10%">{{ 'Total month before'|trans }}</th>
+                    <th scope="col" width="10%" class="hide-on-mobile-portrait with-tooltip" title="{{ 'pequiven_seip.totalPlan'|trans }}">{{ totals['tp_b']|myNumberFormat }}&nbsp;{{ unit }}</th>
+                    <th scope="col" width="10%" class="hide-on-tablet with-tooltip" title="{{ 'pequiven_seip.totalReal'|trans }}">{{ totals['tr_b']|myNumberFormat }}&nbsp;{{ unit }}</th>
+                    <th scope="col" width="10%" class="hide-on-tablet with-tooltip" title="{{ 'pequiven_seip.percentage'|trans }}">{{ totals['percentage_b']|myNumberFormat }}&nbsp;%</th>
+                    <th scope="col" width="10%">&nbsp;</th>
+                </tr>
+                <tr>
+                    <th scope="col" width="10%">{{ 'Total accumulated'|trans }}</th>
+                    <th scope="col" width="10%" class="hide-on-mobile-portrait with-tooltip" title="{{ 'pequiven_seip.totalPlan'|trans }}">{{ totals['tp']|myNumberFormat }}&nbsp;{{ unit }}</th>
+                    <th scope="col" width="10%" class="hide-on-tablet with-tooltip" title="{{ 'pequiven_seip.totalReal'|trans }}">{{ totals['tr']|myNumberFormat }}&nbsp;{{ unit }}</th>
+                    <th scope="col" width="10%" class="hide-on-tablet with-tooltip" title="{{ 'pequiven_seip.percentage'|trans }}">{{ totals['percentage']|myNumberFormat }}&nbsp;%</th>
+                    <th scope="col" width="10%">&nbsp;</th>
+                </tr>
+            </tfoot>
         </table>
         
     </div>

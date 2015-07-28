@@ -1,0 +1,24 @@
+Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate:
+    exclusion_policy: ALL
+    properties:
+        id:
+            expose: true
+            groups: [id]
+        ref:
+            expose: true
+            groups: [api_list]
+        name:
+            expose: true
+            groups: [api_list]
+        period:
+            expose: true
+            groups: [api_period]
+        company:
+            expose: true
+            groups: [api_company]
+        location:
+            expose: true
+            groups: [api_location]
+        region:
+            expose: true
+            groups: [api_region]

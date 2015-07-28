@@ -4,7 +4,9 @@
     <div class="block-title">
         <h3> {{ 'pequiven_seip.product_report.inventory.inventorys'|trans }}&nbsp;({{ product_report.inventorys|length }})</h3>
         <div class="button-group absolute-right compact">
-            <a class="button icon-list-add" href="{{ path('pequiven_inventory_create',{productReport: product_report.id}) }}">{{ 'pequiven.add'|trans({},'messages') }}</a>
+            {% if isAllowPlanningReport %}
+                <a class="button icon-list-add" href="{{ path('pequiven_inventory_create',{productReport: product_report.id}) }}">{{ 'pequiven.add'|trans({},'messages') }}</a>
+            {% endif %}
         </div>
     </div>
     <div class="with-padding">
@@ -18,17 +20,19 @@
             </thead>
             {% set colspan = 6 %}
             <tbody>
-
+                {% set productUnit = product_report.product.productUnit %}
                 {% for inventory in product_report.getInventorySortByMonth %}
                     <tr>
                         <td>{{ loop.index }} - 
                             {{ inventory|trans }}
                         </td>
                         <th scope="row">
-                            {{ inventory.total }}
+                            {{ inventory.getTotalInventory|myNumberFormat }}&nbsp;{{ productUnit }}
                         </th>
                         <td class="low-padding align-center">
-                            <a href="{{ path("pequiven_inventory_update",{id: inventory.id}) }}" class="button compact icon-pencil">{{ "pequiven_seip.actions.edit"|trans }}</a>
+                            {% if isAllowPlanningReport %}
+                                <a href="{{ path("pequiven_inventory_update",{id: inventory.id}) }}" class="button compact icon-pencil">{{ "pequiven_seip.actions.edit"|trans }}</a>
+                            {% endif %}
                         </td>
                     </tr>
                 {% else %}

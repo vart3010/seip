@@ -35,6 +35,26 @@ abstract class Indicator implements IndicatorInterface {
      * Tipo de calculo por formula y valores de las variables automaticos desde ecuacion con las variables de lo hijos
      */
     const TYPE_CALCULATION_FORMULA_AUTOMATIC_FROM_EQ = 2;
+    
+    // TIPOS DE SECCIONES DE RESULTADOS A PARTIR DE LAS PLANTILLAS DE REPORTE
+    
+    /**
+     * Sección Producción Bruta
+     */
+    const TYPE_RESULT_SECTION_PRODUCTION_GROSS = 1;
+    /**
+     * Sección Producción Neta
+     */
+    const TYPE_RESULT_SECTION_PRODUCTION_NET = 2;
+    /**
+     * Sección Producción No Realizada
+     */
+    const TYPE_RESULT_SECTION_UNREALIZED_PRODUCTION = 3;
+    /**
+     * Sección Materia Prima
+     */
+    const TYPE_RESULT_SECTION_RAW_MATERIAL = 4;
+    
 
     /**
      * Indicador con fórmula asociada
@@ -55,6 +75,11 @@ abstract class Indicator implements IndicatorInterface {
      * Indicador sin resultado
      */
     const INDICATOR_WITHOUT_RESULT = 'INDICATOR_WITHOUT_RESULT';
+    
+    /**
+     * Indicador sin Frecuencia de Notificación
+     */
+    const INDICATOR_WITHOUT_FREQUENCY_NOTIFICATION = 'INDICATOR_WITHOUT_FREQUENCY_NOTIFICATION';
 
     /**
      * Tipo de detalle (Ninguno)
@@ -85,6 +110,28 @@ abstract class Indicator implements IndicatorInterface {
      * Metodo de calculo por promedio ponderado del resultado de los hijos
      */
     const CALCULATION_METHOD_WEIGHTED_AVERAGE_RESULT_CHILDREN = 3;
+    
+    
+    /**
+     * Tipo de compañia matriz
+     */
+    const TYPE_OF_COMPANY_MATRIZ = 0;
+    
+    /**
+     * Tipo de compañia filial
+     */
+    const TYPE_OF_COMPANY_AFFILIATED = 1;
+    
+    /**
+     * Tipo de compañia mixta
+     */
+    const TYPE_OF_COMPANY_MIXTA = 2;
+    
+    /**
+     * Tipo de compañia mixta
+     */
+    const TYPE_OF_COMPANY_AFFILIATED_MIXTA = 3;
+    
     const TYPE_OBJECT = 'indicator';
 
     /**
@@ -123,6 +170,19 @@ abstract class Indicator implements IndicatorInterface {
      * @ORM\Column(name="calculationMethod",type="integer")
      */
     protected $calculationMethod = self::CALCULATION_METHOD_ACCUMULATION_OF_VARIABLES;
+
+    /**
+     * Variable que se va mostrar en plantilla de indicador
+     * @var type 
+     */
+    protected $variableToShow;
+    
+    /**
+     * 
+     * @var integer
+     * @ORM\Column(name="typeOfResultSection", type="integer", nullable=false)
+     */
+    protected $typeOfResultSection = self::TYPE_CALCULATION_FORMULA_MANUALLY;
 
     /**
      * Set indicatorLevel
@@ -180,7 +240,6 @@ abstract class Indicator implements IndicatorInterface {
         return $typesOfCalculation;
     }
 
-   
     function getTypeOfCalculationLabel() {
         $typesOfCalculation = self::getTypesOfCalculation();
         if (isset($typesOfCalculation[$this->typeOfCalculation]) === false) {
@@ -208,6 +267,7 @@ abstract class Indicator implements IndicatorInterface {
             self::INDICATOR_WITHOUT_FORMULA => 'pequiven_indicator.summary.without_formula',
             self::INDICATOR_WITH_RESULT => 'pequiven_indicator.summary.with_result',
             self::INDICATOR_WITHOUT_RESULT => 'pequiven_indicator.summary.without_result',
+            self::INDICATOR_WITHOUT_FREQUENCY_NOTIFICATION => 'pequiven_indicator.summary.without_frequency_notification',
         );
         return $labelsStatus;
     }
@@ -319,5 +379,59 @@ abstract class Indicator implements IndicatorInterface {
             \Pequiven\IndicatorBundle\Entity\IndicatorLevel::LEVEL_OPERATIVO => 'pequiven_indicator.indicator_operative',
         );
     }
+    
+    /**
+     * Retorna la sección de tipo de resultado del indicador
+     * @return integer
+     */
+    function getTypeOfResultSection() {
+        return $this->typeOfResultSection;
+    }
 
+    /**
+     * Establece la sección de tipo de resultado del indicador
+     * 
+     * @param integer $typeOfResultSection
+     * @return \Pequiven\IndicatorBundle\Model\Indicator
+     */
+    function setTypeOfResultSection($typeOfResultSection) {
+        $this->typeOfResultSection = $typeOfResultSection;
+
+        return $this;
+    }
+    
+    /**
+     * Retorna las secciones de tipo de resultado del indicador
+     * 
+     * @staticvar array $typesOfResultSection
+     * @return array
+     */
+    static function getTypesOfResultSection() {
+        static $typesOfResultSection = array(
+            self::TYPE_RESULT_SECTION_PRODUCTION_GROSS => 'pequiven_indicator.type_result_section.production_gross',
+            self::TYPE_RESULT_SECTION_PRODUCTION_NET => 'pequiven_indicator.type_result_section.production_net',
+            self::TYPE_RESULT_SECTION_UNREALIZED_PRODUCTION => 'pequiven_indicator.type_result_section.unrealized_production',
+            self::TYPE_RESULT_SECTION_RAW_MATERIAL => 'pequiven_indicator.type_result_section.raw_material',
+        );
+        return $typesOfResultSection;
+    }
+    
+    function getTypeOfResultSectionLabel() {
+        $typesOfResultSection = self::getTypesOfResultSection();
+        if (isset($typesOfResultSection[$this->typeOfResultSection]) === false) {
+            throw new Exception(sprintf('The type of result section "%s" dont exist', $this->typeOfResultSection));
+        }
+        return $typesOfResultSection[$this->typeOfResultSection];
+    }
+    
+    public static function getTypesOfCompanies()
+    {
+        return array(
+            self::TYPE_OF_COMPANY_MATRIZ => 'pequiven_master.company.type.pqv',
+            self::TYPE_OF_COMPANY_AFFILIATED => 'pequiven_master.company.type.affiliated',
+            self::TYPE_OF_COMPANY_MIXTA => 'pequiven_master.company.type.mixta',
+            self::TYPE_OF_COMPANY_AFFILIATED_MIXTA => 'pequiven_master.company.type.affiliated_mixta',
+        );
+    }
+    
 }

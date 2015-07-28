@@ -47,6 +47,7 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeGerenciaSecond', 'class' => 'Pequiven\MasterBundle\Entity\GerenciaSecond', 'format' => 'json'),
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeGoal', 'class' => 'Pequiven\ArrangementProgramBundle\Entity\Goal', 'format' => 'json'),
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeReportTemplate', 'class' => 'Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate', 'format' => 'json'),
+            array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializePlantReport', 'class' => 'Pequiven\SEIPBundle\Entity\DataLoad\PlantReport', 'format' => 'json'),
         );
     }
 
@@ -182,17 +183,17 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
         $disablePlannedOnComplete = true;
 
         //Habilitar la carga por trimestre
-        $isEnabledLoadByQuarter = false;
+        $isEnabledLoadByQuarter = true;
 
         //Habilitar la carga del primer trimestre (Requiere isEnabledLoadByQuarter)
         $isEnabledLoadByQuarterFirst = false;
         //Habilitar la carga de valores planificados del primer trimestre (Requiere isEnabledLoadByQuarterFirst)
-        $isEnabledLoadByQuarterFirstPlanned = true;
+        $isEnabledLoadByQuarterFirstPlanned = false;
         //Habilitar la carga de valores reales del primer trimestre (Requiere isEnabledLoadByQuarterFirst)
-        $isEnabledLoadByQuarterFirstReal = true;
+        $isEnabledLoadByQuarterFirstReal = false;
 
         //Habilitar la carga del segundo trimestre (Requiere isEnabledLoadByQuarter)
-        $isEnabledLoadByQuarterSecond = false;
+        $isEnabledLoadByQuarterSecond = true;
         //Habilitar la carga de valores planificados del segundo trimestre (Requiere isEnabledLoadByQuarterSecond)
         $isEnabledLoadByQuarterSecondPlanned = true;
         //Habilitar la carga de valores reales del segundo trimestre (Requiere isEnabledLoadByQuarterSecond)
@@ -201,16 +202,16 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
         //Habilitar la carga del tercer trimestre (Requiere isEnabledLoadByQuarter)
         $isEnabledLoadByQuarterThird = false;
         //Habilitar la carga de valores planificados del tercer trimestre (Requiere isEnabledLoadByQuarterThird)
-        $isEnabledLoadByQuarterThirdPlanned = true;
+        $isEnabledLoadByQuarterThirdPlanned = false;
         //Habilitar la carga de valores reales del tercer trimestre (Requiere isEnabledLoadByQuarterThird)
-        $isEnabledLoadByQuarterThirdReal = true;
+        $isEnabledLoadByQuarterThirdReal = false;
 
         //Habilitar la carga del cuarto trimestre (Requiere isEnabledLoadByQuarter)
         $isEnabledLoadByQuarterFourth = false;
         //Habilitar la carga de valores planificados del cuarto trimestre (Requiere isEnabledLoadByQuarterFourth)
-        $isEnabledLoadByQuarterFourthPlanned = true;
+        $isEnabledLoadByQuarterFourthPlanned = false;
         //Habilitar la carga de valores reales del cuarto trimestre (Requiere isEnabledLoadByQuarterFourth)
-        $isEnabledLoadByQuarterFourthReal = true;
+        $isEnabledLoadByQuarterFourthReal = false;
 
         $month = $date->format('m');
 
@@ -380,6 +381,16 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
                 }
             }
         }
+        
+        $details = $arrangementProgram->getDetails();
+//        $user = $this->getUser();
+//        if($details->getNotificationInProgressByUser() != null){
+//            if($details->getNotificationInProgressByUser()->getId() === $user->getId() && (($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC && $arrangementProgram->getTacticalObjective()->getGerencia()->getId() == 22) || ($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE && $arrangementProgram->getOperationalObjective()->getGerenciaSecond()->getGerencia()->getId() == 22))){
+//                $data['januaryReal']['isEnabled'] = true;
+//                $data['februaryReal']['isEnabled'] = true;
+//                $data['marchReal']['isEnabled'] = true;
+//            }
+//        }
 
         $event->getVisitor()->addData('_data', $data);
     }
@@ -576,6 +587,15 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
         $links['self']['show'] = $this->generateUrl('pequiven_report_template_show', array('id' => $object->getId()));
         $links['self']['update'] = $this->generateUrl('pequiven_report_template_update', array('id' => $object->getId()));
         $links['self']['load'] = $this->generateUrl('pequiven_report_template_load', array('id' => $object->getId()));
+        $event->getVisitor()->addData('_links', $links);
+    }
+
+    public function onPostSerializePlantReport(ObjectEvent $event) {
+        $object = $event->getObject();
+        $reportTemplate = $object->getReportTemplate();
+        $links = array(
+        );
+        $links['load'] = $this->generateUrl('pequiven_report_template_load', array('id' => $reportTemplate->getId(),'plant_report' => $object->getId()));
         $event->getVisitor()->addData('_links', $links);
     }
 

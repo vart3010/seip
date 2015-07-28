@@ -13,6 +13,10 @@ pequiven_seip:
     totalReal: Total real
     totalStops: Total dias de paradas
     totalHours: Total de horas
+    totalCauseFailInternal: Total Causas Internas
+    totalCauseFailExternal: Total Causas Externas
+    totalCauseFailInternalMP: Total Causas Internas Materia Prima
+    totalCauseFailExternalMP: Total Causas Externas Materia Prima
     days: Dias
     plan_n: "Plan Dia %n%:"
     real_n: "Real Dia %n%:"
@@ -25,8 +29,13 @@ pequiven_seip:
     plants: Plantas
     inventory: Inventario
     date_of_notification: Fecha de notificación
+    date_of_report: Fecha de reporte
     cause_of_PNR: 'Causa de PNR'
     total_pnr: 'Total de PNR'
+    comment_none: 'Ningúna observación.'
+    
+    day: Día
+    totals: Totales
         
     #Login
     sign_in: Ingresar
@@ -149,7 +158,8 @@ pequiven_seip:
 
     #Buttons
     buttons:
-        export_xls: Exportar
+        export_xls: Exportar a Excel
+        export_pdf: Exportar a PDF
         export_result: Exportar Resultados
         refresh: Refrescar
         run_planning: Ejecutar planificación
@@ -159,6 +169,7 @@ pequiven_seip:
         add_internal_cause_mp: Añadir causa interna (Materia Prima)
         add_external_cause_mp: Añadir causa externa (Materia Prima)
         delete_cause: 'Eliminar esta causa'
+        save_slope: 'Guardar pendiente'
     question:
         want_create_production_details_from_planning: ¿Desea crear los detalles de producción a partir del presupuesto de producción?
         want_create_plant_from_planning: ¿Desea crear los detalles de servicios de la planta?
@@ -219,6 +230,7 @@ pequiven_seip:
         excludeGerenciaSecondSupport: Excluir Gerencias de Apoyo
         includeGerenciaSecondSupport: Incluir Gerencias de Apoyo
         period: Periodo
+        frequencyNotifications: Frecuencias de Notificación
     tooltips:
         click_to_show: Click para ver
     area:
@@ -332,14 +344,18 @@ pequiven_seip:
             role_seip_planning_view_result_tactic: Usted no tiene permiso para ver los resultados a nivel tactico.
             role_seip_planning_view_result_operative: Usted no tiene permiso para ver los resultados a nivel operativo.
             role_seip_planning_operation_recalculate_result: Usted no tiene permiso para realizar la operación de recalcular resultados.
+            role_seip_planning_indicator_show_file: Usted no tiene permiso para visualizar los archivos
         error:
             the_pre_planning_is_not_enabled: La pre-planificacion no se encuentra habilitada.
     fail:
         type:
             internal: Interna
             external: Externa
+            internal_mp: Interna MP
+            external_mp: Externa MP
     report_template:
         report_template: Planificación de producción
+        report_day: Reporte del día
         load:
             notification: Notificacion
             production: Producción
@@ -362,8 +378,13 @@ pequiven_seip:
         product_detail_daily_month: Detalle de producción
         unrealized_production:
             unrealized_production: Producción No Realizada
+            internal: Interna
+            external: Externa
+            materiaPrimaInt: Materia Prima Interna
+            materiaPrimaExt: Materia Prima Externa
         question:
             delete: Desea eliminar este detalle de producción
+            
     raw_material:
         type:
             internal: Interna
@@ -407,6 +428,9 @@ pequiven_seip:
         
     day_stop:
         day_stop: Dia de parada
+        
+    visualizePnrTime:
+        reportPnr: "Producción no Realizada"
             
 "Bad credentials": Nombre de usuario o contraseña invalida
 "User account is disabled.": Cuenta de usuario desactivada
@@ -529,8 +553,26 @@ chart:
     type:
         indicatorsAssociatedDoughnut: Indicadores Asociados con resultados (Dona).
         indicatorsAssociatedRealPlanWithResult: Indicadores Asociados con real, plan y resultados (Columna y 2 ejes).
-        resultsOfIndicator: Resultados Asociados al Indicador (2 parámetros).
+        indicatorsDoughnutWithVariables: Indicadores con resultados de variables (Dona).
+        indicatorsVariablesMarkedRealInPie: Resultados de las variables marcadas como real de la fórmula del indicador
+        indicatorsVariablesMarkedPlanInPie: Resultados de las variables marcadas como plan de la fórmula del indicador
+        resultsOfIndicator: Real, plan y resultado de medición del Indicador.
         resultsOfVariable: Resultados de Variables y que forman parte de un mismo valor (Acumuladas).
+        indicatorsVariablesRealPlanBarAreaByFrequencyNotification: Indicadores mostrados por barras y areas, mostrando las variables real y plan de acuerdo a la frecuencia de notificación
+        indicatorsVariablesPlanFromEquationInPie: Resultados de las variables asociadas al plan de la fórmula a partir de ecuación
+        indicatorsVariablesRealFromEquationInPie: Resultados de las variables asociadas al real de la fórmula a partir de ecuación
+        indicatorsVariablesRealPlanByFrequencyNotification: Real, plan y resultado de medición del Indicador de acuerdo a la frecuencia de notificación
+        indicatorsBarAreaVariablesMarkedRealPlanByFrequencyNotification: Barra/Área variables marcadas como real/plan de la fórmula del indicador de acuerdo a la frecuencia de notificación
+        indicatorsColumnMultiSeriesVariablesMarkedRealPlanByFrequencyNotification: Variables marcadas como real/plan de la fórmula del indicador de acuerdo a la frecuencia de notificación, en columnas 3d.
+        indicatorsDoughnutWithVariablesRealPlanFromDashboardEquation: Resultado de la ecuación real y plan para gráficos de la fórmula del indicador, en forma de dona.
+        indicatorsAssociatedColumnMultiSeriesRealPlanFromDashboardEquation: Resultado de la ecuación real y plan para gráficos de la fórmula del indicador, de cada indicador asociado.
+        resultsOfIndicatorColumnMultiSeriesRealPlanByFrequencyNotificationFromDashboardEquation: Resultado de la ecuación real y plan para gráficos de la fórmula del indicador, de acuerdo a la frecuencia de notificación.
+        indicatorVariablesStackedColumnByFrequencyNotificationWithTotal: Variables del indicador, en stacked column, además del acumulado como columna final.
+        indicatorsAssociatedColumnWithTotalByMonth: Resultado de los indicadores asociados, en column 3D, además del acumulado como columna final.
+        indicatorsAssociatedColumnGroupByTypeCompanyWithTotalByMonth: Resultado de los indicadores asociados agrupados por tipo de compañia, en column 3D, además del acumulado como columna final.
+        indicatorPersonalInjuryWithAccumulatedTime: Lesionados personales con tiempo acumulado de los indicadores asociados agrupados por tipo de compañia, en linea, además del valor del actual y del año pasado.
+        indicatorPersonalInjuryWithoutAccumulatedTime: Lesionados personales sin tiempo acumulado de los indicadores asociados agrupados por tipo de compañia, en linea, además del valor del actual y del año pasado.
+        example: Ejemplo
 
 Name: Nombre
 nro: "#"
@@ -556,13 +598,14 @@ nro: "#"
 "Type": Tipo
 "Value": Valor
 "Raw materials": Materias primas
-"Day": Dia
+"Day": Día
+"Year": Año
 "Hours": Horas
 "Ranges": Rangos
 "Product report": Reporte de producto
 "Month budget": Presupuesto del mes
 "Entity": Entidad
-"Report template": Plantilla del complejo
+"Report template": Reporte del complejo
 "Plant report": Reporte de planta
 "Day stops": Dias de parada
 "Services": Servicios
@@ -579,6 +622,24 @@ Mount: Cantidad
 "Ranges stops": 'Rangos de paradas'
 'Total stops': 'Total Días de Paradas'
 Aliquot: Alícuota
-'Current capacity': 'Capacidad actual'
-'Percentage current capacity': 'Porcentaje Capacidad Actual'
+'Current capacity': 'Capacidad Operativa'
+'Percentage current capacity': 'Porcentaje Capacidad Operativa'
 'Net production percentage': 'Porcentaje de Producción Neta'
+'Indicator': Indicador
+'Plant reports': 'Reportes de plantas'
+'Totals': Totales
+'Total month before': Total Mes Anterior
+Unit: Unidad
+'Total accumulated': 'Total Acumulado'
+'Select the plant': 'Debe seleccionar una planta.'
+'No service planning': 'No hay planificación de servicios.'
+'Show day': 'Mostrar día'
+'Show month': Mostrar mes
+'Show year': Mostrar año
+'Products report': Productos de la planta
+'Date report': Fecha de reporte
+'No raw material planning': 'No hay consumo de materia prima.'
+'Automatic calculation plan': '¿Cálculo de plan automático?'
+'By range': 'Por rango'
+'With details': '¿Con detalles?'
+'Product Report': Reporte De Producción

@@ -199,6 +199,11 @@ tecnocreaciones_tools:
                 search: contains
                 field: plant
                 form: pequiven_seipbundle_dataload_productreport
+            indicator_product_report_alias:
+                class: Pequiven\IndicatorBundle\Entity\Indicator
+                search: contains
+                field: indicator
+                form: pequiven_seipbundle_dataload_productreport
                 
 fos_oauth_server:
     db_driver: orm       # Driver availables: orm, mongodb, or propel

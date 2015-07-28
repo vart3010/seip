@@ -34,7 +34,7 @@
             <tag name="form.type" alias="pequiven_seip_user_registration" />
             <argument>%fos_user.model.user.class%</argument>
         </service>
-         <service id="pequiven_seip.mailer.twig_swift" class="Pequiven\SEIPBundle\Service\TwigSwiftMailer">
+        <service id="pequiven_seip.mailer.twig_swift" class="Pequiven\SEIPBundle\Service\TwigSwiftMailer">
             <argument type="service" id="mailer" />
             <argument type="service" id="twig" />
         </service>
@@ -194,14 +194,20 @@
         <service id="pequiven_seip.box.indicators_dashboard" class="Pequiven\SEIPBundle\Model\Box\Indicator\IndicatorsDashboardBox">
             <tag name="tecnocreaciones_box.box" />
         </service>
-         <!-- Box donde se renderizan las líneas estratégicas en formato de íconos para el dashboard a nivel estratégico --> 
+        <!-- Box donde se renderizan las líneas estratégicas en formato de íconos para el dashboard a nivel estratégico --> 
         <service id="pequiven_seip.box.linestrategic.icons_dashboard" class="Pequiven\SEIPBundle\Model\Box\LineStrategic\IconsBox">
             <tag name="tecnocreaciones_box.box" />
         </service>
-         <!-- Box donde se renderizan las líneas estratégicas en formato de barra de navegación --> 
+        <!-- Box donde se renderizan las líneas estratégicas en formato de barra de navegación --> 
         <service id="pequiven_seip.box.linestrategic.icons_nav_bar" class="Pequiven\SEIPBundle\Model\Box\LineStrategic\IconsNavBarBox">
             <tag name="tecnocreaciones_box.box" />
         </service>
+        
+        <!-- Box para rederizar grafica de PNR -->
+        <service id="pequiven_seip.box.unrealized_production" class="Pequiven\SEIPBundle\Model\Box\UnrealizedProduction\UnrealizedProductionBox">
+            <tag name="tecnocreaciones_box.box" />
+        </service>
+        
         
         <!-- Servicio de USER -->
         <service id="pequiven.repository.user" class="Pequiven\SEIPBundle\Repository\UserRepository">
@@ -219,7 +225,7 @@
             </call>
             <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\Result" />
         </service>
-<!--        <service id="pequiven.form.user" class="Pequiven\SEIPBundle\Form\User">
+        <!--        <service id="pequiven.form.user" class="Pequiven\SEIPBundle\Form\User">
             <tag name="form.type" alias="pequiven_seipbundle_user" />
         </service>-->
         <service id="pequiven_arrangement_program.form.localization" class="Pequiven\SEIPBundle\Form\User\LocalizationType">
@@ -328,6 +334,29 @@
         </service>
         <service id="pequiven.repository.entity" class="Pequiven\SEIPBundle\Repository\CEI\EntityRepository">
             <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\CEI\Entity" />
+        </service>
+        <service id="seip.service.causefail" class="Pequiven\SEIPBundle\Service\CEI\CauseFailService">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
+        
+         <service id="seip.service.unrealizedProduction" class="Pequiven\SEIPBundle\Service\DataLoad\UnrealizedProductionService">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
+        
+        <service id="seip.service.productReport" class="Pequiven\SEIPBundle\Service\ProductReportService">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
+        <service id="pequiven.repository.plant_report" class="Pequiven\SEIPBundle\Repository\DataLoad\PlantReportRepository">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+            <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\DataLoad\PlantReport" />
         </service>
     </services>
 </container>

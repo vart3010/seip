@@ -85,16 +85,24 @@ class ReportTemplate extends BaseModel
     /**
      * Plantillas de plantas
      * @var \Pequiven\SEIPBundle\Entity\DataLoad\PlantReport
-     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\PlantReport",mappedBy="reportTemplate")
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\PlantReport",mappedBy="reportTemplate",cascade={"remove"})
      */
     private $plantReports;
-
+    
+    /**
+     * Usuarios
+     * @var type 
+     * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\User",mappedBy="reportTemplates")
+     */
+    private $users;
+    
     /**
      * Constructor
      */
     public function __construct()
     {
         $this->plantReports = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->users = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -277,9 +285,22 @@ class ReportTemplate extends BaseModel
     {
         return $this->plantReports;
     }
+
+    public function getReportTemplateWithName()
+    {
+        $full = sprintf("%s (%s)",$this->getName(),$this->getRef());
+        return $full;
+    }
     
     public function __toString() 
     {
         return $this->getRef() ?: "-";
+    }
+    
+    public function recalculate()
+    {
+        foreach ($this->plantReports as $plantReport) {
+            $plantReport->recalculate();
+        }
     }
 }

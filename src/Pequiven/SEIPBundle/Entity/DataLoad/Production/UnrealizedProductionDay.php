@@ -18,10 +18,10 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @author Carlos Mendoza <inhack20@gmail.com>
  * @ORM\Table(name="seip_report_product_unrealized_production_day")
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\DataLoad\Production\UnrealizedProductionDayRepository")
  */
-class UnrealizedProductionDay 
-{
+class UnrealizedProductionDay {
+
     /**
      * @var integer
      *
@@ -30,7 +30,7 @@ class UnrealizedProductionDay
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-    
+
     /**
      * Causas interna de falla
      * @var CauseFail
@@ -38,7 +38,7 @@ class UnrealizedProductionDay
      * @ORM\JoinTable(name="unrealizedproductionday_internalcauses")
      */
     private $internalCauses;
-    
+
     /**
      * Causas externa de falla
      * @var CauseFail
@@ -46,7 +46,7 @@ class UnrealizedProductionDay
      * @ORM\JoinTable(name="unrealizedproductionday_externalcauses")
      */
     private $externalCauses;
-    
+
     /**
      * Causa interna por materia prima
      * @var UnrealizedProductionDay\RawMaterialRequired
@@ -54,7 +54,7 @@ class UnrealizedProductionDay
      * @ORM\JoinTable(name="unrealizedproductionday_internalcauses_mp")
      */
     private $internalCausesMp;
-    
+
     /**
      * Causa interna por materia prima
      * @var UnrealizedProductionDay\RawMaterialRequired
@@ -62,12 +62,11 @@ class UnrealizedProductionDay
      * @ORM\JoinTable(name="unrealizedproductionday_externalcauses_mp")
      */
     private $externalCausesMp;
-     
+
     /**
      * Constructor
      */
-    public function __construct()
-    {
+    public function __construct() {
         $this->internalCauses = new \Doctrine\Common\Collections\ArrayCollection();
         $this->externalCauses = new \Doctrine\Common\Collections\ArrayCollection();
         $this->internalCausesMp = new \Doctrine\Common\Collections\ArrayCollection();
@@ -79,12 +78,9 @@ class UnrealizedProductionDay
      *
      * @return integer 
      */
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
-
-    
 
     /**
      * Add internalCauses
@@ -92,8 +88,7 @@ class UnrealizedProductionDay
      * @param \Pequiven\SEIPBundle\Entity\DataLoad\Production\CauseFail $internalCauses
      * @return UnrealizedProductionDay
      */
-    public function addInternalCause(\Pequiven\SEIPBundle\Entity\DataLoad\Production\CauseFail $internalCauses)
-    {
+    public function addInternalCause(\Pequiven\SEIPBundle\Entity\DataLoad\Production\CauseFail $internalCauses) {
         $this->internalCauses->add($internalCauses);
 
         return $this;
@@ -104,8 +99,7 @@ class UnrealizedProductionDay
      *
      * @param \Pequiven\SEIPBundle\Entity\DataLoad\Production\CauseFail $internalCauses
      */
-    public function removeInternalCause(\Pequiven\SEIPBundle\Entity\DataLoad\Production\CauseFail $internalCauses)
-    {
+    public function removeInternalCause(\Pequiven\SEIPBundle\Entity\DataLoad\Production\CauseFail $internalCauses) {
         $this->internalCauses->removeElement($internalCauses);
     }
 
@@ -114,8 +108,7 @@ class UnrealizedProductionDay
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getInternalCauses()
-    {
+    public function getInternalCauses() {
         return $this->internalCauses;
     }
 
@@ -125,8 +118,7 @@ class UnrealizedProductionDay
      * @param \Pequiven\SEIPBundle\Entity\DataLoad\Production\CauseFail $externalCauses
      * @return UnrealizedProductionDay
      */
-    public function addExternalCause(\Pequiven\SEIPBundle\Entity\DataLoad\Production\CauseFail $externalCauses)
-    {
+    public function addExternalCause(\Pequiven\SEIPBundle\Entity\DataLoad\Production\CauseFail $externalCauses) {
         $this->externalCauses->add($externalCauses);
 
         return $this;
@@ -137,8 +129,7 @@ class UnrealizedProductionDay
      *
      * @param \Pequiven\SEIPBundle\Entity\DataLoad\Production\CauseFail $externalCauses
      */
-    public function removeExternalCause(\Pequiven\SEIPBundle\Entity\DataLoad\Production\CauseFail $externalCauses)
-    {
+    public function removeExternalCause(\Pequiven\SEIPBundle\Entity\DataLoad\Production\CauseFail $externalCauses) {
         $this->externalCauses->removeElement($externalCauses);
     }
 
@@ -147,8 +138,7 @@ class UnrealizedProductionDay
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getExternalCauses()
-    {
+    public function getExternalCauses() {
         return $this->externalCauses;
     }
 
@@ -158,8 +148,7 @@ class UnrealizedProductionDay
      * @param \Pequiven\SEIPBundle\Entity\DataLoad\Production\UnrealizedProductionDay\RawMaterialRequired $internalCausesMp
      * @return UnrealizedProductionDay
      */
-    public function addInternalCausesMp(\Pequiven\SEIPBundle\Entity\DataLoad\Production\UnrealizedProductionDay\RawMaterialRequired $internalCausesMp)
-    {
+    public function addInternalCausesMp(\Pequiven\SEIPBundle\Entity\DataLoad\Production\UnrealizedProductionDay\RawMaterialRequired $internalCausesMp) {
         $this->internalCausesMp->add($internalCausesMp);
 
         return $this;
@@ -170,8 +159,7 @@ class UnrealizedProductionDay
      *
      * @param \Pequiven\SEIPBundle\Entity\DataLoad\Production\UnrealizedProductionDay\RawMaterialRequired $internalCausesMp
      */
-    public function removeInternalCausesMp(\Pequiven\SEIPBundle\Entity\DataLoad\Production\UnrealizedProductionDay\RawMaterialRequired $internalCausesMp)
-    {
+    public function removeInternalCausesMp(\Pequiven\SEIPBundle\Entity\DataLoad\Production\UnrealizedProductionDay\RawMaterialRequired $internalCausesMp) {
         $this->internalCausesMp->removeElement($internalCausesMp);
     }
 
@@ -180,8 +168,7 @@ class UnrealizedProductionDay
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getInternalCausesMp()
-    {
+    public function getInternalCausesMp() {
         return $this->internalCausesMp;
     }
 
@@ -191,8 +178,7 @@ class UnrealizedProductionDay
      * @param \Pequiven\SEIPBundle\Entity\DataLoad\Production\UnrealizedProductionDay\RawMaterialRequired $externalCausesMp
      * @return UnrealizedProductionDay
      */
-    public function addExternalCausesMp(\Pequiven\SEIPBundle\Entity\DataLoad\Production\UnrealizedProductionDay\RawMaterialRequired $externalCausesMp)
-    {
+    public function addExternalCausesMp(\Pequiven\SEIPBundle\Entity\DataLoad\Production\UnrealizedProductionDay\RawMaterialRequired $externalCausesMp) {
         $this->externalCausesMp->add($externalCausesMp);
 
         return $this;
@@ -203,8 +189,7 @@ class UnrealizedProductionDay
      *
      * @param \Pequiven\SEIPBundle\Entity\DataLoad\Production\UnrealizedProductionDay\RawMaterialRequired $externalCausesMp
      */
-    public function removeExternalCausesMp(\Pequiven\SEIPBundle\Entity\DataLoad\Production\UnrealizedProductionDay\RawMaterialRequired $externalCausesMp)
-    {
+    public function removeExternalCausesMp(\Pequiven\SEIPBundle\Entity\DataLoad\Production\UnrealizedProductionDay\RawMaterialRequired $externalCausesMp) {
         $this->externalCausesMp->removeElement($externalCausesMp);
     }
 
@@ -213,8 +198,13 @@ class UnrealizedProductionDay
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getExternalCausesMp()
-    {
+    public function getExternalCausesMp() {
         return $this->externalCausesMp;
     }
+
+    public function __toString() {
+        $toString = "-";
+        return $toString;
+    }
+
 }

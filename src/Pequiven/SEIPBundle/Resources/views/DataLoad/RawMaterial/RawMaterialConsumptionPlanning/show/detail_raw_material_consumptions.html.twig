@@ -8,7 +8,9 @@
     <div class="block-title">
         <h3> {{ 'pequiven_seip.report_template.raw_material'|trans }}&nbsp;({{ raw_material_consumption_planning.detailRawMaterialConsumptions|length }})</h3>
         <div class="button-group absolute-right compact">
-            <a class="button icon-list-add" href="{{ path("pequiven_detail_raw_material_consumption_create",{rawMaterialConsumption:raw_material_consumption_planning.id}) }}">{{ 'pequiven.add'|trans({},'messages') }}</a>
+            {% if periodService().isAllowPlanningReport %}
+                <a class="button icon-list-add" href="{{ path("pequiven_detail_raw_material_consumption_create",{rawMaterialConsumption:raw_material_consumption_planning.id}) }}">{{ 'pequiven.add'|trans({},'messages') }}</a>
+            {% endif %}
         </div>
     </div>
     <div class="with-padding">
@@ -37,9 +39,11 @@
                         <td class="low-padding align-center">
                             <p class="button-height">
                                 <span class="button-group">
-                                    <a href="{{ path("pequiven_detail_raw_material_consumption_update",{id: detailRawMaterialConsumption.id}) }}" class="button icon-pencil">{{ "pequiven_seip.actions.edit"|trans }}</a>
-                                    {% set deleteUrl = path("pequiven_detail_raw_material_consumption_delete",{id: detailRawMaterialConsumption.id}) %}
-                                    {{ buttons.delete_mini(deleteUrl,message,tableIdRow) }}
+                                    {% if periodService().isAllowPlanningReport %}
+                                        <a href="{{ path("pequiven_detail_raw_material_consumption_update",{id: detailRawMaterialConsumption.id}) }}" class="button icon-pencil">{{ "pequiven_seip.actions.edit"|trans }}</a>
+                                        {% set deleteUrl = path("pequiven_detail_raw_material_consumption_delete",{id: detailRawMaterialConsumption.id}) %}
+                                        {{ buttons.delete_mini(deleteUrl,message,tableIdRow) }}
+                                    {% endif %}
                                 </span>
                             </p>
                         </td>

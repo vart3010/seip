@@ -4,7 +4,9 @@
     <div class="block-title">
         <h3> {{ 'pequiven_seip.plant_report.plant_stop_planning'|trans }}&nbsp;({{ plant_report.plantStopPlannings|length }})</h3>
         <div class="button-group absolute-right compact">
-            <a class="button icon-list-add" href="{{ path('pequiven_plant_stop_planning_create',{plantReport: plant_report.id}) }}">{{ 'pequiven.add'|trans({},'messages') }}</a>
+            {% if periodService().isAllowPlanningReport %}
+                <a class="button icon-list-add" href="{{ path('pequiven_plant_stop_planning_create',{plantReport: plant_report.id}) }}">{{ 'pequiven.add'|trans({},'messages') }}</a>
+            {% endif %}
         </div>
     </div>
     <div class="with-padding">
@@ -19,7 +21,8 @@
             </thead>
             {% set colspan = 6 %}
             <tbody>
-
+                {% set totalStops = 0 %}
+                {% set totalHours = 0 %}
                 {% for plantStopPlanning in plant_report.plantStopPlannings %}
                     <tr>
                         <td>{{ loop.index }} - 
@@ -27,10 +30,16 @@
                         </td>
                         <th scope="row">
                             {{ plantStopPlanning.totalStops }}&nbsp;{{ "pequiven_seip.days"|trans }}
+                            {% set totalStops = totalStops + plantStopPlanning.totalStops %}
                         </th>
-                        <td>{{ plantStopPlanning.totalHours }}&nbsp;h</td>
+                        <td>
+                            {{ plantStopPlanning.totalHours }}&nbsp;h
+                            {% set totalHours = totalHours + plantStopPlanning.totalHours %}
+                        </td>
                         <td class="low-padding align-center">
-                            <a href="{{ path("pequiven_plant_stop_planning_update",{id: plantStopPlanning.id}) }}" class="button compact icon-pencil">{{ "pequiven_seip.actions.edit"|trans }}</a>
+                            {% if periodService().isAllowPlanningReport %}
+                                <a href="{{ path("pequiven_plant_stop_planning_update",{id: plantStopPlanning.id}) }}" class="button compact icon-pencil">{{ "pequiven_seip.actions.edit"|trans }}</a>
+                            {% endif %}
                         </td>
                     </tr>
                 {% else %}
@@ -41,6 +50,14 @@
                     </tr>
                 {% endfor %}
             </tbody>
+            <tfoot>
+                <tr>
+                    <th scope="col" width="35%">&nbsp;</th>
+                    <th scope="col" width="10%" class="hide-on-mobile-portrait">{{ totalStops }}&nbsp;{{ "pequiven_seip.days"|trans }}</th>
+                    <th scope="col" width="10%" class="hide-on-tablet">{{ totalHours }}&nbsp;h</th>
+                    <th scope="col" width="10%">&nbsp;</th>
+                </tr>
+            </tfoot>
         </table>
         
     </div>

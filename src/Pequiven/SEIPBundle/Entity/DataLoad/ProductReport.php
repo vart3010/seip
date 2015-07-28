@@ -19,7 +19,7 @@ use Pequiven\SEIPBundle\Model\DataLoad\ProductReport as BaseModel;
  *
  * @author Carlos Mendoza <inhack20@gmail.com>
  * @ORM\Table(name="seip_report_product_report")
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\DataLoad\ProductReportRepository")
  */
 class ProductReport extends BaseModel
 {
@@ -44,7 +44,7 @@ class ProductReport extends BaseModel
     /**
      * Producto
      * @var \Pequiven\SEIPBundle\Entity\CEI\Product
-     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Product")
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Product",inversedBy="productReports")
      * @ORM\JoinColumn(nullable=false)
      */
     private $product;
@@ -53,7 +53,7 @@ class ProductReport extends BaseModel
      * Presupuesto de Materias prima
      * @var \Pequiven\SEIPBundle\Entity\DataLoad\RawMaterial\RawMaterialConsumptionPlanning
      *
-     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\RawMaterial\RawMaterialConsumptionPlanning",mappedBy="productReport")
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\RawMaterial\RawMaterialConsumptionPlanning",mappedBy="productReport",cascade={"remove"})
      */
     private $rawMaterialConsumptionPlannings;
     
@@ -74,16 +74,25 @@ class ProductReport extends BaseModel
     /**
      * Inventarios
      * @var Inventory\Inventory
-     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Inventory\Inventory",mappedBy="productReport")
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Inventory\Inventory",mappedBy="productReport",cascade={"remove"})
      */
     private $inventorys;
     
     /**
      * Produccion no realizada
      * @var Production\UnrealizedProduction
-     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Production\UnrealizedProduction",mappedBy="productReport")
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Production\UnrealizedProduction",mappedBy="productReport",cascade={"remove"})
      */
     private $unrealizedProductions;
+    
+    /**
+     * Indicador
+     * @var \Pequiven\IndicatorBundle\Entity\Indicator
+     * @ORM\ManyToOne(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator")
+     */
+    private $indicator;
+    
+    private $name = '';
 
     public function __construct() {
         $this->productPlannings = new \Doctrine\Common\Collections\ArrayCollection();
@@ -365,6 +374,51 @@ class ProductReport extends BaseModel
         ksort($sorted);
         return $sorted;
     }
+
+    /**
+     * Set indicator
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator $indicator
+     * @return ProductReport
+     */
+    public function setIndicator(\Pequiven\IndicatorBundle\Entity\Indicator $indicator = null)
+    {
+        $this->indicator = $indicator;
+
+        return $this;
+    }
+
+    /**
+     * Get indicator
+     *
+     * @return \Pequiven\IndicatorBundle\Entity\Indicator 
+     */
+    public function getIndicator()
+    {
+        return $this->indicator;
+    }
+    
+    public function recalculate()
+    {
+        foreach ($this->rawMaterialConsumptionPlannings as $value) {
+            $value->calculate();
+        }
+        foreach ($this->inventorys as $value) {
+            $value->calculate();
+        }
+        foreach ($this->unrealizedProductions as $value) {
+            $value->calculate();
+        }
+    }
+    
+    public function getName(){
+        $name = '';
+        if($this->getProduct() && $this->getPlantReport()){
+            $name = $this->getPlantReport()->getPlant()->getName().' - '.$this->getProduct()->getName();
+        }
+        $this->name = $name;
+        return $this->name;
+    }
     
     public function __toString() 
     {
@@ -372,6 +426,7 @@ class ProductReport extends BaseModel
         if($this->getProduct()){
             $_toString = sprintf("%s",(string)$this->getProduct());
         }
+        
         return $_toString;
     }
 }

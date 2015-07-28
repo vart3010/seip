@@ -176,6 +176,20 @@ class User extends BaseUser implements UserInterface,UserBoxInterface,  PeriodIt
     private $period;
     
     /**
+     * Reportes de plantas que puede cargar el usuario
+     * @var DataLoad\PlantReport
+     * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\PlantReport",inversedBy="users")
+     */
+    private $plantReports;
+    
+    /**
+     * Reportes de plantas que puede cargar el usuario
+     * @var DataLoad\ReportTemplate
+     * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate",inversedBy="users")
+     */
+    private $reportTemplates;
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -188,6 +202,8 @@ class User extends BaseUser implements UserInterface,UserBoxInterface,  PeriodIt
         $this->supervised = new \Doctrine\Common\Collections\ArrayCollection();
         $this->boxes = new \Doctrine\Common\Collections\ArrayCollection();
         $this->groups = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->plantReports = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->reportTemplates = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**
@@ -531,7 +547,7 @@ class User extends BaseUser implements UserInterface,UserBoxInterface,  PeriodIt
      * Devuelve el nivel del rol asignado
      * @return integer
      */
-    public function getLevelByGroup()
+    public function getLevelByGroup($type = CommonObject::TYPE_LEVEL_USER_ONLY_OWNER)
     {
         if(!isset($this->levelByGroup)){
             $level = 0;
@@ -541,9 +557,16 @@ class User extends BaseUser implements UserInterface,UserBoxInterface,  PeriodIt
                 Rol::ROLE_SUPER_ADMIN
             );
             foreach ($groups as $group) {
-                if($group->getLevel() > $level && !in_array($group->getLevel(), $groupsLevelAdmin))
-                {
-                    $level = $group->getLevel();
+                if($type == CommonObject::TYPE_LEVEL_USER_ONLY_OWNER){
+                    if($group->getLevel() > $level && !in_array($group->getLevel(), $groupsLevelAdmin) && $group->getTypeRol() == Rol::TYPE_ROL_OWNER)
+                    {
+                        $level = $group->getLevel();
+                    }
+                } elseif($type == CommonObject::TYPE_LEVEL_USER_ALL){
+                     if($group->getLevel() > $level && !in_array($group->getLevel(), $groupsLevelAdmin))
+                    {
+                        $level = $group->getLevel();
+                    }   
                 }
             }
             $this->levelByGroup = $level;
@@ -581,6 +604,18 @@ class User extends BaseUser implements UserInterface,UserBoxInterface,  PeriodIt
     public function getLevelRealByGroup(){
         if(!isset($this->levelRealByGroup)){
             $this->levelRealByGroup = Rol::getRoleLevel($this->getLevelByGroup());
+        }
+        return $this->levelRealByGroup;
+    }
+    
+    /**
+     * Devuelve el nivel real del rol asignado, nunca devuelve rol auxiliar
+     * 
+     * @return integer
+     */
+    public function getLevelAllByGroup(){
+        if(!isset($this->levelRealByGroup)){
+            $this->levelRealByGroup = Rol::getRoleLevel($this->getLevelByGroup(CommonObject::TYPE_LEVEL_USER_ALL));
         }
         return $this->levelRealByGroup;
     }
@@ -779,5 +814,71 @@ class User extends BaseUser implements UserInterface,UserBoxInterface,  PeriodIt
         $this->period = $period;
         
         return $this;
+    }
+
+    /**
+     * Add plantReports
+     *
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\PlantReport $plantReports
+     * @return User
+     */
+    public function addPlantReport(\Pequiven\SEIPBundle\Entity\DataLoad\PlantReport $plantReports)
+    {
+        $this->plantReports[] = $plantReports;
+
+        return $this;
+    }
+
+    /**
+     * Remove plantReports
+     *
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\PlantReport $plantReports
+     */
+    public function removePlantReport(\Pequiven\SEIPBundle\Entity\DataLoad\PlantReport $plantReports)
+    {
+        $this->plantReports->removeElement($plantReports);
+    }
+
+    /**
+     * Get plantReports
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getPlantReports()
+    {
+        return $this->plantReports;
+    }
+    
+    /**
+     * Add reportTemplates
+     *
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\PlantReport $reportTemplates
+     * @return User
+     */
+    public function addReportTemplates(\Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate $reportTemplates)
+    {
+        $this->reportTemplates[] = $reportTemplates;
+
+        return $this;
+    }
+
+    /**
+     * Remove reportTemplates
+     *
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate $reportTemplates
+     */
+    public function removeReportTemplates(\Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate $reportTemplates)
+    {
+        $this->reportTemplates->removeElement($reportTemplates);
+    }
+
+    /**
+     * Get reportTemplates
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getReportTemplates()
+    {
+        return $this->reportTemplates;
     }
 }

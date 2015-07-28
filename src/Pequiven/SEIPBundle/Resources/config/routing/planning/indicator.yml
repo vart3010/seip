@@ -7,7 +7,7 @@ pequiven_indicator_show:
     requirements:
         _format: html|json|xml
         id: \d+
-    methods: [GET]
+    methods: [GET|POST]
     
 pequiven_indicator_update:
     path: /{id}/update.{_format}
@@ -82,6 +82,20 @@ pequiven_indicator_remove_values:
         id: \d+
     methods: [POST]
     
+pequiven_indicator_vizualice_file:
+    path: /showDocument
+    defaults:
+        _controller: pequiven.controller.indicator:vizualiceFileAction
+    
+pequiven_indicator_get_url_file:
+    path: /.{_format}
+    defaults:
+        _controller: pequiven.controller.indicator:generateUrlFile
+        _format: html
+    requirements:
+        _format: html|json|xml
+    methods: [GET|POST]
+    
 #Select que devuelve las Gerencias de 1ra Línea para la visualización de objetivos a nivel Táctico
 indicatorGerenciaFirstTactic:
     path: /indicator/indicatorGerenciaFirstTactic
@@ -103,3 +117,28 @@ pequiven_indicator_list_error:
         _format: html|json|xml
         level: 1|2|3
     methods: [GET]
+    
+    
+getIsGrantEditButton:
+    path: /getIsGrantEditButton/{id}/{index}
+    defaults:
+        _controller: pequiven.controller.indicator:getIsGrantEditButtonAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
+        
+        
+        
+showButtonDownload:
+    path: /showButtonDownload/{id}
+    defaults:
+        _controller: pequiven.controller.indicator:showButtonDownload
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true

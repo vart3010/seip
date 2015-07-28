@@ -44,7 +44,7 @@ class CauseFail
      * @var float
      * @ORM\Column(name="mount",type="float")
      */
-    private $mount;
+    private $mount = 0.0;
 
     /**
      * Get id
@@ -100,5 +100,9 @@ class CauseFail
     public function getFail()
     {
         return $this->fail;
+    }
+    
+    public function __toString() {
+        return $this->id;
     }
 }
