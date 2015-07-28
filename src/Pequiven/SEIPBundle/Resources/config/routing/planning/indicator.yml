@@ -73,6 +73,16 @@ pequiven_indicator_list:
         _format: html|json|xml
         level: 1|2|3
     methods: [GET]
+#IndicatorSig
+pequiven_indicatorsig_list:
+    path: /{level}/listsig.{_format}
+    defaults:
+        _controller: pequiven.controller.indicator_sig:listAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+        level: 1|2|3
+    methods: [GET]
     
 pequiven_indicator_add_observation:
     path: /{id}/add-observation.{_format}

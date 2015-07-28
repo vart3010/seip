@@ -170,33 +170,27 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                     ))
                     )->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.indicator.visualize', $section)));
                     //Nivel 3
-                    if($this->isGranted('ROLE_SEIP_SIG_MENU'))
-                    {
-                        $itemStrategic = $this->factory->createItem('sig.indicators.list.strategic', array(
-                            'route' => 'sig_indicators_strategic',
-                        ))
-                        ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.indicators.list.strategic', $section)));
-                         $visualize->addChild($itemStrategic);
+                    if($this->isGranted('ROLE_SEIP_SIG_MENU')){
+                        $visualize->addChild('planning.visualize.indicators.strategic', array(
+                            'route' => 'pequiven_indicatorsig_list',
+                            'routeParameters' => array('level' => \Pequiven\IndicatorBundle\Model\IndicatorLevel::LEVEL_ESTRATEGICO)
+                    ))
+                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.indicators.strategic', $section)));
                     }
-                    if($this->isGranted('ROLE_SEIP_SIG_MENU'))
-                    {
-                        $itemTactic = $this->factory->createItem('arrangement_strategic.indicators.list.tactic', array(
-                            'route' => 'sig_indicators_tactic',
-                        ))
-                        ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.indicators.list.tactic', $section)));
-                         $visualize->addChild($itemTactic);
-                    } 
-                    if($this->isGranted('ROLE_SEIP_SIG_MENU'))
-                    {
-                        $itemOperative = $this->factory->createItem('arrangement_strategic.indicators.list.operative', array(
-                            'route' => 'sig_indicators_operative',
-                        ))
-                        ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.indicators.list.operative', $section)));
-                         $visualize->addChild($itemOperative);
+                    if($this->isGranted('ROLE_SEIP_SIG_MENU')){
+                        $visualize->addChild('planning.visualize.indicators.tactic', array(
+                            'route' => 'pequiven_indicatorsig_list',
+                            'routeParameters' => array('level' => \Pequiven\IndicatorBundle\Model\IndicatorLevel::LEVEL_TACTICO)
+                        ))->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.indicators.tactic', $section)));
+                    }
+                    if($this->isGranted('ROLE_SEIP_SIG_MENU')){
+                        $visualize->addChild('planning.visualize.indicators.operative', array(
+                            'route' => 'pequiven_indicatorsig_list',
+                            'routeParameters' => array('level' => \Pequiven\IndicatorBundle\Model\IndicatorLevel::LEVEL_OPERATIVO)
+                        ))->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.indicators.operative', $section)));
                     } 
 
                 $indicator->addChild($visualize);                
-
                 }
 
                 $menuSig->addChild($indicator);

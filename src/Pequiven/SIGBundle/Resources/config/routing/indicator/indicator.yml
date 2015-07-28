@@ -1,0 +1,28 @@
+#IndicatorSig
+pequiven_indicatorsig_list:
+    path: /{level}/listsig.{_format}
+    defaults:
+        _controller: pequiven.controller.indicators_sig:listAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+        level: 1|2|3
+    methods: [GET]
+
+#Lista de Indicadores Estratégicos SIG
+sig_indicators_strategic:
+    path: /sig/indicators_strategic/list
+    defaults: 
+        _controller: pequiven.controller.indicators_sig:strategiclistAction
+
+#Lista de Indicadores Tacticos SIG
+sig_indicators_tactic:
+    path: /sig/indicators_tactic/list
+    defaults: 
+        _controller: pequiven.controller.indicators_sig:tacticlistAction
+
+#Lista de Indicadores Operativos SIG
+sig_indicators_operative:
+    path: /sig/indicators_operative/list
+    defaults: 
+        _controller: pequiven.controller.indicators_sig:operativelistAction

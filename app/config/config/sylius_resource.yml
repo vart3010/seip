@@ -237,14 +237,22 @@ sylius_resource:
                 model: Pequiven\SIGBundle\Entity\PoliticManagementSystem
                 repository: Pequiven\SIGBundle\Repository\PoliticManagementSystemRepository
        
-        #IndicatorsSIG
-        pequiven.indicators_sig:
-            driver: doctrine/orm
-            templates: PequivenSIGBundle:Strategic:list.html.twig
+        #IndicatorSIG
+        pequiven.indicator_sig:
+            driver: doctrine/orm            
+            templates: PequivenSIGBundle:Indicator/
             classes:
-                model: Pequiven\IndicatorBundle\Entity\Indicator
                 controller: Pequiven\SIGBundle\Controller\IndicatorSigController
-                #repository: Pequiven\SIGBundle\Repository\ManagementSystemRepository               
+                model: Pequiven\IndicatorBundle\Entity\Indicator
+                repository: Pequiven\IndicatorBundle\Repository\IndicatorRepository 
+
+        pequiven.indicator_list:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:Planning/Indicator            
+            classes:
+                controller: Pequiven\SIGBundle\Controller\IndicatorSigController
+                model: Pequiven\IndicatorBundle\Entity\Indicator
+                repository: Pequiven\IndicatorBundle\Repository\IndicatorRepository              
         
         pequiven.category_arrangement_program:
             driver: doctrine/orm

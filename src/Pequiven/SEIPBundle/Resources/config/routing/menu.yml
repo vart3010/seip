@@ -114,16 +114,16 @@ sig_objetives:
 sig_indicators_strategic:
     path: /sig/indicators_strategic/list
     defaults: 
-        {_controller: PequivenSIGBundle:IndicatorSig:strategiclist}
+        _controller: pequiven.controller.indicators_sig:strategiclistAction
 
 #Lista de Indicadores Tacticos SIG
 sig_indicators_tactic:
     path: /sig/indicators_tactic/list
     defaults: 
-        {_controller: PequivenSIGBundle:IndicatorSig:tacticlist}
+        _controller: pequiven.controller.indicators_sig:tacticlistAction
         
 #Lista de Indicadores Operativos SIG
 sig_indicators_operative:
     path: /sig/indicators_operative/list
     defaults: 
-        {_controller: PequivenSIGBundle:IndicatorSig:operativelist}
+        _controller: pequiven.controller.indicators_sig:operativelistAction
