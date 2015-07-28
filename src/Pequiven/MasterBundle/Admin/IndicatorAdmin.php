@@ -259,6 +259,7 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                         ->add('showFeatures', null, array(
                             'required' => false,
                         ))
+                        
                     ->end()
                 
                     ->with('Opciones de visualizacion en el dashboard')
@@ -267,6 +268,9 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                         ))
                         ->add('showTags', null, array(
                             'required' => false,
+                        ))
+                        ->add('showRange', null, array(
+                            'required' => false
                         ))
                     ->end()
                 ->end()

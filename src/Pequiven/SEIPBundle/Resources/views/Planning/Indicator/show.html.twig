@@ -216,21 +216,26 @@
                     </div>
                 {% endif%}
 
-                {% set resultReal = indicator.resultReal %}
-                <div class="new-row-mobile twelve-columns six-columns-tablet twelve-columns-mobile" {% if resultReal is not null and errorArrangementRange is null %} ng-controller="DashboardController" ng-init="renderWidgetRange('chartContainerResult',{{ data|json_encode() }})" {% endif %}>
-                    <p class="inline-label">
-                        <label class="label">{{ 'form.resultReal'|trans }}</label>
-                        {% if resultReal is not null and errorArrangementRange is null %}
-                            <span id="chartContainerResult"></span>
-                        {% else %}
-                            {% if errorArrangementRange != null %}
-                                <span class="tag red-bg">{{ errorArrangementRange }}</span>
+
+                {% if (indicator.showRange) %}
+                    {% set resultReal = indicator.resultReal %}
+                    <div class="new-row-mobile twelve-columns six-columns-tablet twelve-columns-mobile" {% if resultReal is not null and errorArrangementRange is null %} ng-controller="DashboardController" ng-init="renderWidgetRange('chartContainerResult',{{ data|json_encode() }})" {% endif %}>
+                        <p class="inline-label">
+                            <label class="label">{{ 'form.resultReal'|trans }}</label>
+                            {% if resultReal is not null and errorArrangementRange is null %}
+                                <span id="chartContainerResult"></span>
                             {% else %}
-                                <span class="tag red-bg">{{ ('pequiven.no_assigned'|trans({},'messages')) }}</span>
+                                {% if errorArrangementRange != null %}
+                                    <span class="tag red-bg">{{ errorArrangementRange }}</span>
+                                {% else %}
+                                    <span class="tag red-bg">{{ ('pequiven.no_assigned'|trans({},'messages')) }}</span>
+                                {% endif %}
                             {% endif %}
-                        {% endif %}
-                    </p>
-                </div>
+                        </p>
+                    </div>
+                {% endif %}
+
+
                 <div class="inline-label">
                     <label class="label">{{ 'form.objetives'|trans }}</label>
                     <ul class="fa-ul">
@@ -351,11 +356,11 @@
     <script type="text/javascript">
 function uploadFilePdf(valueIndicatorId) {
     $("input#indicatorFilePdf_" + valueIndicatorId).click();
-    //$("#form_"+valueIndicatorId).submit();
+//$("#form_"+valueIndicatorId).submit();
 }
 function openFile(valueIndicatorId) {
-    //var obj = $("span#" + valueIndicatorId);
-    //var url = obj.attr("data");
+//var obj = $("span#" + valueIndicatorId);
+//var url = obj.attr("data");
     valueIndicatorId = valueIndicatorId.split("_");
 
     var data = {
@@ -366,7 +371,7 @@ function openFile(valueIndicatorId) {
         url: '{{ path("pequiven_indicator_get_url_file") }}',
         data: data,
         success: function (data) {
-            //alert(data["url"]);
+//alert(data["url"]);
             window.open(data["url"]);
         }
     });
