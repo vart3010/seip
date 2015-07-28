@@ -2815,6 +2815,52 @@ angular.module('seipModule.controllers', [])
                 });
             }
             
+            //18-Gráfico tipo column 3d para mostrar el resultado de un mes (Ideado para aquellos indicadores con fórmula acumulativo de cada carga) de los indicadores asociados agrupados por tipo de empresa, con el total acumulado al final
+            $scope.chargeChartMultiSeriesLineIndicatorPersonalInjuryWithAccumulatedTime = function (indicatorId, render, width, height) {
+                var getDataChartMultiSeriesLineIndicatorPersonalInjuryWithAccumulatedTime = Routing.generate("getDataChartMultiSeriesLineIndicatorPersonalInjuryWithAccumulatedTime", {id: indicatorId});
+                $http.get(getDataChartMultiSeriesLineIndicatorPersonalInjuryWithAccumulatedTime).success(function (data) {
+                    FusionCharts.ready(function () {
+                        var revenueChartMultiSeriesLineIndicatorPersonalInjuryWithAccumulatedTime = new FusionCharts({
+                            "type": "msline",
+                            "renderAt": render,
+                            "width": width + "%",
+                            "height": height,
+                            "dataFormat": "json",
+                            "dataSource": {
+                                "chart": data.dataSource.chart,
+                                "categories": data.dataSource.categories,
+                                "dataset": data.dataSource.dataset
+                            }
+                        });
+                        revenueChartMultiSeriesLineIndicatorPersonalInjuryWithAccumulatedTime.setTransparent(true);
+                        revenueChartMultiSeriesLineIndicatorPersonalInjuryWithAccumulatedTime.render();
+                    });
+                });
+            }
+            
+            //19-Gráfico tipo column 3d para mostrar el resultado de un mes (Ideado para aquellos indicadores con fórmula acumulativo de cada carga) de los indicadores asociados agrupados por tipo de empresa, con el total acumulado al final
+//            $scope.chargeChartMultiSeriesLineIndicatorPersonalInjuryWithoutAccumulatedTime = function (indicatorId, render, width, height) {
+//                var getDataChartMultiSeriesLineIndicatorPersonalInjuryWithoutAccumulatedTime = Routing.generate("getDataChartMultiSeriesLineIndicatorPersonalInjuryWithoutAccumulatedTime", {id: indicatorId});
+//                $http.get(getDataChartMultiSeriesLineIndicatorPersonalInjuryWithoutAccumulatedTime).success(function (data) {
+//                    FusionCharts.ready(function () {
+//                        var revenueChartMultiSeriesLineIndicatorPersonalInjuryWithoutAccumulatedTime = new FusionCharts({
+//                            "type": "msline",
+//                            "renderAt": render,
+//                            "width": width + "%",
+//                            "height": height,
+//                            "dataFormat": "json",
+//                            "dataSource": {
+//                                "chart": data.dataSource.chart,
+//                                "categories": data.dataSource.categories,
+//                                "dataset": data.dataSource.dataset
+//                            }
+//                        });
+//                        revenueChartMultiSeriesLineIndicatorPersonalInjuryWithoutAccumulatedTime.setTransparent(true);
+//                        revenueChartMultiSeriesLineIndicatorPersonalInjuryWithoutAccumulatedTime.render();
+//                    });
+//                });
+//            }
+            
             //20-Gráfico tipo column 3d para mostrar el resultado de un mes (Ideado para aquellos indicadores con fórmula acumulativo de cada carga) de los indicadores asociados agrupados por tipo de empresa, con el total acumulado al final
             $scope.chargeChartMultiSeriesLineIndicatorPersonalInjuryWithAndWithoutAccumulatedTimeFromChildrens = function (indicatorId, render, width, height) {
                 var getDataChartMultiSeriesLineIndicatorPersonalInjuryWithAndWithoutAccumulatedTimeFromChildrens = Routing.generate("getDataChartMultiSeriesLineIndicatorPersonalInjuryWithAndWithoutAccumulatedTimeFromChildrens", {id: indicatorId});

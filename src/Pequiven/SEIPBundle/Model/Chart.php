@@ -104,12 +104,12 @@ abstract class Chart
     const TYPE_CHART_COLUMN_RESULT_INDICATORS_ASSOCIATED_GROUP_BY_TYPE_COMPANY_WITH_TOTAL_BY_MONTH = 17;
     
     /**
-     * Gráfico tipo multiseries de línea, para las lesiones personales con tiempo, acumulados, sólo de indicador
+     * Gráfico tipo multiseries de línea, para las lesiones personales con tiempo, acumulados, sólo del indicador (período actual y anterior)
      */
     const TYPE_CHART_MULTI_SERIES_LINE_INDICATOR_PERSONAL_INJURY_WITH_ACCUMULATED_TIME = 18;
     
     /**
-     * Gráfico tipo multiseries de línea, para las lesiones personales sin tiempo, sólo del indicador
+     * Gráfico tipo multiseries de línea, para las lesiones personales sin tiempo, sólo del indicador (período actual y anterior)
      */
     const TYPE_CHART_MULTI_SERIES_LINE_INDICATOR_PERSONAL_INJURY_WITHOUT_ACCUMULATED_TIME = 19;
     
@@ -117,6 +117,11 @@ abstract class Chart
      * Gráfico tipo multiseries de línea, para las lesiones personales con y sin tiempo, acumulados, de los hijos del indicador
      */
     const TYPE_CHART_MULTI_SERIES_LINE_INDICATOR_PERSONAL_INJURY_WHIT_AND_WITHOUT_ACCUMULATED_TIME_FROM_CHILDRENS = 20;
+        
+    /**
+     * Gráfico tipo multiseries de línea, para los días perdidos, sólo del indicador (período actual y anterior)
+     */
+    const TYPE_CHART_MULTI_SERIES_LINE_INDICATOR_LOST_DAYS_ACCUMULATED_TIME = 21;
     
     const TYPE_EXAMPLE = 100;
        
