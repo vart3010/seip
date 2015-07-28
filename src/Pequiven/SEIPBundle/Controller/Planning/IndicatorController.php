@@ -62,6 +62,7 @@ class IndicatorController extends ResourceController {
 
         //SI SE SUBIO EL ARCHIVO SE PROCEDE A GUARDARLO
         if ($uploadFile != null) {
+            
             $band = false;
             //VALIDACION QUE SEA UN ARCHIVO PERMITIDO
             foreach ($request->files as $file) {
