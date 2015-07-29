@@ -376,7 +376,7 @@ class ChartController extends SEIPController {
     }
     
     /**
-     * 18-Función que retorna la data para un gráfico tipo multiseries de línea, para las lesiones personales con tiempo, acumulados
+     * 18-Función que retorna la data para un gráfico tipo multiseries de línea, para las lesiones personales con tiempo, acumulados, sólo del indicador (período actual y anterior)
      * @return JsonResponse
      */
     public function getDataChartMultiSeriesLineIndicatorPersonalInjuryWithAccumulatedTimeAction(Request $request) {
@@ -388,7 +388,27 @@ class ChartController extends SEIPController {
 
         $indicator = $this->get('pequiven.repository.indicator')->find($idIndicator); //Obtenemos el indicador
 
-        $dataChart = $indicatorService->getDataChartLineMultiSeries($indicator, array('resultIndicatorPersonalInjuryWithAccumulatedTime' => true)); //Obtenemos la data del gráfico de acuerdo al indicador
+        $dataChart = $indicatorService->getDataChartLineMultiSeries($indicator, array('resultIndicatorPersonalInjuryWithAccumulatedTime' => true, 'variables' => array("lesionados_con_tiempo_perdido" => true, "lesiones_con_tiempo_perdido" => true), 'path_array' => 'resultIndicatorPersonalInjuryWithAccumulatedTime')); //Obtenemos la data del gráfico de acuerdo al indicador
+
+        $response->setData($dataChart); //Seteamos la data del gráfico en Json
+
+        return $response;
+    }
+    
+    /**
+     * 19-Función que retorna la data para un gráfico tipo multiseries de línea, para las lesiones personales sin tiempo, sólo del indicador (período actual y anterior)
+     * @return JsonResponse
+     */
+    public function getDataChartMultiSeriesLineIndicatorPersonalInjuryWithoutAccumulatedTimeAction(Request $request) {
+        $response = new JsonResponse();
+
+        $idIndicator = $request->get('id');
+
+        $indicatorService = $this->getIndicatorService(); //Obtenemos el servicio del indicador
+
+        $indicator = $this->get('pequiven.repository.indicator')->find($idIndicator); //Obtenemos el indicador
+
+        $dataChart = $indicatorService->getDataChartLineMultiSeries($indicator, array('resultIndicatorPersonalInjuryWithoutAccumulatedTime' => true, 'variables' => array("lesionados_sin_tiempo_perdido" => true), 'path_array' => 'resultIndicatorPersonalInjuryWithoutAccumulatedTime')); //Obtenemos la data del gráfico de acuerdo al indicador
 
         $response->setData($dataChart); //Seteamos la data del gráfico en Json
 
@@ -409,6 +429,26 @@ class ChartController extends SEIPController {
         $indicator = $this->get('pequiven.repository.indicator')->find($idIndicator); //Obtenemos el indicador
 
         $dataChart = $indicatorService->getDataChartLineMultiSeries($indicator, array('resultIndicatorPersonalInjuryWithAndWithoutAccumulatedTimeFromChildrens' => true)); //Obtenemos la data del gráfico de acuerdo al indicador
+
+        $response->setData($dataChart); //Seteamos la data del gráfico en Json
+
+        return $response;
+    }
+    
+    /**
+     * 21-Función que retorna la data para un gráfico tipo multiseries de línea, para los días perdidos, sólo del indicador (período actual y anterior)
+     * @return JsonResponse
+     */
+    public function getDataChartMultiSeriesLineIndicatorLostDaysAccumulatedTimeAction(Request $request) {
+        $response = new JsonResponse();
+
+        $idIndicator = $request->get('id');
+
+        $indicatorService = $this->getIndicatorService(); //Obtenemos el servicio del indicador
+
+        $indicator = $this->get('pequiven.repository.indicator')->find($idIndicator); //Obtenemos el indicador
+
+        $dataChart = $indicatorService->getDataChartLineMultiSeries($indicator, array('resultIndicatorLostDaysAccumulatedTime' => true, 'variables' => array("dias_perdidos" => true), 'path_array' => 'resultIndicatorLostDaysAccumulatedTime')); //Obtenemos la data del gráfico de acuerdo al indicador
 
         $response->setData($dataChart); //Seteamos la data del gráfico en Json
 

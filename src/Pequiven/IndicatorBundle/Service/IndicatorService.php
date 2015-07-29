@@ -1517,12 +1517,12 @@ class IndicatorService implements ContainerAwareInterface {
             $data['dataSource']['dataset'][] = $dataSetValues['AFILIADA_MIXTA'];
             $data['dataSource']['dataset'][] = $dataSetValues['PERIODO_ACTUAL'];
             $data['dataSource']['dataset'][] = $dataSetValues['PERIODO_ANTERIOR'];
-        } elseif (isset($options['resultIndicatorPersonalInjuryWithAccumulatedTime']) && array_key_exists('resultIndicatorPersonalInjuryWithAccumulatedTime', $options)) {
-            unset($options['resultIndicatorPersonalInjuryWithAccumulatedTime']);
-
+        } elseif((isset($options['resultIndicatorPersonalInjuryWithAccumulatedTime']) && array_key_exists('resultIndicatorPersonalInjuryWithAccumulatedTime', $options)) || (isset($options['resultIndicatorPersonalInjuryWithoutAccumulatedTime']) && array_key_exists('resultIndicatorPersonalInjuryWithoutAccumulatedTime', $options)) || (isset($options['resultIndicatorLostDaysAccumulatedTime']) && array_key_exists('resultIndicatorLostDaysAccumulatedTime', $options))){
+            unset($options[$options['path_array']]);
+            
             $arrayVariables = array();
-            $arrayVariables = $this->getArrayVariablesFormulaWithData($indicator, array('resultIndicatorPersonalInjuryWithAccumulatedTime' => true));
-
+            $arrayVariables = $this->getArrayVariablesFormulaWithData($indicator, array($options['path_array'] => true, 'variables' => $options['variables'], 'path_array' => $options['path_array']));
+            
             $numberResults = $indicator->getFrequencyNotificationIndicator()->getNumberResultsFrequency();
             $labelsFrequencyNotificationArray = $this->getLabelsByIndicatorFrequencyNotification($indicator);
 
@@ -2219,9 +2219,9 @@ class IndicatorService implements ContainerAwareInterface {
                 }
                 $arrayVariables['PERIODO_ANTERIOR']['data'][] = array('value' => $result['PERIODO_ANTERIOR']['value'][$i], 'showValue' => $showValue);
             }
-        } elseif (isset($options['resultIndicatorPersonalInjuryWithAccumulatedTime']) && array_key_exists('resultIndicatorPersonalInjuryWithAccumulatedTime', $options)) {
-            unset($options['resultIndicatorPersonalInjuryWithAccumulatedTime']);
-
+        } elseif((isset($options['resultIndicatorPersonalInjuryWithAccumulatedTime']) && array_key_exists('resultIndicatorPersonalInjuryWithAccumulatedTime', $options)) || (isset($options['resultIndicatorPersonalInjuryWithoutAccumulatedTime']) && array_key_exists('resultIndicatorPersonalInjuryWithoutAccumulatedTime', $options)) || (isset($options['resultIndicatorLostDaysAccumulatedTime']) && array_key_exists('resultIndicatorLostDaysAccumulatedTime', $options))){
+            unset($options[$options['path_array']]);
+            
             $childrens = $indicator->getChildrens();
             $variables = $formula->getVariables();
 
@@ -2229,8 +2229,8 @@ class IndicatorService implements ContainerAwareInterface {
 
             $arrayVariables['PERIODO_ACTUAL'] = array('seriesname' => $indicator->getPeriod()->getName(), 'data' => array());
             $arrayVariables['PERIODO_ANTERIOR'] = array('seriesname' => $indicator->getPeriod()->getParent()->getName(), 'data' => array());
-
-            $arrayVarsSpecific = array("lesionados_con_tiempo_perdido" => true, "lesiones_con_tiempo_perdido" => true);
+            
+            $arrayVarsSpecific = $options['variables'];
             $numberResults = $indicator->getFrequencyNotificationIndicator()->getNumberResultsFrequency();
 
             //Seteamos por defecto los valores por número de resultados totales

@@ -570,9 +570,10 @@ chart:
         indicatorVariablesStackedColumnByFrequencyNotificationWithTotal: Variables del indicador, en stacked column, además del acumulado como columna final.
         indicatorsAssociatedColumnWithTotalByMonth: Resultado de los indicadores asociados, en column 3D, además del acumulado como columna final.
         indicatorsAssociatedColumnGroupByTypeCompanyWithTotalByMonth: Resultado de los indicadores asociados agrupados por tipo de compañia, en column 3D, además del acumulado como columna final.
-        indicatorPersonalInjuryWithAccumulatedTime: Lesionados personales con tiempo acumulado de los indicadores asociados agrupados por tipo de compañia, en linea, además del valor del actual y del año pasado.
-        indicatorPersonalInjuryWithoutAccumulatedTime: Lesionados personales sin tiempo acumulado de los indicadores asociados agrupados por tipo de compañia, en linea, además del valor del actual y del año pasado.
+        indicatorPersonalInjuryWithAccumulatedTime: Lesionados personales con tiempo acumulados del indicador, en linea, del valor actual y del período pasado.
+        indicatorPersonalInjuryWithoutAccumulatedTime: Lesionados personales sin tiempo acumulados del indicador, en linea, del valor actual y del período pasado.
         indicatorPersonalInjuryWithAndWithoutAccumulatedTimeFromChildrens: Lesionados personales con y sin tiempo acumulado de los indicadores asociados agrupados por tipo de compañia, en linea, además del valor del actual y del año pasado.
+        indicatorLostDaysAccumulatedTime: Días perdidos acumulados del indicador, en linea, del valor actual y del período pasado.
         example: Ejemplo
 
 Name: Nombre
