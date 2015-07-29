@@ -17,7 +17,7 @@ class IndicatorsDashboardBox extends GenericBox {
     }
 
     public function getName() {
-        return 'pequiven_seip.box.indicators_dashboard';
+        return 'pequiven_seip_box_indicators_dashboard';
     }
 
     public function getParameters() {

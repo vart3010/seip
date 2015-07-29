@@ -2396,6 +2396,11 @@ class IndicatorService implements ContainerAwareInterface {
                     $medition["data"][] = $dataMedition;
                 }
             }
+            
+            $data['dataSource']['dataset'][] = $dataSetReal;
+            $data['dataSource']['dataset'][] = $dataSetPlan;
+            $data['dataSource']['dataset'][] = $medition;
+            
         } elseif (isset($options['withVariablesRealPLan']) && array_key_exists('withVariablesRealPLan', $options)) {//La info a mostrar es de los resultados propios en base al real o plan
             unset($options['withVariablesRealPLan']);
             if ($indicator->getDetails()) {
@@ -2414,6 +2419,11 @@ class IndicatorService implements ContainerAwareInterface {
             $dataSetReal["data"][] = $dataReal;
             $dataSetPlan["data"][] = $dataPlan;
             $medition["data"][] = $dataMedition;
+            
+            $data['dataSource']['dataset'][] = $dataSetReal;
+            $data['dataSource']['dataset'][] = $dataSetPlan;
+            $data['dataSource']['dataset'][] = $medition;
+            
         } elseif (isset($options['byFrequencyNotification']) && array_key_exists('byFrequencyNotification', $options)) {
             unset($options['byFrequencyNotification']);
             if ($indicator->getDetails()) {
@@ -2451,13 +2461,41 @@ class IndicatorService implements ContainerAwareInterface {
                 $dataSetPlan["data"][] = $dataPlan;
                 $medition["data"][] = $dataMedition;
             }
-        }
+            
+            $data['dataSource']['dataset'][] = $dataSetReal;
+            $data['dataSource']['dataset'][] = $dataSetPlan;
+            $data['dataSource']['dataset'][] = $medition;
+            
+        } 
+//        elseif((isset($options['resultIndicatorPersonalInjuryWithAccumulatedTimeAndFrequency']) && array_key_exists('resultIndicatorPersonalInjuryWithAccumulatedTime', $options)) || (isset($options['resultIndicatorPersonalInjuryWithoutAccumulatedTime']) && array_key_exists('resultIndicatorPersonalInjuryWithoutAccumulatedTime', $options)) || (isset($options['resultIndicatorLostDaysAccumulatedTime']) && array_key_exists('resultIndicatorLostDaysAccumulatedTime', $options))){
+//            unset($options[$options['path_array']]);
+//            
+//            $arrayVariables = array();
+//            $arrayVariables = $this->getArrayVariablesFormulaWithData($indicator, array($options['path_array'] => true, 'variables' => $options['variables'], 'path_array' => $options['path_array']));
+//            
+//            $numberResults = $indicator->getFrequencyNotificationIndicator()->getNumberResultsFrequency();
+//            $labelsFrequencyNotificationArray = $this->getLabelsByIndicatorFrequencyNotification($indicator);
+//
+//            $variables = $indicator->getFormula()->getVariables();
+//            $contVariables = count($variables);
+//
+//            //Añadimos los valores, por frecuencia de notificación
+//            for ($i = 0; $i < $numberResults; $i++) {
+//                $label = array();
+//                $label["label"] = $labelsFrequencyNotificationArray[($i + 1)];
+//
+//                $category[] = $label;
+//            }
+//
+//            $dataSetValues['PERIODO_ACTUAL'] = array('seriesname' => $arrayVariables['PERIODO_ACTUAL']['seriesname'], 'data' => $arrayVariables['PERIODO_ACTUAL']['data']);
+//            $dataSetValues['PERIODO_ANTERIOR'] = array('seriesname' => $arrayVariables['PERIODO_ANTERIOR']['seriesname'], 'data' => $arrayVariables['PERIODO_ANTERIOR']['data']);
+//
+//            $data['dataSource']['dataset'][] = $dataSetValues['PERIODO_ACTUAL'];
+//            $data['dataSource']['dataset'][] = $dataSetValues['PERIODO_ANTERIOR'];
+//        }
 
         $data['dataSource']['chart'] = $chart;
         $data['dataSource']['categories'][]["category"] = $category;
-        $data['dataSource']['dataset'][] = $dataSetReal;
-        $data['dataSource']['dataset'][] = $dataSetPlan;
-        $data['dataSource']['dataset'][] = $medition;
 
         return $data;
     }
