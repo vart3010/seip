@@ -1517,29 +1517,29 @@ class IndicatorService implements ContainerAwareInterface {
             $data['dataSource']['dataset'][] = $dataSetValues['AFILIADA_MIXTA'];
             $data['dataSource']['dataset'][] = $dataSetValues['PERIODO_ACTUAL'];
             $data['dataSource']['dataset'][] = $dataSetValues['PERIODO_ANTERIOR'];
-        } elseif(isset($options['resultIndicatorPersonalInjuryWithAccumulatedTime']) && array_key_exists('resultIndicatorPersonalInjuryWithAccumulatedTime', $options)){
+        } elseif (isset($options['resultIndicatorPersonalInjuryWithAccumulatedTime']) && array_key_exists('resultIndicatorPersonalInjuryWithAccumulatedTime', $options)) {
             unset($options['resultIndicatorPersonalInjuryWithAccumulatedTime']);
-            
+
             $arrayVariables = array();
             $arrayVariables = $this->getArrayVariablesFormulaWithData($indicator, array('resultIndicatorPersonalInjuryWithAccumulatedTime' => true));
-            
+
             $numberResults = $indicator->getFrequencyNotificationIndicator()->getNumberResultsFrequency();
             $labelsFrequencyNotificationArray = $this->getLabelsByIndicatorFrequencyNotification($indicator);
-            
+
             $variables = $indicator->getFormula()->getVariables();
             $contVariables = count($variables);
 
             //Añadimos los valores, por frecuencia de notificación
             for ($i = 0; $i < $numberResults; $i++) {
-                $label =  array();
-                $label["label"] = $labelsFrequencyNotificationArray[($i+1)];
+                $label = array();
+                $label["label"] = $labelsFrequencyNotificationArray[($i + 1)];
 
                 $category[] = $label;
             }
-            
+
             $dataSetValues['PERIODO_ACTUAL'] = array('seriesname' => $arrayVariables['PERIODO_ACTUAL']['seriesname'], 'data' => $arrayVariables['PERIODO_ACTUAL']['data']);
             $dataSetValues['PERIODO_ANTERIOR'] = array('seriesname' => $arrayVariables['PERIODO_ANTERIOR']['seriesname'], 'data' => $arrayVariables['PERIODO_ANTERIOR']['data']);
-            
+
             $data['dataSource']['dataset'][] = $dataSetValues['PERIODO_ACTUAL'];
             $data['dataSource']['dataset'][] = $dataSetValues['PERIODO_ANTERIOR'];
         }
@@ -2219,32 +2219,32 @@ class IndicatorService implements ContainerAwareInterface {
                 }
                 $arrayVariables['PERIODO_ANTERIOR']['data'][] = array('value' => $result['PERIODO_ANTERIOR']['value'][$i], 'showValue' => $showValue);
             }
-        } elseif(isset($options['resultIndicatorPersonalInjuryWithAccumulatedTime']) && array_key_exists('resultIndicatorPersonalInjuryWithAccumulatedTime', $options)){
+        } elseif (isset($options['resultIndicatorPersonalInjuryWithAccumulatedTime']) && array_key_exists('resultIndicatorPersonalInjuryWithAccumulatedTime', $options)) {
             unset($options['resultIndicatorPersonalInjuryWithAccumulatedTime']);
-            
+
             $childrens = $indicator->getChildrens();
             $variables = $formula->getVariables();
-            
+
             $labelsTypesOfCompanies = Indicator::getTypesOfCompanies();
-            
+
             $arrayVariables['PERIODO_ACTUAL'] = array('seriesname' => $indicator->getPeriod()->getName(), 'data' => array());
             $arrayVariables['PERIODO_ANTERIOR'] = array('seriesname' => $indicator->getPeriod()->getParent()->getName(), 'data' => array());
-            
+
             $arrayVarsSpecific = array("lesionados_con_tiempo_perdido" => true, "lesiones_con_tiempo_perdido" => true);
             $numberResults = $indicator->getFrequencyNotificationIndicator()->getNumberResultsFrequency();
-            
+
             //Seteamos por defecto los valores por número de resultados totales
-            for($i = 1; $i <= $numberResults; $i++){
+            for ($i = 1; $i <= $numberResults; $i++) {
                 $result['PERIODO_ACTUAL']['value'][$i] = 0.0;
                 $result['PERIODO_ANTERIOR']['value'][$i] = 0.0;
             }
-            
+
             //Recorremos los valores del indicador
             $contValueIndicator = 1;
             $totalValuesIndicator = count($valuesIndicator);
             foreach ($valuesIndicator as $valueIndicator) {
-                foreach($variables as $variable){
-                    if(array_key_exists($variable->getName(), $arrayVarsSpecific)){
+                foreach ($variables as $variable) {
+                    if (array_key_exists($variable->getName(), $arrayVarsSpecific)) {
                         $nameParameter = $variable->getName();
                         $valVariable = $valueIndicator->getParameter($nameParameter);
                         $result['PERIODO_ACTUAL']['value'][$contValueIndicator] = $result['PERIODO_ACTUAL']['value'][$contValueIndicator] + $valVariable;
@@ -2252,19 +2252,19 @@ class IndicatorService implements ContainerAwareInterface {
                 }
                 $contValueIndicator++;
             }
-            
+
             $em = $this->getDoctrine();
-            $prePlanningItemCloneObject = $em->getRepository('Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanningItemClone')->findOneBy(array('idCloneObject' => $indicator->getId(),'typeObject' => \Pequiven\SEIPBundle\Model\PrePlanning\PrePlanningTypeObject::TYPE_OBJECT_INDICATOR));
+            $prePlanningItemCloneObject = $em->getRepository('Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanningItemClone')->findOneBy(array('idCloneObject' => $indicator->getId(), 'typeObject' => \Pequiven\SEIPBundle\Model\PrePlanning\PrePlanningTypeObject::TYPE_OBJECT_INDICATOR));
             $indicatorLastPeriod = $this->container->get('pequiven.repository.indicator')->find($prePlanningItemCloneObject->getIdSourceObject());
-            
+
             //Recorremos los hijos para acumular los valores por número de resultados totales
             $lastPeriodValuesIndicator = $indicatorLastPeriod->getValuesIndicator();
             $contLastPeriodValueIndicator = 1;
             $variablesLastPeriod = $indicatorLastPeriod->getFormula()->getVariables();
             $totalLastPeriodValuesIndicator = count($lastPeriodValuesIndicator);
             foreach ($lastPeriodValuesIndicator as $lastPeriodValueIndicator) {
-                foreach($variablesLastPeriod as $variableLastPeriod){
-                    if(array_key_exists($variableLastPeriod->getName(), $arrayVarsSpecific)){
+                foreach ($variablesLastPeriod as $variableLastPeriod) {
+                    if (array_key_exists($variableLastPeriod->getName(), $arrayVarsSpecific)) {
                         $nameParameter = $variableLastPeriod->getName();
                         $valVariableLastPeriod = $lastPeriodValueIndicator->getParameter($nameParameter);
                         $result['PERIODO_ANTERIOR']['value'][$contLastPeriodValueIndicator] = $result['PERIODO_ANTERIOR']['value'][$contLastPeriodValueIndicator] + $valVariableLastPeriod;
@@ -2272,25 +2272,25 @@ class IndicatorService implements ContainerAwareInterface {
                 }
                 $contLastPeriodValueIndicator++;
             }
-            
-            
+
+
             //Seteamos el acumulado para cada serie
-            for($i = 1; $i <= $numberResults; $i++){
-                if($i > 1){
-                    $result['PERIODO_ACTUAL']['value'][$i] = $result['PERIODO_ACTUAL']['value'][$i] + $result['PERIODO_ACTUAL']['value'][$i-1];
-                    $result['PERIODO_ANTERIOR']['value'][$i] = $result['PERIODO_ANTERIOR']['value'][$i] + $result['PERIODO_ANTERIOR']['value'][$i-1];
+            for ($i = 1; $i <= $numberResults; $i++) {
+                if ($i > 1) {
+                    $result['PERIODO_ACTUAL']['value'][$i] = $result['PERIODO_ACTUAL']['value'][$i] + $result['PERIODO_ACTUAL']['value'][$i - 1];
+                    $result['PERIODO_ANTERIOR']['value'][$i] = $result['PERIODO_ANTERIOR']['value'][$i] + $result['PERIODO_ANTERIOR']['value'][$i - 1];
                 }
             }
-            
+
             //Seteamos el arreglo a devolver para cada serie
-            $showUntilMonth = 6;//TODO: Ponerlo por el administrador del indicador
+            $showUntilMonth = 6; //TODO: Ponerlo por el administrador del indicador
             $showValue = 1;
-            for($i = 1; $i <= $numberResults; $i++){
+            for ($i = 1; $i <= $numberResults; $i++) {
 //                $showValue = $i <= $showUntilMonth ? 1 : 0;
-                if($i <= $showUntilMonth){
-                    $arrayVariables['PERIODO_ACTUAL']['data'][] =  array('value' =>  $result['PERIODO_ACTUAL']['value'][$i], 'showValue' => $showValue);
+                if ($i <= $showUntilMonth) {
+                    $arrayVariables['PERIODO_ACTUAL']['data'][] = array('value' => $result['PERIODO_ACTUAL']['value'][$i], 'showValue' => $showValue);
                 }
-                $arrayVariables['PERIODO_ANTERIOR']['data'][] = array('value' =>  $result['PERIODO_ANTERIOR']['value'][$i], 'showValue' => $showValue);
+                $arrayVariables['PERIODO_ANTERIOR']['data'][] = array('value' => $result['PERIODO_ANTERIOR']['value'][$i], 'showValue' => $showValue);
             }
         }
 
@@ -2954,18 +2954,18 @@ class IndicatorService implements ContainerAwareInterface {
         $band = false;
         $securityService = $this->getSecurityService();
         if ($securityService->isGranted(['ROLE_SEIP_PLANNING_INDICATOR_VISUALIZE_LAST_FILE'])) {
-            $valueIndicator = "";
+            $vIndicator = "";
             foreach ($indicator->getValuesIndicator() as $valueIndicator) {
                 if ($valueIndicator->getValueIndicatorFile()) {
                     if ($returnId) {
-                        $valueIndicator = $valueIndicator->getId();
+                        $vIndicator = $valueIndicator->getId();
                     }
                     $band = true;
-                    break;
+                    //break;
                 }
             }
             if ($returnId) {
-                return $valueIndicator;
+                return $vIndicator;
             } else {
                 return $band;
             }
