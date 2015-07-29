@@ -44,7 +44,7 @@ class BoxDefaultAdapter extends BoxBaseAdapter
             $boxActives[] = $boxActive;
         }else{
             $boxActive = new \Tecnocreaciones\Bundle\BoxBundle\Model\BoxStaticLocked();
-            $boxActive->setBoxName('pequiven_seip_box_genericdashboardbox');
+            $boxActive->setBoxName();
             $boxActive->setArea(AreasBox::DASHBOARD,array('position' => 0));
 
             $boxActives[] = $boxActive;
