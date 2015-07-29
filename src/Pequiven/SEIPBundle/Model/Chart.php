@@ -124,7 +124,7 @@ abstract class Chart
     const TYPE_CHART_MULTI_SERIES_LINE_INDICATOR_LOST_DAYS_ACCUMULATED_TIME = 21;
     
     /**
-     * Gráfico tipo multiseries columna 3d, para mostrar el resultado de una suma de variables
+     * Gráfico tipo multiseries columna 3d, para mostrar el resultado de una suma de variables de los indicadores hijos (lesionados con tiempo perdidoa, sin tiempo perdido y días perdidos), según sea el caso del período actual y anterior
      */
     const TYPE_CHART_MULTI_SERIES_COLUMN_LINE_INDICATORS_ASSOCIATED_PERSONAL_INJURY_WITH_AND_WITHOUT_AND_LOST_DAYS_BY_PERIOD_WITH_ACCUMULATED = 22;
     
