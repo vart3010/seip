@@ -244,8 +244,8 @@ class productReportService implements ContainerAwareInterface {
                 $valuesReal[] = array("value" => number_format($arrayReal[$cont + $desplazamiento] / $division, 2, ',', '.'));
                 $valuesPlan[] = array("value" => number_format($arrayPlan[$cont + $desplazamiento] / $division, 2, ',', '.'));
                 $perc = 0;
-                if ($arrayPlan[$cont] > 0) {
-                    $perc = ($arrayReal[$cont] * 100) / $arrayPlan[$cont];
+                if ($arrayPlan[$cont+$desplazamiento] > 0) {
+                    $perc = ($arrayReal[$cont+$desplazamiento] * 100) / $arrayPlan[$cont+$desplazamiento];
                 }
                 $percentaje[] = array("value" => number_format($perc, 2, ',', '.'));
                 $cont++;
