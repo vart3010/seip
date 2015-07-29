@@ -2815,7 +2815,7 @@ angular.module('seipModule.controllers', [])
                 });
             }
             
-            //18-Gráfico tipo column 3d para mostrar el resultado de un mes (Ideado para aquellos indicadores con fórmula acumulativo de cada carga) de los indicadores asociados agrupados por tipo de empresa, con el total acumulado al final
+            //18-Gráfico tipo multiseries de línea, para las lesiones personales con tiempo, acumulados, sólo del indicador (período actual y anterior)
             $scope.chargeChartMultiSeriesLineIndicatorPersonalInjuryWithAccumulatedTime = function (indicatorId, render, width, height) {
                 var getDataChartMultiSeriesLineIndicatorPersonalInjuryWithAccumulatedTime = Routing.generate("getDataChartMultiSeriesLineIndicatorPersonalInjuryWithAccumulatedTime", {id: indicatorId});
                 $http.get(getDataChartMultiSeriesLineIndicatorPersonalInjuryWithAccumulatedTime).success(function (data) {
@@ -2838,7 +2838,7 @@ angular.module('seipModule.controllers', [])
                 });
             }
             
-            //19-Gráfico tipo column 3d para mostrar el resultado de un mes (Ideado para aquellos indicadores con fórmula acumulativo de cada carga) de los indicadores asociados agrupados por tipo de empresa, con el total acumulado al final
+            //19-Gráfico tipo multiseries de línea, para las lesiones personales sin tiempo, sólo del indicador (período actual y anterior)
             $scope.chargeChartMultiSeriesLineIndicatorPersonalInjuryWithoutAccumulatedTime = function (indicatorId, render, width, height) {
                 var getDataChartMultiSeriesLineIndicatorPersonalInjuryWithoutAccumulatedTime = Routing.generate("getDataChartMultiSeriesLineIndicatorPersonalInjuryWithoutAccumulatedTime", {id: indicatorId});
                 $http.get(getDataChartMultiSeriesLineIndicatorPersonalInjuryWithoutAccumulatedTime).success(function (data) {
@@ -2861,7 +2861,7 @@ angular.module('seipModule.controllers', [])
                 });
             }
             
-            //20-Gráfico tipo column 3d para mostrar el resultado de un mes (Ideado para aquellos indicadores con fórmula acumulativo de cada carga) de los indicadores asociados agrupados por tipo de empresa, con el total acumulado al final
+            //20-Gráfico tipo multiseries de línea, para las lesiones personales con y sin tiempo, acumulados, de los hijos del indicador
             $scope.chargeChartMultiSeriesLineIndicatorPersonalInjuryWithAndWithoutAccumulatedTimeFromChildrens = function (indicatorId, render, width, height) {
                 var getDataChartMultiSeriesLineIndicatorPersonalInjuryWithAndWithoutAccumulatedTimeFromChildrens = Routing.generate("getDataChartMultiSeriesLineIndicatorPersonalInjuryWithAndWithoutAccumulatedTimeFromChildrens", {id: indicatorId});
                 $http.get(getDataChartMultiSeriesLineIndicatorPersonalInjuryWithAndWithoutAccumulatedTimeFromChildrens).success(function (data) {
@@ -2880,6 +2880,29 @@ angular.module('seipModule.controllers', [])
                         });
                         revenueChartMultiSeriesLineIndicatorPersonalInjuryWithAndWithoutAccumulatedTimeFromChildrens.setTransparent(true);
                         revenueChartMultiSeriesLineIndicatorPersonalInjuryWithAndWithoutAccumulatedTimeFromChildrens.render();
+                    });
+                });
+            }
+            
+            //21-Gráfico tipo multiseries de línea, para los días perdidos, sólo del indicador (período actual y anterior)
+            $scope.chargeChartMultiSeriesLineIndicatorLostDaysAccumulatedTime = function (indicatorId, render, width, height) {
+                var getDataChartMultiSeriesLineIndicatorLostDaysAccumulatedTime = Routing.generate("getDataChartMultiSeriesLineIndicatorLostDaysAccumulatedTime", {id: indicatorId});
+                $http.get(getDataChartMultiSeriesLineIndicatorLostDaysAccumulatedTime).success(function (data) {
+                    FusionCharts.ready(function () {
+                        var revenueChartMultiSeriesLineIndicatorLostDaysAccumulatedTime = new FusionCharts({
+                            "type": "msline",
+                            "renderAt": render,
+                            "width": width + "%",
+                            "height": height,
+                            "dataFormat": "json",
+                            "dataSource": {
+                                "chart": data.dataSource.chart,
+                                "categories": data.dataSource.categories,
+                                "dataset": data.dataSource.dataset
+                            }
+                        });
+                        revenueChartMultiSeriesLineIndicatorLostDaysAccumulatedTime.setTransparent(true);
+                        revenueChartMultiSeriesLineIndicatorLostDaysAccumulatedTime.render();
                     });
                 });
             }
