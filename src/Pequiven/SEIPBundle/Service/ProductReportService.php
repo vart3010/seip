@@ -104,8 +104,11 @@ class productReportService implements ContainerAwareInterface {
         );
 
         $chart = array();
-
-        $chart["caption"] = $titles["caption"];
+        if ($range) {
+            $chart["caption"] = "Producción desde ".$range["dateFrom"]->format("d-m-Y")." hasta ".$range["dateEnd"]->format("d-m-Y");
+        } else {
+            $chart["caption"] = $titles["caption"];
+        }
         $chart["subCaption"] = $titles["subCaption"];
         //        $chart["xAxisName"] = "Indicador";
         if ($division == 1) {
@@ -206,36 +209,47 @@ class productReportService implements ContainerAwareInterface {
             }
         }
 
+
         $cont = 0;
+        $desplazamiento = 0;
         foreach (array_unique($arrayCategories) as $categories) {
             $categoriesGraphic[] = array("label" => $categories);
 
             $rep = array_keys($arrayCategories, $categories);
+
+
             if (count($rep) > 1) {
+                if (count($rep) > $desplazamiento) {
+                    $desplazamiento = count($rep);
+                }
                 $totalPlan = 0;
                 $totalReal = 0;
                 $totalPerc = 0;
+
                 foreach ($rep as $r) {
                     $totalPlan = $totalPlan + $arrayPlan[$r];
                     $totalReal = $totalReal + $arrayReal[$r];
                 }
+
                 if ($arrayPlan[$r] > 0) {
                     $totalPerc = ($totalReal * 100) / $totalPlan;
                 }
+
                 $percentaje[] = array("value" => number_format($totalPerc, 2, ',', '.'));
 
                 $valuesReal[] = array("value" => number_format($totalReal / $division, 2, ',', '.'));
                 $valuesPlan[] = array("value" => number_format($totalPlan / $division, 2, ',', '.'));
+                $cont++;
             } else {
-                $valuesReal[] = array("value" => number_format($arrayReal[$cont] / $division, 2, ',', '.'));
-                $valuesPlan[] = array("value" => number_format($arrayPlan[$cont] / $division, 2, ',', '.'));
+                $valuesReal[] = array("value" => number_format($arrayReal[$cont + $desplazamiento] / $division, 2, ',', '.'));
+                $valuesPlan[] = array("value" => number_format($arrayPlan[$cont + $desplazamiento] / $division, 2, ',', '.'));
                 $perc = 0;
                 if ($arrayPlan[$cont] > 0) {
                     $perc = ($arrayReal[$cont] * 100) / $arrayPlan[$cont];
                 }
                 $percentaje[] = array("value" => number_format($perc, 2, ',', '.'));
+                $cont++;
             }
-            $cont++;
         }
 
 
