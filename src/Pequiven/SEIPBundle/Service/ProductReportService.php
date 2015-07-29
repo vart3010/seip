@@ -104,7 +104,7 @@ class productReportService implements ContainerAwareInterface {
         );
 
         $chart = array();
-        if ($range) {
+        if ($range["range"]) {
             $chart["caption"] = "Producción desde ".$range["dateFrom"]->format("d-m-Y")." hasta ".$range["dateEnd"]->format("d-m-Y");
         } else {
             $chart["caption"] = $titles["caption"];
