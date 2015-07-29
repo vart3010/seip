@@ -182,6 +182,7 @@ abstract class Chart
             self::TYPE_CHART_MULTI_SERIES_LINE_INDICATOR_PERSONAL_INJURY_WITH_ACCUMULATED_TIME => 'chart.type.indicatorPersonalInjuryWithAccumulatedTime',
             self::TYPE_CHART_MULTI_SERIES_LINE_INDICATOR_PERSONAL_INJURY_WITHOUT_ACCUMULATED_TIME => 'chart.type.indicatorPersonalInjuryWithoutAccumulatedTime',
             self::TYPE_CHART_MULTI_SERIES_LINE_INDICATOR_PERSONAL_INJURY_WHIT_AND_WITHOUT_ACCUMULATED_TIME_FROM_CHILDRENS => 'chart.type.indicatorPersonalInjuryWithAndWithoutAccumulatedTimeFromChildrens',
+             self::TYPE_CHART_MULTI_SERIES_LINE_INDICATOR_LOST_DAYS_ACCUMULATED_TIME => 'chart.type.indicatorLostDaysAccumulatedTime',
             self::TYPE_EXAMPLE => 'chart.type.example',
         );
          
