@@ -9,5 +9,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 abstract class ManagementSystem
 {
+		
     
 }

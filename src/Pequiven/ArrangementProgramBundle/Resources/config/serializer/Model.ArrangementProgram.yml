@@ -10,6 +10,6 @@ Pequiven\ArrangementProgramBundle\Model\ArrangementProgram:
         categoryArrangementProgram:
             expose: true
             groups: [categoryArrangementProgram]
-        managementSystem:
+        managementSystems:
             expose: true
-            groups: [managementSystem]
+            groups: [managementSystems]

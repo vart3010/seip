@@ -326,7 +326,7 @@ class ArrangementProgramController extends SEIPController
                 'boxRender' => $boxRender,
             ));
         }else{
-            $view->getSerializationContext()->setGroups(array('id','api_list','period','managementSystem','tacticalObjective','operationalObjective','complejo','gerencia','gerenciaSecond'));
+            $view->getSerializationContext()->setGroups(array('id','api_list','period','managementSystems','tacticalObjective','operationalObjective','complejo','gerencia','gerenciaSecond'));
             $formatData = $request->get('_formatData','default');
             $view->setData($resources->toArray('',array(),$formatData));
         }

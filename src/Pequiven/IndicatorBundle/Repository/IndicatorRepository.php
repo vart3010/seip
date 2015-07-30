@@ -19,7 +19,8 @@ use Pequiven\SEIPBundle\Doctrine\ORM\SeipEntityRepository as EntityRepository;
  * @author matias
  */
 class IndicatorRepository extends EntityRepository 
-{
+{   
+
     public function getByOptionRef($options = array()){
     
         $em = $this->getEntityManager();
@@ -120,6 +121,19 @@ class IndicatorRepository extends EntityRepository
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
     function createPaginatorByLevel(array $criteria = null, array $orderBy = null) {
+        $criteria['for_view'] = true;
+        $orderBy['i.ref'] = 'ASC';
+        return $this->createPaginator($criteria, $orderBy);
+    }
+
+    /**
+     * Crea un paginador para los indicadores de acuerdo al nivel del mismo
+     * Filtrados por Programas de Gestión
+     * @param array $criteria
+     * @param array $orderBy
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    function createPaginatorByLevelSIG(array $criteria = null, array $orderBy = null) {
         $criteria['for_view'] = true;
         $orderBy['i.ref'] = 'ASC';
         return $this->createPaginator($criteria, $orderBy);
@@ -403,9 +417,18 @@ class IndicatorRepository extends EntityRepository
         
         //Vinculación con el objetivo al que esta vinculado el indicador
         $queryBuilder
-                ->andWhere('i.tmp = 0')
+                ->addSelect('ms')                
+                ;
+
+        $queryBuilder
+                ->leftJoin('i.managementSystems', 'ms')        
                 ;
         
+
+        $queryBuilder
+                ->andWhere('i.tmp = 0')
+                ;
+
         if(($forView = $criteria->remove('for_view')) !== null){
             $queryBuilder
                     ->innerJoin('i.objetives', 'o')
@@ -471,6 +494,13 @@ class IndicatorRepository extends EntityRepository
             }
             
         }
+        //Filtro de Sistemas de Gestión
+        if(($managementSystems = $criteria->remove('managementSystems')) != null){
+            $queryBuilder  
+                ->andWhere('ms.id = :managementSystems')
+                ->setParameter('managementSystems', $managementSystems)
+                ;
+        }
         
         //Filtro Gerencias de Apoyo
         if(($support = $criteria->remove('type_gerencia_support')) != null){
@@ -505,9 +535,12 @@ class IndicatorRepository extends EntityRepository
                 }
             }
         }
+
+
         $applyPeriodCriteria = $criteria->remove('applyPeriodCriteria');
         parent::applyCriteria($queryBuilder, $criteria->toArray());
-        
+        //print_r($queryBuilder->getQuery()->getSQL());
+        //die();
         if($applyPeriodCriteria){
             $this->applyPeriodCriteria($queryBuilder);
         }

@@ -100,7 +100,7 @@ abstract class ArrangementProgram
      *
      * @ORM\ManyToOne(targetEntity="Pequiven\SIGBundle\Entity\ManagementSystem")
      */
-    protected $managementSystem;
+    protected $managementSystems;
     
     /**
      * Retorna la etiqueta del tipo de programa de gestion
@@ -496,25 +496,25 @@ abstract class ArrangementProgram
     
     
     /**
-     * Set ManagementSystem
+     * Set ManagementSystems
      *
-     * @param \Pequiven\SIGBundle\Entity\ManagementSystem $managementSystem
+     * @param \Pequiven\SIGBundle\Entity\ManagementSystem $managementSystems
      * @return ArrangementProgram
      */
-    public function setManagementSystem(\Pequiven\SIGBundle\Entity\ManagementSystem $managementSystem = null)
+    public function setManagementSystem(\Pequiven\SIGBundle\Entity\ManagementSystem $managementSystems = null)
     {
-        $this->managementSystem = $managementSystem;
+        $this->managementSystems = $managementSystems;
 
         return $this;
     }
 
     /**
-     * Get getManagementSystem
+     * Get getManagementSystems
      *
      * @return \Pequiven\SIGBundle\Entity\ManagementSystem 
      */
     public function getManagementSystem()
     {
-        return $this->managementSystem;
+        return $this->managementSystems;
     }
 }

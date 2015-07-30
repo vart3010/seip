@@ -2072,6 +2072,7 @@ angular.module('seipModule.controllers', [])
             var selectInclude = angular.element('#includeGerenciaSecondSupport');
             var sectionExcludeGerenciaSecondSupport = angular.element("#sectionExcludeGerenciaSecondSupport");
             var sectionIncludeGerenciaSecondSupport = angular.element("#sectionIncludeGerenciaSecondSupport");
+            var sectionManagementSystem = angular.element ("#sectionManagementSystems");
             $scope.data = {
                 complejos: null,
                 first_line_managements: null,
@@ -2105,7 +2106,7 @@ angular.module('seipModule.controllers', [])
                                 });
                             }
                         });
-            };
+            };            
             //Busca las Gerencias de 1ra Línea
             $scope.getFirstLineManagement = function (complejo) {
                 var parameters = {

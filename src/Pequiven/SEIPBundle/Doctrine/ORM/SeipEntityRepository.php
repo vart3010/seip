@@ -98,7 +98,7 @@ class SeipEntityRepository extends EntityRepository
         }else{
             $this->setParameterPeriod($queryBuilder);
         }
-    }
+    }   
     
     protected function setParameterPeriod(QueryBuilder &$queryBuilder)
     {

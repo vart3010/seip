@@ -4,3 +4,6 @@ Pequiven\IndicatorBundle\Model\Indicator\ValueIndicator:
         formulaParameters:
             expose: true
             groups: [api_list]
+        managementSystems:
+            expose: true
+            groups: [managementSystems]

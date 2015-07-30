@@ -118,7 +118,7 @@ class GenericDataController extends SEIPController
     function getTacticalObjectivesAction(\Symfony\Component\HttpFoundation\Request $request)
     {
         $criteria = $request->get('filter',$this->config->getCriteria());
-        $criteria['idManagementSystem'] = $request->get('idManagementSystem');
+        $criteria['idManagementSystems'] = $request->get('idManagementSystems');
         $user = $this->getUser();
         $repository = $this->get('pequiven.repository.objetiveoperative');
         $results = $repository->findTacticalObjetives($user,$criteria);

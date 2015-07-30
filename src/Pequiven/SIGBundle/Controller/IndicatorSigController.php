@@ -2,11 +2,7 @@
 
 namespace Pequiven\SIGBundle\Controller;
 
-#use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-#use Pequiven\SEIPBundle\Controller\SEIPController;
-
-#use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram;
+//use Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram;
 
 use Pequiven\IndicatorBundle\Entity\Indicator;
 use Pequiven\SIGBundle\Entity\ManagementSystem;
@@ -46,15 +42,15 @@ class IndicatorSigController extends ResourceController
 
         $criteria = $request->get('filter', $this->config->getCriteria());
         $sorting = $request->get('sorting', $this->config->getSorting());
-        $repository = $this->getRepository();
+        $repository = $this->container->get('pequiven.repository.sig_indicator');
 
         $criteria['indicatorLevel'] = $level;
-        $criteria['applyPeriodCriteria'] = false;
-            
+        $criteria['applyPeriodCriteria'] = true;
+        
 
         if ($this->config->isPaginated()) {
             $resources = $this->resourceResolver->getResource(
-                    $repository, 'createPaginatorByLevel', array($criteria, $sorting)
+                    $repository, 'createPaginatorByLevelSIG', array($criteria, $sorting)
             );
         
 
@@ -82,11 +78,8 @@ class IndicatorSigController extends ResourceController
                 ->setTemplate($this->config->getTemplate('list.html'))
                 ->setTemplateVar($this->config->getPluralResourceName())
         ;
-
-        //var_dump($view);
-        //die();
         
-        $view->getSerializationContext()->setGroups(array('id', 'api_list', 'valuesIndicator','managementSystem','api_details', 'sonata_api_read', 'formula'));
+        $view->getSerializationContext()->setGroups(array('id', 'api_list', 'valuesIndicator','managementSystems','api_details', 'sonata_api_read', 'formula'));
         if ($request->get('_format') == 'html') {
             $labelsSummary = array();
             foreach (Indicator::getLabelsSummary() as $key => $value) {
@@ -109,7 +102,6 @@ class IndicatorSigController extends ResourceController
 
             $view->setData($resources->toArray('', array(), $formatData));
         }
-        //return $this->render('PequivenSIGBundle:Indicator:list.html.twig');
         return $this->handleView($view);
 
     }
