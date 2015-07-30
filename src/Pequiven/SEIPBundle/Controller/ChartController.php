@@ -494,6 +494,66 @@ class ChartController extends SEIPController {
 
         return $response;
     }
+    
+    /**
+     * 24-Función que retorna la data para un gráfico tipo mulsiseries columna + línea, todo respecto al mismo eje, para mostrar el resultado de las lesiones con tiempo perdido por frecuencia de notificación del indicador del período actual y anterior (línea) y el acumulado por período (columna) al final.
+     * @return JsonResponse
+     */
+    public function getDataChartMultiSeriesColumnLineIndicatorPersonalInjuryWithLostTimeByFrequencyNotificationByPeriodWithAccumulatedAction(Request $request) {
+        $response = new JsonResponse();
+
+        $idIndicator = $request->get('id');
+
+        $indicatorService = $this->getIndicatorService(); //Obtenemos el servicio del indicador
+
+        $indicator = $this->get('pequiven.repository.indicator')->find($idIndicator); //Obtenemos el indicador
+
+        $dataChart = $indicatorService->getChartColumnLineDualAxis($indicator, array('resultIndicatorPersonalInjuryWithLostTimeByFrequencyNotificationByPeriodAccumulated' => true, 'variables' => array("lesionados_con_tiempo_perdido" => true, "lesiones_con_tiempo_perdido" => true), 'path_array' => 'resultIndicatorPersonalInjuryWithLostTimeByFrequencyNotificationByPeriodAccumulated')); //Obtenemos la data del gráfico de acuerdo al indicador
+
+        $response->setData($dataChart); //Seteamos la data del gráfico en Json
+
+        return $response;
+    }
+    
+    /**
+     * 25-Función que retorna la data para un gráfico tipo mulsiseries columna + línea, todo respecto al mismo eje, para mostrar el resultado de las lesiones sin tiempo perdido por frecuencia de notificación del indicador del período actual y anterior (línea) y el acumulado por período (columna) al final.
+     * @return JsonResponse
+     */
+    public function getDataChartMultiSeriesColumnLineIndicatorPersonalInjuryWithoutLostTimeByFrequencyNotificationByPeriodWithAccumulatedAction(Request $request) {
+        $response = new JsonResponse();
+
+        $idIndicator = $request->get('id');
+
+        $indicatorService = $this->getIndicatorService(); //Obtenemos el servicio del indicador
+
+        $indicator = $this->get('pequiven.repository.indicator')->find($idIndicator); //Obtenemos el indicador
+
+        $dataChart = $indicatorService->getChartColumnLineDualAxis($indicator, array('resultIndicatorPersonalInjuryWithoutLostTimeByFrequencyNotificationByPeriodAccumulated' => true, 'variables' => array("lesionados_sin_tiempo_perdido" => true), 'path_array' => 'resultIndicatorPersonalInjuryWithoutLostTimeByFrequencyNotificationByPeriodAccumulated')); //Obtenemos la data del gráfico de acuerdo al indicador
+
+        $response->setData($dataChart); //Seteamos la data del gráfico en Json
+
+        return $response;
+    }
+   
+    /**
+     * 26-Función que retorna la data para un gráfico tipo mulsiseries columna + línea, todo respecto al mismo eje, para mostrar el resultado de los días perdidos por frecuencia de notificación del indicador del período actual y anterior (línea) y el acumulado por período (columna) al final.
+     * @return JsonResponse
+     */
+    public function getDataChartMultiSeriesColumnLineIndicatorLostDaysByFrequencyNotificationByPeriodWithAccumulatedAction(Request $request) {
+        $response = new JsonResponse();
+
+        $idIndicator = $request->get('id');
+
+        $indicatorService = $this->getIndicatorService(); //Obtenemos el servicio del indicador
+
+        $indicator = $this->get('pequiven.repository.indicator')->find($idIndicator); //Obtenemos el indicador
+
+        $dataChart = $indicatorService->getChartColumnLineDualAxis($indicator, array('resultIndicatorLostDaysByFrequencyNotificationByPeriodAccumulated' => true, 'variables' => array("dias_perdidos" => true), 'path_array' => 'resultIndicatorLostDaysByFrequencyNotificationByPeriodAccumulated')); //Obtenemos la data del gráfico de acuerdo al indicador
+
+        $response->setData($dataChart); //Seteamos la data del gráfico en Json
+
+        return $response;
+    }
    
     /**
      * Servicio de los Indicadores

@@ -133,6 +133,21 @@ abstract class Chart
      */
     const TYPE_CHART_MULTI_SERIES_COLUMN_LINE_INDICATOR_PERSONAL_INJURY_WITH_AND_WITHOUT_AND_LOST_DAYS_BY_FREQUENCY_NOTIFICATION_BY_PERIOD_GROUP_BY_COMPANY_WITH_ACCUMULATED = 23;
     
+    /**
+     * Gráfico tipo mulsiseries columna + línea, todo respecto al mismo eje, para mostrar el resultado de las lesiones con tiempo perdido por frecuencia de notificación del indicador del período actual y anterior (línea) y el acumulado por período (columna) al final.
+     */
+    const TYPE_CHART_MULTI_SERIES_COLUMN_LINE_INDICATOR_PERSONAL_INJURY_WITH_LOST_TIME_BY_FREQUENCY_NOTIFICATION_BY_PERIOD_WITH_ACCUMULATED = 24;
+    
+    /**
+     * Gráfico tipo mulsiseries columna + línea, todo respecto al mismo eje, para mostrar el resultado de las lesiones sin tiempo perdido por frecuencia de notificación del indicador del período actual y anterior (línea) y el acumulado por período (columna) al final.
+     */
+    const TYPE_CHART_MULTI_SERIES_COLUMN_LINE_INDICATOR_PERSONAL_INJURY_WITHOUT_LOST_TIME_BY_FREQUENCY_NOTIFICATION_BY_PERIOD_WITH_ACCUMULATED = 25;
+    
+    /**
+     * Gráfico tipo mulsiseries columna + línea, todo respecto al mismo eje, para mostrar el resultado de los días perdidos por frecuencia de notificación del indicador del período actual y anterior (línea) y el acumulado por período (columna) al final.
+     */
+    const TYPE_CHART_MULTI_SERIES_COLUMN_LINE_INDICATOR_LOST_DAYS_BY_FREQUENCY_NOTIFICATION_BY_PERIOD_WITH_ACCUMULATED = 26;
+    
     const TYPE_EXAMPLE = 100;
        
     /**
@@ -195,6 +210,9 @@ abstract class Chart
             self::TYPE_CHART_MULTI_SERIES_LINE_INDICATOR_LOST_DAYS_ACCUMULATED_TIME => 'chart.type.indicatorLostDaysAccumulatedTime',
             self::TYPE_CHART_MULTI_SERIES_COLUMN_INDICATORS_ASSOCIATED_PERSONAL_INJURY_WITH_AND_WITHOUT_AND_LOST_DAYS_BY_PERIOD_WITH_ACCUMULATED => 'chart.type.indicatorsAssociatedPersonalInjuryWithAndWithoutAndLostDaysByPeriodWithAccumulated',
             self::TYPE_CHART_MULTI_SERIES_COLUMN_LINE_INDICATOR_PERSONAL_INJURY_WITH_AND_WITHOUT_AND_LOST_DAYS_BY_FREQUENCY_NOTIFICATION_BY_PERIOD_GROUP_BY_COMPANY_WITH_ACCUMULATED => 'chart.type.indicatorPersonalInjuryWithAndWithoutAndLostDaysByFrequencyNotificationByPeriodGroupByCompanyWithAccumulated',
+            self::TYPE_CHART_MULTI_SERIES_COLUMN_LINE_INDICATOR_PERSONAL_INJURY_WITH_LOST_TIME_BY_FREQUENCY_NOTIFICATION_BY_PERIOD_WITH_ACCUMULATED => 'chart.type.indicatorPersonalInjuryWithLostTimeByFrequencyNotificationByPeriodWithAccumulated',
+            self::TYPE_CHART_MULTI_SERIES_COLUMN_LINE_INDICATOR_PERSONAL_INJURY_WITHOUT_LOST_TIME_BY_FREQUENCY_NOTIFICATION_BY_PERIOD_WITH_ACCUMULATED => 'chart.type.indicatorPersonalInjuryWithoutLostTimeByFrequencyNotificationByPeriodWithAccumulated',
+            self::TYPE_CHART_MULTI_SERIES_COLUMN_LINE_INDICATOR_LOST_DAYS_BY_FREQUENCY_NOTIFICATION_BY_PERIOD_WITH_ACCUMULATED => 'chart.type.indicatorLostDaysByFrequencyNotificationByPeriodWithAccumulated',
             self::TYPE_EXAMPLE => 'chart.type.example',
         );
          

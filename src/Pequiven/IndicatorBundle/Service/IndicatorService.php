@@ -2514,6 +2514,85 @@ class IndicatorService implements ContainerAwareInterface {
             
             $arrayVariables['ACUMULADO_PERIODO_ACTUAL']['data'][] = array('value' => $result['ACUMULADO_PERIODO_ACTUAL']['value'], 'showValue' => $showValue);
             $arrayVariables['ACUMULADO_PERIODO_ANTERIOR']['data'][] = array('value' => $result['ACUMULADO_PERIODO_ANTERIOR']['value'], 'showValue' => $showValue);
+        } elseif((isset($options['resultIndicatorPersonalInjuryWithLostTimeByFrequencyNotificationByPeriodAccumulated']) && array_key_exists('resultIndicatorPersonalInjuryWithLostTimeByFrequencyNotificationByPeriodAccumulated', $options)) || (isset($options['resultIndicatorPersonalInjuryWithoutLostTimeByFrequencyNotificationByPeriodAccumulated']) && array_key_exists('resultIndicatorPersonalInjuryWithoutLostTimeByFrequencyNotificationByPeriodAccumulated', $options)) || (isset($options['resultIndicatorLostDaysByFrequencyNotificationByPeriodAccumulated']) && array_key_exists('resultIndicatorLostDaysByFrequencyNotificationByPeriodAccumulated', $options))){
+            unset($options['path_array']);
+            
+            $childrens = $indicator->getChildrens();
+            $variables = $formula->getVariables();
+
+            $arrayVariables['PERIODO_ACTUAL'] = array('seriesname' => $indicator->getPeriod()->getName(), 'data' => array(), 'renderAs' => 'line');
+            $arrayVariables['PERIODO_ANTERIOR'] = array('seriesname' => $indicator->getPeriod()->getParent()->getName(), 'data' => array(), 'renderAs' => 'line');
+            $arrayVariables['ACUMULADO_PERIODO_ACTUAL'] = array('seriesname' => 'Acumulado 2015', 'data' => array(), "parentYAxis" => "S", 'renderAs' => 'column');
+            $arrayVariables['ACUMULADO_PERIODO_ANTERIOR'] = array('seriesname' => 'Acumulado 2014', 'data' => array(), "parentYAxis" => "S", 'renderAs' => 'column');
+            
+            $arrayVarsSpecific = $options['variables'];
+            $numberResults = $indicator->getFrequencyNotificationIndicator()->getNumberResultsFrequency();
+
+            //Seteamos por defecto los valores por número de resultados totales
+            for ($i = 1; $i <= $numberResults; $i++) {
+                $result['PERIODO_ACTUAL']['value'][$i] = 0.0;
+                $result['PERIODO_ANTERIOR']['value'][$i] = 0.0;
+            }
+            $result['ACUMULADO_PERIODO_ACTUAL']['value'] = 0.0;
+            $result['ACUMULADO_PERIODO_ANTERIOR']['value'] = 0.0;
+
+            //Recorremos los valores del indicador
+            $contValueIndicator = 1;
+            $totalValuesIndicator = count($valuesIndicator);
+            foreach ($valuesIndicator as $valueIndicator) {
+                foreach ($variables as $variable) {
+                    if (array_key_exists($variable->getName(), $arrayVarsSpecific)) {
+                        $nameParameter = $variable->getName();
+                        $valVariable = $valueIndicator->getParameter($nameParameter);
+                        $result['PERIODO_ACTUAL']['value'][$contValueIndicator] = $result['PERIODO_ACTUAL']['value'][$contValueIndicator] + $valVariable;
+                    }
+                }
+                $contValueIndicator++;
+            }
+
+            $em = $this->getDoctrine();
+            $prePlanningItemCloneObject = $em->getRepository('Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanningItemClone')->findOneBy(array('idCloneObject' => $indicator->getId(), 'typeObject' => \Pequiven\SEIPBundle\Model\PrePlanning\PrePlanningTypeObject::TYPE_OBJECT_INDICATOR));
+            $indicatorLastPeriod = $this->container->get('pequiven.repository.indicator')->find($prePlanningItemCloneObject->getIdSourceObject());
+
+            //Recorremos los hijos para acumular los valores por número de resultados totales
+            $lastPeriodValuesIndicator = $indicatorLastPeriod->getValuesIndicator();
+            $contLastPeriodValueIndicator = 1;
+            $variablesLastPeriod = $indicatorLastPeriod->getFormula()->getVariables();
+            $totalLastPeriodValuesIndicator = count($lastPeriodValuesIndicator);
+            foreach ($lastPeriodValuesIndicator as $lastPeriodValueIndicator) {
+                foreach ($variablesLastPeriod as $variableLastPeriod) {
+                    if (array_key_exists($variableLastPeriod->getName(), $arrayVarsSpecific)) {
+                        $nameParameter = $variableLastPeriod->getName();
+                        $valVariableLastPeriod = $lastPeriodValueIndicator->getParameter($nameParameter);
+                        $result['PERIODO_ANTERIOR']['value'][$contLastPeriodValueIndicator] = $result['PERIODO_ANTERIOR']['value'][$contLastPeriodValueIndicator] + $valVariableLastPeriod;
+                    }
+                }
+                $contLastPeriodValueIndicator++;
+            }
+
+            $showUntilMonth = 6; //TODO: Ponerlo por el administrador del indicador
+            //Seteamos el acumulado para cada serie
+            for ($i = 1; $i <= $numberResults; $i++) {
+                if ($i <= $showUntilMonth) {
+                    $result['ACUMULADO_PERIODO_ACTUAL']['value'] = $result['ACUMULADO_PERIODO_ACTUAL']['value'] + $result['PERIODO_ACTUAL']['value'][$i];
+                }
+                $result['ACUMULADO_PERIODO_ANTERIOR']['value'] = $result['ACUMULADO_PERIODO_ANTERIOR']['value'] + $result['PERIODO_ANTERIOR']['value'][$i];
+            }
+
+            //Seteamos el arreglo a devolver para cada serie
+            $showValue = 1;
+            for ($i = 1; $i <= $numberResults; $i++) {
+//                $showValue = $i <= $showUntilMonth ? 1 : 0;
+                if ($i <= $showUntilMonth) {
+                    $arrayVariables['PERIODO_ACTUAL']['data'][] = array('value' => $result['PERIODO_ACTUAL']['value'][$i], 'showValue' => $showValue);
+                }
+                $arrayVariables['PERIODO_ANTERIOR']['data'][] = array('value' => $result['PERIODO_ANTERIOR']['value'][$i], 'showValue' => $showValue);
+                $arrayVariables['ACUMULADO_PERIODO_ACTUAL']['data'][] = array('value' => 0.0, 'showValue' => 0);
+                $arrayVariables['ACUMULADO_PERIODO_ANTERIOR']['data'][] = array('value' => 0.0, 'showValue' => 0);
+            }
+            
+            $arrayVariables['ACUMULADO_PERIODO_ACTUAL']['data'][] = array('value' => $result['ACUMULADO_PERIODO_ACTUAL']['value'], 'showValue' => $showValue);
+            $arrayVariables['ACUMULADO_PERIODO_ANTERIOR']['data'][] = array('value' => $result['ACUMULADO_PERIODO_ANTERIOR']['value'], 'showValue' => $showValue);
         }
 
         return $arrayVariables;
@@ -2691,6 +2770,10 @@ class IndicatorService implements ContainerAwareInterface {
         } elseif(isset($options['resultIndicatorPersonalInjuryWithAndWithoutAndLostDaysByFrequencyNotificationByPeriodGroupByCompanyAccumulated']) && array_key_exists('resultIndicatorPersonalInjuryWithAndWithoutAndLostDaysByFrequencyNotificationByPeriodGroupByCompanyAccumulated', $options)){
             unset($options[$options['path_array']]);
             
+            $chart["subCaption"] = $indicator->getShowByRealValue();
+            $chart["pYAxisName"] = $indicator->getShowByPlanValue();
+            $chart["rotateValues"] = "0";
+            
             unset($chart["sYAxisName"]);
             unset($chart["sNumberSuffix"]);
             unset($chart["sYAxisMaxValue"]);
@@ -2712,7 +2795,7 @@ class IndicatorService implements ContainerAwareInterface {
                 $category[] = $label;
             }
             
-                $category[] = array('label' => 'Acumulado');
+            $category[] = array('label' => 'Acumulado');
 
             $dataSetValues['MATRIZ'] = array('seriesname' => $arrayVariables['MATRIZ']['seriesname'], 'renderAs' => $arrayVariables['MATRIZ']['renderAs'], 'data' => $arrayVariables['MATRIZ']['data']);
             $dataSetValues['AFILIADA_MIXTA'] = array('seriesname' => $arrayVariables['AFILIADA_MIXTA']['seriesname'], 'renderAs' => $arrayVariables['AFILIADA_MIXTA']['renderAs'], 'data' => $arrayVariables['AFILIADA_MIXTA']['data']);
@@ -2728,6 +2811,42 @@ class IndicatorService implements ContainerAwareInterface {
             $data['dataSource']['dataset'][] = $dataSetValues['ACUMULADO_PERIODO_ACTUAL'];
             $data['dataSource']['dataset'][] = $dataSetValues['ACUMULADO_PERIODO_ANTERIOR'];
             
+        } elseif((isset($options['resultIndicatorPersonalInjuryWithLostTimeByFrequencyNotificationByPeriodAccumulated']) && array_key_exists('resultIndicatorPersonalInjuryWithLostTimeByFrequencyNotificationByPeriodAccumulated', $options)) || (isset($options['resultIndicatorPersonalInjuryWithoutLostTimeByFrequencyNotificationByPeriodAccumulated']) && array_key_exists('resultIndicatorPersonalInjuryWithoutLostTimeByFrequencyNotificationByPeriodAccumulated', $options)) || (isset($options['resultIndicatorLostDaysByFrequencyNotificationByPeriodAccumulated']) && array_key_exists('resultIndicatorLostDaysByFrequencyNotificationByPeriodAccumulated', $options))){
+            unset($options[$options['path_array']]);
+            
+            unset($chart["sYAxisName"]);
+            unset($chart["sNumberSuffix"]);
+            unset($chart["sYAxisMaxValue"]);
+            
+            $arrayVariables = array();
+            $arrayVariables = $this->getArrayVariablesFormulaWithData($indicator, array($options['path_array'] => true, 'variables' => $options['variables'], 'path_array' => $options['path_array']));
+            
+            $numberResults = $indicator->getFrequencyNotificationIndicator()->getNumberResultsFrequency();
+            $labelsFrequencyNotificationArray = $this->getLabelsByIndicatorFrequencyNotification($indicator);
+
+            $variables = $indicator->getFormula()->getVariables();
+            $contVariables = count($variables);
+
+            //Añadimos los valores, por frecuencia de notificación
+            for ($i = 0; $i < $numberResults; $i++) {
+                $label = array();
+                $label["label"] = $labelsFrequencyNotificationArray[($i + 1)];
+
+                $category[] = $label;
+            }
+            
+            
+            $category[] = array('label' => 'Acumulado');
+
+            $dataSetValues['PERIODO_ACTUAL'] = array('seriesname' => $arrayVariables['PERIODO_ACTUAL']['seriesname'], 'renderAs' => $arrayVariables['PERIODO_ACTUAL']['renderAs'], 'data' => $arrayVariables['PERIODO_ACTUAL']['data']);
+            $dataSetValues['PERIODO_ANTERIOR'] = array('seriesname' => $arrayVariables['PERIODO_ANTERIOR']['seriesname'], 'renderAs' => $arrayVariables['PERIODO_ANTERIOR']['renderAs'], 'data' => $arrayVariables['PERIODO_ANTERIOR']['data']);
+            $dataSetValues['ACUMULADO_PERIODO_ACTUAL'] = array('seriesname' => $arrayVariables['ACUMULADO_PERIODO_ACTUAL']['seriesname'], 'data' => $arrayVariables['ACUMULADO_PERIODO_ACTUAL']['data'], 'parentYAxis' => $arrayVariables['ACUMULADO_PERIODO_ACTUAL']['parentYAxis'], 'renderAs' => $arrayVariables['ACUMULADO_PERIODO_ACTUAL']['renderAs']);
+            $dataSetValues['ACUMULADO_PERIODO_ANTERIOR'] = array('seriesname' => $arrayVariables['ACUMULADO_PERIODO_ANTERIOR']['seriesname'], 'data' => $arrayVariables['ACUMULADO_PERIODO_ANTERIOR']['data'],  'parentYAxis' => $arrayVariables['ACUMULADO_PERIODO_ACTUAL']['parentYAxis'], 'renderAs' => $arrayVariables['ACUMULADO_PERIODO_ANTERIOR']['renderAs']);
+
+            $data['dataSource']['dataset'][] = $dataSetValues['PERIODO_ACTUAL'];
+            $data['dataSource']['dataset'][] = $dataSetValues['PERIODO_ANTERIOR'];
+            $data['dataSource']['dataset'][] = $dataSetValues['ACUMULADO_PERIODO_ACTUAL'];
+            $data['dataSource']['dataset'][] = $dataSetValues['ACUMULADO_PERIODO_ANTERIOR'];
         }
 
         $data['dataSource']['chart'] = $chart;
