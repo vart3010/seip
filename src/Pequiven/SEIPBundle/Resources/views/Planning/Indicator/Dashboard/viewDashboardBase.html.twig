@@ -196,6 +196,11 @@
                                         <span id="{{ grafico }}"></span>
                                     </div>
                                 {% endif %}
+                                {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_MULTI_SERIES_COLUMN_LINE_INDICATOR_PERSONAL_INJURY_WITH_AND_WITHOUT_AND_LOST_DAYS_BY_FREQUENCY_NOTIFICATION_BY_PERIOD_GROUP_BY_COMPANY_WITH_ACCUMULATED')  %}
+                                    <div id="tab-{{ grafico }}"  ng-controller="DashboardController" ng-init="chargeChartMultiSeriesColumnLineIndicatorPersonalInjuryWithAndWithoutAndLostDaysByFrequencyNotificationByPeriodGroupByCompanyWithAccumulated({{ indicator.id }},'{{ grafico }}','100','500')">
+                                        <span id="{{ grafico }}"></span>
+                                    </div>
+                                {% endif %}
                                 {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_EXAMPLE')  %}
                                     <div id="tab-{{ grafico }}"  ng-controller="DashboardController" ng-init="renderChartExample({{ indicator.id }},'{{ grafico }}','100','500')">
                                         <span id="{{ grafico }}"></span>
