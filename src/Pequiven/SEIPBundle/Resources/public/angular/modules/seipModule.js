@@ -2908,11 +2908,11 @@ angular.module('seipModule.controllers', [])
             }
             
             //22-Gráfico tipo multiseries columna 3d, para mostrar el resultado de una suma de variables de los indicadores hijos (lesionados con tiempo perdidoa, sin tiempo perdido y días perdidos), según sea el caso del período actual y anterior
-            $scope.chargeChartMultiSeriesLineIndicatorAssociatedPersonalInjuryWithAndWithoutAndLostDaysByPeriodWithAccumulated = function (indicatorId, render, width, height) {
-                var getDataChartMultiSeriesLineIndicatorAssociatedPersonalInjuryWithAndWithoutAndLostDaysByPeriodWithAccumulated = Routing.generate("getDataChartMultiSeriesLineIndicatorAssociatedPersonalInjuryWithAndWithoutAndLostDaysByPeriodWithAccumulated", {id: indicatorId});
-                $http.get(getDataChartMultiSeriesLineIndicatorAssociatedPersonalInjuryWithAndWithoutAndLostDaysByPeriodWithAccumulated).success(function (data) {
+            $scope.chargeChartMultiSeriesIndicatorAssociatedPersonalInjuryWithAndWithoutAndLostDaysByPeriodWithAccumulated = function (indicatorId, render, width, height) {
+                var getDataChartMultiSeriesIndicatorAssociatedPersonalInjuryWithAndWithoutAndLostDaysByPeriodWithAccumulated = Routing.generate("getDataChartMultiSeriesIndicatorAssociatedPersonalInjuryWithAndWithoutAndLostDaysByPeriodWithAccumulated", {id: indicatorId});
+                $http.get(getDataChartMultiSeriesIndicatorAssociatedPersonalInjuryWithAndWithoutAndLostDaysByPeriodWithAccumulated).success(function (data) {
                     FusionCharts.ready(function () {
-                        var revenueChartMultiSeriesLineIndicatorAssociatedPersonalInjuryWithAndWithoutAndLostDaysByPeriodWithAccumulated = new FusionCharts({
+                        var revenueChartMultiSeriesIndicatorAssociatedPersonalInjuryWithAndWithoutAndLostDaysByPeriodWithAccumulated = new FusionCharts({
                             "type": "mscolumn3d",
                             "renderAt": render,
                             "width": width + "%",
@@ -2924,8 +2924,8 @@ angular.module('seipModule.controllers', [])
                                 "dataset": data.dataSource.dataset
                             }
                         });
-                        revenueChartMultiSeriesLineIndicatorAssociatedPersonalInjuryWithAndWithoutAndLostDaysByPeriodWithAccumulated.setTransparent(true);
-                        revenueChartMultiSeriesLineIndicatorAssociatedPersonalInjuryWithAndWithoutAndLostDaysByPeriodWithAccumulated.render();
+                        revenueChartMultiSeriesIndicatorAssociatedPersonalInjuryWithAndWithoutAndLostDaysByPeriodWithAccumulated.setTransparent(true);
+                        revenueChartMultiSeriesIndicatorAssociatedPersonalInjuryWithAndWithoutAndLostDaysByPeriodWithAccumulated.render();
                     });
                 });
             }

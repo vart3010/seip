@@ -459,7 +459,7 @@ class ChartController extends SEIPController {
      * 22-Función que retorna la data para un gráfico tipo multiseries columna 3d, para mostrar el resultado de una suma de variables de los indicadores hijos (lesionados con tiempo perdidoa, sin tiempo perdido y días perdidos), según sea el caso del período actual y anterior
      * @return JsonResponse
      */
-    public function getDataChartMultiSeriesLineIndicatorAssociatedPersonalInjuryWithAndWithoutAndLostDaysByPeriodWithAccumulatedAction(Request $request) {
+    public function getDataChartMultiSeriesIndicatorAssociatedPersonalInjuryWithAndWithoutAndLostDaysByPeriodWithAccumulatedAction(Request $request) {
         $response = new JsonResponse();
 
         $idIndicator = $request->get('id');

@@ -275,10 +275,10 @@ getDataChartMultiSeriesLineIndicatorLostDaysAccumulatedTime:
         expose: true
         
 #22
-getDataChartMultiSeriesLineIndicatorAssociatedPersonalInjuryWithAndWithoutAndLostDaysByPeriodWithAccumulated:
-    path: /getDataChartMultiSeriesLineIndicatorAssociatedPersonalInjuryWithAndWithoutAndLostDaysByPeriodWithAccumulated/{id}
+getDataChartMultiSeriesIndicatorAssociatedPersonalInjuryWithAndWithoutAndLostDaysByPeriodWithAccumulated:
+    path: /getDataChartMultiSeriesIndicatorAssociatedPersonalInjuryWithAndWithoutAndLostDaysByPeriodWithAccumulated/{id}
     defaults:
-        _controller: pequiven.controller.seipchart:getDataChartMultiSeriesLineIndicatorAssociatedPersonalInjuryWithAndWithoutAndLostDaysByPeriodWithAccumulatedAction
+        _controller: pequiven.controller.seipchart:getDataChartMultiSeriesIndicatorAssociatedPersonalInjuryWithAndWithoutAndLostDaysByPeriodWithAccumulatedAction
         _format: json
     requirements:
         _format: "json|xml"
