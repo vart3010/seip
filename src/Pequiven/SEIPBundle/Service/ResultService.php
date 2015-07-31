@@ -1856,7 +1856,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                     $status = \Pequiven\SEIPBundle\Controller\Api\ResultApiController::RESULT_INVALID_CONFIGURATION;
                 }
             } else if ($user->getLevelRealByGroup() == \Pequiven\MasterBundle\Model\Rol::ROLE_DIRECTIVE) {
-                $objetivesStrategic = $this->get('pequiven.repository.objetive')->findAllStrategicByPeriod($period);
+                $objetivesStrategic = $this->container->get('pequiven.repository.objetive')->findAllStrategicByPeriod($period);
                 foreach ($objetivesStrategic as $objetive) {
                     if ($objetive->getPeriod()->getId() == $periodActual->getId()) {
                         $objetives[$objetive->getId()] = $objetive;

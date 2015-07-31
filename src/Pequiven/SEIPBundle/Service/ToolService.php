@@ -158,7 +158,7 @@ class ToolService
      * @param type $arrangementPrograms
      * @param type $objetives
      */
-    public function getObjetiveFromPrograms($arrangementPrograms,&$objetives) {
+    static function getObjetiveFromPrograms($arrangementPrograms,&$objetives) {
         foreach ($arrangementPrograms as $arrangementProgram) {
             $objetive = null;
             if($arrangementProgram->getType() == \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE){
