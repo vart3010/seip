@@ -4,6 +4,18 @@
 <div class="with-padding">
     <div class="columns">
         <div class="twelve-columns">
+            {% if(datosUser!=null) %}
+                <h3 class="thin underline text-center">Usuario</h3>
+                <fieldset class="fieldset">
+                    <p class="inline-label">
+                        <label class="label">Nombre de Usuario</label>
+                        {{ datosUser["nombre"] }}
+                    </p>
+                </fieldset>
+
+            {% endif  %}
+
+
 
             {% if(error|length  == 0) %}
 

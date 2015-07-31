@@ -17,13 +17,28 @@ class UserSummaryItemsBox extends \Tecnocreaciones\Bundle\BoxBundle\Model\Generi
         //OBTENEMOS PROGRAMAS DE GESTION ASOCIADOS
         $criteria = array();
         $orderBy = array();
+        $datosUser = null;
         $repository = $this->container->get('pequiven_seip.repository.arrangementprogram');
 
         $period = $this->getPeriodService()->getPeriodActive()->getName();
 
+
+
+
+        if ($this->getRequest()->get('numPersonal') != null) {
+            $numPersonal = $this->getRequest()->get('numPersonal');
+
+            //USUARIO BUSCADO Pequiven\SEIPBundle\Repository
+            //$em = $this->getDoctrine()->getManager();
+            $searchUser = $this->container->get("pequiven.repository.user")->findUserByNumPersonal($numPersonal);
+
+            $datosUser = array("nombre" => $searchUser->getFullNameUser());
+        } else {
+            $numPersonal = $this->getUser()->getNumPersonal();
+        }
         $resultService = $this->getResultService();
-        $userItems = $resultService->getUserItems($this->getUser()->getNumPersonal(), $period);
-        
+        $userItems = $resultService->getUserItems($numPersonal, $period);
+
 //        $groupsUsers = $this->getUser()->getGroups();
 //        $securityService = $this->getSecurityService();
 
@@ -32,7 +47,8 @@ class UserSummaryItemsBox extends \Tecnocreaciones\Bundle\BoxBundle\Model\Generi
         return array(
             'management' => $userItems["data"]["evaluation"]["management"],
             'objetives' => $userItems["data"]["evaluation"]["results"]["objetives"],
-            'error' => $userItems["errors"]
+            'error' => $userItems["errors"],
+            'datosUser' => $datosUser
         );
     }
 

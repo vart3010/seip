@@ -8,25 +8,12 @@
 {% block before_body %}
     {{ contentHeader("Resumen de Gestion") }}
 {% endblock %}
-{#.controller('ListUserItemsController', function ($scope, $http) {
-              $scope.model = {users=null}
-      
-//             $scope.$watch("model.users", function (newParams, oldParams) {
-//                if ($scope.model.users != null) {
-//                    var responsiblesId = [], i = 0;
-//                    var responsibles = angular.element("#users").select2('data');
-//                    angular.forEach(responsibles, function (value) {
-//                        responsiblesId.push(value.id);
-//                        i++;
-//                    });
-//                    //alert(responsiblesId);
-//                }
-//            });
-              
-      
-        })#}
-        
+
+
 {% block body -%}
+    <form id="userItemsForm" action="" method="post"></form>
+    <input type="hidden" id="ruta">
+    
     <div ng-controller="ListUserItemsController">
         <fieldset class="fieldset">
             <legend class="legend" >Consulta de Gestion</legend>
@@ -36,6 +23,16 @@
                 <div class="with-mid-padding">
                     <input type="text" name="users" id="users" ng-model="model.users" style='width: 270px' />
                 </div>
+
+                <div class="with-mid-padding">
+                    <button class="button" type="button" id="searchUserItems">Consultar</button>
+                </div>
+            </div>
+        </fieldset>
+
+        <fieldset class="fieldset">
+            <div class="new-row-tablet new-row-mobile twelve-columns twelve-columns-tablet">
+                {{ renderArea(constant('Pequiven\\SEIPBundle\\Model\\Box\\AreasBox::ITEMS')) }}
             </div>
         </fieldset>
     </div>
@@ -45,11 +42,33 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
+            $("button#searchUserItems").click(function () {
+                getUrl($("input#ruta").val());
+
+            });
+
+            function getUrl(id) {
+                var data = {
+                    id: id
+                };
+                $.ajax({
+                    type: 'get',
+                    url: '{{ path("pequiven_get_url_list_user") }}',
+                    data: data,
+                    success: function (data) {
+                        $("form#userItemsForm").attr("action", data["url"]);
+                        $("form#userItemsForm").submit();
+                    }
+
+                });
+                
+            }
+
 
 
             var urlResponsibles = '{{ path('pequiven_user_search') }}';
             var parametersSelectResponsibles = {
-                minimumInputLength: 1,
+                minimumInputLength: 3,
                 multiple: false,
                 allowClear: true,
                 ajax: {// instead of writing the function to execute the request we use Select2's convenient helper
@@ -77,7 +96,7 @@
                 } // we do not want to escape markup since we are displaying html in results
             };
 
-            $('#responsiblesGoals').select2(parametersSelectResponsibles);
+            $('#users').select2(parametersSelectResponsibles);
         });
 
     </script>
