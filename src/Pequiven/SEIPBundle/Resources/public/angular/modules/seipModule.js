@@ -1046,6 +1046,25 @@ angular.module('seipModule.controllers', [])
                 url: urlSearchPeriod
             });
         })
+        
+         .controller('ListUserItemsController', function ($scope, $http) {
+              $scope.model = {users=null}
+      
+//             $scope.$watch("model.users", function (newParams, oldParams) {
+//                if ($scope.model.users != null) {
+//                    var responsiblesId = [], i = 0;
+//                    var responsibles = angular.element("#users").select2('data');
+//                    angular.forEach(responsibles, function (value) {
+//                        responsiblesId.push(value.id);
+//                        i++;
+//                    });
+//                    //alert(responsiblesId);
+//                }
+//            });
+              
+      
+        })
+        
         .controller('ReportArrangementProgramAllController', function ($scope, $http) {
             $scope.data = {
                 tacticals: null,
