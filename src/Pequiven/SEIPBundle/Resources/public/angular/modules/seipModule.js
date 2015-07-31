@@ -2814,7 +2814,7 @@ angular.module('seipModule.controllers', [])
                     });
                 });
             }
-            
+
             //18-Gráfico tipo multiseries de línea, para las lesiones personales con tiempo, acumulados, sólo del indicador (período actual y anterior)
             $scope.chargeChartMultiSeriesLineIndicatorPersonalInjuryWithAccumulatedTime = function (indicatorId, render, width, height) {
                 var getDataChartMultiSeriesLineIndicatorPersonalInjuryWithAccumulatedTime = Routing.generate("getDataChartMultiSeriesLineIndicatorPersonalInjuryWithAccumulatedTime", {id: indicatorId});
@@ -2837,7 +2837,7 @@ angular.module('seipModule.controllers', [])
                     });
                 });
             }
-            
+
             //19-Gráfico tipo multiseries de línea, para las lesiones personales sin tiempo, sólo del indicador (período actual y anterior)
             $scope.chargeChartMultiSeriesLineIndicatorPersonalInjuryWithoutAccumulatedTime = function (indicatorId, render, width, height) {
                 var getDataChartMultiSeriesLineIndicatorPersonalInjuryWithoutAccumulatedTime = Routing.generate("getDataChartMultiSeriesLineIndicatorPersonalInjuryWithoutAccumulatedTime", {id: indicatorId});
@@ -2860,7 +2860,7 @@ angular.module('seipModule.controllers', [])
                     });
                 });
             }
-            
+
             //20-Gráfico tipo multiseries de línea, para las lesiones personales con y sin tiempo, acumulados, de los hijos del indicador
             $scope.chargeChartMultiSeriesLineIndicatorPersonalInjuryWithAndWithoutAccumulatedTimeFromChildrens = function (indicatorId, render, width, height) {
                 var getDataChartMultiSeriesLineIndicatorPersonalInjuryWithAndWithoutAccumulatedTimeFromChildrens = Routing.generate("getDataChartMultiSeriesLineIndicatorPersonalInjuryWithAndWithoutAccumulatedTimeFromChildrens", {id: indicatorId});
@@ -2883,7 +2883,7 @@ angular.module('seipModule.controllers', [])
                     });
                 });
             }
-            
+
             //21-Gráfico tipo multiseries de línea, para los días perdidos, sólo del indicador (período actual y anterior)
             $scope.chargeChartMultiSeriesLineIndicatorLostDaysAccumulatedTime = function (indicatorId, render, width, height) {
                 var getDataChartMultiSeriesLineIndicatorLostDaysAccumulatedTime = Routing.generate("getDataChartMultiSeriesLineIndicatorLostDaysAccumulatedTime", {id: indicatorId});
@@ -3732,5 +3732,4 @@ angular.module('seipModule.controllers', [])
                 var url = 'pequiven_gerenciafirst_export';
                 $scope.urlExport = Routing.generate(url, parameters);
             };
-        })
-        ;
+        });

@@ -8,6 +8,15 @@ pequiven_result_list:
         level: 1|2|3
     methods: [GET]
     
+pequiven_list_user_items:
+    path: /list.{_format}
+    defaults:
+        _controller: pequiven.controller.result:userListItem
+        _format: html
+    requirements:
+        _format: html|json|xml
+    methods: [GET]
+    
 pequiven_result_show_by_gerencia:
     path: /{level}/{id}.{_format}
     defaults:

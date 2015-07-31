@@ -117,6 +117,7 @@ pequiven:
         managementSystem: Sistema de Gestión
         tactical_objective: Objetivo Táctico
         operational_objective: Objetivo Operativo
+        strategic_objective: Objetivo Estratégico
         operating_indicator: Indicador Operativo
         location: Localidad
         process: Proceso
