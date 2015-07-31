@@ -209,6 +209,11 @@
         </service>
         
         
+        <service id="pequiven_seip_box_user_summary_items" class="Pequiven\SEIPBundle\Model\Box\UserSummary\UserSummaryItemsBox">
+            <tag name="tecnocreaciones_box.box" />
+        </service>
+        
+        
         <!-- Servicio de USER -->
         <service id="pequiven.repository.user" class="Pequiven\SEIPBundle\Repository\UserRepository">
             <call method="setContainer">

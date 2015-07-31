@@ -1,0 +1,302 @@
+{% trans_default_domain 'PequivenArrangementProgramBundle' %}
+
+
+<div class="with-padding">
+    <div class="columns">
+        <div class="twelve-columns">
+            {% if(datosUser!=null) %}
+                <h3 class="thin underline text-center">Usuario</h3>
+                <fieldset class="fieldset">
+                    <p class="inline-label">
+                        <label class="label">Nombre de Usuario</label>
+                        {{ datosUser["nombre"] }}
+                    </p>
+                </fieldset>
+
+            {% endif  %}
+
+
+
+            {% if(error|length  == 0) %}
+
+                {#            PROGRAMAS DE GESTION#}
+                {% if(management["arrangementPrograms"]|length>0) %}
+                    <h3 class="thin underline text-center">{{ 'pequiven.arrangement_program.arrangement_programs'|trans }}</h3>
+                    <fieldset class="fieldset">
+
+                        {#                    <legend class="legend">Programas de Gestion</legend>#}
+                        <table class="simple-table responsive-table" id="sorting-example2">
+
+                            <thead>
+                                <tr>
+                                    <th scope="col" width="10%" >{{ 'pequiven.ref'|trans({},'messages') }}</th>
+                                    <th scope="col" width="20%" >{{ 'pequiven.arrangement_program.nameOfProgram'|trans }}</th>
+                                    <th scope="col" width="40%" >{{ 'pequiven.arrangement_program.description'|trans }}</th>
+                                    <th scope="col" style="text-align: center" width="40%" >{{ 'pequiven.arrangement_program.advances'|trans }}</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% for pg in  (management["arrangementPrograms"]) %} 
+                                    <tr style="height: 50px">
+                                        <th style="color: #607890;" scope="row">
+                                            <i class="fa fa-tasks"></i>
+                                            {{ pg.id }}
+                                        </th>
+                                        <td>{{ pg.ref }}</td>
+                                        <td>{{ pg.description }}</td>
+                                        <td style="text-align: center">
+                                            {% set advances = pg.result %}
+                                            {% set advancesClass = 'red-gradient' %}
+                                            {% if advances >= 50 and advances < 100 %}
+                                                {% set advancesClass = 'orange-gradient' %}
+
+                                            {% elseif advances >= 100 %}
+                                                {% set advancesClass = 'green-gradient' %}
+                                            {% endif %}
+                                            <span style="max-width: 220px" class="progress" data-progress-options='{"size":false,"barClasses":["{{ advancesClass }}","glossy"],"bottomMarks":[{"value":0,"label":"{{ 'pequiven.advances.nope'|trans({},'messages') }}"},{"value":50,"label":"{{ 'pequiven.advances.better'|trans({},'messages') }}"},{"value":100,"label":"{{ 'pequiven.advances.complete'|trans({},'messages') }}"}],"insetExtremes":true}'>{{ advances }}%</span>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+
+                        </table>
+                    </fieldset>
+                {% endif %}
+
+                {% if(management["goals"]|length>0) %}
+                    <h3 class="thin underline text-center">{{ "pequiven.goals.goals"|trans }}</h3>
+                    <fieldset class="fieldset">
+                        <div ng-controller="ArrangementProgramController">
+                            {#                    <legend class="legend">Metas</legend>#}
+                            <table ng-init="" class="simple-table responsive-table" id="sorting-example2">
+
+                                <thead>
+                                    <tr>
+                                        <th scope="col" width="20%" >Avance</th>
+                                        <th scope="col" width="60%" >Nombre</th>
+                                        <th style="text-align: center" scope="col" width="20%" >Peso</th>
+
+
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    {% set cont = 1 %}
+                                    {% for goal in  management["goals"] %} 
+                                        <tr style="height: 50px">
+                                            <td  scope="row">
+                                                {{ cont }}-
+                                                <span ng-class="getClassForMeter({{ goal.result }},1)"></span>
+                                                <span ng-class="getClassForMeter({{ goal.result }},2)"></span>
+                                                <span ng-class="getClassForMeter({{ goal.result }},3)"></span>
+                                                {{ goal.result }}%
+                                            </td>
+                                            <td  style="color: #607890; font-weight: bold">{{ goal.description }}</td>
+                                            <td style="text-align: center" >{{ goal.weight }}%</td>
+
+                                        </tr>
+                                        {% set cont = cont + 1 %}
+                                    {% endfor %}
+                                </tbody>
+
+                            </table>
+                        </div>
+                    </fieldset>
+                {% endif %}
+
+                {% if ((objetives["OO"]|length>0) or (objetives["OT"]|length>0) or (objetives["OE"]|length>0) )%}
+                    <h3 class="thin underline text-center">Objetivos</h3>
+                {% endif %}
+
+                {% if(objetives["OE"]|length>0) %}
+                    {#                <h3 class="thin underline text-center">Objetivos Operativos</h3>#}
+                    <fieldset class="fieldset">
+                        <legend class="legend">{{ "pequiven.form.tactical_objective" |trans }}</legend>
+                        <table ng-init="" class="simple-table responsive-table" id="sorting-example2">
+
+                            <thead>
+                                <tr>
+                                    <th style="text-align: center" scope="col" width="10%" >Referencia</th>
+                                    <th scope="col" width="auto" >Descripción</th>
+                                    <th scope="col" style="text-align: center" width="25%" >Resultado</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for objetivesOp in objetives["OE"] %}
+                                    <tr>
+                                        <td style="color: #607890; text-align: center;">{{ objetivesOp.id }}</td>
+                                        <td style="font-weight: bold;">{{ objetivesOp.description }}</td>
+                                        <td style="text-align: center">
+                                            {% set advances = objetivesOp.result %}
+                                            {% set advancesClass = 'red-gradient' %}
+                                            {% if advances >= 50 and advances < 100 %}
+                                                {% set advancesClass = 'orange-gradient' %}
+
+                                            {% elseif advances >= 100 %}
+                                                {% set advancesClass = 'green-gradient' %}
+                                            {% endif %}
+                                            <span style="max-width: 220px" class="progress" data-progress-options='{"size":false,"barClasses":["{{ advancesClass }}","glossy"],"bottomMarks":[{"value":0,"label":"{{ 'pequiven.advances.nope'|trans({},'messages') }}"},{"value":50,"label":"{{ 'pequiven.advances.better'|trans({},'messages') }}"},{"value":100,"label":"{{ 'pequiven.advances.complete'|trans({},'messages') }}"}],"insetExtremes":true}'>{{ advances }}%</span>
+                                        </td>
+
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+
+                        </table>
+                    </fieldset>
+                {% endif %}
+
+                {% if(objetives["OT"]|length>0) %}
+                    {#                <h3 class="thin underline text-center">Objetivos Operativos</h3>#}
+                    <fieldset class="fieldset">
+                        <legend class="legend">{{ "pequiven.form.tactical_objective" |trans }}</legend>
+                        <table ng-init="" class="simple-table responsive-table" id="sorting-example2">
+
+                            <thead>
+                                <tr>
+                                    <th style="text-align: center" scope="col" width="10%" >Referencia</th>
+                                    <th scope="col" width="auto" >Descripción</th>
+                                    <th scope="col" style="text-align: center" width="25%" >Resultado</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for objetivesOp in objetives["OT"] %}
+                                    <tr>
+                                        <td style="color: #607890; text-align: center;">{{ objetivesOp.id }}</td>
+                                        <td style="font-weight: bold;">{{ objetivesOp.description }}</td>
+                                        <td style="text-align: center">
+                                            {% set advances = objetivesOp.result %}
+                                            {% set advancesClass = 'red-gradient' %}
+                                            {% if advances >= 50 and advances < 100 %}
+                                                {% set advancesClass = 'orange-gradient' %}
+
+                                            {% elseif advances >= 100 %}
+                                                {% set advancesClass = 'green-gradient' %}
+                                            {% endif %}
+                                            <span style="max-width: 220px" class="progress" data-progress-options='{"size":false,"barClasses":["{{ advancesClass }}","glossy"],"bottomMarks":[{"value":0,"label":"{{ 'pequiven.advances.nope'|trans({},'messages') }}"},{"value":50,"label":"{{ 'pequiven.advances.better'|trans({},'messages') }}"},{"value":100,"label":"{{ 'pequiven.advances.complete'|trans({},'messages') }}"}],"insetExtremes":true}'>{{ advances }}%</span>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+
+                        </table>
+                    </fieldset>
+                {% endif %}
+
+                {% if(objetives["OO"]|length>0) %}
+                    {#                <h3 class="thin underline text-center">Objetivos Operativos</h3>#}
+                    <fieldset class="fieldset">
+                        <legend class="legend">{{ "pequiven.form.operational_objective" |trans }}</legend>
+                        <table ng-init="" class="simple-table responsive-table" id="sorting-example2">
+
+                            <thead>
+                                <tr>
+                                    <th style="text-align: center" scope="col" width="10%" >Referencia</th>
+                                    <th scope="col" width="auto" >Descripción</th>
+                                    <th scope="col" style="text-align: center" width="25%" >Resultado</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for objetivesOp in objetives["OO"] %}
+                                    <tr>
+                                        <td style="color: #607890; text-align: center;">{{ objetivesOp.id }}</td>
+                                        <td style="font-weight: bold;">{{ objetivesOp.description }}</td>
+                                        <td style="text-align: center">
+                                            {% set advances = objetivesOp.result %}
+                                            {% set advancesClass = 'red-gradient' %}
+                                            {% if advances >= 50 and advances < 100 %}
+                                                {% set advancesClass = 'orange-gradient' %}
+
+                                            {% elseif advances >= 100 %}
+                                                {% set advancesClass = 'green-gradient' %}
+                                            {% endif %}
+                                            <span style="max-width: 220px" class="progress" data-progress-options='{"size":false,"barClasses":["{{ advancesClass }}","glossy"],"bottomMarks":[{"value":0,"label":"{{ 'pequiven.advances.nope'|trans({},'messages') }}"},{"value":50,"label":"{{ 'pequiven.advances.better'|trans({},'messages') }}"},{"value":100,"label":"{{ 'pequiven.advances.complete'|trans({},'messages') }}"}],"insetExtremes":true}'>{{ advances }}%</span>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+
+                        </table>
+                    </fieldset>
+                {% endif %}
+
+            {% else %}
+                <h3>
+                    No tiene ningún Item asociado.
+                </h3>
+            {% endif %}
+
+        </div>
+    </div>
+</div>
+
+{% block javascript %}
+    <script type="text/javascript">
+
+        function getClassMeter(percentaje, numMeter) {
+            var className = '';
+            if (numMeter == 1) {
+                if (percentaje > 0 && percentaje <= 30) {
+                    className = 'red-gradient';
+                } else if (percentaje > 30 && percentaje < 70) {
+                    className = 'orange-gradient';
+                } else if (percentaje >= 70) {
+                    className = 'green-gradient';
+                }
+            } else if (numMeter == 2) {
+                if (percentaje > 30 && percentaje < 70) {
+                    className = 'orange-gradient';
+                } else if (percentaje >= 70) {
+                    className = 'green-gradient';
+                }
+            } else if (numMeter == 3) {
+                if (percentaje >= 70) {
+                    className = 'green-gradient';
+                }
+            }
+            return 'meter ' + className;
+        }
+
+        jQuery(document).ready(function () {
+            $(".loads").load(function () {
+                console.log("holas");
+            });
+
+            $('.progress').progress();
+        });
+    </script>
+{% endblock javascript %}
+
+
+{% block stylesheets %}
+    <!-- Additional styles -->
+    <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/form3860.css?v=1') }}">
+    <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/switches3860.css?v=1') }}">
+
+    <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/table3860.css?v=1') }}">
+    <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/progress-slider3860.css?v=1') }}">
+
+    <!-- Select2 -->
+    <link rel="stylesheet" href="{{ asset('bundles/pequivenseip/select2-3.5.0/select2.css') }}">
+
+    <!-- jQuery Form Validation -->
+    <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/libs/formValidator/developr.validationEngine3860.css?v=1') }}">    
+
+{% endblock %}
+
+{% block javascripts %}
+
+    <script src="{{  asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/libs/jquery.tablesorter.min.js') }}"></script>
+    <script src="{{  asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.progress-slider.js') }}"></script>
+    <script src="{{  asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/libs/DataTables/jquery.dataTables.min.js') }}"></script>
+    <!-- Select2 -->
+    <script src="{{ asset('bundles/pequivenseip/select2-3.5.0/select2.min.js') }}"></script>
+    <!-- jQuery-ui -->
+    <script src="{{ asset('bundles/pequivenseip/jquery-ui.custom/jquery-ui.js?v=1') }}"></script>
+
+    <script src="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/libs/formValidator/jquery.validationEngine3860.js?v=1') }}"></script>
+    <script src="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/libs/formValidator/languages/jquery.validationEngine-' ~ app.request.locale ~ '3860.js?v=1') }}"></script>
+
+    <script src="{{  asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.tabs.js') }}"></script>
+{% endblock %}

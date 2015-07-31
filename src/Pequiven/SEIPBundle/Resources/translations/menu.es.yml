@@ -110,6 +110,8 @@ app:
                             objective_tactic: Objetivos Tácticos
                             objective_operative: Objetivos Operativos
                             arrangement_program: Programas de Gestión
+                        user:
+                            item_user_list: Consulta de Gestion
                     users:
                         main: Usuarios SEIP
                         real: Lista
