@@ -1,6 +1,7 @@
 {% trans_default_domain 'PequivenArrangementProgramBundle' %}
 
 
+
 <div class="with-padding">
     <div class="columns">
         <div class="twelve-columns">
@@ -17,7 +18,7 @@
 
 
 
-            {% if(error|length  == 0) %}
+            
 
                 {#            PROGRAMAS DE GESTION#}
                 {% if(management["arrangementPrograms"]|length>0) %}
@@ -221,11 +222,7 @@
                     </fieldset>
                 {% endif %}
 
-            {% else %}
-                <h3>
-                    No tiene ningún Item asociado.
-                </h3>
-            {% endif %}
+            
 
         </div>
     </div>

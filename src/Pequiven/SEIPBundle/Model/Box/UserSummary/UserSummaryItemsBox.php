@@ -21,10 +21,7 @@ class UserSummaryItemsBox extends \Tecnocreaciones\Bundle\BoxBundle\Model\Generi
         $repository = $this->container->get('pequiven_seip.repository.arrangementprogram');
 
         $period = $this->getPeriodService()->getPeriodActive()->getName();
-
-
-
-
+        
         if ($this->getRequest()->get('numPersonal') != null) {
             $numPersonal = $this->getRequest()->get('numPersonal');
 
@@ -47,8 +44,9 @@ class UserSummaryItemsBox extends \Tecnocreaciones\Bundle\BoxBundle\Model\Generi
         return array(
             'management' => $userItems["data"]["evaluation"]["management"],
             'objetives' => $userItems["data"]["evaluation"]["results"]["objetives"],
-            'error' => $userItems["errors"],
-            'datosUser' => $datosUser
+            //'error' => $userItems["errors"],
+            'datosUser' => $datosUser,
+            'userItems'=>$userItems
         );
     }
 

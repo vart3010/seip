@@ -1993,9 +1993,9 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 '%user%' => $user,
             ));
         }
-        if (!$canBeEvaluated || count($this->errors) > 0) {
-            $goals = $arrangementPrograms = $objetives = $objetivesOO = $objetivesOT = $objetivesOE = array();
-        }
+//        if (!$canBeEvaluated || count($this->errors) > 0) {
+//            $goals = $arrangementPrograms = $objetives = $objetivesOO = $objetivesOT = $objetivesOE = array();
+//        }
 
         $data = array(
             'data' => array(
@@ -2019,9 +2019,9 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             'errors' => $this->errors,
             'success' => true,
         );
-        if (!$canBeEvaluated || count($this->errors) > 0) {
-            $data['success'] = false;
-        }
+//        if (!$canBeEvaluated || count($this->errors) > 0) {
+//            $data['success'] = false;
+//        }
         
         return $data;
     }
