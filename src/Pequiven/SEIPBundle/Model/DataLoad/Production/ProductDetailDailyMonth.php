@@ -20,6 +20,9 @@ use Pequiven\SEIPBundle\Model\BaseModel;
  */
 abstract class ProductDetailDailyMonth extends BaseModel implements ProductDetailDailyMonthInterface
 {
+    const STATUS_SAVE_PENDING = 1;
+    const STATUS_SAVE = 2;
+    
     public function getMonthLabel()
     {
         $month = $this->getMonth();
