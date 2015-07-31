@@ -96,6 +96,14 @@ class Chart extends ModelChart
      * @ORM\JoinColumn(nullable=false)
      */
     private $period;
+    
+    /**
+     * Detalles de los gráficos del Indicador
+     * 
+     * @var \Pequiven\IndicatorBundle\Entity\Indicator\IndicatorChartDetails
+     * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\IndicatorChartDetails",mappedBy="chart",cascade={"persist","remove"})
+     */
+    protected $indicatorsChartDetails;
 
     /**
      * Constructor
@@ -375,6 +383,38 @@ class Chart extends ModelChart
     public function getPeriod()
     {
         return $this->period;
+    }
+    
+    /**
+     * Add indicatorsChartDetails
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator\IndicatorChartDetails $indicatorsChartDetails
+     * @return Chart
+     */
+    public function addIndicatorsChartDetails(\Pequiven\IndicatorBundle\Entity\Indicator\IndicatorChartDetails $indicatorsChartDetails) {
+        $indicatorsChartDetails->setIndicator($this);
+
+        $this->indicatorsChartDetails->add($indicatorsChartDetails);
+
+        return $this;
+    }
+
+    /**
+     * Remove indicatorsChartDetails
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator\IndicatorChartDetails $indicatorsChartDetails
+     */
+    public function removeIndicatorsChartDetails(\Pequiven\IndicatorBundle\Entity\Indicator\IndicatorChartDetails $indicatorsChartDetails) {
+        $this->indicatorsChartDetails->removeElement($indicatorsChartDetails);
+    }
+
+    /**
+     * Get indicatorsChartDetails
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getIndicatorsChartDetails() {
+        return $this->indicatorsChartDetails;
     }
     
     /**

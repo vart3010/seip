@@ -304,6 +304,14 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\TagIndicator",mappedBy="indicator",cascade={"persist","remove"})
      */
     protected $tagsIndicator;
+    
+    /**
+     * Detalles de los gráficos del Indicador
+     * 
+     * @var \Pequiven\IndicatorBundle\Entity\Indicator\IndicatorChartDetails
+     * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\IndicatorChartDetails",mappedBy="indicator",cascade={"persist","remove"})
+     */
+    protected $indicatorsChartDetails;
 
     /**
      * ¿El resultado del indicador se calcula en tipo Porcentaje?
@@ -1436,6 +1444,38 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      */
     public function getTagsIndicator() {
         return $this->tagsIndicator;
+    }
+
+    /**
+     * Add indicatorsChartDetails
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator\IndicatorChartDetails $indicatorsChartDetails
+     * @return Indicator
+     */
+    public function addIndicatorsChartDetails(\Pequiven\IndicatorBundle\Entity\Indicator\IndicatorChartDetails $indicatorsChartDetails) {
+        $indicatorsChartDetails->setIndicator($this);
+
+        $this->indicatorsChartDetails->add($indicatorsChartDetails);
+
+        return $this;
+    }
+
+    /**
+     * Remove indicatorsChartDetails
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator\IndicatorChartDetails $indicatorsChartDetails
+     */
+    public function removeIndicatorsChartDetails(\Pequiven\IndicatorBundle\Entity\Indicator\IndicatorChartDetails $indicatorsChartDetails) {
+        $this->indicatorsChartDetails->removeElement($indicatorsChartDetails);
+    }
+
+    /**
+     * Get indicatorsChartDetails
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getIndicatorsChartDetails() {
+        return $this->indicatorsChartDetails;
     }
 
     /**
