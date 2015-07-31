@@ -641,6 +641,7 @@ angular.module('seipModule.controllers', [])
                 document.location = url;
             };
         })
+      
         .controller('ReportArrangementProgramController', function ($scope, $http) {
             var planning = angular.element('#planning');
             var isPlanning = (planning.val() != undefined) ? true : false;

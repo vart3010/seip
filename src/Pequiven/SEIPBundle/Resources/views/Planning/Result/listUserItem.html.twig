@@ -10,14 +10,14 @@
 {% endblock %}
 
 {% block body -%}
-    <div ng-controller="ReportArrangementProgramAllController">
+    <div ng-controller="ListUserItems">
         <fieldset class="fieldset">
             <legend class="legend" >Consulta de Gestion</legend>
             <div class="new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
                 <label class="bold">{{ 'pequiven_seip.filters.user_selection'|trans({},'PequivenSEIPBundle') }}</label>
                 <br/>
                 <div class="with-mid-padding">
-                    <input type="text" name="responsiblesGoals" id="responsiblesGoals" ng-model="model.responsiblesGoals" style='width: 270px' />
+                    <input type="text" name="responsiblesGoals" id="responsiblesGoals" ng-model="model.users" style='width: 270px' />
                 </div>
             </div>
         </fieldset>
