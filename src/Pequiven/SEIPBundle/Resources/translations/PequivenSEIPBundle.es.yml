@@ -574,7 +574,11 @@ chart:
         indicatorPersonalInjuryWithoutAccumulatedTime: Lesionados personales sin tiempo acumulados del indicador, en linea, del valor actual y del período pasado.
         indicatorPersonalInjuryWithAndWithoutAccumulatedTimeFromChildrens: Lesionados personales con y sin tiempo acumulado de los indicadores asociados agrupados por tipo de compañia, en linea, además del valor del actual y del año pasado.
         indicatorLostDaysAccumulatedTime: Días perdidos acumulados del indicador, en linea, del valor actual y del período pasado.
-        indicatorsAssociatedPersonalInjuryWithAndWithoutAndLostDaysByPeriodWithAccumulated: Lesionados personales con y sin tiempo acumulado y días perdidos de los indicadores asociados, con los valores del mes , además del valor del actual y del año pasado.
+        indicatorsAssociatedPersonalInjuryWithAndWithoutAndLostDaysByPeriodWithAccumulated: Lesionados personales con y sin tiempo acumulado y días perdidos de los indicadores asociados, con los valores acumulados, además del valor del actual y del año pasado.
+        indicatorPersonalInjuryWithAndWithoutAndLostDaysByFrequencyNotificationByPeriodGroupByCompanyWithAccumulated: Lesionados personales con y sin tiempo acumulado y días perdidos del indicador, con los valores del mes agrupados por compañía además del período actual y del período anterior (línea) y del acumulado por período (columna).
+        indicatorPersonalInjuryWithLostTimeByFrequencyNotificationByPeriodWithAccumulated: Lesionados personales con tiempo acumulado del indicador, con los valores del mes además del período actual y del período anterior (línea) y del acumulado por período (columna).
+        indicatorPersonalInjuryWithoutLostTimeByFrequencyNotificationByPeriodWithAccumulated: Lesionados personales sin tiempo acumulado del indicador, con los valores del mes además del período actual y del período anterior (línea) y del acumulado por período (columna).
+        indicatorLostDaysByFrequencyNotificationByPeriodWithAccumulated: Días perdidos del indicador, con los valores del mes además del período actual y del período anterior (línea) y del acumulado por período (columna).
         example: Ejemplo
 
 Name: Nombre

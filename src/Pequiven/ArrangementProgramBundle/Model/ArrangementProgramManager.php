@@ -324,7 +324,7 @@ class ArrangementProgramManager implements ContainerAwareInterface
          //Security check
         $user = $this->getUser();
         $valid = false;
-        if(($entity->getCreatedBy() === $user && $entity->getStatus() == ArrangementProgram::STATUS_DRAFT) || $this->getSecurityConext()->isGranted('ROLE_ARRANGEMENT_PROGRAM_DELETE')){
+        if(($entity->getCreatedBy() === $user && $entity->getStatus() == ArrangementProgram::STATUS_DRAFT) || ($this->getSecurityConext()->isGranted('ROLE_ARRANGEMENT_PROGRAM_DELETE') && $entity->getStatus() == ArrangementProgram::STATUS_DRAFT)){
             $valid = true;
         }
         return $valid;
