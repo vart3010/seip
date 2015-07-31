@@ -227,10 +227,22 @@ getDataChartColumnResultIndicatorsAssociatedGroupByTypeCompanyWithTotalByMonth:
         expose: true
         
 #18
-getDataChartMultiSeriesLineIndicatorPersonalInjuryWithAccumulatedTimeFromChildrens:
-    path: /getDataChartMultiSeriesLineIndicatorPersonalInjuryWithAccumulatedTimeFromChildrens/{id}
+getDataChartMultiSeriesLineIndicatorPersonalInjuryWithAccumulatedTime:
+    path: /getDataChartMultiSeriesLineIndicatorPersonalInjuryWithAccumulatedTime/{id}
     defaults:
-        _controller: pequiven.controller.seipchart:getDataChartMultiSeriesLineIndicatorPersonalInjuryWithAccumulatedTimeFromChildrensAction
+        _controller: pequiven.controller.seipchart:getDataChartMultiSeriesLineIndicatorPersonalInjuryWithAccumulatedTimeAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
+       
+#19
+getDataChartMultiSeriesLineIndicatorPersonalInjuryWithoutAccumulatedTime:
+    path: /getDataChartMultiSeriesLineIndicatorPersonalInjuryWithoutAccumulatedTime/{id}
+    defaults:
+        _controller: pequiven.controller.seipchart:getDataChartMultiSeriesLineIndicatorPersonalInjuryWithoutAccumulatedTimeAction
         _format: json
     requirements:
         _format: "json|xml"
@@ -243,6 +255,30 @@ getDataChartMultiSeriesLineIndicatorPersonalInjuryWithAndWithoutAccumulatedTimeF
     path: /getDataChartMultiSeriesLineIndicatorPersonalInjuryWithAndWithoutAccumulatedTimeFromChildrens/{id}
     defaults:
         _controller: pequiven.controller.seipchart:getDataChartMultiSeriesLineIndicatorPersonalInjuryWithAndWithoutAccumulatedTimeFromChildrensAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
+        
+#21
+getDataChartMultiSeriesLineIndicatorLostDaysAccumulatedTime:
+    path: /getDataChartMultiSeriesLineIndicatorLostDaysAccumulatedTime/{id}
+    defaults:
+        _controller: pequiven.controller.seipchart:getDataChartMultiSeriesLineIndicatorLostDaysAccumulatedTimeAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
+        
+#22
+getDataChartMultiSeriesLineIndicatorAssociatedPersonalInjuryWithAndWithoutAndLostDaysByPeriodWithAccumulated:
+    path: /getDataChartMultiSeriesLineIndicatorAssociatedPersonalInjuryWithAndWithoutAndLostDaysByPeriodWithAccumulated/{id}
+    defaults:
+        _controller: pequiven.controller.seipchart:getDataChartMultiSeriesLineIndicatorAssociatedPersonalInjuryWithAndWithoutAndLostDaysByPeriodWithAccumulatedAction
         _format: json
     requirements:
         _format: "json|xml"

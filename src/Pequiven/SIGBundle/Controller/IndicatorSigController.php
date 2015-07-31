@@ -43,10 +43,10 @@ class IndicatorSigController extends ResourceController
         $criteria = $request->get('filter', $this->config->getCriteria());
         $sorting = $request->get('sorting', $this->config->getSorting());
         $repository = $this->container->get('pequiven.repository.sig_indicator');
-
+        
         $criteria['indicatorLevel'] = $level;
         $criteria['applyPeriodCriteria'] = true;
-        
+        //$criteria['managementSystemsCriteria'] = true;        
 
         if ($this->config->isPaginated()) {
             $resources = $this->resourceResolver->getResource(

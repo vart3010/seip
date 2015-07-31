@@ -17,7 +17,7 @@ class IndicatorsDashboardBox extends GenericBox {
     }
 
     public function getName() {
-        return 'pequiven_seip.box.indicators_dashboard';
+        return 'pequiven_seip_box_indicators_dashboard';
     }
 
     public function getParameters() {
@@ -147,7 +147,7 @@ class IndicatorsDashboardBox extends GenericBox {
     }
 
     public function hasPermission() {
-        return $this->isGranted(array('ROLE_DIRECTIVE', 'ROLE_DIRECTIVE_AUX', 'ROLE_WORKER_PLANNING'));
+        return $this->isGranted(array('ROLE_DIRECTIVE', 'ROLE_DIRECTIVE_AUX', 'ROLE_WORKER_PLANNING','ROLE_SEIP_VIEW_RESULT_BY_LINE_STRATEGIC_SPECIAL'));
     }
 
     public function getTemplateName() {

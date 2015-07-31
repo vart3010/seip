@@ -104,19 +104,29 @@ abstract class Chart
     const TYPE_CHART_COLUMN_RESULT_INDICATORS_ASSOCIATED_GROUP_BY_TYPE_COMPANY_WITH_TOTAL_BY_MONTH = 17;
     
     /**
-     * Gráfico tipo multiseries de línea, para las lesiones personales con tiempo, acumulados, sólo de indicador
+     * Gráfico tipo multiseries de línea, para las lesiones personales con tiempo, acumulados, sólo del indicador (período actual y anterior)
      */
-    const TYPE_CHART_MULTI_SERIES_LINE_INDICATOR_PERSONAL_INJURY_WITH_ACCUMULATED_TIME_FROM_CHILDRENS = 18;
+    const TYPE_CHART_MULTI_SERIES_LINE_INDICATOR_PERSONAL_INJURY_WITH_ACCUMULATED_TIME = 18;
     
     /**
-     * Gráfico tipo multiseries de línea, para las lesiones personales sin tiempo, sólo del indicador
+     * Gráfico tipo multiseries de línea, para las lesiones personales sin tiempo, sólo del indicador (período actual y anterior)
      */
-    const TYPE_CHART_MULTI_SERIES_LINE_INDICATOR_PERSONAL_INJURY_WITHOUT_ACCUMULATED_TIME_FROM_CHILDRENS = 19;
+    const TYPE_CHART_MULTI_SERIES_LINE_INDICATOR_PERSONAL_INJURY_WITHOUT_ACCUMULATED_TIME = 19;
     
     /**
-     * Gráfico tipo multiseries de línea, para las lesiones personales con y sin tiempo, acumulados, de los hijos del indicador
+     * Gráfico tipo multiseries de línea, para las lesiones personales con y sin tiempo y dias perdidos, acumulados, de los hijos del indicador
      */
     const TYPE_CHART_MULTI_SERIES_LINE_INDICATOR_PERSONAL_INJURY_WHIT_AND_WITHOUT_ACCUMULATED_TIME_FROM_CHILDRENS = 20;
+        
+    /**
+     * Gráfico tipo multiseries de línea, para los días perdidos, sólo del indicador (período actual y anterior)
+     */
+    const TYPE_CHART_MULTI_SERIES_LINE_INDICATOR_LOST_DAYS_ACCUMULATED_TIME = 21;
+    
+    /**
+     * Gráfico tipo multiseries columna 3d, para mostrar el resultado de una suma de variables de los indicadores hijos (lesionados con tiempo perdidoa, sin tiempo perdido y días perdidos), según sea el caso del período actual y anterior
+     */
+    const TYPE_CHART_MULTI_SERIES_COLUMN_LINE_INDICATORS_ASSOCIATED_PERSONAL_INJURY_WITH_AND_WITHOUT_AND_LOST_DAYS_BY_PERIOD_WITH_ACCUMULATED = 22;
     
     const TYPE_EXAMPLE = 100;
        
@@ -174,9 +184,11 @@ abstract class Chart
             self::TYPE_CHART_STACKED_COLUMN_VARIABLE_BY_FREQUENCY_NOTIFICATION_WITH_TOTAL => 'chart.type.indicatorVariablesStackedColumnByFrequencyNotificationWithTotal',
             self::TYPE_CHART_COLUMN_RESULT_INDICATORS_ASSOCIATED_WITH_TOTAL_BY_MONTH => 'chart.type.indicatorsAssociatedColumnWithTotalByMonth',
             self::TYPE_CHART_COLUMN_RESULT_INDICATORS_ASSOCIATED_GROUP_BY_TYPE_COMPANY_WITH_TOTAL_BY_MONTH => 'chart.type.indicatorsAssociatedColumnGroupByTypeCompanyWithTotalByMonth',
-            self::TYPE_CHART_MULTI_SERIES_LINE_INDICATOR_PERSONAL_INJURY_WITH_ACCUMULATED_TIME_FROM_CHILDRENS => 'chart.type.indicatorPersonalInjuryWithAccumulatedTime',
-            self::TYPE_CHART_MULTI_SERIES_LINE_INDICATOR_PERSONAL_INJURY_WITHOUT_ACCUMULATED_TIME_FROM_CHILDRENS => 'chart.type.indicatorPersonalInjuryWithoutAccumulatedTime',
+            self::TYPE_CHART_MULTI_SERIES_LINE_INDICATOR_PERSONAL_INJURY_WITH_ACCUMULATED_TIME => 'chart.type.indicatorPersonalInjuryWithAccumulatedTime',
+            self::TYPE_CHART_MULTI_SERIES_LINE_INDICATOR_PERSONAL_INJURY_WITHOUT_ACCUMULATED_TIME => 'chart.type.indicatorPersonalInjuryWithoutAccumulatedTime',
             self::TYPE_CHART_MULTI_SERIES_LINE_INDICATOR_PERSONAL_INJURY_WHIT_AND_WITHOUT_ACCUMULATED_TIME_FROM_CHILDRENS => 'chart.type.indicatorPersonalInjuryWithAndWithoutAccumulatedTimeFromChildrens',
+            self::TYPE_CHART_MULTI_SERIES_LINE_INDICATOR_LOST_DAYS_ACCUMULATED_TIME => 'chart.type.indicatorLostDaysAccumulatedTime',
+            self::TYPE_CHART_MULTI_SERIES_COLUMN_LINE_INDICATORS_ASSOCIATED_PERSONAL_INJURY_WITH_AND_WITHOUT_AND_LOST_DAYS_BY_PERIOD_WITH_ACCUMULATED => 'chart.type.indicatorsAssociatedPersonalInjuryWithAndWithoutAndLostDaysByPeriodWithAccumulated',
             self::TYPE_EXAMPLE => 'chart.type.example',
         );
          

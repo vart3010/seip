@@ -8,6 +8,7 @@ tecnocreaciones_vzla_government:
                             save_and_close: Guardar y cerrar
                             question:
                                     delete: Desea eliminar este elemento
+                                    downloadLast: Visualizar Plantilla
 pequiven:
     yes: Si
     no: No

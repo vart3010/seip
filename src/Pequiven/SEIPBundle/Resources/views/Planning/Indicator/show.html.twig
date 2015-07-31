@@ -284,7 +284,6 @@
 
 
 
-
         {% if indicator.showResults %}
             <br /><br />
             {% include 'PequivenSEIPBundle:Planning:Indicator/show/results.html.twig' %}
@@ -349,6 +348,11 @@
 
         {% if hasPermissionToApproved is not defined %}
             {% set hasPermissionToApproved = false %}
+        {% endif %}
+
+        {% if isAllowToDownload == true %}
+            &nbsp;
+            {{ buttons.downloadLastFile(valueIndicatorIdDownload) }}
         {% endif %}
 
         {% if  hasPermissionToApproved == true %}
