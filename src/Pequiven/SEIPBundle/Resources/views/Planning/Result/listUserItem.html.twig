@@ -8,7 +8,24 @@
 {% block before_body %}
     {{ contentHeader("Resumen de Gestion") }}
 {% endblock %}
-
+{#.controller('ListUserItemsController', function ($scope, $http) {
+              $scope.model = {users=null}
+      
+//             $scope.$watch("model.users", function (newParams, oldParams) {
+//                if ($scope.model.users != null) {
+//                    var responsiblesId = [], i = 0;
+//                    var responsibles = angular.element("#users").select2('data');
+//                    angular.forEach(responsibles, function (value) {
+//                        responsiblesId.push(value.id);
+//                        i++;
+//                    });
+//                    //alert(responsiblesId);
+//                }
+//            });
+              
+      
+        })#}
+        
 {% block body -%}
     <div ng-controller="ListUserItemsController">
         <fieldset class="fieldset">
