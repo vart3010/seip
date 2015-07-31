@@ -148,7 +148,7 @@ class ToolService
      * @param type $result
      * @return type
      */
-    public function formatResult($result){
+    static function formatResult($result){
         return number_format($result,2);
     }
     
@@ -178,7 +178,7 @@ class ToolService
      * @param type $date
      * @return type
      */
-    public function formatDateTime($date) {
+    static function formatDateTime($date) {
         $r = '';
         if(is_a($date, 'DateTime')){
             $r = $date->format('d-m-Y');
