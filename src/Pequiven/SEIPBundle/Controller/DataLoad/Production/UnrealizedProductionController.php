@@ -139,8 +139,8 @@ class UnrealizedProductionController extends SEIPController {
                     }
                 }
             }
-            if (isset($mp["getExternalCausesMp"])) {
-                foreach ($mp["getExternalCausesMp"] as $key => $values) {
+            if (isset($mp["getInternalCausesMp"])) {
+                foreach ($mp["getInternalCausesMp"] as $key => $values) {
                     if ($key != "total") {
                         array_push($ExternalCategoriesMp, $key);
                     }
