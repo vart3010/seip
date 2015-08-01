@@ -231,6 +231,7 @@ pequiven_seip:
         includeGerenciaSecondSupport: Incluir Gerencias de Apoyo
         period: Periodo
         frequencyNotifications: Frecuencias de Notificación
+        user_selection: Selecione Usuario
     tooltips:
         click_to_show: Click para ver
     area:

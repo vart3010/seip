@@ -17,14 +17,35 @@
         <br />
     {% endif %}
 
-{{ renderArea(constant('Pequiven\\SEIPBundle\\Model\\Box\\AreasBox::DASHBOARD')) }}
+    {% if(buttonItems) %}
+        <div style="text-align: left; margin-left:15px;">
+            <a class="button"  id="showItems"  href="javascript:void(0)">
+                <span class="button-icon"><span class="icon-list"></span></span>
+                Ver Resumen de Gestión 
+            </a>    
+        </div>
 
-<div class="with-padding">
-    <div class="columns">
-        {{ renderArea(constant('Pequiven\\SEIPBundle\\Model\\Box\\AreasBox::PRINCIPAL')) }}
-    </div>
-</div>
-    
+        {#        <button class="button compact" id="showItems" type="button">Visualizar Items</button>#}
+        <div id="userItems" style="display: none;">
+            {{ renderArea(constant('Pequiven\\SEIPBundle\\Model\\Box\\AreasBox::ITEMS')) }}
+        </div>
+
+        <div id="dashboard" style="display: block;">
+            {{ renderArea(constant('Pequiven\\SEIPBundle\\Model\\Box\\AreasBox::DASHBOARD')) }}
+            <div class="with-padding">
+                <div class="columns">
+                    {{ renderArea(constant('Pequiven\\SEIPBundle\\Model\\Box\\AreasBox::PRINCIPAL')) }}
+                </div>
+            </div>
+        </div>
+    {% else %}
+        {{ renderArea(constant('Pequiven\\SEIPBundle\\Model\\Box\\AreasBox::ITEMS')) }}
+    {% endif %}
+
+
+
+
+
 {% endblock body %}
 
 {% block stylesheets %}
@@ -42,4 +63,12 @@
 
 {% block javascript %}
     {{ parent() }}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("a#showItems").click(function () {
+                $("#userItems").toggle("slow");
+                $("#dashboard").toggle("slow");
+            });
+        });
+    </script>
 {% endblock %}
