@@ -444,6 +444,24 @@ class IndicatorService implements ContainerAwareInterface {
                 $results[$varRealName] = $results[$varRealName] + $valueReal;
                 $results[$varPlanName] = $results[$varPlanName] + $valuePlan;
             }
+        } elseif ($options['typeOfResultSection'] == Indicator::TYPE_RESULT_SECTION_RAW_MATERIAL){
+            if ($indicator->getFrequencyNotificationIndicator()->getNumberResultsFrequency() == 12) {
+                if (!$valueIndicator->getId()) {
+                    $month = count($indicator->getValuesIndicator()) + 1;
+                } else {
+                    $month = $this->getOrderOfValueIndicator($indicator, $valueIndicator);
+                }
+            }
+            foreach ($productsReports as $productReport) {
+                $rawsMaterialsConsumptionPlanning = $productReport->getRawMaterialConsumptionPlannings();
+                foreach($rawsMaterialsConsumptionPlanning as $rawMaterialConsumptionPlanning){
+                    $detailRawMaterialConsumptionsByMonth = $rawMaterialConsumptionPlanning->getDetailByMonth();
+                    $valueReal = array_key_exists($month, $detailRawMaterialConsumptionsByMonth) == true ? $detailRawMaterialConsumptionsByMonth[$month]->getTotalReal() : 0;
+                    $valuePlan = array_key_exists($month, $detailRawMaterialConsumptionsByMonth) == true ? $detailRawMaterialConsumptionsByMonth[$month]->getTotalPlan() : 0;
+                    $results[$varRealName] = $results[$varRealName] + $valueReal;
+                    $results[$varPlanName] = $results[$varPlanName] + $valuePlan;
+                }
+            }
         }
 
         return $results;

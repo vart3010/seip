@@ -54,6 +54,10 @@ abstract class Indicator implements IndicatorInterface {
      * Sección Materia Prima
      */
     const TYPE_RESULT_SECTION_RAW_MATERIAL = 4;
+    /**
+     * Sección Materia Prima
+     */
+    const TYPE_RESULT_SECTION_SERVICES = 5;
     
 
     /**
