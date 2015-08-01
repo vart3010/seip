@@ -1317,6 +1317,9 @@ class IndicatorService implements ContainerAwareInterface {
             $variables = $indicator->getFormula()->getVariables();
             $childrens = $indicator->getChildrens();
             
+            $chart["subCaption"] = $indicator->getShowByRealValue();
+            $chart["pYAxisName"] = $indicator->getShowByPlanValue();
+            
             foreach ($childrens as $children) {
                 if ($children->getTypeOfCompany() == Indicator::TYPE_OF_COMPANY_MATRIZ) {
                     $label = $dataActualPeriod = $dataLastPeriod = array();
@@ -1597,6 +1600,9 @@ class IndicatorService implements ContainerAwareInterface {
 
             $variables = $indicator->getFormula()->getVariables();
             $contVariables = count($variables);
+            
+            $chart["subCaption"] = $indicator->getShowByRealValue();
+            $chart["pYAxisName"] = $indicator->getShowByPlanValue();
 
             //Añadimos los valores, por frecuencia de notificación
             for ($i = 0; $i < $numberResults; $i++) {
@@ -1626,6 +1632,9 @@ class IndicatorService implements ContainerAwareInterface {
 
             $variables = $indicator->getFormula()->getVariables();
             $contVariables = count($variables);
+            
+            $chart["subCaption"] = $indicator->getShowByRealValue();
+            $chart["pYAxisName"] = $indicator->getShowByPlanValue();
 
             //Añadimos los valores, por frecuencia de notificación
             for ($i = 0; $i < $numberResults; $i++) {
@@ -2833,6 +2842,9 @@ class IndicatorService implements ContainerAwareInterface {
 
             $variables = $indicator->getFormula()->getVariables();
             $contVariables = count($variables);
+            
+            $chart["subCaption"] = $indicator->getShowByRealValue();
+            $chart["pYAxisName"] = $indicator->getShowByPlanValue();
 
             //Añadimos los valores, por frecuencia de notificación
             for ($i = 0; $i < $numberResults; $i++) {
@@ -2873,6 +2885,9 @@ class IndicatorService implements ContainerAwareInterface {
 
             $variables = $indicator->getFormula()->getVariables();
             $contVariables = count($variables);
+            
+            $chart["subCaption"] = $indicator->getShowByRealValue();
+            $chart["pYAxisName"] = $indicator->getShowByPlanValue();
 
             //Añadimos los valores, por frecuencia de notificación
             for ($i = 0; $i < $numberResults; $i++) {
