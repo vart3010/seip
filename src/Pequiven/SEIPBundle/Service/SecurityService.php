@@ -222,7 +222,7 @@ class SecurityService implements ContainerAwareInterface
     {
         $user = $this->getUser();
         $valid = false;
-        $rol = $user->getLevelRealByGroup();
+        $rol = $user->getLevelByGroup(\Pequiven\SEIPBundle\Model\Common\CommonObject::TYPE_LEVEL_USER_ALL);
         if($rol === Rol::ROLE_DIRECTIVE){
             $valid = true;
         }else{

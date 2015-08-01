@@ -191,7 +191,7 @@
             <tag name="tecnocreaciones_box.box" />
         </service>
         <!-- Box con la base del dashboard de un indicador -->
-        <service id="pequiven_seip.box.indicators_dashboard" class="Pequiven\SEIPBundle\Model\Box\Indicator\IndicatorsDashboardBox">
+        <service id="pequiven_seip_box_indicators_dashboard" class="Pequiven\SEIPBundle\Model\Box\Indicator\IndicatorsDashboardBox">
             <tag name="tecnocreaciones_box.box" />
         </service>
         <!-- Box donde se renderizan las líneas estratégicas en formato de íconos para el dashboard a nivel estratégico --> 
@@ -204,7 +204,12 @@
         </service>
         
         <!-- Box para rederizar grafica de PNR -->
-        <service id="pequiven_seip.box.unrealized_production" class="Pequiven\SEIPBundle\Model\Box\UnrealizedProduction\UnrealizedProductionBox">
+        <service id="pequiven_seip_box_unrealized_production" class="Pequiven\SEIPBundle\Model\Box\UnrealizedProduction\UnrealizedProductionBox">
+            <tag name="tecnocreaciones_box.box" />
+        </service>
+        
+        
+        <service id="pequiven_seip_box_user_summary_items" class="Pequiven\SEIPBundle\Model\Box\UserSummary\UserSummaryItemsBox">
             <tag name="tecnocreaciones_box.box" />
         </service>
         
@@ -340,6 +345,13 @@
                 <argument type="service" id="service_container" />
             </call>
         </service>
+        
+         <service id="seip.service.unrealizedProduction" class="Pequiven\SEIPBundle\Service\DataLoad\UnrealizedProductionService">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
+        
         <service id="seip.service.productReport" class="Pequiven\SEIPBundle\Service\ProductReportService">
             <call method="setContainer">
                 <argument type="service" id="service_container" />

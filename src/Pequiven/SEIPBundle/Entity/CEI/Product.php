@@ -360,6 +360,10 @@ class Product extends BaseModel
         return $this->isCheckToReportProduction;
     }
     
+    public function getProductReports() {
+        return $this->productReports;
+    }
+    
     
             
             

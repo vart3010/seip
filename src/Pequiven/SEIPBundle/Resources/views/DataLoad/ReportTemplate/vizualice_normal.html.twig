@@ -2,293 +2,636 @@
 
 {% if productsReport is not empty %}
 
-<div class="columns">
-    <div class="twelve-columns twelve-columns-mobile">
-        <h3 class="thin underline text-center">Graficas</h3>
-    </div>
-</div>
-
-<div class="columns">
-    <div class="twelve-columns twelve-columns-mobile">
-        <div class="standard-tabs margin-bottom" id="add-tabs">
-
-            <ul class="tabs">
-                <li {% if showDay %} class="" {% else %} class="disabled" {% endif %}><a href="#tab-1">Dia</a></li>
-                <li {% if showMonth %} class="" {% else %} class="disabled" {% endif %}><a href="#tab-2">Mes</a></li>
-                <li {% if showYear %} class="" {% else %} class="disabled" {% endif %}><a href="#tab-3">Año</a></li>
-            </ul>
-
-            <div class="tabs-content">
-
-                <div id="tab-1" class="with-padding">
-                    <div class="columns">
-                        <div class="twelve-columns"> 
-                            <div  ng-controller="ProductionController" ng-init="renderChartColumn3dLinedy('graphicDay',{{ graphicsDays }},'100','500')">
-                                <span id="graphicDay"></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="tab-2" class="with-padding">
-                    <div class="columns">
-                        <div class="twelve-columns"> 
-                            <div  ng-controller="ProductionController" ng-init="renderChartColumn3dLinedy('graphicMonth',{{ graphicsMonth }},'100','500')">
-                                <span id="graphicMonth"></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="tab-3" class="with-padding">
-                    <div class="columns">
-                        <div class="twelve-columns"> 
-                            <div  ng-controller="ProductionController" ng-init="renderChartColumn3dLinedy('graphicsYear',{{ graphicsYear }},'100','500')">
-                                <span id="graphicsYear"></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
-            </div>
-
-        </div>
-    </div>
-</div>
-<div class="columns">
-    <div class="twelve-columns twelve-columns-mobile">
-        <h3 class="thin underline text-center">OPERACIÓN</h3>
-    </div>
-</div>
-<div class="columns">
-    {% if showDay  %}
-        <div class="twelve-columns twelve-columns-mobile">
-            <table class="simple-table responsive-table responsive-table-on">
-                <thead>
-                    <tr>
-                        <th class="header text-center white-gradient" colspan="5">DÍA</th>
-                    </tr>
-                    <tr>
-                        <th scope="col" style="width: 7%" class="header">PRODUCTO</th>
-                        <th scope="col" style="width: 7%" class="header">PPTO</th>
-                        <th scope="col" style="width: 7%" class=" header">REAL</th>
-                        <th scope="col" style="width: 7%" class=" header">EJEC&nbsp;(%)</th>
-                        <th scope="col" width="15%" class=" header">VAR</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% set total_plan = 0 %}
-                    {% set total_real = 0 %}
-                    {% set plan = 0 %}
-                    {% set real = 0 %}
-                    {% set pnr = 0 %}
-
-                    {% set items = productsReport %}
-
-                    {% for productReport in productsReport %}
-                        {% set summary = productReport.getSummaryDay(dateReport,typeReport) %}
-
-
-                        {% set current_plan = summary['plan'] %}
-                        {% set current_real = summary['real'] %}
-
-                        {% set is_next_equals = false %}
-                        {% set next_item = get_next_item(loop,items) %}
-
-                        {% if next_item %}
-                            {% if productReport.product == next_item.product %}
-                                {% set is_next_equals = true %}
-                            {% endif %}
-                        {% endif  %}
-
-                        {% if is_next_equals == true %}
-                            {% set next_summary = next_item.getSummaryDay(dateReport,typeReport) %}
-
-                            {% set plan = plan + summary['plan'] %}
-                            {% set real = real + summary['real'] %}
-
-                        {% else %}
-                            {% set current_plan = current_plan + plan %}
-                            {% set current_real = current_real + real %}
-                            {% set current_percentage = 0 %}
-                            {% if current_plan > 0 %}
-                                {% set current_percentage = (current_real * 100) / current_plan %}
-                            {% endif %}
-                            {% set current_pnr = current_plan - current_real %}
-                            {% if current_pnr < 0 %}
-                                {% set current_pnr = 0 %}
-                            {% endif %}
-
-                            {# Totalizar#}
-                            {% set total_plan = total_plan + current_plan %}
-                            {% set total_real = total_real + current_real %}
-                            <tr>
-                                <th scope="col" style="width: 7%" class="header">{{ productReport.product|upper }}&nbsp;({{ productReport.product.productUnit }})</th>
-                                <th scope="col" style="width: 7%" class="header">{{ current_plan|myNumberFormat }}</th>
-                                <th scope="col" style="width: 7%" class=" header">{{ current_real|myNumberFormat }}</th>
-                                <th scope="col" style="width: 7%" class=" header">{{ current_percentage|myNumberFormat }}%</th>
-                                <th scope="col" width="15%" class=" header">{{ current_pnr|myNumberFormat }}</th>
-                            </tr>
-
-                            {% set plan = 0 %}
-                            {% set real = 0 %}
-                        {% endif %}
-                    {% endfor %}
-                </tbody>
-                {% set total_percentage = 0 %}
-                {% if total_plan > 0 %}
-                    {% set total_percentage = (total_real * 100) / total_plan %}
-                {% endif %}
-                {% set total_pnr = total_plan - total_real %}
-                {% if total_pnr < 0 %}
-                    {% set total_pnr = 0 %}
-                {% endif %}
-                <tfoot>
-                    <tr>
-                        <th scope="col" style="width: 7%" class="header">TOTALES</th>
-                        <th scope="col" style="width: 7%" class="header">{{ total_plan|myNumberFormat }}</th>
-                        <th scope="col" style="width: 7%" class=" header">{{ total_real|myNumberFormat }}</th>
-                        <th scope="col" style="width: 7%" class=" header">{{ total_percentage|myNumberFormat }}%</th>
-                        <th scope="col" width="15%" class=" header">{{ total_pnr|myNumberFormat }}</th>
-                    </tr>
-                </tfoot>
-            </table>
-        </div>
-    {% endif %}
-    {% if showMonth %}
-        <div class="twelve-columns twelve-columns-mobile">
-            <table class="simple-table responsive-table responsive-table-on">
-                <thead>
-                    <tr>
-                        <th class="header text-center white-gradient" colspan="6">MES</th>
-                    </tr>
-                    <tr>
-                        <th scope="col" style="width: 7%" class="header">PRODUCTO</th>
-                        <th scope="col" style="width: 7%" class="header">PPTO-MES</th>
-                        <th scope="col" style="width: 7%" class="header">PPTO-ACUM</th>
-                        <th scope="col" style="width: 7%" class="header">REAL-ACUM</th>
-                        <th scope="col" style="width: 7%" class=" header">EJEC&nbsp;(%)</th>
-                        <th scope="col" style="width: 7%" class=" header">VAR</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% set total_plan_month = 0 %}
-                    {% set total_plan_acumulated = 0 %}
-                    {% set total_real_acumulated = 0 %}
-                    {% set plan_month = 0 %}
-                    {% set plan_acumulated = 0 %}
-                    {% set real_acumulated = 0 %}
-
-                    {% set items = productsReport %}
-
-                    {% for productReport in productsReport %}
-                        {% set summary = productReport.getSummaryMonth(dateReport,typeReport) %}
-{#                                    {{ dump(summary) }}#}
-                        {% set current_plan_month = summary['plan_month'] %}
-                        {% set current_plan_acumulated = summary['plan_acumulated'] %}
-                        {% set current_real_acumulated = summary['real_acumulated'] %}
-
-                        {% set is_next_equals = false %}
-                        {% set next_item = get_next_item(loop,items) %}
-
-                        {% if next_item %}
-                            {% if productReport.product == next_item.product %}
-                                {% set is_next_equals = true %}
-                            {% endif %}
-                        {% endif  %}
-
-                        {% if is_next_equals == true %}
-                            {% set plan_month = plan_month + summary['plan_month'] %}
-                            {% set plan_acumulated = plan_acumulated + summary['plan_acumulated'] %}
-                            {% set real_acumulated = real_acumulated + summary['real_acumulated'] %}
-                        {% else %}
-                            {% set current_plan_month = current_plan_month + plan_month %}
-                            {% set current_plan_acumulated = current_plan_acumulated + plan_acumulated %}
-                            {% set current_real_acumulated = current_real_acumulated + real_acumulated %}
-
-                            {% set current_percentage = 0 %}
-                            {% if current_plan_acumulated > 0 %}
-                                {% set current_percentage = (current_real_acumulated * 100) / current_plan_acumulated %}
-                            {% endif %}
-                            {% set current_pnr = current_plan_acumulated - current_real_acumulated %}
-                            {% if current_pnr < 0 %}
-                                {% set current_pnr = 0 %}
-                            {% endif %}
-
-                            {# Totalizar#}
-                            {% set total_plan_month = total_plan_month + current_plan_month %}
-                            {% set total_plan_acumulated = total_plan_acumulated + current_plan_acumulated %}
-                            {% set total_real_acumulated = total_real_acumulated + current_real_acumulated %}
-                            <tr>
-                                <th class="header">{{ productReport.product|upper }}&nbsp;({{ productReport.product.productUnit }})</th>
-                                <th class="header">{{ current_plan_month|myNumberFormat }}</th>
-                                <th class="header">{{ current_plan_acumulated|myNumberFormat }}</th>
-                                <th class=" header">{{ current_real_acumulated|myNumberFormat }}</th>
-                                <th class=" header">{{ current_percentage|myNumberFormat }}%</th>
-                                <th class=" header">{{ current_pnr|myNumberFormat }}</th>
-                            </tr>
-                            {% set plan_month = 0 %}
-                            {% set plan_acumulated = 0 %}
-                            {% set real_acumulated = 0 %}
-                        {% endif %}
-                    {% endfor %}
-                </tbody>
-                {% set current_percentage = 0 %}
-                {% if total_plan_acumulated > 0 %}
-                    {% set current_percentage = (total_real_acumulated * 100) / total_plan_acumulated %}
-                {% endif %}
-                {% set current_pnr = total_plan_acumulated - total_real_acumulated %}
-                {% if current_pnr < 0 %}
-                    {% set current_pnr = 0 %}
-                {% endif %}
-                <tfoot>
-                    <tr>
-                        <th class="header">TOTALES</th>
-                        <th class="header">{{ total_plan_month|myNumberFormat }}</th>
-                        <th class="header">{{ total_plan_acumulated|myNumberFormat }}</th>
-                        <th class=" header">{{ total_real_acumulated|myNumberFormat }}</th>
-                        <th class=" header">{{ current_percentage|myNumberFormat }}%</th>
-                        <th class=" header">{{ current_pnr|myNumberFormat }}</th>
-                    </tr>
-                </tfoot>
-            </table>
-        </div>
-    {% endif %}
-</div>
-{% if showYear  %}
     <div class="columns">
         <div class="twelve-columns twelve-columns-mobile">
+            <h3 class="thin underline text-center">Graficas</h3>
+        </div>
+    </div>
+
+    <div class="columns">
+        <div class="twelve-columns twelve-columns-mobile">
+            <div class="standard-tabs margin-bottom" id="add-tabs">
+
+                <ul class="tabs">
+                    <li {% if showDay %} class="" {% else %} class="disabled" {% endif %}><a href="#tab-1">Dia</a></li>
+                    <li {% if showMonth %} class="" {% else %} class="disabled" {% endif %}><a href="#tab-2">Mes</a></li>
+                    <li {% if showYear %} class="" {% else %} class="disabled" {% endif %}><a href="#tab-3">Año</a></li>
+                </ul>
+
+                <div class="tabs-content">
+
+                    <div id="tab-1" class="with-padding">
+                        <div class="columns">
+                            <div class="twelve-columns"> 
+                                <div  ng-controller="ProductionController" ng-init="renderChartColumn3dLinedy('graphicDay',{{ graphicsDays }},'100','500')">
+                                    <span id="graphicDay"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="tab-2" class="with-padding">
+                        <div class="columns">
+                            <div class="twelve-columns"> 
+                                <div  ng-controller="ProductionController" ng-init="renderChartColumn3dLinedy('graphicMonth',{{ graphicsMonth }},'100','500')">
+                                    <span id="graphicMonth"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="tab-3" class="with-padding">
+                        <div class="columns">
+                            <div class="twelve-columns"> 
+                                <div  ng-controller="ProductionController" ng-init="renderChartColumn3dLinedy('graphicsYear',{{ graphicsYear }},'100','500')">
+                                    <span id="graphicsYear"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="columns">
+        <div class="twelve-columns twelve-columns-mobile">
+            <h3 class="thin underline text-center">OPERACIÓN</h3>
+        </div>
+    </div>
+    <div class="columns">
+        {% if showDay  %}
+            <div class="twelve-columns twelve-columns-mobile">
+                <table class="simple-table responsive-table responsive-table-on">
+                    <thead>
+                        <tr>
+                            <th class="header text-center white-gradient" colspan="5">DÍA</th>
+                        </tr>
+                        <tr>
+                            <th scope="col" style="width: 7%" class="header">PRODUCTO</th>
+                            <th scope="col" style="width: 7%" class="header">PPTO</th>
+                            <th scope="col" style="width: 7%" class=" header">REAL</th>
+                            <th scope="col" style="width: 7%" class=" header">EJEC&nbsp;(%)</th>
+                            <th scope="col" width="15%" class=" header">VAR</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% set total_plan = 0 %}
+                        {% set total_real = 0 %}
+                        {% set plan = 0 %}
+                        {% set real = 0 %}
+                        {% set pnr = 0 %}
+
+                        {% set items = productsReport %}
+
+                        {% for productReport in productsReport %}
+                            {% set summary = productReport.getSummaryDay(dateReport,typeReport) %}
+
+
+                            {% set current_plan = summary['plan'] %}
+                            {% set current_real = summary['real'] %}
+
+                            {% set is_next_equals = false %}
+                            {% set next_item = get_next_item(loop,items) %}
+
+                            {% if next_item %}
+                                {% if productReport.product == next_item.product %}
+                                    {% set is_next_equals = true %}
+                                {% endif %}
+                            {% endif  %}
+
+                            {% if is_next_equals == true %}
+                                {% set next_summary = next_item.getSummaryDay(dateReport,typeReport) %}
+
+                                {% set plan = plan + summary['plan'] %}
+                                {% set real = real + summary['real'] %}
+
+                            {% else %}
+                                {% set current_plan = current_plan + plan %}
+                                {% set current_real = current_real + real %}
+                                {% set current_percentage = 0 %}
+                                {% if current_plan > 0 %}
+                                    {% set current_percentage = (current_real * 100) / current_plan %}
+                                {% endif %}
+                                {% set current_pnr = current_plan - current_real %}
+                                {% if current_pnr < 0 %}
+                                    {% set current_pnr = 0 %}
+                                {% endif %}
+
+                                {# Totalizar#}
+                                {% set total_plan = total_plan + current_plan %}
+                                {% set total_real = total_real + current_real %}
+                                <tr>
+                                    <th scope="col" style="width: 7%" class="header">{{ productReport.product|upper }}&nbsp;({{ productReport.product.productUnit }})</th>
+                                    <th scope="col" style="width: 7%" class="header">{{ current_plan|myNumberFormat }}</th>
+                                    <th scope="col" style="width: 7%" class=" header">{{ current_real|myNumberFormat }}</th>
+                                    <th scope="col" style="width: 7%" class=" header">{{ current_percentage|myNumberFormat }}%</th>
+                                    <th scope="col" width="15%" class=" header">{{ current_pnr|myNumberFormat }}</th>
+                                </tr>
+
+                                {% set plan = 0 %}
+                                {% set real = 0 %}
+                            {% endif %}
+                        {% endfor %}
+                    </tbody>
+                    {% set total_percentage = 0 %}
+                    {% if total_plan > 0 %}
+                        {% set total_percentage = (total_real * 100) / total_plan %}
+                    {% endif %}
+                    {% set total_pnr = total_plan - total_real %}
+                    {% if total_pnr < 0 %}
+                        {% set total_pnr = 0 %}
+                    {% endif %}
+                    <tfoot>
+                        <tr>
+                            <th scope="col" style="width: 7%" class="header">TOTALES</th>
+                            <th scope="col" style="width: 7%" class="header">{{ total_plan|myNumberFormat }}</th>
+                            <th scope="col" style="width: 7%" class=" header">{{ total_real|myNumberFormat }}</th>
+                            <th scope="col" style="width: 7%" class=" header">{{ total_percentage|myNumberFormat }}%</th>
+                            <th scope="col" width="15%" class=" header">{{ total_pnr|myNumberFormat }}</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        {% endif %}
+        {% if showMonth %}
+            <div class="twelve-columns twelve-columns-mobile">
+                <table class="simple-table responsive-table responsive-table-on">
+                    <thead>
+                        <tr>
+                            <th class="header text-center white-gradient" colspan="6">MES</th>
+                        </tr>
+                        <tr>
+                            <th scope="col" style="width: 7%" class="header">PRODUCTO</th>
+                            <th scope="col" style="width: 7%" class="header">PPTO-MES</th>
+                            <th scope="col" style="width: 7%" class="header">PPTO-ACUM</th>
+                            <th scope="col" style="width: 7%" class="header">REAL-ACUM</th>
+                            <th scope="col" style="width: 7%" class=" header">EJEC&nbsp;(%)</th>
+                            <th scope="col" style="width: 7%" class=" header">VAR</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% set total_plan_month = 0 %}
+                        {% set total_plan_acumulated = 0 %}
+                        {% set total_real_acumulated = 0 %}
+                        {% set plan_month = 0 %}
+                        {% set plan_acumulated = 0 %}
+                        {% set real_acumulated = 0 %}
+
+                        {% set items = productsReport %}
+
+                        {% for productReport in productsReport %}
+                            {% set summary = productReport.getSummaryMonth(dateReport,typeReport) %}
+                            {#                                    {{ dump(summary) }}#}
+                            {% set current_plan_month = summary['plan_month'] %}
+                            {% set current_plan_acumulated = summary['plan_acumulated'] %}
+                            {% set current_real_acumulated = summary['real_acumulated'] %}
+
+                            {% set is_next_equals = false %}
+                            {% set next_item = get_next_item(loop,items) %}
+
+                            {% if next_item %}
+                                {% if productReport.product == next_item.product %}
+                                    {% set is_next_equals = true %}
+                                {% endif %}
+                            {% endif  %}
+
+                            {% if is_next_equals == true %}
+                                {% set plan_month = plan_month + summary['plan_month'] %}
+                                {% set plan_acumulated = plan_acumulated + summary['plan_acumulated'] %}
+                                {% set real_acumulated = real_acumulated + summary['real_acumulated'] %}
+                            {% else %}
+                                {% set current_plan_month = current_plan_month + plan_month %}
+                                {% set current_plan_acumulated = current_plan_acumulated + plan_acumulated %}
+                                {% set current_real_acumulated = current_real_acumulated + real_acumulated %}
+
+                                {% set current_percentage = 0 %}
+                                {% if current_plan_acumulated > 0 %}
+                                    {% set current_percentage = (current_real_acumulated * 100) / current_plan_acumulated %}
+                                {% endif %}
+                                {% set current_pnr = current_plan_acumulated - current_real_acumulated %}
+                                {% if current_pnr < 0 %}
+                                    {% set current_pnr = 0 %}
+                                {% endif %}
+
+                                {# Totalizar#}
+                                {% set total_plan_month = total_plan_month + current_plan_month %}
+                                {% set total_plan_acumulated = total_plan_acumulated + current_plan_acumulated %}
+                                {% set total_real_acumulated = total_real_acumulated + current_real_acumulated %}
+                                <tr>
+                                    <th class="header">{{ productReport.product|upper }}&nbsp;({{ productReport.product.productUnit }})</th>
+                                    <th class="header">{{ current_plan_month|myNumberFormat }}</th>
+                                    <th class="header">{{ current_plan_acumulated|myNumberFormat }}</th>
+                                    <th class=" header">{{ current_real_acumulated|myNumberFormat }}</th>
+                                    <th class=" header">{{ current_percentage|myNumberFormat }}%</th>
+                                    <th class=" header">{{ current_pnr|myNumberFormat }}</th>
+                                </tr>
+                                {% set plan_month = 0 %}
+                                {% set plan_acumulated = 0 %}
+                                {% set real_acumulated = 0 %}
+                            {% endif %}
+                        {% endfor %}
+                    </tbody>
+                    {% set current_percentage = 0 %}
+                    {% if total_plan_acumulated > 0 %}
+                        {% set current_percentage = (total_real_acumulated * 100) / total_plan_acumulated %}
+                    {% endif %}
+                    {% set current_pnr = total_plan_acumulated - total_real_acumulated %}
+                    {% if current_pnr < 0 %}
+                        {% set current_pnr = 0 %}
+                    {% endif %}
+                    <tfoot>
+                        <tr>
+                            <th class="header">TOTALES</th>
+                            <th class="header">{{ total_plan_month|myNumberFormat }}</th>
+                            <th class="header">{{ total_plan_acumulated|myNumberFormat }}</th>
+                            <th class=" header">{{ total_real_acumulated|myNumberFormat }}</th>
+                            <th class=" header">{{ current_percentage|myNumberFormat }}%</th>
+                            <th class=" header">{{ current_pnr|myNumberFormat }}</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        {% endif %}
+    </div>
+    {% if showYear  %}
+        <div class="columns">
+            <div class="twelve-columns twelve-columns-mobile">
+                <table class="simple-table responsive-table responsive-table-on">
+                    <thead>
+                        <tr>
+                            <th class="header text-center white-gradient" colspan="7">AÑO</th>
+                        </tr>
+                        <tr>
+                            <th scope="col" style="width: 7%" class="header">PRODUCTO</th>
+                            <th scope="col" style="width: 7%" class="header">PPTO-AÑO</th>
+                            <th scope="col" style="width: 7%" class="header">PPTO-ACUM</th>
+                            <th scope="col" style="width: 7%" class="header">REAL-ACUM</th>
+                            <th scope="col" style="width: 7%" class=" header">EJEC&nbsp;(%)</th>
+                            <th scope="col" style="width: 7%" class=" header">VAR</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% set total_plan_year = 0 %}
+                        {% set total_plan_acumulated = 0 %}
+                        {% set total_real_acumulated = 0 %}
+                        {% set plan_year = 0 %}
+                        {% set plan_acumulated = 0 %}
+                        {% set real_acumulated = 0 %}
+
+                        {% set items = productsReport %}
+
+                        {% for productReport in productsReport %}
+                            {% set summary = productReport.getSummaryYear(dateReport,typeReport) %}
+
+                            {% set current_plan_year = summary['plan_year'] %}
+                            {% set current_plan_acumulated = summary['plan_acumulated'] %}
+                            {% set current_real_acumulated = summary['real_acumulated'] %}
+
+                            {% set is_next_equals = false %}
+                            {% set next_item = get_next_item(loop,items) %}
+
+                            {% if next_item %}
+                                {% if productReport.product == next_item.product %}
+                                    {% set is_next_equals = true %}
+                                {% endif %}
+                            {% endif  %}
+
+                            {% if is_next_equals == true %}
+                                {% set plan_year = plan_year + summary['plan_year'] %}
+                                {% set plan_acumulated = plan_acumulated + summary['plan_acumulated'] %}
+                                {% set real_acumulated = real_acumulated + summary['real_acumulated'] %}
+                            {% else %}
+                                {% set current_plan_year = current_plan_year + plan_year %}
+                                {% set current_plan_acumulated = current_plan_acumulated + plan_acumulated %}
+                                {% set current_real_acumulated = current_real_acumulated + real_acumulated %}
+
+                                {% set current_percentage = 0 %}
+                                {% if current_plan_acumulated > 0 %}
+                                    {% set current_percentage = (current_real_acumulated * 100) / current_plan_acumulated %}
+                                {% endif %}
+                                {% set current_pnr = current_plan_acumulated - current_real_acumulated %}
+                                {% if current_pnr < 0 %}
+                                    {% set current_pnr = 0 %}
+                                {% endif %}
+
+                                {# Totalizar#}
+                                {% set total_plan_year = total_plan_year + current_plan_year %}
+                                {% set total_plan_acumulated = total_plan_acumulated + current_plan_acumulated %}
+                                {% set total_real_acumulated = total_real_acumulated + current_real_acumulated %}
+
+                                <tr>
+                                    <th scope="col" style="width: 7%" class="header">{{ productReport.product|upper }}&nbsp;({{ productReport.product.productUnit }})</th>
+                                    <th scope="col" style="width: 7%" class="header">{{ current_plan_year|myNumberFormat }}</th>
+                                    <th scope="col" style="width: 7%" class="header">{{ current_plan_acumulated|myNumberFormat }}</th>
+                                    <th scope="col" style="width: 7%" class=" header">{{ current_real_acumulated|myNumberFormat }}</th>
+                                    <th scope="col" style="width: 7%" class=" header">{{ current_percentage|myNumberFormat }}%</th>
+                                    <th scope="col" style="width: 7%"class=" header">{{ current_pnr|myNumberFormat }}</th>
+                                </tr>
+
+                                {% set plan_year = 0 %}
+                                {% set plan_acumulated = 0 %}
+                                {% set real_acumulated = 0 %}
+                            {% endif %}
+                        {% endfor %}
+                    </tbody>
+                    {% set current_percentage = 0 %}
+                    {% if total_plan_acumulated > 0 %}
+                        {% set current_percentage = (total_real_acumulated * 100) / total_plan_acumulated %}
+                    {% endif %}
+                    {% set current_pnr = total_plan_acumulated - total_real_acumulated %}
+                    {% if current_pnr < 0 %}
+                        {% set current_pnr = 0 %}
+                    {% endif %}
+                    <tfoot>
+                        <tr>
+                            <th class="header">TOTALES</th>
+                            <th class="header">{{ total_plan_year|myNumberFormat }}</th>
+                            <th class="header">{{ total_plan_acumulated|myNumberFormat }}</th>
+                            <th class=" header">{{ total_real_acumulated|myNumberFormat }}</th>
+                            <th class=" header">{{ current_percentage|myNumberFormat }}%</th>
+                            <th class=" header">{{ current_pnr|myNumberFormat }}</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    {% endif %}
+    <div class="columns">
+        <div class="twelve-columns twelve-columns-mobile">
+            <h3 class="thin underline text-center">CONSUMOS</h3>
+        </div>
+    </div>
+    <div class="columns">
+        <div class="twelve-columns-mobile">
             <table class="simple-table responsive-table responsive-table-on">
                 <thead>
                     <tr>
-                        <th class="header text-center white-gradient" colspan="7">AÑO</th>
+                        <th class="header text-center white-gradient" colspan="7">CONSUMO DE MATERIA PRIMA</th>
                     </tr>
                     <tr>
                         <th scope="col" style="width: 7%" class="header">PRODUCTO</th>
-                        <th scope="col" style="width: 7%" class="header">PPTO-AÑO</th>
-                        <th scope="col" style="width: 7%" class="header">PPTO-ACUM</th>
-                        <th scope="col" style="width: 7%" class="header">REAL-ACUM</th>
-                        <th scope="col" style="width: 7%" class=" header">EJEC&nbsp;(%)</th>
-                        <th scope="col" style="width: 7%" class=" header">VAR</th>
+                            {%  if showDay %}
+                            <th scope="col" colspan="2" style="width: 7%" class="text-center header">DÍA</th>
+                            {% endif %}
+                            {%  if showMonth %}
+                            <th scope="col" colspan="2" style="width: 7%" class="text-center header">MES</th>
+                            {% endif %}
+                            {%  if showYear %}
+                            <th scope="col" colspan="2" style="width: 7%" class="text-center header">AÑO</th>
+                            {% endif %}
+                    </tr>
+                    <tr>
+                        <th scope="col" style="width: 7%" class="header">&nbsp;</th>
+                            {%  if showDay %}
+                            <th scope="col" style="width: 7%" class="header">PLAN</th>
+                            <th scope="col" style="width: 7%" class="header">REAL</th>
+                            {% endif %}
+                            {%  if showMonth %}
+                            <th scope="col" style="width: 7%" class=" header">PLAN</th>
+                            <th scope="col" style="width: 7%" class=" header">REAL</th>
+                            {% endif %}
+                            {%  if showYear %}
+                            <th scope="col" style="width: 7%" class=" header">PLAN</th>
+                            <th scope="col" style="width: 7%" class=" header">REAL</th>
+                            {% endif %}
                     </tr>
                 </thead>
                 <tbody>
-                    {% set total_plan_year = 0 %}
-                    {% set total_plan_acumulated = 0 %}
-                    {% set total_real_acumulated = 0 %}
-                    {% set plan_year = 0 %}
-                    {% set plan_acumulated = 0 %}
-                    {% set real_acumulated = 0 %}
+                    {% set total_day = 0 %}
+                    {% set total_month = 0 %}
+                    {% set total_year = 0 %}
+
+                    {% set total_day_plan = 0 %}
+                    {% set total_month_plan = 0 %}
+                    {% set total_year_plan = 0 %}
+
+                    {% set items = rawMaterialConsumptionPlannings %}
+
+                    {% for rawMaterialConsumptionPlanning in rawMaterialConsumptionPlannings %}
+                        {% set summary = rawMaterialConsumptionPlanning.getSummary(dateReport) %}
+
+                        {% set current_total_day = summary['total_day'] %}
+                        {% set current_total_month = summary['total_month'] %}
+                        {% set current_total_year = summary['total_year'] %}
+
+                        {% set current_total_day_plan = summary['total_day_plan'] %}
+                        {% set current_total_month_plan = summary['total_month_plan'] %}
+                        {% set current_total_year_plan = summary['total_year_plan'] %}
+
+                        {% set is_next_equals = false %}
+                        {% set next_item = get_next_item(loop,items) %}
+
+                        {% if next_item %}
+                            {% if rawMaterialConsumptionPlanning.product == next_item.product %}
+                                {% set is_next_equals = true %}
+                            {% endif %}
+                        {% endif  %}
+
+                        {% if is_next_equals == true %}
+                            {% set total_day = total_day + summary['total_day'] %}
+                            {% set total_month = total_month + summary['total_month'] %}
+                            {% set total_year = total_year + summary['total_year'] %}
+
+                            {% set total_day_plan = total_day_plan + summary['total_day_plan'] %}
+                            {% set total_month_plan = total_month_plan + summary['total_month_plan'] %}
+                            {% set total_year_plan = total_year_plan + summary['total_year_plan'] %}
+                        {% else %}
+                            {% set current_total_day = current_total_day + total_day %}
+                            {% set current_total_month = current_total_month + total_month %}
+                            {% set current_total_year = current_total_year + total_year %}
+
+                            {% set current_total_day_plan = current_total_day_plan + total_day_plan %}
+                            {% set current_total_month_plan = current_total_month_plan + total_month_plan %}
+                            {% set current_total_year_plan = current_total_year_plan + total_year_plan %}
+                            <tr>
+                                {% set productUnit = rawMaterialConsumptionPlanning.product.productUnit %}
+                                <th class="header">{{ rawMaterialConsumptionPlanning.product|upper }}&nbsp;({{ productUnit }})</th>
+                                    {%  if showDay %}
+                                    <th class="header">{{ current_total_day_plan|myNumberFormat }}</th>
+                                    <th class="header">{{ current_total_day|myNumberFormat }}</th>
+                                    {% endif %}
+                                    {%  if showMonth %}
+                                    <th class=" header">{{ current_total_month_plan|myNumberFormat }}</th>
+                                    <th class=" header">{{ current_total_month|myNumberFormat }}</th>
+                                    {% endif %}
+                                    {%  if showYear %}
+                                    <th class=" header">{{ current_total_year_plan|myNumberFormat }}</th>
+                                    <th class=" header">{{ current_total_year|myNumberFormat }}</th>
+                                    {% endif %}
+                            </tr>
+                            {% set total_day = 0 %}
+                            {% set total_month = 0 %}
+                            {% set total_year = 0 %}
+
+                            {% set total_day_plan = 0 %}
+                            {% set total_month_plan = 0 %}
+                            {% set total_year_plan = 0 %}
+
+                        {% endif %}
+                    {% else %}
+                        <tr>
+                            <td colspan="4" class="empty_row">{{ "No raw material planning"|trans }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="twelve-columns-mobile">
+            <table class="simple-table responsive-table responsive-table-on">
+                <thead>
+                    <tr>
+                        <th class="header text-center white-gradient" colspan="7">CONSUMO DE SERVICIOS</th>
+                    </tr>
+                    <tr>
+                        <th scope="col" style="width: 7%" class="header">PRODUCTO</th>
+                            {%  if showDay %}
+                            <th scope="col" colspan="2" style="width: 7%" class="text-center header">DÍA</th>
+                            {% endif %}
+                            {%  if showMonth %}
+                            <th scope="col" colspan="2" style="width: 7%" class="text-center header">MES</th>
+                            {% endif %}
+                            {%  if showYear %}
+                            <th scope="col" colspan="2" style="width: 7%" class="text-center header">AÑO</th>
+                            {% endif %}
+                    </tr>
+                    <tr>
+                        <th scope="col" style="width: 7%" class="header">&nbsp;</th>
+                            {%  if showDay %}
+                            <th scope="col" style="width: 7%" class="header">PLAN</th>
+                            <th scope="col" style="width: 7%" class="header">REAL</th>
+                            {% endif %}
+                            {%  if showMonth %}
+                            <th scope="col" style="width: 7%" class=" header">PLAN</th>
+                            <th scope="col" style="width: 7%" class=" header">REAL</th>
+                            {% endif %}
+                            {%  if showYear %}
+                            <th scope="col" style="width: 7%" class=" header">PLAN</th>
+                            <th scope="col" style="width: 7%" class=" header">REAL</th>
+                            {% endif %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% set total_day = 0 %}
+                    {% set total_month = 0 %}
+                    {% set total_year = 0 %}
+
+                    {% set total_day_plan = 0 %}
+                    {% set total_month_plan = 0 %}
+                    {% set total_year_plan = 0 %}
+
+                    {% set items = consumerPlanningServices %}
+
+                    {% for consumerPlanningService in consumerPlanningServices %}
+                        {% set summary = consumerPlanningService.getSummary(dateReport) %}
+
+                        {% set current_total_day = summary['total_day'] %}
+                        {% set current_total_month = summary['total_month'] %}
+                        {% set current_total_year = summary['total_year'] %}
+
+                        {% set current_total_day_plan = summary['total_day_plan'] %}
+                        {% set current_total_month_plan = summary['total_month_plan'] %}
+                        {% set current_total_year_plan = summary['total_year_plan'] %}
+
+                        {% set is_next_equals = false %}
+                        {% set next_item = get_next_item(loop,items) %}
+
+                        {% if next_item %}
+                            {% if consumerPlanningService.service == next_item.service %}
+                                {% set is_next_equals = true %}
+                            {% endif %}
+                        {% endif  %}
+
+                        {% if is_next_equals == true %}
+                            {% set total_day = total_day + summary['total_day'] %}
+                            {% set total_month = total_month + summary['total_month'] %}
+                            {% set total_year = total_year + summary['total_year'] %}
+
+                            {% set total_day_plan = total_day_plan + summary['total_day_plan'] %}
+                            {% set total_month_plan = total_month_plan + summary['total_month_plan'] %}
+                            {% set total_year_plan = total_year_plan + summary['total_year_plan'] %}
+
+                        {% else %}
+                            {% set current_total_day = current_total_day + total_day %}
+                            {% set current_total_month = current_total_month + total_month %}
+                            {% set current_total_year = current_total_year + total_year %}
+
+                            {% set current_total_day_plan = current_total_day_plan + total_day_plan %}
+                            {% set current_total_month_plan = current_total_month_plan + total_month_plan %}
+                            {% set current_total_year_plan = current_total_year_plan + total_year_plan %}
+
+                            <tr>
+                                {% set serviceUnit = consumerPlanningService.service.serviceUnit %}
+                                <th class="header">{{ consumerPlanningService.service|upper }}&nbsp;({{ serviceUnit }})</th>
+                                    {%  if showDay %}
+                                    <th class="header">{{ current_total_day_plan|myNumberFormat }}</th>
+                                    <th class="header">{{ current_total_day|myNumberFormat }}</th>
+                                    {% endif %}
+                                    {%  if showMonth %}
+                                    <th class=" header">{{ current_total_month_plan|myNumberFormat }}</th>
+                                    <th class=" header">{{ current_total_month|myNumberFormat }}</th>
+                                    {% endif %}
+                                    {%  if showYear %}
+                                    <th class=" header">{{ current_total_year_plan|myNumberFormat }}</th>
+                                    <th class=" header">{{ current_total_year|myNumberFormat }}</th>
+                                    {% endif %}
+                            </tr>
+                            {% set total_day = 0 %}
+                            {% set total_month = 0 %}
+                            {% set total_year = 0 %}
+
+                            {% set total_day_plan = 0 %}
+                            {% set total_month_plan = 0 %}
+                            {% set total_year_plan = 0 %}
+                        {% endif %}
+                    {% else %}
+                        <tr>
+                            <td colspan="4" class="empty_row">{{ "No service planning"|trans }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="columns">
+        <div class="twelve-columns-mobile">
+            <table class="simple-table responsive-table responsive-table-on">
+                <thead>
+                    <tr>
+                        <th class="header text-center white-gradient" colspan="5">PRODUCCIÓN NO REALIZADA</th>
+                    </tr>
+                    <tr>
+                        <th scope="col" style="width: 7%" class="header">PRODUCTO</th>
+                            {%  if showDay %}
+                            <th scope="col" style="width: 7%" class="header">DÍA</th>
+                            {% endif %}
+                            {%  if showMonth %}
+                            <th scope="col" style="width: 7%" class=" header">MES</th>
+                            {% endif %}
+                            {%  if showYear %}
+                            <th scope="col" style="width: 7%" class=" header">AÑO</th>
+                            {% endif %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% set total_day = 0 %}
+                    {% set total_month = 0 %}
+                    {% set total_year = 0 %}
+
+                    {% set summary_total_day = 0 %}
+                    {% set summary_total_month = 0 %}
+                    {% set summary_total_year = 0 %}
 
                     {% set items = productsReport %}
 
                     {% for productReport in productsReport %}
-                        {% set summary = productReport.getSummaryYear(dateReport,typeReport) %}
+                        {% set summary = productReport.getSummaryUnrealizedProductions(dateReport) %}
 
-                        {% set current_plan_year = summary['plan_year'] %}
-                        {% set current_plan_acumulated = summary['plan_acumulated'] %}
-                        {% set current_real_acumulated = summary['real_acumulated'] %}
+                        {% set current_total_day = summary['total_day'] %}
+                        {% set current_total_month = summary['total_month'] %}
+                        {% set current_total_year = summary['total_year'] %}
 
                         {% set is_next_equals = false %}
                         {% set next_item = get_next_item(loop,items) %}
@@ -300,511 +643,174 @@
                         {% endif  %}
 
                         {% if is_next_equals == true %}
-                            {% set plan_year = plan_year + summary['plan_year'] %}
-                            {% set plan_acumulated = plan_acumulated + summary['plan_acumulated'] %}
-                            {% set real_acumulated = real_acumulated + summary['real_acumulated'] %}
+                            {% set total_day = total_day + summary['total_day'] %}
+                            {% set total_month = total_month + summary['total_month'] %}
+                            {% set total_year = total_year + summary['total_year'] %}
                         {% else %}
-                            {% set current_plan_year = current_plan_year + plan_year %}
-                            {% set current_plan_acumulated = current_plan_acumulated + plan_acumulated %}
-                            {% set current_real_acumulated = current_real_acumulated + real_acumulated %}
-
-                            {% set current_percentage = 0 %}
-                            {% if current_plan_acumulated > 0 %}
-                                {% set current_percentage = (current_real_acumulated * 100) / current_plan_acumulated %}
-                            {% endif %}
-                            {% set current_pnr = current_plan_acumulated - current_real_acumulated %}
-                            {% if current_pnr < 0 %}
-                                {% set current_pnr = 0 %}
-                            {% endif %}
-
-                            {# Totalizar#}
-                            {% set total_plan_year = total_plan_year + current_plan_year %}
-                            {% set total_plan_acumulated = total_plan_acumulated + current_plan_acumulated %}
-                            {% set total_real_acumulated = total_real_acumulated + current_real_acumulated %}
+                            {% set current_total_day = current_total_day + total_day %}
+                            {% set current_total_month = current_total_month + total_month %}
+                            {% set current_total_year = current_total_year + total_year %}
 
                             <tr>
-                                <th scope="col" style="width: 7%" class="header">{{ productReport.product|upper }}&nbsp;({{ productReport.product.productUnit }})</th>
-                                <th scope="col" style="width: 7%" class="header">{{ current_plan_year|myNumberFormat }}</th>
-                                <th scope="col" style="width: 7%" class="header">{{ current_plan_acumulated|myNumberFormat }}</th>
-                                <th scope="col" style="width: 7%" class=" header">{{ current_real_acumulated|myNumberFormat }}</th>
-                                <th scope="col" style="width: 7%" class=" header">{{ current_percentage|myNumberFormat }}%</th>
-                                <th scope="col" style="width: 7%"class=" header">{{ current_pnr|myNumberFormat }}</th>
+                                <th class="header">
+                                    <a href="{{ path("pequiven_report_template_visualize_pnr_time",{idProduct:productReport.product.id,idReportTemplate: (productReport.plantReport.reportTemplate.id),idProductReport: (productReport.id),dateReport: (dateReport|date('d/m/Y'))}) }}">
+                                        {{ productReport.product|upper }}&nbsp;({{ productReport.product.productUnit }})
+                                    </a>
+
+                                </th>
+                                {%  if showDay %}
+                                    <th class="header">{{ current_total_day|myNumberFormat }}</th>
+                                    {% endif %}
+                                    {%  if showMonth %}
+                                    <th  class=" header">{{ current_total_month|myNumberFormat }}</th>
+                                    {% endif %}
+                                    {%  if showYear %}
+                                    <th  class=" header">{{ current_total_year|myNumberFormat }}</th>
+                                    {% endif %}
                             </tr>
 
-                            {% set plan_year = 0 %}
-                            {% set plan_acumulated = 0 %}
-                            {% set real_acumulated = 0 %}
+                            {% set total_day = 0 %}
+                            {% set total_month = 0 %}
+                            {% set total_year = 0 %}
+
+                            {% set summary_total_day = summary_total_day + current_total_day %}
+                            {% set summary_total_month = summary_total_month + current_total_month %}
+                            {% set summary_total_year = summary_total_year + current_total_year %}
+                            {% if loop.last %}
+                                <tr>
+                                    <td>TOTALES</td>
+                                    <td>{{ summary_total_day|myNumberFormat }}</td>
+                                    <td>{{ summary_total_month|myNumberFormat }}</td>
+                                    <td>{{ summary_total_year|myNumberFormat }}</td>
+                                </tr>
+                            {% endif  %}
                         {% endif %}
+                    {% else %}
+                        <tr>
+                            <td colspan="4" class="empty_row">{{ "No service planning"|trans }}</td>
+                        </tr>
                     {% endfor %}
                 </tbody>
-                {% set current_percentage = 0 %}
-                {% if total_plan_acumulated > 0 %}
-                    {% set current_percentage = (total_real_acumulated * 100) / total_plan_acumulated %}
-                {% endif %}
-                {% set current_pnr = total_plan_acumulated - total_real_acumulated %}
-                {% if current_pnr < 0 %}
-                    {% set current_pnr = 0 %}
-                {% endif %}
-                <tfoot>
-                    <tr>
-                        <th class="header">TOTALES</th>
-                        <th class="header">{{ total_plan_year|myNumberFormat }}</th>
-                        <th class="header">{{ total_plan_acumulated|myNumberFormat }}</th>
-                        <th class=" header">{{ total_real_acumulated|myNumberFormat }}</th>
-                        <th class=" header">{{ current_percentage|myNumberFormat }}%</th>
-                        <th class=" header">{{ current_pnr|myNumberFormat }}</th>
-                    </tr>
-                </tfoot>
             </table>
         </div>
     </div>
-{% endif %}
-<div class="columns">
-    <div class="twelve-columns twelve-columns-mobile">
-        <h3 class="thin underline text-center">CONSUMOS</h3>
-    </div>
-</div>
-<div class="columns">
-    <div class="twelve-columns-mobile">
-        <table class="simple-table responsive-table responsive-table-on">
-            <thead>
-                <tr>
-                    <th class="header text-center white-gradient" colspan="7">CONSUMO DE MATERIA PRIMA</th>
-                </tr>
-                <tr>
-                    <th scope="col" style="width: 7%" class="header">PRODUCTO</th>
-                        {%  if showDay %}
-                            <th scope="col" colspan="2" style="width: 7%" class="text-center header">DÍA</th>
-                        {% endif %}
-                        {%  if showMonth %}
-                            <th scope="col" colspan="2" style="width: 7%" class="text-center header">MES</th>
-                        {% endif %}
-                        {%  if showYear %}
-                            <th scope="col" colspan="2" style="width: 7%" class="text-center header">AÑO</th>
-                        {% endif %}
-                </tr>
-                <tr>
-                    <th scope="col" style="width: 7%" class="header">&nbsp;</th>
-                    {%  if showDay %}
-                        <th scope="col" style="width: 7%" class="header">PLAN</th>
-                        <th scope="col" style="width: 7%" class="header">REAL</th>
-                    {% endif %}
-                    {%  if showMonth %}
-                        <th scope="col" style="width: 7%" class=" header">PLAN</th>
-                        <th scope="col" style="width: 7%" class=" header">REAL</th>
-                    {% endif %}
-                    {%  if showYear %}
-                        <th scope="col" style="width: 7%" class=" header">PLAN</th>
-                        <th scope="col" style="width: 7%" class=" header">REAL</th>
-                    {% endif %}
-                </tr>
-            </thead>
-            <tbody>
-                {% set total_day = 0 %}
-                {% set total_month = 0 %}
-                {% set total_year = 0 %}
-                
-                {% set total_day_plan = 0 %}
-                {% set total_month_plan = 0 %}
-                {% set total_year_plan = 0 %}
-
-                {% set items = rawMaterialConsumptionPlannings %}
-
-                {% for rawMaterialConsumptionPlanning in rawMaterialConsumptionPlannings %}
-                    {% set summary = rawMaterialConsumptionPlanning.getSummary(dateReport) %}
-
-                    {% set current_total_day = summary['total_day'] %}
-                    {% set current_total_month = summary['total_month'] %}
-                    {% set current_total_year = summary['total_year'] %}
-                    
-                    {% set current_total_day_plan = summary['total_day_plan'] %}
-                    {% set current_total_month_plan = summary['total_month_plan'] %}
-                    {% set current_total_year_plan = summary['total_year_plan'] %}
-
-                    {% set is_next_equals = false %}
-                    {% set next_item = get_next_item(loop,items) %}
-
-                    {% if next_item %}
-                        {% if rawMaterialConsumptionPlanning.product == next_item.product %}
-                            {% set is_next_equals = true %}
-                        {% endif %}
-                    {% endif  %}
-
-                    {% if is_next_equals == true %}
-                        {% set total_day = total_day + summary['total_day'] %}
-                        {% set total_month = total_month + summary['total_month'] %}
-                        {% set total_year = total_year + summary['total_year'] %}
-                        
-                        {% set total_day_plan = total_day_plan + summary['total_day_plan'] %}
-                        {% set total_month_plan = total_month_plan + summary['total_month_plan'] %}
-                        {% set total_year_plan = total_year_plan + summary['total_year_plan'] %}
-                    {% else %}
-                        {% set current_total_day = current_total_day + total_day %}
-                        {% set current_total_month = current_total_month + total_month %}
-                        {% set current_total_year = current_total_year + total_year %}
-                        
-                        {% set current_total_day_plan = current_total_day_plan + total_day_plan %}
-                        {% set current_total_month_plan = current_total_month_plan + total_month_plan %}
-                        {% set current_total_year_plan = current_total_year_plan + total_year_plan %}
-                        <tr>
-                            {% set productUnit = rawMaterialConsumptionPlanning.product.productUnit %}
-                            <th class="header">{{ rawMaterialConsumptionPlanning.product|upper }}&nbsp;({{ productUnit }})</th>
-                                {%  if showDay %}
-                                    <th class="header">{{ current_total_day_plan|myNumberFormat }}</th>
-                                    <th class="header">{{ current_total_day|myNumberFormat }}</th>
-                                {% endif %}
-                                {%  if showMonth %}
-                                    <th class=" header">{{ current_total_month_plan|myNumberFormat }}</th>
-                                    <th class=" header">{{ current_total_month|myNumberFormat }}</th>
-                                {% endif %}
-                                {%  if showYear %}
-                                    <th class=" header">{{ current_total_year_plan|myNumberFormat }}</th>
-                                    <th class=" header">{{ current_total_year|myNumberFormat }}</th>
-                                {% endif %}
-                        </tr>
-                        {% set total_day = 0 %}
-                        {% set total_month = 0 %}
-                        {% set total_year = 0 %}
-                        
-                        {% set total_day_plan = 0 %}
-                        {% set total_month_plan = 0 %}
-                        {% set total_year_plan = 0 %}
-                        
-                    {% endif %}
-                {% else %}
+    <div class="columns">
+        <div class="twelve-columns-mobile">
+            <table class="simple-table responsive-table responsive-table-on">
+                <thead>
                     <tr>
-                        <td colspan="4" class="empty_row">{{ "No raw material planning"|trans }}</td>
+                        <th class="header text-center white-gradient" colspan="5">INVENTARIO</th>
                     </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-    <div class="twelve-columns-mobile">
-        <table class="simple-table responsive-table responsive-table-on">
-            <thead>
-                <tr>
-                    <th class="header text-center white-gradient" colspan="7">CONSUMO DE SERVICIOS</th>
-                </tr>
-                <tr>
-                    <th scope="col" style="width: 7%" class="header">PRODUCTO</th>
-                        {%  if showDay %}
-                            <th scope="col" colspan="2" style="width: 7%" class="text-center header">DÍA</th>
-                        {% endif %}
-                        {%  if showMonth %}
-                            <th scope="col" colspan="2" style="width: 7%" class="text-center header">MES</th>
-                        {% endif %}
-                        {%  if showYear %}
-                            <th scope="col" colspan="2" style="width: 7%" class="text-center header">AÑO</th>
-                        {% endif %}
-                </tr>
-                <tr>
-                    <th scope="col" style="width: 7%" class="header">&nbsp;</th>
-                    {%  if showDay %}
-                        <th scope="col" style="width: 7%" class="header">PLAN</th>
-                        <th scope="col" style="width: 7%" class="header">REAL</th>
-                    {% endif %}
-                    {%  if showMonth %}
-                        <th scope="col" style="width: 7%" class=" header">PLAN</th>
-                        <th scope="col" style="width: 7%" class=" header">REAL</th>
-                    {% endif %}
-                    {%  if showYear %}
-                        <th scope="col" style="width: 7%" class=" header">PLAN</th>
-                        <th scope="col" style="width: 7%" class=" header">REAL</th>
-                    {% endif %}
-                </tr>
-            </thead>
-            <tbody>
-                {% set total_day = 0 %}
-                {% set total_month = 0 %}
-                {% set total_year = 0 %}
-                
-                {% set total_day_plan = 0 %}
-                {% set total_month_plan = 0 %}
-                {% set total_year_plan = 0 %}
-
-                {% set items = consumerPlanningServices %}
-
-                {% for consumerPlanningService in consumerPlanningServices %}
-                    {% set summary = consumerPlanningService.getSummary(dateReport) %}
-
-                    {% set current_total_day = summary['total_day'] %}
-                    {% set current_total_month = summary['total_month'] %}
-                    {% set current_total_year = summary['total_year'] %}
-                    
-                    {% set current_total_day_plan = summary['total_day_plan'] %}
-                    {% set current_total_month_plan = summary['total_month_plan'] %}
-                    {% set current_total_year_plan = summary['total_year_plan'] %}
-
-                    {% set is_next_equals = false %}
-                    {% set next_item = get_next_item(loop,items) %}
-
-                    {% if next_item %}
-                        {% if consumerPlanningService.service == next_item.service %}
-                            {% set is_next_equals = true %}
-                        {% endif %}
-                    {% endif  %}
-
-                    {% if is_next_equals == true %}
-                        {% set total_day = total_day + summary['total_day'] %}
-                        {% set total_month = total_month + summary['total_month'] %}
-                        {% set total_year = total_year + summary['total_year'] %}
-                        
-                        {% set total_day_plan = total_day_plan + summary['total_day_plan'] %}
-                        {% set total_month_plan = total_month_plan + summary['total_month_plan'] %}
-                        {% set total_year_plan = total_year_plan + summary['total_year_plan'] %}
-                        
-                    {% else %}
-                        {% set current_total_day = current_total_day + total_day %}
-                        {% set current_total_month = current_total_month + total_month %}
-                        {% set current_total_year = current_total_year + total_year %}
-                        
-                        {% set current_total_day_plan = current_total_day_plan + total_day_plan %}
-                        {% set current_total_month_plan = current_total_month_plan + total_month_plan %}
-                        {% set current_total_year_plan = current_total_year_plan + total_year_plan %}
-                        
-                        <tr>
-                            {% set serviceUnit = consumerPlanningService.service.serviceUnit %}
-                            <th class="header">{{ consumerPlanningService.service|upper }}&nbsp;({{ serviceUnit }})</th>
-                                {%  if showDay %}
-                                <th class="header">{{ current_total_day_plan|myNumberFormat }}</th>
-                                <th class="header">{{ current_total_day|myNumberFormat }}</th>
-                                {% endif %}
-                                {%  if showMonth %}
-                                <th class=" header">{{ current_total_month_plan|myNumberFormat }}</th>
-                                <th class=" header">{{ current_total_month|myNumberFormat }}</th>
-                                {% endif %}
-                                {%  if showYear %}
-                                <th class=" header">{{ current_total_year_plan|myNumberFormat }}</th>
-                                <th class=" header">{{ current_total_year|myNumberFormat }}</th>
-                                {% endif %}
-                        </tr>
-                        {% set total_day = 0 %}
-                        {% set total_month = 0 %}
-                        {% set total_year = 0 %}
-                        
-                        {% set total_day_plan = 0 %}
-                        {% set total_month_plan = 0 %}
-                        {% set total_year_plan = 0 %}
-                    {% endif %}
-                {% else %}
                     <tr>
-                        <td colspan="4" class="empty_row">{{ "No service planning"|trans }}</td>
+                        <th scope="col" style="width: 7%" class="header">PRODUCTO</th>
+                            {%  if showDay %}
+                            <th scope="col" style="width: 7%" class="header">DÍA</th>
+                            {% endif %}
+                            {%  if showMonth %}
+                            <th scope="col" style="width: 7%" class=" header">DÍA ANTERIOR</th>
+                            {% endif %}
                     </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-</div>
-<div class="columns">
-    <div class="twelve-columns-mobile">
-        <table class="simple-table responsive-table responsive-table-on">
-            <thead>
-                <tr>
-                    <th class="header text-center white-gradient" colspan="5">PRODUCCIÓN NO REALIZADA</th>
-                </tr>
-                <tr>
-                    <th scope="col" style="width: 7%" class="header">PRODUCTO</th>
-                        {%  if showDay %}
-                        <th scope="col" style="width: 7%" class="header">DÍA</th>
+                </thead>
+                <tbody>
+                    {% set total_day = 0 %}
+                    {% set total_month = 0 %}
+                    {% set total_year = 0 %}
+
+                    {% set summary_total_day = 0 %}
+                    {% set summary_total_month = 0 %}
+
+                    {% set items = productsReport %}
+
+                    {% for productReport in productsReport %}
+                        {% set summary = productReport.getSummaryInventory(dateReport) %}
+
+                        {% set current_total_day = summary['total_day'] %}
+                        {% set current_total_month = summary['total_month'] %}
+
+                        {% set is_next_equals = false %}
+                        {% set next_item = get_next_item(loop,items) %}
+
+                        {% if next_item %}
+                            {% if productReport.product == next_item.product %}
+                                {% set is_next_equals = true %}
+                            {% endif %}
+                        {% endif  %}
+                        {% if is_next_equals == true %}
+                            {% set total_day = total_day + summary['total_day'] %}
+                            {% set total_month = total_month + summary['total_month'] %}
+                        {% else %}
+                            {% set current_total_day = current_total_day + total_day %}
+                            {% set current_total_month = current_total_month + total_month %}
+
+                            <tr>
+                                <th  class="header">{{ productReport.product|upper }}&nbsp;({{ productReport.product.productUnit }})</th>
+                                    {%  if showDay %}
+                                    <th  class="header">{{ current_total_day|myNumberFormat }}</th>
+                                    {% endif %}
+                                    {%  if showMonth %}
+                                    <th  class=" header">{{ current_total_month|myNumberFormat }}</th>
+                                    {% endif %}
+                            </tr>
                         {% endif %}
-                        {%  if showMonth %}
-                        <th scope="col" style="width: 7%" class=" header">MES</th>
-                        {% endif %}
-                        {%  if showYear %}
-                        <th scope="col" style="width: 7%" class=" header">AÑO</th>
-                        {% endif %}
-                </tr>
-            </thead>
-            <tbody>
-                {% set total_day = 0 %}
-                {% set total_month = 0 %}
-                {% set total_year = 0 %}
-
-                {% set summary_total_day = 0 %}
-                {% set summary_total_month = 0 %}
-                {% set summary_total_year = 0 %}
-
-                {% set items = productsReport %}
-
-                {% for productReport in productsReport %}
-                    {% set summary = productReport.getSummaryUnrealizedProductions(dateReport) %}
-
-                    {% set current_total_day = summary['total_day'] %}
-                    {% set current_total_month = summary['total_month'] %}
-                    {% set current_total_year = summary['total_year'] %}
-
-                    {% set is_next_equals = false %}
-                    {% set next_item = get_next_item(loop,items) %}
-
-                    {% if next_item %}
-                        {% if productReport.product == next_item.product %}
-                            {% set is_next_equals = true %}
-                        {% endif %}
-                    {% endif  %}
-
-                    {% if is_next_equals == true %}
-                        {% set total_day = total_day + summary['total_day'] %}
-                        {% set total_month = total_month + summary['total_month'] %}
-                        {% set total_year = total_year + summary['total_year'] %}
-                    {% else %}
-                        {% set current_total_day = current_total_day + total_day %}
-                        {% set current_total_month = current_total_month + total_month %}
-                        {% set current_total_year = current_total_year + total_year %}
-
-                        <tr>
-                            <th class="header">{{ productReport.product|upper }}&nbsp;({{ productReport.product.productUnit }})</th>
-                                {%  if showDay %}
-                                <th class="header">{{ current_total_day|myNumberFormat }}</th>
-                                {% endif %}
-                                {%  if showMonth %}
-                                <th  class=" header">{{ current_total_month|myNumberFormat }}</th>
-                                {% endif %}
-                                {%  if showYear %}
-                                <th  class=" header">{{ current_total_year|myNumberFormat }}</th>
-                                {% endif %}
-                        </tr>
-
-                        {% set total_day = 0 %}
-                        {% set total_month = 0 %}
-                        {% set total_year = 0 %}
 
                         {% set summary_total_day = summary_total_day + current_total_day %}
                         {% set summary_total_month = summary_total_month + current_total_month %}
-                        {% set summary_total_year = summary_total_year + current_total_year %}
                         {% if loop.last %}
                             <tr>
                                 <td>TOTALES</td>
                                 <td>{{ summary_total_day|myNumberFormat }}</td>
                                 <td>{{ summary_total_month|myNumberFormat }}</td>
-                                <td>{{ summary_total_year|myNumberFormat }}</td>
                             </tr>
                         {% endif  %}
-                    {% endif %}
-                {% else %}
-                    <tr>
-                        <td colspan="4" class="empty_row">{{ "No service planning"|trans }}</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-</div>
-<div class="columns">
-    <div class="twelve-columns-mobile">
-        <table class="simple-table responsive-table responsive-table-on">
-            <thead>
-                <tr>
-                    <th class="header text-center white-gradient" colspan="5">INVENTARIO</th>
-                </tr>
-                <tr>
-                    <th scope="col" style="width: 7%" class="header">PRODUCTO</th>
-                        {%  if showDay %}
-                        <th scope="col" style="width: 7%" class="header">DÍA</th>
-                        {% endif %}
-                        {%  if showMonth %}
-                        <th scope="col" style="width: 7%" class=" header">DÍA ANTERIOR</th>
-                        {% endif %}
-                </tr>
-            </thead>
-            <tbody>
-                {% set total_day = 0 %}
-                {% set total_month = 0 %}
-                {% set total_year = 0 %}
-
-                {% set summary_total_day = 0 %}
-                {% set summary_total_month = 0 %}
-
-                {% set items = productsReport %}
-
-                {% for productReport in productsReport %}
-                    {% set summary = productReport.getSummaryInventory(dateReport) %}
-
-                    {% set current_total_day = summary['total_day'] %}
-                    {% set current_total_month = summary['total_month'] %}
-
-                    {% set is_next_equals = false %}
-                    {% set next_item = get_next_item(loop,items) %}
-
-                    {% if next_item %}
-                        {% if productReport.product == next_item.product %}
-                            {% set is_next_equals = true %}
-                        {% endif %}
-                    {% endif  %}
-                    {% if is_next_equals == true %}
-                        {% set total_day = total_day + summary['total_day'] %}
-                        {% set total_month = total_month + summary['total_month'] %}
                     {% else %}
-                        {% set current_total_day = current_total_day + total_day %}
-                        {% set current_total_month = current_total_month + total_month %}
-
                         <tr>
-                            <th  class="header">{{ productReport.product|upper }}&nbsp;({{ productReport.product.productUnit }})</th>
-                                {%  if showDay %}
-                                <th  class="header">{{ current_total_day|myNumberFormat }}</th>
-                                {% endif %}
-                                {%  if showMonth %}
-                                <th  class=" header">{{ current_total_month|myNumberFormat }}</th>
-                                {% endif %}
-                        </tr>
-                    {% endif %}
-
-                    {% set summary_total_day = summary_total_day + current_total_day %}
-                    {% set summary_total_month = summary_total_month + current_total_month %}
-                    {% if loop.last %}
-                        <tr>
-                            <td>TOTALES</td>
-                            <td>{{ summary_total_day|myNumberFormat }}</td>
-                            <td>{{ summary_total_month|myNumberFormat }}</td>
-                        </tr>
-                    {% endif  %}
-                {% else %}
-                    <tr>
-                        <td colspan="4" class="empty_row">{{ "No inventory planning"|trans }}</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-</div>
-<div class="columns">
-    {% if showDay  %}
-        <div class="twelve-columns twelve-columns-mobile">
-            <table class="simple-table responsive-table responsive-table-on">
-                <thead>
-                    <tr>
-                        <th class="header text-center white-gradient" colspan="5">OBSERVACIONES DEL DÍA</th>
-                    </tr>
-                    <tr>
-                        <th scope="col" style="width: 20%" class="header">PRODUCTO</th>
-                        <th scope="col" style="width: 80%" class="header">COMENTARIO</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for productReport in productsReport %}
-                        {% set summary = productReport.getSummaryDay(dateReport,typeReport) %}
-                        <tr>
-                            <th scope="col" style="width: 20%" class="header">{{ productReport.product|upper }}</th>
-                            <th scope="col" style="width: 80%" class="header">{{ (summary['observation'] is null ? ("pequiven_seip.comment_none"|trans):summary['observation']) |upper }}</th>
+                            <td colspan="4" class="empty_row">{{ "No inventory planning"|trans }}</td>
                         </tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
+    </div>
+    <div class="columns">
+        {% if showDay  %}
+            <div class="twelve-columns twelve-columns-mobile">
+                <table class="simple-table responsive-table responsive-table-on">
+                    <thead>
+                        <tr>
+                            <th class="header text-center white-gradient" colspan="5">OBSERVACIONES DEL DÍA</th>
+                        </tr>
+                        <tr>
+                            <th scope="col" style="width: 20%" class="header">PRODUCTO</th>
+                            <th scope="col" style="width: 80%" class="header">COMENTARIO</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for productReport in productsReport %}
+                            {% set summary = productReport.getSummaryDay(dateReport,typeReport) %}
+                            <tr>
+                                <th scope="col" style="width: 20%" class="header">{{ productReport.product|upper }}</th>
+                                <th scope="col" style="width: 80%" class="header">{{ (summary['observation'] is null ? ("pequiven_seip.comment_none"|trans):summary['observation']) |upper }}</th>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+    </div>
+    <p class="button-height float-right">
+        <a id="btnExportToPdf" href="#" class="button">
+            <span class="button-icon"><span class="icon-download"></span></span>
+                {{ "pequiven_seip.buttons.export_pdf"|trans }}
+        </a>
+    </p>
+    {% if is_granted(['ROLE_SEIP_OPERATION_EXPORT_EXCEL_PRODUCTION']) %}
+        <p class="button-height float-right">
+            <a id="btnExportToExcel" href="#" class="button">
+                <span class="button-icon"><span class="icon-download"></span></span>
+                    {{ "pequiven_seip.buttons.export_xls"|trans }}
+            </a>
+        </p>
     {% endif %}
-</div>
-<p class="button-height float-right">
-    <a id="btnExportToPdf" href="#" class="button">
-        <span class="button-icon"><span class="icon-download"></span></span>
-            {{ "pequiven_seip.buttons.export_pdf"|trans }}
-    </a>
-</p>
-
-<p class="button-height float-right">
-    <a id="btnExportToExcel" href="#" class="button">
-        <span class="button-icon"><span class="icon-download"></span></span>
-            {{ "pequiven_seip.buttons.export_xls"|trans }}
-    </a>
-</p>
 {% else %}
     <h2 class="text-center">{{ "Select the plant"|trans }}</h2>
 {% endif %}

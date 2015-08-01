@@ -75,6 +75,11 @@ abstract class Indicator implements IndicatorInterface {
      * Indicador sin resultado
      */
     const INDICATOR_WITHOUT_RESULT = 'INDICATOR_WITHOUT_RESULT';
+    
+    /**
+     * Indicador sin Frecuencia de Notificación
+     */
+    const INDICATOR_WITHOUT_FREQUENCY_NOTIFICATION = 'INDICATOR_WITHOUT_FREQUENCY_NOTIFICATION';
 
     /**
      * Tipo de detalle (Ninguno)
@@ -105,6 +110,28 @@ abstract class Indicator implements IndicatorInterface {
      * Metodo de calculo por promedio ponderado del resultado de los hijos
      */
     const CALCULATION_METHOD_WEIGHTED_AVERAGE_RESULT_CHILDREN = 3;
+    
+    
+    /**
+     * Tipo de compañia matriz
+     */
+    const TYPE_OF_COMPANY_MATRIZ = 0;
+    
+    /**
+     * Tipo de compañia filial
+     */
+    const TYPE_OF_COMPANY_AFFILIATED = 1;
+    
+    /**
+     * Tipo de compañia mixta
+     */
+    const TYPE_OF_COMPANY_MIXTA = 2;
+    
+    /**
+     * Tipo de compañia mixta
+     */
+    const TYPE_OF_COMPANY_AFFILIATED_MIXTA = 3;
+    
     const TYPE_OBJECT = 'indicator';
 
     /**
@@ -240,6 +267,7 @@ abstract class Indicator implements IndicatorInterface {
             self::INDICATOR_WITHOUT_FORMULA => 'pequiven_indicator.summary.without_formula',
             self::INDICATOR_WITH_RESULT => 'pequiven_indicator.summary.with_result',
             self::INDICATOR_WITHOUT_RESULT => 'pequiven_indicator.summary.without_result',
+            self::INDICATOR_WITHOUT_FREQUENCY_NOTIFICATION => 'pequiven_indicator.summary.without_frequency_notification',
         );
         return $labelsStatus;
     }
@@ -394,6 +422,16 @@ abstract class Indicator implements IndicatorInterface {
             throw new Exception(sprintf('The type of result section "%s" dont exist', $this->typeOfResultSection));
         }
         return $typesOfResultSection[$this->typeOfResultSection];
+    }
+    
+    public static function getTypesOfCompanies()
+    {
+        return array(
+            self::TYPE_OF_COMPANY_MATRIZ => 'pequiven_master.company.type.pqv',
+            self::TYPE_OF_COMPANY_AFFILIATED => 'pequiven_master.company.type.affiliated',
+            self::TYPE_OF_COMPANY_MIXTA => 'pequiven_master.company.type.mixta',
+            self::TYPE_OF_COMPANY_AFFILIATED_MIXTA => 'pequiven_master.company.type.affiliated_mixta',
+        );
     }
     
 }

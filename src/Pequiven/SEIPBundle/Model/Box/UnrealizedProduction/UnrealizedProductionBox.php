@@ -17,7 +17,7 @@ class UnrealizedProductionBox extends GenericBox {
     }
 
     public function getName() {
-        return 'pequiven_seip.box.unrealized_production';
+        return 'pequiven_seip_box_unrealized_production';
     }
 
     protected function getCauseFailService() {

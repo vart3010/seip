@@ -1,0 +1,31 @@
+Pequiven\IndicatorBundle\Entity\Indicator\FrequencyNotificationIndicator:
+    exclusion_policy: ALL
+    properties:
+        id:
+            expose: true
+            groups: [id]
+        createdAt:
+            expose: true
+            groups: [api_list]
+        updatedAt:
+            expose: true
+            groups: [api_list]
+        description:
+            expose: true
+            groups: [api_list]
+        textAbbr:
+            expose: true
+            groups: [api_list]
+        days:
+            expose: true
+            groups: [api_list]
+        numberResultsFrequency:
+            expose: true
+            gropups: [api_list]
+        enabled:
+            expose: true
+            gropups: [api_list]
+        period:
+            expose: true
+            gropups: [period]
+            

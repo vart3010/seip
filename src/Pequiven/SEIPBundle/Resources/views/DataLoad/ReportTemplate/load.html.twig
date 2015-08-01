@@ -391,11 +391,11 @@
         $(document).ready(function(){
             var form = $("#template-load");
             $("#btn-save").on("click",function(){
-                $('.detail-status').val(2);
+                $('.detail-status').val({{ constant('Pequiven\\SEIPBundle\\Model\\DataLoad\\Production\\ProductDetailDailyMonth::STATUS_SAVE') }});
                 form.submit();
             });
             $("#btn-save-slope").on("click",function(){
-                $('.detail-status').val(1);
+                $('.detail-status').val({{ constant('Pequiven\\SEIPBundle\\Model\\DataLoad\\Production\\ProductDetailDailyMonth::STATUS_SAVE_PENDING') }});
                 form.submit();
             });
             {% if is_granted("ROLE_SEIP_DATA_LOAD_CHANGE_DATE") %}

@@ -88,7 +88,67 @@ abstract class Chart
      */
     const TYPE_CHART_COLUMN_REAL_PLAN_BY_FREQUENCY_NOTIFICATION_FROM_DASHBOARD_EQUATION = 14;
     
-    const TYPE_EXAMPLE = 20;
+    /**
+     * Gráfico tipo stacked column 3d para mostrar el resultado , de acuerdo a la frecuencia de notificación de las variables asociadas a la fórmula del indicador, con el total acumulado por variables al final
+     */
+    const TYPE_CHART_STACKED_COLUMN_VARIABLE_BY_FREQUENCY_NOTIFICATION_WITH_TOTAL = 15;
+    
+    /**
+     * Gráfico tipo column 3d para mostrar el resultado de un mes (Ideado para aquellos indicadores con fórmula acumulativo de cada carga) de los indicadores asociados, con el total acumulado al final
+     */
+    const TYPE_CHART_COLUMN_RESULT_INDICATORS_ASSOCIATED_WITH_TOTAL_BY_MONTH = 16;
+    
+    /**
+     * Gráfico tipo column 3d para mostrar el resultado de un mes (Ideado para aquellos indicadores con fórmula acumulativo de cada carga) de los indicadores asociados agrupados por tipo de empresa, con el total acumulado al final
+     */
+    const TYPE_CHART_COLUMN_RESULT_INDICATORS_ASSOCIATED_GROUP_BY_TYPE_COMPANY_WITH_TOTAL_BY_MONTH = 17;
+    
+    /**
+     * Gráfico tipo multiseries de línea, para las lesiones personales con tiempo, acumulados, sólo del indicador (período actual y anterior)
+     */
+    const TYPE_CHART_MULTI_SERIES_LINE_INDICATOR_PERSONAL_INJURY_WITH_ACCUMULATED_TIME = 18;
+    
+    /**
+     * Gráfico tipo multiseries de línea, para las lesiones personales sin tiempo, sólo del indicador (período actual y anterior)
+     */
+    const TYPE_CHART_MULTI_SERIES_LINE_INDICATOR_PERSONAL_INJURY_WITHOUT_ACCUMULATED_TIME = 19;
+    
+    /**
+     * Gráfico tipo multiseries de línea, para las lesiones personales con y sin tiempo y dias perdidos, acumulados, de los hijos del indicador
+     */
+    const TYPE_CHART_MULTI_SERIES_LINE_INDICATOR_PERSONAL_INJURY_WHIT_AND_WITHOUT_ACCUMULATED_TIME_FROM_CHILDRENS = 20;
+        
+    /**
+     * Gráfico tipo multiseries de línea, para los días perdidos, sólo del indicador (período actual y anterior)
+     */
+    const TYPE_CHART_MULTI_SERIES_LINE_INDICATOR_LOST_DAYS_ACCUMULATED_TIME = 21;
+    
+    /**
+     * Gráfico tipo multiseries columna 3d, para mostrar el resultado de una suma de variables de los indicadores hijos (lesionados con tiempo perdidoa, sin tiempo perdido y días perdidos), según sea el caso del período actual y anterior
+     */
+    const TYPE_CHART_MULTI_SERIES_COLUMN_INDICATORS_ASSOCIATED_PERSONAL_INJURY_WITH_AND_WITHOUT_AND_LOST_DAYS_BY_PERIOD_WITH_ACCUMULATED = 22;
+    
+    /**
+     * Gráfico tipo multiseries columna + línea, todo respecto al mismo eje, para mostrar el resultado de la suma de variables por frecuencia del indicador agrupados por compañia y del período actual y anterior (línea) y el acumulado por período (columna) al final.
+     */
+    const TYPE_CHART_MULTI_SERIES_COLUMN_LINE_INDICATOR_PERSONAL_INJURY_WITH_AND_WITHOUT_AND_LOST_DAYS_BY_FREQUENCY_NOTIFICATION_BY_PERIOD_GROUP_BY_COMPANY_WITH_ACCUMULATED = 23;
+    
+    /**
+     * Gráfico tipo mulsiseries columna + línea, todo respecto al mismo eje, para mostrar el resultado de las lesiones con tiempo perdido por frecuencia de notificación del indicador del período actual y anterior (línea) y el acumulado por período (columna) al final.
+     */
+    const TYPE_CHART_MULTI_SERIES_COLUMN_LINE_INDICATOR_PERSONAL_INJURY_WITH_LOST_TIME_BY_FREQUENCY_NOTIFICATION_BY_PERIOD_WITH_ACCUMULATED = 24;
+    
+    /**
+     * Gráfico tipo mulsiseries columna + línea, todo respecto al mismo eje, para mostrar el resultado de las lesiones sin tiempo perdido por frecuencia de notificación del indicador del período actual y anterior (línea) y el acumulado por período (columna) al final.
+     */
+    const TYPE_CHART_MULTI_SERIES_COLUMN_LINE_INDICATOR_PERSONAL_INJURY_WITHOUT_LOST_TIME_BY_FREQUENCY_NOTIFICATION_BY_PERIOD_WITH_ACCUMULATED = 25;
+    
+    /**
+     * Gráfico tipo mulsiseries columna + línea, todo respecto al mismo eje, para mostrar el resultado de los días perdidos por frecuencia de notificación del indicador del período actual y anterior (línea) y el acumulado por período (columna) al final.
+     */
+    const TYPE_CHART_MULTI_SERIES_COLUMN_LINE_INDICATOR_LOST_DAYS_BY_FREQUENCY_NOTIFICATION_BY_PERIOD_WITH_ACCUMULATED = 26;
+    
+    const TYPE_EXAMPLE = 100;
        
     /**
      * @var integer
@@ -141,6 +201,18 @@ abstract class Chart
             self::TYPE_CHART_VARIABLES_REAL_PLAN_FROM_DASHBOARD_EQUATION_DOUGHNUT => 'chart.type.indicatorsDoughnutWithVariablesRealPlanFromDashboardEquation',
             self::TYPE_CHART_COLUMN_REAL_PLAN_INDICATORS_ASSOCIATED_FROM_DASHBOARD_EQUATION => 'chart.type.indicatorsAssociatedColumnMultiSeriesRealPlanFromDashboardEquation',
             self::TYPE_CHART_COLUMN_REAL_PLAN_BY_FREQUENCY_NOTIFICATION_FROM_DASHBOARD_EQUATION => 'chart.type.resultsOfIndicatorColumnMultiSeriesRealPlanByFrequencyNotificationFromDashboardEquation',
+            self::TYPE_CHART_STACKED_COLUMN_VARIABLE_BY_FREQUENCY_NOTIFICATION_WITH_TOTAL => 'chart.type.indicatorVariablesStackedColumnByFrequencyNotificationWithTotal',
+            self::TYPE_CHART_COLUMN_RESULT_INDICATORS_ASSOCIATED_WITH_TOTAL_BY_MONTH => 'chart.type.indicatorsAssociatedColumnWithTotalByMonth',
+            self::TYPE_CHART_COLUMN_RESULT_INDICATORS_ASSOCIATED_GROUP_BY_TYPE_COMPANY_WITH_TOTAL_BY_MONTH => 'chart.type.indicatorsAssociatedColumnGroupByTypeCompanyWithTotalByMonth',
+            self::TYPE_CHART_MULTI_SERIES_LINE_INDICATOR_PERSONAL_INJURY_WITH_ACCUMULATED_TIME => 'chart.type.indicatorPersonalInjuryWithAccumulatedTime',
+            self::TYPE_CHART_MULTI_SERIES_LINE_INDICATOR_PERSONAL_INJURY_WITHOUT_ACCUMULATED_TIME => 'chart.type.indicatorPersonalInjuryWithoutAccumulatedTime',
+            self::TYPE_CHART_MULTI_SERIES_LINE_INDICATOR_PERSONAL_INJURY_WHIT_AND_WITHOUT_ACCUMULATED_TIME_FROM_CHILDRENS => 'chart.type.indicatorPersonalInjuryWithAndWithoutAccumulatedTimeFromChildrens',
+            self::TYPE_CHART_MULTI_SERIES_LINE_INDICATOR_LOST_DAYS_ACCUMULATED_TIME => 'chart.type.indicatorLostDaysAccumulatedTime',
+            self::TYPE_CHART_MULTI_SERIES_COLUMN_INDICATORS_ASSOCIATED_PERSONAL_INJURY_WITH_AND_WITHOUT_AND_LOST_DAYS_BY_PERIOD_WITH_ACCUMULATED => 'chart.type.indicatorsAssociatedPersonalInjuryWithAndWithoutAndLostDaysByPeriodWithAccumulated',
+            self::TYPE_CHART_MULTI_SERIES_COLUMN_LINE_INDICATOR_PERSONAL_INJURY_WITH_AND_WITHOUT_AND_LOST_DAYS_BY_FREQUENCY_NOTIFICATION_BY_PERIOD_GROUP_BY_COMPANY_WITH_ACCUMULATED => 'chart.type.indicatorPersonalInjuryWithAndWithoutAndLostDaysByFrequencyNotificationByPeriodGroupByCompanyWithAccumulated',
+            self::TYPE_CHART_MULTI_SERIES_COLUMN_LINE_INDICATOR_PERSONAL_INJURY_WITH_LOST_TIME_BY_FREQUENCY_NOTIFICATION_BY_PERIOD_WITH_ACCUMULATED => 'chart.type.indicatorPersonalInjuryWithLostTimeByFrequencyNotificationByPeriodWithAccumulated',
+            self::TYPE_CHART_MULTI_SERIES_COLUMN_LINE_INDICATOR_PERSONAL_INJURY_WITHOUT_LOST_TIME_BY_FREQUENCY_NOTIFICATION_BY_PERIOD_WITH_ACCUMULATED => 'chart.type.indicatorPersonalInjuryWithoutLostTimeByFrequencyNotificationByPeriodWithAccumulated',
+            self::TYPE_CHART_MULTI_SERIES_COLUMN_LINE_INDICATOR_LOST_DAYS_BY_FREQUENCY_NOTIFICATION_BY_PERIOD_WITH_ACCUMULATED => 'chart.type.indicatorLostDaysByFrequencyNotificationByPeriodWithAccumulated',
             self::TYPE_EXAMPLE => 'chart.type.example',
         );
          

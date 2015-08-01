@@ -9,6 +9,7 @@
 {% endblock %}
 
 {% block body %}
+    
     {% set hasPermission = is_granted("ROLE_SEIP_DATA_LOAD_CHANGE_DATE") %}
     <form id="frmFilter" action="{{ path("pequiven_report_template_vizualice") }}" method="POST">
         <input id="exportToPdf" type="hidden" name="exportToPdf" value="0" />

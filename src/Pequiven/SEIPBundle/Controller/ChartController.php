@@ -312,6 +312,248 @@ class ChartController extends SEIPController {
 
         return $response;
     }
+    
+    /**
+     * 15-Función que retorna la data para un gráfico tipo stacked column 3d para mostrar el resultado , de acuerdo a la frecuencia de notificación de las variables asociadas a la fórmula del indicador, con el total acumulado por variables al final
+     * @return JsonResponse
+     */
+    public function getDataChartStackedColumnVariableByFrequencyNotificationWithTotalAction(Request $request) {
+        $response = new JsonResponse();
+
+        $idIndicator = $request->get('id');
+
+        $indicatorService = $this->getIndicatorService(); //Obtenemos el servicio del indicador
+
+        $indicator = $this->get('pequiven.repository.indicator')->find($idIndicator); //Obtenemos el indicador
+
+        $dataChart = $indicatorService->getDataChartStackedColumn3d($indicator, array('variablesByFrequencyNotificationWithTotal' => true)); //Obtenemos la data del gráfico de acuerdo al indicador
+
+        $response->setData($dataChart); //Seteamos la data del gráfico en Json
+
+        return $response;
+    }
+    
+    /**
+     * 16-Función que retorna la data para un gráfico tipo column 3d para mostrar el resultado de un mes (Ideado para aquellos indicadores con fórmula acumulativo de cada carga) de los indicadores asociados, con el total acumulado al final
+     * @return JsonResponse
+     */
+    public function getDataChartColumnResultIndicatorsAssociatedWithTotalByMonthAction(Request $request) {
+        $response = new JsonResponse();
+
+        $idIndicator = $request->get('id');
+        $month = $request->get('month', date("n"));
+
+        $indicatorService = $this->getIndicatorService(); //Obtenemos el servicio del indicador
+
+        $indicator = $this->get('pequiven.repository.indicator')->find($idIndicator); //Obtenemos el indicador
+
+        $dataChart = $indicatorService->getDataChartColumn3d($indicator, array('resultIndicatorsAssociatedWithTotalByMonth' => true, 'month' => $month)); //Obtenemos la data del gráfico de acuerdo al indicador
+
+        $response->setData($dataChart); //Seteamos la data del gráfico en Json
+
+        return $response;
+    }
+    
+    /**
+     * 17-Función que retorna la data para un gráfico tipo column 3d para mostrar el resultado de un mes (Ideado para aquellos indicadores con fórmula acumulativo de cada carga) de los indicadores asociados agrupados por tipo de empresa, con el total acumulado al final
+     * @return JsonResponse
+     */
+    public function getDataChartColumnResultIndicatorsAssociatedGroupByTypeCompanyWithTotalByMonthAction(Request $request) {
+        $response = new JsonResponse();
+
+        $idIndicator = $request->get('id');
+        $month = $request->get('month', date("n"));
+
+        $indicatorService = $this->getIndicatorService(); //Obtenemos el servicio del indicador
+
+        $indicator = $this->get('pequiven.repository.indicator')->find($idIndicator); //Obtenemos el indicador
+
+        $dataChart = $indicatorService->getDataChartColumn3d($indicator, array('resultIndicatorsAssociatedGroupByTypeCompanyWithTotalByMonth' => true, 'month' => $month)); //Obtenemos la data del gráfico de acuerdo al indicador
+
+        $response->setData($dataChart); //Seteamos la data del gráfico en Json
+
+        return $response;
+    }
+    
+    /**
+     * 18-Función que retorna la data para un gráfico tipo multiseries de línea, para las lesiones personales con tiempo, acumulados, sólo del indicador (período actual y anterior)
+     * @return JsonResponse
+     */
+    public function getDataChartMultiSeriesLineIndicatorPersonalInjuryWithAccumulatedTimeAction(Request $request) {
+        $response = new JsonResponse();
+
+        $idIndicator = $request->get('id');
+
+        $indicatorService = $this->getIndicatorService(); //Obtenemos el servicio del indicador
+
+        $indicator = $this->get('pequiven.repository.indicator')->find($idIndicator); //Obtenemos el indicador
+
+        $dataChart = $indicatorService->getDataChartLineMultiSeries($indicator, array('resultIndicatorPersonalInjuryWithAccumulatedTime' => true, 'variables' => array("lesionados_con_tiempo_perdido" => true, "lesiones_con_tiempo_perdido" => true), 'path_array' => 'resultIndicatorPersonalInjuryWithAccumulatedTime')); //Obtenemos la data del gráfico de acuerdo al indicador
+
+        $response->setData($dataChart); //Seteamos la data del gráfico en Json
+
+        return $response;
+    }
+    
+    /**
+     * 19-Función que retorna la data para un gráfico tipo multiseries de línea, para las lesiones personales sin tiempo, sólo del indicador (período actual y anterior)
+     * @return JsonResponse
+     */
+    public function getDataChartMultiSeriesLineIndicatorPersonalInjuryWithoutAccumulatedTimeAction(Request $request) {
+        $response = new JsonResponse();
+
+        $idIndicator = $request->get('id');
+
+        $indicatorService = $this->getIndicatorService(); //Obtenemos el servicio del indicador
+
+        $indicator = $this->get('pequiven.repository.indicator')->find($idIndicator); //Obtenemos el indicador
+
+        $dataChart = $indicatorService->getDataChartLineMultiSeries($indicator, array('resultIndicatorPersonalInjuryWithoutAccumulatedTime' => true, 'variables' => array("lesionados_sin_tiempo_perdido" => true), 'path_array' => 'resultIndicatorPersonalInjuryWithoutAccumulatedTime')); //Obtenemos la data del gráfico de acuerdo al indicador
+
+        $response->setData($dataChart); //Seteamos la data del gráfico en Json
+
+        return $response;
+    }
+    
+    /**
+     * 20-Función que retorna la data para un gráfico tipo multiseries de línea, para las lesiones personales con y sin tiempo, acumulados, de los hijos del indicador
+     * @return JsonResponse
+     */
+    public function getDataChartMultiSeriesLineIndicatorPersonalInjuryWithAndWithoutAccumulatedTimeFromChildrensAction(Request $request) {
+        $response = new JsonResponse();
+
+        $idIndicator = $request->get('id');
+
+        $indicatorService = $this->getIndicatorService(); //Obtenemos el servicio del indicador
+
+        $indicator = $this->get('pequiven.repository.indicator')->find($idIndicator); //Obtenemos el indicador
+
+        $dataChart = $indicatorService->getDataChartLineMultiSeries($indicator, array('resultIndicatorPersonalInjuryWithAndWithoutAccumulatedTimeFromChildrens' => true)); //Obtenemos la data del gráfico de acuerdo al indicador
+
+        $response->setData($dataChart); //Seteamos la data del gráfico en Json
+
+        return $response;
+    }
+    
+    /**
+     * 21-Función que retorna la data para un gráfico tipo multiseries de línea, para los días perdidos, sólo del indicador (período actual y anterior)
+     * @return JsonResponse
+     */
+    public function getDataChartMultiSeriesLineIndicatorLostDaysAccumulatedTimeAction(Request $request) {
+        $response = new JsonResponse();
+
+        $idIndicator = $request->get('id');
+
+        $indicatorService = $this->getIndicatorService(); //Obtenemos el servicio del indicador
+
+        $indicator = $this->get('pequiven.repository.indicator')->find($idIndicator); //Obtenemos el indicador
+
+        $dataChart = $indicatorService->getDataChartLineMultiSeries($indicator, array('resultIndicatorLostDaysAccumulatedTime' => true, 'variables' => array("dias_perdidos" => true), 'path_array' => 'resultIndicatorLostDaysAccumulatedTime')); //Obtenemos la data del gráfico de acuerdo al indicador
+
+        $response->setData($dataChart); //Seteamos la data del gráfico en Json
+
+        return $response;
+    }
+    
+    /**
+     * 22-Función que retorna la data para un gráfico tipo multiseries columna 3d, para mostrar el resultado de una suma de variables de los indicadores hijos (lesionados con tiempo perdidoa, sin tiempo perdido y días perdidos), según sea el caso del período actual y anterior
+     * @return JsonResponse
+     */
+    public function getDataChartMultiSeriesIndicatorAssociatedPersonalInjuryWithAndWithoutAndLostDaysByPeriodWithAccumulatedAction(Request $request) {
+        $response = new JsonResponse();
+
+        $idIndicator = $request->get('id');
+
+        $indicatorService = $this->getIndicatorService(); //Obtenemos el servicio del indicador
+
+        $indicator = $this->get('pequiven.repository.indicator')->find($idIndicator); //Obtenemos el indicador
+
+        $dataChart = $indicatorService->getDataChartColumnMultiSeries3d($indicator, array('resultIndicatorsAssociatedPersonalInjuryWithAndWithoutAndLostDaysByPeriodAccumulated' => true, 'variables' => array("lesionados_con_tiempo_perdido" => true, "lesiones_con_tiempo_perdido" => true, "lesionados_sin_tiempo_perdido" => true, "dias_perdidos" => true), 'path_array' => 'resultIndicatorsAssociatedPersonalInjuryWithAndWithoutAndLostDaysByPeriodAccumulated')); //Obtenemos la data del gráfico de acuerdo al indicador
+
+        $response->setData($dataChart); //Seteamos la data del gráfico en Json
+
+        return $response;
+    }
+    
+    /**
+     * 23-Función que retorna la data para un gráfico tipo multiseries columna 3d, para mostrar el resultado de una suma de variables de los indicadores hijos (lesionados con tiempo perdidoa, sin tiempo perdido y días perdidos), según sea el caso del período actual y anterior
+     * @return JsonResponse
+     */
+    public function getDataChartMultiSeriesColumnLineIndicatorPersonalInjuryWithAndWithoutAndLostDaysByFrequencyNotificationByPeriodGroupByCompanyWithAccumulatedAction(Request $request) {
+        $response = new JsonResponse();
+
+        $idIndicator = $request->get('id');
+
+        $indicatorService = $this->getIndicatorService(); //Obtenemos el servicio del indicador
+
+        $indicator = $this->get('pequiven.repository.indicator')->find($idIndicator); //Obtenemos el indicador
+
+        $dataChart = $indicatorService->getChartColumnLineDualAxis($indicator, array('resultIndicatorPersonalInjuryWithAndWithoutAndLostDaysByFrequencyNotificationByPeriodGroupByCompanyAccumulated' => true, 'variables' => array("lesionados_con_tiempo_perdido" => true, "lesiones_con_tiempo_perdido" => true, "lesionados_sin_tiempo_perdido" => true, "dias_perdidos" => true), 'path_array' => 'resultIndicatorPersonalInjuryWithAndWithoutAndLostDaysByFrequencyNotificationByPeriodGroupByCompanyAccumulated')); //Obtenemos la data del gráfico de acuerdo al indicador
+
+        $response->setData($dataChart); //Seteamos la data del gráfico en Json
+
+        return $response;
+    }
+    
+    /**
+     * 24-Función que retorna la data para un gráfico tipo mulsiseries columna + línea, todo respecto al mismo eje, para mostrar el resultado de las lesiones con tiempo perdido por frecuencia de notificación del indicador del período actual y anterior (línea) y el acumulado por período (columna) al final.
+     * @return JsonResponse
+     */
+    public function getDataChartMultiSeriesColumnLineIndicatorPersonalInjuryWithLostTimeByFrequencyNotificationByPeriodWithAccumulatedAction(Request $request) {
+        $response = new JsonResponse();
+
+        $idIndicator = $request->get('id');
+
+        $indicatorService = $this->getIndicatorService(); //Obtenemos el servicio del indicador
+
+        $indicator = $this->get('pequiven.repository.indicator')->find($idIndicator); //Obtenemos el indicador
+
+        $dataChart = $indicatorService->getChartColumnLineDualAxis($indicator, array('resultIndicatorPersonalInjuryWithLostTimeByFrequencyNotificationByPeriodAccumulated' => true, 'variables' => array("lesionados_con_tiempo_perdido" => true, "lesiones_con_tiempo_perdido" => true), 'path_array' => 'resultIndicatorPersonalInjuryWithLostTimeByFrequencyNotificationByPeriodAccumulated')); //Obtenemos la data del gráfico de acuerdo al indicador
+
+        $response->setData($dataChart); //Seteamos la data del gráfico en Json
+
+        return $response;
+    }
+    
+    /**
+     * 25-Función que retorna la data para un gráfico tipo mulsiseries columna + línea, todo respecto al mismo eje, para mostrar el resultado de las lesiones sin tiempo perdido por frecuencia de notificación del indicador del período actual y anterior (línea) y el acumulado por período (columna) al final.
+     * @return JsonResponse
+     */
+    public function getDataChartMultiSeriesColumnLineIndicatorPersonalInjuryWithoutLostTimeByFrequencyNotificationByPeriodWithAccumulatedAction(Request $request) {
+        $response = new JsonResponse();
+
+        $idIndicator = $request->get('id');
+
+        $indicatorService = $this->getIndicatorService(); //Obtenemos el servicio del indicador
+
+        $indicator = $this->get('pequiven.repository.indicator')->find($idIndicator); //Obtenemos el indicador
+
+        $dataChart = $indicatorService->getChartColumnLineDualAxis($indicator, array('resultIndicatorPersonalInjuryWithoutLostTimeByFrequencyNotificationByPeriodAccumulated' => true, 'variables' => array("lesionados_sin_tiempo_perdido" => true), 'path_array' => 'resultIndicatorPersonalInjuryWithoutLostTimeByFrequencyNotificationByPeriodAccumulated')); //Obtenemos la data del gráfico de acuerdo al indicador
+
+        $response->setData($dataChart); //Seteamos la data del gráfico en Json
+
+        return $response;
+    }
+   
+    /**
+     * 26-Función que retorna la data para un gráfico tipo mulsiseries columna + línea, todo respecto al mismo eje, para mostrar el resultado de los días perdidos por frecuencia de notificación del indicador del período actual y anterior (línea) y el acumulado por período (columna) al final.
+     * @return JsonResponse
+     */
+    public function getDataChartMultiSeriesColumnLineIndicatorLostDaysByFrequencyNotificationByPeriodWithAccumulatedAction(Request $request) {
+        $response = new JsonResponse();
+
+        $idIndicator = $request->get('id');
+
+        $indicatorService = $this->getIndicatorService(); //Obtenemos el servicio del indicador
+
+        $indicator = $this->get('pequiven.repository.indicator')->find($idIndicator); //Obtenemos el indicador
+
+        $dataChart = $indicatorService->getChartColumnLineDualAxis($indicator, array('resultIndicatorLostDaysByFrequencyNotificationByPeriodAccumulated' => true, 'variables' => array("dias_perdidos" => true), 'path_array' => 'resultIndicatorLostDaysByFrequencyNotificationByPeriodAccumulated')); //Obtenemos la data del gráfico de acuerdo al indicador
+
+        $response->setData($dataChart); //Seteamos la data del gráfico en Json
+
+        return $response;
+    }
    
     /**
      * Servicio de los Indicadores

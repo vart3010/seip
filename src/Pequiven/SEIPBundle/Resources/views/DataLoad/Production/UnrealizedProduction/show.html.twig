@@ -7,7 +7,8 @@
 
 
 {% block before_body %}
-    {{ contentHeader(("pequiven_seip.product_report.product_detail_daily_month"|trans ))}}
+    {{ contentHeader(({(path("pequiven_product_report_show",{id: productReportId})):("Reporte de Producto"|trans)}),
+                        ("pequiven_seip.product_report.product_detail_daily_month"|trans )  )}}
 {% endblock %}
 
 {%  set mes  = 'pequiven_seip.month.' ~ unrealized_production.month %}
@@ -115,7 +116,7 @@
                         </div>
                         <div class="six-columns">
 
-                            {#                                {{ boxRender.renderBox('pequiven_seip.box.unrealized_production')|raw }}#}
+                            {#                                {{ boxRender.renderBox('pequiven_seip_box_unrealized_production')|raw }}#}
                             <div  ng-controller="DashboardController" ng-init="renderChartPie2d('unrelizedInternal', {{ dataInternal }},'100%','500')">
                                 <span id="unrelizedInternal"></span>
                             </div>

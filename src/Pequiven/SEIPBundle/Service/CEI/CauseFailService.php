@@ -30,6 +30,133 @@ class CauseFailService implements ContainerAwareInterface {
         $fails = $em->getRepository('PequivenSEIPBundle:CEI\Fail')->findQueryByTypeResult($type);
         return $fails;
     }
+    
+    public function getRawMaterialsByFails(UnrealizedProduction $unrealizedProduction){
+        
+        $rawMaterials = array(
+            \Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL_MP => array(),  
+            \Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL_MP => array(),  
+        );
+        $reflection = new \ReflectionClass($unrealizedProduction);
+        $methods = $reflection->getMethods();
+        $nameMatch = '/^getDay\d+Details+$/';
+
+        $daysMonth = $this->getDaysMonth($unrealizedProduction);
+
+        $methodTypeCauses = array(
+            "getInternalCausesMp",
+            "getExternalCausesMp"
+        );
+
+        //Obtenemos la materia prima por la cual no se realizo la producciòn
+        $productsInternalMp = array();
+        $productsExternalMp = array();
+        $cont = 0;
+        foreach ($methods as $m) {
+
+            $methodName = $m->getName();
+            if (preg_match($nameMatch, $methodName)) {    //filtra los metodos getDayXXDetails
+                $unrealizedProductionDay = $unrealizedProduction->$methodName();
+
+                if ($unrealizedProductionDay != "") {
+                    foreach ($methodTypeCauses as $key) { //RECORRE EL ARRAY DE CAUSAS
+                        foreach ($unrealizedProductionDay->$key() as $fails) {
+                            if ($key == "getInternalCausesMp") {
+                                    if (!array_key_exists($fails->getRawMaterial()->getName(), $productsInternalMp)) {
+                                    $productsInternalMp[$fails->getRawMaterial()->getName()] = $fails->getRawMaterial();
+                                }
+                            }
+                            if ($key == "getExternalCausesMp") {
+                                if (!array_key_exists($fails->getRawMaterial()->getName(), $productsExternalMp)) {
+                                    $productsExternalMp[$fails->getRawMaterial()->getName()] = $fails->getRawMaterial();
+                                }
+                            }
+                        }
+                    }
+                }
+                $cont++;
+            }
+        }
+        
+        $rawMaterials[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL_MP] = $productsInternalMp;
+        $rawMaterials[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL_MP] = $productsExternalMp;
+        
+        return $rawMaterials;
+    }
+    
+    /**
+     * 
+     * @param type $rawMaterialsArray
+     */
+    public function getPNRByFailsCauseMp(UnrealizedProduction $unrealizedProduction,$rawMaterialsArray = array()){
+        
+        $reflection = new \ReflectionClass($unrealizedProduction);
+        $methods = $reflection->getMethods();
+        $nameMatch = '/^getDay\d+Details+$/';
+        
+        $daysMonth = $this->getDaysMonth($unrealizedProduction);
+
+        $methodTypeCauses = array(
+            \Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL_MP => "getInternalCausesMp",
+            \Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL_MP => "getExternalCausesMp",
+        );
+        
+        $productsInternalMp = $rawMaterialsArray[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL_MP];
+        $productsExternalMp = $rawMaterialsArray[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL_MP];
+        
+        $mp = array();
+        //Seteamos el arreglo con las Causas Internas por MP
+        if(count($productsInternalMp) > 0){
+            foreach ($productsInternalMp as $InternalMp) {
+                for ($x = 1; $x <= $daysMonth; $x++) {
+                    $mp[$methodTypeCauses[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL_MP]][$InternalMp->getName()][$x] = 0.0;
+                }
+            }
+        } else{
+            for ($x = 1; $x <= $daysMonth; $x++) {
+                $mp[$methodTypeCauses[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL_MP]]['empty'][$x] = 0.0;
+            }
+        }
+        //Seteamos el arreglo con las Causas Externas por MP
+        if(count($productsExternalMp) > 0){
+            foreach ($productsExternalMp as $ExternalMp) {
+                for ($x = 1; $x <= $daysMonth; $x++) {
+                    $mp[$methodTypeCauses[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL_MP]][$ExternalMp->getName()][$x] = 0.0;
+                }
+            }
+        } else{
+            for ($x = 1; $x <= $daysMonth; $x++) {
+                $mp[$methodTypeCauses[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL_MP]]['empty'][$x] = 0.0;
+            }
+        }
+        
+//        var_dump($mp);
+//        die();
+        
+        //Obtenemos nuestra matriz [tipo_pnr_mp][producto][dia]
+        $cont = 1;
+        foreach ($methods as $m) {
+
+            $methodName = $m->getName();
+            if (preg_match($nameMatch, $methodName)) {    //filtra los metodos getDayXXDetails
+                $unrealizedProductionDay = $unrealizedProduction->$methodName();
+                //var_dump($methodName);
+
+                if ($unrealizedProductionDay != "") {
+                    foreach ($methodTypeCauses as $key) { //RECORRE EL ARRAY DE CAUSAS
+                        //var_dump($key);
+                        foreach ($unrealizedProductionDay->$key() as $fails) {
+                            //var_dump($fails->getRawMaterial()->getName());
+                            $mp[$key][$fails->getRawMaterial()->getName()][$cont] = $fails->getMount();
+                        }
+                    }
+                }
+                $cont++;
+            }
+        }
+        
+        return $mp;
+    }
 
 //    public function getFailsMp() {
 //        $em = $this->container->get('doctrine')->getManager();
@@ -88,6 +215,11 @@ class CauseFailService implements ContainerAwareInterface {
         return $totals;
     }
 
+    /**
+     * Retorna un arreglo del tipo [tipo de causa de materia prima][materia prima][día]
+     * @param UnrealizedProduction $unrealizedProduction
+     * @return type
+     */
     public function getFailsCauseMp(UnrealizedProduction $unrealizedProduction) {
         $reflection = new \ReflectionClass($unrealizedProduction);
         $methods = $reflection->getMethods();
@@ -179,6 +311,11 @@ class CauseFailService implements ContainerAwareInterface {
         return $mp;
     }
 
+    /**
+     * Retorna un arreglo del tipo [tipo de pnr:interna o externa][categoría del tipo de PNR][día]
+     * @param UnrealizedProduction $unrealizedProduction
+     * @return type
+     */
     public function getFailsCause(UnrealizedProduction $unrealizedProduction) {
         //OBTIENE METODOS DE UNREALIZED_PRODUCTION
         $reflection = new \ReflectionClass($unrealizedProduction);

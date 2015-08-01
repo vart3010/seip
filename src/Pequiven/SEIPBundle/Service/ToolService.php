@@ -142,4 +142,51 @@ class ToolService
         }
         return $percentaje;
     }
+    
+    /**
+     * Formatea los decimales antes de enviar los resultados.
+     * @param type $result
+     * @return type
+     */
+    static function formatResult($result){
+        return number_format($result,2);
+    }
+    
+    
+    /**
+     * Buscar objetivos del programa de gestion
+     * @param type $arrangementPrograms
+     * @param type $objetives
+     */
+    static function getObjetiveFromPrograms($arrangementPrograms,&$objetives) {
+        foreach ($arrangementPrograms as $arrangementProgram) {
+            $objetive = null;
+            if($arrangementProgram->getType() == \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE){
+                $objetive = $arrangementProgram->getOperationalObjective();
+            }elseif ($arrangementProgram->getType() == \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC) {
+                $objetive = $arrangementProgram->getTacticalObjective();
+            }
+            if($objetive){
+                $objetives[$objetive->getId()] = $objetive;
+            }
+        }
+    }
+    
+    /**
+     * Formatea la fecha antes de enviarla en la api.
+     * 
+     * @param type $date
+     * @return type
+     */
+    static function formatDateTime($date) {
+        $r = '';
+        if(is_a($date, 'DateTime')){
+            $r = $date->format('d-m-Y');
+        }else{
+            $r = $date;
+        }
+        return $r;
+    }
+
+    
 }

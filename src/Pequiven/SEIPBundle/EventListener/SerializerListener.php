@@ -174,9 +174,9 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
         }
 
         //Habilitar carga de valores reales de meses adelantados
-        $isEnabledLoadRealFuture = true;
+        $isEnabledLoadRealFuture = false;
         //Habilitar la carga de valores reales atrasados
-        $isEnabledLoadRealLate = true;
+        $isEnabledLoadRealLate = false;
         //Habilitar edicion del valor real dependiendo si la planeada no esta vacia
         $isEnabledEditByPlannedLoad = false;
         //Deshabilitar las celdas planeadas cuando se distribuya el 100%
@@ -193,18 +193,18 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
         $isEnabledLoadByQuarterFirstReal = false;
 
         //Habilitar la carga del segundo trimestre (Requiere isEnabledLoadByQuarter)
-        $isEnabledLoadByQuarterSecond = true;
+        $isEnabledLoadByQuarterSecond = false;
         //Habilitar la carga de valores planificados del segundo trimestre (Requiere isEnabledLoadByQuarterSecond)
-        $isEnabledLoadByQuarterSecondPlanned = true;
+        $isEnabledLoadByQuarterSecondPlanned = false;
         //Habilitar la carga de valores reales del segundo trimestre (Requiere isEnabledLoadByQuarterSecond)
-        $isEnabledLoadByQuarterSecondReal = true;
+        $isEnabledLoadByQuarterSecondReal = false;
 
         //Habilitar la carga del tercer trimestre (Requiere isEnabledLoadByQuarter)
-        $isEnabledLoadByQuarterThird = false;
+        $isEnabledLoadByQuarterThird = true;
         //Habilitar la carga de valores planificados del tercer trimestre (Requiere isEnabledLoadByQuarterThird)
         $isEnabledLoadByQuarterThirdPlanned = false;
         //Habilitar la carga de valores reales del tercer trimestre (Requiere isEnabledLoadByQuarterThird)
-        $isEnabledLoadByQuarterThirdReal = false;
+        $isEnabledLoadByQuarterThirdReal = true;
 
         //Habilitar la carga del cuarto trimestre (Requiere isEnabledLoadByQuarter)
         $isEnabledLoadByQuarterFourth = false;
@@ -383,14 +383,14 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
         }
         
         $details = $arrangementProgram->getDetails();
-        $user = $this->getUser();
-        if($details->getNotificationInProgressByUser() != null){
-            if($details->getNotificationInProgressByUser()->getId() === $user->getId() && (($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC && $arrangementProgram->getTacticalObjective()->getGerencia()->getId() == 22) || ($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE && $arrangementProgram->getOperationalObjective()->getGerenciaSecond()->getGerencia()->getId() == 22))){
-                $data['januaryReal']['isEnabled'] = true;
-                $data['februaryReal']['isEnabled'] = true;
-                $data['marchReal']['isEnabled'] = true;
-            }
-        }
+//        $user = $this->getUser();
+//        if($details->getNotificationInProgressByUser() != null){
+//            if($details->getNotificationInProgressByUser()->getId() === $user->getId() && (($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC && $arrangementProgram->getTacticalObjective()->getGerencia()->getId() == 22) || ($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE && $arrangementProgram->getOperationalObjective()->getGerenciaSecond()->getGerencia()->getId() == 22))){
+//                $data['januaryReal']['isEnabled'] = true;
+//                $data['februaryReal']['isEnabled'] = true;
+//                $data['marchReal']['isEnabled'] = true;
+//            }
+//        }
 
         $event->getVisitor()->addData('_data', $data);
     }

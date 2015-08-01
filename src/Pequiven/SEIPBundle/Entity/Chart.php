@@ -96,6 +96,21 @@ class Chart extends ModelChart
      * @ORM\JoinColumn(nullable=false)
      */
     private $period;
+    
+    /**
+     * Detalles de los gráficos del Indicador
+     * 
+     * @var \Pequiven\IndicatorBundle\Entity\Indicator\IndicatorChartDetails
+     * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\IndicatorChartDetails",mappedBy="chart",cascade={"persist","remove"})
+     */
+    protected $indicatorsChartDetails;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="nameFunctionAngular", type="string", length=200, nullable=true)
+     */
+    private $nameFunctionAngular;
 
     /**
      * Constructor
@@ -375,6 +390,61 @@ class Chart extends ModelChart
     public function getPeriod()
     {
         return $this->period;
+    }
+    
+    /**
+     * Add indicatorsChartDetails
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator\IndicatorChartDetails $indicatorsChartDetails
+     * @return Chart
+     */
+    public function addIndicatorsChartDetails(\Pequiven\IndicatorBundle\Entity\Indicator\IndicatorChartDetails $indicatorsChartDetails) {
+        $indicatorsChartDetails->setIndicator($this);
+
+        $this->indicatorsChartDetails->add($indicatorsChartDetails);
+
+        return $this;
+    }
+
+    /**
+     * Remove indicatorsChartDetails
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator\IndicatorChartDetails $indicatorsChartDetails
+     */
+    public function removeIndicatorsChartDetails(\Pequiven\IndicatorBundle\Entity\Indicator\IndicatorChartDetails $indicatorsChartDetails) {
+        $this->indicatorsChartDetails->removeElement($indicatorsChartDetails);
+    }
+
+    /**
+     * Get indicatorsChartDetails
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getIndicatorsChartDetails() {
+        return $this->indicatorsChartDetails;
+    }
+    
+    /**
+     * Set nameFunctionAngular
+     *
+     * @param string $nameFunctionAngular
+     * @return Chart
+     */
+    public function setNameFunctionAngular($nameFunctionAngular)
+    {
+        $this->nameFunctionAngular = $nameFunctionAngular;
+
+        return $this;
+    }
+
+    /**
+     * Get nameFunctionAngular
+     *
+     * @return string 
+     */
+    public function getNameFunctionAngular()
+    {
+        return $this->nameFunctionAngular;
     }
     
     /**

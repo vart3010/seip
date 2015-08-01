@@ -23,4 +23,6 @@ final class AreasBox
     const PRINCIPAL = 'pequiven_seip.area.main';
     
     const EVENTS = 'pequiven_seip.area.events';
+    
+     const ITEMS = 'pequiven_seip.area.user_items';
 }

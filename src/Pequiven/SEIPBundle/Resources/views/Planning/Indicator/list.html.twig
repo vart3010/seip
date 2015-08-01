@@ -79,6 +79,16 @@
                                 </select>
                             </div>
                         </div>
+                        <!-- Filtro Frecuencias de Notificación -->
+                        <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                            <label class="bold">{{ 'pequiven_seip.filters.frequencyNotifications'|trans({},'PequivenSEIPBundle') }}</label>
+                            <br/>
+                            <div class="with-mid-padding">
+                                <select class="select2 input-xlarge" id="selectFrequencyNotifications" ng-model="model.frequencyNotification" ng-options="value as value.description for (key,value) in data.frequency_notifications">
+                                    <option value=''></option>
+                                </select>
+                            </div>
+                        </div>
                          {% if (level > levelTactic) %}
                             <!-- Checkbox Gerencias de Aooyo -->
                             <div class="new-row-tablet new-row-mobile six-columns twelve-columns-tablet">

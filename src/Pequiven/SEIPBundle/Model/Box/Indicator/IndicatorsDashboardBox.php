@@ -17,7 +17,7 @@ class IndicatorsDashboardBox extends GenericBox {
     }
 
     public function getName() {
-        return 'pequiven_seip.box.indicators_dashboard';
+        return 'pequiven_seip_box_indicators_dashboard';
     }
 
     public function getParameters() {
@@ -30,6 +30,16 @@ class IndicatorsDashboardBox extends GenericBox {
         $idLineStrategic = ''; //Id de la Línea Estratégica
         $indicatorsGroup = $dataWidget = array(); //Grupo de Indicadores a mostrar en la barra lateral izquierda de la plantilla
         $indicatorService = $this->getIndicatorService();
+        $labelsMonths = array();
+        foreach (\Pequiven\SEIPBundle\Model\Common\CommonObject::getLabelsMonths() as $key => $value) {
+            $labelsMonths[$key] = array(
+                'id' => $key,
+                'description' => $value,
+            );
+        }
+        ksort($labelsMonths);
+//        var_dump($labelsMonths);
+//        die();
 
         //Comparamos el nivel del indicador y asi obtener el id de la Línea Estratégica a la cual esta alineada el mismo
         if ($indicator->getIndicatorLevel()->getLevel() == IndicatorLevel::LEVEL_ESTRATEGICO) {
@@ -132,11 +142,12 @@ class IndicatorsDashboardBox extends GenericBox {
             'seeInColumn' => $seeInColumn,
             'seeInColumnSingleAxis' => $seeInColumnSingleAxis,
             'dataChartColumn' => $dataChartColumn,
+            'labelsMonths' => $labelsMonths,
         );
     }
 
     public function hasPermission() {
-        return $this->isGranted(array('ROLE_DIRECTIVE', 'ROLE_DIRECTIVE_AUX', 'ROLE_WORKER_PLANNING'));
+        return $this->isGranted(array('ROLE_DIRECTIVE', 'ROLE_DIRECTIVE_AUX', 'ROLE_WORKER_PLANNING','ROLE_SEIP_VIEW_RESULT_BY_LINE_STRATEGIC_SPECIAL'));
     }
 
     public function getTemplateName() {
