@@ -104,6 +104,13 @@ class Chart extends ModelChart
      * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\IndicatorChartDetails",mappedBy="chart",cascade={"persist","remove"})
      */
     protected $indicatorsChartDetails;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="nameFunctionAngular", type="string", length=200, nullable=true)
+     */
+    private $nameFunctionAngular;
 
     /**
      * Constructor
@@ -415,6 +422,29 @@ class Chart extends ModelChart
      */
     public function getIndicatorsChartDetails() {
         return $this->indicatorsChartDetails;
+    }
+    
+    /**
+     * Set nameFunctionAngular
+     *
+     * @param string $nameFunctionAngular
+     * @return Chart
+     */
+    public function setNameFunctionAngular($nameFunctionAngular)
+    {
+        $this->nameFunctionAngular = $nameFunctionAngular;
+
+        return $this;
+    }
+
+    /**
+     * Get nameFunctionAngular
+     *
+     * @return string 
+     */
+    public function getNameFunctionAngular()
+    {
+        return $this->nameFunctionAngular;
     }
     
     /**

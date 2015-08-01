@@ -122,5 +122,13 @@
             </call>
             <tag name="app.repository" class="Pequiven\IndicatorBundle\Entity\Indicator\TagIndicator" />
         </service>
+        
+        <!-- Repositorio de los detalles de los gráficos del Indicador -->
+        <service id="pequiven.repository.indicatorchartdetails" class="Pequiven\IndicatorBundle\Repository\Indicator\IndicatorChartDetailsRepository">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+            <tag name="app.repository" class="Pequiven\IndicatorBundle\Entity\Indicator\IndicatorChartDetails" />
+        </service>
     </services>
 </container>

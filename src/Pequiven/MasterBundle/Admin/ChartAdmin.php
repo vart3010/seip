@@ -37,6 +37,7 @@ class ChartAdmin extends Admin implements \Symfony\Component\DependencyInjection
                 'choices' => \Pequiven\SEIPBundle\Entity\Chart::getLabelsTypeOfChart(),
                 'translation_domain' => 'PequivenSEIPBundle'
             ))
+            ->add('nameFunctionAngular')
             ;
     }
     

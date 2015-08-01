@@ -3118,7 +3118,7 @@ class IndicatorService implements ContainerAwareInterface {
         return $value;
     }
 
-    /**
+    /** 
      * Actualiza las Etiquetas del Indicador que dependen de una ecuación
      * @param Indicator $indicator
      */
@@ -3136,6 +3136,47 @@ class IndicatorService implements ContainerAwareInterface {
                 $tagIndicator->setValueOfTag($valueTag);
                 $em->persist($tagIndicator);
                 $em->flush();
+            }
+        }
+    }
+    
+    /**
+     * Actualiza el detalle de los gráficos de los indicadores
+     * @param Indicator $indicator
+     */
+    public function updateIndicatorChartDetails(Indicator $indicator){
+        $em = $this->getDoctrine()->getManager();
+        $indicatorChartDetailsRepository = $this->container->get('pequiven.repository.indicatorchartdetails');
+        
+        $charts = $indicator->getCharts();
+        $indicatorsChartDetails = $indicator->getIndicatorsChartDetails();
+        $totalIndicatorsChartDetails = count($indicatorsChartDetails);
+        
+        if($totalIndicatorsChartDetails == 0){
+            foreach($charts as $chart){
+                $indicatorChartDetails = new Indicator\IndicatorChartDetails();
+                $indicatorChartDetails->setPeriod($indicator->getPeriod());
+                $indicatorChartDetails->setIndicator($indicator);
+                $indicatorChartDetails->setChart($chart);
+                $em->persist($indicatorChartDetails);
+                $em->flush();
+            }
+        } else{
+            foreach($charts as $chart){
+                $flagChart = false;
+                foreach($indicatorsChartDetails as $indicatorChartDetails){
+                    if($indicatorChartDetails->getChart()->getId() == $chart->getId()){
+                        $flagChart = true;
+                    }
+                }
+                if(!$flagChart){
+                    $indicatorChartDetails = new Indicator\IndicatorChartDetails();
+                    $indicatorChartDetails->setPeriod($indicator->getPeriod());
+                    $indicatorChartDetails->setIndicator($indicator);
+                    $indicatorChartDetails->setChart($chart);
+                    $em->persist($indicatorChartDetails);
+                    $em->flush();
+                }
             }
         }
     }

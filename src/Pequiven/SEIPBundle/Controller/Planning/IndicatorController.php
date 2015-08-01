@@ -231,6 +231,7 @@ class IndicatorController extends ResourceController {
 
         //Actualizamos las posibles etiquetas del indicador
         $indicatorService->updateTagIndicator($resource);
+        $indicatorService->updateIndicatorChartDetails($resource);
 
         $resultService = $this->getResultService();
         $arrangementRangeService = $this->getArrangementRangeService();
