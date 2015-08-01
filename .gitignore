@@ -28,4 +28,4 @@ composer.lock
 *.~lock*
 /app/spool/
 /web/ext/SeipProduction/build/
-/web/uploads/documents/*
+/web/uploads/documents/indicator_files/
