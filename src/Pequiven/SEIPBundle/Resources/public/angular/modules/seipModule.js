@@ -1519,11 +1519,13 @@ angular.module('seipModule.controllers', [])
                     $scope.templateOptions.setVar("form", {errors: {}});
                     $scope.templateOptions.setVar('evaluationResult', data.result);
                     var formVarRealName = '#form_' + data.varRealName;
-                    var formVarPlanName = '#form_' + data.varPlanName;
                     angular.element(formVarRealName).val(data.real);
-                    angular.element(formVarPlanName).val(data.plan);
                     $scope.templateOptions.setVar('real', data.real);
-                    $scope.templateOptions.setVar('plan', data.plan);
+                    if (data.showBoth == 1) {
+                        var formVarPlanName = '#form_' + data.varPlanName;
+                        angular.element(formVarPlanName).val(data.plan);
+                        $scope.templateOptions.setVar('plan', data.plan);
+                    }
                     if (successCallBack) {
                         successCallBack(data);
                     }

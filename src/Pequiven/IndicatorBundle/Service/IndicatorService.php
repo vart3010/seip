@@ -393,9 +393,14 @@ class IndicatorService implements ContainerAwareInterface {
 
         $formula = $indicator->getFormula();
 
-        $varRealName = $formula->getVariableToRealValue()->getName();
-        $varPlanName = $formula->getVariableToPlanValue()->getName();
-        $results[$varRealName] = $results[$varPlanName] = 0.0;
+        if($formula->getTypeOfCalculation() != Formula::TYPE_CALCULATION_SIMPLE_AVERAGE){
+            $varPlanName = $formula->getVariableToPlanValue()->getName();
+            $results[$varPlanName] = 0.0;
+            $varRealName = $formula->getVariableToRealValue()->getName();
+        } else{
+            $varRealName = 'real';
+        }
+        $results[$varRealName] = 0.0;
 
         //Separamos el tipo de sección de resultado del indicador
         if ($options['typeOfResultSection'] == Indicator::TYPE_RESULT_SECTION_PRODUCTION_GROSS) {
@@ -452,16 +457,40 @@ class IndicatorService implements ContainerAwareInterface {
                     $month = $this->getOrderOfValueIndicator($indicator, $valueIndicator);
                 }
             }
+            $valueReal = 0.0;
+            $totalRawMaterials = 0;
             foreach ($productsReports as $productReport) {
                 $rawsMaterialsConsumptionPlanning = $productReport->getRawMaterialConsumptionPlannings();
                 foreach($rawsMaterialsConsumptionPlanning as $rawMaterialConsumptionPlanning){
                     $detailRawMaterialConsumptionsByMonth = $rawMaterialConsumptionPlanning->getDetailByMonth();
-                    $valueReal = array_key_exists($month, $detailRawMaterialConsumptionsByMonth) == true ? $detailRawMaterialConsumptionsByMonth[$month]->getTotalReal() : 0;
-                    $valuePlan = array_key_exists($month, $detailRawMaterialConsumptionsByMonth) == true ? $detailRawMaterialConsumptionsByMonth[$month]->getTotalPlan() : 0;
-                    $results[$varRealName] = $results[$varRealName] + $valueReal;
-                    $results[$varPlanName] = $results[$varPlanName] + $valuePlan;
+                    $valueReal = array_key_exists($month, $detailRawMaterialConsumptionsByMonth) == true ? $valueReal + $detailRawMaterialConsumptionsByMonth[$month]->getPercentage() : $valueReal + 0;
+//                    $valuePlan = array_key_exists($month, $detailRawMaterialConsumptionsByMonth) == true ? $detailRawMaterialConsumptionsByMonth[$month]->getTotalPlan() : 0;
+                    $totalRawMaterials++;
                 }
             }
+            $results[$varRealName] = $valueReal/$totalRawMaterials;
+        } elseif ($options['typeOfResultSection'] == Indicator::TYPE_RESULT_SECTION_SERVICES){
+            if ($indicator->getFrequencyNotificationIndicator()->getNumberResultsFrequency() == 12) {
+                if (!$valueIndicator->getId()) {
+                    $month = count($indicator->getValuesIndicator()) + 1;
+                } else {
+                    $month = $this->getOrderOfValueIndicator($indicator, $valueIndicator);
+                }
+            }
+            $valueReal = 0.0;
+            $totalServices = 0;
+            foreach ($productsReports as $productReport) {
+                $plantReport = $productReport->getPlantReport();
+                $services = $plantReport->getConsumerPlanningServices();
+                
+                foreach($services as $service){
+                    $serviceByMonth = $service->getDetailsByMonth();
+                    $valueReal = array_key_exists($month, $serviceByMonth) == true ? $valueReal + $serviceByMonth[$month]->getPercentage() : $valueReal + 0;
+//                    $valuePlan = array_key_exists($month, $detailRawMaterialConsumptionsByMonth) == true ? $detailRawMaterialConsumptionsByMonth[$month]->getTotalPlan() : 0;
+                    $totalServices++;
+                }
+            }
+            $results[$varRealName] = $valueReal/$totalServices;
         }
 
         return $results;

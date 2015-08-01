@@ -165,8 +165,19 @@ class ValueIndicatorController extends \Pequiven\SEIPBundle\Controller\SEIPContr
         $indicatorService = $this->getIndicatorService();
         $formula = $indicator->getFormula();
         
-        $varRealName = $formula->getVariableToRealValue()->getName();
-        $varPlanName = $formula->getVariableToPlanValue()->getName();
+        $parameters = array();
+        $parameters['result'] = 0;
+        $parameters['showBoth'] = 1;
+        
+        if($formula->getTypeOfCalculation() != \Pequiven\MasterBundle\Entity\Formula::TYPE_CALCULATION_SIMPLE_AVERAGE){
+            $varPlanName = $formula->getVariableToPlanValue()->getName();
+            $parameters['varPlanName'] = $varPlanName;
+            $varRealName = $formula->getVariableToRealValue()->getName();
+            $parameters['varRealName'] = $varRealName;
+        } else{
+            $varRealName = 'real';
+            $parameters['varRealName'] = $varRealName;
+        }
         
         $valueIndicator = $this->resourceResolver->getResource(
             $this->getRepository(),
@@ -181,15 +192,16 @@ class ValueIndicatorController extends \Pequiven\SEIPBundle\Controller\SEIPContr
         $options['typeOfResultSection'] = $indicator->getTypeOfResultSection();
         $results = $indicatorService->getValuesFromReportTemplate($indicator, $valueIndicator, $options);
         
+        $parameters['real'] = $results[$varRealName];
+        if($formula->getTypeOfCalculation() != \Pequiven\MasterBundle\Entity\Formula::TYPE_CALCULATION_SIMPLE_AVERAGE){
+            $parameters['plan'] = $results[$varPlanName];
+        } else{
+            $parameters['showBoth'] = 0;
+        }
+        
         $view = $this
             ->view()
-            ->setData(array(
-                'result' => 0,
-                'real' => $results[$varRealName],
-                'plan' => $results[$varPlanName],
-                'varRealName' => $varRealName,
-                'varPlanName' => $varPlanName,
-            ))
+            ->setData($parameters)
         ;
         return $view;
     }
