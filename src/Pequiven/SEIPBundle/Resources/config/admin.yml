@@ -65,6 +65,18 @@ services:
             - [ setTranslationDomain, [SonataAdminBundle]]
             - [ setContainer, [@service_container]]
             
+    sonata.admin.indicator.indicator_chart_details:
+        class: Pequiven\MasterBundle\Admin\Indicator\IndicatorChartDetailsAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Indicador" ,label_catalogue: "SonataUserBundle", label: "Detalles de los gráficos del indicador" }
+        arguments:
+            - ~
+            - Pequiven\IndicatorBundle\Entity\Indicator\IndicatorChartDetails
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
+            - [ setContainer, [@service_container]]
+            
     sonata.admin.indicator.type_feature_indicator:
         class: Pequiven\MasterBundle\Admin\Indicator\TypeFeatureIndicatorAdmin
         tags:

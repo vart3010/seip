@@ -3180,6 +3180,15 @@ class IndicatorService implements ContainerAwareInterface {
             }
         }
     }
+    
+    public function obtainIndicatorChartDetails(Indicator $indicator, \Pequiven\SEIPBundle\Entity\Chart $chart){
+
+        $indicatorChartDetailsRepository = $this->container->get('pequiven.repository.indicatorchartdetails');
+        
+        $indicatorChartDetails = $indicatorChartDetailsRepository->findOneBy(array('indicator' => $indicator->getId(), 'chart' => $chart->getId()));
+
+        return $indicatorChartDetails;
+    }
 
     /**
      * 
