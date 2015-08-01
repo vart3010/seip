@@ -70,7 +70,7 @@ class IndicatorChartDetailsAdmin extends Admin implements \Symfony\Component\Dep
             ->add('description',null, array('editable' => true))
             ->add('chart')
             ->add('indicator')
-            ->add('orderShow')
+            ->add('orderShow',null, array('editable' => true))
             ->add('period')
             ;
     }
