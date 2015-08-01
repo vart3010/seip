@@ -524,6 +524,13 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\Column(name="typeOfCompany",type="integer")
      */
     private $typeOfCompany = self::TYPE_OF_COMPANY_MATRIZ;
+    
+    /**
+     * ¿Se mostrarán las etiquetas en 2 columnas?
+     * @var boolean
+     * @ORM\Column(name="showTagsInTwoColumns",type="boolean")
+     */
+    private $showTagsInTwoColumns = false;
 
     /**
      * Constructor
@@ -2099,6 +2106,25 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      */
     public function getShowRange() {
         return $this->showRange;
+    }
+
+    /**
+     * 
+     * @param type $showTagsInTwoColumns
+     * @return \Pequiven\IndicatorBundle\Entity\Indicator
+     */    
+    public function setShowTagsInTwoColumns($showTagsInTwoColumns) {
+        $this->showTagsInTwoColumns = $showTagsInTwoColumns;
+
+        return $this;
+    }
+
+    /**
+     * 
+     * @return type
+     */
+    public function getShowTagsInTwoColumns() {
+        return $this->showTagsInTwoColumns;
     }
 
     /**

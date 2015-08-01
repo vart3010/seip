@@ -170,9 +170,6 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                 ->add('resultInPercentage', null, array(
                     'required' => false,
                 ))
-                ->add('showTagInResult', null, array(
-                    'required' => false,
-                ))
                 ->add('showRealValue', null, array(
                     'required' => false,
                 ))
@@ -228,6 +225,14 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                     'required' => false,
                 ))
                 ->add('isValuePlanFromEquationPlanFormula', null, array(
+                    'required' => false,
+                ))
+                ->end()
+                ->with('Etiqueta del Indicador')
+                ->add('showTagsInTwoColumns', null, array(
+                    'required' => false,
+                ))
+                ->add('showTagInResult', null, array(
                     'required' => false,
                 ))
                 ->end()

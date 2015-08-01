@@ -63,6 +63,7 @@ pequiven_indicator:
         production_net: Producción Neta
         unrealized_production: Producción No Realizada
         raw_material: Materia Prima
+        services: Servicios
     type_detail:
         none: Ninguno
         daily_load_production: Producción diaria
