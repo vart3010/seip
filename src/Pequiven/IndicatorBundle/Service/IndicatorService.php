@@ -600,7 +600,7 @@ class IndicatorService implements ContainerAwareInterface {
         $chart["upperlimit"] = $colorData['upperLimit'];
         if($indicator->getShowTagInDashboardResult()){
             $value = 0.0;
-            foreach ($this->getTagsIndicator() as $tagIndicator) {
+            foreach ($indicator->getTagsIndicator() as $tagIndicator) {
                 if ($tagIndicator->getShowInIndicatorDashboardResult()) {
                     if ($tagIndicator->getTypeTag() == Indicator\TagIndicator::TAG_TYPE_NUMERIC) {
                         $value = $tagIndicator->getValueOfTag();
