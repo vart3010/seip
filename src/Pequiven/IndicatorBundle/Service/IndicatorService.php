@@ -566,7 +566,21 @@ class IndicatorService implements ContainerAwareInterface {
             $errorArrangementRange = $arrangementRangeService->validateArrangementRange($arrangementRange, $tendency);
             if ($errorArrangementRange == null) {
                 if ($indicator->getEvaluateInPeriod()) {//En caso de que sea medidio en el período actual
-                    $colorData["label"] = number_format($indicator->getResultReal(), 2, ',', '.') . '%';
+                    $value = number_format($indicator->getResultReal(), 2, ',', '.') . '%';
+                    if($indicator->getShowTagInDashboardResult()){
+                        foreach ($indicator->getTagsIndicator() as $tagIndicator) {
+                            if ($tagIndicator->getShowInIndicatorDashboardResult()) {
+                                if ($tagIndicator->getTypeTag() == Indicator\TagIndicator::TAG_TYPE_NUMERIC) {
+                                    $value = $tagIndicator->getValueOfTag();
+                                } else {
+                                    $value = $tagIndicator->getTextOfTag();
+                                }
+                                $value = $tagIndicator->getUnitResult() != "" ? number_format($value, 2, ',', '.') . ' ' . strtoupper($tagIndicator->getUnitResultValue()) : number_format($value, 2, ',', '.') . '%';
+                            }
+                        }
+                    }
+                    $colorData["label"] = $value;
+//                    $colorData["label"] = number_format($indicator->getResultReal(), 2, ',', '.') . '%';
                     if ($resultService->calculateRangeGood($indicator, $tendency, CommonObject::TYPE_RESULT_ARRANGEMENT)) {
                         $colorData["code"] = "#1aaf5d";
                     } elseif ($resultService->calculateRangeMiddle($indicator, $tendency, CommonObject::TYPE_RESULT_ARRANGEMENT)) {
