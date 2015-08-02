@@ -547,11 +547,18 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     private $showColumnAccumulativeInDashboard = false;
     
     /**
-     * ¿EL los gráficos de columna, se mostrará una sola columna plan, al final y con el valor de 'plan anual' que es el mismo?
+     * ¿En los gráficos de columna, se mostrará una sola columna plan, al final y con el valor de 'plan anual' que es el mismo?
      * @var boolean
      *  @ORM\Column(name="showColumnPlanOneTimeInDashboard",type="boolean")
      */
     private $showColumnPlanOneTimeInDashboard = false;
+    
+    /**
+     * ¿EL indicador tendrá en cuenta sólo los resultados de los hijos, para el cálculo del resultado final?
+     * @var boolean
+     *  @ORM\Column(name="resultIsFromChildrensResult",type="boolean")
+     */
+    private $resultIsFromChildrensResult = false;
 
     /**
      * Constructor
@@ -984,7 +991,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      */
     public function setValueFinal($valueFinal) {
         $this->progressToDate = 0;
-        if ($this->totalPlan != 0) {//En caso de que el valor plan sea diferente de cero
+        if ($this->totalPlan != 0 && !$this->getResultIsFromChildrensResult()) {//En caso de que el valor plan sea diferente de cero
             if ($this->resultInPercentage) {//En caso de que el resultado del indicador tenga que convertirse en valor porcentual
                 $this->progressToDate = ($valueFinal / $this->totalPlan) * 100;
             } else {
@@ -2224,6 +2231,25 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      */
     public function getShowColumnPlanOneTimeInDashboard() {
         return $this->showColumnPlanOneTimeInDashboard;
+    }
+    
+    /**
+     * 
+     * @param type $resultIsFromChildrensResult
+     * @return \Pequiven\IndicatorBundle\Entity\Indicator
+     */    
+    public function setResultIsFromChildrensResult($resultIsFromChildrensResult) {
+        $this->resultIsFromChildrensResult = $resultIsFromChildrensResult;
+
+        return $this;
+    }
+
+    /**
+     * 
+     * @return type
+     */
+    public function getResultIsFromChildrensResult() {
+        return $this->resultIsFromChildrensResult;
     }
 
 }
