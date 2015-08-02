@@ -468,6 +468,27 @@ class IndicatorService implements ContainerAwareInterface {
                 }
             }
             $results[$varRealName] = $value/$totalRawMaterials;
+        } elseif ($options['typeOfResultSection'] == Indicator::TYPE_RESULT_SECTION_SERVICES){
+            if ($indicator->getFrequencyNotificationIndicator()->getNumberResultsFrequency() == 12) {
+                if (!$valueIndicator->getId()) {
+                    $month = count($indicator->getValuesIndicator()) + 1;
+                } else {
+                    $month = $this->getOrderOfValueIndicator($indicator, $valueIndicator);
+                }
+            }
+            $totalServices = 0;
+            $value = 0.0;
+            foreach ($productsReports as $productReport) {
+                $planReport = $productReport->getPlantReport();
+                $services = $planReport->getConsumerPlanningServices();
+
+                foreach($services as $service){
+                    $detailServiceByMonth = $service->getDetailsByMonth();
+                    $value = array_key_exists($month, $detailServiceByMonth) == true ? $value + $detailServiceByMonth[$month]->getPercentage() : $value;
+                    $totalServices++;
+                }
+            }
+            $results[$varRealName] = $value/$totalServices;
         }
 
         return $results;
