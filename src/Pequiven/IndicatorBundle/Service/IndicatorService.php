@@ -598,8 +598,8 @@ class IndicatorService implements ContainerAwareInterface {
 
         $chart["lowerlimit"] = $colorData['lowerLimit'];
         $chart["upperlimit"] = $colorData['upperLimit'];
+        $value = number_format($indicator->getResultReal(), 2, ',', '.');
         if($indicator->getShowTagInDashboardResult()){
-            $value = 0.0;
             foreach ($indicator->getTagsIndicator() as $tagIndicator) {
                 if ($tagIndicator->getShowInIndicatorDashboardResult()) {
                     if ($tagIndicator->getTypeTag() == Indicator\TagIndicator::TAG_TYPE_NUMERIC) {
@@ -607,12 +607,11 @@ class IndicatorService implements ContainerAwareInterface {
                     } else {
                         $value = $tagIndicator->getTextOfTag();
                     }
+                    $value = $tagIndicator->getUnitResult() != "" ? $value . ' ' . strtoupper($tagIndicator->getUnitResultValue()) : $value . '%';
                 }
             }
-            $chart["caption"] = number_format($value, 2, ',', '.');
-        } else{
-            $chart["caption"] = number_format($indicator->getResultReal(), 2, ',', '.');
         }
+        $chart["caption"] = number_format($value, 2, ',', '.');
         $chart["captionFontColor"] = $this->getColorOfResult($indicator);
         $chart["captionOnTop"] = "0";
         $chart["autoScale"] = "1";
