@@ -634,11 +634,11 @@ class IndicatorService implements ContainerAwareInterface {
                     } else {
                         $value = $tagIndicator->getTextOfTag();
                     }
-                    $value = $tagIndicator->getUnitResult() != "" ? $value . ' ' . strtoupper($tagIndicator->getUnitResultValue()) : $value . '%';
+                    $value = $tagIndicator->getUnitResult() != "" ? number_format($value, 2, ',', '.') . ' ' . strtoupper($tagIndicator->getUnitResultValue()) : number_format($value, 2, ',', '.') . '%';
                 }
             }
         }
-        $chart["caption"] = number_format($value, 2, ',', '.');
+        $chart["caption"] = $value;
         $chart["captionFontColor"] = $this->getColorOfResult($indicator);
         $chart["captionOnTop"] = "0";
         $chart["autoScale"] = "1";
