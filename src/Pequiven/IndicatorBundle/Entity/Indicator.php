@@ -283,13 +283,6 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     protected $formulaDetails;
 
     /**
-     * @var boolean
-     *
-     * @ORM\Column(name="backward", type="boolean")
-     */
-    private $backward = false;
-
-    /**
      * Configuracion de origen de datos de los detalles de los valores de indicadores
      * 
      * @var \Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\ValueIndicatorConfig
@@ -538,6 +531,13 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\Column(name="showTagsInTwoColumns",type="boolean")
      */
     private $showTagsInTwoColumns = false;
+    
+    /**
+     * ¿Los valores del indicador son acumulativos?
+     * @var boolean
+     * @ORM\Column(name="resultIsAccumulative",type="boolean")
+     */
+    private $resultIsAccumulative = false;
 
     /**
      * Constructor
@@ -1355,27 +1355,6 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     }
 
     /**
-     * Set backward
-     *
-     * @param boolean $backward
-     * @return Indicator
-     */
-    public function setBackward($backward) {
-        $this->backward = $backward;
-
-        return $this;
-    }
-
-    /**
-     * Get backward
-     *
-     * @return boolean 
-     */
-    public function getBackward() {
-        return $this->backward;
-    }
-
-    /**
      * @ORM\PrePersist()
      */
     function prePersist() {
@@ -2174,6 +2153,25 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      */
     public function getTypeOfCompany() {
         return $this->typeOfCompany;
+    }
+    
+    /**
+     * 
+     * @param type $resultIsAccumulative
+     * @return \Pequiven\IndicatorBundle\Entity\Indicator
+     */    
+    public function setResultIsAccumulative($resultIsAccumulative) {
+        $this->resultIsAccumulative = $resultIsAccumulative;
+
+        return $this;
+    }
+
+    /**
+     * 
+     * @return type
+     */
+    public function getResultIsAccumulative() {
+        return $this->resultIsAccumulative;
     }
 
 }

@@ -2888,10 +2888,12 @@ class IndicatorService implements ContainerAwareInterface {
                 $dataSetPlan["data"][] = $dataPlan;
                 $medition["data"][] = $dataMedition;
             }
-            $category[] = array('label' => 'Acumulado');
             
-            $dataSetReal["data"][] = array('value' => number_format($realAccumulated, 2, ',', '.'));
-            $dataSetPlan["data"][] = array('value' => number_format($planAccumulated, 2, ',', '.'));
+            if($indicator->getDetails()->getSourceResult() == Indicator\IndicatorDetails::SOURCE_RESULT_ALL){
+                $category[] = array('label' => 'Acumulado');
+                $dataSetReal["data"][] = array('value' => number_format($realAccumulated, 2, ',', '.'));
+                $dataSetPlan["data"][] = array('value' => number_format($planAccumulated, 2, ',', '.'));
+            }
             
             
             $data['dataSource']['dataset'][] = $dataSetReal;
@@ -3006,8 +3008,36 @@ class IndicatorService implements ContainerAwareInterface {
         } elseif ($frequency->getDays() == 180) {
             $labelsFrequencyArray = CommonObject::getLabelsSixmonthly();
         }
+        
+        if($indicator->getResultIsAccumulative()){
+            $labelsFrequencyArray = $this->setLabelsByIndicatorFrequencyNotificationByTypeResultIndicator($indicator, $labelsFrequencyArray);
+        }
 
         return $labelsFrequencyArray;
+    }
+    
+    /**
+     * Función que redefine las etiquetas por frecuencia de notificación de acuerdo al tipo de resultado del indicador
+     * @param Indicator $indicator
+     */
+    public function setLabelsByIndicatorFrequencyNotificationByTypeResultIndicator(Indicator $indicator, $labelsFrequencyArray = array()){
+        $frequency = $indicator->getFrequencyNotificationIndicator();
+        $labelIni = explode('-',$labelsFrequencyArray[1])[0];
+        $labelsArray = array();
+        $numberResults = $frequency->getNumberResultsFrequency();
+        
+        //Recorremos de acuerdo al número de resultados por frecuencia
+        for($i = 1; $i <= $numberResults; $i++){
+            if($i > 1){
+                $labelActually = explode('-',$labelsFrequencyArray[$i])[1];
+                $labelsArray[$i] = $labelIni.'-'.$labelActually;
+            } else{
+                $labelsArray[$i] = $labelsFrequencyArray[$i];
+            }
+        }
+        
+        return $labelsArray;
+        
     }
 
     /**

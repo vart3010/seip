@@ -182,9 +182,6 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                 ->add('enabled', null, array(
                     'required' => false,
                 ))
-                ->add('backward', null, array(
-                    'required' => false,
-                ))
                 ->add('isValueFromTextReal', null, array(
                     'required' => false,
                 ))
@@ -225,6 +222,11 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                     'required' => false,
                 ))
                 ->add('isValuePlanFromEquationPlanFormula', null, array(
+                    'required' => false,
+                ))
+                ->end()
+                ->with('Gráficos del Indicador')
+                ->add('resultIsAccumulative', null, array(
                     'required' => false,
                 ))
                 ->end()
