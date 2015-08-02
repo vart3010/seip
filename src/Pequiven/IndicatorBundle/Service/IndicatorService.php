@@ -1081,7 +1081,14 @@ class IndicatorService implements ContainerAwareInterface {
             $dataSetReal["renderas"] = "area";
 
             $totalValueIndicators = count($indicator->getValuesIndicator());
+            $resultNumbers = 1;
             for ($i = 0; $i < $totalValueIndicators; $i++) {
+                if($arrayVariables['valueReal'][$i] || 0 && $arrayVariables['valuePlan'][$i] != 0){
+                    $resultNumbers = $i + 1;
+                }
+            }
+            
+            for ($i = 0; $i < $resultNumbers; $i++) {
                 $label = $dataReal = $dataPlan = $dataMedition = array();
                 $label["label"] = $i;
                 $dataReal["value"] = number_format($arrayVariables['valueReal'][$i], 2, ',', '.');
@@ -1107,7 +1114,15 @@ class IndicatorService implements ContainerAwareInterface {
             $dataSetReal["renderas"] = "area";
 
             $totalValueIndicators = count($indicator->getValuesIndicator());
+            
+            $resultNumbers = 1;
             for ($i = 0; $i < $totalValueIndicators; $i++) {
+                if($arrayVariables['valueReal'][$i] != 0 || $arrayVariables['valuePlan'][$i] != 0){
+                    $resultNumbers = $i +1;
+                }
+            }
+            
+            for ($i = 0; $i < $resultNumbers; $i++) {
                 $label = $dataReal = $dataPlan = $dataMedition = array();
                 $label["label"] = $i;
                 $dataReal["value"] = number_format($arrayVariables['valueReal'][$i], 2, ',', '.');
@@ -1196,7 +1211,15 @@ class IndicatorService implements ContainerAwareInterface {
             $dataSetReal["showValues"] = "1";
 
             $totalValueIndicators = count($indicator->getValuesIndicator());
+            
+            $resultNumbers = 1;
             for ($i = 0; $i < $totalValueIndicators; $i++) {
+                if($arrayVariables['valueReal'][$i] != 0 || $arrayVariables['valuePlan'][$i] != 0){
+                    $resultNumbers = $i +1;
+                }
+            }
+            
+            for ($i = 0; $i < $resultNumbers; $i++) {
                 $label = $dataReal = $dataPlan = $dataMedition = array();
                 $label["label"] = $i;
                 $dataReal["value"] = number_format($arrayVariables['valueReal'][$i], 2, ',', '.');
@@ -1262,7 +1285,15 @@ class IndicatorService implements ContainerAwareInterface {
 
             $labelsFrequencyNotificationArray = $this->getLabelsByIndicatorFrequencyNotification($indicator);
             $totalValueIndicators = count($indicator->getValuesIndicator());
+            
+            $resultNumbers = 1;
             for ($i = 0; $i < $totalValueIndicators; $i++) {
+                if($arrayVariables['dashboardEquationReal']['value'][$i] != 0 || $arrayVariables['dashboardEquationPlan']['value'][$i] != 0){
+                    $resultNumbers = $i +1;
+                }
+            }
+            
+            for ($i = 0; $i < $resultNumbers; $i++) {
                 $label = $dataReal = $dataPlan = array();
                 $label["label"] = $labelsFrequencyNotificationArray[($i + 1)];
                 $dataReal["value"] = number_format($arrayVariables['dashboardEquationReal']['value'][$i], 2, ',', '.');
@@ -1903,6 +1934,7 @@ class IndicatorService implements ContainerAwareInterface {
             unset($options['withVariablesMarkedRealPlanByFrequencyNotificationColumnMultiSeries']);
             $variables = $formula->getVariables();
             $varReal = $varPlan = '';
+            $arrayVariables['descriptionReal'] = $arrayVariables['descriptionPlan'] = '';
             foreach ($variables as $variable) {
                 if ($variable->getShowRealInDashboardColumn()) {
                     $varReal = $variable->getName();
@@ -2011,7 +2043,7 @@ class IndicatorService implements ContainerAwareInterface {
             unset($options['withVariablesRealPlanByFrequencyNotificationFromDashboardEquationMultiSeries']);
 
 //            $arrayVariables['dashboardEquationReal']['value'] = $arrayVariables['dashboardEquationPlan']['value'] = 0.0;
-            $arrayVariables['dashboardEquationReal']['unit'] = $arrayVariables['dashboardEquationPlan']['unti'] = '';
+            $arrayVariables['dashboardEquationReal']['unit'] = $arrayVariables['dashboardEquationPlan']['unit'] = '';
             $arrayVariables['dashboardEquationReal']['description'] = $arrayVariables['dashboardEquationPlan']['description'] = '';
 
             $arrayVariables['dashboardEquationReal']['description'] = $indicator->getShowByRealValue();
@@ -2775,16 +2807,24 @@ class IndicatorService implements ContainerAwareInterface {
             $totalValueIndicators = count($indicator->getValuesIndicator());
             $labelsFrequencyNotificationArray = $this->getLabelsByIndicatorFrequencyNotification($indicator);
             $realAccumulated = $planAccumulated = 0.0;
+            
+            $resultNumbers = 1;
             for ($i = 0; $i < $totalValueIndicators; $i++) {
+                if($arrayVariables['valueReal'][$i] != 0 || $arrayVariables['valuePlan'][$i] != 0){
+                    $resultNumbers = $i +1;
+                }
+            }
+            
+            for ($i = 0; $i < $resultNumbers; $i++) {
                 $label = $dataReal = $dataPlan = $dataMedition = array();
-//                $label["label"] = $i;
                 $label["label"] = $labelsFrequencyNotificationArray[($i + 1)];
-//                $label["link"] = $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicatorChildren->getId()));
                 $dataReal["value"] = number_format($arrayVariables['valueReal'][$i], 2, ',', '.');
-//                $dataReal["link"] = $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicatorChildren->getId()));
                 $dataPlan["value"] = number_format($arrayVariables['valuePlan'][$i], 2, ',', '.');
-//                $dataPlan["link"] = $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicatorChildren->getId()));
                 $dataMedition["value"] = number_format($arrayVariables['medition'][$i], 2, ',', '.');
+//                $label["label"] = $i;
+//                $label["link"] = $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicatorChildren->getId()));
+//                $dataReal["link"] = $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicatorChildren->getId()));
+//                $dataPlan["link"] = $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicatorChildren->getId()));
                 
                 $realAccumulated = $realAccumulated + $arrayVariables['valueReal'][$i];
                 $planAccumulated = $planAccumulated + $arrayVariables['valuePlan'][$i];
