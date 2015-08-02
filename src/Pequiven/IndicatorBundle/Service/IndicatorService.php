@@ -2858,10 +2858,10 @@ class IndicatorService implements ContainerAwareInterface {
 
             $dataSetValues['MATRIZ'] = array('seriesname' => $arrayVariables['MATRIZ']['seriesname'], 'renderAs' => $arrayVariables['MATRIZ']['renderAs'], 'data' => $arrayVariables['MATRIZ']['data']);
             $dataSetValues['AFILIADA_MIXTA'] = array('seriesname' => $arrayVariables['AFILIADA_MIXTA']['seriesname'], 'renderAs' => $arrayVariables['AFILIADA_MIXTA']['renderAs'], 'data' => $arrayVariables['AFILIADA_MIXTA']['data']);
-            $dataSetValues['PERIODO_ACTUAL'] = array('seriesname' => $arrayVariables['PERIODO_ACTUAL']['seriesname'], 'renderAs' => $arrayVariables['PERIODO_ACTUAL']['renderAs'], 'data' => $arrayVariables['PERIODO_ACTUAL']['data']);
-            $dataSetValues['PERIODO_ANTERIOR'] = array('seriesname' => $arrayVariables['PERIODO_ANTERIOR']['seriesname'], 'renderAs' => $arrayVariables['PERIODO_ANTERIOR']['renderAs'], 'data' => $arrayVariables['PERIODO_ANTERIOR']['data']);
-            $dataSetValues['ACUMULADO_PERIODO_ACTUAL'] = array('seriesname' => $arrayVariables['ACUMULADO_PERIODO_ACTUAL']['seriesname'], 'data' => $arrayVariables['ACUMULADO_PERIODO_ACTUAL']['data'], 'parentYAxis' => $arrayVariables['ACUMULADO_PERIODO_ACTUAL']['parentYAxis'], 'renderAs' => $arrayVariables['ACUMULADO_PERIODO_ACTUAL']['renderAs']);
-            $dataSetValues['ACUMULADO_PERIODO_ANTERIOR'] = array('seriesname' => $arrayVariables['ACUMULADO_PERIODO_ANTERIOR']['seriesname'], 'data' => $arrayVariables['ACUMULADO_PERIODO_ANTERIOR']['data'],  'parentYAxis' => $arrayVariables['ACUMULADO_PERIODO_ACTUAL']['parentYAxis'], 'renderAs' => $arrayVariables['ACUMULADO_PERIODO_ANTERIOR']['renderAs']);
+            $dataSetValues['PERIODO_ACTUAL'] = array('color' => '#1F9942', 'seriesname' => $arrayVariables['PERIODO_ACTUAL']['seriesname'], 'renderAs' => $arrayVariables['PERIODO_ACTUAL']['renderAs'], 'data' => $arrayVariables['PERIODO_ACTUAL']['data']);
+            $dataSetValues['PERIODO_ANTERIOR'] = array('color' => '#AD2545', 'seriesname' => $arrayVariables['PERIODO_ANTERIOR']['seriesname'], 'renderAs' => $arrayVariables['PERIODO_ANTERIOR']['renderAs'], 'data' => $arrayVariables['PERIODO_ANTERIOR']['data']);
+            $dataSetValues['ACUMULADO_PERIODO_ACTUAL'] = array('color' => '#1F9942', 'seriesname' => $arrayVariables['ACUMULADO_PERIODO_ACTUAL']['seriesname'], 'data' => $arrayVariables['ACUMULADO_PERIODO_ACTUAL']['data'], 'parentYAxis' => $arrayVariables['ACUMULADO_PERIODO_ACTUAL']['parentYAxis'], 'renderAs' => $arrayVariables['ACUMULADO_PERIODO_ACTUAL']['renderAs']);
+            $dataSetValues['ACUMULADO_PERIODO_ANTERIOR'] = array('color' => '#AD2545', 'seriesname' => $arrayVariables['ACUMULADO_PERIODO_ANTERIOR']['seriesname'], 'data' => $arrayVariables['ACUMULADO_PERIODO_ANTERIOR']['data'],  'parentYAxis' => $arrayVariables['ACUMULADO_PERIODO_ACTUAL']['parentYAxis'], 'renderAs' => $arrayVariables['ACUMULADO_PERIODO_ANTERIOR']['renderAs']);
 
             $data['dataSource']['dataset'][] = $dataSetValues['MATRIZ'];
             $data['dataSource']['dataset'][] = $dataSetValues['AFILIADA_MIXTA'];
@@ -2900,10 +2900,10 @@ class IndicatorService implements ContainerAwareInterface {
             
             $category[] = array('label' => 'Acumulado');
 
-            $dataSetValues['PERIODO_ACTUAL'] = array('seriesname' => $arrayVariables['PERIODO_ACTUAL']['seriesname'], 'renderAs' => $arrayVariables['PERIODO_ACTUAL']['renderAs'], 'data' => $arrayVariables['PERIODO_ACTUAL']['data']);
-            $dataSetValues['PERIODO_ANTERIOR'] = array('seriesname' => $arrayVariables['PERIODO_ANTERIOR']['seriesname'], 'renderAs' => $arrayVariables['PERIODO_ANTERIOR']['renderAs'], 'data' => $arrayVariables['PERIODO_ANTERIOR']['data']);
-            $dataSetValues['ACUMULADO_PERIODO_ACTUAL'] = array('seriesname' => $arrayVariables['ACUMULADO_PERIODO_ACTUAL']['seriesname'], 'data' => $arrayVariables['ACUMULADO_PERIODO_ACTUAL']['data'], 'parentYAxis' => $arrayVariables['ACUMULADO_PERIODO_ACTUAL']['parentYAxis'], 'renderAs' => $arrayVariables['ACUMULADO_PERIODO_ACTUAL']['renderAs']);
-            $dataSetValues['ACUMULADO_PERIODO_ANTERIOR'] = array('seriesname' => $arrayVariables['ACUMULADO_PERIODO_ANTERIOR']['seriesname'], 'data' => $arrayVariables['ACUMULADO_PERIODO_ANTERIOR']['data'],  'parentYAxis' => $arrayVariables['ACUMULADO_PERIODO_ACTUAL']['parentYAxis'], 'renderAs' => $arrayVariables['ACUMULADO_PERIODO_ANTERIOR']['renderAs']);
+            $dataSetValues['PERIODO_ACTUAL'] = array('color' => '#1F9942', 'seriesname' => $arrayVariables['PERIODO_ACTUAL']['seriesname'], 'renderAs' => $arrayVariables['PERIODO_ACTUAL']['renderAs'], 'data' => $arrayVariables['PERIODO_ACTUAL']['data']);
+            $dataSetValues['PERIODO_ANTERIOR'] = array('color' => '#AD2545', 'seriesname' => $arrayVariables['PERIODO_ANTERIOR']['seriesname'], 'renderAs' => $arrayVariables['PERIODO_ANTERIOR']['renderAs'], 'data' => $arrayVariables['PERIODO_ANTERIOR']['data']);
+            $dataSetValues['ACUMULADO_PERIODO_ACTUAL'] = array('color' => '#1F9942', 'seriesname' => $arrayVariables['ACUMULADO_PERIODO_ACTUAL']['seriesname'], 'data' => $arrayVariables['ACUMULADO_PERIODO_ACTUAL']['data'], 'parentYAxis' => $arrayVariables['ACUMULADO_PERIODO_ACTUAL']['parentYAxis'], 'renderAs' => $arrayVariables['ACUMULADO_PERIODO_ACTUAL']['renderAs']);
+            $dataSetValues['ACUMULADO_PERIODO_ANTERIOR'] = array('color' => '#AD2545', 'seriesname' => $arrayVariables['ACUMULADO_PERIODO_ANTERIOR']['seriesname'], 'data' => $arrayVariables['ACUMULADO_PERIODO_ANTERIOR']['data'],  'parentYAxis' => $arrayVariables['ACUMULADO_PERIODO_ACTUAL']['parentYAxis'], 'renderAs' => $arrayVariables['ACUMULADO_PERIODO_ANTERIOR']['renderAs']);
 
             $data['dataSource']['dataset'][] = $dataSetValues['PERIODO_ACTUAL'];
             $data['dataSource']['dataset'][] = $dataSetValues['PERIODO_ANTERIOR'];
