@@ -538,6 +538,13 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\Column(name="resultIsAccumulative",type="boolean")
      */
     private $resultIsAccumulative = false;
+    
+    /**
+     * ¿En los gráficos de columna, se mostrará una columna al final con el acumulado de lo mostrado antes?
+     * @var boolean
+     * @ORM\Column(name="showColumnAccumulativeInDashboard",type="boolean")
+     */
+    private $showColumnAccumulativeInDashboard = false;
 
     /**
      * Constructor
@@ -2172,6 +2179,25 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      */
     public function getResultIsAccumulative() {
         return $this->resultIsAccumulative;
+    }
+    
+    /**
+     * 
+     * @param type $showColumnAccumulativeInDashboard
+     * @return \Pequiven\IndicatorBundle\Entity\Indicator
+     */    
+    public function setShowColumnAccumulativeInDashboard($showColumnAccumulativeInDashboard) {
+        $this->showColumnAccumulativeInDashboard = $showColumnAccumulativeInDashboard;
+
+        return $this;
+    }
+
+    /**
+     * 
+     * @return type
+     */
+    public function getShowColumnAccumulativeInDashboard() {
+        return $this->showColumnAccumulativeInDashboard;
     }
 
 }

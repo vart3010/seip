@@ -2889,7 +2889,7 @@ class IndicatorService implements ContainerAwareInterface {
                 $medition["data"][] = $dataMedition;
             }
             
-            if($indicator->getDetails()->getSourceResult() == Indicator\IndicatorDetails::SOURCE_RESULT_ALL){
+            if($indicator->getShowColumnAccumulativeInDashboard()){
                 $category[] = array('label' => 'Acumulado');
                 $dataSetReal["data"][] = array('value' => number_format($realAccumulated, 2, ',', '.'));
                 $dataSetPlan["data"][] = array('value' => number_format($planAccumulated, 2, ',', '.'));
