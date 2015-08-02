@@ -463,11 +463,20 @@ class IndicatorService implements ContainerAwareInterface {
                 $rawsMaterialsConsumptionPlanning = $productReport->getRawMaterialConsumptionPlannings();
                 foreach($rawsMaterialsConsumptionPlanning as $rawMaterialConsumptionPlanning){
                     $detailRawMaterialConsumptionsByMonth = $rawMaterialConsumptionPlanning->getDetailByMonth();
-                    $value = array_key_exists($month, $detailRawMaterialConsumptionsByMonth) == true ? $value + $detailRawMaterialConsumptionsByMonth[$month]->getPercentage() : $value;
-                    $totalRawMaterials++;
+                    if($formula->getTypeOfCalculation() != \Pequiven\MasterBundle\Entity\Formula::TYPE_CALCULATION_SIMPLE_AVERAGE){
+                        $valueReal = array_key_exists($month, $detailRawMaterialConsumptionsByMonth) == true ? $detailRawMaterialConsumptionsByMonth[$month]->getTotalReal() : 0;
+                        $valuePlan = array_key_exists($month, $detailRawMaterialConsumptionsByMonth) == true ? $detailRawMaterialConsumptionsByMonth[$month]->getTotalPlan() : 0;
+                        $results[$varRealName] = $results[$varRealName] + $valueReal;
+                        $results[$varPlanName] = $results[$varPlanName] + $valuePlan;
+                    } else{
+                        $value = array_key_exists($month, $detailRawMaterialConsumptionsByMonth) == true ? $value + $detailRawMaterialConsumptionsByMonth[$month]->getPercentage() : $value;
+                        $totalRawMaterials++;
+                    }
                 }
             }
-            $results[$varRealName] = $value/$totalRawMaterials;
+            if($formula->getTypeOfCalculation() == \Pequiven\MasterBundle\Entity\Formula::TYPE_CALCULATION_SIMPLE_AVERAGE){
+                $results[$varRealName] = $value/$totalRawMaterials;
+            }
         } elseif ($options['typeOfResultSection'] == Indicator::TYPE_RESULT_SECTION_SERVICES){
             if ($indicator->getFrequencyNotificationIndicator()->getNumberResultsFrequency() == 12) {
                 if (!$valueIndicator->getId()) {
