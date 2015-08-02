@@ -545,6 +545,13 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\Column(name="showColumnAccumulativeInDashboard",type="boolean")
      */
     private $showColumnAccumulativeInDashboard = false;
+    
+    /**
+     * ¿EL los gráficos de columna, se mostrará una sola columna plan, al final y con el valor de 'plan anual' que es el mismo?
+     * @var boolean
+     *  @ORM\Column(name="showColumnPlanOneTimeInDashboard",type="boolean")
+     */
+    private $showColumnPlanOneTimeInDashboard = false;
 
     /**
      * Constructor
@@ -2198,6 +2205,25 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      */
     public function getShowColumnAccumulativeInDashboard() {
         return $this->showColumnAccumulativeInDashboard;
+    }
+    
+    /**
+     * 
+     * @param type $showColumnPlanOneTimeInDashboard
+     * @return \Pequiven\IndicatorBundle\Entity\Indicator
+     */    
+    public function setShowColumnPlanOneTimeInDashboard($showColumnPlanOneTimeInDashboard) {
+        $this->showColumnPlanOneTimeInDashboard = $showColumnPlanOneTimeInDashboard;
+
+        return $this;
+    }
+
+    /**
+     * 
+     * @return type
+     */
+    public function getShowColumnPlanOneTimeInDashboard() {
+        return $this->showColumnPlanOneTimeInDashboard;
     }
 
 }

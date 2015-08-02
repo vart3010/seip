@@ -2894,7 +2894,9 @@ class IndicatorService implements ContainerAwareInterface {
 
                 $category[] = $label;
                 $dataSetReal["data"][] = $dataReal;
-                $dataSetPlan["data"][] = $dataPlan;
+                if(!$indicator->getShowColumnPlanOneTimeInDashboard()){
+                    $dataSetPlan["data"][] = $dataPlan;
+                }
                 $medition["data"][] = $dataMedition;
             }
             
@@ -2904,9 +2906,16 @@ class IndicatorService implements ContainerAwareInterface {
                 $dataSetPlan["data"][] = array('value' => number_format($planAccumulated, 2, ',', '.'));
             }
             
+            if($indicator->getShowColumnPlanOneTimeInDashboard()){
+                $category[] = array('label' => 'Plan Anual');
+                $dataSetReal["data"][] = array('value' => number_format($arrayVariables['valuePlan'][0], 2, ',', '.'), 'color' => '#E91212');
+            }
+            
             
             $data['dataSource']['dataset'][] = $dataSetReal;
-            $data['dataSource']['dataset'][] = $dataSetPlan;
+            if(!$indicator->getShowColumnPlanOneTimeInDashboard()){
+                $data['dataSource']['dataset'][] = $dataSetPlan;
+            }
             $data['dataSource']['dataset'][] = $medition;
             
         } elseif(isset($options['resultIndicatorPersonalInjuryWithAndWithoutAndLostDaysByFrequencyNotificationByPeriodGroupByCompanyAccumulated']) && array_key_exists('resultIndicatorPersonalInjuryWithAndWithoutAndLostDaysByFrequencyNotificationByPeriodGroupByCompanyAccumulated', $options)){
