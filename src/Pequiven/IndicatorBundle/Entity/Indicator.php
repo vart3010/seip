@@ -326,6 +326,13 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\Column(name="showTagInResult",type="boolean")
      */
     private $showTagInResult = false;
+    
+    /**
+     * ¿Se mostrará la etiqueta en vez del resultado de medición en el tacómetro?
+     * @var boolean
+     * @ORM\Column(name="showTagInDashboardResult",type="boolean")
+     */
+    private $showTagInDashboardResult = false;
 
     /**
      * ¿Mostar etiqueta "valor" en la ficha del indicador?
@@ -1525,6 +1532,27 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      */
     public function getShowTagInResult() {
         return $this->showTagInResult;
+    }
+    
+    /**
+     * Set showTagInDashboardResult
+     *
+     * @param boolean $showTagInDashboardResult
+     * @return Indicator
+     */
+    public function setShowTagInDashboardResult($showTagInDashboardResult) {
+        $this->showTagInDashboardResult = $showTagInDashboardResult;
+
+        return $this;
+    }
+
+    /**
+     * Get showTagInDashboardResult
+     *
+     * @return boolean 
+     */
+    public function getShowTagInDashboardResult() {
+        return $this->showTagInDashboardResult;
     }
 
     function getIndicatorWeight() {

@@ -598,7 +598,21 @@ class IndicatorService implements ContainerAwareInterface {
 
         $chart["lowerlimit"] = $colorData['lowerLimit'];
         $chart["upperlimit"] = $colorData['upperLimit'];
-        $chart["caption"] = number_format($indicator->getResultReal(), 2, ',', '.');
+        if($indicator->getShowTagInDashboardResult()){
+            $value = 0.0;
+            foreach ($this->getTagsIndicator() as $tagIndicator) {
+                if ($tagIndicator->getShowInIndicatorDashboardResult()) {
+                    if ($tagIndicator->getTypeTag() == Indicator\TagIndicator::TAG_TYPE_NUMERIC) {
+                        $value = $tagIndicator->getValueOfTag();
+                    } else {
+                        $value = $tagIndicator->getTextOfTag();
+                    }
+                }
+            }
+            $chart["caption"] = number_format($value, 2, ',', '.');
+        } else{
+            $chart["caption"] = number_format($indicator->getResultReal(), 2, ',', '.');
+        }
         $chart["captionFontColor"] = $this->getColorOfResult($indicator);
         $chart["captionOnTop"] = "0";
         $chart["autoScale"] = "1";

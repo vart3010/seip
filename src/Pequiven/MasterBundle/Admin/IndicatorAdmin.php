@@ -235,6 +235,9 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                 ->add('showTagInResult', null, array(
                     'required' => false,
                 ))
+                ->add('showTagInDashboardResult', null, array(
+                    'required' => false,
+                ))
                 ->end()
                 ->with('Snippets')
                 ->add("snippetPlan", null, array(
