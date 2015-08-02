@@ -1041,7 +1041,9 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         $details = $indicator->getDetails();
         $valuesIndicatorQuantity = count($valuesIndicator);
         $i = 0;
-
+//        var_dump($valuesIndicatorQuantity);
+//        var_dump($indicator->getId());
+//        die();
         $totalPlan = $totalReal = $value = 0.0;
         foreach ($valuesIndicator as $valueIndicator) {
             $i++;
@@ -1312,6 +1314,10 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                     $valueIndicator->setParameter($nameParameter, $valueParameter);
                 }
             } else if ($calculationMethod == Indicator::CALCULATION_METHOD_AVERAGE_BASED_ON_NUMBER_CHILDREN) {
+                if($indicator->getFormula()->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC){
+                    $variableToRealValueName = $indicator->getFormula()->getVariableToRealValue()->getName();
+                    $variableToPlanValueName = $indicator->getFormula()->getVariableToPlanValue()->getName();
+                }
                 if (isset($resultsItems[$i]) == false) {
                     continue;
                 }
