@@ -3029,7 +3029,7 @@ class IndicatorService implements ContainerAwareInterface {
             
             $numberResultsTotal = $indicator->getFrequencyNotificationIndicator()->getNumberResultsFrequency();
             $numberResultShowReal = 2;
-            $labelsFrequencyNotificationArray = $this->getLabelsByIndicatorFrequencyNotification($indicator);
+            $labelsFrequencyNotificationArray = $this->getLabelsByIndicatorFrequencyNotificationWithoutValidation($indicator);
             
             $result['real']['data'] = array();
             $result['plan']['data'] = array();
@@ -3087,6 +3087,30 @@ class IndicatorService implements ContainerAwareInterface {
         
         if($indicator->getResultIsAccumulative()){
             $labelsFrequencyArray = $this->setLabelsByIndicatorFrequencyNotificationByTypeResultIndicator($indicator, $labelsFrequencyArray);
+        }
+
+        return $labelsFrequencyArray;
+    }
+    
+    /**
+     * Función que retorna las etiquetas de los rangos de la frecuencia de notificación del indicador
+     * @param Indicator $indicator
+     * @return array
+     */
+    public function getLabelsByIndicatorFrequencyNotificationWithoutValidation(Indicator $indicator) {
+        $frequency = $indicator->getFrequencyNotificationIndicator();
+        $labelsFrequencyArray = array();
+
+        if ($frequency->getDays() == 30) {
+            $labelsFrequencyArray = CommonObject::getLabelsMonths();
+        } elseif ($frequency->getDays() == 60) {
+            $labelsFrequencyArray = CommonObject::getLabelsBimonthly();
+        } elseif ($frequency->getDays() == 90) {
+            $labelsFrequencyArray = CommonObject::getLabelsTrimonthly();
+        } elseif ($frequency->getDays() == 120) {
+            $labelsFrequencyArray = CommonObject::getLabelsFourmonthly();
+        } elseif ($frequency->getDays() == 180) {
+            $labelsFrequencyArray = CommonObject::getLabelsSixmonthly();
         }
 
         return $labelsFrequencyArray;
