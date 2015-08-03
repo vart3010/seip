@@ -240,6 +240,9 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                 ->add('showColumnPlanOneTimeInDashboard', null, array(
                     'required' => false,
                 ))
+                ->add('resultsAdditionalInDashboardColumn', null, array(
+                    'required' => false,
+                ))
                 ->end()
                 ->with('Etiqueta del Indicador')
                 ->add('showTagsInTwoColumns', null, array(

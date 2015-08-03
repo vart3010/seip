@@ -559,7 +559,13 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      *  @ORM\Column(name="resultIsFromChildrensResult",type="boolean")
      */
     private $resultIsFromChildrensResult = false;
-
+    
+    /**
+     * ¿EL indicador tendrá en cuencta resultados adicionales para mostrarlo en una columna nueva?
+     * @var boolean
+     * @ORM\Column(name="resultsAdditionalInDashboardColumn",type="boolean")
+     */
+    private $resultsAdditionalInDashboardColumn = false;
     /**
      * Constructor
      */
@@ -2250,6 +2256,25 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      */
     public function getResultIsFromChildrensResult() {
         return $this->resultIsFromChildrensResult;
+    }
+    
+    /**
+     * 
+     * @param type $resultsAdditionalInDashboardColumn
+     * @return \Pequiven\IndicatorBundle\Entity\Indicator
+     */    
+    public function setResultsAdditionalInDashboardColumn($resultsAdditionalInDashboardColumn) {
+        $this->resultsAdditionalInDashboardColumn = $resultsAdditionalInDashboardColumn;
+
+        return $this;
+    }
+
+    /**
+     * 
+     * @return type
+     */
+    public function getResultsAdditionalInDashboardColumn() {
+        return $this->resultsAdditionalInDashboardColumn;
     }
 
 }
