@@ -1315,6 +1315,11 @@ class IndicatorService implements ContainerAwareInterface {
                 $label = $dataReal = $dataPlan = $dataMedition = $dataExtra = array();
                 $label["label"] = $i;
                 if($indicator->getResultsAdditionalInDashboardColumn()){
+                    if($i == 0){
+                        $dataExtra['showValue'] = '1';
+                        $dataExtra['displayValue'] = '*';
+                        $dataExtra['toolText'] = 'En espera de Información';
+                    }
                     $dataExtra["value"] = number_format($result[$indicator->getId()]['real'][$i+1], 2, ',', '.');
                 }
                 $dataReal["value"] = number_format($arrayVariables['valueReal'][$i], 2, ',', '.');
