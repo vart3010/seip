@@ -32,7 +32,7 @@ pequiven:
         start_date: Fecha inicio
         end_date: Fecha fin
         weight: Peso
-        advances: Avances
+        advances: Avances Hasta la Fecha
         advances_in_details: Avances del programa de gestión hasta la fecha
         observations: Observaciones
         revision_date: Fecha de revisión
