@@ -1271,25 +1271,25 @@ class IndicatorService implements ContainerAwareInterface {
             //$result[indicator.id][real][numero_resultado] = valor
             $result = array();
             //CPHC
-            $result[1489]['real'] = array(1 => 0.0, 2 => 0.0);
-            $result[1490]['real'] = array(1 => 0.0, 2 => 0.0);
-            $result[1491]['real'] = array(1 => 0.0, 2 => 0.0);
-            $result[1492]['real'] = array(1 => 0.0, 2 => 0.0);
-            $result[1493]['real'] = array(1 => 0.0, 2 => 0.0);
-            $result[1494]['real'] = array(1 => 0.0, 2 => 0.0);
-            $result[1495]['real'] = array(1 => 0.0, 2 => 0.0);
+            $result[1489]['real'] = array(1 => 0.0, 2 => 11789.0);
+            $result[1490]['real'] = array(1 => 0.0, 2 => 65389.0);
+            $result[1491]['real'] = array(1 => 0.0, 2 => 6957.0);
+            $result[1492]['real'] = array(1 => 0.0, 2 => 9975.0);
+            $result[1493]['real'] = array(1 => 0.0, 2 => 2340.0);
+            $result[1494]['real'] = array(1 => 0.0, 2 => 2866.0);
+            $result[1495]['real'] = array(1 => 0.0, 2 => 11461.0);
             $result[1496]['real'] = array(1 => 0.0, 2 => 0.0);
-            $result[1497]['real'] = array(1 => 0.0, 2 => 0.0);
-            $result[1498]['real'] = array(1 => 0.0, 2 => 0.0);
+            $result[1497]['real'] = array(1 => 0.0, 2 => 2629.0);
+            $result[1498]['real'] = array(1 => 0.0, 2 => 1397.0);
             //CPAMC
-            $result[1503]['real'] = array(1 => 0.0, 2 => 0.0);
-            $result[1504]['real'] = array(1 => 0.0, 2 => 0.0);
-            $result[1505]['real'] = array(1 => 0.0, 2 => 0.0);
+            $result[1503]['real'] = array(1 => 0.0, 2 => 14749.0);
+            $result[1504]['real'] = array(1 => 0.0, 2 => 15973.0);
+            $result[1505]['real'] = array(1 => 0.0, 2 => 27139.0);
             $result[1506]['real'] = array(1 => 0.0, 2 => 0.0);
             $result[1507]['real'] = array(1 => 0.0, 2 => 0.0);
             $result[1508]['real'] = array(1 => 0.0, 2 => 0.0);
-            $result[1509]['real'] = array(1 => 0.0, 2 => 0.0);
-            $result[1510]['real'] = array(1 => 0.0, 2 => 0.0);
+            $result[1509]['real'] = array(1 => 0.0, 2 => 6789.0);
+            $result[1510]['real'] = array(1 => 0.0, 2 => 11697);
 
             $dataSetPlan["seriesname"] = $arrayVariables['descriptionPlan'];
             $dataSetPlan["showValues"] = "1";
@@ -1297,7 +1297,7 @@ class IndicatorService implements ContainerAwareInterface {
             $dataSetReal["showValues"] = "1";
             $dataSetExtra = array();
             if($indicator->getResultsAdditionalInDashboardColumn()){
-                $dataSetExtra["seriesname"] = 'Plus';
+                $dataSetExtra["seriesname"] = 'Costo Unitario + Otros Ingresos/Gastos';
                 $dataSetExtra["showValues"] = '1';
                 $dataSetExtra["color"] = '#DF1D3A';
             }
