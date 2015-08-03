@@ -3102,7 +3102,7 @@ angular.module('seipModule.controllers', [])
                                 "gaugeendangle": "-60",
                                 "gaugealpha": "0",
                                 "decimals": "0",
-                                "showcolorrange": "0",
+                                "showcolorrange": "1",
                                 "placevaluesinside": "1",
                                 "pivotfillmix": "",
                                 "showpivotborder": "1",

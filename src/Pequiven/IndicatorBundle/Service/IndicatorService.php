@@ -1267,11 +1267,40 @@ class IndicatorService implements ContainerAwareInterface {
 
             $arrayVariables = array();
             $arrayVariables = $this->getArrayVariablesFormulaWithData($indicator, array('withVariablesMarkedRealPlanByFrequencyNotificationColumnMultiSeries' => true));
+            
+            //$result[indicator.id][real][numero_resultado] = valor
+            $result = array();
+            //CPHC
+            $result[1489]['real'] = array(1 => 0.0, 2 => 0.0);
+            $result[1490]['real'] = array(1 => 0.0, 2 => 0.0);
+            $result[1491]['real'] = array(1 => 0.0, 2 => 0.0);
+            $result[1492]['real'] = array(1 => 0.0, 2 => 0.0);
+            $result[1493]['real'] = array(1 => 0.0, 2 => 0.0);
+            $result[1494]['real'] = array(1 => 0.0, 2 => 0.0);
+            $result[1495]['real'] = array(1 => 0.0, 2 => 0.0);
+            $result[1496]['real'] = array(1 => 0.0, 2 => 0.0);
+            $result[1497]['real'] = array(1 => 0.0, 2 => 0.0);
+            $result[1498]['real'] = array(1 => 0.0, 2 => 0.0);
+            //CPAMC
+            $result[1503]['real'] = array(1 => 0.0, 2 => 0.0);
+            $result[1504]['real'] = array(1 => 0.0, 2 => 0.0);
+            $result[1505]['real'] = array(1 => 0.0, 2 => 0.0);
+            $result[1506]['real'] = array(1 => 0.0, 2 => 0.0);
+            $result[1507]['real'] = array(1 => 0.0, 2 => 0.0);
+            $result[1508]['real'] = array(1 => 0.0, 2 => 0.0);
+            $result[1509]['real'] = array(1 => 0.0, 2 => 0.0);
+            $result[1510]['real'] = array(1 => 0.0, 2 => 0.0);
 
             $dataSetPlan["seriesname"] = $arrayVariables['descriptionPlan'];
             $dataSetPlan["showValues"] = "1";
             $dataSetReal["seriesname"] = $arrayVariables['descriptionReal'];
             $dataSetReal["showValues"] = "1";
+            $dataSetExtra = array();
+            if($indicator->getResultsAdditionalInDashboardColumn()){
+                $dataSetExtra["seriesname"] = 'Plus';
+                $dataSetExtra["showValues"] = '1';
+                $dataSetExtra["color"] = '#DF1D3A';
+            }
 
             $totalValueIndicators = count($indicator->getValuesIndicator());
             
@@ -1283,16 +1312,21 @@ class IndicatorService implements ContainerAwareInterface {
             }
             
             for ($i = 0; $i < $resultNumbers; $i++) {
-                $label = $dataReal = $dataPlan = $dataMedition = array();
+                $label = $dataReal = $dataPlan = $dataMedition = $dataExtra = array();
                 $label["label"] = $i;
+                if($indicator->getResultsAdditionalInDashboardColumn()){
+                    $dataExtra["value"] = number_format($result[$indicator->getId()]['real'][$i+1], 2, ',', '.');
+                }
                 $dataReal["value"] = number_format($arrayVariables['valueReal'][$i], 2, ',', '.');
                 $dataPlan["value"] = number_format($arrayVariables['valuePlan'][$i], 2, ',', '.');
 
                 $category[] = $label;
+                $dataSetExtra["data"][] = $dataExtra;
                 $dataSetReal["data"][] = $dataReal;
                 $dataSetPlan["data"][] = $dataPlan;
             }
             
+            $data['dataSource']['dataset'][] = $dataSetExtra;
             $data['dataSource']['dataset'][] = $dataSetReal;
             $data['dataSource']['dataset'][] = $dataSetPlan;
             
