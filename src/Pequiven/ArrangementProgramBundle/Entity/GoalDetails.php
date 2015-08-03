@@ -16,8 +16,8 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @ORM\Entity(repositoryClass="Pequiven\ArrangementProgramBundle\Repository\GoalDetailsRepository")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
-class GoalDetails extends Base
-{
+class GoalDetails extends Base {
+
     /**
      * @var integer
      *
@@ -225,7 +225,7 @@ class GoalDetails extends Base
      * @ORM\Column(name="status", type="integer")
      */
     private $status = 0;
-    
+
     /**
      * Meta
      * 
@@ -233,19 +233,21 @@ class GoalDetails extends Base
      * @ORM\OneToOne(targetEntity="Pequiven\ArrangementProgramBundle\Entity\Goal",mappedBy="goalDetails")
      */
     private $goal;
-    
+
     /**
      *
      * @var type 
      * @Extjs\Model\Field(type="int",mapping="goal.weight")
      */
     private $goalWeight;
+
     /**
      *
      * @var type 
      * @Extjs\Model\Field(type="date",mapping="goal.startDate")
      */
     private $goalDateStart;
+
     /**
      *
      * @var type 
@@ -257,14 +259,13 @@ class GoalDetails extends Base
      * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
      */
     private $deletedAt;
-    
+
     /**
      * Get id
      *
      * @return integer 
      */
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
 
@@ -274,8 +275,7 @@ class GoalDetails extends Base
      * @param integer $januaryPlanned
      * @return GoalDetails
      */
-    public function setJanuaryPlanned($januaryPlanned)
-    {
+    public function setJanuaryPlanned($januaryPlanned) {
         $this->januaryPlanned = $januaryPlanned;
 
         return $this;
@@ -286,8 +286,7 @@ class GoalDetails extends Base
      *
      * @return integer 
      */
-    public function getJanuaryPlanned()
-    {
+    public function getJanuaryPlanned() {
         return $this->januaryPlanned;
     }
 
@@ -297,8 +296,7 @@ class GoalDetails extends Base
      * @param integer $januaryReal
      * @return GoalDetails
      */
-    public function setJanuaryReal($januaryReal)
-    {
+    public function setJanuaryReal($januaryReal) {
         $this->januaryReal = $januaryReal;
 
         return $this;
@@ -309,8 +307,7 @@ class GoalDetails extends Base
      *
      * @return integer 
      */
-    public function getJanuaryReal()
-    {
+    public function getJanuaryReal() {
         return $this->januaryReal;
     }
 
@@ -320,8 +317,7 @@ class GoalDetails extends Base
      * @param integer $februaryPlanned
      * @return GoalDetails
      */
-    public function setFebruaryPlanned($februaryPlanned)
-    {
+    public function setFebruaryPlanned($februaryPlanned) {
         $this->februaryPlanned = $februaryPlanned;
 
         return $this;
@@ -332,8 +328,7 @@ class GoalDetails extends Base
      *
      * @return integer 
      */
-    public function getFebruaryPlanned()
-    {
+    public function getFebruaryPlanned() {
         return $this->februaryPlanned;
     }
 
@@ -343,8 +338,7 @@ class GoalDetails extends Base
      * @param integer $februaryReal
      * @return GoalDetails
      */
-    public function setFebruaryReal($februaryReal)
-    {
+    public function setFebruaryReal($februaryReal) {
         $this->februaryReal = $februaryReal;
 
         return $this;
@@ -355,8 +349,7 @@ class GoalDetails extends Base
      *
      * @return integer 
      */
-    public function getFebruaryReal()
-    {
+    public function getFebruaryReal() {
         return $this->februaryReal;
     }
 
@@ -366,8 +359,7 @@ class GoalDetails extends Base
      * @param integer $marchPlanned
      * @return GoalDetails
      */
-    public function setMarchPlanned($marchPlanned)
-    {
+    public function setMarchPlanned($marchPlanned) {
         $this->marchPlanned = $marchPlanned;
 
         return $this;
@@ -378,8 +370,7 @@ class GoalDetails extends Base
      *
      * @return integer 
      */
-    public function getMarchPlanned()
-    {
+    public function getMarchPlanned() {
         return $this->marchPlanned;
     }
 
@@ -389,8 +380,7 @@ class GoalDetails extends Base
      * @param integer $marchReal
      * @return GoalDetails
      */
-    public function setMarchReal($marchReal)
-    {
+    public function setMarchReal($marchReal) {
         $this->marchReal = $marchReal;
 
         return $this;
@@ -401,8 +391,7 @@ class GoalDetails extends Base
      *
      * @return integer 
      */
-    public function getMarchReal()
-    {
+    public function getMarchReal() {
         return $this->marchReal;
     }
 
@@ -412,8 +401,7 @@ class GoalDetails extends Base
      * @param integer $aprilPlanned
      * @return GoalDetails
      */
-    public function setAprilPlanned($aprilPlanned)
-    {
+    public function setAprilPlanned($aprilPlanned) {
         $this->aprilPlanned = $aprilPlanned;
 
         return $this;
@@ -424,8 +412,7 @@ class GoalDetails extends Base
      *
      * @return integer 
      */
-    public function getAprilPlanned()
-    {
+    public function getAprilPlanned() {
         return $this->aprilPlanned;
     }
 
@@ -435,8 +422,7 @@ class GoalDetails extends Base
      * @param integer $aprilReal
      * @return GoalDetails
      */
-    public function setAprilReal($aprilReal)
-    {
+    public function setAprilReal($aprilReal) {
         $this->aprilReal = $aprilReal;
 
         return $this;
@@ -447,8 +433,7 @@ class GoalDetails extends Base
      *
      * @return integer 
      */
-    public function getAprilReal()
-    {
+    public function getAprilReal() {
         return $this->aprilReal;
     }
 
@@ -458,8 +443,7 @@ class GoalDetails extends Base
      * @param integer $mayPlanned
      * @return GoalDetails
      */
-    public function setMayPlanned($mayPlanned)
-    {
+    public function setMayPlanned($mayPlanned) {
         $this->mayPlanned = $mayPlanned;
 
         return $this;
@@ -470,8 +454,7 @@ class GoalDetails extends Base
      *
      * @return integer 
      */
-    public function getMayPlanned()
-    {
+    public function getMayPlanned() {
         return $this->mayPlanned;
     }
 
@@ -481,8 +464,7 @@ class GoalDetails extends Base
      * @param integer $mayReal
      * @return GoalDetails
      */
-    public function setMayReal($mayReal)
-    {
+    public function setMayReal($mayReal) {
         $this->mayReal = $mayReal;
 
         return $this;
@@ -493,8 +475,7 @@ class GoalDetails extends Base
      *
      * @return integer 
      */
-    public function getMayReal()
-    {
+    public function getMayReal() {
         return $this->mayReal;
     }
 
@@ -504,8 +485,7 @@ class GoalDetails extends Base
      * @param integer $junePlanned
      * @return GoalDetails
      */
-    public function setJunePlanned($junePlanned)
-    {
+    public function setJunePlanned($junePlanned) {
         $this->junePlanned = $junePlanned;
 
         return $this;
@@ -516,8 +496,7 @@ class GoalDetails extends Base
      *
      * @return integer 
      */
-    public function getJunePlanned()
-    {
+    public function getJunePlanned() {
         return $this->junePlanned;
     }
 
@@ -527,8 +506,7 @@ class GoalDetails extends Base
      * @param integer $juneReal
      * @return GoalDetails
      */
-    public function setJuneReal($juneReal)
-    {
+    public function setJuneReal($juneReal) {
         $this->juneReal = $juneReal;
 
         return $this;
@@ -539,8 +517,7 @@ class GoalDetails extends Base
      *
      * @return integer 
      */
-    public function getJuneReal()
-    {
+    public function getJuneReal() {
         return $this->juneReal;
     }
 
@@ -550,8 +527,7 @@ class GoalDetails extends Base
      * @param integer $julyPlanned
      * @return GoalDetails
      */
-    public function setJulyPlanned($julyPlanned)
-    {
+    public function setJulyPlanned($julyPlanned) {
         $this->julyPlanned = $julyPlanned;
 
         return $this;
@@ -562,8 +538,7 @@ class GoalDetails extends Base
      *
      * @return integer 
      */
-    public function getJulyPlanned()
-    {
+    public function getJulyPlanned() {
         return $this->julyPlanned;
     }
 
@@ -573,8 +548,7 @@ class GoalDetails extends Base
      * @param integer $julyReal
      * @return GoalDetails
      */
-    public function setJulyReal($julyReal)
-    {
+    public function setJulyReal($julyReal) {
         $this->julyReal = $julyReal;
 
         return $this;
@@ -585,8 +559,7 @@ class GoalDetails extends Base
      *
      * @return integer 
      */
-    public function getJulyReal()
-    {
+    public function getJulyReal() {
         return $this->julyReal;
     }
 
@@ -596,8 +569,7 @@ class GoalDetails extends Base
      * @param integer $augustPlanned
      * @return GoalDetails
      */
-    public function setAugustPlanned($augustPlanned)
-    {
+    public function setAugustPlanned($augustPlanned) {
         $this->augustPlanned = $augustPlanned;
 
         return $this;
@@ -608,8 +580,7 @@ class GoalDetails extends Base
      *
      * @return integer 
      */
-    public function getAugustPlanned()
-    {
+    public function getAugustPlanned() {
         return $this->augustPlanned;
     }
 
@@ -619,8 +590,7 @@ class GoalDetails extends Base
      * @param integer $augustReal
      * @return GoalDetails
      */
-    public function setAugustReal($augustReal)
-    {
+    public function setAugustReal($augustReal) {
         $this->augustReal = $augustReal;
 
         return $this;
@@ -631,8 +601,7 @@ class GoalDetails extends Base
      *
      * @return integer 
      */
-    public function getAugustReal()
-    {
+    public function getAugustReal() {
         return $this->augustReal;
     }
 
@@ -642,8 +611,7 @@ class GoalDetails extends Base
      * @param integer $septemberPlanned
      * @return GoalDetails
      */
-    public function setSeptemberPlanned($septemberPlanned)
-    {
+    public function setSeptemberPlanned($septemberPlanned) {
         $this->septemberPlanned = $septemberPlanned;
 
         return $this;
@@ -654,8 +622,7 @@ class GoalDetails extends Base
      *
      * @return integer 
      */
-    public function getSeptemberPlanned()
-    {
+    public function getSeptemberPlanned() {
         return $this->septemberPlanned;
     }
 
@@ -665,8 +632,7 @@ class GoalDetails extends Base
      * @param integer $septemberReal
      * @return GoalDetails
      */
-    public function setSeptemberReal($septemberReal)
-    {
+    public function setSeptemberReal($septemberReal) {
         $this->septemberReal = $septemberReal;
 
         return $this;
@@ -677,8 +643,7 @@ class GoalDetails extends Base
      *
      * @return integer 
      */
-    public function getSeptemberReal()
-    {
+    public function getSeptemberReal() {
         return $this->septemberReal;
     }
 
@@ -688,8 +653,7 @@ class GoalDetails extends Base
      * @param integer $octoberPlanned
      * @return GoalDetails
      */
-    public function setOctoberPlanned($octoberPlanned)
-    {
+    public function setOctoberPlanned($octoberPlanned) {
         $this->octoberPlanned = $octoberPlanned;
 
         return $this;
@@ -700,8 +664,7 @@ class GoalDetails extends Base
      *
      * @return integer 
      */
-    public function getOctoberPlanned()
-    {
+    public function getOctoberPlanned() {
         return $this->octoberPlanned;
     }
 
@@ -711,8 +674,7 @@ class GoalDetails extends Base
      * @param integer $octoberReal
      * @return GoalDetails
      */
-    public function setOctoberReal($octoberReal)
-    {
+    public function setOctoberReal($octoberReal) {
         $this->octoberReal = $octoberReal;
 
         return $this;
@@ -723,8 +685,7 @@ class GoalDetails extends Base
      *
      * @return integer 
      */
-    public function getOctoberReal()
-    {
+    public function getOctoberReal() {
         return $this->octoberReal;
     }
 
@@ -734,8 +695,7 @@ class GoalDetails extends Base
      * @param integer $novemberPlanned
      * @return GoalDetails
      */
-    public function setNovemberPlanned($novemberPlanned)
-    {
+    public function setNovemberPlanned($novemberPlanned) {
         $this->novemberPlanned = $novemberPlanned;
 
         return $this;
@@ -746,8 +706,7 @@ class GoalDetails extends Base
      *
      * @return integer 
      */
-    public function getNovemberPlanned()
-    {
+    public function getNovemberPlanned() {
         return $this->novemberPlanned;
     }
 
@@ -757,8 +716,7 @@ class GoalDetails extends Base
      * @param integer $novemberReal
      * @return GoalDetails
      */
-    public function setNovemberReal($novemberReal)
-    {
+    public function setNovemberReal($novemberReal) {
         $this->novemberReal = $novemberReal;
 
         return $this;
@@ -769,8 +727,7 @@ class GoalDetails extends Base
      *
      * @return integer 
      */
-    public function getNovemberReal()
-    {
+    public function getNovemberReal() {
         return $this->novemberReal;
     }
 
@@ -780,8 +737,7 @@ class GoalDetails extends Base
      * @param integer $decemberPlanned
      * @return GoalDetails
      */
-    public function setDecemberPlanned($decemberPlanned)
-    {
+    public function setDecemberPlanned($decemberPlanned) {
         $this->decemberPlanned = $decemberPlanned;
 
         return $this;
@@ -792,8 +748,7 @@ class GoalDetails extends Base
      *
      * @return integer 
      */
-    public function getDecemberPlanned()
-    {
+    public function getDecemberPlanned() {
         return $this->decemberPlanned;
     }
 
@@ -803,8 +758,7 @@ class GoalDetails extends Base
      * @param integer $decemberReal
      * @return GoalDetails
      */
-    public function setDecemberReal($decemberReal)
-    {
+    public function setDecemberReal($decemberReal) {
         $this->decemberReal = $decemberReal;
 
         return $this;
@@ -815,8 +769,7 @@ class GoalDetails extends Base
      *
      * @return integer 
      */
-    public function getDecemberReal()
-    {
+    public function getDecemberReal() {
         return $this->decemberReal;
     }
 
@@ -826,8 +779,7 @@ class GoalDetails extends Base
      * @param integer $status
      * @return GoalDetails
      */
-    public function setStatus($status)
-    {
+    public function setStatus($status) {
         $this->status = $status;
 
         return $this;
@@ -838,8 +790,7 @@ class GoalDetails extends Base
      *
      * @return integer 
      */
-    public function getStatus()
-    {
+    public function getStatus() {
         return $this->status;
     }
 
@@ -849,8 +800,7 @@ class GoalDetails extends Base
      * @param \Pequiven\ArrangementProgramBundle\Entity\Goal $goal
      * @return GoalDetails
      */
-    public function setGoal(\Pequiven\ArrangementProgramBundle\Entity\Goal $goal = null)
-    {
+    public function setGoal(\Pequiven\ArrangementProgramBundle\Entity\Goal $goal = null) {
         $this->goal = $goal;
 
         return $this;
@@ -861,30 +811,46 @@ class GoalDetails extends Base
      *
      * @return \Pequiven\ArrangementProgramBundle\Entity\Goal 
      */
-    public function getGoal()
-    {
+    public function getGoal() {
         return $this->goal;
     }
-    
+
     function getDeletedAt() {
         return $this->deletedAt;
     }
 
     function setDeletedAt($deletedAt) {
         $this->deletedAt = $deletedAt;
-        
+
         return $this;
     }
-    
+
     public function __toString() {
-        $toString = $this->getId() ?''.$this->getId():'-';
+        $toString = $this->getId() ? '' . $this->getId() : '-';
         return $toString;
     }
-    
+
+    public function getPlannedTotal($month) {
+        $planTotal = 0;
+        $months = self::getMonthsPlanned();
+        $format = "get%s";
+        
+        foreach ($months as $key => $value) {
+            if ($month >= $value) {
+                $getPlanningMethod = sprintf($format,$key);
+                $plan = $this->$getPlanningMethod();
+                $planTotal = $planTotal + $plan;
+                
+            }
+        }
+        return $planTotal;
+    }
+
     public function __clone() {
-        if($this->id > 0){
+        if ($this->id > 0) {
             $this->id = null;
             $this->goal = null;
         }
     }
+
 }

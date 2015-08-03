@@ -1314,7 +1314,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                     $valueIndicator->setParameter($nameParameter, $valueParameter);
                 }
             } else if ($calculationMethod == Indicator::CALCULATION_METHOD_AVERAGE_BASED_ON_NUMBER_CHILDREN) {
-                if($indicator->getFormula()->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC){
+                if ($indicator->getFormula()->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC) {
                     $variableToRealValueName = $indicator->getFormula()->getVariableToRealValue()->getName();
                     $variableToPlanValueName = $indicator->getFormula()->getVariableToPlanValue()->getName();
                 }
@@ -1791,9 +1791,9 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 $arrangementProgramsForObjetives[$arrangementProgram->getId()] = $arrangementProgram;
                 $allArrangementPrograms[$arrangementProgram->getId()] = $arrangementProgram;
             }
-            
+
             ToolService::getObjetiveFromPrograms($arrangementProgramsForObjetives, $objetives);
-            
+
             foreach ($arrangementProgramsObjects as $key => $arrangementProgram) {
                 $period = $arrangementProgram->getPeriod();
 
@@ -1805,11 +1805,18 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 $realDateStart = $summary['dateStartReal'];
                 $realDateEnd = $summary['dateEndReal'];
 
+                $advanceToDate = 0.0;
+                $today = date("m");
+                foreach ($arrangementProgram->getTimeLine()->getGoals() as $goal) {
+                    $advanceToDate = $advanceToDate + $goal->getGoalDetails()->getPlannedTotal($today) * $goal->getWeight() / 100;
+                }
+
                 $arrangementPrograms[$key] = array(
                     'id' => sprintf('PG-%s', $arrangementProgram->getId()),
                     'ref' => $arrangementProgram->getRef(),
                     'description' => $arrangementProgram->getDescription(),
                     'result' => $arrangementProgram->getUpdateResultByAdmin() ? ToolService::formatResult($arrangementProgram->getResultModified()) : ToolService::formatResult($arrangementProgram->getResult()),
+                    'resulToDate' => $advanceToDate,
                     'dateStart' => array(
                         'plan' => ToolService::formatDateTime($planDateStart),
                         'real' => ToolService::formatDateTime($realDateStart)
@@ -1838,7 +1845,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             if (($user->getLevelRealByGroup() == \Pequiven\MasterBundle\Model\Rol::ROLE_MANAGER_FIRST ) || $user->getLevelRealByGroup() == \Pequiven\MasterBundle\Model\Rol::ROLE_GENERAL_COMPLEJO) {
                 if ($gerenciaFirst) {
                     foreach ($gerenciaFirst->getTacticalObjectives() as $objetive) {
-                        if($objetive->getObjetiveLevel()->getLevel() == \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_TACTICO){
+                        if ($objetive->getObjetiveLevel()->getLevel() == \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_TACTICO) {
                             if ($objetive->getPeriod()->getId() == $periodActual->getId()) {
                                 $objetives[$objetive->getId()] = $objetive;
                             }
@@ -1922,7 +1929,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 $goals[$key] = array(
                     'id' => sprintf('ME-%s', $goal->getId()),
                     'description' => $goal->getName(),
-                    'weight'=>$goal->getWeight(),
+                    'weight' => $goal->getWeight(),
                     'result' => $goal->getUpdateResultByAdmin() ? ToolService::formatResult($goal->getResultModified()) : ToolService::formatResult($goal->getResult()),
                     'dateStart' => array(
                         'plan' => ToolService::formatDateTime($planDateStart),
@@ -1975,7 +1982,6 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
 //                    $canBeEvaluated = false;
 //                }
 //            }
-
             //$resultService = ToolService::getResultService();
             $isValidAdvance = $this->validateAdvanceOfObjetives($objetives);
             if (!$isValidAdvance) {
@@ -2030,11 +2036,9 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
 //        if (!$canBeEvaluated || count($this->errors) > 0) {
 //            $data['success'] = false;
 //        }
-        
+
         return $data;
     }
-    
-    
 
     private function addErrorTrans($error, array $parameters = array()) {
         if (is_array($error)) {
@@ -2140,9 +2144,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
     protected function getPeriodService() {
         return $this->container->get('pequiven_seip.service.period');
     }
-    
-    
-    
+
     /**
      * Renders a string view.
      *
