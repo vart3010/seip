@@ -279,7 +279,7 @@
         </fieldset>
             
         <!-- Etiquetas del Indicador -->
-        {% if indicator.tagsIndicator|length > 0 %}    
+        {% if indicator.tagsIndicator|length > 0 and indicator.showTags == true %}    
             <br /><br />
             <fieldset class="fieldset">
                 <legend class="legend">{{ ('pequiven_indicator.tagIndicators'|trans) }}&nbsp;</legend>
