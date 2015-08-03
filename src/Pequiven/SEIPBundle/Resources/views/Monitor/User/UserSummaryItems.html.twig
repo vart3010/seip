@@ -113,7 +113,7 @@
                 {% if(objetives["OE"]|length>0) %}
                     {#                <h3 class="thin underline text-center">Objetivos Operativos</h3>#}
                     <fieldset class="fieldset">
-                        <legend class="legend">{{ "pequiven.form.tactical_objective" |trans }}</legend>
+                        <legend class="legend">{{ "pequiven.form.strategic_objective" |trans }}</legend>
                         <table ng-init="" class="simple-table responsive-table" id="sorting-example2">
 
                             <thead>
@@ -124,12 +124,12 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for objetivesOp in objetives["OE"] %}
+                                {% for objetivesOE in objetives["OE"] %}
                                     <tr>
-                                        <td style="color: #607890; text-align: center;">{{ objetivesOp.id }}</td>
-                                        <td style="font-weight: bold;">{{ objetivesOp.description }}</td>
+                                        <td style="color: #607890; text-align: center;">{{ objetivesOE.id }}</td>
+                                        <td style="font-weight: bold;">{{ objetivesOE.description }}</td>
                                         <td style="text-align: center">
-                                            {% set advances = objetivesOp.result %}
+                                            {% set advances = objetivesOE.result %}
                                             {% set advancesClass = 'red-gradient' %}
                                             {% if advances >= 50 and advances < 100 %}
                                                 {% set advancesClass = 'orange-gradient' %}
@@ -162,12 +162,12 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for objetivesOp in objetives["OT"] %}
+                                {% for objetivesOT in objetives["OT"] %}
                                     <tr>
-                                        <td style="color: #607890; text-align: center;">{{ objetivesOp.id }}</td>
-                                        <td style="font-weight: bold;">{{ objetivesOp.description }}</td>
+                                        <td style="color: #607890; text-align: center;">{{ objetivesOT.id }}</td>
+                                        <td style="font-weight: bold;">{{ objetivesOT.description }}</td>
                                         <td style="text-align: center">
-                                            {% set advances = objetivesOp.result %}
+                                            {% set advances = objetivesOT.result %}
                                             {% set advancesClass = 'red-gradient' %}
                                             {% if advances >= 50 and advances < 100 %}
                                                 {% set advancesClass = 'orange-gradient' %}
@@ -199,12 +199,12 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for objetivesOp in objetives["OO"] %}
+                                {% for objetivesOO in objetives["OO"] %}
                                     <tr>
-                                        <td style="color: #607890; text-align: center;">{{ objetivesOp.id }}</td>
-                                        <td style="font-weight: bold;">{{ objetivesOp.description }}</td>
+                                        <td style="color: #607890; text-align: center;">{{ objetivesOO.id }}</td>
+                                        <td style="font-weight: bold;">{{ objetivesOO.description }}</td>
                                         <td style="text-align: center">
-                                            {% set advances = objetivesOp.result %}
+                                            {% set advances = objetivesOO.result %}
                                             {% set advancesClass = 'red-gradient' %}
                                             {% if advances >= 50 and advances < 100 %}
                                                 {% set advancesClass = 'orange-gradient' %}
