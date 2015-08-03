@@ -3051,7 +3051,7 @@ class IndicatorService implements ContainerAwareInterface {
 
             $dataSetValues['real'] = array('seriesname' => 'Avance', 'renderAs' => 'line', 'data' => $result['real']['data']);
             $dataSetValues['plan'] = array('seriesname' => 'Plan', 'renderAs' => 'line', 'data' => $result['plan']['data']);
-            $dataSetValues['desviacion'] = array('seriesname' => 'Desviación', 'data' => $result['desviacion']['data'], 'parentYAxis' => 'P', 'renderAs' => 'column');
+            $dataSetValues['desviacion'] = array('seriesname' => 'Desviación', 'data' => $result['desviacion']['data'], 'parentYAxis' => 'P', 'renderAs' => 'column', 'color' => '#E50A0A');
 
             $data['dataSource']['dataset'][] = $dataSetValues['real'];
             $data['dataSource']['dataset'][] = $dataSetValues['plan'];
