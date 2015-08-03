@@ -3036,6 +3036,29 @@ angular.module('seipModule.controllers', [])
                     });
                 });
             }
+            
+            //27-Gráfico sólo para avances de proyectos
+            $scope.chargeChartProgressProjectsByFrequencyNotification = function (indicatorId, render, width, height) {
+                var getDataChartProgressProjectsByFrequencyNotification = Routing.generate("getDataChartChartProgressProjectsByFrequencyNotification", {id: indicatorId});
+                $http.get(getDataChartProgressProjectsByFrequencyNotification).success(function (data) {
+                    FusionCharts.ready(function () {
+                        var revenueChartProgressProjectsByFrequencyNotification = new FusionCharts({
+                            "type": "mscolumn3dlinedy",
+                            "renderAt": render,
+                            "width": width + "%",
+                            "height": height,
+                            "dataFormat": "json",
+                            "dataSource": {
+                                "chart": data.dataSource.chart,
+                                "categories": data.dataSource.categories,
+                                "dataset": data.dataSource.dataset
+                            }
+                        });
+                        revenueChartProgressProjectsByFrequencyNotification.setTransparent(true);
+                        revenueChartProgressProjectsByFrequencyNotification.render();
+                    });
+                });
+            }
 
 
             //Gráfico en forma tacómetro (Usado para mostrar el resultado de los indicadores estratégicos en el dashboard)

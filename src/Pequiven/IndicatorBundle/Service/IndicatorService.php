@@ -2998,6 +2998,64 @@ class IndicatorService implements ContainerAwareInterface {
             $data['dataSource']['dataset'][] = $dataSetValues['PERIODO_ANTERIOR'];
             $data['dataSource']['dataset'][] = $dataSetValues['ACUMULADO_PERIODO_ACTUAL'];
             $data['dataSource']['dataset'][] = $dataSetValues['ACUMULADO_PERIODO_ANTERIOR'];
+        } elseif(isset($options['progressProjectsByFrequencyNotification']) && array_key_exists('progressProjectsByFrequencyNotification', $options)){
+            unset($options[$options['path_array']]);
+            
+            unset($chart["sYAxisName"]);
+            unset($chart["sNumberSuffix"]);
+            unset($chart["sYAxisMaxValue"]);
+            
+            $arrayVariables = array();
+            //$arrayVariables[idIndicador][tipo_valor][numero_resultado][valor] = '';
+            $arrayVariables[2600]['real'] = array(1 => 63.69, 2 => 64.47);$arrayVariables[2600]['plan'] = array(1 => 66.35, 2 => 72.98, 3 => 77.36, 4 => 88.45);$arrayVariables[2600]['maxValue'] = 90;
+            $arrayVariables[2609]['real'] = array(1 => 58.83, 2 => 58.95);$arrayVariables[2609]['plan'] = array(1 => 60.69, 2 => 68.31, 3 => 73.19, 4 => 74.97);$arrayVariables[2609]['maxValue'] = 80;
+            $arrayVariables[2611]['real'] = array(1 => 70.75, 2 => 71.06);$arrayVariables[2611]['plan'] = array(1 => 71.75, 2 => 74.02, 3 => 75.48, 4 => 100.0);$arrayVariables[2611]['maxValue'] = 100;
+            $arrayVariables[2607]['real'] = array(1 => 61.50, 2 => 63.40);$arrayVariables[2607]['plan'] = array(1 => 66.60, 2 => 76.62, 3 => 83.42, 4 => 90.39);$arrayVariables[2607]['maxValue'] = 100;
+            $arrayVariables[2602]['real'] = array(1 => 34.73, 2 => 35.03);$arrayVariables[2602]['plan'] = array(1 => 35.34, 2 => 52.72, 3 => 70.18, 4 => 81.73);$arrayVariables[2602]['maxValue'] = 90;
+            $arrayVariables[2605]['real'] = array(1 => 34.73, 2 => 35.03);$arrayVariables[2605]['plan'] = array(1 => 35.34, 2 => 52.72, 3 => 70.18, 4 => 81.73);$arrayVariables[2605]['maxValue'] = 90;
+            $arrayVariables[1870]['real'] = array(1 => 61.14, 2 => 61.56);$arrayVariables[1870]['plan'] = array(1 => 68.12, 2 => 72.51, 3 => 77.52, 4 => 83.15);$arrayVariables[1870]['maxValue'] = 90;
+            $arrayVariables[1910]['real'] = array(1 => 87.79, 2 => 87.82);$arrayVariables[1910]['plan'] = array(1 => 89.0, 2 => 91.0, 3 => 92.0, 4 => 93.0);$arrayVariables[1910]['maxValue'] = 100;
+            $arrayVariables[1912]['real'] = array(1 => 50.50, 2 => 50.50);$arrayVariables[1912]['plan'] = array(1 => 50.65, 2 => 68.65, 3 => 86.65, 4 => 100.0);$arrayVariables[1912]['maxValue'] = 100;
+            $arrayVariables[1906]['real'] = array(1 => 74.80, 2 => 74.80);$arrayVariables[1906]['plan'] = array(1 => 78.94, 2 => 79.54, 3 => 82.08, 4 => 86.91);$arrayVariables[1906]['maxValue'] = 90;
+            $arrayVariables[1914]['real'] = array(1 => 54.06, 2 => 55.60);$arrayVariables[1914]['plan'] = array(1 => 89.06, 2 => 91.99, 3 => 94.51, 4 => 96.58);$arrayVariables[1914]['maxValue'] = 100;
+            $arrayVariables[1904]['real'] = array(1 => 27.72, 2 => 28.0);$arrayVariables[1904]['plan'] = array(1 => 28.87, 2 => 28.87, 3 => 32.10, 4 => 41.79);$arrayVariables[1904]['maxValue'] = 50;
+            $arrayVariables[1908]['real'] = array(1 => 71.96, 2 => 72.66);$arrayVariables[1908]['plan'] = array(1 => 72.18, 2 => 74.99, 3 => 77.79, 4 => 80.60);$arrayVariables[1908]['maxValue'] = 90;
+            $arrayVariables[1862]['real'] = array(1 => 7.76, 2 => 7.76);$arrayVariables[1862]['plan'] = array(1 => 30.26, 2 => 34.13, 3 => 37.95, 4 => 44.65);$arrayVariables[1862]['maxValue'] = 50;
+            $arrayVariables[1858]['real'] = array(1 => 0.0, 2 => 0.0);$arrayVariables[1858]['plan'] = array(1 => 0.01, 2 => 0.90, 3 => 1.44, 4 => 1.8);$arrayVariables[1858]['maxValue'] = 10;
+            $arrayVariables[1854]['real'] = array(1 => 4.45, 2 => 4.60);$arrayVariables[1854]['plan'] = array(1 => 4.48, 2 => 4.53, 3 => 5.82, 4 => 7.82);$arrayVariables[1854]['maxValue'] = 10;
+            $arrayVariables[1860]['real'] = array(1 => 19.20, 2 => 19.25);$arrayVariables[1860]['plan'] = array(1 => 21.76, 2 => 22.96, 3 => 25.61, 4 => 32.25);$arrayVariables[1860]['maxValue'] = 40;
+            $arrayVariables[2595]['real'] = array(1 => 10.63, 2 => 14.40);$arrayVariables[2595]['plan'] = array(1 => 10.66, 2 => 18.32, 3 => 25.82, 4 => 33.50);$arrayVariables[2595]['maxValue'] = 40;
+            $arrayVariables[1354]['real'] = array(1 => 25.20, 2 => 25.88);$arrayVariables[1354]['plan'] = array(1 => 29.62, 2 => 34.88, 3 => 40.21, 4 => 46.67);$arrayVariables[1354]['maxValue'] = 50;
+            
+            $numberResultsTotal = $indicator->getFrequencyNotificationIndicator()->getNumberResultsFrequency();
+            $numberResultShowReal = 2;
+            $labelsFrequencyNotificationArray = $this->getLabelsByIndicatorFrequencyNotification($indicator);
+            
+            $result['real']['data'] = array();
+            $result['plan']['data'] = array();
+            $result['desviacion']['data'] = array();
+            $chart["sYAxisMaxValue"] =  $arrayVariables[$indicator->getId()]['maxValue'];
+
+            //Añadimos los valores, por frecuencia de notificación
+            for ($i = 1; $i <= $numberResultsTotal; $i++) {
+                $label = array();
+                $label["label"] = $labelsFrequencyNotificationArray[$i];
+                if($i <= $numberResultShowReal){
+                    $result['real']['data'][] = array('value' => number_format($arrayVariables[$indicator->getId()]['real'][$i], 2, ',', '.'));
+                    $result['desviacion']['data'][] = array('value' => number_format($arrayVariables[$indicator->getId()]['plan'][$i] - $arrayVariables[$indicator->getId()]['real'][$i], 2, ',', '.'));
+                }
+                $result['plan']['data'][] = array('value' => number_format($arrayVariables[$indicator->getId()]['plan'][$i], 2, ',', '.'));
+
+                $category[] = $label;
+            }
+
+            $dataSetValues['real'] = array('seriesname' => 'Avance', 'renderAs' => 'line', 'data' => $result['real']['data']);
+            $dataSetValues['plan'] = array('seriesname' => 'Plan', 'renderAs' => 'line', 'data' => $result['plan']['data']);
+            $dataSetValues['desviacion'] = array('seriesname' => 'Desviación', 'data' => $result['desviacion']['data'], 'parentYAxis' => 'P', 'renderAs' => 'column');
+
+            $data['dataSource']['dataset'][] = $dataSetValues['real'];
+            $data['dataSource']['dataset'][] = $dataSetValues['plan'];
+            $data['dataSource']['dataset'][] = $dataSetValues['desviacion'];
         }
 
         $data['dataSource']['chart'] = $chart;
