@@ -8,18 +8,19 @@ use Pequiven\IndicatorBundle\Entity\Indicator;
 use Pequiven\SIGBundle\Entity\ManagementSystem;
 
 use Symfony\Component\HttpFoundation\Request;
-use Pequiven\ArrangementBundle\Entity\ArrangementRange;
+//use Pequiven\ArrangementBundle\Entity\ArrangementRange;
 use Tecnocreaciones\Bundle\ResourceBundle\Controller\ResourceController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Pequiven\IndicatorBundle\Entity\IndicatorLevel;
 use Pequiven\SEIPBundle\Model\Common\CommonObject;
 
+use Pequiven\SEIPBundle\Model\PDF\SeipPdf;
 class IndicatorSigController extends ResourceController
 {   
     /**
      * Lista de Indicadores por nivel(Estratégico, Táctico u Operativo)
-     * 
+     * Filtrados por managementSystems
      * @param Request $request
      * @return type
      */
@@ -46,7 +47,6 @@ class IndicatorSigController extends ResourceController
         
         $criteria['indicatorLevel'] = $level;
         $criteria['applyPeriodCriteria'] = true;
-        //$criteria['managementSystemsCriteria'] = true;        
 
         if ($this->config->isPaginated()) {
             $resources = $this->resourceResolver->getResource(
@@ -107,12 +107,54 @@ class IndicatorSigController extends ResourceController
     }
 
     /**
+     * Vista indice de evolucion
+     * @param Request $request
+     *
+     * @return RedirectResponse|Response
+     */
+    public function evolutionAction(Request $request)
+    {
+        $resource = $this->findOr404($request);
+        $form = $this->getForm($resource);
+
+        if (($request->isMethod('PUT') || $request->isMethod('POST')) && $form->submit($request)->isValid()) {
+
+            $this->domainManager->update($resource);
+
+            return $this->redirectHandler->redirectTo($resource);
+        }
+
+        if ($this->config->isApiRequest()) {
+            return $this->handleView($this->view($form));
+        }        
+
+        $view = $this
+            ->view()
+            ->setTemplate($this->config->getTemplate('evolution.html'))
+            ->setData(array(
+                $this->config->getResourceName() => $resource,
+                'form'                           => $form->createView()
+            ))
+        ;
+
+        return $this->handleView($view);
+    }
+
+    /**
      * 
      * @return \Pequiven\SEIPBundle\Service\SecurityService
      */
     protected function getSecurityService() {
 
         return $this->container->get('seip.service.security');
-    }    
+    }  
+
+    /**
+     * @return \Pequiven\SEIPBundle\Service\FusionChartExportService
+     */
+    private function getFusionChartExportService()
+    {
+        return $this->container->get('pequiven_seip.service.fusion_chart');
+    }  
    
 }

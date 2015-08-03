@@ -1,0 +1,82 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayout.html.twig' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
+
+{% trans_default_domain 'PequivenIndicatorBundle' %}
+
+{% set labelHeader = {
+        (constant('Pequiven\\IndicatorBundle\\Model\\IndicatorLevel::LEVEL_ESTRATEGICO')):'pequiven_indicator.indicator_strategic',
+        (constant('Pequiven\\IndicatorBundle\\Model\\IndicatorLevel::LEVEL_TACTICO')):'pequiven_indicator.indicator_tactic',
+        (constant('Pequiven\\IndicatorBundle\\Model\\IndicatorLevel::LEVEL_OPERATIVO')):'pequiven_indicator.indicator_operative',
+    } %}
+
+ {% set level = indicator_sig.indicatorLevel.level %}
+    
+
+{% block before_body %}
+    {{ contentHeader(
+        {(path('pequiven_indicator_list',{'level':level})):(labelHeader[level])|trans},
+        { (path('pequiven_indicator_show',{'id':indicator_sig.id})): (indicator_sig.ref)},
+        ('pequiven.evolution'|trans({},'messages'))
+    ) }}
+{% endblock %} 
+{% block body %}
+
+    
+        {# Cargando grafico informe de evolution #}
+            <div ng-controller="ChartsSigController" class="dashboard" ng-init="renderChartEvolutionSig('chartContainerResult')" style="height: 400px;">
+                <div class="nine-columns twelve-columns-mobile" id="chartContainerResult">
+                <!-- This div will hold the chart generated in the footer -->
+                </div>
+            </div>
+            <br> 
+        {# Fin Grafico#}
+
+        <fieldset class="fieldset fields-list">
+            <legend class="legend">{{ 'sig.chart_evolution'|trans ({}, 'messages') }}</legend>
+            {# Sistemas de Gestión del Indicador #}
+            {% if  is_granted('ROLE_SEIP_SIG_INDICATOR_VIEW') %}
+                <div class="inline-label">
+                        <label class="label">{{ 'form.systems'|trans }}</label> 
+                        <ul class="fa-ul">
+                            {% for managementSystem in indicator_sig.managementSystems %}
+                                <li>{{ managementSystem.description }}</li>
+                            {% endfor %} 
+                        </ul> 
+                </div>
+            {% endif %}
+            {# Fin carga de sistemas de Gestión #}
+        </fieldset>
+    
+    {# Analisis de Tendencia #}
+    {% if indicator_sig.showFeatures %} 
+            <br /><br />
+           {# {% include 'PequivenSEIPBundle:Planning:Indicator/show/analysis.html.twig' %} #}
+            &nbsp;
+    {% endif %} 
+
+    {# Grafica de Tendencia#}
+    <fieldset class="fieldset fields-list">
+            <legend class="legend">{{ 'sig.causes_deviation'|trans ({}, 'messages') }}</legend>
+            <h3>Grafica de Tendencia</h3>
+    </fieldset>
+
+    {# Analisis de Tendencia #}
+    {% if indicator_sig.showFeatures %}
+            <br /><br />
+             {# {% include 'PequivenSEIPBundle:Planning:Indicator/show/analysis.html.twig' %} #}
+    {% endif %} 
+
+{% endblock body %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/agenda3860.css?v=1') }}">
+    <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/dashboard3860.css?v=1') }}">
+{% endblock stylesheets %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/fusioncharts.js') }}"></script>
+    <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/themes/fusioncharts.theme.fint.js') }}"></script>
+{% endblock %}

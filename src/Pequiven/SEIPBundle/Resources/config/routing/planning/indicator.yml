@@ -44,7 +44,7 @@ pequiven_indicator_delete:
 pequiven_indicator_evolution:
     path: /{id}/evolution.{_format}
     defaults:
-        _controller: pequiven.controller.indicator:evolutionAction
+        _controller: pequiven.controller.indicator_sig:evolutionAction
         _format: html
         _sylius:
             form: pequiven_indicatorbundle_indicator
