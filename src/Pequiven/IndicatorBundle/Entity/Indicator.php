@@ -1578,7 +1578,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
                     if ($tagIndicator->getTypeTag() == Indicator\TagIndicator::TAG_TYPE_NUMERIC) {
                         return $tagIndicator->getValueOfTag();
                     } else {
-                        return number_format($tagIndicator->getTextOfTag(), 2, ',', '.');
+                        return ((float)$tagIndicator->getTextOfTag() + 0.0);
                     }
                 }
             }
