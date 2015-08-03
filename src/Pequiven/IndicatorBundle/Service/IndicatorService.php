@@ -3007,6 +3007,7 @@ class IndicatorService implements ContainerAwareInterface {
             
             $arrayVariables = array();
             //$arrayVariables[idIndicador][tipo_valor][numero_resultado][valor] = '';
+            //Avance Físico
             $arrayVariables[2600]['real'] = array(1 => 63.69, 2 => 64.47);$arrayVariables[2600]['plan'] = array(1 => 66.35, 2 => 72.98, 3 => 77.36, 4 => 88.45);$arrayVariables[2600]['maxValue'] = 90;
             $arrayVariables[2609]['real'] = array(1 => 58.83, 2 => 58.95);$arrayVariables[2609]['plan'] = array(1 => 60.69, 2 => 68.31, 3 => 73.19, 4 => 74.97);$arrayVariables[2609]['maxValue'] = 80;
             $arrayVariables[2611]['real'] = array(1 => 70.75, 2 => 71.06);$arrayVariables[2611]['plan'] = array(1 => 71.75, 2 => 74.02, 3 => 75.48, 4 => 100.0);$arrayVariables[2611]['maxValue'] = 100;
@@ -3026,6 +3027,26 @@ class IndicatorService implements ContainerAwareInterface {
             $arrayVariables[1860]['real'] = array(1 => 19.20, 2 => 19.25);$arrayVariables[1860]['plan'] = array(1 => 21.76, 2 => 22.96, 3 => 25.61, 4 => 32.25);$arrayVariables[1860]['maxValue'] = 40;
             $arrayVariables[2595]['real'] = array(1 => 10.63, 2 => 14.40);$arrayVariables[2595]['plan'] = array(1 => 10.66, 2 => 18.32, 3 => 25.82, 4 => 33.50);$arrayVariables[2595]['maxValue'] = 40;
             $arrayVariables[1354]['real'] = array(1 => 25.20, 2 => 25.88);$arrayVariables[1354]['plan'] = array(1 => 29.62, 2 => 34.88, 3 => 40.21, 4 => 46.67);$arrayVariables[1354]['maxValue'] = 50;
+            //  Avance Financiero
+            $arrayVariables[2601]['real'] = array(1 => 8.30, 2 => 20.88);$arrayVariables[2601]['plan'] = array(1 => 70.14, 2 => 160.85, 3 => 130.05, 4 => 292.42);$arrayVariables[2601]['maxValue'] = 300;
+            $arrayVariables[2608]['real'] = array(1 => 7.23, 2 => 8.18);$arrayVariables[2608]['plan'] = array(1 => 36.76, 2 => 59.72, 3 => 72.56, 4 => 87.51);$arrayVariables[2608]['maxValue'] = 90;
+            $arrayVariables[2610]['real'] = array(1 => 0.49, 2 => 1.04);$arrayVariables[2610]['plan'] = array(1 => 9.78, 2 => 17.13, 3 => 22.89, 4 => 166.41);$arrayVariables[2610]['maxValue'] = 170;
+            $arrayVariables[2606]['real'] = array(1 => 0.31, 2 => 11.66);$arrayVariables[2606]['plan'] = array(1 => 23.60, 2 => 30.0, 3 => 34.60, 4 => 38.50);$arrayVariables[2606]['maxValue'] = 40;
+            $arrayVariables[2603]['real'] = array(1 => 4.47, 2 => 4.53);$arrayVariables[2603]['plan'] = array(1 => 54.60, 2 => 107.60, 3 => 126.0, 4 => 128.20);$arrayVariables[2603]['maxValue'] = 130;
+            $arrayVariables[2604]['real'] = array(1 => 4.47, 2 => 4.53);$arrayVariables[2604]['plan'] = array(1 => 54.60, 2 => 107.60, 3 => 126.0, 4 => 128.20);$arrayVariables[2604]['maxValue'] = 130;
+            $arrayVariables[1871]['real'] = array(1 => 22.41, 2 => 29.16);$arrayVariables[1871]['plan'] = array(1 => 96.45, 2 => 220.50, 3 => 316.76, 4 => 363.69);$arrayVariables[1871]['maxValue'] = 370;
+            $arrayVariables[1911]['real'] = array(1 => 2.92, 2 => 2.92);$arrayVariables[1911]['plan'] = array(1 => 0.0, 2 => 31.48, 3 => 64.25, 4 => 64.25);$arrayVariables[1911]['maxValue'] = 70;
+            $arrayVariables[1913]['real'] = array(1 => 0.66, 2 => 1.15);$arrayVariables[1913]['plan'] = array(1 => 35.50, 2 => 35.50, 3 => 35.50, 4 => 35.50);$arrayVariables[1913]['maxValue'] = 40;
+            $arrayVariables[1907]['real'] = array(1 => 0.0, 2 => 3.93);$arrayVariables[1907]['plan'] = array(1 => 0.24, 2 => 12.89, 3 => 39.93, 4 => 56.86);$arrayVariables[1907]['maxValue'] = 60;
+            $arrayVariables[1915]['real'] = array(1 => 5.42, 2 => 5.42);$arrayVariables[1915]['plan'] = array(1 => 3.71, 2 => 17.23, 3 => 28.61, 4 => 44.07);$arrayVariables[1915]['maxValue'] = 50;
+            $arrayVariables[1905]['real'] = array(1 => 3.85, 2 => 5.23);$arrayVariables[1905]['plan'] = array(1 => 37.34, 2 => 55.49, 3 => 76.73, 4 => 88.01);$arrayVariables[1905]['maxValue'] = 90;
+            $arrayVariables[1909]['real'] = array(1 => 9.56, 2 => 10.51);$arrayVariables[1909]['plan'] = array(1 => 19.66, 2 => 67.91, 3 => 71.74, 4 => 75.0);$arrayVariables[1909]['maxValue'] = 80;
+            $arrayVariables[1863]['real'] = array(1 => 0.0, 2 => 0.13);$arrayVariables[1863]['plan'] = array(1 => 5.38, 2 => 11.50, 3 => 11.99, 4 => 13.44);$arrayVariables[1863]['maxValue'] = 20;
+            $arrayVariables[1859]['real'] = array(1 => 0.0, 2 => 0.0);$arrayVariables[1859]['plan'] = array(1 => 29.18, 2 => 37.14, 3 => 44.22, 4 => 55.28);$arrayVariables[1859]['maxValue'] = 60;
+            $arrayVariables[1855]['real'] = array(1 => 3.0, 2 => 3.0);$arrayVariables[1855]['plan'] = array(1 => 6.27, 2 => 64.66, 3 => 67.23, 4 => 69.81);$arrayVariables[1855]['maxValue'] = 10;
+            $arrayVariables[1861]['real'] = array(1 => 554.10, 2 => 560.21);$arrayVariables[1861]['plan'] = array(1 => 557.65, 2 => 565.04, 3 => 571.57, 4 => 575.17);$arrayVariables[1861]['maxValue'] = 580;
+            $arrayVariables[2596]['real'] = array(1 => 0.0, 2 => 0.0);$arrayVariables[2596]['plan'] = array(1 => 0.0, 2 => 2.0, 3 => 29.13, 4 => 116.60);$arrayVariables[2596]['maxValue'] = 120;
+            $arrayVariables[1355]['real'] = array(1 => 227.66, 2 => 497.39);$arrayVariables[1355]['plan'] = array(1 => 819.67, 2 => 1115.29, 3 => 1296.95, 4 => 1614.61);$arrayVariables[1355]['maxValue'] = 1700;
             
             $numberResultsTotal = $indicator->getFrequencyNotificationIndicator()->getNumberResultsFrequency();
             $numberResultShowReal = 2;
