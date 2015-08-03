@@ -1271,25 +1271,25 @@ class IndicatorService implements ContainerAwareInterface {
             //$result[indicator.id][real][numero_resultado] = valor
             $result = array();
             //CPHC
-            $result[1489]['real'] = array(1 => 0.0, 2 => 0.0);
-            $result[1490]['real'] = array(1 => 0.0, 2 => 0.0);
-            $result[1491]['real'] = array(1 => 0.0, 2 => 0.0);
-            $result[1492]['real'] = array(1 => 0.0, 2 => 0.0);
-            $result[1493]['real'] = array(1 => 0.0, 2 => 0.0);
-            $result[1494]['real'] = array(1 => 0.0, 2 => 0.0);
-            $result[1495]['real'] = array(1 => 0.0, 2 => 0.0);
+            $result[1489]['real'] = array(1 => 0.0, 2 => 11789.0);
+            $result[1490]['real'] = array(1 => 0.0, 2 => 65389.0);
+            $result[1491]['real'] = array(1 => 0.0, 2 => 6957.0);
+            $result[1492]['real'] = array(1 => 0.0, 2 => 9975.0);
+            $result[1493]['real'] = array(1 => 0.0, 2 => 2340.0);
+            $result[1494]['real'] = array(1 => 0.0, 2 => 2866.0);
+            $result[1495]['real'] = array(1 => 0.0, 2 => 11461.0);
             $result[1496]['real'] = array(1 => 0.0, 2 => 0.0);
-            $result[1497]['real'] = array(1 => 0.0, 2 => 0.0);
-            $result[1498]['real'] = array(1 => 0.0, 2 => 0.0);
+            $result[1497]['real'] = array(1 => 0.0, 2 => 2629.0);
+            $result[1498]['real'] = array(1 => 0.0, 2 => 1397.0);
             //CPAMC
-            $result[1503]['real'] = array(1 => 0.0, 2 => 0.0);
-            $result[1504]['real'] = array(1 => 0.0, 2 => 0.0);
-            $result[1505]['real'] = array(1 => 0.0, 2 => 0.0);
+            $result[1503]['real'] = array(1 => 0.0, 2 => 14749.0);
+            $result[1504]['real'] = array(1 => 0.0, 2 => 15973.0);
+            $result[1505]['real'] = array(1 => 0.0, 2 => 27139.0);
             $result[1506]['real'] = array(1 => 0.0, 2 => 0.0);
             $result[1507]['real'] = array(1 => 0.0, 2 => 0.0);
             $result[1508]['real'] = array(1 => 0.0, 2 => 0.0);
-            $result[1509]['real'] = array(1 => 0.0, 2 => 0.0);
-            $result[1510]['real'] = array(1 => 0.0, 2 => 0.0);
+            $result[1509]['real'] = array(1 => 0.0, 2 => 6789.0);
+            $result[1510]['real'] = array(1 => 0.0, 2 => 11697);
 
             $dataSetPlan["seriesname"] = $arrayVariables['descriptionPlan'];
             $dataSetPlan["showValues"] = "1";
@@ -1297,7 +1297,7 @@ class IndicatorService implements ContainerAwareInterface {
             $dataSetReal["showValues"] = "1";
             $dataSetExtra = array();
             if($indicator->getResultsAdditionalInDashboardColumn()){
-                $dataSetExtra["seriesname"] = 'Plus';
+                $dataSetExtra["seriesname"] = 'Costo Unitario + Otros Ingresos/Gastos';
                 $dataSetExtra["showValues"] = '1';
                 $dataSetExtra["color"] = '#DF1D3A';
             }
@@ -1315,6 +1315,11 @@ class IndicatorService implements ContainerAwareInterface {
                 $label = $dataReal = $dataPlan = $dataMedition = $dataExtra = array();
                 $label["label"] = $i;
                 if($indicator->getResultsAdditionalInDashboardColumn()){
+                    if($i == 0){
+                        $dataExtra['showValue'] = '1';
+                        $dataExtra['displayValue'] = '*';
+                        $dataExtra['toolText'] = 'En espera de Información';
+                    }
                     $dataExtra["value"] = number_format($result[$indicator->getId()]['real'][$i+1], 2, ',', '.');
                 }
                 $dataReal["value"] = number_format($arrayVariables['valueReal'][$i], 2, ',', '.');
@@ -3038,29 +3043,30 @@ class IndicatorService implements ContainerAwareInterface {
             unset($chart["sYAxisName"]);
             unset($chart["sNumberSuffix"]);
             unset($chart["sYAxisMaxValue"]);
+            unset($chart["pYAxisName"]);
             
             $arrayVariables = array();
             //$arrayVariables[idIndicador][tipo_valor][numero_resultado][valor] = '';
             //Avance Físico
-            $arrayVariables[2600]['real'] = array(1 => 63.69, 2 => 64.47);$arrayVariables[2600]['plan'] = array(1 => 66.35, 2 => 72.98, 3 => 77.36, 4 => 88.45);$arrayVariables[2600]['maxValue'] = 90;
-            $arrayVariables[2609]['real'] = array(1 => 58.83, 2 => 58.95);$arrayVariables[2609]['plan'] = array(1 => 60.69, 2 => 68.31, 3 => 73.19, 4 => 74.97);$arrayVariables[2609]['maxValue'] = 80;
-            $arrayVariables[2611]['real'] = array(1 => 70.75, 2 => 71.06);$arrayVariables[2611]['plan'] = array(1 => 71.75, 2 => 74.02, 3 => 75.48, 4 => 100.0);$arrayVariables[2611]['maxValue'] = 100;
-            $arrayVariables[2607]['real'] = array(1 => 61.50, 2 => 63.40);$arrayVariables[2607]['plan'] = array(1 => 66.60, 2 => 76.62, 3 => 83.42, 4 => 90.39);$arrayVariables[2607]['maxValue'] = 100;
-            $arrayVariables[2602]['real'] = array(1 => 34.73, 2 => 35.03);$arrayVariables[2602]['plan'] = array(1 => 35.34, 2 => 52.72, 3 => 70.18, 4 => 81.73);$arrayVariables[2602]['maxValue'] = 90;
-            $arrayVariables[2605]['real'] = array(1 => 34.73, 2 => 35.03);$arrayVariables[2605]['plan'] = array(1 => 35.34, 2 => 52.72, 3 => 70.18, 4 => 81.73);$arrayVariables[2605]['maxValue'] = 90;
-            $arrayVariables[1870]['real'] = array(1 => 61.14, 2 => 61.56);$arrayVariables[1870]['plan'] = array(1 => 68.12, 2 => 72.51, 3 => 77.52, 4 => 83.15);$arrayVariables[1870]['maxValue'] = 90;
-            $arrayVariables[1910]['real'] = array(1 => 87.79, 2 => 87.82);$arrayVariables[1910]['plan'] = array(1 => 89.0, 2 => 91.0, 3 => 92.0, 4 => 93.0);$arrayVariables[1910]['maxValue'] = 100;
-            $arrayVariables[1912]['real'] = array(1 => 50.50, 2 => 50.50);$arrayVariables[1912]['plan'] = array(1 => 50.65, 2 => 68.65, 3 => 86.65, 4 => 100.0);$arrayVariables[1912]['maxValue'] = 100;
-            $arrayVariables[1906]['real'] = array(1 => 74.80, 2 => 74.80);$arrayVariables[1906]['plan'] = array(1 => 78.94, 2 => 79.54, 3 => 82.08, 4 => 86.91);$arrayVariables[1906]['maxValue'] = 90;
-            $arrayVariables[1914]['real'] = array(1 => 54.06, 2 => 55.60);$arrayVariables[1914]['plan'] = array(1 => 89.06, 2 => 91.99, 3 => 94.51, 4 => 96.58);$arrayVariables[1914]['maxValue'] = 100;
-            $arrayVariables[1904]['real'] = array(1 => 27.72, 2 => 28.0);$arrayVariables[1904]['plan'] = array(1 => 28.87, 2 => 28.87, 3 => 32.10, 4 => 41.79);$arrayVariables[1904]['maxValue'] = 50;
-            $arrayVariables[1908]['real'] = array(1 => 71.96, 2 => 72.66);$arrayVariables[1908]['plan'] = array(1 => 72.18, 2 => 74.99, 3 => 77.79, 4 => 80.60);$arrayVariables[1908]['maxValue'] = 90;
-            $arrayVariables[1862]['real'] = array(1 => 7.76, 2 => 7.76);$arrayVariables[1862]['plan'] = array(1 => 30.26, 2 => 34.13, 3 => 37.95, 4 => 44.65);$arrayVariables[1862]['maxValue'] = 50;
-            $arrayVariables[1858]['real'] = array(1 => 0.0, 2 => 0.0);$arrayVariables[1858]['plan'] = array(1 => 0.01, 2 => 0.90, 3 => 1.44, 4 => 1.8);$arrayVariables[1858]['maxValue'] = 10;
-            $arrayVariables[1854]['real'] = array(1 => 4.45, 2 => 4.60);$arrayVariables[1854]['plan'] = array(1 => 4.48, 2 => 4.53, 3 => 5.82, 4 => 7.82);$arrayVariables[1854]['maxValue'] = 10;
-            $arrayVariables[1860]['real'] = array(1 => 19.20, 2 => 19.25);$arrayVariables[1860]['plan'] = array(1 => 21.76, 2 => 22.96, 3 => 25.61, 4 => 32.25);$arrayVariables[1860]['maxValue'] = 40;
-            $arrayVariables[2595]['real'] = array(1 => 10.63, 2 => 14.40);$arrayVariables[2595]['plan'] = array(1 => 10.66, 2 => 18.32, 3 => 25.82, 4 => 33.50);$arrayVariables[2595]['maxValue'] = 40;
-            $arrayVariables[1354]['real'] = array(1 => 25.20, 2 => 25.88);$arrayVariables[1354]['plan'] = array(1 => 29.62, 2 => 34.88, 3 => 40.21, 4 => 46.67);$arrayVariables[1354]['maxValue'] = 50;
+            $arrayVariables[2600]['real'] = array(1 => 63.69, 2 => 64.47);$arrayVariables[2600]['plan'] = array(1 => 66.35, 2 => 72.98, 3 => 77.36, 4 => 88.45);$arrayVariables[2600]['maxValue'] = 90;$arrayVariables[2600]['pYAxisName'] = '% Avance';
+            $arrayVariables[2609]['real'] = array(1 => 58.83, 2 => 58.95);$arrayVariables[2609]['plan'] = array(1 => 60.69, 2 => 68.31, 3 => 73.19, 4 => 74.97);$arrayVariables[2609]['maxValue'] = 80;$arrayVariables[2609]['pYAxisName'] = '% Avance';
+            $arrayVariables[2611]['real'] = array(1 => 70.75, 2 => 71.06);$arrayVariables[2611]['plan'] = array(1 => 71.75, 2 => 74.02, 3 => 75.48, 4 => 100.0);$arrayVariables[2611]['maxValue'] = 100;$arrayVariables[2611]['pYAxisName'] = '% Avance';
+            $arrayVariables[2607]['real'] = array(1 => 61.50, 2 => 63.40);$arrayVariables[2607]['plan'] = array(1 => 66.60, 2 => 76.62, 3 => 83.42, 4 => 90.39);$arrayVariables[2607]['maxValue'] = 100;$arrayVariables[2607]['pYAxisName'] = '% Avance';
+            $arrayVariables[2602]['real'] = array(1 => 34.73, 2 => 35.03);$arrayVariables[2602]['plan'] = array(1 => 35.34, 2 => 52.72, 3 => 70.18, 4 => 81.73);$arrayVariables[2602]['maxValue'] = 90;$arrayVariables[2602]['pYAxisName'] = '% Avance';
+            $arrayVariables[2605]['real'] = array(1 => 34.73, 2 => 35.03);$arrayVariables[2605]['plan'] = array(1 => 35.34, 2 => 52.72, 3 => 70.18, 4 => 81.73);$arrayVariables[2605]['maxValue'] = 90;$arrayVariables[2605]['pYAxisName'] = '% Avance';
+            $arrayVariables[1870]['real'] = array(1 => 61.14, 2 => 61.56);$arrayVariables[1870]['plan'] = array(1 => 68.12, 2 => 72.51, 3 => 77.52, 4 => 83.15);$arrayVariables[1870]['maxValue'] = 90;$arrayVariables[1870]['pYAxisName'] = '% Avance';
+            $arrayVariables[1910]['real'] = array(1 => 87.79, 2 => 87.82);$arrayVariables[1910]['plan'] = array(1 => 89.0, 2 => 91.0, 3 => 92.0, 4 => 93.0);$arrayVariables[1910]['maxValue'] = 100;$arrayVariables[1910]['pYAxisName'] = '% Avance';
+            $arrayVariables[1912]['real'] = array(1 => 50.50, 2 => 50.50);$arrayVariables[1912]['plan'] = array(1 => 50.65, 2 => 68.65, 3 => 86.65, 4 => 100.0);$arrayVariables[1912]['maxValue'] = 100;$arrayVariables[1912]['pYAxisName'] = '% Avance';
+            $arrayVariables[1906]['real'] = array(1 => 74.80, 2 => 74.80);$arrayVariables[1906]['plan'] = array(1 => 78.94, 2 => 79.54, 3 => 82.08, 4 => 86.91);$arrayVariables[1906]['maxValue'] = 90;$arrayVariables[1906]['pYAxisName'] = '% Avance';
+            $arrayVariables[1914]['real'] = array(1 => 54.06, 2 => 55.60);$arrayVariables[1914]['plan'] = array(1 => 89.06, 2 => 91.99, 3 => 94.51, 4 => 96.58);$arrayVariables[1914]['maxValue'] = 100;$arrayVariables[1914]['pYAxisName'] = '% Avance';
+            $arrayVariables[1904]['real'] = array(1 => 27.72, 2 => 28.0);$arrayVariables[1904]['plan'] = array(1 => 28.87, 2 => 28.87, 3 => 32.10, 4 => 41.79);$arrayVariables[1904]['maxValue'] = 50;$arrayVariables[1904]['pYAxisName'] = '% Avance';
+            $arrayVariables[1908]['real'] = array(1 => 71.96, 2 => 72.66);$arrayVariables[1908]['plan'] = array(1 => 72.18, 2 => 74.99, 3 => 77.79, 4 => 80.60);$arrayVariables[1908]['maxValue'] = 90;$arrayVariables[1908]['pYAxisName'] = '% Avance';
+            $arrayVariables[1862]['real'] = array(1 => 7.76, 2 => 7.76);$arrayVariables[1862]['plan'] = array(1 => 30.26, 2 => 34.13, 3 => 37.95, 4 => 44.65);$arrayVariables[1862]['maxValue'] = 50;$arrayVariables[1862]['pYAxisName'] = '% Avance';
+            $arrayVariables[1858]['real'] = array(1 => 0.0, 2 => 0.0);$arrayVariables[1858]['plan'] = array(1 => 0.01, 2 => 0.90, 3 => 1.44, 4 => 1.8);$arrayVariables[1858]['maxValue'] = 10;$arrayVariables[1858]['pYAxisName'] = '% Avance';
+            $arrayVariables[1854]['real'] = array(1 => 4.45, 2 => 4.60);$arrayVariables[1854]['plan'] = array(1 => 4.48, 2 => 4.53, 3 => 5.82, 4 => 7.82);$arrayVariables[1854]['maxValue'] = 10;$arrayVariables[1854]['pYAxisName'] = '% Avance';
+            $arrayVariables[1860]['real'] = array(1 => 19.20, 2 => 19.25);$arrayVariables[1860]['plan'] = array(1 => 21.76, 2 => 22.96, 3 => 25.61, 4 => 32.25);$arrayVariables[1860]['maxValue'] = 40;$arrayVariables[1860]['pYAxisName'] = '% Avance';
+            $arrayVariables[2595]['real'] = array(1 => 10.63, 2 => 14.40);$arrayVariables[2595]['plan'] = array(1 => 10.66, 2 => 18.32, 3 => 25.82, 4 => 33.50);$arrayVariables[2595]['maxValue'] = 40;$arrayVariables[2595]['pYAxisName'] = '% Avance';
+            $arrayVariables[1354]['real'] = array(1 => 25.20, 2 => 25.88);$arrayVariables[1354]['plan'] = array(1 => 29.62, 2 => 34.88, 3 => 40.21, 4 => 46.67);$arrayVariables[1354]['maxValue'] = 50;$arrayVariables[1354]['pYAxisName'] = '% Avance';
             //  Avance Financiero
             $arrayVariables[2601]['real'] = array(1 => 8.30, 2 => 20.88);$arrayVariables[2601]['plan'] = array(1 => 70.14, 2 => 160.85, 3 => 130.05, 4 => 292.42);$arrayVariables[2601]['maxValue'] = 300;
             $arrayVariables[2608]['real'] = array(1 => 7.23, 2 => 8.18);$arrayVariables[2608]['plan'] = array(1 => 36.76, 2 => 59.72, 3 => 72.56, 4 => 87.51);$arrayVariables[2608]['maxValue'] = 90;
@@ -3081,6 +3087,8 @@ class IndicatorService implements ContainerAwareInterface {
             $arrayVariables[1861]['real'] = array(1 => 554.10, 2 => 560.21);$arrayVariables[1861]['plan'] = array(1 => 557.65, 2 => 565.04, 3 => 571.57, 4 => 575.17);$arrayVariables[1861]['maxValue'] = 580;
             $arrayVariables[2596]['real'] = array(1 => 0.0, 2 => 0.0);$arrayVariables[2596]['plan'] = array(1 => 0.0, 2 => 2.0, 3 => 29.13, 4 => 116.60);$arrayVariables[2596]['maxValue'] = 120;
             $arrayVariables[1355]['real'] = array(1 => 227.66, 2 => 497.39);$arrayVariables[1355]['plan'] = array(1 => 819.67, 2 => 1115.29, 3 => 1296.95, 4 => 1614.61);$arrayVariables[1355]['maxValue'] = 1700;
+            
+            $chart["pYAxisName"] = $arrayVariables[$indicator->getId()]['pYAxisName'];
             
             $numberResultsTotal = $indicator->getFrequencyNotificationIndicator()->getNumberResultsFrequency();
             $numberResultShowReal = 2;

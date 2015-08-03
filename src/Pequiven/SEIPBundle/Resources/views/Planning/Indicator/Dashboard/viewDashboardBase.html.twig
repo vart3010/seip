@@ -153,7 +153,7 @@
                 </div>
             {% endif %}
             {% if indicator.showTags %}
-                {% if indicator.tagsIndicator|length > 0 %}
+                {% if indicator.tagsIndicator|length > 0 and indicator.showTags == true%}
                     <fieldset class="fieldset">
                         <legend class="legend">{{ ('pequiven_indicator.tagIndicators'|trans({},'PequivenIndicatorBundle')) }}&nbsp;</legend>
                         {% include 'PequivenIndicatorBundle:Common:tagIndicators.html.twig' %}
