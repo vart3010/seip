@@ -333,3 +333,15 @@ getDataChartMultiSeriesColumnLineIndicatorLostDaysByFrequencyNotificationByPerio
     methods: [GET]
     options:
         expose: true
+        
+#27
+getDataChartChartProgressProjectsByFrequencyNotification:
+    path: /getDataChartChartProgressProjectsByFrequencyNotification/{id}
+    defaults:
+        _controller: pequiven.controller.seipchart:getDataChartChartProgressProjectsByFrequencyNotificationAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true

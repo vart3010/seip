@@ -96,7 +96,7 @@
             
             $( "#"+idDateFrom ).datepicker({
               defaultDate: date,
-              changeMonth: false,
+              changeMonth: true,
               numberOfMonths: 1,
               stepMonths: 0,
               onClose: function( selectedDate ) {
@@ -106,7 +106,7 @@
             });
             $( "#"+idDateEnd ).datepicker({
               defaultDate: date,
-              changeMonth: false,
+              changeMonth: true,
               numberOfMonths: 1,
               stepMonths: 0,
               onClose: function( selectedDate ) {
@@ -166,17 +166,17 @@
             addRangeForm($collectionHolderRange, $newLinkLiRange);
         });
         $( ".date-from").datepicker({
-          changeMonth: false,
+          changeMonth: true,
           numberOfMonths: 1,
           dateFormat: dateFormat
         });
         $( ".date-end").datepicker({
-          changeMonth: false,
+          changeMonth: true,
           numberOfMonths: 1,
           dateFormat: dateFormat
         });
         $( ".date-day").datepicker({
-          changeMonth: false,
+          changeMonth: true,
           numberOfMonths: 1,
           dateFormat: dateFormat
         });

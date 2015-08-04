@@ -232,6 +232,7 @@ pequiven_seip:
         includeGerenciaSecondSupport: Incluir Gerencias de Apoyo
         period: Periodo
         frequencyNotifications: Frecuencias de Notificación
+        user_selection: Selecione Usuario
     tooltips:
         click_to_show: Click para ver
     area:
@@ -580,6 +581,7 @@ chart:
         indicatorPersonalInjuryWithLostTimeByFrequencyNotificationByPeriodWithAccumulated: Lesionados personales con tiempo acumulado del indicador, con los valores del mes además del período actual y del período anterior (línea) y del acumulado por período (columna).
         indicatorPersonalInjuryWithoutLostTimeByFrequencyNotificationByPeriodWithAccumulated: Lesionados personales sin tiempo acumulado del indicador, con los valores del mes además del período actual y del período anterior (línea) y del acumulado por período (columna).
         indicatorLostDaysByFrequencyNotificationByPeriodWithAccumulated: Días perdidos del indicador, con los valores del mes además del período actual y del período anterior (línea) y del acumulado por período (columna).
+        typeChartProgressProjectsByFrequencyNotification: Avance de los proyectos por frecuencia de notificación
         example: Ejemplo
 
 Name: Nombre

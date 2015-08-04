@@ -2,7 +2,7 @@
 
 {% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
 
-{% trans_default_domain 'PequivenIndicatorBundle' %}
+{% trans_default_domain 'PequivenSIGBundle' %}
 
 {% set labelHeader = {
         (constant('Pequiven\\IndicatorBundle\\Model\\IndicatorLevel::LEVEL_ESTRATEGICO')):'pequiven_indicator.indicator_strategic',
@@ -21,16 +21,30 @@
     ) }}
 {% endblock %} 
 {% block body %}
-
-    
-        {# Cargando grafico informe de evolution #}
-            <div ng-controller="ChartsSigController" class="dashboard" ng-init="renderChartEvolutionSig('chartContainerResult')" style="height: 400px;">
-                <div class="nine-columns twelve-columns-mobile" id="chartContainerResult">
-                <!-- This div will hold the chart generated in the footer -->
-                </div>
+        {# Graficos #}
+        <div class="columns with-padding">
+            <div class="five-columns twelve-columns-mobile">
+                {# Cargando Grafico informe de evolution #}
+                    <div ng-controller="ChartsSigController" class="dashboard" ng-init="renderChartEvolutionSig('chartContainerResult')" style="height: 300px; width: 400px;">
+                        <div class="nine-columns twelve-columns-mobile" id="chartContainerResult">
+                        <!-- This div will hold the chart generated in the footer -->
+                        </div>
+                    </div>            
+                {# Fin Grafico#}
             </div>
-            <br> 
-        {# Fin Grafico#}
+            &nbsp;
+            <div class="five-columns twelve-columns-mobile">
+                {# Cargando Grafico Causas de Desviación #}
+                    <div ng-controller="ChartsSigController" class="dashboard" ng-init="renderChartSigCs('chartContainerResultCs')" style="height: 300px; width: 400px;">
+                        <div class="nine-columns twelve-columns-mobile" id="chartContainerResultCs">
+                        <!-- This div will hold the chart generated in the footer -->
+                        </div>
+                    </div>
+                    
+                {# Fin Grafico#}
+            </div>
+        </div>
+        {# Fin de Graficos #}
 
         <fieldset class="fieldset fields-list">
             <legend class="legend">{{ 'sig.chart_evolution'|trans ({}, 'messages') }}</legend>
@@ -51,7 +65,7 @@
     {# Analisis de Tendencia #}
     {% if indicator_sig.showFeatures %} 
             <br /><br />
-           {# {% include 'PequivenSEIPBundle:Planning:Indicator/show/analysis.html.twig' %} #}
+            {% include 'PequivenSIGBundle:Indicator:show/analysis.html.twig' %} 
             &nbsp;
     {% endif %} 
 

@@ -393,9 +393,14 @@ class IndicatorService implements ContainerAwareInterface {
 
         $formula = $indicator->getFormula();
 
-        $varRealName = $formula->getVariableToRealValue()->getName();
-        $varPlanName = $formula->getVariableToPlanValue()->getName();
-        $results[$varRealName] = $results[$varPlanName] = 0.0;
+        if($formula->getTypeOfCalculation() != \Pequiven\MasterBundle\Entity\Formula::TYPE_CALCULATION_SIMPLE_AVERAGE){
+            $varRealName = $formula->getVariableToRealValue()->getName();
+            $varPlanName = $formula->getVariableToPlanValue()->getName();
+            $results[$varRealName] = $results[$varPlanName] = 0.0;
+        } else{
+            $varRealName = 'real';
+            $results[$varRealName] = 0.0;
+        }        
 
         //Separamos el tipo de sección de resultado del indicador
         if ($options['typeOfResultSection'] == Indicator::TYPE_RESULT_SECTION_PRODUCTION_GROSS) {
@@ -444,6 +449,55 @@ class IndicatorService implements ContainerAwareInterface {
                 $results[$varRealName] = $results[$varRealName] + $valueReal;
                 $results[$varPlanName] = $results[$varPlanName] + $valuePlan;
             }
+        } elseif ($options['typeOfResultSection'] == Indicator::TYPE_RESULT_SECTION_RAW_MATERIAL){
+            if ($indicator->getFrequencyNotificationIndicator()->getNumberResultsFrequency() == 12) {
+                if (!$valueIndicator->getId()) {
+                    $month = count($indicator->getValuesIndicator()) + 1;
+                } else {
+                    $month = $this->getOrderOfValueIndicator($indicator, $valueIndicator);
+                }
+            }
+            $totalRawMaterials = 0;
+            $value = 0.0;
+            foreach ($productsReports as $productReport) {
+                $rawsMaterialsConsumptionPlanning = $productReport->getRawMaterialConsumptionPlannings();
+                foreach($rawsMaterialsConsumptionPlanning as $rawMaterialConsumptionPlanning){
+                    $detailRawMaterialConsumptionsByMonth = $rawMaterialConsumptionPlanning->getDetailByMonth();
+                    if($formula->getTypeOfCalculation() != \Pequiven\MasterBundle\Entity\Formula::TYPE_CALCULATION_SIMPLE_AVERAGE){
+                        $valueReal = array_key_exists($month, $detailRawMaterialConsumptionsByMonth) == true ? $detailRawMaterialConsumptionsByMonth[$month]->getTotalReal() : 0;
+                        $valuePlan = array_key_exists($month, $detailRawMaterialConsumptionsByMonth) == true ? $detailRawMaterialConsumptionsByMonth[$month]->getTotalPlan() : 0;
+                        $results[$varRealName] = $results[$varRealName] + $valueReal;
+                        $results[$varPlanName] = $results[$varPlanName] + $valuePlan;
+                    } else{
+                        $value = array_key_exists($month, $detailRawMaterialConsumptionsByMonth) == true ? $value + $detailRawMaterialConsumptionsByMonth[$month]->getPercentage() : $value;
+                        $totalRawMaterials++;
+                    }
+                }
+            }
+            if($formula->getTypeOfCalculation() == \Pequiven\MasterBundle\Entity\Formula::TYPE_CALCULATION_SIMPLE_AVERAGE){
+                $results[$varRealName] = $value/$totalRawMaterials;
+            }
+        } elseif ($options['typeOfResultSection'] == Indicator::TYPE_RESULT_SECTION_SERVICES){
+            if ($indicator->getFrequencyNotificationIndicator()->getNumberResultsFrequency() == 12) {
+                if (!$valueIndicator->getId()) {
+                    $month = count($indicator->getValuesIndicator()) + 1;
+                } else {
+                    $month = $this->getOrderOfValueIndicator($indicator, $valueIndicator);
+                }
+            }
+            $totalServices = 0;
+            $value = 0.0;
+            foreach ($productsReports as $productReport) {
+                $planReport = $productReport->getPlantReport();
+                $services = $planReport->getConsumerPlanningServices();
+
+                foreach($services as $service){
+                    $detailServiceByMonth = $service->getDetailsByMonth();
+                    $value = array_key_exists($month, $detailServiceByMonth) == true ? $value + $detailServiceByMonth[$month]->getPercentage() : $value;
+                    $totalServices++;
+                }
+            }
+            $results[$varRealName] = $value/$totalServices;
         }
 
         return $results;
@@ -521,7 +575,21 @@ class IndicatorService implements ContainerAwareInterface {
             $errorArrangementRange = $arrangementRangeService->validateArrangementRange($arrangementRange, $tendency);
             if ($errorArrangementRange == null) {
                 if ($indicator->getEvaluateInPeriod()) {//En caso de que sea medidio en el período actual
-                    $colorData["label"] = number_format($indicator->getResultReal(), 2, ',', '.') . '%';
+                    $value = number_format($indicator->getResultReal(), 2, ',', '.') . '%';
+                    if($indicator->getShowTagInDashboardResult()){
+                        foreach ($indicator->getTagsIndicator() as $tagIndicator) {
+                            if ($tagIndicator->getShowInIndicatorDashboardResult()) {
+                                if ($tagIndicator->getTypeTag() == Indicator\TagIndicator::TAG_TYPE_NUMERIC) {
+                                    $value = $tagIndicator->getValueOfTag();
+                                } else {
+                                    $value = $tagIndicator->getTextOfTag();
+                                }
+                                $value = $tagIndicator->getUnitResult() != "" ? number_format($value, 2, ',', '.') . ' ' . strtoupper($tagIndicator->getUnitResultValue()) : number_format($value, 2, ',', '.') . '%';
+                            }
+                        }
+                    }
+                    $colorData["label"] = $value;
+//                    $colorData["label"] = number_format($indicator->getResultReal(), 2, ',', '.') . '%';
                     if ($resultService->calculateRangeGood($indicator, $tendency, CommonObject::TYPE_RESULT_ARRANGEMENT)) {
                         $colorData["code"] = "#1aaf5d";
                     } elseif ($resultService->calculateRangeMiddle($indicator, $tendency, CommonObject::TYPE_RESULT_ARRANGEMENT)) {
@@ -580,7 +648,20 @@ class IndicatorService implements ContainerAwareInterface {
 
         $chart["lowerlimit"] = $colorData['lowerLimit'];
         $chart["upperlimit"] = $colorData['upperLimit'];
-        $chart["caption"] = number_format($indicator->getResultReal(), 2, ',', '.');
+        $value = number_format($indicator->getResultReal(), 2, ',', '.');
+        if($indicator->getShowTagInDashboardResult()){
+            foreach ($indicator->getTagsIndicator() as $tagIndicator) {
+                if ($tagIndicator->getShowInIndicatorDashboardResult()) {
+                    if ($tagIndicator->getTypeTag() == Indicator\TagIndicator::TAG_TYPE_NUMERIC) {
+                        $value = $tagIndicator->getValueOfTag();
+                    } else {
+                        $value = $tagIndicator->getTextOfTag();
+                    }
+                    $value = $tagIndicator->getUnitResult() != "" ? number_format($value, 2, ',', '.') . ' ' . strtoupper($tagIndicator->getUnitResultValue()) : number_format($value, 2, ',', '.') . '%';
+                }
+            }
+        }
+        $chart["caption"] = $value;
         $chart["captionFontColor"] = $this->getColorOfResult($indicator);
         $chart["captionOnTop"] = "0";
         $chart["autoScale"] = "1";
@@ -823,8 +904,10 @@ class IndicatorService implements ContainerAwareInterface {
                     $set["displayValue"] = $indicatorChildren->getRef() . ' - ' . number_format($indicatorChildren->getResultReal(), 2, ',', '.') . '%';
                     $set["toolText"] = $indicatorChildren->getSummary() . ':{br}' . number_format($indicatorChildren->getResultReal(), 2, ',', '.') . '%';
                     $set["color"] = $this->getColorOfResult($indicatorChildren);
+                    if(count($indicatorChildren->getCharts()) > 0){
+                        $set["link"] = $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicatorChildren->getId()));
+                    }
                     $set["labelLink"] = $this->generateUrl('pequiven_indicator_show', array('id' => $indicatorChildren->getId()));
-                    $set["link"] = $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicatorChildren->getId()));
                     $dataSet[] = $set;
                 }
             }
@@ -1061,7 +1144,14 @@ class IndicatorService implements ContainerAwareInterface {
             $dataSetReal["renderas"] = "area";
 
             $totalValueIndicators = count($indicator->getValuesIndicator());
+            $resultNumbers = 1;
             for ($i = 0; $i < $totalValueIndicators; $i++) {
+                if($arrayVariables['valueReal'][$i] || 0 && $arrayVariables['valuePlan'][$i] != 0){
+                    $resultNumbers = $i + 1;
+                }
+            }
+            
+            for ($i = 0; $i < $resultNumbers; $i++) {
                 $label = $dataReal = $dataPlan = $dataMedition = array();
                 $label["label"] = $i;
                 $dataReal["value"] = number_format($arrayVariables['valueReal'][$i], 2, ',', '.');
@@ -1087,7 +1177,15 @@ class IndicatorService implements ContainerAwareInterface {
             $dataSetReal["renderas"] = "area";
 
             $totalValueIndicators = count($indicator->getValuesIndicator());
+            
+            $resultNumbers = 1;
             for ($i = 0; $i < $totalValueIndicators; $i++) {
+                if($arrayVariables['valueReal'][$i] != 0 || $arrayVariables['valuePlan'][$i] != 0){
+                    $resultNumbers = $i +1;
+                }
+            }
+            
+            for ($i = 0; $i < $resultNumbers; $i++) {
                 $label = $dataReal = $dataPlan = $dataMedition = array();
                 $label["label"] = $i;
                 $dataReal["value"] = number_format($arrayVariables['valueReal'][$i], 2, ',', '.');
@@ -1169,24 +1267,71 @@ class IndicatorService implements ContainerAwareInterface {
 
             $arrayVariables = array();
             $arrayVariables = $this->getArrayVariablesFormulaWithData($indicator, array('withVariablesMarkedRealPlanByFrequencyNotificationColumnMultiSeries' => true));
+            
+            //$result[indicator.id][real][numero_resultado] = valor
+            $result = array();
+            //CPHC
+            $result[1489]['real'] = array(1 => 0.0, 2 => 11789.0);
+            $result[1490]['real'] = array(1 => 0.0, 2 => 65389.0);
+            $result[1491]['real'] = array(1 => 0.0, 2 => 6957.0);
+            $result[1492]['real'] = array(1 => 0.0, 2 => 9975.0);
+            $result[1493]['real'] = array(1 => 0.0, 2 => 2340.0);
+            $result[1494]['real'] = array(1 => 0.0, 2 => 2866.0);
+            $result[1495]['real'] = array(1 => 0.0, 2 => 11461.0);
+            $result[1496]['real'] = array(1 => 0.0, 2 => 0.0);
+            $result[1497]['real'] = array(1 => 0.0, 2 => 2629.0);
+            $result[1498]['real'] = array(1 => 0.0, 2 => 1397.0);
+            //CPAMC
+            $result[1503]['real'] = array(1 => 0.0, 2 => 14749.0);
+            $result[1504]['real'] = array(1 => 0.0, 2 => 15973.0);
+            $result[1505]['real'] = array(1 => 0.0, 2 => 27139.0);
+            $result[1506]['real'] = array(1 => 0.0, 2 => 0.0);
+            $result[1507]['real'] = array(1 => 0.0, 2 => 0.0);
+            $result[1508]['real'] = array(1 => 0.0, 2 => 0.0);
+            $result[1509]['real'] = array(1 => 0.0, 2 => 6789.0);
+            $result[1510]['real'] = array(1 => 0.0, 2 => 11697);
 
             $dataSetPlan["seriesname"] = $arrayVariables['descriptionPlan'];
             $dataSetPlan["showValues"] = "1";
             $dataSetReal["seriesname"] = $arrayVariables['descriptionReal'];
             $dataSetReal["showValues"] = "1";
+            $dataSetExtra = array();
+            if($indicator->getResultsAdditionalInDashboardColumn()){
+                $dataSetExtra["seriesname"] = 'Costo Unitario + Otros Ingresos/Gastos';
+                $dataSetExtra["showValues"] = '1';
+                $dataSetExtra["color"] = '#DF1D3A';
+            }
 
             $totalValueIndicators = count($indicator->getValuesIndicator());
+            
+            $resultNumbers = 1;
             for ($i = 0; $i < $totalValueIndicators; $i++) {
-                $label = $dataReal = $dataPlan = $dataMedition = array();
+                if($arrayVariables['valueReal'][$i] != 0 || $arrayVariables['valuePlan'][$i] != 0){
+                    $resultNumbers = $i +1;
+                }
+            }
+            
+            for ($i = 0; $i < $resultNumbers; $i++) {
+                $label = $dataReal = $dataPlan = $dataMedition = $dataExtra = array();
                 $label["label"] = $i;
+                if($indicator->getResultsAdditionalInDashboardColumn()){
+                    if($i == 0){
+                        $dataExtra['showValue'] = '1';
+                        $dataExtra['displayValue'] = '*';
+                        $dataExtra['toolText'] = 'En espera de Información';
+                    }
+                    $dataExtra["value"] = number_format($result[$indicator->getId()]['real'][$i+1], 2, ',', '.');
+                }
                 $dataReal["value"] = number_format($arrayVariables['valueReal'][$i], 2, ',', '.');
                 $dataPlan["value"] = number_format($arrayVariables['valuePlan'][$i], 2, ',', '.');
 
                 $category[] = $label;
+                $dataSetExtra["data"][] = $dataExtra;
                 $dataSetReal["data"][] = $dataReal;
                 $dataSetPlan["data"][] = $dataPlan;
             }
             
+            $data['dataSource']['dataset'][] = $dataSetExtra;
             $data['dataSource']['dataset'][] = $dataSetReal;
             $data['dataSource']['dataset'][] = $dataSetPlan;
             
@@ -1211,9 +1356,11 @@ class IndicatorService implements ContainerAwareInterface {
                 $label = $dataReal = $dataPlan = array();
                 $label["label"] = $children->getSummary();
                 $dataReal["value"] = number_format($arrayVariables[$children->getRef()]['dashboardEquationReal']['value'], 2, ',', '.');
-                $dataReal["link"] = $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $children->getId()));
                 $dataPlan["value"] = number_format($arrayVariables[$children->getRef()]['dashboardEquationPlan']['value'], 2, ',', '.');
-                $dataPlan["link"] = $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $children->getId()));
+                if(count($children->getCharts()) > 0){
+                    $dataReal["link"] = $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $children->getId()));
+                    $dataPlan["link"] = $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $children->getId()));
+                }
 
                 $category[] = $label;
                 $dataSetReal["data"][] = $dataReal;
@@ -1240,7 +1387,15 @@ class IndicatorService implements ContainerAwareInterface {
 
             $labelsFrequencyNotificationArray = $this->getLabelsByIndicatorFrequencyNotification($indicator);
             $totalValueIndicators = count($indicator->getValuesIndicator());
+            
+            $resultNumbers = 1;
             for ($i = 0; $i < $totalValueIndicators; $i++) {
+                if($arrayVariables['dashboardEquationReal']['value'][$i] != 0 || $arrayVariables['dashboardEquationPlan']['value'][$i] != 0){
+                    $resultNumbers = $i +1;
+                }
+            }
+            
+            for ($i = 0; $i < $resultNumbers; $i++) {
                 $label = $dataReal = $dataPlan = array();
                 $label["label"] = $labelsFrequencyNotificationArray[($i + 1)];
                 $dataReal["value"] = number_format($arrayVariables['dashboardEquationReal']['value'][$i], 2, ',', '.');
@@ -1275,9 +1430,11 @@ class IndicatorService implements ContainerAwareInterface {
                     $label = $dataActualPeriod = $dataLastPeriod = array();
                     $label["label"] = $children->getSummary();
                     $dataActualPeriod["value"] = number_format($arrayVariables[$children->getRef()][$children->getPeriod()->getName()]['value'], 2, ',', '.');
-                    $dataActualPeriod["link"] = $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $children->getId()));
                     $dataLastPeriod["value"] = number_format($arrayVariables[$children->getRef()][$children->getPeriod()->getParent()->getName()]['value'], 2, ',', '.');
-                    $dataLastPeriod["link"] = $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $children->getId()));
+                    if(count($children->getCharts()) > 0){
+                        $dataActualPeriod["link"] = $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $children->getId()));
+                        $dataLastPeriod["link"] = $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $children->getId()));
+                    }
 
                     $category[] = $label;
                     $dataSetActualPeriod["data"][] = $dataActualPeriod;
@@ -1879,6 +2036,7 @@ class IndicatorService implements ContainerAwareInterface {
             unset($options['withVariablesMarkedRealPlanByFrequencyNotificationColumnMultiSeries']);
             $variables = $formula->getVariables();
             $varReal = $varPlan = '';
+            $arrayVariables['descriptionReal'] = $arrayVariables['descriptionPlan'] = '';
             foreach ($variables as $variable) {
                 if ($variable->getShowRealInDashboardColumn()) {
                     $varReal = $variable->getName();
@@ -1987,7 +2145,7 @@ class IndicatorService implements ContainerAwareInterface {
             unset($options['withVariablesRealPlanByFrequencyNotificationFromDashboardEquationMultiSeries']);
 
 //            $arrayVariables['dashboardEquationReal']['value'] = $arrayVariables['dashboardEquationPlan']['value'] = 0.0;
-            $arrayVariables['dashboardEquationReal']['unit'] = $arrayVariables['dashboardEquationPlan']['unti'] = '';
+            $arrayVariables['dashboardEquationReal']['unit'] = $arrayVariables['dashboardEquationPlan']['unit'] = '';
             $arrayVariables['dashboardEquationReal']['description'] = $arrayVariables['dashboardEquationPlan']['description'] = '';
 
             $arrayVariables['dashboardEquationReal']['description'] = $indicator->getShowByRealValue();
@@ -2684,12 +2842,14 @@ class IndicatorService implements ContainerAwareInterface {
                 foreach ($indicatorsChildrens as $indicatorChildren) {
                     $label = $dataReal = $dataPlan = $dataMedition = array();
                     $label["label"] = $indicatorChildren->getSummary();
-                    $label["link"] = $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicatorChildren->getId()));
                     $dataReal["value"] = number_format($indicatorChildren->getValueFinal(), 2, ',', '.');
-                    $dataReal["link"] = $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicatorChildren->getId()));
                     $dataPlan["value"] = number_format($indicatorChildren->getTotalPlan(), 2, ',', '.');
-                    $dataPlan["link"] = $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicatorChildren->getId()));
                     $dataMedition["value"] = number_format($indicatorChildren->getResultReal(), 2, ',', '.');
+                    if(count($indicatorChildren->getCharts()) > 0){
+                        $label["link"] = $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicatorChildren->getId()));
+                        $dataReal["link"] = $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicatorChildren->getId()));
+                        $dataPlan["link"] = $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicatorChildren->getId()));
+                    }
 
                     $category[] = $label;
                     $dataSetReal["data"][] = $dataReal;
@@ -2709,12 +2869,14 @@ class IndicatorService implements ContainerAwareInterface {
             }
             $label = $dataReal = $dataPlan = $dataMedition = array();
             $label["label"] = $indicator->getSummary();
-            $label["link"] = $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicator->getId()));
             $dataReal["value"] = number_format($indicator->getValueFinal(), 2, ',', '.');
-            $dataReal["link"] = $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicator->getId()));
             $dataPlan["value"] = number_format($indicator->getTotalPlan(), 2, ',', '.');
-            $dataPlan["link"] = $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicator->getId()));
             $dataMedition["value"] = number_format($indicator->getResultReal(), 2, ',', '.');
+            if(count($indicator->getCharts()) > 0){
+                $label["link"] = $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicator->getId()));
+                $dataReal["link"] = $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicator->getId()));
+                $dataPlan["link"] = $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicator->getId()));
+            }
 
             $category[] = $label;
             $dataSetReal["data"][] = $dataReal;
@@ -2746,25 +2908,53 @@ class IndicatorService implements ContainerAwareInterface {
 
             $totalValueIndicators = count($indicator->getValuesIndicator());
             $labelsFrequencyNotificationArray = $this->getLabelsByIndicatorFrequencyNotification($indicator);
+            $realAccumulated = $planAccumulated = 0.0;
+            
+            $resultNumbers = 1;
             for ($i = 0; $i < $totalValueIndicators; $i++) {
+                if($arrayVariables['valueReal'][$i] != 0 || $arrayVariables['valuePlan'][$i] != 0){
+                    $resultNumbers = $i +1;
+                }
+            }
+            
+            for ($i = 0; $i < $resultNumbers; $i++) {
                 $label = $dataReal = $dataPlan = $dataMedition = array();
-//                $label["label"] = $i;
                 $label["label"] = $labelsFrequencyNotificationArray[($i + 1)];
-//                $label["link"] = $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicatorChildren->getId()));
                 $dataReal["value"] = number_format($arrayVariables['valueReal'][$i], 2, ',', '.');
-//                $dataReal["link"] = $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicatorChildren->getId()));
                 $dataPlan["value"] = number_format($arrayVariables['valuePlan'][$i], 2, ',', '.');
-//                $dataPlan["link"] = $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicatorChildren->getId()));
                 $dataMedition["value"] = number_format($arrayVariables['medition'][$i], 2, ',', '.');
+//                $label["label"] = $i;
+//                $label["link"] = $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicatorChildren->getId()));
+//                $dataReal["link"] = $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicatorChildren->getId()));
+//                $dataPlan["link"] = $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicatorChildren->getId()));
+                
+                $realAccumulated = $realAccumulated + $arrayVariables['valueReal'][$i];
+                $planAccumulated = $planAccumulated + $arrayVariables['valuePlan'][$i];
 
                 $category[] = $label;
                 $dataSetReal["data"][] = $dataReal;
-                $dataSetPlan["data"][] = $dataPlan;
+                if(!$indicator->getShowColumnPlanOneTimeInDashboard()){
+                    $dataSetPlan["data"][] = $dataPlan;
+                }
                 $medition["data"][] = $dataMedition;
             }
             
+            if($indicator->getShowColumnAccumulativeInDashboard()){
+                $category[] = array('label' => 'Acumulado');
+                $dataSetReal["data"][] = array('value' => number_format($realAccumulated, 2, ',', '.'));
+                $dataSetPlan["data"][] = array('value' => number_format($planAccumulated, 2, ',', '.'));
+            }
+            
+            if($indicator->getShowColumnPlanOneTimeInDashboard()){
+                $category[] = array('label' => 'Plan Anual');
+                $dataSetReal["data"][] = array('value' => number_format($arrayVariables['valuePlan'][0], 2, ',', '.'), 'color' => '#E91212');
+            }
+            
+            
             $data['dataSource']['dataset'][] = $dataSetReal;
-            $data['dataSource']['dataset'][] = $dataSetPlan;
+            if(!$indicator->getShowColumnPlanOneTimeInDashboard()){
+                $data['dataSource']['dataset'][] = $dataSetPlan;
+            }
             $data['dataSource']['dataset'][] = $medition;
             
         } elseif(isset($options['resultIndicatorPersonalInjuryWithAndWithoutAndLostDaysByFrequencyNotificationByPeriodGroupByCompanyAccumulated']) && array_key_exists('resultIndicatorPersonalInjuryWithAndWithoutAndLostDaysByFrequencyNotificationByPeriodGroupByCompanyAccumulated', $options)){
@@ -2847,6 +3037,88 @@ class IndicatorService implements ContainerAwareInterface {
             $data['dataSource']['dataset'][] = $dataSetValues['PERIODO_ANTERIOR'];
             $data['dataSource']['dataset'][] = $dataSetValues['ACUMULADO_PERIODO_ACTUAL'];
             $data['dataSource']['dataset'][] = $dataSetValues['ACUMULADO_PERIODO_ANTERIOR'];
+        } elseif(isset($options['progressProjectsByFrequencyNotification']) && array_key_exists('progressProjectsByFrequencyNotification', $options)){
+            unset($options[$options['path_array']]);
+            
+            unset($chart["sYAxisName"]);
+            unset($chart["sNumberSuffix"]);
+            unset($chart["sYAxisMaxValue"]);
+            unset($chart["pYAxisName"]);
+            
+            $arrayVariables = array();
+            //$arrayVariables[idIndicador][tipo_valor][numero_resultado][valor] = '';
+            //Avance Físico
+            $arrayVariables[2600]['real'] = array(1 => 63.69, 2 => 64.47);$arrayVariables[2600]['plan'] = array(1 => 66.35, 2 => 72.98, 3 => 77.36, 4 => 88.45);$arrayVariables[2600]['maxValue'] = 90;$arrayVariables[2600]['pYAxisName'] = '% Avance';
+            $arrayVariables[2609]['real'] = array(1 => 58.83, 2 => 58.95);$arrayVariables[2609]['plan'] = array(1 => 60.69, 2 => 68.31, 3 => 73.19, 4 => 74.97);$arrayVariables[2609]['maxValue'] = 80;$arrayVariables[2609]['pYAxisName'] = '% Avance';
+            $arrayVariables[2611]['real'] = array(1 => 70.75, 2 => 71.06);$arrayVariables[2611]['plan'] = array(1 => 71.75, 2 => 74.02, 3 => 75.48, 4 => 100.0);$arrayVariables[2611]['maxValue'] = 100;$arrayVariables[2611]['pYAxisName'] = '% Avance';
+            $arrayVariables[2607]['real'] = array(1 => 61.50, 2 => 63.40);$arrayVariables[2607]['plan'] = array(1 => 66.60, 2 => 76.62, 3 => 83.42, 4 => 90.39);$arrayVariables[2607]['maxValue'] = 100;$arrayVariables[2607]['pYAxisName'] = '% Avance';
+            $arrayVariables[2602]['real'] = array(1 => 34.73, 2 => 35.03);$arrayVariables[2602]['plan'] = array(1 => 35.34, 2 => 52.72, 3 => 70.18, 4 => 81.73);$arrayVariables[2602]['maxValue'] = 90;$arrayVariables[2602]['pYAxisName'] = '% Avance';
+            $arrayVariables[2605]['real'] = array(1 => 34.73, 2 => 35.03);$arrayVariables[2605]['plan'] = array(1 => 35.34, 2 => 52.72, 3 => 70.18, 4 => 81.73);$arrayVariables[2605]['maxValue'] = 90;$arrayVariables[2605]['pYAxisName'] = '% Avance';
+            $arrayVariables[1870]['real'] = array(1 => 61.14, 2 => 61.56);$arrayVariables[1870]['plan'] = array(1 => 68.12, 2 => 72.51, 3 => 77.52, 4 => 83.15);$arrayVariables[1870]['maxValue'] = 90;$arrayVariables[1870]['pYAxisName'] = '% Avance';
+            $arrayVariables[1910]['real'] = array(1 => 87.79, 2 => 87.82);$arrayVariables[1910]['plan'] = array(1 => 89.0, 2 => 91.0, 3 => 92.0, 4 => 93.0);$arrayVariables[1910]['maxValue'] = 100;$arrayVariables[1910]['pYAxisName'] = '% Avance';
+            $arrayVariables[1912]['real'] = array(1 => 50.50, 2 => 50.50);$arrayVariables[1912]['plan'] = array(1 => 50.65, 2 => 68.65, 3 => 86.65, 4 => 100.0);$arrayVariables[1912]['maxValue'] = 100;$arrayVariables[1912]['pYAxisName'] = '% Avance';
+            $arrayVariables[1906]['real'] = array(1 => 74.80, 2 => 74.80);$arrayVariables[1906]['plan'] = array(1 => 78.94, 2 => 79.54, 3 => 82.08, 4 => 86.91);$arrayVariables[1906]['maxValue'] = 90;$arrayVariables[1906]['pYAxisName'] = '% Avance';
+            $arrayVariables[1914]['real'] = array(1 => 54.06, 2 => 55.60);$arrayVariables[1914]['plan'] = array(1 => 89.06, 2 => 91.99, 3 => 94.51, 4 => 96.58);$arrayVariables[1914]['maxValue'] = 100;$arrayVariables[1914]['pYAxisName'] = '% Avance';
+            $arrayVariables[1904]['real'] = array(1 => 27.72, 2 => 28.0);$arrayVariables[1904]['plan'] = array(1 => 28.87, 2 => 28.87, 3 => 32.10, 4 => 41.79);$arrayVariables[1904]['maxValue'] = 50;$arrayVariables[1904]['pYAxisName'] = '% Avance';
+            $arrayVariables[1908]['real'] = array(1 => 71.96, 2 => 72.66);$arrayVariables[1908]['plan'] = array(1 => 72.18, 2 => 74.99, 3 => 77.79, 4 => 80.60);$arrayVariables[1908]['maxValue'] = 90;$arrayVariables[1908]['pYAxisName'] = '% Avance';
+            $arrayVariables[1862]['real'] = array(1 => 7.76, 2 => 7.76);$arrayVariables[1862]['plan'] = array(1 => 30.26, 2 => 34.13, 3 => 37.95, 4 => 44.65);$arrayVariables[1862]['maxValue'] = 50;$arrayVariables[1862]['pYAxisName'] = '% Avance';
+            $arrayVariables[1858]['real'] = array(1 => 0.0, 2 => 0.0);$arrayVariables[1858]['plan'] = array(1 => 0.01, 2 => 0.90, 3 => 1.44, 4 => 1.8);$arrayVariables[1858]['maxValue'] = 10;$arrayVariables[1858]['pYAxisName'] = '% Avance';
+            $arrayVariables[1854]['real'] = array(1 => 4.45, 2 => 4.60);$arrayVariables[1854]['plan'] = array(1 => 4.48, 2 => 4.53, 3 => 5.82, 4 => 7.82);$arrayVariables[1854]['maxValue'] = 10;$arrayVariables[1854]['pYAxisName'] = '% Avance';
+            $arrayVariables[1860]['real'] = array(1 => 19.20, 2 => 19.25);$arrayVariables[1860]['plan'] = array(1 => 21.76, 2 => 22.96, 3 => 25.61, 4 => 32.25);$arrayVariables[1860]['maxValue'] = 40;$arrayVariables[1860]['pYAxisName'] = '% Avance';
+            $arrayVariables[2595]['real'] = array(1 => 10.63, 2 => 14.40);$arrayVariables[2595]['plan'] = array(1 => 10.66, 2 => 18.32, 3 => 25.82, 4 => 33.50);$arrayVariables[2595]['maxValue'] = 40;$arrayVariables[2595]['pYAxisName'] = '% Avance';
+            $arrayVariables[1354]['real'] = array(1 => 25.20, 2 => 25.88);$arrayVariables[1354]['plan'] = array(1 => 29.62, 2 => 34.88, 3 => 40.21, 4 => 46.67);$arrayVariables[1354]['maxValue'] = 50;$arrayVariables[1354]['pYAxisName'] = '% Avance';
+            //  Avance Financiero
+            $arrayVariables[2601]['real'] = array(1 => 8.30, 2 => 20.88);$arrayVariables[2601]['plan'] = array(1 => 70.14, 2 => 160.85, 3 => 130.05, 4 => 292.42);$arrayVariables[2601]['maxValue'] = 300;
+            $arrayVariables[2608]['real'] = array(1 => 7.23, 2 => 8.18);$arrayVariables[2608]['plan'] = array(1 => 36.76, 2 => 59.72, 3 => 72.56, 4 => 87.51);$arrayVariables[2608]['maxValue'] = 90;
+            $arrayVariables[2610]['real'] = array(1 => 0.49, 2 => 1.04);$arrayVariables[2610]['plan'] = array(1 => 9.78, 2 => 17.13, 3 => 22.89, 4 => 166.41);$arrayVariables[2610]['maxValue'] = 170;
+            $arrayVariables[2606]['real'] = array(1 => 0.31, 2 => 11.66);$arrayVariables[2606]['plan'] = array(1 => 23.60, 2 => 30.0, 3 => 34.60, 4 => 38.50);$arrayVariables[2606]['maxValue'] = 40;
+            $arrayVariables[2603]['real'] = array(1 => 4.47, 2 => 4.53);$arrayVariables[2603]['plan'] = array(1 => 54.60, 2 => 107.60, 3 => 126.0, 4 => 128.20);$arrayVariables[2603]['maxValue'] = 130;
+            $arrayVariables[2604]['real'] = array(1 => 4.47, 2 => 4.53);$arrayVariables[2604]['plan'] = array(1 => 54.60, 2 => 107.60, 3 => 126.0, 4 => 128.20);$arrayVariables[2604]['maxValue'] = 130;
+            $arrayVariables[1871]['real'] = array(1 => 22.41, 2 => 29.16);$arrayVariables[1871]['plan'] = array(1 => 96.45, 2 => 220.50, 3 => 316.76, 4 => 363.69);$arrayVariables[1871]['maxValue'] = 370;
+            $arrayVariables[1911]['real'] = array(1 => 2.92, 2 => 2.92);$arrayVariables[1911]['plan'] = array(1 => 0.0, 2 => 31.48, 3 => 64.25, 4 => 64.25);$arrayVariables[1911]['maxValue'] = 70;
+            $arrayVariables[1913]['real'] = array(1 => 0.66, 2 => 1.15);$arrayVariables[1913]['plan'] = array(1 => 35.50, 2 => 35.50, 3 => 35.50, 4 => 35.50);$arrayVariables[1913]['maxValue'] = 40;
+            $arrayVariables[1907]['real'] = array(1 => 0.0, 2 => 3.93);$arrayVariables[1907]['plan'] = array(1 => 0.24, 2 => 12.89, 3 => 39.93, 4 => 56.86);$arrayVariables[1907]['maxValue'] = 60;
+            $arrayVariables[1915]['real'] = array(1 => 5.42, 2 => 5.42);$arrayVariables[1915]['plan'] = array(1 => 3.71, 2 => 17.23, 3 => 28.61, 4 => 44.07);$arrayVariables[1915]['maxValue'] = 50;
+            $arrayVariables[1905]['real'] = array(1 => 3.85, 2 => 5.23);$arrayVariables[1905]['plan'] = array(1 => 37.34, 2 => 55.49, 3 => 76.73, 4 => 88.01);$arrayVariables[1905]['maxValue'] = 90;
+            $arrayVariables[1909]['real'] = array(1 => 9.56, 2 => 10.51);$arrayVariables[1909]['plan'] = array(1 => 19.66, 2 => 67.91, 3 => 71.74, 4 => 75.0);$arrayVariables[1909]['maxValue'] = 80;
+            $arrayVariables[1863]['real'] = array(1 => 0.0, 2 => 0.13);$arrayVariables[1863]['plan'] = array(1 => 5.38, 2 => 11.50, 3 => 11.99, 4 => 13.44);$arrayVariables[1863]['maxValue'] = 20;
+            $arrayVariables[1859]['real'] = array(1 => 0.0, 2 => 0.0);$arrayVariables[1859]['plan'] = array(1 => 29.18, 2 => 37.14, 3 => 44.22, 4 => 55.28);$arrayVariables[1859]['maxValue'] = 60;
+            $arrayVariables[1855]['real'] = array(1 => 3.0, 2 => 3.0);$arrayVariables[1855]['plan'] = array(1 => 6.27, 2 => 64.66, 3 => 67.23, 4 => 69.81);$arrayVariables[1855]['maxValue'] = 10;
+            $arrayVariables[1861]['real'] = array(1 => 554.10, 2 => 560.21);$arrayVariables[1861]['plan'] = array(1 => 557.65, 2 => 565.04, 3 => 571.57, 4 => 575.17);$arrayVariables[1861]['maxValue'] = 580;
+            $arrayVariables[2596]['real'] = array(1 => 0.0, 2 => 0.0);$arrayVariables[2596]['plan'] = array(1 => 0.0, 2 => 2.0, 3 => 29.13, 4 => 116.60);$arrayVariables[2596]['maxValue'] = 120;
+            $arrayVariables[1355]['real'] = array(1 => 227.66, 2 => 497.39);$arrayVariables[1355]['plan'] = array(1 => 819.67, 2 => 1115.29, 3 => 1296.95, 4 => 1614.61);$arrayVariables[1355]['maxValue'] = 1700;
+            
+            $chart["pYAxisName"] = $arrayVariables[$indicator->getId()]['pYAxisName'];
+            
+            $numberResultsTotal = $indicator->getFrequencyNotificationIndicator()->getNumberResultsFrequency();
+            $numberResultShowReal = 2;
+            $labelsFrequencyNotificationArray = $this->getLabelsByIndicatorFrequencyNotificationWithoutValidation($indicator);
+            
+            $result['real']['data'] = array();
+            $result['plan']['data'] = array();
+            $result['desviacion']['data'] = array();
+            $chart["sYAxisMaxValue"] =  $arrayVariables[$indicator->getId()]['maxValue'];
+
+            //Añadimos los valores, por frecuencia de notificación
+            for ($i = 1; $i <= $numberResultsTotal; $i++) {
+                $label = array();
+                $label["label"] = $labelsFrequencyNotificationArray[$i];
+                if($i <= $numberResultShowReal){
+                    $result['real']['data'][] = array('value' => number_format($arrayVariables[$indicator->getId()]['real'][$i], 2, ',', '.'));
+                    $result['desviacion']['data'][] = array('value' => number_format($arrayVariables[$indicator->getId()]['plan'][$i] - $arrayVariables[$indicator->getId()]['real'][$i], 2, ',', '.'));
+                }
+                $result['plan']['data'][] = array('value' => number_format($arrayVariables[$indicator->getId()]['plan'][$i], 2, ',', '.'));
+
+                $category[] = $label;
+            }
+
+            $dataSetValues['real'] = array('seriesname' => 'Avance', 'renderAs' => 'line', 'data' => $result['real']['data']);
+            $dataSetValues['plan'] = array('seriesname' => 'Plan', 'renderAs' => 'line', 'data' => $result['plan']['data']);
+            $dataSetValues['desviacion'] = array('seriesname' => 'Desviación', 'data' => $result['desviacion']['data'], 'parentYAxis' => 'P', 'renderAs' => 'column', 'color' => '#E50A0A');
+
+            $data['dataSource']['dataset'][] = $dataSetValues['real'];
+            $data['dataSource']['dataset'][] = $dataSetValues['plan'];
+            $data['dataSource']['dataset'][] = $dataSetValues['desviacion'];
         }
 
         $data['dataSource']['chart'] = $chart;
@@ -2875,8 +3147,60 @@ class IndicatorService implements ContainerAwareInterface {
         } elseif ($frequency->getDays() == 180) {
             $labelsFrequencyArray = CommonObject::getLabelsSixmonthly();
         }
+        
+        if($indicator->getResultIsAccumulative()){
+            $labelsFrequencyArray = $this->setLabelsByIndicatorFrequencyNotificationByTypeResultIndicator($indicator, $labelsFrequencyArray);
+        }
 
         return $labelsFrequencyArray;
+    }
+    
+    /**
+     * Función que retorna las etiquetas de los rangos de la frecuencia de notificación del indicador
+     * @param Indicator $indicator
+     * @return array
+     */
+    public function getLabelsByIndicatorFrequencyNotificationWithoutValidation(Indicator $indicator) {
+        $frequency = $indicator->getFrequencyNotificationIndicator();
+        $labelsFrequencyArray = array();
+
+        if ($frequency->getDays() == 30) {
+            $labelsFrequencyArray = CommonObject::getLabelsMonths();
+        } elseif ($frequency->getDays() == 60) {
+            $labelsFrequencyArray = CommonObject::getLabelsBimonthly();
+        } elseif ($frequency->getDays() == 90) {
+            $labelsFrequencyArray = CommonObject::getLabelsTrimonthly();
+        } elseif ($frequency->getDays() == 120) {
+            $labelsFrequencyArray = CommonObject::getLabelsFourmonthly();
+        } elseif ($frequency->getDays() == 180) {
+            $labelsFrequencyArray = CommonObject::getLabelsSixmonthly();
+        }
+
+        return $labelsFrequencyArray;
+    }
+    
+    /**
+     * Función que redefine las etiquetas por frecuencia de notificación de acuerdo al tipo de resultado del indicador
+     * @param Indicator $indicator
+     */
+    public function setLabelsByIndicatorFrequencyNotificationByTypeResultIndicator(Indicator $indicator, $labelsFrequencyArray = array()){
+        $frequency = $indicator->getFrequencyNotificationIndicator();
+        $labelIni = explode('-',$labelsFrequencyArray[1])[0];
+        $labelsArray = array();
+        $numberResults = $frequency->getNumberResultsFrequency();
+        
+        //Recorremos de acuerdo al número de resultados por frecuencia
+        for($i = 1; $i <= $numberResults; $i++){
+            if($i > 1){
+                $labelActually = explode('-',$labelsFrequencyArray[$i])[1];
+                $labelsArray[$i] = $labelIni.'-'.$labelActually;
+            } else{
+                $labelsArray[$i] = $labelsFrequencyArray[$i];
+            }
+        }
+        
+        return $labelsArray;
+        
     }
 
     /**
@@ -3118,7 +3442,7 @@ class IndicatorService implements ContainerAwareInterface {
         return $value;
     }
 
-    /**
+    /** 
      * Actualiza las Etiquetas del Indicador que dependen de una ecuación
      * @param Indicator $indicator
      */
@@ -3138,6 +3462,63 @@ class IndicatorService implements ContainerAwareInterface {
                 $em->flush();
             }
         }
+    }
+    
+    /**
+     * Actualiza el detalle de los gráficos de los indicadores
+     * @param Indicator $indicator
+     */
+    public function updateIndicatorChartDetails(Indicator $indicator){
+        $em = $this->getDoctrine()->getManager();
+        $indicatorChartDetailsRepository = $this->container->get('pequiven.repository.indicatorchartdetails');
+        
+        $charts = $indicator->getCharts();
+        $indicatorsChartDetails = $indicator->getIndicatorsChartDetails();
+        $totalIndicatorsChartDetails = count($indicatorsChartDetails);
+        
+        if($totalIndicatorsChartDetails == 0){
+            foreach($charts as $chart){
+                $indicatorChartDetails = new Indicator\IndicatorChartDetails();
+                $indicatorChartDetails->setPeriod($indicator->getPeriod());
+                $indicatorChartDetails->setIndicator($indicator);
+                $indicatorChartDetails->setChart($chart);
+                $em->persist($indicatorChartDetails);
+                $em->flush();
+            }
+        } else{
+            foreach($charts as $chart){
+                $flagChart = false;
+                foreach($indicatorsChartDetails as $indicatorChartDetails){
+                    if($indicatorChartDetails->getChart()->getId() == $chart->getId()){
+                        $flagChart = true;
+                    }
+                }
+                if(!$flagChart){
+                    $indicatorChartDetails = new Indicator\IndicatorChartDetails();
+                    $indicatorChartDetails->setPeriod($indicator->getPeriod());
+                    $indicatorChartDetails->setIndicator($indicator);
+                    $indicatorChartDetails->setChart($chart);
+                    $em->persist($indicatorChartDetails);
+                    $em->flush();
+                }
+            }
+        }
+    }
+    
+    public function obtainIndicatorChartDetails(Indicator $indicator, \Pequiven\SEIPBundle\Entity\Chart $chart){
+        $indicatorChartDetailsRepository = $this->container->get('pequiven.repository.indicatorchartdetails');
+        
+        $indicatorChartDetails = $indicatorChartDetailsRepository->findOneBy(array('indicator' => $indicator->getId(), 'chart' => $chart->getId()));
+
+        return $indicatorChartDetails;
+    }
+    
+    public function obtainIndicatorChartDetailsByOrderShow(Indicator $indicator){
+        $indicatorChartDetailsRepository = $this->container->get('pequiven.repository.indicatorchartdetails');
+        
+        $indicatorChartDetails = $indicatorChartDetailsRepository->findBy(array('indicator' => $indicator->getId()), array('orderShow' => 'ASC'));
+        
+        return $indicatorChartDetails;
     }
 
     /**

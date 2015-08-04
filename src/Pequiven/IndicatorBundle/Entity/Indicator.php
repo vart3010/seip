@@ -283,13 +283,6 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     protected $formulaDetails;
 
     /**
-     * @var boolean
-     *
-     * @ORM\Column(name="backward", type="boolean")
-     */
-    private $backward = false;
-
-    /**
      * Configuracion de origen de datos de los detalles de los valores de indicadores
      * 
      * @var \Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\ValueIndicatorConfig
@@ -304,6 +297,14 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\TagIndicator",mappedBy="indicator",cascade={"persist","remove"})
      */
     protected $tagsIndicator;
+    
+    /**
+     * Detalles de los gráficos del Indicador
+     * 
+     * @var \Pequiven\IndicatorBundle\Entity\Indicator\IndicatorChartDetails
+     * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\IndicatorChartDetails",mappedBy="indicator",cascade={"persist","remove"})
+     */
+    protected $indicatorsChartDetails;
 
     /**
      * ¿El resultado del indicador se calcula en tipo Porcentaje?
@@ -318,6 +319,13 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\Column(name="showTagInResult",type="boolean")
      */
     private $showTagInResult = false;
+    
+    /**
+     * ¿Se mostrará la etiqueta en vez del resultado de medición en el tacómetro?
+     * @var boolean
+     * @ORM\Column(name="showTagInDashboardResult",type="boolean")
+     */
+    private $showTagInDashboardResult = false;
 
     /**
      * ¿Mostar etiqueta "valor" en la ficha del indicador?
@@ -516,7 +524,48 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\Column(name="typeOfCompany",type="integer")
      */
     private $typeOfCompany = self::TYPE_OF_COMPANY_MATRIZ;
-
+    
+    /**
+     * ¿Se mostrarán las etiquetas en 2 columnas?
+     * @var boolean
+     * @ORM\Column(name="showTagsInTwoColumns",type="boolean")
+     */
+    private $showTagsInTwoColumns = false;
+    
+    /**
+     * ¿Los valores del indicador son acumulativos?
+     * @var boolean
+     * @ORM\Column(name="resultIsAccumulative",type="boolean")
+     */
+    private $resultIsAccumulative = false;
+    
+    /**
+     * ¿En los gráficos de columna, se mostrará una columna al final con el acumulado de lo mostrado antes?
+     * @var boolean
+     * @ORM\Column(name="showColumnAccumulativeInDashboard",type="boolean")
+     */
+    private $showColumnAccumulativeInDashboard = false;
+    
+    /**
+     * ¿En los gráficos de columna, se mostrará una sola columna plan, al final y con el valor de 'plan anual' que es el mismo?
+     * @var boolean
+     *  @ORM\Column(name="showColumnPlanOneTimeInDashboard",type="boolean")
+     */
+    private $showColumnPlanOneTimeInDashboard = false;
+    
+    /**
+     * ¿EL indicador tendrá en cuenta sólo los resultados de los hijos, para el cálculo del resultado final?
+     * @var boolean
+     *  @ORM\Column(name="resultIsFromChildrensResult",type="boolean")
+     */
+    private $resultIsFromChildrensResult = false;
+    
+    /**
+     * ¿EL indicador tendrá en cuencta resultados adicionales para mostrarlo en una columna nueva?
+     * @var boolean
+     * @ORM\Column(name="resultsAdditionalInDashboardColumn",type="boolean")
+     */
+    private $resultsAdditionalInDashboardColumn = false;
     /**
      * Constructor
      */
@@ -948,7 +997,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      */
     public function setValueFinal($valueFinal) {
         $this->progressToDate = 0;
-        if ($this->totalPlan != 0) {//En caso de que el valor plan sea diferente de cero
+        if ($this->totalPlan != 0 && !$this->getResultIsFromChildrensResult()) {//En caso de que el valor plan sea diferente de cero
             if ($this->resultInPercentage) {//En caso de que el resultado del indicador tenga que convertirse en valor porcentual
                 $this->progressToDate = ($valueFinal / $this->totalPlan) * 100;
             } else {
@@ -1333,27 +1382,6 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     }
 
     /**
-     * Set backward
-     *
-     * @param boolean $backward
-     * @return Indicator
-     */
-    public function setBackward($backward) {
-        $this->backward = $backward;
-
-        return $this;
-    }
-
-    /**
-     * Get backward
-     *
-     * @return boolean 
-     */
-    public function getBackward() {
-        return $this->backward;
-    }
-
-    /**
      * @ORM\PrePersist()
      */
     function prePersist() {
@@ -1439,6 +1467,38 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     }
 
     /**
+     * Add indicatorsChartDetails
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator\IndicatorChartDetails $indicatorsChartDetails
+     * @return Indicator
+     */
+    public function addIndicatorsChartDetails(\Pequiven\IndicatorBundle\Entity\Indicator\IndicatorChartDetails $indicatorsChartDetails) {
+        $indicatorsChartDetails->setIndicator($this);
+
+        $this->indicatorsChartDetails->add($indicatorsChartDetails);
+
+        return $this;
+    }
+
+    /**
+     * Remove indicatorsChartDetails
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator\IndicatorChartDetails $indicatorsChartDetails
+     */
+    public function removeIndicatorsChartDetails(\Pequiven\IndicatorBundle\Entity\Indicator\IndicatorChartDetails $indicatorsChartDetails) {
+        $this->indicatorsChartDetails->removeElement($indicatorsChartDetails);
+    }
+
+    /**
+     * Get indicatorsChartDetails
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getIndicatorsChartDetails() {
+        return $this->indicatorsChartDetails;
+    }
+
+    /**
      * Set resultInPercentage
      *
      * @param boolean $resultInPercentage
@@ -1478,6 +1538,27 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      */
     public function getShowTagInResult() {
         return $this->showTagInResult;
+    }
+    
+    /**
+     * Set showTagInDashboardResult
+     *
+     * @param boolean $showTagInDashboardResult
+     * @return Indicator
+     */
+    public function setShowTagInDashboardResult($showTagInDashboardResult) {
+        $this->showTagInDashboardResult = $showTagInDashboardResult;
+
+        return $this;
+    }
+
+    /**
+     * Get showTagInDashboardResult
+     *
+     * @return boolean 
+     */
+    public function getShowTagInDashboardResult() {
+        return $this->showTagInDashboardResult;
     }
 
     function getIndicatorWeight() {
@@ -2062,6 +2143,25 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     }
 
     /**
+     * 
+     * @param type $showTagsInTwoColumns
+     * @return \Pequiven\IndicatorBundle\Entity\Indicator
+     */    
+    public function setShowTagsInTwoColumns($showTagsInTwoColumns) {
+        $this->showTagsInTwoColumns = $showTagsInTwoColumns;
+
+        return $this;
+    }
+
+    /**
+     * 
+     * @return type
+     */
+    public function getShowTagsInTwoColumns() {
+        return $this->showTagsInTwoColumns;
+    }
+
+    /**
      * Set typeOfCompany
      *
      * @param integer $typeOfCompany
@@ -2080,6 +2180,101 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      */
     public function getTypeOfCompany() {
         return $this->typeOfCompany;
+    }
+    
+    /**
+     * 
+     * @param type $resultIsAccumulative
+     * @return \Pequiven\IndicatorBundle\Entity\Indicator
+     */    
+    public function setResultIsAccumulative($resultIsAccumulative) {
+        $this->resultIsAccumulative = $resultIsAccumulative;
+
+        return $this;
+    }
+
+    /**
+     * 
+     * @return type
+     */
+    public function getResultIsAccumulative() {
+        return $this->resultIsAccumulative;
+    }
+    
+    /**
+     * 
+     * @param type $showColumnAccumulativeInDashboard
+     * @return \Pequiven\IndicatorBundle\Entity\Indicator
+     */    
+    public function setShowColumnAccumulativeInDashboard($showColumnAccumulativeInDashboard) {
+        $this->showColumnAccumulativeInDashboard = $showColumnAccumulativeInDashboard;
+
+        return $this;
+    }
+
+    /**
+     * 
+     * @return type
+     */
+    public function getShowColumnAccumulativeInDashboard() {
+        return $this->showColumnAccumulativeInDashboard;
+    }
+    
+    /**
+     * 
+     * @param type $showColumnPlanOneTimeInDashboard
+     * @return \Pequiven\IndicatorBundle\Entity\Indicator
+     */    
+    public function setShowColumnPlanOneTimeInDashboard($showColumnPlanOneTimeInDashboard) {
+        $this->showColumnPlanOneTimeInDashboard = $showColumnPlanOneTimeInDashboard;
+
+        return $this;
+    }
+
+    /**
+     * 
+     * @return type
+     */
+    public function getShowColumnPlanOneTimeInDashboard() {
+        return $this->showColumnPlanOneTimeInDashboard;
+    }
+    
+    /**
+     * 
+     * @param type $resultIsFromChildrensResult
+     * @return \Pequiven\IndicatorBundle\Entity\Indicator
+     */    
+    public function setResultIsFromChildrensResult($resultIsFromChildrensResult) {
+        $this->resultIsFromChildrensResult = $resultIsFromChildrensResult;
+
+        return $this;
+    }
+
+    /**
+     * 
+     * @return type
+     */
+    public function getResultIsFromChildrensResult() {
+        return $this->resultIsFromChildrensResult;
+    }
+    
+    /**
+     * 
+     * @param type $resultsAdditionalInDashboardColumn
+     * @return \Pequiven\IndicatorBundle\Entity\Indicator
+     */    
+    public function setResultsAdditionalInDashboardColumn($resultsAdditionalInDashboardColumn) {
+        $this->resultsAdditionalInDashboardColumn = $resultsAdditionalInDashboardColumn;
+
+        return $this;
+    }
+
+    /**
+     * 
+     * @return type
+     */
+    public function getResultsAdditionalInDashboardColumn() {
+        return $this->resultsAdditionalInDashboardColumn;
     }
 
 }

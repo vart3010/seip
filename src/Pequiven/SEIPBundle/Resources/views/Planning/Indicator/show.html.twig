@@ -68,12 +68,15 @@
             </p>
             <br/>
             <div class="columns">
+                <!-- Referencia del Indicador -->
                 <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                     <p class="inline-label">
                         <label class="label">{{ 'pequiven.ref'|trans({},'messages') }}</label>
                         {{ generateLink(indicator) }}
                     </p>
                 </div>
+                    
+                <!-- Fórmula del Indicador -->
                 <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                     <p class="inline-label">
                         <label class="label">{{ 'form.formula'|trans }}</label>
@@ -85,12 +88,16 @@
                         {% endif %}
                     </p>
                 </div>
+                    
+                <!-- Peso del Indicador -->
                 <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                     <p class="inline-label">
                         <label class="label">{{ 'form.weight'|trans }}</label>
                         <span class="tag">{{ indicator.weight?indicator.weight ~ '%':(('form.no_appy'|trans)) }}</span>
                     </p>
                 </div>
+                    
+                <!-- Tipo de cálculo del Indicador  -->
                 <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                     <p class="inline-label">
                         <label class="label">{{ 'pequiven_indicator.type_calculation.main'|trans }}</label>
@@ -101,6 +108,8 @@
                         {% endif %}
                     </p>
                 </div>
+                    
+                <!-- Frecuencia de notificación del Indicador -->
                 <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                     <p class="inline-label">
                         <label class="label">{{ 'form.frequencyNotificationIndicator'|trans }}</label>
@@ -113,9 +122,7 @@
                     </p>
                 </div>
 
-                {#                {{ dump(indicator.getDetails.getIsCheckReal) }}#}
-                {#                {{ indicatorService.getValueOfVariableFromValueIndicator(indicator,indicator.getDetails.getVarIndicatorReal) }}#}
-
+                <!-- Valor Real -->
                 {% if indicator.isShowRealValue == true %}
                     <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                         <p class="inline-label">
@@ -139,8 +146,7 @@
                     </div>
                 {% endif %}
 
-
-                {#                {{ indicatorService.getValueOfVariableFromValueIndicator(indicator,indicator.getDetails.getVarIndicatorPlan) }}#}
+                <!-- Valor Plan -->
                 {% if indicator.isShowPlanValue == true %}
                     <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                         <p class="inline-label">
@@ -166,6 +172,8 @@
                         </p>
                     </div>
                 {% endif %}
+                
+                <!-- Tendencia del Indicador -->
                 <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                     <p class="inline-label">
                         <label class="label">{{ 'form.tendency'|trans }}</label>
@@ -177,6 +185,7 @@
                     </p>
                 </div>
 
+                <!-- Período del Indicador -->
                 <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                     <p class="inline-label">
                         <label class="label">{{ 'pequiven.period'|trans({},'messages') }}</label>
@@ -184,7 +193,7 @@
                     </p>
                 </div>
 
-
+                <!-- Detalle de los valores del Indicador -->
                 <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                     <p class="inline-label">
                         <label class="label">{{ 'form.typeDetailValue'|trans }}</label>
@@ -196,6 +205,7 @@
                     </p>
                 </div>
 
+                <!-- Gerencia de 1ra Línea que impacta el Indicador -->
                 {% if level > constant('Pequiven\\IndicatorBundle\\Model\\IndicatorLevel::LEVEL_ESTRATEGICO') %}
                     <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                         <p class="inline-label">
@@ -206,6 +216,7 @@
                     </div>
                 {% endif%}
 
+                <!-- Gerencia de 2da Línea que impacta el Indicador -->
                 {% if level == constant('Pequiven\\IndicatorBundle\\Model\\IndicatorLevel::LEVEL_OPERATIVO') %}
                     <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                         <p class="inline-label">
@@ -216,7 +227,7 @@
                     </div>
                 {% endif%}
 
-
+                <!-- Rango de gestión del Indicador -->
                 {% if (indicator.showRange) %}
                     {% set resultReal = indicator.resultReal %}
                     <div class="new-row-mobile twelve-columns six-columns-tablet twelve-columns-mobile" {% if resultReal is not null and errorArrangementRange is null %} ng-controller="DashboardController" ng-init="renderWidgetRange('chartContainerResult',{{ data|json_encode() }})" {% endif %}>
@@ -235,7 +246,7 @@
                     </div>
                 {% endif %}
 
-
+                <!-- Objetivo al que impacta el indicador -->
                 <div class="inline-label">
                     <label class="label">{{ 'form.objetives'|trans }}</label>
                     <ul class="fa-ul">
@@ -244,6 +255,8 @@
                             {% endfor %}
                     </ul>
                 </div>
+                    
+                <!-- Indicador Padre al que impacta el indicador -->
                 {% if indicator.parent %}
                     <div class="inline-label">
                         <label class="label">{{ 'form.parent_indicator'|trans }}</label>
@@ -252,6 +265,8 @@
                         {% include 'PequivenObjetiveBundle:Common:indicators.html.twig' %}
                     </div>
                 {% endif %}
+                
+                <!-- Indicadores asociados de los que se alimenta el indicador -->
                 {% if (indicator.childrens | length) > 0 %}
                     <div class="inline-label">
                         <label class="label">{{ 'form.associated_indicators'|trans }}</label>
@@ -274,7 +289,9 @@
             {% endif %}
             {# Fin carga de sistemas de Gestión #}
         </fieldset>
-        {% if indicator.tagsIndicator|length > 0 %}    
+            
+        <!-- Etiquetas del Indicador -->
+        {% if indicator.tagsIndicator|length > 0 and indicator.showTags == true %}    
             <br /><br />
             <fieldset class="fieldset">
                 <legend class="legend">{{ ('pequiven_indicator.tagIndicators'|trans) }}&nbsp;</legend>
@@ -282,17 +299,20 @@
             </fieldset>
         {% endif %}
 
-
-
+        <!-- Resultados del Indicador -->
         {% if indicator.showResults %}
             <br /><br />
             {% include 'PequivenSEIPBundle:Planning:Indicator/show/results.html.twig' %}
         {% endif %}
+        
+        <!-- Características del Indicador -->
         {% if indicator.showFeatures %}
             <br /><br />
             {% include 'PequivenSEIPBundle:Planning:Indicator/show/features.html.twig' %}
         {% endif %}
         <br /><br />
+        
+        <!-- Historial de eventos del Indicador -->
         {% include 'PequivenSEIPBundle:Planning:Indicator/show/history.html.twig' with {'entity':indicator} %}
     </div>
 

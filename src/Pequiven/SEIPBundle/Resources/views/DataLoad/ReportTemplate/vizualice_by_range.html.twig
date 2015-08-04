@@ -919,11 +919,11 @@
                             {% endif %}
 
                             {# Totalizar #}
-                            {% set total_day = current_total_day + total_day %}
-                            {% set total_month = current_total_month + total_month %}
+                            {% set total_day = current_total_day %}
+                            {% set total_month = current_total_month %}
 
-                            {% set summary_total_day = summary_total_day + current_total_day %}
-                            {% set summary_total_month = summary_total_month + current_total_month %}
+                            {% set summary_total_day = current_total_day %}
+                            {% set summary_total_month = current_total_month %}
                         {% endfor %}
 
                         {% if is_next_equals == false %}
@@ -956,7 +956,7 @@
                         </tr>
                     {% endfor %}
                 </tbody>
-                <tfoot>
+                {#<tfoot>
                     <tr>
                         <td>TOTALES</td>
                         <td>{{ summary_total_day|myNumberFormat }}</td>
@@ -964,7 +964,7 @@
                             <td>{{ summary_total_month|myNumberFormat }}</td>
                         {% endif %}
                     </tr>
-                </tfoot>
+                </tfoot>#}
             </table>
         </div>
     </div>

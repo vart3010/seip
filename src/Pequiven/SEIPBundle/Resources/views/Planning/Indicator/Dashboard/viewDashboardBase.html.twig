@@ -50,191 +50,116 @@
             {% if indicator.showCharts %}{# En caso de que sólo se necesite ver el gráfico #}
                 <div ng-controller="ChartsDashboardController">
                     {% set Charts = indicator.getCharts %}
+                    {% set indicatorsChartDetailsByOrderShow = indicatorService.obtainIndicatorChartDetailsByOrderShow(indicator) %}
                     <div class="standard-tabs margin-bottom" {#style="height: 600px;"#}>
                         <ul class="tabs">
                             {% set cont = 1 %}
-                            {% for chart in Charts %}
-                                {% set grafico = "grafico"~loop.index %}
-                                <li {% if cont == 1 %} class="active" {% endif %}>
-                                    <a style="color: #000000;" href="#tab-{{ grafico }}">{{ chart.shortDescription }} </a>
-                                </li>
-                                {% set cont = cont + 1 %}
-                            {% endfor %}
+                            {% if indicatorsChartDetailsByOrderShow|length > 0 %}
+                                {% for indicatorChartDetailsByOrderShow in indicatorsChartDetailsByOrderShow %}
+                                    {% set showChart = false %}
+                                    {% for chart in Charts %}
+                                        {% if chart.id == indicatorChartDetailsByOrderShow.chart.id %}
+                                            {% set showChart = true %}
+                                        {% endif %}
+                                    {% endfor %}
+                                    {% if showChart == true %}
+                                        {% set chart = indicatorChartDetailsByOrderShow.chart %}
+                                        {% set description = chart.shortDescription %}
+                                        {% set indicatorChartDetails = indicatorService.obtainIndicatorChartDetails(indicator,chart) %}
+                                        {% if indicatorChartDetails != null %}
+                                            {% if indicatorChartDetails.description != null %}
+                                                {% set description = indicatorChartDetails.description %}
+                                            {% endif %}
+                                        {% endif %}
+                                        {% set grafico = "grafico"~loop.index %}
+                                        <li {% if cont == 1 %} class="active" {% endif %}>
+                                            <a style="color: #000000;" href="#tab-{{ grafico }}">{{ description }} </a>
+                                        </li>
+                                        {% set cont = cont + 1 %}
+                                    {% endif %}
+                                {% endfor %}
+                            {% else %}
+                                {% for chart in Charts %}
+                                    {% set description = chart.shortDescription %}
+                                    {% set indicatorChartDetails = indicatorService.obtainIndicatorChartDetails(indicator,chart) %}
+                                    {% if indicatorChartDetails != null %}
+                                        {% if indicatorChartDetails.description != null %}
+                                            {% set description = indicatorChartDetails.description %}
+                                        {% endif %}
+                                    {% endif %}
+                                    {% set grafico = "grafico"~loop.index %}
+                                    <li {% if cont == 1 %} class="active" {% endif %}>
+                                        <a style="color: #000000;" href="#tab-{{ grafico }}">{{ description }} </a>
+                                    </li>
+                                    {% set cont = cont + 1 %}
+                                {% endfor %}
+                            {% endif %}
                         </ul>
                         <div class="tabs-content" {#style="min-height: 500px;"#}>
-                            {% for chart in Charts %}
-                                {% set grafico = "grafico"~loop.index %}
-                                {% if  chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_INDICATORS_ASSOCIATED_DOUGHNUT') %}
-                                    <div id="tab-{{ grafico }}"  ng-controller="DashboardController" ng-init="chargeChartDoughnut2dIndicatorsAssociated({{ indicator.id }},'{{ grafico }}','100','500')">
-                                        <span id="{{ grafico }}"></span>
-                                    </div>
-                                    {#<div id="tab-{{ chart.typeOfChart }}" ng-init="chargeChartDoughnut2d({{ indicator.id }})" fusioncharts
-                                         width="100%"
-                                         height="400"
-                                         type="{{ chart.alias }}"
-                                         dataFormat= "json"
-                                         dataSource="{$chartDoughnut2d$}" >
-                                    </div>#}
-                                {% endif %}
-                                {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_COLUMN_REAL_PLAN_INDICATORS_ASSOCIATED')  %}
-                                    <div id="tab-{{ grafico }}"  ng-controller="DashboardController" ng-init="chargeChartColumnLineDualAxisIndicatorsAssociated({{ indicator.id }},'{{ grafico }}','100','500')">
-                                        <span id="{{ grafico }}"></span>
-                                    </div>
-                                {% endif %}
-                                {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_VARIABLES_REAL_PLAN_DOUGHNUT')  %}
-                                    <div id="tab-{{ grafico }}"  ng-controller="DashboardController" ng-init="chargeChartDoughnut2dWithVariablesRealPlan({{ indicator.id }},'{{ grafico }}','100','500')">
-                                        <span id="{{ grafico }}"></span>
-                                    </div>
-                                {% endif %}
-                                {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_PIE_VARIABLES_MARKED_REAL')  %}
-                                    <div id="tab-{{ grafico }}"  ng-controller="DashboardController" ng-init="chargeChartPieVariablesMarkedReal({{ indicator.id }},'{{ grafico }}','100','500')">
-                                        <span id="{{ grafico }}"></span>
-                                    </div>
-                                {% endif %}
-                                {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_COLUMN_VARIABLES_REAL_PLAN')  %}
-                                    <div id="tab-{{ grafico }}"  ng-controller="DashboardController" ng-init="chargeChartColumnLineDualAxisRealPlan({{ indicator.id }},'{{ grafico }}','100','500')">
-                                        <span id="{{ grafico }}"></span>
-                                    </div>
-                                {% endif %}
-                                {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_PIE_VARIABLES_MARKED_PLAN')  %}
-                                    <div id="tab-{{ grafico }}"  ng-controller="DashboardController" ng-init="chargeChartPieVariablesMarkedPlan({{ indicator.id }},'{{ grafico }}','100','500')">
-                                        <span id="{{ grafico }}"></span>
-                                    </div>
-                                {% endif %}
-                                {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_BARS_AREA_VARIABLES_REAL_PLAN_BY_FREQUENCY_NOTIFICATION')  %}
-                                    <div id="tab-{{ grafico }}"  ng-controller="DashboardController" ng-init="chargeChartBarsAreaVariablesRealPlanByFrequencyNotification({{ indicator.id }},'{{ grafico }}','100','500')">
-                                        <span id="{{ grafico }}"></span>
-                                    </div>
-                                {% endif %}
-                                {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_PIE_VARIABLES_PLAN_FROM_EQUATION')  %}
-                                    <div id="tab-{{ grafico }}"  ng-controller="DashboardController" ng-init="chargeChartPieVariablesPlanFromEquation({{ indicator.id }},'{{ grafico }}','100','500')">
-                                        <span id="{{ grafico }}"></span>
-                                    </div>
-                                {% endif %}
-                                {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_PIE_VARIABLES_REAL_FROM_EQUATION')  %}
-                                    <div id="tab-{{ grafico }}"  ng-controller="DashboardController" ng-init="chargeChartPieVariablesRealFromEquation({{ indicator.id }},'{{ grafico }}','100','500')">
-                                        <span id="{{ grafico }}"></span>
-                                    </div>
-                                {% endif %}
-                                {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_COLUMN_REAL_PLAN_BY_FREQUENCY_NOTIFICATION')  %}
-                                    <div id="tab-{{ grafico }}"  ng-controller="DashboardController" ng-init="chargeChartColumnLineDualAxisByFrequencyNotification({{ indicator.id }},'{{ grafico }}','100','500')">
-                                        <span id="{{ grafico }}"></span>
-                                    </div>
-                                {% endif %}
-                                {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_BARS_AREA_VARIABLES_MARKED_REAL_PLAN_BY_FREQUENCY_NOTIFICATION')  %}
-                                    <div id="tab-{{ grafico }}"  ng-controller="DashboardController" ng-init="chargeChartBarsAreaVariablesMarkedRealPlanByFrequencyNotification({{ indicator.id }},'{{ grafico }}','100','500')">
-                                        <span id="{{ grafico }}"></span>
-                                    </div>
-                                {% endif %}
-                                {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_COLUMN_VARIABLES_MARKED_REAL_PLAN_BY_FREQUENCY_NOTIFICATION')  %}
-                                    <div id="tab-{{ grafico }}"  ng-controller="DashboardController" ng-init="chargeChartColumnVariablesMarkedRealPlanByFrequencyNotification({{ indicator.id }},'{{ grafico }}','100','500')">
-                                        <span id="{{ grafico }}"></span>
-                                    </div>
-                                {% endif %}
-                                {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_VARIABLES_REAL_PLAN_FROM_DASHBOARD_EQUATION_DOUGHNUT')  %}
-                                    <div id="tab-{{ grafico }}"  ng-controller="DashboardController" ng-init="chargeChartVariablesRealPlanFromDashboardEquationDoughnut({{ indicator.id }},'{{ grafico }}','100','500')">
-                                        <span id="{{ grafico }}"></span>
-                                    </div>
-                                {% endif %}
-                                {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_COLUMN_REAL_PLAN_INDICATORS_ASSOCIATED_FROM_DASHBOARD_EQUATION')  %}
-                                    <div id="tab-{{ grafico }}"  ng-controller="DashboardController" ng-init="chargeChartColumnRealPlanIndicatorsAssociatedFromDashboardEquation({{ indicator.id }},'{{ grafico }}','100','500')">
-                                        <span id="{{ grafico }}"></span>
-                                    </div>
-                                {% endif %}
-                                {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_COLUMN_REAL_PLAN_BY_FREQUENCY_NOTIFICATION_FROM_DASHBOARD_EQUATION')  %}
-                                    <div id="tab-{{ grafico }}"  ng-controller="DashboardController" ng-init="chargeChartColumnRealPlanByFrequencyNotificationFromDashboardEquation({{ indicator.id }},'{{ grafico }}','100','500')">
-                                        <span id="{{ grafico }}"></span>
-                                    </div>
-                                {% endif %}
-                                {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_STACKED_COLUMN_VARIABLE_BY_FREQUENCY_NOTIFICATION_WITH_TOTAL')  %}
-                                    <div id="tab-{{ grafico }}"  ng-controller="DashboardController" ng-init="chargeChartStackedColumnVariableByFrequencyNotificationWithTotal({{ indicator.id }},'{{ grafico }}','100','500')">
-                                        <span id="{{ grafico }}"></span>
-                                    </div>
-                                {% endif %}
-                                {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_COLUMN_RESULT_INDICATORS_ASSOCIATED_WITH_TOTAL_BY_MONTH')  %}
-                                    <div id="tab-{{ grafico }}"  ng-controller="DashboardController" ng-init="chargeChartColumnResultIndicatorsAssociatedWithTotalByMonth({{ indicator.id }},'{{ "now"|date("n") }}','{{ grafico }}','100','500')">
-                                        <div ng-init="data.monthsLabels = {{ labelsMonths|serialize }}" class="with-mid-padding">
-                                            <select id='month' class="select2 input-xlarge" ng-model="model.months" ng-options="value as value.description for (key,value) in data.monthsLabels | orderBy:'value.id'" ng-init="model.months = {{ "now"|date("n") }}" ng-click="chargeChartColumnResultIndicatorsAssociatedWithTotalByMonth({{ indicator.id }},model.months.id,'{{ grafico }}','100','500')">
-                                                <option value='0'>Seleccione un mes</option>
-                                            </select>
+                            {% if indicatorsChartDetailsByOrderShow|length > 0 %}
+                                {% for indicatorChartDetailsByOrderShow in indicatorsChartDetailsByOrderShow %}
+                                    {% set showChart = false %}
+                                    {% for chart in Charts %}
+                                        {% if chart.id == indicatorChartDetailsByOrderShow.chart.id %}
+                                            {% set showChart = true %}
+                                        {% endif %}
+                                    {% endfor %}
+                                    {% if showChart == true %}
+                                        {% set chart = indicatorChartDetailsByOrderShow.chart %}
+                                        {% set grafico = "grafico"~loop.index %}
+                                        <div id="tab-{{ grafico }}"  ng-controller="DashboardController" ng-init="{{ chart.nameFunctionAngular }}({{ indicator.id }},'{{ grafico }}','100','500')">
+                                            {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_COLUMN_RESULT_INDICATORS_ASSOCIATED_WITH_TOTAL_BY_MONTH')  %}
+                                                <div ng-init="data.monthsLabels = {{ labelsMonths|serialize }}" class="with-mid-padding">
+                                                    <select id='month' class="select2 input-xlarge" ng-model="model.months" ng-options="value as value.description for (key,value) in data.monthsLabels | orderBy:'value.id'" ng-init="model.months = {{ "now"|date("n") }}" ng-click="chargeChartColumnResultIndicatorsAssociatedWithTotalByMonth({{ indicator.id }},model.months.id,'{{ grafico }}','100','500')">
+                                                        <option value='0'>Seleccione un mes</option>
+                                                    </select>
+                                                </div>
+                                            {% endif %}
+                                            {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_COLUMN_RESULT_INDICATORS_ASSOCIATED_GROUP_BY_TYPE_COMPANY_WITH_TOTAL_BY_MONTH')  %}
+                                                <div ng-init="data.monthsLabels = {{ labelsMonths|serialize }}" class="with-mid-padding">
+                                                    <select id='monthsGroupByCompany' class="select2 input-xlarge" ng-model="model.monthsGroupByCompany" ng-options="value as value.description for (key,value) in data.monthsLabels | orderBy:'id'" ng-init="model.monthsGroupByCompany = {{ "now"|date("n") }}" ng-click="chargeChartColumnResultIndicatorsAssociatedGroupByTypeCompanyWithTotalByMonth({{ indicator.id }},model.monthsGroupByCompany.id,'{{ grafico }}','100','500')">
+                                                        <option value='0'>Seleccione un mes</option>
+                                                    </select>
+                                                </div>
+                                            {% endif %}
+                                            <span id="{{ grafico }}"></span>
                                         </div>
+                                    {% endif %}
+                                {% endfor %}
+                            {% else %}
+                                {% for chart in Charts %}
+                                    {% set grafico = "grafico"~loop.index %}
+                                    <div id="tab-{{ grafico }}"  ng-controller="DashboardController" ng-init="{{ chart.nameFunctionAngular }}({{ indicator.id }},'{{ grafico }}','100','500')">
+                                        {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_COLUMN_RESULT_INDICATORS_ASSOCIATED_WITH_TOTAL_BY_MONTH')  %}
+                                            <div ng-init="data.monthsLabels = {{ labelsMonths|serialize }}" class="with-mid-padding">
+                                                <select id='month' class="select2 input-xlarge" ng-model="model.months" ng-options="value as value.description for (key,value) in data.monthsLabels | orderBy:'value.id'" ng-init="model.months = {{ "now"|date("n") }}" ng-click="chargeChartColumnResultIndicatorsAssociatedWithTotalByMonth({{ indicator.id }},model.months.id,'{{ grafico }}','100','500')">
+                                                    <option value='0'>Seleccione un mes</option>
+                                                </select>
+                                            </div>
+                                        {% endif %}
+                                        {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_COLUMN_RESULT_INDICATORS_ASSOCIATED_GROUP_BY_TYPE_COMPANY_WITH_TOTAL_BY_MONTH')  %}
+                                            <div ng-init="data.monthsLabels = {{ labelsMonths|serialize }}" class="with-mid-padding">
+                                                <select id='monthsGroupByCompany' class="select2 input-xlarge" ng-model="model.monthsGroupByCompany" ng-options="value as value.description for (key,value) in data.monthsLabels | orderBy:'id'" ng-init="model.monthsGroupByCompany = {{ "now"|date("n") }}" ng-click="chargeChartColumnResultIndicatorsAssociatedGroupByTypeCompanyWithTotalByMonth({{ indicator.id }},model.monthsGroupByCompany.id,'{{ grafico }}','100','500')">
+                                                    <option value='0'>Seleccione un mes</option>
+                                                </select>
+                                            </div>
+                                        {% endif %}
                                         <span id="{{ grafico }}"></span>
                                     </div>
-                                {% endif %}
-                                {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_COLUMN_RESULT_INDICATORS_ASSOCIATED_GROUP_BY_TYPE_COMPANY_WITH_TOTAL_BY_MONTH')  %}
-                                    <div id="tab-{{ grafico }}"  ng-controller="DashboardController" ng-init="chargeChartColumnResultIndicatorsAssociatedGroupByTypeCompanyWithTotalByMonth({{ indicator.id }},'{{ "now"|date("n") }}','{{ grafico }}','100','500')">
-                                        <div ng-init="data.monthsLabels = {{ labelsMonths|serialize }}" class="with-mid-padding">
-                                            <select id='monthsGroupByCompany' class="select2 input-xlarge" ng-model="model.monthsGroupByCompany" ng-options="value as value.description for (key,value) in data.monthsLabels | orderBy:'id'" ng-init="model.monthsGroupByCompany = {{ "now"|date("n") }}" ng-click="chargeChartColumnResultIndicatorsAssociatedGroupByTypeCompanyWithTotalByMonth({{ indicator.id }},model.monthsGroupByCompany.id,'{{ grafico }}','100','500')">
-                                                <option value='0'>Seleccione un mes</option>
-                                            </select>
-                                        </div>
-                                        <span id="{{ grafico }}"></span>
-                                    </div>
-                                {% endif %}
-                                {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_MULTI_SERIES_LINE_INDICATOR_PERSONAL_INJURY_WITH_ACCUMULATED_TIME')  %}
-                                    <div id="tab-{{ grafico }}"  ng-controller="DashboardController" ng-init="chargeChartMultiSeriesLineIndicatorPersonalInjuryWithAccumulatedTime({{ indicator.id }},'{{ grafico }}','100','500')">
-                                        <span id="{{ grafico }}"></span>
-                                    </div>
-                                {% endif %}
-                                {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_MULTI_SERIES_LINE_INDICATOR_PERSONAL_INJURY_WITHOUT_ACCUMULATED_TIME')  %}
-                                    <div id="tab-{{ grafico }}"  ng-controller="DashboardController" ng-init="chargeChartMultiSeriesLineIndicatorPersonalInjuryWithoutAccumulatedTime({{ indicator.id }},'{{ grafico }}','100','500')">
-                                        <span id="{{ grafico }}"></span>
-                                    </div>
-                                {% endif %}
-                                {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_MULTI_SERIES_LINE_INDICATOR_PERSONAL_INJURY_WHIT_AND_WITHOUT_ACCUMULATED_TIME_FROM_CHILDRENS')  %}
-                                    <div id="tab-{{ grafico }}"  ng-controller="DashboardController" ng-init="chargeChartMultiSeriesLineIndicatorPersonalInjuryWithAndWithoutAccumulatedTimeFromChildrens({{ indicator.id }},'{{ grafico }}','100','500')">
-                                        <span id="{{ grafico }}"></span>
-                                    </div>
-                                {% endif %}
-                                {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_MULTI_SERIES_LINE_INDICATOR_LOST_DAYS_ACCUMULATED_TIME')  %}
-                                    <div id="tab-{{ grafico }}"  ng-controller="DashboardController" ng-init="chargeChartMultiSeriesLineIndicatorLostDaysAccumulatedTime({{ indicator.id }},'{{ grafico }}','100','500')">
-                                        <span id="{{ grafico }}"></span>
-                                    </div>
-                                {% endif %}
-                                {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_MULTI_SERIES_COLUMN_INDICATORS_ASSOCIATED_PERSONAL_INJURY_WITH_AND_WITHOUT_AND_LOST_DAYS_BY_PERIOD_WITH_ACCUMULATED')  %}
-                                    <div id="tab-{{ grafico }}"  ng-controller="DashboardController" ng-init="chargeChartMultiSeriesIndicatorAssociatedPersonalInjuryWithAndWithoutAndLostDaysByPeriodWithAccumulated({{ indicator.id }},'{{ grafico }}','100','500')">
-                                        <span id="{{ grafico }}"></span>
-                                    </div>
-                                {% endif %}
-                                {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_MULTI_SERIES_COLUMN_LINE_INDICATOR_PERSONAL_INJURY_WITH_AND_WITHOUT_AND_LOST_DAYS_BY_FREQUENCY_NOTIFICATION_BY_PERIOD_GROUP_BY_COMPANY_WITH_ACCUMULATED')  %}
-                                    <div id="tab-{{ grafico }}"  ng-controller="DashboardController" ng-init="chargeChartMultiSeriesColumnLineIndicatorPersonalInjuryWithAndWithoutAndLostDaysByFrequencyNotificationByPeriodGroupByCompanyWithAccumulated({{ indicator.id }},'{{ grafico }}','100','500')">
-                                        <span id="{{ grafico }}"></span>
-                                    </div>
-                                {% endif %}
-                                {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_MULTI_SERIES_COLUMN_LINE_INDICATOR_PERSONAL_INJURY_WITH_LOST_TIME_BY_FREQUENCY_NOTIFICATION_BY_PERIOD_WITH_ACCUMULATED')  %}
-                                    <div id="tab-{{ grafico }}"  ng-controller="DashboardController" ng-init="chargeChartMultiSeriesColumnLineIndicatorPersonalInjuryWithLostTimeByFrequencyNotificationByPeriodWithAccumulated({{ indicator.id }},'{{ grafico }}','100','500')">
-                                        <span id="{{ grafico }}"></span>
-                                    </div>
-                                {% endif %}
-                                {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_MULTI_SERIES_COLUMN_LINE_INDICATOR_PERSONAL_INJURY_WITHOUT_LOST_TIME_BY_FREQUENCY_NOTIFICATION_BY_PERIOD_WITH_ACCUMULATED')  %}
-                                    <div id="tab-{{ grafico }}"  ng-controller="DashboardController" ng-init="chargeChartMultiSeriesColumnLineIndicatorPersonalInjuryWithoutLostTimeByFrequencyNotificationByPeriodWithAccumulated({{ indicator.id }},'{{ grafico }}','100','500')">
-                                        <span id="{{ grafico }}"></span>
-                                    </div>
-                                {% endif %}
-                                {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_MULTI_SERIES_COLUMN_LINE_INDICATOR_LOST_DAYS_BY_FREQUENCY_NOTIFICATION_BY_PERIOD_WITH_ACCUMULATED')  %}
-                                    <div id="tab-{{ grafico }}"  ng-controller="DashboardController" ng-init="chargeChartMultiSeriesColumnLineIndicatorLostDaysByFrequencyNotificationByPeriodWithAccumulated({{ indicator.id }},'{{ grafico }}','100','500')">
-                                        <span id="{{ grafico }}"></span>
-                                    </div>
-                                {% endif %}
-                                {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_EXAMPLE')  %}
-                                    <div id="tab-{{ grafico }}"  ng-controller="DashboardController" ng-init="renderChartExample({{ indicator.id }},'{{ grafico }}','100','500')">
-                                        <span id="{{ grafico }}"></span>
-                                    </div>
-                                {% endif %}
-                            {% endfor %}
+                                {% endfor %}
+                            {% endif %}
                         </div>
-
                     </div>
                 </div>
             {% endif %}
             {% if indicator.showTags %}
-                {% if indicator.tagsIndicator|length > 0 %}
+                {% if indicator.tagsIndicator|length > 0 and indicator.showTags == true%}
                     <fieldset class="fieldset">
                         <legend class="legend">{{ ('pequiven_indicator.tagIndicators'|trans({},'PequivenIndicatorBundle')) }}&nbsp;</legend>
                         {% include 'PequivenIndicatorBundle:Common:tagIndicators.html.twig' %}
                     </fieldset>
                 {% else %}
-                    <span class="tag red-bg with-tooltip">{{ ('pequiven_indicator.empty'|trans({},'PequivenIndicatorBundle')) }}</span>
+{#                    <span class="tag red-bg with-tooltip">{{ ('pequiven_indicator.empty'|trans({},'PequivenIndicatorBundle')) }}</span>#}
                 {% endif %}
             {% endif %}
         </div>
@@ -266,3 +191,12 @@
         });
     </script>
 {% endblock javascript %}
+
+
+{#<div id="tab-{{ chart.typeOfChart }}" ng-init="chargeChartDoughnut2d({{ indicator.id }})" fusioncharts
+    width="100%"
+    height="400"
+    type="{{ chart.alias }}"
+    dataFormat= "json"
+    dataSource="{$chartDoughnut2d$}" >
+</div>#}

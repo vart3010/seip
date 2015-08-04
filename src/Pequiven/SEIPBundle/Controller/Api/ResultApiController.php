@@ -141,8 +141,10 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
             if(($user->getLevelRealByGroup() == \Pequiven\MasterBundle\Model\Rol::ROLE_MANAGER_FIRST ) || $user->getLevelRealByGroup() == \Pequiven\MasterBundle\Model\Rol::ROLE_GENERAL_COMPLEJO) {
                 if($gerenciaFirst){
                     foreach ($gerenciaFirst->getTacticalObjectives() as $objetive) {
-                        if($objetive->getPeriod()->getId() == $periodActual->getId()){
-                            $objetives[$objetive->getId()] = $objetive;
+                        if($objetive->getObjetiveLevel()->getLevel() == \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_TACTICO){
+                            if($objetive->getPeriod()->getId() == $periodActual->getId()){
+                                $objetives[$objetive->getId()] = $objetive;
+                            }
                         }
                     }
                 }else{

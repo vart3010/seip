@@ -556,6 +556,26 @@ class ChartController extends SEIPController {
     }
    
     /**
+     * 27-Función que retorna la data para un gráfico sólo para avances de proyectos por frecuencia de notificación.
+     * @return JsonResponse
+     */
+    public function getDataChartChartProgressProjectsByFrequencyNotificationAction(Request $request) {
+        $response = new JsonResponse();
+
+        $idIndicator = $request->get('id');
+
+        $indicatorService = $this->getIndicatorService(); //Obtenemos el servicio del indicador
+
+        $indicator = $this->get('pequiven.repository.indicator')->find($idIndicator); //Obtenemos el indicador
+
+        $dataChart = $indicatorService->getChartColumnLineDualAxis($indicator, array('progressProjectsByFrequencyNotification' => true, 'path_array' => 'progressProjectsByFrequencyNotification')); //Obtenemos la data del gráfico de acuerdo al indicador
+
+        $response->setData($dataChart); //Seteamos la data del gráfico en Json
+
+        return $response;
+    }
+   
+    /**
      * Servicio de los Indicadores
      * @return \Pequiven\IndicatorBundle\Service\IndicatorService
      */

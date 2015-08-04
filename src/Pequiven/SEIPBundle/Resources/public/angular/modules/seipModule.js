@@ -1045,6 +1045,19 @@ angular.module('seipModule.controllers', [])
                 url: urlSearchPeriod
             });
         })
+        
+        .controller('ListUserItemsController', function ($scope, $http) {
+              $scope.model = {users: null};
+               $scope.$watch("model.users", function (newParams, oldParams) {
+                if ($scope.model.users != null) {
+                    var selectedUser = [];
+                    var selectedUser = angular.element("#users").select2('data');
+                    //console.log(selectedUser["numPersonal"]);
+                    $("input#ruta").val(selectedUser["numPersonal"]);
+                }
+            });
+        })
+        
         .controller('ReportArrangementProgramAllController', function ($scope, $http) {
             $scope.data = {
                 tacticals: null,
@@ -1506,11 +1519,13 @@ angular.module('seipModule.controllers', [])
                     $scope.templateOptions.setVar("form", {errors: {}});
                     $scope.templateOptions.setVar('evaluationResult', data.result);
                     var formVarRealName = '#form_' + data.varRealName;
-                    var formVarPlanName = '#form_' + data.varPlanName;
                     angular.element(formVarRealName).val(data.real);
-                    angular.element(formVarPlanName).val(data.plan);
                     $scope.templateOptions.setVar('real', data.real);
-                    $scope.templateOptions.setVar('plan', data.plan);
+                    if (data.showBoth == 1) {
+                        var formVarPlanName = '#form_' + data.varPlanName;
+                        angular.element(formVarPlanName).val(data.plan);
+                        $scope.templateOptions.setVar('plan', data.plan);
+                    }
                     if (successCallBack) {
                         successCallBack(data);
                     }
@@ -3022,6 +3037,29 @@ angular.module('seipModule.controllers', [])
                     });
                 });
             }
+            
+            //27-Gráfico sólo para avances de proyectos
+            $scope.chargeChartProgressProjectsByFrequencyNotification = function (indicatorId, render, width, height) {
+                var getDataChartProgressProjectsByFrequencyNotification = Routing.generate("getDataChartChartProgressProjectsByFrequencyNotification", {id: indicatorId});
+                $http.get(getDataChartProgressProjectsByFrequencyNotification).success(function (data) {
+                    FusionCharts.ready(function () {
+                        var revenueChartProgressProjectsByFrequencyNotification = new FusionCharts({
+                            "type": "mscolumn3dlinedy",
+                            "renderAt": render,
+                            "width": width + "%",
+                            "height": height,
+                            "dataFormat": "json",
+                            "dataSource": {
+                                "chart": data.dataSource.chart,
+                                "categories": data.dataSource.categories,
+                                "dataset": data.dataSource.dataset
+                            }
+                        });
+                        revenueChartProgressProjectsByFrequencyNotification.setTransparent(true);
+                        revenueChartProgressProjectsByFrequencyNotification.render();
+                    });
+                });
+            }
 
 
             //Gráfico en forma tacómetro (Usado para mostrar el resultado de los indicadores estratégicos en el dashboard)
@@ -3065,7 +3103,7 @@ angular.module('seipModule.controllers', [])
                                 "gaugeendangle": "-60",
                                 "gaugealpha": "0",
                                 "decimals": "0",
-                                "showcolorrange": "0",
+                                "showcolorrange": "1",
                                 "placevaluesinside": "1",
                                 "pivotfillmix": "",
                                 "showpivotborder": "1",

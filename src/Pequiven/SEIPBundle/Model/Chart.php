@@ -148,6 +148,11 @@ abstract class Chart
      */
     const TYPE_CHART_MULTI_SERIES_COLUMN_LINE_INDICATOR_LOST_DAYS_BY_FREQUENCY_NOTIFICATION_BY_PERIOD_WITH_ACCUMULATED = 26;
     
+    /**
+     * Gráfico sólo para avances de proyectos por frecuencia de notificación
+     */
+    const TYPE_CHART_PROGRESS_PROJECTS_BY_FREQUENCY_NOTIFICATION = 27;
+    
     const TYPE_EXAMPLE = 100;
        
     /**
@@ -213,6 +218,7 @@ abstract class Chart
             self::TYPE_CHART_MULTI_SERIES_COLUMN_LINE_INDICATOR_PERSONAL_INJURY_WITH_LOST_TIME_BY_FREQUENCY_NOTIFICATION_BY_PERIOD_WITH_ACCUMULATED => 'chart.type.indicatorPersonalInjuryWithLostTimeByFrequencyNotificationByPeriodWithAccumulated',
             self::TYPE_CHART_MULTI_SERIES_COLUMN_LINE_INDICATOR_PERSONAL_INJURY_WITHOUT_LOST_TIME_BY_FREQUENCY_NOTIFICATION_BY_PERIOD_WITH_ACCUMULATED => 'chart.type.indicatorPersonalInjuryWithoutLostTimeByFrequencyNotificationByPeriodWithAccumulated',
             self::TYPE_CHART_MULTI_SERIES_COLUMN_LINE_INDICATOR_LOST_DAYS_BY_FREQUENCY_NOTIFICATION_BY_PERIOD_WITH_ACCUMULATED => 'chart.type.indicatorLostDaysByFrequencyNotificationByPeriodWithAccumulated',
+            self::TYPE_CHART_PROGRESS_PROJECTS_BY_FREQUENCY_NOTIFICATION => 'chart.type.typeChartProgressProjectsByFrequencyNotification',
             self::TYPE_EXAMPLE => 'chart.type.example',
         );
          

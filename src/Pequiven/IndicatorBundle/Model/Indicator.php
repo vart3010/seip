@@ -54,6 +54,10 @@ abstract class Indicator implements IndicatorInterface {
      * Sección Materia Prima
      */
     const TYPE_RESULT_SECTION_RAW_MATERIAL = 4;
+    /**
+     * Sección Materia Prima
+     */
+    const TYPE_RESULT_SECTION_SERVICES = 5;
     
 
     /**
@@ -412,6 +416,7 @@ abstract class Indicator implements IndicatorInterface {
             self::TYPE_RESULT_SECTION_PRODUCTION_NET => 'pequiven_indicator.type_result_section.production_net',
             self::TYPE_RESULT_SECTION_UNREALIZED_PRODUCTION => 'pequiven_indicator.type_result_section.unrealized_production',
             self::TYPE_RESULT_SECTION_RAW_MATERIAL => 'pequiven_indicator.type_result_section.raw_material',
+            self::TYPE_RESULT_SECTION_SERVICES => 'pequiven_indicator.type_result_section.services',
         );
         return $typesOfResultSection;
     }

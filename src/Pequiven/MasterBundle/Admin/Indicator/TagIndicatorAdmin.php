@@ -66,6 +66,9 @@ class TagIndicatorAdmin extends Admin implements \Symfony\Component\DependencyIn
             ->add('showInIndicatorResult',null,array(
                 'required' => false,
             ))
+            ->add('showInIndicatorDashboardResult',null,array(
+                'required' => false,
+            ))
             ->add('showTag', null, array(
                 'required' => false,
             ))
@@ -92,7 +95,8 @@ class TagIndicatorAdmin extends Admin implements \Symfony\Component\DependencyIn
             ->add('valueOfTag')
             ->add('textOfTag')
             ->add('indicator')
-            ;
+            ->add('showTag', null, array('editable' => true))
+        ;
     }
     
     public function prePersist($object) 

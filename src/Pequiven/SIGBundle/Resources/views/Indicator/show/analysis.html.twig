@@ -1,8 +1,8 @@
 {% trans_default_domain 'PequivenIndicatorBundle' %}
 
-<div class="block" ng-init="urlValueIndicatorForm='{{ path('pequiven_feature_indicator_get_form',{'idIndicator':indicator.id}) }}'">
+<div class="block" ng-init="urlValueIndicatorForm='{{ path('pequiven_feature_indicator_get_form',{'idIndicator':indicator_sig.id}) }}'">
     <div class="block-title">
-        <h3 class="ng-binding">{$ indicator.featuresIndicator.length $} {{ 'sig.trend_analysis'|trans ({}, 'messages') }}</h3>
+        <h3 class="ng-binding">{$ indicator_sig.featuresIndicator.length $} {{ 'sig.trend_analysis'|trans ({}, 'messages') }}</h3>
         <div class="button-group absolute-right compact">
             <a class="button icon-list-add " href="" ng-click="loadTemplateFeatureIndicator()" title="">{{ 'pequiven.add'|trans({},'messages') }}&nbsp;#{$ (indicator.featuresIndicator.length + 1) $}</a>
         </div>
@@ -49,6 +49,6 @@
                 </tr>
             </tbody>
         </table>
-        
+                
     </div>
 </div>

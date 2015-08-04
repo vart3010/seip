@@ -1,0 +1,1 @@
+DELETE FROM `seip_report_product_inventory` WHERE `seip_report_product_inventory`.`id` = 664;

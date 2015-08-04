@@ -170,9 +170,6 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                 ->add('resultInPercentage', null, array(
                     'required' => false,
                 ))
-                ->add('showTagInResult', null, array(
-                    'required' => false,
-                ))
                 ->add('showRealValue', null, array(
                     'required' => false,
                 ))
@@ -183,9 +180,6 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                     'required' => false,
                 ))
                 ->add('enabled', null, array(
-                    'required' => false,
-                ))
-                ->add('backward', null, array(
                     'required' => false,
                 ))
                 ->add('isValueFromTextReal', null, array(
@@ -228,6 +222,36 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                     'required' => false,
                 ))
                 ->add('isValuePlanFromEquationPlanFormula', null, array(
+                    'required' => false,
+                ))
+                ->end()
+                ->with('Resultados del Indicador')
+                ->add('resultIsFromChildrensResult', null, array(
+                    'required' => false,
+                ))
+                ->end()
+                ->with('Gráficos del Indicador')
+                ->add('resultIsAccumulative', null, array(
+                    'required' => false,
+                ))
+                ->add('showColumnAccumulativeInDashboard', null, array(
+                    'required' => false,
+                ))
+                ->add('showColumnPlanOneTimeInDashboard', null, array(
+                    'required' => false,
+                ))
+                ->add('resultsAdditionalInDashboardColumn', null, array(
+                    'required' => false,
+                ))
+                ->end()
+                ->with('Etiqueta del Indicador')
+                ->add('showTagsInTwoColumns', null, array(
+                    'required' => false,
+                ))
+                ->add('showTagInResult', null, array(
+                    'required' => false,
+                ))
+                ->add('showTagInDashboardResult', null, array(
                     'required' => false,
                 ))
                 ->end()

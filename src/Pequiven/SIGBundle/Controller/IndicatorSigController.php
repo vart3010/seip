@@ -116,17 +116,33 @@ class IndicatorSigController extends ResourceController
     {
         $resource = $this->findOr404($request);
         $form = $this->getForm($resource);
-
-        if (($request->isMethod('PUT') || $request->isMethod('POST')) && $form->submit($request)->isValid()) {
-
-            $this->domainManager->update($resource);
-
-            return $this->redirectHandler->redirectTo($resource);
-        }
-
-        if ($this->config->isApiRequest()) {
-            return $this->handleView($this->view($form));
-        }        
+        
+        //Comienzo de carga de datos del grafico        
+        //$resultIndicator = $resultArrangementProgram = $resultObjetives = array();
+        //$indicator = $resource->getIndicators();        
+        $tree = array();
+        
+        $caption = "Resultados de Indicator";
+        $subCaption = "Periodo - 2015";
+        $data = array(
+            'dataSource' => array(
+                'chart' => array(
+                    'caption' => $caption,
+                    'subCaption' => $subCaption,
+                ),
+                'categories' => array(
+                    'category' => array(),
+                ),
+                'dataset' => array(),
+            ),
+        );
+        //Configuramos el alto del gráfico
+        $totalIndicator = count($indicator);
+        $heightChart = ($totalIndicator * 30) + 150;
+        
+        //print_r($totalIndicator);
+        //die();
+        // Fin configuracion de grafico        
 
         $view = $this
             ->view()
