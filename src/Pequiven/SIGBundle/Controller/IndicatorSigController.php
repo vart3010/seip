@@ -137,8 +137,8 @@ class IndicatorSigController extends ResourceController
             ),
         );
         //Configuramos el alto del gráfico
-        $totalIndicator = count($indicator);
-        $heightChart = ($totalIndicator * 30) + 150;
+        //$totalIndicator = count($indicator);
+        //$heightChart = ($totalIndicator * 30) + 150;
         
         //print_r($totalIndicator);
         //die();
