@@ -40,7 +40,7 @@ class ArrangementProgramRepository extends EntityRepository
             ->leftJoin('ap.responsibles','ap_r')
             ->leftJoin('ap_r.groups','ap_r_g')
             ->leftJoin('ap.timeline','ap_t')
-            ->leftJoin('ap.managementSystems','ap_ms')
+            ->leftJoin('ap.managementSystem','ap_ms')
             ->leftJoin('ap_t.goals','ap_t_g')
             ->leftJoin('ap_t_g.responsibles','ap_t_g_r')
             ->leftJoin('ap_t_g.goalDetails','ap_t_g_gd')
@@ -70,7 +70,7 @@ class ArrangementProgramRepository extends EntityRepository
             ->leftJoin('ap.responsibles','ap_r')
             ->leftJoin('ap_r.groups','ap_r_g')
             ->leftJoin('ap.timeline','ap_t')
-            ->leftJoin('ap.managementSystems','ap_ms')
+            ->leftJoin('ap.managementSystem','ap_ms')
             ->leftJoin('ap_t.goals','ap_t_g')
             ->leftJoin('ap_t_g.responsibles','ap_t_g_r')
             ->leftJoin('ap_t_g_r.groups','ap_t_g_r_g')
@@ -504,7 +504,7 @@ class ArrangementProgramRepository extends EntityRepository
                     ->leftJoin('to.gerencia', 'to_g')
                     ->leftJoin('ap.operationalObjective', 'oo')
                     ->leftJoin('oo.gerenciaSecond', 'gs')
-                    ->leftJoin('ap.managementSystems', 'ms')
+                    ->leftJoin('ap.managementSystem', 'ms')
                 ;
         if(($ref = $criteria->remove('ap.ref'))){
             $queryBuilder->andWhere($queryBuilder->expr()->like('ap.ref',"'%".$ref."%'"));
@@ -603,10 +603,10 @@ class ArrangementProgramRepository extends EntityRepository
             }
         }
         //Filtro de sistemas de calidad
-        if(($managementSystems = $criteria->remove('managementSystems')) != null){
+        if(($managementSystem = $criteria->remove('managementSystem')) != null){
             $queryBuilder  
-                ->andWhere('ms.id = :managementSystems')
-                ->setParameter('managementSystems', $managementSystems)
+                ->andWhere('ms.id = :managementSystem')
+                ->setParameter('managementSystem', $managementSystem)
                 ;
         }
         //VISTA DE ESTADÍSTICA E INFORMACIÓN POR GERENCIA
