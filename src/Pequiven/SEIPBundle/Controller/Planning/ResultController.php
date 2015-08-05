@@ -87,7 +87,7 @@ class ResultController extends ResourceController {
     }
 
     public function userListItem(Request $request) {
-        //var_dump($request->get("numPersonal"));
+        
         $view = $this
                 ->view()
                 ->setTemplate($this->config->getTemplate('listUserItem.html'))

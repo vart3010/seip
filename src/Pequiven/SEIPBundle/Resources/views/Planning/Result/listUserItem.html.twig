@@ -5,6 +5,7 @@
 {% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
 
 
+
 {% block before_body %}
     {{ contentHeader("Resumen de Gestion") }}
 {% endblock %}
@@ -66,7 +67,7 @@
 
 
 
-            var urlResponsibles = '{{ path('pequiven_user_search') }}';
+            var urlResponsibles = '{{ path('pequiven_user_search_filter') }}';
             var parametersSelectResponsibles = {
                 minimumInputLength: 3,
                 multiple: false,
