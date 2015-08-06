@@ -868,6 +868,16 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                 }
                 $visualize->addChild($itemPeriod);
             }
+            
+            //SUB-MENU PARA CONSULTAR USUARIO
+            if ($this->isGranted('ROLE_SEIP_RESULT_MANAGEMENT_CONSULTING_USER')) {
+                $visualize->addChild('results.visualize.list_user_items', array(
+                            'route' => 'pequiven_list_user_items',
+                            'labelAttributes' => array('icon' => 'fa fa-users')
+                        ))
+                        ->setLabel($this->translate(sprintf('app.backend.menu.%s.results.visualize.item_user_list', $section)));
+        //}
+            }
 
             $menuResults->addChild($visualize);
         }

@@ -8,15 +8,6 @@ pequiven_result_list:
         level: 1|2|3
     methods: [GET]
     
-pequiven_get_url_list_user:
-    path: /.{_format}
-    defaults:
-        _controller: pequiven.controller.result:generateUrlFile
-        _format: html
-    requirements:
-        _format: html|json|xml
-    methods: [GET]
-    
 pequiven_result_show_by_gerencia:
     path: /{level}/{id}.{_format}
     defaults:

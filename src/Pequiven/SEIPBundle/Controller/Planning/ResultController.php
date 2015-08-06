@@ -86,6 +86,11 @@ class ResultController extends ResourceController {
         return $this->handleView($view);
     }
 
+    /**
+     * 
+     * @param Request $request
+     * @return type
+     */
     public function userListItem(Request $request) {
         
         $view = $this

@@ -189,7 +189,7 @@ class UserController extends baseController {
         );
         $user = $this->getUser();
         $securityService = $this->getSecurityService();
-        //Si tiene el rol para ver lla gestiòn de todos (preferiblemente ROLE_SEIP_PLANNING_VIEW_ALL_MANAGEMENT_USER) no envias el levelUser
+        //Si tiene el rol para ver la gestiòn de todos (preferiblemente ROLE_SEIP_PLANNING_VIEW_ALL_MANAGEMENT_USER) no envias el levelUser
         if (!$securityService->isGranted('ROLE_SEIP_PLANNING_VIEW_ALL_MANAGEMENT_USER_ITEMS')) {
             $levelUser = $user->getLevelRealByGroup();
             $criteria['levelUser'] = $levelUser;

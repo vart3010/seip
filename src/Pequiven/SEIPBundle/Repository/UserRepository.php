@@ -281,19 +281,18 @@ class UserRepository extends EntityRepository {
                 ->setParameter('level', $levelUser);
             if (($idGerenciaUser = $criteria->remove('idGerenciaUser'))) {
                 $qb
-                    ->andWhere("u.gerencia = :gerencia ")
-                    ->setParameter("gerencia", $criteria['idGerenciaUser']);
+                    ->andWhere("u.gerencia = :gerenciaId")
+                    ->setParameter("gerenciaId", $idGerenciaUser);
             }
             if (($idGerenciaSecondUser = $criteria->remove('idGerenciaSecondUser'))) {
                 $qb
                     ->andWhere("u.gerenciaSecond = :gerenciaSecond ")
-                    ->setParameter("gerenciaSecond", $criteria['idGerenciaSecondUser']);
+                    ->setParameter("gerenciaSecond", $idGerenciaSecondUser);
             }
         }
 
         $qb->setMaxResults(30);
-
-
+        
         return $qb->getQuery()->getResult();
     }
 

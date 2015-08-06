@@ -110,6 +110,7 @@ security:
             - ROLE_SEIP_RESULT_LIST_PERIOD
             - ROLE_SEIP_RESULT_LIST_STRATEGICS
             - ROLE_SEIP_RESULT_BY_PERIOD
+            - ROLE_SEIP_RESULT_MANAGEMENT_CONSULTING_USER
             
             - ROLE_SEIP_RESULT_VIEW_TACTIC
             - ROLE_SEIP_RESULT_VIEW_OPERATIVE
@@ -186,8 +187,6 @@ security:
             
             - ROLE_SEIP_OPERATION_EXPORT_EXCEL_PRODUCTION
             - ROLE_SEIP_OPERATION_EXPORT_EXCEL_PRODUCTION_PNR_BY_TIME
-            
-            - ROLE_SEIP_VIEW_MANAGEMENT_USER_RESULT
             
             # Permisos especiales
             - ROLE_SEIP_UPDATE_RESULT_OBJECTS

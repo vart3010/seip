@@ -109,3 +109,12 @@ pequiven_user_search_filter:
     methods: GET
     options:
         expose: true
+        
+pequiven_get_url_list_user:
+    path: /.{_format}
+    defaults:
+        _controller: pequiven.controller.result:generateUrlFile
+        _format: html
+    requirements:
+        _format: html|json|xml
+    methods: [GET]
