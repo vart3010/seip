@@ -108,10 +108,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
         //Menú de Gestión de Usuarios
         $groupsUsers = $this->getUser()->getGroups();
         
-        if (
-            (count($groupsUsers) == 1) &&  
-            ($this->isGranted(array("ROLE_SEIP_VIEW_MANAGEMENT_USER_RESULT")))
-           ) {
+        if ($this->isGranted(array("ROLE_SEIP_VIEW_MANAGEMENT_USER_RESULT"))) {
             $this->addMenuManagementUser($menu, $section);
         }
 
