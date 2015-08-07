@@ -830,6 +830,11 @@ class GoalDetails extends Base {
         return $toString;
     }
 
+    /**
+     * Función que retorna lo planificado hasta el mes especificado de una meta en especifico
+     * @param type $month
+     * @return type
+     */
     public function getPlannedTotal($month) {
         $planTotal = 0;
         $months = self::getMonthsPlanned();

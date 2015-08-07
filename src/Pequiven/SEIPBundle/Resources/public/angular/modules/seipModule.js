@@ -1053,7 +1053,8 @@ angular.module('seipModule.controllers', [])
                     var selectedUser = [];
                     var selectedUser = angular.element("#users").select2('data');
                     //console.log(selectedUser["numPersonal"]);
-                    $("input#ruta").val(selectedUser["numPersonal"]);
+//                    $("input#ruta").val(selectedUser["numPersonal"]);
+                    $("input#ruta").val(selectedUser["id"]);
                 }
             });
         })
