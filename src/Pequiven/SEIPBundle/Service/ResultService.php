@@ -1926,11 +1926,17 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 $realDateEnd = clone($planDateEnd);
                 $realDateEnd->setDate($realDateEnd->format('Y'), $summary['realMonthDateEnd'], \Pequiven\SEIPBundle\Service\ToolService::getLastDayMonth($realDateEnd->format('Y'), $summary['realMonthDateEnd']));
 
+                $fecha = date('Y-m-j');
+                $fecha = strtotime('-1 month', strtotime($fecha));
+                $fecha = date('m', $fecha);
+                
+                
                 $goals[$key] = array(
                     'id' => sprintf('ME-%s', $goal->getId()),
                     'description' => $goal->getName(),
                     'weight' => $goal->getWeight(),
                     'result' => $goal->getUpdateResultByAdmin() ? ToolService::formatResult($goal->getResultModified()) : ToolService::formatResult($goal->getResult()),
+                    'resultToDate' => $goal->getGoalDetails()->getPlannedTotal($fecha),
                     'dateStart' => array(
                         'plan' => ToolService::formatDateTime($planDateStart),
                         'real' => ToolService::formatDateTime($realDateStart)

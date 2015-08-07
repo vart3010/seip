@@ -105,12 +105,8 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                 'labelAttributes' => array('icon' => 'icon-card'),
             ))->setLabel($this->translate(sprintf('app.backend.menu.%s.admin.main', $section)));
         }
-        //Menú de Gestión de Usuarios
-        $groupsUsers = $this->getUser()->getGroups();
         
-        if ($this->isGranted(array("ROLE_SEIP_VIEW_MANAGEMENT_USER_RESULT"))) {
-            $this->addMenuManagementUser($menu, $section);
-        }
+
 
 
 
@@ -118,7 +114,6 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
         return $menu;
     }
 
-   
     public function createBreadcrumbsMenu(Request
 
     $request) {
@@ -126,26 +121,25 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
         $bcmenu = $this->createSidebarMenu($request);
         return $this->getCurrentMenuItem($bcmenu);
     }
-    
-     /**
-      * 
-      * @param ItemInterface $menu
-      * @param type $section
-      */
-     private function addMenuManagementUser(ItemInterface $menu, $section) {
+
+    /**
+     * 
+     * @param ItemInterface $menu
+     * @param type $section
+     */
+    private function addMenuManagementUser(ItemInterface $menu, $section) {
         //if ($this->isGranted('ROLE_SEIP_PLANNING_LIST_USER_ITEMS')) {
         $menuManagement = $this->factory->createItem('userManagement', $this->getSubLevelOptions(array(
-                             'route' => 'pequiven_list_user_items',
+                            'route' => 'pequiven_list_user_items',
                             'labelAttributes' => array('icon' => 'fa fa-users',),
                         ))
                 )
                 ->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.user.item_user_list', $section)));
 
-        
+
         //}
         $menu->addChild($menuManagement);
     }
-
 
     /**
      * Construye y añade el menu de objetivos
@@ -868,7 +862,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                 }
                 $visualize->addChild($itemPeriod);
             }
-            
+
             //SUB-MENU PARA CONSULTAR USUARIO
             if ($this->isGranted('ROLE_SEIP_RESULT_MANAGEMENT_CONSULTING_USER')) {
                 $visualize->addChild('results.visualize.list_user_items', array(
@@ -876,7 +870,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                             'labelAttributes' => array('icon' => 'fa fa-users')
                         ))
                         ->setLabel($this->translate(sprintf('app.backend.menu.%s.results.visualize.item_user_list', $section)));
-        //}
+                //}
             }
 
             $menuResults->addChild($visualize);
