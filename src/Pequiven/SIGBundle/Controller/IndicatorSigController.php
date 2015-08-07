@@ -16,6 +16,7 @@ use Pequiven\IndicatorBundle\Entity\IndicatorLevel;
 use Pequiven\SEIPBundle\Model\Common\CommonObject;
 
 use Pequiven\SEIPBundle\Model\PDF\SeipPdf;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 class IndicatorSigController extends ResourceController
 {   
     /**
@@ -108,8 +109,8 @@ class IndicatorSigController extends ResourceController
 
     /**
      * Vista indice de evolucion
+     * @Template("PequivenSIGBundle:Indicator:evolution.html.twig")
      * @param Request $request
-     *
      * @return RedirectResponse|Response
      */
     public function evolutionAction(Request $request)
@@ -117,41 +118,38 @@ class IndicatorSigController extends ResourceController
         $resource = $this->findOr404($request);
         $form = $this->getForm($resource);
         
-        //Comienzo de carga de datos del grafico        
-        //$resultIndicator = $resultArrangementProgram = $resultObjetives = array();
-        //$indicator = $resource->getIndicators();        
-        $tree = array();
+        //Carga de data de Indicador para armar grafica
+        $response = new JsonResponse();
+
+        $idIndicator = $request->get('id');
+
+        $indicatorService = $this->getIndicatorService(); //Obtenemos el servicio del indicador
+
+        $indicator = $this->get('pequiven.repository.indicator')->find($idIndicator); //Obtenemos el indicador
+
+        $dataChart = $indicatorService->getDataChartOfIndicatorEvolution($indicator, array('withVariablesRealPLan' => true)); //Obtenemos la data del gráfico de acuerdo al indicador
+
+        //$response->setData($dataChart); //Seteamos la data del gráfico en Json
+
+        //return $response;
+        //Fin carga de data
         
-        $caption = "Resultados de Indicator";
-        $subCaption = "Periodo - 2015";
-        $data = array(
-            'dataSource' => array(
-                'chart' => array(
-                    'caption' => $caption,
-                    'subCaption' => $subCaption,
-                ),
-                'categories' => array(
-                    'category' => array(),
-                ),
-                'dataset' => array(),
-            ),
-        );
-        //Configuramos el alto del gráfico
-        //$totalIndicator = count($indicator);
-        //$heightChart = ($totalIndicator * 30) + 150;
-        
-        //print_r($totalIndicator);
-        //die();
-        // Fin configuracion de grafico        
+        // Fin configuracion de grafico       
 
         $view = $this
             ->view()
             ->setTemplate($this->config->getTemplate('evolution.html'))
             ->setData(array(
+                'data'                           => $dataChart,
                 $this->config->getResourceName() => $resource,
                 'form'                           => $form->createView()
             ))
         ;
+        /*$data = array(
+            'data' => $dataChart,
+        );*/
+        
+        //return $this->render('PequivenSIGBundle:Indicator:evolution.html.twig', array('data' => $data));
 
         return $this->handleView($view);
     }
@@ -171,6 +169,14 @@ class IndicatorSigController extends ResourceController
     private function getFusionChartExportService()
     {
         return $this->container->get('pequiven_seip.service.fusion_chart');
-    }  
+    } 
+
+    /**
+     * 
+     * @return \Pequiven\IndicatorBundle\Service\IndicatorService
+     */
+    protected function getIndicatorService() {
+        return $this->container->get('pequiven_indicator.service.inidicator');
+    } 
    
 }

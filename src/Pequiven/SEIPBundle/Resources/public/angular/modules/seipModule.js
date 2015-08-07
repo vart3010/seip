@@ -2087,26 +2087,43 @@ angular.module('seipModule.controllers', [])
             var selectInclude = angular.element('#includeGerenciaSecondSupport');
             var sectionExcludeGerenciaSecondSupport = angular.element("#sectionExcludeGerenciaSecondSupport");
             var sectionIncludeGerenciaSecondSupport = angular.element("#sectionIncludeGerenciaSecondSupport");
-            var sectionManagementSystem = angular.element ("#sectionManagementSystems");
+            var selectManagementSystems = angular.element ("#selectManagementSystems");
             $scope.data = {
                 complejos: null,
                 first_line_managements: null,
                 second_line_managements: null,
                 indicatorSummaryLabels: null,
-                frequency_notifications: null
+                frequency_notifications: null,
+                managementSystems; null
             };
             $scope.model = {
                 complejo: null,
                 firstLineManagement: null,
                 secondLineManagement: null,
                 indicatorMiscellaneous: null,
-                frequencyNotification: null
+                frequencyNotification: null,
+                managementSystem: null
             };
             //Carga de Configuración por defecto
             $scope.initPage = function () {
                 selectSecondLineManagement.select2("enable", false);
             };
             $scope.initPage();
+            //Carga de Sistemas de Calidad
+            $scope.getManagementSystems = function(){
+                var parameters = {
+                    filter:{}
+                }
+            }
+            $http.get(Routing.generate('pequiven_arrangementprogram_data_management_system'))
+                    .success(function (data) {
+                        $scope.data.managementSystems = data;
+                        if ($scope.model.managementSystem != null) {
+                            $scope.setValueSelect2("selectManagementSystems", $scope.model.managementSystem, $scope.data.managementSystems, function (selected) {
+                                $scope.model.managementSystem = selected;
+                            });
+                        }
+                    });
             //Busca las localidades
             $scope.getComplejos = function () {
                 var parameters = {
@@ -2285,6 +2302,14 @@ angular.module('seipModule.controllers', [])
                 } else {
                     $scope.tableParams.$params.filter['secondLineManagement'] = null;
                     $scope.tableParams.$params.filter['type_gerencia_support'] = null;
+                }
+            });
+            //Scope ManagementSystems
+             $scope.$watch("model.managementSystem", function (newParams, oldParams) {
+                if ($scope.model.managementSystem != null && $scope.model.managementSystem.id != undefined) {
+                    $scope.tableParams.$params.filter['managementSystems'] = $scope.model.managementSystem.id;
+                } else {
+                    $scope.tableParams.$params.filter['managementSystems'] = null;
                 }
             });
             //Scope de Misceláneo

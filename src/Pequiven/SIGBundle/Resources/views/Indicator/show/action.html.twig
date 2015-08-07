@@ -1,0 +1,58 @@
+{% trans_default_domain 'PequivenSIGBundle' %}
+
+<div class="block" ng-init="urlValueIndicatorForm='{{ path('pequiven_feature_indicator_get_form',{'idIndicator':indicator_sig.id}) }}'">
+
+    <div class="block-title">
+        <h3 class="ng-binding">{$ indicator_sig.featuresIndicator.length $} {{ 'form.messages.action_plan'|trans({},'PequivenSIGBundle') }}</h3>        
+    </div>
+
+    <div class="with-padding">
+        {% set colspan = 5 %}
+        <table class="simple-table responsive-table tables-extras" id="sorting-example2">
+            <thead>
+                <tr>
+                    <th scope="col" width="2%" class="header">{{ 'seip.table.header.nro'|trans({},'PequivenSIGBundle') }}</th>
+                    <th scope="col" width="40%" class="header">
+                        {{ 'seip.table.header.action'|trans({},'PequivenSIGBundle') }}</th>
+                    <th scope="col" width="15%" class="hide-on-tablet header">{{ 'seip.table.header.type_action'|trans({},'PequivenSIGBundle') }}</th>
+                    <th scope="col" width="10%" class="hide-on-mobile-portrait header">{{ 'seip.table.header.start_date'|trans({},'PequivenSIGBundle') }}</th>
+                    <th scope="col" width="10%" class="hide-on-mobile-portrait header">{{ 'seip.table.header.end_date'|trans({},'PequivenSIGBundle') }}</th>
+                    <th scope="col" width="10%" class="hide-on-mobile-portrait header">{{ 'seip.table.header.advance'|trans({},'PequivenSIGBundle') }}</th>
+                    <th scope="col" width="20%" class="hide-on-mobile-portrait header">{{ 'seip.table.header.responsible'|trans({},'PequivenSIGBundle') }}</th>
+                    <th scope="col" width="20%" class="hide-on-mobile-portrait header">{{ 'seip.table.header.observations'|trans({},'PequivenSIGBundle') }}</th>
+
+                        {% set colspan = 6 %}
+                        <th scope="col" width="15%" class="hide-on-mobile-portrait header">&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="featureIndicator in indicator.featuresIndicator" >
+                    <td>{$ ($index + 1) $}</td>
+                    <th scope="row" style="color: {$ featureIndicator.typeFeatureIndicator.color $}">
+                        {$ featureIndicator.description $}
+                    </th>
+                    <td>{$ featureIndicator.createdAt | myDateTime $}</td>
+                    <td>
+                        {$ featureIndicator.createdBy.firstname + " "+ featureIndicator.createdBy.lastname $} <small class="tag">{$ " ("+featureIndicator.createdBy.username+")" $}</small>
+                    </td>
+                        <td class="align-right vertical-center">
+                            <span class="select compact">
+                                <a href class="select-value form-edit">{{ 'pequiven.actions'|trans({},'messages') }}</a>
+                                <span class="select-arrow"></span>
+                                <span class="drop-down">
+                                    <a href ng-click="removeFeatureIndicator(featureIndicator)" class="button icon-cross-round">{{ "pequiven.actions.delete"|trans({},"messages") }}</a>
+                                </span>
+                            </span>
+                        </td>
+                </tr>
+                    
+                <tr ng-if="indicator.featuresIndicator.length == 0">
+                    <td colspan="{{ colspan }}" class="empty_row">
+                        {{ "empty.features_indicator"|trans({},'PequivenSEIPBundle') }}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+                
+    </div>
+</div>

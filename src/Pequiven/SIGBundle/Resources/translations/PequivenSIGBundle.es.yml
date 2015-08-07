@@ -208,6 +208,7 @@ form:
             
     
     messages:
+        action_plan: Plan de Acción y Seguimiento
        
         
 action:
@@ -218,3 +219,33 @@ action:
         InvalidFile: Tipo de archivo invalido
         saveFileSuccess: Archivo guardado correctamente
         errorFileUpload: Error al subir archivo
+seip:
+    table:
+        header:
+            nro: '#'
+            name: Nombre
+            action: Acción
+            type_action: Tipo de Acción
+            advance: % Avance
+            responsible: Responsable
+            type_goal: Tipo de Actividad
+            start_date: Fecha Inicio
+            end_date: Fecha Fin
+            responsibles: Responsable(s)
+            responsible_goal: Responsable(s) de la Meta
+            weight: Peso
+            observations: Observaciones
+            actions: Acciones
+            created_at: Fecha
+            created_by: Creado por
+            updated_by: Actualizado por
+            value: Valor
+            parameters: Parametros
+            products: Productos y Servicios
+            description_feature_indicator: Nota o comentario
+        empty:
+            goals: No Hay Metas Cargadas.
+            observations: No Hay Observaciones.
+            events: No Hay Eventos Registrados.
+            results: No Hay Resultados Cargados.
+            products: No Hay Productos y Servicios Configurados.
