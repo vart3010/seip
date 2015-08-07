@@ -339,6 +339,30 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
         
         return $this->handleView($view);
     }
+    
+    //TODO: FUnción para SAI
+//    $data = array(
+//            'data' => array(
+//                'gerencia' => $gerencia,
+//                'evaluation' => array(
+//                    'management' => array(
+//                        'goals' => $goals,
+//                        'arrangementPrograms' => $arrangementPrograms,
+//                    ),
+//                    'results' => array(
+//                        'objetives' => array(
+//                            'OO' => $objetivesOO,
+//                            'OT' => $objetivesOT,
+//                            'OE' => $objetivesOE,
+//                        ),
+//                    ),
+//                ),
+//                'quantityItems' => $totalItems,
+//            ),
+//            'status' => $status,
+//            'errors' => $this->errors,
+//            'success' => true,
+//        );
 
     /**
      * Buscar objetivos del programa de gestion
