@@ -29,8 +29,8 @@
                                 <th scope="col" width="10%" >{{ 'pequiven.ref'|trans({},'messages') }}</th>
                                 <th scope="col" width="20%" >{{ 'pequiven.arrangement_program.nameOfProgram'|trans }}</th>
                                 <th scope="col" width="30%" >{{ 'pequiven.arrangement_program.description'|trans }}</th>
-                                <th scope="col" style="text-align: center" width="20%" >{{ 'pequiven.arrangement_program.advances'|trans }}</th>
-                                <th scope="col" width="10%"></th>
+                                <th scope="col" colspan="2" style="text-align: center" width="20%" >{{ 'pequiven.arrangement_program.advances'|trans }}</th>
+                                
                             </tr>
                         </thead>
 
@@ -48,12 +48,11 @@
                                         {% set advancesClass = 'red-gradient' %}
                                         {% if advances >= 50 and advances < 100 %}
                                             {% set advancesClass = 'orange-gradient' %}
-
                                         {% elseif advances >= 100 %}
                                             {% set advancesClass = 'green-gradient' %}
                                         {% endif %}
-                                         <span style="max-width: 400px" class="progress" data-progress-options='{"size":false,"barClasses":["{{ advancesClass }}","glossy"],"insetExtremes":true}'>{{ advances }}%</span>
-                                         
+                                        <span style="width: 180px; max-width: 400px" class="progress" data-progress-options='{"size":false,"barClasses":["{{ advancesClass }}","glossy"],"insetExtremes":true}'>{{ advances }}%</span>
+
                                         {#                                            <span style="max-width: 220px" class="progress" data-progress-options='{"size":false,"barClasses":["{{ advancesClass }}","glossy"],"bottomMarks":[{"value":0,"label":"{{ 'pequiven.advances.nope'|trans({},'messages') }}"},{"value":50,"label":"{{ 'pequiven.advances.better'|trans({},'messages') }}"},{"value":100,"label":"{{ 'pequiven.advances.complete'|trans({},'messages') }}"}],"insetExtremes":true}'>{{ advances }}%</span>#}
                                     </td>
                                     <td><span class="tag {{ advancesClass }}" >{{ pg.result }}/{{ pg.resulToDate }}%</span></td>
@@ -74,10 +73,10 @@
 
                             <thead>
                                 <tr>
-                                    <th scope="col" width="20%" >Avance</th>
+
                                     <th scope="col" width="60%" >Nombre</th>
                                     <th style="text-align: center" scope="col" width="20%" >Peso</th>
-
+                                    <th scope="col" width="20%" >Avance</th>    
 
                                 </tr>
                             </thead>
@@ -85,17 +84,25 @@
                             <tbody>
                                 {% set cont = 1 %}
                                 {% for goal in  management["goals"] %} 
+
+                                    {% set porc = (goal.result * 100)/ goal.resultToDate %}
+                                    {% set class = "red-gradient"%}
+                                    {% if(porc>=50 and porc<100) %}
+                                        {% set class = "orange-gradient"%}
+                                    {% elseif (porc>=100)  %}
+                                        {% set class = "green-gradient"%}
+                                    {% endif %}
                                     <tr style="height: 50px">
+                                        <td  style="color: #607890; font-weight: bold">{{ goal.description }}</td>
+                                        <td style="text-align: center" >{{ goal.weight }}%</td>
                                         <td  scope="row">
                                             {{ cont }}-
                                             <span ng-class="getClassForMeter({{ goal.result }},1)"></span>
                                             <span ng-class="getClassForMeter({{ goal.result }},2)"></span>
                                             <span ng-class="getClassForMeter({{ goal.result }},3)"></span>
-                                            {{ goal.result }}%
+                                            {{ goal.result }}% 
+                                            <span class="tag {{ class }}">{{ goal.result }}/{{ goal.resultToDate }}%</span>
                                         </td>
-                                        <td  style="color: #607890; font-weight: bold">{{ goal.description }}</td>
-                                        <td style="text-align: center" >{{ goal.weight }}%</td>
-
                                     </tr>
                                     {% set cont = cont + 1 %}
                                 {% endfor %}
