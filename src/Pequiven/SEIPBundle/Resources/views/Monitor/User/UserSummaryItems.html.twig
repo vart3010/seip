@@ -1,7 +1,4 @@
 {% trans_default_domain 'PequivenArrangementProgramBundle' %}
-
-
-
 <div class="with-padding">
     <div class="columns">
         <div class="twelve-columns">
@@ -9,8 +6,13 @@
                 <h3 class="thin underline text-center">Usuario</h3>
                 <fieldset class="fieldset">
                     <p class="inline-label">
-                        <label class="label">Nombre de Usuario</label>
-                        {{ datosUser["nombre"] }}
+                        <label style="font-weight: bold;" class="label">Nombre de Usuario</label>
+                        {{ datosUser.getFullNameUser }}
+                    </p>
+
+                    <p class="inline-label">
+                        <label style="font-weight: bold;" class="label">Fecha:</label>
+                        {{ "now"|date("d/m/Y") }}
                     </p>
                 </fieldset>
 
@@ -30,7 +32,7 @@
                                 <th scope="col" width="20%" >{{ 'pequiven.arrangement_program.nameOfProgram'|trans }}</th>
                                 <th scope="col" width="30%" >{{ 'pequiven.arrangement_program.description'|trans }}</th>
                                 <th scope="col" colspan="2" style="text-align: center" width="20%" >{{ 'pequiven.arrangement_program.advances'|trans }}</th>
-                                
+
                             </tr>
                         </thead>
 
@@ -73,10 +75,10 @@
 
                             <thead>
                                 <tr>
-
+                                    <th>#</th>
                                     <th scope="col" width="60%" >Nombre</th>
-                                    <th style="text-align: center" scope="col" width="20%" >Peso</th>
-                                    <th scope="col" width="20%" >Avance</th>    
+                                    <th style="text-align: center" scope="col" width="10%" >Peso</th>
+                                    <th scope="col" width="30%" >Avance</th>    
 
                                 </tr>
                             </thead>
@@ -93,10 +95,11 @@
                                         {% set class = "green-gradient"%}
                                     {% endif %}
                                     <tr style="height: 50px">
+                                        <td>{{ cont }}-</td>
                                         <td  style="color: #607890; font-weight: bold">{{ goal.description }}</td>
                                         <td style="text-align: center" >{{ goal.weight }}%</td>
                                         <td  scope="row">
-                                            {{ cont }}-
+
                                             <span ng-class="getClassForMeter({{ goal.result }},1)"></span>
                                             <span ng-class="getClassForMeter({{ goal.result }},2)"></span>
                                             <span ng-class="getClassForMeter({{ goal.result }},3)"></span>
@@ -232,6 +235,15 @@
 
 
         </div>
+        {% if(datosUser!=null) %}
+            <div class="twelve-columns" style="text-align: right">
+                <a class="button" id="downloadPdf" href="javascript:void(0)">
+                    <span class="button-icon"><span class="icon-download"></span></span>
+                    {{ 'pequiven.form.exportItemsToPdf'|trans }}
+                </a>
+                <form id="formExportPdf" action="{{ path("pequiven_download_list_user_items",{'idUser':datosUser.getId}) }}" method="POST"></form>
+            </div>
+        {% endif %}
     </div>
 </div>
 
@@ -265,6 +277,10 @@
         jQuery(document).ready(function () {
             $(".loads").load(function () {
                 console.log("holas");
+            });
+
+            $("a#downloadPdf").click(function () {
+                $("form#formExportPdf").submit();
             });
 
             $('.progress').progress();

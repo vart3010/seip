@@ -32,7 +32,7 @@ class UserSummaryItemsBox extends \Tecnocreaciones\Bundle\BoxBundle\Model\Generi
 //            $searchUser = $this->container->get("pequiven.repository.user")->findUserByNumPersonal($numPersonal);
             $searchUser = $this->container->get("pequiven.repository.user")->find($idUser);
 
-            $datosUser = array("nombre" => $searchUser->getFullNameUser());
+            $datosUser = array("nombre" => $searchUser->getFullNameUser(),"idUser"=>$searchUser->getId());
         } else {
 //            $numPersonal = $this->getUser()->getNumPersonal();
             $idUser = $this->getUser()->getId();
@@ -50,7 +50,7 @@ class UserSummaryItemsBox extends \Tecnocreaciones\Bundle\BoxBundle\Model\Generi
             'management' => $userItems["data"]["evaluation"]["management"],
             'objetives' => $userItems["data"]["evaluation"]["results"]["objetives"],
             //'error' => $userItems["errors"],
-            'datosUser' => $datosUser,
+            'datosUser' => $userItems["data"]['user'],
             'userItems'=>$userItems
         );
     }
