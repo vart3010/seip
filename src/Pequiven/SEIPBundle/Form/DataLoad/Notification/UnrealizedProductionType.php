@@ -18,7 +18,7 @@ class UnrealizedProductionType extends BaseNotification
         $builder
             ->add(sprintf('day%s',$day),null,array(
             'label_attr' => array('class' => 'label'),
-            "attr" => array("class" => "input input-mini",'min' => '0'),
+            "attr" => array("class" => "input input-mini pnrClass",'min' => '0'),
             'constraints' => array(
                 new \Symfony\Component\Validator\Constraints\Range(array(
                     'min' => 0,

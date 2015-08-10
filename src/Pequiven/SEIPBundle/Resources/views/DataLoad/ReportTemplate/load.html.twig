@@ -538,9 +538,7 @@
                 var pnr = plan - real;
                 if(pnr > 0){
                     $(tr[3]).find('.btn-open-pnr').removeClass("hidden");
-                }else if(real > 0){
-                    $(tr[3]).find('.btn-open-pnr').removeClass("hidden");
-                }else{
+                } else{
                     $(tr[3]).find('.btn-open-pnr').addClass("hidden");
                 }
                 if(isNaN(pnr)){
@@ -551,6 +549,16 @@
                 }
                 $(tr[2]).html(myNumberFormat(percentaje));
                 $(tr[3]).find('input').val(pnr);
+            });
+            $('.pnrClass').on('keyup',function(){
+                var $this = $(this);
+                var tr = $this.closest("tr").children();
+                var pnr = parseFloat($this.val());
+                if(pnr > 0){
+                    $(tr[3]).find('.btn-open-pnr').removeClass("hidden");
+                }else{
+                    $(tr[3]).find('.btn-open-pnr').addClass("hidden");
+                }
             });
             //Calculo produccion neta
             $('.netReal').on('keyup',function(){
