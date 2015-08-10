@@ -241,6 +241,8 @@ pequiven_seip:
     errors:
         you_must_specify_the_period_inquiry: Debe especificar el período de su consulta.
         you_must_specify_number_staff_consult: Debe especificar el numero del personal a consultar.
+        you_must_specify_type_gerencia: Debe especificar el nivel de la gerencia que quiere consultar
+        you_must_specify_code_gerencia: Debe especificar el código de la gerencia que quiere consultar
         the_number_staff_does_not_exist: El numero de personal "%numPersonal%" no existe en el Sistema Estadístico de Información Petroquímica.
         the_period_does_not_exist.: El período "%period%" no existe.
         user_has_no_associated_items_evaluation: El usuario "%user%" no tiene items asociados para su evaluación.

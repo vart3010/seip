@@ -343,31 +343,112 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
     
     function getItemsSaiAction(\Symfony\Component\HttpFoundation\Request $request){
         
-    }
-    
-    //TODO: FUnción para SAI
-//    $data = array(
-//            'data' => array(
-//                'gerencia' => $gerencia,
-//                'evaluation' => array(
-//                    'management' => array(
-//                        'goals' => $goals,
-//                        'arrangementPrograms' => $arrangementPrograms,
-//                    ),
-//                    'results' => array(
-//                        'objetives' => array(
-//                            'OO' => $objetivesOO,
-//                            'OT' => $objetivesOT,
-//                            'OE' => $objetivesOE,
-//                        ),
-//                    ),
+        $this->errors= array();
+        $periodName = $request->get('period');
+        $typeGerencia = $request->get('typeGerencia');
+        $codeGerencia = $request->get('codeGerencia');
+
+        $objetives = $objetivesOO = $objetivesOT = $objetivesOE = array();
+        
+        if($periodName === null){
+            $this->addErrorTrans('pequiven_seip.errors.you_must_specify_the_period_inquiry');
+        }
+        if($typeGerencia === null){
+            $this->addErrorTrans('pequiven_seip.errors.you_must_specify_type_gerencia');
+        }
+        if($codeGerencia === null){
+            $this->addErrorTrans('pequiven_seip.errors.you_must_specify_code_gerencia');
+        }
+        
+        $period = $this->container->get('pequiven.repository.period')->findOneBy(array(
+            'name' => $periodName,
+        ));
+        if($typeGerencia == 1){
+            $gerencia = $this->container->get('pequiven.repository.gerenciafirst')->findOneBy(array(
+                'abbreviation' => $codeGerencia,
+            ));
+        } else{
+            $gerencia = $this->container->get('pequiven.repository.gerenciasecond')->findOneBy(array(
+                'abbreviation' => $codeGerencia,
+            ));
+        }
+        
+        $periodActual = $period;
+        $totalItems = 0;
+        
+        if($typeGerencia == 1){
+            foreach ($gerencia->getTacticalObjectives() as $objetive) {
+//                if($objetive->getObjetiveLevel()->getLevel() == \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_TACTICO){
+                if($objetive->getPeriod()->getId() == $periodActual->getId()){
+                    $objetives[$objetive->getId()] = $objetive;
+                }
+//                }
+            }
+        } else{
+            foreach ($gerencia->getOperationalObjectives() as $objetive) {
+                if($objetive->getPeriod()->getId() == $periodActual->getId()){
+                    $objetives[$objetive->getId()] = $objetive;
+                }
+            }
+        }
+
+//        $objetivesStrategic = $this->get('pequiven.repository.objetive')->findAllStrategicByPeriod($period);
+//        foreach ($objetivesStrategic as $objetive) {
+//            if($objetive->getPeriod()->getId() == $periodActual->getId()){
+//                $objetives[$objetive->getId()] = $objetive;
+//            }
+//        }
+        
+        //Recorrer todos los objetivos
+        foreach ($objetives as $key => $objetive) {
+            $period = $objetive->getPeriod();
+
+            $data = array(
+                'ref' => sprintf('OB-%s',$objetive->getRef()),
+                'description' => $objetive->getDescription(),
+//                'result' => $objetive->getUpdateResultByAdmin() ? $this->formatResult($objetive->getResultModified()) : $this->formatResult($objetive->getResult()),
+                'result' => $this->formatResult($objetive->getResult()),
+                'level' => $objetive->getObjetiveLevel()->getDescription(),
+//                'dateStart' => array(
+//                    'plan' => $this->formatDateTime($planDateStart),
+//                    'real' => $this->formatDateTime($planDateStart)
 //                ),
-//                'quantityItems' => $totalItems,
-//            ),
-//            'status' => $status,
-//            'errors' => $this->errors,
-//            'success' => true,
-//        );
+//                'dateEnd' => array(
+//                    'plan' => $this->formatDateTime($planDateEnd),
+//                    'real' => $this->formatDateTime($planDateEnd)
+//                ),
+            );
+            if($objetive->getObjetiveLevel()->getLevel() == \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_OPERATIVO){
+                $objetivesOO[$objetive->getId()] = $data;
+            }else if($objetive->getObjetiveLevel()->getLevel() == \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_TACTICO){
+                $objetivesOT[$objetive->getId()] = $data;
+            }else if($objetive->getObjetiveLevel()->getLevel() == \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_ESTRATEGICO){
+                $objetivesOE[$objetive->getId()] = $data;
+            }
+            $totalItems++;
+        }
+        
+        $data = array(
+            'data' => array(
+                'gerencia' => $gerencia->getDescription(),
+                'performance' => array(
+                    'objetives' => array(
+                        'OO' => $objetivesOO,
+                        'OT' => $objetivesOT,
+                        'OE' => $objetivesOE,
+                    ),
+                ),
+            'quantityItems' => $totalItems,
+            ),
+            'errors' => $this->errors,
+            'success' => true,
+        );
+        
+        $view = $this->view($data);
+        $view->getSerializationContext()->setGroups(array('api_list','api_result','sonata_api_read'));
+        
+        return $this->handleView($view);
+    }
 
     /**
      * Buscar objetivos del programa de gestion
