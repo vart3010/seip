@@ -118,3 +118,14 @@ pequiven_get_url_list_user:
     requirements:
         _format: html|json|xml
     methods: [GET]
+    
+
+
+pequiven_download_list_user_items:
+    path: /.{_format}
+    defaults:
+        _controller: pequiven.controller.result:exportManagementUserListItem
+        _format: html
+    requirements:
+        _format: html|json|xml
+    methods: [GET|POST]

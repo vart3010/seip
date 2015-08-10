@@ -33,6 +33,7 @@ pequiven:
         end_date: Fecha fin
         weight: Peso
         advances: Avances Hasta la Fecha
+        advance: Avance
         advances_in_details: Avances del programa de gestión hasta la fecha
         observations: Observaciones
         revision_date: Fecha de revisión
@@ -136,6 +137,7 @@ pequiven:
             responsible: Responsable(s) de la Meta
         description: Descripción
         nameOfProgram: Nombre del Programa
+        exportItemsToPdf: Descargar Resumen de Gestion
     goals:
         goal: Meta
         goals: Meta(s)
