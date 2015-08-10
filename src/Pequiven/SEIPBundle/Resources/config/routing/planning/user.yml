@@ -58,6 +58,9 @@ pequiven_user_search:
     methods: GET
     options:
         expose: true
+
+
+        
 #Select que devuelve las Gerencias de 2da Línea
 select_gerenciaSecond:
     path: /select_gerenciaSecond

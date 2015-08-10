@@ -86,12 +86,18 @@ class ResultController extends ResourceController {
         return $this->handleView($view);
     }
 
+    /**
+     * 
+     * @param Request $request
+     * @return type
+     */
     public function userListItem(Request $request) {
-        //var_dump($request->get("numPersonal"));
+        
         $view = $this
                 ->view()
                 ->setTemplate($this->config->getTemplate('listUserItem.html'))
-                ->setData(array("numPersonal"=>$request->get("numPersonal")))
+                ->setData(array("id"=>$request->get("idUser")))
+//                ->setData(array("numPersonal"=>$request->get("numPersonal")))
         ;
 
 
@@ -107,7 +113,7 @@ class ResultController extends ResourceController {
 
         $response = new JsonResponse();
         $data = array();
-        $data["url"] = $this->generateUrl("pequiven_list_user_items", array("numPersonal" => $request->get("id")));
+        $data["url"] = $this->generateUrl("pequiven_list_user_items", array("idUser" => $request->get("idUser")));
         $response->setData($data);
         return $response;
     }

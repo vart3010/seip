@@ -22,19 +22,24 @@ class UserSummaryItemsBox extends \Tecnocreaciones\Bundle\BoxBundle\Model\Generi
 
         $period = $this->getPeriodService()->getPeriodActive()->getName();
         
-        if ($this->getRequest()->get('numPersonal') != null) {
-            $numPersonal = $this->getRequest()->get('numPersonal');
+//        if ($this->getRequest()->get('numPersonal') != null) {
+        if ($this->getRequest()->get('idUser') != null) {
+//            $numPersonal = $this->getRequest()->get('numPersonal');
+            $idUser = $this->getRequest()->get('idUser');
 
             //USUARIO BUSCADO Pequiven\SEIPBundle\Repository
             //$em = $this->getDoctrine()->getManager();
-            $searchUser = $this->container->get("pequiven.repository.user")->findUserByNumPersonal($numPersonal);
+//            $searchUser = $this->container->get("pequiven.repository.user")->findUserByNumPersonal($numPersonal);
+            $searchUser = $this->container->get("pequiven.repository.user")->find($idUser);
 
             $datosUser = array("nombre" => $searchUser->getFullNameUser());
         } else {
-            $numPersonal = $this->getUser()->getNumPersonal();
+//            $numPersonal = $this->getUser()->getNumPersonal();
+            $idUser = $this->getUser()->getId();
         }
         $resultService = $this->getResultService();
-        $userItems = $resultService->getUserItems($numPersonal, $period);
+//        $userItems = $resultService->getUserItems($numPersonal, $period);
+        $userItems = $resultService->getUserItems($idUser, $period);
 
 //        $groupsUsers = $this->getUser()->getGroups();
 //        $securityService = $this->getSecurityService();
