@@ -1,0 +1,265 @@
+{% trans_default_domain 'PequivenArrangementProgramBundle' %}
+<style>
+    .title {
+        background-color: #dcdcdc; text-align: center; padding: 3px;margin: 5px;
+    }
+    .title span {
+        font-weight: bold;
+        font-size: 16px;
+    }
+</style>
+<div class="with-padding">
+    <div class="columns">
+        <div class="twelve-columns">
+            {% if(datosUser!=null) %}
+                <div class="title">
+                    <span>Usuario</span>
+                </div>
+                <fieldset class="fieldset">
+                    <p class="inline-label">
+                        <label style="font-weight: bold;" class="label">Nombre de Usuario</label>
+                        {{ datosUser.getFullNameUser }}
+                    </p>
+                    <p class="inline-label">
+                        <label style="font-weight: bold;" class="label">Fecha:</label>
+                        {{ "now"|date("d/m/Y") }}
+                    </p>
+                </fieldset>
+
+            {% endif  %}
+
+            {#            PROGRAMAS DE GESTION#}
+            {% if(management["arrangementPrograms"]|length>0) %}
+                <div class="title">
+                    <span>{{ 'pequiven.arrangement_program.arrangement_programs'|trans }}</span>
+                </div>
+                <br>
+                <fieldset class="fieldset">
+                    {#                    <legend class="legend">Programas de Gestion</legend>#}
+                    <table style="font-size: 12px;" class="simple-table responsive-table" id="sorting-example2">
+                        <tr style="font-weight: bold;">
+                            <th scope="col" width="15%" >{{ 'pequiven.ref'|trans({},'messages') }}</th>
+                            <th scope="col" width="25%" >{{ 'pequiven.arrangement_program.nameOfProgram'|trans }}</th>
+                            <th scope="col" width="42%" >{{ 'pequiven.arrangement_program.description'|trans }}</th>
+                            <th scope="col" colspan="2" width="18%" >{{ 'pequiven.arrangement_program.advance'|trans }}</th>
+
+                        </tr>
+
+                        {% for pg in  (management["arrangementPrograms"]) %} 
+                            <tr>
+                                <td scope="row">
+                                    <i class="fa fa-tasks"></i>
+                                    {{ pg.id }}
+                                </td>
+                                <td>{{ pg.ref }}</td>
+                                <td>{{ pg.description }}</td>
+                                {#                                 <td style="text-align: center">#}
+                                {% set advances = pg.result %}
+                                {% set advancesClass = 'red' %}
+                                {% if advances >= 50 and advances < 100 %}
+                                    {% set advancesClass = 'orange' %}
+                                {% elseif advances >= 100 %}
+                                    {% set advancesClass = 'green' %}
+                                {% endif %}
+                                {#                                <span style="width: 180px; max-width: 400px" class="progress" data-progress-options='{"size":false,"barClasses":["{{ advancesClass }}","glossy"],"insetExtremes":true}'>{{ advances }}%</span>#}
+
+                                {#<span style="max-width: 220px" class="progress" data-progress-options='{"size":false,"barClasses":["{{ advancesClass }}","glossy"],"bottomMarks":[{"value":0,"label":"{{ 'pequiven.advances.nope'|trans({},'messages') }}"},{"value":50,"label":"{{ 'pequiven.advances.better'|trans({},'messages') }}"},{"value":100,"label":"{{ 'pequiven.advances.complete'|trans({},'messages') }}"}],"insetExtremes":true}'>{{ advances }}%</span>#}
+
+                                <td>
+                                    <div style="color: {{ advancesClass }};">
+                                        {{ pg.result|number_format(0, '.', ',') }}/{{ pg.resulToDate|number_format(0, '.', ',') }}%
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </fieldset>
+            {% endif %}
+
+            {% if(management["goals"]|length>0) %}
+                <br>
+                <div class="title">
+                    <span>{{ 'pequiven.goals.goals'|trans }}</span>
+                </div>
+                <br>
+                <table style="font-size: 12px;" ng-init="" class="simple-table responsive-table" id="sorting-example2">
+                    <tr style="font-weight: bold;">
+                        <th  width="5%" >#</th>
+                        <th scope="col" width="70%" >Nombre</th>
+                        <th style="text-align: center" scope="col" width="10%" >Peso</th>
+                        <th scope="col" width="20%" >Avance</th>    
+                    </tr>
+
+                    {% set cont = 1 %}
+                    {% for goal in  management["goals"] %} 
+
+                        {% set porc = (goal.result * 100)/ goal.resultToDate %}
+                        {% set class = "red"%}
+                        {% if(porc>=50 and porc<100) %}
+                            {% set class = "orange"%}
+                        {% elseif (porc>=100)  %}
+                            {% set class = "green"%}
+                        {% endif %}
+                        <tr style="height: 50px">
+                            <td>{{ cont }}</td>
+                            <td>{{ goal.description }}</td>
+                            <td style="text-align: center" >{{ goal.weight }}%</td>
+                            <td  scope="row">
+                                <span style="color: {{ class }}">
+                                    {{ goal.result|number_format(0, '.', ',') }}/{{ goal.resultToDate|number_format(0, '.', ',') }}%
+                                </span>
+                            </td>
+                        </tr>
+                        {% set cont = cont + 1 %}
+                    {% endfor %}
+                </table>
+
+            {% endif %}
+
+
+
+
+
+            {% if(objetives["OE"]|length>0) %}
+                <br>
+                <div class="title">
+                    <span>Objetivos Estrategicos</span>
+                </div>
+                <br>
+                <table style="font-size: 12px;"  class="simple-table responsive-table" id="sorting-example2">
+                    <tr style="font-weight: bold;">
+                        <th scope="col" width="15%" >Referencia</th>
+                        <th scope="col" width="65%" >Descripción</th>
+                        <th scope="col" style="text-align: center"  width="20%" >Resultado</th>
+                    </tr>
+                    {% for objetivesOE in objetives["OE"] %}
+                        <tr>
+                            <td>{{ objetivesOE.id }}</td>
+                            <td>{{ objetivesOE.description }}</td>
+                            <td style="text-align: center">
+                                {% set advances = objetivesOE.result %}
+                                {% set advancesClass = 'red' %}
+                                {% if advances >= 50 and advances < 100 %}
+                                    {% set advancesClass = 'orange' %}
+
+                                {% elseif advances >= 100 %}
+                                    {% set advancesClass = 'green' %}
+                                {% endif %}
+                                {#                                <span style="max-width: 220px" class="progress" data-progress-options='{"size":false,"barClasses":["{{ advancesClass }}","glossy"],"bottomMarks":[{"value":0,"label":"{{ 'pequiven.advances.nope'|trans({},'messages') }}"},{"value":50,"label":"{{ 'pequiven.advances.better'|trans({},'messages') }}"},{"value":100,"label":"{{ 'pequiven.advances.complete'|trans({},'messages') }}"}],"insetExtremes":true}'>{{ advances }}%</span>#}
+                                <span style="color: {{ advancesClass }}">
+                                    {{ advances }}%
+                                </span>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            {% endif %}
+
+            {% if(objetives["OT"]|length>0) %}
+                <br>
+                <div class="title">
+                    <span>Objetivos Tácticos</span>
+                </div>
+                <br>
+                <table style="font-size: 12px;" class="simple-table responsive-table" id="sorting-example2">
+                    <tr style="font-weight: bold;">
+                        <th scope="col" width="15%" >Referencia</th>
+                        <th scope="col" width="65%" >Descripción</th>
+                        <th scope="col" style="text-align: center" width="20%" >Resultado</th>
+                    </tr>
+                    <tbody>
+                        {% for objetivesOT in objetives["OT"] %}
+                            <tr>
+                                <td >{{ objetivesOT.id }}</td>
+                                <td >{{ objetivesOT.description }}</td>
+                                <td style="text-align: center">
+                                    {% set advances = objetivesOT.result %}
+                                    {% set advancesClass = 'red' %}
+                                    {% if advances >= 50 and advances < 100 %}
+                                        {% set advancesClass = 'orange' %}
+
+                                    {% elseif advances >= 100 %}
+                                        {% set advancesClass = 'green' %}
+                                    {% endif %}
+                                    {#                                    <span style="max-width: 220px" class="progress" data-progress-options='{"size":false,"barClasses":["{{ advancesClass }}","glossy"],"bottomMarks":[{"value":0,"label":"{{ 'pequiven.advances.nope'|trans({},'messages') }}"},{"value":50,"label":"{{ 'pequiven.advances.better'|trans({},'messages') }}"},{"value":100,"label":"{{ 'pequiven.advances.complete'|trans({},'messages') }}"}],"insetExtremes":true}'>{{ advances }}%</span>#}
+                                    <span style="advancesClass">
+                                        {{ advances }}%
+                                    </span>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+
+            {% if(objetives["OO"]|length>0) %}
+                <br>
+                <div class="title">
+                    <span>Objetivos Operativos</span>
+                </div>
+                <br>
+                <table style="font-size: 12px;" class="simple-table responsive-table" id="sorting-example2">
+                    <tr style="font-weight: bold;">
+                        <th scope="col" width="15%" >Referencia</th>
+                        <th scope="col" width="65%" >Descripción</th>
+                        <th scope="col" style="text-align: center" width="20%" >Resultado</th>
+                    </tr>
+                    {% for objetivesOO in objetives["OO"] %}
+                        <tr>
+                            <td>{{ objetivesOO.id }}</td>
+                            <td>{{ objetivesOO.description }}</td>
+                            <td style="text-align: center">
+                                {% set advances = objetivesOO.result %}
+                                {% set advancesClass = 'red' %}
+                                {% if advances >= 50 and advances < 100 %}
+                                    {% set advancesClass = 'orange' %}
+
+                                {% elseif advances >= 100 %}
+                                    {% set advancesClass = 'green' %}
+                                {% endif %}
+                                {#                                <span style="max-width: 220px" class="progress" data-progress-options='{"size":false,"barClasses":["{{ advancesClass }}","glossy"],"bottomMarks":[{"value":0,"label":"{{ 'pequiven.advances.nope'|trans({},'messages') }}"},{"value":50,"label":"{{ 'pequiven.advances.better'|trans({},'messages') }}"},{"value":100,"label":"{{ 'pequiven.advances.complete'|trans({},'messages') }}"}],"insetExtremes":true}'>{{ advances }}%</span>#}
+                                <span style="color: {{ advancesClass }}">
+                                    {{ advances }}%
+                                </span>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+
+
+{% block stylesheets %}
+    <!-- Additional styles -->
+    <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/form3860.css?v=1') }}">
+    <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/switches3860.css?v=1') }}">
+
+    <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/table3860.css?v=1') }}">
+    <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/progress-slider3860.css?v=1') }}">
+
+    <!-- Select2 -->
+    <link rel="stylesheet" href="{{ asset('bundles/pequivenseip/select2-3.5.0/select2.css') }}">
+
+    <!-- jQuery Form Validation -->
+    <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/libs/formValidator/developr.validationEngine3860.css?v=1') }}">    
+
+{% endblock %}
+
+{% block javascripts %}
+
+    <script src="{{  asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/libs/jquery.tablesorter.min.js') }}"></script>
+    <script src="{{  asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.progress-slider.js') }}"></script>
+    <script src="{{  asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/libs/DataTables/jquery.dataTables.min.js') }}"></script>
+    <!-- Select2 -->
+    <script src="{{ asset('bundles/pequivenseip/select2-3.5.0/select2.min.js') }}"></script>
+    <!-- jQuery-ui -->
+    <script src="{{ asset('bundles/pequivenseip/jquery-ui.custom/jquery-ui.js?v=1') }}"></script>
+
+    <script src="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/libs/formValidator/jquery.validationEngine3860.js?v=1') }}"></script>
+    <script src="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/libs/formValidator/languages/jquery.validationEngine-' ~ app.request.locale ~ '3860.js?v=1') }}"></script>
+
+    <script src="{{  asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.tabs.js') }}"></script>
+{% endblock %}

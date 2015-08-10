@@ -214,7 +214,7 @@ class productReportService implements ContainerAwareInterface {
         $desplazamiento = 0;
         foreach (array_unique($arrayCategories) as $categories) {
             $categoriesGraphic[] = array("label" => $categories);
-
+            
             $rep = array_keys($arrayCategories, $categories);
 
 

@@ -92,16 +92,97 @@ class ResultController extends ResourceController {
      * @return type
      */
     public function userListItem(Request $request) {
-        
+
         $view = $this
                 ->view()
                 ->setTemplate($this->config->getTemplate('listUserItem.html'))
-                ->setData(array("id"=>$request->get("idUser")))
+                ->setData(array("id" => $request->get("idUser")))
 //                ->setData(array("numPersonal"=>$request->get("numPersonal")))
         ;
 
 
         return $this->handleView($view);
+    }
+
+    public function exportManagementUserListItem(Request $request) {
+        $pdf = new \Pequiven\SEIPBundle\Model\PDF\SeipPdf('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+        $pdf->setPrintLineFooter(false);
+        $pdf->setContainer($this->container);
+        $pdf->setPeriod($this->getPeriodService()->getPeriodActive());
+        //$pdf->setFooterText($this->trans('pequiven_seip.message_footer', array(), 'PequivenSEIPBundle'));
+// set document information
+        $pdf->SetCreator(PDF_CREATOR);
+        $pdf->SetAuthor('SEIP');
+        $pdf->setTitle('Gestión de Usuario');
+        //$pdf->SetSubject('Resultados SEIP');
+        $pdf->SetKeywords('PDF, SEIP, Resultados');
+
+        $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+        $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+
+// set default monospaced font
+        $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+
+// set margins
+        $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+
+// set auto page breaks
+        $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+
+// set image scale factor
+        $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+
+// set font
+//            $pdf->SetFont('times', 'BI', 12);
+// add a page
+        $pdf->AddPage();
+
+        $datosUser = array();
+        $period = $this->getPeriodService()->getPeriodActive()->getName();
+        
+//        if ($this->getRequest()->get('numPersonal') != null) {
+        if ($this->getRequest()->get('idUser') != null) {
+//            $numPersonal = $this->getRequest()->get('numPersonal');
+            $idUser = $this->getRequest()->get('idUser');
+
+            //USUARIO BUSCADO Pequiven\SEIPBundle\Repository
+            //$em = $this->getDoctrine()->getManager();
+//            $searchUser = $this->container->get("pequiven.repository.user")->findUserByNumPersonal($numPersonal);
+            $searchUser = $this->container->get("pequiven.repository.user")->find($idUser);
+
+            $datosUser = array("nombre" => $searchUser->getFullNameUser());
+        } else {
+//            $numPersonal = $this->getUser()->getNumPersonal();
+            $idUser = $this->getUser()->getId();
+        }
+        $resultService = $this->getResultService();
+//        $userItems = $resultService->getUserItems($numPersonal, $period);
+        $userItems = $resultService->getUserItems($idUser, $period);
+
+//        $groupsUsers = $this->getUser()->getGroups();
+//        $securityService = $this->getSecurityService();
+
+
+
+        $data = array(
+            'management' => $userItems["data"]["evaluation"]["management"],
+            'objetives' => $userItems["data"]["evaluation"]["results"]["objetives"],
+            //'error' => $userItems["errors"],
+            'datosUser' => $userItems["data"]['user'],
+            'userItems' => $userItems
+        );
+
+
+// set some text to print
+        $html = $this->renderView('PequivenSEIPBundle:Monitor/User:UserSummaryItemsPdfFormat.html.twig', $data);
+
+// print a block of text using Write()
+        $pdf->writeHTML($html, true, false, true, false, '');
+
+//            $pdf->Output('Reporte del dia'.'.pdf', 'I');
+        $pdf->Output('Gestion de Usuario' . '.pdf', 'D');
     }
 
     /**
@@ -118,6 +199,7 @@ class ResultController extends ResourceController {
         return $response;
     }
 
+   
     /**
      * Función que renderiza el Monitor de Objetivos Operativos
      * 
