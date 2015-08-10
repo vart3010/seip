@@ -340,6 +340,11 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
         return $this->handleView($view);
     }
     
+    
+    function getItemsSaiAction(\Symfony\Component\HttpFoundation\Request $request){
+        
+    }
+    
     //TODO: FUnción para SAI
 //    $data = array(
 //            'data' => array(

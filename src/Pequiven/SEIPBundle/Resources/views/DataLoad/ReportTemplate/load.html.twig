@@ -538,6 +538,8 @@
                 var pnr = plan - real;
                 if(pnr > 0){
                     $(tr[3]).find('.btn-open-pnr').removeClass("hidden");
+                }else if(real > 0){
+                    $(tr[3]).find('.btn-open-pnr').removeClass("hidden");
                 }else{
                     $(tr[3]).find('.btn-open-pnr').addClass("hidden");
                 }
