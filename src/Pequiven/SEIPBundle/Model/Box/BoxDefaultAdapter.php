@@ -26,13 +26,13 @@ class BoxDefaultAdapter extends BoxBaseAdapter {
 
 
 
-        if ($this->isGranted('ROLE_WORKER_PLANNING')) {
-            $boxActive = new \Tecnocreaciones\Bundle\BoxBundle\Model\BoxStaticLocked();
-            $boxActive->setBoxName('pequiven_seip_box_tactic_summaryindicatorcharged');
-            $boxActive->setArea(AreasBox::PRINCIPAL, array('position' => 0));
-
-            $boxActives[] = $boxActive;
-        }
+//        if ($this->isGranted('ROLE_WORKER_PLANNING')) {
+//            $boxActive = new \Tecnocreaciones\Bundle\BoxBundle\Model\BoxStaticLocked();
+//            $boxActive->setBoxName('pequiven_seip_box_tactic_summaryindicatorcharged');
+//            $boxActive->setArea(AreasBox::PRINCIPAL, array('position' => 0));
+//
+//            $boxActives[] = $boxActive;
+//        }
         if ($this->isGranted(array('ROLE_DIRECTIVE', 'ROLE_DIRECTIVE_AUX', 'ROLE_WORKER_PLANNING'))) {
             //MUESTRA LA VISTA POR DEFECTO DEL SEIP 
             $boxActive = new \Tecnocreaciones\Bundle\BoxBundle\Model\BoxStaticLocked();
@@ -49,15 +49,15 @@ class BoxDefaultAdapter extends BoxBaseAdapter {
             $boxActives[] = $boxActive;
         }
 
-        //LISTA PRGORAMAS DE GESTION ASOCIADOS
+        //LISTA PROGRAMAS DE GESTIÓN ASOCIADOS
         $boxActive = new \Tecnocreaciones\Bundle\BoxBundle\Model\BoxStaticLocked();
         $boxActive->setBoxName('pequiven_seip_box_my_arrangementprogram_summary');
-        $boxActive->setArea(AreasBox::PRINCIPAL, array('position' => 1));
+        $boxActive->setArea(AreasBox::PRINCIPAL, array('position' => 0));
         $boxActives[] = $boxActive;
 
         $boxActive = new \Tecnocreaciones\Bundle\BoxBundle\Model\BoxStaticLocked();
         $boxActive->setBoxName('pequiven_seip_box_user_summary_items');
-        $boxActive->setArea(AreasBox::ITEMS, array('position' => 2));
+        $boxActive->setArea(AreasBox::ITEMS, array('position' => 0));
         $boxActives[] = $boxActive;
 
 

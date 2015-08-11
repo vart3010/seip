@@ -235,9 +235,10 @@ pequiven_seip:
     tooltips:
         click_to_show: Click para ver
     area:
-        main: Area principal
-        events: Area de eventos
+        main: Área principal
+        events: Área de eventos
         dashboard: Bienvenida
+        user_items: Área de gestión
     errors:
         you_must_specify_the_period_inquiry: Debe especificar el período de su consulta.
         you_must_specify_number_staff_consult: Debe especificar el numero del personal a consultar.
@@ -520,6 +521,7 @@ pequiven_seip_box_linestrategic_icons_indicator_by_line_dashboard: Indicadores E
 pequiven_seip_box_linestrategic_icons_dashboard: Línea Estratégicas (Íconos)
 pequiven_seip_box_linestrategic_iconsnavbar : Línea Estratégicas (Barra de Navegación)
 pequiven_indicator_box_iconssummary: Indicadores Estratégicos (Librito)
+pequiven_seip_box_user_summary_items: Gestión de un usuario
 
 miscellaneous:
     noCharged: No Cargado
