@@ -168,6 +168,10 @@
         <service id="pequiven_seip.box.genericdashboardbox" class="Pequiven\SEIPBundle\Model\Box\Dashboard\GenericDashboardBox">
             <tag name="tecnocreaciones_box.box" />
         </service>
+        <!-- Box Dashboard Nivel Plantilla de Reporte Producción -->
+        <service id="dashboard.data_load.box.report_template" class="Pequiven\SEIPBundle\Model\Box\Dashboard\DataLoadReportTemplateBox">
+            <tag name="tecnocreaciones_box.box" />
+        </service>
         <!-- Box donde se definen las Áreas del sistema para en un futuro separar todo tipo frames -->
         <service id="pequiven_seip.area_definition" class="Pequiven\SEIPBundle\Model\Box\AreaDefinition">
             <tag name="tecnocreaciones_box.area" />

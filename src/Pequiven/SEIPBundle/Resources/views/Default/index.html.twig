@@ -1,5 +1,7 @@
 {#{% extends "PequivenSEIPBundle:Template:Developer/Common/tableFormat1.html.twig" %}#}
-{% extends "PequivenSEIPBundle:Template:Developer/layout.html.twig" %}
+{% extends is_granted('ROLE_SEIP_OPERATION_VIEW_MONITOR_PRODUCTION') 
+    ? 'PequivenSEIPBundle:Template:Developer/layoutMenuHidden.html.twig' 
+    : 'PequivenSEIPBundle:Template:Developer/layout.html.twig' %}
 
 {% trans_default_domain 'PequivenSEIPBundle' %}
 

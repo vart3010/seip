@@ -188,6 +188,9 @@ security:
             - ROLE_SEIP_OPERATION_EXPORT_EXCEL_PRODUCTION
             - ROLE_SEIP_OPERATION_EXPORT_EXCEL_PRODUCTION_PNR_BY_TIME
             
+            # MONITORES
+            - ROLE_SEIP_OPERATION_VIEW_MONITOR_PRODUCTION
+            
             # Permisos especiales
             - ROLE_SEIP_UPDATE_RESULT_OBJECTS
             
