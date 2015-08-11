@@ -2218,7 +2218,7 @@ angular.module('seipModule.controllers', [])
                 }
             };
             if (level == 1) {
-
+                $scope.getFrequencyNotifications();
             } else if (level > 1) {
                 $scope.getComplejos();
                 $scope.getFirstLineManagement();
