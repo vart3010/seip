@@ -1,36 +1,38 @@
 <?php
 
-namespace Pequiven\SEIPBundle\Model\Box\Dashboard;
+namespace Pequiven\SEIPBundle\Model\Box\Dashboard\DataLoad;
 
 /**
- * Muestra un resumen de mis programas de gestion
+ * Muestra la base para el dashboard de Producción
  *
  */
-class DataLoadReportTemplateBox extends \Tecnocreaciones\Bundle\BoxBundle\Model\GenericBox
+class ProductionBox extends \Tecnocreaciones\Bundle\BoxBundle\Model\GenericBox
 {
     public function getName() {
-        return 'dashboard_data_load_report_template';
+        return 'dashboard_data_load_production';
     }
 
     public function getParameters() 
     {
-        $criteria = array();
-        $orderBy = array();
-        $repository = $this->container->get('pequiven_seip.repository.arrangementprogram');
+        //Obtenemos los ReportsTemplates que tiene el usuario disponible para ver (A menos que tenga el rol ROLE_SEIP_OPERATION_REPORT_TEMPLATES_ALL)
+        $repositoryReportTemplate = $this->container->get('pequiven.repository.report_template');
+        $user = $this->getUser();
         
-        $period = $this->getPeriodService()->getPeriodActive();
-        $criteria['ap.period'] = $period;
-        $criteria['ap.user'] = $this->getUser();
+        if($this->isGranted(array('ROLE_SEIP_OPERATION_REPORT_TEMPLATES_ALL'))){
+            $reportTemplates = $repositoryReportTemplate->findAll();
+        } else{
+            $reportTemplates = $user->getReportTemplates();
+        }
         
-        $resources = $repository->createPaginatorByAssignedResponsibles($criteria,$orderBy);
-        $resources->setMaxPerPage(5);
+        
+        
         return array(
-            'result'  => $resources->toArray()
+            'reportTemplates'  => $reportTemplates
         );
     }
 
     public function getTemplateName() {
-        return 'PequivenSEIPBundle:Monitor:Dashboard/DataLoadReportTemplate.html.twig';
+        return 'PequivenSEIPBundle:Monitor:Dashboard\DataLoad\Production.html.twig';
     }
     
     public function getAreasNotPermitted() 
@@ -45,7 +47,7 @@ class DataLoadReportTemplateBox extends \Tecnocreaciones\Bundle\BoxBundle\Model\
     }
     
     public function getDescription() {
-        return 'Dashboard donde se muestra la data consolidada por Report Template';
+        return 'Base donde se manejan los dashboards de producción';
     }
     
     /**

@@ -1,0 +1,25 @@
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+<!-- Sección Lateral Izquierda -->
+<div class="with-padding">
+    <div class="columns">
+        <div class="three-columns three-columns-tablet six-columns-mobile new-row-mobile">
+            Epale
+        </div>
+        <div class="nine-columns nine-columns-tablet six-columns-mobile new-row-mobile">
+            <ul>
+            {% for reportTemplate in reportTemplates %}
+                <li>{{ reportTemplate.name }}</li>
+            {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+
+{% block javascript %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            
+        });
+    </script>
+{% endblock javascript %}

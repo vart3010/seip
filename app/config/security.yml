@@ -190,6 +190,7 @@ security:
             
             # MONITORES
             - ROLE_SEIP_OPERATION_VIEW_MONITOR_PRODUCTION
+            - ROLE_SEIP_OPERATION_REPORT_TEMPLATES_ALL
             
             # Permisos especiales
             - ROLE_SEIP_UPDATE_RESULT_OBJECTS

@@ -22,10 +22,7 @@ class BoxDefaultAdapter extends BoxBaseAdapter {
 
     public function getModelBoxes() {
         $boxActives = array();
-
-
-
-
+        
 //        if ($this->isGranted('ROLE_WORKER_PLANNING')) {
 //            $boxActive = new \Tecnocreaciones\Bundle\BoxBundle\Model\BoxStaticLocked();
 //            $boxActive->setBoxName('pequiven_seip_box_tactic_summaryindicatorcharged');
@@ -33,21 +30,36 @@ class BoxDefaultAdapter extends BoxBaseAdapter {
 //
 //            $boxActives[] = $boxActive;
 //        }
-        if ($this->isGranted(array('ROLE_DIRECTIVE', 'ROLE_DIRECTIVE_AUX', 'ROLE_WORKER_PLANNING'))) {
-            //MUESTRA LA VISTA POR DEFECTO DEL SEIP 
+        
+        if($this->isGranted(array('ROLE_SEIP_OPERATION_VIEW_MONITOR_PRODUCTION'))){
             $boxActive = new \Tecnocreaciones\Bundle\BoxBundle\Model\BoxStaticLocked();
-//            $boxActive->setBoxName('pequiven_seip_box_dashboard_planningdashboard');
-            $boxActive->setBoxName('pequiven_seip_box_genericdashboardbox');
-            $boxActive->setArea(AreasBox::DASHBOARD, array('position' => 0));
+            $boxActive->setBoxName('dashboard_data_load_production');
+            $boxActive->setArea(AreasBox::DASHBOARD,array('position' => 0));
 
             $boxActives[] = $boxActive;
-        } else {
+        } else{
             $boxActive = new \Tecnocreaciones\Bundle\BoxBundle\Model\BoxStaticLocked();
             $boxActive->setBoxName('pequiven_seip_box_genericdashboardbox');
             $boxActive->setArea(AreasBox::DASHBOARD,array('position' => 0));
 
             $boxActives[] = $boxActive;
         }
+        
+//        if ($this->isGranted(array('ROLE_DIRECTIVE', 'ROLE_DIRECTIVE_AUX', 'ROLE_WORKER_PLANNING'))) {
+//            //MUESTRA LA VISTA POR DEFECTO DEL SEIP 
+//            $boxActive = new \Tecnocreaciones\Bundle\BoxBundle\Model\BoxStaticLocked();
+////            $boxActive->setBoxName('pequiven_seip_box_dashboard_planningdashboard');
+//            $boxActive->setBoxName('pequiven_seip_box_genericdashboardbox');
+//            $boxActive->setArea(AreasBox::DASHBOARD, array('position' => 0));
+//
+//            $boxActives[] = $boxActive;
+//        } else {
+//            $boxActive = new \Tecnocreaciones\Bundle\BoxBundle\Model\BoxStaticLocked();
+//            $boxActive->setBoxName('pequiven_seip_box_genericdashboardbox');
+//            $boxActive->setArea(AreasBox::DASHBOARD,array('position' => 0));
+//
+//            $boxActives[] = $boxActive;
+//        }
 
         //LISTA PROGRAMAS DE GESTIÓN ASOCIADOS
         $boxActive = new \Tecnocreaciones\Bundle\BoxBundle\Model\BoxStaticLocked();
