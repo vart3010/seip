@@ -795,6 +795,7 @@ class ReportTemplateController extends SEIPController {
                 ->getForm();
         $productsReportConsulting = [];
         if ($request->isMethod('POST') && $form->submit($request)->isValid()) {
+        
             $data = $form->getData();
             $byRange = $data['byRange'];
             $withDetails = $data['withDetails'];
@@ -929,7 +930,7 @@ class ReportTemplateController extends SEIPController {
         } else {
             $plant = "null";
         }
-
+        
         $data = array(
             'dateReport' => $dateReport,
             'productsReport' => $productsReport,
