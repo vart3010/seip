@@ -137,7 +137,7 @@ pequiven:
             responsible: Responsable(s) de la Meta
         description: Descripción
         nameOfProgram: Nombre del Programa
-        exportItemsToPdf: Descargar Resumen de Gestion
+        exportItemsToPdf: Descargar Resumen de Gestión
     goals:
         goal: Meta
         goals: Meta(s)
