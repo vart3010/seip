@@ -662,6 +662,7 @@ class ReportTemplateController extends SEIPController {
      * @return type
      */
     public function vizualiceAction(Request $request) {
+        
         $plantReportId = null;
         if ($request->isMethod("POST")) {
             $formData = $request->get("form");
@@ -911,11 +912,11 @@ class ReportTemplateController extends SEIPController {
 //            $r = $dateFrom->format("U") + ($d * $dayUnixTime);
 //            var_dump($r);
 //        }
-        
 
-        $graphicsDays = $reportService->generateColumn3dLinery(array("caption" => "Producción por Dia", "subCaption" => "Valores Expresados en TM"), $productsReport, array("range"=>$byRange,"dateFrom"=>$dateFrom,"dateEnd"=>$dateEnd), $dateReport, $typeReport, "getSummaryDay", "plan", "real");
-        $graphicsMonth = $reportService->generateColumn3dLinery(array("caption" => "Producción por Mes", "subCaption" => "Valores Expresados en TM"), $productsReport, array("range"=>$byRange,"dateFrom"=>$dateFrom,"dateEnd"=>$dateEnd), $dateReport, $typeReport, "getSummaryMonth", "plan_acumulated", "real_acumulated");
-        $graphicsYear = $reportService->generateColumn3dLinery(array("caption" => "Producción por Año", "subCaption" => "Valores Expresados en MTM"), $productsReport, array("range"=>$byRange,"dateFrom"=>$dateFrom,"dateEnd"=>$dateEnd), $dateReport, $typeReport, "getSummaryYear", "plan_acumulated", "real_acumulated", 1000);
+
+        $graphicsDays = $reportService->generateColumn3dLinery(array("caption" => "Producción por Dia", "subCaption" => "Valores Expresados en TM"), $productsReport, array("range" => $byRange, "dateFrom" => $dateFrom, "dateEnd" => $dateEnd), $dateReport, $typeReport, "getSummaryDay", "plan", "real");
+        $graphicsMonth = $reportService->generateColumn3dLinery(array("caption" => "Producción por Mes", "subCaption" => "Valores Expresados en TM"), $productsReport, array("range" => $byRange, "dateFrom" => $dateFrom, "dateEnd" => $dateEnd), $dateReport, $typeReport, "getSummaryMonth", "plan_acumulated", "real_acumulated");
+        $graphicsYear = $reportService->generateColumn3dLinery(array("caption" => "Producción por Año", "subCaption" => "Valores Expresados en MTM"), $productsReport, array("range" => $byRange, "dateFrom" => $dateFrom, "dateEnd" => $dateEnd), $dateReport, $typeReport, "getSummaryYear", "plan_acumulated", "real_acumulated", 1000);
 
 
 
@@ -932,7 +933,7 @@ class ReportTemplateController extends SEIPController {
         $data = array(
             'dateReport' => $dateReport,
             'productsReport' => $productsReport,
-            'productReport' => $productsReport,
+            //'productReport' => $productsReport,
             'typeReport' => $typeReport,
             'consumerPlanningServices' => $consumerPlanningServices,
             'rawMaterialConsumptionPlannings' => $rawMaterialConsumptionPlannings,
@@ -998,8 +999,11 @@ class ReportTemplateController extends SEIPController {
             $pdf->AddPage();
 
 // set some text to print
-            $html = $this->renderView('PequivenSEIPBundle:DataLoad/ReportTemplate:vizualice_data.html.twig', $data);
-
+            if ($byRange) {
+                $html = $this->renderView('PequivenSEIPBundle:DataLoad/ReportTemplate:vizualice_data_by_range.html.twig', $data);
+            } else {
+                $html = $this->renderView('PequivenSEIPBundle:DataLoad/ReportTemplate:vizualice_data.html.twig', $data);
+            }
 // print a block of text using Write()
             $pdf->writeHTML($html, true, false, true, false, '');
 
