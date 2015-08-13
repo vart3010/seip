@@ -90,6 +90,13 @@
             </call>
         </service>
         
+        <!-- Servicio del ReportTemplate -->
+        <service id="data_load.service.report_template" class="Pequiven\SEIPBundle\Service\DataLoad\ReportTemplateService">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
+        
         <!-- Repositorio de Monitor -->
         <service id="pequiven.repository.seipmonitor" class="Pequiven\SEIPBundle\Repository\MonitorRepository">
             <call method="setContainer">

@@ -1,12 +1,25 @@
 {% trans_default_domain 'PequivenSEIPBundle' %}
 
 <!-- Sección Lateral Izquierda -->
-<div class="with-padding">
+<div class="with-padding" ng-controller="ChartsDashboardController">
     <div class="columns">
-        <div class="three-columns three-columns-tablet six-columns-mobile new-row-mobile">
+        
+        {% if typeViews.view_type_pqv == true %}
+            <div class="six-columns six-columns-tablet twelve-columns-mobile new-row-mobile">
+                Epale
+            </div>
+        {% endif %}
+        
+        {#<div id="tab-{{ grafico }}" ng-init="{{ chart.nameFunctionAngular }}({{ indicator.id }},'{{ grafico }}','100','500')">
+            <span id="{{ grafico }}"></span>
+        </div>#}
+        
+        
+        
+        <div class="six-columns six-columns-tablet twelve-columns-mobile new-row-mobile">
             Epale
         </div>
-        <div class="nine-columns nine-columns-tablet six-columns-mobile new-row-mobile">
+        <div class="six-columns six-columns-tablet twelve-columns-mobile new-row-mobile">
             <ul>
             {% for reportTemplate in reportTemplates %}
                 <li>{{ reportTemplate.name }}</li>

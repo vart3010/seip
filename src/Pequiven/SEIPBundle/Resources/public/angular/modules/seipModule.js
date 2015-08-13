@@ -3062,6 +3062,30 @@ angular.module('seipModule.controllers', [])
                     });
                 });
             }
+            
+            //PRO_RT_PQV-Gráfico para ver la producción consolidada por los ReportTemplates de PQV
+            $scope.chargeChartProductionReportTemplateByDate = function (reportTemplateId, dateSearch, render, width, height) {
+                var getDataChartProductionReportTemplateByDate = Routing.generate("getDataChartProductionReportTemplateByDate", {id: reportTemplateId, dateSearch: dateSearch});
+                $http.get(getDataChartProductionReportTemplateByDate).success(function (data) {
+                    FusionCharts.ready(function () {
+                        var revenueChartProductionReportTemplateByDate = new FusionCharts({
+                            "type": "stackedcolumn3d",
+                            "renderAt": render,
+                            "width": width + "%",
+                            "height": height,
+                            "dataFormat": "json",
+                            "dataSource": {
+                                "chart": data.dataSource.chart,
+                                "categories": data.dataSource.categories,
+                                "dataset": data.dataSource.dataset
+                            }
+                        });
+                        revenueChartProductionReportTemplateByDate.setTransparent(true);
+                        revenueChartProductionReportTemplateByDate.render();
+                    });
+                });
+            }
+            //PRO_RT_EEMM_FIL-Gráfico para ver la producción consolidada por los ReportTemplates de las Mixtas y Filiales
 
 
             //Gráfico en forma tacómetro (Usado para mostrar el resultado de los indicadores estratégicos en el dashboard)

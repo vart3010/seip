@@ -17,17 +17,42 @@ class ProductionBox extends \Tecnocreaciones\Bundle\BoxBundle\Model\GenericBox
         //Obtenemos los ReportsTemplates que tiene el usuario disponible para ver (A menos que tenga el rol ROLE_SEIP_OPERATION_REPORT_TEMPLATES_ALL)
         $repositoryReportTemplate = $this->container->get('pequiven.repository.report_template');
         $user = $this->getUser();
+        $userManager = $this->getUserManager();
+        $typeViews = array();
+        $typeViews['view_type_pqv'] = false;
+        $typeViews['view_type_eemm'] = false;
+        
+        $reportTemplates = array();
         
         if($this->isGranted(array('ROLE_SEIP_OPERATION_REPORT_TEMPLATES_ALL'))){
-            $reportTemplates = $repositoryReportTemplate->findAll();
+            $resultReportTemplates = $repositoryReportTemplate->findAll();
+            //Seteamos sólo los reportTemplates de PQV, ya que los de la EEMM y Filiales se buscan directo en el controlador del gráfico
+            foreach($resultReportTemplates as $resultReportTemplate){
+                if($resultReportTemplate->getCompany()->getTypeOfCompany() == \Pequiven\SEIPBundle\Entity\CEI\Company::TYPE_OF_COMPANY_MATRIZ){
+                    $reportTemplates[] = $resultReportTemplate;
+                }
+            }
+            $typeViews['view_type_pqv'] = true;
+            $typeViews['view_type_eemm'] = true;
         } else{
-            $reportTemplates = $user->getReportTemplates();
+            $resulReportTemplates = $user->getReportTemplates();
+            if($userManager->hasReportTemplatesByTypeOfCompany($user, \Pequiven\SEIPBundle\Entity\CEI\Company::TYPE_OF_COMPANY_MATRIZ)){
+                $typeViews['view_type_pqv'] = true;
+                //Seteamos sólo los reportTemplates de PQV, ya que los de la EEMM y Filiales se buscan directo en el controlador del gráfico
+                foreach($resultReportTemplates as $resultReportTemplate){
+                    if($resultReportTemplate->getCompany()->getTypeOfCompany() == \Pequiven\SEIPBundle\Entity\CEI\Company::TYPE_OF_COMPANY_MATRIZ){
+                        $reportTemplates[] = $resultReportTemplate;
+                    }
+                }
+            }
+            if($userManager->hasReportTemplatesByTypeOfCompany($user, \Pequiven\SEIPBundle\Entity\CEI\Company::TYPE_OF_COMPANY_AFFILIATED) || $userManager->hasReportTemplatesByTypeOfCompany($user, \Pequiven\SEIPBundle\Entity\CEI\Company::TYPE_OF_COMPANY_MIXTA)){
+                $typeViews['view_type_eemm'] = true;
+            }
         }
         
-        
-        
         return array(
-            'reportTemplates'  => $reportTemplates
+            'reportTemplates'  => $reportTemplates,
+            'typeViews' => $typeViews
         );
     }
 
@@ -66,5 +91,14 @@ class ProductionBox extends \Tecnocreaciones\Bundle\BoxBundle\Model\GenericBox
     protected function getIndicatorService()
     {
         return $this->container->get('pequiven_indicator.service.inidicator');
+    }
+    
+    /**
+     * Manejador de usuario o administrador
+     * @return \Pequiven\SEIPBundle\Model\UserManager
+     */
+    private function getUserManager() 
+    {
+        return $this->container->get('seip.user_manager');
     }
 }

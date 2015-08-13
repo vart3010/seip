@@ -576,6 +576,30 @@ class ChartController extends SEIPController {
     }
    
     /**
+     * 
+     * @return JsonResponse
+     */
+    public function getDataChartProductionReportTemplateByDateAction(Request $request) {
+        $response = new JsonResponse();
+
+        $idReportTemplate = $request->get('id');
+        $dateSearch = $request->get('dateSearch');
+        
+        var_dump($dateSearch);
+        die();
+
+        $reportTemplateService = $this->getReportTemplateService(); //Obtenemos el servicio del ReportTemplate
+
+        $reportTemplate = $this->get('pequiven.repository.report_template')->find($idReportTemplate); //Obtenemos el ReportTemplate
+
+        $dataChart = $reportTemplateService->getDataChartStackedColumn3d($reportTemplate, array('consolidateByReportTemplate' => true, 'dateSearch' => $dateSearch)); //Obtenemos la data del gráfico de acuerdo al indicador
+
+        $response->setData($dataChart); //Seteamos la data del gráfico en Json
+
+        return $response;
+    }
+   
+    /**
      * Servicio de los Indicadores
      * @return \Pequiven\IndicatorBundle\Service\IndicatorService
      */
@@ -589,6 +613,14 @@ class ChartController extends SEIPController {
      */
     public function getResultService() {
         return $this->container->get('seip.service.result');
+    }
+    
+    /**
+     * Servicio de los ReportTemplates (Producción)
+     * @return \Pequiven\SEIPBundle\Service\DataLoad\ReportTemplateService
+     */
+    public function getReportTemplateService() {
+        return $this->container->get('data_load.service.report_template');
     }
     
 
