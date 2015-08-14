@@ -104,14 +104,6 @@ class ValueIndicator extends Model {
     private $valueIndicatorFile;
 
     /**
-     * Relacion con el plan de Accion y Seguimiento
-     * 
-     * @var Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\ValueIndicatorFile
-     * @ORM\OneToOne(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\ValueIndicatorAction",inversedBy="valueIndicator")
-     */
-    private $valueIndicatorAction;
-
-    /**
      * Get id
      *
      * @return integer 
@@ -306,16 +298,7 @@ class ValueIndicator extends Model {
     function setValueIndicatorFile($valueIndicatorFile) {
         $this->valueIndicatorFile = $valueIndicatorFile;
         return $this;
-    }
-
-    function getValueIndicatorAction() {
-        return $this->valueIndicatorAction;
-    }
-
-    function setValueIndicatorAction($valueIndicatorAction) {
-        $this->valueIndicatorAction = $valueIndicatorAction;
-        return $this;
-    }
+    }    
 
     public function __toString() {
         $toString = '';

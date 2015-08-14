@@ -179,7 +179,6 @@ class IndicatorSigController extends ResourceController
         ;
         $view->getSerializationContext()->setGroups(array('id','api_list'));
         return $view;
-        //return $this->render('PequivenSIGBundle:Indicator\form:form.html.twig');
     }
 
     /**
@@ -212,7 +211,6 @@ class IndicatorSigController extends ResourceController
         ;
         $view->getSerializationContext()->setGroups(array('id','api_list'));
         return $view;
-        //return $this->render('PequivenSIGBundle:Indicator\form:form.html.twig');
     }
     /**
      * Retorna el formulario de las causas de desviación
@@ -244,7 +242,38 @@ class IndicatorSigController extends ResourceController
         ;
         $view->getSerializationContext()->setGroups(array('id','api_list'));
         return $view;
-        //return $this->render('PequivenSIGBundle:Indicator\form:form.html.twig');
+    }
+
+    /**
+     * Retorna el formulario del analisis de la tendencia
+     * 
+     * @param Request $request
+     * @return type
+     */
+    function getFormTrendAction(Request $request)
+    {
+        $indicator = $this->findIndicatorOr404($request);        
+        
+        $valueIndicator = $this->resourceResolver->getResource(
+            $this->getRepository(),
+            'findOneBy',
+            array(array('id' => $request->get('id',0))));
+
+        //$form = $this->buildForm();
+        //$form = $this->buildForm($indicator,$valueIndicator);
+        
+        $view = $this
+            ->view()
+            ->setTemplate($this->config->getTemplate('form/form_trend.html'))
+            ->setTemplateVar($this->config->getPluralResourceName())
+            ->setData(array(
+                'indicator' => $indicator,
+                //'form' => $form->createView(),
+                'valueIndicator' => $valueIndicator
+            ))
+        ;
+        $view->getSerializationContext()->setGroups(array('id','api_list'));
+        return $view;
     }
 
     /**

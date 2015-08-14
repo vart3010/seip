@@ -5,9 +5,9 @@ namespace Pequiven\IndicatorBundle\Model\Indicator;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Modelo de Plan de Acción y Seguimiento
+ * Modelo de las causas del indicador
  */
-abstract class ValueIndicatorAction
+abstract class EvolutionCause
 {
 		
     

@@ -39,12 +39,6 @@
     </div>
     </div>
 
-    <div>
-        <div class="button-group absolute-right compact">
-                <a class="button icon-list-add " href="" ng-click="loadTemplateIndicatorCauses()" title="">{{ 'pequiven.add'|trans({},'messages')  }}</a>
-            </div>
-    </div>
-
         {% endif %}
         {# fin Button formulario relacion lastperiod #}
 
@@ -90,27 +84,20 @@
             {# Fin carga de sistemas de Gestión #}
         </fieldset>
     
-    {# Analisis de Tendencia #}
-    {% if indicator_sig.showFeatures %} 
+    {# Analisis de Tendencia #}    
             <br /><br />
             {% include 'PequivenSIGBundle:Indicator:show/analysis.html.twig' %} 
+            &nbsp;    
+    {# Analisis de Causas #}
+            <br /><br />
+            {% include 'PequivenSIGBundle:Indicator:show/form_causes.html.twig' %} 
             &nbsp;
-    {% endif %}
     {# Plan de accion y seguimiento #}
             <br /><br />
             {% include 'PequivenSIGBundle:Indicator:show/action.html.twig' %} 
             &nbsp;
-    {# Grafica de Tendencia#}
-    <fieldset class="fieldset fields-list">
-            <legend class="legend">{{ 'sig.causes_deviation'|trans ({}, 'messages') }}</legend>
-            <h3>Grafica de Tendencia</h3>
-    </fieldset>
 
-    {# Analisis de Tendencia #}
-    {% if indicator_sig.showFeatures %}
-            <br /><br />
-             {# {% include 'PequivenSEIPBundle:Planning:Indicator/show/analysis.html.twig' %} #}
-    {% endif %}
+    
 
 {% endblock body %}
 

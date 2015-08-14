@@ -241,7 +241,7 @@ class GenericDataController extends SEIPController
         $view->getSerializationContext()->setGroups(array('id','api_list','indicators', 'description'));
         return $this->handleView($view);
     }
-    
+
     /**
      * Busca los responsables
      * @param type $param
