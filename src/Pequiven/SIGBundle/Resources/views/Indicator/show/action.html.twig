@@ -1,9 +1,15 @@
 {% trans_default_domain 'PequivenSIGBundle' %}
 
+<div ng-controller="IndicatorAsocLastPeriodController"> 
+
 <div class="block" ng-init="urlValueIndicatorForm='{{ path('pequiven_feature_indicator_get_form',{'idIndicator':indicator_sig.id}) }}'">
 
     <div class="block-title">
-        <h3 class="ng-binding">{$ indicator_sig.featuresIndicator.length $} {{ 'form.messages.action_plan'|trans({},'PequivenSIGBundle') }}</h3>        
+        <h3 class="ng-binding">{$ indicator_sig.featuresIndicator.length $} {{ 'form.messages.action_plan'|trans({},'PequivenSIGBundle') }}</h3> 
+        {# añadir plan de acción #}
+        <div class="button-group absolute-right compact">
+                <a class="button icon-list-add " href="" ng-click="loadTemplateIndicatorAction()" title="">{{ 'pequiven.add'|trans({},'messages')  }}</a>
+        </div>       
     </div>
 
     <div class="with-padding">

@@ -3571,7 +3571,7 @@ class IndicatorService implements ContainerAwareInterface {
         $dataSetAcum["seriesname"] = "Acumulado";
         $dataSetAnt["seriesname"]  = "2014";
         $labelAntper               = "2014";
-        $labelProm                 = "Acumulado";
+        $labelProm                 = "Promedio o Acumulado";
         $labelobj                  = "Objetivo 2015";
 
         //Carga de datos del lebel principal Periodo-2015
@@ -3589,7 +3589,6 @@ class IndicatorService implements ContainerAwareInterface {
                 
                 $category[] = $label;
                 $contMonth++;
-            //var_dump($label);
             }
             $labelp["label"] = $labelProm;//Label del Prom
             $category[] = $labelp;//Label del Prom
@@ -3597,7 +3596,6 @@ class IndicatorService implements ContainerAwareInterface {
             //Label Obj Acum
             $labelo["label"] = $labelobj;//Label del ObjAcum
             $category[] = $labelo;//Label del ObjAcum
-            //die();
 
             //Data 2014
             $dataAnt["value"] = 50;//Pasando data a Data2014
@@ -3606,20 +3604,61 @@ class IndicatorService implements ContainerAwareInterface {
 
             $dataSetTend["data"][] = array( 'value' => '' );
             $dataSetReal["data"][] = array( 'value' => '' );
+            
             foreach ($indicator->getValuesIndicator() as $value) {
-                //var_dump($value->getValueOfIndicator());
+
                 $dataReal["value"] = $value->getValueOfIndicator();
-                //$dataReal["value"] = array($value->getValueOfIndicator());
-                //var_dump($dataReal);
+
                 $dataSetReal["data"][] = $dataReal;
                 $dataSetTend["data"][] = $dataReal;                
             }
+            //Carga de Prom indicatorParent2014
+            //borrar
+            /*$em = $this->getDoctrine();
+            $prePlanningItemCloneObject = $em->getRepository('Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanningItemClone')->findOneBy(array('idCloneObject' => $indicator->getId(), 'typeObject' => \Pequiven\SEIPBundle\Model\PrePlanning\PrePlanningTypeObject::TYPE_OBJECT_INDICATOR));
+            $indicatorLastPeriod = $this->container->get('pequiven.repository.indicator')->find($prePlanningItemCloneObject->getIdSourceObject());
+            var_dump($prePlanningItemCloneObject->getIdSourceObject());
+            $parent_id = $prePlanningItemCloneObject->getIdSourceObject();
+            $valorant = $em->getRepository('Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator')->findOneBy(array('id' => $parent_id));
+            var_dump($valorant->getValueOfIndicator());
+            die();*/
+            //borrar
+            $indicatorParent = $indicator->getParent();
+            //var_dump($indicatorParent);
+            //$parent_id = $indicatorParent->getId();
+
+            foreach ($indicator->getValuesIndicator() as $value) {
+
+                $dataPeriodoAnterior = $value->getValueOfIndicator();
+              //  var_dump($dataPeriodoAnterior);
+            }
+            //echo "INDICADOR PADRE ",var_dump($parent_id);
+            
+            $indicatorlast = $indicator->getindicatorLastPeriod();
+            //var_dump($indicatorlast);
+            if ($indicatorlast === null) {
+                //echo "El indicador no tiene relacion con el Indicador 2014";
+                //die();
+            }else{
+                var_dump($indicatorlast->getId());
+                //die();
+            }
+
+            //Carga de meta Objetivo2015
+            foreach ($indicator->getObjetives() as $value) {
+                $dataValueObjetive = $value->getgoal();
+            }
+            if ($dataValueObjetive == NULL ) {
+                $dataValueObjetive = 0;
+            }
+            //var_dump($dataValueObjetive);
+            //die();
             //Data Prom
             $dataAcum["value"] = $prom;//Pasando data a data prom
             $dataAcum["color"] = '#0a5f87';            
             $dataSetReal["data"][] = $dataAcum;//promedio
             //Pasando Objetivo Acum
-            $dataObj["value"] = 100;//Pasando data a Dataobj
+            $dataObj["value"] = $dataValueObjetive;//Pasando data a Dataobj
             $dataObj["color"] = '#087505';
             $dataSetReal["data"][] = $dataObj;//Acumulado
             

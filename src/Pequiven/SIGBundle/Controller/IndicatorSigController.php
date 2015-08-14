@@ -27,7 +27,7 @@ class IndicatorSigController extends ResourceController
      */
     function listAction(Request $request) {
 
-        $level = $request->get('level');        
+        $level = $request->get('level'); 
 
         $rol = null;
         $roleByLevel = array(
@@ -145,13 +145,155 @@ class IndicatorSigController extends ResourceController
                 'form'                           => $form->createView()
             ))
         ;
-        /*$data = array(
-            'data' => $dataChart,
-        );*/
-        
-        //return $this->render('PequivenSIGBundle:Indicator:evolution.html.twig', array('data' => $data));
 
         return $this->handleView($view);
+    }
+
+    /**
+     * Retorna el formulario de la relacion del indicador con periodo 2014
+     * 
+     * @param Request $request
+     * @return type
+     */
+    function getFormAction(Request $request)
+    {
+        $indicator = $this->findIndicatorOr404($request);        
+        
+        $valueIndicator = $this->resourceResolver->getResource(
+            $this->getRepository(),
+            'findOneBy',
+            array(array('id' => $request->get('id',0))));
+
+        //$form = $this->buildForm();
+        //$form = $this->buildForm($indicator,$valueIndicator);
+        
+        $view = $this
+            ->view()
+            ->setTemplate($this->config->getTemplate('form/form.html'))
+            ->setTemplateVar($this->config->getPluralResourceName())
+            ->setData(array(
+                'indicator' => $indicator,
+                //'form' => $form->createView(),
+                'valueIndicator' => $valueIndicator
+            ))
+        ;
+        $view->getSerializationContext()->setGroups(array('id','api_list'));
+        return $view;
+        //return $this->render('PequivenSIGBundle:Indicator\form:form.html.twig');
+    }
+
+    /**
+     * Retorna el formulario del plan de acción
+     * 
+     * @param Request $request
+     * @return type
+     */
+    function getFormPlanAction(Request $request)
+    {
+        $indicator = $this->findIndicatorOr404($request);        
+        
+        $valueIndicator = $this->resourceResolver->getResource(
+            $this->getRepository(),
+            'findOneBy',
+            array(array('id' => $request->get('id',0))));
+
+        //$form = $this->buildForm();
+        //$form = $this->buildForm($indicator,$valueIndicator);
+        
+        $view = $this
+            ->view()
+            ->setTemplate($this->config->getTemplate('form/form_action.html'))
+            ->setTemplateVar($this->config->getPluralResourceName())
+            ->setData(array(
+                'indicator' => $indicator,
+                //'form' => $form->createView(),
+                'valueIndicator' => $valueIndicator
+            ))
+        ;
+        $view->getSerializationContext()->setGroups(array('id','api_list'));
+        return $view;
+        //return $this->render('PequivenSIGBundle:Indicator\form:form.html.twig');
+    }
+    /**
+     * Retorna el formulario de las causas de desviación
+     * 
+     * @param Request $request
+     * @return type
+     */
+    function getFormCausesAction(Request $request)
+    {
+        $indicator = $this->findIndicatorOr404($request);        
+        
+        $valueIndicator = $this->resourceResolver->getResource(
+            $this->getRepository(),
+            'findOneBy',
+            array(array('id' => $request->get('id',0))));
+
+        //$form = $this->buildForm();
+        //$form = $this->buildForm($indicator,$valueIndicator);
+        
+        $view = $this
+            ->view()
+            ->setTemplate($this->config->getTemplate('form/form_causes.html'))
+            ->setTemplateVar($this->config->getPluralResourceName())
+            ->setData(array(
+                'indicator' => $indicator,
+                //'form' => $form->createView(),
+                'valueIndicator' => $valueIndicator
+            ))
+        ;
+        $view->getSerializationContext()->setGroups(array('id','api_list'));
+        return $view;
+        //return $this->render('PequivenSIGBundle:Indicator\form:form.html.twig');
+    }
+
+    /**
+     * Busca el indicador o retorna un 404
+     * @param Request $request
+     * @return \Pequiven\IndicatorBundle\Entity\Indicator
+     * @throws type
+     */
+    private function findIndicatorOr404(Request $request)
+    {
+        $id = $request->get('idIndicator');
+        
+        $indicator = $this->get('pequiven.repository.indicator')->find($id);
+        if(!$indicator){
+            throw $this->createNotFoundException();
+        }
+        return $indicator;
+    }
+
+    /**
+     * Construye el formulario para la rerlacion con el indicador 2014
+     * @param \Pequiven\MasterBundle\Entity\Formula $formula
+     * @return type
+     */
+    private function buildForm() 
+    {
+       
+        $form = $this->createFormBuilder(array(
+            'csrf_protection' => false,
+        ));
+       
+                $description = "Indicador Asociado 2014";
+                $editable = true;
+                $name = "indicator_asoc";
+                $type = 'text';
+
+                $parameters = array(
+                    'label' => $description,
+                    'label_attr' => array(
+                        'class' => 'label'
+                    ),
+                    'attr' => array(
+                        'class' => 'input'
+                    ),
+                    'disabled' => !$editable,
+                );
+                $form->add($name,$type,$parameters);
+
+        return $form->getForm();
     }
 
     /**

@@ -70,4 +70,7 @@ Pequiven\IndicatorBundle\Entity\Indicator:
         managementSystems:
             expose: true
             groups: [managementSystems]
+        indicatorlast:
+            expose: true
+            groups: [indicatorlast]
         

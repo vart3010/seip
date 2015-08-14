@@ -13,3 +13,6 @@ Pequiven\ArrangementProgramBundle\Model\ArrangementProgram:
         managementSystems:
             expose: true
             groups: [managementSystems]
+        indicators:
+            expose: true
+            groups: [indicators]

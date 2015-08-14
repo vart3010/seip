@@ -1,3 +1,48 @@
+#carga de formulario de relacion del indicador
+pequiven_indicatorlastperiod_get_form:
+    path: /{idIndicator}/get-form.{_format}
+    defaults:
+        _controller: pequiven.controller.indicator_sig:getFormAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET]
+    options:
+        expose: true
+#carga de formulario plan de acción
+pequiven_indicatoraction_get_form:
+    path: /{idIndicator}/get-form_action.{_format}
+    defaults:
+        _controller: pequiven.controller.indicator_sig:getFormPlanAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET]
+    options:
+        expose: true
+#Carga de formulario de causas de evolution
+pequiven_indicatorcauses_get_form:
+    path: /{idIndicator}/get-form_causes.{_format}
+    defaults:
+        _controller: pequiven.controller.indicator_sig:getFormCausesAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET]
+    options:
+        expose: true
+
+pequiven_arrangementprogram_datasig_indicator_lastperiod:
+    path: /indicators.{_format}
+    defaults: 
+        _controller: pequiven_seip.controller.arrangementprogram_data:getIndicatorLastPeriodAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
+        
 #IndicatorSig
 pequiven_indicatorsig_list:
     path: /{level}/listsig.{_format}

@@ -88,3 +88,33 @@ pequiven_seip_result_visualize_arrangement_programs:
         _format: html|json|xml
         _period: \d+
     methods: [GET]
+    
+pequiven_list_user_items:
+    path: /listUserItems.{_format}
+    defaults:
+        _controller: pequiven.controller.result:userListItem
+        _format: html
+    requirements:
+        _format: html|json|xml
+    methods: [GET|POST]
+    
+pequiven_user_search_filter:
+    path: /search.{_format}
+    defaults:
+        _controller: pequiven_seip.controller.user:searchFilterAction
+        _format: json
+    requirements:
+        id: "\d+"
+        _format: json
+    methods: GET
+    options:
+        expose: true
+        
+pequiven_get_url_list_user:
+    path: /.{_format}
+    defaults:
+        _controller: pequiven.controller.result:generateUrlFile
+        _format: html
+    requirements:
+        _format: html|json|xml
+    methods: [GET]

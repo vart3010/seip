@@ -1,0 +1,51 @@
+{% trans_default_domain 'PequivenIndicatorBundle' %}
+    
+        <form method="POST" id="form_value_indicator">
+            <fieldset class="fieldset fields-list" open="">
+                <legend class="legend">{{ 'sig.relation_indicator'|trans ({}, 'messages') }}</legend>
+                {# {% for child in form.children %}
+                    <div class="field-block button-height" >
+                        {{ form_label(child) }}
+                        {{ form_widget(child) }}
+                        {{ form_errors(child) }}
+                    </div>
+                {% endfor %} #}
+                {# #}              
+            <!-- Formulario Plan de Accción -->
+            <details class="details margin-bottom">
+                <summary role="button" aria-expanded="true">
+                    Plan de Acción y Seguimiento
+                </summary><p>
+            
+            <form method="POST" id="form_indicator_plan">
+                <div class="field-block button-height" >           
+                <label class="label">Acción: </label>
+                <p><input type="text" class="input"name="action" value="" /> <p>
+
+                <label class="label">Tipo de Acción: </label>
+                <p><input type="text" class="input"name="type_action" value="" /><p>
+
+                <label class="label">Fecha inicio: </label>
+                <p class="button-height">
+                        <span class="input">
+                            <span class="icon-calendar"></span>
+                            <input type="text" name="special-input-3" id="special-input-3" class="input-unstyled datepicker" value="">
+                        </span>
+                    </p>
+                <label class="label">Fecha cierre </label>                
+                <p class="button-height">
+                        <span class="input">
+                            <span class="icon-calendar"></span>
+                            <input type="text" name="special-input-3" id="special-input-3" class="input-unstyled datepicker" value="">
+                        </span>
+                    </p>
+
+                <label class="label">Avance: </label>
+                <p><input type="text" class="input"name="advance" value="" /><p>
+
+                <label class="label">Observaciones: </label>
+                <p><textarea type="text" class="input  autoexpanding" name="obser" value=""></textarea><p>
+                </div><br/>
+        </form>
+
+        </details>       

@@ -218,6 +218,29 @@ class GenericDataController extends SEIPController
         $view->getSerializationContext()->setGroups(array('id','api_list'));
         return $this->handleView($view);
     }
+
+    /**
+     * Busca los Indicadores
+     * @param type $param
+     */
+    function getIndicatorLastPeriodAction(\Symfony\Component\HttpFoundation\Request $request) {
+        
+        $periodService = $this->getPeriodService();        
+        $user = $this->getUser();        
+        $criteria = $request->get('filter',$this->config->getCriteria());
+
+        //$repository = $this->get('pequiven.repository.sig_management_system');        
+        $repository = $this->get('pequiven.repository.sig_indicator');  
+        $results = $repository->findBy(array('period' => $periodService->getPeriodActive()->getId()));
+        
+        var_dump(count($results));
+        die();
+        
+        $view = $this->view();
+        $view->setData($results);
+        $view->getSerializationContext()->setGroups(array('id','api_list','indicators', 'description'));
+        return $this->handleView($view);
+    }
     
     /**
      * Busca los responsables
@@ -271,4 +294,12 @@ class GenericDataController extends SEIPController
     {
         return $this->get('seip.user_manager');
     }
+
+    /**
+     * 
+     * @return \Pequiven\SEIPBundle\Service\PeriodService
+     */
+    protected function getPeriodService() {
+        return $this->container->get('pequiven_seip.service.period');
+    } 
 }

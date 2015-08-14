@@ -21,6 +21,33 @@
     ) }}
 {% endblock %} 
 {% block body %}
+
+    <div class="block" ng-init="urlValueLastIndicatorForm='{{ path('pequiven_indicatorlastperiod_get_form',{'idIndicator':indicator_sig.id }) }}'">
+        
+    <div ng-controller="IndicatorAsocLastPeriodController"> 
+        
+        {# Carga del formulario de relacion del indicador #}
+        {% if indicator_sig.indicatorlastPeriod %}
+
+        {% else %}
+        <div class="block-title">
+            <h3>El indicador no tiene relacion con el indicador del 2014</h3>        
+            <div class="button-group absolute-right compact">
+                <a class="button icon-list-add " href="" ng-click="loadTemplateIndicatorlastPeriod()" title="">{{ 'pequiven.add'|trans({},'messages')  }}</a>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <div>
+        <div class="button-group absolute-right compact">
+                <a class="button icon-list-add " href="" ng-click="loadTemplateIndicatorCauses()" title="">{{ 'pequiven.add'|trans({},'messages')  }}</a>
+            </div>
+    </div>
+
+        {% endif %}
+        {# fin Button formulario relacion lastperiod #}
+
         {# Graficos #}
         <div class="columns with-padding">
             {# <div class="five-columns twelve-columns-mobile">
@@ -33,18 +60,19 @@
                 {# Fin Grafico#}
             {#</div> #}
             &nbsp;            
-            <div class="five-columns twelve-columns-mobile">
+            {# <div class="five-columns twelve-columns-mobile">
                 {# Cargando Grafico Causas de Desviación #}
-                    <div ng-controller="ChartsSigController" class="dashboard" ng-init="renderChartSigCs('chartContainerResultCs')">
+                {#    <div ng-controller="ChartsSigController" class="dashboard" ng-init="renderChartSigCs('chartContainerResultCs')">
                         <div class="nine-columns twelve-columns-mobile" id="chartContainerResultCs">
                         <!-- This div will hold the chart generated in the footer -->
                         </div>
                     </div>
                     
                 {# Fin Grafico#}
-            </div>
+            {# </div> #}
         </div>
         {# Fin de Graficos #}
+
 
         <fieldset class="fieldset fields-list">
             <legend class="legend">{{ 'sig.chart_evolution'|trans ({}, 'messages') }}</legend>

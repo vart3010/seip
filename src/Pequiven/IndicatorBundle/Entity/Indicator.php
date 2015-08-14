@@ -143,6 +143,13 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     private $objetives;
 
     /**
+     * @var \Pequiven\IndicatorBundle\Entity\Indicator
+     * @ORM\OneToOne(targetEntity="\Pequiven\IndicatorBundle\Entity\Indicator")
+     * @ORM\JoinColumn(name="indicator_last_period", referencedColumnName="id")
+     */
+    private $indicatorlastPeriod;
+
+    /**
      * LineStrategic
      * 
      * @var \Pequiven\MasterBundle\Entity\LineStrategic
@@ -570,6 +577,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * Constructor
      */
     public function __construct() {
+
         $this->objetives = new \Doctrine\Common\Collections\ArrayCollection();
         $this->lineStrategics = new \Doctrine\Common\Collections\ArrayCollection();
         $this->valuesIndicator = new \Doctrine\Common\Collections\ArrayCollection();
@@ -579,6 +587,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
         $this->featuresIndicator = new \Doctrine\Common\Collections\ArrayCollection();
         $this->charts = new \Doctrine\Common\Collections\ArrayCollection();
         $this->managementSystems = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->indicatorlastPeriod = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -862,6 +871,37 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      */
     public function getObjetives() {
         return $this->objetives;
+    }
+
+    /**
+     * Add indicatorlastPeriod
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator
+     * @return Indicator
+     */
+    public function addIndicatorLastPeriod(\Pequiven\IndicatorBundle\Entity\Indicator $indicatorlastPeriod) {
+        $indicatorlastPeriod->addIndicator($this);
+        $this->indicatorlastPeriod->add($indicatorlastPeriod);
+
+        return $this;
+    }
+
+    /**
+     * Remove indicatorlastPeriod
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator $indicatorlastPeriod
+     */
+    public function removeIndicatorLastPeriod(\Pequiven\IndicatorBundle\Entity\Indicator $indicatorlastPeriod) {
+        $this->indicatorlastPeriod->removeElement($indicatorlastPeriod);
+    }
+
+    /**
+     * Get indicatorlastPeriod
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getIndicatorLastPeriod() {
+        return $this->indicatorlastPeriod;
     }
 
     /**

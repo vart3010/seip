@@ -157,6 +157,7 @@ app:
                             operative: Operativo
                             by_gerencia: Por gerencia
                             by_lineStrategic: Por Línea Estratégica
+                            item_user_list: Consulta de Gestion
                         notify:
                             main: Notificar
                             indicators: Indicadores

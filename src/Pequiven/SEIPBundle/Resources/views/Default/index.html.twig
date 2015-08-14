@@ -21,7 +21,8 @@
         <div style="text-align: left; margin-left:15px;">
             <a class="button"  id="showItems"  href="javascript:void(0)">
                 <span class="button-icon"><span class="icon-list"></span></span>
-                Ver Resumen de Gestión 
+                <span class="title">Ver Resumen de Gestión </span>
+                <span class="title" style="display: none">Ocultar Resumen de Gestión </span>
             </a>    
         </div>
 
@@ -68,6 +69,7 @@
             $("a#showItems").click(function () {
                 $("#userItems").toggle("slow");
                 $("#dashboard").toggle("slow");
+                $("a#showItems span.title ").toggle();
             });
         });
     </script>
