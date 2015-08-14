@@ -22,13 +22,20 @@ class ProductionBox extends \Tecnocreaciones\Bundle\BoxBundle\Model\GenericBox
         $typeViews['view_type_pqv'] = false;
         $typeViews['view_type_eemm'] = false;
         
+//        set_time_limit(0);
+        
+        $arrayReportTemplatesPQV = array(
+            'CPHC' => true,
+            'CPAMC' => true,
+        );
+        
         $reportTemplates = array();
         
         if($this->isGranted(array('ROLE_SEIP_OPERATION_REPORT_TEMPLATES_ALL'))){
             $resultReportTemplates = $repositoryReportTemplate->findAll();
             //Seteamos sólo los reportTemplates de PQV, ya que los de la EEMM y Filiales se buscan directo en el controlador del gráfico
             foreach($resultReportTemplates as $resultReportTemplate){
-                if($resultReportTemplate->getCompany()->getTypeOfCompany() == \Pequiven\SEIPBundle\Entity\CEI\Company::TYPE_OF_COMPANY_MATRIZ){
+                if($resultReportTemplate->getCompany()->getTypeOfCompany() == \Pequiven\SEIPBundle\Entity\CEI\Company::TYPE_OF_COMPANY_MATRIZ && array_key_exists($resultReportTemplate->getLocation()->getAlias(), $arrayReportTemplatesPQV)){
                     $reportTemplates[] = $resultReportTemplate;
                 }
             }
@@ -40,7 +47,7 @@ class ProductionBox extends \Tecnocreaciones\Bundle\BoxBundle\Model\GenericBox
                 $typeViews['view_type_pqv'] = true;
                 //Seteamos sólo los reportTemplates de PQV, ya que los de la EEMM y Filiales se buscan directo en el controlador del gráfico
                 foreach($resultReportTemplates as $resultReportTemplate){
-                    if($resultReportTemplate->getCompany()->getTypeOfCompany() == \Pequiven\SEIPBundle\Entity\CEI\Company::TYPE_OF_COMPANY_MATRIZ){
+                    if($resultReportTemplate->getCompany()->getTypeOfCompany() == \Pequiven\SEIPBundle\Entity\CEI\Company::TYPE_OF_COMPANY_MATRIZ && array_key_exists($resultReportTemplate->getLocation()->getAlias(), $arrayReportTemplatesPQV)){
                         $reportTemplates[] = $resultReportTemplate;
                     }
                 }

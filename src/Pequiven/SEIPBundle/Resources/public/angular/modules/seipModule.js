@@ -91,7 +91,6 @@ function setValueSelect2Multiple(idSelect2, entities, data, callBack) {
     }
 }
 
-
 angular.module('seipModule.controllers', [])
         .controller("ArrangementProgramController", function ($scope, notificationBarService, $http, $filter, $timeout, $cookies) {
             $scope.entity = null;
@@ -3065,7 +3064,9 @@ angular.module('seipModule.controllers', [])
             
             //PRO_RT_PQV-Gráfico para ver la producción consolidada por los ReportTemplates de PQV
             $scope.chargeChartProductionReportTemplateByDate = function (reportTemplateId, dateSearch, render, width, height) {
-                var getDataChartProductionReportTemplateByDate = Routing.generate("getDataChartProductionReportTemplateByDate", {id: reportTemplateId, dateSearch: dateSearch});
+                var dateParse = $scope.parseDate(dateSearch);
+                var getDataChartProductionReportTemplateByDate = Routing.generate("getDataChartProductionReportTemplateByDate", {id: reportTemplateId, dateSearch: dateParse});
+                
                 $http.get(getDataChartProductionReportTemplateByDate).success(function (data) {
                     FusionCharts.ready(function () {
                         var revenueChartProductionReportTemplateByDate = new FusionCharts({
@@ -3085,6 +3086,25 @@ angular.module('seipModule.controllers', [])
                     });
                 });
             }
+            
+            // Función que devuelve una data formateada dd/mm/yyyy y recibe en dd-mm-yyyy
+            $scope.parseDate = function parseDate(dateToParse) {
+                var dateParse = new Date(dateToParse);
+                var dd = dateParse.getDate();
+                var mm = dateParse.getMonth()+1; //January is 0!
+
+                var yyyy = dateParse.getFullYear();
+                if(dd<10){
+                    dd='0'+dd;
+                } 
+                if(mm<10){
+                    mm='0'+mm;
+                } 
+
+                var dateParse = dd+'/'+mm+'/'+yyyy;
+
+                return dateParse;
+            };
             //PRO_RT_EEMM_FIL-Gráfico para ver la producción consolidada por los ReportTemplates de las Mixtas y Filiales
 
 

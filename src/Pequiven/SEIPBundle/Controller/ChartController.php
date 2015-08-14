@@ -576,7 +576,7 @@ class ChartController extends SEIPController {
     }
    
     /**
-     * 
+     * Función que retorna la data para un gráfico que muestre la producción por las plantas de un reportTemplate (Día, Mes y Año)
      * @return JsonResponse
      */
     public function getDataChartProductionReportTemplateByDateAction(Request $request) {
@@ -584,9 +584,6 @@ class ChartController extends SEIPController {
 
         $idReportTemplate = $request->get('id');
         $dateSearch = $request->get('dateSearch');
-        
-        var_dump($dateSearch);
-        die();
 
         $reportTemplateService = $this->getReportTemplateService(); //Obtenemos el servicio del ReportTemplate
 

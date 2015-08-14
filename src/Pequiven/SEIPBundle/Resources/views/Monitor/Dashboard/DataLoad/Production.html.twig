@@ -5,27 +5,15 @@
     <div class="columns">
         
         {% if typeViews.view_type_pqv == true %}
-            <div class="six-columns six-columns-tablet twelve-columns-mobile new-row-mobile">
-                Epale
-            </div>
-        {% endif %}
-        
-        {#<div id="tab-{{ grafico }}" ng-init="{{ chart.nameFunctionAngular }}({{ indicator.id }},'{{ grafico }}','100','500')">
-            <span id="{{ grafico }}"></span>
-        </div>#}
-        
-        
-        
-        <div class="six-columns six-columns-tablet twelve-columns-mobile new-row-mobile">
-            Epale
-        </div>
-        <div class="six-columns six-columns-tablet twelve-columns-mobile new-row-mobile">
-            <ul>
             {% for reportTemplate in reportTemplates %}
-                <li>{{ reportTemplate.name }}</li>
+                <div class="six-columns six-columns-tablet twelve-columns-mobile new-row-mobile">
+                    <div id="id-{{ reportTemplate.location.alias }}" ng-init="chargeChartProductionReportTemplateByDate({{ reportTemplate.id }},'{{ "now"|date('Y-m-d') }}','{{ reportTemplate.location.alias }}','100','500')">
+                        <span id="{{ reportTemplate.location.alias }}"></span>
+                        {{ reportTemplate.name }}
+                    </div>
+                </div>
             {% endfor %}
-            </ul>
-        </div>
+        {% endif %}
     </div>
 </div>
 

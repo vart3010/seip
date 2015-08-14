@@ -71,37 +71,26 @@ class ReportTemplateService implements ContainerAwareInterface {
             unset($options['consolidateByReportTemplate']);
 
             $dataSerialized = array();
-            $dataSerialized = $this->getDataSerialized($reportTemplate, array('consolidateByReportTemplate' => true));
+            $dataSerialized = $this->getDataSerialized($reportTemplate, array('consolidateByReportTemplate' => true, 'dateSearch' => $options['dateSearch']));
 
-            $plantReports = $reportTemplate->getPlantReports();
+            $plantReports = $reportTemplate->getPlantReports();//Obtenemos las plantas vinculadas al ReportTemplate
             $totalPlantReports = count($plantReports);
             
+            $category[] = array('label' => $dataSerialized['day']['label']);
+            $category[] = array('label' => $dataSerialized['month']['label']);
+            $category[] = array('label' => $dataSerialized['year']['label']);
+            
             //Añadimos los valores, por cada planta del reportTemplate
-            for ($i = 0; $i < $totalPlantReports; $i++) {
-                $label = array();
-                $label["label"] = $labelsFrequencyNotificationArray[($i + 1)];
-
-                foreach ($variables as $variable) {
-                    $showValue = $arrayVariables[$variable->getName()][$i] == 0 ? 0 : 1;
-                    $dataSetValues[$variable->getName()]['data'][] = array('value' => number_format($arrayVariables[$variable->getName()][$i], 2, ',', '.'), 'showValue' => $showValue);
-                }
-
-                $category[] = $label;
+            foreach($plantReports as $plantReport) {
+                $dataSetValues[$plantReport->getId()]['seriesname'] = $plantReport->getPlant()->getName();
+                $dataSetValues[$plantReport->getId()]['data'][] = array('value' => number_format($dataSerialized['day'][$plantReport->getId()]['value'], 2, ',', '.'));
+                $dataSetValues[$plantReport->getId()]['data'][] = array('value' => number_format($dataSerialized['month'][$plantReport->getId()]['value'], 2, ',', '.'));
+                $dataSetValues[$plantReport->getId()]['data'][] = array('value' => number_format($dataSerialized['year'][$plantReport->getId()]['value'], 2, ',', '.'));
             }
 
-            //Añadimos el acumulado
-            foreach ($variables as $variable) {
-                $showValue = $arrayVariables[$variable->getName()]['total'] == 0 ? 0 : 1;
-                $dataSetValues[$variable->getName()]['seriesname'] = $arrayVariables[$variable->getName()]['description'];
-                $dataSetValues[$variable->getName()]['showValues'] = "1";
-                $dataSetValues[$variable->getName()]['data'][] = array('value' => number_format($arrayVariables[$variable->getName()]['total'], 2, ',', '.'), 'showValue' => $showValue);
+            foreach($plantReports as $plantReport) {
+                $data['dataSource']['dataset'][] = $dataSetValues[$plantReport->getId()];
             }
-
-            foreach ($indicator->getFormula()->getVariables() as $variable) {
-                $data['dataSource']['dataset'][] = $dataSetValues[$variable->getName()];
-            }
-
-            $category[] = array('label' => 'ACUMUL');
         }
 
         $data['dataSource']['chart'] = $chart;
@@ -122,7 +111,42 @@ class ReportTemplateService implements ContainerAwareInterface {
         
         $dataSeralized = array();
         
-        
+        if(isset($options['consolidateByReportTemplate']) && array_key_exists('consolidateByReportTemplate', $options)){
+            unset($options['consolidateByReportTemplate']);
+            
+            $options['dateSearch'] = str_replace('/', '-', $options['dateSearch']);
+            $daySearch = date("j", strtotime($options['dateSearch']));
+            $monthSearch = date("n", strtotime($options['dateSearch']));
+            
+            //Seteo inicial de la estructura a devolver
+            $dataSeralized['day']['label'] = 'Día';
+            $dataSeralized['month']['label'] = 'Mes';
+            $dataSeralized['year']['label'] = 'Año';
+            
+            
+            $plantReports = $reportTemplate->getPlantReports();
+            //[day][plant][value]
+            foreach($plantReports as $plantReport){
+                $dataSeralized['day'][$plantReport->getId()]['value'] = 0.0;
+                $dataSeralized['month'][$plantReport->getId()]['value'] = 0.0;
+                $dataSeralized['year'][$plantReport->getId()]['value'] = 0.0;
+            }
+            
+            foreach($plantReports as $plantReport){
+                $productReports = $plantReport->getProductsReport();
+                foreach($productReports as $productReport){
+                    $productDetailDailyMonths = $productReport->getProductDetailDailyMonthsSortByMonth();
+                    $dataSeralized['day'][$plantReport->getId()]['value'] = $dataSeralized['day'][$plantReport->getId()]['value'] + array_key_exists($monthSearch, $productDetailDailyMonths) == true ? $productDetailDailyMonths[$monthSearch]->getValueGrossByDay($daySearch) : 0;
+                    for($day = 1; $day <= $daySearch; $day++){
+                        $dataSeralized['month'][$plantReport->getId()]['value'] = $dataSeralized['month'][$plantReport->getId()]['value'] + array_key_exists($monthSearch, $productDetailDailyMonths) == true ? $productDetailDailyMonths[$monthSearch]->getValueGrossByDay($day) : 0;
+                    }
+                    for($month = 1; $month < $monthSearch; $month++){
+                        $dataSeralized['year'][$plantReport->getId()]['value'] = $dataSeralized['year'][$plantReport->getId()]['value'] + array_key_exists($month, $productDetailDailyMonths) == true ? $productDetailDailyMonths[$month]->getTotalGrossReal() : 0;
+                    }
+                }
+                $dataSeralized['year'][$plantReport->getId()]['value'] = $dataSeralized['year'][$plantReport->getId()]['value'] + $dataSeralized['month'][$plantReport->getId()]['value'];
+            }
+        }
         
         return $dataSeralized;
     }
