@@ -72,6 +72,14 @@
                 <argument type="service" id="service_container" />
             </call>
         </service>
+        
+        <!-- Repositorio de los Roles -->
+        <service id="pequiven.repository.rol" class="Pequiven\MasterBundle\Model\RolRepository">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+            <tag name="app.repository" class="Pequiven\MasterBundle\Entity\Rol" />
+        </service>
     </services>
     
 </container>
