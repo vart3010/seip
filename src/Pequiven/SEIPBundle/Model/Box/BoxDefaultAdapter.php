@@ -31,19 +31,19 @@ class BoxDefaultAdapter extends BoxBaseAdapter {
 //            $boxActives[] = $boxActive;
 //        }
         
-        if($this->isGranted(array('ROLE_SEIP_OPERATION_VIEW_MONITOR_PRODUCTION'))){
-            $boxActive = new \Tecnocreaciones\Bundle\BoxBundle\Model\BoxStaticLocked();
-            $boxActive->setBoxName('dashboard_data_load_production');
-            $boxActive->setArea(AreasBox::DASHBOARD,array('position' => 0));
-
-            $boxActives[] = $boxActive;
-        } else{
+//        if($this->isGranted(array('ROLE_SEIP_OPERATION_VIEW_MONITOR_PRODUCTION'))){
+//            $boxActive = new \Tecnocreaciones\Bundle\BoxBundle\Model\BoxStaticLocked();
+//            $boxActive->setBoxName('dashboard_data_load_production');
+//            $boxActive->setArea(AreasBox::DASHBOARD,array('position' => 0));
+//
+//            $boxActives[] = $boxActive;
+//        } else{
             $boxActive = new \Tecnocreaciones\Bundle\BoxBundle\Model\BoxStaticLocked();
             $boxActive->setBoxName('pequiven_seip_box_genericdashboardbox');
             $boxActive->setArea(AreasBox::DASHBOARD,array('position' => 0));
 
             $boxActives[] = $boxActive;
-        }
+//        }
         
 //        if ($this->isGranted(array('ROLE_DIRECTIVE', 'ROLE_DIRECTIVE_AUX', 'ROLE_WORKER_PLANNING'))) {
 //            //MUESTRA LA VISTA POR DEFECTO DEL SEIP 
