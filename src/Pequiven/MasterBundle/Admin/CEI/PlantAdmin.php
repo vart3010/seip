@@ -60,6 +60,7 @@ class PlantAdmin extends BaseAdmin
                     $qb
                         ->andWhere($alias.'.enabled = :enabled')
                         ->setParameter('enabled',true)
+                        ->andWhere($qb->expr()->like($alias . ".name", $qb->expr()->literal("%" . $value . "%")))
                     ;
                 }
             ))
