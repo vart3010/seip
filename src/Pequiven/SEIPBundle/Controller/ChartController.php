@@ -597,6 +597,27 @@ class ChartController extends SEIPController {
     }
    
     /**
+     * Función que retorna la data para un gráfico que muestre la producción por las plantas de un grupo de reportTemplate por Día, de acuerdo al tipo de compañía asociado
+     * @return JsonResponse
+     */
+    public function getDataChartProductionReportTemplateByDateGroupByCompanyAction(Request $request) {
+        $response = new JsonResponse();
+
+        $typeCompany = $request->get('typeCompany');
+        $dateSearch = $request->get('dateSearch');
+
+        $reportTemplateService = $this->getReportTemplateService(); //Obtenemos el servicio del ReportTemplate
+        
+        $reportTemplate = new \Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate();
+
+        $dataChart = $reportTemplateService->getDataChartMultiSeriesColumn3D($reportTemplate ,array('consolidateByTypeCompany' => true, 'dateSearch' => $dateSearch, 'typeCompany' => $typeCompany)); //Obtenemos la data del gráfico de acuerdo al indicador
+
+        $response->setData($dataChart); //Seteamos la data del gráfico en Json
+
+        return $response;
+    }
+   
+    /**
      * Servicio de los Indicadores
      * @return \Pequiven\IndicatorBundle\Service\IndicatorService
      */

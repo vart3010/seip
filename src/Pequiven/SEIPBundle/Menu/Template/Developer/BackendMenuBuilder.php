@@ -897,7 +897,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                     )->setLabel($this->translate(sprintf('app.backend.menu.%s.operations.monitor.main', $section)));
 
             if ($this->isGranted(array('ROLE_SEIP_OPERATION_LIST_MONITOR_PRODUCTION'))) {
-                $production = $this->factory->createItem('operations.monitor.production', $this->getSubLevelOptions(array("route" => "",
+                $production = $this->factory->createItem('operations.monitor.production', $this->getSubLevelOptions(array("route" => "pequiven_data_load_dashboard_production",
                                 ))
                         )->setLabel($this->translate(sprintf('app.backend.menu.%s.operations.monitor.production', $section)));
 

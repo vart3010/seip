@@ -188,6 +188,10 @@
         <service id="dashboard.data_load.box.production" class="Pequiven\SEIPBundle\Model\Box\Dashboard\DataLoad\ProductionBox">
             <tag name="tecnocreaciones_box.box" />
         </service>
+        <!-- Box Dashboard Producción Por Tipo de Compañía-->
+        <service id="dashboard.data_load.box.production_by_company" class="Pequiven\SEIPBundle\Model\Box\Dashboard\DataLoad\ProductionByCompanyBox">
+            <tag name="tecnocreaciones_box.box" />
+        </service>
         <!-- Box Dashboard Nivel Plantilla de Reporte Producción -->
         <service id="dashboard.data_load.box.production_report_template" class="Pequiven\SEIPBundle\Model\Box\Dashboard\DataLoad\Production\ReportTemplateBox">
             <tag name="tecnocreaciones_box.box" />

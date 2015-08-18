@@ -6,10 +6,10 @@ namespace Pequiven\SEIPBundle\Model\Box\Dashboard\DataLoad;
  * Muestra la base para el dashboard de Producción
  *
  */
-class ProductionBox extends \Tecnocreaciones\Bundle\BoxBundle\Model\GenericBox
+class ProductionByCompanyBox extends \Tecnocreaciones\Bundle\BoxBundle\Model\GenericBox
 {
     public function getName() {
-        return 'dashboard_data_load_production';
+        return 'dashboard_data_load_production_by_company';
     }
 
     public function getParameters() 
@@ -62,7 +62,7 @@ class ProductionBox extends \Tecnocreaciones\Bundle\BoxBundle\Model\GenericBox
     }
 
     public function getTemplateName() {
-        return 'PequivenSEIPBundle:Monitor:Dashboard\DataLoad\Production\production.html.twig';
+        return 'PequivenSEIPBundle:Monitor:Dashboard\DataLoad\Production\productionByCompany.html.twig';
     }
     
     public function getAreasNotPermitted() 

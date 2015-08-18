@@ -1,0 +1,7 @@
+## YAML Template.
+---
+pequiven_data_load_dashboard_production:
+    path: /production
+    defaults:
+        _controller: pequiven.controller.seipmonitor:displayDashboardProductionAction
+    methods: [GET|POST]
