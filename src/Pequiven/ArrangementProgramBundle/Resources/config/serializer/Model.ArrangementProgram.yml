@@ -16,3 +16,6 @@ Pequiven\ArrangementProgramBundle\Model\ArrangementProgram:
         indicators:
             expose: true
             groups: [indicators]
+        typeAction:
+            expose: true
+            groups: [typeAction]

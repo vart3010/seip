@@ -41,16 +41,16 @@ class EvolutionAction extends Model {
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="start_date", type="datetime")
+     * @ORM\Column(name="dateStart", type="datetime", nullable=true)
      */
-    private $start_date;
+    private $dateStart;
 
     /**
      * @var \DateTime
      * 
-     * @ORM\Column(name="end_date", type="datetime")
+     * @ORM\Column(name="dateEnd", type="datetime", nullable=true)
      */
-    private $end_date;
+    private $dateEnd;
     /**
      * @var integer
      * 
@@ -84,7 +84,7 @@ class EvolutionAction extends Model {
      * 
      * @var \Pequiven\SEIPBundle\Entity\User
      * @ORM\ManyToOne(targetEntity="\Pequiven\SEIPBundle\Entity\User")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $createdBy;
 
@@ -150,38 +150,38 @@ class EvolutionAction extends Model {
 
     /**
      * 
-     * @param type $start_date
+     * @param type $dateStart
      * @return type
      */
-    public function setStart_date($strat_date) {
-        $this->strat_date = $strat_date;
-        return $strat_date;
+    public function setDateStart($dateStart) {
+        $this->dateStart = $dateStart;
+        return $dateStart;
     }
 
     /**
      * 
      * @return type
      */
-    public function getStart_date() {
-        return $this->start_date;
+    public function getDateStart() {
+        return $this->dateStart;
     }
 
     /**
      * 
-     * @param type $end_date
+     * @param type $dateEnd
      * @return type
      */
-    public function setEnd_date($end_date) {
-        $this->end_date = $end_date;
-        return $end_date;
+    public function setDateEnd($dateEnd) {
+        $this->dateEnd = $dateEnd;
+        return $dateEnd;
     }
 
     /**
      * 
      * @return type
      */
-    public function getEnd_date() {
-        return $this->end_date;
+    public function getDateEnd() {
+        return $this->dateEnd;
     }
 
     /**

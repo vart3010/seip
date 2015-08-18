@@ -34,23 +34,5 @@ class ManagementSystemController extends baseController
     {
         return $this->container->get('seip.service.result');
     }
-
-    /**
-     * Busca los Tipos de Acción para el Plan
-     * @param type $param
-     */
-    function gettypeAction(\Symfony\Component\HttpFoundation\Request $request) {
-        
-        //$user = $this->getUser();
-        //$criteria = $request->get('filter',$this->config->getCriteria());
-        $repository = $this->get('pequiven.repository.managementsystem_sig');
-        $results = $repository->findAll();
-        //var_dump(count($results));
-        //die();
-        $view = $this->view();
-        $view->setData($results);
-        $view->getSerializationContext()->setGroups(array('id','api_list'));
-        return $this->handleView($view);
-    }
     
 }

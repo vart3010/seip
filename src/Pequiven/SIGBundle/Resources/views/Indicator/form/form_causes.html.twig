@@ -1,35 +1,15 @@
-{% trans_default_domain 'PequivenIndicatorBundle' %}
-    
-        <form method="POST" id="form_value_indicator">
-            <fieldset class="fieldset fields-list">
-                <legend class="legend">{{ 'sig.relation_indicator'|trans ({}, 'messages') }}</legend>
-                {# {% for child in form.children %}
-                    <div class="field-block button-height" >
-                        {{ form_label(child) }}
-                        {{ form_widget(child) }}
-                        {{ form_errors(child) }}
-                    </div>
-                {% endfor %} #}
-                {# #}              
-            <!-- Formulario de Causas -->
-            <details class="details margin-bottom">
-                <summary role="button" aria-expanded="true">
-                    Causas de Desviación
-                </summary><p>
-            
-            <form method="POST" id="form_indicator_plan">
-                <div class="field-block button-height" >           
-                <label class="label">Causa: </label>
-                <p><input type="text" class="input"name="action" value="" /> <p>
+{% trans_default_domain 'PequivenIndicatorBundle' %}    
+       
+		<fieldset class="fieldset fields-list">
+                <legend class="legend">{{ 'sig.causes_deviation'|trans ({}, 'messages') }}</legend>
 
-                <label class="label">Valor Porcentual de la Causa: </label>
-                <p><input type="text" class="input"name="type_action" value="" /><p>
-                </div><br/>
-        </form>
-        </details> 
-                {# #}
-                {% if valueIndicator != null %}
-                    <input type="hidden" name="id" value="{{ valueIndicator.id }}" />
-                {% endif %}
-            </fieldset>
-        </form>       
+					 <form method="POST" {{ form_enctype(form) }} id="form_causes_evolution">
+					    <div class="field-block button-height" >
+
+					        {{ form_widget(form) }}
+
+					    </div>
+					</form>
+					<br>
+
+		</fieldset>

@@ -245,11 +245,10 @@ sylius_resource:
                 controller: Pequiven\SIGBundle\Controller\IndicatorSigController
                 model: Pequiven\IndicatorBundle\Entity\Indicator
                 repository: Pequiven\IndicatorBundle\Repository\IndicatorRepository
-        pequiven.managementSystem_sig:
-            driver: doctrine/orm            
-            templates: PequivenSIGBundle:Indicator/
+                        
+        pequiven.managementsystem_sig:
+            driver: doctrine/orm
             classes:
-                controller: Pequiven\SIGBundle\Controller\ManagementSystemController
                 model: Pequiven\SIGBundle\Entity\TypeActionManagementSystem
                 repository: Pequiven\SIGBundle\Repository\TypeActionManagementSystemRepository
         

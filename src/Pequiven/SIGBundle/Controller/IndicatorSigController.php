@@ -2,21 +2,24 @@
 
 namespace Pequiven\SIGBundle\Controller;
 
-//use Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram;
 
 use Pequiven\IndicatorBundle\Entity\Indicator;
 use Pequiven\SIGBundle\Entity\ManagementSystem;
 
 use Symfony\Component\HttpFoundation\Request;
-//use Pequiven\ArrangementBundle\Entity\ArrangementRange;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Tecnocreaciones\Bundle\ResourceBundle\Controller\ResourceController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Pequiven\IndicatorBundle\Entity\IndicatorLevel;
 use Pequiven\SEIPBundle\Model\Common\CommonObject;
 
-use Pequiven\SEIPBundle\Model\PDF\SeipPdf;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCause;
+use Pequiven\IndicatorBundle\Form\EvolutionIndicator\EvolutionCauseType;
+
+use Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionAction;
+use Pequiven\IndicatorBundle\Form\EvolutionIndicator\EvolutionActionType;
+
+
 class IndicatorSigController extends ResourceController
 {   
     /**
@@ -109,7 +112,6 @@ class IndicatorSigController extends ResourceController
 
     /**
      * Vista indice de evolucion
-     * @Template("PequivenSIGBundle:Indicator:evolution.html.twig")
      * @param Request $request
      * @return RedirectResponse|Response
      */
@@ -191,13 +193,8 @@ class IndicatorSigController extends ResourceController
     {
         $indicator = $this->findIndicatorOr404($request);        
         
-        $valueIndicator = $this->resourceResolver->getResource(
-            $this->getRepository(),
-            'findOneBy',
-            array(array('id' => $request->get('id',0))));
-
-        //$form = $this->buildForm();
-        //$form = $this->buildForm($indicator,$valueIndicator);
+        $cause = new EvolutionAction();
+        $form  = $this->createForm(new EvolutionActionType(), $cause);
         
         $view = $this
             ->view()
@@ -205,13 +202,34 @@ class IndicatorSigController extends ResourceController
             ->setTemplateVar($this->config->getPluralResourceName())
             ->setData(array(
                 'indicator' => $indicator,
-                //'form' => $form->createView(),
-                'valueIndicator' => $valueIndicator
+                'form' => $form->createView(),
             ))
         ;
         $view->getSerializationContext()->setGroups(array('id','api_list'));
         return $view;
     }
+
+    /**
+     * Añade el Plan de Acción
+     * 
+     * @param Request $request
+     * @return type
+     */
+    public function addAction(Request $request)
+    {   
+        $action = new EvolutionAction();
+        $form  = $this->createForm(new EvolutionActionType(), $action);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($action);
+            $em->flush();
+
+            return $this->redirect($this->generateUrl('pequiven_action_form_add'));
+        }                
+    }
+
     /**
      * Retorna el formulario de las causas de desviación
      * 
@@ -220,28 +238,51 @@ class IndicatorSigController extends ResourceController
      */
     function getFormCausesAction(Request $request)
     {
-        $indicator = $this->findIndicatorOr404($request);        
+        $indicator = $this->findIndicatorOr404($request);                
         
-        $valueIndicator = $this->resourceResolver->getResource(
-            $this->getRepository(),
-            'findOneBy',
-            array(array('id' => $request->get('id',0))));
-
-        //$form = $this->buildForm();
-        //$form = $this->buildForm($indicator,$valueIndicator);
+        $cause = new EvolutionCause();
+        $form  = $this->createForm(new EvolutionCauseType(), $cause);
+        
+        /* final */
         
         $view = $this
             ->view()
             ->setTemplate($this->config->getTemplate('form/form_causes.html'))
             ->setTemplateVar($this->config->getPluralResourceName())
             ->setData(array(
-                'indicator' => $indicator,
-                //'form' => $form->createView(),
-                'valueIndicator' => $valueIndicator
+                'form'           => $form->createView(),
+                'indicator'      => $indicator,
+                //'valueIndicator' => $valueIndicator
             ))
         ;
         $view->getSerializationContext()->setGroups(array('id','api_list'));
         return $view;
+    }
+
+    /**
+     * Añade las Causas
+     * 
+     * @param Request $request
+     * @return type
+     */
+    public function addCausesAction(Request $request)
+    {   
+        //$id = $request->get('idIndicator');
+        //var_dump($id);
+
+        $cause = new EvolutionCause();
+        $form  = $this->createForm(new EvolutionCauseType(), $cause);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($cause);
+            $em->flush();
+
+            return $this->redirect($this->generateUrl('pequiven_causes_form_add'));
+        }        
+        
+        //return $this->render('PequivenSIGBundle:Indicator:add.html.twig', array('form' => $form->createView(),));
     }
 
     /**
@@ -291,39 +332,7 @@ class IndicatorSigController extends ResourceController
             throw $this->createNotFoundException();
         }
         return $indicator;
-    }
-
-    /**
-     * Construye el formulario para la rerlacion con el indicador 2014
-     * @param \Pequiven\MasterBundle\Entity\Formula $formula
-     * @return type
-     */
-    private function buildForm() 
-    {
-       
-        $form = $this->createFormBuilder(array(
-            'csrf_protection' => false,
-        ));
-       
-                $description = "Indicador Asociado 2014";
-                $editable = true;
-                $name = "indicator_asoc";
-                $type = 'text';
-
-                $parameters = array(
-                    'label' => $description,
-                    'label_attr' => array(
-                        'class' => 'label'
-                    ),
-                    'attr' => array(
-                        'class' => 'input'
-                    ),
-                    'disabled' => !$editable,
-                );
-                $form->add($name,$type,$parameters);
-
-        return $form->getForm();
-    }
+    }    
 
     /**
      * 

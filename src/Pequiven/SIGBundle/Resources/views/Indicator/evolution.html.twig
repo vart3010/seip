@@ -2,6 +2,11 @@
 
 {% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
 
+{% block javascripts_base %}
+    {{ parent() }}
+    <script src="{{  asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.input.js') }}"></script>
+{% endblock javascripts_base %}
+
 {% trans_default_domain 'PequivenSIGBundle' %}
 
 {% set labelHeader = {
@@ -15,7 +20,7 @@
 
 {% block before_body %}
     {{ contentHeader(
-        {(path('pequiven_indicator_list',{'level':level})):(labelHeader[level])|trans},
+        {(path('pequiven_indicatorsig_list',{'level':level})):(labelHeader[level])|trans},
         { (path('pequiven_indicator_show',{'id':indicator_sig.id})): (indicator_sig.ref)},
         ('pequiven.evolution'|trans({},'messages'))
     ) }}
@@ -23,8 +28,11 @@
 {% block body %}
 
     <div class="block" ng-init="urlValueLastIndicatorForm='{{ path('pequiven_indicatorlastperiod_get_form',{'idIndicator':indicator_sig.id }) }}'">
-        
-    <div ng-controller="IndicatorAsocLastPeriodController"> 
+    
+    <div ng-controller="TableFormatController">
+    <div ng-controller="IndicatorAsocLastController"> 
+    
+    {#<div ng-controller="IndicatorAsocLastPeriodController"> #}
         
         {# Carga del formulario de relacion del indicador #}
         {% if indicator_sig.indicatorlastPeriod %}
@@ -43,10 +51,10 @@
         {# fin Button formulario relacion lastperiod #}
 
         {# Graficos #}
-        <div class="columns with-padding">
+        {#<div class="columns with-padding">
             {# <div class="five-columns twelve-columns-mobile">
                 {# Cargando Grafico informe de evolution #}
-                   <div ng-controller="ChartsSigController" class="dashboard" ng-init="renderChartEvolutionSig('chartContainerResult', {{ data|json_encode() }})" >
+          {#}         <div ng-controller="ChartsSigController" class="dashboard" ng-init="renderChartEvolutionSig('chartContainerResult', {{ data|json_encode() }})" >
                         <div class="nine-columns twelve-columns-mobile" id="chartContainerResult">
                         <!-- This div will hold the chart generated in the footer -->
                         </div>
@@ -66,6 +74,19 @@
             {# </div> #}
         </div>
         {# Fin de Graficos #}
+
+        <fieldset class="fieldset fieldset-list">
+          <!-- Filter ManagementSystem -->
+                   <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                   <label class="bold">Tipo de acción</label>
+                   <br/>
+                        <div class="with-mid-padding">
+                            <select class="select2 input-xlarge" id="selectTypeAction" ng-model="model.typeAction" ng-options="value as value.id for (key,value) in data.typeAction" >
+                            <option value=''></option>
+                            </select>
+                        </div>
+                   </div>
+        </fieldset>
 
 
         <fieldset class="fieldset fields-list">
@@ -90,7 +111,7 @@
             &nbsp;    
     {# Analisis de Causas #}
             <br /><br />
-            {% include 'PequivenSIGBundle:Indicator:show/form_causes.html.twig' %} 
+            {% include 'PequivenSIGBundle:Indicator:show/causes_list.html.twig' %} 
             &nbsp;
     {# Plan de accion y seguimiento #}
             <br /><br />

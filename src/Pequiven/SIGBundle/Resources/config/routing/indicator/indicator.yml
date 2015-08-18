@@ -31,6 +31,28 @@ pequiven_indicatorcauses_get_form:
     methods: [GET]
     options:
         expose: true
+#Guardamos el formulario del plan de Acción del Indicador
+pequiven_action_evolution_add:
+    path: /{idIndicator}/add.{_format}
+    defaults:
+        _controller: pequiven.controller.indicator_sig:addAction
+        _format: json
+    requirements:
+        _format: json
+    methods: [POST]
+    options:
+        expose: true
+#Guardamos el formulario de las causas del indicador
+pequiven_causes_evolution_add:
+    path: /{idIndicator}/add.{_format}
+    defaults:
+        _controller: pequiven.controller.indicator_sig:addCausesAction
+        _format: json
+    requirements:
+        _format: json
+    methods: [POST]
+    options:
+        expose: true
 #Carga de formulario del analisis de tendencia
 pequiven_indicatortrend_get_form:
     path: /{idIndicator}/get-form_trend.{_format}
@@ -42,22 +64,10 @@ pequiven_indicatortrend_get_form:
     methods: [GET]
     options:
         expose: true
-
 pequiven_arrangementprogram_datasig_indicator_lastperiod:
     path: /indicators.{_format}
     defaults: 
         _controller: pequiven_seip.controller.arrangementprogram_data:getIndicatorLastPeriodAction
-        _format: json
-    requirements:
-        _format: "json|xml"
-    methods: [GET]
-    options:
-        expose: true
-#filtro tipos de Acciones del plan
-pequiven_managementsystem_typeaction:
-    path: /typeaction.{_format}
-    defaults: 
-        _controller: pequiven.controller.managementsystem_sig:gettypeAction
         _format: json
     requirements:
         _format: "json|xml"

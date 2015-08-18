@@ -36,28 +36,28 @@ class EvolutionCause extends Model {
     /**
      * @var string
      *
-     * @ORM\Column(name="action", type="string", length=255, nullable=true)
+     * @ORM\Column(name="cause", type="string", length=255)
      */
     private $causes;
 
     /**
-     * @var integer
+     * @var decimal
      *
-     * @ORM\Column(name="valueOfCauses", type="integer", nullable=true)
+     * @ORM\Column(name="valueOfCauses", type="float",precision = 3)
      */
-    private $valueOfCauses;
+    private $valueOfCauses = 0.0;
 
     /**
      * @var \DateTime
      * @Gedmo\Timestampable(on="create")
-     * @ORM\Column(name="created_at", type="datetime")
+     * @ORM\Column(name="created_at", type="datetime", nullable=true)
      */
     private $createdAt;
 
     /**
      * @var \DateTime
      * @Gedmo\Timestampable(on="update")
-     * @ORM\Column(name="updated_at", type="datetime")
+     * @ORM\Column(name="updated_at", type="datetime",  nullable=true)
      */
     private $updatedAt;
 
@@ -66,7 +66,7 @@ class EvolutionCause extends Model {
      * 
      * @var \Pequiven\SEIPBundle\Entity\User
      * @ORM\ManyToOne(targetEntity="\Pequiven\SEIPBundle\Entity\User")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $createdBy;
 
