@@ -3,7 +3,7 @@
 namespace Pequiven\SEIPBundle\Model\Box\Dashboard\DataLoad\Production;
 
 /**
- * Muestra un resumen de mis programas de gestion
+ * Muestra un resumen del reportTemplate especificado
  *
  */
 class ReportTemplateBox extends \Tecnocreaciones\Bundle\BoxBundle\Model\GenericBox

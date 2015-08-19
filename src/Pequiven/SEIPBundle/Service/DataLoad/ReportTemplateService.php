@@ -109,7 +109,12 @@ class ReportTemplateService implements ContainerAwareInterface {
         return $data;
     }
     
-    
+    /**
+     * Función que devuelve la data para un gráfico tipo MultiSeriesColumna3D
+     * @param ReportTemplate $reportTemplate
+     * @param type $options
+     * @return type
+     */
     public function getDataChartMultiSeriesColumn3D(ReportTemplate $reportTemplate, $options = array()){
         $data = array(
             'dataSource' => array(
@@ -154,6 +159,7 @@ class ReportTemplateService implements ContainerAwareInterface {
         $chart["decimals"] = "2";
         $chart["formatNumberScale"] = "0";
         $chart["bgAlpha"] = "0,0";
+        $chart["toolTipBgColor"] = "#000000";
 
         $category = $dataSetValues = array();
 
@@ -207,8 +213,8 @@ class ReportTemplateService implements ContainerAwareInterface {
             foreach($reportTemplates as $reportTemplate) {
                 $dataRealValues['seriesname'] = 'Real';
                 $dataPlanValues['seriesname'] = 'Plan';
-                $dataRealValues['data'][] = array('value' => number_format($dataSerialized[$reportTemplate->getId()]['real'], 2, ',', '.'));
-                $dataPlanValues['data'][] = array('value' => number_format($dataSerialized[$reportTemplate->getId()]['plan'], 2, ',', '.'));
+                $dataRealValues['data'][] = array('value' => number_format($dataSerialized[$reportTemplate->getId()]['real'], 2, ',', '.'), 'color' => $dataSerialized[$reportTemplate->getId()]['color']);
+                $dataPlanValues['data'][] = array('value' => number_format($dataSerialized[$reportTemplate->getId()]['plan'], 2, ',', '.'), 'color' => "#003CFF");
             }
             
             $data['dataSource']['dataset'][] = $dataRealValues;
@@ -229,7 +235,7 @@ class ReportTemplateService implements ContainerAwareInterface {
      */
     public function getDataSerialized(ReportTemplate $reportTemplate, $options = array()) {
         
-        $dataSeralized = array();
+        $dataSerialized = array();
         
         if(isset($options['consolidateByReportTemplate']) && array_key_exists('consolidateByReportTemplate', $options)){
             unset($options['consolidateByReportTemplate']);
@@ -239,32 +245,32 @@ class ReportTemplateService implements ContainerAwareInterface {
             $monthSearch = date("n", strtotime($options['dateSearch']));
             
             //Seteo inicial de la estructura a devolver
-            $dataSeralized['day']['label'] = 'Día';
-            $dataSeralized['month']['label'] = 'Mes';
-            $dataSeralized['year']['label'] = 'Año';
+            $dataSerialized['day']['label'] = 'Día';
+            $dataSerialized['month']['label'] = 'Mes';
+            $dataSerialized['year']['label'] = 'Año';
             
             
             $plantReports = $reportTemplate->getPlantReports();
             //[day][plant][value]
             foreach($plantReports as $plantReport){
-                $dataSeralized['day'][$plantReport->getId()]['value'] = 0.0;
-                $dataSeralized['month'][$plantReport->getId()]['value'] = 0.0;
-                $dataSeralized['year'][$plantReport->getId()]['value'] = 0.0;
+                $dataSerialized['day'][$plantReport->getId()]['value'] = 0.0;
+                $dataSerialized['month'][$plantReport->getId()]['value'] = 0.0;
+                $dataSerialized['year'][$plantReport->getId()]['value'] = 0.0;
             }
             
             foreach($plantReports as $plantReport){
                 $productReports = $plantReport->getProductsReport();
                 foreach($productReports as $productReport){
                     $productDetailDailyMonths = $productReport->getProductDetailDailyMonthsSortByMonth();
-                    $dataSeralized['day'][$plantReport->getId()]['value'] = $dataSeralized['day'][$plantReport->getId()]['value'] + array_key_exists($monthSearch, $productDetailDailyMonths) == true ? $productDetailDailyMonths[$monthSearch]->getValueGrossByDay($daySearch) : 0;
+                    $dataSerialized['day'][$plantReport->getId()]['value'] = $dataSerialized['day'][$plantReport->getId()]['value'] + array_key_exists($monthSearch, $productDetailDailyMonths) == true ? $productDetailDailyMonths[$monthSearch]->getValueGrossByDay($daySearch) : 0;
                     for($day = 1; $day <= $daySearch; $day++){
-                        $dataSeralized['month'][$plantReport->getId()]['value'] = $dataSeralized['month'][$plantReport->getId()]['value'] + array_key_exists($monthSearch, $productDetailDailyMonths) == true ? $productDetailDailyMonths[$monthSearch]->getValueGrossByDay($day) : 0;
+                        $dataSerialized['month'][$plantReport->getId()]['value'] = $dataSerialized['month'][$plantReport->getId()]['value'] + array_key_exists($monthSearch, $productDetailDailyMonths) == true ? $productDetailDailyMonths[$monthSearch]->getValueGrossByDay($day) : 0;
                     }
                     for($month = 1; $month < $monthSearch; $month++){
-                        $dataSeralized['year'][$plantReport->getId()]['value'] = $dataSeralized['year'][$plantReport->getId()]['value'] + array_key_exists($month, $productDetailDailyMonths) == true ? $productDetailDailyMonths[$month]->getTotalGrossReal() : 0;
+                        $dataSerialized['year'][$plantReport->getId()]['value'] = $dataSerialized['year'][$plantReport->getId()]['value'] + array_key_exists($month, $productDetailDailyMonths) == true ? $productDetailDailyMonths[$month]->getTotalGrossReal() : 0;
                     }
                 }
-                $dataSeralized['year'][$plantReport->getId()]['value'] = $dataSeralized['year'][$plantReport->getId()]['value'] + $dataSeralized['month'][$plantReport->getId()]['value'];
+                $dataSerialized['year'][$plantReport->getId()]['value'] = $dataSerialized['year'][$plantReport->getId()]['value'] + $dataSerialized['month'][$plantReport->getId()]['value'];
             }
         } elseif(isset($options['consolidateByTypeCompany']) && array_key_exists('consolidateByTypeCompany', $options)){
             unset($options['consolidateByTypeCompany']);
@@ -276,27 +282,58 @@ class ReportTemplateService implements ContainerAwareInterface {
             
             //SETEAMOS LOS VALORES POR DEFECTO
             foreach($reportTemplates as $reportTemplate){
-                $dataSeralized[$reportTemplate->getId()]['real'] = $dataSeralized[$reportTemplate->getId()]['plan'] = 0.0;
+                $dataSerialized[$reportTemplate->getId()]['real'] = $dataSerialized[$reportTemplate->getId()]['plan'] = 0.0;
+                $dataSerialized[$reportTemplate->getId()]['color'] = '#FF0004';
+                $dataSerialized[$reportTemplate->getId()]['contNotificationTotal'] = 0;
+                $dataSerialized[$reportTemplate->getId()]['flagNotificationHalf'] = false;
             }
             
             //RELLENAMOS LA DATA
             foreach($reportTemplates as $reportTemplate){
                 $plantReports = $reportTemplate->getPlantReports();
+                $contProductReports = 0;
 
                 foreach($plantReports as $plantReport){
                     $productReports = $plantReport->getProductsReport();
                     foreach($productReports as $productReport){
+                        $contProductReports++;
                         $productDetailDailyMonths = $productReport->getProductDetailDailyMonthsSortByMonth();
                         $valueReal = array_key_exists($monthSearch, $productDetailDailyMonths) == true ? $productDetailDailyMonths[$monthSearch]->getValueGrossByDay($daySearch) : 0.0;
                         $valuePlan = array_key_exists($monthSearch, $productDetailDailyMonths) == true ? $productDetailDailyMonths[$monthSearch]->getPlanGrossByDay($daySearch) : 0.0;
-                        $dataSeralized[$reportTemplate->getId()]['real'] = $dataSeralized[$reportTemplate->getId()]['real'] + $valueReal;
-                        $dataSeralized[$reportTemplate->getId()]['plan'] = $dataSeralized[$reportTemplate->getId()]['plan'] + $valuePlan;
+                        $dataSerialized[$reportTemplate->getId()]['real'] = $dataSerialized[$reportTemplate->getId()]['real'] + $valueReal;
+                        $dataSerialized[$reportTemplate->getId()]['plan'] = $dataSerialized[$reportTemplate->getId()]['plan'] + $valuePlan;
+                        if(array_key_exists($monthSearch, $productDetailDailyMonths)){
+                            if(!$dataSerialized[$reportTemplate->getId()]['flagNotificationHalf']){
+                                $dataSerialized[$reportTemplate->getId()]['flagNotificationHalf'] = $productDetailDailyMonths[$monthSearch]->getStatusByDay($daySearch) == \Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductDetailDailyMonth::STATUS_SAVE_PENDING ? true : false;
+                            }
+                            if($productDetailDailyMonths[$monthSearch]->getStatusByDay($daySearch) == \Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductDetailDailyMonth::STATUS_SAVE){
+                                $dataSerialized[$reportTemplate->getId()]['contNotificationTotal']++;
+                            }
+                        }
                     }
+                }
+                
+                //Comparamos si todos los productReports estan notificados en su totalidad
+                if($contProductReports == $dataSerialized[$reportTemplate->getId()]['contNotificationTotal']){
+                    $dataSerialized[$reportTemplate->getId()]['color'] = '#E5E752';
+                } elseif($dataSerialized[$reportTemplate->getId()]['flagNotificationHalf']){
+                    $dataSerialized[$reportTemplate->getId()]['color'] = '#3C6C4C';
                 }
             }
         }
         
-        return $dataSeralized;
+        return $dataSerialized;
+    }
+    
+    public function getReportTemplatesColors(){
+        $repositoryReportTemplate = $this->container->get('pequiven.repository.report_template');
+            $user = $this->getUser();
+            $securityContext = $this->getSecurityContext();
+            $typeCompany = $options['typeCompany'];
+
+            $arrayTypesCompany = array();
+            
+            $resultReportTemplates = $repositoryReportTemplate->findAll();
     }
 
     public function setContainer(ContainerInterface $container = null) {

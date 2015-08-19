@@ -58,7 +58,7 @@ class UserManager implements ContainerAwareInterface
     }
     
     /**
-     * 
+     * Retorna si tiene permiso para acceder a una plantilla de reporte, de acuerdo 
      * @param User $user
      * @param type $typeOfCompany
      * @return boolean
