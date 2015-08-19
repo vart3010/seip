@@ -3103,7 +3103,8 @@ angular.module('seipModule.controllers', [])
                             "dataSource": {
                                 "chart": data.dataSource.chart,
                                 "categories": data.dataSource.categories,
-                                "dataset": data.dataSource.dataset
+                                "dataset": data.dataSource.dataset,
+                                "annotations": data.dataSource.annotations
                             }
                         });
                         revenueChartProductionReportTemplateByDateGroupByCompany.setTransparent(true);

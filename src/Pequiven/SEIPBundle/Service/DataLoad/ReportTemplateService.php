@@ -121,6 +121,7 @@ class ReportTemplateService implements ContainerAwareInterface {
                 'chart' => array(),
                 'categories' => array(),
                 'dataset' => array(),
+                'annotations' => array(),
             ),
         );
 
@@ -130,7 +131,7 @@ class ReportTemplateService implements ContainerAwareInterface {
 //        $chart["subCaption"] = "Sales by quarter";
 //        $chart["xAxisName"] = "Indicador";
 //        $chart["yAxisName"] = "TM";
-        $chart["paletteColors"] = "#0075c2,#1aaf5d,#f2c500";
+//        $chart["paletteColors"] = "#0075c2,#1aaf5d,#f2c500";
         $chart["showBorder"] = "0";
         $chart["showCanvasBorder"] = "0";
         $chart["usePlotGradientColor"] = "0";
@@ -219,6 +220,40 @@ class ReportTemplateService implements ContainerAwareInterface {
             
             $data['dataSource']['dataset'][] = $dataRealValues;
             $data['dataSource']['dataset'][] = $dataPlanValues;
+            
+            $annotations = array();
+            
+//             "groups": [
+//                {
+//                   "id": "total-label",
+//                   "items": [
+//                      {
+//                         "id": "total-label-bg",
+//                         "type": "rectangle",
+//                         "radius": "3",
+//                         "x": "$chartEndX - 120",
+//                         "y": "$captionStartY",
+//                         "toX": "$chartEndX - 20",
+//                         "toY": "$captionStartY + 30",
+//                         "fillColor": "#0075c2",
+//                         "alpha": "70"
+//                      },
+//                      {
+//                         "id": "total-label-value",
+//                         "type": "text",
+//                         "fontColor": "#ffffff",
+//                         "fontSize": "10",
+//                         "x": "$chartEndX - 70",
+//                         "y": "$captionStartY + 15",
+//                         "wrapWidth": "90",
+//                         "wrapHeight": "25",
+//                         "text": "Total: $7.5M"
+//                      }
+//                   ]
+//                }
+//             ]
+            
+            $data['dataSource']['annotations'] = $annotations;
         }
 
         $data['dataSource']['chart'] = $chart;
