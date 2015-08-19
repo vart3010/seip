@@ -105,7 +105,7 @@ class productReportService implements ContainerAwareInterface {
 
         $chart = array();
         if ($range["range"]) {
-            $chart["caption"] = "Producción desde ".$range["dateFrom"]->format("d-m-Y")." hasta ".$range["dateEnd"]->format("d-m-Y");
+            $chart["caption"] = "Producción desde " . $range["dateFrom"]->format("d-m-Y") . " hasta " . $range["dateEnd"]->format("d-m-Y");
         } else {
             $chart["caption"] = $titles["caption"];
         }
@@ -214,7 +214,7 @@ class productReportService implements ContainerAwareInterface {
         $desplazamiento = 0;
         foreach (array_unique($arrayCategories) as $categories) {
             $categoriesGraphic[] = array("label" => $categories);
-            
+
             $rep = array_keys($arrayCategories, $categories);
 
 
@@ -244,14 +244,106 @@ class productReportService implements ContainerAwareInterface {
                 $valuesReal[] = array("value" => number_format($arrayReal[$cont + $desplazamiento] / $division, 2, ',', '.'));
                 $valuesPlan[] = array("value" => number_format($arrayPlan[$cont + $desplazamiento] / $division, 2, ',', '.'));
                 $perc = 0;
-                if ($arrayPlan[$cont+$desplazamiento] > 0) {
-                    $perc = ($arrayReal[$cont+$desplazamiento] * 100) / $arrayPlan[$cont+$desplazamiento];
+                if ($arrayPlan[$cont + $desplazamiento] > 0) {
+                    $perc = ($arrayReal[$cont + $desplazamiento] * 100) / $arrayPlan[$cont + $desplazamiento];
                 }
                 $percentaje[] = array("value" => number_format($perc, 2, ',', '.'));
                 $cont++;
             }
         }
 
+
+        $data["dataSource"]["chart"] = $chart;
+        $data["dataSource"]["categories"][]["category"] = $categoriesGraphic;
+        $data["dataSource"]["dataset"][] = array(
+            "seriesname" => "Plan",
+            "data" => $valuesPlan
+        );
+        $data["dataSource"]["dataset"][] = array(
+            "seriesname" => "Real",
+            "data" => $valuesReal
+        );
+        $data["dataSource"]["dataset"][] = array(
+            "seriesname" => "Porcentaje",
+            "renderAs" => "line",
+            "parentYAxis" => "S",
+            "showValues" => "0",
+            "data" => $percentaje
+        );
+        //var_dump(json_encode($data["dataSource"]["dataset"]));
+
+        return json_encode($data);
+    }
+
+    public function generateColumn3dLineryPerRange($titles, $production, $range, $division = 1) {
+        $data = array(
+            'dataSource' => array(
+                'chart' => array(),
+                'categories' => array(),
+                'dataset' => array(),
+            ),
+        );
+
+        $chart = array();
+        if ($range["range"]) {
+            $chart["caption"] = "Producción desde " . $range["dateFrom"]->format("d-m-Y") . " hasta " . $range["dateEnd"]->format("d-m-Y");
+        } else {
+            $chart["caption"] = $titles["caption"];
+        }
+        $chart["subCaption"] = $titles["subCaption"];
+        //        $chart["xAxisName"] = "Indicador";
+        if ($division == 1) {
+            $chart["pYAxisName"] = "Cantidad (TM)";
+        } else if ($division == 1000) {
+            $chart["pYAxisName"] = "Cantidad (MTM)";
+        }
+        $chart["sYAxisName"] = "% Ejecucion";
+        $chart["sNumberSuffix"] = "%";
+        $chart["sYAxisMaxValue"] = "100";
+        $chart["paletteColors"] = "#0075c2,#1aaf5d,#f2c500";
+        $chart["bgColor"] = "#ffffff";
+        $chart["showBorder"] = "0";
+        $chart["showCanvasBorder"] = "0";
+        $chart["usePlotGradientColor"] = "0";
+        $chart["plotBorderAlpha"] = "10";
+        $chart["legendBorderAlpha"] = "0";
+        $chart["legendBgAlpha"] = "0";
+        $chart["legendShadow"] = "0";
+        $chart["showHoverEffect"] = "1";
+        $chart["valueFontColor"] = "#000000";
+        $chart["valuePosition"] = "ABOVE";
+        $chart["rotateValues"] = "1";
+        $chart["placeValuesInside"] = "0";
+        $chart["divlineColor"] = "#999999";
+        $chart["divLineDashed"] = "1";
+        $chart["divLineDashLen"] = "1";
+        $chart["divLineGapLen"] = "1";
+        $chart["canvasBgColor"] = "#ffffff";
+        $chart["captionFontSize"] = "14";
+        $chart["subcaptionFontSize"] = "14";
+        $chart["subcaptionFontBold"] = "0";
+        $chart["decimalSeparator"] = ",";
+        $chart["thousandSeparator"] = ".";
+        $chart["inDecimalSeparator"] = ",";
+        $chart["inThousandSeparator"] = ".";
+        $chart["decimals"] = "2";
+
+        $chart["exportenabled"] = "1";
+        $chart["exportatclient"] = "0";
+        $chart["exportFormats"] = "PNG= Exportar como PNG|PDF= Exportar como PDF";
+        $chart["exportFileName"] = "Grafico Resultados ";
+        $chart["exporthandler"] = "http://107.21.74.91/";
+
+        $categoriesGraphic = $valuesPlan = $valuesReal = $percentaje = array();
+        
+        foreach ($production as $prod) {
+            $categoriesGraphic[] = array("label" => $prod["productName"]);
+             $valuesReal[] = array("value" => number_format($prod["real"], 2, ',', '.'));
+             $valuesPlan[] = array("value" => number_format($prod["plan"], 2, ',', '.'));
+             $percentaje[] = array("value" => number_format($prod["percentage"], 2, ',', '.'));
+            
+        }
+        
 
         $data["dataSource"]["chart"] = $chart;
         $data["dataSource"]["categories"][]["category"] = $categoriesGraphic;

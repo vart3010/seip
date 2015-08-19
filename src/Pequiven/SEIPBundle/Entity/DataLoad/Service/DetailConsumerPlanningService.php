@@ -2,9 +2,9 @@
 
 /*
  * This file is part of the TecnoCreaciones package.
- * 
+ *
  * (c) www.tecnocreaciones.com.ve
- * 
+ *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
@@ -32,7 +32,7 @@ class DetailConsumerPlanningService extends Detail
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
-    
+
     /**
      *
      * @var \Pequiven\SEIPBundle\Entity\DataLoad\Service\ConsumerPlanningService
@@ -40,7 +40,7 @@ class DetailConsumerPlanningService extends Detail
      * @ORM\JoinColumn(nullable=false)
      */
     protected $consumerPlanningService;
-    
+
     /**
      * Rangos de distribucion
      * @var Range
@@ -59,7 +59,7 @@ class DetailConsumerPlanningService extends Detail
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -82,7 +82,7 @@ class DetailConsumerPlanningService extends Detail
     /**
      * Get consumerPlanningService
      *
-     * @return \Pequiven\SEIPBundle\Entity\DataLoad\Service\ConsumerPlanningService 
+     * @return \Pequiven\SEIPBundle\Entity\DataLoad\Service\ConsumerPlanningService
      */
     public function getConsumerPlanningService()
     {
@@ -116,13 +116,13 @@ class DetailConsumerPlanningService extends Detail
     /**
      * Get ranges
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getRanges()
     {
         return $this->ranges;
     }
-    
+
     /**
      * @ORM\PrePersist()
      * @ORM\PreUpdate()
