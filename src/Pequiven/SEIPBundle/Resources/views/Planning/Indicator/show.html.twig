@@ -276,6 +276,18 @@
                     </div>
                 {% endif %}
             </div>
+            {# Sistemas de Gestión del Indicador #}
+            {% if  indicator.managementSystems | length > 0 and is_granted('ROLE_SEIP_SIG_EVOLUTION_VIEW') %}
+                <div class="inline-label">
+                        <label class="label">{{ 'form.systems'|trans }}</label>
+                        <ul class="fa-ul">
+                            {% for managementSystem in indicator.managementSystems %}
+                                <li>{{ managementSystem.description }}</li>
+                            {% endfor %}
+                        </ul>
+                </div>
+            {% endif %}
+            {# Fin carga de sistemas de Gestión #}
         </fieldset>
             
         <!-- Etiquetas del Indicador -->
@@ -303,7 +315,19 @@
         <!-- Historial de eventos del Indicador -->
         {% include 'PequivenSEIPBundle:Planning:Indicator/show/history.html.twig' with {'entity':indicator} %}
     </div>
+
     <p class="button-height align-right">
+
+    {# Visualizacion de Indice de evolucion #}
+
+        {% if  indicator.managementSystems | length > 0 and is_granted('ROLE_SEIP_SIG_EVOLUTION_VIEW') %}
+        &nbsp;
+            {{ buttons.generic_ext(path('pequiven_indicator_evolution', { 'id': indicator.id }),('pequiven.evolution'|trans({},'messages'))) }}
+        {% endif %}
+        &nbsp;
+        
+    {# end #}
+
         {% if is_granted(['ROLE_WORKER_PLANNING','ROLE_SEIP_INDICATOR_ADD_OBSERVATION']) %}
             {% set filedObservation = '<br/><br/><textarea name="observation" class="input" placeholder="' ~ ('pequiven.arrangement_program.write_observation'|trans({},'PequivenArrangementProgramBundle')) ~ '" required="required" cols="28" rows="10" ></textarea>' %}
 

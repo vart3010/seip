@@ -143,6 +143,13 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     private $objetives;
 
     /**
+     * @var \Pequiven\IndicatorBundle\Entity\Indicator
+     * @ORM\OneToOne(targetEntity="\Pequiven\IndicatorBundle\Entity\Indicator")
+     * @ORM\JoinColumn(name="indicator_last_period", referencedColumnName="id")
+     */
+    private $indicatorlastPeriod;
+
+    /**
      * LineStrategic
      * 
      * @var \Pequiven\MasterBundle\Entity\LineStrategic
@@ -181,7 +188,6 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * 
      * @var \Pequiven\IndicatorBundle\Entity\Indicator\FrequencyNotificationIndicator
      * @ORM\ManyToOne(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\FrequencyNotificationIndicator")
-
      */
     protected $frequencyNotificationIndicator;
 
@@ -566,10 +572,20 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\Column(name="resultsAdditionalInDashboardColumn",type="boolean")
      */
     private $resultsAdditionalInDashboardColumn = false;
+
+    /**
+     * Causas de Desviación
+     * 
+     * @var \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCause
+     * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCause",mappedBy="indicator",cascade={"persist","remove"})
+     */
+    protected $indicatorCause;
+   
     /**
      * Constructor
      */
     public function __construct() {
+
         $this->objetives = new \Doctrine\Common\Collections\ArrayCollection();
         $this->lineStrategics = new \Doctrine\Common\Collections\ArrayCollection();
         $this->valuesIndicator = new \Doctrine\Common\Collections\ArrayCollection();
@@ -579,6 +595,8 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
         $this->featuresIndicator = new \Doctrine\Common\Collections\ArrayCollection();
         $this->charts = new \Doctrine\Common\Collections\ArrayCollection();
         $this->managementSystems = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->indicatorlastPeriod = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->indicatorCause = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -865,6 +883,37 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     }
 
     /**
+     * Add indicatorlastPeriod
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator
+     * @return Indicator
+     */
+    public function addIndicatorLastPeriod(\Pequiven\IndicatorBundle\Entity\Indicator $indicatorlastPeriod) {
+        $indicatorlastPeriod->addIndicator($this);
+        $this->indicatorlastPeriod->add($indicatorlastPeriod);
+
+        return $this;
+    }
+
+    /**
+     * Remove indicatorlastPeriod
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator $indicatorlastPeriod
+     */
+    public function removeIndicatorLastPeriod(\Pequiven\IndicatorBundle\Entity\Indicator $indicatorlastPeriod) {
+        $this->indicatorlastPeriod->removeElement($indicatorlastPeriod);
+    }
+
+    /**
+     * Get indicatorlastPeriod
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getIndicatorLastPeriod() {
+        return $this->indicatorlastPeriod;
+    }
+
+    /**
      * Set arrangementRange
      *
      * @param \Pequiven\ArrangementBundle\Entity\ArrangementRange $arrangementRange
@@ -978,6 +1027,37 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      */
     public function getValuesIndicator() {
         return $this->valuesIndicator;
+    }
+    
+    /**
+     * Add indicatorCause
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCause $indicatorCause
+     * @return Indicator
+     */
+    public function addIndicatorCause(\Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCause $indicatorCause) {
+
+        $this->indicatorCause->add($indicatorCause);
+
+        return $this;
+    }
+
+    /**
+     * Remove indicatorCause
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCause $indicatorCause
+     */
+    public function removeIndicatorCause(\Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCause $indicatorCause) {
+        $this->indicatorCauses->removeElement($indicatorCause);
+    }
+
+    /**
+     * Get indicatorCause
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getIndicatorCause() {
+        return $this->indicatorCause;
     }
 
     /**
@@ -1251,6 +1331,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
             $this->objetives = new ArrayCollection();
 
             $this->childrens = new ArrayCollection();
+
         }
     }
 
@@ -2275,6 +2356,6 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      */
     public function getResultsAdditionalInDashboardColumn() {
         return $this->resultsAdditionalInDashboardColumn;
-    }
-
+    }    
+    
 }

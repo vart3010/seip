@@ -1,0 +1,15 @@
+{% trans_default_domain 'PequivenIndicatorBundle' %}    
+       
+		<fieldset class="fieldset fields-list">
+                <legend class="legend">{{ 'sig.causes_deviation'|trans ({}, 'messages') }}</legend>
+
+					 <form method="POST" {{ form_enctype(form) }} id="form_causes_evolution">
+					    <div class="field-block button-height" >
+
+					        {{ form_widget(form) }}
+
+					    </div>
+					</form>
+					<br>
+
+		</fieldset>

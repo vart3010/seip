@@ -298,7 +298,7 @@ class ValueIndicator extends Model {
     function setValueIndicatorFile($valueIndicatorFile) {
         $this->valueIndicatorFile = $valueIndicatorFile;
         return $this;
-    }
+    }    
 
     public function __toString() {
         $toString = '';

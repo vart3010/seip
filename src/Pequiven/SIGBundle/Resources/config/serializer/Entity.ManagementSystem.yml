@@ -19,3 +19,6 @@ Pequiven\SIGBundle\Entity\ManagementSystem:
         objetives:
             expose: true
             groups: [objetives]
+        indicators:
+            expose: true
+            groups: [indicators]

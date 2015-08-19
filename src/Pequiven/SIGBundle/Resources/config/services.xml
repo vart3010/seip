@@ -10,6 +10,14 @@
         <service id="pequiven.repository.sig_management_system" class="Pequiven\SIGBundle\Repository\ManagementSystemRepository">
             <tag name="app.repository" class="Pequiven\SIGBundle\Entity\ManagementSystem" />
         </service>
+
+        <!-- Repositorio de Indicadorlist -->
+        <service id="pequiven.repository.sig_indicator" class="Pequiven\IndicatorBundle\Repository\IndicatorRepository">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+            <tag name="app.repository" class="Pequiven\IndicatorBundle\Entity\Indicator" />
+        </service>
         
     </services>
     

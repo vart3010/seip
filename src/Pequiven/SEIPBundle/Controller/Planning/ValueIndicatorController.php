@@ -114,14 +114,16 @@ class ValueIndicatorController extends \Pequiven\SEIPBundle\Controller\SEIPContr
             array(array('id' => $request->get('id',0))));
         
         $form = $this->buildFormulaForm($indicator,$valueIndicator);
+        $formAction = $this->buildActionForm();
         
         $view = $this
             ->view()
             ->setTemplate($this->config->getTemplate('form.html'))
             ->setTemplateVar($this->config->getPluralResourceName())
             ->setData(array(
-                'indicator' => $indicator,
-                'form' => $form->createView(),
+                'indicator'      => $indicator,
+                'form'           => $form->createView(),
+                'formAction'     => $formAction->createView(),
                 'valueIndicator' => $valueIndicator
             ))
         ;
@@ -472,6 +474,38 @@ class ValueIndicatorController extends \Pequiven\SEIPBundle\Controller\SEIPContr
                 $form->add($name,$type,$parameters);
             }
         }
+        return $form->getForm();
+    }
+
+    /**
+     * Construye el formulario para la rerlacion con el indicador 2014
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicatorAction $action
+     * @return type
+     */
+    private function buildActionForm() 
+    {
+       
+        $form = $this->createFormBuilder(array(
+            'csrf_protection' => false,
+        ));
+
+                $description = "Accion: ";
+                $editable = true;
+                $name = "action";
+                $type = 'text';
+
+                $parameters = array(
+                    'label' => $description,
+                    'label_attr' => array(
+                        'class' => 'label'
+                    ),
+                    'attr' => array(
+                        'class' => 'input'
+                    ),
+                    'disabled' => !$editable,
+                );
+                $form->add($name,$type,$parameters);
+
         return $form->getForm();
     }
     

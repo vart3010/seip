@@ -152,6 +152,7 @@ form:
     parent_indicator: Indicador padre
     total_plan: Plan anual
     frequencyNotification : Frecuencia de Notificación
+    systems: Sistemas de Getión del Indicador
     
     arrangementRangeType: Tipo de Rango
     arrangementRangeTypeTop: Tipo de Rango Alto

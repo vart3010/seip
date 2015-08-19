@@ -1,0 +1,40 @@
+{% trans_default_domain 'PequivenIndicatorBundle' %}
+
+<div ng-controller="IndicatorAsocLastPeriodController"> 
+
+
+<div class="block" ng-init="urlValueIndicatorForm='{{ path('pequiven_feature_indicator_get_form',{'idIndicator':indicator_sig.id}) }}'">
+    <div class="block-title">
+        <h3 class="ng-binding">{$ indicator_sig.featuresIndicator.length $} {{ 'sig.trend_analysis'|trans ({}, 'messages') }}</h3>
+        <div class="button-group absolute-right compact">
+            <a class="button icon-list-add " href="" ng-click="loadTemplateAnalysisTrend()" title="">{{ 'pequiven.add'|trans({},'messages') }}&nbsp;</a>
+        </div>
+    </div>
+    <div class="with-padding">
+        {% set colspan = 5 %}
+        <table class="simple-table responsive-table tables-extras" id="sorting-example2">
+            <thead>
+                <tr>
+                    <th scope="col" width="2%" class="header">{{ 'seip.table.header.nro'|trans({},'PequivenArrangementProgramBundle') }}</th>
+                    <th scope="col" width="50%" class="header">
+                        {{ 'seip.table.header.description_feature_indicator'|trans({},'PequivenArrangementProgramBundle') }}</th>                    
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="featureIndicator in indicator.featuresIndicator" >
+                    <td>{$ ($index + 1) $}</td>
+                    <th scope="row" style="color: {$ featureIndicator.typeFeatureIndicator.color $}">
+                        {$ featureIndicator.description $}
+                    </th>                        
+                </tr>
+                    
+                <tr ng-if="indicator.featuresIndicator.length == 0">
+                    <td colspan="{{ colspan }}" class="empty_row">
+                        {{ "empty.features_indicator"|trans({},'PequivenSEIPBundle') }}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+                
+    </div>
+</div>

@@ -1,0 +1,105 @@
+#carga de formulario de relacion del indicador
+pequiven_indicatorlastperiod_get_form:
+    path: /{idIndicator}/get-form.{_format}
+    defaults:
+        _controller: pequiven.controller.indicator_sig:getFormAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET]
+    options:
+        expose: true
+#carga de formulario plan de acción
+pequiven_indicatoraction_get_form:
+    path: /{idIndicator}/get-form_action.{_format}
+    defaults:
+        _controller: pequiven.controller.indicator_sig:getFormPlanAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET]
+    options:
+        expose: true
+#Carga de formulario de causas de evolution
+pequiven_indicatorcauses_get_form:
+    path: /{idIndicator}/get-form_causes.{_format}
+    defaults:
+        _controller: pequiven.controller.indicator_sig:getFormCausesAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET]
+    options:
+        expose: true
+#Guardamos el formulario del plan de Acción del Indicador
+pequiven_action_evolution_add:
+    path: /{idIndicator}/add.{_format}
+    defaults:
+        _controller: pequiven.controller.indicator_sig:addAction
+        _format: json
+    requirements:
+        _format: json
+    methods: [POST]
+    options:
+        expose: true
+#Guardamos el formulario de las causas del indicador
+pequiven_causes_evolution_add:
+    path: /{idIndicator}/add.{_format}
+    defaults:
+        _controller: pequiven.controller.indicator_sig:addCausesAction
+        _format: json
+    requirements:
+        _format: json
+    methods: [POST]
+    options:
+        expose: true
+#Carga de formulario del analisis de tendencia
+pequiven_indicatortrend_get_form:
+    path: /{idIndicator}/get-form_trend.{_format}
+    defaults:
+        _controller: pequiven.controller.indicator_sig:getFormTrendAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET]
+    options:
+        expose: true
+pequiven_arrangementprogram_datasig_indicator_lastperiod:
+    path: /indicators.{_format}
+    defaults: 
+        _controller: pequiven_seip.controller.arrangementprogram_data:getIndicatorLastPeriodAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
+        
+#IndicatorSig
+pequiven_indicatorsig_list:
+    path: /{level}/listsig.{_format}
+    defaults:
+        _controller: pequiven.controller.indicators_sig:listAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+        level: 1|2|3
+    methods: [GET]
+
+#Lista de Indicadores Estratégicos SIG
+sig_indicators_strategic:
+    path: /sig/indicators_strategic/list
+    defaults: 
+        _controller: pequiven.controller.indicators_sig:strategiclistAction
+
+#Lista de Indicadores Tacticos SIG
+sig_indicators_tactic:
+    path: /sig/indicators_tactic/list
+    defaults: 
+        _controller: pequiven.controller.indicators_sig:tacticlistAction
+
+#Lista de Indicadores Operativos SIG
+sig_indicators_operative:
+    path: /sig/indicators_operative/list
+    defaults: 
+        _controller: pequiven.controller.indicators_sig:operativelistAction

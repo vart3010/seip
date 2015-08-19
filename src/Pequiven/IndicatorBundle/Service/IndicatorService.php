@@ -3504,7 +3504,176 @@ class IndicatorService implements ContainerAwareInterface {
             }
         }
     }
+
+    /**
+    *Function que retorna el promedio del indicador
+    *@param indicator $indicator
+    *@return type
+    */
+    public function getPromdIndicator(Indicator $indicator){
+
+        $prom = 0;
+        $acum = 0;
+        $contMonth = 1;
+
+        //Recibiendo la frecuencia de calculo del indicador
+        $labelsFrequencyNotificationArray = $this->getLabelsByIndicatorFrequencyNotification($indicator);
+        
+        foreach ($indicator->getValuesIndicator() as $value) {
+
+                $data = $value->getValueOfIndicator();
+                $cant = $labelsFrequencyNotificationArray[$contMonth];
+                //var_dump($data);
+                //die();
+                $contMonth++;
+                $acum = $acum + $data;
+            }
+            //Data Prom
+            if( $contMonth == 1){
+                $contMonth = 2;            
+            }
+            $prom = $acum / ($contMonth - 1); //Calculo de Promedio
+            $value = $prom;
+
+            return $value;
+    }
     
+    /**
+     * Gráfico de Columna para informe de Evolución
+     * @param Indicator $indicator
+     * @return type
+     */
+    public function getDataChartOfIndicatorEvolution(Indicator $indicator) {
+        $data = array(
+            'dataSource' => array(
+                'chart' => array(),
+                'categories' => array(
+                ),
+                'dataset' => array(
+                ),
+            ),
+        );
+        $chart = array();
+        //Lamado de promedio
+        $prom = $this->getPromdIndicator($indicator);
+        //Llamado de frecuencia de Notificacion del Indicador
+        $labelsFrequencyNotificationArray = $this->getLabelsByIndicatorFrequencyNotification($indicator);
+        //Número de indicadores asociados
+        $totalNumValues = count($indicator->getValuesIndicator());
+
+        //Inicialización
+        $category = $dataSetReal = $dataSetPlan = $dataSetAcum = array();
+        $label = $dataReal = $dataPlan = $dataAcum = $dataMedition = array();
+
+        //Carga de Nombres de Labels
+        $dataSetReal["seriesname"] = "Real";
+        $dataSetPlan["seriesname"] = "Plan";
+        $dataSetAcum["seriesname"] = "Acumulado";
+        $dataSetAnt["seriesname"]  = "2014";
+        $labelAntper               = "2014";
+        $labelProm                 = "Promedio o Acumulado";
+        $labelobj                  = "Objetivo 2015";
+
+        //Carga de datos del lebel principal Periodo-2015
+        $labelAnt["label"] = $labelAntper;//Label del 2014
+        $category[] = $labelAnt;//Label del 2014
+
+        if ($totalNumValues > 0) {
+            $indicatorValues = $indicator->getValuesIndicator();
+            $contMonth = 1;
+            //$labelMonths = CommonObject::getLabelsMonths();
+            foreach ($indicatorValues as $indicatorValue) {
+                $formulaParameters = $indicatorValue->getFormulaParameters();
+
+                $label["label"] = $labelsFrequencyNotificationArray[$contMonth];
+                
+                $category[] = $label;
+                $contMonth++;
+            }
+            $labelp["label"] = $labelProm;//Label del Prom
+            $category[] = $labelp;//Label del Prom
+
+            //Label Obj Acum
+            $labelo["label"] = $labelobj;//Label del ObjAcum
+            $category[] = $labelo;//Label del ObjAcum
+
+            //Data 2014
+            $dataAnt["value"] = 50;//Pasando data a Data2014
+            $dataAnt["color"] = '#f2c500';            
+            $dataSetAnt["data"][] = $dataAnt;//2014
+
+            $dataSetTend["data"][] = array( 'value' => '' );
+            $dataSetReal["data"][] = array( 'value' => '' );
+            
+            foreach ($indicator->getValuesIndicator() as $value) {
+
+                $dataReal["value"] = $value->getValueOfIndicator();
+
+                $dataSetReal["data"][] = $dataReal;
+                $dataSetTend["data"][] = $dataReal;                
+            }
+            //Carga de Prom indicatorParent2014
+            //borrar
+            /*$em = $this->getDoctrine();
+            $prePlanningItemCloneObject = $em->getRepository('Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanningItemClone')->findOneBy(array('idCloneObject' => $indicator->getId(), 'typeObject' => \Pequiven\SEIPBundle\Model\PrePlanning\PrePlanningTypeObject::TYPE_OBJECT_INDICATOR));
+            $indicatorLastPeriod = $this->container->get('pequiven.repository.indicator')->find($prePlanningItemCloneObject->getIdSourceObject());
+            var_dump($prePlanningItemCloneObject->getIdSourceObject());
+            $parent_id = $prePlanningItemCloneObject->getIdSourceObject();
+            $valorant = $em->getRepository('Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator')->findOneBy(array('id' => $parent_id));
+            var_dump($valorant->getValueOfIndicator());
+            die();*/
+            //borrar
+            $indicatorParent = $indicator->getParent();
+            //var_dump($indicatorParent);
+            //$parent_id = $indicatorParent->getId();
+
+            foreach ($indicator->getValuesIndicator() as $value) {
+
+                $dataPeriodoAnterior = $value->getValueOfIndicator();
+              //  var_dump($dataPeriodoAnterior);
+            }
+            //echo "INDICADOR PADRE ",var_dump($parent_id);
+            
+            $indicatorlast = $indicator->getindicatorLastPeriod();
+            //var_dump($indicatorlast);
+            if ($indicatorlast === null) {
+                //echo "El indicador no tiene relacion con el Indicador 2014";
+                //die();
+            }else{
+                var_dump($indicatorlast->getId());
+                //die();
+            }
+
+            //Carga de meta Objetivo2015
+            foreach ($indicator->getObjetives() as $value) {
+                $dataValueObjetive = $value->getgoal();
+            }
+            if ($dataValueObjetive == NULL ) {
+                $dataValueObjetive = 0;
+            }
+            //var_dump($dataValueObjetive);
+            //die();
+            //Data Prom
+            $dataAcum["value"] = $prom;//Pasando data a data prom
+            $dataAcum["color"] = '#0a5f87';            
+            $dataSetReal["data"][] = $dataAcum;//promedio
+            //Pasando Objetivo Acum
+            $dataObj["value"] = $dataValueObjetive;//Pasando data a Dataobj
+            $dataObj["color"] = '#087505';
+            $dataSetReal["data"][] = $dataObj;//Acumulado
+            
+            //Carga de Tendencia
+            $dataSetValues['tendencia'] = array('seriesname' => 'Tendencia', 'parentyaxis' => 'S', 'renderas' => 'Line', 'color' => '#E50A0A', 'data' => $dataSetTend['data']);
+            $data['dataSource']['dataset'][] = $dataSetValues['tendencia'];
+            //die();
+        }
+        //$data['dataSource']['chart'] = $chart;
+        $data['dataSource']['categories'][]["category"] = $category;
+        $data['dataSource']['dataset'][] = $dataSetReal;
+        $data['dataSource']['dataset'][] = $dataSetAnt;
+
+        return $data;
+    }
     public function obtainIndicatorChartDetails(Indicator $indicator, \Pequiven\SEIPBundle\Entity\Chart $chart){
         $indicatorChartDetailsRepository = $this->container->get('pequiven.repository.indicatorchartdetails');
         

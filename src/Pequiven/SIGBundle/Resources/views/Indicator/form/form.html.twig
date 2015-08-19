@@ -1,0 +1,35 @@
+{% trans_default_domain 'PequivenIndicatorBundle' %}
+    
+    <div ng-controller="TableFormatController">
+        <div ng-controller="IndicatorAsocLastController">
+
+        
+        <form method="POST" id="form_value_indicator">
+            <fieldset class="fieldset fields-list">
+                <legend class="legend">{{ 'sig.relation_indicator'|trans ({}, 'messages') }}</legend>
+                {# {% for child in form.children %}
+                    <div class="field-block button-height" >
+                        {{ form_label(child) }}
+                        {{ form_widget(child) }}
+                        {{ form_errors(child) }}
+                    </div>
+                {% endfor %} #}
+                {# #}              
+                     <!-- Filter ManagementSystem -->
+                    <div class="field-block button-height" >                                                
+                      <label class="bold">{{ 'sig.relation_indicator'|trans ({}, 'messages') }}</label>
+                                <br/>
+                            <div class="with-mid-padding">
+                                <select class="select2 input-xlarge" id="selectIndicatorsLast" ng-model="model.indicatorsLast" ng-options="value as value.id for (key,value) in data.indicatorsLast" >
+                                <option value=''></option>
+                                </select>
+                            </div>
+                    </div>
+
+                {#  {{ indicator.id }} #}
+                   
+                {% if valueIndicator != null %}
+                    <input type="hidden" name="id" value="{{ valueIndicator.id }}" />
+                {% endif %}
+            </fieldset>
+        </form>       
