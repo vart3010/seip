@@ -127,7 +127,6 @@ class ReportTemplateService implements ContainerAwareInterface {
 
         $chart = array();
 
-        $chart["caption"] = $options['typeCompany'] == \Pequiven\SEIPBundle\Entity\CEI\Company::TYPE_OF_COMPANY_MATRIZ ? 'Producción PQV' : 'Producción EEMM y FILIALES';
 //        $chart["subCaption"] = "Sales by quarter";
 //        $chart["xAxisName"] = "Indicador";
 //        $chart["yAxisName"] = "TM";
@@ -167,6 +166,8 @@ class ReportTemplateService implements ContainerAwareInterface {
         if (isset($options['consolidateByTypeCompany']) && array_key_exists('consolidateByTypeCompany', $options)) {
             unset($options['consolidateByTypeCompany']);
             
+            $chart["caption"] = $options['typeCompany'] == \Pequiven\SEIPBundle\Entity\CEI\Company::TYPE_OF_COMPANY_MATRIZ ? 'Producción PQV' : 'Producción EEMM y FILIALES';
+            
             $repositoryReportTemplate = $this->container->get('pequiven.repository.report_template');
             $user = $this->getUser();
             $securityContext = $this->getSecurityContext();
@@ -203,6 +204,78 @@ class ReportTemplateService implements ContainerAwareInterface {
 
             $dataSerialized = array();
             $dataSerialized = $this->getDataSerialized($reportTemplate, array('consolidateByTypeCompany' => true, 'dateSearch' => $options['dateSearch'], 'typeCompany' => $options['typeCompany'], 'reportTemplates' => $reportTemplates));
+            
+            foreach($reportTemplates as $reportTemplate) {
+                $category[] = array('label' => $reportTemplate->getName());
+            }
+            
+            $dataRealValues = $dataPlanValues = array();
+            
+            //Añadimos los valores, por cada planta del reportTemplate
+            foreach($reportTemplates as $reportTemplate) {
+                $dataRealValues['seriesname'] = 'Real';
+                $dataPlanValues['seriesname'] = 'Plan';
+                $dataRealValues['data'][] = array('value' => number_format($dataSerialized[$reportTemplate->getId()]['real'], 2, ',', '.'), 'color' => $dataSerialized[$reportTemplate->getId()]['color']);
+                $dataPlanValues['data'][] = array('value' => number_format($dataSerialized[$reportTemplate->getId()]['plan'], 2, ',', '.'), 'color' => "#003CFF");
+            }
+            
+            $data['dataSource']['dataset'][] = $dataRealValues;
+            $data['dataSource']['dataset'][] = $dataPlanValues;
+            
+            $annotations = array();
+            
+//             "groups": [
+//                {
+//                   "id": "total-label",
+//                   "items": [
+//                      {
+//                         "id": "total-label-bg",
+//                         "type": "rectangle",
+//                         "radius": "3",
+//                         "x": "$chartEndX - 120",
+//                         "y": "$captionStartY",
+//                         "toX": "$chartEndX - 20",
+//                         "toY": "$captionStartY + 30",
+//                         "fillColor": "#0075c2",
+//                         "alpha": "70"
+//                      },
+//                      {
+//                         "id": "total-label-value",
+//                         "type": "text",
+//                         "fontColor": "#ffffff",
+//                         "fontSize": "10",
+//                         "x": "$chartEndX - 70",
+//                         "y": "$captionStartY + 15",
+//                         "wrapWidth": "90",
+//                         "wrapHeight": "25",
+//                         "text": "Total: $7.5M"
+//                      }
+//                   ]
+//                }
+//             ]
+            
+            $data['dataSource']['annotations'] = $annotations;
+        } elseif (isset($options['consolidateCorporation']) && array_key_exists('consolidateCorporation', $options)) {
+            unset($options['consolidateCorporation']);
+            
+            $chart["caption"] = 'Producción Corporación PQV';
+            
+            $repositoryReportTemplate = $this->container->get('pequiven.repository.report_template');
+            $user = $this->getUser();
+            $securityContext = $this->getSecurityContext();
+            
+            $reportTemplates = array();
+
+            $resultReportTemplates = $repositoryReportTemplate->findAll();
+            //Seteamos sólo los reportTemplates de PQV, ya que los de la EEMM y Filiales se buscan directo en el controlador del gráfico
+            foreach($resultReportTemplates as $resultReportTemplate){
+                if($resultReportTemplate->getLocation()->getAlias() != 'CPJAA'){
+                    $reportTemplates[] = $resultReportTemplate;
+                }
+            }
+
+            $dataSerialized = array();
+            $dataSerialized = $this->getDataSerialized($reportTemplate, array('consolidateCorporation' => true, 'dateSearch' => $options['dateSearch'], 'reportTemplates' => $reportTemplates));
             
             foreach($reportTemplates as $reportTemplate) {
                 $category[] = array('label' => $reportTemplate->getName());
@@ -309,6 +382,56 @@ class ReportTemplateService implements ContainerAwareInterface {
             }
         } elseif(isset($options['consolidateByTypeCompany']) && array_key_exists('consolidateByTypeCompany', $options)){
             unset($options['consolidateByTypeCompany']);
+            $reportTemplates = $options['reportTemplates'];
+            
+            $options['dateSearch'] = str_replace('/', '-', $options['dateSearch']);
+            $daySearch = date("j", strtotime($options['dateSearch']));
+            $monthSearch = date("n", strtotime($options['dateSearch']));
+            
+            //SETEAMOS LOS VALORES POR DEFECTO
+            foreach($reportTemplates as $reportTemplate){
+                $dataSerialized[$reportTemplate->getId()]['real'] = $dataSerialized[$reportTemplate->getId()]['plan'] = 0.0;
+                $dataSerialized[$reportTemplate->getId()]['color'] = '#FF0004';
+                $dataSerialized[$reportTemplate->getId()]['contNotificationTotal'] = 0;
+                $dataSerialized[$reportTemplate->getId()]['flagNotificationHalf'] = false;
+            }
+            
+            //RELLENAMOS LA DATA
+            foreach($reportTemplates as $reportTemplate){
+                $plantReports = $reportTemplate->getPlantReports();
+                $contProductReports = 0;
+
+                foreach($plantReports as $plantReport){
+                    $productReports = $plantReport->getProductsReport();
+                    foreach($productReports as $productReport){
+                        $contProductReports++;
+                        $productDetailDailyMonths = $productReport->getProductDetailDailyMonthsSortByMonth();
+                        $valueReal = array_key_exists($monthSearch, $productDetailDailyMonths) == true ? $productDetailDailyMonths[$monthSearch]->getValueGrossByDay($daySearch) : 0.0;
+                        $valuePlan = array_key_exists($monthSearch, $productDetailDailyMonths) == true ? $productDetailDailyMonths[$monthSearch]->getPlanGrossByDay($daySearch) : 0.0;
+                        $dataSerialized[$reportTemplate->getId()]['real'] = $dataSerialized[$reportTemplate->getId()]['real'] + $valueReal;
+                        $dataSerialized[$reportTemplate->getId()]['plan'] = $dataSerialized[$reportTemplate->getId()]['plan'] + $valuePlan;
+                        if(array_key_exists($monthSearch, $productDetailDailyMonths)){
+                            if(!$dataSerialized[$reportTemplate->getId()]['flagNotificationHalf']){
+                                $dataSerialized[$reportTemplate->getId()]['flagNotificationHalf'] = $productDetailDailyMonths[$monthSearch]->getStatusByDay($daySearch) == \Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductDetailDailyMonth::STATUS_SAVE_PENDING ? true : false;
+                            }
+                            if($productDetailDailyMonths[$monthSearch]->getStatusByDay($daySearch) == \Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductDetailDailyMonth::STATUS_SAVE){
+                                $dataSerialized[$reportTemplate->getId()]['contNotificationTotal']++;
+                            }
+                        }
+                    }
+                }
+                
+                //Comparamos si todos los productReports estan notificados en su totalidad
+                if($contProductReports == $dataSerialized[$reportTemplate->getId()]['contNotificationTotal']){
+                    $dataSerialized[$reportTemplate->getId()]['color'] = '#0EED59';
+                } elseif($contProductReports != $dataSerialized[$reportTemplate->getId()]['contNotificationTotal'] && !$dataSerialized[$reportTemplate->getId()]['flagNotificationHalf']){
+                    $dataSerialized[$reportTemplate->getId()]['color'] = '#E5E752';
+                } elseif($dataSerialized[$reportTemplate->getId()]['flagNotificationHalf']){
+                    $dataSerialized[$reportTemplate->getId()]['color'] = '#E5E752';
+                }
+            }
+        } elseif(isset($options['consolidateCorporation']) && array_key_exists('consolidateCorporation', $options)){
+            unset($options['consolidateCorporation']);
             $reportTemplates = $options['reportTemplates'];
             
             $options['dateSearch'] = str_replace('/', '-', $options['dateSearch']);

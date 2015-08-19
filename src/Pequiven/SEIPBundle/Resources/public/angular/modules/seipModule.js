@@ -3113,6 +3113,32 @@ angular.module('seipModule.controllers', [])
                 });
             }
             
+            //PRO_RT_PQV-Gráfico para ver la producción consolidada por los ReportTemplates de PQV
+            $scope.chargeChartProductionReportTemplateByDateCorporation = function (dateSearch, render, width, height) {
+                var dateParse = $scope.parseDate(dateSearch);
+                var getDataChartProductionReportTemplateByDateCorporation = Routing.generate("getDataChartProductionReportTemplateByDateCorporation", {dateSearch: dateParse});
+                
+                $http.get(getDataChartProductionReportTemplateByDateCorporation).success(function (data) {
+                    FusionCharts.ready(function () {
+                        var revenueChartProductionReportTemplateByDateCorporation = new FusionCharts({
+                            "type": "mscolumn3d",
+                            "renderAt": render,
+                            "width": width + "%",
+                            "height": height,
+                            "dataFormat": "json",
+                            "dataSource": {
+                                "chart": data.dataSource.chart,
+                                "categories": data.dataSource.categories,
+                                "dataset": data.dataSource.dataset,
+                                "annotations": data.dataSource.annotations
+                            }
+                        });
+                        revenueChartProductionReportTemplateByDateCorporation.setTransparent(true);
+                        revenueChartProductionReportTemplateByDateCorporation.render();
+                    });
+                });
+            }
+            
             // Función que devuelve una data formateada dd/mm/yyyy y recibe en dd-mm-yyyy
             $scope.parseDate = function parseDate(dateToParse) {
                 var dateParse = new Date(dateToParse);

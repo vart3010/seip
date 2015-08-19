@@ -10,7 +10,8 @@
 {% block body %}
     
 {#    {{ boxRender.renderBox('dashboard_data_load_production')|raw }}#}
-    {{ boxRender.renderBox('dashboard_data_load_production_by_company')|raw }}
+{#    {{ boxRender.renderBox('dashboard_data_load_production_by_company')|raw }}#}
+    {{ boxRender.renderBox('dashboard_data_load_production_corporation')|raw }}
     
     <div id="dashboard" style="display: none;">
         {{ renderArea(constant('Pequiven\\SEIPBundle\\Model\\Box\\AreasBox::DASHBOARD')) }}
