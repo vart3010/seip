@@ -67,6 +67,18 @@ abstract class ProductDetailDailyMonth extends BaseModel implements ProductDetai
     }
     
     /**
+     * Retorna el plan de la produccion bruta de un dia
+     * @param type $day
+     * @return type
+     */
+    public function getPlanGrossByDay($day)
+    {
+        //Plan de la bruta
+        $namePlanGross = 'getDay'.$day.'GrossPlan';
+        return $this->$namePlanGross();
+    }
+    
+    /**
      * Retorna el valor de la produccion neta de un dia
      * @param type $day
      * @return type
@@ -76,6 +88,30 @@ abstract class ProductDetailDailyMonth extends BaseModel implements ProductDetai
         //Real de la neta
         $nameRealNet = 'getDay'.$day.'NetReal';
         return $this->$nameRealNet();
+    }
+    
+    /**
+     * Retorna el plan de la produccion neta de un dia
+     * @param type $day
+     * @return type
+     */
+    public function getPlanNetByDay($day)
+    {
+        //Plan de la neta
+        $namePlanNet = 'getDay'.$day.'NetPlan';
+        return $this->$namePlanNet();
+    }
+    
+    /**
+     * Retorna el status de notificación de un día
+     * @param type $day
+     * @return type
+     */
+    public function getStatusByDay($day)
+    {
+        //Status de notificación del día
+        $nameStatus = 'getDay'.$day.'Status';
+        return $this->$nameStatus();
     }
     
     /**

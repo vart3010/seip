@@ -345,3 +345,51 @@ getDataChartChartProgressProjectsByFrequencyNotification:
     methods: [GET]
     options:
         expose: true
+
+#PRO_RT_PQV
+getDataChartProductionReportTemplateByDate:
+    path: /getDataChartProductionReportTemplateByDate/{id}
+    defaults:
+        _controller: pequiven.controller.seipchart:getDataChartProductionReportTemplateByDateAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
+
+#PRO_RT_PQV
+getDataChartProductionReportTemplateByDateGroupByCompany:
+    path: /getDataChartProductionReportTemplateByDateGroupByCompany/{typeCompany}
+    defaults:
+        _controller: pequiven.controller.seipchart:getDataChartProductionReportTemplateByDateGroupByCompanyAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
+
+#PRO_RT_PQV
+getDataChartProductionReportTemplateByDateCorporation:
+    path: /getDataChartProductionReportTemplateByDateCorporation
+    defaults:
+        _controller: pequiven.controller.seipchart:getDataChartProductionReportTemplateByDateCorporationAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
+
+#PRO_RT_EEMM_FIL
+getDataChartProductionGroupByReportTemplateByDate:
+    path: /getDataChartProductionGroupByReportTemplateByDate/{id}
+    defaults:
+        _controller: pequiven.controller.seipchart:getDataChartProductionGroupByReportTemplateByDateAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true

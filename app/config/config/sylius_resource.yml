@@ -2,6 +2,7 @@ sylius_resource:
     resources:
         pequiven.seipmonitor:
             driver: doctrine/orm
+            templates: PequivenSEIPBundle:Monitor
             classes:
                 model: Pequiven\SEIPBundle\Entity\Monitor
                 controller: Pequiven\SEIPBundle\Controller\MonitorController

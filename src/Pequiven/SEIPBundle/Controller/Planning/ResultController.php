@@ -411,6 +411,8 @@ class ResultController extends ResourceController {
      */
     public function recalculateAction(Request $request) {
         $this->getSecurityService()->checkSecurity('ROLE_SEIP_PLANNING_OPERATION_RECALCULATE_RESULT');
+        
+        $period = $this->getPeriodService()->getPeriodActive();
 
         $view = $this
                 ->view()
@@ -419,6 +421,8 @@ class ResultController extends ResourceController {
         ;
         $arrangementprogramRepository = $this->get('pequiven_seip.repository.arrangementprogram');
         $indicatorRepository = $this->get('pequiven.repository.indicator');
+//        $userRepository = $this->container->get('pequiven_seip.repository.user');
+        $userRepository = $this->get('pequiven.repository.user');
         if ($request->isMethod('POST')) {
             $resultService = $this->getResultService();
             $id = $request->get('id');
@@ -434,6 +438,11 @@ class ResultController extends ResourceController {
                 } elseif ($type == 2) {
                     $resource = $indicatorRepository->find($id);
                     $resultService->refreshValueIndicator($resource);
+                } elseif ($type == 3){
+                    $evaluationDetailsService = $this->getEvaluationDetailsService();
+                    $resource = $userRepository->findBy(array('id' => $id));
+//                    $resource = $userRepository->find($id);
+                    $evaluationDetailsService->refreshValueEvaluation($resource[0],$period->getParent());
                 }
                 $data['success'] = true;
             } catch (\Exception $exc) {
@@ -443,24 +452,27 @@ class ResultController extends ResourceController {
                 $data['id'] = $id;
                 $view->setStatusCode(500);
             }
-
             $view->setData($data);
             return $this->handleView($view);
         }
 
-        $period = $this->getPeriodService()->getPeriodActive();
-
+        //Programas de Gestión
         $qbArrangementprogram = $arrangementprogramRepository->findQueryWithResultNull($period);
         $qbArrangementprogram->select('ap.id,ap.ref');
         $resultsArrangementprogram = $qbArrangementprogram->getQuery()->getResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
-
+        //Indicadores
         $qbIndicator = $indicatorRepository->findQueryWithResultNull($period);
         $qbIndicator->select('i.id,i.ref');
         $resultsIndicator = $qbIndicator->getQuery()->getResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+        //Evaluación Usuarios
+        $qbUsers = $userRepository->findQueryWithRoleOwner();
+        $qbUsers->select('u.id,u.numPersonal');
+        $resultsUserEvaluationDetails = $qbUsers->getQuery()->getResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
         $view->setData(array(
             'resultsArrangementprogram' => $resultsArrangementprogram,
-            'resultsIndicator' => $resultsIndicator
+            'resultsIndicator' => $resultsIndicator,
+            'resultsUserEvaluationDetails' => $resultsUserEvaluationDetails,
         ));
 
         return $this->handleView($view);
@@ -713,6 +725,14 @@ class ResultController extends ResourceController {
      */
     private function getResultService() {
         return $this->container->get('seip.service.result');
+    }
+    
+    /**
+     * Servicio del detalle de las evaluaciones
+     * @return \Pequiven\SEIPBundle\Service\User\EvaluationDetailsService
+     */
+    private function getEvaluationDetailsService() {
+        return $this->container->get('seip.service.evaluation_details');
     }
 
     /**

@@ -616,4 +616,27 @@ class MonitorController extends baseController {
             'gerencia' => $gerencia
         );
     }
+    
+    //SECCIÓN DATA-LOAD
+    /**
+     * Función que renderiza el Dashboard de Producción por 
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return type
+     */
+    public function displayDashboardProductionAction(Request $request){
+        
+        $boxRender = $this->get('tecnocreaciones_box.render');
+        $data = array(
+            'boxRender' => $boxRender,
+        );
+        
+        $view = $this
+            ->view()
+            ->setTemplate($this->config->getTemplate('Dashboard\DataLoad\Production\index.html'))
+            ->setTemplateVar($this->config->getResourceName())
+            ->setData($data)
+        ;
+
+        return $this->handleView($view);
+    }
 }

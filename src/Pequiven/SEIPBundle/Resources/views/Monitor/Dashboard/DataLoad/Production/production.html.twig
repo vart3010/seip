@@ -1,0 +1,27 @@
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+<!-- Sección Lateral Izquierda -->
+<div class="with-padding" ng-controller="ChartsDashboardController">
+    <div class="columns">
+        
+        {% if typeViews.view_type_pqv == true %}
+            {% for reportTemplate in reportTemplates %}
+                <div class="six-columns six-columns-tablet twelve-columns-mobile new-row-mobile">
+{#                    <div id="id-{{ reportTemplate.location.alias }}" ng-init="chargeChartProductionReportTemplateByDate({{ reportTemplate.id }},'{{ "now"|date('Y-m-d') }}','{{ reportTemplate.location.alias }}','100','500')">#}
+                    <div id="id-{{ reportTemplate.location.alias }}" ng-init="chargeChartProductionReportTemplateByDate({{ reportTemplate.id }},'{{ "now"|date('Y-m-d') }}','{{ reportTemplate.location.alias }}','100','500')" class="dashboard" style="background: -webkit-linear-gradient(left, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0) 60%, rgba(0, 0, 0, 0.25)), -webkit-linear-gradient(top, #5e6165, #33373a);">
+                        <span id="{{ reportTemplate.location.alias }}"></span>
+                        {{ reportTemplate.name }}
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+</div>
+
+{% block javascript %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            
+        });
+    </script>
+{% endblock javascript %}

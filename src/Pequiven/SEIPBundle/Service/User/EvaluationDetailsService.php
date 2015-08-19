@@ -1,23 +1,16 @@
 <?php
 
-/*
- * This file is part of the TecnoCreaciones package.
- * 
- * (c) www.tecnocreaciones.com
- * 
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+namespace Pequiven\SEIPBundle\Service\User;
 
-namespace Pequiven\SEIPBundle\Controller\Api;
 
 /**
- * API de Resultados
- *
- * @author Carlos Mendoza <inhack20@gmail.com>
+ * Servicio que se encarga de actualizar los detalles de la evaluación del usuario
+ * 
+ * service (seip.service.evaluation_details)
  */
-class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
-{
+class EvaluationDetailsService implements \Symfony\Component\DependencyInjection\ContainerAwareInterface {
+    protected $container;
+    
     const RESULT_OK = 1;
     const RESULT_NO_ITEMS = 2;
     const RESULT_NUM_PERSONAL_NOT_EXIST = 3;
@@ -26,54 +19,21 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
      * No tiene auditoria
      */
     const RESULT_NO_AUDIT = 5;
-    
     private $errors;
     
-    private function addErrorTrans($error,array $parameters = array()) {
-        if(is_array($error)){
-            $this->errors = array_merge($this->errors,$error);
-        }else{
-            $message = $this->trans($error,$parameters,'PequivenSEIPBundle');
-            $this->errors[md5($message)] = $message;
-        }
-    }
-    function getUserItemsAction(\Symfony\Component\HttpFoundation\Request $request)
+    function refreshValueEvaluation(\Pequiven\SEIPBundle\Entity\User $user, \Pequiven\SEIPBundle\Entity\Period $period)
     {
+        
         $this->errors= array();
-        $numPersonal = $request->get('numPersonal');
-        $periodName = $request->get('period');
+//        $numPersonal = $request->get('numPersonal');
+//        $periodName = $request->get('period');
         $status = self::RESULT_OK;
 
         $criteria = $arrangementPrograms = $objetives = $goals = $arrangementProgramsForObjetives = $objetivesOO = $objetivesOT = $objetivesOE = array();
         
-        if($periodName === null){
-            $this->addErrorTrans('pequiven_seip.errors.you_must_specify_the_period_inquiry');
-        }
-        if($numPersonal === null){
-            $this->addErrorTrans('pequiven_seip.errors.you_must_specify_number_staff_consult');
-        }
-        
-        $period = $this->container->get('pequiven.repository.period')->findOneBy(array(
-            'name' => $periodName,
-        ));
-        
-        $user = $this->get('pequiven_seip.repository.user')->findUserByNumPersonal($numPersonal);
-        
-        if(!$user && $numPersonal != ''){
-            $this->addErrorTrans('pequiven_seip.errors.the_number_staff_does_not_exist',array(
-                '%numPersonal%' => $numPersonal,
-            ));
-            $status = self::RESULT_NUM_PERSONAL_NOT_EXIST;
-        }
-        
-        if($periodName != '' && !$period){
-            $this->addErrorTrans('pequiven_seip.errors.the_period_does_not_exist',array(
-                '%period%' => $periodName
-            ));
-        }
-        
         $periodActual = $period;
         $canBeEvaluated = $isValidAudit = true;
+        $sumResult = 0.0;
         if(count($this->errors) == 0){
             //Repositorios
             $goalRepository = $this->container->get('pequiven_seip.repository.arrangementprogram_goal');
@@ -108,6 +68,8 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
                 
                 $realDateStart = $summary['dateStartReal'];
                 $realDateEnd = $summary['dateEndReal'];
+                
+                $sumResult = $arrangementProgram->getUpdateResultByAdmin() ? $sumResult + $arrangementProgram->getResultModified() : $sumResult + $arrangementProgram->getResult();
                         
                 $arrangementPrograms[$key] = array(
                     'id' => sprintf('PG-%s',$arrangementProgram->getId()),
@@ -167,7 +129,7 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
                     $status = self::RESULT_INVALID_CONFIGURATION;
                 }
             }else if($user->getLevelRealByGroup() == \Pequiven\MasterBundle\Model\Rol::ROLE_DIRECTIVE){
-                $objetivesStrategic = $this->get('pequiven.repository.objetive')->findAllStrategicByPeriod($period);
+                $objetivesStrategic = $this->container->get('pequiven.repository.objetive')->findAllStrategicByPeriod($period);
                 foreach ($objetivesStrategic as $objetive) {
                     if($objetive->getPeriod()->getId() == $periodActual->getId()){
                         $objetives[$objetive->getId()] = $objetive;
@@ -187,6 +149,8 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
                 foreach ($objetive->getIndicators() as $indicator) {
                     $allIndicators[$indicator->getId()] = $indicator;
                 }
+                
+                $sumResult = $objetive->getUpdateResultByAdmin() ? $sumResult + $objetive->getResultModified() : $sumResult + $objetive->getResult();
                 
                 $data = array(
                     'id' => sprintf('OB-%s',$objetive->getId()),
@@ -223,6 +187,8 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
                 $realDateEnd = clone($planDateEnd);
                 $realDateEnd->setDate($realDateEnd->format('Y'), $summary['realMonthDateEnd'], \Pequiven\SEIPBundle\Service\ToolService::getLastDayMonth($realDateEnd->format('Y'), $summary['realMonthDateEnd']));
                 
+                $sumResult = $goal->getUpdateResultByAdmin() ? $sumResult + $goal->getResultModified() : $sumResult + $goal->getResult();
+                
                 $goals[$key] = array(
                     'id' => sprintf('ME-%s',$goal->getId()),
                     'description' => $goal->getName(),
@@ -255,30 +221,7 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
                     $canBeEvaluated = false;
                     continue;
                 }
-                //Se evalua que no tenga avance cargado
-//                if($details->getLastNotificationInProgressByUser()  === null && $arrangementProgram->getResult() == 0){
-//                    $this->addErrorTrans('pequiven_seip.errors.the_management_program_does_not_progress_loaded',array(
-//                        '%arrangementProgram%' => $link,
-//                    ));
-//                    $canBeEvaluated = false;
-//                }
             }
-            
-//            Se comento para no evaluar los indicadores en cero
-//            foreach ($allIndicators as $indicator) {
-//                if($indicator->hasNotification() === false){
-//                    $url = $this->generateUrl('pequiven_indicator_show',
-//                        array(
-//                            'id' => $indicator->getId()
-//                        ),\Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_URL
-//                    );
-//                    $link = sprintf('<a href="%s" target="_blank">%s</a>',$url,$indicator);
-//                    $this->addErrorTrans('pequiven_seip.errors.the_indicator_has_not_loaded_values',array(
-//                        '%indicator%' => $link,
-//                    ));
-//                    $canBeEvaluated = false;
-//                }
-//            }
 
             $resultService = $this->getResultService();
             $isValidAdvance = $resultService->validateAdvanceOfObjetives($objetives);
@@ -331,125 +274,50 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
             'errors' => $this->errors,
             'success' => true,
         );
+        
+        $em = $this->getDoctrine()->getManager();
+        $evaluationDetailsRepository = $this->container->get('pequiven.repository.evaluation_details');
+        $evaluationDetailsObject = $evaluationDetailsRepository->findBy(array('user' => $user->getId(), 'period' => $period->getId()));
+        
+        if(!$evaluationDetailsObject){
+            $evaluationDetails = new \Pequiven\SEIPBundle\Entity\User\EvaluationDetails();
+        } else{
+            $evaluationDetails = $evaluationDetailsObject[0];
+        }
+        
         if(!$canBeEvaluated || count($this->errors) > 0){
-            $data['success'] = false;
+            $evaluationDetails->setError(1);
         }
-        $view = $this->view($data);
-        $view->getSerializationContext()->setGroups(array('api_list','api_result','sonata_api_read'));
         
-        return $this->handleView($view);
+        $levelRealUser = $user->getLevelRealByGroup();
+        $groups = $user->getGroups();
+        foreach ($groups as $group) {
+            if($group->getLevel() == $levelRealUser){
+                $rolReal = $group;
+                break;
+            }
+        }
+        
+        $evaluationDetails->setRole($rolReal);
+        $evaluationDetails->setUser($user);
+        $evaluationDetails->setPeriod($period);
+        if($user->getComplejo()){
+            $evaluationDetails->setLocation($user->getComplejo());
+        }
+        if($user->getGerencia()){
+            $evaluationDetails->setGerencia($user->getGerencia());
+        }
+        if($user->getGerenciaSecond()){
+            $evaluationDetails->setGerenciaSecond($user->getGerenciaSecond());
+        }
+        $evaluationDetails->setQuantityItems($totalItems);
+        $evaluationDetails->setSumResult($sumResult);
+        
+        $em->persist($evaluationDetails);
+        
+        $em->flush();
     }
     
-    
-    function getItemsSaiAction(\Symfony\Component\HttpFoundation\Request $request){
-        
-        $this->errors= array();
-        $periodName = $request->get('period');
-        $typeGerencia = $request->get('typeGerencia');
-        $codeGerencia = $request->get('codeGerencia');
-
-        $objetives = $objetivesOO = $objetivesOT = $objetivesOE = array();
-        
-        if($periodName === null){
-            $this->addErrorTrans('pequiven_seip.errors.you_must_specify_the_period_inquiry');
-        }
-        if($typeGerencia === null){
-            $this->addErrorTrans('pequiven_seip.errors.you_must_specify_type_gerencia');
-        }
-        if($codeGerencia === null){
-            $this->addErrorTrans('pequiven_seip.errors.you_must_specify_code_gerencia');
-        }
-        
-        $period = $this->container->get('pequiven.repository.period')->findOneBy(array(
-            'name' => $periodName,
-        ));
-        if($typeGerencia == 1){
-            $gerencia = $this->container->get('pequiven.repository.gerenciafirst')->findOneBy(array(
-                'abbreviation' => $codeGerencia,
-            ));
-        } else{
-            $gerencia = $this->container->get('pequiven.repository.gerenciasecond')->findOneBy(array(
-                'abbreviation' => $codeGerencia,
-            ));
-        }
-        
-        $periodActual = $period;
-        $totalItems = 0;
-        
-        if($typeGerencia == 1){
-            foreach ($gerencia->getTacticalObjectives() as $objetive) {
-//                if($objetive->getObjetiveLevel()->getLevel() == \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_TACTICO){
-                if($objetive->getPeriod()->getId() == $periodActual->getId()){
-                    $objetives[$objetive->getId()] = $objetive;
-                }
-//                }
-            }
-        } else{
-            foreach ($gerencia->getOperationalObjectives() as $objetive) {
-                if($objetive->getPeriod()->getId() == $periodActual->getId()){
-                    $objetives[$objetive->getId()] = $objetive;
-                }
-            }
-        }
-
-//        $objetivesStrategic = $this->get('pequiven.repository.objetive')->findAllStrategicByPeriod($period);
-//        foreach ($objetivesStrategic as $objetive) {
-//            if($objetive->getPeriod()->getId() == $periodActual->getId()){
-//                $objetives[$objetive->getId()] = $objetive;
-//            }
-//        }
-        
-        //Recorrer todos los objetivos
-        foreach ($objetives as $key => $objetive) {
-            $period = $objetive->getPeriod();
-
-            $data = array(
-                'ref' => sprintf('OB-%s',$objetive->getRef()),
-                'description' => $objetive->getDescription(),
-//                'result' => $objetive->getUpdateResultByAdmin() ? $this->formatResult($objetive->getResultModified()) : $this->formatResult($objetive->getResult()),
-                'result' => $this->formatResult($objetive->getResult()),
-                'level' => $objetive->getObjetiveLevel()->getDescription(),
-//                'dateStart' => array(
-//                    'plan' => $this->formatDateTime($planDateStart),
-//                    'real' => $this->formatDateTime($planDateStart)
-//                ),
-//                'dateEnd' => array(
-//                    'plan' => $this->formatDateTime($planDateEnd),
-//                    'real' => $this->formatDateTime($planDateEnd)
-//                ),
-            );
-            if($objetive->getObjetiveLevel()->getLevel() == \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_OPERATIVO){
-                $objetivesOO[$objetive->getId()] = $data;
-            }else if($objetive->getObjetiveLevel()->getLevel() == \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_TACTICO){
-                $objetivesOT[$objetive->getId()] = $data;
-            }else if($objetive->getObjetiveLevel()->getLevel() == \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_ESTRATEGICO){
-                $objetivesOE[$objetive->getId()] = $data;
-            }
-            $totalItems++;
-        }
-        
-        $data = array(
-            'data' => array(
-                'gerencia' => $gerencia->getDescription(),
-                'performance' => array(
-                    'objetives' => array(
-                        'OO' => $objetivesOO,
-                        'OT' => $objetivesOT,
-                        'OE' => $objetivesOE,
-                    ),
-                ),
-            'quantityItems' => $totalItems,
-            ),
-            'errors' => $this->errors,
-            'success' => true,
-        );
-        
-        $view = $this->view($data);
-        $view->getSerializationContext()->setGroups(array('api_list','api_result','sonata_api_read'));
-        
-        return $this->handleView($view);
-    }
-
     /**
      * Buscar objetivos del programa de gestion
      * @param type $arrangementPrograms
@@ -493,7 +361,31 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
         }
         return $r;
     }
-
+    
+    private function addErrorTrans($error,array $parameters = array()) {
+        if(is_array($error)){
+            $this->errors = array_merge($this->errors,$error);
+        }else{
+            $message = $this->trans($error,$parameters,'PequivenSEIPBundle');
+            $this->errors[md5($message)] = $message;
+        }
+    }
+    
+    /**
+     * Generates a URL from the given parameters.
+     *
+     * @param string         $route         The name of the route
+     * @param mixed          $parameters    An array of parameters
+     * @param bool|string    $referenceType The type of reference (one of the constants in UrlGeneratorInterface)
+     *
+     * @return string The generated URL
+     *
+     * @see UrlGeneratorInterface
+     */
+    protected function generateUrl($route, $parameters = array(), $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH) {
+        return $this->container->get('router')->generate($route, $parameters, $referenceType);
+    }
+    
     /**
      * Servicio de resultados
      * @return \Pequiven\SEIPBundle\Service\ResultService
@@ -502,8 +394,28 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
         return $this->container->get('seip.service.result');
     }
     
+    /**
+     * Shortcut to return the Doctrine Registry service.
+     *
+     * @return \Doctrine\Bundle\DoctrineBundle\Registry
+     *
+     * @throws \LogicException If DoctrineBundle is not available
+     */
+    protected function getDoctrine() {
+        if (!$this->container->has('doctrine')) {
+            throw new \LogicException('The DoctrineBundle is not registered in your application.');
+        }
+
+        return $this->container->get('doctrine');
+    }
+    
     protected function trans($id,array $parameters = array(), $domain = 'messages')
     {
-        return $this->get('translator')->trans($id, $parameters, $domain);
+        return $this->container->get('translator')->trans($id, $parameters, $domain);
     }
+    
+    public function setContainer(\Symfony\Component\DependencyInjection\ContainerInterface $container = null) {
+        $this->container = $container;
+    }
+    
 }

@@ -29,6 +29,11 @@
                 <argument type="service" id="service_container" />
             </call>
         </service>
+        <service id="seip.service.evaluation_details" class="Pequiven\SEIPBundle\Service\User\EvaluationDetailsService">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
         <!-- Formulario de registro de usuario  -->
         <service id="pequiven_seip.registration.form.type" class="Pequiven\SEIPBundle\Form\Type\RegistrationFormType">
             <tag name="form.type" alias="pequiven_seip_user_registration" />
@@ -90,12 +95,23 @@
             </call>
         </service>
         
+        <!-- Servicio del ReportTemplate -->
+        <service id="data_load.service.report_template" class="Pequiven\SEIPBundle\Service\DataLoad\ReportTemplateService">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
+        
         <!-- Repositorio de Monitor -->
         <service id="pequiven.repository.seipmonitor" class="Pequiven\SEIPBundle\Repository\MonitorRepository">
             <call method="setContainer">
                 <argument type="service" id="service_container" />
             </call>
             <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\Monitor" />
+        </service>
+        <!-- Repositorio de Detalle de Evaluación del Usuario -->
+        <service id="pequiven.repository.evaluation_details" class="Pequiven\SEIPBundle\Repository\User\EvaluationDetailsRepository">
+            <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\User\EvaluationDetails" />
         </service>
         
         <service id="pequiven.repository.user" class="Pequiven\SEIPBundle\Repository\UserRepository">
@@ -166,6 +182,22 @@
         </service>
         <!-- Box de dashboard generico -->
         <service id="pequiven_seip.box.genericdashboardbox" class="Pequiven\SEIPBundle\Model\Box\Dashboard\GenericDashboardBox">
+            <tag name="tecnocreaciones_box.box" />
+        </service>
+        <!-- Box Dashboard Producción -->
+        <service id="dashboard.data_load.box.production" class="Pequiven\SEIPBundle\Model\Box\Dashboard\DataLoad\ProductionBox">
+            <tag name="tecnocreaciones_box.box" />
+        </service>
+        <!-- Box Dashboard Producción Por Tipo de Compañía-->
+        <service id="dashboard.data_load.box.production_by_company" class="Pequiven\SEIPBundle\Model\Box\Dashboard\DataLoad\ProductionByCompanyBox">
+            <tag name="tecnocreaciones_box.box" />
+        </service>
+        <!-- Box Dashboard Producción de la Corporación-->
+        <service id="dashboard.data_load.box.production_corporation" class="Pequiven\SEIPBundle\Model\Box\Dashboard\DataLoad\ProductionCorporationBox">
+            <tag name="tecnocreaciones_box.box" />
+        </service>
+        <!-- Box Dashboard Nivel Plantilla de Reporte Producción -->
+        <service id="dashboard.data_load.box.production_report_template" class="Pequiven\SEIPBundle\Model\Box\Dashboard\DataLoad\Production\ReportTemplateBox">
             <tag name="tecnocreaciones_box.box" />
         </service>
         <!-- Box donde se definen las Áreas del sistema para en un futuro separar todo tipo frames -->
