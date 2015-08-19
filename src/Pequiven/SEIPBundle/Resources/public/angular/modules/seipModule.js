@@ -3116,7 +3116,7 @@ angular.module('seipModule.controllers', [])
             // Función que devuelve una data formateada dd/mm/yyyy y recibe en dd-mm-yyyy
             $scope.parseDate = function parseDate(dateToParse) {
                 var dateParse = new Date(dateToParse);
-                var dd = dateParse.getDate()+1;
+                var dd = dateParse.getDate();
                 var mm = dateParse.getMonth()+1; //January is 0!
 
                 var yyyy = dateParse.getFullYear();
