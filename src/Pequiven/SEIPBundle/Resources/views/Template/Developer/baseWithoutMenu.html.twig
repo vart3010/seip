@@ -8,7 +8,7 @@
 <!--[if (IE 7)&!(IEMobile)]><html class="no-js ie7 oldie" lang="{{ app.request.locale }}"><![endif]-->
 <!--[if (IE 8)&!(IEMobile)]><html class="no-js ie8 oldie" lang="{{ app.request.locale }}"><![endif]-->
 <!--[if (IE 9)&!(IEMobile)]><html class="no-js ie9" lang="{{ app.request.locale }}"><![endif]-->
-<!--[if (gt IE 9)|(gt IEMobile 7)]><!--><html class="no-js linen" lang="{{ app.request.locale }}"><!--<![endif]-->
+<!--[if (gt IE 9)|(gt IEMobile 7)]><!--><html class="no-js linen" lang="{{ app.request.locale }}" style="background: #33373a;"><!--<![endif]-->
 
     <head>
         <meta charset="utf-8">
@@ -119,7 +119,7 @@
         <meta name="msapplication-task" content="name=My profile;action-uri=http://www.display-inline.fr/demo/developr/profile.html;icon-uri=http://www.display-inline.fr/demo/developr/img/favicons/favicon.ico">
     </head>
 
-    <body ng-controller="MainController" class="clearfix ng-scope dashboard" >
+    <body ng-controller="MainController" class="no-border clearfix ng-scope dashboard" style="background: -webkit-linear-gradient(left, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0) 60%, rgba(0, 0, 0, 0.25)), -webkit-linear-gradient(top, #5e6165, #33373a);">
         {% block content %}
         <!-- Prompt IE 6 users to install Chrome Frame -->
         <!--[if lt IE 7]><p class="message red-gradient simpler">Your browser is <em>ancient!</em> <a href="http://browsehappy.com/">Upgrade to a different browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to experience this site.</p><![endif]-->
@@ -142,7 +142,7 @@
         </div>
         <div id="message-errors"></div>
         <!-- Main content -->
-        <section ng-cloak ng-controller="MainContentController" role="main" id="main" class="block main-frontend" style="background: -webkit-linear-gradient(left, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0) 60%, rgba(0, 0, 0, 0.25)), -webkit-linear-gradient(top, #5e6165, #33373a);">
+        <section ng-cloak ng-controller="MainContentController" role="main" id="main" class="main-frontend">
             <noscript class="message black-gradient simpler">Your browser does not support JavaScript! Some features won't work as expected...</noscript>
             {% include 'PequivenSEIPBundle:Block:headerWatermark.html.twig' %}
             <div  class="content-container">
