@@ -424,7 +424,7 @@ class ReportTemplateService implements ContainerAwareInterface {
                 //Comparamos si todos los productReports estan notificados en su totalidad
                 if($contProductReports == $dataSerialized[$reportTemplate->getId()]['contNotificationTotal']){
                     $dataSerialized[$reportTemplate->getId()]['color'] = '#0EED59';
-                } elseif($contProductReports != $dataSerialized[$reportTemplate->getId()]['contNotificationTotal'] && !$dataSerialized[$reportTemplate->getId()]['flagNotificationHalf']){
+                } elseif($dataSerialized[$reportTemplate->getId()]['contNotificationTotal'] > 0 && !$dataSerialized[$reportTemplate->getId()]['flagNotificationHalf']){
                     $dataSerialized[$reportTemplate->getId()]['color'] = '#E5E752';
                 } elseif($dataSerialized[$reportTemplate->getId()]['flagNotificationHalf']){
                     $dataSerialized[$reportTemplate->getId()]['color'] = '#E5E752';
