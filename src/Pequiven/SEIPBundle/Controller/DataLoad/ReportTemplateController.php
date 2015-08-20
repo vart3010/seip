@@ -1599,7 +1599,7 @@ class ReportTemplateController extends SEIPController {
                 if ($productReport->getProduct()->getIsCheckToReportProduction()) {
                     $rowData = array();
 
-                    array_push($rowData, $productReport->getProduct()->getName());
+                    array_push($rowData, $productReport->getProduct()->getName()." (".$productReport->getProduct()->getProductUnit().")");
 
                     if (array_key_exists("plan_time", $imp)) {
                         array_push($rowData, number_format((float) $typeVar[$imp["plan_time"]], 2, ',', '.'));
@@ -1706,7 +1706,13 @@ class ReportTemplateController extends SEIPController {
             $contCol = $rowCont;
             foreach ($matPrima[$c] as $cons) {
 //var_dump($cols.$contCol."=>".$cons);
-                $activeSheet->setCellValue($cols . $contCol, $cons);
+                if (gettype($cons) == "string") {
+                    $activeSheet->setCellValue($cols . $contCol, $cons);
+                } else {
+                    $activeSheet->setCellValue($cols . $contCol, number_format($cons, 2, ',', '.'));
+                }
+
+
                 $contCol++;
             }
             $c++;
@@ -1734,7 +1740,11 @@ class ReportTemplateController extends SEIPController {
             $contCol = $rowCont;
             foreach ($consumos[$c] as $cons) {
 //var_dump($cols.$contCol."=>".$cons);
-                $activeSheet->setCellValue($cols . $contCol, $cons);
+                if (gettype($cons) == "string") {
+                    $activeSheet->setCellValue($cols . $contCol, $cons);
+                } else {
+                    $activeSheet->setCellValue($cols . $contCol, number_format($cons, 2, ',', '.'));
+                }
                 $contCol++;
             }
             $c++;
@@ -1761,7 +1771,11 @@ class ReportTemplateController extends SEIPController {
             $contCol = $rowCont;
             foreach ($unrealizedProduction[$c] as $cons) {
 //var_dump($cols.$contCol."=>".$cons);
-                $activeSheet->setCellValue($cols . $contCol, $cons);
+                if (gettype($cons) == "string") {
+                    $activeSheet->setCellValue($cols . $contCol, $cons);
+                } else {
+                    $activeSheet->setCellValue($cols . $contCol, number_format($cons, 2, ',', '.'));
+                }
                 $contCol++;
             }
             $c++;
@@ -1787,7 +1801,11 @@ class ReportTemplateController extends SEIPController {
             $contCol = $rowCont;
             foreach ($inventario[$c] as $cons) {
 //var_dump($cols.$contCol."=>".$cons);
-                $activeSheet->setCellValue($cols . $contCol, $cons);
+                if(gettype($cons)=="string") {
+                    $activeSheet->setCellValue($cols . $contCol, $cons);
+                } else {
+                    $activeSheet->setCellValue($cols . $contCol, number_format($cons,2,',','.'));
+                }
                 $contCol++;
             }
             $c++;
@@ -1921,11 +1939,12 @@ class ReportTemplateController extends SEIPController {
         $totalYear = array();
 
         foreach ($rawMaterial as $rs) {
-            $productos[] = $rs->getProduct()->getName();
+            
+            $productos[] = $rs->getProduct()->getName()." (".$rs->getProduct()->getProductUnit().")";
 //$productos[] = $rs->$name;
-            array_push($totalDay, number_format($rs->getSummary($dateReport)["total_day"], 2, ",", "."));
-            array_push($totalMonth, number_format($rs->getSummary($dateReport)["total_month"], 2, ",", "."));
-            array_push($totalYear, number_format($rs->getSummary($dateReport)["total_year"], 2, ",", "."));
+            array_push($totalDay, $rs->getSummary($dateReport)["total_day"]);
+            array_push($totalMonth, $rs->getSummary($dateReport)["total_month"]);
+            array_push($totalYear, $rs->getSummary($dateReport)["total_year"]);
 //var_dump($rawMaterialConsumption->getSummary($dateReport));
         }
 
@@ -1940,7 +1959,7 @@ class ReportTemplateController extends SEIPController {
         $totalYear = array();
 
         foreach ($consumerPlanning as $rs) {
-            $productos[] = $rs->getService()->getName();
+            $productos[] = $rs->getService()->getName()." (".$rs->getService()->getServiceUnit().")";
 //$productos[] = $rs->$name;
             array_push($totalDay, number_format($rs->getSummary($dateReport)["total_day"], 2, ',', '.'));
             array_push($totalMonth, number_format($rs->getSummary($dateReport)["total_month"], 2, ',', '.'));
@@ -1961,7 +1980,7 @@ class ReportTemplateController extends SEIPController {
         $totalYear = array();
 
         foreach ($productsReport as $rs) {
-            $productos[] = $rs->getProduct()->getName();
+            $productos[] = $rs->getProduct()->getName()." (".$rs->getProduct()->getProductUnit().")";
 //$productos[] = $rs->$name;
             array_push($totalDay, number_format($rs->getSummaryUnrealizedProductions($dateReport)["total_day"], 2, ',', '.'));
             array_push($totalMonth, number_format($rs->getSummaryUnrealizedProductions($dateReport)["total_month"], 2, ',', '.'));
@@ -1982,7 +2001,7 @@ class ReportTemplateController extends SEIPController {
         $totalYear = array();
 
         foreach ($productsReport as $rs) {
-            $productos[] = $rs->getProduct()->getName();
+            $productos[] = $rs->getProduct()->getName()." (".$rs->getProduct()->getProductUnit().")";
 //$productos[] = $rs->$name;
             array_push($totalDay, number_format($rs->getSummaryInventory($dateReport)["total_day"], 2, ',', '.'));
             array_push($totalMonth, number_format($rs->getSummaryInventory($dateReport)["total_month"], 2, ',', '.'));
