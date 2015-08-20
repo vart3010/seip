@@ -1400,6 +1400,267 @@ angular.module('seipModule.controllers', [])
                 }
             });
         })
+        //Controladores SIG
+        .controller('IndicatorSigEvolutionController', function ($scope, notificationBarService, $http, notifyService, $filter) {
+
+            //$scope.urlValueLastIndicatorForm = null;
+            //console.log($scope.id_indicator );
+            $scope.urlCausesEvolutionForm = null;
+            $scope.indicator = null;
+            var isInit = false;
+            //Carga el formulario del plan de Acción
+            $scope.loadTemplateActionEvolution = function (resource) {
+                $scope.initFormActionAdd(resource);
+                if (isInit == false) {
+                    isInit = true;
+                }
+                $scope.templateOptions.setTemplate($scope.templates[0]);
+                $scope.templateOptions.setParameterCallBack(resource);
+                $scope.templateOptions.setVar('evaluationResult', 0);
+                if (resource) {
+                    $scope.templateOptions.enableModeEdit();
+                    $scope.openModalAuto();
+                } else {
+                    $scope.openModalAuto();
+                }
+            };
+            //Carga el formulario de las Causas de Desviacion
+            $scope.loadTemplateCausesDesviation = function (resource) {
+                $scope.initFormCausesAdd(resource);
+                if (isInit == false) {
+                    isInit = true;
+                }
+                $scope.templateOptions.setTemplate($scope.templates[0]);
+                $scope.templateOptions.setParameterCallBack(resource);
+                $scope.templateOptions.setVar('evaluationResult', 0);
+                if (resource) {
+                    $scope.templateOptions.enableModeEdit();
+                    $scope.openModalAuto();
+                } else {
+                    $scope.openModalAuto();
+                }
+            };
+            //Añadir Causa de Desviación
+            var addCause = function (save, successCallBack) {
+                var formValueIndicator = angular.element('#form_causes_evolution');
+                var formData = formValueIndicator.serialize();
+                
+                if (save == undefined) {
+                    var save = false;
+                }
+                if (save == true) {
+                    var url = Routing.generate('pequiven_causes_evolution_add', {idIndicator: $scope.id_indicator });
+                } 
+                notificationBarService.getLoadStatus().loading();
+                return $http({
+                    method: 'POST',
+                    url: url,
+                    data: formData,
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'}  // set the headers so angular passing info as form data (not request payload)
+                }).success(function (data) {
+                    $scope.templateOptions.setVar("form", {errors: {}});
+                    //$scope.templateOptions.setVar('evaluationResult', data.result);
+                    if (successCallBack) {
+                        successCallBack(data);
+                    }
+                    notificationBarService.getLoadStatus().done();
+                    return true;
+                }).error(function (data, status, headers, config) {
+                    $scope.templateOptions.setVar("form", {errors: {}});
+                    if (data.errors) {
+                        if (data.errors.errors) {
+                            $.each(data.errors.errors, function (index, value) {
+                                notifyService.error(Translator.trans(value));
+                            });
+                        }
+                        $scope.templateOptions.setVar("form", {errors: data.errors.children});
+                    }
+                    //$scope.templateOptions.setVar('evaluationResult', 0);
+                    notificationBarService.getLoadStatus().done();
+                    return false;
+                });
+            };
+            //Añadir El Plan de Accion de la desviación
+            var addAction = function (save, successCallBack) {
+                var formValueIndicator = angular.element('#form_action_evolution');
+                var formData = formValueIndicator.serialize();
+                
+                if (save == undefined) {
+                    var save = false;
+                }
+                if (save == true) {
+                    var url = Routing.generate('pequiven_action_evolution_add', {idIndicator: $scope.id_indicator });
+                } 
+                notificationBarService.getLoadStatus().loading();
+                return $http({
+                    method: 'POST',
+                    url: url,
+                    data: formData,
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'}  // set the headers so angular passing info as form data (not request payload)
+                }).success(function (data) {
+                    $scope.templateOptions.setVar("form", {errors: {}});
+                    //$scope.templateOptions.setVar('evaluationResult', data.result);
+                    if (successCallBack) {
+                        successCallBack(data);
+                    }
+                    notificationBarService.getLoadStatus().done();
+                    return true;
+                }).error(function (data, status, headers, config) {
+                    $scope.templateOptions.setVar("form", {errors: {}});
+                    if (data.errors) {
+                        if (data.errors.errors) {
+                            $.each(data.errors.errors, function (index, value) {
+                                notifyService.error(Translator.trans(value));
+                            });
+                        }
+                        $scope.templateOptions.setVar("form", {errors: data.errors.children});
+                    }
+                    //$scope.templateOptions.setVar('evaluationResult', 0);
+                    notificationBarService.getLoadStatus().done();
+                    return false;
+                });
+            };
+            $scope.templateOptions.setVar('addCause', addCause);
+            $scope.templateOptions.setVar('addAction', addAction);
+            $scope.templateOptions.setVar('evaluationResult', 0);
+            var confirmCallBack = function () {
+                addCause(true, function (data) {
+                    $scope.indicator = data.indicator;
+                });
+                addAction(true, function (data) {
+                    $scope.indicator = data.indicator;
+                });
+                return true;
+            };
+            //Carga del fomrulario
+            $scope.initFormActionAdd = function (resource) {
+                var d = new Date();
+                var numero = d.getTime();
+
+                var parameters = {
+                    idIndicator: $scope.id_indicator,
+                    _dc: numero
+                };
+                if (resource) {
+                    parameters.id = resource.id;
+                }
+                var url = Routing.generate('pequiven_indicatoraction_get_form', parameters);
+                $scope.templates = [
+                    {
+                        name: 'Plan de Acción del Indicador',
+                        url: url,
+                        confirmCallBack: confirmCallBack,
+                    }
+                ];
+                $scope.templateOptions.setTemplate($scope.templates[0]);
+            };
+            //Formulario Cause
+            $scope.initFormCausesAdd = function (resource) {
+                //var idIni = angular.element('#idIdnicator');
+                var d = new Date();
+                var numero = d.getTime();
+
+                var parameters = {
+                    idIndicator: $scope.id_indicator,
+                    _dc: numero
+                };
+                if (resource) {
+                    parameters.id = resource.id;
+                }
+                var url = Routing.generate('pequiven_indicatorcauses_get_form', parameters);
+                $scope.templates = [
+                    {
+                        name: 'Causas de Desviación del Indicador',
+                        url: url,
+                        confirmCallBack: confirmCallBack,
+                    }
+                ];
+                $scope.templateOptions.setTemplate($scope.templates[0]);
+            };
+            $scope.getUrlForValueIndicator = function (valueIndicator, numResult)
+            {
+                var url = Routing.generate('pequiven_value_indicator_show_detail', {id: valueIndicator.id, numResult: (numResult + 1)});
+                return url;
+            };
+            $scope.openPopUp = function (url) {
+                var horizontalPadding = 10;
+                var verticalPadding = 10;
+                var width = 1200;
+                var heigth = 600;
+                $('<iframe id="site" src="' + url + '" style="padding:0"/>').dialog({
+                    title: 'SEIP',
+                    autoOpen: true,
+                    width: width,
+                    height: heigth,
+                    modal: true,
+                    resizable: true,
+                    autoResize: true,
+                    overlay: {
+                        opacity: 0.5,
+                        background: "black"
+                    }
+                }).width(width - horizontalPadding).height(heigth - verticalPadding);
+            };
+        })
+        .controller('EvolutionIndicatorFilters', function ($scope, ngTableParams, $http, sfTranslator, notifyService) {
+            var selectTypeAction = angular.element ("#selectTypeAction");
+            var selectCausesEvolution = angular.element ("#selectCausesEvolution");
+            $scope.data = {
+                typeAction: null,
+                causesEvolution: null
+            };
+            $scope.model = {
+                typeAction: null,
+                causesEvolution: null
+            };
+            //Carga de los Tipos de Acción
+            $scope.getTypeAction = function(){
+                var parameters = {
+                    filter:{}
+                }
+            }
+            $http.get(Routing.generate('pequiven_arrangementprogram_data_type_action'))
+                    .success(function (data) {
+                        $scope.data.typeAction = data;
+                        if ($scope.model.typeAction != null) {
+                            $scope.setValueSelect2("selectTypeAction", $scope.model.typeAction, $scope.data.typeAction, function (selected) {
+                                $scope.model.typeAction = selected;
+                            });
+                        }
+                    });
+            //Carga las causas de desviación del indicador
+            $scope.getCausesEvolution = function(){
+                var parameters = {
+                    filter:{}
+                }
+            }
+            $http.get(Routing.generate('pequiven_arrangementprogram_data_type_action'))
+                    .success(function (data) {
+                        $scope.data.causesEvolution = data;
+                        if ($scope.model.causesEvolution != null) {
+                            $scope.setValueSelect2("selectCausesEvolution", $scope.model.causesEvolution, $scope.data.causesEvolution, function (selected) {
+                                $scope.model.causesEvolution = selected;
+                            });
+                        }
+                    });
+            //Scope typeAction
+             $scope.$watch("model.typeAction", function (newParams, oldParams) {
+                if ($scope.model.typeAction != null && $scope.model.typeAction.id != undefined) {
+                    $scope.tableParams.$params.filter['TypeAction'] = $scope.model.typeAction.id;
+                } else {
+                    $scope.tableParams.$params.filter['TypeAction'] = null;
+                }
+            });
+            //Scope CausesEvolution
+             $scope.$watch("model.causesEvolution", function (newParams, oldParams) {
+                if ($scope.model.causesEvolution != null && $scope.model.causesEvolution.id != undefined) {
+                    $scope.tableParams.$params.filter['CausesEvolution'] = $scope.model.causesEvolution.id;
+                } else {
+                    $scope.tableParams.$params.filter['CausesEvolution'] = null;
+                }
+            });
+        })
+        //Fin controladores SIG
         .controller('IndicatorResultController', function ($scope, notificationBarService, $http, notifyService, $filter) {
 
             $scope.urlValueIndicatorForm = null;
@@ -2096,7 +2357,7 @@ angular.module('seipModule.controllers', [])
                 second_line_managements: null,
                 indicatorSummaryLabels: null,
                 frequency_notifications: null,
-                managementSystems; null
+                managementSystems: null
             };
             $scope.model = {
                 complejo: null,
@@ -3869,6 +4130,164 @@ angular.module('seipModule.controllers', [])
                 })
             }
         })
+        //Controlador Graficos SIG
+        .controller('ChartsSigController', function ($scope, ngTableParams, $http, sfTranslator, notifyService) {
+
+        //Charts SIG - Evolution
+        $scope.renderChartEvolutionSig = function (id, data, categories, dataPlan, dataReal, dataAcum, dataPorc, caption, typeLabelDisplay) {
+                FusionCharts.ready(function () {
+                    var revenueChart = new FusionCharts({
+                        "type": "mscolumn3dlinedy",
+                        "renderAt": id,
+                        "width": "80%",
+                        "height": "40%",
+                        "dataFormat": "json",
+                        "dataSource": {
+                            "chart": {
+                                "caption": "Gráfico Informe de Evolución",
+                                "subCaption": "Periodo - 2015",
+                                //"exportFormats": "PNG= Exportar como PNG|PDF= Exportar como PDF",                                
+                                //"xAxisName": Translator.trans('chart.arrangementPrograms.xAxisName'),
+                                //"pYAxisName": Translator.trans('chart.arrangementPrograms.pYAxisName'),
+                                //"sYAxisName": Translator.trans('chart.arrangementPrograms.sYAxisName'),
+                                //"sYAxisMaxValue": "100",
+                                //"sYAxisMinValue": "0",
+                                //"showValues": "1",
+                                //"placeValuesInside": "0",
+                                "valueFontColor": "#000000",
+                                "showvalues": "1",
+                                "rotateValues": "0",
+                                //"labelDisplay": typeLabelDisplay,
+                                //"sNumberSuffix": "%",
+                                //"showSum": "1",
+                                //"numberSuffix": "%", 
+                                //"showXAxisLine": "1",                               
+                                "bgAlpha": "0,0",
+                                "baseFontColor": "#ffffff",
+                                "outCnvBaseFontColor": "#000000",
+                                "visible": "0",
+                                "theme": "fint",
+                                //"formatNumberScale": "0",
+                                //"snumbersuffix": "%",
+                                "decimals": "3",
+                                "setadaptiveymin": "1",
+                                "setadaptivesymin": "1",
+                                "linethickness": "5",
+                                "showborder": "0",
+                                "paletteColors": "#0075c2,#c90606,#f2c500,#c90606,#1aaf5d"
+                            },
+                            "categories": data.dataSource.categories,
+                            "dataset": [ data.dataSource.dataset,
+                                {
+                                    "parentyaxis": "S",
+                                    "seriesname": "Plan",
+                                    "renderas": "Line",
+                                    "data": [
+                                        {
+
+                                        },
+                                        {
+
+                                        },
+                                        {
+                                            "value": "80"
+                                        },
+                                        {
+                                            "value": "80"
+                                        },
+                                        {
+                                            "value": "80"
+                                        },
+                                        {
+                                            "value": "80"
+                                        },
+                                        {
+                                            "value": "80"
+                                        },
+                                        {
+                                            "value": "80"
+                                        },
+                                        {
+                                            "value": "80"
+                                        },
+                                        {
+                                            "value": "80"
+                                        },
+                                        {
+                                            "value": "80"
+                                        },
+                                        {
+                                            "value": "80"
+                                        },
+                                        {
+                                            "value": "80"
+                                        },
+                                        {
+                                            "value": "80"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    });
+                    revenueChart.setTransparent(true);
+                    revenueChart.render();
+                })
+            };
+        //FIN
+
+        //Charts SIG - Causas de Desviación
+        $scope.renderChartSigCs = function (id, data, categories, dataCause, caption, typeLabelDisplay) {
+                FusionCharts.ready(function () {
+                    var revenueChart = new FusionCharts({
+                        "type": "stackedbar3d",
+                        "renderAt": id,
+                        //"width": "50%",
+                        "height": "25%",
+                        "dataFormat": "json",
+                        "dataSource": {
+                            "chart": {
+                                "caption": "Gráfico Causas de Desviación",
+                                "subCaption": "Periodo - 2015",
+                                //"exportFormats": "PNG= Exportar como PNG|PDF= Exportar como PDF",                                
+                                //"xAxisName": Translator.trans('chart.arrangementPrograms.xAxisName'),
+                                //"pYAxisName": Translator.trans('chart.arrangementPrograms.pYAxisName'),
+                                //"sYAxisName": Translator.trans('chart.arrangementPrograms.sYAxisName'),
+                                //"sYAxisMaxValue": "100",
+                                //"sYAxisMinValue": "0",
+                                //"showValues": "1",
+                                //"placeValuesInside": "0",
+                                "valueFontColor": "#000000",
+                                "showvalues": "1",
+                                //"rotateValues": "0",
+                                //"labelDisplay": typeLabelDisplay,
+                                //"sNumberSuffix": "%",
+                                "showSum": "1",
+                                "numberSuffix": "%",                                
+                                "bgAlpha": "0,0",
+                                "baseFontColor": "#ffffff",
+                                "outCnvBaseFontColor": "#000000",
+                                "visible": "0",
+                                "theme": "fint",
+                                //"formatNumberScale": "0",
+                                "snumbersuffix": "%",
+                                "decimals": "3",
+                                "setadaptiveymin": "1",
+                                "setadaptivesymin": "1",
+                                "linethickness": "5",
+                                "showborder": "0"
+                            },"categories": data.dataSource.categories,
+                            "dataset": [ data.dataSource.dataset,
+                            ]
+                        }
+                    });
+                    revenueChart.setTransparent(true);
+                    revenueChart.render();
+                })
+            };
+        //FIN
+        })
+        //
 
         .controller('ProductionController', function ($scope, ngTableParams, $http, sfTranslator, notifyService) {
 

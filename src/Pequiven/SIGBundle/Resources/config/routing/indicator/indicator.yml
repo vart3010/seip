@@ -44,7 +44,7 @@ pequiven_action_evolution_add:
         expose: true
 #Guardamos el formulario de las causas del indicador
 pequiven_causes_evolution_add:
-    path: /{idIndicator}/add.{_format}
+    path: /{idIndicator}/addCauses.{_format}
     defaults:
         _controller: pequiven.controller.indicator_sig:addCausesAction
         _format: json
@@ -64,6 +64,18 @@ pequiven_indicatortrend_get_form:
     methods: [GET]
     options:
         expose: true
+#filtro causas del indicador
+pequiven_sig_causes_indicator_evolution:
+    path: /causes-evolution.{_format}
+    defaults: 
+        _controller: pequiven.controller.indicator_sig:getCausesEvolutionAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
+#Filtro de last_period_indicator
 pequiven_arrangementprogram_datasig_indicator_lastperiod:
     path: /indicators.{_format}
     defaults: 

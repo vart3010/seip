@@ -1,7 +1,8 @@
 {% trans_default_domain 'PequivenIndicatorBundle' %}
     
     <div ng-controller="TableFormatController">    
-     <div ng-controller="IndicatorAsocLastController">
+     <div ng-controller="IndicatorSigEvolutionController">
+     	<div ng-controller="EvolutionIndicatorFilters">
     
         <form method="POST" id="form_action_evolution">
             <fieldset class="fieldset fields-list" open="">
@@ -13,5 +14,5 @@
                         {{ form_widget(form) }}
             
             </div>
-
+        
         </details> 

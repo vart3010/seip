@@ -3674,6 +3674,57 @@ class IndicatorService implements ContainerAwareInterface {
 
         return $data;
     }
+    
+    /**
+     * Gráfico de Columna para Causas de Desviación
+     * @param Indicator $indicator
+     * @return type
+     */
+    public function getDataChartOfCausesIndicatorEvolution(Indicator $indicator) {
+        $data = array(
+            'dataSource' => array(
+                'chart' => array(),
+                'categories' => array(
+                ),
+                'dataset' => array(
+                ),
+            ),
+        );
+        $chart = array();
+        
+        //Inicialización
+        $category = $dataSetCause = array();
+        $label = $dataCause = array();
+        $contCause = 1;
+        //Carga de Nombres de Labels
+        $dataSetCause["seriesname"] = "Causa";        
+
+            $label["label"] = 'Causa';
+            
+            foreach ($indicator->getindicatorCause() as $value) {
+                //Carga de los Valores de la causa
+                $dataCause["value"] = $value->getvalueOfCauses();
+                $dataSetCause["data"][] = $dataCause;
+                //Carga del label de la Causa
+                $label["label"] = 'Causa'.' '.$contCause;                    
+                $contCause = $contCause + 1;
+                $category[] = $label;
+            }
+
+            //Carga de meta Objetivo2015
+            /*foreach ($indicator->getObjetives() as $value) {
+                $dataValueObjetive = $value->getgoal();
+            }
+            if ($dataValueObjetive == NULL ) {
+                $dataValueObjetive = 0;
+            }*/
+           
+        //$data['dataSource']['chart'] = $chart;
+        $data['dataSource']['categories'][]["category"] = $category;
+        $data['dataSource']['dataset'][] = $dataSetCause;
+
+        return $data;
+    }
     public function obtainIndicatorChartDetails(Indicator $indicator, \Pequiven\SEIPBundle\Entity\Chart $chart){
         $indicatorChartDetailsRepository = $this->container->get('pequiven.repository.indicatorchartdetails');
         

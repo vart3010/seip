@@ -22,3 +22,6 @@ Pequiven\SIGBundle\Entity\ManagementSystem:
         indicators:
             expose: true
             groups: [indicators]
+        managementSystems:
+            expose: true
+            groups: [managementSystems]

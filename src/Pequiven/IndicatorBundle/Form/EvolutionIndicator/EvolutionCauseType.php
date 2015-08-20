@@ -18,11 +18,13 @@ class EvolutionCauseType extends AbstractType
             ->add('causes', 'text', array(
                 'label' => 'Causa',
                 'label_attr' => array('class' => 'label'),
-                'attr'=> array('class'=> 'input input-large validate[required]' )))
+                'attr' => array('class' => 'input input-large validate[required]' )))
             ->add('valueOfcauses', 'number', array(
                 'label'=>'Valor de la Causa',
                 'label_attr' => array('class' => 'label'),
-                'attr'=> array('class'=> 'input input-large validate[required]' )))
+                'disabled' => false,
+                'attr' => array('class' => 'input input-large validate[required]')))
+                         
         ;
     }
     

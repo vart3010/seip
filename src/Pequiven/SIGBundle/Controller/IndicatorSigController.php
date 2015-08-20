@@ -119,6 +119,8 @@ class IndicatorSigController extends ResourceController
     {
         $resource = $this->findOr404($request);
         $form = $this->getForm($resource);
+
+        
         
         //Carga de data de Indicador para armar grafica
         $response = new JsonResponse();
@@ -132,21 +134,36 @@ class IndicatorSigController extends ResourceController
         $dataChart = $indicatorService->getDataChartOfIndicatorEvolution($indicator, array('withVariablesRealPLan' => true)); //Obtenemos la data del gráfico de acuerdo al indicador
 
         //$response->setData($dataChart); //Seteamos la data del gráfico en Json
+        //Carga de los datos de la grafica de las Causas de Desviación
+        $dataCause = $indicatorService->getDataChartOfCausesIndicatorEvolution($indicator); //Obtenemos la data del grafico de las causas de desviación
+        /*$response->setData($dataCause); //Seteamos la data del gráfico en Json
+        var_dump($response);
+        die();*/
+
+        //Consultamos las Causas Relacionadas al indicador        
+        $indicator = $idIndicator;
+        $results = $this->get('pequiven.repository.sig_causes_indicator')->findByindicator($indicator);
+        //Carga de las Acciones
+        $action = $this->get('pequiven.repository.sig_action_indicator')->findAll();
 
         //return $response;
         //Fin carga de data
         
-        // Fin configuracion de grafico       
+        // Fin configuracion de grafico     
+        //$view = $this->view();
+        //$view->getSerializationContext()->setGroups(array('id','api_list'));  
 
         $view = $this
             ->view()
             ->setTemplate($this->config->getTemplate('evolution.html'))
             ->setData(array(
                 'data'                           => $dataChart,
+                'dataCause'                      => $dataCause,
+                'cause'                          => $results,
+                'data_action'                    => $action,
                 $this->config->getResourceName() => $resource,
                 'form'                           => $form->createView()
-            ))
-        ;
+            ));
 
         return $this->handleView($view);
     }
@@ -159,7 +176,8 @@ class IndicatorSigController extends ResourceController
      */
     function getFormAction(Request $request)
     {
-        $indicator = $this->findIndicatorOr404($request);        
+        $indicator = $this->findIndicatorOr404($request); 
+        //var_dump($request->get('idIndicator'));
         
         $valueIndicator = $this->resourceResolver->getResource(
             $this->getRepository(),
@@ -217,8 +235,13 @@ class IndicatorSigController extends ResourceController
      */
     public function addAction(Request $request)
     {   
+        $user = $this->getUser();
+
         $action = new EvolutionAction();
         $form  = $this->createForm(new EvolutionActionType(), $action);
+        
+        $action->setCreatedBy($user);
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -226,7 +249,7 @@ class IndicatorSigController extends ResourceController
             $em->persist($action);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('pequiven_action_form_add'));
+            //return $this->redirect($this->generateUrl('pequiven_action_evolution_add'));
         }                
     }
 
@@ -239,12 +262,10 @@ class IndicatorSigController extends ResourceController
     function getFormCausesAction(Request $request)
     {
         $indicator = $this->findIndicatorOr404($request);                
+        $idIndicator = $request->get('idIndicator');
         
         $cause = new EvolutionCause();
         $form  = $this->createForm(new EvolutionCauseType(), $cause);
-        
-        /* final */
-        
         $view = $this
             ->view()
             ->setTemplate($this->config->getTemplate('form/form_causes.html'))
@@ -252,7 +273,7 @@ class IndicatorSigController extends ResourceController
             ->setData(array(
                 'form'           => $form->createView(),
                 'indicator'      => $indicator,
-                //'valueIndicator' => $valueIndicator
+                'id' => $idIndicator
             ))
         ;
         $view->getSerializationContext()->setGroups(array('id','api_list'));
@@ -267,22 +288,29 @@ class IndicatorSigController extends ResourceController
      */
     public function addCausesAction(Request $request)
     {   
+        $indicator = $request->get('idIndicator');
+        $repository = $this->get('pequiven.repository.sig_indicator');
+        $results = $repository->find($indicator);
         //$id = $request->get('idIndicator');
         //var_dump($id);
-
+        $user = $this->getUser();
+        $data = $results;
         $cause = new EvolutionCause();
         $form  = $this->createForm(new EvolutionCauseType(), $cause);
+        
+        $cause->setIndicator($data);
+        $cause->setCreatedBy($user);
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            
             $em = $this->getDoctrine()->getManager();
             $em->persist($cause);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('pequiven_causes_form_add'));
-        }        
-        
-        //return $this->render('PequivenSIGBundle:Indicator:add.html.twig', array('form' => $form->createView(),));
+           // return $this->redirect($this->generateUrl('pequiven_causes_form_add'));
+        }     
     }
 
     /**
@@ -315,6 +343,29 @@ class IndicatorSigController extends ResourceController
         ;
         $view->getSerializationContext()->setGroups(array('id','api_list'));
         return $view;
+    }
+
+    /**
+     * Busca las Causas del indicador para filtrarlas para el plan de acción
+     * @param type $param
+     */
+    function getCausesEvoltionAction(\Symfony\Component\HttpFoundation\Request $request) {
+        
+        $idIndicator = $request->get('idIndicator');
+        //$idIndicator = $request->get('id');
+        $results = $this->get('pequiven.repository.sig_causes_indicator')->findByindicator($idIndicator);
+        var_dump(count($results));
+        die();
+        //$user = $this->getUser();
+        $criteria = $request->get('filter',$this->config->getCriteria());
+        $repository = $this->get('pequiven.repository.managementsystem_sig');
+        $results = $repository->findAll();
+        //var_dump(count($results));
+        //die();
+        $view = $this->view();
+        $view->setData($results);
+        $view->getSerializationContext()->setGroups(array('id','api_list','description'));
+        return $this->handleView($view);
     }
 
     /**

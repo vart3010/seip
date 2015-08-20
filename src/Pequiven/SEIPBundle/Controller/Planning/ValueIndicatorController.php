@@ -114,7 +114,6 @@ class ValueIndicatorController extends \Pequiven\SEIPBundle\Controller\SEIPContr
             array(array('id' => $request->get('id',0))));
         
         $form = $this->buildFormulaForm($indicator,$valueIndicator);
-        $formAction = $this->buildActionForm();
         
         $view = $this
             ->view()
@@ -123,7 +122,6 @@ class ValueIndicatorController extends \Pequiven\SEIPBundle\Controller\SEIPContr
             ->setData(array(
                 'indicator'      => $indicator,
                 'form'           => $form->createView(),
-                'formAction'     => $formAction->createView(),
                 'valueIndicator' => $valueIndicator
             ))
         ;

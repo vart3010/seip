@@ -252,6 +252,18 @@ sylius_resource:
             classes:
                 model: Pequiven\SIGBundle\Entity\TypeActionManagementSystem
                 repository: Pequiven\SIGBundle\Repository\TypeActionManagementSystemRepository
+        #Causas de Desviación del indicador
+        pequiven.sig_causes_indicator:
+            driver: doctrine/orm
+            classes:
+                model: Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCause
+                repository: Pequiven\IndicatorBundle\Repository\Indicator\EvolutionIndicator\EvolutionCauseRepository
+        #Plan de Acción de las Causas de Desviación del indicador
+        pequiven.sig_action_indicator:
+            driver: doctrine/orm
+            classes:
+                model: Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionAction
+                repository: Pequiven\IndicatorBundle\Repository\Indicator\EvolutionIndicator\EvolutionActionRepository
         
         pequiven.category_arrangement_program:
             driver: doctrine/orm

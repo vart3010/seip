@@ -6,6 +6,9 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
+
 class EvolutionActionType extends AbstractType
 {
     /**
@@ -19,6 +22,20 @@ class EvolutionActionType extends AbstractType
                 'label' => 'Acción',
                 'label_attr' => array('class' => 'label'),
                 'attr'=> array('class'=> 'input input-large validate[required]' )))
+            ->add('indicatorAction', 'text', array(
+                'label' => 'Tipo de Acción',
+                'label_attr' => array('class' => 'label'),
+                //'class' => 'PequivenSIGBundle:TypeActionManagementSystem',
+                'attr'=> array(
+                        'class'    => 'select2 input-xlarge',
+                        'ng-model' => 'model.typeAction.indicatorAction'
+                    )
+                
+                /*'query_builder' => function(\Pequiven\SIGBundle\Repository\TypeActionManagementSystemRepository $repository){
+                               return $repository->findAll(); },*/
+                //'empty_value' => 'pequiven.select',
+                //'required' => true,
+                               ))
             ->add('dateStart', 'date', array(
                 'label'=>'Fecha de Inicio',
                 'label_attr' => array('class' => 'label'),

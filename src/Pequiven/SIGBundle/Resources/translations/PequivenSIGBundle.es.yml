@@ -243,6 +243,9 @@ seip:
             parameters: Parametros
             products: Productos y Servicios
             description_feature_indicator: Nota o comentario
+            cause: Causa
+            value_of_cause: Valor de la Causa
+            description: Descripción
         empty:
             goals: No Hay Metas Cargadas.
             observations: No Hay Observaciones.

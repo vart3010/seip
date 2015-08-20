@@ -28,6 +28,7 @@ class EvolutionCause extends Model {
     private $id;
 
      /**
+     * @var integer
      * @ORM\ManyToOne(targetEntity="\Pequiven\IndicatorBundle\Entity\Indicator", inversedBy="indicatorCause")
      * @ORM\JoinColumn(name="indicator_id", referencedColumnName="id")
      */
@@ -41,11 +42,11 @@ class EvolutionCause extends Model {
     private $causes;
 
     /**
-     * @var decimal
+     * @var integer
      *
-     * @ORM\Column(name="valueOfCauses", type="float",precision = 3)
+     * @ORM\Column(name="valueOfCauses", type="integer")
      */
-    private $valueOfCauses = 0.0;
+    private $valueOfCauses;
 
     /**
      * @var \DateTime

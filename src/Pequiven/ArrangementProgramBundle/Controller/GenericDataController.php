@@ -225,8 +225,8 @@ class GenericDataController extends SEIPController
      */
     function getTypeAction(\Symfony\Component\HttpFoundation\Request $request) {
         
-        $user = $this->getUser();
-        $criteria = $request->get('filter',$this->config->getCriteria());
+        //$user = $this->getUser();
+        //$criteria = $request->get('filter',$this->config->getCriteria());
         $repository = $this->get('pequiven.repository.managementsystem_sig');
         $results = $repository->findAll();
         //var_dump(count($results));

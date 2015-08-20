@@ -1,15 +1,21 @@
-{% trans_default_domain 'PequivenIndicatorBundle' %}    
+{% trans_default_domain 'PequivenIndicatorBundle' %}  
+	
+	<div ng-controller="TableFormatController">    
+     <div ng-controller="IndicatorSigEvolutionController">  
        
+	<form method="POST" id="form_causes_evolution">
 		<fieldset class="fieldset fields-list">
                 <legend class="legend">{{ 'sig.causes_deviation'|trans ({}, 'messages') }}</legend>
 
-					 <form method="POST" {{ form_enctype(form) }} id="form_causes_evolution">
 					    <div class="field-block button-height" >
 
 					        {{ form_widget(form) }}
 
+					    
 					    </div>
-					</form>
+					    {# <input type="text" id="pequiven_indicatorbundle_evolutionindicator_evolutioncause_valueOfcauses" name="pequiven_indicatorbundle_evolutionindicator_evolutioncause[valueOfcauses]" required="required" class="input input-large validate[required]"> #}
+
+		</form>		
 					<br>
 
 		</fieldset>
