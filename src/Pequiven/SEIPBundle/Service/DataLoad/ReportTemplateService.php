@@ -122,7 +122,7 @@ class ReportTemplateService implements ContainerAwareInterface {
                 'categories' => array(),
                 'dataset' => array(),
                 'annotations' => array(),
-            ),
+                ),
         );
 
         $chart = array();
@@ -224,41 +224,12 @@ class ReportTemplateService implements ContainerAwareInterface {
             
             $annotations = array();
             
-//             "groups": [
-//                {
-//                   "id": "total-label",
-//                   "items": [
-//                      {
-//                         "id": "total-label-bg",
-//                         "type": "rectangle",
-//                         "radius": "3",
-//                         "x": "$chartEndX - 120",
-//                         "y": "$captionStartY",
-//                         "toX": "$chartEndX - 20",
-//                         "toY": "$captionStartY + 30",
-//                         "fillColor": "#0075c2",
-//                         "alpha": "70"
-//                      },
-//                      {
-//                         "id": "total-label-value",
-//                         "type": "text",
-//                         "fontColor": "#ffffff",
-//                         "fontSize": "10",
-//                         "x": "$chartEndX - 70",
-//                         "y": "$captionStartY + 15",
-//                         "wrapWidth": "90",
-//                         "wrapHeight": "25",
-//                         "text": "Total: $7.5M"
-//                      }
-//                   ]
-//                }
-//             ]
-            
             $data['dataSource']['annotations'] = $annotations;
         } elseif (isset($options['consolidateCorporation']) && array_key_exists('consolidateCorporation', $options)) {
             unset($options['consolidateCorporation']);
             
             $chart["caption"] = 'Producción Corporación PQV';
+            $chart["showLegend"] = "0";
             
             $repositoryReportTemplate = $this->container->get('pequiven.repository.report_template');
             $user = $this->getUser();
@@ -286,6 +257,7 @@ class ReportTemplateService implements ContainerAwareInterface {
             //Añadimos los valores, por cada planta del reportTemplate
             foreach($reportTemplates as $reportTemplate) {
                 $dataRealValues['seriesname'] = 'Real';
+//                $dataRealValues['includeInLegend'] = '0';
                 $dataPlanValues['seriesname'] = 'Plan';
                 $dataRealValues['data'][] = array('value' => number_format($dataSerialized[$reportTemplate->getId()]['real'], 2, ',', '.'), 'color' => $dataSerialized[$reportTemplate->getId()]['color']);
                 $dataPlanValues['data'][] = array('value' => number_format($dataSerialized[$reportTemplate->getId()]['plan'], 2, ',', '.'), 'color' => "#003CFF");
@@ -294,37 +266,97 @@ class ReportTemplateService implements ContainerAwareInterface {
             $data['dataSource']['dataset'][] = $dataRealValues;
             $data['dataSource']['dataset'][] = $dataPlanValues;
             
-            $annotations = array();
+//            $chart['paletteColors'] = "#003CFF";
             
-//             "groups": [
-//                {
-//                   "id": "total-label",
-//                   "items": [
-//                      {
-//                         "id": "total-label-bg",
-//                         "type": "rectangle",
-//                         "radius": "3",
-//                         "x": "$chartEndX - 120",
-//                         "y": "$captionStartY",
-//                         "toX": "$chartEndX - 20",
-//                         "toY": "$captionStartY + 30",
-//                         "fillColor": "#0075c2",
-//                         "alpha": "70"
-//                      },
-//                      {
-//                         "id": "total-label-value",
-//                         "type": "text",
-//                         "fontColor": "#ffffff",
-//                         "fontSize": "10",
-//                         "x": "$chartEndX - 70",
-//                         "y": "$captionStartY + 15",
-//                         "wrapWidth": "90",
-//                         "wrapHeight": "25",
-//                         "text": "Total: $7.5M"
-//                      }
-//                   ]
-//                }
-//             ]
+            $annotations = array();
+//            $dataGroups = array();
+//            
+//            $dataGroupsWithoutNotification = array();
+//            $dataGroupsNotificationPending = array();
+//            $dataGroupsNotificationSave = array();
+//            
+//            $dataGroupsWithoutNotification['id'] = "without-notification";
+//            $dataGroupsWithoutNotification['xShift'] = "100";
+//            
+//            $dataItemsWithoutNotification = array();
+//            $dataItemsWithoutNotification["id"] = "without-notification-circle";
+//            $dataItemsWithoutNotification["type"] = "circle";
+//            $dataItemsWithoutNotification["x"] = "\$chartStartX + 20";
+//            $dataItemsWithoutNotification["y"] = "\$legendEndY + 2";
+//            $dataItemsWithoutNotification["radius"] = "8";
+//            $dataItemsWithoutNotification["color"] = "#FF0004";
+//            $dataItemsWithoutNotification["border"] = "2";
+//            $dataItemsWithoutNotification["borderColor"] = "#FF0004";
+//            $dataGroupsWithoutNotification['items'][] = $dataItemsWithoutNotification;
+//            
+//            $dataItemsWithoutNotification = array();
+//            $dataItemsWithoutNotification["id"] = "without-notification-label";
+//            $dataItemsWithoutNotification["type"] = "text";
+//            $dataItemsWithoutNotification["text"] = "Sin Notificar";
+//            $dataItemsWithoutNotification["rotate"] = "90";
+//            $dataItemsWithoutNotification["color"] = "#ffffff";
+//            $dataItemsWithoutNotification["x"] = "\$chartStartX + 65";
+//            $dataItemsWithoutNotification["y"] = "\$legendEndY + 2";
+//            $dataGroupsWithoutNotification['items'][] = $dataItemsWithoutNotification;
+//            
+//            $dataGroupsNotificationPending['id'] = "notification-pending";
+//            $dataGroupsNotificationPending['xShift'] = "100";
+//            
+//            $dataItemsNotificationPending = array();
+//            $dataItemsNotificationPending["id"] = "notification-pending-circle";
+//            $dataItemsNotificationPending["type"] = "circle";
+//            $dataItemsNotificationPending["x"] = "\$chartStartX + 130";
+//            $dataItemsNotificationPending["y"] = "\$legendEndY + 2";
+//            $dataItemsNotificationPending["radius"] = "8";
+//            $dataItemsNotificationPending["color"] = "#E5E752";
+//            $dataItemsNotificationPending["border"] = "2";
+//            $dataItemsNotificationPending["borderColor"] = "#E5E752";
+//            $dataGroupsNotificationPending['items'][] = $dataItemsNotificationPending;
+//            
+//            $dataItemsNotificationPending = array();
+//            $dataItemsNotificationPending["id"] = "notification-pending-label";
+//            $dataItemsNotificationPending["type"] = "text";
+//            $dataItemsNotificationPending["text"] = "Notificación Pendiente";
+//            $dataItemsNotificationPending["rotate"] = "90";
+//            $dataItemsNotificationPending["color"] = "#ffffff";
+//            $dataItemsNotificationPending["x"] = "\$chartStartX + 195";
+//            $dataItemsNotificationPending["y"] = "\$legendEndY + 2";
+//            $dataGroupsNotificationPending['items'][] = $dataItemsNotificationPending;
+//            
+//            $dataGroupsNotificationSave['id'] = "notification-save";
+//            $dataGroupsNotificationSave['xShift'] = "100";
+//            
+//            $dataItemsNotificationSave = array();
+//            $dataItemsNotificationSave["id"] = "notification-save-circle";
+//            $dataItemsNotificationSave["type"] = "circle";
+//            $dataItemsNotificationSave["x"] = "\$chartStartX + 240";
+//            $dataItemsNotificationSave["y"] = "\$legendEndY + 2";
+//            $dataItemsNotificationSave["radius"] = "8";
+//            $dataItemsNotificationSave["color"] = "#0EED59";
+//            $dataItemsNotificationSave["border"] = "2";
+//            $dataItemsNotificationSave["borderColor"] = "#0EED59";
+//            $dataGroupsNotificationSave['items'][] = $dataItemsNotificationSave;
+//            
+//            $dataItemsNotificationSave = array();
+//            $dataItemsNotificationSave["id"] = "notification-save-label";
+//            $dataItemsNotificationSave["type"] = "text";
+//            $dataItemsNotificationSave["text"] = "Notificación Completa";
+//            $dataItemsNotificationSave["rotate"] = "90";
+//            $dataItemsNotificationSave["color"] = "#ffffff";
+//            $dataItemsNotificationSave["x"] = "\$chartStartX + 285";
+//            $dataItemsNotificationSave["y"] = "\$legendEndY + 2";
+//            $dataItemsNotificationSave["autoScale"] = "1";
+//            $dataGroupsNotificationSave['items'][] = $dataItemsNotificationSave;
+//            
+//            $dataGroupsWithoutNotification['autoScale'] = "1";
+//            $dataGroupsNotificationPending['autoScale'] = "1";
+//            $dataGroupsNotificationSave['autoScale'] = "1";
+//            
+//            $annotations['groups'][] = $dataGroupsWithoutNotification;
+//            $annotations['groups'][] = $dataGroupsNotificationPending;
+//            $annotations['groups'][] = $dataGroupsNotificationSave;
+//            $annotations['autoScale'] = "1";
+//            $annotations['constrainScale'] = "1";
             
             $data['dataSource']['annotations'] = $annotations;
         }
