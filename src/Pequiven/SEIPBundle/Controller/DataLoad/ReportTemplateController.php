@@ -877,8 +877,8 @@ class ReportTemplateController extends SEIPController {
 
 
             foreach ($plantReports as $planReport) {
-                if (!in_array($plantReport->getEntity()->getName(), $plants)) {
-                    $plants[] = $plantReport->getEntity()->getName();
+                if (!in_array($plantReport->getReportTemplate()->getName(), $plants)) {
+                    $plants[] = $plantReport->getReportTemplate()->getName();
                 }
 
 
@@ -1084,8 +1084,9 @@ class ReportTemplateController extends SEIPController {
 
             $productsReportByIdProduct = $consumerPlanningServicesByIdService = $rawMaterialConsumptionPlanningsById = array();
             foreach ($plantReports as $plantReport) {
-                if (!in_array($plantReport->getEntity()->getName(), $plants)) {
-                    $plants[] = $plantReport->getEntity()->getName();
+                
+                if (!in_array($plantReport->getReportTemplate()->getName(), $plants)) {
+                    $plants[] = $plantReport->getReportTemplate()->getName();
                 }
 
                 foreach ($plantReport->getProductsReport() as $productReport) {
@@ -1548,7 +1549,7 @@ class ReportTemplateController extends SEIPController {
 
         $impressOperacion = array(
             "getSummaryDay" => array(
-                "title" => "Producción Diaria",
+                "title" => "PRODUCCION DIARIA",
                 "col" => array("B", "C", "D", "E", "F"),
                 "campos" => array("Producto", "PPTO", "REAL", "EJEC(%)", "VAR"),
                 "rowStart" => 7,
@@ -1557,7 +1558,7 @@ class ReportTemplateController extends SEIPController {
                 "color" => "55b34a"
             ),
             "getSummaryMonth" => array(
-                "title" => "Producción Mensual",
+                "title" => "PRODUCCION MENSUAL",
                 "col" => array("B", "C", "D", "E", "F", "G"),
                 "campos" => array("Producto", "PPTO", "PPTO-MES", "REAL", "EJEC(%)", "VAR"),
                 "rowStart" => 7,
@@ -1568,7 +1569,7 @@ class ReportTemplateController extends SEIPController {
             )
             ,
             "getSummaryYear" => array(
-                "title" => "Producción Anual",
+                "title" => "PRODUCCION ANUAL",
                 "col" => array("B", "C", "D", "E", "F", "G"),
                 "campos" => array("Producto", "PPTO", "PPTO-MES", "REAL", "EJEC(%)", "VAR"),
                 "rowStart" => 7,
@@ -1599,7 +1600,7 @@ class ReportTemplateController extends SEIPController {
                 if ($productReport->getProduct()->getIsCheckToReportProduction()) {
                     $rowData = array();
 
-                    array_push($rowData, $productReport->getProduct()->getName());
+                    array_push($rowData, $productReport->getProduct()->getName() . " (" . $productReport->getProduct()->getProductUnit() . ")");
 
                     if (array_key_exists("plan_time", $imp)) {
                         array_push($rowData, number_format((float) $typeVar[$imp["plan_time"]], 2, ',', '.'));
@@ -1669,9 +1670,15 @@ class ReportTemplateController extends SEIPController {
             $styleArray = array(
                 'font' => array(
                     'bold' => true,
+                ),
+                'fill' => array(
+                    'type' => \PHPExcel_Style_Fill::FILL_SOLID,
+                    'startcolor' => array(
+                        'rgb' => "dddddd"
+                    )
                 )
             );
-
+            /* ******TOTALES DE PRODUCCION **************** */
             $t = 0;
             $activeSheet->getStyle($rowCont)->applyFromArray($styleArray);
             $activeSheet->setCellValue($imp["col"][$t] . $rowCont, "Totales");
@@ -1685,70 +1692,77 @@ class ReportTemplateController extends SEIPController {
 
 
 
-
-        /** CONSUMO DE MATERIA PRIMA * */
-        $matPrima = $this->getDataRawMateria($rawMaterialConsumptionPlannings, $dateReport);
-
-        $dataMateriaPrima = array(
-            "row" => $rowCont,
-            "title" => "Consumo Materia Prima",
-            "col" => array("B", "C", "D", "E"),
-            "campos" => array("Producto", "DIA", "MES", "AÑO"),
-            "color" => "ffaa15"
-        );
-
-        $this->setFormatTitle($dataMateriaPrima, $activeSheet, $rowCont);
-        $rowCont = $this->setTitlesRows($activeSheet, $dataMateriaPrima, $rowCont);
-//$activeSheet->setCellValue("B".$rowCont,"holas");
-
-        $c = 0;
-        foreach ($dataMateriaPrima["col"] as $cols) {
-            $contCol = $rowCont;
-            foreach ($matPrima[$c] as $cons) {
-//var_dump($cols.$contCol."=>".$cons);
-                $activeSheet->setCellValue($cols . $contCol, $cons);
-                $contCol++;
-            }
-            $c++;
-        }
-        $rowCont = $contCol;
-        /*         * ****************************** */
-
-
-        /** CONSUMO DE SERVICIOS * */
-        $consumos = $this->getDataConsumerPlanning($consumerPlanningServices, $dateReport);
-
-        $dataConsumo = array(
-            "row" => $rowCont + 1,
-            "title" => "Servicios",
-            "col" => array("B", "C", "D", "E"),
-            "campos" => array("Producto", "DIA", "MES", "AÑO"),
-            "color" => "98bfbf"
-        );
-
-        $this->setFormatTitle($dataConsumo, $activeSheet, $rowCont);
-        $rowCont = $this->setTitlesRows($activeSheet, $dataConsumo, $rowCont);
-
-        $c = 0;
-        foreach ($dataConsumo["col"] as $cols) {
-            $contCol = $rowCont;
-            foreach ($consumos[$c] as $cons) {
-//var_dump($cols.$contCol."=>".$cons);
-                $activeSheet->setCellValue($cols . $contCol, $cons);
-                $contCol++;
-            }
-            $c++;
-        }
-        $rowCont = $contCol;
-        /*         * ****************************** */
-
-
+//
+//        /** CONSUMO DE MATERIA PRIMA * */
+//        $matPrima = $this->getDataRawMateria($rawMaterialConsumptionPlannings, $dateReport);
+//
+//        $dataMateriaPrima = array(
+//            "row" => $rowCont,
+//            "title" => "Consumo Materia Prima",
+//            "col" => array("B", "C", "D", "E"),
+//            "campos" => array("Producto", "DIA", "MES", "AÑO"),
+//            "color" => "ffaa15"
+//        );
+//
+//        $this->setFormatTitle($dataMateriaPrima, $activeSheet, $rowCont);
+//        $rowCont = $this->setTitlesRows($activeSheet, $dataMateriaPrima, $rowCont);
+////$activeSheet->setCellValue("B".$rowCont,"holas");
+//
+//        $c = 0;
+//        foreach ($dataMateriaPrima["col"] as $cols) {
+//            $contCol = $rowCont;
+//            foreach ($matPrima[$c] as $cons) {
+////var_dump($cols.$contCol."=>".$cons);
+//                if (gettype($cons) == "string") {
+//                    $activeSheet->setCellValue($cols . $contCol, $cons);
+//                } else {
+//                    $activeSheet->setCellValue($cols . $contCol, number_format($cons, 2, ',', '.'));
+//                }
+//
+//
+//                $contCol++;
+//            }
+//            $c++;
+//        }
+//        $rowCont = $contCol;
+//        /*         * ****************************** */
+//
+//        /** CONSUMO DE SERVICIOS * */
+//        $consumos = $this->getDataConsumerPlanning($consumerPlanningServices, $dateReport);
+//
+//        $dataConsumo = array(
+//            "row" => $rowCont + 1,
+//            "title" => "Servicios",
+//            "col" => array("B", "C", "D", "E"),
+//            "campos" => array("Producto", "DIA", "MES", "AÑO"),
+//            "color" => "98bfbf"
+//        );
+//
+//        $this->setFormatTitle($dataConsumo, $activeSheet, $rowCont);
+//        $rowCont = $this->setTitlesRows($activeSheet, $dataConsumo, $rowCont);
+//
+//        $c = 0;
+//        foreach ($dataConsumo["col"] as $cols) {
+//            $contCol = $rowCont;
+//            foreach ($consumos[$c] as $cons) {
+////var_dump($cols.$contCol."=>".$cons);
+//                if (gettype($cons) == "string") {
+//                    $activeSheet->setCellValue($cols . $contCol, $cons);
+//                } else {
+//                    $activeSheet->setCellValue($cols . $contCol, number_format($cons, 2, ',', '.'));
+//                }
+//                $contCol++;
+//            }
+//            $c++;
+//        }
+//        $rowCont = $contCol;
+//        /*         * ****************************** */
 ///****PRODUCCION NO REALIZADA **//////////
         $unrealizedProduction = $this->getDataUnrealizedProduction($productsReport, $dateReport);
 
         $dataUnrealized = array(
             "row" => $rowCont + 1,
-            "title" => "Producción No Realizada",
+            "title" => "PRODUCCIÓN NO REALIZADA",
             "col" => array("B", "C", "D", "E"),
             "campos" => array("Producto", "DIA", "MES", "AÑO"),
             "color" => "62cf5a"
@@ -1761,7 +1775,11 @@ class ReportTemplateController extends SEIPController {
             $contCol = $rowCont;
             foreach ($unrealizedProduction[$c] as $cons) {
 //var_dump($cols.$contCol."=>".$cons);
-                $activeSheet->setCellValue($cols . $contCol, $cons);
+                if (gettype($cons) == "string") {
+                    $activeSheet->setCellValue($cols . $contCol, $cons);
+                } else {
+                    $activeSheet->setCellValue($cols . $contCol, number_format($cons, 2, ',', '.'));
+                }
                 $contCol++;
             }
             $c++;
@@ -1774,7 +1792,7 @@ class ReportTemplateController extends SEIPController {
 
         $dataInventario = array(
             "row" => $rowCont,
-            "title" => "Inventario",
+            "title" => "INVENTARIO",
             "col" => array("B", "C", "D"),
             "campos" => array("Producto", "DIA", "DIA ANTERIOR"),
             "color" => "ddbb15"
@@ -1787,7 +1805,11 @@ class ReportTemplateController extends SEIPController {
             $contCol = $rowCont;
             foreach ($inventario[$c] as $cons) {
 //var_dump($cols.$contCol."=>".$cons);
-                $activeSheet->setCellValue($cols . $contCol, $cons);
+                if (gettype($cons) == "string") {
+                    $activeSheet->setCellValue($cols . $contCol, $cons);
+                } else {
+                    $activeSheet->setCellValue($cols . $contCol, number_format($cons, 2, ',', '.'));
+                }
                 $contCol++;
             }
             $c++;
@@ -1800,7 +1822,7 @@ class ReportTemplateController extends SEIPController {
 ///**** OBSERVACIONES  **//////////
         $observaciones = $this->getDataInventario($productsReport, $dateReport);
         $dataObservaciones = array(
-            "title" => "Observaciones",
+            "title" => "PUNTOS DE ATENCIÓN",
             "row" => $rowCont,
             "col" => array("B", "C"),
             "campos" => array("Producto", "Observación"),
@@ -1895,6 +1917,12 @@ class ReportTemplateController extends SEIPController {
             'alignment' => array(
                 'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
                 'vertical' => \PHPExcel_Style_Alignment::VERTICAL_CENTER
+            ),
+            'fill' => array(
+                'type' => \PHPExcel_Style_Fill::FILL_SOLID,
+                'startcolor' => array(
+                    'rgb' => "dddddd"
+                )
             )
         );
 
@@ -1908,7 +1936,7 @@ class ReportTemplateController extends SEIPController {
             $activeSheet->getStyle($col . $rowCont)->applyFromArray($styleArray);
             $camp++;
         }
-        $rowCont = $rowCont + 2;
+        $rowCont = $rowCont + 1;
 
         return $rowCont;
     }
@@ -1921,11 +1949,12 @@ class ReportTemplateController extends SEIPController {
         $totalYear = array();
 
         foreach ($rawMaterial as $rs) {
-            $productos[] = $rs->getProduct()->getName();
+
+            $productos[] = $rs->getProduct()->getName() . " (" . $rs->getProduct()->getProductUnit() . ")";
 //$productos[] = $rs->$name;
-            array_push($totalDay, number_format($rs->getSummary($dateReport)["total_day"], 2, ",", "."));
-            array_push($totalMonth, number_format($rs->getSummary($dateReport)["total_month"], 2, ",", "."));
-            array_push($totalYear, number_format($rs->getSummary($dateReport)["total_year"], 2, ",", "."));
+            array_push($totalDay, $rs->getSummary($dateReport)["total_day"]);
+            array_push($totalMonth, $rs->getSummary($dateReport)["total_month"]);
+            array_push($totalYear, $rs->getSummary($dateReport)["total_year"]);
 //var_dump($rawMaterialConsumption->getSummary($dateReport));
         }
 
@@ -1940,7 +1969,7 @@ class ReportTemplateController extends SEIPController {
         $totalYear = array();
 
         foreach ($consumerPlanning as $rs) {
-            $productos[] = $rs->getService()->getName();
+            $productos[] = $rs->getService()->getName() . " (" . $rs->getService()->getServiceUnit() . ")";
 //$productos[] = $rs->$name;
             array_push($totalDay, number_format($rs->getSummary($dateReport)["total_day"], 2, ',', '.'));
             array_push($totalMonth, number_format($rs->getSummary($dateReport)["total_month"], 2, ',', '.'));
@@ -1961,7 +1990,7 @@ class ReportTemplateController extends SEIPController {
         $totalYear = array();
 
         foreach ($productsReport as $rs) {
-            $productos[] = $rs->getProduct()->getName();
+            $productos[] = $rs->getProduct()->getName() . " (" . $rs->getProduct()->getProductUnit() . ")";
 //$productos[] = $rs->$name;
             array_push($totalDay, number_format($rs->getSummaryUnrealizedProductions($dateReport)["total_day"], 2, ',', '.'));
             array_push($totalMonth, number_format($rs->getSummaryUnrealizedProductions($dateReport)["total_month"], 2, ',', '.'));
@@ -1982,7 +2011,7 @@ class ReportTemplateController extends SEIPController {
         $totalYear = array();
 
         foreach ($productsReport as $rs) {
-            $productos[] = $rs->getProduct()->getName();
+            $productos[] = $rs->getProduct()->getName() . " (" . $rs->getProduct()->getProductUnit() . ")";
 //$productos[] = $rs->$name;
             array_push($totalDay, number_format($rs->getSummaryInventory($dateReport)["total_day"], 2, ',', '.'));
             array_push($totalMonth, number_format($rs->getSummaryInventory($dateReport)["total_month"], 2, ',', '.'));
