@@ -1558,8 +1558,18 @@ class ReportTemplateController extends SEIPController {
             )
         );
 
+
+        $styleProduct = array(
+            'alignment' => array(
+                'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_LEFT,
+                'vertical' => \PHPExcel_Style_Alignment::VERTICAL_CENTER
+            )
+        );
+
+
         $styleTextObservation = array(
             'alignment' => array(
+                'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_LEFT,
                 'vertical' => \PHPExcel_Style_Alignment::VERTICAL_JUSTIFY
             )
         );
@@ -1567,13 +1577,15 @@ class ReportTemplateController extends SEIPController {
         $observationData = $data["observation"];
         foreach ($observationData as $obs) {
             //$activeSheet->getRowDimension($row)->setRowHeight("15");
-            $activeSheet->getRowDimension($row)->setRowHeight("-1");
-            
+            $activeSheet->getRowDimension($row)->setRowHeight("45");
+
             for ($i = 0; $i < count($observation["col"]); $i++) {
                 $cell = $observation["col"][$i] . $row;
                 $activeSheet->getStyle($observation["col"][$i] . $row)->applyFromArray($styleObs);
 
+
                 if ($i == 0) {
+                    $activeSheet->getStyle($observation["col"][$i] . $row)->applyFromArray($styleProduct);
                     $activeSheet->getStyle($observation["col"][$i] . $row)->applyFromArray($styleProductObs);
                 }
                 if ($observation["fieldsShow"][$i] == "day") {
@@ -1587,11 +1599,16 @@ class ReportTemplateController extends SEIPController {
                     $activeSheet->mergeCells($observation["col"][$i] . $row . ":" . "H" . $row);
                     $activeSheet->getStyle("H" . $row)->applyFromArray($styleObs);
                 }
+                $buscar = array(chr(13) . chr(10), "\r\n", "\n", "\r", "\n\r", "\t");
+                $reemplazar = array("", "", "", "", "", "");
 
-                $activeSheet->setCellValue($cell, $field);
+                $cadena = str_ireplace($buscar, $reemplazar, $field);
+                $activeSheet->setCellValue($cell, $cadena);
             }
             $row++;
         }
+
+
 
 
 
@@ -1967,7 +1984,11 @@ class ReportTemplateController extends SEIPController {
                 'allborders' => array(
                     'style' => \PHPExcel_Style_Border::BORDER_MEDIUM,
                 )
-            )
+            ),
+            'alignment' => array(
+                'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_LEFT,
+                'vertical' => \PHPExcel_Style_Alignment::VERTICAL_CENTER
+            ),
         );
 
         $styleProductObs = array(
@@ -1979,7 +2000,11 @@ class ReportTemplateController extends SEIPController {
                 'startcolor' => array(
                     'rgb' => "dddddd"
                 )
-            )
+            ),
+            'alignment' => array(
+                'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_LEFT,
+                'vertical' => \PHPExcel_Style_Alignment::VERTICAL_CENTER
+            ),
         );
 
 
@@ -2004,16 +2029,24 @@ class ReportTemplateController extends SEIPController {
         foreach ($dataObservaciones["col"] as $cols) {
 
             $contCol = $rowCont;
-
+            $activeSheet->getColumnDimension($cols)->setAutoSize(true);
             $cr = 0;
             foreach ($observaciones[$c] as $cons) {
-                $activeSheet->getRowDimension($contCol)->setRowHeight(20);
-                $activeSheet->setCellValue($cols . $contCol, $cons);
+                $activeSheet->getRowDimension($contCol)->setRowHeight("45");
+
+                $buscar = array(chr(13) . chr(10), "\r\n", "\n", "\r", "\n\r", "\t");
+                $reemplazar = array("", "", "", "", "", "");
+
+                $cadena = str_ireplace($buscar, $reemplazar, $cons);
+                //$activeSheet->setCellValue($cell, $cadena);
+
+                $activeSheet->setCellValue($cols . $contCol, strip_tags($cadena));
 
                 if ($c == 1) {
                     $activeSheet->mergeCells($cols . $contCol . ":" . "H" . $contCol);
                     $activeSheet->getStyle($cols . $contCol)->applyFromArray($styleObs);
                     $activeSheet->getStyle("H" . $contCol)->applyFromArray($styleObs);
+                    $activeSheet->getStyle($cols . $contCol)->getAlignment()->setWrapText(true);
                 }
                 if ($c == 0) {
                     $activeSheet->getStyle($cols . $contCol)->applyFromArray($styleProductObs);
@@ -2079,7 +2112,7 @@ class ReportTemplateController extends SEIPController {
         $styleArray = array(
             'font' => array(
                 'bold' => true,
-                'color'=>array('rgb'=>'FFFFFF')
+                'color' => array('rgb' => 'FFFFFF')
             ),
             'alignment' => array(
                 'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
