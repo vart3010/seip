@@ -1458,7 +1458,7 @@ class ReportTemplateController extends SEIPController {
 //        }
 //PNR
         $pnr = array(
-            "title" => "Produccion No Realizada",
+            "title" => "Producción No Realizada",
             "col" => array("B", "C"),
             "campos" => array("Producto", "TOTAL"),
             "fieldsShow" => array("productName", "total"),
@@ -2079,6 +2079,7 @@ class ReportTemplateController extends SEIPController {
         $styleArray = array(
             'font' => array(
                 'bold' => true,
+                'color'=>array('rgb'=>'FFFFFF')
             ),
             'alignment' => array(
                 'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
