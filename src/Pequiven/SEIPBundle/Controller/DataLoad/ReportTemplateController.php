@@ -1335,7 +1335,7 @@ class ReportTemplateController extends SEIPController {
 
 //REGISTROS PRODDUCION
         $impressOperacion = array(
-            "title" => "PRODUCCION",
+            "title" => "Producción",
             "col" => array("B", "C", "D", "E", "F"),
             "campos" => array("Producto", "PPTO", "REAL", "EJEC(%)", "VAR"),
             "fieldsShow" => array("productName", "plan", "real", "percentage", "pnr"),
@@ -1458,7 +1458,7 @@ class ReportTemplateController extends SEIPController {
 //        }
 //PNR
         $pnr = array(
-            "title" => "PRODUCCION NO REALIZADA",
+            "title" => "Produccion No Realizada",
             "col" => array("B", "C"),
             "campos" => array("Producto", "TOTAL"),
             "fieldsShow" => array("productName", "total"),
@@ -1489,7 +1489,7 @@ class ReportTemplateController extends SEIPController {
 
 //INVENTARIO
         $inventory = array(
-            "title" => "INVENTARIO",
+            "title" => "Inventario",
             "col" => array("B", "C"),
             "campos" => array("Producto", "TOTAL"),
             "fieldsShow" => array("productName", "total"),
@@ -1558,9 +1558,17 @@ class ReportTemplateController extends SEIPController {
             )
         );
 
+        $styleTextObservation = array(
+            'alignment' => array(
+                'vertical' => \PHPExcel_Style_Alignment::VERTICAL_JUSTIFY
+            )
+        );
+
         $observationData = $data["observation"];
         foreach ($observationData as $obs) {
-            $activeSheet->getRowDimension($row)->setRowHeight("15");
+            //$activeSheet->getRowDimension($row)->setRowHeight("15");
+            $activeSheet->getRowDimension($row)->setRowHeight("-1");
+            
             for ($i = 0; $i < count($observation["col"]); $i++) {
                 $cell = $observation["col"][$i] . $row;
                 $activeSheet->getStyle($observation["col"][$i] . $row)->applyFromArray($styleObs);
@@ -1575,6 +1583,7 @@ class ReportTemplateController extends SEIPController {
                     $field = $obs[$observation["fieldsShow"][$i]];
                 }
                 if ($i == 2) {
+                    $activeSheet->getStyle($observation["col"][$i] . $row)->applyFromArray($styleTextObservation);
                     $activeSheet->mergeCells($observation["col"][$i] . $row . ":" . "H" . $row);
                     $activeSheet->getStyle("H" . $row)->applyFromArray($styleObs);
                 }
@@ -1669,7 +1678,7 @@ class ReportTemplateController extends SEIPController {
 
         $impressOperacion = array(
             "getSummaryDay" => array(
-                "title" => "PRODUCCION DIARIA",
+                "title" => "Produccion Diaria",
                 "col" => array("B", "C", "D", "E", "F"),
                 "campos" => array("Producto", "PPTO", "REAL", "EJEC(%)", "VAR"),
                 "rowStart" => 7,
@@ -1678,7 +1687,7 @@ class ReportTemplateController extends SEIPController {
                 "color" => "55b34a"
             ),
             "getSummaryMonth" => array(
-                "title" => "PRODUCCION MENSUAL",
+                "title" => "Producción Mensual",
                 "col" => array("B", "C", "D", "E", "F", "G"),
                 "campos" => array("Producto", "PPTO", "PPTO-MES", "REAL", "EJEC(%)", "VAR"),
                 "rowStart" => 7,
@@ -1689,7 +1698,7 @@ class ReportTemplateController extends SEIPController {
             )
             ,
             "getSummaryYear" => array(
-                "title" => "PRODUCCION ANUAL",
+                "title" => "Producción Anual",
                 "col" => array("B", "C", "D", "E", "F", "G"),
                 "campos" => array("Producto", "PPTO", "PPTO-MES", "REAL", "EJEC(%)", "VAR"),
                 "rowStart" => 7,
@@ -1883,7 +1892,7 @@ class ReportTemplateController extends SEIPController {
 
         $dataUnrealized = array(
             "row" => $rowCont + 1,
-            "title" => "PRODUCCIÓN NO REALIZADA",
+            "title" => "Producción No Realizada",
             "col" => array("B", "C", "D", "E"),
             "campos" => array("Producto", "DIA", "MES", "AÑO"),
             "color" => "62cf5a"
@@ -1913,7 +1922,7 @@ class ReportTemplateController extends SEIPController {
 
         $dataInventario = array(
             "row" => $rowCont,
-            "title" => "INVENTARIO",
+            "title" => "Inventario",
             "col" => array("B", "C", "D"),
             "campos" => array("Producto", "DIA", "DIA ANTERIOR"),
             "color" => "ddbb15"

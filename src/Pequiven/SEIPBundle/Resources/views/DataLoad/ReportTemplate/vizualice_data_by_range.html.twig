@@ -48,14 +48,15 @@
     <br>
     <table style="text-align: center; width: 100%">
         <tr>
-            <td class="text-left" style="font-weight: bold; width: 80%">
+            <td class="text-left" style="font-weight: bold; width: 50%">
                 {% if plantsNames|length > 0 %}
                     Complejos:
                 {% else %}
                     Complejo:    
                 {% endif %}
             </td>
-            <td class="text-left" style="font-weight: bold;">Fecha Emision: </td>
+            <td class="text-center" style="font-weight: bold; width: 25%; ">Fecha Emision: </td>
+            <td class="text-center" style="font-weight: bold;width: 25%; ">Fecha Reporte</td>
         </tr>
         <tr>
             <td class="text-left">
@@ -63,8 +64,11 @@
                     {{ plant }}
                 {% endfor %}
             </td>
-            <td class="text-left">{{ "now"|date("m/d/Y") }}</td>
-
+            <td class="text-center">{{ "now"|date("d/m/Y") }}</td>
+            <td class="text-center">
+                Desde {{ dateFrom|date("d/m/Y") }}<br>
+                Hasta {{ dateEnd|date("d/m/Y") }}
+            </td>
         </tr>
     </table>
     <br>
