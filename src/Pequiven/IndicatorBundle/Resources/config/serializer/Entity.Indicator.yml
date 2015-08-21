@@ -73,4 +73,7 @@ Pequiven\IndicatorBundle\Entity\Indicator:
         indicatorlast:
             expose: true
             groups: [indicatorlast]
+        indicatorAction:
+            expose: true
+            groups: [indicatorAction]
         

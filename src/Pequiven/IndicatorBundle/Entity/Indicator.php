@@ -580,6 +580,14 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCause",mappedBy="indicator",cascade={"persist","remove"})
      */
     protected $indicatorCause;
+
+    /**
+     * Plan de Acción
+     * 
+     * @var \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionAction
+     * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionAction",mappedBy="indicatorRel",cascade={"persist","remove"})
+     */
+    protected $indicatorAction;
    
     /**
      * Constructor
@@ -597,6 +605,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
         $this->managementSystems = new \Doctrine\Common\Collections\ArrayCollection();
         $this->indicatorlastPeriod = new \Doctrine\Common\Collections\ArrayCollection();
         $this->indicatorCause = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->indicatorAction = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -905,6 +914,18 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     }
 
     /**
+     * Set indicatorlastPeriod
+     *
+     * @param \Pequiven\ArrangementBundle\Entity\Indicator $indicatorlastPeriod
+     * @return Indicator
+     */
+    public function setIndicatorLastPeriod(\Pequiven\IndicatorBundle\Entity\Indicator $indicatorlastPeriod = null) {
+        $this->indicatorlastPeriod = $indicatorlastPeriod;
+
+        return $this;
+    }
+
+    /**
      * Get indicatorlastPeriod
      *
      * @return \Doctrine\Common\Collections\Collection 
@@ -1058,6 +1079,37 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      */
     public function getIndicatorCause() {
         return $this->indicatorCause;
+    }
+
+    /**
+     * Add indicatorAction
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionAction $indicatorAction
+     * @return Indicator
+     */
+    public function addIndicatorAction(\Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionAction $indicatorAction) {
+
+        $this->indicatorAction->add($indicatorAction);
+
+        return $this;
+    }
+
+    /**
+     * Remove indicatorAction
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionAction $indicatorAction
+     */
+    public function removeIndicatorAction(\Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionAction $indicatorAction) {
+        $this->indicatorAction->removeElement($indicatorAction);
+    }
+
+    /**
+     * Get indicatorAction
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getIndicatorAction() {
+        return $this->indicatorAction;
     }
 
     /**

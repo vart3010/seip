@@ -1,4 +1,4 @@
-Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCause:
+Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionAction:
     exclusion_policy: ALL
     properties:
         id:
@@ -10,12 +10,6 @@ Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCause:
         updatedAt:
             expose: true
             groups: [api_details]
-        causes:
-            expose: true
-            groups: [api_list]
-        valueOfindicator:
-            expose: true
-            groups: [api_list]
         createdBy:
             expose: true
             groups: [api_details]

@@ -14,6 +14,7 @@
 
     </div>
 
+
     <div class="with-padding">
         {% set colspan = 5 %}
         <table class="simple-table responsive-table tables-extras" id="sorting-example2">
@@ -37,7 +38,8 @@
                     </th>
                     <td align="center">{{ cause_data.causes }}</td>
                     <td align="center">
-                        {{ cause_data.createdBy.firstname + " "+ cause_data.createdBy.lastname }} <small class="tag">{{ " ("+cause_data.createdBy.username+")" }}</small>
+                        {{ cause_data.createdBy.firstname }} {{ cause_data.createdBy.lastname }}
+                        <small class="tag">({{ cause_data.createdBy.username }})</small>
                     </td>
                         <td class="align-right vertical-center">
                             <span class="select compact">

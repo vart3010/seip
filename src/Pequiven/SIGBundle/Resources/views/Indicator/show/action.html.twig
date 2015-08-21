@@ -32,17 +32,22 @@
             </thead>
     {% for  action in data_action %}
             <tbody align="center">
-                <tr >
-                    <td>{$ ($index + 1) $}</td>
+                <tr>
+                    <td></td>
                     <th scope="row" style="">
                         {{ action.action }}
                     </th>
-                    <td >{{ action.id }}</td>
-                    <td>{$ featureIndicator.dateStart | myDateTime $}</td>
-                    <td>{$ featureIndicator.dateEnd | myDateTime $}</td>
+                    <td >{{ action.id }}
+                    {% for typeAction in action.indicatorAction %}
+                      <li>{{ typeAction.description }}</li>
+                    {% endfor %}
+                        </td>
+                    <td>{{ action.dateStart | date("m/d/Y") }}</td>
+                    <td>{{ action.dateEnd | date("m/d/Y") }}</td>
                     <td>{{ action.advance }}</td>
                     <td>
-                        {$ featureIndicator.createdBy.firstname + " "+ featureIndicator.createdBy.lastname $} <small class="tag">{$ " ("+featureIndicator.createdBy.username+")" $}</small>
+                        {{ action.createdBy.firstname }} {{ action.createdBy.lastname }}
+                        <small class="tag">({{ action.createdBy.username }})</small>
                     </td>
                     <td> {{ action.observations }}</td>
                         <td class="align-right vertical-center">

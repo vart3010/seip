@@ -16,4 +16,11 @@ Pequiven\SIGBundle\Entity\TypeActionManagementSystem:
         ref:
             expose: true
             groups: [api_list]
+        indicatorAction:
+            expose: true
+            groups: [indicatorAction]
+        typeAction:
+            expose: true
+            groups: [typeAction]
+            
        

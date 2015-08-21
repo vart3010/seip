@@ -1,21 +1,20 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutSIG.html.twig' %}
+
+{% block body %}
 {% trans_default_domain 'PequivenIndicatorBundle' %}
     
     <div ng-controller="TableFormatController">
-        <div ng-controller="IndicatorAsocLastController">
 
-        
-        <form method="POST" id="form_value_indicator">
+        <form method="POST" id="form_asoc_last_period">
             <fieldset class="fieldset fields-list">
                 <legend class="legend">{{ 'sig.relation_indicator'|trans ({}, 'messages') }}</legend>
-                {# {% for child in form.children %}
+                {# {% for child in form.children %} #}
                     <div class="field-block button-height" >
-                        {{ form_label(child) }}
-                        {{ form_widget(child) }}
-                        {{ form_errors(child) }}
+                        {{ form_widget(form) }}
                     </div>
-                {% endfor %} #}
+                {#{% endfor %} #}
                 {# #}              
-                     <!-- Filter ManagementSystem -->
+                    {# <!-- Filter ManagementSystem -->
                     <div class="field-block button-height" >                                                
                       <label class="bold">{{ 'sig.relation_indicator'|trans ({}, 'messages') }}</label>
                                 <br/>
@@ -24,12 +23,8 @@
                                 <option value=''></option>
                                 </select>
                             </div>
-                    </div>
+                    </div> #}
 
-                {#  {{ indicator.id }} #}
-                   
-                {% if valueIndicator != null %}
-                    <input type="hidden" name="id" value="{{ valueIndicator.id }}" />
-                {% endif %}
             </fieldset>
         </form>       
+{% endblock %}

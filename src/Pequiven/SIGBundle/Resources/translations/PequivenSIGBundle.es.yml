@@ -230,7 +230,7 @@ seip:
             responsible: Responsable
             type_goal: Tipo de Actividad
             start_date: Fecha Inicio
-            end_date: Fecha Fin
+            end_date: Fecha Cierre
             responsibles: Responsable(s)
             responsible_goal: Responsable(s) de la Meta
             weight: Peso

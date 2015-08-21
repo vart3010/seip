@@ -21,20 +21,14 @@ class EvolutionActionType extends AbstractType
             ->add('action', 'text', array(
                 'label' => 'Acción',
                 'label_attr' => array('class' => 'label'),
-                'attr'=> array('class'=> 'input input-large validate[required]' )))
-            ->add('indicatorAction', 'text', array(
+                'attr'=> array('class'=> 'input input-large validate[required]' )))            
+            ->add('indicatorAction','entity',array(
                 'label' => 'Tipo de Acción',
                 'label_attr' => array('class' => 'label'),
-                //'class' => 'PequivenSIGBundle:TypeActionManagementSystem',
+                'class' => 'Pequiven\SIGBundle\Entity\TypeActionManagementSystem',
+                'property' => 'description',
                 'attr'=> array(
-                        'class'    => 'select2 input-xlarge',
-                        'ng-model' => 'model.typeAction.indicatorAction'
-                    )
-                
-                /*'query_builder' => function(\Pequiven\SIGBundle\Repository\TypeActionManagementSystemRepository $repository){
-                               return $repository->findAll(); },*/
-                //'empty_value' => 'pequiven.select',
-                //'required' => true,
+                'class'=> 'select2 input-large form-control'),
                                ))
             ->add('dateStart', 'date', array(
                 'label'=>'Fecha de Inicio',

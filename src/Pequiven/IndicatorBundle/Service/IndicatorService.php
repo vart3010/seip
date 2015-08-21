@@ -3597,9 +3597,21 @@ class IndicatorService implements ContainerAwareInterface {
             $labelo["label"] = $labelobj;//Label del ObjAcum
             $category[] = $labelo;//Label del ObjAcum
 
+            //Data 2014            
+            $indicatorlast = $indicator->getindicatorLastPeriod();
+            
+            //var_dump($indicatorlast);
+            if ($indicatorlast === null) {
+                
+                $dataAnt["value"] = 0;//Pasando data a Data2014 si no tiene ralacion
+
+            }else{
+                
+                $dataAnt["value"] = 5;//Pasando data a Data2014                
+            }
             //Data 2014
-            $dataAnt["value"] = 50;//Pasando data a Data2014
             $dataAnt["color"] = '#f2c500';            
+            $dataAnt["showvalues"] = '0';
             $dataSetAnt["data"][] = $dataAnt;//2014
 
             $dataSetTend["data"][] = array( 'value' => '' );
@@ -3623,26 +3635,6 @@ class IndicatorService implements ContainerAwareInterface {
             var_dump($valorant->getValueOfIndicator());
             die();*/
             //borrar
-            $indicatorParent = $indicator->getParent();
-            //var_dump($indicatorParent);
-            //$parent_id = $indicatorParent->getId();
-
-            foreach ($indicator->getValuesIndicator() as $value) {
-
-                $dataPeriodoAnterior = $value->getValueOfIndicator();
-              //  var_dump($dataPeriodoAnterior);
-            }
-            //echo "INDICADOR PADRE ",var_dump($parent_id);
-            
-            $indicatorlast = $indicator->getindicatorLastPeriod();
-            //var_dump($indicatorlast);
-            if ($indicatorlast === null) {
-                //echo "El indicador no tiene relacion con el Indicador 2014";
-                //die();
-            }else{
-                var_dump($indicatorlast->getId());
-                //die();
-            }
 
             //Carga de meta Objetivo2015
             foreach ($indicator->getObjetives() as $value) {
@@ -3663,7 +3655,7 @@ class IndicatorService implements ContainerAwareInterface {
             $dataSetReal["data"][] = $dataObj;//Acumulado
             
             //Carga de Tendencia
-            $dataSetValues['tendencia'] = array('seriesname' => 'Tendencia', 'parentyaxis' => 'S', 'renderas' => 'Line', 'color' => '#E50A0A', 'data' => $dataSetTend['data']);
+            $dataSetValues['tendencia'] = array('seriesname' => 'Tendencia', 'parentyaxis' => 'S', 'renderas' => 'Line', 'color' => '#dbc903', 'data' => $dataSetTend['data']);
             $data['dataSource']['dataset'][] = $dataSetValues['tendencia'];
             //die();
         }

@@ -19,6 +19,7 @@ use Pequiven\IndicatorBundle\Form\EvolutionIndicator\EvolutionCauseType;
 use Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionAction;
 use Pequiven\IndicatorBundle\Form\EvolutionIndicator\EvolutionActionType;
 
+use Pequiven\IndicatorBundle\Form\EvolutionIndicator\IndicatorLastPeriodType;
 
 class IndicatorSigController extends ResourceController
 {   
@@ -119,8 +120,6 @@ class IndicatorSigController extends ResourceController
     {
         $resource = $this->findOr404($request);
         $form = $this->getForm($resource);
-
-        
         
         //Carga de data de Indicador para armar grafica
         $response = new JsonResponse();
@@ -144,10 +143,9 @@ class IndicatorSigController extends ResourceController
         $indicator = $idIndicator;
         $results = $this->get('pequiven.repository.sig_causes_indicator')->findByindicator($indicator);
         //Carga de las Acciones
-        $action = $this->get('pequiven.repository.sig_action_indicator')->findAll();
+        $action = $this->get('pequiven.repository.sig_action_indicator')->findByindicatorRel($indicator);
 
         //return $response;
-        //Fin carga de data
         
         // Fin configuracion de grafico     
         //$view = $this->view();
@@ -179,11 +177,12 @@ class IndicatorSigController extends ResourceController
         $indicator = $this->findIndicatorOr404($request); 
         //var_dump($request->get('idIndicator'));
         
-        $valueIndicator = $this->resourceResolver->getResource(
+        /*$valueIndicator = $this->resourceResolver->getResource(
             $this->getRepository(),
             'findOneBy',
-            array(array('id' => $request->get('id',0))));
-
+            array(array('id' => $request->get('id',0))));*/
+        $indicatorRel = new Indicator();
+        $form  = $this->createForm(new IndicatorLastPeriodType(), $indicatorRel);
         //$form = $this->buildForm();
         //$form = $this->buildForm($indicator,$valueIndicator);
         
@@ -193,12 +192,50 @@ class IndicatorSigController extends ResourceController
             ->setTemplateVar($this->config->getPluralResourceName())
             ->setData(array(
                 'indicator' => $indicator,
-                //'form' => $form->createView(),
-                'valueIndicator' => $valueIndicator
+                'form' => $form->createView(),
+                //'valueIndicator' => $valueIndicator
             ))
         ;
         $view->getSerializationContext()->setGroups(array('id','api_list'));
         return $view;
+    }
+
+    /**
+     * Añade la relacion con el indicador 2014
+     * 
+     * @param Request $request
+     * @return type
+     */
+    public function addLastPeriodAction(Request $request)
+    {   
+        $idIndicator = $request->get('idIndicator');
+        //var_dump($request->get('pequiven_indicatorbundle_indicator_last_period')['indicatorlastPeriod']);
+        $lastPeriod = $request->get('pequiven_indicatorbundle_indicator_last_period')['indicatorlastPeriod'];
+
+        $em = $this->getDoctrine()->getManager();
+
+        $indicatorRel = $this->get('pequiven.repository.sig_indicator')->find($idIndicator);
+        
+        if ($indicatorRel) {
+
+            $dataLast = $this->get('pequiven.repository.sig_indicator')->find($lastPeriod);
+            
+            }
+        //$data = "Accidentalidad (Frecuencia Bruta) CPJAA";
+        //$indicatorRel = new Indicator();
+        //$form  = $this->createForm(new IndicatorLastPeriodType(), $indicatorRel);
+        
+        //$indicatorRel->setDescription($data);
+        $indicatorRel->setIndicatorLastPeriod($dataLast);
+
+
+        //$form->handleRequest($request);
+
+        //if ($form->isSubmitted() && $form->isValid()) {
+            //$em->persist($indicatorRel);
+            $em->flush();
+            //return $this->redirect($this->generateUrl('pequiven_action_evolution_add'));
+        //}                
     }
 
     /**
@@ -237,9 +274,14 @@ class IndicatorSigController extends ResourceController
     {   
         $user = $this->getUser();
 
+        $indicator = $request->get('idIndicator');
+        $repository = $this->get('pequiven.repository.sig_indicator');
+        $results = $repository->find($indicator);
+
         $action = new EvolutionAction();
         $form  = $this->createForm(new EvolutionActionType(), $action);
         
+        $action->setIndicatorRel($results);
         $action->setCreatedBy($user);
 
         $form->handleRequest($request);
@@ -291,8 +333,7 @@ class IndicatorSigController extends ResourceController
         $indicator = $request->get('idIndicator');
         $repository = $this->get('pequiven.repository.sig_indicator');
         $results = $repository->find($indicator);
-        //$id = $request->get('idIndicator');
-        //var_dump($id);
+        
         $user = $this->getUser();
         $data = $results;
         $cause = new EvolutionCause();
@@ -349,9 +390,11 @@ class IndicatorSigController extends ResourceController
      * Busca las Causas del indicador para filtrarlas para el plan de acción
      * @param type $param
      */
-    function getCausesEvoltionAction(\Symfony\Component\HttpFoundation\Request $request) {
+    function getCausesEvolutionAction(\Symfony\Component\HttpFoundation\Request $request) {
         
         $idIndicator = $request->get('idIndicator');
+        var_dump($idIndicator);
+        die();
         //$idIndicator = $request->get('id');
         $results = $this->get('pequiven.repository.sig_causes_indicator')->findByindicator($idIndicator);
         var_dump(count($results));

@@ -1,0 +1,29 @@
+
+{% block stylesheets_base %}
+<link href="{{ asset('pequivenseip/select2-3.5.0/select2.css') }}" type="text/css" rel="stylesheet" />
+{% endblock %}
+
+{% block body %}
+{% endblock %}
+
+{% block javascript_base %}
+
+	<script src="{{ asset('pequivenseip/select2-3.5.0/select2.min.js') }}"></script>
+	
+	<script type="text/javascript">
+  			$('select').select2();
+  			
+  			$(document).ready(function() {
+  			$(".js-example-basic-single").select2();
+			});
+		</script>
+		
+		<!-- DataTable -->
+		<script type="text/javascript" class="init">
+		
+		$(document).ready(function() {
+		$('#example').DataTable();
+		} );
+		
+		</script>
+{% endblock %}

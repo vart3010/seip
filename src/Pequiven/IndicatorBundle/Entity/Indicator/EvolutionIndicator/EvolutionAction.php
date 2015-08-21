@@ -98,6 +98,13 @@ class EvolutionAction extends Model {
      * @ORM\JoinColumn(name="typeAction_id", referencedColumnName="id")
      */
     private $indicatorAction;
+
+    /**
+     * @var integer
+     * @ORM\ManyToOne(targetEntity="\Pequiven\IndicatorBundle\Entity\Indicator", inversedBy="indicatorAction")
+     * @ORM\JoinColumn(name="indicator_id", referencedColumnName="id")
+     */
+    private $indicatorRel;
     
     /**
      * Get id
@@ -328,4 +335,25 @@ class EvolutionAction extends Model {
         return $this->indicatorAction;
     }
         
+    /**
+     * Set indicatorRel
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator $indicator
+     * @return Indicator
+     */
+    public function setIndicatorRel(\Pequiven\IndicatorBundle\Entity\Indicator $indicatorRel) {
+        
+        $this->indicatorRel = $indicatorRel;
+
+        return $this;
+    }
+
+    /**
+     * Get indicatorRel
+     *
+     * @return Pequiven\IndicatorBundle\Entity\Indicator
+     */
+    public function getIndicator() {
+        return $this->indicatorRel;
+    }
 }

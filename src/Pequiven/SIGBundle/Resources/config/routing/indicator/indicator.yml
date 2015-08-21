@@ -1,5 +1,5 @@
 #carga de formulario de relacion del indicador
-pequiven_indicatorlastperiod_get_form:
+pequiven_indicator_last_period_form:
     path: /{idIndicator}/get-form.{_format}
     defaults:
         _controller: pequiven.controller.indicator_sig:getFormAction
@@ -31,6 +31,28 @@ pequiven_indicatorcauses_get_form:
     methods: [GET]
     options:
         expose: true
+#Carga de formulario del analisis de tendencia
+pequiven_indicatortrend_get_form:
+    path: /{idIndicator}/get-form_trend.{_format}
+    defaults:
+        _controller: pequiven.controller.indicator_sig:getFormTrendAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET]
+    options:
+        expose: true
+#Guardamos el formulario de las causas del indicador
+pequiven_indicator_last_period:
+    path: /{idIndicator}/addLastPeriod.{_format}
+    defaults:
+        _controller: pequiven.controller.indicator_sig:addLastPeriodAction
+        _format: json
+    requirements:
+        _format: json
+    methods: [POST]
+    options:
+        expose: true
 #Guardamos el formulario del plan de Acción del Indicador
 pequiven_action_evolution_add:
     path: /{idIndicator}/add.{_format}
@@ -51,17 +73,6 @@ pequiven_causes_evolution_add:
     requirements:
         _format: json
     methods: [POST]
-    options:
-        expose: true
-#Carga de formulario del analisis de tendencia
-pequiven_indicatortrend_get_form:
-    path: /{idIndicator}/get-form_trend.{_format}
-    defaults:
-        _controller: pequiven.controller.indicator_sig:getFormTrendAction
-        _format: html
-    requirements:
-        _format: html|json
-    methods: [GET]
     options:
         expose: true
 #filtro causas del indicador
