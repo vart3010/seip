@@ -1678,7 +1678,7 @@ class ReportTemplateController extends SEIPController {
 
         $impressOperacion = array(
             "getSummaryDay" => array(
-                "title" => "Produccion Diaria",
+                "title" => "Producción Diaria",
                 "col" => array("B", "C", "D", "E", "F"),
                 "campos" => array("Producto", "PPTO", "REAL", "EJEC(%)", "VAR"),
                 "rowStart" => 7,
