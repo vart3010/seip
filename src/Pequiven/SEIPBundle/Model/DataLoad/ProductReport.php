@@ -424,7 +424,7 @@ abstract class ProductReport extends BaseModel implements ProductReportInterface
             if ($month == $monthDetail) {
                 $totalDayName = 'getDay' . $day;
                 $totalDay = $detail->$totalDayName();
-                $totalMonth = $detail->getYesterDay();
+                $totalMonth = $detail->getYesterDayDate($date);
             }
         }
 
