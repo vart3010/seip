@@ -1084,7 +1084,7 @@ class ReportTemplateController extends SEIPController {
 
             $productsReportByIdProduct = $consumerPlanningServicesByIdService = $rawMaterialConsumptionPlanningsById = array();
             foreach ($plantReports as $plantReport) {
-                
+
                 if (!in_array($plantReport->getReportTemplate()->getName(), $plants)) {
                     $plants[] = $plantReport->getReportTemplate()->getName();
                 }
@@ -1264,11 +1264,12 @@ class ReportTemplateController extends SEIPController {
                     "consumerPlanningServices" => $arrayConsumerServices,
                     "unrealizedProducction" => $arrayUnrealizedProduction,
                     "inventory" => $arrayInventory,
-                    "observation" => $arrayObservation
+                    "observation" => $arrayObservation,
+                    "plants" => $plants
                 );
                 $this->ExportExcelActionByRange($production);
             } else {
-                $this->exportExcelAction($productsReport, $typeReport, $dateReport, $rawMaterialConsumptionPlannings, $consumerPlanningServices);
+                $this->exportExcelAction($productsReport, $typeReport, $dateReport, $rawMaterialConsumptionPlannings, $consumerPlanningServices, $plants);
             }
         }
 
@@ -1276,6 +1277,17 @@ class ReportTemplateController extends SEIPController {
     }
 
     public function ExportExcelActionByRange($data) {
+
+        $days = array(
+            "Domingo",
+            "Lunes",
+            "Martes",
+            "Miercoles",
+            "Jueves",
+            "Viernes",
+            "Sábado"
+        );
+
         $path = $this->get('kernel')->locateResource('@PequivenObjetiveBundle/Resources/skeleton/reporte_produccion.xls');
         $now = new \DateTime();
         $objPHPExcel = \PHPExcel_IOFactory::load($path);
@@ -1291,18 +1303,48 @@ class ReportTemplateController extends SEIPController {
         $activeSheet = $objPHPExcel->getActiveSheet();
 
 
+        $styleArray = array(
+            'font' => array(
+                'bold' => true,
+                'color' => array("rgb" => 'FF0000')
+            ),
+            'alignment' => array(
+                'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                'vertical' => \PHPExcel_Style_Alignment::VERTICAL_CENTER
+            )
+        );
+        $activeSheet->getStyle("H2")->applyFromArray($styleArray);
+        $activeSheet->setCellValue("H2", $days[date("N")] . ", " . date("d/m/Y"));
+
+        $row = 4;
+
+        //COMPLEJOS
+
+        $styleArray = array(
+            'font' => array(
+                'bold' => true,
+            )
+        );
+        $plants = $data["plants"];
+        foreach ($plants as $plant) {
+            $activeSheet->getStyle("B" . $row)->applyFromArray($styleArray);
+            $activeSheet->setCellValue("B" . $row, $plant);
+            $activeSheet->mergeCells("B" . $row . ":" . "F" . $row);
+            $row++;
+        }
+
 //REGISTROS PRODDUCION
         $impressOperacion = array(
-            "title" => "Producción",
+            "title" => "PRODUCCION",
             "col" => array("B", "C", "D", "E", "F"),
             "campos" => array("Producto", "PPTO", "REAL", "EJEC(%)", "VAR"),
             "fieldsShow" => array("productName", "plan", "real", "percentage", "pnr"),
-            "rowStart" => 3,
+            "rowStart" => $row + 1,
             "plan" => "plan",
             "real" => "real",
             "color" => "55b34a"
         );
-        $row = 2;
+
 
         $this->setFormatTitle($impressOperacion, $activeSheet, $row);
         $row = $this->setTitlesRows($activeSheet, $impressOperacion, $row);
@@ -1330,11 +1372,17 @@ class ReportTemplateController extends SEIPController {
         $styleArray = array(
             'font' => array(
                 'bold' => true,
+            ),
+            'fill' => array(
+                'type' => \PHPExcel_Style_Fill::FILL_SOLID,
+                'startcolor' => array(
+                    'rgb' => "dddddd"
+                )
             )
         );
 
         $t = 0;
-        $activeSheet->getStyle($row)->applyFromArray($styleArray);
+        $activeSheet->getStyle("B" . $row . ":" . "F" . $row)->applyFromArray($styleArray);
 
         for ($x = 0; $x < count($impressOperacion["col"]); $x++) {
 //$cell = $impressOperacion["col"][$x] . $row;
@@ -1346,73 +1394,71 @@ class ReportTemplateController extends SEIPController {
         }
         $row++;
 
-
-//REGISTRO MATERIA PRIMA
-        $rawMaterialData = array(
-            "title" => "Consumo de Materia Prima",
-            "col" => array("B", "C", "D"),
-            "campos" => array("Producto", "PPTO", "REAL"),
-            "fieldsShow" => array("productName", "planRaw", "realRaw"),
-            "rowStart" => $row,
-            "plan" => "plan",
-            "real" => "real",
-            "color" => "ffaa15"
-        );
-        $this->setFormatTitle($rawMaterialData, $activeSheet, $row);
-        $row = $this->setTitlesRows($activeSheet, $rawMaterialData, $row);
-
-
-
-
-        $rawMaterial = $data["rawMaterial"];
-        foreach ($rawMaterial as $raw) {
-            for ($i = 0; $i < count($rawMaterialData["col"]); $i++) {
-                $cell = $rawMaterialData["col"][$i] . $row;
-                if ($i != 0) {
-                    $field = number_format((float) $raw[$rawMaterialData["fieldsShow"][$i]], 2, ',', '.');
-                } else {
-                    $field = $raw[$rawMaterialData["fieldsShow"][$i]];
-                }
-                $activeSheet->setCellValue($cell, $field);
-            }
-            $row++;
-        }
-
-//REGISTRO MATERIA PRIMA
-        $consumerServiceData = array(
-            "title" => "Consumo de Servicios",
-            "col" => array("B", "C", "D"),
-            "campos" => array("Producto", "PPTO", "REAL"),
-            "fieldsShow" => array("productName", "plan", "real"),
-            "rowStart" => $row,
-            "plan" => "plan",
-            "real" => "real",
-            "color" => "98bfbf"
-        );
-
-        $this->setFormatTitle($consumerServiceData, $activeSheet, $row);
-        $row = $this->setTitlesRows($activeSheet, $consumerServiceData, $row);
-
-
-
-        $consumerPlanningService = $data["consumerPlanningServices"];
-        foreach ($consumerPlanningService as $consume) {
-            for ($i = 0; $i < count($consumerServiceData["col"]); $i++) {
-                $cell = $consumerServiceData["col"][$i] . $row;
-                if ($i != 0) {
-                    $field = number_format((float) $consume[$consumerServiceData["fieldsShow"][$i]], 2, ',', '.');
-                } else {
-                    $field = $consume[$consumerServiceData["fieldsShow"][$i]];
-                }
-                $activeSheet->setCellValue($cell, $field);
-            }
-            $row++;
-        }
-
-
+//
+////REGISTRO MATERIA PRIMA
+//        $rawMaterialData = array(
+//            "title" => "Consumo de Materia Prima",
+//            "col" => array("B", "C", "D"),
+//            "campos" => array("Producto", "PPTO", "REAL"),
+//            "fieldsShow" => array("productName", "planRaw", "realRaw"),
+//            "rowStart" => $row,
+//            "plan" => "plan",
+//            "real" => "real",
+//            "color" => "ffaa15"
+//        );
+//        $this->setFormatTitle($rawMaterialData, $activeSheet, $row);
+//        $row = $this->setTitlesRows($activeSheet, $rawMaterialData, $row);
+//
+//
+//
+//
+//        $rawMaterial = $data["rawMaterial"];
+//        foreach ($rawMaterial as $raw) {
+//            for ($i = 0; $i < count($rawMaterialData["col"]); $i++) {
+//                $cell = $rawMaterialData["col"][$i] . $row;
+//                if ($i != 0) {
+//                    $field = number_format((float) $raw[$rawMaterialData["fieldsShow"][$i]], 2, ',', '.');
+//                } else {
+//                    $field = $raw[$rawMaterialData["fieldsShow"][$i]];
+//                }
+//                $activeSheet->setCellValue($cell, $field);
+//            }
+//            $row++;
+//        }
+//
+////REGISTRO CONSUMO DE SERVICIOS
+//        $consumerServiceData = array(
+//            "title" => "Consumo de Servicios",
+//            "col" => array("B", "C", "D"),
+//            "campos" => array("Producto", "PPTO", "REAL"),
+//            "fieldsShow" => array("productName", "plan", "real"),
+//            "rowStart" => $row,
+//            "plan" => "plan",
+//            "real" => "real",
+//            "color" => "98bfbf"
+//        );
+//
+//        $this->setFormatTitle($consumerServiceData, $activeSheet, $row);
+//        $row = $this->setTitlesRows($activeSheet, $consumerServiceData, $row);
+//
+//
+//
+//        $consumerPlanningService = $data["consumerPlanningServices"];
+//        foreach ($consumerPlanningService as $consume) {
+//            for ($i = 0; $i < count($consumerServiceData["col"]); $i++) {
+//                $cell = $consumerServiceData["col"][$i] . $row;
+//                if ($i != 0) {
+//                    $field = number_format((float) $consume[$consumerServiceData["fieldsShow"][$i]], 2, ',', '.');
+//                } else {
+//                    $field = $consume[$consumerServiceData["fieldsShow"][$i]];
+//                }
+//                $activeSheet->setCellValue($cell, $field);
+//            }
+//            $row++;
+//        }
 //PNR
         $pnr = array(
-            "title" => "Producción no Realizada",
+            "title" => "PRODUCCION NO REALIZADA",
             "col" => array("B", "C"),
             "campos" => array("Producto", "TOTAL"),
             "fieldsShow" => array("productName", "total"),
@@ -1443,7 +1489,7 @@ class ReportTemplateController extends SEIPController {
 
 //INVENTARIO
         $inventory = array(
-            "title" => "Inventario",
+            "title" => "INVENTARIO",
             "col" => array("B", "C"),
             "campos" => array("Producto", "TOTAL"),
             "fieldsShow" => array("productName", "total"),
@@ -1473,28 +1519,64 @@ class ReportTemplateController extends SEIPController {
 //OBSERVACIONES
 
         $observation = array(
-            "title" => "Observaciones",
+            "title" => "PUNTOS DE ATENCIÓN",
             "col" => array("B", "C", "D"),
             "campos" => array("Producto", "Día", "Observación"),
             "fieldsShow" => array("productName", "day", "observation"),
             "rowStart" => $row,
             "plan" => "plan",
             "real" => "real",
-            "color" => "c7c7b3"
+            "color" => "FF0000"
         );
-        $this->setFormatTitle($observation, $activeSheet, $row);
-        $row = $this->setTitlesRows($activeSheet, $observation, $row);
+        $this->setFormatTitleObservation($observation, $activeSheet, $row);
+        $row = $this->setTitlesRowsObservation($activeSheet, $observation, $row);
 
+        $styleObs = array(
+            'borders' => array(
+                'allborders' => array(
+                    'style' => \PHPExcel_Style_Border::BORDER_MEDIUM,
+                )
+            )
+        );
 
+        $styleProductObs = array(
+            'font' => array(
+                'bold' => true,
+            ),
+            'fill' => array(
+                'type' => \PHPExcel_Style_Fill::FILL_SOLID,
+                'startcolor' => array(
+                    'rgb' => "dddddd"
+                )
+            )
+        );
+
+        $styleDay = array(
+            'alignment' => array(
+                'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                'vertical' => \PHPExcel_Style_Alignment::VERTICAL_CENTER
+            )
+        );
 
         $observationData = $data["observation"];
         foreach ($observationData as $obs) {
+            $activeSheet->getRowDimension($row)->setRowHeight("15");
             for ($i = 0; $i < count($observation["col"]); $i++) {
                 $cell = $observation["col"][$i] . $row;
+                $activeSheet->getStyle($observation["col"][$i] . $row)->applyFromArray($styleObs);
+
+                if ($i == 0) {
+                    $activeSheet->getStyle($observation["col"][$i] . $row)->applyFromArray($styleProductObs);
+                }
                 if ($observation["fieldsShow"][$i] == "day") {
+                    $activeSheet->getStyle($observation["col"][$i] . $row)->applyFromArray($styleDay);
                     $field = $obs[$observation["fieldsShow"][$i]]->format("d-m-y");
                 } else {
                     $field = $obs[$observation["fieldsShow"][$i]];
+                }
+                if ($i == 2) {
+                    $activeSheet->mergeCells($observation["col"][$i] . $row . ":" . "H" . $row);
+                    $activeSheet->getStyle("H" . $row)->applyFromArray($styleObs);
                 }
 
                 $activeSheet->setCellValue($cell, $field);
@@ -1524,8 +1606,17 @@ class ReportTemplateController extends SEIPController {
         exit;
     }
 
-    public function exportExcelAction($productsReport, $typeReport, $dateReport, $rawMaterialConsumptionPlannings, $consumerPlanningServices) {
+    public function exportExcelAction($productsReport, $typeReport, $dateReport, $rawMaterialConsumptionPlannings, $consumerPlanningServices, $plants) {
 
+        $days = array(
+            "Domingo",
+            "Lunes",
+            "Martes",
+            "Miercoles",
+            "Jueves",
+            "Viernes",
+            "Sábado"
+        );
 
         $path = $this->get('kernel')->locateResource('@PequivenObjetiveBundle/Resources/skeleton/reporte_produccion.xls');
         $now = new \DateTime();
@@ -1546,6 +1637,35 @@ class ReportTemplateController extends SEIPController {
         $arrayCategories = array();
         $arrayPlan = array();
         $arrayReal = array();
+
+        $styleArray = array(
+            'font' => array(
+                'bold' => true,
+                'color' => array("rgb" => 'FF0000')
+            ),
+            'alignment' => array(
+                'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                'vertical' => \PHPExcel_Style_Alignment::VERTICAL_CENTER
+            )
+        );
+        $activeSheet->getStyle("H2")->applyFromArray($styleArray);
+        $activeSheet->setCellValue("H2", $days[date("N")] . ", " . date("d/m/Y"));
+
+        $rowCont = 4;
+
+        //COMPLEJOS
+
+        $styleArray = array(
+            'font' => array(
+                'bold' => true,
+            )
+        );
+        foreach ($plants as $plant) {
+            $activeSheet->getStyle("B" . $rowCont)->applyFromArray($styleArray);
+            $activeSheet->setCellValue("B" . $rowCont, $plant);
+            $activeSheet->mergeCells("B" . $rowCont . ":" . "F" . $rowCont);
+            $rowCont++;
+        }
 
         $impressOperacion = array(
             "getSummaryDay" => array(
@@ -1579,7 +1699,7 @@ class ReportTemplateController extends SEIPController {
                 "color" => "e56666"
             )
         );
-        $rowCont = 3;
+        $rowCont++;
         $row = 0;
         $arrayPerTime = array();
         foreach ($impressOperacion as $key => $imp) {
@@ -1678,11 +1798,12 @@ class ReportTemplateController extends SEIPController {
                     )
                 )
             );
-            /* ******TOTALES DE PRODUCCION **************** */
+            /*             * *****TOTALES DE PRODUCCION **************** */
             $t = 0;
-            $activeSheet->getStyle($rowCont)->applyFromArray($styleArray);
+            $activeSheet->getStyle($imp["col"][$t] . $rowCont)->applyFromArray($styleArray);
             $activeSheet->setCellValue($imp["col"][$t] . $rowCont, "Totales");
             foreach ($arrayPerTime as $perTime) {
+                $activeSheet->getStyle($imp["col"][$t + 1] . $rowCont)->applyFromArray($styleArray);
                 $activeSheet->setCellValue($imp["col"][$t + 1] . $rowCont, number_format(($perTime), 2, ",", "."));
                 $t++;
             }
@@ -1826,11 +1947,34 @@ class ReportTemplateController extends SEIPController {
             "row" => $rowCont,
             "col" => array("B", "C"),
             "campos" => array("Producto", "Observación"),
-            "color" => "c7c7b3"
+            "color" => "FF0000"
         );
         $observaciones = array();
         $name = array();
         $obs = array();
+
+        $styleObs = array(
+            'borders' => array(
+                'allborders' => array(
+                    'style' => \PHPExcel_Style_Border::BORDER_MEDIUM,
+                )
+            )
+        );
+
+        $styleProductObs = array(
+            'font' => array(
+                'bold' => true,
+            ),
+            'fill' => array(
+                'type' => \PHPExcel_Style_Fill::FILL_SOLID,
+                'startcolor' => array(
+                    'rgb' => "dddddd"
+                )
+            )
+        );
+
+
+
 
         foreach ($productsReport as $productReport) {
             $name[] = $productReport->getProduct()->getName();
@@ -1844,17 +1988,30 @@ class ReportTemplateController extends SEIPController {
         $observaciones[] = $name;
         $observaciones[] = $obs;
 
-        $this->setFormatTitle($dataObservaciones, $activeSheet, $rowCont);
-        $rowCont = $this->setTitlesRows($activeSheet, $dataObservaciones, $rowCont);
-
+        $this->setFormatTitleObservation($dataObservaciones, $activeSheet, $rowCont);
+        $rowCont = $this->setTitlesRowsObservation($activeSheet, $dataObservaciones, $rowCont, "C");
 
         $c = 0;
         foreach ($dataObservaciones["col"] as $cols) {
+
             $contCol = $rowCont;
+
+            $cr = 0;
             foreach ($observaciones[$c] as $cons) {
-//var_dump($cols . $contCol . "=>" . $cons);
+                $activeSheet->getRowDimension($contCol)->setRowHeight(20);
                 $activeSheet->setCellValue($cols . $contCol, $cons);
+
+                if ($c == 1) {
+                    $activeSheet->mergeCells($cols . $contCol . ":" . "H" . $contCol);
+                    $activeSheet->getStyle($cols . $contCol)->applyFromArray($styleObs);
+                    $activeSheet->getStyle("H" . $contCol)->applyFromArray($styleObs);
+                }
+                if ($c == 0) {
+                    $activeSheet->getStyle($cols . $contCol)->applyFromArray($styleProductObs);
+                }
+                $activeSheet->getStyle($cols . $contCol)->applyFromArray($styleObs);
                 $contCol++;
+                $cr++;
             }
             $c++;
         }
@@ -1909,6 +2066,33 @@ class ReportTemplateController extends SEIPController {
         $activeSheet->setCellValue($imp["col"][0] . $rowCont, $imp["title"]);
     }
 
+    public function setFormatTitleObservation($imp, $activeSheet, $rowCont) {
+        $styleArray = array(
+            'font' => array(
+                'bold' => true,
+            ),
+            'alignment' => array(
+                'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                'vertical' => \PHPExcel_Style_Alignment::VERTICAL_CENTER
+            ),
+            'fill' => array(
+                'type' => \PHPExcel_Style_Fill::FILL_SOLID,
+                'startcolor' => array(
+                    'rgb' => $imp["color"]
+                )
+            )
+        );
+
+        $rowCont = $rowCont + 1;
+        $totalCol = count($imp["col"]);
+        $ini = $imp["col"][0] . $rowCont;
+        $fin = "H" . $rowCont;
+        $activeSheet->getRowDimension($rowCont)->setRowHeight(20);
+        $activeSheet->mergeCells($ini . ":" . $fin);
+        $activeSheet->getStyle($ini)->applyFromArray($styleArray);
+        $activeSheet->setCellValue($imp["col"][0] . $rowCont, $imp["title"]);
+    }
+
     public function setTitlesRows($activeSheet, $imp, $rowCont) {
         $styleArray = array(
             'font' => array(
@@ -1934,6 +2118,44 @@ class ReportTemplateController extends SEIPController {
 //var_dump($col . $rowCont, $campos);
             $activeSheet->setCellValue($col . $rowCont, $campos);
             $activeSheet->getStyle($col . $rowCont)->applyFromArray($styleArray);
+            $camp++;
+        }
+        $rowCont = $rowCont + 1;
+
+        return $rowCont;
+    }
+
+    public function setTitlesRowsObservation($activeSheet, $imp, $rowCont, $init = "D") {
+        $styleArray = array(
+            'font' => array(
+                'bold' => true,
+            ),
+            'alignment' => array(
+                'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                'vertical' => \PHPExcel_Style_Alignment::VERTICAL_CENTER
+            ),
+            'fill' => array(
+                'type' => \PHPExcel_Style_Fill::FILL_SOLID,
+                'startcolor' => array(
+                    'rgb' => "dddddd"
+                )
+            ),
+            'borders' => array(
+                'allborders' => array(
+                    'style' => \PHPExcel_Style_Border::BORDER_MEDIUM,
+                )
+            )
+        );
+
+
+        $rowCont = $rowCont + 2;
+        $camp = 0;
+        foreach ($imp["campos"] as $campos) {
+            $col = $imp["col"][$camp];
+            $activeSheet->setCellValue($col . $rowCont, $campos);
+            $activeSheet->getStyle($col . $rowCont)->applyFromArray($styleArray);
+            $activeSheet->mergeCells($init . $rowCont . ":" . "H" . $rowCont);
+            $activeSheet->getStyle("H" . $rowCont)->applyFromArray($styleArray);
             $camp++;
         }
         $rowCont = $rowCont + 1;
