@@ -299,7 +299,12 @@
                     <h3>Resultados </h3>
                 </div>
                 <div class="with-padding">
-                    <strong>El Indicador no tiene configurada ninguna frecuencia de notificación, ingrese al administrador para configurarla.</strong>
+                    <strong>El Indicador no tiene configurada ninguna frecuencia de notificación, 
+                        <a href="{{ path("admin_pequiven_indicator_indicator_edit",{id:indicator.id}) }}">
+                            haga click aquí
+                        </a>
+                        para configurala. 
+                    </strong>
                 </div>
             </div>
         {% endif %}
