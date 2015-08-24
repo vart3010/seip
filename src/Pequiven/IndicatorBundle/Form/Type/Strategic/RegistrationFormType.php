@@ -40,7 +40,7 @@ class RegistrationFormType extends AbstractType implements ContainerAwareInterfa
 
     public function buildForm(FormBuilderInterface $builder, array $options) {
         $container = $this->container;
-        $em = $container->get('doctrine')->getManager();
+        $em = $container->get('doctrine')->getManager(); 
 
         if ($this->typeForm == 'regular') {
             //Línea estratégica del objetivo a crear
@@ -58,15 +58,15 @@ class RegistrationFormType extends AbstractType implements ContainerAwareInterfa
         $builder->add('ref', 'text', array('label' => 'form.ref', 'label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenIndicatorBundle', 'read_only' => true, 'attr' => array('class' => 'input', 'size' => 10)));
         
         //Frecuencia de Indicador
-//        $builder->add("frequencyNotificationIndicator", "entity", array(
-//            'label' => 'form.frequencyNotification',
-//            'label_attr' => array('class' => 'label'),
-//            'class' => 'Pequiven\IndicatorBundle\Entity\Indicator\FrequencyNotificationIndicator',
-//            'property' => 'description',
-//            'translation_domain' => 'PequivenIndicatorBundle',
-//            'required'=>true,
-//            "attr"=>array("class"=>"input select")
-//        ));
+        $builder->add("frequencyNotificationIndicator", "entity", array(
+            'label' => 'form.frequencyNotification',
+            'label_attr' => array('class' => 'label'),
+            'class' => 'Pequiven\IndicatorBundle\Entity\Indicator\FrequencyNotificationIndicator',
+            'property' => 'description',
+            'translation_domain' => 'PequivenIndicatorBundle',
+            'required'=>true,
+            "attr"=>array("class"=>"select2 input-large form-control")
+        ));
 
         //Meta del Indicador
         //$builder->add('goal','percent',array('label' => 'form.goalIndicatorStrategic','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenIndicatorBundle','attr' => array('class' => 'input validate[required]', 'size' => 8)));
