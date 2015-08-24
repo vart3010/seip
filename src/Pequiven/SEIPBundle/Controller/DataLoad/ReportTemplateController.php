@@ -1394,68 +1394,68 @@ class ReportTemplateController extends SEIPController {
         }
         $row++;
 
-//
-////REGISTRO MATERIA PRIMA
-//        $rawMaterialData = array(
-//            "title" => "Consumo de Materia Prima",
-//            "col" => array("B", "C", "D"),
-//            "campos" => array("Producto", "PPTO", "REAL"),
-//            "fieldsShow" => array("productName", "planRaw", "realRaw"),
-//            "rowStart" => $row,
-//            "plan" => "plan",
-//            "real" => "real",
-//            "color" => "ffaa15"
-//        );
-//        $this->setFormatTitle($rawMaterialData, $activeSheet, $row);
-//        $row = $this->setTitlesRows($activeSheet, $rawMaterialData, $row);
-//
-//
-//
-//
-//        $rawMaterial = $data["rawMaterial"];
-//        foreach ($rawMaterial as $raw) {
-//            for ($i = 0; $i < count($rawMaterialData["col"]); $i++) {
-//                $cell = $rawMaterialData["col"][$i] . $row;
-//                if ($i != 0) {
-//                    $field = number_format((float) $raw[$rawMaterialData["fieldsShow"][$i]], 2, ',', '.');
-//                } else {
-//                    $field = $raw[$rawMaterialData["fieldsShow"][$i]];
-//                }
-//                $activeSheet->setCellValue($cell, $field);
-//            }
-//            $row++;
-//        }
-//
-////REGISTRO CONSUMO DE SERVICIOS
-//        $consumerServiceData = array(
-//            "title" => "Consumo de Servicios",
-//            "col" => array("B", "C", "D"),
-//            "campos" => array("Producto", "PPTO", "REAL"),
-//            "fieldsShow" => array("productName", "plan", "real"),
-//            "rowStart" => $row,
-//            "plan" => "plan",
-//            "real" => "real",
-//            "color" => "98bfbf"
-//        );
-//
-//        $this->setFormatTitle($consumerServiceData, $activeSheet, $row);
-//        $row = $this->setTitlesRows($activeSheet, $consumerServiceData, $row);
-//
-//
-//
-//        $consumerPlanningService = $data["consumerPlanningServices"];
-//        foreach ($consumerPlanningService as $consume) {
-//            for ($i = 0; $i < count($consumerServiceData["col"]); $i++) {
-//                $cell = $consumerServiceData["col"][$i] . $row;
-//                if ($i != 0) {
-//                    $field = number_format((float) $consume[$consumerServiceData["fieldsShow"][$i]], 2, ',', '.');
-//                } else {
-//                    $field = $consume[$consumerServiceData["fieldsShow"][$i]];
-//                }
-//                $activeSheet->setCellValue($cell, $field);
-//            }
-//            $row++;
-//        }
+
+//REGISTRO MATERIA PRIMA
+        $rawMaterialData = array(
+            "title" => "Consumo de Materia Prima",
+            "col" => array("B", "C", "D"),
+            "campos" => array("Producto", "PPTO", "REAL"),
+            "fieldsShow" => array("productName", "planRaw", "realRaw"),
+            "rowStart" => $row,
+            "plan" => "plan",
+            "real" => "real",
+            "color" => "ffaa15"
+        );
+        $this->setFormatTitle($rawMaterialData, $activeSheet, $row);
+        $row = $this->setTitlesRows($activeSheet, $rawMaterialData, $row);
+
+
+
+
+        $rawMaterial = $data["rawMaterial"];
+        foreach ($rawMaterial as $raw) {
+            for ($i = 0; $i < count($rawMaterialData["col"]); $i++) {
+                $cell = $rawMaterialData["col"][$i] . $row;
+                if ($i != 0) {
+                    $field = number_format((float) $raw[$rawMaterialData["fieldsShow"][$i]], 2, ',', '.');
+                } else {
+                    $field = $raw[$rawMaterialData["fieldsShow"][$i]];
+                }
+                $activeSheet->setCellValue($cell, $field);
+            }
+            $row++;
+        }
+
+//REGISTRO CONSUMO DE SERVICIOS
+        $consumerServiceData = array(
+            "title" => "Consumo de Servicios",
+            "col" => array("B", "C", "D"),
+            "campos" => array("Producto", "PPTO", "REAL"),
+            "fieldsShow" => array("productName", "plan", "real"),
+            "rowStart" => $row,
+            "plan" => "plan",
+            "real" => "real",
+            "color" => "98bfbf"
+        );
+
+        $this->setFormatTitle($consumerServiceData, $activeSheet, $row);
+        $row = $this->setTitlesRows($activeSheet, $consumerServiceData, $row);
+
+
+
+        $consumerPlanningService = $data["consumerPlanningServices"];
+        foreach ($consumerPlanningService as $consume) {
+            for ($i = 0; $i < count($consumerServiceData["col"]); $i++) {
+                $cell = $consumerServiceData["col"][$i] . $row;
+                if ($i != 0) {
+                    $field = number_format((float) $consume[$consumerServiceData["fieldsShow"][$i]], 2, ',', '.');
+                } else {
+                    $field = $consume[$consumerServiceData["fieldsShow"][$i]];
+                }
+                $activeSheet->setCellValue($cell, $field);
+            }
+            $row++;
+        }
 //PNR
         $pnr = array(
             "title" => "Producción No Realizada",
@@ -1577,7 +1577,7 @@ class ReportTemplateController extends SEIPController {
         $observationData = $data["observation"];
         foreach ($observationData as $obs) {
             //$activeSheet->getRowDimension($row)->setRowHeight("15");
-            $activeSheet->getRowDimension($row)->setRowHeight("45");
+            $activeSheet->getRowDimension($row)->setRowHeight("40");
 
             for ($i = 0; $i < count($observation["col"]); $i++) {
                 $cell = $observation["col"][$i] . $row;
@@ -1839,70 +1839,70 @@ class ReportTemplateController extends SEIPController {
 
 
 
-//
-//        /** CONSUMO DE MATERIA PRIMA * */
-//        $matPrima = $this->getDataRawMateria($rawMaterialConsumptionPlannings, $dateReport);
-//
-//        $dataMateriaPrima = array(
-//            "row" => $rowCont,
-//            "title" => "Consumo Materia Prima",
-//            "col" => array("B", "C", "D", "E"),
-//            "campos" => array("Producto", "DIA", "MES", "AÑO"),
-//            "color" => "ffaa15"
-//        );
-//
-//        $this->setFormatTitle($dataMateriaPrima, $activeSheet, $rowCont);
-//        $rowCont = $this->setTitlesRows($activeSheet, $dataMateriaPrima, $rowCont);
-////$activeSheet->setCellValue("B".$rowCont,"holas");
-//
-//        $c = 0;
-//        foreach ($dataMateriaPrima["col"] as $cols) {
-//            $contCol = $rowCont;
-//            foreach ($matPrima[$c] as $cons) {
-////var_dump($cols.$contCol."=>".$cons);
-//                if (gettype($cons) == "string") {
-//                    $activeSheet->setCellValue($cols . $contCol, $cons);
-//                } else {
-//                    $activeSheet->setCellValue($cols . $contCol, number_format($cons, 2, ',', '.'));
-//                }
-//
-//
-//                $contCol++;
-//            }
-//            $c++;
-//        }
-//        $rowCont = $contCol;
-//        /*         * ****************************** */
-//
-//        /** CONSUMO DE SERVICIOS * */
-//        $consumos = $this->getDataConsumerPlanning($consumerPlanningServices, $dateReport);
-//
-//        $dataConsumo = array(
-//            "row" => $rowCont + 1,
-//            "title" => "Servicios",
-//            "col" => array("B", "C", "D", "E"),
-//            "campos" => array("Producto", "DIA", "MES", "AÑO"),
-//            "color" => "98bfbf"
-//        );
-//
-//        $this->setFormatTitle($dataConsumo, $activeSheet, $rowCont);
-//        $rowCont = $this->setTitlesRows($activeSheet, $dataConsumo, $rowCont);
-//
-//        $c = 0;
-//        foreach ($dataConsumo["col"] as $cols) {
-//            $contCol = $rowCont;
-//            foreach ($consumos[$c] as $cons) {
-////var_dump($cols.$contCol."=>".$cons);
-//                if (gettype($cons) == "string") {
-//                    $activeSheet->setCellValue($cols . $contCol, $cons);
-//                } else {
-//                    $activeSheet->setCellValue($cols . $contCol, number_format($cons, 2, ',', '.'));
-//                }
-//                $contCol++;
-//            }
-//            $c++;
-//        }
-//        $rowCont = $contCol;
+
+        /** CONSUMO DE MATERIA PRIMA * */
+        $matPrima = $this->getDataRawMateria($rawMaterialConsumptionPlannings, $dateReport);
+
+        $dataMateriaPrima = array(
+            "row" => $rowCont,
+            "title" => "Consumo Materia Prima",
+            "col" => array("B", "C", "D", "E"),
+            "campos" => array("Producto", "DIA", "MES", "AÑO"),
+            "color" => "ffaa15"
+        );
+
+        $this->setFormatTitle($dataMateriaPrima, $activeSheet, $rowCont);
+        $rowCont = $this->setTitlesRows($activeSheet, $dataMateriaPrima, $rowCont);
+//$activeSheet->setCellValue("B".$rowCont,"holas");
+
+        $c = 0;
+        foreach ($dataMateriaPrima["col"] as $cols) {
+            $contCol = $rowCont;
+            foreach ($matPrima[$c] as $cons) {
+//var_dump($cols.$contCol."=>".$cons);
+                if (gettype($cons) == "string") {
+                    $activeSheet->setCellValue($cols . $contCol, $cons);
+                } else {
+                    $activeSheet->setCellValue($cols . $contCol, number_format($cons, 2, ',', '.'));
+                }
+
+
+                $contCol++;
+            }
+            $c++;
+        }
+        $rowCont = $contCol;
+        /*         * ****************************** */
+
+        /** CONSUMO DE SERVICIOS * */
+        $consumos = $this->getDataConsumerPlanning($consumerPlanningServices, $dateReport);
+
+        $dataConsumo = array(
+            "row" => $rowCont + 1,
+            "title" => "Servicios",
+            "col" => array("B", "C", "D", "E"),
+            "campos" => array("Producto", "DIA", "MES", "AÑO"),
+            "color" => "98bfbf"
+        );
+
+        $this->setFormatTitle($dataConsumo, $activeSheet, $rowCont);
+        $rowCont = $this->setTitlesRows($activeSheet, $dataConsumo, $rowCont);
+
+        $c = 0;
+        foreach ($dataConsumo["col"] as $cols) {
+            $contCol = $rowCont;
+            foreach ($consumos[$c] as $cons) {
+//var_dump($cols.$contCol."=>".$cons);
+                if (gettype($cons) == "string") {
+                    $activeSheet->setCellValue($cols . $contCol, $cons);
+                } else {
+                    $activeSheet->setCellValue($cols . $contCol, number_format($cons, 2, ',', '.'));
+                }
+                $contCol++;
+            }
+            $c++;
+        }
+        $rowCont = $contCol;
 //        /*         * ****************************** */
 ///****PRODUCCION NO REALIZADA **//////////
         $unrealizedProduction = $this->getDataUnrealizedProduction($productsReport, $dateReport);
@@ -2032,7 +2032,7 @@ class ReportTemplateController extends SEIPController {
             $activeSheet->getColumnDimension($cols)->setAutoSize(true);
             $cr = 0;
             foreach ($observaciones[$c] as $cons) {
-                $activeSheet->getRowDimension($contCol)->setRowHeight("45");
+                $activeSheet->getRowDimension($contCol)->setRowHeight("40");
 
                 $buscar = array(chr(13) . chr(10), "\r\n", "\n", "\r", "\n\r", "\t");
                 $reemplazar = array("", "", "", "", "", "");
