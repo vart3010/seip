@@ -221,7 +221,6 @@ class IndicatorSigController extends ResourceController
             $dataLast = $this->get('pequiven.repository.sig_indicator')->find($lastPeriod);
             
             }
-        //$data = "Accidentalidad (Frecuencia Bruta) CPJAA";
         //$indicatorRel = new Indicator();
         //$form  = $this->createForm(new IndicatorLastPeriodType(), $indicatorRel);
         

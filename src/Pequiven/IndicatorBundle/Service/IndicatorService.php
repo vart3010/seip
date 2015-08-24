@@ -3598,16 +3598,29 @@ class IndicatorService implements ContainerAwareInterface {
             $category[] = $labelo;//Label del ObjAcum
 
             //Data 2014            
+            $acumLast = $cant = $promLast = 0;
             $indicatorlast = $indicator->getindicatorLastPeriod();
+            foreach ($indicatorlast->getValuesIndicator() as $value) {
+
+                    $results = $value->getValueOfIndicator();
+
+                    $acumLast = $acumLast + $results;
+                    $cant = $cant + 1;
+            }
             
-            //var_dump($indicatorlast);
+            
             if ($indicatorlast === null) {
                 
                 $dataAnt["value"] = 0;//Pasando data a Data2014 si no tiene ralacion
 
-            }else{
+            }if($cant === 0){
                 
-                $dataAnt["value"] = 5;//Pasando data a Data2014                
+                $dataAnt["value"] = 0;//Pasando data a Data2014 si no tiene ralacion
+            }
+            else{
+
+                $promLast = $acumLast / $cant;                
+                $dataAnt["value"] = $promLast;//Pasando data a Data2014                
             }
             //Data 2014
             $dataAnt["color"] = '#f2c500';            
@@ -3626,14 +3639,6 @@ class IndicatorService implements ContainerAwareInterface {
             }
             //Carga de Prom indicatorParent2014
             //borrar
-            /*$em = $this->getDoctrine();
-            $prePlanningItemCloneObject = $em->getRepository('Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanningItemClone')->findOneBy(array('idCloneObject' => $indicator->getId(), 'typeObject' => \Pequiven\SEIPBundle\Model\PrePlanning\PrePlanningTypeObject::TYPE_OBJECT_INDICATOR));
-            $indicatorLastPeriod = $this->container->get('pequiven.repository.indicator')->find($prePlanningItemCloneObject->getIdSourceObject());
-            var_dump($prePlanningItemCloneObject->getIdSourceObject());
-            $parent_id = $prePlanningItemCloneObject->getIdSourceObject();
-            $valorant = $em->getRepository('Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator')->findOneBy(array('id' => $parent_id));
-            var_dump($valorant->getValueOfIndicator());
-            die();*/
             //borrar
 
             //Carga de meta Objetivo2015
