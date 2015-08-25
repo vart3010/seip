@@ -42,7 +42,9 @@
    
 
 {% block javascripts %}
+    
     <script type="text/javascript">
+        
         $(document).ready(function(){
             // Form validation
             $('form').validationEngine();
@@ -53,6 +55,7 @@
         $(".select2").select2({
             allowClear: true
         });
+        
     </script>
    
     <script src="{{ asset('bundles/pequivenseip/jquery-ui.custom/i18n/datepicker-es.js') }}"></script>

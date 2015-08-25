@@ -215,7 +215,7 @@ class IndicatorSigController extends ResourceController
     {   
         $idIndicator = $request->get('idIndicator');
         //var_dump($request->get('pequiven_indicatorbundle_indicator_last_period')['indicatorlastPeriod']);
-        var_dump($request);
+        //var_dump($request);
         
         $lastPeriod = $request->get('pequiven_indicatorbundle_indicator_last_period')['indicatorlastPeriod'];
 
@@ -240,7 +240,7 @@ class IndicatorSigController extends ResourceController
         //if ($form->isSubmitted() && $form->isValid()) {
             //$em->persist($indicatorRel);
             $em->flush();
-            //return $this->redirect($this->generateUrl('pequiven_action_evolution_add'));
+            return $this->redirect($this->generateUrl('pequiven_indicator_evolution',$idIndicator));
         //}                
     }
 
@@ -279,16 +279,23 @@ class IndicatorSigController extends ResourceController
     public function addAction(Request $request)
     {   
         $user = $this->getUser();
+        $causeAction = $request->get('pequiven_indicatorbundle_evolutionindicator_evolutionaction')['evolutionCause'];
+        //var_dump($causeAction);
+        //die();
 
         $indicator = $request->get('idIndicator');
         $repository = $this->get('pequiven.repository.sig_indicator');
         $results = $repository->find($indicator);
 
+        $causeResult = $this->get('pequiven.repository.sig_causes_indicator')->find($causeAction);
+        //var_dump(count($causeResult));
+        //die();
         $action = new EvolutionAction();
         $form  = $this->createForm(new EvolutionActionType(), $action);
         
         $action->setIndicatorRel($results);
         $action->setCreatedBy($user);
+        $action->setEvolutionCause($causeResult);
 
         $form->handleRequest($request);
 
@@ -356,8 +363,56 @@ class IndicatorSigController extends ResourceController
             $em->persist($cause);
             $em->flush();
 
+            //return $this->render('PequivenSIGBundle:Indicator:evolution.html.twig', array('id' => $indicator));
+            //return $this->redirect($this->generateUrl('pequiven_indicator_evolution',array('id' => $indicator)));
            // return $this->redirect($this->generateUrl('pequiven_causes_form_add'));
+
         }     
+    }
+
+    /**
+     * Elimina las causas
+     * 
+     * @param Request $request
+     * @return type
+     */
+    public function deleteCauseAction(Request $request)
+    {   
+        //die($request->get('id'));
+        $causeId = $request->get('id');
+        
+        //eliminar
+        /*$indicator = $request->get('idIndicator');
+        $repository = $this->get('pequiven.repository.sig_indicator');
+        $results = $repository->find($indicator);*/
+        //
+        $results = $this->get('pequiven.repository.sig_causes_indicator')->find($causeId);
+        var_dump(count($results));
+        die();
+        /*$user = $this->getUser();
+        $data = $results;
+        $cause = new EvolutionCause();
+        $form  = $this->createForm(new EvolutionCauseType(), $cause);*/
+        
+        //$cause->setIndicator($data);
+        //$cause->setCreatedBy($user);
+
+        //$form->handleRequest($request);
+
+        /*if ($form->isSubmitted() && $form->isValid()) {
+            
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($cause);
+            $em->flush();*/
+
+            $em->remove($results);
+            $em->flush();
+
+            //return $this->render('PequivenSIGBundle:Indicator:evolution.html.twig', array('id' => $indicator));
+            //return $this->redirect($this->generateUrl('pequiven_indicator_evolution',array('id' => $indicator)));
+           // return $this->redirect($this->generateUrl('pequiven_causes_form_add'));
+
+        //}     
     }
 
     /**

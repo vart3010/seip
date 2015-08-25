@@ -46,6 +46,17 @@ class EvolutionActionType extends AbstractType
                 'label'=>'Observaciones',
                 'label_attr' => array('class' => 'label'),
                 'attr'=> array('class'=> 'input input-large validate[required]' )))
+            ->add('evolutionCause','entity',array(
+                'label' => 'Causa del Plan de Acción',
+                'label_attr' => array('class' => 'label'),
+                'class' => 'Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCause',
+                'property' => 'causes',
+                'attr'=> array(
+                'class'=> 'select2 input-large form-control',
+                //'ng-model' => 'model.lastPeriod',
+                //'ng-options' => 'value as value.ref for (key,value) in data.lastPeriod'
+                ),
+                               )) 
         ;
     }
     

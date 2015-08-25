@@ -31,6 +31,7 @@
         
         <div ng-controller="TableFormatController">
         <div ng-controller="IndicatorSigEvolutionController">
+        <div ng-controller="IndicatorLastPeriodController">
         <!-- <div ng-controller="EvolutionIndicatorFilters"> -->
 
         {#    <div class="field-block button-height" >                                                
@@ -70,6 +71,7 @@
         </div>
       </div>
     </div>
+    </div>
   
     <br>
         {# Graficos #}
@@ -99,21 +101,6 @@
 
         <br>
 
-       {#  <fieldset class="fieldset fields-list">
-            <legend class="legend">{{ 'sig.chart_evolution'|trans ({}, 'messages') }}</legend>
-            {# Sistemas de Gestión del Indicador #}
-          {#   {% if  is_granted('ROLE_SEIP_SIG_INDICATOR_VIEW') %}
-                <div class="inline-label">
-                        <label class="label">{{ 'form.systems'|trans }}</label> 
-                        <ul class="fa-ul">
-                            {% for managementSystem in indicator_sig.managementSystems %}
-                                <li>{{ managementSystem.description }}</li>
-                            {% endfor %} 
-                        </ul> 
-                </div>
-            {% endif %}
-            {# Fin carga de sistemas de Gestión #}
-        {# </fieldset>
 
     {# Analisis de Tendencia #}    
             <br /><br />
@@ -125,8 +112,10 @@
             &nbsp;
     {# Plan de accion y seguimiento #}
             <br /><br />
+        {% if cause %}
             {% include 'PequivenSIGBundle:Indicator:show/action.html.twig' %}
             &nbsp;
+        {% endif %}
 
     
 
