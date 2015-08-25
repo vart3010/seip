@@ -1400,6 +1400,11 @@ angular.module('seipModule.controllers', [])
                 }
             });
         })
+        
+        .controller('ReportTemplateController', function ($scope, notificationBarService, $http, notifyService, $filter) {
+           
+        })
+
         .controller('IndicatorResultController', function ($scope, notificationBarService, $http, notifyService, $filter) {
 
             $scope.urlValueIndicatorForm = null;

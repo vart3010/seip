@@ -12,12 +12,13 @@
 
 
 {% block body %}
-    
+    {{ showInventory }}
     {% set hasPermission = is_granted("ROLE_SEIP_DATA_LOAD_CHANGE_DATE") %}
     <form id="frmFilter" action="{{ path("pequiven_report_template_vizualice") }}" method="POST">
         <input id="exportToPdf" type="hidden" name="exportToPdf" value="0" />
         {{ form_errors(form) }}
         <div class="with-padding">
+
             <div class="columns">
                 <div class="six-columns">
                     {{ form_label(form.plantReport) }}&nbsp;
@@ -25,9 +26,12 @@
                     {{ form_errors(form.plantReport) }}
                 </div>
                 <div class="six-columns">
-                    
+                    {{ form_label(form.reportTemplate) }}&nbsp;
+                    {{ form_widget(form.reportTemplate) }}
+                    {{ form_errors(form.reportTemplate) }}
                 </div>
             </div>
+
             <div class="columns">
                 <div class="six-columns">
                     {{ form_label(form.productsReport) }}&nbsp;
@@ -35,11 +39,12 @@
                     {{ form_errors(form.productsReport) }}
                 </div>
                 <div class="six-columns">
-                    {{ form_label(form.reportTemplate) }}&nbsp;
-                    {{ form_widget(form.reportTemplate) }}
-                    {{ form_errors(form.reportTemplate) }}
+                    {{ form_label(form.typeReport) }}&nbsp;
+                    {{ form_widget(form.typeReport) }}
+                    {{ form_errors(form.typeReport) }}
                 </div>
             </div>
+
             <div class="columns">
                 <div class="two-columns">
                     {{ form_label(form.showDay) }}&nbsp;
@@ -56,148 +61,193 @@
                     {{ form_widget(form.showYear) }}
                     {{ form_errors(form.showYear) }}
                 </div>
-                <div class="six-columns">
-                    {{ form_label(form.typeReport) }}&nbsp;
-                    {{ form_widget(form.typeReport) }}
-                    {{ form_errors(form.typeReport) }}
-                </div>
-            </div>
-            <div class="columns">
+
                 <div class="two-columns">
-                    {{ form_label(form.byRange) }}&nbsp;
-                    {{ form_widget(form.byRange) }}
-                    {{ form_errors(form.byRange) }}
+                    {{ form_label(form.showProduction) }}&nbsp;
+                    {{ form_widget(form.showProduction) }}
+                    {{ form_errors(form.showProduction) }}
                 </div>
-                <div class="ten-columns">
-                    <div id="byDateReport" class="{{ byRange == true ? "hidden":"" }}">
-                        {{ form_label(form.dateReport) }}&nbsp;
-                        {{ form_widget(form.dateReport) }}
-                        {{ form_errors(form.dateReport) }}
-                    </div>
-                    <div id="byRange" class="{{ byRange == true ? "":"hidden" }}">
-                        {{ form_label(form.dateFrom) }}&nbsp;
-                        {{ form_widget(form.dateFrom) }}
-                        {{ form_errors(form.dateFrom) }}
-                        &nbsp;&nbsp;
-                        {{ form_label(form.dateEnd) }}&nbsp;
-                        {{ form_widget(form.dateEnd) }}
-                        {{ form_errors(form.dateEnd) }}
-                        &nbsp;&nbsp;
-                        {#{{ form_label(form.withDetails) }}&nbsp;
-                        {{ form_widget(form.withDetails) }}
-                        {{ form_errors(form.withDetails) }}#}
-                    </div>
+                <div class="two-columns">
+                    {{ form_label(form.showServices) }}&nbsp;
+                    {{ form_widget(form.showServices) }}
+                    {{ form_errors(form.showServices) }}
+
+                </div>
+                <div class="two-columns">
+                    {{ form_label(form.showPnr) }}&nbsp;
+                    {{ form_widget(form.showPnr) }}
+                    {{ form_errors(form.showPnr) }}
+                </div>
+
+            </div>
+
+
+        </div>
+        <div class="columns">
+            <div class="two-columns">
+                {{ form_label(form.byRange) }}&nbsp;
+                {{ form_widget(form.byRange) }}
+                {{ form_errors(form.byRange) }}
+            </div>
+            <div class="four-columns">
+                <div id="byDateReport" class="{{ byRange == true ? "hidden":"" }}">
+                    {{ form_label(form.dateReport) }}&nbsp;
+                    {{ form_widget(form.dateReport) }}
+                    {{ form_errors(form.dateReport) }}
+                </div>
+                <div class="byRange {{ byRange == true ? "":"hidden" }}">
+                    {{ form_label(form.dateFrom) }}&nbsp;
+                    {{ form_widget(form.dateFrom) }}
+                    {{ form_errors(form.dateFrom) }}
+
                 </div>
             </div>
-            {{ form_rest(form) }}
-            <a id="btnRefresh" href="#" class="button" >Refrescar</a>
+            <div class="two-columns">
+                {{ form_label(form.showRawMaterial) }}
+                {{ form_widget(form.showRawMaterial) }}
+                {{ form_errors(form.showRawMaterial) }}
+            </div>
+            <div class="two-columns">
+                {{ form_label(form.showInventory) }}&nbsp;
+                {{ form_widget(form.showInventory) }}
+                {{ form_errors(form.showInventory) }}
+            </div>
+            <div class="two-columns" style="text-align: left;">
+                {{ form_label(form.showObservation) }}&nbsp;
+                {{ form_widget(form.showObservation) }}
+                {{ form_errors(form.showObservation) }}
+            </div>
+
         </div>
-    </form>
+        <div class="columns">
+            <div class="two-columns"></div>
+            <div class="four-columns">
+                <div id="" class="byRange {{ byRange == true ? "":"hidden" }}">
 
-    
-    <div class="with-padding">
-        {% if byRange %}
-            {% include 'PequivenSEIPBundle:DataLoad/ReportTemplate:vizualice_by_range.html.twig' %}
-        {% else %}
-            {% include 'PequivenSEIPBundle:DataLoad/ReportTemplate:vizualice_normal.html.twig' %}
-        {% endif %}
+                    {{ form_label(form.dateEnd) }}&nbsp;&nbsp;
+                    {{ form_widget(form.dateEnd) }}
+                    {{ form_errors(form.dateEnd) }}
+
+
+                    {#{{ form_label(form.withDetails) }}&nbsp;
+                    {{ form_widget(form.withDetails) }}
+                    {{ form_errors(form.withDetails) }}#}
+                </div>
+            </div>
+        </div>
+
+
+
+
+        {{ form_rest(form) }}
+        <a id="btnRefresh" href="#" class="button" >Refrescar</a>
     </div>
+</form>
 
-    {% endblock body %}
 
-    {% block javascript %}
-        <script type="text/javascript">
-            $(document).ready(function () {
-                var plantReport = $("#form_plantReport");
-                $("#btnExportToPdf").on("click", function (e) {
-                    e.preventDefault();
-                    $("#exportToPdf").val("1");
-                    eventChange();
+<div class="with-padding">
+    {% if byRange %}
+        {% include 'PequivenSEIPBundle:DataLoad/ReportTemplate:vizualice_by_range.html.twig' %}
+    {% else %}
+        {% include 'PequivenSEIPBundle:DataLoad/ReportTemplate:vizualice_normal.html.twig' %}
+    {% endif %}
+</div>
+
+{% endblock body %}
+
+{% block javascript %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var plantReport = $("#form_plantReport");
+            $("#btnExportToPdf").on("click", function (e) {
+                e.preventDefault();
+                $("#exportToPdf").val("1");
+                eventChange();
+            });
+
+            $("#btnExportToExcel").on("click", function (e) {
+                e.preventDefault();
+                $("#exportToPdf").val("2");
+                eventChange();
+            });
+
+            $("#btnRefresh").on("click", function (e) {
+                e.preventDefault();
+                $("#exportToPdf").val("0");
+                eventChange();
+            });
+
+            var eventChange = function () {
+                $("#frmFilter").submit();
+            };
+        {% if is_granted("ROLE_SEIP_DATA_LOAD_CHANGE_DATE") %}
+                $('#form_dateReport').datepicker({
+                    changeMonth: true,
+                    dateFormat: "dd/mm/yy"
+                }).on("change", function () {
                 });
-                
-                $("#btnExportToExcel").on("click", function (e) {
-                    e.preventDefault();
-                    $("#exportToPdf").val("2");
-                    eventChange();
-                });
-                
-                $("#btnRefresh").on("click", function (e) {
-                    e.preventDefault();
-                    $("#exportToPdf").val("0");
-                    eventChange();
-                });
+        {% endif %}
 
-                var eventChange = function () {
-                    $("#frmFilter").submit();
-                };
-                {% if is_granted("ROLE_SEIP_DATA_LOAD_CHANGE_DATE") %}
-                    $('#form_dateReport').datepicker({
-                        changeMonth: true,
-                        dateFormat: "dd/mm/yy"
-                    }).on("change", function () {
-                    });
-                {% endif %}
-                    
-                    $( "#form_dateFrom" ).datepicker({
-                      defaultDate: "+1w",
-                      changeMonth: true,
-                      numberOfMonths: 1,
-                      dateFormat: "dd/mm/yy",
-                      onClose: function( selectedDate ) {
-                        $( "#form_dateEnd" ).datepicker( "option", "minDate", selectedDate );
-                      }
-                    });
-                    $( "#form_dateEnd" ).datepicker({
-                      defaultDate: "+1w",
-                      changeMonth: true,
-                      numberOfMonths: 1,
-                      dateFormat: "dd/mm/yy",
-                      onClose: function( selectedDate ) {
-                        $( "#form_dateFrom" ).datepicker( "option", "maxDate", selectedDate );
-                      }
-                    });
-                    
-                    $(".select2").select2();
-
-                    var selectPlant = plantReport;
-                    var selectProduct = $("#form_productsReport");
-
-                    var urlGetProduct = "{{ path("pequiven_seip_product_report_by_plant_report") }}";
-                    ajaxToSelect.formaterData = function (response) {
-                        return response.product.name;
-                    };
-                    ajaxToSelect.addEmptyValue = false;
-
-                    selectPlant.on("change", function () {
-                        ajaxToSelect2(urlGetProduct, selectProduct, {plantReport: selectPlant.val()});
-                    });
-            {#            console.log(selectPlant.val());#}
-                    if (selectPlant.val() != "") {
-            {#                ajaxToSelect2(urlGetProduct,selectProduct,{ plantReport: selectPlant.val() });#}
-                    } else {
-                        selectProduct.empty();
-                        selectProduct.select2('disable');
+                $("#form_dateFrom").datepicker({
+                    defaultDate: "+1w",
+                    changeMonth: true,
+                    numberOfMonths: 1,
+                    dateFormat: "dd/mm/yy",
+                    onClose: function (selectedDate) {
+                        $("#form_dateEnd").datepicker("option", "minDate", selectedDate);
                     }
-                    $("#form_byRange").on("change",function(){
-                        if($(this).is(':checked')){
-                            $("#byDateReport").hide();
-                            $("#byRange").show();
-                        }else{
-                            $("#byDateReport").show();
-                            $("#byRange").hide();
-                        }
-                         $("#byDateReport").removeClass("hidden");
-                         $("#byRange").removeClass("hidden");
-                    });
-                    $("#form_byRange").change();
                 });
-        </script>
-    {% endblock %}
+                $("#form_dateEnd").datepicker({
+                    defaultDate: "+1w",
+                    changeMonth: true,
+                    numberOfMonths: 1,
+                    dateFormat: "dd/mm/yy",
+                    onClose: function (selectedDate) {
+                        $("#form_dateFrom").datepicker("option", "maxDate", selectedDate);
+                    }
+                });
+
+                $(".select2").select2();
+
+                var selectPlant = plantReport;
+                var selectProduct = $("#form_productsReport");
+
+                var urlGetProduct = "{{ path("pequiven_seip_product_report_by_plant_report") }}";
+                ajaxToSelect.formaterData = function (response) {
+                    return response.product.name;
+                };
+                ajaxToSelect.addEmptyValue = false;
+
+                selectPlant.on("change", function () {
+                    ajaxToSelect2(urlGetProduct, selectProduct, {plantReport: selectPlant.val()});
+                });
+        {#            console.log(selectPlant.val());#}
+                if (selectPlant.val() != "") {
+        {#                ajaxToSelect2(urlGetProduct,selectProduct,{ plantReport: selectPlant.val() });#}
+                } else {
+                    selectProduct.empty();
+                    selectProduct.select2('disable');
+                }
+                $("#form_byRange").on("change", function () {
+                    if ($(this).is(':checked')) {
+                        $("#byDateReport").hide();
+                        $(".byRange").show();
+                    } else {
+                        $("#byDateReport").show();
+                        $(".byRange").hide();
+                    }
+                    $("#byDateReport").removeClass("hidden");
+                    $(".byRange").removeClass("hidden");
+                });
+                $("#form_byRange").change();
+            });
+    </script>
+{% endblock %}
 
 
 
-    {% block javascripts %}
-        {{ parent() }}
-        <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/fusioncharts.js') }}"></script>
-        <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/themes/fusioncharts.theme.fint.js') }}"></script>
-    {% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/fusioncharts.js') }}"></script>
+    <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/themes/fusioncharts.theme.fint.js') }}"></script>
+{% endblock %}
