@@ -17,124 +17,134 @@
     <form id="frmFilter" action="{{ path("pequiven_report_template_vizualice") }}" method="POST">
         <input id="exportToPdf" type="hidden" name="exportToPdf" value="0" />
         {{ form_errors(form) }}
-        <div class="with-padding">
+        <fieldset class="fieldset">
+            <legend class="legend">Busqueda</legend>
+            <div style="padding: 8px;">    
+                <div class="columns">
+                    <div class="two-columns">
+                        {{ form_label(form.plantReport) }}
+                    </div>
+                    <div class="tree-columns">
+                        {{ form_widget(form.plantReport) }}
+                        {{ form_errors(form.plantReport) }}
+                    </div>
+                    <div class="two-columns">
+                        {{ form_label(form.reportTemplate) }}
 
-            <div class="columns">
-                <div class="six-columns">
-                    {{ form_label(form.plantReport) }}&nbsp;
-                    {{ form_widget(form.plantReport) }}
-                    {{ form_errors(form.plantReport) }}
+                    </div>
+                    <div class="tree-columns">
+                        {{ form_widget(form.reportTemplate) }}
+                        {{ form_errors(form.reportTemplate) }}
+                    </div>
                 </div>
-                <div class="six-columns">
-                    {{ form_label(form.reportTemplate) }}&nbsp;
-                    {{ form_widget(form.reportTemplate) }}
-                    {{ form_errors(form.reportTemplate) }}
-                </div>
-            </div>
-
-            <div class="columns">
-                <div class="six-columns">
-                    {{ form_label(form.productsReport) }}&nbsp;
-                    {{ form_widget(form.productsReport) }}
-                    {{ form_errors(form.productsReport) }}
-                </div>
-                <div class="six-columns">
-                    {{ form_label(form.typeReport) }}&nbsp;
-                    {{ form_widget(form.typeReport) }}
-                    {{ form_errors(form.typeReport) }}
-                </div>
-            </div>
-
-            <div class="columns">
-                <div class="two-columns">
-                    {{ form_label(form.showDay) }}&nbsp;
-                    {{ form_widget(form.showDay) }}
-                    {{ form_errors(form.showDay) }}
-                </div>
-                <div class="two-columns">
-                    {{ form_label(form.showMonth) }}&nbsp;
-                    {{ form_widget(form.showMonth) }}
-                    {{ form_errors(form.showMonth) }}
-                </div>
-                <div class="two-columns">
-                    {{ form_label(form.showYear) }}&nbsp;
-                    {{ form_widget(form.showYear) }}
-                    {{ form_errors(form.showYear) }}
+                <div class="columns">
+                    <div class="two-columns">
+                        {{ form_label(form.productsReport) }}
+                    </div>
+                    <div class="tree-columns">
+                        {{ form_widget(form.productsReport) }}
+                        {{ form_errors(form.productsReport) }}
+                    </div>
+                    <div class="two-columns">
+                        {{ form_label(form.typeReport) }}
+                    </div>
+                    <div class="tree-columns">
+                        {{ form_widget(form.typeReport) }}
+                        {{ form_errors(form.typeReport) }}
+                    </div>
                 </div>
 
-                <div class="two-columns">
-                    {{ form_label(form.showProduction) }}&nbsp;
-                    {{ form_widget(form.showProduction) }}
-                    {{ form_errors(form.showProduction) }}
-                </div>
-                <div class="two-columns">
-                    {{ form_label(form.showServices) }}&nbsp;
-                    {{ form_widget(form.showServices) }}
-                    {{ form_errors(form.showServices) }}
+                <div class="columns">
+                    <div class="two-columns">
+                        {{ form_label(form.byRange) }}&nbsp;
+                        {{ form_widget(form.byRange) }}
+                        {{ form_errors(form.byRange) }}
+                    </div>
+                    <div class="tree-columns">
+                        <div id="byDateReport" class="{{ byRange == true ? "hidden":"" }}">
+                            {{ form_label(form.dateReport) }}&nbsp;<br>
+                            {{ form_widget(form.dateReport) }}
+                            {{ form_errors(form.dateReport) }}
+                        </div>
+                        <div class="byRange {{ byRange == true ? "":"hidden" }}">
+                            {{ form_label(form.dateFrom) }}&nbsp;<br>
+                            {{ form_widget(form.dateFrom) }}
+                            {{ form_errors(form.dateFrom) }}
+                        </div>
 
-                </div>
-                <div class="two-columns">
-                    {{ form_label(form.showPnr) }}&nbsp;
-                    {{ form_widget(form.showPnr) }}
-                    {{ form_errors(form.showPnr) }}
-                </div>
+                    </div>
+                    <div class="four-columns">
+                        <div id="" class="byRange {{ byRange == true ? "":"hidden" }}">
+                            {{ form_label(form.dateEnd) }}&nbsp;&nbsp;<br>
+                            {{ form_widget(form.dateEnd) }}
+                            {{ form_errors(form.dateEnd) }}
 
-            </div>
-
-
-        </div>
-        <div class="columns">
-            <div class="two-columns">
-                {{ form_label(form.byRange) }}&nbsp;
-                {{ form_widget(form.byRange) }}
-                {{ form_errors(form.byRange) }}
-            </div>
-            <div class="four-columns">
-                <div id="byDateReport" class="{{ byRange == true ? "hidden":"" }}">
-                    {{ form_label(form.dateReport) }}&nbsp;
-                    {{ form_widget(form.dateReport) }}
-                    {{ form_errors(form.dateReport) }}
-                </div>
-                <div class="byRange {{ byRange == true ? "":"hidden" }}">
-                    {{ form_label(form.dateFrom) }}&nbsp;
-                    {{ form_widget(form.dateFrom) }}
-                    {{ form_errors(form.dateFrom) }}
-
+                            {#{{ form_label(form.withDetails) }}&nbsp;
+                            {{ form_widget(form.withDetails) }}
+                            {{ form_errors(form.withDetails) }}#}
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="two-columns">
-                {{ form_label(form.showRawMaterial) }}
-                {{ form_widget(form.showRawMaterial) }}
-                {{ form_errors(form.showRawMaterial) }}
-            </div>
-            <div class="two-columns">
-                {{ form_label(form.showInventory) }}&nbsp;
-                {{ form_widget(form.showInventory) }}
-                {{ form_errors(form.showInventory) }}
-            </div>
-            <div class="two-columns" style="text-align: left;">
-                {{ form_label(form.showObservation) }}&nbsp;
-                {{ form_widget(form.showObservation) }}
-                {{ form_errors(form.showObservation) }}
-            </div>
+        </fieldset>
+        <details   open="" class="details margin-bottom">
+            <summary id="filters"  style="padding:6px 6px; " aria-expanded="true" role="button">
+                Filtros
+            </summary>
+            <div id="areaFilters" style="display: none;" class="with-padding">
+                <div class="columns">
+                    <div class="two-columns">
+                        {{ form_label(form.showDay) }}&nbsp;
+                        {{ form_widget(form.showDay) }}
+                        {{ form_errors(form.showDay) }}
+                    </div>
+                    <div class="two-columns">
+                        {{ form_label(form.showMonth) }}&nbsp;
+                        {{ form_widget(form.showMonth) }}
+                        {{ form_errors(form.showMonth) }}
+                    </div>
+                    <div class="two-columns">
+                        {{ form_label(form.showYear) }}&nbsp;
+                        {{ form_widget(form.showYear) }}
+                        {{ form_errors(form.showYear) }}
+                    </div>
+                    <div class="two-columns">
+                        {{ form_label(form.showProduction) }}&nbsp;
+                        {{ form_widget(form.showProduction) }}
+                        {{ form_errors(form.showProduction) }}
+                    </div>
+                    <div class="two-columns">
+                        {{ form_label(form.showServices) }}&nbsp;
+                        {{ form_widget(form.showServices) }}
+                        {{ form_errors(form.showServices) }}
 
-        </div>
-        <div class="columns">
-            <div class="two-columns"></div>
-            <div class="four-columns">
-                <div id="" class="byRange {{ byRange == true ? "":"hidden" }}">
+                    </div>
+                    <div class="two-columns">
+                        {{ form_label(form.showPnr) }}&nbsp;
+                        {{ form_widget(form.showPnr) }}
+                        {{ form_errors(form.showPnr) }}
+                    </div>
+                </div>
+                <div class="columns">
+                    <div class="two-columns">
+                        {{ form_label(form.showRawMaterial) }}&nbsp;
+                        {{ form_widget(form.showRawMaterial) }}
+                        {{ form_errors(form.showRawMaterial) }}
+                    </div>
+                    <div class="two-columns">
+                        {{ form_label(form.showInventory) }}&nbsp;
+                        {{ form_widget(form.showInventory) }}
+                        {{ form_errors(form.showInventory) }}
+                    </div>
+                    <div class="tree-columns" >
+                        {{ form_label(form.showObservation) }}&nbsp;
+                        {{ form_widget(form.showObservation) }}
+                        {{ form_errors(form.showObservation) }}
+                    </div>
 
-                    {{ form_label(form.dateEnd) }}&nbsp;&nbsp;
-                    {{ form_widget(form.dateEnd) }}
-                    {{ form_errors(form.dateEnd) }}
-
-
-                    {#{{ form_label(form.withDetails) }}&nbsp;
-                    {{ form_widget(form.withDetails) }}
-                    {{ form_errors(form.withDetails) }}#}
                 </div>
             </div>
-        </div>
+        </details>
 
 
 
@@ -240,6 +250,10 @@
                     $(".byRange").removeClass("hidden");
                 });
                 $("#form_byRange").change();
+                
+                $("#filters").click(function(){
+                    $("#areaFilters").toggle();
+                });
             });
     </script>
 {% endblock %}
