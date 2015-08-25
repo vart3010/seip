@@ -75,7 +75,7 @@
                         {{ generateLink(indicator) }}
                     </p>
                 </div>
-                    
+
                 <!-- Fórmula del Indicador -->
                 <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                     <p class="inline-label">
@@ -88,7 +88,7 @@
                         {% endif %}
                     </p>
                 </div>
-                    
+
                 <!-- Peso del Indicador -->
                 <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                     <p class="inline-label">
@@ -96,7 +96,7 @@
                         <span class="tag">{{ indicator.weight?indicator.weight ~ '%':(('form.no_appy'|trans)) }}</span>
                     </p>
                 </div>
-                    
+
                 <!-- Tipo de cálculo del Indicador  -->
                 <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                     <p class="inline-label">
@@ -108,7 +108,7 @@
                         {% endif %}
                     </p>
                 </div>
-                    
+
                 <!-- Frecuencia de notificación del Indicador -->
                 <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                     <p class="inline-label">
@@ -172,7 +172,7 @@
                         </p>
                     </div>
                 {% endif %}
-                
+
                 <!-- Tendencia del Indicador -->
                 <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                     <p class="inline-label">
@@ -255,7 +255,7 @@
                             {% endfor %}
                     </ul>
                 </div>
-                    
+
                 <!-- Indicador Padre al que impacta el indicador -->
                 {% if indicator.parent %}
                     <div class="inline-label">
@@ -265,7 +265,7 @@
                         {% include 'PequivenObjetiveBundle:Common:indicators.html.twig' %}
                     </div>
                 {% endif %}
-                
+
                 <!-- Indicadores asociados de los que se alimenta el indicador -->
                 {% if (indicator.childrens | length) > 0 %}
                     <div class="inline-label">
@@ -289,7 +289,7 @@
             {% endif %}
             {# Fin carga de sistemas de Gestión #}
         </fieldset>
-            
+
         <!-- Etiquetas del Indicador -->
         {% if indicator.tagsIndicator|length > 0 and indicator.showTags == true %}    
             <br /><br />
@@ -299,19 +299,35 @@
             </fieldset>
         {% endif %}
 
-        <!-- Resultados del Indicador -->
-        {% if indicator.showResults %}
-            <br /><br />
-            {% include 'PequivenSEIPBundle:Planning:Indicator/show/results.html.twig' %}
+        {% if(indicator.frequencyNotificationIndicator is not  null) %}
+            <!-- Resultados del Indicador -->
+            {% if indicator.showResults %}
+                <br /><br />
+                {% include 'PequivenSEIPBundle:Planning:Indicator/show/results.html.twig' %}
+            {% endif %}
+        {% else %}
+            <div class="block">
+                <div class="block-title">
+                    <h3>Resultados </h3>
+                </div>
+                <div class="with-padding">
+                    <strong>El Indicador no tiene configurada ninguna frecuencia de notificación, 
+                        <a href="{{ path("admin_pequiven_indicator_indicator_edit",{id:indicator.id}) }}">
+                            haga click aquí
+                        </a>
+                        para configurala. 
+                    </strong>
+                </div>
+            </div>
         {% endif %}
-        
+
         <!-- Características del Indicador -->
         {% if indicator.showFeatures %}
             <br /><br />
             {% include 'PequivenSEIPBundle:Planning:Indicator/show/features.html.twig' %}
         {% endif %}
         <br /><br />
-        
+
         <!-- Historial de eventos del Indicador -->
         {% include 'PequivenSEIPBundle:Planning:Indicator/show/history.html.twig' with {'entity':indicator} %}
     </div>

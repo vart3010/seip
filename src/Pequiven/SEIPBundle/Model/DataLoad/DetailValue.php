@@ -1069,6 +1069,22 @@ abstract class DetailValue extends BaseModel
     }
     
     /**
+     * Retorna el valor de ayer EN BASE A UNA FECHA
+     * @return type
+     */
+    public function getYesterDayDate($date) 
+    {
+        //$now = new \DateTime();
+        $day = (int)$date->format("d");
+        if($day > 1){
+            $day--;
+        }
+        $nameReal = 'getDay'.$day;
+        $real = $this->$nameReal();
+        return $real;
+    }
+    
+    /**
      * Retorna el dia actual o total
      * @staticvar type $day
      * @staticvar type $currentMonth

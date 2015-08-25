@@ -40,7 +40,7 @@ class ProductionByCompanyBox extends \Tecnocreaciones\Bundle\BoxBundle\Model\Gen
             $typeViews['view_type_pqv'] = true;
             $typeViews['view_type_eemm'] = true;
         } else{
-            $resulReportTemplates = $user->getReportTemplates();
+            $resultReportTemplates = $user->getReportTemplates();
             if($userManager->hasReportTemplatesByTypeOfCompany($user, \Pequiven\SEIPBundle\Entity\CEI\Company::TYPE_OF_COMPANY_MATRIZ)){
                 $typeViews['view_type_pqv'] = true;
                 //Seteamos sólo los reportTemplates de PQV, ya que los de la EEMM y Filiales se buscan directo en el controlador del gráfico

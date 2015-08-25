@@ -103,6 +103,18 @@ abstract class ProductDetailDailyMonth extends BaseModel implements ProductDetai
     }
     
     /**
+     * Retorna el status de notificación de un día
+     * @param type $day
+     * @return type
+     */
+    public function getStatusByDay($day)
+    {
+        //Status de notificación del día
+        $nameStatus = 'getDay'.$day.'Status';
+        return $this->$nameStatus();
+    }
+    
+    /**
      * Valida que el valor de la produccion neta no sea mayor a la bruta
      * @param type $day
      * @return boolean

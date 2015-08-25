@@ -243,12 +243,12 @@ class ReportTemplateController extends SEIPController {
             \Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL => "TYPE_FAIL_EXTERNAL",
         );
 
-        //Obtenemos las etiquetas de los tipos de falla por PRN
+//Obtenemos las etiquetas de los tipos de falla por PRN
         $labelsTypesFailsPNR = \Pequiven\SEIPBundle\Entity\CEI\Fail::getTypeFailsLabels();
 
         $result = array();
 
-        //Seteamos el total por tipo de causa de PNR
+//Seteamos el total por tipo de causa de PNR
         $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['day'] = 0.0;
         $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['month'] = 0.0;
         $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['year'] = 0.0;
@@ -262,7 +262,7 @@ class ReportTemplateController extends SEIPController {
         $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL_MP]['total']['month'] = 0.0;
         $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL_MP]['total']['year'] = 0.0;
 
-        //SECCIÓN FECHA
+//SECCIÓN FECHA
         $dateReport = $request->get('dateReport', null);
 
         $dateNotification = null;
@@ -279,38 +279,38 @@ class ReportTemplateController extends SEIPController {
         $monthWithZero = date_format($dateReport, 'm');
         $year = date_format($dateReport, 'Y');
 
-        //Obtenemos la plantilla del reporte
+//Obtenemos la plantilla del reporte
         $reportTemplateId = $request->get('idReportTemplate');
         $reportTemplate = $this->container->get('pequiven.repository.report_template')->findOneBy(array('id' => $reportTemplateId));
 
-        //Obtenemos el producto
+//Obtenemos el producto
         $product = $em->getRepository("Pequiven\SEIPBundle\Entity\CEI\Product")->find($request->get("idProduct"));
 
-        //Obtenemos el Reporte del Producto
+//Obtenemos el Reporte del Producto
         $productReportId = $request->get('idProductReport');
         $productReport = $this->container->get('pequiven.repository.product_report')->find($productReportId);
 
-        //Obtenemos las producciones no realizadas, asociadas al Reporte del Producto
+//Obtenemos las producciones no realizadas, asociadas al Reporte del Producto
         $unrealizedProductions = $productReport->getUnrealizedProductions();
 
-        //Obtenemos las categorías de las causas de PNR por fallas por tipo Interna y Externa
+//Obtenemos las categorías de las causas de PNR por fallas por tipo Interna y Externa
         $failsInternal = $causeFailService->getFails(\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL);
         $failsExternal = $causeFailService->getFails(\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL);
 
-        //Seteamos en el arreglo, la sección Causas Internas
+//Seteamos en el arreglo, la sección Causas Internas
         foreach ($failsInternal as $failInternal) {
             $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL][$failInternal->getName()]['day'] = 0.0;
             $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL][$failInternal->getName()]['month'] = 0.0;
             $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL][$failInternal->getName()]['year'] = 0.0;
         }
-        //Seteamos en el arreglo, la sección Causas Externas
+//Seteamos en el arreglo, la sección Causas Externas
         foreach ($failsExternal as $failExternal) {
             $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL][$failExternal->getName()]['day'] = 0.0;
             $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL][$failExternal->getName()]['month'] = 0.0;
             $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL][$failExternal->getName()]['year'] = 0.0;
         }
 
-        //Seteamos los productos de materia prima, por los cuales existió PNR.
+//Seteamos los productos de materia prima, por los cuales existió PNR.
         foreach ($unrealizedProductions as $unrealizedProduction) {
             if ($unrealizedProduction->getMonth() <= $month) {
                 $rawMaterialsArray = $causeFailService->getRawMaterialsByFails($unrealizedProduction);
@@ -340,7 +340,7 @@ class ReportTemplateController extends SEIPController {
         $externalRawMaterials = $rawMaterials[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL_MP];
         $internalRawMaterials = $rawMaterials[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL_MP];
 
-        //Seteamos en el arreglo la sección Causas Internas MP
+//Seteamos en el arreglo la sección Causas Internas MP
         if (count($internalRawMaterials) > 0) {
             foreach ($internalRawMaterials as $internalRawMaterial) {
                 $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL_MP][$internalRawMaterial->getName()]['day'] = 0.0;
@@ -353,7 +353,7 @@ class ReportTemplateController extends SEIPController {
             $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL_MP]['empty']['year'] = 0.0;
         }
 
-        //Seteamos en el arreglo la sección Causas Externa MP
+//Seteamos en el arreglo la sección Causas Externa MP
         if (count($externalRawMaterials) > 0) {
             foreach ($externalRawMaterials as $externalRawMaterial) {
                 $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL_MP][$externalRawMaterial->getName()]['day'] = 0.0;
@@ -369,11 +369,11 @@ class ReportTemplateController extends SEIPController {
 //        var_dump($internalRawMaterials);
 //        var_dump($externalRawMaterials);
 //        die();
-        //Recorremos las producciones no realizadas
+//Recorremos las producciones no realizadas
         foreach ($unrealizedProductions as $unrealizedProduction) {
             $monthUnrealizedProduction = $unrealizedProduction->getMonth();
 
-            //Seteamos el valor dia y mes
+//Seteamos el valor dia y mes
             if ($month == $unrealizedProduction->getMonth()) {
                 $pnrByCausesIntExt = $causeFailService->getFailsCause($unrealizedProduction);
                 $pnrByCausesMP = $causeFailService->getPNRByFailsCauseMp($unrealizedProduction, $rawMaterials);
@@ -416,7 +416,7 @@ class ReportTemplateController extends SEIPController {
             }
 
 
-            //Seteamos el valor año
+//Seteamos el valor año
             if ($monthUnrealizedProduction <= $month) {
                 $pnrByCausesIntExt = $causeFailService->getFailsCause($unrealizedProduction);
                 $pnrByCausesMP = $causeFailService->getPNRByFailsCauseMp($unrealizedProduction, $rawMaterials);
@@ -494,7 +494,7 @@ class ReportTemplateController extends SEIPController {
         );
 
 
-        //VERIFICA SI VIENE DE REPORTE DE PRODUCCION O SE LE DA AL BOTON PARA GENERAR REPORTE
+//VERIFICA SI VIENE DE REPORTE DE PRODUCCION O SE LE DA AL BOTON PARA GENERAR REPORTE
         if ($request->get("exportExcel") == null || $request->get("exportExcel") == '0') {
             $view = $this
                     ->view()
@@ -601,7 +601,7 @@ class ReportTemplateController extends SEIPController {
             foreach ($result as $key => $causes) {
                 $nameCategorie = \Pequiven\SEIPBundle\Model\CEI\Fail::getTypeFilLabelByType($arrayCauses[$key]);
 
-                //$activeSheet->mergeCells("B" . $index . ":" . "E" . $index);
+//$activeSheet->mergeCells("B" . $index . ":" . "E" . $index);
                 $activeSheet->setCellValue("B" . $index, $this->trans($nameCategorie, array(), "PequivenSEIPBundle"));
 
                 $activeSheet->getRowDimension($index)->setRowHeight(20);
@@ -662,7 +662,7 @@ class ReportTemplateController extends SEIPController {
      * @return type
      */
     public function vizualiceAction(Request $request) {
-        
+
         $plantReportId = null;
         if ($request->isMethod("POST")) {
             $formData = $request->get("form");
@@ -681,9 +681,9 @@ class ReportTemplateController extends SEIPController {
             $plantReports->add($plantReport);
             $productsReport = $plantReport->getProductsReport()->toArray();
         }
-        $showDay = $showMonth = $showYear = $defaultShow = $byRange = $withDetails = true;
+        $showDay = $showMonth = $showYear = $defaultShow = $withDetails = true;
         $dateFrom = $dateEnd = new \DateTime();
-
+        $byRange = false;
 
         $parametersReportTemplate = array(
             'label_attr' => array('class' => 'label bold'),
@@ -761,11 +761,11 @@ class ReportTemplateController extends SEIPController {
                     'translation_domain' => 'PequivenSEIPBundle',
                     'data' => false,
                 ])
-                ->add('withDetails', 'checkbox', [
-                    'label_attr' => array('class' => 'label bold'),
-                    'required' => false,
-                    'translation_domain' => 'PequivenSEIPBundle',
-                ])
+//                ->add('withDetails', 'checkbox', [
+//                    'label_attr' => array('class' => 'label bold'),
+//                    'required' => false,
+//                    'translation_domain' => 'PequivenSEIPBundle',
+//                ])
                 ->add('dateFrom', 'date', [
                     'label_attr' => array('class' => 'label bold'),
                     'format' => 'd/M/y',
@@ -795,10 +795,11 @@ class ReportTemplateController extends SEIPController {
                 ->getForm();
         $productsReportConsulting = [];
         if ($request->isMethod('POST') && $form->submit($request)->isValid()) {
-        
+
             $data = $form->getData();
+
             $byRange = $data['byRange'];
-            $withDetails = $data['withDetails'];
+//$withDetails = $data['withDetails'];
             $showDay = $data['showDay'];
             $showMonth = $data['showMonth'];
             $showYear = $data['showYear'];
@@ -820,6 +821,8 @@ class ReportTemplateController extends SEIPController {
                 $plantReports->add($plantReport);
             }
         }
+
+
         $data = $form->getData();
         $typeReport = $data['typeReport'];
         if ($typeReport === null) {
@@ -836,75 +839,314 @@ class ReportTemplateController extends SEIPController {
                 }
             }
         }
+
+//COMPLEJOS CONSULTADOS
+        $plants = array();
+
+        $exportToPdf = $request->get('exportToPdf', false);
+
         if ($byRange === true) {
-            $showMonth = false;
-            $showYear = false;
-        }
 
-        $productsReport = new \Doctrine\Common\Collections\ArrayCollection();
-        $consumerPlanningServices = new \Doctrine\Common\Collections\ArrayCollection();
-        $rawMaterialConsumptionPlannings = new \Doctrine\Common\Collections\ArrayCollection();
+            $dateDesde = $dateFrom->format("U");
+            $dateHasta = $dateEnd->format("U");
 
-        $productsReportByIdProduct = $consumerPlanningServicesByIdService = $rawMaterialConsumptionPlanningsById = array();
-        foreach ($plantReports as $plantReport) {
-            foreach ($plantReport->getProductsReport() as $productReport) {
-                $product = $productReport->getProduct();
-                if (!isset($productsReportByIdProduct[$product->getId()])) {
-                    $productsReportByIdProduct[$product->getId()] = array();
+
+//PRODUCTION
+            $arrayProduction = array();
+            $totalProdPlan = 0.0;
+            $totalProdReal = 0.0;
+//RAWMATERIAL
+            $arrayRawMaterial = array();
+            $totalRawPlan = 0.0;
+            $totalRawReal = 0.0;
+
+//CONSUMO DE MATERIA PRIMA
+            $arrayProdServices = array();
+            $arrayConsumerServices = array();
+
+//PRODUCION NO REALIZADA
+            $arrayUnrealizedProduction = array();
+            $arrayNamesUnrealizedProduction = array();
+
+//invetario
+            $arrayInventory = array();
+            $arrayNamesInventory = array();
+
+//OBSERVACIONES
+            $arrayObservation = array();
+
+
+            foreach ($plantReports as $planReport) {
+                if (!in_array($plantReport->getReportTemplate()->getName(), $plants)) {
+                    $plants[] = $plantReport->getReportTemplate()->getName();
                 }
-                $productsReportByIdProduct[$product->getId()][] = $productReport;
 
-                foreach ($productReport->getRawMaterialConsumptionPlannings() as $rawMaterialConsumptionPlanning) {
-                    $product = $rawMaterialConsumptionPlanning->getProduct();
-                    if (!isset($rawMaterialConsumptionPlanningsById[$product->getId()])) {
-                        $rawMaterialConsumptionPlanningsById[$product->getId()] = array();
+
+                foreach ($planReport->getProductsReport() as $productReport) {
+
+//var_dump($productReport->getname());
+                    $i = $dateDesde;
+                    $rs = array();
+                    $totalPlan = $totalReal = $totalPercentaje = $totalPnr = 0.0;
+//$totalRawPlan = $totalRawReal = 0.0;
+                    while ($i != ($dateHasta + 86400)) {
+                        $timeNormal = new \DateTime(date("Y-m-d", $i));
+//RESULTADOS DE PRODUCCION
+                        $rs = $productReport->getSummaryDay($timeNormal, $typeReport);
+                        $totalPlan += $rs["plan"];
+                        $totalReal += $rs["real"];
+                        $totalProdPlan += $rs["plan"];
+                        $totalProdReal += $rs["real"];
+
+
+                        $totalPercentaje += $rs["percentage"];
+                        $totalPnr += $rs["pnr"];
+                        $rs["plan"] = $totalPlan;
+                        $rs["real"] = $totalReal;
+                        if ($totalPlan > 0) {
+                            $rs["percentage"] = ($totalReal * 100) / $totalPlan;
+                        } else {
+                            $rs["percentage"] = 0.0;
+                            $rs["pnr"] = 0.0;
+                        }
+                        $pnr = $totalPlan - $totalReal;
+                        if ($pnr > 0) {
+                            $rs["pnr"] = $pnr;
+                        } else {
+                            $rs["pnr"] = 0.0;
+                        }
+
+//VERIFICA SI VA A EXPORTAR Y OBVIA LAS OBSERVACIONES VACIAS
+                        if ($exportToPdf) {
+                            if ($rs["observation"] != "") {
+                                $arrayObservation[] = array("day" => $timeNormal, "productName" => $productReport->getProduct()->getName(), "observation" => $rs["observation"]);
+                            }
+                        } else {
+                            $arrayObservation[] = array("day" => $timeNormal, "productName" => $productReport->getProduct()->getName(), "observation" => $rs["observation"]);
+                        }
+
+
+//$rs["pnr"] = $totalPnr;
+
+                        $i = $i + 86400; //VOY RECORRIENDO DIA POR DIA
                     }
-                    $rawMaterialConsumptionPlanningsById[$product->getId()][] = $rawMaterialConsumptionPlanning;
+//PRODUCTION 
+                    $rs["productName"] = $productReport->getProduct()->getName() . " (" . $productReport->getProduct()->getProductUnit()->getUnit() . ")";
+
+                    $arrayProduction[] = $rs;
+
+//CONSUMO DE MATERIA PRIMA
+                    $totalRawDayPlan = 0.0;
+                    $totalRawDayReal = 0.0;
+                    $i = $dateDesde;
+//VERIFICA SI EL PRODUCTO ES MATERIA PRIMA
+                    if ($productReport->getProduct()->getIsRawMaterial()) {
+                        foreach ($productReport->getRawMaterialConsumptionPlannings() as $rawMaterial) {
+                            while ($i != ($dateHasta + 86400)) {
+                                $timeNormal = new \DateTime(date("Y-m-d", $i));
+                                $rawMaterialResult = $rawMaterial->getSummary($timeNormal);
+                                $totalRawDayPlan += $rawMaterialResult["total_day_plan"];
+                                $totalRawDayReal += $rawMaterialResult["total_day"];
+                                $totalRawPlan += $rawMaterialResult["total_day_plan"];
+                                $totalRawReal += $rawMaterialResult["total_day"];
+                                $i = $i + 86400; //VOY RECORRIENDO DIA POR DIA
+                            }
+                        }
+                        $arrayRawMaterial[] = array(
+                            "productName" => $productReport->getProduct()->getName() . " (" . $productReport->getProduct()->getProductUnit()->getUnit() . ")",
+                            "planRaw" => $totalRawDayPlan,
+                            "realRaw" => $totalRawDayReal
+                        );
+                    }
+                }
+//CONSUMO DE SERVICIOS
+                foreach ($planReport->getConsumerPlanningServices() as $consumerPlanningService) {
+                    $i = $dateDesde;
+                    $serviceName = $consumerPlanningService->getService()->getName() . " (" . $consumerPlanningService->getService()->getServiceUnit() . ")";
+                    $serviceId = $consumerPlanningService->getService()->getId();
+
+                    if (!in_array($serviceName, $arrayProdServices)) {
+                        array_push($arrayProdServices, $serviceName);
+                        $arrayConsumerServices[$serviceId] = array("productName" => $serviceName, "plan" => 0.0, "real" => 0.0);
+                    }
+                    while ($i != ($dateHasta + 86400)) {
+
+                        $timeNormal = new \DateTime(date("Y-m-d", $i));
+                        $consumerPlanning = $consumerPlanningService->getSummary($timeNormal);
+
+                        $arrayConsumerServices[$serviceId]["real"] += $consumerPlanning["total_day"];
+                        $arrayConsumerServices[$serviceId]["plan"] += $consumerPlanning["total_day_plan"];
+
+                        $i += 86400; //VOY RECORRIENDO DIA POR DIA
+                    }
+                }
+
+//PRODUCION NO REALIZADA
+                $i = $dateDesde;
+
+                foreach ($planReport->getProductsReport() as $productReport) {
+                    $productId = $productReport->getProduct()->getId();
+//      var_dump($productReport->getName());
+                    if (!in_array($productId, $arrayNamesUnrealizedProduction)) {
+                        $arrayNamesUnrealizedProduction[] = $productId;
+                        $arrayUnrealizedProduction[$productId] = array("productName" => $productReport->getProduct()->getName() . " (" . $productReport->getProduct()->getProductUnit()->getUnit() . ")", "total" => 0.0);
+                    }
+
+                    while ($i != ($dateHasta + 86400)) {
+                        $timeNormal = new \DateTime(date("Y-m-d", $i));
+                        $unrealizedProduction = $productReport->getSummaryUnrealizedProductions($timeNormal);
+//            var_dump($unrealizedProduction);
+                        $arrayUnrealizedProduction[$productId]["total"] += $unrealizedProduction["total_day"];
+
+                        $i += 86400; //VOY RECORRIENDO DIA POR DIA
+                    }
+                }
+
+//INVENTARIO
+
+                foreach ($planReport->getProductsReport() as $productReport) {
+                    $productId = $productReport->getProduct()->getId();
+                    $timeNormal = new \DateTime(date("Y-m-d", $dateHasta));
+                    $Inventory = $productReport->getSummaryInventory($timeNormal);
+                    $arrayInventory[] = array("productName" => $productReport->getProduct()->getName() . " (" . $productReport->getProduct()->getProductUnit()->getUnit() . ")", "total" => $Inventory["total_day"]);
                 }
             }
 
-            foreach ($plantReport->getConsumerPlanningServices() as $consumerPlanningService) {
-                $service = $consumerPlanningService->getService();
-                if (!isset($consumerPlanningServicesByIdService[$service->getId()])) {
-                    $consumerPlanningServicesByIdService[$service->getId()] = array();
-                }
-                $consumerPlanningServicesByIdService[$service->getId()][] = $consumerPlanningService;
+//TOTALES DE PRODUCCION
+            if ($totalProdPlan > 0) {
+                $subTotalProdPlan = ($totalProdReal * 100) / $totalProdPlan;
+            } else {
+                $totalProdPlan = 0.0;
             }
-        }
+            $arrayProductionTotals = array(
+                $totalProdPlan,
+                $totalProdReal,
+                $subTotalProdPlan,
+                $totalProdPlan - $totalProdReal);
 
-        foreach ($productsReportByIdProduct as $id => $groups) {
-            foreach ($groups as $productReport) {
-                if (!$productsReport->contains($productReport)) {
-                    $productsReport->add($productReport);
-                }
-            }
-        }
+//TOTALES DE MATERIA PRIMA
+            $arrayRawMaterialTotals = array(
+                $totalRawPlan,
+                $totalRawReal
+            );
 
-        foreach ($consumerPlanningServicesByIdService as $id => $groups) {
-            foreach ($groups as $consumerPlanningService) {
-                if (!$consumerPlanningServices->contains($consumerPlanningService)) {
-                    $consumerPlanningServices->add($consumerPlanningService);
-                }
+            $tools = new \Pequiven\SEIPBundle\Service\ToolService();
+            if (count($data["reportTemplate"]) != 0) {
+                $plant = $data["reportTemplate"][0]->getName();
+            } else {
+                $plant = "null";
             }
-        }
 
-        foreach ($rawMaterialConsumptionPlanningsById as $id => $groups) {
-            foreach ($groups as $rawMaterialConsumptionPlanning) {
-                if (!$rawMaterialConsumptionPlannings->contains($rawMaterialConsumptionPlanning)) {
-                    $rawMaterialConsumptionPlannings->add($rawMaterialConsumptionPlanning);
+            asort($arrayObservation);
+            $reportService = $this->getProductReportService();
+
+
+            $graphicProducctionRange = $reportService->generateColumn3dLineryPerRange(array("caption" => "Producción por Dia", "subCaption" => "Valores Expresados en TM"), $arrayProduction, array("range" => $byRange, "dateFrom" => $dateFrom, "dateEnd" => $dateEnd));
+
+
+
+            $data = array(
+                'dateReport' => $dateReport,
+                'production' => $arrayProduction,
+                'totalProduction' => $arrayProductionTotals,
+                'rawMaterial' => $arrayRawMaterial,
+                'totalRawMaterial' => $arrayRawMaterialTotals,
+                'consumerPlanning' => $arrayConsumerServices,
+                'unrealizedProduction' => $arrayUnrealizedProduction,
+                'inventory' => $arrayInventory,
+                'observation' => $arrayObservation,
+                'plantsNames' => $plants,
+                'typeReport' => $typeReport,
+                'plantReportId' => $plantReportId,
+                'form' => $form->createView(),
+                'showDay' => $showDay,
+                'byRange' => $byRange,
+                //'withDetails' => $withDetails,
+                'dateFrom' => $dateFrom,
+                'dateEnd' => $dateEnd,
+                'typeReport' => $typeReport,
+                "graphicRange" => $graphicProducctionRange,
+                "securityService" => $this->getSecurityService(),
+                "plant" => $plant,
+                "tools" => $tools
+            );
+
+            $view = $this
+                    ->view()
+                    ->setTemplate($this->config->getTemplate('vizualice.html'))
+            ;
+            $view->setData($data);
+        } else {
+
+            $productsReport = new \Doctrine\Common\Collections\ArrayCollection();
+            $consumerPlanningServices = new \Doctrine\Common\Collections\ArrayCollection();
+            $rawMaterialConsumptionPlannings = new \Doctrine\Common\Collections\ArrayCollection();
+
+            $productsReportByIdProduct = $consumerPlanningServicesByIdService = $rawMaterialConsumptionPlanningsById = array();
+            foreach ($plantReports as $plantReport) {
+
+                if (!in_array($plantReport->getReportTemplate()->getName(), $plants)) {
+                    $plants[] = $plantReport->getReportTemplate()->getName();
+                }
+
+                foreach ($plantReport->getProductsReport() as $productReport) {
+                    $product = $productReport->getProduct();
+                    if (!isset($productsReportByIdProduct[$product->getId()])) {
+                        $productsReportByIdProduct[$product->getId()] = array();
+                    }
+                    $productsReportByIdProduct[$product->getId()][] = $productReport;
+
+                    foreach ($productReport->getRawMaterialConsumptionPlannings() as $rawMaterialConsumptionPlanning) {
+                        $product = $rawMaterialConsumptionPlanning->getProduct();
+                        if (!isset($rawMaterialConsumptionPlanningsById[$product->getId()])) {
+                            $rawMaterialConsumptionPlanningsById[$product->getId()] = array();
+                        }
+                        $rawMaterialConsumptionPlanningsById[$product->getId()][] = $rawMaterialConsumptionPlanning;
+                    }
+                }
+
+                foreach ($plantReport->getConsumerPlanningServices() as $consumerPlanningService) {
+                    $service = $consumerPlanningService->getService();
+                    if (!isset($consumerPlanningServicesByIdService[$service->getId()])) {
+                        $consumerPlanningServicesByIdService[$service->getId()] = array();
+                    }
+                    $consumerPlanningServicesByIdService[$service->getId()][] = $consumerPlanningService;
                 }
             }
-        }
+
+            foreach ($productsReportByIdProduct as $id => $groups) {
+                foreach ($groups as $productReport) {
+                    if (!$productsReport->contains($productReport)) {
+                        $productsReport->add($productReport);
+                    }
+                }
+            }
+
+            foreach ($consumerPlanningServicesByIdService as $id => $groups) {
+                foreach ($groups as $consumerPlanningService) {
+                    if (!$consumerPlanningServices->contains($consumerPlanningService)) {
+                        $consumerPlanningServices->add($consumerPlanningService);
+                    }
+                }
+            }
+
+            foreach ($rawMaterialConsumptionPlanningsById as $id => $groups) {
+                foreach ($groups as $rawMaterialConsumptionPlanning) {
+                    if (!$rawMaterialConsumptionPlannings->contains($rawMaterialConsumptionPlanning)) {
+                        $rawMaterialConsumptionPlannings->add($rawMaterialConsumptionPlanning);
+                    }
+                }
+            }
 //Filtrar productos que quiere el usuario
-        if ($productsReportConsulting && count($productsReportConsulting) > 0) {
-            foreach ($productsReport as $productReport) {
-                if (!$productsReportConsulting->contains($productReport)) {
-                    $productsReport->removeElement($productReport);
+            if ($productsReportConsulting && count($productsReportConsulting) > 0) {
+                foreach ($productsReport as $productReport) {
+                    if (!$productsReportConsulting->contains($productReport)) {
+                        $productsReport->removeElement($productReport);
+                    }
                 }
             }
-        }
 
-        $reportService = $this->getProductReportService();
+            $reportService = $this->getProductReportService();
 
 //        $dayUnixTime = 86400;
 //        $cantDias = ($dateEnd->format("U") - $dateFrom->format("U")) / $dayUnixTime;
@@ -915,54 +1157,57 @@ class ReportTemplateController extends SEIPController {
 //        }
 
 
-        $graphicsDays = $reportService->generateColumn3dLinery(array("caption" => "Producción por Dia", "subCaption" => "Valores Expresados en TM"), $productsReport, array("range" => $byRange, "dateFrom" => $dateFrom, "dateEnd" => $dateEnd), $dateReport, $typeReport, "getSummaryDay", "plan", "real");
-        $graphicsMonth = $reportService->generateColumn3dLinery(array("caption" => "Producción por Mes", "subCaption" => "Valores Expresados en TM"), $productsReport, array("range" => $byRange, "dateFrom" => $dateFrom, "dateEnd" => $dateEnd), $dateReport, $typeReport, "getSummaryMonth", "plan_acumulated", "real_acumulated");
-        $graphicsYear = $reportService->generateColumn3dLinery(array("caption" => "Producción por Año", "subCaption" => "Valores Expresados en MTM"), $productsReport, array("range" => $byRange, "dateFrom" => $dateFrom, "dateEnd" => $dateEnd), $dateReport, $typeReport, "getSummaryYear", "plan_acumulated", "real_acumulated", 1000);
+            $graphicsDays = $reportService->generateColumn3dLinery(array("caption" => "Producción por Dia", "subCaption" => "Valores Expresados en TM"), $productsReport, array("range" => $byRange, "dateFrom" => $dateFrom, "dateEnd" => $dateEnd), $dateReport, $typeReport, "getSummaryDay", "plan", "real");
+            $graphicsMonth = $reportService->generateColumn3dLinery(array("caption" => "Producción por Mes", "subCaption" => "Valores Expresados en TM"), $productsReport, array("range" => $byRange, "dateFrom" => $dateFrom, "dateEnd" => $dateEnd), $dateReport, $typeReport, "getSummaryMonth", "plan_acumulated", "real_acumulated");
+            $graphicsYear = $reportService->generateColumn3dLinery(array("caption" => "Producción por Año", "subCaption" => "Valores Expresados en MTM"), $productsReport, array("range" => $byRange, "dateFrom" => $dateFrom, "dateEnd" => $dateEnd), $dateReport, $typeReport, "getSummaryYear", "plan_acumulated", "real_acumulated", 1000);
 
 
 
 
-        $tools = new \Pequiven\SEIPBundle\Service\ToolService();
+            $tools = new \Pequiven\SEIPBundle\Service\ToolService();
 
 
-        if (count($data["reportTemplate"]) != 0) {
-            $plant = $data["reportTemplate"][0]->getName();
-        } else {
-            $plant = "null";
+            if (count($data["reportTemplate"]) != 0) {
+                $plant = $data["reportTemplate"][0]->getName();
+            } else {
+                $plant = "null";
+            }
+
+            $data = array(
+                'dateReport' => $dateReport,
+                'productsReport' => $productsReport,
+                //'productReport' => $productsReport,
+                'typeReport' => $typeReport,
+                'consumerPlanningServices' => $consumerPlanningServices,
+                'rawMaterialConsumptionPlannings' => $rawMaterialConsumptionPlannings,
+                'plantReportId' => $plantReportId,
+                'plantsNames' => $plants,
+                'form' => $form->createView(),
+                'showDay' => $showDay,
+                'showMonth' => $showMonth,
+                'showYear' => $showYear,
+                'byRange' => $byRange,
+                //'withDetails' => $withDetails,
+                'dateFrom' => $dateFrom,
+                'dateEnd' => $dateEnd,
+                'typeReport' => $typeReport,
+                "graphicsDays" => $graphicsDays,
+                "graphicsMonth" => $graphicsMonth,
+                "graphicsYear" => $graphicsYear,
+                "securityService" => $this->getSecurityService(),
+                "plant" => $plant,
+                "tools" => $tools
+            );
+
+            $view = $this
+                    ->view()
+                    ->setTemplate($this->config->getTemplate('vizualice.html'))
+            ;
+            $view->setData($data);
         }
-        
-        $data = array(
-            'dateReport' => $dateReport,
-            'productsReport' => $productsReport,
-            //'productReport' => $productsReport,
-            'typeReport' => $typeReport,
-            'consumerPlanningServices' => $consumerPlanningServices,
-            'rawMaterialConsumptionPlannings' => $rawMaterialConsumptionPlannings,
-            'plantReportId' => $plantReportId,
-            'form' => $form->createView(),
-            'showDay' => $showDay,
-            'showMonth' => $showMonth,
-            'showYear' => $showYear,
-            'byRange' => $byRange,
-            'withDetails' => $withDetails,
-            'dateFrom' => $dateFrom,
-            'dateEnd' => $dateEnd,
-            'typeReport' => $typeReport,
-            "graphicsDays" => $graphicsDays,
-            "graphicsMonth" => $graphicsMonth,
-            "graphicsYear" => $graphicsYear,
-            "securityService" => $this->getSecurityService(),
-            "plant" => $plant,
-            "tools" => $tools
-        );
 
-        $view = $this
-                ->view()
-                ->setTemplate($this->config->getTemplate('vizualice.html'))
-        ;
-        $view->setData($data);
 
-        $exportToPdf = $request->get('exportToPdf', false);
+
         if ($exportToPdf == "1") {
             $pdf = new \Pequiven\SEIPBundle\Model\PDF\SeipPdf('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
             $pdf->setPrintLineFooter(false);
@@ -1011,15 +1256,393 @@ class ReportTemplateController extends SEIPController {
 //            $pdf->Output('Reporte del dia'.'.pdf', 'I');
             $pdf->Output('Reporte del dia' . '.pdf', 'D');
         } else if ($exportToPdf == "2") {
-
-            $this->exportExcelAction($productsReport, $typeReport, $dateReport, $rawMaterialConsumptionPlannings, $consumerPlanningServices);
+            if ($byRange) {
+                $production = array(
+                    "production" => $arrayProduction,
+                    "totalProduction" => $arrayProductionTotals,
+                    "rawMaterial" => $arrayRawMaterial,
+                    "consumerPlanningServices" => $arrayConsumerServices,
+                    "unrealizedProducction" => $arrayUnrealizedProduction,
+                    "inventory" => $arrayInventory,
+                    "observation" => $arrayObservation,
+                    "plants" => $plants
+                );
+                $this->ExportExcelActionByRange($production);
+            } else {
+                $this->exportExcelAction($productsReport, $typeReport, $dateReport, $rawMaterialConsumptionPlannings, $consumerPlanningServices, $plants);
+            }
         }
 
         return $this->handleView($view);
     }
 
-    public function exportExcelAction($productsReport, $typeReport, $dateReport, $rawMaterialConsumptionPlannings, $consumerPlanningServices) {
+    public function ExportExcelActionByRange($data) {
 
+        $days = array(
+            "Domingo",
+            "Lunes",
+            "Martes",
+            "Miercoles",
+            "Jueves",
+            "Viernes",
+            "Sábado"
+        );
+
+        $path = $this->get('kernel')->locateResource('@PequivenObjetiveBundle/Resources/skeleton/reporte_produccion.xls');
+        $now = new \DateTime();
+        $objPHPExcel = \PHPExcel_IOFactory::load($path);
+        $objPHPExcel
+                ->getProperties()
+                ->setCreator("SEIP")
+                ->setTitle('SEIP - Reporte De Producción')
+                ->setCreated()
+                ->setLastModifiedBy('SEIP')
+                ->setModified()
+        ;
+        $objPHPExcel->setActiveSheetIndex(0);
+        $activeSheet = $objPHPExcel->getActiveSheet();
+
+
+        $styleArray = array(
+            'font' => array(
+                'bold' => true,
+                'color' => array("rgb" => 'FF0000')
+            ),
+            'alignment' => array(
+                'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                'vertical' => \PHPExcel_Style_Alignment::VERTICAL_CENTER
+            )
+        );
+        $activeSheet->getStyle("H2")->applyFromArray($styleArray);
+        $activeSheet->setCellValue("H2", $days[date("N")] . ", " . date("d/m/Y"));
+
+        $row = 4;
+
+        //COMPLEJOS
+
+        $styleArray = array(
+            'font' => array(
+                'bold' => true,
+            )
+        );
+        $plants = $data["plants"];
+        foreach ($plants as $plant) {
+            $activeSheet->getStyle("B" . $row)->applyFromArray($styleArray);
+            $activeSheet->setCellValue("B" . $row, $plant);
+            $activeSheet->mergeCells("B" . $row . ":" . "F" . $row);
+            $row++;
+        }
+
+//REGISTROS PRODDUCION
+        $impressOperacion = array(
+            "title" => "Producción",
+            "col" => array("B", "C", "D", "E", "F"),
+            "campos" => array("Producto", "PPTO", "REAL", "EJEC(%)", "VAR"),
+            "fieldsShow" => array("productName", "plan", "real", "percentage", "pnr"),
+            "rowStart" => $row + 1,
+            "plan" => "plan",
+            "real" => "real",
+            "color" => "55b34a"
+        );
+
+
+        $this->setFormatTitle($impressOperacion, $activeSheet, $row);
+        $row = $this->setTitlesRows($activeSheet, $impressOperacion, $row);
+
+
+
+        $production = $data["production"];
+        $totalProduction = $data["totalProduction"];
+
+
+        foreach ($production as $prod) {
+            for ($i = 0; $i < count($impressOperacion["col"]); $i++) {
+                $cell = $impressOperacion["col"][$i] . $row;
+                if ($i != 0) {
+                    $field = number_format((float) $prod[$impressOperacion["fieldsShow"][$i]], 2, ',', '.');
+                } else {
+                    $field = $prod[$impressOperacion["fieldsShow"][$i]];
+                }
+                $activeSheet->setCellValue($cell, $field);
+            }
+            $row++;
+        }
+
+//AGREGA TOTALES
+        $styleArray = array(
+            'font' => array(
+                'bold' => true,
+            ),
+            'fill' => array(
+                'type' => \PHPExcel_Style_Fill::FILL_SOLID,
+                'startcolor' => array(
+                    'rgb' => "dddddd"
+                )
+            )
+        );
+
+        $t = 0;
+        $activeSheet->getStyle("B" . $row . ":" . "F" . $row)->applyFromArray($styleArray);
+
+        for ($x = 0; $x < count($impressOperacion["col"]); $x++) {
+//$cell = $impressOperacion["col"][$x] . $row;
+            if ($impressOperacion["col"][$x] == "B") {
+                $activeSheet->setCellValue($impressOperacion["col"][$x] . $row, "Totales");
+            } else {
+                $activeSheet->setCellValue($impressOperacion["col"][$x] . $row, number_format($totalProduction[$x - 1], 2, ",", "."));
+            }
+        }
+        $row++;
+
+
+//REGISTRO MATERIA PRIMA
+        $rawMaterialData = array(
+            "title" => "Consumo de Materia Prima",
+            "col" => array("B", "C", "D"),
+            "campos" => array("Producto", "PPTO", "REAL"),
+            "fieldsShow" => array("productName", "planRaw", "realRaw"),
+            "rowStart" => $row,
+            "plan" => "plan",
+            "real" => "real",
+            "color" => "ffaa15"
+        );
+        $this->setFormatTitle($rawMaterialData, $activeSheet, $row);
+        $row = $this->setTitlesRows($activeSheet, $rawMaterialData, $row);
+
+
+
+
+        $rawMaterial = $data["rawMaterial"];
+        foreach ($rawMaterial as $raw) {
+            for ($i = 0; $i < count($rawMaterialData["col"]); $i++) {
+                $cell = $rawMaterialData["col"][$i] . $row;
+                if ($i != 0) {
+                    $field = number_format((float) $raw[$rawMaterialData["fieldsShow"][$i]], 2, ',', '.');
+                } else {
+                    $field = $raw[$rawMaterialData["fieldsShow"][$i]];
+                }
+                $activeSheet->setCellValue($cell, $field);
+            }
+            $row++;
+        }
+
+//REGISTRO CONSUMO DE SERVICIOS
+        $consumerServiceData = array(
+            "title" => "Consumo de Servicios",
+            "col" => array("B", "C", "D"),
+            "campos" => array("Producto", "PPTO", "REAL"),
+            "fieldsShow" => array("productName", "plan", "real"),
+            "rowStart" => $row,
+            "plan" => "plan",
+            "real" => "real",
+            "color" => "98bfbf"
+        );
+
+        $this->setFormatTitle($consumerServiceData, $activeSheet, $row);
+        $row = $this->setTitlesRows($activeSheet, $consumerServiceData, $row);
+
+
+
+        $consumerPlanningService = $data["consumerPlanningServices"];
+        foreach ($consumerPlanningService as $consume) {
+            for ($i = 0; $i < count($consumerServiceData["col"]); $i++) {
+                $cell = $consumerServiceData["col"][$i] . $row;
+                if ($i != 0) {
+                    $field = number_format((float) $consume[$consumerServiceData["fieldsShow"][$i]], 2, ',', '.');
+                } else {
+                    $field = $consume[$consumerServiceData["fieldsShow"][$i]];
+                }
+                $activeSheet->setCellValue($cell, $field);
+            }
+            $row++;
+        }
+//PNR
+        $pnr = array(
+            "title" => "Producción No Realizada",
+            "col" => array("B", "C"),
+            "campos" => array("Producto", "TOTAL"),
+            "fieldsShow" => array("productName", "total"),
+            "rowStart" => $row,
+            "plan" => "plan",
+            "real" => "real",
+            "color" => "62cf5a"
+        );
+        $this->setFormatTitle($pnr, $activeSheet, $row);
+        $row = $this->setTitlesRows($activeSheet, $pnr, $row);
+
+
+        $unrealizedProducction = $data["unrealizedProducction"];
+        foreach ($unrealizedProducction as $unrealized) {
+            for ($i = 0; $i < count($pnr["col"]); $i++) {
+                $cell = $pnr["col"][$i] . $row;
+                if ($i != 0) {
+                    $field = number_format((float) $unrealized[$pnr["fieldsShow"][$i]], 2, ',', '.');
+                } else {
+                    $field = $unrealized[$pnr["fieldsShow"][$i]];
+                }
+                $activeSheet->setCellValue($cell, $field);
+            }
+            $row++;
+        }
+
+
+
+//INVENTARIO
+        $inventory = array(
+            "title" => "Inventario",
+            "col" => array("B", "C"),
+            "campos" => array("Producto", "TOTAL"),
+            "fieldsShow" => array("productName", "total"),
+            "rowStart" => $row,
+            "plan" => "plan",
+            "real" => "real",
+            "color" => "ddbb15"
+        );
+        $this->setFormatTitle($inventory, $activeSheet, $row);
+        $row = $this->setTitlesRows($activeSheet, $inventory, $row);
+
+
+        $inventoryData = $data["inventory"];
+        foreach ($inventoryData as $inv) {
+            for ($i = 0; $i < count($inventory["col"]); $i++) {
+                $cell = $pnr["col"][$i] . $row;
+                if ($i != 0) {
+                    $field = number_format((float) $inv[$inventory["fieldsShow"][$i]], 2, ',', '.');
+                } else {
+                    $field = $inv[$inventory["fieldsShow"][$i]];
+                }
+                $activeSheet->setCellValue($cell, $field);
+            }
+            $row++;
+        }
+
+//OBSERVACIONES
+
+        $observation = array(
+            "title" => "PUNTOS DE ATENCIÓN",
+            "col" => array("B", "C", "D"),
+            "campos" => array("Producto", "Día", "Observación"),
+            "fieldsShow" => array("productName", "day", "observation"),
+            "rowStart" => $row,
+            "plan" => "plan",
+            "real" => "real",
+            "color" => "FF0000"
+        );
+        $this->setFormatTitleObservation($observation, $activeSheet, $row);
+        $row = $this->setTitlesRowsObservation($activeSheet, $observation, $row);
+
+        $styleObs = array(
+            'borders' => array(
+                'allborders' => array(
+                    'style' => \PHPExcel_Style_Border::BORDER_MEDIUM,
+                )
+            )
+        );
+
+        $styleProductObs = array(
+            'font' => array(
+                'bold' => true,
+            ),
+            'fill' => array(
+                'type' => \PHPExcel_Style_Fill::FILL_SOLID,
+                'startcolor' => array(
+                    'rgb' => "dddddd"
+                )
+            )
+        );
+
+        $styleDay = array(
+            'alignment' => array(
+                'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                'vertical' => \PHPExcel_Style_Alignment::VERTICAL_CENTER
+            )
+        );
+
+
+        $styleProduct = array(
+            'alignment' => array(
+                'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_LEFT,
+                'vertical' => \PHPExcel_Style_Alignment::VERTICAL_CENTER
+            )
+        );
+
+
+        $styleTextObservation = array(
+            'alignment' => array(
+                'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_LEFT,
+                'vertical' => \PHPExcel_Style_Alignment::VERTICAL_JUSTIFY
+            )
+        );
+
+        $observationData = $data["observation"];
+        foreach ($observationData as $obs) {
+            //$activeSheet->getRowDimension($row)->setRowHeight("15");
+            $activeSheet->getRowDimension($row)->setRowHeight("40");
+
+            for ($i = 0; $i < count($observation["col"]); $i++) {
+                $cell = $observation["col"][$i] . $row;
+                $activeSheet->getStyle($observation["col"][$i] . $row)->applyFromArray($styleObs);
+
+
+                if ($i == 0) {
+                    $activeSheet->getStyle($observation["col"][$i] . $row)->applyFromArray($styleProduct);
+                    $activeSheet->getStyle($observation["col"][$i] . $row)->applyFromArray($styleProductObs);
+                }
+                if ($observation["fieldsShow"][$i] == "day") {
+                    $activeSheet->getStyle($observation["col"][$i] . $row)->applyFromArray($styleDay);
+                    $field = $obs[$observation["fieldsShow"][$i]]->format("d-m-y");
+                } else {
+                    $field = $obs[$observation["fieldsShow"][$i]];
+                }
+                if ($i == 2) {
+                    $activeSheet->getStyle($observation["col"][$i] . $row)->applyFromArray($styleTextObservation);
+                    $activeSheet->mergeCells($observation["col"][$i] . $row . ":" . "H" . $row);
+                    $activeSheet->getStyle("H" . $row)->applyFromArray($styleObs);
+                }
+                $buscar = array(chr(13) . chr(10), "\r\n", "\n", "\r", "\n\r", "\t");
+                $reemplazar = array("", "", "", "", "", "");
+
+                $cadena = str_ireplace($buscar, $reemplazar, $field);
+                $activeSheet->setCellValue($cell, $cadena);
+            }
+            $row++;
+        }
+
+
+
+
+
+
+        $fileName = sprintf("Reporte de Producción " . date("d-m-Y") . ".xls");
+
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="' . $fileName . '"');
+        header('Cache-Control: max-age=0');
+// If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+
+// If you're serving to IE over SSL, then the following may be needed
+        header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT'); // always modified
+        header('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header('Pragma: public'); // HTTP/1.0
+
+        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+        $objWriter->save('php://output');
+        exit;
+    }
+
+    public function exportExcelAction($productsReport, $typeReport, $dateReport, $rawMaterialConsumptionPlannings, $consumerPlanningServices, $plants) {
+
+        $days = array(
+            "Domingo",
+            "Lunes",
+            "Martes",
+            "Miercoles",
+            "Jueves",
+            "Viernes",
+            "Sábado"
+        );
 
         $path = $this->get('kernel')->locateResource('@PequivenObjetiveBundle/Resources/skeleton/reporte_produccion.xls');
         $now = new \DateTime();
@@ -1040,6 +1663,35 @@ class ReportTemplateController extends SEIPController {
         $arrayCategories = array();
         $arrayPlan = array();
         $arrayReal = array();
+
+        $styleArray = array(
+            'font' => array(
+                'bold' => true,
+                'color' => array("rgb" => 'FF0000')
+            ),
+            'alignment' => array(
+                'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                'vertical' => \PHPExcel_Style_Alignment::VERTICAL_CENTER
+            )
+        );
+        $activeSheet->getStyle("H2")->applyFromArray($styleArray);
+        $activeSheet->setCellValue("H2", $days[date("N")] . ", " . date("d/m/Y"));
+
+        $rowCont = 4;
+
+        //COMPLEJOS
+
+        $styleArray = array(
+            'font' => array(
+                'bold' => true,
+            )
+        );
+        foreach ($plants as $plant) {
+            $activeSheet->getStyle("B" . $rowCont)->applyFromArray($styleArray);
+            $activeSheet->setCellValue("B" . $rowCont, $plant);
+            $activeSheet->mergeCells("B" . $rowCont . ":" . "F" . $rowCont);
+            $rowCont++;
+        }
 
         $impressOperacion = array(
             "getSummaryDay" => array(
@@ -1073,34 +1725,48 @@ class ReportTemplateController extends SEIPController {
                 "color" => "e56666"
             )
         );
-        $rowCont = 3;
+        $rowCont++;
         $row = 0;
+        $arrayPerTime = array();
         foreach ($impressOperacion as $key => $imp) {
             $rs = array();
-            foreach ($productsReport as $productReport) {
+            $totalPlan = 0;
+            $totalReal = 0;
+            $totalPlanTime = 0;
 
+            foreach ($productsReport as $productReport) {
+                $row = $imp["rowStart"];
+
+                $typeVar = $productReport->$key($dateReport, $typeReport);
+                $totalReal += $typeVar[$imp["real"]];
+                $totalPlan += $typeVar[$imp["plan"]];
+                if (array_key_exists("plan_time", $imp)) {
+                    $totalPlanTime += $typeVar[$imp["plan_time"]];
+                }
                 if ($productReport->getProduct()->getIsCheckToReportProduction()) {
                     $rowData = array();
-                    $row = $imp["rowStart"];
 
-                    $typeVar = $productReport->$key($dateReport, $typeReport);
-                    array_push($rowData, $productReport->getProduct()->getName());
+                    array_push($rowData, $productReport->getProduct()->getName() . " (" . $productReport->getProduct()->getProductUnit() . ")");
 
                     if (array_key_exists("plan_time", $imp)) {
-                        array_push($rowData, $typeVar[$imp["plan_time"]]);
+                        array_push($rowData, number_format((float) $typeVar[$imp["plan_time"]], 2, ',', '.'));
+// $totalPlan+= $typeVar[$imp["plan_time"]];
                     }
 
-                    array_push($rowData, $typeVar[$imp["plan"]]);
+                    array_push($rowData, number_format((float) $typeVar[$imp["plan"]], 2, ',', '.'));
 
 
-                    array_push($rowData, $typeVar[$imp["real"]]);
+
+                    array_push($rowData, number_format($typeVar[$imp["real"]], 2, ",", "."));
+
+
                     if ($typeVar[$imp["plan"]] > 0) {
-                        array_push($rowData, ($typeVar[$imp["real"]] * 100) / $typeVar[$imp["plan"]]);
+                        array_push($rowData, number_format((float) ($typeVar[$imp["real"]] * 100) / $typeVar[$imp["plan"]], 2, ',', '.'));
                     } else {
                         array_push($rowData, 0);
                     }
 
-                    $var = $typeVar[$imp["plan"]] - $typeVar[$imp["real"]];
+                    $var = number_format((float) $typeVar[$imp["plan"]] - $typeVar[$imp["real"]], 2, ',', '.');
                     if ($var < 0) {
                         array_push($rowData, 0);
                     } else {
@@ -1110,6 +1776,27 @@ class ReportTemplateController extends SEIPController {
                     array_push($rs, $rowData);
                 }
             }
+            if ($totalPlan > 0) {
+                $perc = ($totalReal * 100) / $totalPlan;
+            } else {
+                $perc = 0;
+            }
+            $var = $totalPlan - $totalReal;
+            if ($var < 0) {
+                $var = 0;
+            }
+            if ($key == "getSummaryDay") {
+                $arrayPerTime = array(
+                    $totalPlan, $totalReal, $perc, $var
+                );
+            } else {
+                $arrayPerTime = array(
+                    $totalPlanTime, $totalPlan, $totalReal, $perc, $var
+                );
+            }
+
+            //var_dump($arrayPerTime);
+
 
             /** SET TITLES** */
             $this->setFormatTitle($imp, $activeSheet, $rowCont);
@@ -1125,7 +1812,31 @@ class ReportTemplateController extends SEIPController {
                 }
                 $rowCont++;
             }
+
+            $styleArray = array(
+                'font' => array(
+                    'bold' => true,
+                ),
+                'fill' => array(
+                    'type' => \PHPExcel_Style_Fill::FILL_SOLID,
+                    'startcolor' => array(
+                        'rgb' => "dddddd"
+                    )
+                )
+            );
+            /*             * *****TOTALES DE PRODUCCION **************** */
+            $t = 0;
+            $activeSheet->getStyle($imp["col"][$t] . $rowCont)->applyFromArray($styleArray);
+            $activeSheet->setCellValue($imp["col"][$t] . $rowCont, "Totales");
+            foreach ($arrayPerTime as $perTime) {
+                $activeSheet->getStyle($imp["col"][$t + 1] . $rowCont)->applyFromArray($styleArray);
+                $activeSheet->setCellValue($imp["col"][$t + 1] . $rowCont, number_format(($perTime), 2, ",", "."));
+                $t++;
+            }
+            $rowCont++;
         }
+
+
 
 
 
@@ -1149,14 +1860,19 @@ class ReportTemplateController extends SEIPController {
             $contCol = $rowCont;
             foreach ($matPrima[$c] as $cons) {
 //var_dump($cols.$contCol."=>".$cons);
-                $activeSheet->setCellValue($cols . $contCol, $cons);
+                if (gettype($cons) == "string") {
+                    $activeSheet->setCellValue($cols . $contCol, $cons);
+                } else {
+                    $activeSheet->setCellValue($cols . $contCol, number_format($cons, 2, ',', '.'));
+                }
+
+
                 $contCol++;
             }
             $c++;
         }
         $rowCont = $contCol;
         /*         * ****************************** */
-
 
         /** CONSUMO DE SERVICIOS * */
         $consumos = $this->getDataConsumerPlanning($consumerPlanningServices, $dateReport);
@@ -1177,15 +1893,17 @@ class ReportTemplateController extends SEIPController {
             $contCol = $rowCont;
             foreach ($consumos[$c] as $cons) {
 //var_dump($cols.$contCol."=>".$cons);
-                $activeSheet->setCellValue($cols . $contCol, $cons);
+                if (gettype($cons) == "string") {
+                    $activeSheet->setCellValue($cols . $contCol, $cons);
+                } else {
+                    $activeSheet->setCellValue($cols . $contCol, number_format($cons, 2, ',', '.'));
+                }
                 $contCol++;
             }
             $c++;
         }
         $rowCont = $contCol;
-        /*         * ****************************** */
-
-
+//        /*         * ****************************** */
 ///****PRODUCCION NO REALIZADA **//////////
         $unrealizedProduction = $this->getDataUnrealizedProduction($productsReport, $dateReport);
 
@@ -1204,7 +1922,11 @@ class ReportTemplateController extends SEIPController {
             $contCol = $rowCont;
             foreach ($unrealizedProduction[$c] as $cons) {
 //var_dump($cols.$contCol."=>".$cons);
-                $activeSheet->setCellValue($cols . $contCol, $cons);
+                if (gettype($cons) == "string") {
+                    $activeSheet->setCellValue($cols . $contCol, $cons);
+                } else {
+                    $activeSheet->setCellValue($cols . $contCol, number_format($cons, 2, ',', '.'));
+                }
                 $contCol++;
             }
             $c++;
@@ -1218,8 +1940,8 @@ class ReportTemplateController extends SEIPController {
         $dataInventario = array(
             "row" => $rowCont,
             "title" => "Inventario",
-            "col" => array("B", "C", "D", "E"),
-            "campos" => array("Producto", "DIA", "MES", "AÑO"),
+            "col" => array("B", "C", "D"),
+            "campos" => array("Producto", "DIA", "DIA ANTERIOR"),
             "color" => "ddbb15"
         );
         $this->setFormatTitle($dataInventario, $activeSheet, $rowCont);
@@ -1230,7 +1952,11 @@ class ReportTemplateController extends SEIPController {
             $contCol = $rowCont;
             foreach ($inventario[$c] as $cons) {
 //var_dump($cols.$contCol."=>".$cons);
-                $activeSheet->setCellValue($cols . $contCol, $cons);
+                if (gettype($cons) == "string") {
+                    $activeSheet->setCellValue($cols . $contCol, $cons);
+                } else {
+                    $activeSheet->setCellValue($cols . $contCol, number_format($cons, 2, ',', '.'));
+                }
                 $contCol++;
             }
             $c++;
@@ -1243,15 +1969,46 @@ class ReportTemplateController extends SEIPController {
 ///**** OBSERVACIONES  **//////////
         $observaciones = $this->getDataInventario($productsReport, $dateReport);
         $dataObservaciones = array(
-            "title" => "Observaciones",
+            "title" => "PUNTOS DE ATENCIÓN",
             "row" => $rowCont,
             "col" => array("B", "C"),
             "campos" => array("Producto", "Observación"),
-            "color" => "c7c7b3"
+            "color" => "FF0000"
         );
         $observaciones = array();
         $name = array();
         $obs = array();
+
+        $styleObs = array(
+            'borders' => array(
+                'allborders' => array(
+                    'style' => \PHPExcel_Style_Border::BORDER_MEDIUM,
+                )
+            ),
+            'alignment' => array(
+                'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_LEFT,
+                'vertical' => \PHPExcel_Style_Alignment::VERTICAL_CENTER
+            ),
+        );
+
+        $styleProductObs = array(
+            'font' => array(
+                'bold' => true,
+            ),
+            'fill' => array(
+                'type' => \PHPExcel_Style_Fill::FILL_SOLID,
+                'startcolor' => array(
+                    'rgb' => "dddddd"
+                )
+            ),
+            'alignment' => array(
+                'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_LEFT,
+                'vertical' => \PHPExcel_Style_Alignment::VERTICAL_CENTER
+            ),
+        );
+
+
+
 
         foreach ($productsReport as $productReport) {
             $name[] = $productReport->getProduct()->getName();
@@ -1265,17 +2022,38 @@ class ReportTemplateController extends SEIPController {
         $observaciones[] = $name;
         $observaciones[] = $obs;
 
-        $this->setFormatTitle($dataObservaciones, $activeSheet, $rowCont);
-        $rowCont = $this->setTitlesRows($activeSheet, $dataObservaciones, $rowCont);
-
+        $this->setFormatTitleObservation($dataObservaciones, $activeSheet, $rowCont);
+        $rowCont = $this->setTitlesRowsObservation($activeSheet, $dataObservaciones, $rowCont, "C");
 
         $c = 0;
         foreach ($dataObservaciones["col"] as $cols) {
+
             $contCol = $rowCont;
+            $activeSheet->getColumnDimension($cols)->setAutoSize(true);
+            $cr = 0;
             foreach ($observaciones[$c] as $cons) {
-//var_dump($cols . $contCol . "=>" . $cons);
-                $activeSheet->setCellValue($cols . $contCol, $cons);
+                $activeSheet->getRowDimension($contCol)->setRowHeight("40");
+
+                $buscar = array(chr(13) . chr(10), "\r\n", "\n", "\r", "\n\r", "\t");
+                $reemplazar = array("", "", "", "", "", "");
+
+                $cadena = str_ireplace($buscar, $reemplazar, $cons);
+                //$activeSheet->setCellValue($cell, $cadena);
+
+                $activeSheet->setCellValue($cols . $contCol, strip_tags($cadena));
+
+                if ($c == 1) {
+                    $activeSheet->mergeCells($cols . $contCol . ":" . "H" . $contCol);
+                    $activeSheet->getStyle($cols . $contCol)->applyFromArray($styleObs);
+                    $activeSheet->getStyle("H" . $contCol)->applyFromArray($styleObs);
+                    $activeSheet->getStyle($cols . $contCol)->getAlignment()->setWrapText(true);
+                }
+                if ($c == 0) {
+                    $activeSheet->getStyle($cols . $contCol)->applyFromArray($styleProductObs);
+                }
+                $activeSheet->getStyle($cols . $contCol)->applyFromArray($styleObs);
                 $contCol++;
+                $cr++;
             }
             $c++;
         }
@@ -1330,6 +2108,34 @@ class ReportTemplateController extends SEIPController {
         $activeSheet->setCellValue($imp["col"][0] . $rowCont, $imp["title"]);
     }
 
+    public function setFormatTitleObservation($imp, $activeSheet, $rowCont) {
+        $styleArray = array(
+            'font' => array(
+                'bold' => true,
+                'color' => array('rgb' => 'FFFFFF')
+            ),
+            'alignment' => array(
+                'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                'vertical' => \PHPExcel_Style_Alignment::VERTICAL_CENTER
+            ),
+            'fill' => array(
+                'type' => \PHPExcel_Style_Fill::FILL_SOLID,
+                'startcolor' => array(
+                    'rgb' => $imp["color"]
+                )
+            )
+        );
+
+        $rowCont = $rowCont + 1;
+        $totalCol = count($imp["col"]);
+        $ini = $imp["col"][0] . $rowCont;
+        $fin = "H" . $rowCont;
+        $activeSheet->getRowDimension($rowCont)->setRowHeight(20);
+        $activeSheet->mergeCells($ini . ":" . $fin);
+        $activeSheet->getStyle($ini)->applyFromArray($styleArray);
+        $activeSheet->setCellValue($imp["col"][0] . $rowCont, $imp["title"]);
+    }
+
     public function setTitlesRows($activeSheet, $imp, $rowCont) {
         $styleArray = array(
             'font' => array(
@@ -1338,6 +2144,12 @@ class ReportTemplateController extends SEIPController {
             'alignment' => array(
                 'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
                 'vertical' => \PHPExcel_Style_Alignment::VERTICAL_CENTER
+            ),
+            'fill' => array(
+                'type' => \PHPExcel_Style_Fill::FILL_SOLID,
+                'startcolor' => array(
+                    'rgb' => "dddddd"
+                )
             )
         );
 
@@ -1351,7 +2163,45 @@ class ReportTemplateController extends SEIPController {
             $activeSheet->getStyle($col . $rowCont)->applyFromArray($styleArray);
             $camp++;
         }
+        $rowCont = $rowCont + 1;
+
+        return $rowCont;
+    }
+
+    public function setTitlesRowsObservation($activeSheet, $imp, $rowCont, $init = "D") {
+        $styleArray = array(
+            'font' => array(
+                'bold' => true,
+            ),
+            'alignment' => array(
+                'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                'vertical' => \PHPExcel_Style_Alignment::VERTICAL_CENTER
+            ),
+            'fill' => array(
+                'type' => \PHPExcel_Style_Fill::FILL_SOLID,
+                'startcolor' => array(
+                    'rgb' => "dddddd"
+                )
+            ),
+            'borders' => array(
+                'allborders' => array(
+                    'style' => \PHPExcel_Style_Border::BORDER_MEDIUM,
+                )
+            )
+        );
+
+
         $rowCont = $rowCont + 2;
+        $camp = 0;
+        foreach ($imp["campos"] as $campos) {
+            $col = $imp["col"][$camp];
+            $activeSheet->setCellValue($col . $rowCont, $campos);
+            $activeSheet->getStyle($col . $rowCont)->applyFromArray($styleArray);
+            $activeSheet->mergeCells($init . $rowCont . ":" . "H" . $rowCont);
+            $activeSheet->getStyle("H" . $rowCont)->applyFromArray($styleArray);
+            $camp++;
+        }
+        $rowCont = $rowCont + 1;
 
         return $rowCont;
     }
@@ -1364,7 +2214,8 @@ class ReportTemplateController extends SEIPController {
         $totalYear = array();
 
         foreach ($rawMaterial as $rs) {
-            $productos[] = $rs->getProduct()->getName();
+
+            $productos[] = $rs->getProduct()->getName() . " (" . $rs->getProduct()->getProductUnit() . ")";
 //$productos[] = $rs->$name;
             array_push($totalDay, $rs->getSummary($dateReport)["total_day"]);
             array_push($totalMonth, $rs->getSummary($dateReport)["total_month"]);
@@ -1383,11 +2234,11 @@ class ReportTemplateController extends SEIPController {
         $totalYear = array();
 
         foreach ($consumerPlanning as $rs) {
-            $productos[] = $rs->getService()->getName();
+            $productos[] = $rs->getService()->getName() . " (" . $rs->getService()->getServiceUnit() . ")";
 //$productos[] = $rs->$name;
-            array_push($totalDay, $rs->getSummary($dateReport)["total_day"]);
-            array_push($totalMonth, $rs->getSummary($dateReport)["total_month"]);
-            array_push($totalYear, $rs->getSummary($dateReport)["total_year"]);
+            array_push($totalDay, number_format($rs->getSummary($dateReport)["total_day"], 2, ',', '.'));
+            array_push($totalMonth, number_format($rs->getSummary($dateReport)["total_month"], 2, ',', '.'));
+            array_push($totalYear, number_format($rs->getSummary($dateReport)["total_year"], 2, ',', '.'));
 //var_dump($rawMaterialConsumption->getSummary($dateReport));
         }
 
@@ -1404,11 +2255,11 @@ class ReportTemplateController extends SEIPController {
         $totalYear = array();
 
         foreach ($productsReport as $rs) {
-            $productos[] = $rs->getProduct()->getName();
+            $productos[] = $rs->getProduct()->getName() . " (" . $rs->getProduct()->getProductUnit() . ")";
 //$productos[] = $rs->$name;
-            array_push($totalDay, $rs->getSummaryUnrealizedProductions($dateReport)["total_day"]);
-            array_push($totalMonth, $rs->getSummaryUnrealizedProductions($dateReport)["total_month"]);
-            array_push($totalYear, $rs->getSummaryUnrealizedProductions($dateReport)["total_year"]);
+            array_push($totalDay, number_format($rs->getSummaryUnrealizedProductions($dateReport)["total_day"], 2, ',', '.'));
+            array_push($totalMonth, number_format($rs->getSummaryUnrealizedProductions($dateReport)["total_month"], 2, ',', '.'));
+            array_push($totalYear, number_format($rs->getSummaryUnrealizedProductions($dateReport)["total_year"], 2, ',', '.'));
 //var_dump($rawMaterialConsumption->getSummary($dateReport));
         }
 
@@ -1425,10 +2276,10 @@ class ReportTemplateController extends SEIPController {
         $totalYear = array();
 
         foreach ($productsReport as $rs) {
-            $productos[] = $rs->getProduct()->getName();
+            $productos[] = $rs->getProduct()->getName() . " (" . $rs->getProduct()->getProductUnit() . ")";
 //$productos[] = $rs->$name;
-            array_push($totalDay, $rs->getSummaryInventory($dateReport)["total_day"]);
-            array_push($totalMonth, $rs->getSummaryInventory($dateReport)["total_month"]);
+            array_push($totalDay, number_format($rs->getSummaryInventory($dateReport)["total_day"], 2, ',', '.'));
+            array_push($totalMonth, number_format($rs->getSummaryInventory($dateReport)["total_month"], 2, ',', '.'));
 
 //var_dump($rawMaterialConsumption->getSummary($dateReport));
         }

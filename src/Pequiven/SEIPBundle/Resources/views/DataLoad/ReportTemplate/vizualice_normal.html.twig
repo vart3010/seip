@@ -1,5 +1,9 @@
 {% trans_default_domain 'PequivenSEIPBundle' %}
-
+<style>
+    .bodyCenter tbody {
+        text-align: center;
+    }
+</style>
 {% if productsReport is not empty %}
 
     <div class="columns">
@@ -366,15 +370,15 @@
     </div>
     <div class="columns">
         <div class="twelve-columns-mobile">
-            <table class="simple-table responsive-table responsive-table-on">
+            <table class="bodyCenter simple-table responsive-table responsive-table-on">
                 <thead>
                     <tr>
                         <th class="header text-center white-gradient" colspan="7">CONSUMO DE MATERIA PRIMA</th>
                     </tr>
-                    <tr>
-                        <th scope="col" style="width: 7%" class="header">PRODUCTO</th>
+                    <tr style="text-align: center;">
+                        <th scope="col" style="width: 7%;text-align: left;" class="header">PRODUCTO</th>
                             {%  if showDay %}
-                            <th scope="col" colspan="2" style="width: 7%" class="text-center header">DÍA</th>
+                            <th scope="col" colspan="2" style="width: 7%;" class="text-center header">DÍA</th>
                             {% endif %}
                             {%  if showMonth %}
                             <th scope="col" colspan="2" style="width: 7%" class="text-center header">MES</th>
@@ -383,8 +387,8 @@
                             <th scope="col" colspan="2" style="width: 7%" class="text-center header">AÑO</th>
                             {% endif %}
                     </tr>
-                    <tr>
-                        <th scope="col" style="width: 7%" class="header">&nbsp;</th>
+                    <tr style="text-align: center;">
+                        <th scope="col" style="width: 7%; text-align: left;" class="header">&nbsp;</th>
                             {%  if showDay %}
                             <th scope="col" style="width: 7%" class="header">PLAN</th>
                             <th scope="col" style="width: 7%" class="header">REAL</th>
@@ -448,18 +452,18 @@
                             {% set current_total_year_plan = current_total_year_plan + total_year_plan %}
                             <tr>
                                 {% set productUnit = rawMaterialConsumptionPlanning.product.productUnit %}
-                                <th class="header">{{ rawMaterialConsumptionPlanning.product|upper }}&nbsp;({{ productUnit }})</th>
+                                <th style="text-align: left;" class="header">{{ rawMaterialConsumptionPlanning.product|upper }}&nbsp;({{ productUnit }})</th>
                                     {%  if showDay %}
-                                    <th class="header">{{ current_total_day_plan|myNumberFormat }}</th>
-                                    <th class="header">{{ current_total_day|myNumberFormat }}</th>
+                                    <th style="text-align: center;" class="header">{{ current_total_day_plan|myNumberFormat }}</th>
+                                    <th style="text-align: center;" class="header">{{ current_total_day|myNumberFormat }}</th>
                                     {% endif %}
                                     {%  if showMonth %}
-                                    <th class=" header">{{ current_total_month_plan|myNumberFormat }}</th>
-                                    <th class=" header">{{ current_total_month|myNumberFormat }}</th>
+                                    <th style="text-align: center;" class=" header">{{ current_total_month_plan|myNumberFormat }}</th>
+                                    <th style="text-align: center;" class=" header">{{ current_total_month|myNumberFormat }}</th>
                                     {% endif %}
                                     {%  if showYear %}
-                                    <th class=" header">{{ current_total_year_plan|myNumberFormat }}</th>
-                                    <th class=" header">{{ current_total_year|myNumberFormat }}</th>
+                                    <th style="text-align: center;" class=" header">{{ current_total_year_plan|myNumberFormat }}</th>
+                                    <th style="text-align: center;" class=" header">{{ current_total_year|myNumberFormat }}</th>
                                     {% endif %}
                             </tr>
                             {% set total_day = 0 %}
@@ -485,8 +489,8 @@
                     <tr>
                         <th class="header text-center white-gradient" colspan="7">CONSUMO DE SERVICIOS</th>
                     </tr>
-                    <tr>
-                        <th scope="col" style="width: 7%" class="header">PRODUCTO</th>
+                    <tr style="text-align: center;">
+                        <th scope="col" style="width: 7%; text-align: left;" class="header">PRODUCTO</th>
                             {%  if showDay %}
                             <th scope="col" colspan="2" style="width: 7%" class="text-center header">DÍA</th>
                             {% endif %}
@@ -497,8 +501,8 @@
                             <th scope="col" colspan="2" style="width: 7%" class="text-center header">AÑO</th>
                             {% endif %}
                     </tr>
-                    <tr>
-                        <th scope="col" style="width: 7%" class="header">&nbsp;</th>
+                    <tr style="text-align: center;">
+                        <th scope="col" style="width: 7%; text-align: left;" class="header">&nbsp;</th>
                             {%  if showDay %}
                             <th scope="col" style="width: 7%" class="header">PLAN</th>
                             <th scope="col" style="width: 7%" class="header">REAL</th>
@@ -521,6 +525,15 @@
                     {% set total_day_plan = 0 %}
                     {% set total_month_plan = 0 %}
                     {% set total_year_plan = 0 %}
+
+                    {% set totales_day_plan = 0 %}
+                    {% set totales_day_real = 0 %}
+
+                    {% set totales_month_plan = 0 %}
+                    {% set totales_month_real = 0 %}
+
+                    {% set totales_year_plan = 0 %}
+                    {% set totales_year_real = 0 %}
 
                     {% set items = consumerPlanningServices %}
 
@@ -562,20 +575,32 @@
                             {% set current_total_month_plan = current_total_month_plan + total_month_plan %}
                             {% set current_total_year_plan = current_total_year_plan + total_year_plan %}
 
-                            <tr>
+
+                            {# TOTALIZAR #}
+                            {% set totales_day_plan = totales_day_plan + current_total_day_plan %}
+                            {% set totales_day_real = totales_day_real +  current_total_day  %}
+
+                            {% set totales_month_plan =  totales_month_plan + current_total_month_plan %}
+                            {% set totales_month_real = totales_month_real + current_total_month  %}
+
+                            {% set totales_year_plan = totales_year_plan + current_total_year_plan %}
+                            {% set totales_year_real = totales_year_real + current_total_year  %}
+
+
+                            <tr style="text-align: center;">
                                 {% set serviceUnit = consumerPlanningService.service.serviceUnit %}
-                                <th class="header">{{ consumerPlanningService.service|upper }}&nbsp;({{ serviceUnit }})</th>
+                                <th style="text-align: left;" class="header" style="text-align: left;">{{ consumerPlanningService.service|upper }}&nbsp;({{ serviceUnit }})</th>
                                     {%  if showDay %}
-                                    <th class="header">{{ current_total_day_plan|myNumberFormat }}</th>
-                                    <th class="header">{{ current_total_day|myNumberFormat }}</th>
+                                    <th style="text-align: center;" class="header">{{ current_total_day_plan|myNumberFormat }}</th>
+                                    <th style="text-align: center;" class="header">{{ current_total_day|myNumberFormat }}</th>
                                     {% endif %}
                                     {%  if showMonth %}
-                                    <th class=" header">{{ current_total_month_plan|myNumberFormat }}</th>
-                                    <th class=" header">{{ current_total_month|myNumberFormat }}</th>
+                                    <th style="text-align: center;" class=" header">{{ current_total_month_plan|myNumberFormat }}</th>
+                                    <th style="text-align: center;" class=" header">{{ current_total_month|myNumberFormat }}</th>
                                     {% endif %}
                                     {%  if showYear %}
-                                    <th class=" header">{{ current_total_year_plan|myNumberFormat }}</th>
-                                    <th class=" header">{{ current_total_year|myNumberFormat }}</th>
+                                    <th style="text-align: center;" class=" header">{{ current_total_year_plan|myNumberFormat }}</th>
+                                    <th style="text-align: center;" class=" header">{{ current_total_year|myNumberFormat }}</th>
                                     {% endif %}
                             </tr>
                             {% set total_day = 0 %}
@@ -592,6 +617,19 @@
                         </tr>
                     {% endfor %}
                 </tbody>
+                <tfoot>
+                    <tr style="text-align: center;">
+                        <th style="text-align: left;">TOTALES</th>
+                        <th >{{ totales_day_plan|myNumberFormat }}</th>
+                        <th>{{ totales_day_real|myNumberFormat }}</th>
+
+                        <th>{{ totales_month_plan|myNumberFormat }}</th>
+                        <th>{{ totales_month_real|myNumberFormat }}</th>
+
+                        <th>{{ totales_year_plan|myNumberFormat }}</th>
+                        <th>{{ totales_year_real|myNumberFormat }}</th>
+                    </tr>
+                </tfoot>
             </table>
         </div>
     </div>

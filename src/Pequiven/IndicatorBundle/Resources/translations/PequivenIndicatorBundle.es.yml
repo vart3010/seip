@@ -236,6 +236,7 @@ form:
         formulaIndicatorStrategic: Fórmula de evaluación del Indicador Estratégico
         formulaIndicatorTactic: Fórmula de evaluación del Indicador Táctico
         formulaIndicatorOperative: Fórmula de evaluación del Indicador Operativo
+        frecuency_tooltip: Frecuencia de de Notificación del Indicador
         arrangementRangeType: Seleccione el tipo de rango
         arrangementRangeTypeTop: Seleccione el tipo de rango Alto
         arrangementRangeTypeMiddleTop: Seleccione el tipo de rango Medio Alto

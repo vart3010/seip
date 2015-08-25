@@ -1,36 +1,25 @@
 <?php
 
-namespace Pequiven\SEIPBundle\Model\Box\Dashboard\DataLoad\Production;
+namespace Pequiven\SEIPBundle\Model\Box\Dashboard\DataLoad;
 
 /**
- * Muestra un resumen del reportTemplate especificado
+ * Muestra la base para el dashboard de Producción
  *
  */
-class ReportTemplateBox extends \Tecnocreaciones\Bundle\BoxBundle\Model\GenericBox
+class ProductionCorporationBox extends \Tecnocreaciones\Bundle\BoxBundle\Model\GenericBox
 {
     public function getName() {
-        return 'dashboard_data_load_production_report_template';
+        return 'dashboard_data_load_production_corporation';
     }
 
     public function getParameters() 
-    {
-        $criteria = array();
-        $orderBy = array();
-        $repository = $this->container->get('pequiven_seip.repository.arrangementprogram');
-        
-        $period = $this->getPeriodService()->getPeriodActive();
-        $criteria['ap.period'] = $period;
-        $criteria['ap.user'] = $this->getUser();
-        
-        $resources = $repository->createPaginatorByAssignedResponsibles($criteria,$orderBy);
-        $resources->setMaxPerPage(5);
+    {   
         return array(
-            'result'  => $resources->toArray()
         );
     }
 
     public function getTemplateName() {
-        return 'PequivenSEIPBundle:Monitor:Dashboard/DataLoad/Production/ReportTemplate.html.twig';
+        return 'PequivenSEIPBundle:Monitor:Dashboard\DataLoad\Production\productionCorporation.html.twig';
     }
     
     public function getAreasNotPermitted() 
@@ -45,7 +34,7 @@ class ReportTemplateBox extends \Tecnocreaciones\Bundle\BoxBundle\Model\GenericB
     }
     
     public function getDescription() {
-        return 'Dashboard donde se muestra la data consolidada por Report Template';
+        return 'Base donde se manejan los dashboards de producción';
     }
     
     /**
@@ -64,5 +53,14 @@ class ReportTemplateBox extends \Tecnocreaciones\Bundle\BoxBundle\Model\GenericB
     protected function getIndicatorService()
     {
         return $this->container->get('pequiven_indicator.service.inidicator');
+    }
+    
+    /**
+     * Manejador de usuario o administrador
+     * @return \Pequiven\SEIPBundle\Model\UserManager
+     */
+    private function getUserManager() 
+    {
+        return $this->container->get('seip.user_manager');
     }
 }

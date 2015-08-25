@@ -618,6 +618,26 @@ class ChartController extends SEIPController {
     }
    
     /**
+     * Función que retorna la data para un gráfico que muestre la producción por las plantas de un grupo de reportTemplate por Día de la corporación
+     * @return JsonResponse
+     */
+    public function getDataChartProductionReportTemplateByDateCorporationAction(Request $request) {
+        $response = new JsonResponse();
+
+        $dateSearch = $request->get('dateSearch');
+
+        $reportTemplateService = $this->getReportTemplateService(); //Obtenemos el servicio del ReportTemplate
+        
+        $reportTemplate = new \Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate();
+
+        $dataChart = $reportTemplateService->getDataChartMultiSeriesColumn3D($reportTemplate ,array('consolidateCorporation' => true, 'dateSearch' => $dateSearch));
+
+        $response->setData($dataChart); //Seteamos la data del gráfico en Json
+
+        return $response;
+    }
+   
+    /**
      * Servicio de los Indicadores
      * @return \Pequiven\IndicatorBundle\Service\IndicatorService
      */
