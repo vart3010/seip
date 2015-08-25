@@ -386,9 +386,10 @@ class IndicatorSigController extends ResourceController
         $repository = $this->get('pequiven.repository.sig_indicator');
         $results = $repository->find($indicator);*/
         //
+        $em = $this->getDoctrine()->getManager();
         $results = $this->get('pequiven.repository.sig_causes_indicator')->find($causeId);
         var_dump(count($results));
-        die();
+        //die();
         /*$user = $this->getUser();
         $data = $results;
         $cause = new EvolutionCause();
