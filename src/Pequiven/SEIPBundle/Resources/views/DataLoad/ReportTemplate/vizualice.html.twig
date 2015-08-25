@@ -12,7 +12,7 @@
 
 
 {% block body %}
-
+    {{ showInventory }}
     {% set hasPermission = is_granted("ROLE_SEIP_DATA_LOAD_CHANGE_DATE") %}
     <form id="frmFilter" action="{{ path("pequiven_report_template_vizualice") }}" method="POST">
         <input id="exportToPdf" type="hidden" name="exportToPdf" value="0" />
@@ -74,11 +74,11 @@
 
                 </div>
                 <div class="two-columns">
-
-                    {{ form_label(form.showObservation) }}&nbsp;
-                    {{ form_widget(form.showObservation) }}
-                    {{ form_errors(form.showObservation) }}
+                    {{ form_label(form.showPnr) }}&nbsp;
+                    {{ form_widget(form.showPnr) }}
+                    {{ form_errors(form.showPnr) }}
                 </div>
+
             </div>
 
 
@@ -111,7 +111,11 @@
                 {{ form_label(form.showInventory) }}&nbsp;
                 {{ form_widget(form.showInventory) }}
                 {{ form_errors(form.showInventory) }}
-
+            </div>
+            <div class="two-columns" style="text-align: left;">
+                {{ form_label(form.showObservation) }}&nbsp;
+                {{ form_widget(form.showObservation) }}
+                {{ form_errors(form.showObservation) }}
             </div>
 
         </div>
