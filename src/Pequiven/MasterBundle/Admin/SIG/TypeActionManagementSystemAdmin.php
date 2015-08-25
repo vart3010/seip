@@ -28,17 +28,8 @@ class TypeActionManagementSystemAdmin extends Admin
     protected function configureFormFields(FormMapper $form) 
     {
         $form
-            ->tab('General')
-                    ->add('ref')
-                    ->add('enabled',null,array(
-                        'required' => true,
-                    ))
-                ->end()
-            ->end()
-            ->tab('Details')
-                    ->add('description')
-                ->end()
-            ->end()
+            ->add('ref')                    
+            ->add('description')
         ;
     }
     

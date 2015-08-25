@@ -582,3 +582,14 @@ services:
             - ~
         calls:
             - [ setTranslationDomain, [SonataAdminBundle]]
+    # Tipos de plan de acción del informe de evolución
+    sonata.admin.sig_typeaction_management_system:
+        class: Pequiven\MasterBundle\Admin\SIG\TypeActionManagementSystemAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "SIG" ,label: "Tipos de Acciones del Plan de Acción" }
+        arguments:
+            - ~
+            - Pequiven\SIGBundle\Entity\TypeActionManagementSystem
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
