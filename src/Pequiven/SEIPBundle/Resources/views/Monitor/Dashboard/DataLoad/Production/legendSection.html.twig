@@ -1,0 +1,32 @@
+{# empty Twig template #}
+{% if typeView == constant('Pequiven\\SEIPBundle\\Entity\\Monitor::MONITOR_PRODUCTION_VIEW_STATUS_CHARGE') %}
+    <table class="{#bold#}">
+        <tbody>
+            <tr>
+                <td><img src="{{ asset('bundles/pequivenseip/logotipos/icon_bar_red.png') }}" width="40px" height="40px" /></td>
+                <td>&nbsp;Sin Notificar&nbsp;</td>
+                <td><img src="{{ asset('bundles/pequivenseip/logotipos/icon_bar_yellow.png') }}" width="40px" height="40px" /></td>
+                <td>&nbsp;Notificación Pendiente&nbsp;</td>
+                <td><img src="{{ asset('bundles/pequivenseip/logotipos/icon_bar_green.png') }}" width="40px" height="40px" /></td>
+                <td>&nbsp;Notificación Completa&nbsp;</td>
+                <td><img src="{{ asset('bundles/pequivenseip/logotipos/icon_bar_blue.png') }}" width="40px" height="40px" /></td>
+                <td>&nbsp;Plan</td>
+            </tr>
+        </tbody>
+    </table>
+{% elseif typeView == constant('Pequiven\\SEIPBundle\\Entity\\Monitor::MONITOR_PRODUCTION_VIEW_COMPLIANCE') %}
+    <table class="{#bold#}">
+        <tbody>
+            <tr>
+                <td><img src="{{ asset('bundles/pequivenseip/logotipos/icon_bar_red.png') }}" width="40px" height="40px" /></td>
+                <td>&nbsp;< 50%&nbsp;</td>
+                <td><img src="{{ asset('bundles/pequivenseip/logotipos/icon_bar_yellow.png') }}" width="40px" height="40px" /></td>
+                <td>&nbsp;>= 50% y <= 90%&nbsp;</td>
+                <td><img src="{{ asset('bundles/pequivenseip/logotipos/icon_bar_green.png') }}" width="40px" height="40px" /></td>
+                <td>&nbsp;> 90%&nbsp;</td>
+                <td><img src="{{ asset('bundles/pequivenseip/logotipos/icon_bar_blue.png') }}" width="40px" height="40px" /></td>
+                <td>&nbsp;Plan</td>
+            </tr>
+        </tbody>
+    </table>
+{% endif %}
