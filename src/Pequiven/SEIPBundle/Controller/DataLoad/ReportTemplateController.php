@@ -792,6 +792,36 @@ class ReportTemplateController extends SEIPController {
                     'attr' => array('class' => 'select2 input-xlarge'),
                     'translation_domain' => 'PequivenSEIPBundle',
                 ])
+                ->add('showProduction', 'checkbox', [
+                    'label_attr' => array('class' => 'label bold'),
+                    'required' => false,
+                    'translation_domain' => 'PequivenSEIPBundle',
+                    'data' => $defaultShow,
+                ])
+                ->add('showRawMaterial', 'checkbox', [
+                    'label_attr' => array('class' => 'label bold'),
+                    'required' => false,
+                    'translation_domain' => 'PequivenSEIPBundle',
+                    'data' => $defaultShow,
+                ])
+                ->add('showServices', 'checkbox', [
+                    'label_attr' => array('class' => 'label bold'),
+                    'required' => false,
+                    'translation_domain' => 'PequivenSEIPBundle',
+                    'data' => $defaultShow,
+                ])
+                ->add('showInventory', 'checkbox', [
+                    'label_attr' => array('class' => 'label bold'),
+                    'required' => false,
+                    'translation_domain' => 'PequivenSEIPBundle',
+                    'data' => $defaultShow,
+                ])
+                ->add('showObservation', 'checkbox', [
+                    'label_attr' => array('class' => 'label bold'),
+                    'required' => false,
+                    'translation_domain' => 'PequivenSEIPBundle',
+                    'data' => $defaultShow,
+                ])
                 ->getForm();
         $productsReportConsulting = [];
         if ($request->isMethod('POST') && $form->submit($request)->isValid()) {
@@ -803,7 +833,13 @@ class ReportTemplateController extends SEIPController {
             $showDay = $data['showDay'];
             $showMonth = $data['showMonth'];
             $showYear = $data['showYear'];
-
+            
+            $showProduction = $data["showProduction"];
+            $showService = $data["ShowService"];
+            $showRawMaterial = $data["showRawMaterial"];
+            $showInventory = $data["showInventory"];
+            $showObservation = $data["showObservation"];
+            
             $dateFrom = $data['dateFrom'];
             $dateEnd = $data['dateEnd'];
 
@@ -1186,6 +1222,12 @@ class ReportTemplateController extends SEIPController {
                 'showDay' => $showDay,
                 'showMonth' => $showMonth,
                 'showYear' => $showYear,
+                'showProduction'=>$showProduction,
+                'showRawMaterial'=>$showRawMaterial,
+                'showService'=>$showService,
+                '$showInventory'=>$showInventory,
+                'showObservation'=>$showObservation,
+                
                 'byRange' => $byRange,
                 //'withDetails' => $withDetails,
                 'dateFrom' => $dateFrom,
