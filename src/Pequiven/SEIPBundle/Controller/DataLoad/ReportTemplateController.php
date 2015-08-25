@@ -725,7 +725,7 @@ class ReportTemplateController extends SEIPController {
                     'format' => 'd/M/y',
                     'widget' => 'single_text',
                     'translation_domain' => 'PequivenSEIPBundle',
-                    'attr' => array('class' => 'input'),
+                    'attr' => array('class' => 'input input-xlarge'),
                     'data' => $dateReport,
                     'required' => false,
                 ])
@@ -771,7 +771,7 @@ class ReportTemplateController extends SEIPController {
                     'format' => 'd/M/y',
                     'widget' => 'single_text',
                     'translation_domain' => 'PequivenSEIPBundle',
-                    'attr' => array('class' => 'input'),
+                    'attr' => array('class' => 'input input-xlarge'),
                     'required' => false,
                 ])
                 ->add('dateEnd', 'date', [
@@ -779,7 +779,7 @@ class ReportTemplateController extends SEIPController {
                     'format' => 'd/M/y',
                     'widget' => 'single_text',
                     'translation_domain' => 'PequivenSEIPBundle',
-                    'attr' => array('class' => 'input'),
+                    'attr' => array('class' => 'input input-xlarge'),
                     'required' => false,
                 ])
                 ->add('typeReport', 'choice', [
