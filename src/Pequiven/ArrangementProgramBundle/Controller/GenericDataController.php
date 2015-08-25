@@ -247,12 +247,15 @@ class GenericDataController extends SEIPController
         $user = $this->getUser();        
         $criteria = $request->get('filter',$this->config->getCriteria());
 
+        $period = 1;
         //$repository = $this->get('pequiven.repository.sig_management_system');        
         $repository = $this->get('pequiven.repository.sig_indicator');  
-        $results = $repository->findBy(array('period' => $periodService->getPeriodActive()->getId()));
+        $results = $repository->findBy(array('period' => $period));
+        //$results = $repository->findBy(array('period' => $periodService->getPeriodActive()->getId()));
+        //$results = $repository->findAll();
         
-        var_dump(count($results));
-        die();
+        //var_dump(count($results));
+        //die();
         
         $view = $this->view();
         $view->setData($results);

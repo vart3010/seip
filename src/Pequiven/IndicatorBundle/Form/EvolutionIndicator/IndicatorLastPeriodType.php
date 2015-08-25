@@ -24,7 +24,10 @@ class IndicatorLastPeriodType extends AbstractType
                 'class' => 'Pequiven\IndicatorBundle\Entity\Indicator',
                 'property' => 'ref',
                 'attr'=> array(
-                'class'=> 'select2 input-xlarge form-control'),
+                'class'=> 'select2 input-large form-control',
+                //'ng-model' => 'model.lastPeriod',
+                //'ng-options' => 'value as value.ref for (key,value) in data.lastPeriod'
+                ),
                                ))            
         ;
     }

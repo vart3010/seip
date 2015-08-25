@@ -19,6 +19,9 @@ use Pequiven\IndicatorBundle\Form\EvolutionIndicator\EvolutionCauseType;
 use Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionAction;
 use Pequiven\IndicatorBundle\Form\EvolutionIndicator\EvolutionActionType;
 
+use Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionTrend;
+use Pequiven\IndicatorBundle\Form\EvolutionIndicator\EvolutionTrendType;
+
 use Pequiven\IndicatorBundle\Form\EvolutionIndicator\IndicatorLastPeriodType;
 
 class IndicatorSigController extends ResourceController
@@ -144,7 +147,8 @@ class IndicatorSigController extends ResourceController
         $results = $this->get('pequiven.repository.sig_causes_indicator')->findByindicator($indicator);
         //Carga de las Acciones
         $action = $this->get('pequiven.repository.sig_action_indicator')->findByindicatorRel($indicator);
-
+        //Carga el analisis de la tendencia
+        $trend = $this->get('pequiven.repository.sig_trend_indicator')->findByindicator($indicator);
         //return $response;
         
         // Fin configuracion de grafico     
@@ -159,6 +163,7 @@ class IndicatorSigController extends ResourceController
                 'dataCause'                      => $dataCause,
                 'cause'                          => $results,
                 'data_action'                    => $action,
+                'trend'                          => $trend,
                 $this->config->getResourceName() => $resource,
                 'form'                           => $form->createView()
             ));
@@ -210,6 +215,8 @@ class IndicatorSigController extends ResourceController
     {   
         $idIndicator = $request->get('idIndicator');
         //var_dump($request->get('pequiven_indicatorbundle_indicator_last_period')['indicatorlastPeriod']);
+        var_dump($request);
+        
         $lastPeriod = $request->get('pequiven_indicatorbundle_indicator_last_period')['indicatorlastPeriod'];
 
         $em = $this->getDoctrine()->getManager();
@@ -362,14 +369,10 @@ class IndicatorSigController extends ResourceController
     function getFormTrendAction(Request $request)
     {
         $indicator = $this->findIndicatorOr404($request);        
+        $idIndicator = $request->get('idIndicator');
         
-        $valueIndicator = $this->resourceResolver->getResource(
-            $this->getRepository(),
-            'findOneBy',
-            array(array('id' => $request->get('id',0))));
-
-        //$form = $this->buildForm();
-        //$form = $this->buildForm($indicator,$valueIndicator);
+        $trend = new EvolutionTrend();
+        $form  = $this->createForm(new EvolutionTrendType(), $trend);
         
         $view = $this
             ->view()
@@ -377,12 +380,43 @@ class IndicatorSigController extends ResourceController
             ->setTemplateVar($this->config->getPluralResourceName())
             ->setData(array(
                 'indicator' => $indicator,
-                //'form' => $form->createView(),
-                'valueIndicator' => $valueIndicator
+                'form' => $form->createView(),
             ))
         ;
         $view->getSerializationContext()->setGroups(array('id','api_list'));
         return $view;
+    }
+
+    /**
+     * Añade la tendencia del indicador
+     * 
+     * @param Request $request
+     * @return type
+     */
+    public function addTrendAction(Request $request)
+    {   
+        $indicator = $request->get('idIndicator');
+        $repository = $this->get('pequiven.repository.sig_indicator');
+        $results = $repository->find($indicator);
+        
+        $user = $this->getUser();
+        $data = $results;
+        $trend = new EvolutionTrend();
+        $form  = $this->createForm(new EvolutionTrendType(), $trend);
+        
+        $trend->setIndicator($data);
+        $trend->setCreatedBy($user);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($trend);
+            $em->flush();
+
+           // return $this->redirect($this->generateUrl('pequiven_causes_form_add'));
+        }     
     }
 
     /**

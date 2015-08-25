@@ -75,6 +75,28 @@ pequiven_causes_evolution_add:
     methods: [POST]
     options:
         expose: true
+#Guardamos el formulario de la tendencia del indicador
+pequiven_trend_evolution_add:
+    path: /{idIndicator}/addTrend.{_format}
+    defaults:
+        _controller: pequiven.controller.indicator_sig:addTrendAction
+        _format: json
+    requirements:
+        _format: json
+    methods: [POST]
+    options:
+        expose: true
+#Eliminamos las causas de desviación
+pequiven_causes_evolution_delete:
+    path: /{id}/delete.{_format}
+    defaults:
+        _controller: pequiven.controller.indicator_sig:deleteCauseAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET]
+    options:
+        expose: true
 #filtro causas del indicador
 pequiven_sig_causes_indicator_evolution:
     path: /causes-evolution.{_format}

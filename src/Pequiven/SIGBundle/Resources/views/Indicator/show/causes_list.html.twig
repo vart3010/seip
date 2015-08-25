@@ -32,7 +32,7 @@
         {% for cause_data in cause %}
             <tbody>
                 <tr>
-                    <td></td>
+                    <td>--</td>
                     <th scope="row" style="">
                         {{ cause_data.valueofCauses }}
                     </th>
@@ -42,13 +42,26 @@
                         <small class="tag">({{ cause_data.createdBy.username }})</small>
                     </td>
                         <td class="align-right vertical-center">
-                            <span class="select compact">
-                                <a href class="select-value form-edit">{{ 'pequiven.actions'|trans({},'messages') }}</a>
-                                <span class="select-arrow"></span>
-                                <span class="drop-down">
-                                    <a href ng-click="removeFeatureIndicator(featureIndicator)" class="button icon-cross-round">{{ "pequiven.actions.delete"|trans({},"messages") }}</a>
+                           <div >
+
+                                <span class="select compact">
+                                    <a href class="select-value form-edit">{{ 'pequiven.actions'|trans({},'messages') }}</a>
+                                    <span class="select-arrow"></span>
+                                    <span class="drop-down">
+                                    
+                                    <a href ng-click="loadTemplateCausesDesviation(cause_data)" class="button icon-pencil">{{ "pequiven.actions.edit"|trans({},"messages") }}</a>
+                                    
+                                    <a href ng-click="removeCausesEvolution(cause_data='{{ cause_data.id }}')" 
+                                    class="button icon-cross-round">{{ "pequiven.actions.delete"|trans({},"messages") }}</a>
+
+                                    <span ng-app ng-init="" class=" button icon-download" onClick="o">
+                                    {{ "pequiven.actions.download_file"|trans({},"messages") }}
+                                        </span>
+                                        
+                                    </span>
+
+
                                 </span>
-                            </span>
                         </td>
                 </tr>
                     

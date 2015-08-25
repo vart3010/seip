@@ -31,7 +31,17 @@
         
         <div ng-controller="TableFormatController">
         <div ng-controller="IndicatorSigEvolutionController">
-        <div ng-controller="EvolutionIndicatorFilters">
+        <!-- <div ng-controller="EvolutionIndicatorFilters"> -->
+
+        {#    <div class="field-block button-height" >                                                
+                      <label class="bold">{{ 'sig.relation_indicator'|trans ({}, 'messages') }}</label>
+                                <br/>
+                            <div class="with-mid-padding">
+                                <select class="select2 input-xlarge" id="selectLastPeriod" ng-model="model.lastPeriod" ng-options="value as value.ref for (key,value) in data.lastPeriod" >
+                                <option value=''></option>
+                                </select>
+                            </div>
+                    </div> #}
         
         {#<div ng-controller="IndicatorAsocLastPeriodController"> #}
             
@@ -58,9 +68,9 @@
         {% endif %}
             {# fin Button formulario relacion lastperiod #}
         </div>
-        </div>
-        </div>
+      </div>
     </div>
+  
     <br>
         {# Graficos #}
         <div class="columns with-padding"> 
@@ -107,7 +117,7 @@
 
     {# Analisis de Tendencia #}    
             <br /><br />
-            {#{% include 'PequivenSIGBundle:Indicator:show/analysis.html.twig' %} 
+            {% include 'PequivenSIGBundle:Indicator:show/analysis.html.twig' %} 
             &nbsp;    
     {# Analisis de Causas #}
             <br /><br />

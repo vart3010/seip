@@ -112,6 +112,7 @@ pequiven_indicator:
 form:
     ref: Nro. de Referencia
     indicator: Indicador
+    trend_analysis: Analisis de Tendencia
     description: Descripción del Indicador
     name: Nombre del Indicador
     nameIndicatorStrategic: Nombre del Indicador Estratégico

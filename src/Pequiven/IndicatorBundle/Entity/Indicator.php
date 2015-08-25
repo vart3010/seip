@@ -588,6 +588,14 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionAction",mappedBy="indicatorRel",cascade={"persist","remove"})
      */
     protected $indicatorAction;
+
+    /**
+     * Tendencia del indicador
+     * 
+     * @var \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionTrend
+     * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionTrend",mappedBy="indicator",cascade={"persist","remove"})
+     */
+    protected $indicatorTrend;
    
     /**
      * Constructor
@@ -606,6 +614,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
         $this->indicatorlastPeriod = new \Doctrine\Common\Collections\ArrayCollection();
         $this->indicatorCause = new \Doctrine\Common\Collections\ArrayCollection();
         $this->indicatorAction = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->indicatorTrend = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -1110,6 +1119,37 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      */
     public function getIndicatorAction() {
         return $this->indicatorAction;
+    }
+
+    /**
+     * Add indicatorTrend
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionTrend $indicatorTrend
+     * @return Indicator
+     */
+    public function addIndicatorTrend(\Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionTrend $indicatorTrend) {
+
+        $this->indicatorTrend->add($indicatorTrend);
+
+        return $this;
+    }
+
+    /**
+     * Remove indicatorTrend
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionTrend $indicatorTrend
+     */
+    public function removeIndicatorTrend(\Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionTrend $indicatorTrend) {
+        $this->indicatorTrend->removeElement($indicatorTrend);
+    }
+
+    /**
+     * Get indicatorTrend
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getIndicatorTrend() {
+        return $this->indicatorTrend;
     }
 
     /**

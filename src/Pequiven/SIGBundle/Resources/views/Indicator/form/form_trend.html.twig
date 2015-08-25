@@ -1,27 +1,15 @@
 {% trans_default_domain 'PequivenIndicatorBundle' %}
     
-    <div ng-controller="TableFormatController">
-        <div ng-controller="IndicatorAsocLastController">
-
         
-        <form method="POST" id="form_value_indicator">
+        <form method="POST" id="form_trend_evolution">
             <fieldset class="fieldset fields-list">
                 <legend class="legend">{{ 'sig.trend_analysis'|trans ({}, 'messages') }}</legend>
-                {# {% for child in form.children %}
+
                     <div class="field-block button-height" >
-                        {{ form_label(child) }}
-                        {{ form_widget(child) }}
-                        {{ form_errors(child) }}
+                        {# {{ form_label(form) }} #}
+                        {{ form_widget(form) }}
+                        {{ form_errors(form) }}
                     </div>
-                {% endfor %} #}
-                {# #}              
-                     <!-- Filter ManagementSystem -->
-            <form method="POST" id="form_indicator_plan">
-                <div class="field-block button-height" >           
-                
-                <label class="label">Analisis de Tendencia: </label>
-                <p><textarea type="text" class="input  autoexpanding" name="trend" value=""></textarea><p>
-                </div><br/>
-            </form>
+            
             </fieldset>
         </form>       

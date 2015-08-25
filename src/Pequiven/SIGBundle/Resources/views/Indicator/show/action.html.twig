@@ -33,15 +33,11 @@
     {% for  action in data_action %}
             <tbody align="center">
                 <tr>
-                    <td></td>
+                    <td>--</td>
                     <th scope="row" style="">
                         {{ action.action }}
                     </th>
-                    <td >{{ action.id }}
-                    {% for typeAction in action.indicatorAction %}
-                      <li>{{ typeAction.description }}</li>
-                    {% endfor %}
-                        </td>
+                    <td>{{ action.indicatorAction.ref }}</td>
                     <td>{{ action.dateStart | date("m/d/Y") }}</td>
                     <td>{{ action.dateEnd | date("m/d/Y") }}</td>
                     <td>{{ action.advance }}</td>

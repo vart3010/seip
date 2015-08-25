@@ -3600,33 +3600,37 @@ class IndicatorService implements ContainerAwareInterface {
             //Data 2014            
             $acumLast = $cant = $promLast = 0;
             $indicatorlast = $indicator->getindicatorLastPeriod();
-            foreach ($indicatorlast->getValuesIndicator() as $value) {
+            if ($indicatorlast) {
+                
+                foreach ($indicatorlast->getValuesIndicator() as $value) {
 
-                    $results = $value->getValueOfIndicator();
+                        $results = $value->getValueOfIndicator();
 
-                    $acumLast = $acumLast + $results;
-                    $cant = $cant + 1;
+                        $acumLast = $acumLast + $results;
+                        $cant = $cant + 1;
+                }            
             }
             
-            
-            if ($indicatorlast === null) {
-                
-                $dataAnt["value"] = 0;//Pasando data a Data2014 si no tiene ralacion
+                if ($indicatorlast === null) {
+                    
+                    $dataAnt["value"] = 0;//Pasando data a Data2014 si no tiene ralacion
 
-            }if($cant === 0){
-                
-                $dataAnt["value"] = 0;//Pasando data a Data2014 si no tiene ralacion
-            }
-            else{
+                }if($cant === 0){
+                    
+                    $dataAnt["value"] = 0;//Pasando data a Data2014 si no tiene ralacion
+                }
+                else{
 
-                $promLast = $acumLast / $cant;                
-                $dataAnt["value"] = $promLast;//Pasando data a Data2014                
-            }
+                    $promLast = $acumLast / $cant;                
+                    $dataAnt["value"] = $promLast;//Pasando data a Data2014                
+                }
             //Data 2014
             $dataAnt["color"] = '#f2c500';            
-            $dataAnt["showvalues"] = '0';
+            $dataSetAnt["showvalues"] = "1";
+            //$dataAnt["link"]  = $this->generateUrl('pequiven_indicator_show', array('id' => $indicatorlast->getId()));            
             $dataSetAnt["data"][] = $dataAnt;//2014
 
+            //Pasando espacios vacios para desarrollo de la gráfica
             $dataSetTend["data"][] = array( 'value' => '' );
             $dataSetReal["data"][] = array( 'value' => '' );
             
@@ -3637,10 +3641,7 @@ class IndicatorService implements ContainerAwareInterface {
                 $dataSetReal["data"][] = $dataReal;
                 $dataSetTend["data"][] = $dataReal;                
             }
-            //Carga de Prom indicatorParent2014
-            //borrar
-            //borrar
-
+            
             //Carga de meta Objetivo2015
             foreach ($indicator->getObjetives() as $value) {
                 $dataValueObjetive = $value->getgoal();
@@ -3648,15 +3649,17 @@ class IndicatorService implements ContainerAwareInterface {
             if ($dataValueObjetive == NULL ) {
                 $dataValueObjetive = 0;
             }
-            //var_dump($dataValueObjetive);
-            //die();
+            
             //Data Prom
+            $dataSetReal["showvalues"] = "1";
             $dataAcum["value"] = $prom;//Pasando data a data prom
             $dataAcum["color"] = '#0a5f87';            
             $dataSetReal["data"][] = $dataAcum;//promedio
+            
             //Pasando Objetivo Acum
             $dataObj["value"] = $dataValueObjetive;//Pasando data a Dataobj
             $dataObj["color"] = '#087505';
+            //$dataObj["link"]  = $this->generateUrl('pequiven_line_strategic_show', array('id' => $value->getId()));
             $dataSetReal["data"][] = $dataObj;//Acumulado
             
             //Carga de Tendencia
@@ -3707,14 +3710,6 @@ class IndicatorService implements ContainerAwareInterface {
                 $contCause = $contCause + 1;
                 $category[] = $label;
             }
-
-            //Carga de meta Objetivo2015
-            /*foreach ($indicator->getObjetives() as $value) {
-                $dataValueObjetive = $value->getgoal();
-            }
-            if ($dataValueObjetive == NULL ) {
-                $dataValueObjetive = 0;
-            }*/
            
         //$data['dataSource']['chart'] = $chart;
         $data['dataSource']['categories'][]["category"] = $category;

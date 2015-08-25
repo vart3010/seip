@@ -1424,6 +1424,22 @@ angular.module('seipModule.controllers', [])
                     $scope.openModalAuto();
                 }
             };
+            //Carga del formulario para la relacion del indicador 2014
+            $scope.loadTemplateAnalysisTrend = function (resource) {
+                $scope.initFormTrend(resource);
+                if (isInit == false) {
+                    isInit = true;
+                }
+                $scope.templateOptions.setTemplate($scope.templates[0]);
+                $scope.templateOptions.setParameterCallBack(resource);
+                //$scope.templateOptions.setVar('evaluationResult', 0);
+                if (resource) {
+                    $scope.templateOptions.enableModeEdit();
+                    $scope.openModalAuto();
+                } else {
+                    $scope.openModalAuto();
+                }
+            };
             //Carga el formulario del plan de Acción
             $scope.loadTemplateActionEvolution = function (resource) {
                 $scope.initFormActionAdd(resource);
@@ -1576,9 +1592,50 @@ angular.module('seipModule.controllers', [])
                     return false;
                 });
             };
+            //añade el analisis de la tendencia del indicador
+            var addTrendEvolution = function (save, successCallBack) {
+                var formValueIndicator = angular.element('#form_trend_evolution');
+                var formData = formValueIndicator.serialize();
+                
+                if (save == undefined) {
+                    var save = false;
+                }
+                if (save == true) {
+                    var url = Routing.generate('pequiven_trend_evolution_add', {idIndicator: $scope.id_indicator });
+                } 
+                notificationBarService.getLoadStatus().loading();
+                return $http({
+                    method: 'POST',
+                    url: url,
+                    data: formData,
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'}  // set the headers so angular passing info as form data (not request payload)
+                }).success(function (data) {
+                    $scope.templateOptions.setVar("form", {errors: {}});
+                    //$scope.templateOptions.setVar('evaluationResult', data.result);
+                    if (successCallBack) {
+                        successCallBack(data);
+                    }
+                    notificationBarService.getLoadStatus().done();
+                    return true;
+                }).error(function (data, status, headers, config) {
+                    $scope.templateOptions.setVar("form", {errors: {}});
+                    if (data.errors) {
+                        if (data.errors.errors) {
+                            $.each(data.errors.errors, function (index, value) {
+                                notifyService.error(Translator.trans(value));
+                            });
+                        }
+                        $scope.templateOptions.setVar("form", {errors: data.errors.children});
+                    }
+                    //$scope.templateOptions.setVar('evaluationResult', 0);
+                    notificationBarService.getLoadStatus().done();
+                    return false;
+                });
+            };
             $scope.templateOptions.setVar('addCause', addCause);
             $scope.templateOptions.setVar('addAction', addAction);
             $scope.templateOptions.setVar('addLastPeriod', addLastPeriod);
+            $scope.templateOptions.setVar('addTrendEvolution', addTrendEvolution);
             //$scope.templateOptions.setVar('evaluationResult', 0);
             var confirmCallBack = function () {
                 addCause(true, function (data) {
@@ -1590,7 +1647,55 @@ angular.module('seipModule.controllers', [])
                 addLastPeriod(true, function (data) {
                     $scope.indicator = data.indicator;
                 });
+
+                addTrendEvolution(true, function (data) {
+                    $scope.indicator = data.indicator;
+                });
                 return true;
+            };
+            //Carga del fomrulario
+            $scope.initFormAsocLast = function (resource) {
+                var d = new Date();
+                var numero = d.getTime();
+
+                var parameters = {
+                    idIndicator: $scope.id_indicator,
+                    _dc: numero
+                };
+                if (resource) {
+                    parameters.id = resource.id;
+                }
+                var url = Routing.generate('pequiven_indicator_last_period_form', parameters);
+                $scope.templates = [
+                    {
+                        name: 'Indicador Periodo Anterior 2014',
+                        url: url,
+                        confirmCallBack: confirmCallBack,
+                    }
+                ];
+                $scope.templateOptions.setTemplate($scope.templates[0]);
+            };
+            //Formulario Analisis de la tendencia
+            $scope.initFormTrend = function (resource) {
+                var d = new Date();
+                var numero = d.getTime();
+
+                var parameters = {
+                    idIndicator: $scope.id_indicator,
+                    _dc: numero
+                };
+                if (resource) {
+                    parameters.id = resource.id;
+                }
+                var url = Routing.generate('pequiven_indicatortrend_get_form', parameters);
+                $scope.templates = [
+                    {
+                        name: 'Analisis de la Tendencia del Indicador',
+                        url: url,
+                        confirmCallBack: confirmCallBack,
+                    }
+                ];
+                $scope.templateOptions.setTemplate($scope.templates[0]);
             };
             //Carga del fomrulario
             $scope.initFormActionAdd = function (resource) {
@@ -1619,6 +1724,8 @@ angular.module('seipModule.controllers', [])
                 //var idIni = angular.element('#idIdnicator');
                 var d = new Date();
                 var numero = d.getTime();
+                var width = 200;
+                var heigth = 60;
 
                 var parameters = {
                     idIndicator: $scope.id_indicator,
@@ -1633,28 +1740,8 @@ angular.module('seipModule.controllers', [])
                         name: 'Causas de Desviación del Indicador',
                         url: url,
                         confirmCallBack: confirmCallBack,
-                    }
-                ];
-                $scope.templateOptions.setTemplate($scope.templates[0]);
-            };
-            //Carga del fomrulario
-            $scope.initFormAsocLast = function (resource) {
-                var d = new Date();
-                var numero = d.getTime();
-
-                var parameters = {
-                    idIndicator: $scope.id_indicator,
-                    _dc: numero
-                };
-                if (resource) {
-                    parameters.id = resource.id;
-                }
-                var url = Routing.generate('pequiven_indicator_last_period_form', parameters);
-                $scope.templates = [
-                    {
-                        name: 'Indicador Periodo Anterior 2014',
-                        url: url,
-                        confirmCallBack: confirmCallBack,
+                        width: width,
+                        height: heigth,
                     }
                 ];
                 $scope.templateOptions.setTemplate($scope.templates[0]);
@@ -1683,34 +1770,64 @@ angular.module('seipModule.controllers', [])
                     }
                 }).width(width - horizontalPadding).height(heigth - verticalPadding);
             };
+            //Removiendo las causas
+            $scope.removeCausesEvolution = function (causesEvolution) {
+                console.log($scope.cause_data);
+                $scope.openModalConfirm('pequiven.modal.confirm.indicator.delete_feature', function () {
+                    notificationBarService.getLoadStatus().loading();
+                    var url = Routing.generate("pequiven_causes_evolution_delete", {id: cause_data.id});
+                    $http({
+                        method: 'GET',
+                        url: url,
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'}  // set the headers so angular passing info as form data (not request payload)
+                    }).success(function (data) {
+                        $scope.templateOptions.setVar("form", {errors: {}});
+                        $scope.indicator.cause_data.remove(cause_data);
+                        notificationBarService.getLoadStatus().done();
+                        return true;
+                    }).error(function (data, status, headers, config) {
+                        $scope.templateOptions.setVar("form", {errors: {}});
+                        if (data.errors) {
+                            if (data.errors.errors) {
+                                $.each(data.errors.errors, function (index, value) {
+                                    notifyService.error(Translator.trans(value));
+                                });
+                            }
+                            $scope.templateOptions.setVar("form", {errors: data.errors.children});
+                        }
+                        notificationBarService.getLoadStatus().done();
+                        return false;
+                    });
+                });
+            };
         })
         .controller('EvolutionIndicatorFilters', function ($scope, ngTableParams, $http, sfTranslator, notifyService) {
             //console.log($scope.id_indicator);
-            var selectTypeAction = angular.element ("#selectTypeAction");
+            var selectLastPeriod = angular.element ("#selectLastPeriod");
             var selectCausesEvolution = angular.element ("#selectCausesEvolution");
             $scope.data = {
-                typeAction: null,
+                lastPeriod: null,
                 causesEvolution: null
             };
             $scope.model = {
-                typeAction: null,
+                lastPeriod: null,
                 causesEvolution: null
             };
-            //Carga de los Tipos de Acción
-            $scope.getTypeAction = function(){
+            //Carga de los indicadores para la relación con el periodo 2014
+            $scope.getLastPeriod = function(){
                 var parameters = {
                     filter:{}
                 }
             }
-            $http.get(Routing.generate('pequiven_arrangementprogram_data_type_action'))
+            $http.get(Routing.generate('pequiven_arrangementprogram_datasig_indicator_lastperiod'))
                     .success(function (data) {
-                        $scope.data.typeAction = data;
-                        if ($scope.model.typeAction != null) {
-                            $scope.setValueSelect2("selectTypeAction", $scope.model.typeAction, $scope.data.typeAction, function (selected) {
-                                $scope.model.typeAction = selected;
+                        $scope.data.lastPeriod = data;
+                        if ($scope.model.lastPeriod != null) {
+                            $scope.setValueSelect2("selectLastPeriod", $scope.model.lastPeriod, $scope.data.lastPeriod, function (selected) {
+                                $scope.model.lastPeriod = selected;
                             });
                         }
-                    });
+                   });            
             //Carga las causas de desviación del indicador
             $scope.getCausesEvolution = function(){
                 var parameters = {
@@ -1726,12 +1843,12 @@ angular.module('seipModule.controllers', [])
                             });
                         }
                     });
-            //Scope typeAction
-             $scope.$watch("model.typeAction", function (newParams, oldParams) {
-                if ($scope.model.typeAction != null && $scope.model.typeAction.id != undefined) {
-                    $scope.tableParams.$params.filter['TypeAction'] = $scope.model.typeAction.id;
+            //Scope lastPeriod
+             $scope.$watch("model.lastPeriod", function (newParams, oldParams) {
+                if ($scope.model.lastPeriod != null && $scope.model.lastPeriod.id != undefined) {
+                    $scope.tableParams.$params.filter['LastPeriod'] = $scope.model.lastPeriod.id;
                 } else {
-                    $scope.tableParams.$params.filter['TypeAction'] = null;
+                    $scope.tableParams.$params.filter['LastPeriod'] = null;
                 }
             });
             //Scope CausesEvolution
@@ -4235,10 +4352,9 @@ angular.module('seipModule.controllers', [])
                                 //"sYAxisName": Translator.trans('chart.arrangementPrograms.sYAxisName'),
                                 //"sYAxisMaxValue": "100",
                                 //"sYAxisMinValue": "0",
-                                //"showValues": "1",
                                 //"placeValuesInside": "0",
                                 "valueFontColor": "#000000",
-                                "showvalues": "1",
+                                //"showvalues": "1",
                                 "rotateValues": "0",
                                 //"labelDisplay": typeLabelDisplay,
                                 //"sNumberSuffix": "%",
