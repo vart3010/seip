@@ -228,7 +228,8 @@ class ReportTemplateService implements ContainerAwareInterface {
         } elseif (isset($options['consolidateCorporation']) && array_key_exists('consolidateCorporation', $options)) {
             unset($options['consolidateCorporation']);
             
-            $chart["caption"] = 'Producción Corporación PQV';
+            $chart["caption"] = 'Producción Pequiven';
+            $chart["yAxisName"] = "TM";
             $chart["showLegend"] = "0";
             
             $repositoryReportTemplate = $this->container->get('pequiven.repository.report_template');
@@ -249,7 +250,7 @@ class ReportTemplateService implements ContainerAwareInterface {
             $dataSerialized = $this->getDataSerialized($reportTemplate, array('consolidateCorporation' => true, 'dateSearch' => $options['dateSearch'], 'reportTemplates' => $reportTemplates));
             
             foreach($reportTemplates as $reportTemplate) {
-                $category[] = array('label' => $reportTemplate->getName());
+                $category[] = array('label' => $reportTemplate->getShortName());
             }
             
             $dataRealValues = $dataPlanValues = array();
