@@ -369,6 +369,30 @@ class ReportTemplateService implements ContainerAwareInterface {
     }
     
     /**
+     * Función que devuelve la data para un gráfico tipo MultiSeriesDualAxis
+     * @param ReportTemplate $reportTemplate
+     * @param type $options
+     * @return type
+     */
+    public function getDataChartMultiSeriesDualAxis(ReportTemplate $reportTemplate, $options = array()){
+        $data = array(
+            'dataSource' => array(
+                'chart' => array(),
+                'categories' => array(),
+                'dataset' => array(),
+                'annotations' => array(),
+                ),
+        );
+
+        $chart = array();
+
+        $data['dataSource']['chart'] = $chart;
+        $data['dataSource']['categories'][]["category"] = $category;
+
+        return $data;
+    }
+    
+    /**
      * Función que retorna la data serializada para los distintos tipo de gráficos que se necesitan para los reportTemplates
      * @param ReportTemplate $reportTemplate
      * @param type $options
