@@ -97,6 +97,13 @@ class ReportTemplate extends BaseModel
     private $users;
     
     /**
+     * Nombre Corto del reporte
+     * @var string
+     * @ORM\Column(name="shortName")
+     */
+    private $shortName;
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -303,4 +310,15 @@ class ReportTemplate extends BaseModel
             $plantReport->recalculate();
         }
     }
+    
+    
+    function getShortName() {
+        return $this->shortName;
+    }
+
+    function setShortName($shortName) {
+        $this->shortName = $shortName;
+    }
+
+
 }
