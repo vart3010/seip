@@ -14,7 +14,10 @@ class ProductionCorporationBox extends \Tecnocreaciones\Bundle\BoxBundle\Model\G
 
     public function getParameters() 
     {   
+        $typeView = $this->getRequest()->get('typeView');
+        
         return array(
+            'typeView' => $typeView,
         );
     }
 
