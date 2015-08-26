@@ -30,7 +30,7 @@
         <div class="" ng-init="urlValueLastIndicatorForm='{{ path('pequiven_indicator_last_period_form',{'idIndicator':indicator_sig.id }) }}'">
         
         <div ng-controller="TableFormatController">
-        <div ng-controller="IndicatorSigEvolutionController">
+        {# <div ng-controller="IndicatorSigEvolutionController"> #}
         <div ng-controller="IndicatorLastPeriodController">
         <!-- <div ng-controller="EvolutionIndicatorFilters"> -->
 
@@ -70,44 +70,44 @@
             {# fin Button formulario relacion lastperiod #}
         </div>
       </div>
-    </div>
-    </div>
+   </div>
+  <br>
   
-    <br>
         {# Graficos #}
         <div class="columns with-padding"> 
-            {# <div class="five-columns twelve-columns-mobile">
-            {# Cargando Grafico informe de evolution #}
-            <center>
-             <div ng-controller="ChartsSigController" class="dashboard" ng-init="renderChartEvolutionSig('chartContainerResult', {{ data|json_encode() }})" style="width: 100%;">
-                    <div class="nine-columns twelve-columns-mobile" id="chartContainerResult">
-                        <!-- This div will hold the chart generated in the footer -->
-                    </div>
-            </div>    
+            {# <div class="five-columns twelve-columns-mobile">#}
+                 <div ng-controller="ChartsSigController" class="dashboard" ng-init="renderChartEvolutionSig('chartContainerResult', {{ data|json_encode() }})" style="width: 95%;" align="center">
+                        <div class="nine-columns twelve-columns-mobile" id="chartContainerResult">
+                            <!-- This div will hold the chart generated in the footer -->
+                        </div>
+                </div>  
+        </div>  
+            
+            &nbsp;
+            {# Analisis de Tendencia #}    
+            <br /><br />
+            {% include 'PequivenSIGBundle:Indicator:show/analysis_trend.html.twig' %} 
             &nbsp; 
+
+        <div class="columns with-padding">         
             {# Fin Grafico#}  
             {# <div class="five-columns twelve-columns-mobile">
                 {# Cargando Grafico Causas de Desviación #}
-             <div ng-controller="ChartsSigController" class="dashboard" ng-init="renderChartSigCs('chartContainerResultCs', {{ dataCause|json_encode() }})" style="width: 100%;">
-                    <div class="nine-columns twelve-columns-mobile" id="chartContainerResultCs">
-                        <!-- This div will hold the chart generated in the footer -->
-                    </div>
-            </div>
-                    </center>
-                {# Fin Grafico#}
+                 <div ng-controller="ChartsSigController" class="dashboard" ng-init="renderChartSigCs('chartContainerResultCs', {{ dataCause|json_encode() }})" style="width: 95%;" align="center">
+                        <div class="nine-columns twelve-columns-mobile" id="chartContainerResultCs">
+                            <!-- This div will hold the chart generated in the footer -->
+                        </div>
+                </div>
         </div> 
+        <br>
         
         {# Fin de Graficos #}
 
-        <br>
-
-
-    {# Analisis de Tendencia #}    
-            <br /><br />
-            {% include 'PequivenSIGBundle:Indicator:show/analysis.html.twig' %} 
-            &nbsp;    
+        
     {# Analisis de Causas #}
             <br /><br />
+            {% include 'PequivenSIGBundle:Indicator:show/analysis_cause.html.twig' %} 
+            <br /><br />            
             {% include 'PequivenSIGBundle:Indicator:show/causes_list.html.twig' %} 
             &nbsp;
     {# Plan de accion y seguimiento #}
@@ -115,6 +115,7 @@
         {% if cause %}
             {% include 'PequivenSIGBundle:Indicator:show/action.html.twig' %}
             &nbsp;
+            {% include 'PequivenSIGBundle:Indicator:show/verification.html.twig' %}            
         {% endif %}
 
     

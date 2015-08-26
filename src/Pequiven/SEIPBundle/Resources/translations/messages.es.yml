@@ -97,7 +97,9 @@ app:
 sig:
     trend_analysis: Análisis de Tendencia
     analysis_causes: Análisis de Causas
+    causes_desviation: Causas de Desviación
     chart_evolution: Graficas de Datos y Tendencia del Proceso
     causes_deviation:  Causas de Desviación
     relation_indicator: Relación Indicador 2014
     action_plan: Plan de Acción y Seguimiento
+    verification_of_the_effectiveness: Verificación de la Eficacia

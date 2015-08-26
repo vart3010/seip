@@ -24,6 +24,12 @@ use Pequiven\IndicatorBundle\Form\EvolutionIndicator\EvolutionTrendType;
 
 use Pequiven\IndicatorBundle\Form\EvolutionIndicator\IndicatorLastPeriodType;
 
+/**
+ * Controlador Informe de Evolución del Indicador
+ *
+ * @author Maximo Sojo <maxsojo13@gmail.com>
+ */
+
 class IndicatorSigController extends ResourceController
 {   
     /**
@@ -180,16 +186,9 @@ class IndicatorSigController extends ResourceController
     function getFormAction(Request $request)
     {
         $indicator = $this->findIndicatorOr404($request); 
-        //var_dump($request->get('idIndicator'));
         
-        /*$valueIndicator = $this->resourceResolver->getResource(
-            $this->getRepository(),
-            'findOneBy',
-            array(array('id' => $request->get('id',0))));*/
         $indicatorRel = new Indicator();
         $form  = $this->createForm(new IndicatorLastPeriodType(), $indicatorRel);
-        //$form = $this->buildForm();
-        //$form = $this->buildForm($indicator,$valueIndicator);
         
         $view = $this
             ->view()
@@ -198,7 +197,6 @@ class IndicatorSigController extends ResourceController
             ->setData(array(
                 'indicator' => $indicator,
                 'form' => $form->createView(),
-                //'valueIndicator' => $valueIndicator
             ))
         ;
         $view->getSerializationContext()->setGroups(array('id','api_list'));
@@ -228,17 +226,13 @@ class IndicatorSigController extends ResourceController
             $dataLast = $this->get('pequiven.repository.sig_indicator')->find($lastPeriod);
             
             }
-        //$indicatorRel = new Indicator();
-        //$form  = $this->createForm(new IndicatorLastPeriodType(), $indicatorRel);
         
         //$indicatorRel->setDescription($data);
         $indicatorRel->setIndicatorLastPeriod($dataLast);
 
-
         //$form->handleRequest($request);
 
         //if ($form->isSubmitted() && $form->isValid()) {
-            //$em->persist($indicatorRel);
             $em->flush();
             return $this->redirect($this->generateUrl('pequiven_indicator_evolution',$idIndicator));
         //}                
@@ -303,8 +297,6 @@ class IndicatorSigController extends ResourceController
             $em = $this->getDoctrine()->getManager();
             $em->persist($action);
             $em->flush();
-
-            //return $this->redirect($this->generateUrl('pequiven_action_evolution_add'));
         }                
     }
 
@@ -362,11 +354,6 @@ class IndicatorSigController extends ResourceController
             $em = $this->getDoctrine()->getManager();
             $em->persist($cause);
             $em->flush();
-
-            //return $this->render('PequivenSIGBundle:Indicator:evolution.html.twig', array('id' => $indicator));
-            //return $this->redirect($this->generateUrl('pequiven_indicator_evolution',array('id' => $indicator)));
-           // return $this->redirect($this->generateUrl('pequiven_causes_form_add'));
-
         }     
     }
 
@@ -381,39 +368,19 @@ class IndicatorSigController extends ResourceController
         //die($request->get('id'));
         $causeId = $request->get('id');
         
-        //eliminar
-        /*$indicator = $request->get('idIndicator');
-        $repository = $this->get('pequiven.repository.sig_indicator');
-        $results = $repository->find($indicator);*/
-        //
         $em = $this->getDoctrine()->getManager();
         $results = $this->get('pequiven.repository.sig_causes_indicator')->find($causeId);
         //var_dump(count($results));
         //die();
-        /*$user = $this->getUser();
-        $data = $results;
-        $cause = new EvolutionCause();
-        $form  = $this->createForm(new EvolutionCauseType(), $cause);*/
-        
-        //$cause->setIndicator($data);
-        //$cause->setCreatedBy($user);
+        if($results){
 
-        //$form->handleRequest($request);
-
-        /*if ($form->isSubmitted() && $form->isValid()) {
-            
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($cause);
-            $em->flush();*/
-
-            $em->remove($results);
-            $em->flush();
+        $em->remove($results);
+        $em->flush();
 
             //return $this->render('PequivenSIGBundle:Indicator:evolution.html.twig', array('id' => $indicator));
             //return $this->redirect($this->generateUrl('pequiven_indicator_evolution',array('id' => $indicator)));
            // return $this->redirect($this->generateUrl('pequiven_causes_form_add'));
-
-        //}     
+        }  
     }
 
     /**

@@ -247,6 +247,10 @@ seip:
             cause: Causa
             value_of_cause: Valor de la Causa
             description: Descripción
+            comments: Comentarios
+            verified_by: Veirificado por
+            verification: Verificación
+            date: fecha
         empty:
             goals: No Hay Metas Cargadas.
             observations: No Hay Observaciones.

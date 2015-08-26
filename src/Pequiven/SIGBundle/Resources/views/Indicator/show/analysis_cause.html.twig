@@ -1,0 +1,37 @@
+{% trans_default_domain 'PequivenSIGBundle' %}
+
+<div ng-controller="IndicatorSigEvolutionController"> 
+
+<div class="block" ng-init="urlValueIndicatorForm='{{ path('pequiven_feature_indicator_get_form',{'idIndicator':indicator_sig.id}) }}'">
+
+    <div class="block-title">
+        <h3 class="ng-binding">{$ indicator_sig.featuresIndicator.length $} {{ 'sig.analysis_causes'|trans ({}, 'messages') }}</h3>
+        <div class="button-group absolute-right compact">
+            <a class="button icon-list-add " href="" ng-click="loadTemplateAnalysisTrend()" title="">{{ 'pequiven.add'|trans({},'messages') }}&nbsp;</a>
+        </div>
+    </div>
+
+    <div class="with-padding">
+        {% set colspan = 5 %}
+        <table class="simple-table responsive-table tables-extras" id="sorting-example2">
+            <thead>
+                <tr>
+                    <th scope="col" width="150%" class="header">
+                        {{ 'form.trend_analysis'|trans({},'PequivenSIGBundle') }}
+                    </th>                    
+                </tr>
+            </thead>
+        {% for data in trend %}
+            <tbody>
+                <tr>
+                    <th align="justify">
+                        {{ data.description }}
+                    </th>                        
+                </tr>
+            </tbody>
+        {% endfor %}
+        </table>
+                
+    </div>
+</div>
+</div>
