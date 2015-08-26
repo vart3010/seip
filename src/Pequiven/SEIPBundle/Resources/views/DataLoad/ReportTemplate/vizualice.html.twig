@@ -87,64 +87,65 @@
                 </div>
             </div>
         </fieldset>
-        <details   open="" class="details margin-bottom">
-            <summary id="filters"  style="padding:6px 6px; " aria-expanded="true" role="button">
-                Filtros
-            </summary>
+
+        <div  class="details margin-bottom" style=" border: 1px solid #bfbfbf; border-radius: 9px;">
+            <div id="filters"  style="background-color: #ddd; padding:10px; cursor: pointer; " aria-expanded="true" role="button">
+                <span style="font-weight: bold; margin-left: 10px;">Filtros</span>
+            </div>
             <div id="areaFilters" style="display: none;" class="with-padding">
                 <div class="columns">
-                    <div class="two-columns">
-                        {{ form_label(form.showDay) }}&nbsp;
+
+                    <div class="four-columns">
                         {{ form_widget(form.showDay) }}
-                        {{ form_errors(form.showDay) }}
+                        {{ form_errors(form.showDay) }}&nbsp;
+                        {{ form_label(form.showDay) }}
                     </div>
-                    <div class="two-columns">
-                        {{ form_label(form.showMonth) }}&nbsp;
+
+                    <div class="four-columns">
                         {{ form_widget(form.showMonth) }}
-                        {{ form_errors(form.showMonth) }}
+                        {{ form_errors(form.showMonth) }}&nbsp;
+                        {{ form_label(form.showMonth) }}
                     </div>
-                    <div class="two-columns">
-                        {{ form_label(form.showYear) }}&nbsp;
+                    <div class="four-columns">
                         {{ form_widget(form.showYear) }}
-                        {{ form_errors(form.showYear) }}
+                        {{ form_errors(form.showYear) }}&nbsp;
+                        {{ form_label(form.showYear) }}
                     </div>
-                    <div class="two-columns">
-                        {{ form_label(form.showProduction) }}&nbsp;
+                    <div class="four-columns">
                         {{ form_widget(form.showProduction) }}
-                        {{ form_errors(form.showProduction) }}
+                        {{ form_errors(form.showProduction) }}&nbsp;
+                        {{ form_label(form.showProduction) }}
                     </div>
-                    <div class="two-columns">
-                        {{ form_label(form.showServices) }}&nbsp;
+                    <div class="four-columns">
                         {{ form_widget(form.showServices) }}
-                        {{ form_errors(form.showServices) }}
-
+                        {{ form_errors(form.showServices) }}&nbsp;
+                        {{ form_label(form.showServices) }}
                     </div>
-                    <div class="two-columns">
-                        {{ form_label(form.showPnr) }}&nbsp;
-                        {{ form_widget(form.showPnr) }}
-                        {{ form_errors(form.showPnr) }}
-                    </div>
-                </div>
-                <div class="columns">
-                    <div class="two-columns">
-                        {{ form_label(form.showRawMaterial) }}&nbsp;
+                    <div class="four-columns">
                         {{ form_widget(form.showRawMaterial) }}
-                        {{ form_errors(form.showRawMaterial) }}
-                    </div>
-                    <div class="two-columns">
-                        {{ form_label(form.showInventory) }}&nbsp;
-                        {{ form_widget(form.showInventory) }}
-                        {{ form_errors(form.showInventory) }}
-                    </div>
-                    <div class="tree-columns" >
-                        {{ form_label(form.showObservation) }}&nbsp;
-                        {{ form_widget(form.showObservation) }}
-                        {{ form_errors(form.showObservation) }}
-                    </div>
+                        {{ form_errors(form.showRawMaterial) }}&nbsp;
+                        {{ form_label(form.showRawMaterial) }}
 
+                    </div>
+                    <div class="four-columns">
+                        {{ form_widget(form.showPnr) }}
+                        {{ form_errors(form.showPnr) }}&nbsp;
+                        {{ form_label(form.showPnr) }}
+                    </div>
+                    <div class="four-columns">
+                        {{ form_widget(form.showInventory) }}
+                        {{ form_errors(form.showInventory) }}&nbsp;
+                        {{ form_label(form.showInventory) }}
+                    </div>
+                    <div class="four-columns" >
+                        {{ form_widget(form.showObservation) }}
+                        {{ form_errors(form.showObservation) }}&nbsp;
+                        {{ form_label(form.showObservation) }}
+                    </div>
                 </div>
+
             </div>
-        </details>
+        </div>
 
 
 
@@ -250,8 +251,8 @@
                     $(".byRange").removeClass("hidden");
                 });
                 $("#form_byRange").change();
-                
-                $("#filters").click(function(){
+
+                $("#filters").click(function () {
                     $("#areaFilters").toggle();
                 });
             });
