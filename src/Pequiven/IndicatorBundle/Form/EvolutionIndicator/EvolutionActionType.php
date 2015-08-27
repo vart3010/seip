@@ -18,10 +18,14 @@ class EvolutionActionType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('ref', 'text', array(
+                'label' => 'Referencia',
+                'label_attr' => array('class' => 'label'),
+                'attr'=> array('class'=> 'input input-large ' ))) 
             ->add('action', 'text', array(
                 'label' => 'Acción',
                 'label_attr' => array('class' => 'label'),
-                'attr'=> array('class'=> 'input input-large validate[required]' )))            
+                'attr'=> array('class'=> 'input input-large ' )))            
             ->add('indicatorAction','entity',array(
                 'label' => 'Tipo de Acción',
                 'label_attr' => array('class' => 'label'),
@@ -41,11 +45,11 @@ class EvolutionActionType extends AbstractType
             ->add('advance', 'text', array(
                 'label'=>'Avance %',
                 'label_attr' => array('class' => 'label'),
-                'attr'=> array('class'=> 'input input-large validate[required]' )))
+                'attr'=> array('class'=> 'input input-large ' )))
             ->add('observations', 'textarea', array(
                 'label'=>'Observaciones',
                 'label_attr' => array('class' => 'label'),
-                'attr'=> array('class'=> 'input input-large validate[required]' )))
+                'attr'=> array('class'=> 'input input-large ' )))
             ->add('evolutionCause','entity',array(
                 'label' => 'Causa del Plan de Acción',
                 'label_attr' => array('class' => 'label'),

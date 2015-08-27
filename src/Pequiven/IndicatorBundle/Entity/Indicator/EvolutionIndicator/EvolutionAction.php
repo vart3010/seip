@@ -4,7 +4,7 @@ namespace Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Pequiven\IndicatorBundle\Model\Indicator\EvolutionAction as Model;
+use Pequiven\IndicatorBundle\Model\Indicator\EvolutionIndicator\EvolutionAction as Model;
 
 /**
  * Plan de Acción y Seguimiento del Indicador
@@ -31,6 +31,12 @@ class EvolutionAction extends Model {
      */
     private $evolutionCause;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="ref" , type="string", length=15)
+     */
+    private $ref;
     /**
      * @var string
      *
@@ -105,6 +111,12 @@ class EvolutionAction extends Model {
      * @ORM\JoinColumn(name="indicator_id", referencedColumnName="id")
      */
     private $indicatorRel;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="\Pequiven\SIGBundle\Entity\TypeVerificationManagementSystem", inversedBy="typeVerification")
+     * @ORM\JoinColumn(name="typeVerification_id", referencedColumnName="id")
+     */
+    private $actionVerification;
     
     /**
      * Get id
@@ -135,6 +147,24 @@ class EvolutionAction extends Model {
      */
     public function getEvolutionCause() {
         return $this->evolutionCause;
+    }
+
+    /**
+     * 
+     * @param type $ref
+     * @return type
+     */
+    public function setRef($ref) {
+        $this->ref = $ref;
+        return $ref;
+    }
+
+    /**
+     * 
+     * @return type
+     */
+    public function getRef() {
+        return $this->ref;
     }
 
     /**
@@ -355,5 +385,26 @@ class EvolutionAction extends Model {
      */
     public function getIndicator() {
         return $this->indicatorRel;
+    }
+
+    /**
+     * Set actionVerification
+     *
+     * @param \Pequiven\SIGBundle\Entity\TypeVerificationManagementSystem $actionVerification
+     */
+    public function setActionVerification(\Pequiven\SIGBundle\Entity\TypeVerificationManagementSystem $actionVerification) {
+        
+        $this->actionVerification = $actionVerification;
+
+        return $this;
+    }
+
+    /**
+     * Get actionVerification
+     *
+     * @return Pequiven\SIGBundle\Entity\TypeVerificationManagementSystem
+     */
+    public function getActionVerification() {
+        return $this->actionVerification;
     }
 }

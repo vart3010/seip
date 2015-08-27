@@ -113,6 +113,8 @@ form:
     ref: Nro. de Referencia
     indicator: Indicador
     trend_analysis: Analisis de Tendencia
+    causes_analysis: Analisis de las Causas
+    action_verification: Verificación del Plan de Acción
     description: Descripción del Indicador
     name: Nombre del Indicador
     nameIndicatorStrategic: Nombre del Indicador Estratégico
@@ -223,6 +225,7 @@ action:
 seip:
     table:
         header:
+            ref: Ref
             nro: '#'
             name: Nombre
             action: Acción

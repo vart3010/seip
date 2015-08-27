@@ -3554,6 +3554,23 @@ class IndicatorService implements ContainerAwareInterface {
             ),
         );
         $chart = array();
+
+        $chart["caption"] = "Gráfico Informe de Evolución";
+        $chart["subCaption"] = "Periodo-2015";
+        $chart["palette"]= "1";
+        $chart["showvalues"]= "0";
+        $chart["paletteColors"]= "#0075c2,#c90606,#f2c500,#12a830,#1aaf5d";
+        $chart["showBorder"] = "0";
+        $chart["yaxisvaluespadding"] = "10";
+        $chart["valueFontColor"] = "#000000";
+        $chart["rotateValues"] = "0";
+        $chart["bgAlpha"] = "0,0";
+        $chart["theme"] = "fint";
+        //$chart["sYAxisMaxValue"] = "150";
+        //$chart["pYAxisMaxValue"] = "150";
+        $chart["showborder"] = "0";
+        $chart["decimals"] = "0";
+
         //Lamado de promedio
         $prom = $this->getPromdIndicator($indicator);
         //Llamado de frecuencia de Notificacion del Indicador
@@ -3574,28 +3591,32 @@ class IndicatorService implements ContainerAwareInterface {
         $labelProm                 = "Promedio o Acumulado";
         $labelobj                  = "Objetivo 2015";
 
-        //Carga de datos del lebel principal Periodo-2015
+        //Carga de datos del label principal Periodo-2015
         $labelAnt["label"] = $labelAntper;//Label del 2014
         $category[] = $labelAnt;//Label del 2014
 
         if ($totalNumValues > 0) {
             $indicatorValues = $indicator->getValuesIndicator();
             $contMonth = 1;
-            //$labelMonths = CommonObject::getLabelsMonths();
+            
             foreach ($indicatorValues as $indicatorValue) {
                 $formulaParameters = $indicatorValue->getFormulaParameters();
 
                 $label["label"] = $labelsFrequencyNotificationArray[$contMonth];
                 
+                $contCant = $contMonth;//Contando la Cantidad de valores
+                
                 $category[] = $label;
                 $contMonth++;
             }
+
             $labelp["label"] = $labelProm;//Label del Prom
             $category[] = $labelp;//Label del Prom
 
             //Label Obj Acum
             $labelo["label"] = $labelobj;//Label del ObjAcum
             $category[] = $labelo;//Label del ObjAcum
+            //Fin carga de labels
 
             //Data 2014            
             $acumLast = $cant = $promLast = 0;
@@ -3605,10 +3626,11 @@ class IndicatorService implements ContainerAwareInterface {
                 foreach ($indicatorlast->getValuesIndicator() as $value) {
 
                         $results = $value->getValueOfIndicator();
-
+                  //      var_dump($results);
                         $acumLast = $acumLast + $results;
                         $cant = $cant + 1;
                 }            
+                //die();
             }
             
                 if ($indicatorlast === null) {
@@ -3636,19 +3658,29 @@ class IndicatorService implements ContainerAwareInterface {
             
             foreach ($indicator->getValuesIndicator() as $value) {
 
-                $dataReal["value"] = $value->getValueOfIndicator();
-
-                $dataSetReal["data"][] = $dataReal;
-                $dataSetTend["data"][] = $dataReal;                
+                $dataReal["value"] = $value->getValueOfIndicator();//Carga de valores del indicador
+                //var_dump($value->getValueOfIndicator());
+                $dataSetReal["data"][] = $dataReal;//Data Real
+                $dataSetTend["data"][] = $dataReal;//Data Real Tendencia
             }
-            
+
             //Carga de meta Objetivo2015
             foreach ($indicator->getObjetives() as $value) {
-                $dataValueObjetive = $value->getgoal();
+                $dataValueObjetive = $value->getgoal();//Carga valor Objetivo 2015
             }
             if ($dataValueObjetive == NULL ) {
                 $dataValueObjetive = 0;
             }
+
+            $dataSetLine["data"][] = array( 'value' => '' );//Valor vacio para saltar 2014
+            for ($i=0; $i < $contCant; $i++) { 
+            
+            $dataLine["value"] = $dataValueObjetive;//Carga de valores           
+            $dataSetLine["data"][] = $dataLine;//Data del Objetivo 2015
+            
+            }
+            //Paso de la data ya formateada
+            $dataSetV['data'] = array('seriesname' => 'Plan', 'parentyaxis' => 'S', 'renderas' => 'Line', 'data' => $dataSetLine['data']);
             
             //Data Prom
             $dataSetReal["showvalues"] = "1";
@@ -3664,13 +3696,14 @@ class IndicatorService implements ContainerAwareInterface {
             
             //Carga de Tendencia
             $dataSetValues['tendencia'] = array('seriesname' => 'Tendencia', 'parentyaxis' => 'S', 'renderas' => 'Line', 'color' => '#dbc903', 'data' => $dataSetTend['data']);
-            $data['dataSource']['dataset'][] = $dataSetValues['tendencia'];
-            //die();
+            
         }
-        //$data['dataSource']['chart'] = $chart;
+        $data['dataSource']['chart'] = $chart;
         $data['dataSource']['categories'][]["category"] = $category;
+        $data['dataSource']['dataset'][] = $dataSetValues['tendencia'];
         $data['dataSource']['dataset'][] = $dataSetReal;
         $data['dataSource']['dataset'][] = $dataSetAnt;
+        $data['dataSource']['dataset'][] = $dataSetV['data'];
 
         return $data;
     }
@@ -3691,24 +3724,52 @@ class IndicatorService implements ContainerAwareInterface {
             ),
         );
         $chart = array();
-        
+        $chart["caption"] = "Gráfico Causas de Desviación";
+        $chart["subCaption"] = "Periodo-2015";
+        $chart["valueFontColor"] = "#000000";
+        $chart["showvalues"]= "1";
+        $chart["showSum"]= "1";
+        $chart["numberSuffix"] = "%";
+        $chart["bgalpha"]= "0,0";
+        $chart["baseFontColor"] = "#ffffff";
+        $chart["outCnvBaseFontColor"] = "#000000";
+        $chart["visible"] = "0";
+        $chart["theme"] = "fint";
+        //$chart["rotateValues"] = "0";
+        $chart["snumbersuffix"] = "%";
+        $chart["decimals"] = "0";
+        $chart["setadaptiveymin"] = "1";
+        $chart["setadaptivesymin"] = "1";
+        //$chart["sYAxisMaxValue"] = "150";
+        //$chart["pYAxisMaxValue"] = "150";
+        $chart["linethickness"]= "5";
+        $chart["showborder"] = "0";
+
         //Inicialización
         $category = $dataSetCause = array();
         $label = $dataCause = array();
         $contCause = 1;
         //Carga de Nombres de Labels
         $dataSetCause["seriesname"] = "Causa";        
-
-            $label["label"] = 'Causa';
+            //
+            foreach ($indicator->getindicatorCause() as $value) {
+                
+                //Carga del label de la Causa
+                //$label["label"] = 'Causa'.' '.$contCause;                    
+                $label["label"] = $value->getCauses();                    
+                $contCause = $contCause + 1;
+                $category[] = $label;
+            }
+            //$label["label"] = 'Causa';
             
             foreach ($indicator->getindicatorCause() as $value) {
                 //Carga de los Valores de la causa
                 $dataCause["value"] = $value->getvalueOfCauses();
                 $dataSetCause["data"][] = $dataCause;
                 //Carga del label de la Causa
-                $label["label"] = 'Causa'.' '.$contCause;                    
-                $contCause = $contCause + 1;
-                $category[] = $label;
+                //$label["label"] = 'Causa'.' '.$contCause;                    
+                //$contCause = $contCause + 1;
+                //$category[] = $label;
             }
            
         //$data['dataSource']['chart'] = $chart;

@@ -1,13 +1,13 @@
 {% trans_default_domain 'PequivenSIGBundle' %}
 
-<div ng-controller="IndicatorSigEvolutionController"> 
+<div ng-controller="IndicatorSigEvolutionCauseController"> 
 
 <div class="block" ng-init="urlValueIndicatorForm='{{ path('pequiven_feature_indicator_get_form',{'idIndicator':indicator_sig.id}) }}'">
 
     <div class="block-title">
         <h3 class="ng-binding">{$ indicator_sig.featuresIndicator.length $} {{ 'sig.analysis_causes'|trans ({}, 'messages') }}</h3>
         <div class="button-group absolute-right compact">
-            <a class="button icon-list-add " href="" ng-click="loadTemplateAnalysisTrend()" title="">{{ 'pequiven.add'|trans({},'messages') }}&nbsp;</a>
+            <a class="button icon-list-add " href="" ng-click="loadTemplateCausesAnalysis()" title="">{{ 'pequiven.add'|trans({},'messages') }}&nbsp;</a>
         </div>
     </div>
 
@@ -17,11 +17,11 @@
             <thead>
                 <tr>
                     <th scope="col" width="150%" class="header">
-                        {{ 'form.trend_analysis'|trans({},'PequivenSIGBundle') }}
+                        {{ 'form.causes_analysis'|trans({},'PequivenSIGBundle') }}
                     </th>                    
                 </tr>
             </thead>
-        {% for data in trend %}
+        {% for data in analysis %}
             <tbody>
                 <tr>
                     <th align="justify">

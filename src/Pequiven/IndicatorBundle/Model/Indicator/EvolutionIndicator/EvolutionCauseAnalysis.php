@@ -1,6 +1,6 @@
 <?php
 
-namespace Pequiven\IndicatorBundle\Model\Indicator;
+namespace Pequiven\IndicatorBundle\Model\Indicator\EvolutionIndicator;
 
 use Doctrine\ORM\Mapping as ORM;
 

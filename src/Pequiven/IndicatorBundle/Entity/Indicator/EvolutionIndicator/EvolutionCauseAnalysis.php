@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Pequiven\IndicatorBundle\Model\Indicator\EvolutionCauseAnalysis as Model;
+use Pequiven\IndicatorBundle\Model\Indicator\EvolutionIndicator\EvolutionCauseAnalysis as Model;
 
 /**
  * Analisis de la tendencia del indicador
@@ -33,6 +33,13 @@ class EvolutionCauseAnalysis extends Model {
      * @ORM\JoinColumn(name="indicator_id", referencedColumnName="id")
      */
     private $indicator;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="month", type="integer")
+     */
+    private $month;
 
     /**
      * @var string
@@ -106,6 +113,24 @@ class EvolutionCauseAnalysis extends Model {
      */
     public function getIndicator() {
         return $this->indicator;
+    }
+
+    /**
+     * 
+     * @param type $month
+     * @return type
+     */
+    public function setMonth($month) {
+        $this->month = $month;
+        return $month;
+    }
+
+    /**
+     * 
+     * @return type
+     */
+    public function getMonth() {
+        return $this->month;
     }
 
     /**

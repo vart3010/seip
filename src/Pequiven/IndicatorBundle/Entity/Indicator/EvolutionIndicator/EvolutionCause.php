@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Pequiven\IndicatorBundle\Model\Indicator\EvolutionCause as Model;
+use Pequiven\IndicatorBundle\Model\Indicator\EvolutionIndicator\EvolutionCause as Model;
 
 /**
  * Causas de Desviacion del Indicador
@@ -40,6 +40,13 @@ class EvolutionCause extends Model {
      * @ORM\Column(name="cause", type="string", length=255)
      */
     private $causes;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="month", type="integer")
+     */
+    private $month;
 
     /**
      * @var integer
@@ -139,6 +146,24 @@ class EvolutionCause extends Model {
      */
     public function getCauses() {
         return $this->causes;
+    }
+
+    /**
+     * 
+     * @param type $month
+     * @return type
+     */
+    public function setMonth($month) {
+        $this->month = $month;
+        return $month;
+    }
+
+    /**
+     * 
+     * @return type
+     */
+    public function getMonth() {
+        return $this->month;
     }
 
     /**

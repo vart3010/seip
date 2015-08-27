@@ -22,6 +22,9 @@ use Pequiven\IndicatorBundle\Form\EvolutionIndicator\EvolutionActionType;
 use Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionTrend;
 use Pequiven\IndicatorBundle\Form\EvolutionIndicator\EvolutionTrendType;
 
+use Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionActionVerification;
+use Pequiven\IndicatorBundle\Form\EvolutionIndicator\EvolutionActionVerificationType;
+
 use Pequiven\IndicatorBundle\Form\EvolutionIndicator\IndicatorLastPeriodType;
 
 /**
@@ -147,6 +150,7 @@ class IndicatorSigController extends ResourceController
         /*$response->setData($dataCause); //Seteamos la data del gráfico en Json
         var_dump($response);
         die();*/
+        //return $response;
 
         //Consultamos las Causas Relacionadas al indicador        
         $indicator = $idIndicator;
@@ -155,8 +159,9 @@ class IndicatorSigController extends ResourceController
         $action = $this->get('pequiven.repository.sig_action_indicator')->findByindicatorRel($indicator);
         //Carga el analisis de la tendencia
         $trend = $this->get('pequiven.repository.sig_trend_indicator')->findByindicator($indicator);
-        //return $response;
-        
+        //Carga del analisis de las causas
+        $causeAnalysis = $this->get('pequiven.repository.sig_causes_analysis')->findByindicator($indicator);
+
         // Fin configuracion de grafico     
         //$view = $this->view();
         //$view->getSerializationContext()->setGroups(array('id','api_list'));  
@@ -169,6 +174,7 @@ class IndicatorSigController extends ResourceController
                 'dataCause'                      => $dataCause,
                 'cause'                          => $results,
                 'data_action'                    => $action,
+                'analysis'                       => $causeAnalysis,
                 'trend'                          => $trend,
                 $this->config->getResourceName() => $resource,
                 'form'                           => $form->createView()
@@ -308,6 +314,8 @@ class IndicatorSigController extends ResourceController
      */
     function getFormCausesAction(Request $request)
     {
+        //var_dump(date("m"));
+        //var_dump(date("M"));
         $indicator = $this->findIndicatorOr404($request);                
         $idIndicator = $request->get('idIndicator');
         
@@ -335,6 +343,9 @@ class IndicatorSigController extends ResourceController
      */
     public function addCausesAction(Request $request)
     {   
+        
+        $month = date("m");//Carga del mes de Creación de la causa
+
         $indicator = $request->get('idIndicator');
         $repository = $this->get('pequiven.repository.sig_indicator');
         $results = $repository->find($indicator);
@@ -346,6 +357,7 @@ class IndicatorSigController extends ResourceController
         
         $cause->setIndicator($data);
         $cause->setCreatedBy($user);
+        $cause->setMonth($month);        
 
         $form->handleRequest($request);
 
@@ -436,6 +448,64 @@ class IndicatorSigController extends ResourceController
             
             $em = $this->getDoctrine()->getManager();
             $em->persist($trend);
+            $em->flush();
+
+           // return $this->redirect($this->generateUrl('pequiven_causes_form_add'));
+        }     
+    }
+
+    /**
+     * Retorna el formulario de Verificación del Plan de Acción
+     * 
+     * @param Request $request
+     * @return type
+     */
+    function getFormVerificationAction(Request $request)
+    {
+        $indicator = $this->findIndicatorOr404($request);        
+        
+        $verification = new EvolutionActionVerification();
+        $form  = $this->createForm(new EvolutionActionVerificationType(), $verification);
+        
+        $view = $this
+            ->view()
+            ->setTemplate($this->config->getTemplate('form/form_action_verification.html'))
+            ->setTemplateVar($this->config->getPluralResourceName())
+            ->setData(array(
+                'indicator' => $indicator,
+                'form' => $form->createView(),
+            ))
+        ;
+        $view->getSerializationContext()->setGroups(array('id','api_list'));
+        return $view;
+    }
+
+    /**
+     * Añade la Verificacion de Plan de Acción y Seguimiento
+     * 
+     * @param Request $request
+     * @return type
+     */
+    public function addVerificationAction(Request $request)
+    {   
+        $indicator = $request->get('idIndicator');
+        $repository = $this->get('pequiven.repository.sig_indicator');
+        $results = $repository->find($indicator);
+        
+        $user = $this->getUser();
+        $data = $results;
+        $verification = new EvolutionActionVerification();
+        $form  = $this->createForm(new EvolutionActionVerificationType(), $verification);
+        
+        //$verification->setIndicator($data);
+        $verification->setCreatedBy($user);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($verification);
             $em->flush();
 
            // return $this->redirect($this->generateUrl('pequiven_causes_form_add'));

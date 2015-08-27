@@ -5,9 +5,9 @@ namespace Pequiven\SIGBundle\Model;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Modelo del tipo de Acción del Plan
+ * Modelo del Tipo de Verification
  */
-abstract class TypeActionManagementSystem
+abstract class TypeVerificationManagementSystem
 {
 		
     

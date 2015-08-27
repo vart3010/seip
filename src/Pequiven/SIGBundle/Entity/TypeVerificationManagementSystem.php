@@ -4,16 +4,16 @@ namespace Pequiven\SIGBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Pequiven\SIGBundle\Model\TypeActionManagementSystem as model;
+use Pequiven\SIGBundle\Model\TypeVerificationManagementSystem as model;
 
 /**
- * Tipo de Acción del Plan de Acción y Seguimiento
+ * Tipo de Verificación del Plan de Acción
  *
- * @ORM\Table(name="ManagementSystem_TypeAction")
- * @ORM\Entity(repositoryClass="Pequiven\SIGBundle\Repository\TypeActionManagementSystemRepository") 
+ * @ORM\Table(name="ManagementSystem_TypeVerification")
+ * @ORM\Entity(repositoryClass="Pequiven\SIGBundle\Repository\TypeVerificationManagementSystemRepository") 
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
-class TypeActionManagementSystem extends model
+class TypeVerificationManagementSystem extends model
 {
     /**
      * @var integer
@@ -60,19 +60,28 @@ class TypeActionManagementSystem extends model
     private $deletedAt;
     
     /**
-     * Tipo de Acción
+     * Tipo de Verificación
      * 
      * @var \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionAction
-     * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionAction",mappedBy="indicatorAction",cascade={"persist","remove"})
+     * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionAction",mappedBy="actionVerification",cascade={"persist","remove"})
      */
-    protected $typeAction;
+    protected $typeVerification;
+
+    /**
+     * Verification en la lista de verificación
+     * 
+     * @var \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionActionVerification
+     * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionActionVerification",mappedBy="typeVerification",cascade={"persist","remove"})
+     */
+    protected $verificationPlan;
     
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->typeAction = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->typeVerification = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->verificationPlan = new \Doctrine\Common\Collections\ArrayCollection();
 
     }
     
@@ -202,32 +211,62 @@ class TypeActionManagementSystem extends model
     }
     
     /**
-     * Add typeAction
+     * Add typeVerification
      *
-     * @param \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionAction $typeAction
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionAction $typeVerification
      */
-    public function addTypeAction(\Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionAction $typeAction) {
+    public function addTypeVerification(\Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionAction $typeVerification) {
 
-        $this->typeAction->add($typeAction);
+        $this->typeVerification->add($typeVerification);
 
         return $this;
     }
 
     /**
-     * Remove typeAction
+     * Remove typeVerification
      *
-     * @param \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionAction $typeAction
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionAction $typeVerification
      */
-    public function removeTypeAction(\Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionAction $typeAction) {
-        $this->typeAction->removeElement($typeAction);
+    public function removeTypeVerification(\Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionAction $typeVerification) {
+        $this->typeVerification->removeElement($typeVerification);
     }
 
     /**
-     * Get indicatorCause
+     * Get typeVerification
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getTypeAction() {
-        return $this->typeAction;
+    public function getTypeVerification() {
+        return $this->typeVerification;
+    }
+
+    /**
+     * Add verificationPlan
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionActionVerification $verificationPlan
+     */
+    public function addVerificationPlan(\Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionActionVerification $verificationPlan) {
+
+        $this->verificationPlan->add($verificationPlan);
+
+        return $this;
+    }
+
+    /**
+     * Remove verificationPlan
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionAction $verificationPlan
+     */
+    public function removeVerificationPlan(\Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionActionVerification $verificationPlan) {
+        $this->verificationPlan->removeElement($verificationPlan);
+    }
+
+    /**
+     * Get verificationPlan
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getVerificationPlan() {
+        return $this->verificationPlan;
     }
 }

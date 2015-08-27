@@ -2,13 +2,13 @@
     
 <div class="block" ng-init="urlCausesEvolutionForm='{{ path('pequiven_indicatorcauses_get_form',{'idIndicator':indicator_sig.id }) }}'">
 
-<div ng-controller="IndicatorSigEvolutionController"> 
+<div ng-controller="IndicatorSigEvolutionVerificationController"> 
 
     <div class="block-title">
         <h3 class="ng-binding">{$ indicator_sig.featuresIndicator.length $} {{ 'sig.verification_of_the_effectiveness'|trans ({}, 'messages') }}</h3> 
         {# añadir plan de acción #}
         <div class="button-group absolute-right compact">
-                <a class="button icon-list-add " href="" ng-click="loadTemplateActionEvolution()" title="">{{ 'pequiven.add'|trans({},'messages')  }}</a>
+                <a class="button icon-list-add " href="" ng-click="loadTemplateVerification()" title="">{{ 'pequiven.add'|trans({},'messages')  }}</a>
         </div>       
     </div>
     <div class="with-padding">

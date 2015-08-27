@@ -593,3 +593,14 @@ services:
             - ~
         calls:
             - [ setTranslationDomain, [SonataAdminBundle]]
+    # Tipos de Verificación para el plan de acción y seguimiento
+    sonata.admin.sig_typeverification_management_system:
+        class: Pequiven\MasterBundle\Admin\SIG\TypeVerificationManagementSystemAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "SIG" ,label: "Tipos de Verificaciones Plan de Acción" }
+        arguments:
+            - ~
+            - Pequiven\SIGBundle\Entity\TypeVerificationManagementSystem
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]

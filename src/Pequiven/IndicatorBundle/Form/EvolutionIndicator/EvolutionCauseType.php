@@ -24,6 +24,11 @@ class EvolutionCauseType extends AbstractType
                 'label_attr' => array('class' => 'label'),
                 'disabled' => false,
                 'attr' => array('class' => 'input input-large validate[required]')))
+            /*->add('month', 'number', array(
+                'label'=>'Mes de la Causa',
+                'label_attr' => array('class' => 'label'),
+                'disabled' => false,
+                'attr' => array('class' => 'input input-large validate[required]')))*/
                          
         ;
     }

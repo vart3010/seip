@@ -1,0 +1,15 @@
+{% trans_default_domain 'PequivenSIGBundle' %}
+    
+        
+        <form method="POST" id="form_causes_analysis_evolution">
+            <fieldset class="fieldset fields-list">
+                <legend class="legend">{{ 'form.causes_analysis'|trans ({}, 'PequivenSIGBundle') }}</legend>
+
+                    <div class="field-block button-height" >
+                        {# {{ form_label(form) }} #}
+                        {{ form_widget(form) }}
+                        {{ form_errors(form) }}
+                    </div>
+            
+            </fieldset>
+        </form>       

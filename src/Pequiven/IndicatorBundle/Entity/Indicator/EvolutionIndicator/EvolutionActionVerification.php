@@ -3,20 +3,18 @@
 namespace Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator;
 
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Pequiven\IndicatorBundle\Model\Indicator\EvolutionIndicator\EvolutionTrend as Model;
+use Pequiven\IndicatorBundle\Model\Indicator\EvolutionIndicator\EvolutionActionVerification as Model;
 
 /**
- * Analisis de la tendencia del indicador
+ * Verification Plan de Acción y Seguimiento del Indicador
  *
  * @author Maximo Sojo <maxsojo13@gmail.com>
- * @ORM\Table(name="seip_indicator_evolution_trend")
+ * @ORM\Table(name="seip_indicator_evolution_action_verification")
  * @ORM\Entity()
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
-class EvolutionTrend extends Model {
+class EvolutionActionVerification extends Model {
 
     /**
      * @var integer
@@ -27,31 +25,30 @@ class EvolutionTrend extends Model {
      */
     private $id;
 
-     /**
-     * @var integer
-     * @ORM\ManyToOne(targetEntity="\Pequiven\IndicatorBundle\Entity\Indicator", inversedBy="indicatorTrend")
-     * @ORM\JoinColumn(name="indicator_id", referencedColumnName="id")
-     */
-    private $indicator;
-
     /**
      * @var string
      *
-     * @ORM\Column(name="description", type="string", length=1000)
+     * @ORM\Column(name="ref" , type="string", length=15)
      */
-    private $description;
+    private $ref;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="comment", type="string", length=500, nullable=true)
+     */
+    private $comment;
 
     /**
      * @var \DateTime
      * @Gedmo\Timestampable(on="create")
-     * @ORM\Column(name="created_at", type="datetime", nullable=true)
+     * @ORM\Column(name="created_at", type="datetime")
      */
     private $createdAt;
 
     /**
      * @var \DateTime
      * @Gedmo\Timestampable(on="update")
-     * @ORM\Column(name="updated_at", type="datetime",  nullable=true)
+     * @ORM\Column(name="updated_at", type="datetime")
      */
     private $updatedAt;
 
@@ -69,14 +66,12 @@ class EvolutionTrend extends Model {
      */
     private $deletedAt;
 
-
     /**
-     * Constructor
+     * @ORM\ManyToOne(targetEntity="\Pequiven\SIGBundle\Entity\TypeVerificationManagementSystem", inversedBy="verificationPlan")
+     * @ORM\JoinColumn(name="verification_id", referencedColumnName="id")
      */
-    public function __construct() {
-
-    }    
-
+    private $typeVerification;
+    
     /**
      * Get id
      *
@@ -85,47 +80,42 @@ class EvolutionTrend extends Model {
     public function getId() {
         return $this->id;
     }
-    
-    /**
-     * Set indicator
-     *
-     * @param \Pequiven\IndicatorBundle\Entity\Indicator $indicator
-     * @return Indicator
-     */
-    public function setIndicator(\Pequiven\IndicatorBundle\Entity\Indicator $indicator) {
-        
-        $this->indicator = $indicator;
-
-        return $this;
-    }
-
-    /**
-     * Get indicator
-     *
-     * @return Pequiven\IndicatorBundle\Entity\Indicator
-     */
-    public function getIndicator() {
-        return $this->indicator;
-    }
 
     /**
      * 
-     * @param type $description
+     * @param type $ref
      * @return type
      */
-    public function setDescription($description) {
-        $this->description = $description;
-        return $description;
+    public function setRef($ref) {
+        $this->ref = $ref;
+        return $ref;
     }
 
     /**
      * 
      * @return type
      */
-    public function getDescription() {
-        return $this->description;
+    public function getRef() {
+        return $this->ref;
     }
 
+    /**
+     * 
+     * @param type $comment
+     * @return type
+     */
+    public function setComment($comment) {
+        $this->comment = $comment;
+        return $comment;
+    }
+
+    /**
+     * 
+     * @return type
+     */
+    public function getComment() {
+        return $this->comment;
+    }
 
     /**
      * Set createdAt
@@ -211,6 +201,26 @@ class EvolutionTrend extends Model {
     public function getDeletedAt()
     {
         return $this->deletedAt;
-    }  
-    
+    }    
+
+    /**
+     * Set typeVerification
+     *
+     * @param \Pequiven\SIGBundle\Entity\TypeVerificationManagementSystem $typeVerification
+     */
+    public function setTypeVerification(\Pequiven\SIGBundle\Entity\TypeVerificationManagementSystem $typeVerification) {
+        
+        $this->typeVerification = $typeVerification;
+
+        return $this;
+    }
+
+    /**
+     * Get typeVerification
+     *
+     * @return Pequiven\SIGBundle\Entity\TypeVerificationManagementSystem
+     */
+    public function gettypeVerification() {
+        return $this->typeVerification;
+    }
 }

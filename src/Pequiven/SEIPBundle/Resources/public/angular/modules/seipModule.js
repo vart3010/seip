@@ -1719,6 +1719,204 @@ angular.module('seipModule.controllers', [])
                 });
             };
         })
+        .controller('IndicatorSigEvolutionCauseController', function ($scope, notificationBarService, $http, notifyService, $filter) {
+
+            //console.log($scope.id_indicator );
+            $scope.urlCausesEvolutionForm = null;
+            $scope.indicator = null;
+            var isInit = false;
+            
+            //Carga el formulario de las Causas de Desviacion
+            $scope.loadTemplateCausesAnalysis = function (resource) {
+                $scope.initFormCausesAnalysis(resource);
+                if (isInit == false) {
+                    isInit = true;
+                }
+                $scope.templateOptions.setTemplate($scope.templates[0]);
+                $scope.templateOptions.setParameterCallBack(resource);
+                //$scope.templateOptions.setVar('evaluationResult', 0);
+                if (resource) {
+                    $scope.templateOptions.enableModeEdit();
+                    $scope.openModalAuto();
+                } else {
+                    $scope.openModalAuto();
+                }
+            };
+            //Añadir Causa de Desviación
+            var addCauseAnalysis = function (save, successCallBack) {
+                var formCauseAnalysis = angular.element('#form_causes_analysis_evolution');
+                var formData = formCauseAnalysis.serialize();
+                
+                if (save == undefined) {
+                    var save = false;
+                }
+                if (save == true) {
+                    var url = Routing.generate('pequiven_analysis_cause_evolution_add', {idIndicator: $scope.id_indicator });
+                } 
+                notificationBarService.getLoadStatus().loading();
+                return $http({
+                    method: 'POST',
+                    url: url,
+                    data: formData,
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'}  // set the headers so angular passing info as form data (not request payload)
+                }).success(function (data) {
+                    $scope.templateOptions.setVar("form", {errors: {}});
+                    //$scope.templateOptions.setVar('evaluationResult', data.result);
+                    if (successCallBack) {
+                        successCallBack(data);
+                    }
+                    notificationBarService.getLoadStatus().done();
+                    return true;
+                }).error(function (data, status, headers, config) {
+                    $scope.templateOptions.setVar("form", {errors: {}});
+                    if (data.errors) {
+                        if (data.errors.errors) {
+                            $.each(data.errors.errors, function (index, value) {
+                                notifyService.error(Translator.trans(value));
+                            });
+                        }
+                        $scope.templateOptions.setVar("form", {errors: data.errors.children});
+                    }
+                    //$scope.templateOptions.setVar('evaluationResult', 0);
+                    notificationBarService.getLoadStatus().done();
+                    return false;
+                });
+            };
+            $scope.templateOptions.setVar('addCauseAnalysis', addCauseAnalysis);
+            //$scope.templateOptions.setVar('evaluationResult', 0);
+            var confirmCallBack = function () {
+                addCauseAnalysis(true, function (data) {
+                    $scope.indicator = data.indicator;
+                });
+                return true;
+            };
+            //Formulario Cause
+            $scope.initFormCausesAnalysis = function (resource) {
+
+                var d = new Date();
+                var numero = d.getTime();
+                var width = 60;
+                var heigth = 60;
+
+                var parameters = {
+                    idIndicator: $scope.id_indicator,
+                    _dc: numero
+                };
+                if (resource) {
+                    parameters.id = resource.id;
+                }
+                var url = Routing.generate('pequiven_causes_analysis_get_form', parameters);
+                $scope.templates = [
+                    {
+                        width: width,
+                        height: heigth,
+                        name: 'Analisis de las Causas de Desviación del Indicador',
+                        url: url,
+                        confirmCallBack: confirmCallBack,
+                    }
+                ];
+                $scope.templateOptions.setTemplate($scope.templates[0]);
+            };            
+        })
+        .controller('IndicatorSigEvolutionVerificationController', function ($scope, notificationBarService, $http, notifyService, $filter) {
+
+            //console.log($scope.id_indicator );
+            //$scope.urlCausesEvolutionForm = null;
+            $scope.indicator = null;
+            var isInit = false;
+            
+            //Carga el formulario de las Causas de Desviacion
+            $scope.loadTemplateVerification = function (resource) {
+                $scope.initFormVerification(resource);
+                if (isInit == false) {
+                    isInit = true;
+                }
+                $scope.templateOptions.setTemplate($scope.templates[0]);
+                $scope.templateOptions.setParameterCallBack(resource);
+                //$scope.templateOptions.setVar('evaluationResult', 0);
+                if (resource) {
+                    $scope.templateOptions.enableModeEdit();
+                    $scope.openModalAuto();
+                } else {
+                    $scope.openModalAuto();
+                }
+            };
+            //Añadir Causa de Desviación
+            var addVerification = function (save, successCallBack) {
+                var formVerification = angular.element('#form_action_verification');
+                var formData = formVerification.serialize();
+                
+                if (save == undefined) {
+                    var save = false;
+                }
+                if (save == true) {
+                    var url = Routing.generate('pequiven_verification_evolution_add', {idIndicator: $scope.id_indicator });
+                } 
+                notificationBarService.getLoadStatus().loading();
+                return $http({
+                    method: 'POST',
+                    url: url,
+                    data: formData,
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'}  // set the headers so angular passing info as form data (not request payload)
+                }).success(function (data) {
+                    $scope.templateOptions.setVar("form", {errors: {}});
+                    //$scope.templateOptions.setVar('evaluationResult', data.result);
+                    if (successCallBack) {
+                        successCallBack(data);
+                    }
+                    notificationBarService.getLoadStatus().done();
+                    return true;
+                }).error(function (data, status, headers, config) {
+                    $scope.templateOptions.setVar("form", {errors: {}});
+                    if (data.errors) {
+                        if (data.errors.errors) {
+                            $.each(data.errors.errors, function (index, value) {
+                                notifyService.error(Translator.trans(value));
+                            });
+                        }
+                        $scope.templateOptions.setVar("form", {errors: data.errors.children});
+                    }
+                    //$scope.templateOptions.setVar('evaluationResult', 0);
+                    notificationBarService.getLoadStatus().done();
+                    return false;
+                });
+            };
+            $scope.templateOptions.setVar('addVerification', addVerification);
+            //$scope.templateOptions.setVar('evaluationResult', 0);
+            var confirmCallBack = function () {
+                addVerification(true, function (data) {
+                    $scope.indicator = data.indicator;
+                });
+                return true;
+            };
+            //Formulario Cause
+            $scope.initFormVerification = function (resource) {
+
+                var d = new Date();
+                var numero = d.getTime();
+                var width = 60;
+                var heigth = 60;
+
+                var parameters = {
+                    idIndicator: $scope.id_indicator,
+                    _dc: numero
+                };
+                if (resource) {
+                    parameters.id = resource.id;
+                }
+                var url = Routing.generate('pequiven_verification_get_form', parameters);
+                $scope.templates = [
+                    {
+                        width: width,
+                        height: heigth,
+                        name: 'Verificación del Plan de Acción y Seguimiento',
+                        url: url,
+                        confirmCallBack: confirmCallBack,
+                    }
+                ];
+                $scope.templateOptions.setTemplate($scope.templates[0]);
+            };            
+        })
         .controller('IndicatorLastPeriodController', function ($scope, notificationBarService, $http, notifyService, $filter) {
 
             //$scope.urlValueLastIndicatorForm = null;
@@ -4376,98 +4574,17 @@ angular.module('seipModule.controllers', [])
         $scope.renderChartEvolutionSig = function (id, data, categories, dataPlan, dataReal, dataAcum, dataPorc, caption, typeLabelDisplay) {
                 FusionCharts.ready(function () {
                     var revenueChart = new FusionCharts({
-                        "type": "mscolumn3dlinedy",
+                        //"type": "mscolumn3dlinedy",
+                        "type": "mscolumnline3d",                        
                         "renderAt": id,
                         "width": "95%",
                         "height": "45%",
                         "dataFormat": "json",
                         "dataSource": {
-                            "chart": {
-                                "caption": "Gráfico Informe de Evolución",
-                                "subCaption": "Periodo - 2015",
-                                //"exportFormats": "PNG= Exportar como PNG|PDF= Exportar como PDF",                                
-                                //"xAxisName": Translator.trans('chart.arrangementPrograms.xAxisName'),
-                                //"pYAxisName": Translator.trans('chart.arrangementPrograms.pYAxisName'),
-                                //"sYAxisName": Translator.trans('chart.arrangementPrograms.sYAxisName'),
-                                //"sYAxisMaxValue": "200",
-                                //"sYAxisMinValue": "0",
-                                //"placeValuesInside": "0",
-                                "pYAxisMaxValue": "150",
-                                "valueFontColor": "#000000",
-                                //"showvalues": "1",
-                                "rotateValues": "0",
-                                //"labelDisplay": typeLabelDisplay,
-                                //"sNumberSuffix": "%",
-                                //"showSum": "1",
-                                //"numberSuffix": "%", 
-                                //"showXAxisLine": "1",                               
-                                "bgAlpha": "0,0",
-                                "baseFontColor": "#ffffff",
-                                "outCnvBaseFontColor": "#000000",
-                                "visible": "0",
-                                "theme": "fint",
-                                //"formatNumberScale": "0",
-                                //"snumbersuffix": "%",
-                                "decimals": "3",
-                                "setadaptiveymin": "1",
-                                "setadaptivesymin": "1",
-                                "linethickness": "5",
-                                "showborder": "0",
-                                "paletteColors": "#0075c2,#c90606,#f2c500,#12a830,#1aaf5d"
-                            },
+                            "chart": data.dataSource.chart,
                             "categories": data.dataSource.categories,
-                            "dataset": [ data.dataSource.dataset,
-                                {
-                                    "parentyaxis": "S",
-                                    "seriesname": "Plan",
-                                    "renderas": "Line",
-                                    "data": [
-                                        {
-
-                                        },
-                                        {
-                                            "value": "80"
-                                        },
-                                        {
-                                            "value": "80"
-                                        },
-                                        {
-                                            "value": "80"
-                                        },
-                                        {
-                                            "value": "80"
-                                        },
-                                        {
-                                            "value": "80"
-                                        },
-                                        {
-                                            "value": "80"
-                                        },
-                                        {
-                                            "value": "80"
-                                        },
-                                        {
-                                            "value": "80"
-                                        },
-                                        {
-                                            "value": "80"
-                                        },
-                                        {
-                                            "value": "80"
-                                        },
-                                        {
-                                            "value": "80"
-                                        },
-                                        {
-                                            "value": "80"
-                                        },
-                                        {
-                                            "value": "80"
-                                        }
-                                    ]
-                                }
-                            ]
-                        }
+                            "dataset": data.dataSource.dataset
+                        }                        
                     });
                     revenueChart.setTransparent(true);
                     revenueChart.render();
@@ -4476,7 +4593,7 @@ angular.module('seipModule.controllers', [])
         //FIN
 
         //Charts SIG - Causas de Desviación
-        $scope.renderChartSigCs = function (id, data, categories, dataCause, caption, typeLabelDisplay) {
+       $scope.renderChartSigCs = function (id, data, categories, dataCause, caption, typeLabelDisplay) {
                 FusionCharts.ready(function () {
                     var revenueChart = new FusionCharts({
                         "type": "stackedbar3d",
@@ -4493,6 +4610,9 @@ angular.module('seipModule.controllers', [])
                                 //"pYAxisName": Translator.trans('chart.arrangementPrograms.pYAxisName'),
                                 //"sYAxisName": Translator.trans('chart.arrangementPrograms.sYAxisName'),
                                 //"sYAxisMaxValue": "100",
+                                //"xYAxisMaxValue": "100",
+                                //"pYAxisMaxValue": "100",
+                                //"yYAxisMaxValue": "100",                                
                                 //"sYAxisMinValue": "0",
                                 //"showValues": "1",
                                 //"placeValuesInside": "0",
