@@ -625,12 +625,17 @@ class ChartController extends SEIPController {
         $response = new JsonResponse();
 
         $dateSearch = $request->get('dateSearch');
+        $typeView = $request->get('typeView');
 
         $reportTemplateService = $this->getReportTemplateService(); //Obtenemos el servicio del ReportTemplate
         
         $reportTemplate = new \Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate();
-
-        $dataChart = $reportTemplateService->getDataChartMultiSeriesColumn3D($reportTemplate ,array('consolidateCorporation' => true, 'dateSearch' => $dateSearch));
+        
+        if($typeView == \Pequiven\SEIPBundle\Entity\Monitor::MONITOR_PRODUCTION_VIEW_STATUS_CHARGE){
+            $dataChart = $reportTemplateService->getDataChartMultiSeriesColumn3D($reportTemplate ,array('consolidateCorporationStatusCharge' => true, 'dateSearch' => $dateSearch));
+        } elseif($typeView == \Pequiven\SEIPBundle\Entity\Monitor::MONITOR_PRODUCTION_VIEW_COMPLIANCE){
+            $dataChart = $reportTemplateService->getDataChartMultiSeriesDualAxis($reportTemplate ,array('consolidateCorporationCompliance' => true, 'dateSearch' => $dateSearch));
+        }
 
         $response->setData($dataChart); //Seteamos la data del gráfico en Json
 

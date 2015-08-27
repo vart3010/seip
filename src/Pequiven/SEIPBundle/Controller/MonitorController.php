@@ -625,9 +625,12 @@ class MonitorController extends baseController {
      */
     public function displayDashboardProductionAction(Request $request){
         
+        $typeView = $request->get('typeView');
+        
         $boxRender = $this->get('tecnocreaciones_box.render');
         $data = array(
             'boxRender' => $boxRender,
+            'typeView' => $typeView,
         );
         
         $view = $this

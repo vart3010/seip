@@ -1400,6 +1400,7 @@ angular.module('seipModule.controllers', [])
                 }
             });
         })
+
         //Controladores SIG
         .controller('IndicatorSigEvolutionController', function ($scope, notificationBarService, $http, notifyService, $filter) {
 
@@ -2071,6 +2072,12 @@ angular.module('seipModule.controllers', [])
             });
         })
         //Fin controladores SIG
+        
+        .controller('ReportTemplateController', function ($scope, notificationBarService, $http, notifyService, $filter) {
+           
+        })
+
+
         .controller('IndicatorResultController', function ($scope, notificationBarService, $http, notifyService, $filter) {
 
             $scope.urlValueIndicatorForm = null;
@@ -3811,14 +3818,20 @@ angular.module('seipModule.controllers', [])
             }
             
             //PRO_RT_PQV-Gráfico para ver la producción consolidada por los ReportTemplates de PQV
-            $scope.chargeChartProductionReportTemplateByDateCorporation = function (dateSearch, render, width, height) {
+            $scope.chargeChartProductionReportTemplateByDateCorporation = function (dateSearch, render, width, height, typeView) {
                 var dateParse = $scope.parseDate(dateSearch);
-                var getDataChartProductionReportTemplateByDateCorporation = Routing.generate("getDataChartProductionReportTemplateByDateCorporation", {dateSearch: dateParse});
+                var getDataChartProductionReportTemplateByDateCorporation = Routing.generate("getDataChartProductionReportTemplateByDateCorporation", {dateSearch: dateParse,typeView: typeView});
+                
+                //Definimos el tipo de gráfico, de acuerdo al tipo de vista a visualizar
+                var typeChart = "mscolumn3d";
+                if(typeView == 1){
+                    typeChart = "mscolumn3dlinedy";
+                }
                 
                 $http.get(getDataChartProductionReportTemplateByDateCorporation).success(function (data) {
                     FusionCharts.ready(function () {
                         var revenueChartProductionReportTemplateByDateCorporation = new FusionCharts({
-                            "type": "mscolumn3d",
+                            "type": typeChart,
                             "renderAt": render,
                             "width": width + "%",
                             "height": height,

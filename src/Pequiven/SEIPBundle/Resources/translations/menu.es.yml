@@ -197,5 +197,8 @@ app:
                             production: Producción
                         monitor:
                             main: Monitor
-                            production: Producción
+                            production: 
+                                main: Producción
+                                statusCharge: Status de Carga
+                                compliance: % Cumplimiento
                             

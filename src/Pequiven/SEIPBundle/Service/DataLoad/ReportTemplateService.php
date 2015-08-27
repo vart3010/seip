@@ -225,8 +225,8 @@ class ReportTemplateService implements ContainerAwareInterface {
             $annotations = array();
             
             $data['dataSource']['annotations'] = $annotations;
-        } elseif (isset($options['consolidateCorporation']) && array_key_exists('consolidateCorporation', $options)) {
-            unset($options['consolidateCorporation']);
+        } elseif (isset($options['consolidateCorporationStatusCharge']) && array_key_exists('consolidateCorporationStatusCharge', $options)) {
+            unset($options['consolidateCorporationStatusCharge']);
             
             $chart["caption"] = 'Producción Pequiven';
             $chart["yAxisName"] = "TM";
@@ -247,7 +247,7 @@ class ReportTemplateService implements ContainerAwareInterface {
             }
 
             $dataSerialized = array();
-            $dataSerialized = $this->getDataSerialized($reportTemplate, array('consolidateCorporation' => true, 'dateSearch' => $options['dateSearch'], 'reportTemplates' => $reportTemplates));
+            $dataSerialized = $this->getDataSerialized($reportTemplate, array('consolidateCorporationStatusCharge' => true, 'dateSearch' => $options['dateSearch'], 'reportTemplates' => $reportTemplates));
             
             foreach($reportTemplates as $reportTemplate) {
                 $category[] = array('label' => $reportTemplate->getShortName());
@@ -369,6 +369,120 @@ class ReportTemplateService implements ContainerAwareInterface {
     }
     
     /**
+     * Función que devuelve la data para un gráfico tipo MultiSeriesDualAxis
+     * @param ReportTemplate $reportTemplate
+     * @param type $options
+     * @return type
+     */
+    public function getDataChartMultiSeriesDualAxis(ReportTemplate $reportTemplate, $options = array()){
+        $data = array(
+            'dataSource' => array(
+                'chart' => array(),
+                'categories' => array(),
+                'dataset' => array(),
+                'annotations' => array(),
+                ),
+        );
+
+        $chart = array();
+        
+        $chart["showBorder"] = "0";
+        $chart["showCanvasBorder"] = "0";
+        $chart["usePlotGradientColor"] = "0";
+        $chart["plotBorderAlpha"] = "10";
+        $chart["legendBorderAlpha"] = "0";
+        $chart["legendBgAlpha"] = "0";
+        $chart["legendItemFontColor"] = "#ffffff";
+        $chart["baseFontColor"] = "#ffffff";
+        $chart["legendItemFontColor"] = "#ffffff";
+        $chart["showHoverEffect"] = "1";
+        $chart["valuePosition"] = "ABOVE";
+        $chart["rotateValues"] = "0";
+        $chart["placeValuesInside"] = "0";
+        $chart["divlineColor"] = "#999999";
+        $chart["divLineDashed"] = "0";
+        $chart["dashed"] = "0";
+        $chart["divLineDashLen"] = "0";
+        $chart["divLineGapLen"] = "0";
+        $chart["canvasBgAlpha"] = "0,0";
+        $chart["captionFontSize"] = "24";
+        $chart["subcaptionFontSize"] = "14";
+        $chart["subcaptionFontBold"] = "0";
+        $chart["decimalSeparator"] = ",";
+        $chart["thousandSeparator"] = ".";
+        $chart["inDecimalSeparator"] = ",";
+        $chart["inThousandSeparator"] = ".";
+        $chart["decimals"] = "2";
+        $chart["formatNumberScale"] = "0";
+        $chart["bgAlpha"] = "0,0";
+        $chart["toolTipBgColor"] = "#000000";
+
+        $category = $dataSetValues = array();
+        
+        if (isset($options['consolidateCorporationCompliance']) && array_key_exists('consolidateCorporationCompliance', $options)) {
+            unset($options['consolidateCorporationCompliance']);
+            
+            $chart["caption"] = 'Producción Pequiven';
+            $chart["pYAxisName"] = "TM";
+            $chart["showDivLineValues"] = "0";
+            $chart["sYAxisName"] = "% Producción";
+            $chart["showLegend"] = "0";
+            
+            $repositoryReportTemplate = $this->container->get('pequiven.repository.report_template');
+            $user = $this->getUser();
+            $securityContext = $this->getSecurityContext();
+            
+            $reportTemplates = array();
+
+            $resultReportTemplates = $repositoryReportTemplate->findAll();
+            //Seteamos sólo los reportTemplates de PQV, ya que los de la EEMM y Filiales se buscan directo en el controlador del gráfico
+            foreach($resultReportTemplates as $resultReportTemplate){
+                if($resultReportTemplate->getLocation()->getAlias() != 'CPJAA'){
+                    $reportTemplates[] = $resultReportTemplate;
+                }
+            }
+
+            $dataSerialized = array();
+            $dataSerialized = $this->getDataSerialized($reportTemplate, array('consolidateCorporationCompliance' => true, 'dateSearch' => $options['dateSearch'], 'reportTemplates' => $reportTemplates));
+            
+            foreach($reportTemplates as $reportTemplate) {
+                $category[] = array('label' => $reportTemplate->getShortName());
+            }
+            
+            $dataRealValues = $dataPlanValues = $dataComplianceValues = array();
+            
+            //Añadimos los valores, por cada planta del reportTemplate
+            foreach($reportTemplates as $reportTemplate) {
+                $dataRealValues['seriesname'] = 'Real';
+//                $dataRealValues['includeInLegend'] = '0';
+                $dataPlanValues['seriesname'] = 'Plan';
+                $dataComplianceValues["renderAs"] = "line";
+                $dataComplianceValues["parentYAxis"] = "S";
+                $dataComplianceValues["showValues"] = "0";
+                $dataComplianceValues["color"] = "#B7B7B6";
+                $dataRealValues['data'][] = array('value' => number_format($dataSerialized[$reportTemplate->getId()]['real'], 2, ',', '.'), 'color' => $dataSerialized[$reportTemplate->getId()]['color']);
+                $dataPlanValues['data'][] = array('value' => number_format($dataSerialized[$reportTemplate->getId()]['plan'], 2, ',', '.'), 'color' => "#003CFF");
+                $dataComplianceValues['data'][] = array('value' => number_format($dataSerialized[$reportTemplate->getId()]['compliance'], 2, ',', '.'), 'displayValue' => number_format($dataSerialized[$reportTemplate->getId()]['compliance'], 2, ',', '.').' %');
+            }
+            
+            $data['dataSource']['dataset'][] = $dataRealValues;
+            $data['dataSource']['dataset'][] = $dataPlanValues;
+            $data['dataSource']['dataset'][] = $dataComplianceValues;
+            
+//            $chart['paletteColors'] = "#003CFF";
+            
+            $annotations = array();
+            
+            $data['dataSource']['annotations'] = $annotations;
+        }
+
+        $data['dataSource']['chart'] = $chart;
+        $data['dataSource']['categories'][]["category"] = $category;
+
+        return $data;
+    }
+    
+    /**
      * Función que retorna la data serializada para los distintos tipo de gráficos que se necesitan para los reportTemplates
      * @param ReportTemplate $reportTemplate
      * @param type $options
@@ -463,8 +577,8 @@ class ReportTemplateService implements ContainerAwareInterface {
                     $dataSerialized[$reportTemplate->getId()]['color'] = '#E5E752';
                 }
             }
-        } elseif(isset($options['consolidateCorporation']) && array_key_exists('consolidateCorporation', $options)){
-            unset($options['consolidateCorporation']);
+        } elseif(isset($options['consolidateCorporationStatusCharge']) && array_key_exists('consolidateCorporationStatusCharge', $options)){
+            unset($options['consolidateCorporationStatusCharge']);
             $reportTemplates = $options['reportTemplates'];
             
             $options['dateSearch'] = str_replace('/', '-', $options['dateSearch']);
@@ -511,6 +625,48 @@ class ReportTemplateService implements ContainerAwareInterface {
                     $dataSerialized[$reportTemplate->getId()]['color'] = '#E5E752';
                 } elseif($dataSerialized[$reportTemplate->getId()]['flagNotificationHalf']){
                     $dataSerialized[$reportTemplate->getId()]['color'] = '#E5E752';
+                }
+            }
+        } elseif(isset($options['consolidateCorporationCompliance']) && array_key_exists('consolidateCorporationCompliance', $options)){
+            unset($options['consolidateCorporationCompliance']);
+            $reportTemplates = $options['reportTemplates'];
+            
+            $options['dateSearch'] = str_replace('/', '-', $options['dateSearch']);
+            $daySearch = date("j", strtotime($options['dateSearch']));
+            $monthSearch = date("n", strtotime($options['dateSearch']));
+            
+            //SETEAMOS LOS VALORES POR DEFECTO
+            foreach($reportTemplates as $reportTemplate){
+                $dataSerialized[$reportTemplate->getId()]['real'] = $dataSerialized[$reportTemplate->getId()]['plan'] =  $dataSerialized[$reportTemplate->getId()]['compliance'] = 0.0;
+            }
+            
+            //RELLENAMOS LA DATA
+            foreach($reportTemplates as $reportTemplate){
+                $plantReports = $reportTemplate->getPlantReports();
+                $contProductReports = 0;
+
+                foreach($plantReports as $plantReport){
+                    $productReports = $plantReport->getProductsReport();
+                    foreach($productReports as $productReport){
+                        $contProductReports++;
+                        $productDetailDailyMonths = $productReport->getProductDetailDailyMonthsSortByMonth();
+                        $valueReal = array_key_exists($monthSearch, $productDetailDailyMonths) == true ? $productDetailDailyMonths[$monthSearch]->getValueGrossByDay($daySearch) : 0.0;
+                        $valuePlan = array_key_exists($monthSearch, $productDetailDailyMonths) == true ? $productDetailDailyMonths[$monthSearch]->getPlanGrossByDay($daySearch) : 0.0;
+                        $dataSerialized[$reportTemplate->getId()]['real'] = $dataSerialized[$reportTemplate->getId()]['real'] + $valueReal;
+                        $dataSerialized[$reportTemplate->getId()]['plan'] = $dataSerialized[$reportTemplate->getId()]['plan'] + $valuePlan;
+                    }
+                }
+                
+                if($dataSerialized[$reportTemplate->getId()]['plan'] > 0){
+                    $dataSerialized[$reportTemplate->getId()]['compliance'] = ($dataSerialized[$reportTemplate->getId()]['real'] / $dataSerialized[$reportTemplate->getId()]['plan'])*100;
+                }
+                
+                if($dataSerialized[$reportTemplate->getId()]['compliance'] < 50.0){
+                    $dataSerialized[$reportTemplate->getId()]['color'] = '#FF0004';
+                } elseif($dataSerialized[$reportTemplate->getId()]['compliance'] >= 50.0 && $dataSerialized[$reportTemplate->getId()]['compliance'] <= 90.0){
+                    $dataSerialized[$reportTemplate->getId()]['color'] = '#E5E752';
+                } elseif($dataSerialized[$reportTemplate->getId()]['compliance'] > 90.0){
+                    $dataSerialized[$reportTemplate->getId()]['color'] = '#0EED59';
                 }
             }
         }
