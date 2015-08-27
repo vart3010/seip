@@ -33,6 +33,7 @@ pequiven:
     show: Ver
     details: Detalles
     evolution: Informe de Evolución
+    evolution_history: Historico Informe de Evolución
     dialog:
         confirm: Confirmar
     advances:

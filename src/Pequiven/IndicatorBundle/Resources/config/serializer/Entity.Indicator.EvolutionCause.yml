@@ -19,3 +19,9 @@ Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCause:
         createdBy:
             expose: true
             groups: [api_details]
+        indicatorAction:
+            expose: true
+            groups: [indicatorAction]
+         verificationRel:
+            expose: true
+            groups: [verificationRel]

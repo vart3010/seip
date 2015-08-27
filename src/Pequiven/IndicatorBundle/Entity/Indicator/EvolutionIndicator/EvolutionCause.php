@@ -277,7 +277,7 @@ class EvolutionCause extends Model {
      * @param \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionAction $indicatorAction
      * @return Indicator
      */
-    public function addAndicatorAction(\Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionAction $indicatorAction) {
+    public function addIndicatorAction(\Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionAction $indicatorAction) {
 
         $this->indicatorAction->add($indicatorAction);
 

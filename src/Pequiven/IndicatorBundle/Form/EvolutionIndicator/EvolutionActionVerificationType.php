@@ -18,10 +18,10 @@ class EvolutionActionVerificationType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('ref', 'text', array(
+            /*->add('ref', 'text', array(
                 'label' => 'Referencia',
                 'label_attr' => array('class' => 'label'),
-                'attr'=> array('class'=> 'input input-large ' ))) 
+                'attr'=> array('class'=> 'input input-large ' ))) */
             ->add('comment', 'textarea', array(
                 'label' => 'Comentario',
                 'label_attr' => array('class' => 'label'),
@@ -31,6 +31,17 @@ class EvolutionActionVerificationType extends AbstractType
                 'label_attr' => array('class' => 'label'),
                 'class' => 'Pequiven\SIGBundle\Entity\TypeVerificationManagementSystem',
                 'property' => 'description',
+                'attr'=> array(
+                'class'=> 'select2 input-large form-control',
+                //'ng-model' => 'model.lastPeriod',
+                //'ng-options' => 'value as value.ref for (key,value) in data.lastPeriod'
+                ),
+                               )) 
+            ->add('actionPlan','entity',array(
+                'label' => 'Plan de Acción',
+                'label_attr' => array('class' => 'label'),
+                'class' => 'Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionAction',
+                'property' => 'ref',
                 'attr'=> array(
                 'class'=> 'select2 input-large form-control',
                 //'ng-model' => 'model.lastPeriod',

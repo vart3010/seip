@@ -1,4 +1,4 @@
-Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionAction:
+Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionActionVerification:
     exclusion_policy: ALL
     properties:
         id:
@@ -16,11 +16,6 @@ Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionAction:
         createdBy:
             expose: true
             groups: [api_details]
-        indicatorAction:
+        actionPlan:
             expose: true
-            groups: [indicatorAction]
-        verificationRel:
-                    expose: true
-                    groups: [verificationRel]
-
-            
+            groups: [actionPlan]

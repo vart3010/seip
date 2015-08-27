@@ -289,6 +289,12 @@ sylius_resource:
             classes:
                 model: Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCauseAnalysis
                 repository: Pequiven\IndicatorBundle\Repository\Indicator\EvolutionIndicator\EvolutionCauseAnalysisRepository
+        #Analisis de las causas de desviación
+        pequiven.sig_action_verification:
+            driver: doctrine/orm
+            classes:
+                model: Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionActionVerification
+                repository: Pequiven\IndicatorBundle\Repository\Indicator\EvolutionIndicator\ActionVerificationRepository
         
         pequiven.category_arrangement_program:
             driver: doctrine/orm

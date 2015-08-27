@@ -3626,7 +3626,6 @@ class IndicatorService implements ContainerAwareInterface {
                 foreach ($indicatorlast->getValuesIndicator() as $value) {
 
                         $results = $value->getValueOfIndicator();
-                  //      var_dump($results);
                         $acumLast = $acumLast + $results;
                         $cant = $cant + 1;
                 }            
@@ -3655,6 +3654,10 @@ class IndicatorService implements ContainerAwareInterface {
             //Pasando espacios vacios para desarrollo de la gráfica
             $dataSetTend["data"][] = array( 'value' => '' );
             $dataSetReal["data"][] = array( 'value' => '' );
+                        
+                        //var_dump($indicator->getIndicatorCause()->getId());
+                        //var_dump($indicator->getTendency()->getId());
+                        //die();
             
             foreach ($indicator->getValuesIndicator() as $value) {
 

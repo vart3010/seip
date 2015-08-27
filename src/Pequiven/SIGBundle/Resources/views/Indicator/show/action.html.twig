@@ -30,7 +30,7 @@
                         <th scope="col" width="15%" class="hide-on-mobile-portrait header">&nbsp;</th>
                 </tr>
             </thead>
-    {% for  action in data_action %}
+     {% for  action in data_action %}
             <tbody align="center">
                 <tr>
                     <td>{{ action.ref }}</td>
@@ -38,8 +38,8 @@
                         {{ action.action }}
                     </th>
                     <td>{{ action.indicatorAction.ref }}</td>
-                    <td>{{ action.dateStart | date("m/d/Y") }}</td>
-                    <td>{{ action.dateEnd | date("m/d/Y") }}</td>
+                    <td>{{ action.dateStart | date("d/m/Y") }}</td>
+                    <td>{{ action.dateEnd | date("d/m/Y") }}</td>
                     <td>{{ action.advance }}</td>
                     <td>
                         {{ action.createdBy.firstname }} {{ action.createdBy.lastname }}
@@ -64,9 +64,7 @@
                 </tr>
             </tbody>
     {% endfor %}
-        </table>
-    
-                
+        </table>                
     </div>
 </div>
 </div>

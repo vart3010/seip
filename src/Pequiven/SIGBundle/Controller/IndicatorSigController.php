@@ -131,7 +131,10 @@ class IndicatorSigController extends ResourceController
     public function evolutionAction(Request $request)
     {
         $resource = $this->findOr404($request);
+
         $form = $this->getForm($resource);
+
+        $data = $this->findEvolutionCause($request);//Carga la data de las causas y sus acciones relacionadas
         
         //Carga de data de Indicador para armar grafica
         $response = new JsonResponse();
@@ -150,19 +153,26 @@ class IndicatorSigController extends ResourceController
         /*$response->setData($dataCause); //Seteamos la data del gráfico en Json
         var_dump($response);
         die();*/
-        //return $response;
 
-        //Consultamos las Causas Relacionadas al indicador        
-        $indicator = $idIndicator;
-        $results = $this->get('pequiven.repository.sig_causes_indicator')->findByindicator($indicator);
-        //Carga de las Acciones
-        $action = $this->get('pequiven.repository.sig_action_indicator')->findByindicatorRel($indicator);
         //Carga el analisis de la tendencia
         $trend = $this->get('pequiven.repository.sig_trend_indicator')->findByindicator($indicator);
         //Carga del analisis de las causas
         $causeAnalysis = $this->get('pequiven.repository.sig_causes_analysis')->findByindicator($indicator);
 
-        // Fin configuracion de grafico     
+        //Verificación de los planes de acción del indicador
+        if($data["action"]){
+         
+            foreach ($data["action"] as $value) {
+
+                $idAction[] = $value->getId();
+            }
+        }    
+
+        if(!$data["action"]){
+            $idAction = null;
+        } 
+        $verification = $this->get('pequiven.repository.sig_action_verification')->findByactionPlan($idAction);
+
         //$view = $this->view();
         //$view->getSerializationContext()->setGroups(array('id','api_list'));  
 
@@ -171,9 +181,10 @@ class IndicatorSigController extends ResourceController
             ->setTemplate($this->config->getTemplate('evolution.html'))
             ->setData(array(
                 'data'                           => $dataChart,
+                'verification'                   => $verification,
                 'dataCause'                      => $dataCause,
-                'cause'                          => $results,
-                'data_action'                    => $action,
+                'cause'                          => $data["results"],
+                'data_action'                    => $data["action"],
                 'analysis'                       => $causeAnalysis,
                 'trend'                          => $trend,
                 $this->config->getResourceName() => $resource,
@@ -283,9 +294,9 @@ class IndicatorSigController extends ResourceController
         //var_dump($causeAction);
         //die();
 
-        $indicator = $request->get('idIndicator');
+        /*$indicator = $request->get('idIndicator');
         $repository = $this->get('pequiven.repository.sig_indicator');
-        $results = $repository->find($indicator);
+        $results = $repository->find($indicator);*/
 
         $causeResult = $this->get('pequiven.repository.sig_causes_indicator')->find($causeAction);
         //var_dump(count($causeResult));
@@ -293,7 +304,7 @@ class IndicatorSigController extends ResourceController
         $action = new EvolutionAction();
         $form  = $this->createForm(new EvolutionActionType(), $action);
         
-        $action->setIndicatorRel($results);
+        //$action->setIndicatorRel($results);
         $action->setCreatedBy($user);
         $action->setEvolutionCause($causeResult);
 
@@ -488,17 +499,18 @@ class IndicatorSigController extends ResourceController
      */
     public function addVerificationAction(Request $request)
     {   
-        $indicator = $request->get('idIndicator');
-        $repository = $this->get('pequiven.repository.sig_indicator');
-        $results = $repository->find($indicator);
         
+        $action = $request->get('pequiven_indicatorbundle_evolutionindicator_evolutionactionverification')['actionPlan'];
+        //die($action);
+        $actionVer = $this->get('pequiven.repository.sig_action_indicator')->find($action);
+        //var_dump(count($actionVer));
+        //die();
         $user = $this->getUser();
-        $data = $results;
         $verification = new EvolutionActionVerification();
         $form  = $this->createForm(new EvolutionActionVerificationType(), $verification);
         
-        //$verification->setIndicator($data);
         $verification->setCreatedBy($user);
+        $verification->setActionPlan($actionVer);
 
         $form->handleRequest($request);
 
@@ -536,6 +548,48 @@ class IndicatorSigController extends ResourceController
         $view->getSerializationContext()->setGroups(array('id','api_list','description'));
         return $this->handleView($view);
     }
+
+    /**
+     * Buscamos las acciones de las causas
+     * @param Request $request
+     * @return \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCauses
+     * @throws type
+     */
+    private function findEvolutionCause(Request $request)
+    {
+        //$id = $request->get('idIndicator');
+        $idIndicator = $request->get('id');        
+
+        $results = $this->get('pequiven.repository.sig_causes_indicator')->findByindicator($idIndicator);
+        
+        $cause = array();
+        if($results){
+
+            foreach ($results as $value) {
+                
+                $idCause = $value->getId();
+                
+                $cause[] = $idCause;
+            }
+
+            $action = $this->get('pequiven.repository.sig_action_indicator')->findByevolutionCause($cause);
+             
+        }        
+        
+
+        if(!$results){
+            $action = null;
+        }
+
+        $data = [
+
+            'action'  => $action, //Pasando la data de las acciones si las hay
+            'results' => $results //Pasando la data de las causas si las hay
+
+        ];
+
+        return $data;
+    } 
 
     /**
      * Busca el indicador o retorna un 404

@@ -60,14 +60,6 @@ class TypeVerificationManagementSystem extends model
     private $deletedAt;
     
     /**
-     * Tipo de Verificación
-     * 
-     * @var \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionAction
-     * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionAction",mappedBy="actionVerification",cascade={"persist","remove"})
-     */
-    protected $typeVerification;
-
-    /**
      * Verification en la lista de verificación
      * 
      * @var \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionActionVerification
@@ -80,9 +72,8 @@ class TypeVerificationManagementSystem extends model
      */
     public function __construct()
     {
-        $this->typeVerification = new \Doctrine\Common\Collections\ArrayCollection();
         $this->verificationPlan = new \Doctrine\Common\Collections\ArrayCollection();
-
+        
     }
     
     /**
@@ -208,36 +199,6 @@ class TypeVerificationManagementSystem extends model
     public function getDeletedAt()
     {
         return $this->deletedAt;
-    }
-    
-    /**
-     * Add typeVerification
-     *
-     * @param \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionAction $typeVerification
-     */
-    public function addTypeVerification(\Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionAction $typeVerification) {
-
-        $this->typeVerification->add($typeVerification);
-
-        return $this;
-    }
-
-    /**
-     * Remove typeVerification
-     *
-     * @param \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionAction $typeVerification
-     */
-    public function removeTypeVerification(\Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionAction $typeVerification) {
-        $this->typeVerification->removeElement($typeVerification);
-    }
-
-    /**
-     * Get typeVerification
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getTypeVerification() {
-        return $this->typeVerification;
     }
 
     /**

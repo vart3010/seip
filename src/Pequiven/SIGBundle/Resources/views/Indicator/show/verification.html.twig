@@ -26,16 +26,19 @@
                     <th scope="col" width="15%" class="hide-on-mobile-portrait header">&nbsp;</th>
                 </tr>
             </thead>
-    {% for  action in data_action %}
+    {% for  ver_data in verification %}
             <tbody align="center">
                 <tr>
                     <td>--</td>
                     <th scope="row" style="">
-                        
+                    {{ ver_data.comment }}          
                     </th>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td>
+                        {{ ver_data.createdBy.firstname }} {{ ver_data.createdBy.lastname }}
+                        <small class="tag">({{ ver_data.createdBy.username }})</small>
+                    </td>
+                    <td>{{ ver_data.createdAt | date("d/m/Y") }}</td>
+                    <td>{{ ver_data.typeVerification.description }}</td>
                         <td class="align-right vertical-center">
                             <span class="select compact">
                                 <a href class="select-value form-edit">{{ 'pequiven.actions'|trans({},'messages') }}</a>
@@ -55,6 +58,7 @@
             </tbody>
     {% endfor %}
         </table>
+    
     
                 
     </div>

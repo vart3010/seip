@@ -28,9 +28,10 @@ class EvolutionActionVerification extends Model {
     /**
      * @var string
      *
-     * @ORM\Column(name="ref" , type="string", length=15)
+     * @ORM\Column(name="ref" , type="string", length=15, nullable=true)
      */
     private $ref;
+    
     /**
      * @var string
      *
@@ -71,6 +72,12 @@ class EvolutionActionVerification extends Model {
      * @ORM\JoinColumn(name="verification_id", referencedColumnName="id")
      */
     private $typeVerification;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="\Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionAction", inversedBy="verificationRel")
+     * @ORM\JoinColumn(name="action_id", referencedColumnName="id")
+     */
+    private $actionPlan;
     
     /**
      * Get id
@@ -220,7 +227,28 @@ class EvolutionActionVerification extends Model {
      *
      * @return Pequiven\SIGBundle\Entity\TypeVerificationManagementSystem
      */
-    public function gettypeVerification() {
+    public function getTypeVerification() {
         return $this->typeVerification;
+    }
+
+    /**
+     * Set actionPlan
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionIndicationVerification $actionPlan
+     */
+    public function setActionPlan(\Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionAction $actionPlan) {
+        
+        $this->actionPlan = $actionPlan;
+
+        return $this;
+    }
+
+    /**
+     * Get actionPlan
+     *
+     * @return Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionIndicatorVerification
+     */
+    public function getActionPlan() {
+        return $this->actionPlan;
     }
 }

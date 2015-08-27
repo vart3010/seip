@@ -106,17 +106,21 @@ class EvolutionAction extends Model {
     private $indicatorAction;
 
     /**
-     * @var integer
-     * @ORM\ManyToOne(targetEntity="\Pequiven\IndicatorBundle\Entity\Indicator", inversedBy="indicatorAction")
-     * @ORM\JoinColumn(name="indicator_id", referencedColumnName="id")
+     * Relacion de la Verificación con el Plan de Acción 
+     * 
+     * @var \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionActionVerification
+     * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionActionVerification",mappedBy="actionPlan",cascade={"persist","remove"})
      */
-    private $indicatorRel;
+    protected $verificationRel;
 
     /**
-     * @ORM\ManyToOne(targetEntity="\Pequiven\SIGBundle\Entity\TypeVerificationManagementSystem", inversedBy="typeVerification")
-     * @ORM\JoinColumn(name="typeVerification_id", referencedColumnName="id")
+     * Constructor
      */
-    private $actionVerification;
+    public function __construct()
+    {
+        $this->verificationRel = new \Doctrine\Common\Collections\ArrayCollection();
+
+    }
     
     /**
      * Get id
@@ -364,47 +368,36 @@ class EvolutionAction extends Model {
     public function getIndicatorAction() {
         return $this->indicatorAction;
     }
-        
+
+    //
     /**
-     * Set indicatorRel
+     * Add verificationRel
      *
-     * @param \Pequiven\IndicatorBundle\Entity\Indicator $indicator
-     * @return Indicator
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionActionVerification $verificationRel
      */
-    public function setIndicatorRel(\Pequiven\IndicatorBundle\Entity\Indicator $indicatorRel) {
-        
-        $this->indicatorRel = $indicatorRel;
+    public function addVerificationRel(\Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionActionVerification $verificationRel) {
+
+        $this->verificationRel->add($verificationRel);
 
         return $this;
     }
 
     /**
-     * Get indicatorRel
+     * Remove verificationRel
      *
-     * @return Pequiven\IndicatorBundle\Entity\Indicator
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionAction $verificationRel
      */
-    public function getIndicator() {
-        return $this->indicatorRel;
+    public function removeVerificationRel(\Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionActionVerification $verificationRel) {
+        $this->verificationRel->removeElement($verificationRel);
     }
 
     /**
-     * Set actionVerification
+     * Get verificationRel
      *
-     * @param \Pequiven\SIGBundle\Entity\TypeVerificationManagementSystem $actionVerification
+     * @return \Doctrine\Common\Collections\Collection 
      */
-    public function setActionVerification(\Pequiven\SIGBundle\Entity\TypeVerificationManagementSystem $actionVerification) {
-        
-        $this->actionVerification = $actionVerification;
-
-        return $this;
+    public function getVerificationRel() {
+        return $this->verificationRel;
     }
-
-    /**
-     * Get actionVerification
-     *
-     * @return Pequiven\SIGBundle\Entity\TypeVerificationManagementSystem
-     */
-    public function getActionVerification() {
-        return $this->actionVerification;
-    }
+    
 }

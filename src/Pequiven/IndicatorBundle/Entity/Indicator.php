@@ -590,14 +590,6 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     protected $indicatorCauseAnalysis;
 
     /**
-     * Plan de Acción
-     * 
-     * @var \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionAction
-     * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionAction",mappedBy="indicatorRel",cascade={"persist","remove"})
-     */
-    protected $indicatorAction;
-
-    /**
      * Tendencia del indicador
      * 
      * @var \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionTrend
@@ -622,7 +614,6 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
         $this->indicatorlastPeriod = new \Doctrine\Common\Collections\ArrayCollection();
         $this->indicatorCause = new \Doctrine\Common\Collections\ArrayCollection();
         $this->indicatorCauseAnalisys = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->indicatorAction = new \Doctrine\Common\Collections\ArrayCollection();
         $this->indicatorTrend = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -1128,37 +1119,6 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      */
     public function getIndicatorCauseAnalysis() {
         return $this->indicatorCauseAnalysis;
-    }
-
-    /**
-     * Add indicatorAction
-     *
-     * @param \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionAction $indicatorAction
-     * @return Indicator
-     */
-    public function addIndicatorAction(\Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionAction $indicatorAction) {
-
-        $this->indicatorAction->add($indicatorAction);
-
-        return $this;
-    }
-
-    /**
-     * Remove indicatorAction
-     *
-     * @param \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionAction $indicatorAction
-     */
-    public function removeIndicatorAction(\Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionAction $indicatorAction) {
-        $this->indicatorAction->removeElement($indicatorAction);
-    }
-
-    /**
-     * Get indicatorAction
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getIndicatorAction() {
-        return $this->indicatorAction;
     }
 
     /**
