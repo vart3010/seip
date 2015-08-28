@@ -228,6 +228,11 @@ class ReportTemplateService implements ContainerAwareInterface {
         } elseif (isset($options['consolidateCorporationStatusCharge']) && array_key_exists('consolidateCorporationStatusCharge', $options)) {
             unset($options['consolidateCorporationStatusCharge']);
             
+            $reportTemplatesExclude = array(
+                'CPJAA' =>true,
+                'PETROCASA' => true,
+            );
+            
             $chart["caption"] = 'Producción Pequiven';
             $chart["yAxisName"] = "TM";
             $chart["showLegend"] = "0";
@@ -241,7 +246,7 @@ class ReportTemplateService implements ContainerAwareInterface {
             $resultReportTemplates = $repositoryReportTemplate->findAll();
             //Seteamos sólo los reportTemplates de PQV, ya que los de la EEMM y Filiales se buscan directo en el controlador del gráfico
             foreach($resultReportTemplates as $resultReportTemplate){
-                if($resultReportTemplate->getLocation()->getAlias() != 'CPJAA'){
+                if(!array_key_exists($resultReportTemplate->getLocation()->getAlias(),$reportTemplatesExclude)){
                     $reportTemplates[] = $resultReportTemplate;
                 }
             }
@@ -250,7 +255,7 @@ class ReportTemplateService implements ContainerAwareInterface {
             $dataSerialized = $this->getDataSerialized($reportTemplate, array('consolidateCorporationStatusCharge' => true, 'dateSearch' => $options['dateSearch'], 'reportTemplates' => $reportTemplates));
             
             foreach($reportTemplates as $reportTemplate) {
-                $category[] = array('label' => $reportTemplate->getShortName());
+                $category[] = array('label' => $reportTemplate->getLocation()->getAlias());
             }
             
             $dataRealValues = $dataPlanValues = array();
@@ -260,7 +265,7 @@ class ReportTemplateService implements ContainerAwareInterface {
                 $dataRealValues['seriesname'] = 'Real';
 //                $dataRealValues['includeInLegend'] = '0';
                 $dataPlanValues['seriesname'] = 'Plan';
-                $dataRealValues['data'][] = array('value' => number_format($dataSerialized[$reportTemplate->getId()]['real'], 2, ',', '.'), 'color' => $dataSerialized[$reportTemplate->getId()]['color']);
+                $dataRealValues['data'][] = array('value' => number_format($dataSerialized[$reportTemplate->getId()]['real'], 2, ',', '.'), 'color' => $dataSerialized[$reportTemplate->getId()]['color'], 'link' => $this->generateUrl('pequiven_data_load_dashboard_production_report_template',array('reportTemplateId' => $reportTemplate->getId(),'typeView' => \Pequiven\SEIPBundle\Entity\Monitor::MONITOR_PRODUCTION_VIEW_STATUS_CHARGE)));
                 $dataPlanValues['data'][] = array('value' => number_format($dataSerialized[$reportTemplate->getId()]['plan'], 2, ',', '.'), 'color' => "#003CFF");
             }
             
@@ -360,6 +365,37 @@ class ReportTemplateService implements ContainerAwareInterface {
 //            $annotations['constrainScale'] = "1";
             
             $data['dataSource']['annotations'] = $annotations;
+        } elseif(isset($options['reportTemplateByDateStatusCharge']) && array_key_exists('reportTemplateByDateStatusCharge', $options)){
+            unset($options['reportTemplateByDateStatusCharge']);
+            
+            $chart["yAxisName"] = "TM";
+            $chart["showLegend"] = "0";
+            
+            $user = $this->getUser();
+            $securityContext = $this->getSecurityContext();
+
+            $dataSerialized = array();
+            $dataSerialized = $this->getDataSerialized($reportTemplate, array('reportTemplateByDateStatusCharge' => true, 'dateSearch' => $options['dateSearch'], 'typeDate' => $options['typeDate']));
+            
+            $plantReports = $reportTemplate->getPlantReports();
+            
+            $dataRealValues = $dataPlanValues = array();
+            
+            //Añadimos los valores, por cada planta del reportTemplate
+            foreach($plantReports as $plantReport) {
+                $category[] = array('label' => $plantReport->getPlant()->getAlias());
+                $dataRealValues['seriesname'] = 'Real';
+                $dataPlanValues['seriesname'] = 'Plan';
+                $dataRealValues['data'][] = array('value' => number_format($dataSerialized[$plantReport->getId()]['real'], 2, ',', '.'), 'color' => $dataSerialized[$plantReport->getId()]['color']);
+                $dataPlanValues['data'][] = array('value' => number_format($dataSerialized[$plantReport->getId()]['plan'], 2, ',', '.'), 'color' => "#003CFF");
+            }
+            
+            $data['dataSource']['dataset'][] = $dataRealValues;
+            $data['dataSource']['dataset'][] = $dataPlanValues;
+            
+//            $chart['paletteColors'] = "#003CFF";
+            
+            $annotations = array();
         }
 
         $data['dataSource']['chart'] = $chart;
@@ -667,6 +703,54 @@ class ReportTemplateService implements ContainerAwareInterface {
                     $dataSerialized[$reportTemplate->getId()]['color'] = '#E5E752';
                 } elseif($dataSerialized[$reportTemplate->getId()]['compliance'] > 90.0){
                     $dataSerialized[$reportTemplate->getId()]['color'] = '#0EED59';
+                }
+            }
+        } elseif(isset($options['reportTemplateByDateStatusCharge']) && array_key_exists('reportTemplateByDateStatusCharge', $options)){
+            unset($options['reportTemplateByDateStatusCharge']);
+            
+            $options['dateSearch'] = str_replace('/', '-', $options['dateSearch']);
+            $daySearch = date("j", strtotime($options['dateSearch']));
+            $monthSearch = date("n", strtotime($options['dateSearch']));
+            
+            $plantReports = $reportTemplate->getPlantReports();
+            
+            //SETEAMOS LOS VALORES POR DEFECTO
+            foreach($plantReports as $plantReport){
+                $dataSerialized[$plantReport->getId()]['real'] = $dataSerialized[$plantReport->getId()]['plan'] = 0.0;
+                $dataSerialized[$plantReport->getId()]['color'] = '#FF0004';
+                $dataSerialized[$plantReport->getId()]['contNotificationTotal'] = 0;
+                $dataSerialized[$plantReport->getId()]['flagNotificationHalf'] = false;
+                $dataSerialized[$plantReport->getId()]['observations'] = array();
+            }
+            
+            //RELLENAMOS LA DATA
+            foreach($plantReports as $plantReport){
+                $productReports = $plantReport->getProductsReport();
+                $contProductReports = 0;
+                foreach($productReports as $productReport){
+                    $contProductReports++;
+                    $productDetailDailyMonths = $productReport->getProductDetailDailyMonthsSortByMonth();
+                    $valueReal = array_key_exists($monthSearch, $productDetailDailyMonths) == true ? $productDetailDailyMonths[$monthSearch]->getValueGrossByDay($daySearch) : 0.0;
+                    $valuePlan = array_key_exists($monthSearch, $productDetailDailyMonths) == true ? $productDetailDailyMonths[$monthSearch]->getPlanGrossByDay($daySearch) : 0.0;
+                    $dataSerialized[$plantReport->getId()]['real'] = $dataSerialized[$plantReport->getId()]['real'] + $valueReal;
+                    $dataSerialized[$plantReport->getId()]['plan'] = $dataSerialized[$plantReport->getId()]['plan'] + $valuePlan;
+                    if(array_key_exists($monthSearch, $productDetailDailyMonths)){
+                        if(!$dataSerialized[$plantReport->getId()]['flagNotificationHalf']){
+                            $dataSerialized[$plantReport->getId()]['flagNotificationHalf'] = $productDetailDailyMonths[$monthSearch]->getStatusByDay($daySearch) == \Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductDetailDailyMonth::STATUS_SAVE_PENDING ? true : false;
+                        }
+                        if($productDetailDailyMonths[$monthSearch]->getStatusByDay($daySearch) == \Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductDetailDailyMonth::STATUS_SAVE){
+                            $dataSerialized[$plantReport->getId()]['contNotificationTotal']++;
+                        }
+                    }
+                }
+
+                //Comparamos si todos los productReports estan notificados en su totalidad
+                if($contProductReports == $dataSerialized[$plantReport->getId()]['contNotificationTotal']){
+                    $dataSerialized[$plantReport->getId()]['color'] = '#0EED59';
+                } elseif($dataSerialized[$plantReport->getId()]['contNotificationTotal'] > 0 && !$dataSerialized[$plantReport->getId()]['flagNotificationHalf']){
+                    $dataSerialized[$plantReport->getId()]['color'] = '#E5E752';
+                } elseif($dataSerialized[$plantReport->getId()]['flagNotificationHalf']){
+                    $dataSerialized[$plantReport->getId()]['color'] = '#E5E752';
                 }
             }
         }

@@ -641,6 +641,33 @@ class ChartController extends SEIPController {
 
         return $response;
     }
+    
+    /**
+     * Función que retorna la data para un gráfico que muestre la producción por las plantas de un grupo de reportTemplate por Día de la corporación
+     * @return JsonResponse
+     */
+    public function getDataChartProductionByReportTemplateByDateAction(Request $request) {
+        $response = new JsonResponse();
+
+        $dateSearch = $request->get('dateSearch');
+        $typeView = $request->get('typeView');
+        $typeDate = $request->get('typeDate');
+        $reportTemplateId = $request->get('reportTemplateId');
+
+        $reportTemplateService = $this->getReportTemplateService(); //Obtenemos el servicio del ReportTemplate
+        
+        $reportTemplate = $this->get('pequiven.repository.report_template')->find($reportTemplateId); //Obtenemos el ReportTemplate
+        
+        if($typeView == \Pequiven\SEIPBundle\Entity\Monitor::MONITOR_PRODUCTION_VIEW_STATUS_CHARGE){
+            $dataChart = $reportTemplateService->getDataChartMultiSeriesColumn3D($reportTemplate ,array('reportTemplateByDateStatusCharge' => true, 'dateSearch' => $dateSearch, 'typeDate' => $typeDate));
+        } elseif($typeView == \Pequiven\SEIPBundle\Entity\Monitor::MONITOR_PRODUCTION_VIEW_COMPLIANCE){
+            $dataChart = $reportTemplateService->getDataChartMultiSeriesDualAxis($reportTemplate ,array('reportTemplateByDateCompliance' => true, 'dateSearch' => $dateSearch, 'typeDate' => $typeDate));
+        }
+
+        $response->setData($dataChart); //Seteamos la data del gráfico en Json
+
+        return $response;
+    }
    
     /**
      * Servicio de los Indicadores

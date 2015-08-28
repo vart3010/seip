@@ -14,23 +14,40 @@ class ReportTemplateBox extends \Tecnocreaciones\Bundle\BoxBundle\Model\GenericB
 
     public function getParameters() 
     {
-        $criteria = array();
-        $orderBy = array();
-        $repository = $this->container->get('pequiven_seip.repository.arrangementprogram');
+        $observations = array();
+        $reportTemplateRepository = $this->container->get('pequiven.repository.report_template');
         
-        $period = $this->getPeriodService()->getPeriodActive();
-        $criteria['ap.period'] = $period;
-        $criteria['ap.user'] = $this->getUser();
+        $boxRender = $this->container->get('tecnocreaciones_box.render');
+        $typeView = $this->getRequest()->get('typeView');
+        $idReportTemplate = $this->getRequest()->get('reportTemplateId');
         
-        $resources = $repository->createPaginatorByAssignedResponsibles($criteria,$orderBy);
-        $resources->setMaxPerPage(5);
+        $daySearch = date("j", strtotime('-1 day'));
+        $monthSearch = date("n");
+        
+        $reportTemplate = $reportTemplateRepository->find($idReportTemplate);
+        
+        $plantReports = $reportTemplate->getPlantReports();
+        foreach($plantReports as $plantReport){
+            $productReports = $plantReport->getProductsReport();
+            foreach($productReports as $productReport){
+                $productDetailDailyMonths = $productReport->getProductDetailDailyMonthsSortByMonth();
+                if(array_key_exists($monthSearch, $productDetailDailyMonths)){
+                    if(($observation = $productDetailDailyMonths[$monthSearch]->getObservationByDay($daySearch)) != null){
+                        $observations[$productReport->getId()] = array('product' => $productReport->getProduct()->getName(), 'observation' => $observation);
+                    }
+                }
+            }
+        }
+        
         return array(
-            'result'  => $resources->toArray()
+            'typeView' => $typeView,
+            'reportTemplateId' => $idReportTemplate,
+            'observations' => $observations,
         );
     }
 
     public function getTemplateName() {
-        return 'PequivenSEIPBundle:Monitor:Dashboard/DataLoad/Production/ReportTemplate.html.twig';
+        return 'PequivenSEIPBundle:Monitor:Dashboard/DataLoad/Production/ReportTemplate/production.html.twig';
     }
     
     public function getAreasNotPermitted() 

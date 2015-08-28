@@ -381,6 +381,17 @@ getDataChartProductionReportTemplateByDateCorporation:
     methods: [GET]
     options:
         expose: true
+        
+getDataChartProductionByReportTemplateByDate:
+    path: /getDataChartProductionByReportTemplateByDate
+    defaults:
+        _controller: pequiven.controller.seipchart:getDataChartProductionByReportTemplateByDateAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
 
 #PRO_RT_EEMM_FIL
 getDataChartProductionGroupByReportTemplateByDate:

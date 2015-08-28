@@ -642,4 +642,35 @@ class MonitorController extends baseController {
 
         return $this->handleView($view);
     }
+    
+    /**
+     * Función que renderiza el Dashboard de Producción por 
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return type
+     */
+    public function displayDashboardProductionReportTemplateAction(Request $request){
+        
+        $typeView = $request->get('typeView');
+        $reportTemplateId = $request->get('reportTemplateId');
+        $boxRender = $this->get('tecnocreaciones_box.render');
+        
+        $reportTemplateRepository = $this->container->get('pequiven.repository.report_template');
+        
+        $reportTemplate = $reportTemplateRepository->find($reportTemplateId);
+        
+        $data = array(
+            'boxRender' => $boxRender,
+            'typeView' => $typeView,
+            'reportTemplate' => $reportTemplate,
+        );
+        
+        $view = $this
+            ->view()
+            ->setTemplate($this->config->getTemplate('Dashboard\DataLoad\Production\ReportTemplate\index.html'))
+            ->setTemplateVar($this->config->getResourceName())
+            ->setData($data)
+        ;
+
+        return $this->handleView($view);
+    }
 }
