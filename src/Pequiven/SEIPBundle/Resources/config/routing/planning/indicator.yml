@@ -42,7 +42,7 @@ pequiven_indicator_delete:
     methods: [POST|DELETE]
     
 pequiven_indicator_evolution:
-    path: /{id}/evolution.{_format}
+    path: /{id}/evolution/{month}.{_format}
     defaults:
         _controller: pequiven.controller.indicator_sig:evolutionAction
         _format: html

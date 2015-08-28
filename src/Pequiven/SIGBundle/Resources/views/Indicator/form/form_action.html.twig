@@ -12,11 +12,72 @@
                 <legend class="legend">{{ 'sig.action_plan'|trans ({}, 'messages') }}</legend>
             
             <div class="field-block button-height" >
-              
-            
-                        {{ form_widget(form) }}
-            
+                        <label class="label">Mes: </label>
+                        <select id="select1" onclick="cargaData();" class="select2 input-large form-control">
+                            <option value="01">Enero</option>
+                            <option value="02">Febrero</option>
+                            <option value="03">Marzo</option>
+                            <option value="04">Abril</option>
+                            <option value="05">Mayo</option>
+                            <option value="06">Junio</option>
+                            <option value="07">Julio</option>
+                            <option value="08">Agosto</option>
+                            <option value="09">Septiembre</option>
+                            <option value="10">Octubre</option>
+                            <option value="11">Noviembre</option>
+                            <option value="12">Diciembre</option>
+                        </select>
+                    <br/>
             </div>
+                    {# fin carga select #}
+            <div class="field-block button-height" >
+                        <!-- Ref -->
+                        {# {{ form_label(form) }} #}
+                        {{ form_widget(form) }}
+            </div>
+
+           {#<div class="field-block button-height" >
+                        <!-- Ref -->
+                        {{ form_label(form.ref) }}
+                        {{ form_widget(form.ref) }}
+            </div>      <!-- action -->
+            <div class="field-block button-height" >
+
+                        {{ form_label(form.action) }}
+                        {{ form_widget(form.action) }}
+            </div>
+            <div class="field-block button-height" >
+
+                        {{ form_label(form.indicatorAction) }}
+                        {{ form_widget(form.indicatorAction) }}
+            </div>
+            <div class="field-block button-height" >
+                        <!-- datestart -->
+                        {{ form_label(form.dateStart) }}
+                        {{ form_widget(form.dateStart) }}
+            </div>
+            <div class="field-block button-height" >
+                        <!-- dateEnd -->
+                        {{ form_label(form.dateEnd) }}
+                        {{ form_widget(form.dateEnd) }}                        
+            </div>
+            <div class="field-block button-height" >
+                        <!-- Advance -->
+                        {{ form_label(form.advance) }}
+                        {{ form_widget(form.advance) }}                        
+            </div>
+            <div class="field-block button-height" >
+                        <!-- Observations -->
+                        {{ form_label(form.observations) }}
+                        {{ form_widget(form.observations) }}                        
+            </div>
+            <div class="field-block button-height" >
+                        <!-- evolutionCause -->
+                        {{ form_label(form.evolutionCause) }}
+                        {{ form_widget(form.evolutionCause) }}                        
+            </div>#}
+            
+           
 
         </details> 
 {% endblock %}

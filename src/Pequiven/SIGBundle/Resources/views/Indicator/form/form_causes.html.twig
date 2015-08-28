@@ -8,9 +8,17 @@
                 <legend class="legend">{{ 'sig.causes_deviation'|trans ({}, 'messages') }}</legend>
 
 					    <div class="field-block button-height" >
+					    	
+					    	{{ form_label(form.causes)}}
+					        {{ form_widget(form.causes) }}
+					    
+					    </div>
 
-					        {{ form_widget(form) }}
 
+					    <div class="field-block button-height" >
+					    	
+					    	{{ form_label(form.valueOfcauses)}}
+					        {{ form_widget(form.valueOfcauses) }}
 					    
 					    </div>
 					    {# <input type="text" id="pequiven_indicatorbundle_evolutionindicator_evolutioncause_valueOfcauses" name="pequiven_indicatorbundle_evolutionindicator_evolutioncause[valueOfcauses]" required="required" class="input input-large validate[required]"> #}

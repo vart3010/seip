@@ -3716,7 +3716,7 @@ class IndicatorService implements ContainerAwareInterface {
      * @param Indicator $indicator
      * @return type
      */
-    public function getDataChartOfCausesIndicatorEvolution(Indicator $indicator) {
+    public function getDataChartOfCausesIndicatorEvolution(Indicator $indicator, $month) {
         $data = array(
             'dataSource' => array(
                 'chart' => array(),
@@ -3748,18 +3748,27 @@ class IndicatorService implements ContainerAwareInterface {
         $chart["linethickness"]= "5";
         $chart["showborder"] = "0";
 
+        //$em = $this->getDoctrine();
+        //$dataCause = $em->getRepository('Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCause')->findBy(array('indicator' => $indicator,'month' => $month));
+
+        //var_dump($month);
+
         //Inicialización
         $category = $dataSetCause = array();
         $label = $dataCause = array();
         $contCause = 1;
         //Carga de Nombres de Labels
-        $dataSetCause["seriesname"] = "Causa";        
+        $dataSetCause["seriesname"] = "Causas";        
             //
             foreach ($indicator->getindicatorCause() as $value) {
-                
+                //$idCause = $value->getId();
                 //Carga del label de la Causa
-                //$label["label"] = 'Causa'.' '.$contCause;                    
+                //$label["label"] = 'Causa'.' '.$contCause;                                    
+                if ($value->getMonth() === $month) {
+
                 $label["label"] = $value->getCauses();                    
+
+                }
                 $contCause = $contCause + 1;
                 $category[] = $label;
             }
@@ -3773,7 +3782,9 @@ class IndicatorService implements ContainerAwareInterface {
                 //$label["label"] = 'Causa'.' '.$contCause;                    
                 //$contCause = $contCause + 1;
                 //$category[] = $label;
+
             }
+        //die();
            
         //$data['dataSource']['chart'] = $chart;
         $data['dataSource']['categories'][]["category"] = $category;

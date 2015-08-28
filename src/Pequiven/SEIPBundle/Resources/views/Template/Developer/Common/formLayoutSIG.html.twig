@@ -32,6 +32,18 @@
                 yearSuffix: ''};
             $.datepicker.setDefaults($.datepicker.regional['es']);
         });
+
+    function cargaData(){
+
+        var codigo = "C-SIG-";
+        var action = "-01";
+        var cause  = "-02";
+        var mes    = document.getElementById("select1").value;
+        
+        //Cargado con select
+        document.getElementById("pequiven_indicatorbundle_evolutionindicator_evolutionaction_ref").value = codigo + mes + action + cause;
+    }
+
     </script>
 
 {% endblock javascripts_base %}

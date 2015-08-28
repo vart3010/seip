@@ -53,6 +53,9 @@
    </div>
   <br>
   
+  {% set month = "now"|date("m") %}
+ 
+
         {# Graficos #}
         <div class="columns with-padding"> 
             {# <div class="five-columns twelve-columns-mobile">#}
@@ -107,7 +110,7 @@
     {# Visualizacion de Indice de evolucion #}
 
         &nbsp;
-            {{ buttons.generic_ext(path('pequiven_indicator_evolution', { 'id': indicator_sig.id }),('pequiven.evolution_history'|trans({},'messages'))) }}
+            {{ buttons.generic_ext(path('pequiven_indicator_evolution', { 'id': indicator_sig.id, 'month': month }),('pequiven.evolution_history'|trans({},'messages'))) }}
         &nbsp;
 
     </p>

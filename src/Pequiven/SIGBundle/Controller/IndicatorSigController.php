@@ -134,6 +134,8 @@ class IndicatorSigController extends ResourceController
 
         $form = $this->getForm($resource);
 
+        $month = $request->get('month');        
+
         $data = $this->findEvolutionCause($request);//Carga la data de las causas y sus acciones relacionadas
         
         //Carga de data de Indicador para armar grafica
@@ -149,17 +151,21 @@ class IndicatorSigController extends ResourceController
 
         //$response->setData($dataChart); //Seteamos la data del gráfico en Json
         //Carga de los datos de la grafica de las Causas de Desviación
-        $dataCause = $indicatorService->getDataChartOfCausesIndicatorEvolution($indicator); //Obtenemos la data del grafico de las causas de desviación
+        $dataCause = $indicatorService->getDataChartOfCausesIndicatorEvolution($indicator, array('month' => $month)); //Obtenemos la data del grafico de las causas de desviación
         /*$response->setData($dataCause); //Seteamos la data del gráfico en Json
         var_dump($response);
         die();*/
+        $results = $this->get('pequiven.repository.sig_causes_indicator')->findBy(array('indicator' => $idIndicator,'month' => $month));
+
 
         //Carga el analisis de la tendencia
         $trend = $this->get('pequiven.repository.sig_trend_indicator')->findByindicator($indicator);
         //Carga del analisis de las causas
-        $causeAnalysis = $this->get('pequiven.repository.sig_causes_analysis')->findByindicator($indicator);
+        $causeAnalysis = $this->get('pequiven.repository.sig_causes_analysis')->findBy(array('indicator'=>$indicator, 'month' => $month));
 
         //Verificación de los planes de acción del indicador
+        //var_dump($idIndicator = $request->get('month'));
+        //die();  
         if($data["action"]){
          
             foreach ($data["action"] as $value) {
@@ -183,7 +189,7 @@ class IndicatorSigController extends ResourceController
                 'data'                           => $dataChart,
                 'verification'                   => $verification,
                 'dataCause'                      => $dataCause,
-                'cause'                          => $data["results"],
+                'cause'                          => $results,
                 'data_action'                    => $data["action"],
                 'analysis'                       => $causeAnalysis,
                 'trend'                          => $trend,
@@ -288,7 +294,7 @@ class IndicatorSigController extends ResourceController
      * @return type
      */
     public function addAction(Request $request)
-    {   
+    {    
         $user = $this->getUser();
         $causeAction = $request->get('pequiven_indicatorbundle_evolutionindicator_evolutionaction')['evolutionCause'];
         //var_dump($causeAction);
@@ -559,8 +565,10 @@ class IndicatorSigController extends ResourceController
     {
         //$id = $request->get('idIndicator');
         $idIndicator = $request->get('id');        
+        $month = $request->get('month'); 
 
-        $results = $this->get('pequiven.repository.sig_causes_indicator')->findByindicator($idIndicator);
+        //$results = $this->get('pequiven.repository.sig_causes_indicator')->findBy(array('indicator' => $idIndicator,'month'=> $month));
+        $results = $this->get('pequiven.repository.sig_causes_indicator')->findBy(array('indicator' => $idIndicator));
         
         $cause = array();
         if($results){
@@ -584,7 +592,7 @@ class IndicatorSigController extends ResourceController
         $data = [
 
             'action'  => $action, //Pasando la data de las acciones si las hay
-            'results' => $results //Pasando la data de las causas si las hay
+            //'results' => $results //Pasando la data de las causas si las hay
 
         ];
 
