@@ -974,10 +974,10 @@ class ReportTemplateController extends SEIPController {
 //VERIFICA SI VA A EXPORTAR Y OBVIA LAS OBSERVACIONES VACIAS
                         if ($exportToPdf) {
                             if ($rs["observation"] != "") {
-                                $arrayObservation[] = array("day" => $timeNormal, "productName" => $productReport->getProduct()->getName(), "observation" => $rs["observation"]);
+                                $arrayObservation[] = array("day" => $timeNormal, "productName" => $productReport->getProduct()->getName()." (".$productReport->getPlantReport()->getPlant()->getName().")", "observation" => $rs["observation"]);
                             }
                         } else {
-                            $arrayObservation[] = array("day" => $timeNormal, "productName" => $productReport->getProduct()->getName(), "observation" => $rs["observation"]);
+                            $arrayObservation[] = array("day" => $timeNormal, "productName" => $productReport->getProduct()->getName()." (".$productReport->getPlantReport()->getPlant()->getName().")", "observation" => $rs["observation"]);
                         }
 
 
@@ -1248,7 +1248,7 @@ class ReportTemplateController extends SEIPController {
 
                 //ME TRAIGO LAS OBSERVACIONES 
                 $observations[] = array(
-                    "nameProduct" => $productReport->getProduct()->getName() . " (" . $productReport->getProduct()->getProductUnit() . ")",
+                    "nameProduct" => $productReport->getProduct()->getName() . " (" . $productReport->getProduct()->getProductUnit() . ")"." (".$productReport->getPlantReport()->getPlant()->getName().")",
                     "obs" => $summaryDay["observation"]
                 );
 
