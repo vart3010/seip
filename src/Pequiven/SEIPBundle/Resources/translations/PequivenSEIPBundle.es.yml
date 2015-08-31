@@ -469,6 +469,7 @@ monitor:
     porcReal: % Cargado
     advances: % Avances
     gerencia: Gerencia
+    productionReportTemplate: Producción %reportTemplate%
     
 principal:
     title: 

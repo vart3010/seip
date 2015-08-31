@@ -82,3 +82,19 @@ select.xxlarge {
 .font-20 {
     font-size: 20px;
 }
+.title-monitor{
+    fill: rgb(255, 255, 255);
+    display: inline-block;
+    text-anchor: middle;
+    font-family: Verdana, sans;
+    font-size: 24px;
+    font-weight: bold;
+}
+.title-dashboard{
+    fill: rgb(255, 255, 255);
+    display: inline-block;
+    text-anchor: middle;
+    font-family: Verdana, sans;
+    font-size: 18px;
+    font-weight: bold;
+}

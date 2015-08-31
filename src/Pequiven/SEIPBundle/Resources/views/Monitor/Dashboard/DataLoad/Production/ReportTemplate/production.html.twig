@@ -1,0 +1,37 @@
+<!-- Día -->
+<div class="six-columns six-columns-tablet six-columns-mobile new-row-mobile" style="text-align: center;">
+    <span class="title-dashboard">Día</span>
+    <div id="id-report-template-day" ng-init="chargeChartProductionByReportTemplateByDate('{{ reportTemplateId }}','{{ "now"|date('Y-m-d') }}','report-template-day','100','400',{{ typeView }},'day')">
+        <span id="report-template-day"></span>
+    </div>
+</div>
+<!-- Observaciones -->
+<div class="six-columns six-columns-tablet six-columns-mobile new-row-mobile" style="text-align: center;">
+    <section role="complementary" class="custom-scroll">
+    <span class="title-dashboard">Observaciones</span>
+    
+    <div class="columns">
+        {% for observation in observations %}
+            <div style="text-align: justify" class="four-columns"><b>{{ observation.product }}</b></div>
+            <div style="text-align: justify" class="eight-columns">{{ observation.observation }}</div>
+        {% endfor %}
+    </div>
+    {#<ul class="list-style-none">
+        {% for observation in observations %}
+            <li><b>{{ observation.product }}:</b> {{ observation.observation }}</li>
+        {% endfor %}
+    </ul>#}
+    <div class="custom-vscrollbar" style="display:block; opacity:0;top: 6px; left: 246px; height: 300px; width: 8px;"></div>
+    </section>
+</div>
+
+{% if typeView == constant('Pequiven\\SEIPBundle\\Entity\\Monitor::MONITOR_PRODUCTION_VIEW_COMPLIANCE')%}
+    <!-- Mes -->
+    <div class="six-columns six-columns-tablet six-columns-mobile new-row-mobile">
+        Mes
+    </div>
+    <!-- Año -->
+    <div class="six-columns six-columns-tablet six-columns-mobile new-row-mobile">
+        Año
+    </div>
+{% endif %}
