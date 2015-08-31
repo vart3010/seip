@@ -299,11 +299,14 @@
                     <h3>Resultados </h3>
                 </div>
                 <div class="with-padding">
-                    <strong>El Indicador no tiene configurada ninguna frecuencia de notificación, 
+                    <strong>El Indicador no tiene configurada ninguna frecuencia de notificación.
+{#                        {{ dump(is_granted('ROLE_SONATA_ADMIN_INDICATOR_INDICATOR_EDIT')) }}#}
+{#                        {% if(is_granted(["ROLE_SONATA_ADMIN_INDICATOR_INDICATOR_EDIT"])) %}#}
                         <a href="{{ path("admin_pequiven_indicator_indicator_edit",{id:indicator.id}) }}">
-                            haga click aquí
+                            Haga click aquí
                         </a>
-                        para configurala. 
+                        para configurarla. 
+                        
                     </strong>
                 </div>
             </div>
