@@ -52,7 +52,7 @@
                     </p>
                 </div>
 
-                <div class="six-columns twelve-columns-mobile">
+                <div class="twelve-columns-mobile twelve-columns-mobile">
                     <p class="inline-label">
                         {{ form_label(form.byRange) }}&nbsp;
                         {{ form_widget(form.byRange) }}
@@ -74,7 +74,7 @@
                 </div>
                 <div class="six-columns twelve-columns-mobile">
                     <div id="" class="byRange {{ byRange == true ? "":"hidden" }}">
-                        {{ form_label(form.dateEnd) }}&nbsp;&nbsp;<br>
+                        {{ form_label(form.dateEnd) }}&nbsp;
                         {{ form_widget(form.dateEnd) }}
                         {{ form_errors(form.dateEnd) }}
 
