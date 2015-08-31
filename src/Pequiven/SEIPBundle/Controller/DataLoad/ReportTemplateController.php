@@ -1248,7 +1248,7 @@ class ReportTemplateController extends SEIPController {
 
                 //ME TRAIGO LAS OBSERVACIONES 
                 $observations[] = array(
-                    "nameProduct" => $productReport->getProduct()->getName() . " (" . $productReport->getProduct()->getProductUnit() . ")"." (".$productReport->getPlantReport()->getPlant()->getName().")",
+                    "nameProduct" => $productReport->getProduct()->getName() ." (".$productReport->getPlantReport()->getPlant()->getName().")",
                     "obs" => $summaryDay["observation"]
                 );
 
