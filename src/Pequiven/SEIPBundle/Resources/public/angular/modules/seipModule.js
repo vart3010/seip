@@ -3125,7 +3125,7 @@ angular.module('seipModule.controllers', [])
                 
                 //Definimos el tipo de gráfico, de acuerdo al tipo de vista a visualizar
                 var typeChart = "mscolumn3d";
-                if(typeView == 0 || typeView == 1){
+                if(typeView == 1){
                     typeChart = "mscolumn3dlinedy";
                 }
                 
