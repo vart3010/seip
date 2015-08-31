@@ -7,13 +7,13 @@
 </div>
 <!-- Observaciones -->
 <div class="six-columns six-columns-tablet six-columns-mobile new-row-mobile" style="text-align: center;">
-    <section role="complementary" class="custom-scroll">
-    <span class="title-dashboard">Observaciones</span>
+{#    <section role="complementary" class="custom-scroll">#}
+    <span class="title-dashboard with-padding">Observaciones</span>
     
-    <div class="columns">
+    <div class="columns with-padding scroll-vertical" style="overflow-y: scroll; height: 300px;">
         {% for observation in observations %}
-            <div style="text-align: justify" class="four-columns"><b>{{ observation.product }}</b></div>
-            <div style="text-align: justify" class="eight-columns">{{ observation.observation }}</div>
+            <div style="text-align: justify;" class="four-columns"><b>{{ observation.product }}</b></div>
+            <div style="text-align: justify;" class="eight-columns">{{ observation.observation }}</div>
         {% endfor %}
     </div>
     {#<ul class="list-style-none">
@@ -21,8 +21,8 @@
             <li><b>{{ observation.product }}:</b> {{ observation.observation }}</li>
         {% endfor %}
     </ul>#}
-    <div class="custom-vscrollbar" style="display:block; opacity:0;top: 6px; left: 246px; height: 300px; width: 8px;"></div>
-    </section>
+    {#<div class="custom-vscrollbar" style="display:block; opacity:0;top: 6px; left: 246px; height: 300px; width: 8px;"></div>
+    </section>#}
 </div>
 
 {% if typeView == constant('Pequiven\\SEIPBundle\\Entity\\Monitor::MONITOR_PRODUCTION_VIEW_COMPLIANCE')%}
