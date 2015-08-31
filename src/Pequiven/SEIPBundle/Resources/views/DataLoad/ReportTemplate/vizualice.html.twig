@@ -19,77 +19,76 @@
         {{ form_errors(form) }}
         <fieldset class="fieldset">
             <legend class="legend">Busqueda</legend>
-            <div style="padding: 8px;">    
-                <div class="columns">
-                    <div class="two-columns">
-                        {{ form_label(form.plantReport) }}
-                    </div>
-                    <div class="tree-columns">
+            <div class="columns with-padding">
+
+                <div class="six-columns six-columns-tablet twelve-columns-mobile">
+                    <p class="inline-label">
                         {{ form_widget(form.plantReport) }}
                         {{ form_errors(form.plantReport) }}
-                    </div>
-                    <div class="two-columns">
-                        {{ form_label(form.reportTemplate) }}
-
-                    </div>
-                    <div class="tree-columns">
+                        {{ form_label(form.plantReport) }}
+                    </p>
+                </div>
+                <div class="six-columns six-columns-tablet twelve-columns-mobile">
+                    <p class="inline-label">
                         {{ form_widget(form.reportTemplate) }}
                         {{ form_errors(form.reportTemplate) }}
-                    </div>
-                </div>
-                <div class="columns">
-                    <div class="two-columns">
-                        {{ form_label(form.productsReport) }}
-                    </div>
-                    <div class="tree-columns">
-                        {{ form_widget(form.productsReport) }}
-                        {{ form_errors(form.productsReport) }}
-                    </div>
-                    <div class="two-columns">
-                        {{ form_label(form.typeReport) }}
-                    </div>
-                    <div class="tree-columns">
-                        {{ form_widget(form.typeReport) }}
-                        {{ form_errors(form.typeReport) }}
-                    </div>
+                        {{ form_label(form.reportTemplate) }}
+                    </p>
                 </div>
 
-                <div class="columns">
-                    <div class="two-columns">
+                <div class="six-columns six-columns-tablet twelve-columns-mobile">
+                    <p class="inline-label">
+                        {{ form_widget(form.productsReport) }}
+                        {{ form_errors(form.productsReport) }}
+                        {{ form_label(form.productsReport) }}
+                    </p>
+                </div>
+
+                <div class="six-columns six-columns-tablet twelve-columns-mobile">
+                    <p class="inline-label">
+                        {{ form_widget(form.typeReport) }}
+                        {{ form_errors(form.typeReport) }}
+                        {{ form_label(form.typeReport) }}
+                    </p>
+                </div>
+
+                <div class="six-columns twelve-columns-mobile">
+                    <p class="inline-label">
                         {{ form_label(form.byRange) }}&nbsp;
                         {{ form_widget(form.byRange) }}
                         {{ form_errors(form.byRange) }}
+                    </p>
+                </div>
+                <div class="six-columns twelve-columns-mobile">
+                    <div id="byDateReport" class="{{ byRange == true ? "hidden":"" }}">
+                        {{ form_label(form.dateReport) }}&nbsp;
+                        {{ form_widget(form.dateReport) }}
+                        {{ form_errors(form.dateReport) }}
                     </div>
-                    <div class="tree-columns">
-                        <div id="byDateReport" class="{{ byRange == true ? "hidden":"" }}">
-                            {{ form_label(form.dateReport) }}&nbsp;<br>
-                            {{ form_widget(form.dateReport) }}
-                            {{ form_errors(form.dateReport) }}
-                        </div>
-                        <div class="byRange {{ byRange == true ? "":"hidden" }}">
-                            {{ form_label(form.dateFrom) }}&nbsp;<br>
-                            {{ form_widget(form.dateFrom) }}
-                            {{ form_errors(form.dateFrom) }}
-                        </div>
-
+                    <div class="byRange {{ byRange == true ? "":"hidden" }}">
+                        {{ form_label(form.dateFrom) }}&nbsp;
+                        {{ form_widget(form.dateFrom) }}
+                        {{ form_errors(form.dateFrom) }}
                     </div>
-                    <div class="four-columns">
-                        <div id="" class="byRange {{ byRange == true ? "":"hidden" }}">
-                            {{ form_label(form.dateEnd) }}&nbsp;&nbsp;<br>
-                            {{ form_widget(form.dateEnd) }}
-                            {{ form_errors(form.dateEnd) }}
 
-                            {#{{ form_label(form.withDetails) }}&nbsp;
-                            {{ form_widget(form.withDetails) }}
-                            {{ form_errors(form.withDetails) }}#}
-                        </div>
+                </div>
+                <div class="six-columns twelve-columns-mobile">
+                    <div id="" class="byRange {{ byRange == true ? "":"hidden" }}">
+                        {{ form_label(form.dateEnd) }}&nbsp;&nbsp;<br>
+                        {{ form_widget(form.dateEnd) }}
+                        {{ form_errors(form.dateEnd) }}
+
+                        {#{{ form_label(form.withDetails) }}&nbsp;
+                        {{ form_widget(form.withDetails) }}
+                        {{ form_errors(form.withDetails) }}#}
                     </div>
                 </div>
             </div>
+
         </fieldset>
 
         <div  class="details margin-bottom" style=" border: 1px solid #bfbfbf; border-radius: 9px;">
-            <div id="filters"  style="background-color: #ddd; padding:10px; cursor: pointer; " aria-expanded="true" role="button">
+            <div id="filters"  style="background-color: #E6E6E6; padding:10px; cursor: pointer; " aria-expanded="true" role="button">
                 <span style="font-weight: bold; margin-left: 10px;">Filtros</span>
             </div>
             <div id="areaFilters" style="display: none;" class="with-padding">
