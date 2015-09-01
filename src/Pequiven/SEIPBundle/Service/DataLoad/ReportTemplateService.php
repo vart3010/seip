@@ -700,6 +700,8 @@ class ReportTemplateService implements ContainerAwareInterface {
                 
                 if($dataSerialized[$reportTemplate->getId()]['plan'] > 0){
                     $dataSerialized[$reportTemplate->getId()]['compliance'] = ($dataSerialized[$reportTemplate->getId()]['real'] / $dataSerialized[$reportTemplate->getId()]['plan'])*100;
+                } elseif($dataSerialized[$reportTemplate->getId()]['plan'] == 0 && $dataSerialized[$reportTemplate->getId()]['real'] > 0){
+                    $dataSerialized[$reportTemplate->getId()]['compliance'] = 100.0;
                 }
                 
                 if($dataSerialized[$reportTemplate->getId()]['compliance'] < 50.0){
