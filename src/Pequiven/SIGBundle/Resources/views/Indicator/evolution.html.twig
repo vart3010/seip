@@ -98,9 +98,9 @@
             &nbsp;
     {# Plan de accion y seguimiento #}
             <br /><br />
-        {% if data_action %}
             {% include 'PequivenSIGBundle:Indicator:show/action.html.twig' %}
             &nbsp;
+        {% if data_action %}
             {% include 'PequivenSIGBundle:Indicator:show/verification.html.twig' %}            
         {% endif %}
         
