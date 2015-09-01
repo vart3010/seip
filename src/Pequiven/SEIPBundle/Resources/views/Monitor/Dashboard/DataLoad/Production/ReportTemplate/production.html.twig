@@ -62,8 +62,15 @@
         var dataObservations = {{(observations|json_encode()|raw)}};
         
         function showDetail() {
-            $('#product').html(dataObservations[cont].product);
-            $('#observation').html(dataObservations[cont].observation);
+            $('#product').fadeOut("slow",function(){
+                $('#product').html(dataObservations[cont].product);
+                $('#product').fadeIn();
+            });
+            
+            $('#observation').fadeOut("slow",function(){
+                $('#observation').html(dataObservations[cont].observation);
+                $('#observation').fadeIn();
+            });
             cont++;
             if(cont == sizeObservations){
                 cont = 0;
@@ -72,7 +79,7 @@
 
         $(document).ready(function () {
             showDetail();
-            setInterval('showDetail()',10000);
+            setInterval('showDetail()',45000);
         });
         
     </script>
