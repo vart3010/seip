@@ -468,12 +468,17 @@ class ReportTemplateService implements ContainerAwareInterface {
             $user = $this->getUser();
             $securityContext = $this->getSecurityContext();
             
+            $reportTemplatesExclude = array(
+                'CPJAA' =>true,
+                'PETROCASA' => true,
+            );
+            
             $reportTemplates = array();
 
             $resultReportTemplates = $repositoryReportTemplate->findAll();
             //Seteamos sólo los reportTemplates de PQV, ya que los de la EEMM y Filiales se buscan directo en el controlador del gráfico
             foreach($resultReportTemplates as $resultReportTemplate){
-                if($resultReportTemplate->getLocation()->getAlias() != 'CPJAA'){
+                if(!array_key_exists($resultReportTemplate->getLocation()->getAlias(),$reportTemplatesExclude)){
                     $reportTemplates[] = $resultReportTemplate;
                 }
             }

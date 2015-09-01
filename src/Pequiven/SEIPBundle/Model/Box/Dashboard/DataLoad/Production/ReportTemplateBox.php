@@ -22,7 +22,11 @@ class ReportTemplateBox extends \Tecnocreaciones\Bundle\BoxBundle\Model\GenericB
         $idReportTemplate = $this->getRequest()->get('reportTemplateId');
         
         $daySearch = date("j", strtotime('-1 day'));
-        $monthSearch = date("n");
+        if(date("j") == 1){
+            $monthSearch = date("n", strtotime('-1 month'));
+        } else{
+            $monthSearch = date("n");
+        }
         
         $reportTemplate = $reportTemplateRepository->find($idReportTemplate);
         

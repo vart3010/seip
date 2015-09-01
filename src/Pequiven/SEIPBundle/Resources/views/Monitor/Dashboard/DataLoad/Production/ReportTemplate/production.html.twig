@@ -1,29 +1,45 @@
-<!-- Día -->
-<div class="six-columns six-columns-tablet six-columns-mobile new-row-mobile" style="text-align: center;">
-    <span class="title-dashboard">Día</span>
-    <div id="id-report-template-day" ng-init="chargeChartProductionByReportTemplateByDate('{{ reportTemplateId }}','{{ "now"|date('Y-m-d') }}','report-template-day','100','400',{{ typeView }},'day')">
-        <span id="report-template-day"></span>
+
+{#<div class="one-column one-column-tablet one-column-mobile">
+    <div style="margin-top: 1%;position: fixed;z-index: 10000;float: left;left: 0px;">
+        <ul>
+            <li#} {#class="linestrategic-active"#} {#style="display: table-row; float: none;">
+                <a href="#" data-toggle="tab">
+                    <img style="padding-top: 10px;" class="snapshot-box-icon-header" src="{{ asset(iconsLineStrategic[1]) }}">
+                </a>
+            </li>
+        </ul>
     </div>
-</div>
-<!-- Observaciones -->
-<div class="six-columns six-columns-tablet six-columns-mobile new-row-mobile" style="text-align: center;">
-{#    <section role="complementary" class="custom-scroll">#}
-    <span class="title-dashboard with-padding">Observaciones</span>
-    
-    <div class="columns with-padding scroll-vertical" style="overflow-y: scroll; height: 300px;">
-        {% for observation in observations %}
-            <div style="text-align: justify;" class="four-columns"><b>{{ observation.product }}</b></div>
-            <div style="text-align: justify;" class="eight-columns">{{ observation.observation }}</div>
-        {% endfor %}
-    </div>
-    {#<ul class="list-style-none">
-        {% for observation in observations %}
-            <li><b>{{ observation.product }}:</b> {{ observation.observation }}</li>
-        {% endfor %}
-    </ul>#}
-    {#<div class="custom-vscrollbar" style="display:block; opacity:0;top: 6px; left: 246px; height: 300px; width: 8px;"></div>
-    </section>#}
-</div>
+</div>#}
+
+{#<div class="eleven-columns eleven-columns-tablet eleven-columns-mobile new-row-mobile no-margin-left">
+    <div class="columns">#}
+        <!-- Día -->
+        <div class="eight-columns eight-columns-tablet eight-columns-mobile new-row-mobile" style="text-align: center;">
+            <span class="title-dashboard">Día</span>
+            <div id="id-report-template-day" ng-init="chargeChartProductionByReportTemplateByDate('{{ reportTemplateId }}','{{ "now"|date('Y-m-d') }}','report-template-day','100','400',{{ typeView }},'day')">
+                <span id="report-template-day"></span>
+            </div>
+        </div>
+        <!-- Observaciones -->
+        <div class="four-columns four-columns-tablet four-columns-mobile new-row-mobile" style="text-align: center;">
+            <span class="title-dashboard with-padding">Observaciones</span>
+            <div class="columns with-padding scroll-vertical" style="overflow-y: scroll; height: 300px;">
+                {#<div id="product" style="text-align: justify;" class="four-columns bold"></div>
+                <div id="observation" style="text-align: justify;" class="eight-columns"></div>#}
+                {% for observation in observations %}
+                    <div style="text-align: justify;" class="four-columns"><b>{{ observation.product }}</b></div>
+                    <div style="text-align: justify;" class="eight-columns">{{ observation.observation }}</div>
+                {% endfor %}
+            </div>
+            {#<ul class="list-style-none">
+                {% for observation in observations %}
+                    <li><b>{{ observation.product }}:</b> {{ observation.observation }}</li>
+                {% endfor %}
+            </ul>#}
+        </div>
+            <input id="observations" type="hidden" value="{{ observations|json_encode() }}" >
+{#    </div>
+</div>#}
 
 {% if typeView == constant('Pequiven\\SEIPBundle\\Entity\\Monitor::MONITOR_PRODUCTION_VIEW_COMPLIANCE')%}
     <!-- Mes -->
@@ -35,3 +51,24 @@
         Año
     </div>
 {% endif %}
+
+{% block javascript %}
+    <script type="text/javascript">
+{#        var dataObservations = {{ observations|json_encode() }};#}
+        var cont = 1;
+        
+        function showDetail() {
+{#            var observations = $("#observations").val();#}
+            {#var observations = {{ observations|json_encode() }};
+            console.log(observations);
+            $('#product').html(observations[1]);#}
+{#            $('#observation').html("{{ observations[1].observation }}");#}
+            cont++;
+        }
+
+        $(document).ready(function () {
+            showDetail();
+{#            setInterval('showDetail()',2000);#}
+        });
+    </script>
+{% endblock javascript %}
