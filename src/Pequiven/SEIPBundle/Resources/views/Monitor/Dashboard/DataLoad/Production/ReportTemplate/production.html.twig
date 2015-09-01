@@ -23,13 +23,13 @@
         <!-- Observaciones -->
         <div class="four-columns four-columns-tablet four-columns-mobile new-row-mobile" style="text-align: center;">
             <span class="title-dashboard with-padding">Observaciones</span>
-            <div class="columns with-padding scroll-vertical" style="overflow-y: scroll; height: 300px;">
-                {#<div id="product" style="text-align: justify;" class="four-columns bold"></div>
-                <div id="observation" style="text-align: justify;" class="eight-columns"></div>#}
-                {% for observation in observations %}
+            <div class="columns with-padding scroll-vertical" {#style="overflow-y: scroll; height: 300px;"#}>
+                <div id="product" style="text-align: justify;" class="four-columns bold"></div>
+                <div id="observation" style="text-align: justify;" class="eight-columns"></div>
+                {#{% for observation in observations %}
                     <div style="text-align: justify;" class="four-columns"><b>{{ observation.product }}</b></div>
                     <div style="text-align: justify;" class="eight-columns">{{ observation.observation }}</div>
-                {% endfor %}
+                {% endfor %}#}
             </div>
             {#<ul class="list-style-none">
                 {% for observation in observations %}
@@ -37,9 +37,10 @@
                 {% endfor %}
             </ul>#}
         </div>
-            <input id="observations" type="hidden" value="{{ observations|json_encode() }}" >
 {#    </div>
 </div>#}
+
+<input id="" type="hidden" value="{{ observations|length }}">
 
 {% if typeView == constant('Pequiven\\SEIPBundle\\Entity\\Monitor::MONITOR_PRODUCTION_VIEW_COMPLIANCE')%}
     <!-- Mes -->
@@ -54,21 +55,25 @@
 
 {% block javascript %}
     <script type="text/javascript">
-{#        var dataObservations = {{ observations|json_encode() }};#}
-        var cont = 1;
+
+        var cont = 0;
+        var sizeObservations = {{ observations|length }};
+        
+        var dataObservations = {{(observations|json_encode()|raw)}};
         
         function showDetail() {
-{#            var observations = $("#observations").val();#}
-            {#var observations = {{ observations|json_encode() }};
-            console.log(observations);
-            $('#product').html(observations[1]);#}
-{#            $('#observation').html("{{ observations[1].observation }}");#}
+            $('#product').html(dataObservations[cont].product);
+            $('#observation').html(dataObservations[cont].observation);
             cont++;
+            if(cont == sizeObservations){
+                cont = 0;
+            }
         }
 
         $(document).ready(function () {
             showDetail();
-{#            setInterval('showDetail()',2000);#}
+            setInterval('showDetail()',10000);
         });
+        
     </script>
 {% endblock javascript %}

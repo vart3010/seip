@@ -37,7 +37,8 @@ class ReportTemplateBox extends \Tecnocreaciones\Bundle\BoxBundle\Model\GenericB
                 $productDetailDailyMonths = $productReport->getProductDetailDailyMonthsSortByMonth();
                 if(array_key_exists($monthSearch, $productDetailDailyMonths)){
                     if(($observation = $productDetailDailyMonths[$monthSearch]->getObservationByDay($daySearch)) != null){
-                        $observations[$productReport->getId()] = array('product' => $productReport->getProduct()->getName(), 'observation' => $observation);
+//                        $observations[$productReport->getId()] = array('product' => $productReport->getProduct()->getName(), 'observation' => $observation);
+                        $observations[] = array('product' => $productReport->getProduct()->getName(), 'observation' => $observation);
                     }
                 }
             }
