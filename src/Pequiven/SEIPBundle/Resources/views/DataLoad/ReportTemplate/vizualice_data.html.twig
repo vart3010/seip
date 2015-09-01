@@ -384,7 +384,7 @@
                         <th class="header text-center white-gradient" colspan="5">INVENTARIO</th>
                     </tr>
                     <tr class="header-tr">
-                        <th scope="col" style="width: 40%" class="header">PRODUCTO</th>
+                        <th scope="col" style="width: 30%" class="header">PRODUCTO</th>
                             {%  if showDay %}
                             <th scope="col" style="width: 35%" class="header">DÍA</th>
                             {% endif %}
@@ -407,7 +407,7 @@
                     {% endfor %}
 
                     <tr class="header-tr" style="font-size: 10px;">
-                        <th style="width: 40%">TOTALES</th>
+                        <th style="width: 30%">TOTALES</th>
                             {% for totals in totalInventorys %}
                             <th style="text-align: center; width: 35%;">{{ totals|myNumberFormat }}</th>
                             {% endfor %}
@@ -433,8 +433,8 @@
 
                         {% for obs in observations %}
                             <tr>
-                                <th scope="col" style="width: 20%; text-align: left;" class="header">{{ obs.nameProduct|upper }}</th>
-                                <th scope="col" style="width: 80%" class="header">{{ (obs['obs'] is null ? ("pequiven_seip.comment_none"|trans):obs['obs']) |upper }}</th>
+                                <th scope="col" style="width: 30%; text-align: left;" class="header">{{ obs.nameProduct|upper }}</th>
+                                <th scope="col" style="width: 70%; text-align: left;" class="header">{{ (obs['obs'] is null ? ("pequiven_seip.comment_none"|trans):obs['obs']) |upper }}</th>
                             </tr>
                         {% endfor %}
                     </table>
