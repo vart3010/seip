@@ -25,4 +25,6 @@ final class AreasBox
     const EVENTS = 'pequiven_seip.area.events';
     
      const ITEMS = 'pequiven_seip.area.user_items';
+
+     const ITEMS_EVOLUTION = 'pequiven_seip.area.evolution_items';
 }

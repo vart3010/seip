@@ -22,6 +22,7 @@ class TypeVerificationManagementSystemAdmin extends Admin
             ->add('createdAt')
             ->add('updatedAt')
             ->add('deletedAt')
+            ->add('status')
             ;
     }
     
@@ -30,6 +31,7 @@ class TypeVerificationManagementSystemAdmin extends Admin
         $form
             ->add('ref')                    
             ->add('description')
+            ->add('status')
         ;
     }
     
@@ -48,6 +50,7 @@ class TypeVerificationManagementSystemAdmin extends Admin
         $list
             ->addIdentifier('ref')
             ->add('description')
+            ->add('status')
             ->add('createdAt')
             ;
     }

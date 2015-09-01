@@ -134,8 +134,8 @@ class IndicatorSigController extends ResourceController
 
         $form = $this->getForm($resource);
 
-        $month = $request->get('month');        
-
+        $month = $request->get('month'); //El mes pasado por parametro
+        
         $data = $this->findEvolutionCause($request);//Carga la data de las causas y sus acciones relacionadas
         
         //Carga de data de Indicador para armar grafica
@@ -151,34 +151,33 @@ class IndicatorSigController extends ResourceController
 
         //$response->setData($dataChart); //Seteamos la data del gráfico en Json
         //Carga de los datos de la grafica de las Causas de Desviación
-        $dataCause = $indicatorService->getDataChartOfCausesIndicatorEvolution($indicator, array('month' => $month)); //Obtenemos la data del grafico de las causas de desviación
+        $dataCause = $indicatorService->getDataChartOfCausesIndicatorEvolution($indicator, $month); //Obtenemos la data del grafico de las causas de desviación
         /*$response->setData($dataCause); //Seteamos la data del gráfico en Json
         var_dump($response);
         die();*/
         $results = $this->get('pequiven.repository.sig_causes_indicator')->findBy(array('indicator' => $idIndicator,'month' => $month));
-
 
         //Carga el analisis de la tendencia
         $trend = $this->get('pequiven.repository.sig_trend_indicator')->findByindicator($indicator);
         //Carga del analisis de las causas
         $causeAnalysis = $this->get('pequiven.repository.sig_causes_analysis')->findBy(array('indicator'=>$indicator, 'month' => $month));
 
-        //Verificación de los planes de acción del indicador
-        //var_dump($idIndicator = $request->get('month'));
-        //die();  
-        if($data["action"]){
-         
-            foreach ($data["action"] as $value) {
-
-                $idAction[] = $value->getId();
-            }
-        }    
-
-        if(!$data["action"]){
-            $idAction = null;
-        } 
-        $verification = $this->get('pequiven.repository.sig_action_verification')->findByactionPlan($idAction);
-
+        //Carga de la señalización de la tendencia de la grafica
+        $tendency = $indicator->getTendency()->getId();
+        switch ($tendency) {
+                case 0:
+                    $font = null;
+                    break;
+                case 1:
+                    $font = "long-arrow-up";
+                    break;
+                case 2:
+                    $font = "long-arrow-down";
+                    break;
+                case 3:
+                    $font = "arrows-h";
+                    break;
+        }       
         //$view = $this->view();
         //$view->getSerializationContext()->setGroups(array('id','api_list'));  
 
@@ -187,12 +186,13 @@ class IndicatorSigController extends ResourceController
             ->setTemplate($this->config->getTemplate('evolution.html'))
             ->setData(array(
                 'data'                           => $dataChart,
-                'verification'                   => $verification,
+                'verification'                   => $data["verification"],
                 'dataCause'                      => $dataCause,
                 'cause'                          => $results,
                 'data_action'                    => $data["action"],
                 'analysis'                       => $causeAnalysis,
                 'trend'                          => $trend,
+                'font'                           => $font,
                 $this->config->getResourceName() => $resource,
                 'form'                           => $form->createView()
             ));
@@ -300,17 +300,11 @@ class IndicatorSigController extends ResourceController
         //var_dump($causeAction);
         //die();
 
-        /*$indicator = $request->get('idIndicator');
-        $repository = $this->get('pequiven.repository.sig_indicator');
-        $results = $repository->find($indicator);*/
-
         $causeResult = $this->get('pequiven.repository.sig_causes_indicator')->find($causeAction);
-        //var_dump(count($causeResult));
-        //die();
+        
         $action = new EvolutionAction();
         $form  = $this->createForm(new EvolutionActionType(), $action);
         
-        //$action->setIndicatorRel($results);
         $action->setCreatedBy($user);
         $action->setEvolutionCause($causeResult);
 
@@ -360,8 +354,7 @@ class IndicatorSigController extends ResourceController
      */
     public function addCausesAction(Request $request)
     {   
-        
-        $month = date("m");//Carga del mes de Creación de la causa
+        $month = date("m");//Carga del mes de Creación de la causa "Automatico"
 
         $indicator = $request->get('idIndicator');
         $repository = $this->get('pequiven.repository.sig_indicator');
@@ -405,10 +398,7 @@ class IndicatorSigController extends ResourceController
 
         $em->remove($results);
         $em->flush();
-
-            //return $this->render('PequivenSIGBundle:Indicator:evolution.html.twig', array('id' => $indicator));
-            //return $this->redirect($this->generateUrl('pequiven_indicator_evolution',array('id' => $indicator)));
-           // return $this->redirect($this->generateUrl('pequiven_causes_form_add'));
+        
         }  
     }
 
@@ -507,10 +497,15 @@ class IndicatorSigController extends ResourceController
     {   
         
         $action = $request->get('pequiven_indicatorbundle_evolutionindicator_evolutionactionverification')['actionPlan'];
-        //die($action);
+        $idVerification = $request->get('pequiven_indicatorbundle_evolutionindicator_evolutionactionverification')['typeVerification'];
+        
+        //Consulta del tipo de Verificación para el plan de acción
+        $ver = $this->get('pequiven.repository.managementsystem_sig_verification')->find($idVerification);
+        $statusAction = $ver->getStatus();//Status 0/1 para el plan 
+
+        //Acción
         $actionVer = $this->get('pequiven.repository.sig_action_indicator')->find($action);
-        //var_dump(count($actionVer));
-        //die();
+
         $user = $this->getUser();
         $verification = new EvolutionActionVerification();
         $form  = $this->createForm(new EvolutionActionVerificationType(), $verification);
@@ -527,7 +522,15 @@ class IndicatorSigController extends ResourceController
             $em->flush();
 
            // return $this->redirect($this->generateUrl('pequiven_causes_form_add'));
-        }     
+        }    
+
+        
+        if($actionVer){//Si existe la acción cambio le cambio el status segun sea el caso
+
+            $actionVer->setStatus($statusAction);
+            $em->flush();  
+
+        }  
     }
 
     /**
@@ -564,11 +567,21 @@ class IndicatorSigController extends ResourceController
     private function findEvolutionCause(Request $request)
     {
         //$id = $request->get('idIndicator');
-        $idIndicator = $request->get('id');        
+        $idIndicator = $request->get('id'); 
+        //Mes Actual
+        $monthActual = date("m");
+        //Mes Consultado       
         $month = $request->get('month'); 
 
         //$results = $this->get('pequiven.repository.sig_causes_indicator')->findBy(array('indicator' => $idIndicator,'month'=> $month));
         $results = $this->get('pequiven.repository.sig_causes_indicator')->findBy(array('indicator' => $idIndicator));
+  
+        //Determinando si esta en historico de informe o periodo actual
+        if($month < $monthActual){
+            $statusCons = 1;
+        }else{
+            $statusCons = 0;
+        }
         
         $cause = array();
         if($results){
@@ -580,19 +593,33 @@ class IndicatorSigController extends ResourceController
                 $cause[] = $idCause;
             }
 
-            $action = $this->get('pequiven.repository.sig_action_indicator')->findByevolutionCause($cause);
+            $action = $this->get('pequiven.repository.sig_action_indicator')->findBy(array('evolutionCause' => $cause, 'status' => $statusCons));
              
         }        
         
-
         if(!$results){
             $action = null;
         }
 
+        //Carga de las acciones para sacar la verificaciones realizadas
+        if($action){
+         
+            foreach ($action as $value) {
+                $idAction[] = $value->getId();
+            }
+        }    
+
+        if(!$action){
+            $idAction = null;
+        } 
+        $verification = $this->get('pequiven.repository.sig_action_verification')->findByactionPlan($idAction);
+
+        //Carga de array con la data
         $data = [
 
-            'action'  => $action, //Pasando la data de las acciones si las hay
-            //'results' => $results //Pasando la data de las causas si las hay
+            'action'        => $action, //Pasando la data de las acciones si las hay
+            'verification'  => $verification, //Pasando la data de las verificaciones
+            //'results'     => $results //Pasando la data de las causas si las hay
 
         ];
 

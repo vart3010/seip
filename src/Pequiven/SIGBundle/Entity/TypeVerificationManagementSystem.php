@@ -36,7 +36,7 @@ class TypeVerificationManagementSystem extends model
      * @var boolean
      * @ORM\Column(name="description",type="string", length=255)
      */
-    private $description = true;
+    private $description;
 
     /**
      * Date created
@@ -58,6 +58,13 @@ class TypeVerificationManagementSystem extends model
      * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
      */
     private $deletedAt;
+
+    /**
+     * @var integer
+     *
+     *  @ORM\Column(name="status", type="integer", nullable=false)
+     */
+    private $status;
     
     /**
      * Verification en la lista de verificación
@@ -107,6 +114,29 @@ class TypeVerificationManagementSystem extends model
     public function getRef()
     {
         return $this->ref;
+    }
+
+    /**
+     * Set status
+     *
+     * @param string $description
+     * @return ManagementSystem
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get status
+     *
+     * @return string 
+     */
+    public function getStatus()
+    {
+        return $this->status;
     }
 
     /**

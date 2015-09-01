@@ -1,0 +1,58 @@
+{% import 'PequivenSIGBundle:Template:Buttons/buttons.html.twig' as buttons %}
+
+{% trans_default_domain 'PequivenArrangementProgramBundle' %}
+
+<div class="with-padding">
+    <div class="columns">
+        <div class="twelve-columns">
+           
+                <h3 class="thin underline text-center">Historico Informe de Evolución</h3>
+                <fieldset class="fieldset">
+                        
+                         {% set month = "now"|date("m") %}
+
+                         {{ buttons.generic_ext(path('pequiven_indicator_evolution', { 'id': 1736 , 'month': month}),('pequiven.go_to_the_historical'|trans({},'messages'))) }} 
+
+                         {# <select class="select2 input-large form-control">
+                            <label class="label">Seleccione el Mes:</label>
+                             <option>zdf</option>
+                         </select>#}
+                </fieldset>
+
+
+         </div>
+     </div>
+ </div>
+
+{% block javascript %}
+    
+{% endblock javascript %}
+
+
+{% block stylesheets %}
+    <!-- Additional styles -->
+    <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/form3860.css?v=1') }}">
+
+    <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/switches3860.css?v=1') }}">
+       
+
+{% endblock %}
+
+{% block javascripts %}
+
+    <script src="{{  asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/libs/jquery.tablesorter.min.js') }}"></script>
+
+    <script src="{{  asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.progress-slider.js') }}"></script>
+
+    <script src="{{  asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/libs/DataTables/jquery.dataTables.min.js') }}"></script>
+    <!-- Select2 -->
+    <script src="{{ asset('bundles/pequivenseip/select2-3.5.0/select2.min.js') }}"></script>
+    <!-- jQuery-ui -->
+    <script src="{{ asset('bundles/pequivenseip/jquery-ui.custom/jquery-ui.js?v=1') }}"></script>
+
+    <script src="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/libs/formValidator/jquery.validationEngine3860.js?v=1') }}"></script>
+
+    <script src="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/libs/formValidator/languages/jquery.validationEngine-' ~ app.request.locale ~ '3860.js?v=1') }}"></script>
+
+    <script src="{{  asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.tabs.js') }}"></script>
+{% endblock %}

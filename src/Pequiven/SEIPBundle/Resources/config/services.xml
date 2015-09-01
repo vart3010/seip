@@ -244,6 +244,10 @@
         <service id="pequiven_seip_box_user_summary_items" class="Pequiven\SEIPBundle\Model\Box\UserSummary\UserSummaryItemsBox">
             <tag name="tecnocreaciones_box.box" />
         </service>
+
+        <service id="pequiven_seip_box_evolution_items" class="Pequiven\SEIPBundle\Model\Box\EvolutionHistory\EvolutionHistoryItemsBox">
+            <tag name="tecnocreaciones_box.box" />
+        </service>
         
         
         <!-- Servicio de USER -->

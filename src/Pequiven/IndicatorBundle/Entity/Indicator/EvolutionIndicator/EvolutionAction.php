@@ -45,6 +45,13 @@ class EvolutionAction extends Model {
     private $action;
 
     /**
+     * @var integer
+     *
+     *  @ORM\Column(name="status", type="integer", nullable=true)
+     */
+    private $status = 0;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="dateStart", type="datetime", nullable=true)
@@ -171,6 +178,25 @@ class EvolutionAction extends Model {
         return $this->ref;
     }
 
+    /**
+     * 
+     * @param type $status
+     * @return type
+     */
+    public function setStatus($status) {
+        $this->status = $status;
+        return $status;
+    }
+
+    /**
+     * 
+     * @return type
+     */
+    public function getStatus() {
+        return $this->status;
+    }
+
+    
     /**
      * 
      * @param type $action

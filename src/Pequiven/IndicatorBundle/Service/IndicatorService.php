@@ -3758,31 +3758,37 @@ class IndicatorService implements ContainerAwareInterface {
         $label = $dataCause = array();
         $contCause = 1;
         //Carga de Nombres de Labels
-        $dataSetCause["seriesname"] = "Causas";        
+        $dataSetCause["seriesname"] = "Causas";
+        $monthCause = (int)$month;
             //
             foreach ($indicator->getindicatorCause() as $value) {
                 //$idCause = $value->getId();
                 //Carga del label de la Causa
                 //$label["label"] = 'Causa'.' '.$contCause;                                    
-                if ($value->getMonth() === $month) {
-
-                $label["label"] = $value->getCauses();                    
+                
+                if ($value->getMonth() === $monthCause) {
+                
+                    $label["label"] = $value->getCauses();                    
+                    $contCause = $contCause + 1;
+                    $category[] = $label;
 
                 }
-                $contCause = $contCause + 1;
-                $category[] = $label;
+
             }
             //$label["label"] = 'Causa';
-            
+
             foreach ($indicator->getindicatorCause() as $value) {
                 //Carga de los Valores de la causa
-                $dataCause["value"] = $value->getvalueOfCauses();
-                $dataSetCause["data"][] = $dataCause;
+                if ($value->getMonth() === $monthCause) {                
+                    
+                    $dataCause["value"] = $value->getvalueOfCauses();
+                    $dataSetCause["data"][] = $dataCause;
+                
+                }
                 //Carga del label de la Causa
                 //$label["label"] = 'Causa'.' '.$contCause;                    
                 //$contCause = $contCause + 1;
                 //$category[] = $label;
-
             }
         //die();
            

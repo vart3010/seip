@@ -208,6 +208,7 @@ form:
     
     info:
         indicator:
+        relation_last: El indicador no tiene relacion con el indicador del 2014
             
     
     messages:

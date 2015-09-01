@@ -1,7 +1,8 @@
 {% trans_default_domain 'TecnocreacionesVzlaGovernmentBundle' %}
 
 {# Redirección informe de Evolution #}
-{% macro generic_ext(url, message='generic', icon = 'fa fa-history fa-1', parameters = {}) %}
+{% macro generic_ext(url, message='generic', icon = 'fa fa-search fa-1', parameters = {}) %}
+
     {% set gradient = 'red-gradient' %}
     {% set translation_domain = 'messages' %}
     {% if parameters['translation_domain'] is defined %}
@@ -14,4 +15,5 @@
         <span class="button-icon left-side {{ gradient }}"><span class="{{ icon }}"></span></span>
         {{ message|trans({},translation_domain) }}
     </a>
+
 {% endmacro %}
