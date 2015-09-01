@@ -143,7 +143,7 @@ pequiven_causes_evolution_delete:
         expose: true
 #filtro causas del indicador
 pequiven_sig_causes_indicator_evolution:
-    path: /causes-evolution.{_format}
+    path: /{idIndicator}/causesevolution.{_format}
     defaults: 
         _controller: pequiven.controller.indicator_sig:getCausesEvolutionAction
         _format: json

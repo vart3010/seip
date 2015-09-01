@@ -11,12 +11,18 @@
             <fieldset class="fieldset fields-list" open="">
                 <legend class="legend">{{ 'form.action_verification'|trans ({}, 'PequivenSIGBundle') }}</legend>
             
-            <div class="field-block button-height" >
-              
-            
+            {#<div class="field-block button-height" >
+                          
                         {{ form_widget(form) }}
-                        <!-- <input type="text" id="maximo" name="maximo" value=""> -->
-            </div>
+                        
+            </div>#}
+            {% for child in form %}
+                    <div class="field-block button-height" >
+                        {{ form_label(child) }}
+                        {{ form_widget(child) }}
+                        {{ form_errors(child) }}
+                    </div>
+            {% endfor %}
 
         </details> 
 {% endblock %}

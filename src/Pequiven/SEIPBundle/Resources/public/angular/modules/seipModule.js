@@ -2045,7 +2045,7 @@ angular.module('seipModule.controllers', [])
                     filter:{}
                 }
             }
-            $http.get(Routing.generate('pequiven_sig_causes_indicator_evolution'))
+            $http.get(Routing.generate('pequiven_sig_causes_indicator_evolution', {idIndicator: $scope.id_indicator }))
                     .success(function (data) {
                         $scope.data.causesEvolution = data;
                         if ($scope.model.causesEvolution != null) {

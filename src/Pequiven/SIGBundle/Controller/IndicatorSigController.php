@@ -540,21 +540,20 @@ class IndicatorSigController extends ResourceController
     function getCausesEvolutionAction(\Symfony\Component\HttpFoundation\Request $request) {
         
         $idIndicator = $request->get('idIndicator');
-        var_dump($idIndicator);
-        die();
-        //$idIndicator = $request->get('id');
-        $results = $this->get('pequiven.repository.sig_causes_indicator')->findByindicator($idIndicator);
-        var_dump(count($results));
-        die();
-        //$user = $this->getUser();
-        $criteria = $request->get('filter',$this->config->getCriteria());
-        $repository = $this->get('pequiven.repository.managementsystem_sig');
-        $results = $repository->findAll();
-        //var_dump(count($results));
+        //echo "indicador"; var_dump($idIndicator);
         //die();
+        //$idIndicator = $request->get('id');
+       
+        $results = $this->get('pequiven.repository.sig_causes_indicator')->findBy(array( 'indicator' => $idIndicator));
+        
+        //$user = $this->getUser();
+        /*$criteria = $request->get('filter',$this->config->getCriteria());
+        $repository = $this->get('pequiven.repository.managementsystem_sig');
+        $results = $repository->findAll();*/
+        
         $view = $this->view();
         $view->setData($results);
-        $view->getSerializationContext()->setGroups(array('id','api_list','description'));
+        $view->getSerializationContext()->setGroups(array('id','api_list','ref','description'));
         return $this->handleView($view);
     }
 

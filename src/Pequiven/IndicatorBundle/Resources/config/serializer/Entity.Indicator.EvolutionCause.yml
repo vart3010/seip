@@ -4,6 +4,9 @@ Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCause:
         id:
             expose: true
             groups: [id]
+        ref:
+            expose: true
+            groups: [ref]
         createdAt:
             expose: true
             groups: [api_list]
