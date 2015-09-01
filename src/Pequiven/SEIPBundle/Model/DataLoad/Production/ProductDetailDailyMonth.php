@@ -115,6 +115,18 @@ abstract class ProductDetailDailyMonth extends BaseModel implements ProductDetai
     }
     
     /**
+     * Retorna la observación de un día
+     * @param type $day
+     * @return type
+     */
+    public function getObservationByDay($day)
+    {
+        //Observación de notificación del día
+        $nameObservation = 'getDay'.$day.'Observation';
+        return $this->$nameObservation();
+    }
+    
+    /**
      * Valida que el valor de la produccion neta no sea mayor a la bruta
      * @param type $day
      * @return boolean

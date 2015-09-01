@@ -98,10 +98,10 @@
                         {% for prod in production %}
                             <tr>
                                 <th style="text-align: left;">{{ prod.productName}}</th>
-                                <th>{{ prod.plan|number_format(2, '.', ',') }}</th>
-                                <th>{{ prod.real|number_format(2, '.', ',') }}</th>
-                                <th>{{ prod.percentage|number_format(2, '.', ',') }}%</th>
-                                <th>{{ prod.pnr|number_format(2, '.', ',') }}</th>
+                                <th>{{ prod.plan|number_format(2, ',', '.') }}</th>
+                                <th>{{ prod.real|number_format(2, ',', '.') }}</th>
+                                <th>{{ prod.percentage|number_format(2, ',', '.') }}%</th>
+                                <th>{{ prod.pnr|number_format(2, ',', '.') }}</th>
                             </tr>
                         {% endfor %}
                         </tbody>
@@ -109,7 +109,7 @@
                         <tr>
                             <th style="text-align: left;">Totales</th>
                                 {% for totals in totalProduction %}
-                                <th>{{ totals|number_format(2, '.', ',') }}</th>
+                                <th>{{ totals|number_format(2, ',', '.') }}</th>
                                 {% endfor %}
                         </tr>
 
@@ -144,15 +144,15 @@
                 {% for raw in rawMaterial %}
                     <tr>
                         <th style="text-align: left;">{{ raw.productName}}</th>
-                        <th>{{ raw.planRaw|number_format(2, '.', ',') }}</th>
-                        <th>{{ raw.realRaw|number_format(2, '.', ',') }}</th>
+                        <th>{{ raw.planRaw|number_format(2, ',', '.') }}</th>
+                        <th>{{ raw.realRaw|number_format(2, ',', '.') }}</th>
                     </tr>
                 {% endfor %}
 
                 <tr>
                     <th style="text-align: left;" >Totales</th>
                         {% for totals in totalRawMaterial %}
-                        <th>{{ totals|number_format(2, '.', ',') }}</th>
+                        <th>{{ totals|number_format(2, ',', '.') }}</th>
                         {% endfor %}
                 </tr>
 
@@ -179,14 +179,14 @@
                 {% for consumer in consumerPlanning %}
                     <tr>
                         <th style="text-align: left;">{{ consumer.productName }}</th>
-                        <th>{{ consumer.plan|number_format(2, '.', ',') }}</th>
-                        <th>{{ consumer.real|number_format(2, '.', ',') }}</th>
+                        <th>{{ consumer.plan|number_format(2, ',', '.') }}</th>
+                        <th>{{ consumer.real|number_format(2, ',', '.') }}</th>
                     </tr>
                     {% set totalPlan = totalPlan + consumer.plan %}
                     {% set totalReal = totalReal + consumer.real %}
                 {% endfor %}
                 <tr>
-                    <th>Totales</th>
+                    <th style="text-align: left;">Totales</th>
                     <th>{{ totalPlan }}</th>
                     <th>{{ totalReal }}</th>
                 </tr>
@@ -218,13 +218,13 @@
                     {% set totalPnr = totalPnr + unrealized.total %}
                     <tr>
                         <th style="text-align: left;">{{ unrealized.productName }}</th>
-                        <th>{{ unrealized.total|number_format(2, '.', ',') }}</th>
+                        <th>{{ unrealized.total|number_format(2, ',', '.') }}</th>
                     </tr>
                 {% endfor %}
 
                 <tr>
-                    <th>Totales</th>
-                    <th>{{ totalPnr|number_format(2, '.', ',') }}</th>
+                    <th style="text-align: left;">Totales</th>
+                    <th>{{ totalPnr|number_format(2, ',', '.') }}</th>
 
                 </tr>
 
@@ -255,7 +255,7 @@
                     {#                {% set totalInv = totalInv + inv.total %}#}
                     <tr>
                         <th style="text-align: left;" >{{ inv.productName }}</th>
-                        <th>{{ inv.total|number_format(2, '.', ',') }}</th>
+                        <th>{{ inv.total|number_format(2, ',', '.') }}</th>
                     </tr>
                 {% endfor %}
                 {#<tr>

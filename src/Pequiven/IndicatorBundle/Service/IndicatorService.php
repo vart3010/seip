@@ -534,8 +534,6 @@ class IndicatorService implements ContainerAwareInterface {
         );
         $chart = array();
 
-//        $chart['caption'] = $indicator->getDescription();
-//        $chart["captionPadding"] = "10";
         $chart["showshadow"] = "0";
         $chart["showvalue"] = "1";
         $chart["useColorNameAsValue"] = "1";
@@ -544,7 +542,6 @@ class IndicatorService implements ContainerAwareInterface {
         $chart["baseFontColor"] = "#333333";
         $chart["baseFont"] = "Helvetica Neue,Arial";
         $chart["captionFontSize"] = "10";
-//        $chart["captionFontBold"] = "1";
         $chart["showborder"] = "0";
         $chart["bgcolor"] = "#FFFFFF";
         $chart["bgalpha"] = "0";
@@ -554,7 +551,6 @@ class IndicatorService implements ContainerAwareInterface {
         $chart["toolTipBgAlpha"] = "80";
         $chart["toolTipBorderRadius"] = "2";
         $chart["toolTipPadding"] = "5";
-//        $chart["clickURL"] = 'n-'.$this->generateUrl('pequiven_indicator_show', array('id' => $indicator->getId()));
         if ($modeUrl == CommonObject::OPEN_URL_OTHER_WINDOW) {
             $chart["clickURL"] = 'n-' . $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicator->getId()));
         } else {
@@ -589,7 +585,6 @@ class IndicatorService implements ContainerAwareInterface {
                         }
                     }
                     $colorData["label"] = $value;
-//                    $colorData["label"] = number_format($indicator->getResultReal(), 2, ',', '.') . '%';
                     if ($resultService->calculateRangeGood($indicator, $tendency, CommonObject::TYPE_RESULT_ARRANGEMENT)) {
                         $colorData["code"] = "#1aaf5d";
                     } elseif ($resultService->calculateRangeMiddle($indicator, $tendency, CommonObject::TYPE_RESULT_ARRANGEMENT)) {

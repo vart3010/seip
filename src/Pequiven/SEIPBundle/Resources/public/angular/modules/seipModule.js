@@ -3849,6 +3849,38 @@ angular.module('seipModule.controllers', [])
                 });
             }
             
+            $scope.chargeChartProductionByReportTemplateByDate = function (reportTemplateId,dateSearch, render, width, height, typeView, typeDate) {
+                var dateParse = $scope.parseDate(dateSearch);
+                console.log('hola');
+                var getDataChartProductionByReportTemplateByDate = Routing.generate("getDataChartProductionByReportTemplateByDate", {reportTemplateId: reportTemplateId,dateSearch: dateParse,typeView: typeView, typeDate: typeDate});
+                
+                //Definimos el tipo de gráfico, de acuerdo al tipo de vista a visualizar
+                var typeChart = "mscolumn3d";
+                if(typeView == 1){
+                    typeChart = "mscolumn3dlinedy";
+                }
+                
+                $http.get(getDataChartProductionByReportTemplateByDate).success(function (data) {
+                    FusionCharts.ready(function () {
+                        var revenueChartProductionByReportTemplateByDate = new FusionCharts({
+                            "type": typeChart,
+                            "renderAt": render,
+                            "width": width + "%",
+                            "height": height,
+                            "dataFormat": "json",
+                            "dataSource": {
+                                "chart": data.dataSource.chart,
+                                "categories": data.dataSource.categories,
+                                "dataset": data.dataSource.dataset,
+                                "annotations": data.dataSource.annotations
+                            }
+                        });
+                        revenueChartProductionByReportTemplateByDate.setTransparent(true);
+                        revenueChartProductionByReportTemplateByDate.render();
+                    });
+                });
+            }
+            
             // Función que devuelve una data formateada dd/mm/yyyy y recibe en dd-mm-yyyy
             $scope.parseDate = function parseDate(dateToParse) {
                 var dateParse = new Date(dateToParse);
