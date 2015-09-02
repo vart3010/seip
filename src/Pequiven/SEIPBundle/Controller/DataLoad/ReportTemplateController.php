@@ -207,6 +207,7 @@ class ReportTemplateController extends SEIPController {
         $form = $this->createForm(new \Pequiven\SEIPBundle\Form\DataLoad\Notification\ReportTemplateType($dateNotification, $resource), $resource);
 
         if ($request->isMethod('POST') && $form->submit($request, true)->isValid()) {
+            
             $em = $this->getDoctrine()->getManager();
             foreach ($resource->getPlantReports() as $plantReport) {
                 if ($plantReport->getId() !== (int) $plantReportToLoad) {
