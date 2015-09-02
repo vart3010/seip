@@ -501,7 +501,7 @@ class ReportTemplateService implements ContainerAwareInterface {
                 $dataComplianceValues["parentYAxis"] = "S";
                 $dataComplianceValues["showValues"] = "0";
                 $dataComplianceValues["color"] = "#B7B7B6";
-                $dataRealValues['data'][] = array('value' => number_format($dataSerialized[$reportTemplate->getId()]['real'], 2, ',', '.'), 'color' => $dataSerialized[$reportTemplate->getId()]['color']);
+                $dataRealValues['data'][] = array('value' => number_format($dataSerialized[$reportTemplate->getId()]['real'], 2, ',', '.'), 'color' => $dataSerialized[$reportTemplate->getId()]['color'], 'link' => $this->generateUrl('pequiven_data_load_dashboard_production_report_template',array('reportTemplateId' => $reportTemplate->getId(),'typeView' => \Pequiven\SEIPBundle\Entity\Monitor::MONITOR_PRODUCTION_VIEW_COMPLIANCE)));
                 $dataPlanValues['data'][] = array('value' => number_format($dataSerialized[$reportTemplate->getId()]['plan'], 2, ',', '.'), 'color' => "#003CFF");
                 $dataComplianceValues['data'][] = array('value' => number_format($dataSerialized[$reportTemplate->getId()]['compliance'], 2, ',', '.'), 'displayValue' => number_format($dataSerialized[$reportTemplate->getId()]['compliance'], 2, ',', '.').' %');
             }
@@ -515,6 +515,8 @@ class ReportTemplateService implements ContainerAwareInterface {
             $annotations = array();
             
             $data['dataSource']['annotations'] = $annotations;
+        } elseif(isset($options['reportTemplateByDateCompliance']) && array_key_exists('reportTemplateByDateCompliance', $options)){
+            unset($options['reportTemplateByDateCompliance']);
         }
 
         $data['dataSource']['chart'] = $chart;

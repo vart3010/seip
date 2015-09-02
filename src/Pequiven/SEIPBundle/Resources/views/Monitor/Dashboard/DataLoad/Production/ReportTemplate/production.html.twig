@@ -14,7 +14,7 @@
 {#<div class="eleven-columns eleven-columns-tablet eleven-columns-mobile new-row-mobile no-margin-left">
     <div class="columns">#}
         <!-- Día -->
-        <div class="eight-columns eight-columns-tablet eight-columns-mobile new-row-mobile" style="text-align: center;">
+        <div id="chart-report-template-day" class="eight-columns eight-columns-tablet eight-columns-mobile new-row-mobile" style="text-align: center; {#display: none;#}">
             <span class="title-dashboard">Día</span>
             <div id="id-report-template-day" ng-init="chargeChartProductionByReportTemplateByDate('{{ reportTemplateId }}','{{ "now"|date('Y-m-d') }}','report-template-day','100','400',{{ typeView }},'day')">
                 <span id="report-template-day"></span>
@@ -23,19 +23,10 @@
         <!-- Observaciones -->
         <div class="four-columns four-columns-tablet four-columns-mobile new-row-mobile" style="text-align: center;">
             <span class="title-dashboard with-padding">Observaciones</span>
-            <div class="columns with-padding scroll-vertical" {#style="overflow-y: scroll; height: 300px;"#}>
+            <div class="columns with-padding {#scroll-vertical#}" {#style="overflow-y: scroll; height: 300px;"#}>
                 <div id="product" style="text-align: justify;" class="four-columns bold"></div>
                 <div id="observation" style="text-align: justify;" class="eight-columns"></div>
-                {#{% for observation in observations %}
-                    <div style="text-align: justify;" class="four-columns"><b>{{ observation.product }}</b></div>
-                    <div style="text-align: justify;" class="eight-columns">{{ observation.observation }}</div>
-                {% endfor %}#}
             </div>
-            {#<ul class="list-style-none">
-                {% for observation in observations %}
-                    <li><b>{{ observation.product }}:</b> {{ observation.observation }}</li>
-                {% endfor %}
-            </ul>#}
         </div>
 {#    </div>
 </div>#}
@@ -78,6 +69,9 @@
         }
 
         $(document).ready(function () {
+            {#$('chart-report-template-day').fadeOut("slow",function() {
+               $(this).attr("display","block"); 
+            });#}
             showDetail();
             setInterval('showDetail()',45000);
         });
