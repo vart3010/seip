@@ -965,84 +965,84 @@ class ProductDetailDailyMonth extends BaseModel
     
     /**
      * Dia 1 (Observacion)
-     * @var float
+     * @var string
      * @ORM\Column(name="day1_observation",type="text",nullable=true)
      */
     private $day1Observation;
     
     /**
      * Dia 2 (Observacion)
-     * @var float
+     * @var string
      * @ORM\Column(name="day2_observation",type="text",nullable=true)
      */
     private $day2Observation;
     
     /**
      * Dia 3 (Observacion)
-     * @var float
+     * @var string
      * @ORM\Column(name="day3_observation",type="text",nullable=true)
      */
     private $day3Observation;
     
     /**
      * Dia 4 (Observacion)
-     * @var float
+     * @var string
      * @ORM\Column(name="day4_observation",type="text",nullable=true)
      */
     private $day4Observation;
     
     /**
      * Dia 5 (Observacion)
-     * @var float
+     * @var string
      * @ORM\Column(name="day5_observation",type="text",nullable=true)
      */
     private $day5Observation;
     
     /**
      * Dia 6 (Observacion)
-     * @var float
+     * @var string
      * @ORM\Column(name="day6_observation",type="text",nullable=true)
      */
     private $day6Observation;
     
     /**
      * Dia 7 (Observacion)
-     * @var float
+     * @var string
      * @ORM\Column(name="day7_observation",type="text",nullable=true)
      */
     private $day7Observation;
     
     /**
      * Dia 8 (Observacion)
-     * @var float
+     * @var string
      * @ORM\Column(name="day8_observation",type="text",nullable=true)
      */
     private $day8Observation;
     
     /**
      * Dia 9 (Observacion)
-     * @var float
+     * @var string
      * @ORM\Column(name="day9_observation",type="text",nullable=true)
      */
     private $day9Observation;
     
     /**
      * Dia 10 (Observacion)
-     * @var float
+     * @var string
      * @ORM\Column(name="day10_observation",type="text",nullable=true)
      */
     private $day10Observation;
     
     /**
      * Dia 11 (Observacion)
-     * @var float
+     * @var string
      * @ORM\Column(name="day11_observation",type="text",nullable=true)
      */
     private $day11Observation;
     
     /**
      * Dia 12 (Observacion)
-     * @var float
+     * @var string
      * @ORM\Column(name="day12_observation",type="text",nullable=true)
      */
     private $day12Observation;

@@ -104,6 +104,15 @@ class ReportTemplate extends BaseModel
     private $shortName;
     
     /**
+     * Ícono del ReportTemplate
+     * 
+     * @var string
+     * 
+     * @ORM\Column(name="icon",type="text")
+     */
+    protected $icon;
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -318,6 +327,22 @@ class ReportTemplate extends BaseModel
 
     function setShortName($shortName) {
         $this->shortName = $shortName;
+    }
+    
+    /**
+     * 
+     * @return type
+     */
+    public function getIcon() {
+        return $this->icon;
+    }
+
+    /**
+     * 
+     * @param type $icon
+     */
+    public function setIcon($icon) {
+        $this->icon = $icon;
     }
 
 

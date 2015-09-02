@@ -22,7 +22,11 @@ class ReportTemplateBox extends \Tecnocreaciones\Bundle\BoxBundle\Model\GenericB
         $idReportTemplate = $this->getRequest()->get('reportTemplateId');
         
         $daySearch = date("j", strtotime('-1 day'));
-        $monthSearch = date("n");
+        if(date("j") == 1){
+            $monthSearch = date("n", strtotime('-1 month'));
+        } else{
+            $monthSearch = date("n");
+        }
         
         $reportTemplate = $reportTemplateRepository->find($idReportTemplate);
         
@@ -33,7 +37,8 @@ class ReportTemplateBox extends \Tecnocreaciones\Bundle\BoxBundle\Model\GenericB
                 $productDetailDailyMonths = $productReport->getProductDetailDailyMonthsSortByMonth();
                 if(array_key_exists($monthSearch, $productDetailDailyMonths)){
                     if(($observation = $productDetailDailyMonths[$monthSearch]->getObservationByDay($daySearch)) != null){
-                        $observations[$productReport->getId()] = array('product' => $productReport->getProduct()->getName(), 'observation' => $observation);
+//                        $observations[$productReport->getId()] = array('product' => $productReport->getProduct()->getName(), 'observation' => $observation);
+                        $observations[] = array('product' => $productReport->getProduct()->getName(), 'observation' => $observation);
                     }
                 }
             }

@@ -468,12 +468,17 @@ class ReportTemplateService implements ContainerAwareInterface {
             $user = $this->getUser();
             $securityContext = $this->getSecurityContext();
             
+            $reportTemplatesExclude = array(
+                'CPJAA' =>true,
+                'PETROCASA' => true,
+            );
+            
             $reportTemplates = array();
 
             $resultReportTemplates = $repositoryReportTemplate->findAll();
             //Seteamos sólo los reportTemplates de PQV, ya que los de la EEMM y Filiales se buscan directo en el controlador del gráfico
             foreach($resultReportTemplates as $resultReportTemplate){
-                if($resultReportTemplate->getLocation()->getAlias() != 'CPJAA'){
+                if(!array_key_exists($resultReportTemplate->getLocation()->getAlias(),$reportTemplatesExclude)){
                     $reportTemplates[] = $resultReportTemplate;
                 }
             }
@@ -482,7 +487,7 @@ class ReportTemplateService implements ContainerAwareInterface {
             $dataSerialized = $this->getDataSerialized($reportTemplate, array('consolidateCorporationCompliance' => true, 'dateSearch' => $options['dateSearch'], 'reportTemplates' => $reportTemplates));
             
             foreach($reportTemplates as $reportTemplate) {
-                $category[] = array('label' => $reportTemplate->getShortName());
+                $category[] = array('label' => $reportTemplate->getLocation()->getAlias());
             }
             
             $dataRealValues = $dataPlanValues = $dataComplianceValues = array();
@@ -496,7 +501,7 @@ class ReportTemplateService implements ContainerAwareInterface {
                 $dataComplianceValues["parentYAxis"] = "S";
                 $dataComplianceValues["showValues"] = "0";
                 $dataComplianceValues["color"] = "#B7B7B6";
-                $dataRealValues['data'][] = array('value' => number_format($dataSerialized[$reportTemplate->getId()]['real'], 2, ',', '.'), 'color' => $dataSerialized[$reportTemplate->getId()]['color']);
+                $dataRealValues['data'][] = array('value' => number_format($dataSerialized[$reportTemplate->getId()]['real'], 2, ',', '.'), 'color' => $dataSerialized[$reportTemplate->getId()]['color'], 'link' => $this->generateUrl('pequiven_data_load_dashboard_production_report_template',array('reportTemplateId' => $reportTemplate->getId(),'typeView' => \Pequiven\SEIPBundle\Entity\Monitor::MONITOR_PRODUCTION_VIEW_COMPLIANCE)));
                 $dataPlanValues['data'][] = array('value' => number_format($dataSerialized[$reportTemplate->getId()]['plan'], 2, ',', '.'), 'color' => "#003CFF");
                 $dataComplianceValues['data'][] = array('value' => number_format($dataSerialized[$reportTemplate->getId()]['compliance'], 2, ',', '.'), 'displayValue' => number_format($dataSerialized[$reportTemplate->getId()]['compliance'], 2, ',', '.').' %');
             }
@@ -510,6 +515,45 @@ class ReportTemplateService implements ContainerAwareInterface {
             $annotations = array();
             
             $data['dataSource']['annotations'] = $annotations;
+        } elseif(isset($options['reportTemplateByDateCompliance']) && array_key_exists('reportTemplateByDateCompliance', $options)){
+            unset($options['reportTemplateByDateCompliance']);
+            
+            $chart["pYAxisName"] = "TM";
+            $chart["showDivLineValues"] = "0";
+            $chart["sYAxisName"] = "% Producción";
+            $chart["showLegend"] = "0";
+            
+            $user = $this->getUser();
+            $securityContext = $this->getSecurityContext();
+
+            $dataSerialized = array();
+            $dataSerialized = $this->getDataSerialized($reportTemplate, array('reportTemplateByDateCompliance' => true, 'dateSearch' => $options['dateSearch'], 'typeDate' => $options['typeDate']));
+            
+            $plantReports = $reportTemplate->getPlantReports();
+            
+            $dataRealValues = $dataPlanValues = $dataComplianceValues = array();
+            
+            //Añadimos los valores, por cada planta del reportTemplate
+            foreach($plantReports as $plantReport) {
+                $category[] = array('label' => $plantReport->getPlant()->getAlias());
+                $dataRealValues['seriesname'] = 'Real';
+                $dataPlanValues['seriesname'] = 'Plan';
+                $dataComplianceValues["renderAs"] = "line";
+                $dataComplianceValues["parentYAxis"] = "S";
+                $dataComplianceValues["showValues"] = "0";
+                $dataComplianceValues["color"] = "#B7B7B6";
+                $dataRealValues['data'][] = array('value' => number_format($dataSerialized[$plantReport->getId()]['real'], 2, ',', '.'), 'color' => $dataSerialized[$plantReport->getId()]['color']);
+                $dataPlanValues['data'][] = array('value' => number_format($dataSerialized[$plantReport->getId()]['plan'], 2, ',', '.'), 'color' => "#003CFF");
+                $dataComplianceValues['data'][] = array('value' => number_format($dataSerialized[$plantReport->getId()]['compliance'], 2, ',', '.'), 'displayValue' => number_format($dataSerialized[$plantReport->getId()]['compliance'], 2, ',', '.').' %');
+            }
+            
+            $data['dataSource']['dataset'][] = $dataRealValues;
+            $data['dataSource']['dataset'][] = $dataPlanValues;
+            $data['dataSource']['dataset'][] = $dataComplianceValues;
+            
+//            $chart['paletteColors'] = "#003CFF";
+            
+            $annotations = array();
         }
 
         $data['dataSource']['chart'] = $chart;
@@ -695,6 +739,8 @@ class ReportTemplateService implements ContainerAwareInterface {
                 
                 if($dataSerialized[$reportTemplate->getId()]['plan'] > 0){
                     $dataSerialized[$reportTemplate->getId()]['compliance'] = ($dataSerialized[$reportTemplate->getId()]['real'] / $dataSerialized[$reportTemplate->getId()]['plan'])*100;
+                } elseif($dataSerialized[$reportTemplate->getId()]['plan'] == 0 && $dataSerialized[$reportTemplate->getId()]['real'] > 0){
+                    $dataSerialized[$reportTemplate->getId()]['compliance'] = 100.0;
                 }
                 
                 if($dataSerialized[$reportTemplate->getId()]['compliance'] < 50.0){
@@ -751,6 +797,69 @@ class ReportTemplateService implements ContainerAwareInterface {
                     $dataSerialized[$plantReport->getId()]['color'] = '#E5E752';
                 } elseif($dataSerialized[$plantReport->getId()]['flagNotificationHalf']){
                     $dataSerialized[$plantReport->getId()]['color'] = '#E5E752';
+                }
+            }
+        } elseif(isset($options['reportTemplateByDateCompliance']) && array_key_exists('reportTemplateByDateCompliance', $options)){
+            unset($options['reportTemplateByDateCompliance']);
+            
+            $options['dateSearch'] = str_replace('/', '-', $options['dateSearch']);
+            $daySearch = date("j", strtotime($options['dateSearch']));
+            $monthSearch = date("n", strtotime($options['dateSearch']));
+            $typeDate = $options['typeDate'];
+            
+            $plantReports = $reportTemplate->getPlantReports();
+            
+            //SETEAMOS LOS VALORES POR DEFECTO
+            foreach($plantReports as $plantReport){
+                $dataSerialized[$plantReport->getId()]['real'] = $dataSerialized[$plantReport->getId()]['plan'] =  $dataSerialized[$plantReport->getId()]['compliance'] = 0.0;
+            }
+            
+            //RELLENAMOS LA DATA
+            foreach($plantReports as $plantReport){
+                $productReports = $plantReport->getProductsReport();
+                $contProductReports = 0;
+                foreach($productReports as $productReport){
+                    $contProductReports++;
+                    $productDetailDailyMonths = $productReport->getProductDetailDailyMonthsSortByMonth();
+                    
+                    if($typeDate == 'day'){
+                        $valueReal = array_key_exists($monthSearch, $productDetailDailyMonths) == true ? $productDetailDailyMonths[$monthSearch]->getValueGrossByDay($daySearch) : 0.0;
+                        $valuePlan = array_key_exists($monthSearch, $productDetailDailyMonths) == true ? $productDetailDailyMonths[$monthSearch]->getPlanGrossByDay($daySearch) : 0.0;
+                        $dataSerialized[$plantReport->getId()]['real'] = $dataSerialized[$plantReport->getId()]['real'] + $valueReal;
+                        $dataSerialized[$plantReport->getId()]['plan'] = $dataSerialized[$plantReport->getId()]['plan'] + $valuePlan;
+                    } elseif($typeDate == 'month'){
+                        for($day = 1; $day <= $daySearch; $day++){
+                            $valueReal = array_key_exists($monthSearch, $productDetailDailyMonths) == true ? $productDetailDailyMonths[$monthSearch]->getValueGrossByDay($day) : 0.0;
+                            $valuePlan = array_key_exists($monthSearch, $productDetailDailyMonths) == true ? $productDetailDailyMonths[$monthSearch]->getPlanGrossByDay($day) : 0.0;
+                            $dataSerialized[$plantReport->getId()]['real'] = $dataSerialized[$plantReport->getId()]['real'] + $valueReal;
+                            $dataSerialized[$plantReport->getId()]['plan'] = $dataSerialized[$plantReport->getId()]['plan'] + $valuePlan;
+                        }
+                    } elseif($typeDate == 'year'){
+                        for($day = 1; $day <= $daySearch; $day++){
+                            $valueReal = array_key_exists($monthSearch, $productDetailDailyMonths) == true ? $productDetailDailyMonths[$monthSearch]->getValueGrossByDay($day) : 0.0;
+                            $valuePlan = array_key_exists($monthSearch, $productDetailDailyMonths) == true ? $productDetailDailyMonths[$monthSearch]->getPlanGrossByDay($day) : 0.0;
+                            $dataSerialized[$plantReport->getId()]['real'] = $dataSerialized[$plantReport->getId()]['real'] + $valueReal;
+                            $dataSerialized[$plantReport->getId()]['plan'] = $dataSerialized[$plantReport->getId()]['plan'] + $valuePlan;
+                        }
+                        for($month = 1; $month < $monthSearch; $month++){
+                            $dataSerialized[$plantReport->getId()]['real'] = $dataSerialized[$plantReport->getId()]['real'] + array_key_exists($month, $productDetailDailyMonths) == true ? $productDetailDailyMonths[$month]->getTotalGrossReal() : 0;
+                            $dataSerialized[$plantReport->getId()]['plan'] = $dataSerialized[$plantReport->getId()]['plan'] + array_key_exists($month, $productDetailDailyMonths) == true ? $productDetailDailyMonths[$month]->getTotalGrossPlan() : 0;
+                        }
+                    }
+                }
+                
+                if($dataSerialized[$plantReport->getId()]['plan'] > 0){
+                    $dataSerialized[$plantReport->getId()]['compliance'] = ($dataSerialized[$plantReport->getId()]['real'] / $dataSerialized[$plantReport->getId()]['plan'])*100;
+                } elseif($dataSerialized[$plantReport->getId()]['plan'] == 0 && $dataSerialized[$plantReport->getId()]['real'] > 0){
+                    $dataSerialized[$plantReport->getId()]['compliance'] = 100.0;
+                }
+                
+                if($dataSerialized[$plantReport->getId()]['compliance'] < 50.0){
+                    $dataSerialized[$plantReport->getId()]['color'] = '#FF0004';
+                } elseif($dataSerialized[$plantReport->getId()]['compliance'] >= 50.0 && $dataSerialized[$plantReport->getId()]['compliance'] <= 90.0){
+                    $dataSerialized[$plantReport->getId()]['color'] = '#E5E752';
+                } elseif($dataSerialized[$plantReport->getId()]['compliance'] > 90.0){
+                    $dataSerialized[$plantReport->getId()]['color'] = '#0EED59';
                 }
             }
         }
