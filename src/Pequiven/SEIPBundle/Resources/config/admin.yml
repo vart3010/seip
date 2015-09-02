@@ -382,7 +382,9 @@ services:
             - ~
         calls:
             - [ setTranslationDomain, [SonataAdminBundle]]
-           
+            - [ setModelManager, [@seip.model.manager]]
+            - [ setContainer, [@service_container]]
+            
     sonata.admin.cei.product:
         class: Pequiven\MasterBundle\Admin\CEI\ProductAdmin
         tags:
