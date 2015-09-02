@@ -35,12 +35,18 @@
 
 {% if typeView == constant('Pequiven\\SEIPBundle\\Entity\\Monitor::MONITOR_PRODUCTION_VIEW_COMPLIANCE')%}
     <!-- Mes -->
-    <div class="six-columns six-columns-tablet six-columns-mobile new-row-mobile">
-        Mes
+    <div id="chart-report-template-month" class="six-columns six-columns-tablet six-columns-mobile new-row-mobile" style="text-align: center; {#display: none;#}">
+        <span class="title-dashboard">Mes</span>
+        <div id="id-report-template-month" ng-init="chargeChartProductionByReportTemplateByDate('{{ reportTemplateId }}','{{ "now"|date('Y-m-d') }}','report-template-month','100','400',{{ typeView }},'month')">
+            <span id="report-template-month"></span>
+        </div>
     </div>
     <!-- Año -->
-    <div class="six-columns six-columns-tablet six-columns-mobile new-row-mobile">
-        Año
+    <div id="chart-report-template-year" class="six-columns six-columns-tablet six-columns-mobile new-row-mobile" style="text-align: center; {#display: none;#}">
+        <span class="title-dashboard">Año</span>
+        <div id="id-report-template-year" ng-init="chargeChartProductionByReportTemplateByDate('{{ reportTemplateId }}','{{ "now"|date('Y-m-d') }}','report-template-year','100','400',{{ typeView }},'year')">
+            <span id="report-template-year"></span>
+        </div>
     </div>
 {% endif %}
 
