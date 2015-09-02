@@ -47,6 +47,7 @@ pequiven_indicator:
     edit: Editar
     save: Guardar
     cancel: Cancelar
+    config: Configuración
     type_calculation:
         main: Tipo de cálculo
         formula_manually: Fórmula manual

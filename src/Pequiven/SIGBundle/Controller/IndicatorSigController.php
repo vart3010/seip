@@ -26,6 +26,7 @@ use Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionAction
 use Pequiven\IndicatorBundle\Form\EvolutionIndicator\EvolutionActionVerificationType;
 
 use Pequiven\IndicatorBundle\Form\EvolutionIndicator\IndicatorLastPeriodType;
+use Pequiven\IndicatorBundle\Form\EvolutionIndicator\IndicatorConfigSigType;
 
 /**
  * Controlador Informe de Evolución del Indicador
@@ -158,24 +159,27 @@ class IndicatorSigController extends ResourceController
         $results = $this->get('pequiven.repository.sig_causes_indicator')->findBy(array('indicator' => $idIndicator,'month' => $month));
 
         //Carga el analisis de la tendencia
-        $trend = $this->get('pequiven.repository.sig_trend_indicator')->findByindicator($indicator);
+        $trend = $this->get('pequiven.repository.sig_trend_indicator')->findBy(array('indicator' => $indicator, 'month' => $month));
         //Carga del analisis de las causas
         $causeAnalysis = $this->get('pequiven.repository.sig_causes_analysis')->findBy(array('indicator'=>$indicator, 'month' => $month));
 
         //Carga de la señalización de la tendencia de la grafica
-        $tendency = $indicator->getTendency()->getId();
+        //var_dump($indicator->getIndicatorSigTendency());
+        //die();
+        $tendency = $indicator->getIndicatorSigTendency();
+        $font = array();
         switch ($tendency) {
                 case 0:
                     $font = null;
                     break;
                 case 1:
-                    $font = "long-arrow-up";
+                    $font = 'long-arrow-up';
                     break;
                 case 2:
-                    $font = "long-arrow-down";
+                    $font = 'long-arrow-down';
                     break;
                 case 3:
-                    $font = "arrows-h";
+                    $font = 'long-arrow-right';                    
                     break;
         }       
         //$view = $this->view();
@@ -531,6 +535,70 @@ class IndicatorSigController extends ResourceController
             $em->flush();  
 
         }  
+    }
+
+    /**
+     * Retorna el formulario de la configuración de la Gráfica
+     * 
+     * @param Request $request
+     * @return type
+     */
+    function getFormConfigAction(Request $request)
+    {
+        $indicator = $this->findIndicatorOr404($request);        
+        
+        $config = new Indicator();
+        $form  = $this->createForm(new IndicatorConfigSigType(), $config);
+        
+        $view = $this
+            ->view()
+            ->setTemplate($this->config->getTemplate('form/form_config_chart.html'))
+            ->setTemplateVar($this->config->getPluralResourceName())
+            ->setData(array(
+                'indicator' => $indicator,
+                'form' => $form->createView(),
+            ))
+        ;
+        $view->getSerializationContext()->setGroups(array('id','api_list'));
+        return $view;
+    }
+
+    /**
+     * Añade la configuración
+     * 
+     * @param Request $request
+     * @return type
+     */
+    public function addConfigChartAction(Request $request)
+    {    
+        $idIndicator = $request->get('idIndicator');
+        //var_dump($request->get('pequiven_indicatorbundle_indicator_last_period')['indicatorlastPeriod']);
+        //var_dump($request);
+        //die();
+        $medition = $request->get('pequiven_indicatorbundle_indicator_config_sig')['indicatorSigMedition'];
+        $objetive = $request->get('pequiven_indicatorbundle_indicator_config_sig')['indicatorSigObjetive'];
+        $tendency = $request->get('pequiven_indicatorbundle_indicator_config_sig')['indicatorSigTendency'];
+
+        $em = $this->getDoctrine()->getManager();
+
+        $indicatorConfig = $this->get('pequiven.repository.sig_indicator')->find($idIndicator);
+        
+        /*if ($indicatorConfig) {
+
+            $dataLast = $this->get('pequiven.repository.sig_indicator')->find($lastPeriod);
+            
+            }*/
+        
+        $indicatorConfig->setIndicatorSigMedition($medition);
+        $indicatorConfig->setIndicatorSigObjetive($objetive);
+        $indicatorConfig->setIndicatorSigTendency($tendency);
+
+        //$form->handleRequest($request);
+
+        //if ($form->isSubmitted() && $form->isValid()) {
+            $em->flush();
+            //return $this->redirect($this->generateUrl('pequiven_indicator_evolution',$idIndicator));
+        //}                            
     }
 
     /**

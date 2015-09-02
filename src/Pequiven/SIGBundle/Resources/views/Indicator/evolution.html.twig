@@ -29,7 +29,7 @@
 {% block body %}
         <div class="" ng-init="urlValueLastIndicatorForm='{{ path('pequiven_indicator_last_period_form',{'idIndicator':indicator_sig.id }) }}'">
         
-        <div ng-controller="TableFormatController">
+    <div ng-controller="TableFormatController">
         {# <div ng-controller="IndicatorSigEvolutionController"> #}
         <div ng-controller="IndicatorLastPeriodController">
         <!-- <div ng-controller="EvolutionIndicatorFilters"> -->
@@ -56,17 +56,25 @@
         {# Graficos #}
         <div class="columns with-padding"> 
             {# <div class="five-columns twelve-columns-mobile">#}
-                 <div ng-controller="ChartsSigController" class="dashboard" ng-init="renderChartEvolutionSig('chartContainerResult', {{ data|json_encode() }})" style="width: 95%;" align="center">
+            <div ng-controller="ChartsSigController" class="dashboard" ng-init="renderChartEvolutionSig('chartContainerResult', {{ data|json_encode() }})" style="width: 95%;" align="center">
                     {# señalización tendencia #}
-                    <div class="position">
-                        Mejor hacia...
+                <div class="position">
+                    {#{{ dump(font) }}#}
+                        Mejor Hacia...
                         <i class="fa fa-{{ font }} fa-2x position"> &nbsp;</i>
-                    </div>
+                </div>
 
-                        <div class="nine-columns twelve-columns-mobile" id="chartContainerResult">
-                            <!-- This div will hold the chart generated in the footer -->
-                        </div>
-                </div>  
+                <div class="nine-columns twelve-columns-mobile" id="chartContainerResult">
+                  <!-- This div will hold the chart generated in the footer -->
+                </div>
+                
+                <div ng-controller="EvolutionIndicatorConfig"> 
+                    <div class="button-group button-config">
+                        <a class="button icon-list-add " href="" ng-click="loadTemplateConfig()" title="">{{ 'pequiven_indicator.config'|trans({},'PequivenSIGBundle')  }}</a>
+                    </div>
+                </div>
+               
+            </div>  
         </div>  
             
             &nbsp;
@@ -101,6 +109,7 @@
             {% include 'PequivenSIGBundle:Indicator:show/action.html.twig' %}
             &nbsp;
         {% if data_action %}
+
             {% include 'PequivenSIGBundle:Indicator:show/verification.html.twig' %}            
         {% endif %}
         
@@ -144,6 +153,14 @@
         color: #1d1c1c;
         float: right;
         font-size: 150%;
+    }
+    .button-config{
+        margin-right: 20px;
+        margin-top: 0px;
+        margin-bottom: 15px;
+        color: #1d1c1c;
+        float: right;
+        /*font-size: 150%;*/
     }
 
 </style>

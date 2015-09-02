@@ -3663,9 +3663,9 @@ class IndicatorService implements ContainerAwareInterface {
             }
 
             //Carga de meta Objetivo2015
-            foreach ($indicator->getObjetives() as $value) {
-                $dataValueObjetive = $value->getgoal();//Carga valor Objetivo 2015
-            }
+            //foreach ($indicator->getObjetives() as $value) {
+            $dataValueObjetive = $indicator->getIndicatorSigObjetive();//Carga valor Objetivo 2015
+            //}
             if ($dataValueObjetive == NULL ) {
                 $dataValueObjetive = 0;
             }

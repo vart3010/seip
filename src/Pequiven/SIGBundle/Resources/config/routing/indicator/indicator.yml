@@ -64,11 +64,33 @@ pequiven_verification_get_form:
     methods: [GET]
     options:
         expose: true
+#Carga de formulario de la configuración de la gráfica
+pequiven_config_chart_get_form:
+    path: /{idIndicator}/get-form_config.{_format}
+    defaults:
+        _controller: pequiven.controller.indicator_sig:getFormConfigAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET]
+    options:
+        expose: true
 #Guardamos el formulario de la relacion del indicador
 pequiven_indicator_last_period:
     path: /{idIndicator}/addLastPeriod.{_format}
     defaults:
         _controller: pequiven.controller.indicator_sig:addLastPeriodAction
+        _format: json
+    requirements:
+        _format: json
+    methods: [POST]
+    options:
+        expose: true
+#Guardamos el formulario de la configuración de la Gráfica
+pequiven_config_chart_evolution_add:
+    path: /{idIndicator}/addConfig.{_format}
+    defaults:
+        _controller: pequiven.controller.indicator_sig:addConfigChartAction
         _format: json
     requirements:
         _format: json

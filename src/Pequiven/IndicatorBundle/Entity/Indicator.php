@@ -122,6 +122,27 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     private $tmp = false;
 
     /**
+     * @var string
+     * 
+     * @ORM\Column(name="indicator_sig_medition", type="string", nullable=true)
+     */
+    private $indicatorSigMedition;
+
+    /**
+     * @var integer
+     * 
+     * @ORM\Column(name="indicator_sig_objetive", type="integer", nullable=true)
+     */
+    private $indicatorSigObjetive; 
+
+    /**
+     * @var integer
+     * 
+     * @ORM\Column(name="indicator_sig_tendency", type="integer", nullable=true)
+     */
+    private $indicatorSigTendency;    
+
+    /**
      * Formula
      * @var \Pequiven\MasterBundle\Entity\Formula
      * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Formula",inversedBy="indicators")
@@ -741,6 +762,69 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      */
     public function getGoal() {
         return $this->goal;
+    }
+
+    /**
+     * Set indicatorSigMedition
+     *
+     * @param float $indicatorSigMedition
+     * @return Indicator
+     */
+    public function setIndicatorSigMedition($indicatorSigMedition) {
+        $this->indicatorSigMedition = $indicatorSigMedition;
+
+        return $this;
+    }
+
+    /**
+     * Get indicatorSigMedition
+     *
+     * @return float 
+     */
+    public function getIndicatorSigMedition() {
+        return $this->indicatorSigMedition;
+    }
+
+    /**
+     * Set indicatorSigObjetive
+     *
+     * @param float $indicatorSigObjetive
+     * @return Indicator
+     */
+    public function setIndicatorSigObjetive($indicatorSigObjetive) {
+        $this->indicatorSigObjetive = $indicatorSigObjetive;
+
+        return $this;
+    }
+
+    /**
+     * Get indicatorSigObjetive
+     *
+     * @return float 
+     */
+    public function getIndicatorSigObjetive() {
+        return $this->indicatorSigObjetive;
+    }
+
+    /**
+     * Set indicatorSigTendency
+     *
+     * @param float $indicatorSigTendency
+     * @return Indicator
+     */
+    public function setIndicatorSigTendency($indicatorSigTendency) {
+        $this->indicatorSigTendency = $indicatorSigTendency;
+
+        return $this;
+    }
+
+    /**
+     * Get indicatorSigTendency
+     *
+     * @return float 
+     */
+    public function getIndicatorSigTendency() {
+        return $this->indicatorSigTendency;
     }
 
     /**

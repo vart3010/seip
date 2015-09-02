@@ -35,6 +35,13 @@ class EvolutionTrend extends Model {
     private $indicator;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="month", type="integer")
+     */
+    private $month;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="description", type="string", length=1000)
@@ -124,6 +131,24 @@ class EvolutionTrend extends Model {
      */
     public function getDescription() {
         return $this->description;
+    }
+
+    /**
+     * 
+     * @param type $month
+     * @return type
+     */
+    public function setMonth($month) {
+        $this->month = $month;
+        return $month;
+    }
+
+    /**
+     * 
+     * @return type
+     */
+    public function getMonth() {
+        return $this->month;
     }
 
 

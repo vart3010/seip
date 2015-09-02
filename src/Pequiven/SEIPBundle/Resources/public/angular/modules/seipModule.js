@@ -1918,6 +1918,103 @@ angular.module('seipModule.controllers', [])
                 $scope.templateOptions.setTemplate($scope.templates[0]);
             };            
         })
+        .controller('EvolutionIndicatorConfig', function ($scope, notificationBarService, $http, notifyService, $filter) {
+
+            $scope.indicator = null;
+            var isInit = false;
+            
+            //Carga el formulario de configuracion de la gráfica
+            $scope.loadTemplateConfig = function (resource) {
+                $scope.initFormConfig(resource);
+                if (isInit == false) {
+                    isInit = true;
+                }
+                $scope.templateOptions.setTemplate($scope.templates[0]);
+                $scope.templateOptions.setParameterCallBack(resource);
+                //$scope.templateOptions.setVar('evaluationResult', 0);
+                if (resource) {
+                    $scope.templateOptions.enableModeEdit();
+                    $scope.openModalAuto();
+                } else {
+                    $scope.openModalAuto();
+                }
+            };
+            //Añadir Causa de Desviación
+            var addConfig = function (save, successCallBack) {
+                var formConfig = angular.element('#form_config_sig');
+                var formData = formConfig.serialize();
+                
+                if (save == undefined) {
+                    var save = false;
+                }
+                if (save == true) {
+                    var url = Routing.generate('pequiven_config_chart_evolution_add', {idIndicator: $scope.id_indicator });
+                } 
+                notificationBarService.getLoadStatus().loading();
+                return $http({
+                    method: 'POST',
+                    url: url,
+                    data: formData,
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'}  // set the headers so angular passing info as form data (not request payload)
+                }).success(function (data) {
+                    $scope.templateOptions.setVar("form", {errors: {}});
+                    //$scope.templateOptions.setVar('evaluationResult', data.result);
+                    if (successCallBack) {
+                        successCallBack(data);
+                    }
+                    notificationBarService.getLoadStatus().done();
+                    return true;
+                }).error(function (data, status, headers, config) {
+                    $scope.templateOptions.setVar("form", {errors: {}});
+                    if (data.errors) {
+                        if (data.errors.errors) {
+                            $.each(data.errors.errors, function (index, value) {
+                                notifyService.error(Translator.trans(value));
+                            });
+                        }
+                        $scope.templateOptions.setVar("form", {errors: data.errors.children});
+                    }
+                    //$scope.templateOptions.setVar('evaluationResult', 0);
+                    notificationBarService.getLoadStatus().done();
+                    return false;
+                });
+            };
+            $scope.templateOptions.setVar('addConfig', addConfig);
+            //$scope.templateOptions.setVar('evaluationResult', 0);
+            var confirmCallBack = function () {
+                addConfig(true, function (data) {
+                    $scope.indicator = data.indicator;
+                });
+                return true;
+            };
+            //Formulario Config
+            $scope.initFormConfig = function (resource) {
+
+                var d = new Date();
+                var numero = d.getTime();
+                var width = 60;
+                var heigth = 60;
+
+                var parameters = {
+                    idIndicator: $scope.id_indicator,
+                    _dc: numero
+                };
+                if (resource) {
+                    parameters.id = resource.id;
+                }
+                var url = Routing.generate('pequiven_config_chart_get_form', parameters);
+                $scope.templates = [
+                    {
+                        width: width,
+                        height: heigth,
+                        name: 'Configuración Gráfica Informe de Evolución',
+                        url: url,
+                        confirmCallBack: confirmCallBack,
+                    }
+                ];
+                $scope.templateOptions.setTemplate($scope.templates[0]);
+            };            
+        })
         .controller('IndicatorLastPeriodController', function ($scope, notificationBarService, $http, notifyService, $filter) {
 
             //$scope.urlValueLastIndicatorForm = null;
