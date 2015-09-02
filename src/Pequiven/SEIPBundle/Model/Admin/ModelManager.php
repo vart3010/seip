@@ -70,7 +70,7 @@ class ModelManager extends BaseManager
         $associations = $this
             ->getMetadata(get_class($object))
             ->getAssociationMappings();
-
+        
         if ($associations) {
             $entityManager = $this->getEntityManager($object);
 

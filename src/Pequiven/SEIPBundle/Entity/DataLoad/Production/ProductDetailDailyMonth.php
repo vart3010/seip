@@ -30,7 +30,7 @@ class ProductDetailDailyMonth extends BaseModel
     /**
      * @var integer
      *
-     * @ORM\Column(name="id", type="integer")
+     * @ORM\Column(name="id",length=6,type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
@@ -47,7 +47,7 @@ class ProductDetailDailyMonth extends BaseModel
     /**
      * Mes
      * @var integer
-     * @ORM\Column(name="month",type="integer",nullable=false)
+     * @ORM\Column(name="month",type="integer",length=2,nullable=false)
      */
     private $month;
     
@@ -1183,218 +1183,218 @@ class ProductDetailDailyMonth extends BaseModel
     /**
      * Dia 1 (Status)
      * @var string
-     * @ORM\Column(name="day1_status",type="integer",nullable=true)
+     * @ORM\Column(name="day1_status",type="integer",length=1,nullable=false)
      */
-    private $day1Status;
+    private $day1Status = 0;
     
     /**
      * Dia 2 (Status)
-     * @var string
-     * @ORM\Column(name="day2_status",type="integer",nullable=true)
+     * @var integer
+     * @ORM\Column(name="day2_status",type="integer",length=1,nullable=false)
      */
-    private $day2Status;
+    private $day2Status= 0;
     
     /**
      * Dia 3 (Status)
      * @var string
-     * @ORM\Column(name="day3_status",type="integer",nullable=true)
+     * @ORM\Column(name="day3_status",type="integer",length=1,nullable=false)
      */
-    private $day3Status;
+    private $day3Status= 0;
     
     /**
      * Dia 4 (Status)
      * @var string
-     * @ORM\Column(name="day4_status",type="integer",nullable=true)
+     * @ORM\Column(name="day4_status",type="integer",length=1,nullable=false)
      */
-    private $day4Status;
+    private $day4Status= 0;
     
     /**
      * Dia 5 (Status)
      * @var string
-     * @ORM\Column(name="day5_status",type="integer",nullable=true)
+     * @ORM\Column(name="day5_status",type="integer",length=1,nullable=false)
      */
-    private $day5Status;
+    private $day5Status= 0;
     
     /**
      * Dia 6 (Status)
      * @var string
-     * @ORM\Column(name="day6_status",type="integer",nullable=true)
+     * @ORM\Column(name="day6_status",type="integer",length=1,nullable=false)
      */
-    private $day6Status;
+    private $day6Status= 0;
     
     /**
      * Dia 7 (Status)
      * @var string
-     * @ORM\Column(name="day7_status",type="integer",nullable=true)
+     * @ORM\Column(name="day7_status",type="integer",length=1,nullable=false)
      */
-    private $day7Status;
+    private $day7Status= 0;
     
     /**
      * Dia 8 (Status)
      * @var string
-     * @ORM\Column(name="day8_status",type="integer",nullable=true)
+     * @ORM\Column(name="day8_status",type="integer",length=1,nullable=false)
      */
-    private $day8Status;
+    private $day8Status= 0;
     
     /**
      * Dia 9 (Status)
      * @var string
-     * @ORM\Column(name="day9_status",type="integer",nullable=true)
+     * @ORM\Column(name="day9_status",type="integer",length=1,nullable=false)
      */
-    private $day9Status;
+    private $day9Status= 0;
     
     /**
      * Dia 10 (Status)
      * @var string
-     * @ORM\Column(name="day10_status",type="integer",nullable=true)
+     * @ORM\Column(name="day10_status",type="integer",length=1,nullable=false)
      */
-    private $day10Status;
+    private $day10Status= 0;
     
     /**
      * Dia 11 (Status)
      * @var string
-     * @ORM\Column(name="day11_status",type="integer",nullable=true)
+     * @ORM\Column(name="day11_status",type="integer",length=1,nullable=false)
      */
-    private $day11Status;
+    private $day11Status= 0;
     
     /**
      * Dia 12 (Status)
      * @var string
-     * @ORM\Column(name="day12_status",type="integer",nullable=true)
+     * @ORM\Column(name="day12_status",type="integer",length=1,nullable=false)
      */
-    private $day12Status;
+    private $day12Status= 0;
     
     /**
      * Dia 13 (Status)
      * @var string
-     * @ORM\Column(name="day13_status",type="integer",nullable=true)
+     * @ORM\Column(name="day13_status",type="integer",length=1,nullable=false)
      */
-    private $day13Status;
+    private $day13Status= 0;
     
     /**
      * Dia 14 (Status)
      * @var string
-     * @ORM\Column(name="day14_status",type="integer",nullable=true)
+     * @ORM\Column(name="day14_status",type="integer",length=1,nullable=false)
      */
-    private $day14Status;
+    private $day14Status= 0;
     
     /**
      * Dia 15 (Status)
      * @var string
-     * @ORM\Column(name="day15_status",type="integer",nullable=true)
+     * @ORM\Column(name="day15_status",type="integer",length=1,nullable=false)
      */
-    private $day15Status;
+    private $day15Status= 0;
     
     /**
      * Dia 16 (Status)
      * @var string
-     * @ORM\Column(name="day16_status",type="integer",nullable=true)
+     * @ORM\Column(name="day16_status",type="integer",length=1,nullable=false)
      */
-    private $day16Status;
+    private $day16Status= 0;
     
     /**
      * Dia 17 (Status)
      * @var string
-     * @ORM\Column(name="day17_status",type="integer",nullable=true)
+     * @ORM\Column(name="day17_status",type="integer",length=1,nullable=false)
      */
-    private $day17Status;
+    private $day17Status= 0;
     
     /**
      * Dia 18 (Status)
      * @var string
-     * @ORM\Column(name="day18_status",type="integer",nullable=true)
+     * @ORM\Column(name="day18_status",type="integer",length=1,nullable=false)
      */
-    private $day18Status;
+    private $day18Status= 0;
     
     /**
      * Dia 19 (Status)
      * @var string
-     * @ORM\Column(name="day19_status",type="integer",nullable=true)
+     * @ORM\Column(name="day19_status",type="integer",length=1,nullable=false)
      */
-    private $day19Status;
+    private $day19Status= 0;
     
     /**
      * Dia 20 (Status)
      * @var string
-     * @ORM\Column(name="day20_status",type="integer",nullable=true)
+     * @ORM\Column(name="day20_status",type="integer",length=1,nullable=false)
      */
-    private $day20Status;
+    private $day20Status= 0;
     
     /**
      * Dia 21 (Status)
      * @var string
-     * @ORM\Column(name="day21_status",type="integer",nullable=true)
+     * @ORM\Column(name="day21_status",type="integer",length=1,nullable=false)
      */
-    private $day21Status;
+    private $day21Status= 0;
     
     /**
      * Dia 22 (Status)
      * @var string
-     * @ORM\Column(name="day22_status",type="integer",nullable=true)
+     * @ORM\Column(name="day22_status",type="integer",length=1,nullable=false)
      */
-    private $day22Status;
+    private $day22Status= 0;
     
     /**
      * Dia 23 (Status)
      * @var string
-     * @ORM\Column(name="day23_status",type="integer",nullable=true)
+     * @ORM\Column(name="day23_status",type="integer",length=1,nullable=false)
      */
-    private $day23Status;
+    private $day23Status= 0;
     
     /**
      * Dia 24 (Status)
      * @var string
-     * @ORM\Column(name="day24_status",type="integer",nullable=true)
+     * @ORM\Column(name="day24_status",type="integer",length=1,nullable=false)
      */
-    private $day24Status;
+    private $day24Status= 0;
     
     /**
      * Dia 25 (Status)
      * @var string
-     * @ORM\Column(name="day25_status",type="integer",nullable=true)
+     * @ORM\Column(name="day25_status",type="integer",length=1,nullable=false)
      */
-    private $day25Status;
+    private $day25Status= 0;
     
     /**
      * Dia 26 (Status)
      * @var string
-     * @ORM\Column(name="day26_status",type="integer",nullable=true)
+     * @ORM\Column(name="day26_status",type="integer",length=1,nullable=false)
      */
-    private $day26Status;
+    private $day26Status= 0;
     
     /**
      * Dia 27 (Status)
      * @var string
-     * @ORM\Column(name="day27_status",type="integer",nullable=true)
+     * @ORM\Column(name="day27_status",type="integer",length=1,nullable=false)
      */
-    private $day27Status;
+    private $day27Status= 0;
     
     /**
      * Dia 28 (Status)
      * @var string
-     * @ORM\Column(name="day28_status",type="integer",nullable=true)
+     * @ORM\Column(name="day28_status",type="integer",length=1,nullable=false)
      */
-    private $day28Status;
+    private $day28Status= 0;
     
     /**
      * Dia 29 (Status)
      * @var string
-     * @ORM\Column(name="day29_status",type="integer",nullable=true)
+     * @ORM\Column(name="day29_status",type="integer",length=1,nullable=false)
      */
-    private $day29Status;
+    private $day29Status= 0;
     
     /**
      * Dia 30 (Status)
      * @var string
-     * @ORM\Column(name="day30_status",type="integer",nullable=true)
+     * @ORM\Column(name="day30_status",type="integer",length=1,nullable=false)
      */
-    private $day30Status;
+    private $day30Status= 0;
     /**
      * Dia 31 (Status)
      * @var string
-     * @ORM\Column(name="day31_status",type="integer",nullable=true)
+     * @ORM\Column(name="day31_status",type="integer",length=1,nullable=false)
      */
-    private $day31Status;
+    private $day31Status= 0;
     
     /**
      * Get id

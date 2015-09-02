@@ -41,7 +41,8 @@ class ProductDetailDailyMonthType extends BaseNotification
                 'attr' => [
                     'cols' => '40',
                     'rows' => '10',
-                    'placeholder' => 'Observaciones...'
+                    'maxlength'=>'255',
+                    'placeholder' => 'Observaciones. (Máximo 255 Caracteres)'
                 ]
             ])
         ;

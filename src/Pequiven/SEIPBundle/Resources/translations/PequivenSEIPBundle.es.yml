@@ -27,6 +27,7 @@ pequiven_seip:
     hours_n: %n% Horas
     details: Detalles
     plants: Plantas
+    plants_groups: Grupos de Plantas
     inventory: Inventario
     date_of_notification: Fecha de notificación
     date_of_report: Fecha de reporte
