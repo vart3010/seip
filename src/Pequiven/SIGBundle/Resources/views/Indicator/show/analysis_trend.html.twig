@@ -6,9 +6,14 @@
 
     <div class="block-title">
         <h3 class="ng-binding">{$ indicator_sig.featuresIndicator.length $} {{ 'sig.trend_analysis'|trans ({}, 'messages') }}</h3>
-        <div class="button-group absolute-right compact">
-            <a class="button icon-list-add " href="" ng-click="loadTemplateAnalysisTrend()" title="">{{ 'pequiven.add'|trans({},'messages') }}&nbsp;</a>
-        </div>
+        {% if trend %}
+            
+        {% else %}
+            <div class="button-group absolute-right compact">
+                <a class="button icon-list-add " href="" ng-click="loadTemplateAnalysisTrend()" title="">{{ 'pequiven.add'|trans({},'messages') }}&nbsp;</a>
+            </div>
+        {% endif %}
+
     </div>
 
     <div class="with-padding">

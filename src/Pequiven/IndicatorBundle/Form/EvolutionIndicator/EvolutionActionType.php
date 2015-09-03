@@ -35,24 +35,24 @@ class EvolutionActionType extends AbstractType
                 'class' => 'Pequiven\SIGBundle\Entity\TypeActionManagementSystem',
                 'property' => 'description',
                 'attr'=> array(
-                'class'=> 'select2 input-large form-control'),
-                               ))
+                'class'=> 'select2 input-large form-control')))
             ->add('dateStart', 'date', array(
                 'label'=>'Fecha de Inicio',
                 'label_attr' => array('class' => 'label'),
-                'attr'=> array('class'=> 'validate[required]' )))
+                'attr'=> array('class'=> '' ),                
+                ))
             ->add('dateEnd', 'date', array(
                 'label'=>'Fecha de Cierre',
                 'label_attr' => array('class' => 'label'),
-                'attr'=> array('class'=> 'validate[required]' )))
-            ->add('advance', 'text', array(
+                'attr'=> array('class'=> '' )))
+            /*->add('advance', 'text', array(
                 'label'=>'Avance %',
                 'label_attr' => array('class' => 'label'),
                 'attr'=> array('class'=> 'input input-large ' )))
             ->add('observations', 'textarea', array(
                 'label'=>'Observaciones',
                 'label_attr' => array('class' => 'label'),
-                'attr'=> array('class'=> 'input input-large ' )))
+                'attr'=> array('class'=> 'input input-large ' )))*/
             ->add('evolutionCause','entity',array(
                 'label' => 'Causa del Plan de Acción',
                 'label_attr' => array('class' => 'label'),
@@ -93,6 +93,6 @@ class EvolutionActionType extends AbstractType
      */
     public function getName()
     {
-        return 'pequiven_indicatorbundle_evolutionindicator_evolutionaction';
+        return 'actionResults';
     }
 }

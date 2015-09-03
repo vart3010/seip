@@ -3501,15 +3501,20 @@ class IndicatorService implements ContainerAwareInterface {
     }
 
     /**
-    *Function que retorna el promedio del indicador
-    *@param indicator $indicator
-    *@return type
-    */
+     * Function que retorna el promedio del indicador
+     * @param indicator $indicator
+     * @return type
+     */
     public function getPromdIndicator(Indicator $indicator){
 
-        $prom = 0;
-        $acum = 0;
+        $result = $acum = $sum = 0;
+        $calc = $indicator->getIndicatorSigMedition();
         $contMonth = 1;
+        //var_dump($calc);
+        //die();
+        if ($calc === null) {
+            $calc = 1;
+        }
 
         //Recibiendo la frecuencia de calculo del indicador
         $labelsFrequencyNotificationArray = $this->getLabelsByIndicatorFrequencyNotification($indicator);
@@ -3521,16 +3526,26 @@ class IndicatorService implements ContainerAwareInterface {
                 //var_dump($data);
                 //die();
                 $contMonth++;
+                $sum  = $sum + $data; 
                 $acum = $acum + $data;
             }
             //Data Prom
             if( $contMonth == 1){
                 $contMonth = 2;            
             }
-            $prom = $acum / ($contMonth - 1); //Calculo de Promedio
-            $value = $prom;
 
+            if($calc === 1){
+
+            $result = $acum / ($contMonth - 1); //Calculo de Promedio
+            $value = ceil($result); //Paso de promedio
+
+            }elseif($calc === 0){
+
+                $value = $sum; //Paso de sumatoria
+
+            }
             return $value;
+        
     }
     
     /**
@@ -3616,7 +3631,9 @@ class IndicatorService implements ContainerAwareInterface {
             //Data 2014            
             $acumLast = $cant = $promLast = 0;
             $indicatorlast = $indicator->getindicatorLastPeriod();
-            if ($indicatorlast) {
+                //var_dump($indicatorlast->getResultReal());
+                //die();
+            /*if ($indicatorlast) {
                 
                 foreach ($indicatorlast->getValuesIndicator() as $value) {
 
@@ -3625,20 +3642,18 @@ class IndicatorService implements ContainerAwareInterface {
                         $cant = $cant + 1;
                 }            
                 //die();
-            }
+            }*/
             
                 if ($indicatorlast === null) {
                     
                     $dataAnt["value"] = 0;//Pasando data a Data2014 si no tiene ralacion
 
-                }if($cant === 0){
-                    
-                    $dataAnt["value"] = 0;//Pasando data a Data2014 si no tiene ralacion
                 }
                 else{
 
-                    $promLast = $acumLast / $cant;                
-                    $dataAnt["value"] = $promLast;//Pasando data a Data2014                
+                    //$promLast = $acumLast / $cant;                
+                    $value = (int)$indicatorlast->getResultReal();
+                    $dataAnt["value"] = $value;//Pasando data a Data2014                
                 }
             //Data 2014
             $dataAnt["color"] = '#f2c500';            
@@ -3650,10 +3665,6 @@ class IndicatorService implements ContainerAwareInterface {
             $dataSetTend["data"][] = array( 'value' => '' );
             $dataSetReal["data"][] = array( 'value' => '' );
                         
-                        //var_dump($indicator->getIndicatorCause()->getId());
-                        //var_dump($indicator->getTendency()->getId());
-                        //die();
-            
             foreach ($indicator->getValuesIndicator() as $value) {
 
                 $dataReal["value"] = $value->getValueOfIndicator();//Carga de valores del indicador

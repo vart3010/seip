@@ -122,9 +122,9 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     private $tmp = false;
 
     /**
-     * @var string
+     * @var integer
      * 
-     * @ORM\Column(name="indicator_sig_medition", type="string", nullable=true)
+     * @ORM\Column(name="indicator_sig_medition", type="integer", nullable=true)
      */
     private $indicatorSigMedition;
 

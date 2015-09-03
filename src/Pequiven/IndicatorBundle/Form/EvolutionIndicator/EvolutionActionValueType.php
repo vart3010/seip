@@ -9,7 +9,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 
-class IndicatorLastPeriodType extends AbstractType
+class EvolutionActionValueType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
@@ -17,18 +17,16 @@ class IndicatorLastPeriodType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder            
-            ->add('indicatorlastPeriod','entity',array(
-                'label' => 'Relación Indicador 2014',
+        $builder
+            ->add('advance', 'text', array(
+                'label'=>'Avance %',
                 'label_attr' => array('class' => 'label'),
-                'class' => 'Pequiven\IndicatorBundle\Entity\Indicator',
-                'property' => 'ref',
-                'attr'=> array(
-                'class'=> 'select2 input-large form-control',
-                //'ng-model' => 'model.lastPeriod',
-                //'ng-options' => 'value as value.ref for (key,value) in data.lastPeriod'
-                ),
-                               ))            
+                'attr'=> array('class'=> 'input input-large ' )))
+            ->add('observations', 'textarea', array(
+                'label'=>'Observaciones',
+                'label_attr' => array('class' => 'label'),
+                'attr'=> array('class'=> 'input input-large ' )))
+            
         ;
     }
     
@@ -38,7 +36,7 @@ class IndicatorLastPeriodType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Pequiven\IndicatorBundle\Entity\Indicator'
+            'data_class' => 'Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionActionValue'
         ));
     }
 
@@ -47,6 +45,6 @@ class IndicatorLastPeriodType extends AbstractType
      */
     public function getName()
     {
-        return 'lastPeriod';
+        return 'actionValue';
     }
 }

@@ -40,12 +40,12 @@
                     <td>{{ action.indicatorAction.ref }}</td>
                     <td>{{ action.dateStart | date("d/m/Y") }}</td>
                     <td>{{ action.dateEnd | date("d/m/Y") }}</td>
-                    <td>{{ action.advance }}</td>
+                    <td>{# {{ action.relactionValue.advance }}#}</td>
                     <td>
                         {{ action.createdBy.firstname }} {{ action.createdBy.lastname }}
                         <small class="tag">({{ action.createdBy.username }})</small>
                     </td>
-                    <td> {{ action.observations }}</td>
+                    <td>{#{{ action.relactionValue.observations }}#}</td>
                         <td class="align-right vertical-center">
                             <span class="select compact">
                                 <a href class="select-value form-edit">{{ 'pequiven.actions'|trans({},'messages') }}</a>

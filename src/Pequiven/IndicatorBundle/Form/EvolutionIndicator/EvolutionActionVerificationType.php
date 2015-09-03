@@ -66,6 +66,6 @@ class EvolutionActionVerificationType extends AbstractType
      */
     public function getName()
     {
-        return 'pequiven_indicatorbundle_evolutionindicator_evolutionactionverification';
+        return 'actionVerification';
     }
 }

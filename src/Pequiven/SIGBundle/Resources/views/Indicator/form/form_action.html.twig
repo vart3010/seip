@@ -6,6 +6,11 @@
     <!--<div ng-controller="TableFormatController">    
       <div ng-controller="IndicatorSigEvolutionController">
      	<div ng-controller="EvolutionIndicatorFilters"> -->
+
+        {% if code %}
+           <input type="hidden" id="complejo" value="{{ code.complejo }}">
+           <input type="hidden" id="gerencia" value="{{ code.gerencia }}">
+        {% endif %}
     
         <form method="POST" id="form_action_evolution">
             <fieldset class="fieldset fields-list" open="">
@@ -34,6 +39,8 @@
                         <!-- Ref -->
                         {# {{ form_label(form) }} #}
                         {{ form_widget(form) }}
+
+                        {{ form_widget(form_value) }}
             </div>
             
             </form>

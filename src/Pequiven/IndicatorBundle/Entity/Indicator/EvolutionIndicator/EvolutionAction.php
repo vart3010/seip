@@ -32,9 +32,16 @@ class EvolutionAction extends Model {
     private $evolutionCause;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="month", type="integer")
+     */
+    private $month;
+
+    /**
      * @var string
      *
-     * @ORM\Column(name="ref" , type="string", length=15)
+     * @ORM\Column(name="ref" , type="string", length=50)
      */
     private $ref;
     /**
@@ -64,20 +71,7 @@ class EvolutionAction extends Model {
      * @ORM\Column(name="dateEnd", type="datetime", nullable=true)
      */
     private $dateEnd;
-    /**
-     * @var integer
-     * 
-     * @ORM\Column(name="advance", type="integer") 
-     */
-    private $advance;
-
-    /**
-     * @var string
-     * 
-     * @ORM\Column(name="observations", type="string", length=255)
-     */
-    private $observations;
-
+    
     /**
      * @var \DateTime
      * @Gedmo\Timestampable(on="create")
@@ -119,6 +113,14 @@ class EvolutionAction extends Model {
      * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionActionVerification",mappedBy="actionPlan",cascade={"persist","remove"})
      */
     protected $verificationRel;
+
+    /**
+     * Valores y Observación de las Acciones
+     * 
+     * @var \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionActionValue
+     * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionActionValue",mappedBy="actionValue",cascade={"persist","remove"})
+     */
+    protected $relactionValue;
 
     /**
      * Constructor
@@ -176,6 +178,24 @@ class EvolutionAction extends Model {
      */
     public function getRef() {
         return $this->ref;
+    }
+
+    /**
+     * 
+     * @param type $month
+     * @return type
+     */
+    public function setMonth($month) {
+        $this->month = $month;
+        return $month;
+    }
+
+    /**
+     * 
+     * @return type
+     */
+    public function getMonth() {
+        return $this->month;
     }
 
     /**
@@ -249,43 +269,6 @@ class EvolutionAction extends Model {
      */
     public function getDateEnd() {
         return $this->dateEnd;
-    }
-
-    /**
-     * 
-     * @param type $advance
-     * @return type
-     */
-    public function setAdvance($advance) {
-        $this->advance = $advance;
-        return $advance;
-    }
-
-    /**
-     * 
-     * @return type
-     */
-    public function getAdvance() {
-        return $this->advance;
-    }
-    
-
-    /**
-     * 
-     * @param type $observations
-     * @return type
-     */
-    public function setObservations($observations) {
-        $this->observations = $observations;
-        return $observations;
-    }
-
-    /**
-     * 
-     * @return type
-     */
-    public function getObservations() {
-        return $this->observations;
     }
 
     /**
@@ -425,5 +408,36 @@ class EvolutionAction extends Model {
     public function getVerificationRel() {
         return $this->verificationRel;
     }
+
+    /**
+     * Add relactionValue
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionActionValue $relactionValue
+     * @return Indicator
+     */
+    public function addRelactionValue(\Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionActionValue $relactionValue) {
+
+        $this->relactionValue->add($relactionValue);
+
+        return $this;
+    }
+
+    /**
+     * Remove relactionValue
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionActionValue $relactionValue
+     */
+    public function removeReclationValue(\Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionActionValue $relactionValue) {
+        $this->relactionValue->removeElement($relactionValue);
+    }
+
+    /**
+     * Get relactionValue
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getRelactionValue() {
+        return $this->relactionValue;
+    } 
     
 }

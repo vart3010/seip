@@ -28,8 +28,8 @@
             </thead>
     {% for  ver_data in verification %}
             <tbody align="center">
-                <tr>
-                    <td>--</td>
+                <tr {{ cycle(["even", "odd"], loop.index) }}>
+                    <td>{{ loop.index }}</td>
                     <th scope="row" style="">
                     {{ ver_data.comment }}          
                     </th>

@@ -7,13 +7,12 @@
 
     <div class="block-title">
         <h3 class="ng-binding">{$ indicator_sig.length $} {{ 'sig.causes_desviation'|trans ({}, 'messages') }}</h3>
-
-        <div class="button-group absolute-right compact">
+        {% if sumCause < 100 %}        
+            <div class="button-group absolute-right compact">
                 <a class="button icon-list-add " href="" ng-click="loadTemplateCausesDesviation()" title="">{{ 'pequiven.add'|trans({},'messages')  }}</a>
             </div>  
-
+        {% endif %}        
     </div>
-
 
     <div class="with-padding">
         {% set colspan = 5 %}
@@ -29,10 +28,11 @@
                         <th scope="col" width="30%" class="hide-on-mobile-portrait header">&nbsp;</th>
                 </tr>
             </thead>
+
         {% for cause_data in cause %}
             <tbody>
-                <tr > 
-                    <td>--</td>
+                <tr {{ cycle(["even", "odd"], loop.index) }}> 
+                    <td>{{ loop.index }}</td>
                     <th scope="row" style="">
                         {{ cause_data.valueofCauses }}
                     </th>
@@ -53,10 +53,12 @@
                                     
                                     <a href ng-click="removeCausesEvolution(cause_data='{{ cause_data.id }}')" 
                                     class="button icon-cross-round">{{ "pequiven.actions.delete"|trans({},"messages") }}</a>
+                                    
+                                    <span class=" button icon-outbox" id="{$ valueIndicator.id $}" onClick="uploadFilePdf(this.id)">{{ "pequiven.actions.upload_file"|trans({},"messages") }}</span>
 
-                                    <span ng-app ng-init="" class=" button icon-download" onClick="o">
+                                    {# <span ng-app ng-init="" class=" button icon-download" onClick="o">
                                     {{ "pequiven.actions.download_file"|trans({},"messages") }}
-                                        </span>
+                                    </span>#}
                                         
                                     </span>
 
@@ -74,7 +76,7 @@
         {% endfor %}
         </table>
                 
-    </div>
-    </div>
+            </div>
+        </div>
     </div>
 </div>

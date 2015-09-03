@@ -35,23 +35,24 @@
 
     function cargaData(){
 
-        var codigo = "C-SIG-";
-        var action = "-01";
-        var cause  = "-02";
+        var guion = "-";
+        var complejo = document.getElementById("complejo").value.toUpperCase();
+        var gerencia = document.getElementById("gerencia").value.toUpperCase();
+        var action = "01";
+        var cause  = "02";
         var mes    = document.getElementById("select1").value;
         
         //Cargado con select
-        document.getElementById("pequiven_indicatorbundle_evolutionindicator_evolutionaction_ref").value = codigo + mes + action + cause;
+        document.getElementById("actionResults_ref").value = complejo + guion + gerencia + guion + mes + guion + action + guion + cause;        
     }
 
     </script>
 
 {% endblock javascripts_base %}
+    
 {% block body %}
 
 {% endblock %}
-
-   
 
 {% block javascripts %}
     

@@ -6,9 +6,12 @@
 
     <div class="block-title">
         <h3 class="ng-binding">{$ indicator_sig.featuresIndicator.length $} {{ 'sig.analysis_causes'|trans ({}, 'messages') }}</h3>
+        {% if analysis %}
+        {% else %}
         <div class="button-group absolute-right compact">
             <a class="button icon-list-add " href="" ng-click="loadTemplateCausesAnalysis()" title="">{{ 'pequiven.add'|trans({},'messages') }}&nbsp;</a>
         </div>
+        {% endif %}
     </div>
 
     <div class="with-padding">
