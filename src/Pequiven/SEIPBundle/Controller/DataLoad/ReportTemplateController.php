@@ -86,8 +86,8 @@ class ReportTemplateController extends SEIPController {
     }
 
     public function showAction(Request $request) {
-        $reportTemplate = $this->getRepository()->findById($request->get("id"));
-        $plantReports = $reportTemplate[0]->getPlantReports();
+        $reportTemplate = $this->getRepository()->find($request->get("id"));
+        $plantReports = $reportTemplate->getPlantReports();
 
         $arrayPlants = array();
         $arrayPlantsGroup = array();
@@ -104,7 +104,13 @@ class ReportTemplateController extends SEIPController {
                 );
             } else if (count($childrens) > 0) { //CON HIJOS
                 $cont = 0;
+                $arrayProductsIds = array();
                 foreach ($childrens as $children) {
+                    foreach ($children->getProducts() as $productChild) {
+                        if (!in_array($productChild->getName(), $arrayProductsIds)) {
+                            $arrayProductsIds[] = $productChild->getName();
+                        }
+                    }
                     if ($cont == 0) {
                         $groupNames .= $children->getName();
                     } else {
@@ -117,15 +123,17 @@ class ReportTemplateController extends SEIPController {
                     "name" => $plantReport->getPlant()->getName(),
                     "groups" => $groupNames,
                     "alias" => $plantReport->getPlant()->getEntity()->getAlias(),
-                    "entity" => $plantReport
+                    "entity" => $plantReport,
+                    "products"=>$arrayProductsIds
                 );
             }
         }
         
+
         $data = array(
-            "report_template" => $reportTemplate[0],
+            "report_template" => $reportTemplate,
             "plants" => $arrayPlants,
-            "plantsGroup" => $arrayPlantsGroup,
+            "plantsGroup" => $arrayPlantsGroup
         );
 
         $view = $this
@@ -207,7 +215,7 @@ class ReportTemplateController extends SEIPController {
         $form = $this->createForm(new \Pequiven\SEIPBundle\Form\DataLoad\Notification\ReportTemplateType($dateNotification, $resource), $resource);
 
         if ($request->isMethod('POST') && $form->submit($request, true)->isValid()) {
-            
+
             $em = $this->getDoctrine()->getManager();
             foreach ($resource->getPlantReports() as $plantReport) {
                 if ($plantReport->getId() !== (int) $plantReportToLoad) {
