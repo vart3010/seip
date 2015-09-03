@@ -98,20 +98,20 @@ class IndicatorController extends ResourceController {
 
         $hasPermissionToUpdate = $isAllowToDelete = $hasPermissionToApproved = false;
 
-        if (!$this->getSecurityService()->isGranted(array('ROLE_SEIP_VIEW_RESULT_BY_LINE_STRATEGIC_SPECIAL'))) {
+//        if (!$this->getSecurityService()->isGranted(array('ROLE_SEIP_VIEW_RESULT_BY_LINE_STRATEGIC_SPECIAL'))) {
 
-            if (isset($roleByLevel[$level])) {
-                $rol = $roleByLevel[$level];
-                $hasPermissionToUpdate = $securityService->isGrantedFull($roleEditDeleteByLevel[$level][0], $resource);
-                $isAllowToDelete = $securityService->isGrantedFull($roleEditDeleteByLevel[$level][1], $resource);
-            }
-
-            $securityService->checkSecurity($rol);
-
-            if (!$securityService->isGranted($rol[1])) {
-                $securityService->checkSecurity($rol[0], $resource);
-            }
+        if (isset($roleByLevel[$level])) {
+            $rol = $roleByLevel[$level];
+            $hasPermissionToUpdate = $securityService->isGrantedFull($roleEditDeleteByLevel[$level][0], $resource);
+            $isAllowToDelete = $securityService->isGrantedFull($roleEditDeleteByLevel[$level][1], $resource);
         }
+
+        $securityService->checkSecurity($rol);
+
+        if (!$securityService->isGranted($rol[1])) {
+            $securityService->checkSecurity($rol[0], $resource);
+        }
+//        }
 
         $errorFormula = null;
 
