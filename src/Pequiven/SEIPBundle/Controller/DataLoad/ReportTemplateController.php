@@ -85,6 +85,59 @@ class ReportTemplateController extends SEIPController {
         return $this->handleView($view);
     }
 
+    public function showAction(Request $request) {
+        $reportTemplate = $this->getRepository()->findById($request->get("id"));
+        $plantReports = $reportTemplate[0]->getPlantReports();
+
+        $arrayPlants = array();
+        $arrayPlantsGroup = array();
+        $groupNames = "";
+        foreach ($plantReports as $plantReport) {
+            $childrens = $plantReport->getPlant()->getChildrens();
+
+            if (count($childrens) == 0) { //SIN HIJOS
+                $arrayPlants[] = array(
+                    "id" => $plantReport->getPlant()->getId(),
+                    "name" => $plantReport->getPlant()->getName(),
+                    "alias" => $plantReport->getPlant()->getEntity()->getAlias(),
+                    "entity" => $plantReport
+                );
+            } else if (count($childrens) > 0) { //CON HIJOS
+                $cont = 0;
+                foreach ($childrens as $children) {
+                    if ($cont == 0) {
+                        $groupNames .= $children->getName();
+                    } else {
+                        $groupNames .= "," . $children->getName();
+                    }
+                    $cont++;
+                }
+                $arrayPlantsGroup[] = array(
+                    "id" => $plantReport->getPlant()->getId(),
+                    "name" => $plantReport->getPlant()->getName(),
+                    "groups" => $groupNames,
+                    "alias" => $plantReport->getPlant()->getEntity()->getAlias(),
+                    "entity" => $plantReport
+                );
+            }
+        }
+        
+        $data = array(
+            "report_template" => $reportTemplate[0],
+            "plants" => $arrayPlants,
+            "plantsGroup" => $arrayPlantsGroup,
+        );
+
+        $view = $this
+                ->view()
+                ->setTemplate($this->config->getTemplate('show.html'))
+                ->setTemplateVar($this->config->getResourceName())
+                ->setData($data)
+        ;
+
+        return $this->handleView($view);
+    }
+
     /**
      * Notificar produccion
      * @param Request $request
@@ -154,6 +207,7 @@ class ReportTemplateController extends SEIPController {
         $form = $this->createForm(new \Pequiven\SEIPBundle\Form\DataLoad\Notification\ReportTemplateType($dateNotification, $resource), $resource);
 
         if ($request->isMethod('POST') && $form->submit($request, true)->isValid()) {
+            
             $em = $this->getDoctrine()->getManager();
             foreach ($resource->getPlantReports() as $plantReport) {
                 if ($plantReport->getId() !== (int) $plantReportToLoad) {
@@ -974,10 +1028,10 @@ class ReportTemplateController extends SEIPController {
 //VERIFICA SI VA A EXPORTAR Y OBVIA LAS OBSERVACIONES VACIAS
                         if ($exportToPdf) {
                             if ($rs["observation"] != "") {
-                                $arrayObservation[] = array("day" => $timeNormal, "productName" => $productReport->getProduct()->getName()." (".$productReport->getPlantReport()->getPlant()->getName().")", "observation" => $rs["observation"]);
+                                $arrayObservation[] = array("day" => $timeNormal, "productName" => $productReport->getProduct()->getName() . " (" . $productReport->getPlantReport()->getPlant()->getName() . ")", "observation" => $rs["observation"]);
                             }
                         } else {
-                            $arrayObservation[] = array("day" => $timeNormal, "productName" => $productReport->getProduct()->getName()." (".$productReport->getPlantReport()->getPlant()->getName().")", "observation" => $rs["observation"]);
+                            $arrayObservation[] = array("day" => $timeNormal, "productName" => $productReport->getProduct()->getName() . " (" . $productReport->getPlantReport()->getPlant()->getName() . ")", "observation" => $rs["observation"]);
                         }
 
 
@@ -1248,7 +1302,7 @@ class ReportTemplateController extends SEIPController {
 
                 //ME TRAIGO LAS OBSERVACIONES 
                 $observations[] = array(
-                    "nameProduct" => $productReport->getProduct()->getName() ." (".$productReport->getPlantReport()->getPlant()->getName().")",
+                    "nameProduct" => $productReport->getProduct()->getName() . " (" . $productReport->getPlantReport()->getPlant()->getName() . ")",
                     "obs" => $summaryDay["observation"]
                 );
 
@@ -1258,11 +1312,11 @@ class ReportTemplateController extends SEIPController {
                     $ejecutionDay = 0;
                 }
                 $summaryProducction["day"][] = array(
-                "nameProduct" => $productReport->getProduct()->getName() . " (" . $productReport->getProduct()->getProductUnit() . ")",
-                "plan" => number_format($summaryDay["plan"], 2, ',', '.'),
-                "real" => number_format($summaryDay["real"], 2, ',', '.'),
-                "ejecution" => number_format($ejecutionDay, 2, ',', '.'),
-                "var" => number_format($var, 2, ',', '.')
+                    "nameProduct" => $productReport->getProduct()->getName() . " (" . $productReport->getProduct()->getProductUnit() . ")",
+                    "plan" => number_format($summaryDay["plan"], 2, ',', '.'),
+                    "real" => number_format($summaryDay["real"], 2, ',', '.'),
+                    "ejecution" => number_format($ejecutionDay, 2, ',', '.'),
+                    "var" => number_format($var, 2, ',', '.')
                 );
 
 
@@ -1278,7 +1332,7 @@ class ReportTemplateController extends SEIPController {
                 } else {
                     $varMonth = $summaryMonth["plan_acumulated"] - $summaryMonth["real_acumulated"];
                 }
-                
+
                 if ($summaryMonth["plan_acumulated"] > 0) {
                     $ejecutionMonth = ($summaryMonth["real_acumulated"] * 100) / $summaryMonth["plan_acumulated"];
                 } else {
@@ -1307,8 +1361,8 @@ class ReportTemplateController extends SEIPController {
                 } else {
                     $varYear = $summaryYear["plan_acumulated"] - $summaryYear["real_acumulated"];
                 }
-                
-                  if ($summaryYear["plan_acumulated"] > 0) {
+
+                if ($summaryYear["plan_acumulated"] > 0) {
                     $ejecutionYear = ($summaryYear["real_acumulated"] * 100) / $summaryYear["plan_acumulated"];
                 } else {
                     $ejecutionYear = 0;
@@ -2246,7 +2300,7 @@ class ReportTemplateController extends SEIPController {
                     if (gettype($cons) == "string") {
                         $activeSheet->setCellValue($cols . $contCol, $cons);
                     } else {
-                        $activeSheet->setCellValue($cols . $contCol, number_format($cons,2,',','.'));
+                        $activeSheet->setCellValue($cols . $contCol, number_format($cons, 2, ',', '.'));
                     }
                     $contCol++;
                 }
@@ -2279,7 +2333,7 @@ class ReportTemplateController extends SEIPController {
                     if (gettype($cons) == "string") {
                         $activeSheet->setCellValue($cols . $contCol, $cons);
                     } else {
-                        $activeSheet->setCellValue($cols . $contCol, number_format($cons,2,',','.'));
+                        $activeSheet->setCellValue($cols . $contCol, number_format($cons, 2, ',', '.'));
                     }
                     $contCol++;
                 }

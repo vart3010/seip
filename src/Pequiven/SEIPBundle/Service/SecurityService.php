@@ -529,10 +529,18 @@ class SecurityService implements ContainerAwareInterface
      */
     private function evaluateIndicatorEdit($rol,  Indicator $indicator)
     {
+        $roleEditByLevel = array(
+            \Pequiven\IndicatorBundle\Entity\IndicatorLevel::LEVEL_ESTRATEGICO => "ROLE_SEIP_INDICATOR_EDIT_STRATEGIC",
+            \Pequiven\IndicatorBundle\Entity\IndicatorLevel::LEVEL_TACTICO => "ROLE_SEIP_INDICATOR_EDIT_TACTIC",
+            \Pequiven\IndicatorBundle\Entity\IndicatorLevel::LEVEL_OPERATIVO => "ROLE_SEIP_INDICATOR_EDIT_OPERATIVE"
+        );
+        
         $result = false;
         if($indicator->getPeriod()->isActive() === true){
-            if($indicator->getStatus() == Indicator::STATUS_DRAFT){
-                $result = true;
+            if($this->isGranted($roleEditDeleteByLevel[$indicator->getIndicatorLevel()->getLevel()])){
+                if($indicator->getStatus() == Indicator::STATUS_DRAFT){
+                    $result = true;
+                }
             }
         }else{
             $result = false;
@@ -548,16 +556,24 @@ class SecurityService implements ContainerAwareInterface
      */
     private function evaluateIndicatorDelete($rol,  Indicator $indicator)
     {
+        $roleDeleteByLevel = array(
+            \Pequiven\IndicatorBundle\Entity\IndicatorLevel::LEVEL_ESTRATEGICO => "ROLE_SEIP_INDICATOR_DELETE_STRATEGIC",
+            \Pequiven\IndicatorBundle\Entity\IndicatorLevel::LEVEL_TACTICO => "ROLE_SEIP_INDICATOR_DELETE_TACTIC",
+            \Pequiven\IndicatorBundle\Entity\IndicatorLevel::LEVEL_OPERATIVO => "ROLE_SEIP_INDICATOR_DELETE_OPERATIVE"
+        );
+        
         $result = false;
         if($indicator->getPeriod()->isActive() === true){
-            if($indicator->getStatus() == Indicator::STATUS_DRAFT){
-                $result = true;
+            if($this->isGranted($roleEditDeleteByLevel[$indicator->getIndicatorLevel()->getLevel()])){
+                if($indicator->getStatus() == Indicator::STATUS_DRAFT){
+                    $result = true;
+                }
             }
         }else{
             $result = false;
         }
         return $result;
-    }    
+    }
 
     /**
      * Evalua que el usuario tenga acceso a la seccion especifica, ademas se valida con un segundo metodo
