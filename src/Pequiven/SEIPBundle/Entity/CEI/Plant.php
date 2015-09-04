@@ -86,6 +86,15 @@ class Plant extends BaseModel {
      * @ORM\JoinTable(name="plants_services")
      */
     private $services;
+    
+     /**
+     * Planta que hace el producto
+     * 
+     * @var \Pequiven\SEIPBundle\Entity\CEI\Plant
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $plant;
 
    
 
