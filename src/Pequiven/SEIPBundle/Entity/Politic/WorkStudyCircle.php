@@ -15,7 +15,7 @@ use Pequiven\SEIPBundle\Entity\PeriodItemInterface;
  * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\Politic\WorkStudyCircleRepository")
  * @ORM\HasLifecycleCallbacks()
  */
-class WorkStudyCircle extends ModelEvaluationDetails implements PeriodItemInterface {
+class WorkStudyCircle extends ModelWorkStudyCircle implements PeriodItemInterface {
 
     /**
      * @var integer
@@ -27,6 +27,43 @@ class WorkStudyCircle extends ModelEvaluationDetails implements PeriodItemInterf
     private $id;
     
     /**
+     * Creado por
+     * @var \Pequiven\SEIPBundle\Entity\User
+     *
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\User")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $createdBy;
+    
+    /**
+     * @var \DateTime
+     * @Gedmo\Timestampable(on="create")
+     * @ORM\Column(name="createdAt", type="datetime")
+     */
+    private $createdAt;
+
+    /**
+     * @var \DateTime
+     * @Gedmo\Timestampable(on="update")
+     * @ORM\Column(name="updatedAt", type="datetime")
+     */
+    private $updatedAt;
+    
+    /**
+     * Referencia del círculo de estudio de trabajo
+     * @var string
+     * @ORM\Column(name="ref",type="string",length=100,nullable=false)
+     */
+    private $ref = null;
+    
+    /**
+     * Nombre del círculo de estudio de trabajo
+     * @var string
+     * @ORM\Column(name="name",type="string",length=100,nullable=false)
+     */
+    private $name = null;
+    
+    /**
      * Periodo.
      * 
      * @var \Pequiven\SEIPBundle\Entity\Period
@@ -34,11 +71,6 @@ class WorkStudyCircle extends ModelEvaluationDetails implements PeriodItemInterf
      * @ORM\JoinColumn(nullable=false)
      */
     private $period;
-    
-    //TODO:
-    //SUM METAS-CANT.METAS-RES.METAS-SUM.PG-CANT.PG-RES.PG-SUM.OBJ-CANT.OBJ-RES.OBJ-RES.FINAL
-    //(PROM METAS + PROM PG) * 60% + (PROM OBJ) * 40%
-    
     
     /**
      * Constructor
@@ -54,6 +86,56 @@ class WorkStudyCircle extends ModelEvaluationDetails implements PeriodItemInterf
      */
     public function getId() {
         return $this->id;
+    }
+    
+    /**
+     * Get CreatedBy
+     * @return type
+     */
+    function getCreatedBy() {
+        return $this->createdBy;
+    }
+
+    /**
+     * Set CreatedBy
+     * @param \Pequiven\SEIPBundle\Entity\User $createdBy
+     * @return \Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle
+     */
+    function setCreatedBy(\Pequiven\SEIPBundle\Entity\User $createdBy) {
+        $this->createdBy = $createdBy;
+        return $this;
+    }
+    
+    /**
+     * Get Ref
+     * @return type
+     */
+    public function getRef() {
+        return $this->ref;
+    }
+    
+    /**
+     * Set Ref
+     * @param type $ref
+     */
+    public function setRef($ref){
+        $this->ref = $ref;
+    }
+    
+    /**
+     * Get Name
+     * @return type
+     */
+    public function getName() {
+        return $this->name;
+    }
+    
+    /**
+     * Set Name
+     * @param type $name
+     */
+    public function setName($name){
+        $this->name = $name;
     }
 
     /**
@@ -75,6 +157,4 @@ class WorkStudyCircle extends ModelEvaluationDetails implements PeriodItemInterf
         $this->period = $period;
     }
 
-
-    
 }
