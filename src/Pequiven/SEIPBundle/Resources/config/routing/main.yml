@@ -56,3 +56,7 @@ pequiven_chart:
 pequiven_data_load:
     resource: "@PequivenSEIPBundle/Resources/config/routing/dataLoad/main.yml"
     prefix:   /data-load
+    
+pequiven_politic_workstudycircle:
+    resource: "@PequivenSEIPBundle/Resources/config/routing/politic/work_study_circle.yml"
+    prefix:   /workstudycircle

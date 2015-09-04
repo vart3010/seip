@@ -1,0 +1,22 @@
+{# empty Twig template #}
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayout.html.twig' %}
+
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
+
+{% block before_body %}
+    {{ contentHeader(
+        ("pequiven_seip.politic.work_study_circle"|trans ),
+        ( 'pequiven.add'|trans({},'messages') )
+    ) }}
+{% endblock %}
+
+{% block body -%}
+    <form method="POST" action="{{ path("pequiven_work_study_circle_create",{reportTemplate:app.request.get("reportTemplate") }) }}">
+       <br /><br />
+       {% include 'PequivenSEIPBundle:Politic/WorkStudyCircle:_form.html.twig' %}
+       {{ actions.create() }}
+       {{ form_rest(form) }}
+   </form>
+{% endblock %}

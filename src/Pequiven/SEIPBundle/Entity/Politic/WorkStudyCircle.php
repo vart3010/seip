@@ -52,7 +52,7 @@ class WorkStudyCircle extends ModelWorkStudyCircle implements PeriodItemInterfac
     /**
      * Referencia del círculo de estudio de trabajo
      * @var string
-     * @ORM\Column(name="ref",type="string",length=100,nullable=false)
+     * @ORM\Column(name="ref",type="string",length=20,nullable=false)
      */
     private $ref = null;
     
@@ -62,6 +62,15 @@ class WorkStudyCircle extends ModelWorkStudyCircle implements PeriodItemInterfac
      * @ORM\Column(name="name",type="string",length=100,nullable=false)
      */
     private $name = null;
+    
+    /**
+     * Region
+     * @var \Pequiven\SEIPBundle\Entity\CEI\Region
+     *
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Region")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $region;
     
     /**
      * Periodo.
@@ -106,6 +115,53 @@ class WorkStudyCircle extends ModelWorkStudyCircle implements PeriodItemInterfac
         return $this;
     }
     
+    
+    /**
+     * Set createdAt
+     *
+     * @param \DateTime $createdAt
+     * @return WorkStudyCircle
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * Get createdAt
+     *
+     * @return \DateTime 
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * Set updatedAt
+     *
+     * @param \DateTime $updatedAt
+     * @return WorkStudyCircle
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get updatedAt
+     *
+     * @return \DateTime 
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+    
     /**
      * Get Ref
      * @return type
@@ -136,6 +192,29 @@ class WorkStudyCircle extends ModelWorkStudyCircle implements PeriodItemInterfac
      */
     public function setName($name){
         $this->name = $name;
+    }
+    
+    /**
+     * Set region
+     *
+     * @param \Pequiven\SEIPBundle\Entity\CEI\Region $region
+     * @return WorkStudyCircle
+     */
+    public function setRegion(\Pequiven\SEIPBundle\Entity\CEI\Region $region)
+    {
+        $this->region = $region;
+
+        return $this;
+    }
+
+    /**
+     * Get region
+     *
+     * @return \Pequiven\SEIPBundle\Entity\CEI\Region 
+     */
+    public function getRegion()
+    {
+        return $this->region;
     }
 
     /**

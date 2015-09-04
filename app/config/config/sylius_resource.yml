@@ -322,3 +322,10 @@ sylius_resource:
             classes:
                 model: Pequiven\MasterBundle\Entity\Formula\Variable
                 repository: Pequiven\MasterBundle\Repository\VariableRepository
+        pequiven.work_study_circle:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:Politic/WorkStudyCircle
+            classes:
+                controller: Pequiven\SEIPBundle\Controller\Politic\WorkStudyCircleController
+                model: Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle
+                repository: Pequiven\SEIPBundle\Repository\Politic\WorkStudyCircleRepository
