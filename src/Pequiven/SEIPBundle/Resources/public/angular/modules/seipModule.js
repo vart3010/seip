@@ -4720,7 +4720,7 @@ angular.module('seipModule.controllers', [])
                         "type": "mscolumnline3d",                        
                         "renderAt": id,
                         "width": "95%",
-                        "height": "45%",
+                        "height": "300%",
                         "dataFormat": "json",
                         "dataSource": {
                             "chart": data.dataSource.chart,
@@ -4740,8 +4740,8 @@ angular.module('seipModule.controllers', [])
                     var revenueChart = new FusionCharts({
                         "type": "stackedbar3d",
                         "renderAt": id,
-                        //"width": "50%",
-                        "height": "25%",
+                        "width": "95%",
+                        "height": "550%",
                         "dataFormat": "json",
                         "dataSource": {
                             "chart": {
@@ -4751,7 +4751,7 @@ angular.module('seipModule.controllers', [])
                                 //"xAxisName": Translator.trans('chart.arrangementPrograms.xAxisName'),
                                 //"pYAxisName": Translator.trans('chart.arrangementPrograms.pYAxisName'),
                                 //"sYAxisName": Translator.trans('chart.arrangementPrograms.sYAxisName'),
-                                //"sYAxisMaxValue": "100",
+                                "YAxisMaxValue": "100",
                                 //"xYAxisMaxValue": "100",
                                 //"pYAxisMaxValue": "100",
                                 //"yYAxisMaxValue": "100",                                

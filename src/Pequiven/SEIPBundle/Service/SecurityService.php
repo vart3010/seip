@@ -537,7 +537,7 @@ class SecurityService implements ContainerAwareInterface
         
         $result = false;
         if($indicator->getPeriod()->isActive() === true){
-            if($this->isGranted($roleEditDeleteByLevel[$indicator->getIndicatorLevel()->getLevel()])){
+            if($this->isGranted($roleEditByLevel[$indicator->getIndicatorLevel()->getLevel()])){
                 if($indicator->getStatus() == Indicator::STATUS_DRAFT){
                     $result = true;
                 }
@@ -564,7 +564,7 @@ class SecurityService implements ContainerAwareInterface
         
         $result = false;
         if($indicator->getPeriod()->isActive() === true){
-            if($this->isGranted($roleEditDeleteByLevel[$indicator->getIndicatorLevel()->getLevel()])){
+            if($this->isGranted($roleDeleteByLevel[$indicator->getIndicatorLevel()->getLevel()])){
                 if($indicator->getStatus() == Indicator::STATUS_DRAFT){
                     $result = true;
                 }

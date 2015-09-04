@@ -4,25 +4,25 @@
 {% trans_default_domain 'PequivenIndicatorBundle' %}
     
     <div ng-controller="TableFormatController">
-    <!-- <div ng-controller="EvolutionIndicatorFilters"> -->
+    <div ng-controller="EvolutionIndicatorFilters"> 
         
         <form method="POST" id="form_asoc_last_period">
             <fieldset class="fieldset fields-list">
                 <legend class="legend">{{ 'sig.relation_indicator'|trans ({}, 'messages') }}</legend>
                 {# {% for child in form.children %} #}
-                    <div class="field-block button-height" >
+                  <div class="field-block button-height" >
                     
                         {{ form_widget(form) }}
                     
                     </div>
                 {#{% endfor %} #}
                 {# #}              
-                    {# <!-- Filter ManagementSystem --> 
-                    {#<div class="field-block button-height" >                                                
+                    {# <!-- Filter ManagementSystem --> #}
+                    {# <div class="field-block button-height" >                                                
                       <label class="bold">{{ 'sig.relation_indicator'|trans ({}, 'messages') }}</label>
                                 <br/>
                             <div class="with-mid-padding">
-                                <select class="select2 input-xlarge form-control" id="selectLastPeriod" ng-model="model.lastPeriod" ng-options="value as value.id for (key,value) in data.lastPeriod" >
+                                <select class="select2 input-xlarge form-control" id="lastPeriod_indicatorlastPeriod" ng-model="model.lastPeriod" ng-options="value as value.ref for (key,value) in data.lastPeriod" >
                                 <option value=''></option>
                                 </select>
                             </div>

@@ -48,6 +48,7 @@ pequiven_indicator:
     save: Guardar
     cancel: Cancelar
     config: Configuración
+    upload_data: Cargar Valores
     type_calculation:
         main: Tipo de cálculo
         formula_manually: Fórmula manual
@@ -255,7 +256,7 @@ seip:
             comments: Comentarios
             verified_by: Veirificado por
             verification: Verificación
-            date: fecha
+            date: Fecha
         empty:
             goals: No Hay Metas Cargadas.
             observations: No Hay Observaciones.

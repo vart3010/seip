@@ -28,7 +28,7 @@ class IndicatorConfigSigType extends AbstractType
                 //'ng-model' => 'model.lastPeriod',
                 //'ng-options' => 'value as value.ref for (key,value) in data.lastPeriod'
                 )))            */
-            ->add('indicatorSigObjetive','text',array(
+            /*->add('indicatorSigObjetive','text',array(
                 'label' => 'Valor Objetivo 2015',
                 'label_attr' => array('class' => 'label'),
                 //'class' => 'Pequiven\IndicatorBundle\Entity\Indicator',
@@ -37,8 +37,8 @@ class IndicatorConfigSigType extends AbstractType
                 'class'=> 'input input-large form-control',
                 //'ng-model' => 'model.lastPeriod',
                 //'ng-options' => 'value as value.ref for (key,value) in data.lastPeriod'
-                )))
-            ->add('indicatorSigTendency','entity',array(
+                )))*/
+            /*->add('indicatorSigTendency','entity',array(
                 'label' => 'Tendencia',
                 'label_attr' => array('class' => 'label'),
                 'class' => 'Pequiven\MasterBundle\Entity\Tendency',
@@ -47,7 +47,7 @@ class IndicatorConfigSigType extends AbstractType
                 'class'=> 'select2 input-large form-control',
                 //'ng-model' => 'model.lastPeriod',
                 //'ng-options' => 'value as value.ref for (key,value) in data.lastPeriod'
-                )))
+                )))*/
         ;
     }
     

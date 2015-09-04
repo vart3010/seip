@@ -277,6 +277,12 @@ sylius_resource:
             classes:
                 model: Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionAction
                 repository: Pequiven\IndicatorBundle\Repository\Indicator\EvolutionIndicator\EvolutionActionRepository
+        #Valor de las Acciones
+        pequiven.sig_action_value_indicator:
+            driver: doctrine/orm
+            classes:
+                model: Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionActionValue
+                repository: Pequiven\IndicatorBundle\Repository\Indicator\EvolutionIndicator\EvolutionActionValueRepository
         #Analisis de la tendencia del indicador
         pequiven.sig_trend_indicator:
             driver: doctrine/orm
@@ -289,7 +295,7 @@ sylius_resource:
             classes:
                 model: Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCauseAnalysis
                 repository: Pequiven\IndicatorBundle\Repository\Indicator\EvolutionIndicator\EvolutionCauseAnalysisRepository
-        #Analisis de las causas de desviación
+        #Verificacion SIG
         pequiven.sig_action_verification:
             driver: doctrine/orm
             classes:

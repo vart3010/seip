@@ -11,7 +11,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Tecnocreaciones\Bundle\ResourceBundle\Controller\ResourceController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Pequiven\IndicatorBundle\Entity\IndicatorLevel;
-use Pequiven\SEIPBundle\Model\Common\CommonObject;
+//use Pequiven\SEIPBundle\Model\Common\CommonObject;
+//use Pequiven\IndicatorBundle\Model\Indicator\EvolutionIndicator\EvolutionActionValue;
 
 use Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCause;
 use Pequiven\IndicatorBundle\Form\EvolutionIndicator\EvolutionCauseType;
@@ -166,34 +167,52 @@ class IndicatorSigController extends ResourceController
             $dataCa = $value->getValueOfCauses();
             $sumCause = $sumCause + $dataCa;
         }
-        //var_dump($sumCause);            
-        //die();
+
         //Carga el analisis de la tendencia
         $trend = $this->get('pequiven.repository.sig_trend_indicator')->findBy(array('indicator' => $indicator, 'month' => $month));
+
         //Carga del analisis de las causas
         $causeAnalysis = $this->get('pequiven.repository.sig_causes_analysis')->findBy(array('indicator'=>$indicator, 'month' => $month));
 
         //Carga de la señalización de la tendencia de la grafica
-        //var_dump($indicator->getIndicatorSigTendency());
-        //die();
-        $tendency = $indicator->getIndicatorSigTendency();
+        //$tendency = $indicator->getIndicatorSigTendency();
+        $tendency = $indicator->getTendency()->getId();
+        
         $font = array();
-        switch ($tendency) {
-                case 0:
-                    $font = null;
-                    break;
-                case 1:
-                    $font = 'long-arrow-up';
-                    break;
-                case 2:
-                    $font = 'long-arrow-down';
-                    break;
-                case 3:
-                    $font = 'long-arrow-right';                    
-                    break;
-        }       
+            switch ($tendency) {
+                    case 0:
+                        $font = [
+                        'icon'=>'',
+                        'text'=>''                    
+                        ];
+                        break;
+                    case 1:
+                        $font = [
+                        'icon' => 'long-arrow-up',
+                        'text' => 'Mejor hacia...'
+                        ];
+                        break;
+                    case 2:
+                        $font = [
+                        'icon' => 'long-arrow-down',
+                        'text' => 'Mejor hacia...'
+                        ];
+                        break;
+                    case 3:
+                        $font = [
+                        'icon' => 'long-arrow-right',
+                        'text' => 'Estable...'
+                        ];                    
+                        break;
+            }       
         //$view = $this->view();
         //$view->getSerializationContext()->setGroups(array('id','api_list'));  
+            
+
+            $dataAction = [
+                'action' => $data["action"],
+                'values' => $data["actionValue"] 
+            ];
 
         $view = $this
             ->view()
@@ -204,7 +223,9 @@ class IndicatorSigController extends ResourceController
                 'dataCause'                      => $dataCause,
                 'sumCause'                       => $sumCause,
                 'cause'                          => $results,
-                'data_action'                    => $data["action"],
+                //'data_action'                    => $data["action"],
+                //'values'                         => $data["actionValue"],
+                'dataAction'                     => $dataAction,
                 'analysis'                       => $causeAnalysis,
                 'trend'                          => $trend,
                 'font'                           => $font,
@@ -250,9 +271,7 @@ class IndicatorSigController extends ResourceController
     public function addLastPeriodAction(Request $request)
     {   
         $idIndicator = $request->get('idIndicator');
-        //var_dump($request->get('lastPeriod')['indicatorlastPeriod']);
-        //var_dump($request);
-        
+
         $lastPeriod = $request->get('lastPeriod')['indicatorlastPeriod'];
 
         $em = $this->getDoctrine()->getManager();
@@ -296,10 +315,15 @@ class IndicatorSigController extends ResourceController
             $gerencia = $value->getGerencia()->getAbbreviation();
 
         }
-        
+
+        //$action = $data["cant"];
+        //var_dump($data["cant"]);
+        //die();
+
         $codifigication = [
             'complejo' => strtoupper($complejo),
-            'gerencia' => strtoupper($gerencia)
+            'gerencia' => strtoupper($gerencia),
+            'cant'     => $data["cant"]
         ];
         //var_dump($codifigication);
         //die();       
@@ -353,7 +377,6 @@ class IndicatorSigController extends ResourceController
         $dEnd   = $dateEnd["month"];
         //var_dump($dStart);
         $count = 0; $data = (int)$dStart;
-        //for ($i=$dStart; $i <= $dEnd; $i++) { 
             //var_dump($data);
             $action = new EvolutionAction();
             $form  = $this->createForm(new EvolutionActionType(), $action);
@@ -363,8 +386,6 @@ class IndicatorSigController extends ResourceController
             $action->setMonth($data);//Carga de Mes(var month)
             //$action->setAdvance($advance);
 
-            //$count = $count + 1;
-          //  $data = $dStart + $count;
 
             $form->handleRequest($request);
 
@@ -376,21 +397,28 @@ class IndicatorSigController extends ResourceController
     
             $idAction = $action->getId();               
             if ($idAction) {
-                $action = $this->get('pequiven.repository.sig_action_indicator')->find($idAction);
+                for ($i=$dStart; $i <= $dEnd; $i++) { 
+                
+                        $action = $this->get('pequiven.repository.sig_action_indicator')->find($idAction);
 
-                $relactionValue = new EvolutionActionValue();
+                        $relactionValue = new EvolutionActionValue();
 
-                $relactionValue->setAdvance($AcValue);
-                $relactionValue->setObservations($AcObservation);
-                $relactionValue->setMonth($data);
-                $relactionValue->setActionValue($action);
+                        $relactionValue->setAdvance($AcValue);
+                        $relactionValue->setObservations($AcObservation);
+                        $relactionValue->setMonth($data);
+                        $relactionValue->setActionValue($action);
 
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($relactionValue);
-                $em->flush();
+                        $em = $this->getDoctrine()->getManager();
+                        $em->persist($relactionValue);
+                        $em->flush();
+
+                    $count = $count + 1;
+                    $data = $dStart + $count;
+                    $AcObservation = null;
+                    $AcValue = 0;
+                }
             }
 
-          //  $advance = 0;
         //}
 
     }
@@ -606,7 +634,7 @@ class IndicatorSigController extends ResourceController
         }    
 
         
-        if($actionVer){//Si existe la acción cambio le cambio el status segun sea el caso
+        if($actionVer){//Si existe la acción le cambio el status segun sea el caso
 
             $actionVer->setStatus($statusAction);
             $em->flush();  
@@ -653,8 +681,8 @@ class IndicatorSigController extends ResourceController
         //var_dump($request);
         //die();
         $medition = $request->get('configSig')['indicatorSigMedition'];
-        $objetive = $request->get('configSig')['indicatorSigObjetive'];
-        $tendency = $request->get('configSig')['indicatorSigTendency'];
+        //$objetive = $request->get('configSig')['indicatorSigObjetive'];
+        //$tendency = $request->get('configSig')['indicatorSigTendency'];
 
         $em = $this->getDoctrine()->getManager();
 
@@ -667,15 +695,11 @@ class IndicatorSigController extends ResourceController
             }*/
         
         $indicatorConfig->setIndicatorSigMedition($medition);
-        $indicatorConfig->setIndicatorSigObjetive($objetive);
-        $indicatorConfig->setIndicatorSigTendency($tendency);
+        //$indicatorConfig->setIndicatorSigObjetive($objetive);
+        //$indicatorConfig->setIndicatorSigTendency($tendency);
 
-        //$form->handleRequest($request);
-
-        //if ($form->isSubmitted() && $form->isValid()) {
-            $em->flush();
-            //return $this->redirect($this->generateUrl('pequiven_indicator_evolution',$idIndicator));
-        //}                            
+        $em->flush();//Carga de Datos a DB
+                                       
     }
 
     /**
@@ -684,10 +708,7 @@ class IndicatorSigController extends ResourceController
      */
     function getCausesEvolutionAction(\Symfony\Component\HttpFoundation\Request $request) {
         
-        $idIndicator = $request->get('idIndicator');
-        //echo "indicador"; var_dump($idIndicator);
-        //die();
-        //$idIndicator = $request->get('id');
+        $idIndicator = $request->get('idIndicator');//Recibiendo indicator
        
         $results = $this->get('pequiven.repository.sig_causes_indicator')->findBy(array( 'indicator' => $idIndicator));
         
@@ -716,7 +737,8 @@ class IndicatorSigController extends ResourceController
         $monthActual = date("m");
         //Mes Consultado       
         $month = $request->get('month'); 
-
+        //Carga de variable base
+        $opc = false; $idAction = $actionResult = 0; $idCons = [0];
         //$results = $this->get('pequiven.repository.sig_causes_indicator')->findBy(array('indicator' => $idIndicator,'month'=> $month));
         $results = $this->get('pequiven.repository.sig_causes_indicator')->findBy(array('indicator' => $idIndicator));
   
@@ -737,7 +759,7 @@ class IndicatorSigController extends ResourceController
                 $cause[] = $idCause;
             }
 
-            $action = $this->get('pequiven.repository.sig_action_indicator')->findBy(array('evolutionCause' => $cause, 'month' => $month));
+            $action = $this->get('pequiven.repository.sig_action_indicator')->findBy(array('evolutionCause' => $cause));
              
         }        
         
@@ -749,11 +771,37 @@ class IndicatorSigController extends ResourceController
         if($action){
          
             foreach ($action as $value) {
-                $idAction[] = $value->getId();
-            }
-        }    
+                //$idAction[] = $value->getId();
+                $relation = $value->getRelactionValue();
+                    //var_dump(count($relation));
+                    foreach ($relation as $value) {
+                            
+                            $monthAction = $value->getMonth();
+                            $monthGet = (int)$month;
 
-        if(!$action){
+                        if ($monthAction === $monthGet) {
+                            //var_dump(count($value->getId()));
+                            $idAction = $value->getActionValue()->getId();
+                            $idCons[] = $idAction;
+                            //var_dump($value->getActionValue()->getId());
+                            //$actionResult = $this->get('pequiven.repository.sig_action_indicator')->findBy(array('id' => $idAction));
+                            
+                        }            
+                    }
+            }
+            $actionResult = $this->get('pequiven.repository.sig_action_indicator')->findBy(array('id' => $idCons));
+            //var_dump($idCons);
+            //die();
+        }  
+
+        $actionsValues = EvolutionActionValue::getActionValues($idCons, $month);  
+        
+        $cant = count($actionResult);
+        //var_dump($cant);
+        //var_dump(count($actionResult));
+        //die();
+
+        if($opc = false){
             $idAction = null;
         } 
         $verification = $this->get('pequiven.repository.sig_action_verification')->findByactionPlan($idAction);
@@ -761,9 +809,11 @@ class IndicatorSigController extends ResourceController
         //Carga de array con la data
         $data = [
 
-            'action'        => $action, //Pasando la data de las acciones si las hay
+            'action'        => $actionResult, //Pasando la data de las acciones si las hay
             'verification'  => $verification, //Pasando la data de las verificaciones
             //'results'     => $results //Pasando la data de las causas si las hay
+            'actionValue'   => $actionsValues,
+            'cant'          => $cant
 
         ];
 

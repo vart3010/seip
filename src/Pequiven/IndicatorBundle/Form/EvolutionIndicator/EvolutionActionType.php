@@ -59,7 +59,8 @@ class EvolutionActionType extends AbstractType
                 'class' => 'Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCause',
                 'property' => 'causes',
                 'attr'=> array(
-                'class'=> 'select2 input-large form-control',
+                'class'   => 'select2 input-large form-control',
+                'onclick' => 'cargaData()'
                 //'ng-model' => 'model.lastPeriod',
                 //'ng-options' => 'value as value.ref for (key,value) in data.lastPeriod'
                 ),

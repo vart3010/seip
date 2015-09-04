@@ -3576,8 +3576,7 @@ class IndicatorService implements ContainerAwareInterface {
         $chart["rotateValues"] = "0";
         $chart["bgAlpha"] = "0,0";
         $chart["theme"] = "fint";
-        //$chart["sYAxisMaxValue"] = "150";
-        //$chart["pYAxisMaxValue"] = "150";
+        $chart["YAxisMaxValue"] = "150";
         $chart["showborder"] = "0";
         $chart["decimals"] = "0";
 
@@ -3675,7 +3674,7 @@ class IndicatorService implements ContainerAwareInterface {
 
             //Carga de meta Objetivo2015
             //foreach ($indicator->getObjetives() as $value) {
-            $dataValueObjetive = $indicator->getIndicatorSigObjetive();//Carga valor Objetivo 2015
+            $dataValueObjetive = $indicator->getGoal();//Carga valor Objetivo 2015
             //}
             if ($dataValueObjetive == NULL ) {
                 $dataValueObjetive = 0;
@@ -3684,8 +3683,8 @@ class IndicatorService implements ContainerAwareInterface {
             $dataSetLine["data"][] = array( 'value' => '' );//Valor vacio para saltar 2014
             for ($i=0; $i < $contCant; $i++) { 
             
-            $dataLine["value"] = $dataValueObjetive;//Carga de valores           
-            $dataSetLine["data"][] = $dataLine;//Data del Objetivo 2015
+                $dataLine["value"] = $dataValueObjetive;//Carga de valores           
+                $dataSetLine["data"][] = $dataLine;//Data del Objetivo 2015
             
             }
             //Paso de la data ya formateada

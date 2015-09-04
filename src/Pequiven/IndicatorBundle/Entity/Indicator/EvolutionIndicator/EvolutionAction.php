@@ -128,6 +128,7 @@ class EvolutionAction extends Model {
     public function __construct()
     {
         $this->verificationRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->relactionValue = new \Doctrine\Common\Collections\ArrayCollection();
 
     }
     

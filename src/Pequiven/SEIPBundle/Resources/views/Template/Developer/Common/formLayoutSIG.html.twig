@@ -38,10 +38,10 @@
         var guion = "-";
         var complejo = document.getElementById("complejo").value.toUpperCase();
         var gerencia = document.getElementById("gerencia").value.toUpperCase();
-        var action = "01";
-        var cause  = "02";
+        var action = document.getElementById("cant").value;
+        var cause  = document.getElementById("actionResults_evolutionCause").value;
         var mes    = document.getElementById("select1").value;
-        
+       
         //Cargado con select
         document.getElementById("actionResults_ref").value = complejo + guion + gerencia + guion + mes + guion + action + guion + cause;        
     }

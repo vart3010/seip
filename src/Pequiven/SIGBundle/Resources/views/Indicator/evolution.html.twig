@@ -55,13 +55,11 @@
 
         {# Graficos #}
         <div class="columns with-padding"> 
-            {# <div class="five-columns twelve-columns-mobile">#}
-            <div ng-controller="ChartsSigController" class="dashboard" ng-init="renderChartEvolutionSig('chartContainerResult', {{ data|json_encode() }})" style="width: 95%;" align="center">
+            <div ng-controller="ChartsSigController" class="dashboard_sig" ng-init="renderChartEvolutionSig('chartContainerResult', {{ data|json_encode() }})" style="width: 95%;" align="center">
                     {# señalización tendencia #}
                 <div class="position">
-                    {#{{ dump(font) }}#}
-                        Mejor Hacia...
-                        <i class="fa fa-{{ font }} fa-2x position"> &nbsp;</i>
+                        {{ font["text"]}}
+                        <i class="fa fa-{{ font["icon"] }} fa-2x position"> &nbsp;</i>
                 </div>
 
                 <div class="nine-columns twelve-columns-mobile" id="chartContainerResult">
@@ -82,10 +80,7 @@
             &nbsp; 
 
         <div class="columns with-padding">         
-            {# Fin Grafico#}  
-            {# <div class="five-columns twelve-columns-mobile">
-                {# Cargando Grafico Causas de Desviación #}
-                 <div ng-controller="ChartsSigController" class="dashboard" ng-init="renderChartSigCs('chartContainerResultCs', {{ dataCause|json_encode() }})" style="width: 95%;" align="center">
+                <div ng-controller="ChartsSigController" class="dashboard_sig" ng-init="renderChartSigCs('chartContainerResultCs', {{ dataCause|json_encode() }})" style="width: 95%;" align="center">
                         <div class="nine-columns twelve-columns-mobile" id="chartContainerResultCs">
                             <!-- This div will hold the chart generated in the footer -->
                         </div>
@@ -106,12 +101,11 @@
             <br /><br />
             {% include 'PequivenSIGBundle:Indicator:show/action.html.twig' %}
             &nbsp;
-        {% if data_action %}
+        {#{% if data_action %}#}
 
             {% include 'PequivenSIGBundle:Indicator:show/verification.html.twig' %}            
-        {% endif %}
-        
-        &nbsp;
+        {#{% endif %}#}        
+            &nbsp;
 
     <p>
         
@@ -135,8 +129,9 @@
 {% endblock body %}
 
 {% block stylesheets %}
-    {#{{ parent() }}
-     <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/agenda3860.css?v=1') }}">
+  {{ parent() }}
+     {# <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/agenda3860.css?v=1') }}">
+
     <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/dashboard3860.css?v=1') }}"> #}
 
 <style type="text/css">
@@ -160,6 +155,20 @@
         float: right;
         /*font-size: 150%;*/
     }
+
+    /* dashboard sig */
+    .dashboard_sig {
+        padding: 20px;
+        position: relative;
+        zoom: 1;
+        color: white;
+        border-top: 1px solid #666666;
+        border-bottom: 1px solid #666666;
+        border-color: #000000;
+    }
+    .dashboard_sig a {
+        color: white;
+    }    
 
 </style>
 

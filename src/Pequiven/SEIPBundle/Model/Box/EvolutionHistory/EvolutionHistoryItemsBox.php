@@ -14,6 +14,32 @@ class EvolutionHistoryItemsBox extends \Tecnocreaciones\Bundle\BoxBundle\Model\G
     }
 
     public function getParameters() {
+
+        $month = date("m");//Carga del mes de Creación de la causa "Automatico"
+        $mesData = date("F");//Data mes
+        
+        $labelMonth = $this->getMonths();
+
+        $count = 1;
+        
+        for ($i=0; $i < $month; $i++) { 
+              //var_dump($count);
+              $setMonth[] = $count;
+              $count = $count + 1;
+          }  
+        //var_dump($setMonth);
+
+        $indicator = 1736;
+        $listMonth = $setMonth;
+        $boxmonth =  $month;
+        //var_dump($listMonth);
+
+        return array(
+            'Box_indicator' => $indicator,
+            'Box_month'     => $boxmonth,
+            'listMonth'     => $listMonth,
+            'labelsMonths'  => $labelMonth
+            );
         
     }
 
@@ -26,12 +52,29 @@ class EvolutionHistoryItemsBox extends \Tecnocreaciones\Bundle\BoxBundle\Model\G
     }
 
     public function getTemplateName() {
+
+        
         return 'PequivenSIGBundle:Template:Box\EvolutionHistory.html.twig';
     }
 
-    public function getAreasNotPermitted() {
-        return array(
+    public function getMonths() {
+        
+        $labelsMonths = array(
+            1 => 'Enero',
+            2 => 'Febrero',
+            3 => 'Marzo',
+            4 => 'Abril',
+            5 => 'Mayo',
+            6 => 'Junio',
+            7 => 'Julio',
+            8 => 'Agosto',
+            9 => 'Septiembre',
+            10 => 'Octubre',
+            11 => 'Noviembre',
+            12 => 'Diciembre'
         );
+        
+        return $labelsMonths;
     }
 
     /**
