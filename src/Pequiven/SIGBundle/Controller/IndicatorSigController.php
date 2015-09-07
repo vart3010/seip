@@ -325,6 +325,10 @@ class IndicatorSigController extends ResourceController
             'gerencia' => strtoupper($gerencia),
             'cant'     => $data["cant"]
         ];
+
+        $config = [
+            'id' => 'form_action_evolution'
+        ];
         //var_dump($codifigication);
         //die();       
         
@@ -338,9 +342,49 @@ class IndicatorSigController extends ResourceController
             ->setTemplateVar($this->config->getPluralResourceName())
             ->setData(array(
                 'indicator'     => $indicator,
+                'config'        => $config,
                 'code'          => $codifigication,
                 'form_value'    => $form_value->createView(),
                 'form'          => $form->createView(),
+            ))
+        ;
+        $view->getSerializationContext()->setGroups(array('id','api_list'));
+        return $view;
+    }
+
+    /**
+     * Retorna el formulario del plan de acción
+     * 
+     * @param Request $request
+     * @return type
+     */
+    function getFormPlanAddAction(Request $request)
+    {
+        $indicator = $this->findIndicatorOr404($request); 
+
+        $user = $this->getUser();//Carga de usuario
+
+        $data = $this->findEvolutionCause($request);//Carga la data de las causas y sus acciones relacionadas
+        
+        //$cause = new EvolutionAction();
+        //$form  = $this->createForm(new EvolutionActionType());
+        $form_value  = $this->createForm(new EvolutionActionValueType());
+        $codifigication = $form = 0;
+        
+        $config = [
+            'id' => 'form_action_values_evolution'
+        ];
+        
+        $view = $this
+            ->view()
+            ->setTemplate($this->config->getTemplate('form/form_action.html'))
+            ->setTemplateVar($this->config->getPluralResourceName())
+            ->setData(array(
+                'indicator'     => $indicator,
+                'code'          => $codifigication,
+                'config'        => $config,
+                'form_value'    => $form_value->createView(),
+                'form'          => $form
             ))
         ;
         $view->getSerializationContext()->setGroups(array('id','api_list'));
@@ -364,9 +408,6 @@ class IndicatorSigController extends ResourceController
         $month = date("m");//Carga del mes de Creación de la causa "Automatico"  
 
         $causeResult = $this->get('pequiven.repository.sig_causes_indicator')->find($causeAction);
-        
-        //var_dump($request);
-        //die();
         
         //Calculando la cantidad de meses que durara la acción
         $dateStart = $request->get('actionResults')['dateStart'];
@@ -420,6 +461,32 @@ class IndicatorSigController extends ResourceController
             }
 
         //}
+
+    }
+
+    /**
+     * Añade el Plan de Acción
+     * 
+     * @param Request $request
+     * @return type
+     */
+    public function addValuesAction(Request $request)
+    {    
+        $idAction = $request->get('idAction'); //Recibiendo de $request el id del valor
+
+        //Recibiendo de formulario
+        $AcValue = $request->get('actionValue')['advance'];//RecibiendoValue
+        $AcObservation = $request->get('actionValue')['observations'];//RecibiendoObservations
+        
+        //Consultando valores
+        $actionResults = $this->get('pequiven.repository.sig_action_value_indicator')->find($idAction);
+        
+        $actionResults->setAdvance($AcValue);
+        $actionResults->setObservations($AcObservation);
+
+                $em = $this->getDoctrine()->getManager();
+                $em->flush();
+
 
     }
 

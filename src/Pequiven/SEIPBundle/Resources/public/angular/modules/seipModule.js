@@ -1442,6 +1442,22 @@ angular.module('seipModule.controllers', [])
                     $scope.openModalAuto();
                 }
             };
+            //Carga del formulario para actualizar los resultados
+            $scope.loadTemplateActionAdd = function (resource) {
+                $scope.initFormAction(resource);
+                if (isInit == false) {
+                    isInit = true;
+                }
+                $scope.templateOptions.setTemplate($scope.templates[0]);
+                $scope.templateOptions.setParameterCallBack(resource);
+                //$scope.templateOptions.setVar('evaluationResult', 0);
+                if (resource) {
+                    $scope.templateOptions.enableModeEdit();
+                    $scope.openModalAuto();
+                } else {
+                    $scope.openModalAuto();
+                }
+            };
             //Carga el formulario de las Causas de Desviacion
             $scope.loadTemplateCausesDesviation = function (resource) {
                 $scope.initFormCausesAdd(resource);
@@ -1538,6 +1554,46 @@ angular.module('seipModule.controllers', [])
                     return false;
                 });
             };
+            //Añadir El Plan de Accion de la desviación
+            var addActionValues = function (save, successCallBack) {
+                var formValueIndicator = angular.element('#form_action_values_evolution');
+                var formData = formValueIndicator.serialize();
+                
+                if (save == undefined) {
+                    var save = false;
+                }
+                if (save == true) {
+                    var url = Routing.generate('pequiven_action_values_evolution_add', {idIndicator: $scope.id_indicator, idAction: $scope.idAction });
+                } 
+                notificationBarService.getLoadStatus().loading();
+                return $http({
+                    method: 'POST',
+                    url: url,
+                    data: formData,
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'}  // set the headers so angular passing info as form data (not request payload)
+                }).success(function (data) {
+                    $scope.templateOptions.setVar("form", {errors: {}});
+                    //$scope.templateOptions.setVar('evaluationResult', data.result);
+                    if (successCallBack) {
+                        successCallBack(data);
+                    }
+                    notificationBarService.getLoadStatus().done();
+                    return true;
+                }).error(function (data, status, headers, config) {
+                    $scope.templateOptions.setVar("form", {errors: {}});
+                    if (data.errors) {
+                        if (data.errors.errors) {
+                            $.each(data.errors.errors, function (index, value) {
+                                notifyService.error(Translator.trans(value));
+                            });
+                        }
+                        $scope.templateOptions.setVar("form", {errors: data.errors.children});
+                    }
+                    //$scope.templateOptions.setVar('evaluationResult', 0);
+                    notificationBarService.getLoadStatus().done();
+                    return false;
+                });
+            };
             //añade el analisis de la tendencia del indicador
             var addTrendEvolution = function (save, successCallBack) {
                 var formValueIndicator = angular.element('#form_trend_evolution');
@@ -1580,6 +1636,7 @@ angular.module('seipModule.controllers', [])
             };
             $scope.templateOptions.setVar('addCause', addCause);
             $scope.templateOptions.setVar('addAction', addAction);
+            $scope.templateOptions.setVar('addActionValues', addActionValues);
             $scope.templateOptions.setVar('addTrendEvolution', addTrendEvolution);
             //$scope.templateOptions.setVar('evaluationResult', 0);
             var confirmCallBack = function () {
@@ -1587,6 +1644,9 @@ angular.module('seipModule.controllers', [])
                     $scope.indicator = data.indicator;
                 });
                 addAction(true, function (data) {
+                    $scope.indicator = data.indicator;
+                });
+                addActionValues(true, function (data) {
                     $scope.indicator = data.indicator;
                 });
                 addTrendEvolution(true, function (data) {
@@ -1638,6 +1698,28 @@ angular.module('seipModule.controllers', [])
                 ];
                 $scope.templateOptions.setTemplate($scope.templates[0]);
             };
+            //Carga del fomrulario de la actualizacion de las acciones
+            $scope.initFormAction = function (resource) {
+                var d = new Date();
+                var numero = d.getTime();
+
+                var parameters = {
+                    idIndicator: $scope.id_indicator,
+                    _dc: numero
+                };
+                if (resource) {
+                    parameters.id = resource.id;
+                }
+                var url = Routing.generate('pequiven_indicator_action_add_get_form', parameters);
+                $scope.templates = [
+                    {
+                        name: 'Carga de Avance y Observaciones',
+                        url: url,
+                        confirmCallBack: confirmCallBack,
+                    }
+                ];
+                $scope.templateOptions.setTemplate($scope.templates[0]);
+            };
             //Formulario Cause
             $scope.initFormCausesAdd = function (resource) {
                 //var idIni = angular.element('#idIdnicator');
@@ -1664,30 +1746,6 @@ angular.module('seipModule.controllers', [])
                     }
                 ];
                 $scope.templateOptions.setTemplate($scope.templates[0]);
-            };
-            $scope.getUrlForValueIndicator = function (valueIndicator, numResult)
-            {
-                var url = Routing.generate('pequiven_value_indicator_show_detail', {id: valueIndicator.id, numResult: (numResult + 1)});
-                return url;
-            };
-            $scope.openPopUp = function (url) {
-                var horizontalPadding = 10;
-                var verticalPadding = 10;
-                var width = 1200;
-                var heigth = 600;
-                $('<iframe id="site" src="' + url + '" style="padding:0"/>').dialog({
-                    title: 'SEIP',
-                    autoOpen: true,
-                    width: width,
-                    height: heigth,
-                    modal: true,
-                    resizable: true,
-                    autoResize: true,
-                    overlay: {
-                        opacity: 0.5,
-                        background: "black"
-                    }
-                }).width(width - horizontalPadding).height(heigth - verticalPadding);
             };
             //Removiendo las causas
             $scope.removeCausesEvolution = function (causesEvolution) {

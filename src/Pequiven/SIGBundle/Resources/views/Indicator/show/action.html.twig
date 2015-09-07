@@ -72,7 +72,7 @@
                                 <span class="drop-down">
                                     <a href ng-click="removeFeatureIndicator(featureIndicator)" class="button icon-cross-round">{{ "pequiven.actions.delete"|trans({},"messages") }}</a>
                                 {% if action.advance == 0 %}
-                                    <span class=" button icon-pencil" id="{$ valueIndicator.id $}" onClick="uploadFilePdf(this.id)">{{ "pequiven_indicator.upload_data"|trans({},"PequivenSIGBundle") }}</span>
+                                    <a href ng-click="loadTemplateActionAdd(idAction='{{ action.id }}')" class="button icon-pencil">{{ "pequiven_indicator.upload_data"|trans({},"PequivenSIGBundle") }}</a>
                                 {% endif %}
                                 </span>
                             </span>

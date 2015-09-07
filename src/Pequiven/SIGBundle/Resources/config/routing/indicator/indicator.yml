@@ -20,6 +20,17 @@ pequiven_indicatoraction_get_form:
     methods: [GET]
     options:
         expose: true
+#carga de formulario plan de acción añdir los resultados 0
+pequiven_indicator_action_add_get_form:
+    path: /{idIndicator}/get-form_add.{_format}
+    defaults:
+        _controller: pequiven.controller.indicator_sig:getFormPlanAddAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET]
+    options:
+        expose: true
 #Carga de formulario de causas de evolution
 pequiven_indicatorcauses_get_form:
     path: /{idIndicator}/get-form_causes.{_format}
@@ -102,6 +113,17 @@ pequiven_action_evolution_add:
     path: /{idIndicator}/add.{_format}
     defaults:
         _controller: pequiven.controller.indicator_sig:addAction
+        _format: json
+    requirements:
+        _format: json
+    methods: [POST]
+    options:
+        expose: true
+#Guardamos el formulario de los valores del plan de acción indicador
+pequiven_action_values_evolution_add:
+    path: /{idIndicator}/add_values.{_format}
+    defaults:
+        _controller: pequiven.controller.indicator_sig:addValuesAction
         _format: json
     requirements:
         _format: json

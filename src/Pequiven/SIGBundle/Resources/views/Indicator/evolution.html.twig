@@ -101,10 +101,10 @@
             <br /><br />
             {% include 'PequivenSIGBundle:Indicator:show/action.html.twig' %}
             &nbsp;
-        {#{% if data_action %}#}
+        {% if dataAction["values"] %}
 
             {% include 'PequivenSIGBundle:Indicator:show/verification.html.twig' %}            
-        {#{% endif %}#}        
+        {% endif %}        
             &nbsp;
 
     <p>
