@@ -22,8 +22,8 @@ use Pequiven\MasterBundle\Model\Base\ModelBaseMaster;
  * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\DataLoad\PlantReportRepository")
  * @ORM\HasLifecycleCallbacks()
  */
-class PlantReport extends ModelBaseMaster {
-
+class PlantReport extends ModelBaseMaster
+{
     /**
      * @var integer
      *
@@ -32,7 +32,7 @@ class PlantReport extends ModelBaseMaster {
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-
+    
     /**
      * Reporte de plantilla
      * @var ReportTemplate
@@ -40,7 +40,7 @@ class PlantReport extends ModelBaseMaster {
      * @ORM\JoinColumn(nullable=false)
      */
     private $reportTemplate;
-
+    
     /**
      * Empresa
      * @var \Pequiven\SEIPBundle\Entity\CEI\Company
@@ -49,7 +49,7 @@ class PlantReport extends ModelBaseMaster {
      * @ORM\JoinColumn(nullable=false)
      */
     private $company;
-
+    
     /**
      * Localizacion (complejo).
      * @var \Pequiven\SEIPBundle\Entity\CEI\Location
@@ -58,7 +58,7 @@ class PlantReport extends ModelBaseMaster {
      * @ORM\JoinColumn(nullable=false)
      */
     private $location;
-
+    
     /**
      * Entidad donde esta el producto
      * 
@@ -66,15 +66,15 @@ class PlantReport extends ModelBaseMaster {
      * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Entity")
      */
     private $entity;
-
+    
     /**
      * Planta que hace el producto
      * 
      * @var \Pequiven\SEIPBundle\Entity\CEI\Plant
-     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Plant",inversedBy="plantReport")
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Plant")
      * @ORM\JoinColumn(nullable=false)
      */
-    //private $plant;
+    private $plant;
 
     /**
      * Productos del reporte
@@ -82,35 +82,35 @@ class PlantReport extends ModelBaseMaster {
      * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\ProductReport",mappedBy="plantReport",cascade={"remove"})
      */
     private $productsReport;
-
+    
     /**
      * Planificacion de paradas
      * @var Plant\PlantStopPlanning
      * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Plant\PlantStopPlanning",mappedBy="plantReport",cascade={"remove"})
      */
     private $plantStopPlannings;
-
+    
     /**
      * Planificacion de consumo de servicios
      * @var Service\ConsumerPlanningService
      * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Service\ConsumerPlanningService",mappedBy="plantReport",cascade={"remove"})
      */
     private $consumerPlanningServices;
-
+    
     /**
      * Porcentaje de la capacidad actual
      * @var float
      * @ORM\Column(name="currentCapacity",type="float")
      */
     private $currentCapacity;
-
+    
     /**
      * Porcentaje de capacidad actual
      * @var float
      * @ORM\Column(name="percentageCurrentCapacity",type="float")
      */
     private $percentageCurrentCapacity;
-
+    
     /**
      * Usuarios
      * @var type 
@@ -121,7 +121,8 @@ class PlantReport extends ModelBaseMaster {
     /**
      * Constructor
      */
-    public function __construct() {
+    public function __construct()
+    {
         $this->productsReport = new \Doctrine\Common\Collections\ArrayCollection();
         $this->plantStopPlannings = new \Doctrine\Common\Collections\ArrayCollection();
         $this->consumerPlanningServices = new \Doctrine\Common\Collections\ArrayCollection();
@@ -133,7 +134,8 @@ class PlantReport extends ModelBaseMaster {
      *
      * @return integer 
      */
-    public function getId() {
+    public function getId()
+    {
         return $this->id;
     }
 
@@ -143,18 +145,20 @@ class PlantReport extends ModelBaseMaster {
      * @param \Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate $reportTemplate
      * @return PlantReport
      */
-    public function setReportTemplate(\Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate $reportTemplate) {
+    public function setReportTemplate(\Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate $reportTemplate)
+    {
         $this->reportTemplate = $reportTemplate;
-
+        
         return $this;
     }
-
+    
     /**
      * Get reportTemplate
      *
      * @return \Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate 
      */
-    public function getReportTemplate() {
+    public function getReportTemplate()
+    {
         return $this->reportTemplate;
     }
 
@@ -164,7 +168,8 @@ class PlantReport extends ModelBaseMaster {
      * @param \Pequiven\SEIPBundle\Entity\DataLoad\ProductReport $productsReport
      * @return PlantReport
      */
-    public function addProductsReport(\Pequiven\SEIPBundle\Entity\DataLoad\ProductReport $productsReport) {
+    public function addProductsReport(\Pequiven\SEIPBundle\Entity\DataLoad\ProductReport $productsReport)
+    {
         $this->productsReport[] = $productsReport;
 
         return $this;
@@ -175,7 +180,8 @@ class PlantReport extends ModelBaseMaster {
      *
      * @param \Pequiven\SEIPBundle\Entity\DataLoad\ProductReport $productsReport
      */
-    public function removeProductsReport(\Pequiven\SEIPBundle\Entity\DataLoad\ProductReport $productsReport) {
+    public function removeProductsReport(\Pequiven\SEIPBundle\Entity\DataLoad\ProductReport $productsReport)
+    {
         $this->productsReport->removeElement($productsReport);
     }
 
@@ -184,7 +190,8 @@ class PlantReport extends ModelBaseMaster {
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getProductsReport() {
+    public function getProductsReport()
+    {
         return $this->productsReport;
     }
 
@@ -194,7 +201,8 @@ class PlantReport extends ModelBaseMaster {
      * @param \Pequiven\SEIPBundle\Entity\CEI\Company $company
      * @return PlantReport
      */
-    public function setCompany(\Pequiven\SEIPBundle\Entity\CEI\Company $company) {
+    public function setCompany(\Pequiven\SEIPBundle\Entity\CEI\Company $company)
+    {
         $this->company = $company;
 
         return $this;
@@ -205,7 +213,8 @@ class PlantReport extends ModelBaseMaster {
      *
      * @return \Pequiven\SEIPBundle\Entity\CEI\Company 
      */
-    public function getCompany() {
+    public function getCompany()
+    {
         return $this->company;
     }
 
@@ -215,7 +224,8 @@ class PlantReport extends ModelBaseMaster {
      * @param \Pequiven\SEIPBundle\Entity\CEI\Location $location
      * @return PlantReport
      */
-    public function setLocation(\Pequiven\SEIPBundle\Entity\CEI\Location $location) {
+    public function setLocation(\Pequiven\SEIPBundle\Entity\CEI\Location $location)
+    {
         $this->location = $location;
 
         return $this;
@@ -226,7 +236,8 @@ class PlantReport extends ModelBaseMaster {
      *
      * @return \Pequiven\SEIPBundle\Entity\CEI\Location 
      */
-    public function getLocation() {
+    public function getLocation()
+    {
         return $this->location;
     }
 
@@ -236,7 +247,8 @@ class PlantReport extends ModelBaseMaster {
      * @param \Pequiven\SEIPBundle\Entity\CEI\Entity $entity
      * @return PlantReport
      */
-    public function setEntity(\Pequiven\SEIPBundle\Entity\CEI\Entity $entity = null) {
+    public function setEntity(\Pequiven\SEIPBundle\Entity\CEI\Entity $entity = null)
+    {
         $this->entity = $entity;
 
         return $this;
@@ -247,19 +259,44 @@ class PlantReport extends ModelBaseMaster {
      *
      * @return \Pequiven\SEIPBundle\Entity\CEI\Entity 
      */
-    public function getEntity() {
+    public function getEntity()
+    {
         return $this->entity;
     }
 
+    /**
+     * Set plant
+     *
+     * @param \Pequiven\SEIPBundle\Entity\CEI\Plant $plant
+     * @return PlantReport
+     */
+    public function setPlant(\Pequiven\SEIPBundle\Entity\CEI\Plant $plant)
+    {
+        $this->plant = $plant;
+
+        return $this;
+    }
+
+    /**
+     * Get plant
+     *
+     * @return \Pequiven\SEIPBundle\Entity\CEI\Plant 
+     */
+    public function getPlant()
+    {
+        return $this->plant;
+    }
+    
     /**
      * Add plantStopPlannings
      *
      * @param \Pequiven\SEIPBundle\Entity\DataLoad\Plant\PlantStopPlanning $plantStopPlannings
      * @return PlantReport
      */
-    public function addPlantStopPlanning(\Pequiven\SEIPBundle\Entity\DataLoad\Plant\PlantStopPlanning $plantStopPlannings) {
+    public function addPlantStopPlanning(\Pequiven\SEIPBundle\Entity\DataLoad\Plant\PlantStopPlanning $plantStopPlannings)
+    {
         $plantStopPlannings->setPlantReport($this);
-
+        
         $this->plantStopPlannings->add($plantStopPlannings);
 
         return $this;
@@ -270,7 +307,8 @@ class PlantReport extends ModelBaseMaster {
      *
      * @param \Pequiven\SEIPBundle\Entity\DataLoad\Plant\PlantStopPlanning $plantStopPlannings
      */
-    public function removePlantStopPlanning(\Pequiven\SEIPBundle\Entity\DataLoad\Plant\PlantStopPlanning $plantStopPlannings) {
+    public function removePlantStopPlanning(\Pequiven\SEIPBundle\Entity\DataLoad\Plant\PlantStopPlanning $plantStopPlannings)
+    {
         $this->plantStopPlannings->removeElement($plantStopPlannings);
     }
 
@@ -279,17 +317,19 @@ class PlantReport extends ModelBaseMaster {
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getPlantStopPlannings() {
+    public function getPlantStopPlannings()
+    {
         return $this->plantStopPlannings;
     }
-
+    
     /**
      * Add consumerPlanningServices
      *
      * @param \Pequiven\SEIPBundle\Entity\DataLoad\Service\ConsumerPlanningService $consumerPlanningServices
      * @return PlantReport
      */
-    public function addConsumerPlanningService(\Pequiven\SEIPBundle\Entity\DataLoad\Service\ConsumerPlanningService $consumerPlanningServices) {
+    public function addConsumerPlanningService(\Pequiven\SEIPBundle\Entity\DataLoad\Service\ConsumerPlanningService $consumerPlanningServices)
+    {
         $this->consumerPlanningServices[] = $consumerPlanningServices;
 
         return $this;
@@ -300,7 +340,8 @@ class PlantReport extends ModelBaseMaster {
      *
      * @param \Pequiven\SEIPBundle\Entity\DataLoad\Service\ConsumerPlanningService $consumerPlanningServices
      */
-    public function removeConsumerPlanningService(\Pequiven\SEIPBundle\Entity\DataLoad\Service\ConsumerPlanningService $consumerPlanningServices) {
+    public function removeConsumerPlanningService(\Pequiven\SEIPBundle\Entity\DataLoad\Service\ConsumerPlanningService $consumerPlanningServices)
+    {
         $this->consumerPlanningServices->removeElement($consumerPlanningServices);
     }
 
@@ -309,20 +350,21 @@ class PlantReport extends ModelBaseMaster {
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getConsumerPlanningServices() {
+    public function getConsumerPlanningServices()
+    {
         return $this->consumerPlanningServices;
     }
-
+    
     function getCurrentCapacity() {
         return $this->currentCapacity;
     }
 
     function setCurrentCapacity($currentCapacity) {
         $this->currentCapacity = $currentCapacity;
-
+        
         return $this;
     }
-
+    
     function getPercentageCurrentCapacity() {
         return $this->percentageCurrentCapacity;
     }
@@ -331,58 +373,62 @@ class PlantReport extends ModelBaseMaster {
         $this->percentageCurrentCapacity = $percentageCurrentCapacity;
     }
 
-    public function __toString() {
+    public function __toString() 
+    {
         $_toString = "-";
-        if ($this->getPlant()) {
-            $_toString = (string) $this->getPlant();
+        if($this->getPlant()){
+            $_toString = (string)$this->getPlant();
         }
         return $_toString;
     }
-
     /**
      * @ORM\PrePersist()
      * @ORM\PreUpdate()
      */
-    public function calculate() {
+    public function calculate()
+    {
         $designCapacity = $this->getPlant()->getDesignCapacity();
         $percentageCurrentCapacity = 0;
-        if ($designCapacity > 0) {
+        if($designCapacity > 0){
             $percentageCurrentCapacity = ($this->currentCapacity * 100) / $designCapacity;
         }
-
+        
         $this->percentageCurrentCapacity = $percentageCurrentCapacity;
     }
-
-    public function init(\Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate $reportTemplate) {
+    
+    public function init(\Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate $reportTemplate)
+    {
         $this->setReportTemplate($reportTemplate);
         $this->setCompany($reportTemplate->getCompany());
         $this->setLocation($reportTemplate->getLocation());
     }
-
+    
     /**
      * Obtiene las paradas de plantas por mes
      * @return type
      */
-    public function getPlantStopPlanningSortByMonth() {
+    public function getPlantStopPlanningSortByMonth()
+    {
         $plantStopPlannings = $this->getPlantStopPlannings();
         $sorted = array();
-        foreach ($plantStopPlannings as $plantStopPlanning) {
+        foreach ($plantStopPlannings as $plantStopPlanning){
             $sorted[$plantStopPlanning->getMonth()] = $plantStopPlanning;
         }
         ksort($sorted);
         return $sorted;
     }
-
-    public function getReportTemplateWithName() {
-        $full = sprintf("%s (%s)", $this->reportTemplate->getName(), $this->reportTemplate->getRef());
+    
+    public function getReportTemplateWithName()
+    {
+        $full = sprintf("%s (%s)",$this->reportTemplate->getName(),$this->reportTemplate->getRef());
         return $full;
     }
-
-    public function recalculate() {
+    
+    public function recalculate()
+    {
         $this->calculate();
         foreach ($this->productsReport as $productReport) {
             $productReport->recalculate();
         }
     }
-
 }
