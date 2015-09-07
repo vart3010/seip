@@ -86,17 +86,15 @@ class Plant extends BaseModel {
      * @ORM\JoinTable(name="plants_services")
      */
     private $services;
-    
-     /**
+
+    /**
      * Planta que hace el producto
      * 
-     * @var \Pequiven\SEIPBundle\Entity\CEI\Plant
-     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad")
+     * @var \Pequiven\SEIPBundle\Entity\DataLoad\PlantReport
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\PlantReport",mappedBy="plant")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $plant;
-
-   
+    //private $plantReport;
 
     /**
      * 
@@ -104,18 +102,19 @@ class Plant extends BaseModel {
      * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Plant",inversedBy="childrens",cascade={"persist"})
      */
     private $parent;
-    
-     /**
+
+    /**
      * 
      * @var \Pequiven\SEIPBundle\Entity\CEI\Plant
      * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Plant",mappedBy="parent",cascade={"persist"})
      */
     private $childrens;
-    
+
     /**
      * Constructor
      */
     public function __construct() {
+        //$this->plantReport = new \Doctrine\Common\Collections\ArrayCollection();
         $this->products = new \Doctrine\Common\Collections\ArrayCollection();
         $this->childrens = new \Doctrine\Common\Collections\ArrayCollection();
         $this->services = new \Doctrine\Common\Collections\ArrayCollection();
@@ -351,5 +350,7 @@ class Plant extends BaseModel {
         }
         return $_toString;
     }
+
+    
 
 }

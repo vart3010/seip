@@ -72,15 +72,7 @@ class PlantReportController extends SEIPController {
 
         $plantReport = $this->getRepository()->find($request->get("id"));
         $childs = $plantReport->getPlant()->getChildrens();
-        var_dump($childs[0]);
-//        foreach ($childs as $child) {
-//            $planStopPlannings = $child->getPlantStopPlannings();
-//            foreach ($planStopPlannings as $planStopPlanning) {
-//                var_dump($planStopPlanning->getMonth());
-//            }
-//        }
-        die();
-
+        
         $data = array(
             "plant_report" => $plantReport,
             "childs" => $childs
