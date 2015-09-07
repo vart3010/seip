@@ -71,7 +71,7 @@ class PlantReport extends ModelBaseMaster
      * Planta que hace el producto
      * 
      * @var \Pequiven\SEIPBundle\Entity\CEI\Plant
-     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Plant")
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Plant",inversedBy="plant")
      * @ORM\JoinColumn(nullable=false)
      */
     private $plant;
