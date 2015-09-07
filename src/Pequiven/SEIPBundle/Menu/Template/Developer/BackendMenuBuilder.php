@@ -97,6 +97,11 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
         if ($this->isGranted('ROLE_SEIP_SIG_MENU')) {
             $this->addMenuSIG($menu, $section);
         }
+        
+        //Menú Círculos de Estudio de Trabajo
+        if($this->isGranted('ROLE_SEIP_WORK_STUDY_CIRCLES_*')){
+            $this->addMenuWorkStudyCircles($menu, $section);
+        }
 
         //Menú Administración
         if ($this->securityContext->isGranted(array('ROLE_SONATA_ADMIN'))) {
@@ -106,11 +111,6 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
             ))->setLabel($this->translate(sprintf('app.backend.menu.%s.admin.main', $section)));
         }
         
-
-
-
-
-
         return $menu;
     }
 
@@ -1226,6 +1226,58 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
         }
 
         $menu->addChild($child);
+    }
+    
+    /**
+     * Construye el menú de Círculos de Estudio de Trabajo
+     * @param ItemInterface $menu
+     * @param type $section
+     */
+    public function addMenuWorkStudyCircles(ItemInterface $menu, $section){
+        $menuWorkStudyCircles = $this->factory->createItem('work_study_circles', $this->getSubLevelOptions(array(
+            'uri'=> null,
+            'labelAttributes' => array('icon' => 'fa fa-users',),
+            ))
+                )->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.main', $section)));
+        
+        if ($this->isGranted(array('ROLE_SEIP_WORK_STUDY_CIRCLES_CREATE'))) {
+            $workStudyCirclesRegister = $this->factory->createItem('work_study_circles.register', $this->getSubLevelOptions(array(
+                "route" => "",
+                'labelAttributes' => array('icon' => 'fa fa-file-text-o',),
+                ))
+                )->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.register', $section)));
+
+            $menuWorkStudyCircles->addChild($workStudyCirclesRegister);
+        }
+        if ($this->isGranted(array('ROLE_SEIP_WORK_STUDY_CIRCLES_VIEW_REPORT'))) {
+            $workStudyCirclesReports = $this->factory->createItem('work_study_circles.reports', $this->getSubLevelOptions(array(
+                "route" => "",
+                'labelAttributes' => array('icon' => 'fa fa-table',),
+                ))
+                )->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.reports', $section)));
+
+            $menuWorkStudyCircles->addChild($workStudyCirclesReports);
+        }
+        if ($this->isGranted(array('ROLE_SEIP_WORK_STUDY_CIRCLES_STRATEGIC_PLAN'))) {
+            $workStudyCirclesStrategicPlan = $this->factory->createItem('work_study_circles.strategic_plan', $this->getSubLevelOptions(array(
+                "route" => "",
+                'labelAttributes' => array('icon' => 'fa fa-bars',),
+                ))
+                )->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.strategic_plan', $section)));
+
+            $menuWorkStudyCircles->addChild($workStudyCirclesStrategicPlan);
+        }
+        if ($this->isGranted(array('ROLE_SEIP_WORK_STUDY_CIRCLES_NOTIFICATION'))) {
+            $workStudyCirclesNotification = $this->factory->createItem('work_study_circles.notification', $this->getSubLevelOptions(array(
+                "route" => "",
+                'labelAttributes' => array('icon' => 'fa fa-pencil-square-o',),
+                ))
+                )->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.notification', $section)));
+
+            $menuWorkStudyCircles->addChild($workStudyCirclesNotification);
+        }
+        
+        $menu->addChild($menuWorkStudyCircles);
     }
 
     /**

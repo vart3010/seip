@@ -201,4 +201,10 @@ app:
                                 main: Producción
                                 statusCharge: Status de Carga
                                 compliance: % Cumplimiento
+                    work_study_circles:
+                        main: Círculos de Estudio de Trabajo
+                        register: Registro
+                        reports: Reportes
+                        strategic_plan: Plan Estratégico
+                        notification: Notificación
                             

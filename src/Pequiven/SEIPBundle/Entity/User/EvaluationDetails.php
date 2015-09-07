@@ -94,6 +94,11 @@ class EvaluationDetails extends ModelEvaluationDetails implements PeriodItemInte
      */
     private $error = false;
     
+    //TODO:
+    //SUM METAS-CANT.METAS-RES.METAS-SUM.PG-CANT.PG-RES.PG-SUM.OBJ-CANT.OBJ-RES.OBJ-RES.FINAL
+    //(PROM METAS + PROM PG) * 60% + (PROM OBJ) * 40%
+    
+    
     /**
      * Constructor
      */

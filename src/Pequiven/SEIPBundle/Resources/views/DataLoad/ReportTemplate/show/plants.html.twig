@@ -27,7 +27,7 @@
                         </th>
                         <td>{{ plant.entity.productsReport|length }}</td>
                         <td class="low-padding align-center">
-                            <a href="{{ path("pequiven_plant_report_update",{id: plant.id}) }}" class="button compact icon-pencil">{{ "pequiven_seip.actions.edit"|trans }}</a>
+                            <a href="{{ path("pequiven_plant_report_update",{id: plant.plantReportId}) }}" class="button compact icon-pencil">{{ "pequiven_seip.actions.edit"|trans }}</a>
                         </td>
                     </tr>
                 {% endfor %}
