@@ -47,6 +47,7 @@ class WorkStudyCircleType extends AbstractType {
                     'property' => 'description',
                     'empty_value' => 'Seleccione',
                     'required' => false,
+                    'multiple' => true,
                     'attr' => array(
                         'class' => 'select2 input-xlarge form-control',
                         'multiple' => 'multiple'
@@ -58,6 +59,7 @@ class WorkStudyCircleType extends AbstractType {
                     'property' => 'description',
                     'empty_value' => 'Seleccione',
                     'required' => false,
+                    'multiple' => true,
                     'attr' => array(
                         'class' => 'select2 input-xlarge form-control',
                         'multiple' => 'multiple'
