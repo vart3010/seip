@@ -1172,6 +1172,9 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
      * @param type $section
      */
     public function addMenuWorkStudyCircles(ItemInterface $menu, $section){
+        $em = $this->getDoctrine()->getManager();
+        
+        
         $menuWorkStudyCircles = $this->factory->createItem('work_study_circles', $this->getSubLevelOptions(array(
             'uri'=> null,
             'labelAttributes' => array('icon' => 'fa fa-users',),

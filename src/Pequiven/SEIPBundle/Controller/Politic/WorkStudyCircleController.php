@@ -77,11 +77,16 @@ class WorkStudyCircleController extends SEIPController {
     public function addWorkStudyCircleToUser(WorkStudyCircle $workStudyCircle, $members = array()){
         $em = $this->getDoctrine()->getManager();
         $em->getConnection()->beginTransaction();
+        
         foreach($members as $member){
             $user = $em->getRepository('PequivenSEIPBundle:User')->findOneBy(array('id' => $member));
             $user->setWorkStudyCircle($workStudyCircle);
             $em->persist($user);
         }
+        
+        $user = $this->getUser();
+        $user->setWorkStudyCircle($workStudyCircle);
+        $em->persist($user);
 
         try {
             $em->flush();
