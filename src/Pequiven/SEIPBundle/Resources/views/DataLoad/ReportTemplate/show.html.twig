@@ -52,10 +52,15 @@
             </div>
         </div>
     </fieldset>
-                    
+
     {% include 'PequivenSEIPBundle:DataLoad:ReportTemplate/show/plants.html.twig' %}
     <br /><br />
-{#    {% include 'PequivenSEIPBundle:DataLoad:ReportTemplate/show/plants_by_group.html.twig' %}#}
+
+
+    {% if (plantsGroup|length >0)  %}
+        {% include 'PequivenSEIPBundle:DataLoad:ReportTemplate/show/plants_by_group.html.twig' %}
+    {% endif %}
+
     <br /><br />
     <p class="button-height align-right">
         {{ buttons.generic(path('pequiven_report_template_update', { 'id': report_template.id }),('pequiven.edit'|trans({},'messages'))) }}
