@@ -1242,7 +1242,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
         
         if ($this->isGranted(array('ROLE_SEIP_WORK_STUDY_CIRCLES_CREATE'))) {
             $workStudyCirclesRegister = $this->factory->createItem('work_study_circles.register', $this->getSubLevelOptions(array(
-                "route" => "",
+                "route" => "pequiven_work_study_circle_create",
                 'labelAttributes' => array('icon' => 'fa fa-file-text-o',),
                 ))
                 )->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.register', $section)));

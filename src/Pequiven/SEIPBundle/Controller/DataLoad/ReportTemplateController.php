@@ -1470,8 +1470,11 @@ class ReportTemplateController extends SEIPController {
                         $arrayNamesUnrealizedProduction[] = $productId;
                         $arrayUnrealizedProduction[$productId] = array(
                             "productName" => $productReport->getProduct()->getName() . " (" . $productReport->getProduct()->getProductUnit()->getUnit() . ")",
+                            //ID DEL PRODUCT_REPORT
                             "productId" => $productReport->getId(),
-                            "reportTemplateId" => $productReport->getPlantReport()->getReportTemplate()->getId()
+                            "reportTemplateId" => $productReport->getPlantReport()->getReportTemplate()->getId(),
+                            //ID DEL PRODUCTO
+                            "idProduct"=>$productId
                         );
                     }
 
@@ -2155,7 +2158,7 @@ class ReportTemplateController extends SEIPController {
             "getSummaryYear" => array(
                 "title" => "Producción Anual",
                 "col" => array("B", "C", "D", "E", "F", "G"),
-                "campos" => array("Producto", "PPTO", "PPTO-MES", "REAL", "EJEC(%)", "VAR"),
+                "campos" => array("Producto", "PPTO", "PPTO-AÑO", "REAL", "EJEC(%)", "VAR"),
                 "rowStart" => 7,
                 "plan_time" => "plan_year",
                 "plan" => "plan_acumulated",

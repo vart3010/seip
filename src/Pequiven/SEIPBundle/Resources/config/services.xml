@@ -399,5 +399,11 @@
             </call>
             <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\DataLoad\PlantReport" />
         </service>
+        
+        <!-- Formulario del Círculo de Estudio de Trabajo -->
+        <service id="pequiven.form.work_study_circle" class="Pequiven\SEIPBundle\Form\Politic\WorkStudyCircleType">
+            <tag name="form.type" alias="pequiven_seipbundle_politic_workstudycircle" />
+        </service>
+        
     </services>
 </container>

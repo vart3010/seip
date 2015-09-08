@@ -437,6 +437,9 @@ pequiven_seip:
         
     visualizePnrTime:
         reportPnr: "Producción no Realizada"
+        
+    politic:
+        work_study_circle: Círculo de Estudio de Trabajo
             
 "Bad credentials": Nombre de usuario o contraseña invalida
 "User account is disabled.": Cuenta de usuario desactivada
@@ -445,6 +448,8 @@ form:
     first_name: Nombre
     last_name: Apellido
     num_personal: Número de personal
+    name_work_study_circle: Nombre Círculo Estudio de Trabajo
+    ref: Referencia
     
 ng-table:
     tooltip:

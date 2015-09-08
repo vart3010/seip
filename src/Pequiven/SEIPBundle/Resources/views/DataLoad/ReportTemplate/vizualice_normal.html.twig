@@ -171,7 +171,7 @@
                         </tr>
                         <tr>
                             <th scope="col" style="width: 7%" class="header">PRODUCTO</th>
-                            <th scope="col" style="width: 7%" class="header">PPTO-MES</th>
+                            <th scope="col" style="width: 7%" class="header">PPTO-AÑO</th>
                             <th scope="col" style="width: 7%" class=" header">PPTO-ACUM</th>
                             <th scope="col" style="width: 7%" class=" header">REAL-ACUM</th>
                             <th scope="col" style="width: 7%" class=" header">EJEC&nbsp;(%)</th>
@@ -368,7 +368,7 @@
                         <tr>
                             <th class="header">
                                 <a href="{{ path("pequiven_report_template_visualize_pnr_time",{
-                                idProduct:unrealizedProduction.productId,
+                                idProduct:unrealizedProduction.idProduct,
                                 idReportTemplate: (unrealizedProduction.reportTemplateId),
                                 idProductReport: (unrealizedProduction.productId),dateReport: (dateReport|date('d/m/Y'))}) }}">
                                     {{ unrealizedProduction.productName|upper }}
