@@ -1,0 +1,102 @@
+
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}
+
+{% trans_default_domain 'workStudyCircle' %}
+
+{% block before_body %}
+    {{ contentHeader("Círculo de Estudio y Trabajo")  }}
+{% endblock %}
+
+{% block body %}
+
+    {#    {{ dump(workStudyCircle) }}#}
+
+    <fieldset class="fieldset">
+        <legend class="legend" >Círculo de Estudio y Trabajo&nbsp;</legend>
+        <div class="columns">
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Código</label>
+                    {{ workStudyCircle.codigo }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Nombre de Circulo</label>
+                    {{ workStudyCircle.name }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Región</label>
+                    {{ workStudyCircle.region.name }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Complejo</label>
+                    {{ workStudyCircle.complejo.description}}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Gerencia 1era Linea</label>
+                    {% for gerencia in  workStudyCircle.gerencias %}
+                        {{ gerencia }}<br>
+                    {% endfor %}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Gerencia 2da Linea</label>
+                    {% for gerenciaSecond in  workStudyCircle.gerenciaSeconds %}
+                        {{ gerenciaSecond }}<br>
+                    {% endfor %}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Superintendencia</label>
+                    {{ workStudyCircle.superintendencia }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Supervisión</label>
+                    {{ workStudyCircle.supervision }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Departamento</label>
+                    {{ workStudyCircle.departamento}}
+                </p>
+            </div>
+        </div>
+    </fieldset>
+    <fieldset class="fieldset">
+        <legend class="legend" >Datos Coordinador&nbsp;</legend>
+        <div class="columns">
+            <div class="new-row-mobile twelve-columns twelve-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Nombre</label>
+                    {{ workStudyCircle.createdBy.getFullNameUser }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Teléfono</label>
+                    {{ workStudyCircle.createdBy.cellphone }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Extensión</label>
+                    {{ workStudyCircle.createdBy.ext }}
+                </p>
+            </div>
+        </div>
+    </fieldset>
+
+{% endblock %}
+
