@@ -2155,7 +2155,7 @@ class ReportTemplateController extends SEIPController {
             "getSummaryYear" => array(
                 "title" => "Producción Anual",
                 "col" => array("B", "C", "D", "E", "F", "G"),
-                "campos" => array("Producto", "PPTO", "PPTO-MES", "REAL", "EJEC(%)", "VAR"),
+                "campos" => array("Producto", "PPTO", "PPTO-AÑO", "REAL", "EJEC(%)", "VAR"),
                 "rowStart" => 7,
                 "plan_time" => "plan_year",
                 "plan" => "plan_acumulated",
