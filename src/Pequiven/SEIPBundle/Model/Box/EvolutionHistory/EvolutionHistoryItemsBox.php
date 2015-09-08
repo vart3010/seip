@@ -15,7 +15,7 @@ class EvolutionHistoryItemsBox extends \Tecnocreaciones\Bundle\BoxBundle\Model\G
 
     public function getParameters() {
 
-        $month = date("m");//Carga del mes de Creación de la causa "Automatico"
+        $month = date("m");//Carga del mes "Automatico"
         $mesData = date("F");//Data mes
         
         $labelMonth = $this->getMonths();
@@ -23,8 +23,7 @@ class EvolutionHistoryItemsBox extends \Tecnocreaciones\Bundle\BoxBundle\Model\G
 
         //$url= $_SERVER["REQUEST_URI"];
         //var_dump(parse_url($url));
-
-
+        
         $count = 1;
         
         for ($i=0; $i < $month; $i++) { 

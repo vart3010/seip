@@ -41,8 +41,6 @@ class EvolutionActionValue extends BaseManager
        return $dataValue;
 
     }	
-
-
 		
     
 }

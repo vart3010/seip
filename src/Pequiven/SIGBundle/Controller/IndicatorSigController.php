@@ -140,11 +140,14 @@ class IndicatorSigController extends ResourceController
 
         $sumCause = 0;//Declaración de Variable
 
-        $cause = 101;
+        $idIndicator = $request->get('id');
+        
+        //$cause = 101;
 
         $month = $request->get('month'); //El mes pasado por parametro
         
         $data = $this->findEvolutionCause($request);//Carga la data de las causas y sus acciones relacionadas
+        
         //Cargando el Archivo
         $uploadFile = $request->get("uploadFile");//Recibiendo archivo
 
@@ -160,7 +163,7 @@ class IndicatorSigController extends ResourceController
                 }
             }
             if ($band) {
-                $this->createValueCauseFile($resource, $request, $cause);
+                $this->createValueCauseFile($resource, $request);
             } else {
                 $this->get('session')->getFlashBag()->add('error', $this->trans('action.messages.InvalidFile', array(), 'PequivenIndicatorBundle'));
                 $this->redirect($this->generateUrl("pequiven_indicator_evolution", array("id" => $request->get("id"),"month" => $month)));
@@ -170,8 +173,6 @@ class IndicatorSigController extends ResourceController
         
         //Carga de data de Indicador para armar grafica
         $response = new JsonResponse();
-
-        $idIndicator = $request->get('id');
 
         $indicatorService = $this->getIndicatorService(); //Obtenemos el servicio del indicador
 
@@ -260,7 +261,7 @@ class IndicatorSigController extends ResourceController
         return $this->handleView($view);
     }
 
-    public function createValueCauseFile(Indicator $indicator, Request $request, $cause) {
+    public function createValueCauseFile(Indicator $indicator, Request $request) {
 
         $EvolutionCauseFile = new Indicator\EvolutionIndicator\EvolutionCauseFile();
         
