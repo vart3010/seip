@@ -19,6 +19,11 @@ class EvolutionHistoryItemsBox extends \Tecnocreaciones\Bundle\BoxBundle\Model\G
         $mesData = date("F");//Data mes
         
         $labelMonth = $this->getMonths();
+        //var_dump($labelMonth);
+
+        //$url= $_SERVER["REQUEST_URI"];
+        //var_dump(parse_url($url));
+
 
         $count = 1;
         
@@ -28,8 +33,8 @@ class EvolutionHistoryItemsBox extends \Tecnocreaciones\Bundle\BoxBundle\Model\G
               $count = $count + 1;
           }  
         //var_dump($setMonth);
-
-        $indicator = 1736;
+          
+        $indicator = 2347;
         $listMonth = $setMonth;
         $boxmonth =  $month;
         //var_dump($listMonth);

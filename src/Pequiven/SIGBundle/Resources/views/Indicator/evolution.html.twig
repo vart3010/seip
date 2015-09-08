@@ -180,11 +180,67 @@
     <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/themes/fusioncharts.theme.fint.js') }}"></script>
 
     <script type="text/javascript">
+        
         $(document).ready(function () {
             $("a#showItems").click(function () {
                 $("#evolutionItems").toggle("slow");
                 $("a#showItems span.title ").toggle();
             });
         });
+
+        //Carga de Archivo pdf
+        function uploadFilePdf(id) {
+            $("input#indicatorFilePdf_" + id).click();
+            //var causeId = document.getElementById("data").value;
+            //console.log(id);
+        //$("#form_"+id).submit();
+        }
+
+        //Visualización
+        function openFile(valueCauseId) {
+        //var obj = $("span#" + valueCauseId);
+        //var url = obj.attr("data");
+            valueCauseId = valueCauseId.split("_");
+            //console.log (valueCauseId[1]);
+            var data = {
+                id: valueCauseId[1]
+            };
+            $.ajax({
+                type: 'get',
+                url: '{{ path("pequiven_cause_vizualice_file") }}',
+                data: data,
+                success: function (data) {
+        //alert(data["url"]);
+                    window.open(data["url"]);
+                }
+            });
+
+        }
+        //set url
+        function getUrl(data) {
+            
+            var rs;
+            return rs;
+        }
+        //envio
+        function submitUploadFile(valueCauseId) {
+            valueCauseId = valueCauseId.split("_");
+            $("#field_" + valueCauseId[1]).val(valueCauseId[1]);
+            $("#form_" + valueCauseId[1]).submit();
+        }
+
+        $(document).ready(function () {
+
+        // Progress
+        //$('.progress').progress();
+
+        {#$("a.uploadFileButton").click(function () {
+            alert("hola");
+        });#}
+        });
     </script>
+
+     
+
+    
 {% endblock %}

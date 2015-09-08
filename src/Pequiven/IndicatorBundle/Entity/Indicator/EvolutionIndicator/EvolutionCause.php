@@ -92,6 +92,14 @@ class EvolutionCause extends Model {
     protected $indicatorAction;
 
     /**
+     * Relacion de las fichas cargadas de la acciones
+     * 
+     * @var Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCauseFile
+     * @ORM\OneToOne(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCauseFile",inversedBy="valueCause")
+     */
+    private $valueCauseFile;
+
+    /**
      * Constructor
      */
     public function __construct() {
@@ -301,4 +309,13 @@ class EvolutionCause extends Model {
     public function getIndicatorAction() {
         return $this->indicatorAction;
     }      
+
+    function getValueCauseFile() {
+        return $this->valueCauseFile;
+    }
+
+    function setValueCauseFile($valueCauseFile) {
+        $this->valueCauseFile = $valueCauseFile;
+        return $this;
+    } 
 }

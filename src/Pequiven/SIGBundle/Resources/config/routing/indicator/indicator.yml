@@ -207,6 +207,15 @@ pequiven_arrangementprogram_datasig_indicator_lastperiod:
     methods: [GET]
     options:
         expose: true
+#URL file
+pequiven_cause_vizualice_file:
+    path: /.{_format}
+    defaults:
+        _controller: pequiven.controller.indicator:generateUrlFile
+        _format: html
+    requirements:
+        _format: html|json|xml
+    methods: [GET|POST]
         
 #IndicatorSig
 pequiven_indicatorsig_list:
