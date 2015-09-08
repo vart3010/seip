@@ -90,25 +90,19 @@ class WorkStudyCircle extends ModelWorkStudyCircle implements PeriodItemInterfac
      */
     private $period;
 
-    
+    /**
+     * Gerencias
+     * 
+     * @ORM\ManyToMany(targetEntity="\Pequiven\MasterBundle\Entity\Gerencia", inversedBy="workStudyCircles")
+     */
+    private $gerencias;
 
     /**
-     * Gerencia
+     * GerenciaSeconds
      * 
-     * @var \Pequiven\MasterBundle\Entity\Gerencia
-     * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Gerencia")
-     * @ORM\JoinColumn(name="fk_gerencia", referencedColumnName="id", nullable=true)
+     * @ORM\ManyToMany(targetEntity="\Pequiven\MasterBundle\Entity\GerenciaSecond", inversedBy="workStudyCircles")
      */
-    private $gerencia;
-
-    /**
-     * GerenciaSecond
-     * 
-     * @var \Pequiven\MasterBundle\Entity\GerenciaSecond
-     * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\GerenciaSecond")
-     * @ORM\JoinColumn(name="fk_gerencia_second", referencedColumnName="id", nullable=true)
-     */
-    private $gerenciaSecond;
+    private $gerenciaSeconds;
 
     /**
      * superintendencia
@@ -142,6 +136,8 @@ class WorkStudyCircle extends ModelWorkStudyCircle implements PeriodItemInterfac
      */
     public function __construct() {
         $this->userWorkerId = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->gerencias = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->gerenciaSeconds = new \Doctrine\Common\Collections\ArrayCollection();
         //$this->members = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -317,36 +313,6 @@ class WorkStudyCircle extends ModelWorkStudyCircle implements PeriodItemInterfac
         return $this->members;
     }
 
-    public function setGerencia(\Pequiven\MasterBundle\Entity\Gerencia $gerencia = null) {
-        $this->gerencia = $gerencia;
-
-        return $this;
-    }
-
-    /**
-     * Get Gerencia
-     *
-     * @return \Pequiven\MasterBundle\Entity\Gerencia 
-     */
-    public function getGerencia() {
-        return $this->gerencia;
-    }
-
-    public function setGerenciaSecond(\Pequiven\MasterBundle\Entity\GerenciaSecond $gerenciaSecond = null) {
-        $this->gerenciaSecond = $gerenciaSecond;
-
-        return $this;
-    }
-
-    /**
-     * Get gerenciaSecond
-     *
-     * @return \Pequiven\MasterBundle\Entity\GerenciaSecond 
-     */
-    public function getGerenciaSecond() {
-        return $this->gerenciaSecond;
-    }
-
     public function getSuperintendencia() {
         return $this->superintendencia;
     }
@@ -383,6 +349,66 @@ class WorkStudyCircle extends ModelWorkStudyCircle implements PeriodItemInterfac
     }
     public function getUserWorkerId() {
         return $this->userWorkerId;
+    }
+    
+    /**
+     * Add gerencias
+     *
+     * @param \Pequiven\MasterBundle\Entity\Gerencia $gerencias
+     * @return WorkStudyCircle
+     */
+    public function addGerencia(\Pequiven\MasterBundle\Entity\Gerencia $gerencias) {
+        $this->gerencias[] = $gerencias;
+
+        return $this;
+    }
+
+    /**
+     * Remove gerencias
+     *
+     * @param \Pequiven\MasterBundle\Entity\Gerencia $gerencias
+     */
+    public function removeGerencia(\Pequiven\MasterBundle\Entity\Gerencia $gerencias) {
+        $this->gerencias->removeElement($gerencias);
+    }
+
+    /**
+     * Get gerencias
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getGerencias() {
+        return $this->gerencias;
+    }
+    
+    /**
+     * Add gerenciaSeconds
+     *
+     * @param \Pequiven\MasterBundle\Entity\GerenciaSecond $gerenciaSeconds
+     * @return WorkStudyCircle
+     */
+    public function addGerenciaSecond(\Pequiven\MasterBundle\Entity\GerenciaSecond $gerenciaSeconds) {
+        $this->gerenciaSeconds[] = $gerenciaSeconds;
+
+        return $this;
+    }
+
+    /**
+     * Remove gerenciaSeconds
+     *
+     * @param \Pequiven\MasterBundle\Entity\GerenciaSecond $gerenciaSeconds
+     */
+    public function removeGerenciaSecond(\Pequiven\MasterBundle\Entity\GerenciaSecond $gerenciaSeconds) {
+        $this->gerenciaSeconds->removeElement($gerenciaSeconds);
+    }
+
+    /**
+     * Get gerenciaSeconds
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getGerenciaSeconds() {
+        return $this->gerenciaSeconds;
     }
 
 }

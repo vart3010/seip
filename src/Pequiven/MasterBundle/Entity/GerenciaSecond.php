@@ -152,12 +152,18 @@ class GerenciaSecond extends modelGerenciaSecond
      * @ORM\Column(name="validAudit",type="boolean")
      */
     private $validAudit = true;
+    
+    /**
+     * @ORM\ManyToMany(targetEntity="\Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle", mappedBy="gerenciaSeconds")
+     */
+    private $workStudyCircles;
 
     public function __construct() {
         parent::__construct();
         $this->operationalObjectives = new ArrayCollection();
         $this->gerenciaVinculants = new ArrayCollection();
         $this->gerenciaSupports = new ArrayCollection();
+        $this->workStudyCircles = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**

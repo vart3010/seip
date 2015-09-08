@@ -75,6 +75,7 @@
         </div>
     </fieldset>
                 
+
     {% include 'PequivenSEIPBundle:DataLoad:PlantReport/show/plantStopPlannings.html.twig' %}
     <br /><br />
     {% include 'PequivenSEIPBundle:DataLoad:PlantReport/show/products.html.twig' %}
@@ -95,5 +96,5 @@
             {{ buttons.delete(path('pequiven_plant_report_delete', { 'id': plant_report.id })) }}
         {% endif %}
     </p>
-                    
+
 {% endblock %}

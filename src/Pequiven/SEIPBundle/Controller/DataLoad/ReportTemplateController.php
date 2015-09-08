@@ -105,7 +105,13 @@ class ReportTemplateController extends SEIPController {
                 );
             } else if (count($childrens) > 0) { //CON HIJOS
                 $cont = 0;
+                $arrayProductsIds = array();
                 foreach ($childrens as $children) {
+                    foreach ($children->getProducts() as $productChild) {
+                        if (!in_array($productChild->getName(), $arrayProductsIds)) {
+                            $arrayProductsIds[] = $productChild->getName();
+                        }
+                    }
                     if ($cont == 0) {
                         $groupNames .= $children->getName();
                     } else {
@@ -119,10 +125,14 @@ class ReportTemplateController extends SEIPController {
                     "groups" => $groupNames,
                     "alias" => $plantReport->getPlant()->getEntity()->getAlias(),
                     "entity" => $plantReport,
+                    "products"=>$arrayProductsIds,
                     "plantReportId" => $plantReport->getId()
                 );
             }
         }
+        
+                    
+          
 
         $data = array(
             "report_template" => $reportTemplate,
