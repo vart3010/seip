@@ -11,9 +11,10 @@
             <thead>
                 <tr>
                     <th scope="col" width="2%" class="header">{{ 'seip.table.header.nro'|trans({},'PequivenArrangementProgramBundle') }}</th>
-                    <th scope="col" width="43%" class="header">Nombre</th>
-                    <th scope="col" width="20%" class="hide-on-tablet header">Teléfono</th>
-                    <th scope="col" width="20%" class="hide-on-mobile-portrait header">Cédula</th>
+                    <th scope="col" width="33%" class="header">Nombre</th>
+                    <th scope="col" width="15%" class="hide-on-tablet header">Teléfono</th>
+                    <th scope="col" width="15%" class="hide-on-mobile-portrait header">Cédula</th>
+                    <th scope="col" width="15%" class="hide-on-mobile-portrait header">Extensión</th>
                     <th scope="col" width="15%" class="hide-on-mobile-portrait header">&nbsp;</th>
                 </tr>
             </thead>
@@ -28,6 +29,7 @@
                 <td>{{ user.getOnlyFullNameUser }}</td>
                 <td>{{ user.cellphone }}</td>
                 <td>{{ user.getIndentification }}</td>
+                <td>{{ user.ext }}</td>
                 <td class="align-right vertical-center">
                     <div ng-controller="ToolsController" id="target_{$ paso+1 $}">
                         <span class="select compact">
