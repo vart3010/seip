@@ -15,3 +15,14 @@ pequiven_work_study_circle_show:
     requirements:
         id: "\d+"
     methods: [GET]
+    
+pequiven_work_study_circle_user_get_form:
+    path: /{idUser}/get-form.{_format}
+    defaults:
+        _controller: pequiven.controller.user:getFormAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET]
+    options:
+        expose: true
