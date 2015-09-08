@@ -40,7 +40,7 @@ class WorkStudyCircleType extends AbstractType {
                     'attr' => array(
                         'class' => 'select2 input-xlarge form-control',
             )))
-                ->add('gerencia', 'entity', array(
+                ->add('gerencias', 'entity', array(
                     'label' => 'Gerencia de Primera Línea',
                     'label_attr' => array('class' => 'label'),
                     'class' => 'Pequiven\MasterBundle\Entity\Gerencia',
@@ -49,8 +49,9 @@ class WorkStudyCircleType extends AbstractType {
                     'required' => false,
                     'attr' => array(
                         'class' => 'select2 input-xlarge form-control',
+                        'multiple' => 'multiple'
             )))
-                ->add('gerenciaSecond', 'entity', array(
+                ->add('gerenciaSeconds', 'entity', array(
                     'label' => 'Gerencia de Segunda Línea',
                     'label_attr' => array('class' => 'label'),
                     'class' => 'Pequiven\MasterBundle\Entity\GerenciaSecond',
@@ -59,6 +60,7 @@ class WorkStudyCircleType extends AbstractType {
                     'required' => false,
                     'attr' => array(
                         'class' => 'select2 input-xlarge form-control',
+                        'multiple' => 'multiple'
             )))
                 ->add('superintendencia', 'text', array(
                     'label' => 'Superintendencia',

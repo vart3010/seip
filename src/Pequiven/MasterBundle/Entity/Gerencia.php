@@ -161,11 +161,16 @@ class Gerencia extends modelGerencia implements AuditableInterface
     private $resume;
     
     /**
-     * Es valida la uditoria para ser evaluado
+     * Es válida la auditoria para ser evaluado
      * @var boolean
      * @ORM\Column(name="validAudit",type="boolean")
      */
     private $validAudit = true;
+    
+    /**
+     * @ORM\ManyToMany(targetEntity="\Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle", mappedBy="gerencias")
+     */
+    private $workStudyCircles;
 
     /**
      * Constructor
@@ -175,6 +180,7 @@ class Gerencia extends modelGerencia implements AuditableInterface
         $this->gerenciaSecondVinculants = new \Doctrine\Common\Collections\ArrayCollection();
         $this->gerenciaSecondSupports = new \Doctrine\Common\Collections\ArrayCollection();
         $this->tacticalObjectives = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->workStudyCircles = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**
