@@ -23,9 +23,8 @@ use Pequiven\SEIPBundle\Model\Common\CommonObject;
  * })
  * @ORM\HasLifecycleCallbacks
  */
-class User extends BaseUser implements UserInterface,UserBoxInterface,  PeriodItemInterface
-{
-    
+class User extends BaseUser implements UserInterface, UserBoxInterface, PeriodItemInterface {
+
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
@@ -33,37 +32,37 @@ class User extends BaseUser implements UserInterface,UserBoxInterface,  PeriodIt
      * @var type 
      */
     protected $id;
-    
+
     /**
-     *@ORM\Column(name="num_personal",type="integer",nullable=true)
+     * @ORM\Column(name="num_personal",type="integer",nullable=true)
      */
     private $numPersonal;
-    
+
     /**
      * @var string
      */
     protected $username;
-    
+
     /**
      * @ORM\OneToMany(targetEntity="\Pequiven\SEIPBundle\Entity\User", mappedBy="parent")
      */
     private $children;
-    
+
     /**
      * @ORM\ManyToOne(targetEntity="\Pequiven\SEIPBundle\Entity\User", inversedBy="children")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
      */
     private $parent;
-    
-    /** 
+
+    /**
      * Dirección
      * @var \Pequiven\MasterBundle\Entity\Direction
      * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Direction")
      * @ORM\JoinColumn(name="fk_direction", referencedColumnName="id")
      */
     private $direction;
-    
-    /** 
+
+    /**
      * Complejo
      * 
      * @var \Pequiven\MasterBundle\Entity\Complejo
@@ -71,7 +70,7 @@ class User extends BaseUser implements UserInterface,UserBoxInterface,  PeriodIt
      * @ORM\JoinColumn(name="fk_complejo", referencedColumnName="id")
      */
     private $complejo;
-    
+
     /**
      * Gerencia
      * 
@@ -80,7 +79,7 @@ class User extends BaseUser implements UserInterface,UserBoxInterface,  PeriodIt
      * @ORM\JoinColumn(name="fk_gerencia", referencedColumnName="id")
      */
     private $gerencia;
-    
+
     /**
      * GerenciaSecond
      * 
@@ -89,7 +88,7 @@ class User extends BaseUser implements UserInterface,UserBoxInterface,  PeriodIt
      * @ORM\JoinColumn(name="fk_gerencia_second", referencedColumnName="id")
      */
     private $gerenciaSecond;
-    
+
     /**
      * Cargo
      * 
@@ -98,7 +97,7 @@ class User extends BaseUser implements UserInterface,UserBoxInterface,  PeriodIt
      * @ORM\JoinColumn(name="fk_cargo", referencedColumnName="id")
      */
     private $cargo;
-    
+
     /**
      * @var \Pequiven\MasterBundle\Entity\Rol
      * @ORM\ManyToMany(targetEntity="Pequiven\MasterBundle\Entity\Rol")
@@ -108,7 +107,7 @@ class User extends BaseUser implements UserInterface,UserBoxInterface,  PeriodIt
      * )
      */
     protected $groups;
-    
+
     /**
      * Programas de gestion
      * 
@@ -124,14 +123,14 @@ class User extends BaseUser implements UserInterface,UserBoxInterface,  PeriodIt
      * @ORM\ManyToMany(targetEntity="Pequiven\ArrangementProgramBundle\Entity\Goal",mappedBy="responsibles")
      */
     private $goals;
-    
+
     /**
      * Supervisores
      * @var User
      * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\User",mappedBy="supervised")
      */
     private $supervisors;
-    
+
     /**
      * Supervisados
      * @var User
@@ -142,7 +141,7 @@ class User extends BaseUser implements UserInterface,UserBoxInterface,  PeriodIt
      *      )
      */
     private $supervised;
-    
+
     /**
      * Configuracion del usuario
      * 
@@ -150,7 +149,7 @@ class User extends BaseUser implements UserInterface,UserBoxInterface,  PeriodIt
      * @ORM\OneToOne(targetEntity="Pequiven\SEIPBundle\Entity\User\Configuration",inversedBy="user",cascade={"persist","remove"})
      */
     private $configuration;
-    
+
     /**
      * Boxes o widgets del usuario
      * 
@@ -158,7 +157,7 @@ class User extends BaseUser implements UserInterface,UserBoxInterface,  PeriodIt
      * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\Box\ModelBox",mappedBy="user")
      */
     private $boxes;
-    
+
     /**
      * Estatus del trabajador
      * @var integer
@@ -174,26 +173,54 @@ class User extends BaseUser implements UserInterface,UserBoxInterface,  PeriodIt
      * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\Period")
      */
     private $period;
-    
+
     /**
      * Reportes de plantas que puede cargar el usuario
      * @var DataLoad\PlantReport
      * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\PlantReport",inversedBy="users")
      */
     private $plantReports;
-    
+
     /**
      * Reportes de plantas que puede cargar el usuario
      * @var DataLoad\ReportTemplate
      * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate",inversedBy="users")
      */
     private $reportTemplates;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="\Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle", inversedBy="userWorkerId")
+     * @ORM\JoinColumn(name="workStudyCircle_id", referencedColumnName="id")
+     * */
+    private $workStudyCircle;
     
+    
+    /**
+     * cedula
+     * @var string
+     * @ORM\Column(name="identification",type="integer",length=9,nullable=false)
+     */
+    private $identification;
+    
+    /**
+     * celular
+     * @var string
+     * @ORM\Column(name="cellphone",type="string",length=100,nullable=true)
+     */
+    private $cellphone;
+    
+    
+    /**
+     * extension
+     * @var string
+     * @ORM\Column(name="ext",type="string",length=6,nullable=true)
+     */
+    private $ext;
+
     /**
      * Constructor
      */
-    public function __construct()
-    {
+    public function __construct() {
         parent::__construct();
         $this->children = new \Doctrine\Common\Collections\ArrayCollection();
         $this->goals = new \Doctrine\Common\Collections\ArrayCollection();
@@ -204,15 +231,15 @@ class User extends BaseUser implements UserInterface,UserBoxInterface,  PeriodIt
         $this->groups = new \Doctrine\Common\Collections\ArrayCollection();
         $this->plantReports = new \Doctrine\Common\Collections\ArrayCollection();
         $this->reportTemplates = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->workStudyCircle = new \Doctrine\Common\Collections\ArrayCollection();
     }
-    
+
     /**
      * Get id
      *
      * @return integer 
      */
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
 
@@ -221,8 +248,7 @@ class User extends BaseUser implements UserInterface,UserBoxInterface,  PeriodIt
      *
      * @return \DateTime 
      */
-    public function getCreatedAt()
-    {
+    public function getCreatedAt() {
         return $this->createdAt;
     }
 
@@ -231,8 +257,7 @@ class User extends BaseUser implements UserInterface,UserBoxInterface,  PeriodIt
      *
      * @return \DateTime 
      */
-    public function getUpdatedAt()
-    {
+    public function getUpdatedAt() {
         return $this->updatedAt;
     }
 
@@ -242,8 +267,7 @@ class User extends BaseUser implements UserInterface,UserBoxInterface,  PeriodIt
      * @param \DateTime $deletedAt
      * @return User
      */
-    public function setDeletedAt($deletedAt)
-    {
+    public function setDeletedAt($deletedAt) {
         $this->deletedAt = $deletedAt;
 
         return $this;
@@ -254,8 +278,7 @@ class User extends BaseUser implements UserInterface,UserBoxInterface,  PeriodIt
      *
      * @return \DateTime 
      */
-    public function getDeletedAt()
-    {
+    public function getDeletedAt() {
         return $this->deletedAt;
     }
 
@@ -265,8 +288,7 @@ class User extends BaseUser implements UserInterface,UserBoxInterface,  PeriodIt
      * @param \Coramer\Sigtec\CoreBundle\Entity\Group $groups
      * @return User
      */
-    public function addGroup(\FOS\UserBundle\Model\GroupInterface $groups)
-    {
+    public function addGroup(\FOS\UserBundle\Model\GroupInterface $groups) {
         $this->groups[] = $groups;
 
         return $this;
@@ -277,8 +299,7 @@ class User extends BaseUser implements UserInterface,UserBoxInterface,  PeriodIt
      *
      * @param \Coramer\Sigtec\CoreBundle\Entity\Group $groups
      */
-    public function removeGroup(\FOS\UserBundle\Model\GroupInterface $groups)
-    {
+    public function removeGroup(\FOS\UserBundle\Model\GroupInterface $groups) {
         $this->groups->removeElement($groups);
     }
 
@@ -288,8 +309,7 @@ class User extends BaseUser implements UserInterface,UserBoxInterface,  PeriodIt
      * @param integer $numPersonal
      * @return User
      */
-    public function setNumPersonal($numPersonal)
-    {
+    public function setNumPersonal($numPersonal) {
         $this->numPersonal = $numPersonal;
 
         return $this;
@@ -300,8 +320,7 @@ class User extends BaseUser implements UserInterface,UserBoxInterface,  PeriodIt
      *
      * @return integer
      */
-    public function getNumPersonal()
-    {
+    public function getNumPersonal() {
         return $this->numPersonal;
     }
 
@@ -311,8 +330,7 @@ class User extends BaseUser implements UserInterface,UserBoxInterface,  PeriodIt
      * @param \Pequiven\SEIPBundle\Entity\User $children
      * @return User
      */
-    public function addChild(\Pequiven\SEIPBundle\Entity\User $children)
-    {
+    public function addChild(\Pequiven\SEIPBundle\Entity\User $children) {
         $this->children[] = $children;
 
         return $this;
@@ -323,8 +341,7 @@ class User extends BaseUser implements UserInterface,UserBoxInterface,  PeriodIt
      *
      * @param \Pequiven\SEIPBundle\Entity\User $children
      */
-    public function removeChild(\Pequiven\SEIPBundle\Entity\User $children)
-    {
+    public function removeChild(\Pequiven\SEIPBundle\Entity\User $children) {
         $this->children->removeElement($children);
     }
 
@@ -333,8 +350,7 @@ class User extends BaseUser implements UserInterface,UserBoxInterface,  PeriodIt
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getChildren()
-    {
+    public function getChildren() {
         return $this->children;
     }
 
@@ -344,8 +360,7 @@ class User extends BaseUser implements UserInterface,UserBoxInterface,  PeriodIt
      * @param \Pequiven\SEIPBundle\Entity\User $parent
      * @return User
      */
-    public function setParent(\Pequiven\SEIPBundle\Entity\User $parent = null)
-    {
+    public function setParent(\Pequiven\SEIPBundle\Entity\User $parent = null) {
         $this->parent = $parent;
 
         return $this;
@@ -356,8 +371,7 @@ class User extends BaseUser implements UserInterface,UserBoxInterface,  PeriodIt
      *
      * @return \Pequiven\SEIPBundle\Entity\User 
      */
-    public function getParent()
-    {
+    public function getParent() {
         return $this->parent;
     }
 
@@ -367,8 +381,7 @@ class User extends BaseUser implements UserInterface,UserBoxInterface,  PeriodIt
      * @param \Pequiven\MasterBundle\Entity\Complejo $complejo
      * @return User
      */
-    public function setComplejo(\Pequiven\MasterBundle\Entity\Complejo $complejo = null)
-    {
+    public function setComplejo(\Pequiven\MasterBundle\Entity\Complejo $complejo = null) {
         $this->complejo = $complejo;
 
         return $this;
@@ -379,8 +392,7 @@ class User extends BaseUser implements UserInterface,UserBoxInterface,  PeriodIt
      *
      * @return \Pequiven\MasterBundle\Entity\Complejo 
      */
-    public function getComplejo()
-    {
+    public function getComplejo() {
         return $this->complejo;
     }
 
@@ -390,8 +402,7 @@ class User extends BaseUser implements UserInterface,UserBoxInterface,  PeriodIt
      * @param \Pequiven\MasterBundle\Entity\Gerencia $gerencia
      * @return User
      */
-    public function setGerencia(\Pequiven\MasterBundle\Entity\Gerencia $gerencia = null)
-    {
+    public function setGerencia(\Pequiven\MasterBundle\Entity\Gerencia $gerencia = null) {
         $this->gerencia = $gerencia;
 
         return $this;
@@ -402,8 +413,7 @@ class User extends BaseUser implements UserInterface,UserBoxInterface,  PeriodIt
      *
      * @return \Pequiven\MasterBundle\Entity\Gerencia 
      */
-    public function getGerencia()
-    {
+    public function getGerencia() {
         return $this->gerencia;
     }
 
@@ -413,8 +423,7 @@ class User extends BaseUser implements UserInterface,UserBoxInterface,  PeriodIt
      * @param \Pequiven\MasterBundle\Entity\Cargo $cargo
      * @return User
      */
-    public function setCargo(\Pequiven\MasterBundle\Entity\Cargo $cargo = null)
-    {
+    public function setCargo(\Pequiven\MasterBundle\Entity\Cargo $cargo = null) {
         $this->cargo = $cargo;
 
         return $this;
@@ -425,8 +434,7 @@ class User extends BaseUser implements UserInterface,UserBoxInterface,  PeriodIt
      *
      * @return \Pequiven\MasterBundle\Entity\Cargo 
      */
-    public function getCargo()
-    {
+    public function getCargo() {
         return $this->cargo;
     }
 
@@ -436,8 +444,7 @@ class User extends BaseUser implements UserInterface,UserBoxInterface,  PeriodIt
      * @param \Pequiven\MasterBundle\Entity\GerenciaSecond $gerenciaSecond
      * @return User
      */
-    public function setGerenciaSecond(\Pequiven\MasterBundle\Entity\GerenciaSecond $gerenciaSecond = null)
-    {
+    public function setGerenciaSecond(\Pequiven\MasterBundle\Entity\GerenciaSecond $gerenciaSecond = null) {
         $this->gerenciaSecond = $gerenciaSecond;
 
         return $this;
@@ -448,19 +455,17 @@ class User extends BaseUser implements UserInterface,UserBoxInterface,  PeriodIt
      *
      * @return \Pequiven\MasterBundle\Entity\GerenciaSecond 
      */
-    public function getGerenciaSecond()
-    {
+    public function getGerenciaSecond() {
         return $this->gerenciaSecond;
     }
-    
+
     /**
      * Set direction
      *
      * @param \Pequiven\MasterBundle\Entity\Direction $direction
      * @return Gerencia
      */
-    public function setDirection(\Pequiven\MasterBundle\Entity\Direction $direction = null)
-    {
+    public function setDirection(\Pequiven\MasterBundle\Entity\Direction $direction = null) {
         $this->direction = $direction;
 
         return $this;
@@ -471,13 +476,12 @@ class User extends BaseUser implements UserInterface,UserBoxInterface,  PeriodIt
      *
      * @return \Pequiven\MasterBundle\Entity\Direction 
      */
-    public function getDirection()
-    {
+    public function getDirection() {
         return $this->direction;
     }
-    
+
     public function __toString() {
-        return sprintf("%s %s (%s)",$this->getFirstName(),$this->getLastName(),$this->getNumPersonal());
+        return sprintf("%s %s (%s)", $this->getFirstName(), $this->getLastName(), $this->getNumPersonal());
     }
 
     /**
@@ -485,8 +489,7 @@ class User extends BaseUser implements UserInterface,UserBoxInterface,  PeriodIt
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getGroups()
-    {
+    public function getGroups() {
         return $this->groups;
     }
 
@@ -496,8 +499,7 @@ class User extends BaseUser implements UserInterface,UserBoxInterface,  PeriodIt
      * @param \Pequiven\ArrangementProgramBundle\Entity\Goal $goals
      * @return User
      */
-    public function addGoal(\Pequiven\ArrangementProgramBundle\Entity\Goal $goals)
-    {
+    public function addGoal(\Pequiven\ArrangementProgramBundle\Entity\Goal $goals) {
         $this->goals[] = $goals;
 
         return $this;
@@ -508,8 +510,7 @@ class User extends BaseUser implements UserInterface,UserBoxInterface,  PeriodIt
      *
      * @param \Pequiven\ArrangementProgramBundle\Entity\Goal $goals
      */
-    public function removeGoal(\Pequiven\ArrangementProgramBundle\Entity\Goal $goals)
-    {
+    public function removeGoal(\Pequiven\ArrangementProgramBundle\Entity\Goal $goals) {
         $this->goals->removeElement($goals);
     }
 
@@ -518,15 +519,14 @@ class User extends BaseUser implements UserInterface,UserBoxInterface,  PeriodIt
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getGoals()
-    {
+    public function getGoals() {
         return $this->goals;
     }
-    
+
     /**
      * 
      */
-    public function isAllowSuperAdmin(){
+    public function isAllowSuperAdmin() {
         $isSuperAdmin = false;
         $groupsLevelAdmin = array(
             Rol::ROLE_ADMIN,
@@ -535,21 +535,19 @@ class User extends BaseUser implements UserInterface,UserBoxInterface,  PeriodIt
 //        $level = Rol::ROLE_SUPER_ADMIN;
         $groups = $this->getGroups();
         foreach ($groups as $group) {
-            if(in_array($group->getLevel(), $groupsLevelAdmin))
-            {
+            if (in_array($group->getLevel(), $groupsLevelAdmin)) {
                 $isSuperAdmin = true;
             }
         }
         return $isSuperAdmin;
     }
-    
+
     /**
      * Devuelve el nivel del rol asignado
      * @return integer
      */
-    public function getLevelByGroup($type = CommonObject::TYPE_LEVEL_USER_ONLY_OWNER)
-    {
-        if(!isset($this->levelByGroup)){
+    public function getLevelByGroup($type = CommonObject::TYPE_LEVEL_USER_ONLY_OWNER) {
+        if (!isset($this->levelByGroup)) {
             $level = 0;
             $groups = $this->getGroups();
             $groupsLevelAdmin = array(
@@ -557,25 +555,23 @@ class User extends BaseUser implements UserInterface,UserBoxInterface,  PeriodIt
                 Rol::ROLE_SUPER_ADMIN
             );
             foreach ($groups as $group) {
-                if($type == CommonObject::TYPE_LEVEL_USER_ONLY_OWNER){
-                    if($group->getLevel() > $level && !in_array($group->getLevel(), $groupsLevelAdmin) && $group->getTypeRol() == Rol::TYPE_ROL_OWNER)
-                    {
+                if ($type == CommonObject::TYPE_LEVEL_USER_ONLY_OWNER) {
+                    if ($group->getLevel() > $level && !in_array($group->getLevel(), $groupsLevelAdmin) && $group->getTypeRol() == Rol::TYPE_ROL_OWNER) {
                         $level = $group->getLevel();
                     }
-                } elseif($type == CommonObject::TYPE_LEVEL_USER_ALL){
-                     if($group->getLevel() > $level && !in_array($group->getLevel(), $groupsLevelAdmin))
-                    {
+                } elseif ($type == CommonObject::TYPE_LEVEL_USER_ALL) {
+                    if ($group->getLevel() > $level && !in_array($group->getLevel(), $groupsLevelAdmin)) {
                         $level = $group->getLevel();
-                    }   
+                    }
                 }
             }
             $this->levelByGroup = $level;
         }
         return $this->levelByGroup;
     }
-    
+
     public function getRealGroup() {
-        if(!isset($this->realGroup)){
+        if (!isset($this->realGroup)) {
             $level = 0;
             $groups = $this->getGroups();
             $groupsLevelAdmin = array(
@@ -584,8 +580,7 @@ class User extends BaseUser implements UserInterface,UserBoxInterface,  PeriodIt
             );
             $realGroup = null;
             foreach ($groups as $group) {
-                if($group->getLevel() > $level && !in_array($group->getLevel(), $groupsLevelAdmin))
-                {
+                if ($group->getLevel() > $level && !in_array($group->getLevel(), $groupsLevelAdmin)) {
                     $level = $group->getLevel();
                     $realGroup = $group;
                 }
@@ -595,43 +590,46 @@ class User extends BaseUser implements UserInterface,UserBoxInterface,  PeriodIt
         }
         return $this->realGroup;
     }
-    
+
     /**
      * Devuelve el nivel real del rol asignado, nunca devuelve rol auxiliar
      * 
      * @return integer
      */
-    public function getLevelRealByGroup(){
-        if(!isset($this->levelRealByGroup)){
+    public function getLevelRealByGroup() {
+        if (!isset($this->levelRealByGroup)) {
             $this->levelRealByGroup = Rol::getRoleLevel($this->getLevelByGroup());
         }
         return $this->levelRealByGroup;
     }
-    
+
     /**
      * Devuelve el nivel real del rol asignado, nunca devuelve rol auxiliar
      * 
      * @return integer
      */
-    public function getLevelAllByGroup(){
-        if(!isset($this->levelRealByGroup)){
+    public function getLevelAllByGroup() {
+        if (!isset($this->levelRealByGroup)) {
             $this->levelRealByGroup = Rol::getRoleLevel($this->getLevelByGroup(CommonObject::TYPE_LEVEL_USER_ALL));
         }
         return $this->levelRealByGroup;
     }
-    
-    public function getFullNameUser(){
-        return $this->firstname . ' '.$this->lastname. ' ('.$this->numPersonal.' | '.$this->username.')';
+
+    public function getFullNameUser() {
+        return $this->firstname . ' ' . $this->lastname . ' (' . $this->numPersonal . ' | ' . $this->username . ')';
     }
     
+    public function getOnlyFullNameUser() {
+        return $this->firstname . ' ' . $this->lastname;
+    }
+
     /**
      * Add supervisors
      *
      * @param \Pequiven\SEIPBundle\Entity\User $supervisors
      * @return User
      */
-    public function addSupervisor(\Pequiven\SEIPBundle\Entity\User $supervisors)
-    {
+    public function addSupervisor(\Pequiven\SEIPBundle\Entity\User $supervisors) {
         $this->supervisors->add($supervisors);
 
         return $this;
@@ -642,8 +640,7 @@ class User extends BaseUser implements UserInterface,UserBoxInterface,  PeriodIt
      *
      * @param \Pequiven\SEIPBundle\Entity\User $supervisors
      */
-    public function removeSupervisor(\Pequiven\SEIPBundle\Entity\User $supervisors)
-    {
+    public function removeSupervisor(\Pequiven\SEIPBundle\Entity\User $supervisors) {
         $this->supervisors->removeElement($supervisors);
     }
 
@@ -652,8 +649,7 @@ class User extends BaseUser implements UserInterface,UserBoxInterface,  PeriodIt
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getSupervisors()
-    {
+    public function getSupervisors() {
         return $this->supervisors;
     }
 
@@ -663,8 +659,7 @@ class User extends BaseUser implements UserInterface,UserBoxInterface,  PeriodIt
      * @param \Pequiven\SEIPBundle\Entity\User $supervised
      * @return User
      */
-    public function addSupervised(\Pequiven\SEIPBundle\Entity\User $supervised)
-    {
+    public function addSupervised(\Pequiven\SEIPBundle\Entity\User $supervised) {
         $this->supervised->add($supervised);
 
         return $this;
@@ -675,8 +670,7 @@ class User extends BaseUser implements UserInterface,UserBoxInterface,  PeriodIt
      *
      * @param \Pequiven\SEIPBundle\Entity\User $supervised
      */
-    public function removeSupervised(\Pequiven\SEIPBundle\Entity\User $supervised)
-    {
+    public function removeSupervised(\Pequiven\SEIPBundle\Entity\User $supervised) {
         $this->supervised->removeElement($supervised);
     }
 
@@ -685,19 +679,17 @@ class User extends BaseUser implements UserInterface,UserBoxInterface,  PeriodIt
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getSupervised()
-    {
+    public function getSupervised() {
         return $this->supervised;
     }
-    
+
     /**
      * Add arrangementPrograms
      *
      * @param \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram $arrangementPrograms
      * @return User
      */
-    public function addArrangementProgram(\Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram $arrangementPrograms)
-    {
+    public function addArrangementProgram(\Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram $arrangementPrograms) {
         $this->arrangementPrograms->add($arrangementPrograms);
 
         return $this;
@@ -708,8 +700,7 @@ class User extends BaseUser implements UserInterface,UserBoxInterface,  PeriodIt
      *
      * @param \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram $arrangementPrograms
      */
-    public function removeArrangementProgram(\Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram $arrangementPrograms)
-    {
+    public function removeArrangementProgram(\Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram $arrangementPrograms) {
         $this->arrangementPrograms->removeElement($arrangementPrograms);
     }
 
@@ -718,8 +709,7 @@ class User extends BaseUser implements UserInterface,UserBoxInterface,  PeriodIt
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getArrangementPrograms()
-    {
+    public function getArrangementPrograms() {
         return $this->arrangementPrograms;
     }
 
@@ -729,8 +719,7 @@ class User extends BaseUser implements UserInterface,UserBoxInterface,  PeriodIt
      * @param \Pequiven\SEIPBundle\Entity\User\Configuration $configuration
      * @return User
      */
-    public function setConfiguration(\Pequiven\SEIPBundle\Entity\User\Configuration $configuration = null)
-    {
+    public function setConfiguration(\Pequiven\SEIPBundle\Entity\User\Configuration $configuration = null) {
         $this->configuration = $configuration;
 
         return $this;
@@ -741,12 +730,9 @@ class User extends BaseUser implements UserInterface,UserBoxInterface,  PeriodIt
      *
      * @return \Pequiven\SEIPBundle\Entity\User\Configuration 
      */
-    public function getConfiguration()
-    {
+    public function getConfiguration() {
         return $this->configuration;
     }
-    
-    
 
     /**
      * Add boxes
@@ -754,8 +740,7 @@ class User extends BaseUser implements UserInterface,UserBoxInterface,  PeriodIt
      * @param \Tecnocreaciones\Bundle\BoxBundle\Model\ModelBoxInterface $boxes
      * @return User
      */
-    public function addModelBox(\Tecnocreaciones\Bundle\BoxBundle\Model\ModelBoxInterface $boxes)
-    {
+    public function addModelBox(\Tecnocreaciones\Bundle\BoxBundle\Model\ModelBoxInterface $boxes) {
         $this->boxes[] = $boxes;
 
         return $this;
@@ -766,8 +751,7 @@ class User extends BaseUser implements UserInterface,UserBoxInterface,  PeriodIt
      *
      * @param \Tecnocreaciones\Bundle\BoxBundle\Model\ModelBoxInterface $boxes
      */
-    public function removeModelBox(\Tecnocreaciones\Bundle\BoxBundle\Model\ModelBoxInterface $boxes)
-    {
+    public function removeModelBox(\Tecnocreaciones\Bundle\BoxBundle\Model\ModelBoxInterface $boxes) {
         $this->boxes->removeElement($boxes);
     }
 
@@ -776,19 +760,17 @@ class User extends BaseUser implements UserInterface,UserBoxInterface,  PeriodIt
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getModelBoxes()
-    {
+    public function getModelBoxes() {
         return $this->boxes;
     }
-    
+
     /**
      * Set status worker
      *
      * @param integer $statusWorker
      * @return ArrangementProgram
      */
-    public function setStatusWorker($statusWorker)
-    {
+    public function setStatusWorker($statusWorker) {
         $this->statusWorker = $statusWorker;
 
         return $this;
@@ -799,20 +781,17 @@ class User extends BaseUser implements UserInterface,UserBoxInterface,  PeriodIt
      *
      * @return integer 
      */
-    public function getStatusWorker()
-    {
+    public function getStatusWorker() {
         return $this->statusWorker;
     }
-    
-    function getPeriod() 
-    {
+
+    function getPeriod() {
         return $this->period;
     }
 
-    function setPeriod(\Pequiven\SEIPBundle\Entity\Period $period) 
-    {
+    function setPeriod(\Pequiven\SEIPBundle\Entity\Period $period) {
         $this->period = $period;
-        
+
         return $this;
     }
 
@@ -822,8 +801,7 @@ class User extends BaseUser implements UserInterface,UserBoxInterface,  PeriodIt
      * @param \Pequiven\SEIPBundle\Entity\DataLoad\PlantReport $plantReports
      * @return User
      */
-    public function addPlantReport(\Pequiven\SEIPBundle\Entity\DataLoad\PlantReport $plantReports)
-    {
+    public function addPlantReport(\Pequiven\SEIPBundle\Entity\DataLoad\PlantReport $plantReports) {
         $this->plantReports[] = $plantReports;
 
         return $this;
@@ -834,8 +812,7 @@ class User extends BaseUser implements UserInterface,UserBoxInterface,  PeriodIt
      *
      * @param \Pequiven\SEIPBundle\Entity\DataLoad\PlantReport $plantReports
      */
-    public function removePlantReport(\Pequiven\SEIPBundle\Entity\DataLoad\PlantReport $plantReports)
-    {
+    public function removePlantReport(\Pequiven\SEIPBundle\Entity\DataLoad\PlantReport $plantReports) {
         $this->plantReports->removeElement($plantReports);
     }
 
@@ -844,19 +821,17 @@ class User extends BaseUser implements UserInterface,UserBoxInterface,  PeriodIt
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getPlantReports()
-    {
+    public function getPlantReports() {
         return $this->plantReports;
     }
-    
+
     /**
      * Add reportTemplates
      *
      * @param \Pequiven\SEIPBundle\Entity\DataLoad\PlantReport $reportTemplates
      * @return User
      */
-    public function addReportTemplates(\Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate $reportTemplates)
-    {
+    public function addReportTemplates(\Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate $reportTemplates) {
         $this->reportTemplates[] = $reportTemplates;
 
         return $this;
@@ -867,8 +842,7 @@ class User extends BaseUser implements UserInterface,UserBoxInterface,  PeriodIt
      *
      * @param \Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate $reportTemplates
      */
-    public function removeReportTemplates(\Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate $reportTemplates)
-    {
+    public function removeReportTemplates(\Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate $reportTemplates) {
         $this->reportTemplates->removeElement($reportTemplates);
     }
 
@@ -877,8 +851,69 @@ class User extends BaseUser implements UserInterface,UserBoxInterface,  PeriodIt
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getReportTemplates()
-    {
+    public function getReportTemplates() {
         return $this->reportTemplates;
     }
+
+    /**
+     * 
+     * @param \Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle $workStudyCircle
+     * @return \Pequiven\SEIPBundle\Entity\User
+     */
+//    public function addWorkStudyCircle(Politic\WorkStudyCircle $workStudyCircle) {
+//        $this->workStudyCircle->add($workStudyCircle);
+//
+//        return $this;
+//    }
+
+    /**
+     * 
+     * @param \Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle $workStudyCircle
+     */
+//    public function removeWorkStudyCircle(Politic\WorkStudyCircle $workStudyCircle) {
+//        $this->workStudyCircle->removeElement($workStudyCircle);
+//    }
+
+    /**
+     * 
+     * @return type
+     */
+    public function setWorkStudyCircle(Politic\WorkStudyCircle $workStudyCircle = null) {
+        $this->workStudyCircle = $workStudyCircle;
+
+        return $this;
+    }
+
+    /**
+     * 
+     * @return type
+     */
+    public function getWorkStudyCircle() {
+        return $this->workStudyCircle;
+    }
+    
+    public  function setIndentification($identification) {
+        $this->identification  = $identification;
+    }
+    
+    public function getIndentification() {
+        return $this->identification;
+    }
+    
+    public  function setCellphone($cellphone) {
+        $this->cellphone  = $cellphone;
+    }
+    
+    public function getCellphone() {
+        return $this->cellphone;
+    }
+    
+    public  function setExt($ext) {
+        $this->ext  = $ext;
+    }
+    
+    public function getExt() {
+        return $this->ext;
+    }
+ 
 }

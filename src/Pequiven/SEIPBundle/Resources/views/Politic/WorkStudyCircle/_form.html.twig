@@ -17,6 +17,11 @@
         {{ form_widget(form.ref) }}
         {{ form_errors(form.ref) }}
     </div>
+     <div class="field-block button-height">
+        {{ form_label(form.members) }}
+        {{ form_widget(form.members) }}
+        {{ form_errors(form.members) }}
+    </div>
 </fieldset>
 {#        {{ dump(_context|keys) }}#}
 <script type="text/javascript">
