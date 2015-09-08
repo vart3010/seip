@@ -23,7 +23,7 @@
             <tbody>
                 {% for plant in plantsGroup %}
                     <tr>
-                        <td title="{{ plant.groups }}">{{ loop.index }} - {{ generateLink(plant.entity) }}
+                        <td title="{{ plant.groups }}">{{ loop.index }} - {{ plant.entity }}
                             <br>
                             <small style="margin-left: 25px;">{{ plant.groups }}</small>
                         </td>
