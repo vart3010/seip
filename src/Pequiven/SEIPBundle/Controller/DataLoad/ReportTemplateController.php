@@ -1470,8 +1470,11 @@ class ReportTemplateController extends SEIPController {
                         $arrayNamesUnrealizedProduction[] = $productId;
                         $arrayUnrealizedProduction[$productId] = array(
                             "productName" => $productReport->getProduct()->getName() . " (" . $productReport->getProduct()->getProductUnit()->getUnit() . ")",
+                            //ID DEL PRODUCT_REPORT
                             "productId" => $productReport->getId(),
-                            "reportTemplateId" => $productReport->getPlantReport()->getReportTemplate()->getId()
+                            "reportTemplateId" => $productReport->getPlantReport()->getReportTemplate()->getId(),
+                            //ID DEL PRODUCTO
+                            "idProduct"=>$productId
                         );
                     }
 
