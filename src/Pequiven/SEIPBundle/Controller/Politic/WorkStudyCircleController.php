@@ -41,6 +41,7 @@ class WorkStudyCircleController extends SEIPController {
 
             $workStudyCircle->setCreatedBy($user);
             $workStudyCircle->setPeriod($period = $this->getPeriodService()->getPeriodActive());
+            $workStudyCircle->setCodigo($this->setNewRef($request->get("workStudyCircle_data")["complejo"]));
             //die("Formulario enviado correctamente");
 
             $em->persist($workStudyCircle);
@@ -83,6 +84,10 @@ class WorkStudyCircleController extends SEIPController {
             $user->setWorkStudyCircle($workStudyCircle);
             $em->persist($user);
         }
+        
+        $user = $this->getUser();
+        $user->setWorkStudyCircle($workStudyCircle);
+        $em->persist($user);
 
         try {
             $em->flush();
@@ -93,6 +98,27 @@ class WorkStudyCircleController extends SEIPController {
         }
 
         return true;
+    }
+    
+    public function setNewRef($location){
+        $em = $this->getDoctrine()->getManager();
+        $complejo = $em->getRepository('PequivenMasterBundle:Complejo')->findOneBy(array('id' => $location));
+        $workStudyCircles = $em->getRepository('PequivenSEIPBundle:Politic\WorkStudyCircle')->findBy(array('complejo' => $location));
+        $totalWorkStudyCircles = count($workStudyCircles);
+        
+        $ref = 'CET-'.$complejo->getRef().'-';
+        $contRef = $totalWorkStudyCircles + 1;
+        if($totalWorkStudyCircles < 10){
+            $ref = $ref . '000' . $contRef;
+        } elseif($totalWorkStudyCircles >= 10 && $totalWorkStudyCircles < 100){
+            $ref = $ref . '00' . $contRef;
+        }elseif($totalWorkStudyCircles >= 100 && $totalWorkStudyCircles < 1000){
+            $ref = $ref . '0' . $contRef;
+        } elseif($totalWorkStudyCircles >= 1000){
+            $ref = $ref . $contRef;
+        }
+        
+        return $ref;
     }
 
     public function showAction(Request $request) {
