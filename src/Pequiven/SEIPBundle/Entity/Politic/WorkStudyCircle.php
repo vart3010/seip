@@ -93,14 +93,14 @@ class WorkStudyCircle extends ModelWorkStudyCircle implements PeriodItemInterfac
     /**
      * Gerencias
      * 
-     * @ORM\ManyToMany(targetEntity="\Pequiven\MasterBundle\Entity\Gerencia", inversedBy="workStudyCircles")
+     * @ORM\ManyToMany(targetEntity="\Pequiven\MasterBundle\Entity\Gerencia", inversedBy="workStudyCircles", cascade={"persist","remove"})
      */
     private $gerencias;
 
     /**
      * GerenciaSeconds
      * 
-     * @ORM\ManyToMany(targetEntity="\Pequiven\MasterBundle\Entity\GerenciaSecond", inversedBy="workStudyCircles")
+     * @ORM\ManyToMany(targetEntity="\Pequiven\MasterBundle\Entity\GerenciaSecond", inversedBy="workStudyCircles", cascade={"persist","remove"})
      */
     private $gerenciaSeconds;
 
