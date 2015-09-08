@@ -3,6 +3,11 @@
 
 {% trans_default_domain 'workStudyCircle' %}
 
+{% block javascripts_base %}
+    {{ parent() }}
+    <script src="{{  asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.input.js') }}"></script>
+{% endblock javascripts_base %}
+
 {% block before_body %}
     {{ contentHeader("Círculo de Estudio y Trabajo")  }}
 {% endblock %}
@@ -97,6 +102,10 @@
             </div>
         </div>
     </fieldset>
+                
+    {% set users = workStudyCircle.userWorkerId %}
+    <br /><br />
+    {% include 'PequivenSEIPBundle:Politic:WorkStudyCircle/members.html.twig' %}
 
 {% endblock %}
 

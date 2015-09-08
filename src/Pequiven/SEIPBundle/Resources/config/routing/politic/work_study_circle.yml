@@ -8,6 +8,14 @@ pequiven_work_study_circle_create:
     options:
         expose: true
         
+pequiven_work_study_circle_member_edit:
+    path: /edit-member/{idUser}
+    defaults:
+        _controller: pequiven.controller.work_study_circle:editWorkStudyCircleMemberAction
+    methods: [GET|POST]
+    options:
+        expose: true
+        
 pequiven_work_study_circle_show:
     path: /{id}
     defaults:

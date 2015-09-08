@@ -18,6 +18,46 @@ use Pequiven\SEIPBundle\Form\Politic\WorkStudyCircleType;
  *
  */
 class WorkStudyCircleController extends SEIPController {
+    
+    
+    public function editWorkStudyCircleMemberAction(Request $request){
+        
+        $em = $this->getDoctrine()->getManager();
+        
+        $idUser = $request->get('idUser');
+
+        $user = $em->getRepository('PequivenSEIPBundle:User')->find($idUser);
+
+        if (!$user) {
+            throw $this->createNotFoundException('Unable to find ArrangementProgram entity.');
+        }
+        
+        $formUser = $this->createForm(new \Pequiven\SEIPBundle\Form\User\UserType(), $user);
+        $formUser->handleRequest($request);
+        
+        $em->getConnection()->beginTransaction();
+        if ($formUser->isSubmitted() && $formUser->isValid()) {
+            $em->persist($user);
+            
+            try {
+                $em->flush();
+                $em->getConnection()->commit();
+            } catch (Exception $e) {
+                $em->getConnection()->rollback();
+                throw $e;
+            }
+            
+            $this->get('session')->getFlashBag()->add('success', 'Miembro actualizado correctamente');
+            return $this->redirect($this->generateUrl('pequiven_work_study_circle_show', array("id" => $user->getWorkStudyCircle()->getId())));
+            
+        }
+        
+        return $this->render('PequivenSEIPBundle:Politic:WorkStudyCircle\editMember.html.twig', array(
+            'user' => $user,
+            'form_user' => $formUser->createView()
+        ));
+        
+    }
 
     public function createAction(Request $request) {
 

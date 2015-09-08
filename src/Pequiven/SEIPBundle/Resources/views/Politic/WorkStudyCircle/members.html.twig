@@ -1,46 +1,48 @@
 {% trans_default_domain 'PequivenSEIPBundle' %}
 
 
-<div class="block" ng-init="urlValueIndicatorForm='{{ path('pequiven_value_indicator_get_form',{'idIndicator':indicator.id}) }}'">
+<div class="block" >
     <div class="block-title">
-        <h3 class="ng-binding">{$ indicator.valuesIndicator.length $} {{ 'pequiven_indicator.results'|trans }}</h3>    
+        <h3 class="ng-binding">Miembros</h3>    
     </div>
 
-        <div class="with-padding">
-            <table class="simple-table responsive-table tables-extras" id="sorting-example2">
-                <thead>
-                    <tr>
-                        <th scope="col" width="2%" class="header">{{ 'seip.table.header.nro'|trans({},'PequivenArrangementProgramBundle') }}</th>
-                        <th scope="col" width="43%" class="header">Nombre</th>
-                        <th scope="col" width="20%" class="hide-on-tablet header">Teléfono</th>
-                        <th scope="col" width="20%" class="hide-on-mobile-portrait header">Cédula</th>
-                        <th scope="col" width="15%" class="hide-on-mobile-portrait header">&nbsp;</th>
-                    </tr>
-                </thead>
-                <tbody>
+    <div class="with-padding" ng-controller="WorkStudyCircleController">
+        <table class="simple-table responsive-table tables-extras" id="sorting-example2">
+            <thead>
+                <tr>
+                    <th scope="col" width="2%" class="header">{{ 'seip.table.header.nro'|trans({},'PequivenArrangementProgramBundle') }}</th>
+                    <th scope="col" width="43%" class="header">Nombre</th>
+                    <th scope="col" width="20%" class="hide-on-tablet header">Teléfono</th>
+                    <th scope="col" width="20%" class="hide-on-mobile-portrait header">Cédula</th>
+                    <th scope="col" width="15%" class="hide-on-mobile-portrait header">&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody>
 
-                    <tr ng-repeat="user in workStudyCircle.userWorkerId"  ng-init="paso=$index;">
-
-                        <td>{$ (paso+1) $}</td>
-                        <td>{$ user.getOnlyFullNameUser $}</td>
-                        <td>{$ user.cellphone $}</td>
-                        <td>{$ user.identification $}</td>
-
-                        <td class="align-right vertical-center">
-                            <div ng-controller="ToolsController" style="display: none;" id="target_{$ paso+1 $}">
-                                <span class="select compact">
-                                    <a href class="select-value form-edit">{{ 'pequiven.actions'|trans({},'messages') }}</a>
-                                    <span class="select-arrow"></span>
-                                    <span class="drop-down">
-                                        <a href ng-click="loadTemplateUser(user)" class="button icon-pencil">{{ "pequiven.actions.edit"|trans({},"messages") }}</a>
-                                    </span>
-                                </span>
-                            </div>
-                        </td>
-
-                        </tr>
-                    </tbody>
-                </table>
-
-            </div>
-        </div>
+                {% set cont = 1 %}
+                {% for user in workStudyCircle.userWorkerId %}
+                    
+                
+                <tr {#ng-repeat="user in workStudyCircle.userWorkerId"#}  {#ng-init="paso=$index;"#}>
+                <td>{{ cont }}</td>
+                <td>{{ user.getOnlyFullNameUser }}</td>
+                <td>{{ user.cellphone }}</td>
+                <td>{{ user.getIndentification }}</td>
+                <td class="align-right vertical-center">
+                    <div ng-controller="ToolsController" id="target_{$ paso+1 $}">
+                        <span class="select compact">
+                            <a href="{{ path('pequiven_work_study_circle_member_edit',{idUser:user.id}) }}" class="select-value form-edit">{{ 'pequiven.actions.edit'|trans({},'messages') }}</a>
+                            <span class="select-arrow"></span>
+                            {#<span class="drop-down">
+                                <a href="{{ path('pequiven_work_study_circle_member_edit',{idUser:user.id}) }}" class="button icon-pencil">{{ "pequiven.actions.edit"|trans({},"messages") }}</a>
+                            </span>#}
+                        </span>
+                    </div>
+                </td>
+                {% set cont = cont + 1 %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
