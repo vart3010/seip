@@ -2,70 +2,111 @@
 
 namespace Pequiven\SEIPBundle\Form\Politic;
 
-use Pequiven\SEIPBundle\Form\SeipAbstractForm;
+use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class WorkStudyCircleType extends SeipAbstractForm
-{
+class WorkStudyCircleType extends AbstractType {
+    
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
      */
-    public function buildForm(FormBuilderInterface $builder, array $options)
-    {
-        //$entity = new \Pequiven\SEIPBundle\Entity\DataLoad\PlantReport();
-        $entity = $builder->getData();
+    public function buildForm(FormBuilderInterface $builder, array $options) {
         
-//        $location = $entity->getReportTemplate()->getLocation();
-        
-        $parametersPreSet = array(
-            'label_attr' => array('class' => 'label'),
-            "empty_value" => "",
-            "attr" => array("class" => "select2 input-large"),
-            "disabled" => true,
-        );
-        
-        $parametersToSet = array(
-            'label_attr' => array('class' => 'label'),
-            "empty_value" => "",
-            "attr" => array("class" => "select2 input-large"),
-        );
-        
-        $parametersSelectRegion = array(
-                'label_attr' => array('class' => 'label'),
-                "empty_value" => "",
-                'attr' => array(
-                    'class' => "input-xlarge select2"
-                ),
-                "query_builder" => function (\Pequiven\SEIPBundle\Doctrine\ORM\SeipEntityRepository $repository){
-                    return $repository->getQueryAllEnabled();
-                }
-            );
-//        'read_only' => true,
-            
         $builder
-            ->add("ref", "text", array("label" => "form.ref", "label_attr" => array('class' => 'label'), 'attr' => array('class' => 'input', 'size' => 20)))
-            ->add("name", "textarea", array("label" => "form.name_work_study_circle", "label_attr" => array("class" => "label"), "attr" => array("cols" => 50, "rows" => 5, "class" => "input validate[required]")))
-            ->add("region",null,$parametersSelectRegion);
+                //->add('ref', 'text', array('attr'=> array('class'=> 'form-control' )))
+                ->add('name', 'textarea', array(
+                    'label' => 'Nombre del Círculo',
+                    'label_attr' => array('class' => 'label'),
+                    'attr' => array('class' => 'input input-large')))
+                
+                ->add('region', 'entity', array(
+                    'label' => 'Región',
+                    'label_attr' => array('class' => 'label'),
+                    'class' => 'Pequiven\SEIPBundle\Entity\CEI\Region',
+                    'property' => 'name',
+                    'empty_value' => 'Seleccione',
+                    'required' => false,
+                    'attr' => array(
+                        'class' => 'select2 input-large form-control',)))
+                ->add('complejo', 'entity', array(
+                    'label' => 'Complejo',
+                    'label_attr' => array('class' => 'label'),
+                    'class' => 'Pequiven\MasterBundle\Entity\Complejo',
+                    'property' => 'description',
+                    'empty_value' => 'Seleccione',
+                    'required' => false,
+                    'attr' => array(
+                        'class' => 'select2 input-xlarge form-control',
+            )))
+                ->add('gerencia', 'entity', array(
+                    'label' => 'Gerencia de Primera Línea',
+                    'label_attr' => array('class' => 'label'),
+                    'class' => 'Pequiven\MasterBundle\Entity\Gerencia',
+                    'property' => 'description',
+                    'empty_value' => 'Seleccione',
+                    'required' => false,
+                    'attr' => array(
+                        'class' => 'select2 input-xlarge form-control',
+            )))
+                ->add('gerenciaSecond', 'entity', array(
+                    'label' => 'Gerencia de Segunda Línea',
+                    'label_attr' => array('class' => 'label'),
+                    'class' => 'Pequiven\MasterBundle\Entity\GerenciaSecond',
+                    'property' => 'description',
+                    'empty_value' => 'Seleccione',
+                    'required' => false,
+                    'attr' => array(
+                        'class' => 'select2 input-xlarge form-control',
+            )))
+                ->add('superintendencia', 'text', array(
+                    'label' => 'Superintendencia',
+                    'label_attr' => array('class' => 'label'),
+                    'attr' => array('class' => 'input input-large '),
+                    'required' => false))
+                ->add('supervision', 'text', array(
+                    'label' => 'Supervisión',
+                    'label_attr' => array('class' => 'label'),
+                    'attr' => array('class' => 'input input-large '),
+                    'required' => false))
+                ->add('departamento', 'text', array(
+                    'label' => 'Departamento',
+                    'label_attr' => array('class' => 'label'),
+                    'attr' => array('class' => 'input input-large '),
+                    'required' => false))
+                ->add('userWorkerId',null,array(
+                    'query_builder' => function(\Pequiven\SEIPBundle\Repository\UserRepository $repository){
+                                return $repository->findQueryUsersByCriteria();
+                            },
+                    'label' => 'Miembros',
+                    'label_attr' => array('class' => 'label'),
+                    'attr' => array(
+                        'class' => "input-xlarge select2",
+//                        'ng-options' => 'value as (value.firstname + " "+ value.lastname + " ("+value.numPersonal+")") for (key,value) in data.responsibleGoals',
+                        'style' => 'width: 270px',
+                        'multiple' => 'multiple'
+                    ),
+                    'empty_value' => 'Seleccione',
+                    'required' => true,
+                ))
+        ;
     }
-    
+
     /**
      * @param OptionsResolverInterface $resolver
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
-    {
+    public function setDefaultOptions(OptionsResolverInterface $resolver) {
         $resolver->setDefaults(array(
-            'data_class' => 'Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle',
-            "translation_domain" => "PequivenSEIPBundle",
+            'data_class' => 'Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle'
         ));
     }
 
     /**
      * @return string
      */
-    public function getName()
-    {
-        return 'pequiven_seipbundle_politic_workstudycircle';
+    public function getName() {
+        return 'workStudyCircle_data';
     }
+
 }
