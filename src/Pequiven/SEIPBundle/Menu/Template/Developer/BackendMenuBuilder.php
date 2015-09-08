@@ -1172,8 +1172,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
      * @param type $section
      */
     public function addMenuWorkStudyCircles(ItemInterface $menu, $section){
-        $em = $this->getDoctrine()->getManager();
-        
+        $user = $this->getUser();
         
         $menuWorkStudyCircles = $this->factory->createItem('work_study_circles', $this->getSubLevelOptions(array(
             'uri'=> null,
@@ -1181,12 +1180,22 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
             ))
                 )->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.main', $section)));
         
-        if ($this->isGranted(array('ROLE_SEIP_WORK_STUDY_CIRCLES_CREATE'))) {
+        if ($this->isGranted(array('ROLE_SEIP_WORK_STUDY_CIRCLES_CREATE')) && !$user->getWorkStudyCircle()) {
             $workStudyCirclesRegister = $this->factory->createItem('work_study_circles.register', $this->getSubLevelOptions(array(
                 "route" => "pequiven_work_study_circle_create",
                 'labelAttributes' => array('icon' => 'fa fa-file-text-o',),
                 ))
                 )->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.register', $section)));
+
+            $menuWorkStudyCircles->addChild($workStudyCirclesRegister);
+        }
+        if ($this->isGranted(array('ROLE_SEIP_WORK_STUDY_CIRCLES_VIEW')) && $user->getWorkStudyCircle()) {
+            $workStudyCirclesRegister = $this->factory->createItem('work_study_circles.vizualice', $this->getSubLevelOptions(array(
+                'route' => 'pequiven_work_study_circle_show',
+                'routeParameters' => array('id' => $user->getWorkStudyCircle()->getId()),
+                'labelAttributes' => array('icon' => 'fa fa-users',),
+                ))
+                )->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.vizualice', $section)));
 
             $menuWorkStudyCircles->addChild($workStudyCirclesRegister);
         }
