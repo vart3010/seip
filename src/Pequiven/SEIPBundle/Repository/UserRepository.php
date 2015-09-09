@@ -213,6 +213,23 @@ class UserRepository extends EntityRepository {
         return $qb;
     }
 
+    function findQueryUsersByNoWorkStudyCircle(array $criteria = array()) {
+        $qb = $this->getQueryBuilder();
+        $qb
+                ->addSelect('u')
+                ->innerJoin('u.groups', 'g')
+                ->andWhere('u.enabled = :enabled')
+                ->setParameter('enabled', true)
+                ->andWhere($qb->expr()->isNull('u.workStudyCircle'))
+        ;
+        $qb
+                ->andWhere('g.level <= :level')
+                ->setParameter('level', \Pequiven\MasterBundle\Entity\Rol::ROLE_DIRECTIVE);
+
+
+        return $qb;
+    }
+
     /**
      * Buscador de usuarios
      * 
@@ -277,22 +294,22 @@ class UserRepository extends EntityRepository {
         $qb->andWhere($orX);
         if (($levelUser = $criteria->remove('levelUser'))) {
             $qb
-                ->andWhere('g.level <= :level')
-                ->setParameter('level', $levelUser);
+                    ->andWhere('g.level <= :level')
+                    ->setParameter('level', $levelUser);
             if (($idGerenciaUser = $criteria->remove('idGerenciaUser'))) {
                 $qb
-                    ->andWhere("u.gerencia = :gerenciaId")
-                    ->setParameter("gerenciaId", $idGerenciaUser);
+                        ->andWhere("u.gerencia = :gerenciaId")
+                        ->setParameter("gerenciaId", $idGerenciaUser);
             }
             if (($idGerenciaSecondUser = $criteria->remove('idGerenciaSecondUser'))) {
                 $qb
-                    ->andWhere("u.gerenciaSecond = :gerenciaSecond ")
-                    ->setParameter("gerenciaSecond", $idGerenciaSecondUser);
+                        ->andWhere("u.gerenciaSecond = :gerenciaSecond ")
+                        ->setParameter("gerenciaSecond", $idGerenciaSecondUser);
             }
         }
 
         $qb->setMaxResults(30);
-        
+
         return $qb->getQuery()->getResult();
     }
 
@@ -414,21 +431,20 @@ class UserRepository extends EntityRepository {
         ;
         return $qb->getQuery()->getOneOrNullResult();
     }
-    
-    public function findQueryWithRoleOwner()
-    {
+
+    public function findQueryWithRoleOwner() {
         $qb = $this->getQueryBuilder();
-        
+
         $qb
                 ->innerJoin('u.groups', 'g')
                 ->andWhere('g.typeRol = :typeRol')
                 ->setParameter('typeRol', \Pequiven\MasterBundle\Entity\Rol::TYPE_ROL_OWNER)
         ;
-        
+
         $qb
                 ->andWhere('g.level <= :level')
                 ->setParameter('level', \Pequiven\MasterBundle\Entity\Rol::ROLE_DIRECTIVE);
-        
+
         return $qb;
     }
 

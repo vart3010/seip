@@ -26,7 +26,7 @@ class WorkStudyCircleType extends AbstractType {
                     'class' => 'Pequiven\SEIPBundle\Entity\CEI\Region',
                     'property' => 'name',
                     'empty_value' => 'Seleccione',
-                    'required' => false,
+                    'required' => true,
                     'attr' => array(
                         'class' => 'select2 input-large form-control',)))
                 ->add('complejo', 'entity', array(
@@ -35,7 +35,7 @@ class WorkStudyCircleType extends AbstractType {
                     'class' => 'Pequiven\MasterBundle\Entity\Complejo',
                     'property' => 'description',
                     'empty_value' => 'Seleccione',
-                    'required' => false,
+                    'required' => true,
                     'attr' => array(
                         'class' => 'select2 input-xlarge form-control',
             )))
@@ -45,7 +45,7 @@ class WorkStudyCircleType extends AbstractType {
                     'class' => 'Pequiven\MasterBundle\Entity\Gerencia',
                     'property' => 'description',
                     'empty_value' => 'Seleccione',
-                    'required' => false,
+                    'required' => true,
                     'multiple' => true,
                     'attr' => array(
                         'class' => 'select2 input-xlarge form-control',
@@ -57,7 +57,7 @@ class WorkStudyCircleType extends AbstractType {
                     'class' => 'Pequiven\MasterBundle\Entity\GerenciaSecond',
                     'property' => 'description',
                     'empty_value' => 'Seleccione',
-                    'required' => false,
+                    'required' => true,
                     'multiple' => true,
                     'attr' => array(
                         'class' => 'select2 input-xlarge form-control',
@@ -80,7 +80,7 @@ class WorkStudyCircleType extends AbstractType {
                     'required' => false))
                 ->add('userWorkerId', null, array(
                     'query_builder' => function(\Pequiven\SEIPBundle\Repository\UserRepository $repository) {
-                        return $repository->findQueryUsersByCriteria();
+                        return $repository->findQueryUsersByNoWorkStudyCircle();
                     },
                     'label' => 'Miembros',
                     'label_attr' => array('class' => 'label'),
