@@ -7,20 +7,19 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class WorkStudyCircleType extends AbstractType {
-    
+
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options) {
-        
+
         $builder
                 //->add('ref', 'text', array('attr'=> array('class'=> 'form-control' )))
                 ->add('name', 'textarea', array(
                     'label' => 'Nombre del Círculo',
                     'label_attr' => array('class' => 'label'),
                     'attr' => array('class' => 'input input-large')))
-                
                 ->add('region', 'entity', array(
                     'label' => 'Región',
                     'label_attr' => array('class' => 'label'),
@@ -79,10 +78,10 @@ class WorkStudyCircleType extends AbstractType {
                     'label_attr' => array('class' => 'label'),
                     'attr' => array('class' => 'input input-large '),
                     'required' => false))
-                ->add('userWorkerId',null,array(
-                    'query_builder' => function(\Pequiven\SEIPBundle\Repository\UserRepository $repository){
-                                return $repository->findQueryUsersByCriteria();
-                            },
+                ->add('userWorkerId', null, array(
+                    'query_builder' => function(\Pequiven\SEIPBundle\Repository\UserRepository $repository) {
+                        return $repository->findQueryUsersByCriteria();
+                    },
                     'label' => 'Miembros',
                     'label_attr' => array('class' => 'label'),
                     'attr' => array(

@@ -18,12 +18,11 @@ use Pequiven\SEIPBundle\Form\Politic\WorkStudyCircleType;
  *
  */
 class WorkStudyCircleController extends SEIPController {
-    
-    
-    public function editWorkStudyCircleMemberAction(Request $request){
-        
+
+    public function editWorkStudyCircleMemberAction(Request $request) {
+
         $em = $this->getDoctrine()->getManager();
-        
+
         $idUser = $request->get('idUser');
 
         $user = $em->getRepository('PequivenSEIPBundle:User')->find($idUser);
@@ -31,14 +30,14 @@ class WorkStudyCircleController extends SEIPController {
         if (!$user) {
             throw $this->createNotFoundException('Unable to find ArrangementProgram entity.');
         }
-        
+
         $formUser = $this->createForm(new \Pequiven\SEIPBundle\Form\User\UserType(), $user);
         $formUser->handleRequest($request);
-        
+
         $em->getConnection()->beginTransaction();
         if ($formUser->isSubmitted() && $formUser->isValid()) {
             $em->persist($user);
-            
+
             try {
                 $em->flush();
                 $em->getConnection()->commit();
@@ -46,17 +45,15 @@ class WorkStudyCircleController extends SEIPController {
                 $em->getConnection()->rollback();
                 throw $e;
             }
-            
+
             $this->get('session')->getFlashBag()->add('success', 'Miembro actualizado correctamente');
             return $this->redirect($this->generateUrl('pequiven_work_study_circle_show', array("id" => $user->getWorkStudyCircle()->getId())));
-            
         }
-        
+
         return $this->render('PequivenSEIPBundle:Politic:WorkStudyCircle\editMember.html.twig', array(
-            'user' => $user,
-            'form_user' => $formUser->createView()
+                    'user' => $user,
+                    'form_user' => $formUser->createView()
         ));
-        
     }
 
     public function createAction(Request $request) {
@@ -124,7 +121,7 @@ class WorkStudyCircleController extends SEIPController {
             $user->setWorkStudyCircle($workStudyCircle);
             $em->persist($user);
         }
-        
+
         $user = $this->getUser();
         $user->setWorkStudyCircle($workStudyCircle);
         $em->persist($user);
@@ -139,25 +136,25 @@ class WorkStudyCircleController extends SEIPController {
 
         return true;
     }
-    
-    public function setNewRef($location){
+
+    public function setNewRef($location) {
         $em = $this->getDoctrine()->getManager();
         $complejo = $em->getRepository('PequivenMasterBundle:Complejo')->findOneBy(array('id' => $location));
         $workStudyCircles = $em->getRepository('PequivenSEIPBundle:Politic\WorkStudyCircle')->findBy(array('complejo' => $location));
         $totalWorkStudyCircles = count($workStudyCircles);
-        
-        $ref = 'CET-'.$complejo->getRef().'-';
+
+        $ref = 'CET-' . $complejo->getRef() . '-';
         $contRef = $totalWorkStudyCircles + 1;
-        if($totalWorkStudyCircles < 10){
+        if ($totalWorkStudyCircles < 10) {
             $ref = $ref . '000' . $contRef;
-        } elseif($totalWorkStudyCircles >= 10 && $totalWorkStudyCircles < 100){
+        } elseif ($totalWorkStudyCircles >= 10 && $totalWorkStudyCircles < 100) {
             $ref = $ref . '00' . $contRef;
-        }elseif($totalWorkStudyCircles >= 100 && $totalWorkStudyCircles < 1000){
+        } elseif ($totalWorkStudyCircles >= 100 && $totalWorkStudyCircles < 1000) {
             $ref = $ref . '0' . $contRef;
-        } elseif($totalWorkStudyCircles >= 1000){
+        } elseif ($totalWorkStudyCircles >= 1000) {
             $ref = $ref . $contRef;
         }
-        
+
         return $ref;
     }
 
@@ -172,6 +169,30 @@ class WorkStudyCircleController extends SEIPController {
 
     protected function getPeriodService() {
         return $this->container->get('pequiven_seip.service.period');
+    }
+
+    public function addOthersMembersAction(Request $request) {
+        $em = $this->getDoctrine()->getManager();
+        $workStudyCircle = new WorkStudyCircle();
+        $form = $this->createForm(new WorkStudyCircleType, $workStudyCircle);
+        $form->handleRequest($request);
+
+        $workStudyCircleRepo = $em->getRepository('PequivenSEIPBundle:Politic\WorkStudyCircle')->findOneBy(array('id' => $request->get("idWorkStudyCircle")));
+
+        if ($form->isSubmitted()) {
+
+            $this->addWorkStudyCircleToUser($workStudyCircleRepo, $request->get("workStudyCircle_data")["userWorkerId"]);
+
+
+            $this->get('session')->getFlashBag()->add('success', 'Nuevos miembros han sido agregados con éxito ');
+            //return $this->redirect($this->generateUrl('pequiven_seip_default_index'));
+            return $this->redirect($this->generateUrl('pequiven_work_study_circle_show', array("id" => $request->get("idWorkStudyCircle"))));
+        }
+
+        return $this->render('PequivenSEIPBundle:Politic:WorkStudyCircle\addOthersMembers.html.twig', array(
+                    'id' => $request->get("idWorkStudyCircle"),
+                    'form' => $form->createView()
+        ));
     }
 
 }

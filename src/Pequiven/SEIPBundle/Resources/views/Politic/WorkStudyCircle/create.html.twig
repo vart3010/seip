@@ -31,26 +31,11 @@
                 <label class="label">Numero de Personal</label>
                 <input class="input input-large" disabled type="text" value="{{ user.numPersonal }}">
             </div>
-            {#<div class="field-block button-height">
-                {{ form_label(form_user.indentification) }}
-                {{ form_widget(form_user.indentification) }}
-                {{ form_errors(form_user.indentification) }}
-            </div>
-            <div class="field-block button-height">
-                {{ form_label(form_user.cellphone) }}
-                {{ form_widget(form_user.cellphone) }}
-                {{ form_errors(form_user.cellphone) }}
-            </div>
-            <div class="field-block button-height">
-                {{ form_label(form_user.ext) }}
-                {{ form_widget(form_user.ext) }}
-                {{ form_errors(form_user.ext) }}
-            </div>#}
             <div class="field-block button-height">
                 {{ form_widget(form_user) }}
             </div>
-
         </fieldset>
+            
         <fieldset class="fieldset fields-list">
             <legend class="legend">{{ 'pequiven_seip.politic.work_study_circle'|trans }}</legend>
             <div class="field-block button-height">
@@ -64,14 +49,14 @@
 
 {% block javascript %}
     <script type="text/javascript">
-    $(document).ready(function(){
-        $("#workStudyCircle_data_region").select2({allowClear: true});
-        $("#workStudyCircle_data_complejo").select2({allowClear: true});
-        $("#workStudyCircle_data_gerencias").select2({allowClear: true});
-        $("#workStudyCircle_data_gerenciaSeconds").select2({allowClear: true});
-        $("#workStudyCircle_data_userWorkerId").select2({
-          minimumInputLength: 3,
-      });
-    });
-</script>
+        $(document).ready(function () {
+            $("#workStudyCircle_data_region").select2({allowClear: true});
+            $("#workStudyCircle_data_complejo").select2({allowClear: true});
+            $("#workStudyCircle_data_gerencias").select2({allowClear: true});
+            $("#workStudyCircle_data_gerenciaSeconds").select2({allowClear: true});
+            $("#workStudyCircle_data_userWorkerId").select2({
+                minimumInputLength: 3,
+            });
+        });
+    </script>
 {% endblock javascript %}

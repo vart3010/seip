@@ -127,7 +127,7 @@ class User extends BaseUser implements UserInterface, UserBoxInterface, PeriodIt
     /**
      * Supervisores
      * @var User
-     * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\User",mappedBy="supervised")
+     * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\User",mappedBy="supervised",cascade={"persist"})
      */
     private $supervisors;
 
@@ -193,23 +193,21 @@ class User extends BaseUser implements UserInterface, UserBoxInterface, PeriodIt
      * @ORM\JoinColumn(name="workStudyCircle_id", referencedColumnName="id")
      * */
     private $workStudyCircle;
-    
-    
+
     /**
      * cedula
      * @var string
-     * @ORM\Column(name="identification",type="integer",length=9,nullable=false)
+     * @ORM\Column(name="identification",type="integer",length=9,nullable=true)
      */
     private $identification;
-    
+
     /**
      * celular
      * @var string
      * @ORM\Column(name="cellphone",type="string",length=100,nullable=true)
      */
     private $cellphone;
-    
-    
+
     /**
      * extension
      * @var string
@@ -618,7 +616,7 @@ class User extends BaseUser implements UserInterface, UserBoxInterface, PeriodIt
     public function getFullNameUser() {
         return $this->firstname . ' ' . $this->lastname . ' (' . $this->numPersonal . ' | ' . $this->username . ')';
     }
-    
+
     public function getOnlyFullNameUser() {
         return $this->firstname . ' ' . $this->lastname;
     }
@@ -891,29 +889,29 @@ class User extends BaseUser implements UserInterface, UserBoxInterface, PeriodIt
     public function getWorkStudyCircle() {
         return $this->workStudyCircle;
     }
-    
-    public  function setIndentification($identification) {
-        $this->identification  = $identification;
+
+    public function setIndentification($identification) {
+        $this->identification = $identification;
     }
-    
+
     public function getIndentification() {
         return $this->identification;
     }
-    
-    public  function setCellphone($cellphone) {
-        $this->cellphone  = $cellphone;
+
+    public function setCellphone($cellphone) {
+        $this->cellphone = $cellphone;
     }
-    
+
     public function getCellphone() {
         return $this->cellphone;
     }
-    
-    public  function setExt($ext) {
-        $this->ext  = $ext;
+
+    public function setExt($ext) {
+        $this->ext = $ext;
     }
-    
+
     public function getExt() {
         return $this->ext;
     }
- 
+
 }
