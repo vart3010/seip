@@ -1777,6 +1777,30 @@ angular.module('seipModule.controllers', [])
                     });
                 });
             };
+            //Removiendo las causas
+            $scope.removeActionEvolution = function (actionEvolution) {
+                $scope.openModalConfirm('pequiven.modal.confirm.indicator.delete_feature', function () {
+                    notificationBarService.getLoadStatus().loading();
+                    var url = Routing.generate("pequiven_action_evolution_delete", {id: $scope.action_data});
+                    $http({
+                        method: 'GET',
+                        url: url,
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'}  // set the headers so angular passing info as form data (not request payload)
+                    }).success(function (data) {
+                        return true;
+                    }).error(function (data, status, headers, config) {
+                        if (data.errors) {
+                            if (data.errors.errors) {
+                                $.each(data.errors.errors, function (index, value) {
+                                    notifyService.error(Translator.trans(value));
+                                });
+                            }
+                        }
+                        notificationBarService.getLoadStatus().done();
+                        return false;
+                    });
+                });
+            };
         })
         .controller('IndicatorSigEvolutionCauseController', function ($scope, notificationBarService, $http, notifyService, $filter) {
 

@@ -1,3 +1,9 @@
+WorkStudyCircle:
+     circle: Circulos de Estudio de Trabajo
+     list: Lista
+     visualize: Visualizar
+     form:
+         list_work: Listado de Circulos de Estudio
 # Login
 pequiven_seip:
   #Index

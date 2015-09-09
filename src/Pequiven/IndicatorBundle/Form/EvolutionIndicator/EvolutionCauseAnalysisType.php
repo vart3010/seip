@@ -38,6 +38,6 @@ class EvolutionCauseAnalysisType extends AbstractType
      */
     public function getName()
     {
-        return 'pequiven_indicatorbundle_evolutionindicator_evolutioncauseanalysis';
+        return 'causeAnalysis_form';
     }
 }

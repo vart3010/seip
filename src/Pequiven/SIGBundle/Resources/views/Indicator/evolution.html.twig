@@ -119,7 +119,9 @@
 
         {#        <button class="button compact" id="showItems" type="button">Visualizar Items</button>#}
         <div id="evolutionItems" style="display: none;">
+            {% set data = indicator_sig.id %}
             {{ renderArea(constant('Pequiven\\SEIPBundle\\Model\\Box\\AreasBox::ITEMS_EVOLUTION')) }}
+            
         </div>  
 
     </p>
@@ -192,7 +194,7 @@
         function uploadFilePdf(id) {
             $("input#indicatorFilePdf_" + id).click();
             //var causeId = document.getElementById("data").value;
-            //console.log(id);
+            console.log(id);
         //$("#form_"+id).submit();
         }
 

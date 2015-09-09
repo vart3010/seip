@@ -109,7 +109,7 @@ class IndicatorSigController extends ResourceController
                     'description' => $this->trans($value, array(), 'PequivenSIGBundle'),
                 );
             }
-
+            
             $data = array(
                 'apiDataUrl' => $apiDataUrl,
                 $this->config->getPluralResourceName() => $resources,
@@ -270,22 +270,14 @@ class IndicatorSigController extends ResourceController
         $month = date("m");//Carga del mes de Creación de la causa "Automatico"  
         //var_export($request->files);
         //die();
-        $cause = $request->get('cause');
+        $causeAnalysis = $request->get('cause');
         //die();
 
-        $causeData = $this->get('pequiven.repository.sig_causes_indicator')->find($cause);
-        //var_dump(count($causeData));
-        //die();
-        //var_dump($request->get('cause'));
-        //$valuesCause = $causeData->getId();
-        //var_dump($causeData->getId());
-        //var_dump($request->get("valueCauseId"));
-        //die();
-        //foreach ($valuesCause as $valueCause) {
-            //if ($causeData->getId() == $request->get("valueCauseId")) {
-            if ($causeData->getId() == $cause) {
-                $EvolutionCauseFile->setValueCause($causeData);
+        $causeData = $this->get('pequiven.repository.sig_causes_analysis')->find($causeAnalysis);
+        
+            if ($causeData->getId() == $causeAnalysis) {
                 //die("paso");
+                $EvolutionCauseFile->setValueCause($causeData);
                 foreach ($request->files as $file) {
                     //VALIDA QUE EL ARCHIVO SEA UN PDF
                     //SE GUARDAN LOS CAMPOS EN BD
@@ -300,9 +292,7 @@ class IndicatorSigController extends ResourceController
                     $fileUploaded = $file->isValid();
                 }
             }
-        //}
-        //die();
-
+        
         if (!$fileUploaded) {
             $em = $this->getDoctrine()->getEntityManager();
             $em->persist($EvolutionCauseFile);
@@ -556,6 +546,30 @@ class IndicatorSigController extends ResourceController
 
         //}
 
+    }
+
+    /**
+     * Elimina las acciones
+     * 
+     * @param Request $request
+     * @return type
+     */
+    public function deletePlanAction(Request $request)
+    {   
+        //die($request->get('id'));
+        $idAction = $request->get('id');
+        
+        $em = $this->getDoctrine()->getManager();
+        $results = $this->get('pequiven.repository.sig_action_indicator')->find($idAction);
+        
+        if($results){
+
+            $em->remove($results);
+            $em->flush();
+            
+            $this->get('session')->getFlashBag()->add('success', $this->trans('flashes.messages.deleteAction', array(), 'PequivenSIGBundle'));
+       
+        }  
     }
 
     /**

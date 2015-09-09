@@ -76,6 +76,14 @@ class EvolutionCauseAnalysis extends Model {
      */
     private $deletedAt;
 
+     /**
+     * Relacion de las fichas cargadas de la acciones
+     * 
+     * @var Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCauseFile
+     * @ORM\OneToOne(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCauseFile",inversedBy="valueCause")
+     */
+    private $valueCauseFile;
+
 
     /**
      * Constructor
@@ -237,5 +245,14 @@ class EvolutionCauseAnalysis extends Model {
     {
         return $this->deletedAt;
     }  
+
+    function getValueCauseFile() {
+        return $this->valueCauseFile;
+    }
+
+    function setValueCauseFile($valueCauseFile) {
+        $this->valueCauseFile = $valueCauseFile;
+        return $this;
+    }
     
 }

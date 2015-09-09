@@ -22,6 +22,7 @@ class EvolutionHistoryItemsBox extends \Tecnocreaciones\Bundle\BoxBundle\Model\G
         //var_dump($labelMonth);
 
         //$url= $_SERVER["REQUEST_URI"];
+        //var_dump(parse_str($url));
         //var_dump(parse_url($url));
         
         $count = 1;

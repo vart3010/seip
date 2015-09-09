@@ -55,11 +55,11 @@
                                     <span class="select-arrow"></span>
                                     <span class="drop-down">
                                     
-                                    <a href ng-click="loadTemplateCausesDesviation(cause_data)" class="button icon-pencil">{{ "pequiven.actions.edit"|trans({},"messages") }}</a>
+                                    {#<a href ng-click="loadTemplateCausesDesviation(cause_data)" class="button icon-pencil">{{ "pequiven.actions.edit"|trans({},"messages") }}</a>#}
                                     
                                     <a href ng-click="removeCausesEvolution(cause_data='{{ cause_data.id }}')" 
                                     class="button icon-cross-round">{{ "pequiven.actions.delete"|trans({},"messages") }}</a>
-                                    
+                                    {#
                                     <span ng-app class=" button icon-outbox" onClick="uploadFilePdf(this.id)" id="{$ cause_data.id $}" >{{ "pequiven.actions.upload_file"|trans({},"messages") }}
                                         {% set data = cause_data.id %}
                                     </span>
@@ -67,7 +67,7 @@
                                     {% if cause_data.valueCauseFile %}
                                         <span ng-app ng-init="validLoad(cause_data.id)" class=" button icon-download" onClick="openFile(this.id)" id="open_{{ cause_data.id }}">{{ "pequiven.actions.download_file"|trans({},"messages") }}
                                         </span>
-                                    {% endif %}
+                                    {% endif %}#}
                                         
                                     </span>
                                 </span>
@@ -76,17 +76,6 @@
             </tbody>
         {% endfor %}
         </table>
-
-{% set idCause = data %}
-{# form carga de archivo #}
-<div ng-controller="ToolsController" ng-init="isGrantedButtonEdit({{ indicator_sig.id }},paso+1)">
-    <form style="display: none" id="form_{$ valueCauseId.id $}" action="{{ path("pequiven_indicator_evolution",{id:indicator_sig.id, month:month, cause:data, uploadFile:(true)}) }}" method="POST" enctype="multipart/form-data">
-    
-       <input name="archivo" onChange="submitUploadFile(this.id)" id="indicatorFilePdf_{$ idCause $}" type="file">
-             
-       <input type="hidden" name="valueCauseId" id="field_{$ idCause $}" value="">
-    </form>
-</div>
                 
             </div>
         </div>

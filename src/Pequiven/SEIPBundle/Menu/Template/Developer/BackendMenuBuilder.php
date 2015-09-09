@@ -1255,6 +1255,16 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                 'labelAttributes' => array('icon' => 'fa fa-table',),
                 ))
                 )->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.reports', $section)));
+            //Menú Nivel 2: Visualizar
+                $workStudyCirclesReports->addChild('work_study_circles.visualize', array(
+                        'route' => 'pequiven_work_study_circle_list',
+                    ))
+                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.visualize', $section)));
+
+                $workStudyCirclesReports->addChild('work_study_circles.charts', array(
+                        'route' => '',
+                    ))
+                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.charts', $section)));
 
             $menuWorkStudyCircles->addChild($workStudyCirclesReports);
         }

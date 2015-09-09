@@ -263,3 +263,7 @@ seip:
             events: No Hay Eventos Registrados.
             results: No Hay Resultados Cargados.
             products: No Hay Productos y Servicios Configurados.
+flashes:
+     messages:
+        successAction: Acción Guargada Correctamente
+        deleteAction: Acción Eliminada Correctamente

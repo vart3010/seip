@@ -70,7 +70,7 @@
                                 <a href class="select-value form-edit">{{ 'pequiven.actions'|trans({},'messages') }}</a>
                                 <span class="select-arrow"></span>
                                 <span class="drop-down">
-                                    <a href ng-click="removeFeatureIndicator(featureIndicator)" class="button icon-cross-round">{{ "pequiven.actions.delete"|trans({},"messages") }}</a>
+                                    <a href ng-click="removeActionEvolution(action_data='{{ action.actionValue.id }}')" class="button icon-cross-round">{{ "pequiven.actions.delete"|trans({},"messages") }}</a>
                                 {% if action.advance == 0 %}
                                     <a href ng-click="loadTemplateActionAdd(idAction='{{ action.id }}')" class="button icon-pencil">{{ "pequiven_indicator.upload_data"|trans({},"PequivenSIGBundle") }}</a>
                                 {% endif %}
@@ -87,7 +87,7 @@
             </tbody>
             {% set count = count + 1 %}
      {% endfor %}
-        </table>  
+        </table> 
 
     <div class="" ng-init="count='{{ count }}'"></div>
              

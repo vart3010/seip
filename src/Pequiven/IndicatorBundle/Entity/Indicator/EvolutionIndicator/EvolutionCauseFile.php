@@ -84,8 +84,8 @@ class EvolutionCauseFile extends Model {
 
     /**
      * ValueIndicator
-     * @var \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCause
-     * @ORM\OneToOne(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCause",mappedBy="valueCauseFile")
+     * @var \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCauseAnalysis
+     * @ORM\OneToOne(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCauseAnalysis",mappedBy="valueCauseFile")
      */
     private $valueCause;
 
@@ -249,10 +249,10 @@ class EvolutionCauseFile extends Model {
     /**
      * Set indicator
      *
-     * @param \Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator $valueCause
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolitionCauseAnalysis $valueCause
      * @return IndicatorConfigDetailValue
      */
-    public function setValueCause(\Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCause $valueCause) {
+    public function setValueCause(\Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCauseAnalysis $valueCause) {
         $valueCause->setValueCauseFile($this);
         $this->valueCause = $valueCause;
 
@@ -262,7 +262,7 @@ class EvolutionCauseFile extends Model {
     /**
      * Get indicator
      *
-     * @return Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCause
+     * @return Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCauseAnalysis
      */
     public function getValueCause() {
         return $this->valueCause;

@@ -21,4 +21,19 @@ class WorkStudyCircleRepository extends EntityRepository
     protected function getAlias() {
         return 'wsc';
     }
+
+    /**
+     * Crea un paginador de los Circulos de Estudios
+     * Filtrados por Programas de Gestión
+     * @param array $criteria
+     * @param array $orderBy
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    function createPaginatorWorkStudy(array $criteria = null, array $orderBy = null) {
+        
+        //$criteria['for_view_work'] = false;
+        $orderBy['wsc.id'] = 'ASC';
+        
+        return $this->createPaginator($criteria, $orderBy);
+    }
 }

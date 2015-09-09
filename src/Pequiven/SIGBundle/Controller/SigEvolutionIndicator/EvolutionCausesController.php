@@ -152,7 +152,12 @@ class EvolutionCausesController extends ResourceController
     public function addCauseAnalysisAction(Request $request)
 
     {   
-        $month = date("m");//Carga del mes de Creación de la causa
+         $month = date("m");//Carga del mes de Creación de la causa
+
+        //$month = $request->get('causeAnalysis_form')['month'];
+        //var_dump($month);
+        //die();
+        
 
         $indicator = $request->get('idIndicator');
         $repository = $this->get('pequiven.repository.sig_indicator');

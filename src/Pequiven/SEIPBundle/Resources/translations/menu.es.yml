@@ -207,4 +207,7 @@ app:
                         reports: Reportes
                         strategic_plan: Plan Estratégico
                         notification: Notificación
+                        list: Lista
+                        charts: Graficas
+                        visualize: Visualizar
                             
