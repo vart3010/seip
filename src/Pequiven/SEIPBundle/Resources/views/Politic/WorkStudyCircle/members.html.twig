@@ -23,29 +23,31 @@
             <tbody>
 
                 {% set cont = 1 %}
+                {% set userCreatedId = workStudyCircle.getCreatedBy.id %}
                 {% for user in workStudyCircle.userWorkerId %}
-
-
-                    <tr {#ng-repeat="user in workStudyCircle.userWorkerId"#}  {#ng-init="paso=$index;"#}>
-                        <td>{{ cont }}</td>
-                        <td>{{ user.getOnlyFullNameUser }}</td>
-                        <td>{{ user.cellphone }}</td>
-                        <td>{{ user.getIndentification }}</td>
-                        <td>{{ user.ext }}</td>
-                        <td class="align-right vertical-center">
-                            <div ng-controller="ToolsController" id="target_{$ paso+1 $}">
-                                <span class="select compact">
-                                    <a href="{{ path('pequiven_work_study_circle_member_edit',{idUser:user.id}) }}" class="select-value form-edit">{{ 'pequiven.actions.edit'|trans({},'messages') }}</a>
-                                    <span class="select-arrow"></span>
-                                    {#<span class="drop-down">
-                                        <a href="{{ path('pequiven_work_study_circle_member_edit',{idUser:user.id}) }}" class="button icon-pencil">{{ "pequiven.actions.edit"|trans({},"messages") }}</a>
-                                    </span>#}
-                                </span>
-                            </div>
-                        </td>
-                        {% set cont = cont + 1 %}
-                    </tr>
+                    {% if (userCreatedId != user.id) %}
+                        <tr {#ng-repeat="user in workStudyCircle.userWorkerId"#}  {#ng-init="paso=$index;"#}>
+                            <td>{{ cont }}</td>
+                            <td>{{ user.getOnlyFullNameUser }}</td>
+                            <td>{{ user.cellphone }}</td>
+                            <td>{{ user.getIndentification }}</td>
+                            <td>{{ user.ext }}</td>
+                            <td class="align-right vertical-center">
+                                <div ng-controller="ToolsController" id="target_{$ paso+1 $}">
+                                    <span class="select compact">
+                                        <a href="{{ path('pequiven_work_study_circle_member_edit',{idUser:user.id}) }}" class="select-value form-edit">{{ 'pequiven.actions.edit'|trans({},'messages') }}</a>
+                                        <span class="select-arrow"></span>
+                                        {#<span class="drop-down">
+                                            <a href="{{ path('pequiven_work_study_circle_member_edit',{idUser:user.id}) }}" class="button icon-pencil">{{ "pequiven.actions.edit"|trans({},"messages") }}</a>
+                                        </span>#}
+                                    </span>
+                                </div>
+                            </td>
+                            {% set cont = cont + 1 %}
+                        </tr>
+                    {% endif %}
                 {% endfor %}
+
             </tbody>
         </table>
     </div>

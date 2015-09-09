@@ -88,6 +88,7 @@ class WorkStudyCircleController extends SEIPController {
             $user->setIndentification($request->get("userType_data")["indentification"]);
             $user->setExt($request->get("userType_data")["ext"]);
 
+
             try {
                 $em->flush();
                 $em->getConnection()->commit();
@@ -98,6 +99,7 @@ class WorkStudyCircleController extends SEIPController {
 
             $workStudyCircle = $em->getRepository('PequivenSEIPBundle:Politic\WorkStudyCircle')->findOneBy(array('createdBy' => $user->getId()));
             $this->addWorkStudyCircleToUser($workStudyCircle, $request->get("workStudyCircle_data")["userWorkerId"]);
+            $this->addWorkStudyCircleToUser($workStudyCircle, array($user->getId()));
 
             $this->get('session')->getFlashBag()->add('success', 'Círculo de Estudio guardado correctamente');
             //return $this->redirect($this->generateUrl('pequiven_seip_default_index'));
