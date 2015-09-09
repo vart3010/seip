@@ -72,40 +72,43 @@ class WorkStudyCircleController extends SEIPController {
         $em->getConnection()->beginTransaction();
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $data = $form->getData();
-//            var_dump($data);
-//            die();
-
-            $workStudyCircle->setCreatedBy($user);
-            $workStudyCircle->setPeriod($period = $this->getPeriodService()->getPeriodActive());
-            $workStudyCircle->setCodigo($this->setNewRef($request->get("workStudyCircle_data")["complejo"]));
-            //die("Formulario enviado correctamente");
-
-            $em->persist($workStudyCircle);
-            $em->flush();
-
-            $user->setCellphone($request->get("userType_data")["cellphone"]);
-            $user->setIndentification($request->get("userType_data")["indentification"]);
-            $user->setExt($request->get("userType_data")["ext"]);
+            $idsUsers = $request->get("workStudyCircle_data")["userWorkerId"];
+            $countUsers = count($idsUsers);
 
 
-            try {
+            if ($countUsers < 8) {
+                $this->get('session')->getFlashBag()->add('error', 'Debe Agregar 8 miembros como mínimo');
+            } else {
+                $workStudyCircle->setCreatedBy($user);
+                $workStudyCircle->setPeriod($period = $this->getPeriodService()->getPeriodActive());
+                $workStudyCircle->setCodigo($this->setNewRef($request->get("workStudyCircle_data")["complejo"]));
+
+                $em->persist($workStudyCircle);
                 $em->flush();
-                $em->getConnection()->commit();
-            } catch (Exception $e) {
-                $em->getConnection()->rollback();
-                throw $e;
+
+                $user->setCellphone($request->get("userType_data")["cellphone"]);
+                $user->setIndentification($request->get("userType_data")["indentification"]);
+                $user->setExt($request->get("userType_data")["ext"]);
+
+
+                try {
+                    $em->flush();
+                    $em->getConnection()->commit();
+                } catch (Exception $e) {
+                    $em->getConnection()->rollback();
+                    throw $e;
+                }
+
+                $workStudyCircle = $em->getRepository('PequivenSEIPBundle:Politic\WorkStudyCircle')->findOneBy(array('createdBy' => $user->getId()));
+                $this->addWorkStudyCircleToUser($workStudyCircle, $request->get("workStudyCircle_data")["userWorkerId"]);
+                $this->addWorkStudyCircleToUser($workStudyCircle, array($user->getId()));
+
+                $this->get('session')->getFlashBag()->add('success', 'Círculo de Estudio guardado correctamente');
+                //return $this->redirect($this->generateUrl('pequiven_seip_default_index'));
+                return $this->redirect($this->generateUrl('pequiven_work_study_circle_show', array("id" => $workStudyCircle->getId())));
+
+                //return $this->redirect($this->generateUrl('saci_people_list', array('id' => $people->getId())));
             }
-
-            $workStudyCircle = $em->getRepository('PequivenSEIPBundle:Politic\WorkStudyCircle')->findOneBy(array('createdBy' => $user->getId()));
-            $this->addWorkStudyCircleToUser($workStudyCircle, $request->get("workStudyCircle_data")["userWorkerId"]);
-            $this->addWorkStudyCircleToUser($workStudyCircle, array($user->getId()));
-
-            $this->get('session')->getFlashBag()->add('success', 'Círculo de Estudio guardado correctamente');
-            //return $this->redirect($this->generateUrl('pequiven_seip_default_index'));
-            return $this->redirect($this->generateUrl('pequiven_work_study_circle_show', array("id" => $workStudyCircle->getId())));
-
-            //return $this->redirect($this->generateUrl('saci_people_list', array('id' => $people->getId())));
         }
 
         return $this->render('PequivenSEIPBundle:Politic:WorkStudyCircle\create.html.twig', array(
