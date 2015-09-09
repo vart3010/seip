@@ -2,6 +2,7 @@ WorkStudyCircle:
      circle: Circulos de Estudio de Trabajo
      list: Lista
      visualize: Visualizar
+     general: General
      form:
          list_work: Listado de Circulos de Estudio
 # Login

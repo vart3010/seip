@@ -204,10 +204,12 @@ app:
                     work_study_circles:
                         main: Círculos de Estudio de Trabajo
                         register: Registro
+                        vizualice: Visualizar
                         reports: Reportes
                         strategic_plan: Plan Estratégico
                         notification: Notificación
                         list: Lista
                         charts: Graficas
                         visualize: Visualizar
+                        general: General
                             

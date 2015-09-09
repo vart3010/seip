@@ -127,7 +127,7 @@ class WorkStudyCircle extends ModelWorkStudyCircle implements PeriodItemInterfac
     
     
     /**
-     * @ORM\OneToMany(targetEntity="\Pequiven\SEIPBundle\Entity\User", mappedBy="workStudyCircle")
+     * @ORM\OneToMany(targetEntity="\Pequiven\SEIPBundle\Entity\User", mappedBy="workStudyCircle", cascade={"persist"})
      **/
     private $userWorkerId;
 

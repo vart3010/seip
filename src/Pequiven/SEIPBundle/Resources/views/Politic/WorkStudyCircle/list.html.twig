@@ -75,14 +75,15 @@
                             </td>
                         </tr>
                         <tr ng-hide="group.$hideRows" ng-repeat="result in group.data" data="{$ result|json $}">
-                            <td data-title="'{{ 'WorkStudyCircle.form.list_work'|trans }}'" sortable="'ref'" filter="{'description' : 'text'}">
-                                <a href="{$ result._links.self.href $}">{$ result.id+result.description $}</a>
+                            <td data-title="'{{ 'WorkStudyCircle.form.list_work'|trans }}'" sortable="'codigo'" filter="{'name' : 'text'}">
+                                <a href="{$ result._links.self.href $}">
+                                    {$ result.id+result.id $}
+                                </a>                                
                             </td>
                         </tr>
                     </tbody>
                 </table>
-            </div>
-            
+            </div>            
 
         </div>
     </div>
@@ -107,8 +108,8 @@
             {
                 var response = '';
 
-                //response = response + 'Fórmula: ' + data.formula.equation;
-                
+                //response = response + 'Circulo: ' + data.nombre;
+
                 return response;
             }
     </script>

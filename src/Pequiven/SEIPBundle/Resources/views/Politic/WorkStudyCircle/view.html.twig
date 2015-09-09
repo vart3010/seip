@@ -1,0 +1,41 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}
+
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+{% block before_body %}
+    {{ contentHeader(
+        {(path('pequiven_work_study_circle_general')):("WorkStudyCircle.circle"|trans)},("WorkStudyCircle.general"|trans )        
+    ) }}
+{% endblock %}
+
+{% block body %}
+<div class="block">
+	<div class="block-title">
+        <h3 class="ng-binding">Listado de Circulos de Estudio de Trbajo por Complejo</h3>
+    </div>
+
+    <div class="with-padding">
+        {% set colspan = 5 %}
+        <table class="simple-table responsive-table tables-extras" id="sorting-example2">
+            <thead>
+                <tr>
+                    <th scope="col" width="150%" class="header">
+                        {{ 'form.trend_analysis'|trans({},'PequivenSIGBundle') }}
+                    </th>                    
+                </tr>
+            </thead>
+        {#{% for data in trend %}#}
+            <tbody>
+                <tr>
+                    <th align="justify">
+                        
+                    </th>                        
+                </tr>
+            </tbody>
+        {#{% endfor %}#}
+        </table>
+                
+    </div>
+ </div>
+
+{% endblock %}

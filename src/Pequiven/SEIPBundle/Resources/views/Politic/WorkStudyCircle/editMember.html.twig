@@ -13,16 +13,12 @@
 {% endblock %}
 
 {% block body -%}
-    <form method="POST" action="{{ path("pequiven_work_study_circle_create",{reportTemplate:app.request.get("reportTemplate") }) }}">
-        {{ form_errors(form) }}
+    <form method="POST" action="{{ path("pequiven_work_study_circle_member_edit",{idUser:user.id }) }}">
+        {{ form_errors(form_user) }}
         <br /><br />
-        {#{% include 'PequivenSEIPBundle:Politic/WorkStudyCircle:_form.html.twig' %}
-        {{ actions.create() }}
-        {{ form_rest(form) }}#}
 
         <fieldset class="fieldset fields-list">
-            <legend class="legend">Coordinador Lider</legend>
-
+            <legend class="legend">Datos de Miembro</legend>
             <div class="field-block button-height">
                 <label class="label">Coordinador Lider</label>
                 <input class="input input-large" disabled type="text" value="{{ user.getOnlyFullNameUser }}">
@@ -34,13 +30,7 @@
             <div class="field-block button-height">
                 {{ form_widget(form_user) }}
             </div>
-        </fieldset>
-            
-        <fieldset class="fieldset fields-list">
-            <legend class="legend">{{ 'pequiven_seip.politic.work_study_circle'|trans }}</legend>
-            <div class="field-block button-height">
-                {{ form_widget(form) }}
-            </div>
+
         </fieldset>
 
         {{ actions.create() }}
@@ -50,13 +40,6 @@
 {% block javascript %}
     <script type="text/javascript">
         $(document).ready(function () {
-            $("#workStudyCircle_data_region").select2({allowClear: true});
-            $("#workStudyCircle_data_complejo").select2({allowClear: true});
-            $("#workStudyCircle_data_gerencias").select2({allowClear: true});
-            $("#workStudyCircle_data_gerenciaSeconds").select2({allowClear: true});
-            $("#workStudyCircle_data_userWorkerId").select2({
-                minimumInputLength: 3,
-            });
         });
     </script>
 {% endblock javascript %}
