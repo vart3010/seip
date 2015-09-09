@@ -99,7 +99,7 @@ class WorkStudyCircleController extends SEIPController {
         $criteria = $request->get('filter', $this->config->getCriteria());
         $sorting = $request->get('sorting', $this->config->getSorting());
         $repository = $this->getRepository();
-//        $repository = $this->container->get('pequiven.repository.work_study_circle');
+        //$repository = $this->container->get('pequiven.repository.work_study_circle');
 
         //$criteria['applyPeriodCriteria'] = false;
 
