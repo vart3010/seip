@@ -63,27 +63,6 @@
 
             </details>
 
-            <div loading-container="tableParams.settings().$loading">
-                <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager" template-header="custom/header" api-data-url="{{ path('pequiven_work_study_circle_list',{_format:'json'}) }}" export-csv="csv" class="table table-responsive table-extra-info">
-                    <tbody ng-repeat="group in $groups">
-                        <tr class="ng-table-group">
-                            <td colspan="{$ $columns.length $}">
-                                <a href="" ng-click="group.$hideRows = !group.$hideRows">
-                                    <span class="glyphicon" ng-class="{ 'glyphicon-chevron-right': group.$hideRows, 'glyphicon-chevron-down': !group.$hideRows }"></span>
-                                    <strong>{$ group.value $}</strong>
-                                </a>
-                            </td>
-                        </tr>
-                        <tr ng-hide="group.$hideRows" ng-repeat="result in group.data" data="{$ result|json $}">
-                            <td data-title="'{{ 'WorkStudyCircle.form.list_work'|trans }}'" sortable="'codigo'" filter="{'name' : 'text'}">
-                                <a href="{$ result._links.self.href $}">
-                                    {$ result.id+result.id $}
-                                </a>                                
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>            
 
         </div>
     </div>

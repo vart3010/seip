@@ -35,14 +35,6 @@ pequiven_work_study_circle_list:
         _format: html|json|xml
     methods: [GET]
 
-
-pequiven_work_study_circle_general:
-    path: /view
-    defaults:
-        _controller: pequiven.controller.work_study_circle:viewAction                
-    requirements:
-        _format: html|json|xml
-    methods: [GET]
     
 pequiven_work_study_circle_user_get_form:
     path: /{idUser}/get-form.{_format}
