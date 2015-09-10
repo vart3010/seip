@@ -467,6 +467,8 @@ class UserRepository extends EntityRepository {
                 ->setParameter('enabled', true)
                 ->andWhere('g.level <= :level')
                 ->andWhere('u_l.id = :complejos')
+        ;
+        $qb
                 ->setParameter('level', \Pequiven\MasterBundle\Entity\Rol::ROLE_DIRECTIVE)
                 ->setParameter('complejos', $criteria)
         ;
@@ -486,12 +488,13 @@ class UserRepository extends EntityRepository {
                 ->innerJoin('u.groups', 'g')
                 ->innerJoin('u.complejo', 'u_l')
                 ->andWhere('u.enabled = :enabled')
-                ->setParameter('enabled', true)
                 ->andWhere('g.level <= :level')
-                ->andWhere($qb->expr()->isNull('u.workStudyCircle'))
+                ->andWhere($qb->expr()->isNotNull('u.workStudyCircle'))
                 ->andWhere('u_l.id = :complejos')
+                ->setParameter('enabled', true)
                 ->setParameter('level', \Pequiven\MasterBundle\Entity\Rol::ROLE_DIRECTIVE)
                 ->setParameter('complejos', $criteria)
+                //->expr()->asc('u.username')
         ;
 
         return $qb->getQuery()->getResult();

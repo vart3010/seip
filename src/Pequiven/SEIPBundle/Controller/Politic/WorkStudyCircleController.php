@@ -212,30 +212,29 @@ class WorkStudyCircleController extends SEIPController {
 
             $idComplejo = $value->getId();
 
-            $users = $this->get('pequiven_seip.repository.user')->findQueryUsersAll($idComplejo); //Carga los Usuarios Reales
-            //$users = $this->get('pequiven_seip.repository.user')->findBy(array('complejo' => $idComplejo, 'statusWorker' => true/*, 'groups' => \Pequiven\MasterBundle\Entity\Rol::ROLE_DIRECTIVE*/));
-            //$usersNull = $this->get('pequiven_seip.repository.user')->findQueryUsersByNoWorkStudyCircle();
-            $usersNull = $this->get('pequiven_seip.repository.user')->findQueryUsersAllRegister($idComplejo); //Carga los Usuarios Reales
-            //$usersNull = $this->get('pequiven_seip.repository.user')->findBy(array('complejo' => $idComplejo, 'workStudyCircle' => null, 'statusWorker' => true ));
-            //$usersRegisters = $this->get('pequiven_seip.repository.user')->findBy(array('complejo' => $idComplejo, 'workStudyCircle' => !null ));
+            //$users = $this->get('pequiven_seip.repository.user')->findQueryUsersAll($idComplejo); //Carga los Usuarios Reales
 
+            $usersNotNull = $this->get('pequiven_seip.repository.user')->findQueryUsersAllRegister($idComplejo); //Carga los Usuarios worStudyCircleId =  NULL
+            
             $workStudyCircle = $em->getRepository('PequivenSEIPBundle:Politic\WorkStudyCircle')->findBy(array('complejo' => $idComplejo));
 
             $complejosCant[] = count($workStudyCircle);
 
-            $usersCant[] = count($users);
-
-            $cantNull[] = count($users) - count($usersNull);
-
+            //$usersCant[] = count($users);
+            //$cantNull[] = count($users) - count($usersNull);
+            $cantNotNull[] = count($usersNotNull);
             //var_dump(count($users));
         }
+
+        $arrayTemp = array(1804, 1806, 342, 606);
 
         return $this->render('PequivenSEIPBundle:Politic:WorkStudyCircle\view.html.twig', array(
                     'workStudyCircle' => $workStudyCircle,
                     'complejo' => $complejo,
-                    'users' => $usersCant,
+                    //'users' => $usersCant,
+                    'users' => $arrayTemp,
                     'complejosCant' => $complejosCant,
-                    'cantNull' => $cantNull
+                    'cantNull' => $cantNotNull
         ));
 
         //return $this->render('PequivenSEIPBundle:Politic:WorkStudyCircle\view.html.twig');
