@@ -124,11 +124,10 @@ class WorkStudyCircle extends ModelWorkStudyCircle implements PeriodItemInterfac
      * @ORM\Column(name="departamento",type="string",length=100,nullable=true)
      */
     private $departamento;
-    
-    
+
     /**
      * @ORM\OneToMany(targetEntity="\Pequiven\SEIPBundle\Entity\User", mappedBy="workStudyCircle", cascade={"persist"})
-     **/
+     * */
     private $userWorkerId;
 
     /**
@@ -210,12 +209,10 @@ class WorkStudyCircle extends ModelWorkStudyCircle implements PeriodItemInterfac
         return $this->updatedAt;
     }
 
-    
     public function getCodigo() {
         return $this->codigo;
     }
 
-    
     public function setCodigo($codigo) {
         $this->codigo = $codigo;
     }
@@ -336,7 +333,7 @@ class WorkStudyCircle extends ModelWorkStudyCircle implements PeriodItemInterfac
     public function setDepartamento($departamento) {
         $this->departamento = $departamento;
     }
-    
+
     /**
      * 
      * @param \Pequiven\SEIPBundle\Entity\User $userWorkerId
@@ -347,10 +344,11 @@ class WorkStudyCircle extends ModelWorkStudyCircle implements PeriodItemInterfac
 
         return $this;
     }
+
     public function getUserWorkerId() {
         return $this->userWorkerId;
     }
-    
+
     /**
      * Add gerencias
      *
@@ -380,7 +378,7 @@ class WorkStudyCircle extends ModelWorkStudyCircle implements PeriodItemInterfac
     public function getGerencias() {
         return $this->gerencias;
     }
-    
+
     /**
      * Add gerenciaSeconds
      *
