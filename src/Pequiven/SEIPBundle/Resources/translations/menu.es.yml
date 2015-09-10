@@ -208,4 +208,6 @@ app:
                         reports: Reportes
                         strategic_plan: Plan Estratégico
                         notification: Notificación
+                        visualize: Visualizar
+                        general: General
                             

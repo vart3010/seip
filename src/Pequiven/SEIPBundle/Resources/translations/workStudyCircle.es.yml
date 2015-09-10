@@ -1,2 +1,24 @@
 workStudyCircle:
     title: Círculo de Estudio y Trabajo
+    form:
+        code: Código
+        nombre: Nombre de Círculo
+        regionn: Región
+        complejo: Complejo
+        gerenciaFirst: Gerencia de Primera Linea
+        gerenciaSecond: Gerencia De Segunda Linea
+        superintendencia: Superintendencia
+        supervision: Supervisión 
+        departamento: Departamento
+        
+        coordinador:
+            nombre: Nombre
+            telefono: Teléfono
+            ext: Extensión
+    members:
+        title: Miembros
+        add: Añadir Miembros
+        edit: Editar
+    
+    general: General
+        
