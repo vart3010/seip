@@ -231,6 +231,30 @@ class UserRepository extends EntityRepository {
     }
 
     /**
+     * todos los usuarios validos
+     *
+     *
+     */
+    function findQueryUsersAll($criteria) {
+        $qb = $this->getQueryBuilder();
+        $qb
+                ->addSelect('u')                
+                ->innerJoin('u.groups', 'g')
+                ->innerJoin('u.complejo', 'u_l')
+                ->andWhere('u.enabled = :enabled')
+                ->setParameter('enabled', true)
+                ->andWhere('g.level <= :level')
+                ->andWhere('u_l.id = :complejos')
+                ->setParameter('level', \Pequiven\MasterBundle\Entity\Rol::ROLE_DIRECTIVE)
+                ->setParameter('complejos', $criteria)
+        ;
+
+//        $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
+        
+        return $qb->getQuery()->getResult();
+    }
+
+    /**
      * Buscador de usuarios
      * 
      * @param array $criteria
