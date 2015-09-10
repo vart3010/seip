@@ -229,7 +229,7 @@ class User extends BaseUser implements UserInterface, UserBoxInterface, PeriodIt
         $this->groups = new \Doctrine\Common\Collections\ArrayCollection();
         $this->plantReports = new \Doctrine\Common\Collections\ArrayCollection();
         $this->reportTemplates = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->workStudyCircle = new \Doctrine\Common\Collections\ArrayCollection();
+        //$this->workStudyCircle = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
