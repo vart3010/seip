@@ -1,12 +1,15 @@
 {% trans_default_domain 'PequivenSEIPBundle' %}
 
+{% set userCreatedId = workStudyCircle.getCreatedBy.id %}
 
 <div class="block" >
     <div class="block-title">
         <h3 class="ng-binding">Miembros</h3>    
-        <div class="button-group absolute-right compact">
-            <a class="button icon-list-add " href="{{ path("pequiven_work_study_circle_add_others_members",{idWorkStudyCircle:workStudyCircle.id})}}"  title="">Añadir Miembro&nbsp;</a>
-        </div>
+        {% if (is_granted('ROLE_SEIP_WORK_STUDY_CIRCLES_EDIT') or (userCreatedId == userData.id)) %}
+            <div class="button-group absolute-right compact">
+                <a class="button icon-list-add " href="{{ path("pequiven_work_study_circle_add_others_members",{idWorkStudyCircle:workStudyCircle.id})}}"  title="">Añadir Miembro&nbsp;</a>
+            </div>
+        {% endif %}
     </div>
     <div class="with-padding" ng-controller="WorkStudyCircleController">
         <table class="simple-table responsive-table tables-extras" id="sorting-example2">
@@ -23,7 +26,7 @@
             <tbody>
 
                 {% set cont = 1 %}
-                {% set userCreatedId = workStudyCircle.getCreatedBy.id %}
+                
                 {% for user in workStudyCircle.userWorkerId %}
                     {% if (userCreatedId != user.id) %}
                         <tr {#ng-repeat="user in workStudyCircle.userWorkerId"#}  {#ng-init="paso=$index;"#}>
@@ -33,15 +36,20 @@
                             <td>{{ user.getIndentification }}</td>
                             <td>{{ user.ext }}</td>
                             <td class="align-right vertical-center">
-                                <div ng-controller="ToolsController" id="target_{$ paso+1 $}">
-                                    <span class="select compact">
-                                        <a href="{{ path('pequiven_work_study_circle_member_edit',{idUser:user.id}) }}" class="select-value form-edit">{{ 'pequiven.actions.edit'|trans({},'messages') }}</a>
-                                        <span class="select-arrow"></span>
-                                        {#<span class="drop-down">
-                                            <a href="{{ path('pequiven_work_study_circle_member_edit',{idUser:user.id}) }}" class="button icon-pencil">{{ "pequiven.actions.edit"|trans({},"messages") }}</a>
-                                        </span>#}
-                                    </span>
-                                </div>
+                                {% if (is_granted('ROLE_SEIP_WORK_STUDY_CIRCLES_EDIT') or (userCreatedId == userData.id)) %}
+                                    <div ng-controller="ToolsController" id="target_{$ paso+1 $}">
+                                        <span class="select compact">
+                                            <a href="{{ path('pequiven_work_study_circle_member_edit',{idUser:user.id}) }}" class="select-value form-edit">{{ 'pequiven.actions.edit'|trans({},'messages') }}</a>
+                                            <span class="select-arrow"></span>
+                                            {#<span class="drop-down">
+                                                <a href="{{ path('pequiven_work_study_circle_member_edit',{idUser:user.id}) }}" class="button icon-pencil">{{ "pequiven.actions.edit"|trans({},"messages") }}</a>
+                                            </span>#}
+                                        </span>
+                                    </div>
+                                {% else  %}
+                                    &nbsp;
+                                {% endif %}
+
                             </td>
                             {% set cont = cont + 1 %}
                         </tr>

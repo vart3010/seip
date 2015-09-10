@@ -291,8 +291,11 @@ class WorkStudyCircleController extends SEIPController {
         $em = $this->getDoctrine()->getManager();
         $workStudyCircle = $em->getRepository('PequivenSEIPBundle:Politic\WorkStudyCircle')->findOneBy(array('id' => $request->get("id")));
 
+        $user = $this->getUser();
+
         return $this->render('PequivenSEIPBundle:Politic:WorkStudyCircle\show.html.twig', array(
-                    'workStudyCircle' => $workStudyCircle
+                    'workStudyCircle' => $workStudyCircle,
+                    'userData' => $user
         ));
     }
 
