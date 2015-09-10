@@ -1279,11 +1279,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                         'route' => 'pequiven_work_study_circle_general',
                     ))
                     ->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.general', $section)));
-                                "route" => "",
-                                'labelAttributes' => array('icon' => 'fa fa-table',),
-                            ))
-                    )->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.reports', $section)));
-
+                              
             $menuWorkStudyCircles->addChild($workStudyCirclesReports);
         }
         if ($this->isGranted(array('ROLE_SEIP_WORK_STUDY_CIRCLES_STRATEGIC_PLAN'))) {
