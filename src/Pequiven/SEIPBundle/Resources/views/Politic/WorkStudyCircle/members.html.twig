@@ -1,13 +1,15 @@
-{% trans_default_domain 'PequivenSEIPBundle' %}
+{% trans_default_domain 'workStudyCircle' %}
 
 {% set userCreatedId = workStudyCircle.getCreatedBy.id %}
 
 <div class="block" >
     <div class="block-title">
-        <h3 class="ng-binding">Miembros</h3>    
+        <h3 class="ng-binding">{{ "workStudyCircle.members.title"|trans }}</h3>    
         {% if (is_granted('ROLE_SEIP_WORK_STUDY_CIRCLES_EDIT') or (userCreatedId == userData.id)) %}
             <div class="button-group absolute-right compact">
-                <a class="button icon-list-add " href="{{ path("pequiven_work_study_circle_add_others_members",{idWorkStudyCircle:workStudyCircle.id})}}"  title="">Añadir Miembro&nbsp;</a>
+                <a class="button icon-list-add " href="{{ path("pequiven_work_study_circle_add_others_members",{idWorkStudyCircle:workStudyCircle.id})}}"  title="">
+                    {{ "workStudyCircle.members.add"|trans }}&nbsp;
+                </a>
             </div>
         {% endif %}
     </div>
@@ -26,7 +28,7 @@
             <tbody>
 
                 {% set cont = 1 %}
-                
+
                 {% for user in workStudyCircle.userWorkerId %}
                     {% if (userCreatedId != user.id) %}
                         <tr {#ng-repeat="user in workStudyCircle.userWorkerId"#}  {#ng-init="paso=$index;"#}>
@@ -39,7 +41,9 @@
                                 {% if (is_granted('ROLE_SEIP_WORK_STUDY_CIRCLES_EDIT') or (userCreatedId == userData.id)) %}
                                     <div ng-controller="ToolsController" id="target_{$ paso+1 $}">
                                         <span class="select compact">
-                                            <a href="{{ path('pequiven_work_study_circle_member_edit',{idUser:user.id}) }}" class="select-value form-edit">{{ 'pequiven.actions.edit'|trans({},'messages') }}</a>
+                                            <a href="{{ path('pequiven_work_study_circle_member_edit',{idUser:user.id}) }}" class="select-value form-edit">
+                                                {{ 'workStudyCircle.members.edit'|trans }}
+                                            </a>
                                             <span class="select-arrow"></span>
                                             {#<span class="drop-down">
                                                 <a href="{{ path('pequiven_work_study_circle_member_edit',{idUser:user.id}) }}" class="button icon-pencil">{{ "pequiven.actions.edit"|trans({},"messages") }}</a>

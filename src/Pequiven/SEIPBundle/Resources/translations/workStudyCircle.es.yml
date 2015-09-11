@@ -4,7 +4,7 @@ workStudyCircle:
     form:
         code: Código
         nombre: Nombre de Círculo
-        regionn: Región
+        region: Región
         complejo: Complejo
         gerenciaFirst: Gerencia de Primera Linea
         gerenciaSecond: Gerencia De Segunda Linea
@@ -13,6 +13,7 @@ workStudyCircle:
         departamento: Departamento
         
         coordinador:
+            title: Datos del Coordinador
             nombre: Nombre
             telefono: Teléfono
             ext: Extensión
@@ -23,4 +24,6 @@ workStudyCircle:
     
     general: General
     list: Lista
+    export:
+        exportPdf: Exportar a Pdf
         
