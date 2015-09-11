@@ -4,9 +4,6 @@ Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle:
         id:
             expose: true
             groups: [id]
-        id:
-            expose: true
-            groups: [api_list]
         name:
             expose: true
             groups: [api_list]

@@ -2099,8 +2099,7 @@ angular.module('seipModule.controllers', [])
                 first_line_managements: null,
                 second_line_managements: null,
                 indicatorSummaryLabels: null,
-                frequency_notifications: null,
-                WorkStudyCircle: null
+                frequency_notifications: null
             };
             $scope.model = {
                 complejo: null,
