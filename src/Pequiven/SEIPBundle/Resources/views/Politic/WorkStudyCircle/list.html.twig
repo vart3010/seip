@@ -63,6 +63,11 @@
                                      
             <div loading-container="tableParams.settings().$loading">
                 <table ng-table="tableParams" show-filter="false" template-pagination="custom/pager" template-header="custom/header" api-data-url="{{ apiDataUrl }}" export-csv="csv" class="table table-responsive table-extra-info" ng-init="data.WorkStudyCircle = {{ labelsCircle|serialize }} " >
+                   <tr>
+                      <td style="font-weight: bold">Codigo</td>                      
+                      <td style="font-weight: bold">Circulo</td>
+                      <td style="font-weight: bold">Complejo</td>
+                   </tr>
                     <tbody>
                         
                         {#<tr ng-repeat="result in $data" data="{$ result|json $}">
@@ -74,18 +79,24 @@
                         
                         {# lista de circulos - punete#}
                          {% for dataCircle in labelsCircle %}
+                                       
                                         <tr>
                                             <td>
                                             <a href="{{ path('pequiven_work_study_circle_show',{id:dataCircle.id})}}">
-                                                
                                                 ({{ dataCircle.codigo }})                                          
-                                                {{ dataCircle.name }} 
-                                                  -
-                                                {{ dataCircle.complejo}}
-
-                                                
                                             </a>
                                             </td>
+                                            <td>
+                                                <a href="{{ path('pequiven_work_study_circle_show',{id:dataCircle.id})}}">
+                                                    {{ dataCircle.name }} 
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <a href="{{ path('pequiven_work_study_circle_show',{id:dataCircle.id})}}">
+                                                    {{ dataCircle.complejo}}                                                
+                                                </a>
+                                            </td>
+
 
                                         </tr>
                         {% endfor %}
