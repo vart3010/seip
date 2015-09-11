@@ -13,7 +13,7 @@ use Pequiven\IndicatorBundle\Model\Indicator\EvolutionIndicator\EvolutionCause a
  *
  * @author Maximo Sojo <maxsojo13@gmail.com>
  * @ORM\Table(name="seip_indicator_evolution_causes")
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="Pequiven\IndicatorBundle\Repository\Indicator\EvolutionIndicator\EvolutionCauseRepository")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
 class EvolutionCause extends Model {
@@ -300,6 +300,14 @@ class EvolutionCause extends Model {
      */
     public function getIndicatorAction() {
         return $this->indicatorAction;
-    }      
+    }   
+
+    /**
+     * 
+     * @return string
+     */
+    public function __toString() {
+        return $this->getCauses() ;
+    }   
      
 }

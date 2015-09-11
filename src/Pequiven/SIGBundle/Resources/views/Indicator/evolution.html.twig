@@ -2,6 +2,8 @@
 
 {% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
 
+{% import 'PequivenSIGBundle:Template:Buttons/buttons.html.twig' as buttons %}
+
 {% block javascripts_base %}
     {{ parent() }}
     <script src="{{  asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.input.js') }}"></script>
@@ -107,7 +109,8 @@
         {% endif %}        
             &nbsp;
 
-    <p>
+    <p class="button-height align-right">
+    
         
         <div style="text-align: left; margin-left:15px;">
             <a class="button"  id="showItems"  href="javascript:void(0)">
@@ -123,6 +126,11 @@
             {{ renderArea(constant('Pequiven\\SEIPBundle\\Model\\Box\\AreasBox::ITEMS_EVOLUTION')) }}
             
         </div>  
+    
+        {# Descarga de Informe de Evolución#}
+       {# &nbsp;
+        {{ buttons.generic_download(path('pequiven_indicator_evolution', { 'id': indicator_sig.id , 'month': month}),('pequiven.evolution'|trans({},'messages'))) }}
+        #}
 
     </p>
 
@@ -193,17 +201,12 @@
         //Carga de Archivo pdf
         function uploadFilePdf(id) {
             $("input#indicatorFilePdf_" + id).click();
-            //var causeId = document.getElementById("data").value;
             console.log(id);
-        //$("#form_"+id).submit();
         }
 
         //Visualización
         function openFile(valueCauseId) {
-        //var obj = $("span#" + valueCauseId);
-        //var url = obj.attr("data");
             valueCauseId = valueCauseId.split("_");
-            //console.log (valueCauseId[1]);
             var data = {
                 id: valueCauseId[1]
             };
@@ -212,7 +215,6 @@
                 url: '{{ path("pequiven_cause_vizualice_file") }}',
                 data: data,
                 success: function (data) {
-        //alert(data["url"]);
                     window.open(data["url"]);
                 }
             });
@@ -233,12 +235,7 @@
 
         $(document).ready(function () {
 
-        // Progress
-        //$('.progress').progress();
-
-        {#$("a.uploadFileButton").click(function () {
-            alert("hola");
-        });#}
+        
         });
     </script>
 

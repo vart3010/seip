@@ -24,18 +24,6 @@ pequiven_work_study_circle_show:
         id: "\d+"
     methods: [GET]
 
-pequiven_work_study_circle_list:
-    path: /list
-    defaults:
-        _controller: pequiven.controller.work_study_circle:listAction
-        #_format: html
-        _sylius:
-            form: pequiven_seipbundle_politic_workstudycircle
-    requirements:
-        _format: html|json|xml
-    methods: [GET]
-
-    
 pequiven_work_study_circle_user_get_form:
     path: /{idUser}/get-form.{_format}
     defaults:

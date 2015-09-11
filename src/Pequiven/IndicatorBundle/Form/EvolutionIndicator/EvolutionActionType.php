@@ -15,7 +15,7 @@ class EvolutionActionType extends AbstractType
      * @param FormBuilderInterface $builder
      * @param array $options
      */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options, $idIndicator)
     {
         $builder
             ->add('ref', 'text', array(
@@ -44,16 +44,8 @@ class EvolutionActionType extends AbstractType
             ->add('dateEnd', 'date', array(
                 'label'=>'Fecha de Cierre',
                 'label_attr' => array('class' => 'label'),
-                'attr'=> array('class'=> '' )))
-            /*->add('advance', 'text', array(
-                'label'=>'Avance %',
-                'label_attr' => array('class' => 'label'),
-                'attr'=> array('class'=> 'input input-large ' )))
-            ->add('observations', 'textarea', array(
-                'label'=>'Observaciones',
-                'label_attr' => array('class' => 'label'),
-                'attr'=> array('class'=> 'input input-large ' )))*/
-            ->add('evolutionCause','entity',array(
+                'attr'=> array('class'=> '' )))            
+            /*->add('evolutionCause','entity',array(
                 'label' => 'Causa del Plan de Acción',
                 'label_attr' => array('class' => 'label'),
                 'class' => 'Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCause',
@@ -64,7 +56,7 @@ class EvolutionActionType extends AbstractType
                 //'ng-model' => 'model.lastPeriod',
                 //'ng-options' => 'value as value.ref for (key,value) in data.lastPeriod'
                 ),
-                               )) 
+                               )) */
               /*->add('evolutionCause',null,array(
                 'label' => 'Causa del Plan de Acción',
                 'label_attr' => array('class' => 'label'),
@@ -76,6 +68,20 @@ class EvolutionActionType extends AbstractType
                 'ng-options' => 'value as value.ref for (key,value) in data.causesEvolution'
                 ),
                                )) */
+            ->add('evolutionCause', null, array(
+                    'query_builder' => function(\Pequiven\IndicatorBundle\Repository\Indicator\EvolutionIndicator\EvolutionCauseRepository $repository) {
+                        return $repository->getCausesByIndicator($idIndicator);
+                    },
+                    'label' => 'Causas del Indicador',
+                    'label_attr' => array('class' => 'label'),
+                    'attr' => array(
+                        'class' => "input-large select2",
+                        'style' => 'width: 270px',
+                        //'multiple' => 'multiple'
+                    ),
+                    'empty_value' => 'Seleccione...',
+                    'required' => true,
+                ))
         ;
     }
     

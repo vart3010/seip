@@ -401,8 +401,7 @@ class IndicatorSigController extends ResourceController
         }
 
         //$action = $data["cant"];
-        //var_dump($data["cant"]);
-        //die();
+        $indi = $indicator->getId();
 
         $codifigication = [
             'complejo' => strtoupper($complejo),
@@ -417,7 +416,7 @@ class IndicatorSigController extends ResourceController
         //die();       
         
         $cause = new EvolutionAction();
-        $form  = $this->createForm(new EvolutionActionType());
+        $form  = $this->createForm(new EvolutionActionType($indi));
         $form_value  = $this->createForm(new EvolutionActionValueType());
         
         $view = $this
