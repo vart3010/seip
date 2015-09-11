@@ -119,8 +119,7 @@ class WorkStudyCircleController extends SEIPController {
                 $this->addWorkStudyCircleToUser($workStudyCircle, $request->get("workStudyCircle_data")["userWorkerId"]);
                 $this->addWorkStudyCircleToUser($workStudyCircle, array($user->getId()));
                 
-                 var_dump($countUsers);
-                die();
+                
                 $this->get('session')->getFlashBag()->add('success', 'Círculo de Estudio guardado correctamente');
                 //return $this->redirect($this->generateUrl('pequiven_seip_default_index'));
                 return $this->redirect($this->generateUrl('pequiven_work_study_circle_show', array("id" => $workStudyCircle->getId())));
