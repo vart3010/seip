@@ -299,14 +299,17 @@ class WorkStudyCircleController extends SEIPController {
                 ->setTemplate($this->config->getTemplate('list.html'))
                 ->setTemplateVar($this->config->getPluralResourceName())
         ;
-        //$view->getSerializationContext()->setGroups(array('id', 'api_list','codigo', 'name'));
+        //$view->getSerializationContext()->setGroups(array('id','api_list','codigo', 'name'));
         if ($request->get('_format') == 'html') {
             $labelsCircle = array();
             foreach ($circle as $value) {
                 
                 $labelsCircle[] = array(
-                    'codigo' => $value->getCodigo(),
+                    'codigo' => $value->getCodigo(),                   
+                    'complejo' => $value->getComplejo(),
                     'name' => $value->getName(),
+                    'id' => $value->getId(),
+
                 );
             }
         
@@ -321,8 +324,7 @@ class WorkStudyCircleController extends SEIPController {
 
             $view->setData($resources->toArray('', array(), $formatData));
         }
-        return $this->handleView($view);
-                
+        return $this->handleView($view);                
     }
 
     public function exportAction(Request $request) {
