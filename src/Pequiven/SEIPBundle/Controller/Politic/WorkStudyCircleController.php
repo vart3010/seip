@@ -259,4 +259,46 @@ class WorkStudyCircleController extends SEIPController {
         ));
     }
 
+    public function viewAction(Request $request) {
+        $em = $this->getDoctrine()->getManager();
+
+        $complejo = $this->get('pequiven_seip.repository.complejo')->findAll(); //Llamada de complejo
+
+        foreach ($complejo as $value) {
+
+            $idComplejo = $value->getId();
+
+            $users = $this->get('pequiven_seip.repository.user')->findQueryUsersAll($idComplejo); //Carga los Usuarios Reales
+            //$users = $this->get('pequiven_seip.repository.user')->findBy(array('complejo' => $idComplejo, 'statusWorker' => true/*, 'groups' => \Pequiven\MasterBundle\Entity\Rol::ROLE_DIRECTIVE*/));
+            //$usersNull = $this->get('pequiven_seip.repository.user')->findQueryUsersByNoWorkStudyCircle();
+            $usersNull = $this->get('pequiven_seip.repository.user')->findQueryUsersAllRegister($idComplejo); //Carga los Usuarios Reales
+            //$usersNull = $this->get('pequiven_seip.repository.user')->findBy(array('complejo' => $idComplejo, 'workStudyCircle' => null, 'statusWorker' => true ));
+            //$usersRegisters = $this->get('pequiven_seip.repository.user')->findBy(array('complejo' => $idComplejo, 'workStudyCircle' => !null ));
+
+            $workStudyCircle = $em->getRepository('PequivenSEIPBundle:Politic\WorkStudyCircle')->findBy(array('complejo' => $idComplejo));
+
+            $complejosCant[] = count($workStudyCircle);
+
+            $usersCant[] = count($users);
+
+            $cantNull[] = count($users) - count($usersNull);
+
+            //var_dump(count($users));
+        }
+
+        return $this->render('PequivenSEIPBundle:Politic:WorkStudyCircle\view.html.twig', array(
+                    'workStudyCircle' => $workStudyCircle,
+                    'complejo' => $complejo,
+                    'users' => $usersCant,
+                    'complejosCant' => $complejosCant,
+                    'cantNull' => $cantNull
+        ));
+
+        //return $this->render('PequivenSEIPBundle:Politic:WorkStudyCircle\view.html.twig');
+    }
+
+//    public function exportAction(Request $request) {
+//        var_dump($request);
+//        die();
+//    }
 }

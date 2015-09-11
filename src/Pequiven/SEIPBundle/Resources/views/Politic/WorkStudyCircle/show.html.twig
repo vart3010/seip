@@ -1,6 +1,8 @@
 
 {% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}
 
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
+
 {% trans_default_domain 'workStudyCircle' %}
 
 {% block javascripts_base %}
@@ -9,7 +11,7 @@
 {% endblock javascripts_base %}
 
 {% block before_body %}
-    {{ contentHeader("Círculo de Estudio y Trabajo")  }}
+    {{ contentHeader("workStudyCircle.title" | trans({}))   }}
 {% endblock %}
 
 {% block body %}
@@ -102,10 +104,18 @@
             </div>
         </div>
     </fieldset>
-                
+
     {% set users = workStudyCircle.userWorkerId %}
     <br /><br />
     {% include 'PequivenSEIPBundle:Politic:WorkStudyCircle/members.html.twig' %}
+    <br /><br />
+    {% set routeConfig = path('pequiven_work_study_circle_export_pdf',{idWorkStudyCircle:workStudyCircle.id}) %}
+    {#{{ buttons.generic(
+                    (routeConfig),
+                    ('pequiven_indicator.indicator.buttons.configure_details_results'|trans({},'PequivenIndicatorBundle')),
+                    'fa fa-wrench'
+                 ) 
+    }}#}
 
 {% endblock %}
 

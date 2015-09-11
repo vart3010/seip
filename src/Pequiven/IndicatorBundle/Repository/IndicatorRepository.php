@@ -113,6 +113,25 @@ class IndicatorRepository extends EntityRepository
         
         return $queryBuilder;
     }
+
+    function getLastPeriod($period) {
+        //Chuleta: se necesita el id del period, no la descripcion.
+        $queryBuilder = $this->getQueryBuilder();
+        $queryBuilder
+
+                ->addSelect('i')
+                ->andWhere('i.enabled = 1')
+                ->andWhere('i.period = :periodo')
+                ->andWhere('i.enabled = 1')
+                ->andWhere('i.tmp = 0')
+                ->orderBy('i.ref')
+                ->setParameter('periodo', $period)
+        ;
+        //$queryBuilder->groupBy('i.ref');
+        //$queryBuilder->orderBy('i.ref');
+        
+        return $queryBuilder;
+    }
     
     /**
      * Crea un paginador para los indicadores de acuerdo al nivel del mismo

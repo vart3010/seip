@@ -57,3 +57,22 @@ pequiven_work_study_circle_add_others_members:
     methods: [GET|POST]
     options:
         expose: true
+        
+pequiven_work_study_circle_export_pdf:
+    path: /{idWorkStudyCircle}/export.{_format}
+    defaults:
+        _controller: pequiven.controller.work_study_circle:exportAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET|POST]
+    options:
+        expose: true
+        
+pequiven_work_study_circle_general:
+    path: /view
+    defaults:
+        _controller: pequiven.controller.work_study_circle:viewAction               
+    requirements:
+        _format: html|json|xml
+    methods: [GET]

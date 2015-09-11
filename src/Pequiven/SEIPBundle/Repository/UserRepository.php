@@ -452,4 +452,49 @@ class UserRepository extends EntityRepository {
         return 'u';
     }
 
+    /**
+     * Todos los usuarios validos por complejo
+     *
+     *
+     */
+    function findQueryUsersAll($criteria) {
+        $qb = $this->getQueryBuilder();
+        $qb
+                ->addSelect('u')
+                ->innerJoin('u.groups', 'g')
+                ->innerJoin('u.complejo', 'u_l')
+                ->andWhere('u.enabled = :enabled')
+                ->setParameter('enabled', true)
+                ->andWhere('g.level <= :level')
+                ->andWhere('u_l.id = :complejos')
+                ->setParameter('level', \Pequiven\MasterBundle\Entity\Rol::ROLE_DIRECTIVE)
+                ->setParameter('complejos', $criteria)
+        ;
+
+        return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * Todos los usuarios validos no registrados
+     *
+     *
+     */
+    function findQueryUsersAllRegister($criteria) {
+        $qb = $this->getQueryBuilder();
+        $qb
+                ->addSelect('u')
+                ->innerJoin('u.groups', 'g')
+                ->innerJoin('u.complejo', 'u_l')
+                ->andWhere('u.enabled = :enabled')
+                ->setParameter('enabled', true)
+                ->andWhere('g.level <= :level')
+                ->andWhere($qb->expr()->isNull('u.workStudyCircle'))
+                ->andWhere('u_l.id = :complejos')
+                ->setParameter('level', \Pequiven\MasterBundle\Entity\Rol::ROLE_DIRECTIVE)
+                ->setParameter('complejos', $criteria)
+        ;
+
+        return $qb->getQuery()->getResult();
+    }
+
 }
