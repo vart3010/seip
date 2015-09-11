@@ -266,6 +266,8 @@ class WorkStudyCircleController extends SEIPController {
         $repository = $this->getRepository();
         $circle = $this->get('pequiven.repository.work_study_circle')->findAll(); //Carga los Criculos
         
+        //var_dump();
+        //die();
         //$criteria['applyPeriodCriteria'] = true;
 
         if ($this->config->isPaginated()) {
@@ -297,7 +299,7 @@ class WorkStudyCircleController extends SEIPController {
                 ->setTemplate($this->config->getTemplate('list.html'))
                 ->setTemplateVar($this->config->getPluralResourceName())
         ;
-        $view->getSerializationContext()->setGroups(array('id', 'api_list','codigo', 'name'));
+        //$view->getSerializationContext()->setGroups(array('id', 'api_list','codigo', 'name'));
         if ($request->get('_format') == 'html') {
             $labelsCircle = array();
             foreach ($circle as $value) {
