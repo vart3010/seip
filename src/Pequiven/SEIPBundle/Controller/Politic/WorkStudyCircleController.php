@@ -239,6 +239,72 @@ class WorkStudyCircleController extends SEIPController {
 
         //return $this->render('PequivenSEIPBundle:Politic:WorkStudyCircle\view.html.twig');
     }
+    
+    
+    public function listAction(Request $request) {
+        
+        $criteria = $request->get('filter', $this->config->getCriteria());
+        $sorting = $request->get('sorting', $this->config->getSorting());
+        $repository = $this->getRepository();
+        $circle = $this->get('pequiven.repository.work_study_circle')->findAll(); //Carga los Criculos
+        
+        //$criteria['applyPeriodCriteria'] = true;
+
+        if ($this->config->isPaginated()) {
+            $resources = $this->resourceResolver->getResource(
+                    $repository, 'createPaginatorByWorkStudyCircle', array($criteria, $sorting)
+            );
+
+            $maxPerPage = $this->config->getPaginationMaxPerPage();
+            if (($limit = $request->query->get('limit')) && $limit > 0) {
+                if ($limit > 100) {
+                    $limit = 100;
+                }
+                $maxPerPage = $limit;
+            }
+            $resources->setCurrentPage($request->get('page', 1), true, true);
+            $resources->setMaxPerPage($maxPerPage);
+        } else {
+            $resources = $this->resourceResolver->getResource(
+                    $repository, 'findBy', array($criteria, $sorting, $this->config->getLimit())
+            );
+        }
+        $routeParameters = array(
+            '_format' => 'json',
+        );
+        $apiDataUrl = $this->generateUrl('pequiven_work_study_circle_list', $routeParameters);
+
+        $view = $this
+                ->view()
+                ->setTemplate($this->config->getTemplate('list.html'))
+                ->setTemplateVar($this->config->getPluralResourceName())
+        ;
+        $view->getSerializationContext()->setGroups(array('id', 'api_list'));
+        if ($request->get('_format') == 'html') {
+            $labelsCircle = array();
+            foreach ($circle as $value) {
+                
+                $labelsCircle[] = array(
+                    'id' => $value->getId(),
+                    'description' => $value->getName(),
+                );
+            }
+        
+            $data = array(
+        //        'apiDataUrl' => $apiDataUrl,
+                    $this->config->getPluralResourceName() => $resources,
+                   'labelsCircle' => $labelsCircle            
+            );
+            $view->setData($data);
+        } else {
+            $formatData = $request->get('_formatData', 'default');
+
+            $view->setData($resources->toArray('', array(), $formatData));
+        }
+        return $this->handleView($view);
+                
+        //return $this->render('PequivenSEIPBundle:Politic:WorkStudyCircle\list.html.twig');
+    }
 
 //    public function exportAction(Request $request) {
 //        var_dump($request);
