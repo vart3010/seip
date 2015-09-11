@@ -9,6 +9,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 class WorkStudyCircleType extends AbstractType {
 
     /**
+     * @author Victor Tortolero
      * @param FormBuilderInterface $builder
      * @param array $options
      */
