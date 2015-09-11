@@ -297,19 +297,19 @@ class WorkStudyCircleController extends SEIPController {
                 ->setTemplate($this->config->getTemplate('list.html'))
                 ->setTemplateVar($this->config->getPluralResourceName())
         ;
-        $view->getSerializationContext()->setGroups(array('id', 'api_list'));
+        $view->getSerializationContext()->setGroups(array('id', 'api_list','codigo', 'name'));
         if ($request->get('_format') == 'html') {
             $labelsCircle = array();
             foreach ($circle as $value) {
                 
                 $labelsCircle[] = array(
-                    'id' => $value->getId(),
-                    'description' => $value->getName(),
+                    'codigo' => $value->getCodigo(),
+                    'name' => $value->getName(),
                 );
             }
         
             $data = array(
-        //        'apiDataUrl' => $apiDataUrl,
+                   'apiDataUrl' => $apiDataUrl,
                     $this->config->getPluralResourceName() => $resources,
                    'labelsCircle' => $labelsCircle            
             );
@@ -321,7 +321,6 @@ class WorkStudyCircleController extends SEIPController {
         }
         return $this->handleView($view);
                 
-        //return $this->render('PequivenSEIPBundle:Politic:WorkStudyCircle\list.html.twig');
     }
 
     public function exportAction(Request $request) {

@@ -60,14 +60,23 @@
                 </div>
 
             </details>
-            {{ dump(labelsCircle)}}
             <div loading-container="tableParams.settings().$loading">
-                <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager" template-header="custom/header" api-data-url="pequiven_work_study_circle_list" export-csv="csv" class="table table-responsive table-extra-info" ng-init="data.WorkStudyCircle = {{ labelsCircle|serialize }} " >
+                <table ng-table="tableParams" show-filter="false" template-pagination="custom/pager" template-header="custom/header" api-data-url="{{ apiDataUrl }}" export-csv="csv" class="table table-responsive table-extra-info" {#ng-init="data.WorkStudyCircle = {{ labelsCircle|serialize }} "#} >
                     <tbody>
                         
                         <tr ng-repeat="result in $data" data="{$ result|json $}">
-                            <td data-title="{#' {{ (labelHeader[level])|trans }}'#}" sortable="'id'" filter="{'name' : 'text'}">
-                                <a href="{$ result._links.self.href $}">{$ result.id+result.name $}  ({$ result.name $}) </a>
+                            <td data-title="' {{ 'workStudyCircle.circle_list'|trans }}'" sortable="'codigo'" filter="{'name' : 'text'}">
+                                <a href="{$ result._links.self.href $}">{$ result.codigo+result.name $}  ({$ result.name $})
+                                 
+                                    {#{% for dataCircle in labelsCircle %}                                   
+                                    
+                                        {{ dataCircle.codigo }}
+                                        {{ dataCircle.name }}
+
+                                    {% endfor %}#}
+
+                                
+                                </a>
                             </td>
                         </tr>
                     </tbody>

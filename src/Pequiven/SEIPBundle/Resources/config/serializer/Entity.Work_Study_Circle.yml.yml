@@ -10,4 +10,8 @@ Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle:
         name:
             expose: true
             groups: [api_list]
+        codigo:
+            expose: true
+            groups: [api_list]
+            
         

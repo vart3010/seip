@@ -66,7 +66,7 @@ pequiven_work_study_circle_general:
     methods: [GET]
     
 pequiven_work_study_circle_list:
-    path: /list
+    path: /list.{_format}
     defaults:
         _controller: pequiven.controller.work_study_circle:listAction  
         _format: html
