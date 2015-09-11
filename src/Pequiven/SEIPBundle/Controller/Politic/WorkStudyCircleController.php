@@ -74,21 +74,35 @@ class WorkStudyCircleController extends SEIPController {
 
             $idsUsers = $request->get("workStudyCircle_data")["userWorkerId"];
             $countUsers = count($idsUsers);
+            $securityService = $this->getSecurityService();
 
 
-            if ($countUsers < 8) {
-                $this->get('session')->getFlashBag()->add('error', 'Debe Agregar 8 miembros como mínimo');
+            $validMinUsers = 8;
+            
+            if ($securityService->isGranted(array("ROLE_SEIP_WORK_STUDY_CIRCLES_INACTIVE_VALIDATION_MEMBERS"))) {
+                $validMinUsers = 1;
+            }
+
+
+            if ($countUsers < $validMinUsers) {
+                $this->get('session')->getFlashBag()->add('error', 'Debe Agregar ' . $validMinUsers . ' miembros como mínimo');
             } else {
+
+
                 $workStudyCircle->setCreatedBy($user);
                 $workStudyCircle->setPeriod($period = $this->getPeriodService()->getPeriodActive());
                 $workStudyCircle->setCodigo($this->setNewRef($request->get("workStudyCircle_data")["complejo"]));
 
+
                 $em->persist($workStudyCircle);
                 $em->flush();
+
+
 
                 $user->setCellphone($request->get("userType_data")["cellphone"]);
                 $user->setIndentification($request->get("userType_data")["indentification"]);
                 $user->setExt($request->get("userType_data")["ext"]);
+
 
 
                 try {
@@ -99,9 +113,13 @@ class WorkStudyCircleController extends SEIPController {
                     throw $e;
                 }
 
+
                 $workStudyCircle = $em->getRepository('PequivenSEIPBundle:Politic\WorkStudyCircle')->findOneBy(array('createdBy' => $user->getId()));
+
+
                 $this->addWorkStudyCircleToUser($workStudyCircle, $request->get("workStudyCircle_data")["userWorkerId"]);
                 $this->addWorkStudyCircleToUser($workStudyCircle, array($user->getId()));
+
 
                 $this->get('session')->getFlashBag()->add('success', 'Círculo de Estudio guardado correctamente');
                 //return $this->redirect($this->generateUrl('pequiven_seip_default_index'));
@@ -216,7 +234,7 @@ class WorkStudyCircleController extends SEIPController {
             //$users = $this->get('pequiven_seip.repository.user')->findQueryUsersAll($idComplejo); //Carga los Usuarios Reales
 
             $usersNotNull = $this->get('pequiven_seip.repository.user')->findQueryUsersAllRegister($idComplejo); //Carga los Usuarios worStudyCircleId =  NULL
-            
+
             $workStudyCircle = $em->getRepository('PequivenSEIPBundle:Politic\WorkStudyCircle')->findBy(array('complejo' => $idComplejo));
 
             $complejosCant[] = count($workStudyCircle);
@@ -240,9 +258,137 @@ class WorkStudyCircleController extends SEIPController {
 
         //return $this->render('PequivenSEIPBundle:Politic:WorkStudyCircle\view.html.twig');
     }
+    
+    
+    public function listAction(Request $request) {
+        
+        $criteria = $request->get('filter', $this->config->getCriteria());
+        $sorting = $request->get('sorting', $this->config->getSorting());
+        $repository = $this->getRepository();
+        $circle = $this->get('pequiven.repository.work_study_circle')->findAll(); //Carga los Criculos
+        
+        //var_dump();
+        //die();
+        //$criteria['applyPeriodCriteria'] = true;
 
-//    public function exportAction(Request $request) {
-//        var_dump($request);
-//        die();
-//    }
+        if ($this->config->isPaginated()) {
+            $resources = $this->resourceResolver->getResource(
+                    $repository, 'createPaginatorByWorkStudyCircle', array($criteria, $sorting)
+            );
+
+            $maxPerPage = $this->config->getPaginationMaxPerPage();
+            if (($limit = $request->query->get('limit')) && $limit > 0) {
+                if ($limit > 100) {
+                    $limit = 100;
+                }
+                $maxPerPage = $limit;
+            }
+            $resources->setCurrentPage($request->get('page', 1), true, true);
+            $resources->setMaxPerPage($maxPerPage);
+        } else {
+            $resources = $this->resourceResolver->getResource(
+                    $repository, 'findBy', array($criteria, $sorting, $this->config->getLimit())
+            );
+        }
+        $routeParameters = array(
+            '_format' => 'json',
+        );
+        $apiDataUrl = $this->generateUrl('pequiven_work_study_circle_list', $routeParameters);
+
+        $view = $this
+                ->view()
+                ->setTemplate($this->config->getTemplate('list.html'))
+                ->setTemplateVar($this->config->getPluralResourceName())
+        ;
+        //$view->getSerializationContext()->setGroups(array('id', 'api_list','codigo', 'name'));
+        if ($request->get('_format') == 'html') {
+            $labelsCircle = array();
+            foreach ($circle as $value) {
+                
+                $labelsCircle[] = array(
+                    'codigo' => $value->getCodigo(),
+                    'name' => $value->getName(),
+                );
+            }
+        
+            $data = array(
+                   'apiDataUrl' => $apiDataUrl,
+                    $this->config->getPluralResourceName() => $resources,
+                   'labelsCircle' => $labelsCircle            
+            );
+            $view->setData($data);
+        } else {
+            $formatData = $request->get('_formatData', 'default');
+
+            $view->setData($resources->toArray('', array(), $formatData));
+        }
+        return $this->handleView($view);
+                
+    }
+
+    public function exportAction(Request $request) {
+        $em = $this->getDoctrine()->getManager();
+        $workStudyCircle = $em->getRepository('PequivenSEIPBundle:Politic\WorkStudyCircle')->findOneBy(array('id' => $request->get("idWorkStudyCircle")));
+
+        $user = $this->getUser();
+
+        $data = array(
+            'workStudyCircle' => $workStudyCircle,
+            'userData' => $user
+        );
+
+        $this->generatePdf($data);
+    }
+
+    public function generatePdf($data) {
+        $pdf = new \Pequiven\SEIPBundle\Model\PDF\SeipPdf('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+        $pdf->setPrintLineFooter(false);
+        $pdf->setContainer($this->container);
+        $pdf->setPeriod($this->getPeriodService()->getPeriodActive());
+        $pdf->setFooterText($this->trans('pequiven_seip.message_footer', array(), 'PequivenSEIPBundle'));
+
+// set document information
+        $pdf->SetCreator(PDF_CREATOR);
+        $pdf->SetAuthor('SEIP');
+        $pdf->setTitle('Reporte del día');
+        $pdf->SetSubject('Resultados SEIP');
+        $pdf->SetKeywords('PDF, SEIP, Resultados');
+
+        $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+        $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+
+// set default monospaced font
+        $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+
+// set margins
+        $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+
+// set auto page breaks
+        $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+
+// set image scale factor
+        $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+
+// set font
+//            $pdf->SetFont('times', 'BI', 12);
+// add a page
+        $pdf->AddPage();
+
+// set some text to print
+
+        $html = $this->renderView('PequivenSEIPBundle:Politic:WorkStudyCircle\viewPdf.html.twig', $data);
+
+// print a block of text using Write()
+        $pdf->writeHTML($html, true, false, true, false, '');
+
+//            $pdf->Output('Reporte del dia'.'.pdf', 'I');
+        $pdf->Output('Reporte del dia' . '.pdf', 'D');
+    }
+
+    protected function getSecurityService() {
+        return $this->container->get('seip.service.security');
+    }
+
 }
