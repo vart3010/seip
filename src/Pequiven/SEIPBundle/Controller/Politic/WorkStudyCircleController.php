@@ -78,6 +78,7 @@ class WorkStudyCircleController extends SEIPController {
 
 
             $validMinUsers = 8;
+            
             if ($securityService->isGranted(array("ROLE_SEIP_WORK_STUDY_CIRCLES_INACTIVE_VALIDATION_MEMBERS"))) {
                 $validMinUsers = 1;
             }
@@ -102,7 +103,7 @@ class WorkStudyCircleController extends SEIPController {
                 $user->setIndentification($request->get("userType_data")["indentification"]);
                 $user->setExt($request->get("userType_data")["ext"]);
 
-               
+
 
                 try {
                     $em->flush();
@@ -111,15 +112,15 @@ class WorkStudyCircleController extends SEIPController {
                     $em->getConnection()->rollback();
                     throw $e;
                 }
-                
-               
+
+
                 $workStudyCircle = $em->getRepository('PequivenSEIPBundle:Politic\WorkStudyCircle')->findOneBy(array('createdBy' => $user->getId()));
-                
-                
+
+
                 $this->addWorkStudyCircleToUser($workStudyCircle, $request->get("workStudyCircle_data")["userWorkerId"]);
                 $this->addWorkStudyCircleToUser($workStudyCircle, array($user->getId()));
-                
-                
+
+
                 $this->get('session')->getFlashBag()->add('success', 'Círculo de Estudio guardado correctamente');
                 //return $this->redirect($this->generateUrl('pequiven_seip_default_index'));
                 return $this->redirect($this->generateUrl('pequiven_work_study_circle_show', array("id" => $workStudyCircle->getId())));
