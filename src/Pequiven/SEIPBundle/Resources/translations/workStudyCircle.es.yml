@@ -1,5 +1,6 @@
 workStudyCircle:
     title: Círculo de Estudio y Trabajo
+    circle_list: Círculos de Estudio y Trabajo
     form:
         code: Código
         nombre: Nombre de Círculo
@@ -22,6 +23,7 @@ workStudyCircle:
         edit: Editar
     
     general: General
+    list: Lista
     export:
         exportPdf: Exportar a Pdf
         

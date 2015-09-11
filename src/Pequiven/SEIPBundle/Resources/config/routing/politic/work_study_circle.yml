@@ -64,3 +64,12 @@ pequiven_work_study_circle_general:
     requirements:
         _format: html|json|xml
     methods: [GET]
+    
+pequiven_work_study_circle_list:
+    path: /list.{_format}
+    defaults:
+        _controller: pequiven.controller.work_study_circle:listAction  
+        _format: html
+    requirements:
+        _format: html|json|xml
+    methods: [GET]

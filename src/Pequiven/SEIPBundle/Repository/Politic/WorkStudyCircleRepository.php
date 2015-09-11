@@ -16,7 +16,18 @@ use Pequiven\SEIPBundle\Doctrine\ORM\SeipEntityRepository as EntityRepository;
 class WorkStudyCircleRepository extends EntityRepository
 {
     
-    
+    /**
+     * Crea un paginador para los Circulos de Estudio y Trabajo
+     * 
+     * @param array $criteria
+     * @param array $orderBy
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    function createPaginatorByWorkStudyCircle(array $criteria = null, array $orderBy = null) {
+        //$criteria['for_view'] = true;
+        $orderBy['wsc.name'] = 'ASC';
+        return $this->createPaginator($criteria, $orderBy);
+    }
     
     protected function getAlias() {
         return 'wsc';
