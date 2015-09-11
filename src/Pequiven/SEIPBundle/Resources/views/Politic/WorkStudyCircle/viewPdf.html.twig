@@ -1,22 +1,43 @@
-
-{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}
-
-{% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
-
 {% trans_default_domain 'workStudyCircle' %}
 
-{% block javascripts_base %}
-    {{ parent() }}
-    <script src="{{  asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.input.js') }}"></script>
-{% endblock javascripts_base %}
-
-{% block before_body %}
-    {{ contentHeader("workStudyCircle.title" | trans({}))   }}
-{% endblock %}
-
+<style>
+    .body {
+        font-size: 10px;
+    }
+    .title_bold {
+        font-weight: bold;
+    }
+    table tr {
+        padding: 15px;
+    }
+</style>
 {% block body %}
 
-    {#    {{ dump(workStudyCircle) }}#}
+    <table> 
+        <tr>
+            <td class="title_bold">{{ "workStudyCircle.form.code"|trans }}</td>
+            <td> {{ workStudyCircle.codigo }}</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td class="title_bold">{{ "workStudyCircle.form.nombre"|trans }}</td>
+            <td> {{ workStudyCircle.name }}</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td class="title_bold">{{ "workStudyCircle.form.region"|trans }}</td>
+            <td>{{ workStudyCircle.region.name }}</td>
+            <td class="title_bold">{{ "workStudyCircle.form.complejo"|trans }}</td>
+            <td>{{ workStudyCircle.complejo.description}}</td>
+        </tr>
+
+
+    </table>
+
+
+
 
     <fieldset class="fieldset">
         <legend class="legend" >Círculo de Estudio y Trabajo&nbsp;</legend>
@@ -107,18 +128,11 @@
 
     {% set users = workStudyCircle.userWorkerId %}
     <br /><br />
-    {% include 'PequivenSEIPBundle:Politic:WorkStudyCircle/members.html.twig' %}
-    <br /><br />
-    {% set routeConfig = path('pequiven_work_study_circle_export_pdf',{idWorkStudyCircle:workStudyCircle.id}) %}
-    {% if(is_granted(["ROLE_SEIP_WORK_STUDY_CIRCLES_VIEW_REPORT"])) %}#}
-        <div class="align-right">
-            {{ buttons.generic(
-                    (routeConfig),
-                    ('workStudyCircle.export.exportPdf'|trans({})),
-                    'icon-download'
-                 ) 
-            }}
-        </div>
-    {% endif %}
+
+
+    {% set userCreatedId = workStudyCircle.getCreatedBy.id %}
+
+
+
 {% endblock %}
 
