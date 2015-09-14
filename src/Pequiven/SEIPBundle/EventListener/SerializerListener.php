@@ -48,6 +48,7 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeGoal', 'class' => 'Pequiven\ArrangementProgramBundle\Entity\Goal', 'format' => 'json'),
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeReportTemplate', 'class' => 'Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate', 'format' => 'json'),
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializePlantReport', 'class' => 'Pequiven\SEIPBundle\Entity\DataLoad\PlantReport', 'format' => 'json'),
+            array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeWorkStudyCircle', 'class' => 'Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle', 'format' => 'json'),
         );
     }
 
@@ -621,6 +622,18 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
     public function onPostSerializeGoal(ObjectEvent $event) {
         
     }
+    
+    public function onPostSerializeWorkStudyCircle(ObjectEvent $event) {
+        $object = $event->getObject();
+        
+        $links['self']['show'] = $this->generateUrl('pequiven_work_study_circle_show', array('id' => $object->getId()));
+        
+        $event->getVisitor()->addData('_links', $links);
+        $event->getVisitor()->addData('complejo', $object->getComplejo()->getDescription());
+        $event->getVisitor()->addData('nombre', $object->getName());
+        $event->getVisitor()->addData('codigo', $object->getCodigo());
+    }
+    
 
     public function setContainer(ContainerInterface $container = null) {
         $this->container = $container;

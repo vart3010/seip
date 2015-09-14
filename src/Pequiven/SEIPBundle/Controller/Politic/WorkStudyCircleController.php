@@ -299,27 +299,27 @@ class WorkStudyCircleController extends SEIPController {
                 ->setTemplate($this->config->getTemplate('list.html'))
                 ->setTemplateVar($this->config->getPluralResourceName())
         ;
-        $view->getSerializationContext()->setGroups(array('id','api_list','codigo', 'name'));
         if ($request->get('_format') == 'html') {
-            $labelsCircle = array();
-            foreach ($circle as $value) {
-                
-                $labelsCircle[] = array(
-                    'codigo' => $value->getCodigo(),                   
-                    'complejo' => $value->getComplejo(),
-                    'name' => $value->getName(),
-                    'id' => $value->getId(),
-
-                );
-            }
-        
+//            $labelsCircle = array();
+//            foreach ($circle as $value) {
+//                
+//                $labelsCircle[] = array(
+//                    'codigo' => $value->getCodigo(),                   
+//                    'complejo' => $value->getComplejo(),
+//                    'name' => $value->getName(),
+//                    'id' => $value->getId(),
+//
+//                );
+//            }
+//        
             $data = array(
                    'apiDataUrl' => $apiDataUrl,
                     $this->config->getPluralResourceName() => $resources,
-                   'labelsCircle' => $labelsCircle            
+//                   'labelsCircle' => $labelsCircle            
             );
             $view->setData($data);
         } else {
+            $view->getSerializationContext()->setGroups(array('id','api_list','complejo','region'));
             $formatData = $request->get('_formatData', 'default');
 
             $view->setData($resources->toArray('', array(), $formatData));
@@ -327,6 +327,10 @@ class WorkStudyCircleController extends SEIPController {
         return $this->handleView($view);                
     }
 
+    /**
+     * 
+     * @param Request $request
+     */
     public function exportAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
         $workStudyCircle = $em->getRepository('PequivenSEIPBundle:Politic\WorkStudyCircle')->findOneBy(array('id' => $request->get("idWorkStudyCircle")));

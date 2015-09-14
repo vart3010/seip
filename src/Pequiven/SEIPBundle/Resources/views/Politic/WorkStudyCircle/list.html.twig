@@ -16,69 +16,76 @@
 {% block body %}
 
 <div ng-controller="TableFormatController">
-        <div ng-controller="TableIndicatorController">
-            <details class="details margin-bottom" open="">
-                <summary role="button" aria-expanded="true">
-                    {{ 'pequiven.filters'|trans({},'messages') }}
-                </summary>
+    <div ng-controller="TableWorkStudyCircleController">
+        <details class="details margin-bottom" open="">
+            <summary role="button" aria-expanded="true">
+                {{ 'pequiven.filters'|trans({},'messages') }}
+            </summary>
                 
-                <div class="with-padding">
-                    <div class="columns">
+            <div class="with-padding">
+                <div class="columns">
                         
-                            <!-- Filtro Localidad -->
-                            <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
-                                <label class="bold">{{ 'pequiven_seip.filters.complejo'|trans({},'PequivenSEIPBundle') }}</label>
-                                <br/>
-                                <div class="with-mid-padding">
-                                    <select class="select2 input-xlarge" id="selectComplejos" ng-model="model.complejo" ng-change="getFirstLineManagement()" ng-options="value as value.description for (key,value) in data.complejos">
-                                        <option value=''></option>
-                                    </select>
-                                </div>
-                            </div>
-                            <!-- Filtro Gerencia 1ra Línea -->
-                            <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
-                                <label class="bold">{{ 'pequiven_seip.filters.first_line_management'|trans({},'PequivenSEIPBundle') }}</label>
-                                <br/>
-                                <div class="with-mid-padding">
-                                    <select class="select2 input-xlarge" id="selectFirstLineManagement" ng-change="getSecondLineManagement()" ng-model="model.firstLineManagement" ng-options="value as value.description group by model.complejo.description for (key,value) in data.first_line_managements" >
-                                        <option value=''></option>
-                                    </select>
-                                </div>
-                            </div>
-                                <!-- Filtro Gerencia 2da Línea -->
-                                <div class="new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
-                                    <label class="bold">{{ 'pequiven_seip.filters.management_second_line'|trans({},'PequivenSEIPBundle') }}</label>
-                                    <br/>
-                                    <div class="with-mid-padding">
-                                        <select class="select2 input-xlarge" id="selectSecondLineManagement" ng-model="model.secondLineManagement" ng-options="value as value.description group by (value.complejo.ref + ' - '+value.gerencia.description) for (key,value) in data.second_line_managements" >
-                                            <option value=''></option>
-                                        </select>
-                                    </div>
-                                </div>
-                      
+                    <!-- Filtro Localidad -->
+                    <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                        <label class="bold">{{ 'pequiven_seip.filters.complejo'|trans({},'PequivenSEIPBundle') }}</label>
+                        <br/>
+                        <div class="with-mid-padding">
+                            <select class="select2 input-xlarge" id="selectComplejos" ng-model="model.complejo" ng-change="getFirstLineManagement()" ng-options="value as value.description for (key,value) in data.complejos">
+                                <option value=''></option>
+                            </select>
+                        </div>
                     </div>
+        
+                    <!-- Filtro Gerencia 1ra Línea -->
+                    <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                        <label class="bold">{{ 'pequiven_seip.filters.first_line_management'|trans({},'PequivenSEIPBundle') }}</label>
+                        <br/>
+                        <div class="with-mid-padding">
+                            <select class="select2 input-xlarge" id="selectFirstLineManagement" ng-change="getSecondLineManagement()" ng-model="model.firstLineManagement" ng-options="value as value.description group by model.complejo.description for (key,value) in data.first_line_managements" >
+                                <option value=''></option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <!-- Filtro Gerencia 2da Línea -->
+                    <div class="new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                        <label class="bold">{{ 'pequiven_seip.filters.management_second_line'|trans({},'PequivenSEIPBundle') }}</label>
+                        <br/>
+                        <div class="with-mid-padding">
+                            <select class="select2 input-xlarge" id="selectSecondLineManagement" ng-model="model.secondLineManagement" ng-options="value as value.description group by (value.complejo.ref + ' - '+value.gerencia.description) for (key,value) in data.second_line_managements" >
+                                <option value=''></option>
+                            </select>
+                        </div>
+                    </div>
+                      
                 </div>
+            </div>
 
-            </details>              
+        </details>              
                                      
-            <div loading-container="tableParams.settings().$loading">
-                <table ng-table="tableParams" show-filter="false" template-pagination="custom/pager" template-header="custom/header" api-data-url="{{ apiDataUrl }}" export-csv="csv" class="table table-responsive table-extra-info" ng-init="data.WorkStudyCircle = {{ labelsCircle|serialize }} " >
-                   <tr>
-                      <td style="font-weight: bold">Codigo</td>                      
-                      <td style="font-weight: bold">Circulo</td>
-                      <td style="font-weight: bold">Complejo</td>
-                   </tr>
-                    <tbody>
+        <div loading-container="tableParams.settings().$loading">
+            <table ng-table="tableParams" {#show-filter="false"#} template-pagination="custom/pager" template-header="custom/header" api-data-url="{{ apiDataUrl }}" export-csv="csv" class="table table-responsive table-extra-info" {#ng-init="data.WorkStudyCircle = {{ labelsCircle|serialize }} "#} >
+                {#<tr>
+                    <td style="font-weight: bold">Codigo</td>
+                    <td style="font-weight: bold">Circulo</td>
+                    <td style="font-weight: bold">Complejo</td>
+                </tr>#}
+                <tbody>
                         
-                        {#<tr ng-repeat="result in $data" data="{$ result|json $}">
-                            <td data-title="' {{ 'workStudyCircle.circle_list'|trans }}'" sortable="'codigo'" filter="{'name' : 'text'}">
-                                <a href="{$ result.id $}">({$ result.codigo $}){$ result.name+result.codigo $}
-                                </a>
-                            </td>
-                        </tr>#}
+                    <tr ng-repeat="result in $data | filter:tableParams.search" data="{$ result|json $}">
+                        <td data-title="Codigo">
+                            <a href="{$ result._links.self.show $}">{$ result.codigo $}</a>
+                        </td>
+                        <td data-title="Circulo">
+                            <a href="{$ result._links.self.show $}">{$ result.nombre $}</a>
+                        </td>
+                        <td data-title="Complejo">
+                            <a href="{$ result._links.self.show $}">{$ result.complejo $}</a>
+                        </td>
+                    </tr>
                         
                         {# lista de circulos - punete#}
-                         {% for dataCircle in labelsCircle %}
+                         {#{% for dataCircle in labelsCircle %}
                                        
                                         <tr>
                                             <td>
@@ -99,12 +106,12 @@
 
 
                                         </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+                        {% endfor %}#}
+                </tbody>
+            </table>
         </div>
     </div>
+</div>
 {% endblock %}
 
 {% block javascript %}
