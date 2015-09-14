@@ -1,5 +1,6 @@
 {% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}
 
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
 {% trans_default_domain 'workStudyCircle' %}
 
 {% block before_body %}
@@ -10,10 +11,16 @@
 
 {% block body %}
 
+    <!--INICIALIZO VARIABLES, PARÁMETROS Y ARREGLOS -->   
     {% set colspan = 5 %}
     {% set count = 0 %}
-    {% for dataComplejo in complejo %}
 
+    {% set CirMet = 0 %}
+    {% set CirReg = 0 %}
+    {% set EmpMet = 0 %}
+    {% set EmpReg = 0 %}  
+
+    {% for dataComplejo in complejo %}
 
         <div class="block">
             <div class="block-title">
@@ -48,10 +55,13 @@
                                     </thead>
                                     <tbody>
                                     <td>
+
                                         {{ (users[count] / 12) |round(0, 'floor')}}
+                                        {% set CirMet = CirMet + ((users[count] / 12) |round(0, 'floor'))%}
                                     </td>
                                     <td>
                                         {{ complejosCant[count] }}
+                                        {% set CirReg = CirReg + complejosCant[count]%}
                                     </td>                		                	            	
                     </tbody>
                 </table>
@@ -72,9 +82,11 @@
                         <tbody>             			
                         <td>
                             {{ users[count] }}
+                            {% set EmpMet = EmpMet + users[count]%}
                         </td>
                         <td>
                             {{ cantNotNull[count] }}
+                            {% set EmpReg = EmpReg + cantNotNull[count]%}
                         </td>                		                	            	
                         </tbody>
                     </table>
@@ -82,11 +94,102 @@
                 </tr>
                 </tbody>
                 </table>
-
             </div>
         </div>
         <br>
         {% set count = count + 1 %}
     {% endfor %}
+
+
+    <br>
+    <HR width=100% align="center">
+    <HR width=100% align="center">
+    <br>
+
+    <!--TABLA DE TOTALES -->  
+    <div class="block">
+        <div class="block-title">
+            <h3 class="ng-binding">Números Totales</h3>
+        </div>
+
+        <div class="with-padding">
+            <table class="simple-table responsive-table tables-extras" id="sorting-example2">
+                <thead>
+                    <tr>
+                        <th scope="col" width="50%" class="header">
+                            Circulos
+                        </th>                    
+                        <th scope="col" width="50%" class="header">
+                            Empleados
+                        </th>  
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>                		
+                            <table class="simple-table responsive-table tables-extras" id="sorting-example2">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" width="50%" class="header">
+                                            Meta
+                                        </th>                    
+                                        <th scope="col" width="50%" class="header">
+                                            Registrados
+                                        </th>  
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                <td>
+                                    {{ CirMet }}
+                                </td>
+                                <td>
+                                    {{ CirReg }}
+                                </td>                		                	            	
+                </tbody>
+            </table>
+            </td>
+
+            <td>                		
+                <table class="simple-table responsive-table tables-extras" id="sorting-example2">
+                    <thead>
+                        <tr>
+                            <th scope="col" width="50%" class="header">
+                                Meta 
+                            </th>                    
+                            <th scope="col" width="50%" class="header">
+                                Registrados
+                            </th>  
+                        </tr>
+                    </thead>
+                    <tbody>             			
+                    <td>
+                        {{ EmpMet }}
+                    </td>
+                    <td>
+                        {{ EmpReg }}
+                    </td>                		                	            	
+                    </tbody>
+                </table>
+            </td>
+            </tr>
+            </tbody>
+            </table>
+        </div>
+    </div>
+
+    <br>
+    <HR width=100% align="center">
+    {% set pdf=0 %} 
+    {% set routeConfig = path('pequiven_work_study_circle_general',{'pdf':pdf}) %}
+    {% if(is_granted(["ROLE_SEIP_WORK_STUDY_CIRCLES_VIEW_REPORT"])) %}
+        <div class="align-right">
+            {{ buttons.generic(
+                    (routeConfig),
+                    ('workStudyCircle.export.exportPdf'|trans({})),
+                    'icon-download'
+                 ) 
+            }}
+        </div>
+    {% endif %}
 
 {% endblock %}
