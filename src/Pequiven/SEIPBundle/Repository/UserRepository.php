@@ -485,16 +485,11 @@ class UserRepository extends EntityRepository {
         $qb = $this->getQueryBuilder();
         $qb
                 ->addSelect('u')
-                ->innerJoin('u.groups', 'g')
-                ->innerJoin('u.complejo', 'u_l')
-                ->andWhere('u.enabled = :enabled')
-                ->andWhere('g.level <= :level')
+                //->innerJoin('u.workStudyCircle', 'us_work')
+                ->innerJoin('u.complejo', 'complejo')
+                ->andWhere('complejo = :complejos')
                 ->andWhere($qb->expr()->isNotNull('u.workStudyCircle'))
-                ->andWhere('u_l.id = :complejos')
-                ->setParameter('enabled', true)
-                ->setParameter('level', \Pequiven\MasterBundle\Entity\Rol::ROLE_DIRECTIVE)
                 ->setParameter('complejos', $criteria)
-                //->expr()->asc('u.username')
         ;
 
         return $qb->getQuery()->getResult();

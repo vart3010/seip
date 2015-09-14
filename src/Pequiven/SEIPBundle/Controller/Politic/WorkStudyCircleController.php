@@ -78,7 +78,7 @@ class WorkStudyCircleController extends SEIPController {
 
 
             $validMinUsers = 8;
-            
+
             if ($securityService->isGranted(array("ROLE_SEIP_WORK_STUDY_CIRCLES_INACTIVE_VALIDATION_MEMBERS"))) {
                 $validMinUsers = 1;
             }
@@ -230,42 +230,35 @@ class WorkStudyCircleController extends SEIPController {
 
             $idComplejo = $value->getId();
 
-            //$users = $this->get('pequiven_seip.repository.user')->findQueryUsersAll($idComplejo); //Carga los Usuarios Reales
-
-            $usersNotNull = $this->get('pequiven_seip.repository.user')->findQueryUsersAllRegister($idComplejo); //Carga los Usuarios worStudyCircleId =  NULL
+            //USUARIOS REGISTRADOS EN GRUPO
+            $usersNotNull = $this->get('pequiven_seip.repository.user')->findQueryUsersAllRegister($idComplejo);
 
             $workStudyCircle = $em->getRepository('PequivenSEIPBundle:Politic\WorkStudyCircle')->findBy(array('complejo' => $idComplejo));
 
             $complejosCant[] = count($workStudyCircle);
 
-            //$usersCant[] = count($users);
-            //$cantNull[] = count($users) - count($usersNull);
             $cantNotNull[] = count($usersNotNull);
-            //var_dump(count($users));
         }
 
-        $arrayTemp = array(1804, 1806, 342, 606);
+        $arrayTemp = array(1804, 1806, 342, 606); 
 
         return $this->render('PequivenSEIPBundle:Politic:WorkStudyCircle\view.html.twig', array(
                     'workStudyCircle' => $workStudyCircle,
                     'complejo' => $complejo,
-                    //'users' => $usersCant,
                     'users' => $arrayTemp,
                     'complejosCant' => $complejosCant,
-                    'cantNull' => $cantNotNull
+                    'cantNotNull' => $cantNotNull
         ));
 
         //return $this->render('PequivenSEIPBundle:Politic:WorkStudyCircle\view.html.twig');
     }
-    
-    
+
     public function listAction(Request $request) {
-        
+
         $criteria = $request->get('filter', $this->config->getCriteria());
         $sorting = $request->get('sorting', $this->config->getSorting());
         $repository = $this->getRepository();
         $circle = $this->get('pequiven.repository.work_study_circle')->findAll(); //Carga los Criculos
-        
         //var_dump();
         //die();
         //$criteria['applyPeriodCriteria'] = true;
@@ -299,24 +292,23 @@ class WorkStudyCircleController extends SEIPController {
                 ->setTemplate($this->config->getTemplate('list.html'))
                 ->setTemplateVar($this->config->getPluralResourceName())
         ;
-        $view->getSerializationContext()->setGroups(array('id','api_list','codigo', 'name'));
+        $view->getSerializationContext()->setGroups(array('id', 'api_list', 'codigo', 'name'));
         if ($request->get('_format') == 'html') {
             $labelsCircle = array();
             foreach ($circle as $value) {
-                
+
                 $labelsCircle[] = array(
-                    'codigo' => $value->getCodigo(),                   
+                    'codigo' => $value->getCodigo(),
                     'complejo' => $value->getComplejo(),
                     'name' => $value->getName(),
                     'id' => $value->getId(),
-
                 );
             }
-        
+
             $data = array(
-                   'apiDataUrl' => $apiDataUrl,
-                    $this->config->getPluralResourceName() => $resources,
-                   'labelsCircle' => $labelsCircle            
+                'apiDataUrl' => $apiDataUrl,
+                $this->config->getPluralResourceName() => $resources,
+                'labelsCircle' => $labelsCircle
             );
             $view->setData($data);
         } else {
@@ -324,7 +316,7 @@ class WorkStudyCircleController extends SEIPController {
 
             $view->setData($resources->toArray('', array(), $formatData));
         }
-        return $this->handleView($view);                
+        return $this->handleView($view);
     }
 
     public function exportAction(Request $request) {
