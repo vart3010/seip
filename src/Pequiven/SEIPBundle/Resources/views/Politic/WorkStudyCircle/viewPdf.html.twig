@@ -1,4 +1,5 @@
 {% trans_default_domain 'workStudyCircle' %}
+{% set userCreatedId = workStudyCircle.getCreatedBy.id %}
 
 <style>
     .body {
@@ -12,127 +13,127 @@
     }
 </style>
 {% block body %}
-
-    <table> 
+    <br/><br/>
+    
+    <table width="95%">
         <tr>
-            <td class="title_bold">{{ "workStudyCircle.form.code"|trans }}</td>
-            <td> {{ workStudyCircle.codigo }}</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
+            <th class="title_bold">1. Datos del Círculo de Estudio y Trabajo</th>
+        </tr>
+    </table>
+    
+    <br/><br/>
+    <table width="95%" class="simple-table responsive-table tables-extras"> 
+        <tr>
+            <td class="title_bold" bgcolor="#F2F2F2" width="35%">{{ "workStudyCircle.form.code"|trans }}:</td>
+            <td width="65%"> {{ workStudyCircle.codigo }}</td>                        
         </tr>
         <tr>
-            <td class="title_bold">{{ "workStudyCircle.form.nombre"|trans }}</td>
-            <td> {{ workStudyCircle.name }}</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
+            <td class="title_bold" bgcolor="#F2F2F2" width="35%">{{ "workStudyCircle.form.nombre"|trans }}:</td>
+            <td width="65%"> {{ workStudyCircle.name }}</td>
         </tr>
         <tr>
-            <td class="title_bold">{{ "workStudyCircle.form.region"|trans }}</td>
-            <td>{{ workStudyCircle.region.name }}</td>
-            <td class="title_bold">{{ "workStudyCircle.form.complejo"|trans }}</td>
-            <td>{{ workStudyCircle.complejo.description}}</td>
+            <td class="title_bold" bgcolor="#F2F2F2" width="35%">{{ "workStudyCircle.form.region"|trans }}:</td>
+            <td width="65%">{{ workStudyCircle.region.name }}</td>
         </tr>
-
-
+        <tr>
+            <td class="title_bold" bgcolor="#F2F2F2" width="35%">{{ "workStudyCircle.form.complejo"|trans }}:</td>
+            <td width="65%">{{ workStudyCircle.complejo.description}}</td>
+        </tr>
+        
+        <tr>
+            <td class="title_bold" bgcolor="#F2F2F2" width="35%">{{ "workStudyCircle.form.gerenciaFirst"|trans }}:</td>
+            <td width="65%"> {% for gerencia in  workStudyCircle.gerencias %} * {{ gerencia }}<br> {% endfor %}</td>
+        </tr>
+        
+        <tr>
+            <td class="title_bold" bgcolor="#F2F2F2" width="35%">{{ "workStudyCircle.form.gerenciaSecond"|trans }}:</td>
+            <td width="65%"> {% for gerencia in  workStudyCircle.gerenciaSeconds %} - {{ gerencia }}<br> {% endfor %}</td>
+        </tr>
+        
+        <tr>
+            <td class="title_bold" bgcolor="#F2F2F2" width="35%">{{ "workStudyCircle.form.superintendencia"|trans }}:</td>
+            <td width="65%">{{ workStudyCircle.superintendencia}}</td>
+        </tr>
+        
+        <tr>
+            <td class="title_bold" bgcolor="#F2F2F2" width="35%">{{ "workStudyCircle.form.supervision"|trans }}:</td>
+            <td width="65%">{{ workStudyCircle.supervision}}</td>
+        </tr>
+        
+        <tr>
+            <td class="title_bold" bgcolor="#F2F2F2" width="35%">{{ "workStudyCircle.form.departamento"|trans }}:</td>
+            <td width="65%">{{ workStudyCircle.departamento}}</td>
+        </tr>
+        
     </table>
 
+<br/><br/>
 
+ <table width="95%">
+        <tr>
+            <th class="title_bold">2. Datos del Coordinador o Líder</th>
+        </tr>
+</table>
 
+<br/><br/>
 
-    <fieldset class="fieldset">
-        <legend class="legend" >Círculo de Estudio y Trabajo&nbsp;</legend>
-        <div class="columns">
-            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
-                <p class="inline-label">
-                    <label class="label">{{ "workStudyCircle.form.code"|trans }}</label>
-                    {{ workStudyCircle.codigo }}
-                </p>
-            </div>
-            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
-                <p class="inline-label">
-                    <label class="label">{{ "workStudyCircle.form.nombre"|trans }}</label>
-                    {{ workStudyCircle.name }}
-                </p>
-            </div>
-            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
-                <p class="inline-label">
-                    <label class="label">{{ "workStudyCircle.form.region"|trans }}</label>
-                    {{ workStudyCircle.region.name }}
-                </p>
-            </div>
-            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
-                <p class="inline-label">
-                    <label class="label">{{ "workStudyCircle.form.complejo"|trans }}</label>
-                    {{ workStudyCircle.complejo.description}}
-                </p>
-            </div>
-            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
-                <p class="inline-label">
-                    <label class="label">{{ "workStudyCircle.form.gerenciaFirst"|trans }}</label>
-                    {% for gerencia in  workStudyCircle.gerencias %}
-                        {{ gerencia }}<br>
-                    {% endfor %}
-                </p>
-            </div>
-            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
-                <p class="inline-label">
-                    <label class="label">{{ "workStudyCircle.form.gerenciaSecond"|trans }}</label>
-                    {% for gerenciaSecond in  workStudyCircle.gerenciaSeconds %}
-                        {{ gerenciaSecond }}<br>
-                    {% endfor %}
-                </p>
-            </div>
-            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
-                <p class="inline-label">
-                    <label class="label">{{ "workStudyCircle.form.superintendencia"|trans }}</label>
-                    {{ workStudyCircle.superintendencia }}
-                </p>
-            </div>
-            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
-                <p class="inline-label">
-                    <label class="label">{{ "workStudyCircle.form.supervision"|trans }}</label>
-                    {{ workStudyCircle.supervision }}
-                </p>
-            </div>
-            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
-                <p class="inline-label">
-                    <label class="label">{{ "workStudyCircle.form.departamento"|trans }}</label>
-                    {{ workStudyCircle.departamento}}
-                </p>
-            </div>
-        </div>
-    </fieldset>
-    <fieldset class="fieldset">
-        <legend class="legend" >{{ "workStudyCircle.form.coordinador.title"|trans }}&nbsp;</legend>
-        <div class="columns">
-            <div class="new-row-mobile twelve-columns twelve-columns-tablet twelve-columns-mobile">
-                <p class="inline-label">
-                    <label class="label">{{ "workStudyCircle.form.coordinador.nombre"|trans }}</label>
-                    {{ workStudyCircle.createdBy.getFullNameUser }}
-                </p>
-            </div>
-            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
-                <p class="inline-label">
-                    <label class="label">{{ "workStudyCircle.form.coordinador.telefono"|trans }}</label>
-                    {{ workStudyCircle.createdBy.cellphone }}
-                </p>
-            </div>
-            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
-                <p class="inline-label">
-                    <label class="label">{{ "workStudyCircle.form.coordinador.ext"|trans }}</label>
-                    {{ workStudyCircle.createdBy.ext }}
-                </p>
-            </div>
-        </div>
-    </fieldset>
+<table width="95%" class="simple-table responsive-table tables-extras" > 
+        <tr>
+            <td class="title_bold" bgcolor="#F2F2F2" width="35%">{{ "workStudyCircle.form.coordinador.nombre"|trans }}:</td>
+            <td width="65%"> {{ workStudyCircle.createdBy.getFullNameUser }}</td>                        
+        </tr>
+        <tr>
+            <td class="title_bold" bgcolor="#F2F2F2" width="35%">{{ "workStudyCircle.form.coordinador.telefono"|trans }}:</td>
+            <td width="65%"> {{ workStudyCircle.createdBy.cellphone }}</td>
+        </tr>
+        <tr>
+            <td class="title_bold" bgcolor="#F2F2F2" width="35%">{{ "workStudyCircle.form.coordinador.ext"|trans }}:</td>
+            <td width="65%">{{ workStudyCircle.createdBy.ext }}</td>
+        </tr>
+</table>
+   <br/>
+<br/>
+ 
+    <table width="95%">
+        <tr>
+            <th class="title_bold">3. Miembros del Círculo de Estudio de Trabajo</th>
+        </tr>
+</table>    
 
-    {% set users = workStudyCircle.userWorkerId %}
-    <br /><br />
+      <br/><br/>
+  
+ 
+<table width="95%" class="simple-table responsive-table tables-extras">  
+    <thead>
+                <tr>
+                	<th scope="col" width="10%" bgcolor="#F2F2F2" class="title_bold"> Nro. </th>
+                        <th scope="col" width="20%" bgcolor="#F2F2F2" class="title_bold"> C.I. </th>
+                        <th scope="col" width="35%" bgcolor="#F2F2F2" class="title_bold"> Nombre </th>
+                        <th scope="col" width="20%" bgcolor="#F2F2F2" class="title_bold"> Teléfono </th>
+                        <th scope="col" width="15%" bgcolor="#F2F2F2" class="title_bold"> Extensión </th>                    
+                </tr>
+    </thead>
+    <tbody>
+        {% set users = workStudyCircle.userWorkerId %}
+        {% set count = 0 %}
+        {% for miembro in users %}
+            
+            {% set count= count + 1%}
+                                {% if (userCreatedId != miembro.id) %}
 
-
-    {% set userCreatedId = workStudyCircle.getCreatedBy.id %}
-
-
-
+        <tr>
+            <td width="10%"> {{ count }} </td>
+            <td width="20%"> {{ miembro.getIndentification() }} </td>
+            <td width="35%"> {{ miembro.firstname | capitalize}} {{ miembro.Lastname | capitalize}}</td>
+            <td width="20%"> {{ miembro.cellphone }} </td>
+            <td width="15%"> {{ miembro.ext }} </td>
+        </tr>
+        {% endif %}
+        {% endfor %}
+    </tbody>
+ </table>
+    
+   
+   
 {% endblock %}
 

@@ -59,26 +59,47 @@
                     </div>
                 </div>
 
-            </details>
+            </details>              
+                                     
             <div loading-container="tableParams.settings().$loading">
-                <table ng-table="tableParams" show-filter="false" template-pagination="custom/pager" template-header="custom/header" api-data-url="{{ apiDataUrl }}" export-csv="csv" class="table table-responsive table-extra-info" {#ng-init="data.WorkStudyCircle = {{ labelsCircle|serialize }} "#} >
+                <table ng-table="tableParams" show-filter="false" template-pagination="custom/pager" template-header="custom/header" api-data-url="{{ apiDataUrl }}" export-csv="csv" class="table table-responsive table-extra-info" ng-init="data.WorkStudyCircle = {{ labelsCircle|serialize }} " >
+                   <tr>
+                      <td style="font-weight: bold">Codigo</td>                      
+                      <td style="font-weight: bold">Circulo</td>
+                      <td style="font-weight: bold">Complejo</td>
+                   </tr>
                     <tbody>
                         
-                        <tr ng-repeat="result in $data" data="{$ result|json $}">
+                        {#<tr ng-repeat="result in $data" data="{$ result|json $}">
                             <td data-title="' {{ 'workStudyCircle.circle_list'|trans }}'" sortable="'codigo'" filter="{'name' : 'text'}">
-                                <a href="{$ result._links.self.href $}">{$ result.codigo+result.name $}  ({$ result.name $})
-                                 
-                                    {#{% for dataCircle in labelsCircle %}                                   
-                                    
-                                        {{ dataCircle.codigo }}
-                                        {{ dataCircle.name }}
-
-                                    {% endfor %}#}
-
-                                
+                                <a href="{$ result.id $}">({$ result.codigo $}){$ result.name+result.codigo $}
                                 </a>
                             </td>
-                        </tr>
+                        </tr>#}
+                        
+                        {# lista de circulos - punete#}
+                         {% for dataCircle in labelsCircle %}
+                                       
+                                        <tr>
+                                            <td>
+                                            <a href="{{ path('pequiven_work_study_circle_show',{id:dataCircle.id})}}">
+                                                ({{ dataCircle.codigo }})                                          
+                                            </a>
+                                            </td>
+                                            <td>
+                                                <a href="{{ path('pequiven_work_study_circle_show',{id:dataCircle.id})}}">
+                                                    {{ dataCircle.name }} 
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <a href="{{ path('pequiven_work_study_circle_show',{id:dataCircle.id})}}">
+                                                    {{ dataCircle.complejo}}                                                
+                                                </a>
+                                            </td>
+
+
+                                        </tr>
+                        {% endfor %}
                     </tbody>
                 </table>
             </div>
