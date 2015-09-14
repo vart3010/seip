@@ -378,7 +378,7 @@
             </call>
         </service>
         
-         <service id="seip.service.unrealizedProduction" class="Pequiven\SEIPBundle\Service\DataLoad\UnrealizedProductionService">
+        <service id="seip.service.unrealizedProduction" class="Pequiven\SEIPBundle\Service\DataLoad\UnrealizedProductionService">
             <call method="setContainer">
                 <argument type="service" id="service_container" />
             </call>
@@ -389,6 +389,13 @@
                 <argument type="service" id="service_container" />
             </call>
         </service>
+        
+        <service id="seip.service.workStudyCircle" class="Pequiven\SEIPBundle\Service\Politic\workStudyCircleService">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
+        
         <service id="pequiven.repository.plant_report" class="Pequiven\SEIPBundle\Repository\DataLoad\PlantReportRepository">
             <call method="setContainer">
                 <argument type="service" id="service_container" />

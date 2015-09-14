@@ -240,14 +240,20 @@ class WorkStudyCircleController extends SEIPController {
             $cantNotNull[] = count($usersNotNull);
         }
 
-        $arrayTemp = array(1804, 1806, 342, 606); 
+        $arrayTemp = array(1804, 1806, 342, 606);
+
+        //GRAFICAS DE REPORTE WORK STUDY CIRCLE
+        $workService = $this->getWorkStudyCircleService();
+        $graphic = $workService->generatePie(array("caption"=>"TITLE"));
 
         return $this->render('PequivenSEIPBundle:Politic:WorkStudyCircle\view.html.twig', array(
                     'workStudyCircle' => $workStudyCircle,
                     'complejo' => $complejo,
                     'users' => $arrayTemp,
                     'complejosCant' => $complejosCant,
-                    'cantNotNull' => $cantNotNull
+                    'cantNotNull' => $cantNotNull,
+                    'graphicComplejo' => $graphic
+                
         ));
 
         //return $this->render('PequivenSEIPBundle:Politic:WorkStudyCircle\view.html.twig');
@@ -306,13 +312,13 @@ class WorkStudyCircleController extends SEIPController {
 //            }
 //        
             $data = array(
-                   'apiDataUrl' => $apiDataUrl,
-                    $this->config->getPluralResourceName() => $resources,
+                'apiDataUrl' => $apiDataUrl,
+                $this->config->getPluralResourceName() => $resources,
 //                   'labelsCircle' => $labelsCircle            
             );
             $view->setData($data);
         } else {
-            $view->getSerializationContext()->setGroups(array('id','api_list','complejo','region'));
+            $view->getSerializationContext()->setGroups(array('id', 'api_list', 'complejo', 'region'));
             $formatData = $request->get('_formatData', 'default');
 
             $view->setData($resources->toArray('', array(), $formatData));
@@ -387,6 +393,10 @@ class WorkStudyCircleController extends SEIPController {
 
     protected function getSecurityService() {
         return $this->container->get('seip.service.security');
+    }
+
+    protected function getWorkStudyCircleService() {
+        return $this->container->get('seip.service.workStudyCircle');
     }
 
 }

@@ -10,6 +10,14 @@
 
 {% block body %}
 
+    <div class="columns">
+        <div class="twelve-columns"> 
+            <div  ng-controller="graphicsWorkStudyCircle" ng-init="renderChartPie2dComplejo('graphicComplejo','','600','300')">
+                <span id="graphicComplejo"></span>
+            </div>
+        </div>
+    </div>
+    {{ dump(users) }}
     {% set colspan = 5 %}
     {% set count = 0 %}
     {% for dataComplejo in complejo %}
@@ -89,4 +97,9 @@
         {% set count = count + 1 %}
     {% endfor %}
 
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/fusioncharts.js') }}"></script>
+    <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/themes/fusioncharts.theme.fint.js') }}"></script>
 {% endblock %}
