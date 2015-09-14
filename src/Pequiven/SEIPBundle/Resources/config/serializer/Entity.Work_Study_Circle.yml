@@ -10,5 +10,11 @@ Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle:
         codigo:
             expose: true
             groups: [api_list]
+        complejo:
+            expose: true
+            groups: [api_list]
+        region:
+            expose: true
+            groups: [api_list]
             
         
