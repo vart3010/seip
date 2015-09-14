@@ -12,9 +12,9 @@ Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle:
             groups: [api_list]
         complejo:
             expose: true
-            groups: [api_list]
+            groups: [complejo]
         region:
             expose: true
-            groups: [api_list]
+            groups: [region]
             
         

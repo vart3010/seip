@@ -23,10 +23,46 @@ class WorkStudyCircleRepository extends EntityRepository
      * @param array $orderBy
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
-    function createPaginatorByWorkStudyCircle(array $criteria = null, array $orderBy = null) {
-        //$criteria['for_view'] = true;
-        $orderBy['wsc.name'] = 'ASC';
-        return $this->createPaginator($criteria, $orderBy);
+    public function createPaginatorByWorkStudyCircle(array $criteria = null, array $orderBy = null) {
+        $queryBuilder = $this->getCollectionQueryBuilder();
+        $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
+        
+        if (($complejo = $criteria->remove('complejo'))) {
+            $queryBuilder
+                    ->andWhere('wsc.complejo = :complejo')
+                    ->setParameter('complejo', $complejo)
+                ;
+        }
+        
+        if (($gerencia = $criteria->remove('firstLineManagement'))) {
+            $queryBuilder
+                    ->innerJoin('wsc.gerencias', 'g')
+                    ->andWhere('g.id = :gerencia')
+                    ->setParameter('gerencia', $gerencia)
+                ;
+        }
+        
+        if (($gerenciaSecond = $criteria->remove('secondLineManagement'))) {
+            $queryBuilder
+                    ->innerJoin('wsc.gerenciaSeconds', 'gs')
+                    ->andWhere('gs.id = :gerenciaSecond')
+                    ->setParameter('gerenciaSecond', $gerenciaSecond)
+                ;
+        }
+        
+        $queryBuilder->orderBy('wsc.name');
+        
+//        $orderBy['wsc.name'] = 'ASC';
+        
+        return $this->getPaginator($queryBuilder);
+    }
+    
+    protected function applyCriteria(\Doctrine\ORM\QueryBuilder $queryBuilder, array $criteria = null) {
+        $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
+        
+//        parent::applyCriteria($queryBuilder, $criteria->toArray());
+//        $this->applyPeriodCriteria($queryBuilder);
+        return parent::applyCriteria($queryBuilder, $criteria->toArray());
     }
     
     protected function getAlias() {
