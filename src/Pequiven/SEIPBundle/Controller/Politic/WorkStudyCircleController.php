@@ -349,7 +349,7 @@ class WorkStudyCircleController extends SEIPController {
 // set document information
         $pdf->SetCreator(PDF_CREATOR);
         $pdf->SetAuthor('SEIP');
-        $pdf->setTitle('Reporte del día');
+        $pdf->setTitle('Reporte de Círculo de Trabajo');
         $pdf->SetSubject('Resultados SEIP');
         $pdf->SetKeywords('PDF, SEIP, Resultados');
 
