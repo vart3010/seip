@@ -2936,6 +2936,113 @@ angular.module('seipModule.controllers', [])
                 }
             });
         })
+        
+        .controller('TableWorkStudyCircleController', function ($scope, ngTableParams, $http, sfTranslator, notifyService) {
+            var selectComplejo = angular.element("#selectComplejos");
+            var selectFirstLineManagement = angular.element("#selectFirstLineManagement");
+            var selectSecondLineManagement = angular.element("#selectSecondLineManagement");
+    
+            $scope.data = {
+                complejos: null,
+            };
+            $scope.model = {
+                complejo: null,
+            };
+            
+            //Busca las localidades
+            $scope.getComplejos = function () {
+                var parameters = {
+                    filter: {}
+                };
+                $http.get(Routing.generate('pequiven_seip_complejos', parameters))
+                    .success(function (data) {
+                        $scope.data.complejos = data;
+                        if ($scope.model.complejo != null) {
+                            $scope.setValueSelect2("selectComplejos", $scope.model.complejo, $scope.data.complejos, function (selected) {
+                                $scope.model.complejo = selected;
+                            });
+                        }
+                    });
+            };
+            
+            //Busca las Gerencias de 1ra Línea
+            $scope.getFirstLineManagement = function (complejo) {
+                var parameters = {
+                    filter: {}
+                };
+                if ($scope.model.complejo != null) {
+                    parameters.filter['complejo'] = $scope.model.complejo.id;
+                }
+                $http.get(Routing.generate('pequiven_seip_first_line_management', parameters))
+                    .success(function (data) {
+                        $scope.data.first_line_managements = data;
+                        if ($scope.model.firstLineManagement != null) {
+                            $scope.setValueSelect2("firstLineManagement", $scope.model.firstLineManagement, $scope.data.first_line_managements, function (selected) {
+                                $scope.model.firstLineManagement = selected;
+                            });
+                        }
+                    });
+            };
+            
+            //Busca las Gerencias de 2da Línea
+            $scope.getSecondLineManagement = function (gerencia) {
+                var parameters = {
+                    filter: {}
+                };
+                if ($scope.model.firstLineManagement != null) {
+                    parameters.filter['gerencia'] = $scope.model.firstLineManagement.id;
+                }
+
+                $http.get(Routing.generate('pequiven_seip_second_line_management', parameters))
+                    .success(function (data) {
+                        $scope.data.second_line_managements = data;
+                        if ($scope.model.secondLineManagement != null) {
+                            $scope.setValueSelect2("secondLineManagement", $scope.model.secondLineManagement, $scope.data.second_line_managements, function (selected) {
+                                $scope.model.secondLineManagement = selected;
+                            });
+                        }
+                    });
+            };
+            
+            $scope.getComplejos();
+            
+            //Scope de Localidad
+            $scope.$watch("model.complejo", function (newParams, oldParams) {
+                if ($scope.model.complejo != null && $scope.model.complejo.id != undefined) {
+                    $scope.tableParams.$params.filter['complejo'] = $scope.model.complejo.id;
+                    //Al cambiar el select de localidad
+                    selectComplejo.change(function () {
+                        selectFirstLineManagement.select2("val", '');
+                        selectSecondLineManagement.select2("val", '');
+                    });
+                } else {
+                    $scope.tableParams.$params.filter['complejo'] = null;
+                }
+            });
+            //Scope de Gerencia de 1ra Línea
+            $scope.$watch("model.firstLineManagement", function (newParams, oldParams) {
+                if ($scope.model.firstLineManagement != null && $scope.model.firstLineManagement.id != undefined) {
+                    $scope.tableParams.$params.filter['firstLineManagement'] = $scope.model.firstLineManagement.id;
+                    selectSecondLineManagement.select2("enable", true);
+                    //Al cambiar la gerencia de 1ra línea
+                    selectFirstLineManagement.change(function () {
+                        selectSecondLineManagement.select2("val", '');
+                    });
+                } else {
+                    $scope.tableParams.$params.filter['firstLineManagement'] = null;
+                    selectSecondLineManagement.select2("enable", false);
+                    selectSecondLineManagement.select2("val", '');
+                }
+            });
+            //Scope de Gerencia de 2da Línea
+            $scope.$watch("model.secondLineManagement", function (newParams, oldParams) {
+                if ($scope.model.secondLineManagement != null && $scope.model.secondLineManagement.id != undefined) {
+                    $scope.tableParams.$params.filter['secondLineManagement'] = $scope.model.secondLineManagement.id;
+                } else {
+                    $scope.tableParams.$params.filter['secondLineManagement'] = null;
+                }
+            });
+        })
         .controller('TableIndicatorController', function ($scope, ngTableParams, $http, sfTranslator, notifyService) {
             var fieldLevel = angular.element('#level');
             var level = fieldLevel.val();

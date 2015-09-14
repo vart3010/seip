@@ -15,7 +15,7 @@ class EvolutionActionType extends AbstractType
      * @param FormBuilderInterface $builder
      * @param array $options
      */
-    public function buildForm(FormBuilderInterface $builder, array $options, $idIndicator)
+    public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add('ref', 'text', array(
@@ -69,8 +69,8 @@ class EvolutionActionType extends AbstractType
                 ),
                                )) */
             ->add('evolutionCause', null, array(
-                    'query_builder' => function(\Pequiven\IndicatorBundle\Repository\Indicator\EvolutionIndicator\EvolutionCauseRepository $repository) {
-                        return $repository->getCausesByIndicator($idIndicator);
+                    'query_builder' => function(\Pequiven\IndicatorBundle\Repository\Indicator\EvolutionIndicator\EvolutionCauseRepository $repository) use($options) {
+                        return $repository->getCausesByIndicator($options['indicator']);
                     },
                     'label' => 'Causas del Indicador',
                     'label_attr' => array('class' => 'label'),

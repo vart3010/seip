@@ -228,6 +228,18 @@ pequiven_cause_vizualice_file:
         _format: html|json|xml
     methods: [GET|POST]
         
+#Export PDF
+pequiven_indicator_evolution_export:
+    path: /{id}/export.{_format}
+    defaults:
+        _controller: pequiven.controller.indicator_sig:exportAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET|POST]
+    options:
+        expose: true
+#BORRAR DE AQUI EN ADELANTE
 #IndicatorSig
 pequiven_indicatorsig_list:
     path: /{level}/listsig.{_format}

@@ -53,8 +53,6 @@
    </div>
   <br>
   
-  {% set month = "now"|date("m") %} 
-
         {# Graficos #}
         <div class="columns with-padding"> 
             <div ng-controller="ChartsSigController" class="dashboard_sig" ng-init="renderChartEvolutionSig('chartContainerResult', {{ data|json_encode() }})" style="width: 95%;" align="center">
@@ -109,31 +107,30 @@
         {% endif %}        
             &nbsp;
 
-    <p class="button-height align-right">
-    
+    <p class="button-height align-right">  
         
         <div style="text-align: left; margin-left:15px;">
             <a class="button"  id="showItems"  href="javascript:void(0)">
-                <span class="button-icon left-side red-gradient"><span class="fa fa-history fa-1"></span></span>
+                <span class="button-icon left-side red-gradient">
+                    <span class="fa fa-history fa-1"></span>
+                </span>
                 <span class="title">{{('pequiven.view_evolution_history'|trans({},'messages'))}}</span>
                 <span class="title" style="display: none">{{('pequiven.hide_evolution_history'|trans({},'messages'))}} </span>
             </a>
-        </div>
 
+        {# Descarga de Informe de Evolución#}
+        &nbsp;
+        {{ buttons.generic_download(path('pequiven_indicator_evolution_export', { 'id': indicator_sig.id, 'month': month }),('pequiven_indicator.download'|trans({},'PequivenSIGBundle'))) }}        
+
+        </div>
+    </p>
         {#        <button class="button compact" id="showItems" type="button">Visualizar Items</button>#}
         <div id="evolutionItems" style="display: none;">
             {% set data = indicator_sig.id %}
+             
             {{ renderArea(constant('Pequiven\\SEIPBundle\\Model\\Box\\AreasBox::ITEMS_EVOLUTION')) }}
             
         </div>  
-    
-        {# Descarga de Informe de Evolución#}
-       {# &nbsp;
-        {{ buttons.generic_download(path('pequiven_indicator_evolution', { 'id': indicator_sig.id , 'month': month}),('pequiven.evolution'|trans({},'messages'))) }}
-        #}
-
-    </p>
-
     
 
 {% endblock body %}

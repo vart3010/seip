@@ -15,6 +15,9 @@ class EvolutionHistoryItemsBox extends \Tecnocreaciones\Bundle\BoxBundle\Model\G
 
     public function getParameters() {
 
+       $idIndicator = $this->getRequest()->get('id');
+       //var_dump($idIndicator);
+
         $month = date("m");//Carga del mes "Automatico"
         $mesData = date("F");//Data mes
         
@@ -34,7 +37,7 @@ class EvolutionHistoryItemsBox extends \Tecnocreaciones\Bundle\BoxBundle\Model\G
           }  
         //var_dump($setMonth);
           
-        $indicator = 2347;
+        $indicator = $idIndicator;
         $listMonth = $setMonth;
         $boxmonth =  $month;
         //var_dump($listMonth);

@@ -49,6 +49,7 @@ pequiven_indicator:
     cancel: Cancelar
     config: Configuración
     upload_data: Cargar Valores
+    download: Descargar Informe de Evolución
     type_calculation:
         main: Tipo de cálculo
         formula_manually: Fórmula manual

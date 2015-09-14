@@ -9,84 +9,84 @@
 {% endblock %}
 
 {% block body %}
-        
-        {% set colspan = 5 %}
-        	{% set count = 0 %}
-        {% for dataComplejo in complejo %}
+
+    {% set colspan = 5 %}
+    {% set count = 0 %}
+    {% for dataComplejo in complejo %}
 
 
-<div class="block">
-	<div class="block-title">
-        <h3 class="ng-binding">{{ dataComplejo.description }}</h3>
-    </div>
+        <div class="block">
+            <div class="block-title">
+                <h3 class="ng-binding">{{ dataComplejo.description }}</h3>
+            </div>
 
-    <div class="with-padding">
-        <table class="simple-table responsive-table tables-extras" id="sorting-example2">
-            <thead>
-                <tr>
-                	<th scope="col" width="50%" class="header">
-                        Circulos
-                    </th>                    
-                    <th scope="col" width="50%" class="header">
-                        Empleados
-                    </th>  
+            <div class="with-padding">
+                <table class="simple-table responsive-table tables-extras" id="sorting-example2">
+                    <thead>
+                        <tr>
+                            <th scope="col" width="50%" class="header">
+                                Circulos
+                            </th>                    
+                            <th scope="col" width="50%" class="header">
+                                Empleados
+                            </th>  
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>                		
+                                <table class="simple-table responsive-table tables-extras" id="sorting-example2">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col" width="50%" class="header">
+                                                Meta
+                                            </th>                    
+                                            <th scope="col" width="50%" class="header">
+                                                Registrados
+                                            </th>  
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    <td>
+                                        {{ (users[count] / 12) |round(0, 'floor')}}
+                                    </td>
+                                    <td>
+                                        {{ complejosCant[count] }}
+                                    </td>                		                	            	
+                    </tbody>
+                </table>
+                </td>
+
+                <td>                		
+                    <table class="simple-table responsive-table tables-extras" id="sorting-example2">
+                        <thead>
+                            <tr>
+                                <th scope="col" width="50%" class="header">
+                                    Meta 
+                                </th>                    
+                                <th scope="col" width="50%" class="header">
+                                    Registrados
+                                </th>  
+                            </tr>
+                        </thead>
+                        <tbody>             			
+                        <td>
+                            {{ users[count] }}
+                        </td>
+                        <td>
+                            {{ cantNotNull[count] }}
+                        </td>                		                	            	
+                        </tbody>
+                    </table>
+                </td>
                 </tr>
-            </thead>
-            <tbody>
-                <tr>
-                	<td>                		
-        	<table class="simple-table responsive-table tables-extras" id="sorting-example2">
-					<thead>
-                		<tr>
-                			<th scope="col" width="50%" class="header">
-                        		Meta
-                    		</th>                    
-                    		<th scope="col" width="50%" class="header">
-                        		Registrados
-                    		</th>  
-                		</tr>
-            		</thead>
-             		<tbody>
-             	    	<td>
-             	    		{{ (users[count] / 12) |round(0, 'floor')}}
-             	    	</td>
-             	    	<td>
-             	    		{{ complejosCant[count] }}
-             	    	</td>                		                	            	
-		            </tbody>
-		    </table>
-         			</td>
+                </tbody>
+                </table>
 
-         			<td>                		
-        	<table class="simple-table responsive-table tables-extras" id="sorting-example2">
-					<thead>
-                		<tr>
-                			<th scope="col" width="50%" class="header">
-                        		Meta 
-                    		</th>                    
-                    		<th scope="col" width="50%" class="header">
-                        		Registrados
-                    		</th>  
-                		</tr>
-            		</thead>
-             		<tbody>             			
-             	    	<td>
-             	    		{{ users[count] }}
-             	    	</td>
-             	    	<td>
-             	    		{{ cantNull[count] }}
-             	    	</td>                		                	            	
-		            </tbody>
-		    </table>
-         			</td>
-                </tr>
-            </tbody>
-        </table>
-                
-    </div>
- </div>
+            </div>
+        </div>
         <br>
         {% set count = count + 1 %}
-        {% endfor %}
+    {% endfor %}
 
 {% endblock %}

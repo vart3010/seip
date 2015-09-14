@@ -12,7 +12,7 @@ use Pequiven\SEIPBundle\Doctrine\ORM\SeipEntityRepository;
 class EvolutionCauseRepository extends SeipEntityRepository {
 
 
-    function getCausesByIndicator($indicator) {
+    function getCausesByIndicator(indicator $indicator) {
         //Chuleta: se necesita el id del period, no la descripcion.
         $queryBuilder = $this->getQueryBuilder();
         $queryBuilder

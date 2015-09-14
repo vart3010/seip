@@ -231,8 +231,7 @@ class IndicatorSigController extends ResourceController
                         break;
             }       
         //$view = $this->view();
-        //$view->getSerializationContext()->setGroups(array('id','api_list'));  
-            
+        //$view->getSerializationContext()->setGroups(array('id','api_list'));              
 
             $dataAction = [
                 'action' => $data["action"],
@@ -248,8 +247,7 @@ class IndicatorSigController extends ResourceController
                 'dataCause'                      => $dataCause,
                 'sumCause'                       => $sumCause,
                 'cause'                          => $results,
-                //'data_action'                    => $data["action"],
-                //'values'                         => $data["actionValue"],
+                'month'                          => $month,
                 'dataAction'                     => $dataAction,
                 'analysis'                       => $causeAnalysis,
                 'trend'                          => $trend,
@@ -387,13 +385,13 @@ class IndicatorSigController extends ResourceController
      */
     function getFormPlanAction(Request $request)
     {
-        $indicator = $this->findIndicatorOr404($request); 
+        $idIndicator = $this->findIndicatorOr404($request); 
 
         $user = $this->getUser();//Carga de usuario
 
         $data = $this->findEvolutionCause($request);//Carga la data de las causas y sus acciones relacionadas
 
-        foreach ($indicator->getObjetives() as $value) {
+        foreach ($idIndicator->getObjetives() as $value) {
           
             $complejo = $value->getComplejo()->getRef();
             $gerencia = $value->getGerencia()->getAbbreviation();
@@ -401,7 +399,7 @@ class IndicatorSigController extends ResourceController
         }
 
         //$action = $data["cant"];
-        $indi = $indicator->getId();
+        $indicator = $idIndicator->getId();
 
         $codifigication = [
             'complejo' => strtoupper($complejo),
@@ -416,7 +414,8 @@ class IndicatorSigController extends ResourceController
         //die();       
         
         $cause = new EvolutionAction();
-        $form  = $this->createForm(new EvolutionActionType($indi));
+        $form  = $this->createForm(new EvolutionActionType(), $indicator, array('indicator' => $indicator));
+        //$form = $this->createForm(new AvatarFormType(), $user, array('user' => $user)) Ejm <---- 
         $form_value  = $this->createForm(new EvolutionActionValueType());
         
         $view = $this
@@ -424,7 +423,7 @@ class IndicatorSigController extends ResourceController
             ->setTemplate($this->config->getTemplate('form/form_action.html'))
             ->setTemplateVar($this->config->getPluralResourceName())
             ->setData(array(
-                'indicator'     => $indicator,
+                'indicator'     => $idIndicator,
                 'config'        => $config,
                 'code'          => $codifigication,
                 'form_value'    => $form_value->createView(),
@@ -997,6 +996,84 @@ class IndicatorSigController extends ResourceController
         return $data;
     } 
 
+    public function exportAction(Request $request) {
+
+        $month = $request->get('month'); //El mes pasado por parametro
+        
+        $idIndicator = $request->get('id');//Indicador 
+
+        //Carga de data de Indicador para armar grafica
+            $response = new JsonResponse();
+
+            $indicatorService = $this->getIndicatorService(); //Obtenemos el servicio del indicador
+
+            $indicator = $this->get('pequiven.repository.indicator')->find($idIndicator); //Obtenemos el indicador
+
+            $dataChart = $indicatorService->getDataChartOfIndicatorEvolution($indicator, array('withVariablesRealPLan' => true)); //Obtenemos la data del gráfico de acuerdo al indicador
+
+            $dataCause = $indicatorService->getDataChartOfCausesIndicatorEvolution($indicator, $month); //Obtenemos la data del grafico de las causas de desviación
+        
+        $name = $indicator->getRef().''.$indicator->getDescription();
+        
+
+        $user = $this->getUser();
+
+        $data = array(
+            'month' => $month,
+            'name'  => $name
+        );
+
+        $this->generatePdf($data);
+    }
+
+    public function generatePdf($data) {
+        $pdf = new \Pequiven\SEIPBundle\Model\PDF\SeipPdf('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+        $pdf->setPrintLineFooter(false);
+        $pdf->setContainer($this->container);
+        $pdf->setPeriod($this->getPeriodService()->getPeriodActive());
+        //$pdf->setFooterText($this->trans('pequiven_seip.message_footer', array(), 'PequivenSEIPBundle'));
+
+// set document information
+        $pdf->SetCreator(PDF_CREATOR);
+        $pdf->SetAuthor('SEIP');
+        $pdf->setTitle('INFORME DE EVOLUCIÓN');
+        $pdf->SetSubject('Resultados SEIP');
+        $pdf->SetKeywords('PDF, SEIP, Resultados');
+
+        $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+        $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+
+// set default monospaced font
+        $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+
+// set margins
+        $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+
+// set auto page breaks
+        $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+
+// set image scale factor
+        $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+
+// set font
+//            $pdf->SetFont('times', 'BI', 12);
+// add a page
+
+        $pdf->AddPage('L');
+
+// set some text to print
+
+        $html = $this->renderView('PequivenSIGBundle:Indicator:viewPdf.html.twig', $data);
+
+// print a block of text using Write()
+        $pdf->writeHTML($html, true, false, true, false, '');
+
+//            $pdf->Output('Reporte del dia'.'.pdf', 'I');
+        $pdf->Output('Informe de evolucion' . '.pdf', 'D');
+    }
+
     /**
      * Busca el indicador o retorna un 404
      * @param Request $request
@@ -1038,5 +1115,13 @@ class IndicatorSigController extends ResourceController
     protected function getIndicatorService() {
         return $this->container->get('pequiven_indicator.service.inidicator');
     } 
+
+    /**
+     *  Period
+     *
+     */
+    protected function getPeriodService() {
+        return $this->container->get('pequiven_seip.service.period');
+    }
    
 }

@@ -1,0 +1,60 @@
+<style>
+    .body {
+        font-size: 10px;
+    }
+    .title_bold {
+        font-weight: bold;
+    }
+    table tr {
+        padding: 15px;
+    }
+</style>
+{% block body %}
+    <br/><br/>
+    
+    <table width="95%">
+        <tr>
+            <th class="title_bold">ASOCIADO A: _______________________________________</th>
+        </tr>
+        <tr>
+            <th>&nbsp;</th>
+        </tr>
+        <tr>
+            <th class="title_bold">INDICE DE: {{ name }}</th>
+        </tr>
+        <tr>
+            <th class="title_bold">MES: {{ month }}</th>
+        </tr>
+    </table>
+
+    <label>GRÁFICA DE DATOS Y TENDENCIA DEL PROCESO</label>
+    
+    <label>CAUSAS DE DESVIACIÓN</label><br>
+
+    <table width="50%" border="1">
+        <tr>
+            <th class="title_bold">Fórmula de Medición</th>
+        </tr>
+    </table>
+
+    <table width="50%" border="1">
+        <tr>
+            <th class="title_bold">Causas</th>
+        </tr>
+    </table> <br>
+
+    <table width="50%" border="1">
+        <tr>
+            <th class="title_bold">ANÁLISIS DE TENDENCIA</th>
+        </tr>
+    </table>
+
+    <table width="50%" border="1">
+        <tr>
+            <th class="title_bold">ANÁLISIS DE CAUSAS</th>
+        </tr>
+    </table>
+    
+   
+   
+{% endblock %}

@@ -37,10 +37,11 @@
 
 {% endmacro %}
 
-{% macro generic_download(url, message='generic', icon = 'fa fa-area-chart fa-1', parameters = {}) %}
+{# download buttons #}
+{% macro generic_download(url, message='generic', icon = 'fa fa-download fa-1', parameters = {}) %}
     
-    {% set gradient = 'red-gradient' %}
-    {% set translation_domain = 'messages' %}
+    {% set gradient = 'blue-gradient' %}
+    {% set translation_domain = 'PequivenSIGBundle' %}
     {% if parameters['translation_domain'] is defined %}
         {% set translation_domain = parameters['translation_domain'] %}
     {% endif  %}
