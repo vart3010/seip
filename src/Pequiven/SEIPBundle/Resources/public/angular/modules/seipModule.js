@@ -1400,9 +1400,9 @@ angular.module('seipModule.controllers', [])
                 }
             });
         })
-        
+
         .controller('ReportTemplateController', function ($scope, notificationBarService, $http, notifyService, $filter) {
-           
+
         })
 
         .controller('IndicatorResultController', function ($scope, notificationBarService, $http, notifyService, $filter) {
@@ -2084,35 +2084,35 @@ angular.module('seipModule.controllers', [])
                 }
             });
         })
-        
+
         .controller('TableWorkStudyCircleController', function ($scope, ngTableParams, $http, sfTranslator, notifyService) {
             var selectComplejo = angular.element("#selectComplejos");
             var selectFirstLineManagement = angular.element("#selectFirstLineManagement");
             var selectSecondLineManagement = angular.element("#selectSecondLineManagement");
-    
+
             $scope.data = {
                 complejos: null,
             };
             $scope.model = {
                 complejo: null,
             };
-            
+
             //Busca las localidades
             $scope.getComplejos = function () {
                 var parameters = {
                     filter: {}
                 };
                 $http.get(Routing.generate('pequiven_seip_complejos', parameters))
-                    .success(function (data) {
-                        $scope.data.complejos = data;
-                        if ($scope.model.complejo != null) {
-                            $scope.setValueSelect2("selectComplejos", $scope.model.complejo, $scope.data.complejos, function (selected) {
-                                $scope.model.complejo = selected;
-                            });
-                        }
-                    });
+                        .success(function (data) {
+                            $scope.data.complejos = data;
+                            if ($scope.model.complejo != null) {
+                                $scope.setValueSelect2("selectComplejos", $scope.model.complejo, $scope.data.complejos, function (selected) {
+                                    $scope.model.complejo = selected;
+                                });
+                            }
+                        });
             };
-            
+
             //Busca las Gerencias de 1ra Línea
             $scope.getFirstLineManagement = function (complejo) {
                 var parameters = {
@@ -2122,16 +2122,16 @@ angular.module('seipModule.controllers', [])
                     parameters.filter['complejo'] = $scope.model.complejo.id;
                 }
                 $http.get(Routing.generate('pequiven_seip_first_line_management', parameters))
-                    .success(function (data) {
-                        $scope.data.first_line_managements = data;
-                        if ($scope.model.firstLineManagement != null) {
-                            $scope.setValueSelect2("firstLineManagement", $scope.model.firstLineManagement, $scope.data.first_line_managements, function (selected) {
-                                $scope.model.firstLineManagement = selected;
-                            });
-                        }
-                    });
+                        .success(function (data) {
+                            $scope.data.first_line_managements = data;
+                            if ($scope.model.firstLineManagement != null) {
+                                $scope.setValueSelect2("firstLineManagement", $scope.model.firstLineManagement, $scope.data.first_line_managements, function (selected) {
+                                    $scope.model.firstLineManagement = selected;
+                                });
+                            }
+                        });
             };
-            
+
             //Busca las Gerencias de 2da Línea
             $scope.getSecondLineManagement = function (gerencia) {
                 var parameters = {
@@ -2142,18 +2142,18 @@ angular.module('seipModule.controllers', [])
                 }
 
                 $http.get(Routing.generate('pequiven_seip_second_line_management', parameters))
-                    .success(function (data) {
-                        $scope.data.second_line_managements = data;
-                        if ($scope.model.secondLineManagement != null) {
-                            $scope.setValueSelect2("secondLineManagement", $scope.model.secondLineManagement, $scope.data.second_line_managements, function (selected) {
-                                $scope.model.secondLineManagement = selected;
-                            });
-                        }
-                    });
+                        .success(function (data) {
+                            $scope.data.second_line_managements = data;
+                            if ($scope.model.secondLineManagement != null) {
+                                $scope.setValueSelect2("secondLineManagement", $scope.model.secondLineManagement, $scope.data.second_line_managements, function (selected) {
+                                    $scope.model.secondLineManagement = selected;
+                                });
+                            }
+                        });
             };
-            
+
             $scope.getComplejos();
-            
+
             //Scope de Localidad
             $scope.$watch("model.complejo", function (newParams, oldParams) {
                 if ($scope.model.complejo != null && $scope.model.complejo.id != undefined) {
@@ -2166,7 +2166,8 @@ angular.module('seipModule.controllers', [])
                 } else {
                     $scope.tableParams.$params.filter['complejo'] = null;
                 }
-            });
+            }
+            );
             //Scope de Gerencia de 1ra Línea
             $scope.$watch("model.firstLineManagement", function (newParams, oldParams) {
                 if ($scope.model.firstLineManagement != null && $scope.model.firstLineManagement.id != undefined) {
@@ -2191,6 +2192,32 @@ angular.module('seipModule.controllers', [])
                 }
             });
         })
+
+
+
+        .controller('graphicsWorkStudyCircle', function ($scope, ngTableParams, $http, sfTranslator, notifyService) {
+
+            $scope.renderMultiSerie3d = function (id, data, width, height) {
+                FusionCharts.ready(function () {
+                    var multiSerie3d = new FusionCharts({
+                        type: 'mscolumn3dlinedy',
+                        renderAt: id,
+                        width: width,
+                        height: height,
+                        dataFormat: 'json',
+                        dataSource: {
+                            "chart": data.dataSource.chart,
+                            "categories": data.dataSource.categories,
+                            "dataset": data.dataSource.dataset
+                        }
+                    });
+                    multiSerie3d.setTransparent(true);
+                    multiSerie3d.render();
+                }
+                );
+            }
+        })
+
         .controller('TableIndicatorController', function ($scope, ngTableParams, $http, sfTranslator, notifyService) {
             var fieldLevel = angular.element('#level');
             var level = fieldLevel.val();
@@ -2506,7 +2533,7 @@ angular.module('seipModule.controllers', [])
                 return cont;
             };
         })
-        
+
         .controller('WorkStudyCircleController', function ($scope, notificationBarService, $http, notifyService, $filter) {
 
             $scope.urlValueIndicatorForm = null;
@@ -3246,12 +3273,12 @@ angular.module('seipModule.controllers', [])
                     });
                 });
             }
-            
+
             //PRO_RT_PQV-Gráfico para ver la producción consolidada por los ReportTemplates de PQV
             $scope.chargeChartProductionReportTemplateByDate = function (reportTemplateId, dateSearch, render, width, height) {
                 var dateParse = $scope.parseDate(dateSearch);
                 var getDataChartProductionReportTemplateByDate = Routing.generate("getDataChartProductionReportTemplateByDate", {id: reportTemplateId, dateSearch: dateParse});
-                
+
                 $http.get(getDataChartProductionReportTemplateByDate).success(function (data) {
                     FusionCharts.ready(function () {
                         var revenueChartProductionReportTemplateByDate = new FusionCharts({
@@ -3271,12 +3298,12 @@ angular.module('seipModule.controllers', [])
                     });
                 });
             }
-            
+
             //PRO_RT_PQV-Gráfico para ver la producción consolidada por los ReportTemplates de PQV
             $scope.chargeChartProductionReportTemplateByDateGroupByCompany = function (typeCompany, dateSearch, render, width, height) {
                 var dateParse = $scope.parseDate(dateSearch);
                 var getDataChartProductionReportTemplateByDateGroupByCompany = Routing.generate("getDataChartProductionReportTemplateByDateGroupByCompany", {typeCompany: typeCompany, dateSearch: dateParse});
-                
+
                 $http.get(getDataChartProductionReportTemplateByDateGroupByCompany).success(function (data) {
                     FusionCharts.ready(function () {
                         var revenueChartProductionReportTemplateByDateGroupByCompany = new FusionCharts({
@@ -3297,18 +3324,18 @@ angular.module('seipModule.controllers', [])
                     });
                 });
             }
-            
+
             //PRO_RT_PQV-Gráfico para ver la producción consolidada por los ReportTemplates de PQV
             $scope.chargeChartProductionReportTemplateByDateCorporation = function (dateSearch, render, width, height, typeView) {
                 var dateParse = $scope.parseDate(dateSearch);
-                var getDataChartProductionReportTemplateByDateCorporation = Routing.generate("getDataChartProductionReportTemplateByDateCorporation", {dateSearch: dateParse,typeView: typeView});
-                
+                var getDataChartProductionReportTemplateByDateCorporation = Routing.generate("getDataChartProductionReportTemplateByDateCorporation", {dateSearch: dateParse, typeView: typeView});
+
                 //Definimos el tipo de gráfico, de acuerdo al tipo de vista a visualizar
                 var typeChart = "mscolumn3d";
-                if(typeView == 1){
+                if (typeView == 1) {
                     typeChart = "mscolumn3dlinedy";
                 }
-                
+
                 $http.get(getDataChartProductionReportTemplateByDateCorporation).success(function (data) {
                     FusionCharts.ready(function () {
                         var revenueChartProductionReportTemplateByDateCorporation = new FusionCharts({
@@ -3329,18 +3356,18 @@ angular.module('seipModule.controllers', [])
                     });
                 });
             }
-            
-            $scope.chargeChartProductionByReportTemplateByDate = function (reportTemplateId,dateSearch, render, width, height, typeView, typeDate) {
+
+            $scope.chargeChartProductionByReportTemplateByDate = function (reportTemplateId, dateSearch, render, width, height, typeView, typeDate) {
                 var dateParse = $scope.parseDate(dateSearch);
                 console.log('hola');
-                var getDataChartProductionByReportTemplateByDate = Routing.generate("getDataChartProductionByReportTemplateByDate", {reportTemplateId: reportTemplateId,dateSearch: dateParse,typeView: typeView, typeDate: typeDate});
-                
+                var getDataChartProductionByReportTemplateByDate = Routing.generate("getDataChartProductionByReportTemplateByDate", {reportTemplateId: reportTemplateId, dateSearch: dateParse, typeView: typeView, typeDate: typeDate});
+
                 //Definimos el tipo de gráfico, de acuerdo al tipo de vista a visualizar
                 var typeChart = "mscolumn3d";
-                if(typeView == 1){
+                if (typeView == 1) {
                     typeChart = "mscolumn3dlinedy";
                 }
-                
+
                 $http.get(getDataChartProductionByReportTemplateByDate).success(function (data) {
                     FusionCharts.ready(function () {
                         var revenueChartProductionByReportTemplateByDate = new FusionCharts({
@@ -3361,22 +3388,22 @@ angular.module('seipModule.controllers', [])
                     });
                 });
             }
-            
+
             // Función que devuelve una data formateada dd/mm/yyyy y recibe en dd-mm-yyyy
             $scope.parseDate = function parseDate(dateToParse) {
                 var dateParse = new Date(dateToParse);
                 var dd = dateParse.getDate();
-                var mm = dateParse.getMonth()+1; //January is 0!
+                var mm = dateParse.getMonth() + 1; //January is 0!
 
                 var yyyy = dateParse.getFullYear();
-                if(dd<10){
-                    dd='0'+dd;
-                } 
-                if(mm<10){
-                    mm='0'+mm;
-                } 
+                if (dd < 10) {
+                    dd = '0' + dd;
+                }
+                if (mm < 10) {
+                    mm = '0' + mm;
+                }
 
-                var dateParse = dd+'/'+mm+'/'+yyyy;
+                var dateParse = dd + '/' + mm + '/' + yyyy;
 
                 return dateParse;
             };
