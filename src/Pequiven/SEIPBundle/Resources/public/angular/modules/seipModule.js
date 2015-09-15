@@ -1563,7 +1563,7 @@ angular.module('seipModule.controllers', [])
                     var save = false;
                 }
                 if (save == true) {
-                    var url = Routing.generate('pequiven_action_values_evolution_add', {idIndicator: $scope.id_indicator, idAction: $scope.idAction });
+                    var url = Routing.generate('pequiven_action_values_evolution_add', {idIndicator: $scope.id_indicator, idAction: $scope.idAction , month: $scope.month });
                 } 
                 notificationBarService.getLoadStatus().loading();
                 return $http({
@@ -4983,6 +4983,10 @@ angular.module('seipModule.controllers', [])
                         "renderAt": id,
                         "width": "95%",
                         "height": "300%",
+                        "exportFormats": "PNG= Exportar como PNG|PDF= Exportar como PDF",
+                        "exportFileName": "Gráfico Evolución Indicador",
+                        "exporthandler": "http://107.21.74.91/",
+                        "html5exporthandler": "http://107.21.74.91/",
                         "dataFormat": "json",
                         "dataSource": {
                             "chart": data.dataSource.chart,

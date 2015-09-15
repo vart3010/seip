@@ -414,7 +414,8 @@ class IndicatorSigController extends ResourceController
         //die();       
         
         $cause = new EvolutionAction();
-        $form  = $this->createForm(new EvolutionActionType(), $indicator, array('indicator' => $indicator));
+        $form  = $this->createForm(new EvolutionActionType());
+        //$form  = $this->createForm(new EvolutionActionType(), $indicator, array('indicator' => $indicator));
         //$form = $this->createForm(new AvatarFormType(), $user, array('user' => $user)) Ejm <---- 
         $form_value  = $this->createForm(new EvolutionActionValueType());
         
@@ -538,7 +539,7 @@ class IndicatorSigController extends ResourceController
                     $count = $count + 1;
                     $data = $dStart + $count;
                     $AcObservation = null;
-                    $AcValue = 0;
+                    //$AcValue = 0;
                 }
             }
 
@@ -571,7 +572,7 @@ class IndicatorSigController extends ResourceController
     }
 
     /**
-     * Añade Valores del Plan de Acción
+     * Añade Valores del Plan de Acción en Acciones Heredadas
      * 
      * @param Request $request
      * @return type
@@ -579,20 +580,41 @@ class IndicatorSigController extends ResourceController
     public function addValuesAction(Request $request)
     {    
         $idAction = $request->get('idAction'); //Recibiendo de $request el id del valor
+        
+        //$month = $request->get('month'); //El mes pasado por parametro
+        $month = $this->getRequest()->get('month');
 
+        $actionResults = $this->get('pequiven.repository.sig_action_value_indicator')->findBy(array('actionValue'=> $idAction));
+        $cant = count($actionResults);
         //Recibiendo de formulario
         $AcValue = $request->get('actionValue')['advance'];//RecibiendoValue
         $AcObservation = $request->get('actionValue')['observations'];//RecibiendoObservations
         
-        //Consultando valores
-        $actionResults = $this->get('pequiven.repository.sig_action_value_indicator')->find($idAction);
-        
-        $actionResults->setAdvance($AcValue);
-        $actionResults->setObservations($AcObservation);
+        for ($i=0; $i <= $cant ; $i++) { 
+       
+            //Consultando valores
+            $actionResult = $this->get('pequiven.repository.sig_action_value_indicator')->findBy(array('actionValue'=> $idAction, 'month'=> $month));
+            foreach ($actionResult as $value) {
 
-                $em = $this->getDoctrine()->getManager();
-                $em->flush();
+                $dat = $value->getMonth();
+                //var_dump($dat);
+                if ($value->getMonth() == $month) {
 
+                $sumAdvance = $value->getAdvance() + $AcValue;
+                //var_dump($sumAdvance);
+                $value->setAdvance($sumAdvance);
+                $value->setObservations($AcObservation);
+
+                        $em = $this->getDoctrine()->getManager();
+                        $em->flush();
+                        //var_dump("Paso del flush");
+
+                $month = $month + 1;//Carga de los meses tantas veces sean para la consulta
+                $AcObservation = null;//
+                }
+
+            }
+        }
 
     }
 
@@ -887,16 +909,11 @@ class IndicatorSigController extends ResourceController
         $idIndicator = $request->get('idIndicator');//Recibiendo indicator
        
         $results = $this->get('pequiven.repository.sig_causes_indicator')->findBy(array( 'indicator' => $idIndicator));
-        
-        //$user = $this->getUser();
-        /*$criteria = $request->get('filter',$this->config->getCriteria());
-        $repository = $this->get('pequiven.repository.managementsystem_sig');
-        $results = $repository->findAll();*/
-        
+      
         $view = $this->view();
-        $view->setData($results);
-        $view->getSerializationContext()->setGroups(array('id','api_list','ref','description'));
-        return $this->handleView($view);
+          $view->setData($results);
+            $view->getSerializationContext()->setGroups(array('id','api_list','ref','description'));
+            return $this->handleView($view);
     }
 
     /**
@@ -966,16 +983,10 @@ class IndicatorSigController extends ResourceController
                     }
             }
             $actionResult = $this->get('pequiven.repository.sig_action_indicator')->findBy(array('id' => $idCons));
-            //var_dump($idCons);
-            //die();
         }  
 
-        $actionsValues = EvolutionActionValue::getActionValues($idCons, $month);  
-        
+        $actionsValues = EvolutionActionValue::getActionValues($idCons, $month);          
         $cant = count($actionResult);
-        //var_dump($cant);
-        //var_dump(count($actionResult));
-        //die();
 
         if($opc = false){
             $idAction = null;
@@ -998,6 +1009,22 @@ class IndicatorSigController extends ResourceController
 
     public function exportAction(Request $request) {
 
+         /*if($request->isMethod('POST')){
+            $exportRequestStream = $request->request->all();
+            $request->request->remove('charttype');
+            $request->request->remove('stream');
+            $request->request->remove('stream_type');
+            $request->request->remove('meta_bgColor');
+            $request->request->remove('meta_bgAlpha');
+            $request->request->remove('meta_DOMId');
+            $request->request->remove('meta_width');
+            $request->request->remove('meta_height');
+            $request->request->remove('parameters');
+            $fusionchartService = $this->getFusionChartExportService();
+            $fileSVG = $fusionchartService->exportFusionChart($exportRequestStream);
+        }*/
+        $dataAction = $this->findEvolutionCause($request);//Carga la data de las causas y sus acciones relacionadas
+
         $month = $request->get('month'); //El mes pasado por parametro
         
         $idIndicator = $request->get('id');//Indicador 
@@ -1013,32 +1040,54 @@ class IndicatorSigController extends ResourceController
 
             $dataCause = $indicatorService->getDataChartOfCausesIndicatorEvolution($indicator, $month); //Obtenemos la data del grafico de las causas de desviación
         
-        $name = $indicator->getRef().''.$indicator->getDescription();
-        
+        $name = $indicator->getRef().''.$indicator->getDescription();//Nombre del Indicador
 
-        $user = $this->getUser();
+        //Carga el analisis de la tendencia
+        $trend = $this->get('pequiven.repository.sig_trend_indicator')->findBy(array('indicator' => $idIndicator, 'month' => $month));
+            if($trend){                
+                foreach ($trend as $value) {            
+                    $trendDescription = $value->getDescription();//Tendencia
+                }
+            }else{
+                $trendDescription = "No se ha Cargando el Analisis de Tendencia";                    
+            }
+        
+        //Carga del analisis de las causas
+        $causeAnalysis = $this->get('pequiven.repository.sig_causes_analysis')->findBy(array('indicator'=>$idIndicator, 'month' => $month));
+            if ($causeAnalysis) {
+                foreach ($causeAnalysis as $value) {
+                    $causeA = $value->getDescription();
+                }
+            }else{
+                $causeA = "No se ha Cargando el Analisis de Causas";        
+            }
 
         $data = array(
-            'month' => $month,
-            'name'  => $name
+            'data'          => $dataChart,//Data del Gráfico Informe de Evolución
+            'dataCause'     => $dataCause,//Data del Grafico de las Causas
+            'month'         => $month,
+            'name'          => $name,
+            'trend'         => $trendDescription,
+            'causeAnalysis' => $causeA,
+            'dataAction'    => $dataAction["actionValue"]
         );
 
         $this->generatePdf($data);
     }
 
     public function generatePdf($data) {
-        $pdf = new \Pequiven\SEIPBundle\Model\PDF\SeipPdf('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+        $pdf = new \Pequiven\SIGBundle\Model\PDF\SIGPdf('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
         $pdf->setPrintLineFooter(false);
         $pdf->setContainer($this->container);
-        $pdf->setPeriod($this->getPeriodService()->getPeriodActive());
+        //$pdf->setPeriod($this->getPeriodService()->getPeriodActive());
         //$pdf->setFooterText($this->trans('pequiven_seip.message_footer', array(), 'PequivenSEIPBundle'));
 
 // set document information
         $pdf->SetCreator(PDF_CREATOR);
-        $pdf->SetAuthor('SEIP');
+        $pdf->SetAuthor('SIG');
         $pdf->setTitle('INFORME DE EVOLUCIÓN');
-        $pdf->SetSubject('Resultados SEIP');
-        $pdf->SetKeywords('PDF, SEIP, Resultados');
+        $pdf->SetSubject('Resultados SIG');
+        $pdf->SetKeywords('PDF, SIG, Resultados');
 
         $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
         $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));

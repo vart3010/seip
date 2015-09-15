@@ -1,60 +1,173 @@
-<style>
-    .body {
-        font-size: 10px;
-    }
+<style type="text/css">
+
+    
     .title_bold {
         font-weight: bold;
     }
-    table tr {
-        padding: 15px;
+
+    .div{
+        /*background: blue;*/
+        border: 1px solid #000000;
+        border-spacing: 1px;
+        margin: 1px;
+        border-color: #000000;
+        padding: 20px;
+        float:left;
+        width: 35%;
+        /*text-align: center;*/
     }
+
+    .box{
+    width:200px;
+    height:200px;
+    background:#999;
+    float:left;
+    border:1px solid #444;
+    }
+    .table-charts {
+        /*width: 60%;*/
+        border: 1px solid #000000;
+        /*float:left;*/
+        padding: 0px;
+        margin: 12px;
+        text-align: justify;
+    }
+    .table {
+        /*width: 50%;*/
+        border: 1px solid #000000;
+        /*float:left;*/
+        padding: 0px;
+        margin: 12px;
+        text-align: justify;
+    }
+    .table-planning{
+        width: 100%;
+        border: 1px solid #000000;
+        float:left;
+        padding: 2px;
+        margin: 10px;   
+        text-align: justify;
+    }
+    .table-th {
+        background-color: #1db7df; 
+        border: 1px solid #000000;
+        text-align: center;
+    }
+    .table-planning-th {
+        background-color: #1db7df; 
+        border: 1px solid #000000;
+        text-align: center;
+    }
+    .table-td {
+        
+        height: 180px;
+
+    }
+
 </style>
 {% block body %}
     <br/><br/>
     
     <table width="95%">
+        <tbody>
+            <tr>
+                <th class="title_bold">ASOCIADO A: _______________________________________</th>
+            </tr>
+            <tr>
+                <th>&nbsp;</th>
+            </tr>
+            <tr>
+                <th class="title_bold">INDICE DE: {{ name }}</th>
+            </tr>
+            <tr>
+                <th class="title_bold">MES: {{ month }}</th>
+            </tr>
+        </tbody>
+    </table>
+
+    <table width="100%" style="padding:5px;">
         <tr>
-            <th class="title_bold">ASOCIADO A: _______________________________________</th>
+            <td>
+                <table class="table-charts" width="100%">
+                    <tbody>
+                        <tr>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+
+            <td>  
+                <table class="table-charts" width="100%">
+                    <tbody>
+                        <tr>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
         </tr>
+    </table>
+    <table width="100%" style="padding:5px;">
         <tr>
-            <th>&nbsp;</th>
-        </tr>
-        <tr>
-            <th class="title_bold">INDICE DE: {{ name }}</th>
-        </tr>
-        <tr>
-            <th class="title_bold">MES: {{ month }}</th>
+            <td>
+                <table class="table" width="100%">
+                    <tbody>
+                        <tr>
+                            <th class="table-th">ANALISIS DE TENDENCIA</th>
+                        </tr>
+                        <tr>
+                            <th class="">{{ trend }}</th>           
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        
+            <td>                
+                <table class="table" width="100%">
+                    <tbody>
+                        <tr>
+                            <th class="table-th">ANALISIS DE CAUSAS</th>
+                        </tr>
+                        <tr>
+                            <th class="">{{ causeAnalysis }}</th>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
         </tr>
     </table>
 
-    <label>GRÁFICA DE DATOS Y TENDENCIA DEL PROCESO</label>
-    
-    <label>CAUSAS DE DESVIACIÓN</label><br>
-
-    <table width="50%" border="1">
-        <tr>
-            <th class="title_bold">Fórmula de Medición</th>
-        </tr>
-    </table>
-
-    <table width="50%" border="1">
-        <tr>
-            <th class="title_bold">Causas</th>
-        </tr>
-    </table> <br>
-
-    <table width="50%" border="1">
-        <tr>
-            <th class="title_bold">ANÁLISIS DE TENDENCIA</th>
-        </tr>
-    </table>
-
-    <table width="50%" border="1">
-        <tr>
-            <th class="title_bold">ANÁLISIS DE CAUSAS</th>
-        </tr>
-    </table>
-    
-   
+    <table class="table-planning">
+        <tbody>
+            <tr>
+                <th class="table-planning-th" colspan="10">PLAN DE ACCION Y SEGUIMIENTO</th>
+            </tr>        
+            <tr align="center">
+                <td style="width: 5%;">Nro</td>
+                <td style="width: 20%;">Acción</td>
+                <td style="width: 12%;">Tipo de Acción</td>
+                <td style="width: 10%;">Fecha Inicio</td>
+                <td style="width: 10%;">Fecha Cierre</td>
+                <td style="width: 8%;">% Avance</td>
+                <td style="width: 15%;">Responsable</td>
+                <td style="width: 20%;">Observaciones</td>
+            </tr>
+    {% for data in dataAction %} 
+           <tr {{ cycle(["even", "odd"], loop.index) }} align="center"> 
+                <td>{{ loop.index }}</td>
+                <td>{{ data.actionValue.action }}</td>
+                <td>{{ data.actionValue.indicatorAction.ref }}</td>
+                <td>{{ data.actionValue.dateStart | date("d/m/Y") }}</td>
+                <td>{{ data.actionValue.dateEnd | date("d/m/Y") }}</td>
+                <td>{{ data.advance }}</td>
+                <td>
+                    {{ data.actionValue.createdBy.firstname }} {{ data.actionValue.createdBy.lastname }}                        
+                </td>
+                <td>{{ data.observations }}</td>
+            </tr>
+    {% endfor %}
+        </tbody>
+    </table>  
    
 {% endblock %}

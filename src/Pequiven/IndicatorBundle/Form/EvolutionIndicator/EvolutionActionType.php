@@ -76,6 +76,7 @@ class EvolutionActionType extends AbstractType
                     'label_attr' => array('class' => 'label'),
                     'attr' => array(
                         'class' => "input-large select2",
+                        'onclick' => 'cargaData()',
                         'style' => 'width: 270px',
                         //'multiple' => 'multiple'
                     ),
@@ -86,16 +87,20 @@ class EvolutionActionType extends AbstractType
     }
     
     /**
+     *
      * @param OptionsResolverInterface $resolver
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionAction'
+            'data_class' => 'Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionAction',
+            'indicator'  => 2066
+
         ));
     }
 
     /**
+     *
      * @return string
      */
     public function getName()
