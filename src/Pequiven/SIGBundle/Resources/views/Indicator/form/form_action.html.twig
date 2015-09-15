@@ -42,21 +42,58 @@
             {% set indicator = indicator.id %}
 
                     {# fin carga select #}
-            <div class="field-block button-height" >
-                        <!-- Ref -->
-                        {# {{ form_label(form) }} #}
-                        {% if form %}
+                    <!-- Ref -->
+            {% if form %}
+            {{ form_errors(form) }}         
 
-                            {{ form_widget(form) }}
 
-                        {% endif %}                        
+                    <div class="field-block button-height" >
+                        {{ form_label(form.action) }}
+                        {{ form_widget(form.action) }}
+                    </div>
 
-                        {{ form_widget(form_value) }}
+                    <div class="field-block button-height" >
+                        {{ form_label(form.indicatorAction) }}
+                        {{ form_widget(form.indicatorAction) }}
+                    </div>
+
+                    <div class="field-block button-height" >
+                        {{ form_label(form.dateStart) }}
+                        {{ form_widget(form.dateStart) }}
+                    </div>
+
+                    <div class="field-block button-height" >
+                        {{ form_label(form.dateEnd) }}
+                        {{ form_widget(form.dateEnd) }}
+                    </div>
+
+                    <div class="field-block button-height" >
+                        {{ form_label(form.evolutionCause) }}
+                        {{ form_widget(form.evolutionCause) }}
+                    </div>
+            {{ form_rest(form) }}
+
+            {% endif %}    
+            {{ form_errors(form_value) }}                     
+                    <div class="field-block button-height" >                    
+                        {{ form_label(form_value.advance) }}                        
+                        {{ form_widget(form_value.advance) }}
+                    </div>
+
+                    <div class="field-block button-height" >                    
+                        {{ form_label(form_value.observations) }}                        
+                        {{ form_widget(form_value.observations) }}
+                    </div>
+                    {# <div class="field-block button-height" > #}
+                        {# {{ form_label(form.ref) }} #}
+                        {{ form_widget(form.ref) }}
+                    {# </div> #}
+            {{ form_rest(form_value) }}
+
             </div>
+
             
-            </form>
-       <!-- </div>
-    </div>-->
+            </form>       
 </fieldset>
 
         </details> 

@@ -18,12 +18,12 @@ class EvolutionActionType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('ref', 'text', array(
+            ->add('ref', 'hidden', array(
                 'label' => 'Referencia',
                 'label_attr' => array('class' => 'label'),
                 'attr'=> array(
                     'class'    => 'input input-large ',
-                    'disabled' => false
+                    'disabled' => false,
                     ))) 
             ->add('action', 'text', array(
                 'label' => 'Acción',
@@ -91,10 +91,10 @@ class EvolutionActionType extends AbstractType
      * @param OptionsResolverInterface $resolver
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
-    {
+    {   
         $resolver->setDefaults(array(
             'data_class' => 'Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionAction',
-            'indicator'  => 2066
+            'indicator'  => 1736
 
         ));
     }

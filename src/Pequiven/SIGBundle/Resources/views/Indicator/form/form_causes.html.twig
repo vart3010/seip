@@ -6,22 +6,19 @@
 	<form method="POST" id="form_causes_evolution">
 		<fieldset class="fieldset fields-list">
                 <legend class="legend">{{ 'sig.causes_deviation'|trans ({}, 'messages') }}</legend>
-
-			{#}		    <div class="field-block button-height" >
-					    	
-					        {{ form_widget(form) }}
-					    
-					    </div>#}
-
-			{% for child in form %}
+            {{ form_errors(form) }}			
+			{# {% for child in form %} #}
                     <div class="field-block button-height" >
-                        {{ form_label(child) }}
-                        {{ form_widget(child) }}
-                        {{ form_errors(child) }}
+                        {{ form_label(form.causes) }}
+                        {{ form_widget(form.causes) }}
                     </div>
-            {% endfor %}
 
-					    {# <input type="text" id="pequiven_indicatorbundle_evolutionindicator_evolutioncause_valueOfcauses" name="pequiven_indicatorbundle_evolutionindicator_evolutioncause[valueOfcauses]" required="required" class="input input-large validate[required]"> #}
+                    <div class="field-block button-height" >
+                        {{ form_label(form.valueOfcauses) }}
+                        {{ form_widget(form.valueOfcauses) }}
+                    </div>
+            {# {% endfor %} #}
+            {{ form_rest(form) }}
 
 		</form>		
 					<br>

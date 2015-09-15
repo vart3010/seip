@@ -11,18 +11,24 @@
             <fieldset class="fieldset fields-list" open="">
                 <legend class="legend">{{ 'form.action_verification'|trans ({}, 'PequivenSIGBundle') }}</legend>
             
-            {#<div class="field-block button-height" >
-                          
-                        {{ form_widget(form) }}
-                        
-            </div>#}
-            {% for child in form %}
+            {{ form_errors(form) }} 
                     <div class="field-block button-height" >
-                        {{ form_label(child) }}
-                        {{ form_widget(child) }}
-                        {{ form_errors(child) }}
+                        {{ form_label(form.comment) }}
+                        {{ form_widget(form.comment) }}
+                        {{ form_errors(form.comment) }}
                     </div>
-            {% endfor %}
+                    <div class="field-block button-height" >
+                        {{ form_label(form.typeVerification) }}
+                        {{ form_widget(form.typeVerification) }}
+                        {{ form_errors(form.typeVerification) }}
+                    </div>
+                    <div class="field-block button-height" >
+                        {{ form_label(form.actionPlan) }}
+                        {{ form_widget(form.actionPlan) }}
+                        {{ form_errors(form.actionPlan) }}
+                    </div>
+
+            {{ form_rest(form) }}
 
         </details> 
 {% endblock %}

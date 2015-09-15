@@ -590,7 +590,7 @@ class IndicatorSigController extends ResourceController
         $AcValue = $request->get('actionValue')['advance'];//RecibiendoValue
         $AcObservation = $request->get('actionValue')['observations'];//RecibiendoObservations
         
-        for ($i=0; $i <= $cant ; $i++) { 
+        for ($i=0; $i <= $cant ; $i++) { //for segun la cantidad de acciones
        
             //Consultando valores
             $actionResult = $this->get('pequiven.repository.sig_action_value_indicator')->findBy(array('actionValue'=> $idAction, 'month'=> $month));
@@ -598,7 +598,7 @@ class IndicatorSigController extends ResourceController
 
                 $dat = $value->getMonth();
                 //var_dump($dat);
-                if ($value->getMonth() == $month) {
+                if ($value->getMonth() == $month) {//Si la accion tiene el mes igual al pasado la actualiza
 
                 $sumAdvance = $value->getAdvance() + $AcValue;
                 //var_dump($sumAdvance);
