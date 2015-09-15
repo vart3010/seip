@@ -27,3 +27,6 @@ workStudyCircle:
     export:
         exportPdf: Exportar a Pdf
         
+    proposals:
+        title: Propuestas
+        add: Añadir Propuesta

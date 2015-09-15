@@ -1,0 +1,88 @@
+{# empty Twig template #}
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayout.html.twig' %}
+
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
+
+{% block before_body %}
+    {{ contentHeader(
+        ("pequiven_seip.politic.work_study_circle"|trans ),
+        ("pequiven_seip.politic.proposal"|trans ),
+        ( 'pequiven.add'|trans({},'messages') )
+    ) }}
+{% endblock %}
+
+{% block body -%}
+    <form method="POST" action="{{ path("pequiven_proposal_create",{workStudyCircle_id:workStudyCircle.id}) }}">
+        
+        {{ form_top(form) }}
+        
+{#        {{ form_errors(form) }}#}
+        <br /><br />
+            
+        <fieldset class="fieldset fields-list">
+            <legend class="legend">{{ 'pequiven_seip.politic.proposal'|trans }}</legend>
+            {#<div class="field-block button-height">
+                {{ form_widget(form) }}
+            </div>#}
+            <div class="field-block button-height">
+                {{ form_label(form.lineStrategic) }}
+                {{ form_widget(form.lineStrategic) }}
+                {{ form_errors(form.lineStrategic) }}
+                <span class="info-spot">
+                    <span class="icon-info-round"></span>
+                    <span class="info-bubble">Sólo debe ingresar 2 propuestas por línea estratégica</span>
+                </span>
+            </div>
+            <div class="field-block button-height">
+                {{ form_label(form.description) }}
+                {{ form_widget(form.description) }}
+                {{ form_errors(form.description) }}
+            </div>
+            <div class="field-block button-height" id="objetives" style="text-align: justify;">
+                
+            </div>
+        </fieldset>
+
+        {{ actions.create() }}
+        
+        {{ form_rest(form) }}
+    </form>
+{% endblock %}
+
+{% block javascript %}
+    <script type="text/javascript">
+        var selectLineStrategic = $("#proposal_data_lineStrategic");
+        
+        $(document).ready(function () {
+            selectLineStrategic.select2({allowClear: true});
+        });
+        
+        selectLineStrategic.change(function() {
+           displayObjetivesFromLineStrategic();
+        });
+        
+        //Función que muestra los objetivos estratégicos de acuerdo a la línea estratégica seleccionada
+        function displayObjetivesFromLineStrategic(){
+            var data = {
+               lineStrategicId: $.trim(selectLineStrategic.val()),
+            };
+            $.ajax({
+                type: 'post',
+                url: '{{ path("pequiven_proposal_show_objetives") }}',
+                data: data,
+                success: function(data) {
+                    var text = '';
+                    for(var i=0, total = data.length; i<total; i++){
+                        text = text + '<label class="label">' + data[i].ref + '</label><span>' + data[i].description + '</span><br>';
+                    }
+                    $('#objetives').fadeOut("slow",function(){
+                        $('#objetives').html(text);
+                        $('#objetives').fadeIn();
+                    });
+               }
+            });
+        }
+    </script>
+{% endblock javascript %}

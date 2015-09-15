@@ -401,5 +401,10 @@
             <tag name="form.type" alias="pequiven_seipbundle_politic_workstudycircle" />
         </service>
         
+        <!-- Formulario de la Propuesta del Círculo de Estudio de Trabajo -->
+        <service id="pequiven.form.proposal" class="Pequiven\SEIPBundle\Form\Politic\ProposalType">
+            <tag name="form.type" alias="pequiven_seipbundle_politic_proposal" />
+        </service>
+        
     </services>
 </container>
