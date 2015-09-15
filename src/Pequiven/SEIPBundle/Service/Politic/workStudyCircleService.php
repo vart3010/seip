@@ -74,18 +74,17 @@ class workStudyCircleService implements ContainerAwareInterface {
         $meta = $real = array();
         for ($i = 0; $i < count($complejos); $i++) {
             $categories[] = array("label" => $complejos[$i]->getRef());
-            
+
             if ($conf["type"] == "circle") {
-                $meta[] = array("value" => number_format(($usersTemp[$i] / 12), 0, ',', '.'));
+                $meta[] = array("value" => round(($usersTemp[$i] / 12), 0, PHP_ROUND_HALF_DOWN));
                 $real[] = array("value" => $complejosCant[$i]);
                 $perc = (($complejosCant[$i]) * 100) / ($usersTemp[$i] / 12);
-                $percentaje[] = array("value" => number_format($perc, 0, ',', '.'));
-                
+                $percentaje[] = array("value" => number_format($perc, 2, ',', '.'));
             } else if ($conf["type"] == "user") {
-                $meta[] = array("value" => number_format(($usersTemp[$i]), 0, ',', '.'));
+                $meta[] = array("value" => ($usersTemp[$i]));
                 $real[] = array("value" => $cantNotNull[$i]);
                 $perc = ($cantNotNull[$i] * 100) / $usersTemp[$i];
-                $percentaje[] = array("value" => number_format($perc, 0, ',', '.'));
+                $percentaje[] = array("value" => number_format($perc, 2, ',', '.'));
             }
         }
 
