@@ -73,14 +73,14 @@
                 <tbody>
                         
                     <tr ng-repeat="result in $data | filter:tableParams.search" data="{$ result|json $}">
-                        <td data-title="Codigo">
+                        <td data-title="'Código'">
                             <a href="{$ result._links.self.show $}">{$ result.codigo $}</a>
                         </td>
-                        <td data-title="Circulo">
-                            <a href="{$ result._links.self.show $}">{$ result.nombre $}</a>
-                        </td>
-                        <td data-title="Complejo">
+                        <td data-title="'Complejo'">
                             <a href="{$ result._links.self.show $}">{$ result.complejo $}</a>
+                        </td>
+                        <td data-title="'Gerencia'">
+                            <a href="{$ result._links.self.show $}">{$ result.gerencias $}</a>
                         </td>
                     </tr>
                         

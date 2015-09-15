@@ -626,12 +626,26 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
     public function onPostSerializeWorkStudyCircle(ObjectEvent $event) {
         $object = $event->getObject();
         
+        $gerenciasText = '';
+        $gerencias = $object->getGerencias();
+        $totalGerencias = count($gerencias);
+        $cont = 1;
+        foreach($gerencias as $gerencia){
+            if($cont == $totalGerencias){
+                $gerenciasText.= $gerencia->getDescription();
+            } else{
+                $gerenciasText.= $gerencia->getDescription().'-';
+            }
+            $cont++;
+        }
+        
         $links['self']['show'] = $this->generateUrl('pequiven_work_study_circle_show', array('id' => $object->getId()));
         
         $event->getVisitor()->addData('_links', $links);
         $event->getVisitor()->addData('complejo', $object->getComplejo()->getDescription());
         $event->getVisitor()->addData('nombre', $object->getName());
         $event->getVisitor()->addData('codigo', $object->getCodigo());
+        $event->getVisitor()->addData('gerencias', $gerenciasText);
     }
     
 

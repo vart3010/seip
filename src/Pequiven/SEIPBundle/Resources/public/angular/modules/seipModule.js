@@ -2153,6 +2153,7 @@ angular.module('seipModule.controllers', [])
             };
 
             $scope.getComplejos();
+            $scope.getFirstLineManagement();
 
             //Scope de Localidad
             $scope.$watch("model.complejo", function (newParams, oldParams) {
