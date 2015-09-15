@@ -13,6 +13,7 @@ use Pequiven\SEIPBundle\Entity\PeriodItemInterface;
  * Estudio de Círculo de Trabajo
  *
  * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\Politic\WorkStudyCircleRepository")
+ * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  * @ORM\HasLifecycleCallbacks()
  */
 class WorkStudyCircle extends ModelWorkStudyCircle implements PeriodItemInterface {
@@ -129,6 +130,11 @@ class WorkStudyCircle extends ModelWorkStudyCircle implements PeriodItemInterfac
      * @ORM\OneToMany(targetEntity="\Pequiven\SEIPBundle\Entity\User", mappedBy="workStudyCircle", cascade={"persist"})
      * */
     private $userWorkerId;
+    
+    /**
+     * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
+     */
+    private $deletedAt;
 
     /**
      * Constructor
@@ -407,6 +413,16 @@ class WorkStudyCircle extends ModelWorkStudyCircle implements PeriodItemInterfac
      */
     public function getGerenciaSeconds() {
         return $this->gerenciaSeconds;
+    }
+    
+    function getDeletedAt() {
+        return $this->deletedAt;
+    }
+
+    function setDeletedAt($deletedAt) {
+        $this->deletedAt = $deletedAt;
+
+        return $this;
     }
 
 }

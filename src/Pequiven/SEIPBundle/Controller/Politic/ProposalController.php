@@ -28,39 +28,59 @@ class ProposalController extends SEIPController {
         
         $proposal = new Proposal();
         $form = $this->createForm(new ProposalType, $proposal);
-        $form->handleRequest($request);        
+        $form->handleRequest($request);
+        
+        $proposalsRegistered = $em->getRepository('PequivenSEIPBundle:Politic\Proposal')->findBy(array('workStudyCircle' => $idWorkStudyCircle));
+        $proposalsArray = array();
+        foreach ($proposalsRegistered as $proposalRegistered){
+            $proposalsArray[$proposalRegistered->getId()] = true;
+        }
 
         $user = $this->getUser();
         $em->getConnection()->beginTransaction();
         if ($form->isSubmitted() && $form->isValid()) {
             
-            //Determinamos si la Línea Estratégica ya tiene 2 propuestas creadas
-            $proposalRepository = $em->getRepository('PequivenSEIPBundle:Politic\Proposal');
-            $proposalByLineStrategic = $proposalRepository->findBy(array('lineStrategic' => $request->get("proposal_data")["lineStrategic"]));
+            $proposal1 = $request->get("proposal_data")["description1"];
+            $proposal2 = $request->get("proposal_data")["description2"];
+            $proposals = array();
+            array_push($proposals, $proposal1);
+            array_push($proposals, $proposal2);
+            
+            //Obtenemos Línea Estratégica
+            $LineStrategicRepository = $em->getRepository('PequivenMasterBundle:LineStrategic');
+            $lineStrategicObject = $LineStrategicRepository->findOneBy(array('id' => $request->get("proposal_data")["lineStrategic"]));
+            
+            if (strlen($proposal1) > 0 && strlen($proposal2) > 0){
+                if(array_key_exists($request->get("proposal_data")["lineStrategic"], $proposals)){
+                    $this->get('session')->getFlashBag()->add('error', 'La Línea Estratégica ya tiene sus 2 propuestas');
+                } else{
+                    for($i = 1;$i <= 2; $i++){
+                        $proposalObject = new Proposal();
+                        $proposalObject->setCreatedBy($user);
+                        $proposalObject->setPeriod($period = $this->getPeriodService()->getPeriodActive());
+                        $proposalObject->setWorkStudyCircle($workStudyCircle);
+                        $proposalObject->setLineStrategic($lineStrategicObject);
+                        $proposalObject->setDescription($proposals[$i-1]);
+                        $em->persist($proposalObject);
+                    }
 
-//            if ($countUsers < $validMinUsers) {
-//                $this->get('session')->getFlashBag()->add('error', 'Debe Agregar ' . $validMinUsers . ' miembros como mínimo');
-//            } else {
-
-                $proposal->setCreatedBy($user);
-                $proposal->setPeriod($period = $this->getPeriodService()->getPeriodActive());
-                $proposal->setWorkStudyCircle($workStudyCircle);
-
-                $em->persist($proposal);
-                $em->flush();
-
-                try {
                     $em->flush();
-                    $em->getConnection()->commit();
-                } catch (Exception $e) {
-                    $em->getConnection()->rollback();
-                    throw $e;
-                }
 
-                $this->get('session')->getFlashBag()->add('success', 'Propuesta guardada correctamente');
-                
-                return $this->redirect($this->generateUrl('pequiven_work_study_circle_show', array("id" => $workStudyCircle->getId())));
-//            }
+                    try {
+                        $em->flush();
+                        $em->getConnection()->commit();
+                    } catch (Exception $e) {
+                        $em->getConnection()->rollback();
+                        throw $e;
+                    }
+
+                    $this->get('session')->getFlashBag()->add('success', 'Propuestas guardadas correctamente');
+
+                    return $this->redirect($this->generateUrl('pequiven_work_study_circle_show', array("id" => $workStudyCircle->getId())));
+                }
+            } else{
+                $this->get('session')->getFlashBag()->add('error', 'Debe agregar 2 propuestas por línea estratégica');
+            }
         }
 
         return $this->render('PequivenSEIPBundle:Politic:Proposal\create.html.twig', array(
