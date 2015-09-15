@@ -60,3 +60,7 @@ pequiven_data_load:
 pequiven_politic_workstudycircle:
     resource: "@PequivenSEIPBundle/Resources/config/routing/politic/work_study_circle.yml"
     prefix:   /workstudycircle
+    
+pequiven_politic_proposal:
+    resource: "@PequivenSEIPBundle/Resources/config/routing/politic/proposal.yml"
+    prefix:   /proposal
