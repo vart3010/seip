@@ -93,17 +93,12 @@ class WorkStudyCircleController extends SEIPController {
                 $workStudyCircle->setPeriod($period = $this->getPeriodService()->getPeriodActive());
                 $workStudyCircle->setCodigo($this->setNewRef($request->get("workStudyCircle_data")["complejo"]));
 
-
                 $em->persist($workStudyCircle);
                 $em->flush();
-
-
 
                 $user->setCellphone($request->get("userType_data")["cellphone"]);
                 $user->setIndentification($request->get("userType_data")["indentification"]);
                 $user->setExt($request->get("userType_data")["ext"]);
-
-
 
                 try {
                     $em->flush();
@@ -113,18 +108,14 @@ class WorkStudyCircleController extends SEIPController {
                     throw $e;
                 }
 
-
                 $workStudyCircle = $em->getRepository('PequivenSEIPBundle:Politic\WorkStudyCircle')->findOneBy(array('createdBy' => $user->getId()));
-
 
                 $this->addWorkStudyCircleToUser($workStudyCircle, $request->get("workStudyCircle_data")["userWorkerId"]);
                 $this->addWorkStudyCircleToUser($workStudyCircle, array($user->getId()));
 
-
                 $this->get('session')->getFlashBag()->add('success', 'Círculo de Estudio guardado correctamente');
                 //return $this->redirect($this->generateUrl('pequiven_seip_default_index'));
                 return $this->redirect($this->generateUrl('pequiven_work_study_circle_show', array("id" => $workStudyCircle->getId())));
-
                 //return $this->redirect($this->generateUrl('saci_people_list', array('id' => $people->getId())));
             }
         }
@@ -224,6 +215,7 @@ class WorkStudyCircleController extends SEIPController {
 
     public function viewAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
+        //var_dump($request);
 
         $complejo = $this->get('pequiven_seip.repository.complejo')->findAll(); //Llamada de complejo
 
@@ -241,15 +233,29 @@ class WorkStudyCircleController extends SEIPController {
             $cantNotNull[] = count($usersNotNull);
         }
 
-        $arrayTemp = array(1804, 1806, 342, 606); 
+        // PARCHE REVISAR INCONSISTENCIAS EN BASE DE DATOS "TO DO NEXT YEAR"
+        $arrayTemp = array(1804, 1806, 342, 606);
 
-        return $this->render('PequivenSEIPBundle:Politic:WorkStudyCircle\view.html.twig', array(
-                    'workStudyCircle' => $workStudyCircle,
-                    'complejo' => $complejo,
-                    'users' => $arrayTemp,
-                    'complejosCant' => $complejosCant,
-                    'cantNotNull' => $cantNotNull
-        ));
+        if ($request->get('pdf') != null) {
+
+            $datos = array(
+                'workStudyCircle' => $workStudyCircle,
+                'complejo' => $complejo,
+                'users' => $arrayTemp,
+                'complejosCant' => $complejosCant,
+                'cantNotNull' => $cantNotNull
+            );
+
+            $this->generatePdf($datos, 'Reporte Gral. de Círculos de Trabajo' , 'PequivenSEIPBundle:Politic:WorkStudyCircle\GeneralViewPdf.html.twig');
+        } else {
+            return $this->render('PequivenSEIPBundle:Politic:WorkStudyCircle\view.html.twig', array(
+                        'workStudyCircle' => $workStudyCircle,
+                        'complejo' => $complejo,
+                        'users' => $arrayTemp,
+                        'complejosCant' => $complejosCant,
+                        'cantNotNull' => $cantNotNull
+            ));
+        }
 
         //return $this->render('PequivenSEIPBundle:Politic:WorkStudyCircle\view.html.twig');
     }
@@ -307,13 +313,13 @@ class WorkStudyCircleController extends SEIPController {
 //            }
 //        
             $data = array(
-                   'apiDataUrl' => $apiDataUrl,
-                    $this->config->getPluralResourceName() => $resources,
+                'apiDataUrl' => $apiDataUrl,
+                $this->config->getPluralResourceName() => $resources,
 //                   'labelsCircle' => $labelsCircle            
             );
             $view->setData($data);
         } else {
-            $view->getSerializationContext()->setGroups(array('id','api_list','complejo','region'));
+            $view->getSerializationContext()->setGroups(array('id', 'api_list', 'complejo', 'region'));
             $formatData = $request->get('_formatData', 'default');
 
             $view->setData($resources->toArray('', array(), $formatData));
@@ -336,10 +342,10 @@ class WorkStudyCircleController extends SEIPController {
             'userData' => $user
         );
 
-        $this->generatePdf($data);
+        $this->generatePdf($data, 'Reporte de Círculo de Trabajo' , 'PequivenSEIPBundle:Politic:WorkStudyCircle\viewPdf.html.twig');
     }
 
-    public function generatePdf($data) {
+    public function generatePdf($data, $title, $template) {
         $pdf = new \Pequiven\SEIPBundle\Model\PDF\SeipPdf('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
         $pdf->setPrintLineFooter(false);
         $pdf->setContainer($this->container);
@@ -349,7 +355,7 @@ class WorkStudyCircleController extends SEIPController {
 // set document information
         $pdf->SetCreator(PDF_CREATOR);
         $pdf->SetAuthor('SEIP');
-        $pdf->setTitle('Reporte de Círculo de Trabajo');
+        $pdf->setTitle($title);
         $pdf->SetSubject('Resultados SEIP');
         $pdf->SetKeywords('PDF, SEIP, Resultados');
 
@@ -377,7 +383,7 @@ class WorkStudyCircleController extends SEIPController {
 
 // set some text to print
 
-        $html = $this->renderView('PequivenSEIPBundle:Politic:WorkStudyCircle\viewPdf.html.twig', $data);
+        $html = $this->renderView($template, $data);
 
 // print a block of text using Write()
         $pdf->writeHTML($html, true, false, true, false, '');

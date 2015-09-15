@@ -1,0 +1,199 @@
+{% trans_default_domain 'workStudyCircle' %}
+
+<style>
+    body {
+        font-size: 10px;
+        text-align: center;
+    }
+
+    .title_bold {
+        font-weight: bold;
+        text-align: center;
+    }
+    
+    table td{
+        text-align: center;
+    }
+
+    .title{
+        font-weight: bold;
+        font-size: 14pt;
+    }
+    table tr {
+        padding: 15px;
+    }
+</style>
+
+{% block body %}
+
+    <!--INICIALIZO VARIABLES, PARÁMETROS Y ARREGLOS -->   
+    {% set colspan = 5 %}
+    {% set count = 0 %}
+
+    {% set CirMet = 0 %}
+    {% set CirReg = 0 %}
+    {% set EmpMet = 0 %}
+    {% set EmpReg = 0 %}  
+<p></p>
+    {% for dataComplejo in complejo %}
+        
+        <table width="95%">
+            <tr>
+                <th class="title">{{ dataComplejo.description }}</th>
+            </tr>
+        </table>
+
+        <table width="100%">
+            <thead>
+                <tr>
+                    <th class="title_bold" bgcolor="#BDBDBD" width="50%">
+                        Circulos
+                    </th>                    
+                    <th class="title_bold" bgcolor="#BDBDBD" width="50%">
+                        Empleados
+                    </th>  
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>                		
+                        <table width="100%">
+                            <thead>
+                                <tr>
+                                    <th class="title_bold" bgcolor="#F2F2F2" width="50%">
+                                        Meta
+                                    </th>                    
+                                    <th class="title_bold" bgcolor="#F2F2F2" width="50%">
+                                        Registrados
+                                    </th>  
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        {{ (users[count] / 12) |round(0, 'floor')}}
+                                        {% set CirMet = CirMet + ((users[count] / 12) |round(0, 'floor'))%}
+                                    </td>
+                                    <td>
+                                        {{ complejosCant[count] }}
+                                        {% set CirReg = CirReg + complejosCant[count]%}
+                                    </td>   
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </td>
+
+                    <td>                		
+                        <table width="100%">
+                            <thead>
+                                <tr>
+                                    <th class="title_bold" bgcolor="#F2F2F2" width="50%">
+                                        Meta 
+                                    </th>                    
+                                    <th class="title_bold" bgcolor="#F2F2F2" width="50%">
+                                        Registrados
+                                    </th>  
+                                </tr>
+                            </thead>
+                            <tbody>  
+                                <tr>                                        
+                                    <td>
+                                        {{ users[count] }}
+                                        {% set EmpMet = EmpMet + users[count]%}
+                                    </td>
+                                    <td>
+                                        {{ cantNotNull[count] }}
+                                        {% set EmpReg = EmpReg + cantNotNull[count]%}
+                                    </td>   
+                                </tr>                                    
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <p></p>
+        {% set count = count + 1 %}
+    {% endfor %}
+
+    <!--TABLA DE TOTALES -->
+    
+    <p></p>
+    <table width="95%">
+        <tr>
+            <th class="title">Totales Generales</th>
+        </tr>
+    </table>
+    <table width="100%">
+        <thead>
+            <tr>
+                <th class="title_bold" bgcolor="#BDBDBD" width="50%">
+                    Circulos
+                </th>                    
+                <th class="title_bold" bgcolor="#BDBDBD" width="50%">
+                    Empleados
+                </th>  
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>                		
+                    <table width="100%">
+                        <thead>
+                            <tr>
+                                <th class="title_bold" bgcolor="#F2F2F2" width="50%">
+                                    Meta
+                                </th>                    
+                                <th class="title_bold" bgcolor="#F2F2F2" width="50%">
+                                    Registrados
+                                </th>  
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    {{ CirMet }}
+                                </td>
+                                <td>
+                                    {{ CirReg }}
+                                </td>    
+                            </tr>                                
+                        </tbody>
+                    </table>
+                </td>
+
+                <td>                		
+                    <table width="100%">
+                        <thead>
+                            <tr>
+                                <th class="title_bold" bgcolor="#F2F2F2" width="50%">
+
+                                    Meta 
+
+                                </th>                    
+                                <th class="title_bold" bgcolor="#F2F2F2" width="50%">
+
+                                    Registrados
+
+                                </th>  
+                            </tr>
+                        </thead>
+                        <tbody> 
+                            <tr>                                    
+                                <td>
+                                    {{ EmpMet }}
+                                </td>
+                                <td>
+                                    {{ EmpReg }}
+                                </td>      
+                            </tr>                                
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+
+{% endblock %}
