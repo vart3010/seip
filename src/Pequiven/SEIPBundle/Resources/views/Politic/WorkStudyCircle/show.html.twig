@@ -109,6 +109,8 @@
     <br /><br />
     {% include 'PequivenSEIPBundle:Politic:WorkStudyCircle/members.html.twig' %}
     <br /><br />
+    {% include 'PequivenSEIPBundle:Politic:WorkStudyCircle/proposals.html.twig' %}
+    <br /><br />
     {% set routeConfig = path('pequiven_work_study_circle_export_pdf',{idWorkStudyCircle:workStudyCircle.id}) %}
     {% if(is_granted(["ROLE_SEIP_WORK_STUDY_CIRCLES_VIEW_REPORT"])) %}
         <div class="align-right">

@@ -447,6 +447,7 @@ pequiven_seip:
         
     politic:
         work_study_circle: Círculo de Estudio de Trabajo
+        proposal: Propuesta
             
 "Bad credentials": Nombre de usuario o contraseña invalida
 "User account is disabled.": Cuenta de usuario desactivada

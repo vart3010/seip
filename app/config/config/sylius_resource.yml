@@ -393,3 +393,10 @@ sylius_resource:
                 controller: Pequiven\SEIPBundle\Controller\Politic\WorkStudyCircleController
                 model: Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle
                 repository: Pequiven\SEIPBundle\Repository\Politic\WorkStudyCircleRepository
+        pequiven.proposal:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:Politic/Proposal
+            classes:
+                controller: Pequiven\SEIPBundle\Controller\Politic\ProposalController
+                model: Pequiven\SEIPBundle\Entity\Politic\Proposal
+                repository: Pequiven\SEIPBundle\Repository\Politic\ProposalRepository

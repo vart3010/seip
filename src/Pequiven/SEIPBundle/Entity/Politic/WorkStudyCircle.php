@@ -277,7 +277,7 @@ class WorkStudyCircle extends ModelWorkStudyCircle implements PeriodItemInterfac
      * Set period
      *
      * @param \Pequiven\SEIPBundle\Entity\Period $period
-     * @return ArrangementProgram
+     * @return WorkStudyCircle
      */
     public function setPeriod(\Pequiven\SEIPBundle\Entity\Period $period) {
         $this->period = $period;

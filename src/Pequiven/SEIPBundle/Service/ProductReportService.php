@@ -90,8 +90,9 @@ class productReportService implements ContainerAwareInterface {
                 'data' => $rs
             ),
         );
-
-        return $pie;
+        
+        return json_encode($chart);
+        //return $pie;
     }
 
     public function generateColumn3dLinery($titles, $productReport, $range, $dateReport, $typeReport, $methodFrecuency, $plan, $real, $division = 1) {
