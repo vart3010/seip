@@ -233,34 +233,66 @@ class WorkStudyCircleController extends SEIPController {
         }
 
         // PARCHE REVISAR INCONSISTENCIAS EN BASE DE DATOS "TO DO NEXT YEAR"
-        $arrayTemp = array(1804, 1806, 342, 606);
+        $usersTemp = array(1804, 1806, 342, 606); //TOTAL DE USUARIOS DE PEQUIVEN
 
         if ($request->get('pdf') != null) {
 
             $datos = array(
                 'workStudyCircle' => $workStudyCircle,
                 'complejo' => $complejo,
-                'users' => $arrayTemp,
+                'users' => $usersTemp,
                 'complejosCant' => $complejosCant,
                 'cantNotNull' => $cantNotNull
             );
 
             $this->generatePdf($datos, 'Reporte Gral. de Círculos de Trabajo', 'PequivenSEIPBundle:Politic:WorkStudyCircle\GeneralViewPdf.html.twig');
         } else {
-            
+
             $workService = $this->getWorkStudyCircleService();
-            $graphic = $workService->generatePie(array("caption" => "TITLE"));
+
+            $titlesCircles = array(
+                "caption" => "Cantidad de Circulos por Complejo",
+                "subCaption" => "",
+                "ejeyLeft"=>"Cant Circulos",
+                "type"=>"circle"
+            );
+            
+            $titlesUser = array(
+                "caption" => "Cantidad de Circulos por Complejo",
+                "subCaption" => "",
+                "ejeyLeft"=>"Cant Empleados",
+                "type"=>"user"
+            );
+            
+            $datosGraphic = array(
+                "complejos" => $complejo,
+                "usersTemp" => $usersTemp,
+                "complejosCant" => $complejosCant,
+                "cantNotNull" => $cantNotNull
+            );
+            
+            $generateColumnCircle = $workService->generateColumn3d($titlesCircles,$datosGraphic);
+            $generateColumnUsers = $workService->generateColumn3d($titlesUser,$datosGraphic);
+
+
+            $totalCircleGoal = $totalCircleReg = $totalEmpGoal = $totalEmpReg = 0;
+            for ($i = 0; $i < count($complejo); $i++) {
+                $totalCircleGoal += ($usersTemp[$i] / 12);
+                $totalCircleReg += $complejosCant[$i];
+                $totalEmpGoal += $usersTemp[$i];
+                $totalEmpReg += $cantNotNull[$i];
+            }
 
             return $this->render('PequivenSEIPBundle:Politic:WorkStudyCircle\view.html.twig', array(
                         'workStudyCircle' => $workStudyCircle,
                         'complejo' => $complejo,
-                        'users' => $arrayTemp,
+                        'users' => $usersTemp,
                         'complejosCant' => $complejosCant,
-                        'cantNotNull' => $cantNotNull
+                        'cantNotNull' => $cantNotNull,
+                        'graphicCircle' => $generateColumnCircle,
+                        'graphicUser' => $generateColumnUsers
             ));
         }
-
-        //return $this->render('PequivenSEIPBundle:Politic:WorkStudyCircle\view.html.twig');
     }
 
     public function listAction(Request $request) {
