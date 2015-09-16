@@ -30,3 +30,15 @@ workStudyCircle:
     proposals:
         title: Propuestas
         add: Añadir Propuesta
+        
+    meetings:
+        title: Reuniones
+        titleSingle: Reunione
+        add: Añadir Reunión
+        dataMeeting: Información de Reunión
+        date: Fecha Reunión
+        place: Lugar  
+        subject: Tema
+            
+    assistances:
+        dataAssistances: Participantes

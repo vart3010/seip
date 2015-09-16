@@ -1,0 +1,66 @@
+{% trans_default_domain 'workStudyCircle' %}
+
+{% set userCreatedId = workStudyCircle.getCreatedBy.id %}
+
+<div class="block" >
+    <div class="block-title">
+        <h3 class="ng-binding">{{ "workStudyCircle.meetings.title"|trans }}</h3>    
+        {#        {% if (is_granted('ROLE_SEIP_PROPOSAL_ADD') or (userCreatedId == userData.id)) %}#}
+        <div class="button-group absolute-right compact">
+            <a class="button icon-list-add " href="{{ path("pequiven_meeting_create",{workStudyCircle_id:workStudyCircle.id})}}"  title="">
+                {{ "workStudyCircle.meetings.add"|trans }}&nbsp;
+            </a>
+        </div>
+        {#        {% endif %}#}
+    </div>
+
+    <div class="with-padding" ng-controller="WorkStudyCircleController">
+        <table class="simple-table responsive-table tables-extras" id="sorting-example2">
+            <thead>
+                <tr>
+                    <th scope="col" width="2%" class="header">{{ 'seip.table.header.nro'|trans({},'PequivenArrangementProgramBundle') }}</th>
+                    <th scope="col" width="15%" class="header">{{ 'workStudyCircle.meetings.date'|trans }}</th>
+                    <th scope="col" width="20%" class="hide-on-tablet header">{{ 'workStudyCircle.meetings.place'|trans }}</th>
+                    <th scope="col" width="45%" class="hide-on-tablet header">{{ 'workStudyCircle.meetings.subject'|trans }}</th>
+                    <th scope="col" width="15%" class="hide-on-mobile-portrait header">&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                {% set cont = 1 %}
+                {% for meeting in meetings %}
+                    <tr>
+                        <td>{{ cont }}</td>
+                        <td>{{ meeting.date|date('Y-m-d') }}</td>
+                        <td>
+                            <a href="{{ path("pequiven_meeting_view",{meeting_id:meeting.id})}}">
+                                {{ meeting.place }}
+                            </a>
+                        </td>
+                        <td>
+                            <a href="{{ path("pequiven_meeting_view",{meeting_id:meeting.id})}}">
+                                {{ meeting.subject }}
+                            </a>
+                        </td>
+                        <td class="align-right vertical-center">
+                            {# {% if (is_granted('ROLE_SEIP_PROPOSAL_EDIT') or (userCreatedId == user.id)) %}
+                                 <div ng-controller="ToolsController" id="target_{$ paso+1 $}">
+                                     <span class="select compact">
+                                         <a href="{{ path('pequiven_meeting_edit',{meeting_id:meeting.id}) }}" class="select-value form-edit">
+                                             {{ 'workStudyCircle.members.edit'|trans }}
+                                         </a>
+                                         <span class="select-arrow"></span>
+                                     </span>
+                                 </div>
+                             {% else  %}
+                                 &nbsp;
+                             {% endif %}#}
+                        </td>
+                        {% set cont = cont + 1 %}
+                    </tr>
+                {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+</div>

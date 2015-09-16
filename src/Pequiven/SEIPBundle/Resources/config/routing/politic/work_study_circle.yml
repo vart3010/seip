@@ -73,3 +73,14 @@ pequiven_work_study_circle_list:
     requirements:
         _format: html|json|xml
     methods: [GET]
+    
+pequiven_work_study_circle_coordinators:
+    path: /coordinators.{_format}
+    defaults: 
+        _controller: pequiven_seip.controller.user:searchCoordinatorAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true

@@ -45,8 +45,8 @@ class Meeting {
      * @ORM\Column(name="updatedAt", type="datetime")
      */
     private $updatedAt;
-    
-       /**
+
+    /**
      * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
      */
     private $deletedAt;
@@ -54,13 +54,12 @@ class Meeting {
     /**
      * @var string
      *
-     * @ORM\Column(name="name",type="string",length=255,nullable=false)
+     * @ORM\Column(name="place",type="string",length=255,nullable=false)
      */
     private $place;
 
     /**
      * @var \DateTime
-     * @Gedmo\Timestampable(on="create")
      * @ORM\Column(name="date", type="datetime")
      */
     private $date;
@@ -77,7 +76,12 @@ class Meeting {
      */
     private $assistances;
 
-    
+    /**
+     * @ORM\ManyToOne(targetEntity="\Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle", inversedBy="meetings")
+     * @ORM\JoinColumn(name="workStudyCircle_id", referencedColumnName="id")
+     * */
+    private $workStudyCircle;
+
     public function __construct() {
         $this->assistances = new \Doctrine\Common\Collections\ArrayCollection();
     }
@@ -177,9 +181,8 @@ class Meeting {
     public function getUpdatedAt() {
         return $this->updatedAt;
     }
-    
-    
-     function getDeletedAt() {
+
+    function getDeletedAt() {
         return $this->deletedAt;
     }
 
@@ -207,6 +210,11 @@ class Meeting {
         return $this->place;
     }
 
+    public function setDate(\DateTime $date) {
+        $this->date = $date;
+        return $this;
+    }
+
     /**
      * 
      * @return type
@@ -231,6 +239,25 @@ class Meeting {
      */
     public function getSubject() {
         return $this->subject;
+    }
+
+    /**
+     * 
+     * @param \Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle $workStudyCircle
+     * @return \Pequiven\SEIPBundle\Entity\Politic\Meeting
+     */
+    public function setWorkStudyCircle(WorkStudyCircle $workStudyCircle) {
+        $this->workStudyCircle = $workStudyCircle;
+
+        return $this;
+    }
+
+    /**
+     * 
+     * @return type
+     */
+    public function getWorkStydyCircle() {
+        return $this->workStudyCircle;
     }
 
 }
