@@ -50,6 +50,16 @@ class WorkStudyCircleRepository extends EntityRepository
                 ;
         }
         
+        if (($coordinators = $criteria->remove('coordinators'))){
+            
+            $array = explode('[',$coordinators);
+            $coordinatorsArray = explode(']',$array[1]);
+            
+            $queryBuilder
+                ->andWhere($queryBuilder->expr()->in('wsc.createdBy', $coordinatorsArray[0]))
+                ;
+        }
+        
         $queryBuilder->orderBy('wsc.name');
         
 //        $orderBy['wsc.name'] = 'ASC';

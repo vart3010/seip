@@ -21,13 +21,24 @@ class ProposalType extends AbstractType {
                 'class' => 'Pequiven\MasterBundle\Entity\LineStrategic',
                 'property' => 'descriptionSelect',
                 'empty_value' => 'Seleccione',
+                'mapped' => false,
                 'required' => true,
                 'attr' => array(
                     'class' => 'select2 input-xlarge form-control',
             )))
-            ->add('description', 'textarea', array(
-                'label' => 'Propuesta',
+            ->add('description1', 'textarea', array(
+                'label' => 'Propuesta 1',
                 'label_attr' => array('class' => 'label'),
+                'mapped' => false,
+                'attr' => array(
+                    'class' => 'input input-large',
+                    'cols' => '40',
+                    'rows' => '10',
+                    )))
+            ->add('description2', 'textarea', array(
+                'label' => 'Propuesta 2',
+                'label_attr' => array('class' => 'label'),
+                'mapped' => false,
                 'attr' => array(
                     'class' => 'input input-large',
                     'cols' => '40',

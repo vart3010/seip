@@ -241,6 +241,7 @@ pequiven_seip:
         period: Periodo
         frequencyNotifications: Frecuencias de Notificación
         user_selection: Selecione Usuario
+        coordinators: Coordinadores
     tooltips:
         click_to_show: Click para ver
     area:

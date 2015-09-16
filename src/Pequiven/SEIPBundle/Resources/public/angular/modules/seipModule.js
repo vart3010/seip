@@ -2943,12 +2943,19 @@ angular.module('seipModule.controllers', [])
             var selectComplejo = angular.element("#selectComplejos");
             var selectFirstLineManagement = angular.element("#selectFirstLineManagement");
             var selectSecondLineManagement = angular.element("#selectSecondLineManagement");
+            var selectCoordinator = angular.element("#selectCoordinator");
 
             $scope.data = {
                 complejos: null,
+                first_line_managements: null,
+                second_line_managements: null,
+                coordinators: null,
             };
             $scope.model = {
                 complejo: null,
+                firstLineManagement: null,
+                secondLineManagement: null,
+                coordinator: null,
             };
 
             //Busca las localidades
@@ -3005,8 +3012,26 @@ angular.module('seipModule.controllers', [])
                             }
                         });
             };
+            
+            //Busca las localidades
+            $scope.getCoordinators = function () {
+                var parameters = {
+                    filter: {}
+                };
+                $http.get(Routing.generate('pequiven_work_study_circle_coordinators', parameters))
+                    .success(function (data) {
+                        $scope.data.coordinators = data;
+                        if ($scope.model.coordinator != null) {
+                            $scope.setValueSelect2("selectCoordinators", $scope.model.coordinator, $scope.data.coordinators, function (selected) {
+                                $scope.model.coordinator = selected;
+                            });
+                        }
+                    });
+            };
 
             $scope.getComplejos();
+            $scope.getFirstLineManagement();
+//            $scope.getCoordinators();
 
             //Scope de Localidad
             $scope.$watch("model.complejo", function (newParams, oldParams) {
@@ -3043,6 +3068,25 @@ angular.module('seipModule.controllers', [])
                     $scope.tableParams.$params.filter['secondLineManagement'] = $scope.model.secondLineManagement.id;
                 } else {
                     $scope.tableParams.$params.filter['secondLineManagement'] = null;
+                }
+            });
+            
+            //Scope de Coordinadores
+            $scope.$watch("model.coordinator", function (newParams, oldParams) {
+                if ($scope.model.coordinator != null) {
+                    var coordinatorsId = [], i = 0;
+                    var coordinators = angular.element("#coordinators").select2('data');
+                    angular.forEach(coordinators, function (value) {
+                        coordinatorsId.push(value.id);
+                        i++;
+                    });
+                    if (i > 0) {
+                        $scope.tableParams.$params.filter['coordinators'] = angular.toJson(coordinatorsId);
+                    } else {
+                        $scope.tableParams.$params.filter['coordinators'] = null;
+                    }
+                } else {
+                    $scope.tableParams.$params.filter['coordinators'] = null;
                 }
             });
         })

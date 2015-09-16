@@ -58,6 +58,7 @@ class workStudyCircleService implements ContainerAwareInterface {
         $chart["inDecimalSeparator"] = ",";
         $chart["inThousandSeparator"] = ".";
         $chart["decimals"] = "2";
+        $chart["formatNumberScale"] = "0";
 
         $chart["exportenabled"] = "1";
         $chart["exportatclient"] = "0";
