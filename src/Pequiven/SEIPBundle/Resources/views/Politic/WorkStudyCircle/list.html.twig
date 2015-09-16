@@ -57,6 +57,15 @@
                             </select>
                         </div>
                     </div>
+                        
+                    <!-- Filtro Coordinadores -->
+                    <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                        <label class="bold">{{ 'pequiven_seip.filters.coordinators'|trans({},'PequivenSEIPBundle') }}</label>
+                        <br/>
+                        <div class="with-mid-padding">
+                            <input type="text" name="coordinators" id="coordinators" ng-model="model.coordinator" style='width: 270px' />
+                        </div>
+                    </div>
                       
                 </div>
             </div>
@@ -127,6 +136,38 @@
                 allowClear: true
                 });
             }
+            
+            var urlCoordinators = '{{ path('pequiven_work_study_circle_coordinators') }}';
+            var parametersSelectCoordinators = {
+                minimumInputLength: 1,
+                multiple: true,
+                allowClear: true,
+                ajax: {// instead of writing the function to execute the request we use Select2's convenient helper
+                    url: urlCoordinators,
+                    dataType: 'json',
+                    quietMillis: 250,
+                    data: function (term, page) {
+                        return {
+                            query: term, // search term
+                        };
+                    },
+                    results: function (data, page) { // parse the results into the format expected by Select2.
+                        // since we are using custom formatting functions we do not need to alter the remote JSON data
+                        return {results: data};
+                    },
+                    cache: true
+                },
+                initSelection: function (element, callback) {
+                },
+                formatResult: responsiblesFormatResult, // omitted for brevity, see the source of this page
+                formatSelection: responsiblesFormatResult, // omitted for brevity, see the source of this page
+                escapeMarkup: function (m) {
+                    return m;
+                } // we do not want to escape markup since we are displaying html in results
+            };
+
+            $('#coordinators').select2(parametersSelectCoordinators);
+            
         });
         
         function getTableExtraInfo(data)

@@ -171,6 +171,30 @@ class UserController extends baseController {
         $view->getSerializationContext()->setGroups(array('id', 'api_list', 'sonata_api_read'));
         return $this->handleView($view);
     }
+    
+    /**
+     * Busca un coordinador
+     * 
+     * @param Request $request
+     * @return type
+     */
+    function searchCoordinatorAction(Request $request) {
+        $query = $request->get('query');
+        $criteria = array(
+            'username' => $query,
+            'firstname' => $query,
+            'lastname' => $query,
+            'numPersonal' => $query,
+        );
+        $results = $this->get('pequiven_seip.repository.user')->searchCoordinator($criteria);
+
+        $view = $this->view();
+        $view->setData($results);
+        $view->getSerializationContext()->setGroups(array('id', 'api_list', 'sonata_api_read'));
+        return $this->handleView($view);
+    }
+    
+    
 
     /**
      * Filtra los usuarios que esten por debajo
