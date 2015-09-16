@@ -1,0 +1,76 @@
+
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
+
+{% trans_default_domain 'workStudyCircle' %}
+
+{% block javascripts_base %}
+    {{ parent() }}
+    <script src="{{  asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.input.js') }}"></script>
+{% endblock javascripts_base %}
+
+{% block before_body %}
+    {{ contentHeader("workStudyCircle.meetings.title" | trans({}))   }}
+{% endblock %}
+
+{% block body %}
+    <form method="POST" action="{{ path("pequiven_meeting_create",{workStudyCircle_id:workStudyCircle.id}) }}">
+
+        <br /><br />
+        <fieldset class="fieldset fields-list">
+            <legend class="legend">{{ 'workStudyCircle.meetings.dataMeeting'|trans }}</legend>
+            <div class="field-block button-height">
+                {{ form_label(form.date) }}
+                {{ form_widget(form.date) }}
+                {{ form_errors(form.date) }}
+                <span class="info-spot">
+                    <span class="icon-info-round"></span>
+                    <span class="info-bubble">Fecha de la Reunión</span>
+                </span>
+            </div>
+            <div class="field-block button-height">
+                {{ form_label(form.place) }}
+                {{ form_widget(form.place) }}
+                {{ form_errors(form.place) }}
+                <span class="info-spot">
+                    <span class="icon-info-roun"d></span>
+                    <span class="info-bubble">Lugar de Reunión (Ejem. Auditorio, Sala, etc.)</span>
+                </span>
+            </div>
+            <div class="field-block button-height">
+                {{ form_label(form.subject) }}
+                {{ form_widget(form.subject) }}
+                {{ form_errors(form.subject) }}
+                <span class="info-spot">
+                    <span class="icon-info-round"></span>
+                    <span class="info-bubble">Tema de la Reunión</span>
+                </span>
+            </div>
+        </fieldset>
+
+
+        {{ actions.create() }}
+
+        {{ form_rest(form) }}
+    </form>
+
+
+
+
+{% endblock %}
+{% block javascript %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#meeting_data_date").datepicker({
+                defaultDate: "+1w",
+                changeMonth: true,
+                numberOfMonths: 1,
+                dateFormat: "dd/mm/yy"
+            });
+        });
+
+    </script>
+{% endblock %}

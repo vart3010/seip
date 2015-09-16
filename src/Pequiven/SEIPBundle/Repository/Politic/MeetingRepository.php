@@ -1,6 +1,6 @@
 <?php
 
-namespace Pequiven\SEIPBundle\Repository\DataLoad;
+namespace Pequiven\SEIPBundle\Repository\Politic;
 
 use Pequiven\SEIPBundle\Doctrine\ORM\SeipEntityRepository;
 
