@@ -1,0 +1,42 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}
+{% trans_default_domain 'workStudyCircle' %}
+
+{% block javascripts_base %}
+    {{ parent() }}
+    <script src="{{  asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.input.js') }}"></script>
+{% endblock javascripts_base %}
+
+{% block before_body %}
+    {{ contentHeader("workStudyCircle.meetings.title" | trans({}))   }}
+{% endblock %}
+
+{% block body %}
+
+    <fieldset class="fieldset">
+        <legend class="legend">{{ 'workStudyCircle.meetings.titleSingle'|trans }}&nbsp;</legend>
+        <div class="columns">
+            <div class="new-row-mobile twelve-columns-mobile twelve-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'workStudyCircle.meetings.date'|trans }}</label>
+                    {{ meeting.date|date('Y-m-d') }}
+                </p>
+            </div>
+            <div class="new-row-mobile twelve-columns-mobile twelve-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'workStudyCircle.meetings.place'|trans }}</label>
+                    {{ meeting.place }}
+                </p>
+            </div>
+            <div class="new-row-mobile twelve-columns-mobile twelve-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'workStudyCircle.meetings.subject'|trans }}</label>
+                    {{ meeting.subject }}
+                </p>
+            </div>
+        </div>
+    </fieldset>
+
+
+{% endblock %}
+
+
