@@ -10,6 +10,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 /**
  * CONTROS DE ASISTENCIA DE REUNIONES
  * @author Victor Tortolero vart10.30@gmail.com
+ * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  * @ORM\HasLifecycleCallbacks()
  */
 class Assistance {
@@ -37,6 +38,11 @@ class Assistance {
      * @JoinColumn(name="meeting_id", referencedColumnName="id")
      * */
     private $meeting;
+
+    /**
+     * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
+     */
+    private $deletedAt;
 
     /**
      * Get id
@@ -81,6 +87,16 @@ class Assistance {
      */
     public function getMeeting() {
         return $this->meeting;
+    }
+
+    function getDeletedAt() {
+        return $this->deletedAt;
+    }
+
+    function setDeletedAt($deletedAt) {
+        $this->deletedAt = $deletedAt;
+
+        return $this;
     }
 
 }

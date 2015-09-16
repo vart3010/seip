@@ -10,6 +10,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 /**
  * REUNIONES CIRCULOS DE TRABAJO
  * @author Victor Tortolero vart10.30@gmail.com
+ * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  * @ORM\HasLifecycleCallbacks()
  */
 class Meeting {
@@ -43,6 +44,11 @@ class Meeting {
      * @ORM\Column(name="updatedAt", type="datetime")
      */
     private $updatedAt;
+    
+       /**
+     * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
+     */
+    private $deletedAt;
 
     /**
      * @var string
@@ -168,6 +174,17 @@ class Meeting {
      */
     public function getUpdatedAt() {
         return $this->updatedAt;
+    }
+    
+    
+     function getDeletedAt() {
+        return $this->deletedAt;
+    }
+
+    function setDeletedAt($deletedAt) {
+        $this->deletedAt = $deletedAt;
+
+        return $this;
     }
 
     /**
