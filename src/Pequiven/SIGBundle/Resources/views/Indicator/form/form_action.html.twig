@@ -73,6 +73,7 @@
                     </div>
             {{ form_rest(form) }}
 
+                        {{ form_widget(form.ref) }}
             {% endif %}    
             {{ form_errors(form_value) }}                     
                     <div class="field-block button-height" >                    
@@ -86,7 +87,6 @@
                     </div>
                     {# <div class="field-block button-height" > #}
                         {# {{ form_label(form.ref) }} #}
-                        {{ form_widget(form.ref) }}
                     {# </div> #}
             {{ form_rest(form_value) }}
 
