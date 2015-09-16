@@ -400,3 +400,10 @@ sylius_resource:
                 controller: Pequiven\SEIPBundle\Controller\Politic\ProposalController
                 model: Pequiven\SEIPBundle\Entity\Politic\Proposal
                 repository: Pequiven\SEIPBundle\Repository\Politic\ProposalRepository
+        pequiven.meeting:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:Politic/Meeting
+            classes:
+                controller: Pequiven\SEIPBundle\Controller\Politic\MeetingController
+                model: Pequiven\SEIPBundle\Entity\Politic\Proposal
+                repository: Pequiven\SEIPBundle\Repository\Politic\MeetingRepository

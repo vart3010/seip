@@ -176,15 +176,18 @@ class WorkStudyCircleController extends SEIPController {
     public function showAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
         $workStudyCircle = $em->getRepository('PequivenSEIPBundle:Politic\WorkStudyCircle')->findOneBy(array('id' => $request->get("id")));
-        
+
         $proposals = $em->getRepository('PequivenSEIPBundle:Politic\Proposal')->findBy(array('workStudyCircle' => $workStudyCircle->getId()));
+        $meetings = $workStudyCircle->getMeeting();
 
         $user = $this->getUser();
 
         return $this->render('PequivenSEIPBundle:Politic:WorkStudyCircle\show.html.twig', array(
                     'workStudyCircle' => $workStudyCircle,
                     'userData' => $user,
-                    'proposals' => $proposals
+                    'proposals' => $proposals,
+                    'meetings' => $meetings,
+                    'user'=>$user
         ));
     }
 
@@ -257,26 +260,26 @@ class WorkStudyCircleController extends SEIPController {
             $titlesCircles = array(
                 "caption" => "Cantidad de Circulos por Complejo",
                 "subCaption" => "",
-                "ejeyLeft"=>"Cant Circulos",
-                "type"=>"circle"
+                "ejeyLeft" => "Cant Circulos",
+                "type" => "circle"
             );
-            
+
             $titlesUser = array(
                 "caption" => "Cantidad de Circulos por Complejo",
                 "subCaption" => "",
-                "ejeyLeft"=>"Cant Empleados",
-                "type"=>"user"
+                "ejeyLeft" => "Cant Empleados",
+                "type" => "user"
             );
-            
+
             $datosGraphic = array(
                 "complejos" => $complejo,
                 "usersTemp" => $usersTemp,
                 "complejosCant" => $complejosCant,
                 "cantNotNull" => $cantNotNull
             );
-            
-            $generateColumnCircle = $workService->generateColumn3d($titlesCircles,$datosGraphic);
-            $generateColumnUsers = $workService->generateColumn3d($titlesUser,$datosGraphic);
+
+            $generateColumnCircle = $workService->generateColumn3d($titlesCircles, $datosGraphic);
+            $generateColumnUsers = $workService->generateColumn3d($titlesUser, $datosGraphic);
 
 
             $totalCircleGoal = $totalCircleReg = $totalEmpGoal = $totalEmpReg = 0;
