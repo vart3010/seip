@@ -130,7 +130,12 @@ class WorkStudyCircle extends ModelWorkStudyCircle implements PeriodItemInterfac
      * @ORM\OneToMany(targetEntity="\Pequiven\SEIPBundle\Entity\User", mappedBy="workStudyCircle", cascade={"persist"})
      * */
     private $userWorkerId;
-    
+
+    /**
+     * @ORM\OneToMany(targetEntity="\Pequiven\SEIPBundle\Entity\Politic\Meeting", mappedBy="workStudyCircle")
+     */
+    private $meetings;
+
     /**
      * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
      */
@@ -143,6 +148,7 @@ class WorkStudyCircle extends ModelWorkStudyCircle implements PeriodItemInterfac
         $this->userWorkerId = new \Doctrine\Common\Collections\ArrayCollection();
         $this->gerencias = new \Doctrine\Common\Collections\ArrayCollection();
         $this->gerenciaSeconds = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->meetings = new \Doctrine\Common\Collections\ArrayCollection();
         //$this->members = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -414,7 +420,7 @@ class WorkStudyCircle extends ModelWorkStudyCircle implements PeriodItemInterfac
     public function getGerenciaSeconds() {
         return $this->gerenciaSeconds;
     }
-    
+
     function getDeletedAt() {
         return $this->deletedAt;
     }
@@ -423,6 +429,33 @@ class WorkStudyCircle extends ModelWorkStudyCircle implements PeriodItemInterfac
         $this->deletedAt = $deletedAt;
 
         return $this;
+    }
+
+    /**
+     * 
+     * @param \Pequiven\SEIPBundle\Entity\Politic\Meeting $meeting
+     * @return \Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle
+     */
+    public function addMeeting(Meeting $meeting) {
+        $this->meetings->add($meeting);
+
+        return $this;
+    }
+
+    /**
+     * 
+     * @param \Pequiven\SEIPBundle\Entity\Politic\Meeting $meeting
+     */
+    public function removeMeeting(Meeting $meeting) {
+        $this->meetings->removeElement($meeting);
+    }
+
+    /**
+     * 
+     * @return type
+     */
+    public function getMeeting() {
+        return $this->meetings;
     }
 
 }

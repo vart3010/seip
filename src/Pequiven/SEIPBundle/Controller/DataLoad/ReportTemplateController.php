@@ -736,6 +736,7 @@ class ReportTemplateController extends SEIPController {
         }
 
         $dateReport = new \DateTime(date("Y-m-d", strtotime("-1 day")));
+        
         if (!$this->getSecurityService()->isGranted('ROLE_SEIP_DATA_LOAD_CHANGE_DATE')) {
             $dateReport = new \DateTime(date("Y-m-d", strtotime("-1 day")));
         }
