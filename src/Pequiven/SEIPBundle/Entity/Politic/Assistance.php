@@ -6,10 +6,12 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Pequiven\SEIPBundle\Entity\Politic\Meeting;
 
 /**
  * CONTROS DE ASISTENCIA DE REUNIONES
  * @author Victor Tortolero vart10.30@gmail.com
+ * @ORM\Entity()
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  * @ORM\HasLifecycleCallbacks()
  */
@@ -34,8 +36,8 @@ class Assistance {
     private $user;
 
     /**
-     * @ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\Politic\Meeting", inversedBy="assistances")
-     * @JoinColumn(name="meeting_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="\Pequiven\SEIPBundle\Entity\Politic\Meeting", inversedBy="assistances")
+     * @ORM\JoinColumn(name="meeting_id", referencedColumnName="id")
      * */
     private $meeting;
 

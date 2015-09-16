@@ -10,6 +10,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 /**
  * REUNIONES CIRCULOS DE TRABAJO
  * @author Victor Tortolero vart10.30@gmail.com
+ * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\Politic\MeetingRepository")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  * @ORM\HasLifecycleCallbacks()
  */
@@ -72,10 +73,11 @@ class Meeting {
     private $subject;
 
     /**
-     * @OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\Politic\Assistance", mappedBy="meeting")
+     * @ORM\OneToMany(targetEntity="\Pequiven\SEIPBundle\Entity\Politic\Assistance", mappedBy="meeting")
      */
     private $assistances;
 
+    
     public function __construct() {
         $this->assistances = new \Doctrine\Common\Collections\ArrayCollection();
     }
