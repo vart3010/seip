@@ -31,8 +31,8 @@ class ProposalType extends AbstractType {
                 'label_attr' => array('class' => 'label'),
                 'mapped' => false,
                 'attr' => array(
-                    'class' => 'input input-large',
-                    'cols' => '40',
+//                    'class' => 'input input-large',
+                    'cols' => '80',
                     'rows' => '10',
                     )))
             ->add('description2', 'textarea', array(
@@ -40,8 +40,8 @@ class ProposalType extends AbstractType {
                 'label_attr' => array('class' => 'label'),
                 'mapped' => false,
                 'attr' => array(
-                    'class' => 'input input-large',
-                    'cols' => '40',
+//                    'class' => 'input input-large',
+                    'cols' => '80',
                     'rows' => '10',
                     )))
         ;
