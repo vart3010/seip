@@ -33,7 +33,20 @@ class EvaluationDetailsService implements \Symfony\Component\DependencyInjection
         
         $periodActual = $period;
         $canBeEvaluated = $isValidAudit = true;
+        
+        //Seteo Base de las Variables
         $sumResult = 0.0;
+        $sumGoals = 0.0;
+        $quantityGoals = 0;
+        $resultGoals = 0.0;
+        $sumArrangementPrograms = 0.0;
+        $quantityArrangementPrograms = 0;
+        $resultArrangementPrograms = 0.0;
+        $sumObjetives = 0.0;
+        $quantityObjetives = 0;
+        $resultObjetives = 0.0;
+        $finalResult = 0.0;
+        
         if(count($this->errors) == 0){
             //Repositorios
             $goalRepository = $this->container->get('pequiven_seip.repository.arrangementprogram_goal');
@@ -70,6 +83,8 @@ class EvaluationDetailsService implements \Symfony\Component\DependencyInjection
                 $realDateEnd = $summary['dateEndReal'];
                 
                 $sumResult = $arrangementProgram->getUpdateResultByAdmin() ? $sumResult + $arrangementProgram->getResultModified() : $sumResult + $arrangementProgram->getResult();
+                $sumArrangementPrograms = $arrangementProgram->getUpdateResultByAdmin() ? $sumArrangementPrograms + $arrangementProgram->getResultModified() : $sumArrangementPrograms + $arrangementProgram->getResult();
+                $quantityArrangementPrograms++;
                         
                 $arrangementPrograms[$key] = array(
                     'id' => sprintf('PG-%s',$arrangementProgram->getId()),
@@ -151,6 +166,8 @@ class EvaluationDetailsService implements \Symfony\Component\DependencyInjection
                 }
                 
                 $sumResult = $objetive->getUpdateResultByAdmin() ? $sumResult + $objetive->getResultModified() : $sumResult + $objetive->getResult();
+                $sumObjetives = $objetive->getUpdateResultByAdmin() ? $sumObjetives + $objetive->getResultModified() : $sumObjetives + $objetive->getResult();
+                $quantityObjetives++;
                 
                 $data = array(
                     'id' => sprintf('OB-%s',$objetive->getId()),
@@ -188,6 +205,8 @@ class EvaluationDetailsService implements \Symfony\Component\DependencyInjection
                 $realDateEnd->setDate($realDateEnd->format('Y'), $summary['realMonthDateEnd'], \Pequiven\SEIPBundle\Service\ToolService::getLastDayMonth($realDateEnd->format('Y'), $summary['realMonthDateEnd']));
                 
                 $sumResult = $goal->getUpdateResultByAdmin() ? $sumResult + $goal->getResultModified() : $sumResult + $goal->getResult();
+                $sumGoals = $goal->getUpdateResultByAdmin() ? $sumGoals + $goal->getResultModified() : $sumGoals + $goal->getResult();
+                $quantityGoals++;
                 
                 $goals[$key] = array(
                     'id' => sprintf('ME-%s',$goal->getId()),
@@ -312,6 +331,42 @@ class EvaluationDetailsService implements \Symfony\Component\DependencyInjection
         }
         $evaluationDetails->setQuantityItems($totalItems);
         $evaluationDetails->setSumResult($sumResult);
+        
+        //TIPOS DE CASOS DE EVALUACIÓN
+        if(($quantityArrangementPrograms > 0 || $quantityGoals > 0) && $quantityObjetives > 0){//Caso 1: Cuando tiene programas de gestión o metas y objetivos
+            if($quantityArrangementPrograms > 0 && $quantityGoals > 0){
+                $resultTotalArrangementProgramsGoals = ($sumArrangementPrograms / $quantityArrangementPrograms) + ($sumGoals / $quantityGoals);
+            } elseif($quantityArrangementPrograms == 0 && $quantityGoals > 0){
+                $resultTotalArrangementProgramsGoals = $sumGoals / $quantityGoals;
+            } elseif($quantityArrangementPrograms > 0 && $quantityGoals == 0){
+                $resultTotalArrangementProgramsGoals = $sumArrangementPrograms / $quantityArrangementPrograms;
+            }
+            $resultTotalObjetives = $sumObjetives / $quantityObjetives;
+            $finalResult = $resultTotalArrangementProgramsGoals * 0.60 + $resultTotalObjetives * 0.40;
+        } elseif(($quantityArrangementPrograms > 0 || $quantityGoals > 0) && $quantityObjetives == 0){//Caso 2: Cuando tiene sólo programas de gestión o metas
+            if($quantityArrangementPrograms > 0 && $quantityGoals > 0){
+                $resultTotalArrangementProgramsGoals = ($sumArrangementPrograms / $quantityArrangementPrograms) + ($sumGoals / $quantityGoals);
+            } elseif($quantityArrangementPrograms == 0 && $quantityGoals > 0){
+                $resultTotalArrangementProgramsGoals = $sumGoals / $quantityGoals;
+            } elseif($quantityArrangementPrograms > 0 && $quantityGoals == 0){
+                $resultTotalArrangementProgramsGoals = $sumArrangementPrograms / $quantityArrangementPrograms;
+            }
+            $finalResult = $resultTotalArrangementProgramsGoals;
+        }elseif(($quantityArrangementPrograms == 0 && $quantityGoals == 0) && $quantityObjetives > 0){//Caso 3: Cuando tiene sólo objetivos
+            $resultTotalObjetives = $sumObjetives / $quantityObjetives;
+            $finalResult = $resultTotalObjetives;
+        }
+        
+        $evaluationDetails->setQuantityGoal($quantityGoals);
+        $evaluationDetails->setSumGoal($sumGoals);
+        $evaluationDetails->setResultGoal($resultGoals);
+        $evaluationDetails->setQuantityArrangementProgram($quantityArrangementPrograms);
+        $evaluationDetails->setSumArrangementProgram($sumArrangementPrograms);
+        $evaluationDetails->setResultArrangementProgram($resultArrangementPrograms);
+        $evaluationDetails->setQuantityObjetive($quantityObjetives);
+        $evaluationDetails->setSumObjetive($sumObjetives);
+        $evaluationDetails->setResultObjetive($resultObjetives);
+        $evaluationDetails->setFinalResult($finalResult);
         
         $em->persist($evaluationDetails);
         
