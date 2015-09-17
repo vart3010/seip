@@ -377,10 +377,17 @@ class WorkStudyCircleController extends SEIPController {
         $workStudyCircle = $em->getRepository('PequivenSEIPBundle:Politic\WorkStudyCircle')->findOneBy(array('id' => $request->get("idWorkStudyCircle")));
 
         $user = $this->getUser();
+        
+        $proposals = $em->getRepository('PequivenSEIPBundle:Politic\Proposal')->findBy(array('workStudyCircle' => $request->get("idWorkStudyCircle")));
+        var_dump($proposals);
+        die();
+        $meetings = $workStudyCircle->getMeeting();
 
         $data = array(
             'workStudyCircle' => $workStudyCircle,
-            'userData' => $user
+            'userData' => $user,
+            'proposals' => $proposals,
+            'meetings' => $meetings
         );
 
         $this->generatePdf($data, 'Reporte de Círculo de Trabajo', 'PequivenSEIPBundle:Politic:WorkStudyCircle\viewPdf.html.twig');

@@ -15,7 +15,7 @@
 {% block body %}
     <br/><br/>
 
-    <table width="95%">
+    <table width="100%">
         <tr>
             <th class="title_bold">1. Datos del Círculo de Estudio y Trabajo</th>
         </tr>
@@ -69,7 +69,7 @@
 
     <br/><br/>
 
-    <table width="95%">
+    <table width="100%">
         <tr>
             <th class="title_bold">2. Datos del Coordinador o Líder</th>
         </tr>
@@ -106,11 +106,11 @@
     <table width="95%" class="simple-table responsive-table tables-extras">  
         <thead>
             <tr>
-                <th scope="col" width="10%" bgcolor="#F2F2F2" class="title_bold"> Nro. </th>
-                <th scope="col" width="20%" bgcolor="#F2F2F2" class="title_bold"> C.I. </th>
-                <th scope="col" width="35%" bgcolor="#F2F2F2" class="title_bold"> Nombre </th>
+                <th scope="col" width="5%" bgcolor="#F2F2F2" class="title_bold"> # </th>
+                <th scope="col" width="15%" bgcolor="#F2F2F2" class="title_bold"> C.I. </th>
+                <th scope="col" width="50%" bgcolor="#F2F2F2" class="title_bold"> Nombre </th>
                 <th scope="col" width="20%" bgcolor="#F2F2F2" class="title_bold"> Teléfono </th>
-                <th scope="col" width="15%" bgcolor="#F2F2F2" class="title_bold"> Extensión </th>                    
+                <th scope="col" width="10%" bgcolor="#F2F2F2" class="title_bold"> Ext. </th>                    
             </tr>
         </thead>
         <tbody>
@@ -122,16 +122,56 @@
                 {% if (userCreatedId != miembro.id) %}
                     {% set count= count + 1%}
                     <tr>
-                        <td width="10%"> {{ count }} </td>
-                        <td width="20%"> {{ miembro.getIndentification() }} </td>
-                        <td width="35%"> {{ miembro.firstname | upper}} {{ miembro.Lastname | upper}}</td>
+                        <td width="5%"> {{ count }} </td>
+                        <td width="15%"> {{ miembro.getIndentification()|number_format(0, ',', '.') }} </td>
+                        <td width="50%"> {{ miembro.firstname | upper}} {{ miembro.Lastname | upper}}</td>
                         <td width="20%"> {{ miembro.cellphone }} </td>
-                        <td width="15%"> {{ miembro.ext }} </td>
+                        <td width="10%"> {{ miembro.ext }} </td>
                     </tr>
                 {% endif %}
             {% endfor %}
         </tbody>
     </table>
+
+    <br/><br/>
+
+    <table width="100%">
+        <tr>
+            <th class="title_bold">4. Propuestas Elaboradas</th>
+        </tr>
+    </table>
+
+    <br/><br/>
+    {% set propuesta = proposals.lineStrategic %}
+    {% for prop in propuesta %}
+        <table width="95%" class="simple-table responsive-table tables-extras"> 
+            <thead>
+                <tr>
+                    <th>Línea Estratégica: {{ proposals.getLineStrategic() }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+                <tr>
+                    <td>
+                        PROPUESTA UNO
+                    </td>                
+                </tr>
+                <tr>
+                    <td>
+                        &nbsp;
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        PROPUESTA DOS
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+    {% endfor %}
+    <br/><br/>
 
 
 
