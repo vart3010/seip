@@ -117,5 +117,48 @@ class ProposalController extends SEIPController {
 
         return $response;
     }
+
+    /**
+     * Edición de Propuestas
+     *
+     *
+     */
+    public function editAction(request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        
+        $id = $request->get('id');
+
+        $proposalData = $em->getRepository('PequivenSEIPBundle:Politic\Proposal')->findOneBy(array('id' => $id));      
+        
+
+        $form = $this->createForm(new ProposalType(), $proposalData);
+        $form->handleRequest($request);
+
+        $em->getConnection()->beginTransaction();
+        if ($form->isSubmitted()) {
+        var_dump($request->get("proposal_data"));
+            $em->persist($proposalData);
+
+            try {
+                $em->flush();
+                $em->getConnection()->commit();
+            } catch (Exception $e) {
+                $em->getConnection()->rollback();
+                throw $e;
+            }
+
+            $this->get('session')->getFlashBag()->add('success', 'Propuesta Actualizada Correctamente');
+            //return $this->redirect($this->generateUrl('pequiven_work_study_circle_show', array("id" => 309)));
+        }
+
+        return $this->render('PequivenSEIPBundle:Politic:Proposal/edit.html.twig', array(
+                    'proposal'=>$proposalData,
+                    'form' => $form->createView()
+        ));
+
+
+        //return $this->render('PequivenSEIPBundle:Politic:Proposal/edit.html.twig', array('proposal'=>$proposal));
+    }
     
 }
