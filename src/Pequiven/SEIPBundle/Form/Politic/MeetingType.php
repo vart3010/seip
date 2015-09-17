@@ -19,7 +19,7 @@ class MeetingType extends AbstractType {
                     'label_attr' => array('class' => 'label bold'),
                     'format' => 'd/M/y',
                     'widget' => 'single_text',
-                    'label'=>'Fecha Reunión',
+                    'label' => 'Fecha Reunión',
                     'attr' => array('class' => 'input input-large'),
                     'required' => true,
                 ])
@@ -29,6 +29,11 @@ class MeetingType extends AbstractType {
                     'attr' => array('class' => 'input input-xlarge')))
                 ->add('subject', 'textarea', array(
                     'label' => 'Tema de la Reunión',
+                    'label_attr' => array('class' => 'label'),
+                    'attr' => array('class' => 'input input-xlarge')))
+                ->add('observation', 'textarea', array(
+                    'label' => 'Observaciones',
+                    'required' => false,
                     'label_attr' => array('class' => 'label'),
                     'attr' => array('class' => 'input input-xlarge')))
 

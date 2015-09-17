@@ -40,6 +40,7 @@ class MeetingController extends SEIPController {
             $meetingObj->setDate($date);
             $meetingObj->setPlace($request->get("meeting_data")["place"]);
             $meetingObj->setSubject($request->get("meeting_data")["subject"]);
+            $meetingObj->setObservation($request->get("meeting_data")["observation"]);
             $meetingObj->setWorkStudyCircle($workStudyCircle);
             $em->persist($meetingObj);
 
