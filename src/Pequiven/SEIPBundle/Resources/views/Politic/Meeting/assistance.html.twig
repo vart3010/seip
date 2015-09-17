@@ -18,9 +18,12 @@
 
                 {% set checkState = "" %}
                 {% set checkValue = 0 %}
+                {% set checkDisabled = "disabled" %}
                 {% set userCreatedId = workStudyCircle.getCreatedBy.id %}
                 {% for member in members %}
-
+                    {% if(is_granted("ROLE_SEIP_MEETING_EDIT_ASSISTANCE") or (userCreatedId==user.id)) %}
+                        {% set checkDisabled = "" %}
+                    {% endif %}
                     {#                    {% if(userCreatedId != member.id) %}#}
                     <tr>
                         <td>{{ loop.index  }}</td>
@@ -37,9 +40,9 @@
                                 {% else  %}
                                     {% set checkState = "" %}
                                 {% endif %}
-                            
-                                <input type="checkbox" name="switchAssistance"  data-meeting="{{ meeting.id }}" data="{{ member.id }}" value="{{ checkValue }}" class="switch blue-active mid-margin-right {{ checkState }}"  data-text-on="SI" data-text-off="NO">
-                            
+
+                                <input type="checkbox" name="switchAssistance"  data-meeting="{{ meeting.id }}" data="{{ member.id }}" value="{{ checkValue }}" class="switch blue-active mid-margin-right {{ checkDisabled }} {{ checkState }}"  data-text-on="SI" data-text-off="NO">
+
                             </p>
                         </td>
                     </tr>

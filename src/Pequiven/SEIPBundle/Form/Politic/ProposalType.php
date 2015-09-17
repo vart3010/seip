@@ -28,21 +28,27 @@ class ProposalType extends AbstractType {
             )))
             ->add('description1', 'textarea', array(
                 'label' => 'Propuesta 1',
-                'label_attr' => array('class' => 'label'),
+                'label_attr' => array(
+                    'class' => 'label',
+                    ),
                 'mapped' => false,
                 'attr' => array(
 //                    'class' => 'input input-large',
                     'cols' => '80',
                     'rows' => '10',
+                    'style' => 'text-transform:uppercase'
                     )))
             ->add('description2', 'textarea', array(
                 'label' => 'Propuesta 2',
-                'label_attr' => array('class' => 'label'),
+                'label_attr' => array(
+                    'class' => 'label',
+                    ),
                 'mapped' => false,
                 'attr' => array(
 //                    'class' => 'input input-large',
                     'cols' => '80',
                     'rows' => '10',
+                    'style' => 'text-transform:uppercase'
                     )))
         ;
     }
