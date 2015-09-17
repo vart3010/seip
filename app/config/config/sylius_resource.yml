@@ -407,3 +407,10 @@ sylius_resource:
                 controller: Pequiven\SEIPBundle\Controller\Politic\MeetingController
                 model: Pequiven\SEIPBundle\Entity\Politic\Proposal
                 repository: Pequiven\SEIPBundle\Repository\Politic\MeetingRepository
+        pequiven.assistance:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:Politic/Assistance
+            classes:
+                controller: Pequiven\SEIPBundle\Controller\Politic\AssistanceController
+                model: Pequiven\SEIPBundle\Entity\Politic\Assistance
+                repository: Pequiven\SEIPBundle\Repository\Politic\AssistanceRepository

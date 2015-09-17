@@ -94,6 +94,76 @@ class EvaluationDetails extends ModelEvaluationDetails implements PeriodItemInte
      */
     private $error = false;
     
+    /**
+     * @var float
+     * 
+     * @ORM\Column(name="sumGoal", type="float", nullable=true)
+     */
+    private $sumGoal;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="quantityGoal", type="integer")
+     */
+    private $quantityGoal = 0;
+    
+    /**
+     * @var float
+     * 
+     * @ORM\Column(name="resultGoal", type="float", nullable=true)
+     */
+    private $resultGoal;
+    
+    /**
+     * @var float
+     * 
+     * @ORM\Column(name="sumArrangementProgram", type="float", nullable=true)
+     */
+    private $sumArrangementProgram;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="quantityArrangementProgram", type="integer")
+     */
+    private $quantityArrangementProgram = 0;
+    
+    /**
+     * @var float
+     * 
+     * @ORM\Column(name="resultArrangementProgram", type="float", nullable=true)
+     */
+    private $resultArrangementProgram;
+    
+    /**
+     * @var float
+     * 
+     * @ORM\Column(name="sumObjetive", type="float", nullable=true)
+     */
+    private $sumObjetive;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="quantityObjetive", type="integer")
+     */
+    private $quantityObjetive = 0;
+    
+    /**
+     * @var float
+     * 
+     * @ORM\Column(name="resultObjetive", type="float", nullable=true)
+     */
+    private $resultObjetive;
+    
+    /**
+     * @var float
+     * 
+     * @ORM\Column(name="finalResult", type="float", nullable=true)
+     */
+    private $finalResult;
+    
     //TODO:
     //SUM METAS-CANT.METAS-RES.METAS-SUM.PG-CANT.PG-RES.PG-SUM.OBJ-CANT.OBJ-RES.OBJ-RES.FINAL
     //(PROM METAS + PROM PG) * 60% + (PROM OBJ) * 40%
@@ -181,6 +251,88 @@ class EvaluationDetails extends ModelEvaluationDetails implements PeriodItemInte
     function setError($error) {
         $this->error = $error;
     }
+    
+    function getSumGoal() {
+        return $this->sumGoal;
+    }
+
+    function getQuantityGoal() {
+        return $this->quantityGoal;
+    }
+
+    function getResultGoal() {
+        return $this->resultGoal;
+    }
+
+    function getSumArrangementProgram() {
+        return $this->sumArrangementProgram;
+    }
+
+    function getQuantityArrangementProgram() {
+        return $this->quantityArrangementProgram;
+    }
+
+    function getResultArrangementProgram() {
+        return $this->resultArrangementProgram;
+    }
+
+    function getSumObjetive() {
+        return $this->sumObjetive;
+    }
+
+    function getQuantityObjetive() {
+        return $this->quantityObjetive;
+    }
+
+    function getResultObjetive() {
+        return $this->resultObjetive;
+    }
+
+    function getFinalResult() {
+        return $this->finalResult;
+    }
+
+    function setSumGoal($sumGoal) {
+        $this->sumGoal = $sumGoal;
+    }
+
+    function setQuantityGoal($quantityGoal) {
+        $this->quantityGoal = $quantityGoal;
+    }
+
+    function setResultGoal($resultGoal) {
+        $this->resultGoal = $resultGoal;
+    }
+
+    function setSumArrangementProgram($sumArrangementProgram) {
+        $this->sumArrangementProgram = $sumArrangementProgram;
+    }
+
+    function setQuantityArrangementProgram($quantityArrangementProgram) {
+        $this->quantityArrangementProgram = $quantityArrangementProgram;
+    }
+
+    function setResultArrangementProgram($resultArrangementProgram) {
+        $this->resultArrangementProgram = $resultArrangementProgram;
+    }
+
+    function setSumObjetive($sumObjetive) {
+        $this->sumObjetive = $sumObjetive;
+    }
+
+    function setQuantityObjetive($quantityObjetive) {
+        $this->quantityObjetive = $quantityObjetive;
+    }
+
+    function setResultObjetive($resultObjetive) {
+        $this->resultObjetive = $resultObjetive;
+    }
+
+    function setFinalResult($finalResult) {
+        $this->finalResult = $finalResult;
+    }
+
+
 
 
 }

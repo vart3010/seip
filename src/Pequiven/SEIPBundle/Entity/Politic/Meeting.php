@@ -67,6 +67,13 @@ class Meeting {
     /**
      * @var string
      *
+     * @ORM\Column(name="observation",type="text",nullable=true)
+     */
+    private $observation;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="subject",type="string",length=255,nullable=false)
      */
     private $subject;
@@ -256,8 +263,24 @@ class Meeting {
      * 
      * @return type
      */
-    public function getWorkStydyCircle() {
+    public function getWorkStudyCircle() {
         return $this->workStudyCircle;
+    }
+
+    /**
+     * 
+     * @return type
+     */
+    function getObservation() {
+        return $this->observation;
+    }
+
+    /**
+     * 
+     * @param type $observation
+     */
+    function setObservation($observation) {
+        $this->observation = $observation;
     }
 
 }

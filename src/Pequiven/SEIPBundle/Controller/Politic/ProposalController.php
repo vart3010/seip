@@ -33,7 +33,7 @@ class ProposalController extends SEIPController {
         $proposalsRegistered = $em->getRepository('PequivenSEIPBundle:Politic\Proposal')->findBy(array('workStudyCircle' => $idWorkStudyCircle));
         $proposalsArray = array();
         foreach ($proposalsRegistered as $proposalRegistered){
-            $proposalsArray[$proposalRegistered->getId()] = true;
+            $proposalsArray[$proposalRegistered->getLineStrategic()->getId()] = true;
         }
 
         $user = $this->getUser();
@@ -51,7 +51,7 @@ class ProposalController extends SEIPController {
             $lineStrategicObject = $LineStrategicRepository->findOneBy(array('id' => $request->get("proposal_data")["lineStrategic"]));
             
             if (strlen($proposal1) > 0 && strlen($proposal2) > 0){
-                if(array_key_exists($request->get("proposal_data")["lineStrategic"], $proposals)){
+                if(array_key_exists($request->get("proposal_data")["lineStrategic"], $proposalsArray)){
                     $this->get('session')->getFlashBag()->add('error', 'La Línea Estratégica ya tiene sus 2 propuestas');
                 } else{
                     for($i = 1;$i <= 2; $i++){

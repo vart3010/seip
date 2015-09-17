@@ -6,8 +6,8 @@ workStudyCircle:
         nombre: Nombre de Círculo
         region: Región
         complejo: Complejo
-        gerenciaFirst: Gerencia de Primera Linea
-        gerenciaSecond: Gerencia De Segunda Linea
+        gerenciaFirst: Gerencia de Primera Línea
+        gerenciaSecond: Gerencia de Segunda Línea
         superintendencia: Superintendencia
         supervision: Supervisión 
         departamento: Departamento
@@ -33,12 +33,16 @@ workStudyCircle:
         
     meetings:
         title: Reuniones
-        titleSingle: Reunione
+        titleSingle: Reuniones
         add: Añadir Reunión
         dataMeeting: Información de Reunión
         date: Fecha Reunión
         place: Lugar  
         subject: Tema
+        observation: Observaciones
+        edit: Editar Reunión
             
     assistances:
         dataAssistances: Participantes
+        user: Participante
+        assistance: Asistió
