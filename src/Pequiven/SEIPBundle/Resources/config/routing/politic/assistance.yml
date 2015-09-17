@@ -1,0 +1,5 @@
+pequiven_assistance_edit:
+    path: /
+    defaults:
+        _controller: pequiven.controller.assistance:editAction
+   

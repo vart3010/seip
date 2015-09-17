@@ -68,3 +68,7 @@ pequiven_politic_proposal:
 pequiven_politic_meetingl:
     resource: "@PequivenSEIPBundle/Resources/config/routing/politic/meeting.yml"
     prefix:   /meeting
+    
+pequiven_politic_assistance:
+    resource: "@PequivenSEIPBundle/Resources/config/routing/politic/assistance.yml"
+    prefix:   /assistance

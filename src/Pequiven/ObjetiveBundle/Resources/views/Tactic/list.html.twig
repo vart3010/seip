@@ -20,6 +20,14 @@
 
     <div ng-controller="TableGroupingFormatController">
         <div ng-controller="TableObjetiveTacticController">
+
+            <details class="details margin-bottom" open="">
+                <summary role="button" aria-expanded="true">
+                    {{ 'pequiven.filters'|trans({},'messages') }}
+                </summary>
+                <div class="with-padding">
+                    <div class="columns">
+
                 {% set filterYesNo = [
                     { 'id':0,'name': ('sigtec.no'|trans)},
                     { 'id':1,'name': ('sigtec.yes'|trans)},
@@ -28,11 +36,25 @@
                     { 'id':1,'name': ('sigtec.active'|trans)},
                     { 'id':0,'name': ('sigtec.inactive'|trans)},
                 ] %}
+                        
+                
+                {% if ((app.user.getRoles[0] == 'ROLE_DIRECTIVE' or app.user.getRoles[0] == 'ROLE_DIRECTIVE_AUX') or (is_granted('ROLE_WORKER_PLANNING'))) %}
+                    <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                        <label class="bold">
+                            {{'pequiven_objetive.gerenciaFirst'|trans({})}}
+                        </label>
+                              <br/>
+                          <div class="with-mid-padding">
+                              <select ng-model="gerenciaFirst" id="selectGerenciaFirst" class="select2-offscreen populate" style="width:300px;"></select>
+                          </div>
+                    </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </details>
+
                 <div loading-container="tableParams.settings().$loading">
                     <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager" template-header="custom/header" api-data-url="{{ path('objetiveTacticList',{_format:'json',_period: app.request.get("_period")}) }}" export-csv="csv" class="table table-responsive table-extra-info">
-                        {% if ((app.user.getRoles[0] == 'ROLE_DIRECTIVE' or app.user.getRoles[0] == 'ROLE_DIRECTIVE_AUX') or (is_granted('ROLE_WORKER_PLANNING'))) %}
-                            <h3>Gerencia 1ra Línea: </h3><select ng-model="gerenciaFirst" id="selectGerenciaFirst" class="select2-offscreen populate" style="width:300px;"></select>
-                        {% endif %}
                         <tbody ng-repeat="group in $groups">
                             <tr class="ng-table-group">
                                 <td colspan="{$ $columns.length $}">

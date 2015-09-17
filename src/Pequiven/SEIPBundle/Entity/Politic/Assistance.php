@@ -47,6 +47,13 @@ class Assistance {
     private $deletedAt;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="assistance", type="boolean")
+     */
+    private $assistance = false;
+
+    /**
      * Get id
      *
      * @return integer 
@@ -100,5 +107,23 @@ class Assistance {
 
         return $this;
     }
+
+    /**
+     * 
+     * @return type
+     */
+    function getAssistance() {
+        return $this->assistance;
+    }
+
+    /**
+     * 
+     * @param type $assistance
+     */
+    function setAssistance($assistance) {
+        $this->assistance = $assistance;
+    }
+    
+    
 
 }

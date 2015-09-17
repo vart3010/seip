@@ -8,6 +8,7 @@ use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
 use Pequiven\SEIPBundle\Entity\Politic\Meeting;
 use Pequiven\SEIPBundle\Form\Politic\MeetingType;
+use Pequiven\SEIPBundle\Entity\Politic\Assistance;
 
 /**
  * Controlador de reuniones de estudio de trabajo
@@ -42,6 +43,16 @@ class MeetingController extends SEIPController {
             $meetingObj->setWorkStudyCircle($workStudyCircle);
             $em->persist($meetingObj);
 
+            //SE AGREGAN LOS MIEMBROS A LA LISTA DE ASISTENCIA DE LA REUNION CON ASSISTENCIA = FALSE 
+            $members = $workStudyCircle->getUserWorkerId();
+            foreach ($members as $member) {
+                $assistance = new Assistance();
+                $assistance->setUser($member);
+                $assistance->setMeeting($meetingObj);
+                $em->persist($assistance);
+            }
+
+
             $em->flush();
 
             try {
@@ -54,7 +65,7 @@ class MeetingController extends SEIPController {
 
             $this->get('session')->getFlashBag()->add('success', 'Reunión Guardada Correctamente');
 
-            return $this->redirect($this->generateUrl('pequiven_work_study_circle_show', array("id" => $workStudyCircle->getId())));
+            return $this->redirect($this->generateUrl('pequiven_meeting_view', array("meeting_id" => $meetingObj->getId())));
         }
 
 
@@ -68,9 +79,31 @@ class MeetingController extends SEIPController {
         $em = $this->getDoctrine()->getManager();
         $idMeeting = $request->get("meeting_id");
         $meeting = $em->getRepository('PequivenSEIPBundle:Politic\Meeting')->findOneBy(array('id' => $idMeeting));
+        $workStudyCircle = $meeting->getWorkStudyCircle();
+        $members = $workStudyCircle->getUserWorkerId();
 
+        $assistance = $meeting->getAssistances();
+        $assistanceIds = array();
+        foreach ($assistance as $assis) {
+            $assistanceIds[$assis->getUser()->getId()] = $assis->getAssistance();
+        }
+        
 
         return $this->render('PequivenSEIPBundle:Politic:Meeting\view.html.twig', array(
+                    'meeting' => $meeting,
+                    'members' => $members,
+                    'workStudyCircle' => $workStudyCircle,
+                    'assistanceIds'=>$assistanceIds
+        ));
+    }
+
+    public function editAcction(Request $request) {
+        $em = $this->getDoctrine()->getManager();
+        $idMeeting = $request->get("meeting_id");
+        $meeting = $em->getRepository('PequivenSEIPBundle:Politic\Meeting')->findOneBy(array('id' => $idMeeting));
+
+
+        return $this->render('PequivenSEIPBundle:Politic:Meeting\edit.html.twig', array(
                     'meeting' => $meeting
         ));
     }
