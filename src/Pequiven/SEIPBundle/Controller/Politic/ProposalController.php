@@ -128,6 +128,7 @@ class ProposalController extends SEIPController {
         $em = $this->getDoctrine()->getManager();
         
         $id = $request->get('id');
+        $idCircle = $request->get('idCircle');
 
         $proposalData = $em->getRepository('PequivenSEIPBundle:Politic\Proposal')->findOneBy(array('id' => $id));      
         
@@ -140,8 +141,12 @@ class ProposalController extends SEIPController {
         if ($form->isSubmitted()) {
             
             $line = $request->get("proposal_data")['lineStrategic'];
-            //var_dump($request->get("proposal_data"));
             $description = $request->get("proposal_data")['description'];
+
+            $lineData = $this->get('pequiven.repository.linestrategic')->findOneBy(array('id' => $line)); //Llamada linea
+
+            $proposalData->setLineStrategic($lineData);
+            $proposalData->setDescription($description);
             
             $em->persist($proposalData);
 
@@ -154,12 +159,13 @@ class ProposalController extends SEIPController {
             }
 
             $this->get('session')->getFlashBag()->add('success', 'Propuesta Actualizada Correctamente');
-            //return $this->redirect($this->generateUrl('pequiven_work_study_circle_show', array("id" => 309)));
+            return $this->redirect($this->generateUrl('pequiven_work_study_circle_show', array("id" => $idCircle)));
         }
 
         return $this->render('PequivenSEIPBundle:Politic:Proposal/edit.html.twig', array(
-                    'proposal'=>$proposalData,
-                    'form' => $form->createView()
+                    'proposal' => $proposalData,
+                    'circle' => $idCircle,
+                    'form'     => $form->createView()
         ));
 
 

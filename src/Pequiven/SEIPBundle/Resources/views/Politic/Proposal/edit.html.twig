@@ -15,7 +15,7 @@
 
 {% block body -%}
 
-    <form method="POST" action="{{ path("pequiven_proposal_view_edit",{id:proposal.id}) }}">
+    <form method="POST" action="{{ path("pequiven_proposal_view_edit",{id:proposal.id, idCircle:circle}) }}">
         <br /><br />
         
             <fieldset class="fieldset fields-list">
