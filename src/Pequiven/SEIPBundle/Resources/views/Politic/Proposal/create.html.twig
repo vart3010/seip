@@ -78,10 +78,13 @@
                 url: '{{ path("pequiven_proposal_show_objetives") }}',
                 data: data,
                 success: function(data) {
-                    var text = '<label class="label" style="color:#FF0004">Objetivos Estratégicos</label><br>';
+                    var text = '<label class="label" style="color:#FF0004;text-transform:uppercase">Objetivos Estratégicos</label>';
+                    var totalObjetiveStrategics = data.length;
+                    text = text + '<div style="margin-left:20px;;padding:10px;border-width:4px;border-style:double;border-color:#FF0004">';
                     for(var i=0, total = data.length; i<total; i++){
                         text = text + '<span>' + data[i].ref + data[i].description + '</span><br>';
                     }
+                    text = text + '</div>';
                     $('#objetives').fadeOut("slow",function(){
                         $('#objetives').html(text);
                         $('#objetives').fadeIn();
