@@ -205,6 +205,7 @@ security:
             - ROLE_SEIP_WORK_STUDY_CIRCLES_VIEW
             - ROLE_SEIP_WORK_STUDY_CIRCLES_INACTIVE_VALIDATION_MEMBERS
             - ROLE_SEIP_PROPOSAL_ADD
+            - ROLE_SEIP_MEETING
             
             # Permisos especiales
             - ROLE_SEIP_UPDATE_RESULT_OBJECTS

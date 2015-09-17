@@ -256,7 +256,7 @@ class Meeting {
      * 
      * @return type
      */
-    public function getWorkStydyCircle() {
+    public function getWorkStudyCircle() {
         return $this->workStudyCircle;
     }
 
