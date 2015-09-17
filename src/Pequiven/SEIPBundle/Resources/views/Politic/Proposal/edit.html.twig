@@ -17,9 +17,8 @@
 
     <form method="POST" action="{{ path("pequiven_proposal_view_edit",{id:proposal.id}) }}">
         <br /><br />
-        {{ form_errors(form) }}
-
-        <fieldset class="fieldset fields-list">
+        
+            <fieldset class="fieldset fields-list">
             <legend class="legend">Datos de la Propuesta</legend>
             <div class="field-block button-height">
                 {{ form_label(form.lineStrategic) }}
@@ -34,7 +33,7 @@
             </div>
             <div class="field-block button-height">
                 <label class="label">Propuesta</label>
-                <textarea class="input" cols="80" rows="10" id="description">{{ proposal.description }}</textarea>
+                <textarea class="input" cols="80" rows="10" id="description" name="proposal_data[description]">{{ proposal.description }}</textarea>
             </div>
 
         </fieldset>

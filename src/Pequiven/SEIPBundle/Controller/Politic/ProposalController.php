@@ -132,12 +132,17 @@ class ProposalController extends SEIPController {
         $proposalData = $em->getRepository('PequivenSEIPBundle:Politic\Proposal')->findOneBy(array('id' => $id));      
         
 
-        $form = $this->createForm(new ProposalType(), $proposalData);
+        $form = $this->createForm(new ProposalType, $proposalData);
         $form->handleRequest($request);
 
         $em->getConnection()->beginTransaction();
+        
         if ($form->isSubmitted()) {
-        var_dump($request->get("proposal_data"));
+            
+            $line = $request->get("proposal_data")['lineStrategic'];
+            //var_dump($request->get("proposal_data"));
+            $description = $request->get("proposal_data")['description'];
+            
             $em->persist($proposalData);
 
             try {
