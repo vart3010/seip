@@ -40,6 +40,7 @@ workStudyCircle:
         place: Lugar  
         subject: Tema
         observation: Observaciones
+        edit: Editar Reunión
             
     assistances:
         dataAssistances: Participantes
