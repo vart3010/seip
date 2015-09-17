@@ -39,6 +39,8 @@ workStudyCircle:
         date: Fecha Reunión
         place: Lugar  
         subject: Tema
+        observation: Observaciones
+        edit: Editar Reunión
             
     assistances:
         dataAssistances: Participantes
