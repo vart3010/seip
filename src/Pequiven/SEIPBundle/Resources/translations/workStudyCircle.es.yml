@@ -33,7 +33,7 @@ workStudyCircle:
         
     meetings:
         title: Reuniones
-        titleSingle: Reunione
+        titleSingle: Reuniones
         add: Añadir Reunión
         dataMeeting: Información de Reunión
         date: Fecha Reunión
@@ -42,3 +42,5 @@ workStudyCircle:
             
     assistances:
         dataAssistances: Participantes
+        user: Participante
+        assistance: Asistió

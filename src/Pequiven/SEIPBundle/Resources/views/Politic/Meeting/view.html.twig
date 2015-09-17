@@ -10,7 +10,10 @@
     {{ contentHeader("workStudyCircle.meetings.title" | trans({}))   }}
 {% endblock %}
 
+
+
 {% block body %}
+
 
     <fieldset class="fieldset">
         <legend class="legend">{{ 'workStudyCircle.meetings.titleSingle'|trans }}&nbsp;</legend>
@@ -35,8 +38,42 @@
             </div>
         </div>
     </fieldset>
+    <br>
+    {% include 'PequivenSEIPBundle:Politic:Meeting/assistance.html.twig' %}
 
 
 {% endblock %}
 
 
+{% block javascript %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#switch-mode').change(function () {
+                $('.switch-wrapper')[this.checked ? 'addClass' : 'removeClass']('reversed-switches');
+                
+            });
+
+            $("p.assistance input").change(function () {
+                var data = $(this).attr("data");
+                var meeting = $(this).attr("data-meeting");
+                var value = $(this).val();
+
+
+                var data = {
+                    user_id: data,
+                    value: value,
+                    meeting: meeting
+                };
+                $.ajax({
+                    type: 'get',
+                    url: '{{ path("pequiven_assistance_edit") }}',
+                    data: data,
+                    success: function (data) {
+                        console.log(data);
+                    }
+                });
+
+            });
+        });
+    </script>
+{% endblock %}
