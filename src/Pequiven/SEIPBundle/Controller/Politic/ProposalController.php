@@ -40,8 +40,8 @@ class ProposalController extends SEIPController {
         $em->getConnection()->beginTransaction();
         if ($form->isSubmitted() && $form->isValid()) {
             
-            $proposal1 = $request->get("proposal_data")["description1"];
-            $proposal2 = $request->get("proposal_data")["description2"];
+            $proposal1 = strtoupper($request->get("proposal_data")["description1"]);
+            $proposal2 = strtoupper($request->get("proposal_data")["description2"]);
             $proposals = array();
             array_push($proposals, $proposal1);
             array_push($proposals, $proposal2);
@@ -116,6 +116,57 @@ class ProposalController extends SEIPController {
         $response->setData($objetiveChildrenStrategic);
 
         return $response;
+    }
+
+    /**
+     * Edición de Propuestas
+     *
+     *
+     */
+    public function editAction(request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        
+        $id = $request->get('id');
+        $idCircle = $request->get('idCircle');
+
+        $proposalData = $em->getRepository('PequivenSEIPBundle:Politic\Proposal')->findOneBy(array('id' => $id));      
+        
+
+        $form = $this->createForm(new ProposalType, $proposalData);//Para reutilizar en form de la propuesta (El select2)
+        $form->handleRequest($request);
+
+        $em->getConnection()->beginTransaction();
+        
+        if ($form->isSubmitted()) {
+            
+            //$line = $request->get("proposal_data")['lineStrategic'];//Recibiendo el id de la Linea
+            $description = strtoupper($request->get("proposal_data")['description']);//Recibiendo la Propuesta Editada
+
+            //$lineData = $this->get('pequiven.repository.linestrategic')->findOneBy(array('id' => $line)); //Llamada linea
+
+            //$proposalData->setLineStrategic($lineData);//Pasando la linea
+            $proposalData->setDescription($description);//Pasando la propuesta editada
+            
+            $em->persist($proposalData);
+
+            try {
+                $em->flush();
+                $em->getConnection()->commit();
+            } catch (Exception $e) {
+                $em->getConnection()->rollback();
+                throw $e;
+            }
+
+            $this->get('session')->getFlashBag()->add('success', 'Propuesta Actualizada Correctamente');
+            return $this->redirect($this->generateUrl('pequiven_work_study_circle_show', array("id" => $idCircle)));
+        }
+
+        return $this->render('PequivenSEIPBundle:Politic:Proposal/edit.html.twig', array(
+                    'proposal' => $proposalData,
+                    'circle'   => $idCircle,
+                    'form'     => $form->createView()
+        ));
     }
     
 }
