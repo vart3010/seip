@@ -120,7 +120,7 @@ class Period extends Base implements \Serializable
      */
     private $dateEndLoadObjetive;
     
-       /**
+     /**
      * Fecha inicio de carga de indicadores.
      * @var \DateTime
      *
@@ -135,6 +135,22 @@ class Period extends Base implements \Serializable
      * @ORM\Column(name="dateEndLoadIndicator", type="date", nullable=true)
      */
     private $dateEndLoadIndicator;
+
+    /**
+     * Fecha inicio de carga de circulos de estudio.
+     * @var \DateTime
+     *
+     * @ORM\Column(name="dateStartLoadWorkStudyCircle", type="date", nullable=true)
+     */
+    private $dateStartLoadWorkStudyCircle;
+    
+    /**
+     * Fecha fin de carga de circulos de estudio.
+     * @var \DateTime
+     *
+     * @ORM\Column(name="dateEndLoadWorkStudyCircle", type="date", nullable=true)
+     */
+    private $dateEndLoadWorkStudyCircle;
 
     /**
      * Fecha inicio de holgura de notificación de programas de gestion
@@ -495,7 +511,7 @@ class Period extends Base implements \Serializable
         return $this->dateEndLoadObjetive;
     }
     
-        /**
+    /**
      * Set dateStartLoadIndicator
      *
      * @param \DateTime $dateStartLoadIndicator
@@ -539,6 +555,52 @@ class Period extends Base implements \Serializable
     public function getDateEndLoadIndicator()
     {
         return $this->dateEndLoadIndicator;
+    }
+
+    /**
+     * Set dateStartLoadWorkStudyCircle
+     *
+     * @param \DateTime $dateStartLoadWorkStudyCircle
+     * @return Period
+     */
+    public function setDateStartLoadWorkStudyCircle($dateStartLoadWorkStudyCircle)
+    {
+        $this->dateStartLoadWorkStudyCircle= $dateStartLoadWorkStudyCircle;
+
+        return $this;
+    }
+
+    /**
+     * Get dateStartLoadWorkStudyCircle
+     *
+     * @return \DateTime 
+     */
+    public function getDateStartLoadWorkStudyCircle()
+    {
+        return $this->dateStartLoadWorkStudyCircle;
+    }
+    
+    /**
+     * Set dateEndLoadWorkStudyCircle
+     *
+     * @param \DateTime $dateEndLoadWorkStudyCircle
+     * @return Period
+     */
+    public function setDateEndLoadWorkStudyCircle($dateEndLoadWorkStudyCircle)
+    {
+        $this->dateEndLoadWorkStudyCircle = $dateEndLoadWorkStudyCircle;
+
+        return $this;
+    }
+
+    /**
+     * Get dateEndLoadWorkStudyCircle
+     *
+     * @return \DateTime 
+     */
+    public function getDateEndLoadWorkStudyCircle()
+    {
+        return $this->dateEndLoadWorkStudyCircle;
     }
 
     /**

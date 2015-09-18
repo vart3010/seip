@@ -40,8 +40,8 @@ class ProposalController extends SEIPController {
         $em->getConnection()->beginTransaction();
         if ($form->isSubmitted() && $form->isValid()) {
             
-            $proposal1 = $request->get("proposal_data")["description1"];
-            $proposal2 = $request->get("proposal_data")["description2"];
+            $proposal1 = strtoupper($request->get("proposal_data")["description1"]);
+            $proposal2 = strtoupper($request->get("proposal_data")["description2"]);
             $proposals = array();
             array_push($proposals, $proposal1);
             array_push($proposals, $proposal2);
@@ -116,6 +116,134 @@ class ProposalController extends SEIPController {
         $response->setData($objetiveChildrenStrategic);
 
         return $response;
+    }
+
+    /**
+     * Edición de Propuestas
+     *
+     *
+     */
+    public function editAction(request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        
+        $id = $request->get('id');
+        $idCircle = $request->get('idCircle');
+
+        $proposalData = $em->getRepository('PequivenSEIPBundle:Politic\Proposal')->findOneBy(array('id' => $id));      
+        
+
+        $form = $this->createForm(new ProposalType, $proposalData);//Para reutilizar en form de la propuesta (El select2)
+        $form->handleRequest($request);
+
+        $em->getConnection()->beginTransaction();
+        
+        if ($form->isSubmitted()) {
+            
+            //$line = $request->get("proposal_data")['lineStrategic'];//Recibiendo el id de la Linea
+            $description = strtoupper($request->get("proposal_data")['description']);//Recibiendo la Propuesta Editada
+
+            //$lineData = $this->get('pequiven.repository.linestrategic')->findOneBy(array('id' => $line)); //Llamada linea
+
+            //$proposalData->setLineStrategic($lineData);//Pasando la linea
+            $proposalData->setDescription($description);//Pasando la propuesta editada
+            
+            $em->persist($proposalData);
+
+            try {
+                $em->flush();
+                $em->getConnection()->commit();
+            } catch (Exception $e) {
+                $em->getConnection()->rollback();
+                throw $e;
+            }
+
+            $this->get('session')->getFlashBag()->add('success', 'Propuesta Actualizada Correctamente');
+            return $this->redirect($this->generateUrl('pequiven_work_study_circle_show', array("id" => $idCircle)));
+        }
+
+        return $this->render('PequivenSEIPBundle:Politic:Proposal/edit.html.twig', array(
+                    'proposal' => $proposalData,
+                    'circle'   => $idCircle,
+                    'form'     => $form->createView()
+        ));
+    }
+
+    /**
+     *
+     *  Vista de propuesta
+     *
+     */
+    public function viewAction(request $request)
+    {   
+        $em = $this->getDoctrine()->getManager();
+
+        $id = $request->get('id');
+
+        $idCircle = $request->get('idCircle');        
+
+        $proposalData = $em->getRepository('PequivenSEIPBundle:Politic\Proposal')->findOneBy(array('id' => $id));      
+
+        return $this->render('PequivenSEIPBundle:Politic:Proposal/view.html.twig', array(
+                    'proposal' => $proposalData,
+                    'circle'   => $idCircle
+        ));
+    }
+    
+    /**
+     * Lista de Indicadores por nivel(Estratégico, Táctico u Operativo)
+     * 
+     * @param Request $request
+     * @return type
+     */
+    function listAction(Request $request) {
+
+        $criteria = $request->get('filter', $this->config->getCriteria());
+        $sorting = $request->get('sorting', $this->config->getSorting());
+        $repository = $this->getRepository();
+
+        if ($this->config->isPaginated()) {
+            $resources = $this->resourceResolver->getResource(
+                    $repository, 'createPaginatorProposal', array($criteria, $sorting)
+            );
+
+            $maxPerPage = $this->config->getPaginationMaxPerPage();
+            if (($limit = $request->query->get('limit')) && $limit > 0) {
+                if ($limit > 100) {
+                    $limit = 100;
+                }
+                $maxPerPage = $limit;
+            }
+            $resources->setCurrentPage($request->get('page', 1), true, true);
+            $resources->setMaxPerPage($maxPerPage);
+        } else {
+            $resources = $this->resourceResolver->getResource(
+                    $repository, 'findBy', array($criteria, $sorting, $this->config->getLimit())
+            );
+        }
+        $routeParameters = array(
+            '_format' => 'json',
+        );
+        $apiDataUrl = $this->generateUrl('pequiven_proposal_list', $routeParameters);
+
+        $view = $this
+                ->view()
+                ->setTemplate($this->config->getTemplate('list.html'))
+                ->setTemplateVar($this->config->getPluralResourceName())
+        ;
+        $view->getSerializationContext()->setGroups(array('id', 'api_list', 'workStudyCircle', 'lineStrategic','complejo'));
+        if ($request->get('_format') == 'html') {
+
+            $data = array(
+                'apiDataUrl' => $apiDataUrl,
+            );
+            $view->setData($data);
+        } else {
+            $formatData = $request->get('_formatData', 'default');
+
+            $view->setData($resources->toArray('', array(), $formatData));
+        }
+        return $this->handleView($view);
     }
     
 }

@@ -13,7 +13,11 @@
 {% endblock javascripts_base %}
 
 {% block before_body %}
-    {{ contentHeader("workStudyCircle.meetings.title" | trans({}))   }}
+    {{ contentHeader(
+        ("workStudyCircle.title"|trans ),
+        ("workStudyCircle.meetings.title"|trans ),
+        ("workStudyCircle.meetings.add"|trans )
+    ) }}
 {% endblock %}
 
 {% block body %}

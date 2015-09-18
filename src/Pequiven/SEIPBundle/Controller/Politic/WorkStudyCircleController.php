@@ -176,7 +176,8 @@ class WorkStudyCircleController extends SEIPController {
         $em = $this->getDoctrine()->getManager();
         $workStudyCircle = $em->getRepository('PequivenSEIPBundle:Politic\WorkStudyCircle')->findOneBy(array('id' => $request->get("id")));
 
-        $proposals = $em->getRepository('PequivenSEIPBundle:Politic\Proposal')->findBy(array('workStudyCircle' => $workStudyCircle->getId()));
+//        $proposals = $em->getRepository('PequivenSEIPBundle:Politic\Proposal')->findBy(array('workStudyCircle' => $workStudyCircle->getId()));
+        $proposals = $workStudyCircle->getProposals();
         $meetings = $workStudyCircle->getMeeting();
 
         $user = $this->getUser();
@@ -186,7 +187,7 @@ class WorkStudyCircleController extends SEIPController {
                     'userData' => $user,
                     'proposals' => $proposals,
                     'meetings' => $meetings,
-                    'user'=>$user
+                    'user' => $user
         ));
     }
 
@@ -375,12 +376,23 @@ class WorkStudyCircleController extends SEIPController {
     public function exportAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
         $workStudyCircle = $em->getRepository('PequivenSEIPBundle:Politic\WorkStudyCircle')->findOneBy(array('id' => $request->get("idWorkStudyCircle")));
-
         $user = $this->getUser();
+
+        $proposals = $em->getRepository('PequivenSEIPBundle:Politic\Proposal')->findBy(array('workStudyCircle' => $request->get("idWorkStudyCircle")));
+
+        /* foreach ($proposals as $lineaE) {
+          var_dump($lineaE->getid());
+          }
+
+          die(); */
+
+        $meetings = $workStudyCircle->getMeeting();
 
         $data = array(
             'workStudyCircle' => $workStudyCircle,
-            'userData' => $user
+            'userData' => $user,
+            'proposals' => $proposals,
+            'meetings' => $meetings
         );
 
         $this->generatePdf($data, 'Reporte de Círculo de Trabajo', 'PequivenSEIPBundle:Politic:WorkStudyCircle\viewPdf.html.twig');
@@ -407,7 +419,7 @@ class WorkStudyCircleController extends SEIPController {
         $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
 
 // set margins
-        $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+        $pdf->SetMargins(PDF_MARGIN_LEFT, 35, PDF_MARGIN_RIGHT);
         $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
         $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
 

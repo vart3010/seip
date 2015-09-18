@@ -5,9 +5,14 @@
     {{ parent() }}
     <script src="{{  asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.input.js') }}"></script>
 {% endblock javascripts_base %}
+{% set circle = meeting.workStudyCircle.id %}
+{% set route_index = 'pequiven_work_study_circle_show' %}
 
 {% block before_body %}
-    {{ contentHeader("workStudyCircle.meetings.title" | trans({}))   }}
+    {{ contentHeader(
+        { ( path(route_index, { id:circle }) ): ("workStudyCircle.title"|trans )},
+        ("workStudyCircle.meetings.title"|trans )
+    ) }}
 {% endblock %}
 
 
@@ -40,6 +45,15 @@
                 <p class="inline-label">
                     <label class="label">{{ 'workStudyCircle.meetings.observation'|trans }}</label>
                     {{ meeting.observation }}
+                </p>
+            </div>
+            <div class="new-row-mobile twelve-columns-mobile twelve-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'workStudyCircle.form.nombre'|trans }}</label>
+                    <a href="{{ path('pequiven_work_study_circle_show',{id:circle }) }}">
+                        ({{ meeting.workStudyCircle.codigo }})                    
+                        {{ meeting.workStudyCircle.name }}
+                    </a>
                 </p>
             </div>
         </div>

@@ -125,6 +125,9 @@ class MeetingController extends SEIPController {
         $idMeeting = $request->get("meeting_id");
         $meeting = $em->getRepository('PequivenSEIPBundle:Politic\Meeting')->findOneBy(array('id' => $idMeeting));
         $workStudyCircle = $meeting->getWorkStudyCircle();
+        
+        $idCircle = $workStudyCircle->getId();//Id Circulo
+
         $members = $workStudyCircle->getUserWorkerId();
 
         $assistance = $meeting->getAssistances();
