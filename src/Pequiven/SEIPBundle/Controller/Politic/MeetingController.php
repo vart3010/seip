@@ -22,6 +22,8 @@ class MeetingController extends SEIPController {
         $idWorkStudyCircle = $request->get('workStudyCircle_id');
         $workStudyCircle = $em->getRepository('PequivenSEIPBundle:Politic\WorkStudyCircle')->findOneBy(array('id' => $idWorkStudyCircle));
 
+        $members = $workStudyCircle->getUserWorkerId();
+
         $meeting = new Meeting();
         $form = $this->createForm(new MeetingType, $meeting);
         $form->handleRequest($request);
@@ -30,49 +32,91 @@ class MeetingController extends SEIPController {
         $em->getConnection()->beginTransaction();
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $date = $request->get("meeting_data")["date"];
-            $date = str_replace("/", "-", $date);
-            $date = new \DateTime($date);
 
-
-            $meetingObj = new Meeting();
-            $meetingObj->setCreatedBy($user);
-            $meetingObj->setDate($date);
-            $meetingObj->setPlace($request->get("meeting_data")["place"]);
-            $meetingObj->setSubject($request->get("meeting_data")["subject"]);
-            $meetingObj->setObservation($request->get("meeting_data")["observation"]);
-            $meetingObj->setWorkStudyCircle($workStudyCircle);
-            $em->persist($meetingObj);
-
-            //SE AGREGAN LOS MIEMBROS A LA LISTA DE ASISTENCIA DE LA REUNION CON ASSISTENCIA = FALSE 
             $members = $workStudyCircle->getUserWorkerId();
+
+            $idsCheck = array();
+            $obsUser = array();
             foreach ($members as $member) {
-                $assistance = new Assistance();
-                $assistance->setUser($member);
-                $assistance->setMeeting($meetingObj);
-                $em->persist($assistance);
+
+                if (isset($request->get("meeting_extra")["member_" . $member->getId()])) {
+                    $idsCheck[$member->getid()] = $request->get("meeting_extra")["member_" . $member->getId()];
+                } else {
+                    $idsCheck[$member->getid()] = "0";
+                }
+
+                if (isset($request->get("meeting_extra")["obs_" . $member->getId()])) {
+                    $obsUser[$member->getid()] = $request->get("meeting_extra")["obs_" . $member->getId()];
+                } else {
+                    $obsUser[$member->getid()] = "";
+                }
+            }
+
+            //VALIDA QUE NINGUN CAMPO DE OBSERVACION ESTE VACIO - SEGUNDA VALIDACION
+            $band = true;
+            $cont = 0;
+            foreach ($members as $member) {
+                if (($idsCheck[$member->getId()] == 0) && ($obsUser[$member->getId()] == "")) {
+                    $band = false;
+                    break;
+                }
+                $cont++;
             }
 
 
-            $em->flush();
 
-            try {
+            if ($band) {
+
+                $date = $request->get("meeting_data")["date"];
+                $date = str_replace("/", "-", $date);
+                $date = new \DateTime($date);
+
+
+                $meetingObj = new Meeting();
+                $meetingObj->setCreatedBy($user);
+                $meetingObj->setDate($date);
+                $meetingObj->setPlace($request->get("meeting_data")["place"]);
+                $meetingObj->setSubject($request->get("meeting_data")["subject"]);
+                $meetingObj->setObservation($request->get("meeting_data")["observation"]);
+                $meetingObj->setWorkStudyCircle($workStudyCircle);
+                $em->persist($meetingObj);
+
+                //SE AGREGAN LOS MIEMBROS A LA LISTA DE ASISTENCIA DE LA REUNION CON ASSISTENCIA = FALSE 
+                //$members = $workStudyCircle->getUserWorkerId();
+                foreach ($members as $member) {
+                    $assistance = new Assistance();
+                    $assistance->setUser($member);
+                    $assistance->setMeeting($meetingObj);
+                    $assistance->setAssistance($idsCheck[$member->getId()]);
+                    $assistance->setObservation($obsUser[$member->getId()]);
+                    $em->persist($assistance);
+                }
+
+
                 $em->flush();
-                $em->getConnection()->commit();
-            } catch (Exception $e) {
-                $em->getConnection()->rollback();
-                throw $e;
+
+                try {
+                    $em->flush();
+                    $em->getConnection()->commit();
+                } catch (Exception $e) {
+                    $em->getConnection()->rollback();
+                    throw $e;
+                }
+
+                $this->get('session')->getFlashBag()->add('success', 'Reunión Guardada Correctamente');
+
+                return $this->redirect($this->generateUrl('pequiven_meeting_view', array("meeting_id" => $meetingObj->getId())));
+            } else {
+                $this->get('session')->getFlashBag()->add('error', 'Debe llenar el campo Observación.');
             }
-
-            $this->get('session')->getFlashBag()->add('success', 'Reunión Guardada Correctamente');
-
-            return $this->redirect($this->generateUrl('pequiven_meeting_view', array("meeting_id" => $meetingObj->getId())));
         }
+
 
 
         return $this->render('PequivenSEIPBundle:Politic:Meeting\create.html.twig', array(
                     'form' => $form->createView(),
-                    "workStudyCircle" => $workStudyCircle
+                    "workStudyCircle" => $workStudyCircle,
+                    'members' => $members
         ));
     }
 
@@ -81,12 +125,17 @@ class MeetingController extends SEIPController {
         $idMeeting = $request->get("meeting_id");
         $meeting = $em->getRepository('PequivenSEIPBundle:Politic\Meeting')->findOneBy(array('id' => $idMeeting));
         $workStudyCircle = $meeting->getWorkStudyCircle();
+        
+        $idCircle = $workStudyCircle->getId();//Id Circulo
+
         $members = $workStudyCircle->getUserWorkerId();
 
         $assistance = $meeting->getAssistances();
         $assistanceIds = array();
+        $assistanceObs = array();
         foreach ($assistance as $assis) {
             $assistanceIds[$assis->getUser()->getId()] = $assis->getAssistance();
+            $assistanceObs[$assis->getUser()->getId()] = $assis->getObservation();
         }
 
 
@@ -95,6 +144,7 @@ class MeetingController extends SEIPController {
                     'members' => $members,
                     'workStudyCircle' => $workStudyCircle,
                     'assistanceIds' => $assistanceIds,
+                    'assistanceObs' => $assistanceObs,
                     'user' => $this->getUser()
         ));
     }

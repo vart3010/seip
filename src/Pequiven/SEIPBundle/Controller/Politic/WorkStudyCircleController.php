@@ -176,7 +176,8 @@ class WorkStudyCircleController extends SEIPController {
         $em = $this->getDoctrine()->getManager();
         $workStudyCircle = $em->getRepository('PequivenSEIPBundle:Politic\WorkStudyCircle')->findOneBy(array('id' => $request->get("id")));
 
-        $proposals = $em->getRepository('PequivenSEIPBundle:Politic\Proposal')->findBy(array('workStudyCircle' => $workStudyCircle->getId()));
+//        $proposals = $em->getRepository('PequivenSEIPBundle:Politic\Proposal')->findBy(array('workStudyCircle' => $workStudyCircle->getId()));
+        $proposals = $workStudyCircle->getProposals();
         $meetings = $workStudyCircle->getMeeting();
 
         $user = $this->getUser();

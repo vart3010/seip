@@ -31,6 +31,7 @@ pequiven:
     edit: Editar
     delete: Eliminar
     show: Ver
+    view: Vista
     details: Detalles
     dialog:
         confirm: Confirmar
