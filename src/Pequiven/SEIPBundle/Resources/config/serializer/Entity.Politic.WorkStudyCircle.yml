@@ -16,5 +16,8 @@ Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle:
         region:
             expose: true
             groups: [region]
+        proposals:
+            expose: true
+            groups: [proposal]
             
         
