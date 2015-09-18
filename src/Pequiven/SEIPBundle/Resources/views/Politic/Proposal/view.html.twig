@@ -1,0 +1,51 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayout.html.twig' %}
+
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+{% set route_index = 'pequiven_work_study_circle_show' %}
+
+{% block before_body %}
+    {{ contentHeader(
+        { ( path(route_index, { id:circle }) ): ("workStudyCircle.title"|trans({},'workStudyCircle') )},
+        ("pequiven_seip.politic.proposal"|trans ),
+        ( 'pequiven.show'|trans({},'messages') )
+    ) }}
+{% endblock %}
+
+{% block body -%}
+
+        <br /><br />
+            <fieldset class="fieldset fields-list">
+            <legend class="legend">Círculo de Estudio y Trabajo </legend>
+                <div class="field-block button-height">
+                    <label class="label">Circulo</label>
+                        <div style="font-weight: bold">
+                            <a href="{{ path('pequiven_work_study_circle_show',{id:circle }) }}">
+                                ({{ proposal.workStudyCircle.codigo }})
+                                {{ proposal.workStudyCircle.name }}
+                            </a>
+                        </div>                
+                </div>
+            </fieldset>
+        
+            <fieldset class="fieldset fields-list">
+            <legend class="legend">Datos de la Propuesta</legend>
+                <div class="field-block button-height">
+                    <label class="label">Línea Estratégica</label>
+                        <div style="font-weight: bold">
+                            {{ proposal.lineStrategic.ref }}{{ proposal.lineStrategic.description }}
+                        </div>                
+                </div>
+                <div class="field-block button-height">
+                    <label class="label">Propuesta</label>
+                    {{ proposal.description }}
+                </div>
+
+            </fieldset>
+
+{% endblock %}
+
+{% block javascript %}
+    
+
+{% endblock javascript %}

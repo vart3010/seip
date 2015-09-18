@@ -168,6 +168,27 @@ class ProposalController extends SEIPController {
                     'form'     => $form->createView()
         ));
     }
+
+    /**
+     *
+     *  Vista de propuesta
+     *
+     */
+    public function viewAction(request $request)
+    {   
+        $em = $this->getDoctrine()->getManager();
+
+        $id = $request->get('id');
+
+        $idCircle = $request->get('idCircle');        
+
+        $proposalData = $em->getRepository('PequivenSEIPBundle:Politic\Proposal')->findOneBy(array('id' => $id));      
+
+        return $this->render('PequivenSEIPBundle:Politic:Proposal/view.html.twig', array(
+                    'proposal' => $proposalData,
+                    'circle'   => $idCircle
+        ));
+    }
     
     /**
      * Lista de Indicadores por nivel(Estratégico, Táctico u Operativo)

@@ -38,3 +38,12 @@ pequiven_proposal_list:
     requirements:
         _format: html|json|xml
     methods: [GET]
+
+pequiven_proposal_show_view:
+    path: /{idCircle}/view/{id}
+    defaults:
+        _controller: pequiven.controller.proposal:viewAction
+    methods: [GET|POST]
+    options:
+        expose: true
+
