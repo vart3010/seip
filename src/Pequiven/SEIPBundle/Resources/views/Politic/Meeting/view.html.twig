@@ -1,4 +1,5 @@
 {% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
 {% trans_default_domain 'workStudyCircle' %}
 
 {% block javascripts_base %}
@@ -60,7 +61,19 @@
     </fieldset>
     <br>
     {% include 'PequivenSEIPBundle:Politic:Meeting/assistance.html.twig' %}
-
+ <br>
+    
+     {% set routeConfig = path('pequiven_meeting_export_pdf',{idmeeting:meeting.id}) %}
+    {% if(is_granted(["ROLE_SEIP_MEETING_EXPORT_REPORT"])) %}
+        <div class="align-right">
+            {{ buttons.generic(
+                    (routeConfig),
+                    ('workStudyCircle.export.exportPdf'|trans({})),
+                    'icon-download'
+                 ) 
+            }}
+        </div>
+    {% endif %}
 
 {% endblock %}
 
