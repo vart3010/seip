@@ -97,7 +97,7 @@ class WorkStudyCircleController extends SEIPController {
                 $em->flush();
 
                 $user->setCellphone($request->get("userType_data")["cellphone"]);
-                $user->setIndentification($request->get("userType_data")["indentification"]);
+                $user->setIdentification($request->get("userType_data")["identification"]);
                 $user->setExt($request->get("userType_data")["ext"]);
 
                 try {
@@ -377,15 +377,7 @@ class WorkStudyCircleController extends SEIPController {
         $em = $this->getDoctrine()->getManager();
         $workStudyCircle = $em->getRepository('PequivenSEIPBundle:Politic\WorkStudyCircle')->findOneBy(array('id' => $request->get("idWorkStudyCircle")));
         $user = $this->getUser();
-
         $proposals = $em->getRepository('PequivenSEIPBundle:Politic\Proposal')->findBy(array('workStudyCircle' => $request->get("idWorkStudyCircle")));
-
-        /* foreach ($proposals as $lineaE) {
-          var_dump($lineaE->getid());
-          }
-
-          die(); */
-
         $meetings = $workStudyCircle->getMeeting();
 
         $data = array(
@@ -442,7 +434,7 @@ class WorkStudyCircleController extends SEIPController {
         $pdf->writeHTML($html, true, false, true, false, '');
 
 //            $pdf->Output('Reporte del dia'.'.pdf', 'I');
-        $pdf->Output('Reporte del dia' . '.pdf', 'D');
+        $pdf->Output($title . '.pdf', 'D');
     }
 
     protected function getSecurityService() {
