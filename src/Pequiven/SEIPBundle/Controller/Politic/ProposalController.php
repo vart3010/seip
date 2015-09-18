@@ -133,20 +133,20 @@ class ProposalController extends SEIPController {
         $proposalData = $em->getRepository('PequivenSEIPBundle:Politic\Proposal')->findOneBy(array('id' => $id));      
         
 
-        $form = $this->createForm(new ProposalType, $proposalData);
+        $form = $this->createForm(new ProposalType, $proposalData);//Para reutilizar en form de la propuesta (El select2)
         $form->handleRequest($request);
 
         $em->getConnection()->beginTransaction();
         
         if ($form->isSubmitted()) {
             
-            $line = $request->get("proposal_data")['lineStrategic'];
-            $description = $request->get("proposal_data")['description'];
+            //$line = $request->get("proposal_data")['lineStrategic'];//Recibiendo el id de la Linea
+            $description = $request->get("proposal_data")['description'];//Recibiendo la Propuesta Editada
 
-            $lineData = $this->get('pequiven.repository.linestrategic')->findOneBy(array('id' => $line)); //Llamada linea
+            //$lineData = $this->get('pequiven.repository.linestrategic')->findOneBy(array('id' => $line)); //Llamada linea
 
-            $proposalData->setLineStrategic($lineData);
-            $proposalData->setDescription($description);
+            //$proposalData->setLineStrategic($lineData);//Pasando la linea
+            $proposalData->setDescription($description);//Pasando la propuesta editada
             
             $em->persist($proposalData);
 
@@ -164,12 +164,9 @@ class ProposalController extends SEIPController {
 
         return $this->render('PequivenSEIPBundle:Politic:Proposal/edit.html.twig', array(
                     'proposal' => $proposalData,
-                    'circle' => $idCircle,
+                    'circle'   => $idCircle,
                     'form'     => $form->createView()
         ));
-
-
-        //return $this->render('PequivenSEIPBundle:Politic:Proposal/edit.html.twig', array('proposal'=>$proposal));
     }
     
 }

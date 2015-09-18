@@ -21,7 +21,12 @@
             <fieldset class="fieldset fields-list">
             <legend class="legend">Datos de la Propuesta</legend>
             <div class="field-block button-height">
-                {{ form_label(form.lineStrategic) }}
+                <label class="label">Línea Estratégica</label>
+                    <div style="font-weight: bold">
+                        {{ proposal.lineStrategic.ref }}{{ proposal.lineStrategic.description }}
+                    </div>
+                {# form para edicion de linea#}
+                {#{{ form_label(form.lineStrategic) }}
                 {{ form_widget(form.lineStrategic) }}
                 {{ form_errors(form.lineStrategic) }}
                 <span class="info-spot">
@@ -30,6 +35,7 @@
                 </span>
             </div>
             <div class="field-block" id="objetives">
+            </div>#}
             </div>
             <div class="field-block button-height">
                 <label class="label">Propuesta</label>
