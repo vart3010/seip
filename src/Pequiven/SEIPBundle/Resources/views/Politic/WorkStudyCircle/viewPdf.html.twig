@@ -3,7 +3,7 @@
 
 <style>
     .body {
-        font-size: 10px;
+        font-size: 9px;
     }
     .title_bold {
         font-weight: bold;
@@ -11,10 +11,11 @@
     table tr {
         padding: 15px;
     }
+    .alin_font {
+        text-align: justify;
+    }
 </style>
 {% block body %}
-    <br/><br/>
-
     <table width="100%">
         <tr>
             <th class="title_bold">1. Datos del Círculo de Estudio y Trabajo</th>
@@ -22,6 +23,7 @@
     </table>
 
     <br/><br/>
+
     <table width="95%" class="simple-table responsive-table tables-extras"> 
         <tr>
             <td class="title_bold" bgcolor="#F2F2F2" width="35%">{{ "workStudyCircle.form.code"|trans }}:</td>
@@ -67,7 +69,7 @@
 
     </table>
 
-    <br/><br/>
+    <br/><br/><br/>
 
     <table width="100%">
         <tr>
@@ -91,8 +93,8 @@
             <td width="65%">{{ workStudyCircle.createdBy.ext }}</td>
         </tr>
     </table>
-    <br/>
-    <br/>
+
+    <br/><br/><br/>
 
     <table width="95%">
         <tr>
@@ -101,7 +103,6 @@
     </table>    
 
     <br/><br/>
-
 
     <table width="95%" class="simple-table responsive-table tables-extras">  
         <thead>
@@ -133,7 +134,7 @@
         </tbody>
     </table>
 
-    <br/><br/>
+    <br/><br/><br/>
 
     <table width="100%">
         <tr>
@@ -142,38 +143,60 @@
     </table>
 
     <br/><br/>
-    {% set propuesta = proposals.lineStrategic %}
-    {% for prop in propuesta %}
-        <table width="95%" class="simple-table responsive-table tables-extras"> 
+    {% set temp="" %}
+    {% for prop in proposals %}
+        <table width="100%" class="simple-table responsive-table tables-extras"> 
             <thead>
                 <tr>
-                    <th>Línea Estratégica: {{ proposals.getLineStrategic() }}</th>
+                    <th bgcolor="#F2F2F2"><b>Línea Estratégica:</b> {{ prop.lineStrategic.description }}</th>
                 </tr>
             </thead>
             <tbody>
-                
                 <tr>
-                    <td>
-                        PROPUESTA UNO
+                    <td class="alin_font">
+                        - {{ prop.getDescription()}}
                     </td>                
                 </tr>
-                <tr>
-                    <td>
-                        &nbsp;
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        PROPUESTA DOS
-                    </td>
-                </tr>
-
             </tbody>
         </table>
+        <br/><br/>
     {% endfor %}
+
+    <br/>
+
+    <table width="100%">
+        <tr>
+            <th class="title_bold">5. Reuniones Realizadas</th>
+        </tr>
+    </table>
+
     <br/><br/>
 
+    <table width="100%" class="simple-table responsive-table tables-extras"> 
+        <thead>
+            <tr>
+                <th width="15%" bgcolor="#F2F2F2" class="title_bold">Fecha</th>
+                <th width="25%" bgcolor="#F2F2F2" class="title_bold">Lugar</th>
+                <th width="60%" bgcolor="#F2F2F2" class="title_bold">Puntos Tratados</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for reunion in meetings %}
+                <tr>
+                    <td width="15%">
+                        {{ reunion.date|date('d-m-Y') }}
+                    </td>                
 
+                    <td width="25%">
+                        {{ reunion.place }}
+                    </td>                
 
+                    <td width="60%" class="alin_font">
+                        {{ reunion.subject }}
+                    </td>                
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}
 
