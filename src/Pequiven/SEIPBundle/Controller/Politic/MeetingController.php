@@ -78,6 +78,7 @@ class MeetingController extends SEIPController {
                 $meetingObj->setPlace($request->get("meeting_data")["place"]);
                 $meetingObj->setSubject($request->get("meeting_data")["subject"]);
                 $meetingObj->setObservation($request->get("meeting_data")["observation"]);
+                $meetingObj->setDuration($request->get("meeting_data")["duration"]["hour"] . ":" . $request->get("meeting_data")["duration"]["minute"]);
                 $meetingObj->setWorkStudyCircle($workStudyCircle);
                 $em->persist($meetingObj);
 
@@ -105,7 +106,7 @@ class MeetingController extends SEIPController {
 
                 $this->get('session')->getFlashBag()->add('success', 'Reunión Guardada Correctamente');
 
-                return $this->redirect($this->generateUrl('pequiven_meeting_view', array("meeting_id" => $meetingObj->getId())));
+                return $this->redirect($this->generateUrl('pequiven_meeting_show', array("meeting_id" => $meetingObj->getId())));
             } else {
                 $this->get('session')->getFlashBag()->add('error', 'Debe llenar el campo Observación.');
             }
@@ -125,8 +126,8 @@ class MeetingController extends SEIPController {
         $idMeeting = $request->get("meeting_id");
         $meeting = $em->getRepository('PequivenSEIPBundle:Politic\Meeting')->findOneBy(array('id' => $idMeeting));
         $workStudyCircle = $meeting->getWorkStudyCircle();
-        
-        $idCircle = $workStudyCircle->getId();//Id Circulo
+
+        $idCircle = $workStudyCircle->getId(); //Id Circulo
 
         $members = $workStudyCircle->getUserWorkerId();
 
@@ -139,7 +140,7 @@ class MeetingController extends SEIPController {
         }
 
 
-        return $this->render('PequivenSEIPBundle:Politic:Meeting\view.html.twig', array(
+        return $this->render('PequivenSEIPBundle:Politic:Meeting\show.html.twig', array(
                     'meeting' => $meeting,
                     'members' => $members,
                     'workStudyCircle' => $workStudyCircle,
@@ -201,14 +202,14 @@ class MeetingController extends SEIPController {
 
         $em = $this->getDoctrine()->getManager();
         $idMeeting = $request->get("idmeeting");
-                
+
         $meeting = $em->getRepository('PequivenSEIPBundle:Politic\Meeting')->findOneBy(array('id' => $idMeeting));
         $workStudyCircle = $meeting->getWorkStudyCircle();
         $members = $workStudyCircle->getUserWorkerId();
 
         $assistance = $meeting->getAssistances();
         $assistanceIds = array();
-        
+
         foreach ($assistance as $assis) {
             $assistanceIds[$assis->getUser()->getId()] = $assis->getAssistance();
         }
