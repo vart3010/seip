@@ -135,6 +135,11 @@ class WorkStudyCircle extends ModelWorkStudyCircle implements PeriodItemInterfac
      * @ORM\OneToMany(targetEntity="\Pequiven\SEIPBundle\Entity\Politic\Meeting", mappedBy="workStudyCircle")
      */
     private $meetings;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="\Pequiven\SEIPBundle\Entity\Politic\Proposal", mappedBy="workStudyCircle")
+     */
+    private $proposals;
 
     /**
      * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
@@ -149,6 +154,7 @@ class WorkStudyCircle extends ModelWorkStudyCircle implements PeriodItemInterfac
         $this->gerencias = new \Doctrine\Common\Collections\ArrayCollection();
         $this->gerenciaSeconds = new \Doctrine\Common\Collections\ArrayCollection();
         $this->meetings = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->proposals = new \Doctrine\Common\Collections\ArrayCollection();
         //$this->members = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -456,6 +462,33 @@ class WorkStudyCircle extends ModelWorkStudyCircle implements PeriodItemInterfac
      */
     public function getMeeting() {
         return $this->meetings;
+    }
+    
+    /**
+     * 
+     * @param \Pequiven\SEIPBundle\Entity\Politic\Proposal $proposal
+     * @return \Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle
+     */
+    public function addProposal(Proposal $proposal) {
+        $this->proposals->add($proposal);
+
+        return $this;
+    }
+
+    /**
+     * 
+     * @param \Pequiven\SEIPBundle\Entity\Politic\Proposal $proposal
+     */
+    public function removeProposal(Proposal $proposal) {
+        $this->proposals->removeElement($proposal);
+    }
+
+    /**
+     * 
+     * @return type
+     */
+    public function getProposals() {
+        return $this->proposals;
     }
 
 }
