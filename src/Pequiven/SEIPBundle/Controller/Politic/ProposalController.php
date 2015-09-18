@@ -176,15 +176,17 @@ class ProposalController extends SEIPController {
      */
     public function viewAction(request $request)
     {   
+        $em = $this->getDoctrine()->getManager();
+
         $id = $request->get('id');
-        $idCircle = $request->get('idCircle');
+
+        $idCircle = $request->get('idCircle');        
 
         $proposalData = $em->getRepository('PequivenSEIPBundle:Politic\Proposal')->findOneBy(array('id' => $id));      
 
-        return $this->render('PequivenSEIPBundle:Politic:Proposal/edit.html.twig', array(
+        return $this->render('PequivenSEIPBundle:Politic:Proposal/view.html.twig', array(
                     'proposal' => $proposalData,
-                    //'circle'   => $idCircle,
-                    //'form'     => $form->createView()
+                    'circle'   => $idCircle
         ));
     }
     
