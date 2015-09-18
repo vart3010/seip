@@ -65,10 +65,10 @@
     <table width="90%">
         <thead>
             <tr>
-                <th class="title_bold" width="5%" style="text-align: center">#</th>
-                <th class="title_bold" width="25%" style="text-align: center">C.I.</th>
-                <th class="title_bold" width="65%" style="text-align: center">Nombre y Apellido</th>
-                <th class="title_bold" width="15%" style="text-align: center">Presente</th>
+                <th class="title_bold" width="5%" style="text-align: left">#</th>
+                <th class="title_bold" width="25%" style="text-align: left">C.I.</th>
+                <th class="title_bold" width="65%" style="text-align: left">Nombre y Apellido</th>
+                <th class="title_bold" width="15%" style="text-align: left">Presente</th>
             </tr>
         </thead>
         <tbody>
@@ -76,13 +76,13 @@
             {% for member in members %}
                 
                 <tr>
-                    <td width="5%" style="text-align: center">{{ loop.index  }}</td>
-                    <td width="25%"style="text-align: center">{{ member.getIndentification|number_format(0, ',', '.') }}</td>
+                    <td width="5%" style="text-align: left">{{ loop.index  }}</td>
+                    <td width="25%"style="text-align: left">{{ member.getIndentification|number_format(0, ',', '.') }}</td>
                     <td width="65%">{{ member.firstname | upper}} {{ member.lastname | upper}}</td>
                     {% if assistanceIds[member.id]== 1 %}
-                    <td width="10%" style="text-align: center"> X </td>
+                    <td width="10%" style="text-align: left"> SI </td>
                     {% else %}
-                    <td width="15%">  </td>    
+                    <td width="15%"> NO </td>    
                     {% endif %}
                 </tr>
                 {#                    {% endif %}#}
