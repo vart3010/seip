@@ -44,14 +44,14 @@
                 {{ form_errors(form.description2) }}
             </div>
         </fieldset>
-            
+
         {#<div class="columns">
             <div class="twelve-columns" id="objetives" style="text-align: center;">
             </div>
         </div>#}
 
         {{ actions.create() }}
-        
+
         {{ form_rest(form) }}
     </form>
 {% endblock %}
@@ -59,34 +59,34 @@
 {% block javascript %}
     <script type="text/javascript">
         var selectLineStrategic = $("#proposal_data_lineStrategic");
-        
+
         $(document).ready(function () {
             selectLineStrategic.select2({allowClear: true});
         });
-        
-        selectLineStrategic.change(function() {
-           displayObjetivesFromLineStrategic();
+
+        selectLineStrategic.change(function () {
+            displayObjetivesFromLineStrategic();
         });
-        
+
         //Función que muestra los objetivos estratégicos de acuerdo a la línea estratégica seleccionada
-        function displayObjetivesFromLineStrategic(){
+        function displayObjetivesFromLineStrategic() {
             var data = {
-               lineStrategicId: $.trim(selectLineStrategic.val()),
+                lineStrategicId: $.trim(selectLineStrategic.val()),
             };
             $.ajax({
                 type: 'post',
                 url: '{{ path("pequiven_proposal_show_objetives") }}',
                 data: data,
-                success: function(data) {
+                success: function (data) {
                     var text = '<label class="label" style="color:#FF0004">Objetivos Estratégicos</label><br>';
-                    for(var i=0, total = data.length; i<total; i++){
+                    for (var i = 0, total = data.length; i < total; i++) {
                         text = text + '<span>' + data[i].ref + data[i].description + '</span><br>';
                     }
-                    $('#objetives').fadeOut("slow",function(){
+                    $('#objetives').fadeOut("slow", function () {
                         $('#objetives').html(text);
                         $('#objetives').fadeIn();
                     });
-               }
+                }
             });
         }
     </script>

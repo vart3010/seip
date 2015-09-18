@@ -54,6 +54,13 @@ class Assistance {
     private $assistance = false;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="observation", type="string",length=255,nullable=true)
+     */
+    private $observation;
+
+    /**
      * Get id
      *
      * @return integer 
@@ -123,7 +130,21 @@ class Assistance {
     function setAssistance($assistance) {
         $this->assistance = $assistance;
     }
-    
-    
+
+    /**
+     * 
+     * @return type
+     */
+    function getObservation() {
+        return $this->observation;
+    }
+
+    /**
+     * 
+     * @param type $observation
+     */
+    function setObservation($observation) {
+        $this->observation = $observation;
+    }
 
 }
