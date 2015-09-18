@@ -2236,10 +2236,11 @@ angular.module('seipModule.controllers', [])
                 }
             });
         })
-        
+
         .controller('TableProposalController', function ($scope, ngTableParams, $http, sfTranslator, notifyService) {
             var selectComplejo = angular.element("#selectComplejos");
             var selectFirstLineManagement = angular.element("#selectFirstLineManagement");
+//            var selectWorkStudyCircle = angular.element("#selectWorkStudyCircle");
 
             $scope.data = {
                 complejos: null,
