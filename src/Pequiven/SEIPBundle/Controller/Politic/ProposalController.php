@@ -40,8 +40,8 @@ class ProposalController extends SEIPController {
         $em->getConnection()->beginTransaction();
         if ($form->isSubmitted() && $form->isValid()) {
             
-            $proposal1 = $request->get("proposal_data")["description1"];
-            $proposal2 = $request->get("proposal_data")["description2"];
+            $proposal1 = strtoupper($request->get("proposal_data")["description1"]);
+            $proposal2 = strtoupper($request->get("proposal_data")["description2"]);
             $proposals = array();
             array_push($proposals, $proposal1);
             array_push($proposals, $proposal2);
@@ -141,7 +141,7 @@ class ProposalController extends SEIPController {
         if ($form->isSubmitted()) {
             
             //$line = $request->get("proposal_data")['lineStrategic'];//Recibiendo el id de la Linea
-            $description = $request->get("proposal_data")['description'];//Recibiendo la Propuesta Editada
+            $description = strtoupper($request->get("proposal_data")['description']);//Recibiendo la Propuesta Editada
 
             //$lineData = $this->get('pequiven.repository.linestrategic')->findOneBy(array('id' => $line)); //Llamada linea
 
