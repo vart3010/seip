@@ -79,8 +79,8 @@ class Proposal extends ModelProposal implements PeriodItemInterface {
      * WorkStudyCircle
      * 
      * @var \Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle
-     * @ORM\ManyToOne(targetEntity="\Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\ManyToOne(targetEntity="\Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle", inversedBy="proposals")
+     * @ORM\JoinColumn(name="workStudyCircle_id", referencedColumnName="id")
      */
     private $workStudyCircle;
     
