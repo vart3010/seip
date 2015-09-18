@@ -4,7 +4,12 @@
 
 {% trans_default_domain 'workStudyCircle' %}
 
-
+{% block before_body %}
+    {{ contentHeader(
+        ("workStudyCircle.title"|trans ),
+        ("workStudyCircle.members.add"|trans )
+    ) }}
+{% endblock %}
 
 {% block body %}
 
