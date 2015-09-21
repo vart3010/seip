@@ -15,41 +15,41 @@ class ProposalType extends AbstractType {
     public function buildForm(FormBuilderInterface $builder, array $options) {
 
         $builder
-            ->add('lineStrategic', 'entity', array(
-                'label' => 'Línea Estratégica',
-                'label_attr' => array('class' => 'label'),
-                'class' => 'Pequiven\MasterBundle\Entity\LineStrategic',
-                'property' => 'descriptionSelect',
-                'empty_value' => 'Seleccione',
-                'mapped' => false,
-                'required' => true,
-                'attr' => array(
-                    'class' => 'select2 input-xlarge form-control',
+                ->add('lineStrategic', 'entity', array(
+                    'label' => 'Línea Estratégica',
+                    'label_attr' => array('class' => 'label'),
+                    'class' => 'Pequiven\MasterBundle\Entity\LineStrategic',
+                    'property' => 'descriptionSelect',
+                    'empty_value' => 'Seleccione',
+                    'mapped' => false,
+                    'required' => true,
+                    'attr' => array(
+                        'class' => 'select2 input-xlarge form-control',
             )))
-            ->add('description1', 'textarea', array(
-                'label' => 'Propuesta 1',
-                'label_attr' => array(
-                    'class' => 'label',
+                ->add('description1', 'textarea', array(
+                    'label' => 'Propuesta 1',
+                    'label_attr' => array(
+                        'class' => 'label'
                     ),
-                'mapped' => false,
-                'attr' => array(
+                    'mapped' => false,
+                    'attr' => array(
 //                    'class' => 'input input-large',
-                    'cols' => '80',
-                    'rows' => '10',
-                    'style' => 'text-transform:uppercase'
-                    )))
-            ->add('description2', 'textarea', array(
-                'label' => 'Propuesta 2',
-                'label_attr' => array(
-                    'class' => 'label',
+                        'cols' => '80',
+                        'rows' => '10',
+                        'style' => 'text-transform:uppercase'
+            )))
+                ->add('description2', 'textarea', array(
+                    'label' => 'Propuesta 2',
+                    'label_attr' => array(
+                        'class' => 'label',
                     ),
-                'mapped' => false,
-                'attr' => array(
+                    'mapped' => false,
+                    'attr' => array(
 //                    'class' => 'input input-large',
-                    'cols' => '80',
-                    'rows' => '10',
-                    'style' => 'text-transform:uppercase'
-                    )))
+                        'cols' => '80',
+                        'rows' => '10',
+                        'style' => 'text-transform:uppercase'
+            )))
         ;
     }
 

@@ -19,67 +19,71 @@ use Pequiven\SEIPBundle\Form\Politic\ProposalType;
  *
  */
 class ProposalController extends SEIPController {
-    
+
     public function createAction(Request $request) {
 
         $em = $this->getDoctrine()->getManager();
         $idWorkStudyCircle = $request->get('workStudyCircle_id');
         $workStudyCircle = $em->getRepository('PequivenSEIPBundle:Politic\WorkStudyCircle')->findOneBy(array('id' => $idWorkStudyCircle));
-        
+
         $proposal = new Proposal();
         $form = $this->createForm(new ProposalType, $proposal);
         $form->handleRequest($request);
-        
+
         $proposalsRegistered = $em->getRepository('PequivenSEIPBundle:Politic\Proposal')->findBy(array('workStudyCircle' => $idWorkStudyCircle));
         $proposalsArray = array();
-        foreach ($proposalsRegistered as $proposalRegistered){
+        foreach ($proposalsRegistered as $proposalRegistered) {
             $proposalsArray[$proposalRegistered->getLineStrategic()->getId()] = true;
         }
 
         $user = $this->getUser();
         $em->getConnection()->beginTransaction();
         if ($form->isSubmitted() && $form->isValid()) {
-            
+
             $proposal1 = strtoupper($request->get("proposal_data")["description1"]);
             $proposal2 = strtoupper($request->get("proposal_data")["description2"]);
-            $proposals = array();
-            array_push($proposals, $proposal1);
-            array_push($proposals, $proposal2);
-            
-            //Obtenemos Línea Estratégica
-            $LineStrategicRepository = $em->getRepository('PequivenMasterBundle:LineStrategic');
-            $lineStrategicObject = $LineStrategicRepository->findOneBy(array('id' => $request->get("proposal_data")["lineStrategic"]));
-            
-            if (strlen($proposal1) > 0 && strlen($proposal2) > 0){
-                if(array_key_exists($request->get("proposal_data")["lineStrategic"], $proposalsArray)){
-                    $this->get('session')->getFlashBag()->add('error', 'La Línea Estratégica ya tiene sus 2 propuestas');
-                } else{
-                    for($i = 1;$i <= 2; $i++){
-                        $proposalObject = new Proposal();
-                        $proposalObject->setCreatedBy($user);
-                        $proposalObject->setPeriod($period = $this->getPeriodService()->getPeriodActive());
-                        $proposalObject->setWorkStudyCircle($workStudyCircle);
-                        $proposalObject->setLineStrategic($lineStrategicObject);
-                        $proposalObject->setDescription($proposals[$i-1]);
-                        $em->persist($proposalObject);
-                    }
+            if (count($proposal1) > 20 || count($proposal2) > 20) {
+                $proposals = array();
+                array_push($proposals, $proposal1);
+                array_push($proposals, $proposal2);
 
-                    $em->flush();
+                //Obtenemos Línea Estratégica
+                $LineStrategicRepository = $em->getRepository('PequivenMasterBundle:LineStrategic');
+                $lineStrategicObject = $LineStrategicRepository->findOneBy(array('id' => $request->get("proposal_data")["lineStrategic"]));
 
-                    try {
+                if (strlen($proposal1) > 0 && strlen($proposal2) > 0) {
+                    if (array_key_exists($request->get("proposal_data")["lineStrategic"], $proposalsArray)) {
+                        $this->get('session')->getFlashBag()->add('error', 'La Línea Estratégica ya tiene sus 2 propuestas');
+                    } else {
+                        for ($i = 1; $i <= 2; $i++) {
+                            $proposalObject = new Proposal();
+                            $proposalObject->setCreatedBy($user);
+                            $proposalObject->setPeriod($period = $this->getPeriodService()->getPeriodActive());
+                            $proposalObject->setWorkStudyCircle($workStudyCircle);
+                            $proposalObject->setLineStrategic($lineStrategicObject);
+                            $proposalObject->setDescription($proposals[$i - 1]);
+                            $em->persist($proposalObject);
+                        }
+
                         $em->flush();
-                        $em->getConnection()->commit();
-                    } catch (Exception $e) {
-                        $em->getConnection()->rollback();
-                        throw $e;
+
+                        try {
+                            $em->flush();
+                            $em->getConnection()->commit();
+                        } catch (Exception $e) {
+                            $em->getConnection()->rollback();
+                            throw $e;
+                        }
+
+                        $this->get('session')->getFlashBag()->add('success', 'Propuestas guardadas correctamente');
+
+                        return $this->redirect($this->generateUrl('pequiven_work_study_circle_show', array("id" => $workStudyCircle->getId())));
                     }
-
-                    $this->get('session')->getFlashBag()->add('success', 'Propuestas guardadas correctamente');
-
-                    return $this->redirect($this->generateUrl('pequiven_work_study_circle_show', array("id" => $workStudyCircle->getId())));
+                } else {
+                    $this->get('session')->getFlashBag()->add('error', 'Debe agregar 2 propuestas por línea estratégica');
                 }
-            } else{
-                $this->get('session')->getFlashBag()->add('error', 'Debe agregar 2 propuestas por línea estratégica');
+            } else {
+                $this->get('session')->getFlashBag()->add('error', 'Las propuestas deben tener 20 caracteres como mínimo');
             }
         }
 
@@ -89,7 +93,7 @@ class ProposalController extends SEIPController {
                     'workStudyCircle' => $workStudyCircle,
         ));
     }
-    
+
     /**
      * Devuelve los Objetivos Estratégicos de acuerdo a la Línea Estratégica seleccionada
      * @param \Symfony\Component\HttpFoundation\Request $request
@@ -123,31 +127,28 @@ class ProposalController extends SEIPController {
      *
      *
      */
-    public function editAction(request $request)
-    {
+    public function editAction(request $request) {
         $em = $this->getDoctrine()->getManager();
-        
+
         $id = $request->get('id');
         $idCircle = $request->get('idCircle');
 
-        $proposalData = $em->getRepository('PequivenSEIPBundle:Politic\Proposal')->findOneBy(array('id' => $id));      
-        
+        $proposalData = $em->getRepository('PequivenSEIPBundle:Politic\Proposal')->findOneBy(array('id' => $id));
 
-        $form = $this->createForm(new ProposalType, $proposalData);//Para reutilizar en form de la propuesta (El select2)
+
+        $form = $this->createForm(new ProposalType, $proposalData); //Para reutilizar en form de la propuesta (El select2)
         $form->handleRequest($request);
 
         $em->getConnection()->beginTransaction();
-        
+
         if ($form->isSubmitted()) {
-            
+
             //$line = $request->get("proposal_data")['lineStrategic'];//Recibiendo el id de la Linea
-            $description = strtoupper($request->get("proposal_data")['description']);//Recibiendo la Propuesta Editada
-
+            $description = strtoupper($request->get("proposal_data")['description']); //Recibiendo la Propuesta Editada
             //$lineData = $this->get('pequiven.repository.linestrategic')->findOneBy(array('id' => $line)); //Llamada linea
-
             //$proposalData->setLineStrategic($lineData);//Pasando la linea
-            $proposalData->setDescription($description);//Pasando la propuesta editada
-            
+            $proposalData->setDescription($description); //Pasando la propuesta editada
+
             $em->persist($proposalData);
 
             try {
@@ -164,8 +165,8 @@ class ProposalController extends SEIPController {
 
         return $this->render('PequivenSEIPBundle:Politic:Proposal/edit.html.twig', array(
                     'proposal' => $proposalData,
-                    'circle'   => $idCircle,
-                    'form'     => $form->createView()
+                    'circle' => $idCircle,
+                    'form' => $form->createView()
         ));
     }
 
@@ -174,22 +175,21 @@ class ProposalController extends SEIPController {
      *  Vista de propuesta
      *
      */
-    public function viewAction(request $request)
-    {   
+    public function viewAction(request $request) {
         $em = $this->getDoctrine()->getManager();
 
         $id = $request->get('id');
 
-        $idCircle = $request->get('idCircle');        
+        $idCircle = $request->get('idCircle');
 
-        $proposalData = $em->getRepository('PequivenSEIPBundle:Politic\Proposal')->findOneBy(array('id' => $id));      
+        $proposalData = $em->getRepository('PequivenSEIPBundle:Politic\Proposal')->findOneBy(array('id' => $id));
 
         return $this->render('PequivenSEIPBundle:Politic:Proposal/view.html.twig', array(
                     'proposal' => $proposalData,
-                    'circle'   => $idCircle
+                    'circle' => $idCircle
         ));
     }
-    
+
     /**
      * Lista de Indicadores por nivel(Estratégico, Táctico u Operativo)
      * 
@@ -231,7 +231,7 @@ class ProposalController extends SEIPController {
                 ->setTemplate($this->config->getTemplate('list.html'))
                 ->setTemplateVar($this->config->getPluralResourceName())
         ;
-        $view->getSerializationContext()->setGroups(array('id', 'api_list', 'workStudyCircle', 'lineStrategic','complejo'));
+        $view->getSerializationContext()->setGroups(array('id', 'api_list', 'workStudyCircle', 'lineStrategic', 'complejo'));
         if ($request->get('_format') == 'html') {
 
             $data = array(
@@ -245,5 +245,5 @@ class ProposalController extends SEIPController {
         }
         return $this->handleView($view);
     }
-    
+
 }
