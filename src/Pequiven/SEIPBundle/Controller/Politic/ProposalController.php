@@ -197,11 +197,24 @@ class ProposalController extends SEIPController {
         $proposal = $em->getRepository('PequivenSEIPBundle:Politic\Proposal')->findAll();
         foreach ($proposal as $value) {
                  $linea = $value->getLineStrategic()->getDescription();
-                 var_dump($linea);
-              }      
-        die();
+          //       var_dump($linea);
+        }      
+        //die();
+        $lineas = $this->get('pequiven.repository.linestrategic')->findAll();//LineasEstrategicas
+        //Carga de data de Indicador para armar grafica
+        $response = new JsonResponse();
 
-        return $this->render('PequivenSEIPBundle:Politic:Proposal/show.html.twig');
+        $workService = $this->getWorkStudyCircleService();
+
+        $proposal = $em->getRepository('PequivenSEIPBundle:Politic\Proposal')->findAll();
+        //var_dump(count($proposal));
+        //die();
+        $dataChart = $workService->getDataChartOfProposalData($proposal,$lineas); //Paso de data de la propuesta
+
+        return $this->render('PequivenSEIPBundle:Politic:Proposal/show.html.twig', 
+        array(
+                'data' => $dataChart,
+        ));
     }
     
     /**
