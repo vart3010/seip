@@ -1,86 +1,51 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayout.html.twig' %}
 
-{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}
+{% trans_default_domain 'PequivenSEIPBundle' %}
 
-{% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
-
-{% trans_default_domain 'workStudyCircle' %}
-
-{% block javascripts_base %}
-    {{ parent() }}
-    <script src="{{  asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.input.js') }}"></script>
-{% endblock javascripts_base %}
-
+{% set route_index = 'pequiven_work_study_circle_show' %}
+{% set circle = proposal.workStudyCircle.id %}
 {% block before_body %}
     {{ contentHeader(
-        ("workStudyCircle.title"|trans ),
-        ("workStudyCircle.proposals.title"|trans )
+        { ( path(route_index, { id:circle }) ): ("workStudyCircle.title"|trans({},'workStudyCircle') )},
+        ("pequiven_seip.politic.proposal"|trans ),
+        ( 'pequiven.show'|trans({},'messages') )
     ) }}
 {% endblock %}
 
-{% block body %}
+{% block body -%}
 
-    <div class="block">
-        <div class="block-title">
-            <h3 class="ng-binding">Estadísticas</h3>
-        </div>
-        <div class="with-padding">
-            <div class="standard-tabs margin-bottom" id="add-tabs">
-
-                <ul class="tabs">
-                    <li class="active"><a href="#tab-1">Por Linea Estrategica</a></li>
-                    <li><a href="#tab-2">Por Localidad</a></li>
-                </ul>
-                <div class="tabs-content">
-                    <div id="tab-1" class="with-padding">
-                        <div class="columns">
-                            <div class="twelve-columns"> 
-                               <div  ng-controller="ChartsProposalController" ng-init="renderChartProposal('graphicProposal',{{ data|json_encode() }},'250%','750')">
-                                    <span id="graphicProposal">
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="tab-2" class="with-padding">
-                        <div class="columns">
-                            <div class="twelve-columns"> 
-                                <div  ng-controller="ChartsProposalController" ng-init="renderChartProposalLocalidad('graphicProposalLocalidad',{{ dataLocalidad|json_encode() }},'250%','750')">
-                                    <span id="graphicProposalLocalidad">
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+        <br /><br />
+            <fieldset class="fieldset fields-list">
+            <legend class="legend">Círculo de Estudio y Trabajo </legend>
+                <div class="field-block button-height">
+                    <label class="label">Circulo</label>
+                        <div style="font-weight: bold">
+                            <a href="{{ path('pequiven_work_study_circle_show',{id:circle }) }}">
+                                ({{ proposal.workStudyCircle.codigo }})
+                                {{ proposal.workStudyCircle.name }}
+                            </a>
+                        </div>                
+                </div>
+            </fieldset>
+        
+            <fieldset class="fieldset fields-list">
+            <legend class="legend">Datos de la Propuesta</legend>
+                <div class="field-block button-height">
+                    <label class="label">Línea Estratégica</label>
+                        <div style="font-weight: bold">
+                            {{ proposal.lineStrategic.ref }}{{ proposal.lineStrategic.description }}
+                        </div>                
+                </div>
+                <div class="field-block button-height">
+                    <label class="label">Propuesta</label>
+                    {{ proposal.description }}
                 </div>
 
-            </div>
-        </div>
+            </fieldset>
 
-    </div>
-
-    <HR width=100% align="center">
-    {% set pdf=0 %} 
-    {% set routeConfig = path('pequiven_work_study_circle_general',{'pdf':pdf}) %}
-    {% if(is_granted(["ROLE_SEIP_WORK_STUDY_CIRCLES_EXPORT_REPORT"])) %}
-        <div class="align-right">
-            {{ buttons.generic(
-                    (routeConfig),
-                    ('workStudyCircle.export.exportPdf'|trans({})),
-                    'icon-download'
-                 ) 
-            }}
-        </div>
-    {% endif %}
-
-
-    {% block javascripts %}
-        {{ parent() }}
-        <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/fusioncharts.js') }}"></script>
-        <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/themes/fusioncharts.theme.fint.js') }}"></script>
-
-
-    {% endblock %}
-
-    
 {% endblock %}
 
+{% block javascript %}
+    
+
+{% endblock javascript %}
