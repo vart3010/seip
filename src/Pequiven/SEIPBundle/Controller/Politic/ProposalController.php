@@ -184,6 +184,25 @@ class ProposalController extends SEIPController {
                     'proposal' => $proposalData,
         ));
     }
+
+    /**
+     *
+     *  Propuestas Vista General
+     *
+     */
+    public function showAction(request $request)
+    {   
+        $em = $this->getDoctrine()->getManager();
+
+        $proposal = $em->getRepository('PequivenSEIPBundle:Politic\Proposal')->findAll();
+        foreach ($proposal as $value) {
+                 $linea = $value->getLineStrategic()->getDescription();
+                 var_dump($linea);
+              }      
+        die();
+
+        return $this->render('PequivenSEIPBundle:Politic:Proposal/show.html.twig');
+    }
     
     /**
      * Lista de Indicadores por nivel(Estratégico, Táctico u Operativo)
@@ -239,6 +258,10 @@ class ProposalController extends SEIPController {
             $view->setData($resources->toArray('', array(), $formatData));
         }
         return $this->handleView($view);
+    }
+
+    protected function getWorkStudyCircleService() {
+        return $this->container->get('seip.service.workStudyCircle');
     }
     
 }
