@@ -3,7 +3,7 @@
 {% trans_default_domain 'PequivenSEIPBundle' %}
 
 {% set route_index = 'pequiven_work_study_circle_show' %}
-
+{% set circle = proposal.workStudyCircle.id %}
 {% block before_body %}
     {{ contentHeader(
         { ( path(route_index, { id:circle }) ): ("workStudyCircle.title"|trans({},'workStudyCircle') )},

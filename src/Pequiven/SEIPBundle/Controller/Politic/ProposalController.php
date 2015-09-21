@@ -131,12 +131,11 @@ class ProposalController extends SEIPController {
         $em = $this->getDoctrine()->getManager();
 
         $id = $request->get('id');
-        $idCircle = $request->get('idCircle');
 
-        $proposalData = $em->getRepository('PequivenSEIPBundle:Politic\Proposal')->findOneBy(array('id' => $id));
-
-
-        $form = $this->createForm(new ProposalType, $proposalData); //Para reutilizar en form de la propuesta (El select2)
+        $proposalData = $em->getRepository('PequivenSEIPBundle:Politic\Proposal')->findOneBy(array('id' => $id));      
+        $idCircle = $proposalData->getWorkStudyCircle()->getId();//Carga de id para el retorno al circulo
+        
+        $form = $this->createForm(new ProposalType, $proposalData);//Para reutilizar en form de la propuesta (El select2)
         $form->handleRequest($request);
 
         $em->getConnection()->beginTransaction();
@@ -175,7 +174,8 @@ class ProposalController extends SEIPController {
      *  Vista de propuesta
      *
      */
-    public function viewAction(request $request) {
+    public function showAction(request $request)
+    {   
         $em = $this->getDoctrine()->getManager();
 
         $id = $request->get('id');

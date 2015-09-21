@@ -23,7 +23,7 @@ pequiven_proposal_show_objetives:
     options:
         expose: true
 pequiven_proposal_view_edit:
-    path: /{idCircle}/edit/{id}
+    path: /edit/{id}
     defaults:
         _controller: pequiven.controller.proposal:editAction
     methods: [GET|POST]
@@ -39,8 +39,8 @@ pequiven_proposal_list:
         _format: html|json|xml
     methods: [GET]
 
-pequiven_proposal_show_view:
-    path: /{idCircle}/view/{id}
+pequiven_proposal_show:
+    path: /{id}
     defaults:
         _controller: pequiven.controller.proposal:viewAction
     methods: [GET|POST]

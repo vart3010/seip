@@ -63,6 +63,36 @@ class GenericDataController extends SEIPController
     }
     
     /**
+     * Retorna los Círculos de Estudio de Trabajo
+     * @param Request $request
+     * @return type
+     */
+    function getWorkStudyCircleAction(Request $request){
+        $criteria = $request->get('filter',$this->config->getCriteria());
+        $repository = $this->get('pequiven.repository.work_study_circle');
+        $results = $repository->findWorkStudyCircle($criteria);
+        $view = $this->view();
+        $view->setData($results);
+        $view->getSerializationContext()->setGroups(array('id','api_list','complejo'));
+        return $this->handleView($view);
+    }
+    
+    /**
+     * Retorna las Líneas Estratégicas
+     * @param Request $request
+     * @return type
+     */
+    function getLineStrategicAction(Request $request){
+        $criteria = $request->get('filter',$this->config->getCriteria());
+        $repository = $this->get('pequiven.repository.linestrategic');
+        $results = $repository->findLineStrategic($criteria);
+        $view = $this->view();
+        $view->setData($results);
+        $view->getSerializationContext()->setGroups(array('id','api_list'));
+        return $this->handleView($view);
+    }
+    
+    /**
      * Retorna las frecuencias de notificación del indicador
      * @param type $param
      */

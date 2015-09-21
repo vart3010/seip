@@ -34,6 +34,18 @@ class LineStrategicRepository extends EntityRepository {
         return $qb->getQuery()->getResult();
     }
     
+    /**
+     * 
+     * @param array $criteria
+     * @return type
+     */
+    function findLineStrategic(array $criteria = null)
+    {
+        $queryBuilder = $this->getCollectionQueryBuilder();
+        $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
+        return $queryBuilder->getQuery()->getResult();
+    }
+    
 //    protected function applyCriteria(\Doctrine\ORM\QueryBuilder $queryBuilder, array $criteria = null) {
 //        $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
 //        

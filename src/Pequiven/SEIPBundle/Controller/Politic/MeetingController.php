@@ -121,7 +121,7 @@ class MeetingController extends SEIPController {
         ));
     }
 
-    public function viewAcction(Request $request) {
+    public function showAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
         $idMeeting = $request->get("meeting_id");
         $meeting = $em->getRepository('PequivenSEIPBundle:Politic\Meeting')->findOneBy(array('id' => $idMeeting));
