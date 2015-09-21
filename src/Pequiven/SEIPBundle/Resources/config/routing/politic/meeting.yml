@@ -14,7 +14,7 @@ pequiven_meeting_edit:
     options:
         expose: true
         
-pequiven_meeting_show:
+pequiven_meeting_view:
     path: /{meeting_id}
     defaults:
         _controller: pequiven.controller.meeting:viewAcction

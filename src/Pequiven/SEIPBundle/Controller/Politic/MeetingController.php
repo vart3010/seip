@@ -157,12 +157,16 @@ class MeetingController extends SEIPController {
 
         $workStudyCircle = $meeting->getWorkStudyCircle();
 
+
         $form = $this->createForm(new MeetingType, $meeting);
+        
         $form->handleRequest($request);
 
-        $em->getConnection()->beginTransaction();
+
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $em->getConnection()->beginTransaction();
+
             $date = $request->get("meeting_data")["date"];
             $date = str_replace("/", "-", $date);
             $date = new \DateTime($date);

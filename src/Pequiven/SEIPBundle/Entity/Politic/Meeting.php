@@ -60,7 +60,7 @@ class Meeting {
 
     /**
      * @var \DateTime
-     * @ORM\Column(name="date", type="datetime")
+     * @ORM\Column(name="date", type="date")
      */
     private $date;
 
@@ -90,9 +90,9 @@ class Meeting {
     private $workStudyCircle;
 
     /**
-     * @var string
+     * @var time
      *
-     * @ORM\Column(name="duration",type="string",nullable=false)
+     * @ORM\Column(name="duration",type="time",nullable=false)
      */
     private $duration;
 
