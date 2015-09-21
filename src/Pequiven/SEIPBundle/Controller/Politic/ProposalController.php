@@ -172,7 +172,7 @@ class ProposalController extends SEIPController {
      *  Vista de propuesta
      *
      */
-    public function viewAction(request $request)
+    public function showAction(request $request)
     {   
         $em = $this->getDoctrine()->getManager();
 
