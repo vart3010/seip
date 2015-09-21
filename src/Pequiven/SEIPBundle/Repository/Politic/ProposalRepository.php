@@ -55,6 +55,13 @@ class ProposalRepository extends EntityRepository
                 ;
         }
         
+        if (($lineStrategic = $criteria->remove('lineStrategic'))) {
+            $queryBuilder
+                    ->andWhere('pr.lineStrategic = :lineStrategic')
+                    ->setParameter('lineStrategic', $lineStrategic)
+                ;
+        }
+        
         parent::applyCriteria($queryBuilder, $criteria->toArray());
     }
     

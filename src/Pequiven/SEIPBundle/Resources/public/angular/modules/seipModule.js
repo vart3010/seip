@@ -2241,16 +2241,19 @@ angular.module('seipModule.controllers', [])
             var selectComplejo = angular.element("#selectComplejos");
             var selectFirstLineManagement = angular.element("#selectFirstLineManagement");
             var selectWorkStudyCircle = angular.element("#selectWorkStudyCircle");
+            var selectLineStrategic = angular.element("#selectLineStrategic");
 
             $scope.data = {
                 complejos: null,
                 first_line_managements: null,
                 work_study_circles: null,
+                line_strategics: null,
             };
             $scope.model = {
                 complejo: null,
                 firstLineManagement: null,
                 workStudyCircle: null,
+                lineStrategic: null,
             };
 
             //Busca las localidades
@@ -2317,7 +2320,7 @@ angular.module('seipModule.controllers', [])
                             $scope.data.line_strategics = data;
                             if ($scope.model.lineStrategic != null) {
                                 $scope.setValueSelect2("lineStrategic", $scope.model.lineStrategic, $scope.data.line_strategics, function (selected) {
-                                    $scope.model.workStudyCircle = selected;
+                                    $scope.model.lineStrategic = selected;
                                 });
                             }
                         });
