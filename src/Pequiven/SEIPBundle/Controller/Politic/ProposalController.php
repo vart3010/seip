@@ -184,7 +184,7 @@ class ProposalController extends SEIPController {
 
         $proposalData = $em->getRepository('PequivenSEIPBundle:Politic\Proposal')->findOneBy(array('id' => $id));
 
-        return $this->render('PequivenSEIPBundle:Politic:Proposal/view.html.twig', array(
+        return $this->render('PequivenSEIPBundle:Politic:Proposal/show.html.twig', array(
                     'proposal' => $proposalData,
                     'circle' => $idCircle
         ));
