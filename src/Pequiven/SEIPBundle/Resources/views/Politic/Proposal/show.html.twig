@@ -27,25 +27,27 @@
             <div class="standard-tabs margin-bottom" id="add-tabs">
 
                 <ul class="tabs">
-                    <li class="active"><a href="#tab-1">Por Localidad</a></li>
-                    <li><a href="#tab-2">Por Linea Estrategica</a></li>
+                    <li class="active"><a href="#tab-1">Por Linea Estrategica</a></li>
+                    <li><a href="#tab-2">Por Localidad</a></li>
                 </ul>
                 <div class="tabs-content">
                     <div id="tab-1" class="with-padding">
                         <div class="columns">
                             <div class="twelve-columns"> 
-                               {# <div  ng-controller="graphicsWorkStudyCircle" ng-init="renderMultiSerie3d('graphicCircle',{{ graphicCircle }},'100%','400')">
-                                    <span id="graphicCircle"></span>
-                                </div>#}
+                               <div  ng-controller="ChartsProposalController" ng-init="renderChartProposal('graphicProposal',{{ data|json_encode() }},'250%','750')">
+                                    <span id="graphicProposal">
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div id="tab-2" class="with-padding">
                         <div class="columns">
                             <div class="twelve-columns"> 
-                                {#<div  ng-controller="graphicsWorkStudyCircle" ng-init="renderMultiSerie3d('graphicUser',{{ graphicUser }},'100%','400')">
-                                    <span id="graphicUser"></span>
-                                </div>#}
+                                <div  ng-controller="ChartsProposalController" ng-init="renderChartProposalLocalidad('graphicProposalLocalidad',{{ dataLocalidad|json_encode() }},'250%','750')">
+                                    <span id="graphicProposalLocalidad">
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     </div>

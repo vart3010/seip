@@ -50,6 +50,25 @@ class ProposalRepository extends EntityRepository
         
         parent::applyCriteria($queryBuilder, $criteria->toArray());
     }
+
+    /**
+     * Propuestas por Complejo
+     *
+     *
+     */
+    function findQueryProposalComplejo($complejo) {
+        
+        //$queryBuilder->innerJoin('pr.workStudyCircle', 'wsc');
+        
+        $qb = $this->getQueryBuilder();
+        $qb
+                ->innerJoin('pr.workStudyCircle', 'wsc')
+                ->andWhere('wsc.complejo = :complejo')
+                ->setParameter('complejo', $complejo)
+        ;
+        
+        return $qb->getQuery()->getResult();
+    }
     
     protected function getAlias() {
         return 'pr';
