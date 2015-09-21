@@ -26,16 +26,21 @@ class MeetingType extends AbstractType {
                 ->add('place', 'textarea', array(
                     'label' => 'Lugar de Reunión',
                     'label_attr' => array('class' => 'label'),
-                    'attr' => array('class' => 'input input-xlarge','style'=>'text-transform:uppercase;')))
+                    'attr' => array('class' => 'input input-xlarge', 'style' => 'text-transform:uppercase;')))
                 ->add('subject', 'textarea', array(
                     'label' => 'Tema de la Reunión',
                     'label_attr' => array('class' => 'label'),
-                    'attr' => array('class' => 'input input-xlarge','style'=>'text-transform:uppercase;')))
+                    'attr' => array('class' => 'input input-xlarge', 'style' => 'text-transform:uppercase;')))
                 ->add('observation', 'textarea', array(
                     'label' => 'Observaciones',
                     'required' => false,
                     'label_attr' => array('class' => 'label'),
-                    'attr' => array('class' => 'input input-xlarge','style'=>'text-transform:uppercase;')))
+                    'attr' => array('class' => 'input input-xlarge', 'style' => 'text-transform:uppercase;')))
+                ->add('duration', 'time', array(
+                    'label' => 'Duración',
+                    'required' => true,
+                    'label_attr' => array('class' => 'label'),
+                    'attr' => array('class' => 'input', 'style' => 'text-transform:uppercase;')))
 
         ;
     }

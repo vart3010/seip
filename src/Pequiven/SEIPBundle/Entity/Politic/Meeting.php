@@ -60,7 +60,7 @@ class Meeting {
 
     /**
      * @var \DateTime
-     * @ORM\Column(name="date", type="datetime")
+     * @ORM\Column(name="date", type="date")
      */
     private $date;
 
@@ -88,6 +88,13 @@ class Meeting {
      * @ORM\JoinColumn(name="workStudyCircle_id", referencedColumnName="id")
      * */
     private $workStudyCircle;
+
+    /**
+     * @var time
+     *
+     * @ORM\Column(name="duration",type="time",nullable=false)
+     */
+    private $duration;
 
     public function __construct() {
         $this->assistances = new \Doctrine\Common\Collections\ArrayCollection();
@@ -281,6 +288,22 @@ class Meeting {
      */
     function setObservation($observation) {
         $this->observation = $observation;
+    }
+
+    /**
+     * 
+     * @return type
+     */
+    function getDuration() {
+        return $this->duration;
+    }
+
+    /**
+     * 
+     * @param type $duration
+     */
+    function setDuration($duration) {
+        $this->duration = $duration;
     }
 
 }

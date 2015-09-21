@@ -36,6 +36,11 @@
                 </span>
             </div>
             <div class="field-block button-height">
+                {{ form_label(form.duration) }}
+                {{ form_widget(form.duration) }}
+                {{ form_errors(form.duration) }}
+            </div>
+            <div class="field-block button-height">
                 {{ form_label(form.place) }}
                 {{ form_widget(form.place) }}
                 {{ form_errors(form.place) }}

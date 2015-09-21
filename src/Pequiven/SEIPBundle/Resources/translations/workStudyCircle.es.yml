@@ -41,6 +41,7 @@ workStudyCircle:
         subject: Tema
         observation: Observaciones
         edit: Editar Reunión
+        duration: Duración (Hrs)
             
     assistances:
         dataAssistances: Participantes
