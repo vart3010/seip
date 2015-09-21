@@ -78,6 +78,21 @@ class GenericDataController extends SEIPController
     }
     
     /**
+     * Retorna las Líneas Estratégicas
+     * @param Request $request
+     * @return type
+     */
+    function getLineStrategicAction(Request $request){
+        $criteria = $request->get('filter',$this->config->getCriteria());
+        $repository = $this->get('pequiven.repository.linestrategic');
+        $results = $repository->findLineStrategic($criteria);
+        $view = $this->view();
+        $view->setData($results);
+        $view->getSerializationContext()->setGroups(array('id','api_list'));
+        return $this->handleView($view);
+    }
+    
+    /**
      * Retorna las frecuencias de notificación del indicador
      * @param type $param
      */

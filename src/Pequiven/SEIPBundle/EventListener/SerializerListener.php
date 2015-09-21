@@ -49,6 +49,7 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeReportTemplate', 'class' => 'Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate', 'format' => 'json'),
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializePlantReport', 'class' => 'Pequiven\SEIPBundle\Entity\DataLoad\PlantReport', 'format' => 'json'),
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeWorkStudyCircle', 'class' => 'Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle', 'format' => 'json'),
+            array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeProposal', 'class' => 'Pequiven\SEIPBundle\Entity\Politic\Proposal', 'format' => 'json'),
         );
     }
 
@@ -643,6 +644,14 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
         
         $event->getVisitor()->addData('_links', $links);
         $event->getVisitor()->addData('gerencias', $gerenciasText);
+    }
+    
+    public function onPostSerializeProposal(ObjectEvent $event) {
+        $object = $event->getObject();
+        
+        $links['self']['show'] = $this->generateUrl('pequiven_proposal_show', array('id' => $object->getId()));
+        
+        $event->getVisitor()->addData('_links', $links);
     }
     
 
