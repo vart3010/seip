@@ -16,12 +16,39 @@ use Pequiven\SEIPBundle\Doctrine\ORM\SeipEntityRepository as EntityRepository;
 class ProposalRepository extends EntityRepository
 {
     
+    /**
+     * Crea un paginador para los indicadores de acuerdo al nivel del mismo
+     * 
+     * @param array $criteria
+     * @param array $orderBy
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    function createPaginatorProposal(array $criteria = null, array $orderBy = null) {
+        return $this->createPaginator($criteria, $orderBy);
+    }
+    
     protected function applyCriteria(\Doctrine\ORM\QueryBuilder $queryBuilder, array $criteria = null) {
         $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
         
-//        parent::applyCriteria($queryBuilder, $criteria->toArray());
-//        $this->applyPeriodCriteria($queryBuilder);
-        return parent::applyCriteria($queryBuilder, $criteria->toArray());
+        $queryBuilder->innerJoin('pr.workStudyCircle', 'wsc');
+        
+        //Filtro Localidad
+        if(($complejo =  $criteria->remove('complejo')) !== null){
+            $queryBuilder
+                    ->andWhere('wsc.complejo = :complejo')
+                    ->setParameter('complejo', $complejo)
+                    ;
+        }
+        
+        if (($gerencia = $criteria->remove('firstLineManagement'))) {
+            $queryBuilder
+                    ->innerJoin('wsc.gerencias', 'g')
+                    ->andWhere('g.id = :gerencia')
+                    ->setParameter('gerencia', $gerencia)
+                ;
+        }
+        
+        parent::applyCriteria($queryBuilder, $criteria->toArray());
     }
     
     protected function getAlias() {

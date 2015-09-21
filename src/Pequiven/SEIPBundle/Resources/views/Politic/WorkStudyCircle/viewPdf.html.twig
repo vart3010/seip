@@ -124,8 +124,8 @@
                     {% set count= count + 1%}
                     <tr>
                         <td width="5%"> {{ count }} </td>
-                        <td width="15%"> {{ miembro.getIndentification()|number_format(0, ',', '.') }} </td>
-                        <td width="50%"> {{ miembro.firstname | upper}} {{ miembro.Lastname | upper}}</td>
+                        <td width="15%"> {{ miembro.getIndentification|number_format(0, ',', '.') }} </td>
+                        <td width="50%"> {{ miembro.firstname | upper}} {{ miembro.lastname | upper}}</td>
                         <td width="20%"> {{ miembro.cellphone }} </td>
                         <td width="10%"> {{ miembro.ext }} </td>
                     </tr>
@@ -198,5 +198,8 @@
             {% endfor %}
         </tbody>
     </table>
+
+
+    
 {% endblock %}
 

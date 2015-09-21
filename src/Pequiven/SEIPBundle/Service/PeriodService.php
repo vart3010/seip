@@ -116,6 +116,23 @@ class PeriodService extends ContainerAware
         
         return $result;
     }
+
+    /**
+     * Retorna si se encuetra habilitada la carga de Circulos de Estudio y Trabajo para el periodo activo.
+     * @return boolean
+     */
+    function isAllowLoadWorkStudyCircle()
+    {
+        $result = false;
+        $period = $this->getPeriodActive();
+        $now = new \DateTime();
+        
+        if($now >= $period->getDateStartLoadWorkStudyCircle() && $now <= $period->getDateEndLoadWorkStudyCircle()){
+            $result = true;
+        }
+        
+        return $result;
+    }
     
     /**
      * Retorna si se encuetra habilitada la carga de planificacion de plantas

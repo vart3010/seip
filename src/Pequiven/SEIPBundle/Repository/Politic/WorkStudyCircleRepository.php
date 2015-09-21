@@ -70,8 +70,6 @@ class WorkStudyCircleRepository extends EntityRepository
     protected function applyCriteria(\Doctrine\ORM\QueryBuilder $queryBuilder, array $criteria = null) {
         $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
         
-//        parent::applyCriteria($queryBuilder, $criteria->toArray());
-//        $this->applyPeriodCriteria($queryBuilder);
         return parent::applyCriteria($queryBuilder, $criteria->toArray());
     }
     

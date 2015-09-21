@@ -89,6 +89,13 @@ class Meeting {
      * */
     private $workStudyCircle;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="duration",type="string",nullable=false)
+     */
+    private $duration;
+
     public function __construct() {
         $this->assistances = new \Doctrine\Common\Collections\ArrayCollection();
     }
@@ -281,6 +288,22 @@ class Meeting {
      */
     function setObservation($observation) {
         $this->observation = $observation;
+    }
+
+    /**
+     * 
+     * @return type
+     */
+    function getDuration() {
+        return $this->duration;
+    }
+
+    /**
+     * 
+     * @param type $duration
+     */
+    function setDuration($duration) {
+        $this->duration = $duration;
     }
 
 }

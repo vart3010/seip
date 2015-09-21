@@ -1242,7 +1242,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                         ))
                 )->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.main', $section)));
 
-        if ($this->isGranted(array('ROLE_SEIP_WORK_STUDY_CIRCLES_CREATE')) && !$user->getWorkStudyCircle()) {
+        if ($this->isGranted(array('ROLE_SEIP_WORK_STUDY_CIRCLES_CREATE')) && !$user->getWorkStudyCircle() && $this->getPeriodService()->isAllowLoadWorkStudyCircle()) {
             $workStudyCirclesRegister = $this->factory->createItem('work_study_circles.register', $this->getSubLevelOptions(array(
                                 "route" => "pequiven_work_study_circle_create",
                                 'labelAttributes' => array('icon' => 'fa fa-file-text-o',),
@@ -1284,7 +1284,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
         }
         if ($this->isGranted(array('ROLE_SEIP_WORK_STUDY_CIRCLES_STRATEGIC_PLAN'))) {
             $workStudyCirclesStrategicPlan = $this->factory->createItem('work_study_circles.strategic_plan', $this->getSubLevelOptions(array(
-                                "route" => "",
+                                'route' => 'pequiven_proposal_list',
                                 'labelAttributes' => array('icon' => 'fa fa-bars',),
                             ))
                     )->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.strategic_plan', $section)));

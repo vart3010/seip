@@ -1,13 +1,19 @@
 {% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
 {% trans_default_domain 'workStudyCircle' %}
 
 {% block javascripts_base %}
     {{ parent() }}
     <script src="{{  asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.input.js') }}"></script>
 {% endblock javascripts_base %}
+{% set circle = meeting.workStudyCircle.id %}
+{% set route_index = 'pequiven_work_study_circle_show' %}
 
 {% block before_body %}
-    {{ contentHeader("workStudyCircle.meetings.title" | trans({}))   }}
+    {{ contentHeader(
+        { ( path(route_index, { id:circle }) ): ("workStudyCircle.title"|trans )},
+        ("workStudyCircle.meetings.title"|trans )
+    ) }}
 {% endblock %}
 
 
@@ -16,12 +22,31 @@
 
 
     <fieldset class="fieldset">
+        <legend class="legend">{{ 'workStudyCircle.form.nombre'|trans }}&nbsp;</legend>
+        <div class="new-row-mobile twelve-columns-mobile twelve-columns-tablet twelve-columns-mobile">
+            <p class="inline-label">
+                <label class="label">{{ 'workStudyCircle.form.nombre'|trans }}</label>
+                <a href="{{ path('pequiven_work_study_circle_show',{id:circle }) }}">
+                    ({{ meeting.workStudyCircle.codigo }})                    
+                    {{ meeting.workStudyCircle.name }}
+                </a>
+            </p>
+        </div>
+    </fieldset>
+    <br>
+    <fieldset class="fieldset">
         <legend class="legend">{{ 'workStudyCircle.meetings.titleSingle'|trans }}&nbsp;</legend>
         <div class="columns">
             <div class="new-row-mobile twelve-columns-mobile twelve-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">{{ 'workStudyCircle.meetings.date'|trans }}</label>
                     {{ meeting.date|date('Y-m-d') }}
+                </p>
+            </div>
+            <div class="new-row-mobile twelve-columns-mobile twelve-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'workStudyCircle.meetings.duration'|trans }}</label>
+                    {{ meeting.duration }}
                 </p>
             </div>
             <div class="new-row-mobile twelve-columns-mobile twelve-columns-tablet twelve-columns-mobile">
@@ -46,7 +71,19 @@
     </fieldset>
     <br>
     {% include 'PequivenSEIPBundle:Politic:Meeting/assistance.html.twig' %}
+    <br>
 
+    {% set routeConfig = path('pequiven_meeting_export_pdf',{idmeeting:meeting.id}) %}
+    {% if(is_granted(["ROLE_SEIP_MEETING_EXPORT_REPORT"])) %}
+        <div class="align-right">
+            {{ buttons.generic(
+                    (routeConfig),
+                    ('workStudyCircle.export.exportPdf'|trans({})),
+                    'icon-download'
+                 ) 
+            }}
+        </div>
+    {% endif %}
 
 {% endblock %}
 
@@ -65,7 +102,7 @@
                 var value = $(this).val();
 
                 var obj = $(this);
-                
+
                 var data = {
                     user_id: data,
                     value: value,
@@ -80,7 +117,7 @@
                         obj.val(data["value"]);
                     }
                 });
-                
+
 
             });
         });

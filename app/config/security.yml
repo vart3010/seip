@@ -212,6 +212,7 @@ security:
             - ROLE_SEIP_MEETING_ADD
             - ROLE_SEIP_MEETING_EDIT
             - ROLE_SEIP_MEETING_EDIT_ASSISTANCE
+            - ROLE_SEIP_MEETING_EXPORT_REPORT
             
             
             # Permisos especiales

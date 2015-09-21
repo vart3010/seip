@@ -7,7 +7,7 @@
 
 {% block before_body %}
     {{ contentHeader(
-        ("pequiven_seip.politic.work_study_circle"|trans ),
+        ("workStudyCircle.title"|trans({},'workStudyCircle') ),
         ("pequiven_seip.politic.proposal"|trans ),
         ( 'pequiven.add'|trans({},'messages') )
     ) }}
@@ -44,14 +44,14 @@
                 {{ form_errors(form.description2) }}
             </div>
         </fieldset>
-            
+
         {#<div class="columns">
             <div class="twelve-columns" id="objetives" style="text-align: center;">
             </div>
         </div>#}
 
         {{ actions.create() }}
-        
+
         {{ form_rest(form) }}
     </form>
 {% endblock %}
@@ -59,19 +59,19 @@
 {% block javascript %}
     <script type="text/javascript">
         var selectLineStrategic = $("#proposal_data_lineStrategic");
-        
+
         $(document).ready(function () {
             selectLineStrategic.select2({allowClear: true});
         });
-        
-        selectLineStrategic.change(function() {
-           displayObjetivesFromLineStrategic();
+
+        selectLineStrategic.change(function () {
+            displayObjetivesFromLineStrategic();
         });
-        
+
         //Función que muestra los objetivos estratégicos de acuerdo a la línea estratégica seleccionada
-        function displayObjetivesFromLineStrategic(){
+        function displayObjetivesFromLineStrategic() {
             var data = {
-               lineStrategicId: $.trim(selectLineStrategic.val()),
+                lineStrategicId: $.trim(selectLineStrategic.val()),
             };
             $.ajax({
                 type: 'post',
@@ -89,7 +89,7 @@
                         $('#objetives').html(text);
                         $('#objetives').fadeIn();
                     });
-               }
+                }
             });
         }
     </script>

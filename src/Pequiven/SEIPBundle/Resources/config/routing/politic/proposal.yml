@@ -29,3 +29,21 @@ pequiven_proposal_view_edit:
     methods: [GET|POST]
     options:
         expose: true
+        
+pequiven_proposal_list:
+    path: /list.{_format}
+    defaults:
+        _controller: pequiven.controller.proposal:listAction  
+        _format: html
+    requirements:
+        _format: html|json|xml
+    methods: [GET]
+
+pequiven_proposal_show_view:
+    path: /{idCircle}/view/{id}
+    defaults:
+        _controller: pequiven.controller.proposal:viewAction
+    methods: [GET|POST]
+    options:
+        expose: true
+

@@ -1,0 +1,15 @@
+Pequiven\SEIPBundle\Entity\Politic\Proposal:
+    exclusion_policy: ALL
+    properties:
+        id:
+            expose: true
+            groups: [id]
+        description:
+            expose: true
+            groups: [api_list]
+        workStudyCircle:
+            expose: true
+            groups: [workStudyCircle]
+        lineStrategic:
+            expose: true
+            groups: [lineStrategic]

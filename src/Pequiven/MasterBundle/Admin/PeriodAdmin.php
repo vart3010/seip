@@ -54,6 +54,8 @@ class PeriodAdmin extends Admin {
                 ->add('dateEndPenalty')
                 ->add('dateStartPlanningReport')
                 ->add('dateEndPlanningReport')
+                ->add('dateStartLoadWorkStudyCircle')
+                ->add('dateEndLoadWorkStudyCircle')
                 ->add('isPlanningReportEnabled')
                 ->add('parent')
                 
@@ -87,6 +89,8 @@ class PeriodAdmin extends Admin {
                     ->setDateEndLoadObjetive($dateEnd)
                     ->setDateStartClearanceNotificationArrangementProgram($dateStart)
                     ->setDateEndClearanceNotificationArrangementProgram($dateEnd)
+                    ->setDateStartLoadWorkStudyCircle($dateStart)
+                    ->setDateEndLoadWorkStudyCircle($dateEnd)
             ;
         }
         if ($object != null && $object->getId() !== null) {
@@ -138,6 +142,10 @@ class PeriodAdmin extends Admin {
                 ->add('dateStartLoadIndicator', 'sonata_type_date_picker', array(
                 ))
                 ->add('dateEndLoadIndicator', 'sonata_type_date_picker', array(
+                ))
+                ->add('dateStartLoadWorkStudyCircle', 'sonata_type_date_picker', array(
+                ))
+                ->add('dateEndLoadWorkStudyCircle', 'sonata_type_date_picker', array(
                 ))
                 ->add('dateStartClearanceNotificationArrangementProgram', 'sonata_type_date_picker', array(
                 ))

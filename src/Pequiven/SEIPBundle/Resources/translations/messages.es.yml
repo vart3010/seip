@@ -31,6 +31,7 @@ pequiven:
     edit: Editar
     delete: Eliminar
     show: Ver
+    view: Vista
     details: Detalles
     evolution: Informe de Evolución
     go_to_the_historical: Ir al Historico del Informe de Evolución
