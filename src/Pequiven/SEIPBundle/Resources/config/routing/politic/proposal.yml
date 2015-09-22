@@ -46,4 +46,11 @@ pequiven_proposal_show:
     methods: [GET|POST]
     options:
         expose: true
+pequiven_proposal_show_general:
+    path: /show/view
+    defaults:
+        _controller: pequiven.controller.proposal:viewAction
+    methods: [GET|POST]
+    options:
+        expose: true
 
