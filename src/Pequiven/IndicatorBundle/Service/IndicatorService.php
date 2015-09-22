@@ -3579,6 +3579,11 @@ class IndicatorService implements ContainerAwareInterface {
         $chart["YAxisMaxValue"] = "150";
         $chart["showborder"] = "0";
         $chart["decimals"] = "0";
+        $chart["exportenabled"] = "1";
+        $chart["exportatclient"] = "0";
+        $chart["exportFormats"] = "PNG= Exportar como PNG|PDF= Exportar como PDF";
+        $chart["exportFileName"] = "Grafico Resultados ";
+        $chart["exporthandler"] = "http://107.21.74.91/";
 
         //Lamado de promedio
         $prom = $this->getPromdIndicator($indicator);
@@ -3740,8 +3745,13 @@ class IndicatorService implements ContainerAwareInterface {
         $chart["numberSuffix"] = "%";
         $chart["bgalpha"]= "0,0";
         $chart["baseFontColor"] = "#ffffff";
+        $chart["bgColor"] = "#ffffff";
+        $chart["legendBgColor"] = "#ffffff";        
+        $chart["legendItemFontSize"] = "10";
+        $chart["legendItemFontColor"] = "#666666";
+        $chart["toolTipColor"] = "#ffffff";                
         $chart["outCnvBaseFontColor"] = "#000000";
-        $chart["visible"] = "0";
+        $chart["visible"] = "1";
         $chart["theme"] = "fint";
         //$chart["rotateValues"] = "0";
         $chart["snumbersuffix"] = "%";
@@ -3752,6 +3762,11 @@ class IndicatorService implements ContainerAwareInterface {
         //$chart["pYAxisMaxValue"] = "150";
         $chart["linethickness"]= "5";
         $chart["showborder"] = "0";
+        $chart["exportenabled"] = "1";
+        $chart["exportatclient"] = "0";
+        $chart["exportFormats"] = "PNG= Exportar como PNG|PDF= Exportar como PDF";
+        $chart["exportFileName"] = "Grafico Resultados ";
+        $chart["exporthandler"] = "http://107.21.74.91/";
 
         //$em = $this->getDoctrine();
         //$dataCause = $em->getRepository('Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCause')->findBy(array('indicator' => $indicator,'month' => $month));
@@ -3797,7 +3812,7 @@ class IndicatorService implements ContainerAwareInterface {
             }
         //die();
            
-        //$data['dataSource']['chart'] = $chart;
+        $data['dataSource']['chart'] = $chart;
         $data['dataSource']['categories'][]["category"] = $category;
         $data['dataSource']['dataset'][] = $dataSetCause;
 

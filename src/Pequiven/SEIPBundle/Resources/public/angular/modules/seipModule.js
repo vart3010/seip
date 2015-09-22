@@ -1401,7 +1401,6 @@ angular.module('seipModule.controllers', [])
             });
         })
 
-//<<<<<<< HEAD
         //Controladores SIG
         .controller('IndicatorSigEvolutionController', function ($scope, notificationBarService, $http, notifyService, $filter) {
 
@@ -5224,42 +5223,15 @@ angular.module('seipModule.controllers', [])
                         "renderAt": id,
                         "width": "95%",
                         "height": "550%",
+                        "exportenabled": "1",
+                        "exportFormats": "PNG= Exportar como PNG|PDF= Exportar como PDF",
+                        "exportFileName": "Gráfico Causas de Desviación del Indicador",
+                        "exporthandler": "http://107.21.74.91/",
+                        "html5exporthandler": "http://107.21.74.91/",
                         "dataFormat": "json",
                         "dataSource": {
-                            "chart": {
-                                "caption": "Gráfico Causas de Desviación",
-                                "subCaption": "Periodo - 2015",
-                                //"exportFormats": "PNG= Exportar como PNG|PDF= Exportar como PDF",                                
-                                //"xAxisName": Translator.trans('chart.arrangementPrograms.xAxisName'),
-                                //"pYAxisName": Translator.trans('chart.arrangementPrograms.pYAxisName'),
-                                //"sYAxisName": Translator.trans('chart.arrangementPrograms.sYAxisName'),
-                                "YAxisMaxValue": "100",
-                                //"xYAxisMaxValue": "100",
-                                //"pYAxisMaxValue": "100",
-                                //"yYAxisMaxValue": "100",                                
-                                //"sYAxisMinValue": "0",
-                                //"showValues": "1",
-                                //"placeValuesInside": "0",
-                                "valueFontColor": "#000000",
-                                "showvalues": "1",
-                                //"rotateValues": "0",
-                                //"labelDisplay": typeLabelDisplay,
-                                //"sNumberSuffix": "%",
-                                "showSum": "1",
-                                "numberSuffix": "%",                                
-                                "bgAlpha": "0,0",
-                                "baseFontColor": "#ffffff",
-                                "outCnvBaseFontColor": "#000000",
-                                "visible": "0",
-                                "theme": "fint",
-                                //"formatNumberScale": "0",
-                                "snumbersuffix": "%",
-                                "decimals": "3",
-                                "setadaptiveymin": "1",
-                                "setadaptivesymin": "1",
-                                "linethickness": "5",
-                                "showborder": "0"
-                            },"categories": data.dataSource.categories,
+                            "chart": data.dataSource.chart,
+                            "categories": data.dataSource.categories,
                             "dataset": [ data.dataSource.dataset,
                             ]
                         }
