@@ -246,4 +246,8 @@ class Proposal extends ModelProposal implements PeriodItemInterface {
 
         return $this;
     }
+    
+    public function getDescriptionTruncate(){
+        return \Pequiven\SEIPBundle\Service\ToolService::truncate($this->getDescription(), array('limit' => 50));
+    }
 }

@@ -32,6 +32,11 @@
                 </span>
             </div>
             <div class="field-block button-height">
+                {{ form_label(form.duration) }}
+                {{ form_widget(form.duration) }}
+                {{ form_errors(form.duration) }}
+            </div>
+            <div class="field-block button-height">
                 {{ form_label(form.place) }}
                 {{ form_widget(form.place) }}
                 {{ form_errors(form.place) }}
@@ -73,6 +78,9 @@
 {% block javascript %}
     <script type="text/javascript">
         $(document).ready(function () {
+            $("#meeting_data_duration_hour").prop("disabled", true);
+            $("#meeting_data_duration_minute").prop("disabled", true);
+            
             $("#meeting_data_date").datepicker({
                 defaultDate: "+1w",
                 changeMonth: true,

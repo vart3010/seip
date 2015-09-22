@@ -48,6 +48,20 @@ class ProposalRepository extends EntityRepository
                 ;
         }
         
+        if (($workStudyCircle = $criteria->remove('workStudyCircle'))) {
+            $queryBuilder
+                    ->andWhere('wsc.id = :workStudyCircle')
+                    ->setParameter('workStudyCircle', $workStudyCircle)
+                ;
+        }
+        
+        if (($lineStrategic = $criteria->remove('lineStrategic'))) {
+            $queryBuilder
+                    ->andWhere('pr.lineStrategic = :lineStrategic')
+                    ->setParameter('lineStrategic', $lineStrategic)
+                ;
+        }
+        
         parent::applyCriteria($queryBuilder, $criteria->toArray());
     }
     

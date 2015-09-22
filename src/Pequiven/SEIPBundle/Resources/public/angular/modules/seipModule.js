@@ -1405,6 +1405,63 @@ angular.module('seipModule.controllers', [])
 
         })
 
+        .controller('MeetingController', function ($scope, $http) {
+            $scope.urlUploadFileForm = null;
+            $scope.idMeeting = null;
+            var isInit = false;
+            
+            $scope.loadUploadFileMetting = function (resource) {
+                console.log(isInit);
+                $scope.initForm(resource);
+                if (isInit == false) {
+                    isInit = true;
+                }
+                $scope.templateOptions.setTemplate($scope.templates[0]);
+                $scope.templateOptions.setParameterCallBack(resource);
+                $scope.templateOptions.setVar('evaluationResult', 0);
+                if (resource) {
+                    $scope.templateOptions.enableModeEdit();
+                    $scope.openModalAuto();
+                } else {
+                    $scope.openModalAuto();
+                }
+            };
+
+            var confirmCallBack = function () {
+                evaluateFormula(true, function (data) {
+                    $scope.idMeeting = data.idMeeting;
+                });
+                obtainValues(true, function (data) {
+                    $scope.idMeeting = data.idMeeting;
+                });
+                return true;
+            };
+
+            $scope.initForm = function (resource) {
+                var parameters = {
+                    idmeeting: "31"
+                };
+                if (resource) {
+                    parameters.id = resource.id;
+                }
+                var url = Routing.generate('pequiven_meeting_upload_form', parameters);
+
+                $scope.templates = [
+                    {
+                        name: 'TITLE',
+                        url: url,
+                        confirmCallBack: confirmCallBack
+                    }
+                ];
+                $scope.templateOptions.setTemplate($scope.templates[0]);
+            };
+
+            var initCallBack = function () {
+                return false;
+            };
+
+        })
+
         .controller('IndicatorResultController', function ($scope, notificationBarService, $http, notifyService, $filter) {
 
             $scope.urlValueIndicatorForm = null;
@@ -1639,6 +1696,7 @@ angular.module('seipModule.controllers', [])
                 var url = Routing.generate('pequiven_value_indicator_show_detail', {id: valueIndicator.id, numResult: (numResult + 1)});
                 return url;
             };
+
             $scope.openPopUp = function (url) {
                 var horizontalPadding = 10;
                 var verticalPadding = 10;
@@ -1658,6 +1716,7 @@ angular.module('seipModule.controllers', [])
                     }
                 }).width(width - horizontalPadding).height(heigth - verticalPadding);
             };
+
         })
         .controller("MainContentController", function ($scope, notificationBarService, sfTranslator, $timeout) {
 
@@ -2158,21 +2217,21 @@ angular.module('seipModule.controllers', [])
                             }
                         });
             };
-            
+
             //Busca las localidades
             $scope.getCoordinators = function () {
                 var parameters = {
                     filter: {}
                 };
                 $http.get(Routing.generate('pequiven_work_study_circle_coordinators', parameters))
-                    .success(function (data) {
-                        $scope.data.coordinators = data;
-                        if ($scope.model.coordinator != null) {
-                            $scope.setValueSelect2("selectCoordinators", $scope.model.coordinator, $scope.data.coordinators, function (selected) {
-                                $scope.model.coordinator = selected;
-                            });
-                        }
-                    });
+                        .success(function (data) {
+                            $scope.data.coordinators = data;
+                            if ($scope.model.coordinator != null) {
+                                $scope.setValueSelect2("selectCoordinators", $scope.model.coordinator, $scope.data.coordinators, function (selected) {
+                                    $scope.model.coordinator = selected;
+                                });
+                            }
+                        });
             };
 
             $scope.getComplejos();
@@ -2216,7 +2275,7 @@ angular.module('seipModule.controllers', [])
                     $scope.tableParams.$params.filter['secondLineManagement'] = null;
                 }
             });
-            
+
             //Scope de Coordinadores
             $scope.$watch("model.coordinator", function (newParams, oldParams) {
                 if ($scope.model.coordinator != null) {
@@ -2236,18 +2295,24 @@ angular.module('seipModule.controllers', [])
                 }
             });
         })
-        
+
         .controller('TableProposalController', function ($scope, ngTableParams, $http, sfTranslator, notifyService) {
             var selectComplejo = angular.element("#selectComplejos");
             var selectFirstLineManagement = angular.element("#selectFirstLineManagement");
+            var selectWorkStudyCircle = angular.element("#selectWorkStudyCircle");
+            var selectLineStrategic = angular.element("#selectLineStrategic");
 
             $scope.data = {
                 complejos: null,
                 first_line_managements: null,
+                work_study_circles: null,
+                line_strategics: null,
             };
             $scope.model = {
                 complejo: null,
                 firstLineManagement: null,
+                workStudyCircle: null,
+                lineStrategic: null,
             };
 
             //Busca las localidades
@@ -2285,8 +2350,45 @@ angular.module('seipModule.controllers', [])
                         });
             };
 
+            //Busca los Círculos de Estudio de Trabajo
+            $scope.getWorkStudyCircle = function (complejo) {
+                var parameters = {
+                    filter: {}
+                };
+                if ($scope.model.complejo != null) {
+                    parameters.filter['complejo'] = $scope.model.complejo.id;
+                }
+                $http.get(Routing.generate('pequiven_seip_work_study_circle', parameters))
+                        .success(function (data) {
+                            $scope.data.work_study_circles = data;
+                            if ($scope.model.workStudyCircle != null) {
+                                $scope.setValueSelect2("workStudyCircle", $scope.model.workStudyCircle, $scope.data.work_study_circles, function (selected) {
+                                    $scope.model.workStudyCircle = selected;
+                                });
+                            }
+                        });
+            };
+
+            //Busca las Líneas Estratégicas
+            $scope.getLineStrategic = function (complejo) {
+                var parameters = {
+                    filter: {}
+                };
+                $http.get(Routing.generate('pequiven_seip_line_strategic', parameters))
+                        .success(function (data) {
+                            $scope.data.line_strategics = data;
+                            if ($scope.model.lineStrategic != null) {
+                                $scope.setValueSelect2("lineStrategic", $scope.model.lineStrategic, $scope.data.line_strategics, function (selected) {
+                                    $scope.model.lineStrategic = selected;
+                                });
+                            }
+                        });
+            };
+
             $scope.getComplejos();
             $scope.getFirstLineManagement();
+            $scope.getWorkStudyCircle();
+            $scope.getLineStrategic();
 
             //Scope de Localidad
             $scope.$watch("model.complejo", function (newParams, oldParams) {
@@ -2295,6 +2397,7 @@ angular.module('seipModule.controllers', [])
                     //Al cambiar el select de localidad
                     selectComplejo.change(function () {
                         selectFirstLineManagement.select2("val", '');
+                        selectWorkStudyCircle.select2("val", '');
                     });
                 } else {
                     $scope.tableParams.$params.filter['complejo'] = null;
@@ -2310,6 +2413,28 @@ angular.module('seipModule.controllers', [])
                     });
                 } else {
                     $scope.tableParams.$params.filter['firstLineManagement'] = null;
+                }
+            });
+            //Scope de Círculo de Estudio de Trabajo
+            $scope.$watch("model.workStudyCircle", function (newParams, oldParams) {
+                if ($scope.model.workStudyCircle != null && $scope.model.workStudyCircle.id != undefined) {
+                    $scope.tableParams.$params.filter['workStudyCircle'] = $scope.model.workStudyCircle.id;
+                    //Al cambiar el círculo de estudio de trabajo
+                    selectWorkStudyCircle.change(function () {
+                    });
+                } else {
+                    $scope.tableParams.$params.filter['workStudyCircle'] = null;
+                }
+            });
+            //Scope de Línea Estratégica
+            $scope.$watch("model.lineStrategic", function (newParams, oldParams) {
+                if ($scope.model.lineStrategic != null && $scope.model.lineStrategic.id != undefined) {
+                    $scope.tableParams.$params.filter['lineStrategic'] = $scope.model.lineStrategic.id;
+                    //Al cambiar la línea estratégica
+                    selectLineStrategic.change(function () {
+                    });
+                } else {
+                    $scope.tableParams.$params.filter['lineStrategic'] = null;
                 }
             });
         })
@@ -2728,7 +2853,12 @@ angular.module('seipModule.controllers', [])
             };
         })
 
-        //Controlador para los gráficos a mostrar en el dashboard del indicador
+
+
+
+
+
+//Controlador para los gráficos a mostrar en el dashboard del indicador
         .controller('ChartsDashboardController', function ($scope, $http) {
 
 //        var month = 0;

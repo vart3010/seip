@@ -71,6 +71,9 @@ class MeetingController extends SEIPController {
                 $date = str_replace("/", "-", $date);
                 $date = new \DateTime($date);
 
+                $timeData = new DateTime("now");
+                $time = $timeData->setTime($request->get("meeting_data")["duration"]["hour"], $request->get("meeting_data")["duration"]["minute"]);
+
 
                 $meetingObj = new Meeting();
                 $meetingObj->setCreatedBy($user);
@@ -78,7 +81,7 @@ class MeetingController extends SEIPController {
                 $meetingObj->setPlace($request->get("meeting_data")["place"]);
                 $meetingObj->setSubject($request->get("meeting_data")["subject"]);
                 $meetingObj->setObservation($request->get("meeting_data")["observation"]);
-                $meetingObj->setDuration($request->get("meeting_data")["duration"]["hour"] . ":" . $request->get("meeting_data")["duration"]["minute"]);
+                $meetingObj->setDuration($time);
                 $meetingObj->setWorkStudyCircle($workStudyCircle);
                 $em->persist($meetingObj);
 
@@ -121,7 +124,7 @@ class MeetingController extends SEIPController {
         ));
     }
 
-    public function viewAcction(Request $request) {
+    public function showAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
         $idMeeting = $request->get("meeting_id");
         $meeting = $em->getRepository('PequivenSEIPBundle:Politic\Meeting')->findOneBy(array('id' => $idMeeting));
@@ -157,12 +160,16 @@ class MeetingController extends SEIPController {
 
         $workStudyCircle = $meeting->getWorkStudyCircle();
 
+
         $form = $this->createForm(new MeetingType, $meeting);
+
         $form->handleRequest($request);
 
-        $em->getConnection()->beginTransaction();
+
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $em->getConnection()->beginTransaction();
+
             $date = $request->get("meeting_data")["date"];
             $date = str_replace("/", "-", $date);
             $date = new \DateTime($date);
@@ -270,6 +277,12 @@ class MeetingController extends SEIPController {
 
 //            $pdf->Output('Reporte del dia'.'.pdf', 'I');
         $pdf->Output($title . '.pdf', 'D');
+    }
+
+    public function uploadFiles(Request $request) {
+        return $this->render('PequivenSEIPBundle:Politic:Meeting\uploadFile.html.twig', array(
+                    'data' => $request->get("idmeeting")
+        ));
     }
 
 }

@@ -39,10 +39,10 @@ pequiven_proposal_list:
         _format: html|json|xml
     methods: [GET]
 
-pequiven_proposal_show_view:
+pequiven_proposal_show:
     path: /{id}
     defaults:
-        _controller: pequiven.controller.proposal:viewAction
+        _controller: pequiven.controller.proposal:showAction
     methods: [GET|POST]
     options:
         expose: true

@@ -46,7 +46,7 @@
             <div class="new-row-mobile twelve-columns-mobile twelve-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">{{ 'workStudyCircle.meetings.duration'|trans }}</label>
-                    {{ meeting.duration }}
+                    {{ meeting.duration|date("h:i") }}
                 </p>
             </div>
             <div class="new-row-mobile twelve-columns-mobile twelve-columns-tablet twelve-columns-mobile">
@@ -71,8 +71,9 @@
     </fieldset>
     <br>
     {% include 'PequivenSEIPBundle:Politic:Meeting/assistance.html.twig' %}
+    <br>    
+    {% include 'PequivenSEIPBundle:Politic:Meeting/meetingFiles.html.twig' %}
     <br>
-
     {% set routeConfig = path('pequiven_meeting_export_pdf',{idmeeting:meeting.id}) %}
     {% if(is_granted(["ROLE_SEIP_MEETING_EXPORT_REPORT"])) %}
         <div class="align-right">
