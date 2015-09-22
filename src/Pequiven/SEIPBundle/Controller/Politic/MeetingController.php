@@ -70,6 +70,9 @@ class MeetingController extends SEIPController {
                 $date = $request->get("meeting_data")["date"];
                 $date = str_replace("/", "-", $date);
                 $date = new \DateTime($date);
+                
+                $timeData = new DateTime("now");
+                $time = $timeData->setTime($request->get("meeting_data")["duration"]["hour"], $request->get("meeting_data")["duration"]["minute"]);
 
 
                 $meetingObj = new Meeting();
@@ -78,7 +81,7 @@ class MeetingController extends SEIPController {
                 $meetingObj->setPlace($request->get("meeting_data")["place"]);
                 $meetingObj->setSubject($request->get("meeting_data")["subject"]);
                 $meetingObj->setObservation($request->get("meeting_data")["observation"]);
-                $meetingObj->setDuration($request->get("meeting_data")["duration"]["hour"] . ":" . $request->get("meeting_data")["duration"]["minute"]);
+                $meetingObj->setDuration($time);
                 $meetingObj->setWorkStudyCircle($workStudyCircle);
                 $em->persist($meetingObj);
 
@@ -159,7 +162,7 @@ class MeetingController extends SEIPController {
 
 
         $form = $this->createForm(new MeetingType, $meeting);
-        
+
         $form->handleRequest($request);
 
 

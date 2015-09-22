@@ -60,7 +60,7 @@ class Meeting {
 
     /**
      * @var \DateTime
-     * @ORM\Column(name="date", type="date")
+     * @ORM\Column(name="date", type="datetime")
      */
     private $date;
 
@@ -224,6 +224,11 @@ class Meeting {
         return $this->place;
     }
 
+    /**
+     * 
+     * @param \DateTime $date
+     * @return \Pequiven\SEIPBundle\Entity\Politic\Meeting
+     */
     public function setDate(\DateTime $date) {
         $this->date = $date;
         return $this;
