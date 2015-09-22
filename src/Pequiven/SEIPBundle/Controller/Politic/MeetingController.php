@@ -70,7 +70,7 @@ class MeetingController extends SEIPController {
                 $date = $request->get("meeting_data")["date"];
                 $date = str_replace("/", "-", $date);
                 $date = new \DateTime($date);
-                
+
                 $timeData = new DateTime("now");
                 $time = $timeData->setTime($request->get("meeting_data")["duration"]["hour"], $request->get("meeting_data")["duration"]["minute"]);
 
@@ -277,6 +277,12 @@ class MeetingController extends SEIPController {
 
 //            $pdf->Output('Reporte del dia'.'.pdf', 'I');
         $pdf->Output($title . '.pdf', 'D');
+    }
+
+    public function uploadFiles(Request $request) {
+        return $this->render('PequivenSEIPBundle:Politic:Meeting\uploadFile.html.twig', array(
+                    'data' => $request->get("idmeeting")
+        ));
     }
 
 }

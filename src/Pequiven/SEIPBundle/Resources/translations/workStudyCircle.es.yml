@@ -48,3 +48,9 @@ workStudyCircle:
         user: Participante
         assistance: Asistió
         observation: Observación
+    
+    files:
+        add: Agregar Documento
+        attachment: Documentos
+        name: Nombre
+        load: Carga de Documentos

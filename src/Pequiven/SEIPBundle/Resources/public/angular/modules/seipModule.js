@@ -1405,6 +1405,63 @@ angular.module('seipModule.controllers', [])
 
         })
 
+        .controller('MeetingController', function ($scope, $http) {
+            $scope.urlUploadFileForm = null;
+            $scope.idMeeting = null;
+            var isInit = false;
+            
+            $scope.loadUploadFileMetting = function (resource) {
+                console.log(isInit);
+                $scope.initForm(resource);
+                if (isInit == false) {
+                    isInit = true;
+                }
+                $scope.templateOptions.setTemplate($scope.templates[0]);
+                $scope.templateOptions.setParameterCallBack(resource);
+                $scope.templateOptions.setVar('evaluationResult', 0);
+                if (resource) {
+                    $scope.templateOptions.enableModeEdit();
+                    $scope.openModalAuto();
+                } else {
+                    $scope.openModalAuto();
+                }
+            };
+
+            var confirmCallBack = function () {
+                evaluateFormula(true, function (data) {
+                    $scope.idMeeting = data.idMeeting;
+                });
+                obtainValues(true, function (data) {
+                    $scope.idMeeting = data.idMeeting;
+                });
+                return true;
+            };
+
+            $scope.initForm = function (resource) {
+                var parameters = {
+                    idmeeting: "31"
+                };
+                if (resource) {
+                    parameters.id = resource.id;
+                }
+                var url = Routing.generate('pequiven_meeting_upload_form', parameters);
+
+                $scope.templates = [
+                    {
+                        name: 'TITLE',
+                        url: url,
+                        confirmCallBack: confirmCallBack
+                    }
+                ];
+                $scope.templateOptions.setTemplate($scope.templates[0]);
+            };
+
+            var initCallBack = function () {
+                return false;
+            };
+
+        })
+
         .controller('IndicatorResultController', function ($scope, notificationBarService, $http, notifyService, $filter) {
 
             $scope.urlValueIndicatorForm = null;
@@ -1639,6 +1696,7 @@ angular.module('seipModule.controllers', [])
                 var url = Routing.generate('pequiven_value_indicator_show_detail', {id: valueIndicator.id, numResult: (numResult + 1)});
                 return url;
             };
+
             $scope.openPopUp = function (url) {
                 var horizontalPadding = 10;
                 var verticalPadding = 10;
@@ -1658,6 +1716,7 @@ angular.module('seipModule.controllers', [])
                     }
                 }).width(width - horizontalPadding).height(heigth - verticalPadding);
             };
+
         })
         .controller("MainContentController", function ($scope, notificationBarService, sfTranslator, $timeout) {
 
@@ -2158,21 +2217,21 @@ angular.module('seipModule.controllers', [])
                             }
                         });
             };
-            
+
             //Busca las localidades
             $scope.getCoordinators = function () {
                 var parameters = {
                     filter: {}
                 };
                 $http.get(Routing.generate('pequiven_work_study_circle_coordinators', parameters))
-                    .success(function (data) {
-                        $scope.data.coordinators = data;
-                        if ($scope.model.coordinator != null) {
-                            $scope.setValueSelect2("selectCoordinators", $scope.model.coordinator, $scope.data.coordinators, function (selected) {
-                                $scope.model.coordinator = selected;
-                            });
-                        }
-                    });
+                        .success(function (data) {
+                            $scope.data.coordinators = data;
+                            if ($scope.model.coordinator != null) {
+                                $scope.setValueSelect2("selectCoordinators", $scope.model.coordinator, $scope.data.coordinators, function (selected) {
+                                    $scope.model.coordinator = selected;
+                                });
+                            }
+                        });
             };
 
             $scope.getComplejos();
@@ -2216,7 +2275,7 @@ angular.module('seipModule.controllers', [])
                     $scope.tableParams.$params.filter['secondLineManagement'] = null;
                 }
             });
-            
+
             //Scope de Coordinadores
             $scope.$watch("model.coordinator", function (newParams, oldParams) {
                 if ($scope.model.coordinator != null) {
@@ -2794,7 +2853,12 @@ angular.module('seipModule.controllers', [])
             };
         })
 
-        //Controlador para los gráficos a mostrar en el dashboard del indicador
+
+
+
+
+
+//Controlador para los gráficos a mostrar en el dashboard del indicador
         .controller('ChartsDashboardController', function ($scope, $http) {
 
 //        var month = 0;
