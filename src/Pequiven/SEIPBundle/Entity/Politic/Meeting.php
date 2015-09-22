@@ -90,9 +90,9 @@ class Meeting {
     private $workStudyCircle;
 
     /**
-     * @var string
+     * @var time
      *
-     * @ORM\Column(name="duration",type="string",nullable=false)
+     * @ORM\Column(name="duration",type="time",nullable=false)
      */
     private $duration;
 
@@ -224,6 +224,11 @@ class Meeting {
         return $this->place;
     }
 
+    /**
+     * 
+     * @param \DateTime $date
+     * @return \Pequiven\SEIPBundle\Entity\Politic\Meeting
+     */
     public function setDate(\DateTime $date) {
         $this->date = $date;
         return $this;

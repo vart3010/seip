@@ -67,6 +67,24 @@ class WorkStudyCircleRepository extends EntityRepository
         return $this->getPaginator($queryBuilder);
     }
     
+    /**
+     * 
+     * @param array $criteria
+     * @return type
+     */
+    function findWorkStudyCircle(array $criteria = null)
+    {
+        $queryBuilder = $this->getCollectionQueryBuilder();
+        $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
+        if(($complejo = $criteria->remove('complejo'))){
+            $queryBuilder
+                    ->andWhere('wsc.complejo = :complejo')
+                    ->setParameter('complejo', $complejo)
+                ;
+        }
+        return $queryBuilder->getQuery()->getResult();
+    }
+    
     protected function applyCriteria(\Doctrine\ORM\QueryBuilder $queryBuilder, array $criteria = null) {
         $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
         

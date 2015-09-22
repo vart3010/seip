@@ -242,6 +242,8 @@ pequiven_seip:
         frequencyNotifications: Frecuencias de Notificación
         user_selection: Selecione Usuario
         coordinators: Coordinadores
+        work_study_circle: Círculo de estudio de trabajo
+        line_strategic: Línea Estratégica
     tooltips:
         click_to_show: Click para ver
     area:

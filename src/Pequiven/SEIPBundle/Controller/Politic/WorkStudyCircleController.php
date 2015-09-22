@@ -97,7 +97,7 @@ class WorkStudyCircleController extends SEIPController {
                 $em->flush();
 
                 $user->setCellphone($request->get("userType_data")["cellphone"]);
-                $user->setIdentification($request->get("userType_data")["identification"]);
+                $user->setIndentification($request->get("userType_data")["indentification"]);
                 $user->setExt($request->get("userType_data")["ext"]);
 
                 try {
