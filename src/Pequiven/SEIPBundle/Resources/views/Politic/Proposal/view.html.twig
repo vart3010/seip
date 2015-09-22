@@ -27,7 +27,7 @@
             <div class="standard-tabs margin-bottom" id="add-tabs">
 
                 <ul class="tabs">
-                    <li class="active"><a href="#tab-1">Por Linea Estrategica</a></li>
+                    <li class="active"><a href="#tab-1">Por Línea Estratégica</a></li>
                     <li><a href="#tab-2">Por Localidad</a></li>
                 </ul>
                 <div class="tabs-content">
@@ -62,14 +62,14 @@
     {% set pdf=0 %} 
     {% set routeConfig = path('pequiven_work_study_circle_general',{'pdf':pdf}) %}
     {% if(is_granted(["ROLE_SEIP_WORK_STUDY_CIRCLES_EXPORT_REPORT"])) %}
-        <div class="align-right">
+        {#<div class="align-right">
             {{ buttons.generic(
                     (routeConfig),
                     ('workStudyCircle.export.exportPdf'|trans({})),
                     'icon-download'
                  ) 
             }}
-        </div>
+        </div>#}
     {% endif %}
 
 
