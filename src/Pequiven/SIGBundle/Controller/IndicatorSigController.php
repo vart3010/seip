@@ -286,7 +286,7 @@ class IndicatorSigController extends ResourceController
                     $EvolutionCauseFile->setExtensionFile($file->guessExtension());
 
                     //SE MUEVE EL ARCHIVO AL SERVIDOR
-                    $file->move($this->container->getParameter("kernel.root_dir") . '/../web/' . Indicator\EvolutionIndicator\EvolutionCauseFile::getUploadDir(), Indicator\ValueIndicator\ValueIndicatorFile::NAME_FILE . $causeData->getId());
+                    $file->move($this->container->getParameter("kernel.root_dir") . '/../web/' . Indicator\EvolutionIndicator\EvolutionCauseFile::getUploadDir(). $causeData->getId());
                     $fileUploaded = $file->isValid();
                 }
             }
@@ -497,8 +497,11 @@ class IndicatorSigController extends ResourceController
         $dateEnd = $request->get('actionResults')['dateEnd'];
         //$advance = $request->get('actionResults')['advance'];
         
-        $dStart = $dateStart["month"];
-        $dEnd   = $dateEnd["month"];
+        $monthStart = explode("/", $dateStart);//Sacando el mes de inicio
+        $monthEnd = explode("/", $dateEnd);//Sacando el mes de cierre
+        
+        $dStart = $monthStart[1];//Pasando mes de Inicio
+        $dEnd   = $monthEnd[1];//Pasando el mes de Cierre
         //var_dump($dStart);
         $count = 0; $data = (int)$dStart;
             //var_dump($data);

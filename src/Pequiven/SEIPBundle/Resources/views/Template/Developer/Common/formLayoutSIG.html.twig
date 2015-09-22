@@ -75,6 +75,20 @@
             });
         });
 
+        $("#actionResults_dateStart").datepicker({
+                defaultDate: "+1w",
+                changeMonth: true,
+                numberOfMonths: 1,
+                dateFormat: "dd/mm/yy"
+        });
+
+        $("#actionResults_dateEnd").datepicker({
+                defaultDate: "+1w",
+                changeMonth: true,
+                numberOfMonths: 1,
+                dateFormat: "dd/mm/yy"
+        });
+
     </script>
    
     <script src="{{ asset('bundles/pequivenseip/jquery-ui.custom/i18n/datepicker-es.js') }}"></script>
