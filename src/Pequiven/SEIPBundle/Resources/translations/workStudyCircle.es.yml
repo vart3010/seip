@@ -41,6 +41,7 @@ workStudyCircle:
         subject: Tema
         observation: Observaciones
         edit: Editar Reunión
+        exportpdf: Exportar Asistencias
             
     assistances:
         dataAssistances: Participantes

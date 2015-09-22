@@ -11,6 +11,7 @@
                     {{ "workStudyCircle.meetings.add"|trans }}&nbsp;
                 </a>
             </div>
+
         {% endif %}
     </div>
 
@@ -67,5 +68,18 @@
 
             </tbody>
         </table>
+
+        {% set routeConfig = path('pequiven_all_meetings_export_pdf',{idWorkStudyCircle:workStudyCircle.id}) %}
+        {% if(is_granted(["ROLE_SEIP_WORK_STUDY_CIRCLES_EXPORT_REPORT"])) %}
+            <div class="align-right">
+                {{ buttons.generic(
+                    (routeConfig),
+                    ('workStudyCircle.meetings.exportpdf'|trans({})),
+                    'icon-download'
+                 ) 
+                }}
+            </div>
+        {% endif %}
+
     </div>
 </div>
