@@ -38,6 +38,6 @@ class EvolutionTrendType extends AbstractType
      */
     public function getName()
     {
-        return 'pequiven_indicatorbundle_evolutionindicator_evolutiontrend';
+        return 'evolutiontrend';
     }
 }

@@ -48,6 +48,6 @@ class EvolutionCauseType extends AbstractType
      */
     public function getName()
     {
-        return 'pequiven_indicatorbundle_evolutionindicator_evolutioncause';
+        return 'evolutioncause';
     }
 }
