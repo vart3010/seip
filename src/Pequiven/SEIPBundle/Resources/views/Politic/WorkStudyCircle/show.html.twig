@@ -124,7 +124,20 @@
                     'icon-download'
                  ) 
             }}
-        </div>
+        &nbsp;        
+        {% set routeConfig2 = path('pequiven_all_meetings_export_pdf',{idWorkStudyCircle:workStudyCircle.id}) %}
+        {% if(is_granted(["ROLE_SEIP_WORK_STUDY_CIRCLES_EXPORT_REPORT"])) %}
+            
+                {{ buttons.generic(
+                    (routeConfig2),
+                    ('workStudyCircle.meetings.exportpdf'|trans({})),
+                    'icon-download'
+                 ) 
+                }}
+            </div>
+        {% endif %}
+        
+        
     {% endif %}
 {% endblock %}
 

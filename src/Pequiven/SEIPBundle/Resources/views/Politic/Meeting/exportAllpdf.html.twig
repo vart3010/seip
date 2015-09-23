@@ -1,0 +1,84 @@
+{% trans_default_domain 'workStudyCircle' %}
+{% set userCreatedId = workStudyCircle.getCreatedBy.id %}
+
+<style>
+    .body {
+        font-size: 8pt;
+    }
+    .title_bold {
+        font-weight: bold;
+    }
+    table tr {
+        padding: 8pt;
+    }
+    .alin_font {
+        text-align: justify;
+    }
+</style>
+
+{% block body %}
+    <table width="95%" class="simple-table responsive-table tables-extras"> 
+        <tr>
+            <td class="title_bold" bgcolor="#F2F2F2" width="30%">{{ "workStudyCircle.form.code"|trans }}:</td>
+            <td width="70%"> {{ workStudyCircle.codigo }}</td>                        
+        </tr>
+        <tr>
+            <td class="title_bold" bgcolor="#F2F2F2" width="30%">{{ "workStudyCircle.form.nombre"|trans }}:</td>
+            <td width="70%"> {{ workStudyCircle.name }}</td>
+        </tr>
+        <tr>
+            <td class="title_bold" bgcolor="#F2F2F2" width="30%">{{ "workStudyCircle.form.complejo"|trans }}:</td>
+            <td width="70%"> {{ workStudyCircle.complejo.description}}</td>
+        </tr>
+
+        <tr>
+            <td class="title_bold" bgcolor="#F2F2F2" width="30%">{{ "workStudyCircle.form.gerenciaFirst"|trans }}:</td>
+            <td width="70%"> {% for gerencia in  workStudyCircle.gerencias %} * {{ gerencia }}<br/> {% endfor %}</td>
+        </tr>
+
+        <tr>
+            <td class="title_bold" bgcolor="#F2F2F2" width="30%">{{ "workStudyCircle.form.gerenciaSecond"|trans }}:</td>
+            <td width="70%"> {% for gerencia in  workStudyCircle.gerenciaSeconds %} - {{ gerencia }}<br> {% endfor %}</td>
+        </tr>
+    </table>
+
+    <br/><br/><br/>
+
+    <table width="100%">
+        <thead>
+            <tr>
+                <th class="title_bold" bgcolor="#F2F2F2" width="30%">Miembros del Círculo</th>
+
+
+                {% for reunion in fechas %}
+                    <th class="title_bold" bgcolor="#F2F2F2" width="7%">{{reunion.date|date('d-m')}}</th>
+                    {% endfor %}
+            </tr>
+        </thead>
+
+        <tbody>
+            {% set users = workStudyCircle.userWorkerId %}
+
+            {% for miembro in users %}
+                <tr>
+                    <td width="30%">{{loop.index}}.  {{ miembro.firstname | ucwords}} {{ miembro.lastname | ucwords}}</td>
+
+                    {% for reunion in fechas %}
+
+                        <th width="7%" style="text-align: center"> 
+                            {% if(asistencia[miembro.id][reunion.id]==true) %}
+                                P
+                            {% else %}
+                                -
+                            {% endif %}
+                        </th>
+
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+{% endblock %}

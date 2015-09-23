@@ -83,4 +83,4 @@ pequiven_work_study_circle_coordinators:
         _format: "json|xml"
     methods: [GET]
     options:
-        expose: true
+        expose: true   
