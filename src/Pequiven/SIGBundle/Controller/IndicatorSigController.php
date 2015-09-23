@@ -659,7 +659,7 @@ class IndicatorSigController extends ResourceController
      */
     public function addCausesAction(Request $request)
     {   
-        //$month = date("m");//Carga del mes de Creación de la causa "Automatico"
+        //$monthActual = date("m");//Carga del mes de Creación de la causa "Automatico"
         $month = $request->get('evolutioncause')['month'];//Carga de Mes pasado
 
         $indicator = $request->get('idIndicator');

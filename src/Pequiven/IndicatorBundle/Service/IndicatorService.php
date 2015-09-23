@@ -3708,7 +3708,12 @@ class IndicatorService implements ContainerAwareInterface {
             $dataSetReal["data"][] = $dataObj;//Acumulado
             
             //Carga de Tendencia
-            $dataSetValues['tendencia'] = array('seriesname' => 'Tendencia', 'parentyaxis' => 'S', 'renderas' => 'Line', 'color' => '#dbc903', 'data' => $dataSetTend['data']);
+            $cantValue = count($dataSetTend['data']);
+            if ($cantValue >= 4) {
+                $dataSetValues['tendencia'] = array('seriesname' => 'Tendencia', 'parentyaxis' => 'S', 'renderas' => 'Line', 'color' => '#dbc903', 'data' => $dataSetTend['data']);                
+            }else{
+                $dataSetValues['tendencia'] = 0;
+            }
             
         }
         $data['dataSource']['chart'] = $chart;
