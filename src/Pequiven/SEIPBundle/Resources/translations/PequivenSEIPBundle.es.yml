@@ -1,3 +1,10 @@
+WorkStudyCircle:
+     circle: Circulos de Estudio de Trabajo
+     list: Lista
+     visualize: Visualizar
+     general: General
+     form:
+         list_work: Listado de Circulos de Estudio
 # Login
 pequiven_seip:
   #Index
@@ -228,6 +235,7 @@ pequiven_seip:
         not_notified: Sin Notificación
         notified_but_still_in_progress: Notificados pero con proceso sin cerrar
         miscellaneous: Misceláneo
+        management_system: Sistemas de Gestión
         excludeGerenciaSecondSupport: Excluir Gerencias de Apoyo
         includeGerenciaSecondSupport: Incluir Gerencias de Apoyo
         period: Periodo

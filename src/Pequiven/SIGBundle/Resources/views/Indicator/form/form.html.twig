@@ -1,0 +1,28 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutSIG.html.twig' %}
+
+{% block body %}
+{# formulario de lastperiod  #}
+{% trans_default_domain 'PequivenIndicatorBundle' %}
+    
+    <div ng-controller="TableFormatController">
+    <div ng-controller="EvolutionIndicatorFilters"> 
+        
+        <form method="POST" id="form_asoc_last_period">
+            <fieldset class="fieldset fields-list">
+                <legend class="legend">{{ 'sig.relation_indicator'|trans ({}, 'messages') }}</legend>
+                  <div class="field-block button-height" >
+                    
+                        {{ form_widget(form) }}
+                        <span class="info-spot">
+                                <span class="icon-info-round"></span>
+                                <span class="info-bubble">Selecciona el Indicador 2014 para la Relación</span>
+                        </span>
+                    
+                  </div>
+                
+            </fieldset>
+        </form>       
+    </div>
+</div>
+{% endblock %}
+

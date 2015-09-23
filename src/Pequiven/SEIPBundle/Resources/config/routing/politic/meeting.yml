@@ -15,7 +15,7 @@ pequiven_meeting_edit:
         expose: true
         
 pequiven_meeting_show:
-    path: /{meeting_id}
+    path: /{id}
     defaults:
         _controller: pequiven.controller.meeting:showAction
     methods: [GET|POST]
@@ -37,6 +37,17 @@ pequiven_all_meetings_export_pdf:
     path: /{idWorkStudyCircle}/exportAll.{_format}
     defaults:
         _controller: pequiven.controller.meeting:exportAllAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET|POST]
+    options:
+        expose: true
+        
+pequiven_meeting_upload_form:
+    path: /{idMeeting}/upload.{_format}
+    defaults:
+        _controller: pequiven.controller.meeting:uploadFilesAction
         _format: html
     requirements:
         _format: html|json

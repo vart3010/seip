@@ -90,6 +90,7 @@ class PrePlanningItemClone extends Model
      */
     private $period;
     
+    
     /**
      * Get id
      *

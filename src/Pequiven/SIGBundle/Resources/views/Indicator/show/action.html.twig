@@ -1,0 +1,96 @@
+{% trans_default_domain 'PequivenSIGBundle' %}
+    
+<div class="block" ng-init="urlCausesEvolutionForm='{{ path('pequiven_indicatorcauses_get_form',{'idIndicator':indicator_sig.id }) }}'">
+
+<div ng-controller="IndicatorSigEvolutionController"> 
+
+    <div class="block-title">
+        <h3 class="ng-binding">{$ indicator_sig.featuresIndicator.length $} {{ 'form.messages.action_plan'|trans({},'PequivenSIGBundle') }}</h3> 
+        {# añadir plan de acción #}
+        <div class="button-group absolute-right compact">
+                <a class="button icon-list-add " href="" ng-click="loadTemplateActionEvolution()" title="">{{ 'pequiven.add'|trans({},'messages')  }}</a>
+        </div>       
+    </div>
+    <div class="with-padding">
+        {% set colspan = 5 %}
+        <table class="simple-table responsive-table tables-extras" id="sorting-example2">
+            <thead>
+                <tr>
+                    <th scope="col" width="15%" class="header" align="center">
+                        {{ 'seip.table.header.nro'|trans({},'PequivenSIGBundle') }}
+                    </th>
+                    <th scope="col" width="25%" class="header">
+                        {{ 'seip.table.header.action'|trans({},'PequivenSIGBundle') }}
+                    </th>
+                    <th scope="col" width="10%" class="hide-on-tablet header">
+                        {{ 'seip.table.header.type_action'|trans({},'PequivenSIGBundle') }}
+                    </th>
+                    <th scope="col" width="10%" class="hide-on-mobile-portrait header">
+                        {{ 'seip.table.header.start_date'|trans({},'PequivenSIGBundle') }}
+                    </th>
+                    <th scope="col" width="10%" class="hide-on-mobile-portrait header">
+                        {{ 'seip.table.header.end_date'|trans({},'PequivenSIGBundle') }}
+                    </th>
+                    <th scope="col" width="10%" class="hide-on-mobile-portrait header">
+                        {{ 'seip.table.header.advance'|trans({},'PequivenSIGBundle') }}
+                    </th>
+                    <th scope="col" width="25%" class="hide-on-mobile-portrait header">
+                        {{ 'seip.table.header.responsible'|trans({},'PequivenSIGBundle') }}
+                    </th>
+                    <th scope="col" width="20%" class="hide-on-mobile-portrait header">
+                        {{ 'seip.table.header.observations'|trans({},'PequivenSIGBundle') }}
+                    </th>
+                    {% set colspan = 6 %}
+                    <th scope="col" width="15%" class="hide-on-mobile-portrait header">&nbsp;</th>
+                </tr>
+            </thead>
+      {% set count =  0 %}
+      {% for  action in dataAction["values"] %}
+            <tbody align="center">
+                <tr>
+                    <td>{{ action.actionValue.ref }}</td>
+                    <th scope="row" style="">
+                        {{ action.actionValue.action }}
+                    </th>
+                    <td>{{ action.actionValue.indicatorAction.ref }}</td>
+                    <td>{{ action.actionValue.dateStart | date("d/m/Y") }}</td>
+                    <td>{{ action.actionValue.dateEnd | date("d/m/Y") }}</td>
+                    <td>{{ action.advance }}</td>
+                    <td>
+                        {{ action.actionValue.createdBy.firstname }} {{ action.actionValue.createdBy.lastname }}
+                        <small class="tag">({{ action.actionValue.createdBy.username }})</small>
+                    </td>
+                    {% if action.observations %}
+                        <td>{{ action.observations }}</td>
+                    {% else %}
+                        <td>&nbsp;</td>
+                    {% endif %}
+                        <td class="align-right vertical-center">
+                            <span class="select compact">
+                                <a href class="select-value form-edit">{{ 'pequiven.actions'|trans({},'messages') }}</a>
+                                <span class="select-arrow"></span>
+                                <span class="drop-down">
+                                    <a href ng-click="removeActionEvolution(action_data='{{ action.actionValue.id }}')" class="button icon-cross-round">{{ "pequiven.actions.delete"|trans({},"messages") }}</a>
+                                {% if action.observations == null %}
+                                    <a href ng-click="loadTemplateActionAdd(idAction='{{ action.actionValue.id }}',month='{{ month }}')" class="button icon-pencil">{{ "pequiven_indicator.upload_data"|trans({},"PequivenSIGBundle") }}</a>
+                                {% endif %}
+                                </span>
+                            </span>
+                        </td>
+                </tr>
+                    
+                <tr ng-if="indicator.featuresIndicator.length == 0">
+                    <td colspan="{{ colspan }}" class="empty_row">
+                        {{ "empty.features_indicator"|trans({},'PequivenSEIPBundle') }}
+                    </td>
+                </tr>
+            </tbody>
+            {% set count = count + 1 %}
+     {% endfor %}
+        </table> 
+
+    <div class="" ng-init="count='{{ count }}'"></div>
+             
+        </div>
+    </div>
+</div>

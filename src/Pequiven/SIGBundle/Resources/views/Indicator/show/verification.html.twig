@@ -1,0 +1,68 @@
+{% trans_default_domain 'PequivenSIGBundle' %}
+    
+<div class="block" ng-init="urlCausesEvolutionForm='{{ path('pequiven_indicatorcauses_get_form',{'idIndicator':indicator_sig.id }) }}'">
+
+<div ng-controller="IndicatorSigEvolutionVerificationController"> 
+
+    <div class="block-title">
+        <h3 class="ng-binding">{$ indicator_sig.featuresIndicator.length $} {{ 'sig.verification_of_the_effectiveness'|trans ({}, 'messages') }}</h3> 
+        {# añadir plan de acción #}
+        <div class="button-group absolute-right compact">
+                <a class="button icon-list-add " href="" ng-click="loadTemplateVerification()" title="">{{ 'pequiven.add'|trans({},'messages')  }}</a>
+        </div>       
+    </div>
+    <div class="with-padding">
+        {% set colspan = 5 %}
+        <table class="simple-table responsive-table tables-extras" id="sorting-example2">
+            <thead>
+                <tr>
+                    <th scope="col" width="5%" class="header">{{ 'seip.table.header.nro'|trans({},'PequivenSIGBundle') }}</th>
+                    <th scope="col" width="35%" class="header">
+                        {{ 'seip.table.header.comments'|trans({},'PequivenSIGBundle') }}</th>
+                    <th scope="col" width="20%" class="hide-on-tablet header">{{ 'seip.table.header.verified_by'|trans({},'PequivenSIGBundle') }}</th>
+                    <th scope="col" width="10%" class="hide-on-mobile-portrait header">{{ 'seip.table.header.date'|trans({},'PequivenSIGBundle') }}</th>
+                    <th scope="col" width="15%" class="hide-on-mobile-portrait header">Acción</th>
+                    <th scope="col" width="10%" class="hide-on-mobile-portrait header">{{ 'seip.table.header.verification'|trans({},'PequivenSIGBundle') }}</th>
+                    {% set colspan = 6 %}
+                    <th scope="col" width="15%" class="hide-on-mobile-portrait header">&nbsp;</th>
+                </tr>
+            </thead>
+    {% for  ver_data in verification %}
+            <tbody align="center">
+                <tr {{ cycle(["even", "odd"], loop.index) }}>
+                    <td>{{ loop.index }}</td>
+                    <th scope="row" style="">
+                    {{ ver_data.comment }}          
+                    </th>
+                    <td>
+                        {{ ver_data.createdBy.firstname }} {{ ver_data.createdBy.lastname }}
+                        <small class="tag">({{ ver_data.createdBy.username }})</small>
+                    </td>
+                    <td>{{ ver_data.createdAt | date("d/m/Y") }}</td>
+                    <td>{{ ver_data.actionPlan.ref }}</td>
+                    <td>{{ ver_data.typeVerification.description }}</td>
+                        <td class="align-right vertical-center">
+                            <span class="select compact">
+                                <a href class="select-value form-edit">{{ 'pequiven.actions'|trans({},'messages') }}</a>
+                                <span class="select-arrow"></span>
+                                <span class="drop-down">
+                                    <a href ng-click="removeFeatureIndicator(featureIndicator)" class="button icon-cross-round">{{ "pequiven.actions.delete"|trans({},"messages") }}</a>
+                                </span>
+                            </span>
+                        </td>
+                </tr>
+                    
+                <tr ng-if="indicator.featuresIndicator.length == 0">
+                    <td colspan="{{ colspan }}" class="empty_row">
+                        {{ "empty.features_indicator"|trans({},'PequivenSEIPBundle') }}
+                    </td>
+                </tr>
+            </tbody>
+    {% endfor %}
+        </table>
+    
+    
+                
+    </div>
+</div>
+</div>

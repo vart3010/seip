@@ -159,6 +159,7 @@ class IndicatorController extends ResourceController {
         $isAllowToDownload =  $indicatorService->validFileIndicator($resource);
         $valueIndicatorId = $indicatorService->validFileIndicator($resource,true);
 
+
         $view = $this
                 ->view()
                 ->setTemplate($this->config->getTemplate('show.html'))
@@ -342,7 +343,7 @@ class IndicatorController extends ResourceController {
             'level' => $level,
         );
         $apiDataUrl = $this->generateUrl('pequiven_indicator_list', $routeParameters);
-
+        
         $view = $this
                 ->view()
                 ->setTemplate($this->config->getTemplate('list.html'))
@@ -371,7 +372,8 @@ class IndicatorController extends ResourceController {
             $view->setData($resources->toArray('', array(), $formatData));
         }
         return $this->handleView($view);
-    }
+    }   
+
 
     /**
      * @Security("is_granted(['ROLE_WORKER_PLANNING','ROLE_SEIP_INDICATOR_ADD_OBSERVATION'])")
