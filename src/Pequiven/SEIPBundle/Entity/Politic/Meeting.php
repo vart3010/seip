@@ -89,6 +89,13 @@ class Meeting {
      * */
     private $workStudyCircle;
 
+    /**
+     * @var time
+     *
+     * @ORM\Column(name="duration",type="time",nullable=false)
+     */
+    private $duration;
+
     public function __construct() {
         $this->assistances = new \Doctrine\Common\Collections\ArrayCollection();
     }
@@ -217,6 +224,11 @@ class Meeting {
         return $this->place;
     }
 
+    /**
+     * 
+     * @param \DateTime $date
+     * @return \Pequiven\SEIPBundle\Entity\Politic\Meeting
+     */
     public function setDate(\DateTime $date) {
         $this->date = $date;
         return $this;
@@ -281,6 +293,22 @@ class Meeting {
      */
     function setObservation($observation) {
         $this->observation = $observation;
+    }
+
+    /**
+     * 
+     * @return type
+     */
+    function getDuration() {
+        return $this->duration;
+    }
+
+    /**
+     * 
+     * @param type $duration
+     */
+    function setDuration($duration) {
+        $this->duration = $duration;
     }
 
 }

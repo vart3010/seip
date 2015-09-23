@@ -10,6 +10,7 @@ use Pequiven\SEIPBundle\Entity\Politic\Meeting;
 use Pequiven\SEIPBundle\Form\Politic\MeetingType;
 use Pequiven\SEIPBundle\Entity\Politic\Assistance;
 
+
 /**
  * Controlador de reuniones de estudio de trabajo
  *
@@ -71,6 +72,9 @@ class MeetingController extends SEIPController {
                 $date = str_replace("/", "-", $date);
                 $date = new \DateTime($date);
 
+                $timeData = new DateTime("now");
+                $time = $timeData->setTime($request->get("meeting_data")["duration"]["hour"], $request->get("meeting_data")["duration"]["minute"]);
+
 
                 $meetingObj = new Meeting();
                 $meetingObj->setCreatedBy($user);
@@ -78,6 +82,7 @@ class MeetingController extends SEIPController {
                 $meetingObj->setPlace($request->get("meeting_data")["place"]);
                 $meetingObj->setSubject($request->get("meeting_data")["subject"]);
                 $meetingObj->setObservation($request->get("meeting_data")["observation"]);
+                $meetingObj->setDuration($time);
                 $meetingObj->setWorkStudyCircle($workStudyCircle);
                 $em->persist($meetingObj);
 
@@ -105,7 +110,7 @@ class MeetingController extends SEIPController {
 
                 $this->get('session')->getFlashBag()->add('success', 'Reunión Guardada Correctamente');
 
-                return $this->redirect($this->generateUrl('pequiven_meeting_view', array("meeting_id" => $meetingObj->getId())));
+                return $this->redirect($this->generateUrl('pequiven_meeting_show', array("meeting_id" => $meetingObj->getId())));
             } else {
                 $this->get('session')->getFlashBag()->add('error', 'Debe llenar el campo Observación.');
             }
@@ -120,13 +125,13 @@ class MeetingController extends SEIPController {
         ));
     }
 
-    public function viewAcction(Request $request) {
+    public function showAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
         $idMeeting = $request->get("meeting_id");
         $meeting = $em->getRepository('PequivenSEIPBundle:Politic\Meeting')->findOneBy(array('id' => $idMeeting));
         $workStudyCircle = $meeting->getWorkStudyCircle();
-        
-        $idCircle = $workStudyCircle->getId();//Id Circulo
+
+        $idCircle = $workStudyCircle->getId(); //Id Circulo
 
         $members = $workStudyCircle->getUserWorkerId();
 
@@ -139,7 +144,7 @@ class MeetingController extends SEIPController {
         }
 
 
-        return $this->render('PequivenSEIPBundle:Politic:Meeting\view.html.twig', array(
+        return $this->render('PequivenSEIPBundle:Politic:Meeting\show.html.twig', array(
                     'meeting' => $meeting,
                     'members' => $members,
                     'workStudyCircle' => $workStudyCircle,
@@ -156,12 +161,16 @@ class MeetingController extends SEIPController {
 
         $workStudyCircle = $meeting->getWorkStudyCircle();
 
+
         $form = $this->createForm(new MeetingType, $meeting);
+
         $form->handleRequest($request);
 
-        $em->getConnection()->beginTransaction();
+
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $em->getConnection()->beginTransaction();
+
             $date = $request->get("meeting_data")["date"];
             $date = str_replace("/", "-", $date);
             $date = new \DateTime($date);
@@ -201,14 +210,14 @@ class MeetingController extends SEIPController {
 
         $em = $this->getDoctrine()->getManager();
         $idMeeting = $request->get("idmeeting");
-                
+
         $meeting = $em->getRepository('PequivenSEIPBundle:Politic\Meeting')->findOneBy(array('id' => $idMeeting));
         $workStudyCircle = $meeting->getWorkStudyCircle();
         $members = $workStudyCircle->getUserWorkerId();
 
         $assistance = $meeting->getAssistances();
         $assistanceIds = array();
-        
+
         foreach ($assistance as $assis) {
             $assistanceIds[$assis->getUser()->getId()] = $assis->getAssistance();
         }
@@ -224,8 +233,49 @@ class MeetingController extends SEIPController {
         $this->generatePdf($data, 'Reporte de Asistencia', 'PequivenSEIPBundle:Politic:Meeting\viewPdf.html.twig');
     }
 
-    public function generatePdf($data, $title, $template) {
-        $pdf = new \Pequiven\SEIPBundle\Model\PDF\SeipPdf('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+    public function exportAllAction(Request $request) {
+
+        $em = $this->getDoctrine()->getManager();
+        $idWorkStudyCircle = $request->get("idWorkStudyCircle");
+
+        $workStudyCircle = $em->getRepository('PequivenSEIPBundle:Politic\WorkStudyCircle')->findOneBy(array('id' => $idWorkStudyCircle));
+        $meeting = $em->getRepository('PequivenSEIPBundle:Politic\Meeting')->findBy(array('workStudyCircle' => $idWorkStudyCircle));
+        $members = $workStudyCircle->getUserWorkerId();
+
+        $fechameeting = array();
+        $asistencia = array();
+
+        foreach ($meeting as $meet) {
+
+            $fechameeting[] = $meet;
+            $assistance = $meet->getAssistances();
+
+            foreach ($assistance as $assis) {
+                $asistencia[$assis->getUser()->getId()][$meet->getId()] = $assis->getAssistance();
+            }
+        }
+        
+//        var_dump($fechameeting);
+//        die();
+
+        $data = array(
+            'workStudyCircle' => $workStudyCircle,
+            'members' => $members,
+            'asistencia' => $asistencia,
+            'meeting' => $meeting,
+            'fechas' => $fechameeting
+        );
+
+        $this->generatePdf($data, 'Reporte de Asistencias a Reuniones', 'PequivenSEIPBundle:Politic:Meeting\exportAllpdf.html.twig',array('ORIENTATION' => 'P'));
+    }
+    
+    public function generatePdf($data, $title, $template, $options = array()) {
+        if(!isset($options['ORIENTATION'])){
+            $options['ORIENTATION'] = 'P';
+        }
+        
+        $pdf = new \Pequiven\SEIPBundle\Model\PDF\SeipPdf($options['ORIENTATION'], PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+        
         $pdf->setPrintLineFooter(false);
         $pdf->setContainer($this->container);
         $pdf->setPeriod($this->getPeriodService()->getPeriodActive());

@@ -22,12 +22,31 @@
 
 
     <fieldset class="fieldset">
+        <legend class="legend">{{ 'workStudyCircle.form.nombre'|trans }}&nbsp;</legend>
+        <div class="new-row-mobile twelve-columns-mobile twelve-columns-tablet twelve-columns-mobile">
+            <p class="inline-label">
+                <label class="label">{{ 'workStudyCircle.form.nombre'|trans }}</label>
+                <a href="{{ path('pequiven_work_study_circle_show',{id:circle }) }}">
+                    ({{ meeting.workStudyCircle.codigo }})                    
+                    {{ meeting.workStudyCircle.name }}
+                </a>
+            </p>
+        </div>
+    </fieldset>
+    <br>
+    <fieldset class="fieldset">
         <legend class="legend">{{ 'workStudyCircle.meetings.titleSingle'|trans }}&nbsp;</legend>
         <div class="columns">
             <div class="new-row-mobile twelve-columns-mobile twelve-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">{{ 'workStudyCircle.meetings.date'|trans }}</label>
                     {{ meeting.date|date('Y-m-d') }}
+                </p>
+            </div>
+            <div class="new-row-mobile twelve-columns-mobile twelve-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'workStudyCircle.meetings.duration'|trans }}</label>
+                    {{ meeting.duration|date("h:i") }}
                 </p>
             </div>
             <div class="new-row-mobile twelve-columns-mobile twelve-columns-tablet twelve-columns-mobile">
@@ -48,27 +67,18 @@
                     {{ meeting.observation }}
                 </p>
             </div>
-            <div class="new-row-mobile twelve-columns-mobile twelve-columns-tablet twelve-columns-mobile">
-                <p class="inline-label">
-                    <label class="label">{{ 'workStudyCircle.form.nombre'|trans }}</label>
-                    <a href="{{ path('pequiven_work_study_circle_show',{id:circle }) }}">
-                        ({{ meeting.workStudyCircle.codigo }})                    
-                        {{ meeting.workStudyCircle.name }}
-                    </a>
-                </p>
-            </div>
         </div>
     </fieldset>
     <br>
     {% include 'PequivenSEIPBundle:Politic:Meeting/assistance.html.twig' %}
- <br>
-    
-     {% set routeConfig = path('pequiven_meeting_export_pdf',{idmeeting:meeting.id}) %}
+    <br>
+
+    {% set routeConfig = path('pequiven_meeting_export_pdf',{idmeeting:meeting.id}) %}
     {% if(is_granted(["ROLE_SEIP_MEETING_EXPORT_REPORT"])) %}
         <div class="align-right">
             {{ buttons.generic(
                     (routeConfig),
-                    ('workStudyCircle.export.exportPdf'|trans({})),
+                    ('workStudyCircle.meetings.exportpdf'|trans({})),
                     'icon-download'
                  ) 
             }}
@@ -92,7 +102,7 @@
                 var value = $(this).val();
 
                 var obj = $(this);
-                
+
                 var data = {
                     user_id: data,
                     value: value,
@@ -107,7 +117,7 @@
                         obj.val(data["value"]);
                     }
                 });
-                
+
 
             });
         });

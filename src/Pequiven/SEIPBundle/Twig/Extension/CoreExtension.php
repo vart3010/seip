@@ -34,6 +34,7 @@ class CoreExtension extends \Twig_Extension {
                         return str_pad($input, $padlength, $padstring, $padtype);
                     }),
             new \Twig_SimpleFilter('myNumberFormat', array($this, 'myNumberFormat')),
+            new \Twig_SimpleFilter('ucwords', array($this, 'ucwords')),
             new \Twig_SimpleFilter('myFormatDateTime', array($this, 'myFormatDateTime')),
             new \Twig_SimpleFilter('myFormatDate', array($this, 'myFormatDate')),
             new \Twig_SimpleFilter('render_yes_no', array($this, 'renderYesNo'), array('is_safe' => array('html'))),
@@ -112,6 +113,16 @@ class CoreExtension extends \Twig_Extension {
      */
     function myNumberFormat($value, $decimals = 2) {
         return number_format($value, $decimals, ',', '.');
+    }
+
+    /**
+     * Filtro para Mayusculas en Cada palabra de un String.
+     * @param type $value
+     * @param type $string
+     * @return type
+     */
+    function ucwords($value) {
+        return ucwords(strtolower($value));
     }
 
     /**

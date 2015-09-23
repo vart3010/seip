@@ -2236,18 +2236,24 @@ angular.module('seipModule.controllers', [])
                 }
             });
         })
-        
+
         .controller('TableProposalController', function ($scope, ngTableParams, $http, sfTranslator, notifyService) {
             var selectComplejo = angular.element("#selectComplejos");
             var selectFirstLineManagement = angular.element("#selectFirstLineManagement");
+            var selectWorkStudyCircle = angular.element("#selectWorkStudyCircle");
+            var selectLineStrategic = angular.element("#selectLineStrategic");
 
             $scope.data = {
                 complejos: null,
                 first_line_managements: null,
+                work_study_circles: null,
+                line_strategics: null,
             };
             $scope.model = {
                 complejo: null,
                 firstLineManagement: null,
+                workStudyCircle: null,
+                lineStrategic: null,
             };
 
             //Busca las localidades
@@ -2285,8 +2291,45 @@ angular.module('seipModule.controllers', [])
                         });
             };
 
+            //Busca los Círculos de Estudio de Trabajo
+            $scope.getWorkStudyCircle = function (complejo) {
+                var parameters = {
+                    filter: {}
+                };
+                if ($scope.model.complejo != null) {
+                    parameters.filter['complejo'] = $scope.model.complejo.id;
+                }
+                $http.get(Routing.generate('pequiven_seip_work_study_circle', parameters))
+                        .success(function (data) {
+                            $scope.data.work_study_circles = data;
+                            if ($scope.model.workStudyCircle != null) {
+                                $scope.setValueSelect2("workStudyCircle", $scope.model.workStudyCircle, $scope.data.work_study_circles, function (selected) {
+                                    $scope.model.workStudyCircle = selected;
+                                });
+                            }
+                        });
+            };
+
+            //Busca las Líneas Estratégicas
+            $scope.getLineStrategic = function (complejo) {
+                var parameters = {
+                    filter: {}
+                };
+                $http.get(Routing.generate('pequiven_seip_line_strategic', parameters))
+                        .success(function (data) {
+                            $scope.data.line_strategics = data;
+                            if ($scope.model.lineStrategic != null) {
+                                $scope.setValueSelect2("lineStrategic", $scope.model.lineStrategic, $scope.data.line_strategics, function (selected) {
+                                    $scope.model.lineStrategic = selected;
+                                });
+                            }
+                        });
+            };
+
             $scope.getComplejos();
             $scope.getFirstLineManagement();
+            $scope.getWorkStudyCircle();
+            $scope.getLineStrategic();
 
             //Scope de Localidad
             $scope.$watch("model.complejo", function (newParams, oldParams) {
@@ -2295,6 +2338,7 @@ angular.module('seipModule.controllers', [])
                     //Al cambiar el select de localidad
                     selectComplejo.change(function () {
                         selectFirstLineManagement.select2("val", '');
+                        selectWorkStudyCircle.select2("val", '');
                     });
                 } else {
                     $scope.tableParams.$params.filter['complejo'] = null;
@@ -2310,6 +2354,28 @@ angular.module('seipModule.controllers', [])
                     });
                 } else {
                     $scope.tableParams.$params.filter['firstLineManagement'] = null;
+                }
+            });
+            //Scope de Círculo de Estudio de Trabajo
+            $scope.$watch("model.workStudyCircle", function (newParams, oldParams) {
+                if ($scope.model.workStudyCircle != null && $scope.model.workStudyCircle.id != undefined) {
+                    $scope.tableParams.$params.filter['workStudyCircle'] = $scope.model.workStudyCircle.id;
+                    //Al cambiar el círculo de estudio de trabajo
+                    selectWorkStudyCircle.change(function () {
+                    });
+                } else {
+                    $scope.tableParams.$params.filter['workStudyCircle'] = null;
+                }
+            });
+            //Scope de Línea Estratégica
+            $scope.$watch("model.lineStrategic", function (newParams, oldParams) {
+                if ($scope.model.lineStrategic != null && $scope.model.lineStrategic.id != undefined) {
+                    $scope.tableParams.$params.filter['lineStrategic'] = $scope.model.lineStrategic.id;
+                    //Al cambiar la línea estratégica
+                    selectLineStrategic.change(function () {
+                    });
+                } else {
+                    $scope.tableParams.$params.filter['lineStrategic'] = null;
                 }
             });
         })

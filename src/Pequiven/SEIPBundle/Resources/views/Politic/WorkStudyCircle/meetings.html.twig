@@ -34,33 +34,31 @@
                         <td>{{ cont }}</td>
                         <td>{{ meeting.date|date('Y-m-d') }}</td>
                         <td>
-                            <a href="{{ path("pequiven_meeting_view",{meeting_id:meeting.id})}}">
+                            <a href="{{ path("pequiven_meeting_show",{meeting_id:meeting.id})}}">
                                 {{ meeting.place }}
                             </a>
                         </td>
                         <td>
-                            <a href="{{ path("pequiven_meeting_view",{meeting_id:meeting.id})}}">
+                            <a href="{{ path("pequiven_meeting_show",{meeting_id:meeting.id})}}">
                                 {{ meeting.subject }}
                             </a>
                         </td>
-                        {% if(is_granted("ROLE_SEIP_MEETING_EDIT")) %}
-                            <td class="align-right vertical-center">
-                                {% if (is_granted('ROLE_SEIP_PROPOSAL_EDIT') or (userCreatedId == user.id)) %}
-                                    <div ng-controller="ToolsController" id="target_{$ paso+1 $}">
-                                        <span class="select compact">
-                                            <a href="{{ path('pequiven_meeting_edit',{meeting_id:meeting.id}) }}" class="select-value form-edit">
-                                                {{ 'workStudyCircle.members.edit'|trans }}
-                                            </a>
-                                            <span class="select-arrow"></span>
-                                        </span>
-                                    </div>
-                                {% else  %}
-                                    &nbsp;
-                                {% endif %}
-                            </td>
-                        {% else %}
-                            &nbsp;
-                        {% endif %}
+
+                        <td class="align-right vertical-center">
+                            {% if (is_granted('ROLE_SEIP_MEETING_EDIT') or (userCreatedId == user.id)) %}
+                                <div ng-controller="ToolsController" id="target_{$ paso+1 $}">
+                                    <span class="select compact">
+                                        <a href="{{ path('pequiven_meeting_edit',{meeting_id:meeting.id}) }}" class="select-value form-edit">
+                                            {{ 'workStudyCircle.members.edit'|trans }}
+                                        </a>
+                                        <span class="select-arrow"></span>
+                                    </span>
+                                </div>
+                            {% else  %}
+                                &nbsp;
+                            {% endif %}
+                        </td>
+
 
                         {% set cont = cont + 1 %}
                     </tr>
@@ -68,18 +66,5 @@
 
             </tbody>
         </table>
-
-        {% set routeConfig = path('pequiven_all_meetings_export_pdf',{idWorkStudyCircle:workStudyCircle.id}) %}
-        {% if(is_granted(["ROLE_SEIP_WORK_STUDY_CIRCLES_EXPORT_REPORT"])) %}
-            <div class="align-right">
-                {{ buttons.generic(
-                    (routeConfig),
-                    ('workStudyCircle.meetings.exportpdf'|trans({})),
-                    'icon-download'
-                 ) 
-                }}
-            </div>
-        {% endif %}
-
     </div>
 </div>
