@@ -306,8 +306,8 @@ class MeetingController extends SEIPController {
             $assistanceIds[$assis->getUser()->getId()] = $assis->getAssistance();
             if ($assis->getAssistance() == false) {
                 // CONSTRUCCIÓN DEL ARRAY DE OBSERVACIONES. CONCADENO EL MENSAJE Y LO PREFORMATEO 
-                $a = ucwords(strtolower($assis->getUser()->getfirstname())) . " " . ucwords(strtolower($assis->getUser()->getlastname()))
-                        . " no Asistió por " . ucwords(strtolower($assis->getObservation()));
+                $a = ucwords(mb_strtolower($assis->getUser()->getfirstname(),'UTF-8')) . " " . ucwords(mb_strtolower($assis->getUser()->getlastname(),'UTF-8'))
+                        . " no Asistió por " . ucwords(mb_strtolower($assis->getObservation(),'UTF-8'));
                 $assistanceObs[] = $a;
             }
         }
