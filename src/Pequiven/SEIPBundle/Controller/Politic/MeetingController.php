@@ -10,7 +10,6 @@ use Pequiven\SEIPBundle\Entity\Politic\Meeting;
 use Pequiven\SEIPBundle\Form\Politic\MeetingType;
 use Pequiven\SEIPBundle\Entity\Politic\Assistance;
 
-
 /**
  * Controlador de reuniones de estudio de trabajo
  *
@@ -217,16 +216,24 @@ class MeetingController extends SEIPController {
 
         $assistance = $meeting->getAssistances();
         $assistanceIds = array();
+        $assistanceObs = array();
 
         foreach ($assistance as $assis) {
             $assistanceIds[$assis->getUser()->getId()] = $assis->getAssistance();
+            if ($assis->getAssistance() == false) {
+                // CONSTRUCCIÓN DEL ARRAY DE OBSERVACIONES. CONCADENO EL MENSAJE Y LO PREFORMATEO 
+                $a = ucwords(strtolower($assis->getUser()->getfirstname())) . " " . ucwords(strtolower($assis->getUser()->getlastname()))
+                        . " no Asistió por " . ucwords(strtolower($assis->getObservation()));
+                $assistanceObs[] = $a;
+            }
         }
-
+        
         $data = array(
             'meeting' => $meeting,
             'members' => $members,
             'workStudyCircle' => $workStudyCircle,
             'assistanceIds' => $assistanceIds,
+            'assistanceObs' => $assistanceObs,
             'user' => $this->getUser()
         );
 
@@ -244,17 +251,29 @@ class MeetingController extends SEIPController {
 
         $fechameeting = array();
         $asistencia = array();
+        $totalAR = array();
+        $totalAT = array();
 
         foreach ($meeting as $meet) {
 
             $fechameeting[] = $meet;
             $assistance = $meet->getAssistances();
+            $total = 0;
+            $totalneto = 0;
 
             foreach ($assistance as $assis) {
                 $asistencia[$assis->getUser()->getId()][$meet->getId()] = $assis->getAssistance();
+
+                if ($assis->getAssistance() == true) {
+                    $total++;
+                }
+                $totalneto++;
             }
+
+            $totalAR[$meet->getId()] = $total;
+            $totalAT[$meet->getId()] = $totalneto;
         }
-        
+
 //        var_dump($fechameeting);
 //        die();
 
@@ -263,19 +282,21 @@ class MeetingController extends SEIPController {
             'members' => $members,
             'asistencia' => $asistencia,
             'meeting' => $meeting,
-            'fechas' => $fechameeting
+            'fechas' => $fechameeting,
+            'totalAR' => $totalAR,
+            'totalAT' => $totalAT
         );
 
-        $this->generatePdf($data, 'Reporte de Asistencias a Reuniones', 'PequivenSEIPBundle:Politic:Meeting\exportAllpdf.html.twig',array('ORIENTATION' => 'P'));
+        $this->generatePdf($data, 'Reporte de Asistencias a Reuniones', 'PequivenSEIPBundle:Politic:Meeting\exportAllpdf.html.twig', array('ORIENTATION' => 'P'));
     }
-    
+
     public function generatePdf($data, $title, $template, $options = array()) {
-        if(!isset($options['ORIENTATION'])){
+        if (!isset($options['ORIENTATION'])) {
             $options['ORIENTATION'] = 'P';
         }
-        
+
         $pdf = new \Pequiven\SEIPBundle\Model\PDF\SeipPdf($options['ORIENTATION'], PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-        
+
         $pdf->setPrintLineFooter(false);
         $pdf->setContainer($this->container);
         $pdf->setPeriod($this->getPeriodService()->getPeriodActive());
