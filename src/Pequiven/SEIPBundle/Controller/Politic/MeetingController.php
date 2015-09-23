@@ -127,10 +127,12 @@ class MeetingController extends SEIPController {
     }
 
     public function createWorkStudyCircleFile(Meeting $meeting, $files) {
-        $idMeeting = $meeting->getId();
+        //$idMeeting = $meeting->getId();
         $idWorkStudyCircle = $meeting->getWorkStudyCircle();
-        $fileName = $idWorkStudyCircle->getId() . "_" . $idMeeting;
+        $fileName = $idWorkStudyCircle->getId();
         $fileUploaded = false;
+        $em = $this->getDoctrine()->getEntityManager();
+
 
         foreach ($files as $file) {
             $workStudyCircleFile = new \Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircleFile();
@@ -141,12 +143,15 @@ class MeetingController extends SEIPController {
             $workStudyCircleFile->setWorkStudyCircle($meeting->getWorkStudyCircle());
 
             //SE MUEVE EL ARCHIVO AL SERVIDOR
-            $file->move($this->container->getParameter("kernel.root_dir") . '/../web/' . \Pequiven\SEIPBundle\Model\Politic\WorkStudyCircleFile::getUploadDir(), \Pequiven\SEIPBundle\Model\Politic\WorkStudyCircleFile::NAME_FILE . $fileName);
+            $file->move($this->container->getParameter("kernel.root_dir") . '/../web/' . \Pequiven\SEIPBundle\Model\Politic\WorkStudyCircleFile::getUploadDir(), \Pequiven\SEIPBundle\Model\Politic\WorkStudyCircleFile::NAME_FILE . $fileName . "_" . base64_encode($file->getClientOriginalName()));
             $fileUploaded = $file->isValid();
         }
 
+
+
+
         if (!$fileUploaded) {
-            $em = $this->getDoctrine()->getEntityManager();
+
             $em->persist($workStudyCircleFile);
             $em->flush();
 
@@ -171,14 +176,23 @@ class MeetingController extends SEIPController {
 
     public function downloadFileAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
-        $idMeeting = $request->get("id");
-        $meeting = $em->getRepository('PequivenSEIPBundle:Politic\Meeting')->findOneBy(array('id' => $idMeeting));
-        $idWorkStudyCircle = $meeting->getWorkStudyCircle();
-        $fileName = $idWorkStudyCircle->getId() . "_" . $idMeeting;
+        $idFile = $request->get("id");
+        $file = $em->getRepository('PequivenSEIPBundle:Politic\WorkStudyCircleFile')->findOneBy(array('id' => $idFile));
+        $workStudyCircle = $file->getWorkStudyCircle();
+        //$metting = $workStudyCircle->getMeeting();
+
+        //$fileName = $workStudyCircle->getId() . "_" . $file->getNameFile();
+
+//        $meeting = $em->getRepository('PequivenSEIPBundle:Politic\Meeting')->findOneBy(array('id' => $idMeeting));
+//        $WorkStudyCircle = $meeting->getWorkStudyCircle();
+//        $idFile = $WorkStudyCircle->getWorkStudyCircleFile();
+//        $fileName = $WorkStudyCircle->getId() . "_" . $idMeeting . "_" . $idFile;
 
         $path = \Pequiven\SEIPBundle\Model\Politic\WorkStudyCircleFile::LOCATION_UPLOAD_FILE;
         $name = \Pequiven\SEIPBundle\Model\Politic\WorkStudyCircleFile::NAME_FILE;
-        $ruta = $this->container->getParameter("kernel.root_dir") . '/../web/' . $path . "/" . $name . $fileName;
+        
+
+        $ruta = $this->container->getParameter("kernel.root_dir") . '/../web/' . $path . "/" . $name . $workStudyCircle->getId() . "_" . base64_encode($file->getNameFile());
 
         header('Content-type: application/pdf');
         readfile($ruta);
@@ -311,7 +325,7 @@ class MeetingController extends SEIPController {
                 $assistanceObs[] = $a;
             }
         }
-        
+
         $data = array(
             'meeting' => $meeting,
             'members' => $members,
