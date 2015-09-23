@@ -133,6 +133,7 @@ class MeetingController extends SEIPController {
         $fileUploaded = false;
         $em = $this->getDoctrine()->getEntityManager();
 
+
         foreach ($files as $file) {
             $workStudyCircleFile = new \Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircleFile();
             $workStudyCircleFile->setCreatedBy($this->getUser());
@@ -179,8 +180,8 @@ class MeetingController extends SEIPController {
         $file = $em->getRepository('PequivenSEIPBundle:Politic\WorkStudyCircleFile')->findOneBy(array('id' => $idFile));
         $workStudyCircle = $file->getWorkStudyCircle();
         //$metting = $workStudyCircle->getMeeting();
-        
-        $fileName = $workStudyCircle->getId()  . "_" . base64_encode($file->getNameFile());
+
+        //$fileName = $workStudyCircle->getId() . "_" . $file->getNameFile();
 
 //        $meeting = $em->getRepository('PequivenSEIPBundle:Politic\Meeting')->findOneBy(array('id' => $idMeeting));
 //        $WorkStudyCircle = $meeting->getWorkStudyCircle();
@@ -189,7 +190,9 @@ class MeetingController extends SEIPController {
 
         $path = \Pequiven\SEIPBundle\Model\Politic\WorkStudyCircleFile::LOCATION_UPLOAD_FILE;
         $name = \Pequiven\SEIPBundle\Model\Politic\WorkStudyCircleFile::NAME_FILE;
-        $ruta = $this->container->getParameter("kernel.root_dir") . '/../web/' . $path . "/" . $name . $fileName;
+        
+
+        $ruta = $this->container->getParameter("kernel.root_dir") . '/../web/' . $path . "/" . $name . $workStudyCircle->getId() . "_" . base64_encode($file->getNameFile());
 
         header('Content-type: application/pdf');
         readfile($ruta);
@@ -322,7 +325,7 @@ class MeetingController extends SEIPController {
                 $assistanceObs[] = $a;
             }
         }
-        
+
         $data = array(
             'meeting' => $meeting,
             'members' => $members,
