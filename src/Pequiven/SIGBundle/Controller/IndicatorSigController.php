@@ -232,7 +232,8 @@ class IndicatorSigController extends ResourceController
             }       
         //$view = $this->view();
         //$view->getSerializationContext()->setGroups(array('id','api_list'));              
-
+            //var_dump(count($data["verification"]));
+            //die();
             $dataAction = [
                 'action' => $data["action"],
                 'values' => $data["actionValue"] 
@@ -497,8 +498,11 @@ class IndicatorSigController extends ResourceController
         $dateEnd = $request->get('actionResults')['dateEnd'];
         //$advance = $request->get('actionResults')['advance'];
         
-        $dStart = $dateStart["month"];
-        $dEnd   = $dateEnd["month"];
+        $monthStart = explode("/", $dateStart);//Sacando el mes de inicio
+        $monthEnd = explode("/", $dateEnd);//Sacando el mes de cierre
+        
+        $dStart = $monthStart[1];//Pasando mes de Inicio
+        $dEnd   = $monthEnd[1];//Pasando el mes de Cierre
         //var_dump($dStart);
         $count = 0; $data = (int)$dStart;
             //var_dump($data);
@@ -655,7 +659,8 @@ class IndicatorSigController extends ResourceController
      */
     public function addCausesAction(Request $request)
     {   
-        $month = date("m");//Carga del mes de Creación de la causa "Automatico"
+        //$monthActual = date("m");//Carga del mes de Creación de la causa "Automatico"
+        $month = $request->get('evolutioncause')['month'];//Carga de Mes pasado
 
         $indicator = $request->get('idIndicator');
         $repository = $this->get('pequiven.repository.sig_indicator');
@@ -672,7 +677,7 @@ class IndicatorSigController extends ResourceController
 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $month != 0) {
             
             $em = $this->getDoctrine()->getManager();
             $em->persist($cause);
@@ -745,7 +750,8 @@ class IndicatorSigController extends ResourceController
         $repository = $this->get('pequiven.repository.sig_indicator');
         $results = $repository->find($indicator);
 
-        $month = date("m");//Carga del mes de Creación de la causa "Automatico"        
+        //$month = date("m");//Carga del mes de Creación de la causa "Automatico"        
+        $month = $request->get('evolutiontrend')['month'];//Carga de Mes pasado
         
         $user = $this->getUser();
         $data = $results;
@@ -758,7 +764,7 @@ class IndicatorSigController extends ResourceController
 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted()) {
             
             $em = $this->getDoctrine()->getManager();
             $em->persist($trend);
@@ -978,20 +984,22 @@ class IndicatorSigController extends ResourceController
                             $idCons[] = $idAction;
                             //var_dump($value->getActionValue()->getId());
                             //$actionResult = $this->get('pequiven.repository.sig_action_indicator')->findBy(array('id' => $idAction));
+                        //$verification[] = $this->get('pequiven.repository.sig_action_verification')->findByactionPlan($idAction);
                             
                         }            
                     }
             }
             $actionResult = $this->get('pequiven.repository.sig_action_indicator')->findBy(array('id' => $idCons));
         }  
-
+        //var_dump(count($verification));
+        //die();
         $actionsValues = EvolutionActionValue::getActionValues($idCons, $month);          
         $cant = count($actionResult);
 
         if($opc = false){
             $idAction = null;
         } 
-        $verification = $this->get('pequiven.repository.sig_action_verification')->findByactionPlan($idAction);
+        $verification = $this->get('pequiven.repository.sig_action_verification')->findAll();
 
         //Carga de array con la data
         $data = [

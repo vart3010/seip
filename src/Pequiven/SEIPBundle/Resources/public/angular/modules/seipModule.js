@@ -5278,6 +5278,11 @@ angular.module('seipModule.controllers', [])
                         "renderAt": id,
                         "width": "95%",
                         "height": "550%",
+                        "exportenabled": "1",
+                        "exportFormats": "PNG= Exportar como PNG|PDF= Exportar como PDF",
+                        "exportFileName": "Gráfico Causas de Desviación del Indicador",
+                        "exporthandler": "http://107.21.74.91/",
+                        "html5exporthandler": "http://107.21.74.91/",
                         "dataFormat": "json",
                         "dataSource": {
                             "chart": {

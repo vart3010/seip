@@ -39,14 +39,19 @@ class EvolutionActionType extends AbstractType
             ->add('dateStart', 'date', array(
                 'label'=>'Fecha de Inicio',
                 'label_attr' => array('class' => 'label'),
-                'attr'=> array('class'=> '' ),                
+                'format' => 'd/M/y',
+                'widget' => 'single_text',
+                'attr' => array('class' => 'input input-large')               
                 ))
             ->add('dateEnd', 'date', array(
                 'label'=>'Fecha de Cierre',
                 'label_attr' => array('class' => 'label'),
-                'attr'=> array('class'=> '' )))            
-            /*->add('evolutionCause','entity',array(
-                'label' => 'Causa del Plan de Acción',
+                'format' => 'd/M/y',
+                'widget' => 'single_text',
+                'attr' => array('class' => 'input input-large')  
+                ))            
+            ->add('evolutionCause','entity',array(
+                'label' => 'Causa de Desviación',
                 'label_attr' => array('class' => 'label'),
                 'class' => 'Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCause',
                 'property' => 'causes',
@@ -56,7 +61,7 @@ class EvolutionActionType extends AbstractType
                 //'ng-model' => 'model.lastPeriod',
                 //'ng-options' => 'value as value.ref for (key,value) in data.lastPeriod'
                 ),
-                               )) */
+                               )) 
               /*->add('evolutionCause',null,array(
                 'label' => 'Causa del Plan de Acción',
                 'label_attr' => array('class' => 'label'),
@@ -68,7 +73,7 @@ class EvolutionActionType extends AbstractType
                 'ng-options' => 'value as value.ref for (key,value) in data.causesEvolution'
                 ),
                                )) */
-            ->add('evolutionCause', null, array(
+            /*->add('evolutionCause', null, array(
                     'query_builder' => function(\Pequiven\IndicatorBundle\Repository\Indicator\EvolutionIndicator\EvolutionCauseRepository $repository) use($options) {
                         return $repository->getCausesByIndicator($options['indicator']);
                     },
@@ -82,7 +87,7 @@ class EvolutionActionType extends AbstractType
                     ),
                     'empty_value' => 'Seleccione...',
                     'required' => true,
-                ))
+                ))*/
         ;
     }
     
@@ -94,7 +99,7 @@ class EvolutionActionType extends AbstractType
     {   
         $resolver->setDefaults(array(
             'data_class' => 'Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionAction',
-            'indicator'  => 1736
+            //'indicator'  => 1736
 
         ));
     }

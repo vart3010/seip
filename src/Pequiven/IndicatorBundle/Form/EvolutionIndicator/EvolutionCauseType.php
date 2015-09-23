@@ -18,12 +18,17 @@ class EvolutionCauseType extends AbstractType
             ->add('causes', 'text', array(
                 'label' => 'Causa',
                 'label_attr' => array('class' => 'label'),
-                'attr' => array('class' => 'input input-large validate[required]' )))
+                'attr' => array(
+                    'class' => 'input input-large validate[required]' 
+                    )))
             ->add('valueOfcauses', 'number', array(
                 'label'=>'Valor de la Causa',
                 'label_attr' => array('class' => 'label'),
-                'disabled' => false,
-                'attr' => array('class' => 'input input-large validate[required]')))
+                'disabled'   => false,
+                'attr' => array(
+                    'class'    => 'input input-large validate[required]',
+                    'maxlength'=> 3                    
+                    )))
             /*->add('month', 'number', array(
                 'label'=>'Mes de la Causa',
                 'label_attr' => array('class' => 'label'),
@@ -48,6 +53,6 @@ class EvolutionCauseType extends AbstractType
      */
     public function getName()
     {
-        return 'pequiven_indicatorbundle_evolutionindicator_evolutioncause';
+        return 'evolutioncause';
     }
 }

@@ -21,7 +21,10 @@ class EvolutionActionValueType extends AbstractType
             ->add('advance', 'text', array(
                 'label'=>'Avance %',
                 'label_attr' => array('class' => 'label'),
-                'attr'=> array('class'=> 'input input-large ' )))
+                'attr'=> array(
+                    'class'=> 'input input-large ',
+                    'maxlength'=> 3 
+                    )))
             ->add('observations', 'textarea', array(
                 'label'=>'Observaciones',
                 'label_attr' => array('class' => 'label'),

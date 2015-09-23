@@ -65,30 +65,50 @@
     <table width="90%">
         <thead>
             <tr>
-                <th class="title_bold" width="5%" style="text-align: left">#</th>
+                <th class="title_bold" width="5%" style="text-align: left">N°</th>
                 <th class="title_bold" width="25%" style="text-align: left">C.I.</th>
                 <th class="title_bold" width="65%" style="text-align: left">Nombre y Apellido</th>
                 <th class="title_bold" width="15%" style="text-align: left">Presente</th>
             </tr>
         </thead>
         <tbody>
-            {% set userCreatedId = workStudyCircle.getCreatedBy.id %}
             {% for member in members %}
-                
+
                 <tr>
                     <td width="5%" style="text-align: left">{{ loop.index  }}</td>
                     <td width="25%"style="text-align: left">{{ member.getIndentification|number_format(0, ',', '.') }}</td>
-                    <td width="65%">{{ member.firstname | upper}} {{ member.lastname | upper}}</td>
+                    <td width="65%">{{ member.firstname | ucwords}} {{ member.lastname | ucwords}}</td>
                     {% if assistanceIds[member.id]== 1 %}
-                    <td width="10%" style="text-align: left"> SI </td>
+                        <td width="10%" style="text-align: left"> SI </td>
                     {% else %}
-                    <td width="15%"> NO </td>    
+                        <td width="15%"> NO </td>  
                     {% endif %}
                 </tr>
-                {#                    {% endif %}#}
             {% endfor %}
         </tbody>
     </tbody>
+</table>
+
+<br/><br/><br/>
+
+<table width="100%">
+    <tr>
+        <th class="title">3. Observaciones</th>
+    </tr>
+</table> 
+
+<br/><br/>
+
+<table width="90%">
+    <tbody>
+        {% for obs in assistanceObs %}
+            <tr>
+                <td width="100%" style="text-align: justify">- {{ obs }}</td>
+
+            </tr>
+        {% endfor %}
+    </tbody>
+</tbody>
 </table>
 
 {% endblock %}
