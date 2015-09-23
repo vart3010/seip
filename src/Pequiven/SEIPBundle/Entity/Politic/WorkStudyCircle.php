@@ -135,7 +135,7 @@ class WorkStudyCircle extends ModelWorkStudyCircle implements PeriodItemInterfac
      * @ORM\OneToMany(targetEntity="\Pequiven\SEIPBundle\Entity\Politic\Meeting", mappedBy="workStudyCircle")
      */
     private $meetings;
-    
+
     /**
      * @ORM\OneToMany(targetEntity="\Pequiven\SEIPBundle\Entity\Politic\Proposal", mappedBy="workStudyCircle")
      */
@@ -147,6 +147,14 @@ class WorkStudyCircle extends ModelWorkStudyCircle implements PeriodItemInterfac
     private $deletedAt;
 
     /**
+     * Relacion archivos asociados a WorkStudyCircle
+     * 
+     * @var Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircleFile
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircleFile",mappedBy="workStudyCircle")
+     */
+    private $workStudyCircleFile;
+
+    /**
      * Constructor
      */
     public function __construct() {
@@ -156,6 +164,7 @@ class WorkStudyCircle extends ModelWorkStudyCircle implements PeriodItemInterfac
         $this->meetings = new \Doctrine\Common\Collections\ArrayCollection();
         $this->proposals = new \Doctrine\Common\Collections\ArrayCollection();
         //$this->members = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->workStudyCircleFile = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -463,7 +472,7 @@ class WorkStudyCircle extends ModelWorkStudyCircle implements PeriodItemInterfac
     public function getMeeting() {
         return $this->meetings;
     }
-    
+
     /**
      * 
      * @param \Pequiven\SEIPBundle\Entity\Politic\Proposal $proposal
@@ -489,6 +498,33 @@ class WorkStudyCircle extends ModelWorkStudyCircle implements PeriodItemInterfac
      */
     public function getProposals() {
         return $this->proposals;
+    }
+
+    /**
+     * 
+     * @param \Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircleFile $workStudyCircleFile
+     * @return \Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle
+     */
+    public function addWorkStudyCircleFile(WorkStudyCircleFile $workStudyCircleFile) {
+        $this->workStudyCircleFile->add($workStudyCircleFile);
+
+        return $this;
+    }
+
+    /**
+     * 
+     * @param \Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircleFile $workStudyCircleFile
+     */
+    public function removeWorkStudyCircleFile(WorkStudyCircleFile $workStudyCircleFile) {
+        $this->workStudyCircleFile->removeElement($workStudyCircleFile);
+    }
+
+    /**
+     * 
+     * @return type
+     */
+    public function getWorkStudyCircleFile() {
+        return $this->workStudyCircleFile;
     }
 
 }

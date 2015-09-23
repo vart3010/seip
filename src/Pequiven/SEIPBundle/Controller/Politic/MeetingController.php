@@ -9,6 +9,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Pequiven\SEIPBundle\Entity\Politic\Meeting;
 use Pequiven\SEIPBundle\Form\Politic\MeetingType;
 use Pequiven\SEIPBundle\Entity\Politic\Assistance;
+use Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircleFileStudy;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 
 /**
@@ -53,7 +55,7 @@ class MeetingController extends SEIPController {
                 }
             }
 
-            //VALIDA QUE NINGUN CAMPO DE OBSERVACION ESTE VACIO - SEGUNDA VALIDACION
+//VALIDA QUE NINGUN CAMPO DE OBSERVACION ESTE VACIO - SEGUNDA VALIDACION
             $band = true;
             $cont = 0;
             foreach ($members as $member) {
@@ -86,8 +88,8 @@ class MeetingController extends SEIPController {
                 $meetingObj->setWorkStudyCircle($workStudyCircle);
                 $em->persist($meetingObj);
 
-                //SE AGREGAN LOS MIEMBROS A LA LISTA DE ASISTENCIA DE LA REUNION CON ASSISTENCIA = FALSE 
-                //$members = $workStudyCircle->getUserWorkerId();
+//SE AGREGAN LOS MIEMBROS A LA LISTA DE ASISTENCIA DE LA REUNION CON ASSISTENCIA = FALSE 
+//$members = $workStudyCircle->getUserWorkerId();
                 foreach ($members as $member) {
                     $assistance = new Assistance();
                     $assistance->setUser($member);
@@ -110,7 +112,7 @@ class MeetingController extends SEIPController {
 
                 $this->get('session')->getFlashBag()->add('success', 'Reunión Guardada Correctamente');
 
-                return $this->redirect($this->generateUrl('pequiven_meeting_show', array("meeting_id" => $meetingObj->getId())));
+                return $this->redirect($this->generateUrl('pequiven_meeting_show', array("id" => $meetingObj->getId())));
             } else {
                 $this->get('session')->getFlashBag()->add('error', 'Debe llenar el campo Observación.');
             }
@@ -125,13 +127,73 @@ class MeetingController extends SEIPController {
         ));
     }
 
+    public function createWorkStudyCircleFile(Meeting $meeting, $files) {
+        $idMeeting = $meeting->getId();
+        $idWorkStudyCircle = $meeting->getWorkStudyCircle();
+        $fileName = $idWorkStudyCircle->getId() . "_" . $idMeeting;
+        $fileUploaded = false;
+
+        foreach ($files as $file) {
+            $workStudyCircleFile = new \Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircleFile();
+            $workStudyCircleFile->setCreatedBy($this->getUser());
+            $workStudyCircleFile->setNameFile($file->getClientOriginalName());
+            $workStudyCircleFile->setPath(\Pequiven\SEIPBundle\Model\Politic\WorkStudyCircleFile::getUploadDir());
+            $workStudyCircleFile->setExtensionFile($file->guessExtension());
+            $workStudyCircleFile->setWorkStudyCircle($meeting->getWorkStudyCircle());
+
+            //SE MUEVE EL ARCHIVO AL SERVIDOR
+            $file->move($this->container->getParameter("kernel.root_dir") . '/../web/' . \Pequiven\SEIPBundle\Model\Politic\WorkStudyCircleFile::getUploadDir(), \Pequiven\SEIPBundle\Model\Politic\WorkStudyCircleFile::NAME_FILE . $fileName);
+            $fileUploaded = $file->isValid();
+        }
+
+        if (!$fileUploaded) {
+            $em = $this->getDoctrine()->getEntityManager();
+            $em->persist($workStudyCircleFile);
+            $em->flush();
+
+            $this->get('session')->getFlashBag()->add('success', $this->trans('action.messages.saveFileSuccess', array(), 'PequivenIndicatorBundle'));
+            //$request->request->set("uploadFile", "");
+            $this->redirect($this->generateUrl("pequiven_meeting_show", array("id" => $meeting->getId())));
+        } else {
+            $this->get('session')->getFlashBag()->add('error', $this->trans('action.messages.errorFileUpload', array(), 'PequivenIndicatorBundle'));
+            //$request->request->set("uploadFile", "");
+            $this->redirect($this->generateUrl("pequiven_meeting_show", array("id" => $meeting->getId())));
+        }
+    }
+
+    public function generateUrlFileAction(Request $request) {
+
+        $response = new JsonResponse();
+        $data = array();
+        $data["url"] = $this->generateUrl("pequiven_work_study_circle_download_file", array("id" => $request->get("id")));
+        $response->setData($data);
+        return $response;
+    }
+
+    public function downloadFileAction(Request $request) {
+        $em = $this->getDoctrine()->getManager();
+        $idMeeting = $request->get("id");
+        $meeting = $em->getRepository('PequivenSEIPBundle:Politic\Meeting')->findOneBy(array('id' => $idMeeting));
+        $idWorkStudyCircle = $meeting->getWorkStudyCircle();
+        $fileName = $idWorkStudyCircle->getId() . "_" . $idMeeting;
+
+        $path = \Pequiven\SEIPBundle\Model\Politic\WorkStudyCircleFile::LOCATION_UPLOAD_FILE;
+        $name = \Pequiven\SEIPBundle\Model\Politic\WorkStudyCircleFile::NAME_FILE;
+        $ruta = $this->container->getParameter("kernel.root_dir") . '/../web/' . $path . "/" . $name . $fileName;
+
+        header('Content-type: application/pdf');
+        readfile($ruta);
+    }
+
     public function showAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
-        $idMeeting = $request->get("meeting_id");
+        $idMeeting = $request->get("id");
         $meeting = $em->getRepository('PequivenSEIPBundle:Politic\Meeting')->findOneBy(array('id' => $idMeeting));
+
+
         $workStudyCircle = $meeting->getWorkStudyCircle();
 
-        $idCircle = $workStudyCircle->getId(); //Id Circulo
+        //$idCircle = $workStudyCircle->getId(); //Id Circulo
 
         $members = $workStudyCircle->getUserWorkerId();
 
@@ -144,13 +206,35 @@ class MeetingController extends SEIPController {
         }
 
 
+        //CUANDO CARGA UN ARCHIVO
+        if (count($request->files) > 0) {
+            //$resource = $this->findOr404($request);
+            $band = false;
+            //VALIDACION QUE SEA UN ARCHIVO PERMITIDO
+            foreach ($request->files as $file) {
+                if (in_array($file->guessExtension(), \Pequiven\SEIPBundle\Model\Politic\WorkStudyCircleFile::getTypesFile())) {
+                    $band = true;
+                }
+            }
+
+            if ($band) {
+                $this->createWorkStudyCircleFile($meeting, $request->files);
+            } else {
+                $this->get('session')->getFlashBag()->add('error', $this->trans('action.messages.InvalidFile', array(), 'PequivenIndicatorBundle'));
+                //$this->redirect($this->generateUrl("pequiven_meeting_show", array("meeting_id" => $request->get("idMeeting"))));
+            }
+        }
+
+        $files = $workStudyCircle->getWorkStudyCircleFile();
+
         return $this->render('PequivenSEIPBundle:Politic:Meeting\show.html.twig', array(
                     'meeting' => $meeting,
                     'members' => $members,
                     'workStudyCircle' => $workStudyCircle,
                     'assistanceIds' => $assistanceIds,
                     'assistanceObs' => $assistanceObs,
-                    'user' => $this->getUser()
+                    'user' => $this->getUser(),
+                    'files' => $files
         ));
     }
 
@@ -319,6 +403,28 @@ class MeetingController extends SEIPController {
 
 //            $pdf->Output('Reporte del dia'.'.pdf', 'I');
         $pdf->Output($title . '.pdf', 'D');
+    }
+
+    public function uploadFilesAction(Request $request) {
+//$resource = $this->findOr404($request);
+
+        $band = false;
+//VALIDACION QUE SEA UN ARCHIVO PERMITIDO
+        foreach ($request->files as $file) {
+            if (in_array($file->guessExtension(), \Pequiven\SEIPBundle\Model\Politic\WorkStudyCircleFile::getTypesFile())) {
+                $band = true;
+            }
+        }
+
+
+        if ($band) {
+            var_dump($band);
+            die();
+//$this->createValueIndicatorFile($resource, $request);
+        } else {
+            $this->get('session')->getFlashBag()->add('error', $this->trans('action.messages.InvalidFile', array(), 'PequivenIndicatorBundle'));
+            $this->redirect($this->generateUrl("pequiven_meeting_show", array("id" => $request->get("idMeeting"))));
+        }
     }
 
 }

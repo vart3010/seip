@@ -71,8 +71,9 @@
     </fieldset>
     <br>
     {% include 'PequivenSEIPBundle:Politic:Meeting/assistance.html.twig' %}
+    <br>    
+    {% include 'PequivenSEIPBundle:Politic:Meeting/meetingFiles.html.twig' %}
     <br>
-
     {% set routeConfig = path('pequiven_meeting_export_pdf',{idmeeting:meeting.id}) %}
     {% if(is_granted(["ROLE_SEIP_MEETING_EXPORT_REPORT"])) %}
         <div class="align-right">
@@ -90,19 +91,40 @@
 
 {% block javascript %}
     <script type="text/javascript">
-        $(document).ready(function () {
-            $('#switch-mode').change(function () {
-                $('.switch-wrapper')[this.checked ? 'addClass' : 'removeClass']('reversed-switches');
 
+
+        function openFile(idMeeting) {
+            var data = {
+                id: idMeeting
+            };
+            $.ajax({
+                type: 'get',
+                url: '{{ path("pequiven_work_study_circle_get_url_file") }}',
+                data: data,
+                success: function (data) {
+                   // console.log(data);
+                   window.open(data["url"]);
+                }
             });
 
+        }
+
+        $(document).ready(function () {
+
+            $("button#downloadFile").click(function () {
+                var idMeeting = $(this).attr("data");
+                //alert(idMeeting);
+                openFile(idMeeting);
+            });
+
+            $('#switch-mode').change(function () {
+                $('.switch-wrapper')[this.checked ? 'addClass' : 'removeClass']('reversed-switches');
+            });
             $("p.assistance input").change(function () {
                 var data = $(this).attr("data");
                 var meeting = $(this).attr("data-meeting");
                 var value = $(this).val();
-
                 var obj = $(this);
-
                 var data = {
                     user_id: data,
                     value: value,
@@ -117,9 +139,18 @@
                         obj.val(data["value"]);
                     }
                 });
-
-
             });
+
+            $("input#meetingFilePdf").change(function () {
+                $("form#forma").submit();
+            });
+
+            $("#clickUploadFile").click(function () {
+                $("input#meetingFilePdf").click();
+            });
+
+
+
         });
     </script>
 {% endblock %}
