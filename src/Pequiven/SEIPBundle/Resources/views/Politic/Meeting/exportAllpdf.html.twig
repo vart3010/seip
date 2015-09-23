@@ -134,9 +134,21 @@
         <tr bgcolor="#F2F2F2">
             <td class="title_bold" width="30%" style="text-align: right"> Porcentaje (%) </td>
             {% for reunion in fechas %}
-                <th width="7%" style="text-align: center"> {{ ((totalAR[reunion.id]*100)/totalAT[reunion.id])|number_format(1, ',', '.') }} </th>
-                {% endfor %}
-            <th width="7%" style="text-align: center"> {{ ((sumaR*100)/sumaP)|number_format(1, ',', '.') }} </th>
+                <th width="7%" style="text-align: center"> 
+                    {% if totalAT[reunion.id]==0%}
+                        0
+                    {% else %}
+                        {{ ((totalAR[reunion.id]*100)/totalAT[reunion.id])|number_format(1, ',', '.') }} 
+                    {% endif%}
+                </th>
+            {% endfor %}
+            <th width="7%" style="text-align: center">
+                {% if sumaP==0%}
+                   0
+                {% else %}
+                    {{ ((sumaR*100)/sumaP)|number_format(1, ',', '.') }} 
+                {% endif%}
+            </th>
         </tr>
 
 
