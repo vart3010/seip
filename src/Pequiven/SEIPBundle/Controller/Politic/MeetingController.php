@@ -12,6 +12,7 @@ use Pequiven\SEIPBundle\Entity\Politic\Assistance;
 use Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircleFileStudy;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
+
 /**
  * Controlador de reuniones de estudio de trabajo
  *
@@ -316,8 +317,49 @@ class MeetingController extends SEIPController {
         $this->generatePdf($data, 'Reporte de Asistencia', 'PequivenSEIPBundle:Politic:Meeting\viewPdf.html.twig');
     }
 
-    public function generatePdf($data, $title, $template) {
-        $pdf = new \Pequiven\SEIPBundle\Model\PDF\SeipPdf('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+    public function exportAllAction(Request $request) {
+
+        $em = $this->getDoctrine()->getManager();
+        $idWorkStudyCircle = $request->get("idWorkStudyCircle");
+
+        $workStudyCircle = $em->getRepository('PequivenSEIPBundle:Politic\WorkStudyCircle')->findOneBy(array('id' => $idWorkStudyCircle));
+        $meeting = $em->getRepository('PequivenSEIPBundle:Politic\Meeting')->findBy(array('workStudyCircle' => $idWorkStudyCircle));
+        $members = $workStudyCircle->getUserWorkerId();
+
+        $fechameeting = array();
+        $asistencia = array();
+
+        foreach ($meeting as $meet) {
+
+            $fechameeting[] = $meet;
+            $assistance = $meet->getAssistances();
+
+            foreach ($assistance as $assis) {
+                $asistencia[$assis->getUser()->getId()][$meet->getId()] = $assis->getAssistance();
+            }
+        }
+        
+//        var_dump($fechameeting);
+//        die();
+
+        $data = array(
+            'workStudyCircle' => $workStudyCircle,
+            'members' => $members,
+            'asistencia' => $asistencia,
+            'meeting' => $meeting,
+            'fechas' => $fechameeting
+        );
+
+        $this->generatePdf($data, 'Reporte de Asistencias a Reuniones', 'PequivenSEIPBundle:Politic:Meeting\exportAllpdf.html.twig',array('ORIENTATION' => 'P'));
+    }
+    
+    public function generatePdf($data, $title, $template, $options = array()) {
+        if(!isset($options['ORIENTATION'])){
+            $options['ORIENTATION'] = 'P';
+        }
+        
+        $pdf = new \Pequiven\SEIPBundle\Model\PDF\SeipPdf($options['ORIENTATION'], PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+        
         $pdf->setPrintLineFooter(false);
         $pdf->setContainer($this->container);
         $pdf->setPeriod($this->getPeriodService()->getPeriodActive());

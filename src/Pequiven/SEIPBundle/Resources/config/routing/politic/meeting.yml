@@ -31,6 +31,17 @@ pequiven_meeting_export_pdf:
         _format: html|json
     methods: [GET|POST]
     options:
+        expose: true   
+               
+pequiven_all_meetings_export_pdf:
+    path: /{idWorkStudyCircle}/exportAll.{_format}
+    defaults:
+        _controller: pequiven.controller.meeting:exportAllAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET|POST]
+    options:
         expose: true
         
 pequiven_meeting_upload_form:
@@ -42,4 +53,6 @@ pequiven_meeting_upload_form:
         _format: html|json
     methods: [GET|POST]
     options:
-        expose: true
+        expose: true   
+        
+        

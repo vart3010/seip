@@ -25,7 +25,7 @@ workStudyCircle:
     general: General
     list: Lista
     export:
-        exportPdf: Exportar a Pdf
+        exportPdf: Exportar Inf. Círculo
         
     proposals:
         title: Propuestas
@@ -42,13 +42,14 @@ workStudyCircle:
         observation: Observaciones
         edit: Editar Reunión
         duration: Duración (Hrs)
+        exportpdf: Exportar Asistencias
             
     assistances:
         dataAssistances: Participantes
         user: Participante
         assistance: Asistió
         observation: Observación
-    
+        
     files:
         add: Agregar Documento
         attachment: Documentos

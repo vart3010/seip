@@ -27,6 +27,7 @@ class SeipPdf extends TCPDF implements ContainerAwareInterface{
 
     //Header del documento pdf de resultados
     public function Header() {
+        
         // Logo SEIP
         $image_file = $this->generateAsset('bundles/pequivenseip/logotipos-pqv/logo_menu_seip.png'); //K_PATH_IMAGES.'logo_example.jpg';
         $this->Image($image_file, 10, 10, 15, '', 'PNG', '', 'T', false, 300, '', false, false, 0, false, false, false);

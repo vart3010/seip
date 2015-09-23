@@ -87,7 +87,11 @@
                                 {% set cont = 1 %}
                                 {% for goal in  management["goals"] %} 
 
-                                    {% set porc = (goal.result * 100)/ goal.resultToDate %}
+                                    {% if goal.resultToDate > 0 %}
+                                        {% set porc = (goal.result * 100)/ goal.resultToDate %}
+                                    {% else %}    
+                                        {% set porc = 0 %}
+                                    {% endif %}
                                     {% set class = "red-gradient"%}
                                     {% if(porc>=50 and porc<100) %}
                                         {% set class = "orange-gradient"%}
