@@ -27,7 +27,7 @@ class SeipEntityRepository extends EntityRepository
         $qb = $this->getQueryBuilder();
         $this->applyPeriodCriteria($qb);
         return $qb;
-    }
+    }    
     
     /**
      * 
@@ -82,8 +82,8 @@ class SeipEntityRepository extends EntityRepository
         }
         $periodId = $this->getRequest()->get("_period");
         $queryBuilder->andWhere($alias.'.period = :period');
-        
         $periodValid = null;
+        
         if($periodId !== null){
             $periodService = $this->getPeriodService();
             $period = $periodService->find($periodId);
@@ -98,7 +98,7 @@ class SeipEntityRepository extends EntityRepository
         }else{
             $this->setParameterPeriod($queryBuilder);
         }
-    }
+    } 
     
     protected function setParameterPeriod(QueryBuilder &$queryBuilder)
     {

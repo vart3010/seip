@@ -103,3 +103,27 @@ pequiven_master_menu_add_gerenciaSecond:
     path: /adminMaster/gerenciaSecond/add
     defaults:
         _controller: pequiven.controller.gerenciasecond:createAction
+
+#Lista de Objetivos SIG
+sig_objetives:
+    path: /sig/objetives/list
+    defaults: 
+        {_controller: PequivenSIGBundle:Objetives:list}
+
+#Lista de Indicadores Estratégicos SIG
+sig_indicators_strategic:
+    path: /sig/indicators_strategic/list
+    defaults: 
+        _controller: pequiven.controller.indicators_sig:strategiclistAction
+
+#Lista de Indicadores Tacticos SIG
+sig_indicators_tactic:
+    path: /sig/indicators_tactic/list
+    defaults: 
+        _controller: pequiven.controller.indicators_sig:tacticlistAction
+        
+#Lista de Indicadores Operativos SIG
+sig_indicators_operative:
+    path: /sig/indicators_operative/list
+    defaults: 
+        _controller: pequiven.controller.indicators_sig:operativelistAction

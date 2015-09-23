@@ -1,0 +1,93 @@
+{% import 'PequivenSIGBundle:Template:Buttons/buttons.html.twig' as buttons %}
+
+{% trans_default_domain 'PequivenArrangementProgramBundle' %}
+
+<div class="">
+    <div class="">
+        <div class="">
+           
+                <h3 class="thin underline text-center">Historico Informe de Evolución</h3>
+                <fieldset class="fieldset">
+                    {% set month = "now"|date("m") %}
+                    
+                    
+                        {#<label class="label">Seleccione Historico </label>
+                        <select class="input-xlarge form-control">                    
+                        {% for data in labelsMonths %}     
+                            <option value="">{{ data }}</option>
+
+                        {% endfor %}                                             
+                        </select>#}
+
+                        {% for data in listMonth %} 
+
+                            {% if data == 1 %} 
+                                {% set name = "Enero" %}
+                            {% elseif data == 2 %} 
+                                {% set name = "Febrero" %}
+                            {% elseif data == 3 %} 
+                                {% set name = "Marzo" %}
+                            {% elseif data == 4 %} 
+                                {% set name = "Abril" %}
+                            {% elseif data == 5 %} 
+                                {% set name = "Mayo" %}
+                            {% elseif data == 6 %} 
+                                {% set name = "Junio" %}
+                            {% elseif data == 7 %} 
+                                {% set name = "Julio" %}
+                            {% elseif data == 8 %} 
+                                {% set name = "Agosto" %}
+                            {% elseif data == 9 %} 
+                                {% set name = "Septiembre" %}
+                            {% elseif data == 10 %} 
+                                {% set name = "Octubre" %}
+                            {% elseif data == 11 %} 
+                                {% set name = "Noviembre" %}
+                            {% elseif data == 12 %} 
+                                {% set name = "Diciembre" %}
+                            {% endif %}
+                            {# <label class="label">{{ name }}</label>#}
+
+                            {{ buttons.generic_history(path('pequiven_indicator_evolution', { 'id': Box_indicator , 'month': data }),( name )) }}
+                        
+                        {% endfor %}
+                        <br>
+                            {# <select class="select2 input-large form-control">
+                                <label class="label">Seleccione el Mes:</label>
+                                 <option>zdf</option>
+                             </select>#}
+                </fieldset>
+
+
+         </div>
+     </div>
+ </div>
+
+{% block javascript %}
+    
+{% endblock javascript %}
+
+
+{% block stylesheets %}
+
+    <!-- Additional styles -->
+    <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/form3860.css?v=1') }}">
+
+    <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/switches3860.css?v=1') }}">
+
+    <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/table3860.css?v=1') }}">
+
+    <!-- Select2 -->
+    <link rel="stylesheet" href="{{ asset('bundles/pequivenseip/select2-3.5.0/select2.css') }}">
+       
+
+{% endblock %}
+
+{% block javascripts %}
+
+    <!-- Select2 -->
+    <script src="{{ asset('bundles/pequivenseip/select2-3.5.0/select2.min.js') }}"></script>
+    <!-- jQuery-ui -->
+    <script src="{{ asset('bundles/pequivenseip/jquery-ui.custom/jquery-ui.js?v=1') }}"></script>
+   
+{% endblock %}

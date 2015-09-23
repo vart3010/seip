@@ -18,6 +18,7 @@ use Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram;
 use Pequiven\IndicatorBundle\Entity\Indicator;
 use Pequiven\MasterBundle\Entity\Rol;
 use Pequiven\ObjetiveBundle\Entity\Objetive;
+use Pequiven\SIGBundle\Entity\ManagementSystem;
 use Pequiven\SEIPBundle\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;

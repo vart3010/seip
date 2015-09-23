@@ -3499,7 +3499,310 @@ class IndicatorService implements ContainerAwareInterface {
             }
         }
     }
+
+    /**
+     * Function que retorna el promedio del indicador
+     * @param indicator $indicator
+     * @return type
+     */
+    public function getPromdIndicator(Indicator $indicator){
+
+        $result = $acum = $sum = 0;
+        $calc = $indicator->getIndicatorSigMedition();
+        $contMonth = 1;
+        //var_dump($calc);
+        //die();
+        if ($calc === null) {
+            $calc = 1;
+        }
+
+        //Recibiendo la frecuencia de calculo del indicador
+        $labelsFrequencyNotificationArray = $this->getLabelsByIndicatorFrequencyNotification($indicator);
+        
+        foreach ($indicator->getValuesIndicator() as $value) {
+
+                $data = $value->getValueOfIndicator();
+                $cant = $labelsFrequencyNotificationArray[$contMonth];
+                //var_dump($data);
+                //die();
+                $contMonth++;
+                $sum  = $sum + $data; 
+                $acum = $acum + $data;
+            }
+            //Data Prom
+            if( $contMonth == 1){
+                $contMonth = 2;            
+            }
+
+            if($calc === 1){
+
+            $result = $acum / ($contMonth - 1); //Calculo de Promedio
+            $value = ceil($result); //Paso de promedio
+
+            }elseif($calc === 0){
+
+                $value = $sum; //Paso de sumatoria
+
+            }
+            return $value;
+        
+    }
     
+    /**
+     * Gráfico de Columna para informe de Evolución
+     * @param Indicator $indicator
+     * @return type
+     */
+    public function getDataChartOfIndicatorEvolution(Indicator $indicator) {
+        $data = array(
+            'dataSource' => array(
+                'chart' => array(),
+                'categories' => array(
+                ),
+                'dataset' => array(
+                ),
+            ),
+        );
+        $chart = array();
+
+        $chart["caption"] = "Gráfico Informe de Evolución";
+        $chart["subCaption"] = "Periodo-2015";
+        $chart["palette"]= "1";
+        $chart["showvalues"]= "0";
+        $chart["paletteColors"]= "#0075c2,#c90606,#f2c500,#12a830,#1aaf5d";
+        $chart["showBorder"] = "0";
+        $chart["yaxisvaluespadding"] = "10";
+        $chart["valueFontColor"] = "#000000";
+        $chart["rotateValues"] = "0";
+        $chart["bgAlpha"] = "0,0";
+        $chart["theme"] = "fint";
+        $chart["YAxisMaxValue"] = "150";
+        $chart["showborder"] = "0";
+        $chart["decimals"] = "0";
+
+        //Lamado de promedio
+        $prom = $this->getPromdIndicator($indicator);
+        //Llamado de frecuencia de Notificacion del Indicador
+        $labelsFrequencyNotificationArray = $this->getLabelsByIndicatorFrequencyNotification($indicator);
+        //Número de indicadores asociados
+        $totalNumValues = count($indicator->getValuesIndicator());
+
+        //Inicialización
+        $category = $dataSetReal = $dataSetPlan = $dataSetAcum = array();
+        $label = $dataReal = $dataPlan = $dataAcum = $dataMedition = array();
+
+        //Carga de Nombres de Labels
+        $dataSetReal["seriesname"] = "Real";
+        $dataSetPlan["seriesname"] = "Plan";
+        $dataSetAcum["seriesname"] = "Acumulado";
+        $dataSetAnt["seriesname"]  = "2014";
+        $labelAntper               = "2014";
+        $labelProm                 = "Promedio o Acumulado";
+        $labelobj                  = "Objetivo 2015";
+
+        //Carga de datos del label principal Periodo-2015
+        $labelAnt["label"] = $labelAntper;//Label del 2014
+        $category[] = $labelAnt;//Label del 2014
+
+        if ($totalNumValues > 0) {
+            $indicatorValues = $indicator->getValuesIndicator();
+            $contMonth = 1;
+            
+            foreach ($indicatorValues as $indicatorValue) {
+                $formulaParameters = $indicatorValue->getFormulaParameters();
+
+                $label["label"] = $labelsFrequencyNotificationArray[$contMonth];
+                
+                $contCant = $contMonth;//Contando la Cantidad de valores
+                
+                $category[] = $label;
+                $contMonth++;
+            }
+
+            $labelp["label"] = $labelProm;//Label del Prom
+            $category[] = $labelp;//Label del Prom
+
+            //Label Obj Acum
+            $labelo["label"] = $labelobj;//Label del ObjAcum
+            $category[] = $labelo;//Label del ObjAcum
+            //Fin carga de labels
+
+            //Data 2014            
+            $acumLast = $cant = $promLast = 0;
+            $indicatorlast = $indicator->getindicatorLastPeriod();
+                //var_dump($indicatorlast->getResultReal());
+                //die();
+            /*if ($indicatorlast) {
+                
+                foreach ($indicatorlast->getValuesIndicator() as $value) {
+
+                        $results = $value->getValueOfIndicator();
+                        $acumLast = $acumLast + $results;
+                        $cant = $cant + 1;
+                }            
+                //die();
+            }*/
+            
+                if ($indicatorlast === null) {
+                    
+                    $dataAnt["value"] = 0;//Pasando data a Data2014 si no tiene ralacion
+
+                }
+                else{
+
+                    //$promLast = $acumLast / $cant;                
+                    $value = (int)$indicatorlast->getResultReal();
+                    $dataAnt["value"] = $value;//Pasando data a Data2014                
+                }
+            //Data 2014
+            $dataAnt["color"] = '#f2c500';            
+            $dataSetAnt["showvalues"] = "1";
+            //$dataAnt["link"]  = $this->generateUrl('pequiven_indicator_show', array('id' => $indicatorlast->getId()));            
+            $dataSetAnt["data"][] = $dataAnt;//2014
+
+            //Pasando espacios vacios para desarrollo de la gráfica
+            $dataSetTend["data"][] = array( 'value' => '' );
+            $dataSetReal["data"][] = array( 'value' => '' );
+                        
+            foreach ($indicator->getValuesIndicator() as $value) {
+
+                $dataReal["value"] = $value->getValueOfIndicator();//Carga de valores del indicador
+                //var_dump($value->getValueOfIndicator());
+                $dataSetReal["data"][] = $dataReal;//Data Real
+                $dataSetTend["data"][] = $dataReal;//Data Real Tendencia
+            }
+
+            //Carga de meta Objetivo2015
+            //foreach ($indicator->getObjetives() as $value) {
+            $dataValueObjetive = $indicator->getGoal();//Carga valor Objetivo 2015
+            //}
+            if ($dataValueObjetive == NULL ) {
+                $dataValueObjetive = 0;
+            }
+
+            $dataSetLine["data"][] = array( 'value' => '' );//Valor vacio para saltar 2014
+            for ($i=0; $i < $contCant; $i++) { 
+            
+                $dataLine["value"] = $dataValueObjetive;//Carga de valores           
+                $dataSetLine["data"][] = $dataLine;//Data del Objetivo 2015
+            
+            }
+            //Paso de la data ya formateada
+            $dataSetV['data'] = array('seriesname' => 'Plan', 'parentyaxis' => 'S', 'renderas' => 'Line', 'data' => $dataSetLine['data']);
+            
+            //Data Prom
+            $dataSetReal["showvalues"] = "1";
+            $dataAcum["value"] = $prom;//Pasando data a data prom
+            $dataAcum["color"] = '#0a5f87';            
+            $dataSetReal["data"][] = $dataAcum;//promedio
+            
+            //Pasando Objetivo Acum
+            $dataObj["value"] = $dataValueObjetive;//Pasando data a Dataobj
+            $dataObj["color"] = '#087505';
+            //$dataObj["link"]  = $this->generateUrl('pequiven_line_strategic_show', array('id' => $value->getId()));
+            $dataSetReal["data"][] = $dataObj;//Acumulado
+            
+            //Carga de Tendencia
+            $dataSetValues['tendencia'] = array('seriesname' => 'Tendencia', 'parentyaxis' => 'S', 'renderas' => 'Line', 'color' => '#dbc903', 'data' => $dataSetTend['data']);
+            
+        }
+        $data['dataSource']['chart'] = $chart;
+        $data['dataSource']['categories'][]["category"] = $category;
+        $data['dataSource']['dataset'][] = $dataSetValues['tendencia'];
+        $data['dataSource']['dataset'][] = $dataSetReal;
+        $data['dataSource']['dataset'][] = $dataSetAnt;
+        $data['dataSource']['dataset'][] = $dataSetV['data'];
+
+        return $data;
+    }
+    
+    /**
+     * Gráfico de Columna para Causas de Desviación
+     * @param Indicator $indicator
+     * @return type
+     */
+    public function getDataChartOfCausesIndicatorEvolution(Indicator $indicator, $month) {
+        $data = array(
+            'dataSource' => array(
+                'chart' => array(),
+                'categories' => array(
+                ),
+                'dataset' => array(
+                ),
+            ),
+        );
+        $chart = array();
+        $chart["caption"] = "Gráfico Causas de Desviación";
+        $chart["subCaption"] = "Periodo-2015";
+        $chart["valueFontColor"] = "#000000";
+        $chart["showvalues"]= "1";
+        $chart["showSum"]= "1";
+        $chart["numberSuffix"] = "%";
+        $chart["bgalpha"]= "0,0";
+        $chart["baseFontColor"] = "#ffffff";
+        $chart["outCnvBaseFontColor"] = "#000000";
+        $chart["visible"] = "0";
+        $chart["theme"] = "fint";
+        //$chart["rotateValues"] = "0";
+        $chart["snumbersuffix"] = "%";
+        $chart["decimals"] = "0";
+        $chart["setadaptiveymin"] = "1";
+        $chart["setadaptivesymin"] = "1";
+        //$chart["sYAxisMaxValue"] = "150";
+        //$chart["pYAxisMaxValue"] = "150";
+        $chart["linethickness"]= "5";
+        $chart["showborder"] = "0";
+
+        //$em = $this->getDoctrine();
+        //$dataCause = $em->getRepository('Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCause')->findBy(array('indicator' => $indicator,'month' => $month));
+
+        //var_dump($month);
+
+        //Inicialización
+        $category = $dataSetCause = array();
+        $label = $dataCause = array();
+        $contCause = 1;
+        //Carga de Nombres de Labels
+        $dataSetCause["seriesname"] = "Causas";
+        $monthCause = (int)$month;
+            //
+            foreach ($indicator->getindicatorCause() as $value) {
+                //$idCause = $value->getId();
+                //Carga del label de la Causa
+                //$label["label"] = 'Causa'.' '.$contCause;                                    
+                
+                if ($value->getMonth() === $monthCause) {
+                
+                    $label["label"] = $value->getCauses();                    
+                    $contCause = $contCause + 1;
+                    $category[] = $label;
+
+                }
+
+            }
+            //$label["label"] = 'Causa';
+
+            foreach ($indicator->getindicatorCause() as $value) {
+                //Carga de los Valores de la causa
+                if ($value->getMonth() === $monthCause) {                
+                    
+                    $dataCause["value"] = $value->getvalueOfCauses();
+                    $dataSetCause["data"][] = $dataCause;
+                
+                }
+                //Carga del label de la Causa
+                //$label["label"] = 'Causa'.' '.$contCause;                    
+                //$contCause = $contCause + 1;
+                //$category[] = $label;
+            }
+        //die();
+           
+        //$data['dataSource']['chart'] = $chart;
+        $data['dataSource']['categories'][]["category"] = $category;
+        $data['dataSource']['dataset'][] = $dataSetCause;
+
+        return $data;
+    }
     public function obtainIndicatorChartDetails(Indicator $indicator, \Pequiven\SEIPBundle\Entity\Chart $chart){
         $indicatorChartDetailsRepository = $this->container->get('pequiven.repository.indicatorchartdetails');
         

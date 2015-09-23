@@ -96,6 +96,17 @@ pequiven_arrangementprogram_data_management_system:
     methods: [GET]
     options:
         expose: true
+#filtro tipos de Acciones del plan
+pequiven_arrangementprogram_data_type_action:
+    path: /type-action.{_format}
+    defaults: 
+        _controller: pequiven_seip.controller.arrangementprogram_data:getTypeAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
         
 pequiven_arrangementprogram_data_responsibles:
     path: /responsibles.{_format}

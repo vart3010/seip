@@ -279,9 +279,9 @@ class MeetingController extends SEIPController {
         $pdf->Output($title . '.pdf', 'D');
     }
 
-    public function uploadFiles(Request $request) {
+    public function uploadFilesAction(Request $request) {
         return $this->render('PequivenSEIPBundle:Politic:Meeting\uploadFile.html.twig', array(
-                    'data' => $request->get("idmeeting")
+                    'idMeeting' => $request->get("idMeeting")
         ));
     }
 

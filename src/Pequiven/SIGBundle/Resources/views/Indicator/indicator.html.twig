@@ -1,0 +1,62 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayout.html.twig' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
+
+{% trans_default_domain 'PequivenIndicatorBundle' %}
+
+{% set labelHeader = {
+        (constant('Pequiven\\IndicatorBundle\\Model\\IndicatorLevel::LEVEL_ESTRATEGICO')):'pequiven_indicator.indicator_strategic',
+        (constant('Pequiven\\IndicatorBundle\\Model\\IndicatorLevel::LEVEL_TACTICO')):'pequiven_indicator.indicator_tactic',
+        (constant('Pequiven\\IndicatorBundle\\Model\\IndicatorLevel::LEVEL_OPERATIVO')):'pequiven_indicator.indicator_operative',
+    } %}
+
+{% set level = indicator.indicatorLevel.level %}
+
+{% block before_body %}
+    {{ contentHeader(
+        {(path('pequiven_indicator_list',{'level':level})):(labelHeader[level])|trans},
+        { (path('pequiven_indicator_show',{'id':indicator.id})): (indicator.ref)},
+        ('pequiven.evolution'|trans({},'messages'))
+    ) }}
+{% endblock %}
+
+{% block body %}
+
+    
+        <fieldset class="fieldset fields-list">
+            <legend class="legend">{{ 'sig.chart_evolution'|trans ({}, 'messages') }}</legend>
+            <h3>Informe de Evolución</h3>
+            {# Sistemas de Gestión del Indicador #}
+            {% if  is_granted('ROLE_SEIP_SIG_INDICATOR_VIEW') %}
+                <div class="inline-label">
+                        <label class="label">{{ 'form.systems'|trans }}</label>
+                        <ul class="fa-ul">
+                            {% for managementSystem in indicator.managementSystems %}
+                                <li>{{ managementSystem.description }}</li>
+                            {% endfor %}
+                        </ul>
+                </div>
+            {% endif %}
+            {# Fin carga de sistemas de Gestión #}
+        </fieldset>
+    
+    {# Analisis de Tendencia #}
+    {# {% if indicator.showFeatures %} #}
+            <br /><br />
+            {% include 'PequivenSEIPBundle:Planning:Indicator/show/analysis.html.twig' %}
+            &nbsp;
+    {# {% endif %} #}
+
+    {# Grafica de Tendencia#}
+    <fieldset class="fieldset fields-list">
+            <legend class="legend">{{ 'sig.causes_deviation'|trans ({}, 'messages') }}</legend>
+            <h3>Grafica de Tendencia</h3>
+    </fieldset>
+
+    {# Analisis de Tendencia #}
+    {% if indicator.showFeatures %}
+            <br /><br />
+            {% include 'PequivenSEIPBundle:Planning:Indicator/show/analysis.html.twig' %}
+    {% endif %}
+
+{% endblock body %}

@@ -1,0 +1,9 @@
+Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionActionValue:
+    exclusion_policy: ALL
+    properties:
+        id:
+            expose: true
+            groups: [id]
+        relactionValue:
+                    expose: true
+                    groups: [relactionValue]

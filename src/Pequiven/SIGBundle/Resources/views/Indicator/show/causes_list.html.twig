@@ -1,0 +1,83 @@
+{% trans_default_domain 'PequivenSIGBundle' %}
+
+<div class="block" ng-init="urlCausesEvolutionForm='{{ path('pequiven_indicatorcauses_get_form',{'idIndicator':indicator_sig.id }) }}'">
+<div class="block_id" ng-init="id_indicator='{{ indicator_sig.id }}'">
+
+<div ng-controller="IndicatorSigEvolutionController"> 
+
+    <div class="block-title">
+        <h3 class="ng-binding">{$ indicator_sig.length $} {{ 'sig.causes_desviation'|trans ({}, 'messages') }}</h3>
+        {% if sumCause < 100 %}        
+            <div class="button-group absolute-right compact">
+                <a class="button icon-list-add " href="" ng-click="loadTemplateCausesDesviation()" title="">{{ 'pequiven.add'|trans({},'messages')  }}</a>
+            </div>  
+        {% endif %}        
+    </div>
+
+    <div class="with-padding">
+        {% set colspan = 5 %}
+        <table class="simple-table responsive-table tables-extras" id="sorting-example2">
+            <thead>
+                <tr>
+                    <th scope="col" width="2%" class="header" align="center">
+                        {{ 'seip.table.header.nro'|trans({},'PequivenArrangementProgramBundle') }}
+                    </th>
+                    <th scope="col" width="15%" class="hide-on-tablet header" align="center">
+                        {{ 'seip.table.header.value_of_cause'|trans({},'PequivenSIGBundle') }}
+                    </th>
+                    <th scope="col" width="45%" class="header" align="center">
+                        {{ 'seip.table.header.description'|trans({},'PequivenSIGBundle') }}
+                    </th>
+                    <th scope="col" width="35%" class="hide-on-mobile-portrait header" align="center">
+                        {{ 'seip.table.header.created_by'|trans({},'PequivenArrangementProgramBundle') }}
+                    </th>
+                        {% set colspan = 6 %}
+                        <th scope="col" width="30%" class="hide-on-mobile-portrait header">&nbsp;</th>
+                </tr>
+            </thead>
+
+        {% for cause_data in cause %}
+            <tbody>
+                <tr {{ cycle(["even", "odd"], loop.index) }}> 
+                    <td>{{ loop.index }}</td>
+                    <th scope="row" align="center">
+                        {{ cause_data.valueofCauses }}
+                    </th>
+                    <td align="center">{{ cause_data.causes }}</td>
+                    <td align="center">
+                        {{ cause_data.createdBy.firstname }} {{ cause_data.createdBy.lastname }}
+                        <small class="tag">({{ cause_data.createdBy.username }})</small>
+                    </td>
+                        <td class="align-right vertical-center">
+                           <div >
+                                <span class="select compact">
+                                    <a href class="select-value form-edit">{{ 'pequiven.actions'|trans({},'messages') }}</a>
+                                    <span class="select-arrow"></span>
+                                    <span class="drop-down">
+                                    
+                                    {#<a href ng-click="loadTemplateCausesDesviation(cause_data)" class="button icon-pencil">{{ "pequiven.actions.edit"|trans({},"messages") }}</a>#}
+                                    
+                                    <a href ng-click="removeCausesEvolution(cause_data='{{ cause_data.id }}')" 
+                                    class="button icon-cross-round">{{ "pequiven.actions.delete"|trans({},"messages") }}</a>
+                                    {#
+                                    <span ng-app class=" button icon-outbox" onClick="uploadFilePdf(this.id)" id="{$ cause_data.id $}" >{{ "pequiven.actions.upload_file"|trans({},"messages") }}
+                                        {% set data = cause_data.id %}
+                                    </span>
+
+                                    {% if cause_data.valueCauseFile %}
+                                        <span ng-app ng-init="validLoad(cause_data.id)" class=" button icon-download" onClick="openFile(this.id)" id="open_{{ cause_data.id }}">{{ "pequiven.actions.download_file"|trans({},"messages") }}
+                                        </span>
+                                    {% endif %}#}
+                                        
+                                    </span>
+                                </span>
+                        </td>
+                </tr>
+            </tbody>
+        {% endfor %}
+        </table>
+                
+            </div>
+        </div>
+    </div>
+</div>

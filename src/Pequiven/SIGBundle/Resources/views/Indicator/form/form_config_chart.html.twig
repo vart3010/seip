@@ -1,0 +1,34 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutSIG.html.twig' %}
+
+{% block body %}
+{% trans_default_domain 'PequivenIndicatorBundle' %}
+    
+    {#<div ng-controller="TableFormatController">
+     <div ng-controller="EvolutionIndicatorConfig"> #}
+        
+        <form method="POST" id="form_config_sig">
+            <fieldset class="fieldset fields-list">
+                <legend class="legend">Configuración Gráfica Informe de Evolución</legend>
+                {# {% for child in form.children %} #}
+                        <div class="field-block button-height" >
+                            <label class="label">Metodo de Calculo</label>
+                            <select id="configSig_indicatorSigMedition" name="configSig[indicatorSigMedition]" class="select2 input-large form-control">
+                                <option value="1">Seleccione opcion...</option>
+                                <option value="0">Acumulado</option>
+                                <option value="1">Promedio</option>
+                            </select>
+                        </div>
+
+                {#{% for child in form %}
+                        <div class="field-block button-height" >
+                            {{ form_label(child) }}
+                            {{ form_widget(child) }}
+                            {{ form_errors(child) }}
+                        </div>
+                {% endfor %}#}
+                {#{% endfor %} #}                
+            </fieldset>
+        </form>       
+    {#</div>
+</div>#}
+{% endblock %}
