@@ -67,3 +67,14 @@ Pequiven\IndicatorBundle\Entity\Indicator:
         featuresIndicator:
             expose: true
             groups: [featuresIndicator]
+        managementSystems:
+            expose: true
+            groups: [managementSystems]
+        indicatorlast:
+            expose: true
+            groups: [indicatorlast]
+        indicatorCause:
+            expose: true
+            groups: [indicatorCause]
+        
+        

@@ -33,6 +33,11 @@ pequiven:
     show: Ver
     view: Vista
     details: Detalles
+    evolution: Informe de Evolución
+    go_to_the_historical: Ir al Historico del Informe de Evolución
+    evolution_history: Historico Informe de Evolución
+    view_evolution_history: Ver Historico Informe de Evolución
+    hide_evolution_history: Ocultar Historico Informe de Evolución
     dialog:
         confirm: Confirmar
     advances:
@@ -93,3 +98,13 @@ app:
             generic: Lo sentimos, ha ocurrido un error.
             403: Usted no tiene permisos para acceder a esta sección.
             404: La página que esta tratando de acceder no existe.
+
+sig:
+    trend_analysis: Análisis de Tendencia
+    analysis_causes: Análisis de Causas
+    causes_desviation: Causas de Desviación
+    chart_evolution: Graficas de Datos y Tendencia del Proceso
+    causes_deviation:  Causas de Desviación
+    relation_indicator: Relación Indicador 2014
+    action_plan: Plan de Acción y Seguimiento
+    verification_of_the_effectiveness: Verificación de la Eficacia

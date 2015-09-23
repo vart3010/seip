@@ -1,0 +1,64 @@
+{% trans_default_domain 'PequivenSIGBundle' %}
+
+<div ng-controller="IndicatorSigEvolutionCauseController"> 
+
+<div class="block" ng-init="urlValueIndicatorForm='{{ path('pequiven_feature_indicator_get_form',{'idIndicator':indicator_sig.id}) }}'">
+
+    <div class="block-title">
+        <h3 class="ng-binding">{$ indicator_sig.featuresIndicator.length $} {{ 'sig.analysis_causes'|trans ({}, 'messages') }}</h3>
+        {% if analysis %}
+            {% for data in analysis %}
+                {% set dataAnalysis = data.id %}
+                <div class="button-group absolute-right compact">
+                    <span ng-app class="button icon-outbox" onClick="uploadFilePdf(this.id)" id="{$ data.id $}" >{{ "pequiven.actions.upload_file"|trans({},"messages") }}
+                    </span>            
+                </div>  
+                {# form carga de archivo #}
+                <div ng-controller="ToolsController" ng-init="isGrantedButtonEdit({{ indicator_sig.id }},paso+1)">
+                    <form style="display: none" id="form_{$ valueCauseId.id $}" action="{{ path("pequiven_indicator_evolution",{id:indicator_sig.id, month:month, cause:dataAnalysis, uploadFile:(true)}) }}" method="POST" enctype="multipart/form-data">
+                    
+                       <input name="archivo" onChange="submitUploadFile(this.id)" id="indicatorFilePdf_{$ idCause $}" type="file">
+                             
+                       <input type="hidden" name="valueCauseId" id="field_{$ idCause $}" value="">
+                    </form>
+                </div> 
+                {# end form #}
+                {# Descarga #}
+                {% if data.valueCauseFile %}
+                    <div class="button-group absolute-right compact">
+                        <span ng-app ng-init="validLoad()" class=" button icon-download" onClick="openFile(this.id)" id="open_{{ data.id }}">{{ "pequiven.actions.download_file"|trans({},"messages") }}
+                        </span>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% else %}
+        <div class="button-group absolute-right compact">
+            <a class="button icon-list-add " href="" ng-click="loadTemplateCausesAnalysis()" title="">{{ 'pequiven.add'|trans({},'messages') }}&nbsp;</a>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="with-padding">
+        {% set colspan = 5 %}
+        <table class="simple-table responsive-table tables-extras" id="sorting-example2">
+            <thead>
+                <tr>
+                    <th scope="col" width="150%" class="header">
+                        {{ 'form.causes_analysis'|trans({},'PequivenSIGBundle') }}
+                    </th>                    
+                </tr>
+            </thead>
+        {% for data in analysis %}
+            <tbody>
+                <tr>
+                    <th align="justify">
+                        {{ data.description }}
+                    </th>                        
+                </tr>
+            </tbody>        
+        {% endfor %}
+        </table>
+                
+    </div>
+</div>
+</div>

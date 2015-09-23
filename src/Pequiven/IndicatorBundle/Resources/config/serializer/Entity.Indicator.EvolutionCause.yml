@@ -1,0 +1,30 @@
+Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCause:
+    exclusion_policy: ALL
+    properties:
+        id:
+            expose: true
+            groups: [id]
+        ref:
+            expose: true
+            groups: [ref]
+        createdAt:
+            expose: true
+            groups: [api_list]
+        updatedAt:
+            expose: true
+            groups: [api_details]
+        causes:
+            expose: true
+            groups: [api_list]
+        valueOfindicator:
+            expose: true
+            groups: [api_list]
+        createdBy:
+            expose: true
+            groups: [api_details]
+        indicatorAction:
+            expose: true
+            groups: [indicatorAction]
+         verificationRel:
+            expose: true
+            groups: [verificationRel]

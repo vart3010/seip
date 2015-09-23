@@ -1,0 +1,33 @@
+{% trans_default_domain 'workStudyCircle' %}
+
+<div ng-controller="MeetingController">
+    {#    <div class="block" ng-init="idMeeting='{{ meeting.id }}'" >#} 
+    <div class="block" >
+        <div class="block-title" >
+            <h3 class="ng-binding">{{ "workStudyCircle.files.attachment"|trans }}</h3>
+            <div class="button-group absolute-right compact">
+                {#                <a class="button icon-list-add " ng-click="loadUploadFileMetting()" title="">#}
+                <a class="button icon-list-add " title="">
+                    <input type="file">
+                    {{ "workStudyCircle.files.add"|trans }}&nbsp
+                </a>
+            </div>
+        </div>
+        <div class="with-padding">
+            <table class="simple-table responsive-table tables-extras" id="sorting-example2">
+                <thead>
+                    <tr>
+                        <th scope="col" width="10%" class="header">#</th>
+                        <th scope="col" width="85%" class="header">{{ 'workStudyCircle.files.name'|trans }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

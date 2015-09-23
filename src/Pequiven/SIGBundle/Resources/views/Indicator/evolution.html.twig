@@ -1,0 +1,242 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayout.html.twig' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
+
+{% import 'PequivenSIGBundle:Template:Buttons/buttons.html.twig' as buttons %}
+
+{% block javascripts_base %}
+    {{ parent() }}
+    <script src="{{  asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.input.js') }}"></script>
+{% endblock javascripts_base %}
+
+{% trans_default_domain 'PequivenSIGBundle' %}
+
+{% set labelHeader = {
+        (constant('Pequiven\\IndicatorBundle\\Model\\IndicatorLevel::LEVEL_ESTRATEGICO')):'pequiven_indicator.indicator_strategic',
+        (constant('Pequiven\\IndicatorBundle\\Model\\IndicatorLevel::LEVEL_TACTICO')):'pequiven_indicator.indicator_tactic',
+        (constant('Pequiven\\IndicatorBundle\\Model\\IndicatorLevel::LEVEL_OPERATIVO')):'pequiven_indicator.indicator_operative',
+    } %}
+
+{% set level = indicator_sig.indicatorLevel.level %}
+    
+
+{% block before_body %}
+    {{ contentHeader(
+        {(path('pequiven_indicatorsig_list',{'level':level})):(labelHeader[level])|trans},
+        { (path('pequiven_indicator_show',{'id':indicator_sig.id})): (indicator_sig.ref)},
+        ('pequiven.evolution'|trans({},'messages'))
+    ) }}
+{% endblock %} 
+
+{% block body %}
+        <div class="" ng-init="urlValueLastIndicatorForm='{{ path('pequiven_indicator_last_period_form',{'idIndicator':indicator_sig.id }) }}'">
+        
+    <div ng-controller="TableFormatController">
+        {# <div ng-controller="IndicatorSigEvolutionController"> #}
+        <div ng-controller="IndicatorLastPeriodController">
+        <!-- <div ng-controller="EvolutionIndicatorFilters"> -->
+
+        {# Carga del formulario de relacion del indicador #}
+            {% if indicator_sig.indicatorlastPeriod %}
+
+            {% else %}
+            <div class="block block-title">
+                <h3>El indicador no tiene relacion con el indicador del 2014</h3>        
+                <div class="button-group absolute-right compact">
+                    <a class="button icon-list-add " href="" ng-click="loadTemplateIndicatorlastPeriod()" title="">{{ 'pequiven.add'|trans({},'messages')  }}</a>
+                </div>
+            </div>
+        {% endif %}
+            {# fin Button formulario relacion lastperiod #}
+        </div>
+      </div>
+   </div>
+  <br>
+  
+        {# Graficos #}
+        <div class="columns with-padding"> 
+            <div ng-controller="ChartsSigController" class="dashboard_sig" ng-init="renderChartEvolutionSig('chartContainerResult', {{ data|json_encode() }})" style="width: 95%;" align="center">
+                    {# señalización tendencia #}
+                <div class="position">
+                        {{ font["text"]}}
+                        <i class="fa fa-{{ font["icon"] }} fa-2x position"> &nbsp;</i>
+                </div>
+
+                <div class="nine-columns twelve-columns-mobile" id="chartContainerResult">
+                  <!-- This div will hold the chart generated in the footer -->
+                </div>
+                
+                <div ng-controller="EvolutionIndicatorConfig"> 
+                    <div class="button-group button-config">
+                        <a class="button icon-list-add " href="" ng-click="loadTemplateConfig()" title="">{{ 'pequiven_indicator.config'|trans({},'PequivenSIGBundle')  }}</a>
+                    </div>
+                </div>
+               
+            </div>  
+        </div>  
+            {# Analisis de Tendencia #}    
+            <br /><br />
+            {% include 'PequivenSIGBundle:Indicator:show/analysis_trend.html.twig' %} 
+            &nbsp; 
+
+        <div class="columns with-padding">         
+                <div ng-controller="ChartsSigController" class="dashboard_sig" ng-init="renderChartSigCs('chartContainerResultCs', {{ dataCause|json_encode() }})" style="width: 95%;" align="center">
+                        <div class="nine-columns twelve-columns-mobile" id="chartContainerResultCs">
+                            <!-- This div will hold the chart generated in the footer -->
+                        </div>
+                </div>
+        </div> 
+        <br>
+        
+        {# Fin de Graficos #}
+
+        
+    {# Analisis de Causas #}
+            <br /><br />
+            {% include 'PequivenSIGBundle:Indicator:show/analysis_cause.html.twig' %} 
+            <br /><br />            
+            {% include 'PequivenSIGBundle:Indicator:show/causes_list.html.twig' %} 
+            &nbsp;
+    {# Plan de accion y seguimiento #}
+            <br /><br />
+            {% include 'PequivenSIGBundle:Indicator:show/action.html.twig' %}
+            &nbsp;
+        {% if dataAction["values"] %}
+
+            {% include 'PequivenSIGBundle:Indicator:show/verification.html.twig' %}            
+        {% endif %}        
+            &nbsp;
+
+    <p class="button-height align-right">  
+        
+        <div style="text-align: left; margin-left:15px;">
+            <a class="button"  id="showItems"  href="javascript:void(0)">
+                <span class="button-icon left-side red-gradient">
+                    <span class="fa fa-history fa-1"></span>
+                </span>
+                <span class="title">{{('pequiven.view_evolution_history'|trans({},'messages'))}}</span>
+                <span class="title" style="display: none">{{('pequiven.hide_evolution_history'|trans({},'messages'))}} </span>
+            </a>
+
+        {# Descarga de Informe de Evolución#}
+        &nbsp;
+        {{ buttons.generic_download(path('pequiven_indicator_evolution_export', { 'id': indicator_sig.id, 'month': month }),('pequiven_indicator.download'|trans({},'PequivenSIGBundle'))) }}        
+
+        </div>
+    </p>
+        {#        <button class="button compact" id="showItems" type="button">Visualizar Items</button>#}
+        <div id="evolutionItems" style="display: none;">
+            {% set data = indicator_sig.id %}
+             
+            {{ renderArea(constant('Pequiven\\SEIPBundle\\Model\\Box\\AreasBox::ITEMS_EVOLUTION')) }}
+            
+        </div>  
+    
+
+{% endblock body %}
+
+{% block stylesheets %}
+  {{ parent() }}
+     {# <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/agenda3860.css?v=1') }}">
+
+    <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/dashboard3860.css?v=1') }}"> #}
+
+<style type="text/css">
+    
+    .position{
+        /*position: absolute;
+        top:  250px; 
+        left: 900px;
+        margin: 20px;*/
+        margin-right: 20px;
+        margin-top: 20px;
+        color: #1d1c1c;
+        float: right;
+        font-size: 150%;
+    }
+    .button-config{
+        margin-right: 20px;
+        margin-top: 0px;
+        margin-bottom: 15px;
+        color: #1d1c1c;
+        float: right;
+        /*font-size: 150%;*/
+    }
+
+    /* dashboard sig */
+    .dashboard_sig {
+        padding: 20px;
+        position: relative;
+        zoom: 1;
+        color: white;
+        border-top: 1px solid #666666;
+        border-bottom: 1px solid #666666;
+        border-color: #000000;
+    }
+    .dashboard_sig a {
+        color: white;
+    }    
+
+</style>
+
+{% endblock stylesheets %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/fusioncharts.js') }}"></script>
+    <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/themes/fusioncharts.theme.fint.js') }}"></script>
+
+    <script type="text/javascript">
+        
+        $(document).ready(function () {
+            $("a#showItems").click(function () {
+                $("#evolutionItems").toggle("slow");
+                $("a#showItems span.title ").toggle();
+            });
+        });
+
+        //Carga de Archivo pdf
+        function uploadFilePdf(id) {
+            $("input#indicatorFilePdf_" + id).click();
+            console.log(id);
+        }
+
+        //Visualización
+        function openFile(valueCauseId) {
+            valueCauseId = valueCauseId.split("_");
+            var data = {
+                id: valueCauseId[1]
+            };
+            $.ajax({
+                type: 'get',
+                url: '{{ path("pequiven_cause_vizualice_file") }}',
+                data: data,
+                success: function (data) {
+                    window.open(data["url"]);
+                }
+            });
+
+        }
+        //set url
+        function getUrl(data) {
+            
+            var rs;
+            return rs;
+        }
+        //envio
+        function submitUploadFile(valueCauseId) {
+            valueCauseId = valueCauseId.split("_");
+            $("#field_" + valueCauseId[1]).val(valueCauseId[1]);
+            $("#form_" + valueCauseId[1]).submit();
+        }
+
+        $(document).ready(function () {
+
+        
+        });
+    </script>
+
+     
+
+    
+{% endblock %}

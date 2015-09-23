@@ -151,6 +151,7 @@ class WorkStudyCircleController extends SEIPController {
         return true;
     }
 
+
     public function setNewRef($location) {
         $em = $this->getDoctrine()->getManager();
         $complejo = $em->getRepository('PequivenMasterBundle:Complejo')->findOneBy(array('id' => $location));

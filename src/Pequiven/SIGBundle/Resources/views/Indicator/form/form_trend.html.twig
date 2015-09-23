@@ -1,0 +1,15 @@
+{% trans_default_domain 'PequivenIndicatorBundle' %}
+    
+        
+        <form method="POST" id="form_trend_evolution">
+            <fieldset class="fieldset fields-list">
+                <legend class="legend">{{ 'sig.trend_analysis'|trans ({}, 'messages') }}</legend>
+
+                    <div class="field-block button-height" >
+                        {# {{ form_label(form) }} #}
+                        {{ form_widget(form) }}
+                        {{ form_errors(form) }}
+                    </div>
+            
+            </fieldset>
+        </form>       

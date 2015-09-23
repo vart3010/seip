@@ -1,0 +1,270 @@
+#carga de formulario de relacion del indicador
+pequiven_indicator_last_period_form:
+    path: /{idIndicator}/get-form.{_format}
+    defaults:
+        _controller: pequiven.controller.indicator_sig:getFormAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET]
+    options:
+        expose: true
+#carga de formulario plan de acción
+pequiven_indicatoraction_get_form:
+    path: /{idIndicator}/get-form_action.{_format}
+    defaults:
+        _controller: pequiven.controller.indicator_sig:getFormPlanAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET]
+    options:
+        expose: true
+#carga de formulario plan de acción añdir los resultados 0
+pequiven_indicator_action_add_get_form:
+    path: /{idIndicator}/get-form_add.{_format}
+    defaults:
+        _controller: pequiven.controller.indicator_sig:getFormPlanAddAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET]
+    options:
+        expose: true
+#Carga de formulario de causas de evolution
+pequiven_indicatorcauses_get_form:
+    path: /{idIndicator}/get-form_causes.{_format}
+    defaults:
+        _controller: pequiven.controller.indicator_sig:getFormCausesAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET]
+    options:
+        expose: true
+#Carga de formulario del analisis de tendencia
+pequiven_indicatortrend_get_form:
+    path: /{idIndicator}/get-form_trend.{_format}
+    defaults:
+        _controller: pequiven.controller.indicator_sig:getFormTrendAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET]
+    options:
+        expose: true
+#Carga de formulario del analisis de las causas
+pequiven_causes_analysis_get_form:
+    path: /{idIndicator}/get-form_causeanalysis.{_format}
+    defaults:
+        _controller: pequiven.controller.sig_causes_indicator:getFormAnalysisAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET]
+    options:
+        expose: true
+#Carga de formulario de la verificación del indicador
+pequiven_verification_get_form:
+    path: /{idIndicator}/get-form_verification.{_format}
+    defaults:
+        _controller: pequiven.controller.indicator_sig:getFormVerificationAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET]
+    options:
+        expose: true
+#Carga de formulario de la configuración de la gráfica
+pequiven_config_chart_get_form:
+    path: /{idIndicator}/get-form_config.{_format}
+    defaults:
+        _controller: pequiven.controller.indicator_sig:getFormConfigAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET]
+    options:
+        expose: true
+#Guardamos el formulario de la relacion del indicador
+pequiven_indicator_last_period:
+    path: /{idIndicator}/addLastPeriod.{_format}
+    defaults:
+        _controller: pequiven.controller.indicator_sig:addLastPeriodAction
+        _format: json
+    requirements:
+        _format: json
+    methods: [POST]
+    options:
+        expose: true
+#Guardamos el formulario de la configuración de la Gráfica
+pequiven_config_chart_evolution_add:
+    path: /{idIndicator}/addConfig.{_format}
+    defaults:
+        _controller: pequiven.controller.indicator_sig:addConfigChartAction
+        _format: json
+    requirements:
+        _format: json
+    methods: [POST]
+    options:
+        expose: true
+#Guardamos el formulario del plan de Acción del Indicador
+pequiven_action_evolution_add:
+    path: /{idIndicator}/add.{_format}
+    defaults:
+        _controller: pequiven.controller.indicator_sig:addAction
+        _format: json
+    requirements:
+        _format: json
+    methods: [POST]
+    options:
+        expose: true
+#Guardamos el formulario de los valores del plan de acción indicador
+pequiven_action_values_evolution_add:
+    path: /{idIndicator}/add_values.{_format}
+    defaults:
+        _controller: pequiven.controller.indicator_sig:addValuesAction
+        _format: json
+    requirements:
+        _format: json
+    methods: [POST]
+    options:
+        expose: true
+#Guardamos el formulario de las causas del indicador
+pequiven_causes_evolution_add:
+    path: /{idIndicator}/addCauses.{_format}
+    defaults:
+        _controller: pequiven.controller.indicator_sig:addCausesAction
+        _format: json
+    requirements:
+        _format: json
+    methods: [POST]
+    options:
+        expose: true
+#Guardamos el formulario de la tendencia del indicador
+pequiven_trend_evolution_add:
+    path: /{idIndicator}/addTrend.{_format}
+    defaults:
+        _controller: pequiven.controller.indicator_sig:addTrendAction
+        _format: json
+    requirements:
+        _format: json
+    methods: [POST]
+    options:
+        expose: true
+#Guardamos el formulario del analisis de las causas
+pequiven_analysis_cause_evolution_add:
+    path: /{idIndicator}/addCauseAnalysis.{_format}
+    defaults:
+        _controller: pequiven.controller.sig_causes_indicator:addCauseAnalysisAction
+        _format: json
+    requirements:
+        _format: json
+    methods: [POST]
+    options:
+        expose: true
+#Guardamos el formulario de Verificación del Plan de Acción
+pequiven_verification_evolution_add:
+    path: /{idIndicator}/addVerification.{_format}
+    defaults:
+        _controller: pequiven.controller.indicator_sig:addVerificationAction
+        _format: json
+    requirements:
+        _format: json
+    methods: [POST]
+    options:
+        expose: true
+#Eliminamos las causas de desviación
+pequiven_causes_evolution_delete:
+    path: /{id}/delete.{_format}
+    defaults:
+        _controller: pequiven.controller.indicator_sig:deleteCauseAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET]
+    options:
+        expose: true
+#Eliminamos las acción
+pequiven_action_evolution_delete:
+    path: /{id}/delaction.{_format}
+    defaults:
+        _controller: pequiven.controller.indicator_sig:deletePlanAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET]
+    options:
+        expose: true
+#filtro causas del indicador
+pequiven_sig_causes_indicator_evolution:
+    path: /{idIndicator}/causesevolution.{_format}
+    defaults: 
+        _controller: pequiven.controller.indicator_sig:getCausesEvolutionAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
+#Filtro de last_period_indicator
+pequiven_arrangementprogram_datasig_indicator_lastperiod:
+    path: /indicators.{_format}
+    defaults: 
+        _controller: pequiven_seip.controller.arrangementprogram_data:getIndicatorLastPeriodAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
+#URL file
+pequiven_cause_vizualice_file:
+    path: /.{_format}
+    defaults:
+        _controller: pequiven.controller.indicator:generateUrlFile
+        _format: html
+    requirements:
+        _format: html|json|xml
+    methods: [GET|POST]
+        
+#Export PDF
+pequiven_indicator_evolution_export:
+    path: /{id}/export.{_format}
+    defaults:
+        _controller: pequiven.controller.indicator_sig:exportAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET|POST]
+    options:
+        expose: true
+#BORRAR DE AQUI EN ADELANTE
+#IndicatorSig
+pequiven_indicatorsig_list:
+    path: /{level}/listsig.{_format}
+    defaults:
+        _controller: pequiven.controller.indicators_sig:listAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+        level: 1|2|3
+    methods: [GET]
+
+#Lista de Indicadores Estratégicos SIG
+sig_indicators_strategic:
+    path: /sig/indicators_strategic/list
+    defaults: 
+        _controller: pequiven.controller.indicators_sig:strategiclistAction
+
+#Lista de Indicadores Tacticos SIG
+sig_indicators_tactic:
+    path: /sig/indicators_tactic/list
+    defaults: 
+        _controller: pequiven.controller.indicators_sig:tacticlistAction
+
+#Lista de Indicadores Operativos SIG
+sig_indicators_operative:
+    path: /sig/indicators_operative/list
+    defaults: 
+        _controller: pequiven.controller.indicators_sig:operativelistAction
