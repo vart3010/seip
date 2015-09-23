@@ -42,7 +42,8 @@ class ProposalController extends SEIPController {
 
             $proposal1 = strtoupper($request->get("proposal_data")["description1"]);
             $proposal2 = strtoupper($request->get("proposal_data")["description2"]);
-            if (count($proposal1) > 20 || count($proposal2) > 20) {
+            
+            if (strlen($proposal1) > 20 && strlen($proposal2) > 20) {
                 $proposals = array();
                 array_push($proposals, $proposal1);
                 array_push($proposals, $proposal2);
