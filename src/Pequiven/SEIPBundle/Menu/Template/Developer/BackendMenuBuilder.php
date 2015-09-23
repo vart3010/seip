@@ -1270,10 +1270,10 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                 ))
                 )->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.reports', $section)));            
             //Menú Nivel 2: Visualizar
-            $workStudyCirclesReports->addChild('work_study_circles.visualize', array(
+            $workStudyCirclesReports->addChild('work_study_circles.list', array(
                         'route' => 'pequiven_work_study_circle_list',
                     ))
-                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.visualize', $section)));
+                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.list', $section)));
 
             $workStudyCirclesReports->addChild('work_study_circles.general', array(
                         'route' => 'pequiven_work_study_circle_general',
@@ -1284,10 +1284,20 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
         }
         if ($this->isGranted(array('ROLE_SEIP_WORK_STUDY_CIRCLES_STRATEGIC_PLAN'))) {
             $workStudyCirclesStrategicPlan = $this->factory->createItem('work_study_circles.strategic_plan', $this->getSubLevelOptions(array(
-                                'route' => 'pequiven_proposal_list',
+                                'route' => '',
                                 'labelAttributes' => array('icon' => 'fa fa-bars',),
                             ))
                     )->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.strategic_plan', $section)));
+            //Menú Nivel 2: Visualizar
+            $workStudyCirclesStrategicPlan->addChild('work_study_circles.list', array(
+                        'route' => 'pequiven_proposal_list',
+                    ))
+                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.list', $section)));
+
+            $workStudyCirclesStrategicPlan->addChild('work_study_circles.general', array(
+                        'route' => 'pequiven_proposal_show_general',
+                    ))
+                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.general', $section)));
 
             $menuWorkStudyCircles->addChild($workStudyCirclesStrategicPlan);
         }

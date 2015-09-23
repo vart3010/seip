@@ -5326,6 +5326,60 @@ angular.module('seipModule.controllers', [])
         })
         //
 
+        .controller('ChartsProposalController', function ($scope, ngTableParams, $http, sfTranslator, notifyService) {
+
+        //Charts Proposal por linea
+        $scope.renderChartProposal = function (id, data, categories, caption, typeLabelDisplay) {
+                FusionCharts.ready(function () {
+                    var revenueChart = new FusionCharts({
+                        "type": "mscolumn3dlinedy",
+                        //"type": "pie3d",                        
+                        "renderAt": id,
+                        "width": "95%",
+                        "height": "500%",
+                        "exportFormats": "PNG= Exportar como PNG|PDF= Exportar como PDF",
+                        "exportFileName": "",
+                        "exporthandler": "http://107.21.74.91/",
+                        "html5exporthandler": "http://107.21.74.91/",
+                        "dataFormat": "json",
+                        "dataSource": {
+                           "chart": data.dataSource.chart,
+                           "categories": data.dataSource.categories,
+                           "dataset": data.dataSource.dataset
+                        }                        
+                    });
+                    revenueChart.setTransparent(true);
+                    revenueChart.render();
+                })
+            };
+        //FIN        
+        //Charts Proposal por localidad
+        $scope.renderChartProposalLocalidad = function (id, data, categories, caption, typeLabelDisplay) {
+                FusionCharts.ready(function () {
+                    var revenueChart = new FusionCharts({
+                        "type": "mscolumn3dlinedy",
+                        //"type": "pie3d",                        
+                        "renderAt": id,
+                        "width": "95%",
+                        "height": "500%",
+                        "exportFormats": "PNG= Exportar como PNG|PDF= Exportar como PDF",
+                        "exportFileName": "",
+                        "exporthandler": "http://107.21.74.91/",
+                        "html5exporthandler": "http://107.21.74.91/",
+                        "dataFormat": "json",
+                        "dataSource": {
+                            "chart": data.dataSource.chart,
+                            "categories": data.dataSource.categories,
+                            "dataset": data.dataSource.dataset
+                        }                        
+                    });
+                    revenueChart.setTransparent(true);
+                    revenueChart.render();
+                })
+            };        
+        //FIN
+        })
+
         .controller('ProductionController', function ($scope, ngTableParams, $http, sfTranslator, notifyService) {
 
 

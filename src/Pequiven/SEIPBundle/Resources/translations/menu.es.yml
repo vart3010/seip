@@ -210,4 +210,5 @@ app:
                         notification: Notificación
                         visualize: Visualizar
                         general: General
+                        list: Lista
                             

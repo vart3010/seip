@@ -476,9 +476,19 @@ class ReportTemplateService implements ContainerAwareInterface {
             $reportTemplates = array();
 
             $resultReportTemplates = $repositoryReportTemplate->findAll();
+            
+            if($securityContext->isGranted(array('ROLE_SEIP_OPERATION_REPORT_TEMPLATES_ALL'))){
+                $userReportTemplates = $resultReportTemplates;
+            } else{
+                $userReportTemplates = $user->getReportTemplates();
+            }
+            $userReportTemplatesArray = array();
+            foreach($userReportTemplates as $userReportTemplate){
+                $userReportTemplatesArray[$userReportTemplate->getId()] = true;
+            }
             //Seteamos sólo los reportTemplates de PQV, ya que los de la EEMM y Filiales se buscan directo en el controlador del gráfico
             foreach($resultReportTemplates as $resultReportTemplate){
-                if(!array_key_exists($resultReportTemplate->getLocation()->getAlias(),$reportTemplatesExclude)){
+                if(!array_key_exists($resultReportTemplate->getLocation()->getAlias(),$reportTemplatesExclude) && array_key_exists($resultReportTemplate->getId(), $userReportTemplatesArray)){
                     $reportTemplates[] = $resultReportTemplate;
                 }
             }
