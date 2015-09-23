@@ -54,3 +54,4 @@ workStudyCircle:
         attachment: Documentos
         name: Nombre
         load: Carga de Documentos
+        download: Descargar

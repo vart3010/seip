@@ -84,3 +84,19 @@ pequiven_work_study_circle_coordinators:
     methods: [GET]
     options:
         expose: true
+        
+    
+pequiven_work_study_circle_get_url_file:
+    path: /.{_format}
+    defaults:
+        _controller: pequiven.controller.meeting:generateUrlFileAction 
+        _format: html
+    requirements:
+        _format: html|json|xml
+    methods: [GET|POST]
+    
+        
+pequiven_work_study_circle_download_file:
+    path: /showDocument
+    defaults:
+        _controller: pequiven.controller.meeting:downloadFileAction 
