@@ -12,7 +12,6 @@ use Pequiven\SEIPBundle\Entity\Politic\Assistance;
 use Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircleFileStudy;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-
 /**
  * Controlador de reuniones de estudio de trabajo
  *
@@ -128,10 +127,11 @@ class MeetingController extends SEIPController {
     }
 
     public function createWorkStudyCircleFile(Meeting $meeting, $files) {
-        $idMeeting = $meeting->getId();
+        //$idMeeting = $meeting->getId();
         $idWorkStudyCircle = $meeting->getWorkStudyCircle();
-        $fileName = $idWorkStudyCircle->getId() . "_" . $idMeeting;
+        $fileName = $idWorkStudyCircle->getId();
         $fileUploaded = false;
+        $em = $this->getDoctrine()->getEntityManager();
 
         foreach ($files as $file) {
             $workStudyCircleFile = new \Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircleFile();
@@ -142,12 +142,15 @@ class MeetingController extends SEIPController {
             $workStudyCircleFile->setWorkStudyCircle($meeting->getWorkStudyCircle());
 
             //SE MUEVE EL ARCHIVO AL SERVIDOR
-            $file->move($this->container->getParameter("kernel.root_dir") . '/../web/' . \Pequiven\SEIPBundle\Model\Politic\WorkStudyCircleFile::getUploadDir(), \Pequiven\SEIPBundle\Model\Politic\WorkStudyCircleFile::NAME_FILE . $fileName);
+            $file->move($this->container->getParameter("kernel.root_dir") . '/../web/' . \Pequiven\SEIPBundle\Model\Politic\WorkStudyCircleFile::getUploadDir(), \Pequiven\SEIPBundle\Model\Politic\WorkStudyCircleFile::NAME_FILE . $fileName . "_" . base64_encode($file->getClientOriginalName()));
             $fileUploaded = $file->isValid();
         }
 
+
+
+
         if (!$fileUploaded) {
-            $em = $this->getDoctrine()->getEntityManager();
+
             $em->persist($workStudyCircleFile);
             $em->flush();
 
@@ -172,10 +175,17 @@ class MeetingController extends SEIPController {
 
     public function downloadFileAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
-        $idMeeting = $request->get("id");
-        $meeting = $em->getRepository('PequivenSEIPBundle:Politic\Meeting')->findOneBy(array('id' => $idMeeting));
-        $idWorkStudyCircle = $meeting->getWorkStudyCircle();
-        $fileName = $idWorkStudyCircle->getId() . "_" . $idMeeting;
+        $idFile = $request->get("id");
+        $file = $em->getRepository('PequivenSEIPBundle:Politic\WorkStudyCircleFile')->findOneBy(array('id' => $idFile));
+        $workStudyCircle = $file->getWorkStudyCircle();
+        //$metting = $workStudyCircle->getMeeting();
+        
+        $fileName = $workStudyCircle->getId()  . "_" . base64_encode($file->getNameFile());
+
+//        $meeting = $em->getRepository('PequivenSEIPBundle:Politic\Meeting')->findOneBy(array('id' => $idMeeting));
+//        $WorkStudyCircle = $meeting->getWorkStudyCircle();
+//        $idFile = $WorkStudyCircle->getWorkStudyCircleFile();
+//        $fileName = $WorkStudyCircle->getId() . "_" . $idMeeting . "_" . $idFile;
 
         $path = \Pequiven\SEIPBundle\Model\Politic\WorkStudyCircleFile::LOCATION_UPLOAD_FILE;
         $name = \Pequiven\SEIPBundle\Model\Politic\WorkStudyCircleFile::NAME_FILE;
@@ -338,7 +348,7 @@ class MeetingController extends SEIPController {
                 $asistencia[$assis->getUser()->getId()][$meet->getId()] = $assis->getAssistance();
             }
         }
-        
+
 //        var_dump($fechameeting);
 //        die();
 
@@ -350,16 +360,16 @@ class MeetingController extends SEIPController {
             'fechas' => $fechameeting
         );
 
-        $this->generatePdf($data, 'Reporte de Asistencias a Reuniones', 'PequivenSEIPBundle:Politic:Meeting\exportAllpdf.html.twig',array('ORIENTATION' => 'P'));
+        $this->generatePdf($data, 'Reporte de Asistencias a Reuniones', 'PequivenSEIPBundle:Politic:Meeting\exportAllpdf.html.twig', array('ORIENTATION' => 'P'));
     }
-    
+
     public function generatePdf($data, $title, $template, $options = array()) {
-        if(!isset($options['ORIENTATION'])){
+        if (!isset($options['ORIENTATION'])) {
             $options['ORIENTATION'] = 'P';
         }
-        
+
         $pdf = new \Pequiven\SEIPBundle\Model\PDF\SeipPdf($options['ORIENTATION'], PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-        
+
         $pdf->setPrintLineFooter(false);
         $pdf->setContainer($this->container);
         $pdf->setPeriod($this->getPeriodService()->getPeriodActive());

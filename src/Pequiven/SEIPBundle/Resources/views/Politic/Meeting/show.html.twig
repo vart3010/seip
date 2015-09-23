@@ -93,9 +93,9 @@
     <script type="text/javascript">
 
 
-        function openFile(idMeeting) {
+        function openFile(idFile) {
             var data = {
-                id: idMeeting
+                id: idFile
             };
             $.ajax({
                 type: 'get',
@@ -112,9 +112,9 @@
         $(document).ready(function () {
 
             $("button#downloadFile").click(function () {
-                var idMeeting = $(this).attr("data");
+                var idFile = $(this).attr("data");
                 //alert(idMeeting);
-                openFile(idMeeting);
+                openFile(idFile);
             });
 
             $('#switch-mode').change(function () {
