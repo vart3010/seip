@@ -333,7 +333,7 @@ class MeetingController extends SEIPController {
             if ($assis->getAssistance() == false) {
                 // CONSTRUCCIÓN DEL ARRAY DE OBSERVACIONES. CONCADENO EL MENSAJE Y LO PREFORMATEO 
                 $a = ucwords(mb_strtolower($assis->getUser()->getfirstname(), 'UTF-8')) . " " . ucwords(mb_strtolower($assis->getUser()->getlastname(), 'UTF-8'))
-                        . " no Asistió porque " . ucwords(mb_strtolower($assis->getObservation(), 'UTF-8'));
+                        . " no Asistió por " . ucwords(mb_strtolower($assis->getObservation(), 'UTF-8'));
                 $assistanceObs[] = $a;
             }
         }
