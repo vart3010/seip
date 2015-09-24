@@ -70,11 +70,11 @@
         {% if prop.lineStrategic.description==key %}
             <table width="100%">
                 <tr>
-                    <td width="100%" style="text-align: justify">- {{prop.getDescription()}}</td>                                
+                    <td width="100%" style="text-align: justify"><b>Propuesta {{loop.index}}:</b> {{prop.getDescription()|ucwords}}</td>                                
                 </tr>
             </table>
             <br/><br/>       
         {% endif %}
     {% endfor%}
-    <br/><br/>
+    <br/>
 {% endfor %}        
