@@ -53,4 +53,13 @@ pequiven_proposal_show_general:
     methods: [GET|POST]
     options:
         expose: true
+        
+pequiven_proposal_export_pdf:
+    path: /{idWorkStudyCircle}/export.{_format}
+    defaults:
+        _controller: pequiven.controller.proposal:exportAction
+        _format: html
+    methods: [GET|POST]
+    options:
+        expose: true
 

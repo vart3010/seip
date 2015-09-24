@@ -1,0 +1,80 @@
+{% trans_default_domain 'workStudyCircle' %}
+{% set userCreatedId = workStudyCircle.getCreatedBy.id %}
+
+<style>
+    .body {
+        font-size: 9px;
+    }
+    .title_bold {
+        font-weight: bold;
+    }
+    table tr {
+        padding: 15px;
+    }
+    .alin_font {
+        text-align: justify;
+    }
+</style>
+
+<table width="100%">
+    <tr>
+        <th class="title_bold">1. Datos del Círculo de Estudio</th>
+    </tr>
+</table> 
+
+<br/><br/>
+
+<table width="100%"> 
+    <tr>
+        <td class="title_bold" bgcolor="#F2F2F2" width="30%">{{ "workStudyCircle.form.code"|trans }}:</td>
+        <td width="70%"> {{ workStudyCircle.codigo }}</td>                        
+    </tr>
+    <tr>
+        <td class="title_bold" bgcolor="#F2F2F2" width="30%">{{ "workStudyCircle.form.nombre"|trans }}:</td>
+        <td width="70%"> {{ workStudyCircle.name }}</td>
+    </tr>
+    <tr>
+        <td class="title_bold" bgcolor="#F2F2F2" width="30%">{{ "workStudyCircle.form.complejo"|trans }}:</td>
+        <td width="70%"> {{ workStudyCircle.complejo.description}}</td>
+    </tr>
+
+    <tr>
+        <td class="title_bold" bgcolor="#F2F2F2" width="30%">{{ "workStudyCircle.form.gerenciaFirst"|trans }}:</td>
+        <td width="70%"> {% for gerencia in  workStudyCircle.gerencias %} - {{ gerencia }}<br/> {% endfor %}</td>
+    </tr>
+
+    <tr>
+        <td class="title_bold" bgcolor="#F2F2F2" width="30%">{{ "workStudyCircle.form.gerenciaSecond"|trans }}:</td>
+        <td width="70%"> {% for gerencia in  workStudyCircle.gerenciaSeconds %} - {{ gerencia }}<br> {% endfor %}</td>
+    </tr>
+</table>
+
+<br/><br/><br/>
+
+<table width="100%">
+    <tr>
+        <th class="title_bold">2. Propuestas Elaboradas</th>
+    </tr>
+</table> 
+
+<br/><br/>  
+
+
+{% for key,value in lineas %}        
+    <table width="100%"> 
+        <tr>
+            <td bgcolor="#F2F2F2" width="100%"><b>Línea Estratégica: </b>{{ key }}</td>
+        </tr>
+    </table>
+    {% for prop in proposals %}
+        {% if prop.lineStrategic.description==key %}
+            <table width="100%">
+                <tr>
+                    <td width="100%" style="text-align: justify">- {{prop.getDescription()}}</td>                                
+                </tr>
+            </table>
+            <br/><br/>       
+        {% endif %}
+    {% endfor%}
+    <br/><br/>
+{% endfor %}        
