@@ -15,7 +15,7 @@
         text-align: justify;
     }
 </style>
-
+{% block body %}
 <table width="100%">
     <tr>
         <th class="title_bold">1. Datos del Círculo de Estudio</th>
@@ -77,4 +77,47 @@
         {% endif %}
     {% endfor%}
     <br/>
-{% endfor %}        
+{% endfor %} 
+
+<br/>
+
+    <table width="95%">
+        <tr>
+            <th class="title_bold">3. Aceptación de los Miembros del Círculo de Estudio de Trabajo</th>
+        </tr>
+    </table>    
+
+    <br/><br/>
+
+    <table width="95%" class="simple-table responsive-table tables-extras">  
+        <thead>
+            <tr>
+                <th scope="col"  width="5%" bgcolor="#F2F2F2" class="title_bold"> N° </th>
+                <th scope="col"  width="15%" bgcolor="#F2F2F2" class="title_bold"> C.I. </th>
+                <th scope="col"  width="50%" bgcolor="#F2F2F2" class="title_bold"> Nombre </th>
+                <th scope="col"  width="30%" bgcolor="#F2F2F2" class="title_bold"> Firma </th>                
+            </tr>
+        </thead>
+        <tbody>
+            {% set users = workStudyCircle.userWorkerId %}
+            {% set count = 0 %}
+            {% for miembro in users %}
+
+
+                {% if (userCreatedId != miembro.id) %}
+                    {% set count= count + 1%}
+                    <tr>
+                        <td width="5%" >  </td>                        
+                    </tr>
+                    <tr>
+                        <td width="5%" > {{ count }} </td>
+                        <td width="15%" > {{ miembro.getIndentification|number_format(0, ',', '.') }} </td>
+                        <td width="50%" > {{ miembro.firstname | ucwords}} {{ miembro.lastname | ucwords}}</td>
+                        <td width="30%"  style="text-align: center"> _____________________ </td>                       
+                    </tr>                    
+                {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

@@ -31,8 +31,8 @@
                     <tr>
                         <td>{{ cont }}</td>
                         <td>{{ proposal.lineStrategic }}</td>
-                        <td>
-                            <a href="{{ path('pequiven_proposal_show',{ id:proposal.id }) }}">{{ proposal.description }}</a>
+                        <td style="text-align: justify">
+                            <a href="{{ path('pequiven_proposal_show',{ id:proposal.id }) }}">{{ proposal.description|ucwords }}</a>
                         </td>
                         <td class="align-right vertical-center">
                             {% if (is_granted('ROLE_SEIP_PROPOSAL_EDIT') or (userCreatedId == userData.id)) %}
