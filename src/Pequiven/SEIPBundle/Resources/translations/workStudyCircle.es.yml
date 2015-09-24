@@ -30,6 +30,7 @@ workStudyCircle:
     proposals:
         title: Propuestas
         add: Añadir Propuesta
+        exportpdf: Exportar Propuestas
         
     meetings:
         title: Reuniones
@@ -43,7 +44,7 @@ workStudyCircle:
         edit: Editar Reunión
         duration: Duración (Hrs)
         exportpdf: Exportar Asistencias
-            
+        
     assistances:
         dataAssistances: Participantes
         user: Participante

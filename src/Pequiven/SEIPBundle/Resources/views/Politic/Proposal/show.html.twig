@@ -38,7 +38,9 @@
                 </div>
                 <div class="field-block button-height">
                     <label class="label">Propuesta</label>
-                    {{ proposal.description }}
+                    <div>
+                    {{ proposal.description|ucwords}}
+                    </div>
                 </div>
 
             </fieldset>

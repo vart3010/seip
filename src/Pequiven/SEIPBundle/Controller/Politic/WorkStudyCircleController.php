@@ -381,11 +381,22 @@ class WorkStudyCircleController extends SEIPController {
         $proposals = $em->getRepository('PequivenSEIPBundle:Politic\Proposal')->findBy(array('workStudyCircle' => $request->get("idWorkStudyCircle")));
         $meetings = $workStudyCircle->getMeeting();
 
+        //RECORRO LAS PROPUESTAS PARA SACAR LAS LINEAS DE CADA UNA NO IMPORTA SI SE REPITEN
+        foreach ($proposals as $prop) {
+            $lineStrategics[] = $prop->getLineStrategic()->getDescription();
+        }
+
+        //AGRUPO EL ARREGLO POR LINEA, ES DECIR UN REGISTRO POR CADA LINEA QUE TENGA PROPUESTA. 
+        //KEY->DESCRIPCION LINEA y VALUE->FRECUENCIA (CUANTAS VECES SE REPITE)
+        
+        $lineas = array_count_values($lineStrategics);
+        
         $data = array(
             'workStudyCircle' => $workStudyCircle,
             'userData' => $user,
             'proposals' => $proposals,
-            'meetings' => $meetings
+            'meetings' => $meetings,
+            'lineas' => $lineas
         );
 
         $this->generatePdf($data, 'Reporte de Círculo de Trabajo', 'PequivenSEIPBundle:Politic:WorkStudyCircle\viewPdf.html.twig');

@@ -35,12 +35,12 @@
                         <td>{{ meeting.date|date('Y-m-d') }}</td>
                         <td>
                             <a href="{{ path("pequiven_meeting_show",{id:meeting.id})}}">
-                                {{ meeting.place }}
+                                {{ meeting.place|ucwords }}
                             </a>
                         </td>
                         <td>
                             <a href="{{ path("pequiven_meeting_show",{id:meeting.id})}}">
-                                {{ meeting.subject }}
+                                {{ meeting.subject|ucwords }}
                             </a>
                         </td>
 
