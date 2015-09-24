@@ -131,35 +131,49 @@ class MeetingController extends SEIPController {
         $idWorkStudyCircle = $meeting->getWorkStudyCircle();
         $fileName = $idWorkStudyCircle->getId();
         $fileUploaded = false;
+        $fileExist = false;
         $em = $this->getDoctrine()->getEntityManager();
 
 
-        foreach ($files as $file) {
-            $workStudyCircleFile = new \Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircleFile();
-            $workStudyCircleFile->setCreatedBy($this->getUser());
-            $workStudyCircleFile->setNameFile($file->getClientOriginalName());
-            $workStudyCircleFile->setPath(\Pequiven\SEIPBundle\Model\Politic\WorkStudyCircleFile::getUploadDir());
-            $workStudyCircleFile->setExtensionFile($file->guessExtension());
-            $workStudyCircleFile->setWorkStudyCircle($meeting->getWorkStudyCircle());
 
-            //SE MUEVE EL ARCHIVO AL SERVIDOR
-            $file->move($this->container->getParameter("kernel.root_dir") . '/../web/' . \Pequiven\SEIPBundle\Model\Politic\WorkStudyCircleFile::getUploadDir(), \Pequiven\SEIPBundle\Model\Politic\WorkStudyCircleFile::NAME_FILE . $fileName . "_" . base64_encode($file->getClientOriginalName()));
-            $fileUploaded = $file->isValid();
+
+        foreach ($files as $file) {
+            $ifExistFile = $em->getRepository('PequivenSEIPBundle:Politic\WorkStudyCircleFile')->findBy(array('nameFile' => base64_encode($file->getClientOriginalName())));
+
+            if (count($ifExistFile) == 0) {
+                $workStudyCircleFile = new \Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircleFile();
+                $workStudyCircleFile->setCreatedBy($this->getUser());
+                $workStudyCircleFile->setNameFile($file->getClientOriginalName());
+                $workStudyCircleFile->setPath(\Pequiven\SEIPBundle\Model\Politic\WorkStudyCircleFile::getUploadDir());
+                $workStudyCircleFile->setExtensionFile($file->guessExtension());
+                $workStudyCircleFile->setWorkStudyCircle($meeting->getWorkStudyCircle());
+
+                //SE MUEVE EL ARCHIVO AL SERVIDOR
+                $file->move($this->container->getParameter("kernel.root_dir") . '/../web/' . \Pequiven\SEIPBundle\Model\Politic\WorkStudyCircleFile::getUploadDir(), \Pequiven\SEIPBundle\Model\Politic\WorkStudyCircleFile::NAME_FILE . $fileName . "_" . base64_encode($file->getClientOriginalName()));
+                $fileUploaded = $file->isValid();
+            } else {
+                $fileExist = true;
+            }
         }
 
 
 
+        if (!$fileExist) {
+            if (!$fileUploaded) {
 
-        if (!$fileUploaded) {
+                $em->persist($workStudyCircleFile);
+                $em->flush();
 
-            $em->persist($workStudyCircleFile);
-            $em->flush();
-
-            $this->get('session')->getFlashBag()->add('success', $this->trans('action.messages.saveFileSuccess', array(), 'PequivenIndicatorBundle'));
-            //$request->request->set("uploadFile", "");
-            $this->redirect($this->generateUrl("pequiven_meeting_show", array("id" => $meeting->getId())));
+                $this->get('session')->getFlashBag()->add('success', $this->trans('action.messages.saveFileSuccess', array(), 'PequivenIndicatorBundle'));
+                //$request->request->set("uploadFile", "");
+                $this->redirect($this->generateUrl("pequiven_meeting_show", array("id" => $meeting->getId())));
+            } else {
+                $this->get('session')->getFlashBag()->add('error', $this->trans('action.messages.errorFileUpload', array(), 'PequivenIndicatorBundle'));
+                //$request->request->set("uploadFile", "");
+                $this->redirect($this->generateUrl("pequiven_meeting_show", array("id" => $meeting->getId())));
+            }
         } else {
-            $this->get('session')->getFlashBag()->add('error', $this->trans('action.messages.errorFileUpload', array(), 'PequivenIndicatorBundle'));
+            $this->get('session')->getFlashBag()->add('error', "El archivo ya existe.");
             //$request->request->set("uploadFile", "");
             $this->redirect($this->generateUrl("pequiven_meeting_show", array("id" => $meeting->getId())));
         }
@@ -180,9 +194,7 @@ class MeetingController extends SEIPController {
         $file = $em->getRepository('PequivenSEIPBundle:Politic\WorkStudyCircleFile')->findOneBy(array('id' => $idFile));
         $workStudyCircle = $file->getWorkStudyCircle();
         //$metting = $workStudyCircle->getMeeting();
-
         //$fileName = $workStudyCircle->getId() . "_" . $file->getNameFile();
-
 //        $meeting = $em->getRepository('PequivenSEIPBundle:Politic\Meeting')->findOneBy(array('id' => $idMeeting));
 //        $WorkStudyCircle = $meeting->getWorkStudyCircle();
 //        $idFile = $WorkStudyCircle->getWorkStudyCircleFile();
@@ -190,7 +202,7 @@ class MeetingController extends SEIPController {
 
         $path = \Pequiven\SEIPBundle\Model\Politic\WorkStudyCircleFile::LOCATION_UPLOAD_FILE;
         $name = \Pequiven\SEIPBundle\Model\Politic\WorkStudyCircleFile::NAME_FILE;
-        
+
 
         $ruta = $this->container->getParameter("kernel.root_dir") . '/../web/' . $path . "/" . $name . $workStudyCircle->getId() . "_" . base64_encode($file->getNameFile());
 
@@ -320,8 +332,8 @@ class MeetingController extends SEIPController {
             $assistanceIds[$assis->getUser()->getId()] = $assis->getAssistance();
             if ($assis->getAssistance() == false) {
                 // CONSTRUCCIÓN DEL ARRAY DE OBSERVACIONES. CONCADENO EL MENSAJE Y LO PREFORMATEO 
-                $a = ucwords(mb_strtolower($assis->getUser()->getfirstname(),'UTF-8')) . " " . ucwords(mb_strtolower($assis->getUser()->getlastname(),'UTF-8'))
-                        . " no Asistió porque " . ucwords(mb_strtolower($assis->getObservation(),'UTF-8'));
+                $a = ucwords(mb_strtolower($assis->getUser()->getfirstname(), 'UTF-8')) . " " . ucwords(mb_strtolower($assis->getUser()->getlastname(), 'UTF-8'))
+                        . " no Asistió porque " . ucwords(mb_strtolower($assis->getObservation(), 'UTF-8'));
                 $assistanceObs[] = $a;
             }
         }
