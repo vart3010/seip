@@ -173,10 +173,8 @@ class workStudyCircleService implements ContainerAwareInterface {
         $chart["showLegend"] = "1";
         $chart["legendBgColor"] = "#ffffff";
         $chart["legendItemFontSize"] = "10";
-        $chart["legendItemFontColor"] = "#666666";
-
-      
-
+        $chart["legendItemFontColor"] = "#666666";     
+        //Export
         $chart["exportenabled"] = "1";
         $chart["exportatclient"] = "0";
         $chart["exportFormats"] = "PNG= Exportar como PNG|PDF= Exportar como PDF";
@@ -266,9 +264,7 @@ class workStudyCircleService implements ContainerAwareInterface {
         $chart["inThousandSeparator"] = ".";
         $chart["decimals"] = "2";
         $chart["formatNumberScale"] = "0";
-
-
-
+        //Export
         $chart["exportenabled"] = "1";
         $chart["exportatclient"] = "0";
         $chart["exportFormats"] = "PNG= Exportar como PNG|PDF= Exportar como PDF";
@@ -293,7 +289,7 @@ class workStudyCircleService implements ContainerAwareInterface {
             $id = $value->getId();
                           
             $label["label"] = $localidad;
-            $category[] = $label;   
+            $category[] = $label; 
             
             $workStudyCircle = $em->getRepository('PequivenSEIPBundle:Politic\WorkStudyCircle')->findBy(array('complejo' => $id));
             //var_dump(count($workStudyCircle));
@@ -315,6 +311,99 @@ class workStudyCircleService implements ContainerAwareInterface {
         $data['dataSource']['dataset'][] = $dataSetMeta;
 
         return $data;
+    }
+
+    public function getDataChartOfMeetingsData($meeting)
+    {
+        $data = array(
+            'dataSource' => array(
+                'chart' => array(),
+                'categories' => array(
+                ),
+                'dataset' => array(
+                ),
+            ),
+        );
+        $chart = array();
+
+        $chart["caption"] = "Reuniones por Localidad";         
+        $chart["sYAxisName"] = "";
+        $chart["sNumberSuffix"] = "";
+        $chart["sYAxisMaxValue"] = "100";
+        $chart["paletteColors"] = "#0075c2,#1aaf5d,#e20000,#f2c500,#f45b00,#8e0000";
+        $chart["bgColor"] = "#ffffff";
+        $chart["showBorder"] = "0";
+        $chart["showCanvasBorder"] = "0";
+        $chart["usePlotGradientColor"] = "0";
+        $chart["plotBorderAlpha"] = "10";
+        $chart["legendBorderAlpha"] = "0";
+        $chart["legendBgAlpha"] = "0";
+        $chart["legendShadow"] = "0";
+        $chart["showHoverEffect"] = "1";
+        $chart["valueFontColor"] = "#000000";
+        $chart["valuePosition"] = "ABOVE";
+        $chart["rotateValues"] = "1";
+        $chart["placeValuesInside"] = "0";
+        $chart["divlineColor"] = "#999999";
+        $chart["divLineDashed"] = "1";
+        $chart["divLineDashLen"] = "1";
+        $chart["divLineGapLen"] = "1";
+        $chart["canvasBgColor"] = "#ffffff";
+        $chart["captionFontSize"] = "14";
+        $chart["subcaptionFontSize"] = "14";
+        $chart["subcaptionFontBold"] = "0";
+        $chart["decimalSeparator"] = ",";
+        $chart["thousandSeparator"] = ".";
+        $chart["inDecimalSeparator"] = ",";
+        $chart["inThousandSeparator"] = ".";
+        $chart["decimals"] = "2";
+        $chart["formatNumberScale"] = "0";
+        $chart["toolTipColor"] = "#ffffff";
+        $chart["toolTipBgColor"] = "#000000";
+        $chart["toolTipBgAlpha"] = "80";
+        $chart["toolTipBorderRadius"] = "2";
+        $chart["toolTipPadding"] = "5";
+        $chart["showLegend"] = "1";
+        $chart["legendBgColor"] = "#ffffff";
+        $chart["legendItemFontSize"] = "10";
+        $chart["legendItemFontColor"] = "#666666";     
+        //Export
+        $chart["exportenabled"] = "1";
+        $chart["exportatclient"] = "0";
+        $chart["exportFormats"] = "PNG= Exportar como PNG|PDF= Exportar como PDF";
+        $chart["exportFileName"] = "Grafico Resultados ";
+        $chart["exporthandler"] = "http://107.21.74.91/";
+
+        $em = $this->getDoctrine()->getManager();
+
+        $label = $dataLocalidad = array();
+        
+        //Carga de Nombres de Labels
+        $dataSetLocal["seriesname"] = "Localidad";
+        
+        $localidad = $em->getRepository('PequivenMasterBundle:Complejo')->findAll();//Consultar las localidades
+        
+        foreach ($localidad as $value) {
+            
+            $label = $value->getRef();
+            $id = $value->getId();
+
+            $dataVer = $em->getRepository('PequivenSEIPBundle:Politic\Meeting')->findQueryMeetingsComplejo($id);
+            $dataCount = count($dataVer);
+            
+            //$category[] = $label;//label cargado con la localidad
+            $dataLocal["label"] = $label;//Carga de valores
+
+            $dataLocal["value"] = $dataCount;//Carga de valores
+            $dataSetLocal["data"][] = $dataLocal;//data localidad
+        }
+
+        $data['dataSource']['chart'] = $chart;
+        //$data['dataSource']['categories'][]["category"] = $category;
+        $data['dataSource']['dataset'][] = $dataSetLocal;      
+        
+        return $data;
+        //return json_encode($data);
     }
 
     /**

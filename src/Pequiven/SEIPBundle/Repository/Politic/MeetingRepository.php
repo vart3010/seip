@@ -63,6 +63,23 @@ class MeetingRepository extends SeipEntityRepository {
         parent::applyCriteria($queryBuilder, $criteria->toArray());
     }
 
+    /**
+     * Reunioes por complejo
+     *
+     *
+     */
+    function findQueryMeetingsComplejo($complejo) {
+        
+        $qb = $this->getQueryBuilder();
+        $qb
+                ->innerJoin('mtg.workStudyCircle', 'wsc')
+                ->andWhere('wsc.complejo = :complejo')
+                ->setParameter('complejo', $complejo)
+        ;
+        
+        return $qb->getQuery()->getResult();
+    }
+
     protected function getAlias() {
         return 'mtg';
     }

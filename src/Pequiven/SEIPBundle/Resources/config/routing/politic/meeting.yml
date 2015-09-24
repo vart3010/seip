@@ -14,7 +14,14 @@ pequiven_meeting_list:
     requirements:
         _format: html|json|xml
     methods: [GET]   
-    
+
+pequiven_meeting_view:
+    path: /view
+    defaults:
+        _controller: pequiven.controller.meeting:viewAction
+    methods: [GET|POST]
+    options:
+        expose: true
 pequiven_meeting_edit:
     path: /edit/{meeting_id}
     defaults:

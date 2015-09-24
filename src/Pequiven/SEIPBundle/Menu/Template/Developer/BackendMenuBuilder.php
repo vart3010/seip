@@ -1296,7 +1296,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                     ->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.list', $section)));
 
             $workStudyCirclesMeeting->addChild('work_study_circles.general', array(
-                        'route' => '',
+                        'route' => 'pequiven_meeting_view',
                     ))
                     ->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.general', $section)));
             
