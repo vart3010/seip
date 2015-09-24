@@ -72,7 +72,7 @@
     <br>
     {% include 'PequivenSEIPBundle:Politic:Meeting/assistance.html.twig' %}
     <br>    
-    {% include 'PequivenSEIPBundle:Politic:Meeting/meetingFiles.html.twig' %}
+    {#{% include 'PequivenSEIPBundle:Politic:Meeting/meetingFiles.html.twig' %}#}
     <br>
     {% set routeConfig = path('pequiven_meeting_export_pdf',{idmeeting:meeting.id}) %}
     {% if(is_granted(["ROLE_SEIP_MEETING_EXPORT_REPORT"])) %}
