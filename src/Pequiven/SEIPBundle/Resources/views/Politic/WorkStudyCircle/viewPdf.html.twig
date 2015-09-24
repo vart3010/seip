@@ -44,7 +44,7 @@
 
         <tr>
             <td class="title_bold" bgcolor="#F2F2F2" width="35%">{{ "workStudyCircle.form.gerenciaFirst"|trans }}:</td>
-            <td width="65%"> {% for gerencia in  workStudyCircle.gerencias %} * {{ gerencia }}<br> {% endfor %}</td>
+            <td width="65%"> {% for gerencia in  workStudyCircle.gerencias %} - {{ gerencia }}<br> {% endfor %}</td>
         </tr>
 
         <tr>
@@ -107,7 +107,7 @@
     <table width="95%" class="simple-table responsive-table tables-extras">  
         <thead>
             <tr>
-                <th scope="col" width="5%" bgcolor="#F2F2F2" class="title_bold"> # </th>
+                <th scope="col" width="5%" bgcolor="#F2F2F2" class="title_bold"> N° </th>
                 <th scope="col" width="15%" bgcolor="#F2F2F2" class="title_bold"> C.I. </th>
                 <th scope="col" width="50%" bgcolor="#F2F2F2" class="title_bold"> Nombre </th>
                 <th scope="col" width="20%" bgcolor="#F2F2F2" class="title_bold"> Teléfono </th>

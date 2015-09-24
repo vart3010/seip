@@ -1400,7 +1400,6 @@ angular.module('seipModule.controllers', [])
                 }
             });
         })
-
         //Controladores SIG
         .controller('IndicatorSigEvolutionController', function ($scope, notificationBarService, $http, notifyService, $filter) {
 
@@ -1409,7 +1408,7 @@ angular.module('seipModule.controllers', [])
             $scope.urlCausesEvolutionForm = null;
             $scope.indicator = null;
             var isInit = false;
-            
+
             //Carga del formulario para la relacion del indicador 2014
             $scope.loadTemplateAnalysisTrend = function (resource) {
                 $scope.initFormTrend(resource);
@@ -1478,13 +1477,13 @@ angular.module('seipModule.controllers', [])
             var addCause = function (save, successCallBack) {
                 var formValueIndicator = angular.element('#form_causes_evolution');
                 var formData = formValueIndicator.serialize();
-                
+
                 if (save == undefined) {
                     var save = false;
                 }
                 if (save == true) {
-                    var url = Routing.generate('pequiven_causes_evolution_add', {idIndicator: $scope.id_indicator });
-                } 
+                    var url = Routing.generate('pequiven_causes_evolution_add', {idIndicator: $scope.id_indicator});
+                }
                 notificationBarService.getLoadStatus().loading();
                 return $http({
                     method: 'POST',
@@ -1518,13 +1517,13 @@ angular.module('seipModule.controllers', [])
             var addAction = function (save, successCallBack) {
                 var formValueIndicator = angular.element('#form_action_evolution');
                 var formData = formValueIndicator.serialize();
-                
+
                 if (save == undefined) {
                     var save = false;
                 }
                 if (save == true) {
-                    var url = Routing.generate('pequiven_action_evolution_add', {idIndicator: $scope.id_indicator });
-                } 
+                    var url = Routing.generate('pequiven_action_evolution_add', {idIndicator: $scope.id_indicator});
+                }
                 notificationBarService.getLoadStatus().loading();
                 return $http({
                     method: 'POST',
@@ -1558,13 +1557,13 @@ angular.module('seipModule.controllers', [])
             var addActionValues = function (save, successCallBack) {
                 var formValueIndicator = angular.element('#form_action_values_evolution');
                 var formData = formValueIndicator.serialize();
-                
+
                 if (save == undefined) {
                     var save = false;
                 }
                 if (save == true) {
-                    var url = Routing.generate('pequiven_action_values_evolution_add', {idIndicator: $scope.id_indicator, idAction: $scope.idAction , month: $scope.month });
-                } 
+                    var url = Routing.generate('pequiven_action_values_evolution_add', {idIndicator: $scope.id_indicator, idAction: $scope.idAction, month: $scope.month});
+                }
                 notificationBarService.getLoadStatus().loading();
                 return $http({
                     method: 'POST',
@@ -1598,13 +1597,13 @@ angular.module('seipModule.controllers', [])
             var addTrendEvolution = function (save, successCallBack) {
                 var formValueIndicator = angular.element('#form_trend_evolution');
                 var formData = formValueIndicator.serialize();
-                
+
                 if (save == undefined) {
                     var save = false;
                 }
                 if (save == true) {
-                    var url = Routing.generate('pequiven_trend_evolution_add', {idIndicator: $scope.id_indicator });
-                } 
+                    var url = Routing.generate('pequiven_trend_evolution_add', {idIndicator: $scope.id_indicator});
+                }
                 notificationBarService.getLoadStatus().loading();
                 return $http({
                     method: 'POST',
@@ -1808,7 +1807,7 @@ angular.module('seipModule.controllers', [])
             $scope.urlCausesEvolutionForm = null;
             $scope.indicator = null;
             var isInit = false;
-            
+
             //Carga el formulario de las Causas de Desviacion
             $scope.loadTemplateCausesAnalysis = function (resource) {
                 $scope.initFormCausesAnalysis(resource);
@@ -1829,13 +1828,13 @@ angular.module('seipModule.controllers', [])
             var addCauseAnalysis = function (save, successCallBack) {
                 var formCauseAnalysis = angular.element('#form_causes_analysis_evolution');
                 var formData = formCauseAnalysis.serialize();
-                
+
                 if (save == undefined) {
                     var save = false;
                 }
                 if (save == true) {
-                    var url = Routing.generate('pequiven_analysis_cause_evolution_add', {idIndicator: $scope.id_indicator });
-                } 
+                    var url = Routing.generate('pequiven_analysis_cause_evolution_add', {idIndicator: $scope.id_indicator});
+                }
                 notificationBarService.getLoadStatus().loading();
                 return $http({
                     method: 'POST',
@@ -1899,7 +1898,7 @@ angular.module('seipModule.controllers', [])
                     }
                 ];
                 $scope.templateOptions.setTemplate($scope.templates[0]);
-            };            
+            };
         })
         .controller('IndicatorSigEvolutionVerificationController', function ($scope, notificationBarService, $http, notifyService, $filter) {
 
@@ -1907,7 +1906,7 @@ angular.module('seipModule.controllers', [])
             //$scope.urlCausesEvolutionForm = null;
             $scope.indicator = null;
             var isInit = false;
-            
+
             //Carga el formulario de las Causas de Desviacion
             $scope.loadTemplateVerification = function (resource) {
                 $scope.initFormVerification(resource);
@@ -1928,13 +1927,13 @@ angular.module('seipModule.controllers', [])
             var addVerification = function (save, successCallBack) {
                 var formVerification = angular.element('#form_action_verification');
                 var formData = formVerification.serialize();
-                
+
                 if (save == undefined) {
                     var save = false;
                 }
                 if (save == true) {
-                    var url = Routing.generate('pequiven_verification_evolution_add', {idIndicator: $scope.id_indicator });
-                } 
+                    var url = Routing.generate('pequiven_verification_evolution_add', {idIndicator: $scope.id_indicator});
+                }
                 notificationBarService.getLoadStatus().loading();
                 return $http({
                     method: 'POST',
@@ -1998,13 +1997,13 @@ angular.module('seipModule.controllers', [])
                     }
                 ];
                 $scope.templateOptions.setTemplate($scope.templates[0]);
-            };            
+            };
         })
         .controller('EvolutionIndicatorConfig', function ($scope, notificationBarService, $http, notifyService, $filter) {
 
             $scope.indicator = null;
             var isInit = false;
-            
+
             //Carga el formulario de configuracion de la gráfica
             $scope.loadTemplateConfig = function (resource) {
                 $scope.initFormConfig(resource);
@@ -2025,13 +2024,13 @@ angular.module('seipModule.controllers', [])
             var addConfig = function (save, successCallBack) {
                 var formConfig = angular.element('#form_config_sig');
                 var formData = formConfig.serialize();
-                
+
                 if (save == undefined) {
                     var save = false;
                 }
                 if (save == true) {
-                    var url = Routing.generate('pequiven_config_chart_evolution_add', {idIndicator: $scope.id_indicator });
-                } 
+                    var url = Routing.generate('pequiven_config_chart_evolution_add', {idIndicator: $scope.id_indicator});
+                }
                 notificationBarService.getLoadStatus().loading();
                 return $http({
                     method: 'POST',
@@ -2095,7 +2094,7 @@ angular.module('seipModule.controllers', [])
                     }
                 ];
                 $scope.templateOptions.setTemplate($scope.templates[0]);
-            };            
+            };
         })
         .controller('IndicatorLastPeriodController', function ($scope, notificationBarService, $http, notifyService, $filter) {
 
@@ -2124,13 +2123,13 @@ angular.module('seipModule.controllers', [])
             var addLastPeriod = function (save, successCallBack) {
                 var formValueIndicator = angular.element('#form_asoc_last_period');
                 var formData = formValueIndicator.serialize();
-                
+
                 if (save == undefined) {
                     var save = false;
                 }
                 if (save == true) {
-                    var url = Routing.generate('pequiven_indicator_last_period', {idIndicator: $scope.id_indicator });
-                } 
+                    var url = Routing.generate('pequiven_indicator_last_period', {idIndicator: $scope.id_indicator});
+                }
                 notificationBarService.getLoadStatus().loading();
                 return $http({
                     method: 'POST',
@@ -2193,8 +2192,8 @@ angular.module('seipModule.controllers', [])
         })
         .controller('EvolutionIndicatorFilters', function ($scope, ngTableParams, $http, sfTranslator, notifyService) {
             //console.log($scope.id_indicator);
-            var selectLastPeriod = angular.element ("#selectLastPeriod");
-            var selectCausesEvolution = angular.element ("#selectCausesEvolution");
+            var selectLastPeriod = angular.element("#selectLastPeriod");
+            var selectCausesEvolution = angular.element("#selectCausesEvolution");
             $scope.data = {
                 lastPeriod: null,
                 causesEvolution: null
@@ -2204,9 +2203,9 @@ angular.module('seipModule.controllers', [])
                 causesEvolution: null
             };
             //Carga de los indicadores para la relación con el periodo 2014
-            $scope.getLastPeriod = function(){
+            $scope.getLastPeriod = function () {
                 var parameters = {
-                    filter:{}
+                    filter: {}
                 }
             }
             $http.get(Routing.generate('pequiven_arrangementprogram_datasig_indicator_lastperiod'))
@@ -2217,14 +2216,14 @@ angular.module('seipModule.controllers', [])
                                 $scope.model.lastPeriod = selected;
                             });
                         }
-                   });            
+                    });
             //Carga las causas de desviación del indicador
-            $scope.getCausesEvolution = function(){
+            $scope.getCausesEvolution = function () {
                 var parameters = {
-                    filter:{}
+                    filter: {}
                 }
             }
-            $http.get(Routing.generate('pequiven_sig_causes_indicator_evolution', {idIndicator: $scope.id_indicator }))
+            $http.get(Routing.generate('pequiven_sig_causes_indicator_evolution', {idIndicator: $scope.id_indicator}))
                     .success(function (data) {
                         $scope.data.causesEvolution = data;
                         if ($scope.model.causesEvolution != null) {
@@ -2234,7 +2233,7 @@ angular.module('seipModule.controllers', [])
                         }
                     });
             //Scope lastPeriod
-             $scope.$watch("model.lastPeriod", function (newParams, oldParams) {
+            $scope.$watch("model.lastPeriod", function (newParams, oldParams) {
                 if ($scope.model.lastPeriod != null && $scope.model.lastPeriod.id != undefined) {
                     $scope.tableParams.$params.filter['LastPeriod'] = $scope.model.lastPeriod.id;
                 } else {
@@ -2242,7 +2241,7 @@ angular.module('seipModule.controllers', [])
                 }
             });
             //Scope CausesEvolution
-             $scope.$watch("model.causesEvolution", function (newParams, oldParams) {
+            $scope.$watch("model.causesEvolution", function (newParams, oldParams) {
                 if ($scope.model.causesEvolution != null && $scope.model.causesEvolution.id != undefined) {
                     $scope.tableParams.$params.filter['CausesEvolution'] = $scope.model.causesEvolution.id;
                 } else {
@@ -2251,12 +2250,61 @@ angular.module('seipModule.controllers', [])
             });
         })
         //Fin controladores SIG
-        
+
 
         .controller('ReportTemplateController', function ($scope, notificationBarService, $http, notifyService, $filter) {
 
         })
 
+        .controller('MeetingController', function ($scope, $http) {
+            //$scope.urlUploadFileForm = null;
+            $scope.idMeeting = null;
+            var isInit = false;
+
+            $scope.loadUploadFileMetting = function (resource) {
+                $scope.initFormUpload(resource);
+                if (isInit == false) {
+                    isInit = true;
+                }
+                $scope.templateOptions.setTemplate($scope.templates[0]);
+                $scope.templateOptions.setParameterCallBack(resource);
+
+                if (resource) {
+                    $scope.templateOptions.enableModeEdit();
+                    $scope.openModalAuto();
+                } else {
+                    $scope.openModalAuto();
+                }
+            };
+
+            $scope.initFormUpload = function (resource) {
+                var d = new Date();
+                var numero = d.getTime();
+
+                var parameters = {
+                    idMeeting: $scope.idMeeting,
+                    _dc: numero
+                };
+
+                if (resource) {
+                    parameters.id = resource.id;
+                }
+                var url = Routing.generate('pequiven_meeting_upload_form', parameters);
+
+                $scope.templates = [
+                    {
+                        name: 'Cargar Archivos',
+                        url: url
+                    }
+                ];
+                $scope.templateOptions.setTemplate($scope.templates[0]);
+            };
+
+            var initCallBack = function () {
+                return false;
+            };
+
+        })
 
         .controller('IndicatorResultController', function ($scope, notificationBarService, $http, notifyService, $filter) {
 
@@ -2492,6 +2540,7 @@ angular.module('seipModule.controllers', [])
                 var url = Routing.generate('pequiven_value_indicator_show_detail', {id: valueIndicator.id, numResult: (numResult + 1)});
                 return url;
             };
+
             $scope.openPopUp = function (url) {
                 var horizontalPadding = 10;
                 var verticalPadding = 10;
@@ -2511,6 +2560,7 @@ angular.module('seipModule.controllers', [])
                     }
                 }).width(width - horizontalPadding).height(heigth - verticalPadding);
             };
+
         })
         .controller("MainContentController", function ($scope, notificationBarService, sfTranslator, $timeout) {
 
@@ -3011,21 +3061,21 @@ angular.module('seipModule.controllers', [])
                             }
                         });
             };
-            
+
             //Busca las localidades
             $scope.getCoordinators = function () {
                 var parameters = {
                     filter: {}
                 };
                 $http.get(Routing.generate('pequiven_work_study_circle_coordinators', parameters))
-                    .success(function (data) {
-                        $scope.data.coordinators = data;
-                        if ($scope.model.coordinator != null) {
-                            $scope.setValueSelect2("selectCoordinators", $scope.model.coordinator, $scope.data.coordinators, function (selected) {
-                                $scope.model.coordinator = selected;
-                            });
-                        }
-                    });
+                        .success(function (data) {
+                            $scope.data.coordinators = data;
+                            if ($scope.model.coordinator != null) {
+                                $scope.setValueSelect2("selectCoordinators", $scope.model.coordinator, $scope.data.coordinators, function (selected) {
+                                    $scope.model.coordinator = selected;
+                                });
+                            }
+                        });
             };
 
             $scope.getComplejos();
@@ -3069,7 +3119,7 @@ angular.module('seipModule.controllers', [])
                     $scope.tableParams.$params.filter['secondLineManagement'] = null;
                 }
             });
-            
+
             //Scope de Coordinadores
             $scope.$watch("model.coordinator", function (newParams, oldParams) {
                 if ($scope.model.coordinator != null) {
@@ -3268,7 +3318,7 @@ angular.module('seipModule.controllers', [])
             var selectInclude = angular.element('#includeGerenciaSecondSupport');
             var sectionExcludeGerenciaSecondSupport = angular.element("#sectionExcludeGerenciaSecondSupport");
             var sectionIncludeGerenciaSecondSupport = angular.element("#sectionIncludeGerenciaSecondSupport");
-            var selectManagementSystems = angular.element ("#selectManagementSystems");
+            var selectManagementSystems = angular.element("#selectManagementSystems");
             $scope.data = {
                 complejos: null,
                 first_line_managements: null,
@@ -3291,9 +3341,9 @@ angular.module('seipModule.controllers', [])
             };
             $scope.initPage();
             //Carga de Sistemas de Calidad
-            $scope.getManagementSystems = function(){
+            $scope.getManagementSystems = function () {
                 var parameters = {
-                    filter:{}
+                    filter: {}
                 }
             }
             $http.get(Routing.generate('pequiven_arrangementprogram_data_management_system'))
@@ -3319,7 +3369,7 @@ angular.module('seipModule.controllers', [])
                                 });
                             }
                         });
-            };            
+            };
             //Busca las Gerencias de 1ra Línea
             $scope.getFirstLineManagement = function (complejo) {
                 var parameters = {
@@ -3486,7 +3536,7 @@ angular.module('seipModule.controllers', [])
                 }
             });
             //Scope ManagementSystems
-             $scope.$watch("model.managementSystem", function (newParams, oldParams) {
+            $scope.$watch("model.managementSystem", function (newParams, oldParams) {
                 if ($scope.model.managementSystem != null && $scope.model.managementSystem.id != undefined) {
                     $scope.tableParams.$params.filter['managementSystems'] = $scope.model.managementSystem.id;
                 } else {
@@ -3673,7 +3723,12 @@ angular.module('seipModule.controllers', [])
             };
         })
 
-        //Controlador para los gráficos a mostrar en el dashboard del indicador
+
+
+
+
+
+//Controlador para los gráficos a mostrar en el dashboard del indicador
         .controller('ChartsDashboardController', function ($scope, $http) {
 
 //        var month = 0;
@@ -5189,12 +5244,12 @@ angular.module('seipModule.controllers', [])
         //Controlador Graficos SIG
         .controller('ChartsSigController', function ($scope, ngTableParams, $http, sfTranslator, notifyService) {
 
-        //Charts SIG - Evolution
-        $scope.renderChartEvolutionSig = function (id, data, categories, dataPlan, dataReal, dataAcum, dataPorc, caption, typeLabelDisplay) {
+            //Charts SIG - Evolution
+            $scope.renderChartEvolutionSig = function (id, data, categories, dataPlan, dataReal, dataAcum, dataPorc, caption, typeLabelDisplay) {
                 FusionCharts.ready(function () {
                     var revenueChart = new FusionCharts({
                         //"type": "mscolumn3dlinedy",
-                        "type": "mscolumnline3d",                        
+                        "type": "mscolumnline3d",
                         "renderAt": id,
                         "width": "95%",
                         "height": "300%",
@@ -5207,16 +5262,16 @@ angular.module('seipModule.controllers', [])
                             "chart": data.dataSource.chart,
                             "categories": data.dataSource.categories,
                             "dataset": data.dataSource.dataset
-                        }                        
+                        }
                     });
                     revenueChart.setTransparent(true);
                     revenueChart.render();
                 })
             };
-        //FIN
+            //FIN
 
-        //Charts SIG - Causas de Desviación
-       $scope.renderChartSigCs = function (id, data, categories, dataCause, caption, typeLabelDisplay) {
+            //Charts SIG - Causas de Desviación
+            $scope.renderChartSigCs = function (id, data, categories, dataCause, caption, typeLabelDisplay) {
                 FusionCharts.ready(function () {
                     var revenueChart = new FusionCharts({
                         "type": "stackedbar3d",
@@ -5230,9 +5285,41 @@ angular.module('seipModule.controllers', [])
                         "html5exporthandler": "http://107.21.74.91/",
                         "dataFormat": "json",
                         "dataSource": {
-                            "chart": data.dataSource.chart,
-                            "categories": data.dataSource.categories,
-                            "dataset": [ data.dataSource.dataset,
+                            "chart": {
+                                "caption": "Gráfico Causas de Desviación",
+                                "subCaption": "Periodo - 2015",
+                                //"exportFormats": "PNG= Exportar como PNG|PDF= Exportar como PDF",                                
+                                //"xAxisName": Translator.trans('chart.arrangementPrograms.xAxisName'),
+                                //"pYAxisName": Translator.trans('chart.arrangementPrograms.pYAxisName'),
+                                //"sYAxisName": Translator.trans('chart.arrangementPrograms.sYAxisName'),
+                                "YAxisMaxValue": "100",
+                                //"xYAxisMaxValue": "100",
+                                //"pYAxisMaxValue": "100",
+                                //"yYAxisMaxValue": "100",                                
+                                //"sYAxisMinValue": "0",
+                                //"showValues": "1",
+                                //"placeValuesInside": "0",
+                                "valueFontColor": "#000000",
+                                "showvalues": "1",
+                                //"rotateValues": "0",
+                                //"labelDisplay": typeLabelDisplay,
+                                //"sNumberSuffix": "%",
+                                "showSum": "1",
+                                "numberSuffix": "%",
+                                "bgAlpha": "0,0",
+                                "baseFontColor": "#ffffff",
+                                "outCnvBaseFontColor": "#000000",
+                                "visible": "0",
+                                "theme": "fint",
+                                //"formatNumberScale": "0",
+                                "snumbersuffix": "%",
+                                "decimals": "3",
+                                "setadaptiveymin": "1",
+                                "setadaptivesymin": "1",
+                                "linethickness": "5",
+                                "showborder": "0"
+                            }, "categories": data.dataSource.categories,
+                            "dataset": [data.dataSource.dataset,
                             ]
                         }
                     });
@@ -5240,7 +5327,7 @@ angular.module('seipModule.controllers', [])
                     revenueChart.render();
                 })
             };
-        //FIN
+            //FIN
         })
         //
 

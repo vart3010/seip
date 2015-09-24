@@ -14,6 +14,7 @@ class MeetingType extends AbstractType {
      * @param array $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options) {
+
         $builder
                 ->add('date', 'date', [
                     'label_attr' => array('class' => 'label bold'),
@@ -35,14 +36,14 @@ class MeetingType extends AbstractType {
                     'label' => 'Observaciones',
                     'required' => false,
                     'label_attr' => array('class' => 'label'),
-                    'attr' => array('class' => 'input input-xlarge', 'style' => 'text-transform:uppercase;')))
-                ->add('duration', 'time', array(
-                    'label' => 'Duración',
-                    'required' => true,
-                    'label_attr' => array('class' => 'label'),
-                    'attr' => array('class' => 'input', 'style' => 'text-transform:uppercase;')))
-
-        ;
+                    'attr' => array('class' => 'input input-xlarge', 'style' => 'text-transform:uppercase;')));
+        
+            $builder->add('duration', 'time', array(
+                'label' => 'Duración',
+                'required' => true,
+                'label_attr' => array('class' => 'label'),
+                'attr' => array('class' => 'input', 'style' => 'text-transform:uppercase;')));
+        
     }
 
     /**

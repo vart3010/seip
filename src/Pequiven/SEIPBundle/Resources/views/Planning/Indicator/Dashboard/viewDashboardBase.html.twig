@@ -1,3 +1,5 @@
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
+
 {% trans_default_domain 'PequivenSEIPBundle' %}
 <!-- Sección de las Líneas Estratégicas -->
 <div class="row-fluid">
@@ -166,6 +168,19 @@
 {#                    <span class="tag red-bg with-tooltip">{{ ('pequiven_indicator.empty'|trans({},'PequivenIndicatorBundle')) }}</span>#}
                 {% endif %}
             {% endif %}
+            <p class="button-height align-right">
+
+            {# Visualizacion de Indice de evolucion #}
+              {% set month = "now"|date("m") %}
+
+                {% if  indicator.managementSystems | length > 0 and is_granted('ROLE_SEIP_SIG_EVOLUTION_VIEW') %}
+                &nbsp;
+                    {{ buttons.generic_ext(path('pequiven_indicator_evolution', { 'id': indicator.id , 'month': month}),('pequiven.evolution'|trans({},'messages'))) }}
+                {% endif %}
+                &nbsp;
+
+            {# end #}
+            </p>
         </div>
     </div>
 </div>
