@@ -6,6 +6,15 @@ pequiven_meeting_create:
     options:
         expose: true
         
+pequiven_meeting_list:
+    path: /list.{_format}
+    defaults:
+        _controller: pequiven.controller.meeting:listAction  
+        _format: html
+    requirements:
+        _format: html|json|xml
+    methods: [GET]   
+    
 pequiven_meeting_edit:
     path: /edit/{meeting_id}
     defaults:
@@ -53,6 +62,7 @@ pequiven_meeting_upload_form:
         _format: html|json
     methods: [GET|POST]
     options:
-        expose: true   
+        expose: true
+        
         
         

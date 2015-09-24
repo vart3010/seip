@@ -405,7 +405,7 @@ sylius_resource:
             templates: PequivenSEIPBundle:Politic/Meeting
             classes:
                 controller: Pequiven\SEIPBundle\Controller\Politic\MeetingController
-                model: Pequiven\SEIPBundle\Entity\Politic\Proposal
+                model: Pequiven\SEIPBundle\Entity\Politic\Meeting
                 repository: Pequiven\SEIPBundle\Repository\Politic\MeetingRepository
         pequiven.assistance:
             driver: doctrine/orm
