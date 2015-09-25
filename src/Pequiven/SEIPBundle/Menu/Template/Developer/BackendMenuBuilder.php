@@ -1309,16 +1309,6 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
             $menuWorkStudyCircles->addChild($workStudyCirclesStrategicPlan);
         }
 
-        if ($this->isGranted(array('ROLE_SEIP_WORK_STUDY_CIRCLES_NOTIFICATION'))) {
-            $workStudyCirclesNotification = $this->factory->createItem('work_study_circles.notification', $this->getSubLevelOptions(array(
-                                "route" => "",
-                                'labelAttributes' => array('icon' => 'fa fa-pencil-square-o',),
-                            ))
-                    )->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.notification', $section)));
-
-            $menuWorkStudyCircles->addChild($workStudyCirclesNotification);
-        }
-
         $menu->addChild($menuWorkStudyCircles);
     }
 

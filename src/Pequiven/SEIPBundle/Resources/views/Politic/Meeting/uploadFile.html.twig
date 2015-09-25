@@ -1,11 +1,15 @@
 {% trans_default_domain 'workStudyCircle' %}
-
+{{ data }}
 <fieldset class="fieldset">
     <legend class="legend">{{ "workStudyCircle.files.add"|trans }}</legend>
     <div class="new-row-mobile twelve-columns-mobile twelve-columns-tablet twelve-columns-mobile">
         <p class="inline-label">
-            <label class="label">Archivos Adjuntos</label>
+            <label class="label">{{ "workStudyCircle.files.file"|trans }}</label>
             <input type="file">
+        </p>
+        <p class="inline-label">
+            <label class="label">{{ "workStudyCircle.files.category"|trans }}</label>
+            categoria
         </p>
     </div>
 </fieldset>
