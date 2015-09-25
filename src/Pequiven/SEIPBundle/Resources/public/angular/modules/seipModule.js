@@ -293,6 +293,7 @@ angular.module('seipModule.controllers', [])
                 }
             };
             managementSystem.on('change', function (e) {
+                console.log(e.val);
                 if (e.val) {
                     var managementSystemId = e.val;
                     tacticalObjective.find('option').remove().end();
