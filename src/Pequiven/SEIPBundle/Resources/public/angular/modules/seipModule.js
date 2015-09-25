@@ -5,7 +5,8 @@ var seipModule = angular.module('seipModule', [
     'ngRoute',
     'seipModule.controllers',
     'notificationBarModule',
-    'ngCookies'
+    'ngCookies',
+    'base64'
 ]);
 seipModule
         .filter('myNumberFormat', function () {
@@ -3140,6 +3141,17 @@ angular.module('seipModule.controllers', [])
             });
         })
 
+        .controller('TableDocumentController', function ($scope, ngTableParams, $http, sfTranslator, notifyService) {
+            
+//            var test = $base64.encode("victor");
+//            console.log($base64.decode(test));
+//            
+//            $scope.decode = function() {
+//                
+//            };
+            
+        })
+
         .controller('TableProposalController', function ($scope, ngTableParams, $http, sfTranslator, notifyService) {
             var selectComplejo = angular.element("#selectComplejos");
             var selectFirstLineManagement = angular.element("#selectFirstLineManagement");
@@ -5333,33 +5345,8 @@ angular.module('seipModule.controllers', [])
 
         .controller('ChartsProposalController', function ($scope, ngTableParams, $http, sfTranslator, notifyService) {
 
-        //Charts Proposal por linea
-        $scope.renderChartProposal = function (id, data, categories, caption, typeLabelDisplay) {
-                FusionCharts.ready(function () {
-                    var revenueChart = new FusionCharts({
-                        "type": "mscolumn3dlinedy",
-                        //"type": "pie3d",                        
-                        "renderAt": id,
-                        "width": "95%",
-                        "height": "500%",
-                        "exportFormats": "PNG= Exportar como PNG|PDF= Exportar como PDF",
-                        "exportFileName": "",
-                        "exporthandler": "http://107.21.74.91/",
-                        "html5exporthandler": "http://107.21.74.91/",
-                        "dataFormat": "json",
-                        "dataSource": {
-                           "chart": data.dataSource.chart,
-                           "categories": data.dataSource.categories,
-                           "dataset": data.dataSource.dataset
-                        }                        
-                    });
-                    revenueChart.setTransparent(true);
-                    revenueChart.render();
-                })
-            };
-        //FIN        
-        //Charts Proposal por localidad
-        $scope.renderChartProposalLocalidad = function (id, data, categories, caption, typeLabelDisplay) {
+            //Charts Proposal por linea
+            $scope.renderChartProposal = function (id, data, categories, caption, typeLabelDisplay) {
                 FusionCharts.ready(function () {
                     var revenueChart = new FusionCharts({
                         "type": "mscolumn3dlinedy",
@@ -5376,13 +5363,38 @@ angular.module('seipModule.controllers', [])
                             "chart": data.dataSource.chart,
                             "categories": data.dataSource.categories,
                             "dataset": data.dataSource.dataset
-                        }                        
+                        }
                     });
                     revenueChart.setTransparent(true);
                     revenueChart.render();
                 })
-            };        
-        //FIN
+            };
+            //FIN        
+            //Charts Proposal por localidad
+            $scope.renderChartProposalLocalidad = function (id, data, categories, caption, typeLabelDisplay) {
+                FusionCharts.ready(function () {
+                    var revenueChart = new FusionCharts({
+                        "type": "mscolumn3dlinedy",
+                        //"type": "pie3d",                        
+                        "renderAt": id,
+                        "width": "95%",
+                        "height": "500%",
+                        "exportFormats": "PNG= Exportar como PNG|PDF= Exportar como PDF",
+                        "exportFileName": "",
+                        "exporthandler": "http://107.21.74.91/",
+                        "html5exporthandler": "http://107.21.74.91/",
+                        "dataFormat": "json",
+                        "dataSource": {
+                            "chart": data.dataSource.chart,
+                            "categories": data.dataSource.categories,
+                            "dataset": data.dataSource.dataset
+                        }
+                    });
+                    revenueChart.setTransparent(true);
+                    revenueChart.render();
+                })
+            };
+            //FIN
         })
 
         .controller('ProductionController', function ($scope, ngTableParams, $http, sfTranslator, notifyService) {
