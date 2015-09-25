@@ -102,20 +102,16 @@
             {% set users = workStudyCircle.userWorkerId %}
             {% set count = 0 %}
             {% for miembro in users %}
-
-
-                {% if (userCreatedId != miembro.id) %}
-                    {% set count= count + 1%}
-                    <tr>
-                        <td width="5%" >  </td>                        
-                    </tr>
-                    <tr>
-                        <td width="5%" > {{ count }} </td>
-                        <td width="15%" > {{ miembro.getIndentification|number_format(0, ',', '.') }} </td>
-                        <td width="50%" > {{ miembro.firstname | ucwords}} {{ miembro.lastname | ucwords}}</td>
-                        <td width="30%"  style="text-align: center"> _____________________ </td>                       
-                    </tr>                    
-                {% endif %}
+                {% set count= count + 1%}
+                <tr>
+                    <td width="5%" >  </td>                        
+                </tr>
+                <tr>
+                    <td width="5%" > {{ count }} </td>
+                    <td width="15%" > {{ miembro.getIndentification|number_format(0, ',', '.') }} </td>
+                    <td width="50%" > {{ miembro.firstname | ucwords}} {{ miembro.lastname | ucwords}}</td>
+                    <td width="30%"  style="text-align: center"> _____________________ </td>
+                </tr>
             {% endfor %}
         </tbody>
     </table>
