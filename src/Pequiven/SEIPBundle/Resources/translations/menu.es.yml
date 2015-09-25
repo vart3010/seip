@@ -211,5 +211,7 @@ app:
                         visualize: Visualizar
                         general: General
                         list: Lista
+                        documents: Documentos
                         meeting: Reuniones
+
                             

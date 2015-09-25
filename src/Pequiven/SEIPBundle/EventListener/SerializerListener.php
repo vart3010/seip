@@ -50,6 +50,7 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializePlantReport', 'class' => 'Pequiven\SEIPBundle\Entity\DataLoad\PlantReport', 'format' => 'json'),
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeWorkStudyCircle', 'class' => 'Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle', 'format' => 'json'),
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeProposal', 'class' => 'Pequiven\SEIPBundle\Entity\Politic\Proposal', 'format' => 'json'),
+            array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeWorkStudyCircleFile', 'class' => 'Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircleFile', 'format' => 'json'),
         );
     }
 
@@ -652,6 +653,20 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
         $links['self']['show'] = $this->generateUrl('pequiven_proposal_show', array('id' => $object->getId()));
         
         $event->getVisitor()->addData('_links', $links);
+    }
+    
+    public function onPostSerializeWorkStudyCircleFile(ObjectEvent $event) {
+        $object = $event->getObject();
+        
+        
+        $nameOriginal = $object->getNameFile();
+        
+//        $links['self']['show'] = $this->generateUrl('pequiven_proposal_show', array('id' => $object->getId()));
+        $links['self']['show'] = $this->generateUrl('pequiven_work_study_circle_download_file', array('id' => $object->getId()));
+        
+        
+        $event->getVisitor()->addData('_links', $links);
+        $event->getVisitor()->addData('nameOriginal', $nameOriginal);
     }
     
 

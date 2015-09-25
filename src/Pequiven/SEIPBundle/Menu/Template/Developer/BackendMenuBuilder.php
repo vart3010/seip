@@ -154,8 +154,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                             'labelAttributes' => array('icon' => 'fa fa-cubes',),
                         ))
                 )
-                ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.main', $section)));
-            
+                ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.main', $section)));            
                 //Menú Nivel 2: Visualizar
                 $objective = $this->factory->createItem('objective.main',
                         $this->getSubLevelOptions(array(
@@ -218,7 +217,6 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                 
                 $menuSig->addChild($indicator);
                 //Fin indicadores
-
 
         //Sección Programas de Gestión
         $arrangementProgram = $this->factory->createItem('arrangement_program.main', $this->getSubLevelOptions(array(
@@ -1237,10 +1235,10 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
         }
         if ($this->isGranted(array('ROLE_SEIP_WORK_STUDY_CIRCLES_VIEW_REPORT'))) {
             $workStudyCirclesReports = $this->factory->createItem('work_study_circles.reports', $this->getSubLevelOptions(array(
-                "route" => "",
-                'labelAttributes' => array('icon' => 'fa fa-table',),
-                ))
-                )->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.reports', $section)));            
+                                "route" => "",
+                                'labelAttributes' => array('icon' => 'fa fa-table',),
+                            ))
+                    )->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.reports', $section)));
             //Menú Nivel 2: Visualizar
             $workStudyCirclesReports->addChild('work_study_circles.list', array(
                         'route' => 'pequiven_work_study_circle_list',
@@ -1292,6 +1290,33 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                     ->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.general', $section)));
 
             $menuWorkStudyCircles->addChild($workStudyCirclesStrategicPlan);
+        }
+
+        if ($this->isGranted(array('ROLE_SEIP_WORK_STUDY_CIRCLES_DOCUMENTS_*'))) {
+            $workStudyCirclesStrategicPlan = $this->factory->createItem('work_study_circles.documents', $this->getSubLevelOptions(array(
+                                'route' => '',
+                                'labelAttributes' => array('icon' => 'fa fa-file-pdf-o',),
+                            ))
+                    )->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.documents', $section)));
+
+            if ($this->isGranted(array('ROLE_SEIP_WORK_STUDY_CIRCLES_DOCUMENTS_LIST'))) {
+                $workStudyCirclesStrategicPlan->addChild('work_study_circles.list', array(
+                            'route' => 'pequiven_work_study_circle_document_list',
+                        ))
+                        ->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.list', $section)));
+            }
+
+            $menuWorkStudyCircles->addChild($workStudyCirclesStrategicPlan);
+        }
+
+        if ($this->isGranted(array('ROLE_SEIP_WORK_STUDY_CIRCLES_NOTIFICATION'))) {
+            $workStudyCirclesNotification = $this->factory->createItem('work_study_circles.notification', $this->getSubLevelOptions(array(
+                                "route" => "",
+                                'labelAttributes' => array('icon' => 'fa fa-pencil-square-o',),
+                            ))
+                    )->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.notification', $section)));
+
+            $menuWorkStudyCircles->addChild($workStudyCirclesNotification);
         }
 
         $menu->addChild($menuWorkStudyCircles);
