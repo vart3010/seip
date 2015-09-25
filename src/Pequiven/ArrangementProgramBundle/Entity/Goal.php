@@ -154,7 +154,7 @@ class Goal implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface
      * @var float
      * @ORM\Column(name="resultModified",type="float")
      */
-    protected $resultModified = 0; 
+    protected $resultModified = 0;
    
     public function __construct() {
         $this->responsibles = new \Doctrine\Common\Collections\ArrayCollection();
