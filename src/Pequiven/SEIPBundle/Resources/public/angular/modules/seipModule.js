@@ -5,8 +5,7 @@ var seipModule = angular.module('seipModule', [
     'ngRoute',
     'seipModule.controllers',
     'notificationBarModule',
-    'ngCookies',
-    'base64'
+    'ngCookies'
 ]);
 seipModule
         .filter('myNumberFormat', function () {
