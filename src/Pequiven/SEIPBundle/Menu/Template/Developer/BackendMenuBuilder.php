@@ -154,94 +154,70 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                             'labelAttributes' => array('icon' => 'fa fa-cubes',),
                         ))
                 )
-                ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.main', $section)));
-
-        //Menú Nivel 2: Visualizar
-        $objective = $this->factory->createItem('objective.main', $this->getSubLevelOptions(array(
-                            'uri' => 'objetive',
-                            'labelAttributes' => array('icon' => '',),
+                ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.main', $section)));            
+                //Menú Nivel 2: Visualizar
+                $objective = $this->factory->createItem('objective.main',
+                        $this->getSubLevelOptions(array(
+                        'uri' => 'objetive',
+                        'labelAttributes' => array('icon' => '',),
                         ))
-                )->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.objective.main', $section)));
-        //Ver 
-        $objective->addChild('sig.objective.list', array(
-                    'route' => '',
-                ))
-                ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.objective.visualize', $section)));
+                    )->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.objective.main', $section)));
+               //Ver 
+                $objective->addChild('sig.objective.list', array(
+                        'route' => '',
+                    ))
+                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.objective.visualize', $section)));
 
-        $objective->addChild('sig.objective.matrices_objectives', array(
-                    'route' => '',
-                ))
-                ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.objective.matrices_objectives', $section)));
+                $objective->addChild('sig.objective.matrices_objectives', array(
+                        'route' => '',
+                    ))
+                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.objective.matrices_objectives', $section)));
 
-        $menuSig->addChild($objective);
+                $menuSig->addChild($objective);
 
-        //Indicator                
-        $indicator = $this->factory->createItem('indicator.main', $this->getSubLevelOptions(array(
-                            'uri' => 'indicator',
-                            'labelAttributes' => array('icon' => '',),
+                //Indicator                
+                $indicator = $this->factory->createItem('indicator.main',
+                        $this->getSubLevelOptions(array(
+                        'uri'             => 'indicator',
+                        'labelAttributes' => array('icon' => '',),
                         ))
-                )->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.indicator.main', $section)));
-        //Nivel 2
-        if ($this->isGranted('ROLE_SEIP_SIG_MENU')) {
-            //Ver 
-            $visualize = $this->factory->createItem('sig.indicator.list', $this->getSubLevelOptions(array(
-                                'uri' => 'null',
-                                'labelAttributes' => array('icon' => '',),
-                            ))
+                    )->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.indicator.main', $section)));
+                //Nivel 2
+                if($this->isGranted('ROLE_SEIP_SIG_MENU'))
+                {
+                //Ver 
+                    $visualize = $this->factory->createItem('sig.indicator.list',
+                        $this->getSubLevelOptions(array(
+                        'uri'             => 'null',
+                        'labelAttributes' => array('icon' => '',),
+                    ))
                     )->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.indicator.visualize', $section)));
-            //Nivel 3
-            if ($this->isGranted('ROLE_SEIP_SIG_MENU')) {
-                $visualize->addChild('planning.visualize.indicators.strategic', array(
-                    'route' => 'pequiven_indicatorsig_list',
-                    'routeParameters' => array('level' => \Pequiven\IndicatorBundle\Model\IndicatorLevel::LEVEL_ESTRATEGICO)
-                ))->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.indicators.strategic', $section)));
-            }
-            if ($this->isGranted('ROLE_SEIP_SIG_MENU')) {
-                $visualize->addChild('planning.visualize.indicators.tactic', array(
-                    'route' => 'pequiven_indicatorsig_list',
-                    'routeParameters' => array('level' => \Pequiven\IndicatorBundle\Model\IndicatorLevel::LEVEL_TACTICO)
-                ))->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.indicators.tactic', $section)));
-            }
-            if ($this->isGranted('ROLE_SEIP_SIG_MENU')) {
-                $visualize->addChild('planning.visualize.indicators.operative', array(
-                    'route' => 'pequiven_indicatorsig_list',
-                    'routeParameters' => array('level' => \Pequiven\IndicatorBundle\Model\IndicatorLevel::LEVEL_OPERATIVO)
-                ))->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.indicators.operative', $section)));
-            }
+                    //Nivel 3
+                    if($this->isGranted('ROLE_SEIP_SIG_MENU')){
+                        $visualize->addChild('planning.visualize.indicators.strategic', array(
+                            'route' => 'pequiven_indicatorsig_list',
+                            'routeParameters' => array('level' => \Pequiven\IndicatorBundle\Model\IndicatorLevel::LEVEL_ESTRATEGICO)
+                        ))->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.indicators.strategic', $section)));
+                    }
+                    if($this->isGranted('ROLE_SEIP_SIG_MENU')){
+                        $visualize->addChild('planning.visualize.indicators.tactic', array(
+                            'route' => 'pequiven_indicatorsig_list',
+                            'routeParameters' => array('level' => \Pequiven\IndicatorBundle\Model\IndicatorLevel::LEVEL_TACTICO)
+                        ))->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.indicators.tactic', $section)));
+                    }
+                    if($this->isGranted('ROLE_SEIP_SIG_MENU')){
+                        $visualize->addChild('planning.visualize.indicators.operative', array(
+                            'route' => 'pequiven_indicatorsig_list',
+                            'routeParameters' => array('level' => \Pequiven\IndicatorBundle\Model\IndicatorLevel::LEVEL_OPERATIVO)
+                        ))->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.indicators.operative', $section)));
+                    } 
 
-            $indicator->addChild($visualize);
-        }
-        /*
+                $indicator->addChild($visualize);                
+                }
+                
+                $menuSig->addChild($indicator);
+                //Fin indicadores
 
-          //Menú Nivel 2: Visualizar
-          $objective = $this->factory->createItem('objective.main', $this->getSubLevelOptions(array('uri' => 'objetive',
-          'labelAttributes' => array('icon' => '',),
-          ))
-          )->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.objective.main', $section)));
-          //Ver
-          $objective->addChild('sig.objective.list', array(
-          'route' => '',))
-          ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.objective.visualize', $section)));
-
-          $objective->addChild('sig.objective.matrices_objectives', array(
-          'route' => '',))
-          ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.objective.matrices_objectives', $section)));
-
-          $menuSig->addChild($objective);
-
-          $indicator = $this->factory->createItem('indicator.main', $this->getSubLevelOptions(array(
-          'uri' => 'indicator',
-          'labelAttributes' => array('icon' => '',),
-          ))
-          )->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.indicator.main', $section)));
-          //Ver
-          $indicator->addChild('sig.indicator.list', array(
-          'route' => '',))
-          ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.indicator.visualize', $section)));
-         */
-
-        $menuSig->addChild($indicator);
-        //Fin indicadores
         //Sección Programas de Gestión
         $arrangementProgram = $this->factory->createItem('arrangement_program.main', $this->getSubLevelOptions(array(
                             'uri' => 'arrangement_program',

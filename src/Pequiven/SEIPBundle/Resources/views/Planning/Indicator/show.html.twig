@@ -277,7 +277,8 @@
                 {% endif %}
             </div>
             {# Sistemas de Gestión del Indicador #}
-            {% if  indicator.managementSystems | length > 0 and is_granted('ROLE_SEIP_SIG_EVOLUTION_VIEW') %}
+            {#{% if  indicator.managementSystems | length > 0 and is_granted('ROLE_SEIP_SIG_EVOLUTION_VIEW') %}#}
+            {% if  indicator.managementSystems | length > 0 %}
                 <div class="inline-label">
                         <label class="label">{{ 'form.systems'|trans }}</label>
                         <ul class="fa-ul">
@@ -340,10 +341,10 @@
     {# Visualizacion de Indice de evolucion #}
       {% set month = "now"|date("m") %}
         
-        {% if  indicator.managementSystems | length > 0 and is_granted('ROLE_SEIP_SIG_EVOLUTION_VIEW') %}
+        {#{% if  indicator.managementSystems | length > 0 and is_granted('ROLE_SEIP_SIG_EVOLUTION_VIEW') %}#}
         &nbsp;
             {{ buttons.generic_ext(path('pequiven_indicator_evolution', { 'id': indicator.id , 'month': month}),('pequiven.evolution'|trans({},'messages'))) }}
-        {% endif %}
+        {#{% endif %}#}
         &nbsp;
         
     {# end #}

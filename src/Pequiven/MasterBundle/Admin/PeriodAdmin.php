@@ -45,6 +45,8 @@ class PeriodAdmin extends Admin {
                 ->add('dateEndNotificationArrangementProgram')
                 ->add('dateStartLoadArrangementProgram')
                 ->add('dateEndLoadArrangementProgram')
+                ->add('dateStartLoadSigArrangementProgram')
+                ->add('dateEndLoadSigArrangementProgram')
                 ->add('dateStartLoadObjetive')
                 ->add('dateEndLoadObjetive')
                 ->add('dateStartClearanceNotificationArrangementProgram')
@@ -85,6 +87,8 @@ class PeriodAdmin extends Admin {
                     ->setDateEndNotificationArrangementProgram($dateEnd)
                     ->setDateStartLoadArrangementProgram($dateStart)
                     ->setDateEndLoadArrangementProgram($dateEnd)
+                    ->setDateStartLoadSigArrangementProgram($dateStart)
+                    ->setDateEndLoadSigArrangementProgram($dateEnd)
                     ->setDateStartLoadObjetive($dateStart)
                     ->setDateEndLoadObjetive($dateEnd)
                     ->setDateStartClearanceNotificationArrangementProgram($dateStart)
@@ -134,6 +138,10 @@ class PeriodAdmin extends Admin {
                 ->add('dateStartLoadArrangementProgram', 'sonata_type_date_picker', array(
                 ))
                 ->add('dateEndLoadArrangementProgram', 'sonata_type_date_picker', array(
+                ))
+                ->add('dateStartLoadSigArrangementProgram', 'sonata_type_date_picker', array(
+                ))
+                ->add('dateEndLoadSigArrangementProgram', 'sonata_type_date_picker', array(
                 ))
                 ->add('dateStartLoadObjetive', 'sonata_type_date_picker', array(
                 ))
