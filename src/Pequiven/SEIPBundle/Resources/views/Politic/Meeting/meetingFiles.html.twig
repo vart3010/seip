@@ -1,15 +1,19 @@
 {% trans_default_domain 'workStudyCircle' %}
 
 <div ng-controller="MeetingController">
-    {#    <div class="block" ng-init="idMeeting='{{ meeting.id }}'" >#} 
-    <div class="block" >
+    <div class="block" ng-init="idMeeting='{{ meeting.id }}'" > 
+        {#    <div class="block" >#}
         <div class="block-title" >
             <h3 class="ng-binding">{{ "workStudyCircle.files.attachment"|trans }}</h3>
             <div class="button-group absolute-right compact">
-                {#                <a class="button icon-list-add " ng-click="loadUploadFileMetting()" title="">#}
-                <a class="button icon-list-add " id="clickUploadFile" title="">
-                    {{ "workStudyCircle.files.add"|trans }}&nbsp
-                </a>
+                {% if(is_granted(["ROLE_SEIP_WORK_STUDY_CIRCLES_DOCUMENTS_UPLOAD"])) %}
+                    <a class="button icon-list-add " ng-click="loadUploadFileMetting()" title="">
+                        {{ "workStudyCircle.files.add"|trans }}&nbsp
+                        {# <a class="button icon-list-add " id="clickUploadFile" title="">
+                             {{ "workStudyCircle.files.add"|trans }}&nbsp
+                         </a>#}
+                    </a>
+                {% endif %}
 
                 <form style="display: none" id="forma" action="{{ path('pequiven_meeting_show',{id:meeting.id})}}" method="POST" enctype="multipart/form-data">
                     <input name="fileUpload" id="meetingFilePdf" type="file">

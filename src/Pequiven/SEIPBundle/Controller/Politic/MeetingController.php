@@ -193,12 +193,6 @@ class MeetingController extends SEIPController {
         $idFile = $request->get("id");
         $file = $em->getRepository('PequivenSEIPBundle:Politic\WorkStudyCircleFile')->findOneBy(array('id' => $idFile));
         $workStudyCircle = $file->getWorkStudyCircle();
-        //$metting = $workStudyCircle->getMeeting();
-        //$fileName = $workStudyCircle->getId() . "_" . $file->getNameFile();
-//        $meeting = $em->getRepository('PequivenSEIPBundle:Politic\Meeting')->findOneBy(array('id' => $idMeeting));
-//        $WorkStudyCircle = $meeting->getWorkStudyCircle();
-//        $idFile = $WorkStudyCircle->getWorkStudyCircleFile();
-//        $fileName = $WorkStudyCircle->getId() . "_" . $idMeeting . "_" . $idFile;
 
         $path = \Pequiven\SEIPBundle\Model\Politic\WorkStudyCircleFile::LOCATION_UPLOAD_FILE;
         $name = \Pequiven\SEIPBundle\Model\Politic\WorkStudyCircleFile::NAME_FILE;
@@ -453,25 +447,25 @@ class MeetingController extends SEIPController {
     }
 
     public function uploadFilesAction(Request $request) {
-//$resource = $this->findOr404($request);
+        
+        return $this->render('PequivenSEIPBundle:Politic:Meeting\uploadFile.html.twig', array(
+                'data'=>$request->get("idMeeting")
+        ));
 
-        $band = false;
-//VALIDACION QUE SEA UN ARCHIVO PERMITIDO
-        foreach ($request->files as $file) {
-            if (in_array($file->guessExtension(), \Pequiven\SEIPBundle\Model\Politic\WorkStudyCircleFile::getTypesFile())) {
-                $band = true;
-            }
-        }
-
-
-        if ($band) {
-            var_dump($band);
-            die();
-//$this->createValueIndicatorFile($resource, $request);
-        } else {
-            $this->get('session')->getFlashBag()->add('error', $this->trans('action.messages.InvalidFile', array(), 'PequivenIndicatorBundle'));
-            $this->redirect($this->generateUrl("pequiven_meeting_show", array("id" => $request->get("idMeeting"))));
-        }
+//        $band = false;
+////VALIDACION QUE SEA UN ARCHIVO PERMITIDO
+//        foreach ($request->files as $file) {
+//            if (in_array($file->guessExtension(), \Pequiven\SEIPBundle\Model\Politic\WorkStudyCircleFile::getTypesFile())) {
+//                $band = true;
+//            }
+//        }
+//
+//        if ($band) {
+//            
+//        } else {
+//            $this->get('session')->getFlashBag()->add('error', $this->trans('action.messages.InvalidFile', array(), 'PequivenIndicatorBundle'));
+//            $this->redirect($this->generateUrl("pequiven_meeting_show", array("id" => $request->get("idMeeting"))));
+//        }
     }
 
     /**
@@ -484,7 +478,7 @@ class MeetingController extends SEIPController {
 
         $criteria = $request->get('filter', $this->config->getCriteria());
         $sorting = $request->get('sorting', $this->config->getSorting());
-        $repository = $this->container->get('pequiven.repository.meeting');        
+        $repository = $this->container->get('pequiven.repository.meeting');
         //$repository = $this->getRepository();
 
         if ($this->config->isPaginated()) {
@@ -531,8 +525,7 @@ class MeetingController extends SEIPController {
         return $this->handleView($view);
     }
 
-    public function viewAction()
-    {
+    public function viewAction() {
 
         $em = $this->getDoctrine()->getManager();
 
@@ -545,11 +538,10 @@ class MeetingController extends SEIPController {
 
 
         $dataChart = $workService->getDataChartOfMeetingsData($meeting); //Paso de data        
-        
-        return $this->render('PequivenSEIPBundle:Politic:Meeting\view.html.twig', 
-        array(
-                'data' => $dataChart
-        ));        
+
+        return $this->render('PequivenSEIPBundle:Politic:Meeting\view.html.twig', array(
+                    'data' => $dataChart
+        ));
     }
 
     protected function getWorkStudyCircleService() {

@@ -3140,15 +3140,10 @@ angular.module('seipModule.controllers', [])
             });
         })
 
-        .controller('TableDocumentController', function ($scope, ngTableParams, $http, sfTranslator, notifyService,$base64) {
-            
-//            var test = $base64.encode("victor");
-//            console.log($base64.decode(test));
-//            
-//            $scope.decode = function() {
-//                
-//            };
-            
+        .controller('TableDocumentController', function ($scope, ngTableParams, $http, sfTranslator, notifyService) {
+
+
+
         })
 
         .controller('TableProposalController', function ($scope, ngTableParams, $http, sfTranslator, notifyService) {
@@ -3197,7 +3192,7 @@ angular.module('seipModule.controllers', [])
                 if ($scope.model.complejo != null) {
                     parameters.filter['complejo'] = $scope.model.complejo.id;
                 }
-                
+
                 $http.get(Routing.generate('pequiven_seip_first_line_management', parameters))
                         .success(function (data) {
                             $scope.data.first_line_managements = data;
@@ -3297,7 +3292,7 @@ angular.module('seipModule.controllers', [])
                     //Cambia status enable en segunda linea
                     selectSecondLineManagement.select2("enable", false);
                     selectSecondLineManagement.select2("val", '');
-                }                
+                }
             });
 
             //Scope de Gerencia de 2da Línea
@@ -5436,12 +5431,12 @@ angular.module('seipModule.controllers', [])
         })
         .controller('ChartsMeetingsController', function ($scope, ngTableParams, $http, sfTranslator, notifyService) {
 
-        //Charts Proposal por linea
-        $scope.renderChartMeetings = function (id, data, categories, caption, typeLabelDisplay) {
+            //Charts Proposal por linea
+            $scope.renderChartMeetings = function (id, data, categories, caption, typeLabelDisplay) {
                 FusionCharts.ready(function () {
                     var revenueChart = new FusionCharts({
                         //"type": "mscolumn3dlinedy",
-                        "type": "pie3d",                        
+                        "type": "pie3d",
                         "renderAt": id,
                         "width": "95%",
                         "height": "500%",
@@ -5451,16 +5446,16 @@ angular.module('seipModule.controllers', [])
                         "html5exporthandler": "http://107.21.74.91/",
                         "dataFormat": "json",
                         "dataSource": {
-                           "chart": data.dataSource.chart,
-                           "categories": data.dataSource.categories,
-                           "dataset": data.dataSource.dataset
-                        }                        
+                            "chart": data.dataSource.chart,
+                            "categories": data.dataSource.categories,
+                            "dataset": data.dataSource.dataset
+                        }
                     });
                     revenueChart.setTransparent(true);
                     revenueChart.render();
                 })
             };
-        //FIN   
+            //FIN   
         })
 
         .controller('ProductionController', function ($scope, ngTableParams, $http, sfTranslator, notifyService) {

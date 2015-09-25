@@ -221,6 +221,8 @@ security:
             #DOCUMUENTOS
             - ROLE_SEIP_WORK_STUDY_CIRCLES_DOCUMENTS
             - ROLE_SEIP_WORK_STUDY_CIRCLES_DOCUMENTS_LIST
+            - ROLE_SEIP_WORK_STUDY_CIRCLES_DOCUMENTS_UPLOAD
+            
             
             
             # Permisos especiales
