@@ -157,7 +157,7 @@ security:
             
             - ROLE_SEIP_DATA_LOAD_REPORT
             - ROLE_SEIP_DATA_LOAD_CHANGE_DATE
-            
+            # ROLES SIG
             - ROLE_SEIP_SIG_MENU
             - ROLE_SEIP_SIG_OBJECTIVE
             - ROLE_SEIP_SIG_OBJECTIVE_VIEW
@@ -176,6 +176,9 @@ security:
             - ROLE_SEIP_SIG_INDICATOR_VIEW
             - ROLE_SEIP_SIG_INDICATOR_LIST
             - ROLE_SEIP_SIG_EVOLUTION_VIEW
+            - ROLE_SEIP_SIG_EVOLUTION_ACTION
+            - ROLE_SEIP_SIG_EVOLUTION_DOWNLOAD
+            - ROLE_SEIP_SIG_EVOLUTION_LASTPERIOD
             
             - ROLE_SEIP_OPERATION_LIST_REPORT_PRODUCTION
             - ROLE_SEIP_OPERATION_LIST_REPORT_PRODUCTION_TEMPLATES_ALL
@@ -214,6 +217,10 @@ security:
             - ROLE_SEIP_MEETING_EDIT
             - ROLE_SEIP_MEETING_EDIT_ASSISTANCE
             - ROLE_SEIP_MEETING_EXPORT_REPORT
+            
+            #DOCUMUENTOS
+            - ROLE_SEIP_WORK_STUDY_CIRCLES_DOCUMENTS
+            - ROLE_SEIP_WORK_STUDY_CIRCLES_DOCUMENTS_LIST
             
             
             # Permisos especiales

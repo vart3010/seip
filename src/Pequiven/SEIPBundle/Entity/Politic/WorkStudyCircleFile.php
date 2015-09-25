@@ -9,9 +9,9 @@ use Pequiven\SEIPBundle\Model\Politic\WorkStudyCircleFile as Model;
 /**
  * Archivos de workStudyCircle
  * @author Victor Tortolero <vart10.30@gmail.com>
- * @ORM\Entity()
  * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\Politic\WorkStudyCircleFileRepository")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
+ * @ORM\HasLifecycleCallbacks()
  */
 class WorkStudyCircleFile extends Model {
 

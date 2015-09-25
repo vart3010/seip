@@ -414,3 +414,10 @@ sylius_resource:
                 controller: Pequiven\SEIPBundle\Controller\Politic\AssistanceController
                 model: Pequiven\SEIPBundle\Entity\Politic\Assistance
                 repository: Pequiven\SEIPBundle\Repository\Politic\AssistanceRepository
+        pequiven.workStudyCircleFile:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:Politic/WorkStudyCircle/File
+            classes:
+                controller: Pequiven\SEIPBundle\Controller\Politic\WorkStudyCircleFileController
+                model: Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircleFile
+                repository: Pequiven\SEIPBundle\Repository\Politic\WorkStudyCircleFileRepository
