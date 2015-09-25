@@ -30,6 +30,11 @@ class ProposalRepository extends EntityRepository {
         $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
 
         $queryBuilder->innerJoin('pr.workStudyCircle', 'wsc');
+        
+        //Filtro por descripción
+        if(($description = $criteria->remove('description')) !== null){
+            $queryBuilder->andWhere($queryBuilder->expr()->like('pr.description', "'%".$description."%'"));
+        }
 
         //Filtro Localidad
         if (($complejo = $criteria->remove('complejo')) !== null) {
