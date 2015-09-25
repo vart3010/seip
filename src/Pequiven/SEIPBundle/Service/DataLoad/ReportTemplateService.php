@@ -852,11 +852,17 @@ class ReportTemplateService implements ContainerAwareInterface {
                             $dataSerialized[$plantReport->getId()]['plan'] = $dataSerialized[$plantReport->getId()]['plan'] + $valuePlan;
                         }
                         for($month = 1; $month < $monthSearch; $month++){
-                            $dataSerialized[$plantReport->getId()]['real'] = $dataSerialized[$plantReport->getId()]['real'] + array_key_exists($month, $productDetailDailyMonths) == true ? $productDetailDailyMonths[$month]->getTotalGrossReal() : 0;
-                            $dataSerialized[$plantReport->getId()]['plan'] = $dataSerialized[$plantReport->getId()]['plan'] + array_key_exists($month, $productDetailDailyMonths) == true ? $productDetailDailyMonths[$month]->getTotalGrossPlan() : 0;
+                            $dataSerialized[$plantReport->getId()]['real']+= array_key_exists($month, $productDetailDailyMonths) == true ? $productDetailDailyMonths[$month]->getTotalGrossReal() : 0;
+                            $dataSerialized[$plantReport->getId()]['plan']+= array_key_exists($month, $productDetailDailyMonths) == true ? $productDetailDailyMonths[$month]->getTotalGrossPlan() : 0;
+//                            if($productReport->getId() == 1){
+//                                var_dump($dataSerialized[$plantReport->getId()]['plan']);
+//                                var_dump($productDetailDailyMonths[$month]->getTotalGrossPlan());
+//                                var_dump($month);
+//                            }
                         }
                     }
                 }
+//                die();
                 
                 if($dataSerialized[$plantReport->getId()]['plan'] > 0){
                     $dataSerialized[$plantReport->getId()]['compliance'] = ($dataSerialized[$plantReport->getId()]['real'] / $dataSerialized[$plantReport->getId()]['plan'])*100;
