@@ -1276,6 +1276,26 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
 
             $menuWorkStudyCircles->addChild($workStudyCirclesReports);
         }
+        //Navegación Reuniones
+        if ($this->isGranted(array('ROLE_SEIP_WORK_STUDY_CIRCLES_MEETING'))) {
+            $workStudyCirclesMeeting = $this->factory->createItem('work_study_circles.meeting', $this->getSubLevelOptions(array(
+                                "route" => "",
+                                'labelAttributes' => array('icon' => 'fa fa-pencil-square-o',),
+                            ))
+                    )->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.meeting', $section)));
+            //Menú Nivel 2: Visualizar
+            $workStudyCirclesMeeting->addChild('work_study_circles.list', array(
+                        'route' => 'pequiven_meeting_list',
+                    ))
+                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.list', $section)));
+
+            $workStudyCirclesMeeting->addChild('work_study_circles.general', array(
+                        'route' => 'pequiven_meeting_view',
+                    ))
+                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.general', $section)));
+            
+            $menuWorkStudyCircles->addChild($workStudyCirclesMeeting);
+        }
         if ($this->isGranted(array('ROLE_SEIP_WORK_STUDY_CIRCLES_STRATEGIC_PLAN'))) {
             $workStudyCirclesStrategicPlan = $this->factory->createItem('work_study_circles.strategic_plan', $this->getSubLevelOptions(array(
                                 'route' => '',

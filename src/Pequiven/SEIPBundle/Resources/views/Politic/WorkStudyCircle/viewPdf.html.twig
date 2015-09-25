@@ -143,24 +143,24 @@
     </table>
 
     <br/><br/>
-    {% set temp="" %}
+    {% for key,value in lineas %}        
+    <table width="100%"> 
+        <tr>
+            <td bgcolor="#F2F2F2" width="100%"><b>Línea Estratégica: </b>{{ key }}</td>
+        </tr>
+    </table>
     {% for prop in proposals %}
-        <table width="100%" class="simple-table responsive-table tables-extras"> 
-            <thead>
+        {% if prop.lineStrategic.description==key %}
+            <table width="100%">
                 <tr>
-                    <th bgcolor="#F2F2F2"><b>Línea Estratégica:</b> {{ prop.lineStrategic.description }}</th>
+                    <td width="100%" style="text-align: justify"><b>Propuesta {{loop.index}}:</b> {{prop.getDescription()|ucwords}}</td>                                
                 </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="alin_font">
-                        - {{ prop.getDescription()}}
-                    </td>                
-                </tr>
-            </tbody>
-        </table>
-        <br/><br/>
-    {% endfor %}
+            </table>
+            <br/><br/>       
+        {% endif %}
+    {% endfor%}
+    <br/>
+{% endfor %} 
 
     <br/>
 

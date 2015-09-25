@@ -124,20 +124,26 @@
                     'icon-download'
                  ) 
             }}
-        &nbsp;        
-        {% set routeConfig2 = path('pequiven_all_meetings_export_pdf',{idWorkStudyCircle:workStudyCircle.id}) %}
-        {% if(is_granted(["ROLE_SEIP_WORK_STUDY_CIRCLES_EXPORT_REPORT"])) %}
-            
-                {{ buttons.generic(
+            &nbsp;        
+            {% set routeConfig3 = path('pequiven_proposal_export_pdf',{idWorkStudyCircle:workStudyCircle.id}) %}
+
+            {{ buttons.generic(
+                    (routeConfig3),
+                    ('workStudyCircle.proposals.exportpdf'|trans({})),
+                    'icon-download'
+                 ) 
+            }}
+            &nbsp;        
+            {% set routeConfig2 = path('pequiven_all_meetings_export_pdf',{idWorkStudyCircle:workStudyCircle.id}) %}
+
+            {{ buttons.generic(
                     (routeConfig2),
                     ('workStudyCircle.meetings.exportpdf'|trans({})),
                     'icon-download'
                  ) 
-                }}
-            </div>
-        {% endif %}
-        
-        
+            }}
+            
+        </div>              
     {% endif %}
 {% endblock %}
 

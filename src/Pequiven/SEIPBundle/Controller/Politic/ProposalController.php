@@ -42,7 +42,7 @@ class ProposalController extends SEIPController {
 
             $proposal1 = strtoupper($request->get("proposal_data")["description1"]);
             $proposal2 = strtoupper($request->get("proposal_data")["description2"]);
-            
+
             if (strlen($proposal1) > 20 && strlen($proposal2) > 20) {
                 $proposals = array();
                 array_push($proposals, $proposal1);
@@ -133,10 +133,10 @@ class ProposalController extends SEIPController {
 
         $id = $request->get('id');
 
-        $proposalData = $em->getRepository('PequivenSEIPBundle:Politic\Proposal')->findOneBy(array('id' => $id));      
-        $idCircle = $proposalData->getWorkStudyCircle()->getId();//Carga de id para el retorno al circulo
-        
-        $form = $this->createForm(new ProposalType, $proposalData);//Para reutilizar en form de la propuesta (El select2)
+        $proposalData = $em->getRepository('PequivenSEIPBundle:Politic\Proposal')->findOneBy(array('id' => $id));
+        $idCircle = $proposalData->getWorkStudyCircle()->getId(); //Carga de id para el retorno al circulo
+
+        $form = $this->createForm(new ProposalType, $proposalData); //Para reutilizar en form de la propuesta (El select2)
         $form->handleRequest($request);
 
         $em->getConnection()->beginTransaction();
@@ -175,8 +175,7 @@ class ProposalController extends SEIPController {
      *  Vista de propuesta
      *
      */
-    public function showAction(request $request)
-    {   
+    public function showAction(request $request) {
         $em = $this->getDoctrine()->getManager();
 
         $id = $request->get('id');
@@ -191,38 +190,58 @@ class ProposalController extends SEIPController {
         ));
     }
 
+    public function exportAction(request $request) {
+        $em = $this->getDoctrine()->getManager();
+        $workStudyCircle = $em->getRepository('PequivenSEIPBundle:Politic\WorkStudyCircle')->findOneBy(array('id' => $request->get("idWorkStudyCircle")));
+        $user = $this->getUser();
+        $proposals = $em->getRepository('PequivenSEIPBundle:Politic\Proposal')->findBy(array('workStudyCircle' => $request->get("idWorkStudyCircle")));
+        $lineStrategics = array();
+
+        //RECORRO LAS PROPUESTAS PARA SACAR LAS LINEAS DE CADA UNA NO IMPORTA SI SE REPITEN
+        foreach ($proposals as $prop) {
+            $lineStrategics[] = $prop->getLineStrategic()->getDescription();
+        }
+
+        //AGRUPO EL ARREGLO POR LINEA, ES DECIR UN REGISTRO POR CADA LINEA QUE TENGA PROPUESTA. 
+        //KEY->DESCRIPCION LINEA y VALUE->FRECUENCIA (CUANTAS VECES SE REPITE)
+        
+        $lineas = array_count_values($lineStrategics);
+
+        $data = array(
+            'workStudyCircle' => $workStudyCircle,
+            'userData' => $user,
+            'proposals' => $proposals,
+            'lineas' => $lineas
+        );
+
+        $this->generatePdf($data, 'Reporte de Propuestas de Círculo de Estudio y Trabajo', 'PequivenSEIPBundle:Politic:Proposal\viewPdf.html.twig');
+    }
 
     /**
      *
      *  Propuestas Vista General
      *
      */
-    public function viewAction(request $request)
-    {   
+    public function viewAction(request $request) {
         $em = $this->getDoctrine()->getManager();
 
         $proposal = $em->getRepository('PequivenSEIPBundle:Politic\Proposal')->findAll();
-       
-        $lineas = $this->get('pequiven.repository.linestrategic')->findAll();//LineasEstrategicas
 
+        $lineas = $this->get('pequiven.repository.linestrategic')->findAll(); //LineasEstrategicas
         //Carga de data de Indicador para armar grafica
         $response = new JsonResponse();
 
         $workService = $this->getWorkStudyCircleService();
 
-        $proposal = $em->getRepository('PequivenSEIPBundle:Politic\Proposal')->findAll();
-        
-        $dataChart = $workService->getDataChartOfProposalData($proposal,$lineas); //Paso de data de la propuesta
-        
+        $dataChart = $workService->getDataChartOfProposalData($proposal, $lineas); //Paso de data de la propuesta
+
         $dataChartLocalidad = $workService->getDataChartOfProposalDataLocalidad($proposal); //Paso de data de la propuesta
-        
-        return $this->render('PequivenSEIPBundle:Politic:Proposal/view.html.twig', 
-        array(
-                'data' => $dataChart,
-                'dataLocalidad' => $dataChartLocalidad
+
+        return $this->render('PequivenSEIPBundle:Politic:Proposal/view.html.twig', array(
+                    'data' => $dataChart,
+                    'dataLocalidad' => $dataChartLocalidad
         ));
     }
-    
 
     /**
      * Lista de Indicadores por nivel(Estratégico, Táctico u Operativo)
@@ -280,9 +299,55 @@ class ProposalController extends SEIPController {
         return $this->handleView($view);
     }
 
+    public function generatePdf($data, $title, $template) {
+        $pdf = new \Pequiven\SEIPBundle\Model\PDF\SeipPdf('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+        $pdf->setPrintLineFooter(false);
+        $pdf->setContainer($this->container);
+        $pdf->setPeriod($this->getPeriodService()->getPeriodActive());
+        $pdf->setFooterText($this->trans('pequiven_seip.message_footer', array(), 'PequivenSEIPBundle'));
+
+// set document information
+        $pdf->SetCreator(PDF_CREATOR);
+        $pdf->SetAuthor('SEIP');
+        $pdf->setTitle($title);
+        $pdf->SetSubject('Resultados SEIP');
+        $pdf->SetKeywords('PDF, SEIP, Resultados');
+
+        $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+        $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+
+// set default monospaced font
+        $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+
+// set margins
+        $pdf->SetMargins(PDF_MARGIN_LEFT, 35, PDF_MARGIN_RIGHT);
+        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+
+// set auto page breaks
+        $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+
+// set image scale factor
+        $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+
+// set font
+//            $pdf->SetFont('times', 'BI', 12);
+// add a page
+        $pdf->AddPage();
+
+// set some text to print
+
+        $html = $this->renderView($template, $data);
+
+// print a block of text using Write()
+        $pdf->writeHTML($html, true, false, true, false, '');
+
+//            $pdf->Output('Reporte del dia'.'.pdf', 'I');
+        $pdf->Output($title . '.pdf', 'D');
+    }
+
     protected function getWorkStudyCircleService() {
         return $this->container->get('seip.service.workStudyCircle');
     }
-    
-}
 
+}

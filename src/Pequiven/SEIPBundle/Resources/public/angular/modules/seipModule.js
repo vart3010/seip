@@ -3155,18 +3155,21 @@ angular.module('seipModule.controllers', [])
         .controller('TableProposalController', function ($scope, ngTableParams, $http, sfTranslator, notifyService) {
             var selectComplejo = angular.element("#selectComplejos");
             var selectFirstLineManagement = angular.element("#selectFirstLineManagement");
+            var selectSecondLineManagement = angular.element("#selectSecondLineManagement");
             var selectWorkStudyCircle = angular.element("#selectWorkStudyCircle");
             var selectLineStrategic = angular.element("#selectLineStrategic");
 
             $scope.data = {
                 complejos: null,
                 first_line_managements: null,
+                second_line_managements: null,
                 work_study_circles: null,
                 line_strategics: null,
             };
             $scope.model = {
                 complejo: null,
                 firstLineManagement: null,
+                secondLineManagement: null,
                 workStudyCircle: null,
                 lineStrategic: null,
             };
@@ -3195,12 +3198,33 @@ angular.module('seipModule.controllers', [])
                 if ($scope.model.complejo != null) {
                     parameters.filter['complejo'] = $scope.model.complejo.id;
                 }
+                
                 $http.get(Routing.generate('pequiven_seip_first_line_management', parameters))
                         .success(function (data) {
                             $scope.data.first_line_managements = data;
                             if ($scope.model.firstLineManagement != null) {
                                 $scope.setValueSelect2("firstLineManagement", $scope.model.firstLineManagement, $scope.data.first_line_managements, function (selected) {
                                     $scope.model.firstLineManagement = selected;
+                                });
+                            }
+                        });
+            };
+
+            //Busca las Gerencias de 2da Línea
+            $scope.getSecondLineManagement = function (gerencia) {
+                var parameters = {
+                    filter: {}
+                };
+                if ($scope.model.firstLineManagement != null) {
+                    parameters.filter['gerencia'] = $scope.model.firstLineManagement.id;
+                }
+
+                $http.get(Routing.generate('pequiven_seip_second_line_management', parameters))
+                        .success(function (data) {
+                            $scope.data.second_line_managements = data;
+                            if ($scope.model.secondLineManagement != null) {
+                                $scope.setValueSelect2("secondLineManagement", $scope.model.secondLineManagement, $scope.data.second_line_managements, function (selected) {
+                                    $scope.model.secondLineManagement = selected;
                                 });
                             }
                         });
@@ -3264,13 +3288,28 @@ angular.module('seipModule.controllers', [])
             $scope.$watch("model.firstLineManagement", function (newParams, oldParams) {
                 if ($scope.model.firstLineManagement != null && $scope.model.firstLineManagement.id != undefined) {
                     $scope.tableParams.$params.filter['firstLineManagement'] = $scope.model.firstLineManagement.id;
+                    selectSecondLineManagement.select2("enable", true);
                     //Al cambiar la gerencia de 1ra línea
                     selectFirstLineManagement.change(function () {
+                        selectSecondLineManagement.select2("val", '');
                     });
                 } else {
                     $scope.tableParams.$params.filter['firstLineManagement'] = null;
+                    //Cambia status enable en segunda linea
+                    selectSecondLineManagement.select2("enable", false);
+                    selectSecondLineManagement.select2("val", '');
+                }                
+            });
+
+            //Scope de Gerencia de 2da Línea
+            $scope.$watch("model.secondLineManagement", function (newParams, oldParams) {
+                if ($scope.model.secondLineManagement != null && $scope.model.secondLineManagement.id != undefined) {
+                    $scope.tableParams.$params.filter['secondLineManagement'] = $scope.model.secondLineManagement.id;
+                } else {
+                    $scope.tableParams.$params.filter['secondLineManagement'] = null;
                 }
             });
+
             //Scope de Círculo de Estudio de Trabajo
             $scope.$watch("model.workStudyCircle", function (newParams, oldParams) {
                 if ($scope.model.workStudyCircle != null && $scope.model.workStudyCircle.id != undefined) {
@@ -5395,6 +5434,34 @@ angular.module('seipModule.controllers', [])
                 })
             };
             //FIN
+        })
+        .controller('ChartsMeetingsController', function ($scope, ngTableParams, $http, sfTranslator, notifyService) {
+
+        //Charts Proposal por linea
+        $scope.renderChartMeetings = function (id, data, categories, caption, typeLabelDisplay) {
+                FusionCharts.ready(function () {
+                    var revenueChart = new FusionCharts({
+                        //"type": "mscolumn3dlinedy",
+                        "type": "pie3d",                        
+                        "renderAt": id,
+                        "width": "95%",
+                        "height": "500%",
+                        "exportFormats": "PNG= Exportar como PNG|PDF= Exportar como PDF",
+                        "exportFileName": "",
+                        "exporthandler": "http://107.21.74.91/",
+                        "html5exporthandler": "http://107.21.74.91/",
+                        "dataFormat": "json",
+                        "dataSource": {
+                           "chart": data.dataSource.chart,
+                           "categories": data.dataSource.categories,
+                           "dataset": data.dataSource.dataset
+                        }                        
+                    });
+                    revenueChart.setTransparent(true);
+                    revenueChart.render();
+                })
+            };
+        //FIN   
         })
 
         .controller('ProductionController', function ($scope, ngTableParams, $http, sfTranslator, notifyService) {

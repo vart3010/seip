@@ -474,4 +474,86 @@ class MeetingController extends SEIPController {
         }
     }
 
+    /**
+     * Lista General de Reuniones de los Circulo de Estudio
+     * 
+     * @param Request $request
+     * @return type
+     */
+    function listAction(Request $request) {
+
+        $criteria = $request->get('filter', $this->config->getCriteria());
+        $sorting = $request->get('sorting', $this->config->getSorting());
+        $repository = $this->container->get('pequiven.repository.meeting');        
+        //$repository = $this->getRepository();
+
+        if ($this->config->isPaginated()) {
+            $resources = $this->resourceResolver->getResource(
+                    $repository, 'createPaginatorMeetings', array($criteria, $sorting)
+            );
+
+            $maxPerPage = $this->config->getPaginationMaxPerPage();
+            if (($limit = $request->query->get('limit')) && $limit > 0) {
+                if ($limit > 100) {
+                    $limit = 100;
+                }
+                $maxPerPage = $limit;
+            }
+            $resources->setCurrentPage($request->get('page', 1), true, true);
+            $resources->setMaxPerPage($maxPerPage);
+        } else {
+            $resources = $this->resourceResolver->getResource(
+                    $repository, 'findBy', array($criteria, $sorting, $this->config->getLimit())
+            );
+        }
+        $routeParameters = array(
+            '_format' => 'json',
+        );
+        $apiDataUrl = $this->generateUrl('pequiven_meeting_list', $routeParameters);
+
+        $view = $this
+                ->view()
+                ->setTemplate($this->config->getTemplate('list.html'))
+                ->setTemplateVar($this->config->getPluralResourceName())
+        ;
+        $view->getSerializationContext()->setGroups(array('id', 'api_list', 'date', 'subject', 'workStudyCircle', 'complejo'));
+        if ($request->get('_format') == 'html') {
+
+            $data = array(
+                'apiDataUrl' => $apiDataUrl,
+            );
+            $view->setData($data);
+        } else {
+            $formatData = $request->get('_formatData', 'default');
+
+            $view->setData($resources->toArray('', array(), $formatData));
+        }
+        return $this->handleView($view);
+    }
+
+    public function viewAction()
+    {
+
+        $em = $this->getDoctrine()->getManager();
+
+        //Carga de data de Indicador para armar grafica
+        $response = new JsonResponse();
+
+        $workService = $this->getWorkStudyCircleService();
+
+        $meeting = $em->getRepository('PequivenSEIPBundle:Politic\Meeting')->findAll();
+
+
+        $dataChart = $workService->getDataChartOfMeetingsData($meeting); //Paso de data        
+        
+        return $this->render('PequivenSEIPBundle:Politic:Meeting\view.html.twig', 
+        array(
+                'data' => $dataChart
+        ));        
+    }
+
+    protected function getWorkStudyCircleService() {
+        return $this->container->get('seip.service.workStudyCircle');
+    }
+
 }
