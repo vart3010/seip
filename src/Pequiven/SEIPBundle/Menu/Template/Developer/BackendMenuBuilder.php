@@ -215,35 +215,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
 
                 $indicator->addChild($visualize);                
                 }
-/*
-
-        //Menú Nivel 2: Visualizar
-        $objective = $this->factory->createItem('objective.main', $this->getSubLevelOptions(array('uri' => 'objetive',
-                            'labelAttributes' => array('icon' => '',),
-                        ))
-                )->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.objective.main', $section)));
-        //Ver 
-        $objective->addChild('sig.objective.list', array(
-                    'route' => '',))
-                ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.objective.visualize', $section)));
-
-        $objective->addChild('sig.objective.matrices_objectives', array(
-                    'route' => '',))
-                ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.objective.matrices_objectives', $section)));
-
-        $menuSig->addChild($objective);
-
-        $indicator = $this->factory->createItem('indicator.main', $this->getSubLevelOptions(array(
-                            'uri' => 'indicator',
-                            'labelAttributes' => array('icon' => '',),
-                        ))
-                )->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.indicator.main', $section)));
-        //Ver 
-        $indicator->addChild('sig.indicator.list', array(
-                    'route' => '',))
-                ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.indicator.visualize', $section)));
-*/
-
+                
                 $menuSig->addChild($indicator);
                 //Fin indicadores
 
