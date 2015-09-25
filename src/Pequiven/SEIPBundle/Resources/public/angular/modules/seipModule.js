@@ -3141,7 +3141,7 @@ angular.module('seipModule.controllers', [])
             });
         })
 
-        .controller('TableDocumentController', function ($scope, ngTableParams, $http, sfTranslator, notifyService) {
+        .controller('TableDocumentController', function ($scope, ngTableParams, $http, sfTranslator, notifyService,$base64) {
             
 //            var test = $base64.encode("victor");
 //            console.log($base64.decode(test));
