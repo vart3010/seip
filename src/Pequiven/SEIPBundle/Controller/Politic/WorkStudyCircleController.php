@@ -127,7 +127,7 @@ class WorkStudyCircleController extends SEIPController {
         ));
     }
 
-    public function addWorkStudyCircleToUser(WorkStudyCircle $workStudyCircle, $members = array()) {
+    public function addWorkStudyCircleToUser(WorkStudyCircle $workStudyCircle, $members = array(), $includeUser = true) {
         $em = $this->getDoctrine()->getManager();
         $em->getConnection()->beginTransaction();
         foreach ($members as $member) {
@@ -135,10 +135,12 @@ class WorkStudyCircleController extends SEIPController {
             $user->setWorkStudyCircle($workStudyCircle);
             $em->persist($user);
         }
-
-        $user = $this->getUser();
-        $user->setWorkStudyCircle($workStudyCircle);
-        $em->persist($user);
+        
+        if($includeUser){
+            $user = $this->getUser();
+            $user->setWorkStudyCircle($workStudyCircle);
+            $em->persist($user);
+        }
 
         try {
             $em->flush();
@@ -206,7 +208,7 @@ class WorkStudyCircleController extends SEIPController {
 
         if ($form->isSubmitted()) {
 
-            $this->addWorkStudyCircleToUser($workStudyCircleRepo, $request->get("workStudyCircle_data")["userWorkerId"]);
+            $this->addWorkStudyCircleToUser($workStudyCircleRepo, $request->get("workStudyCircle_data")["userWorkerId"],false);
 
 
             $this->get('session')->getFlashBag()->add('success', 'Nuevos miembros han sido agregados con éxito ');
