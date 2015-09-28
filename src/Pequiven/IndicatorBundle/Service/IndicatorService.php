@@ -3547,6 +3547,51 @@ class IndicatorService implements ContainerAwareInterface {
             return $value;
         
     }
+
+    /**
+     * Function que retorna el objetivo segun tendencia del indicador
+     * @param indicator $indicator
+     * @return type
+     */
+    public function getObjIndicator(Indicator $indicator){
+
+
+        $trend = 0;
+        $trend = $indicator->getTendency()->getId();
+        $obj = $indicator->getArrangementRange()->getRankBottomBasic();
+        //var_dump($trend);
+        //Creciente
+        if ($trend === 1) {
+            
+            $obj = $indicator->getArrangementRange()->getRankTopBasic();
+
+        //Decreciente            
+        }elseif($trend === 2){
+            
+            $obj = $indicator->getArrangementRange()->getRankBottomBasic();
+            
+        //Estable
+        }elseif ($trend === 3) {
+            
+            $value1 = $indicator->getArrangementRange()->getRankTopMixedTop();
+            $value2 = $indicator->getArrangementRange()->getRankTopMixedBottom();
+
+            $obj = (($value2 - $value1)/2)+$value1; 
+             
+        //Sin tendencia
+        }else{
+
+            $obj = 0;
+        }
+
+        //var_dump($trend->getId());
+        //var_dump($value1);               
+        //var_dump($obj);               
+
+        //die();
+        return $obj;           
+        
+    }
     
     /**
      * Gráfico de Columna para informe de Evolución
@@ -3576,7 +3621,7 @@ class IndicatorService implements ContainerAwareInterface {
         $chart["rotateValues"] = "0";
         $chart["bgAlpha"] = "0,0";
         $chart["theme"] = "fint";
-        $chart["YAxisMaxValue"] = "150";
+        //$chart["YAxisMaxValue"] = "150";
         $chart["showborder"] = "0";
         $chart["decimals"] = "0";
         $chart["exportenabled"] = "1";
@@ -3587,6 +3632,8 @@ class IndicatorService implements ContainerAwareInterface {
 
         //Lamado de promedio
         $prom = $this->getPromdIndicator($indicator);
+        //Lamado obj
+        $obj = $this->getObjIndicator($indicator);
         //Llamado de frecuencia de Notificacion del Indicador
         $labelsFrequencyNotificationArray = $this->getLabelsByIndicatorFrequencyNotification($indicator);
         //Número de indicadores asociados
@@ -3635,19 +3682,7 @@ class IndicatorService implements ContainerAwareInterface {
             //Data 2014            
             $acumLast = $cant = $promLast = 0;
             $indicatorlast = $indicator->getindicatorLastPeriod();
-                //var_dump($indicatorlast->getResultReal());
-                //die();
-            /*if ($indicatorlast) {
-                
-                foreach ($indicatorlast->getValuesIndicator() as $value) {
-
-                        $results = $value->getValueOfIndicator();
-                        $acumLast = $acumLast + $results;
-                        $cant = $cant + 1;
-                }            
-                //die();
-            }*/
-            
+               
                 if ($indicatorlast === null) {
                     
                     $dataAnt["value"] = 0;//Pasando data a Data2014 si no tiene ralacion
@@ -3688,7 +3723,7 @@ class IndicatorService implements ContainerAwareInterface {
             $dataSetLine["data"][] = array( 'value' => '' );//Valor vacio para saltar 2014
             for ($i=0; $i < $contCant; $i++) { 
             
-                $dataLine["value"] = $dataValueObjetive;//Carga de valores           
+                $dataLine["value"] = $obj;//Carga de valores           
                 $dataSetLine["data"][] = $dataLine;//Data del Objetivo 2015
             
             }
@@ -3702,7 +3737,7 @@ class IndicatorService implements ContainerAwareInterface {
             $dataSetReal["data"][] = $dataAcum;//promedio
             
             //Pasando Objetivo Acum
-            $dataObj["value"] = $dataValueObjetive;//Pasando data a Dataobj
+            $dataObj["value"] = $obj;//Pasando data a Dataobj
             $dataObj["color"] = '#087505';
             //$dataObj["link"]  = $this->generateUrl('pequiven_line_strategic_show', array('id' => $value->getId()));
             $dataSetReal["data"][] = $dataObj;//Acumulado
@@ -3722,6 +3757,7 @@ class IndicatorService implements ContainerAwareInterface {
             $dataSetValues['tendencia'] = 0;            
             $dataSetV['data'] = 0;
         }
+
         $data['dataSource']['chart'] = $chart;
         $data['dataSource']['categories'][]["category"] = $category;
         $data['dataSource']['dataset'][] = $dataSetValues['tendencia'];

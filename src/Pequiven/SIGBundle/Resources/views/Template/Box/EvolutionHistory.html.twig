@@ -47,7 +47,12 @@
                                 {% set name = "Diciembre" %}
                             {% endif %}
 
-                            {{ buttons.generic_history(path('pequiven_indicator_evolution', { 'id': Box_indicator , 'month': data }),( name )) }}
+                            {% if data > 8 %}
+                                {% set disabled = TRUE %}
+
+                                {{ buttons.generic_history(path('pequiven_indicator_evolution', { 'id': Box_indicator , 'month': data }),( name )) }}
+                                
+                            {% endif %}
                         
                         {% endfor %}
                         <br>
