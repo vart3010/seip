@@ -46,16 +46,11 @@
                             {% elseif data == 12 %} 
                                 {% set name = "Diciembre" %}
                             {% endif %}
-                            {# <label class="label">{{ name }}</label>#}
 
                             {{ buttons.generic_history(path('pequiven_indicator_evolution', { 'id': Box_indicator , 'month': data }),( name )) }}
                         
                         {% endfor %}
                         <br>
-                            {# <select class="select2 input-large form-control">
-                                <label class="label">Seleccione el Mes:</label>
-                                 <option>zdf</option>
-                             </select>#}
                 </fieldset>
 
 

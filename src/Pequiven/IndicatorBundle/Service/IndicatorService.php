@@ -3711,10 +3711,16 @@ class IndicatorService implements ContainerAwareInterface {
             $cantValue = count($dataSetTend['data']);
             if ($cantValue >= 4) {
                 $dataSetValues['tendencia'] = array('seriesname' => 'Tendencia', 'parentyaxis' => 'S', 'renderas' => 'Line', 'color' => '#dbc903', 'data' => $dataSetTend['data']);                
-            }else{
+            }elseif(!$cantValue) {
+                $dataSetValues['tendencia'] = 0;                
+            }
+            else{
                 $dataSetValues['tendencia'] = 0;
             }
             
+        }else{
+            $dataSetValues['tendencia'] = 0;            
+            $dataSetV['data'] = 0;
         }
         $data['dataSource']['chart'] = $chart;
         $data['dataSource']['categories'][]["category"] = $category;
