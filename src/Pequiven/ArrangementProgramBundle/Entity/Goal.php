@@ -18,8 +18,8 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @ORM\HasLifecycleCallbacks()
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
-class Goal implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface
-{
+class Goal implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface {
+
     /**
      * @var integer
      *
@@ -93,7 +93,7 @@ class Goal implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface
      * @ORM\Column(name="status", type="integer")
      */
     private $status = 0;
-    
+
     /**
      * Linea de tiempo
      * @var \Pequiven\ArrangementProgramBundle\Entity\Timeline
@@ -101,7 +101,7 @@ class Goal implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface
      * @ORM\JoinColumn(nullable=false)
      */
     private $timeline;
-    
+
     /**
      * Detalles de la meta
      * 
@@ -110,7 +110,7 @@ class Goal implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface
      * @ORM\JoinColumn(nullable=false)
      */
     private $goalDetails;
-    
+
     /**
      * Periodo.
      * @var \Pequiven\SEIPBundle\Entity\Period
@@ -119,27 +119,27 @@ class Goal implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface
      * @ORM\JoinColumn(nullable=false)
      */
     private $period;
-    
+
     /**
      * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
      */
     private $deletedAt;
-    
+
     /**
      * Avance de la meta
      * 
      * @ORM\Column(name="advance",type="float")
      */
     private $advance = 0;
-    
+
     /**
      * Resultado original
      * 
      * @var float
      * @ORM\Column(name="resultReal",type="float")
      */
-    protected $resultReal = 0; 
-    
+    protected $resultReal = 0;
+
     /**
      * ¿El resultado que irá a evaluaciones, será colocado manualmente? Quiere decir que de acuerdo a previa solicitud y justificación se puede editar el resultado de la meta.
      * 
@@ -147,26 +147,41 @@ class Goal implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface
      * @ORM\Column(name="updateResultByAdmin",type="boolean")
      */
     protected $updateResultByAdmin = false;
-    
+
     /**
      * Resultado modificado
      * 
      * @var float
      * @ORM\Column(name="resultModified",type="float")
      */
-    protected $resultModified = 0; 
-   
+    protected $resultModified = 0;
+
+    /**
+     * Penalizacion
+     * @var integer
+     *
+     * @ORM\Column(name="penalty", type="integer", nullable=true)
+     */
+    private $penalty = 0;
+
+    /**
+     * Resultado Penalizado
+     * @var float
+     *
+     * @ORM\Column(name="penalizedresult", type="float", nullable=true)
+     */
+    private $penalizedResult = 0;
+
     public function __construct() {
         $this->responsibles = new \Doctrine\Common\Collections\ArrayCollection();
     }
-    
+
     /**
      * Get id
      *
      * @return integer 
      */
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
 
@@ -176,8 +191,7 @@ class Goal implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface
      * @param string $name
      * @return Goal
      */
-    public function setName($name)
-    {
+    public function setName($name) {
         $this->name = $name;
 
         return $this;
@@ -188,8 +202,7 @@ class Goal implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface
      *
      * @return string 
      */
-    public function getName()
-    {
+    public function getName() {
         return $this->name;
     }
 
@@ -199,8 +212,7 @@ class Goal implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface
      * @param \DateTime $startDate
      * @return Goal
      */
-    public function setStartDate($startDate)
-    {
+    public function setStartDate($startDate) {
         $this->startDate = $startDate;
 
         return $this;
@@ -211,8 +223,7 @@ class Goal implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface
      *
      * @return \DateTime 
      */
-    public function getStartDate()
-    {
+    public function getStartDate() {
         return $this->startDate;
     }
 
@@ -222,8 +233,7 @@ class Goal implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface
      * @param \DateTime $endDate
      * @return Goal
      */
-    public function setEndDate($endDate)
-    {
+    public function setEndDate($endDate) {
         $this->endDate = $endDate;
 
         return $this;
@@ -234,8 +244,7 @@ class Goal implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface
      *
      * @return \DateTime 
      */
-    public function getEndDate()
-    {
+    public function getEndDate() {
         return $this->endDate;
     }
 
@@ -245,8 +254,7 @@ class Goal implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface
      * @param integer $weight
      * @return Goal
      */
-    public function setWeight($weight)
-    {
+    public function setWeight($weight) {
         $this->weight = $weight;
 
         return $this;
@@ -257,8 +265,7 @@ class Goal implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface
      *
      * @return integer 
      */
-    public function getWeight()
-    {
+    public function getWeight() {
         return $this->weight;
     }
 
@@ -268,8 +275,7 @@ class Goal implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface
      * @param string $observations
      * @return Goal
      */
-    public function setObservations($observations)
-    {
+    public function setObservations($observations) {
         $this->observations = $observations;
 
         return $this;
@@ -280,8 +286,7 @@ class Goal implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface
      *
      * @return string 
      */
-    public function getObservations()
-    {
+    public function getObservations() {
         return $this->observations;
     }
 
@@ -291,8 +296,7 @@ class Goal implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface
      * @param integer $status
      * @return Goal
      */
-    public function setStatus($status)
-    {
+    public function setStatus($status) {
         $this->status = $status;
 
         return $this;
@@ -303,8 +307,7 @@ class Goal implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface
      *
      * @return integer 
      */
-    public function getStatus()
-    {
+    public function getStatus() {
         return $this->status;
     }
 
@@ -314,8 +317,7 @@ class Goal implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface
      * @param \Pequiven\MasterBundle\Entity\ArrangementProgram\TypeGoal $typeGoal
      * @return Goal
      */
-    public function setTypeGoal(\Pequiven\MasterBundle\Entity\ArrangementProgram\TypeGoal $typeGoal = null)
-    {
+    public function setTypeGoal(\Pequiven\MasterBundle\Entity\ArrangementProgram\TypeGoal $typeGoal = null) {
         $this->typeGoal = $typeGoal;
 
         return $this;
@@ -326,8 +328,7 @@ class Goal implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface
      *
      * @return \Pequiven\MasterBundle\Entity\ArrangementProgram\TypeGoal 
      */
-    public function getTypeGoal()
-    {
+    public function getTypeGoal() {
         return $this->typeGoal;
     }
 
@@ -337,8 +338,7 @@ class Goal implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface
      * @param \Pequiven\ArrangementProgramBundle\Entity\Timeline $timeline
      * @return Goal
      */
-    public function setTimeline(\Pequiven\ArrangementProgramBundle\Entity\Timeline $timeline = null)
-    {
+    public function setTimeline(\Pequiven\ArrangementProgramBundle\Entity\Timeline $timeline = null) {
         $this->timeline = $timeline;
 
         return $this;
@@ -349,8 +349,7 @@ class Goal implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface
      *
      * @return \Pequiven\ArrangementProgramBundle\Entity\Timeline 
      */
-    public function getTimeline()
-    {
+    public function getTimeline() {
         return $this->timeline;
     }
 
@@ -360,8 +359,7 @@ class Goal implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface
      * @param \Pequiven\ArrangementProgramBundle\Entity\GoalDetails $goalDetails
      * @return Goal
      */
-    public function setGoalDetails(\Pequiven\ArrangementProgramBundle\Entity\GoalDetails $goalDetails = null)
-    {
+    public function setGoalDetails(\Pequiven\ArrangementProgramBundle\Entity\GoalDetails $goalDetails = null) {
         $goalDetails->setGoal($this);
         $this->goalDetails = $goalDetails;
 
@@ -373,20 +371,18 @@ class Goal implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface
      *
      * @return \Pequiven\ArrangementProgramBundle\Entity\GoalDetails 
      */
-    public function getGoalDetails()
-    {
+    public function getGoalDetails() {
         return $this->goalDetails;
     }
-    
+
     /**
      * @ORM\PrePersist()
      */
-    public function prePersist()
-    {
-        if($this->getTimeline()->getArrangementProgram()){
-            $this->setPeriod($this->getTimeline()->getArrangementProgram()->getPeriod()) ;
+    public function prePersist() {
+        if ($this->getTimeline()->getArrangementProgram()) {
+            $this->setPeriod($this->getTimeline()->getArrangementProgram()->getPeriod());
         }
-        if($this->goalDetails == null){
+        if ($this->goalDetails == null) {
             $this->goalDetails = new GoalDetails();
         }
     }
@@ -397,9 +393,8 @@ class Goal implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface
      * @param \Pequiven\SEIPBundle\Entity\User $responsibles
      * @return Goal
      */
-    public function addResponsible(\Pequiven\SEIPBundle\Entity\User $responsible)
-    {
-        $responsible->addGoal($this); 
+    public function addResponsible(\Pequiven\SEIPBundle\Entity\User $responsible) {
+        $responsible->addGoal($this);
         $this->responsibles->add($responsible);
 
         return $this;
@@ -410,8 +405,7 @@ class Goal implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface
      *
      * @param \Pequiven\SEIPBundle\Entity\User $responsibles
      */
-    public function removeResponsible(\Pequiven\SEIPBundle\Entity\User $responsibles)
-    {
+    public function removeResponsible(\Pequiven\SEIPBundle\Entity\User $responsibles) {
         $this->responsibles->removeElement($responsibles);
     }
 
@@ -420,25 +414,22 @@ class Goal implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getResponsibles()
-    {
+    public function getResponsibles() {
         return $this->responsibles;
     }
-    
-    public function __toString() 
-    {
+
+    public function __toString() {
         $toString = \Pequiven\SEIPBundle\Service\ToolService::truncate($this->getName());
-        return $toString?:'-';
+        return $toString? : '-';
     }
-    
+
     /**
      * Set period
      *
      * @param \Pequiven\SEIPBundle\Entity\Period $period
      * @return ArrangementProgram
      */
-    public function setPeriod(\Pequiven\SEIPBundle\Entity\Period $period = null)
-    {
+    public function setPeriod(\Pequiven\SEIPBundle\Entity\Period $period = null) {
         $this->period = $period;
 
         return $this;
@@ -449,62 +440,59 @@ class Goal implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface
      *
      * @return \Pequiven\SEIPBundle\Entity\Period 
      */
-    public function getPeriod()
-    {
+    public function getPeriod() {
         return $this->period;
     }
-    
+
     function getDeletedAt() {
         return $this->deletedAt;
     }
 
     function setDeletedAt($deletedAt) {
         $this->deletedAt = $deletedAt;
-        
+
         return $this;
     }
 
-    function getAdvance() 
-    {
+    function getAdvance() {
         return $this->advance;
     }
 
-    function setAdvance($advance) 
-    {
+    function setAdvance($advance) {
         $this->advance = $advance;
     }
-    
-    public function setResult($result) 
-    {
+
+    public function setResult($result) {
         $this->advance = $result;
     }
-    
-    public function getResult() 
-    {
+
+    public function getResult() {
         return $this->advance;
     }
-    
+
     /**
      * Set resultReal
-     *indicators
+     * indicators
      * @param float $resultReal
      * @return Indicator
      */
-    public function setResultReal($resultReal)
-    {
+    public function setResultReal($resultReal) {
         $this->resultReal = $resultReal;
 
         return $this;
     }
-    
+
+    public function getResultReal() {
+        return $this->resultReal;
+    }
+
     /**
      * Set updateResultByAdmin
      *
      * @param boolean $updateResultByAdmin
      * @return Goal
      */
-    public function setUpdateResultByAdmin($updateResultByAdmin)
-    {
+    public function setUpdateResultByAdmin($updateResultByAdmin) {
         $this->updateResultByAdmin = $updateResultByAdmin;
 
         return $this;
@@ -515,18 +503,16 @@ class Goal implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface
      *
      * @return boolean 
      */
-    public function getUpdateResultByAdmin()
-    {
+    public function getUpdateResultByAdmin() {
         return $this->updateResultByAdmin;
     }
-    
+
     /**
      * Set resultModified
      * @param float $resultModified
      * @return Goal
      */
-    public function setResultModified($resultModified)
-    {
+    public function setResultModified($resultModified) {
         $this->resultModified = $resultModified;
 
         return $this;
@@ -537,19 +523,59 @@ class Goal implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface
      *
      * @return float 
      */
-    public function getResultModified()
-    {
+    public function getResultModified() {
         return $this->resultModified;
     }
-    
+
+    /**
+     * Set penalty
+     * @param integer $penalty
+     * @return Goal
+     */
+    public function setPenalty($penalty) {
+        $this->penalty = $penalty;
+
+        return $this;
+    }
+
+    /**
+     * Get penalty
+     *
+     * @return integer 
+     */
+    public function getPenalty() {
+        return $this->penalty;
+    }
+
+    /**
+     * Set penalizedresult
+     * @param integer $penalizedresult
+     * @return Goal
+     */
+    public function setPenalizedResult($penalizedresult) {
+        $this->penalizedResult = $penalizedresult;
+
+        return $this;
+    }
+
+    /**
+     * Get penalizedresult
+     *
+     * @return integer 
+     */
+    public function getPenalizedResult() {
+        return $this->penalizedResult;
+    }
+
     public function __clone() {
-        if($this->id > 0){
-           $this->id = null;
-           
-           $this->goalDetails = clone($this->goalDetails);
-           $this->goalDetails->setGoal($this);
-           $this->advance = 0;
-           $this->resultReal = 0;
+        if ($this->id > 0) {
+            $this->id = null;
+
+            $this->goalDetails = clone($this->goalDetails);
+            $this->goalDetails->setGoal($this);
+            $this->advance = 0;
+            $this->resultReal = 0;
         }
     }
+
 }
