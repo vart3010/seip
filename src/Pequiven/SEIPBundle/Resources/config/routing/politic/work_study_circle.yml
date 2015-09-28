@@ -100,3 +100,11 @@ pequiven_work_study_circle_download_file:
         _controller: pequiven.controller.meeting:downloadFileAction 
         expose: true   
 
+pequiven_work_study_circle_document_list:
+    path: /listFile.{_format}
+    defaults:
+        _controller: pequiven.controller.work_study_circle_file:listAction 
+        _format: html
+    requirements:
+        _format: html|json|xml
+    methods: [GET|POST]

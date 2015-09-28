@@ -221,7 +221,7 @@ class productReportService implements ContainerAwareInterface {
 
             if (count($rep) > 1) {
                 if (count($rep) > $desplazamiento) {
-                    $desplazamiento = count($rep);
+                    $desplazamiento = count($rep)-1;
                 }
                 $totalPlan = 0;
                 $totalReal = 0;
@@ -252,6 +252,7 @@ class productReportService implements ContainerAwareInterface {
                 $cont++;
             }
         }
+        
 
 
         $data["dataSource"]["chart"] = $chart;

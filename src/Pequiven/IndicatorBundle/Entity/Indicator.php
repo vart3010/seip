@@ -632,7 +632,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
         $this->featuresIndicator = new \Doctrine\Common\Collections\ArrayCollection();
         $this->charts = new \Doctrine\Common\Collections\ArrayCollection();
         $this->managementSystems = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->indicatorlastPeriod = new \Doctrine\Common\Collections\ArrayCollection();
+//        $this->indicatorlastPeriod = new \Doctrine\Common\Collections\ArrayCollection();
         $this->indicatorCause = new \Doctrine\Common\Collections\ArrayCollection();
         $this->indicatorCauseAnalisys = new \Doctrine\Common\Collections\ArrayCollection();
         $this->indicatorTrend = new \Doctrine\Common\Collections\ArrayCollection();

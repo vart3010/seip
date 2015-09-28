@@ -207,8 +207,10 @@ app:
                         vizualice: Visualizar
                         reports: Reportes
                         strategic_plan: Plan Estratégico
-                        notification: Notificación
                         visualize: Visualizar
                         general: General
                         list: Lista
+                        documents: Documentos
+                        meeting: Reuniones
+
                             

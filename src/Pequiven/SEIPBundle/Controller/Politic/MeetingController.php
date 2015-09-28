@@ -193,12 +193,6 @@ class MeetingController extends SEIPController {
         $idFile = $request->get("id");
         $file = $em->getRepository('PequivenSEIPBundle:Politic\WorkStudyCircleFile')->findOneBy(array('id' => $idFile));
         $workStudyCircle = $file->getWorkStudyCircle();
-        //$metting = $workStudyCircle->getMeeting();
-        //$fileName = $workStudyCircle->getId() . "_" . $file->getNameFile();
-//        $meeting = $em->getRepository('PequivenSEIPBundle:Politic\Meeting')->findOneBy(array('id' => $idMeeting));
-//        $WorkStudyCircle = $meeting->getWorkStudyCircle();
-//        $idFile = $WorkStudyCircle->getWorkStudyCircleFile();
-//        $fileName = $WorkStudyCircle->getId() . "_" . $idMeeting . "_" . $idFile;
 
         $path = \Pequiven\SEIPBundle\Model\Politic\WorkStudyCircleFile::LOCATION_UPLOAD_FILE;
         $name = \Pequiven\SEIPBundle\Model\Politic\WorkStudyCircleFile::NAME_FILE;
@@ -453,25 +447,105 @@ class MeetingController extends SEIPController {
     }
 
     public function uploadFilesAction(Request $request) {
-//$resource = $this->findOr404($request);
+        
+        return $this->render('PequivenSEIPBundle:Politic:Meeting\uploadFile.html.twig', array(
+                'data'=>$request->get("idMeeting")
+        ));
 
-        $band = false;
-//VALIDACION QUE SEA UN ARCHIVO PERMITIDO
-        foreach ($request->files as $file) {
-            if (in_array($file->guessExtension(), \Pequiven\SEIPBundle\Model\Politic\WorkStudyCircleFile::getTypesFile())) {
-                $band = true;
+//        $band = false;
+////VALIDACION QUE SEA UN ARCHIVO PERMITIDO
+//        foreach ($request->files as $file) {
+//            if (in_array($file->guessExtension(), \Pequiven\SEIPBundle\Model\Politic\WorkStudyCircleFile::getTypesFile())) {
+//                $band = true;
+//            }
+//        }
+//
+//        if ($band) {
+//            
+//        } else {
+//            $this->get('session')->getFlashBag()->add('error', $this->trans('action.messages.InvalidFile', array(), 'PequivenIndicatorBundle'));
+//            $this->redirect($this->generateUrl("pequiven_meeting_show", array("id" => $request->get("idMeeting"))));
+//        }
+    }
+
+    /**
+     * Lista General de Reuniones de los Circulo de Estudio
+     * 
+     * @param Request $request
+     * @return type
+     */
+    function listAction(Request $request) {
+
+        $criteria = $request->get('filter', $this->config->getCriteria());
+        $sorting = $request->get('sorting', $this->config->getSorting());
+        $repository = $this->container->get('pequiven.repository.meeting');
+        //$repository = $this->getRepository();
+
+        if ($this->config->isPaginated()) {
+            $resources = $this->resourceResolver->getResource(
+                    $repository, 'createPaginatorMeetings', array($criteria, $sorting)
+            );
+
+            $maxPerPage = $this->config->getPaginationMaxPerPage();
+            if (($limit = $request->query->get('limit')) && $limit > 0) {
+                if ($limit > 100) {
+                    $limit = 100;
+                }
+                $maxPerPage = $limit;
             }
-        }
-
-
-        if ($band) {
-            var_dump($band);
-            die();
-//$this->createValueIndicatorFile($resource, $request);
+            $resources->setCurrentPage($request->get('page', 1), true, true);
+            $resources->setMaxPerPage($maxPerPage);
         } else {
-            $this->get('session')->getFlashBag()->add('error', $this->trans('action.messages.InvalidFile', array(), 'PequivenIndicatorBundle'));
-            $this->redirect($this->generateUrl("pequiven_meeting_show", array("id" => $request->get("idMeeting"))));
+            $resources = $this->resourceResolver->getResource(
+                    $repository, 'findBy', array($criteria, $sorting, $this->config->getLimit())
+            );
         }
+        $routeParameters = array(
+            '_format' => 'json',
+        );
+        $apiDataUrl = $this->generateUrl('pequiven_meeting_list', $routeParameters);
+
+        $view = $this
+                ->view()
+                ->setTemplate($this->config->getTemplate('list.html'))
+                ->setTemplateVar($this->config->getPluralResourceName())
+        ;
+        $view->getSerializationContext()->setGroups(array('id', 'api_list', 'date', 'subject', 'workStudyCircle', 'complejo'));
+        if ($request->get('_format') == 'html') {
+
+            $data = array(
+                'apiDataUrl' => $apiDataUrl,
+            );
+            $view->setData($data);
+        } else {
+            $formatData = $request->get('_formatData', 'default');
+
+            $view->setData($resources->toArray('', array(), $formatData));
+        }
+        return $this->handleView($view);
+    }
+
+    public function viewAction() {
+
+        $em = $this->getDoctrine()->getManager();
+
+        //Carga de data de Indicador para armar grafica
+        $response = new JsonResponse();
+
+        $workService = $this->getWorkStudyCircleService();
+
+        $meeting = $em->getRepository('PequivenSEIPBundle:Politic\Meeting')->findAll();
+
+
+        $dataChart = $workService->getDataChartOfMeetingsData($meeting); //Paso de data        
+
+        return $this->render('PequivenSEIPBundle:Politic:Meeting\view.html.twig', array(
+                    'data' => $dataChart
+        ));
+    }
+
+    protected function getWorkStudyCircleService() {
+        return $this->container->get('seip.service.workStudyCircle');
     }
 
 }

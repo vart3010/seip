@@ -1069,6 +1069,12 @@ class IndicatorSigController extends ResourceController
             }else{
                 $causeA = "No se ha Cargando el Analisis de Causas";        
             }
+        //Relación - Objetivo
+        foreach ($indicator->getObjetives() as $value) {
+            $objRel = $value->getDescription();
+         } 
+        //Verificación
+        $verification = $this->get('pequiven.repository.sig_action_verification')->findAll();        
 
         $data = array(
             'data'          => $dataChart,//Data del Gráfico Informe de Evolución
@@ -1077,7 +1083,9 @@ class IndicatorSigController extends ResourceController
             'name'          => $name,
             'trend'         => $trendDescription,
             'causeAnalysis' => $causeA,
-            'dataAction'    => $dataAction["actionValue"]
+            'dataAction'    => $dataAction["actionValue"],
+            'obj'           => $objRel,
+            'verification'  => $verification
         );
 
         $this->generatePdf($data);

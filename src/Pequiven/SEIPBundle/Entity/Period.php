@@ -103,6 +103,22 @@ class Period extends Base implements \Serializable
      * @ORM\Column(name="dateEndLoadArrangementProgram", type="date", nullable=true)
      */
     private $dateEndLoadArrangementProgram;
+
+    /**
+     * Fecha inicio de carga de programas de gestion.
+     * @var \DateTime
+     *
+     * @ORM\Column(name="dateStartLoadSigArrangementProgram", type="date", nullable=true)
+     */
+    private $dateStartLoadSigArrangementProgram;
+
+    /**
+     * Fecha fin de carga de programas de gestión.
+     * @var \DateTime
+     *
+     * @ORM\Column(name="dateEndLoadSigArrangementProgram", type="date", nullable=true)
+     */
+    private $dateEndLoadSigArrangementProgram;
     
     /**
      * Fecha inicio de carga de objetivos.
@@ -464,6 +480,52 @@ class Period extends Base implements \Serializable
     {
         return $this->dateEndLoadArrangementProgram;
     }
+    
+    /**
+     * Set dateStartLoadSigArrangementProgram
+     *
+     * @param \DateTime $dateStartLoadSigArrangementProgram
+     * @return Period
+     */
+    public function setDateStartLoadSigArrangementProgram($dateStartLoadSigArrangementProgram)
+    {
+        $this->dateStartLoadSigArrangementProgram = $dateStartLoadSigArrangementProgram;
+
+        return $this;
+    }
+
+    /**
+     * Get dateStartLoadSigArrangementProgram
+     *
+     * @return \DateTime 
+     */
+    public function getDateStartLoadSigArrangementProgram()
+    {
+        return $this->dateStartLoadSigArrangementProgram;
+    }
+
+    /**
+     * Set dateEndLoadSigArrangementProgram
+     *
+     * @param \DateTime $dateEndLoadSigArrangementProgram
+     * @return Period
+     */
+    public function setDateEndLoadSigArrangementProgram($dateEndLoadSigArrangementProgram)
+    {
+        $this->dateEndLoadSigArrangementProgram = $dateEndLoadSigArrangementProgram;
+
+        return $this;
+    }
+
+    /**
+     * Get dateEndLoadSigArrangementProgram
+     *
+     * @return \DateTime 
+     */
+    public function getDateEndLoadSigArrangementProgram()
+    {
+        return $this->dateEndLoadSigArrangementProgram;
+    }    
     
     /**
      * Set dateStartLoadObjetive
@@ -872,6 +934,8 @@ class Period extends Base implements \Serializable
             $this->dateEndNotificationArrangementProgram,
             $this->dateStartLoadArrangementProgram,
             $this->dateEndLoadArrangementProgram,
+            $this->dateStartLoadSigArrangementProgram,
+            $this->dateEndLoadSigArrangementProgram,
             $this->dateStartClearanceNotificationArrangementProgram,
             $this->dateStartPenalty,
             $this->dateEndPenalty,
@@ -909,6 +973,8 @@ class Period extends Base implements \Serializable
             $this->dateEndNotificationArrangementProgram,
             $this->dateStartLoadArrangementProgram,
             $this->dateEndLoadArrangementProgram,
+            $this->dateStartLoadSigArrangementProgram,
+            $this->dateEndLoadSigArrangementProgram,
             $this->dateStartClearanceNotificationArrangementProgram,
             $this->dateStartPenalty,
             $this->dateEndPenalty,

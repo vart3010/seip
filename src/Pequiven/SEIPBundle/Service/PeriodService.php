@@ -81,6 +81,22 @@ class PeriodService extends ContainerAware
         }
         return $result;
     }
+
+    /**
+     * Retorna si se encuetra habilitada la carga de programa de gestion para SIG en el periodo activo.
+     * @return boolean
+     */
+    function isAllowLoadSigArrangementProgram()
+    {
+        $result = false;
+        $period = $this->getPeriodActive();
+        $now = new \DateTime();
+        
+        if($now >= $period->getDateStartLoadSigArrangementProgram() && $now <= $period->getDateEndLoadSigArrangementProgram()){
+            $result = true;
+        }
+        return $result;
+    }
     
     /**
      * Retorna si se encuetra habilitada la carga de objetivos para el periodo activo.

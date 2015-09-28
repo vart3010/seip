@@ -71,7 +71,7 @@
     <table width="95%">
         <tbody>
             <tr>
-                <th class="title_bold">ASOCIADO A: _______________________________________</th>
+                <th class="title_bold">ASOCIADO A: {{ obj }}</th>
             </tr>
             <tr>
                 <th>&nbsp;</th>
@@ -156,7 +156,7 @@
     {% for data in dataAction %} 
            <tr {{ cycle(["even", "odd"], loop.index) }} align="center"> 
                 <td>{{ loop.index }}</td>
-                <td>{{ data.actionValue.action }}</td>
+                <td align="left">{{ data.actionValue.action }}</td>
                 <td>{{ data.actionValue.indicatorAction.ref }}</td>
                 <td>{{ data.actionValue.dateStart | date("d/m/Y") }}</td>
                 <td>{{ data.actionValue.dateEnd | date("d/m/Y") }}</td>
@@ -164,10 +164,51 @@
                 <td>
                     {{ data.actionValue.createdBy.firstname }} {{ data.actionValue.createdBy.lastname }}                        
                 </td>
-                <td>{{ data.observations }}</td>
+                <td align="left">{{ data.observations }}</td>
+            </tr>            
+    {% endfor %}
+            <tr>
+                <td align="left" style="width: 30%;">REVISADO POR:</td>
+                <td align="left" style="width: 10%;">FECHA:</td>                
+                <td align="right" style="width: 25%;">APROBADO POR:</td>
+                <td align="right" style="width: 15%;">FECHA:</td>
             </tr>
+        </tbody>
+    </table> 
+    <table>
+        <tr>
+            <td align="left">NIVEL DE REVISION:</td>
+            <td>&nbsp;</td>
+            <td align="right">C-SI-GI-PG-R-004</td>
+        </tr>
+    </table>
+    {# verificatión #}
+    <table class="table-planning">
+        <tbody>
+            <tr>
+                <th class="table-planning-th" colspan="10">VERIFICACION DE LA EFICACIA</th>
+            </tr>        
+            <tr align="center">
+                <td style="width: 5%;">Nro</td>
+                <td style="width: 30%;">Comentarios</td>
+                <td style="width: 20%;">Verificado Por</td>
+                <td style="width: 10%;">Fecha</td>
+                <td style="width: 20%;">Acción</td>
+                <td style="width: 10%;">Verificación</td>
+            </tr>
+    {% for data in verification %} 
+           <tr {{ cycle(["even", "odd"], loop.index) }} align="center"> 
+                <td>{{ loop.index }}</td>
+                <td align="left">{{ data.comment }}</td>
+                <td>
+                  {{ data.createdBy.firstname }} {{ data.createdBy.lastname }}                   
+                </td>
+                <td>{{ data.createdAt | date("d/m/Y") }}</td>
+                <td>{{ data.actionPlan.ref }}</td>
+                <td>{{ data.typeVerification.ref }}</td>
+            </tr>            
     {% endfor %}
         </tbody>
-    </table>  
+    </table>     
    
 {% endblock %}

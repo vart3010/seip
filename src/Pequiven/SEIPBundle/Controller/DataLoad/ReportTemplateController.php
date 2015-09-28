@@ -125,14 +125,14 @@ class ReportTemplateController extends SEIPController {
                     "groups" => $groupNames,
                     "alias" => $plantReport->getPlant()->getEntity()->getAlias(),
                     "entity" => $plantReport,
-                    "products"=>$arrayProductsIds,
+                    "products" => $arrayProductsIds,
                     "plantReportId" => $plantReport->getId()
                 );
             }
         }
-        
-                    
-          
+
+
+
 
         $data = array(
             "report_template" => $reportTemplate,
@@ -383,7 +383,7 @@ class ReportTemplateController extends SEIPController {
                 $externalRawMaterials = $rawMaterialsArray[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL_MP];
                 $internalRawMaterials = $rawMaterialsArray[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL_MP];
 
-//                var_dump($rawMaterialsArray);
+//                var_dump ($rawMaterialsArray);
 
                 if (count($externalRawMaterials) > 0) {
                     foreach ($externalRawMaterials as $key => $rawMaterial) {
@@ -736,7 +736,7 @@ class ReportTemplateController extends SEIPController {
         }
 
         $dateReport = new \DateTime(date("Y-m-d", strtotime("-1 day")));
-        
+
         if (!$this->getSecurityService()->isGranted('ROLE_SEIP_DATA_LOAD_CHANGE_DATE')) {
             $dateReport = new \DateTime(date("Y-m-d", strtotime("-1 day")));
         }
@@ -1062,8 +1062,9 @@ class ReportTemplateController extends SEIPController {
                     $totalRawDayReal = 0.0;
                     $i = $dateDesde;
 //VERIFICA SI EL PRODUCTO ES MATERIA PRIMA
-                    if ($productReport->getProduct()->getIsRawMaterial()) {
-                        foreach ($productReport->getRawMaterialConsumptionPlannings() as $rawMaterial) {
+                    //if ($productReport->getProduct()->getIsRawMaterial()) {
+                    foreach ($productReport->getRawMaterialConsumptionPlannings() as $rawMaterial) {
+                        if ($rawMaterial->getProduct()->getIsRawMaterial()) {
                             while ($i != ($dateHasta + 86400)) {
                                 $timeNormal = new \DateTime(date("Y-m-d", $i));
                                 $rawMaterialResult = $rawMaterial->getSummary($timeNormal);
@@ -1074,12 +1075,13 @@ class ReportTemplateController extends SEIPController {
                                 $i = $i + 86400; //VOY RECORRIENDO DIA POR DIA
                             }
                         }
-                        $arrayRawMaterial[] = array(
-                            "productName" => $productReport->getProduct()->getName() . " (" . $productReport->getProduct()->getProductUnit()->getUnit() . ")",
-                            "planRaw" => $totalRawDayPlan,
-                            "realRaw" => $totalRawDayReal
-                        );
                     }
+                    $arrayRawMaterial[] = array(
+                        "productName" => $productReport->getProduct()->getName() . " (" . $productReport->getProduct()->getProductUnit()->getUnit() . ")",
+                        "planRaw" => $totalRawDayPlan,
+                        "realRaw" => $totalRawDayReal
+                    );
+                    //}
                 }
 //CONSUMO DE SERVICIOS
                 foreach ($planReport->getConsumerPlanningServices() as $consumerPlanningService) {
@@ -1393,8 +1395,9 @@ class ReportTemplateController extends SEIPController {
                 );
 
                 //RAW MATERIAL 
-                if ($productReport->getProduct()->getIsRawMaterial()) {
-                    foreach ($productReport->getRawMaterialConsumptionPlannings() as $rawMaterial) {
+                //if ($productReport->getProduct()->getIsRawMaterial()) {
+                foreach ($productReport->getRawMaterialConsumptionPlannings() as $rawMaterial) {
+                    if ($rawMaterial->getProduct()->getIsRawMaterial()) {
                         $rawMaterialResult = $rawMaterial->getSummary($dateReport);
                         $arrayRawMaterial[] = array(
                             "productName" => $rawMaterial->getProduct()->getName() . " (" . $rawMaterial->getProduct()->getProductUnit()->getUnit() . ")",
@@ -1407,6 +1410,7 @@ class ReportTemplateController extends SEIPController {
                         );
                     }
                 }
+                //}
             }
             //CONSUME SERVICES
             $totalConsumerServices = array(
@@ -1485,7 +1489,7 @@ class ReportTemplateController extends SEIPController {
                             "productId" => $productReport->getId(),
                             "reportTemplateId" => $productReport->getPlantReport()->getReportTemplate()->getId(),
                             //ID DEL PRODUCTO
-                            "idProduct"=>$productId
+                            "idProduct" => $productId
                         );
                     }
 

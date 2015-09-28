@@ -1,0 +1,82 @@
+{% extends "PequivenSEIPBundle:Template:Developer/Common/tableFormat1.html.twig" %}
+
+{% trans_default_domain 'workStudyCircle' %}
+
+{% block title %}- {{ 'workStudyCircle.title'|trans }}{% endblock %}
+
+{% block before_body %}
+    {{ contentHeader(
+        ('workStudyCircle.files.attachment'|trans),
+        ('workStudyCircle.list'|trans)
+    ) }}
+{% endblock %}
+
+{% block body %}
+
+    <div ng-controller="TableFormatController">
+        <div ng-controller="TableDocumentController">
+            <details class="details margin-bottom" open="">
+                <summary role="button" aria-expanded="true">
+                    {{ 'pequiven.filters'|trans({},'messages') }}
+                </summary>
+            </details>              
+
+            <div loading-container="tableParams.settings().$loading">
+                <table ng-table="tableParams" template-pagination="custom/pager" template-header="custom/header" api-data-url="{{ apiDataUrl }}" export-csv="csv" class="table table-responsive table-extra-info" >
+                    <tbody>
+                        <tr ng-repeat="result in $data | filter:tableParams.search" data="{$ result|json $}">
+                            <td style="text-align: center;" data-title="'Nª'">
+                                {$ result.id $}
+                            </td>
+                            <td data-title="'Nombre de Documento'">
+                                {$ result.nameOriginal $}
+                            </td> 
+                            <td  style="text-align: center;" data-title="'Descargar'">
+                                <a target="_blank" href="{$ result._links.self.show $}">
+                                    <span icon="fa fa-file-pdf-o">
+                                        <i class="fa fa-file-pdf-o"></i>
+                                        <i class="icon-double-angle-right"></i>
+                                    </span>
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{  asset('bundles/pequivenseip/angular-base64/angular-base64.js') }}"></script>
+{% endblock %}
+
+
+{% block javascript %}
+    {{ parent() }}
+    <script type="text/javascript">
+
+$(document).ready(function () {
+        {#charge();
+        $('#selectWorkStudyCircle').select2({
+            minimumInputLength: 2,
+            allowClear: true,
+        })
+
+        function charge() {
+            $('.select2').select2({
+                allowClear: true
+            });
+        }
+#}
+    });
+
+    function getTableExtraInfo(data)
+    {
+        var response = '';
+        return response;
+    }
+    </script>
+
+{% endblock %}

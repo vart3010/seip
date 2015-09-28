@@ -556,8 +556,12 @@ class ArrangementProgramController extends SEIPController {
         $user = $this->getUser();
         $periodService = $this->getPeriodService();
 
-        if (!$periodService->isAllowLoadArrangementProgram()) {//Consultamos si está habilitada la carga de programa de gestión en el perído actual
-            $message = $this->trans('pequiven_seip.arrangementprogram.not_allow_load_arrangementprogram', array(), 'flashes');
+        //Validación Carga de Programa de Gestión SIG
+        if($associate == ArrangementProgram::ASSOCIATE_ARRANGEMENT_PROGRAM_SIG && $periodService->isAllowLoadSigArrangementProgram()){
+            
+
+        }elseif(!$periodService->isAllowLoadArrangementProgram()){//Consultamos si está habilitada la carga de programa de gestión en el perído actual
+            $message = $this->trans('pequiven_seip.arrangementprogram.not_allow_load_arrangementprogram',array(),'flashes');
             $this->setFlash('error', $message);
             throw $this->createAccessDeniedHttpException($message);
         }
