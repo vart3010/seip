@@ -3615,8 +3615,9 @@ class IndicatorService implements ContainerAwareInterface {
             $resultNumbers = $i +1;
             }
         }
-        //var_dump($resultNumbers);
+
         $results = $resultNumbers;
+        
         return $results;
         
     }

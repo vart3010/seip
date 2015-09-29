@@ -1749,7 +1749,7 @@ angular.module('seipModule.controllers', [])
             };
             //Removiendo las causas
             $scope.removeCausesEvolution = function (causesEvolution) {
-                $scope.openModalConfirm('pequiven.modal.confirm.indicator.delete_feature', function () {
+                $scope.openModalConfirm('¿Desea eliminar la causa?', function () {
                     notificationBarService.getLoadStatus().loading();
                     var url = Routing.generate("pequiven_causes_evolution_delete", {id: $scope.cause_data});
                     $http({
@@ -1773,7 +1773,7 @@ angular.module('seipModule.controllers', [])
             };
             //Removiendo las acciones
             $scope.removeActionEvolution = function (actionEvolution) {
-                $scope.openModalConfirm('pequiven.modal.confirm.indicator.delete_feature', function () {
+                $scope.openModalConfirm('¿Desea eliminar la acción?', function () {
                     notificationBarService.getLoadStatus().loading();
                     var url = Routing.generate("pequiven_action_evolution_delete", {id: $scope.action_data});
                     $http({
@@ -2156,8 +2156,8 @@ angular.module('seipModule.controllers', [])
             };
             //Removiendo la relación con el indicador 2014
             $scope.removeLastPeriod = function (relatioLastPeriod) {
-                console.log($scope.idIndicator);
-                $scope.openModalConfirm('pequiven.modal.confirm.indicator.delete_feature', function () {
+                //console.log($scope.idIndicator);
+                $scope.openModalConfirm('¿Desea eliminar la relación?', function () {
                     notificationBarService.getLoadStatus().loading();
                     var url = Routing.generate("pequiven_indicator_last_period_delete", {id: $scope.idIndicator});
                     $http({
