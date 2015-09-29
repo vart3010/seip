@@ -3583,12 +3583,7 @@ class IndicatorService implements ContainerAwareInterface {
 
             $obj = 0;
         }
-
-        //var_dump($trend->getId());
-        //var_dump($value1);               
-        //var_dump($obj);               
-
-        //die();
+        
         return $obj;           
         
     }
@@ -3622,6 +3617,8 @@ class IndicatorService implements ContainerAwareInterface {
         $chart["bgAlpha"] = "0,0";
         $chart["theme"] = "fint";
         //$chart["YAxisMaxValue"] = "150";
+        //$chart["decimalSeparator"] = ",";
+        //$chart["decimals"] = "2";
         $chart["showborder"] = "0";
         $chart["decimals"] = "0";
         $chart["exportenabled"] = "1";
@@ -3631,8 +3628,9 @@ class IndicatorService implements ContainerAwareInterface {
         $chart["exporthandler"] = "http://107.21.74.91/";
 
         //Lamado de promedio
-        $prom = $this->getPromdIndicator($indicator);
-        //Lamado obj
+        //$prom = $this->getPromdIndicator($indicator);
+        $prom = $indicator->getResultReal();//Carga del resultado real cargado del indicador        
+        //Lamado obj 2015
         $obj = $this->getObjIndicator($indicator);
         //Llamado de frecuencia de Notificacion del Indicador
         $labelsFrequencyNotificationArray = $this->getLabelsByIndicatorFrequencyNotification($indicator);
@@ -3723,7 +3721,7 @@ class IndicatorService implements ContainerAwareInterface {
             $dataSetLine["data"][] = array( 'value' => '' );//Valor vacio para saltar 2014
             for ($i=0; $i < $contCant; $i++) { 
             
-                $dataLine["value"] = $obj;//Carga de valores           
+                $dataLine["value"] = $obj;//Carga de valores     2015      
                 $dataSetLine["data"][] = $dataLine;//Data del Objetivo 2015
             
             }
