@@ -3587,6 +3587,39 @@ class IndicatorService implements ContainerAwareInterface {
         return $obj;           
         
     }
+
+    /**
+     * Function que retorna el objetivo segun tendencia del indicador
+     * @param indicator $indicator
+     * @return type
+     */
+    public function getIndicatorHasResultValid(Indicator $indicator){
+
+        //$results = $indicator->getId();
+        if ($indicator->getFormula()->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_FROM_EQ) {
+            
+            $arrayVariables = $this->getArrayVariablesFormulaWithData($indicator, array('viewVariablesRealPlanFromEquationByFrequencyNotification' => true));
+
+        } elseif ($indicator->getFormula()->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC) {
+            
+            $arrayVariables = $this->getArrayVariablesFormulaWithData($indicator, array('viewVariablesRealPlanAutomaticByFrequencyNotification' => true));
+        }
+
+        $totalValueIndicators = count($indicator->getValuesIndicator());
+        $labelsFrequencyNotificationArray = $this->getLabelsByIndicatorFrequencyNotification($indicator);
+        $realAccumulated = $planAccumulated = 0.0;
+            
+        $resultNumbers = 1;
+        for ($i = 0; $i < $totalValueIndicators; $i++) {
+            if($arrayVariables['valueReal'][$i] != 0 || $arrayVariables['valuePlan'][$i] != 0){
+            $resultNumbers = $i +1;
+            }
+        }
+        //var_dump($resultNumbers);
+        $results = $resultNumbers;
+        return $results;
+        
+    }
     
     /**
      * Gráfico de Columna para informe de Evolución
@@ -3632,6 +3665,8 @@ class IndicatorService implements ContainerAwareInterface {
         $prom = $indicator->getResultReal();//Carga del resultado real cargado del indicador        
         //Lamado obj 2015
         $obj = $this->getObjIndicator($indicator);
+        //Paso de Valores Validos
+        $resultNumbers = $this->getIndicatorHasResultValid($indicator);        
         //Llamado de frecuencia de Notificacion del Indicador
         $labelsFrequencyNotificationArray = $this->getLabelsByIndicatorFrequencyNotification($indicator);
         //Número de indicadores asociados
@@ -3660,12 +3695,17 @@ class IndicatorService implements ContainerAwareInterface {
             
             foreach ($indicatorValues as $indicatorValue) {
                 $formulaParameters = $indicatorValue->getFormulaParameters();
+             
+                if ($resultNumbers >= $contMonth) {                   
 
-                $label["label"] = $labelsFrequencyNotificationArray[$contMonth];
+                    $label["label"] = $labelsFrequencyNotificationArray[$contMonth];
                 
-                $contCant = $contMonth;//Contando la Cantidad de valores
+                    $contCant = $contMonth;//Contando la Cantidad de valores
+
+                    $category[] = $label;
                 
-                $category[] = $label;
+                }
+                
                 $contMonth++;
             }
 
@@ -3701,13 +3741,18 @@ class IndicatorService implements ContainerAwareInterface {
             //Pasando espacios vacios para desarrollo de la gráfica
             $dataSetTend["data"][] = array( 'value' => '' );
             $dataSetReal["data"][] = array( 'value' => '' );
-                        
+            
+            $contValue = 1;
             foreach ($indicator->getValuesIndicator() as $value) {
 
-                $dataReal["value"] = $value->getValueOfIndicator();//Carga de valores del indicador
-                //var_dump($value->getValueOfIndicator());
-                $dataSetReal["data"][] = $dataReal;//Data Real
-                $dataSetTend["data"][] = $dataReal;//Data Real Tendencia
+                if ($resultNumbers >= $contValue) {                   
+
+                    $dataReal["value"] = $value->getValueOfIndicator();//Carga de valores del indicador
+                    $dataSetReal["data"][] = $dataReal;//Data Real
+                    $dataSetTend["data"][] = $dataReal;//Data Real Tendencia
+                    $contValue = $contValue;
+                }
+                $contValue++;
             }
 
             //Carga de meta Objetivo2015
