@@ -9,6 +9,17 @@ pequiven_indicator_last_period_form:
     methods: [GET]
     options:
         expose: true
+#Eliminamos la relación con el indicador 2014
+pequiven_indicator_last_period_delete:
+    path: /{id}/delete-.{_format}
+    defaults:
+        _controller: pequiven.controller.indicator_sig:deleteLastPeriodAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET]
+    options:
+        expose: true
 #carga de formulario plan de acción
 pequiven_indicatoraction_get_form:
     path: /{idIndicator}/get-form_action.{_format}

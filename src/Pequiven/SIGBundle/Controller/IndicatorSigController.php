@@ -379,6 +379,33 @@ class IndicatorSigController extends ResourceController
     }
 
     /**
+     * Elimina la relación con el Indicador 2014
+     * 
+     * @param Request $request
+     * @return type
+     */
+    public function deleteLastPeriodAction(Request $request)
+    {   
+        $idIndicator = $request->get('id');
+        
+        $em = $this->getDoctrine()->getManager();
+
+        $indicatorRel = $this->get('pequiven.repository.sig_indicator')->find($idIndicator);
+        
+        if ($indicatorRel) {
+
+            $dataLast = NULL;
+            
+        }
+        
+            $indicatorRel->setIndicatorLastPeriod($dataLast);
+
+            $em->flush();
+            return $this->redirect($this->generateUrl('pequiven_indicator_evolution',$idIndicator));
+     
+    }
+
+    /**
      * Retorna el formulario del plan de acción
      * 
      * @param Request $request

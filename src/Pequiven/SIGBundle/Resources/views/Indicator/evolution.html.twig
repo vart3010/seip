@@ -39,14 +39,19 @@
 
         {# Carga del formulario de relacion del indicador #}
             {% if indicator_sig.indicatorlastPeriod %}
-
-            {% else %}
-            <div class="block block-title">
-                <h3>El indicador no tiene relacion con el indicador del 2014</h3>        
-                <div class="button-group absolute-right compact">
-                    <a class="button icon-list-add " href="" ng-click="loadTemplateIndicatorlastPeriod()" title="">{{ 'pequiven.add'|trans({},'messages')  }}</a>
+                <div class="block block-title">
+                    <h3>El Indicador tiene relación con el indicador del 2014</h3>
+                    <div class="button-group absolute-right compact">
+                        <a class="button icon-list-add " href="" ng-click="removeLastPeriod(idIndicator='{{ indicator_sig.id }}')" title="">{{ 'pequiven.delete'|trans({},'messages')  }}</a>
+                    </div>
                 </div>
-            </div>
+            {% else %}
+                <div class="block block-title">
+                    <h3>El Indicador no tiene relación con el indicador del 2014</h3>
+                    <div class="button-group absolute-right compact">
+                        <a class="button icon-list-add " href="" ng-click="loadTemplateIndicatorlastPeriod()" title="">{{ 'pequiven.add'|trans({},'messages')  }}</a>
+                    </div>
+                </div>
            {% endif %}
             {# fin Button formulario relacion lastperiod #}
         </div>
