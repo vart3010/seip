@@ -1258,7 +1258,7 @@ class ArrangementProgramController extends SEIPController {
     public function finishNotificationProcessAction(Request $request) {
         $resource = $this->findOr404($request);
 
-        $this->setPenaltiesbyGoal($request);
+        
 
         $arrangementProgramManager = $this->getArrangementProgramManager();
 
@@ -1292,6 +1292,9 @@ class ArrangementProgramController extends SEIPController {
 
         $this->domainManager->dispatchEvent('post_finish_the_notification_process', new ResourceEvent($resource));
 
+        //Comentado para Versión de Pruebas. Descomentar al Terminarlas
+        //$this->setPenaltiesbyGoal($request);
+        
         return $this->redirectHandler->redirectTo($resource);
     }
 
