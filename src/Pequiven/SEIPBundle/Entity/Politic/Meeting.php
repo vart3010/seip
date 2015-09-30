@@ -95,10 +95,39 @@ class Meeting {
      * @ORM\Column(name="duration",type="time",nullable=false)
      */
     private $duration;
+    
+    
+    /**
+     * Relacion archivos asociados a meeting
+     * 
+     * @var Pequiven\SEIPBundle\Entity\Politic\MeetingFile
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\Politic\MeetingFile",mappedBy="meeting")
+     */
+    private $meetingFile;
+    
 
     public function __construct() {
         $this->assistances = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->meetingFile = new \Doctrine\Common\Collections\ArrayCollection();
     }
+    
+    
+    public function addMeetingFile(MeetingFile $meetingFile) {
+        $this->meetingFile->add($meetingFile);
+        return $this;
+    }
+    
+    public function removeMeetingFile(MeetingFile $meetingFile) {
+        $this->meetingFile->removeElement($meetingFile);
+    }
+    /**
+     * 
+     * @return type
+     */
+    public function getMeetingFile() {
+        return $this->meetingFile;
+    }
+    
 
     /**
      * 

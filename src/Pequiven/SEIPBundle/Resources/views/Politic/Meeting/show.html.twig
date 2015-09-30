@@ -102,9 +102,9 @@
                 url: '{{ path("pequiven_work_study_circle_get_url_file") }}',
                 data: data,
                 success: function (data) {
-                    // console.log(data);
                     //window.open(data["url"]);
-                    window.location = data["url"];
+                    //window.location = data["url"];
+                    window.open(data["url"], '_blank');
                 }
             });
 
@@ -114,7 +114,6 @@
 
             $("button#downloadFile").click(function () {
                 var idFile = $(this).attr("data");
-                //alert(idMeeting);
                 openFile(idFile);
             });
 

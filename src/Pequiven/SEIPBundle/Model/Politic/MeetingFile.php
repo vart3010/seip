@@ -9,7 +9,7 @@ use Pequiven\SEIPBundle\Model\BaseModel;
  * Modelo de las propuestas del círculo de estudio de trabajo
  * @author Victor Tortolero vart10.30@gmail.com
  */
-abstract class WorkStudyCircleFile {
+abstract class MeetingFile {
 
     const NAME_FILE = "CET_";
     const LOCATION_UPLOAD_FILE = "uploads/documents/cet_files";

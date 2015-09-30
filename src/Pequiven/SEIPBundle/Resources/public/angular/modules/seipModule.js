@@ -2277,7 +2277,7 @@ angular.module('seipModule.controllers', [])
         })
 
         .controller('MeetingController', function ($scope, $http) {
-            //$scope.urlUploadFileForm = null;
+            var formFile= angular.element('form#formFile');
             $scope.idMeeting = null;
             var isInit = false;
 
@@ -2286,7 +2286,9 @@ angular.module('seipModule.controllers', [])
                 if (isInit == false) {
                     isInit = true;
                 }
-                $scope.templateOptions.setTemplate($scope.templates[0]);
+                $scope.setHeight(350);
+
+                //$scope.templateOptions.setTemplate($scope.templates[0]);
                 $scope.templateOptions.setParameterCallBack(resource);
 
                 if (resource) {
@@ -2295,6 +2297,20 @@ angular.module('seipModule.controllers', [])
                 } else {
                     $scope.openModalAuto();
                 }
+            };
+
+            var addFile = function (save, successCallBack) {
+                $("#saveFile").click();
+                console.log(formFile);
+            };
+
+            $scope.templateOptions.setVar('addFile', addFile);
+
+            var confirmCallBack = function () {
+                addFile(true, function (data) {
+                    idMeeting: $scope.idMeeting;
+                });
+                return true;
             };
 
             $scope.initFormUpload = function (resource) {
@@ -2314,15 +2330,16 @@ angular.module('seipModule.controllers', [])
                 $scope.templates = [
                     {
                         name: 'Cargar Archivos',
-                        url: url
+                        url: url,
+                        confirmCallBack: confirmCallBack
                     }
                 ];
                 $scope.templateOptions.setTemplate($scope.templates[0]);
             };
 
-            var initCallBack = function () {
-                return false;
-            };
+
+
+
 
         })
 
@@ -2592,6 +2609,9 @@ angular.module('seipModule.controllers', [])
                     title: sfTranslator.trans("pequiven.dialog.confirm")
                 }
             };
+
+            $scope.height = 650;
+
             //Establece el valor de un select2
             $scope.setValueSelect2 = function setValueSelect2(idSelect2, idEntity, data, callBack) {
                 var selected = null;
@@ -2684,6 +2704,9 @@ angular.module('seipModule.controllers', [])
             $scope.templateOptions.getTemplate = function () {
                 return $scope.template;
             };
+            $scope.setHeight = function (h) {
+                $scope.height = h;
+            };
             var modalOpen, modalConfirm;
             jQuery(document).ready(function () {
                 var angular = jQuery("#dialog-form");
@@ -2731,14 +2754,17 @@ angular.module('seipModule.controllers', [])
                 }
             };
             $scope.openModalAuto = function (callback) {
+
                 notificationBarService.getLoadStatus().loading();
                 if ($scope.template.load == true) {
                     openModal(callback);
                 }
             };
             function openModal(callback) {
+                var height = $scope.height;
                 if ($scope.template.name) {
                     modalOpen.dialog("option", "title", sfTranslator.trans($scope.template.name));
+                    modalOpen.dialog("option", "height", height);
                 }
 
                 if ($scope.template.modeEdit) {
@@ -2771,7 +2797,7 @@ angular.module('seipModule.controllers', [])
                         {text: "Añadir", click: function () {
                                 if ($scope.template.confirmCallBack) {
                                     if ($scope.template.confirmCallBack()) {
-                                        modalOpen.dialog("close");
+                                        //modalOpen.dialog("close");
                                     }
                                 } else {
                                     modalOpen.dialog("close");
@@ -3006,6 +3032,35 @@ angular.module('seipModule.controllers', [])
                     $scope.tableParams.$params.filter['gerenciaSecond'] = null;
                 }
             });
+        })
+
+        .controller('TableWorkStudyCircleFileController', function ($scope, ngTableParams, $http, sfTranslator, notifyService) {
+            var selectCategoryFile = angular.element("#selectCategoryFile");
+
+            $scope.data = {
+                category: null
+            };
+            $scope.model = {
+                category: null
+            };
+
+            //Busca las categorias de archivos
+            $scope.getCategoryFile = function () {
+                var parameters = {
+                    filter: {}
+                };
+                $http.get(Routing.generate('pequiven_seip_work_study_circle_category_file', parameters))
+                        .success(function (data) {
+                            $scope.data.category = data;
+                            if ($scope.model.category != null) {
+                                $scope.setValueSelect2("selectCategoryFile", $scope.model.category, $scope.data.category, function (selected) {
+                                    $scope.model.category = selected;
+                                });
+                            }
+                        });
+            };
+            $scope.getCategoryFile();
+
         })
 
         .controller('TableWorkStudyCircleController', function ($scope, ngTableParams, $http, sfTranslator, notifyService) {
