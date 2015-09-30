@@ -207,6 +207,17 @@ pequiven_action_evolution_delete:
     methods: [GET]
     options:
         expose: true
+#Eliminamos las verificaciones
+pequiven_verification_evolution_delete:
+    path: /{id}/delverification.{_format}
+    defaults:
+        _controller: pequiven.controller.indicator_sig:deleteVerificationAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET]
+    options:
+        expose: true
 #filtro causas del indicador
 pequiven_sig_causes_indicator_evolution:
     path: /{idIndicator}/causesevolution.{_format}

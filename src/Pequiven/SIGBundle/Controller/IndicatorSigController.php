@@ -740,17 +740,16 @@ class IndicatorSigController extends ResourceController
      */
     public function deleteCauseAction(Request $request)
     {   
-        //die($request->get('id'));
+        
         $causeId = $request->get('id');
         
         $em = $this->getDoctrine()->getManager();
         $results = $this->get('pequiven.repository.sig_causes_indicator')->find($causeId);
-        //var_dump(count($results));
-        //die();
+        
         if($results){
 
-        $em->remove($results);
-        $em->flush();
+            $em->remove($results);
+            $em->flush();
         
         }  
     }
@@ -893,6 +892,30 @@ class IndicatorSigController extends ResourceController
             $em->flush();  
 
         }  
+    }
+
+    /**
+     *  Delete verification
+     *  
+     * @param Request $request
+     * @return type
+     */
+    public function deleteVerificationAction(Request $request)
+    {
+        $id = $request->get('id');//id Verification        
+        
+        $em = $this->getDoctrine()->getManager();
+        //$verification = $this->get('pequiven.repository.sig_causes_indicator')->find($id);
+        $verification = $this->get('pequiven.repository.sig_action_verification')->find($id);
+
+        
+        if($verification){
+
+            $em->remove($verification);
+            $em->flush();
+        
+        }
+
     }
 
     /**
@@ -1040,8 +1063,7 @@ class IndicatorSigController extends ResourceController
             }
             $actionResult = $this->get('pequiven.repository.sig_action_indicator')->findBy(array('id' => $idCons));
         }  
-        //var_dump(count($verification));
-        //die();
+
         $actionsValues = EvolutionActionValue::getActionValues($idCons, $month);          
         $cant = count($actionResult);
 
