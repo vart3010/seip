@@ -103,7 +103,7 @@ pequiven_work_study_circle_download_file:
 pequiven_work_study_circle_document_list:
     path: /listFile.{_format}
     defaults:
-        _controller: pequiven.controller.work_study_circle_file:listAction 
+        _controller: pequiven.controller.meetingFile:listAction 
         _format: html
     requirements:
         _format: html|json|xml

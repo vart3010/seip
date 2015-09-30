@@ -414,6 +414,7 @@ sylius_resource:
                 controller: Pequiven\SEIPBundle\Controller\Politic\AssistanceController
                 model: Pequiven\SEIPBundle\Entity\Politic\Assistance
                 repository: Pequiven\SEIPBundle\Repository\Politic\AssistanceRepository
+        
         pequiven.workStudyCircleFile:
             driver: doctrine/orm
             templates: PequivenSEIPBundle:Politic/WorkStudyCircle/File
@@ -421,9 +422,18 @@ sylius_resource:
                 controller: Pequiven\SEIPBundle\Controller\Politic\WorkStudyCircleFileController
                 model: Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircleFile
                 repository: Pequiven\SEIPBundle\Repository\Politic\WorkStudyCircleFileRepository
+        
         pequiven_seip.categoryFile:
             driver: doctrine/orm
             classes:
                 controller: Pequiven\ArrangementProgramBundle\Controller\GenericDataController
                 model: Pequiven\SEIPBundle\Entity\Politic\CategoryFile
                 repository: Pequiven\SEIPBundle\Repository\Politic\CategoryFileRepository
+        pequiven.meetingFile:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:Politic/Meeting
+            classes:
+                controller: Pequiven\SEIPBundle\Controller\Politic\MeetingFileController
+                model: Pequiven\SEIPBundle\Entity\Politic\MeetingFile
+                repository: Pequiven\SEIPBundle\Repository\Politic\MeetingFileRepository
+        

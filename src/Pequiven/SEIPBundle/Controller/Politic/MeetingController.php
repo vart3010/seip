@@ -9,7 +9,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Pequiven\SEIPBundle\Entity\Politic\Meeting;
 use Pequiven\SEIPBundle\Form\Politic\MeetingType;
 use Pequiven\SEIPBundle\Entity\Politic\Assistance;
-use Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircleFileStudy;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Pequiven\SEIPBundle\Form\Politic\MeetingFileType;
 

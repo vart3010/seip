@@ -33,15 +33,18 @@
                 <tbody>
                     {% set cont = 1 %}
                     {% for file in files %}
-                        {% set totalCat = "" %}
-                        {% for cat in file.categoryFile %}
-                             {% set totalCat = totalCat ~ "," ~ cat.description %}
-                        {% endfor %}
+                        {# {% set totalCat = "" %}
+                         {% for cat in file.categoryFile %}
+                              {% set totalCat = totalCat ~ "," ~ cat.description %}
+                         {% endfor %}#}
                         <tr>
                             <td>{{ cont }}</td>
                             <td> {{ file.nameFile }} </td>
                             <td>
-                                <span title="{{ totalCat }}">{{ totalCat|slice(1,26) }}</span>
+                                {% for cat in file.categoryFile %}
+                                    <span class="tag blue-bg">{{ cat.description }}</span>
+                                {% endfor %}
+                                {#<span title="{{ totalCat }}">{{ totalCat|slice(1,26) }}</span>#}
                             </td>
                             <td>
                                 <button id="downloadFile" data="{{ file.id }}" class="button compact" type="button">
