@@ -420,9 +420,26 @@ class IndicatorSigController extends ResourceController
         $data = $this->findEvolutionCause($request);//Carga la data de las causas y sus acciones relacionadas
 
         foreach ($idIndicator->getObjetives() as $value) {
-          
-            $complejo = $value->getComplejo()->getRef();
-            $gerencia = $value->getGerencia()->getAbbreviation();
+            
+            $compData = $value->getComplejo();//Consultando si tiene complejo
+            $gerData = $value->getGerencia();//Si tiene gerencia
+            
+            if($compData){
+
+                $complejo = $compData->getRef();
+                
+            }else{
+                $complejo = "S/C";
+            }
+            if ($gerData) {
+            
+                $gerencia = $gerData->getAbbreviation();
+                
+            }else{
+                $gerencia = "S/G";
+            }
+            //$complejo = $value->getComplejo()->getRef();
+            //$gerencia = $value->getGerencia()->getAbbreviation();
 
         }
 

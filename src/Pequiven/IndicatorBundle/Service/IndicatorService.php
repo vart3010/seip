@@ -3595,14 +3595,34 @@ class IndicatorService implements ContainerAwareInterface {
      */
     public function getIndicatorHasResultValid(Indicator $indicator){
 
-        //$results = $indicator->getId();
-        if ($indicator->getFormula()->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_FROM_EQ) {
-            
-            $arrayVariables = $this->getArrayVariablesFormulaWithData($indicator, array('viewVariablesRealPlanFromEquationByFrequencyNotification' => true));
+        $cont = 0;
+        $var = FALSE;
 
-        } elseif ($indicator->getFormula()->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC) {
+        if ($indicator->getFormula()->getTypeOfCalculation() == Formula::TYPE_CALCULATION_SIMPLE_AVERAGE) {
+            
+            //$arrayVariables = $this->getArrayVariablesFormulaWithData($indicator, array('viewVariablesRealPlanAutomaticByFrequencyNotification' => true));
+            $var = FALSE;
+
+        }elseif ($indicator->getFormula()->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC) {
             
             $arrayVariables = $this->getArrayVariablesFormulaWithData($indicator, array('viewVariablesRealPlanAutomaticByFrequencyNotification' => true));
+            $var = TRUE;
+
+        }elseif ($indicator->getFormula()->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AUTOMATIC) {
+            
+            //$arrayVariables = $this->getArrayVariablesFormulaWithData($indicator, array('viewVariablesRealPlanAutomaticByFrequencyNotification' => true));
+            $var = FALSE;
+            
+        }elseif ($indicator->getFormula()->getTypeOfCalculation() == Formula::TYPE_CALCULATION_ACCUMULATE) {
+            
+            //$arrayVariables = $this->getArrayVariablesFormulaWithData($indicator, array('viewVariablesRealPlanAutomaticByFrequencyNotification' => true));
+            $var = FALSE;
+            
+        }elseif ($indicator->getFormula()->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_FROM_EQ) {
+            
+            $arrayVariables = $this->getArrayVariablesFormulaWithData($indicator, array('viewVariablesRealPlanFromEquationByFrequencyNotification' => true));
+            $var = TRUE;
+
         }
 
         $totalValueIndicators = count($indicator->getValuesIndicator());
@@ -3610,9 +3630,18 @@ class IndicatorService implements ContainerAwareInterface {
         $realAccumulated = $planAccumulated = 0.0;
             
         $resultNumbers = 1;
-        for ($i = 0; $i < $totalValueIndicators; $i++) {
-            if($arrayVariables['valueReal'][$i] != 0 || $arrayVariables['valuePlan'][$i] != 0){
-            $resultNumbers = $i +1;
+        if ($var === TRUE) {
+            
+            for ($i = 0; $i < $totalValueIndicators; $i++) {
+                if($arrayVariables['valueReal'][$i] != 0 || $arrayVariables['valuePlan'][$i] != 0){
+                $resultNumbers = $i +1;
+                }
+            }
+        }else{
+            foreach ($indicator->getValuesIndicator() as $value) {
+                
+                $cont++;
+                $resultNumbers = $cont;
             }
         }
 
@@ -3727,9 +3756,8 @@ class IndicatorService implements ContainerAwareInterface {
                     $dataAnt["value"] = 0;//Pasando data a Data2014 si no tiene ralacion
 
                 }
-                else{
-
-                    //$promLast = $acumLast / $cant;                
+                else{               
+                    
                     $value = (int)$indicatorlast->getResultReal();
                     $dataAnt["value"] = $value;//Pasando data a Data2014                
                 }
@@ -3754,14 +3782,6 @@ class IndicatorService implements ContainerAwareInterface {
                     $contValue = $contValue;
                 }
                 $contValue++;
-            }
-
-            //Carga de meta Objetivo2015
-            //foreach ($indicator->getObjetives() as $value) {
-            $dataValueObjetive = $indicator->getGoal();//Carga valor Objetivo 2015
-            //}
-            if ($dataValueObjetive == NULL ) {
-                $dataValueObjetive = 0;
             }
 
             $dataSetLine["data"][] = array( 'value' => '' );//Valor vacio para saltar 2014
