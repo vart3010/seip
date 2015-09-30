@@ -78,6 +78,20 @@ class EvolutionActionVerification extends Model {
      * @ORM\JoinColumn(name="action_id", referencedColumnName="id")
      */
     private $actionPlan;
+
+    /**
+     * @var integer
+     * @ORM\ManyToOne(targetEntity="\Pequiven\IndicatorBundle\Entity\Indicator", inversedBy="indicatorVerification")
+     * @ORM\JoinColumn(name="indicator_id", referencedColumnName="id")
+     */
+    private $indicator;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="month", type="integer")
+     */
+    private $month;
     
     /**
      * Get id
@@ -86,6 +100,46 @@ class EvolutionActionVerification extends Model {
      */
     public function getId() {
         return $this->id;
+    }
+
+    /**
+     * Set indicator
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator $indicator
+     * @return Indicator
+     */
+    public function setIndicator(\Pequiven\IndicatorBundle\Entity\Indicator $indicator) {
+        
+        $this->indicator = $indicator;
+
+        return $this;
+    }
+
+    /**
+     * Get indicator
+     *
+     * @return Pequiven\IndicatorBundle\Entity\Indicator
+     */
+    public function getIndicator() {
+        return $this->indicator;
+    }
+
+    /**
+     * 
+     * @param type $month
+     * @return type
+     */
+    public function setMonth($month) {
+        $this->month = $month;
+        return $month;
+    }
+
+    /**
+     * 
+     * @return type
+     */
+    public function getMonth() {
+        return $this->month;
     }
 
     /**

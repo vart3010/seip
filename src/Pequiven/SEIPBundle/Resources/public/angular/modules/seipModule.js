@@ -1920,7 +1920,7 @@ angular.module('seipModule.controllers', [])
                     var save = false;
                 }
                 if (save == true) {
-                    var url = Routing.generate('pequiven_verification_evolution_add', {idIndicator: $scope.id_indicator});
+                    var url = Routing.generate('pequiven_verification_evolution_add', {idIndicator: $scope.id_indicator, month: $scope.month});
                 }
                 notificationBarService.getLoadStatus().loading();
                 return $http({
@@ -1960,7 +1960,7 @@ angular.module('seipModule.controllers', [])
             };
             //Formulario Verificación
             $scope.initFormVerification = function (resource) {
-
+                //console.log($scope.month);
                 var d = new Date();
                 var numero = d.getTime();
 

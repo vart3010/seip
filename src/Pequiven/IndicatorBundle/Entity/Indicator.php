@@ -617,6 +617,14 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionTrend",mappedBy="indicator",cascade={"persist","remove"})
      */
     protected $indicatorTrend;
+
+    /**
+     * Causas de Desviación
+     * 
+     * @var \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCause
+     * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionActionVerification",mappedBy="indicator",cascade={"persist","remove"})
+     */
+    protected $indicatorVerification;
    
     /**
      * Constructor
@@ -632,7 +640,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
         $this->featuresIndicator = new \Doctrine\Common\Collections\ArrayCollection();
         $this->charts = new \Doctrine\Common\Collections\ArrayCollection();
         $this->managementSystems = new \Doctrine\Common\Collections\ArrayCollection();
-//        $this->indicatorlastPeriod = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->indicatorVerification = new \Doctrine\Common\Collections\ArrayCollection();        
         $this->indicatorCause = new \Doctrine\Common\Collections\ArrayCollection();
         $this->indicatorCauseAnalisys = new \Doctrine\Common\Collections\ArrayCollection();
         $this->indicatorTrend = new \Doctrine\Common\Collections\ArrayCollection();
@@ -1173,6 +1181,38 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     public function getIndicatorCause() {
         return $this->indicatorCause;
     }
+    
+    /**
+     * Add indicatorVerification
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionActionVerification $indicatorVerification
+     * @return Indicator
+     */
+    public function addIndicatorVerification(\Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionActionVerification $indicatorVerification) {
+
+        $this->indicatorVerification->add($indicatorVerification);
+
+        return $this;
+    }
+
+    /**
+     * Remove indicatorVerification
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionActionVerification $indicatorCause
+     */
+    public function removeIndicatorVerification(\Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionActionVerification $indicatorVerification) {
+        $this->indicatorCauses->removeElement($indicatorCause);
+    }
+
+    /**
+     * Get indicatorVerification
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getIndicatorVerification() {
+        return $this->indicatorVerification;
+    }
+    
 
     /**
      * Add indicatorCauseAnalysis

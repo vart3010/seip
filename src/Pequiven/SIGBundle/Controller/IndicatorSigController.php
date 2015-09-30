@@ -852,6 +852,11 @@ class IndicatorSigController extends ResourceController
      */
     public function addVerificationAction(Request $request)
     {   
+        $indicator = $request->get('idIndicator');//Carga de indicador
+        $repository = $this->get('pequiven.repository.sig_indicator');
+        $results = $repository->find($indicator);
+
+        $month = $request->get('month');;//Mes
         
         $action = $request->get('actionVerification')['actionPlan'];
         $idVerification = $request->get('actionVerification')['typeVerification'];
@@ -869,6 +874,8 @@ class IndicatorSigController extends ResourceController
         
         $verification->setCreatedBy($user);
         $verification->setActionPlan($actionVer);
+        $verification->setIndicator($results);
+        $verification->setMonth($month);
 
         $form->handleRequest($request);
 
@@ -877,8 +884,6 @@ class IndicatorSigController extends ResourceController
             $em = $this->getDoctrine()->getManager();
             $em->persist($verification);
             $em->flush();
-
-           // return $this->redirect($this->generateUrl('pequiven_causes_form_add'));
         }    
 
         
@@ -1043,8 +1048,8 @@ class IndicatorSigController extends ResourceController
         if($opc = false){
             $idAction = null;
         } 
-        $verification = $this->get('pequiven.repository.sig_action_verification')->findAll();
-
+        $verification = $this->get('pequiven.repository.sig_action_verification')->findBy(array('indicator'=>$idIndicator, 'month' => $month));                
+        
         //Carga de array con la data
         $data = [
 
@@ -1118,7 +1123,7 @@ class IndicatorSigController extends ResourceController
             $objRel = $value->getDescription();
          } 
         //Verificación
-        $verification = $this->get('pequiven.repository.sig_action_verification')->findAll();        
+        $verification = $this->get('pequiven.repository.sig_action_verification')->findBy(array('indicator'=>$idIndicator, 'month' => $month));        
 
         $data = array(
             'data'          => $dataChart,//Data del Gráfico Informe de Evolución
