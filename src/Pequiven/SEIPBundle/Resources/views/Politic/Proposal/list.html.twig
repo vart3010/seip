@@ -73,7 +73,7 @@
         </details>              
                                      
         <div loading-container="tableParams.settings().$loading">
-            <table ng-table="tableParams" template-pagination="custom/pager" template-header="custom/header" api-data-url="{{ apiDataUrl }}" export-csv="csv" class="table table-responsive table-extra-info" >
+            <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager" template-header="custom/header" api-data-url="{{ apiDataUrl }}" export-csv="csv" class="table table-responsive table-extra-info" >
                 <tbody>
                         
                     <tr ng-repeat="result in $data | filter:tableParams.search" data="{$ result|json $}">
@@ -83,7 +83,7 @@
                         <td data-title="'Línea Estratégica'">
                             <a href="{$ result._links.self.show $}">{$ result.lineStrategic.description $}</a>
                         </td>
-                        <td data-title="'Propuesta'">
+                        <td data-title="'Propuesta'" filter="{'description' : 'text'}">
                             <a href="{$ result._links.self.show $}">{$ result.description $}</a>
                         </td>
                         <td data-title="'Localidad'">

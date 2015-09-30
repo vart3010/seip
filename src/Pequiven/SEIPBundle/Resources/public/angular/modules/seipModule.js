@@ -292,6 +292,7 @@ angular.module('seipModule.controllers', [])
                 }
             };
             managementSystem.on('change', function (e) {
+                console.log(e.val);
                 if (e.val) {
                     var managementSystemId = e.val;
                     tacticalObjective.find('option').remove().end();
@@ -1748,8 +1749,7 @@ angular.module('seipModule.controllers', [])
             };
             //Removiendo las causas
             $scope.removeCausesEvolution = function (causesEvolution) {
-                //console.log($scope.cause_data);
-                $scope.openModalConfirm('pequiven.modal.confirm.indicator.delete_feature', function () {
+                $scope.openModalConfirm('¿Desea eliminar la causa?', function () {
                     notificationBarService.getLoadStatus().loading();
                     var url = Routing.generate("pequiven_causes_evolution_delete", {id: $scope.cause_data});
                     $http({
@@ -1757,28 +1757,23 @@ angular.module('seipModule.controllers', [])
                         url: url,
                         headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'}  // set the headers so angular passing info as form data (not request payload)
                     }).success(function (data) {
-                        //$scope.templateOptions.setVar("form", {errors: {}});
-                        //$scope.indicator.cause_data.remove(cause_data);
-                        //notificationBarService.getLoadStatus().done();
                         return true;
                     }).error(function (data, status, headers, config) {
-                        //$scope.templateOptions.setVar("form", {errors: {}});
                         if (data.errors) {
                             if (data.errors.errors) {
                                 $.each(data.errors.errors, function (index, value) {
                                     notifyService.error(Translator.trans(value));
                                 });
                             }
-                            //$scope.templateOptions.setVar("form", {errors: data.errors.children});
                         }
                         notificationBarService.getLoadStatus().done();
                         return false;
                     });
                 });
             };
-            //Removiendo las causas
+            //Removiendo las acciones
             $scope.removeActionEvolution = function (actionEvolution) {
-                $scope.openModalConfirm('pequiven.modal.confirm.indicator.delete_feature', function () {
+                $scope.openModalConfirm('¿Desea eliminar la acción?', function () {
                     notificationBarService.getLoadStatus().loading();
                     var url = Routing.generate("pequiven_action_evolution_delete", {id: $scope.action_data});
                     $http({
@@ -2157,6 +2152,31 @@ angular.module('seipModule.controllers', [])
                     //$scope.templateOptions.setVar('evaluationResult', 0);
                     notificationBarService.getLoadStatus().done();
                     return false;
+                });
+            };
+            //Removiendo la relación con el indicador 2014
+            $scope.removeLastPeriod = function (relatioLastPeriod) {
+                //console.log($scope.idIndicator);
+                $scope.openModalConfirm('¿Desea eliminar la relación?', function () {
+                    notificationBarService.getLoadStatus().loading();
+                    var url = Routing.generate("pequiven_indicator_last_period_delete", {id: $scope.idIndicator});
+                    $http({
+                        method: 'GET',
+                        url: url,
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'}  // set the headers so angular passing info as form data (not request payload)
+                    }).success(function (data) {
+                        return true;
+                    }).error(function (data, status, headers, config) {
+                        if (data.errors) {
+                            if (data.errors.errors) {
+                                $.each(data.errors.errors, function (index, value) {
+                                    notifyService.error(Translator.trans(value));
+                                });
+                            }
+                        }
+                        notificationBarService.getLoadStatus().done();
+                        return false;
+                    });
                 });
             };
             $scope.templateOptions.setVar('addLastPeriod', addLastPeriod);

@@ -144,6 +144,11 @@ app:
                             visualize:
                                 main: Visualizar
                                 listAll: Lista
+                                assigned: Asignados
+                                pending: Pendientes
+                                for_reviewing: Por revisar
+                                for_approving: Por aprobar
+                                for_notifying: Por notificar
                     results:
                         main: Resultados
                         visualize:
@@ -207,7 +212,6 @@ app:
                         vizualice: Visualizar
                         reports: Reportes
                         strategic_plan: Plan Estratégico
-                        notification: Notificación
                         visualize: Visualizar
                         general: General
                         list: Lista

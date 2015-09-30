@@ -155,6 +155,8 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                         ))
                 )
                 ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.main', $section)));            
+            if($this->isGranted('ROLE_SEIP_SIG_OBJECTIVE'))
+                {
                 //Menú Nivel 2: Visualizar
                 $objective = $this->factory->createItem('objective.main',
                         $this->getSubLevelOptions(array(
@@ -174,7 +176,9 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                     ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.objective.matrices_objectives', $section)));
 
                 $menuSig->addChild($objective);
-
+            }
+            if($this->isGranted('ROLE_SEIP_SIG_INDICATOR'))
+                {
                 //Indicator                
                 $indicator = $this->factory->createItem('indicator.main',
                         $this->getSubLevelOptions(array(
@@ -182,9 +186,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                         'labelAttributes' => array('icon' => '',),
                         ))
                     )->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.indicator.main', $section)));
-                //Nivel 2
-                if($this->isGranted('ROLE_SEIP_SIG_MENU'))
-                {
+                //Nivel 2                
                 //Ver 
                     $visualize = $this->factory->createItem('sig.indicator.list',
                         $this->getSubLevelOptions(array(
@@ -193,87 +195,124 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                     ))
                     )->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.indicator.visualize', $section)));
                     //Nivel 3
-                    if($this->isGranted('ROLE_SEIP_SIG_MENU')){
+                    if($this->isGranted('ROLE_SEIP_SIG_INDICATOR_LIST')){
                         $visualize->addChild('planning.visualize.indicators.strategic', array(
                             'route' => 'pequiven_indicatorsig_list',
                             'routeParameters' => array('level' => \Pequiven\IndicatorBundle\Model\IndicatorLevel::LEVEL_ESTRATEGICO)
                         ))->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.indicators.strategic', $section)));
                     }
-                    if($this->isGranted('ROLE_SEIP_SIG_MENU')){
+                    if($this->isGranted('ROLE_SEIP_SIG_INDICATOR_LIST')){
                         $visualize->addChild('planning.visualize.indicators.tactic', array(
                             'route' => 'pequiven_indicatorsig_list',
                             'routeParameters' => array('level' => \Pequiven\IndicatorBundle\Model\IndicatorLevel::LEVEL_TACTICO)
                         ))->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.indicators.tactic', $section)));
                     }
-                    if($this->isGranted('ROLE_SEIP_SIG_MENU')){
+                    if($this->isGranted('ROLE_SEIP_SIG_INDICATOR_LIST')){
                         $visualize->addChild('planning.visualize.indicators.operative', array(
                             'route' => 'pequiven_indicatorsig_list',
                             'routeParameters' => array('level' => \Pequiven\IndicatorBundle\Model\IndicatorLevel::LEVEL_OPERATIVO)
                         ))->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.indicators.operative', $section)));
                     } 
 
-                $indicator->addChild($visualize);                
-                }
+                $indicator->addChild($visualize);                                
                 
                 $menuSig->addChild($indicator);
                 //Fin indicadores
-
-        //Sección Programas de Gestión
-        $arrangementProgram = $this->factory->createItem('arrangement_program.main', $this->getSubLevelOptions(array(
-                            'uri' => 'arrangement_program',
-                            'labelAttributes' => array('icon' => '',),
-                        ))
-                )->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.arrangement_program.main', $section)));
-
-        if ($this->isGranted('ROLE_SEIP_ARRANGEMENT_PROGRAM_LIST_*')) {
-            //Menú Nivel 2: Visualizar
-            $visualize = $this->factory->createItem('sig.arrangement_programs.visualize', $this->getSubLevelOptions(array('uri' => 'null',
+            }
+        if($this->isGranted('ROLE_SEIP_SIG_ARRANGEMENT_PROGRAM'))
+                {
+            //Sección Programas de Gestión
+            //Pendientes
+            $pending = $this->factory->createItem('arrangement_programs.list.pending', $this->getSubLevelOptions(array('uri' => null,
+                                    'labelAttributes' => array('icon' => '',),
+                                ))
+                        )->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_programs.pending', $section)));
+            //Visualizar general
+            $arrangementProgram = $this->factory->createItem('arrangement_program.main', $this->getSubLevelOptions(array(
+                                'uri' => 'arrangement_program',
                                 'labelAttributes' => array('icon' => '',),
                             ))
-                    )->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.arrangement_program.visualize.main', $section)));
-            if ($this->isGranted('ROLE_SEIP_SIG_ARRANGEMENT_PROGRAM_LIST_ALL')) {
-                $visualize
-                        ->addChild('sig.arrangement_program.visualize.listAll', array(
-                            'route' => 'pequiven_seip_sig_arrangementprogram_all',
-                        ))
-                        ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.arrangement_program.visualize.listAll', $section)));
-            }
+                    )->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.arrangement_program.main', $section)));
 
-            $arrangementProgram->addChild($visualize);
-        }
-
-        //Añadir
-        if ($this->isGranted('ROLE_SEIP_SIG_ARRANGEMENT_PROGRAM_CREATE_*')) {
-//            if ($this->isGranted('ROLE_SEIP_ARRANGEMENT_PROGRAM_CREATE_SPECIAL')) {
-            $subchild = $this->factory->createItem('sig.arrangement_program.add.main', $this->getSubLevelOptions(array(
-                                'uri' => null,
-                                'labelAttributes' => array('icon' => 'icon-book',),
+            if ($this->isGranted('ROLE_SEIP_ARRANGEMENT_PROGRAM_LIST_*')) {
+                //Menú Nivel 2: Visualizar
+                $visualize = $this->factory->createItem('sig.arrangement_programs.visualize', $this->getSubLevelOptions(array('uri' => 'null',
+                                    'labelAttributes' => array('icon' => '',),
+                                ))
+                        )->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.arrangement_program.visualize.main', $section)));
+                if ($this->isGranted('ROLE_SEIP_SIG_ARRANGEMENT_PROGRAM_LIST_ALL')) {
+                    $visualize
+                            ->addChild('sig.arrangement_program.visualize.listAll', array(
+                                'route' => 'pequiven_seip_sig_arrangementprogram_all',
                             ))
-                    )->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_programs.add.main', $section)));
+                            ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.arrangement_program.visualize.listAll', $section)));
+                }
+                if ($this->isGranted('ROLE_SEIP_SIG_ARRANGEMENT_PROGRAM_LIST_ALL')) {
+                    $visualize
+                            ->addChild('sig.arrangement_program.visualize.assigned', array(
+                                'route' => 'pequiven_seip_arrangementprogram_assigned',
+                            ))
+                            ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.arrangement_program.visualize.assigned', $section)));
+                }
+                //Pendientes
+                if ($this->isGranted('ROLE_SEIP_SIG_ARRANGEMENT_PROGRAM_LIST_ALL')) {
+                    $pending
+                            ->addChild('sig.arrangement_program.visualize.for_reviewing', array(
+                                'route' => 'pequiven_seip_arrangementprogram_for_reviewing',
+                            ))
+                            ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.arrangement_program.visualize.for_reviewing', $section)));
+                    }
+                if ($this->isGranted('ROLE_SEIP_SIG_ARRANGEMENT_PROGRAM_LIST_ALL')) {
+                    $pending
+                            ->addChild('sig.arrangement_program.visualize.for_approving', array(
+                                'route' => 'pequiven_seip_arrangementprogram_for_approving',
+                            ))
+                            ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.arrangement_program.visualize.for_approving', $section)));
+                }
+                if ($this->isGranted('ROLE_SEIP_SIG_ARRANGEMENT_PROGRAM_LIST_ALL')) {
+                    $pending
+                            ->addChild('sig.arrangement_program.visualize.for_notifying', array(
+                                'route' => 'pequiven_seip_arrangementprogram_for_notifying',
+                            ))
+                            ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.arrangement_program.visualize.for_notifying', $section)));
+                }
+                $visualize->addChild($pending);
+                
+                $arrangementProgram->addChild($visualize);
+             }        
 
-            if ($this->isGranted('ROLE_SEIP_SIG_ARRANGEMENT_PROGRAM_CREATE_TACTIC')) {
-                $subchild
-                        ->addChild('sig.arrangement_program.add.tactic', array(
-                            'route' => 'pequiven_arrangementprogram_create',
-                            'routeParameters' => array('type' => \Pequiven \ArrangementProgramBundle\Entity\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC, 'associate' => \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::ASSOCIATE_ARRANGEMENT_PROGRAM_SIG),
-                        ))
-                        ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.arrangement_program.add.tactic', $section)));
-            }
-            if ($this->isGranted('ROLE_SEIP_SIG_ARRANGEMENT_PROGRAM_CREATE_OPERATIVE')) {
-                $subchild->addChild('sig.arrangement_program.add.operative', array(
-                            'route' => 'pequiven_arrangementprogram_create',
-                            'routeParameters' => array('type' => \Pequiven \ArrangementProgramBundle\Entity\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE, 'associate' => \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::ASSOCIATE_ARRANGEMENT_PROGRAM_SIG),
-                        ))
-                        ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.arrangement_program.add.operative', $section)));
+
+            //Añadir
+            if ($this->isGranted('ROLE_SEIP_SIG_ARRANGEMENT_PROGRAM_CREATE_*')) {
+                $subchild = $this->factory->createItem('sig.arrangement_program.add.main', $this->getSubLevelOptions(array(
+                                    'uri' => null,
+                                    'labelAttributes' => array('icon' => 'icon-book',),
+                                ))
+                        )->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_programs.add.main', $section)));
+
+                if ($this->isGranted('ROLE_SEIP_SIG_ARRANGEMENT_PROGRAM_CREATE_TACTIC')) {
+                    $subchild
+                            ->addChild('sig.arrangement_program.add.tactic', array(
+                                'route' => 'pequiven_arrangementprogram_create',
+                                'routeParameters' => array('type' => \Pequiven \ArrangementProgramBundle\Entity\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC, 'associate' => \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::ASSOCIATE_ARRANGEMENT_PROGRAM_SIG),
+                            ))
+                            ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.arrangement_program.add.tactic', $section)));
+                }
+                if ($this->isGranted('ROLE_SEIP_SIG_ARRANGEMENT_PROGRAM_CREATE_OPERATIVE')) {
+                    $subchild->addChild('sig.arrangement_program.add.operative', array(
+                                'route' => 'pequiven_arrangementprogram_create',
+                                'routeParameters' => array('type' => \Pequiven \ArrangementProgramBundle\Entity\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE, 'associate' => \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::ASSOCIATE_ARRANGEMENT_PROGRAM_SIG),
+                            ))
+                            ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.arrangement_program.add.operative', $section)));
+                }
+
+                $arrangementProgram->addChild($subchild);
+
             }
 
-            $arrangementProgram->addChild($subchild);
-//            }
+            $menuSig->addChild($arrangementProgram);
+            $menu->addChild($menuSig);
         }
-
-        $menuSig->addChild($arrangementProgram);
-
-        $menu->addChild($menuSig);
     }
 
     /**
@@ -1308,16 +1347,6 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
 //
 //            $menuWorkStudyCircles->addChild($workStudyCirclesStrategicPlan);
 //        }
-
-        if ($this->isGranted(array('ROLE_SEIP_WORK_STUDY_CIRCLES_NOTIFICATION'))) {
-            $workStudyCirclesNotification = $this->factory->createItem('work_study_circles.notification', $this->getSubLevelOptions(array(
-                                "route" => "",
-                                'labelAttributes' => array('icon' => 'fa fa-pencil-square-o',),
-                            ))
-                    )->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.notification', $section)));
-
-            $menuWorkStudyCircles->addChild($workStudyCirclesNotification);
-        }
 
         $menu->addChild($menuWorkStudyCircles);
     }
