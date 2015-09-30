@@ -61,7 +61,7 @@ pequiven_all_meetings_export_pdf:
         expose: true
         
 pequiven_meeting_upload_form:
-    path: /{idMeeting}/upload.{_format}
+    path: /{idMeeting}/formFile.{_format}
     defaults:
         _controller: pequiven.controller.meeting:uploadFilesAction
         _format: html
@@ -71,5 +71,14 @@ pequiven_meeting_upload_form:
     options:
         expose: true
         
-        
+pequiven_meeting_upload:
+    path: /{idMeeting}/upload.{_format}
+    defaults:
+        _controller: pequiven.controller.meeting:uploadAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET|POST]
+    options:
+        expose: true
         

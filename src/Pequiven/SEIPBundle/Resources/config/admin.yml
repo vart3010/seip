@@ -606,3 +606,14 @@ services:
             - ~
         calls:
             - [ setTranslationDomain, [SonataAdminBundle]]
+            
+    sonata.admin.workstudycircle.categoryfile:
+        class: Pequiven\MasterBundle\Admin\Politic\CategoryFileAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Círculo de Estudio y Trabajo", label: "Etiquetas de Archivos" }
+        arguments:
+            - ~
+            - Pequiven\SEIPBundle\Entity\Politic\CategoryFile
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
