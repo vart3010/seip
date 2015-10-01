@@ -9,6 +9,17 @@ pequiven_indicator_last_period_form:
     methods: [GET]
     options:
         expose: true
+#Eliminamos la relación con el indicador 2014
+pequiven_indicator_last_period_delete:
+    path: /{id}/delete-.{_format}
+    defaults:
+        _controller: pequiven.controller.indicator_sig:deleteLastPeriodAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET]
+    options:
+        expose: true
 #carga de formulario plan de acción
 pequiven_indicatoraction_get_form:
     path: /{idIndicator}/get-form_action.{_format}
@@ -165,7 +176,7 @@ pequiven_analysis_cause_evolution_add:
         expose: true
 #Guardamos el formulario de Verificación del Plan de Acción
 pequiven_verification_evolution_add:
-    path: /{idIndicator}/addVerification.{_format}
+    path: /{idIndicator}/{month}/addVerification.{_format}
     defaults:
         _controller: pequiven.controller.indicator_sig:addVerificationAction
         _format: json
@@ -190,6 +201,17 @@ pequiven_action_evolution_delete:
     path: /{id}/delaction.{_format}
     defaults:
         _controller: pequiven.controller.indicator_sig:deletePlanAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET]
+    options:
+        expose: true
+#Eliminamos las verificaciones
+pequiven_verification_evolution_delete:
+    path: /{id}/delverification.{_format}
+    defaults:
+        _controller: pequiven.controller.indicator_sig:deleteVerificationAction
         _format: html
     requirements:
         _format: html|json

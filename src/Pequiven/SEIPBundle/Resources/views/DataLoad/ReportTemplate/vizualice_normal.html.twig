@@ -70,8 +70,6 @@
 
         <div class="columns">
             {% if showDay  %}
-
-
                 <div class="twelve-columns twelve-columns-mobile">
                     <table class="simple-table responsive-table responsive-table-on">
                         <thead>
@@ -100,7 +98,7 @@
                         <tfoot>
                             <tr>
                                 <th class="header">TOTALES</th>
-                                    {% for  totals in totalProducction["day"] %}    
+                                    {% for totals in totalProducction["day"] %}    
                                     <th scope="col" style="width: 7%" class=" header">{{ totals }}</th>
                                         {#<th scope="col" style="width: 7%" class="header">{{ totalsDay.plan_total }}</th>
                                         <th scope="col" style="width: 7%" class=" header">{{ totalsDay.real_total }}</th>

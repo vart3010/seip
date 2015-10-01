@@ -1413,14 +1413,27 @@ class ReportTemplateController extends SEIPController {
                 //}
             }
             //CONSUME SERVICES
-            $totalConsumerServices = array(
-                "plan" => 0.0,
-                "real" => 0.0,
-                "plan_month" => 0.0,
-                "real_month" => 0.0,
-                "plan_year" => 0.0,
-                "real_year" => 0.0,
-            );
+//            $totalConsumerServices = array();
+            if ($showDay) {
+                $totalConsumerServices["plan"] = 0.0;
+                $totalConsumerServices["real"] = 0.0;
+            }
+            if ($showMonth) {
+                $totalConsumerServices["plan_month"] = 0.0;
+                $totalConsumerServices["real_month"] = 0.0;
+            }
+            if ($showYear) {
+                $totalConsumerServices["plan_year"] = 0.0;
+                $totalConsumerServices["real_year"] = 0.0;
+            }
+//            $totalConsumerServices = array(
+//                "plan" => 0.0,
+//                "real" => 0.0,
+//                "plan_month" => 0.0,
+//                "real_month" => 0.0,
+//                "plan_year" => 0.0,
+//                "real_year" => 0.0,
+//            );
             $arrayConsumerServices = array();
 
             //UNERALIZED PRODUCCTION
@@ -1459,12 +1472,18 @@ class ReportTemplateController extends SEIPController {
                         );
                     }
                     $consumerPlanning = $consumerPlanningService->getSummary($dateReport);
-                    $totalConsumerServices["plan"] += $consumerPlanning["total_day_plan"];
-                    $totalConsumerServices["real"] += $consumerPlanning["total_day"];
-                    $totalConsumerServices["plan_month"] += $consumerPlanning["total_month_plan"];
-                    $totalConsumerServices["real_month"] += $consumerPlanning["total_month"];
-                    $totalConsumerServices["plan_year"] += $consumerPlanning["total_year_plan"];
-                    $totalConsumerServices["real_year"] += $consumerPlanning["total_year"];
+                    if ($showDay) {
+                        $totalConsumerServices["plan"] += $consumerPlanning["total_day_plan"];
+                        $totalConsumerServices["real"] += $consumerPlanning["total_day"];
+                    }
+                    if ($showMonth) {
+                        $totalConsumerServices["plan_month"] += $consumerPlanning["total_month_plan"];
+                        $totalConsumerServices["real_month"] += $consumerPlanning["total_month"];
+                    }
+                    if ($showYear) {
+                        $totalConsumerServices["plan_year"] += $consumerPlanning["total_year_plan"];
+                        $totalConsumerServices["real_year"] += $consumerPlanning["total_year"];
+                    }
 
 
                     $arrayConsumerServices[$serviceId]["real"] += $consumerPlanning["total_day"];
@@ -1715,7 +1734,7 @@ class ReportTemplateController extends SEIPController {
 
                 $this->ExportExcelActionByRange($production, $sections);
             } else {
-                $this->exportExcelAction($productsReport, $typeReport, $dateReport, $rawMaterialConsumptionPlannings, $consumerPlanningServices, $plants, $sections);
+                $this->exportExcelAction($productsReport, $typeReport, $dateReport, $rawMaterialConsumptionPlannings, $consumerPlanningServices, $plants, $sections, $totalConsumerServices);
             }
         }
 
@@ -2088,7 +2107,7 @@ class ReportTemplateController extends SEIPController {
         exit;
     }
 
-    public function exportExcelAction($productsReport, $typeReport, $dateReport, $rawMaterialConsumptionPlannings, $consumerPlanningServices, $plants, $sections) {
+    public function exportExcelAction($productsReport, $typeReport, $dateReport, $rawMaterialConsumptionPlannings, $consumerPlanningServices, $plants, $sections, $totalConsumerServices) {
 
         $days = array(
             "Domingo",
@@ -2346,21 +2365,48 @@ class ReportTemplateController extends SEIPController {
             $rowCont = $this->setTitlesRows($activeSheet, $dataConsumo, $rowCont);
 
             $c = 0;
+            $totals = array();
             foreach ($dataConsumo["col"] as $cols) {
                 $contCol = $rowCont;
+                $contTotal = 0;
                 foreach ($consumos[$c] as $cons) {
-//var_dump($cols.$contCol."=>".$cons);
                     if (gettype($cons) == "string") {
                         $activeSheet->setCellValue($cols . $contCol, $cons);
                     } else {
+                        $contTotal += $cons;
                         $activeSheet->setCellValue($cols . $contCol, number_format($cons, 2, ',', '.'));
                     }
                     $contCol++;
                 }
+                $totals[] = $contTotal;
                 $c++;
             }
             $rowCont = $contCol;
-//        /*         * ****************************** */
+
+            $styleTotalConsumer = array(
+                'font' => array(
+                    'bold' => true,
+                )
+            );
+
+            //TOTALES DE CONSUMO DE SERVICIOS
+            $contRow = 0;
+            foreach ($dataConsumo["col"] as $cols) {
+                if ($contRow > 0) {
+                    $activeSheet->getStyle($cols . $rowCont)->applyFromArray($styleArray);
+                    $activeSheet->setCellValue($cols . $rowCont, number_format($totals[$contRow], 2, ',', '.'));
+                } else {
+                    $activeSheet->getStyle($cols . $rowCont)->applyFromArray($styleArray);
+                    $activeSheet->setCellValue($cols . $rowCont, "Totales");
+                }
+                $contRow++;
+            }
+            $rowCont++;
+
+
+
+
+            //**********************************/
         }
 
         if ($sections["pnr"]) {

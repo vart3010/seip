@@ -4,16 +4,16 @@ namespace Pequiven\SEIPBundle\Entity\Politic;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Pequiven\SEIPBundle\Model\Politic\WorkStudyCircleFile as Model;
+use Pequiven\SEIPBundle\Model\Politic\MeetingFile as Model;
 
 /**
- * Archivos de workStudyCircle
+ * Archivos de meeting
  * @author Victor Tortolero <vart10.30@gmail.com>
- * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\Politic\WorkStudyCircleFileRepository")
+ * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\Politic\MeetingFileRepository")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  * @ORM\HasLifecycleCallbacks()
  */
-class WorkStudyCircleFile extends Model {
+class MeetingFile extends Model {
 
     /**
      * @var integer
@@ -83,10 +83,44 @@ class WorkStudyCircleFile extends Model {
 
     /**
      * workStudyCircle
-     * @var \Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle
-     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle",inversedBy="workStudyCircleFile")
+     * @var \Pequiven\SEIPBundle\Entity\Politic\Meeting
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\Politic\Meeting",inversedBy="meetingFile")
      */
-    private $workStudyCircle;
+    private $meeting;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="\Pequiven\SEIPBundle\Entity\Politic\CategoryFile", inversedBy="meetingFile")
+     */
+    private $categoryFile;
+
+    public function __construct() {
+        $this->categoryFile = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * 
+     * @param \Pequiven\SEIPBundle\Entity\Politic\CategoryFile $categoryFile
+     * @return \Pequiven\SEIPBundle\Entity\Politic\MeetingFile
+     */
+    public function addCategoryFile(CategoryFile $categoryFile) {
+        //$categoryFile->addMeetingFileCategory($categoryFile);
+        $this->categoryFile->add($categoryFile);
+        return $this;
+    }
+    /**
+     * 
+     * @param \Pequiven\SEIPBundle\Entity\Politic\CategoryFile $categoryFile
+     */
+    public function removeCategoryFile(CategoryFile $categoryFile) {
+        $this->categoryFile->removeElement($categoryFile);
+    }
+    /**
+     * 
+     * @return type
+     */
+    public function getCategoryFile() {
+        return $this->categoryFile;
+    }
 
     /**
      * Get id
@@ -249,12 +283,12 @@ class WorkStudyCircleFile extends Model {
         return $this->getNameFile();
     }
 
-    function getWorkStudyCircle() {
-        return $this->workStudyCircle;
+    function getMeeting() {
+        return $this->meeting;
     }
 
-    function setWorkStudyCircle(\Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle $workStudyCircle) {
-        $this->workStudyCircle = $workStudyCircle;
+    function setMeeting(\Pequiven\SEIPBundle\Entity\Politic\Meeting $meeting) {
+        $this->meeting = $meeting;
     }
 
 }
