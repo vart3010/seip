@@ -243,7 +243,7 @@ class ManagementSystem extends modelManagementSystem
     * @param \Pequiven\ObjetiveBundle\Entity\Objetive $objetives
     * @return ManagementSystem
     */
-    public function addObjetive(\Pequiven\ObjetiveBundle\Entity\Objetive $objetives)
+    public function addObjetives(\Pequiven\ObjetiveBundle\Entity\Objetive $objetives)
     {
         $this->objetives[] = $objetives;
 
@@ -255,7 +255,7 @@ class ManagementSystem extends modelManagementSystem
     *
     * @param \Pequiven\ObjetiveBundle\Entity\Objetive $objetives
     */
-    public function removeObjetive(\Pequiven\ObjetiveBundle\Entity\Objetive $objetives)
+    public function removeObjetives(\Pequiven\ObjetiveBundle\Entity\Objetive $objetives)
     {
         $this->objetives->removeElement($objetives);
     }

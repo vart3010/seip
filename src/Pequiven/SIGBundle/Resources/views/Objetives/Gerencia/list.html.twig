@@ -28,7 +28,7 @@
                             <a href="{$ result._links.self.href $}">{$result.description$}</a>
                         </td>
                         <td>
-                            <a href="{$ urlExport $}" ng-click="exportToXLS(result.id)" class="button">
+                            <a href="{$ result.id $}/export" ng-click="exportToXLS(result.id)" class="button">
                                 <span class="button-icon"><span class="icon-download"></span></span>
                                 {{ 'pequiven_seip.buttons.export_xls'|trans({},'PequivenSEIPBundle') }}
                             </a>

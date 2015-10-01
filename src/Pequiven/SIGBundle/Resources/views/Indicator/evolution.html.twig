@@ -60,7 +60,7 @@
    </div>
    <br>
 
-   <fieldset class="fieldset">
+        <fieldset class="fieldset">
             <legend class="legend">{{ indicator_sig }}&nbsp;</legend>
             <div class="columns">
                 <!-- Referencia del Indicador -->
@@ -76,7 +76,7 @@
                     <ul class="fa-ul">
                         {% for objetive in indicator_sig.objetives %}
                             <li>{{ generateLink(objetive) }}</li>
-                            {% endfor %}
+                        {% endfor %}
                     </ul>
                 </div>
             </div>
@@ -97,14 +97,14 @@
         {# Graficos #}
         <div class="columns with-padding"> 
             <div ng-controller="ChartsSigController" class="dashboard_sig" ng-init="renderChartEvolutionSig('chartContainerResult', {{ data|json_encode() }})" style="width: 95%;" align="center">
-                    {# señalización tendencia #}
+                {# señalización tendencia #}
                 <div class="position">
                         {{ font["text"]}}
                         <i class="fa fa-{{ font["icon"] }} fa-2x position"> &nbsp;</i>
                 </div>
 
                 <div class="nine-columns twelve-columns-mobile" id="chartContainerResult">
-                  <!-- This div will hold the chart generated in the footer -->
+                <!-- This div will hold the chart generated in the footer -->
                 </div>
             {% if is_granted('ROLE_SEIP_SIG_EVOLUTION_LAST_PERIOD') %}                
                 <div ng-controller="EvolutionIndicatorConfig"> 
@@ -284,8 +284,5 @@
         
         });
     </script>
-
-     
-
     
 {% endblock %}

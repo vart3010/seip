@@ -29,5 +29,14 @@ pequiven_objetives_gerencia_list_:
         _controller: pequiven.controller.gerenciafirst:gerenciaFirstListAction
         _sylius:
             method: createPaginatorGerenciaFirst
+#export matriz managementesystem
+pequiven_sig_gerenciafirst_export:
+    path: /adminMaster/list/{id}/export
+    defaults: { _controller: pequiven.controller.managementsystem_sig_objetives:exportAction }
+    requirements:
+        id: "\d+"
+    methods: [GET]
+    options:
+        expose: true
 
 

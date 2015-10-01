@@ -185,6 +185,24 @@ class ObjetiveRepository extends EntityRepository {
            $this->applyPeriodCriteria($queryBuilder);
         }  
     }
+
+    function getObjetivesManagementSystem($gerencia) {
+        
+        $queryBuilder = $this->getQueryBuilder();
+        $queryBuilder
+                  ->select('o')
+                ->where('o.gerencia = :ger')
+                ->andWhere('o.period = :per')
+                ->andWhere('o.objetiveLevel = :level')
+                ->andWhere('o.deletedAt IS NULL')
+                ->innerJoin('o.managementSystems', 'ms')
+                ->setParameter('ger', $gerencia)
+                ->setParameter('per',$this->getPeriodService()->getPeriodActive())
+                ->setParameter('level',\Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_TACTICO)
+        ;
+        
+        return $queryBuilder->getQuery()->getResult();
+    }
     
     /**
      * Crea un paginador para los objetivos de acuerdo al nivel del mismo

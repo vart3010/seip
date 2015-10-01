@@ -36,7 +36,6 @@ use Pequiven\IndicatorBundle\Form\EvolutionIndicator\IndicatorConfigSigType;
  *
  * @author Maximo Sojo <maxsojo13@gmail.com>
  */
-
 class IndicatorSigController extends ResourceController
 {   
     /**

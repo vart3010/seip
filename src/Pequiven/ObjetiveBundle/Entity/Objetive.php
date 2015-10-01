@@ -1247,7 +1247,7 @@ class Objetive extends modelObjetive implements ResultItemInterface,PeriodItemIn
      * @param \Pequiven\SIGBundle\Entity\ManagementSystem $managementSystems
      * @return Objetive
      */
-    public function addManagementSystem(\Pequiven\SIGBundle\Entity\ManagementSystem $managementSystems)
+    public function addManagementSystems(\Pequiven\SIGBundle\Entity\ManagementSystem $managementSystems)
     {
         $this->managementSystems[] = $managementSystems;
 
@@ -1259,7 +1259,7 @@ class Objetive extends modelObjetive implements ResultItemInterface,PeriodItemIn
      *
      * @param \Pequiven\SIGBundle\Entity\ManagementSystem $managementSystems
      */
-    public function removeManagementSystem(\Pequiven\SIGBundle\Entity\ManagementSystem $managementSystems)
+    public function removeManagementSystems(\Pequiven\SIGBundle\Entity\ManagementSystem $managementSystems)
     {
         $this->managementSystems->removeElement($managementSystems);
     }
