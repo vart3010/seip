@@ -172,20 +172,13 @@ class ObjetivesController extends ResourceController
         if($managementSystemId !== null){
             $managementSystem = $this->get('pequiven.repository.sig_management_system')->find($managementSystemId);
         }
-        $managementSystemAll = $this->get('pequiven.repository.sig_management_system')->findAll();
+        //$managementSystemAll = $this->get('pequiven.repository.sig_management_system')->findAll();
 
         $idGerencia = $request->get('id');
         $gerencia = $this->get('pequiven.repository.gerenciafirst')->find($idGerencia);//Obtenemos la gerencia
         
-        	
-        /*foreach ($managementSystemAll as $value) {
-        	$managementSystem = $value->getId();*/
-        	//$objetivesTactics = $this->get('pequiven.repository.objetive')->findBy(array('gerencia' => $gerencia->getId(),'objetiveLevel' => \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_TACTICO,'period' => $this->getPeriodService()->getPeriodActive()));
-        	
         //Objetivos Tácticos de la Gerencia
         $objetivesTactics = $this->get('pequiven.repository.objetive')->getObjetivesManagementSystem($gerencia);
-
-        //}
         
         $resource = $this->findOr404($request);
         
