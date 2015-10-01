@@ -1,0 +1,46 @@
+{% extends "PequivenSEIPBundle:Template:Developer/Common/tableFormat1.html.twig" %}
+
+{% trans_default_domain 'PequivenSIGBundle' %}
+
+
+
+{% block title %}- Matriz de Objetivos SIG{% endblock %}
+
+
+{% block before_body %}
+    {{ contentHeader(
+        ('pequiven_objetive.title_matriz'|trans),
+        ('pequiven_indicator.list'|trans)
+    ) }}
+{% endblock %}
+
+{% block body %}
+    
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+    <script type="text/javascript">
+        
+        $(document).ready(function()
+        {
+            charge();
+            
+            function charge(){
+               $('.select2').select2({
+                allowClear: true
+                });
+            }
+        });
+        
+        function getTableExtraInfo(data)
+            {
+                var response = '';
+
+                response = response + 'Fórmula: ' + data.formula.equation;
+                
+                return response;
+            }
+    </script>
+    
+{% endblock %}

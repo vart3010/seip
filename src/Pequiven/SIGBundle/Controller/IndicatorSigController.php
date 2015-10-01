@@ -454,9 +454,7 @@ class IndicatorSigController extends ResourceController
 
         $config = [
             'id' => 'form_action_evolution'
-        ];
-        //var_dump($codifigication);
-        //die();       
+        ];      
         
         $cause = new EvolutionAction();
         $form  = $this->createForm(new EvolutionActionType());
@@ -494,8 +492,6 @@ class IndicatorSigController extends ResourceController
 
         $data = $this->findEvolutionCause($request);//Carga la data de las causas y sus acciones relacionadas
         
-        //$cause = new EvolutionAction();
-        //$form  = $this->createForm(new EvolutionActionType());
         $form_value  = $this->createForm(new EvolutionActionValueType());
         $codifigication = $form = 0;
         
@@ -905,15 +901,12 @@ class IndicatorSigController extends ResourceController
         $id = $request->get('id');//id Verification        
         
         $em = $this->getDoctrine()->getManager();
-        //$verification = $this->get('pequiven.repository.sig_causes_indicator')->find($id);
         $verification = $this->get('pequiven.repository.sig_action_verification')->find($id);
-
         
         if($verification){
 
             $em->remove($verification);
-            $em->flush();
-        
+            $em->flush();        
         }
 
     }

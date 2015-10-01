@@ -163,15 +163,33 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                             ))
                     )->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.objective.main', $section)));
             //Ver 
-            $objective->addChild('sig.objective.list', array(
-                        'route' => '',
-                    ))
-                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.objective.visualize', $section)));
+            $visualize = $this->factory->createItem('sig.indicator.visualize', $this->getSubLevelOptions(array(
+                                'uri' => 'null',
+                                'labelAttributes' => array('icon' => '',),
+                            ))
+                    )->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.indicator.visualize', $section)));
+            //Nivel 3
+                $visualize->addChild('planning.visualize.objetives.strategic', array(
+                    'route' => 'pequiven_objetives_list_sig',
+                    'routeParameters' => array('level' => \Pequiven\ObjetiveBundle\Model\ObjetiveLevel::LEVEL_ESTRATEGICO)
+                ))->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.objetives.strategic', $section)));
+            
+                $visualize->addChild('planning.visualize.objetives.tactic', array(
+                    'route' => 'pequiven_objetives_list_sig',
+                    'routeParameters' => array('level' => \Pequiven\ObjetiveBundle\Model\ObjetiveLevel::LEVEL_TACTICO)
+                ))->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.objetives.tactic', $section)));
+            
+                $visualize->addChild('planning.visualize.objetives.operative', array(
+                    'route' => 'pequiven_objetives_list_sig',
+                    'routeParameters' => array('level' => \Pequiven\ObjetiveBundle\Model\ObjetiveLevel::LEVEL_OPERATIVO)
+                ))->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.objetives.operative', $section)));
 
-            $objective->addChild('sig.objective.matrices_objectives', array(
-                        'route' => '',
+                $visualize->addChild('sig.objective.matrices_objectives', array(
+                        'route' => 'pequiven_objetives_gerencia_list_sig',
                     ))
                     ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.objective.matrices_objectives', $section)));
+            
+            $objective->addChild($visualize);            
 
             $menuSig->addChild($objective);
         }

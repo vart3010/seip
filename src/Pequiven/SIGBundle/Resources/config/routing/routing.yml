@@ -1,5 +1,25 @@
 pequiven_sig_homepage:
     path:     /hello/{name}
     defaults: { _controller: PequivenSIGBundle:Default:index }
+pequiven_objetives_list_sig:
+    path: /{level}/list/sig.{_format}
+    defaults:
+        _controller: pequiven.controller.managementsystem_sig_objetives:ObjetiveslistAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+        level: 1|2|3
+    methods: [GET]
+#listado de matriz de objetivos
+pequiven_objetives_gerencia_list_sig:
+    path: /adminMaster/list/sig
+    defaults:
+        _controller: pequiven.controller.managementsystem_sig_objetives:listAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET]
+    options:
+        expose: true
 
 

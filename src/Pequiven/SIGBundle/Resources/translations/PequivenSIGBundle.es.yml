@@ -111,6 +111,12 @@ pequiven_indicator:
     type_value_tag:
         fromEquation: A partir de ecuación
         fromInput: Ingresado manualmente
+pequiven_objetive:
+    title: Objetivos
+    title_matriz: Matriz de Objetivos SIG
+    objetive_strategic: Objetivo Estratégico
+    objetive_tactic: Objetivo Táctico
+    objetive_operative: Objetivo Operativo
         
 form:
     ref: Nro. de Referencia
