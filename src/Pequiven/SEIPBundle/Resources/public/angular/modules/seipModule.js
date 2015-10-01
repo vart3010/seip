@@ -2277,7 +2277,9 @@ angular.module('seipModule.controllers', [])
         })
 
         .controller('MeetingController', function ($scope, $http) {
-            var formFile= angular.element('form#formFile');
+
+
+            var formFile = angular.element('form#formFile');
             $scope.idMeeting = null;
             var isInit = false;
 
@@ -3216,7 +3218,157 @@ angular.module('seipModule.controllers', [])
         })
 
         .controller('TableDocumentController', function ($scope, ngTableParams, $http, sfTranslator, notifyService) {
+            var selectComplejo = angular.element("#selectComplejos");
+            var selectFirstLineManagement = angular.element("#selectFirstLineManagement");
+            var selectWorkStudyCircle = angular.element("#selectWorkStudyCircle");
+            var selectCategoryFile = angular.element("#selectCategoryFile");
 
+            $scope.data = {
+                complejos: null,
+                first_line_managements: null,
+                work_study_circles: null,
+                category_files: null
+            };
+            $scope.model = {
+                complejos: null,
+                first_line_managements: null,
+                work_study_circles: null,
+                category_files: null
+            };
+
+
+            //Busca las localidades
+            $scope.getComplejos = function () {
+                var parameters = {
+                    filter: {}
+                };
+                $http.get(Routing.generate('pequiven_seip_complejos', parameters))
+                        .success(function (data) {
+                            $scope.data.complejos = data;
+                            if ($scope.model.complejo != null) {
+                                $scope.setValueSelect2("selectComplejos", $scope.model.complejo, $scope.data.complejos, function (selected) {
+                                    $scope.model.complejo = selected;
+                                });
+                            }
+                        });
+            };
+
+            $scope.getComplejos();
+
+
+            //Scope de Localidad
+            $scope.$watch("model.complejo", function (newParams, oldParams) {
+                if ($scope.model.complejo != null && $scope.model.complejo.id != undefined) {
+                    $scope.tableParams.$params.filter['complejo'] = $scope.model.complejo.id;
+                    //Al cambiar el select de localidad
+                    selectComplejo.change(function () {
+                        selectFirstLineManagement.select2("val", '');
+                        //selectWorkStudyCircle.select2("val", '');
+                    });
+                } else {
+                    $scope.tableParams.$params.filter['complejo'] = null;
+                }
+            }
+            );
+
+            //Busca las Gerencias de 1ra Línea
+            $scope.getFirstLineManagement = function (complejo) {
+                var parameters = {
+                    filter: {}
+                };
+                if ($scope.model.complejo != null) {
+                    parameters.filter['complejo'] = $scope.model.complejo.id;
+                }
+
+                $http.get(Routing.generate('pequiven_seip_first_line_management', parameters))
+                        .success(function (data) {
+                            $scope.data.first_line_managements = data;
+                            if ($scope.model.firstLineManagement != null) {
+                                $scope.setValueSelect2("firstLineManagement", $scope.model.firstLineManagement, $scope.data.first_line_managements, function (selected) {
+                                    $scope.model.firstLineManagement = selected;
+                                });
+                            }
+                        });
+            };
+            //Scope de Gerencia de 1ra Línea
+            $scope.$watch("model.firstLineManagement", function (newParams, oldParams) {
+                if ($scope.model.firstLineManagement != null && $scope.model.firstLineManagement.id != undefined) {
+                    $scope.tableParams.$params.filter['firstLineManagement'] = $scope.model.firstLineManagement.id;
+                    //selectSecondLineManagement.select2("enable", true);
+                    //Al cambiar la gerencia de 1ra línea
+//                    selectFirstLineManagement.change(function () {
+//                        selectSecondLineManagement.select2("val", '');
+//                    });
+                } else {
+                    $scope.tableParams.$params.filter['firstLineManagement'] = null;
+                    //Cambia status enable en segunda linea
+//                    selectSecondLineManagement.select2("enable", false);
+//                    selectSecondLineManagement.select2("val", '');
+                }
+            });
+            $scope.getFirstLineManagement();
+
+
+            //Busca los Círculos de Estudio de Trabajo
+            $scope.getWorkStudyCircle = function (complejo) {
+                var parameters = {
+                    filter: {}
+                };
+                if ($scope.model.complejo != null) {
+                    parameters.filter['complejo'] = $scope.model.complejo.id;
+                }
+                $http.get(Routing.generate('pequiven_seip_work_study_circle', parameters))
+                        .success(function (data) {
+                            $scope.data.work_study_circles = data;
+                            if ($scope.model.workStudyCircle != null) {
+                                $scope.setValueSelect2("workStudyCircle", $scope.model.workStudyCircle, $scope.data.work_study_circles, function (selected) {
+                                    $scope.model.workStudyCircle = selected;
+                                });
+                            }
+                        });
+            };
+
+            //Scope de Círculo de Estudio de Trabajo
+            $scope.$watch("model.workStudyCircle", function (newParams, oldParams) {
+                if ($scope.model.workStudyCircle != null && $scope.model.workStudyCircle.id != undefined) {
+                    $scope.tableParams.$params.filter['workStudyCircle'] = $scope.model.workStudyCircle.id;
+                    //Al cambiar el círculo de estudio de trabajo
+                    selectWorkStudyCircle.change(function () {
+                    });
+                } else {
+                    $scope.tableParams.$params.filter['workStudyCircle'] = null;
+                }
+            });
+
+            $scope.getWorkStudyCircle();
+
+
+            //Busca las categorias de archivos
+            $scope.getCategoryFile = function () {
+                var parameters = {
+                    filter: {}
+                };
+                $http.get(Routing.generate('pequiven_seip_category_file', parameters))
+                        .success(function (data) {
+                            $scope.data.category_files = data;
+                            if ($scope.model.category_file != null) {
+                                $scope.setValueSelect2("selectCategoryFile", $scope.model.category_file, $scope.data.category_files, function (selected) {
+                                    $scope.model.category_file = selected;
+                                });
+                            }
+                        });
+            };
+
+            //Scope de categorias de archivos
+            $scope.$watch("model.category_file", function (newParams, oldParams) {
+                if ($scope.model.category_file != null && $scope.model.category_file.id != undefined) {
+                    $scope.tableParams.$params.filter['categoryFile'] = $scope.model.category_file.id;
+
+                } else {
+                    $scope.tableParams.$params.filter['categoryFile'] = null;
+                }
+            });
+            $scope.getCategoryFile();
 
 
         })
