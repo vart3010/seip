@@ -1342,22 +1342,22 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
             $menuWorkStudyCircles->addChild($workStudyCirclesStrategicPlan);
         }
 
-//        if ($this->isGranted(array('ROLE_SEIP_WORK_STUDY_CIRCLES_DOCUMENTS_*'))) {
-//            $workStudyCirclesStrategicPlan = $this->factory->createItem('work_study_circles.documents', $this->getSubLevelOptions(array(
-//                                'route' => '',
-//                                'labelAttributes' => array('icon' => 'fa fa-file-pdf-o',),
-//                            ))
-//                    )->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.documents', $section)));
-//
-//            if ($this->isGranted(array('ROLE_SEIP_WORK_STUDY_CIRCLES_DOCUMENTS_LIST'))) {
-//                $workStudyCirclesStrategicPlan->addChild('work_study_circles.list', array(
-//                            'route' => 'pequiven_work_study_circle_document_list',
-//                        ))
-//                        ->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.list', $section)));
-//            }
-//
-//            $menuWorkStudyCircles->addChild($workStudyCirclesStrategicPlan);
-//        }
+        if ($this->isGranted(array('ROLE_SEIP_WORK_STUDY_CIRCLES_DOCUMENTS_*'))) {
+            $workStudyCirclesStrategicPlan = $this->factory->createItem('work_study_circles.documents', $this->getSubLevelOptions(array(
+                                'route' => '',
+                                'labelAttributes' => array('icon' => 'fa fa-file-pdf-o',),
+                            ))
+                    )->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.documents', $section)));
+
+            if ($this->isGranted(array('ROLE_SEIP_WORK_STUDY_CIRCLES_DOCUMENTS_LIST'))) {
+                $workStudyCirclesStrategicPlan->addChild('work_study_circles.list', array(
+                            'route' => 'pequiven_work_study_circle_document_list',
+                        ))
+                        ->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.list', $section)));
+            }
+
+            $menuWorkStudyCircles->addChild($workStudyCirclesStrategicPlan);
+        }
 
         $menu->addChild($menuWorkStudyCircles);
     }

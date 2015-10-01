@@ -15,16 +15,14 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class MeetingFileController extends SEIPController {
 
     function listAction(Request $request) {
-        var_dump($request);
-        die();
-
+        
         $criteria = $request->get('filter', $this->config->getCriteria());
         $sorting = $request->get('sorting', $this->config->getSorting());
         $repository = $this->getRepository();
 
         if ($this->config->isPaginated()) {
             $resources = $this->resourceResolver->getResource(
-                    $repository, 'createPaginatorWorkStudyCircleFile', array($criteria, $sorting)
+                    $repository, 'createPaginatorMeetingFile', array($criteria, $sorting)
             );
 
             $maxPerPage = $this->config->getPaginationMaxPerPage();
@@ -45,13 +43,17 @@ class MeetingFileController extends SEIPController {
             '_format' => 'json',
         );
         $apiDataUrl = $this->generateUrl('pequiven_work_study_circle_document_list', $routeParameters);
-
+        
+        
+        
         $view = $this
                 ->view()
-                ->setTemplate($this->config->getTemplate('list.html'))
+                ->setTemplate($this->config->getTemplate('listFiles.html'))
+                //->setTemplate("PequivenSEIPBundle:Politic:Meeting/listFiles.html.twig")
                 ->setTemplateVar($this->config->getPluralResourceName())
         ;
-        $view->getSerializationContext()->setGroups(array('id', 'api_list'));
+        
+        $view->getSerializationContext()->setGroups(array('id', 'api_list','nameFile'));
         if ($request->get('_format') == 'html') {
 
             $data = array(
@@ -63,7 +65,10 @@ class MeetingFileController extends SEIPController {
 
             $view->setData($resources->toArray('', array(), $formatData));
         }
+        
         return $this->handleView($view);
+        
+        
     }
 
 }

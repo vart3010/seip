@@ -1,4 +1,4 @@
-Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircleFile:
+Pequiven\SEIPBundle\Entity\Politic\MeetingFile:
     exclusion_policy: ALL
     properties:
         id:

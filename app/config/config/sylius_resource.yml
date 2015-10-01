@@ -436,6 +436,7 @@ sylius_resource:
                 controller: Pequiven\ArrangementProgramBundle\Controller\GenericDataController
                 model: Pequiven\SEIPBundle\Entity\Politic\CategoryFile
                 repository: Pequiven\SEIPBundle\Repository\Politic\CategoryFileRepository
+                
         pequiven.meetingFile:
             driver: doctrine/orm
             templates: PequivenSEIPBundle:Politic/Meeting

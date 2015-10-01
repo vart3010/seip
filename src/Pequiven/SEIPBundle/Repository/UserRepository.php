@@ -268,7 +268,7 @@ class UserRepository extends EntityRepository {
     }
     
     /**
-     * Buscador de usuarios
+     * Buscador de coordinadores de círculos de estudio de trabajo
      * 
      * @param array $criteria
      * @return type

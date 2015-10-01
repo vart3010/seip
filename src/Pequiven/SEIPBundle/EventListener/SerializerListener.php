@@ -50,7 +50,7 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializePlantReport', 'class' => 'Pequiven\SEIPBundle\Entity\DataLoad\PlantReport', 'format' => 'json'),
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeWorkStudyCircle', 'class' => 'Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle', 'format' => 'json'),
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeProposal', 'class' => 'Pequiven\SEIPBundle\Entity\Politic\Proposal', 'format' => 'json'),
-            array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeWorkStudyCircleFile', 'class' => 'Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircleFile', 'format' => 'json'),
+            array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeMeetingFile', 'class' => 'Pequiven\SEIPBundle\Entity\Politic\MeetingFile', 'format' => 'json'),
         );
     }
 
@@ -384,7 +384,7 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
                 }
             }
         }
-        
+
         $details = $arrangementProgram->getDetails();
 //        $user = $this->getUser();
 //        if($details->getNotificationInProgressByUser() != null){
@@ -598,7 +598,7 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
         $reportTemplate = $object->getReportTemplate();
         $links = array(
         );
-        $links['load'] = $this->generateUrl('pequiven_report_template_load', array('id' => $reportTemplate->getId(),'plant_report' => $object->getId()));
+        $links['load'] = $this->generateUrl('pequiven_report_template_load', array('id' => $reportTemplate->getId(), 'plant_report' => $object->getId()));
         $event->getVisitor()->addData('_links', $links);
     }
 
@@ -624,51 +624,54 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
     public function onPostSerializeGoal(ObjectEvent $event) {
         
     }
-    
+
     public function onPostSerializeWorkStudyCircle(ObjectEvent $event) {
         $object = $event->getObject();
-        
+
         $gerenciasText = '';
         $gerencias = $object->getGerencias();
         $totalGerencias = count($gerencias);
         $cont = 1;
-        foreach($gerencias as $gerencia){
-            if($cont == $totalGerencias){
+        foreach ($gerencias as $gerencia) {
+            if ($cont == $totalGerencias) {
                 $gerenciasText.= $gerencia->getDescription();
-            } else{
-                $gerenciasText.= $gerencia->getDescription().'-';
+            } else {
+                $gerenciasText.= $gerencia->getDescription() . '-';
             }
             $cont++;
         }
-        
+
         $links['self']['show'] = $this->generateUrl('pequiven_work_study_circle_show', array('id' => $object->getId()));
-        
+
         $event->getVisitor()->addData('_links', $links);
         $event->getVisitor()->addData('gerencias', $gerenciasText);
     }
-    
+
     public function onPostSerializeProposal(ObjectEvent $event) {
         $object = $event->getObject();
-        
+
         $links['self']['show'] = $this->generateUrl('pequiven_proposal_show', array('id' => $object->getId()));
-        
+
         $event->getVisitor()->addData('_links', $links);
     }
-    
-    public function onPostSerializeWorkStudyCircleFile(ObjectEvent $event) {
+
+    public function onPostSerializeMeetingFile(ObjectEvent $event) {
         $object = $event->getObject();
-        
-        
+
+
         $nameOriginal = $object->getNameFile();
-        
+        $workStudyCircle = $object->getMeeting()->getWorkStudyCircle();
+
 //        $links['self']['show'] = $this->generateUrl('pequiven_proposal_show', array('id' => $object->getId()));
         $links['self']['show'] = $this->generateUrl('pequiven_work_study_circle_download_file', array('id' => $object->getId()));
-        
-        
+        $links['self']['circle'] = $this->generateUrl('pequiven_work_study_circle_show', array('id' => $workStudyCircle->getId()));
+
+
         $event->getVisitor()->addData('_links', $links);
         $event->getVisitor()->addData('nameOriginal', $nameOriginal);
+        $event->getVisitor()->addData('nameWorkStudyCircle', $workStudyCircle->getName());
+        $event->getVisitor()->addData('complejo', $workStudyCircle->getComplejo()->getDescription());
     }
-    
 
     public function setContainer(ContainerInterface $container = null) {
         $this->container = $container;
