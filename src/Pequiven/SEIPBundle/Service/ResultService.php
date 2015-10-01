@@ -333,20 +333,26 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
 
         $summary = $arrangementProgram->getSummary(array(
             'limitMonthToNow' => true,
-            'refresh' => 0,
+            'refresh' => true,
         ));
-
+        
+        //SALVO EL VALOR ANTES DE PENALIZAR
+        $beforePenalty = $arrangementProgram->getResult();
+        $arrangementProgram->setresultBeforepenalty($beforePenalty);
+        
+        //PENALIZO
         $arrangementProgram->setResult($summary['advances'] - $amountPenalty);
         $arrangementProgram->setResultReal($summary['advances']);
+
+        //CALCULO Y GUARDO LA PENALIZACIÓN
+        $arrangementProgram->setPenalty($beforePenalty - $summary['advances'] - $amountPenalty);
+
         $summary = $arrangementProgram->getSummary(array('refresh' => true));
         $arrangementProgram->setTotalAdvance(($summary['advances'] - $amountPenalty));
-
         $em = $this->getDoctrine()->getManager();
 
-
-
         foreach ($arrangementProgram->getTimeline()->getGoals() as $goal) {
-            // echo $goal->getAdvance() . ' ' . $goal->getName() . '</br>';
+            //  echo $goal->getAdvance() . ' ' . $goal->getName() . '</br>';
             $advance = $goal->getResult();
             $goal->setResult(($advance - $amountPenalty));
             $goal->setResultReal($advance);
@@ -484,11 +490,6 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
 
             //CALCULO EL RESULTADO PENALIZADO
             $total = ($timeline_goals->getadvance()) - $mayor;
-            $timeline_goals->setpenalizedResult($total);
-
-
-            $timeline_goals->setadvance($total);
-            $timeline_goals->setResultReal($total);
 
             $em->persist($timeline_goals);
         }

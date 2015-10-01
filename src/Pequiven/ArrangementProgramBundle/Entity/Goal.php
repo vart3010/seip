@@ -165,14 +165,6 @@ class Goal implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface {
     private $penalty = 0;
 
     /**
-     * Resultado Penalizado
-     * @var float
-     *
-     * @ORM\Column(name="penalizedresult", type="float", nullable=true)
-     */
-    private $penalizedResult = 0;
-
-    /**
      * Resultado Antes de la Penalización
      * @var float
      *
@@ -553,26 +545,6 @@ class Goal implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface {
      */
     public function getPenalty() {
         return $this->penalty;
-    }
-
-    /**
-     * Set penalizedresult
-     * @param float $penalizedresult
-     * @return Goal
-     */
-    public function setPenalizedResult($penalizedresult) {
-        $this->penalizedResult = $penalizedresult;
-
-        return $this;
-    }
-
-    /**
-     * Get penalizedresult
-     *
-     * @return float 
-     */
-    public function getPenalizedResult() {
-        return $this->penalizedResult;
     }
 
     /**
