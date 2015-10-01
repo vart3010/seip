@@ -96,6 +96,12 @@ class ObjetivesController extends ResourceController
 
     }
 
+    /**
+     *
+     * Lista de matriz
+     * @param Request $request
+     * @return type
+     */
     public function listAction()
     {
         return $this->render('PequivenSIGBundle:Objetives:Gerencia/list.html.twig');    	

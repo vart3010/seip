@@ -1,6 +1,7 @@
 pequiven_sig_homepage:
     path:     /hello/{name}
     defaults: { _controller: PequivenSIGBundle:Default:index }
+#Listado general de objetivos marcados con magementsystem
 pequiven_objetives_list_sig:
     path: /{level}/list/sig.{_format}
     defaults:
@@ -21,5 +22,12 @@ pequiven_objetives_gerencia_list_sig:
     methods: [GET]
     options:
         expose: true
+#Devuelve el paginador con la data de las gerencias de 1ra línea
+pequiven_objetives_gerencia_list_:
+    path: /adminMaster_list/gerenciaFirst
+    defaults: 
+        _controller: pequiven.controller.gerenciafirst:gerenciaFirstListAction
+        _sylius:
+            method: createPaginatorGerenciaFirst
 
 
