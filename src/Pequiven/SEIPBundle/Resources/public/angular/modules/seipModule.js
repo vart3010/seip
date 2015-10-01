@@ -1404,8 +1404,6 @@ angular.module('seipModule.controllers', [])
         //Controladores SIG
         .controller('IndicatorSigEvolutionController', function ($scope, notificationBarService, $http, notifyService, $filter) {
 
-            //$scope.urlValueLastIndicatorForm = null;
-            //console.log($scope.id_indicator );
             $scope.urlCausesEvolutionForm = null;
             $scope.indicator = null;
             var isInit = false;
@@ -1416,9 +1414,10 @@ angular.module('seipModule.controllers', [])
                 if (isInit == false) {
                     isInit = true;
                 }
-                $scope.templateOptions.setTemplate($scope.templates[0]);
+                //$scope.setHeight(350);                
+
                 $scope.templateOptions.setParameterCallBack(resource);
-                //$scope.templateOptions.setVar('evaluationResult', 0);
+
                 if (resource) {
                     $scope.templateOptions.enableModeEdit();
                     $scope.openModalAuto();
@@ -1432,9 +1431,10 @@ angular.module('seipModule.controllers', [])
                 if (isInit == false) {
                     isInit = true;
                 }
-                $scope.templateOptions.setTemplate($scope.templates[0]);
+                //$scope.setHeight(350);                
+                
                 $scope.templateOptions.setParameterCallBack(resource);
-                $scope.templateOptions.setVar('evaluationResult', 0);
+                
                 if (resource) {
                     $scope.templateOptions.enableModeEdit();
                     $scope.openModalAuto();
@@ -1448,9 +1448,9 @@ angular.module('seipModule.controllers', [])
                 if (isInit == false) {
                     isInit = true;
                 }
-                $scope.templateOptions.setTemplate($scope.templates[0]);
+
                 $scope.templateOptions.setParameterCallBack(resource);
-                //$scope.templateOptions.setVar('evaluationResult', 0);
+
                 if (resource) {
                     $scope.templateOptions.enableModeEdit();
                     $scope.openModalAuto();
@@ -1464,9 +1464,9 @@ angular.module('seipModule.controllers', [])
                 if (isInit == false) {
                     isInit = true;
                 }
-                $scope.templateOptions.setTemplate($scope.templates[0]);
+                
                 $scope.templateOptions.setParameterCallBack(resource);
-                $scope.templateOptions.setVar('evaluationResult', 0);
+                
                 if (resource) {
                     $scope.templateOptions.enableModeEdit();
                     $scope.openModalAuto();
@@ -1658,6 +1658,7 @@ angular.module('seipModule.controllers', [])
             $scope.initFormTrend = function (resource) {
                 var d = new Date();
                 var numero = d.getTime();
+                //$scope.setHeight(350);                                
 
                 var parameters = {
                     idIndicator: $scope.id_indicator,
@@ -1722,12 +1723,10 @@ angular.module('seipModule.controllers', [])
             };
             //Formulario Cause
             $scope.initFormCausesAdd = function (resource) {
-                //var idIni = angular.element('#idIdnicator');
+                
                 var d = new Date();
                 var numero = d.getTime();
-                var width = 60;
-                var heigth = 60;
-
+                
                 var parameters = {
                     idIndicator: $scope.id_indicator,
                     _dc: numero
@@ -1738,8 +1737,6 @@ angular.module('seipModule.controllers', [])
                 var url = Routing.generate('pequiven_indicatorcauses_get_form', parameters);
                 $scope.templates = [
                     {
-                        width: width,
-                        height: heigth,
                         name: 'Causas de Desviación del Indicador',
                         url: url,
                         confirmCallBack: confirmCallBack,
@@ -1872,8 +1869,6 @@ angular.module('seipModule.controllers', [])
 
                 var d = new Date();
                 var numero = d.getTime();
-                var width = 60;
-                var heigth = 60;
 
                 var parameters = {
                     idIndicator: $scope.id_indicator,
@@ -1885,8 +1880,6 @@ angular.module('seipModule.controllers', [])
                 var url = Routing.generate('pequiven_causes_analysis_get_form', parameters);
                 $scope.templates = [
                     {
-                        width: width,
-                        height: heigth,
                         name: 'Analisis de las Causas de Desviación del Indicador',
                         url: url,
                         confirmCallBack: confirmCallBack,
@@ -1927,7 +1920,7 @@ angular.module('seipModule.controllers', [])
                     var save = false;
                 }
                 if (save == true) {
-                    var url = Routing.generate('pequiven_verification_evolution_add', {idIndicator: $scope.id_indicator});
+                    var url = Routing.generate('pequiven_verification_evolution_add', {idIndicator: $scope.id_indicator, month: $scope.month});
                 }
                 notificationBarService.getLoadStatus().loading();
                 return $http({
@@ -1959,20 +1952,17 @@ angular.module('seipModule.controllers', [])
                 });
             };
             $scope.templateOptions.setVar('addVerification', addVerification);
-            //$scope.templateOptions.setVar('evaluationResult', 0);
             var confirmCallBack = function () {
                 addVerification(true, function (data) {
                     $scope.indicator = data.indicator;
                 });
                 return true;
             };
-            //Formulario Cause
+            //Formulario Verificación
             $scope.initFormVerification = function (resource) {
-
+                //console.log($scope.month);
                 var d = new Date();
                 var numero = d.getTime();
-                var width = 60;
-                var heigth = 60;
 
                 var parameters = {
                     idIndicator: $scope.id_indicator,
@@ -1984,14 +1974,37 @@ angular.module('seipModule.controllers', [])
                 var url = Routing.generate('pequiven_verification_get_form', parameters);
                 $scope.templates = [
                     {
-                        width: width,
-                        height: heigth,
                         name: 'Verificación del Plan de Acción y Seguimiento',
                         url: url,
                         confirmCallBack: confirmCallBack,
                     }
                 ];
                 $scope.templateOptions.setTemplate($scope.templates[0]);
+            };
+            //Removiendo las acciones
+            $scope.removeVerificationEvolution = function (actionEvolution) {
+                //console.log($scope.verf);//id verification
+                $scope.openModalConfirm('¿Desea eliminar la Verificación?', function () {
+                    notificationBarService.getLoadStatus().loading();
+                    var url = Routing.generate("pequiven_verification_evolution_delete", {id: $scope.verf});
+                    $http({
+                        method: 'GET',
+                        url: url,
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'}  // set the headers so angular passing info as form data (not request payload)
+                    }).success(function (data) {
+                        return true;
+                    }).error(function (data, status, headers, config) {
+                        if (data.errors) {
+                            if (data.errors.errors) {
+                                $.each(data.errors.errors, function (index, value) {
+                                    notifyService.error(Translator.trans(value));
+                                });
+                            }
+                        }
+                        notificationBarService.getLoadStatus().done();
+                        return false;
+                    });
+                });
             };
         })
         .controller('EvolutionIndicatorConfig', function ($scope, notificationBarService, $http, notifyService, $filter) {
@@ -2799,7 +2812,7 @@ angular.module('seipModule.controllers', [])
                         {text: "Añadir", click: function () {
                                 if ($scope.template.confirmCallBack) {
                                     if ($scope.template.confirmCallBack()) {
-                                        //modalOpen.dialog("close");
+                                        modalOpen.dialog("close");
                                     }
                                 } else {
                                     modalOpen.dialog("close");

@@ -420,9 +420,26 @@ class IndicatorSigController extends ResourceController
         $data = $this->findEvolutionCause($request);//Carga la data de las causas y sus acciones relacionadas
 
         foreach ($idIndicator->getObjetives() as $value) {
-          
-            $complejo = $value->getComplejo()->getRef();
-            $gerencia = $value->getGerencia()->getAbbreviation();
+            
+            $compData = $value->getComplejo();//Consultando si tiene complejo
+            $gerData = $value->getGerencia();//Si tiene gerencia
+            
+            if($compData){
+
+                $complejo = $compData->getRef();
+                
+            }else{
+                $complejo = "S/C";
+            }
+            if ($gerData) {
+            
+                $gerencia = $gerData->getAbbreviation();
+                
+            }else{
+                $gerencia = "S/G";
+            }
+            //$complejo = $value->getComplejo()->getRef();
+            //$gerencia = $value->getGerencia()->getAbbreviation();
 
         }
 
@@ -723,17 +740,16 @@ class IndicatorSigController extends ResourceController
      */
     public function deleteCauseAction(Request $request)
     {   
-        //die($request->get('id'));
+        
         $causeId = $request->get('id');
         
         $em = $this->getDoctrine()->getManager();
         $results = $this->get('pequiven.repository.sig_causes_indicator')->find($causeId);
-        //var_dump(count($results));
-        //die();
+        
         if($results){
 
-        $em->remove($results);
-        $em->flush();
+            $em->remove($results);
+            $em->flush();
         
         }  
     }
@@ -835,6 +851,11 @@ class IndicatorSigController extends ResourceController
      */
     public function addVerificationAction(Request $request)
     {   
+        $indicator = $request->get('idIndicator');//Carga de indicador
+        $repository = $this->get('pequiven.repository.sig_indicator');
+        $results = $repository->find($indicator);
+
+        $month = $request->get('month');;//Mes
         
         $action = $request->get('actionVerification')['actionPlan'];
         $idVerification = $request->get('actionVerification')['typeVerification'];
@@ -852,6 +873,8 @@ class IndicatorSigController extends ResourceController
         
         $verification->setCreatedBy($user);
         $verification->setActionPlan($actionVer);
+        $verification->setIndicator($results);
+        $verification->setMonth($month);
 
         $form->handleRequest($request);
 
@@ -860,8 +883,6 @@ class IndicatorSigController extends ResourceController
             $em = $this->getDoctrine()->getManager();
             $em->persist($verification);
             $em->flush();
-
-           // return $this->redirect($this->generateUrl('pequiven_causes_form_add'));
         }    
 
         
@@ -871,6 +892,30 @@ class IndicatorSigController extends ResourceController
             $em->flush();  
 
         }  
+    }
+
+    /**
+     *  Delete verification
+     *  
+     * @param Request $request
+     * @return type
+     */
+    public function deleteVerificationAction(Request $request)
+    {
+        $id = $request->get('id');//id Verification        
+        
+        $em = $this->getDoctrine()->getManager();
+        //$verification = $this->get('pequiven.repository.sig_causes_indicator')->find($id);
+        $verification = $this->get('pequiven.repository.sig_action_verification')->find($id);
+
+        
+        if($verification){
+
+            $em->remove($verification);
+            $em->flush();
+        
+        }
+
     }
 
     /**
@@ -1018,16 +1063,15 @@ class IndicatorSigController extends ResourceController
             }
             $actionResult = $this->get('pequiven.repository.sig_action_indicator')->findBy(array('id' => $idCons));
         }  
-        //var_dump(count($verification));
-        //die();
+
         $actionsValues = EvolutionActionValue::getActionValues($idCons, $month);          
         $cant = count($actionResult);
 
         if($opc = false){
             $idAction = null;
         } 
-        $verification = $this->get('pequiven.repository.sig_action_verification')->findAll();
-
+        $verification = $this->get('pequiven.repository.sig_action_verification')->findBy(array('indicator'=>$idIndicator, 'month' => $month));                
+        
         //Carga de array con la data
         $data = [
 
@@ -1101,7 +1145,7 @@ class IndicatorSigController extends ResourceController
             $objRel = $value->getDescription();
          } 
         //Verificación
-        $verification = $this->get('pequiven.repository.sig_action_verification')->findAll();        
+        $verification = $this->get('pequiven.repository.sig_action_verification')->findBy(array('indicator'=>$idIndicator, 'month' => $month));        
 
         $data = array(
             'data'          => $dataChart,//Data del Gráfico Informe de Evolución

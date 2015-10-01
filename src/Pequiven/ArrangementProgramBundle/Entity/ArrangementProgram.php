@@ -219,6 +219,22 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
      */
     protected $resultModified = 0; 
     
+    /**
+     * Penalización
+     * 
+     * @var float
+     * @ORM\Column(name="penalty",type="float")
+     */
+    protected $penalty = 0; 
+    
+    /**
+     * Resultado antes de la Penalización
+     * 
+     * @var float
+     * @ORM\Column(name="resultbeforepenalty",type="float")
+     */
+    protected $resultBeforepenalty = 0; 
+    
     public function __construct() {
         $this->responsibles = new \Doctrine\Common\Collections\ArrayCollection();
         $this->histories = new \Doctrine\Common\Collections\ArrayCollection();
@@ -771,6 +787,46 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
     public function getResultModified()
     {
         return $this->resultModified;
+    }
+    
+    /**
+     * Set penalty
+     * @param integer $penalty
+     * @return Goal
+     */
+    public function setPenalty($penalty) {
+        $this->penalty = $penalty;
+
+        return $this;
+    }
+
+    /**
+     * Get penalty
+     *
+     * @return integer 
+     */
+    public function getPenalty() {
+        return $this->penalty;
+    }
+
+    /**
+     * Set resultbeforepenalty
+     * @param float $resultBeforepenalty
+     * @return Goal
+     */
+    public function setresultBeforepenalty($resultBeforepenalty) {
+        $this->resultBeforepenalty = $resultBeforepenalty;
+
+        return $this;
+    }
+
+    /**
+     * Get resultBeforepenalty
+     *
+     * @return float 
+     */
+    public function getresultBeforepenalty() {
+        return $this->resultBeforepenalty;
     }
 
     public function __clone() 
