@@ -172,6 +172,14 @@ class Goal implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface {
      */
     private $penalizedResult = 0;
 
+    /**
+     * Resultado Antes de la Penalización
+     * @var float
+     *
+     * @ORM\Column(name="resultbeforepenalty", type="float", nullable=true)
+     */
+    private $resultBeforepenalty = 0;
+
     public function __construct() {
         $this->responsibles = new \Doctrine\Common\Collections\ArrayCollection();
     }
@@ -549,7 +557,7 @@ class Goal implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface {
 
     /**
      * Set penalizedresult
-     * @param integer $penalizedresult
+     * @param float $penalizedresult
      * @return Goal
      */
     public function setPenalizedResult($penalizedresult) {
@@ -561,10 +569,30 @@ class Goal implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface {
     /**
      * Get penalizedresult
      *
-     * @return integer 
+     * @return float 
      */
     public function getPenalizedResult() {
         return $this->penalizedResult;
+    }
+
+    /**
+     * Set resultbeforepenalty
+     * @param float $resultBeforepenalty
+     * @return Goal
+     */
+    public function setresultBeforepenalty($resultBeforepenalty) {
+        $this->resultBeforepenalty = $resultBeforepenalty;
+
+        return $this;
+    }
+
+    /**
+     * Get resultBeforepenalty
+     *
+     * @return float 
+     */
+    public function getresultBeforepenalty() {
+        return $this->resultBeforepenalty;
     }
 
     public function __clone() {

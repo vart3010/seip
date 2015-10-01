@@ -557,11 +557,10 @@ class ArrangementProgramController extends SEIPController {
         $periodService = $this->getPeriodService();
 
         //Validación Carga de Programa de Gestión SIG
-        if($associate == ArrangementProgram::ASSOCIATE_ARRANGEMENT_PROGRAM_SIG && $periodService->isAllowLoadSigArrangementProgram()){
+        if ($associate == ArrangementProgram::ASSOCIATE_ARRANGEMENT_PROGRAM_SIG && $periodService->isAllowLoadSigArrangementProgram()) {
             
-
-        }elseif(!$periodService->isAllowLoadArrangementProgram()){//Consultamos si está habilitada la carga de programa de gestión en el perído actual
-            $message = $this->trans('pequiven_seip.arrangementprogram.not_allow_load_arrangementprogram',array(),'flashes');
+        } elseif (!$periodService->isAllowLoadArrangementProgram()) {//Consultamos si está habilitada la carga de programa de gestión en el perído actual
+            $message = $this->trans('pequiven_seip.arrangementprogram.not_allow_load_arrangementprogram', array(), 'flashes');
             $this->setFlash('error', $message);
             throw $this->createAccessDeniedHttpException($message);
         }
@@ -1079,131 +1078,6 @@ class ArrangementProgramController extends SEIPController {
     }
 
     /**
-     * Establece Penalizaciones de Metas
-     * 
-     */
-    public function setPenaltiesbyGoal(Request $request) {
-
-        $resource = $this->findOr404($request);
-
-        $em = $this->getDoctrine()->getManager();
-
-        $timeline = $resource->getTimeline();
-
-        $real = array();
-        $planned = array();
-
-        foreach ($timeline->getGoals() as $timeline_goals) {
-
-            //ENERO
-            $sump = $timeline_goals->getGoalDetails()->getJanuaryPlanned();
-            $sumr = $timeline_goals->getGoalDetails()->getJanuaryReal();
-            $planned[1] = $sump;
-            $real[1] = $sumr;
-
-            //+FEBRERO
-            $sump += $timeline_goals->getGoalDetails()->getFebruaryPlanned();
-            $sumr += $timeline_goals->getGoalDetails()->getFebruaryReal();
-            $planned[2] = $sump;
-            $real[2] = $sumr;
-
-            //+MARZO
-            $sump += $timeline_goals->getGoalDetails()->getMarchPlanned();
-            $sumr += $timeline_goals->getGoalDetails()->getMarchReal();
-            $planned[3] = $sump;
-            $real[3] = $sumr;
-
-            //+ABRIL
-            $sump += $timeline_goals->getGoalDetails()->getAprilPlanned();
-            $sumr += $timeline_goals->getGoalDetails()->getAprilReal();
-            $planned[4] = $sump;
-            $real[4] = $sumr;
-
-            //+MAYO
-            $sump += $timeline_goals->getGoalDetails()->getMayPlanned();
-            $sumr += $timeline_goals->getGoalDetails()->getMayReal();
-            $planned[5] = $sump;
-            $real[5] = $sumr;
-
-            //+JUNIO
-            $sump += $timeline_goals->getGoalDetails()->getJunePlanned();
-            $sumr += $timeline_goals->getGoalDetails()->getJuneReal();
-            $planned[6] = $sump;
-            $real[6] = $sumr;
-
-            //+JULIO
-            $sump += $timeline_goals->getGoalDetails()->getJulyPlanned();
-            $sumr += $timeline_goals->getGoalDetails()->getJulyReal();
-            $planned[7] = $sump;
-            $real[7] = $sumr;
-
-            //+AGOSTO
-            $sump += $timeline_goals->getGoalDetails()->getAugustPlanned();
-            $sumr += $timeline_goals->getGoalDetails()->getAugustReal();
-            $planned[8] = $sump;
-            $real[8] = $sumr;
-
-            //+SEPTIEMBRE
-            $sump += $timeline_goals->getGoalDetails()->getSeptemberPlanned();
-            $sumr += $timeline_goals->getGoalDetails()->getSeptemberReal();
-            $planned[9] = $sump;
-            $real[9] = $sumr;
-
-            //+OCTUBRE
-            $sump += $timeline_goals->getGoalDetails()->getOctoberPlanned();
-            $sumr += $timeline_goals->getGoalDetails()->getOctoberReal();
-            $planned[10] = $sump;
-            $real[10] = $sumr;
-
-            //+NOVIEMBRE
-            $sump += $timeline_goals->getGoalDetails()->getNovemberPlanned();
-            $sumr += $timeline_goals->getGoalDetails()->getNovemberReal();
-            $planned[11] = $sump;
-            $real[11] = $sumr;
-
-            //+DICIEMBRE
-            $sump += $timeline_goals->getGoalDetails()->getDecemberPlanned();
-            $sumr += $timeline_goals->getGoalDetails()->getDecemberReal();
-            $planned[12] = $sump;
-            $real[12] = $sumr;
-
-            if ((date("n") == 1) || (date("n") == 12)) {
-                $mes = date("n");
-            } else {
-                $mes = date("n") - 1;
-            }
-
-            $mayor = 0;
-            for ($i = 1; $i <= $mes; $i++) {
-                $penal = 0;
-                for ($j = $i; $j <= $mes; $j++) {
-                    if ($real[$j] < $planned[$i]) {
-                        $penal++;
-                    } else {
-                        break;
-                    }
-                }
-
-                if ($penal > $mayor) {
-                    $mayor = $penal;
-                }
-
-                if ($planned[$i] == 100) {
-                    break;
-                }
-            }
-
-            $timeline_goals->setPenalty($mayor);
-            $total=($timeline_goals->getResultReal())-$mayor;
-            $timeline_goals->setpenalizedResult($total);
-            echo $mayor . 'en ' . $timeline_goals->getname() . '</br>';
-            $em->persist($timeline_goals);
-        }
-        $em->flush();
-        
-    }
-
-    /**
      * Inicia el proceso de notificacion
      * 
      * @param Request $request
@@ -1256,10 +1130,8 @@ class ArrangementProgramController extends SEIPController {
      * @throws type
      */
     public function finishNotificationProcessAction(Request $request) {
+
         $resource = $this->findOr404($request);
-
-        
-
         $arrangementProgramManager = $this->getArrangementProgramManager();
 
         if (!$arrangementProgramManager->isAllowToNotity($resource)) {
@@ -1283,6 +1155,7 @@ class ArrangementProgramController extends SEIPController {
                 ->setNotificationInProgressDate(null)
         ;
         $resultService = $this->container->get('seip.service.result');
+
         $resultService->refreshValueArrangementProgram($resource);
 
         $this->domainManager->dispatchEvent('pre_finish_the_notification_process', new ResourceEvent($resource));
@@ -1292,9 +1165,6 @@ class ArrangementProgramController extends SEIPController {
 
         $this->domainManager->dispatchEvent('post_finish_the_notification_process', new ResourceEvent($resource));
 
-        //Comentado para Versión de Pruebas. Descomentar al Terminarlas
-        //$this->setPenaltiesbyGoal($request);
-        
         return $this->redirectHandler->redirectTo($resource);
     }
 

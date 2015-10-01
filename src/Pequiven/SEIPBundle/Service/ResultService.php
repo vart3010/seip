@@ -329,10 +329,13 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             $amountPenalty = $periodService->getPeriodActive()->getPercentagePenalty();
         }
 
+        $this->setPenaltiesbyGoal($arrangementProgram);
+
         $summary = $arrangementProgram->getSummary(array(
             'limitMonthToNow' => true,
-            'refresh' => true,
+            'refresh' => 0,
         ));
+
         $arrangementProgram->setResult($summary['advances'] - $amountPenalty);
         $arrangementProgram->setResultReal($summary['advances']);
         $summary = $arrangementProgram->getSummary(array('refresh' => true));
@@ -340,13 +343,16 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
 
         $em = $this->getDoctrine()->getManager();
 
+
+
         foreach ($arrangementProgram->getTimeline()->getGoals() as $goal) {
+            // echo $goal->getAdvance() . ' ' . $goal->getName() . '</br>';
             $advance = $goal->getResult();
             $goal->setResult(($advance - $amountPenalty));
             $goal->setResultReal($advance);
             $em->persist($goal);
         }
-
+        //die();
         $arrangementProgram->updateLastDateCalculateResult();
 
         $em->persist($arrangementProgram);
@@ -356,6 +362,137 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         if ($andFlush) {
             $em->flush();
         }
+    }
+
+    /* Establece Penalizaciones de Metas
+     * 
+     * @param Request $request
+     */
+
+    public function setPenaltiesbyGoal(\Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram $resource) {
+
+        $real = array();
+        $planned = array();
+        $em = $this->getDoctrine()->getManager();
+        $timeline = $resource->getTimeline();
+
+        foreach ($timeline->getGoals() as $timeline_goals) {
+
+            //ENERO
+            $sump = $timeline_goals->getGoalDetails()->getJanuaryPlanned();
+            $sumr = $timeline_goals->getGoalDetails()->getJanuaryReal();
+            $planned[1] = $sump;
+            $real[1] = $sumr;
+
+            //+FEBRERO
+            $sump += $timeline_goals->getGoalDetails()->getFebruaryPlanned();
+            $sumr += $timeline_goals->getGoalDetails()->getFebruaryReal();
+            $planned[2] = $sump;
+            $real[2] = $sumr;
+
+            //+MARZO
+            $sump += $timeline_goals->getGoalDetails()->getMarchPlanned();
+            $sumr += $timeline_goals->getGoalDetails()->getMarchReal();
+            $planned[3] = $sump;
+            $real[3] = $sumr;
+
+            //+ABRIL
+            $sump += $timeline_goals->getGoalDetails()->getAprilPlanned();
+            $sumr += $timeline_goals->getGoalDetails()->getAprilReal();
+            $planned[4] = $sump;
+            $real[4] = $sumr;
+
+            //+MAYO
+            $sump += $timeline_goals->getGoalDetails()->getMayPlanned();
+            $sumr += $timeline_goals->getGoalDetails()->getMayReal();
+            $planned[5] = $sump;
+            $real[5] = $sumr;
+
+            //+JUNIO
+            $sump += $timeline_goals->getGoalDetails()->getJunePlanned();
+            $sumr += $timeline_goals->getGoalDetails()->getJuneReal();
+            $planned[6] = $sump;
+            $real[6] = $sumr;
+
+            //+JULIO
+            $sump += $timeline_goals->getGoalDetails()->getJulyPlanned();
+            $sumr += $timeline_goals->getGoalDetails()->getJulyReal();
+            $planned[7] = $sump;
+            $real[7] = $sumr;
+
+            //+AGOSTO
+            $sump += $timeline_goals->getGoalDetails()->getAugustPlanned();
+            $sumr += $timeline_goals->getGoalDetails()->getAugustReal();
+            $planned[8] = $sump;
+            $real[8] = $sumr;
+
+            //+SEPTIEMBRE
+            $sump += $timeline_goals->getGoalDetails()->getSeptemberPlanned();
+            $sumr += $timeline_goals->getGoalDetails()->getSeptemberReal();
+            $planned[9] = $sump;
+            $real[9] = $sumr;
+
+            //+OCTUBRE
+            $sump += $timeline_goals->getGoalDetails()->getOctoberPlanned();
+            $sumr += $timeline_goals->getGoalDetails()->getOctoberReal();
+            $planned[10] = $sump;
+            $real[10] = $sumr;
+
+            //+NOVIEMBRE
+            $sump += $timeline_goals->getGoalDetails()->getNovemberPlanned();
+            $sumr += $timeline_goals->getGoalDetails()->getNovemberReal();
+            $planned[11] = $sump;
+            $real[11] = $sumr;
+
+            //+DICIEMBRE
+            $sump += $timeline_goals->getGoalDetails()->getDecemberPlanned();
+            $sumr += $timeline_goals->getGoalDetails()->getDecemberReal();
+            $planned[12] = $sump;
+            $real[12] = $sumr;
+
+            if ((date("n") == 1) || (date("n") == 12)) {
+                $mes = date("n");
+            } else {
+                $mes = date("n") - 1;
+            }
+
+            $mayor = 0;
+            for ($i = 1; $i <= $mes; $i++) {
+                $penal = 0;
+                for ($j = $i; $j <= $mes; $j++) {
+                    if ($real[$j] < $planned[$i]) {
+                        $penal++;
+                    } else {
+                        break;
+                    }
+                }
+
+                if ($penal > $mayor) {
+                    $mayor = $penal;
+                }
+
+                if ($planned[$i] == 100) {
+                    break;
+                }
+            }
+
+            //CARGO LA PENALIZACIÓN
+            $timeline_goals->setPenalty($mayor);
+
+            //GUARGO EN BEFOREPENALATY EL RESULTADO ANTES DE LA PENALIZACIÓN
+            $timeline_goals->setresultBeforepenalty($timeline_goals->getadvance());
+
+            //CALCULO EL RESULTADO PENALIZADO
+            $total = ($timeline_goals->getadvance()) - $mayor;
+            $timeline_goals->setpenalizedResult($total);
+
+
+            $timeline_goals->setadvance($total);
+            $timeline_goals->setResultReal($total);
+
+            $em->persist($timeline_goals);
+        }
+        $em->flush();
     }
 
     /**
@@ -1745,7 +1882,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         if ($periodName === null) {
             $this->addErrorTrans('pequiven_seip.errors.you_must_specify_the_period_inquiry');
         }
-        
+
 //        if ($numPersonal === null) {
 //            $this->addErrorTrans('pequiven_seip.errors.you_must_specify_number_staff_consult');
 //        }
@@ -1932,8 +2069,8 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 $fecha = date('Y-m-j');
                 $fecha = strtotime('-1 month', strtotime($fecha));
                 $fecha = date('m', $fecha);
-                
-                
+
+
                 $goals[$key] = array(
                     'id' => sprintf('ME-%s', $goal->getId()),
                     'description' => $goal->getName(),
