@@ -1,0 +1,134 @@
+{% extends "PequivenSEIPBundle:Template:Developer/Common/tableFormat1.html.twig" %}
+
+{% trans_default_domain 'workStudyCircle' %}
+
+{% block title %}- {{ 'workStudyCircle.title'|trans }}{% endblock %}
+
+{% block before_body %}
+    {{ contentHeader(
+        ('workStudyCircle.files.attachment'|trans),
+        ('workStudyCircle.list'|trans)
+    ) }}
+{% endblock %}
+
+{% block body %}
+
+    <div ng-controller="TableFormatController">
+        <div ng-controller="TableDocumentController">
+            <details class="details margin-bottom" open="">
+                <summary role="button" aria-expanded="true">
+                    {{ 'pequiven.filters'|trans({},'messages') }}
+                </summary>
+
+                <div class="with-padding">
+                    <div class="columns">
+
+                        <!-- Filtro Localidad -->
+                        <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                            <label class="bold">{{ 'pequiven_seip.filters.complejo'|trans({},'PequivenSEIPBundle') }}</label>
+                            <br/>
+                            <div class="with-mid-padding">
+                                <select class="select2 input-xlarge" id="selectComplejos" ng-model="model.complejo" ng-change="getFirstLineManagement();getWorkStudyCircle();" ng-options="value as value.description for (key,value) in data.complejos">
+                                    <option value=''></option>
+                                </select>
+                            </div>
+                        </div>
+                        <!-- Filtro Gerencia 1ra Línea -->
+                        <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                            <label class="bold">{{ 'pequiven_seip.filters.first_line_management'|trans({},'PequivenSEIPBundle') }}</label>
+                            <br/>
+                            <div class="with-mid-padding">
+                                <select class="select2 input-xlarge" id="selectFirstLineManagement" ng-change="getSecondLineManagement()" ng-model="model.firstLineManagement" ng-options="value as value.description group by model.complejo.description for (key,value) in data.first_line_managements" >
+                                    <option value=''></option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Filtro Círculos de Estudio de Trabajo -->
+                        <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                            <label class="bold">{{ 'pequiven_seip.filters.work_study_circle'|trans({},'PequivenSEIPBundle') }}</label>
+                            <br/>
+                            <div class="with-mid-padding">
+                                <select class="select2 input-xlarge" id="selectWorkStudyCircle" ng-model="model.workStudyCircle" ng-options="value as value.name group by model.complejo.description for (key,value) in data.work_study_circles" >
+                                    <option value=''></option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Filtro Categorias de Archivos -->
+                        <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                            <label class="bold">{{ 'pequiven_seip.filters.categoryFile'|trans({},'PequivenSEIPBundle') }}</label>
+                            <br/>
+                            <div class="with-mid-padding">
+                                <select class="select2 input-xlarge"  id="selectCategoryFile" ng-model="model.category_file" ng-options="value as value.ref+'-'+value.description for (key,value) in data.category_files" >
+                                    <option value=''></option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </details>              
+
+            <div loading-container="tableParams.settings().$loading">
+                <table ng-table="tableParams" template-pagination="custom/pager" template-header="custom/header" api-data-url="{{ apiDataUrl }}" export-csv="csv" class="table table-responsive table-extra-info" >
+                    <tbody>
+                        <tr ng-repeat="result in $data | filter:tableParams.search" data="{$ result|json $}">
+                            <td style="text-align: center;" data-title="'Nª'">
+                                {$ result.id $}
+                            </td>
+                            <td data-title="'Círculo De Trabajo'">
+                                <a target="_blank" href="{$ result._links.self.circle $}">
+                                    {$ result.nameWorkStudyCircle $}
+                                </a>
+                            </td> 
+                            <td data-title="'Complejo'">
+                                {$ result.complejo $}
+                            </td> 
+                            <td data-title="'Nombre de Documento'">
+                                {$ result.nameOriginal $}
+                            </td> 
+
+                            <td  style="text-align: center;" data-title="'Descargar'">
+                                <a target="_blank" href="{$ result._links.self.show $}">
+                                    <span icon="fa fa-file-pdf-o">
+                                        <i class="fa fa-file-pdf-o"></i>
+                                        <i class="icon-double-angle-right"></i>
+                                    </span>
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block javascript %}
+    {{ parent() }}
+    <script type="text/javascript">
+
+$(document).ready(function () {
+    charge();
+    $('#selectWorkStudyCircle').select2({
+        minimumInputLength: 2,
+        allowClear: true
+    });
+
+    function charge() {
+        $('.select2').select2({
+            allowClear: true
+        });
+    }
+
+});
+
+function getTableExtraInfo(data)
+{
+    var response = '';
+    return response;
+}
+    </script>
+
+{% endblock %}

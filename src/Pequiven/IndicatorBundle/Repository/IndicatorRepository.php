@@ -437,9 +437,6 @@ class IndicatorRepository extends EntityRepository
     protected function applyCriteria(\Doctrine\ORM\QueryBuilder $queryBuilder, array $criteria = null) {
         $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
 
-        //var_dump($criteria);
-        //(die();
-        
         //Vinculación con el objetivo al que esta vinculado el indicador
 
         $queryBuilder

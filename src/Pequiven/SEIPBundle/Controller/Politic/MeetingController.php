@@ -65,8 +65,6 @@ class MeetingController extends SEIPController {
                 $cont++;
             }
 
-
-
             if ($band) {
 
                 $date = $request->get("meeting_data")["date"];
@@ -76,42 +74,45 @@ class MeetingController extends SEIPController {
                 $timeData = new DateTime("now");
                 $time = $timeData->setTime($request->get("meeting_data")["duration"]["hour"], $request->get("meeting_data")["duration"]["minute"]);
 
-
-                $meetingObj = new Meeting();
-                $meetingObj->setCreatedBy($user);
-                $meetingObj->setDate($date);
-                $meetingObj->setPlace($request->get("meeting_data")["place"]);
-                $meetingObj->setSubject($request->get("meeting_data")["subject"]);
-                $meetingObj->setObservation($request->get("meeting_data")["observation"]);
-                $meetingObj->setDuration($time);
-                $meetingObj->setWorkStudyCircle($workStudyCircle);
-                $em->persist($meetingObj);
+                if ($request->get("meeting_data")["duration"]["hour"] != "0" || $request->get("meeting_data")["duration"]["minute"] != "0") {
+                    $meetingObj = new Meeting();
+                    $meetingObj->setCreatedBy($user);
+                    $meetingObj->setDate($date);
+                    $meetingObj->setPlace($request->get("meeting_data")["place"]);
+                    $meetingObj->setSubject($request->get("meeting_data")["subject"]);
+                    $meetingObj->setObservation($request->get("meeting_data")["observation"]);
+                    $meetingObj->setDuration($time);
+                    $meetingObj->setWorkStudyCircle($workStudyCircle);
+                    $em->persist($meetingObj);
 
 //SE AGREGAN LOS MIEMBROS A LA LISTA DE ASISTENCIA DE LA REUNION CON ASSISTENCIA = FALSE 
 //$members = $workStudyCircle->getUserWorkerId();
-                foreach ($members as $member) {
-                    $assistance = new Assistance();
-                    $assistance->setUser($member);
-                    $assistance->setMeeting($meetingObj);
-                    $assistance->setAssistance($idsCheck[$member->getId()]);
-                    $assistance->setObservation($obsUser[$member->getId()]);
-                    $em->persist($assistance);
-                }
+                    foreach ($members as $member) {
+                        $assistance = new Assistance();
+                        $assistance->setUser($member);
+                        $assistance->setMeeting($meetingObj);
+                        $assistance->setAssistance($idsCheck[$member->getId()]);
+                        $assistance->setObservation($obsUser[$member->getId()]);
+                        $em->persist($assistance);
+                    }
 
 
-                $em->flush();
-
-                try {
                     $em->flush();
-                    $em->getConnection()->commit();
-                } catch (Exception $e) {
-                    $em->getConnection()->rollback();
-                    throw $e;
+
+                    try {
+                        $em->flush();
+                        $em->getConnection()->commit();
+                    } catch (Exception $e) {
+                        $em->getConnection()->rollback();
+                        throw $e;
+                    }
+
+                    $this->get('session')->getFlashBag()->add('success', 'Reunión Guardada Correctamente');
+
+                    return $this->redirect($this->generateUrl('pequiven_meeting_show', array("id" => $meetingObj->getId())));
+                } else {
+                    $this->get('session')->getFlashBag()->add('error', 'Debe llenar el campo Duración.');
                 }
-
-                $this->get('session')->getFlashBag()->add('success', 'Reunión Guardada Correctamente');
-
-                return $this->redirect($this->generateUrl('pequiven_meeting_show', array("id" => $meetingObj->getId())));
             } else {
                 $this->get('session')->getFlashBag()->add('error', 'Debe llenar el campo Observación.');
             }
@@ -203,7 +204,7 @@ class MeetingController extends SEIPController {
         $em = $this->getDoctrine()->getManager();
         $idFile = $request->get("id");
         $file = $em->getRepository('PequivenSEIPBundle:Politic\MeetingFile')->findOneBy(array('id' => $idFile));
-        
+
 
         $path = \Pequiven\SEIPBundle\Model\Politic\MeetingFile::LOCATION_UPLOAD_FILE;
         $name = \Pequiven\SEIPBundle\Model\Politic\MeetingFile::NAME_FILE;

@@ -99,7 +99,7 @@ class EvolutionActionType extends AbstractType
     {   
         $resolver->setDefaults(array(
             'data_class' => 'Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionAction',
-            //'indicator'  => 1736
+            //'indicator'  => 1704
 
         ));
     }

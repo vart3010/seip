@@ -163,15 +163,33 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                             ))
                     )->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.objective.main', $section)));
             //Ver 
-            $objective->addChild('sig.objective.list', array(
-                        'route' => '',
-                    ))
-                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.objective.visualize', $section)));
+            $visualize = $this->factory->createItem('sig.indicator.visualize', $this->getSubLevelOptions(array(
+                                'uri' => 'null',
+                                'labelAttributes' => array('icon' => '',),
+                            ))
+                    )->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.indicator.visualize', $section)));
+            //Nivel 3
+                $visualize->addChild('planning.visualize.objetives.strategic', array(
+                    'route' => 'pequiven_objetives_list_sig',
+                    'routeParameters' => array('level' => \Pequiven\ObjetiveBundle\Model\ObjetiveLevel::LEVEL_ESTRATEGICO)
+                ))->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.objetives.strategic', $section)));
+            
+                $visualize->addChild('planning.visualize.objetives.tactic', array(
+                    'route' => 'pequiven_objetives_list_sig',
+                    'routeParameters' => array('level' => \Pequiven\ObjetiveBundle\Model\ObjetiveLevel::LEVEL_TACTICO)
+                ))->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.objetives.tactic', $section)));
+            
+                $visualize->addChild('planning.visualize.objetives.operative', array(
+                    'route' => 'pequiven_objetives_list_sig',
+                    'routeParameters' => array('level' => \Pequiven\ObjetiveBundle\Model\ObjetiveLevel::LEVEL_OPERATIVO)
+                ))->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.objetives.operative', $section)));
 
-            $objective->addChild('sig.objective.matrices_objectives', array(
-                        'route' => '',
+                $visualize->addChild('sig.objective.matrices_objectives', array(
+                        'route' => 'pequiven_objetives_gerencia_list_sig',
                     ))
                     ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.objective.matrices_objectives', $section)));
+            
+            $objective->addChild($visualize);            
 
             $menuSig->addChild($objective);
         }
@@ -1324,22 +1342,22 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
             $menuWorkStudyCircles->addChild($workStudyCirclesStrategicPlan);
         }
 
-//        if ($this->isGranted(array('ROLE_SEIP_WORK_STUDY_CIRCLES_DOCUMENTS_*'))) {
-//            $workStudyCirclesStrategicPlan = $this->factory->createItem('work_study_circles.documents', $this->getSubLevelOptions(array(
-//                                'route' => '',
-//                                'labelAttributes' => array('icon' => 'fa fa-file-pdf-o',),
-//                            ))
-//                    )->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.documents', $section)));
-//
-//            if ($this->isGranted(array('ROLE_SEIP_WORK_STUDY_CIRCLES_DOCUMENTS_LIST'))) {
-//                $workStudyCirclesStrategicPlan->addChild('work_study_circles.list', array(
-//                            'route' => 'pequiven_work_study_circle_document_list',
-//                        ))
-//                        ->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.list', $section)));
-//            }
-//
-//            $menuWorkStudyCircles->addChild($workStudyCirclesStrategicPlan);
-//        }
+        if ($this->isGranted(array('ROLE_SEIP_WORK_STUDY_CIRCLES_DOCUMENTS_*'))) {
+            $workStudyCirclesStrategicPlan = $this->factory->createItem('work_study_circles.documents', $this->getSubLevelOptions(array(
+                                'route' => '',
+                                'labelAttributes' => array('icon' => 'fa fa-file-pdf-o',),
+                            ))
+                    )->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.documents', $section)));
+
+            if ($this->isGranted(array('ROLE_SEIP_WORK_STUDY_CIRCLES_DOCUMENTS_LIST'))) {
+                $workStudyCirclesStrategicPlan->addChild('work_study_circles.list', array(
+                            'route' => 'pequiven_work_study_circle_document_list',
+                        ))
+                        ->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.list', $section)));
+            }
+
+            $menuWorkStudyCircles->addChild($workStudyCirclesStrategicPlan);
+        }
 
         $menu->addChild($menuWorkStudyCircles);
     }
