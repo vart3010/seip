@@ -1,5 +1,16 @@
 {% trans_default_domain 'PequivenArrangementProgramBundle' %}
-                
+
+<style>
+    .hideClass {
+        display: none;
+    }
+
+    .fa-exclamation-triangle{
+        color: red;
+    }
+
+</style>
+
 <div class="block">
     <div class="block-title">
         <h3>{$ goals.length $} {{ 'pequiven.goals.goals'|trans }}</h3>
@@ -9,61 +20,67 @@
     </div>
     <div class="with-padding">
         <table class="simple-table responsive-table tables-extras" id="sorting-example2">
-        <thead>
-            <tr>
-                <th scope="col" width="10%">{{ 'seip.table.header.nro'|trans }}</th>
-                <th scope="col" width="25%">{{ 'seip.table.header.name'|trans }}</th>
-                {% if appConfiguration.isSupportIntegratedManagementSystem == true %}
-                    <th scope="col" width="10%" class="hide-on-mobile">{{ 'seip.table.header.type_goal'|trans }}</th>
-                {% endif %}
-                <th scope="col" width="13%" class="hide-on-mobile-portrait">{{ 'seip.table.header.start_date'|trans }}</th>
-                <th scope="col" width="13%" class="hide-on-tablet">{{ 'seip.table.header.end_date'|trans }}</th>
-                <th scope="col" width="10%" class="hide-on-tablet">{{ 'seip.table.header.weight'|trans }}</th>
-                <th scope="col" width="29%">{{ 'seip.table.header.responsible_goal'|trans }}</th>
-            </tr>
-        </thead>
-        {% set colspan = 6 %}
-        {% if appConfiguration.isSupportIntegratedManagementSystem == true %}
-            {% set colspan = 7 %}
-        {% endif %}
-        <tbody ng-init="{% if entity.timeline %}goals={{ entity.timeline.goals|serialize('json',serialization_context().setGroups(['id','api_list','responsibles','sonata_api_read'])) }}{% endif %}">
-            <tr ng-if="goals.length == 0">
-                <td colspan="{{ colspan }}" class="empty_row">
-                    {{ "seip.table.empty.goals"|trans }}
-                </td>
-            </tr>
-            <tr ng-repeat="goal in goals">
-                <td>{$ $index + 1 $} - 
+            <thead>
+                <tr>
+                    <th scope="col" width="12%">{{ 'seip.table.header.nro'|trans }}</th>
+                    <th scope="col" width="25%">{{ 'seip.table.header.name'|trans }}</th>
+                        {% if appConfiguration.isSupportIntegratedManagementSystem == true %}
+                        <th scope="col" width="10%" class="hide-on-mobile">{{ 'seip.table.header.type_goal'|trans }}</th>
+                        {% endif %}
+                    <th scope="col" width="12%" class="hide-on-mobile-portrait">{{ 'seip.table.header.start_date'|trans }}</th>
+                    <th scope="col" width="12%" class="hide-on-tablet">{{ 'seip.table.header.end_date'|trans }}</th>
+                    <th scope="col" width="10%" class="hide-on-tablet">{{ 'seip.table.header.weight'|trans }}</th>
+                    <th scope="col" width="29%">{{ 'seip.table.header.responsible_goal'|trans }}</th>
+                </tr>
+            </thead>
+            {% set colspan = 6 %}
+            {% if appConfiguration.isSupportIntegratedManagementSystem == true %}
+                {% set colspan = 7 %}
+            {% endif %}
+            <tbody ng-init="{% if entity.timeline %}goals={{ entity.timeline.goals|serialize('json',serialization_context().setGroups(['id','api_list','responsibles','sonata_api_read'])) }}{% endif %}">
+                <tr ng-if="goals.length == 0">
+                    <td colspan="{{ colspan }}" class="empty_row">
+                        {{ "seip.table.empty.goals"|trans }}
+                    </td>
+                </tr>
+                <tr ng-repeat="goal in goals">
+                    <td>{$ $index + 1 $} - 
                         <span ng-class="getClassForMeter(goal.advance,1)"></span>
                         <span ng-class="getClassForMeter(goal.advance,2)"></span>
                         <span ng-class="getClassForMeter(goal.advance,3)"></span>
                         {$ goal.advance $}%
-                </td>
-                <th scope="row">
-                    {$ goal.name $}<br>
-                    <small>{$ goal.observations $}</small>
-                </th>
-                {% if appConfiguration.isSupportIntegratedManagementSystem == true %}
+
+                        {% if ((isAllowSuperAdmin == true) or (is_granted('ROLE_SEIP_ARRANGEMENT_PROGRAM_VIEW_PENALIZED_GOALS'))) %}
+                            <br>
+                            <span ng-class="getPenaltyForm(goal.penalty)"><center><i class="fa fa-exclamation-triangle"></i> : {$ goal.penalty $}%</center></span>
+
+                        {%endif%}
+                    </td>
+                    <th scope="row">
+                        {$ goal.name $}<br>
+                        <small>{$ goal.observations $}</small>
+                    </th>
+                    {% if appConfiguration.isSupportIntegratedManagementSystem == true %}
+                        <td>
+                            <span ng-if="goal.typeGoal">
+                                {$ goal.typeGoal.description $}
+                            </span>
+                            <span ng-if="!goal.typeGoal">
+                                {$ 'pequiven.form.not_applicable'|trans $}
+                            </span>
+                        </td>
+                    {% endif %}
+                    <td>{$ goal.startDate | myDate $}</td>
+                    <td>{$ goal.endDate| myDate $}</td>
+                    <td>{$ goal.weight $}%</td>
                     <td>
-                        <span ng-if="goal.typeGoal">
-                            {$ goal.typeGoal.description $}
-                        </span>
-                        <span ng-if="!goal.typeGoal">
-                            {$ 'pequiven.form.not_applicable'|trans $}
+                        <span ng-repeat="responsible in goal.responsibles">
+                            {$ responsible.firstname + " "+ responsible.lastname $} <small class="tag">{$ " ("+responsible.username+")" $}</small><span ng-if="!$last">,</span><span ng-if="$last">.</span>
                         </span>
                     </td>
-                {% endif %}
-                <td>{$ goal.startDate | myDate $}</td>
-                <td>{$ goal.endDate| myDate $}</td>
-                <td>{$ goal.weight $}%</td>
-                <td>
-                    <span ng-repeat="responsible in goal.responsibles">
-                        {$ responsible.firstname + " "+ responsible.lastname $} <small class="tag">{$ " ("+responsible.username+")" $}</small><span ng-if="!$last">,</span><span ng-if="$last">.</span>
-                    </span>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-        
+                </tr>
+            </tbody>
+        </table>
+
     </div>
 </div>
