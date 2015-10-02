@@ -169,27 +169,27 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                             ))
                     )->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.indicator.visualize', $section)));
             //Nivel 3
-                $visualize->addChild('planning.visualize.objetives.strategic', array(
-                    'route' => 'pequiven_objetives_list_sig',
-                    'routeParameters' => array('level' => \Pequiven\ObjetiveBundle\Model\ObjetiveLevel::LEVEL_ESTRATEGICO)
-                ))->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.objetives.strategic', $section)));
-            
-                $visualize->addChild('planning.visualize.objetives.tactic', array(
-                    'route' => 'pequiven_objetives_list_sig',
-                    'routeParameters' => array('level' => \Pequiven\ObjetiveBundle\Model\ObjetiveLevel::LEVEL_TACTICO)
-                ))->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.objetives.tactic', $section)));
-            
-                $visualize->addChild('planning.visualize.objetives.operative', array(
-                    'route' => 'pequiven_objetives_list_sig',
-                    'routeParameters' => array('level' => \Pequiven\ObjetiveBundle\Model\ObjetiveLevel::LEVEL_OPERATIVO)
-                ))->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.objetives.operative', $section)));
+            $visualize->addChild('planning.visualize.objetives.strategic', array(
+                'route' => 'pequiven_objetives_list_sig',
+                'routeParameters' => array('level' => \Pequiven\ObjetiveBundle\Model\ObjetiveLevel::LEVEL_ESTRATEGICO)
+            ))->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.objetives.strategic', $section)));
 
-                $visualize->addChild('sig.objective.matrices_objectives', array(
+            $visualize->addChild('planning.visualize.objetives.tactic', array(
+                'route' => 'pequiven_objetives_list_sig',
+                'routeParameters' => array('level' => \Pequiven\ObjetiveBundle\Model\ObjetiveLevel::LEVEL_TACTICO)
+            ))->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.objetives.tactic', $section)));
+
+            $visualize->addChild('planning.visualize.objetives.operative', array(
+                'route' => 'pequiven_objetives_list_sig',
+                'routeParameters' => array('level' => \Pequiven\ObjetiveBundle\Model\ObjetiveLevel::LEVEL_OPERATIVO)
+            ))->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.objetives.operative', $section)));
+
+            $visualize->addChild('sig.objective.matrices_objectives', array(
                         'route' => 'pequiven_objetives_gerencia_list_sig',
                     ))
                     ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.objective.matrices_objectives', $section)));
-            
-            $objective->addChild($visualize);            
+
+            $objective->addChild($visualize);
 
             $menuSig->addChild($objective);
         }
@@ -1355,6 +1355,13 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                         ))
                         ->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.list', $section)));
             }
+
+
+            $workStudyCirclesStrategicPlan->addChild('work_study_circles.general', array(
+                        'route' => 'pequiven_work_study_circle_document_general',
+                    ))
+                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.general', $section)));
+
 
             $menuWorkStudyCircles->addChild($workStudyCirclesStrategicPlan);
         }

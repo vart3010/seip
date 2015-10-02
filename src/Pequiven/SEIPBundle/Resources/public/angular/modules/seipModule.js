@@ -2363,6 +2363,26 @@ angular.module('seipModule.controllers', [])
             };
 
 
+            $scope.renderPie3dDocuments = function (id, data, width, height) {
+                FusionCharts.ready(function () {
+                    var pie3dDocument = new FusionCharts({
+                        type: 'pie3d',
+                        renderAt: id,
+                        width: width,
+                        height: height,
+                        dataFormat: 'json',
+                        dataSource: {
+                            "chart": data.dataSource.chart,
+                            "data": data.dataSource.dataset
+                        }
+                    });
+                    pie3dDocument.setTransparent(true);
+                    pie3dDocument.render();
+                }
+                );
+            }
+
+
 
 
 
