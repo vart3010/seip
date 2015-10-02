@@ -217,6 +217,18 @@ angular.module('seipModule.controllers', [])
                 }
                 return 'meter ' + className;
             };
+
+            //FUNCIÓN UTILIZADA PARA VER LA PENALIZACIÓN EN LA VISTA DE ARRAGEMENT PROGRAM SOLO SI EXISTE
+            $scope.getPenaltyForm = function (penalty) {
+
+                if (penalty > 0) {
+                    return "";
+                } else {
+                    return "hideClass";
+                }
+
+            };
+
             //Funcion que carga el template de la meta
             $scope.loadTemplateMeta = function (goal, index) {
                 $scope.model.goalCount = index;
@@ -2290,9 +2302,6 @@ angular.module('seipModule.controllers', [])
         })
 
         .controller('MeetingController', function ($scope, $http) {
-
-
-
             var formFile = angular.element('form#formFile');
             $scope.idMeeting = null;
             var isInit = false;
