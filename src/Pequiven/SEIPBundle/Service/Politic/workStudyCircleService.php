@@ -488,8 +488,7 @@ class workStudyCircleService implements ContainerAwareInterface {
         //$data['dataSource']['categories'][]["category"] = $category;
         $data['dataSource']['dataset'][] = $dataSetLocal;
 
-        //return $data;
-        return json_encode($data);
+        return $data;
     }
 
     /**

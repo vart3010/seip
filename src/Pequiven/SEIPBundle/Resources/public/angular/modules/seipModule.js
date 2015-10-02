@@ -5701,7 +5701,7 @@ angular.module('seipModule.controllers', [])
         })
         .controller('ChartsMeetingsController', function ($scope, ngTableParams, $http, sfTranslator, notifyService) {
 
-            //Charts Proposal por linea
+            //Charts 
             $scope.renderChartMeetings = function (id, data, categories, caption, typeLabelDisplay) {
                 FusionCharts.ready(function () {
                     var revenueChart = new FusionCharts({
@@ -5717,7 +5717,6 @@ angular.module('seipModule.controllers', [])
                         "dataFormat": "json",
                         "dataSource": {
                             "chart": data.dataSource.chart,
-                            "categories": data.dataSource.categories,
                             "dataset": data.dataSource.dataset
                         }
                     });
