@@ -1424,6 +1424,8 @@ class ArrangementProgramController extends SEIPController {
         $activeSheet
                 ->setCellValue('B' . $rowObservation, $observationString)
                 ->setCellValue('AE' . $rowObservation, $reference);
+        
+        $activeSheet->getStyle(sprintf('B%s:AD%s', $rowObservation, $rowObservation))->applyFromArray($styleArrayBordersContent);
 
         //Agregar los detalles del programa de gestion
         $sendToReviewBy = ucwords(strtolower($details->getReviewedBy() ? $details->getReviewedBy() : $this->trans('pequiven.arrangement_program.no_send_to_review_date')));
