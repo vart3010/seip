@@ -234,22 +234,24 @@ class ObjetivesController extends ResourceController
         
         $lastRowOpe = 8;
         foreach($objetivesTactics as $objetiveTactic){//Recorremos los objetivos tácticos de la Gerencia
-//            if($managementSystem !== null && $managementSystem !== $objetiveTactic->getManagementSystem()){
-//                continue;
-//            }
+            //if($managementSystem !== null && $managementSystem !== $objetiveTactic->getManagementSystem()){
+              //  continue;
+            //}
             $indicatorsTactics = $objetiveTactic->getIndicators();
             $totalIndicatorTactics = count($indicatorsTactics);
             $objetivesOperatives = $objetiveTactic->getChildrens();
             $totalObjetiveOperatives = count($objetivesOperatives);
+            
             if($totalObjetiveOperatives > 0){//Si el objetivo táctico tiene objetivos operativos
                 foreach($objetivesOperatives as $objetiveOperative){//Recorremos los Objetivos Operativos
-//                    if($managementSystem !== null && $managementSystem !== $objetiveOperative->getManagementSystem()){
-//                        continue;
-//                    }
+                    /*if($managementSystem !== null && $managementSystem !== $objetiveOperative->getManagementSystem()){
+                        continue;
+                    }*/
+
                     $contTotalObjOperatives = 0;
                     $rowIniOpe = $row;//Fila Inicial del Objetivo Operativo
-                    $indicatorsOperatives = $objetiveOperative->getIndicators();
-                    $totalIndicatorOperatives = count($indicatorsOperatives);
+                    $indicatorsOperatives = $objetiveOperative->getIndicators();//Indicadores de Obj Operativos
+                    $totalIndicatorOperatives = count($indicatorsOperatives);//Cantidad de Indicadores
                     if($totalIndicatorOperatives > 0){//Si el objetivo operativo tiene indicadores operativos
                         foreach($indicatorsOperatives as $indicatorOperative){
                             $activeSheet->setCellValue('R'.$row, $indicatorOperative->getRef().' '.$indicatorOperative->getDescription());//Seteamos el Indicador Operativo
@@ -299,6 +301,7 @@ class ObjetivesController extends ResourceController
                     $activeSheet->mergeCells(sprintf('Q%s:Q%s',($rowIniOpe),($rowFinOpe)));
                     $activeSheet->mergeCells(sprintf('V%s:V%s',($rowIniOpe),($rowFinOpe)));
                     $contTotalObjOperatives++;
+                    
                     if($totalObjetiveOperatives = $contTotalObjOperatives){
                         $lastRowOpe = $rowIniOpe;
                     }
