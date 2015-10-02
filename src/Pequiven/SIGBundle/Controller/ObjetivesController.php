@@ -243,15 +243,18 @@ class ObjetivesController extends ResourceController
             $totalObjetiveOperatives = count($objetivesOperatives);
             
             if($totalObjetiveOperatives > 0){//Si el objetivo táctico tiene objetivos operativos
-                foreach($objetivesOperatives as $objetiveOperative){//Recorremos los Objetivos Operativos
+                foreach($objetivesOperatives as $value){//Recorremos los Objetivos Operativos
                     /*if($managementSystem !== null && $managementSystem !== $objetiveOperative->getManagementSystem()){
                         continue;
                     }*/
+                    
+                    $objetiveOperative = $value;
 
                     $contTotalObjOperatives = 0;
                     $rowIniOpe = $row;//Fila Inicial del Objetivo Operativo
                     $indicatorsOperatives = $objetiveOperative->getIndicators();//Indicadores de Obj Operativos
                     $totalIndicatorOperatives = count($indicatorsOperatives);//Cantidad de Indicadores
+                    
                     if($totalIndicatorOperatives > 0){//Si el objetivo operativo tiene indicadores operativos
                         foreach($indicatorsOperatives as $indicatorOperative){
                             $activeSheet->setCellValue('R'.$row, $indicatorOperative->getRef().' '.$indicatorOperative->getDescription());//Seteamos el Indicador Operativo
@@ -305,6 +308,7 @@ class ObjetivesController extends ResourceController
                     if($totalObjetiveOperatives = $contTotalObjOperatives){
                         $lastRowOpe = $rowIniOpe;
                     }
+                    
                 }
                 
                 if($totalIndicatorTactics > 0){//Si el Objetivo Táctico tiene Indicadores Táctico
@@ -462,9 +466,8 @@ class ObjetivesController extends ResourceController
         $activeSheet->setCellValue(sprintf('A%s',$row),'NIVEL DE REVISION: 1');
         $activeSheet->setCellValue(sprintf('V%s',$row),'C-CP-DM-OI-R-001');
         $activeSheet->getStyle(sprintf('A%s:V%s',$row,$row))->getFont()->setSize(8);
-        
         $fileName = sprintf('SEIP-Matriz de Objetivos-%s-%s.xls',$gerencia->getDescription(),$now->format('Ymd-His'));
-        
+
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="'.$fileName.'"');
         header('Cache-Control: max-age=0');
