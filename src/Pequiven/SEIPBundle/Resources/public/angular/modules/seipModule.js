@@ -217,6 +217,18 @@ angular.module('seipModule.controllers', [])
                 }
                 return 'meter ' + className;
             };
+
+            //
+            $scope.getPenaltyForm = function (penalty) {
+
+                if (penalty > 0) {
+                    return "";
+                } else {
+                    return "hideClass";
+                }
+
+            };
+
             //Funcion que carga el template de la meta
             $scope.loadTemplateMeta = function (goal, index) {
                 $scope.model.goalCount = index;
@@ -1432,9 +1444,9 @@ angular.module('seipModule.controllers', [])
                     isInit = true;
                 }
                 //$scope.setHeight(350);                
-                
+
                 $scope.templateOptions.setParameterCallBack(resource);
-                
+
                 if (resource) {
                     $scope.templateOptions.enableModeEdit();
                     $scope.openModalAuto();
@@ -1464,9 +1476,9 @@ angular.module('seipModule.controllers', [])
                 if (isInit == false) {
                     isInit = true;
                 }
-                
+
                 $scope.templateOptions.setParameterCallBack(resource);
-                
+
                 if (resource) {
                     $scope.templateOptions.enableModeEdit();
                     $scope.openModalAuto();
@@ -1723,10 +1735,10 @@ angular.module('seipModule.controllers', [])
             };
             //Formulario Cause
             $scope.initFormCausesAdd = function (resource) {
-                
+
                 var d = new Date();
                 var numero = d.getTime();
-                
+
                 var parameters = {
                     idIndicator: $scope.id_indicator,
                     _dc: numero
@@ -2290,7 +2302,7 @@ angular.module('seipModule.controllers', [])
         })
 
         .controller('MeetingController', function ($scope, $http) {
-            var formFile= angular.element('form#formFile');
+            var formFile = angular.element('form#formFile');
             $scope.idMeeting = null;
             var isInit = false;
 
