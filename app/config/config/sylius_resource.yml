@@ -263,6 +263,13 @@ sylius_resource:
             classes:
                 model: Pequiven\SIGBundle\Entity\TypeVerificationManagementSystem
                 repository: Pequiven\SIGBundle\Repository\TypeVerificationManagementSystemRepository
+        pequiven.managementsystem_sig_objetives:
+            driver: doctrine/orm
+            templates: PequivenSIGBundle:Objetives/
+            classes:
+                controller: Pequiven\SIGBundle\Controller\ObjetivesController
+                model: Pequiven\ObjetiveBundle\Entity\Objetive
+                repository: Pequiven\ObjetiveBundle\Repository\ObjetiveRepository                
         #Causas de Desviación del indicador
         pequiven.sig_causes_indicator:
             driver: doctrine/orm

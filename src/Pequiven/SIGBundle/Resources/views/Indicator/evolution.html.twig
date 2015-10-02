@@ -58,19 +58,53 @@
     </div>
     {% endif %}
    </div>
-  <br>
+   <br>
+
+        <fieldset class="fieldset">
+            <legend class="legend">{{ indicator_sig }}&nbsp;</legend>
+            <div class="columns">
+                <!-- Referencia del Indicador -->
+                <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                    <p class="inline-label">
+                        <label class="label">{{ 'pequiven.ref'|trans({},'messages') }}</label>
+                        {{ generateLink(indicator_sig) }}
+                    </p>
+                </div>
+                <!-- Objetivo al que impacta el indicador -->
+                <div class="inline-label">
+                    <label class="label">{{ 'form.objetives'|trans }}</label>
+                    <ul class="fa-ul">
+                        {% for objetive in indicator_sig.objetives %}
+                            <li>{{ generateLink(objetive) }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            {# Sistemas de la Calidad al que pertenece #}
+            {% if  indicator_sig.managementSystems | length > 0 %}
+                <div class="inline-label">
+                        <label class="label">{{ 'form.systems'|trans }}</label>
+                        <ul class="fa-ul">
+                            {% for managementSystem in indicator_sig.managementSystems %}
+                                <li>{{ managementSystem.description }}</li>
+                            {% endfor %}
+                        </ul>
+                </div>
+            {% endif %}
+
+        </fieldset>
   
         {# Graficos #}
         <div class="columns with-padding"> 
             <div ng-controller="ChartsSigController" class="dashboard_sig" ng-init="renderChartEvolutionSig('chartContainerResult', {{ data|json_encode() }})" style="width: 95%;" align="center">
-                    {# señalización tendencia #}
+                {# señalización tendencia #}
                 <div class="position">
                         {{ font["text"]}}
                         <i class="fa fa-{{ font["icon"] }} fa-2x position"> &nbsp;</i>
                 </div>
 
                 <div class="nine-columns twelve-columns-mobile" id="chartContainerResult">
-                  <!-- This div will hold the chart generated in the footer -->
+                <!-- This div will hold the chart generated in the footer -->
                 </div>
             {% if is_granted('ROLE_SEIP_SIG_EVOLUTION_LAST_PERIOD') %}                
                 <div ng-controller="EvolutionIndicatorConfig"> 
@@ -250,8 +284,5 @@
         
         });
     </script>
-
-     
-
     
 {% endblock %}
