@@ -108,3 +108,12 @@ pequiven_work_study_circle_document_list:
     requirements:
         _format: html|json|xml
     methods: [GET|POST]
+    
+pequiven_work_study_circle_document_general:
+    path: /general.{_format}
+    defaults:
+        _controller: pequiven.controller.meeting:listGeneralAction 
+        _format: html
+    requirements:
+        _format: html|json|xml
+    methods: [GET|POST]

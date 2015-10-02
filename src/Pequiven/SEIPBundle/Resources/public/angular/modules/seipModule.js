@@ -1432,9 +1432,9 @@ angular.module('seipModule.controllers', [])
                     isInit = true;
                 }
                 //$scope.setHeight(350);                
-                
+
                 $scope.templateOptions.setParameterCallBack(resource);
-                
+
                 if (resource) {
                     $scope.templateOptions.enableModeEdit();
                     $scope.openModalAuto();
@@ -1464,9 +1464,9 @@ angular.module('seipModule.controllers', [])
                 if (isInit == false) {
                     isInit = true;
                 }
-                
+
                 $scope.templateOptions.setParameterCallBack(resource);
-                
+
                 if (resource) {
                     $scope.templateOptions.enableModeEdit();
                     $scope.openModalAuto();
@@ -1723,10 +1723,10 @@ angular.module('seipModule.controllers', [])
             };
             //Formulario Cause
             $scope.initFormCausesAdd = function (resource) {
-                
+
                 var d = new Date();
                 var numero = d.getTime();
-                
+
                 var parameters = {
                     idIndicator: $scope.id_indicator,
                     _dc: numero
@@ -2292,6 +2292,7 @@ angular.module('seipModule.controllers', [])
         .controller('MeetingController', function ($scope, $http) {
 
 
+
             var formFile = angular.element('form#formFile');
             $scope.idMeeting = null;
             var isInit = false;
@@ -2351,6 +2352,26 @@ angular.module('seipModule.controllers', [])
                 ];
                 $scope.templateOptions.setTemplate($scope.templates[0]);
             };
+
+
+            $scope.renderPie3dDocuments = function (id, data, width, height) {
+                FusionCharts.ready(function () {
+                    var pie3dDocument = new FusionCharts({
+                        type: 'pie3d',
+                        renderAt: id,
+                        width: width,
+                        height: height,
+                        dataFormat: 'json',
+                        dataSource: {
+                            "chart": data.dataSource.chart,
+                            "data": data.dataSource.dataset
+                        }
+                    });
+                    pie3dDocument.setTransparent(true);
+                    pie3dDocument.render();
+                }
+                );
+            }
 
 
 

@@ -569,6 +569,14 @@ class MeetingController extends SEIPController {
         ));
     }
 
+    public function listGeneralAction(Request $request) {
+        $workService = $this->getWorkStudyCircleService();
+        $dataChart = $workService->getDataDocumentsChart();
+        return $this->render('PequivenSEIPBundle:Politic:Meeting\viewDocuments.html.twig', array(
+                    "chart" => $dataChart
+        ));
+    }
+
     protected function getWorkStudyCircleService() {
         return $this->container->get('seip.service.workStudyCircle');
     }
