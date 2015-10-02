@@ -218,7 +218,7 @@ angular.module('seipModule.controllers', [])
                 return 'meter ' + className;
             };
 
-            //
+            //FUNCIÓN UTILIZADA PARA VER LA PENALIZACIÓN EN LA VISTA DE ARRAGEMENT PROGRAM SOLO SI EXISTE
             $scope.getPenaltyForm = function (penalty) {
 
                 if (penalty > 0) {
