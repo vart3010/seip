@@ -167,7 +167,7 @@ class WorkStudyCircle extends ModelWorkStudyCircle implements PeriodItemInterfac
      * 
      * @ORM\Column(name="phase", type="integer", nullable=true)
      */
-    private $phase = 1;
+    private $phase = self::PHASE_ONE;
     
     /**
      * CET al que pertenece este CET
