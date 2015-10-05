@@ -33,9 +33,9 @@ class ObjetivesController extends ResourceController
         
         $rol = null;
         $roleByLevel = array(
-            ObjetiveLevel::LEVEL_ESTRATEGICO => array('ROLE_SEIP_INDICATOR_VIEW_STRATEGIC', 'ROLE_SEIP_PLANNING_LIST_INDICATOR_STRATEGIC'),
-            ObjetiveLevel::LEVEL_TACTICO => array('ROLE_SEIP_INDICATOR_VIEW_TACTIC', 'ROLE_SEIP_PLANNING_LIST_INDICATOR_TACTIC'),
-            ObjetiveLevel::LEVEL_OPERATIVO => array('ROLE_SEIP_INDICATOR_VIEW_OPERATIVE', 'ROLE_SEIP_PLANNING_LIST_INDICATOR_OPERATIVE')
+            ObjetiveLevel::LEVEL_ESTRATEGICO => array('ROLE_SEIP_SIG_OBJECTIVE_VIEW'),
+            ObjetiveLevel::LEVEL_TACTICO => array('ROLE_SEIP_SIG_OBJECTIVE_VIEW'),
+            ObjetiveLevel::LEVEL_OPERATIVO => array('ROLE_SEIP_SIG_OBJECTIVE_VIEW')
         );
         
         if (isset($roleByLevel[$level])) {
@@ -247,8 +247,11 @@ class ObjetivesController extends ResourceController
                     /*if($managementSystem !== null && $managementSystem !== $objetiveOperative->getManagementSystem()){
                         continue;
                     }*/
-                    
-                    $objetiveOperative = $value;
+                    $cantOperative = count($value->getManagementSystems());
+                    if ($cantOperative == 1) {
+                        //var_dump(count($value));
+                        $objetiveOperative = $value;
+
 
                     $contTotalObjOperatives = 0;
                     $rowIniOpe = $row;//Fila Inicial del Objetivo Operativo
@@ -308,6 +311,7 @@ class ObjetivesController extends ResourceController
                     if($totalObjetiveOperatives = $contTotalObjOperatives){
                         $lastRowOpe = $rowIniOpe;
                     }
+                }//if de managementsystems
                     
                 }
                 
@@ -393,7 +397,6 @@ class ObjetivesController extends ResourceController
             
             $activeSheet->setCellValue('G'.$rowIniTac, $objetiveTactic->getRef().' '.$objetiveTactic->getDescription());//Seteamos el Objetivo Táctico
             $activeSheet->setCellValue('H'.$rowIniTac, $objetiveTactic->getGoal());//Seteamos la Meta del Objetivo Táctico
-            
             //Sección Programas de Gestión Tácticos
             $arrangementProgramsTactics = $objetiveTactic->getArrangementPrograms();
             $totalArrangementProgramsTactic = count($arrangementProgramsTactics);
@@ -455,6 +458,7 @@ class ObjetivesController extends ResourceController
             $activeSheet->mergeCells(sprintf('B%s:B%s',($rowIniTac),($rowFinTac)));
             
             $rowIniTac = $row;//Actualizamos la fila inicial del nivel Táctico
+            
         }
 
         $row = 8;//Fila Inicial del skeleton
