@@ -32,7 +32,7 @@ class WorkStudyCircle extends ModelWorkStudyCircle implements PeriodItemInterfac
      * @var \Pequiven\SEIPBundle\Entity\User
      *
      * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\User")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $createdBy;
 
@@ -145,14 +145,45 @@ class WorkStudyCircle extends ModelWorkStudyCircle implements PeriodItemInterfac
      * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
      */
     private $deletedAt;
+    
+    /**
+     * Miembros
+     * @var \Pequiven\SEIPBundle\Entity\User
+     * @ORM\ManyToMany(targetEntity="\Pequiven\SEIPBundle\Entity\User", inversedBy="workStudyCircles", cascade={"persist","remove"})
+     */
+    private $members;
+    
+    /**
+     * Creado por
+     * @var \Pequiven\SEIPBundle\Entity\User
+     *
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\User")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $coordinator;
+    
+    /**
+     * @var integer
+     * 
+     * @ORM\Column(name="phase", type="integer", nullable=true)
+     */
+    private $phase = 1;
+    
+    /**
+     * CET al que pertenece este CET
+     * 
+     * @var \Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle",inversedBy="childrens",cascade={"persist"})
+     */
+    protected $parent;
 
     /**
-     * Relacion archivos asociados a WorkStudyCircle
+     * Círculos de Estudio de Trabajo que pertenecen a este CET
      * 
-     * @var Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircleFile
-     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircleFile",mappedBy="workStudyCircle")
+     * @var \Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle",mappedBy="parent",cascade={"persist"}))
      */
-   // private $workStudyCircleFile;
+    protected $childrens;
 
     /**
      * Constructor
@@ -163,8 +194,8 @@ class WorkStudyCircle extends ModelWorkStudyCircle implements PeriodItemInterfac
         $this->gerenciaSeconds = new \Doctrine\Common\Collections\ArrayCollection();
         $this->meetings = new \Doctrine\Common\Collections\ArrayCollection();
         $this->proposals = new \Doctrine\Common\Collections\ArrayCollection();
-        //$this->members = new \Doctrine\Common\Collections\ArrayCollection();
-        //$this->workStudyCircleFile = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->members = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->childrens = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -499,32 +530,96 @@ class WorkStudyCircle extends ModelWorkStudyCircle implements PeriodItemInterfac
     public function getProposals() {
         return $this->proposals;
     }
+    
+    /**
+     * Get Coordinator
+     * @return type
+     */
+    function getCoordinator() {
+        return $this->coordinator;
+    }
 
-//    /**
-//     * 
-//     * @param \Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircleFile $workStudyCircleFile
-//     * @return \Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle
-//     */
-//    public function addWorkStudyCircleFile(WorkStudyCircleFile $workStudyCircleFile) {
-//        $this->workStudyCircleFile->add($workStudyCircleFile);
-//
-//        return $this;
-//    }
-//
-//    /**
-//     * 
-//     * @param \Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircleFile $workStudyCircleFile
-//     */
-//    public function removeWorkStudyCircleFile(WorkStudyCircleFile $workStudyCircleFile) {
-//        $this->workStudyCircleFile->removeElement($workStudyCircleFile);
-//    }
-//
-//    /**
-//     * 
-//     * @return type
-//     */
-//    public function getWorkStudyCircleFile() {
-//        return $this->workStudyCircleFile;
-//    }
+    /**
+     * Set Coordinator
+     * @param \Pequiven\SEIPBundle\Entity\User $coordinator
+     * @return \Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle
+     */
+    function setCoordinator(\Pequiven\SEIPBundle\Entity\User $coordinator) {
+        $this->coordinator = $coordinator;
+        return $this;
+    }
+    
+    /**
+     * Set Fase
+     *
+     * @param integer $phase
+     * @return WorkStudyCircle
+     */
+    public function setPhase($phase) {
+        $this->phase = $phase;
+
+        return $this;
+    }
+
+    /**
+     * Get Fase
+     *
+     * @return integer
+     */
+    public function getPhase() {
+        return $this->phase;
+    }
+    
+    /**
+     * Set parent
+     *
+     * @param \Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle $parent
+     * @return WorkStudyCircle
+     */
+    public function setParent(\Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle $parent = null) {
+        $this->parent = $parent;
+
+        return $this;
+    }
+
+    /**
+     * Get parent
+     *
+     * @return \Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle
+     */
+    public function getParent() {
+        return $this->parent;
+    }
+
+    /**
+     * Add childrens
+     *
+     * @param \Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle $childrens
+     * @return WorkStudyCircle
+     */
+    public function addChildren(\Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle $childrens) {
+        $childrens->setParent($this);
+        $this->childrens->add($childrens);
+
+        return $this;
+    }
+
+    /**
+     * Remove childrens
+     *
+     * @param \Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle $childrens
+     */
+    public function removeChildren(\Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle $childrens) {
+        $this->childrens->removeElement($childrens);
+    }
+
+    /**
+     * Get childrens
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getChildrens() {
+        return $this->childrens;
+    }
 
 }

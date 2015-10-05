@@ -214,6 +214,11 @@ class User extends BaseUser implements UserInterface, UserBoxInterface, PeriodIt
      * @ORM\Column(name="ext",type="string",length=6,nullable=true)
      */
     private $ext;
+    
+    /**
+     * @ORM\ManyToMany(targetEntity="\Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle", mappedBy="members")
+     */
+    private $workStudyCircles;
 
     /**
      * Constructor
@@ -229,7 +234,7 @@ class User extends BaseUser implements UserInterface, UserBoxInterface, PeriodIt
         $this->groups = new \Doctrine\Common\Collections\ArrayCollection();
         $this->plantReports = new \Doctrine\Common\Collections\ArrayCollection();
         $this->reportTemplates = new \Doctrine\Common\Collections\ArrayCollection();
-        //$this->workStudyCircle = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->workStudyCircles = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
