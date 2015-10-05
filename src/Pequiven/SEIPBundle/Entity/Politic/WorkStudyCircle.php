@@ -32,7 +32,7 @@ class WorkStudyCircle extends ModelWorkStudyCircle implements PeriodItemInterfac
      * @var \Pequiven\SEIPBundle\Entity\User
      *
      * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\User")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $createdBy;
 
@@ -145,6 +145,29 @@ class WorkStudyCircle extends ModelWorkStudyCircle implements PeriodItemInterfac
      * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
      */
     private $deletedAt;
+    
+    /**
+     * Miembros
+     * @var \Pequiven\SEIPBundle\Entity\User
+     * @ORM\ManyToMany(targetEntity="\Pequiven\SEIPBundle\Entity\User", inversedBy="workStudyCircles", cascade={"persist","remove"})
+     */
+    private $members;
+    
+    /**
+     * Creado por
+     * @var \Pequiven\SEIPBundle\Entity\User
+     *
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\User")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $coordinator;
+    
+    /**
+     * @var integer
+     * 
+     * @ORM\Column(name="phase", type="integer", nullable=true)
+     */
+    private $phase = 1;
 
     /**
      * Constructor
@@ -155,7 +178,7 @@ class WorkStudyCircle extends ModelWorkStudyCircle implements PeriodItemInterfac
         $this->gerenciaSeconds = new \Doctrine\Common\Collections\ArrayCollection();
         $this->meetings = new \Doctrine\Common\Collections\ArrayCollection();
         $this->proposals = new \Doctrine\Common\Collections\ArrayCollection();
-        //$this->members = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->members = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -489,6 +512,45 @@ class WorkStudyCircle extends ModelWorkStudyCircle implements PeriodItemInterfac
      */
     public function getProposals() {
         return $this->proposals;
+    }
+    
+    /**
+     * Get Coordinator
+     * @return type
+     */
+    function getCoordinator() {
+        return $this->coordinator;
+    }
+
+    /**
+     * Set Coordinator
+     * @param \Pequiven\SEIPBundle\Entity\User $coordinator
+     * @return \Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle
+     */
+    function setCoordinator(\Pequiven\SEIPBundle\Entity\User $coordinator) {
+        $this->coordinator = $coordinator;
+        return $this;
+    }
+    
+    /**
+     * Set Fase
+     *
+     * @param integer $phase
+     * @return WorkStudyCircle
+     */
+    public function setPhase($phase) {
+        $this->phase = $phase;
+
+        return $this;
+    }
+
+    /**
+     * Get Fase
+     *
+     * @return integer
+     */
+    public function getPhase() {
+        return $this->phase;
     }
 
 }
