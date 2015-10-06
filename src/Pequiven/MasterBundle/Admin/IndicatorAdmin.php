@@ -59,6 +59,7 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                 ->add('showResults')
                 ->add('showFeatures')
                 ->add('showCharts')
+                ->add('showEvolutionView')
                 ->add('showTags')
                 ->add('requiredToImport')
                 ->add('details')
@@ -283,6 +284,9 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                 ->end()
                 ->with('Opciones de visualizacion en el dashboard')
                 ->add('showCharts', null, array(
+                    'required' => false,
+                ))
+                ->add('showEvolutionView', null, array(
                     'required' => false,
                 ))
                 ->add('showTags', null, array(

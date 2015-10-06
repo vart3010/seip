@@ -116,12 +116,14 @@ class ObjetivesController extends ResourceController
         $sorting = $request->get('sorting',$this->config->getSorting());
         
         //$repository = $this->getRepository();
-        $repository = $this->container->get('pequiven.repository.gerenciafirst');
+        //$repository = $this->container->get('pequiven.repository.gerenciafirst');
+        $repository = $this->container->get('pequiven.repository.sig_management_system');        
+        
 
         if ($this->config->isPaginated()) {
             $resources = $this->resourceResolver->getResource(
                 $repository,
-                'createPaginatorGerenciaFirst',
+                'createPaginatorManagementSystems',
                 array($criteria, $sorting)
             );
             
@@ -147,7 +149,7 @@ class ObjetivesController extends ResourceController
             ->setTemplate($this->config->getTemplate('Gerencia/list.html'))
             ->setTemplateVar($this->config->getPluralResourceName())
         ;
-        $view->getSerializationContext()->setGroups(array('id','api_list','complejo'));
+        $view->getSerializationContext()->setGroups(array('id','api_list','managementSystem'));
         if($request->get('_format') == 'html'){
             $view->setData($resources);
         }else{
@@ -166,7 +168,7 @@ class ObjetivesController extends ResourceController
     {
         $this->getSecurityService()->checkSecurity(array('ROLE_SEIP_OBJECTIVE_LIST_MATRIX_OBJECTIVES','ROLE_SEIP_PLANNING_LIST_OBJECTIVE_MATRIX_OBJECTIVES'));
         
-        $managementSystemId = $request->get('managementSystem');
+        $managementSystemId = $request->get('id');
 
         $managementSystem = null;
         if($managementSystemId !== null){
@@ -174,11 +176,11 @@ class ObjetivesController extends ResourceController
         }
         //$managementSystemAll = $this->get('pequiven.repository.sig_management_system')->findAll();
 
-        $idGerencia = $request->get('id');
-        $gerencia = $this->get('pequiven.repository.gerenciafirst')->find($idGerencia);//Obtenemos la gerencia
+        
+        //$gerencia = $this->get('pequiven.repository.gerenciafirst')->find($idGerencia);//Obtenemos la gerencia
         
         //Objetivos Tácticos de la Gerencia
-        $objetivesTactics = $this->get('pequiven.repository.objetive')->getObjetivesManagementSystem($gerencia);
+        $objetivesTactics = $this->get('pequiven.repository.objetive')->getObjetivesManagementSystem($managementSystem);
        
         $resource = $this->findOr404($request);
         
@@ -205,13 +207,13 @@ class ObjetivesController extends ResourceController
             )
         );
         
-        $path = $this->get('kernel')->locateResource('@PequivenObjetiveBundle/Resources/skeleton/matriz_de_objetivos.xls');
+        $path = $this->get('kernel')->locateResource('@PequivenObjetiveBundle/Resources/skeleton/matriz_de_alineacion_sig.xls');
         $now = new \DateTime();
         $objPHPExcel = \PHPExcel_IOFactory::load($path);
         $objPHPExcel
                 ->getProperties()
                 ->setCreator("SEIP")
-                ->setTitle('SEIP - Matriz de Objetivos')
+                ->setTitle('SEIP - Matriz de Alineación SIG')
                 ->setCreated()
                 ->setLastModifiedBy('SEIP')
                 ->setModified()
@@ -222,17 +224,17 @@ class ObjetivesController extends ResourceController
         $activeSheet->getDefaultRowDimension()->setRowHeight();
         
 //        $activeSheet->setTitle($gerencia->getDescription());
-        //Gerencia de la matriz de objetivos e indicadores
-        $activeSheet->setCellValue('A3', $gerencia->getDescription());
+        //Sistema de la Calidad de la Matriz
+        $activeSheet->setCellValue('A3', $managementSystem->getDescription());
         
-        $row = $iniFile = 8;//Fila Inicial del skeleton
+        $row = $iniFile = 7;//Fila Inicial del skeleton
         $contResult = $contInd = 0;//Contador de resultados totales
         $rowHeight = 70;//Alto de la fila
         
         $rowIniTac = $row;//Fila Inicial del Objetivo Táctico
         $rowFinTac = $row;//Fila Final del Objetivo Táctico
         
-        $lastRowOpe = 8;
+        $lastRowOpe = 7;
         
         foreach($objetivesTactics as $objetiveTactic){//Recorremos los objetivos tácticos de la Gerencia
             //if($managementSystem !== null && $managementSystem !== $objetiveTactic->getManagementSystem()){
@@ -271,7 +273,6 @@ class ObjetivesController extends ResourceController
                                 //$row = $row + 2; 
                                 $contResult++;                            
                             }    
-                        
                         } else{//En caso de que el objetivo operativo no tenga indicadores operativos
                             $activeSheet->setCellValue('R'.$row, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
                             $activeSheet->setCellValue('S'.$row, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
@@ -282,10 +283,11 @@ class ObjetivesController extends ResourceController
                             $row++;
                             //$row = $row + 2;
                             $contResult++;
+
                         }
+
                         $rowFinOpe = $row - 1;//Fila Final del Objetivo Operativo
                         $rowFinTac = $row - 1;//Fila Final del Objetivo Táctico
-
                         //Sección Programas de Gestión Operativos
                         $arrangementProgramsOperatives = $objetiveOperative->getArrangementPrograms();
                         $totalArrangementProgramsOperatives = count($arrangementProgramsOperatives);
@@ -469,19 +471,22 @@ class ObjetivesController extends ResourceController
             
             $rowIniTac = $row;//Actualizamos la fila inicial del nivel Táctico
         }
+        /*$ver = $managementSystem->getPoliticManagementSystem()->getDescription();
+        var_dump($ver);
+        die();*/
 
-        $row = 8;//Fila Inicial del skeleton
+        $row = 7;//Fila Inicial del skeleton
         for($i=$row;$i<=$rowFinTac;$i++){//Recorremos toda la matriz para setear el alto y los bordes en cada celda
             $activeSheet->getRowDimension($i)->setRowHeight($rowHeight);
-            $activeSheet->getStyle(sprintf('A%s:V%s',$i,$i))->applyFromArray($styleArrayBordersContent);
+            $activeSheet->getStyle(sprintf('A%s:U%s',$i,$i))->applyFromArray($styleArrayBordersContent);
         }
         $row = $rowFinTac + 1;
-        //die();
+
  
         $activeSheet->setCellValue(sprintf('A%s',$row),'NIVEL DE REVISION: 1');
-        $activeSheet->setCellValue(sprintf('V%s',$row),'C-CP-DM-OI-R-001');
-        $activeSheet->getStyle(sprintf('A%s:V%s',$row,$row))->getFont()->setSize(8);
-        $fileName = sprintf('SEIP-Matriz de Objetivos-%s-%s.xls',$gerencia->getDescription(),$now->format('Ymd-His'));
+        $activeSheet->setCellValue(sprintf('U%s',$row),'C-SI-GI-PG-R-005');
+        $activeSheet->getStyle(sprintf('A%s:U%s',$row,$row))->getFont()->setSize(8);
+        $fileName = sprintf('SEIP-Matriz de Objetivos-%s-%s.xls',$managementSystem->getDescription(),$now->format('Ymd-His'));
 
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="'.$fileName.'"');

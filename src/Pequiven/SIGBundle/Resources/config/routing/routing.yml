@@ -13,7 +13,7 @@ pequiven_objetives_list_sig:
     methods: [GET]
 #listado de matriz de objetivos
 pequiven_objetives_gerencia_list_sig:
-    path: /adminMaster/list/sig
+    path: /adminMaster/list/sig.{_format}
     defaults:
         _controller: pequiven.controller.managementsystem_sig_objetives:listAction
         _format: html
