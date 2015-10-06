@@ -443,6 +443,7 @@ class PrePlanningService extends ContainerAware
                             $itemInstanceCloned = $cloneService->cloneObject($itemInstance);
                             $ref = $sequenceGenerator->getNextRefChildIndicator($itemInstanceCloned);
                             $itemInstanceCloned->setRef($ref);
+                            $itemInstanceCloned->setIndicatorLastPeriod($itemInstance);
                             $this->persist($itemInstanceCloned);
                         }
                     }

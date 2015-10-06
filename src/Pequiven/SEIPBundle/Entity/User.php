@@ -860,25 +860,6 @@ class User extends BaseUser implements UserInterface, UserBoxInterface, PeriodIt
 
     /**
      * 
-     * @param \Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle $workStudyCircle
-     * @return \Pequiven\SEIPBundle\Entity\User
-     */
-//    public function addWorkStudyCircle(Politic\WorkStudyCircle $workStudyCircle) {
-//        $this->workStudyCircle->add($workStudyCircle);
-//
-//        return $this;
-//    }
-
-    /**
-     * 
-     * @param \Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle $workStudyCircle
-     */
-//    public function removeWorkStudyCircle(Politic\WorkStudyCircle $workStudyCircle) {
-//        $this->workStudyCircle->removeElement($workStudyCircle);
-//    }
-
-    /**
-     * 
      * @return type
      */
     public function setWorkStudyCircle(Politic\WorkStudyCircle $workStudyCircle = null) {
@@ -917,6 +898,36 @@ class User extends BaseUser implements UserInterface, UserBoxInterface, PeriodIt
 
     public function getExt() {
         return $this->ext;
+    }
+    
+     /**
+     * Add workStudyCircles
+     *
+     * @param \Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle $workStudyCircle
+     * @return User
+     */
+    public function addWorkStudyCircles(\Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle $workStudyCircle) {
+        $this->workStudyCircles[] = $workStudyCircle;
+
+        return $this;
+    }
+
+    /**
+     * Remove workStudyCircles
+     *
+     * @param \Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle $workStudyCircle
+     */
+    public function removeWorkStudyCircles(\Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle $workStudyCircle) {
+        $this->workStudyCircles->removeElement($workStudyCircle);
+    }
+
+    /**
+     * Get workStudyCircles
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getWorkStudyCircles() {
+        return $this->workStudyCircles;
     }
 
 }

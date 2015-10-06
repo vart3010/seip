@@ -1490,6 +1490,15 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
     protected function getPeriodService() {
         return $this->container->get('pequiven_seip.service.period');
     }
+    
+    
+    /**
+     * 
+     * @return \Pequiven\SEIPBundle\Service\Politic\WorkStudyCircleService
+     */
+    protected function getWorkStudyCircleService() {
+        return $this->container->get('seip.service.workStudyCircle');
+    }
 
     /**
      * 

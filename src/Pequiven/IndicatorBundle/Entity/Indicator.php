@@ -166,7 +166,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     /**
      * @var \Pequiven\IndicatorBundle\Entity\Indicator
      * @ORM\OneToOne(targetEntity="\Pequiven\IndicatorBundle\Entity\Indicator")
-     * @ORM\JoinColumn(name="indicator_last_period", referencedColumnName="id")
+     * @ORM\JoinColumn(name="indicator_last_period", referencedColumnName="id", nullable=true)
      */
     private $indicatorlastPeriod;
 
@@ -1547,6 +1547,8 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
             $this->objetives = new ArrayCollection();
 
             $this->childrens = new ArrayCollection();
+            
+            $this->indicatorlastPeriod = null;
 
         }
     }

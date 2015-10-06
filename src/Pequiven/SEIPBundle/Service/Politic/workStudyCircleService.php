@@ -490,6 +490,20 @@ class workStudyCircleService implements ContainerAwareInterface {
 
         return $data;
     }
+    
+    
+    public function isAllowCreateWorkStudyCircleByPhase(\Pequiven\SEIPBundle\Entity\User $user, $phase = \Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle::PHASE_ONE){
+        $workStudyCircles = $user->getWorkStudyCircles();
+        $createWorkStudyCircle = true;
+        
+        foreach($workStudyCircles as $workStudyCircle){
+            if($workStudyCircle->getPhase() == $phase){
+                $createWorkStudyCircle = false;
+            }
+        }
+        
+        return $createWorkStudyCircle;
+    }
 
     /**
      * Shortcut to return the Doctrine Registry service.
