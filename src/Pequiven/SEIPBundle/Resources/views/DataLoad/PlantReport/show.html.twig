@@ -57,24 +57,47 @@
             <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">{{ 'Design capacity'|trans }}</label>
-                    {{ plant_report.plant.designCapacity|myNumberFormat }}
+                    {% if (plant_report.plant.childrens) %}
+                        {% set totalDesignCap = 0 %}
+                        {% for childrens in plant_report.plant.childrens %}
+                            {% set totalDesignCap = childrens.designCapacity  %}
+                        {% endfor %}
+                        {{ totalDesignCap | myNumberFormat }}
+
+                    {% else %}
+                        {{ plant_report.plant.designCapacity|myNumberFormat }}
+                    {% endif %}
                 </p>
             </div>
             <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">{{ 'Current capacity'|trans }}</label>
-                    {{ plant_report.currentCapacity|myNumberFormat }}
+                    {% set totalCurrentCap = 0 %}
+                    {% for childrens in plant_report.plant.childrens %}
+                        {% for plantReport in childrens.plantReport %}
+                            {% set totalCurrentCap = plantReport.currentCapacity  %}
+                        {% endfor %}
+                    {% endfor %}
+                    {{ totalCurrentCap|myNumberFormat }}
+                    {#                     {{ plant_report.currentCapacity|myNumberFormat }}#}
                 </p>
             </div>
             <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">{{ 'Percentage current capacity'|trans }}</label>
-                    {{ plant_report.percentageCurrentCapacity|myNumberFormat }}%
+                    {% set percentajeCap = 0 %}
+                    {% for childrens in plant_report.plant.childrens %}
+                        {% for plantReport in childrens.plantReport %}
+                            {% set percentajeCap = plantReport.percentageCurrentCapacity  %}
+                        {% endfor %}
+                    {% endfor %}
+                    {{ percentajeCap|myNumberFormat }}%
+                    {#                    {{ plant_report.percentageCurrentCapacity|myNumberFormat }}%#}
                 </p>
             </div>
         </div>
     </fieldset>
-                
+
 
     {% include 'PequivenSEIPBundle:DataLoad:PlantReport/show/plantStopPlannings.html.twig' %}
     <br /><br />
@@ -82,19 +105,21 @@
     <br /><br />
     {% include 'PequivenSEIPBundle:DataLoad:PlantReport/show/services.html.twig' %}
     <br /><br />
-    <p class="button-height align-right">
-        {% if periodService().isAllowPlanningReport %}
-            {{ buttons.generic_confirm(path("pequiven_plant_report_run",{ id: plant_report.id }),"pequiven_seip.buttons.run_plant",{
+    {% if(plant_report.plant.childrens|length==0) %}
+        <p class="button-height align-right">
+            {% if periodService().isAllowPlanningReport %}
+                {{ buttons.generic_confirm(path("pequiven_plant_report_run",{ id: plant_report.id }),"pequiven_seip.buttons.run_plant",{
                 content: ("pequiven_seip.question.want_create_plant_from_planning"|trans),
                 translation_domain: "PequivenSEIPBundle",
                 icon: "icon-extract"
                 }) 
-            }}
-            &nbsp;
-            {{ buttons.generic(path('pequiven_plant_report_update', { 'id': plant_report.id }),('pequiven.edit'|trans({},'messages'))) }}
-            &nbsp;
-            {{ buttons.delete(path('pequiven_plant_report_delete', { 'id': plant_report.id })) }}
-        {% endif %}
-    </p>
+                }}
+                &nbsp;
+                {{ buttons.generic(path('pequiven_plant_report_update', { 'id': plant_report.id }),('pequiven.edit'|trans({},'messages'))) }}
+                &nbsp;
+                {{ buttons.delete(path('pequiven_plant_report_delete', { 'id': plant_report.id })) }}
+            {% endif %}
+        </p>
+    {% endif %}
 
 {% endblock %}

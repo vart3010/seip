@@ -87,7 +87,12 @@ class Plant extends BaseModel {
      */
     private $services;
 
-   
+    /**
+     * Reporte de Planta
+     * @var \Pequiven\SEIPBundle\Entity\DataLoad\PlantReport
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\PlantReport",mappedBy="plant",cascade={"remove"})
+     */
+    private $plantReport;
 
     /**
      * 
@@ -95,14 +100,14 @@ class Plant extends BaseModel {
      * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Plant",inversedBy="childrens",cascade={"persist"})
      */
     private $parent;
-    
-     /**
+
+    /**
      * 
      * @var \Pequiven\SEIPBundle\Entity\CEI\Plant
      * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Plant",mappedBy="parent",cascade={"persist"})
      */
     private $childrens;
-    
+
     /**
      * Constructor
      */
@@ -110,6 +115,7 @@ class Plant extends BaseModel {
         $this->products = new \Doctrine\Common\Collections\ArrayCollection();
         $this->childrens = new \Doctrine\Common\Collections\ArrayCollection();
         $this->services = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->plantReport = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -301,6 +307,34 @@ class Plant extends BaseModel {
      */
     public function getChildrens() {
         return $this->childrens;
+    }
+
+    /**
+     * 
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\lo$ plantReport
+     * @return \Pequiven\SEIPBundle\Entity\CEI\Plant
+     */
+    public function addPlantReport(\Pequiven\SEIPBundle\Entity\DataLoad\PlantReport $plantReport) {
+        $plantReport->setParent($this);
+        $this->plantReport->add($plantReport);
+
+        return $this;
+    }
+
+    /**
+     * 
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\PlantReport $plantReport
+     */
+    public function removePlantReport(\Pequiven\SEIPBundle\Entity\DataLoad\PlantReport $plantReport) {
+        $this->plantReport->removeElement($plantReport);
+    }
+
+    /**
+     * 
+     * @return type
+     */
+    public function getPlantReport() {
+        return $this->plantReport;
     }
 
     /**
