@@ -103,6 +103,22 @@ class MovementDetails {
      */
     private $pentalty;
     
+     /**
+     * CAUSA DE MOVIMIENTO: ASIG-> ASIGNACIÓN / SUP->SUPLENCIA / AUS-> AUSENCIA / CAMB-> CAMBIO
+     * @var string
+     *
+     * @ORM\Column(name="cause", type="text",nullable=false)
+     */
+    private $cause;
+
+    /**
+     * OBSERVACIONES
+     * @var string
+     *
+     * @ORM\Column(name="observations", type="text",nullable=true)
+     */
+    private $observations;
+    
 
     public function __construct() {
         //$this->assistances = new \Doctrine\Common\Collections\ArrayCollection();
@@ -318,6 +334,40 @@ class MovementDetails {
     function setPentalty($pentalty) {
         $this->pentalty = $pentalty;
     }
+    
+    /**
+     * 
+     * @return type
+     */
+    function getCause() {
+        return $this->cause;
+    }
+
+    /**
+     * 
+     * @return type
+     */
+    function getObservations() {
+        return $this->observations;
+    }
+
+    /**
+     * 
+     * @param type $cause
+     */
+    function setCause($cause) {
+        $this->cause = $cause;
+    }
+
+    /**
+     * 
+     * @param type $observations
+     */
+    function setObservations($observations) {
+        $this->observations = $observations;
+    }
+
+
 
 
 

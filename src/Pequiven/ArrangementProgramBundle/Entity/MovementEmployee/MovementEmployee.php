@@ -59,23 +59,7 @@ class MovementEmployee {
     private $User;
 
     /**
-     * CAUSA DE MOVIMIENTO: A-> AUSENCIA / C-> CAMBIO
-     * @var string
-     *
-     * @ORM\Column(name="cause", type="text",nullable=false)
-     */
-    private $cause;
-
-    /**
-     * OBSERVACIONES
-     * @var string
-     *
-     * @ORM\Column(name="observations", type="text",nullable=true)
-     */
-    private $observations;
-
-    /**
-     * TIPO DE MOVIMIENTO: A-> META / B-> PROGRAMA DE GESTIÓN / C-> OBJ. OPERATIVO / D-> OBJ. TACTICO / E-> OBJ. ESTRATÉGICO
+     * TIPO DE MOVIMIENTO: GOAL-> META / AP-> PROGRAMA DE GESTIÓN / OBJO-> OBJ. OPERATIVO / OBJT-> OBJ. TACTICO / OBJT-> OBJ. ESTRATÉGICO
      * @var string
      *
      * @ORM\Column(name="type", type="text",nullable=false)
@@ -241,30 +225,6 @@ class MovementEmployee {
      * 
      * @return type
      */
-    function getCause() {
-        return $this->cause;
-    }
-
-    /**
-     * 
-     * @param type $cause
-     */
-    function setCause($cause) {
-        $this->cause = $cause;
-    }
-
-    /**
-     * 
-     * @return type
-     */
-    function getObservations() {
-        return $this->observations;
-    }
-
-    /**
-     * 
-     * @return type
-     */
     function getType() {
         return $this->type;
     }
@@ -275,14 +235,6 @@ class MovementEmployee {
      */
     function getPeriod() {
         return $this->period;
-    }
-
-    /**
-     * 
-     * @param type $observations
-     */
-    function setObservations($observations) {
-        $this->observations = $observations;
     }
 
     /**
@@ -300,7 +252,7 @@ class MovementEmployee {
     function setPeriod(\Pequiven\SEIPBundle\Entity\Period $period = null) {
         $this->period = $period;
     }
-    
+
     function getIn() {
         return $this->in;
     }
@@ -316,7 +268,5 @@ class MovementEmployee {
     function setOut($out) {
         $this->out = $out;
     }
-
-
 
 }
