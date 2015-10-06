@@ -32,7 +32,7 @@ class EvolutionActionValue extends BaseManager
      * 
      * @return string
      */
-   	public function getActionValues($idCons, $month){
+   	public static function getActionValues($idCons, $month){
 
        
        $dataValue = $this->get('pequiven.repository.sig_action_value_indicator')->findBy(array('actionValue' => $idCons, 'month' => $month));

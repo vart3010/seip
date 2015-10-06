@@ -171,6 +171,7 @@ class ReportTemplateController extends SEIPController {
         }
         if ($dateNotification === null) {
             $dateNotification = new \DateTime();
+            $dateNotification->sub(new \DateInterval('P1D'));
         }
         $resource = $this->getRepository()->findToNotify($request->get("id"), $dateNotification, $plantReportToLoad);
 
