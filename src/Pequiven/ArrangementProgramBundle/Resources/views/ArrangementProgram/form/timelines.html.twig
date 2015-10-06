@@ -80,17 +80,13 @@
                         <span ng-bind-html='printFormErrors(form.children.timeline.children.goals.children[$index].children.responsibles)'></span>
                     </td>
                     <td class="align-right vertical-center">
- {{ path("goal_movement_get_url") }}
                         <span class="select compact">
                             <a href class="select-value form-edit">{{ 'pequiven.actions'|trans({},'messages') }}</a>
                             <span class="select-arrow"></span>
                             <span class="drop-down">
-                                {#{% set prueba= path("goal_movement_get_url")%}#}
-                               
-                                {% set prueba= 'HOLA'%}
                                 <a href ng-click="loadTemplateMeta(goal,fIndex + 1)" class="button icon-pencil">{{ "pequiven.actions.edit"|trans({},"messages") }}</a>
                                 <a href ng-click="removeGoal(goal)" class="button icon-trash with-tooltip confirm">{{ "pequiven.actions.delete"|trans({},"messages") }}</a>
-                                <a href ng-click="getUrlMovement(goal.id,'{{ prueba }}')" class="button icon-users with-tooltip confirm">
+                                <a href ng-click="getUrlMovement(goal.id,'{{ path("goal_movement") }}')" class="button icon-users with-tooltip confirm">
                                     {{ "pequiven.actions.mov"|trans({},"messages") }}
                                 </a>
                             </span>

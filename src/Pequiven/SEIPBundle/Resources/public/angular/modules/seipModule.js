@@ -229,20 +229,15 @@ angular.module('seipModule.controllers', [])
 
             };
 
-            $scope.getUrlMovement = function (idGoal,url) {
-                              
-                 var redirect = url+""+idGoal;
-               console.log(url);
-                //location.href =redirect;
-//                $.ajax({
-//                    type: 'get',
-//                    url: url,
-//                    data: data,
-//                    success: function (data) {
-//                        console.log(data["value"]);
-//                        
-//                    }
-//                });
+            $scope.getUrlMovement = function (idGoal, url) {
+
+                var redirect = url + "?idGoal=" + idGoal;
+
+                //PENDIENTE AVERIGUAR PORQUE NO SIRVE:
+                //var redirect = Routing.generate(url, {idGoal: idGoal});
+
+                location.href = redirect;
+
             };
 
             //Funcion que carga el template de la meta
