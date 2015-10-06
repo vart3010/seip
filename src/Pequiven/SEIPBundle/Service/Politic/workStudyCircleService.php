@@ -9,6 +9,7 @@ use ErrorException;
 use Exception;
 use LogicException;
 use Pequiven\SEIPBundle\Model\Common\CommonObject;
+use Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle;
 
 class workStudyCircleService implements ContainerAwareInterface {
 
@@ -489,6 +490,99 @@ class workStudyCircleService implements ContainerAwareInterface {
         $data['dataSource']['dataset'][] = $dataSetLocal;
 
         return $data;
+    }
+    
+    
+    public function isAllowCreateWorkStudyCircleByPhase(\Pequiven\SEIPBundle\Entity\User $user, $phase = \Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle::PHASE_ONE){
+        $workStudyCircles = $user->getWorkStudyCircles();
+        $createWorkStudyCircle = true;
+        
+        foreach($workStudyCircles as $workStudyCircle){
+            if($workStudyCircle->getPhase() == $phase){
+                $createWorkStudyCircle = false;
+            }
+        }
+        
+        return $createWorkStudyCircle;
+    }
+    
+    /**
+     * Si el usuario pertenece a un círculo de alguna fase, retorna el círculo al que pertenece
+     * @param \Pequiven\SEIPBundle\Entity\User $user
+     * @param type $phase
+     * @return type
+     */
+    public function obtainWorkStudyCircleByPhase(\Pequiven\SEIPBundle\Entity\User $user, $phase = \Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle::PHASE_ONE){
+        $workStudyCircles = $user->getWorkStudyCircles();
+        $object = null;
+        
+        foreach($workStudyCircles as $workStudyCircle){
+            if($workStudyCircle->getPhase() == $phase){
+                $object = $workStudyCircle;
+            }
+        }
+        
+        return $object;
+    }
+    
+    /**
+     * 
+     * @param WorkStudyCircle $workStudyCircle
+     * @return boolean
+     */
+    public function isAllowToEdit(\Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle $workStudyCircle){
+        $valid = false;
+        $user = $this->getUser();
+        
+        if($workStudyCircle->getPhase() == WorkStudyCircle::PHASE_ONE){
+            if($this->getSecurityContext()->isGranted(array('ROLE_SEIP_WORK_STUDY_CIRCLES_EDIT')) || $workStudyCircle->getCoordinator()->getId() == $user->getId()){
+                $valid = true;
+            }
+        } else{
+            $valid = true;
+        }
+        
+        return $valid;
+    }
+    
+    /**
+     * 
+     * @return \Symfony\Component\Security\Core\SecurityContext
+     * @throws \LogicException
+     */
+    private function getSecurityContext()
+    {
+        if (!$this->container->has('security.context')) {
+            throw new \LogicException('The SecurityBundle is not registered in your application.');
+        }
+
+        return $this->container->get('security.context');
+    }
+    
+    /**
+     * Get a user from the Security Context
+     *
+     * @return mixed
+     *
+     * @throws \LogicException If SecurityBundle is not available
+     *
+     * @see Symfony\Component\Security\Core\Authentication\Token\TokenInterface::getUser()
+     */
+    public function getUser()
+    {
+        if (!$this->container->has('security.context')) {
+            throw new \LogicException('The SecurityBundle is not registered in your application.');
+        }
+
+        if (null === $token = $this->container->get('security.context')->getToken()) {
+            return;
+        }
+
+        if (!is_object($user = $token->getUser())) {
+            return;
+        }
+
+        return $user;
     }
 
     /**

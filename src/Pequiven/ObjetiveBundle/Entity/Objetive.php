@@ -1177,9 +1177,12 @@ class Objetive extends modelObjetive implements ResultItemInterface,PeriodItemIn
             $this->updatedAt = null;
             $this->userCreatedAt = null;
             $this->ref = null;
+            $this->details = null;
             
             $this->childrens = new ArrayCollection();
             $this->parents = new ArrayCollection();
+            
+            $this->managementSystems = new ArrayCollection();
             
             $this->period = null;
             $this->reviewedBy = null;

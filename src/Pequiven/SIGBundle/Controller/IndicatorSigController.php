@@ -50,9 +50,9 @@ class IndicatorSigController extends ResourceController
 
         $rol = null;
         $roleByLevel = array(
-            IndicatorLevel::LEVEL_ESTRATEGICO => array('ROLE_SEIP_INDICATOR_VIEW_STRATEGIC', 'ROLE_SEIP_PLANNING_LIST_INDICATOR_STRATEGIC'),
-            IndicatorLevel::LEVEL_TACTICO => array('ROLE_SEIP_INDICATOR_VIEW_TACTIC', 'ROLE_SEIP_PLANNING_LIST_INDICATOR_TACTIC'),
-            IndicatorLevel::LEVEL_OPERATIVO => array('ROLE_SEIP_INDICATOR_VIEW_OPERATIVE', 'ROLE_SEIP_PLANNING_LIST_INDICATOR_OPERATIVE')
+            IndicatorLevel::LEVEL_ESTRATEGICO => array('ROLE_SEIP_SIG_INDICATOR_VIEW'),
+            IndicatorLevel::LEVEL_TACTICO => array('ROLE_SEIP_SIG_INDICATOR_VIEW'),
+            IndicatorLevel::LEVEL_OPERATIVO => array('ROLE_SEIP_SIG_INDICATOR_VIEW')
         );
         if (isset($roleByLevel[$level])) {
             $rol = $roleByLevel[$level];

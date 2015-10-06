@@ -424,6 +424,14 @@ class PrePlanningService extends ContainerAware
                                 }else{
                                     $ref = $sequenceGenerator->getNextRefChildObjetive($itemInstanceCloned);
                                 }
+                                
+                                //Adición de los Sistemas de Calidad
+                                if(count($itemInstance->getManagementSystems()) > 0){
+                                    foreach($itemInstance->getManagementSystems() as $managementSystem){
+                                        $itemInstanceCloned->addManagementSystem($managementSystem);
+                                    }
+                                }
+                                
                                 $itemInstanceCloned->setRef($ref);
                                 $this->persist($itemInstanceCloned);
                             }
@@ -443,6 +451,15 @@ class PrePlanningService extends ContainerAware
                             $itemInstanceCloned = $cloneService->cloneObject($itemInstance);
                             $ref = $sequenceGenerator->getNextRefChildIndicator($itemInstanceCloned);
                             $itemInstanceCloned->setRef($ref);
+                            $itemInstanceCloned->setIndicatorLastPeriod($itemInstance);
+                            
+                            //Adición de los Sistemas de Calidad
+                            if(count($itemInstance->getManagementSystems()) > 0){
+                                foreach($itemInstance->getManagementSystems() as $managementSystem){
+                                    $itemInstanceCloned->addManagementSystem($managementSystem);
+                                }
+                            }
+                            
                             $this->persist($itemInstanceCloned);
                         }
                     }

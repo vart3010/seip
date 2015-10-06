@@ -1,0 +1,150 @@
+
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
+
+{% trans_default_domain 'workStudyCircle' %}
+
+{% block javascripts_base %}
+    {{ parent() }}
+    <script src="{{  asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.input.js') }}"></script>
+{% endblock javascripts_base %}
+
+{% block before_body %}
+    {{ contentHeader("workStudyCircle.title" | trans({}))   }}
+{% endblock %}
+
+{% block body %}
+
+    {#    {{ dump(workStudyCircle) }}#}
+
+    <fieldset class="fieldset">
+        <legend class="legend" >Círculo de Estudio y Trabajo&nbsp;</legend>
+        <div class="columns">
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ "workStudyCircle.form.code"|trans }}</label>
+                    {{ workStudyCircle.codigo }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ "workStudyCircle.form.nombre"|trans }}</label>
+                    {{ workStudyCircle.name }}
+                </p>
+            </div>
+            {#<div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ "workStudyCircle.form.region"|trans }}</label>
+                    {{ workStudyCircle.region.name }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ "workStudyCircle.form.complejo"|trans }}</label>
+                    {{ workStudyCircle.complejo.description}}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ "workStudyCircle.form.gerenciaFirst"|trans }}</label>
+                    {% for gerencia in  workStudyCircle.gerencias %}
+                        {{ gerencia }}<br>
+                    {% endfor %}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ "workStudyCircle.form.gerenciaSecond"|trans }}</label>
+                    {% for gerenciaSecond in  workStudyCircle.gerenciaSeconds %}
+                        {{ gerenciaSecond }}<br>
+                    {% endfor %}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ "workStudyCircle.form.superintendencia"|trans }}</label>
+                    {{ workStudyCircle.superintendencia }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ "workStudyCircle.form.supervision"|trans }}</label>
+                    {{ workStudyCircle.supervision }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ "workStudyCircle.form.departamento"|trans }}</label>
+                    {{ workStudyCircle.departamento}}
+                </p>
+            </div>#}
+        </div>
+    </fieldset>
+    <fieldset class="fieldset">
+        <legend class="legend" >{{ "workStudyCircle.form.coordinador.title"|trans }}&nbsp;</legend>
+        <div class="columns">
+            {% if workStudyCircle.coordinator != null %}
+                <div class="new-row-mobile twelve-columns twelve-columns-tablet twelve-columns-mobile">
+                    <p class="inline-label">
+                        <label class="label">{{ "workStudyCircle.form.coordinador.nombre"|trans }}</label>
+                        {{ workStudyCircle.coordinator.getFullNameUser }}
+                    </p>
+                </div>
+                <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                    <p class="inline-label">
+                        <label class="label">{{ "workStudyCircle.form.coordinador.telefono"|trans }}</label>
+                        {{ workStudyCircle.coordinator.cellphone }}
+                    </p>
+                </div>
+                <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                    <p class="inline-label">
+                        <label class="label">{{ "workStudyCircle.form.coordinador.ext"|trans }}</label>
+                        {{ workStudyCircle.coordinator.ext }}
+                    </p>
+                </div>
+            {% endif %}
+        </div>
+    </fieldset>
+
+    {% set users = workStudyCircle.members %}
+    <br /><br />
+    {% include 'PequivenSEIPBundle:Politic:WorkStudyCircle/members.html.twig' %}
+    <br /><br />
+    {% include 'PequivenSEIPBundle:Politic:WorkStudyCircle/proposals.html.twig' %}
+    <br /><br />
+    {% if(is_granted(["ROLE_SEIP_MEETING_LIST"])) %}
+        {% include 'PequivenSEIPBundle:Politic:WorkStudyCircle/meetings.html.twig' %}    
+    {% endif %}
+    <br /><br />
+    {% set routeExportWorkStudyCircle = path('pequiven_work_study_circle_export_pdf',{idWorkStudyCircle:workStudyCircle.id}) %}
+    {% if(is_granted(["ROLE_SEIP_WORK_STUDY_CIRCLES_EXPORT_REPORT"])) %}
+        <div class="align-right">
+            {{ buttons.generic(
+                    (routeExportWorkStudyCircle),
+                    ('workStudyCircle.export.exportPdf'|trans({})),
+                    'icon-download'
+                 ) 
+            }}
+            &nbsp;        
+            {% set routeExportProposals = path('pequiven_proposal_export_pdf',{idWorkStudyCircle:workStudyCircle.id}) %}
+
+            {{ buttons.generic(
+                    (routeExportProposals),
+                    ('workStudyCircle.proposals.exportpdf'|trans({})),
+                    'icon-download'
+                 ) 
+            }}
+            &nbsp;        
+            {% set routeExportMeetings = path('pequiven_all_meetings_export_pdf',{idWorkStudyCircle:workStudyCircle.id}) %}
+
+            {{ buttons.generic(
+                    (routeExportMeetings),
+                    ('workStudyCircle.meetings.exportpdf'|trans({})),
+                    'icon-download'
+                 ) 
+            }}
+            
+        </div>              
+    {% endif %}
+{% endblock %}

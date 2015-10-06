@@ -21,12 +21,17 @@ pequiven_plant_report_show:
         _controller: pequiven.controller.plant_report:showAction
     methods: [GET]
     
+#pequiven_plant_group_report_show:
+#    path: /{id}/showGroup
+#    defaults:
+#        _controller: pequiven.controller.plant_report:showGroupAction
+#    methods: [GET]
+    
 pequiven_plant_report_update:
     path: /{id}/update
     defaults:
         _controller: pequiven.controller.plant_report:updateAction
-        _sylius:
-            form: pequiven_seipbundle_dataload_plantreport
+        
     methods: [GET|POST|PUT]
     
 pequiven_plant_report_delete:

@@ -1,6 +1,8 @@
 workStudyCircle:
     title: Círculo de Estudio y Trabajo
     circle_list: Círculos de Estudio y Trabajo
+    phases: Fases
+    phase_number: Fase %phase%
     form:
         code: Código
         nombre: Nombre de Círculo
