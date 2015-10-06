@@ -1255,6 +1255,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
      */
     public function addMenuWorkStudyCircles(ItemInterface $menu, $section) {
         $user = $this->getUser();
+        $workStudyCircleService = $this->getWorkStudyCircleService();
 
         $menuWorkStudyCircles = $this->factory->createItem('work_study_circles', $this->getSubLevelOptions(array(
                             'uri' => null,
@@ -1296,6 +1297,15 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                     ))
                 )->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.vizualice.phase_one', $section)));
                 $workStudyCirclesVizualice->addChild($workStudyCirclesPhaseOne);
+            }
+            
+            if(($workStudyCircle = $workStudyCircleService->obtainWorkStudyCircleByPhase($user, \Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle::PHASE_TWO)) != null){
+                $workStudyCirclesPhaseTwo = $this->factory->createItem('work_study_circles.vizualice.phase_two', $this->getSubLevelOptions(array(
+                        'route' => 'pequiven_work_study_circle_show_phase',
+                        'routeParameters' => array('id' => $workStudyCircle->getId()),
+                    ))
+                )->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.vizualice.phase_two', $section)));
+                $workStudyCirclesVizualice->addChild($workStudyCirclesPhaseTwo);
             }
 
             $menuWorkStudyCircles->addChild($workStudyCirclesVizualice);

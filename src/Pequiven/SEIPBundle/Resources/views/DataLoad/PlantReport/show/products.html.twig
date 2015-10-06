@@ -1,11 +1,19 @@
 {% trans_default_domain 'PequivenSEIPBundle' %}
-                
+
 <div class="block">
     <div class="block-title">
-        <h3> {{ 'pequiven_seip.products'|trans }}&nbsp;({{ plant_report.productsReport|length }})</h3>
+        <h3> {{ 'pequiven_seip.products'|trans }}&nbsp;
+            {% if(plant_report.plant.childrens|length>0) %}
+                ({{ products|length}})
+            {% else %}
+                ({{ plant_report.productsReport|length }})
+            {% endif %}
+        </h3>
         <div class="button-group absolute-right compact">
             {% if periodService().isAllowPlanningReport %}
-                <a class="button icon-list-add" href="{{ path('pequiven_product_report_create',{plantReport: plant_report.id}) }}">{{ 'pequiven.add'|trans({},'messages') }}</a>
+                {% if(plant_report.plant.childrens|length==0) %}
+                    <a class="button icon-list-add" href="{{ path('pequiven_product_report_create',{plantReport: plant_report.id}) }}">{{ 'pequiven.add'|trans({},'messages') }}</a>
+                {% endif %}
             {% endif %}
         </div>
     </div>
@@ -21,31 +29,43 @@
             </thead>
             {% set colspan = 6 %}
             <tbody>
+                {% if(plant_report.plant.childrens|length>0) %}
+                    {% for produc in products %}
+                        <tr>
+                            <td>{{ loop.index }} - {{ produc.name }}</td>
+                            <td>{{ produc.line }}</td>
+                            <td>{{ produc.unit }}</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                    {% endfor %}
+                {% else %}    
+                    {% for productReport in plant_report.productsReport %}
+                        <tr>
+                            <td>{{ loop.index }} - 
+                                {{ generateLink(productReport) }}
+                            </td>
+                            <th scope="row">
+                                {{ productReport.product.productionLine }}
+                            </th>
+                            <td>{{ productReport.product.productUnit }}</td>
+                            <td class="low-padding align-center">
+                                {% if periodService().isAllowPlanningReport %}
+                                    <a href="{{ path("pequiven_product_report_update",{id: productReport.id}) }}" class="button compact icon-pencil">{{ "pequiven_seip.actions.edit"|trans }}</a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr >
+                            <td colspan="{{ colspan }}" class="empty_row">
+                                {{ "empty.product_report"|trans }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
 
-                {% for productReport in plant_report.productsReport %}
-                    <tr>
-                        <td>{{ loop.index }} - 
-                            {{ generateLink(productReport) }}
-                        </td>
-                        <th scope="row">
-                            {{ productReport.product.productionLine }}
-                        </th>
-                        <td>{{ productReport.product.productUnit }}</td>
-                        <td class="low-padding align-center">
-                            {% if periodService().isAllowPlanningReport %}
-                                <a href="{{ path("pequiven_product_report_update",{id: productReport.id}) }}" class="button compact icon-pencil">{{ "pequiven_seip.actions.edit"|trans }}</a>
-                            {% endif %}
-                        </td>
-                    </tr>
-                {% else %}
-                    <tr >
-                        <td colspan="{{ colspan }}" class="empty_row">
-                            {{ "empty.product_report"|trans }}
-                        </td>
-                    </tr>
-                {% endfor %}
+
             </tbody>
         </table>
-        
+
     </div>
 </div>

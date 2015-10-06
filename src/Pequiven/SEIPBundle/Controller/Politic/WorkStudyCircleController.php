@@ -179,18 +179,43 @@ class WorkStudyCircleController extends SEIPController {
         $em = $this->getDoctrine()->getManager();
         $workStudyCircle = $em->getRepository('PequivenSEIPBundle:Politic\WorkStudyCircle')->findOneBy(array('id' => $request->get("id")));
 
-//        $proposals = $em->getRepository('PequivenSEIPBundle:Politic\Proposal')->findBy(array('workStudyCircle' => $workStudyCircle->getId()));
+        $workStudyCircleService = $this->getWorkStudyCircleService();
         $proposals = $workStudyCircle->getProposals();
         $meetings = $workStudyCircle->getMeeting();
 
         $user = $this->getUser();
+        
+        $isALlowToEdit = $workStudyCircleService->isAllowToEdit($workStudyCircle);
 
         return $this->render('PequivenSEIPBundle:Politic:WorkStudyCircle\show.html.twig', array(
                     'workStudyCircle' => $workStudyCircle,
                     'userData' => $user,
                     'proposals' => $proposals,
                     'meetings' => $meetings,
-                    'user' => $user
+                    'user' => $user,
+                    'isAllowToEdit' => $isALlowToEdit,
+        ));
+    }
+    
+    public function showPhaseAction(Request $request) {
+        $em = $this->getDoctrine()->getManager();
+        $workStudyCircle = $em->getRepository('PequivenSEIPBundle:Politic\WorkStudyCircle')->findOneBy(array('id' => $request->get("id")));
+        $workStudyCircleService = $this->getWorkStudyCircleService();
+
+        $proposals = $workStudyCircle->getProposals();
+        $meetings = $workStudyCircle->getMeeting();
+
+        $user = $this->getUser();
+        
+        $isALlowToEdit = $workStudyCircleService->isAllowToEdit($workStudyCircle);
+
+        return $this->render('PequivenSEIPBundle:Politic:WorkStudyCircle\showPhase.html.twig', array(
+                    'workStudyCircle' => $workStudyCircle,
+                    'userData' => $user,
+                    'proposals' => $proposals,
+                    'meetings' => $meetings,
+                    'user' => $user,
+                    'isAllowToEdit' => $isALlowToEdit,
         ));
     }
 
@@ -391,6 +416,7 @@ class WorkStudyCircleController extends SEIPController {
         //AGRUPO EL ARREGLO POR LINEA, ES DECIR UN REGISTRO POR CADA LINEA QUE TENGA PROPUESTA. 
         //KEY->DESCRIPCION LINEA y VALUE->FRECUENCIA (CUANTAS VECES SE REPITE)
         
+        //TODO: ARREGLAR ESTO, DA ERROR
         $lineas = array_count_values($lineStrategics);
         
         $data = array(
