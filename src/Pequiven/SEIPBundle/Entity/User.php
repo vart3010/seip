@@ -929,6 +929,6 @@ class User extends BaseUser implements UserInterface, UserBoxInterface, PeriodIt
         return $this;
     }
 
-    /**
+    
 
 }
