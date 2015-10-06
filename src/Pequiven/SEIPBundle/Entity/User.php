@@ -219,7 +219,7 @@ class User extends BaseUser implements UserInterface, UserBoxInterface, PeriodIt
      * @ORM\ManyToMany(targetEntity="\Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle", mappedBy="members")
      */
     private $workStudyCircles;
-
+    
     /**
      * @var Pequiven\ArrangementProgramBundle\Entity\MovementEmployee\MovementEmployee
      * @ORM\OneToMany(targetEntity="Pequiven\ArrangementProgramBundle\Entity\MovementEmployee\MovementEmployee", mappedBy="User")
@@ -241,9 +241,6 @@ class User extends BaseUser implements UserInterface, UserBoxInterface, PeriodIt
         $this->plantReports = new \Doctrine\Common\Collections\ArrayCollection();
         $this->reportTemplates = new \Doctrine\Common\Collections\ArrayCollection();
         $this->workStudyCircles = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->movementEmployee = new \Doctrine\Common\Collections\ArrayCollection();
-        //$this->workStudyCircle = new \Doctrine\Common\Collections\ArrayCollection();
-        
     }
 
     /**
@@ -917,18 +914,46 @@ class User extends BaseUser implements UserInterface, UserBoxInterface, PeriodIt
      */
     public function addWorkStudyCircles(\Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle $workStudyCircle) {
         $this->workStudyCircles[] = $workStudyCircle;
+
+        return $this;
     }
+
     /**
-     * 
-     * @param \Pequiven\ArrangementProgramBundle\Entity\MovementEmployee\MovementEmnployee $movementEmployee
-     * @return \Pequiven\SEIPBundle\Entity\User
+     * Remove workStudyCircles
+     *
+     * @param \Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle $workStudyCircle
      */
-    public function addMovementEmployee(\Pequiven\ArrangementProgramBundle\Entity\MovementEmployee\MovementEmployee $movementEmployee) {
+    public function removeWorkStudyCircles(\Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle $workStudyCircle) {
+        $this->workStudyCircles->removeElement($workStudyCircle);
+    }
+
+    /**
+     * Get workStudyCircles
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getWorkStudyCircles() {
+        return $this->workStudyCircles;
+    }
+    
+    function getMovementEmployee() {
+        return $this->movementEmployee;
+    }
+
+    function setMovementEmployee(Pequiven\ArrangementProgramBundle\Entity\MovementEmployee\MovementEmployee $movementEmployee) {
+        $this->movementEmployee = $movementEmployee;
+    }
+    
+    public function removeMovementEmployee(Pequiven\ArrangementProgramBundle\Entity\MovementEmployee\MovementEmployee $movementEmployee) {
+        $this->movementEmployee->removeElement($movementEmployee);
+    }
+    
+    public function addMovementEmployee(Pequiven\ArrangementProgramBundle\Entity\MovementEmployee\MovementEmployee $movementEmployee) {
         $this->movementEmployee[] = $movementEmployee;
 
         return $this;
     }
 
-    
+
 
 }
