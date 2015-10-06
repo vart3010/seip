@@ -3758,9 +3758,10 @@ class IndicatorService implements ContainerAwareInterface {
                 }
                 else{               
                     
-                    $value = (int)$indicatorlast->getResultReal();
+                    $value = round($indicatorlast->getResultReal());
                     $dataAnt["value"] = $value;//Pasando data a Data2014                
                 }
+                
             //Data 2014
             $dataAnt["color"] = '#f2c500';            
             $dataSetAnt["showvalues"] = "1";
