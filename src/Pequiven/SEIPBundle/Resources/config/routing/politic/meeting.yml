@@ -81,4 +81,3 @@ pequiven_meeting_upload:
     methods: [GET|POST]
     options:
         expose: true
-        

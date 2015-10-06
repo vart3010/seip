@@ -68,14 +68,128 @@ class PlantReportController extends SEIPController {
         return $this->handleView($view);
     }
 
+    public function showGroupAction(Request $request) {
+        $plantReport = $this->getRepository()->findOneBy(array("id" => $request->get("id")));
+        $childs = $plantReport->getPlant()->getChildrens();
+
+
+        $data = array(
+            "plant_report" => $plantReport,
+            "childs" => $childs
+        );
+
+        $view = $this
+                ->view()
+                ->setTemplate($this->config->getTemplate('showGroup.html'))
+                ->setTemplateVar($this->config->getResourceName())
+                ->setData($data)
+        ;
+
+
+
+
+        return $this->handleView($view);
+    }
+
+    public function fillArrayStopPlanning($array) {
+        for ($i = 1; $i <= 12; $i++) {
+            $array[$i] = 0;
+        }
+        return $array;
+    }
+
+    public function validIdExist($find, $array) {
+        $band = false;
+        foreach ($array as $value) {
+            if ($value["id"] == $find) {
+                $band = true;
+                break;
+            }
+        }
+        return $band;
+    }
+
     public function showAction(Request $request) {
 
         $plantReport = $this->getRepository()->find($request->get("id"));
         $childs = $plantReport->getPlant()->getChildrens();
+        $totalStops = array();
+        $totalHours = array();
+        $totalProducts = array();
+        $totalServices = array();
+
+        $alicuota = array();
+
+        $totalStops = $this->fillArrayStopPlanning($totalStops);
+        $totalHours = $this->fillArrayStopPlanning($totalHours);
+        /**
+         * METODO PARA CUANDO HAY GRUPO DE PLANTAS
+         * SACOS LOS HIJOS Y LUEGO LOS REPORTPLANT DE CADA UNO Y RECORRO ACUMULANDO
+         * LAS PARADAS DE PLANTAS,
+         * PRODUCTOS Y 
+         * SERVICIOS
+         */
+        foreach ($childs as $child) {
+
+            foreach ($child->getPLantReport() as $plantReportByChild) {
+                //PLANT STOP PLANNING
+                $planStopPlannings = $plantReportByChild->getPlantStopPlannings();
+                foreach ($planStopPlannings as $planStopPlanning) {
+                    if (array_key_exists($planStopPlanning->getMonth(), $totalStops)) {
+                        $totalStops[$planStopPlanning->getMonth()] += $planStopPlanning->getTotalStops();
+                        $totalHours[$planStopPlanning->getMonth()] += $planStopPlanning->getTotalHours();
+                    }
+                }
+                //PRODUCTOS
+                foreach ($plantReportByChild->getPlant()->getProducts() as $product) {
+                    if (!$this->validIdExist($product->getId(), $totalProducts)) {
+                        $totalProducts[] = array(
+                            "id" => $product->getId(),
+                            "name" => $product->getName(),
+                            "line" => $product->getProductionLine(),
+                            "unit" => $product->getProductUnit()
+                        );
+                    }
+                }
+                //SERVICIOS
+                foreach ($plantReportByChild->getConsumerPlanningServices() as $planningService) {
+
+
+                    if (array_key_exists($planningService->getService()->getId(), $alicuota)) {
+                        $alicuota[$planningService->getService()->getId()] += $planningService->getAliquot();
+                    } else {
+                        $alicuota[$planningService->getService()->getId()] = $planningService->getAliquot();
+                    }
+                    if (!$this->validIdExist($planningService->getService()->getId(), $totalServices)) {
+                        $totalServices[] = array(
+                            "id" => $planningService->getService()->getId(),
+                            "name" => $planningService->getService()->getName(),
+                            "unit" => $planningService->getService()->getServiceUnit(),
+                            "alicuota" => $alicuota
+                        );
+                    }
+                }
+            }
+        }
         
+
+        $labelMonth = \Pequiven\SEIPBundle\Model\Common\CommonObject::getLabelsMonths();
+        $stopPlanningTable = array();
+        for ($i = 1; $i <= 12; $i++) {
+            $stopPlanningTable[] = array(
+                "month" => $i . " - " . $labelMonth[$i],
+                "stop" => $totalStops[$i],
+                "hours" => $totalHours[$i]
+            );
+        }
+
         $data = array(
             "plant_report" => $plantReport,
-            "childs" => $childs
+            "childs" => $childs,
+            "stopPlanning" => $stopPlanningTable,
+            "products" => $totalProducts,
+            "services" => $totalServices,
+            "alicuota" => $alicuota
         );
 
         $view = $this
@@ -84,10 +198,6 @@ class PlantReportController extends SEIPController {
                 ->setTemplateVar($this->config->getResourceName())
                 ->setData($data)
         ;
-
-
-
-
         return $this->handleView($view);
     }
 
