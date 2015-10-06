@@ -314,6 +314,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * 
      * @var \Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\ValueIndicatorConfig
      * @ORM\OneToOne(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\ValueIndicatorConfig",inversedBy="indicator")
+     * @ORM\JoinColumn(nullable=true)
      */
     private $valueIndicatorConfig;
 
@@ -1545,6 +1546,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
             $this->histories = new ArrayCollection();
             $this->observations = new ArrayCollection();
             $this->details = new Indicator\IndicatorDetails();
+            $this->valueIndicatorConfig = null;
 
             $this->objetives = new ArrayCollection();
 
