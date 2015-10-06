@@ -200,18 +200,22 @@ class WorkStudyCircleController extends SEIPController {
     public function showPhaseAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
         $workStudyCircle = $em->getRepository('PequivenSEIPBundle:Politic\WorkStudyCircle')->findOneBy(array('id' => $request->get("id")));
+        $workStudyCircleService = $this->getWorkStudyCircleService();
 
         $proposals = $workStudyCircle->getProposals();
         $meetings = $workStudyCircle->getMeeting();
 
         $user = $this->getUser();
+        
+        $isALlowToEdit = $workStudyCircleService->isAllowToEdit($workStudyCircle);
 
         return $this->render('PequivenSEIPBundle:Politic:WorkStudyCircle\showPhase.html.twig', array(
                     'workStudyCircle' => $workStudyCircle,
                     'userData' => $user,
                     'proposals' => $proposals,
                     'meetings' => $meetings,
-                    'user' => $user
+                    'user' => $user,
+                    'isAllowToEdit' => $isALlowToEdit,
         ));
     }
 
