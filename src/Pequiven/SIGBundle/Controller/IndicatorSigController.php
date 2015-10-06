@@ -1056,7 +1056,8 @@ class IndicatorSigController extends ResourceController
             $actionResult = $this->get('pequiven.repository.sig_action_indicator')->findBy(array('id' => $idCons));
         }  
 
-        $actionsValues = EvolutionActionValue::getActionValues($idCons, $month);          
+//        $actionsValues = EvolutionActionValue::getActionValues($idCons, $month);          
+        $actionsValues = $this->get('pequiven.repository.sig_action_value_indicator')->findBy(array('actionValue' => $idCons, 'month' => $month));    
         $cant = count($actionResult);
 
         if($opc = false){
