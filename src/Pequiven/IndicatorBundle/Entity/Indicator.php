@@ -1533,6 +1533,8 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
             $this->period = null;
 
             $this->valuesIndicator = new ArrayCollection();
+            
+            $this->managementSystems = new ArrayCollection();
 
             $this->valueFinal = 0;
             $this->totalPlan = 0;
