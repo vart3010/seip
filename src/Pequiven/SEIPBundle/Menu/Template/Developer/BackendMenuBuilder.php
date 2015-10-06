@@ -185,7 +185,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
             ))->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.objetives.operative', $section)));
 
             $visualize->addChild('sig.objective.matrices_objectives', array(
-                        'route' => 'pequiven_objetives_gerencia_list_sig',
+                        'route' => '',
                     ))
                     ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.objective.matrices_objectives', $section)));
 
