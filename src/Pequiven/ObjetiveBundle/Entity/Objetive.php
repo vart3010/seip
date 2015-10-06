@@ -1177,9 +1177,12 @@ class Objetive extends modelObjetive implements ResultItemInterface,PeriodItemIn
             $this->updatedAt = null;
             $this->userCreatedAt = null;
             $this->ref = null;
+            $this->details = null;
             
             $this->childrens = new ArrayCollection();
             $this->parents = new ArrayCollection();
+            
+            $this->managementSystems = new ArrayCollection();
             
             $this->period = null;
             $this->reviewedBy = null;
@@ -1247,7 +1250,7 @@ class Objetive extends modelObjetive implements ResultItemInterface,PeriodItemIn
      * @param \Pequiven\SIGBundle\Entity\ManagementSystem $managementSystems
      * @return Objetive
      */
-    public function addManagementSystems(\Pequiven\SIGBundle\Entity\ManagementSystem $managementSystems)
+    public function addManagementSystem(\Pequiven\SIGBundle\Entity\ManagementSystem $managementSystems)
     {
         $this->managementSystems[] = $managementSystems;
 
@@ -1259,7 +1262,7 @@ class Objetive extends modelObjetive implements ResultItemInterface,PeriodItemIn
      *
      * @param \Pequiven\SIGBundle\Entity\ManagementSystem $managementSystems
      */
-    public function removeManagementSystems(\Pequiven\SIGBundle\Entity\ManagementSystem $managementSystems)
+    public function removeManagementSystem(\Pequiven\SIGBundle\Entity\ManagementSystem $managementSystems)
     {
         $this->managementSystems->removeElement($managementSystems);
     }

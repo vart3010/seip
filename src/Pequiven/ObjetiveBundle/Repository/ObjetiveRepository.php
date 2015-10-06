@@ -186,11 +186,18 @@ class ObjetiveRepository extends EntityRepository {
         }  
     }
 
+    /**
+     * Devuleve todos los obejtevios tacticos filtrados por gerencia, periodo y asociados a los sistemas de la calidad
+     * 
+     * @param array $criteria
+     * @param array $orderBy
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
     function getObjetivesManagementSystem($gerencia) {
         
         $queryBuilder = $this->getQueryBuilder();
         $queryBuilder
-                  ->select('o')
+                ->select('o')
                 ->where('o.gerencia = :ger')
                 ->andWhere('o.period = :per')
                 ->andWhere('o.objetiveLevel = :level')

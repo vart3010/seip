@@ -488,8 +488,21 @@ class workStudyCircleService implements ContainerAwareInterface {
         //$data['dataSource']['categories'][]["category"] = $category;
         $data['dataSource']['dataset'][] = $dataSetLocal;
 
-        //return $data;
-        return json_encode($data);
+        return $data;
+    }
+    
+    
+    public function isAllowCreateWorkStudyCircleByPhase(\Pequiven\SEIPBundle\Entity\User $user, $phase = \Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle::PHASE_ONE){
+        $workStudyCircles = $user->getWorkStudyCircles();
+        $createWorkStudyCircle = true;
+        
+        foreach($workStudyCircles as $workStudyCircle){
+            if($workStudyCircle->getPhase() == $phase){
+                $createWorkStudyCircle = false;
+            }
+        }
+        
+        return $createWorkStudyCircle;
     }
 
     /**
