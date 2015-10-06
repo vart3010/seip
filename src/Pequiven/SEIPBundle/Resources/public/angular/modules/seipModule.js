@@ -229,6 +229,22 @@ angular.module('seipModule.controllers', [])
 
             };
 
+            $scope.getUrlMovement = function (idGoal,url) {
+                              
+                 var redirect = url+""+idGoal;
+               console.log(url);
+                //location.href =redirect;
+//                $.ajax({
+//                    type: 'get',
+//                    url: url,
+//                    data: data,
+//                    success: function (data) {
+//                        console.log(data["value"]);
+//                        
+//                    }
+//                });
+            };
+
             //Funcion que carga el template de la meta
             $scope.loadTemplateMeta = function (goal, index) {
                 $scope.model.goalCount = index;
@@ -564,6 +580,7 @@ angular.module('seipModule.controllers', [])
                     $scope.openModalAuto();
                 }
             };
+
             //Setea la dta del formulario
             $scope.setDataFormGoal = function (goal) {
                 $scope.initModelGoal(goal);

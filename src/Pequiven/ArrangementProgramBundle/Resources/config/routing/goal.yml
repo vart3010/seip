@@ -46,3 +46,18 @@ goal_delete:
     defaults: 
         _controller: pequiven_seip.controller.arrangementprogram_goal:deleteAction
     methods: [DELETE]
+    
+goal_movement:
+    path: /{id}
+    defaults: 
+        _controller: pequiven_seip.arrangementprogram_movement:showAction
+    methods: [GET]
+
+goal_movement_get_url:
+    path: /.{_format}
+    defaults:
+        _controller: pequiven_seip.arrangementprogram_movement:getUrlMovementAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+    methods: [GET|POST]

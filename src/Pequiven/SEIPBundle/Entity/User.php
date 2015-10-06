@@ -216,6 +216,12 @@ class User extends BaseUser implements UserInterface, UserBoxInterface, PeriodIt
     private $ext;
 
     /**
+     * @var Pequiven\ArrangementProgramBundle\Entity\MovementEmployee\MovementEmployee
+     * @ORM\OneToMany(targetEntity="Pequiven\ArrangementProgramBundle\Entity\MovementEmployee\MovementEmployee", mappedBy="User")
+     * */
+    private $movementEmployee;
+
+    /**
      * Constructor
      */
     public function __construct() {
@@ -229,7 +235,9 @@ class User extends BaseUser implements UserInterface, UserBoxInterface, PeriodIt
         $this->groups = new \Doctrine\Common\Collections\ArrayCollection();
         $this->plantReports = new \Doctrine\Common\Collections\ArrayCollection();
         $this->reportTemplates = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->movementEmployee = new \Doctrine\Common\Collections\ArrayCollection();
         //$this->workStudyCircle = new \Doctrine\Common\Collections\ArrayCollection();
+        
     }
 
     /**
@@ -913,5 +921,33 @@ class User extends BaseUser implements UserInterface, UserBoxInterface, PeriodIt
     public function getExt() {
         return $this->ext;
     }
+    
+    /**
+     * 
+     * @param \Pequiven\ArrangementProgramBundle\Entity\MovementEmployee\MovementEmnployee $movementEmployee
+     * @return \Pequiven\SEIPBundle\Entity\User
+     */
+    public function addMovementEmployee(\Pequiven\ArrangementProgramBundle\Entity\MovementEmployee\MovementEmployee $movementEmployee) {
+        $this->movementEmployee[] = $movementEmployee;
+
+        return $this;
+    }
+
+    /**
+     * 
+     * @param \Pequiven\ArrangementProgramBundle\Entity\MovementEmployee\MovementEmnployee $movementEmployee
+     */
+    public function removeMovementEmployee(\Pequiven\ArrangementProgramBundle\Entity\MovementEmployee\MovementEmployee $movementEmployee) {
+        $this->movementEmployee->removeElement($movementEmployee);
+    }
+
+    /**
+     * 
+     * @return type
+     */
+    public function getMovementEmployee() {
+        return $this->movementEmployee;
+    }
+    
 
 }

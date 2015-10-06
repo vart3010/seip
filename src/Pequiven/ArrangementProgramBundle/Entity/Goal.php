@@ -171,6 +171,12 @@ class Goal implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface {
      * @ORM\Column(name="resultbeforepenalty", type="float", nullable=true)
      */
     private $resultBeforepenalty = 0;
+    
+     /**
+     * @var Pequiven\ArrangementProgramBundle\Entity\MovementEmployee\MovementEmployee
+     * @ORM\OneToMany(targetEntity="Pequiven\ArrangementProgramBundle\Entity\MovementEmployee\MovementEmployee", mappedBy="Goal")
+     * */
+    private $movementEmployee;
 
     public function __construct() {
         $this->responsibles = new \Doctrine\Common\Collections\ArrayCollection();
@@ -565,6 +571,33 @@ class Goal implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface {
      */
     public function getresultBeforepenalty() {
         return $this->resultBeforepenalty;
+    }
+    
+     /**
+     * 
+     * @param \Pequiven\ArrangementProgramBundle\Entity\MovementEmployee\MovementEmnployee $movementEmployee
+     * @return \Pequiven\SEIPBundle\Entity\User
+     */
+    public function addMovementEmployee(\Pequiven\ArrangementProgramBundle\Entity\MovementEmployee\MovementEmnployee $movementEmployee) {
+        $this->movementEmployee[] = $movementEmployee;
+
+        return $this;
+    }
+
+    /**
+     * 
+     * @param \Pequiven\ArrangementProgramBundle\Entity\MovementEmployee\MovementEmnployee $movementEmployee
+     */
+    public function removeMovementEmployee(\Pequiven\ArrangementProgramBundle\Entity\MovementEmployee\MovementEmnployee $movementEmployee) {
+        $this->movementEmployee->removeElement($movementEmployee);
+    }
+
+    /**
+     * 
+     * @return type
+     */
+    public function getMovementEmployee() {
+        return $this->movementEmployee;
     }
 
     public function __clone() {
