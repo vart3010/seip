@@ -917,6 +917,7 @@ class User extends BaseUser implements UserInterface, UserBoxInterface, PeriodIt
      */
     public function addWorkStudyCircles(\Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle $workStudyCircle) {
         $this->workStudyCircles[] = $workStudyCircle;
+    }
     /**
      * 
      * @param \Pequiven\ArrangementProgramBundle\Entity\MovementEmployee\MovementEmnployee $movementEmployee
