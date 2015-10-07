@@ -46,19 +46,6 @@ pequiven_user_update:
     requirements:
         id: "\d+"
     methods: [GET|POST|PUT]
-    
-pequiven_user_search:
-    path: /search.{_format}
-    defaults:
-        _controller: pequiven_seip.controller.user:searchAction
-        _format: json
-    requirements:
-        id: "\d+"
-        _format: json
-    methods: GET
-    options:
-        expose: true
-
 
         
 #Select que devuelve las Gerencias de 2da Línea
