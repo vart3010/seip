@@ -394,7 +394,7 @@
             </call>
         </service>
         
-        <service id="seip.service.workStudyCircle" class="Pequiven\SEIPBundle\Service\Politic\workStudyCircleService">
+        <service id="seip.service.workStudyCircle" class="Pequiven\SEIPBundle\Service\Politic\WorkStudyCircleService">
             <call method="setContainer">
                 <argument type="service" id="service_container" />
             </call>

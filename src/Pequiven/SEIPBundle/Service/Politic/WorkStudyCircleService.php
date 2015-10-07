@@ -11,7 +11,7 @@ use LogicException;
 use Pequiven\SEIPBundle\Model\Common\CommonObject;
 use Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle;
 
-class workStudyCircleService implements ContainerAwareInterface {
+class WorkStudyCircleService implements ContainerAwareInterface {
 
     private $container;
 
