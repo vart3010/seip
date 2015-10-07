@@ -34,7 +34,7 @@
 
                 {% set cont = 1 %}
 
-                {% for user in workStudyCircle.userWorkerId %}
+                {% for user in users %}
                     {% if (userCoordinator != user.id) %}
                         <tr {#ng-repeat="user in workStudyCircle.userWorkerId"#}  {#ng-init="paso=$index;"#}>
                             <td>{{ cont }}</td>

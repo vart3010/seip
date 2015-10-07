@@ -107,7 +107,7 @@
         </div>
     </fieldset>
 
-    {% set users = workStudyCircle.members %}
+    {% set users = workStudyCircle.obtainMembersWithoutCoordinator %}
     <br /><br />
     {% include 'PequivenSEIPBundle:Politic:WorkStudyCircle/members.html.twig' %}
     <br /><br />
