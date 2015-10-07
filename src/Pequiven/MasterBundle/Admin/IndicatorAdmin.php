@@ -203,11 +203,6 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
         $form
                 ->tab("Details")
                 ->with('Details')
-                ->add('managementSystems', 'sonata_type_model_autocomplete', array(
-                    'property' => array('description'),
-                    'multiple' => true,
-                    'required' => false,
-                ))
                 ->add('showByRealValue')
                 ->add('showByPlanValue')
                 ->add('details', 'sonata_type_admin', array(
@@ -286,12 +281,19 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                 ->add('showCharts', null, array(
                     'required' => false,
                 ))
-                ->add('showEvolutionView', null, array(
-                    'required' => false,
-                ))
                 ->add('showTags', null, array(
                     'required' => false,
                 ))
+                ->end()
+                ->with('SIG')
+                ->add('managementSystems', 'sonata_type_model_autocomplete', array(
+                    'property' => array('description'),
+                    'multiple' => true,
+                    'required' => false,
+                ))
+                ->add('showEvolutionView', null, array(
+                    'required' => false,
+                ))                
                 ->end()
                 ->end()
         ;

@@ -18,8 +18,13 @@ class ManagementSystemRepository extends SeipEntityRepository
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
     function createPaginatorManagementSystems(array $criteria = null, array $orderBy = null) {
-       
-        $orderBy['ms.id'] = 'ASC';
+        $queryBuilder = $this->getCollectionQueryBuilder();
+        
+        $queryBuilder
+                ->addSelect('ms')
+                ->andWhere('ms.enabled = 1')
+                ->orderBy('ms.id')
+        ;
         
         return $this->createPaginator($criteria, $orderBy);
     }

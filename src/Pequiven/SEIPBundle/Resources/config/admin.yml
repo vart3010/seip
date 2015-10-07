@@ -584,6 +584,17 @@ services:
             - ~
         calls:
             - [ setTranslationDomain, [SonataAdminBundle]]
+    # Procesos de los Sistemas de Getión
+    sonata.admin.sig_process_management_system:
+        class: Pequiven\MasterBundle\Admin\SIG\ProcessManagementSystemAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "SIG" ,label: "Procesos de los Sistemas de Getión" }
+        arguments:
+            - ~
+            - Pequiven\SIGBundle\Entity\ProcessManagementSystem
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
     # Tipos de plan de acción del informe de evolución
     sonata.admin.sig_typeaction_management_system:
         class: Pequiven\MasterBundle\Admin\SIG\TypeActionManagementSystemAdmin
