@@ -622,6 +622,10 @@ class WorkStudyCircle extends ModelWorkStudyCircle implements PeriodItemInterfac
         return $this->childrens;
     }
     
+    /**
+     * Retorna los miembros de un CET, sin contar al coordinador
+     * @return type
+     */
     public function obtainMembersWithoutCoordinator(){
         $members = array();
         if($this->id > 0){
