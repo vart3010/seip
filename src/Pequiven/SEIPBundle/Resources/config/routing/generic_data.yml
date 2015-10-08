@@ -219,3 +219,15 @@ pequiven_seip_work_study_circle_category_file:
     methods: [GET]
     options:
         expose: true
+        
+pequiven_user_search:
+    path: /user-search.{_format}
+    defaults:
+        _controller: pequiven_seip.controller.user:searchAction
+        _format: json
+    requirements:
+        id: "\d+"
+        _format: json
+    methods: GET
+    options:
+        expose: true

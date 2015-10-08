@@ -394,7 +394,7 @@
             </call>
         </service>
         
-        <service id="seip.service.workStudyCircle" class="Pequiven\SEIPBundle\Service\Politic\workStudyCircleService">
+        <service id="seip.service.workStudyCircle" class="Pequiven\SEIPBundle\Service\Politic\WorkStudyCircleService">
             <call method="setContainer">
                 <argument type="service" id="service_container" />
             </call>
@@ -415,6 +415,13 @@
         <!-- Formulario de la Propuesta del Círculo de Estudio de Trabajo -->
         <service id="pequiven.form.proposal" class="Pequiven\SEIPBundle\Form\Politic\ProposalType">
             <tag name="form.type" alias="pequiven_seipbundle_politic_proposal" />
+        </service>
+        
+        <service id="pequiven.form.coordinator_workstudycircle" class="Pequiven\SEIPBundle\Form\CoordinatorType">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+            <tag name="form.type" alias="coordinator_workstudycircle" />
         </service>
         
     </services>

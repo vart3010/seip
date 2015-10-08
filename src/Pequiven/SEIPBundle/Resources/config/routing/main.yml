@@ -1,10 +1,6 @@
 pequiven_sig:
     resource: "@PequivenSIGBundle/Resources/config/routing/indicator/indicator.yml"
     prefix:   /sig
-    
-pequiven_seip_user_routes:
-    resource: "@PequivenSEIPBundle/Resources/config/routing/planning/user.yml"
-    prefix:   /user
 
 pequiven_planning_main:
     resource: "@PequivenSEIPBundle/Resources/config/routing/planning/main.yml"

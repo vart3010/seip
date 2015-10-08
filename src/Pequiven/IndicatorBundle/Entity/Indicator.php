@@ -398,6 +398,13 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     private $showTags = false;
 
     /**
+     * ¿Mostar navegación al informe de evolución?
+     * @var boolean
+     * @ORM\Column(name="showEvolutionView",type="boolean")
+     */
+    private $showEvolutionView = true;
+
+    /**
      * @var float
      * 
      * @ORM\Column(name="indicatorWeight", type="float", nullable=true)
@@ -1917,12 +1924,24 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
         return $this->showPlanValue;
     }
 
+
     function isShowRealValue() {
         return $this->showRealValue;
     }
 
     function isShowPlanValue() {
         return $this->showPlanValue;
+    }
+    function getShowEvolutionView() {
+        return $this->showEvolutionView;
+    }
+
+    function isShowEvolutionView() {
+        return $this->showEvolutionView;
+    }
+
+    function setShowEvolutionView($showEvolutionView) {
+        $this->showEvolutionView = $showEvolutionView;
     }
 
     function setShowRealValue($showRealValue) {

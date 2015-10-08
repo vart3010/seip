@@ -135,7 +135,7 @@ class ObjetiveRepository extends EntityRepository {
     }
 
     /**
-     * Crea un paginador para los indicadores de acuerdo al nivel del mismo
+     * Crea un paginador para los objetivos de acuerdo al sistema de la calidad
      * Filtrados por Programas de Gestión
      * @param array $criteria
      * @param array $orderBy
@@ -187,23 +187,25 @@ class ObjetiveRepository extends EntityRepository {
     }
 
     /**
-     * Devuleve todos los obejtevios tacticos filtrados por gerencia, periodo y asociados a los sistemas de la calidad
-     * 
+     * Devuelve todos los objetivos tacticos filtrados por sistema de la calidad, periodo.
+     * @author Maximo Sojo <maxsojo13@gmail.com>
      * @param array $criteria
      * @param array $orderBy
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
-    function getObjetivesManagementSystem($gerencia) {
+    function getObjetivesManagementSystem($managementSystem) {
         
         $queryBuilder = $this->getQueryBuilder();
         $queryBuilder
                 ->select('o')
-                ->where('o.gerencia = :ger')
+                //->where('o.managementSystems = :managementSystemId')
+                ->andWhere('ms.id = :managementSystemId')
                 ->andWhere('o.period = :per')
                 ->andWhere('o.objetiveLevel = :level')
                 ->andWhere('o.deletedAt IS NULL')
                 ->innerJoin('o.managementSystems', 'ms')
-                ->setParameter('ger', $gerencia)
+                //->innerJoin('o.managementSystems', 'ms')
+                ->setParameter('managementSystemId', $managementSystem)
                 ->setParameter('per',$this->getPeriodService()->getPeriodActive())
                 ->setParameter('level',\Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_TACTICO)
         ;

@@ -94,6 +94,22 @@ class WorkStudyCircleType extends AbstractType {
                     'empty_value' => 'Seleccione',
                     'required' => true,
                 ))
+                ->add('members', null, array(
+                    'query_builder' => function(\Pequiven\SEIPBundle\Repository\UserRepository $repository2) {
+                        return $repository2->findQueryUsersCoordinatorPhaseWorkStudyCircle();
+                    },
+                    'label' => 'Coordinadores',
+                    'label_attr' => array('class' => 'label'),
+                    'attr' => array(
+                        'class' => "input-xlarge select2",
+//                        'ng-options' => 'value as (value.firstname + " "+ value.lastname + " ("+value.numPersonal+")") for (key,value) in data.responsibleGoals',
+                        'style' => 'width: 270px',
+                        'multiple' => 'multiple'
+                    ),
+                    'mapped' => false,
+                    'empty_value' => 'Seleccione',
+                    'required' => false,
+                ))
         ;
     }
 

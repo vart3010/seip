@@ -234,6 +234,16 @@ class UserRepository extends EntityRepository {
 
         return $qb;
     }
+    
+    function findQueryUsersCoordinatorPhaseWorkStudyCircle(array $criteria = array()) {
+        $qb = $this->getQueryBuilder();
+        $qb
+                ->addSelect('u')
+                ->innerJoin('u.workStudyCircles', 'wsc')
+                ->andWhere('wsc.phase = 2')
+        ;
+        return $qb;
+    }
 
     /**
      * Buscador de usuarios
@@ -303,6 +313,47 @@ class UserRepository extends EntityRepository {
 
         $qb->setMaxResults(30);
 
+        return $qb->getQuery()->getResult();
+    }
+    
+    /**
+     * Buscador de coordinadores de círculos de estudio de trabajo
+     * 
+     * @param array $criteria
+     * @return type
+     */
+    function searchOnlyCoordinator(array $criteria = array()) {
+        $qb = $this->getQueryBuilder();
+        $qb
+            ->innerJoin('u.workStudyCircles', 'wsc')
+            ;
+
+        $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
+        $orX = $qb->expr()->orX();
+        if (($firstname = $criteria->remove('firstname'))) {
+            $orX->add($qb->expr()->like('u.firstname', "'%" . $firstname . "%'"));
+        }
+        if (($lastname = $criteria->remove('lastname'))) {
+            $orX->add($qb->expr()->like('u.lastname', "'%" . $lastname . "%'"));
+        }
+        if (($username = $criteria->remove('username'))) {
+            $orX->add($qb->expr()->like('u.username', "'%" . $username . "%'"));
+        }
+        if (($numPersonal = $criteria->remove('numPersonal'))) {
+            $orX->add($qb->expr()->like('u.numPersonal', "'%" . $numPersonal . "%'"));
+        }
+        
+        if(($workStudyCircleId = $criteria->remove('workStudyCircleId')) != null){
+            $qb
+                ->andWhere('wsc.id = :workStudyCircleId')
+                ->setParameter('workStudyCircleId', $workStudyCircleId)
+                ;
+        }
+        
+        $qb->andWhere($orX);
+
+        $qb->setMaxResults(30);
+        
         return $qb->getQuery()->getResult();
     }
 
