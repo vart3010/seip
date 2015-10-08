@@ -116,9 +116,9 @@ class ObjetivesController extends ResourceController
         $sorting = $request->get('sorting',$this->config->getSorting());
         
         //$repository = $this->getRepository();        
-        $repository = $this->container->get('pequiven.repository.sig_management_system');        
+        $repository = $this->container->get('pequiven.repository.sig_management_system'); 
         
-
+        
         if ($this->config->isPaginated()) {
             $resources = $this->resourceResolver->getResource(
                 $repository,
@@ -409,6 +409,7 @@ class ObjetivesController extends ResourceController
             $activeSheet->mergeCells(sprintf('C%s:C%s',($rowIniTac),($rowFinTac)));
             $activeSheet->mergeCells(sprintf('G%s:G%s',($rowIniTac),($rowFinTac)));
             
+            //Pasando la politica del Sistema de la Calidad
             if ($contTac == 1) {
                 //Politica del Sistema de la Calidad Consultado
                 $textPoliticManagementSystem = $managementSystem->getPoliticManagementSystem()->getDescription();

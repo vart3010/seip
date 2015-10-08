@@ -18,15 +18,28 @@ class ManagementSystemRepository extends SeipEntityRepository
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
     function createPaginatorManagementSystems(array $criteria = null, array $orderBy = null) {
-        $queryBuilder = $this->getCollectionQueryBuilder();
         
-        $queryBuilder
-                ->addSelect('ms')
-                ->andWhere('ms.enabled = 1')
-                ->orderBy('ms.id')
-        ;
-        
+        $criteria['for_view_management'] = true;
+        $orderBy['ms.id'] = 'ASC';
+
         return $this->createPaginator($criteria, $orderBy);
+    }
+
+    protected function applyCriteria(\Doctrine\ORM\QueryBuilder $queryBuilder, array $criteria = null) {
+        $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
+
+        
+        //Visualización Sistemas de la Calidad
+        if(($forviewmanagement = $criteria->remove('for_view_management')) != null){
+            
+            $queryBuilder
+                ->andWhere('ms.enabled = 1')
+                ->andWhere('ms.deletedAt IS NULL')                
+            ;
+        }
+        
+        parent::applyCriteria($queryBuilder, $criteria->toArray());
+        
     }
 
     protected function getAlias() {
