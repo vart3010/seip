@@ -10,7 +10,7 @@
 <div class="block" >
     <div class="block-title">
         <h3 class="ng-binding">{{ "workStudyCircle.meetings.title"|trans }}</h3>    
-        {% if(is_granted("ROLE_SEIP_MEETING_ADD") or (userCoordinator == user.id )) %}
+        {% if((is_granted("ROLE_SEIP_MEETING_ADD") or (userCoordinator == user.id )) and workStudyCircle.phase > 1) %}
             <div class="button-group absolute-right compact">
                 <a class="button icon-list-add " href="{{ path("pequiven_meeting_create",{workStudyCircle_id:workStudyCircle.id})}}"  title="">
                     {{ "workStudyCircle.meetings.add"|trans }}&nbsp;
@@ -50,7 +50,7 @@
                         </td>
 
                         <td class="align-right vertical-center">
-                            {% if (is_granted('ROLE_SEIP_MEETING_EDIT') or (userCoordinator == user.id)) %}
+                            {% if ((is_granted('ROLE_SEIP_MEETING_EDIT') or (userCoordinator == user.id)) and workStudyCircle.phase > 1) %}
                                 <div ng-controller="ToolsController" id="target_{$ paso+1 $}">
                                     <span class="select compact">
                                         <a href="{{ path('pequiven_meeting_edit',{meeting_id:meeting.id}) }}" class="select-value form-edit">
