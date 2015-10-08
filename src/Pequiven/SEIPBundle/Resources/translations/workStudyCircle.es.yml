@@ -19,6 +19,8 @@ workStudyCircle:
             nombre: Nombre
             telefono: Teléfono
             ext: Extensión
+    coordinator:
+        add: Añadir Coordinador
     members:
         title: Miembros
         add: Añadir Miembros

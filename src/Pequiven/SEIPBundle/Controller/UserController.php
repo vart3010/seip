@@ -194,6 +194,32 @@ class UserController extends baseController {
         return $this->handleView($view);
     }
     
+    /**
+     * Busca un coordinador
+     * 
+     * @param Request $request
+     * @return type
+     */
+    function searchOnlyCoordinatorAction(Request $request) {
+        
+        $query = $request->get('query');
+        $criteria = array(
+            'username' => $query,
+            'firstname' => $query,
+            'lastname' => $query,
+            'numPersonal' => $query,
+        );
+        
+        $criteria['workStudyCircleId'] = $request->get('workStudyCircleId');
+        
+        $results = $this->get('pequiven_seip.repository.user')->searchOnlyCoordinator($criteria);
+
+        $view = $this->view();
+        $view->setData($results);
+        $view->getSerializationContext()->setGroups(array('id', 'api_list', 'sonata_api_read'));
+        return $this->handleView($view);
+    }
+    
     
 
     /**

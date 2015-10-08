@@ -83,8 +83,8 @@
     </fieldset>
     <fieldset class="fieldset">
         <legend class="legend" >{{ "workStudyCircle.form.coordinador.title"|trans }}&nbsp;</legend>
+        {% if workStudyCircle.coordinator != null %}
         <div class="columns">
-            {% if workStudyCircle.coordinator != null %}
                 <div class="new-row-mobile twelve-columns twelve-columns-tablet twelve-columns-mobile">
                     <p class="inline-label">
                         <label class="label">{{ "workStudyCircle.form.coordinador.nombre"|trans }}</label>
@@ -103,8 +103,18 @@
                         {{ workStudyCircle.coordinator.ext }}
                     </p>
                 </div>
-            {% endif %}
         </div>
+        {% else %}
+            <div class="block" >
+                <div class="block-title">
+                    <div class="button-group absolute-left compact">
+                        <a class="button icon-list-add " href="{{ path("pequiven_work_study_circle_add_coordinator",{idWorkStudyCircle:workStudyCircle.id})}}"  title="">
+                            {{ "workStudyCircle.coordinator.add"|trans }}&nbsp;
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
     </fieldset>
 
     {% set users = workStudyCircle.obtainMembersWithoutCoordinator %}

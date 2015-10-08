@@ -246,6 +246,31 @@ class WorkStudyCircleController extends SEIPController {
                     'form' => $form->createView()
         ));
     }
+    
+    public function addCoordinatorAction(Request $request) {
+        $em = $this->getDoctrine()->getManager();
+        $workStudyCircle = new WorkStudyCircle();
+        $form = $this->createForm(new WorkStudyCircleType, $workStudyCircle);
+        $form->handleRequest($request);
+
+        $workStudyCircleRepo = $em->getRepository('PequivenSEIPBundle:Politic\WorkStudyCircle')->findOneBy(array('id' => $request->get("idWorkStudyCircle")));
+
+        if ($form->isSubmitted()) {
+
+            $this->addWorkStudyCircleToUser($workStudyCircleRepo, $request->get("workStudyCircle_data")["userWorkerId"],false);
+
+
+            $this->get('session')->getFlashBag()->add('success', 'Nuevos miembros han sido agregados con éxito ');
+            //return $this->redirect($this->generateUrl('pequiven_seip_default_index'));
+            return $this->redirect($this->generateUrl('pequiven_work_study_circle_show', array("id" => $request->get("idWorkStudyCircle"))));
+        }
+
+        return $this->render('PequivenSEIPBundle:Politic:WorkStudyCircle\addCoordinator.html.twig', array(
+                    'id' => $request->get("idWorkStudyCircle"),
+                    'form' => $form->createView()
+        ));
+    }
+
 
     public function viewAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
