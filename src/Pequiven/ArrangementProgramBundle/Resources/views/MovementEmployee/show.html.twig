@@ -9,61 +9,6 @@
 
 {% block body %}
     <style>
-        .tabs {
-            position: relative;
-            min-height: 350px;
-            clear: both;
-            margin: 25px 0;
-        }
-        .tab {
-            float: left;
-        }
-        .tab label {
-            background: #eee;
-            padding: 10px;
-            border: 1px solid #ccc;
-            margin-left: -1px;
-            position: relative;
-            left: 1px;
-        }
-        /*oculto los inputs para que solo se vean las etiquetas o label*/
-        .tab input[type=radio] {
-            display: none;
-        }
-        .content {
-            position: absolute;
-            top: 28px;
-            left: 0;
-            background: white;
-            right: 0;
-            bottom: 0;
-            padding: 20px;
-            border: 1px solid #ccc;
-            overflow: hidden;
-            text-align: justify;
-        }
-        .content >
-        * {
-            display:none;
-
-        }
-        .tab input[type=radio]:checked ~ label {
-            background: white;
-            border-bottom: 1px solid white;
-            z-index: 2;
-        }
-        .tab input[type=radio]:checked ~ label ~ .content {
-            z-index: 1;
-        }
-        .tab input[type=radio]:checked ~ label ~ .content >
-        * {
-            display: block;
-        }
-        img{
-            margin:5px 10px 0 5px;
-            float:left;
-        }
-
         table tr {
             padding: 15px;
 
@@ -146,73 +91,76 @@
     </fieldset>
 
     <fieldset class="fieldset">
-        <legend class="legend"><b>Responsables </b></legend>
-        <div class="tabs">
-            <!--pestaña 1 activa por defecto-->
-            <div class="tab">
-                <input type="radio" id="tab-1" name="tab-group-1" checked>
-                <label for="tab-1">Asignar</label>
-                <!--contenido de la pestaña 1-->
-                <div class="content">
-                    <p>Chanante ipsum dolor sit amet, ut, ex ad. Ju-j· ut
-                        tempor quis ullamco horcate piticli dolore quis. Ea ad
-                        eveniet hueles avinagrado dolore incididunt dolore sed
-                        <img src="http://lorempixel.com/output/nightlife-q-c-200-200-9.jpg"></img>
-                        ullamco sÌberet churretoso aliqua magna magna.</p> 
-                    <p>Enim ad quis eres un pir·midee chachach· aliqua nisi
-                        exercitation, bufonesco labore saepe. Ullamco ojete calor
-                        exercitation adipisicing exercitation monguer Guaper, ut
-                        ut consectetur aliqua elit piticli nui incididunt. Quis
-                        elit adipisicing forrondosco enim veniam ex quis. Ullamco
-                        tollina minim cosica ea eveniet veniam eveniet no te digo
-                        n· y te lo digo tÛ vivo con tu madre en un castillo.</p>
-                    <p>Chanante ipsum dolor sit amet, ut adipisicing ad ex
-                        agazapao freshquisimo. Et cacahuÈ tempor cabeza de viejo
-                        cuerpo de joven ut dolore, ad saepe. Gambitero monguer
-                        Guaper bajonaaa minim. Estoy fatal de lo mÌo a tope con
-                        la maquinaria pero quÈ pelazo, ga?·n dolore dolore artista
-                        mamellas aliqua ojete calor adipisicing dolore minim magna
-                        labore.</p>
-                    <p>Chanante ipsum dolor sit amet, gaticos incididunt
-                        eveniet atiendee elit eiusmod dolore eres un pir?midee
-                        ad. Incididunt eveniet sed saepe saepe labore labore ad.
-                        Eiusmod melifluo nisi nostrud labore muchachada nisi
-                        gaÒan ad.</p>
-                </div>
-            </div>
-            <!-- pestaña 2-->
-            <div class="tab">
-                <input type="radio" id="tab-2" name="tab-group-1">
-                <label for="tab-2">Retirar</label>
-                <div class="content">
-                    <!--contenido de la pestaña 2-->
-                    <p>Chanante ipsum dolor sit amet, minim ut exercitation
-                        ut cosica minim ut eveniet sed, chavalada. Labore eveniet
-                        <img src="http://lorempixel.com/output/nightlife-q-c-200-200-1.jpg">
-                        ea forrondosco mangurri·n interneeeer elit enjuto mojamuto,
-                        ut estoy fatal de lo mÌo ayy quÈ gustico ju-j· ut ut.
-                        Ullamco aliqua, ex ad atiendee adipisicing ea consectetur
-                        minim. Elit pepinoninoni nostrud soooy crossoverr cabeza de viejo
-                        cuerpo de joven elit zagal. Ullamco quis labore saepe ad ullamco gaÒ·n
-                        churretoso te viste de torero chotera nostrud magna ahÌ va
-                        quÈ chorrazo ut bizcochÈ. Ex muchachada minim ullamco one
-                        more time. Incididunt fresquete ut payacho ad eveniet
-                        magna aliqua ea monetes elit.</p>
-                    <p>Chanante ipsum dolor sit amet, minim super ÒoÒo magna
-                        ojete calor nostrud enjuto mojamuto. Ea ut exercitation.
-                        Ex ex consectetur horcate cartoniano et nisi te viste de
-                        torero veniam nostrud ad. Zanguango asobinao chotera ullamco et.</p>
-                    <p>Chanante ipsum dolor sit amet, adipisicing ut chiquititantantan
-                        dolore, chotera bocachoti, ut eiusmod ea. Incididunt ut estoy
-                        fatal de lo mÌo consectetur adipisicing nostrud adipisicing,
-                        minim minim adipisicing a tope con la maquinaria tempor ut.
-                        Interneeeer quis saepe enratonao. Sed tempor ut nisi, minim
-                        veniam eiusmod, asobinao nostrud cacahuÈ enim. AhÌ va quÈ
-                        chorrazo quis enim droja enim.</p>
+        <legend class="legend"><b>Gestión de Responsables </b></legend>
 
 
+
+        <div class="standard-tabs margin-bottom" id="add-tabs">
+
+            <ul class="tabs">
+                <li class="active"><a href="#tab-1">Asignar a Empleado</a></li>
+                <li><a href="#tab-2">Retirar a Empleado</a></li>
+            </ul>
+
+            <div class="tabs-content">
+
+                <div id="tab-1" class="with-padding">
+                    <form method="POST" action="">
+                        <p class="inline-label">
+                            {{ form_label(formassigndetails.date) }}
+                            {{ form_widget(formassigndetails.date) }}
+                            {{ form_errors(formassigndetails.date) }}
+                        </p>
+                        <p class="inline-label">
+                            {{ form_label(form.User) }}
+                            {{ form_widget(form.User) }}
+                            {{ form_errors(form.User) }}
+                        </p>
+                        <p class="inline-label">
+                            {{ form_label(formassigndetails.cause) }}
+                            {{ form_widget(formassigndetails.cause) }}
+                            {{ form_errors(formassigndetails.cause) }}
+                        </p>
+                        <p class="inline-label">
+                            {{ form_label(formassigndetails.observations) }}
+                            {{ form_widget(formassigndetails.observations) }}
+                            {{ form_errors(formassigndetails.observations) }}
+                        </p>
+
+                        <p class="inline-label">
+
+                        </p>
+                    </form>
+                </div>
+
+                <div id="tab-2" class="with-padding">
+                    <form method="POST" action="">
+                        <p class="inline-label">
+                            {{ form_label(formremovedetails.date) }}
+                            {{ form_widget(formremovedetails.date) }}
+                            {{ form_errors(formremovedetails.date) }}
+                        </p>
+                        <p class="inline-label">
+                            {{ form_label(form1.User) }}
+                            {{ form_widget(form1.User) }}
+                            {{ form_errors(form1.User) }}
+                        </p>
+                        <p class="inline-label">
+                            {{ form_label(formremovedetails.cause) }}
+                            {{ form_widget(formremovedetails.cause) }}
+                            {{ form_errors(formremovedetails.cause) }}
+                        </p>
+                        <p class="inline-label">
+                            {{ form_label(formremovedetails.observations) }}
+                            {{ form_widget(formremovedetails.observations) }}
+                            {{ form_errors(formremovedetails.observations) }}
+                        </p>
+
+                    </form>
                 </div>
             </div>
+
+        </div>
 
     </fieldset>  
 
@@ -225,9 +173,33 @@
 
 {% block javascript %}
     <script type="text/javascript">
-        jQuery(document).ready(function () {
+
+        $(document).ready(function () {
+            $(".select2").select2({
+                allowClear: true
+            });
+
+            $("#AssignGoal_User").select2({
+                minimumInputLength: 3,
+            });
 
             $('.progress').progress();
-        });
+
+            $("#AssignGoalDetails_date").datepicker({
+                defaultDate: "+1w",
+                changeMonth: true,
+                numberOfMonths: 1,
+                dateFormat: "dd/mm/yy"
+            });
+
+            $("#RemoveGoalDetails_date").datepicker({
+                defaultDate: "+1w",
+                changeMonth: true,
+                numberOfMonths: 1,
+                dateFormat: "dd/mm/yy"
+            });
+        }
+        );
+
     </script>
 {% endblock javascript %}

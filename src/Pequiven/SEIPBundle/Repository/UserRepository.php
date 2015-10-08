@@ -181,6 +181,11 @@ class UserRepository extends EntityRepository {
         return $this->findQueryToAssingTacticArrangementProgramGoal($users, $criteria)->getQuery()->getResult();
     }
 
+    /**
+     * TRAE LAS METAS DE UN USUARIO EN ESPECÍFICO
+     * @param array $responsiblesId
+     * @return type
+     */
     function findUsers(array $responsiblesId) {
         $qb = $this->getQueryBuilder();
         $qb
@@ -266,7 +271,7 @@ class UserRepository extends EntityRepository {
         $qb->setMaxResults(30);
         return $qb->getQuery()->getResult();
     }
-    
+
     /**
      * Buscador de coordinadores de círculos de estudio de trabajo
      * 
@@ -276,9 +281,9 @@ class UserRepository extends EntityRepository {
     function searchCoordinator(array $criteria = array()) {
         $qb = $this->getQueryBuilder();
         $qb
-            ->innerJoin('u.workStudyCircle', 'wsc')
-            ->andWhere('wsc.createdBy = u.id')
-            ;
+                ->innerJoin('u.workStudyCircle', 'wsc')
+                ->andWhere('wsc.createdBy = u.id')
+        ;
 
         $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
         $orX = $qb->expr()->orX();
@@ -297,7 +302,7 @@ class UserRepository extends EntityRepository {
         $qb->andWhere($orX);
 
         $qb->setMaxResults(30);
-        
+
         return $qb->getQuery()->getResult();
     }
 
@@ -479,6 +484,32 @@ class UserRepository extends EntityRepository {
                 ->andWhere('g.level <= :level')
                 ->setParameter('level', \Pequiven\MasterBundle\Entity\Rol::ROLE_DIRECTIVE);
 
+        return $qb;
+    }
+
+    /**
+     * Retorna los Usuarios Asignados a una Meta en Específica. Usada por RemoveGoalType.php
+     * @param int $idGoal
+     * @param array $criteria
+     */
+    function findQuerytoRemoveAssingedGoal($idGoal) {
+        $qb = $this->getQueryBuilder();
+
+        $qb
+                //->select('u')
+                ->innerJoin('u.goals', 'goal')
+                ->innerJoin('u.groups', 'g')
+                ->andWhere('u.enabled = :enabled')
+                ->andWhere('g.typeRol = :typeRol')
+                ->andWhere('goal.id = :goallist')
+                ->setParameter('enabled', true)
+                ->setParameter('typeRol', \Pequiven\MasterBundle\Entity\Rol::TYPE_ROL_OWNER)
+                ->setParameter('goallist', $idGoal)
+        ;
+        $qb
+                ->andWhere('g.level <= :level')
+                ->setParameter('level', \Pequiven\MasterBundle\Entity\Rol::ROLE_DIRECTIVE)
+        ;
         return $qb;
     }
 
