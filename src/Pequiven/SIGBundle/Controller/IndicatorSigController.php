@@ -442,8 +442,6 @@ class IndicatorSigController extends ResourceController
         
         $cause = new EvolutionAction();
         $form  = $this->createForm(new EvolutionActionType($indicator));
-        //$form  = $this->createForm(new EvolutionActionType(), $indicator, array('indicator' => $indicator));
-        //$form = $this->createForm(new AvatarFormType(), $user, array('user' => $user)) Ejm <---- 
         $form_value  = $this->createForm(new EvolutionActionValueType());
         
         $view = $this
