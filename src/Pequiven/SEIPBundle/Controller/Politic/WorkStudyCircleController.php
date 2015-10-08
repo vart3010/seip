@@ -131,16 +131,18 @@ class WorkStudyCircleController extends SEIPController {
         $em = $this->getDoctrine()->getManager();
         $em->getConnection()->beginTransaction();
         foreach ($members as $member) {
+            
             $user = $em->getRepository('PequivenSEIPBundle:User')->findOneBy(array('id' => $member));
-            $user->setWorkStudyCircle($workStudyCircle);
-            $em->persist($user);
+            $workStudyCircle->setCoordinator($user);
+//            $user->setWorkStudyCircle($workStudyCircle);
+            $em->persist($workStudyCircle);
         }
         
-        if($includeUser){
-            $user = $this->getUser();
-            $user->setWorkStudyCircle($workStudyCircle);
-            $em->persist($user);
-        }
+//        if($includeUser){
+//            $user = $this->getUser();
+//            $user->setWorkStudyCircle($workStudyCircle);
+//            $em->persist($user);
+//        }
 
         try {
             $em->flush();
@@ -255,15 +257,11 @@ class WorkStudyCircleController extends SEIPController {
 
         $workStudyCircleRepo = $em->getRepository('PequivenSEIPBundle:Politic\WorkStudyCircle')->findOneBy(array('id' => $request->get("idWorkStudyCircle")));
         if ($form->isSubmitted()) {
-            
-            var_dump($request->get("add")["coordinators"]);
-            die();
-            
-            $this->addWorkStudyCircleToUser($workStudyCircleRepo, $request->get("add")["coordinators"],false);
+            $this->addWorkStudyCircleToUser($workStudyCircleRepo, $request->get("workStudyCircle_data")["members"],false);
 
             $this->get('session')->getFlashBag()->add('success', 'Nuevos miembros han sido agregados con éxito ');
             //return $this->redirect($this->generateUrl('pequiven_seip_default_index'));
-            return $this->redirect($this->generateUrl('pequiven_work_study_circle_show', array("id" => $request->get("idWorkStudyCircle"))));
+            return $this->redirect($this->generateUrl('pequiven_work_study_circle_show_phase', array("id" => $request->get("idWorkStudyCircle"))));
         }
 
         return $this->render('PequivenSEIPBundle:Politic:WorkStudyCircle\addCoordinator.html.twig', array(

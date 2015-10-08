@@ -229,6 +229,16 @@ class UserRepository extends EntityRepository {
 
         return $qb;
     }
+    
+    function findQueryUsersCoordinatorPhaseWorkStudyCircle(array $criteria = array()) {
+        $qb = $this->getQueryBuilder();
+        $qb
+                ->addSelect('u')
+                ->innerJoin('u.workStudyCircles', 'wsc')
+                ->andWhere('wsc.phase = 2')
+        ;
+        return $qb;
+    }
 
     /**
      * Buscador de usuarios

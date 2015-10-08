@@ -10,7 +10,7 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class ArrangementProgramType extends AbstractType implements \Symfony\Component\DependencyInjection\ContainerAwareInterface{
+class CoordinatorType extends AbstractType implements \Symfony\Component\DependencyInjection\ContainerAwareInterface{
     private $container;
     
     /**
