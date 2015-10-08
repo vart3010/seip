@@ -93,9 +93,9 @@ class EvolutionActionType extends AbstractType
     }
 
     protected $indicator;
-
+    
     public function __construct ($indicator)
     {
-        $this->indicator = $indicator;
+        $this->indicator = $indicator;        
     }
 }
