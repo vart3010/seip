@@ -254,11 +254,12 @@ class WorkStudyCircleController extends SEIPController {
         $form->handleRequest($request);
 
         $workStudyCircleRepo = $em->getRepository('PequivenSEIPBundle:Politic\WorkStudyCircle')->findOneBy(array('id' => $request->get("idWorkStudyCircle")));
-
         if ($form->isSubmitted()) {
-
-            $this->addWorkStudyCircleToUser($workStudyCircleRepo, $request->get("workStudyCircle_data")["userWorkerId"],false);
-
+            
+            var_dump($request->get("add")["coordinators"]);
+            die();
+            
+            $this->addWorkStudyCircleToUser($workStudyCircleRepo, $request->get("add")["coordinators"],false);
 
             $this->get('session')->getFlashBag()->add('success', 'Nuevos miembros han sido agregados con éxito ');
             //return $this->redirect($this->generateUrl('pequiven_seip_default_index'));
