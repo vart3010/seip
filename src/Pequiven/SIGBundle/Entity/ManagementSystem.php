@@ -77,12 +77,21 @@ class ManagementSystem extends modelManagementSystem
     private $indicators;
 
     /**
+     * @ORM\ManyToMany(targetEntity="Pequiven\SIGBundle\Entity\ProcessManagementSystem", mappedBy="managementSystem")
+     * 
+     */
+    private $processManagementSystem;
+
+
+
+    /**
      * Constructor
      */
     public function __construct()
     {
         $this->objetives = new \Doctrine\Common\Collections\ArrayCollection();
         $this->indicators = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->processManagementSystem = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**
@@ -301,5 +310,38 @@ class ManagementSystem extends modelManagementSystem
     public function getIndicators()
     {
         return $this->indicators;
+    }
+
+    /**
+    * Add processManagementSystem
+    *
+    * @param \Pequiven\SIGBundle\Entity\ProcessManagementSystem $processManagementSystem
+    * @return ManagementSystem
+    */
+    public function addProcessManagementSystem(\Pequiven\IndicatorBundle\Entity\Indicator $processManagementSystem)
+    {
+        $this->processManagementSystem[] = $processManagementSystem;
+
+        return $this;
+    }
+
+    /**
+    * Remove processManagementSystem
+    *
+    * @param \Pequiven\SIGBundle\Entity\ProcessManagementSystem $processManagementSystem
+    */
+    public function removeProcessManagementSystem(\Pequiven\IndicatorBundle\Entity\Indicator $processManagementSystem)
+    {
+        $this->processManagementSystem->removeElement($processManagementSystem);
+    }
+
+    /**
+    * Get processManagementSystem
+    *
+    * @return \Doctrine\Common\Collections\Collection 
+    */
+    public function getProcessManagementSystem()
+    {
+        return $this->processManagementSystem;
     }
 }

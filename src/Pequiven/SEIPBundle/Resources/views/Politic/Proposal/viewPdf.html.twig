@@ -70,7 +70,7 @@
         {% if prop.lineStrategic.description==key %}
             <table width="100%">
                 <tr>
-                    <td width="100%" style="text-align: justify"><b>Propuesta {{loop.index}}:</b> {{prop.getDescription()|ucwords}}</td>                                
+                    <td width="100%" style="text-align: justify"><b>Propuesta {{loop.index}}:</b> {{prop.getDescription()|upper}}</td>                                
                 </tr>
             </table>
             <br/><br/>       
@@ -97,20 +97,26 @@
                 <th scope="col"  width="50%" bgcolor="#F2F2F2" class="title_bold"> Nombre </th>
                 <th scope="col"  width="30%" bgcolor="#F2F2F2" class="title_bold"> Firma </th>                
             </tr>
+                <tr>
+                    <td width="5%" >  </td>                        
+                </tr>
+            
+        
         </thead>
         <tbody>
             {% set users = workStudyCircle.userWorkerId %}
             {% set count = 0 %}
             {% for miembro in users %}
                 {% set count= count + 1%}
-                <tr>
-                    <td width="5%" >  </td>                        
-                </tr>
+               
                 <tr>
                     <td width="5%" > {{ count }} </td>
                     <td width="15%" > {{ miembro.getIndentification|number_format(0, ',', '.') }} </td>
                     <td width="50%" > {{ miembro.firstname | ucwords}} {{ miembro.lastname | ucwords}}</td>
                     <td width="30%"  style="text-align: center"> _____________________ </td>
+                </tr>
+                 <tr>
+                    <td width="5%" >  </td>                        
                 </tr>
             {% endfor %}
         </tbody>
