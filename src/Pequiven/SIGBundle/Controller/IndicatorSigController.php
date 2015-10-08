@@ -141,8 +141,6 @@ class IndicatorSigController extends ResourceController
 
         $idIndicator = $request->get('id');
         
-        //$cause = 101;
-
         $month = $request->get('month'); //El mes pasado por parametro
         
         $data = $this->findEvolutionCause($request);//Carga la data de las causas y sus acciones relacionadas
@@ -179,12 +177,9 @@ class IndicatorSigController extends ResourceController
 
         $dataChart = $indicatorService->getDataChartOfIndicatorEvolution($indicator, array('withVariablesRealPLan' => true)); //Obtenemos la data del gráfico de acuerdo al indicador
 
-        //$response->setData($dataChart); //Seteamos la data del gráfico en Json
         //Carga de los datos de la grafica de las Causas de Desviación
         $dataCause = $indicatorService->getDataChartOfCausesIndicatorEvolution($indicator, $month); //Obtenemos la data del grafico de las causas de desviación
-        /*$response->setData($dataCause); //Seteamos la data del gráfico en Json
-        var_dump($response);
-        die();*/
+       
         $results = $this->get('pequiven.repository.sig_causes_indicator')->findBy(array('indicator' => $idIndicator,'month' => $month));
         
         foreach ($results as $value) {
@@ -229,10 +224,7 @@ class IndicatorSigController extends ResourceController
                         ];                    
                         break;
             }       
-        //$view = $this->view();
-        //$view->getSerializationContext()->setGroups(array('id','api_list'));              
-            //var_dump(count($data["verification"]));
-            //die();
+       
             $dataAction = [
                 'action' => $data["action"],
                 'values' => $data["actionValue"] 
@@ -266,20 +258,17 @@ class IndicatorSigController extends ResourceController
         $fileUploaded = false;
         
         $month = date("m");//Carga del mes de Creación de la causa "Automatico"  
-        //var_export($request->files);
-        //die();
+        
         $causeAnalysis = $request->get('cause');
-        //die();
-
+        
         $causeData = $this->get('pequiven.repository.sig_causes_analysis')->find($causeAnalysis);
         
             if ($causeData->getId() == $causeAnalysis) {
-                //die("paso");
+        
                 $EvolutionCauseFile->setValueCause($causeData);
                 foreach ($request->files as $file) {
                     //VALIDA QUE EL ARCHIVO SEA UN PDF
                     //SE GUARDAN LOS CAMPOS EN BD
-                  //  die("entro al foreach");
                     $EvolutionCauseFile->setCreatedBy($this->getUser());
                     $EvolutionCauseFile->setNameFile($file->getClientOriginalName());
                     $EvolutionCauseFile->setPath(Indicator\EvolutionIndicator\EvolutionCauseFile::getUploadDir());
@@ -366,15 +355,11 @@ class IndicatorSigController extends ResourceController
             
             }
         
-        //$indicatorRel->setDescription($data);
         $indicatorRel->setIndicatorLastPeriod($dataLast);
 
-        //$form->handleRequest($request);
-
-        //if ($form->isSubmitted() && $form->isValid()) {
             $em->flush();
             return $this->redirect($this->generateUrl('pequiven_indicator_evolution',$idIndicator));
-        //}                
+        
     }
 
     /**
@@ -456,7 +441,7 @@ class IndicatorSigController extends ResourceController
         ];      
         
         $cause = new EvolutionAction();
-        $form  = $this->createForm(new EvolutionActionType());
+        $form  = $this->createForm(new EvolutionActionType($indicator));
         //$form  = $this->createForm(new EvolutionActionType(), $indicator, array('indicator' => $indicator));
         //$form = $this->createForm(new AvatarFormType(), $user, array('user' => $user)) Ejm <---- 
         $form_value  = $this->createForm(new EvolutionActionValueType());
