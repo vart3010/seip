@@ -23,8 +23,8 @@
             <thead>
                 <tr>
                     <th scope="col" width="2%" class="header">{{ 'seip.table.header.nro'|trans({},'PequivenArrangementProgramBundle') }}</th>
-                    <th scope="col" width="40%" class="header">Línea Estratégica</th>
-                    <th scope="col" width="50%" class="hide-on-tablet header">Propuesta</th>
+                    <th scope="col" width="30%" class="header">Línea Estratégica</th>
+                    <th scope="col" width="60%" class="hide-on-tablet header">Propuesta</th>
                     <th scope="col" width="15%" class="hide-on-mobile-portrait header">&nbsp;</th>
                 </tr>
             </thead>
@@ -37,7 +37,7 @@
                         <td>{{ cont }}</td>
                         <td>{{ proposal.lineStrategic }}</td>
                         <td style="text-align: justify">
-                            <a href="{{ path('pequiven_proposal_show',{ id:proposal.id }) }}">{{ proposal.description|ucwords }}</a>
+                            <a href="{{ path('pequiven_proposal_show',{ id:proposal.id }) }}">{{ proposal.description|upper }}</a>
                         </td>
                         <td class="align-right vertical-center">
                             {% if ((is_granted('ROLE_SEIP_PROPOSAL_EDIT') or (userCoordinator == userData.id)) and workStudyCircle.phase > 1) %}
