@@ -309,6 +309,14 @@ class Objetive extends modelObjetive implements ResultItemInterface,PeriodItemIn
      * @ORM\Column(name="resultModified",type="float")
      */
     protected $resultModified = 0; 
+
+    /**
+     * ManagementSystem
+     * @var \Pequiven\SIGBundle\Entity\ProcessManagementSystem
+     * @ORM\ManyToOne(targetEntity="Pequiven\SIGBundle\Entity\ProcessManagementSystem" , inversedBy="objetive")
+     * @ORM\JoinColumn(name="process_managementsystem_id", referencedColumnName="id")
+     */
+    protected $processManagementSystem;
     
     /**
      * Constructor
@@ -1320,5 +1328,28 @@ class Objetive extends modelObjetive implements ResultItemInterface,PeriodItemIn
     public function getResultModified()
     {
         return $this->resultModified;
+    }
+
+    /**
+     * Set processManagementSystem
+     *
+     * @param \Pequiven\SIGBundle\Entity\ProcessManagementSystem $processManagementSystem
+     * @return ManagementSystem
+     */
+    public function setProcessManagementSystem(\Pequiven\SIGBundle\Entity\ProcessManagementSystem $processManagementSystem = null)
+    {
+        $this->processManagementSystem = $processManagementSystem;
+
+        return $this;
+    }
+
+    /**
+     * Get processManagementSystem
+     *
+     * @return \Pequiven\SIGBundle\Entity\ProcessManagementSystem 
+     */
+    public function getProcessManagementSystem()
+    {
+        return $this->processManagementSystem;
     }
 }

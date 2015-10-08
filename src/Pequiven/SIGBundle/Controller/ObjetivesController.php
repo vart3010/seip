@@ -115,11 +115,10 @@ class ObjetivesController extends ResourceController
         $criteria = $request->get('filter',$this->config->getCriteria());
         $sorting = $request->get('sorting',$this->config->getSorting());
         
-        //$repository = $this->getRepository();
-        //$repository = $this->container->get('pequiven.repository.gerenciafirst');
-        $repository = $this->container->get('pequiven.repository.sig_management_system');        
+        //$repository = $this->getRepository();        
+        $repository = $this->container->get('pequiven.repository.sig_management_system'); 
         
-
+        
         if ($this->config->isPaginated()) {
             $resources = $this->resourceResolver->getResource(
                 $repository,
@@ -174,14 +173,10 @@ class ObjetivesController extends ResourceController
         if($managementSystemId !== null){
             $managementSystem = $this->get('pequiven.repository.sig_management_system')->find($managementSystemId);
         }
-        //$managementSystemAll = $this->get('pequiven.repository.sig_management_system')->findAll();
 
-        
-        //$gerencia = $this->get('pequiven.repository.gerenciafirst')->find($idGerencia);//Obtenemos la gerencia
-        
         //Objetivos Tácticos de la Gerencia
         $objetivesTactics = $this->get('pequiven.repository.objetive')->getObjetivesManagementSystem($managementSystem);
-       
+
         $resource = $this->findOr404($request);
         
         //Formato para todo el documento
@@ -223,23 +218,21 @@ class ObjetivesController extends ResourceController
         $activeSheet = $objPHPExcel->getActiveSheet();
         $activeSheet->getDefaultRowDimension()->setRowHeight();
         
-//        $activeSheet->setTitle($gerencia->getDescription());
         //Sistema de la Calidad de la Matriz
         $activeSheet->setCellValue('A3', $managementSystem->getDescription());
         
         $row = $iniFile = 7;//Fila Inicial del skeleton
         $contResult = $contInd = 0;//Contador de resultados totales
+        $contTac = 1;
         $rowHeight = 70;//Alto de la fila
-        
+        $countObjTac = count($objetivesTactics);
         $rowIniTac = $row;//Fila Inicial del Objetivo Táctico
         $rowFinTac = $row;//Fila Final del Objetivo Táctico
         
         $lastRowOpe = 7;
         
         foreach($objetivesTactics as $objetiveTactic){//Recorremos los objetivos tácticos de la Gerencia
-            //if($managementSystem !== null && $managementSystem !== $objetiveTactic->getManagementSystem()){
-              //  continue;
-            //}
+            
             $indicatorsTactics = $objetiveTactic->getIndicators();
             $totalIndicatorTactics = count($indicatorsTactics);
             $objetivesOperatives = $objetiveTactic->getChildrens();
@@ -247,9 +240,7 @@ class ObjetivesController extends ResourceController
             
             if($totalObjetiveOperatives > 0){//Si el objetivo táctico tiene objetivos operativos
                 foreach($objetivesOperatives as $value){//Recorremos los Objetivos Operativos
-                    /*if($managementSystem !== null && $managementSystem !== $objetiveOperative->getManagementSystem()){
-                        continue;
-                    }*/                    
+                                       
                     $cantOperative = count($value->getManagementSystems());
                     
                     if ($cantOperative !== 0) {//Si el objetivo esta marcado con el sistema de la calidad
@@ -263,25 +254,23 @@ class ObjetivesController extends ResourceController
                         
                         if($totalIndicatorOperatives > 0){//Si el objetivo operativo tiene indicadores operativos
                             foreach($indicatorsOperatives as $indicatorOperative){
-                                $activeSheet->setCellValue('O'.$row, $indicatorOperative->getRef().' '.$indicatorOperative->getDescription());//Seteamos el Indicador Operativo
-                                $activeSheet->setCellValue('P'.$row, $indicatorOperative->getFormula()->getEquation());//Seteamos la Fórmula del Indicador Operativo
-                                $activeSheet->setCellValue('S'.$row, $indicatorOperative->getWeight());//Seteamos el Peso del Indicador Operativo
+                                $activeSheet->setCellValue('J'.$row, $indicatorOperative->getRef().' '.$indicatorOperative->getDescription());//Seteamos el Indicador Operativo
+                                $activeSheet->setCellValue('K'.$row, $indicatorOperative->getFormula()->getEquation());//Seteamos la Fórmula del Indicador Operativo
+                                $activeSheet->setCellValue('M'.$row, $indicatorOperative->getWeight());//Seteamos el Peso del Indicador Operativo
+                                $activeSheet->setCellValue('N'.$row, $indicatorOperative->getFrequencyNotificationIndicator());//Seteamos la frecuencia de medicion Operativo
                                 
-                                //$activeSheet->mergeCells(sprintf('S%s:T%s',($row),($row)));
-                        
+                                //$activeSheet->mergeCells(sprintf('S%s:T%s',($row),($row)));                        
                                 $row++;                                
-                                //$row = $row + 2; 
                                 $contResult++;                            
                             }    
                         } else{//En caso de que el objetivo operativo no tenga indicadores operativos
-                            $activeSheet->setCellValue('O'.$row, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
-                            $activeSheet->setCellValue('P'.$row, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
-                            $activeSheet->setCellValue('S'.$row, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
+                            $activeSheet->setCellValue('J'.$row, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
+                            $activeSheet->setCellValue('K'.$row, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
+                            $activeSheet->setCellValue('M'.$row, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
+                            $activeSheet->setCellValue('N'.$row, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
                             
-                            //$activeSheet->mergeCells(sprintf('S%s:T%s',($row),($row)));
-                            
+                            //$activeSheet->mergeCells(sprintf('S%s:T%s',($row),($row)));                            
                             $row++;
-                            //$row = $row + 2;
                             $contResult++;
 
                         }
@@ -300,19 +289,15 @@ class ObjetivesController extends ResourceController
                             $textArrangementProgramsOperatives = $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle');
                         }
                         
-                        $activeSheet->setCellValue('U'.$rowIniOpe, $textArrangementProgramsOperatives);//Seteamos los Programas de Gestión del Objetivo Operativo
-
-                        $activeSheet->setCellValue('N'.$rowIniOpe, $objetiveOperative->getRef().' '.$objetiveOperative->getDescription());//Seteamos el Objetivo Operativo
-                        //$activeSheet->setCellValue('O'.$rowIniOpe, $objetiveOperative->getGerenciaSecond()->getDescription());//Seteamos la Gerencia de 2da Línea del Objetivo Operativo
-                        //$activeSheet->getStyle('O'.$rowIniOpe)->applyFromArray($styleArray);//Aplicamos formato a la celda de la Gerencia de 2da Línea del Objetivo Operativo
-                        //$activeSheet->setCellValue('P'.$rowIniOpe, $objetiveOperative->getGoal());//Seteamos la Meta del Objetivo Operativo
-                        $activeSheet->setCellValue('Q'.$rowIniOpe, $objetiveOperative->getWeight());//Seteamos el Peso del Objetivo Operativo
+                        $activeSheet->setCellValue('O'.$rowIniOpe, $textArrangementProgramsOperatives);//Seteamos los Programas de Gestión del Objetivo Operativo
+                        $activeSheet->setCellValue('H'.$rowIniOpe, $objetiveOperative->getProcessManagementSystem());//Seteamos el proceso
+                        $activeSheet->setCellValue('I'.$rowIniOpe, $objetiveOperative->getRef().' '.$objetiveOperative->getDescription());//Seteamos el Objetivo Operativo                        
+                        $activeSheet->setCellValue('L'.$rowIniOpe, $objetiveOperative->getGoal());//Seteamos el Peso del Objetivo Operativo
                         
-                        $activeSheet->mergeCells(sprintf('N%s:N%s',($rowIniOpe),($rowFinOpe)));
                         $activeSheet->mergeCells(sprintf('O%s:O%s',($rowIniOpe),($rowFinOpe)));
-                        //$activeSheet->mergeCells(sprintf('P%s:P%s',($rowIniOpe),($rowFinOpe)));
-                        $activeSheet->mergeCells(sprintf('Q%s:Q%s',($rowIniOpe),($rowFinOpe)));
-                        $activeSheet->mergeCells(sprintf('U%s:U%s',($rowIniOpe),($rowFinOpe)));
+                        $activeSheet->mergeCells(sprintf('H%s:H%s',($rowIniOpe),($rowFinOpe)));                        
+                        $activeSheet->mergeCells(sprintf('I%s:I%s',($rowIniOpe),($rowFinOpe)));
+                        $activeSheet->mergeCells(sprintf('L%s:L%s',($rowIniOpe),($rowFinOpe)));
                         $contTotalObjOperatives++;
                         
                         if($totalObjetiveOperatives = $contTotalObjOperatives){
@@ -329,53 +314,49 @@ class ObjetivesController extends ResourceController
                     $contIndTac = 0;
                     
                     foreach($indicatorsTactics as $indicatorTactic){
-                        $activeSheet->setCellValue('H'.$rowIndTac, $indicatorTactic->getRef().' '.$indicatorTactic->getDescription());//Seteamos el Indicador Táctico
-                        $activeSheet->setCellValue('I'.$rowIndTac, $indicatorTactic->getFormula()->getEquation());//Seteamos la Fórmula del Indicador Táctico
-                        $activeSheet->setCellValue('K'.$rowIndTac, $indicatorTactic->getWeight());//Seteamos el Peso del Indicador Táctico $activeSheet->mergeCells(sprintf('J%s:K%s',($rowIndTac),($rowIndTac)));
+                        $activeSheet->setCellValue('D'.$rowIndTac, $indicatorTactic->getRef().' '.$indicatorTactic->getDescription());//Seteamos el Indicador Táctico
+                        $activeSheet->setCellValue('E'.$rowIndTac, $indicatorTactic->getFormula()->getEquation());//Seteamos la Fórmula del Indicador Táctico
+                        $activeSheet->setCellValue('F'.$rowIndTac, $indicatorTactic->getWeight());//Seteamos el Peso del Indicador Táctico $activeSheet->mergeCells(sprintf('J%s:K%s',($rowIndTac),($rowIndTac)));
                         $contIndTac++;
 
                         if($contIndTac == $totalIndicatorTactics && $rowIndTac <= $rowFinTac){
-                            $activeSheet->mergeCells(sprintf('H%s:I%s',($rowIndTac),($rowFinTac)));
-                            $activeSheet->mergeCells(sprintf('I%s:K%s',($rowIndTac),($rowFinTac)));
-                            $activeSheet->mergeCells(sprintf('K%s:L%s',($rowIndTac),($rowFinTac)));
+                            $activeSheet->mergeCells(sprintf('D%s:D%s',($rowIndTac),($rowFinTac)));
+                            $activeSheet->mergeCells(sprintf('E%s:E%s',($rowIndTac),($rowFinTac)));
+                            $activeSheet->mergeCells(sprintf('F%s:F%s',($rowIndTac),($rowFinTac)));
                         }
                         $rowIndTac++;
                     }
                     if($totalIndicatorTactics > $rowsSectionOperative){
                             //$rowFinTac = $rowIndTac - 1;
-                            //$dataFind = $rowFinTac;// final de la carga de los tacticos
                             
-                            $activeSheet->mergeCells(sprintf('N%s:N%s',($rowIniOpe),($rowFinTac)));
-                            $activeSheet->mergeCells(sprintf('O%s:O%s',($rowIniOpe),($rowFinTac)));
-                            //$activeSheet->mergeCells(sprintf('P%s:P%s',($rowIniOpe),($rowFinTac)));
-                            $activeSheet->mergeCells(sprintf('Q%s:Q%s',($rowIniOpe),($rowFinTac)));
+                            $activeSheet->mergeCells(sprintf('I%s:I%s',($rowIniOpe),($rowFinTac)));
+                            $activeSheet->mergeCells(sprintf('J%s:J%s',($rowIniOpe),($rowFinTac)));
+                            $activeSheet->mergeCells(sprintf('L%s:L%s',($rowIniOpe),($rowFinTac)));
                             $activeSheet->mergeCells(sprintf('R%s:R%s',($rowIniOpe),($rowFinTac)));
-                            $activeSheet->mergeCells(sprintf('S%s:T%s',($rowIniOpe),($rowFinTac)));
-                            //$activeSheet->mergeCells(sprintf('U%s:U%s',($rowIniOpe),($rowFinTac)));
-                            $activeSheet->mergeCells(sprintf('U%s:U%s',($rowIniOpe),($rowFinTac)));
+                            $activeSheet->mergeCells(sprintf('M%s:M%s',($rowIniOpe),($rowFinTac)));
+                            $activeSheet->mergeCells(sprintf('O%s:O%s',($rowIniOpe),($rowFinTac)));
                     }
-                } /*else{//En caso de que el Objetivo Táctico no tenga Indicadores Tácticos
-                    $activeSheet->setCellValue('I'.$rowIniTac, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
-                    $activeSheet->setCellValue('J'.$rowIniTac, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
-                    $activeSheet->setCellValue('L'.$rowIniTac, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
-                    $activeSheet->mergeCells(sprintf('J%s:K%s',($rowIniTac),($rowIniTac)));
+                } else{//En caso de que el Objetivo Táctico no tenga Indicadores Tácticos
+                    $activeSheet->setCellValue('D'.$rowIniTac, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
+                    $activeSheet->setCellValue('E'.$rowIniTac, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
+                    $activeSheet->setCellValue('F'.$rowIniTac, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
+                    $activeSheet->mergeCells(sprintf('E%s:E%s',($rowIniTac),($rowIniTac)));
                     
-                    $activeSheet->mergeCells(sprintf('I%s:I%s',($rowIniTac),($rowFinTac)));
-                    $activeSheet->mergeCells(sprintf('J%s:K%s',($rowIniTac),($rowFinTac)));
-                    $activeSheet->mergeCells(sprintf('L%s:L%s',($rowIniTac),($rowFinTac)));
-                }*/
+                    $activeSheet->mergeCells(sprintf('D%s:D%s',($rowIniTac),($rowFinTac)));
+                    $activeSheet->mergeCells(sprintf('E%s:E%s',($rowIniTac),($rowFinTac)));
+                    $activeSheet->mergeCells(sprintf('F%s:F%s',($rowIniTac),($rowFinTac)));
+                }
 
             } else{//En caso de que el objetivo táctico no tenga objetivos operativos
-                $activeSheet->setCellValue('N'.$rowIniTac, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
-                $activeSheet->setCellValue('O'.$rowIniTac, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
-                //$activeSheet->setCellValue('P'.$rowIniTac, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
-                $activeSheet->setCellValue('Q'.$rowIniTac, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
+                $activeSheet->setCellValue('H'.$rowIniTac, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
+                $activeSheet->setCellValue('I'.$rowIniTac, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
+                $activeSheet->setCellValue('J'.$rowIniTac, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado                
+                $activeSheet->setCellValue('L'.$rowIniTac, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
                 $activeSheet->setCellValue('R'.$rowIniTac, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
-                $activeSheet->setCellValue('S'.$rowIniTac, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
-                //$activeSheet->setCellValue('U'.$rowIniTac, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
-                $activeSheet->setCellValue('U'.$rowIniTac, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
+                $activeSheet->setCellValue('M'.$rowIniTac, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
+                $activeSheet->setCellValue('O'.$rowIniTac, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
                 
-                $activeSheet->mergeCells(sprintf('S%s:T%s',($rowIniTac),($rowIniTac)));
+                $activeSheet->mergeCells(sprintf('M%s:T%s',($rowIniTac),($rowIniTac)));
                 
                 if($totalIndicatorTactics > 0){//Si el Objetivo Táctico tiene Indicadores Táctico
                     $rowIndTac = $rowIniTac;
@@ -383,9 +364,9 @@ class ObjetivesController extends ResourceController
                     $contIndTac = 0;
 
                     foreach($indicatorsTactics as $indicatorTactic){
-                        $activeSheet->setCellValue('H'.$rowIndTac, $indicatorTactic->getRef().' '.$indicatorTactic->getDescription());//Seteamos el Indicador Táctico
-                        $activeSheet->setCellValue('I'.$rowIndTac, $indicatorTactic->getFormula()->getEquation());//Seteamos la Fórmula del Indicador Táctico
-                        $activeSheet->setCellValue('K'.$rowIndTac, $indicatorTactic->getWeight());//Seteamos el Peso del Indicador Táctico
+                        $activeSheet->setCellValue('D'.$rowIndTac, $indicatorTactic->getRef().' '.$indicatorTactic->getDescription());//Seteamos el Indicador Táctico
+                        $activeSheet->setCellValue('E'.$rowIndTac, $indicatorTactic->getFormula()->getEquation());//Seteamos la Fórmula del Indicador Táctico
+                        $activeSheet->setCellValue('F'.$rowIndTac, $indicatorTactic->getWeight());//Seteamos el Peso del Indicador Táctico
                         $activeSheet->mergeCells(sprintf('I%s:J%s',($rowIndTac),($rowIndTac)));
                         
                         $contIndTac++;
@@ -395,9 +376,9 @@ class ObjetivesController extends ResourceController
                         $contResult++;
                     }
                 } else{//En caso de que el Objetivo Táctico no tenga Indicadores Tácticos
-                    $activeSheet->setCellValue('H'.$rowIniTac, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
-                    $activeSheet->setCellValue('I'.$rowIniTac, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
-                    $activeSheet->setCellValue('K'.$rowIniTac, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
+                    $activeSheet->setCellValue('D'.$rowIniTac, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
+                    $activeSheet->setCellValue('E'.$rowIniTac, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
+                    $activeSheet->setCellValue('F'.$rowIniTac, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
                     $activeSheet->mergeCells(sprintf('J%s:K%s',($rowIniTac),($rowIniTac)));
                     
                     $row++;
@@ -406,7 +387,7 @@ class ObjetivesController extends ResourceController
             }
             
             $activeSheet->setCellValue('B'.$rowIniTac, $objetiveTactic->getRef().' '.$objetiveTactic->getDescription());//Seteamos el Objetivo Táctico
-            $activeSheet->setCellValue('G'.$rowIniTac, $objetiveTactic->getGoal());//Seteamos la Meta del Objetivo Táctico
+            $activeSheet->setCellValue('C'.$rowIniTac, $objetiveTactic->getGoal());//Seteamos la Meta del Objetivo Táctico
             //Sección Programas de Gestión Tácticos
             $arrangementProgramsTactics = $objetiveTactic->getArrangementPrograms();
             $totalArrangementProgramsTactic = count($arrangementProgramsTactics);
@@ -418,74 +399,47 @@ class ObjetivesController extends ResourceController
             } else {
                 $textArrangementProgramsTactic = $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle');
             }
-            $activeSheet->setCellValue('L'.$rowIniTac, $textArrangementProgramsTactic);//Seteamos los Programas de Gestión del Objetivo Táctico
+            $activeSheet->setCellValue('G'.$rowIniTac, $textArrangementProgramsTactic);//Seteamos los Programas de Gestión del Objetivo Táctico
             
             if($rowFinTac < $rowIniTac){
                 $rowFinTac = $row - 1;
             }
             
             $activeSheet->mergeCells(sprintf('B%s:B%s',($rowIniTac),($rowFinTac)));
+            $activeSheet->mergeCells(sprintf('C%s:C%s',($rowIniTac),($rowFinTac)));
             $activeSheet->mergeCells(sprintf('G%s:G%s',($rowIniTac),($rowFinTac)));
-            $activeSheet->mergeCells(sprintf('L%s:L%s',($rowIniTac),($rowFinTac)));
             
-            //Sección Línea Estratégica y Objetivos Estratégicos
-            $objetivesStrategics = $objetiveTactic->getParents();
-            $totalObjetivesStrategics = count($objetivesStrategics);
-            $contObjStra = 1;
-            $textObjStra = '';
-            $textLineStrategic = '';
-            
-            foreach($objetivesStrategics as $objetiveStrategic){
-                if($totalObjetivesStrategics > 1){
-                    $textObjStra.= $objetiveStrategic->getRef().' '.$objetiveStrategic->getDescription()."\n";
-                    if($contObjStra == 1){
-                        $lineStrategics = $objetiveStrategic->getLineStrategics();
-                        foreach($lineStrategics as $lineStrategic){
-                            $textLineStrategic.= $lineStrategic->getRef().' '.$lineStrategic->getDescription()."\n";
-                        }
-                    } else{
-                        if($beforeLineStraRef === $objetiveStrategic->getRef()){
-                        } else{
-                            $lineStrategics = $objetiveStrategic->getLineStrategics();
-                            foreach($lineStrategics as $lineStrategic){
-                                $textLineStrategic.= $lineStrategic->getRef().' '.$lineStrategic->getDescription()."\n";
-                            }
-                        }
-                        $beforeLineStraRef = $objetiveStrategic->getLineStrategics()->getRef();
-                    }
-                } else{
-                    $lineStrategics = $objetiveStrategic->getLineStrategics();
-                    foreach($lineStrategics as $lineStrategic){
-                        $textLineStrategic.= $lineStrategic->getRef().' '.$lineStrategic->getDescription();
-                    }
-                    $textObjStra.= $objetiveStrategic->getRef().' '.$objetiveStrategic->getDescription();
-                }
-            }
+            //Pasando la politica del Sistema de la Calidad
+            if ($contTac == 1) {
+                //Politica del Sistema de la Calidad Consultado
+                $textPoliticManagementSystem = $managementSystem->getPoliticManagementSystem()->getDescription();
+                $activeSheet->setCellValue('A'.$rowIniTac, $textPoliticManagementSystem);//Seteamos la Politica del Sistema de la Calidad consultado
 
-            $textPoliticManagementSystem = $managementSystem->getPoliticManagementSystem()->getDescription();
-            $activeSheet->setCellValue('A'.$rowIniTac, $textPoliticManagementSystem);//Seteamos la Línea Estratégica
-            //$activeSheet->setCellValue('B'.$rowIniTac, $textObjStra);//Seteamos el Objetivo Estratégico
+            }elseif ($contTac == $countObjTac) {
+                $rowInit = 7;
+                $activeSheet->mergeCells(sprintf('A%s:A%s',($rowInit),($rowFinTac)));
+                
+            }
             
-            $activeSheet->mergeCells(sprintf('A%s:A%s',($rowIniTac),($rowFinTac)));
             $activeSheet->mergeCells(sprintf('B%s:B%s',($rowIniTac),($rowFinTac)));
             
             $rowIniTac = $row;//Actualizamos la fila inicial del nivel Táctico
+            $contTac++;
         }
-        /*$ver = $managementSystem->getPoliticManagementSystem()->getDescription();
-        var_dump($ver);
-        die();*/
-
+        
         $row = 7;//Fila Inicial del skeleton
         for($i=$row;$i<=$rowFinTac;$i++){//Recorremos toda la matriz para setear el alto y los bordes en cada celda
             $activeSheet->getRowDimension($i)->setRowHeight($rowHeight);
-            $activeSheet->getStyle(sprintf('A%s:U%s',$i,$i))->applyFromArray($styleArrayBordersContent);
+            $activeSheet->getStyle(sprintf('A%s:O%s',$i,$i))->applyFromArray($styleArrayBordersContent);
         }
         $row = $rowFinTac + 1;
 
  
-        $activeSheet->setCellValue(sprintf('A%s',$row),'NIVEL DE REVISION: 1');
-        $activeSheet->setCellValue(sprintf('U%s',$row),'C-SI-GI-PG-R-005');
-        $activeSheet->getStyle(sprintf('A%s:U%s',$row,$row))->getFont()->setSize(8);
+        $activeSheet->setCellValue(sprintf('A%s',$row),'Nota: Responsable por los Objetivos Tácticos(Generales) es la Alta Dirección de cada Sistema de Gestión(1era Linea)');
+        $activeSheet->setCellValue(sprintf('A%s',$row + 1),'       Responsable por los Objetivos Operativos son los Representantes de la Alta Dirección de cada Sistema de Gestión(2da Linea)');
+        $activeSheet->setCellValue(sprintf('A%s',$row + 2),'NIVEL DE REVISION: 1');
+        $activeSheet->setCellValue(sprintf('O%s',$row + 2),'C-SI-GI-PG-R-005');
+        $activeSheet->getStyle(sprintf('A%s:O%s',$row,$row))->getFont()->setSize(8);
         $fileName = sprintf('SEIP-Matriz de Objetivos-%s-%s.xls',$managementSystem->getDescription(),$now->format('Ymd-His'));
 
         header('Content-Type: application/vnd.ms-excel');
