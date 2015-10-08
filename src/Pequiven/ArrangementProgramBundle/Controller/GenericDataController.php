@@ -219,53 +219,10 @@ class GenericDataController extends SEIPController {
         $user = $this->getUser();
         $criteria = $request->get('filter', $this->config->getCriteria());
         $repository = $this->get('pequiven.repository.sig_management_system');
-        $results = $repository->findAll();
+        $results = $repository->findBy(array("enabled" => 1));
         $view = $this->view();
         $view->setData($results);
         $view->getSerializationContext()->setGroups(array('id', 'api_list'));
-        return $this->handleView($view);
-    }
-
-    /**
-     * Busca los Tipos de Acción para el Plan
-     * @param type $param
-     */
-    function getTypeAction(\Symfony\Component\HttpFoundation\Request $request) {
-
-        //$user = $this->getUser();
-        //$criteria = $request->get('filter',$this->config->getCriteria());
-        $repository = $this->get('pequiven.repository.managementsystem_sig');
-        $results = $repository->findAll();
-        //var_dump(count($results));
-        //die();
-        $view = $this->view();
-        $view->setData($results);
-        $view->getSerializationContext()->setGroups(array('id', 'api_list', 'description'));
-        return $this->handleView($view);
-    }
-
-    /**
-     * Busca los Indicadores
-     * @param type $param
-     */
-    function getIndicatorLastPeriodAction(\Symfony\Component\HttpFoundation\Request $request) {
-
-        $periodService = $this->getPeriodService();
-        $user = $this->getUser();
-        $criteria = $request->get('filter', $this->config->getCriteria());
-
-        $period = 1;
-        //$repository = $this->get('pequiven.repository.sig_management_system');        
-        $repository = $this->get('pequiven.repository.sig_indicator');
-        $results = $repository->findBy(array('period' => $period));
-        //$results = $repository->findBy(array('period' => $periodService->getPeriodActive()->getId()));
-        //$results = $repository->findAll();
-        //var_dump(count($results));
-        //die();
-
-        $view = $this->view();
-        $view->setData($results);
-        $view->getSerializationContext()->setGroups(array('id', 'api_list', 'indicators', 'description'));
         return $this->handleView($view);
     }
 
