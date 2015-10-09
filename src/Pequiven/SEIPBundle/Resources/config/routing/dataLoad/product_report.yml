@@ -12,6 +12,12 @@ pequiven_product_report_show:
         _controller: pequiven.controller.product_report:showAction
     methods: [GET]
     
+pequiven_product_report_show_groups:
+    path: /{id}/showGroups
+    defaults:
+        _controller: pequiven.controller.product_report:showGroupsAction
+    methods: [GET]
+    
 pequiven_product_report_update:
     path: /{id}/update
     defaults:

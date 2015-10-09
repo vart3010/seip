@@ -281,7 +281,7 @@ class Objetive extends modelObjetive implements ResultItemInterface,PeriodItemIn
     protected $requiredToImport = false;
     
     /**
-    * @ORM\ManyToMany(targetEntity="Pequiven\SIGBundle\Entity\ManagementSystem", inversedBy="objetives", cascade={"persist","remove"})
+    * @ORM\ManyToMany(targetEntity="Pequiven\SIGBundle\Entity\ManagementSystem", inversedBy="objetives")
     * @ORM\JoinTable(name="seip_objetives_management_systems")
     */
     private $managementSystems;
@@ -311,10 +311,10 @@ class Objetive extends modelObjetive implements ResultItemInterface,PeriodItemIn
     protected $resultModified = 0; 
 
     /**
-     * ManagementSystem
-     * @var \Pequiven\SIGBundle\Entity\ProcessManagementSystem
-     * @ORM\ManyToOne(targetEntity="Pequiven\SIGBundle\Entity\ProcessManagementSystem" , inversedBy="objetive")
-     * @ORM\JoinColumn(name="process_managementsystem_id", referencedColumnName="id")
+     * ProcessManagementSystem
+     * 
+     * @ORM\ManyToMany(targetEntity="Pequiven\SIGBundle\Entity\ProcessManagementSystem", inversedBy="objetive")
+     * @ORM\JoinTable(name="management_systems_objetive_process")
      */
     protected $processManagementSystem;
     
@@ -328,6 +328,7 @@ class Objetive extends modelObjetive implements ResultItemInterface,PeriodItemIn
         $this->lineStrategics = new \Doctrine\Common\Collections\ArrayCollection();
         $this->results = new \Doctrine\Common\Collections\ArrayCollection();
         $this->managementSystems = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->processManagementSystem = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -1191,6 +1192,7 @@ class Objetive extends modelObjetive implements ResultItemInterface,PeriodItemIn
             $this->parents = new ArrayCollection();
             
             $this->managementSystems = new ArrayCollection();
+            $this->processManagementSystem = new ArrayCollection();
             
             $this->period = null;
             $this->reviewedBy = null;
@@ -1331,22 +1333,32 @@ class Objetive extends modelObjetive implements ResultItemInterface,PeriodItemIn
     }
 
     /**
-     * Set processManagementSystem
+     * Add processManagementSystem
      *
      * @param \Pequiven\SIGBundle\Entity\ProcessManagementSystem $processManagementSystem
-     * @return ManagementSystem
+     * @return Objetive
      */
-    public function setProcessManagementSystem(\Pequiven\SIGBundle\Entity\ProcessManagementSystem $processManagementSystem = null)
+    public function addProcessManagementSystem(\Pequiven\SIGBundle\Entity\ProcessManagementSystem $processManagementSystem)
     {
-        $this->processManagementSystem = $processManagementSystem;
+        $this->processManagementSystem[] = $processManagementSystem;
 
         return $this;
     }
 
     /**
+     * Remove processManagementSystem
+     *
+     * @param \Pequiven\SIGBundle\Entity\ManagementSystem $processManagementSystem
+     */
+    public function removeProcessManagementSystem(\Pequiven\SIGBundle\Entity\ProcessManagementSystem $processManagementSystem)
+    {
+        $this->processManagementSystem->removeElement($processManagementSystem);
+    }
+
+    /**
      * Get processManagementSystem
      *
-     * @return \Pequiven\SIGBundle\Entity\ProcessManagementSystem 
+     * @return \Doctrine\Common\Collections\Collection 
      */
     public function getProcessManagementSystem()
     {

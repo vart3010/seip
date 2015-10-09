@@ -13,6 +13,7 @@ namespace Pequiven\SEIPBundle\Controller\DataLoad;
 
 use Pequiven\SEIPBundle\Controller\SEIPController;
 use Symfony\Component\HttpFoundation\Request;
+use Pequiven\SEIPBundle\Model\Common\CommonObject;
 
 /**
  * Reporte de planta
@@ -91,24 +92,6 @@ class PlantReportController extends SEIPController {
         return $this->handleView($view);
     }
 
-    public function fillArrayStopPlanning($array) {
-        for ($i = 1; $i <= 12; $i++) {
-            $array[$i] = 0;
-        }
-        return $array;
-    }
-
-    public function validIdExist($find, $array) {
-        $band = false;
-        foreach ($array as $value) {
-            if ($value["id"] == $find) {
-                $band = true;
-                break;
-            }
-        }
-        return $band;
-    }
-
     public function showAction(Request $request) {
 
         $plantReport = $this->getRepository()->find($request->get("id"));
@@ -116,62 +99,154 @@ class PlantReportController extends SEIPController {
         $totalStops = array();
         $totalHours = array();
         $totalProducts = array();
+        $totalGroupsProducts = array();
         $totalServices = array();
 
         $alicuota = array();
 
-        $totalStops = $this->fillArrayStopPlanning($totalStops);
-        $totalHours = $this->fillArrayStopPlanning($totalHours);
+        $totalStops = CommonObject::fillArrayMonth($totalStops);
+        $totalHours = CommonObject::fillArrayMonth($totalHours);
+        
+        $hasGroupProducts = false;
+
         /**
          * METODO PARA CUANDO HAY GRUPO DE PLANTAS
-         * SACOS LOS HIJOS Y LUEGO LOS REPORTPLANT DE CADA UNO Y RECORRO ACUMULANDO
+         * SACO LOS HIJOS Y LUEGO LOS REPORTPLANT DE CADA UNO Y RECORRO ACUMULANDO
          * LAS PARADAS DE PLANTAS,
          * PRODUCTOS Y 
          * SERVICIOS
          */
-        foreach ($childs as $child) {
-
-            foreach ($child->getPLantReport() as $plantReportByChild) {
-                //PLANT STOP PLANNING
-                $planStopPlannings = $plantReportByChild->getPlantStopPlannings();
-                foreach ($planStopPlannings as $planStopPlanning) {
-                    if (array_key_exists($planStopPlanning->getMonth(), $totalStops)) {
-                        $totalStops[$planStopPlanning->getMonth()] += $planStopPlanning->getTotalStops();
-                        $totalHours[$planStopPlanning->getMonth()] += $planStopPlanning->getTotalHours();
+        if (count($childs) > 0) {
+            
+            $productReports = $plantReport->getProductsReport();
+            if(count($productReports) > 0){
+                foreach($productReports as $productReport){
+                    if(count($productReport->getProduct()->getComponents()) > 0){
+                        $hasGroupProducts = true;
+                        break;
                     }
                 }
-                //PRODUCTOS
-                foreach ($plantReportByChild->getPlant()->getProducts() as $product) {
-                    if (!$this->validIdExist($product->getId(), $totalProducts)) {
+            }
+            
+            //SECCIÒN PRODUCTOS HEREDADOS
+            foreach ($childs as $child) {
+                foreach ($child->getPlantReport() as $plantReportByChild) {
+                    //PLANT STOP PLANNING
+                    $planStopPlannings = $plantReportByChild->getPlantStopPlannings();
+                    foreach ($planStopPlannings as $planStopPlanning) {
+                        if (array_key_exists($planStopPlanning->getMonth(), $totalStops)) {
+                            $totalStops[$planStopPlanning->getMonth()] += $planStopPlanning->getTotalStops();
+                            $totalHours[$planStopPlanning->getMonth()] += $planStopPlanning->getTotalHours();
+                        }
+                    }
+                    //PRODUCTOS -> SE RECORREN POR PRODUCT_REPORT
+                    foreach ($plantReportByChild->getProductsReport() as $productReports) {
+
+                        $product = $productReports->getProduct();
+                        //SE LLENAN LOS DOS VECTORES DE PRODUCTOS
+//                        if (count($product->getComponents()) > 0) {
+//                            $cont = 0;
+//                            $groupNames = "";
+//                            foreach ($product->getComponents() as $productChildren) {
+//                                if ($cont == 0) {
+//                                    $groupNames .= $productChildren->getName();
+//                                } else {
+//                                    $groupNames .= "," . $productChildren->getName();
+//                                }
+//                                $cont++;
+//                            }
+//                            //PRODUCTOS POR GRUPOS
+//                            $totalGroupsProducts[] = array(
+//                                "id" => $product->getId(),
+//                                "name" => $product->getName(),
+//                                "line" => $product->getProductionLine(),
+//                                "unit" => $product->getProductUnit(),
+//                                "entityProductReport" => $productReports,
+//                                "groupsProducts" => $groupNames
+//                            );
+//                        } else {
+                            if (!CommonObject::validIdExist($product->getId(), $totalProducts)) {
+                                //if (!$this->validIdExist($product->getId(), $totalProducts)) {
+                                //PRODUCTOS
+                                $totalProducts[] = array(
+                                    "id" => $product->getId(),
+                                    "name" => $product->getName(),
+                                    "line" => $product->getProductionLine(),
+                                    "unit" => $product->getProductUnit(),
+                                    "entityProductReport" => $productReports
+                                );
+                            }
+//                        }
+                    }
+
+                    //SERVICIOS
+                    foreach ($plantReportByChild->getConsumerPlanningServices() as $planningService) {
+                        if (array_key_exists($planningService->getService()->getId(), $alicuota)) {
+                            $alicuota[$planningService->getService()->getId()] += $planningService->getAliquot();
+                        } else {
+                            $alicuota[$planningService->getService()->getId()] = $planningService->getAliquot();
+                        }
+                        if (!CommonObject::validIdExist($planningService->getService()->getId(), $totalServices)) {
+                            //if (!$this->validIdExist($planningService->getService()->getId(), $totalServices)) {
+                            $totalServices[] = array(
+                                "id" => $planningService->getService()->getId(),
+                                "name" => $planningService->getService()->getName(),
+                                "unit" => $planningService->getService()->getServiceUnit(),
+                                "alicuota" => $alicuota
+                            );
+                        }
+                    }
+                }
+            }
+            
+            if($hasGroupProducts){
+                foreach ($plantReport->getProductsReport() as $productReports) {
+                    $product = $productReports->getProduct();
+                    //SE LLENAN LOS DOS VECTORES DE PRODUCTOS
+                    if (count($product->getComponents()) > 0) {
+                        $cont = 0;
+                        $groupNames = "";
+                        foreach ($product->getComponents() as $productChildren) {
+                            if ($cont == 0) {
+                                $groupNames .= $productChildren->getName();
+                            } else {
+                                $groupNames .= "," . $productChildren->getName();
+                            }
+                            $cont++;
+                        }
+                        //PRODUCTOS POR GRUPOS
+                        $totalGroupsProducts[] = array(
+                            "id" => $product->getId(),
+                            "name" => $product->getName(),
+                            "line" => $product->getProductionLine(),
+                            "unit" => $product->getProductUnit(),
+                            "entityProductReport" => $productReports,
+                            "groupsProducts" => $groupNames
+                        );
+                    }
+                }
+            }
+        } else {
+            foreach ($plantReport->getProductsReport() as $productReports) {
+                $product = $productReports->getProduct();
+
+                if (count($product->getComponents()) == "0") {
+                    //var_dump(count($product->getComponents()));
+                    if (!CommonObject::validIdExist($product->getId(), $totalProducts)) {
+                        //if (!$this->validIdExist($product->getId(), $totalProducts)) {
+                        //PRODUCTOS
                         $totalProducts[] = array(
                             "id" => $product->getId(),
                             "name" => $product->getName(),
                             "line" => $product->getProductionLine(),
-                            "unit" => $product->getProductUnit()
-                        );
-                    }
-                }
-                //SERVICIOS
-                foreach ($plantReportByChild->getConsumerPlanningServices() as $planningService) {
-
-
-                    if (array_key_exists($planningService->getService()->getId(), $alicuota)) {
-                        $alicuota[$planningService->getService()->getId()] += $planningService->getAliquot();
-                    } else {
-                        $alicuota[$planningService->getService()->getId()] = $planningService->getAliquot();
-                    }
-                    if (!$this->validIdExist($planningService->getService()->getId(), $totalServices)) {
-                        $totalServices[] = array(
-                            "id" => $planningService->getService()->getId(),
-                            "name" => $planningService->getService()->getName(),
-                            "unit" => $planningService->getService()->getServiceUnit(),
-                            "alicuota" => $alicuota
+                            "unit" => $product->getProductUnit(),
+                            "entityProductReport" => $productReports
                         );
                     }
                 }
             }
         }
-        
+
 
         $labelMonth = \Pequiven\SEIPBundle\Model\Common\CommonObject::getLabelsMonths();
         $stopPlanningTable = array();
@@ -188,6 +263,7 @@ class PlantReportController extends SEIPController {
             "childs" => $childs,
             "stopPlanning" => $stopPlanningTable,
             "products" => $totalProducts,
+            "groupsProducts" => $totalGroupsProducts,
             "services" => $totalServices,
             "alicuota" => $alicuota
         );
@@ -215,7 +291,7 @@ class PlantReportController extends SEIPController {
         $consumerPlanningServices = $resource->getConsumerPlanningServices();
         $propertyAccessor = \Symfony\Component\PropertyAccess\PropertyAccess::createPropertyAccessor();
 
-        //Funcion que retorna los dias de paradas
+//Funcion que retorna los dias de paradas
         $getDayStops = function($month) use ($plantStopPlanningsByMonths) {
             $daysStopsArray = array();
             if (isset($plantStopPlanningsByMonths[$month])) {
@@ -227,7 +303,7 @@ class PlantReportController extends SEIPController {
             return $daysStopsArray;
         };
 
-        //Servicios
+//Servicios
         foreach ($consumerPlanningServices as $consumerPlanningService) {
             $details = $consumerPlanningService->getDetails();
             $aliquot = $consumerPlanningService->getAliquot();
@@ -264,7 +340,7 @@ class PlantReportController extends SEIPController {
                         }
 
                         $totalPlan = 0.0;
-                        //Recorremos los productos para calcular el plan del dia
+//Recorremos los productos para calcular el plan del dia
                         foreach ($productsReport as $productReport) {
                             $productDetailDailyMonths = $productReport->getProductDetailDailyMonthsSortByMonth();
                             if (isset($productDetailDailyMonths[$month])) {
@@ -278,8 +354,8 @@ class PlantReportController extends SEIPController {
                     }
                 }
             }//Fin for
-            //Completar los meses que no estan definidos
-            //Los planes de consumo de servicios
+//Completar los meses que no estan definidos
+//Los planes de consumo de servicios
             for ($month = 1; $month <= 12; $month++) {
                 if (!isset($detailsByMonth[$month])) {
                     $daysStopsArray = $getDayStops($month);
@@ -298,7 +374,7 @@ class PlantReportController extends SEIPController {
                         }
 
                         $totalPlan = 0.0;
-                        //Recorremos los productos para calcular el plan del dia
+//Recorremos los productos para calcular el plan del dia
                         foreach ($productsReport as $productReport) {
                             $productDetailDailyMonths = $productReport->getProductDetailDailyMonthsSortByMonth();
                             if (isset($productDetailDailyMonths[$month])) {
@@ -316,7 +392,7 @@ class PlantReportController extends SEIPController {
 
                     $this->save($consumerPlanningService);
                 } else {
-                    //Actualizar valores
+//Actualizar valores
                     $detail = $detailsByMonth[$month];
                     for ($day = 1; $day <= 31; $day++) {
                         $dayInt = (int) $day;
@@ -328,7 +404,7 @@ class PlantReportController extends SEIPController {
                         }
 
                         $totalPlan = 0.0;
-                        //Recorremos los productos para calcular el plan del dia
+//Recorremos los productos para calcular el plan del dia
                         foreach ($productsReport as $productReport) {
                             $productDetailDailyMonths = $productReport->getProductDetailDailyMonthsSortByMonth();
                             if (isset($productDetailDailyMonths[$month])) {
@@ -345,7 +421,7 @@ class PlantReportController extends SEIPController {
                     $this->save($consumerPlanningService);
                 }
             }
-            //Validar los dias de paradas
+//Validar los dias de paradas
             foreach ($resource->getPlantStopPlannings() as $plantStopPlanning) {
                 $ranges = $plantStopPlanning->getRanges();
                 if ($ranges->count()) {

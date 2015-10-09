@@ -1077,6 +1077,7 @@ class IndicatorSigController extends ResourceController
             $fusionchartService = $this->getFusionChartExportService();
             $fileSVG = $fusionchartService->exportFusionChart($exportRequestStream);
         }*/
+
         $dataAction = $this->findEvolutionCause($request);//Carga la data de las causas y sus acciones relacionadas
 
         $month = $request->get('month'); //El mes pasado por parametro
