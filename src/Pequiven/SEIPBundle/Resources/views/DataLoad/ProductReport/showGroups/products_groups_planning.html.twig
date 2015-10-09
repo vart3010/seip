@@ -1,0 +1,45 @@
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+<div class="block">
+    <div class="block-title">
+        <h3> {{ 'pequiven_seip.product_planning.product_planning'|trans }}&nbsp;
+            {{ labelProductPlanning }}&nbsp;({{ totalProductGross|length }})
+        </h3>
+
+    </div>
+    <div class="with-padding">
+        <table class="simple-table responsive-table tables-extras" id="sorting-example2">
+            <thead>
+                <tr>
+                    <th scope="col" width="40%">{{ 'Month'|trans }}</th>
+                    <th scope="col" width="25%" class="hide-on-mobile-portrait">{{ 'Total month'|trans }}</th>
+                    <th scope="col" width="25%" class="hide-on-tablet">{{ 'Daily production capacity'|trans }}</th>
+
+                </tr>
+            </thead>
+            {% set colspan = 5 %}
+            {% set totalMont = 0 %}
+            {% set unit = "" %}
+            <tbody> 
+                {% for productGross in totalProduct %}
+                    {% set totalMont = totalMont + productGross.month %}
+                    {% set unit = productGross.unit %}
+                    <tr>
+                        <td>{{ loop.index}} - {{ productGross.idMonth}}</td>
+                        <td>{{ productGross.month | myNumberFormat}}</td>
+                        <td>{{ productGross.daily| myNumberFormat}}</td>
+
+                    </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th scope="col" width="40%">{{ 'Totals'|trans }}</th>
+                    <th scope="col" width="25%" class="hide-on-mobile-portrait">{{ totalMont|myNumberFormat }}&nbsp;{{ unit }}</th>
+                    <th scope="col" width="25%" class="hide-on-tablet">{#{{ totalDailyProductionCapacity|myNumberFormat }}&nbsp;{{ productUnit }}#}</th>
+                </tr>
+            </tfoot>
+        </table>
+
+    </div>
+</div>

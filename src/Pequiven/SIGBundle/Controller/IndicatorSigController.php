@@ -504,7 +504,9 @@ class IndicatorSigController extends ResourceController
      * @return type
      */
     public function addAction(Request $request)
-    {    
+    {   
+        $indicator = $this->getRequest()->get('id');
+        //var_dump($request);
         $user = $this->getUser();
         $causeAction = $request->get('actionResults')['evolutionCause'];//Recibiendo
         
@@ -525,21 +527,20 @@ class IndicatorSigController extends ResourceController
         
         $dStart = $monthStart[1];//Pasando mes de Inicio
         $dEnd   = $monthEnd[1];//Pasando el mes de Cierre
-        //var_dump($dStart);
+        
         $count = 0; $data = (int)$dStart;
-            //var_dump($data);
+            
             $action = new EvolutionAction();
-            $form  = $this->createForm(new EvolutionActionType(), $action);
+            $form  = $this->createForm(new EvolutionActionType($indicator), $action);
             
             $action->setCreatedBy($user);
             $action->setEvolutionCause($causeResult);
             $action->setMonth($data);//Carga de Mes(var month)
             //$action->setAdvance($advance);
 
-
             $form->handleRequest($request);
 
-            if ($form->isSubmitted() && $form->isValid()) {
+            if ($form->isSubmitted()) {
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($action);
                 $em->flush();
@@ -623,17 +624,16 @@ class IndicatorSigController extends ResourceController
             foreach ($actionResult as $value) {
 
                 $dat = $value->getMonth();
-                //var_dump($dat);
+                
                 if ($value->getMonth() == $month) {//Si la accion tiene el mes igual al pasado la actualiza
 
                 $sumAdvance = $value->getAdvance() + $AcValue;
-                //var_dump($sumAdvance);
+                
                 $value->setAdvance($sumAdvance);
                 $value->setObservations($AcObservation);
 
                         $em = $this->getDoctrine()->getManager();
-                        $em->flush();
-                        //var_dump("Paso del flush");
+                        $em->flush();                        
 
                 $month = $month + 1;//Carga de los meses tantas veces sean para la consulta
                 $AcObservation = null;//
@@ -977,7 +977,6 @@ class IndicatorSigController extends ResourceController
      */
     private function findEvolutionCause(Request $request)
     {
-        //$id = $request->get('idIndicator');
         $idIndicator = $request->get('id'); 
         //Mes Actual
         $monthActual = date("m");
@@ -1078,6 +1077,7 @@ class IndicatorSigController extends ResourceController
             $fusionchartService = $this->getFusionChartExportService();
             $fileSVG = $fusionchartService->exportFusionChart($exportRequestStream);
         }*/
+
         $dataAction = $this->findEvolutionCause($request);//Carga la data de las causas y sus acciones relacionadas
 
         $month = $request->get('month'); //El mes pasado por parametro

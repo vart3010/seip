@@ -14,6 +14,7 @@ pequiven_seip:
     type_report: Tipo de reporte
     add: Añadir
     products: Productos
+    productsGroups: Grupos de Productos
     ref: Referencia
     total: Total
     totalPlan: Total planificado

@@ -2246,66 +2246,7 @@ angular.module('seipModule.controllers', [])
                 ];
                 $scope.templateOptions.setTemplate($scope.templates[0]);
             };
-        })
-        .controller('EvolutionIndicatorFilters', function ($scope, ngTableParams, $http, sfTranslator, notifyService) {
-            //console.log($scope.id_indicator);
-            var selectLastPeriod = angular.element("#selectLastPeriod");
-            var selectCausesEvolution = angular.element("#selectCausesEvolution");
-            $scope.data = {
-                lastPeriod: null,
-                causesEvolution: null
-            };
-            $scope.model = {
-                lastPeriod: null,
-                causesEvolution: null
-            };
-            //Carga de los indicadores para la relación con el periodo 2014
-            $scope.getLastPeriod = function () {
-                var parameters = {
-                    filter: {}
-                }
-            }
-            $http.get(Routing.generate('pequiven_arrangementprogram_datasig_indicator_lastperiod'))
-                    .success(function (data) {
-                        $scope.data.lastPeriod = data;
-                        if ($scope.model.lastPeriod != null) {
-                            $scope.setValueSelect2("selectLastPeriod", $scope.model.lastPeriod, $scope.data.lastPeriod, function (selected) {
-                                $scope.model.lastPeriod = selected;
-                            });
-                        }
-                    });
-            //Carga las causas de desviación del indicador
-            $scope.getCausesEvolution = function () {
-                var parameters = {
-                    filter: {}
-                }
-            }
-            $http.get(Routing.generate('pequiven_sig_causes_indicator_evolution', {idIndicator: $scope.id_indicator}))
-                    .success(function (data) {
-                        $scope.data.causesEvolution = data;
-                        if ($scope.model.causesEvolution != null) {
-                            $scope.setValueSelect2("selectCausesEvolution", $scope.model.causesEvolution, $scope.data.causesEvolution, function (selected) {
-                                $scope.model.causesEvolution = selected;
-                            });
-                        }
-                    });
-            //Scope lastPeriod
-            $scope.$watch("model.lastPeriod", function (newParams, oldParams) {
-                if ($scope.model.lastPeriod != null && $scope.model.lastPeriod.id != undefined) {
-                    $scope.tableParams.$params.filter['LastPeriod'] = $scope.model.lastPeriod.id;
-                } else {
-                    $scope.tableParams.$params.filter['LastPeriod'] = null;
-                }
-            });
-            //Scope CausesEvolution
-            $scope.$watch("model.causesEvolution", function (newParams, oldParams) {
-                if ($scope.model.causesEvolution != null && $scope.model.causesEvolution.id != undefined) {
-                    $scope.tableParams.$params.filter['CausesEvolution'] = $scope.model.causesEvolution.id;
-                } else {
-                    $scope.tableParams.$params.filter['CausesEvolution'] = null;
-                }
-            });
-        })
+        })        
         //Fin controladores SIG
 
 

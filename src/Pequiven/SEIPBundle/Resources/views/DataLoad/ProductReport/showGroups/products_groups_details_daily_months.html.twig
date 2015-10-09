@@ -1,0 +1,93 @@
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
+
+{% set message = ("pequiven_seip.product_report.question.delete"|trans) %}
+
+<div class="block">
+    <div class="block-title">
+        <h3> {{ 'pequiven_seip.product_report.product_detail_daily_months'|trans }}&nbsp;
+            ({{ totalDetailProducction|length }})
+        </h3>
+
+    </div>
+    {% set typeProductionGross = "&nbsp;("~("pequiven_seip.gross"|trans)~")" %}
+    {% set typeProductionNet = "&nbsp;("~("pequiven_seip.net"|trans)~")" %}
+    {% set productUnit = product_report.product.productUnit %}
+    <div class="with-padding">
+        <table class="simple-table responsive-table tables-extras" id="sorting-example2">
+            <thead>
+                <tr>
+                    <th scope="col" width="10%">{{ 'Month'|trans }}</th>
+                    <th scope="col" width="10%" class="hide-on-mobile-portrait with-tooltip" title="{{ 'pequiven_seip.totalPlan'|trans }}">{{ 'pequiven_seip.headers.totalPlan'|trans }}{{ typeProductionGross|raw }}</th>
+                    <th scope="col" width="10%" class="hide-on-tablet with-tooltip" title="{{ 'pequiven_seip.totalReal'|trans }}">{{ 'pequiven_seip.headers.totalReal'|trans }}{{ typeProductionGross|raw }}</th>
+                    <th scope="col" width="10%" class="hide-on-tablet with-tooltip" title="{{ 'pequiven_seip.percentage'|trans }}">{{ 'pequiven_seip.headers.percentage'|trans }}{{ typeProductionGross|raw }}</th>
+                    <th scope="col" width="10%" class="hide-on-mobile-portrait with-tooltip" title="{{ 'pequiven_seip.totalPlan'|trans }}">{{ 'pequiven_seip.headers.totalPlan'|trans }}{{ typeProductionNet|raw }}</th>
+                    <th scope="col" width="10%" class="hide-on-tablet with-tooltip" title="{{ 'pequiven_seip.totalReal'|trans }}">{{ 'pequiven_seip.headers.totalReal'|trans }}{{ typeProductionNet|raw }}</th>
+                    <th scope="col" width="10%" class="hide-on-tablet with-tooltip" title="{{ 'pequiven_seip.percentage'|trans }}">{{ 'pequiven_seip.headers.percentage'|trans }}{{ typeProductionNet|raw }}</th>
+                    <th scope="col" width="10%">&nbsp;</th>
+                </tr>
+            </thead>
+            {% set colspan = 9 %}
+            {% set totalTpGross = 0 %}
+            {% set totalTrGross = 0 %}
+            {% set totalTpNet = 0 %}
+            {% set totalTrNet = 0 %}
+            <tbody>
+                {% for detailProducction in totalDetailProducction %} 
+                    {% set totalTpGross = totalTpGross + detailProducction.tpGross  %}
+                    {% set totalTrGross = totalTrGross + detailProducction.trGross %}
+                    {% set totalTpNet = totalTpNet + detailProducction.tpNet  %}
+                    {% set totalTrNet = totalTrNet + detailProducction.trNet %}
+                    <tr>
+                        <td>{{ loop.index }} - {{ detailProducction.idMonth }}</td>
+                        <td>{{ detailProducction.tpGross|myNumberFormat }}</td>
+                        <td>{{ detailProducction.trGross|myNumberFormat }}</td>
+                        {% if(detailProducction.tpGross>0)%}
+                            {% set percDetailGross = (detailProducction.trGross/detailProducction.tpGross) * 100 %}
+                        {% else %}
+                            {% set percDetailGross = 0 %}
+                        {% endif %}
+
+                        <td>{{ percDetailGross|myNumberFormat }}%</td>
+                        <td>{{ detailProducction.tpNet|myNumberFormat }}</td>
+                        <td>{{ detailProducction.trNet|myNumberFormat }}</td>
+                        {% if(detailProducction.tpNet>0)%}
+                            {% set percDetailNet = (detailProducction.trNet/detailProducction.tpNet) * 100 %}
+                        {% else %}
+                            {% set percDetailNet = 0 %}
+                        {% endif %}
+                        <td>{{ percDetailNet|myNumberFormat }}%</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                {% endfor %}
+
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th scope="col">Total Acumulado</th>
+                    <th scope="col">{{totalTpGross|myNumberFormat}} </th>
+                    <th scope="col">{{totalTrGross|myNumberFormat}} </th>
+                        {% if(totalTpGross>0)%}
+                            {% set percGross = (totalTrGross / totalTpGross ) * 100 %}
+                        {% else %}
+                            {% set percGross = 0 %}
+                        {% endif %}
+
+                    <th scope="col">{{ percGross | myNumberFormat }} </th>
+                    <th scope="col">{{totalTpNet|myNumberFormat}} </th>
+                    <th scope="col">{{totalTrNet|myNumberFormat}} </th>
+                        {% if(totalTpNet>0)%}
+                            {% set percNet = (totalTrNet / totalTpNet) * 100 %}
+                        {% else %}
+                            {% set percNet = 0 %}
+                        {% endif %}
+
+                    <th scope="col">{{ percNet | myNumberFormat }} </th>
+                    <th scope="col">&nbsp;</th>
+                </tr>
+            </tfoot>
+        </table>
+
+    </div>
+</div>

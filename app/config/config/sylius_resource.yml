@@ -233,7 +233,8 @@ sylius_resource:
             classes:
                 model: Pequiven\SEIPBundle\Entity\DataLoad\ProductReport
                 controller: Pequiven\SEIPBundle\Controller\DataLoad\ProductReportController
-        
+                repository: Pequiven\SEIPBundle\Repository\DataLoad\ProductReportRepository
+                
         pequiven.indicator_value_result:
             driver: doctrine/orm
             classes:

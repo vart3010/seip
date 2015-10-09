@@ -547,6 +547,30 @@ class WorkStudyCircleService implements ContainerAwareInterface {
     
     /**
      * 
+     * @param WorkStudyCircle $workStudyCircle
+     * @return boolean
+     */
+    public function isAllowToAddMembers(\Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle $workStudyCircle){
+        $valid = false;
+        $user = $this->getUser();
+        
+        return $valid;
+    }
+    
+    /**
+     * 
+     * @param WorkStudyCircle $workStudyCircle
+     * @return boolean
+     */
+    public function isAllowToEditMembers(\Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle $workStudyCircle){
+        $valid = false;
+        $user = $this->getUser();
+        
+        return $valid;
+    }
+    
+    /**
+     * 
      * @return \Symfony\Component\Security\Core\SecurityContext
      * @throws \LogicException
      */

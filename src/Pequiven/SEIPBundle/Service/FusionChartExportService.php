@@ -66,9 +66,9 @@ public $exportedStatus;
         $this->exportData = $this->parseExportRequestStream($this->exportRequestStream);
         $this->exporterResource = $this->getExporter($this->exportData ['parameters'] ["exportformat"], $this->exportData ["streamtype"]);
     //    
-    //    if (!@include( $this->exporterResource )) {
-    //        raise_error(404, true);
-    //    }
+//        if (!@include( $this->exporterResource )) {
+//            raise_error(404, true);
+//        }
     //    
         $this->exportObject = $this->exportProcessor($this->exportData ['stream'], $this->exportData ['meta'], $this->exportData ['parameters']);
         if(strlen($this->exportObject) > 0){
@@ -103,7 +103,7 @@ public $exportedStatus;
         }
         else {
         	//raise error as this export handler only accepts SVG as the input stream.
-            raise_error("Invalid input stream type. Only SVG is accepted.");
+            $this->raise_error("Invalid input stream type. Only SVG is accepted.");
         }
     }
 
@@ -111,12 +111,12 @@ public $exportedStatus;
     // halt with error message  if stream is not found
     $exportData ['stream'] = (string)@$exportRequestStream ['stream']
             or $exportData ['stream'] = (string)@$exportRequestStream ['svg'] // backward compatible
-            or raise_error(100, true);
+            or $this->raise_error(100, true);
 
     // get all export related parameters and parse to validate and process these
     // add notice if 'parameters' is not retrieved. In that case default values would be taken
     if (!@$exportRequestStream['parameters'])
-        raise_error(102);
+        $this->raise_error(102);
 
     // parse parameters
     $exportData ['parameters'] = $this->parseExportParams(@$exportRequestStream ['parameters'], @$exportRequestStream);
@@ -126,9 +126,9 @@ public $exportedStatus;
     // halt with error message  if width/height is/are not retrieved
     $exportData ['meta']['width'] = (int) @$exportRequestStream ['meta_width']
             or $exportData ['meta']['width'] = (int) @$exportRequestStream ['width'] // backward compatible
-            or raise_error(101);
+            or $this->raise_error(101);
     $exportData ['meta']['height'] = (int) @$exportRequestStream ['meta_height']
-            or raise_error(101);
+            or $this->raise_error(101);
 
     // get background color of chart
     // add notice if background color is not retrieved
@@ -350,7 +350,7 @@ function setupServer($exportFile, $exportType, $target = "_self") {
     $path = preg_replace('/([^\/]$)/i', '${1}/', SAVE_PATH);
     // check whether directory exists
     // raise error and halt execution if directory does not exists
-    $fe = file_exists(realpath($path)) or raise_error(" Server Directory does not exist.", true);
+    $fe = file_exists(realpath($path)) or $this->raise_error(" Server Directory does not exist.", true);
 
     // check if directory is writable or not
     $dirWritable = is_writable(realpath($path));
@@ -545,7 +545,7 @@ function raise_error($code, $halt = false) {
 
     // If halt is true stop execution and send response back to chart/output stream
     if ($halt) {
-        flushStatus(false, '', $err_message);
+        $this->flushStatus(false, '', $err_message);
     } else {
         // otherwise add the message into global notice repository
         $notices .= $err_message;
@@ -626,7 +626,7 @@ function exportProcessor($stream, $meta, $exportParams) {
         // catch error
         if (!is_file($tempOutputFile) || filesize($tempOutputFile) < 10) {
             $return_binary = $output;
-            raise_error($output, true);
+            $this->raise_error($output, true);
         }
         // stream it
         else {
@@ -648,7 +648,7 @@ function exportProcessor($stream, $meta, $exportParams) {
     } else if ($ext == 'svg') {
         $return_binary = $stream;
     } else {
-        raise_error("Invalid Export Format.", true);
+        $this->raise_error("Invalid Export Format.", true);
     }
     // return export ready binary data
     return @$return_binary;
