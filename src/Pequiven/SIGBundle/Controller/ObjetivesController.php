@@ -118,7 +118,6 @@ class ObjetivesController extends ResourceController
         //$repository = $this->getRepository();        
         $repository = $this->container->get('pequiven.repository.sig_management_system'); 
         
-        
         if ($this->config->isPaginated()) {
             $resources = $this->resourceResolver->getResource(
                 $repository,
@@ -176,7 +175,7 @@ class ObjetivesController extends ResourceController
 
         //Objetivos Tácticos de la Gerencia
         $objetivesTactics = $this->get('pequiven.repository.objetive')->getObjetivesManagementSystem($managementSystem);
-
+        
         $resource = $this->findOr404($request);
         
         //Formato para todo el documento

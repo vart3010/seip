@@ -21,7 +21,7 @@
             <div loading-container="tableParams.settings().$loading">
                 <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager"  template-header="custom/header" api-data-url="{{ path('pequiven_objetives_gerencia_list_sig',{_format:'json'}) }}" export-csv="csv" class="table table-responsive table-extra-info">
                     <tr ng-repeat="result in $data | filter:tableParams.search " data="{$ result|json $}">                        
-                        <td data-title="'{{ 'form.list.managementSystem'|trans({},'PequivenSIGBundle') }}'" sortable="'description'" filter="{ 'description': 'text' }" >
+                        <td data-title="'{{ 'form.list.managementSystem'|trans({},'PequivenSIGBundle') }}'" sortable="'description'">
                            - <a href="{$ result._links.self.href $}">{$result.description$}</a>
                         </td>
                         <td align="center" width="25%">

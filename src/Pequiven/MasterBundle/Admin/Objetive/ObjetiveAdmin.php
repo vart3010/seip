@@ -85,7 +85,7 @@ class ObjetiveAdmin extends Admin
                     ))
                     ->add('processManagementSystem','sonata_type_model_autocomplete',array(
                         'property' => array('description'),
-                        'multiple' => false,
+                        'multiple' => true,
                         'required' => false,
                     ))
                     ->add('evalObjetive',null,array(

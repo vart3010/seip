@@ -218,28 +218,6 @@ pequiven_verification_evolution_delete:
     methods: [GET]
     options:
         expose: true
-#filtro causas del indicador
-pequiven_sig_causes_indicator_evolution:
-    path: /{idIndicator}/causesevolution.{_format}
-    defaults: 
-        _controller: pequiven.controller.indicator_sig:getCausesEvolutionAction
-        _format: json
-    requirements:
-        _format: "json|xml"
-    methods: [GET]
-    options:
-        expose: true
-#Filtro de last_period_indicator
-pequiven_arrangementprogram_datasig_indicator_lastperiod:
-    path: /indicators.{_format}
-    defaults: 
-        _controller: pequiven_seip.controller.arrangementprogram_data:getIndicatorLastPeriodAction
-        _format: json
-    requirements:
-        _format: "json|xml"
-    methods: [GET]
-    options:
-        expose: true
 #URL file
 pequiven_cause_vizualice_file:
     path: /.{_format}
