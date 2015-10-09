@@ -51,13 +51,6 @@ class MovementDetails {
      */
     private $deletedAt;
 
-    /** ID USUARIO
-     *
-     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\User",inversedBy="movementEmployee")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $User;
-
     /**
      * TIPO DE MOVIMIENTO: I-> ENTRADA / O-> SALIDA
      * @var string
@@ -65,45 +58,38 @@ class MovementDetails {
      * @ORM\Column(name="type", type="text",nullable=false)
      */
     private $type;
-    
-      
+
     /**
      * @var \DateTime
      * @ORM\Column(name="date", type="datetime", nullable=false)
      */
     private $date;
-    
-    /**
-     * @var \float
-     * @ORM\Column(name="planned", type="float", nullable=false)
-     */
-    private $planned;
-    
+
     /**
      * @var \float
      * @ORM\Column(name="real_advance", type="float", nullable=false)
      */
     private $real_advance;
-    
+
     /**
      * @var \float
      * @ORM\Column(name="advance", type="float", nullable=false)
      */
     private $advance;
-    
+
     /**
      * @var \float
      * @ORM\Column(name="beforepenalty", type="float", nullable=true)
      */
     private $beforePenalty;
-    
+
     /**
      * @var \float
      * @ORM\Column(name="penalty", type="float", nullable=true)
      */
     private $pentalty;
-    
-     /**
+
+    /**
      * CAUSA DE MOVIMIENTO: ASIG-> ASIGNACIÓN / SUP->SUPLENCIA / AUS-> AUSENCIA / CAMB-> CAMBIO
      * @var string
      *
@@ -118,7 +104,6 @@ class MovementDetails {
      * @ORM\Column(name="observations", type="text",nullable=true)
      */
     private $observations;
-    
 
     public function __construct() {
         //$this->assistances = new \Doctrine\Common\Collections\ArrayCollection();
@@ -208,22 +193,6 @@ class MovementDetails {
      * 
      * @return type
      */
-    function getUser() {
-        return $this->User;
-    }
-
-    /**
-     * 
-     * @param type $User
-     */
-    function setUser($User) {
-        $this->User = $User;
-    }
-
-    /**
-     * 
-     * @return type
-     */
     function getType() {
         return $this->type;
     }
@@ -235,7 +204,7 @@ class MovementDetails {
     function setType($type) {
         $this->type = $type;
     }
-    
+
     /**
      * 
      * @return type
@@ -243,16 +212,6 @@ class MovementDetails {
     function getDate() {
         return $this->date;
     }
-
-    /**
-     * 
-     * @return type
-     */
-    function getPlanned() {
-        return $this->planned;
-    }
-
-    
 
     /**
      * 
@@ -288,14 +247,6 @@ class MovementDetails {
 
     /**
      * 
-     * @param \float $planned
-     */
-    function setPlanned($planned) {
-        $this->planned = $planned;
-    }
-
-    /**
-     * 
      * @return type
      */
     function getReal_advance() {
@@ -310,7 +261,6 @@ class MovementDetails {
         $this->real_advance = $real_advance;
     }
 
-    
     /**
      * 
      * @param \float $advance
@@ -334,7 +284,7 @@ class MovementDetails {
     function setPentalty($pentalty) {
         $this->pentalty = $pentalty;
     }
-    
+
     /**
      * 
      * @return type
@@ -366,9 +316,5 @@ class MovementDetails {
     function setObservations($observations) {
         $this->observations = $observations;
     }
-
-
-
-
 
 }

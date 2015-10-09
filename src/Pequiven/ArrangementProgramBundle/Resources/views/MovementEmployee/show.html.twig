@@ -1,5 +1,6 @@
 {% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}
 {% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
 {% trans_default_domain 'PequivenArrangementProgramBundle' %}
 
 {% block before_body %}
@@ -105,57 +106,88 @@
             <div class="tabs-content">
 
                 <div id="tab-1" class="with-padding">
-                    <form method="POST" action="">
-                        <p class="inline-label">
-                            {{ form_label(formassigndetails.date) }}
-                            {{ form_widget(formassigndetails.date) }}
-                            {{ form_errors(formassigndetails.date) }}
-                        </p>
-                        <p class="inline-label">
-                            {{ form_label(form.User) }}
-                            {{ form_widget(form.User) }}
-                            {{ form_errors(form.User) }}
-                        </p>
-                        <p class="inline-label">
-                            {{ form_label(formassigndetails.cause) }}
-                            {{ form_widget(formassigndetails.cause) }}
-                            {{ form_errors(formassigndetails.cause) }}
-                        </p>
-                        <p class="inline-label">
-                            {{ form_label(formassigndetails.observations) }}
-                            {{ form_widget(formassigndetails.observations) }}
-                            {{ form_errors(formassigndetails.observations) }}
-                        </p>
+                    <form method="POST" action="{{ path("goal_movement_assign",{idGoal:goal.id}) }}">
+                        <table>
+                            <tr>
+                                <td>
+                                    <p class="inline-label">
+                                        {{ form_label(formassigndetails.date) }}
+                                        {{ form_widget(formassigndetails.date) }}
+                                        {{ form_errors(formassigndetails.date) }}
+                                    </p>
+                                    <p class="inline-label">
+                                        {{ form_label(form.User) }}
+                                        {{ form_widget(form.User) }}
+                                        {{ form_errors(form.User) }}
+                                    </p>
+                                    <p class="inline-label">
+                                        {{ form_label(formassigndetails.cause) }}
+                                        {{ form_widget(formassigndetails.cause) }}
+                                        {{ form_errors(formassigndetails.cause) }}
+                                    </p>
+                                    <p class="inline-label">
+                                        {{ form_label(formassigndetails.observations) }}
+                                        {{ form_widget(formassigndetails.observations) }}
+                                        {{ form_errors(formassigndetails.observations) }}
+                                    </p>
 
-                        <p class="inline-label">
+                                    <p class="inline-label">
 
-                        </p>
+                                    </p>
+                                </td>
+                                <td>
+                                    BOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <br>
+                                    {{ actions.assign() }}   
+                                    {{ form_rest(form) }}
+                                </td>
+                            </tr>
+                        </table>
                     </form>
                 </div>
 
                 <div id="tab-2" class="with-padding">
-                    <form method="POST" action="">
-                        <p class="inline-label">
-                            {{ form_label(formremovedetails.date) }}
-                            {{ form_widget(formremovedetails.date) }}
-                            {{ form_errors(formremovedetails.date) }}
-                        </p>
-                        <p class="inline-label">
-                            {{ form_label(form1.User) }}
-                            {{ form_widget(form1.User) }}
-                            {{ form_errors(form1.User) }}
-                        </p>
-                        <p class="inline-label">
-                            {{ form_label(formremovedetails.cause) }}
-                            {{ form_widget(formremovedetails.cause) }}
-                            {{ form_errors(formremovedetails.cause) }}
-                        </p>
-                        <p class="inline-label">
-                            {{ form_label(formremovedetails.observations) }}
-                            {{ form_widget(formremovedetails.observations) }}
-                            {{ form_errors(formremovedetails.observations) }}
-                        </p>
-
+                    <form method="POST" action="{{ path("goal_movement_remove",{idGoal:goal.id}) }}">
+                        <table>
+                            <tr>
+                                <td>
+                                    <p class="inline-label">
+                                        {{ form_label(formremovedetails.date) }}
+                                        {{ form_widget(formremovedetails.date) }}
+                                        {{ form_errors(formremovedetails.date) }}
+                                    </p>
+                                    <p class="inline-label">
+                                        {{ form_label(form1.User) }}
+                                        {{ form_widget(form1.User) }}
+                                        {{ form_errors(form1.User) }}
+                                    </p>
+                                    <p class="inline-label">
+                                        {{ form_label(formremovedetails.cause) }}
+                                        {{ form_widget(formremovedetails.cause) }}
+                                        {{ form_errors(formremovedetails.cause) }}
+                                    </p>
+                                    <p class="inline-label">
+                                        {{ form_label(formremovedetails.observations) }}
+                                        {{ form_widget(formremovedetails.observations) }}
+                                        {{ form_errors(formremovedetails.observations) }}
+                                    </p>
+                                </td>
+                                <td aling="center">
+                                  BOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <br>
+                                    {{ actions.remove() }}   
+                                    {{ form_rest(form) }}
+                                </td>
+                            </tr>
+                        </table>
                     </form>
                 </div>
             </div>

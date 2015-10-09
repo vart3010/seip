@@ -19,6 +19,7 @@ use Pequiven\ArrangementProgramBundle\Form\MovementEmployee\AssignGoalType;
 use Pequiven\ArrangementProgramBundle\Form\MovementEmployee\RemoveGoalType;
 use Pequiven\ArrangementProgramBundle\Form\MovementEmployee\AssignGoalDetailsType;
 use Pequiven\ArrangementProgramBundle\Form\MovementEmployee\RemoveGoalDetailsType;
+use Pequiven\ArrangementProgramBundle\Repository\MovementEmployee\MovementEmployeeRepository;
 
 class MovementEmployeeController extends SEIPController {
 
@@ -34,11 +35,11 @@ class MovementEmployeeController extends SEIPController {
 
         //FORMULARIO DE USUARIOS
         $form = $this->createForm(new AssignGoalType(), $MovementEmployee);
-        $form1 = $this->createForm(new RemoveGoalType(), $MovementEmployee);
+        $form1 = $this->createForm(new RemoveGoalType($id), $MovementEmployee);
 
         //FORMULARIO DE DETALLES
         $formassigndetails = $this->createForm(new AssignGoalDetailsType(), $MovementEmployeeDetails);
-        $formremovedetails = $this->createForm(new RemoveGoalDetailsType($id), $MovementEmployeeDetails);
+        $formremovedetails = $this->createForm(new RemoveGoalDetailsType(), $MovementEmployeeDetails);
 
         return $this->render('PequivenArrangementProgramBundle:MovementEmployee:show.html.twig', array(
                     'goal' => $entity,
@@ -48,6 +49,75 @@ class MovementEmployeeController extends SEIPController {
                     'formassigndetails' => $formassigndetails->createView(),
                     'formremovedetails' => $formremovedetails->createView()
         ));
+    }
+
+    public function assignAction(Request $request) {
+
+        $id = $request->get('idGoal');
+
+        $em = $this->getDoctrine()->getManager();
+        $goal = $em->getRepository('PequivenArrangementProgramBundle:Goal')->findOneById($id);
+
+        $details = new MovementDetails();
+        $form = $this->createForm(new AssignGoalDetailsType(), $details);
+        $form->handleRequest($request);
+
+        $movement = new MovementEmployee();
+        $formUser = $this->createForm(new AssignGoalType(), $movement);
+        $formUser->handleRequest($request);
+
+        $em->getConnection()->beginTransaction();
+
+        if ($form->isSubmitted()) {
+
+            //DATOS DE AssignGoalDetailsType
+            $cause = $request->get("AssignGoalDetails")["cause"];
+            $date = $request->get("AssignGoalDetails")["date"];
+            $date = str_replace("/", "-", $date);
+            $date = new \DateTime($date);
+            $obs = $request->get("AssignGoalDetails")["observations"];
+
+            //DATOS AUDITORIA
+            $login = $this->getUser();
+
+            //DATOS DE AssignGoalType
+            $id_user = ($request->get("AssignGoal")["User"]);
+            $user = $em->getRepository('PequivenSEIPBundle:User')->findOneById($id_user);
+
+            //CARGO LOS DATOS DE DETALLE EN DB
+            $details = new MovementDetails();
+            $details->setCreatedBy($login);
+            $details->setReal_advance($goal->getResultReal());
+            $details->setAdvance($goal->getAdvance());
+            $details->setBeforePenalty($goal->getresultBeforepenalty());
+            $details->setDate($date);
+            $details->setType('I');
+            $details->setCause($cause);
+            $details->setObservations($obs);
+
+            $em->persist($details);
+
+            //CARGO LOS DATOS DE MOVIMIENTO EN DB
+            $movement = new MovementEmployee();
+            $movement->setCreatedBy($login);
+            $movement->setType('Goal');
+            $movement->setUser($user);
+            $movement->setGoal($goal);
+            $movement->setPeriod($this->getPeriodService()->getPeriodActive());
+            $movement->setIn($details);
+
+            $em->persist($movement);
+
+            $em->flush();
+        }
+
+        return $this->redirect($this->generateUrl('goal_movement', array('idGoal' => $id)));
+    }
+
+    public function removeAction(Request $request) {
+        $id = $request->get('idGoal');
+        var_dump($id);
+        die();
     }
 
 }

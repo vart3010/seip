@@ -30,7 +30,7 @@ class RemoveGoalDetailsType extends AbstractType {
                     'label_attr' => array('class' => 'label bold'),
                     'format' => 'd/M/y',
                     'widget' => 'single_text',
-                    'label' => 'Fecha de Retiro',
+                    'label' => 'Fecha de Retiro de la Meta',
                     'required' => true,
                     'attr' => array('class' => 'input input-large'),
                     'required' => true,

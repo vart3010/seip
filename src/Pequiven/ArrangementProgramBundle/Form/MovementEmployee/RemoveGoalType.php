@@ -13,11 +13,11 @@ use Pequiven\ArrangementProgramBundle\Entity\Goal;
 class RemoveGoalType extends AbstractType {
 
     public function buildForm(FormBuilderInterface $builder, array $options) {
-
+        $id = $this->id;
         $builder
                 ->add('User', null, array(
-                    'query_builder' => function(UserRepository $repository) {
-                        return $repository->findQuerytoRemoveAssingedGoal(13451);
+                    'query_builder' => function(UserRepository $repository) use ($id) {
+                        return $repository->findQuerytoRemoveAssingedGoal($id);
                     },
                     'label' => 'Empleados Asignados',
                     'empty_value' => 'Seleccione...',
@@ -42,12 +42,11 @@ class RemoveGoalType extends AbstractType {
         return 'RemoveGoal';
     }
 
-    protected $idGoal;
+    protected $id;
 
-    public function __construct(Goal $id) {
-        var_dump($id);
-        die();
-        $this->goal = $id;
+    public function __construct($id) {
+        $this->id = $id;
+      
     }
 
 }
