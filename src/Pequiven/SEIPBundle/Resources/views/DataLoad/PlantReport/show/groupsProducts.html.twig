@@ -5,6 +5,11 @@
         <h3> {{ 'pequiven_seip.productsGroups'|trans }}&nbsp;
             ({{ groupsProducts|length }})
         </h3>
+        <div class="button-group absolute-right compact">
+            {% if periodService().isAllowPlanningReport %}
+                <a class="button icon-list-add" href="{{ path('pequiven_product_report_create',{plantReport: plant_report.id}) }}">{{ 'pequiven.add'|trans({},'messages') }}</a>
+            {% endif %}
+        </div>
     </div>
     <div class="with-padding">
         <table class="simple-table responsive-table tables-extras" id="sorting-example2">

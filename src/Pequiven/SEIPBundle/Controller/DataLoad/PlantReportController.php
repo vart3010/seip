@@ -106,6 +106,8 @@ class PlantReportController extends SEIPController {
 
         $totalStops = CommonObject::fillArrayMonth($totalStops);
         $totalHours = CommonObject::fillArrayMonth($totalHours);
+        
+        $hasGroupProducts = false;
 
         /**
          * METODO PARA CUANDO HAY GRUPO DE PLANTAS
@@ -115,6 +117,18 @@ class PlantReportController extends SEIPController {
          * SERVICIOS
          */
         if (count($childs) > 0) {
+            
+            $productReports = $plantReport->getProductsReport();
+            if(count($productReports) > 0){
+                foreach($productReports as $productReport){
+                    if(count($productReport->getProduct()->getComponents()) > 0){
+                        $hasGroupProducts = true;
+                        break;
+                    }
+                }
+            }
+            
+            //SECCIÒN PRODUCTOS HEREDADOS
             foreach ($childs as $child) {
                 foreach ($child->getPlantReport() as $plantReportByChild) {
                     //PLANT STOP PLANNING
@@ -130,27 +144,27 @@ class PlantReportController extends SEIPController {
 
                         $product = $productReports->getProduct();
                         //SE LLENAN LOS DOS VECTORES DE PRODUCTOS
-                        if (count($product->getComponents()) > 0) {
-                            $cont = 0;
-                            $groupNames = "";
-                            foreach ($product->getComponents() as $productChildren) {
-                                if ($cont == 0) {
-                                    $groupNames .= $productChildren->getName();
-                                } else {
-                                    $groupNames .= "," . $productChildren->getName();
-                                }
-                                $cont++;
-                            }
-                            //PRODUCTOS POR GRUPOS
-                            $totalGroupsProducts[] = array(
-                                "id" => $product->getId(),
-                                "name" => $product->getName(),
-                                "line" => $product->getProductionLine(),
-                                "unit" => $product->getProductUnit(),
-                                "entityProductReport" => $productReports,
-                                "groupsProducts" => $groupNames
-                            );
-                        } else {
+//                        if (count($product->getComponents()) > 0) {
+//                            $cont = 0;
+//                            $groupNames = "";
+//                            foreach ($product->getComponents() as $productChildren) {
+//                                if ($cont == 0) {
+//                                    $groupNames .= $productChildren->getName();
+//                                } else {
+//                                    $groupNames .= "," . $productChildren->getName();
+//                                }
+//                                $cont++;
+//                            }
+//                            //PRODUCTOS POR GRUPOS
+//                            $totalGroupsProducts[] = array(
+//                                "id" => $product->getId(),
+//                                "name" => $product->getName(),
+//                                "line" => $product->getProductionLine(),
+//                                "unit" => $product->getProductUnit(),
+//                                "entityProductReport" => $productReports,
+//                                "groupsProducts" => $groupNames
+//                            );
+//                        } else {
                             if (!CommonObject::validIdExist($product->getId(), $totalProducts)) {
                                 //if (!$this->validIdExist($product->getId(), $totalProducts)) {
                                 //PRODUCTOS
@@ -162,7 +176,7 @@ class PlantReportController extends SEIPController {
                                     "entityProductReport" => $productReports
                                 );
                             }
-                        }
+//                        }
                     }
 
                     //SERVICIOS
@@ -181,6 +195,34 @@ class PlantReportController extends SEIPController {
                                 "alicuota" => $alicuota
                             );
                         }
+                    }
+                }
+            }
+            
+            if($hasGroupProducts){
+                foreach ($plantReport->getProductsReport() as $productReports) {
+                    $product = $productReports->getProduct();
+                    //SE LLENAN LOS DOS VECTORES DE PRODUCTOS
+                    if (count($product->getComponents()) > 0) {
+                        $cont = 0;
+                        $groupNames = "";
+                        foreach ($product->getComponents() as $productChildren) {
+                            if ($cont == 0) {
+                                $groupNames .= $productChildren->getName();
+                            } else {
+                                $groupNames .= "," . $productChildren->getName();
+                            }
+                            $cont++;
+                        }
+                        //PRODUCTOS POR GRUPOS
+                        $totalGroupsProducts[] = array(
+                            "id" => $product->getId(),
+                            "name" => $product->getName(),
+                            "line" => $product->getProductionLine(),
+                            "unit" => $product->getProductUnit(),
+                            "entityProductReport" => $productReports,
+                            "groupsProducts" => $groupNames
+                        );
                     }
                 }
             }

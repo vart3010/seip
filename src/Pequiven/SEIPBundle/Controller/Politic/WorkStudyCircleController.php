@@ -190,6 +190,7 @@ class WorkStudyCircleController extends SEIPController {
         $isALlowToEdit = $workStudyCircleService->isAllowToEdit($workStudyCircle);
         $isAllowToAddMembers = $workStudyCircleService->isAllowToAddMembers($workStudyCircle);
         $isAllowToEditMembers = $workStudyCircleService->isAllowToEditMembers($workStudyCircle);
+        $isAllowToAddMeetings = $workStudyCircleService->isAllowToAddMeetings($workStudyCircle);
 
         return $this->render('PequivenSEIPBundle:Politic:WorkStudyCircle\show.html.twig', array(
                     'workStudyCircle' => $workStudyCircle,
@@ -199,6 +200,8 @@ class WorkStudyCircleController extends SEIPController {
                     'user' => $user,
                     'isAllowToEdit' => $isALlowToEdit,
                     'isAllowToAddMembers' => $isAllowToAddMembers,
+                    'isAllowToEditMembers' => $isAllowToEditMembers,
+                    'isAllowToAddMeetings' => $isAllowToAddMeetings,
         ));
     }
     
@@ -215,6 +218,7 @@ class WorkStudyCircleController extends SEIPController {
         $isALlowToEdit = $workStudyCircleService->isAllowToEdit($workStudyCircle);
         $isAllowToAddMembers = $workStudyCircleService->isAllowToAddMembers($workStudyCircle);
         $isAllowToEditMembers = $workStudyCircleService->isAllowToEditMembers($workStudyCircle);
+        $isAllowToAddMeetings = $workStudyCircleService->isAllowToAddMeetings($workStudyCircle);
 
         return $this->render('PequivenSEIPBundle:Politic:WorkStudyCircle\showPhase.html.twig', array(
                     'workStudyCircle' => $workStudyCircle,
@@ -224,6 +228,8 @@ class WorkStudyCircleController extends SEIPController {
                     'user' => $user,
                     'isAllowToEdit' => $isALlowToEdit,
                     'isAllowToAddMembers' => $isAllowToAddMembers,
+                    'isAllowToEditMembers' => $isAllowToEditMembers,
+                    'isAllowToAddMeetings' => $isAllowToAddMeetings,
         ));
     }
 
