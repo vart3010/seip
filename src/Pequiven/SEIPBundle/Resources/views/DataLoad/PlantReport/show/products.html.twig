@@ -17,6 +17,7 @@
             {% endif %}
         </div>
     </div>
+
     <div class="with-padding">
         <table class="simple-table responsive-table tables-extras" id="sorting-example2">
             <thead>
@@ -29,39 +30,39 @@
             </thead>
             {% set colspan = 6 %}
             <tbody>
-                {% if(plant_report.plant.childrens|length>0) %}
-                    {% for produc in products %}
-                        <tr>
-                            <td>{{ loop.index }} - {{ produc.name }}</td>
-                            <td>{{ produc.line }}</td>
-                            <td>{{ produc.unit }}</td>
-                            <td>&nbsp;</td>
-                        </tr>
-                    {% endfor %}
-                {% else %}    
-                    {% for productReport in plant_report.productsReport %}
-                        <tr>
-                            <td>{{ loop.index }} - 
-                                {{ generateLink(productReport) }}
-                            </td>
-                            <th scope="row">
-                                {{ productReport.product.productionLine }}
-                            </th>
-                            <td>{{ productReport.product.productUnit }}</td>
-                            <td class="low-padding align-center">
-                                {% if periodService().isAllowPlanningReport %}
-                                    <a href="{{ path("pequiven_product_report_update",{id: productReport.id}) }}" class="button compact icon-pencil">{{ "pequiven_seip.actions.edit"|trans }}</a>
-                                {% endif %}
-                            </td>
-                        </tr>
-                    {% else %}
-                        <tr >
-                            <td colspan="{{ colspan }}" class="empty_row">
-                                {{ "empty.product_report"|trans }}
-                            </td>
-                        </tr>
-                    {% endfor %}
-                {% endif %}
+                {#                {% if(plant_report.plant.childrens|length>0) %}#}
+                {% for product in products %}
+                    <tr>
+                        <td>{{ loop.index }} - {{ generateLink(product.entityProductReport) }}</td>
+                        <td>{{ product.line }}</td>
+                        <td>{{ product.unit }}</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                {% endfor %}
+                {# {% else %}    
+                     {% for productReport in plant_report.productsReport %}
+                         <tr>
+                             <td>{{ loop.index }} - 
+                                 {{ generateLink(productReport) }}
+                             </td>
+                             <th scope="row">
+                                 {{ productReport.product.productionLine }}
+                             </th>
+                             <td>{{ productReport.product.productUnit }}</td>
+                             <td class="low-padding align-center">
+                                 {% if periodService().isAllowPlanningReport %}
+                                     <a href="{{ path("pequiven_product_report_update",{id: productReport.id}) }}" class="button compact icon-pencil">{{ "pequiven_seip.actions.edit"|trans }}</a>
+                                 {% endif %}
+                             </td>
+                         </tr>
+                     {% else %}
+                         <tr >
+                             <td colspan="{{ colspan }}" class="empty_row">
+                                 {{ "empty.product_report"|trans }}
+                             </td>
+                         </tr>
+                     {% endfor %}
+                 {% endif %}#}
 
 
             </tbody>

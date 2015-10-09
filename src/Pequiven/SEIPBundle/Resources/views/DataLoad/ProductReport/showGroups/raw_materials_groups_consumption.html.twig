@@ -1,0 +1,73 @@
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
+
+{% set message = ("pequiven_seip.product_report.question.delete"|trans) %}
+
+<div class="block">
+    <div class="block-title">
+        <h3> {{ 'pequiven_seip.report_template.raw_material'|trans }}&nbsp;
+            ({{ rawMaterial|length }})
+        </h3>
+
+    </div>
+    <div class="with-padding">
+        <table class="simple-table responsive-table tables-extras" id="sorting-example2">
+            <thead>
+                <tr>
+                    <th scope="col" width="10%">{{ 'pequiven_seip.product_report.product_report'|trans }}</th>
+                    <th scope="col" width="10%" class="hide-on-mobile-portrait with-tooltip" title="{{ 'pequiven_seip.totalPlan'|trans }}">{{ 'pequiven_seip.headers.totalPlan'|trans }}</th>
+                    <th scope="col" width="10%" class="hide-on-tablet with-tooltip" title="{{ 'pequiven_seip.totalReal'|trans }}">{{ 'pequiven_seip.headers.totalReal'|trans }}</th>
+                    <th scope="col" width="10%" class="hide-on-tablet with-tooltip" title="{{ 'pequiven_seip.percentage'|trans }}">{{ 'pequiven_seip.headers.percentage'|trans }}</th>
+                    <th scope="col" width="10%" class="hide-on-tablet">{{ 'Aliquot'|trans }}</th>
+                    <th scope="col" width="10%">&nbsp;</th>
+                </tr>
+            </thead>
+            {% set colspan = 9 %}
+            {% set totalPlan = 0 %}
+            {% set totalReal = 0 %}
+            <tbody>
+                {% for raw in rawMaterial%}
+                    {% set totalPlan = totalPlan + raw.tp %}
+                    {% set totalReal = totalReal + raw.tr  %}
+                    <tr>
+                        <td>{{ raw.name }}</td>
+                        <td>{{ raw.tp|myNumberFormat }}</td>
+                        <td>{{ raw.tr|myNumberFormat }}</td>
+                        {% if(raw.tp>0)%}
+                            {% set porc = (raw.tr/raw.tp)*100 %}
+                        {% else %}
+                            {% set porc = 0 %}
+                        {% endif %}
+                        <td>{{ porc|myNumberFormat }}</td>
+                        <td>{{ raw.aliquot }}</td>
+                        <td></td>
+                    <tr>
+                    {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th scope="col" width="10%">{{ 'Total accumulated'|trans }}</th>
+                    <th scope="col" width="10%" class="hide-on-mobile-portrait with-tooltip" title="{{ 'pequiven_seip.totalPlan'|trans }}">
+                        {{ totalPlan|myNumberFormat }}
+                    </th>
+                    <th scope="col" width="10%" class="hide-on-tablet with-tooltip" title="{{ 'pequiven_seip.totalReal'|trans }}">
+                        {{ totalReal|myNumberFormat }}
+                    </th>
+                    <th scope="col" width="10%" class="hide-on-tablet with-tooltip" title="{{ 'pequiven_seip.percentage'|trans }}">
+                        {% if(totalPlan>0)%}
+                            {% set porc = (totalReal/totalPlan)*100 %}
+                        {% else %}
+                            {% set porc = 0 %}
+                        {% endif %}
+                        {{ porc | myNumberFormat }}
+                    </th>
+                    <th scope="col" width="10%" class="hide-on-tablet">&nbsp;
+                    </th>
+                    <th scope="col" width="10%">&nbsp;</th>
+                </tr>
+            </tfoot>
+        </table>
+
+    </div>
+</div>
