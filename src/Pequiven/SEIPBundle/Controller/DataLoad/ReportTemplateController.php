@@ -273,6 +273,18 @@ class ReportTemplateController extends SEIPController {
             $this->domainManager->update($resource);
             return $this->redirect($this->generateUrl('pequiven_report_template_list'));
         }
+        
+        /**
+         * CODIGO QUE VALIDA LOS DIAS PARA NOTIFICAR LA PRODUCCION
+         * SI TIENE EL ROL "ROLE_SEIP_OPERATION_LOAD_FIVE_DAYS"
+         * DEJA CARGAR 5 DIAS ANTES DEL DIA ACTUAL
+         */
+        $fecha = date('d/m/Y');
+        $yesterday = strtotime('-1 day', strtotime($fecha));
+        $yesterday = date('d/m/Y', $yesterday);
+
+        $startDate = strtotime('-5 day', strtotime($fecha));
+        $startDate = date('d/m/Y', $startDate);
 
         $view = $this
                 ->view()
@@ -281,6 +293,8 @@ class ReportTemplateController extends SEIPController {
                 ->setData(array(
             $this->config->getResourceName() => $resource,
             'dateNotification' => $dateNotification,
+            'startDate' => $startDate,
+            'endDate' => $yesterday,
             'form' => $form->createView(),
                 ))
         ;
