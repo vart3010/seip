@@ -106,6 +106,7 @@ class ReportTemplateController extends SEIPController {
             } else if (count($childrens) > 0) { //CON HIJOS
                 $cont = 0;
                 $arrayProductsIds = array();
+                $groupNames = "";
                 foreach ($childrens as $children) {
                     foreach ($children->getProducts() as $productChild) {
                         if (!in_array($productChild->getName(), $arrayProductsIds)) {

@@ -1,0 +1,117 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}
+
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
+
+
+{% block body %}
+    <fieldset class="fieldset">
+        <legend class="legend">{{ 'pequiven_seip.product_report.product_report'|trans }}</legend>
+        <div class="columns">
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'pequiven_seip.plant_report.plant_report'|trans }}</label>
+                    <a href="{{ path("pequiven_plant_report_show",{id:product_report.plantReport.id}) }}">
+                        <i class=""></i>&nbsp;&nbsp;
+                        {{ product_report.name }}
+                    </a>
+                </p>
+            </div>
+            {#<div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'pequiven_seip.plant_report.plant_report'|trans }}</label>
+                    {{ generateLink(product_report.plantReport) }}
+                </p>
+            </div>#}
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'Production line'|trans }}</label>
+                    {{ product_report.product.productionLine }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'pequiven_seip.products'|trans }}</label>
+                    {% for product in product_report.product.components %}
+                        {{ product }}<br>
+                    {% endfor %}
+                </p>
+            </div>
+            {#<div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'Product unit'|trans }}</label>
+                    {{ product_report.product.productUnit }}
+                </p>
+            </div>
+            <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'Is raw material'|trans }}</label>
+                    {{ product_report.product.isRawMaterial|render_yes_no }}
+                </p>
+            </div>#}
+            <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'Enabled'|trans }}</label>
+                    {{ product_report.enabled|render_yes_no }}
+                </p>
+            </div>
+            {#<div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'Type product'|trans }}</label>
+                    {{ product_report.product.typeProductLabel | trans }}
+                </p>
+            </div>#}
+            <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'Company'|trans }}</label>
+                    {{ product_report.plantReport.company }}
+                </p>
+            </div>
+            <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'Location'|trans }}</label>
+                    {{ product_report.plantReport.location }}
+                </p>
+            </div>
+            <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'Entity'|trans }}</label>
+                    {{ product_report.plantReport.entity }}
+                </p>
+            </div>
+            <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'Raw material'|trans }}</label>
+                    {% for rawMaterial in product_report.product.rawMaterials %}
+                        {{ rawMaterial }}{% if loop.last %}.{% else %},{% endif %}
+                    {% else %}
+                        <span class="tag ">{{ "empty.no_raw_material"|trans }}</span>
+                    {% endfor %}
+                </p>
+            </div>
+        </div>
+
+    </fieldset>
+
+    <br /><br />
+    {% set labelProductPlanning = ("pequiven_seip.gross"|trans) %}
+    {% set totalProduct = totalProductGross %}
+    {% include 'PequivenSEIPBundle:DataLoad:ProductReport/showGroups/products_groups_planning.html.twig' %}
+    <br /><br />
+
+    {% set labelProductPlanning = ("pequiven_seip.net"|trans) %}
+    {% set totalProduct = totalProductNet %}
+    {% include 'PequivenSEIPBundle:DataLoad:ProductReport/showGroups/products_groups_planning.html.twig' %}
+    <br /><br />
+
+    {% include 'PequivenSEIPBundle:DataLoad:ProductReport/showGroups/products_groups_details_daily_months.html.twig' %}
+    <br /><br />
+    {% include 'PequivenSEIPBundle:DataLoad:ProductReport/showGroups/raw_materials_groups_consumption.html.twig' %}
+    <br /><br />
+    {% include 'PequivenSEIPBundle:DataLoad:ProductReport/showGroups/unrealized_productions_groups.html.twig' %}
+    <br /><br />
+    {% include 'PequivenSEIPBundle:DataLoad:ProductReport/showGroups/inventorys_groups.html.twig' %}
+
+
+{% endblock %}

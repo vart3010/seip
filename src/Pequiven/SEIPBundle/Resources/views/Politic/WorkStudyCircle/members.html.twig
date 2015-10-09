@@ -10,13 +10,13 @@
 <div class="block" >
     <div class="block-title">
         <h3 class="ng-binding">{{ "workStudyCircle.members.title"|trans }}</h3>
-        {#{% if isAllowToEdit == true and workStudyCircle.phase == 1 %}
+        {% if isAllowToAddMembers == true %}
             <div class="button-group absolute-right compact">
                 <a class="button icon-list-add " href="{{ path("pequiven_work_study_circle_add_others_members",{idWorkStudyCircle:workStudyCircle.id})}}"  title="">
                     {{ "workStudyCircle.members.add"|trans }}&nbsp;
                 </a>
             </div>
-        {% endif %}#}
+        {% endif %}
     </div>
     <div class="with-padding" ng-controller="WorkStudyCircleController">
         <table class="simple-table responsive-table tables-extras" id="sorting-example2">

@@ -37,13 +37,12 @@ class MeetingType extends AbstractType {
                     'required' => false,
                     'label_attr' => array('class' => 'label'),
                     'attr' => array('class' => 'input input-xlarge', 'style' => 'text-transform:uppercase;')));
-        
-            $builder->add('duration', 'time', array(
-                'label' => 'Duración',
-                'required' => true,
-                'label_attr' => array('class' => 'label'),
-                'attr' => array('class' => 'input', 'style' => 'text-transform:uppercase;')));
-        
+
+        $builder->add('duration', 'time', array(
+            'label' => 'Duración',
+            'required' => true,
+            'label_attr' => array('class' => 'label'),
+            'attr' => array('class' => 'input', 'style' => 'text-transform:uppercase;')));
     }
 
     /**

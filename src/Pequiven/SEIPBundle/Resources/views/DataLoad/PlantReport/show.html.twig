@@ -103,6 +103,12 @@
     <br /><br />
     {% include 'PequivenSEIPBundle:DataLoad:PlantReport/show/products.html.twig' %}
     <br /><br />
+
+    {% if(groupsProducts|length>0) %}
+        <br /><br />
+        {% include 'PequivenSEIPBundle:DataLoad:PlantReport/show/groupsProducts.html.twig' %}
+        <br /><br />
+    {% endif %}
     {% include 'PequivenSEIPBundle:DataLoad:PlantReport/show/services.html.twig' %}
     <br /><br />
     {% if(plant_report.plant.childrens|length==0) %}
