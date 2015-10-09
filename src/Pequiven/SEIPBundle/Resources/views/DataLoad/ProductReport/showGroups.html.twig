@@ -33,7 +33,7 @@
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">{{ 'pequiven_seip.products'|trans }}</label>
-                    
+
                     {% for product in product_report.product.components %}
                         {{ product }}<br>
                     {% endfor %}
@@ -84,11 +84,14 @@
             <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">{{ 'Raw material'|trans }}</label>
-                    {% for rawMaterial in product_report.product.rawMaterials %}
-                        {{ rawMaterial }}{% if loop.last %}.{% else %},{% endif %}
-                    {% else %}
-                        <span class="tag ">{{ "empty.no_raw_material"|trans }}</span>
+                    {% for raw in rawMaterial%}
+                        {{ raw.name }}<br>
                     {% endfor %}
+                    {# {% for rawMaterial in product_report.product.rawMaterials %}
+                         {{ rawMaterial }}{% if loop.last %}.{% else %},{% endif %}
+                     {% else %}
+                         <span class="tag ">{{ "empty.no_raw_material"|trans }}</span>
+                     {% endfor %}#}
                 </p>
             </div>
         </div>
