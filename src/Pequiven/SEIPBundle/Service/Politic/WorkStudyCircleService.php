@@ -11,7 +11,7 @@ use LogicException;
 use Pequiven\SEIPBundle\Model\Common\CommonObject;
 use Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle;
 
-class workStudyCircleService implements ContainerAwareInterface {
+class WorkStudyCircleService implements ContainerAwareInterface {
 
     private $container;
 
@@ -541,6 +541,30 @@ class workStudyCircleService implements ContainerAwareInterface {
         } else{
             $valid = true;
         }
+        
+        return $valid;
+    }
+    
+    /**
+     * 
+     * @param WorkStudyCircle $workStudyCircle
+     * @return boolean
+     */
+    public function isAllowToAddMembers(\Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle $workStudyCircle){
+        $valid = false;
+        $user = $this->getUser();
+        
+        return $valid;
+    }
+    
+    /**
+     * 
+     * @param WorkStudyCircle $workStudyCircle
+     * @return boolean
+     */
+    public function isAllowToEditMembers(\Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle $workStudyCircle){
+        $valid = false;
+        $user = $this->getUser();
         
         return $valid;
     }

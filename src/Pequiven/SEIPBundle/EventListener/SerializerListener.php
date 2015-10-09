@@ -203,18 +203,18 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
         $isEnabledLoadByQuarterSecondReal = false;
 
         //Habilitar la carga del tercer trimestre (Requiere isEnabledLoadByQuarter)
-        $isEnabledLoadByQuarterThird = true;
+        $isEnabledLoadByQuarterThird = false;
         //Habilitar la carga de valores planificados del tercer trimestre (Requiere isEnabledLoadByQuarterThird)
         $isEnabledLoadByQuarterThirdPlanned = false;
         //Habilitar la carga de valores reales del tercer trimestre (Requiere isEnabledLoadByQuarterThird)
-        $isEnabledLoadByQuarterThirdReal = true;
+        $isEnabledLoadByQuarterThirdReal = false;
 
         //Habilitar la carga del cuarto trimestre (Requiere isEnabledLoadByQuarter)
-        $isEnabledLoadByQuarterFourth = false;
+        $isEnabledLoadByQuarterFourth = true;
         //Habilitar la carga de valores planificados del cuarto trimestre (Requiere isEnabledLoadByQuarterFourth)
         $isEnabledLoadByQuarterFourthPlanned = false;
         //Habilitar la carga de valores reales del cuarto trimestre (Requiere isEnabledLoadByQuarterFourth)
-        $isEnabledLoadByQuarterFourthReal = false;
+        $isEnabledLoadByQuarterFourthReal = true;
 
         $month = $date->format('m');
 
@@ -388,10 +388,10 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
         $details = $arrangementProgram->getDetails();
 //        $user = $this->getUser();
 //        if($details->getNotificationInProgressByUser() != null){
-//            if($details->getNotificationInProgressByUser()->getId() === $user->getId() && (($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC && $arrangementProgram->getTacticalObjective()->getGerencia()->getId() == 22) || ($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE && $arrangementProgram->getOperationalObjective()->getGerenciaSecond()->getGerencia()->getId() == 22))){
-//                $data['januaryReal']['isEnabled'] = true;
-//                $data['februaryReal']['isEnabled'] = true;
-//                $data['marchReal']['isEnabled'] = true;
+//            if($details->getNotificationInProgressByUser()->getId() === $user->getId() && (($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC && $arrangementProgram->getTacticalObjective()->getGerencia()->getId() == 18) || ($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE && $arrangementProgram->getOperationalObjective()->getGerenciaSecond()->getGerencia()->getId() == 18))){
+//                $data['julyReal']['isEnabled'] = true;
+//                $data['augustReal']['isEnabled'] = true;
+//                $data['septemberReal']['isEnabled'] = true;
 //            }
 //        }
 

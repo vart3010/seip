@@ -119,6 +119,8 @@ pequiven_objetive:
     objetive_operative: Objetivo Operativo
         
 form:
+    list:
+         managementSystem: Sistema de la Calidad
     ref: Nro. de Referencia
     indicator: Indicador
     trend_analysis: Analisis de Tendencia

@@ -342,9 +342,10 @@
       {% set month = "now"|date("m") %}
         
         {#{% if  indicator.managementSystems | length > 0 and is_granted('ROLE_SEIP_SIG_EVOLUTION_VIEW') %}#}
+        {% if indicator.showEvolutionView %}
         &nbsp;
             {{ buttons.generic_ext(path('pequiven_indicator_evolution', { 'id': indicator.id , 'month': month}),('pequiven.evolution'|trans({},'messages'))) }}
-        {#{% endif %}#}
+        {% endif %}
         &nbsp;
         
     {# end #}
