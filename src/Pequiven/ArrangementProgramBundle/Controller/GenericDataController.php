@@ -219,7 +219,7 @@ class GenericDataController extends SEIPController {
         $user = $this->getUser();
         $criteria = $request->get('filter', $this->config->getCriteria());
         $repository = $this->get('pequiven.repository.sig_management_system');
-        $results = $repository->findBy(array("enabled" => 1));
+        $results = $repository->findBy(array("enabled" => 1, "deletedAt" => NULL));
         $view = $this->view();
         $view->setData($results);
         $view->getSerializationContext()->setGroups(array('id', 'api_list'));

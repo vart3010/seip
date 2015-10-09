@@ -66,10 +66,10 @@ class ProcessManagementSystem extends model
     private $managementSystem;
 
     /**
-     * Causas de Desviación
+     * Proceso de los objetivos
      * 
-     * @var \Pequiven\ObjetiveBundle\Entity\Objetive
-     * @ORM\OneToMany(targetEntity="Pequiven\ObjetiveBundle\Entity\Objetive",mappedBy="processManagementSystem",cascade={"persist","remove"})
+     * @ORM\ManyToMany(targetEntity="Pequiven\ObjetiveBundle\Entity\Objetive", mappedBy="processManagementSystem")
+     * 
      */
     protected $objetive;
     /**
@@ -78,6 +78,7 @@ class ProcessManagementSystem extends model
     public function __construct()
     {
         $this->managementSystem = new \Doctrine\Common\Collections\ArrayCollection();        
+        $this->objetive = new \Doctrine\Common\Collections\ArrayCollection();        
     }
     
     /**
