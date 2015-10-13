@@ -289,7 +289,7 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                 ->add('managementSystems', 'sonata_type_model_autocomplete', array(
                     'property' => array('description'),
                     'multiple' => true,
-                    'required' => false,
+                    'required' => false,                    
                 ))
                 ->add('showEvolutionView', null, array(
                     'required' => false,

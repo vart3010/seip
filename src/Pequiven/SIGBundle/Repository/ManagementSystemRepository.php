@@ -9,7 +9,26 @@ use Pequiven\SEIPBundle\Doctrine\ORM\SeipEntityRepository;
  *
  */
 class ManagementSystemRepository extends SeipEntityRepository
-{
+{   
+    /**
+     * Retorna solo los sistemas de la calidad activos
+     * 
+     * @param array $criteria
+     * @param array $orderBy
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    function getManagementSystemsActives() {
+        
+        $queryBuilder = $this->getQueryBuilder();
+        $queryBuilder
+                ->select('ms')
+                ->andWhere('ms.enabled = 1')
+                ->andWhere('ms.deletedAt IS NULL')                
+            ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
 	/**
      * Crea un paginador para los sistemas de la calidad para la matriz
      * 
