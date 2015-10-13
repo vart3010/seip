@@ -24,7 +24,11 @@ class MeetingController extends SEIPController {
         $idWorkStudyCircle = $request->get('workStudyCircle_id');
         $workStudyCircle = $em->getRepository('PequivenSEIPBundle:Politic\WorkStudyCircle')->findOneBy(array('id' => $idWorkStudyCircle));
 
-        $members = $workStudyCircle->getUserWorkerId();
+        if($workStudyCircle->getPhase() == \Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle::PHASE_ONE){
+            $members = $workStudyCircle->getUserWorkerId();
+        } elseif($workStudyCircle->getPhase() == \Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle::PHASE_TWO){
+            $members = $workStudyCircle->getMembers();
+        }
 
         $meeting = new Meeting();
         $form = $this->createForm(new MeetingType, $meeting);
@@ -35,7 +39,11 @@ class MeetingController extends SEIPController {
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $members = $workStudyCircle->getUserWorkerId();
+            if($workStudyCircle->getPhase() == \Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle::PHASE_ONE){
+                $members = $workStudyCircle->getUserWorkerId();
+            } elseif($workStudyCircle->getPhase() == \Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle::PHASE_TWO){
+                $members = $workStudyCircle->getMembers();
+            }
 
             $idsCheck = array();
             $obsUser = array();
@@ -225,7 +233,11 @@ class MeetingController extends SEIPController {
 
         $workStudyCircle = $meeting->getWorkStudyCircle();
 
-        $members = $workStudyCircle->getUserWorkerId();
+        if($workStudyCircle->getPhase() == \Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle::PHASE_ONE){
+            $members = $workStudyCircle->getUserWorkerId();
+        } elseif($workStudyCircle->getPhase() == \Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle::PHASE_TWO){
+            $members = $workStudyCircle->getMembers();
+        }
 
         $assistance = $meeting->getAssistances();
         $assistanceIds = array();

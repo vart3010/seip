@@ -7,7 +7,11 @@
     <script src="{{  asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.input.js') }}"></script>
 {% endblock javascripts_base %}
 {% set circle = meeting.workStudyCircle.id %}
-{% set route_index = 'pequiven_work_study_circle_show' %}
+{% if meeting.workStudyCircle.phase == 1 %}
+    {% set route_index = 'pequiven_work_study_circle_show' %}
+{% elseif  meeting.workStudyCircle.phase == 2 %}
+    {% set route_index = 'pequiven_work_study_circle_show_phase' %}
+{% endif %}
 
 {% block before_body %}
     {{ contentHeader(
@@ -26,7 +30,7 @@
         <div class="new-row-mobile twelve-columns-mobile twelve-columns-tablet twelve-columns-mobile">
             <p class="inline-label">
                 <label class="label">{{ 'workStudyCircle.form.nombre'|trans }}</label>
-                <a href="{{ path('pequiven_work_study_circle_show',{id:circle }) }}">
+                <a href="{{ path(route_index,{id:circle }) }}">
                     ({{ meeting.workStudyCircle.codigo }})                    
                     {{ meeting.workStudyCircle.name }}
                 </a>

@@ -2,8 +2,12 @@
 
 {% trans_default_domain 'PequivenSEIPBundle' %}
 
-{% set route_index = 'pequiven_work_study_circle_show' %}
 {% set circle = proposal.workStudyCircle.id %}
+{% if proposal.workStudyCircle.phase == 1 %}
+    {% set route_index = 'pequiven_work_study_circle_show' %}
+{% elseif  proposal.workStudyCircle.phase == 2 %}
+    {% set route_index = 'pequiven_work_study_circle_show_phase' %}
+{% endif %}
 {% block before_body %}
     {{ contentHeader(
         { ( path(route_index, { id:circle }) ): ("workStudyCircle.title"|trans({},'workStudyCircle') )},
@@ -20,7 +24,7 @@
                 <div class="field-block button-height">
                     <label class="label">Circulo</label>
                         <div style="font-weight: bold">
-                            <a href="{{ path('pequiven_work_study_circle_show',{id:circle }) }}">
+                            <a href="{{ path(route_index,{id:circle }) }}">
                                 ({{ proposal.workStudyCircle.codigo }})
                                 {{ proposal.workStudyCircle.name }}
                             </a>
