@@ -2,6 +2,7 @@
 
 namespace Pequiven\SIGBundle\Repository;
 
+use Doctrine\DBAL\Query\QueryBuilder;
 use Pequiven\SEIPBundle\Doctrine\ORM\SeipEntityRepository;
 
 /**
@@ -26,7 +27,7 @@ class ManagementSystemRepository extends SeipEntityRepository
                 ->andWhere('ms.deletedAt IS NULL')                
             ;
 
-        return $queryBuilder->getQuery()->getResult();
+        return $queryBuilder;
     }
 
 	/**
