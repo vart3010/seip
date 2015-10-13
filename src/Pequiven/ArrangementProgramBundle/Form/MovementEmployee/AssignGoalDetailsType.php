@@ -5,6 +5,7 @@ namespace Pequiven\ArrangementProgramBundle\Form\MovementEmployee;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Pequiven\ArrangementProgramBundle\Model\MovementEmployee;
 
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -18,8 +19,7 @@ class AssignGoalDetailsType extends AbstractType {
                 ->add('cause', 'choice', array(
                     'label' => 'Motivo o Causa',
                     'required' => true,
-                    'choice_list' => new ChoiceList(
-                            array('Asig', 'Sup'), array('Asignación', 'Suplencia')),
+                    'choice_list' => \Pequiven\SIGBundle\Entity\ProcessManagementSystem::getlevelProcessArray(), 
                     'label_attr' => array('class' => 'label'),
                     'attr' => array(
                         'class' => 'select2 input-large form-control',

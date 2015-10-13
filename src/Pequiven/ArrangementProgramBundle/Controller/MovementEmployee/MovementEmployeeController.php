@@ -94,7 +94,6 @@ class MovementEmployeeController extends SEIPController {
             $details->setType('I');
             $details->setCause($cause);
             $details->setObservations($obs);
-
             $em->persist($details);
 
             //CARGO LOS DATOS DE MOVIMIENTO EN DB
@@ -105,10 +104,16 @@ class MovementEmployeeController extends SEIPController {
             $movement->setGoal($goal);
             $movement->setPeriod($this->getPeriodService()->getPeriodActive());
             $movement->setIn($details);
-
             $em->persist($movement);
 
-            $em->flush();
+            //VALIDACIÓN DE INTEGRIDAD DE DATOS EN REGISTRO DE BD
+            try {
+                $em->flush();
+                $em->getConnection()->commit();
+            } catch (Exception $e) {
+                $em->getConnection()->rollback();
+                throw $e;
+            }
         }
 
         return $this->redirect($this->generateUrl('goal_movement', array('idGoal' => $id)));
