@@ -78,7 +78,7 @@ class ProposalController extends SEIPController {
 
                         $this->get('session')->getFlashBag()->add('success', 'Propuestas guardadas correctamente');
 
-                        return $this->redirect($this->generateUrl('pequiven_work_study_circle_show', array("id" => $workStudyCircle->getId())));
+                        return $this->redirect($this->generateUrl('pequiven_work_study_circle_show_phase', array("id" => $workStudyCircle->getId())));
                     }
                 } else {
                     $this->get('session')->getFlashBag()->add('error', 'Debe agregar 2 propuestas por línea estratégica');

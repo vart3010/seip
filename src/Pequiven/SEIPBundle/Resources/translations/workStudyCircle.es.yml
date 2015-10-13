@@ -19,8 +19,15 @@ workStudyCircle:
             nombre: Nombre
             telefono: Teléfono
             ext: Extensión
+        coordinatorDiscussion:
+            title: Datos del Coordinador de Debate
+            nombre: Nombre
+            telefono: Teléfono
+            ext: Extensión
     coordinator:
         add: Añadir Coordinador
+    coordinatorDiscussion:
+        add: Añadir Coordinador de Debate
     members:
         title: Miembros
         add: Añadir Miembros
