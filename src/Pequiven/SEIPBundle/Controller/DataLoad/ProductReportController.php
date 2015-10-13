@@ -51,6 +51,7 @@ class ProductReportController extends SEIPController {
     }
 
     public function showGroupsAction(Request $request) {
+
         $productReport = $this->get("pequiven.repository.product_report")->findOneBy(array("id" => $request->get("id")));
         $periodService = $this->getPeriodService();
         $labelsMonths = CommonObject::getLabelsMonths();
@@ -185,6 +186,7 @@ class ProductReportController extends SEIPController {
                 }
             }
         }
+        $productReport = $this->get("pequiven.repository.product_report")->findOneBy(array("id" => $request->get("id")));
 
         $view = $this
                 ->view()
