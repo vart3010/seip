@@ -159,13 +159,15 @@ class ReportTemplateController extends SEIPController {
      */
     public function loadAction(Request $request) {
         $dateString = null;
-        if ($this->getSecurityService()->isGranted('ROLE_SEIP_DATA_LOAD_CHANGE_DATE')) {
+        if ($this->getSecurityService()->isGranted(array('ROLE_SEIP_DATA_LOAD_CHANGE_DATE','ROLE_SEIP_OPERATION_LOAD_FIVE_DAYS'))) {
             $dateString = $request->get('dateNotification', null);
         }
         $plantReportToLoad = $request->get('plant_report', null);
         if ($plantReportToLoad === null) {
             return $this->redirect($this->generateUrl('pequiven_plant_report_index'));
         }
+     
+        
         $dateNotification = null;
         if ($dateString !== null) {
             $dateNotification = \DateTime::createFromFormat('d/m/Y', $dateString);
@@ -274,6 +276,14 @@ class ReportTemplateController extends SEIPController {
             return $this->redirect($this->generateUrl('pequiven_report_template_list'));
         }
 
+        /**
+         * CODIGO QUE VALIDA LOS DIAS PARA NOTIFICAR LA PRODUCCION
+         * SI TIENE EL ROL "ROLE_SEIP_OPERATION_LOAD_FIVE_DAYS"
+         * DEJA CARGAR 5 DIAS ANTES DEL DIA ACTUAL
+         */
+        $fecha = date('d/m/Y');
+       
+
         $view = $this
                 ->view()
                 ->setTemplate($this->config->getTemplate('load.html'))
@@ -281,11 +291,18 @@ class ReportTemplateController extends SEIPController {
                 ->setData(array(
             $this->config->getResourceName() => $resource,
             'dateNotification' => $dateNotification,
+            'startDate' => $this->getTransfDate($fecha, -5),
+            'endDate' => $this->getTransfDate($fecha, -1),
             'form' => $form->createView(),
                 ))
         ;
 
         return $this->handleView($view);
+    }
+
+    function getTransfDate($fecha, $dia) {
+        list($day, $mon, $year) = explode('/', $fecha);
+        return date('d/m/Y', mktime(0, 0, 0, $mon, $day + $dia, $year));
     }
 
     /**

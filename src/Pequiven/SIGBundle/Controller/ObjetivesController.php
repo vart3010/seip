@@ -289,7 +289,18 @@ class ObjetivesController extends ResourceController
                         }
                         
                         $activeSheet->setCellValue('O'.$rowIniOpe, $textArrangementProgramsOperatives);//Seteamos los Programas de Gestión del Objetivo Operativo
-                        $activeSheet->setCellValue('H'.$rowIniOpe, $objetiveOperative->getProcessManagementSystem());//Seteamos el proceso
+                        
+                        //Si el objetivo operativo tiene un proceso de sistema de gestion asociado
+                        $processManagement = $objetiveOperative->getProcessManagementSystem();
+                        $countProcessManagement =  count($processManagement);
+                        if ($countProcessManagement == 1) {                          
+                            foreach ($processManagement as $process) {
+                                $activeSheet->setCellValue('H'.$rowIniOpe, $process->getDescription());//Seteamos el proceso                                                          
+                            }                          
+                        }else{                                                    
+                            $activeSheet->setCellValue('H'.$rowIniOpe, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
+                        }
+
                         $activeSheet->setCellValue('I'.$rowIniOpe, $objetiveOperative->getRef().' '.$objetiveOperative->getDescription());//Seteamos el Objetivo Operativo                        
                         $activeSheet->setCellValue('L'.$rowIniOpe, $objetiveOperative->getGoal());//Seteamos el Peso del Objetivo Operativo
                         

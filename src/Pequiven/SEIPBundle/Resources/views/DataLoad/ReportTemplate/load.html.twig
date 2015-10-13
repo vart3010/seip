@@ -398,7 +398,7 @@
                 $('.detail-status').val({{ constant('Pequiven\\SEIPBundle\\Model\\DataLoad\\Production\\ProductDetailDailyMonth::STATUS_SAVE_PENDING') }});
                 form.submit();
             });
-            {% if is_granted("ROLE_SEIP_DATA_LOAD_CHANGE_DATE") %}
+            {% if (is_granted("ROLE_SEIP_DATA_LOAD_CHANGE_DATE") and is_granted("ROLE_SEIP_OPERATION_LOAD_FIVE_DAYS")) or (is_granted("ROLE_SEIP_DATA_LOAD_CHANGE_DATE")) %}
                 $('#dateNotification').datepicker({
                      changeMonth: true,
                      dateFormat: "dd/mm/yy"
@@ -407,7 +407,27 @@
                     var url = Routing.generate("pequiven_report_template_load",{id: "{{ report_template.id }}" ,dateNotification:changeToDate,plant_report: "{{ app.request.get("plant_report") }}" });
                     window.location.href = url;
                 });
+            {% elseif (is_granted("ROLE_SEIP_OPERATION_LOAD_FIVE_DAYS")) %}
+                //var startDate = '03/10/2015';
+                var startDate = '{{ startDate }}';
+                //var endDate = '08/10/2015';
+                var endDate = '{{ endDate }}';
+                //console.log(endDate);
+                
+                $('#dateNotification').datepicker({
+                     changeMonth: true,
+                     dateFormat: "dd/mm/yy"
+                }).on("change",function(){
+                    var changeToDate = $(this).val();
+                    var url = Routing.generate("pequiven_report_template_load",{id: "{{ report_template.id }}" ,dateNotification:changeToDate,plant_report: "{{ app.request.get("plant_report") }}" });
+                    window.location.href = url;
+                });
+                jQuery("#dateNotification").datepicker( "option", "minDate", startDate );
+                jQuery("#dateNotification").datepicker( "option", "maxDate", endDate );
             {% endif %}
+                
+           
+            
             
             var calculateTotalPnrAcumulate = function(data,useData){
                     var $this = $(this);

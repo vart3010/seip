@@ -4,8 +4,8 @@
 
 {% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
 
-
 {% block body %}
+
     <fieldset class="fieldset">
         <legend class="legend">{{ 'pequiven_seip.product_report.product_report'|trans }}</legend>
         <div class="columns">
@@ -14,7 +14,7 @@
                     <label class="label">{{ 'pequiven_seip.plant_report.plant_report'|trans }}</label>
                     <a href="{{ path("pequiven_plant_report_show",{id:product_report.plantReport.id}) }}">
                         <i class=""></i>&nbsp;&nbsp;
-                        {{ product_report.name }}
+                        {{ product_report.product.name }}
                     </a>
                 </p>
             </div>
@@ -33,6 +33,7 @@
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">{{ 'pequiven_seip.products'|trans }}</label>
+
                     {% for product in product_report.product.components %}
                         {{ product }}<br>
                     {% endfor %}
@@ -83,11 +84,14 @@
             <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">{{ 'Raw material'|trans }}</label>
-                    {% for rawMaterial in product_report.product.rawMaterials %}
-                        {{ rawMaterial }}{% if loop.last %}.{% else %},{% endif %}
-                    {% else %}
-                        <span class="tag ">{{ "empty.no_raw_material"|trans }}</span>
+                    {% for raw in rawMaterial%}
+                        {{ raw.name }}<br>
                     {% endfor %}
+                    {# {% for rawMaterial in product_report.product.rawMaterials %}
+                         {{ rawMaterial }}{% if loop.last %}.{% else %},{% endif %}
+                     {% else %}
+                         <span class="tag ">{{ "empty.no_raw_material"|trans }}</span>
+                     {% endfor %}#}
                 </p>
             </div>
         </div>
