@@ -408,10 +408,11 @@
                     window.location.href = url;
                 });
             {% elseif (is_granted("ROLE_SEIP_OPERATION_LOAD_FIVE_DAYS")) %}
-             var startDate = '03/10/2015';
+                //var startDate = '03/10/2015';
+                var startDate = '{{ startDate }}';
                 //var endDate = '08/10/2015';
-                var endDate = {{ endDate }};
-                console.log(endDate);
+                var endDate = '{{ endDate }}';
+                //console.log(endDate);
                 
                 $('#dateNotification').datepicker({
                      changeMonth: true,

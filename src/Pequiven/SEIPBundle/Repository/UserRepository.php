@@ -231,12 +231,22 @@ class UserRepository extends EntityRepository {
     }
     
     function findQueryUsersCoordinatorPhaseWorkStudyCircle(array $criteria = array()) {
+        $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
+        
         $qb = $this->getQueryBuilder();
         $qb
                 ->addSelect('u')
                 ->innerJoin('u.workStudyCircles', 'wsc')
-                ->andWhere('wsc.phase = 2')
+//                ->andWhere('wsc.phase = 2')
         ;
+        
+        if(($workStudyCircle = $criteria->remove('WorkStudyCircle')) != null){
+            $qb
+                ->andWhere('wsc.id = :workStudyCircle')
+                ->setParameter('workStudyCircle', $workStudyCircle)
+                    ;
+        }
+        
         return $qb;
     }
 

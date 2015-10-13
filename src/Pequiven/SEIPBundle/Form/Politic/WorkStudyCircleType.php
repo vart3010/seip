@@ -8,6 +8,8 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class WorkStudyCircleType extends AbstractType {
 
+    protected $workStudyCircle;
+    
     /**
      * @author Victor Tortolero
      * @param FormBuilderInterface $builder
@@ -95,8 +97,8 @@ class WorkStudyCircleType extends AbstractType {
                     'required' => true,
                 ))
                 ->add('members', null, array(
-                    'query_builder' => function(\Pequiven\SEIPBundle\Repository\UserRepository $repository2) {
-                        return $repository2->findQueryUsersCoordinatorPhaseWorkStudyCircle();
+                    'query_builder' => function(\Pequiven\SEIPBundle\Repository\UserRepository $repository2){
+                        return $repository2->findQueryUsersCoordinatorPhaseWorkStudyCircle(array('WorkStudyCircle' => $this->workStudyCircle));
                     },
                     'label' => 'Coordinadores',
                     'label_attr' => array('class' => 'label'),
@@ -127,6 +129,11 @@ class WorkStudyCircleType extends AbstractType {
      */
     public function getName() {
         return 'workStudyCircle_data';
+    }
+    
+    public function __construct ($workStudyCircle = null)
+    {
+        $this->workStudyCircle = $workStudyCircle;
     }
 
 }
