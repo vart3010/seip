@@ -270,21 +270,21 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                 if ($this->isGranted('ROLE_SEIP_SIG_ARRANGEMENT_PROGRAM_LIST_ALL')) {
                     $pending
                             ->addChild('sig.arrangement_program.visualize.for_reviewing', array(
-                                'route' => 'pequiven_seip_arrangementprogram_for_reviewing',
+                                'route' => 'pequiven_seip_arrangementprogram_for_reviewing_sig',
                             ))
                             ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.arrangement_program.visualize.for_reviewing', $section)));
                 }
                 if ($this->isGranted('ROLE_SEIP_SIG_ARRANGEMENT_PROGRAM_LIST_ALL')) {
                     $pending
                             ->addChild('sig.arrangement_program.visualize.for_approving', array(
-                                'route' => 'pequiven_seip_arrangementprogram_for_approving',
+                                'route' => 'pequiven_seip_arrangementprogram_for_approving_sig',
                             ))
                             ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.arrangement_program.visualize.for_approving', $section)));
                 }
                 if ($this->isGranted('ROLE_SEIP_SIG_ARRANGEMENT_PROGRAM_LIST_ALL')) {
                     $pending
                             ->addChild('sig.arrangement_program.visualize.for_notifying', array(
-                                'route' => 'pequiven_seip_arrangementprogram_for_notifying',
+                                'route' => 'pequiven_seip_arrangementprogram_for_notifying_sig',
                             ))
                             ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.arrangement_program.visualize.for_notifying', $section)));
                 }
