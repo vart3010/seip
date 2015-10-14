@@ -14,8 +14,20 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
  */
 class ArrangementProgramSigController extends ResourceController
 {
-    public function evolutionAction()
+    public function evolutionAction(Request $request)
     {
-        return $this->render('PequivenSIGBundle:ArrangementProgram:evolution.html.twig');
+    	$id = $request->get("id");
+        $em = $this->getDoctrine()->getManager();
+    	
+    	$ArrangementProgram = $em->getRepository('PequivenArrangementProgramBundle:ArrangementProgram')->findWithData($id);
+
+    	$view = $this
+            ->view()
+            ->setTemplate($this->config->getTemplate('evolution.html'))
+            ->setData(array(
+                'ArrangementProgram'  => $ArrangementProgram,
+            ));
+
+        return $this->handleView($view);
     }
 }

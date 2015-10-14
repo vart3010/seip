@@ -19,7 +19,18 @@
 {% endblock %} 
 
 {% block body %}
-
-<h1>AL AIRE YEAAA!!! </h1>
+<fieldset class="fieldset">
+        <legend class="legend">{{ 'pequiven.arrangement_program.arrangement_program'|trans }}&nbsp;<b></b></legend>
+        
+         <div class="columns">
+             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'pequiven.ref'|trans({},'messages') }}</label>
+                    {{ generateLink(ArrangementProgram) }}
+                </p>
+             </div>
+            
+        </div>
+    </fieldset>
 
 {% endblock %}
