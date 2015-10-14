@@ -340,7 +340,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         $beforePenalty = $arrangementProgram->getResult();
         $arrangementProgram->setresultBeforepenalty($beforePenalty);
 
-        //PENALIZO
+        //PENALIZO POR PORCENTAJE
         $arrangementProgram->setResult($summary['advances'] - $amountPenalty);
         $arrangementProgram->setResultReal($summary['advances']);
 
@@ -481,13 +481,13 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 }
             }
 
-            //CARGO LA PENALIZACIÓN
+            //CARGO LA PENALIZACIÓN POR INCUMPLIMIENTO
             $timeline_goals->setPenalty($mayor);
 
-            //GUARGO EN BEFOREPENALATY EL RESULTADO ANTES DE LA PENALIZACIÓN
+            //GUARGO EN BEFOREPENALATY EL RESULTADO ANTES DE LA PENALIZACIÓN POR INCUMPLIMIENTO
             $timeline_goals->setresultBeforepenalty($timeline_goals->getadvance());
 
-            //CALCULO EL RESULTADO PENALIZADO
+            //CALCULO EL RESULTADO PENALIZADO POR INCUMPLIMIENTO
             $total = ($timeline_goals->getadvance()) - $mayor;
             $timeline_goals->setadvance($total);
 
