@@ -192,3 +192,11 @@ pequiven_seip_arrangementprogram_for_notifying_sig:
     requirements:
         _format: html|json|xml
     methods: [GET]
+pequiven_seip_arrangementprogram_evolution_sig:
+    path: /{id}/evolution/{month}.{_format}
+    defaults:
+        _controller: pequiven.controller.arrangementprogram_sig:evolutionAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+    methods: [GET]
