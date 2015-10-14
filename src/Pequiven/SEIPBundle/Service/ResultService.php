@@ -8,6 +8,7 @@ use Pequiven\MasterBundle\Entity\Tendency;
 use Pequiven\MasterBundle\Entity\ArrangementRangeType;
 use Pequiven\MasterBundle\Entity\Operator;
 use Pequiven\SEIPBundle\Model\Common\CommonObject;
+use Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram;
 
 /**
  * Servicio que se encarga de actualizar los resultados
@@ -320,43 +321,46 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
      * 
      * @param \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram $arrangementProgram
      */
-    public function refreshValueArrangementProgram(\Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram $arrangementProgram, $andFlush = true) {
+    public function refreshValueArrangementProgram(ArrangementProgram $arrangementProgram, $andFlush = true) {
         $periodService = $this->getPeriodService();
         $amountPenalty = 0;
+        $em = $this->getDoctrine()->getManager();        
 
+        //DETERMINO SI EL PROGRAMA SE PENALIZA POR PORCENTAJE O NO
         $lastNotificationInProgressDate = $arrangementProgram->getDetails()->getLastNotificationInProgressDate();
         if ($arrangementProgram->isCouldBePenalized() && ($periodService->isPenaltyInResult($lastNotificationInProgressDate) === true || $arrangementProgram->isForcePenalize() === true)) {
             $amountPenalty = $periodService->getPeriodActive()->getPercentagePenalty();
         }
 
-        $this->setPenaltiesbyGoal($arrangementProgram);
-
-        $summary = $arrangementProgram->getSummary(array(
-            'limitMonthToNow' => true,
-            'refresh' => true,
-        ));
+        //ESTABLEZCO EL VALOR DE PENALIZACIONES DE METAS POR RETRASO Y POR PORCENTAJE (DOS PENALIZACIONES DISTINTAS)
+        $this->setPenaltiesbyGoal($arrangementProgram, $amountPenalty);
 
         //SALVO EL VALOR ANTES DE PENALIZAR
         $beforePenalty = $arrangementProgram->getResult();
         $arrangementProgram->setresultBeforepenalty($beforePenalty);
 
-        //PENALIZO POR PORCENTAJE
-        $arrangementProgram->setResult($summary['advances'] - $amountPenalty);
-        $arrangementProgram->setResultReal($summary['advances']);
-
-        //CALCULO Y GUARDO LA PENALIZACIÓN
-        $arrangementProgram->setPenalty($beforePenalty - $summary['advances'] - $amountPenalty);
-
-        $summary = $arrangementProgram->getSummary(array('refresh' => true));
-        $arrangementProgram->setTotalAdvance(($summary['advances'] - $amountPenalty));
-        $em = $this->getDoctrine()->getManager();
-
+        //PENALIZO LAS METAS
         foreach ($arrangementProgram->getTimeline()->getGoals() as $goal) {
             $advance = $goal->getResult();
-            $goal->setResult(($advance - $amountPenalty));
+            $penalties = $goal->getPenalty() + $goal->getPercentagepenalty();
+            $goal->setResult(($advance + ($amountPenalty - $penalties)));
             $goal->setResultReal($advance);
             $em->persist($goal);
         }
+
+        //OBTENGO LOS NUEVOS VALORES DEL PROGRAMA DE GESTIÓN
+        $summary = $arrangementProgram->getSummary(array(
+            'limitMonthToNow' => true,
+            'refresh' => false,
+        ));
+
+        //PENALIZO PROGRAMA DE GESTIÓN
+        $arrangementProgram->setResult($summary['advances']);
+        $arrangementProgram->setResultReal($summary['advances']);
+        $arrangementProgram->setTotalAdvance($summary['advances']);
+
+        //CALCULO Y GUARDO EL VALOR DE LA PENALIZACIÓN COMPLETA
+        $arrangementProgram->setPenalty($beforePenalty - $summary['advances']);
         
         $arrangementProgram->updateLastDateCalculateResult();
 
@@ -374,7 +378,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
      * @param Request $request
      */
 
-    public function setPenaltiesbyGoal(\Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram $resource) {
+    public function setPenaltiesbyGoal(ArrangementProgram $resource, $porcentaje) {
 
         $real = array();
         $planned = array();
@@ -481,15 +485,12 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 }
             }
 
-            //CARGO LA PENALIZACIÓN POR INCUMPLIMIENTO
+            //GUARDO EL VALOR DE LA META ANTES DE PENALIZAR
+            $timeline_goals->setresultBeforepenalty($timeline_goals->getAdvance());
+
+            //CARGO LA PENALIZACIÓN POR INCUMPLIMIENTO Y POR PORCENTAJE (DOS PENALIZACIONES DISTINTAS)
             $timeline_goals->setPenalty($mayor);
-
-            //GUARGO EN BEFOREPENALATY EL RESULTADO ANTES DE LA PENALIZACIÓN POR INCUMPLIMIENTO
-            $timeline_goals->setresultBeforepenalty($timeline_goals->getadvance());
-
-            //CALCULO EL RESULTADO PENALIZADO POR INCUMPLIMIENTO
-            $total = ($timeline_goals->getadvance()) - $mayor;
-            $timeline_goals->setadvance($total);
+            $timeline_goals->setpercentagepenalty($porcentaje);
 
             $em->persist($timeline_goals);
         }

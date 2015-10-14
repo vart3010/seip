@@ -381,12 +381,10 @@ abstract class ArrangementProgram {
                     }
                 }
 
-                $penal = $goal->getPenalty();
-
                 if ($refresh === true) {
-                    $goal->setAdvance($advanceRealGoal - $penal);
+                    $goal->setAdvance($advanceRealGoal);
                 }
-                $advancesReal = $advancesReal - ($penal * ($weight / 100));
+                $advancesReal = $advancesReal;
             }
         }
 
