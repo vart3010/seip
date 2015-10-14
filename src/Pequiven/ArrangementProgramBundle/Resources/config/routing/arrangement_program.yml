@@ -157,3 +157,12 @@ arrangementprogram_finish_the_notification_process:
     requirements:
         id: "\d+"
     methods: [GET]
+#SIG
+pequiven_seip_arrangementprogram_assigned_sig:
+    path: /assigned/sig.{_format}
+    defaults:
+        _controller: pequiven_seip.controller.arrangementprogram:assignedSigAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+    methods: [GET]

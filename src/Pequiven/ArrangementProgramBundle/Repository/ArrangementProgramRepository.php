@@ -452,6 +452,9 @@ class ArrangementProgramRepository extends EntityRepository
             ->innerJoin('ap.timeline', 't')
             ->innerJoin('t.goals', 't_g')
             ->innerJoin('t_g.responsibles', 't_g_r')
+            ->innerJoin('ap.categoryArrangementProgram', 'cap')
+            ->andWhere('cap.id = :idCategoryArrangementProgram')
+            ->setParameter('idCategoryArrangementProgram', ArrangementProgram::ASSOCIATE_ARRANGEMENT_PROGRAM_PLA)
             ;
         
         if(($period = $criteria->remove('ap.period')) != null){
@@ -648,6 +651,48 @@ class ArrangementProgramRepository extends EntityRepository
     }
     protected function applySorting(\Doctrine\ORM\QueryBuilder $queryBuilder, array $sorting = null) {
         parent::applySorting($queryBuilder, $sorting);
+    }
+
+    /**
+     * Retorna los programas de gestion los cuales tengo asignados y Filtrados por hallasgos SIG
+     * 
+     * @param array $criteria
+     * @param array $orderBy
+     * @return type
+     */
+    public function createPaginatorByAssignedSigResponsibles(array $criteria = null, array $orderBy = null) {
+        
+        $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
+        
+        $qb = $this->getQueryBuilder();
+        $qb
+            ->innerJoin('ap.responsibles', 'ap_r')
+            ->innerJoin('ap.timeline', 't')
+            ->innerJoin('t.goals', 't_g')
+            ->innerJoin('t_g.responsibles', 't_g_r')
+            ->innerJoin('ap.categoryArrangementProgram', 'cap')
+            ->andWhere('cap.id = :idCategoryArrangementProgram')
+            ->setParameter('idCategoryArrangementProgram', ArrangementProgram::ASSOCIATE_ARRANGEMENT_PROGRAM_SIG)
+            ;
+        
+        if(($period = $criteria->remove('ap.period')) != null){
+            $qb
+                ->andWhere('ap.period = :period')
+                ->setParameter('period', $period)
+                ;
+        }
+        if(($user = $criteria->remove('ap.user')) != null){
+            $qb
+               ->andWhere($qb->expr()->orX('ap_r.id = :responsible','t_g_r.id = :responsible'))
+               ->setParameter('responsible', $user)
+                ;
+        }
+        
+        $this->applyCriteria($qb,$criteria->toArray());
+        $this->applySorting($qb, $orderBy);
+        
+        return $this->getPaginator($qb);
+
     }
     
     protected function getAlias() {

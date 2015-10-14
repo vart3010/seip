@@ -262,7 +262,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                 if ($this->isGranted('ROLE_SEIP_SIG_ARRANGEMENT_PROGRAM_LIST_ALL')) {
                     $visualize
                             ->addChild('sig.arrangement_program.visualize.assigned', array(
-                                'route' => 'pequiven_seip_arrangementprogram_assigned',
+                                'route' => 'pequiven_seip_arrangementprogram_assigned_sig',
                             ))
                             ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.arrangement_program.visualize.assigned', $section)));
                 }

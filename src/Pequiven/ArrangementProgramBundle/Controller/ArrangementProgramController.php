@@ -320,6 +320,20 @@ class ArrangementProgramController extends SEIPController {
     }
 
     /**
+     * Retorna la vista de los asignados para SIG.
+     * @param Request $request
+     * @return type
+     */
+    public function assignedSigAction(Request $request) {
+        //$this->getSecurityService()->checkSecurity('ROLE_SEIP_ARRANGEMENT_PROGRAM_LIST_ASSIGNED');
+
+        $method = 'createPaginatorByAssignedSigResponsibles';
+        $route = 'pequiven_seip_arrangementprogram_assigned_sig';
+        $template = 'assignedIndex.html';
+        return $this->getSummaryResponse($request, $method, $route, $template);
+    }
+
+    /**
      * 
      * @param Request $request
      * @return type
