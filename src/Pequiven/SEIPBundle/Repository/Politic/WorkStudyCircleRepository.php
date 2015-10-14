@@ -82,6 +82,14 @@ class WorkStudyCircleRepository extends EntityRepository
                     ->setParameter('complejo', $complejo)
                 ;
         }
+        
+        if(($workStudyCircleParent = $criteria->remove('workStudyCircleParent'))){
+            $queryBuilder
+                ->andWhere('wsc.parent = :workStudyCircleParent')
+                ->setParameter('workStudyCircleParent', $workStudyCircleParent)
+                    ;
+        }
+        
         return $queryBuilder->getQuery()->getResult();
     }
     

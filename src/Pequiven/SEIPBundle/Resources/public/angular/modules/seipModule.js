@@ -3362,6 +3362,7 @@ angular.module('seipModule.controllers', [])
             var selectFirstLineManagement = angular.element("#selectFirstLineManagement");
             var selectSecondLineManagement = angular.element("#selectSecondLineManagement");
             var selectWorkStudyCircle = angular.element("#selectWorkStudyCircle");
+            var selectWorkStudyCircleInherited = angular.element("#selectWorkStudyCircleInherited");
             var selectLineStrategic = angular.element("#selectLineStrategic");
 
             $scope.data = {
@@ -3369,6 +3370,7 @@ angular.module('seipModule.controllers', [])
                 first_line_managements: null,
                 second_line_managements: null,
                 work_study_circles: null,
+                work_sutyd_circles_inherited: null,
                 line_strategics: null,
             };
             $scope.model = {
@@ -3376,6 +3378,7 @@ angular.module('seipModule.controllers', [])
                 firstLineManagement: null,
                 secondLineManagement: null,
                 workStudyCircle: null,
+                workStudyCircleInherited: null,
                 lineStrategic: null,
             };
 
@@ -3443,6 +3446,24 @@ angular.module('seipModule.controllers', [])
                 if ($scope.model.complejo != null) {
                     parameters.filter['complejo'] = $scope.model.complejo.id;
                 }
+                $http.get(Routing.generate('pequiven_seip_work_study_circle', parameters))
+                        .success(function (data) {
+                            $scope.data.work_study_circles = data;
+                            if ($scope.model.workStudyCircle != null) {
+                                $scope.setValueSelect2("workStudyCircle", $scope.model.workStudyCircle, $scope.data.work_study_circles, function (selected) {
+                                    $scope.model.workStudyCircle = selected;
+                                });
+                            }
+                        });
+            };
+            
+            //Busca los Círculos de Estudio de Trabajo
+            $scope.getWorkStudyCircleInherited = function (workStudyCircleParent) {
+                var parameters = {
+                    filter: {
+                        workStudyCircleParent: workStudyCircleParent
+                    }
+                };
                 $http.get(Routing.generate('pequiven_seip_work_study_circle', parameters))
                         .success(function (data) {
                             $scope.data.work_study_circles = data;
