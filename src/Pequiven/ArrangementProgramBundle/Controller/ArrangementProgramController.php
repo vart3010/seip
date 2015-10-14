@@ -325,7 +325,7 @@ class ArrangementProgramController extends SEIPController {
      * @return type
      */
     public function assignedSigAction(Request $request) {
-        //$this->getSecurityService()->checkSecurity('ROLE_SEIP_ARRANGEMENT_PROGRAM_LIST_ASSIGNED');
+        $this->getSecurityService()->checkSecurity('ROLE_SEIP_SIG_ARRANGEMENT_PROGRAM_LIST_FOR');
 
         $method = 'createPaginatorByAssignedSigResponsibles';
         $route = 'pequiven_seip_arrangementprogram_assigned_sig';
@@ -340,7 +340,7 @@ class ArrangementProgramController extends SEIPController {
      * @return type
      */
     function forReviewingSigAction(Request $request) {
-        $this->getSecurityService()->checkSecurity('ROLE_SEIP_ARRANGEMENT_PROGRAM_LIST_FOR_REVIEWING');
+        $this->getSecurityService()->checkSecurity('ROLE_SEIP_SIG_ARRANGEMENT_PROGRAM_LIST_FOR');
 
         $method = 'createPaginatorByAssignedForReviewing';
         $route = 'pequiven_seip_arrangementprogram_for_reviewing';
@@ -354,7 +354,7 @@ class ArrangementProgramController extends SEIPController {
      * @return type
      */
     function forApprovingSigAction(Request $request) {
-        $this->getSecurityService()->checkSecurity('ROLE_SEIP_ARRANGEMENT_PROGRAM_LIST_FOR_APPROVING');
+        $this->getSecurityService()->checkSecurity('ROLE_SEIP_SIG_ARRANGEMENT_PROGRAM_LIST_FOR');
 
         $method = 'createPaginatorByAssignedForApproving';
         $route = 'pequiven_seip_arrangementprogram_for_approving';
@@ -368,7 +368,7 @@ class ArrangementProgramController extends SEIPController {
      * @return type
      */
     function forNotifyingSigAction(Request $request) {
-        $this->getSecurityService()->checkSecurity('ROLE_SEIP_ARRANGEMENT_PROGRAM_LIST_FOR_NOTIFYING');
+        $this->getSecurityService()->checkSecurity('ROLE_SEIP_SIG_ARRANGEMENT_PROGRAM_LIST_FOR');
 
         $method = 'createPaginatorByNotified';
         $route = 'pequiven_seip_arrangementprogram_for_notifying';
