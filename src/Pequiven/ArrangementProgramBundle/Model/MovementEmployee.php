@@ -1,10 +1,8 @@
 <?php
 
-namespace Pequiven\ArrangementProgramBundle\Model\MovementEmployee;
+namespace Pequiven\ArrangementProgramBundle\Model;
 
-use Pequiven\SEIPBundle\Model\BaseModel;
-
-abstract class MovementEmployee extends BaseModel implements MovementEmployeeInterface {
+abstract class MovementEmployee {
 
     /**
      * MAESTROS DE ENTRADA
@@ -56,11 +54,11 @@ abstract class MovementEmployee extends BaseModel implements MovementEmployeeInt
     static function getCausein() {
         static $array = [
             self::ASIGNACION => 'Asignación',
-            self::SUPLENCIA => 'Suplencia',            
+            self::SUPLENCIA => 'Suplencia',
         ];
         return $array;
     }
-    
+
     /**
      * 
      * @staticvar array $array
@@ -69,7 +67,7 @@ abstract class MovementEmployee extends BaseModel implements MovementEmployeeInt
     static function getCauseout() {
         static $array = [
             self::CAMBIO => 'Cambio',
-            self::RETIRO => 'Retiro',            
+            self::RETIRO => 'Retiro'
         ];
         return $array;
     }

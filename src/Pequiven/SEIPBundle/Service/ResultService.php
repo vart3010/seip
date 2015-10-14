@@ -352,7 +352,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         $em = $this->getDoctrine()->getManager();
 
         foreach ($arrangementProgram->getTimeline()->getGoals() as $goal) {
-            //  echo $goal->getAdvance() . ' ' . $goal->getName() . '</br>';
+            
             $advance = $goal->getResult();
             $goal->setResult(($advance - $amountPenalty));
             $goal->setResultReal($advance);

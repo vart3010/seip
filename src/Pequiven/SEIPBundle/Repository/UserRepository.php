@@ -234,7 +234,7 @@ class UserRepository extends EntityRepository {
 
         return $qb;
     }
-    
+
     function findQueryUsersCoordinatorPhaseWorkStudyCircle(array $criteria = array()) {
         $qb = $this->getQueryBuilder();
         $qb
@@ -315,7 +315,7 @@ class UserRepository extends EntityRepository {
 
         return $qb->getQuery()->getResult();
     }
-    
+
     /**
      * Buscador de coordinadores de círculos de estudio de trabajo
      * 
@@ -325,8 +325,8 @@ class UserRepository extends EntityRepository {
     function searchOnlyCoordinator(array $criteria = array()) {
         $qb = $this->getQueryBuilder();
         $qb
-            ->innerJoin('u.workStudyCircles', 'wsc')
-            ;
+                ->innerJoin('u.workStudyCircles', 'wsc')
+        ;
 
         $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
         $orX = $qb->expr()->orX();
@@ -342,18 +342,18 @@ class UserRepository extends EntityRepository {
         if (($numPersonal = $criteria->remove('numPersonal'))) {
             $orX->add($qb->expr()->like('u.numPersonal', "'%" . $numPersonal . "%'"));
         }
-        
-        if(($workStudyCircleId = $criteria->remove('workStudyCircleId')) != null){
+
+        if (($workStudyCircleId = $criteria->remove('workStudyCircleId')) != null) {
             $qb
-                ->andWhere('wsc.id = :workStudyCircleId')
-                ->setParameter('workStudyCircleId', $workStudyCircleId)
-                ;
+                    ->andWhere('wsc.id = :workStudyCircleId')
+                    ->setParameter('workStudyCircleId', $workStudyCircleId)
+            ;
         }
-        
+
         $qb->andWhere($orX);
 
         $qb->setMaxResults(30);
-        
+
         return $qb->getQuery()->getResult();
     }
 
@@ -547,13 +547,10 @@ class UserRepository extends EntityRepository {
         $qb = $this->getQueryBuilder();
 
         $qb
-                //->select('u')
                 ->innerJoin('u.goals', 'goal')
                 ->innerJoin('u.groups', 'g')
-                ->andWhere('u.enabled = :enabled')
                 ->andWhere('g.typeRol = :typeRol')
                 ->andWhere('goal.id = :goallist')
-                ->setParameter('enabled', true)
                 ->setParameter('typeRol', \Pequiven\MasterBundle\Entity\Rol::TYPE_ROL_OWNER)
                 ->setParameter('goallist', $idGoal)
         ;

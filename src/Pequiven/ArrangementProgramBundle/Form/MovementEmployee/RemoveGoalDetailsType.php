@@ -5,11 +5,7 @@ namespace Pequiven\ArrangementProgramBundle\Form\MovementEmployee;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
-
-use Symfony\Component\Form\Extension\Core\ChoiceList\ChoiceList;
+use Pequiven\ArrangementProgramBundle\Model\MovementEmployee;
 
 class RemoveGoalDetailsType extends AbstractType {
 
@@ -18,8 +14,7 @@ class RemoveGoalDetailsType extends AbstractType {
                 ->add('cause', 'choice', array(
                     'label' => 'Motivo o Causa',
                     'required' => true,
-                    'choice_list' => new ChoiceList(
-                            array('Camb', 'Aus'), array('Cambio','Ausencia')),
+                    'choices' => MovementEmployee::getCauseout(),
                     'label_attr' => array('class' => 'label'),
                     'attr' => array(
                         'class' => 'select2 input-large form-control',

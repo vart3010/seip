@@ -7,11 +7,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Pequiven\ArrangementProgramBundle\Model\MovementEmployee;
 
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
-
-use Symfony\Component\Form\Extension\Core\ChoiceList\ChoiceList;
-
 class AssignGoalDetailsType extends AbstractType {
 
     public function buildForm(FormBuilderInterface $builder, array $options) {
@@ -19,7 +14,7 @@ class AssignGoalDetailsType extends AbstractType {
                 ->add('cause', 'choice', array(
                     'label' => 'Motivo o Causa',
                     'required' => true,
-                    'choice_list' => \Pequiven\SIGBundle\Entity\ProcessManagementSystem::getlevelProcessArray(), 
+                    'choices' => MovementEmployee::getCausein(),
                     'label_attr' => array('class' => 'label'),
                     'attr' => array(
                         'class' => 'select2 input-large form-control',
