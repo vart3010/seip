@@ -1,5 +1,5 @@
 
-{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/tableFormat1.html.twig' %}
 
 {% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
 
@@ -151,6 +151,30 @@
                 </div>
             </div>
         {% endif %}
+    </fieldset>
+    
+    <fieldset class="fieldset">
+        <legend class="legend" >{{ "workStudyCircle.form.proposalsInherited"|trans }}&nbsp;</legend>
+        
+        <div ng-controller="TableFormatController">
+            <div ng-controller="TableProposalController">
+                <div loading-container="tableParams.settings().$loading">
+                    <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager"  template-header="custom/header" api-data-url="{{ path('pequiven_proposal_inherited_work_study_circle',{_format:'json',workStudyCircleParent:workStudyCircle.id}) }}" export-csv="csv" class="table table-responsive table-extra-info">
+                        <tr ng-repeat="result in $data | filter:tableParams.search " data="{$ result|json $}">
+                            <td data-title="'CET'" >
+                                <a href="{$ result._links.self.show $}">{$ result.workStudyCircle.name $}</a>
+                            </td>
+                            <td data-title="'Línea Estratégica'" >
+                                <a href="{$ result._links.self.show $}">{$ result.lineStrategic.description $}</a>
+                            </td>
+                            <td data-title="'Propuesta'" >
+                                <a href="{$ result._links.self.show $}">{$ result.description $}</a>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
     </fieldset>
 
     {% set users = workStudyCircle.obtainMembersWithoutCoordinator %}

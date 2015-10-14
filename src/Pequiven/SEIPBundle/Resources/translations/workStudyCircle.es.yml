@@ -13,6 +13,7 @@ workStudyCircle:
         superintendencia: Superintendencia
         supervision: Supervisión 
         departamento: Departamento
+        proposalsInherited: Propuestas Heredadas
         
         coordinador:
             title: Datos del Coordinador
