@@ -159,15 +159,15 @@ class ReportTemplateController extends SEIPController {
      */
     public function loadAction(Request $request) {
         $dateString = null;
-        if ($this->getSecurityService()->isGranted(array('ROLE_SEIP_DATA_LOAD_CHANGE_DATE','ROLE_SEIP_OPERATION_LOAD_FIVE_DAYS'))) {
+        if ($this->getSecurityService()->isGranted(array('ROLE_SEIP_DATA_LOAD_CHANGE_DATE', 'ROLE_SEIP_OPERATION_LOAD_FIVE_DAYS'))) {
             $dateString = $request->get('dateNotification', null);
         }
         $plantReportToLoad = $request->get('plant_report', null);
         if ($plantReportToLoad === null) {
             return $this->redirect($this->generateUrl('pequiven_plant_report_index'));
         }
-     
-        
+
+
         $dateNotification = null;
         if ($dateString !== null) {
             $dateNotification = \DateTime::createFromFormat('d/m/Y', $dateString);
@@ -282,7 +282,7 @@ class ReportTemplateController extends SEIPController {
          * DEJA CARGAR 5 DIAS ANTES DEL DIA ACTUAL
          */
         $fecha = date('d/m/Y');
-       
+
 
         $view = $this
                 ->view()
@@ -1077,29 +1077,40 @@ class ReportTemplateController extends SEIPController {
                     $arrayProduction[] = $rs;
 
 //CONSUMO DE MATERIA PRIMA
-                    $totalRawDayPlan = 0.0;
-                    $totalRawDayReal = 0.0;
+
                     $i = $dateDesde;
+
 //VERIFICA SI EL PRODUCTO ES MATERIA PRIMA
                     //if ($productReport->getProduct()->getIsRawMaterial()) {
                     foreach ($productReport->getRawMaterialConsumptionPlannings() as $rawMaterial) {
+                        $totalRawDayPlan = 0.0;
+                        $totalRawDayReal = 0.0;
                         if ($rawMaterial->getProduct()->getIsRawMaterial()) {
                             while ($i != ($dateHasta + 86400)) {
                                 $timeNormal = new \DateTime(date("Y-m-d", $i));
                                 $rawMaterialResult = $rawMaterial->getSummary($timeNormal);
+
                                 $totalRawDayPlan += $rawMaterialResult["total_day_plan"];
                                 $totalRawDayReal += $rawMaterialResult["total_day"];
                                 $totalRawPlan += $rawMaterialResult["total_day_plan"];
                                 $totalRawReal += $rawMaterialResult["total_day"];
+
                                 $i = $i + 86400; //VOY RECORRIENDO DIA POR DIA
                             }
+
+
+                            $arrayRawMaterial[] = array(
+                                "productName" => $rawMaterial->getProduct()->getName() . " (" . $rawMaterial->getProduct()->getProductUnit()->getUnit() . ")",
+                                "planRaw" => $totalRawDayPlan,
+                                "realRaw" => $totalRawDayReal
+                            );
                         }
                     }
-                    $arrayRawMaterial[] = array(
-                        "productName" => $productReport->getProduct()->getName() . " (" . $productReport->getProduct()->getProductUnit()->getUnit() . ")",
-                        "planRaw" => $totalRawDayPlan,
-                        "realRaw" => $totalRawDayReal
-                    );
+//                    $arrayRawMaterial[] = array(
+//                        "productName" => $productReport->getProduct()->getName() . " (" . $productReport->getProduct()->getProductUnit()->getUnit() . ")",
+//                        "planRaw" => $totalRawDayPlan,
+//                        "realRaw" => $totalRawDayReal
+//                    );
                     //}
                 }
 //CONSUMO DE SERVICIOS
