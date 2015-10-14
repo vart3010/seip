@@ -14,6 +14,7 @@ workStudyCircle:
         supervision: Supervisión 
         departamento: Departamento
         proposalsInherited: Propuestas Heredadas
+        proposalsPhaseOne: Propuestas Fase 1
         
         coordinador:
             title: Datos del Coordinador
