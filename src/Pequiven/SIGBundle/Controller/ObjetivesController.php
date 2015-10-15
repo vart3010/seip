@@ -173,7 +173,7 @@ class ObjetivesController extends ResourceController
             $managementSystem = $this->get('pequiven.repository.sig_management_system')->find($managementSystemId);
         }
 
-        //Objetivos Tácticos de la Gerencia
+        //Objetivos Tácticos Marcados con el Sistema de la Calidad
         $objetivesTactics = $this->get('pequiven.repository.objetive')->getObjetivesManagementSystem($managementSystem);
         
         $resource = $this->findOr404($request);
@@ -239,10 +239,14 @@ class ObjetivesController extends ResourceController
             
             if($totalObjetiveOperatives > 0){//Si el objetivo táctico tiene objetivos operativos
                 foreach($objetivesOperatives as $value){//Recorremos los Objetivos Operativos
-                                       
+                    
+                    //Consulta de Sistema de la Calidad Pegado al Objetivo
+                    foreach ($value->getManagementSystems() as $data) {                        
+                        $idObjManagement = $data->getId();                        
+
                     $cantOperative = count($value->getManagementSystems());
                     
-                    if ($cantOperative !== 0) {//Si el objetivo esta marcado con el sistema de la calidad
+                    if ($cantOperative !== 0 && $idObjManagement == $managementSystemId) {//Si el objetivo esta marcado con el sistema de la calidad
 
                         $objetiveOperative = $value;
 
@@ -316,6 +320,7 @@ class ObjetivesController extends ResourceController
             
                     }//if de managementsystems
             
+                    }
                 }
 
                 if($totalIndicatorTactics > 0){//Si el Objetivo Táctico tiene Indicadores Táctico
@@ -443,8 +448,7 @@ class ObjetivesController extends ResourceController
             $activeSheet->getStyle(sprintf('A%s:O%s',$i,$i))->applyFromArray($styleArrayBordersContent);
         }
         $row = $rowFinTac + 1;
-
- 
+        
         $activeSheet->setCellValue(sprintf('A%s',$row),'Nota: Responsable por los Objetivos Tácticos(Generales) es la Alta Dirección de cada Sistema de Gestión(1era Linea)');
         $activeSheet->setCellValue(sprintf('A%s',$row + 1),'       Responsable por los Objetivos Operativos son los Representantes de la Alta Dirección de cada Sistema de Gestión(2da Linea)');
         $activeSheet->setCellValue(sprintf('A%s',$row + 2),'NIVEL DE REVISION: 1');
