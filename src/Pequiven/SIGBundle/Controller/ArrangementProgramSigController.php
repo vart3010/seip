@@ -20,14 +20,58 @@ class ArrangementProgramSigController extends ResourceController
         $em = $this->getDoctrine()->getManager();
     	
     	$ArrangementProgram = $em->getRepository('PequivenArrangementProgramBundle:ArrangementProgram')->findWithData($id);
+        //Creaciń de Grafico para informe de Evolución
+        $response = new JsonResponse();
+
+        $ArrangementProgramService = $this->getArrangementProgramService(); //Obtenemos el servicio del indicador
+        
+        //$ArrangementProgram = $this->get('pequiven.repository.indicator')->find(); //Obtenemos el indicador
+
+        $dataChart = $ArrangementProgramService->getDataChartOfArrangementProgramEvolution($ArrangementProgram); //Obtenemos la data del gráfico de acuerdo al indicador
+
+        $data = 0;
 
     	$view = $this
             ->view()
             ->setTemplate($this->config->getTemplate('evolution.html'))
             ->setData(array(
                 'ArrangementProgram'  => $ArrangementProgram,
+                'data'                => $data
             ));
 
         return $this->handleView($view);
+    }
+
+    /**
+     * 
+     * @return \Pequiven\SEIPBundle\Service\SecurityService
+     */
+    protected function getSecurityService() {
+
+        return $this->container->get('seip.service.security');
+    }  
+
+    /**
+     * @return \Pequiven\SEIPBundle\Service\FusionChartExportService
+     */
+    private function getFusionChartExportService()
+    {
+        return $this->container->get('pequiven_seip.service.fusion_chart');
+    } 
+
+    /**
+     * 
+     * @return \Pequiven\IndicatorBundle\Service\ArrangementProgramService
+     */
+    protected function getArrangementProgramService() {
+        return $this->container->get('pequiven.service.arrangementprogram');
+    } 
+
+    /**
+     *  Period
+     *
+     */
+    protected function getPeriodService() {
+        return $this->container->get('pequiven_seip.service.period');
     }
 }

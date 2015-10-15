@@ -2216,7 +2216,6 @@ angular.module('seipModule.controllers', [])
             $scope.initFormAsocLast = function (resource) {
                 var d = new Date();
                 var numero = d.getTime();
-
                 var parameters = {
                     idIndicator: $scope.id_indicator,
                     _dc: numero

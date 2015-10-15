@@ -77,8 +77,16 @@
         </div>
     </fieldset>
 
-    <p class="button-height align-right">  
-        
+        {# Graficos #}
+        <div class="columns with-padding"> 
+            <div ng-controller="ChartsSigController" class="dashboard_sig" ng-init="renderChartEvolutionSig('chartContainerResult', {{ data|json_encode() }})" style="width: 95%;" align="center">                
+                <div class="nine-columns twelve-columns-mobile" id="chartContainerResult">
+                <!-- This div will hold the chart generated in the footer -->
+                </div>            
+            </div>  
+        </div> 
+
+    <p class="button-height align-right">          
         <div style="text-align: left; margin-left:15px;">
             <a class="button"  id="showItems"  href="javascript:void(0)">
                 <span class="button-icon left-side red-gradient">
