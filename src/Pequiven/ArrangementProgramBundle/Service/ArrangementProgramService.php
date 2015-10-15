@@ -30,7 +30,8 @@ class ArrangementProgramService implements ContainerAwareInterface {
      * @param Indicator $indicator
      * @return type
      */
-    public function getDataChartOfArrangementProgramEvolution(ArrangementProgram $ArrangementProgram) {
+    public function getDataChartOfArrangementProgramEvolution($ArrangementProgram) {
+    	die();
     	$real = array();
         $planned = array();
         $em = $this->getDoctrine()->getManager();
