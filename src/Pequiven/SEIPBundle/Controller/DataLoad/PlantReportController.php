@@ -230,7 +230,7 @@ class PlantReportController extends SEIPController {
             foreach ($plantReport->getProductsReport() as $productReports) {
                 $product = $productReports->getProduct();
 
-                if (count($product->getComponents()) == "0") {
+//                if (count($product->getComponents()) == "0") {
                     //var_dump(count($product->getComponents()));
                     if (!CommonObject::validIdExist($product->getId(), $totalProducts)) {
                         //if (!$this->validIdExist($product->getId(), $totalProducts)) {
@@ -243,7 +243,7 @@ class PlantReportController extends SEIPController {
                             "entityProductReport" => $productReports
                         );
                     }
-                }
+//                }
             }
         }
 
