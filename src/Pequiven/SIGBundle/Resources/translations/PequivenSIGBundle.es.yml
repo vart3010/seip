@@ -278,3 +278,8 @@ flashes:
         deleteAction: Acción Eliminada Correctamente
 arrangementprogram:
      title: Programa de Gestión
+     asociate: Programa Asociado a
+     period: Período
+     location: Localidad
+     tactical_objective: Objetivo Tactico
+     operational_objective: Objetivo Operativo

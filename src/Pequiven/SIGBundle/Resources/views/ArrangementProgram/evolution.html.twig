@@ -20,7 +20,7 @@
 
 {% block body %}
 <fieldset class="fieldset">
-        <legend class="legend">{{ 'pequiven.arrangement_program.arrangement_program'|trans }}&nbsp;<b></b></legend>
+        <legend class="legend">{{ 'arrangementprogram.title'|trans }}&nbsp;<b>{{ ArrangementProgram.getTypeLabel|trans({},'PequivenArrangementProgramBundle')}}</b></legend>
         
          <div class="columns">
              <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
@@ -29,8 +29,96 @@
                     {{ generateLink(ArrangementProgram) }}
                 </p>
              </div>
+             <div class="new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                <p class="inline-label">
+                    <label class="label">{{ 'arrangementprogram.period'|trans }}</label>
+                    {{ ArrangementProgram.period }}
+                </p>
+            </div>
+            <div class="new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                <p class="inline-label">
+                    <label class="label">{{ 'arrangementprogram.asociate'|trans }}</label>
+                    {{ ArrangementProgram.categoryArrangementProgram }}
+                </p>
+            </div>
+            <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                {% if ArrangementProgram.type == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC') %}
+                    <p class="inline-label">
+                        <label class="label">{{ 'arrangementprogram.location'|trans }}</label>
+                        {{ ArrangementProgram.tacticalObjective.gerencia.complejo }}
+                    </p>
+                {% endif %}
+                {% if ArrangementProgram.type == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE') %}
+                    <p class="inline-label">
+                        <label class="label">{{ 'arrangementprogram.location'|trans }}</label>
+                        {{ ArrangementProgram.operationalObjective.gerencia.complejo }}
+                    </p>
+                {% endif %}
+            </div>
+            <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'arrangementprogram.tactical_objective'|trans }}</label>
+                    {% set avancedUsed = ArrangementProgram.tacticalObjective.result %}
+                    {% include 'PequivenObjetiveBundle:Common:percentajeBarResult.html.twig' %}
+                    {{ generateLink(ArrangementProgram.tacticalObjective) }}
+                </p>        
+            </div>
+            {% if ArrangementProgram.type == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE') %}
+                <div class="new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                        <p class="inline-label">
+                            <label class="label">{{ 'arrangementprogram.operational_objective'|trans }}</label>
+                            {% set avancedUsed = ArrangementProgram.operationalObjective.result %}
+                            {% include 'PequivenObjetiveBundle:Common:percentajeBarResult.html.twig' %}
+                            {{ generateLink(ArrangementProgram.operationalObjective) }}
+                        </p>
+                </div>
+            {% endif %}
             
         </div>
     </fieldset>
 
+    <p class="button-height align-right">  
+        
+        <div style="text-align: left; margin-left:15px;">
+            <a class="button"  id="showItems"  href="javascript:void(0)">
+                <span class="button-icon left-side red-gradient">
+                    <span class="fa fa-history fa-1"></span>
+                </span>
+                <span class="title">{{('pequiven.view_evolution_history'|trans({},'messages'))}}</span>
+                <span class="title" style="display: none">{{('pequiven.hide_evolution_history'|trans({},'messages'))}} </span>
+            </a>
+        
+        {% if is_granted('ROLE_SEIP_SIG_EVOLUTION_DOWNLOAD') %}
+            {# Descarga de Informe de Evolución#}
+            &nbsp;
+            {{ buttons.generic_download(path('pequiven_indicator_evolution_export', { 'id': ArrangementProgram.id, 'month': 10 }),('pequiven_indicator.download'|trans({},'PequivenSIGBundle'))) }}        
+        {% endif %}
+
+        </div>
+    </p>
+        {# Box historico de informe de evolución #}
+        <div id="evolutionItems" style="display: none;">
+            {% set data = ArrangementProgram.id %}
+             
+            {{ renderArea(constant('Pequiven\\SEIPBundle\\Model\\Box\\AreasBox::ITEMS_EVOLUTION')) }}
+            
+        </div> 
+
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/fusioncharts.js') }}"></script>
+    <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/themes/fusioncharts.theme.fint.js') }}"></script>
+
+    <script type="text/javascript">
+        
+        $(document).ready(function () {
+            $("a#showItems").click(function () {
+                $("#evolutionItems").toggle("slow");
+                $("a#showItems span.title ").toggle();
+            });
+        });
+        
+    </script>
+    
 {% endblock %}
