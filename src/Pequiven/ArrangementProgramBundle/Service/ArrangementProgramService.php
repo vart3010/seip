@@ -31,7 +31,7 @@ class ArrangementProgramService implements ContainerAwareInterface {
      * @return type
      */
     public function getDataChartOfArrangementProgramEvolution($ArrangementProgram) {
-    	die();
+    	
     	$real = array();
         $planned = array();
         $em = $this->getDoctrine()->getManager();
@@ -111,6 +111,10 @@ class ArrangementProgramService implements ContainerAwareInterface {
             $planned[12] = $sump;
             $real[12] = $sumr;
         }        
+        var_dump($planned);
+        echo"</br>";
+        var_dump($real);
+        die();
         return $data;
     }
 
