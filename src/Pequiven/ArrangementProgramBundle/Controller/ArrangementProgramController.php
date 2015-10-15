@@ -696,7 +696,8 @@ class ArrangementProgramController extends SEIPController {
 
         //Validación Carga de Programa de Gestión SIG
         if ($associate == ArrangementProgram::ASSOCIATE_ARRANGEMENT_PROGRAM_SIG && $periodService->isAllowLoadSigArrangementProgram()) {
-            
+            $statusSig = 1;
+            $entity->setShowEvolutionView($statusSig);
         } elseif (!$periodService->isAllowLoadArrangementProgram()) {//Consultamos si está habilitada la carga de programa de gestión en el perído actual
             $message = $this->trans('pequiven_seip.arrangementprogram.not_allow_load_arrangementprogram', array(), 'flashes');
             $this->setFlash('error', $message);
