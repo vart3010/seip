@@ -1,0 +1,25 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayout.html.twig' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
+
+{% import 'PequivenSIGBundle:Template:Buttons/buttons.html.twig' as buttons %}
+
+{% block javascripts_base %}
+    {{ parent() }}
+    <script src="{{  asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.input.js') }}"></script>
+{% endblock javascripts_base %}
+
+{% trans_default_domain 'PequivenSIGBundle' %}
+
+{% block before_body %}
+    {{ contentHeader(
+        ('arrangementprogram.title'|trans({})),        
+        ('pequiven.evolution'|trans({},'messages'))
+    ) }}
+{% endblock %} 
+
+{% block body %}
+
+<h1>AL AIRE YEAAA!!! </h1>
+
+{% endblock %}

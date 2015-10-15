@@ -234,6 +234,13 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\Column(name="resultbeforepenalty",type="float")
      */
     protected $resultBeforepenalty = 0; 
+
+    /**
+     * ¿Mostar navegación al informe de evolución?
+     * @var boolean
+     * @ORM\Column(name="showEvolutionView",type="boolean")
+     */
+    private $showEvolutionView = false;
     
     public function __construct() {
         $this->responsibles = new \Doctrine\Common\Collections\ArrayCollection();
@@ -742,6 +749,18 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
         $this->forcePenalize = $forcePenalize;
         
         return $this;
+    }
+
+    function getShowEvolutionView() {
+        return $this->showEvolutionView;
+    }
+
+    function isShowEvolutionView() {
+        return $this->showEvolutionView;
+    }
+
+    function setShowEvolutionView($showEvolutionView) {
+        $this->showEvolutionView = $showEvolutionView;
     }
     
     /**
