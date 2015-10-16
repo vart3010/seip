@@ -74,7 +74,8 @@ class CoreExtension extends \Twig_Extension {
             //Si tiene un solo rol y es personal PQV --> $FORCEALLPERIODS = TRUE
             $groupsUsers = $this->getUser()->getGroups();
             $securityService = $this->getSecurityService();
-            if ((count($groupsUsers) == 1) && ($securityService->isGranted(array("ROLE_WORKER_PQV")))) {
+            $rolReal = $this->getUser()->getRealGroup()->getLevel();
+            if (((count($groupsUsers) == 1) && ($securityService->isGranted(array("ROLE_WORKER_PQV")))) || ($rolReal >= \Pequiven\MasterBundle\Entity\Rol::ROLE_MANAGER_SECOND && $rolReal <= \Pequiven\MasterBundle\Entity\Rol::ROLE_DIRECTIVE)) {
                 $forceAllPeriods = true;
             }
 
