@@ -79,7 +79,7 @@
 
         {# Graficos #}
         <div class="columns with-padding"> 
-            <div ng-controller="ChartsSigController" class="dashboard_sig" ng-init="renderChartEvolutionSig('chartContainerResult', {{ data|json_encode() }})" style="width: 95%;" align="center">                
+            <div ng-controller="ChartsSigController" class="dashboard_sig" ng-init="renderChartEvolutionSig('chartContainerResult', {{ data|json_encode() }})" style="width: 85%;" align="center">                
                 <div class="nine-columns twelve-columns-mobile" id="chartContainerResult">
                 <!-- This div will hold the chart generated in the footer -->
                 </div>            
@@ -113,6 +113,46 @@
         </div> 
 
 {% endblock %}
+
+{% block stylesheets %}
+  {{ parent() }}
+    
+<style type="text/css">
+    
+    .position{        
+        margin-right: 20px;
+        margin-top: 20px;
+        color: #1d1c1c;
+        float: right;
+        font-size: 150%;
+    }
+    .button-config{
+        margin-right: 20px;
+        margin-top: 0px;
+        margin-bottom: 15px;
+        color: #1d1c1c;
+        float: right;
+        /*font-size: 150%;*/
+    }
+
+    /* dashboard sig */
+    .dashboard_sig {
+        padding: 75px;
+        position: relative;
+        zoom: 1;
+        color: white;
+        border-top: 1px solid #666666;
+        border-bottom: 1px solid #666666;
+        border-color: #000000;
+    }
+    .dashboard_sig a {
+        color: white;
+    }    
+
+</style>
+
+{% endblock stylesheets %}
+
 {% block javascripts %}
     {{ parent() }}
     <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/fusioncharts.js') }}"></script>

@@ -25,13 +25,68 @@ class ArrangementProgramService implements ContainerAwareInterface {
         $this->container = $container;
     }
 
+    /**
+     *
+     * Carga de labels de los meses del informe de evolucion arrangement program
+     *	
+     */
+    public function getMonthsArrangementProgram($cantmotnh)
+    {
+
+    }
+
 	/**
      * Gráfico de Columna para informe de Evolución
-     * @param Indicator $indicator
+     * @param ArrangementProgram $ArrangementProgram
      * @return type
      */
     public function getDataChartOfArrangementProgramEvolution($ArrangementProgram) {
     	
+    	$data = array(
+            'dataSource' => array(
+                'chart' => array(),
+                'categories' => array(
+                ),
+                'dataset' => array(
+                ),
+            ),
+        );
+        $chart = array();
+
+        $chart["caption"] = "Gráfico Informe de Evolución";
+        $chart["subCaption"] = "Periodo-2015";
+        $chart["palette"]= "1";
+        $chart["showvalues"]= "0";
+        $chart["paletteColors"]= "#0075c2,#c90606,#f2c500,#12a830,#1aaf5d";
+        $chart["showBorder"] = "0";
+        $chart["yaxisvaluespadding"] = "10";
+        $chart["valueFontColor"] = "#000000";
+        $chart["rotateValues"] = "0";
+        $chart["bgAlpha"] = "0,0";
+        $chart["theme"] = "fint";
+        //$chart["YAxisMaxValue"] = "150";
+        //$chart["decimalSeparator"] = ",";
+        //$chart["decimals"] = "2";
+        $chart["showborder"] = "0";
+        $chart["decimals"] = "0";
+        $chart["exportenabled"] = "1";
+        $chart["exportatclient"] = "0";
+        $chart["exportFormats"] = "PNG= Exportar como PNG|PDF= Exportar como PDF";
+        $chart["exportFileName"] = "Grafico Resultados ";
+        $chart["exporthandler"] = "http://107.21.74.91/";
+
+        $category = $dataSetReal = $dataSetPlan = $dataSetAcum = array();
+        $label = $dataReal = $dataPlan = $dataAcum = $dataMedition = array();
+        $cantData = 0;
+        //Carga de Nombres de Labels
+        $dataSetReal["seriesname"] = "Real";
+        $dataSetPlan["seriesname"] = "Plan";
+        $dataSetAcum["seriesname"] = "Acumulado";
+        $dataSetAnt["seriesname"]  = "2014";
+        $labelAntper               = "2014";
+        $labelProm                 = "Promedio o Acumulado";
+        $labelobj                  = "Objetivo 2015";
+
     	$real = array();
         $planned = array();
         $em = $this->getDoctrine()->getManager();
@@ -110,11 +165,79 @@ class ArrangementProgramService implements ContainerAwareInterface {
             $sumr += $timeline_goals->getGoalDetails()->getDecemberReal();
             $planned[12] = $sump;
             $real[12] = $sumr;
-        }        
-        var_dump($planned);
-        echo"</br>";
-        var_dump($real);
-        die();
+        }      
+        	//Carga de datos del label principal Periodo-2015
+        	$labelAnt["label"] = $labelAntper;//Label del 2014
+        	$category[] = $labelAnt;//Label del 2014
+        	//var_dump($real);
+        	$cantData = count($real);
+        	//var_dump($cantData);
+        	//die();
+        	$cont = 1;
+        	//$dataSetReal["data"][] = array( 'value' => '' );//Data vacia para saltar 2014
+        	//$dataSetPlan["data"][] = array( 'value' => '' );//Data vacia para saltar 2014
+        	for ($i=0; $i < $cantData; $i++) { 
+        		$label["label"] = "mes";
+				$category[] = $label;
+        		
+        		//Carga de la data Real
+        		$dataReal["value"] = $real[$cont];
+				$dataSetReal["data"][] = $dataReal;
+        		
+        		//Carga de la Data Plan
+				$dataPlan["value"] = $planned[$cont];
+				$dataSetPlan["data"][] = $dataPlan;
+
+				$dataSetTend["data"][] = $dataReal;
+        		
+        		$cont++;
+        	}
+        	//Label Promedio o Acumunlado
+        	$labelp["label"] = $labelProm;//Label del Prom
+            $category[] = $labelp;//Label del Prom
+
+            //Data Prom
+            $dataSetReal["showvalues"] = "1";
+            $dataAcum["value"] = 50;//Pasando data a data prom
+            $dataAcum["color"] = '#0a5f87';            
+            $dataSetReal["data"][] = $dataAcum;//promedio
+
+            //Label Objetivo
+            $labelo["label"] = $labelobj;//Label del ObjAcum
+            $category[] = $labelo;//Label del ObjAcum
+
+            //Pasando Objetivo Acum
+            $dataObj["value"] = 75;//Pasando data a Dataobj
+            $dataObj["color"] = '#087505';            
+            $dataSetReal["data"][] = $dataObj;//Acumulado
+
+            //Carga de linea de real
+            $dataSetPlan['data'] = array('seriesname' => 'Plan', 'parentyaxis' => 'S', 'renderas' => 'Line', 'data' => $dataSetPlan['data']);
+            //Carga de Tendencia
+            $cantValue = count($dataSetTend['data']);
+            if ($cantValue >= 4) {
+                $dataSetValues['tendencia'] = array('seriesname' => 'Tendencia', 'parentyaxis' => 'S', 'renderas' => 'Line', 'color' => '#dbc903', 'data' => $dataSetTend['data']);                
+            }elseif(!$cantValue) {
+                $dataSetValues['tendencia'] = 0;                
+            }
+            else{
+                $dataSetValues['tendencia'] = 0;
+            }
+
+        	//Data 2014
+        	$dataAnt["value"] = 50;
+            $dataAnt["color"] = '#f2c500';            
+            $dataSetAnt["showvalues"] = "1";            
+            $dataSetAnt["data"][] = $dataAnt;//2014
+        	
+        	$data['dataSource']['chart'] = $chart;
+        	$data['dataSource']['categories'][]["category"] = $category;
+			$data['dataSource']['dataset'][] = $dataSetValues['tendencia'];
+			$data['dataSource']['dataset'][] = $dataSetReal;
+			$data['dataSource']['dataset'][] = $dataSetAnt;
+			$data['dataSource']['dataset'][] = $dataSetPlan['data'];
+        	
+        //return json_encode($data);
         return $data;
     }
 

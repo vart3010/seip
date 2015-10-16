@@ -108,13 +108,13 @@
                 <div class="nine-columns twelve-columns-mobile" id="chartContainerResult">
                 <!-- This div will hold the chart generated in the footer -->
                 </div>
-            {% if is_granted('ROLE_SEIP_SIG_EVOLUTION_LAST_PERIOD') %}                
+            {#{% if is_granted('ROLE_SEIP_SIG_EVOLUTION_LAST_PERIOD') %}                
                 <div ng-controller="EvolutionIndicatorConfig"> 
                     <div class="button-group button-config">
                         <a class="button icon-list-add " href="" ng-click="loadTemplateConfig()" title="">{{ 'pequiven_indicator.config'|trans({},'PequivenSIGBundle')  }}</a>
                     </div>
                 </div>
-            {% endif %}
+            {% endif %}#}
                
             </div>  
         </div>  
@@ -132,25 +132,28 @@
                         </div>
                 </div>
         </div> 
-        <br>
-        
+        <br>        
         {# Fin de Graficos #}
 
-    {% if is_granted('ROLE_SEIP_SIG_EVOLUTION_ACTION') %}
     
     {# Analisis de Causas #}
+    {% if is_granted('ROLE_SEIP_SIG_EVOLUTION_CAUSE') %}    
             <br /><br />
             {% include 'PequivenSIGBundle:Indicator:show/analysis_cause.html.twig' %} 
             <br /><br />            
             {% include 'PequivenSIGBundle:Indicator:show/causes_list.html.twig' %} 
             &nbsp;
+    {% endif %}
+    
+    {% if is_granted('ROLE_SEIP_SIG_EVOLUTION_ACTION') %}
     {# Plan de accion y seguimiento #}
             <br /><br />
             {% include 'PequivenSIGBundle:Indicator:show/action.html.twig' %}
             &nbsp;
-        {% if dataAction["values"] %}
+        {% if dataAction["values"] and is_granted('ROLE_SEIP_SIG_EVOLUTION_ACTION_VERIFICATION')%}
 
             {% include 'PequivenSIGBundle:Indicator:show/verification.html.twig' %}            
+
         {% endif %}        
             &nbsp;
 

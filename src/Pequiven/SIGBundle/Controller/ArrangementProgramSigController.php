@@ -28,15 +28,14 @@ class ArrangementProgramSigController extends ResourceController
         //$ArrangementProgram = $this->get('pequiven.repository.indicator')->find(); //Obtenemos el indicador
 
         $dataChart = $ArrangementProgramService->getDataChartOfArrangementProgramEvolution($ArrangementProgram); //Obtenemos la data del gráfico de acuerdo al indicador
-
-        $data = 0;
-
+        //var_dump($dataChart);
+        //die();
     	$view = $this
             ->view()
             ->setTemplate($this->config->getTemplate('evolution.html'))
             ->setData(array(
                 'ArrangementProgram'  => $ArrangementProgram,
-                'data'                => $data
+                'data'                => $dataChart
             ));
 
         return $this->handleView($view);
