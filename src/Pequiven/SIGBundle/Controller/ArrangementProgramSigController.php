@@ -16,7 +16,9 @@ class ArrangementProgramSigController extends ResourceController
 {
     public function evolutionAction(Request $request)
     {
-    	$id = $request->get("id");
+    	$id = $request->get("id");//Id ArrangmentProgram
+        $month = $request->get('month'); //El mes pasado por parametro
+
         $em = $this->getDoctrine()->getManager();
     	
     	$ArrangementProgram = $em->getRepository('PequivenArrangementProgramBundle:ArrangementProgram')->findWithData($id);
@@ -28,14 +30,18 @@ class ArrangementProgramSigController extends ResourceController
         //$ArrangementProgram = $this->get('pequiven.repository.indicator')->find(); //Obtenemos el indicador
 
         $dataChart = $ArrangementProgramService->getDataChartOfArrangementProgramEvolution($ArrangementProgram); //Obtenemos la data del gráfico de acuerdo al indicador
-        //var_dump($dataChart);
-        //die();
+        
+        //Carga el analisis de la tendencia
+        $trend = $this->get('pequiven.repository.sig_trend_report_evolution')->findBy(array('arrangementProgram' => $id, 'month' => $month, 'typeObject' => 2));
+        
     	$view = $this
             ->view()
             ->setTemplate($this->config->getTemplate('evolution.html'))
             ->setData(array(
                 'ArrangementProgram'  => $ArrangementProgram,
-                'data'                => $dataChart
+                'data'                => $dataChart,
+                'trend'               => $trend,
+                'typeObject'          => 2   
             ));
 
         return $this->handleView($view);

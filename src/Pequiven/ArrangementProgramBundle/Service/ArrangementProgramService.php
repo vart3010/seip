@@ -169,36 +169,42 @@ class ArrangementProgramService implements ContainerAwareInterface {
         	//Carga de datos del label principal Periodo-2015
         	$labelAnt["label"] = $labelAntper;//Label del 2014
         	$category[] = $labelAnt;//Label del 2014
-        	//var_dump($real);
-        	$cantData = count($real);
-        	//var_dump($cantData);
-        	//die();
+        	
+        	$cantData = count($real);        	
         	$cont = 1;
-        	//$dataSetReal["data"][] = array( 'value' => '' );//Data vacia para saltar 2014
-        	//$dataSetPlan["data"][] = array( 'value' => '' );//Data vacia para saltar 2014
+        	$dataSetReal["data"][] = array( 'value' => '' );//Data vacia para saltar 2014
+        	$dataSetPlan["data"][] = array( 'value' => '' );//Data vacia para saltar 2014
+        	$dataSetTend["data"][] = array( 'value' => '' );//Data vacia para saltar 2014
+        	
         	for ($i=0; $i < $cantData; $i++) { 
-        		$label["label"] = "mes";
-				$category[] = $label;
         		
-        		//Carga de la data Real
-        		$dataReal["value"] = $real[$cont];
-				$dataSetReal["data"][] = $dataReal;
-        		
-        		//Carga de la Data Plan
-				$dataPlan["value"] = $planned[$cont];
-				$dataSetPlan["data"][] = $dataPlan;
+        		if ($real[$cont] != NULL) {        		
+        			
+        			$label["label"] = "mes";
+					$category[] = $label;
 
-				$dataSetTend["data"][] = $dataReal;
         		
-        		$cont++;
+	        		//Carga de la data Real
+	        		$dataReal["value"] = $real[$cont];
+					$dataSetReal["data"][] = $dataReal;
+	        		
+	        		//Carga de la Data Plan
+					$dataPlan["value"] = $planned[$cont];
+					$dataSetPlan["data"][] = $dataPlan;
+
+					$dataSetTend["data"][] = $dataReal;
+	        		
+        		}
+	        		$cont++;
         	}
+
         	//Label Promedio o Acumunlado
         	$labelp["label"] = $labelProm;//Label del Prom
             $category[] = $labelp;//Label del Prom
 
             //Data Prom
             $dataSetReal["showvalues"] = "1";
-            $dataAcum["value"] = 50;//Pasando data a data prom
+            $dataAcum["value"] = $ArrangementProgram->getResult();//Pasando data a data prom
             $dataAcum["color"] = '#0a5f87';            
             $dataSetReal["data"][] = $dataAcum;//promedio
 
@@ -225,7 +231,7 @@ class ArrangementProgramService implements ContainerAwareInterface {
             }
 
         	//Data 2014
-        	$dataAnt["value"] = 50;
+        	$dataAnt["value"] = 0;
             $dataAnt["color"] = '#f2c500';            
             $dataSetAnt["showvalues"] = "1";            
             $dataSetAnt["data"][] = $dataAnt;//2014

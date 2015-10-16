@@ -9,10 +9,10 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Pequiven\IndicatorBundle\Model\Indicator\EvolutionIndicator\EvolutionCause as Model;
 
 /**
- * Causas de Desviacion del Indicador
+ * Causas de Desviacion del informe de evolucion
  *
  * @author Maximo Sojo <maxsojo13@gmail.com>
- * @ORM\Table(name="seip_indicator_evolution_causes")
+ * @ORM\Table(name="seip_report_evolution_causes")
  * @ORM\Entity(repositoryClass="Pequiven\IndicatorBundle\Repository\Indicator\EvolutionIndicator\EvolutionCauseRepository")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
