@@ -34,7 +34,7 @@ class ArrangementProgramSigController extends ResourceController
         //Carga el analisis de la tendencia
         $trend = $this->get('pequiven.repository.sig_trend_report_evolution')->findBy(array('arrangementProgram' => $id, 'month' => $month, 'typeObject' => 2));
         
-    	$view = $this
+        $view = $this
             ->view()
             ->setTemplate($this->config->getTemplate('evolution.html'))
             ->setData(array(
