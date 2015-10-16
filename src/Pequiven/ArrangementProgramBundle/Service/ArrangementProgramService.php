@@ -30,9 +30,34 @@ class ArrangementProgramService implements ContainerAwareInterface {
      * Carga de labels de los meses del informe de evolucion arrangement program
      *	
      */
-    public function getMonthsArrangementProgram($cantmotnh)
-    {
-
+    public function getMonthsArrangementProgram($cont)
+    {   
+        if ($cont == 1) {
+            $month = "Enero";
+        }elseif ($cont == 2) {
+            $month = "Febrero";
+        }elseif ($cont == 3) {
+            $month = "Marzo";
+        }elseif ($cont == 4) {
+            $month = "Abril";
+        }elseif ($cont == 5) {
+            $month = "Mayo";
+        }elseif ($cont == 6) {
+            $month = "Junio";
+        }elseif ($cont == 7) {
+            $month = "Julio";
+        }elseif ($cont == 8) {
+            $month = "Agosto";
+        }elseif ($cont == 9) {
+            $month = "Septiembre";
+        }elseif ($cont == 10) {
+            $month = "Octubre";
+        }elseif ($cont == 11) {
+            $month = "Noviembre";
+        }elseif ($cont == 12) {
+            $month = "Diciembre";
+        }
+        return $month;        
     }
 
 	/**
@@ -91,6 +116,7 @@ class ArrangementProgramService implements ContainerAwareInterface {
         $planned = array();
         $em = $this->getDoctrine()->getManager();
         $timeline = $ArrangementProgram->getTimeline();
+
 
         foreach ($timeline->getGoals() as $timeline_goals) {
 
@@ -166,25 +192,29 @@ class ArrangementProgramService implements ContainerAwareInterface {
             $planned[12] = $sump;
             $real[12] = $sumr;
         }      
-        	//Carga de datos del label principal Periodo-2015
-        	$labelAnt["label"] = $labelAntper;//Label del 2014
-        	$category[] = $labelAnt;//Label del 2014
-        	
-        	$cantData = count($real);        	
-        	$cont = 1;
-        	$dataSetReal["data"][] = array( 'value' => '' );//Data vacia para saltar 2014
-        	$dataSetPlan["data"][] = array( 'value' => '' );//Data vacia para saltar 2014
-        	$dataSetTend["data"][] = array( 'value' => '' );//Data vacia para saltar 2014
-        	
-        	for ($i=0; $i < $cantData; $i++) { 
-        		
-        		if ($real[$cont] != NULL) {        		
-        			
-        			$label["label"] = "mes";
-					$category[] = $label;
+            //Carga de datos del label principal Periodo-2015
+            $labelAnt["label"] = $labelAntper;//Label del 2014
+            $category[] = $labelAnt;//Label del 2014
+            
+            $cantData = count($real);           
 
-        		
-	        		//Carga de la data Real
+
+            $cont = 1;
+            $dataSetReal["data"][] = array( 'value' => '' );//Data vacia para saltar 2014
+            $dataSetPlan["data"][] = array( 'value' => '' );//Data vacia para saltar 2014
+            $dataSetTend["data"][] = array( 'value' => '' );//Data vacia para saltar 2014
+            
+            for ($i=0; $i < $cantData; $i++) { 
+                
+                if ($real[$cont] != NULL) {             
+                    
+                    $month = $this->getMonthsArrangementProgram($cont);//Carga de labels de los meses
+
+                    $label["label"] = $month;
+                    $category[] = $label;
+
+                
+                    //Carga de la data Real
 	        		$dataReal["value"] = $real[$cont];
 					$dataSetReal["data"][] = $dataReal;
 	        		

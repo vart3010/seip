@@ -109,7 +109,7 @@
         {% if is_granted('ROLE_SEIP_SIG_EVOLUTION_DOWNLOAD') %}
             {# Descarga de Informe de Evolución#}
             &nbsp;
-            {{ buttons.generic_download(path('pequiven_indicator_evolution_export', { 'id': ArrangementProgram.id, 'month': 10 }),('pequiven_indicator.download'|trans({},'PequivenSIGBundle'))) }}        
+            {{ buttons.generic_download(path('pequiven_indicator_evolution_export', { 'id': ArrangementProgram.id, 'month': month }),('pequiven_indicator.download'|trans({},'PequivenSIGBundle'))) }}        
         {% endif %}
 
         </div>

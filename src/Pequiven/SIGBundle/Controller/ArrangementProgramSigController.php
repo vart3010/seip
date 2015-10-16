@@ -41,6 +41,7 @@ class ArrangementProgramSigController extends ResourceController
                 'ArrangementProgram'  => $ArrangementProgram,
                 'data'                => $dataChart,
                 'trend'               => $trend,
+                'month'               => $month,
                 'typeObject'          => 2   
             ));
 
