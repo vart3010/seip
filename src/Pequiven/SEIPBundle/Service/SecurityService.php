@@ -120,7 +120,7 @@ class SecurityService implements ContainerAwareInterface
         $result = false;
         if($indicator->getStatus() == Indicator::STATUS_DRAFT && $indicator->getPeriod()->isActive() === true){
             $result = true;
-        } elseif($objetive->getStatus() == Indicator::STATUS_DRAFT && $indicator->getPeriod()->getParent()->isActive()){
+        } elseif($indicator->getStatus() == Indicator::STATUS_DRAFT && $indicator->getPeriod()->getParent()->isActive()){
             $result = true;            
         } else{
             $result = false;
