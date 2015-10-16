@@ -188,7 +188,7 @@ class IndicatorSigController extends ResourceController
         }
 
         //Carga el analisis de la tendencia
-        $trend = $this->get('pequiven.repository.sig_trend_indicator')->findBy(array('indicator' => $indicator, 'month' => $month));
+        $trend = $this->get('pequiven.repository.sig_trend_report_evolution')->findBy(array('indicator' => $indicator, 'month' => $month, 'typeObject' => 1));
 
         //Carga del analisis de las causas
         $causeAnalysis = $this->get('pequiven.repository.sig_causes_analysis')->findBy(array('indicator'=>$indicator, 'month' => $month));
@@ -244,6 +244,7 @@ class IndicatorSigController extends ResourceController
                 'analysis'                       => $causeAnalysis,
                 'trend'                          => $trend,
                 'font'                           => $font,
+                'typeObject'                     => 1,
                 $this->config->getResourceName() => $resource,
                 'form'                           => $form->createView()
             ));
@@ -733,69 +734,6 @@ class IndicatorSigController extends ResourceController
     }
 
     /**
-     * Retorna el formulario del analisis de la tendencia
-     * 
-     * @param Request $request
-     * @return type
-     */
-    function getFormTrendAction(Request $request)
-    {
-        $indicator = $this->findIndicatorOr404($request);        
-        $idIndicator = $request->get('idIndicator');
-        
-        $trend = new EvolutionTrend();
-        $form  = $this->createForm(new EvolutionTrendType(), $trend);
-        
-        $view = $this
-            ->view()
-            ->setTemplate($this->config->getTemplate('form/form_trend.html'))
-            ->setTemplateVar($this->config->getPluralResourceName())
-            ->setData(array(
-                'indicator' => $indicator,
-                'form' => $form->createView(),
-            ))
-        ;
-        $view->getSerializationContext()->setGroups(array('id','api_list'));
-        return $view;
-    }
-
-    /**
-     * Añade la tendencia del indicador
-     * 
-     * @param Request $request
-     * @return type
-     */
-    public function addTrendAction(Request $request)
-    {   
-        $indicator = $request->get('idIndicator');
-        $repository = $this->get('pequiven.repository.sig_indicator');
-        $results = $repository->find($indicator);
-
-        //$month = date("m");//Carga del mes de Creación de la causa "Automatico"        
-        $month = $request->get('evolutiontrend')['month'];//Carga de Mes pasado
-        
-        $user = $this->getUser();
-        $data = $results;
-        $trend = new EvolutionTrend();
-        $form  = $this->createForm(new EvolutionTrendType(), $trend);
-        
-        $trend->setIndicator($data);
-        $trend->setCreatedBy($user);
-        $trend->setMonth($month);
-
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted()) {
-            
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($trend);
-            $em->flush();
-
-           // return $this->redirect($this->generateUrl('pequiven_causes_form_add'));
-        }     
-    }
-
-    /**
      * Retorna el formulario de Verificación del Plan de Acción
      * 
      * @param Request $request
@@ -1098,7 +1036,7 @@ class IndicatorSigController extends ResourceController
         $name = $indicator->getRef().''.$indicator->getDescription();//Nombre del Indicador
 
         //Carga el analisis de la tendencia
-        $trend = $this->get('pequiven.repository.sig_trend_indicator')->findBy(array('indicator' => $idIndicator, 'month' => $month));
+        $trend = $this->get('pequiven.repository.sig_trend_report_evolution')->findBy(array('indicator' => $idIndicator, 'month' => $month));
             if($trend){                
                 foreach ($trend as $value) {            
                     $trendDescription = $value->getDescription();//Tendencia

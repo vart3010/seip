@@ -7,10 +7,10 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Pequiven\IndicatorBundle\Model\Indicator\EvolutionIndicator\EvolutionActionValue as Model;
 
 /**
- * Valores del Plan de Acción y Seguimiento del Indicador
+ * Valores del Plan de Acción y Seguimiento del informe de evolucion
  *
  * @author Maximo Sojo <maxsojo13@gmail.com>
- * @ORM\Table(name="seip_indicator_evolution_action_value")
+ * @ORM\Table(name="seip_report_evolution_action_value")
  * @ORM\Entity()
  * 
  */
