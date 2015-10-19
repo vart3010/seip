@@ -33,9 +33,9 @@ pequiven_indicatoraction_get_form:
         expose: true
 #carga de formulario plan de acción añdir los resultados 0
 pequiven_indicator_action_add_get_form:
-    path: /{idIndicator}/get-form_add.{_format}
+    path: /{idIndicator}/{typeObj}/get-form_add.{_format}
     defaults:
-        _controller: pequiven.controller.indicator_sig:getFormPlanAddAction
+        _controller: pequiven.controller.sig_trend_report_evolution:getFormPlanAddAction
         _format: html
     requirements:
         _format: html|json
@@ -77,9 +77,9 @@ pequiven_causes_analysis_get_form:
         expose: true
 #Carga de formulario de la verificación del indicador
 pequiven_verification_get_form:
-    path: /{idIndicator}/get-form_verification.{_format}
+    path: /{idIndicator}/{typeObj}/get-form_verification.{_format}
     defaults:
-        _controller: pequiven.controller.indicator_sig:getFormVerificationAction
+        _controller: pequiven.controller.sig_trend_report_evolution:getFormVerificationAction
         _format: html
     requirements:
         _format: html|json
@@ -134,7 +134,7 @@ pequiven_action_evolution_add:
 pequiven_action_values_evolution_add:
     path: /{idIndicator}/add_values.{_format}
     defaults:
-        _controller: pequiven.controller.indicator_sig:addValuesAction
+        _controller: pequiven.controller.sig_trend_report_evolution:addValuesAction
         _format: json
     requirements:
         _format: json

@@ -1719,6 +1719,7 @@ angular.module('seipModule.controllers', [])
 
                 var parameters = {
                     idIndicator: $scope.id_indicator,
+                    typeObj: $scope.typeObj,
                     _dc: numero
                 };
                 if (resource) {
@@ -1903,7 +1904,6 @@ angular.module('seipModule.controllers', [])
         })
         .controller('IndicatorSigEvolutionVerificationController', function ($scope, notificationBarService, $http, notifyService, $filter) {
 
-            //$scope.urlCausesEvolutionForm = null;
             $scope.indicator = null;
             var isInit = false;
 
@@ -1915,7 +1915,6 @@ angular.module('seipModule.controllers', [])
                 }
                 $scope.templateOptions.setTemplate($scope.templates[0]);
                 $scope.templateOptions.setParameterCallBack(resource);
-                //$scope.templateOptions.setVar('evaluationResult', 0);
                 if (resource) {
                     $scope.templateOptions.enableModeEdit();
                     $scope.openModalAuto();
@@ -1972,12 +1971,13 @@ angular.module('seipModule.controllers', [])
             };
             //Formulario Verificación
             $scope.initFormVerification = function (resource) {
-                //console.log($scope.month);
+                
                 var d = new Date();
                 var numero = d.getTime();
 
                 var parameters = {
                     idIndicator: $scope.id_indicator,
+                    typeObj: $scope.typeObj,
                     _dc: numero
                 };
                 if (resource) {

@@ -204,6 +204,55 @@ class ReportEvolutionController extends ResourceController
     }
 
     /**
+     * Retorna el formulario del plan de acción para cargar valores
+     * 
+     * @param Request $request
+     * @return type
+     */
+    function getFormPlanAddAction(Request $request)
+    {   
+        $id = $request->get('idIndicator');
+
+        $typeObject = $request->get('typeObj');
+
+        if ($typeObject == 1) {
+            
+            $result = $this->findIndicatorOr404($request);        
+            
+        }elseif($typeObject == 2){
+            
+            $repository = $this->get('pequiven_seip.repository.arrangementprogram');
+            $result = $repository->find($id); 
+        }
+
+        $user = $this->getUser();//Carga de usuario
+
+        $data = $this->findEvolutionCause($request);//Carga la data de las causas y sus acciones relacionadas
+        
+        $form_value  = $this->createForm(new EvolutionActionValueType());
+        $codifigication = $form = 0;
+        
+        $config = [
+            'id' => 'form_action_values_evolution'
+        ];
+        
+        $view = $this
+            ->view()
+            ->setTemplate($this->config->getTemplate('form/form_action.html'))
+            ->setTemplateVar($this->config->getPluralResourceName())
+            ->setData(array(
+                'indicator'     => $result,
+                'code'          => $codifigication,
+                'config'        => $config,
+                'form_value'    => $form_value->createView(),
+                'form'          => $form
+            ))
+        ;
+        $view->getSerializationContext()->setGroups(array('id','api_list'));
+        return $view;
+    }
+
+    /**
      * Añade el Plan de Acción
      * 
      * @param Request $request
@@ -351,6 +400,104 @@ class ReportEvolutionController extends ResourceController
         }
 
     }    
+
+    /**
+     * Retorna el formulario de Verificación del Plan de Acción
+     * 
+     * @param Request $request
+     * @return type
+     */
+    function getFormVerificationAction(Request $request)
+    {
+        $indicator = $this->findIndicatorOr404($request);        
+        
+        $verification = new EvolutionActionVerification();
+        $form  = $this->createForm(new EvolutionActionVerificationType(), $verification);
+        
+        $view = $this
+            ->view()
+            ->setTemplate($this->config->getTemplate('form/form_action_verification.html'))
+            ->setTemplateVar($this->config->getPluralResourceName())
+            ->setData(array(
+                'indicator' => $indicator,
+                'form' => $form->createView(),
+            ))
+        ;
+        $view->getSerializationContext()->setGroups(array('id','api_list'));
+        return $view;
+    }
+
+    /**
+     * Añade la Verificacion de Plan de Acción y Seguimiento
+     * 
+     * @param Request $request
+     * @return type
+     */
+    public function addVerificationAction(Request $request)
+    {   
+        $indicator = $request->get('idIndicator');//Carga de indicador
+        $repository = $this->get('pequiven.repository.sig_indicator');
+        $results = $repository->find($indicator);
+
+        $month = $request->get('month');;//Mes
+        
+        $action = $request->get('actionVerification')['actionPlan'];
+        $idVerification = $request->get('actionVerification')['typeVerification'];
+        
+        //Consulta del tipo de Verificación para el plan de acción
+        $ver = $this->get('pequiven.repository.managementsystem_sig_verification')->find($idVerification);
+        $statusAction = $ver->getStatus();//Status 0/1 para el plan 
+
+        //Acción
+        $actionVer = $this->get('pequiven.repository.sig_action_indicator')->find($action);
+
+        $user = $this->getUser();
+        $verification = new EvolutionActionVerification();
+        $form  = $this->createForm(new EvolutionActionVerificationType(), $verification);
+        
+        $verification->setCreatedBy($user);
+        $verification->setActionPlan($actionVer);
+        $verification->setIndicator($results);
+        $verification->setMonth($month);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($verification);
+            $em->flush();
+        }    
+
+        
+        if($actionVer){//Si existe la acción le cambio el status segun sea el caso
+
+            $actionVer->setStatus($statusAction);
+            $em->flush();  
+
+        }  
+    }
+
+    /**
+     *  Delete verification
+     *  
+     * @param Request $request
+     * @return type
+     */
+    public function deleteVerificationAction(Request $request)
+    {
+        $id = $request->get('id');//id Verification        
+        
+        $em = $this->getDoctrine()->getManager();
+        $verification = $this->get('pequiven.repository.sig_action_verification')->find($id);
+        
+        if($verification){
+
+            $em->remove($verification);
+            $em->flush();        
+        }
+
+    }
 
     /**
      * Buscamos las acciones de las causas

@@ -384,43 +384,7 @@ class IndicatorSigController extends ResourceController
             return $this->redirect($this->generateUrl('pequiven_indicator_evolution',$idIndicator));
      
     }
-
-    /**
-     * Retorna el formulario del plan de acción
-     * 
-     * @param Request $request
-     * @return type
-     */
-    function getFormPlanAddAction(Request $request)
-    {
-        $indicator = $this->findIndicatorOr404($request); 
-
-        $user = $this->getUser();//Carga de usuario
-
-        $data = $this->findEvolutionCause($request);//Carga la data de las causas y sus acciones relacionadas
-        
-        $form_value  = $this->createForm(new EvolutionActionValueType());
-        $codifigication = $form = 0;
-        
-        $config = [
-            'id' => 'form_action_values_evolution'
-        ];
-        
-        $view = $this
-            ->view()
-            ->setTemplate($this->config->getTemplate('form/form_action.html'))
-            ->setTemplateVar($this->config->getPluralResourceName())
-            ->setData(array(
-                'indicator'     => $indicator,
-                'code'          => $codifigication,
-                'config'        => $config,
-                'form_value'    => $form_value->createView(),
-                'form'          => $form
-            ))
-        ;
-        $view->getSerializationContext()->setGroups(array('id','api_list'));
-        return $view;
-    }
+    
 
     /**
      * Elimina las causas
