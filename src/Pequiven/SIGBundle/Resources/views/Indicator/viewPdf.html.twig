@@ -67,6 +67,32 @@
 </style>
 {% block body %}
     <br/><br/>
+
+    {% if month == 1 %}
+        {% set setmonth = "Enero" %} 
+    {% elseif month == 2 %}
+        {% set setmonth = "Febrero" %}
+    {% elseif month == 3 %}
+        {% set setmonth = "Marzo" %}
+    {% elseif month == 4 %}
+        {% set setmonth = "Abril" %}
+    {% elseif month == 5 %}
+        {% set setmonth = "Mayo" %}
+    {% elseif month == 6 %}
+        {% set setmonth = "Junio" %}
+    {% elseif month == 7 %}
+        {% set setmonth = "Julio" %}
+    {% elseif month == 8 %}
+        {% set setmonth = "Agosto" %}
+    {% elseif month == 9 %}
+        {% set setmonth = "Septiembre" %}
+    {% elseif month == 10 %}
+        {% set setmonth = "Octubre" %}
+    {% elseif month == 11 %}
+        {% set setmonth = "Noviembre" %}
+    {% elseif month == 12 %}
+        {% set setmonth = "Diciembre" %}
+    {% endif %}         
     
     <table width="95%">
         <tbody>
@@ -80,7 +106,7 @@
                 <th class="title_bold">INDICE DE: {{ name }}</th>
             </tr>
             <tr>
-                <th class="title_bold">MES: {{ month }}</th>
+                <th class="title_bold">MES: {{ setmonth }}</th>
             </tr>
         </tbody>
     </table>
