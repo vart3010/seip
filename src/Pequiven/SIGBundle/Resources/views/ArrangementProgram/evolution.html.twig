@@ -82,7 +82,7 @@
 
         {# Graficos #}
         <div class="columns with-padding"> 
-            <div ng-controller="ChartsSigController" class="dashboard_sig" ng-init="renderChartEvolutionSig('chartContainerResult', {{ data|json_encode() }})" style="width: 85%;" align="center">                
+            <div ng-controller="ChartsSigController" class="dashboard_sig" ng-init="renderChartEvolutionSig('chartContainerResult', {{ data|json_encode() }})" style="width: 82%;" align="center">                
                 <div class="nine-columns twelve-columns-mobile" id="chartContainerResult">
                 <!-- This div will hold the chart generated in the footer -->
                 </div>            
@@ -94,6 +94,25 @@
             <br /><br />
             {% include 'PequivenSIGBundle:Indicator:show/analysis_trend.html.twig' %} 
             &nbsp; 
+        {% endif %}
+
+        <div class="columns with-padding">         
+                <div ng-controller="ChartsSigController" class="dashboard_sig" ng-init="renderChartSigCs('chartContainerResultCs', {{ dataCause|json_encode() }})" style="width: 82%; height:55%;" align="center">
+                        <div class="nine-columns twelve-columns-mobile" id="chartContainerResultCs">
+                            <!-- This div will hold the chart generated in the footer -->
+                        </div>
+                </div>
+        </div> 
+        <br>        
+        {# Fin de Graficos #}
+
+        {# Analisis de Causas #}
+        {% if is_granted('ROLE_SEIP_SIG_EVOLUTION_CAUSE') %}    
+            <br /><br />
+            {% include 'PequivenSIGBundle:Indicator:show/analysis_cause.html.twig' %} 
+            <br /><br />            
+            {% include 'PequivenSIGBundle:Indicator:show/causes_list.html.twig' %} 
+            &nbsp;
         {% endif %}
 
     <p class="button-height align-right">          

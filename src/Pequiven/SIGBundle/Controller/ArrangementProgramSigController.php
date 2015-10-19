@@ -27,21 +27,33 @@ class ArrangementProgramSigController extends ResourceController
 
         $ArrangementProgramService = $this->getArrangementProgramService(); //Obtenemos el servicio del indicador
         
-        //$ArrangementProgram = $this->get('pequiven.repository.indicator')->find(); //Obtenemos el indicador
+        $dataChart = $ArrangementProgramService->getDataChartOfArrangementProgramEvolution($ArrangementProgram); //Obtenemos la data del gráfico de acuerdo al programa
 
-        $dataChart = $ArrangementProgramService->getDataChartOfArrangementProgramEvolution($ArrangementProgram); //Obtenemos la data del gráfico de acuerdo al indicador
+        $dataCause = $ArrangementProgramService->getDataChartOfCausesEvolution($ArrangementProgram, $month); //Obtenemos la data del grafico de las causas de desviación
+
+        //Carga de las Causas
+        $results = $this->get('pequiven.repository.sig_causes_report_evolution')->findBy(array('arrangementProgram' => $id,'month' => $month, 'typeObject' => 2));
         
         //Carga el analisis de la tendencia
         $trend = $this->get('pequiven.repository.sig_trend_report_evolution')->findBy(array('arrangementProgram' => $id, 'month' => $month, 'typeObject' => 2));
+       
+        //Carga el analisis de Causas
+        $causeAnalysis = $this->get('pequiven.repository.sig_causes_analysis')->findBy(array('arrangementProgram'=> $id, 'month' => $month, 'typeObject'=> 2));
         
+        $analysis = $sumCause = 0;
+
         $view = $this
             ->view()
             ->setTemplate($this->config->getTemplate('evolution.html'))
             ->setData(array(
                 'ArrangementProgram'  => $ArrangementProgram,
                 'data'                => $dataChart,
+                'dataCause'           => $dataCause,
                 'trend'               => $trend,
                 'month'               => $month,
+                'analysis'            => $causeAnalysis,
+                'cause'               => $results,
+                'sumCause'            => $sumCause,                
                 'typeObject'          => 2   
             ));
 

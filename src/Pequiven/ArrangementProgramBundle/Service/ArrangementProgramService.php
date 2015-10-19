@@ -14,7 +14,7 @@ use Pequiven\SEIPBundle\Model\Common\CommonObject;
 /**
  * Servicios para el ArrangementProgram
  * 
- * service pequiven_indicator.service.inidicator
+ * service 
  * @author Maximo Sojo <maxsojo13@gmail.com>
  */
 class ArrangementProgramService implements ContainerAwareInterface {
@@ -274,6 +274,93 @@ class ArrangementProgramService implements ContainerAwareInterface {
 			$data['dataSource']['dataset'][] = $dataSetPlan['data'];
         	
         //return json_encode($data);
+        return $data;
+    }
+
+
+    /**
+     * Gráfico de Columna para Causas de Desviación
+     * @param ArrangementProgram $ArrangementProgram
+     * @return type
+     */
+    public function getDataChartOfCausesEvolution($ArrangementProgram, $month) {
+        
+        $data = array(
+            'dataSource' => array(
+                'chart' => array(),
+                'categories' => array(
+                ),
+                'dataset' => array(
+                ),
+            ),
+        );
+        
+        $chart = array();
+        $chart["caption"] = "Gráfico Causas de Desviación";
+        $chart["subCaption"] = "Periodo-2015";
+        $chart["valueFontColor"] = "#000000";
+        $chart["showvalues"]= "1";
+        $chart["showSum"]= "1";
+        $chart["numberSuffix"] = "%";
+        $chart["bgalpha"]= "0,0";
+        $chart["baseFontColor"] = "#ffffff";
+        $chart["bgColor"] = "#ffffff";
+        $chart["legendBgColor"] = "#ffffff";        
+        $chart["legendItemFontSize"] = "10";
+        $chart["legendItemFontColor"] = "#666666";
+        $chart["toolTipColor"] = "#ffffff";                
+        $chart["outCnvBaseFontColor"] = "#000000";
+        $chart["visible"] = "1";
+        $chart["theme"] = "fint";
+        //$chart["rotateValues"] = "0";
+        $chart["snumbersuffix"] = "%";
+        $chart["decimals"] = "0";
+        $chart["setadaptiveymin"] = "1";
+        $chart["setadaptivesymin"] = "1";
+        //$chart["sYAxisMaxValue"] = "150";
+        //$chart["pYAxisMaxValue"] = "150";
+        $chart["linethickness"]= "5";
+        $chart["showborder"] = "0";
+        $chart["exportenabled"] = "1";
+        $chart["exportatclient"] = "0";
+        $chart["exportFormats"] = "PNG= Exportar como PNG|PDF= Exportar como PDF";
+        $chart["exportFileName"] = "Grafico Resultados ";
+        $chart["exporthandler"] = "http://107.21.74.91/";
+
+        //Inicialización
+        $category = $dataSetCause = array();
+        $label = $dataCause = array();
+        $contCause = 1;
+        //Carga de Nombres de Labels
+        $dataSetCause["seriesname"] = "Causas";
+        $monthCause = (int)$month;
+            //
+            foreach ($ArrangementProgram->getArrangementProgramCauses() as $value) {
+                
+                if ($value->getMonth() === $monthCause) {
+                
+                    $label["label"] = $value->getCauses();                    
+                    $contCause = $contCause + 1;
+                    $category[] = $label;
+
+                }
+            }
+            
+            foreach ($ArrangementProgram->getArrangementProgramCauses() as $value) {
+                //Carga de los Valores de la causa
+                if ($value->getMonth() === $monthCause) {                
+                    
+                    $dataCause["value"] = $value->getvalueOfCauses();
+                    $dataSetCause["data"][] = $dataCause;
+                
+                }                
+            }
+        
+           
+        $data['dataSource']['chart'] = $chart;
+        $data['dataSource']['categories'][]["category"] = $category;
+        $data['dataSource']['dataset'][] = $dataSetCause;
+
         return $data;
     }
 

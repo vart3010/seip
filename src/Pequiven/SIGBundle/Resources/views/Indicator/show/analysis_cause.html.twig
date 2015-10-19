@@ -1,11 +1,8 @@
 {% trans_default_domain 'PequivenSIGBundle' %}
-
+<div class="block">
 <div ng-controller="IndicatorSigEvolutionCauseController"> 
-
-<div class="block" ng-init="urlValueIndicatorForm='{{ path('pequiven_feature_indicator_get_form',{'idIndicator':indicator_sig.id}) }}'">
-
     <div class="block-title">
-        <h3 class="ng-binding">{$ indicator_sig.featuresIndicator.length $} {{ 'sig.analysis_causes'|trans ({}, 'messages') }}</h3>
+        <h3 class="ng-binding">{{ 'sig.analysis_causes'|trans ({}, 'messages') }}</h3>
         {% if analysis %}
             {% for data in analysis %}
                 {% set dataAnalysis = data.id %}
@@ -14,14 +11,14 @@
                     </span>            
                 </div>  
                 {# form carga de archivo #}
-                <div ng-controller="ToolsController" ng-init="isGrantedButtonEdit({{ indicator_sig.id }},paso+1)">
-                    <form style="display: none" id="form_{$ valueCauseId.id $}" action="{{ path("pequiven_indicator_evolution",{id:indicator_sig.id, month:month, cause:dataAnalysis, uploadFile:(true)}) }}" method="POST" enctype="multipart/form-data">
+                {#<div ng-controller="ToolsController" ng-init="isGrantedButtonEdit({{ indicator_sig.id }},paso+1)">
+                    <form style="display: none" id="form_{$ valueCauseId.id $}" action="{{ path("pequiven_indicator_evolution",{id:indicator_sig.id, month:month, cause:dataAnalysis, uploadFile:(true)}) }}" method="POST" enctype="multipart/form-data">#}
                     
-                       <input name="archivo" onChange="submitUploadFile(this.id)" id="indicatorFilePdf_{$ idCause $}" type="file">
+                       {#<input name="archivo" onChange="submitUploadFile(this.id)" id="indicatorFilePdf_{$ idCause $}" type="file">
                              
                        <input type="hidden" name="valueCauseId" id="field_{$ idCause $}" value="">
-                    </form>
-                </div> 
+                    </form>#}
+                {#</div> #}
                 {# end form #}
                 {# Descarga #}
                 {% if data.valueCauseFile %}

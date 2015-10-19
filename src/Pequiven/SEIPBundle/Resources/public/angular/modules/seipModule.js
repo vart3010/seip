@@ -1495,7 +1495,7 @@ angular.module('seipModule.controllers', [])
                     var save = false;
                 }
                 if (save == true) {
-                    var url = Routing.generate('pequiven_causes_evolution_add', {idIndicator: $scope.id_indicator});
+                    var url = Routing.generate('pequiven_causes_evolution_add', {idIndicator: $scope.id_indicator, typeObj: $scope.typeObj });
                 }
                 notificationBarService.getLoadStatus().loading();
                 return $http({
@@ -1505,7 +1505,7 @@ angular.module('seipModule.controllers', [])
                     headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'}  // set the headers so angular passing info as form data (not request payload)
                 }).success(function (data) {
                     $scope.templateOptions.setVar("form", {errors: {}});
-                    //$scope.templateOptions.setVar('evaluationResult', data.result);
+
                     if (successCallBack) {
                         successCallBack(data);
                     }
@@ -1521,7 +1521,6 @@ angular.module('seipModule.controllers', [])
                         }
                         $scope.templateOptions.setVar("form", {errors: data.errors.children});
                     }
-                    //$scope.templateOptions.setVar('evaluationResult', 0);
                     notificationBarService.getLoadStatus().done();
                     return false;
                 });
@@ -1742,6 +1741,7 @@ angular.module('seipModule.controllers', [])
 
                 var parameters = {
                     idIndicator: $scope.id_indicator,
+                    typeObj: $scope.typeObj,
                     _dc: numero
                 };
                 if (resource) {
@@ -1808,7 +1808,6 @@ angular.module('seipModule.controllers', [])
         })
         .controller('IndicatorSigEvolutionCauseController', function ($scope, notificationBarService, $http, notifyService, $filter) {
 
-            //console.log($scope.id_indicator );
             $scope.urlCausesEvolutionForm = null;
             $scope.indicator = null;
             var isInit = false;
@@ -1838,7 +1837,7 @@ angular.module('seipModule.controllers', [])
                     var save = false;
                 }
                 if (save == true) {
-                    var url = Routing.generate('pequiven_analysis_cause_evolution_add', {idIndicator: $scope.id_indicator});
+                    var url = Routing.generate('pequiven_analysis_cause_evolution_add', {idIndicator: $scope.id_indicator, typeObj: $scope.typeObj});
                 }
                 notificationBarService.getLoadStatus().loading();
                 return $http({
@@ -1870,7 +1869,6 @@ angular.module('seipModule.controllers', [])
                 });
             };
             $scope.templateOptions.setVar('addCauseAnalysis', addCauseAnalysis);
-            //$scope.templateOptions.setVar('evaluationResult', 0);
             var confirmCallBack = function () {
                 addCauseAnalysis(true, function (data) {
                     $scope.indicator = data.indicator;
@@ -1885,6 +1883,7 @@ angular.module('seipModule.controllers', [])
 
                 var parameters = {
                     idIndicator: $scope.id_indicator,
+                    typeObj: $scope.typeObj,
                     _dc: numero
                 };
                 if (resource) {
@@ -1893,7 +1892,7 @@ angular.module('seipModule.controllers', [])
                 var url = Routing.generate('pequiven_causes_analysis_get_form', parameters);
                 $scope.templates = [
                     {
-                        name: 'Analisis de las Causas de Desviación del Indicador',
+                        name: 'Analisis de las Causas de Desviación',
                         url: url,
                         confirmCallBack: confirmCallBack,
                     }
@@ -1903,7 +1902,6 @@ angular.module('seipModule.controllers', [])
         })
         .controller('IndicatorSigEvolutionVerificationController', function ($scope, notificationBarService, $http, notifyService, $filter) {
 
-            //console.log($scope.id_indicator );
             //$scope.urlCausesEvolutionForm = null;
             $scope.indicator = null;
             var isInit = false;
@@ -5554,7 +5552,7 @@ angular.module('seipModule.controllers', [])
                         "type": "stackedbar3d",
                         "renderAt": id,
                         "width": "95%",
-                        "height": "550%",
+                        //"height": "550%",
                         "exportenabled": "1",
                         "exportFormats": "PNG= Exportar como PNG|PDF= Exportar como PDF",
                         "exportFileName": "Gráfico Causas de Desviación del Indicador",
@@ -5564,23 +5562,10 @@ angular.module('seipModule.controllers', [])
                         "dataSource": {
                             "chart": {
                                 "caption": "Gráfico Causas de Desviación",
-                                "subCaption": "Periodo - 2015",
-                                //"exportFormats": "PNG= Exportar como PNG|PDF= Exportar como PDF",                                
-                                //"xAxisName": Translator.trans('chart.arrangementPrograms.xAxisName'),
-                                //"pYAxisName": Translator.trans('chart.arrangementPrograms.pYAxisName'),
-                                //"sYAxisName": Translator.trans('chart.arrangementPrograms.sYAxisName'),
+                                "subCaption": "Periodo - 2015",                                
                                 "YAxisMaxValue": "100",
-                                //"xYAxisMaxValue": "100",
-                                //"pYAxisMaxValue": "100",
-                                //"yYAxisMaxValue": "100",                                
-                                //"sYAxisMinValue": "0",
-                                //"showValues": "1",
-                                //"placeValuesInside": "0",
                                 "valueFontColor": "#000000",
                                 "showvalues": "1",
-                                //"rotateValues": "0",
-                                //"labelDisplay": typeLabelDisplay,
-                                //"sNumberSuffix": "%",
                                 "showSum": "1",
                                 "numberSuffix": "%",
                                 "bgAlpha": "0,0",
@@ -5588,7 +5573,6 @@ angular.module('seipModule.controllers', [])
                                 "outCnvBaseFontColor": "#000000",
                                 "visible": "0",
                                 "theme": "fint",
-                                //"formatNumberScale": "0",
                                 "snumbersuffix": "%",
                                 "decimals": "3",
                                 "setadaptiveymin": "1",

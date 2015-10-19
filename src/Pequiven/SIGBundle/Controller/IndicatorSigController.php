@@ -180,7 +180,7 @@ class IndicatorSigController extends ResourceController
         //Carga de los datos de la grafica de las Causas de Desviación
         $dataCause = $indicatorService->getDataChartOfCausesIndicatorEvolution($indicator, $month); //Obtenemos la data del grafico de las causas de desviación
        
-        $results = $this->get('pequiven.repository.sig_causes_indicator')->findBy(array('indicator' => $idIndicator,'month' => $month));
+        $results = $this->get('pequiven.repository.sig_causes_report_evolution')->findBy(array('indicator' => $idIndicator,'month' => $month));
         
         foreach ($results as $value) {
             $dataCa = $value->getValueOfCauses();
@@ -516,7 +516,7 @@ class IndicatorSigController extends ResourceController
         
         $month = date("m");//Carga del mes de Creación de la causa "Automatico"  
 
-        $causeResult = $this->get('pequiven.repository.sig_causes_indicator')->find($causeAction);
+        $causeResult = $this->get('pequiven.repository.sig_causes_report_evolution')->find($causeAction);
         
         //Calculando la cantidad de meses que durara la acción
         $dateStart = $request->get('actionResults')['dateStart'];
@@ -643,73 +643,7 @@ class IndicatorSigController extends ResourceController
             }
         }
 
-    }
-
-    /**
-     * Retorna el formulario de las causas de desviación
-     * 
-     * @param Request $request
-     * @return type
-     */
-    function getFormCausesAction(Request $request)
-    {
-        //var_dump(date("m"));
-        //var_dump(date("M"));
-        $indicator = $this->findIndicatorOr404($request);                
-        $idIndicator = $request->get('idIndicator');
-        
-        $cause = new EvolutionCause();
-        $form  = $this->createForm(new EvolutionCauseType(), $cause);
-        $view = $this
-            ->view()
-            ->setTemplate($this->config->getTemplate('form/form_causes.html'))
-            ->setTemplateVar($this->config->getPluralResourceName())
-            ->setData(array(
-                'form'           => $form->createView(),
-                'indicator'      => $indicator,
-                'id' => $idIndicator
-            ))
-        ;
-        $view->getSerializationContext()->setGroups(array('id','api_list'));
-        return $view;
-    }
-
-    /**
-     * Añade las Causas
-     * 
-     * @param Request $request
-     * @return type
-     */
-    public function addCausesAction(Request $request)
-    {   
-        //$monthActual = date("m");//Carga del mes de Creación de la causa "Automatico"
-        $month = $request->get('evolutioncause')['month'];//Carga de Mes pasado
-
-        $indicator = $request->get('idIndicator');
-        $repository = $this->get('pequiven.repository.sig_indicator');
-        $results = $repository->find($indicator);
-        
-        $user = $this->getUser();
-        $data = $results;
-        $cause = new EvolutionCause();
-        $form  = $this->createForm(new EvolutionCauseType(), $cause);
-        
-        $cause->setIndicator($data);
-        $cause->setCreatedBy($user);
-        $cause->setMonth($month);        
-
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $month != 0) {
-            
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($cause);
-            $em->flush();
-
-            //$this->get('session')->getFlashBag()->add('error', $this->trans('action.messages.InvalidFile', array(), 'PequivenIndicatorBundle'));
-            //$this->redirect($this->generateUrl("pequiven_indicator_evolution", array("id" => $indicator, "month" => $month)));
-        }     
-    }
+    }    
 
     /**
      * Elimina las causas
@@ -723,7 +657,7 @@ class IndicatorSigController extends ResourceController
         $causeId = $request->get('id');
         
         $em = $this->getDoctrine()->getManager();
-        $results = $this->get('pequiven.repository.sig_causes_indicator')->find($causeId);
+        $results = $this->get('pequiven.repository.sig_causes_report_evolution')->find($causeId);
         
         if($results){
 
@@ -899,7 +833,7 @@ class IndicatorSigController extends ResourceController
         
         $idIndicator = $request->get('idIndicator');//Recibiendo indicator
        
-        $results = $this->get('pequiven.repository.sig_causes_indicator')->findBy(array( 'indicator' => $idIndicator));
+        $results = $this->get('pequiven.repository.sig_causes_report_evolution')->findBy(array( 'indicator' => $idIndicator));
       
         $view = $this->view();
           $view->setData($results);
@@ -922,8 +856,8 @@ class IndicatorSigController extends ResourceController
         $month = $request->get('month'); 
         //Carga de variable base
         $opc = false; $idAction = $actionResult = 0; $idCons = [0];
-        //$results = $this->get('pequiven.repository.sig_causes_indicator')->findBy(array('indicator' => $idIndicator,'month'=> $month));
-        $results = $this->get('pequiven.repository.sig_causes_indicator')->findBy(array('indicator' => $idIndicator));
+        //$results = $this->get('pequiven.repository.sig_causes_report_evolution')->findBy(array('indicator' => $idIndicator,'month'=> $month));
+        $results = $this->get('pequiven.repository.sig_causes_report_evolution')->findBy(array('indicator' => $idIndicator));
   
         //Determinando si esta en historico de informe o periodo actual
         if($month < $monthActual){

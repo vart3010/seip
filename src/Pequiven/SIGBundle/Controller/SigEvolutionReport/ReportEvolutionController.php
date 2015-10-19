@@ -76,7 +76,6 @@ class ReportEvolutionController extends ResourceController
         $result = $request->get('idIndicator');
         $typeObject = $request->get('typeObj');
         
-        //$month = date("m");//Carga del mes de Creación de la causa "Automatico"        
         $month = $request->get('evolutiontrend')['month'];//Carga de Mes pasado
         
         $user = $this->getUser();
@@ -109,9 +108,7 @@ class ReportEvolutionController extends ResourceController
             
             $em = $this->getDoctrine()->getManager();
             $em->persist($trend);
-            $em->flush();
-
-           // return $this->redirect($this->generateUrl('pequiven_causes_form_add'));
+            $em->flush();           
         }     
     }
 

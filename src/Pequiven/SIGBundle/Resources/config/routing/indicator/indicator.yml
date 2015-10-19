@@ -44,9 +44,9 @@ pequiven_indicator_action_add_get_form:
         expose: true
 #Carga de formulario de causas de evolution
 pequiven_indicatorcauses_get_form:
-    path: /{idIndicator}/get-form_causes.{_format}
+    path: /{idIndicator}/{typeObj}/get-form_causes.{_format}
     defaults:
-        _controller: pequiven.controller.indicator_sig:getFormCausesAction
+        _controller: pequiven.controller.sig_causes_report_evolution:getFormCausesAction
         _format: html
     requirements:
         _format: html|json
@@ -66,9 +66,9 @@ pequiven_indicatortrend_get_form:
         expose: true
 #Carga de formulario del analisis de las causas
 pequiven_causes_analysis_get_form:
-    path: /{idIndicator}/get-form_causeanalysis.{_format}
+    path: /{idIndicator}/{typeObj}/get-form_causeanalysis.{_format}
     defaults:
-        _controller: pequiven.controller.sig_causes_indicator:getFormAnalysisAction
+        _controller: pequiven.controller.sig_causes_report_evolution:getFormAnalysisAction
         _format: html
     requirements:
         _format: html|json
@@ -143,9 +143,9 @@ pequiven_action_values_evolution_add:
         expose: true
 #Guardamos el formulario de las causas del indicador
 pequiven_causes_evolution_add:
-    path: /{idIndicator}/addCauses.{_format}
+    path: /{idIndicator}/{typeObj}/addCauses.{_format}
     defaults:
-        _controller: pequiven.controller.indicator_sig:addCausesAction
+        _controller: pequiven.controller.sig_causes_report_evolution:addCausesAction
         _format: json
     requirements:
         _format: json
@@ -165,9 +165,9 @@ pequiven_trend_evolution_add:
         expose: true
 #Guardamos el formulario del analisis de las causas
 pequiven_analysis_cause_evolution_add:
-    path: /{idIndicator}/addCauseAnalysis.{_format}
+    path: /{idIndicator}/{typeObj}/addCauseAnalysis.{_format}
     defaults:
-        _controller: pequiven.controller.sig_causes_indicator:addCauseAnalysisAction
+        _controller: pequiven.controller.sig_causes_report_evolution:addCauseAnalysisAction
         _format: json
     requirements:
         _format: json

@@ -30,7 +30,7 @@ class EvolutionCause extends Model {
      /**
      * @var integer
      * @ORM\ManyToOne(targetEntity="\Pequiven\IndicatorBundle\Entity\Indicator", inversedBy="indicatorCause")
-     * @ORM\JoinColumn(name="indicator_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="indicator_id", referencedColumnName="id", nullable=true)
      */
     private $indicator;
 
@@ -92,6 +92,20 @@ class EvolutionCause extends Model {
     protected $indicatorAction;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="typeObject", type="integer")
+     */
+    private $typeObject; 
+
+    /**
+     * @var integer
+     * @ORM\ManyToOne(targetEntity="\Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram", inversedBy="arrangementProgramCauses")
+     * @ORM\JoinColumn(name="arrangementProgram_id", referencedColumnName="id", nullable=true)
+     */
+    private $arrangementProgram; 
+
+    /**
      * Constructor
      */
     public function __construct() {
@@ -128,6 +142,46 @@ class EvolutionCause extends Model {
      */
     public function getIndicator() {
         return $this->indicator;
+    }
+
+    /**
+     * Set arrangementProgram
+     *
+     * @param \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram $arrangementProgram
+     * @return arrangementProgram
+     */
+    public function setArrangementProgram(\Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram $arrangementProgram) {
+        
+        $this->arrangementProgram = $arrangementProgram;
+
+        return $this;
+    }
+
+    /**
+     * Get arrangementProgram
+     *
+     * @return \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram
+     */
+    public function getArrangementProgram() {
+        return $this->arrangementProgram;
+    }
+
+    /**
+     * 
+     * @param type $typeObject
+     * @return type
+     */
+    public function setTypeObject($typeObject) {
+        $this->typeObject = $typeObject;
+        return $typeObject;
+    }
+
+    /**
+     * 
+     * @return type
+     */
+    public function getTypeObject() {
+        return $this->typeObject;
     }
 
     /**
