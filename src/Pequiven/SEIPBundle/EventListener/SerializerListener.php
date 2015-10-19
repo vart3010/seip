@@ -641,7 +641,7 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
             $cont++;
         }
 
-        $links['self']['show'] = $this->generateUrl('pequiven_work_study_circle_show', array('id' => $object->getId()));
+        $links['self']['show'] = $object->getPhase() == \Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle::PHASE_ONE ? $this->generateUrl('pequiven_work_study_circle_show', array('id' => $object->getId())) : $this->generateUrl('pequiven_work_study_circle_show_phase', array('id' => $object->getId()));
 
         $event->getVisitor()->addData('_links', $links);
         $event->getVisitor()->addData('gerencias', $gerenciasText);
