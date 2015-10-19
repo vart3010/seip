@@ -36,6 +36,13 @@ class ProposalRepository extends EntityRepository {
 
         $queryBuilder->innerJoin('pr.workStudyCircle', 'wsc');
         
+        if (($phase = $criteria->remove('phase'))) {
+            $queryBuilder
+                    ->andWhere('wsc.phase = :phase')
+                    ->setParameter('phase', $phase)
+                ;
+        }
+        
         //Filtro por descripción
         if(($description = $criteria->remove('description')) !== null){
             $queryBuilder->andWhere($queryBuilder->expr()->like('pr.description', "'%".$description."%'"));

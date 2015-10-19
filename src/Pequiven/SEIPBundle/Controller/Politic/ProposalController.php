@@ -226,6 +226,7 @@ class ProposalController extends SEIPController {
         $em = $this->getDoctrine()->getManager();
 
         $proposal = $em->getRepository('PequivenSEIPBundle:Politic\Proposal')->findAll();
+        $phase = $request->get('phase');
 
         $lineas = $this->get('pequiven.repository.linestrategic')->findAll(); //LineasEstrategicas
         //Carga de data de Indicador para armar grafica
@@ -254,6 +255,9 @@ class ProposalController extends SEIPController {
         $criteria = $request->get('filter', $this->config->getCriteria());
         $sorting = $request->get('sorting', $this->config->getSorting());
         $repository = $this->getRepository();
+        $phase = $request->get('phase');
+        
+        $criteria['phase'] = $phase;
 
         if ($this->config->isPaginated()) {
             $resources = $this->resourceResolver->getResource(
@@ -276,6 +280,7 @@ class ProposalController extends SEIPController {
         }
         $routeParameters = array(
             '_format' => 'json',
+            'phase' => $phase,
         );
         $apiDataUrl = $this->generateUrl('pequiven_proposal_list', $routeParameters);
 
@@ -289,6 +294,7 @@ class ProposalController extends SEIPController {
 
             $data = array(
                 'apiDataUrl' => $apiDataUrl,
+                'phase' => $phase,
             );
             $view->setData($data);
         } else {

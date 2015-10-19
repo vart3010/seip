@@ -3439,12 +3439,15 @@ angular.module('seipModule.controllers', [])
             };
 
             //Busca los Círculos de Estudio de Trabajo
-            $scope.getWorkStudyCircle = function (complejo) {
+            $scope.getWorkStudyCircle = function (complejo,phase) {
                 var parameters = {
                     filter: {}
                 };
                 if ($scope.model.complejo != null) {
                     parameters.filter['complejo'] = $scope.model.complejo.id;
+                }
+                if(phase != '' && phase != undefined){
+                    parameters.filter['phase'] = phase;
                 }
                 $http.get(Routing.generate('pequiven_seip_work_study_circle', parameters))
                         .success(function (data) {
@@ -3493,7 +3496,7 @@ angular.module('seipModule.controllers', [])
 
             $scope.getComplejos();
             $scope.getFirstLineManagement();
-            $scope.getWorkStudyCircle();
+//            $scope.getWorkStudyCircle();
             $scope.getLineStrategic();
 
             //Scope de Localidad

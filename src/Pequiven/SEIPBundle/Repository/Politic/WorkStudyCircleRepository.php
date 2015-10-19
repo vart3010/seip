@@ -37,6 +37,14 @@ class WorkStudyCircleRepository extends EntityRepository
     {
         $queryBuilder = $this->getCollectionQueryBuilder();
         $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
+        
+        if (($phase = $criteria->remove('phase'))) {
+            $queryBuilder
+                    ->andWhere('wsc.phase = :phase')
+                    ->setParameter('phase', $phase)
+                ;
+        }
+        
         if(($complejo = $criteria->remove('complejo'))){
             $queryBuilder
                     ->andWhere('wsc.complejo = :complejo')

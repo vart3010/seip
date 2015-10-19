@@ -517,6 +517,8 @@ class MeetingController extends SEIPController {
         $sorting = $request->get('sorting', $this->config->getSorting());
         $repository = $this->container->get('pequiven.repository.meeting');
         $phase = $request->get('phase');
+        
+        $criteria['phase'] = $phase;
 
         if ($this->config->isPaginated()) {
             $resources = $this->resourceResolver->getResource(
