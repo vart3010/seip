@@ -114,6 +114,10 @@ class SecurityService implements ContainerAwareInterface
             }
         }
         
+        if($this->isGranted('ROLE_SEIP_WORK_STUDY_CIRCLES_VIEW_ALL_PHASE')){
+            $result = true;
+        }
+        
         return $result;
     }
     
