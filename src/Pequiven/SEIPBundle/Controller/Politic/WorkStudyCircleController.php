@@ -186,6 +186,10 @@ class WorkStudyCircleController extends SEIPController {
         $em = $this->getDoctrine()->getManager();
         $workStudyCircle = $em->getRepository('PequivenSEIPBundle:Politic\WorkStudyCircle')->findOneBy(array('id' => $request->get("id")));
 
+        $rolView = 'ROLE_SEIP_WORK_STUDY_CIRCLE_VIEW';
+        $securityService = $this->getSecurityService();
+        $securityService->checkMethodSecurity($rolView, $workStudyCircle);
+        
         $workStudyCircleService = $this->getWorkStudyCircleService();
         $proposals = $workStudyCircle->getProposals();
         $meetings = $workStudyCircle->getMeeting();
@@ -213,6 +217,11 @@ class WorkStudyCircleController extends SEIPController {
     public function showPhaseAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
         $workStudyCircle = $em->getRepository('PequivenSEIPBundle:Politic\WorkStudyCircle')->findOneBy(array('id' => $request->get("id")));
+        
+        $rolView = 'ROLE_SEIP_WORK_STUDY_CIRCLE_VIEW';
+        $securityService = $this->getSecurityService();
+        $securityService->checkMethodSecurity($rolView, $workStudyCircle);
+        
         $workStudyCircleService = $this->getWorkStudyCircleService();
 
         $proposals = $workStudyCircle->getProposals();
@@ -297,8 +306,8 @@ class WorkStudyCircleController extends SEIPController {
 
     public function viewAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
-        //var_dump($request);
 
+        $phase = $request->get('phase');
         $complejo = $this->get('pequiven_seip.repository.complejo')->findAll(); //Llamada de complejo
 
         foreach ($complejo as $value) {
@@ -308,7 +317,7 @@ class WorkStudyCircleController extends SEIPController {
             //USUARIOS REGISTRADOS EN GRUPO
             $usersNotNull = $this->get('pequiven_seip.repository.user')->findQueryUsersAllRegister($idComplejo);
 
-            $workStudyCircle = $em->getRepository('PequivenSEIPBundle:Politic\WorkStudyCircle')->findBy(array('complejo' => $idComplejo));
+            $workStudyCircle = $em->getRepository('PequivenSEIPBundle:Politic\WorkStudyCircle')->findBy(array('complejo' => $idComplejo,'phase' => $phase));
 
             $complejosCant[] = count($workStudyCircle);
 
@@ -373,7 +382,8 @@ class WorkStudyCircleController extends SEIPController {
                         'complejosCant' => $complejosCant,
                         'cantNotNull' => $cantNotNull,
                         'graphicCircle' => $generateColumnCircle,
-                        'graphicUser' => $generateColumnUsers
+                        'graphicUser' => $generateColumnUsers,
+                        'phase' => $phase,
             ));
         }
     }
@@ -383,10 +393,10 @@ class WorkStudyCircleController extends SEIPController {
         $criteria = $request->get('filter', $this->config->getCriteria());
         $sorting = $request->get('sorting', $this->config->getSorting());
         $repository = $this->getRepository();
+        $phase = $request->get('phase');
         $circle = $this->get('pequiven.repository.work_study_circle')->findAll(); //Carga los Criculos
-        //var_dump();
-        //die();
-        //$criteria['applyPeriodCriteria'] = true;
+        
+        $criteria['phase'] = $phase;
 
         if ($this->config->isPaginated()) {
             $resources = $this->resourceResolver->getResource(
@@ -409,6 +419,7 @@ class WorkStudyCircleController extends SEIPController {
         }
         $routeParameters = array(
             '_format' => 'json',
+            'phase' => $phase,
         );
         $apiDataUrl = $this->generateUrl('pequiven_work_study_circle_list', $routeParameters);
 
@@ -432,6 +443,7 @@ class WorkStudyCircleController extends SEIPController {
 //        
             $data = array(
                 'apiDataUrl' => $apiDataUrl,
+                'phase' => $phase,
                 $this->config->getPluralResourceName() => $resources,
 //                   'labelsCircle' => $labelsCircle            
             );
