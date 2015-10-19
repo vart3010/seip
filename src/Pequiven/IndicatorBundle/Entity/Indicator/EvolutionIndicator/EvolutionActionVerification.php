@@ -92,6 +92,13 @@ class EvolutionActionVerification extends Model {
      * @ORM\Column(name="month", type="integer")
      */
     private $month;
+
+    /**
+     * @var integer
+     * @ORM\ManyToOne(targetEntity="\Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram", inversedBy="arrangementProgramVerification")
+     * @ORM\JoinColumn(name="arrangementProgram_id", referencedColumnName="id", nullable=true)
+     */
+    private $arrangementProgram;
     
     /**
      * Get id
@@ -122,6 +129,28 @@ class EvolutionActionVerification extends Model {
      */
     public function getIndicator() {
         return $this->indicator;
+    }
+
+    /**
+     * Set arrangementProgram
+     *
+     * @param \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram $arrangementProgram
+     * @return arrangementProgram
+     */
+    public function setArrangementProgram(\Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram $arrangementProgram) {
+        
+        $this->arrangementProgram = $arrangementProgram;
+
+        return $this;
+    }
+
+    /**
+     * Get arrangementProgram
+     *
+     * @return \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram
+     */
+    public function getArrangementProgram() {
+        return $this->arrangementProgram;
     }
 
     /**

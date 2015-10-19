@@ -39,6 +39,13 @@ class EvolutionAction extends Model {
     private $month;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="typeObject", type="integer")
+     */
+    private $typeObject; 
+
+    /**
      * @var string
      *
      * @ORM\Column(name="ref" , type="string", length=50)
@@ -440,5 +447,23 @@ class EvolutionAction extends Model {
     public function getRelactionValue() {
         return $this->relactionValue;
     } 
+
+    /**
+     * 
+     * @param type $typeObject
+     * @return type
+     */
+    public function setTypeObject($typeObject) {
+        $this->typeObject = $typeObject;
+        return $typeObject;
+    }
+
+    /**
+     * 
+     * @return type
+     */
+    public function getTypeObject() {
+        return $this->typeObject;
+    }
     
 }

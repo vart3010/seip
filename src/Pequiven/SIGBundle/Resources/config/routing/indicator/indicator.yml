@@ -22,9 +22,9 @@ pequiven_indicator_last_period_delete:
         expose: true
 #carga de formulario plan de acción
 pequiven_indicatoraction_get_form:
-    path: /{idIndicator}/get-form_action.{_format}
+    path: /{idIndicator}/{typeObj}/get-form_action.{_format}
     defaults:
-        _controller: pequiven.controller.indicator_sig:getFormPlanAction
+        _controller: pequiven.controller.sig_trend_report_evolution:getFormPlanAction
         _format: html
     requirements:
         _format: html|json
@@ -121,9 +121,9 @@ pequiven_config_chart_evolution_add:
         expose: true
 #Guardamos el formulario del plan de Acción del Indicador
 pequiven_action_evolution_add:
-    path: /{idIndicator}/add.{_format}
+    path: /{idIndicator}/{typeObj}/add.{_format}
     defaults:
-        _controller: pequiven.controller.indicator_sig:addAction
+        _controller: pequiven.controller.sig_trend_report_evolution:addAction
         _format: json
     requirements:
         _format: json

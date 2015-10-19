@@ -1534,7 +1534,7 @@ angular.module('seipModule.controllers', [])
                     var save = false;
                 }
                 if (save == true) {
-                    var url = Routing.generate('pequiven_action_evolution_add', {idIndicator: $scope.id_indicator});
+                    var url = Routing.generate('pequiven_action_evolution_add', {idIndicator: $scope.id_indicator, typeObj: $scope.typeObj});
                 }
                 notificationBarService.getLoadStatus().loading();
                 return $http({
@@ -1696,6 +1696,7 @@ angular.module('seipModule.controllers', [])
 
                 var parameters = {
                     idIndicator: $scope.id_indicator,
+                    typeObj: $scope.typeObj,
                     _dc: numero
                 };
                 if (resource) {
@@ -1704,7 +1705,7 @@ angular.module('seipModule.controllers', [])
                 var url = Routing.generate('pequiven_indicatoraction_get_form', parameters);
                 $scope.templates = [
                     {
-                        name: 'Plan de Acción del Indicador',
+                        name: 'Plan de Acción',
                         url: url,
                         confirmCallBack: confirmCallBack,
                     }

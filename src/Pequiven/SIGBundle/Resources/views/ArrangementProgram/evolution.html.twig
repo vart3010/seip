@@ -115,6 +115,20 @@
             &nbsp;
         {% endif %}
 
+        {% if is_granted('ROLE_SEIP_SIG_EVOLUTION_ACTION') %}
+        {# Plan de accion y seguimiento #}
+            <br /><br />
+            {% include 'PequivenSIGBundle:Indicator:show/action.html.twig' %}
+            &nbsp;
+        {% if dataAction["values"] and is_granted('ROLE_SEIP_SIG_EVOLUTION_ACTION_VERIFICATION')%}
+
+            {% include 'PequivenSIGBundle:Indicator:show/verification.html.twig' %}            
+
+        {% endif %}        
+            &nbsp;
+
+        {% endif %}
+
     <p class="button-height align-right">          
         <div style="text-align: left; margin-left:15px;">
             <a class="button"  id="showItems"  href="javascript:void(0)">
