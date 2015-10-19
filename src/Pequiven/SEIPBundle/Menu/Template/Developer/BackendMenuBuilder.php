@@ -1318,65 +1318,77 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                             ))
                     )->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.reports.main', $section)));
             
-            //FASE 1
-                $ReportsPhaseOne = $this->factory->createItem('work_study_circles.reports.phase_one', $this->getSubLevelOptions(array(
+                //FASE 1
+                $reportsPhaseOne = $this->factory->createItem('work_study_circles.reports.phase_one', $this->getSubLevelOptions(array(
                             "route" => "",
                             'labelAttributes' => array('icon' => 'fa fa-table',),
                         ))
                 )->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.reports.phase_one', $section)));
             
-                    $ReportsPhaseOneList = $this->factory->createItem('work_study_circles.list', $this->getSubLevelOptions(array(
+                    $reportsPhaseOneList = $this->factory->createItem('work_study_circles.list', $this->getSubLevelOptions(array(
                                 'route' => 'pequiven_work_study_circle_list',
                                 'routeParameters' => array('phase' => \Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle::PHASE_ONE),
                             ))
                         )->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.list', $section)));
-                $ReportsPhaseOne->addChild($ReportsPhaseOneList);
+                $reportsPhaseOne->addChild($reportsPhaseOneList);
                 
-                    $ReportsPhaseOneGeneral = $this->factory->createItem('work_study_circles.general', $this->getSubLevelOptions(array(
+                    $reportsPhaseOneGeneral = $this->factory->createItem('work_study_circles.general', $this->getSubLevelOptions(array(
                                 'route' => 'pequiven_work_study_circle_general',
                                 'routeParameters' => array('phase' => \Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle::PHASE_ONE),
                             ))
                         )->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.general', $section)));
-//
-                $ReportsPhaseOne->addChild($ReportsPhaseOneGeneral);
+                $reportsPhaseOne->addChild($reportsPhaseOneGeneral);
+                
+            $workStudyCirclesReports->addChild($reportsPhaseOne);
             
-            //FASE 2
-                $ReportsPhaseTwo = $this->factory->createItem('work_study_circles.reports.phase_two', $this->getSubLevelOptions(array(
+                //FASE 2
+                $reportsPhaseTwo = $this->factory->createItem('work_study_circles.reports.phase_two', $this->getSubLevelOptions(array(
                             "route" => "",
                             'labelAttributes' => array('icon' => 'fa fa-table',),
                         ))
                 )->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.reports.phase_two', $section)));
 
-                    $ReportsPhaseTwoList = $this->factory->createItem('work_study_circles.list', $this->getSubLevelOptions(array(
+                    $reportsPhaseTwoList = $this->factory->createItem('work_study_circles.list', $this->getSubLevelOptions(array(
                                 'route' => 'pequiven_work_study_circle_list',
                                 'routeParameters' => array('phase' => \Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle::PHASE_TWO),
                             ))
                         )->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.list', $section)));
-                $ReportsPhaseTwo->addChild($ReportsPhaseTwoList);
+                $reportsPhaseTwo->addChild($reportsPhaseTwoList);
             
-            $workStudyCirclesReports->addChild($ReportsPhaseOne);
-            $workStudyCirclesReports->addChild($ReportsPhaseTwo);
+            $workStudyCirclesReports->addChild($reportsPhaseTwo);
 
             $menuWorkStudyCircles->addChild($workStudyCirclesReports);
         }
         //Navegación Reuniones
         if ($this->isGranted(array('ROLE_SEIP_WORK_STUDY_CIRCLES_MEETING'))) {
             $workStudyCirclesMeeting = $this->factory->createItem('work_study_circles.meeting', $this->getSubLevelOptions(array(
-                                "route" => "",
-                                'labelAttributes' => array('icon' => 'fa fa-pencil-square-o',),
+                        "route" => "",
+                        'labelAttributes' => array('icon' => 'fa fa-pencil-square-o',),
+                    ))
+                )->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.meeting', $section)));
+            
+                //FASE 1
+                $meetingsPhaseOne = $this->factory->createItem('work_study_circles.meeting.phase_one', $this->getSubLevelOptions(array(
+                            "route" => "",
+                            'labelAttributes' => array('icon' => 'fa fa-table',),
+                        ))
+                )->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.phase_one', $section)));
+
+                    $meetingsPhaseOneList = $this->factory->createItem('work_study_circles.list', $this->getSubLevelOptions(array(
+                                'route' => 'pequiven_meeting_list',
+                                'routeParameters' => array('phase' => \Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle::PHASE_ONE),
                             ))
-                    )->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.meeting', $section)));
-            //Menú Nivel 2: Visualizar
-            $workStudyCirclesMeeting->addChild('work_study_circles.list', array(
-                        'route' => 'pequiven_meeting_list',
-                    ))
-                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.list', $section)));
+                        )->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.list', $section)));
+                $meetingsPhaseOne->addChild($meetingsPhaseOneList);
 
-            $workStudyCirclesMeeting->addChild('work_study_circles.general', array(
-                        'route' => 'pequiven_meeting_view',
-                    ))
-                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.general', $section)));
+                    $meetingsPhaseOneGeneral = $this->factory->createItem('work_study_circles.general', $this->getSubLevelOptions(array(
+                                'route' => 'pequiven_meeting_view',
+                                'routeParameters' => array('phase' => \Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle::PHASE_ONE),
+                            ))
+                        )->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.general', $section)));
+                $meetingsPhaseOne->addChild($meetingsPhaseOneGeneral);
 
+            $workStudyCirclesMeeting->addChild($meetingsPhaseOne);
             $menuWorkStudyCircles->addChild($workStudyCirclesMeeting);
         }
         if ($this->isGranted(array('ROLE_SEIP_WORK_STUDY_CIRCLES_STRATEGIC_PLAN'))) {

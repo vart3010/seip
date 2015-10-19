@@ -208,6 +208,9 @@ app:
                                 compliance: % Cumplimiento
                     work_study_circles:
                         main: Círculos de Estudio de Trabajo
+                        phase_one: Fase 1
+                        phase_two: Fase 2
+                        phase_three: Fase 3
                         register: 
                             main: Registro
                             phase_one: Fase 1
