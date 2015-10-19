@@ -20,9 +20,6 @@ use Pequiven\IndicatorBundle\Form\EvolutionIndicator\EvolutionCauseType;
 use Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionTrend;
 use Pequiven\IndicatorBundle\Form\EvolutionIndicator\EvolutionTrendType;
 
-use Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionActionVerification;
-use Pequiven\IndicatorBundle\Form\EvolutionIndicator\EvolutionActionVerificationType;
-
 use Pequiven\IndicatorBundle\Form\EvolutionIndicator\IndicatorLastPeriodType;
 use Pequiven\IndicatorBundle\Form\EvolutionIndicator\IndicatorConfigSigType;
 

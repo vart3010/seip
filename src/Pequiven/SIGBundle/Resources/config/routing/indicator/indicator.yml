@@ -176,9 +176,9 @@ pequiven_analysis_cause_evolution_add:
         expose: true
 #Guardamos el formulario de Verificación del Plan de Acción
 pequiven_verification_evolution_add:
-    path: /{idIndicator}/{month}/addVerification.{_format}
+    path: /{idIndicator}/{month}/{typeObj}/addVerification.{_format}
     defaults:
-        _controller: pequiven.controller.indicator_sig:addVerificationAction
+        _controller: pequiven.controller.sig_trend_report_evolution:addVerificationAction
         _format: json
     requirements:
         _format: json

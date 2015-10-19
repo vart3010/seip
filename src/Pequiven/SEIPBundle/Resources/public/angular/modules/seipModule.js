@@ -1931,7 +1931,7 @@ angular.module('seipModule.controllers', [])
                     var save = false;
                 }
                 if (save == true) {
-                    var url = Routing.generate('pequiven_verification_evolution_add', {idIndicator: $scope.id_indicator, month: $scope.month});
+                    var url = Routing.generate('pequiven_verification_evolution_add', {idIndicator: $scope.id_indicator, month: $scope.month, typeObj: $scope.typeObj });
                 }
                 notificationBarService.getLoadStatus().loading();
                 return $http({

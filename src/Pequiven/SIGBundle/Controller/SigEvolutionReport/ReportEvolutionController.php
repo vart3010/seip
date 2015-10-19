@@ -24,6 +24,10 @@ use Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionAction
 use Pequiven\IndicatorBundle\Form\EvolutionIndicator\EvolutionActionType;
 use Pequiven\IndicatorBundle\Form\EvolutionIndicator\EvolutionActionValueType;
 
+#Verification
+use Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionActionVerification;
+use Pequiven\IndicatorBundle\Form\EvolutionIndicator\EvolutionActionVerificationType;
+
 /**
  * Controlador de los distintos modulos del infome de evolucion
  *
@@ -80,6 +84,7 @@ class ReportEvolutionController extends ResourceController
     public function addTrendAction(Request $request)
     {   
         $result = $request->get('idIndicator');
+
         $typeObject = $request->get('typeObj');
         
         $month = $request->get('evolutiontrend')['month'];//Carga de Mes pasado
@@ -409,7 +414,11 @@ class ReportEvolutionController extends ResourceController
      */
     function getFormVerificationAction(Request $request)
     {
-        $indicator = $this->findIndicatorOr404($request);        
+        $id = $request->get('id');        
+        
+        $month = $request->get('evolutiontrend')['month'];//Carga de Mes pasado
+        
+        $user = $this->getUser();        
         
         $verification = new EvolutionActionVerification();
         $form  = $this->createForm(new EvolutionActionVerificationType(), $verification);
@@ -419,7 +428,7 @@ class ReportEvolutionController extends ResourceController
             ->setTemplate($this->config->getTemplate('form/form_action_verification.html'))
             ->setTemplateVar($this->config->getPluralResourceName())
             ->setData(array(
-                'indicator' => $indicator,
+                'indicator' => $id,
                 'form' => $form->createView(),
             ))
         ;
@@ -435,12 +444,30 @@ class ReportEvolutionController extends ResourceController
      */
     public function addVerificationAction(Request $request)
     {   
-        $indicator = $request->get('idIndicator');//Carga de indicador
-        $repository = $this->get('pequiven.repository.sig_indicator');
-        $results = $repository->find($indicator);
+        $id = $request->get('idIndicator');//Carga de indicador
+
+        $typeObject = $request->get('typeObj');
 
         $month = $request->get('month');;//Mes
+
+        $user = $this->getUser();
+
+        $verification = new EvolutionActionVerification();
+        $form  = $this->createForm(new EvolutionActionVerificationType(), $verification);
         
+        if ($typeObject == 1) {
+            
+            $repository = $this->get('pequiven.repository.sig_indicator');
+            $results = $repository->find($id);            
+            $verification->setIndicator($results);
+            
+        }elseif($typeObject == 2){
+            
+            $repository = $this->get('pequiven_seip.repository.arrangementprogram');
+            $results = $repository->find($id); 
+            $verification->setArrangementProgram($results);            
+        }
+
         $action = $request->get('actionVerification')['actionPlan'];
         $idVerification = $request->get('actionVerification')['typeVerification'];
         
@@ -450,15 +477,11 @@ class ReportEvolutionController extends ResourceController
 
         //Acción
         $actionVer = $this->get('pequiven.repository.sig_action_indicator')->find($action);
-
-        $user = $this->getUser();
-        $verification = new EvolutionActionVerification();
-        $form  = $this->createForm(new EvolutionActionVerificationType(), $verification);
         
         $verification->setCreatedBy($user);
         $verification->setActionPlan($actionVer);
-        $verification->setIndicator($results);
         $verification->setMonth($month);
+        $verification->setTypeObject($typeObject);
 
         $form->handleRequest($request);
 

@@ -82,7 +82,7 @@ class EvolutionActionVerification extends Model {
     /**
      * @var integer
      * @ORM\ManyToOne(targetEntity="\Pequiven\IndicatorBundle\Entity\Indicator", inversedBy="indicatorVerification")
-     * @ORM\JoinColumn(name="indicator_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="indicator_id", referencedColumnName="id", nullable=true)
      */
     private $indicator;
 
@@ -92,6 +92,13 @@ class EvolutionActionVerification extends Model {
      * @ORM\Column(name="month", type="integer")
      */
     private $month;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="typeObject", type="integer")
+     */
+    private $typeObject;
 
     /**
      * @var integer
@@ -169,6 +176,24 @@ class EvolutionActionVerification extends Model {
      */
     public function getMonth() {
         return $this->month;
+    }
+
+    /**
+     * 
+     * @param type $typeObject
+     * @return type
+     */
+    public function setTypeObject($typeObject) {
+        $this->typeObject = $typeObject;
+        return $typeObject;
+    }
+
+    /**
+     * 
+     * @return type
+     */
+    public function getTypeObject() {
+        return $this->typeObject;
     }
 
     /**
