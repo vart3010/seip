@@ -57,11 +57,25 @@ class EvolutionActionType extends AbstractType
                     'query_builder' => function(\Pequiven\IndicatorBundle\Repository\Indicator\EvolutionIndicator\EvolutionCauseRepository $repository) use($id, $typeObject) {
                         return $repository->getCausesByIndicator($id, $typeObject);
                     },                               
-                    'label' => 'Causas del Indicador',
+                    'label' => 'Causa del Plan',
                     'label_attr' => array('class' => 'label'),
                     'attr' => array(
                         'class' => "input-large select2",
                         'onclick' => 'cargaData()',
+                        'style' => 'width: 270px',
+                        //'multiple' => 'multiple'
+                    ),
+                    'empty_value' => 'Seleccione...',
+                    'required' => true,
+                ))
+            ->add('responsibles', null, array(
+                    'query_builder' => function(\Pequiven\SEIPBundle\Repository\UserRepository $repository) {
+                        return $repository->findQueryUsersByCriteria();
+                    },                               
+                    'label' => 'Responsable del Plan',
+                    'label_attr' => array('class' => 'label'),
+                    'attr' => array(
+                        'class' => "input-large select2",                        
                         'style' => 'width: 270px',
                         //'multiple' => 'multiple'
                     ),

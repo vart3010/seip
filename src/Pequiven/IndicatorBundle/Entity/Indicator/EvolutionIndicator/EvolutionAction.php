@@ -130,13 +130,21 @@ class EvolutionAction extends Model {
     protected $relactionValue;
 
     /**
+     * Responsables
+     * @var \Pequiven\SEIPBundle\Entity\User
+     *
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\User",inversedBy="evolutionAction")
+     * @ORM\JoinColumn(name="responsible_id", referencedColumnName="id")
+     */
+    private $responsibles;
+
+    /**
      * Constructor
      */
     public function __construct()
     {
         $this->verificationRel = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->relactionValue = new \Doctrine\Common\Collections\ArrayCollection();
-
+        $this->relactionValue = new \Doctrine\Common\Collections\ArrayCollection();        
     }
     
     /**
@@ -464,6 +472,25 @@ class EvolutionAction extends Model {
      */
     public function getTypeObject() {
         return $this->typeObject;
+    }
+
+    /**
+     * Get responsibles
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getResponsibles() {
+        return $this->responsibles;
+    }
+
+    /**
+     * 
+     * @param type $responsibles
+     * @return type
+     */
+    public function setResponsibles($responsibles) {
+        $this->responsibles = $responsibles;
+        return $responsibles;
     }
     
 }

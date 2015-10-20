@@ -269,14 +269,17 @@ class ReportEvolutionController extends ResourceController
         $typeObject = $this->getRequest()->get('typeObj');
         
         $user = $this->getUser();
-        $causeAction = $request->get('actionResults')['evolutionCause'];//Recibiendo
+        
+        $causeAction = $request->get('actionResults')['evolutionCause'];//Recibiendo Causa
+        
+        $responsible = $request->get('actionResults')['responsibles'];//Recibiendo Responsable
         
         $AcValue = $request->get('actionValue')['advance'];//RecibiendoValue
         $AcObservation = $request->get('actionValue')['observations'];//RecibiendoObservations
-        
         $month = date("m");//Carga del mes de Creación de la causa "Automatico"  
 
         $causeResult = $this->get('pequiven.repository.sig_causes_report_evolution')->find($causeAction);
+        $responsible = $this->get('pequiven_seip.repository.user')->find($responsible);
         
         //Calculando la cantidad de meses que durara la acción
         $dateStart = $request->get('actionResults')['dateStart'];
@@ -298,8 +301,8 @@ class ReportEvolutionController extends ResourceController
             $action->setEvolutionCause($causeResult);
             $action->setMonth($data);//Carga de Mes(var month)
             $action->setTypeObject($typeObject);//Tipo de Objeto
-            //$action->setAdvance($advance);
-
+            $action->setResponsibles($responsible);//Responsable del plan de Acción
+            
             $form->handleRequest($request);
 
             if ($form->isSubmitted()) {
