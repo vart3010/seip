@@ -679,6 +679,7 @@ class IndicatorSigController extends ResourceController
 
     public function exportAction(Request $request) {
 
+        $em = $this->getDoctrine()->getManager();
          /*if($request->isMethod('POST')){
             $exportRequestStream = $request->request->all();
             $request->request->remove('charttype');
@@ -705,12 +706,20 @@ class IndicatorSigController extends ResourceController
         if ($typeObject == 1) {
             
             $indicator = $this->get('pequiven.repository.indicator')->find($id); //Obtenemos el indicador
-            $name = $indicator->getRef().''.$indicator->getDescription();//Nombre del Indicador
+            $name = $indicator->getRef().' '.$indicator->getDescription();//Nombre del Indicador
             $type = "indicator";            
+            
+            //Relación - Objetivo
+            foreach ($indicator->getObjetives() as $value) {
+                $objRel = $value->getDescription();
+            } 
 
         }elseif ($typeObject == 2) {
-            $name = "Revision";
-            $type = "arrangementProgram";
+            $ArrangementProgram = $em->getRepository('PequivenArrangementProgramBundle:ArrangementProgram')->findWithData($id);
+            $type = "arrangementProgram";            
+            $name = $ArrangementProgram->getRef().''.$ArrangementProgram->getDescription();
+            //Relacion
+            $objRel = $ArrangementProgram->getTacticalObjective()->getDescription();
         }
         //Carga de data de Indicador para armar grafica
             //$response = new JsonResponse();
@@ -742,11 +751,6 @@ class IndicatorSigController extends ResourceController
             }else{
                 $causeA = "No se ha Cargando el Analisis de Causas";        
             }
-        //Relación - Objetivo
-        /*foreach ($indicator->getObjetives() as $value) {
-            $objRel = $value->getDescription();
-        } */
-        $objRel = "hola";
         
         //Verificación
         $verification = $this->get('pequiven.repository.sig_action_verification')->findBy(array($type => $id, 'month' => $month));        
