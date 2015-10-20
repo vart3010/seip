@@ -35,6 +35,7 @@ class ArrangementProgramAdmin extends Admin
             ->add('isAvailableInResult')
             ->add('couldBePenalized')
             ->add('forcePenalize')
+            ->add('showEvolutionView')            
             ;
         if ($this->isGranted('ROLE_SEIP_UPDATE_RESULT_OBJECTS')){
             $show
@@ -65,6 +66,9 @@ class ArrangementProgramAdmin extends Admin
                 'required' => false,
             ))
             ->add('forcePenalize',null,array(
+                'required' => false,
+            ))
+            ->add('showEvolutionView',null,array(
                 'required' => false,
             ))
             ;

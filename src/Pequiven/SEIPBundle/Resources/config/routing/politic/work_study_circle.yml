@@ -77,20 +77,24 @@ pequiven_work_study_circle_export_pdf:
         expose: true
         
 pequiven_work_study_circle_general:
-    path: /view
+    path: /view/{phase}
     defaults:
-        _controller: pequiven.controller.work_study_circle:viewAction               
+        _controller: pequiven.controller.work_study_circle:viewAction
+        phase: 1
     requirements:
         _format: html|json|xml
+        phase: "\d+"
     methods: [GET]
     
 pequiven_work_study_circle_list:
-    path: /list.{_format}
+    path: /list/{phase}/.{_format}
     defaults:
         _controller: pequiven.controller.work_study_circle:listAction  
         _format: html
+        phase: 1
     requirements:
         _format: html|json|xml
+        phase: "\d+"
     methods: [GET]
     
 pequiven_proposal_inherited_work_study_circle:

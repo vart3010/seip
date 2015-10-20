@@ -7,10 +7,10 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Pequiven\IndicatorBundle\Model\Indicator\EvolutionIndicator\EvolutionAction as Model;
 
 /**
- * Plan de Acción y Seguimiento del Indicador
+ * Plan de Acción y Seguimiento del informe de evolucion
  *
  * @author Maximo Sojo <maxsojo13@gmail.com>
- * @ORM\Table(name="seip_indicator_evolution_action")
+ * @ORM\Table(name="seip_report_evolution_action")
  * @ORM\Entity()
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
@@ -37,6 +37,13 @@ class EvolutionAction extends Model {
      * @ORM\Column(name="month", type="integer")
      */
     private $month;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="typeObject", type="integer")
+     */
+    private $typeObject; 
 
     /**
      * @var string
@@ -123,13 +130,21 @@ class EvolutionAction extends Model {
     protected $relactionValue;
 
     /**
+     * Responsables
+     * @var \Pequiven\SEIPBundle\Entity\User
+     *
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\User",inversedBy="evolutionAction")
+     * @ORM\JoinColumn(name="responsible_id", referencedColumnName="id")
+     */
+    private $responsibles;
+
+    /**
      * Constructor
      */
     public function __construct()
     {
         $this->verificationRel = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->relactionValue = new \Doctrine\Common\Collections\ArrayCollection();
-
+        $this->relactionValue = new \Doctrine\Common\Collections\ArrayCollection();        
     }
     
     /**
@@ -440,5 +455,42 @@ class EvolutionAction extends Model {
     public function getRelactionValue() {
         return $this->relactionValue;
     } 
+
+    /**
+     * 
+     * @param type $typeObject
+     * @return type
+     */
+    public function setTypeObject($typeObject) {
+        $this->typeObject = $typeObject;
+        return $typeObject;
+    }
+
+    /**
+     * 
+     * @return type
+     */
+    public function getTypeObject() {
+        return $this->typeObject;
+    }
+
+    /**
+     * Get responsibles
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getResponsibles() {
+        return $this->responsibles;
+    }
+
+    /**
+     * 
+     * @param type $responsibles
+     * @return type
+     */
+    public function setResponsibles($responsibles) {
+        $this->responsibles = $responsibles;
+        return $responsibles;
+    }
     
 }

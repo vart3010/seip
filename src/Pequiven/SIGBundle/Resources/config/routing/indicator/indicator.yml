@@ -22,9 +22,9 @@ pequiven_indicator_last_period_delete:
         expose: true
 #carga de formulario plan de acción
 pequiven_indicatoraction_get_form:
-    path: /{idIndicator}/get-form_action.{_format}
+    path: /{idIndicator}/{typeObj}/get-form_action.{_format}
     defaults:
-        _controller: pequiven.controller.indicator_sig:getFormPlanAction
+        _controller: pequiven.controller.sig_trend_report_evolution:getFormPlanAction
         _format: html
     requirements:
         _format: html|json
@@ -33,9 +33,9 @@ pequiven_indicatoraction_get_form:
         expose: true
 #carga de formulario plan de acción añdir los resultados 0
 pequiven_indicator_action_add_get_form:
-    path: /{idIndicator}/get-form_add.{_format}
+    path: /{idIndicator}/{typeObj}/get-form_add.{_format}
     defaults:
-        _controller: pequiven.controller.indicator_sig:getFormPlanAddAction
+        _controller: pequiven.controller.sig_trend_report_evolution:getFormPlanAddAction
         _format: html
     requirements:
         _format: html|json
@@ -44,9 +44,9 @@ pequiven_indicator_action_add_get_form:
         expose: true
 #Carga de formulario de causas de evolution
 pequiven_indicatorcauses_get_form:
-    path: /{idIndicator}/get-form_causes.{_format}
+    path: /{idIndicator}/{typeObj}/get-form_causes.{_format}
     defaults:
-        _controller: pequiven.controller.indicator_sig:getFormCausesAction
+        _controller: pequiven.controller.sig_causes_report_evolution:getFormCausesAction
         _format: html
     requirements:
         _format: html|json
@@ -55,9 +55,9 @@ pequiven_indicatorcauses_get_form:
         expose: true
 #Carga de formulario del analisis de tendencia
 pequiven_indicatortrend_get_form:
-    path: /{idIndicator}/get-form_trend.{_format}
+    path: /{idIndicator}/{typeObj}/get-form_trend.{_format}
     defaults:
-        _controller: pequiven.controller.indicator_sig:getFormTrendAction
+        _controller: pequiven.controller.sig_trend_report_evolution:getFormTrendAction
         _format: html
     requirements:
         _format: html|json
@@ -66,9 +66,9 @@ pequiven_indicatortrend_get_form:
         expose: true
 #Carga de formulario del analisis de las causas
 pequiven_causes_analysis_get_form:
-    path: /{idIndicator}/get-form_causeanalysis.{_format}
+    path: /{idIndicator}/{typeObj}/get-form_causeanalysis.{_format}
     defaults:
-        _controller: pequiven.controller.sig_causes_indicator:getFormAnalysisAction
+        _controller: pequiven.controller.sig_causes_report_evolution:getFormAnalysisAction
         _format: html
     requirements:
         _format: html|json
@@ -77,9 +77,9 @@ pequiven_causes_analysis_get_form:
         expose: true
 #Carga de formulario de la verificación del indicador
 pequiven_verification_get_form:
-    path: /{idIndicator}/get-form_verification.{_format}
+    path: /{idIndicator}/{typeObj}/get-form_verification.{_format}
     defaults:
-        _controller: pequiven.controller.indicator_sig:getFormVerificationAction
+        _controller: pequiven.controller.sig_trend_report_evolution:getFormVerificationAction
         _format: html
     requirements:
         _format: html|json
@@ -121,9 +121,9 @@ pequiven_config_chart_evolution_add:
         expose: true
 #Guardamos el formulario del plan de Acción del Indicador
 pequiven_action_evolution_add:
-    path: /{idIndicator}/add.{_format}
+    path: /{idIndicator}/{typeObj}/add.{_format}
     defaults:
-        _controller: pequiven.controller.indicator_sig:addAction
+        _controller: pequiven.controller.sig_trend_report_evolution:addAction
         _format: json
     requirements:
         _format: json
@@ -134,7 +134,7 @@ pequiven_action_evolution_add:
 pequiven_action_values_evolution_add:
     path: /{idIndicator}/add_values.{_format}
     defaults:
-        _controller: pequiven.controller.indicator_sig:addValuesAction
+        _controller: pequiven.controller.sig_trend_report_evolution:addValuesAction
         _format: json
     requirements:
         _format: json
@@ -143,9 +143,9 @@ pequiven_action_values_evolution_add:
         expose: true
 #Guardamos el formulario de las causas del indicador
 pequiven_causes_evolution_add:
-    path: /{idIndicator}/addCauses.{_format}
+    path: /{idIndicator}/{typeObj}/addCauses.{_format}
     defaults:
-        _controller: pequiven.controller.indicator_sig:addCausesAction
+        _controller: pequiven.controller.sig_causes_report_evolution:addCausesAction
         _format: json
     requirements:
         _format: json
@@ -154,9 +154,9 @@ pequiven_causes_evolution_add:
         expose: true
 #Guardamos el formulario de la tendencia del indicador
 pequiven_trend_evolution_add:
-    path: /{idIndicator}/addTrend.{_format}
+    path: /{idIndicator}/{typeObj}/addTrend.{_format}
     defaults:
-        _controller: pequiven.controller.indicator_sig:addTrendAction
+        _controller: pequiven.controller.sig_trend_report_evolution:addTrendAction
         _format: json
     requirements:
         _format: json
@@ -165,9 +165,9 @@ pequiven_trend_evolution_add:
         expose: true
 #Guardamos el formulario del analisis de las causas
 pequiven_analysis_cause_evolution_add:
-    path: /{idIndicator}/addCauseAnalysis.{_format}
+    path: /{idIndicator}/{typeObj}/addCauseAnalysis.{_format}
     defaults:
-        _controller: pequiven.controller.sig_causes_indicator:addCauseAnalysisAction
+        _controller: pequiven.controller.sig_causes_report_evolution:addCauseAnalysisAction
         _format: json
     requirements:
         _format: json
@@ -176,9 +176,9 @@ pequiven_analysis_cause_evolution_add:
         expose: true
 #Guardamos el formulario de Verificación del Plan de Acción
 pequiven_verification_evolution_add:
-    path: /{idIndicator}/{month}/addVerification.{_format}
+    path: /{idIndicator}/{month}/{typeObj}/addVerification.{_format}
     defaults:
-        _controller: pequiven.controller.indicator_sig:addVerificationAction
+        _controller: pequiven.controller.sig_trend_report_evolution:addVerificationAction
         _format: json
     requirements:
         _format: json

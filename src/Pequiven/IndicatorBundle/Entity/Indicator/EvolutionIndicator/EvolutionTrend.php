@@ -9,10 +9,10 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Pequiven\IndicatorBundle\Model\Indicator\EvolutionIndicator\EvolutionTrend as Model;
 
 /**
- * Analisis de la tendencia del indicador
+ * Analisis de la tendencia del informe de evolucion
  *
  * @author Maximo Sojo <maxsojo13@gmail.com>
- * @ORM\Table(name="seip_indicator_evolution_trend")
+ * @ORM\Table(name="seip_report_evolution_trend")
  * @ORM\Entity()
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
@@ -30,7 +30,7 @@ class EvolutionTrend extends Model {
      /**
      * @var integer
      * @ORM\ManyToOne(targetEntity="\Pequiven\IndicatorBundle\Entity\Indicator", inversedBy="indicatorTrend")
-     * @ORM\JoinColumn(name="indicator_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="indicator_id", referencedColumnName="id", nullable=true)
      */
     private $indicator;
 
@@ -76,6 +76,20 @@ class EvolutionTrend extends Model {
      */
     private $deletedAt;
 
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="typeObject", type="integer")
+     */
+    private $typeObject;   
+
+    /**
+     * @var integer
+     * @ORM\ManyToOne(targetEntity="\Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram", inversedBy="arrangementProgramTrend")
+     * @ORM\JoinColumn(name="arrangementProgram_id", referencedColumnName="id", nullable=true)
+     */
+    private $arrangementProgram; 
+
 
     /**
      * Constructor
@@ -116,6 +130,28 @@ class EvolutionTrend extends Model {
     }
 
     /**
+     * Set arrangementProgram
+     *
+     * @param \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram $arrangementProgram
+     * @return arrangementProgram
+     */
+    public function setArrangementProgram(\Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram $arrangementProgram) {
+        
+        $this->arrangementProgram = $arrangementProgram;
+
+        return $this;
+    }
+
+    /**
+     * Get arrangementProgram
+     *
+     * @return \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram
+     */
+    public function getArrangementProgram() {
+        return $this->arrangementProgram;
+    }
+
+    /**
      * 
      * @param type $description
      * @return type
@@ -149,6 +185,24 @@ class EvolutionTrend extends Model {
      */
     public function getMonth() {
         return $this->month;
+    }
+
+    /**
+     * 
+     * @param type $typeObject
+     * @return type
+     */
+    public function setTypeObject($typeObject) {
+        $this->typeObject = $typeObject;
+        return $typeObject;
+    }
+
+    /**
+     * 
+     * @return type
+     */
+    public function getTypeObject() {
+        return $this->typeObject;
     }
 
 

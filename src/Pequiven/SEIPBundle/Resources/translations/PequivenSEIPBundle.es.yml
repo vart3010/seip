@@ -363,6 +363,7 @@ pequiven_seip:
             role_seip_planning_view_result_operative: Usted no tiene permiso para ver los resultados a nivel operativo.
             role_seip_planning_operation_recalculate_result: Usted no tiene permiso para realizar la operación de recalcular resultados.
             role_seip_planning_indicator_show_file: Usted no tiene permiso para visualizar los archivos
+            role_seip_work_study_circle_view: Usted no tiene permiso para ver el Círculo de Estudio de Trabajo
         error:
             the_pre_planning_is_not_enabled: La pre-planificacion no se encuentra habilitada.
     fail:

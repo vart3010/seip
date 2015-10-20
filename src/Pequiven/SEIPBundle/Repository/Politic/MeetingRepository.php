@@ -29,6 +29,13 @@ class MeetingRepository extends SeipEntityRepository {
         
         $queryBuilder->innerJoin('mtg.workStudyCircle', 'wsc');
         
+        if (($phase = $criteria->remove('phase'))) {
+            $queryBuilder
+                    ->andWhere('wsc.phase = :phase')
+                    ->setParameter('phase', $phase)
+                ;
+        }
+        
         //Filtro Localidad
         if(($complejo =  $criteria->remove('complejo')) !== null){
             $queryBuilder

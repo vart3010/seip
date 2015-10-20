@@ -35,12 +35,14 @@ class EvolutionHistoryItemsBox extends \Tecnocreaciones\Bundle\BoxBundle\Model\G
         $indicator = $idIndicator;
         $listMonth = $setMonth;
         $boxmonth =  $month;
+        $typeObject = 1;
         
         return array(
             'Box_indicator' => $indicator,
             'Box_month'     => $boxmonth,
             'listMonth'     => $listMonth,
-            'labelsMonths'  => $labelMonth
+            'labelsMonths'  => $labelMonth,
+            'typeObject'    => $typeObject
             );
         
     }

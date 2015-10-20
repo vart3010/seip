@@ -146,18 +146,15 @@ class ArrangementProgramType extends AbstractType implements \Symfony\Component\
                     ));
                         
                     if($object->getCategoryArrangementProgram()->getId() == ArrangementProgram::ASSOCIATE_ARRANGEMENT_PROGRAM_SIG){
-                        $form->add('managementSystem','entity',array(
-                            'label_attr' => array('class' => 'label'),
+                        $form->add('managementSystem',null,array(
                             'label' => 'pequiven.form.managementSystem',
-                            'class' => 'PequivenSIGBundle:ManagementSystem',
-                            'property' => 'description',
+                            'label_attr' => array('class' => 'label'),
                             'attr' => array(
                                 'class' => "select2 input-xlarge",
-                                "ng-model" => "model.managementSystem",
                             ),
-//                            'query_builder' => function(\Pequiven\SIGBundle\Repository\ManagementSystemRepository $repository){
-//                                return $repository->findAll();
-//                            },
+                            'query_builder' => function(\Pequiven\SIGBundle\Repository\ManagementSystemRepository $repository){
+                                return $repository->getManagementSystemsActives();
+                            },
                             'empty_value' => 'pequiven.select',
                             'required' => true,
                         ));
@@ -192,18 +189,15 @@ class ArrangementProgramType extends AbstractType implements \Symfony\Component\
                         'required' => false
                     ));
                     if($object->getCategoryArrangementProgram()->getId() == ArrangementProgram::ASSOCIATE_ARRANGEMENT_PROGRAM_SIG){
-                        $form->add('managementSystem','entity',array(
+                        $form->add('managementSystem',null,array(
                             'label_attr' => array('class' => 'label'),
                             'label' => 'pequiven.form.managementSystem',
-                            'class' => 'PequivenSIGBundle:ManagementSystem',
-                            'property' => 'description',
                             'attr' => array(
-                                'class' => "select2 input-xlarge",
-                                "ng-model" => "model.managementSystem",
+                                'class' => "select2 input-xlarge",                            
                             ),
-//                            'query_builder' => function(\Pequiven\SIGBundle\Repository\ManagementSystemRepository $repository){
-//                                return $repository->findAll();
-//                            },
+                            'query_builder' => function(\Pequiven\SIGBundle\Repository\ManagementSystemRepository $repository){
+                                return $repository->getManagementSystemsActives();
+                            },
                             'empty_value' => 'pequiven.select',
                             'required' => true,
                         ));

@@ -7,10 +7,10 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Pequiven\IndicatorBundle\Model\Indicator\ValueIndicatorFile as Model;
 
 /**
- * Valor del indicador
+ * Valor del informe de evolucion
  *
- * @author Victor Tortolero <vart10.30@gmail.com>
- * @ORM\Table(name="seip_indicator_evolution_cause_file")
+ * @author Maximo Sojo <maxsojo13@gmail.com>
+ * @ORM\Table(name="seip_report_evolution_cause_file")
  * @ORM\Entity()
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
