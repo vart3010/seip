@@ -116,22 +116,18 @@ class ArrangementProgramSigController extends ResourceController
         if($action){
          
             foreach ($action as $value) {
-                //$idAction[] = $value->getId();
+                
                 $relation = $value->getRelactionValue();
-                    //var_dump(count($relation));
+                    
                     foreach ($relation as $value) {
                             
                             $monthAction = $value->getMonth();
                             $monthGet = (int)$month;
 
                         if ($monthAction === $monthGet) {
-                            //var_dump(count($value->getId()));
-                            $idAction = $value->getActionValue()->getId();
-                            $idCons[] = $idAction;
-                            //var_dump($value->getActionValue()->getId());
-                            //$actionResult = $this->get('pequiven.repository.sig_action_indicator')->findBy(array('id' => $idAction));
-                        //$verification[] = $this->get('pequiven.repository.sig_action_verification')->findByactionPlan($idAction);
                             
+                            $idAction = $value->getActionValue()->getId();
+                            $idCons[] = $idAction;                                                        
                         }            
                     }
             }
