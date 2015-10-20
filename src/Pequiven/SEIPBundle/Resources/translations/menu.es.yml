@@ -208,6 +208,9 @@ app:
                                 compliance: % Cumplimiento
                     work_study_circles:
                         main: Círculos de Estudio de Trabajo
+                        phase_one: Fase 1
+                        phase_two: Fase 2
+                        phase_three: Fase 3
                         register: 
                             main: Registro
                             phase_one: Fase 1
@@ -216,8 +219,17 @@ app:
                             main: Visualizar
                             phase_one: Fase 1
                             phase_two: Fase 2
-                        reports: Reportes
-                        strategic_plan: Plan Estratégico
+                            phase_three: Fase 3
+                        reports:
+                            main: Reportes
+                            phase_one: Fase 1
+                            phase_two: Fase 2
+                            phase_three: Fase 3
+                        strategic_plan:
+                            main: Plan Estratégico
+                            phase_one: Fase 1
+                            phase_two: Fase 2
+                            phase_three: Fase 3
                         visualize: Visualizar
                         general: General
                         list: Lista

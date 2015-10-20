@@ -7,18 +7,23 @@ pequiven_meeting_create:
         expose: true
         
 pequiven_meeting_list:
-    path: /list.{_format}
+    path: /list/{phase}.{_format}
     defaults:
         _controller: pequiven.controller.meeting:listAction  
         _format: html
+        phase: 1
     requirements:
         _format: html|json|xml
+        phase: "\d+"
     methods: [GET]   
 
 pequiven_meeting_view:
-    path: /view
+    path: /view/{phase}
     defaults:
         _controller: pequiven.controller.meeting:viewAction
+        phase: 1
+    requirements:
+        phase: "\d+"
     methods: [GET|POST]
     options:
         expose: true

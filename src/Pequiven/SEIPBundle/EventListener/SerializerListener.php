@@ -50,6 +50,7 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializePlantReport', 'class' => 'Pequiven\SEIPBundle\Entity\DataLoad\PlantReport', 'format' => 'json'),
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeWorkStudyCircle', 'class' => 'Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle', 'format' => 'json'),
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeProposal', 'class' => 'Pequiven\SEIPBundle\Entity\Politic\Proposal', 'format' => 'json'),
+            array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeMeeting', 'class' => 'Pequiven\SEIPBundle\Entity\Politic\Meeting', 'format' => 'json'),
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeMeetingFile', 'class' => 'Pequiven\SEIPBundle\Entity\Politic\MeetingFile', 'format' => 'json'),
         );
     }
@@ -386,14 +387,14 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
         }
 
         $details = $arrangementProgram->getDetails();
-//        $user = $this->getUser();
-//        if($details->getNotificationInProgressByUser() != null){
-//            if($details->getNotificationInProgressByUser()->getId() === $user->getId() && (($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC && $arrangementProgram->getTacticalObjective()->getGerencia()->getId() == 18) || ($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE && $arrangementProgram->getOperationalObjective()->getGerenciaSecond()->getGerencia()->getId() == 29))){
-//                $data['julyReal']['isEnabled'] = true;
-//                $data['augustReal']['isEnabled'] = true;
-//                $data['septemberReal']['isEnabled'] = true;
-//            }
-//        }
+        $user = $this->getUser();
+        if($details->getNotificationInProgressByUser() != null){
+            if($details->getNotificationInProgressByUser()->getId() === $user->getId() && (($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC && $arrangementProgram->getTacticalObjective()->getGerencia()->getId() == 22) || ($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE && $arrangementProgram->getOperationalObjective()->getGerenciaSecond()->getGerencia()->getId() == 22))){
+                $data['julyReal']['isEnabled'] = true;
+                $data['augustReal']['isEnabled'] = true;
+                $data['septemberReal']['isEnabled'] = true;
+            }
+        }
 
         $event->getVisitor()->addData('_data', $data);
     }
@@ -641,7 +642,7 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
             $cont++;
         }
 
-        $links['self']['show'] = $this->generateUrl('pequiven_work_study_circle_show', array('id' => $object->getId()));
+        $links['self']['show'] = $object->getPhase() == \Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle::PHASE_ONE ? $this->generateUrl('pequiven_work_study_circle_show', array('id' => $object->getId())) : $this->generateUrl('pequiven_work_study_circle_show_phase', array('id' => $object->getId()));
 
         $event->getVisitor()->addData('_links', $links);
         $event->getVisitor()->addData('gerencias', $gerenciasText);
@@ -651,6 +652,14 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
         $object = $event->getObject();
 
         $links['self']['show'] = $this->generateUrl('pequiven_proposal_show', array('id' => $object->getId()));
+
+        $event->getVisitor()->addData('_links', $links);
+    }
+    
+    public function onPostSerializeMeeting(ObjectEvent $event) {
+        $object = $event->getObject();
+
+        $links['self']['show'] = $this->generateUrl('pequiven_meeting_show', array('id' => $object->getId()));
 
         $event->getVisitor()->addData('_links', $links);
     }

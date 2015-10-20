@@ -19,6 +19,7 @@ use Pequiven\IndicatorBundle\Entity\Indicator;
 use Pequiven\MasterBundle\Entity\Rol;
 use Pequiven\ObjetiveBundle\Entity\Objetive;
 use Pequiven\SIGBundle\Entity\ManagementSystem;
+use Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle;
 use Pequiven\SEIPBundle\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -86,7 +87,38 @@ class SecurityService implements ContainerAwareInterface
             'ROLE_SEIP_INDICATOR_APPROVED_STRATEGIC' => 'evaluateIndicatorApproved',
             'ROLE_SEIP_INDICATOR_APPROVED_TACTIC' => 'evaluateIndicatorApproved',
             'ROLE_SEIP_INDICATOR_APPROVED_OPERATIVE' => 'evaluateIndicatorApproved',
+            
+            'ROLE_SEIP_WORK_STUDY_CIRCLE_VIEW' => 'evaluateWorkStudyCircle',
         );
+    }
+    
+    /**
+     * Evalúa si el CET (Cualquier fase) puede ser visto
+     * @param type $rol
+     * @param WorkStudyCircle $workStudyCircle
+     * @return boolean
+     */
+    function evaluateWorkStudyCircle($rol, WorkStudyCircle $workStudyCircle) 
+    {
+        $result = false;
+        $user = $this->getUser();
+        if($workStudyCircle->getPhase() == WorkStudyCircle::PHASE_ONE){
+            if($workStudyCircle->getId() == $user->getWorkStudyCircle()->getId()){
+                $result = true;
+            }
+        } elseif($workStudyCircle->getPhase() == WorkStudyCircle::PHASE_TWO){
+            foreach($user->getWorkStudyCircles() as $workStudyCircleObject){
+                if($workStudyCircle->getId() == $workStudyCircleObject->getId()){
+                    $result = true;
+                }
+            }
+        }
+        
+        if($this->isGranted('ROLE_SEIP_WORK_STUDY_CIRCLES_VIEW_ALL_PHASE')){
+            $result = true;
+        }
+        
+        return $result;
     }
     
     /**
@@ -603,6 +635,40 @@ class SecurityService implements ContainerAwareInterface
                     return $valid;
                 }
             }
+            $methodValidMap = $this->getMethodValidMap();
+            if($quantityRoles == 1 && isset($methodValidMap[$rol])){
+                $method = $methodValidMap[$rol];
+                $valid = call_user_func_array(array($this,$method),array($rol,$parameters));
+                if(!$valid){
+                    if($throwException === true){
+                        throw $this->createAccessDeniedHttpException($this->buildMessage($rol));
+                    }else{
+                        return $valid;
+                    }
+                }
+            }
+        }
+        return $valid;
+    }
+    
+    public function checkMethodSecurity($rol = null,$parameters = null,$throwException = true){
+        if($rol === null){
+            throw $this->createAccessDeniedHttpException($this->trans('pequiven_seip.security.permission_denied'));
+        }
+        $roles = $rol;
+        if(!is_array($rol)){
+            $roles = array($rol);
+        }
+        $valid = false;
+        $quantityRoles = count($roles);
+        foreach ($roles as $rol) {
+//            if(!$valid){
+//                if($throwException === true){
+//                    throw $this->createAccessDeniedHttpException($this->buildMessage($rol));
+//                }else{
+//                    return $valid;
+//                }
+//            }
             $methodValidMap = $this->getMethodValidMap();
             if($quantityRoles == 1 && isset($methodValidMap[$rol])){
                 $method = $methodValidMap[$rol];
