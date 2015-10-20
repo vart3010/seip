@@ -80,17 +80,17 @@
                         
                     <tr ng-repeat="result in $data | filter:tableParams.search" data="{$ result|json $}">
                         <td data-title="'Localidad'">
-                            <a href="{$ result.id $}">
+                            <a href="{$ result._links.self.show $}">
                                 {$ result.workStudyCircle.complejo.description $}
                             </a>
                         </td>
                         <td data-title="'Tema'">
-                            <a href="{$ result.id $}">
+                            <a href="{$ result._links.self.show $}">
                                 {$ result.subject $}
                             </a>
                         </td>
                         <td data-title="'Fecha'">
-                            <a href="{$ result.id $}">
+                            <a href="{$ result._links.self.show $}">
                                 {$ result.date $}
                             </a>
                         </td>

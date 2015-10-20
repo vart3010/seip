@@ -50,6 +50,7 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializePlantReport', 'class' => 'Pequiven\SEIPBundle\Entity\DataLoad\PlantReport', 'format' => 'json'),
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeWorkStudyCircle', 'class' => 'Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle', 'format' => 'json'),
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeProposal', 'class' => 'Pequiven\SEIPBundle\Entity\Politic\Proposal', 'format' => 'json'),
+            array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeMeeting', 'class' => 'Pequiven\SEIPBundle\Entity\Politic\Meeting', 'format' => 'json'),
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeMeetingFile', 'class' => 'Pequiven\SEIPBundle\Entity\Politic\MeetingFile', 'format' => 'json'),
         );
     }
@@ -651,6 +652,14 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
         $object = $event->getObject();
 
         $links['self']['show'] = $this->generateUrl('pequiven_proposal_show', array('id' => $object->getId()));
+
+        $event->getVisitor()->addData('_links', $links);
+    }
+    
+    public function onPostSerializeMeeting(ObjectEvent $event) {
+        $object = $event->getObject();
+
+        $links['self']['show'] = $this->generateUrl('pequiven_meeting_show', array('id' => $object->getId()));
 
         $event->getVisitor()->addData('_links', $links);
     }
