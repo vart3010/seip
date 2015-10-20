@@ -3,6 +3,7 @@
 namespace Pequiven\ArrangementProgramBundle\Model;
 
 use Doctrine\ORM\Mapping as ORM;
+use Pequiven\SEIPBundle\Service\ResultService;
 
 /**
  * Modelo del programa de gestion
@@ -275,7 +276,8 @@ abstract class ArrangementProgram {
      * @param array $options limitMonthToNow: limita los resultados al mes actual
      * @return type
      */
-    function getSummary(array $options = array()) {
+    function getSummary(array $options = array(), $em = null) {
+
         $summary = array(
             'weight' => 0,
             'advances' => 0,
@@ -300,7 +302,6 @@ abstract class ArrangementProgram {
         }
         $totalWeight = 0;
         $advancesReal = 0;
-        $advancesBeforepenalty = 0;
         $advancesPlanned = 0;
         $timeline = $this->getTimeline();
         $advancesGoalDetailsReal = array();
@@ -381,8 +382,15 @@ abstract class ArrangementProgram {
                     }
                 }
 
-                if ($refresh === true) {
+                if (($refresh === true) and ( $em <> null)) {
+                    //RESTAURO EL VALOR DE LA META
                     $goal->setAdvance($advanceRealGoal);
+                    $goal->setResultReal($advanceRealGoal);
+                    
+                    //GUARDO EL VALOR EN EL CAMPO DE RESPALDO
+                    $goal->setresultBeforepenalty($advanceRealGoal);
+                    $em->persist($goal);
+                    $em->flush();
                 }
                 $advancesReal = $advancesReal;
             }
