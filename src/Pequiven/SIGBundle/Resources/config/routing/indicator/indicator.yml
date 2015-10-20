@@ -55,9 +55,9 @@ pequiven_indicatorcauses_get_form:
         expose: true
 #Carga de formulario del analisis de tendencia
 pequiven_indicatortrend_get_form:
-    path: /{idIndicator}/get-form_trend.{_format}
+    path: /{idIndicator}/{typeObj}/get-form_trend.{_format}
     defaults:
-        _controller: pequiven.controller.indicator_sig:getFormTrendAction
+        _controller: pequiven.controller.sig_trend_report_evolution:getFormTrendAction
         _format: html
     requirements:
         _format: html|json
@@ -154,9 +154,9 @@ pequiven_causes_evolution_add:
         expose: true
 #Guardamos el formulario de la tendencia del indicador
 pequiven_trend_evolution_add:
-    path: /{idIndicator}/addTrend.{_format}
+    path: /{idIndicator}/{typeObj}/addTrend.{_format}
     defaults:
-        _controller: pequiven.controller.indicator_sig:addTrendAction
+        _controller: pequiven.controller.sig_trend_report_evolution:addTrendAction
         _format: json
     requirements:
         _format: json

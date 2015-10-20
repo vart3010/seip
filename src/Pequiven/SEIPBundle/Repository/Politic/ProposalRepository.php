@@ -25,11 +25,23 @@ class ProposalRepository extends EntityRepository {
     function createPaginatorProposal(array $criteria = null, array $orderBy = null) {
         return $this->createPaginator($criteria, $orderBy);
     }
+    
+    function createPaginatorInheritedByWorkStudyCircle(array $criteria = null, array $oderBy = null){
+        $criteria['inheritedByWorkStudyCircle'] = true;
+        return $this->createPaginator($criteria, $oderBy);
+    }
 
     protected function applyCriteria(\Doctrine\ORM\QueryBuilder $queryBuilder, array $criteria = null) {
         $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
 
         $queryBuilder->innerJoin('pr.workStudyCircle', 'wsc');
+        
+        if (($phase = $criteria->remove('phase'))) {
+            $queryBuilder
+                    ->andWhere('wsc.phase = :phase')
+                    ->setParameter('phase', $phase)
+                ;
+        }
         
         //Filtro por descripción
         if(($description = $criteria->remove('description')) !== null){
@@ -64,6 +76,18 @@ class ProposalRepository extends EntityRepository {
                     ->andWhere('pr.lineStrategic = :lineStrategic')
                     ->setParameter('lineStrategic', $lineStrategic)
             ;
+        }
+        
+        if(($inheritedByWorkStudyCircle = $criteria->remove('inheritedByWorkStudyCircle')) != null){
+            if($inheritedByWorkStudyCircle == true){
+                $queryBuilder->innerJoin('wsc.parent', 'wscp');
+                if(($workStudyCircleParent = $criteria->remove('workStudyCircleParent')) != null){
+                    $queryBuilder
+                        ->andWhere('wscp.id = :workStudyCircleParent')
+                        ->setParameter('workStudyCircleParent', $workStudyCircleParent)
+                            ;
+                }
+            }
         }
 
         parent::applyCriteria($queryBuilder, $criteria->toArray());

@@ -9,16 +9,16 @@
                 <h3 class="thin underline text-center">Historico Informe de Evolución</h3>
                 <fieldset class="fieldset">
                     {% set month = "now"|date("m") %}
+                    {% set year = "now"|date("Y") %}  
                     
-                    
-                        {#<label class="label">Seleccione Historico </label>
-                        <select class="input-xlarge form-control">                    
-                        {% for data in labelsMonths %}     
-                            <option value="">{{ data }}</option>
-
-                        {% endfor %}                                             
-                        </select>#}
-
+                    {# Carga del tipo de objeto para setear la ruta del historico #}
+                    {% set typeObjet = typeObject %}
+                    {% if typeObjet == 1 %}
+                        {% set route = "pequiven_indicator_evolution" %}
+                    {% elseif typeObject == 2 %}
+                        {% set route = "pequiven_seip_arrangementprogram_evolution_sig" %}
+                    {% endif %}
+                                
                         {% for data in listMonth %} 
 
                             {% if data == 1 %} 
@@ -59,12 +59,16 @@
                                 {% set dataMonth = "12" %}                                    
                             {% endif %}
 
-                            {% if data > 8 %}
+                            {% if data > 8 and year == 2015 %}
                                 {% set disabled = TRUE %}
 
-                                {{ buttons.generic_history(path('pequiven_indicator_evolution', { 'id': Box_indicator , 'month': dataMonth }),( name )) }}
-                                
-                            {% endif %}
+                                {{ buttons.generic_history(path( route, { 'id': Box_indicator , 'month': dataMonth }),( name )) }}
+
+                            {% elseif year != 2015 %}    
+
+                                {{ buttons.generic_history(path( route, { 'id': Box_indicator , 'month': dataMonth }),( name )) }}
+
+                            {% endif %}                            
                         
                         {% endfor %}
                         <br>

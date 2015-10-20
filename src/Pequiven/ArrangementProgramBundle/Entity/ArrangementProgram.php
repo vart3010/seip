@@ -234,11 +234,27 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\Column(name="resultbeforepenalty",type="float")
      */
     protected $resultBeforepenalty = 0; 
+
+    /**
+     * ¿Mostar navegación al informe de evolución?
+     * @var boolean
+     * @ORM\Column(name="showEvolutionView",type="boolean")
+     */
+    private $showEvolutionView = false;
+
+    /**
+     * Analisis de Tendencia del Programa
+     * 
+     * @var \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionTrend
+     * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionTrend",mappedBy="arrangementProgram",cascade={"persist","remove"})
+     */
+    protected $arrangementProgramTrend;
     
     public function __construct() {
         $this->responsibles = new \Doctrine\Common\Collections\ArrayCollection();
         $this->histories = new \Doctrine\Common\Collections\ArrayCollection();
         $this->observations = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->arrangementProgramTrend = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**
@@ -466,6 +482,37 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
     public function getUpdatedAt()
     {
         return $this->updatedAt;
+    }
+
+    /**
+     * Add arrangementProgramTrend
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionTrend $arrangementProgramTrend
+     * @return Indicator
+     */
+    public function addArrangementProgramTrend(\Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionTrend $arrangementProgramTrend) {
+
+        $this->arrangementProgramTrend->add($arrangementProgramTrend);
+
+        return $this;
+    }
+
+    /**
+     * Remove arrangementProgramTrend
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionTrend $arrangementProgramTrend
+     */
+    public function removeArrangementProgramTrend(\Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionTrend $arrangementProgramTrend) {
+        $this->arrangementProgramTrend->removeElement($arrangementProgramTrend);
+    }
+
+    /**
+     * Get arrangementProgramTrend
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getArrangementProgramTrend() {
+        return $this->arrangementProgramTrend;
     }
 
     /**
@@ -742,6 +789,18 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
         $this->forcePenalize = $forcePenalize;
         
         return $this;
+    }
+
+    function getShowEvolutionView() {
+        return $this->showEvolutionView;
+    }
+
+    function isShowEvolutionView() {
+        return $this->showEvolutionView;
+    }
+
+    function setShowEvolutionView($showEvolutionView) {
+        $this->showEvolutionView = $showEvolutionView;
     }
     
     /**

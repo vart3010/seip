@@ -24,8 +24,53 @@ class WorkStudyCircleRepository extends EntityRepository
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
     public function createPaginatorByWorkStudyCircle(array $criteria = null, array $orderBy = null) {
+        $orderBy['wsc.name'] = 'ASC';
+        return $this->createPaginator($criteria, $orderBy);
+    }
+    
+    /**
+     * 
+     * @param array $criteria
+     * @return type
+     */
+    function findWorkStudyCircle(array $criteria = null)
+    {
         $queryBuilder = $this->getCollectionQueryBuilder();
         $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
+        
+        if (($phase = $criteria->remove('phase'))) {
+            $queryBuilder
+                    ->andWhere('wsc.phase = :phase')
+                    ->setParameter('phase', $phase)
+                ;
+        }
+        
+        if(($complejo = $criteria->remove('complejo'))){
+            $queryBuilder
+                    ->andWhere('wsc.complejo = :complejo')
+                    ->setParameter('complejo', $complejo)
+                ;
+        }
+        
+        if(($workStudyCircleParent = $criteria->remove('workStudyCircleParent'))){
+            $queryBuilder
+                ->andWhere('wsc.parent = :workStudyCircleParent')
+                ->setParameter('workStudyCircleParent', $workStudyCircleParent)
+                    ;
+        }
+        
+        return $queryBuilder->getQuery()->getResult();
+    }
+    
+    protected function applyCriteria(\Doctrine\ORM\QueryBuilder $queryBuilder, array $criteria = null) {
+        $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
+        
+        if (($phase = $criteria->remove('phase'))) {
+            $queryBuilder
+                    ->andWhere('wsc.phase = :phase')
+                    ->setParameter('phase', $phase)
+                ;
+        }
         
         if (($complejo = $criteria->remove('complejo'))) {
             $queryBuilder
@@ -56,39 +101,11 @@ class WorkStudyCircleRepository extends EntityRepository
             $coordinatorsArray = explode(']',$array[1]);
             
             $queryBuilder
-                ->andWhere($queryBuilder->expr()->in('wsc.createdBy', $coordinatorsArray[0]))
+                ->andWhere($queryBuilder->expr()->in('wsc.coordinator', $coordinatorsArray[0]))
                 ;
         }
         
-        $queryBuilder->orderBy('wsc.name');
-        
-//        $orderBy['wsc.name'] = 'ASC';
-        
-        return $this->getPaginator($queryBuilder);
-    }
-    
-    /**
-     * 
-     * @param array $criteria
-     * @return type
-     */
-    function findWorkStudyCircle(array $criteria = null)
-    {
-        $queryBuilder = $this->getCollectionQueryBuilder();
-        $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
-        if(($complejo = $criteria->remove('complejo'))){
-            $queryBuilder
-                    ->andWhere('wsc.complejo = :complejo')
-                    ->setParameter('complejo', $complejo)
-                ;
-        }
-        return $queryBuilder->getQuery()->getResult();
-    }
-    
-    protected function applyCriteria(\Doctrine\ORM\QueryBuilder $queryBuilder, array $criteria = null) {
-        $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
-        
-        return parent::applyCriteria($queryBuilder, $criteria->toArray());
+        parent::applyCriteria($queryBuilder, $criteria->toArray());
     }
     
     protected function getAlias() {
