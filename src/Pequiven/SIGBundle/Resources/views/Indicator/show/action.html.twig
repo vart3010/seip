@@ -56,10 +56,16 @@
                     <td>{{ action.actionValue.dateStart | date("d/m/Y") }}</td>
                     <td>{{ action.actionValue.dateEnd | date("d/m/Y") }}</td>
                     <td>{{ action.advance }}</td>
-                    <td>
-                        {{ action.actionValue.responsibles.firstname }} {{ action.actionValue.responsibles.lastname }}
-                        <small class="tag">({{ action.actionValue.responsibles.username }})</small>
-                    </td>
+                    {% if action.actionValue.responsibles %}
+                        <td>
+                            {{ action.actionValue.responsibles.firstname }} {{ action.actionValue.responsibles.lastname }}
+                            <small class="tag">({{ action.actionValue.responsibles.username }})</small>
+                        </td>
+                    {% else %}
+                        <td>
+                            SIN RESPONSABLE CARGADO
+                        </td>
+                    {% endif %}
                     {% if action.observations %}
                         <td>{{ action.observations }}</td>
                     {% else %}
