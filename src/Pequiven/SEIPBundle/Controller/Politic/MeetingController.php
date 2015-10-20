@@ -24,7 +24,11 @@ class MeetingController extends SEIPController {
         $idWorkStudyCircle = $request->get('workStudyCircle_id');
         $workStudyCircle = $em->getRepository('PequivenSEIPBundle:Politic\WorkStudyCircle')->findOneBy(array('id' => $idWorkStudyCircle));
 
-        $members = $workStudyCircle->getUserWorkerId();
+        if($workStudyCircle->getPhase() == \Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle::PHASE_ONE){
+            $members = $workStudyCircle->getUserWorkerId();
+        } elseif($workStudyCircle->getPhase() == \Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle::PHASE_TWO){
+            $members = $workStudyCircle->getMembers();
+        }
 
         $meeting = new Meeting();
         $form = $this->createForm(new MeetingType, $meeting);
@@ -35,7 +39,11 @@ class MeetingController extends SEIPController {
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $members = $workStudyCircle->getUserWorkerId();
+            if($workStudyCircle->getPhase() == \Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle::PHASE_ONE){
+                $members = $workStudyCircle->getUserWorkerId();
+            } elseif($workStudyCircle->getPhase() == \Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle::PHASE_TWO){
+                $members = $workStudyCircle->getMembers();
+            }
 
             $idsCheck = array();
             $obsUser = array();
@@ -225,7 +233,11 @@ class MeetingController extends SEIPController {
 
         $workStudyCircle = $meeting->getWorkStudyCircle();
 
-        $members = $workStudyCircle->getUserWorkerId();
+        if($workStudyCircle->getPhase() == \Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle::PHASE_ONE){
+            $members = $workStudyCircle->getUserWorkerId();
+        } elseif($workStudyCircle->getPhase() == \Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle::PHASE_TWO){
+            $members = $workStudyCircle->getMembers();
+        }
 
         $assistance = $meeting->getAssistances();
         $assistanceIds = array();
@@ -504,7 +516,9 @@ class MeetingController extends SEIPController {
         $criteria = $request->get('filter', $this->config->getCriteria());
         $sorting = $request->get('sorting', $this->config->getSorting());
         $repository = $this->container->get('pequiven.repository.meeting');
-        //$repository = $this->getRepository();
+        $phase = $request->get('phase');
+        
+        $criteria['phase'] = $phase;
 
         if ($this->config->isPaginated()) {
             $resources = $this->resourceResolver->getResource(
@@ -527,6 +541,7 @@ class MeetingController extends SEIPController {
         }
         $routeParameters = array(
             '_format' => 'json',
+            'phase' => $phase,
         );
         $apiDataUrl = $this->generateUrl('pequiven_meeting_list', $routeParameters);
 
@@ -540,6 +555,7 @@ class MeetingController extends SEIPController {
 
             $data = array(
                 'apiDataUrl' => $apiDataUrl,
+                'phase' => $phase,
             );
             $view->setData($data);
         } else {
@@ -556,6 +572,7 @@ class MeetingController extends SEIPController {
 
         //Carga de data de Indicador para armar grafica
         $response = new JsonResponse();
+        $phase = $request->get('phase');
 
         $workService = $this->getWorkStudyCircleService();
 

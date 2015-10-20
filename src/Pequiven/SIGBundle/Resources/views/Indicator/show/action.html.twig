@@ -1,6 +1,6 @@
 {% trans_default_domain 'PequivenSIGBundle' %}
     
-<div class="block" ng-init="urlCausesEvolutionForm='{{ path('pequiven_indicatorcauses_get_form',{'idIndicator':indicator_sig.id }) }}'">
+<div class="block">
 
 <div ng-controller="IndicatorSigEvolutionController"> 
 
@@ -56,10 +56,16 @@
                     <td>{{ action.actionValue.dateStart | date("d/m/Y") }}</td>
                     <td>{{ action.actionValue.dateEnd | date("d/m/Y") }}</td>
                     <td>{{ action.advance }}</td>
-                    <td>
-                        {{ action.actionValue.createdBy.firstname }} {{ action.actionValue.createdBy.lastname }}
-                        <small class="tag">({{ action.actionValue.createdBy.username }})</small>
-                    </td>
+                    {% if action.actionValue.responsibles %}
+                        <td>
+                            {{ action.actionValue.responsibles.firstname }} {{ action.actionValue.responsibles.lastname }}
+                            <small class="tag">({{ action.actionValue.responsibles.username }})</small>
+                        </td>
+                    {% else %}
+                        <td>
+                            SIN RESPONSABLE CARGADO
+                        </td>
+                    {% endif %}
                     {% if action.observations %}
                         <td>{{ action.observations }}</td>
                     {% else %}

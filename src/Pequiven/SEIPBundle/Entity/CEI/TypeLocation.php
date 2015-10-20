@@ -18,7 +18,7 @@ use Pequiven\SEIPBundle\Model\CEI\TypeLocation as BaseModel;
  * Tipo de sede
  *
  * @author Carlos Mendoza <inhack20@gmail.com>
- * @ORM\Table(name="seip_cei_TypeLocation",uniqueConstraints={@ORM\UniqueConstraint(name="code_idx",columns={"code"}) } )
+ * @ORM\Table(name="seip_cei_TypeLocation",uniqueConstraints={@ORM\UniqueConstraint(name="typeCode_idx",columns={"code"}) } )
  * @ORM\Entity()
  */
 class TypeLocation extends BaseModel

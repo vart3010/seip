@@ -31,12 +31,14 @@ pequiven_proposal_view_edit:
         expose: true
         
 pequiven_proposal_list:
-    path: /list.{_format}
+    path: /list/{phase}.{_format}
     defaults:
         _controller: pequiven.controller.proposal:listAction  
         _format: html
+        phase: 1
     requirements:
         _format: html|json|xml
+        phase: "\d+"
     methods: [GET]
 
 pequiven_proposal_show:
@@ -47,7 +49,7 @@ pequiven_proposal_show:
     options:
         expose: true
 pequiven_proposal_show_general:
-    path: /show/view
+    path: /show/view/{phase}
     defaults:
         _controller: pequiven.controller.proposal:viewAction
     methods: [GET|POST]

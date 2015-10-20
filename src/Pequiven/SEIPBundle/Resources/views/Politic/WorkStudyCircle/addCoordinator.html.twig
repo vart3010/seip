@@ -14,7 +14,7 @@
 {% block body %}
 
     {#    {{ dump(workStudyCircle) }}#}
-    <form method="POST" action="{{ path("pequiven_work_study_circle_add_coordinator",{idWorkStudyCircle:id}) }}">
+    <form method="POST" action="{{ path("pequiven_work_study_circle_add_coordinator",{idWorkStudyCircle:id,typeCoordinator:typeCoordinator}) }}">
         <fieldset class="fieldset">
             <legend class="legend" >Añadir Coordinador</legend>
             <div class="columns">

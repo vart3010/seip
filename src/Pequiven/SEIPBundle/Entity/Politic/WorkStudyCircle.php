@@ -162,6 +162,16 @@ class WorkStudyCircle extends ModelWorkStudyCircle implements PeriodItemInterfac
      */
     private $coordinator;
     
+        
+    /**
+     * Creado por
+     * @var \Pequiven\SEIPBundle\Entity\User
+     *
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\User")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $coordinatorDiscussion;
+    
     /**
      * @var integer
      * 
@@ -546,6 +556,24 @@ class WorkStudyCircle extends ModelWorkStudyCircle implements PeriodItemInterfac
      */
     function setCoordinator(\Pequiven\SEIPBundle\Entity\User $coordinator) {
         $this->coordinator = $coordinator;
+        return $this;
+    }
+    
+    /**
+     * Get CoordinatorDiscussion
+     * @return type
+     */
+    function getCoordinatorDiscussion() {
+        return $this->coordinatorDiscussion;
+    }
+
+    /**
+     * Set CoordinatorDiscussion
+     * @param \Pequiven\SEIPBundle\Entity\User $coordinatorDiscussion
+     * @return \Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle
+     */
+    function setCoordinatorDiscussion(\Pequiven\SEIPBundle\Entity\User $coordinatorDiscussion) {
+        $this->coordinatorDiscussion = $coordinatorDiscussion;
         return $this;
     }
     

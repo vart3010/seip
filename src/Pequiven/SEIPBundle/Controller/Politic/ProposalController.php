@@ -78,7 +78,7 @@ class ProposalController extends SEIPController {
 
                         $this->get('session')->getFlashBag()->add('success', 'Propuestas guardadas correctamente');
 
-                        return $this->redirect($this->generateUrl('pequiven_work_study_circle_show', array("id" => $workStudyCircle->getId())));
+                        return $this->redirect($this->generateUrl('pequiven_work_study_circle_show_phase', array("id" => $workStudyCircle->getId())));
                     }
                 } else {
                     $this->get('session')->getFlashBag()->add('error', 'Debe agregar 2 propuestas por línea estratégica');
@@ -226,6 +226,7 @@ class ProposalController extends SEIPController {
         $em = $this->getDoctrine()->getManager();
 
         $proposal = $em->getRepository('PequivenSEIPBundle:Politic\Proposal')->findAll();
+        $phase = $request->get('phase');
 
         $lineas = $this->get('pequiven.repository.linestrategic')->findAll(); //LineasEstrategicas
         //Carga de data de Indicador para armar grafica
@@ -254,6 +255,9 @@ class ProposalController extends SEIPController {
         $criteria = $request->get('filter', $this->config->getCriteria());
         $sorting = $request->get('sorting', $this->config->getSorting());
         $repository = $this->getRepository();
+        $phase = $request->get('phase');
+        
+        $criteria['phase'] = $phase;
 
         if ($this->config->isPaginated()) {
             $resources = $this->resourceResolver->getResource(
@@ -276,6 +280,7 @@ class ProposalController extends SEIPController {
         }
         $routeParameters = array(
             '_format' => 'json',
+            'phase' => $phase,
         );
         $apiDataUrl = $this->generateUrl('pequiven_proposal_list', $routeParameters);
 
@@ -289,12 +294,72 @@ class ProposalController extends SEIPController {
 
             $data = array(
                 'apiDataUrl' => $apiDataUrl,
+                'phase' => $phase,
             );
             $view->setData($data);
         } else {
             $formatData = $request->get('_formatData', 'default');
 
             $view->setData($resources->toArray('', array(), $formatData));
+        }
+        return $this->handleView($view);
+    }
+    
+    /**
+     * Función que devuelve el paginador con las propuestas agrupados por los círculos heredados
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     */
+    public function listPhaseAction(Request $request){
+        
+        $securityContext = $this->container->get('security.context');
+        $user = $securityContext->getToken()->getUser();
+        
+        $criteria = $request->get('filter',$this->config->getCriteria());
+        $sorting = $request->get('sorting',$this->config->getSorting());
+        
+        $workStudyCircleParent = $request->get('workStudyCircleParent');
+        
+        $repository = $this->getRepository();
+        $criteria['workStudyCircleParent'] = $workStudyCircleParent;
+        
+        //$criteria['user'] = $user->getId();
+        
+        if ($this->config->isPaginated()) {
+            $resources = $this->resourceResolver->getResource(
+                $repository,
+                'createPaginatorInheritedByWorkStudyCircle',
+                array($criteria, $sorting)
+            );
+            
+            $maxPerPage = $this->config->getPaginationMaxPerPage();
+            if(($limit = $request->query->get('limit')) && $limit > 0){
+                if($limit > 100){
+                    $limit = 100;
+                }
+                $maxPerPage = $limit;
+            }
+            $resources->setCurrentPage($request->get('page', 1), true, true);
+            $resources->setMaxPerPage($maxPerPage);
+        } else {
+            $resources = $this->resourceResolver->getResource(
+                $repository,
+                'findBy',
+                array($criteria, $sorting, $this->config->getLimit())
+            );
+        }
+
+        $view = $this
+            ->view()
+            ->setTemplate('PequivenSEIPBundle:Politic:WorkStudyCircle/showPhase.html.twig')
+            ->setTemplateVar($this->config->getPluralResourceName())
+        ;
+        $view->getSerializationContext()->setGroups(array('id','api_list','workStudyCircle','lineStrategic'));
+        if($request->get('_format') == 'html'){
+            $view->setData($resources);
+        }else{
+            $formatData = $request->get('_formatData','default');
+
+            $view->setData($resources->toArray('',array(),$formatData));
         }
         return $this->handleView($view);
     }

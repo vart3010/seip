@@ -16,6 +16,9 @@ abstract class WorkStudyCircle  {
     const PHASE_TWO = 2;
     const PHASE_THREE = 3;
     
+    const TYPE_COORDINATOR = 1;
+    const TYPE_COORDINATOR_DISCUSSION = 2;
+    
     /**
      * Retorna las secciones de tipo de resultado del indicador
      * 

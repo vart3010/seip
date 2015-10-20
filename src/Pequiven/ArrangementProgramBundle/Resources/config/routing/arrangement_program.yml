@@ -157,3 +157,46 @@ arrangementprogram_finish_the_notification_process:
     requirements:
         id: "\d+"
     methods: [GET]
+#SIG
+pequiven_seip_arrangementprogram_assigned_sig:
+    path: /assigned/sig.{_format}
+    defaults:
+        _controller: pequiven_seip.controller.arrangementprogram:assignedSigAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+    methods: [GET]
+pequiven_seip_arrangementprogram_for_reviewing_sig:
+    path: /for-reviewing/sig.{_format}
+    defaults:
+        _controller: pequiven_seip.controller.arrangementprogram:forReviewingSigAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+    methods: [GET]
+    
+pequiven_seip_arrangementprogram_for_approving_sig:
+    path: /for-approving/sig.{_format}
+    defaults:
+        _controller: pequiven_seip.controller.arrangementprogram:forApprovingSigAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+    methods: [GET]
+
+pequiven_seip_arrangementprogram_for_notifying_sig:
+    path: /for-notifying/sig.{_format}
+    defaults:
+        _controller: pequiven_seip.controller.arrangementprogram:forNotifyingSigAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+    methods: [GET]
+pequiven_seip_arrangementprogram_evolution_sig:
+    path: /{id}/evolution/{month}.{_format}
+    defaults:
+        _controller: pequiven.controller.arrangementprogram_sig:evolutionAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+    methods: [GET]

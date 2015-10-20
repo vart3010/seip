@@ -48,18 +48,6 @@
     </div>
 
     <HR width=100% align="center">
-    {% set pdf=0 %} 
-    {% set routeConfig = path('pequiven_work_study_circle_general',{'pdf':pdf}) %}
-    {% if(is_granted(["ROLE_SEIP_WORK_STUDY_CIRCLES_EXPORT_REPORT"])) %}
-        {#<div class="align-right">
-            {{ buttons.generic(
-                    (routeConfig),
-                    ('workStudyCircle.export.exportPdf'|trans({})),
-                    'icon-download'
-                 ) 
-            }}
-        </div>#}
-    {% endif %}
 
 
     {% block javascripts %}

@@ -159,13 +159,15 @@ class ReportTemplateController extends SEIPController {
      */
     public function loadAction(Request $request) {
         $dateString = null;
-        if ($this->getSecurityService()->isGranted('ROLE_SEIP_DATA_LOAD_CHANGE_DATE')) {
+        if ($this->getSecurityService()->isGranted(array('ROLE_SEIP_DATA_LOAD_CHANGE_DATE', 'ROLE_SEIP_OPERATION_LOAD_FIVE_DAYS'))) {
             $dateString = $request->get('dateNotification', null);
         }
         $plantReportToLoad = $request->get('plant_report', null);
         if ($plantReportToLoad === null) {
             return $this->redirect($this->generateUrl('pequiven_plant_report_index'));
         }
+
+
         $dateNotification = null;
         if ($dateString !== null) {
             $dateNotification = \DateTime::createFromFormat('d/m/Y', $dateString);
@@ -273,18 +275,24 @@ class ReportTemplateController extends SEIPController {
             $this->domainManager->update($resource);
             return $this->redirect($this->generateUrl('pequiven_report_template_list'));
         }
-        
-        /**
-         * CODIGO QUE VALIDA LOS DIAS PARA NOTIFICAR LA PRODUCCION
-         * SI TIENE EL ROL "ROLE_SEIP_OPERATION_LOAD_FIVE_DAYS"
-         * DEJA CARGAR 5 DIAS ANTES DEL DIA ACTUAL
-         */
-        $fecha = date('d/m/Y');
-        $yesterday = strtotime('-1 day', strtotime($fecha));
-        $yesterday = date('d/m/Y', $yesterday);
 
-        $startDate = strtotime('-5 day', strtotime($fecha));
-        $startDate = date('d/m/Y', $startDate);
+
+        $fecha = date('d/m/Y');
+
+        /**
+         * CODIGO PARA HABILITAR LA NOTIFICACION POR UN MES COMPLETO
+         */
+        $monthActive = "";
+
+        if ($monthActive == "") {
+            $monthActive = date("m");
+        }
+
+        $year = date("Y");
+        $daysMonth = cal_days_in_month(CAL_GREGORIAN, $monthActive, $year);
+        $startDayMonth = "01/" . $monthActive . "/" . $year;
+        $endDayMonth = $daysMonth . "/" . $monthActive . "/" . $year;
+
 
         $view = $this
                 ->view()
@@ -293,13 +301,25 @@ class ReportTemplateController extends SEIPController {
                 ->setData(array(
             $this->config->getResourceName() => $resource,
             'dateNotification' => $dateNotification,
-            'startDate' => $startDate,
-            'endDate' => $yesterday,
+            'startDate' => $this->getTransfDate($fecha, -5),
+            'endDate' => $this->getTransfDate($fecha, -1),
+            'startDayMonth' => $startDayMonth,
+            'endDayMonth' => $endDayMonth,
             'form' => $form->createView(),
                 ))
         ;
 
         return $this->handleView($view);
+    }
+
+    /**
+     * CODIGO QUE VALIDA LOS DIAS PARA NOTIFICAR LA PRODUCCION
+     * SI TIENE EL ROL "ROLE_SEIP_OPERATION_LOAD_FIVE_DAYS"
+     * DEJA CARGAR 5 DIAS ANTES DEL DIA ACTUAL
+     */
+    function getTransfDate($fecha, $dia) {
+        list($day, $mon, $year) = explode('/', $fecha);
+        return date('d/m/Y', mktime(0, 0, 0, $mon, $day + $dia, $year));
     }
 
     /**
@@ -1074,29 +1094,40 @@ class ReportTemplateController extends SEIPController {
                     $arrayProduction[] = $rs;
 
 //CONSUMO DE MATERIA PRIMA
-                    $totalRawDayPlan = 0.0;
-                    $totalRawDayReal = 0.0;
+
                     $i = $dateDesde;
+
 //VERIFICA SI EL PRODUCTO ES MATERIA PRIMA
                     //if ($productReport->getProduct()->getIsRawMaterial()) {
                     foreach ($productReport->getRawMaterialConsumptionPlannings() as $rawMaterial) {
+                        $totalRawDayPlan = 0.0;
+                        $totalRawDayReal = 0.0;
                         if ($rawMaterial->getProduct()->getIsRawMaterial()) {
                             while ($i != ($dateHasta + 86400)) {
                                 $timeNormal = new \DateTime(date("Y-m-d", $i));
                                 $rawMaterialResult = $rawMaterial->getSummary($timeNormal);
+
                                 $totalRawDayPlan += $rawMaterialResult["total_day_plan"];
                                 $totalRawDayReal += $rawMaterialResult["total_day"];
                                 $totalRawPlan += $rawMaterialResult["total_day_plan"];
                                 $totalRawReal += $rawMaterialResult["total_day"];
+
                                 $i = $i + 86400; //VOY RECORRIENDO DIA POR DIA
                             }
+
+
+                            $arrayRawMaterial[] = array(
+                                "productName" => $rawMaterial->getProduct()->getName() . " (" . $rawMaterial->getProduct()->getProductUnit()->getUnit() . ")",
+                                "planRaw" => $totalRawDayPlan,
+                                "realRaw" => $totalRawDayReal
+                            );
                         }
                     }
-                    $arrayRawMaterial[] = array(
-                        "productName" => $productReport->getProduct()->getName() . " (" . $productReport->getProduct()->getProductUnit()->getUnit() . ")",
-                        "planRaw" => $totalRawDayPlan,
-                        "realRaw" => $totalRawDayReal
-                    );
+//                    $arrayRawMaterial[] = array(
+//                        "productName" => $productReport->getProduct()->getName() . " (" . $productReport->getProduct()->getProductUnit()->getUnit() . ")",
+//                        "planRaw" => $totalRawDayPlan,
+//                        "realRaw" => $totalRawDayReal
+//                    );
                     //}
                 }
 //CONSUMO DE SERVICIOS

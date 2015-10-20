@@ -195,12 +195,23 @@
 <br /><br />
 
 <p class="button-height align-right">
+
+    {# Informe de Evolution #}
+
+    {% if entity.showEvolutionView %}
+    {% set month = "now"|date("m") %}
+        &nbsp;
+            {{ buttons.generic_ext(path('pequiven_seip_arrangementprogram_evolution_sig', { 'id': entity.id , 'month': month }),('pequiven.evolution'|trans({},'messages'))) }}
+        &nbsp;
+    {% endif %}
+
     {% set filedObservation = '<br/><br/><textarea name="observation" class="input" placeholder="' ~ ('pequiven.arrangement_program.write_observation'|trans) ~ '" required="required" cols="28" rows="10" ></textarea>' %}
     
     <a href="{{ path('arrangementprogram_export',{ id: entity.id }) }}" class="button">
         <span class="button-icon"><span class="icon-download"></span></span>
         {{ 'pequiven_seip.buttons.export_xls'|trans({},'PequivenSEIPBundle') }}
     </a>
+
     {% if isAllowToNotity == true %}
         &nbsp;
         {% if entity.details.notificationInProgressByUser == null %}

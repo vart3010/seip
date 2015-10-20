@@ -18,6 +18,11 @@
     </services>
     -->
     <services>
+        <service id="pequiven.service.arrangementprogram" class="Pequiven\ArrangementProgramBundle\Service\ArrangementProgramService">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
         <service id="pequiven_seip.repository.arrangementprogram_template" class="Pequiven\ArrangementProgramBundle\Repository\ArrangementProgramTemplateRepository">
             <tag name="app.repository" class="Pequiven\ArrangementProgramBundle\Entity\ArrangementProgramTemplate" />
         </service>
