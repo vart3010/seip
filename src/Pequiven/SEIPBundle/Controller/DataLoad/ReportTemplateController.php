@@ -276,12 +276,22 @@ class ReportTemplateController extends SEIPController {
             return $this->redirect($this->generateUrl('pequiven_report_template_list'));
         }
 
-        /**
-         * CODIGO QUE VALIDA LOS DIAS PARA NOTIFICAR LA PRODUCCION
-         * SI TIENE EL ROL "ROLE_SEIP_OPERATION_LOAD_FIVE_DAYS"
-         * DEJA CARGAR 5 DIAS ANTES DEL DIA ACTUAL
-         */
+
         $fecha = date('d/m/Y');
+
+        /**
+         * CODIGO PARA HABILITAR LA NOTIFICACION POR UN MES COMPLETO
+         */
+        $monthActive = "";
+
+        if ($monthActive == "") {
+            $monthActive = date("m");
+        }
+
+        $year = date("Y");
+        $daysMonth = cal_days_in_month(CAL_GREGORIAN, $monthActive, $year);
+        $startDayMonth = "01/" . $monthActive . "/" . $year;
+        $endDayMonth = $daysMonth . "/" . $monthActive . "/" . $year;
 
 
         $view = $this
@@ -293,6 +303,8 @@ class ReportTemplateController extends SEIPController {
             'dateNotification' => $dateNotification,
             'startDate' => $this->getTransfDate($fecha, -5),
             'endDate' => $this->getTransfDate($fecha, -1),
+            'startDayMonth' => $startDayMonth,
+            'endDayMonth' => $endDayMonth,
             'form' => $form->createView(),
                 ))
         ;
@@ -300,6 +312,11 @@ class ReportTemplateController extends SEIPController {
         return $this->handleView($view);
     }
 
+    /**
+     * CODIGO QUE VALIDA LOS DIAS PARA NOTIFICAR LA PRODUCCION
+     * SI TIENE EL ROL "ROLE_SEIP_OPERATION_LOAD_FIVE_DAYS"
+     * DEJA CARGAR 5 DIAS ANTES DEL DIA ACTUAL
+     */
     function getTransfDate($fecha, $dia) {
         list($day, $mon, $year) = explode('/', $fecha);
         return date('d/m/Y', mktime(0, 0, 0, $mon, $day + $dia, $year));
