@@ -31,14 +31,22 @@ class CauseFailService implements ContainerAwareInterface {
         return $fails;
     }
     
+    /**
+     * Función que devuelve los productos de tipo materia prima que causaron PNR, recibiendo un registro de mes de UnrealizedProduction
+     * @param UnrealizedProduction $unrealizedProduction
+     * @return type
+     */
     public function getRawMaterialsByFails(UnrealizedProduction $unrealizedProduction){
         
         $rawMaterials = array(
             \Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL_MP => array(),  
             \Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL_MP => array(),  
         );
+        //Seteo de clase por defecto (tipo UnrealizedProduction)
         $reflection = new \ReflectionClass($unrealizedProduction);
+        //Obtención de los métodos de la clase
         $methods = $reflection->getMethods();
+        //Seteo del método genérico
         $nameMatch = '/^getDay\d+Details+$/';
 
         $daysMonth = $this->getDaysMonth($unrealizedProduction);
