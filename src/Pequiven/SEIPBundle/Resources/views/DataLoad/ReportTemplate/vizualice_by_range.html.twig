@@ -170,7 +170,18 @@
                     {% for unrealized in unrealizedProduction %}
                         {% set totalPnr = totalPnr + unrealized.total %}
                         <tr>
-                            <th>{{ unrealized.productName }}</th>
+                            <th>
+                                {#<a href="{{ path("pequiven_report_template_visualize_pnr_range_time",{
+                                idProduct:unrealized.idProduct,
+                                idProductReport:unrealized.idProductReport,
+                                startDate:dateFrom|date('d-m-Y'),
+                                endDate:dateEnd|date('d-m-Y'),
+                                }) }}">
+                                    {{ unrealized.productName | upper}}
+                                </a>#}
+                                {{ unrealized.productName | upper}}
+
+                            </th>
                             <th>{{ unrealized.total|number_format(2, '.', ',') }}</th>
                         </tr>
                     {% endfor %}

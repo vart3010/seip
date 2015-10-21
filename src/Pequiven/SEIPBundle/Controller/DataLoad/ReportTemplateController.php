@@ -322,6 +322,17 @@ class ReportTemplateController extends SEIPController {
         return date('d/m/Y', mktime(0, 0, 0, $mon, $day + $dia, $year));
     }
 
+    public function visualizePnrPerRangeProduct(Request $request) {
+        $productReport = $productReport = $this->container->get('pequiven.repository.product_report')->find($request->get("idProductReport"));
+
+        foreach ($productReport->getUnrealizedProductions() as $unrealizedProduction) {
+            
+        }
+        
+        var_dump($productReport);
+        die();
+    }
+
     /**
      * Vista para mostrar la PNR de un producto desde reporte de produccion
      */
@@ -1031,9 +1042,6 @@ class ReportTemplateController extends SEIPController {
             $dateDesde = $dateFrom->format("U");
             $dateHasta = $dateEnd->format("U");
 
-
-
-
             foreach ($plantReports as $planReport) {
                 if (!in_array($plantReport->getReportTemplate()->getName(), $plants)) {
                     $plants[] = $plantReport->getReportTemplate()->getName();
@@ -1098,7 +1106,7 @@ class ReportTemplateController extends SEIPController {
                     $i = $dateDesde;
 
 //VERIFICA SI EL PRODUCTO ES MATERIA PRIMA
-                    //if ($productReport->getProduct()->getIsRawMaterial()) {
+//if ($productReport->getProduct()->getIsRawMaterial()) {
                     foreach ($productReport->getRawMaterialConsumptionPlannings() as $rawMaterial) {
                         $totalRawDayPlan = 0.0;
                         $totalRawDayReal = 0.0;
@@ -1128,7 +1136,7 @@ class ReportTemplateController extends SEIPController {
 //                        "planRaw" => $totalRawDayPlan,
 //                        "realRaw" => $totalRawDayReal
 //                    );
-                    //}
+//}
                 }
 //CONSUMO DE SERVICIOS
                 foreach ($planReport->getConsumerPlanningServices() as $consumerPlanningService) {
@@ -1160,7 +1168,12 @@ class ReportTemplateController extends SEIPController {
 //      var_dump($productReport->getName());
                     if (!in_array($productId, $arrayNamesUnrealizedProduction)) {
                         $arrayNamesUnrealizedProduction[] = $productId;
-                        $arrayUnrealizedProduction[$productId] = array("productName" => $productReport->getProduct()->getName() . " (" . $productReport->getProduct()->getProductUnit()->getUnit() . ")", "total" => 0.0);
+                        $arrayUnrealizedProduction[$productId] = array(
+                            "productName" => $productReport->getProduct()->getName() . " (" . $productReport->getProduct()->getProductUnit()->getUnit() . ")",
+                            "idProduct" => $productReport->getProduct()->getId(),
+                            "idProductReport" => $productReport->getId(),
+                            "total" => 0.0
+                        );
                     }
 
                     while ($i != ($dateHasta + 86400)) {
@@ -1330,7 +1343,7 @@ class ReportTemplateController extends SEIPController {
             $graphicsMonth = $reportService->generateColumn3dLinery(array("caption" => "Producción por Mes", "subCaption" => "Valores Expresados en TM"), $productsReport, array("range" => $byRange, "dateFrom" => $dateFrom, "dateEnd" => $dateEnd), $dateReport, $typeReport, "getSummaryMonth", "plan_acumulated", "real_acumulated");
             $graphicsYear = $reportService->generateColumn3dLinery(array("caption" => "Producción por Año", "subCaption" => "Valores Expresados en MTM"), $productsReport, array("range" => $byRange, "dateFrom" => $dateFrom, "dateEnd" => $dateEnd), $dateReport, $typeReport, "getSummaryYear", "plan_acumulated", "real_acumulated", 1000);
 
-            //PRODUCTION
+//PRODUCTION
             $dayPlan = 0.0;
             $dayReal = 0.0;
 
@@ -1350,7 +1363,7 @@ class ReportTemplateController extends SEIPController {
             $observations = array();
 
             foreach ($productsReport as $productReport) {
-                //PRODUCCTION DAY
+//PRODUCCTION DAY
                 $summaryDay = $productReport->getSummaryDay($dateReport, $typeReport);
 
                 $dayPlan+=$summaryDay["plan"];
@@ -1362,7 +1375,7 @@ class ReportTemplateController extends SEIPController {
                     $var = $summaryDay["plan"] - $summaryDay["real"];
                 }
 
-                //ME TRAIGO LAS OBSERVACIONES 
+//ME TRAIGO LAS OBSERVACIONES 
                 $observations[] = array(
                     "nameProduct" => $productReport->getProduct()->getName() . " (" . $productReport->getPlantReport()->getPlant()->getName() . ")",
                     "obs" => $summaryDay["observation"]
@@ -1382,7 +1395,7 @@ class ReportTemplateController extends SEIPController {
                 );
 
 
-                //PRODUCCTION MONTH
+//PRODUCCTION MONTH
                 $summaryMonth = $productReport->getSummaryMonth($dateReport, $typeReport);
 
                 $MonthPlan+=$summaryMonth["plan_month"];
@@ -1411,7 +1424,7 @@ class ReportTemplateController extends SEIPController {
                 );
 
 
-                //PRODUCCTION YEAR
+//PRODUCCTION YEAR
                 $summaryYear = $productReport->getSummaryYear($dateReport, $typeReport);
 
                 $yearPlan+=$summaryYear["plan_year"];
@@ -1441,8 +1454,8 @@ class ReportTemplateController extends SEIPController {
                     "var" => number_format($varYear, 2, ',', '.')
                 );
 
-                //RAW MATERIAL 
-                //if ($productReport->getProduct()->getIsRawMaterial()) {
+//RAW MATERIAL 
+//if ($productReport->getProduct()->getIsRawMaterial()) {
                 foreach ($productReport->getRawMaterialConsumptionPlannings() as $rawMaterial) {
                     if ($rawMaterial->getProduct()->getIsRawMaterial()) {
                         $rawMaterialResult = $rawMaterial->getSummary($dateReport);
@@ -1457,9 +1470,9 @@ class ReportTemplateController extends SEIPController {
                         );
                     }
                 }
-                //}
+//}
             }
-            //CONSUME SERVICES
+//CONSUME SERVICES
 //            $totalConsumerServices = array();
             if ($showDay) {
                 $totalConsumerServices["plan"] = 0.0;
@@ -1483,7 +1496,7 @@ class ReportTemplateController extends SEIPController {
 //            );
             $arrayConsumerServices = array();
 
-            //UNERALIZED PRODUCCTION
+//UNERALIZED PRODUCCTION
             $arrayUnrealizedProduction = array();
             $totalUnrealizedProduction = array(
                 "day" => 0.0,
@@ -1491,7 +1504,7 @@ class ReportTemplateController extends SEIPController {
                 "year" => 0.0
             );
 
-            //INVENTORY
+//INVENTORY
             $arrayInventory = array();
             $totalInventory = array(
                 "day" => 0.0,
@@ -1499,7 +1512,7 @@ class ReportTemplateController extends SEIPController {
             );
 
             foreach ($plantReports as $planReport) {
-                //CONSUMO DE SERVICIOS
+//CONSUMO DE SERVICIOS
 
                 foreach ($planReport->getConsumerPlanningServices() as $consumerPlanningService) {
 
@@ -1542,7 +1555,7 @@ class ReportTemplateController extends SEIPController {
                 }
 
 
-                //PRODUCION NO REALIZADA
+//PRODUCION NO REALIZADA
 
                 foreach ($planReport->getProductsReport() as $productReport) {
                     $productId = $productReport->getProduct()->getId();
@@ -1608,7 +1621,7 @@ class ReportTemplateController extends SEIPController {
                 "var" => number_format($varDay, 2, ',', '.')
             );
 
-            //TOTALES MONTH PRODUCCTIONS
+//TOTALES MONTH PRODUCCTIONS
             if ($MonthPlanAcumulated - $MonthRealAcumualated) {
                 $varMonth = 0;
             } else {
@@ -1629,7 +1642,7 @@ class ReportTemplateController extends SEIPController {
             );
 
 
-            //TOTALES YEAR PRODUCCTIONS
+//TOTALES YEAR PRODUCCTIONS
             if ($yearPlanAcumulated - $yearRealAcumualated) {
                 $varMonth = 0;
             } else {
@@ -2436,7 +2449,7 @@ class ReportTemplateController extends SEIPController {
                 )
             );
 
-            //TOTALES DE CONSUMO DE SERVICIOS
+//TOTALES DE CONSUMO DE SERVICIOS
             $contRow = 0;
             foreach ($dataConsumo["col"] as $cols) {
                 if ($contRow > 0) {
@@ -2453,7 +2466,7 @@ class ReportTemplateController extends SEIPController {
 
 
 
-            //**********************************/
+//**********************************/
         }
 
         if ($sections["pnr"]) {
@@ -2490,7 +2503,7 @@ class ReportTemplateController extends SEIPController {
 
         if ($sections["inventory"]) {
 
-            ///****INVENTARIO  **//////////
+///****INVENTARIO  **//////////
             $inventario = $this->getDataInventario($productsReport, $dateReport);
 
             $dataInventario = array(
