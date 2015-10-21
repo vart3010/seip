@@ -9,6 +9,8 @@ use Pequiven\SEIPBundle\Doctrine\ORM\SeipEntityRepository;
  */
 class EvolutionActionRepository extends SeipEntityRepository {
 
+	function getQueryActionPlan() {
+	}
     protected function getAlias() {
         return 'ea';
     }

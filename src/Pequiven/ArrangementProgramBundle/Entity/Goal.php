@@ -163,6 +163,14 @@ class Goal implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface {
      * @ORM\Column(name="penalty", type="integer", nullable=true)
      */
     private $penalty = 0;
+    
+    /**
+     * Penalizacion de Porcentaje
+     * @var integer
+     *
+     * @ORM\Column(name="percentagepenalty", type="float", nullable=true)
+     */
+    private $percentagepenalty =0;
 
     /**
      * Resultado Antes de la Penalización
@@ -552,7 +560,24 @@ class Goal implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface {
     public function getPenalty() {
         return $this->penalty;
     }
+    
+    /**
+     * Get Percentagepenalty
+     * @return type
+     */
+    function getPercentagepenalty() {
+        return $this->percentagepenalty;
+    }
 
+    /**
+     * Set Percentagepenalty
+     * @param type $percentagepenalty
+     */
+    function setPercentagepenalty($percentagepenalty) {
+        $this->percentagepenalty = $percentagepenalty;
+    }
+
+    
     /**
      * Set resultbeforepenalty
      * @param float $resultBeforepenalty

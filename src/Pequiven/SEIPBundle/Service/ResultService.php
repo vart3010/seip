@@ -8,6 +8,7 @@ use Pequiven\MasterBundle\Entity\Tendency;
 use Pequiven\MasterBundle\Entity\ArrangementRangeType;
 use Pequiven\MasterBundle\Entity\Operator;
 use Pequiven\SEIPBundle\Model\Common\CommonObject;
+use Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram;
 
 /**
  * Servicio que se encarga de actualizar los resultados
@@ -320,53 +321,79 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
      * 
      * @param \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram $arrangementProgram
      */
-    public function refreshValueArrangementProgram(\Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram $arrangementProgram, $andFlush = true) {
+    public function refreshValueArrangementProgram(ArrangementProgram $arrangementProgram, $andFlush = true) {
         $periodService = $this->getPeriodService();
         $amountPenalty = 0;
+        $em = $this->getDoctrine()->getManager();
 
+
+        //DETERMINO SI EL PROGRAMA SE PENALIZA POR PORCENTAJE O NO
         $lastNotificationInProgressDate = $arrangementProgram->getDetails()->getLastNotificationInProgressDate();
         if ($arrangementProgram->isCouldBePenalized() && ($periodService->isPenaltyInResult($lastNotificationInProgressDate) === true || $arrangementProgram->isForcePenalize() === true)) {
             $amountPenalty = $periodService->getPeriodActive()->getPercentagePenalty();
         }
 
-        $this->setPenaltiesbyGoal($arrangementProgram);
 
-        $summary = $arrangementProgram->getSummary(array(
+        //RECALCULO LOS VALORES ORIGINALES DE LAS METAS SIN PENALIZAR
+        $arrangementProgram->getSummary(array(
             'limitMonthToNow' => true,
             'refresh' => true,
-        ));
+                ), $em);
 
-        //SALVO EL VALOR ANTES DE PENALIZAR
-        $beforePenalty = $arrangementProgram->getResult();
-        $arrangementProgram->setresultBeforepenalty($beforePenalty);
+        //OBTENGO LOS VALORES DEL PROGRAMA DE GESTION SIN PENALIZAR
+        $beforepenaltyAP = $arrangementProgram->getSummary(array(
+            'limitMonthToNow' => true,
+            'refresh' => false,
+                ), $em);
 
-        //PENALIZO POR PORCENTAJE
-        $arrangementProgram->setResult($summary['advances'] - $amountPenalty);
-        $arrangementProgram->setResultReal($summary['advances']);
+        //SALVO EL VALOR DEL AP SIN PENALIZAR
+        $arrangementProgram->setresultBeforepenalty($beforepenaltyAP['advances']);
 
-        //CALCULO Y GUARDO LA PENALIZACIÓN
-        $arrangementProgram->setPenalty($beforePenalty - $summary['advances'] - $amountPenalty);
+        //ESTABLEZCO EL VALOR DE PENALIZACIONES EN METAS POR RETRASO Y POR PORCENTAJE (DOS PENALIZACIONES DISTINTAS)
+        $this->setPenaltiesbyGoal($arrangementProgram, $amountPenalty);
 
-        $summary = $arrangementProgram->getSummary(array('refresh' => true));
-        $arrangementProgram->setTotalAdvance(($summary['advances'] - $amountPenalty));
-        $em = $this->getDoctrine()->getManager();
-
+        //PENALIZO LAS METAS
         foreach ($arrangementProgram->getTimeline()->getGoals() as $goal) {
             $advance = $goal->getResult();
-            $goal->setResult(($advance - $amountPenalty));
-            $goal->setResultReal($advance);
+            $penalties = $goal->getPenalty() + $goal->getPercentagepenalty();
+            if (($advance - $penalties) < 0) {
+                $goal->setResult(0);
+                $goal->setResultReal(0);
+            } else {
+                $goal->setResult(($advance - $penalties));
+                $goal->setResultReal($advance - $penalties);
+            }
             $em->persist($goal);
         }
-        
+
+        //OBTENGO LOS NUEVOS VALORES DEL PROGRAMA DE GESTIÓN
+        $newsummary = $arrangementProgram->getSummary(array(
+            'limitMonthToNow' => true,
+            'refresh' => false,
+                ), $em);
+
+        //PENALIZO LOS PROGRAMAS DE GESTION. EN CASO DE SER NEGATIVO EL RESULTADO SE ESTABLECE COMO CERO
+        if ($newsummary['advances'] < 0) {
+            $arrangementProgram->setResult(0);
+            $arrangementProgram->setResultReal(0);
+            $arrangementProgram->setTotalAdvance(0);
+        } else {
+            $arrangementProgram->setResult($newsummary['advances']);
+            $arrangementProgram->setResultReal($newsummary['advances']);
+            $arrangementProgram->setTotalAdvance($newsummary['advances']);
+        }
+
+        //CALCULO Y GUARDO EL VALOR DE LA PENALIZACIÓN DEL AP
+        $arrangementProgram->setPenalty($beforepenaltyAP['advances'] - $newsummary['advances']);
+
+        //INGRESO LOS DATOS DE AUDITORIA
         $arrangementProgram->updateLastDateCalculateResult();
 
         $em->persist($arrangementProgram);
 
         $this->updateResultOfObjects($arrangementProgram->getObjetiveByType());
 
-        if ($andFlush) {
-            $em->flush();
-        }
+        $em->flush();
     }
 
     /* Establece Penalizaciones de Metas
@@ -374,7 +401,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
      * @param Request $request
      */
 
-    public function setPenaltiesbyGoal(\Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram $resource) {
+    public function setPenaltiesbyGoal(ArrangementProgram $resource, $porcentaje) {
 
         $real = array();
         $planned = array();
@@ -481,15 +508,9 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 }
             }
 
-            //CARGO LA PENALIZACIÓN POR INCUMPLIMIENTO
+            //CARGO LA PENALIZACIÓN POR INCUMPLIMIENTO Y POR PORCENTAJE (DOS PENALIZACIONES DISTINTAS)
             $timeline_goals->setPenalty($mayor);
-
-            //GUARGO EN BEFOREPENALATY EL RESULTADO ANTES DE LA PENALIZACIÓN POR INCUMPLIMIENTO
-            $timeline_goals->setresultBeforepenalty($timeline_goals->getadvance());
-
-            //CALCULO EL RESULTADO PENALIZADO POR INCUMPLIMIENTO
-            $total = ($timeline_goals->getadvance()) - $mayor;
-            $timeline_goals->setadvance($total);
+            $timeline_goals->setpercentagepenalty($porcentaje);
 
             $em->persist($timeline_goals);
         }
