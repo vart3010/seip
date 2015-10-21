@@ -48,6 +48,20 @@ class EvolutionActionVerificationType extends AbstractType
                 //'ng-options' => 'value as value.ref for (key,value) in data.lastPeriod'
                 ),
                                )) 
+            /*->add('actionPlan', null, array(
+                    'query_builder' => function(\Pequiven\IndicatorBundle\Repository\Indicator\EvolutionIndicator\EvolutionActionRespository $repository) {
+                        return $repository->findQueryActionPlan();
+                    },                               
+                    'label' => 'Plan de Acción',
+                    'label_attr' => array('class' => 'label'),
+                    'attr' => array(
+                        'class' => "input-large select2",                        
+                        //'style' => 'width: 270px',
+                        //'multiple' => 'multiple'
+                    ),
+                    'empty_value' => 'Seleccione...',
+                    'required' => true,
+                ))*/
         ;
     }
     
