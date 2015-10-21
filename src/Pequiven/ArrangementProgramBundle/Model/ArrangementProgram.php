@@ -386,13 +386,16 @@ abstract class ArrangementProgram {
                     //RESTAURO EL VALOR DE LA META
                     $goal->setAdvance($advanceRealGoal);
                     $goal->setResultReal($advanceRealGoal);
-                    
+                                        
                     //GUARDO EL VALOR EN EL CAMPO DE RESPALDO
                     $goal->setresultBeforepenalty($advanceRealGoal);
                     $em->persist($goal);
                     $em->flush();
                 }
-                $advancesReal = $advancesReal;
+                
+                if(($refresh === false) and ( $em <> null)){ 
+                $advancesReal = $advancesReal - (($goal->getPenalty()*$weight)/100);
+                }
             }
         }
 

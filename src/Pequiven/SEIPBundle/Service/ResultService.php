@@ -325,7 +325,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         $periodService = $this->getPeriodService();
         $amountPenalty = 0;
         $em = $this->getDoctrine()->getManager();
-        
+
 
         //DETERMINO SI EL PROGRAMA SE PENALIZA POR PORCENTAJE O NO
         $lastNotificationInProgressDate = $arrangementProgram->getDetails()->getLastNotificationInProgressDate();
@@ -333,51 +333,67 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             $amountPenalty = $periodService->getPeriodActive()->getPercentagePenalty();
         }
 
-        //RECALCULO LOS VALORES ORIGINALES DEL PROGRAMA DE GESTIÓN
-        $summary = $arrangementProgram->getSummary(array(
+
+        //RECALCULO LOS VALORES ORIGINALES DE LAS METAS SIN PENALIZAR
+        $arrangementProgram->getSummary(array(
             'limitMonthToNow' => true,
             'refresh' => true,
                 ), $em);
-        
-        //SALVO EL VALOR ANTES DE PENALIZAR
-        $beforePenalty = $arrangementProgram->getResult();
-        $arrangementProgram->setresultBeforepenalty($beforePenalty);
 
-        //ESTABLEZCO EL VALOR DE PENALIZACIONES DE METAS POR RETRASO Y POR PORCENTAJE (DOS PENALIZACIONES DISTINTAS)
+        //OBTENGO LOS VALORES DEL PROGRAMA DE GESTION SIN PENALIZAR
+        $beforepenaltyAP = $arrangementProgram->getSummary(array(
+            'limitMonthToNow' => true,
+            'refresh' => false,
+                ), $em);
+
+        //SALVO EL VALOR DEL AP SIN PENALIZAR
+        $arrangementProgram->setresultBeforepenalty($beforepenaltyAP['advances']);
+
+        //ESTABLEZCO EL VALOR DE PENALIZACIONES EN METAS POR RETRASO Y POR PORCENTAJE (DOS PENALIZACIONES DISTINTAS)
         $this->setPenaltiesbyGoal($arrangementProgram, $amountPenalty);
 
         //PENALIZO LAS METAS
         foreach ($arrangementProgram->getTimeline()->getGoals() as $goal) {
             $advance = $goal->getResult();
             $penalties = $goal->getPenalty() + $goal->getPercentagepenalty();
-            $goal->setResult(($advance - $penalties));
-            $goal->setResultReal($advance);
+            if (($advance - $penalties) < 0) {
+                $goal->setResult(0);
+                $goal->setResultReal(0);
+            } else {
+                $goal->setResult(($advance - $penalties));
+                $goal->setResultReal($advance - $penalties);
+            }
             $em->persist($goal);
         }
 
         //OBTENGO LOS NUEVOS VALORES DEL PROGRAMA DE GESTIÓN
-        $summary = $arrangementProgram->getSummary(array(
+        $newsummary = $arrangementProgram->getSummary(array(
             'limitMonthToNow' => true,
             'refresh' => false,
-        ), $em);
+                ), $em);
 
-        //PENALIZO PROGRAMA DE GESTIÓN
-        $arrangementProgram->setResult($summary['advances']);
-        $arrangementProgram->setResultReal($summary['advances']);
-        $arrangementProgram->setTotalAdvance($summary['advances']);
+        //PENALIZO LOS PROGRAMAS DE GESTION. EN CASO DE SER NEGATIVO EL RESULTADO SE ESTABLECE COMO CERO
+        if ($newsummary['advances'] < 0) {
+            $arrangementProgram->setResult(0);
+            $arrangementProgram->setResultReal(0);
+            $arrangementProgram->setTotalAdvance(0);
+        } else {
+            $arrangementProgram->setResult($newsummary['advances']);
+            $arrangementProgram->setResultReal($newsummary['advances']);
+            $arrangementProgram->setTotalAdvance($newsummary['advances']);
+        }
 
-        //CALCULO Y GUARDO EL VALOR DE LA PENALIZACIÓN COMPLETA
-        $arrangementProgram->setPenalty($beforePenalty - $summary['advances']);
+        //CALCULO Y GUARDO EL VALOR DE LA PENALIZACIÓN DEL AP
+        $arrangementProgram->setPenalty($beforepenaltyAP['advances'] - $newsummary['advances']);
 
+        //INGRESO LOS DATOS DE AUDITORIA
         $arrangementProgram->updateLastDateCalculateResult();
 
         $em->persist($arrangementProgram);
 
         $this->updateResultOfObjects($arrangementProgram->getObjetiveByType());
 
-        
-            $em->flush();
-        
+        $em->flush();
     }
 
     /* Establece Penalizaciones de Metas
