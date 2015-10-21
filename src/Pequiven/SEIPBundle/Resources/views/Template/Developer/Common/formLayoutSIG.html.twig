@@ -75,6 +75,12 @@
             });
         });
 
+        $(document).ready(function () {
+            $("#actionResults_responsibles").select2({
+                minimumInputLength: 3,
+            });
+        });
+
         $("#actionResults_dateStart").datepicker({
                 defaultDate: "+1w",
                 changeMonth: true,

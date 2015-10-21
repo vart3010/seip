@@ -279,11 +279,11 @@ sylius_resource:
                 model: Pequiven\ObjetiveBundle\Entity\Objetive
                 repository: Pequiven\ObjetiveBundle\Repository\ObjetiveRepository                
         #Causas de Desviación del indicador
-        pequiven.sig_causes_indicator:
+        pequiven.sig_causes_report_evolution:
             driver: doctrine/orm
             templates: PequivenSIGBundle:Indicator/
             classes:
-                controller: Pequiven\SIGBundle\Controller\SigEvolutionIndicator\EvolutionCausesController                
+                controller: Pequiven\SIGBundle\Controller\SigEvolutionReport\ReportEvolutionCausesController                
                 model: Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCause
                 repository: Pequiven\IndicatorBundle\Repository\Indicator\EvolutionIndicator\EvolutionCauseRepository
         #Plan de Acción de las Causas de Desviación del indicador

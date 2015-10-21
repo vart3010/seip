@@ -1,11 +1,9 @@
 {% trans_default_domain 'PequivenSIGBundle' %}
-
-<div class="block" ng-init="urlCausesEvolutionForm='{{ path('pequiven_indicatorcauses_get_form',{'idIndicator':indicator_sig.id }) }}'">
-
+<div class="block">
 <div ng-controller="IndicatorSigEvolutionController"> 
 
     <div class="block-title">
-        <h3 class="ng-binding">{$ indicator_sig.length $} {{ 'sig.causes_desviation'|trans ({}, 'messages') }}</h3>
+        <h3 class="ng-binding">{{ 'sig.causes_desviation'|trans ({}, 'messages') }}</h3>
         {% if sumCause < 100 %}        
             <div class="button-group absolute-right compact">
                 <a class="button icon-list-add " href="" ng-click="loadTemplateCausesDesviation()" title="">{{ 'pequiven.add'|trans({},'messages')  }}</a>
@@ -34,7 +32,6 @@
                         <th scope="col" width="30%" class="hide-on-mobile-portrait header">&nbsp;</th>
                 </tr>
             </thead>
-
         {% for cause_data in cause %}
             <tbody>
                 <tr {{ cycle(["even", "odd"], loop.index) }}> 
@@ -79,4 +76,3 @@
             </div>
         </div>
     </div>
-</div>

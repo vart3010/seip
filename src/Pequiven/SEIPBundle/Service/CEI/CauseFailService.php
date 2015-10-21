@@ -31,14 +31,36 @@ class CauseFailService implements ContainerAwareInterface {
         return $fails;
     }
     
+    /**
+     * Función que devuelve los productos de tipo materia prima que causaron PNR, recibiendo un registro de mes de UnrealizedProduction
+     * @param UnrealizedProduction $unrealizedProduction
+     * @return type
+     */
     public function getRawMaterialsByFails(UnrealizedProduction $unrealizedProduction){
+        
+        //ini=15-06-15 fin=15-10-15
+//        $month = $unrealizedProduction->getMonth();
+//        if($month == $monthIni || $month == $monthFin){
+//            if($month == $monthIni && $month == $monthFin){
+//                //Recorrer desde diaIni hasta diaFin
+//            } elseif($month == $monthIni){
+//                //Recorrer desde diaInicial hasta finde mes
+//            } elseif($month == $monthFin){
+//                //Recorrer desde dia 1 hasta el dinFin
+//            }
+//        } else{
+//            //Recorre todo el mes
+//        }
         
         $rawMaterials = array(
             \Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL_MP => array(),  
             \Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL_MP => array(),  
         );
+        //Seteo de clase por defecto (tipo UnrealizedProduction)
         $reflection = new \ReflectionClass($unrealizedProduction);
+        //Obtención de los métodos de la clase
         $methods = $reflection->getMethods();
+        //Seteo del método genérico
         $nameMatch = '/^getDay\d+Details+$/';
 
         $daysMonth = $this->getDaysMonth($unrealizedProduction);
@@ -57,7 +79,7 @@ class CauseFailService implements ContainerAwareInterface {
             $methodName = $m->getName();
             if (preg_match($nameMatch, $methodName)) {    //filtra los metodos getDayXXDetails
                 $unrealizedProductionDay = $unrealizedProduction->$methodName();
-
+                
                 if ($unrealizedProductionDay != "") {
                     foreach ($methodTypeCauses as $key) { //RECORRE EL ARRAY DE CAUSAS
                         foreach ($unrealizedProductionDay->$key() as $fails) {

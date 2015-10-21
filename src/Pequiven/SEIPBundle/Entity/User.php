@@ -221,6 +221,14 @@ class User extends BaseUser implements UserInterface, UserBoxInterface, PeriodIt
     private $workStudyCircles;
 
     /**
+     * Metas
+     * 
+     * @var \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionAction
+     * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionAction",mappedBy="responsibles")
+     */
+    private $evolutionAction;
+
+    /**
      * Constructor
      */
     public function __construct() {
@@ -235,6 +243,7 @@ class User extends BaseUser implements UserInterface, UserBoxInterface, PeriodIt
         $this->plantReports = new \Doctrine\Common\Collections\ArrayCollection();
         $this->reportTemplates = new \Doctrine\Common\Collections\ArrayCollection();
         $this->workStudyCircles = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->evolutionAction = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -928,6 +937,37 @@ class User extends BaseUser implements UserInterface, UserBoxInterface, PeriodIt
      */
     public function getWorkStudyCircles() {
         return $this->workStudyCircles;
+    }
+
+
+    /**
+     * Add evolutionAction
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionAction $evolutionAction
+     * @return User
+     */
+    public function addEvolutionAction(\Pequiven\ArrangementProgramBundle\Entity\Goal $evolutionAction) {
+        $this->evolutionAction[] = $evolutionAction;
+
+        return $this;
+    }
+
+    /**
+     * Remove evolutionAction
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionAction $evolutionAction
+     */
+    public function removeEvolutionAction(\Pequiven\ArrangementProgramBundle\Entity\Goal $evolutionAction) {
+        $this->evolutionAction->removeElement($evolutionAction);
+    }
+
+    /**
+     * Get evolutionAction
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getEvolutionAction() {
+        return $this->evolutionAction;
     }
 
 }

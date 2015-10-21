@@ -249,12 +249,39 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionTrend",mappedBy="arrangementProgram",cascade={"persist","remove"})
      */
     protected $arrangementProgramTrend;
+
+    /**
+     * Analisis de Tendencia del Programa
+     * 
+     * @var \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCause
+     * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCause",mappedBy="arrangementProgram",cascade={"persist","remove"})
+     */
+    protected $arrangementProgramCauses;
+
+    /**
+     * Analisis de Tendencia del Programa
+     * 
+     * @var \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCauseAnalysis
+     * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCauseAnalysis",mappedBy="arrangementProgram",cascade={"persist","remove"})
+     */
+    protected $arrangementProgramCausesAnalysis;
+
+     /**
+     * Analisis de Tendencia del Programa
+     * 
+     * @var \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCause
+     * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionActionVerification",mappedBy="arrangementProgram",cascade={"persist","remove"})
+     */
+    protected $arrangementProgramVerification;
     
     public function __construct() {
         $this->responsibles = new \Doctrine\Common\Collections\ArrayCollection();
         $this->histories = new \Doctrine\Common\Collections\ArrayCollection();
         $this->observations = new \Doctrine\Common\Collections\ArrayCollection();
         $this->arrangementProgramTrend = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->arrangementProgramCauses = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->arrangementProgramCausesAnalysis = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->arrangementProgramVerification = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**
@@ -513,6 +540,99 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
      */
     public function getArrangementProgramTrend() {
         return $this->arrangementProgramTrend;
+    }
+
+    /**
+     * Add arrangementProgramCauses
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCauses $arrangementProgramCauses
+     * @return Indicator
+     */
+    public function addArrangementProgramCauses(\Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCause $arrangementProgramCauses) {
+
+        $this->arrangementProgramCauses->add($arrangementProgramCauses);
+
+        return $this;
+    }
+
+    /**
+     * Remove arrangementProgramCauses
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCause $arrangementProgramCauses
+     */
+    public function removeArrangementProgramCauses(\Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCause $arrangementProgramCauses) {
+        $this->arrangementProgramCauses->removeElement($arrangementProgramCauses);
+    }
+
+    /**
+     * Get arrangementProgramCauses
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getArrangementProgramCauses() {
+        return $this->arrangementProgramCauses;
+    }
+
+    /**
+     * Add arrangementProgramCausesAnalysis
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCauses $arrangementProgramCausesAnalysis
+     * @return Indicator
+     */
+    public function addArrangementProgramCausesAnalysis(\Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCauseAnalysis $arrangementProgramCausesAnalysis) {
+
+        $this->arrangementProgramCausesAnalysis->add($arrangementProgramCausesAnalysis);
+
+        return $this;
+    }
+
+    /**
+     * Remove arrangementProgramCausesAnalysis
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCauses $arrangementProgramCausesAnalysis
+     */
+    public function removeArrangementProgramCausesAnalysis(\Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCauseAnalysis $arrangementProgramCausesAnalysis) {
+        $this->arrangementProgramCauses->removeElement($arrangementProgramCausesAnalysis);
+    }
+
+    /**
+     * Get arrangementProgramCauses
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getArrangementProgramCausesAnalysis() {
+        return $this->arrangementProgramCausesAnalysis;
+    }
+
+    /**
+     * Add arrangementProgramVerification
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionActionVerification $arrangementProgramVerification
+     * @return Indicator
+     */
+    public function addArrangementProgramVerification(\Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionActionVerification $arrangementProgramVerification) {
+
+        $this->arrangementProgramVerification->add($arrangementProgramVerification);
+
+        return $this;
+    }
+
+    /**
+     * Remove arrangementProgramVerification
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionActionVerification $arrangementProgramVerification
+     */
+    public function removeArrangementProgramVerification(\Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionActionVerification $arrangementProgramVerification) {
+        $this->arrangementProgramCauses->removeElement($arrangementProgramVerification);
+    }
+
+    /**
+     * Get arrangementProgramCauses
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getArrangementProgramVerification() {
+        return $this->arrangementProgramVerification;
     }
 
     /**

@@ -3657,6 +3657,7 @@ class IndicatorService implements ContainerAwareInterface {
      * @return type
      */
     public function getDataChartOfIndicatorEvolution(Indicator $indicator) {
+        
         $data = array(
             'dataSource' => array(
                 'chart' => array(),
@@ -3880,11 +3881,6 @@ class IndicatorService implements ContainerAwareInterface {
         $chart["exportFileName"] = "Grafico Resultados ";
         $chart["exporthandler"] = "http://107.21.74.91/";
 
-        //$em = $this->getDoctrine();
-        //$dataCause = $em->getRepository('Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCause')->findBy(array('indicator' => $indicator,'month' => $month));
-
-        //var_dump($month);
-
         //Inicialización
         $category = $dataSetCause = array();
         $label = $dataCause = array();
@@ -3930,6 +3926,7 @@ class IndicatorService implements ContainerAwareInterface {
 
         return $data;
     }
+
     public function obtainIndicatorChartDetails(Indicator $indicator, \Pequiven\SEIPBundle\Entity\Chart $chart){
         $indicatorChartDetailsRepository = $this->container->get('pequiven.repository.indicatorchartdetails');
         
