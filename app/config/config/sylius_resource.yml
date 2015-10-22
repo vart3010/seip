@@ -135,21 +135,19 @@ sylius_resource:
                 controller: Pequiven\ArrangementProgramBundle\Controller\GoalController
                 model: Pequiven\ArrangementProgramBundle\Entity\Goal
                 repository: Pequiven\ArrangementProgramBundle\Repository\GoalRepository
-        
+        #MOVIMIENTO DE EMPLEADOS
         pequiven_seip.arrangementprogram_movement:
             driver: doctrine/orm
             classes:
                 controller: Pequiven\ArrangementProgramBundle\Controller\MovementEmployee\MovementEmployeeController
                 model: Pequiven\ArrangementProgramBundle\Entity\MovementEmployee\MovementEmployee
-                repository: Pequiven\ArrangementProgramBundle\Repository\MovementEmployee\MovementEmployeeRepository
-                
+                repository: Pequiven\ArrangementProgramBundle\Repository\MovementEmployee\MovementEmployeeRepository                
+        #DETALLE DE MOVIMIENTO DE EMPLEADOS
         pequiven_seip.arrangementprogram_movementdetails:
             driver: doctrine/orm
             classes:
                 model: Pequiven\ArrangementProgramBundle\Entity\MovementEmployee\MovementDetails
                 repository: Pequiven\ArrangementProgramBundle\Repository\MovementEmployee\MovementDetailsRepository
-                
-        
         pequiven_seip.complejo:
             driver: doctrine/orm
             classes:

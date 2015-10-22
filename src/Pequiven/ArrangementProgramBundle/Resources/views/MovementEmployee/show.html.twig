@@ -111,24 +111,24 @@
                             <tr>
                                 <td>
                                     <p class="inline-label">
-                                        {{ form_label(formassigndetails.date) }}
-                                        {{ form_widget(formassigndetails.date) }}
-                                        {{ form_errors(formassigndetails.date) }}
+                                        {{ form_label(assign.date) }}
+                                        {{ form_widget(assign.date) }}
+                                        {{ form_errors(assign.date) }}
                                     </p>
                                     <p class="inline-label">
-                                        {{ form_label(form.User) }}
-                                        {{ form_widget(form.User) }}
-                                        {{ form_errors(form.User) }}
+                                        {{ form_label(assign.User) }}
+                                        {{ form_widget(assign.User) }}
+                                        {{ form_errors(assign.User) }}
                                     </p>
                                     <p class="inline-label">
-                                        {{ form_label(formassigndetails.cause) }}
-                                        {{ form_widget(formassigndetails.cause) }}
-                                        {{ form_errors(formassigndetails.cause) }}
+                                        {{ form_label(assign.cause) }}
+                                        {{ form_widget(assign.cause) }}
+                                        {{ form_errors(assign.cause) }}
                                     </p>
                                     <p class="inline-label">
-                                        {{ form_label(formassigndetails.observations) }}
-                                        {{ form_widget(formassigndetails.observations) }}
-                                        {{ form_errors(formassigndetails.observations) }}
+                                        {{ form_label(assign.observations) }}
+                                        {{ form_widget(assign.observations) }}
+                                        {{ form_errors(assign.observations) }}
                                     </p>
 
                                     <p class="inline-label">
@@ -158,7 +158,7 @@
                                 <td>
                                     <br>
                                     {{ actions.assign() }}   
-                                    {{ form_rest(formassigndetails) }}
+                                    {{ form_rest(assign) }}
                                 </td>
                             </tr>
                         </table>
@@ -171,24 +171,24 @@
                             <tr>
                                 <td>
                                     <p class="inline-label">
-                                        {{ form_label(formremovedetails.date) }}
-                                        {{ form_widget(formremovedetails.date) }}
-                                        {{ form_errors(formremovedetails.date) }}
+                                        {{ form_label(remove.date) }}
+                                        {{ form_widget(remove.date) }}
+                                        {{ form_errors(remove.date) }}
                                     </p>
                                     <p class="inline-label">
-                                        {{ form_label(form1.User) }}
-                                        {{ form_widget(form1.User) }}
-                                        {{ form_errors(form1.User) }}
+                                        {{ form_label(remove.User) }}
+                                        {{ form_widget(remove.User) }}
+                                        {{ form_errors(remove.User) }}
                                     </p>
                                     <p class="inline-label">
-                                        {{ form_label(formremovedetails.cause) }}
-                                        {{ form_widget(formremovedetails.cause) }}
-                                        {{ form_errors(formremovedetails.cause) }}
+                                        {{ form_label(remove.cause) }}
+                                        {{ form_widget(remove.cause) }}
+                                        {{ form_errors(remove.cause) }}
                                     </p>
                                     <p class="inline-label">
-                                        {{ form_label(formremovedetails.observations) }}
-                                        {{ form_widget(formremovedetails.observations) }}
-                                        {{ form_errors(formremovedetails.observations) }}
+                                        {{ form_label(remove.observations) }}
+                                        {{ form_widget(remove.observations) }}
+                                        {{ form_errors(remove.observations) }}
                                     </p>
                                 </td>
                                 <td aling="center">
@@ -214,7 +214,7 @@
                                 <td>
                                     <br>
                                     {{ actions.remove() }}   
-                                    {{ form_rest(formremovedetails) }}
+                                    {{ form_rest(remove) }}
                                 </td>
                             </tr>
                         </table>
@@ -248,9 +248,12 @@
                 </tr>
             </thead>
             <tbody>
-            <td>
-
-            </td>
+                {% for mov in movements %}
+                <td>{{ mov.gettype }} </td>
+                <td>{{ mov.getuser }} </td>
+                <td>{{ mov.getdate }} </td>
+                <td>{{ mov.getrealAdvance }} </td>
+            {% endfor %}
             </tbody>
         </table>
 

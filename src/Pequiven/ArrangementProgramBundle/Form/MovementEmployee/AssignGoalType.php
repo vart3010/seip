@@ -8,11 +8,21 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Pequiven\SEIPBundle\Repository\UserRepository;
+use Pequiven\ArrangementProgramBundle\Model\MovementEmployee;
 
 class AssignGoalType extends AbstractType {
 
     public function buildForm(FormBuilderInterface $builder, array $options) {
         $builder
+                ->add('date', 'date', [
+                    'label_attr' => array('class' => 'label bold'),
+                    'format' => 'd/M/y',
+                    'widget' => 'single_text',
+                    'label' => 'Fecha de Asignación',
+                    'required' => true,
+                    'attr' => array('class' => 'input input-large'),
+                    'required' => true,
+                ])
                 ->add('User', 'entity', array(
                     'label' => 'Empleado',
                     'empty_value' => 'Seleccione...',
@@ -27,6 +37,23 @@ class AssignGoalType extends AbstractType {
                         'style' => 'width: 300px'
                     ),
                 ))
+                ->add('cause', 'choice', array(
+                    'label' => 'Motivo o Causa',
+                    'required' => true,
+                    'choices' => MovementEmployee::getCausein(),
+                    'label_attr' => array('class' => 'label'),
+                    'attr' => array(
+                        'class' => 'select2 input-large form-control',
+                        'style' => 'width: 300px')
+                        )
+                )
+                ->add('observations', 'textarea', array(
+                    'label' => 'Observaciones',
+                    'required' => false,
+                    'label_attr' => array('class' => 'label'),
+                    'attr' => array('class' => 'input input-xlarge', 'style' => 'text-transform:uppercase;')
+                        )
+                )
 
 
         ;

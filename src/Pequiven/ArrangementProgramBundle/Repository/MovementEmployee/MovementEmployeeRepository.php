@@ -36,6 +36,18 @@ class MovementEmployeeRepository extends EntityRepository {
         ;
         return $qb->getQuery()->getResult();
     }
+    
+    function FindMovementDetailsbyGoal($idGoal) {
+        $qb = $this->getQueryBuilder();
+        $qb
+                ->Select('movdet')
+                ->andWhere('movdet.Goal= :goals')
+                ->orderBy('movdet.date')
+                ->setParameter('goals', $idGoal)
+                
+        ;
+        return $qb->getQuery()->getResult();
+    }
 
     function getAlias() {
         return 'mov';

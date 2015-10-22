@@ -24,35 +24,26 @@ class MovementEmployeeController extends SEIPController {
 
         //INSTANCIACIÓN DE ENTIDADES
         $MovementEmployee = new MovementEmployee();
-        $MovementEmployeeDetails = new MovementDetails();
 
-        //FORMULARIO DE USUARIOS
-        $form = $this->createForm(new AssignGoalType(), $MovementEmployee);
-        $form1 = $this->createForm(new RemoveGoalType($id), $MovementEmployee);
-
-        //FORMULARIO DE DETALLES
-        $formassigndetails = $this->createForm(new AssignGoalDetailsType(), $MovementEmployeeDetails);
-        $formremovedetails = $this->createForm(new RemoveGoalDetailsType(), $MovementEmployeeDetails);
+        //FORMULARIOS DE ENTRADA Y SALIDA
+        $formassign = $this->createForm(new AssignGoalType(), $MovementEmployee);
+        $formremove = $this->createForm(new RemoveGoalType($id), $MovementEmployee);
 
         //RESPONSABLES ASIGNADOS
         $responsibles = $this->get('pequiven_seip.repository.user')->findQuerytoRemoveAssingedGoal($id, false);
 
         //MOVIMIENTOS REALIZADOS
-        $em = $this->getDoctrine()->getManager();
-        $movements = $this->getRepository("\Pequiven\ArrangementProgramBundle\Repository\MovementEmployee\MovementEmployeeDetailsRepository")->FindMovementbyGoal($id);
-        
-        var_dump($movements);
-        die();
+//        $movements = $this->get('pequiven_seip.repository.arrangementprogram_movementdetails')->FindMovementDetailsbyGoal($id);
+
+        $movements = null;
 
         return $this->render('PequivenArrangementProgramBundle:MovementEmployee:show.html.twig', array(
                     'goal' => $entity,
                     'user' => $this->getUser(),
-                    'form' => $form->createView(),
-                    'form1' => $form1->createView(),
-                    'formassigndetails' => $formassigndetails->createView(),
-                    'formremovedetails' => $formremovedetails->createView(),
+                    'assign' => $formassign->createView(),
+                    'remove' => $formremove->createView(),
                     'responsibles' => $responsibles,
-                        //   'movements' => $movements
+                    'movements' => $movements
         ));
     }
 
@@ -63,22 +54,18 @@ class MovementEmployeeController extends SEIPController {
         $em = $this->getDoctrine()->getManager();
         $goal = $em->getRepository('PequivenArrangementProgramBundle:Goal')->findOneById($id);
 
-        $details = new MovementDetails();
-        $form = $this->createForm(new AssignGoalDetailsType(), $details);
-        $form->handleRequest($request);
-
         $movement = new MovementEmployee();
-        $formUser = $this->createForm(new AssignGoalType(), $movement);
-        $formUser->handleRequest($request);
+        $formAssign = $this->createForm(new AssignGoalType(), $movement);
+        $formAssign->handleRequest($request);
 
         $em->getConnection()->beginTransaction();
 
-        if ($form->isSubmitted()) {
+        if ($formAssign->isSubmitted()) {
 
-            //DATOS DE AssignGoalDetailsType
-            $cause = $request->get("AssignGoalDetails")["cause"];
-            $date = new \DateTime(str_replace("/", "-", ($request->get("AssignGoalDetails")["date"])));
-            $obs = $request->get("AssignGoalDetails")["observations"];
+            //DATOS DE AssignGoalType
+            $cause = $request->get("AssignGoal")["cause"];
+            $date = new \DateTime(str_replace("/", "-", ($request->get("AssignGoal")["date"])));
+            $obs = $request->get("AssignGoal")["observations"];
 
             //DATOS AUDITORIA
             $login = $this->getUser();
@@ -87,13 +74,14 @@ class MovementEmployeeController extends SEIPController {
             $id_user = ($request->get("AssignGoal")["User"]);
             $user = $em->getRepository('PequivenSEIPBundle:User')->findOneById($id_user);
 
-            //CARGO LOS DATOS DE DETALLE EN DB
-            $details = new MovementDetails();
-            $details->setCreatedBy($login);
-            $details->setDate($date);
-            $details->setType('I');
-            $details->setCause($cause);
-            $details->setObservations($obs);
+            //CARGO LOS DATOS EN DB
+            $movement = new MovementEmployee();
+            $movement->setCreatedBy($login);
+            $movement->setDate($date);
+            $movement->setType('I');
+            $movement->setGoal($goal);
+            $movement->setCause($cause);
+            $movement->setObservations($obs);
 
             //CALCULO PENALIZACIONES Y AVANCES PARA LA FECHA
             $datos = $this->CalculateAdvancePenalty($goal, $date);
@@ -101,20 +89,13 @@ class MovementEmployeeController extends SEIPController {
             if ($advance < 0) {
                 $advance = 0;
             }
-            $details->setrealAdvance($advance);
-            $details->setPentalty($datos['penalty']);
-            $details->setPlanned($datos['plannedResult']);
 
-            $em->persist($details);
-
-            //CARGO LOS DATOS DE MOVIMIENTO EN DB
-            $movement = new MovementEmployee();
-            $movement->setCreatedBy($login);
-            $movement->setType('Goal');
+            $movement->setrealAdvance($advance);
+            $movement->setPentalty($datos['penalty']);
+            $movement->setPlanned($datos['plannedResult']);
+            $movement->setTypeMov('Goal');
             $movement->setUser($user);
-            $movement->setGoal($goal);
             $movement->setPeriod($this->getPeriodService()->getPeriodActive());
-            $movement->setIn($details);
             $em->persist($movement);
 
             //AGREGO AL USUARIO EN LA META
@@ -141,24 +122,20 @@ class MovementEmployeeController extends SEIPController {
         $em = $this->getDoctrine()->getManager();
         $goal = $em->getRepository('PequivenArrangementProgramBundle:Goal')->findOneById($id);
 
-        $details = new MovementDetails();
-        $form = $this->createForm(new RemoveGoalDetailsType(), $details);
-        $form->handleRequest($request);
-
         $movement = new MovementEmployee();
-        $formUser = $this->createForm(new RemoveGoalType($id), $movement);
-        $formUser->handleRequest($request);
+        $formRemove = $this->createForm(new RemoveGoalType($id), $movement);
+        $formRemove->handleRequest($request);
 
         $em->getConnection()->beginTransaction();
 
-        if ($form->isSubmitted()) {
+        if ($formRemove->isSubmitted()) {
 
-            //DATOS DE RemoveGoalDetailsType
-            $cause = $request->get("RemoveGoalDetails")["cause"];
-            $date = $request->get("RemoveGoalDetails")["date"];
+            //DATOS DE RemoveGoalType
+            $cause = $request->get("RemoveGoal")["cause"];
+            $date = $request->get("RemoveGoal")["date"];
             $date = str_replace("/", "-", $date);
             $date = new \DateTime($date);
-            $obs = $request->get("RemoveGoalDetails")["observations"];
+            $obs = $request->get("RemoveGoal")["observations"];
 
             //DATOS AUDITORIA
             $login = $this->getUser();
@@ -167,13 +144,14 @@ class MovementEmployeeController extends SEIPController {
             $id_user = ($request->get("RemoveGoal")["User"]);
             $user = $em->getRepository('PequivenSEIPBundle:User')->findOneById($id_user);
 
-            //CARGO LOS DATOS DE DETALLE EN DB
-            $details = new MovementDetails();
-            $details->setCreatedBy($login);
-            $details->setDate($date);
-            $details->setType('O');
-            $details->setCause($cause);
-            $details->setObservations($obs);
+
+            $movement = new MovementEmployee();
+            $movement->setCreatedBy($login);
+            $movement->setDate($date);
+            $movement->setType('O');
+            $movement->setGoal($goal);
+            $movement->setCause($cause);
+            $movement->setObservations($obs);
 
             //CALCULO PENALIZACIONES Y AVANCES PARA LA FECHA
             $datos = $this->CalculateAdvancePenalty($goal, $date);
@@ -182,37 +160,16 @@ class MovementEmployeeController extends SEIPController {
             if ($advance < 0) {
                 $advance = 0;
             }
-            $details->setrealAdvance($advance);
-            $details->setPentalty($datos['penalty']);
-            $details->setPlanned($datos['plannedResult']);
 
-            $em->persist($details);
+            $movement->setrealAdvance($advance);
+            $movement->setPentalty($datos['penalty']);
+            $movement->setPlanned($datos['plannedResult']);
+            $movement->setTypeMov('Goal');
+            $movement->setUser($user);
+            $movement->setPeriod($this->getPeriodService()->getPeriodActive());
+            $em->persist($movement);
 
-            $periodo = $this->getPeriodService()->getPeriodActive();
-
-            //BUSCO EL REGISTRO DE ENTRADA
-            $mov = $this->container->get('pequiven_seip.repository.arrangementprogram_movement')->FindMovementIn($id, $id_user, $periodo);
-
-            //SI EL USUARIO NO TIENE REGISTRO DE ENTRADA SE CREA UN REGISTRO PERO CON 'IN' NULO
-            if ($mov == null) {
-                $movement = new MovementEmployee();
-                $movement->setCreatedBy($login);
-                $movement->setType('Goal');
-                $movement->setUser($user);
-                $movement->setGoal($goal);
-                $movement->setPeriod($periodo);
-                $movement->setIn(null);
-                $movement->setOut($details);
-                $em->persist($movement);
-            } else {
-
-                //ACTUALIZO LOS DATOS DE SALIDA DE MOVIMIENTO EN DB
-                foreach ($mov as $remove) {
-                    $remove->setOut($details);
-                    $em->persist($remove);
-                }
-            }
-
+            
             //ELIMINO AL USUARIO EN LA META
             $goal->removeResponsible($user);
             $em->persist($goal);

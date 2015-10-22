@@ -62,9 +62,9 @@ class MovementEmployee {
      * TIPO DE MOVIMIENTO: GOAL-> META / AP-> PROGRAMA DE GESTIÓN / OBJO-> OBJ. OPERATIVO / OBJT-> OBJ. TACTICO / OBJT-> OBJ. ESTRATÉGICO
      * @var string
      *
-     * @ORM\Column(name="type", type="text",nullable=false)
+     * @ORM\Column(name="typeMov", type="text",nullable=false)
      */
-    private $type;
+    private $typeMov;
 
     /**
      * ID DE LA META, SERÁ LA BASE DE LOS CALCULOS DE AVANCE SIN EMBARGO LA PREDOMINACIÓN DE LA BUSQUEDA LO DEFINE EL TYPE
@@ -83,18 +83,52 @@ class MovementEmployee {
     private $period;
 
     /**
-     * ID DE DETALLE DE ENTRADA
-     * @ORM\OneToOne(targetEntity="Pequiven\ArrangementProgramBundle\Entity\MovementEmployee\MovementDetails")
-     * @ORM\JoinColumn(name="in_id", referencedColumnName="id", nullable=true) 
+     * TIPO DE MOVIMIENTO: I-> ENTRADA / O-> SALIDA
+     * @var string
+     *
+     * @ORM\Column(name="type", type="text",nullable=false)
      */
-    private $in;
+    private $type;
 
     /**
-     * ID DE DETALLE DE SALIDA
-     * @ORM\OneToOne(targetEntity="Pequiven\ArrangementProgramBundle\Entity\MovementEmployee\MovementDetails")
-     *  @ORM\JoinColumn(name="out_id", referencedColumnName="id", nullable=true) 
+     * @var \DateTime
+     * @ORM\Column(name="date", type="datetime", nullable=false)
      */
-    private $out;
+    private $date;
+
+    /**
+     * @var \decimal
+     * @ORM\Column(name="realAdvance", type="decimal", nullable=false)
+     */
+    private $realAdvance;
+
+    /**
+     * @var \decimal
+     * @ORM\Column(name="planned", type="decimal", nullable=false)
+     */
+    private $planned;
+
+    /**
+     * @var \decimal
+     * @ORM\Column(name="penalty", type="decimal", nullable=true)
+     */
+    private $pentalty;
+
+    /**
+     * CAUSA DE MOVIMIENTO: ASIG-> ASIGNACIÓN / SUP->SUPLENCIA / AUS-> AUSENCIA / CAMB-> CAMBIO
+     * @var string
+     *
+     * @ORM\Column(name="cause", type="text",nullable=false)
+     */
+    private $cause;
+
+    /**
+     * OBSERVACIONES
+     * @var string
+     *
+     * @ORM\Column(name="observations", type="text",nullable=true)
+     */
+    private $observations;
 
     public function __construct() {
         //$this->assistances = new \Doctrine\Common\Collections\ArrayCollection();
@@ -252,21 +286,65 @@ class MovementEmployee {
     function setPeriod(\Pequiven\SEIPBundle\Entity\Period $period = null) {
         $this->period = $period;
     }
-
-    function getIn() {
-        return $this->in;
+    
+    function getTypeMov() {
+        return $this->typeMov;
     }
 
-    function getOut() {
-        return $this->out;
+    function getDate() {
+        return $this->date;
     }
 
-    function setIn($in) {
-        $this->in = $in;
+    function getRealAdvance() {
+        return $this->realAdvance;
     }
 
-    function setOut($out) {
-        $this->out = $out;
+    function getPlanned() {
+        return $this->planned;
     }
+
+    function getPentalty() {
+        return $this->pentalty;
+    }
+
+    function getCause() {
+        return $this->cause;
+    }
+
+    function getObservations() {
+        return $this->observations;
+    }
+
+    function setTypeMov($typeMov) {
+        $this->typeMov = $typeMov;
+    }
+
+    function setDate($date) {
+        $this->date = $date;
+    }
+
+    function setRealAdvance($realAdvance) {
+        $this->realAdvance = $realAdvance;
+    }
+
+    function setPlanned($planned) {
+        $this->planned = $planned;
+    }
+
+    function setPentalty($pentalty) {
+        $this->pentalty = $pentalty;
+    }
+
+    function setCause($cause) {
+        $this->cause = $cause;
+    }
+
+    function setObservations($observations) {
+        $this->observations = $observations;
+    }
+
+
+
+    
 
 }
