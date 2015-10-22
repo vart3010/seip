@@ -6,7 +6,6 @@
         <div class="block-title">
             <h3 class="ng-binding">{$ indicator_sig.featuresIndicator.length $} {{ 'sig.trend_analysis'|trans ({}, 'messages') }}</h3>
             {% if trend %}
-                
             {% else %}
                 <div class="button-group absolute-right compact">
                     <a class="button icon-list-add " href="" ng-click="loadTemplateAnalysisTrend()" title="">{{ 'pequiven.add'|trans({},'messages') }}&nbsp;</a>
@@ -22,7 +21,7 @@
                     <tr>
                         <th scope="col" width="150%" class="header">
                             {{ 'form.trend_analysis'|trans({},'PequivenSIGBundle') }}
-                        </th>                    
+                        </th>                                     
                     </tr>
                 </thead>
             {% for data in trend %}
@@ -31,6 +30,15 @@
                         <th align="justify">
                             {{ data.description }}
                         </th>                        
+                        <th class="align-right vertical-center">                          
+                                <span class="select compact">
+                                    <a href class="select-value form-edit">{{ 'pequiven.actions'|trans({},'messages') }}</a>
+                                    <span class="select-arrow"></span>
+                                    <span class="drop-down">                                    
+                                    <a href ng-click="removeAnalysisTrend(data_trend='{{ data.id }}')" class="button icon-cross-round">{{ "pequiven.actions.delete"|trans({},"messages") }}</a>             
+                                    </span>
+                                </span>
+                        </th>
                     </tr>
                 </tbody>
             {% endfor %}

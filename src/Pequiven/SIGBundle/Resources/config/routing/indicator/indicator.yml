@@ -185,6 +185,28 @@ pequiven_verification_evolution_add:
     methods: [POST]
     options:
         expose: true
+#Eliminamos el analisis de la Tendencia
+pequiven_trend_evolution_delete:
+    path: /{id}/deltrend.{_format}
+    defaults:
+        _controller: pequiven.controller.sig_trend_report_evolution:deleteTrendAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET]
+    options:
+        expose: true
+#Eliminamos el analisis de Causas
+pequiven_cause_analysis_evolution_delete:
+    path: /{id}/del.{_format}
+    defaults:
+        _controller: pequiven.controller.sig_causes_report_evolution:deleteAnalysisCAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET]
+    options:
+        expose: true
 #Eliminamos las causas de desviación
 pequiven_causes_evolution_delete:
     path: /{id}/delete.{_format}

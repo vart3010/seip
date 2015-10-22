@@ -221,6 +221,28 @@ class ReportEvolutionCausesController extends ResourceController
     }
 
     /**
+     * Elimina el analisis de Causas
+     * 
+     * @param Request $request
+     * @return type
+     */
+    public function deleteAnalysisCAction(Request $request)
+    {   
+        $id = $request->get('id');
+        
+        $em = $this->getDoctrine()->getManager();
+        $results = $this->get('pequiven.repository.sig_causes_analysis')->find($id);
+        
+        if($results){
+
+            $em->remove($results);
+            $em->flush();
+            
+            $this->get('session')->getFlashBag()->add('success', $this->trans('flashes.messages.deleteCauseAnalysis', array(), 'PequivenSIGBundle'));
+        }  
+    }
+
+    /**
      * Busca el indicador o retorna un 404
      * @param Request $request
      * @return \Pequiven\IndicatorBundle\Entity\Indicator

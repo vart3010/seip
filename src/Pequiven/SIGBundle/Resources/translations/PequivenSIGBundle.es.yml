@@ -275,6 +275,8 @@ seip:
 flashes:
      messages:
         successAction: Acción Guargada Correctamente
+        deleteTrend: Analisis de Tendencia Eliminado Correctamente
+        deleteCauseAnalysis: Analisis de Causas Eliminado Correctamente
         deleteAction: Acción Eliminada Correctamente
         deleteCause: Causa Eliminada Correctamente
 arrangementprogram:

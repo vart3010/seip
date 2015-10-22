@@ -124,6 +124,28 @@ class ReportEvolutionController extends ResourceController
     }
 
     /**
+     * Elimina el analisis de la tendencia
+     * 
+     * @param Request $request
+     * @return type
+     */
+    public function deletetrendAction(Request $request)
+    {   
+        $id = $request->get('id');
+        
+        $em = $this->getDoctrine()->getManager();
+        $results = $this->get('pequiven.repository.sig_trend_report_evolution')->find($id);
+        
+        if($results){
+
+            $em->remove($results);
+            $em->flush();
+            
+            $this->get('session')->getFlashBag()->add('success', $this->trans('flashes.messages.deleteTrend', array(), 'PequivenSIGBundle'));
+        }  
+    }
+
+    /**
      * Retorna el formulario del plan de acción
      * 
      * @param Request $request
