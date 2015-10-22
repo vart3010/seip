@@ -238,6 +238,7 @@ class IndicatorSigController extends ResourceController
                 'trend'                          => $trend,
                 'font'                           => $font,
                 'typeObject'                     => $typeObject,
+                'id'                             => $idIndicator,
                 $this->config->getResourceName() => $resource,
                 'form'                           => $form->createView()
             ));

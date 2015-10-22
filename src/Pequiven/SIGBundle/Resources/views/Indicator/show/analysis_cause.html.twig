@@ -6,27 +6,27 @@
         {% if analysis %}
             {% for data in analysis %}
                 {% set dataAnalysis = data.id %}
-                {#<div class="button-group absolute-right compact">
+                <div class="button-group absolute-right compact">
                     <span ng-app class="button icon-outbox" onClick="uploadFilePdf(this.id)" id="{$ data.id $}" >{{ "pequiven.actions.upload_file"|trans({},"messages") }}
                     </span>            
-                </div>  #}
+                </div>  
                 {# form carga de archivo #}
-                {#<div ng-controller="ToolsController" ng-init="isGrantedButtonEdit({{ indicator_sig.id }},paso+1)">
-                    <form style="display: none" id="form_{$ valueCauseId.id $}" action="{{ path("pequiven_indicator_evolution",{id:indicator_sig.id, month:month, cause:dataAnalysis, uploadFile:(true)}) }}" method="POST" enctype="multipart/form-data">#}
+                <div ng-controller="ToolsController" ng-init="isGrantedButtonEdit({{ id }},paso+1)">
+                    <form style="display: none" id="form_{$ valueCauseId.id $}" action="{{ path("pequiven_indicator_evolution",{id: id, month:month, cause:dataAnalysis, uploadFile:(true)}) }}" method="POST" enctype="multipart/form-data">
                     
-                       {#<input name="archivo" onChange="submitUploadFile(this.id)" id="indicatorFilePdf_{$ idCause $}" type="file">
+                       <input name="archivo" onChange="submitUploadFile(this.id)" id="indicatorFilePdf_{$ idCause $}" type="file">
                              
                        <input type="hidden" name="valueCauseId" id="field_{$ idCause $}" value="">
-                    </form>#}
-                {#</div> #}
+                    </form>
+                </div> 
                 {# end form #}
                 {# Descarga #}
-                {#{% if data.valueCauseFile %}
+                {% if data.valueCauseFile %}
                     <div class="button-group absolute-right compact">
                         <span ng-app ng-init="validLoad()" class=" button icon-download" onClick="openFile(this.id)" id="open_{{ data.id }}">{{ "pequiven.actions.download_file"|trans({},"messages") }}
                         </span>
                     </div>
-                {% endif %}#}
+                {% endif %}
             {% endfor %}
         {% else %}
         <div class="button-group absolute-right compact">

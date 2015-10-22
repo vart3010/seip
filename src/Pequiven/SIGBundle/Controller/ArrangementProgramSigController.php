@@ -63,7 +63,8 @@ class ArrangementProgramSigController extends ResourceController
                 'sumCause'            => $sumCause,                
                 'dataAction'          => $dataAction,                
                 'verification'        => $data['verification'],
-                'typeObject'          => 2   
+                'typeObject'          => 2 ,
+                'id'                  => $id  
             ));
 
         return $this->handleView($view);
