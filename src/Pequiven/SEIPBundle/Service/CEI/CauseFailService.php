@@ -65,14 +65,8 @@ class CauseFailService implements ContainerAwareInterface {
             "getExternalCausesMp"
         );
 
-
         //ini=15-06-15 fin=15-10-15
         $month = $unrealizedProduction->getMonth();
-
-
-
-
-
 
         //Obtenemos la materia prima por la cual no se realizo la producciòn
         $productsInternalMp = array();
@@ -208,8 +202,8 @@ class CauseFailService implements ContainerAwareInterface {
                 $cont++;
             }
         }
-var_dump($mp);
-die();
+//var_dump($mp);
+//die();
         return $mp;
     }
 

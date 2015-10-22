@@ -417,7 +417,7 @@ class ReportTemplateController extends SEIPController {
                 if (count($internalRawMaterials) > 0) {
                     foreach ($internalRawMaterials as $key => $rawMaterial) {
                         if (!array_key_exists($key, $rawMaterials[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL_MP])) {
-                            $rawMaterials[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL_MP][$key] = $rawMaterial;
+                            $rawMaterials[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL_MP][$key] = $rawMaterial;
                         }
                     }
                 }
@@ -453,9 +453,9 @@ class ReportTemplateController extends SEIPController {
             if ($monthUnrealizedProduction >= $startMonth && $monthUnrealizedProduction <= $endMonth) {
                 $pnrByCausesIntExt = $causeFailService->getFailsCause($unrealizedProduction);
                 $pnrByCausesMP = $causeFailService->getPNRByFailsCauseMp($unrealizedProduction, $rawMaterials);
+                var_dump($pnrByCausesIntExt);
                 var_dump($pnrByCausesMP);
                 die();
-                
                 if ($monthUnrealizedProduction == $startMonth && $monthUnrealizedProduction == $endMonth) {
                     //Recorrer desde diaIni hasta diaFin
                     if($dayDetail >= $startDay && $dayDetail <= $endDay){
@@ -690,7 +690,7 @@ class ReportTemplateController extends SEIPController {
                 if (count($internalRawMaterials) > 0) {
                     foreach ($internalRawMaterials as $key => $rawMaterial) {
                         if (!array_key_exists($key, $rawMaterials[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL_MP])) {
-                            $rawMaterials[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL_MP][$key] = $rawMaterial;
+                            $rawMaterials[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL_MP][$key] = $rawMaterial;
                         }
                     }
                 }
