@@ -11,8 +11,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Tecnocreaciones\Bundle\ResourceBundle\Controller\ResourceController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Pequiven\IndicatorBundle\Entity\IndicatorLevel;
-//use Pequiven\SEIPBundle\Model\Common\CommonObject;
-//use Pequiven\IndicatorBundle\Model\Indicator\EvolutionIndicator\EvolutionActionValue;
 
 use Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCause;
 use Pequiven\IndicatorBundle\Form\EvolutionIndicator\EvolutionCauseType;
@@ -238,6 +236,8 @@ class IndicatorSigController extends ResourceController
                 'trend'                          => $trend,
                 'font'                           => $font,
                 'typeObject'                     => $typeObject,
+                'id'                             => $idIndicator,
+                'route'                          => "pequiven_indicator_evolution",//Ruta para carga de Archivo
                 $this->config->getResourceName() => $resource,
                 'form'                           => $form->createView()
             ));
@@ -385,28 +385,6 @@ class IndicatorSigController extends ResourceController
      
     }
     
-
-    /**
-     * Elimina las causas
-     * 
-     * @param Request $request
-     * @return type
-     */
-    public function deleteCauseAction(Request $request)
-    {   
-        
-        $causeId = $request->get('id');
-        
-        $em = $this->getDoctrine()->getManager();
-        $results = $this->get('pequiven.repository.sig_causes_report_evolution')->find($causeId);
-        
-        if($results){
-
-            $em->remove($results);
-            $em->flush();
-        
-        }  
-    }
 
     /**
      * Retorna el formulario de Verificación del Plan de Acción
