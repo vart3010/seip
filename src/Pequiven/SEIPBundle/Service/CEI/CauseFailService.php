@@ -30,31 +30,26 @@ class CauseFailService implements ContainerAwareInterface {
         $fails = $em->getRepository('PequivenSEIPBundle:CEI\Fail')->findQueryByTypeResult($type);
         return $fails;
     }
-    
+
     /**
      * Función que devuelve los productos de tipo materia prima que causaron PNR, recibiendo un registro de mes de UnrealizedProduction
      * @param UnrealizedProduction $unrealizedProduction
      * @return type
      */
-    public function getRawMaterialsByFails(UnrealizedProduction $unrealizedProduction){
-        
-        //ini=15-06-15 fin=15-10-15
-//        $month = $unrealizedProduction->getMonth();
-//        if($month == $monthIni || $month == $monthFin){
-//            if($month == $monthIni && $month == $monthFin){
-//                //Recorrer desde diaIni hasta diaFin
-//            } elseif($month == $monthIni){
-//                //Recorrer desde diaInicial hasta finde mes
-//            } elseif($month == $monthFin){
-//                //Recorrer desde dia 1 hasta el dinFin
-//            }
-//        } else{
-//            //Recorre todo el mes
-//        }
-        
+    public function getRawMaterialsByFails(UnrealizedProduction $unrealizedProduction, $typeSearch = 'ALL', $options = array()) {
+        if ($typeSearch == "RANGE") {
+            $startDate = $options["startDate"];
+            $endDate = $options["endDate"];
+
+            $startDay = date_format($startDate, 'j');
+            $startMonth = date_format($startDate, 'n');
+            $endDay = date_format($endDate, 'j');
+            $endMonth = date_format($endDate, 'n');
+        }
+
         $rawMaterials = array(
-            \Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL_MP => array(),  
-            \Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL_MP => array(),  
+            \Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL_MP => array(),
+            \Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL_MP => array(),
         );
         //Seteo de clase por defecto (tipo UnrealizedProduction)
         $reflection = new \ReflectionClass($unrealizedProduction);
@@ -70,6 +65,15 @@ class CauseFailService implements ContainerAwareInterface {
             "getExternalCausesMp"
         );
 
+
+        //ini=15-06-15 fin=15-10-15
+        $month = $unrealizedProduction->getMonth();
+
+
+
+
+
+
         //Obtenemos la materia prima por la cual no se realizo la producciòn
         $productsInternalMp = array();
         $productsExternalMp = array();
@@ -79,18 +83,46 @@ class CauseFailService implements ContainerAwareInterface {
             $methodName = $m->getName();
             if (preg_match($nameMatch, $methodName)) {    //filtra los metodos getDayXXDetails
                 $unrealizedProductionDay = $unrealizedProduction->$methodName();
-                
+
                 if ($unrealizedProductionDay != "") {
-                    foreach ($methodTypeCauses as $key) { //RECORRE EL ARRAY DE CAUSAS
-                        foreach ($unrealizedProductionDay->$key() as $fails) {
-                            if ($key == "getInternalCausesMp") {
-                                    if (!array_key_exists($fails->getRawMaterial()->getName(), $productsInternalMp)) {
-                                    $productsInternalMp[$fails->getRawMaterial()->getName()] = $fails->getRawMaterial();
-                                }
+                    $flag = false;
+                    if ($typeSearch == 'RANGE') {
+                        //Obtenciòn del dìa del
+                        $array = explode('getDay',$methodName);
+                        $array2 = explode('Details',$array[1]);
+                        $dayDetail = (int)$array2[0];
+                        if ($month == $startMonth && $month == $endMonth) {
+                            //Recorrer desde diaIni hasta diaFin
+                            if($dayDetail >= $startDay && $dayDetail <= $endDay){
+                                $flag = true;
                             }
-                            if ($key == "getExternalCausesMp") {
-                                if (!array_key_exists($fails->getRawMaterial()->getName(), $productsExternalMp)) {
-                                    $productsExternalMp[$fails->getRawMaterial()->getName()] = $fails->getRawMaterial();
+                        } elseif ($month == $startMonth) {
+                            //Recorrer desde diaInicial hasta finde mes
+                            if($dayDetail >= $startDay && $dayDetail <= $daysMonth){
+                                $flag = true;
+                            }
+                        } elseif ($month == $endMonth) {
+                            //Recorrer desde dia 1 hasta el dinFin
+                            if($dayDetail >= 1 && $dayDetail <= $endDay){
+                                $flag = true;
+                            }
+                        }
+                    } else{
+                        $flag = true;
+                    }
+                    
+                    if($flag){
+                        foreach ($methodTypeCauses as $key) { //RECORRE EL ARRAY DE CAUSAS
+                            foreach ($unrealizedProductionDay->$key() as $fails) {
+                                if ($key == "getInternalCausesMp") {
+                                    if (!array_key_exists($fails->getRawMaterial()->getName(), $productsInternalMp)) {
+                                        $productsInternalMp[$fails->getRawMaterial()->getName()] = $fails->getRawMaterial();
+                                    }
+                                }
+                                if ($key == "getExternalCausesMp") {
+                                    if (!array_key_exists($fails->getRawMaterial()->getName(), $productsExternalMp)) {
+                                        $productsExternalMp[$fails->getRawMaterial()->getName()] = $fails->getRawMaterial();
+                                    }
                                 }
                             }
                         }
@@ -99,59 +131,59 @@ class CauseFailService implements ContainerAwareInterface {
                 $cont++;
             }
         }
-        
+
         $rawMaterials[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL_MP] = $productsInternalMp;
         $rawMaterials[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL_MP] = $productsExternalMp;
-        
+
         return $rawMaterials;
     }
-    
+
     /**
      * 
      * @param type $rawMaterialsArray
      */
-    public function getPNRByFailsCauseMp(UnrealizedProduction $unrealizedProduction,$rawMaterialsArray = array()){
-        
+    public function getPNRByFailsCauseMp(UnrealizedProduction $unrealizedProduction, $rawMaterialsArray = array()) {
+
         $reflection = new \ReflectionClass($unrealizedProduction);
         $methods = $reflection->getMethods();
         $nameMatch = '/^getDay\d+Details+$/';
-        
+
         $daysMonth = $this->getDaysMonth($unrealizedProduction);
 
         $methodTypeCauses = array(
             \Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL_MP => "getInternalCausesMp",
             \Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL_MP => "getExternalCausesMp",
         );
-        
+
         $productsInternalMp = $rawMaterialsArray[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL_MP];
         $productsExternalMp = $rawMaterialsArray[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL_MP];
-        
+
         $mp = array();
         //Seteamos el arreglo con las Causas Internas por MP
-        if(count($productsInternalMp) > 0){
+        if (count($productsInternalMp) > 0) {
             foreach ($productsInternalMp as $InternalMp) {
                 for ($x = 1; $x <= $daysMonth; $x++) {
                     $mp[$methodTypeCauses[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL_MP]][$InternalMp->getName()][$x] = 0.0;
                 }
             }
-        } else{
+        } else {
             for ($x = 1; $x <= $daysMonth; $x++) {
                 $mp[$methodTypeCauses[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL_MP]]['empty'][$x] = 0.0;
             }
         }
         //Seteamos el arreglo con las Causas Externas por MP
-        if(count($productsExternalMp) > 0){
+        if (count($productsExternalMp) > 0) {
             foreach ($productsExternalMp as $ExternalMp) {
                 for ($x = 1; $x <= $daysMonth; $x++) {
                     $mp[$methodTypeCauses[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL_MP]][$ExternalMp->getName()][$x] = 0.0;
                 }
             }
-        } else{
+        } else {
             for ($x = 1; $x <= $daysMonth; $x++) {
                 $mp[$methodTypeCauses[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL_MP]]['empty'][$x] = 0.0;
             }
         }
-        
+
 //        var_dump($mp);
 //        die();
         
@@ -176,7 +208,8 @@ class CauseFailService implements ContainerAwareInterface {
                 $cont++;
             }
         }
-        
+var_dump($mp);
+die();
         return $mp;
     }
 
@@ -200,7 +233,7 @@ class CauseFailService implements ContainerAwareInterface {
         foreach ($mp[$type] as $key => $product) {
 
             if ($key == "total") {
-                
+
                 for ($d = 1; $d < $days; $d++) {
                     $total = $total + $product[$d];
                 }
@@ -329,7 +362,7 @@ class CauseFailService implements ContainerAwareInterface {
             }
         }
         //var_dump($mp["getInternalCausesMp"]);
-        
+
         return $mp;
     }
 
