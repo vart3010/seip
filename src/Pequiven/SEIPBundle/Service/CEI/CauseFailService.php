@@ -100,6 +100,8 @@ class CauseFailService implements ContainerAwareInterface {
                             if($dayDetail >= 1 && $dayDetail <= $endDay){
                                 $flag = true;
                             }
+                        } else{
+                            $flag = true;
                         }
                     } else{
                         $flag = true;
@@ -213,6 +215,11 @@ class CauseFailService implements ContainerAwareInterface {
 //        return $fails;
 //    }
 
+    /**
+     * 
+     * @param UnrealizedProduction $unrealizedProduction
+     * @return type
+     */
     public function getDaysMonth(UnrealizedProduction $unrealizedProduction) {
         return $unrealizedProduction->getDaysPerMonth($unrealizedProduction->getMonth());
     }

@@ -403,7 +403,7 @@ class ReportTemplateController extends SEIPController {
             if ($unrealizedProduction->getMonth() >= $startMonth && $unrealizedProduction->getMonth() <= $endMonth) {
 
                 $rawMaterialsArray = $causeFailService->getRawMaterialsByFails($unrealizedProduction, "RANGE", array("startDate" => $formatStartDay, "endDate" => $formatEndDay));
-
+                
                 $externalRawMaterials = $rawMaterialsArray[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL_MP];
                 $internalRawMaterials = $rawMaterialsArray[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL_MP];
 
@@ -451,61 +451,119 @@ class ReportTemplateController extends SEIPController {
 
 //Seteamos el valor dia y mes
             if ($monthUnrealizedProduction >= $startMonth && $monthUnrealizedProduction <= $endMonth) {
+                $daysMonth = $causeFailService->getDaysMonth($unrealizedProduction);
                 $pnrByCausesIntExt = $causeFailService->getFailsCause($unrealizedProduction);
                 $pnrByCausesMP = $causeFailService->getPNRByFailsCauseMp($unrealizedProduction, $rawMaterials);
-                var_dump($pnrByCausesIntExt);
-                var_dump($pnrByCausesMP);
-                die();
-                if ($monthUnrealizedProduction == $startMonth && $monthUnrealizedProduction == $endMonth) {
-                    //Recorrer desde diaIni hasta diaFin
-                    if($dayDetail >= $startDay && $dayDetail <= $endDay){
-                        $flag = true;
-                    }
-                } elseif ($month == $startMonth) {
-                    //Recorrer desde diaInicial hasta finde mes
-                    if($dayDetail >= $startDay && $dayDetail <= $daysMonth){
-                        $flag = true;
-                    }
-                } elseif ($month == $endMonth) {
-                    //Recorrer desde dia 1 hasta el dinFin
-                    if($dayDetail >= 1 && $dayDetail <= $endDay){
-                        $flag = true;
-                    }
-                }
+//                var_dump($pnrByCausesIntExt);
+//                var_dump($pnrByCausesMP);
+//                die();
                 
                 foreach ($failsInternal as $failInternal) {
-                    $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL][$failInternal->getName()]['day'] = $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$day];
-                    $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['day'] = $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['day'] + $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$day];
-                    for ($dayMonth = 1; $dayMonth <= $day; $dayMonth++) {
-                        $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL][$failInternal->getName()]['month'] = $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL][$failInternal->getName()]['month'] + $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$dayMonth];
-                        $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['month'] = $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['month'] + $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$dayMonth];
+                    for ($day = 1; $day <= $daysMonth; $day++) {
+                        $flag = false;
+                        if ($monthUnrealizedProduction == $startMonth && $monthUnrealizedProduction == $endMonth) {
+                            //Recorrer desde diaIni hasta diaFin
+                            if($day >= $startDay && $day <= $endDay){
+                                $flag = true;
+                            }
+                        } elseif ($monthUnrealizedProduction == $startMonth) {
+                            //Recorrer desde diaInicial hasta finde mes
+                            if($day >= $startDay && $day <= $daysMonth){
+                                $flag = true;
+                            }
+                        } elseif ($monthUnrealizedProduction == $endMonth) {
+                            //Recorrer desde dia 1 hasta el dinFin
+                            if($day >= 1 && $day <= $endDay){
+                                $flag = true;
+                            }
+                        } else{
+                            $flag = true;
+                        }
+                        
+                        if($flag){
+                            $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL][$failInternal->getName()]['total'] = $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL][$failInternal->getName()]['total'] + $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]][$failInternal->getName()][$day];
+                        }
                     }
                 }
                 foreach ($failsExternal as $failExternal) {
-                    $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL][$failExternal->getName()]['day'] = $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL]][$failExternal->getName()][$day];
-                    $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL]['total']['day'] = $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL]['total']['day'] + $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL]][$failExternal->getName()][$day];
-                    for ($dayMonth = 1; $dayMonth <= $day; $dayMonth++) {
-                        $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL][$failExternal->getName()]['month'] = $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL][$failExternal->getName()]['month'] + $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL]][$failExternal->getName()][$dayMonth];
-                        $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL]['total']['month'] = $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL]['total']['month'] + $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL]][$failExternal->getName()][$dayMonth];
+                    for ($day = 1; $day <= $daysMonth; $day++) {
+                        $flag = false;
+                        if ($monthUnrealizedProduction == $startMonth && $monthUnrealizedProduction == $endMonth) {
+                            //Recorrer desde diaIni hasta diaFin
+                            if($day >= $startDay && $day <= $endDay){
+                                $flag = true;
+                            }
+                        } elseif ($monthUnrealizedProduction == $startMonth) {
+                            //Recorrer desde diaInicial hasta finde mes
+                            if($day >= $startDay && $day <= $daysMonth){
+                                $flag = true;
+                            }
+                        } elseif ($monthUnrealizedProduction == $endMonth) {
+                            //Recorrer desde dia 1 hasta el dinFin
+                            if($day >= 1 && $day <= $endDay){
+                                $flag = true;
+                            }
+                        } else{
+                            $flag = true;
+                        }
+                        if($flag){
+                            $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL][$failExternal->getName()]['total'] = $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL][$failExternal->getName()]['total'] + $pnrByCausesIntExt[$methodTypeCausesIntExt[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL]][$failExternal->getName()][$day];
+                        }
                     }
                 }
                 if (count($internalRawMaterials) > 0) {
                     foreach ($internalRawMaterials as $internalRawMaterial) {
-                        $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL_MP][$internalRawMaterial->getName()]['day'] = $pnrByCausesMP[$methodTypeCausesMP[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL_MP]][$internalRawMaterial->getName()][$day];
-                        $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL_MP]['total']['day'] = $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL_MP]['total']['day'] + $pnrByCausesMP[$methodTypeCausesMP[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL_MP]][$internalRawMaterial->getName()][$day];
-                        for ($dayMonth = 1; $dayMonth <= $day; $dayMonth++) {
-                            $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL_MP][$internalRawMaterial->getName()]['month'] = $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL_MP][$internalRawMaterial->getName()]['month'] + $pnrByCausesMP[$methodTypeCausesMP[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL_MP]][$internalRawMaterial->getName()][$dayMonth];
-                            $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL_MP]['total']['month'] = $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL_MP]['total']['month'] + $pnrByCausesMP[$methodTypeCausesMP[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL_MP]][$internalRawMaterial->getName()][$dayMonth];
+                        for ($day = 1; $day <= $daysMonth; $day++) {
+                            $flag = false;
+                            if ($monthUnrealizedProduction == $startMonth && $monthUnrealizedProduction == $endMonth) {
+                                //Recorrer desde diaIni hasta diaFin
+                                if($day >= $startDay && $day <= $endDay){
+                                    $flag = true;
+                                }
+                            } elseif ($monthUnrealizedProduction == $startMonth) {
+                                //Recorrer desde diaInicial hasta finde mes
+                                if($day >= $startDay && $day <= $daysMonth){
+                                    $flag = true;
+                                }
+                            } elseif ($monthUnrealizedProduction == $endMonth) {
+                                //Recorrer desde dia 1 hasta el dinFin
+                                if($day >= 1 && $day <= $endDay){
+                                    $flag = true;
+                                }
+                            } else{
+                                $flag = true;
+                            }
+                            if($flag){
+                                $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL_MP][$internalRawMaterial->getName()]['total'] = $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL_MP][$internalRawMaterial->getName()]['total'] + $pnrByCausesMP[$methodTypeCausesMP[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL_MP]][$internalRawMaterial->getName()][$day];
+                            }
                         }
                     }
                 }
                 if (count($externalRawMaterials) > 0) {
                     foreach ($externalRawMaterials as $externalRawMaterial) {
-                        $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL_MP][$externalRawMaterial->getName()]['day'] = $pnrByCausesMP[$methodTypeCausesMP[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL_MP]][$externalRawMaterial->getName()][$day];
-                        $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL_MP]['total']['day'] = $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL_MP]['total']['day'] + $pnrByCausesMP[$methodTypeCausesMP[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL_MP]][$externalRawMaterial->getName()][$day];
-                        for ($dayMonth = 1; $dayMonth <= $day; $dayMonth++) {
-                            $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL_MP][$externalRawMaterial->getName()]['month'] = $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL_MP][$externalRawMaterial->getName()]['month'] + $pnrByCausesMP[$methodTypeCausesMP[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL_MP]][$externalRawMaterial->getName()][$dayMonth];
-                            $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL_MP]['total']['month'] = $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL_MP]['total']['month'] + $pnrByCausesMP[$methodTypeCausesMP[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL_MP]][$externalRawMaterial->getName()][$dayMonth];
+                        for ($day = 1; $day <= $daysMonth; $day++) {
+                            $flag = false;
+                            if ($monthUnrealizedProduction == $startMonth && $monthUnrealizedProduction == $endMonth) {
+                                //Recorrer desde diaIni hasta diaFin
+                                if($day >= $startDay && $day <= $endDay){
+                                    $flag = true;
+                                }
+                            } elseif ($monthUnrealizedProduction == $startMonth) {
+                                //Recorrer desde diaInicial hasta finde mes
+                                if($day >= $startDay && $day <= $daysMonth){
+                                    $flag = true;
+                                }
+                            } elseif ($monthUnrealizedProduction == $endMonth) {
+                                //Recorrer desde dia 1 hasta el dinFin
+                                if($day >= 1 && $day <= $endDay){
+                                    $flag = true;
+                                }
+                            } else{
+                                $flag = true;
+                            }
+                            if($flag){
+                                $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL_MP][$externalRawMaterial->getName()]['total'] = $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL_MP][$externalRawMaterial->getName()]['total'] + $pnrByCausesMP[$methodTypeCausesMP[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL_MP]][$externalRawMaterial->getName()][$day];
+                            }
                         }
                     }
                 }
