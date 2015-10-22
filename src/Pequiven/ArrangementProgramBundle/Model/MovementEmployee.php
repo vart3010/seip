@@ -9,12 +9,14 @@ abstract class MovementEmployee {
      */
     const ASIGNACION = 1;
     const SUPLENCIA = 2;
+    const REINTEGRO = 3;
 
     /**
      * MAESTROS DE SALIDA
      */
     const CAMBIO = 1;
     const RETIRO = 2;
+    const REPOSO = 3;
 
     /**
      * @var integer
@@ -55,6 +57,7 @@ abstract class MovementEmployee {
         static $array = [
             self::ASIGNACION => 'Asignación',
             self::SUPLENCIA => 'Suplencia',
+            self::REINTEGRO => 'Reintegro por Reposo'
         ];
         return $array;
     }
@@ -67,7 +70,8 @@ abstract class MovementEmployee {
     static function getCauseout() {
         static $array = [
             self::CAMBIO => 'Cambio',
-            self::RETIRO => 'Retiro'
+            self::RETIRO => 'Retiro',
+            self::REPOSO => 'Reposo'
         ];
         return $array;
     }

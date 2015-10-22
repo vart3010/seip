@@ -85,7 +85,7 @@ class MovementEmployee {
     /**
      * ID DE DETALLE DE ENTRADA
      * @ORM\OneToOne(targetEntity="Pequiven\ArrangementProgramBundle\Entity\MovementEmployee\MovementDetails")
-     * @ORM\JoinColumn(name="in_id", referencedColumnName="id", nullable=false) 
+     * @ORM\JoinColumn(name="in_id", referencedColumnName="id", nullable=true) 
      */
     private $in;
 

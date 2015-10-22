@@ -22,15 +22,29 @@ class MovementEmployeeRepository extends EntityRepository {
      * @param type $iduser
      * @return type
      */
-    function FindMovementIn($idGoal, $iduser) {
+    function FindMovementIn($idGoal, $iduser, $period) {
         $qb = $this->getQueryBuilder();
         $qb
                 ->Select('mov')
                 ->andWhere('mov.User = :users')
                 ->andWhere('mov.Goal= :goals')
                 ->andWhere('mov.out IS NULL')
+                ->andWhere('mov.period= :periodo')
                 ->setParameter('users', $iduser)
                 ->setParameter('goals', $idGoal)
+                ->setParameter('periodo', $period)
+        ;
+        return $qb->getQuery()->getResult();
+    }
+
+    function FindMovementbyGoal($idGoal, $period) {
+        $qb = $this->getQueryBuilder();
+        $qb
+                ->Select('mov')
+                ->andWhere('mov.Goal= :goals')
+                ->andWhere('mov.period= :periodo')
+                ->setParameter('goals', $idGoal)
+                ->setParameter('periodo', $period)
         ;
         return $qb->getQuery()->getResult();
     }

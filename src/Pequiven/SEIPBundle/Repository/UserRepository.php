@@ -237,21 +237,21 @@ class UserRepository extends EntityRepository {
 
     function findQueryUsersCoordinatorPhaseWorkStudyCircle(array $criteria = array()) {
         $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
-        
+
         $qb = $this->getQueryBuilder();
         $qb
                 ->addSelect('u')
                 ->innerJoin('u.workStudyCircles', 'wsc')
 //                ->andWhere('wsc.phase = 2')
         ;
-        
-        if(($workStudyCircle = $criteria->remove('WorkStudyCircle')) != null){
+
+        if (($workStudyCircle = $criteria->remove('WorkStudyCircle')) != null) {
             $qb
-                ->andWhere('wsc.id = :workStudyCircle')
-                ->setParameter('workStudyCircle', $workStudyCircle)
-                    ;
+                    ->andWhere('wsc.id = :workStudyCircle')
+                    ->setParameter('workStudyCircle', $workStudyCircle)
+            ;
         }
-        
+
         return $qb;
     }
 
@@ -553,7 +553,8 @@ class UserRepository extends EntityRepository {
      * @param int $idGoal
      * @param array $criteria
      */
-    function findQuerytoRemoveAssingedGoal($idGoal) {
+    function findQuerytoRemoveAssingedGoal($idGoal, $type = true) {
+
         $qb = $this->getQueryBuilder();
 
         $qb
@@ -568,7 +569,12 @@ class UserRepository extends EntityRepository {
                 ->andWhere('g.level <= :level')
                 ->setParameter('level', \Pequiven\MasterBundle\Entity\Rol::ROLE_DIRECTIVE)
         ;
-        return $qb;
+
+        if ($type) {
+            return $qb;
+        } else {
+            return $qb->getQuery()->getResult();
+        }
     }
 
     protected function getAlias() {

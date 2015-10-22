@@ -7,14 +7,12 @@ use Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram;
 use Pequiven\ArrangementProgramBundle\Entity\Goal;
 use Pequiven\ArrangementProgramBundle\Entity\MovementEmployee\MovementDetails;
 use Pequiven\ArrangementProgramBundle\Entity\MovementEmployee\MovementEmployee;
-use Pequiven\ArrangementProgramBundle\Entity\Timeline;
 use Pequiven\SEIPBundle\Controller\SEIPController;
 use Symfony\Component\HttpFoundation\Request;
 use Pequiven\ArrangementProgramBundle\Form\MovementEmployee\AssignGoalType;
 use Pequiven\ArrangementProgramBundle\Form\MovementEmployee\RemoveGoalType;
 use Pequiven\ArrangementProgramBundle\Form\MovementEmployee\AssignGoalDetailsType;
 use Pequiven\ArrangementProgramBundle\Form\MovementEmployee\RemoveGoalDetailsType;
-use Pequiven\ArrangementProgramBundle\Repository\MovementEmployee\MovementEmployeeRepository;
 
 class MovementEmployeeController extends SEIPController {
 
@@ -36,13 +34,19 @@ class MovementEmployeeController extends SEIPController {
         $formassigndetails = $this->createForm(new AssignGoalDetailsType(), $MovementEmployeeDetails);
         $formremovedetails = $this->createForm(new RemoveGoalDetailsType(), $MovementEmployeeDetails);
 
+        //RESPONSABLES ASIGNADOS
+        $responsibles = $this->get('pequiven_seip.repository.user')->findQuerytoRemoveAssingedGoal($id, false);
+        
+        //MOVIMIENTOS REALIZADOS
+
         return $this->render('PequivenArrangementProgramBundle:MovementEmployee:show.html.twig', array(
                     'goal' => $entity,
                     'user' => $this->getUser(),
                     'form' => $form->createView(),
                     'form1' => $form1->createView(),
                     'formassigndetails' => $formassigndetails->createView(),
-                    'formremovedetails' => $formremovedetails->createView()
+                    'formremovedetails' => $formremovedetails->createView(),
+                    'responsibles' => $responsibles
         ));
     }
 
@@ -85,11 +89,15 @@ class MovementEmployeeController extends SEIPController {
             $details->setCause($cause);
             $details->setObservations($obs);
 
-            //CALCULO PENALIZACIONES Y AVANCES
+            //CALCULO PENALIZACIONES Y AVANCES PARA LA FECHA
             $datos = $this->CalculateAdvancePenalty($goal, $date);
-            $details->setReal_advance($datos['realResult'] - $datos['penalty']);
-            $details->setAdvance($datos['advanceResult']);
-            $details->setBeforePenalty($goal->getresultBeforepenalty());
+            $advance = $datos['realResult'] - $datos['penalty'];
+            if ($advance < 0) {
+                $advance = 0;
+            }
+            $details->setrealAdvance($advance);
+            $details->setPentalty($datos['penalty']);
+            $details->setPlanned($datos['plannedResult']);
 
             $em->persist($details);
 
@@ -104,16 +112,17 @@ class MovementEmployeeController extends SEIPController {
             $em->persist($movement);
 
             //AGREGO AL USUARIO EN LA META
-            //           $goal->addResponsible($user);
-            //          $em->persist($goal);
+            $goal->addResponsible($user);
+            $em->persist($goal);
+
             //VALIDACIÓN DE INTEGRIDAD DE DATOS EN REGISTRO DE BD
-//            try {
-//                $em->flush();
-//                $em->getConnection()->commit();
-//            } catch (Exception $e) {
-//                $em->getConnection()->rollback();
-//                throw $e;
-//            }
+            try {
+                $em->flush();
+                $em->getConnection()->commit();
+            } catch (Exception $e) {
+                $em->getConnection()->rollback();
+                throw $e;
+            }
         }
 
         return $this->redirect($this->generateUrl('goal_movement', array('idGoal' => $id)));
@@ -160,20 +169,42 @@ class MovementEmployeeController extends SEIPController {
             $details->setCause($cause);
             $details->setObservations($obs);
 
-            //CALCULO PENALIZACIONES Y AVANCES
-            $details->setReal_advance($goal->getResultReal());
-            $details->setAdvance($goal->getAdvance());
-            $details->setBeforePenalty($goal->getresultBeforepenalty());
+            //CALCULO PENALIZACIONES Y AVANCES PARA LA FECHA
+            $datos = $this->CalculateAdvancePenalty($goal, $date);
+
+            $advance = $datos['realResult'] - $datos['penalty'];
+            if ($advance < 0) {
+                $advance = 0;
+            }
+            $details->setrealAdvance($advance);
+            $details->setPentalty($datos['penalty']);
+            $details->setPlanned($datos['plannedResult']);
 
             $em->persist($details);
 
-            //BUSCO EL REGISTRO DE ENTRADA
-            $mov = $this->container->get('pequiven_seip.repository.arrangementprogram_movement')->FindMovementIn($id, $id_user);
+            $periodo = $this->getPeriodService()->getPeriodActive();
 
-            //ACTUALIZO LOS DATOS DE SALIDA DE MOVIMIENTO EN DB
-            foreach ($mov as $remove) {
-                $remove->setOut($details);
-                $em->persist($remove);
+            //BUSCO EL REGISTRO DE ENTRADA
+            $mov = $this->container->get('pequiven_seip.repository.arrangementprogram_movement')->FindMovementIn($id, $id_user, $periodo);
+
+            //SI EL USUARIO NO TIENE REGISTRO DE ENTRADA SE CREA UN REGISTRO PERO CON 'IN' NULO
+            if ($mov == null) {
+                $movement = new MovementEmployee();
+                $movement->setCreatedBy($login);
+                $movement->setType('Goal');
+                $movement->setUser($user);
+                $movement->setGoal($goal);
+                $movement->setPeriod($periodo);
+                $movement->setIn(null);
+                $movement->setOut($details);
+                $em->persist($movement);
+            } else {
+
+                //ACTUALIZO LOS DATOS DE SALIDA DE MOVIMIENTO EN DB
+                foreach ($mov as $remove) {
+                    $remove->setOut($details);
+                    $em->persist($remove);
+                }
             }
 
             //ELIMINO AL USUARIO EN LA META
@@ -200,9 +231,21 @@ class MovementEmployeeController extends SEIPController {
      * @return array
      */
     function CalculateAdvancePenalty(Goal $goal, $date) {
+
         $real = array();
         $planned = array();
         $em = $this->getDoctrine()->getManager();
+
+        $periodService = $this->getPeriodService();
+        $amountPenalty = 0;
+
+        $arrangementProgram = $goal->getTimeline()->getArrangementProgram();
+
+        $lastNotificationInProgressDate = $arrangementProgram->getDetails()->getLastNotificationInProgressDate();
+
+        if ($arrangementProgram->isCouldBePenalized() && ($periodService->isPenaltyInResult($lastNotificationInProgressDate) === true || $arrangementProgram->isForcePenalize() === true)) {
+            $amountPenalty = $periodService->getPeriodActive()->getPercentagePenalty();
+        }
 
         //ENERO
         $sump = $goal->getGoalDetails()->getJanuaryPlanned();
@@ -298,15 +341,21 @@ class MovementEmployeeController extends SEIPController {
             }
         }
 
+        if ($mayor == null) {
+            $mayor = 0;
+        }
+        if ($real[$mes] == null) {
+            $real[$mes] = 0;
+        }
+        if ($planned[$mes] == null) {
+            $planned[$mes] = 0;
+        }
+
         $retorno = array(
-            'penalty' => $penal,
+            'penalty' => ($mayor + $amountPenalty),
             'realResult' => $real[$mes],
             'plannedResult' => $planned[$mes]
         );
-
-        var_dump($retorno);
-        die();
-
 
         return $retorno;
     }

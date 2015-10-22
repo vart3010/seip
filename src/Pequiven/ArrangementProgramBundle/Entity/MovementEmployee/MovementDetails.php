@@ -66,26 +66,20 @@ class MovementDetails {
     private $date;
 
     /**
-     * @var \float
-     * @ORM\Column(name="real_advance", type="float", nullable=false)
+     * @var \decimal
+     * @ORM\Column(name="realAdvance", type="decimal", nullable=false)
      */
-    private $real_advance;
+    private $realAdvance;
 
     /**
-     * @var \float
-     * @ORM\Column(name="advance", type="float", nullable=false)
+     * @var \decimal
+     * @ORM\Column(name="planned", type="decimal", nullable=false)
      */
-    private $advance;
+    private $planned;
 
     /**
-     * @var \float
-     * @ORM\Column(name="beforepenalty", type="float", nullable=true)
-     */
-    private $beforePenalty;
-
-    /**
-     * @var \float
-     * @ORM\Column(name="penalty", type="float", nullable=true)
+     * @var \decimal
+     * @ORM\Column(name="penalty", type="decimal", nullable=true)
      */
     private $pentalty;
 
@@ -207,6 +201,14 @@ class MovementDetails {
 
     /**
      * 
+     * @param \DateTime $date
+     */
+    function setDate($date) {
+        $this->date = $date;
+    }
+
+    /**
+     * 
      * @return type
      */
     function getDate() {
@@ -223,46 +225,6 @@ class MovementDetails {
 
     /**
      * 
-     * @return type
-     */
-    function getBeforePenalty() {
-        return $this->beforePenalty;
-    }
-
-    /**
-     * 
-     * @return type
-     */
-    function getPentalty() {
-        return $this->pentalty;
-    }
-
-    /**
-     * 
-     * @param \DateTime $date
-     */
-    function setDate($date) {
-        $this->date = $date;
-    }
-
-    /**
-     * 
-     * @return type
-     */
-    function getReal_advance() {
-        return $this->real_advance;
-    }
-
-    /**
-     * 
-     * @param type $real_advance
-     */
-    function setReal_advance($real_advance) {
-        $this->real_advance = $real_advance;
-    }
-
-    /**
-     * 
      * @param \float $advance
      */
     function setAdvance($advance) {
@@ -271,10 +233,10 @@ class MovementDetails {
 
     /**
      * 
-     * @param \float $beforePenalty
+     * @return type
      */
-    function setBeforePenalty($beforePenalty) {
-        $this->beforePenalty = $beforePenalty;
+    function getPentalty() {
+        return $this->pentalty;
     }
 
     /**
@@ -316,5 +278,39 @@ class MovementDetails {
     function setObservations($observations) {
         $this->observations = $observations;
     }
+    
+    /**
+     * 
+     * @return type
+     */
+    function getrealAdvance() {
+        return $this->realAdvance;
+    }
+
+    /**
+     * 
+     * @return type
+     */
+    function getPlanned() {
+        return $this->planned;
+    }
+
+    /**
+     * 
+     * @param type $realAdvance
+     */
+    function setrealAdvance($realAdvance) {
+        $this->realAdvance = $realAdvance;
+    }
+
+    /**
+     * 
+     * @param type $planned
+     */
+    function setPlanned($planned) {
+        $this->planned = $planned;
+    }
+
+
 
 }
