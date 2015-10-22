@@ -189,7 +189,7 @@ pequiven_verification_evolution_add:
 pequiven_causes_evolution_delete:
     path: /{id}/delete.{_format}
     defaults:
-        _controller: pequiven.controller.indicator_sig:deleteCauseAction
+        _controller: pequiven.controller.sig_causes_report_evolution:deleteCauseAction
         _format: html
     requirements:
         _format: html|json
@@ -200,7 +200,7 @@ pequiven_causes_evolution_delete:
 pequiven_action_evolution_delete:
     path: /{id}/delaction.{_format}
     defaults:
-        _controller: pequiven.controller.indicator_sig:deletePlanAction
+        _controller: pequiven.controller.sig_trend_report_evolution:deletePlanAction
         _format: html
     requirements:
         _format: html|json
@@ -211,7 +211,7 @@ pequiven_action_evolution_delete:
 pequiven_verification_evolution_delete:
     path: /{id}/delverification.{_format}
     defaults:
-        _controller: pequiven.controller.indicator_sig:deleteVerificationAction
+        _controller: pequiven.controller.sig_trend_report_evolution:deleteVerificationAction
         _format: html
     requirements:
         _format: html|json

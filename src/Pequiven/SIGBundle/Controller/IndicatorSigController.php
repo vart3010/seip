@@ -387,28 +387,6 @@ class IndicatorSigController extends ResourceController
     
 
     /**
-     * Elimina las causas
-     * 
-     * @param Request $request
-     * @return type
-     */
-    public function deleteCauseAction(Request $request)
-    {   
-        
-        $causeId = $request->get('id');
-        
-        $em = $this->getDoctrine()->getManager();
-        $results = $this->get('pequiven.repository.sig_causes_report_evolution')->find($causeId);
-        
-        if($results){
-
-            $em->remove($results);
-            $em->flush();
-        
-        }  
-    }
-
-    /**
      * Retorna el formulario de Verificación del Plan de Acción
      * 
      * @param Request $request

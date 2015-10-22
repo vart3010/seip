@@ -276,6 +276,7 @@ flashes:
      messages:
         successAction: Acción Guargada Correctamente
         deleteAction: Acción Eliminada Correctamente
+        deleteCause: Causa Eliminada Correctamente
 arrangementprogram:
      title: Programa de Gestión
      asociate: Programa Asociado a

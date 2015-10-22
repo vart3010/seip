@@ -196,6 +196,30 @@ class ReportEvolutionCausesController extends ResourceController
         }     
     }
 
+     /**
+     * Elimina las causas
+     * 
+     * @param Request $request
+     * @return type
+     */
+    public function deleteCauseAction(Request $request)
+    {   
+        
+        $causeId = $request->get('id');
+        
+        $em = $this->getDoctrine()->getManager();
+        $results = $this->get('pequiven.repository.sig_causes_report_evolution')->find($causeId);
+        
+        if($results){
+
+            $em->remove($results);
+            $em->flush();
+
+            $this->get('session')->getFlashBag()->add('success', $this->trans('flashes.messages.deleteCause', array(), 'PequivenSIGBundle'));
+        
+        }  
+    }
+
     /**
      * Busca el indicador o retorna un 404
      * @param Request $request
