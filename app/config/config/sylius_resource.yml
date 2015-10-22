@@ -143,10 +143,12 @@ sylius_resource:
                 model: Pequiven\ArrangementProgramBundle\Entity\MovementEmployee\MovementEmployee
                 repository: Pequiven\ArrangementProgramBundle\Repository\MovementEmployee\MovementEmployeeRepository
                 
-#        pequiven_seip.arrangementprogram_movement_details:
-#            driver: doctrine/orm
-#            classes:
-#                repository: Pequiven\ArrangementProgramBundle\Repository\MovementEmployee\MovementEmployeeDetailsRepository
+        pequiven_seip.arrangementprogram_movementdetails:
+            driver: doctrine/orm
+            classes:
+                model: Pequiven\ArrangementProgramBundle\Entity\MovementEmployee\MovementDetails
+                repository: Pequiven\ArrangementProgramBundle\Repository\MovementEmployee\MovementDetailsRepository
+                
         
         pequiven_seip.complejo:
             driver: doctrine/orm
