@@ -199,4 +199,4 @@ pequiven_seip_arrangementprogram_evolution_sig:
         _format: html
     requirements:
         _format: html|json|xml
-    methods: [GET]
+    methods: [GET|POST]

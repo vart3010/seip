@@ -4947,7 +4947,7 @@ angular.module('seipModule.controllers', [])
             }
 
             $scope.uploadFile = function () {
-                alert("hola");
+                //alert("hola");
                 var f = document.getElementById('form_archivo').files[0],
                         r = new FileReader();
                 r.onloadend = function (e) {

@@ -11,8 +11,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Tecnocreaciones\Bundle\ResourceBundle\Controller\ResourceController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Pequiven\IndicatorBundle\Entity\IndicatorLevel;
-//use Pequiven\SEIPBundle\Model\Common\CommonObject;
-//use Pequiven\IndicatorBundle\Model\Indicator\EvolutionIndicator\EvolutionActionValue;
 
 use Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCause;
 use Pequiven\IndicatorBundle\Form\EvolutionIndicator\EvolutionCauseType;
@@ -239,6 +237,7 @@ class IndicatorSigController extends ResourceController
                 'font'                           => $font,
                 'typeObject'                     => $typeObject,
                 'id'                             => $idIndicator,
+                'route'                          => "pequiven_indicator_evolution",//Ruta para carga de Archivo
                 $this->config->getResourceName() => $resource,
                 'form'                           => $form->createView()
             ));

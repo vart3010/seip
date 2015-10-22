@@ -11,8 +11,8 @@
                     </span>            
                 </div>  
                 {# form carga de archivo #}
-                <div ng-controller="ToolsController" ng-init="isGrantedButtonEdit({{ id }},paso+1)">
-                    <form style="display: none" id="form_{$ valueCauseId.id $}" action="{{ path("pequiven_indicator_evolution",{id: id, month:month, cause:dataAnalysis, uploadFile:(true)}) }}" method="POST" enctype="multipart/form-data">
+                <div ng-controller="ToolsController">
+                    <form style="display: none" id="form_{$ valueCauseId.id $}" action="{{ path(route,{id: id, month:month, cause:dataAnalysis, uploadFile:(true)}) }}" method="POST" enctype="multipart/form-data">
                     
                        <input name="archivo" onChange="submitUploadFile(this.id)" id="indicatorFilePdf_{$ idCause $}" type="file">
                              
