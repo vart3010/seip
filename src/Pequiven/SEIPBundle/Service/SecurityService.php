@@ -102,7 +102,9 @@ class SecurityService implements ContainerAwareInterface
     {
         $result = false;
         $user = $this->getUser();
-        if($workStudyCircle->getPhase() == WorkStudyCircle::PHASE_ONE){
+        if($this->isGranted('ROLE_SEIP_WORK_STUDY_CIRCLES_VIEW_ALL_PHASE')){
+            $result = true;
+        }elseif($workStudyCircle->getPhase() == WorkStudyCircle::PHASE_ONE){
             if($workStudyCircle->getId() == $user->getWorkStudyCircle()->getId()){
                 $result = true;
             }
@@ -112,10 +114,6 @@ class SecurityService implements ContainerAwareInterface
                     $result = true;
                 }
             }
-        }
-        
-        if($this->isGranted('ROLE_SEIP_WORK_STUDY_CIRCLES_VIEW_ALL_PHASE')){
-            $result = true;
         }
         
         return $result;
