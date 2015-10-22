@@ -50,16 +50,18 @@
                 <tr>
                     <th align="justify">
                         {{ data.description }}
-                    </th> 
-                    <th class="align-right vertical-center">                          
-                        <span class="select compact">
-                        <a href class="select-value form-edit">{{ 'pequiven.actions'|trans({},'messages') }}</a>
-                        <span class="select-arrow"></span>
-                            <span class="drop-down">                                    
-                                <a href ng-click="removeAnalysisCause(data_cause='{{ data.id }}')" class="button icon-cross-round">{{ "pequiven.actions.delete"|trans({},"messages") }}</a>             
+                    </th>
+                    {% if is_granted('ROLE_SEIP_SIG_EVOLUTION_DELETE_CAUSE_ANALYSIS') %}  
+                        <th class="align-right vertical-center">                          
+                            <span class="select compact">
+                            <a href class="select-value form-edit">{{ 'pequiven.actions'|trans({},'messages') }}</a>
+                            <span class="select-arrow"></span>
+                                <span class="drop-down">                                    
+                                    <a href ng-click="removeAnalysisCause(data_cause='{{ data.id }}')" class="button icon-cross-round">{{ "pequiven.actions.delete"|trans({},"messages") }}</a>             
+                                </span>
                             </span>
-                        </span>
-                    </th>                       
+                        </th>  
+                    {% endif %}                     
                 </tr>
             </tbody>        
         {% endfor %}
