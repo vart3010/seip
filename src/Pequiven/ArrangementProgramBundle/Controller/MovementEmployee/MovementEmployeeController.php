@@ -36,8 +36,9 @@ class MovementEmployeeController extends SEIPController {
 
         //RESPONSABLES ASIGNADOS
         $responsibles = $this->get('pequiven_seip.repository.user')->findQuerytoRemoveAssingedGoal($id, false);
-        
+
         //MOVIMIENTOS REALIZADOS
+        $movements = $this->getRepository(movement)->findQuerytoRemoveAssingedGoal($id, false);
 
         return $this->render('PequivenArrangementProgramBundle:MovementEmployee:show.html.twig', array(
                     'goal' => $entity,
@@ -46,7 +47,8 @@ class MovementEmployeeController extends SEIPController {
                     'form1' => $form1->createView(),
                     'formassigndetails' => $formassigndetails->createView(),
                     'formremovedetails' => $formremovedetails->createView(),
-                    'responsibles' => $responsibles
+                    'responsibles' => $responsibles,
+                 //   'movements' => $movements
         ));
     }
 
