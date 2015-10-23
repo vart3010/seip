@@ -1,5 +1,4 @@
 {% trans_default_domain 'workStudyCircle' %}
-{% set userCreatedId = workStudyCircle.getCreatedBy.id %}
 
 <style>
     .body {
@@ -39,16 +38,17 @@
             <td class="title_bold" bgcolor="#F2F2F2" width="30%">{{ "workStudyCircle.form.complejo"|trans }}:</td>
             <td width="70%"> {{ workStudyCircle.complejo.description}}</td>
         </tr>
+        {% if workStudyCircle.phase == 1 %}
+            <tr>
+                <td class="title_bold" bgcolor="#F2F2F2" width="30%">{{ "workStudyCircle.form.gerenciaFirst"|trans }}:</td>
+                <td width="70%"> {% for gerencia in  workStudyCircle.gerencias %} - {{ gerencia }}<br/> {% endfor %}</td>
+            </tr>
 
-        <tr>
-            <td class="title_bold" bgcolor="#F2F2F2" width="30%">{{ "workStudyCircle.form.gerenciaFirst"|trans }}:</td>
-            <td width="70%"> {% for gerencia in  workStudyCircle.gerencias %} - {{ gerencia }}<br/> {% endfor %}</td>
-        </tr>
-
-        <tr>
-            <td class="title_bold" bgcolor="#F2F2F2" width="30%">{{ "workStudyCircle.form.gerenciaSecond"|trans }}:</td>
-            <td width="70%"> {% for gerencia in  workStudyCircle.gerenciaSeconds %} - {{ gerencia }}<br> {% endfor %}</td>
-        </tr>
+            <tr>
+                <td class="title_bold" bgcolor="#F2F2F2" width="30%">{{ "workStudyCircle.form.gerenciaSecond"|trans }}:</td>
+                <td width="70%"> {% for gerencia in  workStudyCircle.gerenciaSeconds %} - {{ gerencia }}<br> {% endfor %}</td>
+            </tr>
+        {% endif %}
     </table>
 
     <br/><br/>
@@ -75,8 +75,11 @@
             </tr>
         </thead>
 
-
-        {% set users = workStudyCircle.userWorkerId %}
+        {% if workStudyCircle.phase > 1 %}
+            {% set users = workStudyCircle.getMembers %}
+        {% else %}
+            {% set users = workStudyCircle.userWorkerId %}
+        {% endif %}
         {% for miembro in users %}
 
             <tr>
@@ -144,7 +147,7 @@
             {% endfor %}
             <th width="7%" style="text-align: center">
                 {% if sumaP==0%}
-                   0
+                    0
                 {% else %}
                     {{ ((sumaR*100)/sumaP)|number_format(1, ',', '.') }} 
                 {% endif%}

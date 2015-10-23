@@ -1,5 +1,4 @@
 {% trans_default_domain 'workStudyCircle' %}
-{% set userCreatedId = workStudyCircle.getCreatedBy.id %}
 
 <style>
     .body {
@@ -40,15 +39,15 @@
         </tr>
         <tr>
             <td class="title_bold" width="20%">Lugar: </td>
-            <td width="80%"> {{ meeting.place }}</td>
+            <td width="80%"> {{ meeting.place|ucwords }}</td>
         </tr>
         <tr>
             <td class="title_bold" width="20%">Puntos Tratados: </td>
-            <td width="80%"> {{ meeting.subject }}</td>
+            <td width="80%"> {{ meeting.subject|ucwords }}</td>
         </tr>
         <tr>
             <td class="title_bold" width="20%">Observaciones: </td>
-            <td width="80%"> {{ meeting.observation }}</td>
+            <td width="80%"> {{ meeting.observation|ucwords }}</td>
         </tr>
     </table>
 
@@ -73,7 +72,6 @@
         </thead>
         <tbody>
             {% for member in members %}
-
                 <tr>
                     <td width="5%" style="text-align: left">{{ loop.index  }}</td>
                     <td width="25%"style="text-align: left">{{ member.getIndentification|number_format(0, ',', '.') }}</td>
