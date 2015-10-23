@@ -38,16 +38,17 @@
             <td class="title_bold" bgcolor="#F2F2F2" width="30%">{{ "workStudyCircle.form.complejo"|trans }}:</td>
             <td width="70%"> {{ workStudyCircle.complejo.description}}</td>
         </tr>
+        {% if workStudyCircle.phase == 1 %}
+            <tr>
+                <td class="title_bold" bgcolor="#F2F2F2" width="30%">{{ "workStudyCircle.form.gerenciaFirst"|trans }}:</td>
+                <td width="70%"> {% for gerencia in  workStudyCircle.gerencias %} - {{ gerencia }}<br/> {% endfor %}</td>
+            </tr>
 
-        <tr>
-            <td class="title_bold" bgcolor="#F2F2F2" width="30%">{{ "workStudyCircle.form.gerenciaFirst"|trans }}:</td>
-            <td width="70%"> {% for gerencia in  workStudyCircle.gerencias %} - {{ gerencia }}<br/> {% endfor %}</td>
-        </tr>
-
-        <tr>
-            <td class="title_bold" bgcolor="#F2F2F2" width="30%">{{ "workStudyCircle.form.gerenciaSecond"|trans }}:</td>
-            <td width="70%"> {% for gerencia in  workStudyCircle.gerenciaSeconds %} - {{ gerencia }}<br> {% endfor %}</td>
-        </tr>
+            <tr>
+                <td class="title_bold" bgcolor="#F2F2F2" width="30%">{{ "workStudyCircle.form.gerenciaSecond"|trans }}:</td>
+                <td width="70%"> {% for gerencia in  workStudyCircle.gerenciaSeconds %} - {{ gerencia }}<br> {% endfor %}</td>
+            </tr>
+        {% endif %}
     </table>
 
     <br/><br/>
