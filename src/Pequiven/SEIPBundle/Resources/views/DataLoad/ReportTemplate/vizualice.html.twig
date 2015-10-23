@@ -21,13 +21,6 @@
 
                 <div class="six-columns six-columns-tablet twelve-columns-mobile">
                     <p class="inline-label">
-                        {{ form_widget(form.plantReport) }}
-                        {{ form_errors(form.plantReport) }}
-                        {{ form_label(form.plantReport) }}
-                    </p>
-                </div>
-                <div class="six-columns six-columns-tablet twelve-columns-mobile">
-                    <p class="inline-label">
                         {{ form_widget(form.reportTemplate) }}
                         {{ form_errors(form.reportTemplate) }}
                         {{ form_label(form.reportTemplate) }}
@@ -36,13 +29,21 @@
 
                 <div class="six-columns six-columns-tablet twelve-columns-mobile">
                     <p class="inline-label">
+                        {{ form_widget(form.plantReport) }}
+                        {{ form_errors(form.plantReport) }}
+                        {{ form_label(form.plantReport) }}
+                    </p>
+                </div>
+
+                <div style="display: none;" class="six-columns six-columns-tablet twelve-columns-mobile">
+                    <p class="inline-label">
                         {{ form_widget(form.productsReport) }}
                         {{ form_errors(form.productsReport) }}
                         {{ form_label(form.productsReport) }}
                     </p>
                 </div>
 
-                <div class="six-columns six-columns-tablet twelve-columns-mobile">
+                <div class="twelve-columns twelve-columns-tablet twelve-columns-mobile">
                     <p class="inline-label">
                         {{ form_widget(form.typeReport) }}
                         {{ form_errors(form.typeReport) }}
@@ -165,29 +166,68 @@
 
 {% block javascript %}
     <script type="text/javascript">
+        function validateSelectsOnChange(objEvent, objTarget) {
+            if (objEvent.val() == null || objEvent.val() == "") {
+                objTarget.prop("disabled", false);
+            } else {
+                objTarget.prop("disabled", true);
+            }
+        }
+
+        function validateSelectsOnLoad(obj) {
+            if (obj.val() == null || obj.val() == "") {
+                obj.prop("disabled", true);
+            } else {
+                obj.prop("disabled", false);
+            }
+        }
         $(document).ready(function () {
-            var plantReport = $("#form_plantReport");
-            $("#btnExportToPdf").on("click", function (e) {
-                e.preventDefault();
-                $("#exportToPdf").val("1");
-                eventChange();
-            });
+        {% if byRange %}
+            {% if production is not empty %}
+                        validateSelectsOnLoad($("#form_reportTemplate"));
+                        validateSelectsOnLoad($("#form_plantReport"));
+            {% endif %}
+        {% else %}
+            {% if productsReport is not empty %}
+                    validateSelectsOnLoad($("#form_reportTemplate"));
+                    validateSelectsOnLoad($("#form_plantReport"));
+            {% endif %}
+        {% endif %}
 
-            $("#btnExportToExcel").on("click", function (e) {
-                e.preventDefault();
-                $("#exportToPdf").val("2");
-                eventChange();
-            });
 
-            $("#btnRefresh").on("click", function (e) {
-                e.preventDefault();
-                $("#exportToPdf").val("0");
-                eventChange();
-            });
 
-            var eventChange = function () {
-                $("#frmFilter").submit();
-            };
+
+
+                $("#form_reportTemplate").change(function () {
+                    validateSelectsOnChange($(this), $("#form_plantReport"));
+                });
+
+                $("#form_plantReport").change(function () {
+                    validateSelectsOnChange($(this), $("#form_reportTemplate"));
+                });
+
+                var plantReport = $("#form_plantReport");
+                $("#btnExportToPdf").on("click", function (e) {
+                    e.preventDefault();
+                    $("#exportToPdf").val("1");
+                    eventChange();
+                });
+
+                $("#btnExportToExcel").on("click", function (e) {
+                    e.preventDefault();
+                    $("#exportToPdf").val("2");
+                    eventChange();
+                });
+
+                $("#btnRefresh").on("click", function (e) {
+                    e.preventDefault();
+                    $("#exportToPdf").val("0");
+                    eventChange();
+                });
+
+                var eventChange = function () {
+                    $("#frmFilter").submit();
+                };
         {% if is_granted("ROLE_SEIP_DATA_LOAD_CHANGE_DATE") %}
                 $('#form_dateReport').datepicker({
                     changeMonth: true,
