@@ -18,7 +18,10 @@ class EvolutionTrendType extends AbstractType
             ->add('description', 'textarea', array(
                 'label' => 'Analisis de la Tendencia',
                 'label_attr' => array('class' => 'label'),
-                'attr' => array('class' => 'input full-width autoexpanding validate[required]' )))            
+                'attr' => array(
+                    'class'     => 'input full-width autoexpanding validate[required]',
+                    'maxlength' => 1000
+                    )))            
                          
         ;
     }

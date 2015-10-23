@@ -1759,6 +1759,31 @@ angular.module('seipModule.controllers', [])
                 ];
                 $scope.templateOptions.setTemplate($scope.templates[0]);
             };
+            //Removiendo el Analisis de la Tendencia
+            $scope.removeAnalysisTrend = function (AnalysisTrend) {
+                $scope.openModalConfirm('¿Desea eliminar el Analisis de la Tendencia?', function () {
+                    notificationBarService.getLoadStatus().loading();
+                    var url = Routing.generate("pequiven_trend_evolution_delete", {id: $scope.data_trend});
+                    $http({
+                        method: 'GET',
+                        url: url,
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'}  // set the headers so angular passing info as form data (not request payload)
+                    }).success(function (data) {
+                        return true;
+                    }).error(function (data, status, headers, config) {
+                        if (data.errors) {
+                            if (data.errors.errors) {
+                                $.each(data.errors.errors, function (index, value) {
+                                    notifyService.error(Translator.trans(value));
+                                });
+                            }
+                        }
+                        notificationBarService.getLoadStatus().done();
+                        return false;
+                    });
+                });
+            };
+            
             //Removiendo las causas
             $scope.removeCausesEvolution = function (causesEvolution) {
                 $scope.openModalConfirm('¿Desea eliminar la causa?', function () {
@@ -1870,6 +1895,7 @@ angular.module('seipModule.controllers', [])
                     return false;
                 });
             };
+
             $scope.templateOptions.setVar('addCauseAnalysis', addCauseAnalysis);
             var confirmCallBack = function () {
                 addCauseAnalysis(true, function (data) {
@@ -1900,6 +1926,30 @@ angular.module('seipModule.controllers', [])
                     }
                 ];
                 $scope.templateOptions.setTemplate($scope.templates[0]);
+            };
+            //Removiendo el Analisis de Causas
+            $scope.removeAnalysisCause = function (AnalysisCause) {
+                $scope.openModalConfirm('¿Desea eliminar el Analisis de Causas?', function () {
+                    notificationBarService.getLoadStatus().loading();
+                    var url = Routing.generate("pequiven_cause_analysis_evolution_delete", {id: $scope.data_cause});
+                    $http({
+                        method: 'GET',
+                        url: url,
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'}  // set the headers so angular passing info as form data (not request payload)
+                    }).success(function (data) {
+                        return true;
+                    }).error(function (data, status, headers, config) {
+                        if (data.errors) {
+                            if (data.errors.errors) {
+                                $.each(data.errors.errors, function (index, value) {
+                                    notifyService.error(Translator.trans(value));
+                                });
+                            }
+                        }
+                        notificationBarService.getLoadStatus().done();
+                        return false;
+                    });
+                });
             };
         })
         .controller('IndicatorSigEvolutionVerificationController', function ($scope, notificationBarService, $http, notifyService, $filter) {
@@ -4947,7 +4997,7 @@ angular.module('seipModule.controllers', [])
             }
 
             $scope.uploadFile = function () {
-                alert("hola");
+                //alert("hola");
                 var f = document.getElementById('form_archivo').files[0],
                         r = new FileReader();
                 r.onloadend = function (e) {

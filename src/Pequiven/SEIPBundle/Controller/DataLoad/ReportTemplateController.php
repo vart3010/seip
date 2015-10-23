@@ -1642,8 +1642,8 @@ class ReportTemplateController extends SEIPController {
             );
 
 
-//TOTALES YEAR PRODUCCTIONS
-            if ($yearPlanAcumulated - $yearRealAcumualated) {
+            //TOTALES YEAR PRODUCCTIONS
+            if (($yearPlanAcumulated - $yearRealAcumualated) < 0) {
                 $varMonth = 0;
             } else {
                 $varMonth = $yearPlanAcumulated - $yearRealAcumualated;
@@ -1655,7 +1655,7 @@ class ReportTemplateController extends SEIPController {
                 $ejecutionYear = 0.0;
             }
             $summaryProducctionTotals["year"] = array(
-                "plan_total" => number_format($MonthPlan, 2, ',', '.'),
+                "plan_total" => number_format($yearPlan, 2, ',', '.'),
                 "plan_acumulated_total" => number_format($yearPlanAcumulated, 2, ',', '.'),
                 "real_acumulated_total" => number_format($yearRealAcumualated, 2, ',', '.'),
                 "ejectution_total" => number_format($ejecutionYear, 2, ',', '.'),

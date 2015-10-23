@@ -11,14 +11,14 @@
                     </span>            
                 </div>  
                 {# form carga de archivo #}
-                {#<div ng-controller="ToolsController" ng-init="isGrantedButtonEdit({{ indicator_sig.id }},paso+1)">
-                    <form style="display: none" id="form_{$ valueCauseId.id $}" action="{{ path("pequiven_indicator_evolution",{id:indicator_sig.id, month:month, cause:dataAnalysis, uploadFile:(true)}) }}" method="POST" enctype="multipart/form-data">#}
+                <div ng-controller="ToolsController">
+                    <form style="display: none" id="form_{$ valueCauseId.id $}" action="{{ path(route,{id: id, month:month, cause:dataAnalysis, uploadFile:(true)}) }}" method="POST" enctype="multipart/form-data">
                     
-                       {#<input name="archivo" onChange="submitUploadFile(this.id)" id="indicatorFilePdf_{$ idCause $}" type="file">
+                       <input name="archivo" onChange="submitUploadFile(this.id)" id="indicatorFilePdf_{$ idCause $}" type="file">
                              
                        <input type="hidden" name="valueCauseId" id="field_{$ idCause $}" value="">
-                    </form>#}
-                {#</div> #}
+                    </form>
+                </div> 
                 {# end form #}
                 {# Descarga #}
                 {% if data.valueCauseFile %}
@@ -50,7 +50,18 @@
                 <tr>
                     <th align="justify">
                         {{ data.description }}
-                    </th>                        
+                    </th>
+                    {% if is_granted('ROLE_SEIP_SIG_EVOLUTION_DELETE_CAUSE_ANALYSIS') %}  
+                        <th class="align-right vertical-center">                          
+                            <span class="select compact">
+                            <a href class="select-value form-edit">{{ 'pequiven.actions'|trans({},'messages') }}</a>
+                            <span class="select-arrow"></span>
+                                <span class="drop-down">                                    
+                                    <a href ng-click="removeAnalysisCause(data_cause='{{ data.id }}')" class="button icon-cross-round">{{ "pequiven.actions.delete"|trans({},"messages") }}</a>             
+                                </span>
+                            </span>
+                        </th>  
+                    {% endif %}                     
                 </tr>
             </tbody>        
         {% endfor %}

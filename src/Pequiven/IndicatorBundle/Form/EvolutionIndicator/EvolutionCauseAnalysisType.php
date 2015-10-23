@@ -18,7 +18,10 @@ class EvolutionCauseAnalysisType extends AbstractType
             ->add('description', 'textarea', array(
                 'label' => 'Analisis de las Causas',
                 'label_attr' => array('class' => 'label'),
-                'attr' => array('class' => 'input full-width autoexpanding validate[required]' )))            
+                'attr' => array(
+                    'class' => 'input full-width autoexpanding validate[required]',
+                    'maxlength' => 1000
+                     )))            
                          
         ;
     }
