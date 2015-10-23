@@ -14,9 +14,9 @@ abstract class MovementEmployee {
     /**
      * MAESTROS DE SALIDA
      */
-    const CAMBIO = 1;
-    const RETIRO = 2;
-    const REPOSO = 3;
+    const CAMBIO = 11;
+    const RETIRO = 12;
+    const REPOSO = 13;
 
     /**
      * @var integer
@@ -69,6 +69,18 @@ abstract class MovementEmployee {
      */
     static function getCauseout() {
         static $array = [
+            self::CAMBIO => 'Cambio',
+            self::RETIRO => 'Retiro',
+            self::REPOSO => 'Reposo'
+        ];
+        return $array;
+    }
+
+    static function getAllCauses() {
+        static $array = [
+            self::ASIGNACION => 'Asignación',
+            self::SUPLENCIA => 'Suplencia',
+            self::REINTEGRO => 'Reintegro por Reposo',
             self::CAMBIO => 'Cambio',
             self::RETIRO => 'Retiro',
             self::REPOSO => 'Reposo'

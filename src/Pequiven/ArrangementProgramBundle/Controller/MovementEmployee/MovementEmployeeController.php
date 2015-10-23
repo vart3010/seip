@@ -32,13 +32,17 @@ class MovementEmployeeController extends SEIPController {
         //MOVIMIENTOS REALIZADOS
         $movements = $this->get('pequiven_seip.repository.arrangementprogram_movement')->FindMovementDetailsbyGoal($id);
 
+        //ARREGLO DE CAUSAS
+        $causes = \Pequiven\ArrangementProgramBundle\Model\MovementEmployee::getAllCauses();
+
         return $this->render('PequivenArrangementProgramBundle:MovementEmployee:show.html.twig', array(
                     'goal' => $entity,
                     'user' => $this->getUser(),
                     'assign' => $formassign->createView(),
                     'remove' => $formremove->createView(),
                     'responsibles' => $responsibles,
-                    'movements' => $movements
+                    'movements' => $movements,
+                    'causes' => $causes
         ));
     }
 

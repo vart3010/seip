@@ -35,6 +35,9 @@
         .centrado{
             text-align: center;
         }
+        .header{
+            text-align: center;
+        }
     </style>
     {% set message =  'pequiven.arrangement_program.you_must_assign_config'|trans %}
 
@@ -238,42 +241,28 @@
     <fieldset class="fieldset">
         <legend class="legend"><b>Historial de Cambios </b></legend>
 
-        <table class="record_properties" width="80%">
+        <table class="simple-table responsive-table tables-extras" width="80%">
             <thead>
                 <tr>
-                    <th class="centrado">
-                        Fecha de Cambio
-                    </th>
-                    <th class="centrado">
-                        Tipo
-                    </th>
-                    <th>
-                        Empleado
-                    </th>
-                    <th class="centrado">
-                        Causa
-                    </th>
-                    <th class="centrado">
-                        Avance
-                    </th>
+                    <th class="header" width="10%">Fecha de Cambio</th>
+                    <th class="header" width="10%">Tipo</th>
+                    <th width="40%">Empleado</th>
+                    <th width="30%">Causa</th>
+                    <th class="header" width="10%">Avance</th>
                 </tr>
             </thead>
             <tbody>
                 {% for mov in movements %}
                     <tr>
-                        <td class="centrado">{{ mov.getdate | date("d/m/Y") }}</td>
+                        <td class="centrado" width="10%">{{ mov.getdate | date("d/m/Y") }}</td>
                         {% if mov.gettype == 'I'%}
-                            <td class="centrado"><i class="fa fa-long-arrow-up"></i></td>
+                            <td class="centrado" width="10%"><i class="fa fa-long-arrow-up"></i></td>
                             {% else %}
-                            <td class="centrado"><i class="fa fa-long-arrow-down"></i></td>
+                            <td class="centrado" width="10%"><i class="fa fa-long-arrow-down"></i></td>
                             {% endif %}
-                        <td>{{ mov.getuser.getOnlyFullNameUser }}  </td>
-                        {% if mov.gettype == 'I'%}
-                            <td class="centrado">{{ mov.getcausein }} </td>
-                        {% else %}
-                            <td class="centrado">{{ mov.getcauseout }} </td>
-                        {% endif %}
-                        <td class="centrado">{{ mov.getrealAdvance | number_format(2, '.', ',')  }} % </td>
+                        <td width="40%">{{ mov.getuser.getOnlyFullNameUser }}  </td>
+                        <td width="30%">{{ causes[mov.cause] }} </td>
+                        <td class="centrado" width="10%">{{ mov.getrealAdvance | number_format(2, '.', ',')  }} % </td>
                     </tr>
                 {% endfor %}
             </tbody>
