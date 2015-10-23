@@ -26,6 +26,15 @@
         .alin_font {
             text-align: justify;
         }
+        .fa-long-arrow-up {
+            color: green;    
+        }
+        .fa-long-arrow-down {
+            color: red;    
+        }
+        .centrado{
+            text-align: center;
+        }
     </style>
     {% set message =  'pequiven.arrangement_program.you_must_assign_config'|trans %}
 
@@ -229,34 +238,46 @@
     <fieldset class="fieldset">
         <legend class="legend"><b>Historial de Cambios </b></legend>
 
-
-        <table class="record_properties" width="100%">
+        <table class="record_properties" width="80%">
             <thead>
                 <tr>
-                    <th>
+                    <th class="centrado">
+                        Fecha de Cambio
+                    </th>
+                    <th class="centrado">
                         Tipo
                     </th>
                     <th>
                         Empleado
                     </th>
-                    <th>
-                        Fecha de Cambio
+                    <th class="centrado">
+                        Causa
                     </th>
-                    <th>
+                    <th class="centrado">
                         Avance
                     </th>
                 </tr>
             </thead>
             <tbody>
                 {% for mov in movements %}
-                <td>{{ mov.gettype }} </td>
-                <td>{{ mov.getuser }} </td>
-                <td>{{ mov.getdate }} </td>
-                <td>{{ mov.getrealAdvance }} </td>
-            {% endfor %}
+                    <tr>
+                        <td class="centrado">{{ mov.getdate | date("d/m/Y") }}</td>
+                        {% if mov.gettype == 'I'%}
+                            <td class="centrado"><i class="fa fa-long-arrow-up"></i></td>
+                            {% else %}
+                            <td class="centrado"><i class="fa fa-long-arrow-down"></i></td>
+                            {% endif %}
+                        <td>{{ mov.getuser.getOnlyFullNameUser }}  </td>
+                        {% if mov.gettype == 'I'%}
+                            <td class="centrado">{{ mov.getcausein }} </td>
+                        {% else %}
+                            <td class="centrado">{{ mov.getcauseout }} </td>
+                        {% endif %}
+                        <td class="centrado">{{ mov.getrealAdvance | number_format(2, '.', ',')  }} % </td>
+                    </tr>
+                {% endfor %}
             </tbody>
         </table>
-
     </fieldset>
 
 {% endblock %}
@@ -275,14 +296,14 @@
 
             $('.progress').progress();
 
-            $("#AssignGoalDetails_date").datepicker({
+            $("#AssignGoal_date").datepicker({
                 defaultDate: "+1w",
                 changeMonth: true,
                 numberOfMonths: 1,
                 dateFormat: "dd/mm/yy"
             });
 
-            $("#RemoveGoalDetails_date").datepicker({
+            $("#RemoveGoal_date").datepicker({
                 defaultDate: "+1w",
                 changeMonth: true,
                 numberOfMonths: 1,

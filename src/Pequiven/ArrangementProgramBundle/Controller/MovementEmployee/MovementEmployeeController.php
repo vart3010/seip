@@ -5,14 +5,11 @@ namespace Pequiven\ArrangementProgramBundle\Controller\MovementEmployee;
 use DateTime;
 use Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram;
 use Pequiven\ArrangementProgramBundle\Entity\Goal;
-use Pequiven\ArrangementProgramBundle\Entity\MovementEmployee\MovementDetails;
 use Pequiven\ArrangementProgramBundle\Entity\MovementEmployee\MovementEmployee;
 use Pequiven\SEIPBundle\Controller\SEIPController;
 use Symfony\Component\HttpFoundation\Request;
 use Pequiven\ArrangementProgramBundle\Form\MovementEmployee\AssignGoalType;
 use Pequiven\ArrangementProgramBundle\Form\MovementEmployee\RemoveGoalType;
-use Pequiven\ArrangementProgramBundle\Form\MovementEmployee\AssignGoalDetailsType;
-use Pequiven\ArrangementProgramBundle\Form\MovementEmployee\RemoveGoalDetailsType;
 
 class MovementEmployeeController extends SEIPController {
 
@@ -33,9 +30,7 @@ class MovementEmployeeController extends SEIPController {
         $responsibles = $this->get('pequiven_seip.repository.user')->findQuerytoRemoveAssingedGoal($id, false);
 
         //MOVIMIENTOS REALIZADOS
-//        $movements = $this->get('pequiven_seip.repository.arrangementprogram_movementdetails')->FindMovementDetailsbyGoal($id);
-
-        $movements = null;
+        $movements = $this->get('pequiven_seip.repository.arrangementprogram_movement')->FindMovementDetailsbyGoal($id);
 
         return $this->render('PequivenArrangementProgramBundle:MovementEmployee:show.html.twig', array(
                     'goal' => $entity,
@@ -132,9 +127,7 @@ class MovementEmployeeController extends SEIPController {
 
             //DATOS DE RemoveGoalType
             $cause = $request->get("RemoveGoal")["cause"];
-            $date = $request->get("RemoveGoal")["date"];
-            $date = str_replace("/", "-", $date);
-            $date = new \DateTime($date);
+            $date = new \DateTime(str_replace("/", "-", ($request->get("RemoveGoal")["date"])));
             $obs = $request->get("RemoveGoal")["observations"];
 
             //DATOS AUDITORIA
@@ -144,7 +137,7 @@ class MovementEmployeeController extends SEIPController {
             $id_user = ($request->get("RemoveGoal")["User"]);
             $user = $em->getRepository('PequivenSEIPBundle:User')->findOneById($id_user);
 
-
+            //CARGO LOS DATOS EN DB
             $movement = new MovementEmployee();
             $movement->setCreatedBy($login);
             $movement->setDate($date);
@@ -169,7 +162,6 @@ class MovementEmployeeController extends SEIPController {
             $movement->setPeriod($this->getPeriodService()->getPeriodActive());
             $em->persist($movement);
 
-            
             //ELIMINO AL USUARIO EN LA META
             $goal->removeResponsible($user);
             $em->persist($goal);

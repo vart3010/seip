@@ -16,35 +16,14 @@ use Pequiven\SEIPBundle\Doctrine\ORM\SeipEntityRepository as EntityRepository;
  */
 class MovementEmployeeRepository extends EntityRepository {
 
-    /**
-     * BUSCA EL REGISTRO DE MOVEMENT EMPLOYEE DADO EL USUARIO Y LA META
-     * @param type $idGoal
-     * @param type $iduser
-     * @return type
-     */
-    function FindMovementIn($idGoal, $iduser, $period) {
-        $qb = $this->getQueryBuilder();
-        $qb
-                ->Select('mov')
-                ->andWhere('mov.User = :users')
-                ->andWhere('mov.Goal= :goals')
-                ->andWhere('mov.out IS NULL')
-                ->andWhere('mov.period= :periodo')
-                ->setParameter('users', $iduser)
-                ->setParameter('goals', $idGoal)
-                ->setParameter('periodo', $period)
-        ;
-        return $qb->getQuery()->getResult();
-    }
-    
     function FindMovementDetailsbyGoal($idGoal) {
         $qb = $this->getQueryBuilder();
         $qb
-                ->Select('movdet')
-                ->andWhere('movdet.Goal= :goals')
-                ->orderBy('movdet.date')
+                ->Select('mov')
+                ->andWhere('mov.Goal= :goals')
+                ->orderBy('mov.date')
                 ->setParameter('goals', $idGoal)
-                
+
         ;
         return $qb->getQuery()->getResult();
     }
