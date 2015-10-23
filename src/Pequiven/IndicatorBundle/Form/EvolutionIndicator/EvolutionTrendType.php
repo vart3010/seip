@@ -20,7 +20,7 @@ class EvolutionTrendType extends AbstractType
                 'label_attr' => array('class' => 'label'),
                 'attr' => array(
                     'class'     => 'input full-width autoexpanding validate[required]',
-                    'maxlength' => 1000
+                    'maxlength' => 3500
                     )))            
                          
         ;

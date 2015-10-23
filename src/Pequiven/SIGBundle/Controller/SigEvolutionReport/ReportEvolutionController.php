@@ -119,7 +119,9 @@ class ReportEvolutionController extends ResourceController
             
             $em = $this->getDoctrine()->getManager();
             $em->persist($trend);
-            $em->flush();           
+            $em->flush(); 
+
+            $this->get('session')->getFlashBag()->add('success', "Analisis de Tendencia Añadido Correctamente");                        
         }     
     }
 
@@ -139,9 +141,10 @@ class ReportEvolutionController extends ResourceController
         if($results){
 
             $em->remove($results);
-            $em->flush();
-            
+            $em->flush();            
+
             $this->get('session')->getFlashBag()->add('success', $this->trans('flashes.messages.deleteTrend', array(), 'PequivenSIGBundle'));
+            return true;
         }  
     }
 
@@ -427,6 +430,7 @@ class ReportEvolutionController extends ResourceController
                 }
 
             }
+            //$this->get('session')->getFlashBag()->add('success', "Valores Cargados Correctamente");                        
         }
 
     }    
@@ -524,6 +528,7 @@ class ReportEvolutionController extends ResourceController
             $em->flush();  
 
         }  
+        $this->get('session')->getFlashBag()->add('success', "Verificación Cargada Correctamente");                                
     }
 
     /**
@@ -543,6 +548,8 @@ class ReportEvolutionController extends ResourceController
 
             $em->remove($verification);
             $em->flush();        
+            
+            $this->get('session')->getFlashBag()->add('success', "Verificación Eliminada Correctamente");                        
         }
 
     }
