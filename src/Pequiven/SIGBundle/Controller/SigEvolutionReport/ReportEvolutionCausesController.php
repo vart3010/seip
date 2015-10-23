@@ -193,6 +193,7 @@ class ReportEvolutionCausesController extends ResourceController
             $em = $this->getDoctrine()->getManager();
             $em->persist($cause);
             $em->flush();
+            $this->get('session')->getFlashBag()->add('success', "Causa Cargada Correctamente");
         }     
     }
 
@@ -216,7 +217,7 @@ class ReportEvolutionCausesController extends ResourceController
             $em->flush();
 
             $this->get('session')->getFlashBag()->add('success', $this->trans('flashes.messages.deleteCause', array(), 'PequivenSIGBundle'));
-        
+            return true;
         }  
     }
 

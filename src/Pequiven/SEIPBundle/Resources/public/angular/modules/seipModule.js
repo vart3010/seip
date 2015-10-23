@@ -1414,7 +1414,7 @@ angular.module('seipModule.controllers', [])
             });
         })
         //Controladores SIG
-        .controller('IndicatorSigEvolutionController', function ($scope, notificationBarService, $http, notifyService, $filter) {
+        .controller('IndicatorSigEvolutionController', function ($scope, notificationBarService, $http, notifyService, $filter, $timeout) {
 
             $scope.urlCausesEvolutionForm = null;
             $scope.indicator = null;
@@ -1510,6 +1510,7 @@ angular.module('seipModule.controllers', [])
                         successCallBack(data);
                     }
                     notificationBarService.getLoadStatus().done();
+                    location.reload(); 
                     return true;
                 }).error(function (data, status, headers, config) {
                     $scope.templateOptions.setVar("form", {errors: {}});
@@ -1543,12 +1544,12 @@ angular.module('seipModule.controllers', [])
                     data: formData,
                     headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'}  // set the headers so angular passing info as form data (not request payload)
                 }).success(function (data) {
-                    $scope.templateOptions.setVar("form", {errors: {}});
-                    //$scope.templateOptions.setVar('evaluationResult', data.result);
+                    $scope.templateOptions.setVar("form", {errors: {}});                 
                     if (successCallBack) {
                         successCallBack(data);
                     }
                     notificationBarService.getLoadStatus().done();
+                    $timeout(callAtTimeout, 3000);  
                     return true;
                 }).error(function (data, status, headers, config) {
                     $scope.templateOptions.setVar("form", {errors: {}});
@@ -1559,11 +1560,13 @@ angular.module('seipModule.controllers', [])
                             });
                         }
                         $scope.templateOptions.setVar("form", {errors: data.errors.children});
-                    }
-                    //$scope.templateOptions.setVar('evaluationResult', 0);
+                    }                    
                     notificationBarService.getLoadStatus().done();
                     return false;
                 });
+                function callAtTimeout() {                    
+                    location.reload();
+                }
             };
             //Añadir El Plan de Accion de la desviación
             var addActionValues = function (save, successCallBack) {
@@ -1589,6 +1592,7 @@ angular.module('seipModule.controllers', [])
                         successCallBack(data);
                     }
                     notificationBarService.getLoadStatus().done();
+                    location.reload(); 
                     return true;
                 }).error(function (data, status, headers, config) {
                     $scope.templateOptions.setVar("form", {errors: {}});
@@ -1599,8 +1603,7 @@ angular.module('seipModule.controllers', [])
                             });
                         }
                         $scope.templateOptions.setVar("form", {errors: data.errors.children});
-                    }
-                    //$scope.templateOptions.setVar('evaluationResult', 0);
+                    }                    
                     notificationBarService.getLoadStatus().done();
                     return false;
                 });
@@ -1623,12 +1626,12 @@ angular.module('seipModule.controllers', [])
                     data: formData,
                     headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'}  // set the headers so angular passing info as form data (not request payload)
                 }).success(function (data) {
-                    $scope.templateOptions.setVar("form", {errors: {}});
-                    //$scope.templateOptions.setVar('evaluationResult', data.result);
+                    $scope.templateOptions.setVar("form", {errors: {}});                    
                     if (successCallBack) {
                         successCallBack(data);
                     }
                     notificationBarService.getLoadStatus().done();
+                    location.reload();              
                     return true;
                 }).error(function (data, status, headers, config) {
                     $scope.templateOptions.setVar("form", {errors: {}});
@@ -1639,17 +1642,15 @@ angular.module('seipModule.controllers', [])
                             });
                         }
                         $scope.templateOptions.setVar("form", {errors: data.errors.children});
-                    }
-                    //$scope.templateOptions.setVar('evaluationResult', 0);
+                    }                    
                     notificationBarService.getLoadStatus().done();
                     return false;
-                });
+                });  
             };
             $scope.templateOptions.setVar('addCause', addCause);
             $scope.templateOptions.setVar('addAction', addAction);
             $scope.templateOptions.setVar('addActionValues', addActionValues);
-            $scope.templateOptions.setVar('addTrendEvolution', addTrendEvolution);
-            //$scope.templateOptions.setVar('evaluationResult', 0);
+            $scope.templateOptions.setVar('addTrendEvolution', addTrendEvolution);            
             var confirmCallBack = function () {
                 addCause(true, function (data) {
                     $scope.indicator = data.indicator;
@@ -1781,9 +1782,14 @@ angular.module('seipModule.controllers', [])
                         notificationBarService.getLoadStatus().done();
                         return false;
                     });
+                    $timeout(callAtTimeout, 3000);                    
                 });
+                
+                function callAtTimeout() {
+                    //console.log("Timeout occurred");
+                    location.reload();
+                }
             };
-            
             //Removiendo las causas
             $scope.removeCausesEvolution = function (causesEvolution) {
                 $scope.openModalConfirm('¿Desea eliminar la causa?', function () {
@@ -1806,7 +1812,11 @@ angular.module('seipModule.controllers', [])
                         notificationBarService.getLoadStatus().done();
                         return false;
                     });
+                    $timeout(callAtTimeout, 3000);                    
                 });
+                function callAtTimeout() {                    
+                    location.reload();
+                }
             };
             //Removiendo las acciones
             $scope.removeActionEvolution = function (actionEvolution) {
@@ -1829,11 +1839,15 @@ angular.module('seipModule.controllers', [])
                         }
                         notificationBarService.getLoadStatus().done();
                         return false;
-                    });
+                    }); 
+                    $timeout(callAtTimeout, 3000);                    
                 });
+                function callAtTimeout() {                    
+                    location.reload();
+                }
             };
         })
-        .controller('IndicatorSigEvolutionCauseController', function ($scope, notificationBarService, $http, notifyService, $filter) {
+        .controller('IndicatorSigEvolutionCauseController', function ($scope, notificationBarService, $http, notifyService, $filter, $timeout) {
 
             $scope.urlCausesEvolutionForm = null;
             $scope.indicator = null;
@@ -1879,6 +1893,7 @@ angular.module('seipModule.controllers', [])
                         successCallBack(data);
                     }
                     notificationBarService.getLoadStatus().done();
+                    location.reload(); 
                     return true;
                 }).error(function (data, status, headers, config) {
                     $scope.templateOptions.setVar("form", {errors: {}});
@@ -1948,11 +1963,15 @@ angular.module('seipModule.controllers', [])
                         }
                         notificationBarService.getLoadStatus().done();
                         return false;
-                    });
+                    });   
+                    $timeout(callAtTimeout, 3000);                                                             
                 });
+                function callAtTimeout() {                    
+                    location.reload();
+                }
             };
         })
-        .controller('IndicatorSigEvolutionVerificationController', function ($scope, notificationBarService, $http, notifyService, $filter) {
+        .controller('IndicatorSigEvolutionVerificationController', function ($scope, notificationBarService, $http, notifyService, $filter, $timeout) {
 
             $scope.indicator = null;
             var isInit = false;
@@ -1996,6 +2015,7 @@ angular.module('seipModule.controllers', [])
                         successCallBack(data);
                     }
                     notificationBarService.getLoadStatus().done();
+                    location.reload(); 
                     return true;
                 }).error(function (data, status, headers, config) {
                     $scope.templateOptions.setVar("form", {errors: {}});
@@ -2065,8 +2085,12 @@ angular.module('seipModule.controllers', [])
                         }
                         notificationBarService.getLoadStatus().done();
                         return false;
-                    });
+                    }); 
+                    $timeout(callAtTimeout, 3000);                                                           
                 });
+                function callAtTimeout() {                    
+                    location.reload();
+                }
             };
         })
         .controller('EvolutionIndicatorConfig', function ($scope, notificationBarService, $http, notifyService, $filter) {
@@ -2124,14 +2148,12 @@ angular.module('seipModule.controllers', [])
                             });
                         }
                         $scope.templateOptions.setVar("form", {errors: data.errors.children});
-                    }
-                    //$scope.templateOptions.setVar('evaluationResult', 0);
+                    }                    
                     notificationBarService.getLoadStatus().done();
                     return false;
                 });
             };
-            $scope.templateOptions.setVar('addConfig', addConfig);
-            //$scope.templateOptions.setVar('evaluationResult', 0);
+            $scope.templateOptions.setVar('addConfig', addConfig);            
             var confirmCallBack = function () {
                 addConfig(true, function (data) {
                     $scope.indicator = data.indicator;
@@ -2166,10 +2188,8 @@ angular.module('seipModule.controllers', [])
                 $scope.templateOptions.setTemplate($scope.templates[0]);
             };
         })
-        .controller('IndicatorLastPeriodController', function ($scope, notificationBarService, $http, notifyService, $filter) {
+        .controller('IndicatorLastPeriodController', function ($scope, notificationBarService, $http, notifyService, $filter, $timeout) {
 
-            //$scope.urlValueLastIndicatorForm = null;
-            //console.log($scope.id_indicator );
             $scope.urlCausesEvolutionForm = null;
             $scope.indicator = null;
             var isInit = false;
@@ -2181,7 +2201,6 @@ angular.module('seipModule.controllers', [])
                 }
                 $scope.templateOptions.setTemplate($scope.templates[0]);
                 $scope.templateOptions.setParameterCallBack(resource);
-                //$scope.templateOptions.setVar('evaluationResult', 0);
                 if (resource) {
                     $scope.templateOptions.enableModeEdit();
                     $scope.openModalAuto();
@@ -2208,11 +2227,11 @@ angular.module('seipModule.controllers', [])
                     headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'}  // set the headers so angular passing info as form data (not request payload)
                 }).success(function (data) {
                     $scope.templateOptions.setVar("form", {errors: {}});
-                    //$scope.templateOptions.setVar('evaluationResult', data.result);
                     if (successCallBack) {
                         successCallBack(data);
                     }
-                    notificationBarService.getLoadStatus().done();
+                    notificationBarService.getLoadStatus().done();                    
+                    $timeout(callAtTimeout, 3000);  
                     return true;
                 }).error(function (data, status, headers, config) {
                     $scope.templateOptions.setVar("form", {errors: {}});
@@ -2224,14 +2243,15 @@ angular.module('seipModule.controllers', [])
                         }
                         $scope.templateOptions.setVar("form", {errors: data.errors.children});
                     }
-                    //$scope.templateOptions.setVar('evaluationResult', 0);
                     notificationBarService.getLoadStatus().done();
                     return false;
                 });
+                function callAtTimeout() {                    
+                    location.reload();
+                }
             };
             //Removiendo la relación con el indicador 2014
             $scope.removeLastPeriod = function (relatioLastPeriod) {
-                //console.log($scope.idIndicator);
                 $scope.openModalConfirm('¿Desea eliminar la relación?', function () {
                     notificationBarService.getLoadStatus().loading();
                     var url = Routing.generate("pequiven_indicator_last_period_delete", {id: $scope.idIndicator});
@@ -2251,11 +2271,14 @@ angular.module('seipModule.controllers', [])
                         }
                         notificationBarService.getLoadStatus().done();
                         return false;
-                    });
+                    });     
+                    $timeout(callAtTimeout, 3000);                                                                                              
                 });
+                function callAtTimeout() {                    
+                    location.reload();
+                }
             };
             $scope.templateOptions.setVar('addLastPeriod', addLastPeriod);
-            //$scope.templateOptions.setVar('evaluationResult', 0);
             var confirmCallBack = function () {
                 addLastPeriod(true, function (data) {
                     $scope.indicator = data.indicator;
