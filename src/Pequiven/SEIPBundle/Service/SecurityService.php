@@ -301,12 +301,12 @@ class SecurityService implements ContainerAwareInterface
         $rol = $user->getLevelRealByGroup();
         if($rol === Rol::ROLE_DIRECTIVE){
             $valid = true;
-        }elseif($user->getId() == 1381 OR $user->getId() == 5318){
+        }elseif($user->getId() == 1381 OR $user->getId() == 5318 OR $user->getId() == 1334 OR $user->getId() == 1338){
             
             foreach ($indicator->getObjetives() as $value) {
                 foreach ($value->getLineStrategics() as $line) {
                     if($line->getId() === 2){
-                    $valid = true;
+                        $valid = true;
                     }                                    
                 }
             }
