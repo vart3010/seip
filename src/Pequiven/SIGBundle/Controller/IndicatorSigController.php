@@ -123,12 +123,22 @@ class IndicatorSigController extends ResourceController {
 
         $idIndicator = $request->get('id');
         $typeObject = 1;
-
+        
         $month = $request->get('month'); //El mes pasado por parametro
-
-        $data = $this->findEvolutionCause($request, $typeObject); //Carga la data de las causas y sus acciones relacionadas
+        
+        $data = $this->findEvolutionCause($request,$typeObject);//Carga la data de las causas y sus acciones relacionadas
+        
+        //Validación de que el mes pasado este entre los validos
+        if ($month > 12) {
+            $this->get('session')->getFlashBag()->add('error', "El mes consultado no es un mes valido!");
+            $month = 12;            
+        }elseif ($month < 1) {
+            $this->get('session')->getFlashBag()->add('error', "El mes consultado no es un mes valido!");
+            $month = 01;            
+        }
         //Cargando el Archivo
-        $uploadFile = $request->get("uploadFile"); //Recibiendo archivo
+        $uploadFile = $request->get("uploadFile");//Recibiendo archivo
+
         //SI SE SUBIO EL ARCHIVO SE PROCEDE A GUARDARLO
         if ($uploadFile != null) {
 
@@ -337,8 +347,9 @@ class IndicatorSigController extends ResourceController {
 
         $indicatorRel->setIndicatorLastPeriod($dataLast);
 
-        $em->flush();
-        return $this->redirect($this->generateUrl('pequiven_indicator_evolution', $idIndicator));
+            $em->flush();
+            $this->get('session')->getFlashBag()->add('success', "Relación Cargada Correctamente");
+        
     }
 
     /**
@@ -359,10 +370,6 @@ class IndicatorSigController extends ResourceController {
             $dataLast = NULL;
         }
 
-        $indicatorRel->setIndicatorLastPeriod($dataLast);
-
-        $em->flush();
-        return $this->redirect($this->generateUrl('pequiven_indicator_evolution', $idIndicator));
     }
 
     /**
@@ -811,3 +818,6 @@ $pdf->AddPage('L');
     }
 
 }
+            $em->flush();
+            $this->get('session')->getFlashBag()->add('success', "Relación Eliminada Correctamente");
+     

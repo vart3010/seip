@@ -6,6 +6,11 @@
         <div class="block-title">
             <h3 class="ng-binding">{$ indicator_sig.featuresIndicator.length $} {{ 'sig.trend_analysis'|trans ({}, 'messages') }}</h3>
             {% if trend %}
+                {#<div class="button-group absolute-right compact">
+                    <a href="javascript:void(0);" class="button icon-pencil">Edit</a>
+                    <a href="javascript:void(0);" class="button icon-gear with-tooltip" title="Other actions"></a>
+                    <a href="javascript:void(0);" class="button icon-trash with-tooltip confirm" title="Delete"></a>
+                </div>#}
             {% else %}
                 <div class="button-group absolute-right compact">
                     <a class="button icon-list-add " href="" ng-click="loadTemplateAnalysisTrend()" title="">{{ 'pequiven.add'|trans({},'messages') }}&nbsp;</a>

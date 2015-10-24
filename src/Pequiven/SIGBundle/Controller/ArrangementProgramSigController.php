@@ -24,12 +24,22 @@ class ArrangementProgramSigController extends ResourceController
         //$form = $this->getForm($resource);
 
     	$id = $request->get("id");//Id ArrangmentProgram
+        
         $month = $request->get('month'); //El mes pasado por parametro
 
         $em = $this->getDoctrine()->getManager();
 
         $data = $this->findEvolutionCause($request);//Carga la data de las causas y sus acciones relacionadas
     	
+        //Validación de que el mes pasado este entre los validos
+        if ($month > 12) {
+            $this->get('session')->getFlashBag()->add('error', "El mes consultado no es un mes valido!");
+            $month = 12;            
+        }elseif ($month < 1) {
+            $this->get('session')->getFlashBag()->add('error', "El mes consultado no es un mes valido!");
+            $month = 01;            
+        }
+
         //Cargando el Archivo
         $uploadFile = $request->get("uploadFile");//Recibiendo archivo
 

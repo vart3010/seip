@@ -569,7 +569,7 @@ class ReportTemplateController extends SEIPController {
                 }
             }
         }
-        
+
 
         $data = array(
             "result" => $result,
@@ -1039,7 +1039,9 @@ class ReportTemplateController extends SEIPController {
         $plantReportId = null;
         if ($request->isMethod("POST")) {
             $formData = $request->get("form");
-            $plantReportId = (int) $formData['plantReport'];
+            if (isset($formData['plantReport'])) {
+                $plantReportId = (int) $formData['plantReport'];
+            }
         }
 
         $dateReport = new \DateTime(date("Y-m-d", strtotime("-1 day")));
