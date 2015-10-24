@@ -48,9 +48,9 @@
         {% for data in analysis %}
             <tbody>
                 <tr>
-                    <th align="justify">
+                    <td align="justify">
                         {{ data.description }}
-                    </th>
+                    </td>
                     {% if is_granted('ROLE_SEIP_SIG_EVOLUTION_DELETE_CAUSE_ANALYSIS') %}  
                         <th class="align-right vertical-center">                          
                             <span class="select compact">
