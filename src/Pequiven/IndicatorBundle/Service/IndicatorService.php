@@ -3277,17 +3277,21 @@ class IndicatorService implements ContainerAwareInterface {
         $labelIni = explode('-', $labelsFrequencyArray[1])[0];
         $labelsArray = array();
         $numberResults = $frequency->getNumberResultsFrequency();
-
+        
         if ($numberResults == 12) {
             for ($i = 1; $i <= $numberResults; $i++) {
-                $labelsArray[$i] = $labelsFrequencyArray[$i];
+                if ($type == "from") {
+                    $labelsArray[$i] = $labelsFrequencyArray[$i];
+                } elseif ($type == "until") {
+                    $labelsArray[$i] = "a " . $labelsFrequencyArray[$i];
+                }
             }
         } else {
+            
             //Recorremos de acuerdo al número de resultados por frecuencia
             for ($i = 1; $i <= $numberResults; $i++) {
                 $labelActually = explode('-', $labelsFrequencyArray[$i])[1];
                 if ($i > 1) {
-
                     if ($type == "from") {
                         $labelsArray[$i] = $labelIni . '-' . $labelActually;
                     } elseif ($type == "until") {
@@ -3302,8 +3306,8 @@ class IndicatorService implements ContainerAwareInterface {
                 }
             }
         }
-
-
+        
+        
         return $labelsArray;
     }
 
