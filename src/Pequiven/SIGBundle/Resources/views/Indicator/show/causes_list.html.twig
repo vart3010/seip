@@ -22,10 +22,10 @@
                     <th scope="col" width="15%" class="hide-on-tablet header" align="center">
                         {{ 'seip.table.header.value_of_cause'|trans({},'PequivenSIGBundle') }}
                     </th>
-                    <th scope="col" width="45%" class="header" align="center">
+                    <th scope="col" width="45%" class="header" align="left">
                         {{ 'seip.table.header.description'|trans({},'PequivenSIGBundle') }}
                     </th>
-                    <th scope="col" width="35%" class="hide-on-mobile-portrait header" align="center">
+                    <th scope="col" width="35%" class="hide-on-mobile-portrait header" align="left">
                         {{ 'seip.table.header.created_by'|trans({},'PequivenArrangementProgramBundle') }}
                     </th>
                         {% set colspan = 6 %}
@@ -36,11 +36,11 @@
             <tbody>
                 <tr {{ cycle(["even", "odd"], loop.index) }}> 
                     <td>{{ loop.index }}</td>
-                    <th scope="row" align="center">
-                        {{ cause_data.valueofCauses }}
-                    </th>
-                    <td align="center">{{ cause_data.causes }}</td>
                     <td align="center">
+                        {{ cause_data.valueofCauses }}
+                    </td>
+                    <td align="left">{{ cause_data.causes }}</td>
+                    <td align="left">
                         {{ cause_data.createdBy.firstname }} {{ cause_data.createdBy.lastname }}
                         <small class="tag">({{ cause_data.createdBy.username }})</small>
                     </td>
