@@ -127,6 +127,14 @@ class IndicatorSigController extends ResourceController {
         $month = $request->get('month'); //El mes pasado por parametro
 
         $data = $this->findEvolutionCause($request, $typeObject); //Carga la data de las causas y sus acciones relacionadas
+//Validación de que el mes pasado este entre los validos
+        if ($month > 12) {
+            $this->get('session')->getFlashBag()->add('error', "El mes consultado no es un mes valido!");
+            $month = 12;
+        } elseif ($month < 1) {
+            $this->get('session')->getFlashBag()->add('error', "El mes consultado no es un mes valido!");
+            $month = 01;
+        }
         //Cargando el Archivo
         $uploadFile = $request->get("uploadFile"); //Recibiendo archivo
         //SI SE SUBIO EL ARCHIVO SE PROCEDE A GUARDARLO
@@ -338,6 +346,9 @@ class IndicatorSigController extends ResourceController {
         $indicatorRel->setIndicatorLastPeriod($dataLast);
 
         $em->flush();
+
+        $this->get('session')->getFlashBag()->add('success', "Relación Cargada Correctamente");
+
         return $this->redirect($this->generateUrl('pequiven_indicator_evolution', $idIndicator));
     }
 
@@ -362,6 +373,9 @@ class IndicatorSigController extends ResourceController {
         $indicatorRel->setIndicatorLastPeriod($dataLast);
 
         $em->flush();
+
+        $this->get('session')->getFlashBag()->add('success', "Relación Eliminada Correctamente");
+
         return $this->redirect($this->generateUrl('pequiven_indicator_evolution', $idIndicator));
     }
 
@@ -749,7 +763,7 @@ class IndicatorSigController extends ResourceController {
 //            $pdf->SetFont('times', 'BI', 12);
 // add a page
 
-$pdf->AddPage('L');
+        $pdf->AddPage('L');
 
 // set some text to print
 
