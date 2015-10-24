@@ -127,7 +127,7 @@ class IndicatorSigController extends ResourceController {
         $month = $request->get('month'); //El mes pasado por parametro
 
         $data = $this->findEvolutionCause($request, $typeObject); //Carga la data de las causas y sus acciones relacionadas
-//Validación de que el mes pasado este entre los validos
+        //Validación de que el mes pasado este entre los validos
         if ($month > 12) {
             $this->get('session')->getFlashBag()->add('error', "El mes consultado no es un mes valido!");
             $month = 12;
@@ -346,10 +346,7 @@ class IndicatorSigController extends ResourceController {
         $indicatorRel->setIndicatorLastPeriod($dataLast);
 
         $em->flush();
-
         $this->get('session')->getFlashBag()->add('success', "Relación Cargada Correctamente");
-
-        return $this->redirect($this->generateUrl('pequiven_indicator_evolution', $idIndicator));
     }
 
     /**
@@ -373,10 +370,7 @@ class IndicatorSigController extends ResourceController {
         $indicatorRel->setIndicatorLastPeriod($dataLast);
 
         $em->flush();
-
         $this->get('session')->getFlashBag()->add('success', "Relación Eliminada Correctamente");
-
-        return $this->redirect($this->generateUrl('pequiven_indicator_evolution', $idIndicator));
     }
 
     /**
