@@ -1308,6 +1308,15 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                 )->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.vizualice.phase_two', $section)));
                 $workStudyCirclesVizualice->addChild($workStudyCirclesPhaseTwo);
             }
+            
+            if(($workStudyCircle = $workStudyCircleService->obtainWorkStudyCircleByPhase($user, \Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle::PHASE_THREE)) != null){
+                $workStudyCirclesPhaseThree = $this->factory->createItem('work_study_circles.vizualice.phase_three', $this->getSubLevelOptions(array(
+                        'route' => 'pequiven_work_study_circle_show_phase',
+                        'routeParameters' => array('id' => $workStudyCircle->getId()),
+                    ))
+                )->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.vizualice.phase_three', $section)));
+                $workStudyCirclesVizualice->addChild($workStudyCirclesPhaseThree);
+            }
 
             $menuWorkStudyCircles->addChild($workStudyCirclesVizualice);
         }

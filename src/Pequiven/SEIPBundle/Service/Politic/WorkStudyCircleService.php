@@ -587,6 +587,38 @@ class WorkStudyCircleService implements ContainerAwareInterface {
     
     /**
      * 
+     * @param WorkStudyCircle $workStudyCircle
+     * @return boolean
+     */
+    public function isAllowToAddProposals(WorkStudyCircle $workStudyCircle){
+        $valid = false;
+        $user = $this->getUser();
+        
+        if(($this->getSecurityContext()->isGranted(array('ROLE_SEIP_PROPOSAL_ADD')) || $workStudyCircle->getCoordinator()->getId() == $user->getId()) && $workStudyCircle->getPhase() == WorkStudyCircle::PHASE_THREE){
+            $valid = true;
+        }
+        
+        return $valid;
+    }
+    
+    /**
+     * 
+     * @param WorkStudyCircle $workStudyCircle
+     * @return boolean
+     */
+    public function isAllowToEditProposals(WorkStudyCircle $workStudyCircle){
+        $valid = false;
+        $user = $this->getUser();
+        
+        if(($this->getSecurityContext()->isGranted(array('ROLE_SEIP_PROPOSAL_EDIT')) || $workStudyCircle->getCoordinator()->getId() == $user->getId()) && $workStudyCircle->getPhase() == WorkStudyCircle::PHASE_THREE){
+            $valid = true;
+        }
+        
+        return $valid;
+    }
+    
+    /**
+     * 
      * @return \Symfony\Component\Security\Core\SecurityContext
      * @throws \LogicException
      */
