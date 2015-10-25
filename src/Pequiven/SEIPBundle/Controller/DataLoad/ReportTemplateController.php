@@ -1303,7 +1303,7 @@ class ReportTemplateController extends SEIPController {
 
             $dateDesde = $dateFrom->format("U");
             $dateHasta = $dateEnd->format("U");
-
+            
             foreach ($plantReports as $planReport) {
                 if (!in_array($plantReport->getReportTemplate()->getName(), $plants)) {
                     $plants[] = $plantReport->getReportTemplate()->getName();
@@ -1364,15 +1364,17 @@ class ReportTemplateController extends SEIPController {
                     $arrayProduction[] = $rs;
 
 //CONSUMO DE MATERIA PRIMA
-
-                    $i = $dateDesde;
-
 //VERIFICA SI EL PRODUCTO ES MATERIA PRIMA
+                    $i = $dateDesde;
 //if ($productReport->getProduct()->getIsRawMaterial()) {
+//                    var_dump($i);
+//                    var_dump($dateHasta);
                     foreach ($productReport->getRawMaterialConsumptionPlannings() as $rawMaterial) {
                         $totalRawDayPlan = 0.0;
                         $totalRawDayReal = 0.0;
+
                         if ($rawMaterial->getProduct()->getIsRawMaterial()) {
+
                             while ($i != ($dateHasta + 86400)) {
                                 $timeNormal = new \DateTime(date("Y-m-d", $i));
                                 $rawMaterialResult = $rawMaterial->getSummary($timeNormal);
@@ -1382,8 +1384,10 @@ class ReportTemplateController extends SEIPController {
                                 $totalRawPlan += $rawMaterialResult["total_day_plan"];
                                 $totalRawReal += $rawMaterialResult["total_day"];
 
+
                                 $i = $i + 86400; //VOY RECORRIENDO DIA POR DIA
                             }
+//                            var_dump($rawMaterial->getProduct()->getName());
 
 
                             $arrayRawMaterial[] = array(
@@ -1400,6 +1404,7 @@ class ReportTemplateController extends SEIPController {
 //                    );
 //}
                 }
+//                die();
 //CONSUMO DE SERVICIOS
                 foreach ($planReport->getConsumerPlanningServices() as $consumerPlanningService) {
                     $i = $dateDesde;

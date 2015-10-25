@@ -1282,7 +1282,8 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
 
             $menuWorkStudyCircles->addChild($workStudyCirclesRegister);
         }
-        if ($this->isGranted(array('ROLE_SEIP_WORK_STUDY_CIRCLES_VIEW')) && $user->getWorkStudyCircle()) {
+//        if ($this->isGranted(array('ROLE_SEIP_WORK_STUDY_CIRCLES_VIEW')) && $user->getWorkStudyCircle()) {
+        if(($workStudyCircle = $workStudyCircleService->obtainWorkStudyCircleByPhase($user, \Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle::PHASE_ONE)) != null){
             $workStudyCirclesVizualice = $this->factory->createItem('work_study_circles.vizualice', $this->getSubLevelOptions(array(
                         "route" => "",
                         'labelAttributes' => array('icon' => 'fa fa-users',),
