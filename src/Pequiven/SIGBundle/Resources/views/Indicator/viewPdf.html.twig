@@ -134,7 +134,7 @@
                 <table class="table-charts" width="100%">
                     <tbody>
                         <tr>
-                            <td> <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br> </td>
+                            <td> <br><br><br><br><br><br><br><br><br><br><br><br><br><br> </td>
                         </tr>
                     </tbody>
                 </table>
@@ -144,7 +144,7 @@
                 <table class="table-charts" width="100%">
                     <tbody>
                         <tr>
-                            <td> <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br> </td>
+                            <td> <br><br><br><br><br><br><br><br><br><br><br><br><br><br> </td>
                         </tr>
                     </tbody>
                 </table>
@@ -161,7 +161,11 @@
                             <th class="table-th">ANALISIS DE TENDENCIA</th>
                         </tr>
                         <tr>
-                            <td>{{ trend }}</td>           
+                            {% if trend|length >1020 %}
+                            <td>{{ trend[:1020] }}... Para más Información Consultar el SEIP</td>
+                            {% else %}
+                            <td>{{ trend }}</td>
+                            {% endif %}
                         </tr>
                     </tbody>
                 </table>
@@ -174,7 +178,11 @@
                             <th class="table-th">ANALISIS DE CAUSAS</th>
                         </tr>
                         <tr>
-                            <td>{{ causeAnalysis }}</td>
+                            {% if causeAnalysis|length >1020 %}
+                            <td>{{ causeAnalysis[:1020]}}... Para más Información Consultar el SEIP</td>
+                            {% else %}
+                            <td>{{ causeAnalysis}}</td>    
+                            {% endif %}
                         </tr>
                     </tbody>
                 </table>
