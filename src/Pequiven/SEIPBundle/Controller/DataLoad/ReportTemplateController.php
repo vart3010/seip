@@ -1426,12 +1426,13 @@ class ReportTemplateController extends SEIPController {
                 $i = $dateDesde;
 
                 foreach ($planReport->getProductsReport() as $productReport) {
-                    $productId = $productReport->getProduct()->getId();
-//      var_dump($productReport->getName());
-                    if (!in_array($productId, $arrayNamesUnrealizedProduction)) {
-                        $arrayNamesUnrealizedProduction[] = $productId;
-                        $arrayUnrealizedProduction[$productId] = array(
-                            "productName" => $productReport->getProduct()->getName() . " (" . $productReport->getProduct()->getProductUnit()->getUnit() . ")",
+                    //$productId = $productReport->getProduct()->getId();
+                    $productReportId = $productReport->getId();
+                    //var_dump($productReport->getName());
+                    if (!in_array($productReportId, $arrayNamesUnrealizedProduction)) {
+                        $arrayNamesUnrealizedProduction[] = $productReportId;
+                        $arrayUnrealizedProduction[$productReportId] = array(
+                            "productName" => $productReport->getName() . " (" . $productReport->getProduct()->getProductUnit()->getUnit() . ")",
                             "idProduct" => $productReport->getProduct()->getId(),
                             "idProductReport" => $productReport->getId(),
                             "idReportTemplate" => $planReport->getReportTemplate()->getId(),
@@ -1443,11 +1444,14 @@ class ReportTemplateController extends SEIPController {
                         $timeNormal = new \DateTime(date("Y-m-d", $i));
                         $unrealizedProduction = $productReport->getSummaryUnrealizedProductions($timeNormal);
 //            var_dump($unrealizedProduction);
-                        $arrayUnrealizedProduction[$productId]["total"] += $unrealizedProduction["total_day"];
+                        $arrayUnrealizedProduction[$productReportId]["total"] += $unrealizedProduction["total_day"];
 
                         $i += 86400; //VOY RECORRIENDO DIA POR DIA
                     }
                 }
+
+
+
 
 //INVENTARIO
 
@@ -1459,7 +1463,10 @@ class ReportTemplateController extends SEIPController {
                 }
             }
 
+
+
 //TOTALES DE PRODUCCION
+            $subTotalProdPlan = 0;
             if ($totalProdPlan > 0) {
                 $subTotalProdPlan = ($totalProdReal * 100) / $totalProdPlan;
             } else {
@@ -1822,11 +1829,12 @@ class ReportTemplateController extends SEIPController {
 
                 foreach ($planReport->getProductsReport() as $productReport) {
                     $productId = $productReport->getProduct()->getId();
+                    $productReportId = $productReport->getId();
 
-                    if (!in_array($productId, $arrayNamesUnrealizedProduction)) {
+                    if (!in_array($productReportId, $arrayNamesUnrealizedProduction)) {
                         $arrayNamesUnrealizedProduction[] = $productId;
-                        $arrayUnrealizedProduction[$productId] = array(
-                            "productName" => $productReport->getProduct()->getName() . " (" . $productReport->getProduct()->getProductUnit()->getUnit() . ")",
+                        $arrayUnrealizedProduction[$productReportId] = array(
+                            "productName" => $productReport->getName() . " (" . $productReport->getProduct()->getProductUnit()->getUnit() . ")",
                             //ID DEL PRODUCT_REPORT
                             "productId" => $productReport->getId(),
                             "reportTemplateId" => $productReport->getPlantReport()->getReportTemplate()->getId(),
@@ -1837,9 +1845,9 @@ class ReportTemplateController extends SEIPController {
 
                     $unrealizedProduction = $productReport->getSummaryUnrealizedProductions($dateReport);
 
-                    $arrayUnrealizedProduction[$productId]["day"] = $unrealizedProduction["total_day"];
-                    $arrayUnrealizedProduction[$productId]["month"] = $unrealizedProduction["total_month"];
-                    $arrayUnrealizedProduction[$productId]["year"] = $unrealizedProduction["total_year"];
+                    $arrayUnrealizedProduction[$productReportId]["day"] = $unrealizedProduction["total_day"];
+                    $arrayUnrealizedProduction[$productReportId]["month"] = $unrealizedProduction["total_month"];
+                    $arrayUnrealizedProduction[$productReportId]["year"] = $unrealizedProduction["total_year"];
 
                     $totalUnrealizedProduction["day"] += $unrealizedProduction["total_day"];
                     $totalUnrealizedProduction["month"] += $unrealizedProduction["total_month"];
