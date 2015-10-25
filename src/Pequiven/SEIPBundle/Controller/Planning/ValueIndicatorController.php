@@ -169,36 +169,38 @@ class ValueIndicatorController extends \Pequiven\SEIPBundle\Controller\SEIPContr
         $parameters['result'] = 0;
         $parameters['showBoth'] = 1;
         
-        if($formula->getTypeOfCalculation() != \Pequiven\MasterBundle\Entity\Formula::TYPE_CALCULATION_SIMPLE_AVERAGE){
-            $varPlanName = $formula->getVariableToPlanValue()->getName();
-            $parameters['varPlanName'] = $varPlanName;
-            $varRealName = $formula->getVariableToRealValue()->getName();
-            $parameters['varRealName'] = $varRealName;
-        } else{
-            $varRealName = 'real';
-            $parameters['varRealName'] = $varRealName;
+        if($indicator->getTypeDetailValue() == \Pequiven\IndicatorBundle\Entity\Indicator::TYPE_DETAIL_DAILY_LOAD_PRODUCTION){
+        
+            if($formula->getTypeOfCalculation() != \Pequiven\MasterBundle\Entity\Formula::TYPE_CALCULATION_SIMPLE_AVERAGE){
+                $varPlanName = $formula->getVariableToPlanValue()->getName();
+                $parameters['varPlanName'] = $varPlanName;
+                $varRealName = $formula->getVariableToRealValue()->getName();
+                $parameters['varRealName'] = $varRealName;
+            } else{
+                $varRealName = 'real';
+                $parameters['varRealName'] = $varRealName;
+            }
+
+            $valueIndicator = $this->resourceResolver->getResource(
+                $this->getRepository(),
+                'findOneBy',
+                array(array('id' => $request->get('id',0))));
+
+            if(!$valueIndicator){
+                $valueIndicator = new \Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator();
+            }
+
+            //Método para obtener el orden del valor del indicador
+            $options['typeOfResultSection'] = $indicator->getTypeOfResultSection();
+            $results = $indicatorService->getValuesFromReportTemplate($indicator, $valueIndicator, $options);
+
+            $parameters['real'] = $results[$varRealName];
+            if($formula->getTypeOfCalculation() != \Pequiven\MasterBundle\Entity\Formula::TYPE_CALCULATION_SIMPLE_AVERAGE){
+                $parameters['plan'] = $results[$varPlanName];
+            } else{
+                $parameters['showBoth'] = 0;
+            }
         }
-        
-        $valueIndicator = $this->resourceResolver->getResource(
-            $this->getRepository(),
-            'findOneBy',
-            array(array('id' => $request->get('id',0))));
-        
-        if(!$valueIndicator){
-            $valueIndicator = new \Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator();
-        }
-        
-        //Método para obtener el orden del valor del indicador
-        $options['typeOfResultSection'] = $indicator->getTypeOfResultSection();
-        $results = $indicatorService->getValuesFromReportTemplate($indicator, $valueIndicator, $options);
-        
-        $parameters['real'] = $results[$varRealName];
-        if($formula->getTypeOfCalculation() != \Pequiven\MasterBundle\Entity\Formula::TYPE_CALCULATION_SIMPLE_AVERAGE){
-            $parameters['plan'] = $results[$varPlanName];
-        } else{
-            $parameters['showBoth'] = 0;
-        }
-        
         $view = $this
             ->view()
             ->setData($parameters)
