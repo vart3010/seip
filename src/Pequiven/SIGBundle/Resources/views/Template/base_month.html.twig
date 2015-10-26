@@ -1,0 +1,38 @@
+	
+	{# Recibo el mes #}
+	{% if month == 1 %}
+        {% set setmonth = "ENERO" %} 
+    {% elseif month == 2 %}
+        {% set setmonth = "FEBRERO" %}
+    {% elseif month == 3 %}
+        {% set setmonth = "MARZO" %}
+    {% elseif month == 4 %}
+        {% set setmonth = "ABRIL" %}
+    {% elseif month == 5 %}
+        {% set setmonth = "MAYO" %}
+    {% elseif month == 6 %}
+        {% set setmonth = "JUNIO" %}
+    {% elseif month == 7 %}
+        {% set setmonth = "JULIO" %}
+    {% elseif month == 8 %}
+        {% set setmonth = "AGOSTO" %}
+    {% elseif month == 9 %}
+        {% set setmonth = "SEPTIEMBRE" %}
+    {% elseif month == 10 %}
+        {% set setmonth = "OCTUBRE" %}
+    {% elseif month == 11 %}
+        {% set setmonth = "NOVIEMBRE" %}
+    {% elseif month == 12 %}
+        {% set setmonth = "DICIEMBRE" %}
+    {% endif %}     
+<!-- Mes del informe de Evolución -->
+<div class="">
+	<div class="inline-label">
+		<label class="label">Informe de Evolución Mes:</label>
+			<ul class="fa-ul">			        
+			    <li>
+			    	<div class="three-columns orange-bg" align="center"><h3>{{ setmonth }}</h3></div>
+			    </li>			        
+			</ul>
+	</div>
+</div>

@@ -200,6 +200,8 @@ class WorkStudyCircleController extends SEIPController {
         $isAllowToAddMembers = $workStudyCircleService->isAllowToAddMembers($workStudyCircle);
         $isAllowToEditMembers = $workStudyCircleService->isAllowToEditMembers($workStudyCircle);
         $isAllowToAddMeetings = $workStudyCircleService->isAllowToAddMeetings($workStudyCircle);
+        $isAllowToAddProposals = $workStudyCircleService->isAllowToAddProposals($workStudyCircle);
+        $isAllowToEditProposals = $workStudyCircleService->isAllowToEditProposals($workStudyCircle);
 
         return $this->render('PequivenSEIPBundle:Politic:WorkStudyCircle\show.html.twig', array(
                     'workStudyCircle' => $workStudyCircle,
@@ -211,6 +213,8 @@ class WorkStudyCircleController extends SEIPController {
                     'isAllowToAddMembers' => $isAllowToAddMembers,
                     'isAllowToEditMembers' => $isAllowToEditMembers,
                     'isAllowToAddMeetings' => $isAllowToAddMeetings,
+                    'isAllowToAddProposals' => $isAllowToAddProposals,
+                    'isAllowToEditProposals' => $isAllowToEditProposals,
         ));
     }
     
@@ -233,6 +237,8 @@ class WorkStudyCircleController extends SEIPController {
         $isAllowToAddMembers = $workStudyCircleService->isAllowToAddMembers($workStudyCircle);
         $isAllowToEditMembers = $workStudyCircleService->isAllowToEditMembers($workStudyCircle);
         $isAllowToAddMeetings = $workStudyCircleService->isAllowToAddMeetings($workStudyCircle);
+        $isAllowToAddProposals = $workStudyCircleService->isAllowToAddProposals($workStudyCircle);
+        $isAllowToEditProposals = $workStudyCircleService->isAllowToEditProposals($workStudyCircle);
 
         return $this->render('PequivenSEIPBundle:Politic:WorkStudyCircle\showPhase.html.twig', array(
                     'workStudyCircle' => $workStudyCircle,
@@ -244,6 +250,8 @@ class WorkStudyCircleController extends SEIPController {
                     'isAllowToAddMembers' => $isAllowToAddMembers,
                     'isAllowToEditMembers' => $isAllowToEditMembers,
                     'isAllowToAddMeetings' => $isAllowToAddMeetings,
+                    'isAllowToAddProposals' => $isAllowToAddProposals,
+                    'isAllowToEditProposals' => $isAllowToEditProposals,
         ));
     }
 

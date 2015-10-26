@@ -1,8 +1,17 @@
 <style type="text/css">
 
-    
+    td{
+        vertical-align: middle;
+    }
     .title_bold {
         font-weight: bold;
+        font-size: 14px;
+    }
+    .subtittle{
+        background-color: #F2F2F2;
+        vertical-align: middle;
+        font-weight: bold;
+        font-size: 12px;
     }
 
     .div{
@@ -18,11 +27,11 @@
     }
 
     .box{
-    width:200px;
-    height:200px;
-    background:#999;
-    float:left;
-    border:1px solid #444;
+        width:200px;
+        height:200px;
+        background:#999;
+        float:left;
+        border:1px solid #444;
     }
     .table-charts {
         /*width: 60%;*/
@@ -36,7 +45,7 @@
         /*width: 50%;*/
         border: 1px solid #000000;
         /*float:left;*/
-        padding: 0px;
+        padding: 5px;
         margin: 12px;
         text-align: justify;
     }
@@ -44,25 +53,31 @@
         width: 100%;
         border: 1px solid #000000;
         float:left;
-        padding: 2px;
+        padding: 5px;
         margin: 10px;   
-        text-align: justify;
+        text-align: justify;       
     }
     .table-th {
-        background-color: #1db7df; 
+        background-color: #A9E2F3; 
         border: 1px solid #000000;
         text-align: center;
+        font-size: 14px;
+        font-weight: bold;        
     }
     .table-planning-th {
-        background-color: #1db7df; 
+        background-color: #A9E2F3; 
         border: 1px solid #000000;
         text-align: center;
+        font-size: 14px;
+        font-weight: bold;  
     }
-    .table-td {
-        
-        height: 180px;
+    td {
+        font-size: 12px;
+    }
+    .td-tittle{
+        font-size: 14px;
+    }
 
-    }
 
 </style>
 {% block body %}
@@ -93,31 +108,33 @@
     {% elseif month == 12 %}
         {% set setmonth = "Diciembre" %}
     {% endif %}         
-    
+
     <table width="95%">
         <tbody>
             <tr>
-                <th class="title_bold">ASOCIADO A: {{ obj }}</th>
+                <td class="subtittle" width="15%">ASOCIADO A: </td>
+                <td class="td-tittle" width="85%"> {{ obj }}</td>
+            </tr>
+           
+            <tr>
+                <td class="subtittle" width="15%">ÍNDICE DE: </td>
+                <td class="td-tittle" width="85%"> {{ name }}</td>                
             </tr>
             <tr>
-                <th>&nbsp;</th>
-            </tr>
-            <tr>
-                <th class="title_bold">INDICE DE: {{ name }}</th>
-            </tr>
-            <tr>
-                <th class="title_bold">MES: {{ setmonth }}</th>
+                <td class="subtittle" width="15%">MES DEL INFORME: </td>
+                <td class="td-tittle" width="85%"> {{ setmonth  }} del {{ period }}</td>
             </tr>
         </tbody>
     </table>
 
+    <br><br>
     <table width="100%" style="padding:5px;">
         <tr>
             <td>
                 <table class="table-charts" width="100%">
                     <tbody>
                         <tr>
-                            <td></td>
+                            <td> <br><br><br><br><br><br><br><br><br><br><br><br><br><br> </td>
                         </tr>
                     </tbody>
                 </table>
@@ -127,13 +144,14 @@
                 <table class="table-charts" width="100%">
                     <tbody>
                         <tr>
-                            <td></td>
+                            <td> <br><br><br><br><br><br><br><br><br><br><br><br><br><br> </td>
                         </tr>
                     </tbody>
                 </table>
             </td>
         </tr>
     </table>
+    <br>
     <table width="100%" style="padding:5px;">
         <tr>
             <td>
@@ -143,12 +161,16 @@
                             <th class="table-th">ANALISIS DE TENDENCIA</th>
                         </tr>
                         <tr>
-                            <th class="">{{ trend }}</th>           
+                            {% if trend|length >1020 %}
+                            <td>{{ trend[:1020] }}... Para más Información Consultar el SEIP</td>
+                            {% else %}
+                            <td>{{ trend }}</td>
+                            {% endif %}
                         </tr>
                     </tbody>
                 </table>
             </td>
-        
+
             <td>                
                 <table class="table" width="100%">
                     <tbody>
@@ -156,85 +178,105 @@
                             <th class="table-th">ANALISIS DE CAUSAS</th>
                         </tr>
                         <tr>
-                            <th class="">{{ causeAnalysis }}</th>
+                            {% if causeAnalysis|length >1020 %}
+                            <td>{{ causeAnalysis[:1020]}}... Para más Información Consultar el SEIP</td>
+                            {% else %}
+                            <td>{{ causeAnalysis}}</td>    
+                            {% endif %}
                         </tr>
                     </tbody>
                 </table>
             </td>
         </tr>
     </table>
-
+    <table style=" page-break-before: always;"></table>
+    <br><br>
     <table class="table-planning">
         <tbody>
             <tr>
                 <th class="table-planning-th" colspan="10">PLAN DE ACCION Y SEGUIMIENTO</th>
             </tr>        
             <tr align="center">
-                <td style="width: 5%;">Nro</td>
-                <td style="width: 20%;">Acción</td>
-                <td style="width: 12%;">Tipo de Acción</td>
-                <td style="width: 10%;">Fecha Inicio</td>
-                <td style="width: 10%;">Fecha Cierre</td>
-                <td style="width: 8%;">% Avance</td>
-                <td style="width: 15%;">Responsable</td>
-                <td style="width: 20%;">Observaciones</td>
+                <td width="5%" class="subtittle" >Nro</td>
+                <td width="30%" class="subtittle" >Acción</td>
+                <td width="10%" class="subtittle" >Tipo de<br>Acción</td>
+                <td width="10%" class="subtittle" >Fecha Inicio</td>
+                <td width="10%" class="subtittle" >Fecha Cierre</td>
+                <td width="10%" class="subtittle" >Avance</td>
+                <td width="10%" class="subtittle" >Responsable</td>
+                <td width="15%" class="subtittle" >Observaciones</td>
             </tr>
-    {% for data in dataAction %} 
-           <tr {{ cycle(["even", "odd"], loop.index) }} align="center"> 
-                <td>{{ loop.index }}</td>
-                <td align="left">{{ data.actionValue.action }}</td>
-                <td>{{ data.actionValue.indicatorAction.ref }}</td>
-                <td>{{ data.actionValue.dateStart | date("d/m/Y") }}</td>
-                <td>{{ data.actionValue.dateEnd | date("d/m/Y") }}</td>
-                <td>{{ data.advance }}</td>
-                <td>
-                    {{ data.actionValue.responsibles.firstname }} {{ data.actionValue.responsibles.lastname }}                        
-                </td>
-                <td align="left">{{ data.observations }}</td>
-            </tr>            
-    {% endfor %}
+
+            {% for data in dataAction %} 
+                <tr {{ cycle(["even", "odd"], loop.index) }} align="center"> 
+                    <td>{{ loop.index }}</td>
+                    <td style="text-align: justify">{{ data.actionValue.action }}</td>
+                    <td>{{ data.actionValue.indicatorAction.ref }}</td>
+                    <td>{{ data.actionValue.dateStart | date("d/m/Y") }}</td>
+                    <td>{{ data.actionValue.dateEnd | date("d/m/Y") }}</td>
+                    <td>{{ data.advance }}%</td>
+                    <td>
+                        {{ data.actionValue.responsibles.firstname }} {{ data.actionValue.responsibles.lastname }}                        
+                    </td>
+                    <td>{{ data.observations }}</td>
+                </tr>            
+            {% endfor %}
             <tr>
-                <td align="left" style="width: 30%;">REVISADO POR:</td>
-                <td align="left" style="width: 10%;">FECHA:</td>                
-                <td align="right" style="width: 25%;">APROBADO POR:</td>
-                <td align="right" style="width: 15%;">FECHA:</td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td colspan="8">
+                    <table width="100%">
+                        <tbody>
+                            <tr>
+                                <td align="left" style="width: 30%; font-weight: bold;">Revisado Por: ______________________</td>
+                                <td align="left" style="width: 20%; font-weight: bold;">Fecha: _________________</td>                
+                                <td align="left" style="width: 30%; font-weight: bold;">Aprobado Por: ______________________</td>
+                                <td align="left" style="width: 20%; font-weight: bold;">Fecha: _________________</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
             </tr>
         </tbody>
     </table> 
     <table>
         <tr>
-            <td align="left">NIVEL DE REVISION:</td>
+            <td align="left">Nivel de Revisión: 2</td>
             <td>&nbsp;</td>
             <td align="right">C-SI-GI-PG-R-004</td>
         </tr>
     </table>
+
     {# verificatión #}
+    {# <table style=" page-break-before: always;"></table>#}
+    <br><br><br>
     <table class="table-planning">
         <tbody>
             <tr>
                 <th class="table-planning-th" colspan="10">VERIFICACION DE LA EFICACIA</th>
             </tr>        
             <tr align="center">
-                <td style="width: 5%;">Nro</td>
-                <td style="width: 30%;">Comentarios</td>
-                <td style="width: 20%;">Verificado Por</td>
-                <td style="width: 10%;">Fecha</td>
-                <td style="width: 20%;">Acción</td>
-                <td style="width: 10%;">Verificación</td>
+                <td width="5%" class="subtittle">Nro</td>
+                <td width="35%" class="subtittle">Comentarios</td>
+                <td width="20%" class="subtittle">Verificado Por</td>
+                <td width="10%" class="subtittle">Fecha</td>
+                <td width="20%" class="subtittle">Acción</td>
+                <td width="10%" class="subtittle">Verificación</td>
             </tr>
-    {% for data in verification %} 
-           <tr {{ cycle(["even", "odd"], loop.index) }} align="center"> 
-                <td>{{ loop.index }}</td>
-                <td align="left">{{ data.comment }}</td>
-                <td>
-                  {{ data.createdBy.firstname }} {{ data.createdBy.lastname }}                   
-                </td>
-                <td>{{ data.createdAt | date("d/m/Y") }}</td>
-                <td>{{ data.actionPlan.ref }}</td>
-                <td>{{ data.typeVerification.ref }}</td>
-            </tr>            
-    {% endfor %}
+            {% for data in verification %} 
+                <tr {{ cycle(["even", "odd"], loop.index) }} align="center"> 
+                    <td>{{ loop.index }}</td>
+                    <td align="left">{{ data.comment }}</td>
+                    <td>
+                        {{ data.createdBy.firstname }} {{ data.createdBy.lastname }}                   
+                    </td>
+                    <td>{{ data.createdAt | date("d/m/Y") }}</td>
+                    <td>{{ data.actionPlan.ref }}</td>
+                    <td>{{ data.typeVerification.ref }}</td>
+                </tr>            
+            {% endfor %}
         </tbody>
     </table>     
-   
+
 {% endblock %}

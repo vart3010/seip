@@ -133,14 +133,14 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * 
      * @ORM\Column(name="indicator_sig_objetive", type="integer", nullable=true)
      */
-    private $indicatorSigObjetive; 
+    private $indicatorSigObjetive;
 
     /**
      * @var integer
      * 
      * @ORM\Column(name="indicator_sig_tendency", type="integer", nullable=true)
      */
-    private $indicatorSigTendency;    
+    private $indicatorSigTendency;
 
     /**
      * Formula
@@ -325,7 +325,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\TagIndicator",mappedBy="indicator",cascade={"persist","remove"})
      */
     protected $tagsIndicator;
-    
+
     /**
      * Detalles de los gráficos del Indicador
      * 
@@ -347,7 +347,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\Column(name="showTagInResult",type="boolean")
      */
     private $showTagInResult = false;
-    
+
     /**
      * ¿Se mostrará la etiqueta en vez del resultado de medición en el tacómetro?
      * @var boolean
@@ -559,42 +559,49 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\Column(name="typeOfCompany",type="integer")
      */
     private $typeOfCompany = self::TYPE_OF_COMPANY_MATRIZ;
-    
+
     /**
      * ¿Se mostrarán las etiquetas en 2 columnas?
      * @var boolean
      * @ORM\Column(name="showTagsInTwoColumns",type="boolean")
      */
     private $showTagsInTwoColumns = false;
-    
+
     /**
      * ¿Los valores del indicador son acumulativos?
      * @var boolean
      * @ORM\Column(name="resultIsAccumulative",type="boolean")
      */
     private $resultIsAccumulative = false;
-    
+
+    /**
+     * ¿Los valores del indicador son acumulativos con el mes?
+     * @var boolean
+     * @ORM\Column(name="resultIsAccumulativeWithToMonth",type="boolean")
+     */
+    private $resultIsAccumulativeWithToMonth = false;
+
     /**
      * ¿En los gráficos de columna, se mostrará una columna al final con el acumulado de lo mostrado antes?
      * @var boolean
      * @ORM\Column(name="showColumnAccumulativeInDashboard",type="boolean")
      */
     private $showColumnAccumulativeInDashboard = false;
-    
+
     /**
      * ¿En los gráficos de columna, se mostrará una sola columna plan, al final y con el valor de 'plan anual' que es el mismo?
      * @var boolean
      *  @ORM\Column(name="showColumnPlanOneTimeInDashboard",type="boolean")
      */
     private $showColumnPlanOneTimeInDashboard = false;
-    
+
     /**
      * ¿EL indicador tendrá en cuenta sólo los resultados de los hijos, para el cálculo del resultado final?
      * @var boolean
      *  @ORM\Column(name="resultIsFromChildrensResult",type="boolean")
      */
     private $resultIsFromChildrensResult = false;
-    
+
     /**
      * ¿EL indicador tendrá en cuencta resultados adicionales para mostrarlo en una columna nueva?
      * @var boolean
@@ -633,7 +640,15 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionActionVerification",mappedBy="indicator",cascade={"persist","remove"})
      */
     protected $indicatorVerification;
-   
+    
+    /**
+     * ¿En los gráficos de columna, se mostrará una columna plan, al final y con el valor de 'plan anual' que es el mismo?
+     * @var boolean
+     *  @ORM\Column(name="showColumnPlanAtTheEnd",type="boolean")
+     */
+    private $showColumnPlanAtTheEnd = false;
+    
+
     /**
      * Constructor
      */
@@ -648,7 +663,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
         $this->featuresIndicator = new \Doctrine\Common\Collections\ArrayCollection();
         $this->charts = new \Doctrine\Common\Collections\ArrayCollection();
         $this->managementSystems = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->indicatorVerification = new \Doctrine\Common\Collections\ArrayCollection();        
+        $this->indicatorVerification = new \Doctrine\Common\Collections\ArrayCollection();
         $this->indicatorCause = new \Doctrine\Common\Collections\ArrayCollection();
         $this->indicatorCauseAnalisys = new \Doctrine\Common\Collections\ArrayCollection();
         $this->indicatorTrend = new \Doctrine\Common\Collections\ArrayCollection();
@@ -1158,7 +1173,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     public function getValuesIndicator() {
         return $this->valuesIndicator;
     }
-    
+
     /**
      * Add indicatorCause
      *
@@ -1189,7 +1204,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     public function getIndicatorCause() {
         return $this->indicatorCause;
     }
-    
+
     /**
      * Add indicatorVerification
      *
@@ -1220,7 +1235,6 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     public function getIndicatorVerification() {
         return $this->indicatorVerification;
     }
-    
 
     /**
      * Add indicatorCauseAnalysis
@@ -1541,7 +1555,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
             $this->period = null;
 
             $this->valuesIndicator = new ArrayCollection();
-            
+
             $this->managementSystems = new ArrayCollection();
 
             $this->valueFinal = 0;
@@ -1558,9 +1572,8 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
             $this->objetives = new ArrayCollection();
 
             $this->childrens = new ArrayCollection();
-            
-            $this->indicatorlastPeriod = null;
 
+            $this->indicatorlastPeriod = null;
         }
     }
 
@@ -1849,7 +1862,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     public function getShowTagInResult() {
         return $this->showTagInResult;
     }
-    
+
     /**
      * Set showTagInDashboardResult
      *
@@ -1888,7 +1901,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
                     if ($tagIndicator->getTypeTag() == Indicator\TagIndicator::TAG_TYPE_NUMERIC) {
                         return $tagIndicator->getValueOfTag();
                     } else {
-                        return ((float)$tagIndicator->getTextOfTag() + 0.0);
+                        return ((float) $tagIndicator->getTextOfTag() + 0.0);
                     }
                 }
             }
@@ -1924,7 +1937,6 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
         return $this->showPlanValue;
     }
 
-
     function isShowRealValue() {
         return $this->showRealValue;
     }
@@ -1932,6 +1944,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     function isShowPlanValue() {
         return $this->showPlanValue;
     }
+
     function getShowEvolutionView() {
         return $this->showEvolutionView;
     }
@@ -2449,7 +2462,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * 
      * @param type $isShowRange
      * @return \Pequiven\IndicatorBundle\Entity\Indicator
-     */    
+     */
     public function setShowRange($showRange) {
         $this->showRange = $showRange;
 
@@ -2468,7 +2481,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * 
      * @param type $showTagsInTwoColumns
      * @return \Pequiven\IndicatorBundle\Entity\Indicator
-     */    
+     */
     public function setShowTagsInTwoColumns($showTagsInTwoColumns) {
         $this->showTagsInTwoColumns = $showTagsInTwoColumns;
 
@@ -2503,12 +2516,12 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     public function getTypeOfCompany() {
         return $this->typeOfCompany;
     }
-    
+
     /**
      * 
      * @param type $resultIsAccumulative
      * @return \Pequiven\IndicatorBundle\Entity\Indicator
-     */    
+     */
     public function setResultIsAccumulative($resultIsAccumulative) {
         $this->resultIsAccumulative = $resultIsAccumulative;
 
@@ -2522,12 +2535,20 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     public function getResultIsAccumulative() {
         return $this->resultIsAccumulative;
     }
-    
+
+    function getResultIsAccumulativeWithToMonth() {
+        return $this->resultIsAccumulativeWithToMonth;
+    }
+
+    function setResultIsAccumulativeWithToMonth($resultIsAccumulativeWithToMonth) {
+        $this->resultIsAccumulativeWithToMonth = $resultIsAccumulativeWithToMonth;
+    }
+
     /**
      * 
      * @param type $showColumnAccumulativeInDashboard
      * @return \Pequiven\IndicatorBundle\Entity\Indicator
-     */    
+     */
     public function setShowColumnAccumulativeInDashboard($showColumnAccumulativeInDashboard) {
         $this->showColumnAccumulativeInDashboard = $showColumnAccumulativeInDashboard;
 
@@ -2541,14 +2562,33 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     public function getShowColumnAccumulativeInDashboard() {
         return $this->showColumnAccumulativeInDashboard;
     }
-    
+
     /**
      * 
      * @param type $showColumnPlanOneTimeInDashboard
      * @return \Pequiven\IndicatorBundle\Entity\Indicator
-     */    
+     */
     public function setShowColumnPlanOneTimeInDashboard($showColumnPlanOneTimeInDashboard) {
         $this->showColumnPlanOneTimeInDashboard = $showColumnPlanOneTimeInDashboard;
+
+        return $this;
+    }
+
+    /**
+     * 
+     * @return type
+     */
+    public function getShowColumnPlanAtTheEnd() {
+        return $this->showColumnPlanAtTheEnd;
+    }
+    
+    /**
+     * 
+     * @param type $showColumnPlanAtTheEnd
+     * @return \Pequiven\IndicatorBundle\Entity\Indicator
+     */
+    public function setShowColumnPlanAtTheEnd($showColumnPlanAtTheEnd) {
+        $this->showColumnPlanAtTheEnd = $showColumnPlanAtTheEnd;
 
         return $this;
     }
@@ -2560,12 +2600,12 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     public function getShowColumnPlanOneTimeInDashboard() {
         return $this->showColumnPlanOneTimeInDashboard;
     }
-    
+
     /**
      * 
      * @param type $resultIsFromChildrensResult
      * @return \Pequiven\IndicatorBundle\Entity\Indicator
-     */    
+     */
     public function setResultIsFromChildrensResult($resultIsFromChildrensResult) {
         $this->resultIsFromChildrensResult = $resultIsFromChildrensResult;
 
@@ -2579,12 +2619,12 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     public function getResultIsFromChildrensResult() {
         return $this->resultIsFromChildrensResult;
     }
-    
+
     /**
      * 
      * @param type $resultsAdditionalInDashboardColumn
      * @return \Pequiven\IndicatorBundle\Entity\Indicator
-     */    
+     */
     public function setResultsAdditionalInDashboardColumn($resultsAdditionalInDashboardColumn) {
         $this->resultsAdditionalInDashboardColumn = $resultsAdditionalInDashboardColumn;
 
@@ -2597,6 +2637,6 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      */
     public function getResultsAdditionalInDashboardColumn() {
         return $this->resultsAdditionalInDashboardColumn;
-    }    
-    
+    }
+
 }

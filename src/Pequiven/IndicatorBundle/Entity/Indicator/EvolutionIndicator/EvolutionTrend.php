@@ -42,9 +42,9 @@ class EvolutionTrend extends Model {
     private $month;
 
     /**
-     * @var string
+     * @var text
      *
-     * @ORM\Column(name="description", type="string", length=1000)
+     * @ORM\Column(name="description", type="text")
      */
     private $description;
 
