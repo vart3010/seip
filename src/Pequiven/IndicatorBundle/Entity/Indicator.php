@@ -640,6 +640,14 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionActionVerification",mappedBy="indicator",cascade={"persist","remove"})
      */
     protected $indicatorVerification;
+    
+    /**
+     * ¿En los gráficos de columna, se mostrará una columna plan, al final y con el valor de 'plan anual' que es el mismo?
+     * @var boolean
+     *  @ORM\Column(name="showColumnPlanAtTheEnd",type="boolean")
+     */
+    private $showColumnPlanAtTheEnd = false;
+    
 
     /**
      * Constructor
@@ -2562,6 +2570,25 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      */
     public function setShowColumnPlanOneTimeInDashboard($showColumnPlanOneTimeInDashboard) {
         $this->showColumnPlanOneTimeInDashboard = $showColumnPlanOneTimeInDashboard;
+
+        return $this;
+    }
+
+    /**
+     * 
+     * @return type
+     */
+    public function getShowColumnPlanAtTheEnd() {
+        return $this->showColumnPlanAtTheEnd;
+    }
+    
+    /**
+     * 
+     * @param type $showColumnPlanAtTheEnd
+     * @return \Pequiven\IndicatorBundle\Entity\Indicator
+     */
+    public function setShowColumnPlanAtTheEnd($showColumnPlanAtTheEnd) {
+        $this->showColumnPlanAtTheEnd = $showColumnPlanAtTheEnd;
 
         return $this;
     }

@@ -2935,9 +2935,9 @@ class IndicatorService implements ContainerAwareInterface {
                 $dataSetPlan["data"][] = array('value' => number_format($planAccumulated, 2, ',', '.'));
             }
 
-            if ($indicator->getShowColumnPlanOneTimeInDashboard()) {
+            if ($indicator->getShowColumnPlanOneTimeInDashboard() || $indicator->getShowColumnPlanAtTheEnd()) {
                 $category[] = array('label' => 'Plan Anual');
-                $dataSetReal["data"][] = array('value' => number_format($arrayVariables['valuePlan'][0], 2, ',', '.'), 'color' => '#E91212');
+                $dataSetReal["data"][] = array('value' => number_format($arrayVariables['valuePlan'][2], 2, ',', '.'), 'color' => '#E91212');
             }
 
 
