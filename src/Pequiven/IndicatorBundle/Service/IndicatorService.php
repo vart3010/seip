@@ -2908,8 +2908,8 @@ class IndicatorService implements ContainerAwareInterface {
             $arrayIndicators[2603] = 128.20;
             $arrayIndicators[2604] = 128.20;
             $arrayIndicators[1871] = 589.52;
-            $arrayIndicators[1913] = 168.82;
-            $arrayIndicators[1911] = 16.26;
+            $arrayIndicators[1913] = 16.26;
+            $arrayIndicators[1911] = 168.82;
             $arrayIndicators[1907] = 60.28;
             $arrayIndicators[1915] = 121.58;
             $arrayIndicators[1905] = 40.29;
