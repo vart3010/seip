@@ -35,7 +35,6 @@ class CoreExtension extends \Twig_Extension {
                     }),
             new \Twig_SimpleFilter('myNumberFormat', array($this, 'myNumberFormat')),
             new \Twig_SimpleFilter('ucwords', array($this, 'ucwords')),
-            new \Twig_SimpleFilter('fnl2br', array($this, 'fnl2br')),
             new \Twig_SimpleFilter('myFormatDateTime', array($this, 'myFormatDateTime')),
             new \Twig_SimpleFilter('myFormatDate', array($this, 'myFormatDate')),
             new \Twig_SimpleFilter('render_yes_no', array($this, 'renderYesNo'), array('is_safe' => array('html'))),
@@ -125,15 +124,6 @@ class CoreExtension extends \Twig_Extension {
      */
     function ucwords($value) {
         return ucwords(mb_strtolower($value, 'UTF-8'));
-    }
-
-    /**
-     * Genera un String Cargado en Base de Datos con sus saltos de linea originales
-     * @param type $value
-     * @return type
-     */
-    function fnl2br($value) {
-        return nl2br($value, false);
     }
 
     /**
