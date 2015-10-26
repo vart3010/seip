@@ -2879,6 +2879,7 @@ class IndicatorService implements ContainerAwareInterface {
             $data['dataSource']['dataset'][] = $medition;
         } elseif (isset($options['byFrequencyNotification']) && array_key_exists('byFrequencyNotification', $options)) {
             
+            //FÍSICO ACUMULADO
             $arrayIndicators[2600] = 88.45;
             $arrayIndicators[2609] = 74.97;
             $arrayIndicators[2611] = 100.0;
@@ -2898,6 +2899,69 @@ class IndicatorService implements ContainerAwareInterface {
             $arrayIndicators[1860] = 31.73;
             $arrayIndicators[2595] = 24.80;
             $arrayIndicators[1354] = 49.02;
+            
+            //FINANCIERO ACUMULADO
+            $arrayIndicators[2601] = 804.15;
+            $arrayIndicators[2608] = 422.15;
+            $arrayIndicators[2610] = 261.70;
+            $arrayIndicators[2606] = 120.30;
+            $arrayIndicators[2603] = 128.20;
+            $arrayIndicators[2604] = 128.20;
+            $arrayIndicators[1871] = 589.52;
+            $arrayIndicators[1913] = 168.82;
+            $arrayIndicators[1911] = 16.26;
+            $arrayIndicators[1907] = 60.28;
+            $arrayIndicators[1915] = 121.58;
+            $arrayIndicators[1905] = 40.29;
+            $arrayIndicators[1909] = 182.29;
+            $arrayIndicators[1863] = 62.69;
+            $arrayIndicators[1859] = 59.10;
+            $arrayIndicators[1855] = 80.63;
+            $arrayIndicators[1861] = 607.95;
+            $arrayIndicators[2596] = 5.69;
+            $arrayIndicators[1355] = 2337.93;
+            
+            //FÍSICO ANUAL
+            $arrayIndicators[2650] = 25.47;
+            $arrayIndicators[2643] = 16.97;
+            $arrayIndicators[2645] = 29.13;
+            $arrayIndicators[2641] = 30.30;
+            $arrayIndicators[2652] = 81.73;
+            $arrayIndicators[2648] = 81.73;
+            $arrayIndicators[2666] = 15.47;
+            $arrayIndicators[2662] = 6.82;
+            $arrayIndicators[2660] = 0.0;
+            $arrayIndicators[2656] = 16.18;
+            $arrayIndicators[2664] = 23.96;
+            $arrayIndicators[2654] = 29.65;
+            $arrayIndicators[2658] = 16.20;
+            $arrayIndicators[2674] = 16.36;
+            $arrayIndicators[2668] = 28.80;
+            $arrayIndicators[2676] = 3.37;
+            $arrayIndicators[2670] = 11.74;
+            $arrayIndicators[2672] = 17.0;
+            $arrayIndicators[2684] = 24.99;
+            
+            //FINANCIERO ANUAL
+            $arrayIndicators[2651] = 292.42;
+            $arrayIndicators[2644] = 87.51;
+            $arrayIndicators[2647] = 166.41;
+            $arrayIndicators[2642] = 38.50;
+            $arrayIndicators[2653] = 128.20;
+            $arrayIndicators[2649] = 128.20;
+            $arrayIndicators[2667] = 180.84;
+            $arrayIndicators[2663] = 35.74;
+            $arrayIndicators[2661] = 4.92;
+            $arrayIndicators[2657] = 31.37;
+            $arrayIndicators[2665] = 22.18;
+            $arrayIndicators[2655] = 18.58;
+            $arrayIndicators[2659] = 68.05;
+            $arrayIndicators[2675] = 13.44;
+            $arrayIndicators[2669] = 55.28;
+            $arrayIndicators[2677] = 69.81;
+            $arrayIndicators[2671] = 21.74;
+            $arrayIndicators[2673] = 4.66;
+            $arrayIndicators[2685] = 766.39;
             
             unset($options['byFrequencyNotification']);
             if ($indicator->getDetails()) {
