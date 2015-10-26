@@ -263,7 +263,7 @@ seip:
             value_of_cause: Valor de la Causa
             description: Descripción
             comments: Comentarios
-            verified_by: Veirificado por
+            verified_by: Verificado por
             verification: Verificación
             date: Fecha
         empty:
