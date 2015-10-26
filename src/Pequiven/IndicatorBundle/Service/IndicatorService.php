@@ -2878,6 +2878,27 @@ class IndicatorService implements ContainerAwareInterface {
             $data['dataSource']['dataset'][] = $dataSetPlan;
             $data['dataSource']['dataset'][] = $medition;
         } elseif (isset($options['byFrequencyNotification']) && array_key_exists('byFrequencyNotification', $options)) {
+            
+            $arrayIndicators[2600] = 88.45;
+            $arrayIndicators[2609] = 74.97;
+            $arrayIndicators[2611] = 100.0;
+            $arrayIndicators[2607] = 90.39;
+            $arrayIndicators[2602] = 81.73;
+            $arrayIndicators[2605] = 81.73;
+            $arrayIndicators[1870] = 82.35;
+            $arrayIndicators[1910] = 93.08;
+            $arrayIndicators[1912] = 100.0;
+            $arrayIndicators[1906] = 80.90;
+            $arrayIndicators[1914] = 78.0;
+            $arrayIndicators[1904] = 60.0;
+            $arrayIndicators[1908] = 82.14;
+            $arrayIndicators[1862] = 44.65;
+            $arrayIndicators[1858] = 30.60;
+            $arrayIndicators[1854] = 7.82;
+            $arrayIndicators[1860] = 31.73;
+            $arrayIndicators[2595] = 24.80;
+            $arrayIndicators[1354] = 49.02;
+            
             unset($options['byFrequencyNotification']);
             if ($indicator->getDetails()) {
                 $chart["pYAxisName"] = $indicator->getDetails()->getResultManagementUnit();
@@ -2937,7 +2958,11 @@ class IndicatorService implements ContainerAwareInterface {
 
             if ($indicator->getShowColumnPlanOneTimeInDashboard() || $indicator->getShowColumnPlanAtTheEnd()) {
                 $category[] = array('label' => 'Plan Anual');
-                $dataSetReal["data"][] = array('value' => number_format($arrayVariables['valuePlan'][2], 2, ',', '.'), 'color' => '#E91212');
+                $valuePlanAtTheEnd = $arrayVariables['valuePlan'][2];
+                if(array_key_exists($indicator->getId(), $arrayIndicators)){
+                    $valuePlanAtTheEnd = $arrayIndicators[$indicator->getId()];
+                }
+                $dataSetReal["data"][] = array('value' => number_format($valuePlanAtTheEnd, 2, ',', '.'), 'color' => '#E91212');
             }
 
 
