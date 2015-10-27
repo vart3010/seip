@@ -68,7 +68,7 @@ class EvolutionActionType extends AbstractType
                     'empty_value' => 'Seleccione...',
                     'required' => true,
                 ))
-            ->add('responsibles', null, array(
+            ->add('responsible', null, array(
                     'query_builder' => function(\Pequiven\SEIPBundle\Repository\UserRepository $repository) {
                         return $repository->findQueryUsersByCriteria();
                     },                               

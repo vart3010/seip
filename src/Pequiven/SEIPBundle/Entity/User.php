@@ -221,10 +221,11 @@ class User extends BaseUser implements UserInterface, UserBoxInterface, PeriodIt
     private $workStudyCircles;
 
     /**
-     * Metas
+     * aciones
      * 
      * @var \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionAction
-     * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionAction",mappedBy="responsibles")
+     * @ORM\ManyToMany(targetEntity="\Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionAction", inversedBy="responsible", cascade={"persist","remove"}) 
+     * @ORM\JoinTable(name="seip_report_evolution_action_responsibles")    
      */
     private $evolutionAction;
 
@@ -946,7 +947,7 @@ class User extends BaseUser implements UserInterface, UserBoxInterface, PeriodIt
      * @param \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionAction $evolutionAction
      * @return User
      */
-    public function addEvolutionAction(\Pequiven\ArrangementProgramBundle\Entity\Goal $evolutionAction) {
+    public function addEvolutionAction(\Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionAction $evolutionAction) {
         $this->evolutionAction[] = $evolutionAction;
 
         return $this;
@@ -957,7 +958,7 @@ class User extends BaseUser implements UserInterface, UserBoxInterface, PeriodIt
      *
      * @param \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionAction $evolutionAction
      */
-    public function removeEvolutionAction(\Pequiven\ArrangementProgramBundle\Entity\Goal $evolutionAction) {
+    public function removeEvolutionAction(\Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionAction $evolutionAction) {
         $this->evolutionAction->removeElement($evolutionAction);
     }
 

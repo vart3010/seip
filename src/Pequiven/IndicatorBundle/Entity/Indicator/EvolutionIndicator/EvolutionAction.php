@@ -133,10 +133,19 @@ class EvolutionAction extends Model {
      * Responsables
      * @var \Pequiven\SEIPBundle\Entity\User
      *
-     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\User",inversedBy="evolutionAction")
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\User")
      * @ORM\JoinColumn(name="responsible_id", referencedColumnName="id")
      */
     private $responsibles;
+
+    /**
+     * Responsables
+     * @var \Pequiven\SEIPBundle\Entity\User
+     *
+     * @ORM\ManyToMany(targetEntity="\Pequiven\SEIPBundle\Entity\User",mappedBy="evolutionAction")     
+     * 
+     */
+    private $responsible;
 
     /**
      * Constructor
@@ -145,6 +154,7 @@ class EvolutionAction extends Model {
     {
         $this->verificationRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->relactionValue = new \Doctrine\Common\Collections\ArrayCollection();        
+        $this->responsible = new \Doctrine\Common\Collections\ArrayCollection();        
     }
     
     /**
@@ -491,6 +501,37 @@ class EvolutionAction extends Model {
     public function setResponsibles($responsibles) {
         $this->responsibles = $responsibles;
         return $responsibles;
+    }
+
+    //responsable
+    /**
+     * Add responsible
+     *
+     * @param \Pequiven\SEIPBundle\Entity\User $responsible
+     * @return Indicator
+     */
+    public function addResponsible(\Pequiven\SEIPBundle\Entity\User $responsible) {
+        $this->responsible[] = $responsible;
+
+        return $this;
+    }
+
+    /**
+     * Remove responsible
+     *
+     * @param \Pequiven\SEIPBundle\Entity\User $responsible
+     */
+    public function removeResponsible(\Pequiven\SEIPBundle\Entity\User $responsible) {
+        $this->responsible->removeElement($responsible);
+    }
+
+    /**
+     * Get responsible
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getResponsible() {
+        return $this->responsible;
     }
     
 }

@@ -1510,7 +1510,7 @@ angular.module('seipModule.controllers', [])
                         successCallBack(data);
                     }
                     notificationBarService.getLoadStatus().done();
-                    location.reload(); 
+                    //location.reload(); 
                     return true;
                 }).error(function (data, status, headers, config) {
                     $scope.templateOptions.setVar("form", {errors: {}});
@@ -1549,7 +1549,7 @@ angular.module('seipModule.controllers', [])
                         successCallBack(data);
                     }
                     notificationBarService.getLoadStatus().done();
-                    $timeout(callAtTimeout, 3000);  
+                    //$timeout(callAtTimeout, 3000);  
                     return true;
                 }).error(function (data, status, headers, config) {
                     $scope.templateOptions.setVar("form", {errors: {}});
@@ -1565,7 +1565,7 @@ angular.module('seipModule.controllers', [])
                     return false;
                 });
                 function callAtTimeout() {                    
-                    location.reload();
+                    //location.reload();
                 }
             };
             //Añadir El Plan de Accion de la desviación
@@ -1586,13 +1586,12 @@ angular.module('seipModule.controllers', [])
                     data: formData,
                     headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'}  // set the headers so angular passing info as form data (not request payload)
                 }).success(function (data) {
-                    $scope.templateOptions.setVar("form", {errors: {}});
-                    //$scope.templateOptions.setVar('evaluationResult', data.result);
+                    $scope.templateOptions.setVar("form", {errors: {}});                    
                     if (successCallBack) {
                         successCallBack(data);
                     }
                     notificationBarService.getLoadStatus().done();
-                    location.reload(); 
+                    //location.reload(); 
                     return true;
                 }).error(function (data, status, headers, config) {
                     $scope.templateOptions.setVar("form", {errors: {}});
@@ -1631,7 +1630,7 @@ angular.module('seipModule.controllers', [])
                         successCallBack(data);
                     }
                     notificationBarService.getLoadStatus().done();
-                    location.reload();              
+                    //location.reload();              
                     return true;
                 }).error(function (data, status, headers, config) {
                     $scope.templateOptions.setVar("form", {errors: {}});
@@ -1787,7 +1786,7 @@ angular.module('seipModule.controllers', [])
                 
                 function callAtTimeout() {
                     //console.log("Timeout occurred");
-                    location.reload();
+                    //location.reload();
                 }
             };
             //Removiendo las causas
@@ -1815,7 +1814,7 @@ angular.module('seipModule.controllers', [])
                     $timeout(callAtTimeout, 3000);                    
                 });
                 function callAtTimeout() {                    
-                    location.reload();
+                    //location.reload();
                 }
             };
             //Removiendo las acciones
@@ -1843,7 +1842,7 @@ angular.module('seipModule.controllers', [])
                     $timeout(callAtTimeout, 3000);                    
                 });
                 function callAtTimeout() {                    
-                    location.reload();
+                    //location.reload();
                 }
             };
         })

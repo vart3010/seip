@@ -162,7 +162,7 @@ class ReportEvolutionController extends ResourceController
 
         if ($typeObject == 1) {
             
-            $result = $this->findIndicatorOr404($request);        
+            $result = $this->findIndicatorOr404($request); 
 
             foreach ($result->getObjetives() as $value) {
                 
@@ -290,21 +290,20 @@ class ReportEvolutionController extends ResourceController
      */
     public function addAction(Request $request)
     {   
-        $id = $this->getRequest()->get('id');
+        $id = $this->getRequest()->get('idIndicator');
         $typeObject = $this->getRequest()->get('typeObj');
         
         $user = $this->getUser();
-        
+
         $causeAction = $request->get('actionResults')['evolutionCause'];//Recibiendo Causa
         
-        $responsible = $request->get('actionResults')['responsibles'];//Recibiendo Responsable
-        
+        $responsible = $request->get('actionResults')['responsible'];//Recibiendo Responsable
+
         $AcValue = $request->get('actionValue')['advance'];//RecibiendoValue
         $AcObservation = $request->get('actionValue')['observations'];//RecibiendoObservations
         $month = date("m");//Carga del mes de Creación de la causa "Automatico"  
 
-        $causeResult = $this->get('pequiven.repository.sig_causes_report_evolution')->find($causeAction);
-        $responsible = $this->get('pequiven_seip.repository.user')->find($responsible);
+        $causeResult = $this->get('pequiven.repository.sig_causes_report_evolution')->find($causeAction);        
         
         //Calculando la cantidad de meses que durara la acción
         $dateStart = $request->get('actionResults')['dateStart'];
@@ -322,11 +321,18 @@ class ReportEvolutionController extends ResourceController
             $action = new EvolutionAction();
             $form  = $this->createForm(new EvolutionActionType($id, $typeObject), $action);
             
+            $catnRes = count($responsible);
+            $contaRes = 0;            
+            foreach ($responsible as $value) {
+                $responsible = $this->get('pequiven_seip.repository.user')->find($value);
+                $action->addResponsible($responsible);//Responsable del plan de Acción                
+            }            
+            //die();
+            
             $action->setCreatedBy($user);
             $action->setEvolutionCause($causeResult);
             $action->setMonth($data);//Carga de Mes(var month)
             $action->setTypeObject($typeObject);//Tipo de Objeto
-            $action->setResponsibles($responsible);//Responsable del plan de Acción
             
             $form->handleRequest($request);
 
