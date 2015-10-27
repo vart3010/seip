@@ -311,6 +311,16 @@ class SecurityService implements ContainerAwareInterface
                 }
             }
 
+        }elseif($user->getId() == 871 OR $user->getId() == 887 OR $user->getId() == 4531){
+            
+            foreach ($indicator->getObjetives() as $value) {
+                foreach ($value->getLineStrategics() as $line) {
+                    if($line->getId() === 5){
+                        $valid = true;
+                    }                                    
+                }
+            }
+
         }else{
         }
 
