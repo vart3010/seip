@@ -31,7 +31,7 @@
 {% block body %}
     <div class="" ng-init="urlValueLastIndicatorForm='{{ path('pequiven_indicator_last_period_form',{'idIndicator':indicator_sig.id }) }}'">
     <div class="block_id" ng-init="id_indicator='{{ indicator_sig.id }}'"></div>
-    <div class="block_id" ng-init="typeObj='{{ typeObject }}'"></div>
+    <div class="block_id" ng-init="typeObj='{{ typeObject }}'"></div>    
     
     {% if is_granted('ROLE_SEIP_SIG_EVOLUTION_LAST_PERIOD') %}  
 

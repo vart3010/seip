@@ -1522,7 +1522,7 @@ angular.module('seipModule.controllers', [])
                         successCallBack(data);
                     }
                     notificationBarService.getLoadStatus().done();
-                    location.reload(); 
+                    $timeout(callAtTimeout, 1500);                      
                     return true;
                 }).error(function (data, status, headers, config) {
                     $scope.templateOptions.setVar("form", {errors: {}});
@@ -1537,6 +1537,9 @@ angular.module('seipModule.controllers', [])
                     notificationBarService.getLoadStatus().done();
                     return false;
                 });
+                function callAtTimeout() {                    
+                    location.reload();
+                }                
             };
             //Añadir El Plan de Accion de la desviación
             var addAction = function (save, successCallBack) {
@@ -1580,7 +1583,7 @@ angular.module('seipModule.controllers', [])
                     location.reload();
                 }
             };
-            //Añadir El Plan de Accion de la desviación
+            //Añadir Valores del Plan de Accion de la desviación
             var addActionValues = function (save, successCallBack) {
                 var formValueIndicator = angular.element('#form_action_values_evolution');
                 var formData = formValueIndicator.serialize();
@@ -1598,13 +1601,12 @@ angular.module('seipModule.controllers', [])
                     data: formData,
                     headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'}  // set the headers so angular passing info as form data (not request payload)
                 }).success(function (data) {
-                    $scope.templateOptions.setVar("form", {errors: {}});
-                    //$scope.templateOptions.setVar('evaluationResult', data.result);
+                    $scope.templateOptions.setVar("form", {errors: {}});                    
                     if (successCallBack) {
                         successCallBack(data);
                     }
                     notificationBarService.getLoadStatus().done();
-                    location.reload(); 
+                    $timeout(callAtTimeout, 1500);                       
                     return true;
                 }).error(function (data, status, headers, config) {
                     $scope.templateOptions.setVar("form", {errors: {}});
@@ -1619,6 +1621,9 @@ angular.module('seipModule.controllers', [])
                     notificationBarService.getLoadStatus().done();
                     return false;
                 });
+                function callAtTimeout() {                    
+                    location.reload();
+                }
             };
             //añade el analisis de la tendencia del indicador
             var addTrendEvolution = function (save, successCallBack) {
@@ -1643,7 +1648,7 @@ angular.module('seipModule.controllers', [])
                         successCallBack(data);
                     }
                     notificationBarService.getLoadStatus().done();
-                    location.reload();              
+                    $timeout(callAtTimeout, 1500);             
                     return true;
                 }).error(function (data, status, headers, config) {
                     $scope.templateOptions.setVar("form", {errors: {}});
@@ -1657,7 +1662,10 @@ angular.module('seipModule.controllers', [])
                     }                    
                     notificationBarService.getLoadStatus().done();
                     return false;
-                });  
+                });
+                function callAtTimeout() {                    
+                    location.reload();
+                }  
             };
             $scope.templateOptions.setVar('addCause', addCause);
             $scope.templateOptions.setVar('addAction', addAction);
@@ -1682,7 +1690,7 @@ angular.module('seipModule.controllers', [])
             $scope.initFormTrend = function (resource) {
                 var d = new Date();
                 var numero = d.getTime();
-                //$scope.setHeight(350);                                
+                $scope.setHeight(350);                                
 
                 var parameters = {
                     idIndicator: $scope.id_indicator,
@@ -1753,6 +1761,7 @@ angular.module('seipModule.controllers', [])
 
                 var d = new Date();
                 var numero = d.getTime();
+                $scope.setHeight(420);
 
                 var parameters = {
                     idIndicator: $scope.id_indicator,
@@ -1899,8 +1908,7 @@ angular.module('seipModule.controllers', [])
                     data: formData,
                     headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'}  // set the headers so angular passing info as form data (not request payload)
                 }).success(function (data) {
-                    $scope.templateOptions.setVar("form", {errors: {}});
-                    //$scope.templateOptions.setVar('evaluationResult', data.result);
+                    $scope.templateOptions.setVar("form", {errors: {}});                    
                     if (successCallBack) {
                         successCallBack(data);
                     }
@@ -1916,8 +1924,7 @@ angular.module('seipModule.controllers', [])
                             });
                         }
                         $scope.templateOptions.setVar("form", {errors: data.errors.children});
-                    }
-                    //$scope.templateOptions.setVar('evaluationResult', 0);
+                    }                    
                     notificationBarService.getLoadStatus().done();
                     return false;
                 });
@@ -1935,6 +1942,7 @@ angular.module('seipModule.controllers', [])
 
                 var d = new Date();
                 var numero = d.getTime();
+                $scope.setHeight(350);
 
                 var parameters = {
                     idIndicator: $scope.id_indicator,
@@ -2301,6 +2309,7 @@ angular.module('seipModule.controllers', [])
             $scope.initFormAsocLast = function (resource) {
                 var d = new Date();
                 var numero = d.getTime();
+                $scope.setHeight(350);                
                 var parameters = {
                     idIndicator: $scope.id_indicator,
                     _dc: numero

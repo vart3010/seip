@@ -108,6 +108,7 @@ class ReportEvolutionCausesController extends ResourceController
             $em = $this->getDoctrine()->getManager();
             $em->persist($causeAnalysis);
             $em->flush();
+            $this->get('session')->getFlashBag()->add('success', "Analisis de Causas Cargado Correctamente");            
         }     
     }
 

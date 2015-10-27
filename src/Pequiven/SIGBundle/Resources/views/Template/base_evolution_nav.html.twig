@@ -1,0 +1,35 @@
+	{% set month = "now"|date("m") %}
+
+	{# Recibo el mes #}
+	{% if month == 1 %}
+        {% set setmonth = "12" %} 
+    {% elseif month == 2 %}
+        {% set setmonth = "01" %}
+    {% elseif month == 3 %}
+        {% set setmonth = "02" %}
+    {% elseif month == 4 %}
+        {% set setmonth = "03" %}
+    {% elseif month == 5 %}
+        {% set setmonth = "04" %}
+    {% elseif month == 6 %}
+        {% set setmonth = "05" %}
+    {% elseif month == 7 %}
+        {% set setmonth = "06" %}
+    {% elseif month == 8 %}
+        {% set setmonth = "07" %}
+    {% elseif month == 9 %}
+        {% set setmonth = "08" %}
+    {% elseif month == 10 %}
+        {% set setmonth = "09" %}
+    {% elseif month == 11 %}
+        {% set setmonth = "10" %}
+    {% elseif month == 12 %}
+        {% set setmonth = "11" %}
+    {% endif %}
+        
+        {#{% if  indicator.managementSystems | length > 0 and is_granted('ROLE_SEIP_SIG_EVOLUTION_VIEW') %}#}
+        {% if indicator.showEvolutionView %}
+        &nbsp;
+            {{ buttons.generic_ext(path('pequiven_indicator_evolution', { 'id': indicator.id , 'month': setmonth}),('pequiven.evolution'|trans({},'messages'))) }}
+        {% endif %}
+        &nbsp;
