@@ -290,6 +290,8 @@ class ReportEvolutionController extends ResourceController
      */
     public function addAction(Request $request)
     {   
+        $em = $this->getDoctrine()->getManager();
+
         $id = $this->getRequest()->get('idIndicator');
         $typeObject = $this->getRequest()->get('typeObj');
         
@@ -318,15 +320,16 @@ class ReportEvolutionController extends ResourceController
         
         $count = 0; $data = (int)$dStart;
             
+            $em->getConnection()->beginTransaction();
             $action = new EvolutionAction();
             $form  = $this->createForm(new EvolutionActionType($id, $typeObject), $action);
             
             $catnRes = count($responsible);
             $contaRes = 0;            
-            foreach ($responsible as $value) {
+            /*foreach ($responsible as $value) {
                 $responsible = $this->get('pequiven_seip.repository.user')->find($value);
                 $action->addResponsible($responsible);//Responsable del plan de Acción                
-            }            
+            }   */         
             //die();
             
             $action->setCreatedBy($user);
@@ -337,9 +340,17 @@ class ReportEvolutionController extends ResourceController
             $form->handleRequest($request);
 
             if ($form->isSubmitted()) {
-                $em = $this->getDoctrine()->getManager();
+                
                 $em->persist($action);
                 $em->flush();
+                
+                try {
+                    $em->flush();
+                    $em->getConnection()->commit();
+                } catch (Exception $e) {
+                    $em->getConnection()->rollback();
+                throw $e;
+                }
             } 
     
             $idAction = $action->getId();               
@@ -355,7 +366,6 @@ class ReportEvolutionController extends ResourceController
                         $relactionValue->setMonth($data);
                         $relactionValue->setActionValue($action);
 
-                        $em = $this->getDoctrine()->getManager();
                         $em->persist($relactionValue);
                         $em->flush();
 
@@ -365,9 +375,7 @@ class ReportEvolutionController extends ResourceController
                     //$AcValue = 0;
                 }
             }
-
-        //}
-
+    
     }
 
     /**

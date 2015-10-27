@@ -1510,7 +1510,7 @@ angular.module('seipModule.controllers', [])
                         successCallBack(data);
                     }
                     notificationBarService.getLoadStatus().done();
-                    //location.reload(); 
+                    $timeout(callAtTimeout, 2500);                      
                     return true;
                 }).error(function (data, status, headers, config) {
                     $scope.templateOptions.setVar("form", {errors: {}});
@@ -1525,6 +1525,9 @@ angular.module('seipModule.controllers', [])
                     notificationBarService.getLoadStatus().done();
                     return false;
                 });
+                function callAtTimeout() {                    
+                    location.reload();
+                }                
             };
             //Añadir El Plan de Accion de la desviación
             var addAction = function (save, successCallBack) {
@@ -1549,7 +1552,7 @@ angular.module('seipModule.controllers', [])
                         successCallBack(data);
                     }
                     notificationBarService.getLoadStatus().done();
-                    //$timeout(callAtTimeout, 3000);  
+                    $timeout(callAtTimeout, 3000);  
                     return true;
                 }).error(function (data, status, headers, config) {
                     $scope.templateOptions.setVar("form", {errors: {}});
@@ -1565,10 +1568,10 @@ angular.module('seipModule.controllers', [])
                     return false;
                 });
                 function callAtTimeout() {                    
-                    //location.reload();
+                    location.reload();
                 }
             };
-            //Añadir El Plan de Accion de la desviación
+            //Añadir Valores del Plan de Accion de la desviación
             var addActionValues = function (save, successCallBack) {
                 var formValueIndicator = angular.element('#form_action_values_evolution');
                 var formData = formValueIndicator.serialize();
@@ -1591,7 +1594,7 @@ angular.module('seipModule.controllers', [])
                         successCallBack(data);
                     }
                     notificationBarService.getLoadStatus().done();
-                    //location.reload(); 
+                    $timeout(callAtTimeout, 2500);                       
                     return true;
                 }).error(function (data, status, headers, config) {
                     $scope.templateOptions.setVar("form", {errors: {}});
@@ -1606,6 +1609,9 @@ angular.module('seipModule.controllers', [])
                     notificationBarService.getLoadStatus().done();
                     return false;
                 });
+                function callAtTimeout() {                    
+                    location.reload();
+                }
             };
             //añade el analisis de la tendencia del indicador
             var addTrendEvolution = function (save, successCallBack) {
@@ -1630,7 +1636,7 @@ angular.module('seipModule.controllers', [])
                         successCallBack(data);
                     }
                     notificationBarService.getLoadStatus().done();
-                    //location.reload();              
+                    $timeout(callAtTimeout, 2500);             
                     return true;
                 }).error(function (data, status, headers, config) {
                     $scope.templateOptions.setVar("form", {errors: {}});
@@ -1644,7 +1650,10 @@ angular.module('seipModule.controllers', [])
                     }                    
                     notificationBarService.getLoadStatus().done();
                     return false;
-                });  
+                });
+                function callAtTimeout() {                    
+                    location.reload();
+                }  
             };
             $scope.templateOptions.setVar('addCause', addCause);
             $scope.templateOptions.setVar('addAction', addAction);
@@ -1669,7 +1678,7 @@ angular.module('seipModule.controllers', [])
             $scope.initFormTrend = function (resource) {
                 var d = new Date();
                 var numero = d.getTime();
-                //$scope.setHeight(350);                                
+                $scope.setHeight(350);                                
 
                 var parameters = {
                     idIndicator: $scope.id_indicator,
@@ -1740,6 +1749,7 @@ angular.module('seipModule.controllers', [])
 
                 var d = new Date();
                 var numero = d.getTime();
+                $scope.setHeight(420);
 
                 var parameters = {
                     idIndicator: $scope.id_indicator,
@@ -1786,7 +1796,7 @@ angular.module('seipModule.controllers', [])
                 
                 function callAtTimeout() {
                     //console.log("Timeout occurred");
-                    //location.reload();
+                    location.reload();
                 }
             };
             //Removiendo las causas
@@ -1814,7 +1824,7 @@ angular.module('seipModule.controllers', [])
                     $timeout(callAtTimeout, 3000);                    
                 });
                 function callAtTimeout() {                    
-                    //location.reload();
+                    location.reload();
                 }
             };
             //Removiendo las acciones
@@ -1842,7 +1852,7 @@ angular.module('seipModule.controllers', [])
                     $timeout(callAtTimeout, 3000);                    
                 });
                 function callAtTimeout() {                    
-                    //location.reload();
+                    location.reload();
                 }
             };
         })
@@ -1922,6 +1932,7 @@ angular.module('seipModule.controllers', [])
 
                 var d = new Date();
                 var numero = d.getTime();
+                $scope.setHeight(350);
 
                 var parameters = {
                     idIndicator: $scope.id_indicator,

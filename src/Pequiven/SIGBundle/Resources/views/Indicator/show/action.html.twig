@@ -55,9 +55,12 @@
                             <td rowspan="2">{{ action.actionValue.dateEnd | date("d/m/Y") }}</td>
                             <td rowspan="2">{{ action.advance }}%</td>
                             <td rowspan="2">
-                                {% if action.actionValue.responsibles %}
-                                    {{ action.actionValue.responsibles.firstname }} {{ action.actionValue.responsibles.lastname }}
-                                    <small class="tag">({{ action.actionValue.responsibles.username }})</small>
+                                {% if action.actionValue.responsible %}
+                                    {% for resp in action.actionValue.responsible %}
+                                        {{ resp.firstname }} {{ resp.lastname }}
+                                        <small class="tag">({{ resp.username }})</small>
+                                        <br>
+                                    {% endfor %}
                                 {% else %}
                                     SIN RESPONSABLE CARGADO
                                 {% endif %}

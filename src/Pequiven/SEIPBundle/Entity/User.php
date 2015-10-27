@@ -224,8 +224,8 @@ class User extends BaseUser implements UserInterface, UserBoxInterface, PeriodIt
      * aciones
      * 
      * @var \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionAction
-     * @ORM\ManyToMany(targetEntity="\Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionAction", inversedBy="responsible", cascade={"persist","remove"}) 
-     * @ORM\JoinTable(name="seip_report_evolution_action_responsibles")    
+     * @ORM\ManyToMany(targetEntity="\Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionAction", mappedBy="responsible") 
+     * 
      */
     private $evolutionAction;
 

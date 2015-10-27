@@ -142,8 +142,8 @@ class EvolutionAction extends Model {
      * Responsables
      * @var \Pequiven\SEIPBundle\Entity\User
      *
-     * @ORM\ManyToMany(targetEntity="\Pequiven\SEIPBundle\Entity\User",mappedBy="evolutionAction")     
-     * 
+     * @ORM\ManyToMany(targetEntity="\Pequiven\SEIPBundle\Entity\User",inversedBy="evolutionAction", cascade={"persist","remove"})     
+     * @ORM\JoinTable(name="seip_report_evolution_action_responsibles")    
      */
     private $responsible;
 
