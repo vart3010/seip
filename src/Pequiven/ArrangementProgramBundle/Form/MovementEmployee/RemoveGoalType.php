@@ -15,6 +15,8 @@ class RemoveGoalType extends AbstractType {
 
     public function buildForm(FormBuilderInterface $builder, array $options) {
         $id = $this->id;
+        $post_mortem=$this->post_mortem;
+        
         $builder
                 ->add('date', 'date', [
                     'label_attr' => array('class' => 'label bold'),
@@ -24,20 +26,42 @@ class RemoveGoalType extends AbstractType {
                     'required' => true,
                     'attr' => array('class' => 'input input-large'),
                     'required' => true,
-                ])
-                ->add('User', null, array(
-                    'query_builder' => function(UserRepository $repository) use ($id) {
-                        return $repository->findQuerytoRemoveAssingedGoal($id);
-                    },
-                    'label' => 'Empleados Asignados',
-                    'empty_value' => 'Seleccione...',
-                    'label_attr' => array('class' => 'label'),
-                    'attr' => array(
-                        'class' => "select2 input-large form-control",
-                        'style' => 'width: 270px',
-                    ),
-                    'required' => true,
-                ))
+        ]);
+
+        if ($post_mortem == true) {
+            $builder
+                    ->add('User', 'entity', array(
+                        'label' => 'Empleado',
+                        'empty_value' => 'Seleccione...',
+                        'required' => true,
+                        'query_builder' => function(UserRepository $repository) {
+                            return $repository->findQueryUsersByCriteria();
+                        },
+                        'label_attr' => array('class' => 'label'),
+                        'class' => 'Pequiven\SEIPBundle\Entity\User',
+                        'attr' => array(
+                            'class' => 'select2 input-large form-control',
+                            'style' => 'width: 300px'
+                        ),
+            ));
+        } else {
+            $builder
+                    ->add('User', null, array(
+                        'query_builder' => function(UserRepository $repository) use ($id) {
+                            return $repository->findQuerytoRemoveAssingedGoal($id);
+                        },
+                        'label' => 'Empleados Asignados',
+                        'empty_value' => 'Seleccione...',
+                        'label_attr' => array('class' => 'label'),
+                        'attr' => array(
+                            'class' => "select2 input-large form-control",
+                            'style' => 'width: 270px',
+                        ),
+                        'required' => true,
+            ));
+        }
+
+        $builder
                 ->add('cause', 'choice', array(
                     'label' => 'Motivo o Causa',
                     'required' => true,
@@ -70,8 +94,9 @@ class RemoveGoalType extends AbstractType {
 
     protected $id;
 
-    public function __construct($id) {
+    public function __construct($id, $post_mortem) {
         $this->id = $id;
+        $this->post_mortem = $post_mortem;
     }
 
 }

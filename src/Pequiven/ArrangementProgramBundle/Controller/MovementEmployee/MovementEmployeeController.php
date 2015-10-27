@@ -21,10 +21,21 @@ class MovementEmployeeController extends SEIPController {
 
         //INSTANCIACIÓN DE ENTIDADES
         $MovementEmployee = new MovementEmployee();
+        
+        //VERIFICO LA PERMISOLOGÍA DEL USUARIO SI PUEDE RETIRAR EMPLEADOS POST-MORTEM
+        $securityService = $this->getSecurityService();
+        if ($securityService->isGranted(array("ROLE_SEIP_ARRANGEMENT_PROGRAM_MOVEMENT_GOALS_POST_MORTEM"))) {
+            $post_mortem = true;
+        } else {
+            $post_mortem = false;
+        }
+
+        var_dump($post_mortem);
+        die();
 
         //FORMULARIOS DE ENTRADA Y SALIDA
         $formassign = $this->createForm(new AssignGoalType(), $MovementEmployee);
-        $formremove = $this->createForm(new RemoveGoalType($id), $MovementEmployee);
+        $formremove = $this->createForm(new RemoveGoalType($id, $post_mortem), $MovementEmployee);
 
         //RESPONSABLES ASIGNADOS
         $responsibles = $this->get('pequiven_seip.repository.user')->findQuerytoRemoveAssingedGoal($id, false);

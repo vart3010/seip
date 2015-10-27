@@ -960,11 +960,20 @@ class ArrangementProgramController extends SEIPController {
                 $data['formErrors'] = $editForm;
             }
         }//Fin isMethodPost
+        
+        //VALIDO QUE TENGA PERMISOS PARA MOVER EMPLEADOS EN METAS         
+        $securityService = $this->getSecurityService();
+        if ($securityService->isGranted(array("ROLE_SEIP_ARRANGEMENT_PROGRAM_MOVEMENT_GOALS"))) {
+            $MovementEmployee = true;
+        } else {
+            $MovementEmployee = false;
+        }
 
         $data = array(
             'entity' => $entity,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
+            'mov' => $MovementEmployee,
         );
 
         $view = $this->view($data);
