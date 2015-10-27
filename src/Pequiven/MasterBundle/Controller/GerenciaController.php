@@ -486,7 +486,7 @@ class GerenciaController extends baseController {
         }
         $row = $rowFinTac + 1;
         $activeSheet->setCellValue(sprintf('A%s',$row),'NIVEL DE REVISION: 1');
-        $activeSheet->setCellValue(sprintf('V%s',$row),'C-CP-DM-OI-R-001');
+        $activeSheet->setCellValue(sprintf('V%s',$row),'C-PG-DM-OI-R-001');
         $activeSheet->getStyle(sprintf('A%s:V%s',$row,$row))->getFont()->setSize(8);
         
         $fileName = sprintf('SEIP-Matriz de Objetivos-%s-%s.xls',$gerencia->getDescription(),$now->format('Ymd-His'));
