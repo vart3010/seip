@@ -30,9 +30,6 @@ class MovementEmployeeController extends SEIPController {
             $post_mortem = false;
         }
 
-        var_dump($post_mortem);
-        die();
-
         //FORMULARIOS DE ENTRADA Y SALIDA
         $formassign = $this->createForm(new AssignGoalType(), $MovementEmployee);
         $formremove = $this->createForm(new RemoveGoalType($id, $post_mortem), $MovementEmployee);
