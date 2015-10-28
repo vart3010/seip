@@ -154,9 +154,9 @@
     </fieldset>
     
     <fieldset class="fieldset">
-        {% if workStudyCircle.phase == (constant('Pequiven\\SEIPBundle\\Entity\\Politic\\WorkStudyCircle::PHASE_TWO') %}
+        {% if workStudyCircle.phase == constant('Pequiven\\SEIPBundle\\Entity\\Politic\\WorkStudyCircle::PHASE_TWO') %}
             <legend class="legend" >{{ "workStudyCircle.form.proposalsPhaseOne"|trans }}&nbsp;</legend>
-        {% elseif workStudyCircle.phase == (constant('Pequiven\\SEIPBundle\\Entity\\Politic\\WorkStudyCircle::PHASE_THREE') %}
+        {% elseif workStudyCircle.phase == constant('Pequiven\\SEIPBundle\\Entity\\Politic\\WorkStudyCircle::PHASE_THREE') %}
             <legend class="legend" >{{ "workStudyCircle.form.proposalsPhaseTwo"|trans }}&nbsp;</legend>
         {% endif %}
         
