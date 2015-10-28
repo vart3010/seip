@@ -45,7 +45,17 @@ class ProposalType extends AbstractType {
                     ),
                     'mapped' => false,
                     'attr' => array(
-//                    'class' => 'input input-large',
+                        'cols' => '80',
+                        'rows' => '10',
+                        'style' => 'text-transform:uppercase'
+            )))
+                ->add('description3', 'textarea', array(
+                    'label' => 'Propuesta 3',
+                    'label_attr' => array(
+                        'class' => 'label',
+                    ),
+                    'mapped' => false,
+                    'attr' => array(
                         'cols' => '80',
                         'rows' => '10',
                         'style' => 'text-transform:uppercase'
