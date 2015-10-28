@@ -708,13 +708,15 @@ class ReportEvolutionController extends ResourceController
                 $gerData = $value->getGerencia();//Si tiene gerencia
                 
                 if($compData){
-                    $complejo = $compData->getRef().''."-";                    
+                    $complejo = $compData->getRef().''."-";
+                    $complejo = strtoupper($complejo);
                 }else{
                     $complejo = "S/C-";
                     //$complejo = "";
                 }
                 if ($gerData) {                
-                    $gerencia = $gerData->getAbbreviation().''."-";                    
+                    $gerencia = $gerData->getAbbreviation().''."-"; 
+                    $gerencia = strtoupper($gerencia);
                 }else{
                     $gerencia = "S/G-";
                     //$gerencia = "";
