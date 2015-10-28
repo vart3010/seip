@@ -108,7 +108,7 @@ class SecurityService implements ContainerAwareInterface
             if($workStudyCircle->getId() == $user->getWorkStudyCircle()->getId()){
                 $result = true;
             }
-        } elseif($workStudyCircle->getPhase() == WorkStudyCircle::PHASE_TWO){
+        } elseif($workStudyCircle->getPhase() == WorkStudyCircle::PHASE_TWO || $workStudyCircle->getPhase() == WorkStudyCircle::PHASE_THREE){
             foreach($user->getWorkStudyCircles() as $workStudyCircleObject){
                 if($workStudyCircle->getId() == $workStudyCircleObject->getId()){
                     $result = true;

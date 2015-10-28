@@ -28,7 +28,7 @@
                 {{ form_errors(form.lineStrategic) }}
                 <span class="info-spot">
                     <span class="icon-info-round"></span>
-                    <span class="info-bubble">Sólo debe ingresar 2 propuestas por línea estratégica</span>
+                    <span class="info-bubble">Sólo debe ingresar 3 propuestas por línea estratégica</span>
                 </span>
             </div>
             <div class="field-block" id="objetives">
@@ -46,6 +46,15 @@
                 {{ form_label(form.description2) }}
                 {{ form_widget(form.description2) }}
                 {{ form_errors(form.description2) }}
+                <span class="info-spot">
+                    <span class="icon-info-round"></span>
+                    <span class="info-bubble">La propuesta debe contener 20 caracteres como mínimo</span>
+                </span>
+            </div>
+            <div class="field-block button-height">
+                {{ form_label(form.description3) }}
+                {{ form_widget(form.description3) }}
+                {{ form_errors(form.description3) }}
                 <span class="info-spot">
                     <span class="icon-info-round"></span>
                     <span class="info-bubble">La propuesta debe contener 20 caracteres como mínimo</span>
@@ -71,6 +80,7 @@
         function statusFieldsProposal(band) {
             $("#proposal_data_description1").prop("disabled", band);
             $("#proposal_data_description2").prop("disabled", band);
+            $("#proposal_data_description3").prop("disabled", band);
         }
 
         {# function validTextArea(text) {

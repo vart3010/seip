@@ -154,7 +154,11 @@
     </fieldset>
     
     <fieldset class="fieldset">
-        <legend class="legend" >{{ "workStudyCircle.form.proposalsPhaseOne"|trans }}&nbsp;</legend>
+        {% if workStudyCircle.phase == constant('Pequiven\\SEIPBundle\\Entity\\Politic\\WorkStudyCircle::PHASE_TWO') %}
+            <legend class="legend" >{{ "workStudyCircle.form.proposalsPhaseOne"|trans }}&nbsp;</legend>
+        {% elseif workStudyCircle.phase == constant('Pequiven\\SEIPBundle\\Entity\\Politic\\WorkStudyCircle::PHASE_THREE') %}
+            <legend class="legend" >{{ "workStudyCircle.form.proposalsPhaseTwo"|trans }}&nbsp;</legend>
+        {% endif %}
         
         <div ng-controller="TableFormatController">
             <div ng-controller="TableProposalController">

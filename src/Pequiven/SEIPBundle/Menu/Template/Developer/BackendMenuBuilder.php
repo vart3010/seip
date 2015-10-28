@@ -1366,6 +1366,22 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                 $reportsPhaseTwo->addChild($reportsPhaseTwoList);
             
             $workStudyCirclesReports->addChild($reportsPhaseTwo);
+            
+                //FASE 3
+                $reportsPhaseThree = $this->factory->createItem('work_study_circles.reports.phase_three', $this->getSubLevelOptions(array(
+                            "route" => "",
+                            'labelAttributes' => array('icon' => 'fa fa-table',),
+                        ))
+                )->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.reports.phase_three', $section)));
+
+                    $reportsPhaseThreeList = $this->factory->createItem('work_study_circles.list', $this->getSubLevelOptions(array(
+                                'route' => 'pequiven_work_study_circle_list',
+                                'routeParameters' => array('phase' => \Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle::PHASE_THREE),
+                            ))
+                        )->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.list', $section)));
+                $reportsPhaseThree->addChild($reportsPhaseThreeList);
+            
+            $workStudyCirclesReports->addChild($reportsPhaseThree);
 
             $menuWorkStudyCircles->addChild($workStudyCirclesReports);
         }

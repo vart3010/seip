@@ -15,6 +15,7 @@ abstract class WorkStudyCircle  {
     const PHASE_ONE = 1;
     const PHASE_TWO = 2;
     const PHASE_THREE = 3;
+    const PHASE_FOUR = 4;
     
     const TYPE_COORDINATOR = 1;
     const TYPE_COORDINATOR_DISCUSSION = 2;
@@ -30,6 +31,7 @@ abstract class WorkStudyCircle  {
             self::PHASE_ONE => 'workStudyCircle.phase',
             self::PHASE_TWO => 'workStudyCircle.phase',
             self::PHASE_THREE => 'workStudyCircle.phase',
+            self::PHASE_FOUR => 'workStudyCircle.phase',
         );
         return $phaseLabels;
     }

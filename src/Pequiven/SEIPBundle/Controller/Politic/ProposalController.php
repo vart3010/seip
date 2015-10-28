@@ -42,21 +42,23 @@ class ProposalController extends SEIPController {
 
             $proposal1 = strtoupper($request->get("proposal_data")["description1"]);
             $proposal2 = strtoupper($request->get("proposal_data")["description2"]);
+            $proposal3 = strtoupper($request->get("proposal_data")["description3"]);
 
-            if (strlen($proposal1) > 20 && strlen($proposal2) > 20) {
+            if (strlen($proposal1) > 20 && strlen($proposal2) > 20 && strlen($proposal3) > 20) {
                 $proposals = array();
                 array_push($proposals, $proposal1);
                 array_push($proposals, $proposal2);
+                array_push($proposals, $proposal3);
 
                 //Obtenemos Línea Estratégica
                 $LineStrategicRepository = $em->getRepository('PequivenMasterBundle:LineStrategic');
                 $lineStrategicObject = $LineStrategicRepository->findOneBy(array('id' => $request->get("proposal_data")["lineStrategic"]));
 
-                if (strlen($proposal1) > 0 && strlen($proposal2) > 0) {
+                if (strlen($proposal1) > 0 && strlen($proposal2) > 0 && strlen($proposal3) > 0) {
                     if (array_key_exists($request->get("proposal_data")["lineStrategic"], $proposalsArray)) {
                         $this->get('session')->getFlashBag()->add('error', 'La Línea Estratégica ya tiene sus 2 propuestas');
                     } else {
-                        for ($i = 1; $i <= 2; $i++) {
+                        for ($i = 1; $i <= 3; $i++) {
                             $proposalObject = new Proposal();
                             $proposalObject->setCreatedBy($user);
                             $proposalObject->setPeriod($period = $this->getPeriodService()->getPeriodActive());
@@ -81,7 +83,7 @@ class ProposalController extends SEIPController {
                         return $this->redirect($this->generateUrl('pequiven_work_study_circle_show_phase', array("id" => $workStudyCircle->getId())));
                     }
                 } else {
-                    $this->get('session')->getFlashBag()->add('error', 'Debe agregar 2 propuestas por línea estratégica');
+                    $this->get('session')->getFlashBag()->add('error', 'Debe agregar 3 propuestas por línea estratégica');
                 }
             } else {
                 $this->get('session')->getFlashBag()->add('error', 'Las propuestas deben tener 20 caracteres como mínimo');
