@@ -216,7 +216,9 @@
                     <td>{{ data.actionValue.dateEnd | date("d/m/Y") }}</td>
                     <td>{{ data.advance }}%</td>
                     <td>
-                        {{ data.actionValue.responsibles.firstname }} {{ data.actionValue.responsibles.lastname }}                        
+                        {% for resp in data.actionValue.responsible %}
+                          {{ resp.firstname }} {{ resp.lastname }}
+                        {% endfor %}
                     </td>
                     <td>{{ data.observations }}</td>
                 </tr>            
