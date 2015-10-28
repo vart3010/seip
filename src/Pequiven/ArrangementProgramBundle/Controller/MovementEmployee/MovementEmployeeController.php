@@ -21,7 +21,7 @@ class MovementEmployeeController extends SEIPController {
 
         //INSTANCIACIÓN DE ENTIDADES
         $MovementEmployee = new MovementEmployee();
-        
+
         //VERIFICO LA PERMISOLOGÍA DEL USUARIO SI PUEDE RETIRAR EMPLEADOS POST-MORTEM
         $securityService = $this->getSecurityService();
         if ($securityService->isGranted(array("ROLE_SEIP_ARRANGEMENT_PROGRAM_MOVEMENT_GOALS_POST_MORTEM"))) {
@@ -61,64 +61,115 @@ class MovementEmployeeController extends SEIPController {
         $em = $this->getDoctrine()->getManager();
         $goal = $em->getRepository('PequivenArrangementProgramBundle:Goal')->findOneById($id);
 
-        $movement = new MovementEmployee();
-        $formAssign = $this->createForm(new AssignGoalType(), $movement);
-        $formAssign->handleRequest($request);
+        $securityService = $this->getSecurityService();
 
-        $em->getConnection()->beginTransaction();
+        //VALIDO PERMISOLOGÍA POR SI ACASO SE ACCEDE DESDE URL DIRECTA
+        if ((($securityService->isGranted(array("ROLE_SEIP_ARRANGEMENT_PROGRAM_MOVEMENT_GOALS")))) || ($securityService->isGranted(array("ROLE_SEIP_ARRANGEMENT_PROGRAM_MOVEMENT_GOALS_POST_MORTEM")))) {
 
-        if ($formAssign->isSubmitted()) {
-
-            //DATOS DE AssignGoalType
-            $cause = $request->get("AssignGoal")["cause"];
-            $date = new \DateTime(str_replace("/", "-", ($request->get("AssignGoal")["date"])));
-            $obs = $request->get("AssignGoal")["observations"];
-
-            //DATOS AUDITORIA
-            $login = $this->getUser();
-
-            //DATOS DE AssignGoalType
-            $id_user = ($request->get("AssignGoal")["User"]);
-            $user = $em->getRepository('PequivenSEIPBundle:User')->findOneById($id_user);
-
-            //CARGO LOS DATOS EN DB
             $movement = new MovementEmployee();
-            $movement->setCreatedBy($login);
-            $movement->setDate($date);
-            $movement->setType('I');
-            $movement->setGoal($goal);
-            $movement->setCause($cause);
-            $movement->setObservations($obs);
+            $formAssign = $this->createForm(new AssignGoalType(), $movement);
+            $formAssign->handleRequest($request);
 
-            //CALCULO PENALIZACIONES Y AVANCES PARA LA FECHA
-            $datos = $this->CalculateAdvancePenalty($goal, $date);
-            $advance = $datos['realResult'] - $datos['penalty'];
-            if ($advance < 0) {
-                $advance = 0;
+            $em->getConnection()->beginTransaction();
+
+            if ($securityService->isGranted(array("ROLE_SEIP_ARRANGEMENT_PROGRAM_MOVEMENT_GOALS_POST_MORTEM"))) {
+                $post_mortem = true;
+            } else {
+                $post_mortem = false;
             }
 
-            $movement->setrealAdvance($advance);
-            $movement->setPentalty($datos['penalty']);
-            $movement->setPlanned($datos['plannedResult']);
-            $movement->setTypeMov('Goal');
-            $movement->setUser($user);
-            $movement->setPeriod($this->getPeriodService()->getPeriodActive());
-            $em->persist($movement);
 
-            //AGREGO AL USUARIO EN LA META
-            $goal->addResponsible($user);
-            $em->persist($goal);
+            if ($formAssign->isSubmitted()) {
 
-            //VALIDACIÓN DE INTEGRIDAD DE DATOS EN REGISTRO DE BD
-            try {
-                $em->flush();
-                $em->getConnection()->commit();
-            } catch (Exception $e) {
-                $em->getConnection()->rollback();
-                throw $e;
+                //DATOS DE AssignGoalType
+                $cause = $request->get("AssignGoal")["cause"];
+                $date = new \DateTime(str_replace("/", "-", ($request->get("AssignGoal")["date"])));
+                $obs = $request->get("AssignGoal")["observations"];
+
+                //DATOS AUDITORIA
+                $login = $this->getUser();
+
+                //DATOS DE AssignGoalType
+                $id_user = ($request->get("AssignGoal")["User"]);
+                $user = $em->getRepository('PequivenSEIPBundle:User')->findOneById($id_user);
+                
+                $period = $this->getPeriodService()->getPeriodActive();
+
+                $bandera = $em->getRepository('PequivenArrangementProgramBundle:Goal')->verificationGoalUser($user, $goal, $period);
+
+                //SI EL EMPLEADO NO SE ENCUENTRA ASIGNADO A LA META
+                if ($bandera == null) {
+                    //CARGO LOS DATOS EN DB
+                    $movement = new MovementEmployee();
+                    $movement->setCreatedBy($login);
+                    $movement->setDate($date);
+                    $movement->setType('I');
+                    $movement->setGoal($goal);
+                    $movement->setCause($cause);
+                    $movement->setObservations($obs);
+
+                    //CALCULO PENALIZACIONES Y AVANCES PARA LA FECHA
+                    $datos = $this->CalculateAdvancePenalty($goal, $date);
+                    $advance = $datos['realResult'] - $datos['penalty'];
+                    if ($advance < 0) {
+                        $advance = 0;
+                    }
+
+                    $movement->setrealAdvance($advance);
+                    $movement->setPentalty($datos['penalty']);
+                    $movement->setPlanned($datos['plannedResult']);
+                    $movement->setTypeMov('Goal');
+                    $movement->setUser($user);
+                    $movement->setPeriod($period);
+                    $em->persist($movement);
+
+                    //AGREGO AL USUARIO EN LA META                
+                    $goal->addResponsible($user);
+                    $em->persist($goal);
+                } else {
+
+                    if ($post_mortem == false) {
+                        $this->get('session')->getFlashBag()->add('error', "El Empleado ya se Encuentra Asignado a la Meta");
+                    } else {
+                        //CARGO LOS DATOS EN DB
+                        $movement = new MovementEmployee();
+                        $movement->setCreatedBy($login);
+                        $movement->setDate($date);
+                        $movement->setType('I');
+                        $movement->setGoal($goal);
+                        $movement->setCause($cause);
+                        $movement->setObservations($obs);
+
+                        //CALCULO PENALIZACIONES Y AVANCES PARA LA FECHA
+                        $datos = $this->CalculateAdvancePenalty($goal, $date);
+                        $advance = $datos['realResult'] - $datos['penalty'];
+                        if ($advance < 0) {
+                            $advance = 0;
+                        }
+
+                        $movement->setrealAdvance($advance);
+                        $movement->setPentalty($datos['penalty']);
+                        $movement->setPlanned($datos['plannedResult']);
+                        $movement->setTypeMov('Goal');
+                        $movement->setUser($user);
+                        $period = $this->getPeriodService()->getPeriodActive();
+                        $movement->setPeriod($period);
+                        $em->persist($movement);
+                    }
+                }
+
+                //VALIDACIÓN DE INTEGRIDAD DE DATOS EN REGISTRO DE BD
+                try {
+                    $em->flush();
+                    $em->getConnection()->commit();
+                } catch (Exception $e) {
+                    $em->getConnection()->rollback();
+                    throw $e;
+                }
             }
+        } else {
+            $this->get('session')->getFlashBag()->add('error', "No tiene los Permisos para Realizar la Acción");
         }
-
         return $this->redirect($this->generateUrl('goal_movement', array('idGoal' => $id)));
     }
 
@@ -129,66 +180,115 @@ class MovementEmployeeController extends SEIPController {
         $em = $this->getDoctrine()->getManager();
         $goal = $em->getRepository('PequivenArrangementProgramBundle:Goal')->findOneById($id);
 
-        $movement = new MovementEmployee();
-        $formRemove = $this->createForm(new RemoveGoalType($id), $movement);
-        $formRemove->handleRequest($request);
+        $securityService = $this->getSecurityService();
 
-        $em->getConnection()->beginTransaction();
+        //VALIDO PERMISOLOGÍA POR SI ACASO SE ACCEDE DESDE URL DIRECTA
+        if ((($securityService->isGranted(array("ROLE_SEIP_ARRANGEMENT_PROGRAM_MOVEMENT_GOALS")))) || ($securityService->isGranted(array("ROLE_SEIP_ARRANGEMENT_PROGRAM_MOVEMENT_GOALS_POST_MORTEM")))) {
 
-        if ($formRemove->isSubmitted()) {
+            if ($securityService->isGranted(array("ROLE_SEIP_ARRANGEMENT_PROGRAM_MOVEMENT_GOALS_POST_MORTEM"))) {
+                $post_mortem = true;
+            } else {
+                $post_mortem = false;
+            }
 
-            //DATOS DE RemoveGoalType
-            $cause = $request->get("RemoveGoal")["cause"];
-            $date = new \DateTime(str_replace("/", "-", ($request->get("RemoveGoal")["date"])));
-            $obs = $request->get("RemoveGoal")["observations"];
-
-            //DATOS AUDITORIA
-            $login = $this->getUser();
-
-            //DATOS DE RemoveGoalType
-            $id_user = ($request->get("RemoveGoal")["User"]);
-            $user = $em->getRepository('PequivenSEIPBundle:User')->findOneById($id_user);
-
-            //CARGO LOS DATOS EN DB
             $movement = new MovementEmployee();
-            $movement->setCreatedBy($login);
-            $movement->setDate($date);
-            $movement->setType('O');
-            $movement->setGoal($goal);
-            $movement->setCause($cause);
-            $movement->setObservations($obs);
+            $formRemove = $this->createForm(new RemoveGoalType($id, $post_mortem), $movement);
+            $formRemove->handleRequest($request);
 
-            //CALCULO PENALIZACIONES Y AVANCES PARA LA FECHA
-            $datos = $this->CalculateAdvancePenalty($goal, $date);
+            $em->getConnection()->beginTransaction();
 
-            $advance = $datos['realResult'] - $datos['penalty'];
-            if ($advance < 0) {
-                $advance = 0;
+            if ($formRemove->isSubmitted()) {
+
+                //DATOS DE RemoveGoalType
+                $cause = $request->get("RemoveGoal")["cause"];
+                $date = new \DateTime(str_replace("/", "-", ($request->get("RemoveGoal")["date"])));
+                $obs = $request->get("RemoveGoal")["observations"];
+
+                //DATOS AUDITORIA
+                $login = $this->getUser();
+
+                //DATOS DE RemoveGoalType
+                $id_user = ($request->get("RemoveGoal")["User"]);
+                $user = $em->getRepository('PequivenSEIPBundle:User')->findOneById($id_user);
+                $period = $this->getPeriodService()->getPeriodActive();
+
+                $bandera = $em->getRepository('PequivenArrangementProgramBundle:Goal')->verificationGoalUser($user, $goal, $period);
+
+                //SI EL EMPLEADO ENCUENTRA ASIGNADO A LA META
+                if ($bandera <> null) {
+                    //CARGO LOS DATOS EN DB
+                    $movement = new MovementEmployee();
+                    $movement->setCreatedBy($login);
+                    $movement->setDate($date);
+                    $movement->setType('O');
+                    $movement->setGoal($goal);
+                    $movement->setCause($cause);
+                    $movement->setObservations($obs);
+
+                    //CALCULO PENALIZACIONES Y AVANCES PARA LA FECHA
+                    $datos = $this->CalculateAdvancePenalty($goal, $date);
+
+                    $advance = $datos['realResult'] - $datos['penalty'];
+                    if ($advance < 0) {
+                        $advance = 0;
+                    }
+
+                    $movement->setrealAdvance($advance);
+                    $movement->setPentalty($datos['penalty']);
+                    $movement->setPlanned($datos['plannedResult']);
+                    $movement->setTypeMov('Goal');
+                    $movement->setUser($user);
+                    $movement->setPeriod($this->getPeriodService()->getPeriodActive());
+                    $em->persist($movement);
+
+                    //ELIMINO AL USUARIO EN LA META
+                    $goal->removeResponsible($user);
+                    $em->persist($goal);
+                } else {
+
+                    if ($post_mortem == false) {
+                        $this->get('session')->getFlashBag()->add('error', "El Empleado Seleccionado no se Encuentra Asignado a la Meta");
+                    } else {
+                        //CARGO LOS DATOS EN DB
+                        $movement = new MovementEmployee();
+                        $movement->setCreatedBy($login);
+                        $movement->setDate($date);
+                        $movement->setType('O');
+                        $movement->setGoal($goal);
+                        $movement->setCause($cause);
+                        $movement->setObservations($obs);
+
+                        //CALCULO PENALIZACIONES Y AVANCES PARA LA FECHA
+                        $datos = $this->CalculateAdvancePenalty($goal, $date);
+
+                        $advance = $datos['realResult'] - $datos['penalty'];
+                        if ($advance < 0) {
+                            $advance = 0;
+                        }
+
+                        $movement->setrealAdvance($advance);
+                        $movement->setPentalty($datos['penalty']);
+                        $movement->setPlanned($datos['plannedResult']);
+                        $movement->setTypeMov('Goal');
+                        $movement->setUser($user);
+                        $movement->setPeriod($this->getPeriodService()->getPeriodActive());
+                        $em->persist($movement);
+                    }
+                }
+
+                //VALIDACIÓN DE INTEGRIDAD DE DATOS EN REGISTRO DE BD
+                try {
+                    $em->flush();
+                    $em->getConnection()->commit();
+                } catch (Exception $e) {
+                    $em->getConnection()->rollback();
+                    throw $e;
+                }
             }
-
-            $movement->setrealAdvance($advance);
-            $movement->setPentalty($datos['penalty']);
-            $movement->setPlanned($datos['plannedResult']);
-            $movement->setTypeMov('Goal');
-            $movement->setUser($user);
-            $movement->setPeriod($this->getPeriodService()->getPeriodActive());
-            $em->persist($movement);
-
-            //ELIMINO AL USUARIO EN LA META
-            $goal->removeResponsible($user);
-            $em->persist($goal);
-
-            //VALIDACIÓN DE INTEGRIDAD DE DATOS EN REGISTRO DE BD
-            try {
-                $em->flush();
-                $em->getConnection()->commit();
-            } catch (Exception $e) {
-                $em->getConnection()->rollback();
-                throw $e;
-            }
-
-            return $this->redirect($this->generateUrl('goal_movement', array('idGoal' => $id)));
+        } else {
+            $this->get('session')->getFlashBag()->add('error', "No tiene los Permisos para Realizar la Acción");
         }
+        return $this->redirect($this->generateUrl('goal_movement', array('idGoal' => $id)));
     }
 
     /**
@@ -292,7 +392,7 @@ class MovementEmployeeController extends SEIPController {
         for ($i = 1; $i <= $mes; $i++) {
             $penal = 0;
             for ($j = $i; $j <= $mes; $j++) {
-                if ($real[$j] < $planned[$i]) {
+                if ($real [$j] < $planned[$i]) {
                     $penal++;
                 } else {
                     break;
@@ -303,7 +403,7 @@ class MovementEmployeeController extends SEIPController {
                 $mayor = $penal;
             }
 
-            if ($planned[$i] == 100) {
+            if ($planned [$i] == 100) {
                 break;
             }
         }
@@ -311,10 +411,10 @@ class MovementEmployeeController extends SEIPController {
         if ($mayor == null) {
             $mayor = 0;
         }
-        if ($real[$mes] == null) {
+        if ($real [$mes] == null) {
             $real[$mes] = 0;
         }
-        if ($planned[$mes] == null) {
+        if ($planned [$mes] == null) {
             $planned[$mes] = 0;
         }
 
