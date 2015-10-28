@@ -34,7 +34,7 @@ class GoalRepository extends EntityRepository {
                 ->andWhere('ap.status != :status')
                 ->setParameter('period', $period)
                 ->setParameter('responsible', $user)
-                ->setParameter('status', \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::STATUS_REJECTED);
+                ->setParameter('status', \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::STATUS_REJECTED)
         ;
         if (isset($criteria['notArrangementProgram'])) {
             $qb->andWhere('ap.id != :arrangementProgram');
@@ -43,30 +43,20 @@ class GoalRepository extends EntityRepository {
         return $qb->getQuery()->getResult();
     }
 
-    /**
-     * Retorna los Usuarios Asignados a una Meta en Específica. Usada por RemoveGoalType.php
-     * @param int $idGoal
-     * @param array $criteria
-     */
-    function findQuerytoRemoveAssingedGoal() {
-        $qb = $this->getQueryBuilder();
+    function verificationGoalUser(User $user, $Goal, Period $period) {
 
+        $qb = $this->getQueryBuilder();
         $qb
-                ->select('g')
-////                ->innerJoin('g.responsibles', 'user')
-////                ->innerJoin('user.groups', 'group')
-////                ->andWhere('user.enabled = :enabled')
-////                ->andWhere('group.typeRol = :typeRol')
-////               // ->andWhere('g.id = :goallist')
-////                ->setParameter('enabled', true)
-////                ->setParameter('typeRol', \Pequiven\MasterBundle\Entity\Rol::TYPE_ROL_OWNER)
-////               // ->setParameter('goallist', $idGoal)
-//        ;
-//        $qb
-//                ->andWhere('group.level <= :level')
-//                ->setParameter('level', \Pequiven\MasterBundle\Entity\Rol::ROLE_DIRECTIVE)
-                ;
-        return $qb;
+                ->innerJoin('g.responsibles', 'resp')
+                ->andWhere('g.period = :per')
+                ->andWhere('g.id = :ide')
+                ->andWhere('resp.id = :responsible')
+                ->setParameter('responsible', $user)
+                ->setParameter('per', $period)
+                ->setParameter('ide', $Goal)
+        ;
+
+        return $qb->getQuery()->getResult();
     }
 
     protected function getAlias() {
