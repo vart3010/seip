@@ -127,6 +127,7 @@ class IndicatorSigController extends ResourceController {
         $month = $request->get('month'); //El mes pasado por parametro
 
         $data = $this->findEvolutionCause($request, $typeObject); //Carga la data de las causas y sus acciones relacionadas
+       
         //Validación de que el mes pasado este entre los validos
         if ($month > 12) {
             $this->get('session')->getFlashBag()->add('error', "El mes consultado no es un mes valido!");
@@ -631,7 +632,7 @@ class IndicatorSigController extends ResourceController {
         ];
 
         return $data;
-    }
+    }    
 
     public function exportAction(Request $request) {
 

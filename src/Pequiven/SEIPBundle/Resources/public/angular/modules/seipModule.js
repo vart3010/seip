@@ -1702,6 +1702,7 @@ angular.module('seipModule.controllers', [])
             $scope.initFormActionAdd = function (resource) {
                 var d = new Date();
                 var numero = d.getTime();
+                $scope.setHeight(750);                                
 
                 var parameters = {
                     idIndicator: $scope.id_indicator,
