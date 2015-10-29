@@ -5695,8 +5695,40 @@ angular.module('seipModule.controllers', [])
                         "dataSource": {
                             "chart": data.dataSource.chart,
                             "categories": data.dataSource.categories,
-                            "dataset": [data.dataSource.dataset,
-                            ]
+                            "dataset": data.dataSource.dataset
+                        },
+                        "events": {
+                        "renderComplete": function (e, a) {
+                           
+                           // Cross-browser event listening
+                           var addListener = function (elem, evt, fn) {
+                               if (elem && elem.addEventListener) {
+                                   elem.addEventListener(evt, fn);
+                               }
+                               else if (elem && elem.attachEvent) {
+                                   elem.attachEvent("on" + evt, fn);
+                               } 
+                               else {
+                                   elem["on" + evt] = fn;
+                               }
+                           };
+                           
+                           // Export chart method
+                           var exportFC = function () {
+                               var types = {    
+                                   "export_causespng": "png"                                 
+                               };
+                               if (e && e.sender && e.sender.exportChart) {
+                                    e.sender.exportChart({
+                                       exportFileName: "FC_sample_export",
+                                       exportFormat: types[this.id]
+                                   });
+                               }
+                           };
+
+                            // Attach events 
+                            addListener(document.getElementById("export_causespng"), "click", exportFC);
+                            }
                         }
                     });
                     revenueChart.setTransparent(true);
