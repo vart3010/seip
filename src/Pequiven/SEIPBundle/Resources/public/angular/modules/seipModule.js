@@ -5655,8 +5655,8 @@ angular.module('seipModule.controllers', [])
                            
                            // Export chart method
                            var exportFC = function () {
-                               var types = {                                    
-                                   "exportsvg": "svg"                                   
+                               var types = {    
+                                   "exportpng": "png"                                 
                                };
                                if (e && e.sender && e.sender.exportChart) {
                                     e.sender.exportChart({
@@ -5666,8 +5666,8 @@ angular.module('seipModule.controllers', [])
                                }
                            };
 
-                            // Attach events                           
-                           addListener(document.getElementById("exportsvg"), "click", exportFC);                           
+                            // Attach events 
+                            addListener(document.getElementById("exportpng"), "click", exportFC);
                             }
                         }                                            
 
@@ -5679,7 +5679,7 @@ angular.module('seipModule.controllers', [])
             //FIN
 
             //Charts SIG - Causas de Desviación
-            $scope.renderChartSigCs = function (id, data, categories, dataCause, caption, typeLabelDisplay) {
+            $scope.renderChartSigCs = function (id, data, categories, dataCause, caption, typeLabelDisplay, urlExportFromChart) {
                 FusionCharts.ready(function () {
                     var revenueChart = new FusionCharts({
                         "type": "stackedbar3d",
@@ -5687,32 +5687,14 @@ angular.module('seipModule.controllers', [])
                         "width": "95%",
                         //"height": "550%",
                         "exportenabled": "1",
-                        "exportFormats": "PNG= Exportar como PNG|PDF= Exportar como PDF",
+                        //"exportFormats": "PNG= Exportar como PNG|PDF= Exportar como PDF",
                         "exportFileName": "Gráfico Causas de Desviación del Indicador",
-                        "exporthandler": "http://107.21.74.91/",
-                        "html5exporthandler": "http://107.21.74.91/",
+                        "exporthandler": urlExportFromChart,
+                        "html5exporthandler": urlExportFromChart,
                         "dataFormat": "json",
                         "dataSource": {
-                            "chart": {
-                                "caption": "Gráfico Causas de Desviación",
-                                "subCaption": "Periodo - 2015",                                
-                                "YAxisMaxValue": "100",
-                                "valueFontColor": "#000000",
-                                "showvalues": "1",
-                                "showSum": "1",
-                                "numberSuffix": "%",
-                                "bgAlpha": "0,0",
-                                "baseFontColor": "#ffffff",
-                                "outCnvBaseFontColor": "#000000",
-                                "visible": "0",
-                                "theme": "fint",
-                                "snumbersuffix": "%",
-                                "decimals": "3",
-                                "setadaptiveymin": "1",
-                                "setadaptivesymin": "1",
-                                "linethickness": "5",
-                                "showborder": "0"
-                            }, "categories": data.dataSource.categories,
+                            "chart": data.dataSource.chart,
+                            "categories": data.dataSource.categories,
                             "dataset": [data.dataSource.dataset,
                             ]
                         }

@@ -167,7 +167,7 @@ class IndicatorSigController extends ResourceController {
 
         $dataChart = $indicatorService->getDataChartOfIndicatorEvolution($indicator,$urlExportFromChart, array('withVariablesRealPLan' => true)); //Obtenemos la data del gráfico de acuerdo al indicador
         //Carga de los datos de la grafica de las Causas de Desviación
-        $dataCause = $indicatorService->getDataChartOfCausesIndicatorEvolution($indicator, $month); //Obtenemos la data del grafico de las causas de desviación
+        $dataCause = $indicatorService->getDataChartOfCausesIndicatorEvolution($indicator, $month, $urlExportFromChart); //Obtenemos la data del grafico de las causas de desviación
 
         $results = $this->get('pequiven.repository.sig_causes_report_evolution')->findBy(array('indicator' => $idIndicator, 'month' => $month));
 
@@ -680,9 +680,11 @@ class IndicatorSigController extends ResourceController {
     //  $pdf->SetFont('times', 'BI', 12);
     // add a page
         //var_dump($data['nameSVG']);
-        ?><img src="<?= $data['nameSVG']?>"><?php
-        die();
+        /*?><img src="http://localhost/seip/web/php-export-handler/temp/<?= $data['nameSVG']?>"><?php
+        die();   */
         $pdf->AddPage('L');
+
+        //$pdf->Image($data['nameSVG'], 15, 140, 75, 113, 'PNG', '', true, 150, '', false, false, 1, false, false, false);                
 
     // set some text to print
 

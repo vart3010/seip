@@ -110,8 +110,8 @@
 
                 <div class="nine-columns twelve-columns-mobile" id="chartContainerResult">
                 <!-- This div will hold the chart generated in the footer -->
-                </div>
-                <input id='exportsvg' type='Button' value='Export to SVG' />
+                </div>                                
+                <input id='exportpng' type='Button' value='Exportar Informe' />
             {#{% if is_granted('ROLE_SEIP_SIG_EVOLUTION_LAST_PERIOD') %}                
                 <div ng-controller="EvolutionIndicatorConfig"> 
                     <div class="button-group button-config">
@@ -131,7 +131,7 @@
         {% endif %}
 
         <div class="columns with-padding">         
-                <div ng-controller="ChartsSigController" class="dashboard_sig" ng-init="renderChartSigCs('chartContainerResultCs', {{ dataCause|json_encode() }})" style="width: 95%; height:55%;" align="center">
+                <div ng-controller="ChartsSigController" class="dashboard_sig" ng-init="renderChartSigCs('chartContainerResultCs', {{ dataCause|json_encode()}},'{{ urlExportFromChart }}')" style="width: 95%; height:55%;" align="center">
                         <div class="nine-columns twelve-columns-mobile" id="chartContainerResultCs">
                             <!-- This div will hold the chart generated in the footer -->
                         </div>
@@ -175,11 +175,11 @@
                 <span class="title" style="display: none">{{('pequiven.hide_evolution_history'|trans({},'messages'))}} </span>
             </a>
         
-        {% if is_granted('ROLE_SEIP_SIG_EVOLUTION_DOWNLOAD') %}            
+        {% if is_granted('ROLE_SEIP_SIG_EVOLUTION_DOWNLOAD') %}                       
             {# Descarga de Informe de Evolución#}
             {% set typeObj = 1 %}
             &nbsp;
-            {{ buttons.generic_download(path('pequiven_indicator_evolution_export', { 'id': indicator_sig.id, 'month': month,'typeObj': typeObj }),('pequiven_indicator.download'|trans({},'PequivenSIGBundle'))) }}        
+            {{ buttons.generic_download }}        
         {% endif %}
 
         </div>
@@ -281,6 +281,13 @@
             valueCauseId = valueCauseId.split("_");
             $("#field_" + valueCauseId[1]).val(valueCauseId[1]);
             $("#form_" + valueCauseId[1]).submit();
+        }
+        
+        function downloadEvolution(){            
+            var button = document.getElementById("exportpng");
+            if (button){
+               button.click();   
+            }
         }
 
     </script>

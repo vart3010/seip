@@ -3879,7 +3879,7 @@ class IndicatorService implements ContainerAwareInterface {
         $chart["decimals"] = "0";
         $chart["exportenabled"] = "1";
         $chart["exportatclient"] = "0";
-        $chart["exportFormats"] = "SVG= Exportar como SVG|PNG= Exportar como PNG|PDF= Exportar como PDF";
+        $chart["exportFormats"] = "PNG= Exportar Informe de Evolución PDF";
         $chart["exportFileName"] = "Grafico Resultados ";
         $chart["exporthandler"] = $urlExportFromChart;
 
@@ -4022,7 +4022,7 @@ class IndicatorService implements ContainerAwareInterface {
      * @param Indicator $indicator
      * @return type
      */
-    public function getDataChartOfCausesIndicatorEvolution(Indicator $indicator, $month) {
+    public function getDataChartOfCausesIndicatorEvolution(Indicator $indicator, $month, $urlExportFromChart) {
         $data = array(
             'dataSource' => array(
                 'chart' => array(),
@@ -4060,9 +4060,9 @@ class IndicatorService implements ContainerAwareInterface {
         $chart["showborder"] = "0";
         $chart["exportenabled"] = "1";
         $chart["exportatclient"] = "0";
-        $chart["exportFormats"] = "PNG= Exportar como PNG|PDF= Exportar como PDF";
+        $chart["exportFormats"] = "PNG= Exportar Informe de Evolución PDF";
         $chart["exportFileName"] = "Grafico Resultados ";
-        $chart["exporthandler"] = "http://107.21.74.91/";
+        $chart["exporthandler"] = $urlExportFromChart;
 
         //Inicialización
         $category = $dataSetCause = array();

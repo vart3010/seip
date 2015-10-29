@@ -137,7 +137,7 @@ public $exportedStatus;
     // chart DOMId
     $exportData ['meta']['DOMId'] = @$exportRequestStream ['meta_DOMId'];
 
-    // return collected and processed data
+    // return collected and processed data    
     return $exportData;
 }
 
@@ -555,10 +555,11 @@ function exportProcessor($stream, $meta, $exportParams) {
 
     // get mime type list parsing MIMETYPES constant declared in Export Resource PHP file
     $ext = strtolower($exportParams["exportformat"]);
+
     $ext2 = '';
     $mimeList = $this->bang(@MIMETYPES);
     $mimeType = $mimeList[$ext];
-
+    
     // prepare variables
     if (get_magic_quotes_gpc()) {
         $stream = stripslashes($stream);
@@ -571,14 +572,19 @@ function exportProcessor($stream, $meta, $exportParams) {
         $ext2 = 'jpg';
     }
 
+    $routing = "/var/www/html/seip";  
     $tempInputSVGFile =  $this->container->getParameter('kernel.root_dir')."/../web/php-export-handler/" . TEMP_PATH . "{$tempFileName}.svg";
+    //$tempInputSVGFile =  $routing."/web/php-export-handler/" . TEMP_PATH . "{$tempFileName}.svg";
 
-    $tempOutputFile = $this->container->getParameter('kernel.root_dir')."/../web/php-export-handler/" . TEMP_PATH . "/{$tempFileName}.{$ext}";
+    //$tempOutputFile = $this->container->getParameter('kernel.root_dir')."/../web/php-export-handler/" . TEMP_PATH . "{$tempFileName}.{$ext}";
+    $tempOutputFile = $routing."/web/php-export-handler/" . TEMP_PATH . "{$tempFileName}.{$ext}";
+   
     $tempOutputJpgFile = realpath(TEMP_PATH) . "/{$tempFileName}.jpg";
-    $tempOutputPngFile = realpath(TEMP_PATH) . "/{$tempFileName}.png";
+    $tempOutputPngFile = realpath(TEMP_PATH) . "/{$tempFileName}.png";        
+         
 
     if ($ext != 'svg') {
-
+        
         // width format for batik
         $width = @$meta['width'];
         $height = @$meta['height'];
@@ -608,11 +614,10 @@ function exportProcessor($stream, $meta, $exportParams) {
         }
         
         shell_exec("chmod -R 777".$this->container->getParameter('kernel.root_dir')."/../web/php-export-handler/*");
-
-        return $nameSVG;
+        
+        //return $nameSVG;
         // do the conversion
         $command = INKSCAPE_PATH . "$bg --without-gui {$tempInputSVGFile} --export-{$ext} $tempOutputFile {$size}";
-
         $output = shell_exec($command);
         shell_exec("chmod -R 777".$ext.$tempOutputFile);
         
@@ -623,6 +628,8 @@ function exportProcessor($stream, $meta, $exportParams) {
             $output .= shell_exec($comandJpg);
         }
         
+        $nameSVG = $tempOutputFile;
+        return $nameSVG;
         // catch error
         if (!is_file($tempOutputFile) || filesize($tempOutputFile) < 10) {
             $return_binary = $output;
@@ -643,6 +650,8 @@ function exportProcessor($stream, $meta, $exportParams) {
         if (file_exists($tempOutputPngFile)) {
             unlink($tempOutputPngFile);
         }
+        var_dump($tempOutputFile);
+        die();
 
     // SVG can be streamed back directly
     } else if ($ext == 'svg') {
@@ -656,7 +665,7 @@ function exportProcessor($stream, $meta, $exportParams) {
             $size = "-w {$width} -h {$height}";
         }
         // override the size in case of pdf output
-        if ('svg' == $ext) {
+        if ('pdf' == $ext) {
             $size = '';
         }
 
@@ -668,14 +677,12 @@ function exportProcessor($stream, $meta, $exportParams) {
 
         $nameSVG = '';
         // generate the temporary file
-        $nameSVG = "{$tempFileName}.svg";
-
-        /*if (!file_put_contents($tempInputSVGFile, $stream)) {
+        if (!file_put_contents($tempInputSVGFile, $stream)) {
             die("Couldn't create temporary file. Check that the directory permissions for
             the " . TEMP_PATH . " directory are set to 777.");
         } else{
             $nameSVG = "{$tempFileName}.svg";
-        }*/
+        }
         
         shell_exec("chmod -R 777".$this->container->getParameter('kernel.root_dir')."/../web/php-export-handler/*");
 
@@ -685,8 +692,8 @@ function exportProcessor($stream, $meta, $exportParams) {
         $output = shell_exec($command);
         shell_exec("chmod -R 777".$ext.$tempOutputFile);
         
-        return $tempOutputFile;//Dirección completa con svg
-        
+        return $nameSVG;
+        //return $tempOutputFile;//Dirección completa con svg        
         
         if ('svg' == $ext2) {
             $comandJpg = CONVERT_PATH . " -quality 100 $tempOutputFile $tempOutputJpgFile";
