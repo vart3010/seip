@@ -3848,7 +3848,7 @@ class IndicatorService implements ContainerAwareInterface {
      * @param Indicator $indicator
      * @return type
      */
-    public function getDataChartOfIndicatorEvolution(Indicator $indicator) {
+    public function getDataChartOfIndicatorEvolution(Indicator $indicator, $urlExportFromChart) {
 
         $data = array(
             'dataSource' => array(
@@ -3879,9 +3879,9 @@ class IndicatorService implements ContainerAwareInterface {
         $chart["decimals"] = "0";
         $chart["exportenabled"] = "1";
         $chart["exportatclient"] = "0";
-        $chart["exportFormats"] = "PNG= Exportar como PNG|PDF= Exportar como PDF";
+        $chart["exportFormats"] = "SVG= Exportar como SVG|PNG= Exportar como PNG|PDF= Exportar como PDF";
         $chart["exportFileName"] = "Grafico Resultados ";
-        $chart["exporthandler"] = "http://107.21.74.91/";
+        $chart["exporthandler"] = $urlExportFromChart;
 
         //Lamado de promedio
         //$prom = $this->getPromdIndicator($indicator);

@@ -156,6 +156,8 @@ class IndicatorSigController extends ResourceController {
             }
         }
         //fin de la carga
+        //Url export
+        $urlExportFromChart = $this->generateUrl('pequiven_indicator_evolution_export', array('id' => $idIndicator, 'month' => $month, 'typeObj' => 1));
         //Carga de data de Indicador para armar grafica
         $response = new JsonResponse();
 
@@ -163,7 +165,7 @@ class IndicatorSigController extends ResourceController {
 
         $indicator = $this->get('pequiven.repository.indicator')->find($idIndicator); //Obtenemos el indicador
 
-        $dataChart = $indicatorService->getDataChartOfIndicatorEvolution($indicator, array('withVariablesRealPLan' => true)); //Obtenemos la data del gráfico de acuerdo al indicador
+        $dataChart = $indicatorService->getDataChartOfIndicatorEvolution($indicator,$urlExportFromChart, array('withVariablesRealPLan' => true)); //Obtenemos la data del gráfico de acuerdo al indicador
         //Carga de los datos de la grafica de las Causas de Desviación
         $dataCause = $indicatorService->getDataChartOfCausesIndicatorEvolution($indicator, $month); //Obtenemos la data del grafico de las causas de desviación
 
@@ -217,23 +219,25 @@ class IndicatorSigController extends ResourceController {
             'values' => $data["actionValue"]
         ];
 
+
         $view = $this
                 ->view()
                 ->setTemplate($this->config->getTemplate('evolution.html'))
                 ->setData(array(
             'data' => $dataChart,
             'verification' => $data["verification"],
-            'dataCause' => $dataCause,
-            'sumCause' => $sumCause,
-            'cause' => $results,
-            'month' => $month,
+            'dataCause'  => $dataCause,
+            'sumCause'   => $sumCause,
+            'cause'      => $results,
+            'month'      => $month,
             'dataAction' => $dataAction,
-            'analysis' => $causeAnalysis,
-            'trend' => $trend,
-            'font' => $font,
+            'analysis'   => $causeAnalysis,
+            'trend'      => $trend,
+            'font'       => $font,
             'typeObject' => $typeObject,
-            'id' => $idIndicator,
-            'route' => "pequiven_indicator_evolution", //Ruta para carga de Archivo
+            'id'         => $idIndicator,
+            'route'      => "pequiven_indicator_evolution", //Ruta para carga de Archivo
+            'urlExportFromChart' => $urlExportFromChart,
             $this->config->getResourceName() => $resource,
             'form' => $form->createView()
         ));
@@ -545,7 +549,9 @@ class IndicatorSigController extends ResourceController {
     public function exportAction(Request $request) {
 
         $em = $this->getDoctrine()->getManager();
-        /* if($request->isMethod('POST')){
+        //$chart = $request->get('stream');
+        
+        if($request->isMethod('POST')){
           $exportRequestStream = $request->request->all();
           $request->request->remove('charttype');
           $request->request->remove('stream');
@@ -556,9 +562,14 @@ class IndicatorSigController extends ResourceController {
           $request->request->remove('meta_width');
           $request->request->remove('meta_height');
           $request->request->remove('parameters');
-          $fusionchartService = $this->getFusionChartExportService();
+          $fusionchartService = $this->getFusionChartExportService();          
           $fileSVG = $fusionchartService->exportFusionChart($exportRequestStream);
-          } */
+        //var_dump("paso");
+        }
+        //var_dump($fileSVG);
+        //die();
+
+        $chart = $request->get('stream');
 
         $dataAction = $this->findEvolutionCause($request); //Carga la data de las causas y sus acciones relacionadas
 
@@ -590,6 +601,7 @@ class IndicatorSigController extends ResourceController {
         //$indicatorService = $this->getIndicatorService(); //Obtenemos el servicio del indicador
         //$dataChart = $indicatorService->getDataChartOfIndicatorEvolution($indicator, array('withVariablesRealPLan' => true)); //Obtenemos la data del gráfico de acuerdo al indicador
         //$dataCause = $indicatorService->getDataChartOfCausesIndicatorEvolution($indicator, $month); //Obtenemos la data del grafico de las causas de desviación
+        
         //Carga el analisis de la tendencia
         $trend = $this->get('pequiven.repository.sig_trend_report_evolution')->findBy(array($type => $id, 'month' => $month));
         if ($trend) {
@@ -619,14 +631,16 @@ class IndicatorSigController extends ResourceController {
         $data = array(
             //'data'          => $dataChart,//Data del Gráfico Informe de Evolución
             //'dataCause'     => $dataCause,//Data del Grafico de las Causas
-            'month' => $month,
-            'name' => $name,
-            'trend' => $trendDescription,
+            'nameSVG'       => $fileSVG,
+            'chart'         => $chart,
+            'month'         => $month,
+            'name'          => $name,
+            'trend'         => $trendDescription,
             'causeAnalysis' => $causeA,
-            'dataAction' => $dataAction["actionValue"],
-            'obj' => $objRel,
-            'verification' => $verification,
-            'period' => $period
+            'dataAction'    => $dataAction["actionValue"],
+            'obj'           => $objRel,
+            'verification'  => $verification,
+            'period'        => $period
         );
 
         $this->generatePdf($data);
@@ -638,7 +652,7 @@ class IndicatorSigController extends ResourceController {
         $pdf->setContainer($this->container);
         //$pdf->setPeriod($this->getPeriodService()->getPeriodActive());
         //$pdf->setFooterText($this->trans('pequiven_seip.message_footer', array(), 'PequivenSEIPBundle'));
-// set document information
+    // set document information
         $pdf->SetCreator(PDF_CREATOR);
         $pdf->SetAuthor('SIG');
         $pdf->setTitle('INFORME DE EVOLUCIÓN');
@@ -648,34 +662,36 @@ class IndicatorSigController extends ResourceController {
         $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
         $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
 
-// set default monospaced font
+    // set default monospaced font
         $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
 
-// set margins
+    // set margins
         $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
         $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
         $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
 
-// set auto page breaks
+    // set auto page breaks
         $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
 
-// set image scale factor
+    // set image scale factor
         $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
 
-// set font
-//            $pdf->SetFont('times', 'BI', 12);
-// add a page
-
+    // set font
+    //  $pdf->SetFont('times', 'BI', 12);
+    // add a page
+        //var_dump($data['nameSVG']);
+        ?><img src="<?= $data['nameSVG']?>"><?php
+        die();
         $pdf->AddPage('L');
 
-// set some text to print
+    // set some text to print
 
         $html = $this->renderView('PequivenSIGBundle:Indicator:viewPdf.html.twig', $data);
 
-// print a block of text using Write()
+    // print a block of text using Write()
         $pdf->writeHTML($html, true, false, true, false, '');
 
-//            $pdf->Output('Reporte del dia'.'.pdf', 'I');
+    //            $pdf->Output('Reporte del dia'.'.pdf', 'I');
         $pdf->Output('Informe de evolucion' . '.pdf', 'D');
     }
 

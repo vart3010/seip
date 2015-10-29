@@ -5619,7 +5619,7 @@ angular.module('seipModule.controllers', [])
         .controller('ChartsSigController', function ($scope, ngTableParams, $http, sfTranslator, notifyService) {
 
             //Charts SIG - Evolution
-            $scope.renderChartEvolutionSig = function (id, data, categories, dataPlan, dataReal, dataAcum, dataPorc, caption, typeLabelDisplay) {
+            $scope.renderChartEvolutionSig = function (id, data, categories, dataPlan, dataReal, dataAcum, dataPorc, caption, typeLabelDisplay, urlExportFromChart) {
                 FusionCharts.ready(function () {
                     var revenueChart = new FusionCharts({
                         //"type": "mscolumn3dlinedy",
@@ -5629,14 +5629,48 @@ angular.module('seipModule.controllers', [])
                         "height": "300%",
                         "exportFormats": "PNG= Exportar como PNG|PDF= Exportar como PDF",
                         "exportFileName": "Gráfico Evolución Indicador",
-                        "exporthandler": "http://107.21.74.91/",
-                        "html5exporthandler": "http://107.21.74.91/",
+                        "exporthandler": urlExportFromChart,
+                        "html5exporthandler": urlExportFromChart,
                         "dataFormat": "json",
                         "dataSource": {
                             "chart": data.dataSource.chart,
                             "categories": data.dataSource.categories,
                             "dataset": data.dataSource.dataset
-                        }
+                        },
+                        "events": {
+                        "renderComplete": function (e, a) {
+                           
+                           // Cross-browser event listening
+                           var addListener = function (elem, evt, fn) {
+                               if (elem && elem.addEventListener) {
+                                   elem.addEventListener(evt, fn);
+                               }
+                               else if (elem && elem.attachEvent) {
+                                   elem.attachEvent("on" + evt, fn);
+                               } 
+                               else {
+                                   elem["on" + evt] = fn;
+                               }
+                           };
+                           
+                           // Export chart method
+                           var exportFC = function () {
+                               var types = {                                    
+                                   "exportsvg": "svg"                                   
+                               };
+                               if (e && e.sender && e.sender.exportChart) {
+                                    e.sender.exportChart({
+                                       exportFileName: "FC_sample_export",
+                                       exportFormat: types[this.id]
+                                   });
+                               }
+                           };
+
+                            // Attach events                           
+                           addListener(document.getElementById("exportsvg"), "click", exportFC);                           
+                            }
+                        }                                            
+
                     });
                     revenueChart.setTransparent(true);
                     revenueChart.render();

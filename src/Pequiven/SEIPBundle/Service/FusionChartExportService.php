@@ -607,14 +607,14 @@ function exportProcessor($stream, $meta, $exportParams) {
             $nameSVG = "{$tempFileName}.svg";
         }
         
-        shell_exec("chmod 777 -R ".$this->container->getParameter('kernel.root_dir')."/../web/php-export-handler/*");
+        shell_exec("chmod -R 777".$this->container->getParameter('kernel.root_dir')."/../web/php-export-handler/*");
 
         return $nameSVG;
         // do the conversion
         $command = INKSCAPE_PATH . "$bg --without-gui {$tempInputSVGFile} --export-{$ext} $tempOutputFile {$size}";
 
         $output = shell_exec($command);
-        shell_exec("chmod 777 -R ".$ext.$tempOutputFile);
+        shell_exec("chmod -R 777".$ext.$tempOutputFile);
         
         if ('jpg' == $ext2) {
             $comandJpg = CONVERT_PATH . " -quality 100 $tempOutputFile $tempOutputJpgFile";
@@ -644,9 +644,82 @@ function exportProcessor($stream, $meta, $exportParams) {
             unlink($tempOutputPngFile);
         }
 
-        // SVG can be streamed back directly
+    // SVG can be streamed back directly
     } else if ($ext == 'svg') {
-        $return_binary = $stream;
+      
+       // width format for batik
+        $width = @$meta['width'];
+        $height = @$meta['height'];
+
+        $size = '';
+        if (!empty($width) && !empty($height)) {
+            $size = "-w {$width} -h {$height}";
+        }
+        // override the size in case of pdf output
+        if ('svg' == $ext) {
+            $size = '';
+        }
+
+        //batik bg color format
+        $bg = @$meta['bgColor'];
+        if ($bg) {
+            $bg = " --export-background=".$bg;
+        }
+
+        $nameSVG = '';
+        // generate the temporary file
+        $nameSVG = "{$tempFileName}.svg";
+
+        /*if (!file_put_contents($tempInputSVGFile, $stream)) {
+            die("Couldn't create temporary file. Check that the directory permissions for
+            the " . TEMP_PATH . " directory are set to 777.");
+        } else{
+            $nameSVG = "{$tempFileName}.svg";
+        }*/
+        
+        shell_exec("chmod -R 777".$this->container->getParameter('kernel.root_dir')."/../web/php-export-handler/*");
+
+        //return $nameSVG;
+        // do the conversion
+        $command = INKSCAPE_PATH . "$bg --without-gui {$tempInputSVGFile} --export-{$ext} $tempOutputFile {$size}";
+        $output = shell_exec($command);
+        shell_exec("chmod -R 777".$ext.$tempOutputFile);
+        
+        return $tempOutputFile;//Dirección completa con svg
+        
+        
+        if ('svg' == $ext2) {
+            $comandJpg = CONVERT_PATH . " -quality 100 $tempOutputFile $tempOutputJpgFile";
+            $tempOutputFile = $tempOutputJpgFile;
+
+            $output .= shell_exec($comandJpg);
+        }
+        
+        // catch error
+        if (!is_file($tempOutputFile) || filesize($tempOutputFile) < 10) {
+            $return_binary = $output;
+            $this->raise_error($output, true);
+        }
+        // stream it
+        else {
+            $return_binary = file_get_contents($tempOutputFile);
+        }
+
+        // delete temp files
+        if (file_exists($tempInputSVGFile)) {
+            unlink($tempInputSVGFile);
+        }
+        if (file_exists($tempOutputFile)) {
+            unlink($tempOutputFile);
+        }
+        if (file_exists($tempOutputPngFile)) {
+            unlink($tempOutputPngFile);
+        }
+        // stream it
+        else {
+            $return_binary = file_get_contents($tempOutputFile);
+        }
+        //$return_binary = $stream;
     } else {
         $this->raise_error("Invalid Export Format.", true);
     }
