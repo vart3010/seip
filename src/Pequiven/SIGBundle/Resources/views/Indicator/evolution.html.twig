@@ -135,7 +135,7 @@
                 <div class="nine-columns twelve-columns-mobile" id="chartContainerResultCs">
                 <!-- This div will hold the chart generated in the footer -->
                 </div>
-                <input id='export_causespng' type='button' value='Exportar Informe' />
+                <input id='export_causespng' type='hidden' value='Exportar Informe' />
 
                 </div>
         </div> 
@@ -290,7 +290,7 @@
             var button = document.getElementById("exportpng");
             if (button){
                button.click();   
-               //window.setTimeout(downloadCause,1000);               
+               window.setTimeout(downloadCause,500);               
             }            
         }
         //Carga de Evento de Descarga de Grafica de Causas del Indicador

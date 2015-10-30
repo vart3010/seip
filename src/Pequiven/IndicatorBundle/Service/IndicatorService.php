@@ -3850,6 +3850,8 @@ class IndicatorService implements ContainerAwareInterface {
      */
     public function getDataChartOfIndicatorEvolution(Indicator $indicator, $urlExportFromChart) {
 
+        $period = $indicator->getPeriod()->getDescription();
+        
         $data = array(
             'dataSource' => array(
                 'chart' => array(),
@@ -3861,27 +3863,27 @@ class IndicatorService implements ContainerAwareInterface {
         );
         $chart = array();
 
-        $chart["caption"] = "Gráfico Informe de Evolución";
-        $chart["subCaption"] = "Periodo-2015";
-        $chart["palette"] = "1";
-        $chart["showvalues"] = "0";
-        $chart["paletteColors"] = "#0075c2,#c90606,#f2c500,#12a830,#1aaf5d";
-        $chart["showBorder"] = "0";
+        $chart["caption"]        = "Gráfico Informe de Evolución";
+        $chart["subCaption"]     = $period;
+        $chart["palette"]        = "1";
+        $chart["showvalues"]     = "0";
+        $chart["paletteColors"]  = "#0075c2,#c90606,#f2c500,#12a830,#1aaf5d";
+        //$chart["showBorder"] = "0";
         $chart["yaxisvaluespadding"] = "10";
         $chart["valueFontColor"] = "#000000";
-        $chart["rotateValues"] = "0";
-        $chart["bgAlpha"] = "0,0";
-        $chart["theme"] = "fint";
+        $chart["rotateValues"]   = "0";
+        //$chart["bgAlpha"] = "0,0";//Fondo 
+        $chart["theme"]          = "fint";
         //$chart["YAxisMaxValue"] = "150";
         //$chart["decimalSeparator"] = ",";
         //$chart["decimals"] = "2";
-        $chart["showborder"] = "0";
-        $chart["decimals"] = "0";
-        $chart["exportenabled"] = "1";
+        $chart["showborder"]     = "0";
+        $chart["decimals"]       = "0";
+        $chart["exportenabled"]  = "1";
         $chart["exportatclient"] = "0";
-        $chart["exportFormats"] = "PNG= Exportar Informe de Evolución PDF";
+        $chart["exportFormats"]  = "PNG= Exportar Informe de Evolución PDF";
         $chart["exportFileName"] = "Grafico Resultados ";
-        $chart["exporthandler"] = $urlExportFromChart;
+        $chart["exporthandler"]  = $urlExportFromChart;
 
         //Lamado de promedio
         //$prom = $this->getPromdIndicator($indicator);

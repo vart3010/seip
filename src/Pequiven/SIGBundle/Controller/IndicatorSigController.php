@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Tecnocreaciones\Bundle\ResourceBundle\Controller\ResourceController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Pequiven\IndicatorBundle\Entity\IndicatorLevel;
+
 use Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCause;
 use Pequiven\IndicatorBundle\Form\EvolutionIndicator\EvolutionCauseType;
 use Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionTrend;
@@ -546,12 +547,13 @@ class IndicatorSigController extends ResourceController {
         return $data;
     }    
 
-    public function exportAction(Request $request) {
-
-        $em = $this->getDoctrine()->getManager();
-        //$chart = $request->get('stream');
-        
-        if($request->isMethod('POST')){
+    /**
+     *
+     *
+     *
+     */
+    public function exportChrat(Request $request)
+    {
           $exportRequestStream = $request->request->all();
           $request->request->remove('charttype');
           $request->request->remove('stream');
@@ -563,13 +565,45 @@ class IndicatorSigController extends ResourceController {
           $request->request->remove('meta_height');
           $request->request->remove('parameters');
           $fusionchartService = $this->getFusionChartExportService();          
-          $fileSVG = $fusionchartService->exportFusionChart($exportRequestStream);
-        //var_dump("paso");
-        }
-        //var_dump($fileSVG);
-        //die();
+          $fileSVG = $fusionchartService->exportFusionChart($exportRequestStream);                                    
 
-        $chart = $request->get('stream');
+        return $fileSVG;
+    }
+
+    /**
+     *
+     * Exportar informe de Evolución
+     *
+     */
+    public function exportAction(Request $request) {
+
+        $em = $this->getDoctrine()->getManager();
+        //$chart = $request->get('stream');
+        $routing = "/var/www/html/seip"; 
+        if($request->isMethod('POST')){
+          $fileSVG = $this->exportChrat($request);
+        }
+        //Buscando los Archivos por Codigo
+        $nameSVG = glob("$routing/web/php-export-handler/temp/*.png");
+        
+        $user = $this->getUser()->getId();//Id Usuario    
+        $user = str_pad($user, 6,"0", STR_PAD_LEFT);
+
+        $cont = 0;
+        $contImg = 1;
+        foreach ($nameSVG as $value) {            
+            $pos = strpos($nameSVG[$cont], $user);            
+            if ($pos !== false) {              
+                if ($contImg === 1) {
+                    $chartEvolution = $nameSVG[$cont];
+                    $contImg ++;
+                }elseif ($contImg === 2) {
+                    $chartCause = $nameSVG[$cont];
+                }
+            }
+
+            $cont ++;
+        }        
 
         $dataAction = $this->findEvolutionCause($request); //Carga la data de las causas y sus acciones relacionadas
 
@@ -596,11 +630,6 @@ class IndicatorSigController extends ResourceController {
             //Relacion
             $objRel = $ArrangementProgram->getTacticalObjective()->getDescription();
         }
-        //Carga de data de Indicador para armar grafica
-        //$response = new JsonResponse();
-        //$indicatorService = $this->getIndicatorService(); //Obtenemos el servicio del indicador
-        //$dataChart = $indicatorService->getDataChartOfIndicatorEvolution($indicator, array('withVariablesRealPLan' => true)); //Obtenemos la data del gráfico de acuerdo al indicador
-        //$dataCause = $indicatorService->getDataChartOfCausesIndicatorEvolution($indicator, $month); //Obtenemos la data del grafico de las causas de desviación
         
         //Carga el analisis de la tendencia
         $trend = $this->get('pequiven.repository.sig_trend_report_evolution')->findBy(array($type => $id, 'month' => $month));
@@ -625,14 +654,14 @@ class IndicatorSigController extends ResourceController {
         //Verificación
         $verification = $this->get('pequiven.repository.sig_action_verification')->findBy(array($type => $id, 'month' => $month));
 
-        //PERIODO
+        //Periodo
         $period = $this->getPeriodService()->getPeriodActive();
 
         $data = array(
             //'data'          => $dataChart,//Data del Gráfico Informe de Evolución
             //'dataCause'     => $dataCause,//Data del Grafico de las Causas
-            'nameSVG'       => $fileSVG,
-            'chart'         => $chart,
+            'nameSVG'       => $chartEvolution,
+            'chartCause'    => $chartCause,
             'month'         => $month,
             'name'          => $name,
             'trend'         => $trendDescription,
@@ -686,8 +715,7 @@ class IndicatorSigController extends ResourceController {
 
         //$pdf->Image($data['nameSVG'], 15, 140, 75, 113, 'PNG', '', true, 150, '', false, false, 1, false, false, false);                
 
-    // set some text to print
-
+    // set some text to print 
         $html = $this->renderView('PequivenSIGBundle:Indicator:viewPdf.html.twig', $data);
 
     // print a block of text using Write()
@@ -695,6 +723,22 @@ class IndicatorSigController extends ResourceController {
 
     //            $pdf->Output('Reporte del dia'.'.pdf', 'I');
         $pdf->Output('Informe de evolucion' . '.pdf', 'D');
+
+        $this->rmTempFile($data);
+    }
+    /**
+     *
+     *  Eliminación de Archivos temporales
+     *
+     */
+    public function rmTempFile($data)
+    {   
+        $imgChart = $data['nameSVG'];
+        $imgCause = $data['chartCause'];
+        
+        shell_exec("rm $imgChart");
+        shell_exec("rm $imgCause");
+
     }
 
     /**

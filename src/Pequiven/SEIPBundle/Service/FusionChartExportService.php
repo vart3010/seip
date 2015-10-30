@@ -565,8 +565,14 @@ function exportProcessor($stream, $meta, $exportParams) {
         $stream = stripslashes($stream);
     }
 
-    // create a new export data
-    $tempFileName = md5(rand());
+    //Creación nombre de Archivo relacionado al usuario que consulta
+    $user = $this->getUser()->getId();//Id Usuario    
+    $user = str_pad($user, 6,"0", STR_PAD_LEFT);
+    $cadena = $user.md5(rand());
+    
+    // create a new export data    
+    $tempFileName = $cadena;
+    
     if ('jpeg' == $ext || 'jpg' == $ext) {
         $ext = 'png';
         $ext2 = 'jpg';
@@ -615,6 +621,7 @@ function exportProcessor($stream, $meta, $exportParams) {
         
         shell_exec("chmod -R 777".$this->container->getParameter('kernel.root_dir')."/../web/php-export-handler/*");
         
+        $nameTemp = $nameSVG;
         //return $nameSVG;
         // do the conversion
         $command = INKSCAPE_PATH . "$bg --without-gui {$tempInputSVGFile} --export-{$ext} $tempOutputFile {$size}";
@@ -628,8 +635,11 @@ function exportProcessor($stream, $meta, $exportParams) {
             $output .= shell_exec($comandJpg);
         }
         
-        $nameSVG = $tempOutputFile;
-        return $nameSVG;
+        shell_exec("rm $tempInputSVGFile");
+        
+        $nameSVG = $tempOutputFile;                
+        //return $nameSVG;
+
         // catch error
         if (!is_file($tempOutputFile) || filesize($tempOutputFile) < 10) {
             $return_binary = $output;
@@ -641,17 +651,17 @@ function exportProcessor($stream, $meta, $exportParams) {
         }
 
         // delete temp files
-        if (file_exists($tempInputSVGFile)) {
-            unlink($tempInputSVGFile);
+        if (file_exists($nameTemp)) {
+            unlink($nameTemp);            
         }
-        if (file_exists($tempOutputFile)) {
+        /*if (file_exists($tempOutputFile)) {
             unlink($tempOutputFile);
         }
         if (file_exists($tempOutputPngFile)) {
             unlink($tempOutputPngFile);
-        }
-        var_dump($tempOutputFile);
-        die();
+        }*/   
+        
+        return $nameSVG;
 
     // SVG can be streamed back directly
     } else if ($ext == 'svg') {
@@ -814,4 +824,29 @@ function hex2rgb($h, $sep = "") {
     }
     return $rgb;
 }
+
+    /**
+     * Get a user from the Security Context
+     *
+     * @return mixed
+     *
+     * @throws \LogicException If SecurityBundle is not available
+     *
+     * @see Symfony\Component\Security\Core\Authentication\Token\TokenInterface::getUser()
+     */
+    protected function getUser() {
+        if (!$this->container->has('security.context')) {
+            throw new \LogicException('The SecurityBundle is not registered in your application.');
+        }
+
+        if (null === $token = $this->container->get('security.context')->getToken()) {
+            return;
+        }
+
+        if (!is_object($user = $token->getUser())) {
+            return;
+        }
+
+        return $user;
+    }
 }
