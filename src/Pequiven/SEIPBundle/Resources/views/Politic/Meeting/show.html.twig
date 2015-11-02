@@ -7,10 +7,10 @@
     <script src="{{  asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.input.js') }}"></script>
 {% endblock javascripts_base %}
 {% set circle = meeting.workStudyCircle.id %}
-{% if meeting.workStudyCircle.phase == 1 %}
-    {% set route_index = 'pequiven_work_study_circle_show' %}
-{% elseif  meeting.workStudyCircle.phase == 2 %}
+{% if meeting.workStudyCircle.phase > 1 %}
     {% set route_index = 'pequiven_work_study_circle_show_phase' %}
+{% else %}
+    {% set route_index = 'pequiven_work_study_circle_show' %}
 {% endif %}
 
 {% block before_body %}
@@ -19,8 +19,6 @@
         ("workStudyCircle.meetings.title"|trans )
     ) }}
 {% endblock %}
-
-
 
 {% block body %}
 
