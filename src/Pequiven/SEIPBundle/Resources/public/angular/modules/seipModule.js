@@ -5685,7 +5685,7 @@ angular.module('seipModule.controllers', [])
                         "type": "stackedbar3d",
                         "renderAt": id,
                         "width": "95%",
-                        //"height": "550%",
+                        "height": "650%",
                         "exportenabled": "1",
                         //"exportFormats": "PNG= Exportar como PNG|PDF= Exportar como PDF",
                         "exportFileName": "Gráfico Causas de Desviación del Indicador",

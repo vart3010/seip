@@ -553,8 +553,8 @@ class IndicatorSigController extends ResourceController {
      *
      */
     public function exportChrat(Request $request)
-    {
-          $exportRequestStream = $request->request->all();
+    {          
+          $exportRequestStream = $request->request->all();          
           $request->request->remove('charttype');
           $request->request->remove('stream');
           $request->request->remove('stream_type');
@@ -577,6 +577,8 @@ class IndicatorSigController extends ResourceController {
      */
     public function exportAction(Request $request) {
 
+        //$chartEvolution = $chartCause = "";
+
         $em = $this->getDoctrine()->getManager();
         //$chart = $request->get('stream');
         $routing = "/var/www/html/seip"; 
@@ -593,18 +595,18 @@ class IndicatorSigController extends ResourceController {
         $contImg = 1;
         foreach ($nameSVG as $value) {            
             $pos = strpos($nameSVG[$cont], $user);            
-            if ($pos !== false) {              
-                if ($contImg === 1) {
+            if ($pos !== false) {                                 
+                if (strpos($nameSVG[$cont], "mscolumnline3d")) {                    
                     $chartEvolution = $nameSVG[$cont];
                     $contImg ++;
-                }elseif ($contImg === 2) {
+                }elseif (strpos($nameSVG[$cont], "stackedbar3d")) {
                     $chartCause = $nameSVG[$cont];
                 }
             }
 
             $cont ++;
         }        
-
+        
         $dataAction = $this->findEvolutionCause($request); //Carga la data de las causas y sus acciones relacionadas
 
         $month = $request->get('month'); //El mes pasado por parametro
@@ -656,10 +658,10 @@ class IndicatorSigController extends ResourceController {
 
         //Periodo
         $period = $this->getPeriodService()->getPeriodActive();
-
+        
+        
         $data = array(
-            //'data'          => $dataChart,//Data del Gráfico Informe de Evolución
-            //'dataCause'     => $dataCause,//Data del Grafico de las Causas
+            //'font'          => utf8_decode("&#8593"),            
             'nameSVG'       => $chartEvolution,
             'chartCause'    => $chartCause,
             'month'         => $month,
@@ -707,13 +709,8 @@ class IndicatorSigController extends ResourceController {
 
     // set font
     //  $pdf->SetFont('times', 'BI', 12);
-    // add a page
-        //var_dump($data['nameSVG']);
-        /*?><img src="http://localhost/seip/web/php-export-handler/temp/<?= $data['nameSVG']?>"><?php
-        die();   */
+    // add a page        
         $pdf->AddPage('L');
-
-        //$pdf->Image($data['nameSVG'], 15, 140, 75, 113, 'PNG', '', true, 150, '', false, false, 1, false, false, false);                
 
     // set some text to print 
         $html = $this->renderView('PequivenSIGBundle:Indicator:viewPdf.html.twig', $data);

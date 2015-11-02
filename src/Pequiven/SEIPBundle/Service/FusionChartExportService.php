@@ -40,6 +40,7 @@ public $exportObject;
 public $exportedStatus;
 
     public function exportFusionChart($post) {
+        
         define("SAVE_PATH", "php-export-handler/ExportedImages/");
     
         define("HTTP_URI", "ExportedImages/");
@@ -61,7 +62,8 @@ public $exportedStatus;
         define('TEMP_PATH', 'temp/');
         define('INKSCAPE_PATH', '/usr/bin/inkscape');
         define('CONVERT_PATH', '/usr/bin/convert'); // imagemagic
-
+        
+        $type = $post['charttype'];
         $this->exportRequestStream = $post;
         $this->exportData = $this->parseExportRequestStream($this->exportRequestStream);
         $this->exporterResource = $this->getExporter($this->exportData ['parameters'] ["exportformat"], $this->exportData ["streamtype"]);
@@ -70,7 +72,7 @@ public $exportedStatus;
 //            raise_error(404, true);
 //        }
     //    
-        $this->exportObject = $this->exportProcessor($this->exportData ['stream'], $this->exportData ['meta'], $this->exportData ['parameters']);
+        $this->exportObject = $this->exportProcessor($this->exportData ['stream'], $this->exportData ['meta'], $this->exportData ['parameters'], $type);
         if(strlen($this->exportObject) > 0){
             return $this->exportObject;
         } else{
@@ -551,8 +553,8 @@ function raise_error($code, $halt = false) {
         $notices .= $err_message;
     }
 }
-function exportProcessor($stream, $meta, $exportParams) {
-
+function exportProcessor($stream, $meta, $exportParams, $type) {
+    
     // get mime type list parsing MIMETYPES constant declared in Export Resource PHP file
     $ext = strtolower($exportParams["exportformat"]);
 
@@ -568,7 +570,7 @@ function exportProcessor($stream, $meta, $exportParams) {
     //Creación nombre de Archivo relacionado al usuario que consulta
     $user = $this->getUser()->getId();//Id Usuario    
     $user = str_pad($user, 6,"0", STR_PAD_LEFT);
-    $cadena = $user.md5(rand());
+    $cadena = $user."-".md5(rand())."-".$type;
     
     // create a new export data    
     $tempFileName = $cadena;

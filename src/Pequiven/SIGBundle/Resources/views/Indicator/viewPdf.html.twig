@@ -78,8 +78,16 @@
         font-size: 14px;
     }
 
-
+    #page {
+    width: 500px;
+    margin: 0 auto;
+    background: #FFFFFF;
+    border: 10px #FFFFFF solid;
+    text-align: center;
+    }
+    
 </style>
+
 {% block body %}
     <br/><br/>    
     {% if month == 1 %}
@@ -107,7 +115,7 @@
     {% elseif month == 12 %}
         {% set setmonth = "Diciembre" %}
     {% endif %}         
-    <!--<img src="http://localhost/seip/web/php-export-handler/temp/{{ nameSVG }}">-->
+    
     <table width="95%">
         <tbody>
             <tr>
@@ -129,11 +137,32 @@
     <br><br>
     
     <!-- Informe de Evolución Grafica de Indicador -->
-    <div>
-        <img src="{{ nameSVG }}" width="450px" height="350px"  style="border:5px solid;">
-        <img src="{{ chartCause }}" width="450px" height="350px"  style="border:5px solid;">
-    </div>
+    
+    <div id="page">
+        
+        <table>
+        <tr>
+            <td>
+                <h4 align="center">GRÁFICA DE DATOS Y TENDENCIA DE PROCESO</h4>
+            </td>
+            <td>
+                <h4 align="center">CAUSAS DE DESVIACIÓN</h4>
+            </td>
+        </tr>
+        <tr>
+            <td border="1">
+                <h5 align="right">MEJOR HACIA...<span>&#8593;</span></h5>
+                <h5 align="left">Fórmula de Medición:</h5>                
+                <img src="{{ nameSVG }}" width="450px" height="300px">
+            </td>
 
+            <td border="1">
+                <img src="{{ chartCause }}" width="450px" height="350px">
+            </td>
+        </tr>
+        </table>
+    </div>
+    
     <br>
     <table width="100%" style="padding:5px;">
         <tr>

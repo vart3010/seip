@@ -101,6 +101,7 @@
   
         {# Graficos #}
         <div class="columns with-padding"> 
+            <h4 align="center">Gráfica de Datos y Tendencia de Proceso</h4>                
             <div ng-controller="ChartsSigController" class="dashboard_sig" ng-init="renderChartEvolutionSig('chartContainerResult', {{ data|json_encode() }},'{{ urlExportFromChart }}')" style="width: 95%;" align="center">
                 {# señalización tendencia #}
                 <div class="position">
@@ -130,13 +131,13 @@
             &nbsp; 
         {% endif %}
 
-        <div class="columns with-padding">         
+        <div class="columns with-padding">
+                <h4 align="center">Causas de Desviación</h4>                
                 <div ng-controller="ChartsSigController" class="dashboard_sig" ng-init="renderChartSigCs('chartContainerResultCs', {{ dataCause|json_encode()}},'{{ urlExportFromChart }}')" style="width: 95%; height:55%;" align="center">
                 <div class="nine-columns twelve-columns-mobile" id="chartContainerResultCs">
                 <!-- This div will hold the chart generated in the footer -->
                 </div>
                 <input id='export_causespng' type='hidden' value='Exportar Informe' />
-
                 </div>
         </div> 
         <br>        
@@ -290,7 +291,7 @@
             var button = document.getElementById("exportpng");
             if (button){
                button.click();   
-               window.setTimeout(downloadCause,500);               
+               window.setTimeout(downloadCause,800);               
             }            
         }
         //Carga de Evento de Descarga de Grafica de Causas del Indicador

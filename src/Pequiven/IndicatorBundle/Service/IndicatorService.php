@@ -3863,8 +3863,8 @@ class IndicatorService implements ContainerAwareInterface {
         );
         $chart = array();
 
-        $chart["caption"]        = "Gráfico Informe de Evolución";
-        $chart["subCaption"]     = $period;
+        //$chart["caption"]        = "Gráfico Informe de Evolución";
+        //$chart["subCaption"]     = $period;
         $chart["palette"]        = "1";
         $chart["showvalues"]     = "0";
         $chart["paletteColors"]  = "#0075c2,#c90606,#f2c500,#12a830,#1aaf5d";
@@ -4025,6 +4025,9 @@ class IndicatorService implements ContainerAwareInterface {
      * @return type
      */
     public function getDataChartOfCausesIndicatorEvolution(Indicator $indicator, $month, $urlExportFromChart) {
+        
+        $period = $indicator->getPeriod()->getDescription();
+
         $data = array(
             'dataSource' => array(
                 'chart' => array(),
@@ -4035,8 +4038,8 @@ class IndicatorService implements ContainerAwareInterface {
             ),
         );
         $chart = array();
-        $chart["caption"] = "Gráfico Causas de Desviación";
-        $chart["subCaption"] = "Periodo-2015";
+        //$chart["caption"] = "Gráfico Causas de Desviación";
+        //$chart["subCaption"] = $period;
         $chart["valueFontColor"] = "#000000";
         $chart["showvalues"] = "1";
         $chart["showSum"] = "1";
