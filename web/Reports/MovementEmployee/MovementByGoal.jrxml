@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Movimientos_Meta" language="javascript" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="39a430ef-fd62-4b25-8487-b8107872e988">
+	<property name="ireport.zoom" value="1.6105100000000023"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="60"/>
+	<parameter name="idGoal" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select period.name as Period, goal.name as Meta,
+CONCAT(goal.weight,' %') as Peso, date_format(goal.startdate,'%d/%m/%Y') as Fecha_Inicio,
+date_format(goal.enddate,'%d/%m/%Y') as Fecha_Fin,
+goal.observations as Obs_Goal,
+case
+when (AP.description is null) then CONCAT(AP.description)
+when (AP.ref is null) then CONCAT(AP.ref)
+else CONCAT(AP.ref,'. ',AP.description) end as Programa_Gestion,
+date_format(mov.date,'%d/%m/%Y') as FechaMov,
+case when mov.type='O' then 'Salida'
+when mov.type='I' then 'Entrada' end as Tipo,
+mov.cause as id_Cause,
+case
+when mov.cause=1 then 'Asignación'
+when mov.cause=2 then 'Suplencia'
+when mov.cause=3 then 'Reintegro por Reposo'
+when mov.cause=11 then 'Culminación de Suplencia'
+when mov.cause=12 then 'Cambio'
+when mov.cause=13 then 'Retiro'
+when mov.cause=14 then 'Reposo'
+end as Causa,
+
+case when emp.num_personal is null then
+concat(emp.firstname,' ',emp.lastname)
+else
+concat(emp.firstname,' ',emp.lastname,' (',emp.num_personal,')') end as Empleado,
+
+CONCAT(mov.realAdvance,' %') as Avance, CONCAT(mov.planned,' %') as Planificado, CONCAT(mov.penalty,' %') as Penalizaciones,
+mov.observations as Obs, mov.createdAt as FechaCreacion, usu.username as CreadoPor
+
+from MovementEmployee as mov
+inner join Period period on (period.id=mov.period_id)
+inner join seip_user emp on (emp.id=mov.user_id)
+inner join seip_user usu on (usu.id=mov.createdBy_id)
+inner join Goal goal on (goal.id=mov.goal_id)
+inner join ArrangementProgram AP on (goal.timeline_id=AP.timeline_id)
+where typeMov='Goal' and goal.id=$P{idGoal}
+order by goal.name,mov.date]]>
+	</queryString>
+	<field name="Period" class="java.lang.String"/>
+	<field name="Meta" class="java.lang.String"/>
+	<field name="Peso" class="java.lang.String"/>
+	<field name="Fecha_Inicio" class="java.lang.String"/>
+	<field name="Fecha_Fin" class="java.lang.String"/>
+	<field name="Obs_Goal" class="java.lang.String"/>
+	<field name="Programa_Gestion" class="java.lang.String"/>
+	<field name="FechaMov" class="java.lang.String"/>
+	<field name="Tipo" class="java.lang.String"/>
+	<field name="id_Cause" class="java.lang.String"/>
+	<field name="Causa" class="java.lang.String"/>
+	<field name="Empleado" class="java.lang.String"/>
+	<field name="Avance" class="java.lang.String"/>
+	<field name="Planificado" class="java.lang.String"/>
+	<field name="Penalizaciones" class="java.lang.String"/>
+	<field name="Obs" class="java.lang.String"/>
+	<field name="FechaCreacion" class="java.sql.Timestamp"/>
+	<field name="CreadoPor" class="java.lang.String"/>
+	<group name="Goal" isStartNewPage="true">
+		<groupExpression><![CDATA[$F{Meta}]]></groupExpression>
+		<groupHeader>
+			<band height="174">
+				<rectangle radius="10">
+					<reportElement x="0" y="23" width="572" height="90" backcolor="#F0F0F0" uuid="adb3b30a-d176-40ac-8adb-a84619cde240"/>
+				</rectangle>
+				<staticText>
+					<reportElement x="0" y="0" width="572" height="20" uuid="9baec6cd-dd87-43e3-bc0f-a9b8c30b271b"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Liberation Sans Narrow" size="10" isBold="true" isItalic="false" isUnderline="false"/>
+					</textElement>
+					<text><![CDATA[1- Datos de la Meta:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="11" y="66" width="57" height="20" uuid="f5cd53bb-11b6-4672-bead-451dd082a3d8"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Liberation Sans Narrow" size="9" isBold="true" isItalic="false" isUnderline="false"/>
+					</textElement>
+					<text><![CDATA[Observaciones:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="11" y="26" width="57" height="20" uuid="abcacbdd-4bef-404d-9d17-1a961ac6ef1a"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Liberation Sans Narrow" size="9" isBold="true" isItalic="false" isUnderline="false"/>
+					</textElement>
+					<text><![CDATA[Descripcion:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="11" y="46" width="57" height="20" uuid="a45b2bb4-232f-4297-a56b-8b7ff5a3972b"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Liberation Sans Narrow" size="9" isBold="true" isItalic="false" isUnderline="false"/>
+					</textElement>
+					<text><![CDATA[Fecha de Inicio:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="192" y="46" width="87" height="20" uuid="8d13ba0f-9a5d-4f0d-a6a8-9deb33d12da1"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Liberation Sans Narrow" size="9" isBold="true" isItalic="false" isUnderline="false"/>
+					</textElement>
+					<text><![CDATA[Fecha de Culminacion:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="435" y="46" width="33" height="20" uuid="9258a61c-8c80-45c0-aec5-1a9fc38d7bfa"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Liberation Sans Narrow" size="9" isBold="true" isItalic="false" isUnderline="false"/>
+					</textElement>
+					<text><![CDATA[Peso:]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="72" y="46" width="100" height="20" uuid="ed0c1b65-ad5c-445a-b0a9-a2178afaa621"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Liberation Sans Narrow" size="9" isItalic="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{Fecha_Inicio}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="281" y="46" width="100" height="20" uuid="aad95d19-7e6d-4568-986b-3d3f0d991574"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Liberation Sans Narrow" size="9" isItalic="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{Fecha_Fin}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="471" y="46" width="54" height="20" uuid="08c1854f-018f-4922-8543-048e95867409"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Liberation Sans Narrow" size="9" isItalic="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{Peso}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="72" y="26" width="480" height="20" uuid="75f45295-516f-4a44-b0d4-eae78478a3f0"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Liberation Sans Narrow" size="9" isItalic="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{Meta}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="11" y="86" width="117" height="20" uuid="50191f8b-de80-4c0a-9bd2-9d8d278e0246"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Liberation Sans Narrow" size="9" isBold="true" isItalic="false" isUnderline="false"/>
+					</textElement>
+					<text><![CDATA[Programa de Gestion Asociado:]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="139" y="86" width="424" height="20" uuid="e05f8510-2070-4653-8557-59bbd6bb3868"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Liberation Sans Narrow" size="9" isItalic="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{Programa_Gestion}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="0" y="125" width="572" height="20" uuid="bcb01e4d-676d-4e3a-8669-da006dc50991"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Liberation Sans Narrow" size="10" isBold="true" isItalic="false" isUnderline="false"/>
+					</textElement>
+					<text><![CDATA[2- Cambios Realizados:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="0" y="150" width="46" height="20" uuid="0d281e12-855f-484f-8367-bbb5802ad6ae"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Liberation Sans Narrow" size="9" isBold="true" isItalic="false" isUnderline="false"/>
+					</textElement>
+					<text><![CDATA[Fecha]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="192" y="150" width="36" height="20" uuid="344cf212-368d-478b-87bf-4ff0a9f460ce"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Liberation Sans Narrow" size="9" isBold="true" isItalic="false" isUnderline="false"/>
+					</textElement>
+					<text><![CDATA[Tipo]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="46" y="150" width="123" height="20" uuid="3fbc29a1-cb81-45e8-853b-e0539da28d8c"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Liberation Sans Narrow" size="9" isBold="true" isItalic="false" isUnderline="false"/>
+					</textElement>
+					<text><![CDATA[Trabajador]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="228" y="150" width="67" height="20" uuid="e594a8d0-9f46-473b-aef5-699db4691618"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Liberation Sans Narrow" size="9" isBold="true" isItalic="false" isUnderline="false"/>
+					</textElement>
+					<text><![CDATA[Causa]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="295" y="150" width="36" height="20" uuid="752adbc3-a093-4479-bbd5-3d4c36330b1a"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Liberation Sans Narrow" size="9" isBold="true" isItalic="false" isUnderline="false"/>
+					</textElement>
+					<text><![CDATA[Avance]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="331" y="150" width="46" height="20" uuid="488f3f58-c519-4f3b-a419-ecbaf7b9a61a"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Liberation Sans Narrow" size="9" isBold="true" isItalic="false" isUnderline="false"/>
+					</textElement>
+					<text><![CDATA[Planificado]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="376" y="150" width="38" height="20" uuid="8408d66f-fbad-4d4c-bd02-057b6865fe2f"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Liberation Sans Narrow" size="9" isBold="true" isItalic="false" isUnderline="false"/>
+					</textElement>
+					<text><![CDATA[Penaliz.]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="414" y="150" width="158" height="20" uuid="39a6ef66-dadc-4571-a3da-c89d4597ab45"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Liberation Sans Narrow" size="9" isBold="true" isItalic="false" isUnderline="false"/>
+					</textElement>
+					<text><![CDATA[Observaciones]]></text>
+				</staticText>
+				<line>
+					<reportElement x="0" y="171" width="572" height="1" uuid="2a89d483-ddcf-46a8-be4d-d27ef90a90b5"/>
+					<graphicElement>
+						<pen lineWidth="2.0" lineStyle="Double"/>
+					</graphicElement>
+				</line>
+				<textField>
+					<reportElement x="72" y="66" width="480" height="20" uuid="8cfb327f-3e02-4e7a-b269-b47538318fdb"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Liberation Sans Narrow" size="9"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{Obs_Goal}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="7"/>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="50"/>
+	</title>
+	<pageHeader>
+		<band height="96" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="70" width="559" height="20" uuid="2aeca690-ee83-4e9a-92f0-652f4fe7382c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Liberation Sans Narrow" size="12" isBold="true" isItalic="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[REPORTE DE MOVIMIENTO DE TRABAJADORES DENTRO DE LAS METAS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="414" y="14" width="103" height="31" uuid="33e40bfa-f3ed-49ff-b1c2-1f835636ad78"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Liberation Sans Narrow" size="8" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Sistema Estadístico de Información Petroquímica]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="2"/>
+	</columnHeader>
+	<detail>
+		<band height="29" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="9" width="46" height="12" uuid="4b795260-73b3-48d8-962e-7321f3492966"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Liberation Sans Narrow" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FechaMov}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="46" y="9" width="146" height="12" uuid="a38830bb-6b1b-4a1b-a6ae-9fbf7573ef3a"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Liberation Sans Narrow" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Empleado}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="192" y="9" width="36" height="12" uuid="ec5d09cc-ed5d-4229-940a-fd6354fafef1"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Liberation Sans Narrow" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Tipo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="228" y="9" width="67" height="12" uuid="75e8a2c8-0287-405b-b9a6-410c22b0efd4"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Liberation Sans Narrow" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Causa}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="295" y="9" width="36" height="12" uuid="a2c0dbcf-4ffd-41f0-8b59-2bf0b30cc603"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Liberation Sans Narrow" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Avance}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="331" y="9" width="45" height="12" uuid="750fb585-8147-4b76-b15a-8615d5471a8e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Liberation Sans Narrow" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Planificado}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="377" y="9" width="37" height="12" uuid="c5af008d-1a04-4abc-abb1-b7b222b5fc83"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Liberation Sans Narrow" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Penalizaciones}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="414" y="3" width="158" height="26" isPrintWhenDetailOverflows="true" uuid="64f2e551-02ee-4cda-91a4-294dfb2b8f5b"/>
+				<textElement textAlignment="Justified" verticalAlignment="Top">
+					<font fontName="Liberation Sans Narrow" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Obs}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="6" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="46" splitType="Stretch">
+			<rectangle radius="10">
+				<reportElement x="0" y="4" width="572" height="4" forecolor="#FEFEFE" backcolor="#BB0707" uuid="7d810c7d-d8f8-4038-b5eb-4b16c54b6d1b"/>
+				<graphicElement>
+					<pen lineWidth="0.0" lineStyle="Solid"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="92" y="11" width="398" height="33" uuid="ea9b895c-02f5-4dcc-8ac5-3c80df00bf3e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Liberation Sans Narrow" size="10" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Gerencia Corporativa de Planificación Estratégica y Nuevos Desarrollos]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="490" y="11" width="43" height="33" uuid="cf5de5ef-5cfd-4dbc-8f49-1fa17ceb5aa8"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Liberation Sans Narrow" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="534" y="11" width="25" height="33" uuid="e5cba87d-df34-459c-859c-2c8f449348bd"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Liberation Sans Narrow" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<lastPageFooter>
+		<band height="5"/>
+	</lastPageFooter>
+	<summary>
+		<band height="5"/>
+	</summary>
+	<noData>
+		<band height="4"/>
+	</noData>
+</jasperReport>

@@ -307,6 +307,22 @@ class MovementEmployeeController extends SEIPController {
     }
 
     /**
+     * Función que Genera el Reporte de Movimientos en JasperReport
+     * @param Request $request
+     * @return type
+     */
+    public function exportAction(Request $request) {
+
+        $id = $request->get('idGoal');
+        $reportService = $this->container->get('seip.service.report');
+        $route = "MovementEmployee/MovementByGoal.jrxml";
+        $parameters = array("idGoal" => $id);
+        $reportService->DownloadReportService($parameters, $route);
+
+        return $this->redirect($this->generateUrl('goal_movement', array('idGoal' => $id)));
+    }
+
+    /**
      * CALCULA EL AVANCE, REAL Y PENALIZACIONES DE METAS A UNA FECHA
      * @param Goal $goal
      * @param type $date
