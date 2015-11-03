@@ -3926,11 +3926,9 @@ class IndicatorService implements ContainerAwareInterface {
                 
                 if ($resultNumbers >= $contMonth) {
                     
-                    if ($labelsFrequencyNotificationArray === 0) {                     
+                    //if ($labelsFrequencyNotificationArray === 0) {                     
                         $label["label"] = $labelsFrequencyNotificationArray[$contMonth];                        
-                    }else{
-                        $label["label"] = "Anual";
-                    }                    
+                    //}                    
 
                     $contCant = $contMonth; //Contando la Cantidad de valores
 
