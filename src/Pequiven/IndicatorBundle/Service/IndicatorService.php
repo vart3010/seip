@@ -3307,17 +3307,19 @@ class IndicatorService implements ContainerAwareInterface {
     public function getLabelsByIndicatorFrequencyNotification(Indicator $indicator) {
         $frequency = $indicator->getFrequencyNotificationIndicator();
         $labelsFrequencyArray = array();
-
-        if ($frequency->getDays() == 30) {
-            $labelsFrequencyArray = CommonObject::getLabelsMonths();
-        } elseif ($frequency->getDays() == 60) {
-            $labelsFrequencyArray = CommonObject::getLabelsBimonthly();
-        } elseif ($frequency->getDays() == 90) {
-            $labelsFrequencyArray = CommonObject::getLabelsTrimonthly();
-        } elseif ($frequency->getDays() == 120) {
-            $labelsFrequencyArray = CommonObject::getLabelsFourmonthly();
-        } elseif ($frequency->getDays() == 180) {
-            $labelsFrequencyArray = CommonObject::getLabelsSixmonthly();
+        
+        if($frequency){
+            if ($frequency->getDays() == 30) {
+                $labelsFrequencyArray = CommonObject::getLabelsMonths();
+            } elseif ($frequency->getDays() == 60) {
+                $labelsFrequencyArray = CommonObject::getLabelsBimonthly();
+            } elseif ($frequency->getDays() == 90) {
+                $labelsFrequencyArray = CommonObject::getLabelsTrimonthly();
+            } elseif ($frequency->getDays() == 120) {
+                $labelsFrequencyArray = CommonObject::getLabelsFourmonthly();
+            } elseif ($frequency->getDays() == 180) {
+                $labelsFrequencyArray = CommonObject::getLabelsSixmonthly();
+            }
         }
 
         if ($indicator->getResultIsAccumulative()) {
@@ -3895,7 +3897,6 @@ class IndicatorService implements ContainerAwareInterface {
         //Llamado de frecuencia de Notificacion del Indicador
         $labelsFrequencyNotificationArray = $this->getLabelsByIndicatorFrequencyNotification($indicator);
 
-
         //Número de indicadores asociados
         $totalNumValues = count($indicator->getValuesIndicator());
 
@@ -3907,10 +3908,10 @@ class IndicatorService implements ContainerAwareInterface {
         $dataSetReal["seriesname"] = "Real";
         $dataSetPlan["seriesname"] = "Plan";
         $dataSetAcum["seriesname"] = "Acumulado";
-        $dataSetAnt["seriesname"] = "2014";
+        $dataSetAnt["seriesname"]  = "2014";
         $labelAntper = "2014";
-        $labelProm = "Promedio o Acumulado";
-        $labelobj = "Objetivo 2015";
+        $labelProm   = "Promedio o Acumulado";
+        $labelobj    = "Objetivo 2015";
 
         //Carga de datos del label principal Periodo-2015
         $labelAnt["label"] = $labelAntper; //Label del 2014
@@ -3922,10 +3923,14 @@ class IndicatorService implements ContainerAwareInterface {
 
             foreach ($indicatorValues as $indicatorValue) {
                 $formulaParameters = $indicatorValue->getFormulaParameters();
-
+                
                 if ($resultNumbers >= $contMonth) {
-
-                    $label["label"] = $labelsFrequencyNotificationArray[$contMonth];
+                    
+                    if ($labelsFrequencyNotificationArray === 0) {                     
+                        $label["label"] = $labelsFrequencyNotificationArray[$contMonth];                        
+                    }else{
+                        $label["label"] = "Anual";
+                    }                    
 
                     $contCant = $contMonth; //Contando la Cantidad de valores
 
@@ -3934,7 +3939,7 @@ class IndicatorService implements ContainerAwareInterface {
 
                 $contMonth++;
             }
-
+            
             $labelp["label"] = $labelProm; //Label del Prom
             $category[] = $labelp; //Label del Prom
             //Label Obj Acum
