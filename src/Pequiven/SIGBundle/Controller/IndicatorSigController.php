@@ -632,6 +632,7 @@ class IndicatorSigController extends ResourceController {
             $objRel = $ArrangementProgram->getTacticalObjective()->getDescription();
         }
         
+        $formula = $indicator->getFormula();
         //Carga el analisis de la tendencia
         $trend = $this->get('pequiven.repository.sig_trend_report_evolution')->findBy(array($type => $id, 'month' => $month));
         if ($trend) {
@@ -660,7 +661,7 @@ class IndicatorSigController extends ResourceController {
         
         
         $data = array(
-            //'font'          => utf8_decode("&#8593"),            
+            'formula'       => $formula,            
             'nameSVG'       => $chartEvolution,
             'chartCause'    => $chartCause,
             'month'         => $month,
@@ -729,11 +730,11 @@ class IndicatorSigController extends ResourceController {
      */
     public function rmTempFile($data)
     {   
-        $imgChart = $data['nameSVG'];
-        $imgCause = $data['chartCause'];
+        $imgChart = $data['nameSVG'];//Ruta
+        $imgCause = $data['chartCause'];//Ruta
         
-        shell_exec("rm $imgChart");
-        shell_exec("rm $imgCause");
+        shell_exec("rm $imgChart");//Eliminamos
+        shell_exec("rm $imgCause");//Eliminamos
 
     }
 

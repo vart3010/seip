@@ -626,6 +626,9 @@ function exportProcessor($stream, $meta, $exportParams, $type) {
         $nameTemp = $nameSVG;
         //return $nameSVG;
         // do the conversion
+        $width = 900;
+        $height = 750;
+        $size = "-w {$width} -h {$height}";
         $command = INKSCAPE_PATH . "$bg --without-gui {$tempInputSVGFile} --export-{$ext} $tempOutputFile {$size}";
         $output = shell_exec($command);
         shell_exec("chmod -R 777".$ext.$tempOutputFile);
