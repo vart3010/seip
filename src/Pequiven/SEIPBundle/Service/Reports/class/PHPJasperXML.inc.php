@@ -1772,7 +1772,7 @@ $font=$data->textElement->font["fontName"];
         $this->pdf->SetRightMargin($this->arrayPageSetting["rightMargin"]);
         $this->pdf->SetTopMargin($this->arrayPageSetting["topMargin"]);
         $this->pdf->SetAutoPageBreak(true,$this->arrayPageSetting["bottomMargin"]/2);
-        $this->pdf->AliasNbPages();
+        //$this->pdf->AliasNbPages(); NO SOPORTADO EN TCPDF 6.2.12
 
 
         $this->global_pointer=0;

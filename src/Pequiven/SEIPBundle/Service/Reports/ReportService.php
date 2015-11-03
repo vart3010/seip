@@ -25,7 +25,7 @@ class ReportService implements \Symfony\Component\DependencyInjection\ContainerA
         $this->user = "root"; // usuario 
         $this->pass = "a1b2c3$"; // password 
         $this->version = "0.9d"; // esta la version del PHPJasperXML no lo borren 
-        $this->pchartfolder="class/pchart2";
+        $this->pchartfolder = "class/pchart2";
     }
 
     /**
@@ -37,14 +37,15 @@ class ReportService implements \Symfony\Component\DependencyInjection\ContainerA
 
         // $parameters, parametros de consulta del reporte
         // $route, la ruta absoluta del reporte
-        
-        $route = $this->container->getParameter('kernel.root_dir') . "/../web/Reports/".$route;
-        
+
+        $route = $this->container->getParameter('kernel.root_dir') . "/../web/Reports/" . $route;
+
         $PHPJasperXML = new PHPJasperXML();
         $PHPJasperXML->arrayParameter = $parameter;
-        $PHPJasperXML->load_xml_file($route);
+        $xml = simplexml_load_file($route);
+        $PHPJasperXML->xml_dismantle($xml);
         $PHPJasperXML->transferDBtoArray($this->server, $this->user, $this->pass, $this->db);
-        $PHPJasperXML->outpage("D");    //page output method I:standard output  D:Download file
+        $PHPJasperXML->outpage("D");    //page output method I:standard output  D:Download file        
     }
 
     public function setContainer(\Symfony\Component\DependencyInjection\ContainerInterface $container = null) {

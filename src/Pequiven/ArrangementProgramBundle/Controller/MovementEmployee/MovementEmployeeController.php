@@ -315,7 +315,7 @@ class MovementEmployeeController extends SEIPController {
 
         $id = $request->get('idGoal');
         $reportService = $this->container->get('seip.service.report');
-        $route = "MovementEmployee/MovementByGoal.jrxml";
+        $route = "MovementEmployee/BaseReport.jrxml";
         $parameters = array("idGoal" => $id);
         $reportService->DownloadReportService($parameters, $route);
 
