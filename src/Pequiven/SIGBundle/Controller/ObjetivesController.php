@@ -164,7 +164,7 @@ class ObjetivesController extends ResourceController
      */
     public function exportAction(Request $request)
     {
-        $this->getSecurityService()->checkSecurity(array('ROLE_SEIP_OBJECTIVE_LIST_MATRIX_OBJECTIVES','ROLE_SEIP_PLANNING_LIST_OBJECTIVE_MATRIX_OBJECTIVES'));
+        $this->getSecurityService()->checkSecurity(array('ROLE_SEIP_SIG_OBJECTIVE_EXPORT_MATRIZ'));
         
         $managementSystemId = $request->get('id');
 

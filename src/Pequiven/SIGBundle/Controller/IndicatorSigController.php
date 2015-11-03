@@ -35,9 +35,9 @@ class IndicatorSigController extends ResourceController {
 
         $rol = null;
         $roleByLevel = array(
-            IndicatorLevel::LEVEL_ESTRATEGICO => array('ROLE_SEIP_SIG_INDICATOR_VIEW'),
-            IndicatorLevel::LEVEL_TACTICO => array('ROLE_SEIP_SIG_INDICATOR_VIEW'),
-            IndicatorLevel::LEVEL_OPERATIVO => array('ROLE_SEIP_SIG_INDICATOR_VIEW')
+            IndicatorLevel::LEVEL_ESTRATEGICO => array('ROLE_SEIP_SIG_INDICATOR_LIST'),
+            IndicatorLevel::LEVEL_TACTICO => array('ROLE_SEIP_SIG_INDICATOR_LIST'),
+            IndicatorLevel::LEVEL_OPERATIVO => array('ROLE_SEIP_SIG_INDICATOR_LIST')
         );
         if (isset($roleByLevel[$level])) {
             $rol = $roleByLevel[$level];
@@ -45,11 +45,10 @@ class IndicatorSigController extends ResourceController {
 
         $this->getSecurityService()->checkSecurity($rol);
 
-
         $criteria = $request->get('filter', $this->config->getCriteria());
         $sorting = $request->get('sorting', $this->config->getSorting());
         $repository = $this->container->get('pequiven.repository.sig_indicator');
-
+        
         $criteria['indicatorLevel'] = $level;
         $criteria['applyPeriodCriteria'] = true;
 

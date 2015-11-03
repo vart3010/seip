@@ -201,7 +201,7 @@
         <p class="button-height align-right">
             {% set filedObservation = '<br/><br/><textarea name="observation" class="input" placeholder="' ~ ('pequiven.arrangement_program.write_observation'|trans) ~ '" required="required" cols="28" rows="10" ></textarea>' %}
 
-            <a href="{{ path('arrangementprogram_export',{ id: entity.id }) }}" class="button">
+            {#<a href="{{ path('arrangementprogram_export',{ id: entity.id }) }}" class="button">
                 <span class="button-icon"><span class="icon-download"></span></span>
                     {{ 'pequiven_seip.buttons.export_xls'|trans({},'PequivenSEIPBundle') }}
             </a>
@@ -212,14 +212,14 @@
                 {% else %}
                     {{ buttons.generic_confirm(path('arrangementprogram_finish_the_notification_process',{ id: entity.id }),('pequiven.arrangement_program.buttons.end_notification_process'|trans({},'PequivenArrangementProgramBundle')),{'icon':'icon-lock','gradient':'red-gradient','content':('pequiven.arrangement_program.questions.want_to_finish_the_notification_process'|trans)}) }}
                 {% endif %}
-            {% endif %}
+            {% endif %}#}
 
 <p class="button-height align-right">
 
     {# Informe de Evolution #}
 
     {% if entity.showEvolutionView %}
-    {% set month = "now"|date("m") %}
+        {% set month = "now"|date("m") %}
         &nbsp;
             {{ buttons.generic_ext(path('pequiven_seip_arrangementprogram_evolution_sig', { 'id': entity.id , 'month': month }),('pequiven.evolution'|trans({},'messages'))) }}
         &nbsp;
