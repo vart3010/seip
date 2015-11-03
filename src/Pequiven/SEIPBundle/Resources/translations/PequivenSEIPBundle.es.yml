@@ -311,6 +311,7 @@ pequiven_seip:
             role_seip_objective_list_tactic: Usted no tiene permiso para ver la lista de los objetivos tacticos.
             role_seip_objective_list_operative: Usted no tiene permiso para ver la lista de los objetivos operativos.
             role_seip_objective_list_matrix_objectives: Usted no tiene permiso para ver la lista de la matriz de objetivos.
+            role_seip_sig_objective_export_matriz: Usted no tiene permiso para exportar la matriz de objetivos.
             role_seip_objective_view_strategic: Usted no tiene permiso para ver los objetivos estrategicos.
             role_seip_objective_view_tactic: Usted no tiene permiso para ver los objetivos tacticos.
             role_seip_objective_view_operative: Usted no tiene permiso para ver los objetivos operativos.
