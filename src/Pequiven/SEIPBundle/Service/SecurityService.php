@@ -567,7 +567,7 @@ class SecurityService implements ContainerAwareInterface
     private function evaluateObjetiveEdit($rol,Objetive $objective)
     {
         $result = false;
-        if($objective->getPeriod()->isActive() === true){
+        if($objective->getPeriod()->isActive() === true || $objective->getPeriod()->getParent()->isActive() == true){
             if($objective->getStatus() == Objetive::STATUS_DRAFT){
                 $result = true;
             }
@@ -586,7 +586,7 @@ class SecurityService implements ContainerAwareInterface
     private function evaluateObjetiveDelete($rol,Objetive $objective)
     {
         $result = false;
-        if($objective->getPeriod()->isActive() === true){
+        if($objective->getPeriod()->isActive() === true || $objective->getPeriod()->getParent()->isActive() == true){
             if($objective->getStatus() == Objetive::STATUS_DRAFT){
                 $result = true;
             }
@@ -611,7 +611,7 @@ class SecurityService implements ContainerAwareInterface
         );
         
         $result = false;
-        if($indicator->getPeriod()->isActive() === true){
+        if($indicator->getPeriod()->isActive() === true || $indicator->getPeriod()->getParent()->isActive() == true){
             if($this->isGranted($roleEditByLevel[$indicator->getIndicatorLevel()->getLevel()])){
                 if($indicator->getStatus() == Indicator::STATUS_DRAFT){
                     $result = true;
