@@ -4256,6 +4256,60 @@ class IndicatorService implements ContainerAwareInterface {
         return $band;
     }
 
+    /**
+     * Metodo que retorna si el el indicador va contra un indicador estrategico 
+     * 
+     * @param Indicator $indicator
+     * @return boolean
+     */
+    public function isIndicatorHasParentsEstrategic(Indicator $indicator) {
+        
+        $indicatorParent = $indicator->getParent();
+
+        $indicatorLevel = $indicator->getIndicatorLevel()->getId();
+        
+        $value = false;        
+            switch ($indicatorLevel) {
+                case 1:
+                    $value = false;
+                break;
+                
+                case 2:
+                    if ($indicatorParent) {                
+                        $value = false;
+                    }else{
+                        $value = true;
+                    }
+                break;
+                
+                case 3:
+                    if ($indicatorParent) {                        
+                        $levelParentOperative = $indicatorParent->getIndicatorLevel()->getId();
+                        $indicatorParentOperative = $indicatorParent->getParent();
+                        if ($levelParentOperative === $indicatorLevel) {
+                            $indicatorParentOperative = $indicatorParentOperative->getParent();
+                            if ($indicatorParentOperative) {                                                    
+                                $value = false;
+                            }                            
+                        }elseif($indicatorParentOperative){                            
+                                $value = false;
+                        }else{
+                            $value = true;
+                        }                                        
+        
+                    }else{
+                        $value = true;
+                    }
+                    
+                break;
+                
+                default: 
+                    $value = false;
+            }
+        
+        return $value;
+    }
+
     public function isGrantedButton(Indicator $indicator) {
         $freq = $indicator->getFrequencyNotificationIndicator()->getDays();
         $rs = 360 / $freq;
