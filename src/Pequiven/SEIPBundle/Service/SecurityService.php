@@ -55,6 +55,7 @@ class SecurityService implements ContainerAwareInterface
             'ROLE_SEIP_INDICATOR_VIEW_STRATEGIC' => 'evaluateStrategicIndicator',
             'ROLE_SEIP_INDICATOR_VIEW_TACTIC' => 'evaluateTacticIndicator',
             'ROLE_SEIP_INDICATOR_VIEW_OPERATIVE' => 'evaluateOperativeIndicator',
+            'ROLE_SEIP_SIG_INDICATOR_VIEW' => 'evaluateSIGIndicator',
             
             'ROLE_SEIP_RESULT_VIEW_TACTIC' => 'evaluateTacticResult',
             'ROLE_SEIP_RESULT_VIEW_OPERATIVE' => 'evaluateTacticResult',
@@ -289,6 +290,25 @@ class SecurityService implements ContainerAwareInterface
         }
     }
 
+    /**
+     * Evalúa si el usuario tiene permiso para ver los Indicadores que pertenecen a SIG
+     * @param type $rol
+     * @param Indicator $indicator
+     */
+    private function evaluateSIGIndicator($rol, Indicator $indicator)
+    {
+        $user = $this->getUser();
+        $valid = false;
+        $rol = $user->getLevelRealByGroup();
+        
+        $managementSystems = $indicator->getManagementSystems();
+        if(count($managementSystems) > 0){
+            $valid = true;
+        }
+
+        return $valid;
+    }
+    
     /**
      * Evalúa si el usuario tiene permiso para ver los Indicadores Estratégicos
      * @param type $rol
@@ -547,7 +567,7 @@ class SecurityService implements ContainerAwareInterface
     private function evaluateObjetiveEdit($rol,Objetive $objective)
     {
         $result = false;
-        if($objective->getPeriod()->isActive() === true){
+        if($objective->getPeriod()->isActive() === true || $objective->getPeriod()->getParent()->isOpened() == true){
             if($objective->getStatus() == Objetive::STATUS_DRAFT){
                 $result = true;
             }
@@ -566,7 +586,7 @@ class SecurityService implements ContainerAwareInterface
     private function evaluateObjetiveDelete($rol,Objetive $objective)
     {
         $result = false;
-        if($objective->getPeriod()->isActive() === true){
+        if($objective->getPeriod()->isActive() === true || $objective->getPeriod()->getParent()->isOpened() == true){
             if($objective->getStatus() == Objetive::STATUS_DRAFT){
                 $result = true;
             }
@@ -591,7 +611,7 @@ class SecurityService implements ContainerAwareInterface
         );
         
         $result = false;
-        if($indicator->getPeriod()->isActive() === true){
+        if($indicator->getPeriod()->isActive() === true || $indicator->getPeriod()->getParent()->isOpened() == true){
             if($this->isGranted($roleEditByLevel[$indicator->getIndicatorLevel()->getLevel()])){
                 if($indicator->getStatus() == Indicator::STATUS_DRAFT){
                     $result = true;
@@ -618,7 +638,7 @@ class SecurityService implements ContainerAwareInterface
         );
         
         $result = false;
-        if($indicator->getPeriod()->isActive() === true){
+        if($indicator->getPeriod()->isActive() === true || $indicator->getPeriod()->getParent()->isOpened() == true){
             if($this->isGranted($roleDeleteByLevel[$indicator->getIndicatorLevel()->getLevel()])){
                 if($indicator->getStatus() == Indicator::STATUS_DRAFT){
                     $result = true;

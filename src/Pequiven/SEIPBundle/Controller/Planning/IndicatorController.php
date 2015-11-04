@@ -83,9 +83,9 @@ class IndicatorController extends ResourceController {
 
         $rol = null;
         $roleByLevel = array(
-            IndicatorLevel::LEVEL_ESTRATEGICO => array('ROLE_SEIP_INDICATOR_VIEW_STRATEGIC', 'ROLE_SEIP_PLANNING_VIEW_INDICATOR_STRATEGIC'),
-            IndicatorLevel::LEVEL_TACTICO => array('ROLE_SEIP_INDICATOR_VIEW_TACTIC', 'ROLE_SEIP_PLANNING_VIEW_INDICATOR_TACTIC'),
-            IndicatorLevel::LEVEL_OPERATIVO => array('ROLE_SEIP_INDICATOR_VIEW_OPERATIVE', 'ROLE_SEIP_PLANNING_VIEW_INDICATOR_OPERATIVE')
+            IndicatorLevel::LEVEL_ESTRATEGICO => array('ROLE_SEIP_INDICATOR_VIEW_STRATEGIC', 'ROLE_SEIP_PLANNING_VIEW_INDICATOR_STRATEGIC', 'ROLE_SEIP_SIG_INDICATOR_VIEW'),
+            IndicatorLevel::LEVEL_TACTICO => array('ROLE_SEIP_INDICATOR_VIEW_TACTIC', 'ROLE_SEIP_PLANNING_VIEW_INDICATOR_TACTIC', 'ROLE_SEIP_SIG_INDICATOR_VIEW'),
+            IndicatorLevel::LEVEL_OPERATIVO => array('ROLE_SEIP_INDICATOR_VIEW_OPERATIVE', 'ROLE_SEIP_PLANNING_VIEW_INDICATOR_OPERATIVE', 'ROLE_SEIP_SIG_INDICATOR_VIEW')
         );
 
         $roleEditDeleteByLevel = array(
@@ -109,7 +109,10 @@ class IndicatorController extends ResourceController {
         $securityService->checkSecurity($rol);
 
         if (!$securityService->isGranted($rol[1])) {
-            $securityService->checkSecurity($rol[0], $resource);
+            if (!$securityService->isGranted($rol[0])) {
+                $securityService->checkSecurity($rol[2], $resource);
+            }
+//            $securityService->checkSecurity($rol[0], $resource);
         }
 //        }
 

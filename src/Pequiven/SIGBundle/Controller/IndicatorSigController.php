@@ -35,9 +35,9 @@ class IndicatorSigController extends ResourceController {
 
         $rol = null;
         $roleByLevel = array(
-            IndicatorLevel::LEVEL_ESTRATEGICO => array('ROLE_SEIP_SIG_INDICATOR_VIEW'),
-            IndicatorLevel::LEVEL_TACTICO => array('ROLE_SEIP_SIG_INDICATOR_VIEW'),
-            IndicatorLevel::LEVEL_OPERATIVO => array('ROLE_SEIP_SIG_INDICATOR_VIEW')
+            IndicatorLevel::LEVEL_ESTRATEGICO => array('ROLE_SEIP_SIG_INDICATOR_LIST'),
+            IndicatorLevel::LEVEL_TACTICO => array('ROLE_SEIP_SIG_INDICATOR_LIST'),
+            IndicatorLevel::LEVEL_OPERATIVO => array('ROLE_SEIP_SIG_INDICATOR_LIST')
         );
         if (isset($roleByLevel[$level])) {
             $rol = $roleByLevel[$level];
@@ -45,11 +45,10 @@ class IndicatorSigController extends ResourceController {
 
         $this->getSecurityService()->checkSecurity($rol);
 
-
         $criteria = $request->get('filter', $this->config->getCriteria());
         $sorting = $request->get('sorting', $this->config->getSorting());
         $repository = $this->container->get('pequiven.repository.sig_indicator');
-
+        
         $criteria['indicatorLevel'] = $level;
         $criteria['applyPeriodCriteria'] = true;
 
@@ -127,6 +126,7 @@ class IndicatorSigController extends ResourceController {
         $month = $request->get('month'); //El mes pasado por parametro
 
         $data = $this->findEvolutionCause($request, $typeObject); //Carga la data de las causas y sus acciones relacionadas
+       
         //Validación de que el mes pasado este entre los validos
         if ($month > 12) {
             $this->get('session')->getFlashBag()->add('error', "El mes consultado no es un mes valido!");
@@ -374,98 +374,6 @@ class IndicatorSigController extends ResourceController {
     }
 
     /**
-     * Retorna el formulario de Verificación del Plan de Acción
-     * 
-     * @param Request $request
-     * @return type
-     */
-    function getFormVerificationAction(Request $request) {
-        $indicator = $this->findIndicatorOr404($request);
-
-        $verification = new EvolutionActionVerification();
-        $form = $this->createForm(new EvolutionActionVerificationType(), $verification);
-
-        $view = $this
-                ->view()
-                ->setTemplate($this->config->getTemplate('form/form_action_verification.html'))
-                ->setTemplateVar($this->config->getPluralResourceName())
-                ->setData(array(
-            'indicator' => $indicator,
-            'form' => $form->createView(),
-                ))
-        ;
-        $view->getSerializationContext()->setGroups(array('id', 'api_list'));
-        return $view;
-    }
-
-    /**
-     * Añade la Verificacion de Plan de Acción y Seguimiento
-     * 
-     * @param Request $request
-     * @return type
-     */
-    public function addVerificationAction(Request $request) {
-        $indicator = $request->get('idIndicator'); //Carga de indicador
-        $repository = $this->get('pequiven.repository.sig_indicator');
-        $results = $repository->find($indicator);
-
-        $month = $request->get('month');
-        ; //Mes
-
-        $action = $request->get('actionVerification')['actionPlan'];
-        $idVerification = $request->get('actionVerification')['typeVerification'];
-
-        //Consulta del tipo de Verificación para el plan de acción
-        $ver = $this->get('pequiven.repository.managementsystem_sig_verification')->find($idVerification);
-        $statusAction = $ver->getStatus(); //Status 0/1 para el plan 
-        //Acción
-        $actionVer = $this->get('pequiven.repository.sig_action_indicator')->find($action);
-
-        $user = $this->getUser();
-        $verification = new EvolutionActionVerification();
-        $form = $this->createForm(new EvolutionActionVerificationType(), $verification);
-
-        $verification->setCreatedBy($user);
-        $verification->setActionPlan($actionVer);
-        $verification->setIndicator($results);
-        $verification->setMonth($month);
-
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($verification);
-            $em->flush();
-        }
-
-
-        if ($actionVer) {//Si existe la acción le cambio el status segun sea el caso
-            $actionVer->setStatus($statusAction);
-            $em->flush();
-        }
-    }
-
-    /**
-     *  Delete verification
-     *  
-     * @param Request $request
-     * @return type
-     */
-    public function deleteVerificationAction(Request $request) {
-        $id = $request->get('id'); //id Verification        
-
-        $em = $this->getDoctrine()->getManager();
-        $verification = $this->get('pequiven.repository.sig_action_verification')->find($id);
-
-        if ($verification) {
-
-            $em->remove($verification);
-            $em->flush();
-        }
-    }
-
-    /**
      * Retorna el formulario de la configuración de la Gráfica
      * 
      * @param Request $request
@@ -631,7 +539,7 @@ class IndicatorSigController extends ResourceController {
         ];
 
         return $data;
-    }
+    }    
 
     public function exportAction(Request $request) {
 
