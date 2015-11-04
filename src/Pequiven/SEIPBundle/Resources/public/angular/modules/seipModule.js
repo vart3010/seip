@@ -5238,7 +5238,7 @@ angular.module('seipModule.controllers', [])
                 })
             };
             $scope.renderChartResult = function (id, data, gerencia, url) {
-                FusionCharts.ready(function () {
+                FusionCharts.ready(function () {                    
                     var revenueChart = new FusionCharts({
                         "type": "stackedbar3d",
                         "renderAt": id,
@@ -5251,10 +5251,10 @@ angular.module('seipModule.controllers', [])
                                 "subCaption": data.dataSource.chart.subCaption,
                                 "exportenabled": "1",
                                 "exportatclient": "0",
-                                "exportFormats": "PNG= Exportar como PNG|PDF= Exportar como PDF",
+                                "exportFormats": "PNG= Exportar Resultados",
                                 "exportFileName": "Grafico Resultados " + gerencia,
-                                "exporthandler": "http://107.21.74.91/",
-                                "html5exporthandler": "http://107.21.74.91/",
+                                "exporthandler": data.dataSource.chart.exporthandler,
+                                "html5exporthandler": data.dataSource.chart.exporthandler,
                                 "xAxisname": Translator.trans('chart.result.objetiveOperative.xAxisName'),
                                 "yAxisName": Translator.trans('chart.result.objetiveOperative.yAxisName'),
                                 "showSum": "1",
@@ -5280,8 +5280,40 @@ angular.module('seipModule.controllers', [])
                                     "category": data.dataSource.categories.category
                                 }
                             ],
-                            "dataset": data.dataSource.dataset
-                        }
+                            "dataset": data.dataSource.dataset  
+                        },
+                            "events": {
+                            "renderComplete": function (e, a) {
+                               
+                               // Cross-browser event listening
+                               var addListener = function (elem, evt, fn) {
+                                   if (elem && elem.addEventListener) {
+                                       elem.addEventListener(evt, fn);
+                                   }
+                                   else if (elem && elem.attachEvent) {
+                                       elem.attachEvent("on" + evt, fn);
+                                   } 
+                                   else {
+                                       elem["on" + evt] = fn;
+                                   }
+                               };
+                               
+                               // Export chart method
+                               var exportFC = function () {                                
+                                   var types = {    
+                                       "exportpng": "png"                                 
+                                   };
+                                   if (e && e.sender && e.sender.exportChart) {
+                                        e.sender.exportChart({
+                                           exportFileName: "FC_sample_export",
+                                           exportFormat: types[this.id]
+                                       });
+                                   }
+                               };
+                                // Attach events 
+                                addListener(document.getElementById("exportpng"), "click", exportFC);
+                                }
+                            }
                     });
                     revenueChart.setTransparent(true);
                     revenueChart.render();
