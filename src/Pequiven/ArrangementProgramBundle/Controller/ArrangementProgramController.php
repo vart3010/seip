@@ -963,7 +963,7 @@ class ArrangementProgramController extends SEIPController {
         
         //VALIDO QUE TENGA PERMISOS PARA MOVER EMPLEADOS EN METAS         
         $securityService = $this->getSecurityService();
-        if ($securityService->isGranted(array("ROLE_SEIP_ARRANGEMENT_PROGRAM_MOVEMENT_GOALS"))) {
+         if ((($securityService->isGranted(array("ROLE_SEIP_ARRANGEMENT_PROGRAM_MOVEMENT_GOALS")))) || ($securityService->isGranted(array("ROLE_SEIP_ARRANGEMENT_PROGRAM_MOVEMENT_GOALS_POST_MORTEM")))) {
             $MovementEmployee = true;
         } else {
             $MovementEmployee = false;
