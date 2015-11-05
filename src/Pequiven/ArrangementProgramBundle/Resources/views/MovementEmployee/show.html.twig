@@ -274,6 +274,19 @@
                 {% endfor %}
             </tbody>
         </table>
+        <table>
+            <tr>
+                <td style="text-align:right">
+                    {% set routeConfig = path('goal_movement_export',{idGoal:goal.id}) %}
+                    {{ buttons.generic(
+                    (routeConfig),
+                    ('Exportar Historial de Cambios'),
+                    'icon-download'
+                 ) 
+                    }}
+                </td>
+            </tr>
+        </table>
     </fieldset>
 
 {% endblock %}

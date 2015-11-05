@@ -4,7 +4,9 @@
     "type": "project",
     "description": "Template developer seed for vzla government",
     "autoload": {
-        "psr-0": { "": "src/" }
+        "psr-0": {
+            "": "src/"
+        }
     },
     "require": {
         "php": ">=5.3.3",
@@ -21,32 +23,25 @@
         "sensio/framework-extra-bundle": "~3.0",
         "sensio/generator-bundle": "~2.3",
         "incenteev/composer-parameter-handler": "~2.0",
-        
         "tecnocreaciones/resource-bundle": "dev-master",
-	"tecnocreaciones/vzla-government-bundle": "dev-master",
-	"tecnocreaciones/ajax-fos-user-bundle": "1.*@dev",
-	"tecnocreaciones/install-bundle": "dev-master",
+        "tecnocreaciones/vzla-government-bundle": "dev-master",
+        "tecnocreaciones/ajax-fos-user-bundle": "1.*@dev",
+        "tecnocreaciones/install-bundle": "dev-master",
         "tecnocreaciones/tools-bundle": "dev-master",
         "tecnocreaciones/vzla-entity-bundle": "dev-master",
         "tecnocreaciones/vzla-fixtures-bundle": "dev-master",
-        
-        "friendsofsymfony/rest-bundle":"@stable",
+        "friendsofsymfony/rest-bundle": "@stable",
         "friendsofsymfony/user-bundle": "v1.3.3",
         "friendsofsymfony/jsrouting-bundle": "1.5.3",
         "friendsofsymfony/oauth-server-bundle": "1.4.2",
-        
         "jms/translation-bundle": "~1.1@dev",
         "jms/serializer-bundle": "@stable",
         "knplabs/knp-menu-bundle": "~2.0@dev",
         "knplabs/knp-menu": "~2.0@dev",
         "white-october/pagerfanta-bundle": "1.0.*",
-        
         "sylius/resource-bundle": "0.10.0",
-        
         "phpoffice/phpexcel": "1.8.1",
-        
         "tecnocreaciones/extjs-bundle": "dev-master",
-        
         "sonata-project/admin-bundle": "~2.4@dev",
         "sonata-project/core-bundle": "2.3.*@dev",
         "sonata-project/doctrine-orm-admin-bundle": "2.4.*@dev",
@@ -54,9 +49,7 @@
         "sonata-project/doctrine-extensions": "~1@dev",
         "sonata-project/block-bundle": "~2.2@dev",
         "sonata-project/user-bundle": "~2.2@dev",
-        
         "tecnick.com/tcpdf": "6.2.8",
-        
         "simplethings/entity-audit-bundle": "0.*@dev",
         "genemu/form-bundle": "2.2.*@dev",
         "shtumi/useful-bundle": "dev-master",
