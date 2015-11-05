@@ -622,7 +622,7 @@ function exportProcessor($stream, $meta, $exportParams, $type) {
         }        
         
         $nameTemp = $nameSVG;
-        var_dump($nameTemp);
+        
         //return $nameSVG;
         // do the conversion
         $width = 950;

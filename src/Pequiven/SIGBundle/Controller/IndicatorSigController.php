@@ -565,7 +565,7 @@ class IndicatorSigController extends ResourceController {
           $request->request->remove('parameters');
           $fusionchartService = $this->getFusionChartExportService();          
           $fileSVG = $fusionchartService->exportFusionChart($exportRequestStream);                                    
-                  
+
         return $fileSVG;
     }
 
@@ -745,7 +745,7 @@ class IndicatorSigController extends ResourceController {
     //            $pdf->Output('Reporte del dia'.'.pdf', 'I');
         $pdf->Output('Informe de evolucion' . '.pdf', 'D');
 
-        $this->rmTempFile($data);
+        //$this->rmTempFile($data);
     }
     /**
      *
