@@ -745,7 +745,7 @@ class IndicatorSigController extends ResourceController {
     //            $pdf->Output('Reporte del dia'.'.pdf', 'I');
         $pdf->Output('Informe de evolucion' . '.pdf', 'D');
 
-        //$this->rmTempFile($data);
+        $this->rmTempFile($data);
     }
     /**
      *

@@ -621,8 +621,7 @@ function exportProcessor($stream, $meta, $exportParams, $type) {
             $nameSVG = "{$tempFileName}.svg";
         }        
         
-        $nameTemp = $nameSVG;
-        
+        $nameTemp = $nameSVG;        
         //return $nameSVG;
         // do the conversion
         $width = 950;
@@ -639,7 +638,7 @@ function exportProcessor($stream, $meta, $exportParams, $type) {
             $output .= shell_exec($comandJpg);
         }
 
-        //shell_exec("rm $tempInputSVGFile");
+        shell_exec("rm $tempInputSVGFile");
         
         $nameSVG = $tempOutputFile;                
         //return $nameSVG;
