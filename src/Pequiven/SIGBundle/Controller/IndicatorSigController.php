@@ -614,6 +614,7 @@ class IndicatorSigController extends ResourceController {
 
         $id = $request->get('id'); //id 
 
+        $font = "";
         if ($typeObject == 1) {
 
             $indicator = $this->get('pequiven.repository.indicator')->find($id); //Obtenemos el indicador
@@ -624,15 +625,35 @@ class IndicatorSigController extends ResourceController {
             foreach ($indicator->getObjetives() as $value) {
                 $objRel = $value->getDescription();
             }
+
+            $tendency = $indicator->getTendency()->getId();
+            switch ($tendency) {
+                case 0:
+                    $font = "";
+                    break;
+                case 1:
+                    $font = "1.png";
+                    break;
+                case 2:
+                    $font = "2.png";
+                    break;
+                case 3:
+                    $font = "3.png";
+                    break;
+            }
+
         } elseif ($typeObject == 2) {
+
             $ArrangementProgram = $em->getRepository('PequivenArrangementProgramBundle:ArrangementProgram')->findWithData($id);
             $type = "arrangementProgram";
             $name = $ArrangementProgram->getRef() . '' . $ArrangementProgram->getDescription();
             //Relacion
             $objRel = $ArrangementProgram->getTacticalObjective()->getDescription();
+
         }
         
         $formula = $indicator->getFormula();
+        
         //Carga el analisis de la tendencia
         $trend = $this->get('pequiven.repository.sig_trend_report_evolution')->findBy(array($type => $id, 'month' => $month));
         if ($trend) {
@@ -671,7 +692,8 @@ class IndicatorSigController extends ResourceController {
             'dataAction'    => $dataAction["actionValue"],
             'obj'           => $objRel,
             'verification'  => $verification,
-            'period'        => $period
+            'period'        => $period,
+            'font'          => $font
         );
 
         $this->generatePdf($data);
