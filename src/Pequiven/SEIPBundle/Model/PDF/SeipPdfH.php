@@ -5,13 +5,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-namespace Pequiven\SIGBundle\Model\PDF;
+namespace Pequiven\SEIPBundle\Model\PDF;
 
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use TCPDF;
 
-class SIGPdf extends TCPDF implements ContainerAwareInterface{
+class SeipPdfH extends TCPDF implements ContainerAwareInterface{
     /**
      * @var ContainerInterface
      *
@@ -27,21 +27,22 @@ class SIGPdf extends TCPDF implements ContainerAwareInterface{
 
     //Header del documento pdf de resultados
     public function Header() {
+        
         // Logo SEIP
-        $image_file = $this->generateAsset('bundles/pequivenseip/logotipos-pqv/logo_pqv2.gif'); //K_PATH_IMAGES.'logo_example.jpg';
-        $this->Image($image_file, 10, 10, 15, '', 'GIF', '', 'T', false, 300, '', false, false, 0, false, false, false);
+        $image_file = $this->generateAsset('bundles/pequivenseip/logotipos-pqv/logo_menu_seip.png'); //K_PATH_IMAGES.'logo_example.jpg';
+        $this->Image($image_file, 10, 10, 15, '', 'PNG', '', 'T', false, 300, '', false, false, 0, false, false, false);
         // Set font
         $this->SetFont('helvetica', 'B', 16);
         $this->SetTextColor(255,0,0);
         // Title
-        $text='<div align="center" style="font-size: 1em;color: red;">'.$this->title.'<br>'./*$this->period->getDescription().*/'</div>';
+        $text='<div align="center" style="font-size: 1em;color: red;">'.$this->title.'<br>'.$this->period->getDescription().'</div>';
         $this->writeHTML($text);
         // Logo Pqv
-        $image_file = $this->generateAsset('bundles/pequivenseip/logotipos-pqv/logo_menu_seip.png'); //K_PATH_IMAGES.'logo_example.jpg';
-        $this->Image($image_file, 270, 10, 15, '', 'PNG', '', 'T', false, 300, '', false, false, 0, false, false, false);
+        $image_file = $this->generateAsset('bundles/pequivenseip/logotipos-pqv/logo_pqv2.gif'); //K_PATH_IMAGES.'logo_example.jpg';
+        $this->Image($image_file, 270, 10, 15, '', 'GIF', '', 'T', false, 300, '', false, false, 0, false, false, false);
         // Línea HR
         $lineRed = array('width' => 1.0, 'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(255, 0, 0));
-        $this->Line(0, 27, 300, 27, $lineRed);        
+        $this->Line(0, 27, 300, 27, $lineRed);
     }
 
     // Footer del pdf de resultados

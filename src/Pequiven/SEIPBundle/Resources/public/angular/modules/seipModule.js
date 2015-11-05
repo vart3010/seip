@@ -5238,7 +5238,7 @@ angular.module('seipModule.controllers', [])
                 })
             };
             $scope.renderChartResult = function (id, data, gerencia, url) {
-                FusionCharts.ready(function () {
+                FusionCharts.ready(function () {                    
                     var revenueChart = new FusionCharts({
                         "type": "stackedbar3d",
                         "renderAt": id,
@@ -5251,10 +5251,10 @@ angular.module('seipModule.controllers', [])
                                 "subCaption": data.dataSource.chart.subCaption,
                                 "exportenabled": "1",
                                 "exportatclient": "0",
-                                "exportFormats": "PNG= Exportar como PNG|PDF= Exportar como PDF",
+                                "exportFormats": "PNG= Exportar Resultados",
                                 "exportFileName": "Grafico Resultados " + gerencia,
-                                "exporthandler": "http://107.21.74.91/",
-                                "html5exporthandler": "http://107.21.74.91/",
+                                "exporthandler": data.dataSource.chart.exporthandler,
+                                "html5exporthandler": data.dataSource.chart.exporthandler,
                                 "xAxisname": Translator.trans('chart.result.objetiveOperative.xAxisName'),
                                 "yAxisName": Translator.trans('chart.result.objetiveOperative.yAxisName'),
                                 "showSum": "1",
@@ -5280,8 +5280,40 @@ angular.module('seipModule.controllers', [])
                                     "category": data.dataSource.categories.category
                                 }
                             ],
-                            "dataset": data.dataSource.dataset
-                        }
+                            "dataset": data.dataSource.dataset  
+                        },
+                            "events": {
+                            "renderComplete": function (e, a) {
+                               
+                               // Cross-browser event listening
+                               var addListener = function (elem, evt, fn) {
+                                   if (elem && elem.addEventListener) {
+                                       elem.addEventListener(evt, fn);
+                                   }
+                                   else if (elem && elem.attachEvent) {
+                                       elem.attachEvent("on" + evt, fn);
+                                   } 
+                                   else {
+                                       elem["on" + evt] = fn;
+                                   }
+                               };
+                               
+                               // Export chart method
+                               var exportFC = function () {                                
+                                   var types = {    
+                                       "exportpng": "png"                                 
+                                   };
+                                   if (e && e.sender && e.sender.exportChart) {
+                                        e.sender.exportChart({
+                                           exportFileName: "FC_sample_export",
+                                           exportFormat: types[this.id]
+                                       });
+                                   }
+                               };
+                                // Attach events 
+                                addListener(document.getElementById("exportpng"), "click", exportFC);
+                                }
+                            }
                     });
                     revenueChart.setTransparent(true);
                     revenueChart.render();
@@ -5619,7 +5651,7 @@ angular.module('seipModule.controllers', [])
         .controller('ChartsSigController', function ($scope, ngTableParams, $http, sfTranslator, notifyService) {
 
             //Charts SIG - Evolution
-            $scope.renderChartEvolutionSig = function (id, data, categories, dataPlan, dataReal, dataAcum, dataPorc, caption, typeLabelDisplay) {
+            $scope.renderChartEvolutionSig = function (id, data, categories, dataPlan, dataReal, dataAcum, dataPorc, caption, typeLabelDisplay, urlExportFromChart) {
                 FusionCharts.ready(function () {
                     var revenueChart = new FusionCharts({
                         //"type": "mscolumn3dlinedy",
@@ -5629,14 +5661,48 @@ angular.module('seipModule.controllers', [])
                         "height": "300%",
                         "exportFormats": "PNG= Exportar como PNG|PDF= Exportar como PDF",
                         "exportFileName": "Gráfico Evolución Indicador",
-                        "exporthandler": "http://107.21.74.91/",
-                        "html5exporthandler": "http://107.21.74.91/",
+                        "exporthandler": urlExportFromChart,
+                        "html5exporthandler": urlExportFromChart,
                         "dataFormat": "json",
                         "dataSource": {
                             "chart": data.dataSource.chart,
                             "categories": data.dataSource.categories,
                             "dataset": data.dataSource.dataset
-                        }
+                        },
+                        "events": {
+                        "renderComplete": function (e, a) {
+                           
+                           // Cross-browser event listening
+                           var addListener = function (elem, evt, fn) {
+                               if (elem && elem.addEventListener) {
+                                   elem.addEventListener(evt, fn);
+                               }
+                               else if (elem && elem.attachEvent) {
+                                   elem.attachEvent("on" + evt, fn);
+                               } 
+                               else {
+                                   elem["on" + evt] = fn;
+                               }
+                           };
+                           
+                           // Export chart method
+                           var exportFC = function () {
+                               var types = {    
+                                   "exportpng": "png"                                 
+                               };
+                               if (e && e.sender && e.sender.exportChart) {
+                                    e.sender.exportChart({
+                                       exportFileName: "FC_sample_export",
+                                       exportFormat: types[this.id]
+                                   });
+                               }
+                           };
+
+                            // Attach events 
+                            addListener(document.getElementById("exportpng"), "click", exportFC);
+                            }
+                        }                                            
+
                     });
                     revenueChart.setTransparent(true);
                     revenueChart.render();
@@ -5645,42 +5711,56 @@ angular.module('seipModule.controllers', [])
             //FIN
 
             //Charts SIG - Causas de Desviación
-            $scope.renderChartSigCs = function (id, data, categories, dataCause, caption, typeLabelDisplay) {
+            $scope.renderChartSigCs = function (id, data, categories, dataCause, caption, typeLabelDisplay, urlExportFromChart) {
                 FusionCharts.ready(function () {
                     var revenueChart = new FusionCharts({
                         "type": "stackedbar3d",
                         "renderAt": id,
                         "width": "95%",
-                        //"height": "550%",
+                        "height": "650%",
                         "exportenabled": "1",
-                        "exportFormats": "PNG= Exportar como PNG|PDF= Exportar como PDF",
+                        //"exportFormats": "PNG= Exportar como PNG|PDF= Exportar como PDF",
                         "exportFileName": "Gráfico Causas de Desviación del Indicador",
-                        "exporthandler": "http://107.21.74.91/",
-                        "html5exporthandler": "http://107.21.74.91/",
+                        "exporthandler": urlExportFromChart,
+                        "html5exporthandler": urlExportFromChart,
                         "dataFormat": "json",
                         "dataSource": {
-                            "chart": {
-                                "caption": "Gráfico Causas de Desviación",
-                                "subCaption": "Periodo - 2015",                                
-                                "YAxisMaxValue": "100",
-                                "valueFontColor": "#000000",
-                                "showvalues": "1",
-                                "showSum": "1",
-                                "numberSuffix": "%",
-                                "bgAlpha": "0,0",
-                                "baseFontColor": "#ffffff",
-                                "outCnvBaseFontColor": "#000000",
-                                "visible": "0",
-                                "theme": "fint",
-                                "snumbersuffix": "%",
-                                "decimals": "3",
-                                "setadaptiveymin": "1",
-                                "setadaptivesymin": "1",
-                                "linethickness": "5",
-                                "showborder": "0"
-                            }, "categories": data.dataSource.categories,
-                            "dataset": [data.dataSource.dataset,
-                            ]
+                            "chart": data.dataSource.chart,
+                            "categories": data.dataSource.categories,
+                            "dataset": data.dataSource.dataset
+                        },
+                        "events": {
+                        "renderComplete": function (e, a) {
+                           
+                           // Cross-browser event listening
+                           var addListener = function (elem, evt, fn) {
+                               if (elem && elem.addEventListener) {
+                                   elem.addEventListener(evt, fn);
+                               }
+                               else if (elem && elem.attachEvent) {
+                                   elem.attachEvent("on" + evt, fn);
+                               } 
+                               else {
+                                   elem["on" + evt] = fn;
+                               }
+                           };
+                           
+                           // Export chart method
+                           var exportFC = function () {
+                               var types = {    
+                                   "export_causespng": "png"                                 
+                               };
+                               if (e && e.sender && e.sender.exportChart) {
+                                    e.sender.exportChart({
+                                       exportFileName: "FC_sample_export",
+                                       exportFormat: types[this.id]
+                                   });
+                               }
+                           };
+
+                            // Attach events 
+                            addListener(document.getElementById("export_causespng"), "click", exportFC);
+                            }
                         }
                     });
                     revenueChart.setTransparent(true);
