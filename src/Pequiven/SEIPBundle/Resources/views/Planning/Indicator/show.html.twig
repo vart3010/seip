@@ -338,16 +338,8 @@
 
     <p class="button-height align-right">
 
-    {# Visualizacion de Indice de evolucion #}
-      {% set month = "now"|date("m") %}
-        
-        {#{% if  indicator.managementSystems | length > 0 and is_granted('ROLE_SEIP_SIG_EVOLUTION_VIEW') %}#}
-        {% if indicator.showEvolutionView %}
-        &nbsp;
-            {{ buttons.generic_ext(path('pequiven_indicator_evolution', { 'id': indicator.id , 'month': month}),('pequiven.evolution'|trans({},'messages'))) }}
-        {% endif %}
-        &nbsp;
-        
+    {# Visualizacion de Indice de evolucion #}      
+        {% include 'PequivenSIGBundle:Template:base_evolution_nav.html.twig' %}        
     {# end #}
 
         {% if is_granted(['ROLE_WORKER_PLANNING','ROLE_SEIP_INDICATOR_ADD_OBSERVATION']) %}

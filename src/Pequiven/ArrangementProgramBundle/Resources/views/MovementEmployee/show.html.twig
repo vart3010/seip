@@ -1,0 +1,316 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
+{% trans_default_domain 'PequivenArrangementProgramBundle' %}
+
+{% block before_body %}
+    {{ contentHeader("Asignación de Metas")   }}
+{% endblock %}
+
+
+{% block body %}
+    <style>
+        table tr {
+            padding: 15px;
+
+        }
+        table th{
+            text-align: left;
+            vertical-align: middle;
+            height: 35px;
+        }
+        table td{
+            height: 35px;
+            vertical-align: middle;
+        }
+        .alin_font {
+            text-align: justify;
+        }
+        .fa-long-arrow-up {
+            color: green;    
+        }
+        .fa-long-arrow-down {
+            color: red;    
+        }
+        .fa-clock-o{
+            color: orange;
+        }
+        .centrado{
+            text-align: center;
+        }
+        .header{
+            text-align: center;
+        }
+    </style>
+    {% set message =  'pequiven.arrangement_program.you_must_assign_config'|trans %}
+
+    <fieldset class="fieldset">
+        <legend class="legend"><b>Datos de la Meta </b></legend>
+        <table class="record_properties" width="100%">
+            <tbody>
+                <tr>
+                    <th width="20%">Período</th>
+                    <td width="80%" colspan = "3">{{ goal.period }}</td>
+                </tr>  
+                <tr>
+                    <th width="20%">Programa de Gestión</th>
+                    <td width="80%" colspan = "3">
+                        {% set avancedUsed = goal.timeline.arrangementProgram.result %}
+                        {% include 'PequivenObjetiveBundle:Common:percentajeBarResult.html.twig' %}
+                        {{ generateLink(goal.timeline.arrangementProgram) }}. <a ref="">{{goal.timeline.arrangementProgram.description}}</a>
+                        {#{% set ap=goal.timeline.arrangementProgram%}#}
+                        {#<td width="80%" colspan = "2">{{ ap.description|ucwords }}</td>#}
+                    </td>
+                </tr>
+                <tr>
+                    <th width="20%">Nombre</th>
+                    <td width="80%" colspan = "3">{{ goal.name|ucwords }}</td>
+                </tr>
+                <tr>
+                    <th width="20%">Fecha de Inicio</th>
+                    <td width="30%">{{ goal.startDate|date('Y-m-d') }}</td>
+                    <th width="20%">Fecha de Culminación</th>
+                    <td width="30%">{{ goal.endDate|date('Y-m-d') }}</td>
+                </tr>
+
+                <tr>
+                    <th width="20%">Peso</th>
+                    <td width="80%" colspan = "2">{{ goal.weight }}%</td>
+                </tr>
+                <tr>
+                    <th width="20%"><br/> <br/> Avances hasta la Fecha <br/><br/><br/><br/></th>
+                    <td width="80%" colspan = "3">
+                        <br/><br/>
+                        {% set advances = goal.getResult %}
+                        {% set advancesClass = 'red-gradient' %}
+                        {% if advances >= 50 and advances < 100 %}
+                            {% set advancesClass = 'orange-gradient' %}
+
+                        {% elseif advances >= 100 %}
+                            {% set advancesClass = 'green-gradient' %}
+                        {% endif %}
+                        <span style="max-width: 90%" class="progress" data-progress-options='{"size":false,"barClasses":["{{ advancesClass }}","glossy"],"innerMarks":25,"topMarks":25,"topLabel":"[value]%","bottomMarks":[{"value":0,"label":" Nada "},{"value":50,"label":" Mejor "},{"value":100,"label":" Completa "}],"insetExtremes":true}'>{{ advances }}%</span>
+
+                        <br/><br/><br/><br/>
+                    </td>
+
+
+                <tr>
+                    <th width="20%">Observaciones</th>
+                    <td width="80%" colspan = "3">{{ goal.observations }}</td>
+                </tr>
+
+                </tr>
+
+            </tbody>
+        </table>
+    </fieldset>
+
+    <fieldset class="fieldset">
+        <legend class="legend"><b>Gestión de Responsables </b></legend>
+
+
+
+        <div class="standard-tabs margin-bottom" id="add-tabs">
+
+            <ul class="tabs">
+                <li class="active"><a href="#tab-1">Asignar a Empleado</a></li>
+                <li><a href="#tab-2">Retirar a Empleado</a></li>
+            </ul>
+
+            <div class="tabs-content">
+
+                <div id="tab-1" class="with-padding">
+                    <form method="POST" action="{{ path("goal_movement_assign",{idGoal:goal.id}) }}">
+                        <table width="90%">
+                            <tr>
+                                <td>
+                                    <p class="inline-label">
+                                        {{ form_label(assign.date) }}
+                                        {{ form_widget(assign.date) }}
+                                        {{ form_errors(assign.date) }}
+                                    </p>
+                                    <p class="inline-label">
+                                        {{ form_label(assign.User) }}
+                                        {{ form_widget(assign.User) }}
+                                        {{ form_errors(assign.User) }}
+                                    </p>
+                                    <p class="inline-label">
+                                        {{ form_label(assign.cause) }}
+                                        {{ form_widget(assign.cause) }}
+                                        {{ form_errors(assign.cause) }}
+                                    </p>
+                                    <p class="inline-label">
+                                        {{ form_label(assign.observations) }}
+                                        {{ form_widget(assign.observations) }}
+                                        {{ form_errors(assign.observations) }}
+                                    </p>
+
+                                    <p class="inline-label">
+
+                                    </p>
+                                </td>
+                                <td aling="center">
+                                    <table width="100%">
+                                        <thead>
+                                        <th>Responsables Asignados</th>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <div style="width:100%; height:160px; overflow: scroll;">
+                                                        {% for responsable in responsibles %}
+                                                            {{ responsable.getOnlyFullNameUser }} </br>
+                                                        {% endfor %}
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <br>
+                                    {{ actions.assign() }}   
+                                    {{ form_rest(assign) }}
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                </div>
+
+                <div id="tab-2" class="with-padding">
+                    <form method="POST" action="{{ path("goal_movement_remove",{idGoal:goal.id}) }}">
+                        <table width="90%">
+                            <tr>
+                                <td>
+                                    <p class="inline-label">
+                                        {{ form_label(remove.date) }}
+                                        {{ form_widget(remove.date) }}
+                                        {{ form_errors(remove.date) }}
+                                    </p>
+                                    <p class="inline-label">
+                                        {{ form_label(remove.User) }}
+                                        {{ form_widget(remove.User) }}
+                                        {{ form_errors(remove.User) }}
+                                    </p>
+                                    <p class="inline-label">
+                                        {{ form_label(remove.cause) }}
+                                        {{ form_widget(remove.cause) }}
+                                        {{ form_errors(remove.cause) }}
+                                    </p>
+                                    <p class="inline-label">
+                                        {{ form_label(remove.observations) }}
+                                        {{ form_widget(remove.observations) }}
+                                        {{ form_errors(remove.observations) }}
+                                    </p>
+                                </td>
+                                <td aling="center">
+                                    <table width="100%">
+                                        <thead>
+                                        <th>Responsables Asignados</th>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <div style="width:100%; height:160px; overflow: scroll;">
+                                                        {% for responsable in responsibles %}
+                                                            {{ responsable.getOnlyFullNameUser }} </br>
+                                                        {% endfor %}
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <br>
+                                    {{ actions.remove() }}   
+                                    {{ form_rest(remove) }}
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+
+    </fieldset>  
+
+    <fieldset class="fieldset">
+        <legend class="legend"><b>Historial de Cambios </b></legend>
+
+        <table class="simple-table responsive-table tables-extras" width="80%">
+            <thead>
+                <tr>
+                    <th class="header" width="10%">Fecha de Cambio</th>
+                    <th class="header" width="10%">Tipo</th>
+                    <th width="40%">Empleado</th>
+                    <th width="30%">Causa</th>
+                    <th class="header" width="10%">Avance</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for mov in movements %}
+                    <tr>
+                        <td class="centrado" width="10%">{{ mov.getdate | date("d/m/Y") }}</td>
+                        {% if mov.cause == '2' or mov.cause == '13'%}
+                            <td class="centrado" width="10%"><i class="fa fa-clock-o"></i></td>
+                            {% else %}
+                                {% if mov.gettype == 'I'%}
+                                <td class="centrado" width="10%"><i class="fa fa-long-arrow-up"></i></td>
+                                {% else %}
+                                <td class="centrado" width="10%"><i class="fa fa-long-arrow-down"></i></td>
+                                {% endif %}
+                            {% endif %}
+                        <td width="40%">{{ mov.getuser.getOnlyFullNameUser }}  </td>
+                        <td width="30%">{{ causes[mov.cause] }} </td>
+                        <td class="centrado" width="10%">{{ mov.getrealAdvance | number_format(2, '.', ',')  }} % </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </fieldset>
+
+{% endblock %}
+
+{% block javascript %}
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $(".select2").select2({
+                allowClear: true
+            });
+
+            $("#AssignGoal_User").select2({
+                minimumInputLength: 3,
+            });
+
+            $('.progress').progress();
+
+            $("#AssignGoal_date").datepicker({
+                defaultDate: "+1w",
+                changeMonth: true,
+                numberOfMonths: 1,
+                dateFormat: "dd/mm/yy"
+            });
+
+            $("#RemoveGoal_date").datepicker({
+                defaultDate: "+1w",
+                changeMonth: true,
+                numberOfMonths: 1,
+                dateFormat: "dd/mm/yy"
+            });
+
+            $("#RemoveGoal_User").select2({
+                minimumInputLength: 3,
+            });
+        }
+        );
+
+    </script>
+{% endblock javascript %}

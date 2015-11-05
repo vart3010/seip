@@ -214,19 +214,27 @@ class User extends BaseUser implements UserInterface, UserBoxInterface, PeriodIt
      * @ORM\Column(name="ext",type="string",length=6,nullable=true)
      */
     private $ext;
-    
+
     /**
      * @ORM\ManyToMany(targetEntity="\Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle", mappedBy="members")
      */
     private $workStudyCircles;
 
     /**
-     * Metas
+     * aciones
      * 
      * @var \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionAction
-     * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionAction",mappedBy="responsibles")
+     * @ORM\ManyToMany(targetEntity="\Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionAction", mappedBy="responsible") 
+     * 
      */
     private $evolutionAction;
+    
+     /**
+
+     * @var Pequiven\ArrangementProgramBundle\Entity\MovementEmployee\MovementEmployee
+     * @ORM\OneToMany(targetEntity="Pequiven\ArrangementProgramBundle\Entity\MovementEmployee\MovementEmployee", mappedBy="User")
+     * */
+    private $movementEmployee;
 
     /**
      * Constructor
@@ -908,8 +916,8 @@ class User extends BaseUser implements UserInterface, UserBoxInterface, PeriodIt
     public function getExt() {
         return $this->ext;
     }
-    
-     /**
+
+    /**
      * Add workStudyCircles
      *
      * @param \Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle $workStudyCircle
@@ -946,7 +954,7 @@ class User extends BaseUser implements UserInterface, UserBoxInterface, PeriodIt
      * @param \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionAction $evolutionAction
      * @return User
      */
-    public function addEvolutionAction(\Pequiven\ArrangementProgramBundle\Entity\Goal $evolutionAction) {
+    public function addEvolutionAction(\Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionAction $evolutionAction) {
         $this->evolutionAction[] = $evolutionAction;
 
         return $this;
@@ -957,7 +965,7 @@ class User extends BaseUser implements UserInterface, UserBoxInterface, PeriodIt
      *
      * @param \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionAction $evolutionAction
      */
-    public function removeEvolutionAction(\Pequiven\ArrangementProgramBundle\Entity\Goal $evolutionAction) {
+    public function removeEvolutionAction(\Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionAction $evolutionAction) {
         $this->evolutionAction->removeElement($evolutionAction);
     }
 

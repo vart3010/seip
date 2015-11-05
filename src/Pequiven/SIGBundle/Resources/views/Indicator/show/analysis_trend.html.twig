@@ -32,9 +32,9 @@
             {% for data in trend %}
                 <tbody>
                     <tr>
-                        <th align="justify">
+                        <td align="justify">
                             {{ data.description }}
-                        </th> 
+                        </td> 
                         {% if is_granted('ROLE_SEIP_SIG_EVOLUTION_DELETE_TREND_ANALYSIS') %}  
                             <th class="align-right vertical-center">                          
                                 <span class="select compact">

@@ -230,6 +230,9 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                 ->add('resultIsAccumulative', null, array(
                     'required' => false,
                 ))
+                ->add('resultIsAccumulativeWithToMonth', null, array(
+                    'required' => false,
+                ))
                 ->add('showColumnAccumulativeInDashboard', null, array(
                     'required' => false,
                 ))
@@ -237,6 +240,9 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                     'required' => false,
                 ))
                 ->add('resultsAdditionalInDashboardColumn', null, array(
+                    'required' => false,
+                ))
+                ->add('showColumnPlanAtTheEnd', null, array(
                     'required' => false,
                 ))
                 ->end()

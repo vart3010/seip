@@ -21,13 +21,6 @@ class EvolutionActionType extends AbstractType
         $typeObject = $this->typeObject;
 
         $builder
-            ->add('ref', 'hidden', array(
-                'label' => 'Referencia',
-                'label_attr' => array('class' => 'label'),
-                'attr'=> array(
-                    'class'    => 'input input-large ',
-                    'disabled' => false,
-                    ))) 
             ->add('action', 'text', array(
                 'label' => 'Acción',
                 'label_attr' => array('class' => 'label'),
@@ -61,14 +54,14 @@ class EvolutionActionType extends AbstractType
                     'label_attr' => array('class' => 'label'),
                     'attr' => array(
                         'class' => "input-large select2",
-                        'onclick' => 'cargaData()',
+                        //'onclick' => 'cargaData()',
                         'style' => 'width: 270px',
                         //'multiple' => 'multiple'
                     ),
                     'empty_value' => 'Seleccione...',
                     'required' => true,
                 ))
-            ->add('responsibles', null, array(
+            ->add('responsible', null, array(
                     'query_builder' => function(\Pequiven\SEIPBundle\Repository\UserRepository $repository) {
                         return $repository->findQueryUsersByCriteria();
                     },                               

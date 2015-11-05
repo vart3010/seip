@@ -162,7 +162,7 @@ class ReportEvolutionController extends ResourceController
 
         if ($typeObject == 1) {
             
-            $result = $this->findIndicatorOr404($request);        
+            $result = $this->findIndicatorOr404($request); 
 
             foreach ($result->getObjetives() as $value) {
                 
@@ -171,17 +171,19 @@ class ReportEvolutionController extends ResourceController
                 
                 if($compData){
 
-                    $complejo = $compData->getRef();
+                    $complejo = $compData->getRef().''."-";
                     
                 }else{
-                    $complejo = "S/C";
+                    //$complejo = "S/C-";
+                    $complejo = "";
                 }
                 if ($gerData) {
                 
-                    $gerencia = $gerData->getAbbreviation();
+                    $gerencia = $gerData->getAbbreviation().''."-";
                     
                 }else{
-                    $gerencia = "S/G";
+                    //$gerencia = "S/G-";
+                    $gerencia = "";
                 }
                 //$complejo = $value->getComplejo()->getRef();
                 //$gerencia = $value->getGerencia()->getAbbreviation();
@@ -290,21 +292,26 @@ class ReportEvolutionController extends ResourceController
      */
     public function addAction(Request $request)
     {   
-        $id = $this->getRequest()->get('id');
+        $em = $this->getDoctrine()->getManager();
+
+        $id = $this->getRequest()->get('idIndicator');
         $typeObject = $this->getRequest()->get('typeObj');
         
         $user = $this->getUser();
         
+        $monthSet = $request->get('actionResults')['month'];//recibiendo mes
+
         $causeAction = $request->get('actionResults')['evolutionCause'];//Recibiendo Causa
         
-        $responsible = $request->get('actionResults')['responsibles'];//Recibiendo Responsable
-        
+        $ref = $this->findEvolutionActionRef($request, $monthSet, $causeAction); //Carga la data de la referencia
+
+        $responsible = $request->get('actionResults')['responsible'];//Recibiendo Responsable
+
         $AcValue = $request->get('actionValue')['advance'];//RecibiendoValue
         $AcObservation = $request->get('actionValue')['observations'];//RecibiendoObservations
         $month = date("m");//Carga del mes de Creación de la causa "Automatico"  
 
-        $causeResult = $this->get('pequiven.repository.sig_causes_report_evolution')->find($causeAction);
-        $responsible = $this->get('pequiven_seip.repository.user')->find($responsible);
+        $causeResult = $this->get('pequiven.repository.sig_causes_report_evolution')->find($causeAction);        
         
         //Calculando la cantidad de meses que durara la acción
         $dateStart = $request->get('actionResults')['dateStart'];
@@ -319,21 +326,33 @@ class ReportEvolutionController extends ResourceController
         
         $count = 0; $data = (int)$dStart;
             
+            $em->getConnection()->beginTransaction();
             $action = new EvolutionAction();
             $form  = $this->createForm(new EvolutionActionType($id, $typeObject), $action);
             
+            $catnRes = count($responsible);
+            $contaRes = 0;            
+            
+            $action->setRef($ref);//referencia
             $action->setCreatedBy($user);
             $action->setEvolutionCause($causeResult);
             $action->setMonth($data);//Carga de Mes(var month)
             $action->setTypeObject($typeObject);//Tipo de Objeto
-            $action->setResponsibles($responsible);//Responsable del plan de Acción
             
             $form->handleRequest($request);
 
             if ($form->isSubmitted()) {
-                $em = $this->getDoctrine()->getManager();
+                
                 $em->persist($action);
                 $em->flush();
+                
+                try {
+                    $em->flush();
+                    $em->getConnection()->commit();
+                } catch (Exception $e) {
+                    $em->getConnection()->rollback();
+                throw $e;
+                }
             } 
     
             $idAction = $action->getId();               
@@ -349,7 +368,6 @@ class ReportEvolutionController extends ResourceController
                         $relactionValue->setMonth($data);
                         $relactionValue->setActionValue($action);
 
-                        $em = $this->getDoctrine()->getManager();
                         $em->persist($relactionValue);
                         $em->flush();
 
@@ -359,9 +377,7 @@ class ReportEvolutionController extends ResourceController
                     //$AcValue = 0;
                 }
             }
-
-        //}
-
+    
     }
 
     /**
@@ -625,7 +641,8 @@ class ReportEvolutionController extends ResourceController
 
 //        $actionsValues = EvolutionActionValue::getActionValues($idCons, $month);          
         $actionsValues = $this->get('pequiven.repository.sig_action_value_indicator')->findBy(array('actionValue' => $idCons, 'month' => $month));    
-        $cant = count($actionResult);
+        //Carga de Cantidiad de Acciones
+        $cant = "0".''.count($actionResult);
 
         if($opc = false){
             $idAction = null;
@@ -644,6 +661,90 @@ class ReportEvolutionController extends ResourceController
         ];
 
         return $data;
+    } 
+
+    /**
+     * Creando la Referencia de la acción
+     * @param Request $request
+     * @return \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCauses
+     * @throws type
+     */
+    private function findEvolutionActionRef(Request $request, $monthSet, $causeAction)
+    {
+        $id = $request->get('idIndicator');
+        $typeObject = $request->get('typeObj');
+        $cont = 1; 
+        $posCause = 0;        
+        
+        //Mes Actual
+        $monthActual = date("m");
+        //Mes Consultado       
+        $month = $request->get('month'); 
+        
+        if ($typeObject == 1) {
+            
+            $result = $this->get('pequiven.repository.indicator')->find($id);             
+            //Causa
+            $causes = $this->get('pequiven.repository.sig_causes_report_evolution')->findBy(array('indicator' => $id, 'month' => $monthSet));
+                
+                $cause = array();
+                if ($causes) {
+                    foreach ($causes as $value) {
+                        $idCause = $value->getId();
+                        $cause[] = $idCause;
+                        if ($idCause == $causeAction) {
+                            $posCause = $cont;
+                        }
+                        $cont++; 
+                    }
+                    $action = $this->get('pequiven.repository.sig_action_indicator')->findBy(array('evolutionCause' => $cause));
+                }
+                $cantAction = count($action) + 1;
+                $cantAction = "0".''.$cantAction.''."-";                
+
+            foreach ($result->getObjetives() as $value) {
+                
+                $compData = $value->getComplejo();//Consultando si tiene complejo
+                $gerData = $value->getGerencia();//Si tiene gerencia
+                
+                if($compData){
+                    $complejo = $compData->getRef().''."-";
+                    $complejo = strtoupper($complejo);
+                }else{
+                    $complejo = "S/C-";
+                    //$complejo = "";
+                }
+                if ($gerData) {                
+                    $gerencia = $gerData->getAbbreviation().''."-"; 
+                    $gerencia = strtoupper($gerencia);
+                }else{
+                    $gerencia = "S/G-";
+                    //$gerencia = "";
+                }
+                //$complejo = $value->getComplejo()->getRef();
+                //$gerencia = $value->getGerencia()->getAbbreviation();
+            }
+            
+        }elseif($typeObject == 2){
+            
+            $repository = $this->get('pequiven_seip.repository.arrangementprogram');
+            $result = $repository->find($id); 
+            //Causas
+            $cause = $this->get('pequiven.repository.sig_causes_report_evolution')->findBy(array('arrangementProgram' => $id));
+            $complejo = "S/C";
+            $gerencia = "S/G";
+        }
+
+        $monthSet = $monthSet.''."-";
+        $posCause = "0".''.$posCause;
+        $ref = $complejo.''.$gerencia.''.$monthSet.''.$cantAction.''.$posCause;
+        //Carga de array con la data
+        $data = [
+            //'id'    => $id,
+            'ref'   => $ref
+        ];
+
+        return $ref;
     } 
 
     /**

@@ -123,7 +123,7 @@ class CoreExtension extends \Twig_Extension {
      * @return type
      */
     function ucwords($value) {
-        return ucwords(mb_strtolower($value,'UTF-8'));
+        return ucwords(mb_strtolower($value, 'UTF-8'));
     }
 
     /**

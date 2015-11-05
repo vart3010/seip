@@ -27,7 +27,7 @@
             
                 <div class="field-block button-height" >
                             <label class="label">Mes: </label>
-                            <select id="select1" onclick="cargaData();" class="select2 input-large form-control">
+                            <select id="actionResults_month" name="actionResults[month]" class="select2 input-large form-control">
                                 <option value="00">Seleccione...</option>
                                 {#<option value="01">Enero</option>
                                 <option value="02">Febrero</option>
@@ -79,13 +79,12 @@
                         {{ form_widget(form.evolutionCause) }}
                     </div>
                     <div class="field-block button-height" >
-                        {{ form_label(form.responsibles) }}
-                        {{ form_widget(form.responsibles) }}
+                        {{ form_label(form.responsible) }}
+                        {{ form_widget(form.responsible) }}
                     </div>
             {{ form_rest(form) }}
                     <div class="field-block button-height" >
-                        {{ form_widget(form.ref) }}
-                    </div>
+                    </div>                    
             {% endif %}    
             {{ form_errors(form_value) }}                     
                     <div class="field-block button-height" >                    

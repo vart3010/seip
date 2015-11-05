@@ -181,6 +181,11 @@ class UserRepository extends EntityRepository {
         return $this->findQueryToAssingTacticArrangementProgramGoal($users, $criteria)->getQuery()->getResult();
     }
 
+    /**
+     * TRAE LAS METAS DE UN USUARIO EN ESPECÍFICO
+     * @param array $responsiblesId
+     * @return type
+     */
     function findUsers(array $responsiblesId) {
         $qb = $this->getQueryBuilder();
         $qb
@@ -229,24 +234,24 @@ class UserRepository extends EntityRepository {
 
         return $qb;
     }
-    
+
     function findQueryUsersCoordinatorPhaseWorkStudyCircle(array $criteria = array()) {
         $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
-        
+
         $qb = $this->getQueryBuilder();
         $qb
                 ->addSelect('u')
                 ->innerJoin('u.workStudyCircles', 'wsc')
 //                ->andWhere('wsc.phase = 2')
         ;
-        
-        if(($workStudyCircle = $criteria->remove('WorkStudyCircle')) != null){
+
+        if (($workStudyCircle = $criteria->remove('WorkStudyCircle')) != null) {
             $qb
-                ->andWhere('wsc.id = :workStudyCircle')
-                ->setParameter('workStudyCircle', $workStudyCircle)
-                    ;
+                    ->andWhere('wsc.id = :workStudyCircle')
+                    ->setParameter('workStudyCircle', $workStudyCircle)
+            ;
         }
-        
+
         return $qb;
     }
 
@@ -286,7 +291,7 @@ class UserRepository extends EntityRepository {
         $qb->setMaxResults(30);
         return $qb->getQuery()->getResult();
     }
-    
+
     /**
      * Buscador de coordinadores de círculos de estudio de trabajo
      * 
@@ -296,9 +301,9 @@ class UserRepository extends EntityRepository {
     function searchCoordinator(array $criteria = array()) {
         $qb = $this->getQueryBuilder();
         $qb
-            ->innerJoin('u.workStudyCircle', 'wsc')
-            ->andWhere('wsc.createdBy = u.id')
-            ;
+                ->innerJoin('u.workStudyCircle', 'wsc')
+                ->andWhere('wsc.createdBy = u.id')
+        ;
 
         $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
         $orX = $qb->expr()->orX();
@@ -317,10 +322,10 @@ class UserRepository extends EntityRepository {
         $qb->andWhere($orX);
 
         $qb->setMaxResults(30);
-        
+
         return $qb->getQuery()->getResult();
     }
-    
+
     /**
      * Buscador de coordinadores de círculos de estudio de trabajo
      * 
@@ -330,8 +335,8 @@ class UserRepository extends EntityRepository {
     function searchOnlyCoordinator(array $criteria = array()) {
         $qb = $this->getQueryBuilder();
         $qb
-            ->innerJoin('u.workStudyCircles', 'wsc')
-            ;
+                ->innerJoin('u.workStudyCircles', 'wsc')
+        ;
 
         $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
         $orX = $qb->expr()->orX();
@@ -347,18 +352,18 @@ class UserRepository extends EntityRepository {
         if (($numPersonal = $criteria->remove('numPersonal'))) {
             $orX->add($qb->expr()->like('u.numPersonal', "'%" . $numPersonal . "%'"));
         }
-        
-        if(($workStudyCircleId = $criteria->remove('workStudyCircleId')) != null){
+
+        if (($workStudyCircleId = $criteria->remove('workStudyCircleId')) != null) {
             $qb
-                ->andWhere('wsc.id = :workStudyCircleId')
-                ->setParameter('workStudyCircleId', $workStudyCircleId)
-                ;
+                    ->andWhere('wsc.id = :workStudyCircleId')
+                    ->setParameter('workStudyCircleId', $workStudyCircleId)
+            ;
         }
-        
+
         $qb->andWhere($orX);
 
         $qb->setMaxResults(30);
-        
+
         return $qb->getQuery()->getResult();
     }
 
@@ -541,6 +546,35 @@ class UserRepository extends EntityRepository {
                 ->setParameter('level', \Pequiven\MasterBundle\Entity\Rol::ROLE_DIRECTIVE);
 
         return $qb;
+    }
+
+    /**
+     * Retorna los Usuarios Asignados a una Meta en Específica. Usada por RemoveGoalType.php
+     * @param int $idGoal
+     * @param array $criteria
+     */
+    function findQuerytoRemoveAssingedGoal($idGoal, $type = true) {
+
+        $qb = $this->getQueryBuilder();
+
+        $qb
+                ->innerJoin('u.goals', 'goal')
+                ->innerJoin('u.groups', 'g')
+                ->andWhere('g.typeRol = :typeRol')
+                ->andWhere('goal.id = :goallist')
+                ->setParameter('typeRol', \Pequiven\MasterBundle\Entity\Rol::TYPE_ROL_OWNER)
+                ->setParameter('goallist', $idGoal)
+        ;
+        $qb
+                ->andWhere('g.level <= :level')
+                ->setParameter('level', \Pequiven\MasterBundle\Entity\Rol::ROLE_DIRECTIVE)
+        ;
+
+        if ($type) {
+            return $qb;
+        } else {
+            return $qb->getQuery()->getResult();
+        }
     }
 
     protected function getAlias() {

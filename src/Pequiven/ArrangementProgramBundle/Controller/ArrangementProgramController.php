@@ -330,7 +330,7 @@ class ArrangementProgramController extends SEIPController {
         $method = 'createPaginatorByAssignedSigResponsibles';
         $route = 'pequiven_seip_arrangementprogram_assigned_sig';
         $template = 'assigned.html.twig';
-        
+
         return $this->getSummaryResponseSIG($request, $method, $route, $template);
     }
 
@@ -623,10 +623,10 @@ class ArrangementProgramController extends SEIPController {
         $baseTemplate = 'PequivenSIGBundle:ArrangementProgram:';
         $view = $this
                 ->view()
-                ->setTemplate($baseTemplate.''.($template))                
+                ->setTemplate($baseTemplate . '' . ($template))
                 ->setTemplateVar($this->config->getPluralResourceName())
         ;
-        
+
         if ($request->get('_format') == 'html') {
             $labelsStatus = array();
             foreach (ArrangementProgram::getLabelsStatus() as $key => $value) {
@@ -960,11 +960,20 @@ class ArrangementProgramController extends SEIPController {
                 $data['formErrors'] = $editForm;
             }
         }//Fin isMethodPost
+        
+        //VALIDO QUE TENGA PERMISOS PARA MOVER EMPLEADOS EN METAS         
+        $securityService = $this->getSecurityService();
+         if ((($securityService->isGranted(array("ROLE_SEIP_ARRANGEMENT_PROGRAM_MOVEMENT_GOALS")))) || ($securityService->isGranted(array("ROLE_SEIP_ARRANGEMENT_PROGRAM_MOVEMENT_GOALS_POST_MORTEM")))) {
+            $MovementEmployee = true;
+        } else {
+            $MovementEmployee = false;
+        }
 
         $data = array(
             'entity' => $entity,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
+            'mov' => $MovementEmployee,
         );
 
         $view = $this->view($data);
@@ -1330,7 +1339,7 @@ class ArrangementProgramController extends SEIPController {
                 'bold' => false
             ),
             'alignment' => array(
-                'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_RIGHT,
+                'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_GENERAL,
                 'vertical' => \PHPExcel_Style_Alignment::VERTICAL_CENTER,
                 'wrap' => true
             )
@@ -1385,6 +1394,8 @@ class ArrangementProgramController extends SEIPController {
                 ->setCellValue('AA7', $description)
         ;
 
+
+
         $timeline = $resource->getTimeline();
         $countGoals = 1;
         $rowGoal = 11;
@@ -1402,8 +1413,8 @@ class ArrangementProgramController extends SEIPController {
 
             $responsiblesGoal = '';
             foreach ($goal->getResponsibles() as $responsible) {
-                $responsiblesGoal .= ' ' . $responsible;
-                $responsiblesGoal .= ',';
+                $responsiblesGoal .= '' . $responsible;
+                $responsiblesGoal .= "\n";
             }
             $responsiblesLen = strlen($responsiblesGoal);
             if ($responsiblesLen > 0) {
@@ -1464,6 +1475,7 @@ class ArrangementProgramController extends SEIPController {
                     ->setCellValue('H' . $rowGoal, $endDate)
                     ->setCellValue('I' . $rowGoal, $responsiblesGoal)
                     ->setCellValue('J' . $rowGoal, $weight);
+
             //Valores planeado y real de la meta
             $activeSheet
                     ->setCellValue('K' . $rowGoal, $januaryPlanned)
@@ -1493,6 +1505,8 @@ class ArrangementProgramController extends SEIPController {
                     ->setCellValue('AI' . $rowGoal, $goalObservations)
             ;
 
+            $activeSheet
+                    ->getStyle('I')->getAlignment()->setWrapText(true);
             $activeSheet->getStyle(sprintf('C%s:I%s', $rowGoal, $rowGoal))->applyFromArray($styleArrayBordersContent);
             $activeSheet->getStyle(sprintf('AI%s:AL%s', $rowGoal, $rowGoal))->applyFromArray($styleArrayBordersContent);
             $rowHeight = 50;
@@ -1550,20 +1564,25 @@ class ArrangementProgramController extends SEIPController {
         $observations = $resource->getObservations();
         $reference = $resource->getRef();
         $observationString = '';
+        $count=0;
         foreach ($observations as $observation) {
-            $observationString .= sprintf('%s,', $observation->getDescription());
+            $count++;
+            $observationString .= sprintf("%d.- %s. \n", $count, $observation->getDescription());
         }
         $observationsLen = strlen($observationString);
         if ($observationsLen > 0) {
-            $observationString[strlen($observationString) - 1] = '.';
-            $observationString = ucfirst(strtolower($observationString));
+            $observationString = ucwords(strtolower($observationString));
         } else {
             $observationString = 'Ninguna.';
         }
+
         $activeSheet
                 ->setCellValue('B' . $rowObservation, $observationString)
                 ->setCellValue('AE' . $rowObservation, $reference);
-        
+
+        $activeSheet
+                ->getStyle('B')->getAlignment()->setWrapText(true);
+
         $activeSheet->getStyle(sprintf('B%s:AD%s', $rowObservation, $rowObservation))->applyFromArray($styleArrayBordersContent);
 
         //Agregar los detalles del programa de gestion

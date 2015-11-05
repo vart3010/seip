@@ -29,6 +29,7 @@ pequiven:
         delete: Eliminar
         upload_file: Subir Archivo
         download_file: Descargar Archivo
+        mov: Asignar
     modal:
         title:
             goal: Meta
