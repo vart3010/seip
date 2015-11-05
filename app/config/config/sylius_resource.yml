@@ -454,4 +454,11 @@ sylius_resource:
                 controller: Pequiven\SEIPBundle\Controller\Politic\MeetingFileController
                 model: Pequiven\SEIPBundle\Entity\Politic\MeetingFile
                 repository: Pequiven\SEIPBundle\Repository\Politic\MeetingFileRepository
+        #SIP
+        pequiven.onePerTen:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:Sip/onePerTen
+            classes:
+                controller: Pequiven\SEIPBundle\Controller\Sip\OnePerTenController
+                model: Pequiven\SEIPBundle\Entity\Sip\onePerTen\OnePerTenRepository
         

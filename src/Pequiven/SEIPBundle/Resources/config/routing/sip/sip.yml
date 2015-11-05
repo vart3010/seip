@@ -1,0 +1,8 @@
+## SIP
+pequiven_onePerTen_create:
+    path: /create
+    defaults:
+        _controller: pequiven.controller.onePerTen:createAction
+    methods: [GET|POST]
+    options:
+        expose: true
