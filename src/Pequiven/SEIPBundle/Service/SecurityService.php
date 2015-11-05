@@ -567,7 +567,7 @@ class SecurityService implements ContainerAwareInterface
     private function evaluateObjetiveEdit($rol,Objetive $objective)
     {
         $result = false;
-        if($objective->getPeriod()->isActive() === true){
+        if($objective->getPeriod()->isActive() === true || $objective->getPeriod()->getParent()->isOpened() == true){
             if($objective->getStatus() == Objetive::STATUS_DRAFT){
                 $result = true;
             }
@@ -586,7 +586,7 @@ class SecurityService implements ContainerAwareInterface
     private function evaluateObjetiveDelete($rol,Objetive $objective)
     {
         $result = false;
-        if($objective->getPeriod()->isActive() === true){
+        if($objective->getPeriod()->isActive() === true || $objective->getPeriod()->getParent()->isOpened() == true){
             if($objective->getStatus() == Objetive::STATUS_DRAFT){
                 $result = true;
             }
@@ -604,22 +604,34 @@ class SecurityService implements ContainerAwareInterface
      */
     private function evaluateIndicatorEdit($rol,  Indicator $indicator)
     {
+        $indicatorService = $this->getIndicatorService();//Llamado al servicio
+        
         $roleEditByLevel = array(
             \Pequiven\IndicatorBundle\Entity\IndicatorLevel::LEVEL_ESTRATEGICO => "ROLE_SEIP_INDICATOR_EDIT_STRATEGIC",
             \Pequiven\IndicatorBundle\Entity\IndicatorLevel::LEVEL_TACTICO => "ROLE_SEIP_INDICATOR_EDIT_TACTIC",
             \Pequiven\IndicatorBundle\Entity\IndicatorLevel::LEVEL_OPERATIVO => "ROLE_SEIP_INDICATOR_EDIT_OPERATIVE"
         );
+       
+        $value = $indicatorService->isIndicatorHasParentsEstrategic($indicator);//Llamando al metodo
         
         $result = false;
-        if($indicator->getPeriod()->isActive() === true){
+        if($indicator->getPeriod()->isActive() === true || $indicator->getPeriod()->getParent()->isOpened() == true){
             if($this->isGranted($roleEditByLevel[$indicator->getIndicatorLevel()->getLevel()])){
                 if($indicator->getStatus() == Indicator::STATUS_DRAFT){
-                    $result = true;
+                    if ($value === false) {
+                        if ($this->isGranted('ROLE_SEIP_PLANNING_INDICATOR_EDIT')) {
+                            $result = true;
+                        }else{
+                            $result = false;                            
+                        }
+                    }else{
+                        $result = true;                        
+                    }
                 }
             }
         }else{
             $result = false;
-        }
+        }        
         return $result;
     }
     
@@ -638,7 +650,7 @@ class SecurityService implements ContainerAwareInterface
         );
         
         $result = false;
-        if($indicator->getPeriod()->isActive() === true){
+        if($indicator->getPeriod()->isActive() === true || $indicator->getPeriod()->getParent()->isOpened() == true){
             if($this->isGranted($roleDeleteByLevel[$indicator->getIndicatorLevel()->getLevel()])){
                 if($indicator->getStatus() == Indicator::STATUS_DRAFT){
                     $result = true;
@@ -858,5 +870,13 @@ class SecurityService implements ContainerAwareInterface
     public function getPeriodService()
     {
         return $this->container->get('pequiven_seip.service.period');
+    }
+
+    /**
+     * 
+     * @return \Pequiven\IndicatorBundle\Service\IndicatorService
+     */
+    protected function getIndicatorService() {
+        return $this->container->get('pequiven_indicator.service.inidicator');
     }
 }
