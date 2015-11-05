@@ -11,12 +11,13 @@ use Pequiven\SEIPBundle\Repository\UserRepository;
 use Pequiven\ArrangementProgramBundle\Entity\Goal;
 use Pequiven\ArrangementProgramBundle\Model\MovementEmployee;
 
-class RemoveGoalType extends AbstractType {
+class RemoveMovType extends AbstractType {
 
     public function buildForm(FormBuilderInterface $builder, array $options) {
         $id = $this->id;
-        $post_mortem=$this->post_mortem;
-        
+        $post_mortem = $this->post_mortem;
+        $type = $this->type;
+
         $builder
                 ->add('date', 'date', [
                     'label_attr' => array('class' => 'label bold'),
@@ -45,20 +46,40 @@ class RemoveGoalType extends AbstractType {
                         ),
             ));
         } else {
-            $builder
-                    ->add('User', null, array(
-                        'query_builder' => function(UserRepository $repository) use ($id) {
-                            return $repository->findQuerytoRemoveAssingedGoal($id);
-                        },
-                        'label' => 'Empleados Asignados',
-                        'empty_value' => 'Seleccione...',
-                        'label_attr' => array('class' => 'label'),
-                        'attr' => array(
-                            'class' => "select2 input-large form-control",
-                            'style' => 'width: 270px',
-                        ),
-                        'required' => true,
-            ));
+
+            if ($type == 'Goal') {
+                $builder
+                        ->add('User', null, array(
+                            'query_builder' => function(UserRepository $repository) use ($id) {
+                                return $repository->findQuerytoRemoveAssingedGoal($id);
+                            },
+                            'label' => 'Empleados Asignados',
+                            'empty_value' => 'Seleccione...',
+                            'label_attr' => array('class' => 'label'),
+                            'attr' => array(
+                                'class' => "select2 input-large form-control",
+                                'style' => 'width: 270px',
+                            ),
+                            'required' => true,
+                ));
+            }
+
+            if ($type == 'AP') {
+                $builder
+                        ->add('User', null, array(
+                            'query_builder' => function(UserRepository $repository) use ($id) {
+                                return $repository->findQuerytoRemoveAssingedAP($id);
+                            },
+                            'label' => 'Empleados Asignados',
+                            'empty_value' => 'Seleccione...',
+                            'label_attr' => array('class' => 'label'),
+                            'attr' => array(
+                                'class' => "select2 input-large form-control",
+                                'style' => 'width: 270px',
+                            ),
+                            'required' => true,
+                ));
+            }
         }
 
         $builder
@@ -89,14 +110,15 @@ class RemoveGoalType extends AbstractType {
     }
 
     public function getName() {
-        return 'RemoveGoal';
+        return 'RemoveMov';
     }
 
     protected $id;
 
-    public function __construct($id, $post_mortem) {
+    public function __construct($id, $post_mortem, $type) {
         $this->id = $id;
         $this->post_mortem = $post_mortem;
+        $this->type = $type;
     }
 
 }

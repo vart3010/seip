@@ -576,6 +576,35 @@ class UserRepository extends EntityRepository {
             return $qb->getQuery()->getResult();
         }
     }
+    
+    /**
+     * Retorna los Usuarios Asignados a un Programa de Gestión en Específico. Usada por RemoveAPType.php
+     * @param int $idGoal
+     * @param array $criteria
+     */
+    function findQuerytoRemoveAssingedAP($idGoal, $type = true) {
+
+        $qb = $this->getQueryBuilder();
+
+        $qb
+                ->innerJoin('u.arrangementPrograms', 'ap')
+                ->innerJoin('u.groups', 'g')
+                ->andWhere('g.typeRol = :typeRol')
+                ->andWhere('ap.id = :aplist')
+                ->setParameter('typeRol', \Pequiven\MasterBundle\Entity\Rol::TYPE_ROL_OWNER)
+                ->setParameter('aplist', $idGoal)
+        ;
+        $qb
+                ->andWhere('g.level <= :level')
+                ->setParameter('level', \Pequiven\MasterBundle\Entity\Rol::ROLE_DIRECTIVE)
+        ;
+
+        if ($type) {
+            return $qb;
+        } else {
+            return $qb->getQuery()->getResult();
+        }
+    }
 
     protected function getAlias() {
         return 'u';
