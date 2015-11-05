@@ -585,7 +585,7 @@ class IndicatorSigController extends ResourceController {
           $fileSVG = $this->exportChrat($request);
         
         }
-        die();
+        
         //Buscando los Archivos por Codigo
         $nameSVG = glob("$routing");
         
