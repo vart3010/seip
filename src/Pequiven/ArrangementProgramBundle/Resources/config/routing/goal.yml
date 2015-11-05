@@ -71,3 +71,11 @@ goal_movement_remove:
     methods: [GET|POST]
     options:
         expose: true
+        
+goal_movement_export:
+    path: /export/{idGoal}
+    defaults:
+        _controller: pequiven_seip.controller.arrangementprogram_movement:exportAction
+    methods: [GET|POST]
+    options:
+        expose: true
