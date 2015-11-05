@@ -107,15 +107,7 @@
 {% endblock %}
 {% block javascript %}
     {{ parent() }}
-    <script type="text/javascript">
-    //Carga de Evento de Descarga de Grafica
-        function downloadChart(){            
-            var button = document.getElementById("exportpng");
-            if (button){
-               console.log("hola");
-               button.click();                  
-            }            
-        }
+    <script type="text/javascript">    
     </script>
 
 {% endblock %}
