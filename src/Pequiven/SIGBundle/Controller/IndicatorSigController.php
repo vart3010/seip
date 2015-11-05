@@ -580,12 +580,13 @@ class IndicatorSigController extends ResourceController {
 
         $em = $this->getDoctrine()->getManager();
         //$chart = $request->get('stream');
-        $routing = "/var/www/html/seip"; 
+//        $routing = "/var/www/html/seip"; 
+        $routing = $this->container->getParameter('kernel.root_dir');
         if($request->isMethod('POST')){
           $fileSVG = $this->exportChrat($request);
         }
         //Buscando los Archivos por Codigo
-        $nameSVG = glob("$routing/web/php-export-handler/temp/*.png");
+        $nameSVG = glob("$routing/../web/php-export-handler/temp/*.png");
         
         $user = $this->getUser()->getId();//Id Usuario    
         $user = str_pad($user, 6,"0", STR_PAD_LEFT);
