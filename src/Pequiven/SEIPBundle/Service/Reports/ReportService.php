@@ -46,6 +46,7 @@ class ReportService implements \Symfony\Component\DependencyInjection\ContainerA
         $PHPJasperXML->xml_dismantle($xml);
         $PHPJasperXML->transferDBtoArray($this->server, $this->user, $this->pass, $this->db);
         $PHPJasperXML->outpage("D");    //page output method I:standard output  D:Download file        
+        
     }
 
     public function setContainer(\Symfony\Component\DependencyInjection\ContainerInterface $container = null) {
