@@ -612,7 +612,7 @@ function exportProcessor($stream, $meta, $exportParams, $type) {
         $nameSVG = '';
         
         $routingTemp = $this->container->getParameter('kernel.root_dir')."/../web/php-export-handler/*";
-        
+
         // generate the temporary file
         if (!file_put_contents($tempInputSVGFile, $stream)) {
             die("Couldn't create temporary file. Check that the directory permissions for
@@ -622,6 +622,7 @@ function exportProcessor($stream, $meta, $exportParams, $type) {
         }        
         
         $nameTemp = $nameSVG;
+        var_dump($nameTemp);
         //return $nameSVG;
         // do the conversion
         $width = 950;
@@ -638,7 +639,7 @@ function exportProcessor($stream, $meta, $exportParams, $type) {
             $output .= shell_exec($comandJpg);
         }
 
-        shell_exec("rm $tempInputSVGFile");
+        //shell_exec("rm $tempInputSVGFile");
         
         $nameSVG = $tempOutputFile;                
         //return $nameSVG;

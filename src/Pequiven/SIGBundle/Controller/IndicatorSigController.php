@@ -565,7 +565,7 @@ class IndicatorSigController extends ResourceController {
           $request->request->remove('parameters');
           $fusionchartService = $this->getFusionChartExportService();          
           $fileSVG = $fusionchartService->exportFusionChart($exportRequestStream);                                    
-        var_dump($exportRequestStream);
+                  
         return $fileSVG;
     }
 
