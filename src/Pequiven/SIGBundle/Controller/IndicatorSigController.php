@@ -565,7 +565,7 @@ class IndicatorSigController extends ResourceController {
           $request->request->remove('parameters');
           $fusionchartService = $this->getFusionChartExportService();          
           $fileSVG = $fusionchartService->exportFusionChart($exportRequestStream);                                    
-
+        var_dump($exportRequestStream);
         return $fileSVG;
     }
 
@@ -580,14 +580,14 @@ class IndicatorSigController extends ResourceController {
 
         $em = $this->getDoctrine()->getManager();
         //$chart = $request->get('stream');
-        $routing = $this->container->getParameter('kernel.root_dir');
+        $routing = $this->container->getParameter('kernel.root_dir')."/../web/php-export-handler/temp/*.png";
         if($request->isMethod('POST')){
           $fileSVG = $this->exportChrat($request);
-          var_dump($fileSVG);
+        
         }
         die();
         //Buscando los Archivos por Codigo
-        $nameSVG = glob("$routing/../web/php-export-handler/temp/*.png");
+        $nameSVG = glob("$routing");
         
         $user = $this->getUser()->getId();//Id Usuario    
         $user = str_pad($user, 6,"0", STR_PAD_LEFT);
