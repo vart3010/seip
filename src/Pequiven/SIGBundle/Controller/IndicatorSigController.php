@@ -583,7 +583,7 @@ class IndicatorSigController extends ResourceController {
         $routing = $this->container->getParameter('kernel.root_dir');
         if($request->isMethod('POST')){
           $fileSVG = $this->exportChrat($request);
-          var_dump("paso");
+          var_dump($fileSVG);
         }
         die();
         //Buscando los Archivos por Codigo
