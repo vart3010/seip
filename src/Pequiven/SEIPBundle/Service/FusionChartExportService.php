@@ -584,8 +584,8 @@ function exportProcessor($stream, $meta, $exportParams, $type) {
     $tempInputSVGFile =  $this->container->getParameter('kernel.root_dir')."/../web/php-export-handler/" . TEMP_PATH . "{$tempFileName}.svg";
     //$tempInputSVGFile =  $routing."/web/php-export-handler/" . TEMP_PATH . "{$tempFileName}.svg";
 
-    //$tempOutputFile = $this->container->getParameter('kernel.root_dir')."/../web/php-export-handler/" . TEMP_PATH . "{$tempFileName}.{$ext}";
-    $tempOutputFile = $routing."/web/php-export-handler/" . TEMP_PATH . "{$tempFileName}.{$ext}";
+    $tempOutputFile = $this->container->getParameter('kernel.root_dir')."/../web/php-export-handler/" . TEMP_PATH . "{$tempFileName}.{$ext}";
+    //$tempOutputFile = $routing."/web/php-export-handler/" . TEMP_PATH . "{$tempFileName}.{$ext}";
    
     $tempOutputJpgFile = realpath(TEMP_PATH) . "/{$tempFileName}.jpg";
     $tempOutputPngFile = realpath(TEMP_PATH) . "/{$tempFileName}.png";        
@@ -626,7 +626,7 @@ function exportProcessor($stream, $meta, $exportParams, $type) {
         $nameTemp = $nameSVG;
         //return $nameSVG;
         // do the conversion
-        $width = 900;
+        $width = 950;
         $height = 750;
         $size = "-w {$width} -h {$height}";
         $command = INKSCAPE_PATH . "$bg --without-gui {$tempInputSVGFile} --export-{$ext} $tempOutputFile {$size}";

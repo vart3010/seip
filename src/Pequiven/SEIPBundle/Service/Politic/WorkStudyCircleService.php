@@ -492,7 +492,12 @@ class WorkStudyCircleService implements ContainerAwareInterface {
         return $data;
     }
     
-    
+    /**
+     * Función que devuelve si se puede crear un círculo
+     * @param \Pequiven\SEIPBundle\Entity\User $user
+     * @param type $phase
+     * @return boolean
+     */
     public function isAllowCreateWorkStudyCircleByPhase(\Pequiven\SEIPBundle\Entity\User $user, $phase = \Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle::PHASE_ONE){
         $workStudyCircles = $user->getWorkStudyCircles();
         $createWorkStudyCircle = true;
@@ -526,11 +531,11 @@ class WorkStudyCircleService implements ContainerAwareInterface {
     }
     
     /**
-     * 
+     * Función que devuelve si se puede editar un CET
      * @param WorkStudyCircle $workStudyCircle
      * @return boolean
      */
-    public function isAllowToEdit(\Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle $workStudyCircle){
+    public function isAllowToEdit(WorkStudyCircle $workStudyCircle){
         $valid = false;
         $user = $this->getUser();
         
@@ -546,11 +551,11 @@ class WorkStudyCircleService implements ContainerAwareInterface {
     }
     
     /**
-     * 
+     * Función que devuelve si se pueden añadir miembros a un CET
      * @param WorkStudyCircle $workStudyCircle
      * @return boolean
      */
-    public function isAllowToAddMembers(\Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle $workStudyCircle){
+    public function isAllowToAddMembers(WorkStudyCircle $workStudyCircle){
         $valid = false;
         $user = $this->getUser();
         
@@ -558,11 +563,11 @@ class WorkStudyCircleService implements ContainerAwareInterface {
     }
     
     /**
-     * 
+     * Función que devuelve si se permite editar los miembros de un CET
      * @param WorkStudyCircle $workStudyCircle
      * @return boolean
      */
-    public function isAllowToEditMembers(\Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle $workStudyCircle){
+    public function isAllowToEditMembers(WorkStudyCircle $workStudyCircle){
         $valid = false;
         $user = $this->getUser();
         
@@ -570,11 +575,11 @@ class WorkStudyCircleService implements ContainerAwareInterface {
     }
     
     /**
-     * 
+     * Función que devuelve si se puede añadir una reunión a un CET
      * @param WorkStudyCircle $workStudyCircle
      * @return boolean
      */
-    public function isAllowToAddMeetings(\Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle $workStudyCircle){
+    public function isAllowToAddMeetings(WorkStudyCircle $workStudyCircle){
         $valid = false;
         $user = $this->getUser();
         
@@ -597,7 +602,8 @@ class WorkStudyCircleService implements ContainerAwareInterface {
         $user = $this->getUser();
         
         if($workStudyCircle->getCoordinator()){
-            if(($this->getSecurityContext()->isGranted(array('ROLE_SEIP_PROPOSAL_ADD')) || $workStudyCircle->getCoordinator()->getId() == $user->getId()) && $workStudyCircle->getPhase() == WorkStudyCircle::PHASE_THREE){
+//            if(($this->getSecurityContext()->isGranted(array('ROLE_SEIP_PROPOSAL_ADD')) || $workStudyCircle->getCoordinator()->getId() == $user->getId()) && $workStudyCircle->getPhase() == WorkStudyCircle::PHASE_FOUR){
+            if(($this->getSecurityContext()->isGranted(array('ROLE_SEIP_PROPOSAL_ADD')) || $workStudyCircle->getCoordinator()->getId() == $user->getId()) && ($workStudyCircle->getId() == 440 || $workStudyCircle->getId() == 441)){
                 $valid = true;
             }
         }
@@ -615,9 +621,25 @@ class WorkStudyCircleService implements ContainerAwareInterface {
         $user = $this->getUser();
         
         if($workStudyCircle->getCoordinator()){
-            if(($this->getSecurityContext()->isGranted(array('ROLE_SEIP_PROPOSAL_EDIT')) || $workStudyCircle->getCoordinator()->getId() == $user->getId()) && $workStudyCircle->getPhase() == WorkStudyCircle::PHASE_THREE){
+            if(($this->getSecurityContext()->isGranted(array('ROLE_SEIP_PROPOSAL_EDIT')) || $workStudyCircle->getCoordinator()->getId() == $user->getId()) && $workStudyCircle->getPhase() == WorkStudyCircle::PHASE_FOUR){
                 $valid = true;
             }
+        }
+        
+        return $valid;
+    }
+    
+    /**
+     * 
+     * @param WorkStudyCircle $workStudyCircle
+     * @return boolean
+     */
+    public function isAllowToAddProposals(WorkStudyCircle $workStudyCircle){
+        $valid = false;
+        $user = $this->getUser();
+        
+        if(($this->getSecurityContext()->isGranted(array('ROLE_SEIP_PROPOSAL_ADD')) || $workStudyCircle->getCoordinator()->getId() == $user->getId()) && $workStudyCircle->getPhase() == WorkStudyCircle::PHASE_THREE){
+            $valid = true;
         }
         
         return $valid;

@@ -600,10 +600,10 @@ class Goal implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface {
     
      /**
      * 
-     * @param \Pequiven\ArrangementProgramBundle\Entity\MovementEmployee\MovementEmnployee $movementEmployee
+     * @param \Pequiven\ArrangementProgramBundle\Entity\MovementEmployee\MovementEmployee $movementEmployee
      * @return \Pequiven\SEIPBundle\Entity\User
      */
-    public function addMovementEmployee(\Pequiven\ArrangementProgramBundle\Entity\MovementEmployee\MovementEmnployee $movementEmployee) {
+    public function addMovementEmployee(\Pequiven\ArrangementProgramBundle\Entity\MovementEmployee\MovementEmployee $movementEmployee) {
         $this->movementEmployee[] = $movementEmployee;
 
         return $this;
@@ -611,9 +611,9 @@ class Goal implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface {
 
     /**
      * 
-     * @param \Pequiven\ArrangementProgramBundle\Entity\MovementEmployee\MovementEmnployee $movementEmployee
+     * @param \Pequiven\ArrangementProgramBundle\Entity\MovementEmployee\MovementEmployee $movementEmployee
      */
-    public function removeMovementEmployee(\Pequiven\ArrangementProgramBundle\Entity\MovementEmployee\MovementEmnployee $movementEmployee) {
+    public function removeMovementEmployee(\Pequiven\ArrangementProgramBundle\Entity\MovementEmployee\MovementEmployee $movementEmployee) {
         $this->movementEmployee->removeElement($movementEmployee);
     }
 
