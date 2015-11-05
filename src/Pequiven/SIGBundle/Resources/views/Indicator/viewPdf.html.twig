@@ -78,11 +78,18 @@
         font-size: 14px;
     }
 
-
+    #page {
+    width: 500px;
+    margin: 0 auto;
+    background: #FFFFFF;
+    border: 10px #FFFFFF solid;
+    text-align: center;
+    }
+    
 </style>
-{% block body %}
-    <br/><br/>
 
+{% block body %}
+    <br/><br/>    
     {% if month == 1 %}
         {% set setmonth = "Enero" %} 
     {% elseif month == 2 %}
@@ -108,7 +115,7 @@
     {% elseif month == 12 %}
         {% set setmonth = "Diciembre" %}
     {% endif %}         
-
+    
     <table width="95%">
         <tbody>
             <tr>
@@ -125,33 +132,37 @@
                 <td class="td-tittle" width="85%"> {{ setmonth  }} del {{ period }}</td>
             </tr>
         </tbody>
-    </table>
-
-    <br><br>
-    <table width="100%" style="padding:5px;">
+    </table>    
+    
+    <!-- Informe de Evolución Grafica de Indicador -->    
+    <div id="page">        
+        <table>
         <tr>
             <td>
-                <table class="table-charts" width="100%">
-                    <tbody>
-                        <tr>
-                            <td> <br><br><br><br><br><br><br><br><br><br><br><br><br><br> </td>
-                        </tr>
-                    </tbody>
-                </table>
+                <h4 align="center">GRÁFICA DE DATOS Y TENDENCIA DE PROCESO</h4>
             </td>
-
-            <td>  
-                <table class="table-charts" width="100%">
-                    <tbody>
-                        <tr>
-                            <td> <br><br><br><br><br><br><br><br><br><br><br><br><br><br> </td>
-                        </tr>
-                    </tbody>
-                </table>
+            <td>
+                <h4 align="center">CAUSAS DE DESVIACIÓN</h4>
             </td>
         </tr>
-    </table>
-    <br>
+        <tr>
+            <td border="1">
+                <h5 align="right">MEJOR HACIA... 
+                <img src="/var/www/html/seip/web/bundles/pequivensig/images/{{ font }}" width="15px" height="15px">
+                </h5>
+                <h5 align="left">Fórmula de Medición: {{ formula }}</h5>                
+                <img src="{{ nameSVG }}" width="430px" height="220px">
+            </td>
+
+            <td border="1">
+                <div>&nbsp;</div>
+                <div>&nbsp;</div>
+                <img src="{{ chartCause }}" width="430px" height="210px">
+            </td>
+        </tr>
+        </table>
+    </div>    
+   
     <table width="100%" style="padding:5px;">
         <tr>
             <td>
@@ -189,7 +200,7 @@
             </td>
         </tr>
     </table>
-    <table style=" page-break-before: always;"></table>
+    <!--<table style=" page-break-before: always;"></table>-->
     <br><br>
     <table class="table-planning">
         <tbody>
