@@ -239,6 +239,19 @@ angular.module('seipModule.controllers', [])
                 location.href = redirect;
 
             };
+            
+            
+            $scope.getUrlMovementAP = function (idAP, url) {
+
+                var redirect = url + "?idAP=" + idAP;
+
+                //PENDIENTE AVERIGUAR PORQUE NO SIRVE:
+                //var redirect = Routing.generate(url, {idGoal: idGoal});
+
+                location.href = redirect;
+
+            };
+            
 
             //Funcion que carga el template de la meta
             $scope.loadTemplateMeta = function (goal, index) {
