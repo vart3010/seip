@@ -16,11 +16,4 @@ class OnePerTenController extends SEIPController {
         return $this->render('PequivenSEIPBundle:Sip:onePerTen\create.html.twig', array());
     }
 
-    public function listCutlAction()
-    {
-
-    	return $this->render('PequivenSEIPBundle:Sip:cutl\list.html.twig');
-
-    }
-
 }
