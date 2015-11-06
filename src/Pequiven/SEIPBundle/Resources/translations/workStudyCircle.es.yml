@@ -17,6 +17,7 @@ workStudyCircle:
         proposalsPhaseOne: Propuestas Fase 1
         proposalsPhaseTwo: Propuestas Fase 2
         proposalsPhaseThree: Propuestas Fase 3
+        proposalsPhaseFour: Propuestas Fase 4
         
         coordinador:
             title: Datos del Coordinador
