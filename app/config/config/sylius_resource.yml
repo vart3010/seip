@@ -467,4 +467,4 @@ sylius_resource:
             classes:
                 controller: Pequiven\SEIPBundle\Controller\Sip\Cutl\CutlController
                 model: Pequiven\SEIPBundle\Entity\Sip\Cutl
-        
+                repository: Pequiven\SEIPBundle\Repository\Sip\Cutl\CutlRepository

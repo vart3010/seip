@@ -1,5 +1,4 @@
-
-{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}
+{% extends "PequivenSEIPBundle:Template:Developer/Common/tableFormat1.html.twig" %}
 
 {% trans_default_domain 'sip' %}
 
@@ -16,6 +15,34 @@
 {% endblock %}
 
 {% block body %}
-	
+
+	<div ng-controller="TableFormatController">    
+		
+		<div loading-container="tableParams.settings().$loading">
+            <table ng-table="tableParams" template-pagination="custom/pager" template-header="custom/header" api-data-url="{{ apiDataUrl }}" export-csv="csv" class="table table-responsive table-extra-info" >
+                <tbody>
+                        
+                    <tr ng-repeat="result in $data | filter:tableParams.search" data="{$ result|json $}">
+                        <td data-title="'Cedula'">
+                            <a href="{$ result._links.self.show $}">
+                                {$ result.cedula $}
+                            </a>
+                        </td>
+                        <td data-title="'Nombre'">
+                            <a href="{$ result._links.self.show $}">
+                                {$ result.nombre $}
+                            </a>
+                        </td>
+                        <td data-title="'Centro'">
+                            <a href="{$ result._links.self.show $}">
+                                {$ result.centro $}
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+     </div>
 
 {% endblock %}

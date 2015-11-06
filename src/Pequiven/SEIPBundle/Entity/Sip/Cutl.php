@@ -22,9 +22,7 @@ class Cutl {
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
      */
-    private $id;
-
-    
+    private $id;    
 
     /**
      * municipio

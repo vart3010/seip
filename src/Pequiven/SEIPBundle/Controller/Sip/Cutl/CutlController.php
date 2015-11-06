@@ -7,7 +7,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Controlador CUTL del SIP
+ * Controlador CUTL
+ * @author Maximo Sojo maxsojo13@gmail.com
  *
  */
 class CutlController extends SEIPController {
@@ -17,16 +18,15 @@ class CutlController extends SEIPController {
 	 *
 	 *
 	 */
-    public function listAction(){
+    public function listAction(Request $request){
 
     	$criteria = $request->get('filter', $this->config->getCriteria());
         $sorting = $request->get('sorting', $this->config->getSorting());
-        $repository = $this->getRepository();
-        $phase = $request->get('phase');
+        $repository = $this->getRepository();                
         
-        //$circle = $this->get('pequiven.repository.work_study_circle')->findAll(); 
+        $cutl = $this->get('pequiven.repository.cutl')->findAll();         
         
-        $criteria['phase'] = $phase;
+        //$criteria['cult'] = false;
 
         if ($this->config->isPaginated()) {
             $resources = $this->resourceResolver->getResource(
@@ -47,9 +47,9 @@ class CutlController extends SEIPController {
                     $repository, 'findBy', array($criteria, $sorting, $this->config->getLimit())
             );
         }
+
         $routeParameters = array(
-            '_format' => 'json',
-            'phase' => $phase,
+            '_format' => 'json',            
         );
         $apiDataUrl = $this->generateUrl('pequiven_sip_cutl_list', $routeParameters);
 
@@ -58,22 +58,20 @@ class CutlController extends SEIPController {
                 ->setTemplate($this->config->getTemplate('list.html'))
                 ->setTemplateVar($this->config->getPluralResourceName())
         ;
-        if ($request->get('_format') == 'html') {
-            
+        if ($request->get('_format') == 'html') {            
             $data = array(
-                'apiDataUrl' => $apiDataUrl,
-                'phase' => $phase,
+                'apiDataUrl' => $apiDataUrl,                
                 $this->config->getPluralResourceName() => $resources,
             );
             $view->setData($data);
         } else {
-            $view->getSerializationContext()->setGroups(array('id', 'api_list', 'complejo', 'region'));
+            $view->getSerializationContext()->setGroups(array('id', 'api_list', 'cedula', 'nombre', 'centro'));
             $formatData = $request->get('_formatData', 'default');
 
             $view->setData($resources->toArray('', array(), $formatData));
         }
-        return $this->handleView($view);
 
+        return $this->handleView($view);
     }
 
 }
