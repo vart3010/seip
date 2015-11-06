@@ -1537,6 +1537,23 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                 )->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.onePerTen', $section)));
         $menuSip->addChild($onePerTen);
 
+        //CUTL
+        $cutl = $this->factory->createItem('sip.cutl', $this->getSubLevelOptions(array(
+                                "route" => "",
+                                'labelAttributes' => array('icon' => 'fa fa-user',),
+                            ))
+                    )->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.cutl', $section)));
+            //Sub menu
+            $cutlMenu = $this->factory->createItem('sip.list', $this->getSubLevelOptions(array(
+                                "route" => "pequiven_cutl_list",
+                                'labelAttributes' => array('icon' => 'fa fa-table',),
+                            ))
+                    )->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.list', $section)));
+
+            $cutl->addChild($cutlMenu);            
+
+            $menuSip->addChild($cutl);
+
         $menu->addChild($menuSip);
     }
 

@@ -6,3 +6,10 @@ pequiven_onePerTen_create:
     methods: [GET|POST]
     options:
         expose: true
+pequiven_cutl_list:
+    path: /cutl/list
+    defaults:
+        _controller: pequiven.controller.onePerTen:listCutlAction
+    methods: [GET|POST]
+    options:
+        expose: true

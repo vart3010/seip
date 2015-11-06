@@ -1,2 +1,5 @@
 sip:
     create: Registro de 1x10
+    list: Lista
+    cutl:
+        list: Listado de CUTL
