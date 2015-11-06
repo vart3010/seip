@@ -19,5 +19,16 @@
 {% endblock %}
 
 {% block body %}
+    <fieldset class="fieldset">
+        <legend class="legend" >{{ "sip.create"|trans }}</legend>
+        <div class="columns">
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ ("sip.cedula"|trans ) }}</label>
+                    <input class="input input-large" type="text">
+                </p>
+            </div>
 
+        </div>
+    </fieldset>
 {% endblock %}
