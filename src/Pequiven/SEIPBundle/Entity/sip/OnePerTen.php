@@ -1,0 +1,131 @@
+<?php
+
+namespace Pequiven\SEIPBundle\Entity\Sip;
+
+use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Gedmo\Mapping\Annotation as Gedmo;
+
+/**
+ * OnePerTen
+ * @author Victor Tortolero vart10.30@gmail.com
+ * @ORM\Table(name="sip_onePerTen")
+ * @ORM\Entity()
+ * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
+ * @ORM\HasLifecycleCallbacks()
+ */
+class OnePerTen {
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="NONE")
+     */
+    private $id;
+
+    /**
+     * cedula del 1
+     * @var string
+     *
+     * @ORM\Column(name="cedula", type="string", length=12)
+     */
+    private $cedula;
+
+    /**
+     * Creado por
+     * @var \Pequiven\SEIPBundle\Entity\User
+     *
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\User")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $user;
+
+    /**
+     * Creado por
+     * @var \Pequiven\SEIPBundle\Entity\User
+     *
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\User")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $createdBy;
+
+    /**
+     * @var \DateTime
+     * @Gedmo\Timestampable(on="create")
+     * @ORM\Column(name="createdAt", type="datetime")
+     */
+    private $createdAt;
+
+    /**
+     * @var \DateTime
+     * @Gedmo\Timestampable(on="update")
+     * @ORM\Column(name="updatedAt", type="datetime")
+     */
+    private $updatedAt;
+
+    /**
+     * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
+     */
+    private $deletedAt;
+
+    function getId() {
+        return $this->id;
+    }
+
+    function getCedula() {
+        return $this->cedula;
+    }
+
+    function getUser() {
+        return $this->user;
+    }
+
+    function getCreatedBy() {
+        return $this->createdBy;
+    }
+
+    function getCreatedAt() {
+        return $this->createdAt;
+    }
+
+    function getUpdatedAt() {
+        return $this->updatedAt;
+    }
+
+    function setId($id) {
+        $this->id = $id;
+    }
+
+    function setCedula($cedula) {
+        $this->cedula = $cedula;
+    }
+
+    function setUser(\Pequiven\SEIPBundle\Entity\User $user) {
+        $this->user = $user;
+    }
+
+    function setCreatedBy(\Pequiven\SEIPBundle\Entity\User $createdBy) {
+        $this->createdBy = $createdBy;
+    }
+
+    function setCreatedAt(\DateTime $createdAt) {
+        $this->createdAt = $createdAt;
+    }
+
+    function setUpdatedAt(\DateTime $updatedAt) {
+        $this->updatedAt = $updatedAt;
+    }
+
+    function getDeletedAt() {
+        return $this->deletedAt;
+    }
+
+    function setDeletedAt($deletedAt) {
+        $this->deletedAt = $deletedAt;
+    }
+
+
+}
