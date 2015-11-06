@@ -502,8 +502,9 @@ class ResultController extends ResourceController {
         }
 
         //Busqueda de la Imagen Descargada
-        $routing = "/var/www/html/seip";
-        $nameSVG = glob("$routing/web/php-export-handler/temp/*.png");
+//        $routing = "/var/www/html/seip";
+        $routing = $this->container->getParameter('kernel.root_dir');
+        $nameSVG = glob("$routing/../web/php-export-handler/temp/*.png");
         
         $user = $this->getUser()->getId();//Id Usuario    
         $user = str_pad($user, 6,"0", STR_PAD_LEFT);

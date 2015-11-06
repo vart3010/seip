@@ -580,12 +580,14 @@ class IndicatorSigController extends ResourceController {
 
         $em = $this->getDoctrine()->getManager();
         //$chart = $request->get('stream');
-        $routing = "/var/www/html/seip"; 
+        $routing = $this->container->getParameter('kernel.root_dir')."/../web/php-export-handler/temp/*.png";
         if($request->isMethod('POST')){
           $fileSVG = $this->exportChrat($request);
+        
         }
+        
         //Buscando los Archivos por Codigo
-        $nameSVG = glob("$routing/web/php-export-handler/temp/*.png");
+        $nameSVG = glob("$routing");
         
         $user = $this->getUser()->getId();//Id Usuario    
         $user = str_pad($user, 6,"0", STR_PAD_LEFT);
@@ -625,7 +627,7 @@ class IndicatorSigController extends ResourceController {
             foreach ($indicator->getObjetives() as $value) {
                 $objRel = $value->getDescription();
             }
-
+            $routingTendency = "/../web/bundles/pequivensig/images/";//Ruta de la Tendencia
             $tendency = $indicator->getTendency()->getId();
             switch ($tendency) {
                 case 0:
@@ -641,6 +643,7 @@ class IndicatorSigController extends ResourceController {
                     $font = "3.png";
                     break;
             }
+            $font = $routing.$routingTendency.$font;            
 
         } elseif ($typeObject == 2) {
 
@@ -679,7 +682,6 @@ class IndicatorSigController extends ResourceController {
 
         //Periodo
         $period = $this->getPeriodService()->getPeriodActive();
-        
         
         $data = array(
             'formula'       => $formula,            
