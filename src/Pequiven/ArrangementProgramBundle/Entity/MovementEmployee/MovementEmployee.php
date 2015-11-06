@@ -67,11 +67,12 @@ class MovementEmployee {
     private $typeMov;
 
     /**
-     * ID DE LA META, SERÁ LA BASE DE LOS CALCULOS DE AVANCE SIN EMBARGO LA PREDOMINACIÓN DE LA BUSQUEDA LO DEFINE EL TYPE
-     * @ORM\ManyToOne(targetEntity="Pequiven\ArrangementProgramBundle\Entity\Goal",inversedBy="movementEmployee")
-     * @ORM\JoinColumn(name="goal_id", referencedColumnName="id", nullable=false)
+     * ID AFECTADO EN EL CAMPO. LA TABLA REFERENCIADA LO DEFINE EL CAMPO TYPE
+     * @var integer
+     *
+     * @ORM\Column(name="id_affected", type="integer",nullable=false)
      */
-    private $Goal;
+    private $id_affected;
 
     /**
      * Periodo.
@@ -97,20 +98,20 @@ class MovementEmployee {
     private $date;
 
     /**
-     * @var \decimal
-     * @ORM\Column(name="realAdvance", type="decimal", nullable=false)
+     * @var \float
+     * @ORM\Column(name="realAdvance", type="float", nullable=false)
      */
     private $realAdvance;
 
     /**
-     * @var \decimal
-     * @ORM\Column(name="planned", type="decimal", nullable=false)
+     * @var \float
+     * @ORM\Column(name="planned", type="float", nullable=false)
      */
     private $planned;
 
     /**
-     * @var \decimal
-     * @ORM\Column(name="penalty", type="decimal", nullable=true)
+     * @var \float
+     * @ORM\Column(name="penalty", type="float", nullable=true)
      */
     private $pentalty;
 
@@ -243,16 +244,16 @@ class MovementEmployee {
      * 
      * @return type
      */
-    function getGoal() {
-        return $this->Goal;
+    function getId_Affected() {
+        return $this->id_affected;
     }
 
     /**
      * 
-     * @param type $Goal
+     * @param type $id_affected
      */
-    function setGoal($Goal) {
-        $this->Goal = $Goal;
+    function setId_Affected($id_affected) {
+        $this->id_affected = $id_affected;
     }
 
     /**

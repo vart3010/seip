@@ -23,14 +23,14 @@
             <thead>
                 <tr>
                     <th scope="col" width="12%">{{ 'seip.table.header.nro'|trans }}</th>
-                    <th scope="col" width="25%">{{ 'seip.table.header.name'|trans }}</th>
+                    <th scope="col" width="30%">{{ 'seip.table.header.name'|trans }}</th>
                         {% if appConfiguration.isSupportIntegratedManagementSystem == true %}
                         <th scope="col" width="10%" class="hide-on-mobile">{{ 'seip.table.header.type_goal'|trans }}</th>
                         {% endif %}
-                    <th scope="col" width="12%" class="hide-on-mobile-portrait">{{ 'seip.table.header.start_date'|trans }}</th>
-                    <th scope="col" width="12%" class="hide-on-tablet">{{ 'seip.table.header.end_date'|trans }}</th>
-                    <th scope="col" width="10%" class="hide-on-tablet">{{ 'seip.table.header.weight'|trans }}</th>
-                    <th scope="col" width="29%">{{ 'seip.table.header.responsible_goal'|trans }}</th>
+                    <th scope="col" width="10%" class="hide-on-mobile-portrait">Inicio</th>
+                    <th scope="col" width="10%" class="hide-on-tablet">Fin</th>
+                    <th scope="col" width="5%" class="hide-on-tablet">{{ 'seip.table.header.weight'|trans }}</th>
+                    <th scope="col" width="30%">{{ 'seip.table.header.responsible_goal'|trans }}</th>
                 </tr>
             </thead>
             {% set colspan = 6 %}
@@ -74,7 +74,8 @@
                     <td>{$ goal.weight $}%</td>
                     <td>
                         <span ng-repeat="responsible in goal.responsibles">
-                            {$ responsible.firstname + " "+ responsible.lastname $} <small class="tag">{$ " ("+responsible.username+")" $}</small><span ng-if="!$last">,</span><span ng-if="$last">.</span>
+                            {$ responsible.firstname + " "+ responsible.lastname $} <small class="tag">{$ " ("+responsible.username+")" $}</small><span ng-if="!$last"></span><span ng-if="$last"></span>
+                            <br>
                         </span>
                     </td>
                 </tr>

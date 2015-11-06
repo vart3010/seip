@@ -163,14 +163,14 @@ class Goal implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface {
      * @ORM\Column(name="penalty", type="integer", nullable=true)
      */
     private $penalty = 0;
-    
+
     /**
      * Penalizacion de Porcentaje
      * @var integer
      *
      * @ORM\Column(name="percentagepenalty", type="float", nullable=true)
      */
-    private $percentagepenalty =0;
+    private $percentagepenalty = 0;
 
     /**
      * Resultado Antes de la Penalización
@@ -179,12 +179,6 @@ class Goal implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface {
      * @ORM\Column(name="resultbeforepenalty", type="float", nullable=true)
      */
     private $resultBeforepenalty = 0;
-    
-     /**
-     * @var Pequiven\ArrangementProgramBundle\Entity\MovementEmployee\MovementEmployee
-     * @ORM\OneToMany(targetEntity="Pequiven\ArrangementProgramBundle\Entity\MovementEmployee\MovementEmployee", mappedBy="Goal")
-     * */
-    private $movementEmployee;
 
     public function __construct() {
         $this->responsibles = new \Doctrine\Common\Collections\ArrayCollection();
@@ -560,7 +554,7 @@ class Goal implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface {
     public function getPenalty() {
         return $this->penalty;
     }
-    
+
     /**
      * Get Percentagepenalty
      * @return type
@@ -577,7 +571,6 @@ class Goal implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface {
         $this->percentagepenalty = $percentagepenalty;
     }
 
-    
     /**
      * Set resultbeforepenalty
      * @param float $resultBeforepenalty
@@ -596,33 +589,6 @@ class Goal implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface {
      */
     public function getresultBeforepenalty() {
         return $this->resultBeforepenalty;
-    }
-    
-     /**
-     * 
-     * @param \Pequiven\ArrangementProgramBundle\Entity\MovementEmployee\MovementEmployee $movementEmployee
-     * @return \Pequiven\SEIPBundle\Entity\User
-     */
-    public function addMovementEmployee(\Pequiven\ArrangementProgramBundle\Entity\MovementEmployee\MovementEmployee $movementEmployee) {
-        $this->movementEmployee[] = $movementEmployee;
-
-        return $this;
-    }
-
-    /**
-     * 
-     * @param \Pequiven\ArrangementProgramBundle\Entity\MovementEmployee\MovementEmployee $movementEmployee
-     */
-    public function removeMovementEmployee(\Pequiven\ArrangementProgramBundle\Entity\MovementEmployee\MovementEmployee $movementEmployee) {
-        $this->movementEmployee->removeElement($movementEmployee);
-    }
-
-    /**
-     * 
-     * @return type
-     */
-    public function getMovementEmployee() {
-        return $this->movementEmployee;
     }
 
     public function __clone() {

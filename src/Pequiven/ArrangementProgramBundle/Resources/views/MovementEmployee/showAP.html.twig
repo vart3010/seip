@@ -3,10 +3,17 @@
 {% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
 {% trans_default_domain 'PequivenArrangementProgramBundle' %}
 
-{% block before_body %}
-    {{ contentHeader("Asignación de Metas")   }}
-{% endblock %}
+{% set entity = AP %}
 
+{% if entity.categoryArrangementProgram.id == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::ASSOCIATE_ARRANGEMENT_PROGRAM_SIG') %}
+    {% set configuration = gerenciaSIG.configuration %}
+{% else %}
+    {% set configuration = entity.tacticalObjective.gerencia.configuration %}
+{% endif %}
+{% set validConfiguration = false %}
+{% if configuration != null %}
+    {% set validConfiguration = true %}
+{% endif %}
 
 {% block body %}
     <style>
@@ -44,68 +51,136 @@
     </style>
     {% set message =  'pequiven.arrangement_program.you_must_assign_config'|trans %}
 
-    <fieldset class="fieldset">
-        <legend class="legend"><b>Datos de la Meta </b></legend>
-        <table class="record_properties" width="100%">
-            <tbody>
-                <tr>
-                    <th width="20%">Período</th>
-                    <td width="80%" colspan = "3">{{ goal.period }}</td>
-                </tr>  
-                <tr>
-                    <th width="20%">Programa de Gestión</th>
-                    <td width="80%" colspan = "3">
-                        {% set avancedUsed = goal.timeline.arrangementProgram.result %}
+
+    <hgroup id="main-title" class="thin breadcrumb">
+        <h1>
+            <a href="{{ path('pequiven_seip_arrangementprogram_index') }}">{{ 'pequiven.arrangement_program.arrangement_program'|trans }}</a>
+            <span class="icon-forward"></span>
+            <span class="thin">{{ entity.getTypeLabel|trans }}</span>
+            <span class="icon-forward"></span>
+            <span class="thin">Asignaciones</span>
+        </h1>
+    </hgroup>
+
+    {% if validConfiguration == false %}
+        {% set message =  'pequiven.arrangement_program.you_must_assign_config'|trans %}
+        {{ print_error(message) }}
+    {% endif  %}
+    
+    <div ng-controller="ArrangementProgramController">
+        <fieldset class="fieldset">
+            <legend class="legend">Datos del {{ 'pequiven.arrangement_program.arrangement_program'|trans }}&nbsp;<b>{{ entity.getTypeLabel|trans }}</b></legend>
+
+            <div class="columns">
+                <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                    <p class="inline-label">
+                        <label class="label">{{ 'pequiven.ref'|trans({},'messages') }}</label>
+                        {{ generateLink(entity) }}
+                    </p>
+                </div>
+                <div class="new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                    <p class="inline-label">
+                        <label class="label">{{ 'pequiven.arrangement_program.period'|trans }}</label>
+                        {{ entity.period }}
+                    </p>
+                </div>
+                {% if appConfiguration.isSupportIntegratedManagementSystem == true %}
+                    <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                        <p class="inline-label">
+                            <label class="label">{{ 'pequiven.arrangement_program.process'|trans }}</label>
+                            {{ entity.process }}
+                        </p>
+                    </div>
+                {% endif %}
+                <div class="new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                    <p class="inline-label">
+                        <label class="label">{{ 'pequiven.arrangement_program.category_arrangement_program'|trans }}</label>
+                        {{ entity.categoryArrangementProgram }}
+                    </p>
+                </div>
+
+                <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                    {% if entity.type == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC') %}
+                        <p class="inline-label">
+                            <label class="label">{{ 'pequiven.arrangement_program.location'|trans }}</label>
+                            {{ entity.tacticalObjective.gerencia.complejo }}
+                        </p>
+                    {% endif %}
+                    {% if entity.type == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE') %}
+                        <p class="inline-label">
+                            <label class="label">{{ 'pequiven.arrangement_program.location'|trans }}</label>
+                            {{ entity.operationalObjective.gerencia.complejo }}
+                        </p>
+                    {% endif %}
+                </div>
+                <div class="new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                    <p class="inline-label">
+                        <label class="label">{{ 'pequiven.arrangement_program.management'|trans }}</label>
+                        {{ entity.tacticalObjective.gerencia }}
+                    </p>
+                </div>
+
+                <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                    <p class="inline-label">
+                        <label class="label">{{ 'pequiven.arrangement_program.tactical_objective'|trans }}</label>
+                        {% set avancedUsed = entity.tacticalObjective.result %}
                         {% include 'PequivenObjetiveBundle:Common:percentajeBarResult.html.twig' %}
-                        {{ generateLink(goal.timeline.arrangementProgram) }}. <a ref="">{{goal.timeline.arrangementProgram.description}}</a>
-                        {#{% set ap=goal.timeline.arrangementProgram%}#}
-                        {#<td width="80%" colspan = "2">{{ ap.description|ucwords }}</td>#}
-                    </td>
-                </tr>
-                <tr>
-                    <th width="20%">Nombre</th>
-                    <td width="80%" colspan = "3">{{ goal.name|ucwords }}</td>
-                </tr>
-                <tr>
-                    <th width="20%">Fecha de Inicio</th>
-                    <td width="30%">{{ goal.startDate|date('Y-m-d') }}</td>
-                    <th width="20%">Fecha de Culminación</th>
-                    <td width="30%">{{ goal.endDate|date('Y-m-d') }}</td>
-                </tr>
+                        {{ generateLink(entity.tacticalObjective) }}
+                    </p>        
+                </div>
+                {% if entity.type == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE') %}
+                    <div class="new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                        <p class="inline-label">
+                            <label class="label">{{ 'pequiven.arrangement_program.operational_objective'|trans }}</label>
+                            {% set avancedUsed = entity.operationalObjective.result %}
+                            {% include 'PequivenObjetiveBundle:Common:percentajeBarResult.html.twig' %}
+                            {{ generateLink(entity.operationalObjective) }}
+                        </p>
+                    </div>
+                {% endif %}
 
-                <tr>
-                    <th width="20%">Peso</th>
-                    <td width="80%" colspan = "2">{{ goal.weight }}%</td>
-                </tr>
-                <tr>
-                    <th width="20%"><br/> <br/> Avances hasta la Fecha <br/><br/><br/><br/></th>
-                    <td width="80%" colspan = "3">
-                        <br/><br/>
-                        {% set advances = goal.getResult %}
-                        {% set advancesClass = 'red-gradient' %}
-                        {% if advances >= 50 and advances < 100 %}
-                            {% set advancesClass = 'orange-gradient' %}
+                {% if entity.type == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE') %}
+                    <div class="new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                        <p class="inline-label">
+                            <label class="label">{{ 'pequiven.arrangement_program.management_second_line'|trans }}</label>
+                            {{ entity.operationalObjective.gerenciaSecond }}
+                        </p>
+                    </div>
+                {% endif %}
+                <div class="new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                    <p class="inline-label">
+                        <label class="label">{{ 'pequiven.arrangement_program.nameOfProgram'|trans }}</label>
+                        {{ entity.description != '' ? entity.description :('pequiven.arrangement_program.description_none'|trans) }}
+                    </p>
+                </div>
 
-                        {% elseif advances >= 100 %}
-                            {% set advancesClass = 'green-gradient' %}
-                        {% endif %}
-                        <span style="max-width: 90%" class="progress" data-progress-options='{"size":false,"barClasses":["{{ advancesClass }}","glossy"],"innerMarks":25,"topMarks":25,"topLabel":"[value]%","bottomMarks":[{"value":0,"label":" Nada "},{"value":50,"label":" Mejor "},{"value":100,"label":" Completa "}],"insetExtremes":true}'>{{ advances }}%</span>
+            </div>
+            {% set summary = entity.summary() %}
+            {% if entity.status == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::STATUS_APPROVED') or
+              entity.status == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::STATUS_REJECTED') %}
+            <br/><br/>
+            <p class="inline-label">
+                <label class="label">{{ 'pequiven.arrangement_program.advances'|trans }}</label>
+                {% set advances = entity.getResult %}
+                {% if(entity.getResult < 0) %}
+                    {% set advances = 0 %}
+                {% endif %}
 
-                        <br/><br/><br/><br/>
-                    </td>
+                {% set advancesClass = 'red-gradient' %}
+                {% if advances >= 50 and advances < 100 %}
+                    {% set advancesClass = 'orange-gradient' %}
 
-
-                <tr>
-                    <th width="20%">Observaciones</th>
-                    <td width="80%" colspan = "3">{{ goal.observations }}</td>
-                </tr>
-
-                </tr>
-
-            </tbody>
-        </table>
+                {% elseif advances >= 100 %}
+                    {% set advancesClass = 'green-gradient' %}
+                {% endif %}
+                <span style="max-width: 400px" class="progress" data-progress-options='{"size":false,"barClasses":["{{ advancesClass }}","glossy"],"innerMarks":25,"topMarks":25,"topLabel":"[value]%","bottomMarks":[{"value":0,"label":"{{ 'pequiven.advances.nope'|trans({},'messages') }}"},{"value":50,"label":"{{ 'pequiven.advances.better'|trans({},'messages') }}"},{"value":100,"label":"{{ 'pequiven.advances.complete'|trans({},'messages') }}"}],"insetExtremes":true}'>{{ advances }}%</span>
+            </p>
+            <br/>
+            {% endif %}                
+        </div>
     </fieldset>
 
+        <br><br>
     <fieldset class="fieldset">
         <legend class="legend"><b>Gestión de Responsables </b></legend>
 
@@ -121,7 +196,7 @@
             <div class="tabs-content">
 
                 <div id="tab-1" class="with-padding">
-                    <form method="POST" action="{{ path("goal_movement_assign",{idGoal:goal.id}) }}">
+                    <form method="POST" action="{{ path("AP_movement_assign",{idAP:AP.id}) }}">
                         <table width="90%">
                             <tr>
                                 <td>
@@ -181,7 +256,7 @@
                 </div>
 
                 <div id="tab-2" class="with-padding">
-                    <form method="POST" action="{{ path("goal_movement_remove",{idGoal:goal.id}) }}">
+                    <form method="POST" action="{{ path("AP_movement_remove",{idAP:AP.id}) }}">
                         <table width="90%">
                             <tr>
                                 <td>
@@ -277,7 +352,7 @@
         <table>
             <tr>
                 <td style="text-align:right">
-                    {% set routeConfig = path('goal_movement_export',{idGoal:goal.id}) %}
+                    {% set routeConfig = path('AP_movement_export',{idAP:AP.id}) %}
                     {{ buttons.generic(
                     (routeConfig),
                     ('Exportar Historial de Cambios'),
@@ -289,41 +364,41 @@
         </table>
     </fieldset>
 
-{% endblock %}
+    {% endblock %}
 
-{% block javascript %}
-    <script type="text/javascript">
+        {% block javascript %}
+            <script type="text/javascript">
 
-        $(document).ready(function () {
-            $(".select2").select2({
-                allowClear: true
-            });
+                $(document).ready(function () {
+                    $(".select2").select2({
+                        allowClear: true
+                    });
 
-            $("#AssignMov_User").select2({
-                minimumInputLength: 3,
-            });
+                    $("#AssignMov_User").select2({
+                        minimumInputLength: 3,
+                    });
 
-            $('.progress').progress();
+                    $('.progress').progress();
 
-            $("#AssignMov_date").datepicker({
-                defaultDate: "+1w",
-                changeMonth: true,
-                numberOfMonths: 1,
-                dateFormat: "dd/mm/yy"
-            });
+                    $("#AssignMov_date").datepicker({
+                        defaultDate: "+1w",
+                        changeMonth: true,
+                        numberOfMonths: 1,
+                        dateFormat: "dd/mm/yy"
+                    });
 
-            $("#RemoveMov_date").datepicker({
-                defaultDate: "+1w",
-                changeMonth: true,
-                numberOfMonths: 1,
-                dateFormat: "dd/mm/yy"
-            });
+                    $("#RemoveMov_date").datepicker({
+                        defaultDate: "+1w",
+                        changeMonth: true,
+                        numberOfMonths: 1,
+                        dateFormat: "dd/mm/yy"
+                    });
 
-            $("#RemoveMov_User").select2({
-                minimumInputLength: 3,
-            });
-        }
-        );
+                    $("#RemoveMov_User").select2({
+                        minimumInputLength: 3,
+                    });
+                }
+                );
 
-    </script>
-{% endblock javascript %}
+            </script>
+        {% endblock javascript %}

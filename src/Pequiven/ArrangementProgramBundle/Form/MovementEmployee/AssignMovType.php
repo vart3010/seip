@@ -10,7 +10,7 @@ use Symfony\Component\Form\FormEvents;
 use Pequiven\SEIPBundle\Repository\UserRepository;
 use Pequiven\ArrangementProgramBundle\Model\MovementEmployee;
 
-class AssignGoalType extends AbstractType {
+class AssignMovType extends AbstractType {
 
     public function buildForm(FormBuilderInterface $builder, array $options) {
         $builder
@@ -65,7 +65,7 @@ class AssignGoalType extends AbstractType {
     }
 
     public function getName() {
-        return 'AssignGoal';
+        return 'AssignMov';
     }
 
 }

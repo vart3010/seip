@@ -695,6 +695,22 @@ class ArrangementProgramRepository extends EntityRepository
 
     }
     
+    function verificationAPUser(User $user, $AP, Period $period) {
+
+        $qb = $this->getQueryBuilder();
+        $qb
+                ->innerJoin('ap.responsibles', 'resp')
+                ->andWhere('ap.period = :per')
+                ->andWhere('ap.id = :ide')
+                ->andWhere('resp.id = :responsible')
+                ->setParameter('responsible', $user)
+                ->setParameter('per', $period)
+                ->setParameter('ide', $AP)
+        ;
+
+        return $qb->getQuery()->getResult();
+    }
+    
     protected function getAlias() {
         return 'ap';
     }
