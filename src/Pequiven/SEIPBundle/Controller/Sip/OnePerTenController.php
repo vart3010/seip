@@ -16,4 +16,15 @@ class OnePerTenController extends SEIPController {
         return $this->render('PequivenSEIPBundle:Sip:onePerTen\create.html.twig', array());
     }
 
+    public function searchAction(Request $request) {
+        $response = new JsonResponse();
+        $cedula = $request->request->get('ced');
+        var_dump($cedula);
+
+
+        die();
+        $response->setData($request);
+        return $response;
+    }
+
 }

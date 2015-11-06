@@ -22,7 +22,7 @@ class Cutl {
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
      */
-    private $id;    
+    private $id;
 
     /**
      * municipio
@@ -136,7 +136,12 @@ class Cutl {
      */
     private $nombreCentro;
 
-    
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="assistance", type="boolean")
+     */
+    private $assistance = true;
 
     function getId() {
         return $this->id;
@@ -256,6 +261,14 @@ class Cutl {
 
     function setNombreCentro($nombreCentro) {
         $this->nombreCentro = $nombreCentro;
+    }
+
+    function getAssistance() {
+        return $this->assistance;
+    }
+
+    function setAssistance($assistance) {
+        $this->assistance = $assistance;
     }
 
 }
