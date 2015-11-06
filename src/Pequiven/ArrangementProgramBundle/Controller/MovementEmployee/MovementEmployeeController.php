@@ -141,43 +141,36 @@ class MovementEmployeeController extends SEIPController {
                     $id = $request->get('idGoal');
                     $tipo = 'Goal';
                     $entity = $em->getRepository('PequivenArrangementProgramBundle:Goal')->findOneById($id);
+
+                    //VERIFICO SI EL EMPLEADO PERTENECE A LA META
                     $bandera = $em->getRepository('PequivenArrangementProgramBundle:Goal')->verificationGoalUser($user, $entity, $period);
-                 
+
+                    //VALOR PARA EL RETURN
                     $arrangementProgram = $entity->getTimeline()->getArrangementProgram();
                     $idap = $arrangementProgram->getid();
 
                     //CALCULO PENALIZACIONES Y AVANCES PARA LA FECHA
                     $datos = $this->CalculateAdvancePenalty($entity, $date);
-                    $advance = $datos['realResult'] - $datos['penalty'];
-                    if ($advance < 0) {
-                        $advance = 0;
-                    }
                 }
 
                 if (!is_null($request->get('idAP'))) {
                     $id = $request->get('idAP');
                     $tipo = 'AP';
-                    $entity = $em->getRepository('PequivenArrangementProgramBundle:ArrangementProgram')->findOneById($id);
-                    $bandera = $em->getRepository('PequivenArrangementProgramBundle:ArrangementProgram')->verificationAPUser($user, $entity, $period);
 
+                    $entity = $em->getRepository('PequivenArrangementProgramBundle:arrangementprogram')->find($id);
+
+                    //VERIFICO SI EL EMPLEADO PERTENECE AL AP
+                    $bandera = $em->getRepository('PequivenArrangementProgramBundle:arrangementprogram')->verificationAPUser($user, $entity, $period);
+
+                    //VALOR PARA EL RETURN
                     $idap = $id;
-                    
-                    $datos = 0;
-                    $advance = 0;
 
-                    //DETERMINO LAS METAS PERTENECIENTES AL AP
-                    foreach ($entity->getTimeline()->getGoals() as $meta) {
-                        //CALCULO PENALIZACIONES Y AVANCES PARA LA FECHA
-                        $datos += $this->CalculateAdvancePenalty($meta, $date);
-                        $advance += $datos['realResult'] - $datos['penalty'];
-                    }
-                    if ($advance < 0) {
-                        $advance = 0;
-                    }
+                    //CALCULO PENALIZACIONES Y AVANCES PARA LA FECHA
+                    $datos = $this->CalculateAdvancePenaltyAP($entity, $date);
                 }
 
                 //SI EL EMPLEADO NO SE ENCUENTRA ASIGNADO A LA META
-                if ($bandera == null) {
+                if (($bandera == null)) {
                     //CARGO LOS DATOS EN DB
                     $movement = new MovementEmployee();
                     $movement->setCreatedBy($login);
@@ -186,7 +179,7 @@ class MovementEmployeeController extends SEIPController {
                     $movement->setId_Affected($id);
                     $movement->setCause($cause);
                     $movement->setObservations($obs);
-                    $movement->setrealAdvance($advance);
+                    $movement->setrealAdvance($datos['realResult']);
                     $movement->setPentalty($datos['penalty']);
                     $movement->setPlanned($datos['plannedResult']);
                     $movement->setTypeMov($tipo);
@@ -210,7 +203,7 @@ class MovementEmployeeController extends SEIPController {
                         $movement->setId_Affected($id);
                         $movement->setCause($cause);
                         $movement->setObservations($obs);
-                        $movement->setrealAdvance($advance);
+                        $movement->setrealAdvance($datos['realResult']);
                         $movement->setPentalty($datos['penalty']);
                         $movement->setPlanned($datos['plannedResult']);
                         $movement->setTypeMov($tipo);
@@ -240,12 +233,19 @@ class MovementEmployeeController extends SEIPController {
 
     public function removeAction(Request $request) {
 
-        $id = $request->get('idGoal');
-
         $em = $this->getDoctrine()->getManager();
-        $goal = $em->getRepository('PequivenArrangementProgramBundle:Goal')->findOneById($id);
-
         $securityService = $this->getSecurityService();
+
+        if (!is_null($request->get('idGoal'))) {
+            $id = $request->get('idGoal');
+            $tipo = 'Goal';
+        }
+
+        if (!is_null($request->get('idAP'))) {
+            $id = $request->get('idAP');
+            $tipo = 'AP';
+        }
+
 
         //VALIDO PERMISOLOGÍA POR SI ACASO SE ACCEDE DESDE URL DIRECTA
         if ((($securityService->isGranted(array("ROLE_SEIP_ARRANGEMENT_PROGRAM_MOVEMENT_GOALS")))) || ($securityService->isGranted(array("ROLE_SEIP_ARRANGEMENT_PROGRAM_MOVEMENT_GOALS_POST_MORTEM")))) {
@@ -257,34 +257,65 @@ class MovementEmployeeController extends SEIPController {
             }
 
             $movement = new MovementEmployee();
-            $formRemove = $this->createForm(new RemoveMovType($id, $post_mortem), $movement);
+            $formRemove = $this->createForm(new RemoveMovType($id, $post_mortem, $tipo), $movement);
             $formRemove->handleRequest($request);
 
             $em->getConnection()->beginTransaction();
 
-            $responsibles = $goal->getresponsibles();
-
             if ($formRemove->isSubmitted()) {
 
+                //DATOS DE RemoveMovType
+                $cause = $request->get("RemoveMov")["cause"];
+                $date = new \DateTime(str_replace("/", "-", ($request->get("RemoveMov")["date"])));
+                $obs = $request->get("RemoveMov")["observations"];
+
+                //DATOS AUDITORIA
+                $login = $this->getUser();
+
+                //DATOS DE RemoveMovType
+                $id_user = ($request->get("RemoveMov")["User"]);
+                $user = $em->getRepository('PequivenSEIPBundle:User')->findOneById($id_user);
+                $period = $this->getPeriodService()->getPeriodActive();
+
+                //VERIFICO SI SE TRATA DE UNA META O UN PROGRAMA DE GESTION
+                if (!is_null($request->get('idGoal'))) {
+                    $id = $request->get('idGoal');
+                    $tipo = 'Goal';
+                    $entity = $em->getRepository('PequivenArrangementProgramBundle:Goal')->findOneById($id);
+
+                    //VERIFICO SI EL EMPLEADO PERTENECE A LA META
+                    $bandera = $em->getRepository('PequivenArrangementProgramBundle:Goal')->verificationGoalUser($user, $entity, $period);
+
+                    //VALOR PARA EL RETURN
+                    $arrangementProgram = $entity->getTimeline()->getArrangementProgram();
+                    $idap = $arrangementProgram->getid();
+
+                    //CALCULO PENALIZACIONES Y AVANCES PARA LA FECHA
+                    $datos = $this->CalculateAdvancePenalty($entity, $date);
+                }
+
+                if (!is_null($request->get('idAP'))) {
+                    $id = $request->get('idAP');
+                    $tipo = 'AP';
+
+                    $entity = $em->getRepository('PequivenArrangementProgramBundle:arrangementprogram')->find($id);
+
+                    //VERIFICO SI EL EMPLEADO PERTENECE AL AP
+                    $bandera = $em->getRepository('PequivenArrangementProgramBundle:arrangementprogram')->verificationAPUser($user, $entity, $period);
+
+                    //VALOR PARA EL RETURN
+                    $idap = $id;
+
+                    //CALCULO PENALIZACIONES Y AVANCES PARA LA FECHA
+                    $datos = $this->CalculateAdvancePenaltyAP($entity, $date);
+                }
+
+                //VALIDO QUE LAS METAS O PROGRAMAS NO QUEDEN VACIOS
+                $responsibles = $entity->getresponsibles();
+
                 if (count($responsibles) <= 1) {
-                    $this->get('session')->getFlashBag()->add('error', "La Meta NO Puede estar sin Responsables, Por favor Asigne un Empleado antes de Retirar");
+                    $this->get('session')->getFlashBag()->add('error', "NO Puede quedar sin Responsables, Por favor Asigne un Empleado antes de Retirar");
                 } else {
-
-                    //DATOS DE RemoveMovType
-                    $cause = $request->get("RemoveMov")["cause"];
-                    $date = new \DateTime(str_replace("/", "-", ($request->get("RemoveMov")["date"])));
-                    $obs = $request->get("RemoveMov")["observations"];
-
-                    //DATOS AUDITORIA
-                    $login = $this->getUser();
-
-                    //DATOS DE RemoveMovType
-                    $id_user = ($request->get("RemoveMov")["User"]);
-                    $user = $em->getRepository('PequivenSEIPBundle:User')->findOneById($id_user);
-                    $period = $this->getPeriodService()->getPeriodActive();
-
-                    $bandera = $em->getRepository('PequivenArrangementProgramBundle:Goal')->verificationGoalUser($user, $goal, $period);
-
                     //SI EL EMPLEADO ENCUENTRA ASIGNADO A LA META
                     if ($bandera <> null) {
                         //CARGO LOS DATOS EN DB
@@ -295,26 +326,17 @@ class MovementEmployeeController extends SEIPController {
                         $movement->setId_Affected($id);
                         $movement->setCause($cause);
                         $movement->setObservations($obs);
-
-                        //CALCULO PENALIZACIONES Y AVANCES PARA LA FECHA
-                        $datos = $this->CalculateAdvancePenalty($goal, $date);
-
-                        $advance = $datos['realResult'] - $datos['penalty'];
-                        if ($advance < 0) {
-                            $advance = 0;
-                        }
-
-                        $movement->setrealAdvance($advance);
+                        $movement->setrealAdvance($datos['realResult']);
                         $movement->setPentalty($datos['penalty']);
                         $movement->setPlanned($datos['plannedResult']);
-                        $movement->setTypeMov('Goal');
+                        $movement->setTypeMov($tipo);
                         $movement->setUser($user);
                         $movement->setPeriod($this->getPeriodService()->getPeriodActive());
                         $em->persist($movement);
 
                         //ELIMINO AL USUARIO EN LA META
-                        $goal->removeResponsible($user);
-                        $em->persist($goal);
+                        $entity->removeResponsible($user);
+                        $em->persist($entity);
                     } else {
 
                         if ($post_mortem == false) {
@@ -328,16 +350,7 @@ class MovementEmployeeController extends SEIPController {
                             $movement->setId_Affected($id);
                             $movement->setCause($cause);
                             $movement->setObservations($obs);
-
-                            //CALCULO PENALIZACIONES Y AVANCES PARA LA FECHA
-                            $datos = $this->CalculateAdvancePenalty($goal, $date);
-
-                            $advance = $datos['realResult'] - $datos['penalty'];
-                            if ($advance < 0) {
-                                $advance = 0;
-                            }
-
-                            $movement->setrealAdvance($advance);
+                            $movement->setrealAdvance($datos['realResult']);
                             $movement->setPentalty($datos['penalty']);
                             $movement->setPlanned($datos['plannedResult']);
                             $movement->setTypeMov('Goal');
@@ -361,7 +374,7 @@ class MovementEmployeeController extends SEIPController {
             $this->get('session')->getFlashBag()->add('error', "No tiene los Permisos para Realizar la Acción");
         }
 
-        $arrangementProgram = $goal->getTimeline()->getArrangementProgram();
+        $arrangementProgram = $entity->getTimeline()->getArrangementProgram();
         $idap = $arrangementProgram->getid();
         return $this->redirect($this->generateUrl('arrangementprogram_update', array('id' => $idap)));
         //return $this->redirect($this->generateUrl('goal_movement', array('idGoal' => $id)));
@@ -393,7 +406,6 @@ class MovementEmployeeController extends SEIPController {
 
         $real = array();
         $planned = array();
-        $em = $this->getDoctrine()->getManager();
 
         $periodService = $this->getPeriodService();
         $amountPenalty = 0;
@@ -514,6 +526,32 @@ class MovementEmployeeController extends SEIPController {
             'penalty' => ($mayor + $amountPenalty),
             'realResult' => $real[$mes],
             'plannedResult' => $planned[$mes]
+        );
+
+        return $retorno;
+    }
+
+    function CalculateAdvancePenaltyAP(ArrangementProgram $AP, $date) {
+
+        $realResult = 0;
+        $penalty = 0;
+        $plannedResult = 0;
+
+        //DETERMINO LAS METAS PERTENECIENTES AL AP
+        foreach ($AP->getTimeline()->getGoals() as $meta) {
+            //CALCULO PENALIZACIONES Y AVANCES PARA LA FECHA Y VOY SUMANDO POR META
+            $datosAP = $this->CalculateAdvancePenalty($meta, $date);
+
+            $realResult+=(($datosAP['realResult'] * $meta->getWeight())) / 100;
+            $penalty+=(($datosAP['penalty'] * $meta->getWeight())) / 100;
+            $plannedResult+=(($datosAP['plannedResult'] * $meta->getWeight())) / 100;
+        }
+
+        $advance = $realResult - $penalty;
+        $retorno = array(
+            'penalty' => $penalty,
+            'realResult' => $advance,
+            'plannedResult' => $plannedResult
         );
 
         return $retorno;

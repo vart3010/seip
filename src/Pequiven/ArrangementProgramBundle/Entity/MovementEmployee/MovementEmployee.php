@@ -98,20 +98,20 @@ class MovementEmployee {
     private $date;
 
     /**
-     * @var \decimal
-     * @ORM\Column(name="realAdvance", type="decimal", nullable=false)
+     * @var \float
+     * @ORM\Column(name="realAdvance", type="float", nullable=false)
      */
     private $realAdvance;
 
     /**
-     * @var \decimal
-     * @ORM\Column(name="planned", type="decimal", nullable=false)
+     * @var \float
+     * @ORM\Column(name="planned", type="float", nullable=false)
      */
     private $planned;
 
     /**
-     * @var \decimal
-     * @ORM\Column(name="penalty", type="decimal", nullable=true)
+     * @var \float
+     * @ORM\Column(name="penalty", type="float", nullable=true)
      */
     private $pentalty;
 
