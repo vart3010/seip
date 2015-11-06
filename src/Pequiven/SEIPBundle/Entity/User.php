@@ -214,7 +214,7 @@ class User extends BaseUser implements UserInterface, UserBoxInterface, PeriodIt
      * @ORM\Column(name="ext",type="string",length=6,nullable=true)
      */
     private $ext;
-    
+
     /**
      * @ORM\ManyToMany(targetEntity="\Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle", mappedBy="members")
      */
@@ -228,6 +228,13 @@ class User extends BaseUser implements UserInterface, UserBoxInterface, PeriodIt
      * 
      */
     private $evolutionAction;
+    
+     /**
+
+     * @var Pequiven\ArrangementProgramBundle\Entity\MovementEmployee\MovementEmployee
+     * @ORM\OneToMany(targetEntity="Pequiven\ArrangementProgramBundle\Entity\MovementEmployee\MovementEmployee", mappedBy="User")
+     * */
+    private $movementEmployee;
 
     /**
      * Constructor
@@ -909,8 +916,8 @@ class User extends BaseUser implements UserInterface, UserBoxInterface, PeriodIt
     public function getExt() {
         return $this->ext;
     }
-    
-     /**
+
+    /**
      * Add workStudyCircles
      *
      * @param \Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle $workStudyCircle

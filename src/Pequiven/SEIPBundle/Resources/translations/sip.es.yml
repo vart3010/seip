@@ -1,3 +1,8 @@
 sip:
     create: Registro de 1x10
-    cedula: Cédula
+    list: Lista
+    cedula: Cédula    
+    cutl:
+        title: CUTL        
+        list: Listado de CUTL
+

@@ -35,7 +35,6 @@ class CoreExtension extends \Twig_Extension {
                     }),
             new \Twig_SimpleFilter('myNumberFormat', array($this, 'myNumberFormat')),
             new \Twig_SimpleFilter('ucwords', array($this, 'ucwords')),
-            new \Twig_SimpleFilter('addpage', array($this, 'addpage')),
             new \Twig_SimpleFilter('myFormatDateTime', array($this, 'myFormatDateTime')),
             new \Twig_SimpleFilter('myFormatDate', array($this, 'myFormatDate')),
             new \Twig_SimpleFilter('render_yes_no', array($this, 'renderYesNo'), array('is_safe' => array('html'))),
@@ -125,10 +124,6 @@ class CoreExtension extends \Twig_Extension {
      */
     function ucwords($value) {
         return ucwords(mb_strtolower($value, 'UTF-8'));
-    }
-
-    function addpage($pdf) {
-        $pdf->AddPage('L');
     }
 
     /**

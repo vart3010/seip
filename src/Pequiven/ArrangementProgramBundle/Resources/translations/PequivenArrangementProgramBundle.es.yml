@@ -16,7 +16,7 @@ pequiven:
         nameOfProgram: Nombre del Programa
         managementSystem: Sistema de Calidad
         period: Período
-        prog_description: Descripción del Programa
+        prog_description: Nombre del Programa
         process: Proceso
         management: Gerencia
         management_second_line: Gerencia de segunda línea

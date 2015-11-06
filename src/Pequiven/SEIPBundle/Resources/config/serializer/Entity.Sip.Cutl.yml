@@ -1,0 +1,15 @@
+Pequiven\SEIPBundle\Entity\Sip\Cutl:
+    exclusion_policy: ALL
+    properties:
+        id:
+            expose: true
+            groups: [id]
+        cedula:
+            expose: true
+            groups: [api_list]
+        nombre:
+            expose: true
+            groups: [api_list]
+        centro:
+            expose: true
+            groups: [api_list]

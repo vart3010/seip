@@ -12,3 +12,13 @@ search_one_por_cedula:
     defaults:
         _controller: pequiven.controller.onePerTen:searchAction
     
+
+pequiven_sip_cutl_list:
+    path: /cutl/list/.{_format}
+    defaults:
+        _controller: pequiven.controller.cutl:listAction
+        _format: html
+    requirements:
+        _format: html|json|xml        
+    methods: [GET]
+

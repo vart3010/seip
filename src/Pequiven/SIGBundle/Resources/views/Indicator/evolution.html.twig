@@ -101,7 +101,8 @@
   
         {# Graficos #}
         <div class="columns with-padding"> 
-            <div ng-controller="ChartsSigController" class="dashboard_sig" ng-init="renderChartEvolutionSig('chartContainerResult', {{ data|json_encode() }})" style="width: 95%;" align="center">
+            <h4 align="center">Gráfica de Datos y Tendencia de Proceso</h4>                
+            <div ng-controller="ChartsSigController" class="dashboard_sig" ng-init="renderChartEvolutionSig('chartContainerResult', {{ data|json_encode() }},'{{ urlExportFromChart }}')" style="width: 95%;" align="center">
                 {# señalización tendencia #}
                 <div class="position">
                         {{ font["text"]}}
@@ -110,7 +111,8 @@
 
                 <div class="nine-columns twelve-columns-mobile" id="chartContainerResult">
                 <!-- This div will hold the chart generated in the footer -->
-                </div>
+                </div>                                
+                <input id='exportpng' type='hidden' value='Exportar Informe' />
             {#{% if is_granted('ROLE_SEIP_SIG_EVOLUTION_LAST_PERIOD') %}                
                 <div ng-controller="EvolutionIndicatorConfig"> 
                     <div class="button-group button-config">
@@ -129,11 +131,13 @@
             &nbsp; 
         {% endif %}
 
-        <div class="columns with-padding">         
-                <div ng-controller="ChartsSigController" class="dashboard_sig" ng-init="renderChartSigCs('chartContainerResultCs', {{ dataCause|json_encode() }})" style="width: 95%; height:55%;" align="center">
-                        <div class="nine-columns twelve-columns-mobile" id="chartContainerResultCs">
-                            <!-- This div will hold the chart generated in the footer -->
-                        </div>
+        <div class="columns with-padding">
+                <h4 align="center">Causas de Desviación</h4>                
+                <div ng-controller="ChartsSigController" class="dashboard_sig" ng-init="renderChartSigCs('chartContainerResultCs', {{ dataCause|json_encode()}},'{{ urlExportFromChart }}')" style="width: 95%; height:55%;" align="center">
+                <div class="nine-columns twelve-columns-mobile" id="chartContainerResultCs">
+                <!-- This div will hold the chart generated in the footer -->
+                </div>
+                <input id='export_causespng' type='hidden' value='Exportar Informe' />
                 </div>
         </div> 
         <br>        
@@ -162,7 +166,7 @@
             &nbsp;
 
     {% endif %}
-
+    
     <p class="button-height align-right">  
         
         <div style="text-align: left; margin-left:15px;">
@@ -174,11 +178,11 @@
                 <span class="title" style="display: none">{{('pequiven.hide_evolution_history'|trans({},'messages'))}} </span>
             </a>
         
-        {% if is_granted('ROLE_SEIP_SIG_EVOLUTION_DOWNLOAD') %}
+        {% if is_granted('ROLE_SEIP_SIG_EVOLUTION_DOWNLOAD') %}                       
             {# Descarga de Informe de Evolución#}
             {% set typeObj = 1 %}
             &nbsp;
-            {{ buttons.generic_download(path('pequiven_indicator_evolution_export', { 'id': indicator_sig.id, 'month': month,'typeObj': typeObj }),('pequiven_indicator.download'|trans({},'PequivenSIGBundle'))) }}        
+            {{ buttons.generic_download }}        
         {% endif %}
 
         </div>
@@ -280,6 +284,22 @@
             valueCauseId = valueCauseId.split("_");
             $("#field_" + valueCauseId[1]).val(valueCauseId[1]);
             $("#form_" + valueCauseId[1]).submit();
+        }
+        
+        //Carga de Evento de Descarga de Grafica de Indicador
+        function downloadEvolution(){            
+            var button = document.getElementById("exportpng");
+            if (button){
+               button.click();   
+               //window.setTimeout(downloadCause,800);               
+            }            
+        }
+        //Carga de Evento de Descarga de Grafica de Causas del Indicador
+        function downloadCause(){
+            var button_cause = document.getElementById("export_causespng");
+            if (button_cause){
+                button_cause.click();                
+            }
         }
 
     </script>
