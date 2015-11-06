@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Movimiento-por-Meta" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="39a430ef-fd62-4b25-8487-b8107872e988">
+	<property name="ireport.zoom" value="1.6105100000000023"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="idGoal" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select period.name as Period, goal.name as Meta,
+CONCAT(goal.weight,' %') as Peso, date_format(goal.startdate,'%d/%m/%Y') as Fecha_Inicio,
+date_format(goal.enddate,'%d/%m/%Y') as Fecha_Fin,
+goal.observations as Obs_Goal,
+case
+when (AP.description is null) then CONCAT(AP.description)
+when (AP.ref is null) then CONCAT(AP.ref)
+else CONCAT(AP.ref,'. ',AP.description) end as Programa_Gestion,
+date_format(mov.date,'%d/%m/%Y') as FechaMov,
+case when mov.type='O' then 'Salida'
+when mov.type='I' then 'Entrada' end as Tipo,
+mov.cause as id_Cause,
+case
+when mov.cause=1 then 'Asignación'
+when mov.cause=2 then 'Suplencia'
+when mov.cause=3 then 'Reintegro por Reposo'
+when mov.cause=11 then 'Culminación de Suplencia'
+when mov.cause=12 then 'Cambio'
+when mov.cause=13 then 'Retiro'
+when mov.cause=14 then 'Reposo'
+end as Causa,
+
+case when emp.num_personal is null then
+concat(emp.firstname,' ',emp.lastname)
+else
+concat(emp.firstname,' ',emp.lastname,' (',emp.num_personal,')') end as Empleado,
+
+CONCAT(mov.realAdvance,' %') as Avance, CONCAT(mov.planned,' %') as Planificado, CONCAT(mov.penalty,' %') as Penalizaciones,
+mov.observations as Obs, mov.createdAt as FechaCreacion, usu.username as CreadoPor
+
+from MovementEmployee as mov
+inner join Period period on (period.id=mov.period_id)
+inner join seip_user emp on (emp.id=mov.user_id)
+inner join seip_user usu on (usu.id=mov.createdBy_id)
+inner join Goal goal on (goal.id=mov.goal_id)
+inner join ArrangementProgram AP on (goal.timeline_id=AP.timeline_id)
+where typeMov='Goal' and goal.id=$P{idGoal}
+order by goal.id,mov.date]]>
+	</queryString>
+	<field name="Period" class="java.lang.String"/>
+	<field name="Meta" class="java.lang.String"/>
+	<field name="Peso" class="java.lang.String"/>
+	<field name="Fecha_Inicio" class="java.lang.String"/>
+	<field name="Fecha_Fin" class="java.lang.String"/>
+	<field name="Obs_Goal" class="java.lang.String"/>
+	<field name="Programa_Gestion" class="java.lang.String"/>
+	<field name="FechaMov" class="java.lang.String"/>
+	<field name="Tipo" class="java.lang.String"/>
+	<field name="id_Cause" class="java.lang.String"/>
+	<field name="Causa" class="java.lang.String"/>
+	<field name="Empleado" class="java.lang.String"/>
+	<field name="Avance" class="java.lang.String"/>
+	<field name="Planificado" class="java.lang.String"/>
+	<field name="Penalizaciones" class="java.lang.String"/>
+	<field name="Obs" class="java.lang.String"/>
+	<field name="FechaCreacion" class="java.sql.Timestamp"/>
+	<field name="CreadoPor" class="java.lang.String"/>
+	<group name="Goal">
+		<groupExpression><![CDATA[$P{idGoal}]]></groupExpression>
+		<groupHeader>
+			<band height="162">
+				<staticText>
+					<reportElement x="6" y="135" width="559" height="13" uuid="f64605d2-48c4-4f30-bd6d-4028405cda87"/>
+					<textElement verticalAlignment="Top">
+						<font fontName="DejaVu Serif Condensed" size="10" isBold="true" isItalic="false" isUnderline="false"/>
+					</textElement>
+					<text><![CDATA[* Cambios Realizados]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="6" y="10" width="559" height="13" uuid="b79c7dad-64f1-46f6-96b6-2a4bb64d9425"/>
+					<textElement verticalAlignment="Top">
+						<font fontName="DejaVu Serif Condensed" size="10" isBold="true" isItalic="false" isUnderline="false"/>
+					</textElement>
+					<text><![CDATA[* Datos de la Meta]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="40" y="36" width="100" height="20" uuid="8660dddd-c8cd-4c43-ae5f-e1fa66e8cee9"/>
+					<textElement>
+						<font fontName="DejaVu Serif Condensed" size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{Meta}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="212" y="49" width="100" height="20" uuid="1e20664d-3797-4e78-b7ea-b61c3afb40b1"/>
+					<textElement>
+						<font fontName="DejaVu Serif Condensed" size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{Period}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="212" y="78" width="100" height="20" uuid="b71541b4-7dbb-4c83-a8d9-f479ca93818d"/>
+					<textElement>
+						<font fontName="DejaVu Serif Condensed" size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{Fecha_Inicio}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="216" y="111" width="100" height="20" uuid="4a29825f-0263-4c9b-98f9-b6010da1fd71"/>
+					<textElement>
+						<font fontName="DejaVu Serif Condensed" size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{Fecha_Fin}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="353" y="55" width="100" height="20" uuid="b8e3f4f1-b58f-4556-a160-325a4b095323"/>
+					<textElement>
+						<font fontName="DejaVu Serif Condensed" size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{Programa_Gestion}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="50"/>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="94" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="72" width="559" height="20" uuid="2aeca690-ee83-4e9a-92f0-652f4fe7382c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Serif Condensed" size="14" isBold="true" isItalic="true" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Reporte de Movimiento de Trabajadores]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="393" y="14" width="124" height="31" uuid="33e40bfa-f3ed-49ff-b1c2-1f835636ad78"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Serif Condensed" size="10" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Sistema Estadístico de Información Petroquímica]]></text>
+			</staticText>
+			<image>
+				<reportElement x="0" y="1" width="393" height="70" uuid="04b1d058-f404-4b75-bc40-d8cb2ac579bd"/>
+				<imageExpression><![CDATA["/var/www/html/seip/web/Reports/Logo_Pequiven.jpg"]]></imageExpression>
+			</image>
+			<image>
+				<reportElement x="519" y="10" width="42" height="42" uuid="903fd8e7-ba35-4638-9c7f-b28025305e2f"/>
+				<imageExpression><![CDATA["/var/www/html/seip/web/Reports/Logo_Seip.jpg"]]></imageExpression>
+			</image>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="7" splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="51" splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band height="14" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="46" splitType="Stretch">
+			<rectangle radius="10">
+				<reportElement x="0" y="4" width="572" height="4" forecolor="#FEFEFE" backcolor="#BB0707" uuid="7d810c7d-d8f8-4038-b5eb-4b16c54b6d1b"/>
+				<graphicElement>
+					<pen lineWidth="0.0" lineStyle="Solid"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="90" y="20" width="400" height="19" uuid="ea9b895c-02f5-4dcc-8ac5-3c80df00bf3e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Serif Condensed" size="10" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Gerencia Corporativa de Planificación Estratégica y Nuevos Desarrollos]]></text>
+			</staticText>
+			<image>
+				<reportElement x="14" y="11" width="69" height="33" uuid="c89b982f-48a9-4059-b2e0-9d15a0b1c402"/>
+				<imageExpression><![CDATA["/var/www/html/seip/web/Reports/Eslogan.jpg"]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="517" y="20" width="42" height="19" uuid="e00db96c-63a4-433d-b999-5f47000218e2"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Serif Condensed" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="9" splitType="Stretch"/>
+	</summary>
+</jasperReport>

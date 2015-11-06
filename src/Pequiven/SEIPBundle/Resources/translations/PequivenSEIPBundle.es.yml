@@ -104,6 +104,8 @@ pequiven_seip:
         edit: Editar
         delete: Eliminar
         update: Editar
+        assign: Asignar
+        remove: Retirar
     headers:
         ref: Referencia
         status: Estatus

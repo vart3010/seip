@@ -13,7 +13,7 @@ use Tecnocreaciones\Bundle\ResourceBundle\Controller\ResourceController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Pequiven\SEIPBundle\Model\PDF\SeipPdf;
+use Pequiven\SEIPBundle\Model\PDF\SeipPdfH;
 use Pequiven\MasterBundle\Entity\Rol;
 use Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram;
 
@@ -105,7 +105,7 @@ class ResultController extends ResourceController {
     }
 
     public function exportManagementUserListItem(Request $request) {
-        $pdf = new \Pequiven\SEIPBundle\Model\PDF\SeipPdf('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+        $pdf = new \Pequiven\SEIPBundle\Model\PDF\SeipPdfH('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
         $pdf->setPrintLineFooter(false);
         $pdf->setContainer($this->container);
         $pdf->setPeriod($this->getPeriodService()->getPeriodActive());
@@ -287,6 +287,7 @@ class ResultController extends ResourceController {
                 'chart' => array(
                     'caption' => $caption,
                     'subCaption' => $subCaption,
+                    'exporthandler' => $linkToExportResult,
                 ),
                 'categories' => array(
                     'category' => array(),
@@ -294,6 +295,7 @@ class ResultController extends ResourceController {
                 'dataset' => array(),
             ),
         );
+
         //Configuramos el alto del gráfico
         $totalObjects = count($objetives);
         $heightChart = ($totalObjects * 30) + 150;
@@ -483,20 +485,42 @@ class ResultController extends ResourceController {
      * @param Request $request
      */
     public function exportAction(Request $request) {
-//        if($request->isMethod('POST')){
-//            $exportRequestStream = $request->request->all();
-//            $request->request->remove('charttype');
-//            $request->request->remove('stream');
-//            $request->request->remove('stream_type');
-//            $request->request->remove('meta_bgColor');
-//            $request->request->remove('meta_bgAlpha');
-//            $request->request->remove('meta_DOMId');
-//            $request->request->remove('meta_width');
-//            $request->request->remove('meta_height');
-//            $request->request->remove('parameters');
-//            $fusionchartService = $this->getFusionChartExportService();
-//            $fileSVG = $fusionchartService->exportFusionChart($exportRequestStream);
-//        }
+        
+        if($request->isMethod('POST')){
+            $exportRequestStream = $request->request->all();
+            $request->request->remove('charttype');
+            $request->request->remove('stream');
+            $request->request->remove('stream_type');
+            $request->request->remove('meta_bgColor');
+            $request->request->remove('meta_bgAlpha');
+            $request->request->remove('meta_DOMId');
+            $request->request->remove('meta_width');
+            $request->request->remove('meta_height');
+            $request->request->remove('parameters');
+            $fusionchartService = $this->getFusionChartExportService();
+            $fileSVG = $fusionchartService->exportFusionChart($exportRequestStream);              
+        }
+
+        //Busqueda de la Imagen Descargada
+//        $routing = "/var/www/html/seip";
+        $routing = $this->container->getParameter('kernel.root_dir');
+        $nameSVG = glob("$routing/../web/php-export-handler/temp/*.png");
+        
+        $user = $this->getUser()->getId();//Id Usuario    
+        $user = str_pad($user, 6,"0", STR_PAD_LEFT);
+
+        $cont = 0;
+        $contImg = 1;
+        foreach ($nameSVG as $value) {            
+            $pos = strpos($nameSVG[$cont], $user);            
+            if ($pos !== false) {                                 
+                if (strpos($nameSVG[$cont], "stackedbar3d")) {                    
+                    $chartName = $nameSVG[$cont];
+                    $contImg ++;
+                }
+            }
+            $cont ++;
+        }       
 
         $showResultObjetives = false;
         $level = $request->get('level');
@@ -548,7 +572,7 @@ class ResultController extends ResourceController {
             $entity = $gerenciaSecond;
         }
 
-        $pdf = new SeipPdf('L', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+        $pdf = new SeipPdfH('L', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
         $pdf->setContainer($this->container);
         $pdf->setPeriod($periodService->getPeriodActive());
         $pdf->setFooterText($this->trans('pequiven_seip.message_footer', array(), 'PequivenSEIPBundle'));
@@ -562,7 +586,7 @@ class ResultController extends ResourceController {
         $pdf->SetAuthor('SEIP');
         $pdf->setTitle($title);
         $pdf->SetSubject('Resultados SEIP');
-        $pdf->SetKeywords('PDF, SEIP, Resultados');
+        $pdf->SetKeywords('PDF, SEIP, Resultados');        
 
         // set default header data
 //        $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PDF_HEADER_STRING);
@@ -587,31 +611,38 @@ class ResultController extends ResourceController {
         // set font
         $pdf->SetFont('times', 'BI', 12);
 
-        if (isset($fileSVG)) {
-            if (strlen($fileSVG) > 0) {
-                $pdf->AddPage();
-                $pdf->ImageSVG('http://localhost/seip/web/php-export-handler/temp/' . $fileSVG);
-            }
-        }
-
         // add a page
         $pdf->AddPage();
 
         // set some text to print
         $html = $this->renderView('PequivenSEIPBundle:Result:viewPdf.html.twig', array(
-            'entity' => $entity,
-            'tree' => $tree,
-            'level' => $level,
+            'chartName'     => $chartName,
+            'entity'        => $entity,
+            'tree'          => $tree,
+            'level'         => $level,
             'resultService' => $resultService,
-            'images' => $images));
+            'images'        => $images));
 
-//        print($html);
-//        die();
         // print a block of text using Write()
         $pdf->writeHTML($html, true, false, true, false);
 
         $pdf->Output($namePdf . '.pdf', 'D');
-//        die();
+
+        $this->rmTempFile($chartName);
+
+    }
+
+    /**
+     *
+     *  Eliminación de Imagen Temporal
+     *
+     */
+    public function rmTempFile($chartName)
+    {   
+        $imgChart = $chartName;//Ruta              
+        
+        shell_exec("rm $imgChart");//Eliminamos
+
     }
 
     /**

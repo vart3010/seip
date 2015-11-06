@@ -13,6 +13,24 @@
 </div>
 {% endmacro %}
 
+{% macro assign(url) %}
+<div class="field-block button-height">
+    <button type="submit" class="button glossy mid-margin-right">
+        <span class="button-icon green-gradient"><span class="icon-plus-round"></span></span>
+        {{ 'pequiven_seip.actions.assign'|trans }}
+    </button>    
+</div>
+{% endmacro %}
+
+{% macro remove(url) %}
+<div class="field-block button-height">
+    <button type="submit" class="button glossy mid-margin-right">
+        <span class="button-icon red-gradient"><span class="icon-trash"></span></span>
+        {{ 'pequiven_seip.actions.remove'|trans }}
+    </button>    
+</div>
+{% endmacro %}
+
 {% macro create_formModal(url) %}
 <div class="field-block button-height">
     <button type="submit" class="button glossy mid-margin-right">
