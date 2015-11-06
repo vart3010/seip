@@ -74,4 +74,13 @@ class CutlController extends SEIPController {
         return $this->handleView($view);
     }
 
+    /**
+     *
+     *
+     *
+     */
+    public function showAction(){
+    	return $this->render('PequivenSeipBundle:Sip:Cutl/show.html.twig');
+    }
+
 }

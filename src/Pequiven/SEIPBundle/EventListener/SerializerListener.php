@@ -669,7 +669,7 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
     public function onPostSerializeCutl(ObjectEvent $event) {
         $object = $event->getObject();
 
-        $links['self']['show'] = $this->generateUrl('pequiven_meeting_show', array('id' => $object->getId()));
+        $links['self']['show'] = $this->generateUrl('pequiven_sip_cutl_show', array('id' => $object->getId()));
 
         $event->getVisitor()->addData('_links', $links);
     }

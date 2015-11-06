@@ -15,3 +15,10 @@ pequiven_sip_cutl_list:
     requirements:
         _format: html|json|xml        
     methods: [GET]
+pequiven_sip_cutl_show:
+    path: /cult/{id}
+    defaults:
+        _controller: pequiven.controller.cutl:showAction
+    methods: [GET|POST]
+    options:
+        expose: true
