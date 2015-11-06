@@ -1527,14 +1527,30 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
 
         $menuSip = $this->factory->createItem('menu_sip', $this->getSubLevelOptions(array(
                             'uri' => null,
-                            'labelAttributes' => array('icon' => 'fa fa-ticket',),
+                            'labelAttributes' => array('icon' => 'fa fa-ticket'),
                         ))
                 )->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.main', $section)));
 
+        //if ($this->isGranted(array('ROLE_SEIP_SIP_ONEPERTEN'))) {
         $onePerTen = $this->factory->createItem('onePerTen', $this->getSubLevelOptions(array(
-                            'route' => 'pequiven_onePerTen_create'
+                            'uri' => null,
+                            'labelAttributes' => array('icon' => 'fa fa-ticket'),
                         ))
                 )->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.onePerTen', $section)));
+
+
+        $register = $this->factory->createItem('RegisterOnePerTen', $this->getSubLevelOptions(array(
+                            'route' => 'pequiven_onePerTen_create',
+                        ))
+                )->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.register', $section)));
+
+        $list = $this->factory->createItem('listOnePerTen', $this->getSubLevelOptions(array(
+                        ))
+                )->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.list', $section)));
+
+        $onePerTen->addChild($register);
+        $onePerTen->addChild($list);
+
         $menuSip->addChild($onePerTen);
 
         $menu->addChild($menuSip);

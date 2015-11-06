@@ -241,6 +241,7 @@ security:
             
             #SISTEMA DE INFORMACION POLITICA - SIP
             - ROLE_SEIP_SIP_MENU
+            - ROLE_SEIP_SIP_ONEPERTEN
             
             
             
