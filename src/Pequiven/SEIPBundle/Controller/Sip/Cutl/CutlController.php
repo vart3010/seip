@@ -22,9 +22,8 @@ class CutlController extends SEIPController {
 
     	$criteria = $request->get('filter', $this->config->getCriteria());
         $sorting = $request->get('sorting', $this->config->getSorting());
-        $repository = $this->getRepository();                
-        
-        $cutl = $this->get('pequiven.repository.cutl')->findAll();         
+        $repository = $this->getRepository('pequiven.repository.cutl');                        
+             
         
         //$criteria['cult'] = false;
 
@@ -65,7 +64,7 @@ class CutlController extends SEIPController {
             );
             $view->setData($data);
         } else {
-            $view->getSerializationContext()->setGroups(array('id', 'api_list', 'cedula', 'nombre', 'centro'));
+            $view->getSerializationContext()->setGroups(array('id', 'api_list', 'cedula', 'nombre', 'centro', 'codigoCentro'));
             $formatData = $request->get('_formatData', 'default');
 
             $view->setData($resources->toArray('', array(), $formatData));

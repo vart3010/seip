@@ -2,6 +2,7 @@
 
 namespace Pequiven\SEIPBundle\Repository\sip\Cutl;
 
+use Pequiven\SEIPBundle\Entity\Sip\Cutl;
 use Pequiven\SEIPBundle\Doctrine\ORM\SeipEntityRepository as EntityRepository;
 
 /**
@@ -19,11 +20,10 @@ class CutlRepository extends EntityRepository {
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
     public function createPaginatorByCutl(array $criteria = null, array $orderBy = null) {
-        $orderBy['ct.nombre'] = 'ASC';
         return $this->createPaginator($criteria, $orderBy);
     }
-
-   protected function getAlias() {
+   
+    protected function getAlias() {
         return "ct";
-   }  
+    }  
 }
