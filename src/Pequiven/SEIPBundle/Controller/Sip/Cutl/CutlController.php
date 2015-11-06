@@ -79,8 +79,15 @@ class CutlController extends SEIPController {
      *
      *
      */
-    public function showAction(){
-    	return $this->render('PequivenSeipBundle:Sip:Cutl/show.html.twig');
+    public function showAction(Request $request){
+
+        $id = $request->get('id');
+
+        $cutl = $this->get('pequiven.repository.cutl')->find($id);  
+
+    	return $this->render('PequivenSEIPBundle:Sip:cutl\show.html.twig', array(
+    		'cutl' => $cutl, ));    	
+
     }
 
 }

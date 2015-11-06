@@ -1,0 +1,41 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
+
+{% trans_default_domain 'sip' %}
+
+{% block javascripts_base %}
+    {{ parent() }}
+    <script src="{{  asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.input.js') }}"></script>
+{% endblock javascripts_base %}
+
+{% block before_body %}
+    {{ contentHeader("sip.cutl.title" | trans({}))   }}
+{% endblock %}
+
+{% block body %}
+
+    
+
+    <fieldset class="fieldset">
+        <legend class="legend" >CUTL&nbsp;</legend>
+        <div class="columns">
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Nombre</label>
+                    {{ cutl.nombre }}
+                </p>
+                <p class="inline-label">
+                    <label class="label">Centro</label>
+                    {{ cutl.centro }}
+                </p>                
+                <p class="inline-label">
+                    <label class="label">Telefono:</label>
+                    {{ cutl.nombre }}
+                </p>               
+
+            </div>            
+        </div>
+    </fieldset>   
+{% endblock %}
+
