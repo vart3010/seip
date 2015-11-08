@@ -1,0 +1,108 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
+
+{% trans_default_domain 'sip' %}
+
+{% block javascripts_base %}
+    {{ parent() }}
+    <script src="{{  asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.input.js') }}"></script>
+{% endblock javascripts_base %}
+
+{% block before_body %}
+    {{ contentHeader("sip.cutl.title" | trans({}))   }}
+{% endblock %}
+
+{% block body %}
+
+    {% if(assist == 1 ) %}
+        {% set checkState = "checked" %}
+    {% else  %}
+        {% set checkState = "" %}
+    {% endif %}
+
+
+    <fieldset class="fieldset">
+        <legend class="legend" >CUTL&nbsp;</legend>
+        <div class="columns">
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Nombre</label>
+                    {{ cutl.nombre }}
+                </p>
+                <p class="inline-label">
+                    <label class="label">Centro</label>
+                    {{ cutl.centro }}
+                </p>                
+                <p class="inline-label">
+                    <label class="label">Telefono:</label>
+                    {{ cutl.telefonoFirma }}
+                </p>     
+                <p class="inline-label">
+                    <label class="label">Observaciones:</label>
+                    <textarea type="textarea" id="obs" rows="4" cols="100" name="obs" class="input input-large">{{ cutl.observation }}</textarea>
+                </p>     
+                <p class="assistance inline-label">
+                <div class="margin-bottom switch-wrapper">
+                    <label class="label"><strong>Asistió:</strong></label>
+                    <input type="checkbox" name="switchAssistance" id="switchAssistance"  data="{{ cutl.id }}" value="{{ assist }}" class="switch blue-active mid-margin-right {{ checkState }}"  data-text-on="SI" data-text-off="NO">
+                </div>
+                </p>
+
+            </div>   
+        </div>
+        <div class="columns">
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <a id="save" class="button compact icon-pencil" href="">
+                    Guardar
+                </a>
+            </div>
+        </div>
+    </fieldset>   
+    <br>
+
+{% endblock %}
+
+{% block javascript %}
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            $('#switch-mode').change(function () {
+                $('.switch-wrapper')[this.checked ? 'addClass' : 'removeClass']('reversed-switches');
+            });
+            $("#switchAssistance").change(function () {
+                var value = $(this).val();
+                if (value == 1) {
+                    $(this).val(0);
+                } else {
+                    $(this).val(1);
+                }
+                console.log(value);
+            });
+            $("a#save").click(function () {
+                var value = $("#switchAssistance").val();
+                var idCutl = $("#switchAssistance").attr("data");
+                var obs = $("#obs").val();
+                var data = {
+                    idCutl: idCutl,
+                    status: value,
+                    obs: obs
+                };
+                console.log(value);
+                $.ajax({
+                    type: 'get',
+                    url: '{{ path("update_assistance_cutl") }}',
+                    data: data,
+                    success: function (data) {
+                        //window.open(data["url"]);
+                        $(location).attr('href', data["url"]);
+                    }
+                });
+
+                console.log(idCutl);
+            });
+        });
+    </script>
+{% endblock %}
+
