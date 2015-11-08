@@ -76,3 +76,8 @@ pequiven_politic_meetingl:
 pequiven_politic_assistance:
     resource: "@PequivenSEIPBundle/Resources/config/routing/politic/assistance.yml"
     prefix:   /assistance
+
+###SISTEMA DE INFORMACION POLIICA
+pequiven_sip:
+    resource: "@PequivenSEIPBundle/Resources/config/routing/sip/sip.yml"
+    prefix:   /sip
