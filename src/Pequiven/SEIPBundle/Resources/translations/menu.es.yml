@@ -221,16 +221,19 @@ app:
                             phase_one: Fase 1
                             phase_two: Fase 2
                             phase_three: Fase 3
+                            phase_four: Fase 4
                         reports:
                             main: Reportes
                             phase_one: Fase 1
                             phase_two: Fase 2
                             phase_three: Fase 3
+                            phase_four: Fase 4
                         strategic_plan:
                             main: Plan Estratégico
                             phase_one: Fase 1
                             phase_two: Fase 2
                             phase_three: Fase 3
+                            phase_four: Fase 4
                         visualize: Visualizar
                         general: General
                         list: Lista

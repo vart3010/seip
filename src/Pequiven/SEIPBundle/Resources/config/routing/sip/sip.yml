@@ -14,7 +14,7 @@ search_one_por_cedula:
     
 
 pequiven_sip_cutl_list:
-    path: /cutl/list/.{_format}
+    path: /cutl/list.{_format}
     defaults:
         _controller: pequiven.controller.cutl:listAction
         _format: html

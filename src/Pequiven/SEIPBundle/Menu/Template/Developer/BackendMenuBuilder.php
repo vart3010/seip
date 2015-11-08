@@ -1395,6 +1395,23 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
             $reportsPhaseThree->addChild($reportsPhaseThreeList);
 
             $workStudyCirclesReports->addChild($reportsPhaseThree);
+            
+            
+            //FASE 4
+                $reportsPhaseFour = $this->factory->createItem('work_study_circles.reports.phase_four', $this->getSubLevelOptions(array(
+                            "route" => "",
+                            'labelAttributes' => array('icon' => 'fa fa-table',),
+                        ))
+                )->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.reports.phase_four', $section)));
+
+                    $reportsPhaseFourList = $this->factory->createItem('work_study_circles.list', $this->getSubLevelOptions(array(
+                                'route' => 'pequiven_work_study_circle_list',
+                                'routeParameters' => array('phase' => \Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle::PHASE_FOUR),
+                            ))
+                        )->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.list', $section)));
+                $reportsPhaseFour->addChild($reportsPhaseFourList);
+            
+            $workStudyCirclesReports->addChild($reportsPhaseFour);
 
             $menuWorkStudyCircles->addChild($workStudyCirclesReports);
         }
@@ -1458,8 +1475,24 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                         )->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.list', $section)));
                 $meetingsPhaseThree->addChild($meetingsPhaseThreeList);
             
-            $workStudyCirclesMeeting->addChild($meetingsPhaseThree);                
+            $workStudyCirclesMeeting->addChild($meetingsPhaseThree);
+            
+             //FASE 4
+                $meetingsPhaseFour = $this->factory->createItem('work_study_circles.meeting.phase_four', $this->getSubLevelOptions(array(
+                            "route" => "",
+                            'labelAttributes' => array('icon' => 'fa fa-table',),
+                        ))
+                )->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.phase_four', $section)));
 
+                    $meetingsPhaseFourList = $this->factory->createItem('work_study_circles.list', $this->getSubLevelOptions(array(
+                                'route' => 'pequiven_meeting_list',
+                                'routeParameters' => array('phase' => \Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle::PHASE_FOUR),
+                            ))
+                        )->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.list', $section)));
+                $meetingsPhaseFour->addChild($meetingsPhaseFourList);
+            
+            $workStudyCirclesMeeting->addChild($meetingsPhaseFour);
+                
             $menuWorkStudyCircles->addChild($workStudyCirclesMeeting);
         }
         if ($this->isGranted(array('ROLE_SEIP_WORK_STUDY_CIRCLES_STRATEGIC_PLAN'))) {
@@ -1523,6 +1556,22 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                 $proposalsPhaseThree->addChild($proposalsPhaseThreeList);
                 
             $workStudyCirclesStrategicPlan->addChild($proposalsPhaseThree);
+            
+            //FASE 4
+            $proposalsPhaseFour = $this->factory->createItem('work_study_circles.strategic_plan.phase_four', $this->getSubLevelOptions(array(
+                            "route" => "",
+                            'labelAttributes' => array('icon' => 'fa fa-table',),
+                        ))
+                )->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.phase_four', $section)));
+
+                    $proposalsPhaseFourList = $this->factory->createItem('work_study_circles.list', $this->getSubLevelOptions(array(
+                                'route' => 'pequiven_proposal_list',
+                                'routeParameters' => array('phase' => \Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle::PHASE_FOUR),
+                            ))
+                        )->setLabel($this->translate(sprintf('app.backend.menu.%s.work_study_circles.list', $section)));
+                $proposalsPhaseFour->addChild($proposalsPhaseFourList);
+                
+            $workStudyCirclesStrategicPlan->addChild($proposalsPhaseFour);
 
             $menuWorkStudyCircles->addChild($workStudyCirclesStrategicPlan);
         }

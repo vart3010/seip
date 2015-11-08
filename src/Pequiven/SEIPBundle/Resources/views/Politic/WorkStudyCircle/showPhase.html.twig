@@ -81,88 +81,119 @@
             </div>#}
         </div>
     </fieldset>
+
+
     <fieldset class="fieldset">
         <legend class="legend" >{{ "workStudyCircle.form.coordinador.title"|trans }}&nbsp;</legend>
         {% if workStudyCircle.coordinator != null %}
-        <div class="columns">
-                <div class="new-row-mobile twelve-columns twelve-columns-tablet twelve-columns-mobile">
-                    <p class="inline-label">
-                        <label class="label">{{ "workStudyCircle.form.coordinador.nombre"|trans }}</label>
-                        {{ workStudyCircle.coordinator.getFullNameUser }}
-                    </p>
-                </div>
-                <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
-                    <p class="inline-label">
-                        <label class="label">{{ "workStudyCircle.form.coordinador.telefono"|trans }}</label>
-                        {{ workStudyCircle.coordinator.cellphone }}
-                    </p>
-                </div>
-                <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
-                    <p class="inline-label">
-                        <label class="label">{{ "workStudyCircle.form.coordinador.ext"|trans }}</label>
-                        {{ workStudyCircle.coordinator.ext }}
-                    </p>
-                </div>
-        </div>
-        {% else %}
-            <div class="block" >
-                <div class="block-title">
-                    <div class="button-group absolute-left compact">
-                        <a class="button icon-list-add " href="{{ path("pequiven_work_study_circle_add_coordinator",{idWorkStudyCircle:workStudyCircle.id,typeCoordinator:1})}}"  title="">
-                            {{ "workStudyCircle.coordinator.add"|trans }}&nbsp;
-                        </a>
+            {% if workStudyCircle.phase != 4 %}
+                <div class="columns">
+                    <div class="new-row-mobile twelve-columns twelve-columns-tablet twelve-columns-mobile">
+                        <p class="inline-label">
+                            <label class="label">{{ "workStudyCircle.form.coordinador.nombre"|trans }}</label>
+                            {{ workStudyCircle.coordinator.getFullNameUser }}
+                        </p>
+                    </div>
+                    <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                        <p class="inline-label">
+                            <label class="label">{{ "workStudyCircle.form.coordinador.telefono"|trans }}</label>
+                            {{ workStudyCircle.coordinator.cellphone }}
+                        </p>
+                    </div>
+                    <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                        <p class="inline-label">
+                            <label class="label">{{ "workStudyCircle.form.coordinador.ext"|trans }}</label>
+                            {{ workStudyCircle.coordinator.ext }}
+                        </p>
                     </div>
                 </div>
-            </div>
-        {% endif %}
-    </fieldset>
-    
-    <fieldset class="fieldset">
-        <legend class="legend" >{{ "workStudyCircle.form.coordinatorDiscussion.title"|trans }}&nbsp;</legend>
-        {% if workStudyCircle.coordinatorDiscussion != null %}
-        <div class="columns">
-                <div class="new-row-mobile twelve-columns twelve-columns-tablet twelve-columns-mobile">
-                    <p class="inline-label">
-                        <label class="label">{{ "workStudyCircle.form.coordinatorDiscussion.nombre"|trans }}</label>
-                        {{ workStudyCircle.coordinatorDiscussion.getFullNameUser }}
-                    </p>
-                </div>
-                <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
-                    <p class="inline-label">
-                        <label class="label">{{ "workStudyCircle.form.coordinatorDiscussion.telefono"|trans }}</label>
-                        {{ workStudyCircle.coordinatorDiscussion.cellphone }}
-                    </p>
-                </div>
-                <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
-                    <p class="inline-label">
-                        <label class="label">{{ "workStudyCircle.form.coordinatorDiscussion.ext"|trans }}</label>
-                        {{ workStudyCircle.coordinatorDiscussion.ext }}
-                    </p>
-                </div>
-        </div>
-        {% else %}
-            <div class="block" >
-                <div class="block-title">
-                    <div class="button-group absolute-left compact">
-                        <a class="button icon-list-add " href="{{ path("pequiven_work_study_circle_add_coordinator",{idWorkStudyCircle:workStudyCircle.id,typeCoordinator:2})}}"  title="">
-                            {{ "workStudyCircle.coordinatorDiscussion.add"|trans }}&nbsp;
-                        </a>
+            {% else %}
+                <div class="columns">
+                    <div class="new-row-mobile twelve-columns twelve-columns-tablet twelve-columns-mobile">
+                        <p class="inline-label">
+                            <label class="label">{{ "workStudyCircle.form.coordinador.nombre"|trans }}</label>
+                            POR DEFINIR
+                        </p>
+                    </div>
+                    <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                        <p class="inline-label">
+                            <label class="label">{{ "workStudyCircle.form.coordinador.telefono"|trans }}</label>
+                            POR DEFINIR
+                        </p>
+                    </div>
+                    <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                        <p class="inline-label">
+                            <label class="label">{{ "workStudyCircle.form.coordinador.ext"|trans }}</label>
+                            POR DEFINIR
+                        </p>
                     </div>
                 </div>
-            </div>
+            {% endif %}
+        {% else %}
+            {% if workStudyCircle.phase != 4 %}
+                <div class="block" >
+                    <div class="block-title">
+                        <div class="button-group absolute-left compact">
+                            <a class="button icon-list-add " href="{{ path("pequiven_work_study_circle_add_coordinator",{idWorkStudyCircle:workStudyCircle.id,typeCoordinator:1})}}"  title="">
+                                {{ "workStudyCircle.coordinator.add"|trans }}&nbsp;
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
         {% endif %}
     </fieldset>
-    
+    {% if workStudyCircle.phase != 4 %}
+        <fieldset class="fieldset">
+            <legend class="legend" >{{ "workStudyCircle.form.coordinatorDiscussion.title"|trans }}&nbsp;</legend>
+            {% if workStudyCircle.coordinatorDiscussion != null %}
+
+                <div class="columns">
+                    <div class="new-row-mobile twelve-columns twelve-columns-tablet twelve-columns-mobile">
+                        <p class="inline-label">
+                            <label class="label">{{ "workStudyCircle.form.coordinatorDiscussion.nombre"|trans }}</label>
+                            {{ workStudyCircle.coordinatorDiscussion.getFullNameUser }}
+                        </p>
+                    </div>
+                    <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                        <p class="inline-label">
+                            <label class="label">{{ "workStudyCircle.form.coordinatorDiscussion.telefono"|trans }}</label>
+                            {{ workStudyCircle.coordinatorDiscussion.cellphone }}
+                        </p>
+                    </div>
+                    <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                        <p class="inline-label">
+                            <label class="label">{{ "workStudyCircle.form.coordinatorDiscussion.ext"|trans }}</label>
+                            {{ workStudyCircle.coordinatorDiscussion.ext }}
+                        </p>
+                    </div>
+                </div>
+
+            {% else %}
+                <div class="block" >
+                    <div class="block-title">
+                        <div class="button-group absolute-left compact">
+                            <a class="button icon-list-add " href="{{ path("pequiven_work_study_circle_add_coordinator",{idWorkStudyCircle:workStudyCircle.id,typeCoordinator:2})}}"  title="">
+                                {{ "workStudyCircle.coordinatorDiscussion.add"|trans }}&nbsp;
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </fieldset>
+    {% endif %}
     <fieldset class="fieldset">
         {% if workStudyCircle.phase == constant('Pequiven\\SEIPBundle\\Entity\\Politic\\WorkStudyCircle::PHASE_TWO') %}
             <legend class="legend" >{{ "workStudyCircle.form.proposalsPhaseOne"|trans }}&nbsp;</legend>
         {% elseif workStudyCircle.phase == constant('Pequiven\\SEIPBundle\\Entity\\Politic\\WorkStudyCircle::PHASE_THREE') %}
             <legend class="legend" >{{ "workStudyCircle.form.proposalsPhaseTwo"|trans }}&nbsp;</legend>
+        {% elseif workStudyCircle.phase == constant('Pequiven\\SEIPBundle\\Entity\\Politic\\WorkStudyCircle::PHASE_FOUR') %}
+            <legend class="legend" >{{ "workStudyCircle.form.proposalsPhaseThree"|trans }}&nbsp;</legend>
         {% endif %}
-        
+
         <div ng-controller="TableFormatController">
             <div ng-controller="TableProposalController">
-                
+
                 <details class="details margin-bottom" open="">
                     <summary role="button" aria-expanded="true">
                         {{ 'pequiven.filters'|trans({},'messages') }}
@@ -173,7 +204,7 @@
 
                             <!-- Filtro Círculos de Estudio de Trabajo -->
                             <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
-                                    <label class="bold">{{ 'pequiven_seip.filters.work_study_circle'|trans({},'PequivenSEIPBundle') }}</label>
+                                <label class="bold">{{ 'pequiven_seip.filters.work_study_circle'|trans({},'PequivenSEIPBundle') }}</label>
                                 <br/>
                                 <div class="with-mid-padding">
                                     <select class="select2 input-xlarge" id="selectWorkStudyCircle" ng-model="model.workStudyCircle" ng-init="getWorkStudyCircleInherited({{ workStudyCircle.id }})" ng-options="value as value.name for (key,value) in data.work_study_circles" >
@@ -197,17 +228,17 @@
                     </div>
 
                 </details>
-                
+
                 <div loading-container="tableParams.settings().$loading">
                     <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager"  template-header="custom/header" api-data-url="{{ path('pequiven_proposal_inherited_work_study_circle',{_format:'json',workStudyCircleParent:workStudyCircle.id}) }}" export-csv="csv" class="table table-responsive table-extra-info">
                         <tr ng-repeat="result in $data | filter:tableParams.search " data="{$ result|json $}">
-                            <td data-title="'CET'" >
+                            <td data-title="'CET'" width="10%" style="text-align: center">
                                 <a href="{$ result._links.self.show $}">{$ result.workStudyCircle.name $}</a>
                             </td>
-                            <td data-title="'Línea Estratégica'" >
+                            <td data-title="'Línea Estratégica'"  width="10%"  style="text-align: center">
                                 <a href="{$ result._links.self.show $}">{$ result.lineStrategic.description $}</a>
                             </td>
-                            <td data-title="'Propuesta'" >
+                            <td data-title="'Propuesta'"  width="80%">
                                 <a href="{$ result._links.self.show $}">{$ result.description $}</a>
                             </td>
                         </tr>
@@ -254,7 +285,7 @@
                     'icon-download'
                  ) 
             }}
-            
+
         </div>              
     {% endif %}
 {% endblock %}
@@ -262,28 +293,28 @@
 {% block javascript %}
     {{ parent() }}
     <script type="text/javascript">
-        
-        $(document).ready(function()
-        {
-            charge();
-            {#$('#selectWorkStudyCircle').select2({
-                minimumInputLength: 2,
-                allowClear: true,
-            })#}
-            
-            function charge(){
-               $('.select2').select2({
-                allowClear: true
-                });
-            }
-            
-        });
-        
-        function getTableExtraInfo(data)
+
+$(document).ready(function ()
+{
+    charge();
+        {#$('#selectWorkStudyCircle').select2({
+            minimumInputLength: 2,
+            allowClear: true,
+        })#}
+
+                function charge() {
+                    $('.select2').select2({
+                        allowClear: true
+                    });
+                }
+
+            });
+
+            function getTableExtraInfo(data)
             {
                 var response = '';
                 return response;
             }
     </script>
-    
+
 {% endblock %}

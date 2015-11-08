@@ -13,3 +13,6 @@ Pequiven\SEIPBundle\Entity\Sip\Cutl:
         centro:
             expose: true
             groups: [api_list]
+        codigoCentro:
+            expose: true
+            groups: [api_list]
