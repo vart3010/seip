@@ -13,19 +13,19 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class CutlController extends SEIPController {
 
-	/**
-	 * Listado de CUTL
-	 *
-	 *
-	 */
-    public function listAction(Request $request){
+    /**
+     * Listado de CUTL
+     *
+     *
+     */
+    public function listAction(Request $request) {
 
-    	$criteria = $request->get('filter', $this->config->getCriteria());
+        $criteria = $request->get('filter', $this->config->getCriteria());
         $sorting = $request->get('sorting', $this->config->getSorting());
-        $repository = $this->getRepository();                
-        
-        $cutl = $this->get('pequiven.repository.cutl')->findAll();         
-        
+        $repository = $this->getRepository();
+
+        $cutl = $this->get('pequiven.repository.cutl')->findAll();
+
         //$criteria['cult'] = false;
 
         if ($this->config->isPaginated()) {
@@ -49,7 +49,7 @@ class CutlController extends SEIPController {
         }
 
         $routeParameters = array(
-            '_format' => 'json',            
+            '_format' => 'json',
         );
         $apiDataUrl = $this->generateUrl('pequiven_sip_cutl_list', $routeParameters);
 
@@ -58,9 +58,9 @@ class CutlController extends SEIPController {
                 ->setTemplate($this->config->getTemplate('list.html'))
                 ->setTemplateVar($this->config->getPluralResourceName())
         ;
-        if ($request->get('_format') == 'html') {            
+        if ($request->get('_format') == 'html') {
             $data = array(
-                'apiDataUrl' => $apiDataUrl,                
+                'apiDataUrl' => $apiDataUrl,
                 $this->config->getPluralResourceName() => $resources,
             );
             $view->setData($data);
@@ -79,15 +79,21 @@ class CutlController extends SEIPController {
      *
      *
      */
-    public function showAction(Request $request){
+    public function showAction(Request $request) {
 
         $id = $request->get('id');
 
-        $cutl = $this->get('pequiven.repository.cutl')->find($id);  
+        $cutl = $this->get('pequiven.repository.cutl')->find($id);
+        if ($cutl->getAssistance()) {
+            $assist = 1;
+        } else {
+            $assist = 0;
+        }
 
-    	return $this->render('PequivenSEIPBundle:Sip:cutl\show.html.twig', array(
-    		'cutl' => $cutl, ));    	
-
+        return $this->render('PequivenSEIPBundle:Sip:cutl\show.html.twig', array(
+                    'cutl' => $cutl,
+                    'assist' => $assist
+        ));
     }
 
 }

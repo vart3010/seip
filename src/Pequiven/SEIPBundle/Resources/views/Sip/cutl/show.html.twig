@@ -15,7 +15,14 @@
 
 {% block body %}
 
-    
+    {{ assist }}
+
+    {% if(assist == 1 ) %}
+        {% set checkState = "checked" %}
+    {% else  %}
+        {% set checkState = " " %}
+    {% endif %}
+
 
     <fieldset class="fieldset">
         <legend class="legend" >CUTL&nbsp;</legend>
@@ -32,10 +39,22 @@
                 <p class="inline-label">
                     <label class="label">Telefono:</label>
                     {{ cutl.telefonoFirma }}
-                </p>               
+                </p>     
+
+                <p class="assistance inline-label">
+                    <label class="label">Asistió:</label>
+                    <input type="checkbox" name="switchAssistance"  data="{{ cutl.id }}" value="{{ assist }}" class="switch blue-active mid-margin-right {{ checkState }}"  data-text-on="SI" data-text-off="NO">
+                </p>
 
             </div>            
         </div>
     </fieldset>   
+    <br>
+
+{% endblock %}
+
+{% block javascript %}
+    <script type="text/javascript">
+    </script>
 {% endblock %}
 

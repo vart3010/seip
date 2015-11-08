@@ -141,7 +141,7 @@ class Cutl {
      *
      * @ORM\Column(name="assistance", type="boolean")
      */
-    private $assistance = true;
+    private $assistance = false;
 
     function getId() {
         return $this->id;
