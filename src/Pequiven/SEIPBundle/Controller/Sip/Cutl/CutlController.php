@@ -117,7 +117,10 @@ class CutlController extends SEIPController {
         $em->persist($cutl);
         $em->flush();
 
-        $response->setData($request);
+        $data = array();
+        $data["url"] = $this->generateUrl("pequiven_sip_cutl_show", array("id" => $id));
+
+        $response->setData($data);
         return $response;
     }
 
