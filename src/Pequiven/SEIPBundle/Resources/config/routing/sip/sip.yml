@@ -11,8 +11,12 @@ search_one_por_cedula:
     path: /sip/search_one_per_cedula
     defaults:
         _controller: pequiven.controller.onePerTen:searchAction
+        
+update_assistance_cutl:
+    path: /sip/update
+    defaults:
+        _controller: pequiven.controller.cutl:updateAssistance
     
-
 pequiven_sip_cutl_list:
     path: /cutl/list.{_format}
     defaults:
@@ -21,6 +25,7 @@ pequiven_sip_cutl_list:
     requirements:
         _format: html|json|xml        
     methods: [GET]
+    
 pequiven_sip_cutl_show:
     path: /cult/{id}
     defaults:

@@ -27,8 +27,8 @@ class CutlController extends SEIPController {
 
         $cutl = $this->get('pequiven.repository.cutl')->findAll();
 
-        $repository = $this->getRepository('pequiven.repository.cutl');                        
-             
+        $repository = $this->getRepository('pequiven.repository.cutl');
+
         //$criteria['cult'] = false;
 
         if ($this->config->isPaginated()) {
@@ -78,9 +78,9 @@ class CutlController extends SEIPController {
     }
 
     /**
-     *
-     *
-     *
+     * 
+     * @param Request $request
+     * @return type
      */
     public function showAction(Request $request) {
 
@@ -97,6 +97,26 @@ class CutlController extends SEIPController {
                     'cutl' => $cutl,
                     'assist' => $assist
         ));
+    }
+
+    /**
+     * 
+     * @param Request $request
+     */
+    public function updateAssistance(Request $request) {
+        $response = new JsonResponse();
+        $em = $this->getDoctrine()->getEntityManager();
+        $id = $request->get('idCutl');
+        $status = $request->get('status');
+
+        $cutl = $this->get('pequiven.repository.cutl')->findOneBy(array("id" => $id));
+        $cutl->setAssistance($status);
+
+        $em->persist($cutl);
+        $em->flush();
+
+        $response->setData($request);
+        return $response;
     }
 
 }
