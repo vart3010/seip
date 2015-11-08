@@ -108,9 +108,11 @@ class CutlController extends SEIPController {
         $em = $this->getDoctrine()->getEntityManager();
         $id = $request->get('idCutl');
         $status = $request->get('status');
+        $obs = $request->get('obs');
 
         $cutl = $this->get('pequiven.repository.cutl')->findOneBy(array("id" => $id));
         $cutl->setAssistance($status);
+        $cutl->setObservation($obs);
 
         $em->persist($cutl);
         $em->flush();
