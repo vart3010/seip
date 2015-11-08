@@ -43,9 +43,12 @@
                     <textarea type="textarea" id="obs" rows="4" cols="100" name="obs" class="input input-large">{{ cutl.observation }}</textarea>
                 </p>     
                 <p class="assistance inline-label">
-                    <label class="label">Asistió:</label>
-                    <input type="checkbox" name="switchAssistance"  data="{{ cutl.id }}" value="{{ assist }}" class="switch blue-active mid-margin-right {{ checkState }}"  data-text-on="SI" data-text-off="NO">
+                <div class="margin-bottom switch-wrapper">
+                    <label class="label"><strong>Asistió:</strong></label>
+                    <input type="checkbox" name="switchAssistance" id="switchAssistance"  data="{{ cutl.id }}" value="{{ assist }}" class="switch blue-active mid-margin-right {{ checkState }}"  data-text-on="SI" data-text-off="NO">
+                </div>
                 </p>
+
             </div>   
         </div>
         <div class="columns">
@@ -68,7 +71,7 @@
             $('#switch-mode').change(function () {
                 $('.switch-wrapper')[this.checked ? 'addClass' : 'removeClass']('reversed-switches');
             });
-            $("p.assistance input").change(function () {
+            $("#switchAssistance").change(function () {
                 var value = $(this).val();
                 if (value == 1) {
                     $(this).val(0);
@@ -78,8 +81,8 @@
                 console.log(value);
             });
             $("a#save").click(function () {
-                var value = $("p.assistance input").val();
-                var idCutl = $("p.assistance input").attr("data");
+                var value = $("#switchAssistance").val();
+                var idCutl = $("#switchAssistance").attr("data");
                 var obs = $("#obs").val();
                 var data = {
                     idCutl: idCutl,
