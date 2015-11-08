@@ -88,7 +88,7 @@
 
     <br/><br/>
 
-    {% if workStudyCircle.getphase > 1 %}
+    {% if workStudyCircle.getphase < 4 %}
 
         <table width="95%" class="simple-table responsive-table tables-extras" > 
             <tr>
@@ -131,18 +131,62 @@
         <br/><br/><br/>
 
     {% else %}
+        <table width="100%">
+            <tr>
+                <th class="title_bold">Coordinadores</th>
+            </tr>
+        </table>
+
+        <br/><br/>
+        
         <table width="95%" class="simple-table responsive-table tables-extras" > 
             <tr>
                 <td class="title_bold" bgcolor="#F2F2F2" width="35%">{{ "workStudyCircle.form.coordinador.nombre"|trans }}:</td>
-                <td width="65%"> {{ workStudyCircle.createdBy.getFullNameUser |upper}}</td>                        
+                <td width="65%">Juancarlo Depablos</td>
             </tr>
             <tr>
-                <td class="title_bold" bgcolor="#F2F2F2" width="35%">{{ "workStudyCircle.form.coordinador.telefono"|trans }}:</td>
-                <td width="65%"> {{ workStudyCircle.createdBy.cellphone }}</td>
+                <td class="title_bold" bgcolor="#F2F2F2" width="35%">Cargo</td>
+                <td width="65%">Presidente</td>
             </tr>
             <tr>
-                <td class="title_bold" bgcolor="#F2F2F2" width="35%">{{ "workStudyCircle.form.coordinador.ext"|trans }}:</td>
-                <td width="65%"> {{ workStudyCircle.createdBy.ext }}</td>
+                <td class="title_bold" bgcolor="#F2F2F2" width="35%">{{ "workStudyCircle.form.coordinador.nombre"|trans }}:</td>
+                <td width="65%">Natasha Castillo</td>
+            </tr>
+            <tr>
+                <td class="title_bold" bgcolor="#F2F2F2" width="35%">Cargo</td>
+                <td width="65%">Vice-Presidente</td>
+            </tr>
+            <tr>
+                <td class="title_bold" bgcolor="#F2F2F2" width="35%">{{ "workStudyCircle.form.coordinador.nombre"|trans }}:</td>
+                <td width="65%">Francisco Mejías</td>
+            </tr>
+            <tr>
+                <td class="title_bold" bgcolor="#F2F2F2" width="35%">Cargo</td>
+                <td width="65%">Director</td>
+            </tr>
+            <tr>
+                <td class="title_bold" bgcolor="#F2F2F2" width="35%">{{ "workStudyCircle.form.coordinador.nombre"|trans }}:</td>
+                <td width="65%">Jorge Perdomo</td>
+            </tr>
+            <tr>
+                <td class="title_bold" bgcolor="#F2F2F2" width="35%">Cargo</td>
+                <td width="65%">Director</td>
+            </tr>
+            <tr>
+                <td class="title_bold" bgcolor="#F2F2F2" width="35%">{{ "workStudyCircle.form.coordinador.nombre"|trans }}:</td>
+                <td width="65%">Eduardo Casañas</td>
+            </tr>
+            <tr>
+                <td class="title_bold" bgcolor="#F2F2F2" width="35%">Cargo</td>
+                <td width="65%">Director</td>
+            </tr>
+            <tr>
+                <td class="title_bold" bgcolor="#F2F2F2" width="35%">{{ "workStudyCircle.form.coordinador.nombre"|trans }}:</td>
+                <td width="65%">José Luis Pérez</td>
+            </tr>
+            <tr>
+                <td class="title_bold" bgcolor="#F2F2F2" width="35%">Cargo</td>
+                <td width="65%">DIrector</td>
             </tr>
         </table>
 
