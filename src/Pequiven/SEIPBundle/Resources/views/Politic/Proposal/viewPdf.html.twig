@@ -1,8 +1,10 @@
 {% trans_default_domain 'workStudyCircle' %}
+{% if (workStudyCircle.getphase < 4) %}
 {% if workStudyCircle.getphase > 1 %}
     {% set userCreatedId = workStudyCircle.getCoordinator.id %}
 {% else %}
     {% set userCreatedId = workStudyCircle.getCreatedBy.id %}
+{% endif %}
 {% endif %}
 
 <style>
