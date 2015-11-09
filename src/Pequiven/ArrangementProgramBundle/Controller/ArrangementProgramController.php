@@ -1603,6 +1603,8 @@ class ArrangementProgramController extends SEIPController {
                 ->setCellValue('AI' . $rowDetails, $approvalDate)
         ;
         $row = $rowDetails + 3;
+        $merge = 'B'.$row.':H'.$row.'';
+        $activeSheet->mergeCells($merge);
         $activeSheet->setCellValue(sprintf('B%s', $row), 'NIVEL DE REVISION: 1');
         $activeSheet->setCellValue(sprintf('AI%s', $row), 'C-PG-DM-OI-R-002');
         $activeSheet->getStyle(sprintf('B%s:AI%s', $row, $row))->getFont()->setSize(8);
