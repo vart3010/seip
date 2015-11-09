@@ -1,0 +1,18 @@
+Pequiven\SEIPBundle\Entity\Sip\Parroquia:
+    exclusion_policy: ALL
+    properties:
+        id:
+            expose: true
+            groups: [id]
+        codigoEstado:
+            expose: true
+            groups: [codigoEstado]
+        codigoMunicipio:
+            expose: true
+            groups: [codigoMunicipio]
+        codigoParroquia:
+            expose: true
+            groups: [codigoParroquia]
+        description:
+            expose: true
+            groups: [api_list]
