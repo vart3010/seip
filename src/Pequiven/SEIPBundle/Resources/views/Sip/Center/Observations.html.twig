@@ -12,14 +12,23 @@
         <div class="with-padding">            
             <table class="simple-table responsive-table tables-extras" id="sorting-example2">
                 <thead>
-                    <tr>                        
+                    <tr> 
+                        <th scope="col" width="55%" class="header">Obervación</th>
+                        <th scope="col" width="15%" class="header">Categoria</th>
+                        <th scope="col" width="10%" class="header">Fecha</th>                       
                     </tr>
                 </thead>                
+                {% for dataObs  in observations %}
                 <tbody>
-                    <tr>
-                        <td rowspan="2">Esperando Carga de datos...</td>                            
-                    </tr>                        
+                        <tr>
+                            <td rowspan="2">{{ dataObs.observations }}</td>                            
+                        
+                            <td rowspan="2">{{ dataObs.categoria }}</td>                            
+                        
+                            <td rowspan="2">{{ dataObs.fecha | date("d/m/Y") }}</td>                            
+                        </tr>
                 </tbody>                                
+                {% endfor %}
             </table> 
         </div>
     </div>

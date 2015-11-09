@@ -41,6 +41,13 @@ class Assists {
      * @ORM\Column(name="codigoCentro", type="integer", nullable=true)
      */
     private $codigoCentro;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="assists", type="integer", nullable=true)
+     */
+    private $assists;
     
     
     function getId() {
@@ -69,6 +76,14 @@ class Assists {
     
     function getCodigoCentro() {
         return $this->codigoCentro;
+    }
+
+    function setAssists($assists) {
+        $this->assists = $assists;
+    }
+    
+    function getAssists() {
+        return $this->assists;
     }
 
 

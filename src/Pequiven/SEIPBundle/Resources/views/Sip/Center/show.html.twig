@@ -38,18 +38,22 @@
         <legend class="legend" >CUTL&nbsp;</legend>
         <div class="columns">
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
-                {#<p class="inline-label">
-                    <label class="label">Nombre</label>
-                    {{ cutl.nombre }}
-                </p>
-                <p class="inline-label">
-                    <label class="label">Centro</label>
-                    {{ cutl.centro }}
-                </p>                
-                <p class="inline-label">
-                    <label class="label">Telefono:</label>
-                    {{ cutl.telefonoFirma }}
-                </p>    #} 
+                {% for dataCutl in  cutl %}
+                    <p class="inline-label">
+                        <label class="label">Nombre</label>
+                        {{ dataCutl.nombre }}
+                    </p>
+                    <p class="inline-label">
+                        <label class="label">Centro</label>
+                        {{ dataCutl.centro }}
+                    </p>                
+                    <p class="inline-label">
+                        <label class="label">Telefono:</label>
+                        {{ dataCutl.telefonoSeip }}/
+                        {{ dataCutl.telefonoCutl }}/
+                        {{ dataCutl.telefonoFirma }}
+                    </p>    
+                {% endfor %}
             </div>   
         </div>        
     </fieldset> 

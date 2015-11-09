@@ -2386,7 +2386,7 @@ angular.module('seipModule.controllers', [])
                         successCallBack(data);
                     }
                     notificationBarService.getLoadStatus().done();
-                    //location.reload(); 
+                    location.reload(); 
                     return true;
                 }).error(function (data, status, headers, config) {
                     $scope.templateOptions.setVar("form", {errors: {}});
@@ -2475,7 +2475,7 @@ angular.module('seipModule.controllers', [])
                         successCallBack(data);
                     }
                     notificationBarService.getLoadStatus().done();
-                    //location.reload(); 
+                    location.reload(); 
                     return true;
                 }).error(function (data, status, headers, config) {
                     $scope.templateOptions.setVar("form", {errors: {}});
@@ -2497,6 +2497,7 @@ angular.module('seipModule.controllers', [])
                 addAssists(true, function (data) {
                     $scope.indicator = data.indicator;
                 });
+
                 return true;
             };
            
