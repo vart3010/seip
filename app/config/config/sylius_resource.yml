@@ -480,5 +480,5 @@ sylius_resource:
             templates: PequivenSEIPBundle:Sip/Center
             classes:
                 controller: Pequiven\SEIPBundle\Controller\Sip\Center\CenterController
-                model: Pequiven\SEIPBundle\Entity\Sip\Cutl
-                repository: Pequiven\SEIPBundle\Repository\Sip\Cutl\CutlRepository
+                model: Pequiven\SEIPBundle\Entity\Sip\Centro
+                repository: Pequiven\SEIPBundle\Repository\Sip\Centro\CentroRepository
