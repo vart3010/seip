@@ -162,8 +162,8 @@ class CenterController extends SEIPController {
 //            $assist = 0;
 //        }
 
-        return $this->render('PequivenSEIPBundle:Sip:cutl\show.html.twig', array(
-                    'cutl' => $center,
+        return $this->render('PequivenSEIPBundle:Sip:Center\show.html.twig', array(
+                    'center' => $center,
                     'assist' => $assist
         ));
     }

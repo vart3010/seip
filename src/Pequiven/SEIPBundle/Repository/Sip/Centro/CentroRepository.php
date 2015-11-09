@@ -25,6 +25,14 @@ class CentroRepository extends EntityRepository {
     protected function applyCriteria(\Doctrine\ORM\QueryBuilder $queryBuilder, array $criteria = null) {
         $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
         
+        if (($nombreCentro = $criteria->remove('centro'))) {
+            $queryBuilder->andWhere($queryBuilder->expr()->like('ctro.description', "'%".$nombreCentro."%'"));
+        }
+        
+        if (($codigoCentro = $criteria->remove('codigoCentro'))) {
+            $queryBuilder->andWhere($queryBuilder->expr()->like('ctro.codigoCentro', "'%".$codigoCentro."%'"));
+        }
+        
         parent::applyCriteria($queryBuilder, $criteria->toArray());
     }
    
