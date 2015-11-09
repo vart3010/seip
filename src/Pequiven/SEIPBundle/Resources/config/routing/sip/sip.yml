@@ -55,4 +55,26 @@ pequiven_sip_center_observations_add:
     methods: [POST]
     options:
         expose: true
+#Asistencia
+pequiven_sip_center_assists:
+    path: /center/assists.{_format}
+    defaults:
+        _controller: pequiven.controller.center:formAssistsAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET]
+    options:
+        expose: true
+#Guardamos el formulario de las asistencias
+pequiven_sip_center_assists_add:
+    path: /center/addAssists.{_format}
+    defaults:
+        _controller: pequiven.controller.center:addAssistsAction
+        _format: json
+    requirements:
+        _format: json
+    methods: [POST]
+    options:
+        expose: true
 

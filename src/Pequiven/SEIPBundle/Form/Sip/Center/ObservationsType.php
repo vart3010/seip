@@ -5,6 +5,7 @@ namespace Pequiven\SEIPBundle\Form\Sip\Center;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Pequiven\SEIPBundle\Model\Sip\Center\Observations;
 
 class ObservationsType extends AbstractType
 {
@@ -16,12 +17,32 @@ class ObservationsType extends AbstractType
     {
         $builder
             ->add('observations', 'textarea', array(
-                'label' => 'Observación',
+                'label' => 'Observación ',
                 'label_attr' => array('class' => 'label'),
                 'attr' => array(
-                    'class'     => 'input full-width autoexpanding validate[required]',
-                    'maxlength' => 3500
-                )))            
+                    'class'     => 'input full-width autoexpanding',
+                    'maxlength' => 3500),
+                'required' => true
+                ))
+            ->add('fecha', 'date', array(
+                'label'=>'Fecha ',
+                'label_attr' => array('class' => 'label'),
+                'format' => 'd/M/y',
+                'widget' => 'single_text',
+                'attr'   => array('class' => 'input input-large'),
+                'required' => true
+                ))
+            ->add('categoria', 'choice', array(
+                'label' => 'Categoria ',                
+                'choices' => Observations::getCategoriasObservations(),
+                'label_attr' => array('class' => 'label'),
+                'attr' => array(
+                    'class' => 'select2 input-large form-control',
+                    'style' => 'width: 300px',
+                    ),
+                'required' => true,
+                'empty_value' => 'Seleccione...',
+                ))           
                          
         ;
     }

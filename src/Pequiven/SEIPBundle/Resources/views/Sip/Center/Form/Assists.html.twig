@@ -1,0 +1,19 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutSIG.html.twig' %}
+
+{% block body %}
+{% trans_default_domain 'sip' %}    
+       <form method="POST" id="form_sip_center_assists">
+            <fieldset class="fieldset fields-list">
+                <legend class="legend">{{ 'sip.assists'|trans ({}) }}</legend>
+                    {{ form_errors(form) }} 
+                    <div class="field-block button-height" >
+                        {{ form_label(form.fecha) }}                        
+                        {{ form_widget(form.fecha) }}
+                        {{ form_errors(form.fecha) }}
+                    </div>                    
+                    {{ form_rest(form) }}
+            
+            </fieldset>
+        </form>         
+
+{% endblock %}

@@ -9,6 +9,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Pequiven\SEIPBundle\Entity\Sip\Center\Observations;
 use Pequiven\SEIPBundle\Form\Sip\Center\ObservationsType;
 
+use Pequiven\SEIPBundle\Entity\Sip\Center\Assists;
+use Pequiven\SEIPBundle\Form\Sip\Center\AssistsType;
+
 /**
  * Controlador Centros
  * @author Maximo Sojo maxsojo13@gmail.com
@@ -21,12 +24,50 @@ class CenterController extends SEIPController {
      * @param Request $request
      * @return type
      */
-    public function assistsAction(Request $request) {
+    public function formAssistsAction(Request $request) {
 
-        $id = $request->get('id');
+        $observations = new Assists();
         
-        var_dump($id);
-        die();
+        $form = $this->createForm(new AssistsType(), $observations);
+
+        $view = $this
+                ->view()
+                ->setTemplate($this->config->getTemplate('Form/Assists.html'))
+                ->setTemplateVar($this->config->getPluralResourceName())
+                ->setData(array(            
+                'form' => $form->createView(),
+                ))
+        ;
+        $view->getSerializationContext()->setGroups(array('id', 'api_list'));
+        
+        return $view;
+        
+    }
+
+    /**
+     * Guardamos las asistencias
+     * 
+     * @param Request $request
+     * @return type
+     */
+    public function addAssistsAction(Request $request) {
+        
+        $em = $this->getDoctrine()->getEntityManager();
+
+        $form = $this->createForm(new AssistsType(), new Assists());
+
+        $form->bind($this->getRequest());
+
+        if ($form->isValid()) {
+            $Assists = $form->getData();
+
+            $em->persist($Assists);
+            $em->flush();
+
+            //return $this->redirect(...);
+            var_dump("Cargado!");
+            die();
+        }
         
     }
 

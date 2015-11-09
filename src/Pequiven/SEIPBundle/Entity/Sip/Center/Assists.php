@@ -15,8 +15,9 @@ class Assists {
     /**
      * @var integer
      *
-     * @ORM\Column(name="id",type="integer")
+     * @ORM\Column(name="id", type="integer")
      * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -30,14 +31,14 @@ class Assists {
     /**
      * @var integer
      *
-     * @ORM\Column(name="cedula", type="integer")
+     * @ORM\Column(name="cedula", type="integer", nullable=true)
      */
     private $cedula;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="codigoCentro", type="integer")
+     * @ORM\Column(name="codigoCentro", type="integer", nullable=true)
      */
     private $codigoCentro;
     
