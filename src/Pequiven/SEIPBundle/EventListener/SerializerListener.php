@@ -689,9 +689,9 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
         $links['self']['show'] = $this->generateUrl('pequiven_sip_center_show', array('id' => $object->getId()));
 
         $event->getVisitor()->addData('_links', $links);
-        $event->getVisitor()->addData('estado', $estado->getDescription());
+//        $event->getVisitor()->addData('estado', $estado->getDescription());
         $event->getVisitor()->addData('municipio', $municipio->getDescription());
-//        $event->getVisitor()->addData('parroquia', $parroquia->getDescription());
+        $event->getVisitor()->addData('parroquia', $parroquia->getDescription());
     }
 
     public function onPostSerializeMeetingFile(ObjectEvent $event) {

@@ -2372,7 +2372,7 @@ angular.module('seipModule.controllers', [])
                     var save = false;
                 }
                 if (save == true) {
-                    var url = Routing.generate('pequiven_sip_center_observations_add');
+                    var url = Routing.generate('pequiven_sip_center_observations_add', {idCenter: $scope.idCenter});
                 }
                 notificationBarService.getLoadStatus().loading();
                 return $http({
@@ -2416,7 +2416,7 @@ angular.module('seipModule.controllers', [])
                 var numero = d.getTime();
                 $scope.setHeight(450);                
                 var parameters = {
-                    //idIndicator: $scope.id_indicator,                    
+                    idCenter: $scope.idCenter,                    
                     _dc: numero
                 };
                 if (resource) {
@@ -2461,7 +2461,7 @@ angular.module('seipModule.controllers', [])
                     var save = false;
                 }
                 if (save == true) {
-                    var url = Routing.generate('pequiven_sip_center_assists_add');
+                    var url = Routing.generate('pequiven_sip_center_assists_add', {idCenter: $scope.idCenter});
                 }
                 notificationBarService.getLoadStatus().loading();
                 return $http({
@@ -2506,7 +2506,7 @@ angular.module('seipModule.controllers', [])
                 var numero = d.getTime();
                 $scope.setHeight(450);                
                 var parameters = {
-                    //idIndicator: $scope.id_indicator,                    
+                    idCenter: $scope.idCenter,                    
                     _dc: numero
                 };
                 if (resource) {

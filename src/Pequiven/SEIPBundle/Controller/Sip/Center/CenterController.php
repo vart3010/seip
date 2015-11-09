@@ -52,6 +52,8 @@ class CenterController extends SEIPController {
      */
     public function addAssistsAction(Request $request) {
         
+        $idCenter = $request->get('idCenter');
+
         $em = $this->getDoctrine()->getEntityManager();
 
         $form = $this->createForm(new AssistsType(), new Assists());
@@ -60,6 +62,8 @@ class CenterController extends SEIPController {
 
         if ($form->isValid()) {
             $Assists = $form->getData();
+            
+            $Assists->setCodigoCentro($idCenter);
 
             $em->persist($Assists);
             $em->flush();
@@ -104,6 +108,8 @@ class CenterController extends SEIPController {
      */
     public function addObservationsAction(Request $request) {
         
+        $idCenter = $request->get('idCenter');
+
         $em = $this->getDoctrine()->getEntityManager();
 
         $form = $this->createForm(new ObservationsType(), new Observations());
@@ -112,6 +118,8 @@ class CenterController extends SEIPController {
 
         if ($form->isValid()) {
             $Observations = $form->getData();
+            
+            $Observations->setCodigoCentro($idCenter);
 
             $em->persist($Observations);
             $em->flush();
