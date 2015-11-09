@@ -691,7 +691,7 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
         $event->getVisitor()->addData('_links', $links);
         $event->getVisitor()->addData('estado', $estado->getDescription());
         $event->getVisitor()->addData('municipio', $municipio->getDescription());
-//        $event->getVisitor()->addData('parroquia', $parroquia->getDescription());
+        $event->getVisitor()->addData('parroquia', $parroquia->getDescription());
     }
 
     public function onPostSerializeMeetingFile(ObjectEvent $event) {
