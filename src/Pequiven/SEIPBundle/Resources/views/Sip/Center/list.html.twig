@@ -22,14 +22,14 @@
             <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager" template-header="custom/header" api-data-url="{{ apiDataUrl }}" export-csv="csv" class="table table-responsive table-extra-info" >
                 <tbody> 
                     <tr ng-repeat="result in $data" data="{$ result|json $}">
-                        {#<td data-title="'Cedula'" filter="{'cedula' : 'text'}">
+                        <td data-title="'Municipio'" filter="{'municipio' : 'text'}">
                             <a href="{$ result._links.self.show $}">
-                                {$ result.cedula $}
+                                {$ result.municipio $}
                             </a>
                         </td>
-                        <td data-title="'Nombre'" filter="{'nombre' : 'text'}">
+                        {#<td data-title="'Parroquia'" filter="{'parroquia' : 'text'}">
                             <a href="{$ result._links.self.show $}">
-                                {$ result.nombre $}
+                                {$ result.parroquia $}
                             </a>
                         </td>#}
                         <td data-title="'Codigo'" filter="{'codigoCentro' : 'text'}">

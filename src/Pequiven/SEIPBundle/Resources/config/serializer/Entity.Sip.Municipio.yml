@@ -1,0 +1,15 @@
+Pequiven\SEIPBundle\Entity\Sip\Municipio:
+    exclusion_policy: ALL
+    properties:
+        id:
+            expose: true
+            groups: [id]
+        codigoEstado:
+            expose: true
+            groups: [codigoEstado]
+        codigoMunicipio:
+            expose: true
+            groups: [codigoMunicipio]
+        description:
+            expose: true
+            groups: [api_list]

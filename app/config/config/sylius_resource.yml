@@ -482,3 +482,18 @@ sylius_resource:
                 controller: Pequiven\SEIPBundle\Controller\Sip\Center\CenterController
                 model: Pequiven\SEIPBundle\Entity\Sip\Centro
                 repository: Pequiven\SEIPBundle\Repository\Sip\Centro\CentroRepository
+        pequiven.estado:
+            driver: doctrine/orm
+            classes:
+                model: Pequiven\SEIPBundle\Entity\Sip\Estado
+                repository: Pequiven\SEIPBundle\Repository\Sip\EstadoRepository
+        pequiven.municipio:
+            driver: doctrine/orm
+            classes:
+                model: Pequiven\SEIPBundle\Entity\Sip\Municipio
+                repository: Pequiven\SEIPBundle\Repository\Sip\MunicipioRepository
+        pequiven.parroquia:
+            driver: doctrine/orm
+            classes:
+                model: Pequiven\SEIPBundle\Entity\Sip\Parroquia
+                repository: Pequiven\SEIPBundle\Repository\Sip\ParroquiaRepository
