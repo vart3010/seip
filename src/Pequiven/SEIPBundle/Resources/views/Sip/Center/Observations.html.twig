@@ -1,0 +1,26 @@
+{% trans_default_domain 'sip' %}
+
+<div class="block">    
+    <div ng-controller="SipCenterController"> 
+
+        <div class="block-title">
+            <h3 class="ng-binding">{{ 'sip.observations'|trans({}) }}</h3>             
+            <div class="button-group absolute-right compact">
+                <a class="button icon-list-add " href="" ng-click="loadTemplateObservations()" title="">{{ 'pequiven.add'|trans({},'messages')  }}</a>
+            </div>       
+        </div>
+        <div class="with-padding">            
+            <table class="simple-table responsive-table tables-extras" id="sorting-example2">
+                <thead>
+                    <tr>                        
+                    </tr>
+                </thead>                
+                <tbody>
+                    <tr>
+                        <td rowspan="2">Esperando Carga de datos...</td>                            
+                    </tr>                        
+                </tbody>                                
+            </table> 
+        </div>
+    </div>
+</div>

@@ -5,4 +5,9 @@ sip:
     cutl:
         title: CUTL        
         list: Listado de CUTL
+    center:
+        title: Datos del Centro
+    assists: Asistencias
+    observations: Observaciones
+
 

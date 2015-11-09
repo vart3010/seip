@@ -1,0 +1,31 @@
+{% trans_default_domain 'sip' %}
+
+<div class="block">
+    
+    <div ng-controller="IndicatorSigEvolutionController"> 
+
+        <div class="block-title">
+            <h3 class="ng-binding">{{ 'sip.assists'|trans({}) }}</h3> 
+            {# añadir plan de acción #}
+            <div class="button-group absolute-right compact">
+                <a class="button icon-list-add " href="" ng-click="loadTemplateActionEvolution()" title="">{{ 'pequiven.add'|trans({},'messages')  }}</a>
+            </div>       
+        </div>
+        <div class="with-padding">            
+            <table class="simple-table responsive-table tables-extras" id="sorting-example2">
+                <thead>
+                    <tr>
+                        <th scope="col" width="10%" class="header" align="left">
+                            {{ 'seip.table.header.nro'|trans({},'PequivenSIGBundle') }}
+                        </th>                        
+                    </tr>
+                </thead>                
+                <tbody align="center">
+                    <tr>
+                        <td rowspan="2">Esperando Carga de Datos...</td>                            
+                    </tr>                        
+                </tbody>                                
+            </table> 
+        </div>
+    </div>
+</div>

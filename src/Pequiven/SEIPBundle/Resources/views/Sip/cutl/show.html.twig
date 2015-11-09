@@ -10,7 +10,7 @@
 {% endblock javascripts_base %}
 
 {% block before_body %}
-    {{ contentHeader("sip.cutl.title" | trans({}))   }}
+    {{ contentHeader("sip.center.title" | trans({}))   }}
 {% endblock %}
 
 {% block body %}
@@ -22,6 +22,26 @@
     {% endif %}
 
 
+    <fieldset class="fieldset">
+        <legend class="legend" >{{ 'sip.center.title'|trans({}) }}&nbsp;</legend>
+        <div class="columns">
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Nombre</label>
+                    {{ cutl.nombre }}
+                </p>
+                <p class="inline-label">
+                    <label class="label">Centro</label>
+                    {{ cutl.centro }}
+                </p>                
+                <p class="inline-label">
+                    <label class="label">Telefono:</label>
+                    {{ cutl.telefonoFirma }}
+                </p>     
+            </div>   
+        </div>        
+    </fieldset>   
+    <br>
     <fieldset class="fieldset">
         <legend class="legend" >CUTL&nbsp;</legend>
         <div class="columns">
@@ -38,29 +58,29 @@
                     <label class="label">Telefono:</label>
                     {{ cutl.telefonoFirma }}
                 </p>     
-                <p class="inline-label">
-                    <label class="label">Observaciones:</label>
-                    <textarea type="textarea" id="obs" rows="4" cols="100" name="obs" class="input input-large">{{ cutl.observation }}</textarea>
-                </p>     
-                <p class="assistance inline-label">
-                <div class="margin-bottom switch-wrapper">
-                    <label class="label"><strong>Asistió:</strong></label>
-                    <input type="checkbox" name="switchAssistance" id="switchAssistance"  data="{{ cutl.id }}" value="{{ assist }}" class="switch blue-active mid-margin-right {{ checkState }}"  data-text-on="SI" data-text-off="NO">
-                </div>
-                </p>
-
             </div>   
-        </div>
+        </div>        
+    </fieldset> 
+    <br>
+    <fieldset class="fieldset">
+        <legend class="legend" >UBCH&nbsp;</legend>
         <div class="columns">
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
-                <a id="save" class="button compact icon-pencil" href="">
-                    Guardar
-                </a>
-            </div>
-        </div>
-    </fieldset>   
+                <p class="inline-label">
+                    <label class="label">Nombre</label>                    
+                    Esperando Carga...
+                </p>                    
+            </div>   
+        </div>        
+    </fieldset> 
+    <br>   
+    {# Asistencias #}                                
+        {% include 'PequivenSEIPBundle:Sip:Center/Assists.html.twig' %}                             
+    
     <br>
-
+    {# Observaciones #}
+        {% include 'PequivenSEIPBundle:Sip:Center/Observations.html.twig' %}         
+    
 {% endblock %}
 
 {% block javascript %}

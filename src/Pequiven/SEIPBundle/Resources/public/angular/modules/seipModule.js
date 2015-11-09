@@ -2344,7 +2344,124 @@ angular.module('seipModule.controllers', [])
         })        
         //Fin controladores SIG
 
+        //Controlador SIP Centro
+        .controller('SipCenterController', function ($scope, notificationBarService, $http, notifyService, $filter, $timeout) {
 
+            var isInit = false;
+            //Carga el formulario de las observaciones
+            $scope.loadTemplateObservations = function (resource) {
+                $scope.initFormObservations(resource);
+                if (isInit == false) {
+                    isInit = true;
+                }
+                $scope.templateOptions.setTemplate($scope.templates[0]);
+                $scope.templateOptions.setParameterCallBack(resource);                
+                if (resource) {
+                    $scope.templateOptions.enableModeEdit();
+                    $scope.openModalAuto();
+                } else {
+                    $scope.openModalAuto();
+                }
+            };
+            //Añadir Observations
+            var addObservations = function (save, successCallBack) {
+                var formCauseAnalysis = angular.element('#form_sip_center_observations');
+                var formData = formCauseAnalysis.serialize();
+
+                if (save == undefined) {
+                    var save = false;
+                }
+                if (save == true) {
+                    var url = Routing.generate('pequiven_sip_center_observations_add');
+                }
+                notificationBarService.getLoadStatus().loading();
+                return $http({
+                    method: 'POST',
+                    url: url,
+                    data: formData,
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'}  // set the headers so angular passing info as form data (not request payload)
+                }).success(function (data) {
+                    $scope.templateOptions.setVar("form", {errors: {}});                    
+                    if (successCallBack) {
+                        successCallBack(data);
+                    }
+                    notificationBarService.getLoadStatus().done();
+                    //location.reload(); 
+                    return true;
+                }).error(function (data, status, headers, config) {
+                    $scope.templateOptions.setVar("form", {errors: {}});
+                    if (data.errors) {
+                        if (data.errors.errors) {
+                            $.each(data.errors.errors, function (index, value) {
+                                notifyService.error(Translator.trans(value));
+                            });
+                        }
+                        $scope.templateOptions.setVar("form", {errors: data.errors.children});
+                    }                    
+                    notificationBarService.getLoadStatus().done();
+                    return false;
+                });
+            };
+
+            $scope.templateOptions.setVar('addObservations', addObservations);
+            var confirmCallBack = function () {
+                addObservations(true, function (data) {
+                    $scope.indicator = data.indicator;
+                });
+                return true;
+            };
+            //Formulario Observaciones
+            $scope.initFormObservations = function (resource) {
+                var d = new Date();
+                var numero = d.getTime();
+                $scope.setHeight(350);                
+                var parameters = {
+                    //idIndicator: $scope.id_indicator,                    
+                    _dc: numero
+                };
+                if (resource) {
+                    parameters.id = resource.id;
+                }
+                var url = Routing.generate('pequiven_sip_center_observations', parameters);
+                $scope.templates = [
+                    {
+                        name: 'Observación',
+                        url: url,
+                        confirmCallBack: confirmCallBack,
+                    }
+                ];
+                $scope.templateOptions.setTemplate($scope.templates[0]);
+            };
+            //Removiendo el Analisis de Causas
+            $scope.removeAnalysisCause = function (AnalysisCause) {
+                $scope.openModalConfirm('¿Desea eliminar el Analisis de Causas?', function () {
+                    notificationBarService.getLoadStatus().loading();
+                    var url = Routing.generate("pequiven_cause_analysis_evolution_delete", {id: $scope.data_cause});
+                    $http({
+                        method: 'GET',
+                        url: url,
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'}  // set the headers so angular passing info as form data (not request payload)
+                    }).success(function (data) {
+                        return true;
+                    }).error(function (data, status, headers, config) {
+                        if (data.errors) {
+                            if (data.errors.errors) {
+                                $.each(data.errors.errors, function (index, value) {
+                                    notifyService.error(Translator.trans(value));
+                                });
+                            }
+                        }
+                        notificationBarService.getLoadStatus().done();
+                        return false;
+                    });   
+                    $timeout(callAtTimeout, 3000);                                                             
+                });
+                function callAtTimeout() {                    
+                    location.reload();
+                }
+            };
+        })
+        //fin
         .controller('ReportTemplateController', function ($scope, notificationBarService, $http, notifyService, $filter) {
 
         })
