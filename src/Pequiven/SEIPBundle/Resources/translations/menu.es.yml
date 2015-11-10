@@ -243,6 +243,7 @@ app:
                         main: Sistema de Información Política
                         onePerTen: 1 x 10
                         cutl: CUTL
+                        centros: Centros
                         register: Registrar
                         list: Lista
 
