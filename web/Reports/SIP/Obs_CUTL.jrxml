@@ -2,67 +2,50 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Movements" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="39a430ef-fd62-4b25-8487-b8107872e988">
 	<property name="ireport.zoom" value="1.6105100000000023"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="196"/>
+	<parameter name="idCentro" class="java.lang.String"/>
 	<queryString>
-		<![CDATA[SELECT * FROM Goal]]>
+		<![CDATA[SELECT
+estado.description as Estado,
+municip.description as Municipio,
+parroq.description as Parroquia,
+cent.id as idCentro,
+cent.description as Centro,
+date_format(obs.fecha,'%d/%m/%Y') as Fecha,
+obs.id as ObsId,
+UPPER(obs.observations) as Observaciones,
+case
+when obs.categoria=1 then 'Propaganda'
+when obs.categoria=2 then 'Transporte'
+when obs.categoria=3 then 'Hidratación'
+when obs.categoria=4 then 'Logística'
+when obs.categoria=5 then 'Asistencia'
+end as Categoria
+
+from sip_centro_observations as obs
+inner join sip_centro as cent on (obs.codigocentro=cent.codigoCentro)
+inner join sip_parroquia as parroq on (cent.codigoParroquia=parroq.id)
+inner join sip_municipio as municip on (cent.codigoMunicipio=municip.id)
+inner join sip_estado as estado on (cent.codigoEstado=estado.id)
+where cent.id=$P{idCentro}
+order by fecha]]>
 	</queryString>
-	<field name="id" class="java.lang.Integer">
+	<field name="Estado" class="java.lang.String"/>
+	<field name="Municipio" class="java.lang.String"/>
+	<field name="Parroquia" class="java.lang.String"/>
+	<field name="idCentro" class="java.lang.Integer"/>
+	<field name="Centro" class="java.lang.String"/>
+	<field name="Fecha" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="timeline_id" class="java.lang.Integer">
+	<field name="ObsId" class="java.lang.Integer"/>
+	<field name="Observaciones" class="java.lang.String"/>
+	<field name="Categoria" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="name" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="startDate" class="java.sql.Timestamp">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="endDate" class="java.sql.Timestamp">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="weight" class="java.lang.Integer">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="observations" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="status" class="java.lang.Integer">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="typeGoal_id" class="java.lang.Integer">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="goalDetails_id" class="java.lang.Integer">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="period_id" class="java.lang.Integer">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="deletedAt" class="java.sql.Timestamp">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="advance" class="java.lang.Double">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="resultReal" class="java.lang.Double">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="updateResultByAdmin" class="java.lang.Boolean">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="resultModified" class="java.lang.Double">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="penalty" class="java.lang.Integer">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="resultbeforepenalty" class="java.lang.Double">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="percentagepenalty" class="java.lang.Double">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
+	<variable name="ObsId_1" class="java.lang.Integer" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{ObsId}]]></variableExpression>
+	</variable>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -73,7 +56,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="DejaVu Serif Condensed" size="14" isBold="true" isItalic="true" isUnderline="false"/>
 				</textElement>
-				<text><![CDATA[Reporte Base]]></text>
+				<text><![CDATA[Reporte de Requerimientos]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="393" y="14" width="124" height="31" uuid="33e40bfa-f3ed-49ff-b1c2-1f835636ad78"/>
@@ -93,13 +76,192 @@
 		</band>
 	</pageHeader>
 	<columnHeader>
-		<band height="19" splitType="Stretch"/>
+		<band height="146" splitType="Stretch">
+			<rectangle radius="10">
+				<reportElement x="7" y="36" width="548" height="39" backcolor="#F5F5F5" uuid="b1eeda44-0a40-4e8d-adab-67c7f1929693"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="0" y="125" width="100" height="13" uuid="2b02bc18-31bc-4a73-a73a-77e56fe16e17"/>
+				<textElement>
+					<font fontName="DejaVu Serif Condensed" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="118" y="125" width="100" height="13" uuid="93e19ac9-4d3b-4d27-a37c-531f5a256cae"/>
+				<textElement>
+					<font fontName="DejaVu Serif Condensed" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Categoria]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="248" y="125" width="269" height="13" uuid="4e7348d2-6e38-4f54-84f6-9b4c95fb9bd0"/>
+				<textElement>
+					<font fontName="DejaVu Serif Condensed" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Requerimientos]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="15" width="176" height="15" uuid="29945320-e5d1-4fa2-9a4f-6fa36c550c62"/>
+				<textElement>
+					<font fontName="DejaVu Serif Condensed" isBold="true"/>
+				</textElement>
+				<text><![CDATA[- Datos del Centro Electoral:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="14" y="41" width="52" height="14" uuid="28e232e6-c7a6-4273-baf4-d303a500e523"/>
+				<textElement>
+					<font fontName="DejaVu Serif Condensed" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Estado:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="14" y="56" width="52" height="14" uuid="c4728124-0b50-4e68-b12b-8ce9433f048f"/>
+				<textElement>
+					<font fontName="DejaVu Serif Condensed" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nombre:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="190" y="41" width="58" height="14" uuid="8ffd353b-26b9-4b4a-8bb2-86ec46a1cee9"/>
+				<textElement>
+					<font fontName="DejaVu Serif Condensed" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Municipio:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="366" y="41" width="57" height="14" uuid="b9c4c428-def8-4d0a-8c9b-cc96f74b8989"/>
+				<textElement>
+					<font fontName="DejaVu Serif Condensed" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Parroquia:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="66" y="41" width="100" height="15" uuid="5e212b61-0464-48b5-a50c-9bba2cc6cc90"/>
+				<textElement>
+					<font fontName="DejaVu Serif Condensed" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Estado}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="248" y="41" width="118" height="14" uuid="8c6c8004-459c-4648-bd8c-c6a90bb2bb7b"/>
+				<textElement>
+					<font fontName="DejaVu Serif Condensed" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Municipio}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="423" y="41" width="120" height="14" uuid="124d13ef-5a5b-4f8d-80b4-22c88a6bba36"/>
+				<textElement>
+					<font fontName="DejaVu Serif Condensed" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Parroquia}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="66" y="56" width="477" height="14" uuid="0b45cb12-3b0b-4007-a425-44ab65e9cc3c"/>
+				<textElement>
+					<font fontName="DejaVu Serif Condensed" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Centro}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="517" y="125" width="55" height="13" uuid="429ac598-8936-4a76-8207-45fbfd10b39b"/>
+				<textElement>
+					<font fontName="DejaVu Serif Condensed" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Estatus]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="97" width="176" height="15" uuid="78dc23e2-857d-42da-a1dd-f6885738fb63"/>
+				<textElement>
+					<font fontName="DejaVu Serif Condensed" isBold="true"/>
+				</textElement>
+				<text><![CDATA[- Requerimientos Solicitados:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="138" width="572" height="1" uuid="142ab56b-7080-46df-a8fe-dedc374bd3c7"/>
+				<graphicElement>
+					<pen lineWidth="1.5" lineStyle="Double"/>
+				</graphicElement>
+			</line>
+		</band>
 	</columnHeader>
 	<detail>
-		<band height="25" splitType="Stretch"/>
+		<band height="19" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="100" height="14" uuid="ee296e76-b0a6-4c8e-ac97-723956ff4504"/>
+				<textElement>
+					<font fontName="DejaVu Sans Condensed" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Fecha}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="118" y="2" width="100" height="14" uuid="aae9b035-ed8b-4a43-818e-0163985b9f3e"/>
+				<textElement>
+					<font fontName="DejaVu Sans Condensed" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Categoria}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="248" y="2" width="269" height="14" isPrintWhenDetailOverflows="true" uuid="5f7e38b9-d916-4b88-bb18-35c595887e63"/>
+				<textElement>
+					<font fontName="DejaVu Sans Condensed" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Observaciones}]]></textFieldExpression>
+			</textField>
+		</band>
 	</detail>
 	<columnFooter>
-		<band height="14" splitType="Stretch"/>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement x="66" y="31" width="52" height="13" uuid="84f30c8c-63f5-4a0e-8b5a-08668f7f3fa5"/>
+				<textElement>
+					<font fontName="DejaVu Serif Condensed" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Enviados:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="16" width="66" height="15" uuid="94b9432f-7a40-49f3-ad1f-add6ca5b12ba"/>
+				<textElement>
+					<font fontName="DejaVu Serif Condensed" isBold="true"/>
+				</textElement>
+				<text><![CDATA[- Resumen:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="66" y="44" width="52" height="13" uuid="6bfe6a10-10d1-462a-ad9e-95f4f7ac6f64"/>
+				<textElement>
+					<font fontName="DejaVu Serif Condensed" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Recibidos:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="304" y="31" width="62" height="13" uuid="5958fc9d-21eb-41f0-9117-2fde77d0fb2a"/>
+				<textElement>
+					<font fontName="DejaVu Serif Condensed" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Aprobados:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="304" y="44" width="62" height="13" uuid="86c61bcb-e58d-4fc0-8084-43a02f8ab36a"/>
+				<textElement>
+					<font fontName="DejaVu Serif Condensed" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Rechazados:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="7" width="572" height="1" uuid="1df52869-0937-4a68-8ddd-5e10ad66726f"/>
+				<graphicElement>
+					<pen lineWidth="1.5" lineStyle="Double"/>
+				</graphicElement>
+			</line>
+			<textField>
+				<reportElement x="118" y="31" width="100" height="13" uuid="a1904a05-f343-44e9-8077-a802653c7065"/>
+				<textElement>
+					<font fontName="DejaVu Sans Condensed" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{ObsId_1}]]></textFieldExpression>
+			</textField>
+		</band>
 	</columnFooter>
 	<pageFooter>
 		<band height="46" splitType="Stretch">
