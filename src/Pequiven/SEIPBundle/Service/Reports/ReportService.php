@@ -45,7 +45,23 @@ class ReportService implements \Symfony\Component\DependencyInjection\ContainerA
         $xml = simplexml_load_file($route);
         $PHPJasperXML->xml_dismantle($xml);
         $PHPJasperXML->transferDBtoArray($this->server, $this->user, $this->pass, $this->db);
-        $PHPJasperXML->outpage("D");    //page output method I:standard output  D:Download file        
+        $PHPJasperXML->outpage("I");    //page output method I:standard output  D:Download file        
+        
+    }
+    
+    public function ViewReportService(array $parameter = null, $route) {
+
+        // $parameters, parametros de consulta del reporte
+        // $route, la ruta absoluta del reporte
+
+        $route = $this->container->getParameter('kernel.root_dir') . "/../web/Reports/" . $route;
+
+        $PHPJasperXML = new PHPJasperXML();
+        $PHPJasperXML->arrayParameter = $parameter;
+        $xml = simplexml_load_file($route);
+        $PHPJasperXML->xml_dismantle($xml);
+        $PHPJasperXML->transferDBtoArray($this->server, $this->user, $this->pass, $this->db);
+        $PHPJasperXML->outpage("I");    //page output method I:standard output  D:Download file        
         
     }
 

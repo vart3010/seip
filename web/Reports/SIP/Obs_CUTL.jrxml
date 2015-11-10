@@ -80,7 +80,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="DejaVu Serif Condensed" size="10" isBold="true" isItalic="false"/>
 				</textElement>
-				<text><![CDATA[Sistema Estadístico de Información Petroquímica]]></text>
+				<text><![CDATA[Sistema de Información Política]]></text>
 			</staticText>
 			<image>
 				<reportElement x="0" y="0" width="393" height="70" uuid="04b1d058-f404-4b75-bc40-d8cb2ac579bd"/>
