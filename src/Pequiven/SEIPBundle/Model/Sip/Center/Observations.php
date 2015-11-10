@@ -25,13 +25,16 @@ abstract class Observations
 
     const ASISTENCIA  = 5;
 
+    const TELEFONIA  = 6;
+
     /**
      * Status
      *
      */
-    const RECIBIDO  = 2;
-    const APROBADO  = 3;
-    const RECHAZADO = 4;
+    const PENDIENTE    = 2;
+    const SEGUIMIENTO  = 3;
+    const CERRADO      = 4;
+    const RECHAZADO    = 5;
     
     /**
      * @var integer
@@ -92,7 +95,8 @@ abstract class Observations
             self::TRANSPORTE   => 'Transporte',
 	        self::HIDRATACIÓN  => 'Hidratación',
 	        self::LOGISTICA    => 'Logistica',
-	        self::ASISTENCIA   => 'Asistencia',	        
+            self::ASISTENCIA   => 'Asistencia',         
+	        self::TELEFONIA    => 'Telefonia',	        
 	    ];
 	    return $levelProcessArray;
     }   
@@ -100,9 +104,10 @@ abstract class Observations
     static function getStatusObservations()
     {
         static $status = [
-            self::RECIBIDO  => 'Recibido',
-            self::APROBADO  => 'Aprobado',
-            self::RECHAZADO => 'Rechazado',            
+            self::PENDIENTE     => 'Pendiente',
+            self::SEGUIMIENTO   => 'Seguimiento',
+            self::CERRADO       => 'Cerrado',            
+            self::RECHAZADO     => 'Rechazado',            
         ];
         return $status;
     }   
