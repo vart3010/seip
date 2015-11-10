@@ -7,7 +7,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Pequiven\SEIPBundle\Model\Sip\Center\Observations;
 
-class ObservationsType extends AbstractType
+class StatusType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
@@ -15,26 +15,10 @@ class ObservationsType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
-            ->add('observations', 'textarea', array(
-                'label' => 'Requerimiento ',
-                'label_attr' => array('class' => 'label'),
-                'attr' => array(
-                    'class'     => 'input full-width autoexpanding',
-                    'maxlength' => 3500),
-                'required' => true
-                ))
-            ->add('fecha', 'date', array(
-                'label'=>'Fecha ',
-                'label_attr' => array('class' => 'label'),
-                'format' => 'd/M/y',
-                'widget' => 'single_text',
-                'attr'   => array('class' => 'input input-large'),
-                'required' => true
-                ))
-            ->add('categoria', 'choice', array(
-                'label' => 'Categoria ',                
-                'choices' => Observations::getCategoriasObservations(),
+        $builder            
+            ->add('status', 'choice', array(
+                'label' => 'Revisión ',                
+                'choices' => Observations::getStatusObservations(),
                 'label_attr' => array('class' => 'label'),
                 'attr' => array(
                     'class' => 'select2 input-large form-control',
@@ -62,6 +46,6 @@ class ObservationsType extends AbstractType
      */
     public function getName()
     {
-        return 'sip_center_observations';
+        return 'sip_center_observations_status';
     }
 }
