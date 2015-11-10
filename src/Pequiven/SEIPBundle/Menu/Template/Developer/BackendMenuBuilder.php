@@ -1619,48 +1619,72 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                             'labelAttributes' => array('icon' => 'fa fa-ticket'),
                         ))
                 )->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.main', $section)));
+        
+        
+        if($this->isGranted(array('ROLE_SEIP_SIP_CENTRO'))){
+            //Centro
+            $centro = $this->factory->createItem('sip.centro', $this->getSubLevelOptions(array(
+                                    "route" => "",
+                                    'labelAttributes' => array('icon' => 'fa fa-building',),
+                                ))
+                        )->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.centros', $section)));
+                //Sub menu
+                $centroMenu = $this->factory->createItem('sip.list', $this->getSubLevelOptions(array(
+                                    "route" => "pequiven_sip_center_list",
+                                    'labelAttributes' => array('icon' => 'fa fa-table',),
+                                ))
+                        )->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.list', $section)));
 
-        //if ($this->isGranted(array('ROLE_SEIP_SIP_ONEPERTEN'))) {
-        $onePerTen = $this->factory->createItem('onePerTen', $this->getSubLevelOptions(array(
-                            'uri' => null,
-                            'labelAttributes' => array('icon' => 'fa fa-ticket'),
-                        ))
-                )->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.onePerTen', $section)));
+                $centro->addChild($centroMenu);
 
+            $menuSip->addChild($centro);
+        }
 
-        $register = $this->factory->createItem('RegisterOnePerTen', $this->getSubLevelOptions(array(
-                            'route' => 'pequiven_onePerTen_create',
-                        ))
-                )->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.register', $section)));
-
-        $list = $this->factory->createItem('listOnePerTen', $this->getSubLevelOptions(array(
-                        ))
-                )->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.list', $section)));
-
-        $onePerTen->addChild($register);
-
-        $onePerTen->addChild($list);
-
-        $menuSip->addChild($onePerTen);
-
-        //CUTL
-        $cutl = $this->factory->createItem('sip.cutl', $this->getSubLevelOptions(array(
-                                "route" => "",
-                                'labelAttributes' => array('icon' => 'fa fa-user',),
+        if ($this->isGranted(array('ROLE_SEIP_SIP_ONEPERTEN'))) {
+            $onePerTen = $this->factory->createItem('onePerTen', $this->getSubLevelOptions(array(
+                                'uri' => null,
+                                'labelAttributes' => array('icon' => 'fa fa-ticket'),
                             ))
-                    )->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.cutl', $section)));
-            //Sub menu
-            $cutlMenu = $this->factory->createItem('sip.list', $this->getSubLevelOptions(array(
-                                "route" => "pequiven_sip_center_list",
-                                'labelAttributes' => array('icon' => 'fa fa-table',),
+                    )->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.onePerTen', $section)));
+
+
+            $register = $this->factory->createItem('RegisterOnePerTen', $this->getSubLevelOptions(array(
+                                'route' => 'pequiven_onePerTen_create',
+                            ))
+                    )->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.register', $section)));
+
+            $list = $this->factory->createItem('listOnePerTen', $this->getSubLevelOptions(array(
                             ))
                     )->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.list', $section)));
 
-            $cutl->addChild($cutlMenu);            
+            $onePerTen->addChild($register);
 
-        $menuSip->addChild($cutl);
+            $onePerTen->addChild($list);
+
+            $menuSip->addChild($onePerTen);
+        }
+
+        if ($this->isGranted(array('ROLE_SEIP_SIP_CUTL'))) {
+            //CUTL
+            $cutl = $this->factory->createItem('sip.cutl', $this->getSubLevelOptions(array(
+                                    "route" => "",
+                                    'labelAttributes' => array('icon' => 'fa fa-user',),
+                                ))
+                        )->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.cutl', $section)));
+                //Sub menu
+                $cutlMenu = $this->factory->createItem('sip.list', $this->getSubLevelOptions(array(
+                                    "route" => "",
+                                    'labelAttributes' => array('icon' => 'fa fa-table',),
+                                ))
+                        )->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.list', $section)));
+
+                $cutl->addChild($cutlMenu);            
+
+            $menuSip->addChild($cutl);
+        }
 
         $menu->addChild($menuSip);
+        
     }
 
     /**
