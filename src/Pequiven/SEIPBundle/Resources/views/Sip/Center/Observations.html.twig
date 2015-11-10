@@ -16,16 +16,17 @@
                         <th scope="col" width="55%" class="header">Obervación</th>
                         <th scope="col" width="15%" class="header">Categoria</th>
                         <th scope="col" width="10%" class="header">Fecha</th>                       
+                        <th scope="col" width="10%" class="header">Status</th>                       
                     </tr>
                 </thead>                
                 {% for dataObs  in observations %}
                 <tbody>
                         <tr>
                             <td rowspan="2">{{ dataObs.observations }}</td>                            
-                        
-                            <td rowspan="2">{{ dataObs.categoria }}</td>                            
+                            <td rowspan="2">{{ catObs[dataObs.categoria] }}</td>                            
                         
                             <td rowspan="2">{{ dataObs.fecha | date("d/m/Y") }}</td>                            
+                            <td rowspan="2">{{ status[dataObs.status] }}</td>                            
                         </tr>
                 </tbody>                                
                 {% endfor %}
