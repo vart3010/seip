@@ -275,10 +275,12 @@ class CenterController extends SEIPController {
      */
     public function showAction(Request $request) {
 
+        $em = $this->getDoctrine()->getManager();
+        
         $id = $request->get('id');
 
         $center = $this->get('pequiven.repository.center')->find($id);
-
+        
         $codigoCentro = $center->getCodigoCentro();
         
         $cutl = $this->get('pequiven.repository.cutl')->findBy(array('codigoCentro' => $codigoCentro));
@@ -294,15 +296,17 @@ class CenterController extends SEIPController {
             2 => 'Transporte',
             3 => 'Hidratación',
             4 => 'Logistica',
-            5 => 'Asistencia'
+            5 => 'Asistencia',
+            6 => 'Telefonia',
         ];
 
         //Carga de status
         $status = [
-            1 => "Enviado",
-            2 => "Recibido",
-            3 => "Aprobado",
-            4 => "Rechazado"
+            1 => "Abierto",
+            2 => "Pendiente",
+            3 => "Seguimiento",
+            4 => "Cerrado",
+            5 => "Rechazado"
         ];
         
         
