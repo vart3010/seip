@@ -275,10 +275,12 @@ class CenterController extends SEIPController {
      */
     public function showAction(Request $request) {
 
+        $em = $this->getDoctrine()->getManager();
+        
         $id = $request->get('id');
 
         $center = $this->get('pequiven.repository.center')->find($id);
-
+        
         $codigoCentro = $center->getCodigoCentro();
         
         $cutl = $this->get('pequiven.repository.cutl')->findBy(array('codigoCentro' => $codigoCentro));
