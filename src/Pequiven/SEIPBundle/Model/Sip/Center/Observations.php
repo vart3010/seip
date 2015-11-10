@@ -11,15 +11,27 @@ use Doctrine\ORM\Mapping as ORM;
  */
 abstract class Observations
 {	
-    const PROPAGANDA = 1;
+    /**
+     * Categorias
+     *
+     */
+    const PROPAGANDA  = 1;
 
-    const TRANSPORTE = 2;
+    const TRANSPORTE  = 2;
     
     const HIDRATACIÓN = 3;
 
-	const LOGISTICA = 4;
+	const LOGISTICA   = 4;
 
-    const ASISTENCIA = 5;
+    const ASISTENCIA  = 5;
+
+    /**
+     * Status
+     *
+     */
+    const RECIBIDA  = 2;
+    const APROBADA  = 3;
+    const RECHAZADA = 4;
     
     /**
      * @var integer
@@ -27,40 +39,72 @@ abstract class Observations
      * @ORM\Column(name="categorias", type="integer")
      */
     protected $categorias;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="status", type="integer")
+     */
+    protected $status;
     
     /**
-     * 
      * 
      * @param integer
      * @return 
      */
     function setCategorias($categorias) {
         $this->categorias = $categorias;
-
         return $this;
     }
 
     /**
      * 
+     * @param integer
+     * @return 
+     */
+    function getCategorias() {       
+        return $this->categorias;
+    }
+
+    /**
      * 
      * @param integer
      * @return 
      */
-    function getCategorias() {
-       
-        return $this->categorias;
+    function setStatus($status) {
+        $this->status = $status;
+        return $this;
+    }
+
+    /**
+     * 
+     * @param integer
+     * @return 
+     */
+    function getStatus() {       
+        return $this->status;
     }
 
     static function getCategoriasObservations()
     {
     	static $levelProcessArray = [
-            self::PROPAGANDA => 'Propaganda',
-            self::TRANSPORTE => 'Transporte',
-	        self::HIDRATACIÓN => 'Hidratación',
-	        self::LOGISTICA => 'Logistica',
-	        self::ASISTENCIA => 'Asistencia',	        
+            self::PROPAGANDA   => 'Propaganda',
+            self::TRANSPORTE   => 'Transporte',
+	        self::HIDRATACIÓN  => 'Hidratación',
+	        self::LOGISTICA    => 'Logistica',
+	        self::ASISTENCIA   => 'Asistencia',	        
 	    ];
 	    return $levelProcessArray;
+    }   
+
+    static function getStatusObservations()
+    {
+        static $status = [
+            self::RECIBIDA  => 'Recibida',
+            self::APROBADA  => 'Aprobada',
+            self::RECHAZADA => 'Rechazada',            
+        ];
+        return $status;
     }   
     
 }

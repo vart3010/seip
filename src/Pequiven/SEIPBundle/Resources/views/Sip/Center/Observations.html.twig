@@ -16,7 +16,8 @@
                         <th scope="col" width="55%" class="header">Obervación</th>
                         <th scope="col" width="15%" class="header">Categoria</th>
                         <th scope="col" width="10%" class="header">Fecha</th>                       
-                        <th scope="col" width="10%" class="header">Status</th>                       
+                        <th scope="col" width="10%" class="header">Status</th>
+                        <th scope="col" width="10%" class="header"></th>                       
                     </tr>
                 </thead>                
                 {% for dataObs  in observations %}
@@ -27,6 +28,15 @@
                         
                             <td rowspan="2">{{ dataObs.fecha | date("d/m/Y") }}</td>                            
                             <td rowspan="2">{{ status[dataObs.status] }}</td>                            
+                            <td class="align-right vertical-center">                          
+                                <span class="select compact">
+                                    <a href class="select-value form-edit">{{ 'pequiven.actions'|trans({},'messages') }}</a>
+                                <span class="select-arrow"></span>
+                                    <span class="drop-down">                                    
+                                        <a href ng-click="loadTemplateStatus(Status='{{ dataObs.id }}')" class="button icon-pencil">Revisar</a>             
+                                    </span>
+                                </span>
+                            </td>                                
                         </tr>
                 </tbody>                                
                 {% endfor %}

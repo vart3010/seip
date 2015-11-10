@@ -8,13 +8,14 @@ use Symfony\Component\HttpFoundation\Request;
 
 use Pequiven\SEIPBundle\Entity\Sip\Center\Observations;
 use Pequiven\SEIPBundle\Form\Sip\Center\ObservationsType;
+use Pequiven\SEIPBundle\Form\Sip\Center\StatusType;
 
 use Pequiven\SEIPBundle\Entity\Sip\Center\Assists;
 use Pequiven\SEIPBundle\Form\Sip\Center\AssistsType;
 
 /**
  * Controlador Centros
- * @author Maximo Sojo maxsojo13@gmail.com
+ * @author Maximo Sojo <maxsojo13@gmail.com>
  *
  */
 class CenterController extends SEIPController {
@@ -146,7 +147,7 @@ class CenterController extends SEIPController {
 
         $form->bind($this->getRequest());
 
-        if ($form->isValid()) {
+        if ($form->isSubmitted()) {
             $Observations = $form->getData();
             
             $Observations->setCodigoCentro($idCenter);
@@ -157,6 +158,51 @@ class CenterController extends SEIPController {
             //return $this->redirect(...);            
         }
         $this->get('session')->getFlashBag()->add('success', "Observación Añadida Correctamente");                        
+        
+    }
+
+    /**
+     * 
+     * @param Request $request
+     * @return type
+     */
+    public function formStatusAction(Request $request) {
+        
+        $id = $request->get('idObs');
+
+        $em = $this->getDoctrine()->getEntityManager();
+
+        $observations = new Observations();        
+        $form = $this->createForm(new StatusType(), $observations);
+
+        if (isset($request->get('sip_center_observations_status')['status'])) {
+            
+            $form->bind($this->getRequest());
+            
+            $status = $request->get('sip_center_observations_status')['status'];
+
+            $Observations = $this->get('pequiven.repository.observations')->find($id);
+            
+            $Observations->setStatus($status);
+            
+            $em->flush();
+
+            $this->get('session')->getFlashBag()->add('success', "Estatus Cambiado Correctamente");
+            
+        }else{
+            $view = $this
+                    ->view()
+                    ->setTemplate($this->config->getTemplate('Form/Status.html'))
+                    ->setTemplateVar($this->config->getPluralResourceName())
+                    ->setData(array(            
+                    'form' => $form->createView(),
+                    ))
+            ;
+            $view->getSerializationContext()->setGroups(array('id', 'api_list'));
+            
+            return $view;
+
+        }
         
     }
     
@@ -255,7 +301,8 @@ class CenterController extends SEIPController {
         $status = [
             1 => "Enviada",
             2 => "Recibida",
-            3 => "Aprobada"
+            3 => "Aprobada",
+            4 => "Rechazada"
         ];
         
         
