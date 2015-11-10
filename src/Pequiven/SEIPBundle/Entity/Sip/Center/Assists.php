@@ -31,23 +31,30 @@ class Assists {
     /**
      * @var integer
      *
-     * @ORM\Column(name="cedula", type="integer", nullable=true)
+     * @ORM\Column(name="cedula", type="integer")
      */
     private $cedula;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="codigoCentro", type="integer", nullable=true)
+     * @ORM\Column(name="codigoCentro", type="integer")
      */
     private $codigoCentro;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="assists", type="integer", nullable=true)
+     * @ORM\Column(name="assists", type="integer")
      */
     private $assists;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="observations", type="string", nullable=true)
+     */
+    private $observations;
     
     
     function getId() {
@@ -86,5 +93,11 @@ class Assists {
         return $this->assists;
     }
 
-
+    function setObservations($observations) {
+        $this->observations = $observations;
+    }
+    
+    function getObservations() {
+        return $this->observations;
+    }
 }

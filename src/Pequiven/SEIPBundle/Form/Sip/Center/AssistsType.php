@@ -22,7 +22,7 @@ class AssistsType extends AbstractType
                 'widget' => 'single_text',
                 'attr' => array('class' => 'input input-large',               
                 'required' => true,)
-                ))       
+            ))
         ;
     }
     

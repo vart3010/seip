@@ -18,13 +18,20 @@
 
                     {% for dataCutl in cutl %}
                         <div class="field-block button-height" >
-                            <label class="label">Cutl</label>
+                            <p class="assistance button-height">
+
+                            <label class="label">Cutl</label>                            
                             
                             {{ dataCutl.nombre }}
                             
-                            <p class="assistance button-height">
                             <input type="checkbox" name="sip_center_assists[{{ dataCutl.id }}]" data="{{ dataCutl.id }}" value="0" class="switch blue-active mid-margin-right "  data-text-on="SI" data-text-off="NO">
-                            </p>                                                        
+                            </p> 
+                            
+                            <textarea required="required"  id="obs_{{ dataCutl.id }}" name="sip_center_assists[obs_{{ dataCutl.id }}]" class=" input input-xlarge"></textarea> 
+                            <span class="info-spot">
+                                <span class="icon-info-round"></span>
+                                <span class="info-bubble">Si no asistio el CUTL debe añadir observación</span>
+                            </span>         
                         </div>                        
                     {% endfor %}
             
@@ -43,11 +50,16 @@
             });
             $("p.assistance input").change(function () {
                 var value = $(this).val();
-                var memeber = $(this).attr("data");
+                var assists = $(this).attr("data");
                 if (value == 1) {
-                    $(this).val(0);                    
+                    $(this).val(0);
+                    $("#obs_" + assists).attr("disabled", false);
+                    $("#obs_" + assists).attr("required", true);                    
                 } else {
-                    $(this).val(1);                    
+                    $(this).val(1);
+                    $("#obs_" + assists).val("");
+                    $("#obs_" + assists).attr("disabled", true);
+                    $("#obs_" + assists).attr("required", true);                    
                 }
                 console.log((value));
             });
