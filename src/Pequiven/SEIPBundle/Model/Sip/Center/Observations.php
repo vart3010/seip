@@ -29,9 +29,9 @@ abstract class Observations
      * Status
      *
      */
-    const RECIBIDA  = 2;
-    const APROBADA  = 3;
-    const RECHAZADA = 4;
+    const RECIBIDO  = 2;
+    const APROBADO  = 3;
+    const RECHAZADO = 4;
     
     /**
      * @var integer
@@ -100,9 +100,9 @@ abstract class Observations
     static function getStatusObservations()
     {
         static $status = [
-            self::RECIBIDA  => 'Recibida',
-            self::APROBADA  => 'Aprobada',
-            self::RECHAZADA => 'Rechazada',            
+            self::RECIBIDO  => 'Recibido',
+            self::APROBADO  => 'Aprobado',
+            self::RECHAZADO => 'Rechazado',            
         ];
         return $status;
     }   

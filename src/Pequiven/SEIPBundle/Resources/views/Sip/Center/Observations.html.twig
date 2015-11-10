@@ -13,7 +13,7 @@
             <table class="simple-table responsive-table tables-extras" id="sorting-example2">
                 <thead>
                     <tr> 
-                        <th scope="col" width="55%" class="header">Obervación</th>
+                        <th scope="col" width="55%" class="header">Requerimiento</th>
                         <th scope="col" width="15%" class="header">Categoria</th>
                         <th scope="col" width="10%" class="header">Fecha</th>                       
                         <th scope="col" width="10%" class="header">Status</th>
@@ -27,7 +27,9 @@
                             <td rowspan="2">{{ catObs[dataObs.categoria] }}</td>                            
                         
                             <td rowspan="2">{{ dataObs.fecha | date("d/m/Y") }}</td>                            
-                            <td rowspan="2">{{ status[dataObs.status] }}</td>                            
+                            <td rowspan="2">
+                                <small class="tag">{{ status[dataObs.status] }}</small>
+                            </td>                            
                             <td class="align-right vertical-center">                          
                                 <span class="select compact">
                                     <a href class="select-value form-edit">{{ 'pequiven.actions'|trans({},'messages') }}</a>

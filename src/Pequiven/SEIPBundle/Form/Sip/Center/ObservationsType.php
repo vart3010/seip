@@ -17,7 +17,7 @@ class ObservationsType extends AbstractType
     {
         $builder
             ->add('observations', 'textarea', array(
-                'label' => 'Observación ',
+                'label' => 'Requerimiento ',
                 'label_attr' => array('class' => 'label'),
                 'attr' => array(
                     'class'     => 'input full-width autoexpanding',

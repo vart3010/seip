@@ -2484,7 +2484,7 @@ angular.module('seipModule.controllers', [])
                 var url = Routing.generate('pequiven_sip_center_observations', parameters);
                 $scope.templates = [
                     {
-                        name: 'Observación',
+                        name: 'Requerimiento',
                         url: url,
                         confirmCallBack: confirmCallBack,
                     }
@@ -2506,7 +2506,7 @@ angular.module('seipModule.controllers', [])
                 var url = Routing.generate('pequiven_sip_center_observations_status', parameters);
                 $scope.templates = [
                     {
-                        name: 'Revisión',
+                        name: 'Revisión de Requerimiento',
                         url: url,
                         confirmCallBack: confirmCallBackStatus,
                     }

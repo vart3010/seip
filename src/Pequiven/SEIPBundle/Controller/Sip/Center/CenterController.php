@@ -157,7 +157,7 @@ class CenterController extends SEIPController {
             $em->flush();
             //return $this->redirect(...);            
         }
-        $this->get('session')->getFlashBag()->add('success', "Observación Añadida Correctamente");                        
+        $this->get('session')->getFlashBag()->add('success', "Requerimiento Añadido Correctamente");                        
         
     }
 
@@ -299,10 +299,10 @@ class CenterController extends SEIPController {
 
         //Carga de status
         $status = [
-            1 => "Enviada",
-            2 => "Recibida",
-            3 => "Aprobada",
-            4 => "Rechazada"
+            1 => "Enviado",
+            2 => "Recibido",
+            3 => "Aprobado",
+            4 => "Rechazado"
         ];
         
         
