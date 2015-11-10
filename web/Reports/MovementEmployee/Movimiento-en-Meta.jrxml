@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Movimiento-por-Meta" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="39a430ef-fd62-4b25-8487-b8107872e988">
-	<property name="ireport.zoom" value="1.6105100000000023"/>
+	<property name="ireport.zoom" value="2.3579476910000037"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="350"/>
 	<parameter name="idGoal" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[select period.name as Period, goal.name as Meta,
@@ -39,10 +39,10 @@ from MovementEmployee as mov
 inner join Period period on (period.id=mov.period_id)
 inner join seip_user emp on (emp.id=mov.user_id)
 inner join seip_user usu on (usu.id=mov.createdBy_id)
-inner join Goal goal on (goal.id=mov.goal_id)
+inner join Goal goal on (goal.id=mov.id_affected)
 inner join ArrangementProgram AP on (goal.timeline_id=AP.timeline_id)
-where typeMov='Goal' and goal.id=$P{idGoal}
-order by goal.id,mov.date]]>
+where typeMov='Goal' and mov.id_affected=$P{idGoal}
+order by mov.id_affected,mov.date]]>
 	</queryString>
 	<field name="Period" class="java.lang.String"/>
 	<field name="Meta" class="java.lang.String"/>
@@ -62,72 +62,13 @@ order by goal.id,mov.date]]>
 	<field name="Obs" class="java.lang.String"/>
 	<field name="FechaCreacion" class="java.sql.Timestamp"/>
 	<field name="CreadoPor" class="java.lang.String"/>
-	<group name="Goal">
-		<groupExpression><![CDATA[$P{idGoal}]]></groupExpression>
-		<groupHeader>
-			<band height="162">
-				<staticText>
-					<reportElement x="6" y="135" width="559" height="13" uuid="f64605d2-48c4-4f30-bd6d-4028405cda87"/>
-					<textElement verticalAlignment="Top">
-						<font fontName="DejaVu Serif Condensed" size="10" isBold="true" isItalic="false" isUnderline="false"/>
-					</textElement>
-					<text><![CDATA[* Cambios Realizados]]></text>
-				</staticText>
-				<staticText>
-					<reportElement x="6" y="10" width="559" height="13" uuid="b79c7dad-64f1-46f6-96b6-2a4bb64d9425"/>
-					<textElement verticalAlignment="Top">
-						<font fontName="DejaVu Serif Condensed" size="10" isBold="true" isItalic="false" isUnderline="false"/>
-					</textElement>
-					<text><![CDATA[* Datos de la Meta]]></text>
-				</staticText>
-				<textField>
-					<reportElement x="40" y="36" width="100" height="20" uuid="8660dddd-c8cd-4c43-ae5f-e1fa66e8cee9"/>
-					<textElement>
-						<font fontName="DejaVu Serif Condensed" size="8"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$F{Meta}]]></textFieldExpression>
-				</textField>
-				<textField>
-					<reportElement x="212" y="49" width="100" height="20" uuid="1e20664d-3797-4e78-b7ea-b61c3afb40b1"/>
-					<textElement>
-						<font fontName="DejaVu Serif Condensed" size="8"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$F{Period}]]></textFieldExpression>
-				</textField>
-				<textField>
-					<reportElement x="212" y="78" width="100" height="20" uuid="b71541b4-7dbb-4c83-a8d9-f479ca93818d"/>
-					<textElement>
-						<font fontName="DejaVu Serif Condensed" size="8"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$F{Fecha_Inicio}]]></textFieldExpression>
-				</textField>
-				<textField>
-					<reportElement x="216" y="111" width="100" height="20" uuid="4a29825f-0263-4c9b-98f9-b6010da1fd71"/>
-					<textElement>
-						<font fontName="DejaVu Serif Condensed" size="8"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$F{Fecha_Fin}]]></textFieldExpression>
-				</textField>
-				<textField>
-					<reportElement x="353" y="55" width="100" height="20" uuid="b8e3f4f1-b58f-4556-a160-325a4b095323"/>
-					<textElement>
-						<font fontName="DejaVu Serif Condensed" size="8"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$F{Programa_Gestion}]]></textFieldExpression>
-				</textField>
-			</band>
-		</groupHeader>
-		<groupFooter>
-			<band height="50"/>
-		</groupFooter>
-	</group>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<pageHeader>
 		<band height="94" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="72" width="559" height="20" uuid="2aeca690-ee83-4e9a-92f0-652f4fe7382c"/>
+				<reportElement x="14" y="72" width="541" height="20" uuid="2aeca690-ee83-4e9a-92f0-652f4fe7382c"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="DejaVu Serif Condensed" size="14" isBold="true" isItalic="true" isUnderline="false"/>
 				</textElement>
@@ -142,19 +83,254 @@ order by goal.id,mov.date]]>
 			</staticText>
 			<image>
 				<reportElement x="0" y="1" width="393" height="70" uuid="04b1d058-f404-4b75-bc40-d8cb2ac579bd"/>
-				<imageExpression><![CDATA["/var/www/html/seip/web/Reports/Logo_Pequiven.jpg"]]></imageExpression>
+				<imageExpression><![CDATA["/var/www/html/seip/prod/web/Reports/Logo_Pequiven.jpg"]]></imageExpression>
 			</image>
 			<image>
 				<reportElement x="519" y="10" width="42" height="42" uuid="903fd8e7-ba35-4638-9c7f-b28025305e2f"/>
-				<imageExpression><![CDATA["/var/www/html/seip/web/Reports/Logo_Seip.jpg"]]></imageExpression>
+				<imageExpression><![CDATA["/var/www/html/seip/prod/web/Reports/Logo_Seip.jpg"]]></imageExpression>
 			</image>
 		</band>
 	</pageHeader>
 	<columnHeader>
-		<band height="7" splitType="Stretch"/>
+		<band height="140" splitType="Stretch">
+			<rectangle radius="10">
+				<reportElement x="13" y="18" width="542" height="73" backcolor="#F4F4F4" uuid="20561450-8979-462b-9f82-a38f02ffb4c2"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="2" y="0" width="570" height="13" uuid="b79c7dad-64f1-46f6-96b6-2a4bb64d9425"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="DejaVu Serif Condensed" size="10" isBold="true" isItalic="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[1. Datos de la Meta]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="104" width="572" height="13" uuid="f64605d2-48c4-4f30-bd6d-4028405cda87"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="DejaVu Serif Condensed" size="10" isBold="true" isItalic="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[2. Cambios Realizados]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="179" y="122" width="100" height="13" uuid="4b0cf7db-0020-4092-bd3f-800706d16d34"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="DejaVu Serif Condensed" size="8" isBold="true" isItalic="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Empleado]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="122" width="65" height="13" uuid="c2eeb80e-f946-4721-9bb8-30d542012d86"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="DejaVu Serif Condensed" size="8" isBold="true" isItalic="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Fecha]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="65" y="122" width="52" height="13" uuid="53f50d48-22fd-4c3a-958e-08fc8d8ebca0"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="DejaVu Serif Condensed" size="8" isBold="true" isItalic="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Tipo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="325" y="122" width="35" height="13" uuid="bc0d958f-c147-4db5-99bb-6c1177bbd9da"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="DejaVu Serif Condensed" size="8" isBold="true" isItalic="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Avance]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="360" y="122" width="48" height="13" uuid="a9e8c0d0-825c-475f-9691-e92827259a40"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="DejaVu Serif Condensed" size="8" isBold="true" isItalic="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Planeado]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="408" y="122" width="36" height="13" uuid="514bac32-e3d8-4924-93cf-06e3d01a60e4"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="DejaVu Serif Condensed" size="8" isBold="true" isItalic="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Penaliz.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="444" y="122" width="128" height="13" uuid="822744e2-aadd-480b-a99b-16ee8e0c1d41"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="DejaVu Serif Condensed" size="8" isBold="true" isItalic="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Observaciones]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="21" y="22" width="43" height="13" uuid="52c1a113-994b-4108-82c6-8e6475b4f4ac"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="DejaVu Serif Condensed" size="8" isBold="true" isItalic="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Periodo:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="21" y="35" width="43" height="13" uuid="d01f3997-032e-4d48-94d2-da25d49783f1"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="DejaVu Serif Condensed" size="8" isBold="true" isItalic="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Nombre:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="21" y="48" width="69" height="13" uuid="56ec3cff-da7e-4579-b797-f0ce88e115e5"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="DejaVu Serif Condensed" size="8" isBold="true" isItalic="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Fecha de Inicio:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="224" y="48" width="99" height="13" uuid="dec6ec9c-fe81-48bf-bd5b-8ea29b3f7dea"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="DejaVu Serif Condensed" size="8" isBold="true" isItalic="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Fecha de Culminación:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="439" y="49" width="26" height="13" uuid="543691f8-3ab6-412c-9858-e175adcbf577"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="DejaVu Serif Condensed" size="8" isBold="true" isItalic="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Peso:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="21" y="75" width="69" height="13" uuid="0c3ba7fb-d3ea-4c48-b1d7-0a7ca3c90318"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="DejaVu Serif Condensed" size="8" isBold="true" isItalic="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Observaciones:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="21" y="62" width="133" height="13" uuid="ec4e8a6f-1e04-4ebc-acd6-0d6cce157af0"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="DejaVu Serif Condensed" size="8" isBold="true" isItalic="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Programa de Gestión Asociado:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="64" y="22" width="100" height="13" uuid="8cf97214-8d3d-4d5b-8faa-b1aec26a8232"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="DejaVu Serif Condensed" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Period}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="64" y="35" width="472" height="13" uuid="092740d2-f7bb-4abe-aed1-9910a0fc146e"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="DejaVu Serif Condensed" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Meta}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="90" y="48" width="121" height="13" uuid="e0cbd6b7-0328-4d9b-8822-b2c6e9d76539"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="DejaVu Serif Condensed" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Fecha_Inicio}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="324" y="49" width="100" height="12" uuid="47a90c2d-3d52-4993-83f9-14bfd5d84675"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="DejaVu Serif Condensed" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Fecha_Fin}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="90" y="76" width="446" height="12" uuid="cfe50b8a-86ab-41d2-9966-92b43b7724fd"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="DejaVu Serif Condensed" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Obs_Goal}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="465" y="50" width="71" height="12" uuid="9194809f-b526-4f58-ae08-4394528d1d92"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="DejaVu Serif Condensed" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Peso}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="154" y="62" width="382" height="13" uuid="2f3ebb81-9f22-4c61-ae10-b4d52979edc8"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="DejaVu Serif Condensed" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Programa_Gestion}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="117" y="122" width="62" height="13" uuid="e6ce6daa-1aa9-49ac-a4a8-cdd596a5c2b1"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="DejaVu Serif Condensed" size="8" isBold="true" isItalic="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Causa]]></text>
+			</staticText>
+			<line>
+				<reportElement x="2" y="137" width="570" height="1" uuid="848552ae-5b44-470b-8e1c-24fa9b68dd25"/>
+				<graphicElement>
+					<pen lineWidth="1.0" lineStyle="Double"/>
+				</graphicElement>
+			</line>
+		</band>
 	</columnHeader>
 	<detail>
-		<band height="51" splitType="Stretch"/>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="3" width="65" height="13" uuid="2de9b040-fff1-44c0-b726-54b1d362f0f3"/>
+				<textElement textAlignment="Center">
+					<font fontName="DejaVu Serif Condensed" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FechaMov}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="65" y="3" width="52" height="13" uuid="e3426254-6f51-4df5-b2e9-8aa0ed127764"/>
+				<textElement textAlignment="Center">
+					<font fontName="DejaVu Serif Condensed" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Tipo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="117" y="3" width="62" height="13" uuid="5ede4cbe-6afd-44d5-b536-c2601de57d98"/>
+				<textElement textAlignment="Center">
+					<font fontName="DejaVu Serif Condensed" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Causa}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="179" y="3" width="146" height="13" uuid="a5e5cc3b-848f-4d66-894d-63f1d3c0eec5"/>
+				<textElement>
+					<font fontName="DejaVu Serif Condensed" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Empleado}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="325" y="3" width="35" height="13" uuid="be1dd7e9-d388-4bfc-b916-1a2fb81cf346"/>
+				<textElement textAlignment="Center">
+					<font fontName="DejaVu Serif Condensed" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Avance}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="360" y="3" width="48" height="13" uuid="a17ea05c-4333-4f1e-a30d-5a91e1c7925c"/>
+				<textElement textAlignment="Center">
+					<font fontName="DejaVu Serif Condensed" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Planificado}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="408" y="3" width="36" height="13" uuid="835971cf-7cea-4089-bceb-9ad32f452010"/>
+				<textElement textAlignment="Center">
+					<font fontName="DejaVu Serif Condensed" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Penalizaciones}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="444" y="3" width="128" height="13" uuid="dd94de56-56e3-436b-9caa-c01ae4a078ad"/>
+				<textElement>
+					<font fontName="DejaVu Serif Condensed" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Obs}]]></textFieldExpression>
+			</textField>
+		</band>
 	</detail>
 	<columnFooter>
 		<band height="14" splitType="Stretch"/>
@@ -168,7 +344,7 @@ order by goal.id,mov.date]]>
 				</graphicElement>
 			</rectangle>
 			<staticText>
-				<reportElement x="90" y="20" width="400" height="19" uuid="ea9b895c-02f5-4dcc-8ac5-3c80df00bf3e"/>
+				<reportElement x="90" y="19" width="400" height="19" uuid="ea9b895c-02f5-4dcc-8ac5-3c80df00bf3e"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="DejaVu Serif Condensed" size="10" isBold="true" isItalic="false"/>
 				</textElement>
@@ -176,7 +352,7 @@ order by goal.id,mov.date]]>
 			</staticText>
 			<image>
 				<reportElement x="14" y="11" width="69" height="33" uuid="c89b982f-48a9-4059-b2e0-9d15a0b1c402"/>
-				<imageExpression><![CDATA["/var/www/html/seip/web/Reports/Eslogan.jpg"]]></imageExpression>
+				<imageExpression><![CDATA["/var/www/html/seip/prod/web/Reports/Eslogan.jpg"]]></imageExpression>
 			</image>
 			<textField>
 				<reportElement x="517" y="20" width="42" height="19" uuid="e00db96c-63a4-433d-b999-5f47000218e2"/>

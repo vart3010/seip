@@ -389,7 +389,7 @@ class MovementEmployeeController extends SEIPController {
 
         $id = $request->get('idGoal');
         $reportService = $this->container->get('seip.service.report');
-        $route = "MovementEmployee/Movimiento-en-Meta.jasper";
+        $route = "MovementEmployee/Movimiento-en-Meta.jrxml";
         $parameters = array("idGoal" => $id);
         $reportService->DownloadReportService($parameters, $route);
 
