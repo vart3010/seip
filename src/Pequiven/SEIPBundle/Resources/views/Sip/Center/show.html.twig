@@ -27,48 +27,108 @@
         <div class="columns">
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
+                    <label class="label">Estado</label>
+                    {{ center.descriptionEstado }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Municipio</label>
+                    {{ center.descriptionMunicipio }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Parroquia</label>
+                    {{ center.descriptionParroquia }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Código Centro</label>
+                    {{ center.codigoCentro }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
                     <label class="label">Centro</label>
                     {{ center.description }}
-                </p>                
-            </div>   
-        </div>        
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Dirección</label>
+                    {{ center.direccion }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">N° de Mesas</label>
+                    {{ center.mesas }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">N° de Electores</label>
+                    {{ center.electores }}
+                </p>
+            </div>
+            {% if center.eje > 0 %}
+                <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                    <p class="inline-label">
+                        <label class="label">Eje en la Parroquia</label>
+                        {{ center.eje }}
+                    </p>
+                </div>
+            {% endif %}
+        </div>
     </fieldset>   
     <br>
     <fieldset class="fieldset">
         <legend class="legend" >CUTL&nbsp;</legend>
         <div class="columns">
-            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
-                {% set cont = 0 %}
-                {% for dataCutl in  cutl %}
-                    {% if cont == 1 %}    
-                        <HR>
-                    {% endif %}
-                        <p class="inline-label">
-                            <label class="label">Cedula</label>
-                            {{ dataCutl.cedula }}
-                        </p>
-                        <p class="inline-label">
-                            <label class="label">Nombre</label>
-                            {{ dataCutl.nombre }}
-                        </p> 
-                        <p class="inline-label">
-                            <label class="label">Gerencia de Primera Linea</label>
-                            {{ dataCutl.gerenciafirst }}
-                        </p>  
-                        <p class="inline-label">
-                            <label class="label">Gerencia de Segunda Linea</label>
-                            {{ dataCutl.gerenciaSecond }}
-                        </p>                
-                        <p class="inline-label">
-                            <label class="label">Telefono:</label>
-                            {{ dataCutl.telefonoSeip }}/
-                            {{ dataCutl.telefonoCutl }}/
-                            {{ dataCutl.telefonoFirma }}
-                        </p>    
-                    {% set cont = cont + 1 %}                    
-                {% endfor %}
-            </div>   
-        </div>        
+            {% set cont = 0 %}
+            {% for dataCutl in  cutl %}
+                {% if cont == 1 %}    
+                    <HR>
+                {% endif %}
+                <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                    <p class="inline-label">
+                        <label class="label">Cedula</label>
+                        {{ dataCutl.cedula }}
+                    </p>
+                </div>
+                <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                    <p class="inline-label">
+                        <label class="label">Nombre</label>
+                        {{ dataCutl.nombre }}
+                    </p> 
+                </div>
+                <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                    <p class="inline-label">
+                        <label class="label">Gerencia de Primera Linea</label>
+                        {{ dataCutl.gerenciafirst }}
+                    </p>
+                </div>
+                <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                    <p class="inline-label">
+                        <label class="label">Gerencia de Segunda Linea</label>
+                        {{ dataCutl.gerenciaSecond }}
+                    </p>
+                </div>
+                <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                    <p class="inline-label">
+                        <label class="label">Telefono:</label>
+                        {{ dataCutl.telefonoSeip }}/
+                        {{ dataCutl.telefonoCutl }}/
+                        {{ dataCutl.telefonoFirma }}
+                    </p>
+                </div>
+                <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                </div>
+                {% set cont = cont + 1 %}                    
+            {% endfor %}
+        </div>
     </fieldset> 
     <br>
     <fieldset class="fieldset">
