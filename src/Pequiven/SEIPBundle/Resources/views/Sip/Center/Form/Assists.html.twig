@@ -1,0 +1,80 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutSIG.html.twig' %}
+
+{% block body %}
+{% trans_default_domain 'sip' %}    
+       <form method="POST" id="form_sip_center_assists">
+            <fieldset class="fieldset fields-list">
+                <legend class="legend">{{ 'sip.assists'|trans ({}) }}</legend>
+                    {{ form_errors(form) }} 
+                    <div class="field-block button-height" >
+                        {{ form_label(form.fecha) }}                        
+                        {{ form_widget(form.fecha) }}
+                        {{ form_errors(form.fecha) }}
+                    </div>                    
+                    {{ form_rest(form) }}
+                    
+                    <div class="field-block button-height" >
+                    </div>
+
+                    {% for dataCutl in cutl %}
+                        <div class="field-block button-height" >
+                        <label class="label">Cutl</label>
+                        <input class="input input-xlarge" type="hidden" name="sip_center_assists[cedula]" id="sip_center_assists_cedula" value="{{ dataCutl.cedula }}">                        
+
+                            {{ dataCutl.nombre }}
+
+                        <strong>Asistió:</strong>
+                        <input type="checkbox" name="switchAssistance" id="switchAssistance" data="{{ dataCutl.id }}" value="0" class="switch blue-active mid-margin-right "  data-text-on="SI" data-text-off="NO">
+
+                        </div>                        
+                    {% endfor %}
+            
+            </fieldset>
+        </form>         
+
+{% endblock %}
+
+{% block javascript_base %}
+    <script type="text/javascript">
+        
+        $(document).ready(function () {
+
+            $('#switch-mode').change(function () {
+                $('.switch-wrapper')[this.checked ? 'addClass' : 'removeClass']('reversed-switches');
+            });
+
+            $("#switchAssistance").change(function () {
+                var value = $(this).val();
+                if (value == 1) {
+                    $(this).val(0);
+                } else {
+                    $(this).val(1);
+                }
+                console.log(value);
+            });
+            
+            $("a#save").click(function () {
+                var value = $("#switchAssistance").val();
+                var idCutl = $("#switchAssistance").attr("data");
+                var obs = $("#obs").val();
+                var data = {
+                    idCutl: idCutl,
+                    status: value,
+                    obs: obs
+                };
+                console.log(value);
+                $.ajax({
+                    type: 'get',
+                    url: '{{ path("update_assistance_cutl") }}',
+                    data: data,
+                    success: function (data) {
+                        //window.open(data["url"]);
+                        $(location).attr('href', data["url"]);
+                    }
+                });
+
+                console.log(idCutl);
+            });
+        });
+    </script>
+{% endblock %}

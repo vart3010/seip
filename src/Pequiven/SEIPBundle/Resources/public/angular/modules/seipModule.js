@@ -2345,7 +2345,7 @@ angular.module('seipModule.controllers', [])
         //Fin controladores SIG
 
         //Controlador SIP Centro
-        .controller('SipCenterController', function ($scope, notificationBarService, $http, notifyService, $filter, $timeout) {
+        .controller('SipCenterObservationController', function ($scope, notificationBarService, $http, notifyService, $filter, $timeout) {
 
             var isInit = false;
             //Carga el formulario de las observaciones
@@ -2372,7 +2372,7 @@ angular.module('seipModule.controllers', [])
                     var save = false;
                 }
                 if (save == true) {
-                    var url = Routing.generate('pequiven_sip_center_observations_add');
+                    var url = Routing.generate('pequiven_sip_center_observations_add', {idCenter: $scope.idCenter});
                 }
                 notificationBarService.getLoadStatus().loading();
                 return $http({
@@ -2386,7 +2386,7 @@ angular.module('seipModule.controllers', [])
                         successCallBack(data);
                     }
                     notificationBarService.getLoadStatus().done();
-                    //location.reload(); 
+                    location.reload(); 
                     return true;
                 }).error(function (data, status, headers, config) {
                     $scope.templateOptions.setVar("form", {errors: {}});
@@ -2414,9 +2414,9 @@ angular.module('seipModule.controllers', [])
             $scope.initFormObservations = function (resource) {
                 var d = new Date();
                 var numero = d.getTime();
-                $scope.setHeight(350);                
+                $scope.setHeight(450);                
                 var parameters = {
-                    //idIndicator: $scope.id_indicator,                    
+                    idCenter: $scope.idCenter,                    
                     _dc: numero
                 };
                 if (resource) {
@@ -2431,35 +2431,98 @@ angular.module('seipModule.controllers', [])
                     }
                 ];
                 $scope.templateOptions.setTemplate($scope.templates[0]);
-            };
-            //Removiendo el Analisis de Causas
-            $scope.removeAnalysisCause = function (AnalysisCause) {
-                $scope.openModalConfirm('¿Desea eliminar el Analisis de Causas?', function () {
-                    notificationBarService.getLoadStatus().loading();
-                    var url = Routing.generate("pequiven_cause_analysis_evolution_delete", {id: $scope.data_cause});
-                    $http({
-                        method: 'GET',
-                        url: url,
-                        headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'}  // set the headers so angular passing info as form data (not request payload)
-                    }).success(function (data) {
-                        return true;
-                    }).error(function (data, status, headers, config) {
-                        if (data.errors) {
-                            if (data.errors.errors) {
-                                $.each(data.errors.errors, function (index, value) {
-                                    notifyService.error(Translator.trans(value));
-                                });
-                            }
-                        }
-                        notificationBarService.getLoadStatus().done();
-                        return false;
-                    });   
-                    $timeout(callAtTimeout, 3000);                                                             
-                });
-                function callAtTimeout() {                    
-                    location.reload();
+            };             
+        })
+        .controller('SipCenterAssistsController', function ($scope, notificationBarService, $http, notifyService, $filter, $timeout) {
+
+            var isInit = false;            
+            //Carga el formulario de las Asistencias
+            $scope.loadTemplateAssists = function (resource) {
+                $scope.initFormAssists(resource);
+                if (isInit == false) {
+                    isInit = true;
                 }
+                $scope.templateOptions.setTemplate($scope.templates[0]);
+                $scope.templateOptions.setParameterCallBack(resource);                
+                if (resource) {
+                    $scope.templateOptions.enableModeEdit();
+                    $scope.openModalAuto();
+                } else {
+                    $scope.openModalAuto();
+                }
+            };           
+
+            //Añadir Observations
+            var addAssists = function (save, successCallBack) {
+                var formCauseAnalysis = angular.element('#form_sip_center_assists');
+                var formData = formCauseAnalysis.serialize();
+
+                if (save == undefined) {
+                    var save = false;
+                }
+                if (save == true) {
+                    var url = Routing.generate('pequiven_sip_center_assists_add', {idCenter: $scope.idCenter});
+                }
+                notificationBarService.getLoadStatus().loading();
+                return $http({
+                    method: 'POST',
+                    url: url,
+                    data: formData,
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'}  // set the headers so angular passing info as form data (not request payload)
+                }).success(function (data) {
+                    $scope.templateOptions.setVar("form", {errors: {}});                    
+                    if (successCallBack) {
+                        successCallBack(data);
+                    }
+                    notificationBarService.getLoadStatus().done();
+                    location.reload(); 
+                    return true;
+                }).error(function (data, status, headers, config) {
+                    $scope.templateOptions.setVar("form", {errors: {}});
+                    if (data.errors) {
+                        if (data.errors.errors) {
+                            $.each(data.errors.errors, function (index, value) {
+                                notifyService.error(Translator.trans(value));
+                            });
+                        }
+                        $scope.templateOptions.setVar("form", {errors: data.errors.children});
+                    }                    
+                    notificationBarService.getLoadStatus().done();
+                    return false;
+                });
             };
+
+            $scope.templateOptions.setVar('addAssists', addAssists);
+            var confirmCallBack = function () {                
+                addAssists(true, function (data) {
+                    $scope.indicator = data.indicator;
+                });
+
+                return true;
+            };
+           
+            //Formulario Asistencias
+            $scope.initFormAssists = function (resource) {
+                var d = new Date();
+                var numero = d.getTime();
+                $scope.setHeight(450);                
+                var parameters = {
+                    idCenter: $scope.idCenter,                    
+                    _dc: numero
+                };
+                if (resource) {
+                    parameters.id = resource.id;
+                }
+                var url = Routing.generate('pequiven_sip_center_assists', parameters);
+                $scope.templates = [
+                    {
+                        name: 'Asistencias',
+                        url: url,
+                        confirmCallBack: confirmCallBack,
+                    }
+                ];
+                $scope.templateOptions.setTemplate($scope.templates[0]);
+            };            
         })
         //fin
         .controller('ReportTemplateController', function ($scope, notificationBarService, $http, notifyService, $filter) {
@@ -2971,14 +3034,14 @@ angular.module('seipModule.controllers', [])
                 }
             };
             function openModal(callback) {
-                var height = $scope.height;
+                var height = $scope.height;                
                 if ($scope.template.name) {
                     modalOpen.dialog("option", "title", sfTranslator.trans($scope.template.name));
-                    modalOpen.dialog("option", "height", height);
+                    modalOpen.dialog("option", "height", height);                    
                 }
 
                 if ($scope.template.modeEdit) {
-                    $scope.template.modeEdit = false;
+                    $scope.template.modeEdit = false;                    
                     // setter
                     modalOpen.dialog("option", "buttons", [
                         {text: "Guardar", click: function () {

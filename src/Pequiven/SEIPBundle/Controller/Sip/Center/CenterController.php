@@ -9,6 +9,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Pequiven\SEIPBundle\Entity\Sip\Center\Observations;
 use Pequiven\SEIPBundle\Form\Sip\Center\ObservationsType;
 
+use Pequiven\SEIPBundle\Entity\Sip\Center\Assists;
+use Pequiven\SEIPBundle\Form\Sip\Center\AssistsType;
+
 /**
  * Controlador Centros
  * @author Maximo Sojo maxsojo13@gmail.com
@@ -21,12 +24,70 @@ class CenterController extends SEIPController {
      * @param Request $request
      * @return type
      */
-    public function assistsAction(Request $request) {
+    public function formAssistsAction(Request $request) {
 
-        $id = $request->get('id');
+        $idCenter = $request->get('idCenter');
+
+        $cutl = $this->get('pequiven.repository.cutl')->findBy(array('codigoCentro' => $idCenter));
+
+        $observations = new Assists();
         
-        var_dump($id);
-        die();
+        $form = $this->createForm(new AssistsType(), $observations);
+
+        $view = $this
+                ->view()
+                ->setTemplate($this->config->getTemplate('Form/Assists.html'))
+                ->setTemplateVar($this->config->getPluralResourceName())
+                ->setData(array( 
+                'cutl' => $cutl,           
+                'form' => $form->createView(),
+                ))
+        ;
+        $view->getSerializationContext()->setGroups(array('id', 'api_list'));
+        
+        return $view;
+        
+    }
+
+    /**
+     * Guardamos las asistencias
+     * 
+     * @param Request $request
+     * @return type
+     */
+    public function addAssistsAction(Request $request) {
+        
+        $idCenter = $request->get('idCenter');
+        
+        $cedulaCutl = $request->get('sip_center_assists')['cedula'];
+        $value = 0;
+
+        if ($request->get('switchAssistance')) {
+            $value = 1;
+        }else{
+            $value = 0;
+        }
+        
+        $em = $this->getDoctrine()->getEntityManager();
+
+        $form = $this->createForm(new AssistsType(), new Assists());
+
+        $form->bind($this->getRequest());
+
+        //if ($form->isValid()) {
+            $Assists = $form->getData();
+            
+            $Assists->setCodigoCentro($idCenter);
+            $Assists->setCedula($cedulaCutl);
+            $Assists->setAssists($value);
+
+            $em->persist($Assists);
+            $em->flush();
+
+            //return $this->redirect(...);
+            var_dump("Cargado!");
+            die();
+        //}
         
     }
 
@@ -63,6 +124,8 @@ class CenterController extends SEIPController {
      */
     public function addObservationsAction(Request $request) {
         
+        $idCenter = $request->get('idCenter');
+
         $em = $this->getDoctrine()->getEntityManager();
 
         $form = $this->createForm(new ObservationsType(), new Observations());
@@ -71,6 +134,8 @@ class CenterController extends SEIPController {
 
         if ($form->isValid()) {
             $Observations = $form->getData();
+            
+            $Observations->setCodigoCentro($idCenter);
 
             $em->persist($Observations);
             $em->flush();
@@ -154,8 +219,24 @@ class CenterController extends SEIPController {
         $id = $request->get('id');
 
         $center = $this->get('pequiven.repository.center')->find($id);
-        $assist = 0;
+
+        $codigoCentro = $center->getCodigoCentro();
         
+        $cutl = $this->get('pequiven.repository.cutl')->findBy(array('codigoCentro' => $codigoCentro));
+        
+        foreach ($cutl as $value) {
+            
+            $nomCutl = [
+                $value->getCedula() => $value->getNombre()
+            ];
+            
+        }
+        
+        
+        $assist = $this->get('pequiven.repository.assists')->findBy(array('codigoCentro' => $codigoCentro));
+
+        $observations = $this->get('pequiven.repository.observations')->findBy(array('codigoCentro' => $codigoCentro));
+
 //        if ($cutl->getAssistance()) {
 //            $assist = 1;
 //        } else {
@@ -163,8 +244,11 @@ class CenterController extends SEIPController {
 //        }
 
         return $this->render('PequivenSEIPBundle:Sip:Center\show.html.twig', array(
-                    'center' => $center,
-                    'assist' => $assist
+                    'center'        => $center,
+                    'cutl'          => $cutl,
+                    'assist'        => $assist,
+                    'observations'  => $observations,
+                    'nomCutl'        => $nomCutl
         ));
     }
 
