@@ -2,7 +2,6 @@
 
 namespace Pequiven\ArrangementProgramBundle\Controller\MovementEmployee;
 
-use DateTime;
 use Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram;
 use Pequiven\ArrangementProgramBundle\Entity\Goal;
 use Pequiven\ArrangementProgramBundle\Entity\MovementEmployee\MovementEmployee;

@@ -116,6 +116,38 @@ class Centro {
      */
     private $eje = 0;
     
+    /**
+     * Cédula UBCH
+     * @var string
+     *
+     * @ORM\Column(name="cedulaubch", type="string", length=20)
+     */
+    private $cedulaubch;
+    
+    /**
+     * Nombre UBCH
+     * @var string
+     *
+     * @ORM\Column(name="nombreubch", type="string", length=100)
+     */
+    private $nombreubch;
+    
+    /**
+     * Teléfono UBCH
+     * @var string
+     *
+     * @ORM\Column(name="telefonoubch", type="string", length=20)
+     */
+    private $telefonoubch;
+    
+    /**
+     * Cargo UBCH
+     * @var string
+     *
+     * @ORM\Column(name="cargoubch", type="string", length=50)
+     */
+    private $cargoubch;
+    
     function getId() {
         return $this->id;
     }
@@ -166,6 +198,22 @@ class Centro {
     
     function getEje() {
         return $this->eje;
+    }
+    
+    function getCedulaUbch() {
+        return $this->cedulaubch;
+    }
+    
+    function getNombreUbch() {
+        return $this->nombreubch;
+    }
+    
+    function getTelefonoUbch() {
+        return $this->telefonoubch;
+    }
+    
+    function getCargoUbch() {
+        return $this->cargoubch;
     }
 
     function setId($id) {
@@ -219,5 +267,20 @@ class Centro {
     function setEje($eje) {
         $this->eje = $eje;
     }
-
+    
+    function setCedulaUbch($cedulaubch) {
+        $this->cedulaubch = $cedulaubch;
+    }
+    
+    function setNombreUbch($nombreubch) {
+        $this->nombreubch = $nombreubch;
+    }
+    
+    function setTelefonoUbch($telefonoubch) {
+        $this->telefonoubch = $telefonoubch;
+    }
+    
+    function setCargoUbch($cargoubch) {
+        $this->cargoubch = $cargoubch;
+    }
 }
