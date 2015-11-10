@@ -44,11 +44,34 @@ pequiven_sip_center_observations:
     methods: [GET]
     options:
         expose: true
+#Revisión Cambio de status
+pequiven_sip_center_observations_status:    
+    path: /{idObs}/get-status_add.{_format}
+    defaults:
+        _controller: pequiven.controller.center:formStatusAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET]
+    options:
+        expose: true
+
 #Guardamos el formulario de las observaciones
 pequiven_sip_center_observations_add:
     path: /{idCenter}/addObservations.{_format}
     defaults:
         _controller: pequiven.controller.center:addObservationsAction
+        _format: json
+    requirements:
+        _format: json
+    methods: [POST]
+    options:
+        expose: true
+#Guardamos la revisión
+pequiven_sip_center_observations_add_status:
+    path: /{idObs}/addStatus.{_format}
+    defaults:
+        _controller: pequiven.controller.center:formStatusAction
         _format: json
     requirements:
         _format: json

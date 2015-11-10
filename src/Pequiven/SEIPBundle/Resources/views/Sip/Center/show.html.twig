@@ -38,21 +38,34 @@
         <legend class="legend" >CUTL&nbsp;</legend>
         <div class="columns">
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                {% set cont = 0 %}
                 {% for dataCutl in  cutl %}
-                    <p class="inline-label">
-                        <label class="label">Nombre</label>
-                        {{ dataCutl.nombre }}
-                    </p>
-                    <p class="inline-label">
-                        <label class="label">Centro</label>
-                        {{ dataCutl.centro }}
-                    </p>                
-                    <p class="inline-label">
-                        <label class="label">Telefono:</label>
-                        {{ dataCutl.telefonoSeip }}/
-                        {{ dataCutl.telefonoCutl }}/
-                        {{ dataCutl.telefonoFirma }}
-                    </p>    
+                    {% if cont == 1 %}    
+                        <HR>
+                    {% endif %}
+                        <p class="inline-label">
+                            <label class="label">Cedula</label>
+                            {{ dataCutl.cedula }}
+                        </p>
+                        <p class="inline-label">
+                            <label class="label">Nombre</label>
+                            {{ dataCutl.nombre }}
+                        </p> 
+                        <p class="inline-label">
+                            <label class="label">Gerencia de Primera Linea</label>
+                            {{ dataCutl.gerenciafirst }}
+                        </p>  
+                        <p class="inline-label">
+                            <label class="label">Gerencia de Segunda Linea</label>
+                            {{ dataCutl.gerenciaSecond }}
+                        </p>                
+                        <p class="inline-label">
+                            <label class="label">Telefono:</label>
+                            {{ dataCutl.telefonoSeip }}/
+                            {{ dataCutl.telefonoCutl }}/
+                            {{ dataCutl.telefonoFirma }}
+                        </p>    
+                    {% set cont = cont + 1 %}                    
                 {% endfor %}
             </div>   
         </div>        

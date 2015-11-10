@@ -9,14 +9,30 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @author Maximo Sojo <maxsojo13@gmail.com>
  */
-abstract class Observations {
+abstract class Observations
+{	
+    /**
+     * Categorias
+     *
+     */
+    const PROPAGANDA  = 1;
 
-    const PROPAGANDA = 1;
-    const TRANSPORTE = 2;
+    const TRANSPORTE  = 2;
+    
     const HIDRATACIÓN = 3;
-    const LOGISTICA = 4;
-    const ASISTENCIA = 5;
 
+	const LOGISTICA   = 4;
+
+    const ASISTENCIA  = 5;
+
+    /**
+     * Status
+     *
+     */
+    const RECIBIDO  = 2;
+    const APROBADO  = 3;
+    const RECHAZADO = 4;
+    
     /**
      * @var integer
      *
@@ -25,37 +41,70 @@ abstract class Observations {
     protected $categorias;
 
     /**
-     * 
+     * @var integer
+     *
+     * @ORM\Column(name="status", type="integer")
+     */
+    protected $status;
+    
+    /**
      * 
      * @param integer
      * @return 
      */
     function setCategorias($categorias) {
         $this->categorias = $categorias;
-
         return $this;
     }
 
     /**
      * 
+     * @param integer
+     * @return 
+     */
+    function getCategorias() {       
+        return $this->categorias;
+    }
+
+    /**
      * 
      * @param integer
      * @return 
      */
-    function getCategorias() {
-
-        return $this->categorias;
+    function setStatus($status) {
+        $this->status = $status;
+        return $this;
     }
 
-    static function getCategoriasObservations() {
-        static $levelProcessArray = [
-            self::PROPAGANDA => 'Propaganda',
-            self::TRANSPORTE => 'Transporte',
-            self::HIDRATACIÓN => 'Hidratación',
-            self::LOGISTICA => 'Logistica',
-            self::ASISTENCIA => 'Asistencia',
+    /**
+     * 
+     * @param integer
+     * @return 
+     */
+    function getStatus() {       
+        return $this->status;
+    }
+
+    static function getCategoriasObservations()
+    {
+    	static $levelProcessArray = [
+            self::PROPAGANDA   => 'Propaganda',
+            self::TRANSPORTE   => 'Transporte',
+	        self::HIDRATACIÓN  => 'Hidratación',
+	        self::LOGISTICA    => 'Logistica',
+	        self::ASISTENCIA   => 'Asistencia',	        
+	    ];
+	    return $levelProcessArray;
+    }   
+
+    static function getStatusObservations()
+    {
+        static $status = [
+            self::RECIBIDO  => 'Recibido',
+            self::APROBADO  => 'Aprobado',
+            self::RECHAZADO => 'Rechazado',            
         ];
-        return $levelProcessArray;
-    }
-
+        return $status;
+    }   
+    
 }

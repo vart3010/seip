@@ -8,13 +8,14 @@ use Symfony\Component\HttpFoundation\Request;
 
 use Pequiven\SEIPBundle\Entity\Sip\Center\Observations;
 use Pequiven\SEIPBundle\Form\Sip\Center\ObservationsType;
+use Pequiven\SEIPBundle\Form\Sip\Center\StatusType;
 
 use Pequiven\SEIPBundle\Entity\Sip\Center\Assists;
 use Pequiven\SEIPBundle\Form\Sip\Center\AssistsType;
 
 /**
  * Controlador Centros
- * @author Maximo Sojo maxsojo13@gmail.com
+ * @author Maximo Sojo <maxsojo13@gmail.com>
  *
  */
 class CenterController extends SEIPController {
@@ -57,37 +58,49 @@ class CenterController extends SEIPController {
      */
     public function addAssistsAction(Request $request) {
         
-        $idCenter = $request->get('idCenter');
-        
-        $cedulaCutl = $request->get('sip_center_assists')['cedula'];
-        $value = 0;
+        $em = $this->getDoctrine()->getManager();
 
-        if ($request->get('switchAssistance')) {
-            $value = 1;
-        }else{
-            $value = 0;
-        }
+        $codigoCentro = $request->get('idCenter');        
+
+        $cutl = $this->get('pequiven.repository.cutl')->findBy(array('codigoCentro' => $codigoCentro));
         
-        $em = $this->getDoctrine()->getEntityManager();
+        $contCutl = count($cutl);
+
+        foreach ($cutl as $value) {
+            $cedula = $value->getCedula();            
+
+            if (isset($request->get('sip_center_assists')[$value->getId()])) {
+                $value = 1;
+            }else{
+                $value = 0;
+            }
+
+        $cedulaCutl = $cedula;
 
         $form = $this->createForm(new AssistsType(), new Assists());
 
         $form->bind($this->getRequest());
 
-        //if ($form->isValid()) {
-            $Assists = $form->getData();
-            
-            $Assists->setCodigoCentro($idCenter);
+        $em->getConnection()->beginTransaction();
+        
+        if ($form->isSubmitted()) {
+
+            $Assists = $form->getData();            
+            $Assists->setCodigoCentro($codigoCentro);
             $Assists->setCedula($cedulaCutl);
             $Assists->setAssists($value);
-
-            $em->persist($Assists);
+            $em->persist($Assists);        
             $em->flush();
-
-            //return $this->redirect(...);
-            var_dump("Cargado!");
-            die();
-        //}
+        }
+            try {
+                $em->flush();
+                $em->getConnection()->commit();
+            } catch (Exception $e) {
+                $em->getConnection()->rollback();
+                throw $e;
+            }
+        }
+        $this->get('session')->getFlashBag()->add('success', "Asistencia Añadida Correctamente");
         
     }
 
@@ -126,23 +139,69 @@ class CenterController extends SEIPController {
         
         $idCenter = $request->get('idCenter');
 
+        $status = 1;//Status Observación Enviada
+
         $em = $this->getDoctrine()->getEntityManager();
 
         $form = $this->createForm(new ObservationsType(), new Observations());
 
         $form->bind($this->getRequest());
 
-        if ($form->isValid()) {
+        if ($form->isSubmitted()) {
             $Observations = $form->getData();
             
             $Observations->setCodigoCentro($idCenter);
+            $Observations->setStatus($status);
 
             $em->persist($Observations);
             $em->flush();
+            //return $this->redirect(...);            
+        }
+        $this->get('session')->getFlashBag()->add('success', "Requerimiento Añadido Correctamente");                        
+        
+    }
 
-            //return $this->redirect(...);
-            var_dump("Cargado!");
-            die();
+    /**
+     * 
+     * @param Request $request
+     * @return type
+     */
+    public function formStatusAction(Request $request) {
+        
+        $id = $request->get('idObs');
+
+        $em = $this->getDoctrine()->getEntityManager();
+
+        $observations = new Observations();        
+        $form = $this->createForm(new StatusType(), $observations);
+
+        if (isset($request->get('sip_center_observations_status')['status'])) {
+            
+            $form->bind($this->getRequest());
+            
+            $status = $request->get('sip_center_observations_status')['status'];
+
+            $Observations = $this->get('pequiven.repository.observations')->find($id);
+            
+            $Observations->setStatus($status);
+            
+            $em->flush();
+
+            $this->get('session')->getFlashBag()->add('success', "Estatus Cambiado Correctamente");
+            
+        }else{
+            $view = $this
+                    ->view()
+                    ->setTemplate($this->config->getTemplate('Form/Status.html'))
+                    ->setTemplateVar($this->config->getPluralResourceName())
+                    ->setData(array(            
+                    'form' => $form->createView(),
+                    ))
+            ;
+            $view->getSerializationContext()->setGroups(array('id', 'api_list'));
+            
+            return $view;
+
         }
         
     }
@@ -223,32 +282,43 @@ class CenterController extends SEIPController {
         $codigoCentro = $center->getCodigoCentro();
         
         $cutl = $this->get('pequiven.repository.cutl')->findBy(array('codigoCentro' => $codigoCentro));
-        
-        foreach ($cutl as $value) {
-            
-            $nomCutl = [
-                $value->getCedula() => $value->getNombre()
-            ];
-            
+
+        //Carga de Nombre de CUTL
+        foreach ($cutl as $value) {            
+            $nomCutl[$value->getCedula()] = $value->getNombre();            
         }
+
+        //Carga de Categorias
+        $catObs = [
+            1 => 'Propaganda',
+            2 => 'Transporte',
+            3 => 'Hidratación',
+            4 => 'Logistica',
+            5 => 'Asistencia'
+        ];
+
+        //Carga de status
+        $status = [
+            1 => "Enviado",
+            2 => "Recibido",
+            3 => "Aprobado",
+            4 => "Rechazado"
+        ];
         
         
         $assist = $this->get('pequiven.repository.assists')->findBy(array('codigoCentro' => $codigoCentro));
 
         $observations = $this->get('pequiven.repository.observations')->findBy(array('codigoCentro' => $codigoCentro));
 
-//        if ($cutl->getAssistance()) {
-//            $assist = 1;
-//        } else {
-//            $assist = 0;
-//        }
 
         return $this->render('PequivenSEIPBundle:Sip:Center\show.html.twig', array(
                     'center'        => $center,
                     'cutl'          => $cutl,
                     'assist'        => $assist,
                     'observations'  => $observations,
-                    'nomCutl'        => $nomCutl
+                    'nomCutl'       => $nomCutl,
+                    'catObs'        => $catObs,
+                    'status'        => $status
         ));
     }
 

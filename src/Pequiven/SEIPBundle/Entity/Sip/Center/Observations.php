@@ -48,6 +48,13 @@ class Observations {
      * @ORM\Column(name="categoria", type="integer", nullable=true)
      */
     private $categoria;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="status", type="integer", nullable=true)
+     */
+    private $status;
     
     
     function getId() {
@@ -84,6 +91,14 @@ class Observations {
 
     function getCategoria() {
         return $this->categoria;
+    }
+
+    function setStatus($status) {
+        $this->status = $status;
+    }
+
+    function getStatus() {
+        return $this->status;
     }
 
 }
