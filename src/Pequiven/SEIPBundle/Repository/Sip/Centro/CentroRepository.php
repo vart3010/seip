@@ -33,6 +33,11 @@ class CentroRepository extends EntityRepository {
             $queryBuilder->andWhere($queryBuilder->expr()->like('ctro.codigoCentro', "'%".$codigoCentro."%'"));
         }
         
+//        if (($municipio = $criteria->remove('municipio'))) {
+//            $queryBuilder->addSelect();
+//            $queryBuilder->andWhere($queryBuilder->expr()->like('ctro.codigoCentro', "'%".$codigoCentro."%'"));
+//        }
+        
         parent::applyCriteria($queryBuilder, $criteria->toArray());
     }
    
