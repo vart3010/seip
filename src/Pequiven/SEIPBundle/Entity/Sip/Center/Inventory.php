@@ -1,0 +1,114 @@
+<?php
+
+namespace Pequiven\SEIPBundle\Entity\Sip\Center;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Parroquia
+ * @author Maximo Sojo maxsojo13@gmail.com
+ * @ORM\Table(name="sip_centro_inventory")
+ * @ORM\Entity()
+ */
+class Inventory {
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var \DateTime
+     * 
+     * @ORM\Column(name="fecha", type="datetime", nullable=true)
+     */
+    private $fecha;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="codigoCentro", type="integer", nullable=true)
+     */
+    private $codigoCentro;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="observations", type="string", type="text")
+     */
+    private $observations;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="cantidad", type="integer", nullable=true)
+     */
+    private $cantidad;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="\Pequiven\SEIPBundle\Entity\Sip\Center\Material", inversedBy="inventory")
+     * @ORM\JoinColumn(name="material_id", referencedColumnName="id")
+     */
+    private $material;
+    
+    
+    function getId() {
+        return $this->id;
+    }   
+
+    function setFecha($fecha) {
+        $this->fecha = $fecha;
+    }
+
+    function getFecha() {
+        return $this->fecha;
+    }
+
+    function setCodigoCentro($codigoCentro) {
+        $this->codigoCentro = $codigoCentro;
+    }
+    
+    function getCodigoCentro() {
+        return $this->codigoCentro;
+    }
+
+    function setObservations($observations) {
+        $this->observations = $observations;
+    }
+
+    function getObservations() {
+        return $this->observations;
+    }
+
+    function setCantidad($cantidad) {
+        $this->cantidad = $cantidad;
+    }
+
+    function getCantidad() {
+        return $this->cantidad;
+    }
+
+    /**
+     * Set material
+     *
+     * @param \Pequiven\SEIPBundle\Entity\Sip\Center\Material $material
+     */
+    public function setMaterial(\Pequiven\SEIPBundle\Entity\Sip\Center\Material $material) {        
+        $this->material = $material;
+        return $this;
+    }
+
+    /**
+     * Get material
+     *
+     * @return Pequiven\SEIPBundle\Entity\Sip\Center\Material
+     */
+    public function getMaterial() {
+        return $this->material;
+    }
+
+}

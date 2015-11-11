@@ -20,7 +20,7 @@ class ObservationsType extends AbstractType
                 'label' => 'Requerimiento ',
                 'label_attr' => array('class' => 'label'),
                 'attr' => array(
-                    'class'     => 'input full-width autoexpanding',
+                    'class'     => 'input input-xlarge autoexpanding',
                     'maxlength' => 3500),
                 'required' => true
                 ))

@@ -2606,6 +2606,98 @@ angular.module('seipModule.controllers', [])
             };            
         })
         //fin
+        .controller('SipCenterInventoryController', function ($scope, notificationBarService, $http, notifyService, $filter, $timeout) {
+
+            var isInit = false;            
+            //Carga el formulario de las Asistencias
+            $scope.loadTemplateInventory = function (resource) {
+                $scope.initFormInventory(resource);
+                if (isInit == false) {
+                    isInit = true;
+                }
+                $scope.templateOptions.setTemplate($scope.templates[0]);
+                $scope.templateOptions.setParameterCallBack(resource);                
+                if (resource) {
+                    $scope.templateOptions.enableModeEdit();
+                    $scope.openModalAuto();
+                } else {
+                    $scope.openModalAuto();
+                }
+            };           
+
+            //Añadir Observations
+            var addInventory = function (save, successCallBack) {
+                var formCauseAnalysis = angular.element('#form_sip_center_inventory');
+                var formData = formCauseAnalysis.serialize();
+
+                if (save == undefined) {
+                    var save = false;
+                }
+                if (save == true) {
+                    var url = Routing.generate('pequiven_sip_center_inventory_add', {idCenter: $scope.idCenter});
+                }
+                notificationBarService.getLoadStatus().loading();
+                return $http({
+                    method: 'POST',
+                    url: url,
+                    data: formData,
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'}  // set the headers so angular passing info as form data (not request payload)
+                }).success(function (data) {
+                    $scope.templateOptions.setVar("form", {errors: {}});                    
+                    if (successCallBack) {
+                        successCallBack(data);
+                    }
+                    notificationBarService.getLoadStatus().done();
+                    location.reload(); 
+                    return true;
+                }).error(function (data, status, headers, config) {
+                    $scope.templateOptions.setVar("form", {errors: {}});
+                    if (data.errors) {
+                        if (data.errors.errors) {
+                            $.each(data.errors.errors, function (index, value) {
+                                notifyService.error(Translator.trans(value));
+                            });
+                        }
+                        $scope.templateOptions.setVar("form", {errors: data.errors.children});
+                    }                    
+                    notificationBarService.getLoadStatus().done();
+                    return false;
+                });
+            };
+
+            $scope.templateOptions.setVar('addInventory', addInventory);
+            var confirmCallBack = function () {                
+                addInventory(true, function (data) {
+                    $scope.indicator = data.indicator;
+                });
+
+                return true;
+            };
+           
+            //Formulario Asistencias
+            $scope.initFormInventory = function (resource) {
+                var d = new Date();
+                var numero = d.getTime();
+                $scope.setHeight(550);                
+                var parameters = {
+                    idCenter: $scope.idCenter,                    
+                    _dc: numero
+                };
+                if (resource) {
+                    parameters.id = resource.id;
+                }
+                var url = Routing.generate('pequiven_sip_center_inventory', parameters);
+                $scope.templates = [
+                    {
+                        name: 'Inventario',
+                        url: url,
+                        confirmCallBack: confirmCallBack,
+                    }
+                ];
+                $scope.templateOptions.setTemplate($scope.templates[0]);
+            };            
+        })
+        //fin
         .controller('ReportTemplateController', function ($scope, notificationBarService, $http, notifyService, $filter) {
 
         })

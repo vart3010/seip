@@ -100,6 +100,28 @@ pequiven_sip_center_assists_add:
     methods: [POST]
     options:
         expose: true
+#Inventario
+pequiven_sip_center_inventory:
+    path: /{idCenter}/inventory.{_format}
+    defaults:
+        _controller: pequiven.controller.center:formInventoryAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET]
+    options:
+        expose: true
+#Guardamos el formulario del inventario
+pequiven_sip_center_inventory_add:
+    path: /{idCenter}/addInventory.{_format}
+    defaults:
+        _controller: pequiven.controller.center:formInventoryAction
+        _format: json
+    requirements:
+        _format: json
+    methods: [POST]
+    options:
+        expose: true
 pequiven_sip_center_list:
     path: /center/list.{_format}
     defaults:
