@@ -57,7 +57,7 @@ class CenterController extends SEIPController {
      * @return type
      */
     public function addAssistsAction(Request $request) {
-        
+       
         $em = $this->getDoctrine()->getManager();
 
         $codigoCentro = $request->get('idCenter');        
@@ -68,11 +68,18 @@ class CenterController extends SEIPController {
 
         foreach ($cutl as $value) {
             $cedula = $value->getCedula();            
-
-            if (isset($request->get('sip_center_assists')[$value->getId()])) {
+            $idAssist = $value->getId();
+            //Carga de Asistencia
+            if (isset($request->get('sip_center_assists')[$idAssist])) {
                 $value = 1;
             }else{
                 $value = 0;
+            }            
+            //Carga de Observación
+            if (isset($request->get('sip_center_assists')["obs_".$idAssist])) {
+                $Observations = $request->get('sip_center_assists')["obs_".$idAssist];
+            }else{
+                $Observations = NULL;
             }
 
         $cedulaCutl = $cedula;
@@ -89,6 +96,7 @@ class CenterController extends SEIPController {
             $Assists->setCodigoCentro($codigoCentro);
             $Assists->setCedula($cedulaCutl);
             $Assists->setAssists($value);
+            $Assists->setObservations($Observations);
             $em->persist($Assists);        
             $em->flush();
         }

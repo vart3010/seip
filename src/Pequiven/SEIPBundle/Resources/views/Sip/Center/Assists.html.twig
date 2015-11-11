@@ -23,6 +23,9 @@
                         </th>    
                         <th scope="col" width="10%" class="header" align="left">
                             Asistencia
+                        </th> 
+                        <th scope="col" width="10%" class="header" align="left">
+                            Observación
                         </th>      
                     </tr>
                 </thead>     
@@ -39,7 +42,8 @@
                                 {% set checkState = "" %}
                             {% endif %}
                             <input type="checkbox" value="{{ data.assists  }}" class="switch blue-active mid-margin-right {{ checkState }}"  data-text-on="SI" data-text-off="NO" disabled>
-                            </td>                            
+                            </td> 
+                            <td rowspan="2" align="left">{{ data.observations }}</td>                           
                         </tr>                 
                 </tbody>                    
                 {% endfor %}       
