@@ -22,13 +22,13 @@
                 {% for dataInv  in inventory %}
                 <tbody>
                         <tr>
-                            <td rowspan="2">{{ dataInv.material }}</td>            
+                            <td>{{ dataInv.material }}</td>            
 
-                            <td rowspan="2">{{ dataInv.observations }}</td>
+                            <td align="justify">{{ dataInv.observations }}</td>
 
-                            <td rowspan="2">{{ dataInv.cantidad }}</td>
+                            <td>{{ dataInv.cantidad }}</td>
                         
-                            <td rowspan="2">{{ dataInv.fecha | date("d/m/Y") }}</td>
+                            <td>{{ dataInv.fecha | date("d/m/Y") }}</td>
                             <td class="align-right vertical-center">                          
                                 <span class="select compact">
                                 <a href class="select-value form-edit">{{ 'pequiven.actions'|trans({},'messages') }}</a>

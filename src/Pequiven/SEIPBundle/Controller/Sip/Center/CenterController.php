@@ -111,7 +111,7 @@ class CenterController extends SEIPController {
                 throw $e;
             }
         }
-        $this->get('session')->getFlashBag()->add('success', "Asistencia Añadida Correctamente");
+        $this->get('session')->getFlashBag()->add('success', "Asistencia Añadida Exitosamente");
         
     }
 
@@ -192,7 +192,7 @@ class CenterController extends SEIPController {
             $em->flush();
             //return $this->redirect(...);            
         }
-        $this->get('session')->getFlashBag()->add('success', "Requerimiento Añadido Correctamente");                        
+        $this->get('session')->getFlashBag()->add('success', "Requerimiento Añadido Exitosamente");                        
         
     }
 
@@ -222,7 +222,7 @@ class CenterController extends SEIPController {
             
             $em->flush();
 
-            $this->get('session')->getFlashBag()->add('success', "Estatus Cambiado Correctamente");
+            $this->get('session')->getFlashBag()->add('success', "Estatus Cambiado Exitosamente");
             
         }else{
             $view = $this
@@ -295,7 +295,10 @@ class CenterController extends SEIPController {
             $inventory = $form->getData();            
             
             $em->persist($inventory);
-            $em->flush();            
+            $em->flush(); 
+            
+            $this->get('session')->getFlashBag()->add('success', 'Registro Añadido Exitosamente');
+
         }
 
         $view = $this

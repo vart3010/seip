@@ -2,85 +2,54 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Requerimientos" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="39a430ef-fd62-4b25-8487-b8107872e988">
 	<property name="ireport.zoom" value="1.6105100000000023"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="67"/>
+	<property name="ireport.y" value="202"/>
 	<parameter name="idCentro" class="java.lang.String"/>
 	<queryString>
-		<![CDATA[SELECT
-estado.description as Estado,
-municip.description as Municipio,
-parroq.description as Parroquia,
-cent.id as idCentro,
-cent.description as Centro,
-date_format(obs.fecha,'%d/%m/%Y') as Fecha,
-obs.id as ObsId,
-UPPER(obs.observations) as Observaciones,
-case
-when obs.categoria=1 then 'Propaganda'
-when obs.categoria=2 then 'Transporte'
-when obs.categoria=3 then 'Hidratación'
-when obs.categoria=4 then 'Logística'
-when obs.categoria=5 then 'Asistencia'
-when obs.categoria=6 then 'Telefonía'
-end as Categoria,
-
-case
-when obs.status=1 then 'Abierto'
-when obs.status=2 then 'Pendiente'
-when obs.status=3 then 'Seguimiento'
-when obs.status=4 then 'Cerrado'
-when obs.status=5 then 'Rechazado'
-else 'Sin Status'
-end as Status,
-
-case when obs.status=1 then 1 else 0 end as ABI,
-case when obs.status=2 then 1 else 0 end as PEN,
-case when obs.status=3 then 1 else 0 end as SEG,
-case when obs.status=4 then 1 else 0 end as CER,
-case when obs.status=5 then 1 else 0 end as REC
-
-from sip_centro_observations as obs
-inner join sip_centro as cent on (obs.codigocentro=cent.codigoCentro)
-inner join sip_parroquia as parroq on (cent.codigoParroquia=parroq.id)
-inner join sip_municipio as municip on (cent.codigoMunicipio=municip.id)
-inner join sip_estado as estado on (cent.codigoEstado=estado.id)
-where cent.id=$P{idCentro}
-order by fecha]]>
+		<![CDATA[select asist.id as id, date_format(asist.fecha,'%d/%m/%Y') as Fecha,
+cent.descriptionEstado as Estado, cent.descriptionMunicipio as Municipio,
+cent.descriptionParroquia as Parroquia, cent.codigoCentro as Codigo, cent.description as Centro,
+asist.cedula as Cedula, cutl.nombrecutl as Nombre, cutl.telefonocutl as Telefono,
+case when asist.assists=1 then 'Presente'
+else 'Ausente' end as Asistencia,
+case when asist.assists=1 then 1
+else 0 end as Presente,
+case when asist.assists=0 then 1
+else 0 end as Ausente,
+asist.observations as Observaciones
+from sip_centro_assists as asist
+inner join sip_centro as cent on (asist.codigoCentro=cent.codigoCentro)
+inner join sip_cutl as cutl on (asist.cedula=cutl.cedula)]]>
 	</queryString>
-	<field name="Estado" class="java.lang.String"/>
-	<field name="Municipio" class="java.lang.String"/>
-	<field name="Parroquia" class="java.lang.String"/>
-	<field name="idCentro" class="java.lang.Integer"/>
-	<field name="Centro" class="java.lang.String"/>
+	<field name="id" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
 	<field name="Fecha" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="ObsId" class="java.lang.Integer"/>
+	<field name="Estado" class="java.lang.String"/>
+	<field name="Municipio" class="java.lang.String"/>
+	<field name="Parroquia" class="java.lang.String"/>
+	<field name="Codigo" class="java.lang.Integer"/>
+	<field name="Centro" class="java.lang.String"/>
+	<field name="Cedula" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Nombre" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Telefono" class="java.lang.String"/>
+	<field name="Asistencia" class="java.lang.String"/>
+	<field name="Presente" class="java.lang.Long"/>
+	<field name="Ausente" class="java.lang.Long"/>
 	<field name="Observaciones" class="java.lang.String"/>
-	<field name="Categoria" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="Status" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="ABI" class="java.lang.Long"/>
-	<field name="PEN" class="java.lang.Long"/>
-	<field name="SEG" class="java.lang.Long"/>
-	<field name="CER" class="java.lang.Long"/>
-	<field name="REC" class="java.lang.Long"/>
-	<variable name="REC_1" class="java.lang.Long" resetType="Column" calculation="Sum">
-		<variableExpression><![CDATA[$F{REC}]]></variableExpression>
+	<variable name="Presente_1" class="java.lang.Long" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{Presente}]]></variableExpression>
 	</variable>
-	<variable name="PEN_1" class="java.lang.Long" resetType="Column" calculation="Sum">
-		<variableExpression><![CDATA[$F{PEN}]]></variableExpression>
+	<variable name="Ausente_1" class="java.lang.Long" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{Ausente}]]></variableExpression>
 	</variable>
-	<variable name="SEG_1" class="java.lang.Long" resetType="Column" calculation="Sum">
-		<variableExpression><![CDATA[$F{SEG}]]></variableExpression>
-	</variable>
-	<variable name="CER_1" class="java.lang.Long" resetType="Column" calculation="Sum">
-		<variableExpression><![CDATA[$F{CER}]]></variableExpression>
-	</variable>
-	<variable name="ABI_1" class="java.lang.Long" resetType="Column" calculation="Sum">
-		<variableExpression><![CDATA[$F{ABI}]]></variableExpression>
+	<variable name="id_1" class="java.lang.Integer" resetType="Column" calculation="Count">
+		<variableExpression><![CDATA[$F{id}]]></variableExpression>
 	</variable>
 	<background>
 		<band splitType="Stretch"/>
@@ -117,15 +86,15 @@ order by fecha]]>
 				<reportElement x="7" y="36" width="548" height="39" backcolor="#F5F5F5" uuid="b1eeda44-0a40-4e8d-adab-67c7f1929693"/>
 			</rectangle>
 			<staticText>
-				<reportElement x="7" y="125" width="52" height="13" uuid="2b02bc18-31bc-4a73-a73a-77e56fe16e17"/>
-				<textElement>
+				<reportElement x="0" y="125" width="50" height="13" uuid="2b02bc18-31bc-4a73-a73a-77e56fe16e17"/>
+				<textElement textAlignment="Center">
 					<font fontName="DejaVu Serif Condensed" size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Fecha]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="76" y="125" width="75" height="13" uuid="93e19ac9-4d3b-4d27-a37c-531f5a256cae"/>
-				<textElement>
+				<reportElement x="55" y="125" width="49" height="13" uuid="93e19ac9-4d3b-4d27-a37c-531f5a256cae"/>
+				<textElement textAlignment="Center">
 					<font fontName="DejaVu Serif Condensed" size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Cédula]]></text>
@@ -194,8 +163,8 @@ order by fecha]]>
 				<textFieldExpression><![CDATA[$F{Centro}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="474" y="125" width="69" height="13" uuid="429ac598-8936-4a76-8207-45fbfd10b39b"/>
-				<textElement>
+				<reportElement x="304" y="125" width="39" height="13" uuid="429ac598-8936-4a76-8207-45fbfd10b39b"/>
+				<textElement textAlignment="Center">
 					<font fontName="DejaVu Serif Condensed" size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Estatus]]></text>
@@ -214,62 +183,76 @@ order by fecha]]>
 				</graphicElement>
 			</line>
 			<staticText>
-				<reportElement x="157" y="125" width="147" height="13" uuid="dccbc8b6-1b8b-4358-9905-4f9117dfcaaf"/>
+				<reportElement x="123" y="125" width="107" height="13" uuid="dccbc8b6-1b8b-4358-9905-4f9117dfcaaf"/>
 				<textElement>
 					<font fontName="DejaVu Serif Condensed" size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Nombre y Apellido]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="348" y="125" width="104" height="13" uuid="01e48d3f-0a0e-404b-941e-5271f1a72a0c"/>
+				<reportElement x="245" y="125" width="53" height="13" uuid="01e48d3f-0a0e-404b-941e-5271f1a72a0c"/>
 				<textElement>
 					<font fontName="DejaVu Serif Condensed" size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Teléfono]]></text>
 			</staticText>
+			<staticText>
+				<reportElement x="378" y="125" width="194" height="13" uuid="35a19103-bf30-4999-b414-13b4b3b3b654"/>
+				<textElement>
+					<font fontName="DejaVu Serif Condensed" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Observaciones]]></text>
+			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="19" splitType="Stretch">
+		<band height="52" splitType="Stretch">
 			<textField>
-				<reportElement x="0" y="0" width="66" height="14" uuid="ee296e76-b0a6-4c8e-ac97-723956ff4504"/>
-				<textElement>
+				<reportElement x="0" y="0" width="50" height="14" uuid="ee296e76-b0a6-4c8e-ac97-723956ff4504"/>
+				<textElement textAlignment="Center">
 					<font fontName="DejaVu Serif Condensed" size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Fecha}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="76" y="2" width="75" height="14" uuid="aae9b035-ed8b-4a43-818e-0163985b9f3e"/>
-				<textElement>
-					<font fontName="DejaVu Serif Condensed" size="9"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{Categoria}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="157" y="2" width="147" height="14" isPrintWhenDetailOverflows="true" uuid="5f7e38b9-d916-4b88-bb18-35c595887e63"/>
-				<textElement>
-					<font fontName="DejaVu Serif Condensed" size="9"/>
+			<textField isBlankWhenNull="true">
+				<reportElement x="353" y="0" width="219" height="50" isPrintWhenDetailOverflows="true" uuid="5f7e38b9-d916-4b88-bb18-35c595887e63"/>
+				<textElement textAlignment="Justified">
+					<font fontName="DejaVu Serif Condensed" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Observaciones}]]></textFieldExpression>
 			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="55" y="0" width="49" height="14" uuid="a9d2c5aa-18c7-4347-bd4c-93325fab85fe"/>
+				<textElement textAlignment="Center">
+					<font fontName="DejaVu Serif Condensed" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Cedula}]]></textFieldExpression>
+			</textField>
 			<textField>
-				<reportElement x="474" y="2" width="69" height="14" uuid="6ead242a-4379-4ba6-a889-5af1fbd886af"/>
+				<reportElement x="110" y="0" width="130" height="14" uuid="b9116976-8ed5-463e-9b88-16ba0dca6b1e"/>
 				<textElement>
 					<font fontName="DejaVu Serif Condensed" size="9"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{Status}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{Nombre}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0">
+				<reportElement x="240" y="0" width="58" height="14" uuid="1ecf2db0-52b5-4ebe-9d78-3767cd05814a"/>
+				<textElement>
+					<font fontName="DejaVu Serif Condensed" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Telefono}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="304" y="0" width="39" height="14" uuid="9da07a52-f0dd-46c5-b737-068c434d79af"/>
+				<textElement textAlignment="Center">
+					<font fontName="DejaVu Serif Condensed" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Asistencia}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
 	<columnFooter>
-		<band height="73" splitType="Stretch">
-			<staticText>
-				<reportElement x="66" y="31" width="62" height="13" uuid="84f30c8c-63f5-4a0e-8b5a-08668f7f3fa5"/>
-				<textElement>
-					<font fontName="DejaVu Serif Condensed" size="9" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Días:]]></text>
-			</staticText>
+		<band height="79" splitType="Stretch">
 			<staticText>
 				<reportElement x="0" y="16" width="66" height="15" uuid="94b9432f-7a40-49f3-ad1f-add6ca5b12ba"/>
 				<textElement>
@@ -278,21 +261,21 @@ order by fecha]]>
 				<text><![CDATA[- Recuento:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="66" y="44" width="62" height="13" uuid="6bfe6a10-10d1-462a-ad9e-95f4f7ac6f64"/>
+				<reportElement x="66" y="48" width="62" height="13" uuid="6bfe6a10-10d1-462a-ad9e-95f4f7ac6f64"/>
 				<textElement>
 					<font fontName="DejaVu Serif Condensed" size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Presentes:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="304" y="57" width="48" height="13" uuid="5958fc9d-21eb-41f0-9117-2fde77d0fb2a"/>
+				<reportElement x="304" y="61" width="55" height="13" uuid="5958fc9d-21eb-41f0-9117-2fde77d0fb2a"/>
 				<textElement>
 					<font fontName="DejaVu Serif Condensed" size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Ausencia:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="66" y="57" width="62" height="13" uuid="86c61bcb-e58d-4fc0-8084-43a02f8ab36a"/>
+				<reportElement x="66" y="61" width="62" height="13" uuid="86c61bcb-e58d-4fc0-8084-43a02f8ab36a"/>
 				<textElement>
 					<font fontName="DejaVu Serif Condensed" size="9" isBold="true"/>
 				</textElement>
@@ -305,19 +288,61 @@ order by fecha]]>
 				</graphicElement>
 			</line>
 			<staticText>
-				<reportElement x="304" y="45" width="48" height="13" uuid="36e17f62-1063-4f70-bfd1-8e2fb3eccf58"/>
+				<reportElement x="304" y="48" width="55" height="13" uuid="36e17f62-1063-4f70-bfd1-8e2fb3eccf58"/>
 				<textElement>
 					<font fontName="DejaVu Serif Condensed" size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Asistencia:]]></text>
 			</staticText>
+			<textField>
+				<reportElement x="128" y="48" width="100" height="13" uuid="7a04ca2b-eb35-472b-ba9e-e74836ab2f28"/>
+				<textElement>
+					<font fontName="DejaVu Serif Condensed" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{Presente_1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="128" y="61" width="100" height="13" uuid="4199e7ac-d95b-4698-95b6-04d343ba1f28"/>
+				<textElement>
+					<font fontName="DejaVu Serif Condensed" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{Ausente_1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="128" y="35" width="100" height="13" uuid="2bf5b0b3-9670-4dab-b322-f94a31cd7c53"/>
+				<textElement>
+					<font fontName="DejaVu Serif Condensed" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{id_1}]]></textFieldExpression>
+			</textField>
 			<staticText>
-				<reportElement x="304" y="31" width="62" height="13" uuid="070ba98e-00dd-4c59-be32-ff99610924e1"/>
+				<reportElement x="66" y="35" width="62" height="13" uuid="27e886ed-d83d-4a01-a40f-97cb10dea10d"/>
 				<textElement>
 					<font fontName="DejaVu Serif Condensed" size="9" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Porcentaje]]></text>
+				<text><![CDATA[Planificados:]]></text>
 			</staticText>
+			<staticText>
+				<reportElement x="304" y="35" width="155" height="13" uuid="672378df-ddcc-4c23-9aac-371cfdd2e8f1"/>
+				<textElement>
+					<font fontName="DejaVu Serif Condensed" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Porcentaje (%)]]></text>
+			</staticText>
+			<textField pattern="###0.00">
+				<reportElement x="359" y="48" width="100" height="13" uuid="e022c715-060d-417b-8e2a-7f0d37049050"/>
+				<textElement>
+					<font fontName="DejaVu Serif Condensed" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[(($V{Presente_1})/($V{id_1}))*100]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.00">
+				<reportElement x="359" y="61" width="100" height="13" uuid="dd1edafd-d3ad-4ee1-b40a-a833ac1ced6e"/>
+				<textElement>
+					<font fontName="DejaVu Serif Condensed" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[(($V{Ausente_1})/($V{id_1}))*100]]></textFieldExpression>
+			</textField>
 		</band>
 	</columnFooter>
 	<pageFooter>
