@@ -198,23 +198,23 @@ class Rep {
         $this->psuv = $psuv;
     }
 
-    function setCodigoEstado(interger $codigoEstado) {
+    function setCodigoEstado($codigoEstado) {
         $this->codigoEstado = $codigoEstado;
     }
 
-    function setCodigoMunicipio(interger $codigoMunicipio) {
+    function setCodigoMunicipio($codigoMunicipio) {
         $this->codigoMunicipio = $codigoMunicipio;
     }
 
-    function setCodigoParroquia(interger $codigoParroquia) {
+    function setCodigoParroquia($codigoParroquia) {
         $this->codigoParroquia = $codigoParroquia;
     }
 
-    function setCircuito(interger $circuito) {
+    function setCircuito($circuito) {
         $this->circuito = $circuito;
     }
 
-    function setCodigoCentro(interger $codigoCentro) {
+    function setCodigoCentro($codigoCentro) {
         $this->codigoCentro = $codigoCentro;
     }
 
