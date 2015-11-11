@@ -215,8 +215,8 @@ where cent.id=$P{idCentro}]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Fecha}]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement x="353" y="0" width="219" height="50" isPrintWhenDetailOverflows="true" uuid="5f7e38b9-d916-4b88-bb18-35c595887e63"/>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="353" y="0" width="219" height="50" uuid="5f7e38b9-d916-4b88-bb18-35c595887e63"/>
 				<textElement textAlignment="Justified">
 					<font fontName="DejaVu Serif Condensed" size="8"/>
 				</textElement>

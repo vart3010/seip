@@ -223,7 +223,7 @@ order by fecha]]>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="17" splitType="Stretch">
+		<band height="44" splitType="Stretch">
 			<textField>
 				<reportElement x="0" y="0" width="66" height="14" uuid="ee296e76-b0a6-4c8e-ac97-723956ff4504"/>
 				<textElement>
@@ -238,10 +238,10 @@ order by fecha]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Categoria}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="166" y="2" width="351" height="14" isPrintWhenDetailOverflows="true" uuid="5f7e38b9-d916-4b88-bb18-35c595887e63"/>
-				<textElement>
-					<font fontName="DejaVu Serif Condensed" size="9"/>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="166" y="2" width="351" height="40" uuid="5f7e38b9-d916-4b88-bb18-35c595887e63"/>
+				<textElement textAlignment="Justified">
+					<font fontName="DejaVu Serif Condensed" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Observaciones}]]></textFieldExpression>
 			</textField>
