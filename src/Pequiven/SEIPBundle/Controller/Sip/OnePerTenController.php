@@ -33,7 +33,7 @@ class OnePerTenController extends SEIPController {
     public function searchAction(Request $request) {
         $response = new JsonResponse();
         $em = $this->getDoctrine()->getEntityManager();
-        $cedula = $request->request->get('ced');
+        $cedula = $request->get('ced');
         $datos = array("nombre" => "", "centro" => "", "nameCentro" => "", "msj" => "");
 
         $user = $em->getRepository("\Pequiven\SEIPBundle\Entity\User")->findOneBy(array("identification" => $cedula));
