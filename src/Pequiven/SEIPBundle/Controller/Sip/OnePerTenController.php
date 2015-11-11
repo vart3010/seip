@@ -178,7 +178,7 @@ class OnePerTenController extends SEIPController {
                     "nombre" => $onePerTenMembers[0]->getNombre(),
                     "telefono" => $onePerTenMembers[0]->getTelefono(),
                     "idCentro" => $onePerTenMembers[0]->getCodCentro(),
-                    "centro" => $member->getNombreCentro()
+                    "centro" => $onePerTenMembers[0]->getNombreCentro()
                 );
             }
         }
