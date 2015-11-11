@@ -12,4 +12,13 @@ sip:
     cutl:
         title: CUTL        
         list: Listado de CUTL
+    center:
+        title: Datos del Centro
+        name: Centro de Votación
+        code: Código del Centro
+        list: Listado de Centros
+    assists: Asistencias
+    observations: Requerimientos
+    inventory: Inventario
+
 

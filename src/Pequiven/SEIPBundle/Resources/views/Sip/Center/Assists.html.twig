@@ -1,0 +1,53 @@
+{% trans_default_domain 'sip' %}
+
+<div class="block">
+    <div ng-controller="SipCenterAssistsController"> 
+        
+        <div class="block-title">
+            <h3 class="ng-binding">{{ 'sip.assists'|trans({}) }}</h3> 
+            {# añadir plan de acción #}
+            <div class="button-group absolute-right compact">
+                <a class="button icon-list-add " href="" ng-click="loadTemplateAssists()" title="">{{ 'pequiven.add'|trans({},'messages')  }}</a>
+            </div>       
+        </div>
+
+        <div class="with-padding">            
+            <table class="simple-table responsive-table tables-extras" id="sorting-example2">
+                <thead>
+                    <tr>
+                        <th scope="col" width="30%" class="header" align="left">
+                            CUTL
+                        </th>                    
+                        <th scope="col" width="10%" class="header" align="left">
+                            Fecha
+                        </th>    
+                        <th scope="col" width="10%" class="header" align="left">
+                            Asistencia
+                        </th> 
+                        <th scope="col" width="10%" class="header" align="left">
+                            Observación
+                        </th>      
+                    </tr>
+                </thead>     
+                {% for data in assist %}
+                <tbody align="center">
+                        <tr>
+                            <td rowspan="2" align="left">{{ nomCutl[data.cedula]  }}</td>                            
+                            <td rowspan="2" align="left">{{ data.fecha | date("d/m/Y")  }}</td>                            
+                            <td rowspan="2" align="left">
+                            {% set assist = data.assists %}
+                            {% if(assist == 1 ) %}
+                                {% set checkState = "checked" %}
+                            {% else  %}
+                                {% set checkState = "" %}
+                            {% endif %}
+                            <input type="checkbox" value="{{ data.assists  }}" class="switch blue-active mid-margin-right {{ checkState }}"  data-text-on="SI" data-text-off="NO" disabled>
+                            </td> 
+                            <td rowspan="2" align="left">{{ data.observations }}</td>                           
+                        </tr>                 
+                </tbody>                    
+                {% endfor %}       
+            </table> 
+        </div>
+    </div>
+</div>

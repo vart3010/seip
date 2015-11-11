@@ -232,11 +232,25 @@ class WorkStudyCircleController extends SEIPController {
 
         $user = $this->getUser();
 
+        $isAllowToAddMeetings = false;
+        $isAllowToAddProposals = false;
+
+        if ($workStudyCircle->getphase() < 4) {
+            $isAllowToAddMeetings = $workStudyCircleService->isAllowToAddMeetings($workStudyCircle);
+            $isAllowToAddProposals = $workStudyCircleService->isAllowToAddProposals($workStudyCircle);
+        } else {
+            foreach ($user->getWorkStudyCircles() as $circulos) {
+                if ($circulos->getphase() == 4) {
+                    $isAllowToAddMeetings = true;
+                    $isAllowToAddProposals = true;
+                }
+            }
+        }
+
+
         $isALlowToEdit = $workStudyCircleService->isAllowToEdit($workStudyCircle);
         $isAllowToAddMembers = $workStudyCircleService->isAllowToAddMembers($workStudyCircle);
         $isAllowToEditMembers = $workStudyCircleService->isAllowToEditMembers($workStudyCircle);
-        $isAllowToAddMeetings = $workStudyCircleService->isAllowToAddMeetings($workStudyCircle);
-        $isAllowToAddProposals = $workStudyCircleService->isAllowToAddProposals($workStudyCircle);
         $isAllowToEditProposals = $workStudyCircleService->isAllowToEditProposals($workStudyCircle);
 
         return $this->render('PequivenSEIPBundle:Politic:WorkStudyCircle\showPhase.html.twig', array(
@@ -474,6 +488,8 @@ class WorkStudyCircleController extends SEIPController {
         $proposals = $em->getRepository('PequivenSEIPBundle:Politic\Proposal')->findBy(array('workStudyCircle' => $request->get("idWorkStudyCircle")));
         $meetings = $workStudyCircle->getMeeting();
 
+        $lineStrategics = null;
+
         //RECORRO LAS PROPUESTAS PARA SACAR LAS LINEAS DE CADA UNA NO IMPORTA SI SE REPITEN
         foreach ($proposals as $prop) {
             $lineStrategics[] = $prop->getLineStrategic()->getDescription();
@@ -482,7 +498,11 @@ class WorkStudyCircleController extends SEIPController {
         //AGRUPO EL ARREGLO POR LINEA, ES DECIR UN REGISTRO POR CADA LINEA QUE TENGA PROPUESTA. 
         //KEY->DESCRIPCION LINEA y VALUE->FRECUENCIA (CUANTAS VECES SE REPITE)
         //TODO: ARREGLAR ESTO, DA ERROR
-        $lineas = array_count_values($lineStrategics);
+        if ($lineStrategics <> null) {
+            $lineas = array_count_values($lineStrategics);
+        } else {
+            $lineas = null;
+        }
 
         $data = array(
             'workStudyCircle' => $workStudyCircle,

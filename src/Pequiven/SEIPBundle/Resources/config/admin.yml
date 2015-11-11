@@ -628,3 +628,13 @@ services:
             - ~
         calls:
             - [ setTranslationDomain, [SonataAdminBundle]]
+    sonata.admin.sip.material:
+        class: Pequiven\MasterBundle\Admin\Sip\SipMaterialAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Sip", label: "Material CUTL" }
+        arguments:
+            - ~
+            - Pequiven\SEIPBundle\Entity\Sip\Center\Material
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]

@@ -53,6 +53,7 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeMeeting', 'class' => 'Pequiven\SEIPBundle\Entity\Politic\Meeting', 'format' => 'json'),
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeMeetingFile', 'class' => 'Pequiven\SEIPBundle\Entity\Politic\MeetingFile', 'format' => 'json'),
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeCutl', 'class' => 'Pequiven\SEIPBundle\Entity\Sip\Cutl', 'format' => 'json'),
+            array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeCenter', 'class' => 'Pequiven\SEIPBundle\Entity\Sip\Centro', 'format' => 'json'),
         );
     }
 
@@ -391,7 +392,7 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
 //        $user = $this->getUser();
 //        if($details->getNotificationInProgressByUser() != null){
 ////            if($details->getNotificationInProgressByUser()->getId() === $user->getId() && (($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC && $arrangementProgram->getTacticalObjective()->getGerencia()->getId() == 9) || ($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE && $arrangementProgram->getOperationalObjective()->getGerenciaSecond()->getGerencia()->getId() == 9))){
-//            if($details->getNotificationInProgressByUser()->getId() === $user->getId() && (($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC && $arrangementProgram->getTacticalObjective()->getGerencia()->getId() == 29) || ($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE && $arrangementProgram->getOperationalObjective()->getGerencia()->getId() == 29))){
+//            if($details->getNotificationInProgressByUser()->getId() === $user->getId() && (($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC && $arrangementProgram->getTacticalObjective()->getGerencia()->getId() == 18) || ($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE && $arrangementProgram->getOperationalObjective()->getGerencia()->getId() == 18))){
 //                $data['julyReal']['isEnabled'] = true;
 //                $data['augustReal']['isEnabled'] = true;
 //                $data['septemberReal']['isEnabled'] = true;
@@ -672,6 +673,25 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
         $links['self']['show'] = $this->generateUrl('pequiven_sip_cutl_show', array('id' => $object->getId()));
 
         $event->getVisitor()->addData('_links', $links);
+    }
+    
+    public function onPostSerializeCenter(ObjectEvent $event) {
+        $object = $event->getObject();
+        
+        $codEstado = $object->getCodigoEstado();
+        $codMunicipio = $object->getCodigoMunicipio();
+        $codParroquia = $object->getCodigoParroquia();
+        
+        $estado = $this->container->get('pequiven.repository.estado')->findOneBy(array('id' => $codEstado));
+        $municipio = $this->container->get('pequiven.repository.municipio')->findOneBy(array('codigoMunicipio' => $codMunicipio));
+        $parroquia = $this->container->get('pequiven.repository.parroquia')->findOneBy(array('codigoParroquia' => $codParroquia, 'codigoMunicipio' => $codMunicipio));
+        
+        $links['self']['show'] = $this->generateUrl('pequiven_sip_center_show', array('id' => $object->getId()));
+
+        $event->getVisitor()->addData('_links', $links);
+//        $event->getVisitor()->addData('estado', $estado->getDescription());
+        $event->getVisitor()->addData('municipio', $municipio->getDescription());
+        $event->getVisitor()->addData('parroquia', $parroquia->getDescription());
     }
 
     public function onPostSerializeMeetingFile(ObjectEvent $event) {

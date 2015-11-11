@@ -60,6 +60,28 @@ class ProposalType extends AbstractType {
                         'rows' => '10',
                         'style' => 'text-transform:uppercase'
             )))
+                ->add('description4', 'textarea', array(
+                    'label' => 'Propuesta 4',
+                    'label_attr' => array(
+                        'class' => 'label',
+                    ),
+                    'mapped' => false,
+                    'attr' => array(
+                        'cols' => '80',
+                        'rows' => '10',
+                        'style' => 'text-transform:uppercase'
+            )))
+                ->add('description5', 'textarea', array(
+                    'label' => 'Propuesta 5',
+                    'label_attr' => array(
+                        'class' => 'label',
+                    ),
+                    'mapped' => false,
+                    'attr' => array(
+                        'cols' => '80',
+                        'rows' => '10',
+                        'style' => 'text-transform:uppercase'
+            )))
         ;
     }
 

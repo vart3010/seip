@@ -1,0 +1,9 @@
+Pequiven\SEIPBundle\Entity\Sip\Estado:
+    exclusion_policy: ALL
+    properties:
+        id:
+            expose: true
+            groups: [id]
+        description:
+            expose: true
+            groups: [api_list]

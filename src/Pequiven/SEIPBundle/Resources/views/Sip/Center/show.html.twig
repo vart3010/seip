@@ -1,0 +1,218 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
+
+{% trans_default_domain 'sip' %}
+
+{% block javascripts_base %}
+    {{ parent() }}
+    <script src="{{  asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.input.js') }}"></script>
+{% endblock javascripts_base %}
+
+{% block before_body %}
+    {{ contentHeader("sip.center.title" | trans({}))   }}
+{% endblock %}
+
+{% block body %}
+    <div class="block_id" ng-init="idCenter='{{ center.codigoCentro }}'"></div>    
+    {% if(assist == 1 ) %}
+        {% set checkState = "checked" %}
+    {% else  %}
+        {% set checkState = "" %}
+    {% endif %}
+
+
+    <fieldset class="fieldset">
+        <legend class="legend" >{{ 'sip.center.title'|trans({}) }}&nbsp;</legend>
+        <div class="columns">
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Estado</label>
+                    {{ center.descriptionEstado }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Municipio</label>
+                    {{ center.descriptionMunicipio }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Parroquia</label>
+                    {{ center.descriptionParroquia }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Código Centro</label>
+                    {{ center.codigoCentro }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Centro</label>
+                    {{ center.description }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Dirección</label>
+                    {{ center.direccion }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">N° de Mesas</label>
+                    {{ center.mesas }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">N° de Electores</label>
+                    {{ center.electores }}
+                </p>
+            </div>
+            {% if center.eje > 0 %}
+                <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                    <p class="inline-label">
+                        <label class="label">Eje en la Parroquia</label>
+                        {{ center.eje }}
+                    </p>
+                </div>
+            {% endif %}
+        </div>
+    </fieldset>   
+    <br>
+    <fieldset class="fieldset">
+        <legend class="legend" >CUTL&nbsp;</legend>
+        <div class="columns">
+            {% set cont = 0 %}
+            {% for dataCutl in  cutl %}
+                {% if cont == 1 %}    
+                    <HR>
+                {% endif %}
+                <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                    <p class="inline-label">
+                        <label class="label">Cedula</label>
+                        {{ dataCutl.cedula }}
+                    </p>
+                </div>
+                <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                    <p class="inline-label">
+                        <label class="label">Nombre</label>
+                        {{ dataCutl.nombre }}
+                    </p> 
+                </div>
+                <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                    <p class="inline-label">
+                        <label class="label">Gerencia de Primera Linea</label>
+                        {{ dataCutl.gerenciafirst }}
+                    </p>
+                </div>
+                <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                    <p class="inline-label">
+                        <label class="label">Gerencia de Segunda Linea</label>
+                        {{ dataCutl.gerenciaSecond }}
+                    </p>
+                </div>
+                <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                    <p class="inline-label">
+                        <label class="label">Telefono:</label>
+                        {{ dataCutl.telefonoSeip }}/
+                        {{ dataCutl.telefonoCutl }}/
+                        {{ dataCutl.telefonoFirma }}
+                    </p>
+                </div>
+                <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                </div>
+                {% set cont = cont + 1 %}                    
+            {% endfor %}
+        </div>
+    </fieldset> 
+    <br>
+    <fieldset class="fieldset">
+        <legend class="legend" >UBCH&nbsp;</legend>
+        <div class="columns">
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Cédula</label>
+                    {{ center.cedulaubch }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Nombre</label>
+                    {{ center.nombreubch }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Teléfono</label>
+                    {{ center.telefonoubch }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Cargo</label>
+                    {{ center.cargoubch }}
+                </p>
+            </div>
+        </div>        
+    </fieldset> 
+    <br>   
+    {# Asistencias #}                                
+        {% include 'PequivenSEIPBundle:Sip:Center/Assists.html.twig' %}                             
+    
+    <br>
+    {# Observaciones #}
+        {% include 'PequivenSEIPBundle:Sip:Center/Observations.html.twig' %} 
+    <br>
+    {# Inventario #}
+        {% include 'PequivenSEIPBundle:Sip:Center/Inventory.html.twig' %}         
+    
+{% endblock %}
+
+{% block javascript %}
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            $('#switch-mode').change(function () {
+                $('.switch-wrapper')[this.checked ? 'addClass' : 'removeClass']('reversed-switches');
+            });
+            $("#switchAssistance").change(function () {
+                var value = $(this).val();
+                if (value == 1) {
+                    $(this).val(0);
+                } else {
+                    $(this).val(1);
+                }
+                console.log(value);
+            });
+            $("a#save").click(function () {
+                var value = $("#switchAssistance").val();
+                var idCutl = $("#switchAssistance").attr("data");
+                var obs = $("#obs").val();
+                var data = {
+                    idCutl: idCutl,
+                    status: value,
+                    obs: obs
+                };
+                console.log(value);
+                $.ajax({
+                    type: 'get',
+                    url: '{{ path("update_assistance_cutl") }}',
+                    data: data,
+                    success: function (data) {
+                        //window.open(data["url"]);
+                        $(location).attr('href', data["url"]);
+                    }
+                });
+
+                console.log(idCutl);
+            });
+        });
+    </script>
+{% endblock %}
+

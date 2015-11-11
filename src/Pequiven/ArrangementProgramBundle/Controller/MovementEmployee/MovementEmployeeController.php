@@ -2,7 +2,6 @@
 
 namespace Pequiven\ArrangementProgramBundle\Controller\MovementEmployee;
 
-use DateTime;
 use Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram;
 use Pequiven\ArrangementProgramBundle\Entity\Goal;
 use Pequiven\ArrangementProgramBundle\Entity\MovementEmployee\MovementEmployee;
@@ -389,7 +388,7 @@ class MovementEmployeeController extends SEIPController {
 
         $id = $request->get('idGoal');
         $reportService = $this->container->get('seip.service.report');
-        $route = "MovementEmployee/Movimiento-en-Meta.jasper";
+        $route = "MovementEmployee/Movimiento-en-Meta.jrxml";
         $parameters = array("idGoal" => $id);
         $reportService->DownloadReportService($parameters, $route);
 

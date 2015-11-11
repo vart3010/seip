@@ -1,0 +1,39 @@
+{% trans_default_domain 'sip' %}
+
+<div class="block">    
+    <div ng-controller="SipCenterInventoryController"> 
+
+        <div class="block-title">
+            <h3 class="ng-binding">{{ 'sip.inventory'|trans({}) }}</h3>             
+            <div class="button-group absolute-right compact">
+                <a class="button icon-list-add " href="" ng-click="loadTemplateInventory()" title="">{{ 'pequiven.add'|trans({},'messages')  }}</a>
+            </div>       
+        </div>
+        <div class="with-padding">            
+            <table class="simple-table responsive-table tables-extras" id="sorting-example2">
+                <thead>
+                    <tr> 
+                        <th scope="col" width="20%" class="header">Material</th>
+                        <th scope="col" width="50%" class="header">Observación</th>
+                        <th scope="col" width="15%" class="header">Cantidad</th>
+                        <th scope="col" width="15%" class="header">Fecha</th>                       
+                    </tr>
+                </thead>                
+                {% for dataInv  in inventory %}
+                <tbody>
+                        <tr>
+                            <td rowspan="2">{{ dataInv.material }}</td>            
+
+                            <td rowspan="2">{{ dataInv.observations }}</td>
+
+                            <td rowspan="2">{{ dataInv.cantidad }}</td>
+                        
+                            <td rowspan="2">{{ dataInv.fecha | date("d/m/Y") }}</td>
+                            
+                        </tr>
+                </tbody>                                
+                {% endfor %}
+            </table> 
+        </div>
+    </div>
+</div>
