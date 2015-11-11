@@ -1,0 +1,158 @@
+
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
+
+{% trans_default_domain 'sip' %}
+
+{% block javascripts_base %}
+    {{ parent() }}
+    <script src="{{  asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.input.js') }}"></script>
+{% endblock javascripts_base %}
+
+{% block before_body %}
+    {{ contentHeader(
+        ("sip.consulta"|trans )
+    ) }}
+{% endblock %}
+
+{% block body %}
+    <form action="{{ path("pequiven_search_members") }}" method="POST" id="search">
+        <fieldset class="fieldset">
+            <legend class="legend" >{{ "sip.consulta"|trans }}</legend>
+            <div class="columns">
+                <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                    <p class="inline-label">
+                        <label class="label">{{ ("sip.busqueda"|trans ) }}</label>
+                        {{ form_widget(form.user) }}
+                        {{ form_errors(form.user) }}
+                    </p>
+                </div>
+                {#<div class="new-row-mobile three-columns three-columns-tablet twelve-columns-mobile">
+                    <p class="inline-label">
+                        <input class="button margin-top" type="submit" value="Guardar">
+                    </p>
+                </div>#}
+        </fieldset>
+    </form>
+
+    <br>
+
+    <div class="block" >
+        <div class="block-title">
+            <h3 class="ng-binding">1x10 de {{ user }}</h3>
+            <div class="button-group absolute-right compact">
+                <a class="button icon-list-add " href="{{ path("pequiven_onePerTen_add_member",{idUserOne:user.id})}}"  title="">
+                    Agregar Miembro&nbsp;
+                </a>
+            </div>
+        </div>
+        {% if(members|length)>0 %}
+            <div class="with-padding">
+                <table class="simple-table responsive-table tables-extras" id="sorting-example2">
+                    <thead>
+                        <tr>
+                            <th scope="col" width="2%" class="header">Nro</th>
+                            <th scope="col" width="28%" class="header">Nombre</th>
+                            <th scope="col" width="28%" class="header">Centro</th>
+                            <th scope="col" width="30%" class="header">Telefono</th>
+                            <th scope="col" width="30%" class="header">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        {% for member  in members %}
+                            <tr class="row_{{ member.id }}">
+                                <td>{{ loop.index }}</td>
+                                <td>{{ member.nombre}}</td>
+                                <td>{{ member.centro}}</td>
+                                <td>{{ member.telefono}}</td>
+                                <td> 
+                                    <button  class="button del" data="{{ member.id  }}" type="button">Eliminar</button>
+                                </td>
+                            </tr>
+                        {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="with-padding"><h3>No tiene miembros asociados.</h3></div>
+        {% endif %}
+    </div>
+
+
+    <br>
+
+{% endblock %}
+
+
+{% block javascript %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $("#onePerTen_search_user").select2({allowClear: true});
+            $("#onePerTen_search_user").change(function () {
+                $("#search").submit();
+            });
+
+            $("button.del").click(function () {
+                var id = $(this).attr("data");
+                //alert(idUser);
+                var data = {
+                    id: id
+                };
+                $.ajax({
+                    type: 'post',
+                    url: '{{ path("pequiven_delete_member") }}',
+                    data: data,
+                    success: function (data) {
+                        $("tr.row_" + id).remove();
+                        console.log(data);
+                    }
+                });
+
+            });
+
+            $("#save").click(function () {
+                var tlf = $("#telefono").val();
+                if (tlf != "") {
+                    $("form#saveOne").submit();
+                } else {
+                    alert("Debe Ingresar el Telefono.");
+                }
+            });
+
+
+            $("#search").click(function () {
+                if ($("#cedula").val() != "") {
+                    var data = {
+                        ced: $("#cedula").val()
+                    };
+                    $.ajax({
+                        type: 'post',
+                        url: '{{ path("search_one_por_cedula") }}',
+                        data: data,
+                        success: function (data) {
+                            $("p.name").html(data["nombre"]);
+                            $("p.centro").html(data["nameCentro"]);
+                            $("input#codCentro").val(data["centro"]);
+                            $("input#nombre").val(data["nombre"]);
+                            $("input#cedula").val(data["cedula"]);
+                            if (data["nombre"] != "" || data["nameCentro"]) {
+                                $("button#save").show();
+                                $("input#telefono").show();
+                            }
+                            console.log(data);
+                        }
+                    });
+
+                } else {
+                    alert("Debe Ingresar una Cédula.");
+                }
+            });
+        });
+    </script>
+{% endblock %}

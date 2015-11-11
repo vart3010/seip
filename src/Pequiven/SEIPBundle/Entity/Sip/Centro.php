@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Parroquia
  * @author Victor Tortolero vart10.30@gmail.com
  * @ORM\Table(name="sip_centro")
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\Sip\CentroRepository")
  */
 class Centro {
 
@@ -56,7 +56,7 @@ class Centro {
      * @ORM\Column(name="description", type="string", length=255)
      */
     private $description;
-    
+
     function getId() {
         return $this->id;
     }
@@ -104,7 +104,5 @@ class Centro {
     function setDescription($description) {
         $this->description = $description;
     }
-
-
 
 }

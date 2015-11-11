@@ -1,6 +1,6 @@
 <?php
 
-namespace Pequiven\SEIPBundle\Sip\Entity;
+namespace Pequiven\SEIPBundle\Entity\Sip;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -10,8 +10,8 @@ use Gedmo\Mapping\Annotation as Gedmo;
 /**
  * Rep
  *
- * @ORM\Table(name="sip_rep")
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\Sip\RepRepository")
+ * @ORM\Table(name="sip_rep",indexes={@ORM\Index(name="rep_idx", columns={"cedula","codigoMunicipio","codigoParroquia","codigoEstado","codigoCentro","circuito"})})
  */
 class Rep {
 
@@ -36,6 +36,13 @@ class Rep {
      * @ORM\Column(name="cedula", type="integer")
      */
     private $cedula;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="nombre", type="string")
+     */
+    private $nombre;
 
     /**
      * @var string
@@ -106,6 +113,14 @@ class Rep {
      * @ORM\Column(name="mesa", type="string")
      */
     private $mesa;
+
+    function getNombre() {
+        return $this->nombre;
+    }
+
+    function setNombre($nombre) {
+        $this->nombre = $nombre;
+    }
 
     function getIdCedula() {
         return $this->idCedula;

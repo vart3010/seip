@@ -1,6 +1,6 @@
 <?php
 
-namespace Pequiven\SEIPBundle\Sip\Entity;
+namespace Pequiven\SEIPBundle\Entity\Sip;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -11,7 +11,8 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * Rep
  *
  * @ORM\Table(name="sip_nomina")
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\Sip\NominaRepository")
+ * @ORM\Table(name="sip_nomina",indexes={@ORM\Index(name="nomina_idx", columns={"nroPersonal","codigoMunicipio","codigoParroquia","codigoEstado","codigoCentro","codigoCentroSimulacro","codigoCentro_6d"})})
  */
 class Nomina {
 
@@ -26,7 +27,7 @@ class Nomina {
     /**
      * @var integer
      *
-     * @ORM\Column(name="nroPersonal", type="integer")
+     * @ORM\Column(name="nroPersonal",type="integer",nullable=false)
      */
     private $nroPersonal;
 
@@ -82,21 +83,21 @@ class Nomina {
     /**
      * @var string
      *
-     * @ORM\Column(name="codigoEstado", type="integer")
+     * @ORM\Column(name="codigoEstado", type="integer",nullable=false)
      */
     private $codigoEstado;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="codigoMunicipio", type="integer")
+     * @ORM\Column(name="codigoMunicipio", type="integer",nullable=false)
      */
     private $codigoMunicipio;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="codigoParroquia", type="integer")
+     * @ORM\Column(name="codigoParroquia", type="integer",nullable=false)
      */
     private $codigoParroquia;
 
@@ -110,7 +111,7 @@ class Nomina {
     /**
      * @var string
      *
-     * @ORM\Column(name="codigoCentro", type="integer")
+     * @ORM\Column(name="codigoCentro", type="integer",nullable=false)
      */
     private $codigoCentro;
 
@@ -131,14 +132,14 @@ class Nomina {
     /**
      * @var string
      *
-     * @ORM\Column(name="codigoCentroSimulacro", type="integer")
+     * @ORM\Column(name="codigoCentroSimulacro", type="integer",nullable=false)
      */
     private $codigoCentroSimulacro;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="centroSimulacro", type="integer")
+     * @ORM\Column(name="centroSimulacro", type="integer",nullable=false)
      */
     private $centroSimulacro;
 
@@ -152,7 +153,7 @@ class Nomina {
     /**
      * @var string
      *
-     * @ORM\Column(name="codigoCentro_6d", type="integer")
+     * @ORM\Column(name="codigoCentro_6d", type="integer",nullable=false)
      */
     private $codigoCentro6d;
 

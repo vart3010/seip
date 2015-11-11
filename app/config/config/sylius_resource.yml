@@ -467,7 +467,9 @@ sylius_resource:
             templates: PequivenSEIPBundle:Sip/onePerTen
             classes:
                 controller: Pequiven\SEIPBundle\Controller\Sip\OnePerTenController
-                model: Pequiven\SEIPBundle\Entity\Sip\onePerTen\OnePerTenRepository
+                model: Pequiven\SEIPBundle\Entity\Sip\OnePerTen
+                repository: Pequiven\SEIPBundle\Repository\Sip\OnePerTen\OnePerTenRepository
+                 
         pequiven.cutl:
             driver: doctrine/orm
             templates: PequivenSEIPBundle:Sip/cutl

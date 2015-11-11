@@ -235,6 +235,26 @@ class UserRepository extends EntityRepository {
         return $qb;
     }
 
+    function findQueryUsersByYesWorkStudyCircle() {
+        $user = $this->getUser();
+        $qb = $this->getQueryBuilder();
+        $qb
+                ->addSelect('u')
+                ->innerJoin('u.groups', 'g')
+                ->andWhere('u.enabled = :enabled')
+                ->setParameter('enabled', true)
+                ->andWhere('u.workStudyCircle = :circle')
+                ->setParameter('circle', $user->getWorkStudyCircle())
+                ->andWhere('u.id != :user')
+                ->setParameter('user', $user->getId());
+        $qb
+                ->andWhere('g.level <= :level')
+                ->setParameter('level', \Pequiven\MasterBundle\Entity\Rol::ROLE_DIRECTIVE);
+
+
+        return $qb;
+    }
+
     function findQueryUsersCoordinatorPhaseWorkStudyCircle(array $criteria = array()) {
         $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
 
@@ -576,7 +596,7 @@ class UserRepository extends EntityRepository {
             return $qb->getQuery()->getResult();
         }
     }
-    
+
     /**
      * Retorna los Usuarios Asignados a un Programa de Gestión en Específico. Usada por RemoveAPType.php
      * @param int $idGoal
