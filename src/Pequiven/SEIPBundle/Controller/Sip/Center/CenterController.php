@@ -13,6 +13,9 @@ use Pequiven\SEIPBundle\Form\Sip\Center\StatusType;
 use Pequiven\SEIPBundle\Entity\Sip\Center\Assists;
 use Pequiven\SEIPBundle\Form\Sip\Center\AssistsType;
 
+use Pequiven\SEIPBundle\Entity\Sip\Center\Inventory;
+use Pequiven\SEIPBundle\Form\Sip\Center\InventoryType;
+
 /**
  * Controlador Centros
  * @author Maximo Sojo <maxsojo13@gmail.com>
@@ -213,6 +216,53 @@ class CenterController extends SEIPController {
         }
         
     }
+
+    /**
+     * Formulario de Inventario de materiales CUTL
+     * @param Request $request
+     * @return type
+     */
+    public function formInventoryAction(Request $request) {
+
+        $em = $this->getDoctrine()->getEntityManager();
+        
+        $idCenter = $request->get('idCenter');
+
+        $inventory = new Inventory();
+        
+        $form = $this->createForm(new InventoryType(), $inventory);
+
+
+        if (isset($request->get('sip_center_inventory')['material'])) {
+            
+            $material = $request->get('sip_center_inventory')['material'];
+            
+            $material = $this->get('pequiven.repository.material')->find($material);
+
+            $form->bind($this->getRequest());
+            //Seteo de datos
+            $inventory->setCodigoCentro($idCenter);            
+            $inventory->setMaterial($material);
+
+            $inventory = $form->getData();            
+            
+            $em->persist($inventory);
+            $em->flush();            
+        }
+
+        $view = $this
+                ->view()
+                ->setTemplate($this->config->getTemplate('Form/Inventory.html'))
+                ->setTemplateVar($this->config->getPluralResourceName())
+                ->setData(array(           
+                'form' => $form->createView(),
+                ))
+        ;
+        $view->getSerializationContext()->setGroups(array('id', 'api_list'));
+        
+        return $view;
+        
+    }
     
     /**
      * Listado de Centros
@@ -321,8 +371,9 @@ class CenterController extends SEIPController {
         $assist = $this->get('pequiven.repository.assists')->findBy(array('codigoCentro' => $codigoCentro));
 
         $observations = $this->get('pequiven.repository.observations')->findBy(array('codigoCentro' => $codigoCentro));
-
-
+        
+        $inventory = $this->get('pequiven.repository.inventory')->findBy(array('codigoCentro' => $codigoCentro));
+        
         return $this->render('PequivenSEIPBundle:Sip:Center\show.html.twig', array(
                     'center'        => $center,
                     'cutl'          => $cutl,
@@ -330,7 +381,8 @@ class CenterController extends SEIPController {
                     'observations'  => $observations,
                     'nomCutl'       => $nomCutl,
                     'catObs'        => $catObs,
-                    'status'        => $status
+                    'status'        => $status,
+                    'inventory'     => $inventory
         ));
     }
 

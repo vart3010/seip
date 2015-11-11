@@ -1,0 +1,50 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutSIG.html.twig' %}
+
+{% block body %}
+{% trans_default_domain 'sip' %}    
+        
+        <form method="POST" id="form_sip_center_inventory">
+            <fieldset class="fieldset fields-list">
+                <legend class="legend">{{ 'sip.observations'|trans ({}) }}</legend>
+                    {{ form_errors(form) }} 
+                    <div class="field-block button-height" >
+                        {{ form_label(form.fecha) }}                        
+                        {{ form_widget(form.fecha) }}
+                        {{ form_errors(form.fecha) }}
+                    </div>
+                    <div class="field-block button-height" >
+                        {{ form_label(form.material) }}                        
+                        {{ form_widget(form.material) }}
+                        {{ form_errors(form.material) }}
+                    </div>
+                    <div class="field-block button-height" >
+                        {{ form_label(form.cantidad) }}                        
+                        {{ form_widget(form.cantidad) }}
+                        {{ form_errors(form.cantidad) }}
+                    </div>
+                    <div class="field-block button-height" >
+                        {{ form_label(form.observations) }}                        
+                        {{ form_widget(form.observations) }}
+                        {{ form_errors(form.observations) }}
+                    </div>
+                    {{ form_rest(form) }}
+            
+            </fieldset>
+        </form>       
+
+{% endblock %}
+
+{% block javascript_base %}
+    <script type="text/javascript">
+        
+        function justNumbers(e)
+            {
+            var keynum = window.event ? window.event.keyCode : e.which;
+            if ((keynum == 8) || (keynum == 46))
+            return true;
+             
+            return /\d/.test(String.fromCharCode(keynum));
+        }
+        
+    </script>
+{% endblock %}
