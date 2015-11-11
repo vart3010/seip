@@ -1649,7 +1649,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
 
 
             $register = $this->factory->createItem('RegisterOnePerTen', $this->getSubLevelOptions(array(
-                                'route' => 'pequiven_onePerTen_create',
+                                'route' => 'pequiven_search_members',
                             ))
                     )->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.register', $section)));
 

@@ -11,7 +11,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * OnePerTen
  * @author Victor Tortolero vart10.30@gmail.com
  * @ORM\Table(name="sip_onePerTen")
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\Sip\OnePerTenRepository")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  * @ORM\HasLifecycleCallbacks()
  */
@@ -22,7 +22,7 @@ class OnePerTen {
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -30,7 +30,7 @@ class OnePerTen {
      * cedula del 1
      * @var string
      *
-     * @ORM\Column(name="cedula", type="string", length=12)
+     * @ORM\Column(name="cedula", type="string", length=12,nullable=true)
      */
     private $cedula;
 
@@ -126,6 +126,5 @@ class OnePerTen {
     function setDeletedAt($deletedAt) {
         $this->deletedAt = $deletedAt;
     }
-
 
 }

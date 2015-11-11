@@ -8,7 +8,7 @@ use Pequiven\SEIPBundle\Doctrine\ORM\SeipEntityRepository as EntityRepository;
  * Repositorio de 1x10
  * @author Victor Tortolero vart10.30@gmail.com
  */
-class OnePerTenRepository {
+class OnePerTenRepository extends EntityRepository {
 
 //    public function getValidUsers() {
 //

@@ -11,7 +11,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * miembros de onePerTen
  * @author Victor Tortolero vart10.30@gmail.com
  * @ORM\Table(name="sip_onePerTenMembers")
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\Sip\OnePerTenMembersRepository")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  * @ORM\HasLifecycleCallbacks()
  */
@@ -22,9 +22,17 @@ class OnePerTenMembers {
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+
+    /**
+     * Id one
+     * @var \Pequiven\SEIPBundle\Entity\Sip\OnePerTen
+     *
+     * @ORM\ManyToOne(targetEntity="\Pequiven\SEIPBundle\Entity\Sip\OnePerTen")
+     */
+    private $one;
 
     /**
      * cedula del 1
@@ -49,14 +57,6 @@ class OnePerTenMembers {
      * @ORM\Column(name="codCentro", type="string")
      */
     private $codCentro;
-
-    /**
-     * nombre de centro
-     * @var string
-     *
-     * @ORM\Column(name="nombreCentro", type="string")
-     */
-    private $nombreCentro;
 
     /**
      * telefono
@@ -94,6 +94,14 @@ class OnePerTenMembers {
      */
     private $deletedAt;
 
+    function getOne() {
+        return $this->one;
+    }
+
+    function setOne(\Pequiven\SEIPBundle\Entity\Sip\OnePerTen $one) {
+        $this->one = $one;
+    }
+
     function getId() {
         return $this->id;
     }
@@ -108,10 +116,6 @@ class OnePerTenMembers {
 
     function getCodCentro() {
         return $this->codCentro;
-    }
-
-    function getNombreCentro() {
-        return $this->nombreCentro;
     }
 
     function getTelefono() {
@@ -148,10 +152,6 @@ class OnePerTenMembers {
 
     function setCodCentro($codCentro) {
         $this->codCentro = $codCentro;
-    }
-
-    function setNombreCentro($nombreCentro) {
-        $this->nombreCentro = $nombreCentro;
     }
 
     function setTelefono($telefono) {

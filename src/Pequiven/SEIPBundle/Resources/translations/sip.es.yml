@@ -1,7 +1,14 @@
 sip:
     create: Registro de 1x10
+    consulta: Consulta de 1x10
     list: Lista
-    cedula: Cédula    
+    cedula: Cédula
+    centro: Centro
+    nombre: Nombre
+    telefono: Teléfono
+    miembros: Miembros
+    miembro: Miembro
+    busqueda: Búsqueda
     cutl:
         title: CUTL        
         list: Listado de CUTL

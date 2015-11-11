@@ -39,6 +39,14 @@ class Cutl {
      * @ORM\Column(name="parroquia", type="string", length=255)
      */
     private $parroquia;
+    
+    /**
+     * Eje
+     * @var integer
+     *
+     * @ORM\Column(name="eje", type="integer")
+     */
+    private $eje = 0;
 
     /**
      * codigo centro
@@ -128,28 +136,6 @@ class Cutl {
      */
     private $gerenciaSecond;
 
-    /**
-     * nombreCentro
-     * @var string
-     *
-     * @ORM\Column(name="nombreCentro", type="string")
-     */
-    private $nombreCentro;
-
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="assistance", type="boolean")
-     */
-    private $assistance = false;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="observation",type="text")
-     */
-    private $observation;
-
     function getId() {
         return $this->id;
     }
@@ -160,6 +146,11 @@ class Cutl {
 
     function getParroquia() {
         return $this->parroquia;
+    }
+    
+        
+    function getEje() {
+        return $this->eje;
     }
 
     function getCodigoCentro() {
@@ -206,18 +197,6 @@ class Cutl {
         return $this->gerenciaSecond;
     }
 
-    function getNombreCentro() {
-        return $this->nombreCentro;
-    }
-
-    function getAssistance() {
-        return $this->assistance;
-    }
-
-    function getObservation() {
-        return $this->observation;
-    }
-
     function setId($id) {
         $this->id = $id;
     }
@@ -228,6 +207,10 @@ class Cutl {
 
     function setParroquia($parroquia) {
         $this->parroquia = $parroquia;
+    }
+    
+    function setEje($eje) {
+        $this->eje = $eje;
     }
 
     function setCodigoCentro($codigoCentro) {
@@ -272,18 +255,6 @@ class Cutl {
 
     function setGerenciaSecond($gerenciaSecond) {
         $this->gerenciaSecond = $gerenciaSecond;
-    }
-
-    function setNombreCentro($nombreCentro) {
-        $this->nombreCentro = $nombreCentro;
-    }
-
-    function setAssistance($assistance) {
-        $this->assistance = $assistance;
-    }
-
-    function setObservation($observation) {
-        $this->observation = $observation;
     }
 
 }

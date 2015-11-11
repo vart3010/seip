@@ -1,8 +1,8 @@
 ## SIP
-pequiven_onePerTen_create:
-    path: /1x10/create
+pequiven_onePerTen_add_member:
+    path: /1x10/add/{idUserOne}
     defaults:
-        _controller: pequiven.controller.onePerTen:createAction
+        _controller: pequiven.controller.onePerTen:addMemberAction
     methods: [GET|POST]
     options:
         expose: true
@@ -33,6 +33,27 @@ pequiven_sip_cutl_show:
     methods: [GET|POST]
     options:
         expose: true
+
+        
+save_onePerTen:
+    path: /1x10/save
+    defaults:
+        _controller: pequiven.controller.onePerTen:saveAction
+    methods: [GET|POST]
+    options:
+        expose: true
+        
+pequiven_search_members:
+    path: /1x10/search
+    defaults:
+        _controller: pequiven.controller.onePerTen:searchMembersAction
+        
+pequiven_delete_member:
+    path: /1x10/delMember
+    defaults:
+        _controller: pequiven.controller.onePerTen:deleteMemeberAction
+    
+
 #Centro 
 pequiven_sip_center_observations:    
     path: /{idCenter}/get-form_add.{_format}
@@ -55,6 +76,7 @@ pequiven_sip_center_observations_status:
     methods: [GET]
     options:
         expose: true
+
 
 #Guardamos el formulario de las observaciones
 pequiven_sip_center_observations_add:
