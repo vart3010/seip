@@ -136,28 +136,6 @@ class Cutl {
      */
     private $gerenciaSecond;
 
-    /**
-     * nombreCentro
-     * @var string
-     *
-     * @ORM\Column(name="nombreCentro", type="string")
-     */
-    private $nombreCentro;
-
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="assistance", type="boolean")
-     */
-    private $assistance = false;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="observation",type="text")
-     */
-    private $observation;
-
     function getId() {
         return $this->id;
     }
@@ -219,18 +197,6 @@ class Cutl {
         return $this->gerenciaSecond;
     }
 
-    function getNombreCentro() {
-        return $this->nombreCentro;
-    }
-
-    function getAssistance() {
-        return $this->assistance;
-    }
-
-    function getObservation() {
-        return $this->observation;
-    }
-
     function setId($id) {
         $this->id = $id;
     }
@@ -289,18 +255,6 @@ class Cutl {
 
     function setGerenciaSecond($gerenciaSecond) {
         $this->gerenciaSecond = $gerenciaSecond;
-    }
-
-    function setNombreCentro($nombreCentro) {
-        $this->nombreCentro = $nombreCentro;
-    }
-
-    function setAssistance($assistance) {
-        $this->assistance = $assistance;
-    }
-
-    function setObservation($observation) {
-        $this->observation = $observation;
     }
 
 }
