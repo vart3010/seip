@@ -36,6 +36,7 @@ class OnePerTenController extends SEIPController {
         $cedula = $request->get('ced');
         $datos = array("nombre" => "", "centro" => "", "nameCentro" => "", "msj" => "");
 
+
         $user = $em->getRepository("\Pequiven\SEIPBundle\Entity\User")->findOneBy(array("identification" => $cedula));
         $onePerTen = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\OnePerTen")->findOneBy(array("user" => $request->get("idUserOne")));
 
@@ -57,7 +58,14 @@ class OnePerTenController extends SEIPController {
                         //VALIDA CON REP CARABOBO 
                         $rep = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Rep")->findOneBy(array("cedula" => $cedula));
                         if (is_null($rep)) {
-                            //VALIDACION CON API
+                            //VALIDACION CON CNE
+                            $cne = $this->getCneService();
+                            $userCne = $cne->getDatosCne($cedula);
+
+                            $datos["nombre"] = $userCne["nombre"];
+                            $datos["cedula"] = $userCne["cedula"];
+                            $datos["centro"] = "";
+                            $datos["nameCentro"] = $userCne["centro"];
                         } else {
                             $nameCentro = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->getCentro($rep->getCodigoCentro());
                             $datos["nombre"] = $rep->getNombre();
@@ -92,6 +100,7 @@ class OnePerTenController extends SEIPController {
         //DATOS TEN
         $cedula = $request->get("cedula");
         $codCentro = $request->get("codCentro");
+        $nombreCentro = $request->get("nombreCentro");
         $nombre = $request->get("nombre");
         $telefono = $request->get("telefono");
 
@@ -113,6 +122,7 @@ class OnePerTenController extends SEIPController {
         $onePerTenMembers->setCedula($cedula);
         $onePerTenMembers->setNombre($nombre);
         $onePerTenMembers->setCodCentro($codCentro);
+        $onePerTenMembers->setNombreCentro($nombreCentro);
         $onePerTenMembers->setTelefono($telefono);
         $onePerTenMembers->setCreatedBy($user);
         $em->persist($onePerTenMembers);
@@ -149,26 +159,26 @@ class OnePerTenController extends SEIPController {
             $onePerTenMembers = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\OnePerTenMembers")->findBy(array("one" => $onePerTen->getId()));
             if (count($onePerTenMembers) > 1) {
                 foreach ($onePerTenMembers as $member) {
-                    $nombreCentro = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->getCentro($member->getCodCentro());
-                    $nombreCentro = $nombreCentro[0]["description"];
+//                    $nombreCentro = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->getCentro($member->getCodCentro());
+//                    $nombreCentro = $nombreCentro[0]["description"];
                     $members[] = array(
                         "id" => $member->getId(),
                         "nombre" => $member->getNombre(),
                         "telefono" => $member->getTelefono(),
                         "idCentro" => $member->getCodCentro(),
-                        "centro" => $nombreCentro
+                        "centro" => $member->getNombreCentro()
                     );
                 }
             } else if (count($onePerTenMembers) == 1) {
-                $nombreCentro = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->getCentro($onePerTenMembers[0]->getCodCentro());
-                $nombreCentro = $nombreCentro[0]["description"];
+//                $nombreCentro = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->getCentro($onePerTenMembers[0]->getCodCentro());
+//                $nombreCentro = $nombreCentro[0]["description"];
 
                 $members[] = array(
                     "id" => $onePerTenMembers[0]->getId(),
                     "nombre" => $onePerTenMembers[0]->getNombre(),
                     "telefono" => $onePerTenMembers[0]->getTelefono(),
                     "idCentro" => $onePerTenMembers[0]->getCodCentro(),
-                    "centro" => $nombreCentro
+                    "centro" => $onePerTenMembers[0]->getNombreCentro()
                 );
             }
         }
@@ -193,6 +203,10 @@ class OnePerTenController extends SEIPController {
 
         $response->setData($request);
         return $response;
+    }
+
+    protected function getCneService() {
+        return $this->container->get('seip.service.apiCne');
     }
 
 }

@@ -62,6 +62,7 @@
                 <p>
                 <form action="{{ path("save_onePerTen") }}" method="POST" id="saveOne">
                     <input type="hidden" name="codCentro" id="codCentro">
+                    <input type="hidden" name="nombreCentro" id="nombreCentro">
                     <input type="hidden" name="nombre" id="nombre">
                     <input type="hidden" name="cedula" id="cedula">
                     <input type="hidden" name="idUserOne" id="idUserName" value=" {{ idUserOne }}">
@@ -117,6 +118,7 @@
                             $("p.name").html(data["nombre"]);
                             $("p.centro").html(data["nameCentro"]);
                             $("input#codCentro").val(data["centro"]);
+                            $("input#nombreCentro").val(data["nameCentro"]);
                             $("input#nombre").val(data["nombre"]);
                             $("input#cedula").val(data["cedula"]);
                             $("div#msj").html(data["msj"]);
