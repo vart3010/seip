@@ -9,33 +9,29 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @author Maximo Sojo <maxsojo13@gmail.com>
  */
-abstract class Observations
-{	
+abstract class Observations {
+
     /**
      * Categorias
      *
      */
-    const PROPAGANDA  = 1;
-
-    const TRANSPORTE  = 2;
-    
+    const PROPAGANDA = 1;
+    const TRANSPORTE = 2;
     const HIDRATACIÓN = 3;
-
-	const LOGISTICA   = 4;
-
-    const ASISTENCIA  = 5;
-
-    const TELEFONIA  = 6;
+    const LOGISTICA = 4;
+    const ASISTENCIA = 5;
+    const TELEFONIA = 6;
 
     /**
      * Status
      *
      */
-    const PENDIENTE    = 2;
-    const SEGUIMIENTO  = 3;
-    const CERRADO      = 4;
-    const RECHAZADO    = 5;
-    
+    const ABIERTO = 1;
+    const PENDIENTE = 2;
+    const SEGUIMIENTO = 3;
+    const CERRADO = 4;
+    const RECHAZADO = 5;
+
     /**
      * @var integer
      *
@@ -49,7 +45,7 @@ abstract class Observations
      * @ORM\Column(name="status", type="integer")
      */
     protected $status;
-    
+
     /**
      * 
      * @param integer
@@ -65,7 +61,7 @@ abstract class Observations
      * @param integer
      * @return 
      */
-    function getCategorias() {       
+    function getCategorias() {
         return $this->categorias;
     }
 
@@ -84,32 +80,30 @@ abstract class Observations
      * @param integer
      * @return 
      */
-    function getStatus() {       
+    function getStatus() {
         return $this->status;
     }
 
-    static function getCategoriasObservations()
-    {
-    	static $levelProcessArray = [
-            self::PROPAGANDA   => 'Propaganda',
-            self::TRANSPORTE   => 'Transporte',
-	        self::HIDRATACIÓN  => 'Hidratación',
-	        self::LOGISTICA    => 'Logistica',
-            self::ASISTENCIA   => 'Asistencia',         
-	        self::TELEFONIA    => 'Telefonia',	        
-	    ];
-	    return $levelProcessArray;
-    }   
+    static function getCategoriasObservations() {
+        static $levelProcessArray = [
+            self::PROPAGANDA => 'Propaganda',
+            self::TRANSPORTE => 'Transporte',
+            self::HIDRATACIÓN => 'Hidratación',
+            self::LOGISTICA => 'Logistica',
+            self::ASISTENCIA => 'Asistencia',
+            self::TELEFONIA => 'Telefonia',
+        ];
+        return $levelProcessArray;
+    }
 
-    static function getStatusObservations()
-    {
+    static function getStatusObservations() {
         static $status = [
-            self::PENDIENTE     => 'Pendiente',
-            self::SEGUIMIENTO   => 'Seguimiento',
-            self::CERRADO       => 'Cerrado',            
-            self::RECHAZADO     => 'Rechazado',            
+            self::PENDIENTE => 'Pendiente',
+            self::SEGUIMIENTO => 'Seguimiento',
+            self::CERRADO => 'Cerrado',
+            self::RECHAZADO => 'Rechazado',
         ];
         return $status;
-    }   
-    
+    }
+
 }
