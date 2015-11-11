@@ -192,3 +192,11 @@ pequiven_sip_center_show:
     methods: [GET|POST]
     options:
         expose: true
+        
+pequiven_sip_center_export:
+    path: /center/{idCenter}/Type/{type}
+    defaults:
+        _controller: pequiven.controller.center:exportAction
+    methods: [GET|POST]
+    options:
+        expose: true

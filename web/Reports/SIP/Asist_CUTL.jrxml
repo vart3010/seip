@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Requerimientos" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="39a430ef-fd62-4b25-8487-b8107872e988">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Asistencias de Cutls" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="39a430ef-fd62-4b25-8487-b8107872e988">
 	<property name="ireport.zoom" value="1.6105100000000023"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="202"/>
+	<property name="ireport.y" value="115"/>
 	<parameter name="idCentro" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[select asist.id as id, date_format(asist.fecha,'%d/%m/%Y') as Fecha,
@@ -18,7 +18,8 @@ else 0 end as Ausente,
 asist.observations as Observaciones
 from sip_centro_assists as asist
 inner join sip_centro as cent on (asist.codigoCentro=cent.codigoCentro)
-inner join sip_cutl as cutl on (asist.cedula=cutl.cedula)]]>
+inner join sip_cutl as cutl on (asist.cedula=cutl.cedula)
+where cent.id=$P{idCentro}]]>
 	</queryString>
 	<field name="id" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
@@ -252,98 +253,7 @@ inner join sip_cutl as cutl on (asist.cedula=cutl.cedula)]]>
 		</band>
 	</detail>
 	<columnFooter>
-		<band height="79" splitType="Stretch">
-			<staticText>
-				<reportElement x="0" y="16" width="66" height="15" uuid="94b9432f-7a40-49f3-ad1f-add6ca5b12ba"/>
-				<textElement>
-					<font fontName="DejaVu Serif Condensed" isBold="true"/>
-				</textElement>
-				<text><![CDATA[- Recuento:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="66" y="48" width="62" height="13" uuid="6bfe6a10-10d1-462a-ad9e-95f4f7ac6f64"/>
-				<textElement>
-					<font fontName="DejaVu Serif Condensed" size="9" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Presentes:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="304" y="61" width="55" height="13" uuid="5958fc9d-21eb-41f0-9117-2fde77d0fb2a"/>
-				<textElement>
-					<font fontName="DejaVu Serif Condensed" size="9" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Ausencia:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="66" y="61" width="62" height="13" uuid="86c61bcb-e58d-4fc0-8084-43a02f8ab36a"/>
-				<textElement>
-					<font fontName="DejaVu Serif Condensed" size="9" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Ausentes:]]></text>
-			</staticText>
-			<line>
-				<reportElement x="0" y="7" width="572" height="1" uuid="1df52869-0937-4a68-8ddd-5e10ad66726f"/>
-				<graphicElement>
-					<pen lineWidth="1.5" lineStyle="Double"/>
-				</graphicElement>
-			</line>
-			<staticText>
-				<reportElement x="304" y="48" width="55" height="13" uuid="36e17f62-1063-4f70-bfd1-8e2fb3eccf58"/>
-				<textElement>
-					<font fontName="DejaVu Serif Condensed" size="9" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Asistencia:]]></text>
-			</staticText>
-			<textField>
-				<reportElement x="128" y="48" width="100" height="13" uuid="7a04ca2b-eb35-472b-ba9e-e74836ab2f28"/>
-				<textElement>
-					<font fontName="DejaVu Serif Condensed" size="9"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{Presente_1}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="128" y="61" width="100" height="13" uuid="4199e7ac-d95b-4698-95b6-04d343ba1f28"/>
-				<textElement>
-					<font fontName="DejaVu Serif Condensed" size="9"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{Ausente_1}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="128" y="35" width="100" height="13" uuid="2bf5b0b3-9670-4dab-b322-f94a31cd7c53"/>
-				<textElement>
-					<font fontName="DejaVu Serif Condensed" size="9"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{id_1}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="66" y="35" width="62" height="13" uuid="27e886ed-d83d-4a01-a40f-97cb10dea10d"/>
-				<textElement>
-					<font fontName="DejaVu Serif Condensed" size="9" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Planificados:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="304" y="35" width="155" height="13" uuid="672378df-ddcc-4c23-9aac-371cfdd2e8f1"/>
-				<textElement>
-					<font fontName="DejaVu Serif Condensed" size="9" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Porcentaje (%)]]></text>
-			</staticText>
-			<textField pattern="###0.00">
-				<reportElement x="359" y="48" width="100" height="13" uuid="e022c715-060d-417b-8e2a-7f0d37049050"/>
-				<textElement>
-					<font fontName="DejaVu Serif Condensed" size="9"/>
-				</textElement>
-				<textFieldExpression><![CDATA[(($V{Presente_1})/($V{id_1}))*100]]></textFieldExpression>
-			</textField>
-			<textField pattern="###0.00">
-				<reportElement x="359" y="61" width="100" height="13" uuid="dd1edafd-d3ad-4ee1-b40a-a833ac1ced6e"/>
-				<textElement>
-					<font fontName="DejaVu Serif Condensed" size="9"/>
-				</textElement>
-				<textFieldExpression><![CDATA[(($V{Ausente_1})/($V{id_1}))*100]]></textFieldExpression>
-			</textField>
-		</band>
+		<band height="10" splitType="Stretch"/>
 	</columnFooter>
 	<pageFooter>
 		<band height="46" splitType="Stretch">

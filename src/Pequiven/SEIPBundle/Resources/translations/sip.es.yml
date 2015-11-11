@@ -20,5 +20,8 @@ sip:
     assists: Asistencias
     observations: Requerimientos
     inventory: Inventario
+    
+    export:
+        exportpdf: Exportar a PDF
 
 

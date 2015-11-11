@@ -1513,8 +1513,6 @@ class PHPJasperXML {
                         }
                     }// finisish resettype=''
                     elseif ($out['resetType'] == 'Group') { //reset type='group'
-
-
 //                       print_r($this->grouplist);
 //                       echo "<br/>";
 //                       echo $out['resetGroup'] ."<br/>";
@@ -4367,6 +4365,7 @@ class PHPJasperXML {
 //            return implode($arrdata);
 //        }
 //    }
+
     public function analyse_expression($data, $isPrintRepeatedValue = "true") {
         //echo $data."<br/>";
         $tmpplussymbol = '|_plus_|';
