@@ -23,11 +23,11 @@
                 {% for dataObs  in observations %}
                 <tbody>
                         <tr>
-                            <td rowspan="2">{{ dataObs.observations }}</td>                            
-                            <td rowspan="2">{{ catObs[dataObs.categoria] }}</td>                            
+                            <td>{{ dataObs.observations }}</td>                            
+                            <td>{{ catObs[dataObs.categoria] }}</td>                            
                         
-                            <td rowspan="2">{{ dataObs.fecha | date("d/m/Y") }}</td>                            
-                            <td rowspan="2">
+                            <td>{{ dataObs.fecha | date("d/m/Y") }}</td>                            
+                            <td>
                                 <small class="tag">{{ status[dataObs.status] }}</small>
                             </td>                            
                             <td class="align-right vertical-center">                          
@@ -39,8 +39,6 @@
                                        
                                         <a href ng-click="removeObservations(observations='{{ dataObs.id }}')" class="button icon-cross-round">{{ "pequiven.actions.delete"|trans({},"messages") }}</a>
                                     </span>
-                                                                        
-                                    
                                 </span>
                             </td>                                
                         </tr>

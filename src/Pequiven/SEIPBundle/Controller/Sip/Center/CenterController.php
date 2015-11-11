@@ -295,7 +295,10 @@ class CenterController extends SEIPController {
             $inventory = $form->getData();            
             
             $em->persist($inventory);
-            $em->flush();            
+            $em->flush(); 
+            
+            $this->get('session')->getFlashBag()->add('success', 'Registro Añadido Exitosamente');
+
         }
 
         $view = $this
