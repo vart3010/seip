@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Parroquia
  * @author Victor Tortolero vart10.30@gmail.com
  * @ORM\Table(name="sip_centro")
- * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\Sip\CentroRepository")
+ * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\Sip\Centro\CentroRepository")
  */
 class Centro {
 

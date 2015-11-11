@@ -1635,22 +1635,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                                 ))
                         )->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.list', $section)));
 
-        //if ($this->isGranted(array('ROLE_SEIP_SIP_ONEPERTEN'))) {
-        $onePerTen = $this->factory->createItem('onePerTen', $this->getSubLevelOptions(array(
-                            'uri' => null,
-                            'labelAttributes' => array('icon' => 'fa fa-ticket'),
-                        ))
-                )->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.onePerTen', $section)));
-
-
-        $register = $this->factory->createItem('RegisterOnePerTen', $this->getSubLevelOptions(array(
-                            'route' => 'pequiven_search_members',
-                        ))
-                )->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.register', $section)));
-
-        $list = $this->factory->createItem('listOnePerTen', $this->getSubLevelOptions(array(
-                        ))
-                )->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.list', $section)));
+                $centro->addChild($centroMenu);
 
             $menuSip->addChild($centro);
         }
