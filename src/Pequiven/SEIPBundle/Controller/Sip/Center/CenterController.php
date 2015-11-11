@@ -94,6 +94,7 @@ class CenterController extends SEIPController {
         $em->getConnection()->beginTransaction();
         
         if ($form->isSubmitted()) {
+            $Observations = strtoupper($Observations);
 
             $Assists = $form->getData();            
             $Assists->setCodigoCentro($codigoCentro);
@@ -176,6 +177,8 @@ class CenterController extends SEIPController {
 
         $status = 1;//Status Observación Enviada
 
+        $obs = strtoupper($request->get('sip_center_observations')['observations']);
+
         $em = $this->getDoctrine()->getEntityManager();
 
         $form = $this->createForm(new ObservationsType(), new Observations());
@@ -185,6 +188,7 @@ class CenterController extends SEIPController {
         if ($form->isSubmitted()) {
             $Observations = $form->getData();
             
+            $Observations->setObservations($obs);
             $Observations->setCodigoCentro($idCenter);
             $Observations->setStatus($status);
 
@@ -283,12 +287,15 @@ class CenterController extends SEIPController {
 
         if (isset($request->get('sip_center_inventory')['material'])) {
             
+            $obs = strtoupper($request->get('sip_center_inventory')['observations']);
+
             $material = $request->get('sip_center_inventory')['material'];
             
             $material = $this->get('pequiven.repository.material')->find($material);
 
             $form->bind($this->getRequest());
             //Seteo de datos
+            $inventory->setObservations($obs);            
             $inventory->setCodigoCentro($idCenter);            
             $inventory->setMaterial($material);
 
