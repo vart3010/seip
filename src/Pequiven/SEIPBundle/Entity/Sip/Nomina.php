@@ -352,7 +352,7 @@ class Nomina {
         $this->localidad = $localidad;
     }
 
-    function setNivel(nivel $nivel) {
+    function setNivel($nivel) {
         $this->nivel = $nivel;
     }
 
