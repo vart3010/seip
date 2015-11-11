@@ -26,7 +26,7 @@ class Material {
     /**
      * @var string
      *
-     * @ORM\Column(name="material", type="string", nullable=true)
+     * @ORM\Column(name="material", type="string")
      */
     private $description;
 

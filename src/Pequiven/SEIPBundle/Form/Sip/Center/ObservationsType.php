@@ -21,7 +21,7 @@ class ObservationsType extends AbstractType
                 'label_attr' => array('class' => 'label'),
                 'attr' => array(
                     'class'     => 'input input-xlarge autoexpanding',
-                    'maxlength' => 3500),
+                    'maxlength' => 1000),
                 'required' => true
                 ))
             ->add('fecha', 'date', array(

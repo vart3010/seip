@@ -26,35 +26,35 @@ class Observations {
     /**
      * @var \DateTime
      * 
-     * @ORM\Column(name="fecha", type="datetime", nullable=true)
+     * @ORM\Column(name="fecha", type="datetime")
      */
     private $fecha;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="codigoCentro", type="integer", nullable=true)
+     * @ORM\Column(name="codigoCentro", type="integer")
      */
     private $codigoCentro;
     
     /**
      * @var string
      *
-     * @ORM\Column(name="observations", type="string", type="text")
+     * @ORM\Column(name="observations", type="text")
      */
     private $observations;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="categoria", type="integer", nullable=true)
+     * @ORM\Column(name="categoria", type="integer")
      */
     private $categoria;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="status", type="integer", nullable=true)
+     * @ORM\Column(name="status", type="integer")
      */
     private $status;
 

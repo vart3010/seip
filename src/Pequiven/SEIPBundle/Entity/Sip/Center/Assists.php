@@ -54,7 +54,7 @@ class Assists {
     /**
      * @var string
      *
-     * @ORM\Column(name="observations", type="string", nullable=true)
+     * @ORM\Column(name="observations", type="text", nullable=true)
      */
     private $observations;
 
