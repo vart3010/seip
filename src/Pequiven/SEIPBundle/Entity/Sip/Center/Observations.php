@@ -3,12 +3,14 @@
 namespace Pequiven\SEIPBundle\Entity\Sip\Center;
 
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Parroquia
  * @author Maximo Sojo maxsojo13@gmail.com
  * @ORM\Table(name="sip_centro_observations")
  * @ORM\Entity()
+ * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
 class Observations {
 
@@ -55,6 +57,11 @@ class Observations {
      * @ORM\Column(name="status", type="integer", nullable=true)
      */
     private $status;
+
+     /**
+     * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
+     */
+    private $deletedAt;
     
     
     function getId() {
@@ -99,6 +106,29 @@ class Observations {
 
     function getStatus() {
         return $this->status;
+    }
+
+    /**
+     * Set deletedAt
+     *
+     * @param \DateTime $deletedAt
+     * @return material
+     */
+    public function setDeletedAt($deletedAt)
+    {
+        $this->deletedAt = $deletedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get deletedAt
+     *
+     * @return \DateTime 
+     */
+    public function getDeletedAt()
+    {
+        return $this->deletedAt;
     }
 
 }

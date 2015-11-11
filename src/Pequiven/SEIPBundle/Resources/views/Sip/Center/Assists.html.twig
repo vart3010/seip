@@ -43,7 +43,16 @@
                             {% endif %}
                             <input type="checkbox" value="{{ data.assists  }}" class="switch blue-active mid-margin-right {{ checkState }}"  data-text-on="SI" data-text-off="NO" disabled>
                             </td> 
-                            <td rowspan="2" align="left">{{ data.observations }}</td>                           
+                            <td rowspan="2" align="left">{{ data.observations }}</td> 
+                            <td class="align-right vertical-center">                          
+                                <span class="select compact">
+                                <a href class="select-value form-edit">{{ 'pequiven.actions'|trans({},'messages') }}</a>
+                                <span class="select-arrow"></span>
+                                    <span class="drop-down">                                    
+                                        <a href ng-click="removeAssists(assists='{{ data.id }}')" class="button icon-cross-round">{{ "pequiven.actions.delete"|trans({},"messages") }}</a>             
+                                    </span>
+                                </span>
+                            </td>                          
                         </tr>                 
                 </tbody>                    
                 {% endfor %}       

@@ -29,7 +29,15 @@
                             <td rowspan="2">{{ dataInv.cantidad }}</td>
                         
                             <td rowspan="2">{{ dataInv.fecha | date("d/m/Y") }}</td>
-                            
+                            <td class="align-right vertical-center">                          
+                                <span class="select compact">
+                                <a href class="select-value form-edit">{{ 'pequiven.actions'|trans({},'messages') }}</a>
+                                <span class="select-arrow"></span>
+                                    <span class="drop-down">                                    
+                                        <a href ng-click="removeInventory(inventory='{{ dataInv.id }}')" class="button icon-cross-round">{{ "pequiven.actions.delete"|trans({},"messages") }}</a>             
+                                    </span>
+                                </span>
+                            </td>   
                         </tr>
                 </tbody>                                
                 {% endfor %}

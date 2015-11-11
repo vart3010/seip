@@ -3,12 +3,14 @@
 namespace Pequiven\SEIPBundle\Entity\Sip\Center;
 
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Parroquia
  * @author Maximo Sojo maxsojo13@gmail.com
  * @ORM\Table(name="sip_centro_inventory")
  * @ORM\Entity()
+ * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
 class Inventory {
 
@@ -54,6 +56,11 @@ class Inventory {
      * @ORM\JoinColumn(name="material_id", referencedColumnName="id")
      */
     private $material;
+
+    /**
+     * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
+     */
+    private $deletedAt;
     
     
     function getId() {
@@ -109,6 +116,29 @@ class Inventory {
      */
     public function getMaterial() {
         return $this->material;
+    }
+
+    /**
+     * Set deletedAt
+     *
+     * @param \DateTime $deletedAt
+     * @return material
+     */
+    public function setDeletedAt($deletedAt)
+    {
+        $this->deletedAt = $deletedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get deletedAt
+     *
+     * @return \DateTime 
+     */
+    public function getDeletedAt()
+    {
+        return $this->deletedAt;
     }
 
 }
