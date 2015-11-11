@@ -116,6 +116,30 @@ class CenterController extends SEIPController {
     }
 
     /**
+     *
+     *  Eliminación de Asistencia
+     *
+     *
+     */
+    public function delAssistsAction(Request $request){
+        
+        $id = $request->get('id');        
+        
+        $em = $this->getDoctrine()->getManager();
+
+        $results = $this->get('pequiven.repository.assists')->find($id);
+        
+        if($results){
+
+            $em->remove($results);
+            $em->flush();            
+
+            $this->get('session')->getFlashBag()->add('success', 'Asistencia Eliminada Exitosamente');
+            return true;
+        } 
+    }
+
+    /**
      * 
      * @param Request $request
      * @return type
@@ -218,6 +242,30 @@ class CenterController extends SEIPController {
     }
 
     /**
+     *
+     *  Eliminación de Observacion
+     *
+     *
+     */
+    public function delObservationsAction(Request $request){
+        
+        $id = $request->get('id');        
+        
+        $em = $this->getDoctrine()->getManager();
+
+        $results = $this->get('pequiven.repository.observations')->find($id);
+        
+        if($results){
+
+            $em->remove($results);
+            $em->flush();            
+
+            $this->get('session')->getFlashBag()->add('success', 'Observación Eliminada Exitosamente');
+            return true;
+        } 
+    }
+
+    /**
      * Formulario de Inventario de materiales CUTL
      * @param Request $request
      * @return type
@@ -262,6 +310,30 @@ class CenterController extends SEIPController {
         
         return $view;
         
+    }
+
+    /**
+     *
+     *  Eliminación de Inventario
+     *
+     *
+     */
+    public function delInventoryAction(Request $request){
+        
+        $id = $request->get('id');        
+        
+        $em = $this->getDoctrine()->getManager();
+
+        $results = $this->get('pequiven.repository.inventory')->find($id);
+        
+        if($results){
+
+            $em->remove($results);
+            $em->flush();            
+
+            $this->get('session')->getFlashBag()->add('success', 'Registro Eliminada de Inventario Exitosamente');
+            return true;
+        } 
     }
     
     /**

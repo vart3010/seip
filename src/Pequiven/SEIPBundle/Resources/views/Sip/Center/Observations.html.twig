@@ -36,7 +36,11 @@
                                 <span class="select-arrow"></span>
                                     <span class="drop-down">                                    
                                         <a href ng-click="loadTemplateStatus(Status='{{ dataObs.id }}')" class="button icon-pencil">Revisar</a>             
+                                       
+                                        <a href ng-click="removeObservations(observations='{{ dataObs.id }}')" class="button icon-cross-round">{{ "pequiven.actions.delete"|trans({},"messages") }}</a>
                                     </span>
+                                                                        
+                                    
                                 </span>
                             </td>                                
                         </tr>
