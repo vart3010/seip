@@ -441,6 +441,15 @@ class CenterController extends SEIPController {
             4 => "Cerrado",
             5 => "Rechazado"
         ];
+
+        //Color de status
+        $color = [
+            1 => "#12799f",
+            2 => "#e12002",
+            3 => "#d1b200",
+            4 => "#03c842",
+            5 => "#920a00"
+        ];
         
         
         $assist = $this->get('pequiven.repository.assists')->findBy(array('codigoCentro' => $codigoCentro));
@@ -457,7 +466,8 @@ class CenterController extends SEIPController {
                     'nomCutl'       => $nomCutl,
                     'catObs'        => $catObs,
                     'status'        => $status,
-                    'inventory'     => $inventory
+                    'inventory'     => $inventory,
+                    'colorStatus'         => $color
         ));
     }
 
