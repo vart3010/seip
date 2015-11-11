@@ -348,7 +348,7 @@ class Nomina {
         $this->empleado = $empleado;
     }
 
-    function setLocalidad(localidad $localidad) {
+    function setLocalidad($localidad) {
         $this->localidad = $localidad;
     }
 
