@@ -40,13 +40,13 @@ class OnePerTenController extends SEIPController {
         $user = $em->getRepository("\Pequiven\SEIPBundle\Entity\User")->findOneBy(array("identification" => $cedula));
         $onePerTen = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\OnePerTen")->findOneBy(array("user" => $request->get("idUserOne")));
 
-
         $onePerTenMembers = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\OnePerTenMembers")->findBy(
                 array(
                     "cedula" => $cedula,
                     "one" => $onePerTen->getId()
                 )
         );
+
         if (count($onePerTenMembers) <= 0) {
             if (!isset($user) || $user->getWorkStudyCircle() == "null") {
                 if ($cedula != "" || $cedula != 0) {
@@ -61,9 +61,10 @@ class OnePerTenController extends SEIPController {
                             //VALIDACION CON CNE
                             $cne = $this->getCneService();
                             $userCne = $cne->getDatosCne($cedula);
+                            $ced = explode("-", $userCne["cedula"]);
 
                             $datos["nombre"] = $userCne["nombre"];
-                            $datos["cedula"] = $userCne["cedula"];
+                            $datos["cedula"] = $ced[1];
                             $datos["centro"] = "";
                             $datos["nameCentro"] = $userCne["centro"];
                         } else {
