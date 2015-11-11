@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Requerimientos" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="39a430ef-fd62-4b25-8487-b8107872e988">
 	<property name="ireport.zoom" value="1.6105100000000023"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="51"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="idCentro" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[SELECT
@@ -124,14 +124,14 @@ order by fecha]]>
 				<text><![CDATA[Fecha]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="76" y="125" width="75" height="13" uuid="93e19ac9-4d3b-4d27-a37c-531f5a256cae"/>
+				<reportElement x="76" y="125" width="53" height="13" uuid="93e19ac9-4d3b-4d27-a37c-531f5a256cae"/>
 				<textElement>
 					<font fontName="DejaVu Serif Condensed" size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Categoria]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="166" y="125" width="351" height="13" uuid="4e7348d2-6e38-4f54-84f6-9b4c95fb9bd0"/>
+				<reportElement x="142" y="125" width="375" height="13" uuid="4e7348d2-6e38-4f54-84f6-9b4c95fb9bd0"/>
 				<textElement>
 					<font fontName="DejaVu Serif Condensed" size="9" isBold="true"/>
 				</textElement>
@@ -223,7 +223,7 @@ order by fecha]]>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="17" splitType="Stretch">
+		<band height="44" splitType="Stretch">
 			<textField>
 				<reportElement x="0" y="0" width="66" height="14" uuid="ee296e76-b0a6-4c8e-ac97-723956ff4504"/>
 				<textElement>
@@ -232,16 +232,16 @@ order by fecha]]>
 				<textFieldExpression><![CDATA[$F{Fecha}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="76" y="2" width="75" height="14" uuid="aae9b035-ed8b-4a43-818e-0163985b9f3e"/>
+				<reportElement x="76" y="2" width="53" height="14" uuid="aae9b035-ed8b-4a43-818e-0163985b9f3e"/>
 				<textElement>
 					<font fontName="DejaVu Serif Condensed" size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Categoria}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="166" y="2" width="351" height="14" isPrintWhenDetailOverflows="true" uuid="5f7e38b9-d916-4b88-bb18-35c595887e63"/>
-				<textElement>
-					<font fontName="DejaVu Serif Condensed" size="9"/>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="142" y="2" width="375" height="40" uuid="5f7e38b9-d916-4b88-bb18-35c595887e63"/>
+				<textElement textAlignment="Justified">
+					<font fontName="DejaVu Serif Condensed" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Observaciones}]]></textFieldExpression>
 			</textField>
