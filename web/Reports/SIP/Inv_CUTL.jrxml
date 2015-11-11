@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Requerimientos" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="39a430ef-fd62-4b25-8487-b8107872e988">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Inventariado" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="39a430ef-fd62-4b25-8487-b8107872e988">
 	<property name="ireport.zoom" value="1.6105100000000023"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="95"/>
+	<property name="ireport.y" value="94"/>
 	<parameter name="idCentro" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[SELECT
@@ -61,11 +61,11 @@ order by fecha]]>
 			</staticText>
 			<image>
 				<reportElement x="0" y="0" width="393" height="70" uuid="04b1d058-f404-4b75-bc40-d8cb2ac579bd"/>
-				<imageExpression><![CDATA["/var/www/html/seip/web/Reports/Logo_Pequiven.jpg"]]></imageExpression>
+				<imageExpression><![CDATA["/var/www/html/seip/prod/web/Reports/Logo_Pequiven.jpg"]]></imageExpression>
 			</image>
 			<image>
 				<reportElement x="519" y="10" width="42" height="42" uuid="903fd8e7-ba35-4638-9c7f-b28025305e2f"/>
-				<imageExpression><![CDATA["/var/www/html/seip/web/Reports/Logo_Seip.jpg"]]></imageExpression>
+				<imageExpression><![CDATA["/var/www/html/seip/prod/web/Reports/Logo_Seip.jpg"]]></imageExpression>
 			</image>
 		</band>
 	</pageHeader>
@@ -75,7 +75,7 @@ order by fecha]]>
 				<reportElement x="7" y="36" width="548" height="39" backcolor="#F5F5F5" uuid="b1eeda44-0a40-4e8d-adab-67c7f1929693"/>
 			</rectangle>
 			<staticText>
-				<reportElement x="7" y="125" width="52" height="13" uuid="2b02bc18-31bc-4a73-a73a-77e56fe16e17"/>
+				<reportElement x="14" y="125" width="52" height="13" uuid="2b02bc18-31bc-4a73-a73a-77e56fe16e17"/>
 				<textElement>
 					<font fontName="DejaVu Serif Condensed" size="9" isBold="true"/>
 				</textElement>
@@ -163,7 +163,7 @@ order by fecha]]>
 				<textElement>
 					<font fontName="DejaVu Serif Condensed" isBold="true"/>
 				</textElement>
-				<text><![CDATA[- Requerimientos Solicitados:]]></text>
+				<text><![CDATA[- Inventario Entregado:]]></text>
 			</staticText>
 			<line>
 				<reportElement x="0" y="138" width="572" height="1" uuid="142ab56b-7080-46df-a8fe-dedc374bd3c7"/>
@@ -183,7 +183,7 @@ order by fecha]]>
 	<detail>
 		<band height="44" splitType="Stretch">
 			<textField>
-				<reportElement x="0" y="2" width="66" height="14" uuid="ee296e76-b0a6-4c8e-ac97-723956ff4504"/>
+				<reportElement x="7" y="2" width="59" height="14" uuid="ee296e76-b0a6-4c8e-ac97-723956ff4504"/>
 				<textElement>
 					<font fontName="DejaVu Serif Condensed" size="9"/>
 				</textElement>
@@ -191,7 +191,7 @@ order by fecha]]>
 			</textField>
 			<textField isStretchWithOverflow="true">
 				<reportElement x="200" y="2" width="372" height="40" uuid="5f7e38b9-d916-4b88-bb18-35c595887e63"/>
-				<textElement textAlignment="Justified">
+				<textElement>
 					<font fontName="DejaVu Serif Condensed" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Observaciones}]]></textFieldExpression>
@@ -232,7 +232,7 @@ order by fecha]]>
 			</staticText>
 			<image>
 				<reportElement x="14" y="11" width="69" height="33" uuid="c89b982f-48a9-4059-b2e0-9d15a0b1c402"/>
-				<imageExpression><![CDATA["/var/www/html/seip/web/Reports/Eslogan.jpg"]]></imageExpression>
+				<imageExpression><![CDATA["/var/www/html/seip/prod/web/Reports/Eslogan.jpg"]]></imageExpression>
 			</image>
 			<textField>
 				<reportElement x="517" y="20" width="42" height="19" uuid="e00db96c-63a4-433d-b999-5f47000218e2"/>
