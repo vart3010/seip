@@ -26,28 +26,28 @@ class Inventory {
     /**
      * @var \DateTime
      * 
-     * @ORM\Column(name="fecha", type="datetime", nullable=true)
+     * @ORM\Column(name="fecha", type="datetime")
      */
     private $fecha;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="codigoCentro", type="integer", nullable=true)
+     * @ORM\Column(name="codigoCentro", type="integer")
      */
     private $codigoCentro;
     
     /**
      * @var string
      *
-     * @ORM\Column(name="observations", type="string", type="text")
+     * @ORM\Column(name="observations", type="string", type="text", nullable=true)
      */
     private $observations;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="cantidad", type="integer", nullable=true)
+     * @ORM\Column(name="cantidad", type="integer")
      */
     private $cantidad;
 
