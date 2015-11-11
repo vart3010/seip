@@ -430,7 +430,16 @@ class CenterController extends SEIPController {
             5 => "Rechazado"
         ];
 
-
+        //Color de status
+        $color = [
+            1 => "#12799f",
+            2 => "#e12002",
+            3 => "#d1b200",
+            4 => "#03c842",
+            5 => "#920a00"
+        ];
+        
+        
         $assist = $this->get('pequiven.repository.assists')->findBy(array('codigoCentro' => $codigoCentro));
 
         $observations = $this->get('pequiven.repository.observations')->findBy(array('codigoCentro' => $codigoCentro));
@@ -438,14 +447,15 @@ class CenterController extends SEIPController {
         $inventory = $this->get('pequiven.repository.inventory')->findBy(array('codigoCentro' => $codigoCentro));
 
         return $this->render('PequivenSEIPBundle:Sip:Center\show.html.twig', array(
-                    'center' => $center,
-                    'cutl' => $cutl,
-                    'assist' => $assist,
-                    'observations' => $observations,
-                    'nomCutl' => $nomCutl,
-                    'catObs' => $catObs,
-                    'status' => $status,
-                    'inventory' => $inventory
+                    'center'        => $center,
+                    'cutl'          => $cutl,
+                    'assist'        => $assist,
+                    'observations'  => $observations,
+                    'nomCutl'       => $nomCutl,
+                    'catObs'        => $catObs,
+                    'status'        => $status,
+                    'inventory'     => $inventory,
+                    'colorStatus'         => $color
         ));
     }
 
