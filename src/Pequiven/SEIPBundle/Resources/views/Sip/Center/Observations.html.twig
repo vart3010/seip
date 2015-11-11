@@ -16,7 +16,7 @@
                         <th scope="col" width="55%" class="header">Requerimiento</th>
                         <th scope="col" width="15%" class="header">Categoria</th>
                         <th scope="col" width="10%" class="header">Fecha</th>                       
-                        <th scope="col" width="10%" class="header">Status</th>
+                        <th scope="col" width="15%" class="header">Status</th>
                         <th scope="col" width="10%" class="header"></th>                       
                     </tr>
                 </thead>                
@@ -26,9 +26,11 @@
                             <td>{{ dataObs.observations }}</td>                            
                             <td>{{ catObs[dataObs.categoria] }}</td>                            
                         
-                            <td>{{ dataObs.fecha | date("d/m/Y") }}</td>                            
+                            <td>{{ dataObs.fecha | date("d/m/Y") }}</td>
                             <td>
-                                <small class="tag">{{ status[dataObs.status] }}</small>
+                                <div class="height:60px; height:60px; " style="color:#dcdcdc; border-radius: 15px 15px 15px 15px; font-weight: bold; background:{{colorStatus[dataObs.status]}}; border-color:{{colorStatus[dataObs.status]}};" align="center">
+                                    {{ status[dataObs.status] }}                                
+                                </div>
                             </td>                            
                             <td class="align-right vertical-center">                          
                                 <span class="select compact">
