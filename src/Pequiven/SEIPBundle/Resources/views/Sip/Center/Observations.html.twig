@@ -28,7 +28,7 @@
                         
                             <td>{{ dataObs.fecha | date("d/m/Y") }}</td>
                             <td>
-                                <div style="color:#dcdcdc; border-radius: 15px 15px 15px 15px; font-weight: bold; background:{{colorStatus[dataObs.status]}}; border-color:{{colorStatus[dataObs.status]}};" align="center">
+                                <div style="color:#ffffff; border-radius: 15px 15px 15px 15px; font-weight: bold; background:{{colorStatus[dataObs.status]}}; border-color:{{colorStatus[dataObs.status]}};" align="center">
                                     {{ status[dataObs.status] }}                                
                                 </div>
                             </td>                            
@@ -47,6 +47,22 @@
                 </tbody>                                
                 {% endfor %}
             </table> 
+             &nbsp;    
+                  {#{% if(is_granted(["ROLE_SEIP_WORK_STUDY_CIRCLES_EXPORT_REPORT"])) %}#}
+        <div class="align-left">
+                    
+            {% set routeExport = path('pequiven_sip_center_export',{idCenter:center.id, type:3}) %}
+
+            {{ buttons.generic(
+                    (routeExport),
+                    ('sip.export.exportpdf'|trans({})),
+                    'icon-download'
+                 ) 
+            }}
+           
+        </div>              
+            {#{% endif %}#}
         </div>
+      
     </div>
 </div>
