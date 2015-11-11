@@ -8,11 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Parroquia
  * @author Victor Tortolero vart10.30@gmail.com
  * @ORM\Table(name="sip_centro")
-<<<<<<< HEAD
  * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\Sip\CentroRepository")
-=======
- * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\IndicatorRepository")
->>>>>>> 0b19c249c21a650d18e125d2225938405b56e121
  */
 class Centro {
 
@@ -31,7 +27,7 @@ class Centro {
      * @ORM\Column(name="codigoEstado", type="integer")
      */
     private $codigoEstado;
-    
+
     /**
      * Estado
      * @var string
@@ -47,7 +43,7 @@ class Centro {
      * @ORM\Column(name="codigoMunicipio", type="integer")
      */
     private $codigoMunicipio;
-    
+
     /**
      * Municipio
      * @var string
@@ -63,7 +59,7 @@ class Centro {
      * @ORM\Column(name="codigoParroquia",type="integer")
      */
     private $codigoParroquia;
-    
+
     /**
      * Parroquia
      * @var string
@@ -87,10 +83,7 @@ class Centro {
      * @ORM\Column(name="description", type="string", length=255)
      */
     private $description;
-<<<<<<< HEAD
 
-=======
-    
     /**
      * Dirección Centro
      * @var string
@@ -98,7 +91,7 @@ class Centro {
      * @ORM\Column(name="direccion", type="string", length=255)
      */
     private $direccion;
-    
+
     /**
      * Mesas
      * @var integer
@@ -106,7 +99,7 @@ class Centro {
      * @ORM\Column(name="mesas", type="integer")
      */
     private $mesas = 0;
-    
+
     /**
      * Electores
      * @var integer
@@ -114,7 +107,7 @@ class Centro {
      * @ORM\Column(name="electores", type="integer")
      */
     private $electores = 0;
-    
+
     /**
      * Eje
      * @var integer
@@ -122,7 +115,7 @@ class Centro {
      * @ORM\Column(name="eje", type="integer")
      */
     private $eje = 0;
-    
+
     /**
      * Cédula UBCH
      * @var string
@@ -130,7 +123,7 @@ class Centro {
      * @ORM\Column(name="cedulaubch", type="string", length=20)
      */
     private $cedulaubch;
-    
+
     /**
      * Nombre UBCH
      * @var string
@@ -138,7 +131,7 @@ class Centro {
      * @ORM\Column(name="nombreubch", type="string", length=100)
      */
     private $nombreubch;
-    
+
     /**
      * Teléfono UBCH
      * @var string
@@ -146,7 +139,7 @@ class Centro {
      * @ORM\Column(name="telefonoubch", type="string", length=20)
      */
     private $telefonoubch;
-    
+
     /**
      * Cargo UBCH
      * @var string
@@ -154,8 +147,7 @@ class Centro {
      * @ORM\Column(name="cargoubch", type="string", length=50)
      */
     private $cargoubch;
-    
->>>>>>> 0b19c249c21a650d18e125d2225938405b56e121
+
     function getId() {
         return $this->id;
     }
@@ -163,7 +155,7 @@ class Centro {
     function getCodigoEstado() {
         return $this->codigoEstado;
     }
-    
+
     function getDescriptionEstado() {
         return $this->descriptionEstado;
     }
@@ -171,7 +163,7 @@ class Centro {
     function getCodigoMunicipio() {
         return $this->codigoMunicipio;
     }
-    
+
     function getDescriptionMunicipio() {
         return $this->descriptionMunicipio;
     }
@@ -179,7 +171,7 @@ class Centro {
     function getCodigoParroquia() {
         return $this->codigoParroquia;
     }
-    
+
     function getDescriptionParroquia() {
         return $this->descriptionParroquia;
     }
@@ -191,35 +183,35 @@ class Centro {
     function getDescription() {
         return $this->description;
     }
-    
+
     function getDireccion() {
         return $this->direccion;
     }
-    
+
     function getMesas() {
         return $this->mesas;
     }
-    
+
     function getElectores() {
         return $this->electores;
     }
-    
+
     function getEje() {
         return $this->eje;
     }
-    
+
     function getCedulaUbch() {
         return $this->cedulaubch;
     }
-    
+
     function getNombreUbch() {
         return $this->nombreubch;
     }
-    
+
     function getTelefonoUbch() {
         return $this->telefonoubch;
     }
-    
+
     function getCargoUbch() {
         return $this->cargoubch;
     }
@@ -231,7 +223,7 @@ class Centro {
     function setCodigoEstado($codigoEstado) {
         $this->codigoEstado = $codigoEstado;
     }
-    
+
     function setDescriptionEstado($descriptionEstado) {
         $this->descriptionEstado = $descriptionEstado;
     }
@@ -239,7 +231,7 @@ class Centro {
     function setCodigoMunicipio($codigoMunicipio) {
         $this->codigoMunicipio = $codigoMunicipio;
     }
-    
+
     function setDescriptionMunicipio($descriptionMunicipio) {
         $this->descriptionMunicipio = $descriptionMunicipio;
     }
@@ -247,7 +239,7 @@ class Centro {
     function setCodigoParroquia($codigoParroquia) {
         $this->codigoParroquia = $codigoParroquia;
     }
-    
+
     function setDescriptionParroquia($descriptionParroquia) {
         $this->descriptionParroquia = $descriptionParroquia;
     }
@@ -260,38 +252,36 @@ class Centro {
         $this->description = $description;
     }
 
-<<<<<<< HEAD
-=======
     function setDireccion($direccion) {
         $this->direccion = $direccion;
     }
-    
+
     function setMesas($mesas) {
         $this->mesas = $mesas;
     }
-    
+
     function setElectores($electores) {
         $this->electores = $electores;
     }
-    
+
     function setEje($eje) {
         $this->eje = $eje;
     }
-    
+
     function setCedulaUbch($cedulaubch) {
         $this->cedulaubch = $cedulaubch;
     }
-    
+
     function setNombreUbch($nombreubch) {
         $this->nombreubch = $nombreubch;
     }
-    
+
     function setTelefonoUbch($telefonoubch) {
         $this->telefonoubch = $telefonoubch;
     }
-    
+
     function setCargoUbch($cargoubch) {
         $this->cargoubch = $cargoubch;
     }
->>>>>>> 0b19c249c21a650d18e125d2225938405b56e121
+
 }
