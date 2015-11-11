@@ -342,11 +342,20 @@
                 <argument type="service" id="service_container" />
             </call>
         </service>
+        
         <service id="seip.service.security" class="Pequiven\SEIPBundle\Service\SecurityService">
             <call method="setContainer">
                 <argument type="service" id="service_container" />
             </call>
         </service>
+        
+        <service id="seip.service.apiCne" class="Pequiven\SEIPBundle\Service\Sip\ApiCneService">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
+        
+        
         <service id="app.twig_string_loader" class="Twig_Loader_String"></service>
         <service id="app.twig_string" class="%twig.class%">
             <argument type="service" id="app.twig_string_loader" />

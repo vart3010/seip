@@ -54,9 +54,17 @@ class OnePerTenMembers {
      * codigo de centro
      * @var string
      *
-     * @ORM\Column(name="codCentro", type="string")
+     * @ORM\Column(name="codCentro", type="string",nullable=true)
      */
     private $codCentro;
+
+    /**
+     * Nombre de centro
+     * @var string
+     *
+     * @ORM\Column(name="nombreCentro", type="string",nullable=true)
+     */
+    private $nombreCentro;
 
     /**
      * telefono
@@ -93,6 +101,14 @@ class OnePerTenMembers {
      * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
      */
     private $deletedAt;
+
+    function getNombreCentro() {
+        return $this->nombreCentro;
+    }
+
+    function setNombreCentro($nombreCentro) {
+        $this->nombreCentro = $nombreCentro;
+    }
 
     function getOne() {
         return $this->one;
