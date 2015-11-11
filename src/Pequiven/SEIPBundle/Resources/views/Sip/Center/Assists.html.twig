@@ -2,7 +2,7 @@
 
 <div class="block">
     <div ng-controller="SipCenterAssistsController"> 
-        
+
         <div class="block-title">
             <h3 class="ng-binding">{{ 'sip.assists'|trans({}) }}</h3> 
             {# añadir plan de acción #}
@@ -31,33 +31,46 @@
                     </tr>
                 </thead>     
                 {% for data in assist %}
-                <tbody align="center">
+                    <tbody align="center">
                         <tr>
                             <td align="left">{{ nomCutl[data.cedula]  }}</td>                            
                             <td align="left">{{ data.fecha | date("d/m/Y")  }}</td>                            
                             <td align="left">
-                            {% set assist = data.assists %}
-                            {% if(assist == 1 ) %}
-                                {% set checkState = "checked" %}
-                            {% else  %}
-                                {% set checkState = "" %}
-                            {% endif %}
-                            <input type="checkbox" value="{{ data.assists  }}" class="switch blue-active mid-margin-right {{ checkState }}"  data-text-on="SI" data-text-off="NO" disabled>
+                                {% set assist = data.assists %}
+                                {% if(assist == 1 ) %}
+                                    {% set checkState = "checked" %}
+                                {% else  %}
+                                    {% set checkState = "" %}
+                                {% endif %}
+                                <input type="checkbox" value="{{ data.assists  }}" class="switch blue-active mid-margin-right {{ checkState }}"  data-text-on="SI" data-text-off="NO" disabled>
                             </td> 
                             <td align="justify">{{ data.observations }}</td> 
                             <td class="align-right vertical-center">                          
                                 <span class="select compact">
-                                <a href class="select-value form-edit">{{ 'pequiven.actions'|trans({},'messages') }}</a>
-                                <span class="select-arrow"></span>
+                                    <a href class="select-value form-edit">{{ 'pequiven.actions'|trans({},'messages') }}</a>
+                                    <span class="select-arrow"></span>
                                     <span class="drop-down">                                    
                                         <a href ng-click="removeAssists(assists='{{ data.id }}')" class="button icon-cross-round">{{ "pequiven.actions.delete"|trans({},"messages") }}</a>             
                                     </span>
                                 </span>
                             </td>                          
                         </tr>                 
-                </tbody>                    
+                    </tbody>                    
                 {% endfor %}       
             </table> 
+            &nbsp;  
+            <div class="align-left">
+
+                {% set routeExport = path('pequiven_sip_center_export',{idCenter:center.id, type:2}) %}
+
+                {{ buttons.generic(
+                    (routeExport),
+                    ('sip.export.exportpdf'|trans({})),
+                    'icon-download'
+                 ) 
+                }}
+
+            </div>          
         </div>
     </div>
 </div>
