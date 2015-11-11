@@ -463,7 +463,7 @@ class CenterController extends SEIPController {
                     'catObs'        => $catObs,
                     'status'        => $status,
                     'inventory'     => $inventory,
-                    'colorStatus'         => $color
+                    'colorStatus'   => $color
         ));
     }
 

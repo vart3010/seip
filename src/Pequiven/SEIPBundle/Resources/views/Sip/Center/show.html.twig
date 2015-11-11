@@ -10,10 +10,15 @@
 {% endblock javascripts_base %}
 
 {% block before_body %}
-    {{ contentHeader("sip.center.title" | trans({}))   }}
+    {{ contentHeader(
+        ("sip.center.title" | trans({})),
+        ('pequiven.show'|trans({},'messages'))
+    )}}
 {% endblock %}
 
 {% block body %}
+    {% set show = 1 %}
+        
     <div class="block_id" ng-init="idCenter='{{ center.codigoCentro }}'"></div>    
     {% if(assist == 1 ) %}
         {% set checkState = "checked" %}
