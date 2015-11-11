@@ -39,6 +39,14 @@ class Cutl {
      * @ORM\Column(name="parroquia", type="string", length=255)
      */
     private $parroquia;
+    
+    /**
+     * Eje
+     * @var integer
+     *
+     * @ORM\Column(name="eje", type="integer")
+     */
+    private $eje = 0;
 
     /**
      * codigo centro
@@ -161,6 +169,11 @@ class Cutl {
     function getParroquia() {
         return $this->parroquia;
     }
+    
+        
+    function getEje() {
+        return $this->eje;
+    }
 
     function getCodigoCentro() {
         return $this->codigoCentro;
@@ -228,6 +241,10 @@ class Cutl {
 
     function setParroquia($parroquia) {
         $this->parroquia = $parroquia;
+    }
+    
+    function setEje($eje) {
+        $this->eje = $eje;
     }
 
     function setCodigoCentro($codigoCentro) {
