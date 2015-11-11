@@ -42,6 +42,14 @@ class CutlRepository extends EntityRepository {
             $queryBuilder->andWhere($queryBuilder->expr()->like('ct.cedula', "'%" . $cedulaPersona . "%'"));
         }
 
+        if (($municipio = $criteria->remove('municipio'))) {
+            $queryBuilder->andWhere($queryBuilder->expr()->like('ct.municipio', "'%" . $municipio . "%'"));
+        }
+
+        if (($parroquia = $criteria->remove('parroquia'))) {
+            $queryBuilder->andWhere($queryBuilder->expr()->like('ct.parroquia', "'%" . $parroquia . "%'"));
+        }
+
         parent::applyCriteria($queryBuilder, $criteria->toArray());
     }
 

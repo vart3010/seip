@@ -66,7 +66,7 @@ class CutlController extends SEIPController {
             );
             $view->setData($data);
         } else {
-            $view->getSerializationContext()->setGroups(array('id', 'api_list', 'nombre', 'centro', 'codigoCentro', 'municipio', 'parroquia'));
+            $view->getSerializationContext()->setGroups(array('id', 'api_list', 'nombre', 'centro', 'cedula', 'codigoCentro', 'municipio', 'parroquia'));
             $formatData = $request->get('_formatData', 'default');
 
             $view->setData($resources->toArray('', array(), $formatData));
