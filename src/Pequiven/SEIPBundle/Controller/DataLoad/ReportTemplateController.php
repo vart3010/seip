@@ -1303,7 +1303,7 @@ class ReportTemplateController extends SEIPController {
 
             $dateDesde = $dateFrom->format("U");
             $dateHasta = $dateEnd->format("U");
-            
+
             foreach ($plantReports as $planReport) {
                 if (!in_array($plantReport->getReportTemplate()->getName(), $plants)) {
                     $plants[] = $plantReport->getReportTemplate()->getName();
@@ -1836,17 +1836,17 @@ class ReportTemplateController extends SEIPController {
                     $productId = $productReport->getProduct()->getId();
                     $productReportId = $productReport->getId();
 
-                    if (!in_array($productReportId, $arrayNamesUnrealizedProduction)) {
-                        $arrayNamesUnrealizedProduction[] = $productId;
-                        $arrayUnrealizedProduction[$productReportId] = array(
-                            "productName" => $productReport->getName() . " (" . $productReport->getProduct()->getProductUnit()->getUnit() . ")",
-                            //ID DEL PRODUCT_REPORT
-                            "productId" => $productReport->getId(),
-                            "reportTemplateId" => $productReport->getPlantReport()->getReportTemplate()->getId(),
-                            //ID DEL PRODUCTO
-                            "idProduct" => $productId
-                        );
-                    }
+//                    if (!in_array($productReportId, $arrayNamesUnrealizedProduction)) {
+//                        $arrayNamesUnrealizedProduction[] = $productId;
+                    $arrayUnrealizedProduction[$productReportId] = array(
+                        "productName" => $productReport->getName() . " (" . $productReport->getProduct()->getProductUnit()->getUnit() . ")",
+                        //ID DEL PRODUCT_REPORT
+                        "productId" => $productReport->getId(),
+                        "reportTemplateId" => $productReport->getPlantReport()->getReportTemplate()->getId(),
+                        //ID DEL PRODUCTO
+                        "idProduct" => $productId
+                    );
+                    // }
 
                     $unrealizedProduction = $productReport->getSummaryUnrealizedProductions($dateReport);
 
