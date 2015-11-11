@@ -24,7 +24,7 @@
             <div class="new-row-mobile three-columns three-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">{{ ("sip.cedula"|trans ) }}</label>
-                    <input class="input" id="cedula" type="text">
+                    <input class="input" id="cedulaSearch" type="text">
                 </p>
             </div>
             <div class="new-row-mobile two-columns two-columns-tablet twelve-columns-mobile">
@@ -89,7 +89,7 @@
     <script type="text/javascript">
         $(document).ready(function () {
 
-            $('#cedula').mask('00000000');
+            $('#cedulaSearch').mask('00000000');
             $('#telefono').mask('0000-0000000');
 
 
@@ -104,9 +104,9 @@
 
 
             $("#search").click(function () {
-                if ($("#cedula").val() != "") {
+                if ($("#cedulaSearch").val() != "") {
                     var data = {
-                        ced: $("#cedula").val(),
+                        ced: $("#cedulaSearch").val(),
                         idUserOne: $("#idUserName").val()
                     };
                     $.ajax({
