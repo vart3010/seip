@@ -36,6 +36,11 @@
                 <p class="inline-label">
                 </p>
             </div>
+            <div id="carga" style="display:none">
+                <p class="button-height">
+                    <span class="loader big"></span>
+                </p>
+            </div>
             <div class="new-row-mobile three-columns three-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                 <div style="color: #dc6262; font-weight: bold; margin-top: -20px" id="msj"></div>
@@ -114,6 +119,10 @@
                         type: 'post',
                         url: '{{ path("pequiven_ubch_member_search") }}',
                         data: data,
+                        beforeSend:function(objeto){
+                            $('#carga').css({display:'block'});
+                        },
+                        complete:function(){$('#carga').css('display','none');},
                         success: function (data) {
                             $("p.name").html(data["nombre"]);
                             $("p.centro").html(data["nameCentro"]);
