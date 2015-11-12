@@ -53,13 +53,13 @@
                 var assists = $(this).attr("data");
                 if (value == 1) {
                     $(this).val(0);
-                    $("#obs_" + assists).attr("disabled", false);
-                    $("#obs_" + assists).attr("required", true);                    
+                    //$("#obs_" + assists).attr("disabled", false);
+                    //$("#obs_" + assists).attr("required", true);                    
                 } else {
                     $(this).val(1);
-                    $("#obs_" + assists).val("");
-                    $("#obs_" + assists).attr("disabled", true);
-                    $("#obs_" + assists).attr("required", true);                    
+                    //$("#obs_" + assists).val("");
+                    //$("#obs_" + assists).attr("disabled", true);
+                    //$("#obs_" + assists).attr("required", true);                    
                 }
                 console.log((value));
             });

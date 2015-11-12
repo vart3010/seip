@@ -448,6 +448,11 @@ class CenterController extends SEIPController {
             5 => "#920a00"
         ];
 
+        //Carga de status
+        $ubchCargo = [
+            1 => "Jefe",
+            2 => "Patrullero",            
+        ];
 
         $assist = $this->get('pequiven.repository.assists')->findBy(array('codigoCentro' => $codigoCentro));
 
@@ -466,7 +471,8 @@ class CenterController extends SEIPController {
                     'status'        => $status,
                     'inventory'     => $inventory,
                     'colorStatus'   => $color,
-                    'ubch'          => $ubch
+                    'ubch'          => $ubch,
+                    'ubchCargo'     => $ubchCargo
         ));
     }
 

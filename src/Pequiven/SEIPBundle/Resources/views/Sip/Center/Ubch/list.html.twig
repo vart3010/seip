@@ -34,10 +34,10 @@
                 {% for dataUbch in ubch %}
                     <tbody align="center">
                         <tr>
-                            <td align="left">{{ dataUbch.cedula }}</td>                            
+                            <td align="left">V-{{ dataUbch.cedula }}</td>                            
                             <td align="left">{{ dataUbch.nombre }}</td>                            
                             <td align="left">{{ dataUbch.telefono }}</td> 
-                            <td align="left">{{ dataUbch.cargo }}</td>                            
+                            <td align="left">{{ ubchCargo[dataUbch.cargo] }}</td>                            
                         </tr>                 
                     </tbody> 
                 {% endfor %}
