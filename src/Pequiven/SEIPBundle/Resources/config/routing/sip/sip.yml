@@ -208,3 +208,40 @@ pequiven_sip_center_export:
     methods: [GET|POST]
     options:
         expose: true
+#UBCH
+pequiven_ubch_add_member:
+    path: /ubch/add/{idCentro}
+    defaults:
+        _controller: pequiven.controller.ubch:addMemberAction
+    methods: [GET|POST]
+    options:
+        expose: true
+pequiven_ubch_member_search:
+    path: /ubch/search
+    defaults:
+        _controller: pequiven.controller.ubch:searchAction
+pequiven_ubch_member_save:
+    path: /ubch/save
+    defaults:
+        _controller: pequiven.controller.ubch:saveAction
+    methods: [GET|POST]
+    options:
+        expose: true
+pequiven_ubch_show:
+    path: /ubch/show/{id}
+    defaults:
+        _controller: pequiven.controller.ubch:showAction
+    methods: [GET|POST]
+    options:
+        expose: true
+#Eliminacion de Observación
+pequiven_ubch_delete_member:
+    path: /{id}/delUbch.{_format}
+    defaults:
+        _controller: pequiven.controller.ubch:delUbchAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET]
+    options:
+        expose: true

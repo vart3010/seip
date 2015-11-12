@@ -484,6 +484,13 @@ sylius_resource:
                 controller: Pequiven\SEIPBundle\Controller\Sip\Center\CenterController
                 model: Pequiven\SEIPBundle\Entity\Sip\Centro
                 repository: Pequiven\SEIPBundle\Repository\Sip\Centro\CentroRepository
+        pequiven.ubch:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:Sip/Center/Ubch
+            classes:
+                controller: Pequiven\SEIPBundle\Controller\Sip\Center\UbchController
+                model: Pequiven\SEIPBundle\Entity\Sip\Ubch
+                repository: Pequiven\SEIPBundle\Repository\Sip\UbchRepository
         pequiven.estado:
             driver: doctrine/orm
             classes:

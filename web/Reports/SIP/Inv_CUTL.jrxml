@@ -2,13 +2,13 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Inventariado" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="39a430ef-fd62-4b25-8487-b8107872e988">
 	<property name="ireport.zoom" value="1.6105100000000023"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="94"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="idCentro" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[SELECT
-estado.description as Estado,
-municip.description as Municipio,
-parroq.description as Parroquia,
+cent.descriptionEstado as Estado,
+cent.descriptionMunicipio as Municipio,
+cent.descriptionParroquia as Parroquia,
 cent.id as idCentro,
 cent.description as Centro,
 date_format(inv.fecha,'%d/%m/%Y') as Fecha,
@@ -20,10 +20,7 @@ UPPER(inv.observations) as Observaciones
 from sip_centro_inventory as inv
 inner join sip_centro as cent on (inv.codigocentro=cent.codigoCentro)
 inner join sip_centro_material as mat on (inv.material_id=mat.id)
-inner join sip_parroquia as parroq on (cent.codigoParroquia=parroq.id)
-inner join sip_municipio as municip on (cent.codigoMunicipio=municip.id)
-inner join sip_estado as estado on (cent.codigoEstado=estado.id)
-where cent.id=$P{idCentro}
+where inv.deletedAt is null and cent.id=$P{idCentro}
 order by fecha]]>
 	</queryString>
 	<field name="Estado" class="java.lang.String"/>
@@ -89,7 +86,7 @@ order by fecha]]>
 				<text><![CDATA[Material]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="221" y="125" width="351" height="13" uuid="4e7348d2-6e38-4f54-84f6-9b4c95fb9bd0"/>
+				<reportElement x="238" y="125" width="334" height="13" uuid="4e7348d2-6e38-4f54-84f6-9b4c95fb9bd0"/>
 				<textElement>
 					<font fontName="DejaVu Serif Condensed" size="9" isBold="true"/>
 				</textElement>
@@ -181,7 +178,7 @@ order by fecha]]>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="44" splitType="Stretch">
+		<band height="33" splitType="Stretch">
 			<textField>
 				<reportElement x="7" y="2" width="59" height="14" uuid="ee296e76-b0a6-4c8e-ac97-723956ff4504"/>
 				<textElement>
@@ -190,7 +187,7 @@ order by fecha]]>
 				<textFieldExpression><![CDATA[$F{Fecha}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement x="200" y="2" width="372" height="40" uuid="5f7e38b9-d916-4b88-bb18-35c595887e63"/>
+				<reportElement x="221" y="2" width="351" height="29" uuid="5f7e38b9-d916-4b88-bb18-35c595887e63"/>
 				<textElement>
 					<font fontName="DejaVu Serif Condensed" size="8"/>
 				</textElement>
@@ -213,7 +210,7 @@ order by fecha]]>
 		</band>
 	</detail>
 	<columnFooter>
-		<band height="6" splitType="Stretch"/>
+		<band splitType="Stretch"/>
 	</columnFooter>
 	<pageFooter>
 		<band height="46" splitType="Stretch">

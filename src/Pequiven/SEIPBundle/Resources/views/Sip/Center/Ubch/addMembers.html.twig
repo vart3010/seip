@@ -1,0 +1,148 @@
+
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
+
+
+
+{% trans_default_domain 'sip' %}
+
+
+{% block before_body %}
+    {{ contentHeader(
+        ("Registro Miembro UBCH"|trans ),
+        ('pequiven.add'|trans({},'messages'))
+    ) }}
+{% endblock %}
+
+{% block body %}
+    <fieldset class="fieldset">
+        <legend class="legend" >Registro Miembro UBCH</legend>
+        <div class="columns">
+            <div class="new-row-mobile three-columns three-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ ("sip.cedula"|trans ) }}</label>
+                    <input class="input" id="cedulaSearch" type="text">
+                </p>
+            </div>
+            <div class="new-row-mobile two-columns two-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <button id="search" class="button" type="button">Consultar</button>
+                </p>
+            </div>
+            <div class="new-row-mobile two-columns two-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                </p>
+            </div>
+            <div id="carga" style="display:none">
+                <p class="button-height">
+                    <span class="loader big"></span>
+                </p>
+            </div>
+            <div class="new-row-mobile three-columns three-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                <div style="color: #dc6262; font-weight: bold; margin-top: -20px" id="msj"></div>
+                </p>
+            </div>
+
+        </div>
+
+        <div class="columns" id="details" style="margin-top: 15px;">
+            <div class="new-row-mobile three-columnsfour-columns-tablet three-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ ("sip.nombre"|trans ) }}:</label>
+                <p class="name"></p>
+            </div>
+            <div class="new-row-mobile three-columns three-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ ("sip.centro"|trans ) }}:</label>
+                <p class="centro"></p>
+                </p>
+            </div>
+            <div class="new-row-mobile three-columns three-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ ("sip.telefono"|trans ) }}:</label>
+                <p>
+                <form action="{{ path("pequiven_ubch_member_save") }}" method="POST" id="saveUbch">
+                    <input type="hidden" name="codCentro" id="codCentro">
+                    <input type="hidden" name="nombreCentro" id="nombreCentro">
+                    <input type="hidden" name="nombre" id="nombre">
+                    <input type="hidden" name="cedula" id="cedula">                    
+                    <input type="hidden" name="idCentro" id="idCentro" value="{{idCentro}}">                    
+                    <input id="telefono" name="telefono" style="display: none;"  type="text" class="input ">
+                </form>
+                </p>
+                </p>
+            </div>
+            <div class="new-row-mobile three-columns three-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <button id="save" class="button margin-top" style="display: none;" type="button">Guardar</button>
+                </p>
+            </div>
+        </div>
+
+    </fieldset>
+
+
+{% endblock %}
+
+
+{% block javascript %}
+    <script src="{{  asset('bundles/pequivenseip/jQuery-Mask-Plugin-master/jquery.mask.min.js') }}"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $('#cedulaSearch').mask('00000000');
+            $('#telefono').mask('0000-0000000');
+
+
+            $("#save").click(function () {
+                var tlf = $("#telefono").val();
+                if (tlf != "") {
+                    $("form#saveUbch").submit();
+                } else {
+                    alert("Debe Ingresar el Telefono.");
+                }
+            });
+
+
+            $("#search").click(function () {
+                if ($("#cedulaSearch").val() != "") {
+                    var data = {
+                        ced: $("#cedulaSearch").val(),
+                        idUserOne: $("#idUserName").val()
+                    };
+                    $.ajax({
+                        type: 'post',
+                        url: '{{ path("pequiven_ubch_member_search") }}',
+                        data: data,
+                        beforeSend:function(objeto){
+                            $('#carga').css({display:'block'});
+                        },
+                        complete:function(){$('#carga').css('display','none');},
+                        success: function (data) {
+                            $("p.name").html(data["nombre"]);
+                            $("p.centro").html(data["nameCentro"]);
+                            $("input#codCentro").val(data["centro"]);
+                            $("input#nombreCentro").val(data["nameCentro"]);
+                            $("input#nombre").val(data["nombre"]);
+                            $("input#cedula").val(data["cedula"]);                            
+                            $("div#msj").html(data["msj"]);
+                            if (data["nombre"] != "" || data["nameCentro"]) {
+                                $("button#save").show();
+                                $("input#telefono").show();
+                            }
+                            //console.log(data);
+                        }
+                    });
+
+                } else {
+                    alert("Debe Ingresar una Cédula.");
+                }
+            });
+        });
+    </script>
+{% endblock %}
