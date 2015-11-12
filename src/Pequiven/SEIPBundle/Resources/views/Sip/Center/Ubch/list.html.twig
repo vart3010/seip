@@ -1,19 +1,52 @@
 {% trans_default_domain 'sip' %}
-
-
-    <div ng-controller="SipCenterAssistsController"> 
-
+<div class="block" ng-controller="SipCenterObservationController"> 
         <div class="block-title">
-            <h3 class="ng-binding">Patrulleros</h3> 
+            <h3 class="ng-binding">UBCH</h3> 
             {# añadir ubch #}
-            {% if show == 1 %}
             <div class="button-group absolute-right compact">
-                <a class="button icon-list-add " href="{{ path("pequiven_ubch_add_member",{idCentro:center.id})}}" title="">{{ 'pequiven.add'|trans({},'messages')  }}</a>
-            </div>       
-            {% endif %}
-        </div>
 
-                  
+                <a class="button icon-list-add " href="{{ path("pequiven_ubch_add_member",{idCentro:center.id})}}" title="">{{ 'pequiven.add'|trans({},'messages')  }}</a>
+            {% if show == 1 %}
+                <a href="{{ path("pequiven_ubch_show",{id:center.id})}}" class="button fa fa-search-plus">Ver</a>
+                {#<a href="javascript:void(0);" class="button icon-gear with-tooltip" title="Other actions"></a>
+                <a href="javascript:void(0);" class="button icon-trash with-tooltip confirm" title="Delete"></a>#}
+            {% endif %}
+                
+            </div>       
+        </div>
+    
+    <fieldset style="padding:20px;">
+        <div class="columns">
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Cédula</label>
+                    {{ center.cedulaubch }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Nombre</label>
+                    {{ center.nombreubch }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Teléfono</label>
+                    {{ center.telefonoubch }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Cargo</label>
+                    {{ center.cargoubch }}
+                </p>
+            </div>
+
+        </div> 
+    </fieldset>
+    <HR>
+        <div class="with-padding"> 
+            <h3>Patrulleros</h3>        
             <table class="simple-table responsive-table tables-extras" id="sorting-example2">
                 <thead>
                     <tr>
@@ -37,7 +70,16 @@
                             <td align="left">V-{{ dataUbch.cedula }}</td>                            
                             <td align="left">{{ dataUbch.nombre }}</td>                            
                             <td align="left">{{ dataUbch.telefono }}</td> 
-                            <td align="left">{{ ubchCargo[dataUbch.cargo] }}</td>                            
+                            <td align="left">{{ ubchCargo[dataUbch.cargo] }}</td>
+                            <td class="align-right vertical-center">                          
+                                <span class="select compact">
+                                    <a href class="select-value form-edit">{{ 'pequiven.actions'|trans({},'messages') }}</a>
+                                    <span class="select-arrow"></span>
+                                    <span class="drop-down">                                    
+                                        <a href ng-click="removeUbch(ubch='{{ dataUbch.id }}')" class="button icon-cross-round">{{ "pequiven.actions.delete"|trans({},"messages") }}</a>             
+                                    </span>
+                                </span>
+                            </td>                            
                         </tr>                 
                     </tbody> 
                 {% endfor %}
@@ -56,5 +98,7 @@
                 }}
             </div>
             {% endif %}          #}
-        </div>
+        </div>    
+</div>
+
     
