@@ -6,9 +6,9 @@
 	<parameter name="idCentro" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[SELECT
-estado.description as Estado,
-municip.description as Municipio,
-parroq.description as Parroquia,
+cent.descriptionEstado as Estado,
+cent.descriptionMunicipio as Municipio,
+cent.descriptionParroquia as Parroquia,
 cent.id as idCentro,
 cent.description as Centro,
 date_format(inv.fecha,'%d/%m/%Y') as Fecha,
@@ -23,7 +23,7 @@ inner join sip_centro_material as mat on (inv.material_id=mat.id)
 inner join sip_parroquia as parroq on (cent.codigoParroquia=parroq.id)
 inner join sip_municipio as municip on (cent.codigoMunicipio=municip.id)
 inner join sip_estado as estado on (cent.codigoEstado=estado.id)
-where cent.id=$P{idCentro}
+where inv.deletedAt is null and  cent.id=$P{idCentro}
 order by fecha]]>
 	</queryString>
 	<field name="Estado" class="java.lang.String"/>

@@ -2,13 +2,13 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Requerimientos" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="39a430ef-fd62-4b25-8487-b8107872e988">
 	<property name="ireport.zoom" value="1.6105100000000023"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="94"/>
 	<parameter name="idCentro" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[SELECT
-estado.description as Estado,
-municip.description as Municipio,
-parroq.description as Parroquia,
+cent.descriptionEstado as Estado,
+cent.descriptionMunicipio as Municipio,
+cent.descriptionParroquia as Parroquia,
 cent.id as idCentro,
 cent.description as Centro,
 date_format(obs.fecha,'%d/%m/%Y') as Fecha,
@@ -43,7 +43,7 @@ inner join sip_centro as cent on (obs.codigocentro=cent.codigoCentro)
 inner join sip_parroquia as parroq on (cent.codigoParroquia=parroq.id)
 inner join sip_municipio as municip on (cent.codigoMunicipio=municip.id)
 inner join sip_estado as estado on (cent.codigoEstado=estado.id)
-where cent.id=$P{idCentro}
+where obs.deletedAt is null and  cent.id=$P{idCentro}
 order by fecha]]>
 	</queryString>
 	<field name="Estado" class="java.lang.String"/>

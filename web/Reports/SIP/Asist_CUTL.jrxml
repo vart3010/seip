@@ -19,7 +19,7 @@ asist.observations as Observaciones
 from sip_centro_assists as asist
 inner join sip_centro as cent on (asist.codigoCentro=cent.codigoCentro)
 inner join sip_cutl as cutl on (asist.cedula=cutl.cedula)
-where cent.id=$P{idCentro}]]>
+where asist.deletedAt is null and cent.id=$P{idCentro}]]>
 	</queryString>
 	<field name="id" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
