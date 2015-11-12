@@ -480,7 +480,8 @@ class CenterController extends SEIPController {
 
         //EN CASO DE VENIR DEL BOTON DE ASISTENCIAS
         if ($type == 2) {
-            $route = "SIP/Asist_CUTL.jrxml";
+            //$route = "SIP/Asist_CUTL.jrxml";
+            $route = "SIP/AsistTabla.jrxml";
         }
 
         //EN CASO DE VENIR DEL BOTON DE REQUERIMIENTOS

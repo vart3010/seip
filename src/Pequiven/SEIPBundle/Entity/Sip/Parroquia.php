@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Parroquia
  * @author Victor Tortolero vart10.30@gmail.com
  * @ORM\Table(name="sip_parroquia")
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\Sip\ParroquiaRepository")
  */
 class Parroquia {
 

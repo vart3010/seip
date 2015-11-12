@@ -2,8 +2,8 @@
 
 namespace Pequiven\SEIPBundle\Service\Reports;
 
-include_once('class/tcpdf/tcpdf.php');
-include_once('class/PHPJasperXML.inc.php');
+include_once('clases/tcpdf/tcpdf.php');
+include_once('clases/PHPJasperXML.inc.php');
 
 use PHPJasperXML;
 
