@@ -5,6 +5,7 @@ namespace Pequiven\SEIPBundle\Controller\Sip\Center;
 use Pequiven\SEIPBundle\Controller\SEIPController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Pequiven\SEIPBundle\Entity\Sip\Ubch;
 
 
 /**
@@ -19,9 +20,14 @@ class UbchController extends SEIPController {
 	 *	Añadiendo miembro UBCH
 	 *
 	 */
-	public function addMemberAction(){
-
-		return $this->render('PequivenSEIPBundle:Sip:Center/Ubch/addMembers.html.twig');
+	public function addMemberAction(Request $request){
+	
+		$idCentro = $request->get("idCentro");
+		
+		return $this->render('PequivenSEIPBundle:Sip:Center/Ubch/addMembers.html.twig', 
+			array(
+				'idCentro' => $idCentro
+			));
 	}
 
 	/**
@@ -36,19 +42,14 @@ class UbchController extends SEIPController {
         $cedula = $request->get('ced');
         $datos = array("nombre" => "", "centro" => "", "nameCentro" => "", "msj" => "");
 
-        var_dump($cedula);
-        die();
         $user = $em->getRepository("\Pequiven\SEIPBundle\Entity\User")->findOneBy(array("identification" => $cedula));
-        $onePerTen = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\OnePerTen")->findOneBy(array("user" => $request->get("idUserOne")));
 
-
-        $onePerTenMembers = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\OnePerTenMembers")->findBy(
+        $ubch = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Ubch")->findBy(
                 array(
-                    "cedula" => $cedula,
-                    "one" => $onePerTen->getId()
+                    "cedula" => $cedula,                    
                 )
         );
-        if (count($onePerTenMembers) <= 0) {
+        if (count($ubch) <= 0) {
             if (!isset($user) || $user->getWorkStudyCircle() == "null") {
                 if ($cedula != "" || $cedula != 0) {
                     /**
@@ -86,7 +87,7 @@ class UbchController extends SEIPController {
                 $datos["msj"] = "El usuario es Nómina Pequiven";
             }
         } else {
-            $datos["msj"] = "El usuario ya esta agregado a tu 1x10";
+            $datos["msj"] = "El usuario ya esta agregado a una UBCH";
         }
 
         $response->setData($datos);
@@ -98,20 +99,43 @@ class UbchController extends SEIPController {
 	 *
 	 */ 
 	public function saveAction(Request $request){
-		die("Recibido");
+		
+		$id = $request->get("idCentro");
+		
 		$user = $this->getUser();
 
         $em = $this->getDoctrine()->getManager();
+        
+        $center = $this->get('pequiven.repository.center')->find($id);	        
 
-        //DATOS TEN
-        $cedula = $request->get("cedula");
-        $codCentro = $request->get("codCentro");
+        //Formateando las Cedulas
+        if (strpos($request->get("cedula"), "-")) {                    
+             $cedula = trim($request->get("cedula"), "V-");                            	 
+        }else{
+             $cedula = $request->get("cedula");
+        }
+
+        //DATOS DEL REGISTRO
+        $cedula = $cedula;
+        $codCentro = $center->getCodigoCentro();
         $nombreCentro = $request->get("nombreCentro");
         $nombre = $request->get("nombre");
         $telefono = $request->get("telefono");
+        $cargo = 2;
 
-        
+
         $em->getConnection()->beginTransaction();
+
+        $ubch = new Ubch();
+        
+        $ubch->setCedula($cedula);
+        $ubch->setNombre($nombre);
+        $ubch->setCodigoCentro($codCentro);
+        $ubch->setTelefono($telefono);
+        $ubch->setCargo($cargo);
+        $ubch->setCreatedBy($user);
+        
+        $em->persist($ubch);
 
 
         try {
@@ -122,7 +146,14 @@ class UbchController extends SEIPController {
             throw $e;
         }
         $this->get('session')->getFlashBag()->add('success', 'Miembro Agregado Exitosamente.');
-        die();
-        //return $this->redirect($this->generateUrl('pequiven_search_members', array("user" => $idUserOne)));
+        
+        return $this->redirect($this->generateUrl('pequiven_sip_center_show', array("id" => $id)));
 	}
+	/**
+	 *	Api CNE
+	 *
+	 */
+	protected function getCneService() {
+        return $this->container->get('seip.service.apiCne');
+    }
 }

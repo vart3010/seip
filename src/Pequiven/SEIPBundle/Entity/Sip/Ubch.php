@@ -44,9 +44,9 @@ class Ubch {
 
     /**
      * telefono
-     * @var integer
+     * @var string
      *
-     * @ORM\Column(name="telefono", type="integer", length=12, nullable=true)
+     * @ORM\Column(name="telefono", type="string", length=12, nullable=true)
      */
     private $telefono;
 
@@ -56,7 +56,7 @@ class Ubch {
      *
      * @ORM\Column(name="codigoCentro", type="integer", nullable=true)
      */
-    private $codCentro;
+    private $codigoCentro;
 
     /**
      * cargo

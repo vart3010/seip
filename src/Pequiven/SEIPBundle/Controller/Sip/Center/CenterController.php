@@ -413,6 +413,8 @@ class CenterController extends SEIPController {
 
         $cutl = $this->get('pequiven.repository.cutl')->findBy(array('codigoCentro' => $codigoCentro));
 
+        $ubch = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Ubch")->findBy(array("codigoCentro" => $codigoCentro));
+        
         //Carga de Nombre de CUTL
         foreach ($cutl as $value) {
             $nomCutl[$value->getCedula()] = $value->getNombre();
@@ -463,7 +465,8 @@ class CenterController extends SEIPController {
                     'catObs'        => $catObs,
                     'status'        => $status,
                     'inventory'     => $inventory,
-                    'colorStatus'   => $color
+                    'colorStatus'   => $color,
+                    'ubch'          => $ubch
         ));
     }
 

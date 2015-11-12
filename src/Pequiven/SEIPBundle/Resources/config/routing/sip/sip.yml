@@ -200,7 +200,7 @@ pequiven_sip_center_export:
         expose: true
 #UBCH
 pequiven_ubch_add_member:
-    path: /ubch/add/{cedula}
+    path: /ubch/add/{idCentro}
     defaults:
         _controller: pequiven.controller.ubch:addMemberAction
     methods: [GET|POST]

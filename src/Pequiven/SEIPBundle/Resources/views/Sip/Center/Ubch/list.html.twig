@@ -8,7 +8,7 @@
             {# añadir ubch #}
             {% if show == 1 %}
             <div class="button-group absolute-right compact">
-                <a class="button icon-list-add " href="{{ path("pequiven_ubch_add_member",{cedula:center.id})}}" title="">{{ 'pequiven.add'|trans({},'messages')  }}</a>
+                <a class="button icon-list-add " href="{{ path("pequiven_ubch_add_member",{idCentro:center.id})}}" title="">{{ 'pequiven.add'|trans({},'messages')  }}</a>
             </div>       
             {% endif %}
         </div>
@@ -17,28 +17,30 @@
             <table class="simple-table responsive-table tables-extras" id="sorting-example2">
                 <thead>
                     <tr>
-                        <th scope="col" width="30%" class="header" align="left">
+                        <th scope="col" width="15%" class="header" align="left">
                             Cedula
                         </th>                    
-                        <th scope="col" width="10%" class="header" align="left">
+                        <th scope="col" width="30%" class="header" align="left">
                             Nombre
                         </th>    
-                        <th scope="col" width="10%" class="header" align="left">
+                        <th scope="col" width="20%" class="header" align="left">
                             Telefono
                         </th> 
-                        <th scope="col" width="30%" class="header" align="left">
+                        <th scope="col" width="20%" class="header" align="left">
                             Cargo
                         </th>                         
                     </tr>
-                </thead>     
+                </thead>  
+                {% for dataUbch in ubch %}
                     <tbody align="center">
                         <tr>
-                            <td align="left"></td>                            
-                            <td align="left"></td>                            
-                            <td align="left"></td> 
-                            <td align="left"></td>                            
+                            <td align="left">{{ dataUbch.cedula }}</td>                            
+                            <td align="left">{{ dataUbch.nombre }}</td>                            
+                            <td align="left">{{ dataUbch.telefono }}</td> 
+                            <td align="left">{{ dataUbch.cargo }}</td>                            
                         </tr>                 
                     </tbody> 
+                {% endfor %}
             </table> 
             {#&nbsp;  
             {% if show == 1 %} 

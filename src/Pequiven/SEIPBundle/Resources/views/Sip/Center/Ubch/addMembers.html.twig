@@ -18,7 +18,6 @@
 {% endblock %}
 
 {% block body %}
-
     <fieldset class="fieldset">
         <legend class="legend" >Registro Miembro UBCH</legend>
         <div class="columns">
@@ -66,6 +65,7 @@
                     <input type="hidden" name="nombreCentro" id="nombreCentro">
                     <input type="hidden" name="nombre" id="nombre">
                     <input type="hidden" name="cedula" id="cedula">                    
+                    <input type="hidden" name="idCentro" id="idCentro" value="{{idCentro}}">                    
                     <input id="telefono" name="telefono" style="display: none;"  type="text" class="input ">
                 </form>
                 </p>
@@ -120,13 +120,13 @@
                             $("input#codCentro").val(data["centro"]);
                             $("input#nombreCentro").val(data["nameCentro"]);
                             $("input#nombre").val(data["nombre"]);
-                            $("input#cedula").val(data["cedula"]);
+                            $("input#cedula").val(data["cedula"]);                            
                             $("div#msj").html(data["msj"]);
                             if (data["nombre"] != "" || data["nameCentro"]) {
                                 $("button#save").show();
                                 $("input#telefono").show();
                             }
-                            console.log(data);
+                            //console.log(data);
                         }
                     });
 
