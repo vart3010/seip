@@ -11,6 +11,7 @@
 
 {% block before_body %}
     {{ contentHeader(
+        {(path('pequiven_sip_center_show',{'id':center.id})): "sip.center.name"|trans},
         ("UBCH" | trans({})),
         ('pequiven.show'|trans({},'messages'))
     )}}
