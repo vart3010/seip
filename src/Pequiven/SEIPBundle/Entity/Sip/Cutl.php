@@ -135,6 +135,14 @@ class Cutl {
      * @ORM\Column(name="gerenciaSecond", type="string")
      */
     private $gerenciaSecond;
+    
+    /**
+     * cedula
+     * @var integer
+     *
+     * @ORM\Column(name="orderCenter", type="integer")
+     */
+    private $orderCenter;
 
     function getId() {
         return $this->id;
@@ -197,6 +205,10 @@ class Cutl {
         return $this->gerenciaSecond;
     }
 
+    function getOrderCenter() {
+        return $this->orderCenter;
+    }
+
     function setId($id) {
         $this->id = $id;
     }
@@ -255,6 +267,10 @@ class Cutl {
 
     function setGerenciaSecond($gerenciaSecond) {
         $this->gerenciaSecond = $gerenciaSecond;
+    }
+
+    function setOrderCenter($orderCenter) {
+        $this->orderCenter = $orderCenter;
     }
 
 }

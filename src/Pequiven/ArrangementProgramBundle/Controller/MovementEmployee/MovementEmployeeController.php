@@ -313,6 +313,18 @@ class MovementEmployeeController extends SEIPController {
                 $responsibles = $entity->getresponsibles();
 
                 if (count($responsibles) <= 1) {
+                    foreach ($responsibles as $resp) {
+                        if (($resp->getid()) != ($user->getid())) {
+                            $va = 1;
+                        } else {
+                            $va = 0;
+                        }
+                    }
+                } else {
+                    $va = 1;
+                }
+
+                if ($va == 0) {
                     $this->get('session')->getFlashBag()->add('error', "NO Puede quedar sin Responsables, Por favor Asigne un Empleado antes de Retirar");
                 } else {
                     //SI EL EMPLEADO ENCUENTRA ASIGNADO A LA META
