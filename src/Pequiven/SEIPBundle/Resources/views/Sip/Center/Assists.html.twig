@@ -33,7 +33,8 @@
                         <th scope="col" width="15%" class="header" align="left"></th>     
                         {% endif %}
                     </tr>
-                </thead>     
+                </thead> 
+                {% if cantCutl == 0 %}
                 {% for data in assist %}
                     <tbody align="center">
                         <tr>
@@ -62,7 +63,8 @@
                             {% endif %}             
                         </tr>                 
                     </tbody>                    
-                {% endfor %}       
+                {% endfor %}  
+                {% endif %}
             </table> 
             &nbsp;  
             {% if show == 1 %} 
