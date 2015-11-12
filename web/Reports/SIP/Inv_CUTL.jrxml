@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Inventariado" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="39a430ef-fd62-4b25-8487-b8107872e988">
 	<property name="ireport.zoom" value="1.6105100000000023"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="70"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="idCentro" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[SELECT
@@ -178,7 +178,7 @@ order by fecha]]>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="34" splitType="Stretch">
+		<band height="33" splitType="Stretch">
 			<textField>
 				<reportElement x="7" y="2" width="59" height="14" uuid="ee296e76-b0a6-4c8e-ac97-723956ff4504"/>
 				<textElement>
