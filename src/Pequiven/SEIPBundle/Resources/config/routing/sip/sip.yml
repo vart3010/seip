@@ -217,3 +217,10 @@ pequiven_ubch_member_save:
     methods: [GET|POST]
     options:
         expose: true
+pequiven_ubch_show:
+    path: /ubch/show/{id}
+    defaults:
+        _controller: pequiven.controller.ubch:showAction
+    methods: [GET|POST]
+    options:
+        expose: true

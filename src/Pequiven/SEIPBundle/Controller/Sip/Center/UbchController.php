@@ -76,7 +76,7 @@ class UbchController extends SEIPController {
                 $datos["msj"] = "No puede añadir al Jefe de la UBCH como Patrullero";
             }
         } else {
-            $datos["msj"] = "El usuario ya esta agregado a una UBCH";
+            $datos["msj"] = "La persona ya esta registrada en una UBCH";
         }
 
         $response->setData($datos);
@@ -136,7 +136,38 @@ class UbchController extends SEIPController {
         }
         $this->get('session')->getFlashBag()->add('success', 'Miembro Agregado Exitosamente.');
         
-        return $this->redirect($this->generateUrl('pequiven_sip_center_show', array("id" => $id)));
+        return $this->redirect($this->generateUrl('pequiven_ubch_show', array("id" => $id)));
+	}
+
+	/**
+	 *
+	 *	Ficha UBCH
+	 *
+	 */
+	public function showAction(Request $request){
+		
+		$id = $request->get('id');
+		
+		$em = $this->getDoctrine()->getManager();
+
+		$center = $this->get('pequiven.repository.center')->find($id);
+
+        $codigoCentro = $center->getCodigoCentro();
+		
+		$ubch = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Ubch")->findBy(array("codigoCentro" => $codigoCentro));
+
+        //Carga de status
+        $ubchCargo = [
+            1 => "Jefe",
+            2 => "Patrullero",            
+        ];
+
+		return $this->render('PequivenSEIPBundle:Sip:Center/Ubch/show.html.twig',array(
+			'center'	=> $center,
+			'ubch'		=> $ubch,
+            'ubchCargo'     => $ubchCargo
+
+			));
 	}
 	/**
 	 *	Api CNE
