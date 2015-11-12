@@ -442,9 +442,9 @@ class CenterController extends SEIPController {
         //Color de status
         $color = [
             1 => "#12799f",
-            2 => "#e12002",
+            2 => "#03c842",
             3 => "#d1b200",
-            4 => "#03c842",
+            4 => "#e12002",
             5 => "#920a00"
         ];
 
