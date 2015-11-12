@@ -1,0 +1,58 @@
+{% trans_default_domain 'sip' %}
+
+
+    <div ng-controller="SipCenterAssistsController"> 
+
+        <div class="block-title">
+            <h3 class="ng-binding">Patrulleros</h3> 
+            {# añadir ubch #}
+            {% if show == 1 %}
+            <div class="button-group absolute-right compact">
+                <a class="button icon-list-add " href="{{ path("pequiven_ubch_add_member",{cedula:center.id})}}" title="">{{ 'pequiven.add'|trans({},'messages')  }}</a>
+            </div>       
+            {% endif %}
+        </div>
+
+                  
+            <table class="simple-table responsive-table tables-extras" id="sorting-example2">
+                <thead>
+                    <tr>
+                        <th scope="col" width="30%" class="header" align="left">
+                            Cedula
+                        </th>                    
+                        <th scope="col" width="10%" class="header" align="left">
+                            Nombre
+                        </th>    
+                        <th scope="col" width="10%" class="header" align="left">
+                            Telefono
+                        </th> 
+                        <th scope="col" width="30%" class="header" align="left">
+                            Cargo
+                        </th>                         
+                    </tr>
+                </thead>     
+                    <tbody align="center">
+                        <tr>
+                            <td align="left"></td>                            
+                            <td align="left"></td>                            
+                            <td align="left"></td> 
+                            <td align="left"></td>                            
+                        </tr>                 
+                    </tbody> 
+            </table> 
+            {#&nbsp;  
+            {% if show == 1 %} 
+            <div class="align-left">
+
+                {% set routeExport = path('pequiven_sip_center_export',{idCenter:center.id, type:2}) %}
+
+                {{ buttons.generic(
+                    (routeExport),
+                    ('sip.export.exportpdf'|trans({})),
+                    'icon-download'
+                 ) 
+                }}
+            </div>
+            {% endif %}          #}
+        </div>
+    
