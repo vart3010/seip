@@ -1,6 +1,7 @@
 sip:
     create: Registro de 1x10
     consulta: Consulta de 1x10
+    onePerTen: 1x10
     list: Lista
     cedula: Cédula
     centro: Centro

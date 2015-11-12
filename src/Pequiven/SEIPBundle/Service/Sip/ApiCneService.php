@@ -81,14 +81,6 @@ class ApiCneService {
                 //DIRECCION
                 $datos = explode(':', $ci[1]);
                 $centro = trim($datos[5]);
-
-//                var_dump($cedula);
-//                var_dump($nombre);
-//                var_dump($estado);
-//                var_dump($mcpo);
-//                var_dump($parroquia);
-//                var_dump($direccion);
-//                var_dump($centro);
             }
         }
         curl_close($curl);
