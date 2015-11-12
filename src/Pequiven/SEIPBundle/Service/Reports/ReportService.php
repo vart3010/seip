@@ -65,7 +65,7 @@ class ReportService implements \Symfony\Component\DependencyInjection\ContainerA
         $PHPJasperXML->arrayParameter = $parameter;
         $xml = simplexml_load_file($route);
         $PHPJasperXML->xml_dismantle($xml);
-        $PHPJasperXML->transferDBtoArray($this->server, $this->user, $this->pass, $this->db);
+        $PHPJasperXML->transferDBtoArray($server, $user, $pass, $db);
         $PHPJasperXML->outpage("I");    //page output method I:standard output  D:Download file        
     }
 

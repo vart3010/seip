@@ -406,6 +406,7 @@ class CenterController extends SEIPController {
         $em = $this->getDoctrine()->getManager();
 
         $id = $request->get('id');
+        $cantCutl = 0;
 
         $center = $this->get('pequiven.repository.center')->find($id);
 
@@ -416,8 +417,13 @@ class CenterController extends SEIPController {
         $ubch = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Ubch")->findBy(array("codigoCentro" => $codigoCentro));
         
         //Carga de Nombre de CUTL
-        foreach ($cutl as $value) {
-            $nomCutl[$value->getCedula()] = $value->getNombre();
+        if(count($cutl == 0)){
+            $nomCutl = array();
+        } else{
+            $cantCutl = count($cutl);
+            foreach ($cutl as $value) {
+                $nomCutl[$value->getCedula()] = $value->getNombre();
+            }
         }
 
         //Carga de Categorias
@@ -472,7 +478,8 @@ class CenterController extends SEIPController {
                     'inventory'     => $inventory,
                     'colorStatus'   => $color,
                     'ubch'          => $ubch,
-                    'ubchCargo'     => $ubchCargo
+                    'ubchCargo'     => $ubchCargo,
+                    'cantCutl'     => $cantCutl
         ));
     }
 
@@ -489,8 +496,8 @@ class CenterController extends SEIPController {
 
         //EN CASO DE VENIR DEL BOTON DE ASISTENCIAS
         if ($type == 2) {
-            //$route = "SIP/Asist_CUTL.jrxml";
-            $route = "SIP/AsistTabla.jrxml";
+            $route = "SIP/Asist_CUTL.jrxml";
+            //$route = "SIP/AsistTabla.jrxml";
         }
 
         //EN CASO DE VENIR DEL BOTON DE REQUERIMIENTOS

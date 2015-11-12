@@ -15,6 +15,65 @@ use Pequiven\SEIPBundle\Form\Sip\OnePerTenType;
  */
 class OnePerTenController extends SEIPController {
 
+    public function listAction(Request $request) {
+        //return $this->render('PequivenSEIPBundle:Sip:onePerTen\list.html.twig', array());
+
+
+        $criteria = $request->get('filter', $this->config->getCriteria());
+        $sorting = $request->get('sorting', $this->config->getSorting());
+
+        $repository = $this->getRepository();
+
+        $cutl = $this->get('pequiven.repository.onePerTen')->findAll();
+
+        $repository = $this->getRepository('pequiven.repository.onePerTen');
+
+        if ($this->config->isPaginated()) {
+            $resources = $this->resourceResolver->getResource(
+                    $repository, 'createPaginatorByOnePerTen', array($criteria, $sorting)
+            );
+
+            $maxPerPage = $this->config->getPaginationMaxPerPage();
+            if (($limit = $request->query->get('limit')) && $limit > 0) {
+                if ($limit > 100) {
+                    $limit = 100;
+                }
+                $maxPerPage = $limit;
+            }
+            $resources->setCurrentPage($request->get('page', 1), true, true);
+            $resources->setMaxPerPage($maxPerPage);
+        } else {
+            $resources = $this->resourceResolver->getResource(
+                    $repository, 'findBy', array($criteria, $sorting, $this->config->getLimit())
+            );
+        }
+
+        $routeParameters = array(
+            '_format' => 'json',
+        );
+        $apiDataUrl = $this->generateUrl('pequiven_onePerTen_list', $routeParameters);
+
+        $view = $this
+                ->view()
+                ->setTemplate($this->config->getTemplate('list.html'))
+                ->setTemplateVar($this->config->getPluralResourceName())
+        ;
+        if ($request->get('_format') == 'html') {
+            $data = array(
+                'apiDataUrl' => $apiDataUrl,
+                $this->config->getPluralResourceName() => $resources,
+            );
+            $view->setData($data);
+        } else {
+            $view->getSerializationContext()->setGroups(array('id', 'api_list'));
+            $formatData = $request->get('_formatData', 'default');
+
+            $view->setData($resources->toArray('', array(), $formatData));
+        }
+
+        return $this->handleView($view);
+    }
+
     public function createAction(Request $request) {
         $formSearchOne = $this->createForm(new OnePerTenType);
         return $this->render('PequivenSEIPBundle:Sip:onePerTen\show.html.twig', array(
@@ -49,49 +108,99 @@ class OnePerTenController extends SEIPController {
 
 
         $user = $em->getRepository("\Pequiven\SEIPBundle\Entity\User")->findOneBy(array("identification" => $cedula));
+
         $onePerTen = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\OnePerTen")->findOneBy(array("user" => $request->get("idUserOne")));
+        $ciOne = $onePerTen->getCedula();
 
-        $onePerTenMembers = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\OnePerTenMembers")->findBy(
-                array(
-                    "cedula" => $cedula,
-                    "one" => $onePerTen->getId()
-                )
-        );
+        //SE BUSCA EL ESTADO EN REP
+        $repOne = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Rep")->findOneBy(array("cedula" => $ciOne));
+        if (!isset($repOne)) {
+            //SE BUSCA ESTADO EN CNE de ONE
+            $cneOne = $this->getCneService();
+            $userCneOne = $cneOne->getDatosCne($ciOne);
+            $estadoOne = $userCneOne["estado"];
 
-        if (count($onePerTenMembers) <= 0) {
-            if (!isset($user) || $user->getWorkStudyCircle() == "null") {
-                if ($cedula != "" || $cedula != 0) {
-                    /**
-                     * VALIDACION CON NOMINA PQV
-                     */
-                    $nomina = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Nomina")->findOneBy(array("cedula" => $cedula));
-                    if (is_null($nomina)) {
-                        //VALIDA CON REP CARABOBO 
-                        $rep = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Rep")->findOneBy(array("cedula" => $cedula));
-                        if (is_null($rep)) {
-                            //VALIDACION CON CNE
-                            $cne = $this->getCneService();
-                            $userCne = $cne->getDatosCne($cedula);
-                            $ced = explode("-", $userCne["cedula"]);
+            // SE BUSCA ESTADO DE MIEMBRO
+            $cneMember = $this->getCneService();
+            $userCneMember = $cneMember->getDatosCne($cedula);
+            $estadoMember = $userCneMember["estado"];
+        } else {
 
-                            $datos["nombre"] = $userCne["nombre"];
-                            $datos["cedula"] = $ced[1];
-                            $datos["centro"] = "";
-                            $datos["nameCentro"] = $userCne["centro"];
-                            $datos["codigoParroquia"] = "";
-                            $datos["nombreParroquia"] = $userCne["parroquia"];
-                            $datos["codigoMunicipio"] = "";
-                            $datos["nombreMunicipio"] = $userCne["municipio"];
-                            $datos["codigoEstado"] = "";
-                            $datos["nombreEstado"] = $userCne["estado"];
+            //SE BUSCA ESTADO ONE EN REP
+            $codEstadoOne = $repOne->getCodigoEstado();
+            $estadoOne = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Estado")->findOneBy(array("id" => $codEstadoOne));
+            $estadoOne = $estadoOne->getDescription();
+
+            // SE BUSCA ESTADO DE MIEMBRO
+            $cneMember = $this->getCneService();
+            $userCneMember = $cneMember->getDatosCne($cedula);
+            $estadoMember = $userCneMember["estado"];
+        }
+
+        if ($estadoOne == $estadoMember) {
+            $onePerTenMembers = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\OnePerTenMembers")->findBy(
+                    array(
+                        "cedula" => $cedula,
+                        "one" => $onePerTen->getId()
+                    )
+            );
+
+            if (count($onePerTenMembers) <= 0) {
+                if (!isset($user) || $user->getWorkStudyCircle() == "null") {
+                    if ($cedula != "" || $cedula != 0) {
+                        /**
+                         * VALIDACION CON NOMINA PQV
+                         */
+                        $nomina = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Nomina")->findOneBy(array("cedula" => $cedula));
+                        if (is_null($nomina)) {
+                            //VALIDA CON REP CARABOBO 
+                            $rep = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Rep")->findOneBy(array("cedula" => $cedula));
+                            if (is_null($rep)) {
+                                //VALIDACION CON CNE
+                                $cne = $this->getCneService();
+                                $userCne = $cne->getDatosCne($cedula);
+                                $ced = explode("-", $userCne["cedula"]);
+
+                                $rs = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Estado")->findOneBy(array("description" => $userCne["estado"]));
+
+                                if (!is_null($rs)) {
+                                    $datos["nombre"] = $userCne["nombre"];
+                                    $datos["cedula"] = $ced[1];
+                                    $datos["centro"] = "";
+                                    $datos["nameCentro"] = $userCne["centro"];
+                                    $datos["codigoParroquia"] = "";
+                                    $datos["nombreParroquia"] = $userCne["parroquia"];
+                                    $datos["codigoMunicipio"] = "";
+                                    $datos["nombreMunicipio"] = $userCne["municipio"];
+                                    $datos["codigoEstado"] = "";
+                                    $datos["nombreEstado"] = $userCne["estado"];
+                                } else {
+                                    $datos["msj"] = "La persona debe pertenecer al mismo estado.";
+                                }
+                            } else {
+                                $nameCentro = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->getCentro($rep->getCodigoCentro());
+                                $parroquia = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Parroquia")->findOneBy(array("id" => $rep->getCodigoParroquia()));
+                                $municipio = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Municipio")->findOneBy(array("id" => $rep->getCodigoMunicipio()));
+                                $estado = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Estado")->findOneBy(array("id" => $rep->getCodigoEstado()));
+                                $datos["nombre"] = $rep->getNombre();
+                                $datos["cedula"] = $rep->getCedula();
+                                $datos["centro"] = $rep->getCodigoCentro();
+                                $datos["nameCentro"] = $nameCentro[0]["description"];
+                                $datos["codigoParroquia"] = $parroquia->getId();
+                                $datos["nombreParroquia"] = $parroquia->getDescription();
+                                $datos["codigoMunicipio"] = $municipio->getId();
+                                $datos["nombreMunicipio"] = $municipio->getDescription();
+                                $datos["codigoEstado"] = $estado->getId();
+                                $datos["nombreEstado"] = $estado->getDescription();
+                            }
                         } else {
-                            $nameCentro = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->getCentro($rep->getCodigoCentro());
+                            $nameCentro = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->getCentro($nomina->getCodigoCentro());
                             $parroquia = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Parroquia")->findOneBy(array("id" => $rep->getCodigoParroquia()));
                             $municipio = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Municipio")->findOneBy(array("id" => $rep->getCodigoMunicipio()));
                             $estado = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Estado")->findOneBy(array("id" => $rep->getCodigoEstado()));
-                            $datos["nombre"] = $rep->getNombre();
-                            $datos["cedula"] = $rep->getCedula();
-                            $datos["centro"] = $rep->getCodigoCentro();
+                            $datos["nombre"] = $nomina->getEmpleado();
+                            $datos["cedula"] = $nomina->getCedula();
+                            $datos["centro"] = $nomina->getCodigoCentro();
                             $datos["nameCentro"] = $nameCentro[0]["description"];
                             $datos["codigoParroquia"] = $parroquia->getId();
                             $datos["nombreParroquia"] = $parroquia->getDescription();
@@ -100,28 +209,15 @@ class OnePerTenController extends SEIPController {
                             $datos["codigoEstado"] = $estado->getId();
                             $datos["nombreEstado"] = $estado->getDescription();
                         }
-                    } else {
-                        $nameCentro = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->getCentro($nomina->getCodigoCentro());
-                        $parroquia = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Parroquia")->findOneBy(array("id" => $rep->getCodigoParroquia()));
-                        $municipio = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Municipio")->findOneBy(array("id" => $rep->getCodigoMunicipio()));
-                        $estado = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Estado")->findOneBy(array("id" => $rep->getCodigoEstado()));
-                        $datos["nombre"] = $nomina->getEmpleado();
-                        $datos["cedula"] = $nomina->getCedula();
-                        $datos["centro"] = $nomina->getCodigoCentro();
-                        $datos["nameCentro"] = $nameCentro[0]["description"];
-                        $datos["codigoParroquia"] = $parroquia->getId();
-                        $datos["nombreParroquia"] = $parroquia->getDescription();
-                        $datos["codigoMunicipio"] = $municipio->getId();
-                        $datos["nombreMunicipio"] = $municipio->getDescription();
-                        $datos["codigoEstado"] = $estado->getId();
-                        $datos["nombreEstado"] = $estado->getDescription();
                     }
+                } else {
+                    $datos["msj"] = "El usuario es Nómina Pequiven";
                 }
             } else {
-                $datos["msj"] = "El usuario es Nómina Pequiven";
+                $datos["msj"] = "El usuario ya esta agregado a tu 1x10";
             }
         } else {
-            $datos["msj"] = "El usuario ya esta agregado a tu 1x10";
+            $datos["msj"] = "El miembro esta fuera de la Región.";
         }
 
         $response->setData($datos);
