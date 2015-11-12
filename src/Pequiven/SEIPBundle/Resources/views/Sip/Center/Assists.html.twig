@@ -5,10 +5,12 @@
 
         <div class="block-title">
             <h3 class="ng-binding">{{ 'sip.assists'|trans({}) }}</h3> 
-            {# añadir plan de acción #}
+            {# añadir asistencia #}
+            {% if show == 1 %}
             <div class="button-group absolute-right compact">
                 <a class="button icon-list-add " href="" ng-click="loadTemplateAssists()" title="">{{ 'pequiven.add'|trans({},'messages')  }}</a>
             </div>       
+            {% endif %}
         </div>
 
         <div class="with-padding">            
@@ -27,7 +29,9 @@
                         <th scope="col" width="30%" class="header" align="left">
                             Observación
                         </th> 
+                        {% if show == 1 %} 
                         <th scope="col" width="15%" class="header" align="left"></th>     
+                        {% endif %}
                     </tr>
                 </thead>     
                 {% for data in assist %}
@@ -44,7 +48,8 @@
                                 {% endif %}
                                 <input type="checkbox" value="{{ data.assists  }}" class="switch blue-active mid-margin-right {{ checkState }}"  data-text-on="SI" data-text-off="NO" disabled>
                             </td> 
-                            <td align="justify">{{ data.observations }}</td> 
+                            <td align="justify">{{ data.observations }}</td>
+                            {% if show == 1 %} 
                             <td class="align-right vertical-center">                          
                                 <span class="select compact">
                                     <a href class="select-value form-edit">{{ 'pequiven.actions'|trans({},'messages') }}</a>
@@ -53,12 +58,14 @@
                                         <a href ng-click="removeAssists(assists='{{ data.id }}')" class="button icon-cross-round">{{ "pequiven.actions.delete"|trans({},"messages") }}</a>             
                                     </span>
                                 </span>
-                            </td>                          
+                            </td>
+                            {% endif %}             
                         </tr>                 
                     </tbody>                    
                 {% endfor %}       
             </table> 
             &nbsp;  
+            {% if show == 1 %} 
             <div class="align-left">
 
                 {% set routeExport = path('pequiven_sip_center_export',{idCenter:center.id, type:2}) %}
@@ -69,8 +76,8 @@
                     'icon-download'
                  ) 
                 }}
-
-            </div>          
+            </div>
+            {% endif %}          
         </div>
     </div>
 </div>

@@ -54,9 +54,65 @@ class OnePerTenMembers {
      * codigo de centro
      * @var string
      *
-     * @ORM\Column(name="codCentro", type="string")
+     * @ORM\Column(name="codCentro", type="string",nullable=true)
      */
     private $codCentro;
+
+    /**
+     * Nombre de centro
+     * @var string
+     *
+     * @ORM\Column(name="nombreCentro", type="string",nullable=true)
+     */
+    private $nombreCentro;
+
+    /**
+     * codigo de parroquia
+     * @var string
+     *
+     * @ORM\Column(name="codigoParroquia", type="integer",nullable=true)
+     */
+    private $codigoParroquia;
+
+    /**
+     * Nombre de parroquia
+     * @var string
+     *
+     * @ORM\Column(name="nombreParroquia", type="string",nullable=true)
+     */
+    private $nombreParroquia;
+
+    /**
+     * codigo de municipio
+     * @var string
+     *
+     * @ORM\Column(name="codigoMunicipio", type="integer",nullable=true)
+     */
+    private $codigoMunicipio;
+
+    /**
+     * Nombre de Municipio
+     * @var string
+     *
+     * @ORM\Column(name="nombreMunicipio", type="string",nullable=true)
+     */
+    private $nombreMunicipio;
+
+    /**
+     * codigo de Estado
+     * @var string
+     *
+     * @ORM\Column(name="codigoEstado", type="integer",nullable=true)
+     */
+    private $codigoEstado;
+
+    /**
+     * Nombre de Estado
+     * @var string
+     *
+     * @ORM\Column(name="nombreEstado", type="string",nullable=true)
+     */
+    private $nombreEstado;
 
     /**
      * telefono
@@ -93,6 +149,62 @@ class OnePerTenMembers {
      * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
      */
     private $deletedAt;
+
+    function getCodigoParroquia() {
+        return $this->codigoParroquia;
+    }
+
+    function getNombreParroquia() {
+        return $this->nombreParroquia;
+    }
+
+    function getCodigoMunicipio() {
+        return $this->codigoMunicipio;
+    }
+
+    function getNombreMunicipio() {
+        return $this->nombreMunicipio;
+    }
+
+    function getCodigoEstado() {
+        return $this->codigoEstado;
+    }
+
+    function getNombreEstado() {
+        return $this->nombreEstado;
+    }
+
+    function setCodigoParroquia($codigoParroquia) {
+        $this->codigoParroquia = $codigoParroquia;
+    }
+
+    function setNombreParroquia($nombreParroquia) {
+        $this->nombreParroquia = $nombreParroquia;
+    }
+
+    function setCodigoMunicipio($codigoMunicipio) {
+        $this->codigoMunicipio = $codigoMunicipio;
+    }
+
+    function setNombreMunicipio($nombreMunicipio) {
+        $this->nombreMunicipio = $nombreMunicipio;
+    }
+
+    function setCodigoEstado($codigoEstado) {
+        $this->codigoEstado = $codigoEstado;
+    }
+
+    function setNombreEstado($nombreEstado) {
+        $this->nombreEstado = $nombreEstado;
+    }
+
+    function getNombreCentro() {
+        return $this->nombreCentro;
+    }
+
+    function setNombreCentro($nombreCentro) {
+        $this->nombreCentro = $nombreCentro;
+    }
 
     function getOne() {
         return $this->one;

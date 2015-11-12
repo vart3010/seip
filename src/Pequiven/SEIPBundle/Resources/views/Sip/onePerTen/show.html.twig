@@ -43,11 +43,13 @@
     <div class="block" >
         <div class="block-title">
             <h3 class="ng-binding">1x10 de {{ user }}</h3>
-            <div class="button-group absolute-right compact">
-                <a class="button icon-list-add " href="{{ path("pequiven_onePerTen_add_member",{idUserOne:user.id})}}"  title="">
-                    Agregar Miembro&nbsp;
-                </a>
-            </div>
+            {% if(members|length<=12) %}
+                <div class="button-group absolute-right compact">
+                    <a class="button icon-list-add " href="{{ path("pequiven_onePerTen_add_member",{idUserOne:user.id})}}"  title="">
+                        Agregar Miembro&nbsp;
+                    </a>
+                </div>
+            {% endif %}
         </div>
         {% if(members|length)>0 %}
             <div class="with-padding">

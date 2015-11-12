@@ -115,6 +115,14 @@ class Centro {
      * @ORM\Column(name="eje", type="integer")
      */
     private $eje = 0;
+    
+    /**
+     * Circuito
+     * @var integer
+     *
+     * @ORM\Column(name="circuito", type="integer")
+     */
+    private $circuito = 0;
 
     /**
      * Cédula UBCH
@@ -200,6 +208,10 @@ class Centro {
         return $this->eje;
     }
 
+    function getCircuito() {
+        return $this->circuito;
+    }
+
     function getCedulaUbch() {
         return $this->cedulaubch;
     }
@@ -266,6 +278,10 @@ class Centro {
 
     function setEje($eje) {
         $this->eje = $eje;
+    }
+
+    function setCircuito($circuito) {
+        $this->circuito = $circuito;
     }
 
     function setCedulaUbch($cedulaubch) {

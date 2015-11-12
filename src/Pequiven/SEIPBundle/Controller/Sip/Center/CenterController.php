@@ -454,15 +454,16 @@ class CenterController extends SEIPController {
         $inventory = $this->get('pequiven.repository.inventory')->findBy(array('codigoCentro' => $codigoCentro));
 
         return $this->render('PequivenSEIPBundle:Sip:Center\show.html.twig', array(
-                    'center' => $center,
-                    'cutl' => $cutl,
-                    'assist' => $assist,
-                    'observations' => $observations,
-                    'nomCutl' => $nomCutl,
-                    'catObs' => $catObs,
-                    'status' => $status,
-                    'inventory' => $inventory,
-                    'colorStatus' => $color
+
+                    'center'        => $center,
+                    'cutl'          => $cutl,
+                    'assist'        => $assist,
+                    'observations'  => $observations,
+                    'nomCutl'       => $nomCutl,
+                    'catObs'        => $catObs,
+                    'status'        => $status,
+                    'inventory'     => $inventory,
+                    'colorStatus'   => $color
         ));
     }
 

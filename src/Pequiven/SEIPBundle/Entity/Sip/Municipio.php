@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Municipio
  *
  * @ORM\Table(name="sip_municipio")
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\Sip\MunicipioRepository")
  */
 class Municipio {
 

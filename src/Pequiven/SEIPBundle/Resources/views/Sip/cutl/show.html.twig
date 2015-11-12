@@ -10,119 +10,102 @@
 {% endblock javascripts_base %}
 
 {% block before_body %}
-    {{ contentHeader("sip.center.title" | trans({}))   }}
+    {{ contentHeader( 
+        ("sip.cutl.title" | trans({})),
+        ('pequiven.show'|trans({},'messages'))
+    )}}    
 {% endblock %}
 
 {% block body %}
-
-    {% if(assist == 1 ) %}
-        {% set checkState = "checked" %}
-    {% else  %}
-        {% set checkState = "" %}
-    {% endif %}
-
-
+    {% set show = 2 %}
+        
+     <fieldset class="fieldset">
+        <legend class="legend" >CUTL&nbsp;</legend>
+        <div class="columns">
+                <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                    <p class="inline-label">
+                        <label class="label">Cedula</label>
+                        {{ cutl.cedula }}
+                    </p>
+                </div>
+                <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                    <p class="inline-label">
+                        <label class="label">Nombre</label>
+                        {{ cutl.nombre }}
+                    </p> 
+                </div>
+                <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                    <p class="inline-label">
+                        <label class="label">Gerencia de Primera Linea</label>
+                        {{ cutl.gerenciafirst }}
+                    </p>
+                </div>
+                <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                    <p class="inline-label">
+                        <label class="label">Gerencia de Segunda Linea</label>
+                        {{ cutl.gerenciaSecond }}
+                    </p>
+                </div>
+                <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                    <p class="inline-label">
+                        <label class="label">Telefono:</label>
+                        {{ cutl.telefonoSeip }}/
+                        {{ cutl.telefonoCutl }}/
+                        {{ cutl.telefonoFirma }}
+                    </p>
+                </div>
+                <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                </div>
+        </div>
+    </fieldset> 
     <fieldset class="fieldset">
         <legend class="legend" >{{ 'sip.center.title'|trans({}) }}&nbsp;</legend>
         <div class="columns">
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
-                    <label class="label">Nombre</label>
-                    {{ cutl.nombre }}
+                    <label class="label">Estado</label>
+                    {{ center.descriptionEstado }}
                 </p>
-                <p class="inline-label">
-                    <label class="label">Centro</label>
-                    {{ cutl.centro }}
-                </p>                
-                <p class="inline-label">
-                    <label class="label">Telefono:</label>
-                    {{ cutl.telefonoFirma }}
-                </p>     
-            </div>   
-        </div>        
-    </fieldset>   
-    <br>
-    <fieldset class="fieldset">
-        <legend class="legend" >CUTL&nbsp;</legend>
-        <div class="columns">
+            </div>
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
-                    <label class="label">Nombre</label>
-                    {{ cutl.nombre }}
+                    <label class="label">Municipio</label>
+                    {{ center.descriptionMunicipio }}
                 </p>
-                <p class="inline-label">
-                    <label class="label">Centro</label>
-                    {{ cutl.centro }}
-                </p>                
-                <p class="inline-label">
-                    <label class="label">Telefono:</label>
-                    {{ cutl.telefonoFirma }}
-                </p>     
-            </div>   
-        </div>        
-    </fieldset> 
-    <br>
-    <fieldset class="fieldset">
-        <legend class="legend" >UBCH&nbsp;</legend>
-        <div class="columns">
+            </div>
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
-                    <label class="label">Nombre</label>                    
-                    Esperando Carga...
-                </p>                    
-            </div>   
+                    <label class="label">Parroquia</label>
+                    {{ center.descriptionParroquia }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Código Centro</label>
+                    {{ center.codigoCentro }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Centro</label>
+                    {{ center.description }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Dirección</label>
+                    {{ center.direccion }}
+                </p>
+            </div> 
         </div>        
-    </fieldset> 
-    <br>   
-    {# Asistencias #}                                
-        {% include 'PequivenSEIPBundle:Sip:Center/Assists.html.twig' %}                             
-    
-    <br>
-    {# Observaciones #}
-        {% include 'PequivenSEIPBundle:Sip:Center/Observations.html.twig' %}         
+    </fieldset>       
+    <br>    
+    {# Asistencias #}
+    {% include 'PequivenSEIPBundle:Sip:Center/Assists.html.twig' %}                             
     
 {% endblock %}
 
 {% block javascript %}
-    <script type="text/javascript">
-
-        $(document).ready(function () {
-
-            $('#switch-mode').change(function () {
-                $('.switch-wrapper')[this.checked ? 'addClass' : 'removeClass']('reversed-switches');
-            });
-            $("#switchAssistance").change(function () {
-                var value = $(this).val();
-                if (value == 1) {
-                    $(this).val(0);
-                } else {
-                    $(this).val(1);
-                }
-                console.log(value);
-            });
-            $("a#save").click(function () {
-                var value = $("#switchAssistance").val();
-                var idCutl = $("#switchAssistance").attr("data");
-                var obs = $("#obs").val();
-                var data = {
-                    idCutl: idCutl,
-                    status: value,
-                    obs: obs
-                };
-                console.log(value);
-                $.ajax({
-                    type: 'get',
-                    url: '{{ path("update_assistance_cutl") }}',
-                    data: data,
-                    success: function (data) {
-                        //window.open(data["url"]);
-                        $(location).attr('href', data["url"]);
-                    }
-                });
-
-                console.log(idCutl);
-            });
-        });
-    </script>
+        
 {% endblock %}
 

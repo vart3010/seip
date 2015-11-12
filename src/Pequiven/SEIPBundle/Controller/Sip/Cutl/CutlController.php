@@ -29,8 +29,6 @@ class CutlController extends SEIPController {
 
         $repository = $this->getRepository('pequiven.repository.cutl');
 
-        //$criteria['cult'] = false;
-
         if ($this->config->isPaginated()) {
             $resources = $this->resourceResolver->getResource(
                     $repository, 'createPaginatorByCutl', array($criteria, $sorting)
@@ -68,7 +66,7 @@ class CutlController extends SEIPController {
             );
             $view->setData($data);
         } else {
-            $view->getSerializationContext()->setGroups(array('id', 'api_list', 'cedula', 'nombre', 'centro', 'codigoCentro'));
+            $view->getSerializationContext()->setGroups(array('id', 'api_list', 'nombre', 'centro', 'cedula', 'codigoCentro', 'municipio', 'parroquia'));
             $formatData = $request->get('_formatData', 'default');
 
             $view->setData($resources->toArray('', array(), $formatData));
@@ -87,15 +85,24 @@ class CutlController extends SEIPController {
         $id = $request->get('id');
 
         $cutl = $this->get('pequiven.repository.cutl')->find($id);
-        if ($cutl->getAssistance()) {
-            $assist = 1;
-        } else {
-            $assist = 0;
-        }
+        
+        //Carga de Nombre de CUTL                
+        $nomCutl[$cutl->getCedula()] = $cutl->getNombre();
 
+        $codCenter =  $cutl->getCodigoCentro();        
+        $center = $this->get('pequiven.repository.center')->findBy(array('codigoCentro' => $codCenter));                
+        
+        foreach ($center as $value) {
+            $center = $this->get('pequiven.repository.center')->find($value->getId());            
+        }
+        
+        $assist = $this->get('pequiven.repository.assists')->findBy(array('cedula'=>$cutl->getCedula(), 'codigoCentro' => $codCenter));
+        
         return $this->render('PequivenSEIPBundle:Sip:cutl\show.html.twig', array(
-                    'cutl' => $cutl,
-                    'assist' => $assist
+                    'cutl'      => $cutl,                    
+                    'center'    => $center,
+                    'assist'    => $assist,
+                    'nomCutl'   => $nomCutl
         ));
     }
 

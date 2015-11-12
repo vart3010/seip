@@ -244,9 +244,9 @@ class UserRepository extends EntityRepository {
                 ->andWhere('u.enabled = :enabled')
                 ->setParameter('enabled', true)
                 ->andWhere('u.workStudyCircle = :circle')
-                ->setParameter('circle', $user->getWorkStudyCircle())
-                ->andWhere('u.id != :user')
-                ->setParameter('user', $user->getId());
+                ->setParameter('circle', $user->getWorkStudyCircle());
+//                ->andWhere('u.id != :user')
+//                ->setParameter('user', $user->getId());
         $qb
                 ->andWhere('g.level <= :level')
                 ->setParameter('level', \Pequiven\MasterBundle\Entity\Rol::ROLE_DIRECTIVE);

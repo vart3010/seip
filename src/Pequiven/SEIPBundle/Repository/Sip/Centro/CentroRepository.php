@@ -40,7 +40,10 @@ class CentroRepository extends EntityRepository {
         if (($parroquia = $criteria->remove('parroquia'))) {
             $queryBuilder->andWhere($queryBuilder->expr()->like('ctro.descriptionParroquia', "'%" . $parroquia . "%'"));
         }
-
+        
+        $queryBuilder->andWhere('ctro.circuito = :circuito')
+                ->setParameter('circuito', 5);
+        
         parent::applyCriteria($queryBuilder, $criteria->toArray());
     }
 
