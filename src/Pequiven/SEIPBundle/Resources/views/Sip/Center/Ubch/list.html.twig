@@ -1,6 +1,5 @@
 {% trans_default_domain 'sip' %}
-
-<div class="block">
+<div class="block" ng-controller="SipCenterObservationController"> 
         <div class="block-title">
             <h3 class="ng-binding">UBCH</h3> 
             {# añadir ubch #}
@@ -71,7 +70,16 @@
                             <td align="left">V-{{ dataUbch.cedula }}</td>                            
                             <td align="left">{{ dataUbch.nombre }}</td>                            
                             <td align="left">{{ dataUbch.telefono }}</td> 
-                            <td align="left">{{ ubchCargo[dataUbch.cargo] }}</td>                            
+                            <td align="left">{{ ubchCargo[dataUbch.cargo] }}</td>
+                            <td class="align-right vertical-center">                          
+                                <span class="select compact">
+                                    <a href class="select-value form-edit">{{ 'pequiven.actions'|trans({},'messages') }}</a>
+                                    <span class="select-arrow"></span>
+                                    <span class="drop-down">                                    
+                                        <a href ng-click="removeUbch(ubch='{{ dataUbch.id }}')" class="button icon-cross-round">{{ "pequiven.actions.delete"|trans({},"messages") }}</a>             
+                                    </span>
+                                </span>
+                            </td>                            
                         </tr>                 
                     </tbody> 
                 {% endfor %}
@@ -90,7 +98,7 @@
                 }}
             </div>
             {% endif %}          #}
-            </div>
+        </div>    
 </div>
 
     

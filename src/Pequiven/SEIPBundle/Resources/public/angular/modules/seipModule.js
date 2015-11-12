@@ -2541,7 +2541,35 @@ angular.module('seipModule.controllers', [])
                 function callAtTimeout() {                    
                     location.reload();
                 }
-            };           
+            };  
+            //Removiendo las asistencias
+            $scope.removeUbch = function () {
+                $scope.openModalConfirm('¿Desea eliminar el Miembro?', function () {
+                    notificationBarService.getLoadStatus().loading();
+                    var url = Routing.generate("pequiven_ubch_delete_member", {id: $scope.ubch});
+                    $http({
+                        method: 'GET',
+                        url: url,
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'}  // set the headers so angular passing info as form data (not request payload)
+                    }).success(function (data) {
+                        return true;
+                    }).error(function (data, status, headers, config) {
+                        if (data.errors) {
+                            if (data.errors.errors) {
+                                $.each(data.errors.errors, function (index, value) {
+                                    notifyService.error(Translator.trans(value));
+                                });
+                            }
+                        }
+                        notificationBarService.getLoadStatus().done();
+                        return false;
+                    });     
+                    $timeout(callAtTimeout, 3000);                                                                                              
+                });
+                function callAtTimeout() {                    
+                    location.reload();
+                }
+            };         
         })
         .controller('SipCenterAssistsController', function ($scope, notificationBarService, $http, notifyService, $filter, $timeout) {
 

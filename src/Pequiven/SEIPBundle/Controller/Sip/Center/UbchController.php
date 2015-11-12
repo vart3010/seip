@@ -169,6 +169,31 @@ class UbchController extends SEIPController {
 
 			));
 	}
+
+    /**
+     *
+     *  Eliminación el Miembro de la UBCH
+     *
+     *
+     */
+    public function delUbchAction(Request $request) {
+
+        $id = $request->get('id');
+
+        $em = $this->getDoctrine()->getManager();
+
+        $results = $this->get('pequiven.repository.ubch')->find($id);
+        
+        if ($results) {
+
+            $em->remove($results);
+            $em->flush();
+
+            $this->get('session')->getFlashBag()->add('success', 'Miembro Eliminada Exitosamente');
+            return true;
+        }
+    }
+
 	/**
 	 *	Api CNE
 	 *

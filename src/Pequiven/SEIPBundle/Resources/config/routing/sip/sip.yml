@@ -224,3 +224,14 @@ pequiven_ubch_show:
     methods: [GET|POST]
     options:
         expose: true
+#Eliminacion de Observación
+pequiven_ubch_delete_member:
+    path: /{id}/delUbch.{_format}
+    defaults:
+        _controller: pequiven.controller.ubch:delUbchAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET]
+    options:
+        expose: true
