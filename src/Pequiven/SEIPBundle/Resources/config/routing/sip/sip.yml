@@ -50,7 +50,17 @@ pequiven_delete_member:
     path: /1x10/delMember
     defaults:
         _controller: pequiven.controller.onePerTen:deleteMemeberAction
-    
+        
+
+pequiven_onePerTen_list:
+    path: /1x10/list.{_format}
+    defaults:
+        _controller: pequiven.controller.onePerTen:listAction
+        _format: html
+    requirements:
+        _format: html|json|xml        
+    methods: [GET]
+ 
 
 #Centro 
 pequiven_sip_center_observations:    

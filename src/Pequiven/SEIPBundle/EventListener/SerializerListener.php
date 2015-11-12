@@ -54,6 +54,7 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeMeetingFile', 'class' => 'Pequiven\SEIPBundle\Entity\Politic\MeetingFile', 'format' => 'json'),
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeCutl', 'class' => 'Pequiven\SEIPBundle\Entity\Sip\Cutl', 'format' => 'json'),
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeCenter', 'class' => 'Pequiven\SEIPBundle\Entity\Sip\Centro', 'format' => 'json'),
+            array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeOnePerTen', 'class' => 'Pequiven\SEIPBundle\Entity\Sip\OnePerTen', 'format' => 'json'),
         );
     }
 
@@ -658,7 +659,7 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
 
         $event->getVisitor()->addData('_links', $links);
     }
-    
+
     public function onPostSerializeMeeting(ObjectEvent $event) {
         $object = $event->getObject();
 
@@ -674,24 +675,33 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
 
         $event->getVisitor()->addData('_links', $links);
     }
-    
+
     public function onPostSerializeCenter(ObjectEvent $event) {
         $object = $event->getObject();
-        
+
         $codEstado = $object->getCodigoEstado();
         $codMunicipio = $object->getCodigoMunicipio();
         $codParroquia = $object->getCodigoParroquia();
-        
+
         $estado = $this->container->get('pequiven.repository.estado')->findOneBy(array('id' => $codEstado));
         $municipio = $this->container->get('pequiven.repository.municipio')->findOneBy(array('codigoMunicipio' => $codMunicipio));
         $parroquia = $this->container->get('pequiven.repository.parroquia')->findOneBy(array('codigoParroquia' => $codParroquia, 'codigoMunicipio' => $codMunicipio));
-        
+
         $links['self']['show'] = $this->generateUrl('pequiven_sip_center_show', array('id' => $object->getId()));
 
         $event->getVisitor()->addData('_links', $links);
 //        $event->getVisitor()->addData('estado', $estado->getDescription());
         $event->getVisitor()->addData('municipio', $municipio->getDescription());
         $event->getVisitor()->addData('parroquia', $parroquia->getDescription());
+    }
+
+    public function onPostSerializeOnePerTen(ObjectEvent $event) {
+        $object = $event->getObject();
+        $user = $this->container->get('pequiven.repository.user')->findOneBy(array('id' => $object->getUser()));
+        $links['self']['show'] = $this->generateUrl('pequiven_search_members', array('user' => $user->getID()));
+
+        $event->getVisitor()->addData('userName', $user->getFirstName() . " " . $user->getLastName());
+        $event->getVisitor()->addData('_links', $links);
     }
 
     public function onPostSerializeMeetingFile(ObjectEvent $event) {
