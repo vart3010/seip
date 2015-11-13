@@ -34,11 +34,15 @@
                         {% endif %}
                     </tr>
                 </thead> 
-                {% if cantCutl == 0 %}
+                {% if cantCutl != 0 %}
                 {% for data in assist %}
                     <tbody align="center">
                         <tr>
-                            <td align="left">{{ nomCutl[data.cedula]  }}</td>                            
+                            {% if validacionCutl != 0 %}
+                            <td align="left">{{ nomCutl[data.cedula]  }}</td>
+                            {% else %}                            
+                            <td align="left"></td>
+                            {% endif %}
                             <td align="left">{{ data.fecha | date("d/m/Y")  }}</td>                            
                             <td align="left">
                                 {% set assist = data.assists %}

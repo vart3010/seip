@@ -416,15 +416,18 @@ class CenterController extends SEIPController {
 
         $ubch = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Ubch")->findBy(array("codigoCentro" => $codigoCentro));
         
+        $cantCutl = count($cutl);
         //Carga de Nombre de CUTL
-        if(count($cutl == 0)){
-            $nomCutl = array();
-        } else{
-            $cantCutl = count($cutl);
-            foreach ($cutl as $value) {
+        if($cantCutl == 0){
+            $nomCutl = array();            
+        } else{            
+            foreach ($cutl as $value) {                
                 $nomCutl[$value->getCedula()] = $value->getNombre();
+                $cedula = $value->getCedula();
             }
         }
+        
+        $validacionCutl = $cedula;
 
         //Carga de Categorias
         $catObs = [
@@ -434,6 +437,7 @@ class CenterController extends SEIPController {
             4 => 'Logistica',
             5 => 'Asistencia',
             6 => 'Telefonia',
+            7 => 'Otros...'
         ];
 
         //Carga de status
@@ -479,7 +483,8 @@ class CenterController extends SEIPController {
                     'colorStatus'   => $color,
                     'ubch'          => $ubch,
                     'ubchCargo'     => $ubchCargo,
-                    'cantCutl'     => $cantCutl
+                    'cantCutl'      => $cantCutl,
+                    'validacionCutl' => $validacionCutl
         ));
     }
 
