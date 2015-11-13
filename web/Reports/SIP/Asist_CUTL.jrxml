@@ -2,65 +2,66 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Asistencias de Cutls" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="39a430ef-fd62-4b25-8487-b8107872e988">
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="4"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="idCentro" class="java.lang.String">
 		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
 	</parameter>
 	<queryString>
-		<![CDATA[select asist.id as id, date_format(asist.fecha,'%d/%m/%Y') as Fecha,
-cent.descriptionEstado as Estado, cent.descriptionMunicipio as Municipio,
-cent.descriptionParroquia as Parroquia, cent.codigoCentro as Codigo, cent.description as Centro,
-asist.cedula as Cedula, cutl.nombre as Nombre, cutl.telefonoSeip as Telefono,
-case when asist.assists=1 then 'Presente'
-else 'Ausente' end as Asistencia,
-case when asist.assists=1 then 'x' end as Presente,
-case when asist.assists=0 then 'x' end as Ausente,
-
-case when cutl.ordercenter=1 then 'x' end as CUTL1,
-case when cutl.ordercenter=2 then 'x' end as CUTL2,
-case when cutl.ordercenter=3 then 'x' end as CUTL3,
-
-(SELECT nombre from sip_cutl where codigoCentro=cutl.codigoCentro and ordercenter=1) as Nombre1,
-(SELECT nombre from sip_cutl where codigoCentro=cutl.codigoCentro and ordercenter=2) as Nombre2,
-(SELECT nombre from sip_cutl where codigoCentro=cutl.codigoCentro and ordercenter=3) as Nombre3,
-
-asist.observations as Observaciones
-from sip_centro_assists as asist
-inner join sip_centro as cent on ((asist.codigoCentro=cent.codigoCentro))
-left outer join sip_cutl as cutl on ((asist.cedula=cutl.cedula)and(asist.codigoCentro=cutl.codigoCentro))
-where asist.deletedAt is null and cent.id=$P{idCentro}
-order by fecha]]>
+		<![CDATA[select Fecha, Estado, Municipio, Parroquia, idCentro, Codigo, Centro,
+Nombre1, Cedula1, Telefono1,
+Nombre2, Cedula2, Telefono2,
+case when sum(cutl1)=0 then null
+when sum(cutl1)>0 then 'x' end as CUTL1,
+case when sum(cutl2)=0 then null
+when sum(cutl2)>0 then 'x' end as CUTL2
+from Asistencia_CUTL
+where idCentro=$P{idCentro}
+group by fecha, estado, municipio, parroquia, idCentro, codigo, centro,
+nombre1, cedula1, telefono1,
+nombre2, cedula2, telefono2
+order by codigo, fecha]]>
 	</queryString>
-	<field name="id" class="java.lang.Integer">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
 	<field name="Fecha" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="Estado" class="java.lang.String"/>
 	<field name="Municipio" class="java.lang.String"/>
 	<field name="Parroquia" class="java.lang.String"/>
+	<field name="idCentro" class="java.lang.Integer"/>
 	<field name="Codigo" class="java.lang.Integer"/>
 	<field name="Centro" class="java.lang.String"/>
-	<field name="Cedula" class="java.lang.Integer">
+	<field name="Nombre1" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="Nombre" class="java.lang.String">
+	<field name="Cedula1" class="java.lang.Long">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="Telefono" class="java.lang.String"/>
-	<field name="Asistencia" class="java.lang.String"/>
-	<field name="Presente" class="java.lang.String"/>
-	<field name="Ausente" class="java.lang.String"/>
-	<field name="CUTL1" class="java.lang.String"/>
-	<field name="CUTL2" class="java.lang.String"/>
-	<field name="CUTL3" class="java.lang.String"/>
-	<field name="Nombre1" class="java.lang.String"/>
-	<field name="Nombre2" class="java.lang.String"/>
-	<field name="Nombre3" class="java.lang.String"/>
-	<field name="Observaciones" class="java.lang.String"/>
-	<variable name="id_1" class="java.lang.Integer" resetType="Column" calculation="Count">
-		<variableExpression><![CDATA[$F{id}]]></variableExpression>
+	<field name="Telefono1" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Nombre2" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Cedula2" class="java.lang.Long">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Telefono2" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="CUTL1" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="CUTL2" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<variable name="CUTL1_1" class="java.lang.Integer" resetType="Column" calculation="Count">
+		<variableExpression><![CDATA[$F{CUTL1}]]></variableExpression>
+	</variable>
+	<variable name="CUTL2_1" class="java.lang.Integer" resetType="Column" calculation="Count">
+		<variableExpression><![CDATA[$F{CUTL2}]]></variableExpression>
+	</variable>
+	<variable name="Fecha_1" class="java.lang.Integer" resetType="Column" calculation="Count">
+		<variableExpression><![CDATA[$F{Fecha}]]></variableExpression>
 	</variable>
 	<background>
 		<band splitType="Stretch"/>
@@ -92,9 +93,9 @@ order by fecha]]>
 		</band>
 	</pageHeader>
 	<columnHeader>
-		<band height="146" splitType="Stretch">
+		<band height="141" splitType="Stretch">
 			<rectangle radius="10">
-				<reportElement x="7" y="36" width="548" height="39" backcolor="#F5F5F5" uuid="b1eeda44-0a40-4e8d-adab-67c7f1929693"/>
+				<reportElement x="4" y="37" width="548" height="39" backcolor="#F5F5F5" uuid="b1eeda44-0a40-4e8d-adab-67c7f1929693"/>
 			</rectangle>
 			<staticText>
 				<reportElement x="0" y="125" width="66" height="13" uuid="2b02bc18-31bc-4a73-a73a-77e56fe16e17"/>
@@ -187,7 +188,7 @@ order by fecha]]>
 				<textFieldExpression><![CDATA[$F{Nombre1}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="229" y="126" width="118" height="13" uuid="aa5bbfc4-2136-4d52-be75-cda67469e57d"/>
+				<reportElement x="229" y="126" width="154" height="13" uuid="aa5bbfc4-2136-4d52-be75-cda67469e57d"/>
 				<textElement textAlignment="Center">
 					<font fontName="DejaVu Serif Condensed" size="9" isBold="true"/>
 				</textElement>
@@ -196,38 +197,32 @@ order by fecha]]>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="20" splitType="Stretch">
+		<band height="18" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement x="83" y="3" width="131" height="14" uuid="de1579a8-3aa6-4aa0-9670-8c5962890baf"/>
+				<textElement textAlignment="Center">
+					<font fontName="DejaVu Serif Condensed" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CUTL1}]]></textFieldExpression>
+			</textField>
 			<textField>
-				<reportElement x="0" y="0" width="66" height="14" uuid="ee296e76-b0a6-4c8e-ac97-723956ff4504"/>
+				<reportElement x="0" y="3" width="66" height="14" uuid="ee296e76-b0a6-4c8e-ac97-723956ff4504"/>
 				<textElement textAlignment="Center">
 					<font fontName="DejaVu Serif Condensed" size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Fecha}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="83" y="0" width="131" height="14" uuid="c91e5fe7-754b-4826-ab0c-c996132bbf46"/>
-				<textElement textAlignment="Center">
-					<font fontName="DejaVu Serif Condensed" size="9"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{CUTL1}]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement x="229" y="0" width="118" height="14" uuid="e8aa5b4d-c1e8-44a0-a5ac-1104485a2351"/>
+				<reportElement x="230" y="3" width="153" height="14" uuid="3ac79216-5bbe-4452-93c1-84e2cabe0b03"/>
 				<textElement textAlignment="Center">
 					<font fontName="DejaVu Serif Condensed" size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{CUTL2}]]></textFieldExpression>
 			</textField>
-			<line>
-				<reportElement x="0" y="16" width="572" height="1" uuid="143672c2-7543-4ec0-92a4-b936e9e4791e"/>
-				<graphicElement>
-					<pen lineWidth="0.5" lineStyle="Solid" lineColor="#B8B8B8"/>
-				</graphicElement>
-			</line>
 		</band>
 	</detail>
 	<columnFooter>
-		<band height="10" splitType="Stretch"/>
+		<band height="5" splitType="Stretch"/>
 	</columnFooter>
 	<pageFooter>
 		<band height="46" splitType="Stretch">
