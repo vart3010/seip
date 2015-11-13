@@ -2,28 +2,12 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Asistencias de Cutls" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="39a430ef-fd62-4b25-8487-b8107872e988">
 	<property name="ireport.zoom" value="1.6105100000000023"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="97"/>
-	<parameter name="idCentro" class="java.lang.String"/>
-	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["/var/www/html/seip/web/Reports/SIP/"]]></defaultValueExpression>
+	<property name="ireport.y" value="190"/>
+	<parameter name="idCentro" class="java.lang.String">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
 	</parameter>
 	<queryString>
-		<![CDATA[select asist.id as id, date_format(asist.fecha,'%d/%m/%Y') as Fecha,
-cent.descriptionEstado as Estado, cent.descriptionMunicipio as Municipio,
-cent.descriptionParroquia as Parroquia, cent.codigoCentro as Codigo, cent.description as Centro,
-asist.cedula as Cedula, cutl.nombre as Nombre, cutl.telefonoSeip as Telefono,
-case when asist.assists=1 then 'Presente'
-else 'Ausente' end as Asistencia,
-case when asist.assists=1 then 1
-else 0 end as Presente,
-case when asist.assists=0 then 1
-else 0 end as Ausente,
-asist.observations as Observaciones
-from sip_centro_assists as asist
-inner join sip_centro as cent on ((asist.codigoCentro=cent.codigoCentro))
-left outer join sip_cutl as cutl on ((asist.cedula=cutl.cedula)and(asist.codigoCentro=cutl.codigoCentro))
-where asist.deletedAt is null and cent.id=$P{idCentro}
-order by fecha]]>
+		<![CDATA[]]>
 	</queryString>
 	<field name="id" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
@@ -47,12 +31,14 @@ order by fecha]]>
 	<field name="Presente" class="java.lang.Long"/>
 	<field name="Ausente" class="java.lang.Long"/>
 	<field name="Observaciones" class="java.lang.String"/>
-	<variable name="Presente_1" class="java.lang.Long" resetType="Column" calculation="Sum">
-		<variableExpression><![CDATA[$F{Presente}]]></variableExpression>
-	</variable>
-	<variable name="Ausente_1" class="java.lang.Long" resetType="Column" calculation="Sum">
-		<variableExpression><![CDATA[$F{Ausente}]]></variableExpression>
-	</variable>
+	<field name="orderCenter" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Cen" class="java.lang.Long"/>
+	<field name="fec" class="java.lang.String"/>
+	<field name="Cutl1" class="java.lang.Long"/>
+	<field name="Cutl2" class="java.lang.Long"/>
+	<field name="Cutl3" class="java.lang.Long"/>
 	<variable name="id_1" class="java.lang.Integer" resetType="Column" calculation="Count">
 		<variableExpression><![CDATA[$F{id}]]></variableExpression>
 	</variable>
@@ -253,6 +239,18 @@ order by fecha]]>
 					<font fontName="DejaVu Serif Condensed" size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Asistencia}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="7" y="22" width="43" height="20" uuid="be8626e5-b0f0-41ab-a95d-97b220cb72a6"/>
+				<textFieldExpression><![CDATA[$F{Cutl1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="55" y="22" width="45" height="20" uuid="903ac3be-5d1a-40e6-951a-67f6f4c9ce36"/>
+				<textFieldExpression><![CDATA[$F{Cutl2}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="100" y="22" width="52" height="20" uuid="0f355915-9e61-4e2d-9a5b-4cfe402af6e6"/>
+				<textFieldExpression><![CDATA[$F{Cutl3}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
