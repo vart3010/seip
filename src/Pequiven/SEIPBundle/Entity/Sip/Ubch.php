@@ -94,6 +94,14 @@ class Ubch {
      */
     private $deletedAt;
 
+    /**
+     * notification
+     * @var integer
+     *
+     * @ORM\Column(name="notification", type="integer")
+     */
+    private $notification = 0;
+
     function getId() {
         return $this->id;
     }
@@ -136,6 +144,14 @@ class Ubch {
     
     function setCargo($cargo) {
         $this->cargo = $cargo;
+    }
+
+    function getNotification() {
+        return $this->notification;
+    }
+    
+    function setNotification($notification) {
+        $this->notification = $notification;
     }
 
     function getCreatedBy() {

@@ -16,9 +16,8 @@
 
 {% block body %}
 
-	<div ng-controller="TableFormatController">  
-
-		<div loading-container="tableParams.settings().$loading">
+    <div ng-controller="TableFormatController">  
+        <div loading-container="tableParams.settings().$loading">
             <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager" template-header="custom/header" api-data-url="{{ apiDataUrl }}" export-csv="csv" class="table table-responsive table-extra-info" >
                 <tbody> 
                     <tr ng-repeat="result in $data" data="{$ result|json $}">
@@ -52,6 +51,6 @@
             </table>
         </div>
 
-     </div>
+    </div>
 
 {% endblock %}

@@ -406,6 +406,7 @@ class CenterController extends SEIPController {
         $em = $this->getDoctrine()->getManager();
 
         $id = $request->get('id');
+        $cantCutl = 0;
 
         $center = $this->get('pequiven.repository.center')->find($id);
 
@@ -415,10 +416,18 @@ class CenterController extends SEIPController {
 
         $ubch = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Ubch")->findBy(array("codigoCentro" => $codigoCentro));
         
+        $cantCutl = count($cutl);
         //Carga de Nombre de CUTL
-        foreach ($cutl as $value) {
-            $nomCutl[$value->getCedula()] = $value->getNombre();
+        if($cantCutl == 0){
+            $nomCutl = array();            
+        } else{            
+            foreach ($cutl as $value) {                
+                $nomCutl[$value->getCedula()] = $value->getNombre();
+                $cedula = $value->getCedula();
+            }
         }
+        
+        $validacionCutl = $cedula;
 
         //Carga de Categorias
         $catObs = [
@@ -428,6 +437,7 @@ class CenterController extends SEIPController {
             4 => 'Logistica',
             5 => 'Asistencia',
             6 => 'Telefonia',
+            7 => 'Otros...'
         ];
 
         //Carga de status
@@ -442,9 +452,9 @@ class CenterController extends SEIPController {
         //Color de status
         $color = [
             1 => "#12799f",
-            2 => "#e12002",
+            2 => "#03c842",
             3 => "#d1b200",
-            4 => "#03c842",
+            4 => "#e12002",
             5 => "#920a00"
         ];
 
@@ -472,7 +482,9 @@ class CenterController extends SEIPController {
                     'inventory'     => $inventory,
                     'colorStatus'   => $color,
                     'ubch'          => $ubch,
-                    'ubchCargo'     => $ubchCargo
+                    'ubchCargo'     => $ubchCargo,
+                    'cantCutl'      => $cantCutl,
+                    'validacionCutl' => $validacionCutl
         ));
     }
 

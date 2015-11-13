@@ -56,11 +56,14 @@
                         <th scope="col" width="30%" class="header" align="left">
                             Nombre
                         </th>    
-                        <th scope="col" width="20%" class="header" align="left">
+                        <th scope="col" width="15%" class="header" align="left">
                             Telefono
                         </th> 
-                        <th scope="col" width="20%" class="header" align="left">
+                        <th scope="col" width="15%" class="header" align="left">
                             Cargo
+                        </th>                         
+                        <th scope="col" width="35%" class="header" align="center">
+                            Registro de 1x10
                         </th>                         
                     </tr>
                 </thead>  
@@ -71,6 +74,24 @@
                             <td align="left">{{ dataUbch.nombre }}</td>                            
                             <td align="left">{{ dataUbch.telefono }}</td> 
                             <td align="left">{{ ubchCargo[dataUbch.cargo] }}</td>
+                            <td>
+                                {% set notification = dataUbch.notification %}
+                                {% if(notification == 1 ) %}
+                                    {% set checkState = "checked" %}
+                                    {% set disabled = "disabled" %}
+                                {% else  %}
+                                    {% set checkState = "" %}
+                                    {% set disabled = "" %}                                        
+                                {% endif %}
+                            <div id="carga" style="display:none">
+                                <p class="button-height">
+                                    <span class="loader big refreshing"></span>
+                                </p>
+                            </div>
+                                <p class="switchAssistance button-height">                            
+                                    <input type="checkbox" name="switch-medium-1" id="switch-medium-1" data="{{dataUbch.id}}" class="switch medium mid-margin-right {{checkState}}" {{disabled}} value="{{dataUbch.notification}}" data-text-on="SI" data-text-off="NO">
+                                </p>                            
+                            </td>
                             <td class="align-right vertical-center">                          
                                 <span class="select compact">
                                     <a href class="select-value form-edit">{{ 'pequiven.actions'|trans({},'messages') }}</a>
@@ -84,20 +105,6 @@
                     </tbody> 
                 {% endfor %}
             </table> 
-            {#&nbsp;  
-            {% if show == 1 %} 
-            <div class="align-left">
-
-                {% set routeExport = path('pequiven_sip_center_export',{idCenter:center.id, type:2}) %}
-
-                {{ buttons.generic(
-                    (routeExport),
-                    ('sip.export.exportpdf'|trans({})),
-                    'icon-download'
-                 ) 
-                }}
-            </div>
-            {% endif %}          #}
         </div>    
 </div>
 

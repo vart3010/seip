@@ -123,6 +123,22 @@ class Centro {
      * @ORM\Column(name="circuito", type="integer")
      */
     private $circuito = 0;
+    
+    /**
+     * Centro de Misiones
+     * @var string
+     *
+     * @ORM\Column(name="centroMisiones", type="string", length=3)
+     */
+    private $centroMisiones = 'NO';
+    
+    /**
+     * Importante
+     * @var string
+     *
+     * @ORM\Column(name="importante", type="string", length=3)
+     */
+    private $importante = 'NO';
 
     /**
      * Cédula UBCH
@@ -212,6 +228,14 @@ class Centro {
         return $this->circuito;
     }
 
+    function getCentroMisiones() {
+        return $this->centroMisiones;
+    }
+
+    function getImportante() {
+        return $this->importante;
+    }
+
     function getCedulaUbch() {
         return $this->cedulaubch;
     }
@@ -282,6 +306,14 @@ class Centro {
 
     function setCircuito($circuito) {
         $this->circuito = $circuito;
+    }
+
+    function setCentroMisiones($centroMisiones) {
+        $this->centroMisiones = $centroMisiones;
+    }
+
+    function setImportante($importante) {
+        $this->importante = $importante;
     }
 
     function setCedulaUbch($cedulaubch) {

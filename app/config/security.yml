@@ -8,6 +8,8 @@ security:
         connection: default
     role_hierarchy:
         ROLE_SEIP:
+            - ROLE_SEIP_UNLOCKED_USER
+            
 #            Menu pre-planificacion
             - ROLE_SEIP_PRE_PLANNING_CREATE_TACTIC
             - ROLE_SEIP_PRE_PLANNING_CREATE_OPERATIVE
@@ -242,6 +244,7 @@ security:
             #SISTEMA DE INFORMACION POLITICA - SIP
             - ROLE_SEIP_SIP_MENU
             - ROLE_SEIP_SIP_ONEPERTEN
+            - ROLE_SEIP_SIP_ONEPERTEN_LIST
             - ROLE_SEIP_SIP_CENTRO
             - ROLE_SEIP_SIP_CUTL
             

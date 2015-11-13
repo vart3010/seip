@@ -117,11 +117,14 @@ class UserAdmin extends Base
             ->add('email')
             ->add('groups')
             ->add('enabled', null, array('editable' => true))
-            ->add('locked', null, array('editable' => true))
             ->add('createdAt',null,array(
                 'format' => 'Y-m-d h:i:s a'
             ))
         ;
+        
+        if ($this->isGranted('ROLE_SEIP_UNLOCKED_USER')){
+            $listMapper->add('locked', null, array('editable' => true));
+        }
 
         if ($this->isGranted('ROLE_ALLOWED_TO_SWITCH')) {
             $listMapper

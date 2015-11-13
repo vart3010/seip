@@ -15,22 +15,23 @@ abstract class Observations {
      * Categorias
      *
      */
-    const PROPAGANDA = 1;
-    const TRANSPORTE = 2;
+    const PROPAGANDA  = 1;
+    const TRANSPORTE  = 2;
     const HIDRATACIÓN = 3;
-    const LOGISTICA = 4;
-    const ASISTENCIA = 5;
-    const TELEFONIA = 6;
+    const LOGISTICA   = 4;
+    const ASISTENCIA  = 5;
+    const TELEFONIA   = 6;
+    const OTROS       = 7;
 
     /**
      * Status
      *
      */
-    const ABIERTO = 1;
-    const PENDIENTE = 2;
+    const ABIERTO     = 1;
+    const PENDIENTE   = 2;
     const SEGUIMIENTO = 3;
-    const CERRADO = 4;
-    const RECHAZADO = 5;
+    const CERRADO     = 4;
+    const RECHAZADO   = 5;
 
     /**
      * @var integer
@@ -89,9 +90,10 @@ abstract class Observations {
             self::PROPAGANDA => 'Propaganda',
             self::TRANSPORTE => 'Transporte',
             self::HIDRATACIÓN => 'Hidratación',
-            self::LOGISTICA => 'Logistica',
+            self::LOGISTICA  => 'Logistica',
             self::ASISTENCIA => 'Asistencia',
-            self::TELEFONIA => 'Telefonia',
+            self::TELEFONIA  => 'Telefonia',
+            self::OTROS      => 'Otros...',
         ];
         return $levelProcessArray;
     }
