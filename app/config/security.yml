@@ -8,6 +8,8 @@ security:
         connection: default
     role_hierarchy:
         ROLE_SEIP:
+            - ROLE_SEIP_UNLOCKED_USER
+            
 #            Menu pre-planificacion
             - ROLE_SEIP_PRE_PLANNING_CREATE_TACTIC
             - ROLE_SEIP_PRE_PLANNING_CREATE_OPERATIVE
