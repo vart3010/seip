@@ -234,7 +234,7 @@ pequiven_ubch_show:
     methods: [GET|POST]
     options:
         expose: true
-#Eliminacion de Observación
+#Eliminacion de miembro
 pequiven_ubch_delete_member:
     path: /{id}/delUbch.{_format}
     defaults:
@@ -245,3 +245,7 @@ pequiven_ubch_delete_member:
     methods: [GET]
     options:
         expose: true
+update_assistance_ubch:
+    path: /sip/ubch/update
+    defaults:
+        _controller: pequiven.controller.ubch:updateAssistance

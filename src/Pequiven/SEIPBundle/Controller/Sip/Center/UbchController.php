@@ -194,6 +194,28 @@ class UbchController extends SEIPController {
         }
     }
 
+    /**
+     * 
+     * @param Request $request
+     */
+    public function updateAssistance(Request $request) {
+        
+        $id = $request->get('idMember');       
+
+        $status = $request->get('status');
+
+        $em = $this->getDoctrine()->getEntityManager();
+        
+        $ubch = $this->get('pequiven.repository.ubch')->find($id);
+        
+        $ubch->setNotification($status);        
+
+            $em->persist($ubch);
+            $em->flush();
+
+        return true;
+    }
+
 	/**
 	 *	Api CNE
 	 *
