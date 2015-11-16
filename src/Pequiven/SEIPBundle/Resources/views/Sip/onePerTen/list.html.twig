@@ -16,7 +16,7 @@
 
 {% block body %}
 
-    <div ng-controller="TableFormatController">  
+    <div ng-controller="TableFormatController">
 
         <div loading-container="tableParams.settings().$loading">
             <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager" template-header="custom/header"
@@ -57,4 +57,17 @@
 
     </div>
 
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+    <script type="text/javascript">
+        function getTableExtraInfo(data)
+            {
+                var response = '';
+                
+                return response;
+            }
+    </script>
+    
 {% endblock %}

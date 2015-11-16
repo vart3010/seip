@@ -124,6 +124,7 @@ pequiven:
         process: Proceso
         responsibles: Responsable(s) del programa
         period: Periodo
+        ref: Referencia
         name: Nombre
         type_goal: Tipo de Actividad
         not_applicable: No Aplica

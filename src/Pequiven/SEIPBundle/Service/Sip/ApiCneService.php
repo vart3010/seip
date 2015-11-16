@@ -24,7 +24,7 @@ class ApiCneService {
         /**
          * CONFIGURACION DE PROXY
          */
-        curl_setopt($curl, CURLOPT_PROXY, "http://pqvzivprx02.pequiven.com/proxy.pac"); //your proxy url
+        curl_setopt($curl, CURLOPT_PROXY, "http://pqvzivprx.pequiven.com/proxy.pac"); //your proxy url
         curl_setopt($curl, CURLOPT_PROXYPORT, "8080"); // your proxy port number 
 //        curl_setopt($curl, CURLOPT_PROXYUSERPWD, "username:pass"); //username:pass 
         $cne = '';
@@ -33,7 +33,6 @@ class ApiCneService {
             echo 'Curl error: ' . curl_error($curl);
         } else {
             $cne = curl_exec($curl);
-
 
             if (strpos($cne, '<table cellpadding="2" width="530">')) {
                 $bandera = true;
@@ -51,7 +50,6 @@ class ApiCneService {
                 //CEDULA
                 $n_ci = explode(':', $ci[0]);
                 $cedula = trim($n_ci[1]);
-                //var_dump($cedula);
                 //NOMBRE
                 $datos = explode(':', $ci[1]);
                 $nombre = explode("Estado", $datos[0]);

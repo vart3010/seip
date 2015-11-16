@@ -22,14 +22,19 @@
             <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager" template-header="custom/header" api-data-url="{{ apiDataUrl }}" export-csv="csv" class="table table-responsive table-extra-info" >
                 <tbody> 
                     <tr ng-repeat="result in $data" data="{$ result|json $}">
+                        <td data-title="'Estado'" filter="{'estado' : 'text'}">
+                            <a href="{$ result._links.self.show $}">
+                                {$ result.descriptionEstado $}
+                            </a>
+                        </td>
                         <td data-title="'Municipio'" filter="{'municipio' : 'text'}">
                             <a href="{$ result._links.self.show $}">
-                                {$ result.municipio $}
+                                {$ result.descriptionMunicipio $}
                             </a>
                         </td>
                         <td data-title="'Parroquia'" filter="{'parroquia' : 'text'}">
                             <a href="{$ result._links.self.show $}">
-                                {$ result.parroquia $}
+                                {$ result.descriptionParroquia $}
                             </a>
                         </td>
                         <td data-title="'Codigo'" filter="{'codigoCentro' : 'text'}">
@@ -49,4 +54,17 @@
 
      </div>
 
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+    <script type="text/javascript">
+        
+        function getTableExtraInfo(data)
+            {
+                var response = '';
+                return response;
+            }
+    </script>
+    
 {% endblock %}

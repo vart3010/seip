@@ -10,3 +10,12 @@ Pequiven\SEIPBundle\Entity\Sip\Centro:
         description:
             expose: true
             groups: [api_list]
+        descriptionEstado:
+            expose: true
+            groups: [api_list]
+        descriptionMunicipio:
+            expose: true
+            groups: [api_list]
+        descriptionParroquia:
+            expose: true
+            groups: [api_list]
