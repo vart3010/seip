@@ -419,7 +419,8 @@ class CenterController extends SEIPController {
         $cantCutl = count($cutl);
         //Carga de Nombre de CUTL
         if($cantCutl == 0){
-            $nomCutl = array();            
+            $nomCutl = array();
+            $cedula = 0;
         } else{            
             foreach ($cutl as $value) {                
                 $nomCutl[$value->getCedula()] = $value->getNombre();
