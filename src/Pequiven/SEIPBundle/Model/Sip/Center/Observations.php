@@ -21,6 +21,9 @@ abstract class Observations {
     const LOGISTICA = 4;
     const ASISTENCIA = 5;
     const TELEFONIA = 6;
+    const SERVICIOS_BASICOS = 7;
+    const SERVICIO_ELECTRICO = 8;
+    const MATERIAL_OFICINA = 9;
 
     /**
      * Status
