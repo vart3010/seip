@@ -55,3 +55,16 @@
      </div>
 
 {% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+    <script type="text/javascript">
+        
+        function getTableExtraInfo(data)
+            {
+                var response = '';
+                return response;
+            }
+    </script>
+    
+{% endblock %}
