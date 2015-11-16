@@ -252,7 +252,7 @@ class GerenciaController extends baseController {
         
 //        $activeSheet->setTitle($gerencia->getDescription());
         //Gerencia de la matriz de objetivos e indicadores
-        $activeSheet->setCellValue('A3', $gerencia->getDescription().' '.$this->getPeriodService()->getPeriodActive());
+        $activeSheet->setCellValue('A3', $gerencia->getDescription().'. '.$this->getPeriodService()->getPeriodActive());
         
         $row = 8;//Fila Inicial del skeleton
         $contResult = 0;//Contador de resultados totales
