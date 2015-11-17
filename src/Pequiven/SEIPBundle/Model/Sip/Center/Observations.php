@@ -15,23 +15,27 @@ abstract class Observations {
      * Categorias
      *
      */
-    const PROPAGANDA  = 1;
-    const TRANSPORTE  = 2;
+    const PROPAGANDA = 1;
+    const TRANSPORTE = 2;
     const HIDRATACIÓN = 3;
-    const LOGISTICA   = 4;
-    const ASISTENCIA  = 5;
-    const TELEFONIA   = 6;
-    const OTROS       = 7;
+    const LOGISTICA = 4;
+    const ASISTENCIA = 5;
+    const TELEFONIA = 6;
+    const OTROS = 7;
+    const SERVICIO_LUZ = 8;
+    const SERVICIO_AGUA = 9;
+    const SERVICIO_ASEO = 10;
+    const MATERIAL_OFICINA = 11;
 
     /**
      * Status
      *
      */
-    const ABIERTO     = 1;
-    const PENDIENTE   = 2;
+    const ABIERTO = 1;
+    const PENDIENTE = 2;
     const SEGUIMIENTO = 3;
-    const CERRADO     = 4;
-    const RECHAZADO   = 5;
+    const CERRADO = 4;
+    const RECHAZADO = 5;
 
     /**
      * @var integer
@@ -90,10 +94,14 @@ abstract class Observations {
             self::PROPAGANDA => 'Propaganda',
             self::TRANSPORTE => 'Transporte',
             self::HIDRATACIÓN => 'Hidratación',
-            self::LOGISTICA  => 'Logistica',
+            self::LOGISTICA => 'Logistica',
             self::ASISTENCIA => 'Asistencia',
-            self::TELEFONIA  => 'Telefonia',
-            self::OTROS      => 'Otros...',
+            self::TELEFONIA => 'Telefonia',
+            self::OTROS => 'Otros...',
+            self::SERVICIO_AGUA => 'Servicios de Agua',
+            self::SERVICIO_LUZ => 'Servicios de Luz',
+            self::SERVICIO_ASEO => 'Servicios de Aseo',
+            self::MATERIAL_OFICINA => 'Material de Oficina'
         ];
         return $levelProcessArray;
     }
