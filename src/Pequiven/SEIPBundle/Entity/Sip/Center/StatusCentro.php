@@ -8,11 +8,11 @@ use Gedmo\Mapping\Annotation as Gedmo;
 /**
  * Parroquia
  * @author Maximo Sojo maxsojo13@gmail.com
- * @ORM\Table(name="sip_centro_assists")
+ * @ORM\Table(name="sip_centro_status")
  * @ORM\Entity()
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
-class Assists {
+class StatusCentro {
 
     /**
      * @var integer
@@ -23,19 +23,12 @@ class Assists {
      */
     private $id;
 
-    /**
+     /**
      * @var \Date
      * 
      * @ORM\Column(name="fecha", type="datetime")
      */
     private $fecha;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="cedula", type="integer")
-     */
-    private $cedula;
 
     /**
      * @var integer
@@ -47,9 +40,9 @@ class Assists {
     /**
      * @var integer
      *
-     * @ORM\Column(name="assists", type="integer")
+     * @ORM\Column(name="status", type="integer")
      */
-    private $assists;
+    private $status;
 
     /**
      * @var string
@@ -76,14 +69,6 @@ class Assists {
         return $this->fecha;
     }
 
-    function setCedula($cedula) {
-        $this->cedula = $cedula;
-    }
-
-    function getCedula() {
-        return $this->cedula;
-    }
-
     function setCodigoCentro($codigoCentro) {
         $this->codigoCentro = $codigoCentro;
     }
@@ -92,12 +77,12 @@ class Assists {
         return $this->codigoCentro;
     }
 
-    function setAssists($assists) {
-        $this->assists = $assists;
+    function setStatus($status) {
+        $this->status = $status;
     }
     
-    function getAssists() {
-        return $this->assists;
+    function getStatus() {
+        return $this->status;
     }
 
     function setObservations($observations) {

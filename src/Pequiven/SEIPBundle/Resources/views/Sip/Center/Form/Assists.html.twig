@@ -6,11 +6,28 @@
             <fieldset class="fieldset fields-list">
                 <legend class="legend">{{ 'sip.assists'|trans ({}) }}</legend>
                     {{ form_errors(form) }} 
+
                     <div class="field-block button-height" >
                         {{ form_label(form.fecha) }}                        
                         {{ form_widget(form.fecha) }}
                         {{ form_errors(form.fecha) }}
                     </div>                    
+                    
+                    <div class="field-block button-height" >
+                            <p class="assistance button-height">
+
+                            <label class="label">Centro Activo</label> 
+                            <p class="assistanc button-height"> 
+                                <textarea required="required"  id="obs_centro" name="sip_center_assists[obs_centro]" class=" input input-xlarge"></textarea> 
+
+                                <input type="checkbox" name="sip_center_assists[status]" data="" value="0" class="switch blue-active mid-margin-right "  data-text-on="SI" data-text-off="NO">
+                            <span class="info-spot">
+                                <span class="icon-info-round"></span>
+                                <span class="info-bubble">Seleccion si el punto estaba activado o no dependiendo de su caso</span>
+                            </span> 
+                            </p>         
+                    </div>    
+                    
                     {{ form_rest(form) }}
                     
                     <div class="field-block button-height" >
@@ -61,7 +78,20 @@
                     //$("#obs_" + assists).attr("disabled", true);
                     //$("#obs_" + assists).attr("required", true);                    
                 }
-                console.log((value));
+                //console.log((value));
+            });
+
+            $("p.assistanc input").change(function () {
+                var value = $(this).val();
+                var assists = $(this).attr("data");
+                if (value == 1) {
+                    $(this).val(0);
+                    //$("#obs_centro").attr("disabled", false);
+                    //$("#obs_centro").attr("required", true);                    
+                } else {
+                    $(this).val(1);                    
+                }
+                //console.log((value));
             });
             
             

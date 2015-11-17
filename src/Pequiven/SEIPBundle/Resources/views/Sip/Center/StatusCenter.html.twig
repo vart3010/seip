@@ -1,0 +1,45 @@
+{% trans_default_domain 'sip' %}
+
+<div class="block">
+    <div ng-controller="SipCenterAssistsController"> 
+
+        <div class="block-title">
+            <h3 class="ng-binding">Centro Activo</h3>             
+        </div>
+        <div class="with-padding">            
+            <table class="table responsive-table" id="sorting-example2">
+                <thead>
+                    <tr>
+                        <th scope="col" width="30%" class="header" align="left">
+                            Fecha
+                        </th>                    
+                        <th scope="col" width="10%" class="header" align="left">
+                            Activo 
+                        </th>
+                        <th scope="col" width="30%" class="header" align="left">
+                            Observación
+                        </th> 
+                    </tr>
+                </thead>                 
+                {% for data in centerAct %}
+                    <tbody align="center">
+                        <tr>                            
+                            <td align="left">{{ data.fecha | date("d/m/Y")  }}</td>
+                            
+                            <td align="left">
+                                {% set status = data.status %}
+                                {% if(status == 1 ) %}
+                                    {% set checkState = "checked" %}
+                                {% else  %}
+                                    {% set checkState = "" %}
+                                {% endif %}
+                                <input type="checkbox" value="{{ data.status  }}" class="switch blue-active mid-margin-right {{ checkState }}"  data-text-on="SI" data-text-off="NO" disabled>
+                            </td> 
+                            <td align="justify">{{ data.observations }}</td>
+                        </tr>                 
+                    </tbody>                    
+                {% endfor %}                 
+            </table>             
+        </div>
+    </div>
+</div>

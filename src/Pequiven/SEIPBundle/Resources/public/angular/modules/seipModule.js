@@ -2643,7 +2643,7 @@ angular.module('seipModule.controllers', [])
             $scope.initFormAssists = function (resource) {
                 var d = new Date();
                 var numero = d.getTime();
-                $scope.setHeight(550);                
+                $scope.setHeight(650);                
                 var parameters = {
                     idCenter: $scope.idCenter,                    
                     _dc: numero
