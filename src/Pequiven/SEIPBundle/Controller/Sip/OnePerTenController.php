@@ -106,7 +106,7 @@ class OnePerTenController extends SEIPController {
         );
 
 
-        $user = $em->getRepository("\Pequiven\SEIPBundle\Entity\User")->findOneBy(array("identification" => $cedula));
+        $user = $em->getRepository("\Pequiven\SEIPBundle\Entity\User")->findOneBy(array("id" => $request->get("idUserOne")));
 
         $onePerTen = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\OnePerTen")->findOneBy(array("user" => $request->get("idUserOne")));
         $ciOne = $onePerTen->getCedula();
