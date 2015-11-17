@@ -71,6 +71,39 @@ class OnePerTen {
      */
     private $deletedAt;
 
+    /**
+     * @var \Pequiven\SEIPBundle\Entity\Sip\OnerPerTenMembers
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\Sip\OnePerTenMembers", mappedBy="one", cascade={"persist","remove"})
+     */
+    private $ten;
+
+    public function __construct() {
+        $this->ten = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * 
+     * @param \Pequiven\SEIPBundle\Entity\Sip\OnePerTenMembers $onePerTenMembers
+     * @return \Pequiven\SEIPBundle\Entity\Sip\OnePerTen
+     */
+    public function addTen(OnePerTenMembers $onePerTenMembers) {
+        $onePerTenMembers->setOne($this);
+        $this->ten->add($onePerTenMembers);
+        return $this;
+    }
+
+    /**
+     * 
+     * @param \Pequiven\SEIPBundle\Entity\Sip\OnePerTenMembers $onePerTenMembers
+     */
+    public function removeTen(OnePerTenMembers $onePerTenMembers) {
+        $this->ten->removeElement($onePerTenMembers);
+    }
+
+    public function getTen() {
+        return $this->ten;
+    }
+
     function getId() {
         return $this->id;
     }

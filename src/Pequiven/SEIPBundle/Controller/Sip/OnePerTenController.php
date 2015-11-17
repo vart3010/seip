@@ -22,9 +22,8 @@ class OnePerTenController extends SEIPController {
         $criteria = $request->get('filter', $this->config->getCriteria());
         $sorting = $request->get('sorting', $this->config->getSorting());
 
-        $repository = $this->getRepository();
-
-        $cutl = $this->get('pequiven.repository.onePerTen')->findAll();
+//        $repository = $this->getRepository();
+//        $cutl = $this->get('pequiven.repository.onePerTen')->findAll();
 
         $repository = $this->getRepository('pequiven.repository.onePerTen');
 
@@ -106,10 +105,12 @@ class OnePerTenController extends SEIPController {
             "msj" => ""
         );
 
-
         $user = $em->getRepository("\Pequiven\SEIPBundle\Entity\User")->findOneBy(array("identification" => $cedula));
 
-        $onePerTen = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\OnePerTen")->findOneBy(array("user" => $request->get("idUserOne")));
+        //$onePerTen = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\OnePerTen")->findOneBy(array("user" => $request->get("idUserOne")));
+        $onePerTen = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\OnePerTen")->getOnePerTen($request->get("idUserOne"));
+        //$onePerTen = $this->get("pequiven.repository.onePerTen")->findOneBy(array("user" => "26"));
+        $onePerTen = $onePerTen[0];
         $ciOne = $onePerTen->getCedula();
 
         //SE BUSCA EL ESTADO EN REP
@@ -195,9 +196,9 @@ class OnePerTenController extends SEIPController {
                             }
                         } else {
                             $nameCentro = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->getCentro($nomina->getCodigoCentro());
-                            $parroquia = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Parroquia")->findOneBy(array("id" => $rep->getCodigoParroquia()));
-                            $municipio = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Municipio")->findOneBy(array("id" => $rep->getCodigoMunicipio()));
-                            $estado = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Estado")->findOneBy(array("id" => $rep->getCodigoEstado()));
+                            $parroquia = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Parroquia")->findOneBy(array("id" => $nomina->getCodigoParroquia()));
+                            $municipio = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Municipio")->findOneBy(array("id" => $nomina->getCodigoMunicipio()));
+                            $estado = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Estado")->findOneBy(array("id" => $nomina->getCodigoEstado()));
                             $datos["nombre"] = $nomina->getEmpleado();
                             $datos["cedula"] = $nomina->getCedula();
                             $datos["centro"] = $nomina->getCodigoCentro();
