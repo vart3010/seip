@@ -11,22 +11,26 @@ use Pequiven\SEIPBundle\Doctrine\ORM\SeipEntityRepository as EntityRepository;
 class OnePerTenRepository extends EntityRepository {
 
     public function createPaginatorByOnePerTen(array $criteria = null, array $orderBy = null) {
+
+
         return $this->createPaginator($criteria, $orderBy);
     }
 
     protected function applyCriteria(\Doctrine\ORM\QueryBuilder $queryBuilder, array $criteria = null) {
         $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
-        
-        $queryBuilder->innerJoin('opt.user', 'u');
-        
+
+        $queryBuilder
+                ->innerJoin('opt.user', 'u')
+                ->innerJoin('opt.ten', 't')
+        ;
+
+
         if (($description = $criteria->remove('userName')) != null) {
             if (isset($criteria['userName'])) {
                 $description = $criteria['userName'];
                 $queryBuilder->andWhere($queryBuilder->expr()->orX($queryBuilder->expr()->like('u.firstname', "'%" . $description . "%'"), $queryBuilder->expr()->like('u.lastname', "'%" . $description . "%'")));
             }
         }
-
-        
 
         parent::applyCriteria($queryBuilder, $criteria->toArray());
     }

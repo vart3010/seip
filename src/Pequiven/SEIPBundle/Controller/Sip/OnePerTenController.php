@@ -22,9 +22,8 @@ class OnePerTenController extends SEIPController {
         $criteria = $request->get('filter', $this->config->getCriteria());
         $sorting = $request->get('sorting', $this->config->getSorting());
 
-        $repository = $this->getRepository();
-
-        $cutl = $this->get('pequiven.repository.onePerTen')->findAll();
+//        $repository = $this->getRepository();
+//        $cutl = $this->get('pequiven.repository.onePerTen')->findAll();
 
         $repository = $this->getRepository('pequiven.repository.onePerTen');
 

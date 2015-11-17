@@ -30,7 +30,7 @@ class OnePerTenMembers {
      * Id one
      * @var \Pequiven\SEIPBundle\Entity\Sip\OnePerTen
      *
-     * @ORM\ManyToOne(targetEntity="\Pequiven\SEIPBundle\Entity\Sip\OnePerTen")
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\Sip\OnePerTen", inversedBy="ten")
      */
     private $one;
 
@@ -285,5 +285,6 @@ class OnePerTenMembers {
     function setDeletedAt($deletedAt) {
         $this->deletedAt = $deletedAt;
     }
+    
 
 }
