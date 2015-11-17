@@ -49,6 +49,20 @@ class OnePerTenRepository extends EntityRepository {
 //        return $q->getResult();
 //    }
 
+    public function getOnePerTen($id) {
+
+        $query = $this->getQueryBuilder();
+
+        $query
+                ->andWhere('opt.user = :idOne')
+                ->setParameter("idOne", $id)
+        ;
+
+        $q = $query->getQuery();
+
+        return $q->getResult();
+    }
+
     protected function getAlias() {
         return 'opt';
     }

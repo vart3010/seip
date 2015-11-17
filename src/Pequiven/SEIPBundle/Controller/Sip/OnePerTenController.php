@@ -105,10 +105,12 @@ class OnePerTenController extends SEIPController {
             "msj" => ""
         );
 
-
         $user = $em->getRepository("\Pequiven\SEIPBundle\Entity\User")->findOneBy(array("identification" => $cedula));
 
-        $onePerTen = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\OnePerTen")->findOneBy(array("user" => $request->get("idUserOne")));
+        //$onePerTen = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\OnePerTen")->findOneBy(array("user" => $request->get("idUserOne")));
+        $onePerTen = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\OnePerTen")->getOnePerTen($request->get("idUserOne"));
+        //$onePerTen = $this->get("pequiven.repository.onePerTen")->findOneBy(array("user" => "26"));
+        $onePerTen = $onePerTen[0];
         $ciOne = $onePerTen->getCedula();
 
         //SE BUSCA EL ESTADO EN REP
