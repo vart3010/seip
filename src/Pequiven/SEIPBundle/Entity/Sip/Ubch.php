@@ -64,7 +64,7 @@ class Ubch {
      *
      * @ORM\Column(name="cargo", type="integer", nullable=true)
      */
-    private $cargo;
+    private $cargo = 2;
 
     /**
      * Creado por
