@@ -152,39 +152,44 @@
 
 {% block javascript %}
     <script type="text/javascript">
-
+    
         $(document).ready(function () {
 
             $('#switch-mode').change(function () {
                 $('.switch-wrapper')[this.checked ? 'addClass' : 'removeClass']('reversed-switches');
             });
+            
             $("p.switchAssistance input").change(function () {
-                var value = $(this).val();                
-                if (value == 1) {
-                    $(this).val(0);
-                } else {
-                    $("#switch-medium-1").prop("disabled", true);
-                    $(this).val(1);                    
-                }
+                var idMember = $(this).attr("data");                
+                //var value = $(this).val();              
+                var value = $("#switch_" + idMember).val();
+                //var id = document.getElementById("#switch_" + idMember);  
+                var idMemberd = $(this).attr("data");                
                 
-                var value = $("p.switchAssistance input").val();
-                var idMember = $("p.switchAssistance input").attr("data");                
+                if (value == 1) {
+                    $(this).val(0);                    
+                } else {
+                    $("#switch_" + idMember).prop("disabled", true);
+                    $(this).val(1);                                     
+                }
+                var value = $("#switch_" + idMember).val();
                 var data = {
                     idMember: idMember,
                     status: value,                    
                 };
-                
+                //console.log(data);
+
                 $.ajax({
                     type: 'get',
                     url: '{{ path("update_assistance_ubch") }}',
                     data: data,
                     beforeSend:function(objeto){
-                            $('#carga').css({display:'block'});
-                            $('p.switchAssistance').css('display','none');
+                            $('#carga_' + idMember).css({display:'block'});
+                            $('#p_' + idMember).css('display','none');
                     },
                     complete:function(){
-                        $('#carga').css('display','none');
-                        $('p.switchAssistance').css('display','block');  
+                        $('#carga_' + idMember).css('display','none');
+                        $('#p_' + idMember).css('display','block');  
                     },
                     success: function (data) {                        
                         $(location).attr('href', data["url"]);
@@ -194,7 +199,6 @@
             });
             
         });
-
     </script>
 {% endblock %}
 

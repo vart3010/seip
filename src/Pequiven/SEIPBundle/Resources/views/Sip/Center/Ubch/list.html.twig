@@ -83,13 +83,15 @@
                                     {% set checkState = "" %}
                                     {% set disabled = "" %}                                        
                                 {% endif %}
-                            <div id="carga" style="display:none">
+                            <div id="carga_{{dataUbch.id}}" style="display:none">
                                 <p class="button-height">
                                     <span class="loader big refreshing"></span>
                                 </p>
                             </div>
-                                <p class="switchAssistance button-height">                            
-                                    <input type="checkbox" name="switch-medium-1" id="switch-medium-1" data="{{dataUbch.id}}" class="switch medium mid-margin-right {{checkState}}" {{disabled}} value="{{dataUbch.notification}}" data-text-on="SI" data-text-off="NO">
+                                <p class="switchAssistance button-height" id="p_{{dataUbch.id}}">
+                                    
+                                    <input type="checkbox" name="switch_{{dataUbch.id}}" id="switch_{{dataUbch.id}}" data="{{dataUbch.id}}" class="switch medium mid-margin-right {{checkState}}" {{disabled}} value="{{dataUbch.notification}}" data-text-on="SI" data-text-off="NO" onclick="pasoId()">
+
                                 </p>                            
                             </td>
                             <td class="align-right vertical-center">                          
