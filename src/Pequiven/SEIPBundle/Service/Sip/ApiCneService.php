@@ -89,8 +89,8 @@ class ApiCneService {
             "estado" => $estado,
             "municipio" => $mcpo,
             "parroquia" => $parroquia,
-            "direccion" => $direccion,
-            "centro" => $centro
+            "direccion" => $centro,
+            "centro" => $direccion
         );
     }
 
