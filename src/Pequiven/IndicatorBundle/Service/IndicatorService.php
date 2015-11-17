@@ -4258,6 +4258,11 @@ class IndicatorService implements ContainerAwareInterface {
             } else {
                 $band = false;
             }
+        } else{
+            $nivel = $indicator->getIndicatorLevel()->getLevel();
+            if ($nivel == \Pequiven\IndicatorBundle\Entity\IndicatorLevel::LEVEL_ESTRATEGICO) {
+                $band = true;
+            }
         }
 
         //var_dump($band);

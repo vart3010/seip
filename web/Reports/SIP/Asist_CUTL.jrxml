@@ -1,57 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Asistencias de Cutls" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="39a430ef-fd62-4b25-8487-b8107872e988">
-	<property name="ireport.zoom" value="1.6105100000000023"/>
+	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
-	<parameter name="idCentro" class="java.lang.String"/>
+	<parameter name="idCentro" class="java.lang.String">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
 	<queryString>
-		<![CDATA[select asist.id as id, date_format(asist.fecha,'%d/%m/%Y') as Fecha,
-cent.descriptionEstado as Estado, cent.descriptionMunicipio as Municipio,
-cent.descriptionParroquia as Parroquia, cent.codigoCentro as Codigo, cent.description as Centro,
-asist.cedula as Cedula, cutl.nombre as Nombre, cutl.telefonoSeip as Telefono,
-case when asist.assists=1 then 'Presente'
-else 'Ausente' end as Asistencia,
-case when asist.assists=1 then 1
-else 0 end as Presente,
-case when asist.assists=0 then 1
-else 0 end as Ausente,
-asist.observations as Observaciones
-from sip_centro_assists as asist
-inner join sip_centro as cent on ((asist.codigoCentro=cent.codigoCentro))
-left outer join sip_cutl as cutl on ((asist.cedula=cutl.cedula)and(asist.codigoCentro=cutl.codigoCentro))
-where asist.deletedAt is null and cent.id=$P{idCentro}
-order by fecha]]>
+		<![CDATA[select Fecha, Estado, Municipio, Parroquia, idCentro, Codigo, Centro,
+Nombre1, Cedula1, Telefono1,
+Nombre2, Cedula2, Telefono2,
+case when sum(cutl1)=0 then null
+when sum(cutl1)>0 then 'x' end as CUTL1,
+case when sum(cutl2)=0 then null
+when sum(cutl2)>0 then 'x' end as CUTL2
+from Asistencia_CUTL
+where idCentro=$P{idCentro}
+group by fecha, estado, municipio, parroquia, idCentro, codigo, centro,
+nombre1, cedula1, telefono1,
+nombre2, cedula2, telefono2
+order by codigo, fecha]]>
 	</queryString>
-	<field name="id" class="java.lang.Integer">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
 	<field name="Fecha" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="Estado" class="java.lang.String"/>
 	<field name="Municipio" class="java.lang.String"/>
 	<field name="Parroquia" class="java.lang.String"/>
+	<field name="idCentro" class="java.lang.Integer"/>
 	<field name="Codigo" class="java.lang.Integer"/>
 	<field name="Centro" class="java.lang.String"/>
-	<field name="Cedula" class="java.lang.Integer">
+	<field name="Nombre1" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="Nombre" class="java.lang.String">
+	<field name="Cedula1" class="java.lang.Long">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="Telefono" class="java.lang.String"/>
-	<field name="Asistencia" class="java.lang.String"/>
-	<field name="Presente" class="java.lang.Long"/>
-	<field name="Ausente" class="java.lang.Long"/>
-	<field name="Observaciones" class="java.lang.String"/>
-	<variable name="Presente_1" class="java.lang.Long" resetType="Column" calculation="Sum">
-		<variableExpression><![CDATA[$F{Presente}]]></variableExpression>
+	<field name="Telefono1" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Nombre2" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Cedula2" class="java.lang.Long">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Telefono2" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="CUTL1" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="CUTL2" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<variable name="CUTL1_1" class="java.lang.Integer" resetType="Column" calculation="Count">
+		<variableExpression><![CDATA[$F{CUTL1}]]></variableExpression>
 	</variable>
-	<variable name="Ausente_1" class="java.lang.Long" resetType="Column" calculation="Sum">
-		<variableExpression><![CDATA[$F{Ausente}]]></variableExpression>
+	<variable name="CUTL2_1" class="java.lang.Integer" resetType="Column" calculation="Count">
+		<variableExpression><![CDATA[$F{CUTL2}]]></variableExpression>
 	</variable>
-	<variable name="id_1" class="java.lang.Integer" resetType="Column" calculation="Count">
-		<variableExpression><![CDATA[$F{id}]]></variableExpression>
+	<variable name="Fecha_1" class="java.lang.Integer" resetType="Column" calculation="Count">
+		<variableExpression><![CDATA[$F{Fecha}]]></variableExpression>
 	</variable>
 	<background>
 		<band splitType="Stretch"/>
@@ -83,23 +93,16 @@ order by fecha]]>
 		</band>
 	</pageHeader>
 	<columnHeader>
-		<band height="146" splitType="Stretch">
+		<band height="141" splitType="Stretch">
 			<rectangle radius="10">
-				<reportElement x="7" y="36" width="548" height="39" backcolor="#F5F5F5" uuid="b1eeda44-0a40-4e8d-adab-67c7f1929693"/>
+				<reportElement x="4" y="37" width="548" height="39" backcolor="#F5F5F5" uuid="b1eeda44-0a40-4e8d-adab-67c7f1929693"/>
 			</rectangle>
 			<staticText>
-				<reportElement x="0" y="125" width="50" height="13" uuid="2b02bc18-31bc-4a73-a73a-77e56fe16e17"/>
+				<reportElement x="0" y="125" width="66" height="13" uuid="2b02bc18-31bc-4a73-a73a-77e56fe16e17"/>
 				<textElement textAlignment="Center">
 					<font fontName="DejaVu Serif Condensed" size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Fecha]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="55" y="125" width="49" height="13" uuid="93e19ac9-4d3b-4d27-a37c-531f5a256cae"/>
-				<textElement textAlignment="Center">
-					<font fontName="DejaVu Serif Condensed" size="9" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Cédula]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="0" y="15" width="176" height="15" uuid="29945320-e5d1-4fa2-9a4f-6fa36c550c62"/>
@@ -165,13 +168,6 @@ order by fecha]]>
 				<textFieldExpression><![CDATA[$F{Centro}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="304" y="125" width="39" height="13" uuid="429ac598-8936-4a76-8207-45fbfd10b39b"/>
-				<textElement textAlignment="Center">
-					<font fontName="DejaVu Serif Condensed" size="9" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Estatus]]></text>
-			</staticText>
-			<staticText>
 				<reportElement x="0" y="97" width="176" height="15" uuid="78dc23e2-857d-42da-a1dd-f6885738fb63"/>
 				<textElement>
 					<font fontName="DejaVu Serif Condensed" isBold="true"/>
@@ -184,77 +180,49 @@ order by fecha]]>
 					<pen lineWidth="1.5" lineStyle="Double"/>
 				</graphicElement>
 			</line>
-			<staticText>
-				<reportElement x="123" y="125" width="107" height="13" uuid="dccbc8b6-1b8b-4358-9905-4f9117dfcaaf"/>
-				<textElement>
+			<textField>
+				<reportElement x="83" y="125" width="131" height="13" uuid="dbef5ea4-4ccf-419b-af41-e417946dbe11"/>
+				<textElement textAlignment="Center">
 					<font fontName="DejaVu Serif Condensed" size="9" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Nombre y Apellido]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="245" y="125" width="53" height="13" uuid="01e48d3f-0a0e-404b-941e-5271f1a72a0c"/>
-				<textElement>
+				<textFieldExpression><![CDATA[$F{Nombre1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="229" y="126" width="154" height="13" uuid="aa5bbfc4-2136-4d52-be75-cda67469e57d"/>
+				<textElement textAlignment="Center">
 					<font fontName="DejaVu Serif Condensed" size="9" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Teléfono]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="378" y="125" width="194" height="13" uuid="35a19103-bf30-4999-b414-13b4b3b3b654"/>
-				<textElement>
-					<font fontName="DejaVu Serif Condensed" size="9" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Observaciones]]></text>
-			</staticText>
+				<textFieldExpression><![CDATA[$F{Nombre2}]]></textFieldExpression>
+			</textField>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="52" splitType="Stretch">
+		<band height="18" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement x="83" y="3" width="131" height="14" uuid="de1579a8-3aa6-4aa0-9670-8c5962890baf"/>
+				<textElement textAlignment="Center">
+					<font fontName="DejaVu Serif Condensed" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CUTL1}]]></textFieldExpression>
+			</textField>
 			<textField>
-				<reportElement x="0" y="0" width="50" height="14" uuid="ee296e76-b0a6-4c8e-ac97-723956ff4504"/>
+				<reportElement x="0" y="3" width="66" height="14" uuid="ee296e76-b0a6-4c8e-ac97-723956ff4504"/>
 				<textElement textAlignment="Center">
 					<font fontName="DejaVu Serif Condensed" size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Fecha}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement x="353" y="0" width="219" height="50" uuid="5f7e38b9-d916-4b88-bb18-35c595887e63"/>
-				<textElement textAlignment="Justified">
-					<font fontName="DejaVu Serif Condensed" size="8"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{Observaciones}]]></textFieldExpression>
-			</textField>
-			<textField pattern="#,##0">
-				<reportElement x="55" y="0" width="49" height="14" uuid="a9d2c5aa-18c7-4347-bd4c-93325fab85fe"/>
+			<textField isBlankWhenNull="true">
+				<reportElement x="230" y="3" width="153" height="14" uuid="3ac79216-5bbe-4452-93c1-84e2cabe0b03"/>
 				<textElement textAlignment="Center">
 					<font fontName="DejaVu Serif Condensed" size="9"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{Cedula}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="110" y="0" width="130" height="14" uuid="b9116976-8ed5-463e-9b88-16ba0dca6b1e"/>
-				<textElement>
-					<font fontName="DejaVu Serif Condensed" size="9"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{Nombre}]]></textFieldExpression>
-			</textField>
-			<textField pattern="###0">
-				<reportElement x="240" y="0" width="58" height="14" uuid="1ecf2db0-52b5-4ebe-9d78-3767cd05814a"/>
-				<textElement>
-					<font fontName="DejaVu Serif Condensed" size="9"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{Telefono}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="304" y="0" width="39" height="14" uuid="9da07a52-f0dd-46c5-b737-068c434d79af"/>
-				<textElement textAlignment="Center">
-					<font fontName="DejaVu Serif Condensed" size="9"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{Asistencia}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{CUTL2}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
 	<columnFooter>
-		<band height="10" splitType="Stretch"/>
+		<band height="5" splitType="Stretch"/>
 	</columnFooter>
 	<pageFooter>
 		<band height="46" splitType="Stretch">
@@ -285,6 +253,8 @@ order by fecha]]>
 		</band>
 	</pageFooter>
 	<summary>
-		<band height="17" splitType="Stretch"/>
+		<band height="6" splitType="Stretch">
+			<elementGroup/>
+		</band>
 	</summary>
 </jasperReport>
