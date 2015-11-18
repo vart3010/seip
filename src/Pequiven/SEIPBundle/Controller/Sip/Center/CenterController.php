@@ -573,6 +573,7 @@ class CenterController extends SEIPController {
      *
      */
     public function listPqvAction(Request $request){
+        
         $idCentro = $request->get('idCentro');
         $center = $this->get('pequiven.repository.center')->find($idCentro);
         $codCentro = $center->getCodigoCentro();//Cargo el codigo del centro
@@ -585,7 +586,7 @@ class CenterController extends SEIPController {
         $criteria['codCentro'] = $codCentro;
         //$repository = $this->getRepository('pequiven.repository.center')->createPaginatorByCentroPqv($criteria, $sorting);
         $repository = $this->getRepository('pequiven.repository.center');
-        
+
         if ($this->config->isPaginated()) {
             $resources = $this->resourceResolver->getResource(
                     $repository, 'createPaginatorByCentroPqv', array($criteria, $sorting)

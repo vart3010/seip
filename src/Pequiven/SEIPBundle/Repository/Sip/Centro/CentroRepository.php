@@ -38,8 +38,9 @@ class CentroRepository extends EntityRepository {
         $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
 
         if(($codCentro = $criteria->remove('codCentro'))){
-            //var_dump($codCentro);            
-            $em = $this->getEntityManager();
+            
+
+            /*$em = $this->getEntityManager();
             $db = $em->getConnection();
 
             $sql = 'SELECT o.cedula
@@ -49,9 +50,18 @@ class CentroRepository extends EntityRepository {
 
             $stmt = $db->prepare($sql);
             $stmt->execute();
-            $result = $stmt->fetchAll();
+            $result = $stmt->fetchAll();*/
             
-            return $result;
+            if (($nombreCentro = $criteria->remove('centro'))) {
+                $queryBuilder->andWhere($queryBuilder->expr()->like('ctro.description', "'%" . $nombreCentro . "%'"));
+            }
+
+            if (($codigoCentro = $criteria->remove('codigoCentro'))) {
+                $queryBuilder->andWhere($queryBuilder->expr()->like('ctro.codigoCentro', "'%" . $codigoCentro . "%'"));
+            }
+            
+            //return $q->getResult();
+            //return $result;
         }
 
         if (($nombreCentro = $criteria->remove('centro'))) {
