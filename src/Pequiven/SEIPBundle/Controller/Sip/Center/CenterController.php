@@ -438,19 +438,16 @@ class CenterController extends SEIPController {
 
         $em = $this->getDoctrine()->getManager();
 
-
-
         $id = $request->get('id');
+
         $cantCutl = 0;
 
         $center = $this->get('pequiven.repository.center')->find($id);
 
-        //var_dump($center->getCodigoCentro());
+        //Personal PQV por centro
+        //$result = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Rep")->getPqvCentro($center->getCodigoCentro());
         
-        //$cent = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Rep")->getCentroPqv($center->getCodigoCentro());
-        
-        //var_dump(count($cent));//Rep por centro
-        //die();
+
         $codigoCentro = $center->getCodigoCentro();
 
         $cutl = $this->get('pequiven.repository.cutl')->findBy(array('codigoCentro' => $codigoCentro));
@@ -481,7 +478,11 @@ class CenterController extends SEIPController {
             4 => 'Logistica',
             5 => 'Asistencia',
             6 => 'Telefonia',
-            7 => 'Otros...'
+            7 => 'Otros...',
+            8 => 'Servicios de Agua',
+            9 => 'Servicios de Luz',
+            10 => 'Servicios de Aseo',
+            11 => 'Material de Oficina'
         ];
 
         //Carga de status
