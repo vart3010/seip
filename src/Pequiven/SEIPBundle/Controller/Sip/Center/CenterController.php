@@ -469,7 +469,8 @@ class CenterController extends SEIPController {
         }
         
         $validacionCutl = $cedula;
-
+        //var_dump($nomCutl);
+        //die();
         //Carga de Categorias
         $catObs = [
             1 => 'Propaganda',
