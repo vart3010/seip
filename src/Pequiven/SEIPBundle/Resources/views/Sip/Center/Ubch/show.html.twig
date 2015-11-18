@@ -89,6 +89,54 @@
 {% endblock %}
 
 {% block javascript %}
-   
+    <script type="text/javascript">
+    
+        $(document).ready(function () {
+
+            $('#switch-mode').change(function () {
+                $('.switch-wrapper')[this.checked ? 'addClass' : 'removeClass']('reversed-switches');
+            });
+            
+            $("p.switchAssistance input").change(function () {
+                var idMember = $(this).attr("data");                
+                //var value = $(this).val();              
+                var value = $("#switch_" + idMember).val();
+                //var id = document.getElementById("#switch_" + idMember);  
+                var idMemberd = $(this).attr("data");                
+                
+                if (value == 1) {
+                    $(this).val(0);                    
+                } else {
+                    $("#switch_" + idMember).prop("disabled", true);
+                    $(this).val(1);                                     
+                }
+                var value = $("#switch_" + idMember).val();
+                var data = {
+                    idMember: idMember,
+                    status: value,                    
+                };
+                //console.log(data);
+
+                $.ajax({
+                    type: 'get',
+                    url: '{{ path("update_assistance_ubch") }}',
+                    data: data,
+                    beforeSend:function(objeto){
+                            $('#carga_' + idMember).css({display:'block'});
+                            $('#p_' + idMember).css('display','none');
+                    },
+                    complete:function(){
+                        $('#carga_' + idMember).css('display','none');
+                        $('#p_' + idMember).css('display','block');  
+                    },
+                    success: function (data) {                        
+                        $(location).attr('href', data["url"]);
+                    }
+                });
+                
+            });
+            
+        });
+    </script>
 {% endblock %}
 

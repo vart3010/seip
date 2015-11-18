@@ -12,6 +12,7 @@ use Pequiven\SEIPBundle\Entity\Sip\Center\Assists;
 use Pequiven\SEIPBundle\Form\Sip\Center\AssistsType;
 use Pequiven\SEIPBundle\Entity\Sip\Center\Inventory;
 use Pequiven\SEIPBundle\Form\Sip\Center\InventoryType;
+use Pequiven\SEIPBundle\Entity\Sip\Center\StatusCentro;
 
 /**
  * Controlador Centros
@@ -56,18 +57,37 @@ class CenterController extends SEIPController {
      * @return type
      */
     public function addAssistsAction(Request $request) {
-
+        
+        $ObsCentro = $request->get('sip_center_assists')["obs_centro"];
+        $fecha = $request->get('sip_center_assists')['fecha'];        
+        
         $em = $this->getDoctrine()->getManager();
 
         $codigoCentro = $request->get('idCenter');
 
         $cutl = $this->get('pequiven.repository.cutl')->findBy(array('codigoCentro' => $codigoCentro));
-
+        
+        //$assist = $this->get('pequiven.repository.assists')->findBy(array('codigoCentro' => $codigoCentro));
+        
+        //$fecha = $request->get('sip_center_assists')['fecha'];
+        //$fecha = date("Y-d-m H:i:s", strtotime($fecha)); 
+        //$aprob = 1;
+        
+        $fecha = date_create_from_format("d/m/Y",$fecha);
+        
         $contCutl = count($cutl);
+        $cont = 1;
 
         foreach ($cutl as $value) {
             $cedula = $value->getCedula();
             $idAssist = $value->getId();
+            //Status del centro
+            if (isset($request->get('sip_center_assists')["status"])) {
+                $status = 1;
+            } else {
+                $status = 0;
+            }
+            
             //Carga de Asistencia
             if (isset($request->get('sip_center_assists')[$idAssist])) {
                 $value = 1;
@@ -94,11 +114,23 @@ class CenterController extends SEIPController {
                 $Assists = $form->getData();
                 $Assists->setCodigoCentro($codigoCentro);
                 $Assists->setCedula($cedulaCutl);
-                $Assists->setAssists($value);
+                $Assists->setAssists($value);                
                 $Assists->setObservations($Observations);
                 $em->persist($Assists);
                 $em->flush();
+                
+                if ($cont == 1) {                    
+                    $statusCentro  = new StatusCentro();
+                    $statusCentro->setCodigoCentro($codigoCentro);
+                    $statusCentro->setFecha($fecha);
+                    $statusCentro->setStatus($status);
+                    $statusCentro->setObservations($ObsCentro);
+
+                    $em->persist($statusCentro);
+                    $em->flush();
+                }
             }
+
             try {
                 $em->flush();
                 $em->getConnection()->commit();
@@ -106,8 +138,9 @@ class CenterController extends SEIPController {
                 $em->getConnection()->rollback();
                 throw $e;
             }
+            $cont++;
         }
-        $this->get('session')->getFlashBag()->add('success', "Asistencia Añadida Exitosamente");
+        $this->get('session')->getFlashBag()->add('success', "Datos Cargados Exitosamente");
     }
 
     /**
@@ -405,14 +438,24 @@ class CenterController extends SEIPController {
 
         $em = $this->getDoctrine()->getManager();
 
+
+
         $id = $request->get('id');
         $cantCutl = 0;
 
         $center = $this->get('pequiven.repository.center')->find($id);
 
+        //var_dump($center->getCodigoCentro());
+        
+        //$cent = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Rep")->getCentroPqv($center->getCodigoCentro());
+        
+        //var_dump(count($cent));//Rep por centro
+        //die();
         $codigoCentro = $center->getCodigoCentro();
 
         $cutl = $this->get('pequiven.repository.cutl')->findBy(array('codigoCentro' => $codigoCentro));
+
+        $centerAct = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Center\StatusCentro")->findBy(array("codigoCentro" => $codigoCentro));
 
         $ubch = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Ubch")->findBy(array("codigoCentro" => $codigoCentro));
         
@@ -485,7 +528,8 @@ class CenterController extends SEIPController {
                     'ubch'          => $ubch,
                     'ubchCargo'     => $ubchCargo,
                     'cantCutl'      => $cantCutl,
-                    'validacionCutl' => $validacionCutl
+                    'validacionCutl' => $validacionCutl,
+                    'centerAct'     => $centerAct
         ));
     }
 
