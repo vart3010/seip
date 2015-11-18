@@ -115,7 +115,8 @@ class OnePerTenController extends SEIPController {
 
         //SE BUSCA EL ESTADO EN REP
         $repOne = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Rep")->findOneBy(array("cedula" => $ciOne));
-        if (!isset($repOne)) {
+        //if (!isset($repOne)) {
+        if (count($repOne) <= 0) {
             //SE BUSCA ESTADO EN CNE de ONE
             $cneOne = $this->getCneService();
             $userCneOne = $cneOne->getDatosCne($ciOne);
@@ -125,6 +126,10 @@ class OnePerTenController extends SEIPController {
             $cneMember = $this->getCneService();
             $userCneMember = $cneMember->getDatosCne($cedula);
             $estadoMember = $userCneMember["estado"];
+//            $repMember = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Rep")->findOneBy(array("cedula" => $cedula));
+//            $codEstadoMember = $repMember->getCodigoEstado();
+//            $estadoMember = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Estado")->findOneBy(array("id" => $codEstadoMember));
+//            $estadoMember = $estadoOne->getDescription();
         } else {
 
             //SE BUSCA ESTADO ONE EN REP
@@ -133,10 +138,15 @@ class OnePerTenController extends SEIPController {
             $estadoOne = $estadoOne->getDescription();
 
             // SE BUSCA ESTADO DE MIEMBRO
-            $cneMember = $this->getCneService();
-            $userCneMember = $cneMember->getDatosCne($cedula);
-            $estadoMember = $userCneMember["estado"];
+//            $cneMember = $this->getCneService();
+//            $userCneMember = $cneMember->getDatosCne($cedula);
+//            $estadoMember = $userCneMember["estado"];
+            $repMember = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Rep")->findOneBy(array("cedula" => $cedula));
+            $codEstadoMember = $repMember->getCodigoEstado();
+            $estadoMember = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Estado")->findOneBy(array("id" => $codEstadoMember));
+            $estadoMember = $estadoMember->getDescription();
         }
+
 
         if ($estadoOne == $estadoMember) {
             $onePerTenMembers = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\OnePerTenMembers")->findBy(
@@ -244,7 +254,7 @@ class OnePerTenController extends SEIPController {
         $nombreEstado = $request->get("nombreEstado");
 
         $idUserOne = $request->get("idUserOne");
-        
+
         $onePerTen = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\OnePerTen")->getOnePerTen($request->get("idUserOne"));
         //$onePerTen = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\OnePerTen")->findOneBy(array("user" => $idUserOne));
 
