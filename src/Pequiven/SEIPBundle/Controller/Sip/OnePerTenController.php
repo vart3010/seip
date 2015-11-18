@@ -244,8 +244,9 @@ class OnePerTenController extends SEIPController {
         $nombreEstado = $request->get("nombreEstado");
 
         $idUserOne = $request->get("idUserOne");
-
-        $onePerTen = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\OnePerTen")->findOneBy(array("user" => $idUserOne));
+        
+        $onePerTen = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\OnePerTen")->getOnePerTen($request->get("idUserOne"));
+        //$onePerTen = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\OnePerTen")->findOneBy(array("user" => $idUserOne));
 
 
         $em->getConnection()->beginTransaction();
@@ -257,7 +258,7 @@ class OnePerTenController extends SEIPController {
 //        $em->persist($onePerTen);
         //MEMBERS
         $onePerTenMembers = new OnePerTenMembers();
-        $onePerTenMembers->setOne($onePerTen);
+        $onePerTenMembers->setOne($onePerTen[0]);
         $onePerTenMembers->setCedula($cedula);
         $onePerTenMembers->setNombre($nombre);
         $onePerTenMembers->setCodCentro($codCentro);
