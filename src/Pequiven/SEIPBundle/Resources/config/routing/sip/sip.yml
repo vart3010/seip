@@ -249,3 +249,11 @@ update_assistance_ubch:
     path: /sip/ubch/update
     defaults:
         _controller: pequiven.controller.ubch:updateAssistance
+pequiven_sip_cutl_list_pqv:
+    path: /center/list-pqv/{idCentro}.{_format}
+    defaults:
+        _controller: pequiven.controller.center:listPqvAction
+        _format: html
+    requirements:
+        _format: html|json|xml        
+    methods: [GET]

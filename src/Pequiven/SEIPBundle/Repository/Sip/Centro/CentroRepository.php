@@ -22,8 +22,37 @@ class CentroRepository extends EntityRepository {
         return $this->createPaginator($criteria, $orderBy);
     }
 
+    /**
+     * Crea un paginador para los Votantes de Personal PQV
+     * 
+     * @param array $criteria
+     * @param array $orderBy
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    public function createPaginatorByCentroPqv(array $criteria = null, array $orderBy = null) {
+        //$criteria['for_view_pqv'] = true;        
+        return $this->createPaginator($criteria, $orderBy);
+    }
+
     protected function applyCriteria(\Doctrine\ORM\QueryBuilder $queryBuilder, array $criteria = null) {
         $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
+
+        if(($codCentro = $criteria->remove('codCentro'))){
+            //var_dump($codCentro);            
+            $em = $this->getEntityManager();
+            $db = $em->getConnection();
+
+            $sql = 'SELECT o.cedula
+                FROM sip_onePerTen AS o
+                INNER JOIN sip_rep AS sp ON o.cedula = sp.cedula
+                WHERE sp.codigoCentro ='.$codCentro;            
+
+            $stmt = $db->prepare($sql);
+            $stmt->execute();
+            $result = $stmt->fetchAll();
+            
+            return $result;
+        }
 
         if (($nombreCentro = $criteria->remove('centro'))) {
             $queryBuilder->andWhere($queryBuilder->expr()->like('ctro.description', "'%" . $nombreCentro . "%'"));

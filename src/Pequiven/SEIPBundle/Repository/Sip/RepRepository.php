@@ -20,7 +20,7 @@ class RepRepository extends EntityRepository {
         $em = $this->getEntityManager();
         $db = $em->getConnection();
 
-        $sql = 'SELECT o.cedula, sp.cedula
+        $sql = 'SELECT *
             FROM sip_onePerTen AS o
             INNER JOIN sip_rep AS sp ON o.cedula = sp.cedula
             WHERE sp.codigoCentro ='.$codCentro;            
@@ -29,13 +29,6 @@ class RepRepository extends EntityRepository {
         $stmt->execute();
         $result = $stmt->fetchAll();
         
-        /*SELECT u.name, c.name
-        FROM SMTCBundle:Country c
-        JOIN SMTCBundle:User u WITH u.country = c.id*/
-
-        //var_dump(count($result));
-        //var_dump($result);
-        //die();
         return $result;
 
     }

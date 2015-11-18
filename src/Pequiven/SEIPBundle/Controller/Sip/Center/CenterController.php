@@ -445,9 +445,8 @@ class CenterController extends SEIPController {
         $center = $this->get('pequiven.repository.center')->find($id);
 
         //Personal PQV por centro
-        //$result = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Rep")->getPqvCentro($center->getCodigoCentro());
-        
-
+        $result = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Rep")->getPqvCentro($center->getCodigoCentro());
+        $result = count($result);
         $codigoCentro = $center->getCodigoCentro();
 
         $cutl = $this->get('pequiven.repository.cutl')->findBy(array('codigoCentro' => $codigoCentro));
@@ -531,7 +530,8 @@ class CenterController extends SEIPController {
                     'ubchCargo'     => $ubchCargo,
                     'cantCutl'      => $cantCutl,
                     'validacionCutl' => $validacionCutl,
-                    'centerAct'     => $centerAct
+                    'centerAct'     => $centerAct,
+                    'pqvCentro'     => $result
         ));
     }
 
@@ -565,6 +565,72 @@ class CenterController extends SEIPController {
         $reportService->DownloadReportService($parameters, $route);
 
         return $this->redirect($this->generateUrl('pequiven_sip_center_show', array('id' => $id)));
+    }
+
+    /**
+     *
+     *  Lista de Personal PQV
+     *
+     */
+    public function listPqvAction(Request $request){
+        $idCentro = $request->get('idCentro');
+        $center = $this->get('pequiven.repository.center')->find($idCentro);
+        $codCentro = $center->getCodigoCentro();//Cargo el codigo del centro
+
+        $criteria = $request->get('filter', $this->config->getCriteria());
+        $sorting = $request->get('sorting', $this->config->getSorting());
+
+        $repository = $this->getRepository();
+        
+        $criteria['codCentro'] = $codCentro;
+        //$repository = $this->getRepository('pequiven.repository.center')->createPaginatorByCentroPqv($criteria, $sorting);
+        $repository = $this->getRepository('pequiven.repository.center');
+        
+        if ($this->config->isPaginated()) {
+            $resources = $this->resourceResolver->getResource(
+                    $repository, 'createPaginatorByCentroPqv', array($criteria, $sorting)
+            );
+
+            $maxPerPage = $this->config->getPaginationMaxPerPage();
+            if (($limit = $request->query->get('limit')) && $limit > 0) {
+                if ($limit > 100) {
+                    $limit = 100;
+                }
+                $maxPerPage = $limit;
+            }
+            $resources->setCurrentPage($request->get('page', 1), true, true);
+            $resources->setMaxPerPage($maxPerPage);
+        } else {
+            $resources = $this->resourceResolver->getResource(
+                    $repository, 'findBy', array($criteria, $sorting, $this->config->getLimit())
+            );
+        }
+
+        $routeParameters = array(
+            '_format' => 'json',
+            'idCentro'=> $idCentro
+        );
+        $apiDataUrl = $this->generateUrl('pequiven_sip_cutl_list_pqv', $routeParameters);
+
+        $view = $this
+                ->view()
+                ->setTemplate($this->config->getTemplate('listPqv.html'))
+                ->setTemplateVar($this->config->getPluralResourceName())
+        ;
+        if ($request->get('_format') == 'html') {
+            $data = array(
+                'apiDataUrl' => $apiDataUrl,
+                $this->config->getPluralResourceName() => $resources,
+            );
+            $view->setData($data);
+        } else {
+            $view->getSerializationContext()->setGroups(array('id', 'api_list', 'codigoCentro'));
+            $formatData = $request->get('_formatData', 'default');
+
+            $view->setData($resources->toArray('', array(), $formatData));
+        }
+
+        return $this->handleView($view);       
     }
 
 }
