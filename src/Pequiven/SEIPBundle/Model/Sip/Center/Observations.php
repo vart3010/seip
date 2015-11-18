@@ -26,6 +26,7 @@ abstract class Observations {
     const SERVICIO_AGUA = 9;
     const SERVICIO_ASEO = 10;
     const MATERIAL_OFICINA = 11;
+    const CAVA = 12;
 
     /**
      * Status
@@ -97,11 +98,12 @@ abstract class Observations {
             self::LOGISTICA => 'Logistica',
             self::ASISTENCIA => 'Asistencia',
             self::TELEFONIA => 'Telefonia',
-            self::OTROS => 'Otros...',
             self::SERVICIO_AGUA => 'Servicios de Agua',
             self::SERVICIO_LUZ => 'Servicios de Luz',
             self::SERVICIO_ASEO => 'Servicios de Aseo',
-            self::MATERIAL_OFICINA => 'Material de Oficina'
+            self::MATERIAL_OFICINA => 'Material de Oficina',
+            self::CAVA => 'Cava',
+            self::OTROS => 'Otros...',
         ];
         return $levelProcessArray;
     }
