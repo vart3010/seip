@@ -57,24 +57,23 @@ class CenterController extends SEIPController {
      * @return type
      */
     public function addAssistsAction(Request $request) {
-        
+
         $ObsCentro = $request->get('sip_center_assists')["obs_centro"];
-        $fecha = $request->get('sip_center_assists')['fecha'];        
-        
+        $fecha = $request->get('sip_center_assists')['fecha'];
+
         $em = $this->getDoctrine()->getManager();
 
         $codigoCentro = $request->get('idCenter');
 
         $cutl = $this->get('pequiven.repository.cutl')->findBy(array('codigoCentro' => $codigoCentro));
-        
+
         //$assist = $this->get('pequiven.repository.assists')->findBy(array('codigoCentro' => $codigoCentro));
-        
         //$fecha = $request->get('sip_center_assists')['fecha'];
         //$fecha = date("Y-d-m H:i:s", strtotime($fecha)); 
         //$aprob = 1;
-        
-        $fecha = date_create_from_format("d/m/Y",$fecha);
-        
+
+        $fecha = date_create_from_format("d/m/Y", $fecha);
+
         $contCutl = count($cutl);
         $cont = 1;
 
@@ -87,7 +86,7 @@ class CenterController extends SEIPController {
             } else {
                 $status = 0;
             }
-            
+
             //Carga de Asistencia
             if (isset($request->get('sip_center_assists')[$idAssist])) {
                 $value = 1;
@@ -114,13 +113,13 @@ class CenterController extends SEIPController {
                 $Assists = $form->getData();
                 $Assists->setCodigoCentro($codigoCentro);
                 $Assists->setCedula($cedulaCutl);
-                $Assists->setAssists($value);                
+                $Assists->setAssists($value);
                 $Assists->setObservations($Observations);
                 $em->persist($Assists);
                 $em->flush();
-                
-                if ($cont == 1) {                    
-                    $statusCentro  = new StatusCentro();
+
+                if ($cont == 1) {
+                    $statusCentro = new StatusCentro();
                     $statusCentro->setCodigoCentro($codigoCentro);
                     $statusCentro->setFecha($fecha);
                     $statusCentro->setStatus($status);
@@ -454,19 +453,19 @@ class CenterController extends SEIPController {
         $centerAct = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Center\StatusCentro")->findBy(array("codigoCentro" => $codigoCentro));
 
         $ubch = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Ubch")->findBy(array("codigoCentro" => $codigoCentro));
-        
+
         $cantCutl = count($cutl);
         //Carga de Nombre de CUTL
-        if($cantCutl == 0){
+        if ($cantCutl == 0) {
             $nomCutl = array();
             $cedula = 0;
-        } else{            
-            foreach ($cutl as $value) {                
+        } else {
+            foreach ($cutl as $value) {
                 $nomCutl[$value->getCedula()] = $value->getNombre();
                 $cedula = $value->getCedula();
             }
         }
-        
+
         $validacionCutl = $cedula;
         //var_dump($nomCutl);
         //die();
@@ -482,7 +481,9 @@ class CenterController extends SEIPController {
             8 => 'Servicios de Agua',
             9 => 'Servicios de Luz',
             10 => 'Servicios de Aseo',
-            11 => 'Material de Oficina'
+            11 => 'Material de Oficina',
+            12 => 'Cava',
+            13 => 'Termo de Agua'
         ];
 
         //Carga de status
@@ -506,7 +507,7 @@ class CenterController extends SEIPController {
         //Carga de status
         $ubchCargo = [
             1 => "Jefe",
-            2 => "Patrullero",            
+            2 => "Patrullero",
         ];
 
         $assist = $this->get('pequiven.repository.assists')->findBy(array('codigoCentro' => $codigoCentro));
@@ -516,22 +517,21 @@ class CenterController extends SEIPController {
         $inventory = $this->get('pequiven.repository.inventory')->findBy(array('codigoCentro' => $codigoCentro));
 
         return $this->render('PequivenSEIPBundle:Sip:Center\show.html.twig', array(
-
-                    'center'        => $center,
-                    'cutl'          => $cutl,
-                    'assist'        => $assist,
-                    'observations'  => $observations,
-                    'nomCutl'       => $nomCutl,
-                    'catObs'        => $catObs,
-                    'status'        => $status,
-                    'inventory'     => $inventory,
-                    'colorStatus'   => $color,
-                    'ubch'          => $ubch,
-                    'ubchCargo'     => $ubchCargo,
-                    'cantCutl'      => $cantCutl,
+                    'center' => $center,
+                    'cutl' => $cutl,
+                    'assist' => $assist,
+                    'observations' => $observations,
+                    'nomCutl' => $nomCutl,
+                    'catObs' => $catObs,
+                    'status' => $status,
+                    'inventory' => $inventory,
+                    'colorStatus' => $color,
+                    'ubch' => $ubch,
+                    'ubchCargo' => $ubchCargo,
+                    'cantCutl' => $cantCutl,
                     'validacionCutl' => $validacionCutl,
-                    'centerAct'     => $centerAct,
-                    'pqvCentro'     => $result
+                    'centerAct' => $centerAct,
+                    'pqvCentro' => $result
         ));
     }
 
@@ -572,17 +572,17 @@ class CenterController extends SEIPController {
      *  Lista de Personal PQV
      *
      */
-    public function listPqvAction(Request $request){
-        
+    public function listPqvAction(Request $request) {
+
         $idCentro = $request->get('idCentro');
         $center = $this->get('pequiven.repository.center')->find($idCentro);
-        $codCentro = $center->getCodigoCentro();//Cargo el codigo del centro
+        $codCentro = $center->getCodigoCentro(); //Cargo el codigo del centro
 
         $criteria = $request->get('filter', $this->config->getCriteria());
         $sorting = $request->get('sorting', $this->config->getSorting());
 
         $repository = $this->getRepository();
-        
+
         $criteria['codCentro'] = $codCentro;
         //$repository = $this->getRepository('pequiven.repository.center')->createPaginatorByCentroPqv($criteria, $sorting);
         $repository = $this->getRepository('pequiven.repository.center');
@@ -609,7 +609,7 @@ class CenterController extends SEIPController {
 
         $routeParameters = array(
             '_format' => 'json',
-            'idCentro'=> $idCentro
+            'idCentro' => $idCentro
         );
         $apiDataUrl = $this->generateUrl('pequiven_sip_cutl_list_pqv', $routeParameters);
 
@@ -631,7 +631,7 @@ class CenterController extends SEIPController {
             $view->setData($resources->toArray('', array(), $formatData));
         }
 
-        return $this->handleView($view);       
+        return $this->handleView($view);
     }
 
 }
