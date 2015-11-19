@@ -103,14 +103,14 @@ class Rep {
     /**
      * @var string
      *
-     * @ORM\Column(name="direccion", type="string")
+     * @ORM\Column(name="direccion", type="string", nullable=true)
      */
     private $direccion;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="mesa", type="string")
+     * @ORM\Column(name="mesa", type="string", nullable=true)
      */
     private $mesa;
 
