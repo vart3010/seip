@@ -712,11 +712,11 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
 
         $links['self']['show'] = "";
 
-        $arrayLabel = Observations::getCategoriasObservations();
-        $arrayStatus = Observations::getStatusObservations();
+        //$arrayLabel = Observations::getCategoriasObservations();
+        //$arrayStatus = Observations::getStatusObservations();
         
-        $event->getVisitor()->addData('nombreCategoria', $arrayLabel[$object->getCategoria()]);
-        $event->getVisitor()->addData('nombreStatus', $arrayStatus[$object->getStatus()]);
+        //$event->getVisitor()->addData('nombreCategoria', $arrayLabel[$object->getCategoria()]);
+        //$event->getVisitor()->addData('nombreStatus', $arrayStatus[$object->getStatus()]);
         $event->getVisitor()->addData('_links', $links);
     }
 

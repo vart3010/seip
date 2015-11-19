@@ -1697,7 +1697,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                                 "route" => "pequiven_sip_request_list",
                                 'labelAttributes' => array('icon' => 'fa fa-table',),
                             ))
-                    )->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.list', $section)));
+                    )->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.list_request', $section)));
 
             $request->addChild($requestMenu);
             //Inventario
