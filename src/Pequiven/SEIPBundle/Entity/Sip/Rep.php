@@ -61,7 +61,7 @@ class Rep {
     /**
      * @var string
      *
-     * @ORM\Column(name="psuv", type="string")
+     * @ORM\Column(name="psuv", type="string", nullable=true)
      */
     private $psuv;
 
