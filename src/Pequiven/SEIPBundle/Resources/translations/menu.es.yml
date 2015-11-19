@@ -246,5 +246,7 @@ app:
                         centros: Centros
                         register: Registrar
                         list: Lista
+                        request: Requerimientos
+                        list_inventory: Lista Inventario
 
                             

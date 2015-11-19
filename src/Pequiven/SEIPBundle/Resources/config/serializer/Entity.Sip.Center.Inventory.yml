@@ -1,0 +1,21 @@
+Pequiven\SEIPBundle\Entity\Sip\Center\Inventory:
+    exclusion_policy: ALL
+    properties:
+        id:
+            expose: true
+            groups: [id]
+        codigoCentro:
+            expose: true
+            groups: [codigoCentro]
+        material:
+            expose: true
+            groups: [material]
+        cantidad:
+            expose: true
+            groups: [cantidad]
+        fecha:
+            expose: true
+            groups: [fecha]
+        observations:
+            expose: true
+            groups: [observations]

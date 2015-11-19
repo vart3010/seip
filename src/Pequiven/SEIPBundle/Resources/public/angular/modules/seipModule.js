@@ -2810,6 +2810,49 @@ angular.module('seipModule.controllers', [])
                 }
             };                
         })
+
+        .controller('SipRequestGetFilters', function ($scope, $http) {
+            $scope.data = {
+                LabelsRequestStatus: null,
+                LabelsCategorias: null,
+            };
+            $scope.model = {                
+                RequestStatus: null,
+                Categorias: null,
+                
+            };
+           //STATUS DE REQUERIMIENTOS
+            $scope.viewByStatus = function (status) {
+                $scope.tableParams.$params.filter['status'] = status;
+                var selectStatus = angular.element('#selectStatus');
+                selectStatus.select2("val", status);
+//                $scope.resetViewNotified();
+            }
+            
+            $scope.$watch("model.RequestStatus", function (newParams, oldParams) {
+                if ($scope.model.RequestStatus != null && $scope.model.RequestStatus.id != undefined) {
+                    $scope.tableParams.$params.filter['status'] = $scope.model.RequestStatus.id;                    
+                } else {
+                    $scope.tableParams.$params.filter['status'] = null;
+                }
+            });
+
+            //CATEGORIAS DE REQUERIMIENTOS
+            $scope.viewByCategorias = function (categoria) {
+                $scope.tableParams.$params.filter['categoria'] = status;
+                var selectCategorias = angular.element('#selectCategorias');
+                selectCategorias.select2("val", categoria);
+//                $scope.resetViewNotified();
+            }
+            
+            $scope.$watch("model.Categorias", function (newParams, oldParams) {
+                if ($scope.model.Categorias != null && $scope.model.Categorias.id != undefined) {
+                    $scope.tableParams.$params.filter['categoria'] = $scope.model.Categorias.id;                    
+                } else {
+                    $scope.tableParams.$params.filter['categoria'] = null;
+                }
+            });
+        })
         //fin
         .controller('ReportTemplateController', function ($scope, notificationBarService, $http, notifyService, $filter) {
 

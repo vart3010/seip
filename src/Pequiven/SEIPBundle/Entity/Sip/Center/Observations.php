@@ -4,6 +4,7 @@ namespace Pequiven\SEIPBundle\Entity\Sip\Center;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Pequiven\SEIPBundle\Model\Sip\Center\Observations as modelObservations;
 
 /**
  * Parroquia
@@ -12,7 +13,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @ORM\Entity()
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
-class Observations {
+class Observations extends modelObservations{
 
     /**
      * @var integer

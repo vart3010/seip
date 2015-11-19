@@ -1,0 +1,7 @@
+Pequiven\SEIPBundle\Entity\Sip\Center\Material:
+    exclusion_policy: ALL
+    properties:
+        
+        description:
+            expose: true
+            groups: [api_list]
