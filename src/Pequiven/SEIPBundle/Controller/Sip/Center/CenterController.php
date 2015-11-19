@@ -445,8 +445,11 @@ class CenterController extends SEIPController {
         $center = $this->get('pequiven.repository.center')->find($id);
 
         //Personal PQV por centro
-        $result = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Rep")->getPqvCentro($center->getCodigoCentro());
+        //$result = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Rep")->getPqvCentro($center->getCodigoCentro());
+        $result = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\NominaCentro")->findBy(array('codigoCentro' => $center->getCodigoCentro()));
+        
         $result = count($result);
+        
         $codigoCentro = $center->getCodigoCentro();
 
         $cutl = $this->get('pequiven.repository.cutl')->findBy(array('codigoCentro' => $codigoCentro));
@@ -583,9 +586,9 @@ class CenterController extends SEIPController {
 
         $repository = $this->getRepository();
         
-        $criteria['codCentro'] = $codCentro;
-        //$repository = $this->getRepository('pequiven.repository.center')->createPaginatorByCentroPqv($criteria, $sorting);
-        $repository = $this->getRepository('pequiven.repository.center');
+        $repository = $this->get('pequiven.repository.nominaCentro');        
+        
+        $criteria['codCentro'] = $codCentro;        
 
         if ($this->config->isPaginated()) {
             $resources = $this->resourceResolver->getResource(
@@ -625,7 +628,7 @@ class CenterController extends SEIPController {
             );
             $view->setData($data);
         } else {
-            $view->getSerializationContext()->setGroups(array('id', 'api_list', 'codigoCentro'));
+            $view->getSerializationContext()->setGroups(array('id', 'api_list','cedula','nombre', 'codigoCentro'));
             $formatData = $request->get('_formatData', 'default');
 
             $view->setData($resources->toArray('', array(), $formatData));
