@@ -4,7 +4,7 @@ Pequiven\SEIPBundle\Entity\Sip\NominaCentro:
         id:
             expose: true
             groups: [id]
-        Nombre:
+        nombre:
             expose: true
             groups: [api_list]
         cedula:
@@ -16,6 +16,6 @@ Pequiven\SEIPBundle\Entity\Sip\NominaCentro:
         codigoCentro:
             expose: true
             groups: [api_list]
-        Centro:
+        centro:
             expose: true
             groups: [api_list]

@@ -27,6 +27,7 @@ abstract class Observations {
     const SERVICIO_ASEO = 10;
     const MATERIAL_OFICINA = 11;
     const CAVA = 12;
+    const TERMO_AGUA = 13;
 
     /**
      * Status
@@ -103,6 +104,7 @@ abstract class Observations {
             self::SERVICIO_ASEO => 'Servicios de Aseo',
             self::MATERIAL_OFICINA => 'Material de Oficina',
             self::CAVA => 'Cava',
+            self::TERMO_AGUA => 'Termo De Agua',
             self::OTROS => 'Otros...',
         ];
         return $levelProcessArray;

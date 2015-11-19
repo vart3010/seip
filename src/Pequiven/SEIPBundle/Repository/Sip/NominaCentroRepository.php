@@ -50,18 +50,6 @@ class NominaCentroRepository extends EntityRepository {
         if (($codigoCentro = $criteria->remove('codigoCentro'))) {
             $queryBuilder->andWhere($queryBuilder->expr()->like('nc.codigoCentro', "'%" . $codigoCentro . "%'"));
         }
-
-        if (($estado = $criteria->remove('estado'))) {
-            $queryBuilder->andWhere($queryBuilder->expr()->like('nc.descriptionEstado', "'%" . $estado . "%'"));
-        }
-        
-        if (($municipio = $criteria->remove('municipio'))) {
-            $queryBuilder->andWhere($queryBuilder->expr()->like('nc.descriptionMunicipio', "'%" . $municipio . "%'"));
-        }
-
-        if (($parroquia = $criteria->remove('parroquia'))) {
-            $queryBuilder->andWhere($queryBuilder->expr()->like('nc.descriptionParroquia', "'%" . $parroquia . "%'"));
-        }
         
         parent::applyCriteria($queryBuilder, $criteria->toArray());
     }

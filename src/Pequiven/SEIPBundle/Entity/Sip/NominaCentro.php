@@ -67,16 +67,16 @@ class NominaCentro {
     /**
      * @var string
      *
-     * @ORM\Column(name="Centro", type="string",nullable=true)
+     * @ORM\Column(name="centro", type="string",nullable=true)
      */
-    private $Centro;
+    private $centro;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="Nombre", type="string", length=255,nullable=true)
+     * @ORM\Column(name="nombre", type="string", length=255,nullable=true)
      */
-    private $Nombre;
+    private $nombre;
     
     function setUserid($userid) {
         $this->userid = $userid;
@@ -136,19 +136,19 @@ class NominaCentro {
     }
 
 
-    function setCentro($Centro) {
-        $this->Centro = $Centro;
+    function setCentro($centro) {
+        $this->centro = $centro;
     }
     
     function getCentro() {
-        return $this->Centro;
+        return $this->centro;
     }
 
-    function setNombre($Nombre) {
-        $this->Nombre = $Nombre;
+    function setNombre($nombre) {
+        $this->nombre = $nombre;
     }
     
     function getNombre() {
-        return $this->Nombre;
+        return $this->nombre;
     }
 }
