@@ -59,6 +59,13 @@ class Observations extends modelObservations{
      */
     private $status;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="centro", type="text")
+     */
+    private $centro;
+
      /**
      * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
      */
@@ -107,6 +114,14 @@ class Observations extends modelObservations{
 
     function getStatus() {
         return $this->status;
+    }
+
+    function setCentro($centro) {
+        $this->centro = $centro;
+    }
+
+    function getCentro() {
+        return $this->centro;
     }
 
     /**
