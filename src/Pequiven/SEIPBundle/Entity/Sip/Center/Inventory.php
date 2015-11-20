@@ -60,7 +60,7 @@ class Inventory {
     /**
      * @var string
      *
-     * @ORM\Column(name="centro", type="text")
+     * @ORM\Column(name="centro", type="text",nullable=true)
      */
     private $centro;
 
