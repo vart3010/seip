@@ -119,7 +119,7 @@ class OnePerTenController extends SEIPController {
 
             //SE BUSCA EL ESTADO EN REP
             $repOne = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Rep")->findOneBy(array("cedula" => $ciOne));
-            //var_dump(count($repOne));
+
 
             //if (!isset($repOne)) {
             if ((count($repOne) <= 0)) {
@@ -148,9 +148,13 @@ class OnePerTenController extends SEIPController {
 //            $userCneMember = $cneMember->getDatosCne($cedula);
 //            $estadoMember = $userCneMember["estado"];
                 $repMember = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Rep")->findOneBy(array("cedula" => $cedula));
-                $codEstadoMember = $repMember->getCodigoEstado();
-                $estadoMember = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Estado")->findOneBy(array("id" => $codEstadoMember));
-                $estadoMember = $estadoMember->getDescription();
+                if (count($repMember) > 0) {
+                    $codEstadoMember = $repMember->getCodigoEstado();
+                    $estadoMember = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Estado")->findOneBy(array("id" => $codEstadoMember));
+                    $estadoMember = $estadoMember->getDescription();
+                } else {
+                    $estadoMember = "";
+                }
             }
 
 
