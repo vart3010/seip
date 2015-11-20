@@ -200,7 +200,7 @@ class OnePerTenController extends SEIPController {
                                             $datos["msj"] = "La persona debe pertenecer al mismo estado.";
                                         }
                                     } else {
-                                            $datos["msj"] = "Problemas con la API.";
+                                            $datos["msj"] = "Por favor consulte nuevamente, estamos teniendo con la conexión al CNE.";
                                     }
                                 } else {
                                     $nameCentro = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->getCentro($rep->getCodigoCentro());
