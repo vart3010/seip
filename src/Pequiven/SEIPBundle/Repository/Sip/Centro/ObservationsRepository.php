@@ -36,6 +36,10 @@ class ObservationsRepository extends EntityRepository {
         if (($fecha = $criteria->remove('fecha'))) {
             $queryBuilder->andWhere($queryBuilder->expr()->like('obs.fecha', "'%" . $fecha . "%'"));
         }
+
+        if (($centro = $criteria->remove('centro'))) {
+            $queryBuilder->andWhere($queryBuilder->expr()->like('obs.centro', "'%" . $centro . "%'"));
+        }
         
         parent::applyCriteria($queryBuilder, $criteria->toArray());
     }
