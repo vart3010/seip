@@ -58,6 +58,13 @@ class Inventory {
     private $material;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="centro", type="text")
+     */
+    private $centro;
+
+    /**
      * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
      */
     private $deletedAt;
@@ -97,6 +104,14 @@ class Inventory {
 
     function getCantidad() {
         return $this->cantidad;
+    }
+
+    function setCentro($centro) {
+        $this->centro = $centro;
+    }
+
+    function getCentro() {
+        return $this->centro;
     }
 
     /**
