@@ -81,9 +81,9 @@
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">N° de Electores Pequiven</label>
-                    {#<a href="{{ path("pequiven_sip_cutl_list_pqv",{idCentro:center.id})}}">#}
+                    <a href="{{ path("pequiven_sip_cutl_list_pqv",{idCentro:center.id})}}">
                         {{ pqvCentro }}
-                    {#</a>#}
+                    </a>
                 </p>
             </div>
             {% if center.eje > 0 %}

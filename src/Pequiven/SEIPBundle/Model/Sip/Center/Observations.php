@@ -28,6 +28,8 @@ abstract class Observations {
     const MATERIAL_OFICINA = 11;
     const CAVA = 12;
     const TERMO_AGUA = 13;
+    const CNE = 14;
+    const COMIDA = 15;
 
     /**
      * Status
@@ -39,58 +41,7 @@ abstract class Observations {
     const CERRADO = 4;
     const RECHAZADO = 5;
 
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="categorias", type="integer")
-     */
-    protected $categorias;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="status", type="integer")
-     */
-    protected $status;
-
-    /**
-     * 
-     * @param integer
-     * @return 
-     */
-    function setCategorias($categorias) {
-        $this->categorias = $categorias;
-        return $this;
-    }
-
-    /**
-     * 
-     * @param integer
-     * @return 
-     */
-    function getCategorias() {
-        return $this->categorias;
-    }
-
-    /**
-     * 
-     * @param integer
-     * @return 
-     */
-    function setStatus($status) {
-        $this->status = $status;
-        return $this;
-    }
-
-    /**
-     * 
-     * @param integer
-     * @return 
-     */
-    function getStatus() {
-        return $this->status;
-    }
-
+    
     static function getCategoriasObservations() {
         static $levelProcessArray = [
             self::PROPAGANDA => 'Propaganda',
@@ -105,6 +56,8 @@ abstract class Observations {
             self::MATERIAL_OFICINA => 'Material de Oficina',
             self::CAVA => 'Cava',
             self::TERMO_AGUA => 'Termo De Agua',
+            self::CNE => 'CNE',
+            self::COMIDA => 'Comida',
             self::OTROS => 'Otros...',
         ];
         return $levelProcessArray;
@@ -112,6 +65,7 @@ abstract class Observations {
 
     static function getStatusObservations() {
         static $status = [
+            self::ABIERTO => 'Abierto',
             self::PENDIENTE => 'Pendiente',
             self::SEGUIMIENTO => 'Seguimiento',
             self::CERRADO => 'Cerrado',

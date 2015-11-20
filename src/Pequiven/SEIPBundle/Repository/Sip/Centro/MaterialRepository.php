@@ -7,7 +7,7 @@ use Pequiven\SEIPBundle\Doctrine\ORM\SeipEntityRepository as EntityRepository;
 
 /**
  * Repositorio asistencia
- *
+ * @author Maximo Sojo <maxsojo13@gmail.com>
  */
 class MaterialRepository extends EntityRepository {  
 
@@ -19,7 +19,7 @@ class MaterialRepository extends EntityRepository {
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
     function findQuerySipMaterial() {
-        
+
         $queryBuilder = $this->getQueryBuilder();
         $queryBuilder
                 ->select('mat')

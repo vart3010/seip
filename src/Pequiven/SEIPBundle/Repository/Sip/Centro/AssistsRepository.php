@@ -8,6 +8,7 @@ use Pequiven\SEIPBundle\Doctrine\ORM\SeipEntityRepository as EntityRepository;
 /**
  * Repositorio asistencia
  *
+ * @author Maximo Sojo <maxsojo13@gmail.com>
  */
 class AssistsRepository extends EntityRepository {    
    

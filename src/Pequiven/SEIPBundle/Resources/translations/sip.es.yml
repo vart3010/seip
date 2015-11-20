@@ -3,6 +3,7 @@ sip:
     consulta: Consulta de 1x10
     onePerTen: 1x10
     list: Lista
+    list_inventory: Lista Inventario
     cedula: Cédula
     centro: Centro
     nombre: Nombre

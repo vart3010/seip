@@ -16,6 +16,7 @@ use JMS\Serializer\EventDispatcher\PreSerializeEvent;
 use Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram;
 use Pequiven\ArrangementProgramBundle\Entity\GoalDetails;
 use Pequiven\ObjetiveBundle\Entity\ObjetiveLevel;
+use Pequiven\SEIPBundle\Entity\Sip\Center\Observations;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -55,6 +56,7 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeCutl', 'class' => 'Pequiven\SEIPBundle\Entity\Sip\Cutl', 'format' => 'json'),
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeCenter', 'class' => 'Pequiven\SEIPBundle\Entity\Sip\Centro', 'format' => 'json'),
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeOnePerTen', 'class' => 'Pequiven\SEIPBundle\Entity\Sip\OnePerTen', 'format' => 'json'),
+            array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeObservationsSip', 'class' => 'Pequiven\SEIPBundle\Entity\Sip\Center\Observations', 'format' => 'json'),
         );
     }
 
@@ -701,6 +703,20 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
         $links['self']['show'] = $this->generateUrl('pequiven_search_members', array('user' => $user->getID()));
 
         $event->getVisitor()->addData('userName', $user->getFirstName() . " " . $user->getLastName());
+        $event->getVisitor()->addData('_links', $links);
+    }
+
+    public function onPostSerializeObservationsSip(ObjectEvent $event) {
+        
+        $object = $event->getObject();
+
+        $links['self']['show'] = "";
+
+        //$arrayLabel = Observations::getCategoriasObservations();
+        //$arrayStatus = Observations::getStatusObservations();
+        
+        //$event->getVisitor()->addData('nombreCategoria', $arrayLabel[$object->getCategoria()]);
+        //$event->getVisitor()->addData('nombreStatus', $arrayStatus[$object->getStatus()]);
         $event->getVisitor()->addData('_links', $links);
     }
 

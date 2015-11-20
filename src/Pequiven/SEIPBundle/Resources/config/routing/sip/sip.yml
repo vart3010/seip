@@ -257,3 +257,20 @@ pequiven_sip_cutl_list_pqv:
     requirements:
         _format: html|json|xml        
     methods: [GET]
+#Lista de Requerimientos
+pequiven_sip_request_list:
+    path: /request/list.{_format}
+    defaults:
+        _controller: pequiven.controller.center:listRequestAction
+        _format: html
+    requirements:
+        _format: html|json|xml        
+    methods: [GET]
+pequiven_sip_request_list_inventory:
+    path: /inventory/list.{_format}
+    defaults:
+        _controller: pequiven.controller.center:listInventoryAction
+        _format: html
+    requirements:
+        _format: html|json|xml        
+    methods: [GET]

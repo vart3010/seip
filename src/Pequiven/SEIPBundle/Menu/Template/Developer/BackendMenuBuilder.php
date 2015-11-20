@@ -1685,6 +1685,33 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
             $menuSip->addChild($cutl);
         }
 
+        if ($this->isGranted(array('ROLE_SEIP_SIP_REQ'))) {
+            //Requerimientos
+            $request = $this->factory->createItem('sip.request', $this->getSubLevelOptions(array(
+                                "route" => "",
+                                'labelAttributes' => array('icon' => 'fa fa-user',),
+                            ))
+                    )->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.request', $section)));
+            //Sub menu
+            $requestMenu = $this->factory->createItem('sip.list', $this->getSubLevelOptions(array(
+                                "route" => "pequiven_sip_request_list",
+                                'labelAttributes' => array('icon' => 'fa fa-table',),
+                            ))
+                    )->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.list_request', $section)));
+
+            $request->addChild($requestMenu);
+            //Inventario
+            $requestMenu = $this->factory->createItem('sip.list_inventory', $this->getSubLevelOptions(array(
+                                "route" => "pequiven_sip_request_list_inventory",
+                                'labelAttributes' => array('icon' => 'fa fa-table',),
+                            ))
+                    )->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.list_inventory', $section)));
+
+            $request->addChild($requestMenu);
+
+            $menuSip->addChild($request);
+        }
+
         $menu->addChild($menuSip);
     }
 

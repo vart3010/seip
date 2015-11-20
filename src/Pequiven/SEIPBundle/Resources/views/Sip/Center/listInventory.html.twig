@@ -10,7 +10,7 @@
 {% block before_body %}
     {{ contentHeader(
     	("sip.center.name"|trans ),
-        ("Votantes Pequiven")
+        ("Lista de Inventario")
     ) }}
 {% endblock %}
 
@@ -22,29 +22,29 @@
             <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager" template-header="custom/header" api-data-url="{{ apiDataUrl }}" export-csv="csv" class="table table-responsive table-extra-info" >
                 <tbody> 
                     <tr ng-repeat="result in $data" data="{$ result|json $}">
-                        <td data-title="'Cedula'" filter="{'cedula' : 'text'}">
+                        <td data-title="'Material'" filter="{'material.description' : 'text'}">
                             <a href="">
-                                {$ result.cedula $}
+                                {$ result.material.description $}
                             </a>
                         </td>
-                        <td data-title="'Nombre'" filter="{'nombre' : 'text'}">
+                        <td data-title="'Cantidad'" filter="{'cantidad' : 'text'}" align="center">
                             <a href="">
-                                {$ result.nombre $}
+                                {$ result.cantidad $}
                             </a>
                         </td>
-                        <td data-title="'Telefono'" filter="{'telefono' : 'text'}">
+                        <td data-title="'Observación'" filter="{'observations' : 'text'}">
                             <a href="">
-                                {$ result.telefono $}
+                                {$ result.observations $}
+                            </a>
+                        </td>
+                        <td data-title="'Fecha'" filter="{'fecha' : 'text'}">
+                            <a href="">
+                                {$ result.fecha $}
                             </a>
                         </td>
                         <td data-title="'Codigo Centro'" filter="{'codigoCentro' : 'text'}">
                             <a href="">
                                 {$ result.codigoCentro $}
-                            </a>
-                        </td>
-                        <td data-title="'Centro'" filter="{'centro' : 'text'}">
-                            <a href="">
-                                {$ result.centro $}
                             </a>
                         </td>
                     </tr>

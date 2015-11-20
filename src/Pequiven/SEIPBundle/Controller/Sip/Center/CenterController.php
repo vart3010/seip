@@ -444,8 +444,11 @@ class CenterController extends SEIPController {
         $center = $this->get('pequiven.repository.center')->find($id);
 
         //Personal PQV por centro
-        $result = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Rep")->getPqvCentro($center->getCodigoCentro());
+        //$result = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Rep")->getPqvCentro($center->getCodigoCentro());
+        $result = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\NominaCentro")->findBy(array('codigoCentro' => $center->getCodigoCentro()));
+        
         $result = count($result);
+        
         $codigoCentro = $center->getCodigoCentro();
 
         $cutl = $this->get('pequiven.repository.cutl')->findBy(array('codigoCentro' => $codigoCentro));
@@ -478,12 +481,14 @@ class CenterController extends SEIPController {
             5 => 'Asistencia',
             6 => 'Telefonia',
             7 => 'Otros...',
-            8 => 'Servicios de Agua',
-            9 => 'Servicios de Luz',
+            8 => 'Servicios de Luz',
+            9 => 'Servicios de Agua',
             10 => 'Servicios de Aseo',
             11 => 'Material de Oficina',
             12 => 'Cava',
-            13 => 'Termo de Agua'
+            13 => 'Termo de Agua',
+            14 => 'CNE',
+            15 => 'Comida'
         ];
 
         //Carga de status
@@ -513,7 +518,7 @@ class CenterController extends SEIPController {
         $assist = $this->get('pequiven.repository.assists')->findBy(array('codigoCentro' => $codigoCentro));
 
         $observations = $this->get('pequiven.repository.observations')->findBy(array('codigoCentro' => $codigoCentro));
-
+        
         $inventory = $this->get('pequiven.repository.inventory')->findBy(array('codigoCentro' => $codigoCentro));
 
         return $this->render('PequivenSEIPBundle:Sip:Center\show.html.twig', array(
@@ -582,10 +587,10 @@ class CenterController extends SEIPController {
         $sorting = $request->get('sorting', $this->config->getSorting());
 
         $repository = $this->getRepository();
+        $repository = $this->get('pequiven.repository.nominaCentro');        
+        
 
         $criteria['codCentro'] = $codCentro;
-        //$repository = $this->getRepository('pequiven.repository.center')->createPaginatorByCentroPqv($criteria, $sorting);
-        $repository = $this->getRepository('pequiven.repository.center');
 
         if ($this->config->isPaginated()) {
             $resources = $this->resourceResolver->getResource(
@@ -625,7 +630,147 @@ class CenterController extends SEIPController {
             );
             $view->setData($data);
         } else {
-            $view->getSerializationContext()->setGroups(array('id', 'api_list', 'codigoCentro'));
+            $view->getSerializationContext()->setGroups(array('id', 'api_list','cedula','nombre', 'codigoCentro'));
+            $formatData = $request->get('_formatData', 'default');
+
+            $view->setData($resources->toArray('', array(), $formatData));
+        }
+
+        return $this->handleView($view);
+    }
+
+
+    /**
+     *
+     *  Lista de de Requerimientos
+     *
+     */
+    public function listRequestAction(Request $request) {
+
+        $criteria = $request->get('filter', $this->config->getCriteria());
+        $sorting = $request->get('sorting', $this->config->getSorting());
+
+        $repository = $this->getRepository();
+        $repository = $this->get('pequiven.repository.observations');        
+        
+        //$criteria['codCentro'] = $codCentro;
+
+        if ($this->config->isPaginated()) {
+            $resources = $this->resourceResolver->getResource(
+                    $repository, 'createPaginatorByRequest', array($criteria, $sorting)
+            );
+
+            $maxPerPage = $this->config->getPaginationMaxPerPage();
+            if (($limit = $request->query->get('limit')) && $limit > 0) {
+                if ($limit > 100) {
+                    $limit = 100;
+                }
+                $maxPerPage = $limit;
+            }
+            $resources->setCurrentPage($request->get('page', 1), true, true);
+            $resources->setMaxPerPage($maxPerPage);
+        } else {
+            $resources = $this->resourceResolver->getResource(
+                    $repository, 'findBy', array($criteria, $sorting, $this->config->getLimit())
+            );
+        }
+
+        $routeParameters = array(
+            '_format' => 'json'
+        );
+        $apiDataUrl = $this->generateUrl('pequiven_sip_request_list', $routeParameters);
+
+        $view = $this
+                ->view()
+                ->setTemplate($this->config->getTemplate('listRequest.html'))
+                ->setTemplateVar($this->config->getPluralResourceName())
+        ;
+        if ($request->get('_format') == 'html') {
+            $labelsStatus = array();
+            foreach (Observations::getCategoriasObservations() as $key => $value) {
+                $labelsObservations[] = array(
+                    'id' => $key,
+                    'description' => $this->trans($value, array(), 'PequivenArrangementProgramBundle'),
+                );
+            }
+
+            foreach (Observations::getStatusObservations() as $key => $value) {
+                $labelsStatus[] = array(
+                    'id' => $key,
+                    'description' => $this->trans($value, array(), 'PequivenArrangementProgramBundle'),
+                );
+            }
+
+            $data = array(
+                'labelsObservations' => $labelsObservations,
+                'labelsStatus'       => $labelsStatus,
+                'apiDataUrl'         => $apiDataUrl,
+                $this->config->getPluralResourceName() => $resources,
+            );
+            $view->setData($data);
+        } else {
+            $view->getSerializationContext()->setGroups(array('id', 'api_list', 'codigoCentro', 'status', 'categoria', 'observations', 'fecha'));
+            $formatData = $request->get('_formatData', 'default');
+
+            $view->setData($resources->toArray('', array(), $formatData));
+        }
+
+        return $this->handleView($view);
+    }
+
+    /**
+     *
+     *  Lista de Inventario
+     *
+     */
+    public function listInventoryAction(Request $request) {
+
+        $criteria = $request->get('filter', $this->config->getCriteria());
+        $sorting = $request->get('sorting', $this->config->getSorting());
+
+        $repository = $this->getRepository();
+        $repository = $this->get('pequiven.repository.inventory');        
+        
+        //$criteria['codCentro'] = $codCentro;
+
+        if ($this->config->isPaginated()) {
+            $resources = $this->resourceResolver->getResource(
+                    $repository, 'createPaginatorByInventory', array($criteria, $sorting)
+            );
+
+            $maxPerPage = $this->config->getPaginationMaxPerPage();
+            if (($limit = $request->query->get('limit')) && $limit > 0) {
+                if ($limit > 100) {
+                    $limit = 100;
+                }
+                $maxPerPage = $limit;
+            }
+            $resources->setCurrentPage($request->get('page', 1), true, true);
+            $resources->setMaxPerPage($maxPerPage);
+        } else {
+            $resources = $this->resourceResolver->getResource(
+                    $repository, 'findBy', array($criteria, $sorting, $this->config->getLimit())
+            );
+        }
+
+        $routeParameters = array(
+            '_format' => 'json'
+        );
+        $apiDataUrl = $this->generateUrl('pequiven_sip_request_list_inventory', $routeParameters);
+
+        $view = $this
+                ->view()
+                ->setTemplate($this->config->getTemplate('listInventory.html'))
+                ->setTemplateVar($this->config->getPluralResourceName())
+        ;
+        if ($request->get('_format') == 'html') {
+            $data = array(
+                'apiDataUrl' => $apiDataUrl,
+                $this->config->getPluralResourceName() => $resources,
+            );
+            $view->setData($data);
+        } else {
+            $view->getSerializationContext()->setGroups(array('id', 'api_list', 'codigoCentro', 'material', 'cantidad', 'observations', 'fecha'));
             $formatData = $request->get('_formatData', 'default');
 
             $view->setData($resources->toArray('', array(), $formatData));
