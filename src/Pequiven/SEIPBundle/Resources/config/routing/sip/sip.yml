@@ -84,8 +84,6 @@ pequiven_sip_center_observations_status:
     methods: [GET]
     options:
         expose: true
-
-
 #Guardamos el formulario de las observaciones
 pequiven_sip_center_observations_add:
     path: /{idCenter}/addObservations.{_format}
@@ -249,6 +247,27 @@ update_assistance_ubch:
     path: /sip/ubch/update
     defaults:
         _controller: pequiven.controller.ubch:updateAssistance
+pequiven_sip_ubch_form_report:    
+    path: /{id}/get-form_ubch.{_format}
+    defaults:
+        _controller: pequiven.controller.ubch:formUbchAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET]
+    options:
+        expose: true
+#Guardamos el formulario de las observaciones
+pequiven_sip_ubch_add_report:
+    path: /{id}/addUbchReport.{_format}
+    defaults:
+        _controller: pequiven.controller.ubch:formUbchAction
+        _format: json
+    requirements:
+        _format: json
+    methods: [POST]
+    options:
+        expose: true
 pequiven_sip_cutl_list_pqv:
     path: /center/list-pqv/{idCentro}.{_format}
     defaults:

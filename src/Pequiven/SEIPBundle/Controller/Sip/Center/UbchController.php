@@ -6,6 +6,7 @@ use Pequiven\SEIPBundle\Controller\SEIPController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Pequiven\SEIPBundle\Entity\Sip\Ubch;
+use Pequiven\SEIPBundle\Form\Sip\Center\UbchType;
 
 
 /**
@@ -214,6 +215,54 @@ class UbchController extends SEIPController {
             $em->flush();
 
         return true;
+    }
+
+    /**
+     *
+     *
+     *
+     */
+    public function formUbchAction(Request $request){
+
+        $id = $request->get('id');
+
+        $em = $this->getDoctrine()->getEntityManager();
+
+        $Ubch = new Ubch();
+        $form = $this->createForm(new UbchType(), $Ubch);
+        
+        if (isset($request->get('sip_ubch')['observations'])) {
+            $id = $request->get('id');
+            
+            if (isset($request->get('sip_ubch')['notification'])) {
+                $not = 1;
+            } else {
+                $not = 0;
+            }
+            $Obs = $request->get('sip_ubch')['observations'];
+            $form->bind($this->getRequest());
+            
+            $Ubch = $this->get('pequiven.repository.ubch')->find($id);
+
+            $Ubch->setNotification($not);
+            $Ubch->setObservations($Obs);
+
+            $em->flush();
+
+            $this->get('session')->getFlashBag()->add('success', "Reporte Cargado Exitosamente");
+        } else {
+            $view = $this
+                    ->view()
+                    ->setTemplate('PequivenSEIPBundle:Sip:Center\Form\Ubch.html.twig')
+                    ->setTemplateVar($this->config->getPluralResourceName())
+                    ->setData(array(
+                'form' => $form->createView(),
+                    ))
+            ;
+            $view->getSerializationContext()->setGroups(array('id', 'api_list'));
+
+            return $view;
+        }
     }
 
 	/**
