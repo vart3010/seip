@@ -82,16 +82,27 @@ class ApiCneService {
             }
         }
         curl_close($curl);
-
-        return array(
-            "cedula" => $cedula,
-            "nombre" => $nombre,
-            "estado" => $estado,
-            "municipio" => $mcpo,
-            "parroquia" => $parroquia,
-            "direccion" => $centro,
-            "centro" => $direccion
-        );
+        if (isset($cedula)) {
+            return array(
+                "cedula" => $cedula,
+                "nombre" => $nombre,
+                "estado" => $estado,
+                "municipio" => $mcpo,
+                "parroquia" => $parroquia,
+                "direccion" => $centro,
+                "centro" => $direccion
+            );
+        } else {
+            return array(
+                "cedula" => "xx",
+                "nombre" => "",
+                "estado" => "",
+                "municipio" => "",
+                "parroquia" => "",
+                "direccion" => "",
+                "centro" => ""
+            );
+        }
     }
 
     public function ExtraerFrase($separador1, $separador2, $cadena) {

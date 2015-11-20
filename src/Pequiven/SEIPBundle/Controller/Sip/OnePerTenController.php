@@ -180,23 +180,27 @@ class OnePerTenController extends SEIPController {
                                     //VALIDACION CON CNE
                                     $cne = $this->getCneService();
                                     $userCne = $cne->getDatosCne($cedula);
-                                    $ced = explode("-", $userCne["cedula"]);
+                                    if ($userCne["cedula"] != "xx") {
+                                        $ced = explode("-", $userCne["cedula"]);
 
-                                    $rs = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Estado")->findOneBy(array("description" => $userCne["estado"]));
+                                        $rs = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Estado")->findOneBy(array("description" => $userCne["estado"]));
 
-                                    if (!is_null($rs)) {
-                                        $datos["nombre"] = $userCne["nombre"];
-                                        $datos["cedula"] = $ced[1];
-                                        $datos["centro"] = "";
-                                        $datos["nameCentro"] = $userCne["centro"];
-                                        $datos["codigoParroquia"] = "";
-                                        $datos["nombreParroquia"] = $userCne["parroquia"];
-                                        $datos["codigoMunicipio"] = "";
-                                        $datos["nombreMunicipio"] = $userCne["municipio"];
-                                        $datos["codigoEstado"] = "";
-                                        $datos["nombreEstado"] = $userCne["estado"];
+                                        if (!is_null($rs)) {
+                                            $datos["nombre"] = $userCne["nombre"];
+                                            $datos["cedula"] = $ced[1];
+                                            $datos["centro"] = "";
+                                            $datos["nameCentro"] = $userCne["centro"];
+                                            $datos["codigoParroquia"] = "";
+                                            $datos["nombreParroquia"] = $userCne["parroquia"];
+                                            $datos["codigoMunicipio"] = "";
+                                            $datos["nombreMunicipio"] = $userCne["municipio"];
+                                            $datos["codigoEstado"] = "";
+                                            $datos["nombreEstado"] = $userCne["estado"];
+                                        } else {
+                                            $datos["msj"] = "La persona debe pertenecer al mismo estado.";
+                                        }
                                     } else {
-                                        $datos["msj"] = "La persona debe pertenecer al mismo estado.";
+                                            $datos["msj"] = "Problemas con la API.";
                                     }
                                 } else {
                                     $nameCentro = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->getCentro($rep->getCodigoCentro());
