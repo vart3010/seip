@@ -128,8 +128,6 @@ class OnePerTenController extends SEIPController {
                 $cne = $this->getCneService();
                 $userCneOne = $cne->getDatosCne($ciOne);
                 $estadoOne = $userCneOne["estado"];
-                var_dump($userCneOne);
-                die();
                 sleep(4);
                 //if (isset($estadoOne)) {
                 // SE BUSCA ESTADO DE MIEMBRO
