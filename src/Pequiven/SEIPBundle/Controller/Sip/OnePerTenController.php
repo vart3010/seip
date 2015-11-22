@@ -123,15 +123,19 @@ class OnePerTenController extends SEIPController {
 
             //if (!isset($repOne)) {
             if ((count($repOne) <= 0)) {
-                //SE BUSCA ESTADO EN CNE de ONE
-                $cneOne = $this->getCneService();
-                $userCneOne = $cneOne->getDatosCne($ciOne);
-                $estadoOne = $userCneOne["estado"];
 
-                // SE BUSCA ESTADO DE MIEMBRO
-                $cneMember = $this->getCneService();
-                $userCneMember = $cneMember->getDatosCne($cedula);
+                //SE BUSCA ESTADO EN CNE de ONE
+                $cne = $this->getCneService();
+                $userCneOne = $cne->getDatosCne($ciOne);
+                $estadoOne = $userCneOne["estado"];
+                sleep(4);
+                //if (isset($estadoOne)) {
+                $userCneMember = $cne->getDatosCne($cedula);
                 $estadoMember = $userCneMember["estado"];
+
+                //}
+                // SE BUSCA ESTADO DE MIEMBRO
+                //$cneMember = $this->getCneService();
 //            $repMember = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Rep")->findOneBy(array("cedula" => $cedula));
 //            $codEstadoMember = $repMember->getCodigoEstado();
 //            $estadoMember = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Estado")->findOneBy(array("id" => $codEstadoMember));
@@ -159,6 +163,7 @@ class OnePerTenController extends SEIPController {
 
 
             if ($estadoOne == $estadoMember) {
+
                 $onePerTenMembers = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\OnePerTenMembers")->findBy(
                         array(
                             "cedula" => $cedula,
@@ -166,20 +171,28 @@ class OnePerTenController extends SEIPController {
                         )
                 );
 
+
                 if (count($onePerTenMembers) <= 0) {
+
                     if (!isset($user) || $user->getWorkStudyCircle() == "null") {
+
                         if ($cedula != "" || $cedula != 0) {
+
                             /**
                              * VALIDACION CON NOMINA PQV
                              */
                             $nomina = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Nomina")->findOneBy(array("cedula" => $cedula));
+
                             if (is_null($nomina)) {
                                 //VALIDA CON REP CARABOBO 
                                 $rep = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Rep")->findOneBy(array("cedula" => $cedula));
+
                                 if (is_null($rep)) {
                                     //VALIDACION CON CNE
-                                    $cne = $this->getCneService();
+                                    // $cne = $this->getCneService();
+                                    sleep(4);
                                     $userCne = $cne->getDatosCne($cedula);
+
                                     $ced = explode("-", $userCne["cedula"]);
 
                                     $rs = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Estado")->findOneBy(array("description" => $userCne["estado"]));
@@ -215,6 +228,7 @@ class OnePerTenController extends SEIPController {
                                     $datos["nombreEstado"] = $estado->getDescription();
                                 }
                             } else {
+
                                 $nameCentro = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->getCentro($nomina->getCodigoCentro());
                                 $parroquia = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Parroquia")->findOneBy(array("id" => $nomina->getCodigoParroquia()));
                                 $municipio = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Municipio")->findOneBy(array("id" => $nomina->getCodigoMunicipio()));
