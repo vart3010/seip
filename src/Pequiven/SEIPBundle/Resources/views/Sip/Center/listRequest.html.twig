@@ -65,7 +65,7 @@
                                 {$ data.getlabelsObservations[result.categoria - 1].description $} 
                             </a>
                         </td>
-                        <td data-title="'Estatus'" width="15%" sortable="'status'" align="center">
+                        <td data-title="'Estatus'" width="15%" align="center">
                             <a href="">
                                 {$ data.LabelsRequestStatus[result.status - 1].description $} 
                             </a>
@@ -78,6 +78,11 @@
                         <td data-title="'Codigo Centro'" filter="{'codigoCentro' : 'text'}">
                             <a href="">
                                 {$ result.codigoCentro $}
+                            </a>
+                        </td>
+                        <td data-title="'Centro'" filter="{'centro' : 'text'}">
+                            <a href="">
+                                {$ result.centro $}
                             </a>
                         </td>
                     </tr>

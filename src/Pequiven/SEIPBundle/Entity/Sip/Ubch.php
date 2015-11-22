@@ -95,6 +95,14 @@ class Ubch {
     private $deletedAt;
 
     /**
+     * observations
+     * @var string
+     *
+     * @ORM\Column(name="observations", type="text", nullable=true)
+     */
+    private $observations;
+
+    /**
      * notification
      * @var integer
      *
@@ -184,6 +192,14 @@ class Ubch {
 
     function setDeletedAt($deletedAt) {
         $this->deletedAt = $deletedAt;
+    }
+
+    function getObservations() {
+        return $this->observations;
+    }
+    
+    function setObservations($observations) {
+        $this->observations = $observations;
     }
 
 }

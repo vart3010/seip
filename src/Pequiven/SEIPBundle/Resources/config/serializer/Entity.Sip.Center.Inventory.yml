@@ -19,3 +19,6 @@ Pequiven\SEIPBundle\Entity\Sip\Center\Inventory:
         observations:
             expose: true
             groups: [observations]
+        centro:
+            expose: true
+            groups: [api_list]
