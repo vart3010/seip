@@ -238,7 +238,7 @@ class CenterController extends SEIPController {
             }
             $this->get('session')->getFlashBag()->add('success', "Datos Cargados Exitosamente");
         }elseif($valid == 1){
-            $this->get('session')->getFlashBag()->add('error', "Atención hay asistencia cargada para esta fecha. Verifique");
+            $this->get('session')->getFlashBag()->add('error', "ATENCIÓN! hay asistencia cargada para esta fecha. Verifique");
         }
     }
 
