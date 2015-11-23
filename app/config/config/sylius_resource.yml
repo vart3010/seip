@@ -531,3 +531,8 @@ sylius_resource:
             classes:
                 model: Pequiven\SEIPBundle\Entity\Sip\NominaCentro
                 repository: Pequiven\SEIPBundle\Repository\Sip\NominaCentroRepository
+        pequiven.statusCentro:
+            driver: doctrine/orm
+            classes:
+                model: Pequiven\SEIPBundle\Entity\Sip\Center\StatusCentro
+                repository: Pequiven\SEIPBundle\Repository\Sip\Centro\StatusCentroRepository

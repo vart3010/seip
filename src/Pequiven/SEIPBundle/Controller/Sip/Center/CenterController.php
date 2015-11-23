@@ -10,6 +10,7 @@ use Pequiven\SEIPBundle\Form\Sip\Center\ObservationsType;
 use Pequiven\SEIPBundle\Form\Sip\Center\StatusType;
 use Pequiven\SEIPBundle\Entity\Sip\Center\Assists;
 use Pequiven\SEIPBundle\Form\Sip\Center\AssistsType;
+use Pequiven\SEIPBundle\Form\Sip\Center\AssistsEditType;
 use Pequiven\SEIPBundle\Entity\Sip\Center\Inventory;
 use Pequiven\SEIPBundle\Form\Sip\Center\InventoryType;
 use Pequiven\SEIPBundle\Entity\Sip\Center\StatusCentro;
@@ -48,6 +49,100 @@ class CenterController extends SEIPController {
         $view->getSerializationContext()->setGroups(array('id', 'api_list'));
 
         return $view;
+    }
+
+     /**
+     * 
+     * @param Request $request
+     * @return type
+     */
+    public function formAssistsEditAction(Request $request) {
+        $em = $this->getDoctrine()->getManager();
+
+        $idCenter = $request->get('idCenter');
+        
+        $fecha = date("Y-m-d");
+        //$fecha = date_create_from_format("Y/m/d", $fecha);        
+        $cutl = $this->get('pequiven.repository.cutl')->findBy(array('codigoCentro' => $idCenter));
+        $resultCenter = $this->get('pequiven.repository.assists')->getAssistFechaCenter($idCenter, $fecha);
+        $resultCutl = $this->get('pequiven.repository.assists')->getAssistFecha($idCenter, $fecha);
+        
+
+        $assists = new Assists();
+        $statusCentro = new StatusCentro();
+        $form = $this->createForm(new AssistsEditType(), $assists);
+        $cont = 1;
+        if (isset($request->get('sip_center_assists')["obs_centro"])) {
+            
+            foreach ($cutl as $cutlValues) {
+                $contC = $cont - 1;
+                
+                $idCutl = $resultCutl[$contC]["id"];
+                $idCenter = $resultCenter[$contC]["id"];
+
+                $form->bind($this->getRequest());
+
+                $assists = $this->get('pequiven.repository.assists')->find($idCutl);            
+                $statusCentro = $this->get('pequiven.repository.statusCentro')->find($idCenter);                            
+                
+                $idCutl = $cutlValues->getId();//Id cutl
+
+
+                $ObsCentro = $request->get('sip_center_assists')["obs_centro"];
+                //Status del centro
+                if (isset($request->get('sip_center_assists')["status"])) {
+                    $status = 1;
+                } else {
+                    $status = 0;
+                }
+                //Carga de Asistencia
+                if (isset($request->get('sip_center_assists')[$idCutl])) {
+                    $value = 1;
+                } else {
+                    $value = 0;
+                }
+                //Carga de Observación
+                if (isset($request->get('sip_center_assists')["obs_".$idCutl])) {
+                    $Observations = strtoupper($request->get('sip_center_assists')["obs_" . $idCutl]);
+                } else {
+                    $Observations = NULL;
+                }
+                
+                    $resultCutl = $form->getData();                
+                    $assists->setAssists($value);                
+                    $assists->setObservations($Observations);
+                    
+                    $em->flush();
+                    
+                    if ($cont == 1) {                        
+                        $statusCentro->setStatus($status);
+                        $statusCentro->setObservations($ObsCentro);
+                        
+                        $em->flush();
+                    }        
+                    
+                    $cont++;
+            }
+
+            
+        }else{
+
+        $view = $this
+                ->view()
+                ->setTemplate($this->config->getTemplate('Form/AssistsEdit.html'))
+                ->setTemplateVar($this->config->getPluralResourceName())
+                ->setData(array(
+                'resultCutl'    => $resultCutl,
+                'resultCenter'  => $resultCenter,
+                'cutl'          => $cutl,
+                'fecha'         => $fecha,
+                'form'          => $form->createView(),
+                ))
+        ;
+        $view->getSerializationContext()->setGroups(array('id', 'api_list'));
+
+        return $view;
+        }
     }
 
     /**

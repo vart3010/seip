@@ -2672,7 +2672,22 @@ angular.module('seipModule.controllers', [])
                 } else {
                     $scope.openModalAuto();
                 }
-            };           
+            };    
+            //Carga el formulario de las Asistencias para editar
+            $scope.loadTemplateAssistsEdit = function (resource) {
+                $scope.initFormAssistsEdit(resource);
+                if (isInit == false) {
+                    isInit = true;
+                }
+                $scope.templateOptions.setTemplate($scope.templates[0]);
+                $scope.templateOptions.setParameterCallBack(resource);                
+                if (resource) {
+                    $scope.templateOptions.enableModeEdit();
+                    $scope.openModalAuto();
+                } else {
+                    $scope.openModalAuto();
+                }
+            };        
 
             //Añadir Observations
             var addAssists = function (save, successCallBack) {
@@ -2714,15 +2729,62 @@ angular.module('seipModule.controllers', [])
                 });
             };
 
+            //Añadir Observations
+            var editAssists = function (save, successCallBack) {
+                var formCauseAnalysis = angular.element('#form_sip_center_assists_edit');
+                var formData = formCauseAnalysis.serialize();
+
+                if (save == undefined) {
+                    var save = false;
+                }
+                if (save == true) {
+                    var url = Routing.generate('pequiven_sip_center_assists_edit_center', {idCenter: $scope.idCenter});
+                }
+                notificationBarService.getLoadStatus().loading();
+                return $http({
+                    method: 'POST',
+                    url: url,
+                    data: formData,
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'}  // set the headers so angular passing info as form data (not request payload)
+                }).success(function (data) {
+                    $scope.templateOptions.setVar("form", {errors: {}});                    
+                    if (successCallBack) {
+                        successCallBack(data);
+                    }
+                    notificationBarService.getLoadStatus().done();
+                    location.reload(); 
+                    return true;
+                }).error(function (data, status, headers, config) {
+                    $scope.templateOptions.setVar("form", {errors: {}});
+                    if (data.errors) {
+                        if (data.errors.errors) {
+                            $.each(data.errors.errors, function (index, value) {
+                                notifyService.error(Translator.trans(value));
+                            });
+                        }
+                        $scope.templateOptions.setVar("form", {errors: data.errors.children});
+                    }                    
+                    notificationBarService.getLoadStatus().done();
+                    return false;
+                });
+            };
             $scope.templateOptions.setVar('addAssists', addAssists);
+            $scope.templateOptions.setVar('editAssists', editAssists);
             var confirmCallBack = function () {                
                 addAssists(true, function (data) {
                     $scope.indicator = data.indicator;
                 });
 
                 return true;
-            };
-           
+            }; 
+
+            var confirmCallBackEdit = function () {                
+                editAssists(true, function (data) {
+                    $scope.indicator = data.indicator;
+                });
+
+                return true;
+            };           
             //Formulario Asistencias
             $scope.initFormAssists = function (resource) {
                 var d = new Date();
@@ -2741,6 +2803,28 @@ angular.module('seipModule.controllers', [])
                         name: 'Asistencias',
                         url: url,
                         confirmCallBack: confirmCallBack,
+                    }
+                ];
+                $scope.templateOptions.setTemplate($scope.templates[0]);
+            };
+            //Formulario Asistencias para editar
+            $scope.initFormAssistsEdit = function (resource) {
+                var d = new Date();
+                var numero = d.getTime();
+                $scope.setHeight(650);                
+                var parameters = {
+                    idCenter: $scope.idCenter,                    
+                    _dc: numero
+                };
+                if (resource) {
+                    parameters.id = resource.id;
+                }
+                var url = Routing.generate('pequiven_sip_center_assists_edit', parameters);
+                $scope.templates = [
+                    {
+                        name: 'Edición de Asistencias',
+                        url: url,
+                        confirmCallBack: confirmCallBackEdit,
                     }
                 ];
                 $scope.templateOptions.setTemplate($scope.templates[0]);
