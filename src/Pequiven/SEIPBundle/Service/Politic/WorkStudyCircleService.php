@@ -556,11 +556,11 @@ class WorkStudyCircleService implements ContainerAwareInterface {
      * @return boolean
      */
     public function isAllowToAddMembers(WorkStudyCircle $workStudyCircle){
-        $valid = false;
+        $valid = t;
         $user = $this->getUser();
         
         if($workStudyCircle->getPhase() == WorkStudyCircle::PHASE_ONE){
-            if($this->getSecurityContext()->isGranted(array('ROLE_SEIP_WORK_STUDY_CIRCLES_EDIT')) || $workStudyCircle->getCoordinator()->getId() == $user->getId()){
+            if($workStudyCircle->getCoordinator()->getId() == $user->getId()){
                 $valid = true;
             }
         } else{
