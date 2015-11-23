@@ -162,10 +162,6 @@ class OnePerTenController extends SEIPController {
                 }
             }
 
-//            var_dump('One: ' . $estadoOne . ' Ten: ' . $estadoMember);
-//            die();
-
-
             if ($estadoOne == $estadoMember) {
 
                 $onePerTenMembers = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\OnePerTenMembers")->findBy(
