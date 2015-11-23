@@ -157,6 +157,9 @@ class OnePerTenController extends SEIPController {
                 }
             }
 
+//            var_dump('One: ' . $estadoOne . ' Ten: ' . $estadoMember);
+//            die();
+
 
             if ($estadoOne == $estadoMember) {
                 $onePerTenMembers = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\OnePerTenMembers")->findBy(
@@ -200,7 +203,7 @@ class OnePerTenController extends SEIPController {
                                             $datos["msj"] = "La persona debe pertenecer al mismo estado.";
                                         }
                                     } else {
-                                            $datos["msj"] = "Por favor consulte nuevamente, estamos teniendo con la conexión al CNE.";
+                                        $datos["msj"] = "Por favor consulte nuevamente, estamos teniendo dificultades con la comunicación con el CNE.";
                                     }
                                 } else {
                                     $nameCentro = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->getCentro($rep->getCodigoCentro());
