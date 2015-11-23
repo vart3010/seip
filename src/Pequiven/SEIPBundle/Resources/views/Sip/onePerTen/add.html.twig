@@ -121,7 +121,7 @@
             $("#search").click(function () {
                 $(this).hide();
                 $("img#loading").show();
-
+                //$("#details").hide();
                 if ($("#cedulaSearch").val() != "") {
                     var data = {
                         ced: $("#cedulaSearch").val(),
@@ -153,6 +153,9 @@
                             if (data["nombre"] != "" || data["nameCentro"]) {
                                 $("button#save").show();
                                 $("input#telefono").show();
+                                $("#details").show();
+                            } else {
+                                $("#details").hide();
                             }
                             console.log(data);
                         }
