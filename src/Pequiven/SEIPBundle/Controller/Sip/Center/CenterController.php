@@ -162,79 +162,84 @@ class CenterController extends SEIPController {
 
         $cutl = $this->get('pequiven.repository.cutl')->findBy(array('codigoCentro' => $codigoCentro));
 
-        //$assist = $this->get('pequiven.repository.assists')->findBy(array('codigoCentro' => $codigoCentro));
-        //$fecha = $request->get('sip_center_assists')['fecha'];
-        //$fecha = date("Y-d-m H:i:s", strtotime($fecha)); 
-        //$aprob = 1;
-
+        $arr = explode('/', $fecha);
+        $fechaCons = $arr[2].'-'.$arr[1].'-'.$arr[0];
+        
+        $resultAssists = $this->get('pequiven.repository.assists')->getAssistFecha($codigoCentro, $fechaCons);
+        $valid = count($resultAssists);
+        
         $fecha = date_create_from_format("d/m/Y", $fecha);
 
         $contCutl = count($cutl);
         $cont = 1;
 
-        foreach ($cutl as $value) {
-            $cedula = $value->getCedula();
-            $idAssist = $value->getId();
-            //Status del centro
-            if (isset($request->get('sip_center_assists')["status"])) {
-                $status = 1;
-            } else {
-                $status = 0;
-            }
-
-            //Carga de Asistencia
-            if (isset($request->get('sip_center_assists')[$idAssist])) {
-                $value = 1;
-            } else {
-                $value = 0;
-            }
-            //Carga de Observación
-            if (isset($request->get('sip_center_assists')["obs_" . $idAssist])) {
-                $Observations = strtoupper($request->get('sip_center_assists')["obs_" . $idAssist]);
-            } else {
-                $Observations = NULL;
-            }
-
-            $cedulaCutl = $cedula;
-
-            $form = $this->createForm(new AssistsType(), new Assists());
-
-            $form->bind($this->getRequest());
-
-            $em->getConnection()->beginTransaction();
-
-            if ($form->isSubmitted()) {
-
-                $Assists = $form->getData();
-                $Assists->setCodigoCentro($codigoCentro);
-                $Assists->setCedula($cedulaCutl);
-                $Assists->setAssists($value);
-                $Assists->setObservations($Observations);
-                $em->persist($Assists);
-                $em->flush();
-
-                if ($cont == 1) {
-                    $statusCentro = new StatusCentro();
-                    $statusCentro->setCodigoCentro($codigoCentro);
-                    $statusCentro->setFecha($fecha);
-                    $statusCentro->setStatus($status);
-                    $statusCentro->setObservations($ObsCentro);
-
-                    $em->persist($statusCentro);
-                    $em->flush();
+        if ($valid == 0) {
+            foreach ($cutl as $value) {
+                $cedula = $value->getCedula();
+                $idAssist = $value->getId();
+                //Status del centro
+                if (isset($request->get('sip_center_assists')["status"])) {
+                    $status = 1;
+                } else {
+                    $status = 0;
                 }
-            }
 
-            try {
-                $em->flush();
-                $em->getConnection()->commit();
-            } catch (Exception $e) {
-                $em->getConnection()->rollback();
-                throw $e;
+                //Carga de Asistencia
+                if (isset($request->get('sip_center_assists')[$idAssist])) {
+                    $value = 1;
+                } else {
+                    $value = 0;
+                }
+                //Carga de Observación
+                if (isset($request->get('sip_center_assists')["obs_" . $idAssist])) {
+                    $Observations = strtoupper($request->get('sip_center_assists')["obs_" . $idAssist]);
+                } else {
+                    $Observations = NULL;
+                }
+
+                $cedulaCutl = $cedula;
+
+                $form = $this->createForm(new AssistsType(), new Assists());
+
+                $form->bind($this->getRequest());
+
+                $em->getConnection()->beginTransaction();
+
+                if ($form->isSubmitted()) {
+
+                    $Assists = $form->getData();
+                    $Assists->setCodigoCentro($codigoCentro);
+                    $Assists->setCedula($cedulaCutl);
+                    $Assists->setAssists($value);
+                    $Assists->setObservations($Observations);
+                    $em->persist($Assists);
+                    $em->flush();
+
+                    if ($cont == 1) {
+                        $statusCentro = new StatusCentro();
+                        $statusCentro->setCodigoCentro($codigoCentro);
+                        $statusCentro->setFecha($fecha);
+                        $statusCentro->setStatus($status);
+                        $statusCentro->setObservations($ObsCentro);
+
+                        $em->persist($statusCentro);
+                        $em->flush();
+                    }
+                }
+
+                try {
+                    $em->flush();
+                    $em->getConnection()->commit();
+                } catch (Exception $e) {
+                    $em->getConnection()->rollback();
+                    throw $e;
+                }
+                $cont++;
             }
-            $cont++;
+            $this->get('session')->getFlashBag()->add('success', "Datos Cargados Exitosamente");
+        }elseif($valid == 1){
+            $this->get('session')->getFlashBag()->add('error', "Atención hay asistencia cargada para esta fecha. Verifique");
         }
-        $this->get('session')->getFlashBag()->add('success', "Datos Cargados Exitosamente");
     }
 
     /**
