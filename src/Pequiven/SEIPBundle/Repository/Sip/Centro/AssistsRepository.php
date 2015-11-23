@@ -24,7 +24,7 @@ class AssistsRepository extends EntityRepository {
         
         $sql = "SELECT *
             FROM sip_centro_assists AS ast
-            WHERE ast.fecha LIKE '%".$fecha."%' AND ast.codigoCentro =".$codCentro;            
+            WHERE ast.fecha LIKE '%".$fecha."%' AND ast.deletedAt IS NULL AND ast.codigoCentro =".$codCentro ;            
 
         $stmt = $db->prepare($sql);
         $stmt->execute();
@@ -46,7 +46,7 @@ class AssistsRepository extends EntityRepository {
         
         $sql = "SELECT *
             FROM sip_centro_status AS ast
-            WHERE ast.fecha LIKE '%".$fecha."%' AND ast.codigoCentro =".$codCentro;            
+            WHERE ast.fecha LIKE '%".$fecha."%' AND ast.deletedAt IS NULL AND ast.codigoCentro =".$codCentro ;                    
 
         $stmt = $db->prepare($sql);
         $stmt->execute();
