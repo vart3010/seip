@@ -86,6 +86,22 @@
                     </a>
                 </p>
             </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Centro de Misiones</label>
+                    <a href="{{ path("pequiven_sip_cutl_list_pqv",{idCentro:center.id})}}">
+                        {{ center.centroMisiones }}
+                    </a>
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Importante</label>
+                    <a href="{{ path("pequiven_sip_cutl_list_pqv",{idCentro:center.id})}}">
+                        {{ center.importante }}
+                    </a>
+                </p>
+            </div>
             {% if center.eje > 0 %}
                 <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                     <p class="inline-label">

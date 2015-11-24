@@ -11,8 +11,8 @@
 
 {% block before_body %}
     {{ contentHeader(
-        ("sip.center.name"|trans ),
-        ('Inventario'|trans({},'messages')),
+        {(path('pequiven_sip_center_show',{'id':center.id})): "sip.center.name"|trans},                
+        {(path('pequiven_sip_request_list_inventory')): "Inventario"|trans},
         ('pequiven.show'|trans({},'messages'))
     )}}
 {% endblock %}
@@ -23,70 +23,66 @@
     <fieldset class="fieldset">
         <legend class="legend" >Descripción Inventario</legend>
         <div class="columns">
-            {% for data in inventory %}
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">Material</label>
-                        {{ data.material }}                    
+                        {{ inventory.material }}                    
                 </p>
             </div>
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">Cantidad</label>                    
-                        {{ data.cantidad }}                    
+                        {{ inventory.cantidad }}                    
                 </p>
             </div>
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">Observación</label>                    
-                        {{ data.observations }}                    
+                        {{ inventory.observations }}                    
                 </p>
             </div> 
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">Fecha</label>                    
-                        {{ data.fecha | date("d/m/Y")}}                    
+                        {{ inventory.fecha | date("d/m/Y")}}                    
                 </p>
             </div> 
-            {% endfor %}
         </div>
     </fieldset> 
 
     <fieldset class="fieldset">
     <legend class="legend" >Datos del Centro</legend>
-        <div class="columns">
-            {% for data in inventory %}            
+        <div class="columns">           
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">Codigo Centro</label>                    
-                        {{ data.codigoCentro }}                    
-                </p>
-            </div> 
-            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
-                <p class="inline-label">
-                    <label class="label">Centro</label>                    
-                        {{ data.centro }}                    
+                        {{ inventory.codigoCentro }}                    
                 </p>
             </div>  
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">Centro</label>                    
-                        {{ data.centro }}                    
+                        {{ inventory.centro }}                    
+                </p>
+            </div> 
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Estado</label>                    
+                        {{ center.descriptionEstado }}                    
                 </p>
             </div> 
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">Municipio</label>                    
-                        {{ data.municipio }}                    
+                        {{ inventory.municipio }}                    
                 </p>
             </div>           
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">Parroquia</label>                    
-                        {{ data.parroquia }}                    
+                        {{ inventory.parroquia }}                    
                 </p>
             </div> 
-            {% endfor %}
         </div>
     </fieldset> 
 {% endblock %}

@@ -424,13 +424,16 @@ class CenterController extends SEIPController {
             5 => "#920a00"
         ];
 
-        $request = $this->get('pequiven.repository.observations')->findBy(array('id' => $id));
-
+        $request = $this->get('pequiven.repository.observations')->findOneBy(array('id' => $id));
+                
+        $center  = $this->get('pequiven.repository.center')->findOneBy(array('codigoCentro' => $request->getCodigoCentro()));
+        
         return $this->render('PequivenSEIPBundle:Sip:Center/Request/show.html.twig', array(
             'request'             => $request,
             'labelsObservations'  => $labelsObservations,
             'labelsStatus'        => $labelsStatus,
-            'color'               => $color
+            'color'               => $color,
+            'center'              => $center
             ));
     }
 
@@ -522,9 +525,14 @@ class CenterController extends SEIPController {
 
         $id = $request->get('id');
         
-        $inventory = $this->get('pequiven.repository.inventory')->findBy(array('id' => $id));
+        $inventory = $this->get('pequiven.repository.inventory')->findOneBy(array('id' => $id));
 
-        return $this->render('PequivenSEIPBundle:Sip:Center/Inventory/show.html.twig', array('inventory' => $inventory));
+        $center  = $this->get('pequiven.repository.center')->findOneBy(array('codigoCentro' => $inventory->getCodigoCentro()));
+        
+        return $this->render('PequivenSEIPBundle:Sip:Center/Inventory/show.html.twig', array(
+            'inventory' => $inventory,
+            'center'    => $center
+            ));
     }
 
     /**

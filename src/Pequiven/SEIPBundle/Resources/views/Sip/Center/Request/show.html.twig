@@ -11,8 +11,8 @@
 
 {% block before_body %}
     {{ contentHeader(
-        ("sip.center.name"|trans ),
-        ('Requerimieto'|trans({},'messages')),
+        {(path('pequiven_sip_center_show',{'id':center.id})): "sip.center.name"|trans},        
+        {(path('pequiven_sip_request_list')): "Requerimieto"|trans},                
         ('pequiven.show'|trans({},'messages'))
     )}}
 {% endblock %}
@@ -23,25 +23,24 @@
     <fieldset class="fieldset">
         <legend class="legend" >Descripción Requerimiento</legend>
         <div class="columns">
-            {% for data in request %}
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">Observación</label>                    
-                        {{ data.observations }}                    
+                        {{ request.observations }}                    
                 </p>
             </div> 
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">Categoria</label>
-                        {{ labelsObservations[data.categoria - 1].description }}
+                        {{ labelsObservations[request.categoria - 1].description }}
                 </p>
             </div>
             <div ng-controller="SipCenterObservationController"> 
                 <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                     <p class="inline-label">
                     <label class="label">Estatus</label>                                            
-                            <label style="color:#ffffff;width:80px; border-radius: 15px 15px 15px 15px; font-weight: bold; background:{{color[data.status]}}; border-color:{{color[data.status]}};" align="center" href ng-click="loadTemplateStatus(Status='{{ data.id }}')">
-                                &nbsp;{{ labelsStatus[data.status - 1].description }}&nbsp;
+                            <label style="color:#ffffff;width:80px; border-radius: 15px 15px 15px 15px; font-weight: bold; background:{{color[request.status]}}; border-color:{{color[request.status]}};" align="center" href ng-click="loadTemplateStatus(Status='{{ request.id }}')">
+                                &nbsp;{{ labelsStatus[request.status - 1].description }}&nbsp;
                             </label>
                             
                     </p>
@@ -51,48 +50,45 @@
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">Fecha</label>                    
-                        {{ data.fecha | date("d/m/Y")}}                    
+                        {{ request.fecha | date("d/m/Y")}}                    
                 </p>
             </div> 
-            {% endfor %}
         </div>
     </fieldset> 
 
     <fieldset class="fieldset">
     <legend class="legend" >Datos del Centro</legend>
-        <div class="columns">
-            {% for data in request %}            
+        <div class="columns">           
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">Codigo Centro</label>                    
-                        {{ data.codigoCentro }}                    
+                        {{ request.codigoCentro }}                    
                 </p>
             </div> 
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">Centro</label>                    
-                        {{ data.centro }}                    
+                        {{ request.centro }}                    
                 </p>
-            </div>  
+            </div>
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
-                    <label class="label">Centro</label>                    
-                        {{ data.centro }}                    
+                    <label class="label">Estado</label>                    
+                        {{ center.descriptionEstado }}                    
                 </p>
             </div> 
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">Municipio</label>                    
-                        {{ data.municipio }}                    
+                        {{ request.municipio }}                    
                 </p>
             </div>           
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">Parroquia</label>                    
-                        {{ data.parroquia }}                    
+                        {{ request.parroquia }}                    
                 </p>
             </div> 
-            {% endfor %}
         </div>
     </fieldset> 
 {% endblock %}
