@@ -57,6 +57,7 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeCenter', 'class' => 'Pequiven\SEIPBundle\Entity\Sip\Centro', 'format' => 'json'),
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeOnePerTen', 'class' => 'Pequiven\SEIPBundle\Entity\Sip\OnePerTen', 'format' => 'json'),
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeObservationsSip', 'class' => 'Pequiven\SEIPBundle\Entity\Sip\Center\Observations', 'format' => 'json'),
+            array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeInventorySip', 'class' => 'Pequiven\SEIPBundle\Entity\Sip\Center\Inventory', 'format' => 'json'),
         );
     }
 
@@ -709,6 +710,22 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
     public function onPostSerializeObservationsSip(ObjectEvent $event) {
         
         $object = $event->getObject();
+
+        $links['self']['show'] = "";
+
+        //$arrayLabel = Observations::getCategoriasObservations();
+        //$arrayStatus = Observations::getStatusObservations();
+        
+        //$event->getVisitor()->addData('nombreCategoria', $arrayLabel[$object->getCategoria()]);
+        //$event->getVisitor()->addData('nombreStatus', $arrayStatus[$object->getStatus()]);
+        $event->getVisitor()->addData('_links', $links);
+    }
+
+    public function onPostSerializeInventorySip(ObjectEvent $event) {
+        
+        $object = $event->getObject();
+        
+        $inventory = $this->container->get('pequiven.repository.inventory')->findAll();
 
         $links['self']['show'] = "";
 

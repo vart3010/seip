@@ -56,6 +56,14 @@ class InventoryRepository extends EntityRepository {
         if (($centro = $criteria->remove('centro'))) {
             $queryBuilder->andWhere($queryBuilder->expr()->like('inv.centro', "'%" . $centro . "%'"));
         }
+
+        if (($parroquia = $criteria->remove('parroquia'))) {
+            $queryBuilder->andWhere($queryBuilder->expr()->like('inv.parroquia', "'%" . $parroquia . "%'"));
+        }
+
+        if (($municipio = $criteria->remove('municipio'))) {
+            $queryBuilder->andWhere($queryBuilder->expr()->like('inv.municipio', "'%" . $municipio . "%'"));
+        }
         
         parent::applyCriteria($queryBuilder, $criteria->toArray());
     }

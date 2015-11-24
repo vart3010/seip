@@ -30,6 +30,8 @@ abstract class Observations {
     const TERMO_AGUA = 13;
     const CNE = 14;
     const COMIDA = 15;
+    const AYUDA_SOCIAL = 16;
+    const INFRAESTRUCTURA = 17;
 
     /**
      * Status
@@ -59,6 +61,8 @@ abstract class Observations {
             self::CNE => 'CNE',
             self::COMIDA => 'Comida',
             self::OTROS => 'Otros...',
+            self::AYUDA_SOCIAL => 'Ayuda Social',
+            self::INFRAESTRUCTURA => 'Infraestructura',
         ];
         return $levelProcessArray;
     }
