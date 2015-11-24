@@ -473,6 +473,20 @@ class CenterController extends SEIPController {
     }
 
     /**
+     *
+     * show de Inventario
+     *
+     */
+    public function showInventoryaction(Request $request){
+
+        $id = $request->get('id');
+        
+        $inventory = $this->get('pequiven.repository.inventory')->findBy(array('id' => $id));
+
+        return $this->render('PequivenSEIPBundle:Sip:Center/Inventory/show.html.twig', array('inventory' => $inventory));
+    }
+
+    /**
      * Listado de Centros
      *
      *
