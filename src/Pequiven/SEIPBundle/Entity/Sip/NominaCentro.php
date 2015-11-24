@@ -25,7 +25,7 @@ class NominaCentro {
     /**
      * @var integer
      *
-     * @ORM\Column(name="telefono", type="integer",nullable=true)
+     * @ORM\Column(name="telefono", type="string",nullable=true)
      */
     private $telefono;
 
