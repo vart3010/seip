@@ -594,7 +594,8 @@ class CenterController extends SEIPController {
             12 => 'Cava',
             13 => 'Termo de Agua',
             14 => 'CNE',
-            15 => 'Comida'
+            15 => 'Comida',
+            16 => 'Ayuda Social'
         ];
 
         //Carga de status
