@@ -727,7 +727,7 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
         
         $inventory = $this->container->get('pequiven.repository.inventory')->findAll();
 
-        $links['self']['show'] = $this->generateUrl('pequiven_sip_center_inventory_show', array('id' => $inventory->getId()));
+        $links['self']['show'] = "";
 
         //$arrayLabel = Observations::getCategoriasObservations();
         //$arrayStatus = Observations::getStatusObservations();
