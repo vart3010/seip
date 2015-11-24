@@ -55,11 +55,6 @@
             <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager" template-header="custom/header" api-data-url="{{ apiDataUrl }}" export-csv="csv" class="table table-responsive table-extra-info" >
                 <tbody> 
                     <tr ng-repeat="result in $data" data="{$ result|json $}">
-                        <td data-title="'Requerimiento'" filter="{'observations' : 'text'}">
-                            <a href="">
-                                {$ result.observations $}
-                            </a>
-                        </td>
                         <td data-title="'Categoria'" width="15%">
                             <a href="">                                
                                 {$ data.getlabelsObservations[result.categoria - 1].description $} 
@@ -80,9 +75,14 @@
                                 {$ result.codigoCentro $}
                             </a>
                         </td>
-                        <td data-title="'Centro'" filter="{'centro' : 'text'}">
+                        <td data-title="'Municipio'" filter="{'municipio' : 'text'}">
                             <a href="">
-                                {$ result.centro $}
+                                {$ result.municipio $}
+                            </a>
+                        </td>
+                         <td data-title="'Parroquia'" filter="{'parroquia' : 'text'}">
+                            <a href="">
+                                {$ result.parroquia $}
                             </a>
                         </td>
                     </tr>
