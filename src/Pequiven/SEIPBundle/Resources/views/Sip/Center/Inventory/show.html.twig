@@ -1,0 +1,96 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
+
+{% trans_default_domain 'sip' %}
+
+{% block javascripts_base %}
+    {{ parent() }}
+    <script src="{{  asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.input.js') }}"></script>
+{% endblock javascripts_base %}
+
+{% block before_body %}
+    {{ contentHeader(
+        ("sip.center.name"|trans ),
+        ('Inventario'|trans({},'messages')),
+        ('pequiven.show'|trans({},'messages'))
+    )}}
+{% endblock %}
+
+{% block body %}
+    {% set show = 1 %}
+
+    <fieldset class="fieldset">
+        <legend class="legend" >Descripción Inventario</legend>
+        <div class="columns">
+            {% for data in inventory %}
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Material</label>
+                        {{ data.material }}                    
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Cantidad</label>                    
+                        {{ data.cantidad }}                    
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Observación</label>                    
+                        {{ data.observations }}                    
+                </p>
+            </div> 
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Fecha</label>                    
+                        {{ data.fecha | date("d/m/Y")}}                    
+                </p>
+            </div> 
+            {% endfor %}
+        </div>
+    </fieldset> 
+
+    <fieldset class="fieldset">
+    <legend class="legend" >Datos del Centro</legend>
+        <div class="columns">
+            {% for data in inventory %}            
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Codigo Centro</label>                    
+                        {{ data.codigoCentro }}                    
+                </p>
+            </div> 
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Centro</label>                    
+                        {{ data.centro }}                    
+                </p>
+            </div>  
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Centro</label>                    
+                        {{ data.centro }}                    
+                </p>
+            </div> 
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Municipio</label>                    
+                        {{ data.municipio }}                    
+                </p>
+            </div>           
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Parroquia</label>                    
+                        {{ data.parroquia }}                    
+                </p>
+            </div> 
+            {% endfor %}
+        </div>
+    </fieldset> 
+{% endblock %}
+
+{% block javascript %}    
+{% endblock %}
+
