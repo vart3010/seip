@@ -88,18 +88,14 @@
             </div>
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
-                    <label class="label">Centro de Misiones</label>
-                    <a href="{{ path("pequiven_sip_cutl_list_pqv",{idCentro:center.id})}}">
-                        {{ center.centroMisiones }}
-                    </a>
+                    <label class="label">Centro de Misiones</label>                    
+                        {{ center.centroMisiones }}                    
                 </p>
             </div>
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
-                    <label class="label">Importante</label>
-                    <a href="{{ path("pequiven_sip_cutl_list_pqv",{idCentro:center.id})}}">
-                        {{ center.importante }}
-                    </a>
+                    <label class="label">Importante</label>                    
+                        {{ center.importante }}                    
                 </p>
             </div>
             {% if center.eje > 0 %}
