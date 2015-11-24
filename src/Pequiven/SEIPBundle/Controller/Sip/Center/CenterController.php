@@ -394,6 +394,47 @@ class CenterController extends SEIPController {
     }
 
     /**
+     *
+     * show de Inventario
+     *
+     */
+    public function showRequestAction(Request $request){
+
+        $id = $request->get('id');
+
+            foreach (Observations::getCategoriasObservations() as $key => $value) {
+                $labelsObservations[] = array(
+                    'id' => $key,
+                    'description' => $this->trans($value, array(), 'PequivenArrangementProgramBundle'),
+                );
+            }
+
+            foreach (Observations::getStatusObservations() as $key => $value) {
+                $labelsStatus[] = array(
+                    'id' => $key,
+                    'description' => $this->trans($value, array(), 'PequivenArrangementProgramBundle'),
+                );
+            }
+        //Color de status
+        $color = [
+            1 => "#12799f",
+            2 => "#03c842",
+            3 => "#d1b200",
+            4 => "#e12002",
+            5 => "#920a00"
+        ];
+
+        $request = $this->get('pequiven.repository.observations')->findBy(array('id' => $id));
+
+        return $this->render('PequivenSEIPBundle:Sip:Center/Request/show.html.twig', array(
+            'request'             => $request,
+            'labelsObservations'  => $labelsObservations,
+            'labelsStatus'        => $labelsStatus,
+            'color'               => $color
+            ));
+    }
+
+    /**
      * Formulario de Inventario de materiales CUTL
      * @param Request $request
      * @return type
@@ -590,37 +631,20 @@ class CenterController extends SEIPController {
         }
 
         $validacionCutl = $cedula;
-        //var_dump($nomCutl);
-        //die();
-        //Carga de Categorias
-        $catObs = [
-            1 => 'Propaganda',
-            2 => 'Transporte',
-            3 => 'Hidratación',
-            4 => 'Logistica',
-            5 => 'Asistencia',
-            6 => 'Telefonia',
-            7 => 'Otros...',
-            8 => 'Servicios de Luz',
-            9 => 'Servicios de Agua',
-            10 => 'Servicios de Aseo',
-            11 => 'Material de Oficina',
-            12 => 'Cava',
-            13 => 'Termo de Agua',
-            14 => 'CNE',
-            15 => 'Comida',
-            16 => 'Ayuda Social',
-            17 => 'Infraestructura'
-        ];
+        
+            foreach (Observations::getCategoriasObservations() as $key => $value) {
+                $labelsObservations[] = array(
+                    'id' => $key,
+                    'description' => $this->trans($value, array(), 'PequivenArrangementProgramBundle'),
+                );
+            }
 
-        //Carga de status
-        $status = [
-            1 => "Abierto",
-            2 => "Pendiente",
-            3 => "Seguimiento",
-            4 => "Cerrado",
-            5 => "Rechazado"
-        ];
+            foreach (Observations::getStatusObservations() as $key => $value) {
+                $labelsStatus[] = array(
+                    'id' => $key,
+                    'description' => $this->trans($value, array(), 'PequivenArrangementProgramBundle'),
+                );
+            }
 
         //Color de status
         $color = [
@@ -644,18 +668,18 @@ class CenterController extends SEIPController {
         $inventory = $this->get('pequiven.repository.inventory')->findBy(array('codigoCentro' => $codigoCentro));
 
         return $this->render('PequivenSEIPBundle:Sip:Center\show.html.twig', array(
-                    'center' => $center,
-                    'cutl' => $cutl,
-                    'assist' => $assist,
+                    'center'    => $center,
+                    'cutl'      => $cutl,
+                    'assist'    => $assist,
                     'observations' => $observations,
-                    'nomCutl' => $nomCutl,
-                    'catObs' => $catObs,
-                    'status' => $status,
+                    'nomCutl'   => $nomCutl,
+                    'catObs'    => $labelsObservations,
+                    'status'    => $labelsStatus,
                     'inventory' => $inventory,
                     'colorStatus' => $color,
-                    'ubch' => $ubch,
+                    'ubch'      => $ubch,
                     'ubchCargo' => $ubchCargo,
-                    'cantCutl' => $cantCutl,
+                    'cantCutl'  => $cantCutl,
                     'validacionCutl' => $validacionCutl,
                     'centerAct' => $centerAct,
                     'pqvCentro' => $result

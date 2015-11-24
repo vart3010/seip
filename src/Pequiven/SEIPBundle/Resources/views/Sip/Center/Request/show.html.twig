@@ -12,7 +12,7 @@
 {% block before_body %}
     {{ contentHeader(
         ("sip.center.name"|trans ),
-        ('Inventario'|trans({},'messages')),
+        ('Requerimieto'|trans({},'messages')),
         ('pequiven.show'|trans({},'messages'))
     )}}
 {% endblock %}
@@ -21,27 +21,33 @@
     {% set show = 1 %}
 
     <fieldset class="fieldset">
-        <legend class="legend" >Descripción Inventario</legend>
+        <legend class="legend" >Descripción Requerimiento</legend>
         <div class="columns">
-            {% for data in inventory %}
-            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
-                <p class="inline-label">
-                    <label class="label">Material</label>
-                        {{ data.material }}                    
-                </p>
-            </div>
-            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
-                <p class="inline-label">
-                    <label class="label">Cantidad</label>                    
-                        {{ data.cantidad }}                    
-                </p>
-            </div>
+            {% for data in request %}
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">Observación</label>                    
                         {{ data.observations }}                    
                 </p>
             </div> 
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Categoria</label>
+                        {{ labelsObservations[data.categoria - 1].description }}
+                </p>
+            </div>
+            <div ng-controller="SipCenterObservationController"> 
+                <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                    <p class="inline-label">
+                    <label class="label">Estatus</label>                                            
+                            <label style="color:#ffffff;width:80px; border-radius: 15px 15px 15px 15px; font-weight: bold; background:{{color[data.status]}}; border-color:{{color[data.status]}};" align="center" href ng-click="loadTemplateStatus(Status='{{ data.id }}')">
+                                &nbsp;{{ labelsStatus[data.status - 1].description }}&nbsp;
+                            </label>
+                            
+                    </p>
+                </div>
+            </div>
+            &nbsp;
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">Fecha</label>                    
@@ -55,7 +61,7 @@
     <fieldset class="fieldset">
     <legend class="legend" >Datos del Centro</legend>
         <div class="columns">
-            {% for data in inventory %}            
+            {% for data in request %}            
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">Codigo Centro</label>                    

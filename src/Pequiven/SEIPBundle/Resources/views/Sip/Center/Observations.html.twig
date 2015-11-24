@@ -24,12 +24,12 @@
                 <tbody>
                         <tr>
                             <td>{{ dataObs.observations }}</td>                            
-                            <td>{{ catObs[dataObs.categoria] }}</td>                            
+                            <td>{{ catObs[dataObs.categoria - 1].description }}</td>                            
                         
                             <td>{{ dataObs.fecha | date("d/m/Y") }}</td>
                             <td>
                                 <div style="color:#ffffff; border-radius: 15px 15px 15px 15px; font-weight: bold; background:{{colorStatus[dataObs.status]}}; border-color:{{colorStatus[dataObs.status]}};" align="center">
-                                    {{ status[dataObs.status] }}                                
+                                    {{ status[dataObs.status - 1].description }}                                
                                 </div>
                             </td>                            
                             <td class="align-right vertical-center">                          

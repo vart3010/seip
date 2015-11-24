@@ -56,32 +56,32 @@
                 <tbody> 
                     <tr ng-repeat="result in $data" data="{$ result|json $}">
                         <td data-title="'Categoria'" width="15%">
-                            <a href="">                                
+                            <a href="{$ result.id $}/show">                                
                                 {$ data.getlabelsObservations[result.categoria - 1].description $} 
                             </a>
                         </td>
                         <td data-title="'Estatus'" width="15%" align="center">
-                            <a href="">
+                            <a href="{$ result.id $}/show">
                                 {$ data.LabelsRequestStatus[result.status - 1].description $} 
                             </a>
                         </td>
                         <td data-title="'Fecha'" filter="{'fecha' : 'text'}">
-                            <a href="">
+                            <a href="{$ result.id $}/show">
                                 {$ result.fecha $}
                             </a>
                         </td>
                         <td data-title="'Codigo Centro'" filter="{'codigoCentro' : 'text'}">
-                            <a href="">
+                            <a href="{$ result.id $}/show">
                                 {$ result.codigoCentro $}
                             </a>
                         </td>
                         <td data-title="'Municipio'" filter="{'municipio' : 'text'}">
-                            <a href="">
+                            <a href="{$ result.id $}/show">
                                 {$ result.municipio $}
                             </a>
                         </td>
                          <td data-title="'Parroquia'" filter="{'parroquia' : 'text'}">
-                            <a href="">
+                            <a href="{$ result.id $}/show">
                                 {$ result.parroquia $}
                             </a>
                         </td>
