@@ -70,7 +70,7 @@ class Observations extends modelObservations{
      * municipio
      * @var string
      *
-     * @ORM\Column(name="municipio", type="string", length=255)
+     * @ORM\Column(name="municipio", type="string", length=255, nullable=true)
      */
     private $municipio;
 
@@ -78,7 +78,7 @@ class Observations extends modelObservations{
      * parroquia
      * @var string
      *
-     * @ORM\Column(name="parroquia", type="string", length=255)
+     * @ORM\Column(name="parroquia", type="string", length=255, nullable=true)
      */
     private $parroquia;
 
