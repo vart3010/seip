@@ -239,8 +239,8 @@ angular.module('seipModule.controllers', [])
                 location.href = redirect;
 
             };
-            
-            
+
+
             $scope.getUrlMovementAP = function (idAP, url) {
 
                 var redirect = url + "?idAP=" + idAP;
@@ -251,7 +251,7 @@ angular.module('seipModule.controllers', [])
                 location.href = redirect;
 
             };
-            
+
 
             //Funcion que carga el template de la meta
             $scope.loadTemplateMeta = function (goal, index) {
@@ -1520,7 +1520,7 @@ angular.module('seipModule.controllers', [])
                     var save = false;
                 }
                 if (save == true) {
-                    var url = Routing.generate('pequiven_causes_evolution_add', {idIndicator: $scope.id_indicator, typeObj: $scope.typeObj });
+                    var url = Routing.generate('pequiven_causes_evolution_add', {idIndicator: $scope.id_indicator, typeObj: $scope.typeObj});
                 }
                 notificationBarService.getLoadStatus().loading();
                 return $http({
@@ -1535,7 +1535,7 @@ angular.module('seipModule.controllers', [])
                         successCallBack(data);
                     }
                     notificationBarService.getLoadStatus().done();
-                    $timeout(callAtTimeout, 1500);                      
+                    $timeout(callAtTimeout, 1500);
                     return true;
                 }).error(function (data, status, headers, config) {
                     $scope.templateOptions.setVar("form", {errors: {}});
@@ -1550,9 +1550,9 @@ angular.module('seipModule.controllers', [])
                     notificationBarService.getLoadStatus().done();
                     return false;
                 });
-                function callAtTimeout() {                    
+                function callAtTimeout() {
                     location.reload();
-                }                
+                }
             };
             //Añadir El Plan de Accion de la desviación
             var addAction = function (save, successCallBack) {
@@ -1572,12 +1572,12 @@ angular.module('seipModule.controllers', [])
                     data: formData,
                     headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'}  // set the headers so angular passing info as form data (not request payload)
                 }).success(function (data) {
-                    $scope.templateOptions.setVar("form", {errors: {}});                 
+                    $scope.templateOptions.setVar("form", {errors: {}});
                     if (successCallBack) {
                         successCallBack(data);
                     }
                     notificationBarService.getLoadStatus().done();
-                    $timeout(callAtTimeout, 3000);  
+                    $timeout(callAtTimeout, 3000);
                     return true;
                 }).error(function (data, status, headers, config) {
                     $scope.templateOptions.setVar("form", {errors: {}});
@@ -1588,11 +1588,11 @@ angular.module('seipModule.controllers', [])
                             });
                         }
                         $scope.templateOptions.setVar("form", {errors: data.errors.children});
-                    }                    
+                    }
                     notificationBarService.getLoadStatus().done();
                     return false;
                 });
-                function callAtTimeout() {                    
+                function callAtTimeout() {
                     location.reload();
                 }
             };
@@ -1614,12 +1614,12 @@ angular.module('seipModule.controllers', [])
                     data: formData,
                     headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'}  // set the headers so angular passing info as form data (not request payload)
                 }).success(function (data) {
-                    $scope.templateOptions.setVar("form", {errors: {}});                    
+                    $scope.templateOptions.setVar("form", {errors: {}});
                     if (successCallBack) {
                         successCallBack(data);
                     }
                     notificationBarService.getLoadStatus().done();
-                    $timeout(callAtTimeout, 1500);                       
+                    $timeout(callAtTimeout, 1500);
                     return true;
                 }).error(function (data, status, headers, config) {
                     $scope.templateOptions.setVar("form", {errors: {}});
@@ -1630,11 +1630,11 @@ angular.module('seipModule.controllers', [])
                             });
                         }
                         $scope.templateOptions.setVar("form", {errors: data.errors.children});
-                    }                    
+                    }
                     notificationBarService.getLoadStatus().done();
                     return false;
                 });
-                function callAtTimeout() {                    
+                function callAtTimeout() {
                     location.reload();
                 }
             };
@@ -1656,12 +1656,12 @@ angular.module('seipModule.controllers', [])
                     data: formData,
                     headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'}  // set the headers so angular passing info as form data (not request payload)
                 }).success(function (data) {
-                    $scope.templateOptions.setVar("form", {errors: {}});                    
+                    $scope.templateOptions.setVar("form", {errors: {}});
                     if (successCallBack) {
                         successCallBack(data);
                     }
                     notificationBarService.getLoadStatus().done();
-                    $timeout(callAtTimeout, 1500);             
+                    $timeout(callAtTimeout, 1500);
                     return true;
                 }).error(function (data, status, headers, config) {
                     $scope.templateOptions.setVar("form", {errors: {}});
@@ -1672,18 +1672,18 @@ angular.module('seipModule.controllers', [])
                             });
                         }
                         $scope.templateOptions.setVar("form", {errors: data.errors.children});
-                    }                    
+                    }
                     notificationBarService.getLoadStatus().done();
                     return false;
                 });
-                function callAtTimeout() {                    
+                function callAtTimeout() {
                     location.reload();
-                }  
+                }
             };
             $scope.templateOptions.setVar('addCause', addCause);
             $scope.templateOptions.setVar('addAction', addAction);
             $scope.templateOptions.setVar('addActionValues', addActionValues);
-            $scope.templateOptions.setVar('addTrendEvolution', addTrendEvolution);            
+            $scope.templateOptions.setVar('addTrendEvolution', addTrendEvolution);
             var confirmCallBack = function () {
                 addCause(true, function (data) {
                     $scope.indicator = data.indicator;
@@ -1703,7 +1703,7 @@ angular.module('seipModule.controllers', [])
             $scope.initFormTrend = function (resource) {
                 var d = new Date();
                 var numero = d.getTime();
-                $scope.setHeight(350);                                
+                $scope.setHeight(350);
 
                 var parameters = {
                     idIndicator: $scope.id_indicator,
@@ -1727,7 +1727,7 @@ angular.module('seipModule.controllers', [])
             $scope.initFormActionAdd = function (resource) {
                 var d = new Date();
                 var numero = d.getTime();
-                $scope.setHeight(750);                                
+                $scope.setHeight(750);
 
                 var parameters = {
                     idIndicator: $scope.id_indicator,
@@ -1817,9 +1817,9 @@ angular.module('seipModule.controllers', [])
                         notificationBarService.getLoadStatus().done();
                         return false;
                     });
-                    $timeout(callAtTimeout, 3000);                    
+                    $timeout(callAtTimeout, 3000);
                 });
-                
+
                 function callAtTimeout() {
                     //console.log("Timeout occurred");
                     location.reload();
@@ -1847,9 +1847,9 @@ angular.module('seipModule.controllers', [])
                         notificationBarService.getLoadStatus().done();
                         return false;
                     });
-                    $timeout(callAtTimeout, 3000);                    
+                    $timeout(callAtTimeout, 3000);
                 });
-                function callAtTimeout() {                    
+                function callAtTimeout() {
                     location.reload();
                 }
             };
@@ -1874,10 +1874,10 @@ angular.module('seipModule.controllers', [])
                         }
                         notificationBarService.getLoadStatus().done();
                         return false;
-                    }); 
-                    $timeout(callAtTimeout, 3000);                    
+                    });
+                    $timeout(callAtTimeout, 3000);
                 });
-                function callAtTimeout() {                    
+                function callAtTimeout() {
                     location.reload();
                 }
             };
@@ -1922,12 +1922,12 @@ angular.module('seipModule.controllers', [])
                     data: formData,
                     headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'}  // set the headers so angular passing info as form data (not request payload)
                 }).success(function (data) {
-                    $scope.templateOptions.setVar("form", {errors: {}});                    
+                    $scope.templateOptions.setVar("form", {errors: {}});
                     if (successCallBack) {
                         successCallBack(data);
                     }
                     notificationBarService.getLoadStatus().done();
-                    location.reload(); 
+                    location.reload();
                     return true;
                 }).error(function (data, status, headers, config) {
                     $scope.templateOptions.setVar("form", {errors: {}});
@@ -1938,7 +1938,7 @@ angular.module('seipModule.controllers', [])
                             });
                         }
                         $scope.templateOptions.setVar("form", {errors: data.errors.children});
-                    }                    
+                    }
                     notificationBarService.getLoadStatus().done();
                     return false;
                 });
@@ -1997,10 +1997,10 @@ angular.module('seipModule.controllers', [])
                         }
                         notificationBarService.getLoadStatus().done();
                         return false;
-                    });   
-                    $timeout(callAtTimeout, 3000);                                                             
+                    });
+                    $timeout(callAtTimeout, 3000);
                 });
-                function callAtTimeout() {                    
+                function callAtTimeout() {
                     location.reload();
                 }
             };
@@ -2034,7 +2034,7 @@ angular.module('seipModule.controllers', [])
                     var save = false;
                 }
                 if (save == true) {
-                    var url = Routing.generate('pequiven_verification_evolution_add', {idIndicator: $scope.id_indicator, month: $scope.month, typeObj: $scope.typeObj });
+                    var url = Routing.generate('pequiven_verification_evolution_add', {idIndicator: $scope.id_indicator, month: $scope.month, typeObj: $scope.typeObj});
                 }
                 notificationBarService.getLoadStatus().loading();
                 return $http({
@@ -2049,7 +2049,7 @@ angular.module('seipModule.controllers', [])
                         successCallBack(data);
                     }
                     notificationBarService.getLoadStatus().done();
-                    location.reload(); 
+                    location.reload();
                     return true;
                 }).error(function (data, status, headers, config) {
                     $scope.templateOptions.setVar("form", {errors: {}});
@@ -2075,7 +2075,7 @@ angular.module('seipModule.controllers', [])
             };
             //Formulario Verificación
             $scope.initFormVerification = function (resource) {
-                
+
                 var d = new Date();
                 var numero = d.getTime();
 
@@ -2119,10 +2119,10 @@ angular.module('seipModule.controllers', [])
                         }
                         notificationBarService.getLoadStatus().done();
                         return false;
-                    }); 
-                    $timeout(callAtTimeout, 3000);                                                           
+                    });
+                    $timeout(callAtTimeout, 3000);
                 });
-                function callAtTimeout() {                    
+                function callAtTimeout() {
                     location.reload();
                 }
             };
@@ -2182,12 +2182,12 @@ angular.module('seipModule.controllers', [])
                             });
                         }
                         $scope.templateOptions.setVar("form", {errors: data.errors.children});
-                    }                    
+                    }
                     notificationBarService.getLoadStatus().done();
                     return false;
                 });
             };
-            $scope.templateOptions.setVar('addConfig', addConfig);            
+            $scope.templateOptions.setVar('addConfig', addConfig);
             var confirmCallBack = function () {
                 addConfig(true, function (data) {
                     $scope.indicator = data.indicator;
@@ -2264,8 +2264,8 @@ angular.module('seipModule.controllers', [])
                     if (successCallBack) {
                         successCallBack(data);
                     }
-                    notificationBarService.getLoadStatus().done();                    
-                    $timeout(callAtTimeout, 3000);  
+                    notificationBarService.getLoadStatus().done();
+                    $timeout(callAtTimeout, 3000);
                     return true;
                 }).error(function (data, status, headers, config) {
                     $scope.templateOptions.setVar("form", {errors: {}});
@@ -2280,7 +2280,7 @@ angular.module('seipModule.controllers', [])
                     notificationBarService.getLoadStatus().done();
                     return false;
                 });
-                function callAtTimeout() {                    
+                function callAtTimeout() {
                     location.reload();
                 }
             };
@@ -2305,10 +2305,10 @@ angular.module('seipModule.controllers', [])
                         }
                         notificationBarService.getLoadStatus().done();
                         return false;
-                    });     
-                    $timeout(callAtTimeout, 3000);                                                                                              
+                    });
+                    $timeout(callAtTimeout, 3000);
                 });
-                function callAtTimeout() {                    
+                function callAtTimeout() {
                     location.reload();
                 }
             };
@@ -2323,7 +2323,7 @@ angular.module('seipModule.controllers', [])
             $scope.initFormAsocLast = function (resource) {
                 var d = new Date();
                 var numero = d.getTime();
-                $scope.setHeight(350);                
+                $scope.setHeight(350);
                 var parameters = {
                     idIndicator: $scope.id_indicator,
                     _dc: numero
@@ -2341,7 +2341,7 @@ angular.module('seipModule.controllers', [])
                 ];
                 $scope.templateOptions.setTemplate($scope.templates[0]);
             };
-        })        
+        })
         //Fin controladores SIG
 
         //Controlador SIP Centro
@@ -2355,7 +2355,7 @@ angular.module('seipModule.controllers', [])
                     isInit = true;
                 }
                 $scope.templateOptions.setTemplate($scope.templates[0]);
-                $scope.templateOptions.setParameterCallBack(resource);                
+                $scope.templateOptions.setParameterCallBack(resource);
                 if (resource) {
                     $scope.templateOptions.enableModeEdit();
                     $scope.openModalAuto();
@@ -2370,7 +2370,7 @@ angular.module('seipModule.controllers', [])
                     isInit = true;
                 }
                 $scope.templateOptions.setTemplate($scope.templates[0]);
-                $scope.templateOptions.setParameterCallBack(resource);                
+                $scope.templateOptions.setParameterCallBack(resource);
                 if (resource) {
                     $scope.templateOptions.enableModeEdit();
                     $scope.openModalAuto();
@@ -2385,7 +2385,7 @@ angular.module('seipModule.controllers', [])
                     isInit = true;
                 }
                 $scope.templateOptions.setTemplate($scope.templates[0]);
-                $scope.templateOptions.setParameterCallBack(resource);                
+                $scope.templateOptions.setParameterCallBack(resource);
                 if (resource) {
                     $scope.templateOptions.enableModeEdit();
                     $scope.openModalAuto();
@@ -2411,12 +2411,12 @@ angular.module('seipModule.controllers', [])
                     data: formData,
                     headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'}  // set the headers so angular passing info as form data (not request payload)
                 }).success(function (data) {
-                    $scope.templateOptions.setVar("form", {errors: {}});                    
+                    $scope.templateOptions.setVar("form", {errors: {}});
                     if (successCallBack) {
                         successCallBack(data);
                     }
                     notificationBarService.getLoadStatus().done();
-                    location.reload(); 
+                    location.reload();
                     return true;
                 }).error(function (data, status, headers, config) {
                     $scope.templateOptions.setVar("form", {errors: {}});
@@ -2427,13 +2427,13 @@ angular.module('seipModule.controllers', [])
                             });
                         }
                         $scope.templateOptions.setVar("form", {errors: data.errors.children});
-                    }                    
+                    }
                     notificationBarService.getLoadStatus().done();
                     return false;
                 });
             };
             //Cambiando status
-            var addStatus= function (save, successCallBack) {
+            var addStatus = function (save, successCallBack) {
                 var formCauseAnalysis = angular.element('#form_sip_center_observations_status');
                 var formData = formCauseAnalysis.serialize();
 
@@ -2450,12 +2450,12 @@ angular.module('seipModule.controllers', [])
                     data: formData,
                     headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'}  // set the headers so angular passing info as form data (not request payload)
                 }).success(function (data) {
-                    $scope.templateOptions.setVar("form", {errors: {}});                    
+                    $scope.templateOptions.setVar("form", {errors: {}});
                     if (successCallBack) {
                         successCallBack(data);
                     }
                     notificationBarService.getLoadStatus().done();
-                    location.reload(); 
+                    location.reload();
                     return true;
                 }).error(function (data, status, headers, config) {
                     $scope.templateOptions.setVar("form", {errors: {}});
@@ -2466,7 +2466,7 @@ angular.module('seipModule.controllers', [])
                             });
                         }
                         $scope.templateOptions.setVar("form", {errors: data.errors.children});
-                    }                    
+                    }
                     notificationBarService.getLoadStatus().done();
                     return false;
                 });
@@ -2490,12 +2490,12 @@ angular.module('seipModule.controllers', [])
                     data: formData,
                     headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'}  // set the headers so angular passing info as form data (not request payload)
                 }).success(function (data) {
-                    $scope.templateOptions.setVar("form", {errors: {}});                    
+                    $scope.templateOptions.setVar("form", {errors: {}});
                     if (successCallBack) {
                         successCallBack(data);
                     }
                     notificationBarService.getLoadStatus().done();
-                   location.reload(); 
+                    location.reload();
                     return true;
                 }).error(function (data, status, headers, config) {
                     $scope.templateOptions.setVar("form", {errors: {}});
@@ -2506,7 +2506,7 @@ angular.module('seipModule.controllers', [])
                             });
                         }
                         $scope.templateOptions.setVar("form", {errors: data.errors.children});
-                    }                    
+                    }
                     notificationBarService.getLoadStatus().done();
                     return false;
                 });
@@ -2514,19 +2514,19 @@ angular.module('seipModule.controllers', [])
 
             $scope.templateOptions.setVar('addObservations', addObservations);
             var confirmCallBack = function () {
-                addObservations(true, function (data) {                    
+                addObservations(true, function (data) {
                 });
                 return true;
             };
-            $scope.templateOptions.setVar('addStatus', addStatus);            
+            $scope.templateOptions.setVar('addStatus', addStatus);
             var confirmCallBackStatus = function () {
-                addStatus(true, function (data) {                    
+                addStatus(true, function (data) {
                 });
                 return true;
             };
-            $scope.templateOptions.setVar('addOnePerTen', addOnePerTen);            
+            $scope.templateOptions.setVar('addOnePerTen', addOnePerTen);
             var confirmCallBackOnePerTen = function () {
-                addOnePerTen(true, function (data) {                    
+                addOnePerTen(true, function (data) {
                 });
                 return true;
             };
@@ -2534,9 +2534,9 @@ angular.module('seipModule.controllers', [])
             $scope.initFormObservations = function (resource) {
                 var d = new Date();
                 var numero = d.getTime();
-                $scope.setHeight(450);                
+                $scope.setHeight(450);
                 var parameters = {
-                    idCenter: $scope.idCenter,                    
+                    idCenter: $scope.idCenter,
                     _dc: numero
                 };
                 if (resource) {
@@ -2551,14 +2551,14 @@ angular.module('seipModule.controllers', [])
                     }
                 ];
                 $scope.templateOptions.setTemplate($scope.templates[0]);
-            }; 
+            };
             //Formulario del Estatus
             $scope.initFormStatus = function (resource) {
                 var d = new Date();
                 var numero = d.getTime();
-                $scope.setHeight(450);                
+                $scope.setHeight(450);
                 var parameters = {
-                    idObs: $scope.Status,                    
+                    idObs: $scope.Status,
                     _dc: numero
                 };
                 if (resource) {
@@ -2573,15 +2573,15 @@ angular.module('seipModule.controllers', [])
                     }
                 ];
                 $scope.templateOptions.setTemplate($scope.templates[0]);
-            };  
+            };
 
             //Formulario OnePerTen
             $scope.initFormOnePerTen = function (resource) {
                 var d = new Date();
                 var numero = d.getTime();
-                $scope.setHeight(450);                
+                $scope.setHeight(450);
                 var parameters = {
-                    idCenter: $scope.idCenter,                    
+                    idCenter: $scope.idCenter,
                     _dc: numero
                 };
                 if (resource) {
@@ -2596,7 +2596,7 @@ angular.module('seipModule.controllers', [])
                     }
                 ];
                 $scope.templateOptions.setTemplate($scope.templates[0]);
-            }; 
+            };
 
             //Removiendo las asistencias
             $scope.removeObservations = function () {
@@ -2619,13 +2619,13 @@ angular.module('seipModule.controllers', [])
                         }
                         notificationBarService.getLoadStatus().done();
                         return false;
-                    });     
-                    $timeout(callAtTimeout, 3000);                                                                                              
+                    });
+                    $timeout(callAtTimeout, 3000);
                 });
-                function callAtTimeout() {                    
+                function callAtTimeout() {
                     location.reload();
                 }
-            };  
+            };
             //Removiendo las asistencias
             $scope.removeUbch = function () {
                 $scope.openModalConfirm('¿Desea eliminar el Miembro?', function () {
@@ -2647,17 +2647,17 @@ angular.module('seipModule.controllers', [])
                         }
                         notificationBarService.getLoadStatus().done();
                         return false;
-                    });     
-                    $timeout(callAtTimeout, 3000);                                                                                              
+                    });
+                    $timeout(callAtTimeout, 3000);
                 });
-                function callAtTimeout() {                    
+                function callAtTimeout() {
                     location.reload();
                 }
-            };         
+            };
         })
         .controller('SipCenterAssistsController', function ($scope, notificationBarService, $http, notifyService, $filter, $timeout) {
 
-            var isInit = false;            
+            var isInit = false;
             //Carga el formulario de las Asistencias
             $scope.loadTemplateAssists = function (resource) {
                 $scope.initFormAssists(resource);
@@ -2665,7 +2665,7 @@ angular.module('seipModule.controllers', [])
                     isInit = true;
                 }
                 $scope.templateOptions.setTemplate($scope.templates[0]);
-                $scope.templateOptions.setParameterCallBack(resource);                
+                $scope.templateOptions.setParameterCallBack(resource);
                 if (resource) {
                     $scope.templateOptions.enableModeEdit();
                     $scope.openModalAuto();
@@ -2688,6 +2688,7 @@ angular.module('seipModule.controllers', [])
                     $scope.openModalAuto();
                 }
             };        
+            
 
             //Añadir Observations
             var addAssists = function (save, successCallBack) {
@@ -2707,12 +2708,12 @@ angular.module('seipModule.controllers', [])
                     data: formData,
                     headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'}  // set the headers so angular passing info as form data (not request payload)
                 }).success(function (data) {
-                    $scope.templateOptions.setVar("form", {errors: {}});                    
+                    $scope.templateOptions.setVar("form", {errors: {}});
                     if (successCallBack) {
                         successCallBack(data);
                     }
                     notificationBarService.getLoadStatus().done();
-                    location.reload(); 
+                    location.reload();
                     return true;
                 }).error(function (data, status, headers, config) {
                     $scope.templateOptions.setVar("form", {errors: {}});
@@ -2723,7 +2724,7 @@ angular.module('seipModule.controllers', [])
                             });
                         }
                         $scope.templateOptions.setVar("form", {errors: data.errors.children});
-                    }                    
+                    }
                     notificationBarService.getLoadStatus().done();
                     return false;
                 });
@@ -2789,9 +2790,9 @@ angular.module('seipModule.controllers', [])
             $scope.initFormAssists = function (resource) {
                 var d = new Date();
                 var numero = d.getTime();
-                $scope.setHeight(650);                
+                $scope.setHeight(650);
                 var parameters = {
-                    idCenter: $scope.idCenter,                    
+                    idCenter: $scope.idCenter,
                     _dc: numero
                 };
                 if (resource) {
@@ -2850,18 +2851,18 @@ angular.module('seipModule.controllers', [])
                         }
                         notificationBarService.getLoadStatus().done();
                         return false;
-                    });     
-                    $timeout(callAtTimeout, 3000);                                                                                              
+                    });
+                    $timeout(callAtTimeout, 3000);
                 });
-                function callAtTimeout() {                    
+                function callAtTimeout() {
                     location.reload();
                 }
-            };          
+            };
         })
         //fin
         .controller('SipCenterInventoryController', function ($scope, notificationBarService, $http, notifyService, $filter, $timeout) {
 
-            var isInit = false;            
+            var isInit = false;
             //Carga el formulario de las Asistencias
             $scope.loadTemplateInventory = function (resource) {
                 $scope.initFormInventory(resource);
@@ -2869,14 +2870,14 @@ angular.module('seipModule.controllers', [])
                     isInit = true;
                 }
                 $scope.templateOptions.setTemplate($scope.templates[0]);
-                $scope.templateOptions.setParameterCallBack(resource);                
+                $scope.templateOptions.setParameterCallBack(resource);
                 if (resource) {
                     $scope.templateOptions.enableModeEdit();
                     $scope.openModalAuto();
                 } else {
                     $scope.openModalAuto();
                 }
-            };           
+            };
 
             //Añadir Observations
             var addInventory = function (save, successCallBack) {
@@ -2896,12 +2897,12 @@ angular.module('seipModule.controllers', [])
                     data: formData,
                     headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'}  // set the headers so angular passing info as form data (not request payload)
                 }).success(function (data) {
-                    $scope.templateOptions.setVar("form", {errors: {}});                    
+                    $scope.templateOptions.setVar("form", {errors: {}});
                     if (successCallBack) {
                         successCallBack(data);
                     }
                     notificationBarService.getLoadStatus().done();
-                    location.reload(); 
+                    location.reload();
                     return true;
                 }).error(function (data, status, headers, config) {
                     $scope.templateOptions.setVar("form", {errors: {}});
@@ -2912,28 +2913,28 @@ angular.module('seipModule.controllers', [])
                             });
                         }
                         $scope.templateOptions.setVar("form", {errors: data.errors.children});
-                    }                    
+                    }
                     notificationBarService.getLoadStatus().done();
                     return false;
                 });
             };
 
             $scope.templateOptions.setVar('addInventory', addInventory);
-            var confirmCallBack = function () {                
+            var confirmCallBack = function () {
                 addInventory(true, function (data) {
                     $scope.indicator = data.indicator;
                 });
 
                 return true;
             };
-           
+
             //Formulario Asistencias
             $scope.initFormInventory = function (resource) {
                 var d = new Date();
                 var numero = d.getTime();
-                $scope.setHeight(550);                
+                $scope.setHeight(550);
                 var parameters = {
-                    idCenter: $scope.idCenter,                    
+                    idCenter: $scope.idCenter,
                     _dc: numero
                 };
                 if (resource) {
@@ -2948,7 +2949,7 @@ angular.module('seipModule.controllers', [])
                     }
                 ];
                 $scope.templateOptions.setTemplate($scope.templates[0]);
-            };   
+            };
             //Removiendo las asistencias
             $scope.removeInventory = function () {
                 $scope.openModalConfirm('¿Desea eliminar de Inventario?', function () {
@@ -2970,13 +2971,13 @@ angular.module('seipModule.controllers', [])
                         }
                         notificationBarService.getLoadStatus().done();
                         return false;
-                    });     
-                    $timeout(callAtTimeout, 3000);                                                                                              
+                    });
+                    $timeout(callAtTimeout, 3000);
                 });
-                function callAtTimeout() {                    
+                function callAtTimeout() {
                     location.reload();
                 }
-            };                
+            };
         })
 
         .controller('SipRequestGetFilters', function ($scope, $http) {
@@ -2984,22 +2985,21 @@ angular.module('seipModule.controllers', [])
                 LabelsRequestStatus: null,
                 LabelsCategorias: null,
             };
-            $scope.model = {                
+            $scope.model = {
                 RequestStatus: null,
                 Categorias: null,
-                
             };
-           //STATUS DE REQUERIMIENTOS
+            //STATUS DE REQUERIMIENTOS
             $scope.viewByStatus = function (status) {
                 $scope.tableParams.$params.filter['status'] = status;
                 var selectStatus = angular.element('#selectStatus');
                 selectStatus.select2("val", status);
 //                $scope.resetViewNotified();
             }
-            
+
             $scope.$watch("model.RequestStatus", function (newParams, oldParams) {
                 if ($scope.model.RequestStatus != null && $scope.model.RequestStatus.id != undefined) {
-                    $scope.tableParams.$params.filter['status'] = $scope.model.RequestStatus.id;                    
+                    $scope.tableParams.$params.filter['status'] = $scope.model.RequestStatus.id;
                 } else {
                     $scope.tableParams.$params.filter['status'] = null;
                 }
@@ -3012,10 +3012,10 @@ angular.module('seipModule.controllers', [])
                 selectCategorias.select2("val", categoria);
 //                $scope.resetViewNotified();
             }
-            
+
             $scope.$watch("model.Categorias", function (newParams, oldParams) {
                 if ($scope.model.Categorias != null && $scope.model.Categorias.id != undefined) {
-                    $scope.tableParams.$params.filter['categoria'] = $scope.model.Categorias.id;                    
+                    $scope.tableParams.$params.filter['categoria'] = $scope.model.Categorias.id;
                 } else {
                     $scope.tableParams.$params.filter['categoria'] = null;
                 }
@@ -3531,14 +3531,14 @@ angular.module('seipModule.controllers', [])
                 }
             };
             function openModal(callback) {
-                var height = $scope.height;                
+                var height = $scope.height;
                 if ($scope.template.name) {
                     modalOpen.dialog("option", "title", sfTranslator.trans($scope.template.name));
-                    modalOpen.dialog("option", "height", height);                    
+                    modalOpen.dialog("option", "height", height);
                 }
 
                 if ($scope.template.modeEdit) {
-                    $scope.template.modeEdit = false;                    
+                    $scope.template.modeEdit = false;
                     // setter
                     modalOpen.dialog("option", "buttons", [
                         {text: "Guardar", click: function () {
@@ -3832,6 +3832,7 @@ angular.module('seipModule.controllers', [])
             $scope.getCategoryFile();
 
         })
+
 
         .controller('TableWorkStudyCircleController', function ($scope, ngTableParams, $http, sfTranslator, notifyService) {
             var selectComplejo = angular.element("#selectComplejos");
@@ -4141,6 +4142,171 @@ angular.module('seipModule.controllers', [])
 
         })
 
+        //ONE PER TEN 
+        .controller('TableOnePerTenController', function ($scope, ngTableParams, $http, sfTranslator, notifyService) {
+            var selectComplejo = angular.element("#selectComplejos");
+            var selectFirstLineManagement = angular.element("#selectFirstLineManagement");
+            var selectSecondLineManagement = angular.element("#selectSecondLineManagement");
+            var selectWorkStudyCircle = angular.element("#selectWorkStudyCircle");
+
+
+            $scope.data = {
+                complejos: null,
+                first_line_managements: null,
+                second_line_managements: null,
+                work_study_circles: null,
+            };
+
+            $scope.model = {
+                complejo: null,
+                firstLineManagement: null,
+                secondLineManagement: null,
+                workStudyCircle: null,
+            };
+
+            //Busca las localidades
+            $scope.getComplejos = function () {
+                var parameters = {
+                    filter: {}
+                };
+                $http.get(Routing.generate('pequiven_seip_complejos', parameters))
+                        .success(function (data) {
+                            $scope.data.complejos = data;
+                            if ($scope.model.complejo != null) {
+                                $scope.setValueSelect2("selectComplejos", $scope.model.complejo, $scope.data.complejos, function (selected) {
+                                    $scope.model.complejo = selected;
+                                });
+                            }
+                        });
+            };
+
+
+            //Busca las Gerencias de 1ra Línea
+            $scope.getFirstLineManagement = function (complejo) {
+                var parameters = {
+                    filter: {}
+                };
+                if ($scope.model.complejo != null) {
+                    parameters.filter['complejo'] = $scope.model.complejo.id;
+                }
+
+                $http.get(Routing.generate('pequiven_seip_first_line_management', parameters))
+                        .success(function (data) {
+                            $scope.data.first_line_managements = data;
+                            if ($scope.model.firstLineManagement != null) {
+                                $scope.setValueSelect2("firstLineManagement", $scope.model.firstLineManagement, $scope.data.first_line_managements, function (selected) {
+                                    $scope.model.firstLineManagement = selected;
+                                });
+                            }
+                        });
+            };
+
+            //Busca las Gerencias de 2da Línea
+            $scope.getSecondLineManagement = function (gerencia) {
+                var parameters = {
+                    filter: {}
+                };
+                if ($scope.model.firstLineManagement != null) {
+                    parameters.filter['gerencia'] = $scope.model.firstLineManagement.id;
+                }
+
+                $http.get(Routing.generate('pequiven_seip_second_line_management', parameters))
+                        .success(function (data) {
+                            $scope.data.second_line_managements = data;
+                            if ($scope.model.secondLineManagement != null) {
+                                $scope.setValueSelect2("secondLineManagement", $scope.model.secondLineManagement, $scope.data.second_line_managements, function (selected) {
+                                    $scope.model.secondLineManagement = selected;
+                                });
+                            }
+                        });
+            };
+            
+             //Busca los Círculos de Estudio de Trabajo
+            $scope.getWorkStudyCircle = function (complejo, phase) {
+                var parameters = {
+                    filter: {}
+                };
+                if ($scope.model.complejo != null) {
+                    parameters.filter['complejo'] = $scope.model.complejo.id;
+                }
+                if (phase != '' && phase != undefined) {
+                    parameters.filter['phase'] = phase;
+                }
+                $http.get(Routing.generate('pequiven_seip_work_study_circle', parameters))
+                        .success(function (data) {
+                            $scope.data.work_study_circles = data;
+                            if ($scope.model.workStudyCircle != null) {
+                                $scope.setValueSelect2("workStudyCircle", $scope.model.workStudyCircle, $scope.data.work_study_circles, function (selected) {
+                                    $scope.model.workStudyCircle = selected;
+                                });
+                            }
+                        });
+            };
+
+            $scope.getComplejos();
+            $scope.getFirstLineManagement();
+            $scope.getWorkStudyCircle();
+
+            //Scope de Localidad
+            $scope.$watch("model.complejo", function (newParams, oldParams) {
+                if ($scope.model.complejo != null && $scope.model.complejo.id != undefined) {
+                    $scope.tableParams.$params.filter['complejo'] = $scope.model.complejo.id;
+                    //Al cambiar el select de localidad
+                    selectComplejo.change(function () {
+                        selectFirstLineManagement.select2("val", '');
+                        selectWorkStudyCircle.select2("val", '');
+                    });
+                } else {
+                    $scope.tableParams.$params.filter['complejo'] = null;
+                }
+            }
+            );
+
+            //Scope de Gerencia de 1ra Línea
+            $scope.$watch("model.firstLineManagement", function (newParams, oldParams) {
+                if ($scope.model.firstLineManagement != null && $scope.model.firstLineManagement.id != undefined) {
+                    $scope.tableParams.$params.filter['firstLineManagement'] = $scope.model.firstLineManagement.id;
+                    selectSecondLineManagement.select2("enable", true);
+                    //Al cambiar la gerencia de 1ra línea
+                    selectFirstLineManagement.change(function () {
+                        selectSecondLineManagement.select2("val", '');
+                    });
+                } else {
+                    $scope.tableParams.$params.filter['firstLineManagement'] = null;
+                    //Cambia status enable en segunda linea
+                    selectSecondLineManagement.select2("enable", false);
+                    selectSecondLineManagement.select2("val", '');
+                }
+            });
+
+            //Scope de Gerencia de 2da Línea
+            $scope.$watch("model.secondLineManagement", function (newParams, oldParams) {
+                if ($scope.model.secondLineManagement != null && $scope.model.secondLineManagement.id != undefined) {
+                    $scope.tableParams.$params.filter['secondLineManagement'] = $scope.model.secondLineManagement.id;
+                } else {
+                    $scope.tableParams.$params.filter['secondLineManagement'] = null;
+                }
+            });
+
+           
+
+            //Scope de Círculo de Estudio de Trabajo
+            $scope.$watch("model.workStudyCircle", function (newParams, oldParams) {
+                if ($scope.model.workStudyCircle != null && $scope.model.workStudyCircle.id != undefined) {
+                    $scope.tableParams.$params.filter['workStudyCircle'] = $scope.model.workStudyCircle.id;
+                    //Al cambiar el círculo de estudio de trabajo
+                    selectWorkStudyCircle.change(function () {
+                    });
+                } else {
+                    $scope.tableParams.$params.filter['workStudyCircle'] = null;
+                }
+            });
+
+
+        })
+        //FIN ONE PER TEN
+
+
         .controller('TableProposalController', function ($scope, ngTableParams, $http, sfTranslator, notifyService) {
             var selectComplejo = angular.element("#selectComplejos");
             var selectFirstLineManagement = angular.element("#selectFirstLineManagement");
@@ -4223,14 +4389,14 @@ angular.module('seipModule.controllers', [])
             };
 
             //Busca los Círculos de Estudio de Trabajo
-            $scope.getWorkStudyCircle = function (complejo,phase) {
+            $scope.getWorkStudyCircle = function (complejo, phase) {
                 var parameters = {
                     filter: {}
                 };
                 if ($scope.model.complejo != null) {
                     parameters.filter['complejo'] = $scope.model.complejo.id;
                 }
-                if(phase != '' && phase != undefined){
+                if (phase != '' && phase != undefined) {
                     parameters.filter['phase'] = phase;
                 }
                 $http.get(Routing.generate('pequiven_seip_work_study_circle', parameters))
@@ -4243,7 +4409,7 @@ angular.module('seipModule.controllers', [])
                             }
                         });
             };
-            
+
             //Busca los Círculos de Estudio de Trabajo
             $scope.getWorkStudyCircleInherited = function (workStudyCircleParent) {
                 var parameters = {
@@ -5928,7 +6094,7 @@ angular.module('seipModule.controllers', [])
                 })
             };
             $scope.renderChartResult = function (id, data, gerencia, url) {
-                FusionCharts.ready(function () {                    
+                FusionCharts.ready(function () {
                     var revenueChart = new FusionCharts({
                         "type": "stackedbar3d",
                         "renderAt": id,
@@ -5970,40 +6136,40 @@ angular.module('seipModule.controllers', [])
                                     "category": data.dataSource.categories.category
                                 }
                             ],
-                            "dataset": data.dataSource.dataset  
+                            "dataset": data.dataSource.dataset
                         },
-                            "events": {
+                        "events": {
                             "renderComplete": function (e, a) {
-                               
-                               // Cross-browser event listening
-                               var addListener = function (elem, evt, fn) {
-                                   if (elem && elem.addEventListener) {
-                                       elem.addEventListener(evt, fn);
-                                   }
-                                   else if (elem && elem.attachEvent) {
-                                       elem.attachEvent("on" + evt, fn);
-                                   } 
-                                   else {
-                                       elem["on" + evt] = fn;
-                                   }
-                               };
-                               
-                               // Export chart method
-                               var exportFC = function () {                                
-                                   var types = {    
-                                       "exportpng": "png"                                 
-                                   };
-                                   if (e && e.sender && e.sender.exportChart) {
+
+                                // Cross-browser event listening
+                                var addListener = function (elem, evt, fn) {
+                                    if (elem && elem.addEventListener) {
+                                        elem.addEventListener(evt, fn);
+                                    }
+                                    else if (elem && elem.attachEvent) {
+                                        elem.attachEvent("on" + evt, fn);
+                                    }
+                                    else {
+                                        elem["on" + evt] = fn;
+                                    }
+                                };
+
+                                // Export chart method
+                                var exportFC = function () {
+                                    var types = {
+                                        "exportpng": "png"
+                                    };
+                                    if (e && e.sender && e.sender.exportChart) {
                                         e.sender.exportChart({
-                                           exportFileName: "FC_sample_export",
-                                           exportFormat: types[this.id]
-                                       });
-                                   }
-                               };
+                                            exportFileName: "FC_sample_export",
+                                            exportFormat: types[this.id]
+                                        });
+                                    }
+                                };
                                 // Attach events 
                                 addListener(document.getElementById("exportpng"), "click", exportFC);
-                                }
                             }
+                        }
                     });
                     revenueChart.setTransparent(true);
                     revenueChart.render();
@@ -6360,38 +6526,38 @@ angular.module('seipModule.controllers', [])
                             "dataset": data.dataSource.dataset
                         },
                         "events": {
-                        "renderComplete": function (e, a) {
-                           
-                           // Cross-browser event listening
-                           var addListener = function (elem, evt, fn) {
-                               if (elem && elem.addEventListener) {
-                                   elem.addEventListener(evt, fn);
-                               }
-                               else if (elem && elem.attachEvent) {
-                                   elem.attachEvent("on" + evt, fn);
-                               } 
-                               else {
-                                   elem["on" + evt] = fn;
-                               }
-                           };
-                           
-                           // Export chart method
-                           var exportFC = function () {
-                               var types = {    
-                                   "exportpng": "png"                                 
-                               };
-                               if (e && e.sender && e.sender.exportChart) {
-                                    e.sender.exportChart({
-                                       exportFileName: "FC_sample_export",
-                                       exportFormat: types[this.id]
-                                   });
-                               }
-                           };
+                            "renderComplete": function (e, a) {
 
-                            // Attach events 
-                            addListener(document.getElementById("exportpng"), "click", exportFC);
+                                // Cross-browser event listening
+                                var addListener = function (elem, evt, fn) {
+                                    if (elem && elem.addEventListener) {
+                                        elem.addEventListener(evt, fn);
+                                    }
+                                    else if (elem && elem.attachEvent) {
+                                        elem.attachEvent("on" + evt, fn);
+                                    }
+                                    else {
+                                        elem["on" + evt] = fn;
+                                    }
+                                };
+
+                                // Export chart method
+                                var exportFC = function () {
+                                    var types = {
+                                        "exportpng": "png"
+                                    };
+                                    if (e && e.sender && e.sender.exportChart) {
+                                        e.sender.exportChart({
+                                            exportFileName: "FC_sample_export",
+                                            exportFormat: types[this.id]
+                                        });
+                                    }
+                                };
+
+                                // Attach events 
+                                addListener(document.getElementById("exportpng"), "click", exportFC);
                             }
-                        }                                            
+                        }
 
                     });
                     revenueChart.setTransparent(true);
@@ -6420,36 +6586,36 @@ angular.module('seipModule.controllers', [])
                             "dataset": data.dataSource.dataset
                         },
                         "events": {
-                        "renderComplete": function (e, a) {
-                           
-                           // Cross-browser event listening
-                           var addListener = function (elem, evt, fn) {
-                               if (elem && elem.addEventListener) {
-                                   elem.addEventListener(evt, fn);
-                               }
-                               else if (elem && elem.attachEvent) {
-                                   elem.attachEvent("on" + evt, fn);
-                               } 
-                               else {
-                                   elem["on" + evt] = fn;
-                               }
-                           };
-                           
-                           // Export chart method
-                           var exportFC = function () {
-                               var types = {    
-                                   "export_causespng": "png"                                 
-                               };
-                               if (e && e.sender && e.sender.exportChart) {
-                                    e.sender.exportChart({
-                                       exportFileName: "FC_sample_export",
-                                       exportFormat: types[this.id]
-                                   });
-                               }
-                           };
+                            "renderComplete": function (e, a) {
 
-                            // Attach events 
-                            addListener(document.getElementById("export_causespng"), "click", exportFC);
+                                // Cross-browser event listening
+                                var addListener = function (elem, evt, fn) {
+                                    if (elem && elem.addEventListener) {
+                                        elem.addEventListener(evt, fn);
+                                    }
+                                    else if (elem && elem.attachEvent) {
+                                        elem.attachEvent("on" + evt, fn);
+                                    }
+                                    else {
+                                        elem["on" + evt] = fn;
+                                    }
+                                };
+
+                                // Export chart method
+                                var exportFC = function () {
+                                    var types = {
+                                        "export_causespng": "png"
+                                    };
+                                    if (e && e.sender && e.sender.exportChart) {
+                                        e.sender.exportChart({
+                                            exportFileName: "FC_sample_export",
+                                            exportFormat: types[this.id]
+                                        });
+                                    }
+                                };
+
+                                // Attach events 
+                                addListener(document.getElementById("export_causespng"), "click", exportFC);
                             }
                         }
                     });
