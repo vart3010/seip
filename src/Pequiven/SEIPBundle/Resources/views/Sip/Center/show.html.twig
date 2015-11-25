@@ -11,7 +11,7 @@
 
 {% block before_body %}
     {{ contentHeader(
-        ("sip.center.name"|trans ),
+        {(path('pequiven_sip_center_list')): "sip.center.name"|trans},        
         ('pequiven.show'|trans({},'messages'))
     )}}
 {% endblock %}
