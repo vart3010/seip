@@ -79,7 +79,7 @@
                             <td align="left">V-{{ dataUbch.cedula }}</td>                            
                             <td align="left">{{ dataUbch.nombre }}</td>                            
                             <td align="left">{{ dataUbch.telefono }}</td> 
-                            <td align="left">{{ ubchCargo[dataUbch.cargo] }}</td>
+                            <td align="left">{{ ubchCargo[dataUbch.cargo - 1].description }}</td>
                             <td>
                                 {% set notification = dataUbch.notification %}
                                 {% if notification == 1 %}
@@ -118,6 +118,8 @@
                                         {% if notification == 0%}               
                                             <a href ng-click="loadTemplateOnePerTen(ubch='{{ dataUbch.id }}')" class="button icon-pencil">Cargar</a> 
                                         {% endif %}
+                                        <a href ng-click="loadTemplateCargoUbch(id='{{ dataUbch.id }}')" class="button icon-pencil">Editar</a> 
+
                                         <a href ng-click="removeUbch(ubch='{{ dataUbch.id }}')" class="button icon-cross-round">{{ "pequiven.actions.delete"|trans({},"messages") }}</a>             
                                     </span>
                                 </span>

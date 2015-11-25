@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Pequiven\SEIPBundle\Entity\Sip\Ubch;
 use Pequiven\SEIPBundle\Form\Sip\Center\UbchType;
+use Pequiven\SEIPBundle\Form\Sip\Center\UbchCargoType;
 
 
 /**
@@ -158,15 +159,17 @@ class UbchController extends SEIPController {
 		$ubch = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Ubch")->findBy(array("codigoCentro" => $codigoCentro));
 
         //Carga de status
-        $ubchCargo = [
-            1 => "Jefe",
-            2 => "Patrullero",            
-        ];
+            foreach (Ubch::getCargoUbch() as $key => $value) {
+                $labelsCargo[] = array(
+                    'id' => $key,
+                    'description' => $this->trans($value, array(), 'PequivenArrangementProgramBundle'),
+                );
+            }
 
 		return $this->render('PequivenSEIPBundle:Sip:Center/Ubch/show.html.twig',array(
 			'center'	=> $center,
 			'ubch'		=> $ubch,
-            'ubchCargo'     => $ubchCargo
+            'ubchCargo' => $labelsCargo
 
 			));
 	}
@@ -257,6 +260,48 @@ class UbchController extends SEIPController {
                     ->setTemplateVar($this->config->getPluralResourceName())
                     ->setData(array(
                 'form' => $form->createView(),
+                    ))
+            ;
+            $view->getSerializationContext()->setGroups(array('id', 'api_list'));
+
+            return $view;
+        }
+    }
+
+    /**
+     * 
+     * @param Request $request
+     * @return type
+     */
+    public function formCargoAction(Request $request) {
+
+        $id = $request->get('id');
+
+        $em = $this->getDoctrine()->getEntityManager();
+
+        $cargo = new Ubch();
+
+        $form = $this->createForm(new UbchCargoType(), $cargo);
+        
+        if (isset($request->get('sip_ubch_cargo')['cargo'])) {
+
+            $form->bind($this->getRequest());
+            $cargo = $request->get('sip_ubch_cargo')['cargo'];
+            
+            $ubch = $this->get('pequiven.repository.ubch')->find($id);
+
+            $ubch->setCargo($cargo);
+
+            $em->flush();
+
+            $this->get('session')->getFlashBag()->add('success', "Cargo Actualizado Exitosamente");
+        } else {
+            $view = $this
+                    ->view()
+                    ->setTemplate('PequivenSEIPBundle:Sip:Center/Form/UbchCargo.html.twig')
+                    ->setTemplateVar($this->config->getPluralResourceName())
+                    ->setData(array(
+                    'form' => $form->createView(),
                     ))
             ;
             $view->getSerializationContext()->setGroups(array('id', 'api_list'));
