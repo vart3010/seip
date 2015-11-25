@@ -32,6 +32,7 @@ abstract class Observations {
     const COMIDA = 15;
     const AYUDA_SOCIAL = 16;
     const INFRAESTRUCTURA = 17;
+    const SERVICIOS_MEDICOS = 18;
 
     /**
      * Status
@@ -63,6 +64,7 @@ abstract class Observations {
             self::OTROS => 'Otros...',
             self::AYUDA_SOCIAL => 'Ayuda Social',
             self::INFRAESTRUCTURA => 'Infraestructura',
+            self::SERVICIOS_MEDICOS => 'Servicios Médicos',
         ];
         return $levelProcessArray;
     }
