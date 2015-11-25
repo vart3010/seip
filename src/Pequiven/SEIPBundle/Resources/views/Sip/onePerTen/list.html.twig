@@ -69,6 +69,16 @@
                                 </select>
                             </div>
                         </div>
+                        {#<!-- Filtro de Centros Completos -->
+                        <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                            <label class="bold">Cargados</label>
+                            <br/>
+                            <div class="with-mid-padding">
+                                <select class="select2 input-xlarge" id="selectWorkStudyCircle" ng-model="model.workStudyCircle" ng-init="getWorkStudyCircle('model.complejo.id','1')" ng-options="value as value.name group by model.complejo.description for (key,value) in data.work_study_circles" >
+                                    <option value=''></option>
+                                </select>
+                            </div>
+                        </div>#}
 
                     </div>
                 </div>

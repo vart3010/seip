@@ -5,15 +5,20 @@ namespace Pequiven\SEIPBundle\Controller\Sip\Center;
 use Pequiven\SEIPBundle\Controller\SEIPController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+
 use Pequiven\SEIPBundle\Entity\Sip\Center\Observations;
 use Pequiven\SEIPBundle\Form\Sip\Center\ObservationsType;
 use Pequiven\SEIPBundle\Form\Sip\Center\StatusType;
+
 use Pequiven\SEIPBundle\Entity\Sip\Center\Assists;
 use Pequiven\SEIPBundle\Form\Sip\Center\AssistsType;
 use Pequiven\SEIPBundle\Form\Sip\Center\AssistsEditType;
+
 use Pequiven\SEIPBundle\Entity\Sip\Center\Inventory;
 use Pequiven\SEIPBundle\Form\Sip\Center\InventoryType;
 use Pequiven\SEIPBundle\Entity\Sip\Center\StatusCentro;
+
+use Pequiven\SEIPBundle\Entity\Sip\Ubch;
 
 /**
  * Controlador Centros
@@ -424,13 +429,16 @@ class CenterController extends SEIPController {
             5 => "#920a00"
         ];
 
-        $request = $this->get('pequiven.repository.observations')->findBy(array('id' => $id));
-
+        $request = $this->get('pequiven.repository.observations')->findOneBy(array('id' => $id));
+                
+        $center  = $this->get('pequiven.repository.center')->findOneBy(array('codigoCentro' => $request->getCodigoCentro()));
+        
         return $this->render('PequivenSEIPBundle:Sip:Center/Request/show.html.twig', array(
             'request'             => $request,
             'labelsObservations'  => $labelsObservations,
             'labelsStatus'        => $labelsStatus,
-            'color'               => $color
+            'color'               => $color,
+            'center'              => $center
             ));
     }
 
@@ -522,9 +530,14 @@ class CenterController extends SEIPController {
 
         $id = $request->get('id');
         
-        $inventory = $this->get('pequiven.repository.inventory')->findBy(array('id' => $id));
+        $inventory = $this->get('pequiven.repository.inventory')->findOneBy(array('id' => $id));
 
-        return $this->render('PequivenSEIPBundle:Sip:Center/Inventory/show.html.twig', array('inventory' => $inventory));
+        $center  = $this->get('pequiven.repository.center')->findOneBy(array('codigoCentro' => $inventory->getCodigoCentro()));
+        
+        return $this->render('PequivenSEIPBundle:Sip:Center/Inventory/show.html.twig', array(
+            'inventory' => $inventory,
+            'center'    => $center
+            ));
     }
 
     /**
@@ -655,11 +668,13 @@ class CenterController extends SEIPController {
             5 => "#920a00"
         ];
 
-        //Carga de status
-        $ubchCargo = [
-            1 => "Jefe",
-            2 => "Patrullero",
-        ];
+            //Carga de status
+            foreach (Ubch::getCargoUbch() as $key => $value) {
+                $labelsCargo[] = array(
+                    'id' => $key,
+                    'description' => $this->trans($value, array(), 'PequivenArrangementProgramBundle'),
+                );
+            }
 
         $assist = $this->get('pequiven.repository.assists')->findBy(array('codigoCentro' => $codigoCentro));
 
@@ -678,7 +693,7 @@ class CenterController extends SEIPController {
                     'inventory' => $inventory,
                     'colorStatus' => $color,
                     'ubch'      => $ubch,
-                    'ubchCargo' => $ubchCargo,
+                    'ubchCargo' => $labelsCargo,
                     'cantCutl'  => $cantCutl,
                     'validacionCutl' => $validacionCutl,
                     'centerAct' => $centerAct,

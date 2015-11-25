@@ -11,7 +11,7 @@
 
 {% block before_body %}
     {{ contentHeader( 
-        ("sip.cutl.title" | trans({})),
+        {(path('pequiven_sip_cutl_list')): "sip.cutl.title"|trans},
         ('pequiven.show'|trans({},'messages'))
     )}}    
 {% endblock %}
@@ -82,7 +82,9 @@
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">Código Centro</label>
+                    <a href="{{path('pequiven_sip_center_show',{'id':center.id})}}">
                     {{ center.codigoCentro }}
+                    </a>
                 </p>
             </div>
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
@@ -96,7 +98,39 @@
                     <label class="label">Dirección</label>
                     {{ center.direccion }}
                 </p>
-            </div> 
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">N° de Mesas</label>
+                    {{ center.mesas }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">N° de Electores</label>
+                    {{ center.electores }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Centro de Misiones</label>                    
+                        {{ center.centroMisiones }}                    
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Importante</label>                    
+                        {{ center.importante }}                    
+                </p>
+            </div>
+            {% if center.eje > 0 %}
+                <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                    <p class="inline-label">
+                        <label class="label">Eje en la Parroquia</label>
+                        {{ center.eje }}
+                    </p>
+                </div>
+            {% endif %} 
         </div>        
     </fieldset>       
     <br>    

@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Pequiven\SEIPBundle\Model\Sip\Center\Ubch as modelUbch;
 
 /**
  * ubch
@@ -15,7 +16,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  * @ORM\HasLifecycleCallbacks()
  */
-class Ubch {
+class Ubch extends modelUbch{
 
     /**
      * @var integer
