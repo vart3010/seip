@@ -11,7 +11,7 @@
 
 {% block before_body %}
     {{ contentHeader( 
-        ("sip.cutl.title" | trans({})),
+        {(path('pequiven_sip_cutl_list')): "sip.cutl.title"|trans},
         ('pequiven.show'|trans({},'messages'))
     )}}    
 {% endblock %}

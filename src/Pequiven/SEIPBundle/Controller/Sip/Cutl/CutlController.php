@@ -86,6 +86,18 @@ class CutlController extends SEIPController {
 
         $cutl = $this->get('pequiven.repository.cutl')->find($id);
         
+        $cantCutl = count($cutl);
+
+        //Carga de Nombre de CUTL
+        if ($cantCutl == 0) {
+            $nomCutl = array();
+            $cedula = 0;
+        }else{
+                $nomCutl[$cutl->getCedula()] = $cutl->getNombre();
+                $cedula = $cutl->getCedula();
+        }
+        
+        $validacionCutl = $cedula;
         //Carga de Nombre de CUTL                
         $nomCutl[$cutl->getCedula()] = $cutl->getNombre();
 
@@ -102,7 +114,9 @@ class CutlController extends SEIPController {
                     'cutl'      => $cutl,                    
                     'center'    => $center,
                     'assist'    => $assist,
-                    'nomCutl'   => $nomCutl
+                    'nomCutl'   => $nomCutl,
+                    'cantCutl'  => $cantCutl,
+                    'validacionCutl' => $validacionCutl,
         ));
     }
 
