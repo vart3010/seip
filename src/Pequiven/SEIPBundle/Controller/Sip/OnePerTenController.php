@@ -375,7 +375,7 @@ class OnePerTenController extends SEIPController {
 
                 $members[] = array(
                     "id" => $onePerTenMembers[0]->getId(),
-                    "cedula" => $member->getCedula(),
+                    "cedula" => $onePerTenMembers[0]->getCedula(),
                     "nombre" => $onePerTenMembers[0]->getNombre(),
                     "telefono" => $onePerTenMembers[0]->getTelefono(),
                     "idCentro" => $onePerTenMembers[0]->getCodCentro(),
