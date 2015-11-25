@@ -45,8 +45,7 @@
             <h3 class="ng-binding">1x10 de {{ user }} 
                 {% if user.indentification %}
                     - CI:{{ user.indentification }}</h3>
-                {% endif %}
-                }
+                {% endif %}                
             {% if(members|length<=12) %}
                 <div class="button-group absolute-right compact">
                     <a class="button icon-list-add " href="{{ path("pequiven_onePerTen_add_member",{idUserOne:user.id})}}"  title="">
