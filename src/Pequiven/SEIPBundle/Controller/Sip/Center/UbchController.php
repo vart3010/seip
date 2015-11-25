@@ -310,6 +310,91 @@ class UbchController extends SEIPController {
         }
     }
 
+    /**
+     *
+     * Exportar reporte ubch
+     *
+     */
+    public function exportAction(Request $request) {
+
+        $id = $request->get('id');
+        
+        $em = $this->getDoctrine()->getManager();
+
+        $center = $this->get('pequiven.repository.center')->find($id);
+
+        $codigoCentro = $center->getCodigoCentro();
+        
+        $ubch = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Ubch")->findBy(array("codigoCentro" => $codigoCentro));
+
+        //Carga de status
+        foreach (Ubch::getCargoUbch() as $key => $value) {
+            $labelsCargo[] = array(
+                'id' => $key,
+                'description' => $this->trans($value, array(), 'PequivenArrangementProgramBundle'),
+            );
+        }
+
+        //Periodo
+        $period = $this->getPeriodService()->getPeriodActive();
+        
+        $data = array(
+            'center' => $center,
+            'ubch'   => $ubch,            
+            'period' => $period
+           
+        );
+
+        $this->generatePdf($data);
+    }
+
+    public function generatePdf($data) {
+        $pdf = new \Pequiven\SEIPBundle\Model\Sip\PDF\UbchPdf('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+        $pdf->setPrintLineFooter(false);
+        $pdf->setContainer($this->container);
+        //$pdf->setPeriod($this->getPeriodService()->getPeriodActive());
+        //$pdf->setFooterText($this->trans('pequiven_seip.message_footer', array(), 'PequivenSEIPBundle'));
+    // set document information
+        $pdf->SetCreator(PDF_CREATOR);
+        $pdf->SetAuthor('SEIP');
+        $pdf->setTitle('REPORTE UBCH');
+        $pdf->SetSubject('Resultados UBCH');
+        $pdf->SetKeywords('PDF, UBCH, Resultados');
+
+        $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+        $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+
+    // set default monospaced font
+        $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+
+    // set margins
+        $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+
+    // set auto page breaks
+        $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+
+    // set image scale factor
+        $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+
+    // set font
+    //  $pdf->SetFont('times', 'BI', 12);
+    // add a page        
+        $pdf->AddPage('L');
+
+    // set some text to print 
+        $html = $this->renderView('PequivenSEIPBundle:Sip:Center/Ubch/viewPdf.html.twig', $data);
+
+    // print a block of text using Write()
+        $pdf->writeHTML($html, true, false, true, false, '');
+
+    //            $pdf->Output('Reporte del dia'.'.pdf', 'I');
+        $pdf->Output('Reporte Ubch' . '.pdf', 'D');
+
+        $this->rmTempFile($data);
+    }
+
 	/**
 	 *	Api CNE
 	 *
