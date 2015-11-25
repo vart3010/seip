@@ -25,9 +25,9 @@ class Observations extends modelObservations{
     private $id;
 
     /**
-     * @var \DateTime
+     * @var \Date
      * 
-     * @ORM\Column(name="fecha", type="datetime")
+     * @ORM\Column(name="fecha", type="date")
      */
     private $fecha;
 
@@ -65,6 +65,22 @@ class Observations extends modelObservations{
      * @ORM\Column(name="centro", type="text", nullable=true)
      */
     private $centro;
+
+    /**
+     * municipio
+     * @var string
+     *
+     * @ORM\Column(name="municipio", type="string", length=255, nullable=true)
+     */
+    private $municipio;
+
+    /**
+     * parroquia
+     * @var string
+     *
+     * @ORM\Column(name="parroquia", type="string", length=255, nullable=true)
+     */
+    private $parroquia;
 
      /**
      * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
@@ -122,6 +138,22 @@ class Observations extends modelObservations{
 
     function getCentro() {
         return $this->centro;
+    }
+
+    function setMunicipio($municipio) {
+        $this->municipio = $municipio;
+    }
+
+    function setParroquia($parroquia) {
+        $this->parroquia = $parroquia;
+    }
+
+    function getMunicipio() {
+        return $this->municipio;
+    }
+
+    function getParroquia() {
+        return $this->parroquia;
     }
 
     /**

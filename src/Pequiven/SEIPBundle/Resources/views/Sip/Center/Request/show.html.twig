@@ -1,0 +1,98 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
+
+{% trans_default_domain 'sip' %}
+
+{% block javascripts_base %}
+    {{ parent() }}
+    <script src="{{  asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.input.js') }}"></script>
+{% endblock javascripts_base %}
+
+{% block before_body %}
+    {{ contentHeader(
+        {(path('pequiven_sip_center_show',{'id':center.id})): "sip.center.name"|trans},        
+        {(path('pequiven_sip_request_list')): "Requerimieto"|trans},                
+        ('pequiven.show'|trans({},'messages'))
+    )}}
+{% endblock %}
+
+{% block body %}
+    {% set show = 1 %}
+
+    <fieldset class="fieldset">
+        <legend class="legend" >Descripción Requerimiento</legend>
+        <div class="columns">
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Observación</label>                    
+                        {{ request.observations }}                    
+                </p>
+            </div> 
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Categoria</label>
+                        {{ labelsObservations[request.categoria - 1].description }}
+                </p>
+            </div>
+            <div ng-controller="SipCenterObservationController"> 
+                <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                    <p class="inline-label">
+                    <label class="label">Estatus</label>                                            
+                            <label style="color:#ffffff;width:80px; border-radius: 15px 15px 15px 15px; font-weight: bold; background:{{color[request.status]}}; border-color:{{color[request.status]}};" align="center" href ng-click="loadTemplateStatus(Status='{{ request.id }}')">
+                                &nbsp;{{ labelsStatus[request.status - 1].description }}&nbsp;
+                            </label>
+                            
+                    </p>
+                </div>
+            </div>
+            &nbsp;
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Fecha</label>                    
+                        {{ request.fecha | date("d/m/Y")}}                    
+                </p>
+            </div> 
+        </div>
+    </fieldset> 
+
+    <fieldset class="fieldset">
+    <legend class="legend" >Datos del Centro</legend>
+        <div class="columns">           
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Codigo Centro</label>                    
+                        {{ request.codigoCentro }}                    
+                </p>
+            </div> 
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Centro</label>                    
+                        {{ request.centro }}                    
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Estado</label>                    
+                        {{ center.descriptionEstado }}                    
+                </p>
+            </div> 
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Municipio</label>                    
+                        {{ request.municipio }}                    
+                </p>
+            </div>           
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Parroquia</label>                    
+                        {{ request.parroquia }}                    
+                </p>
+            </div> 
+        </div>
+    </fieldset> 
+{% endblock %}
+
+{% block javascript %}    
+{% endblock %}
+

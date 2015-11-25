@@ -24,12 +24,34 @@ class OnePerTenRepository extends EntityRepository {
                 ->innerJoin('opt.ten', 't')
         ;
 
-
         if (($description = $criteria->remove('userName')) != null) {
-            if (isset($criteria['userName'])) {
-                $description = $criteria['userName'];
-                $queryBuilder->andWhere($queryBuilder->expr()->orX($queryBuilder->expr()->like('u.firstname', "'%" . $description . "%'"), $queryBuilder->expr()->like('u.lastname', "'%" . $description . "%'")));
-            }
+            $queryBuilder->andWhere($queryBuilder->expr()->orX($queryBuilder->expr()->like('u.firstname', "'%" . $description . "%'"), $queryBuilder->expr()->like('u.lastname', "'%" . $description . "%'")));
+        }
+        if (($complejo = $criteria->remove('complejo')) != null) {
+            $queryBuilder
+                    ->andWhere("u.complejo = :complejo")
+                    ->setParameter("complejo", $complejo);
+        }
+
+        if (($gerencia = $criteria->remove('firstLineManagement'))) {
+            $queryBuilder
+                    ->andWhere('u.gerencia= :gerencia')
+                    ->setParameter('gerencia', $gerencia)
+            ;
+        }
+
+        if (($gerenciaSecond = $criteria->remove('secondLineManagement'))) {
+            $queryBuilder
+                    ->andWhere('u.gerenciaSecond = :gerenciaSecond')
+                    ->setParameter('gerenciaSecond', $gerenciaSecond)
+            ;
+        }
+
+        if (($workStudyCircle = $criteria->remove('workStudyCircle'))) {
+            $queryBuilder
+                    ->andWhere('u.workStudyCircle = :workStudyCircle')
+                    ->setParameter('workStudyCircle', $workStudyCircle)
+            ;
         }
 
         parent::applyCriteria($queryBuilder, $criteria->toArray());

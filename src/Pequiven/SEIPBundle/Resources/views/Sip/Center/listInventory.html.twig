@@ -23,33 +23,33 @@
                 <tbody> 
                     <tr ng-repeat="result in $data" data="{$ result|json $}">
                         <td data-title="'Material'" filter="{'material.description' : 'text'}">
-                            <a href="">
+                            <a href="{$ result.id $}/show">
                                 {$ result.material.description $}
                             </a>
                         </td>
                         <td data-title="'Cantidad'" filter="{'cantidad' : 'text'}" align="center">
-                            <a href="">
+                            <a href="{$ result.id $}/show">
                                 {$ result.cantidad $}
                             </a>
                         </td>
-                        <td data-title="'Observación'" filter="{'observations' : 'text'}">
-                            <a href="">
-                                {$ result.observations $}
-                            </a>
-                        </td>
                         <td data-title="'Fecha'" filter="{'fecha' : 'text'}">
-                            <a href="">
-                                {$ result.fecha $}
+                            <a href="{$ result.id $}/show">                                
+                                {$ result.fecha $}                                
                             </a>
                         </td>
                         <td data-title="'Codigo Centro'" filter="{'codigoCentro' : 'text'}">
-                            <a href="">
+                            <a href="{$ result.id $}/show">
                                 {$ result.codigoCentro $}
                             </a>
                         </td>
-                         <td data-title="'Centro'" filter="{'centro' : 'text'}">
-                            <a href="">
-                                {$ result.centro $}
+                        <td data-title="'Municipio'" filter="{'municipio' : 'text'}">
+                            <a href="{$ result.id $}/show">
+                                {$ result.municipio $}
+                            </a>
+                        </td>
+                         <td data-title="'Parroquia'" filter="{'parroquia' : 'text'}">
+                            <a href="{$ result.id $}/show">
+                                {$ result.parroquia $}
                             </a>
                         </td>
                     </tr>

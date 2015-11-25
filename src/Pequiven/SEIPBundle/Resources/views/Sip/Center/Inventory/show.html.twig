@@ -1,0 +1,92 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
+
+{% trans_default_domain 'sip' %}
+
+{% block javascripts_base %}
+    {{ parent() }}
+    <script src="{{  asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.input.js') }}"></script>
+{% endblock javascripts_base %}
+
+{% block before_body %}
+    {{ contentHeader(
+        {(path('pequiven_sip_center_show',{'id':center.id})): "sip.center.name"|trans},                
+        {(path('pequiven_sip_request_list_inventory')): "Inventario"|trans},
+        ('pequiven.show'|trans({},'messages'))
+    )}}
+{% endblock %}
+
+{% block body %}
+    {% set show = 1 %}
+
+    <fieldset class="fieldset">
+        <legend class="legend" >Descripción Inventario</legend>
+        <div class="columns">
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Material</label>
+                        {{ inventory.material }}                    
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Cantidad</label>                    
+                        {{ inventory.cantidad }}                    
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Observación</label>                    
+                        {{ inventory.observations }}                    
+                </p>
+            </div> 
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Fecha</label>                    
+                        {{ inventory.fecha | date("d/m/Y")}}                    
+                </p>
+            </div> 
+        </div>
+    </fieldset> 
+
+    <fieldset class="fieldset">
+    <legend class="legend" >Datos del Centro</legend>
+        <div class="columns">           
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Codigo Centro</label>                    
+                        {{ inventory.codigoCentro }}                    
+                </p>
+            </div>  
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Centro</label>                    
+                        {{ inventory.centro }}                    
+                </p>
+            </div> 
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Estado</label>                    
+                        {{ center.descriptionEstado }}                    
+                </p>
+            </div> 
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Municipio</label>                    
+                        {{ inventory.municipio }}                    
+                </p>
+            </div>           
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Parroquia</label>                    
+                        {{ inventory.parroquia }}                    
+                </p>
+            </div> 
+        </div>
+    </fieldset> 
+{% endblock %}
+
+{% block javascript %}    
+{% endblock %}
+

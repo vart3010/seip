@@ -9,6 +9,16 @@
             {% if show == 1 %}
             <div class="button-group absolute-right compact">
                 <a class="button icon-list-add " href="" ng-click="loadTemplateAssists()" title="">{{ 'pequiven.add'|trans({},'messages')  }}</a>
+                {% for data in assist %}
+                    
+                    {% set fecha = data.fecha | date("d/m/Y") %}
+                    {% set day = "now"|date("d/m/Y") %}
+
+                {% if fecha == day %}   
+                    <a href="" ng-click="loadTemplateAssistsEdit()" class="button icon-pencil ">Editar</a>
+                {% endif %}
+                {% endfor %} 
+
             </div>       
             {% endif %}
         </div>
