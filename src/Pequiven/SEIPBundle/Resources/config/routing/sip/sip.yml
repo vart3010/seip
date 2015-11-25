@@ -293,3 +293,17 @@ pequiven_sip_request_list_inventory:
     requirements:
         _format: html|json|xml        
     methods: [GET]
+    
+pequiven_sip_report:
+    path: /Report
+    defaults:
+        _controller: pequiven.controller.report:showAction
+        
+pequiven_sip_report_asist:
+    path: /Report/Asist
+    defaults:
+        _controller: pequiven.controller.report:exportAssistAction
+    requirements:
+        _format: html|json|xml        
+    methods: [GET|POST]
+    

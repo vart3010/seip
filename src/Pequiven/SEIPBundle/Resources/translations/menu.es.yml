@@ -249,5 +249,6 @@ app:
                         request: Requerimientos
                         list_inventory: Lista Inventario
                         list_request: Lista Requerimientos
+                        report: Reportes
 
                             

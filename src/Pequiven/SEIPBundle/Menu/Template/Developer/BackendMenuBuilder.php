@@ -1652,7 +1652,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                                 'route' => 'pequiven_search_members',
                             ))
                     )->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.register', $section)));
-            
+
             $onePerTen->addChild($register);
 
             if ($this->isGranted(array('ROLE_SEIP_SIP_ONEPERTEN_LIST'))) {
@@ -1710,6 +1710,16 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
             $request->addChild($requestMenu);
 
             $menuSip->addChild($request);
+        }
+
+        if ($this->isGranted(array('ROLE_SEIP_SIP_REPORTS'))) {
+            //REPORTES
+            $report = $this->factory->createItem('sip.report', $this->getSubLevelOptions(array(
+                                "route" => "pequiven_sip_report",
+                                'labelAttributes' => array('icon' => 'fa fa-file-excel-o',),
+                            ))
+                    )->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.report', $section)));
+            $menuSip->addChild($report);
         }
 
         $menu->addChild($menuSip);

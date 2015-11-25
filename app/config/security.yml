@@ -248,6 +248,7 @@ security:
             - ROLE_SEIP_SIP_CENTRO
             - ROLE_SEIP_SIP_CUTL
             - ROLE_SEIP_SIP_REQ
+            - ROLE_SEIP_SIP_REPORTS
             
             
             

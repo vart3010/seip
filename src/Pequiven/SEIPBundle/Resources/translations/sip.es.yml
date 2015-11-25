@@ -25,5 +25,14 @@ sip:
     
     export:
         exportpdf: Exportar a PDF
+        
+    report:
+        date_start: Desde
+        date_finish: Hasta
+        date: Fecha
+        reports: Reportes
+        menu: Menu
+        list: Lista
+        generate: Generar
 
 
