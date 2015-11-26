@@ -7,7 +7,7 @@
 
                 <a class="button icon-list-add " href="{{ path("pequiven_ubch_add_member",{idCentro:center.id})}}" title="">{{ 'pequiven.add'|trans({},'messages')  }}</a>
 
-                {#<a class="button icon-download " href="{{ path("pequiven_ubch_report_export",{id:center.id})}}" title="">Exportar</a> #}               
+                <a class="button icon-download " href="{{ path("pequiven_ubch_report_export",{id:center.id})}}" title="">Exportar</a>
                 
             {% if show == 1 %}
                 <a href="{{ path("pequiven_ubch_show",{id:center.id})}}" class="button icon-search">Ver</a>

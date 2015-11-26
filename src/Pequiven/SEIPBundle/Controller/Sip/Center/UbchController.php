@@ -335,13 +335,22 @@ class UbchController extends SEIPController {
             );
         }
 
+            //Carga de status
+            foreach (Ubch::getCargoUbch() as $key => $value) {
+                $labelsCargo[] = array(
+                    'id' => $key,
+                    'description' => $this->trans($value, array(), 'PequivenArrangementProgramBundle'),
+                );
+            }
+
         //Periodo
         $period = $this->getPeriodService()->getPeriodActive();
         
         $data = array(
-            'center' => $center,
-            'ubch'   => $ubch,            
-            'period' => $period
+            'center'    => $center,
+            'ubch'      => $ubch, 
+            'ubchCargo' => $labelsCargo,
+            'period'    => $period
            
         );
 
@@ -357,7 +366,7 @@ class UbchController extends SEIPController {
     // set document information
         $pdf->SetCreator(PDF_CREATOR);
         $pdf->SetAuthor('SEIP');
-        $pdf->setTitle('REPORTE UBCH');
+        $pdf->setTitle('');
         $pdf->SetSubject('Resultados UBCH');
         $pdf->SetKeywords('PDF, UBCH, Resultados');
 
@@ -368,7 +377,7 @@ class UbchController extends SEIPController {
         $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
 
     // set margins
-        $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+        $pdf->SetMargins(PDF_MARGIN_LEFT, 35, PDF_MARGIN_RIGHT);
         $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
         $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
 
@@ -391,8 +400,6 @@ class UbchController extends SEIPController {
 
     //            $pdf->Output('Reporte del dia'.'.pdf', 'I');
         $pdf->Output('Reporte Ubch' . '.pdf', 'D');
-
-        $this->rmTempFile($data);
     }
 
 	/**
