@@ -131,17 +131,24 @@
 <table width="100%" style="padding:5px;">
     <tbody>
         <tr>
-            <th class="table-th" width="5%">#</th>
+            <th class="table-th" width="3%">#</th>
             <th class="table-th" width="35%">NOMBRES Y APELLIDOS</th>
-            <th class="table-th" width="35%">JEFE O JEFA DE PATRULLA DE:</th>
-            <th class="table-th" width="12%">CEDULA</th>
-            <th class="table-th" width="13%">TELEFONO</th>
+            <th class="table-th" width="27%">JEFE O JEFA DE PATRULLA DE:</th>
+            <th class="table-th" width="15%">REPORTE 1X10</th>
+            <th class="table-th" width="10%">CEDULA</th>
+            <th class="table-th" width="10%">TELEFONO</th>
         </tr>
         {% for data in ubch %}
             <tr {{ cycle(["even", "odd"], loop.index) }}>
                 <td border="1">{{ loop.index }}</td>            
                 <td border="1">&nbsp;{{ data.nombre }}</td>            
-                <td border="1">&nbsp;{{ ubchCargo[data.cargo - 1].description | upper }}</td>            
+                <td border="1">&nbsp;{{ ubchCargo[data.cargo - 1].description | upper }}</td>
+                {% if data.notification == 1 %}
+                    {% set notification = "SI" %}
+                {% else %}
+                    {% set notification = "NO" %}
+                {% endif %}
+                <td border="1">&nbsp;{{ notification }}</td>            
                 <td border="1">&nbsp;{{ data.cedula }}</td>            
                 <td border="1">&nbsp;{{ data.telefono }}</td>            
             </tr>
