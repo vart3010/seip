@@ -1,0 +1,113 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutSIG.html.twig' %}
+
+{% block body %}
+{% trans_default_domain 'sip' %}    
+        
+        <form method="POST" id="">
+            <fieldset class="fieldset fields-list">
+                <legend class="legend">Reporte apertura de Mesa &nbsp; {{ report.mesa }}</legend>
+                    {{ form_errors(form) }} 
+                    <div class="field-block button-height" >                            
+                                              
+                            <label class="label">Mesa: &nbsp; {{ report.mesa }}</label> 
+                            <p class="assistanc button-height"> 
+                                <input type="checkbox" name="sip_center[rep_{{ report.id}}]" id="switch_{{ report.id }}" data="{{ report.id }}" value="0" class="switch blue-active mid-margin-right" data-text-on="SI" data-text-off="NO">
+
+                            <span class="info-spot">
+                                <span class="icon-info-round"></span>
+                                <span class="info-bubble">Seleccione si la mesa ha sido aperturada</span>
+                            </span> 
+                            </p> 
+                    
+                    </div>
+                    <div class="field-block button-height" >    
+                        {{ form_label(form.hora) }}                        
+                        {{ form_widget(form.hora) }}
+                        {{ form_errors(form.hora) }}
+                    </div>
+
+                    <div class="field-block button-height" >    
+                        {{ form_label(form.observations) }}                        
+                        {{ form_widget(form.observations) }}
+                        {{ form_errors(form.observations) }}
+                    </div>
+                    {{ form_rest(form) }}
+            </fieldset>
+        </form>   
+            &nbsp;    
+            <fieldset class="fieldset fields-list">
+                <legend class="legend">Registro Mesa &nbsp; {{ report.mesa }}</legend>
+                    <div class="field-block button-height" >  
+
+                    {% for reportData in notifications %}                              
+                            <label class="label">Mesa: &nbsp; {{ reportData.mesa }}</label> 
+                            <p class="assistanc button-height"> 
+                                {% set rep = reportData.notification %}
+                                {% if(rep == 1 ) %}
+                                    {% set checkState = "checked" %}
+                                    {% set disabled = "disabled" %}
+                                {% else  %}
+                                    {% set checkState = "" %}
+                                    {% set disabled = "" %}         
+                                {% endif %}
+
+                                <input type="checkbox" name="sip_center[rep_{{ reportData.id}}]" id="switch_{{ reportData.id }}" data="{{ reportData.id }}" value="0" class="switch blue-active mid-margin-right" {{ checkState }}  data-text-on="SI" data-text-off="NO" {{ disabled }}>
+                            </p> 
+                    {% endfor %}        
+                    </div>
+            
+            </fieldset>
+
+{% endblock %}
+
+{% block javascript_base %}
+    <script type="text/javascript">
+    
+        $(document).ready(function () {
+
+            $('#switch-mode').change(function () {
+                $('.switch-wrapper')[this.checked ? 'addClass' : 'removeClass']('reversed-switches');
+            });
+            
+            $("p.assistanc input").change(function () {
+                var id = $(this).attr("data");                
+                //var value = $(this).val();              
+                var value = $("#switch_" + id).val();
+                //var id = document.getElementById("#switch_" + id);  
+                var id = $(this).attr("data");                
+                
+                if (value == 1) {
+                    $(this).val(0);                    
+                } else {
+                    $("#switch_" + id).prop("disabled", true);
+                    $(this).val(1);                                     
+                }
+                var value = $("#switch_" + id).val();
+                var data = {
+                    id: id,
+                    status: value,                    
+                };
+                console.log(data);
+
+                $.ajax({
+                    type: 'get',
+                    url: '{{ path("pequiven_sip_center_report_add") }}',
+                    data: data,
+                    beforeSend:function(objeto){
+                            $('#carga_' + id).css({display:'block'});
+                            $('#p_' + id).css('display','none');
+                    },
+                    complete:function(){
+                        $('#carga_' + id).css('display','none');
+                        $('#p_' + id).css('display','block');  
+                    },
+                    success: function (data) {                        
+                        $(location).attr('href', data["url"]);
+                    }
+                });
+                
+            });
+            
+        });
+    </script>
+{% endblock %}

@@ -31,25 +31,18 @@ class ReportCentro{
     private $codigoCentro;
 
     /**
-     * @var string
+     * @var integer
      *
-     * @ORM\Column(name="mesa", type="string")
+     * @ORM\Column(name="mesa", type="integer")
      */
     private $mesa;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="status", type="integer")
+     * @ORM\Column(name="day", type="integer")
      */
-    private $status;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="notification", type="integer", nullable=true)
-     */
-    private $notification;
+    private $day;
 
     /**
      * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
@@ -62,6 +55,22 @@ class ReportCentro{
      * @ORM\Column(name="updated_at", type="datetime")
      */
     private $updatedAt;
+
+    /**
+     * Observaciones
+     * 
+     * @var \Pequiven\SEIPBundle\Entity\Sip\Center\ReportCentroNotifications
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\Sip\Center\ReportCentroNotifications",mappedBy="report",cascade={"persist","remove"})
+     */
+    protected $observations;
+
+    /**
+     * Constructor
+     */
+    public function __construct() {
+
+        $this->observations = new \Doctrine\Common\Collections\ArrayCollection();
+    }
     
     
     function getId() {
@@ -84,20 +93,12 @@ class ReportCentro{
         return $this->codigoCentro;
     }
 
-    function setStatus($status) {
-        $this->status = $status;
+    function setDay($day) {
+        $this->day = $day;
     }
     
-    function getStatus() {
-        return $this->status;
-    }
-
-    function setNotification($notification) {
-        $this->notification = $notification;
-    }
-    
-    function getNotification() {
-        return $this->notification;
+    function getDay() {
+        return $this->day;
     }
 
     /**
@@ -145,4 +146,34 @@ class ReportCentro{
     {
         return $this->updatedAt;
     }
+
+    /**
+     * Add observations
+     *
+     * @param \Pequiven\SEIPBundle\Entity\Sip\Center\ReportCentroNotifications $observations
+     * @return Indicator
+     */
+    public function addObservations(\Pequiven\SEIPBundle\Entity\Sip\Center\ReportCentroNotifications $observations) {
+
+        $this->observations->add($observations);
+
+        return $this;
+    }
+
+    /**
+     * Remove observations
+     *
+     * @param \Pequiven\SEIPBundle\Entity\Sip\Center\ReportCentroNotifications $observations
+     */
+    public function removeObservations(\Pequiven\SEIPBundle\Entity\Sip\Center\ReportCentroNotifications $observations) {
+        $this->observations->removeElement($observations);
+    }
+
+    /**
+     * Get observations
+     *
+     * @return \Pequiven\SEIPBundle\Entity\Sip\Center\ReportCentroNotifications     */
+    public function getObservations() {
+        return $this->observations;
+    }   
 }

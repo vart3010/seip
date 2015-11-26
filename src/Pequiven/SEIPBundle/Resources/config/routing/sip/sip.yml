@@ -258,6 +258,27 @@ pequiven_sip_center_export:
     methods: [GET|POST]
     options:
         expose: true
+#Asistencia
+pequiven_sip_center_report:
+    path: /{idCenter}/center-report.{_format}
+    defaults:
+        _controller: pequiven.controller.center:formCenterReportAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET]
+    options:
+        expose: true
+pequiven_sip_center_report_add:
+    path: /center-report-add
+    defaults:
+        _controller: pequiven.controller.center:formCenterReportAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET]
+    options:
+        expose: true
 #UBCH
 pequiven_ubch_add_member:
     path: /ubch/add/{idCentro}

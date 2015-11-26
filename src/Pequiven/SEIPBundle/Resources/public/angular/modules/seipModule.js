@@ -2943,6 +2943,53 @@ angular.module('seipModule.controllers', [])
                 }
             };
         })
+
+        .controller('SipCenterReportController', function ($scope, notificationBarService, $http, notifyService, $filter, $timeout) {
+
+            var isInit = false;
+            //Carga el formulario de las Asistencias
+            $scope.loadTemplateReportCenter = function (resource) {
+                $scope.initFormReportCenter(resource);
+                if (isInit == false) {
+                    isInit = true;
+                }
+                $scope.templateOptions.setTemplate($scope.templates[0]);
+                $scope.templateOptions.setParameterCallBack(resource);
+                if (resource) {
+                    $scope.templateOptions.enableModeEdit();
+                    $scope.openModalAuto();
+                } else {
+                    $scope.openModalAuto();
+                }
+            };         
+            var confirmCallBack = function () {
+                location.reload();
+                return true;
+            };
+            //Formulario Asistencias
+            $scope.initFormReportCenter = function (resource) {
+                var d = new Date();
+                var numero = d.getTime();
+                $scope.setHeight(650);
+                var parameters = {
+                    idCenter: $scope.idCenter,                    
+                    mesa: $scope.mesa,
+                    _dc: numero
+                };
+                if (resource) {
+                    parameters.id = resource.id;
+                }
+                var url = Routing.generate('pequiven_sip_center_report', parameters);
+                $scope.templates = [
+                    {
+                        name: 'Reporte Apertura de Mesa',
+                        url: url,
+                        confirmCallBack: confirmCallBack,
+                    }
+                ];
+                $scope.templateOptions.setTemplate($scope.templates[0]);
+            };
+        })
         //fin
         .controller('SipCenterInventoryController', function ($scope, notificationBarService, $http, notifyService, $filter, $timeout) {
 
