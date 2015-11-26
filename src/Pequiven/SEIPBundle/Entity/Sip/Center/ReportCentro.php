@@ -17,8 +17,16 @@ class ReportCentro{
     /**
      * @var integer
      *
-     * @ORM\Column(name="codigoCentro", type="integer")
+     * @ORM\Column(name="id", type="integer")
      * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="codigoCentro", type="integer")
      */
     private $codigoCentro;
 
