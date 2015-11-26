@@ -117,7 +117,7 @@
             {# Dia actual #}
             {% set day = "now" | date("d/m/Y") %}
 
-            {#{% if day4 == day or day6 == day %}#}            
+            {% if day4 == day or day6 == day %}
         <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
             <p class="inline-label">
                 <label class="label">Mesas Activas</label>
@@ -133,7 +133,7 @@
                     &nbsp; 
                 {% endfor %}            
         </div>
-            {#{% endif %}#}
+            {% endif %}
     </fieldset>  
     <br>
         {% include 'PequivenSEIPBundle:Sip:Center/StatusCenter.html.twig' %}  
