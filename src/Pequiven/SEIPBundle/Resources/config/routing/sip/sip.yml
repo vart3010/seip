@@ -346,7 +346,15 @@ pequiven_sip_report:
 pequiven_sip_report_asist:
     path: /Report/Asist
     defaults:
-        _controller: pequiven.controller.report:exportAssistAction
+        _controller: pequiven.controller.report:AssistAction
     requirements:
         _format: html|json|xml        
     methods: [GET|POST]   
+    
+pequiven_sip_report_asist_history:
+    path: /Report/Asist
+    defaults:
+        _controller: pequiven.controller.report:AssistHistoryAction
+    requirements:
+        _format: html|json|xml        
+    methods: [GET|POST]  
