@@ -89,6 +89,14 @@
                     </tbody>
                 </table>
             </div>
+            {% if is_granted(['ROLE_SEIP_SIP_ONEPERTEN_EXPORT']) %}
+                <p class="button-height float-right" style="margin: 2px;">
+                    <a id="btnExportToExcel" href="{{ path("pequiven_export_onePerTen",{idOne:user.id}) }}" class="button">
+                        <span class="button-icon"><span class="icon-download"></span></span>
+                            {{ "sip.export.exportpdf"|trans }}
+                    </a>
+                </p>
+            {% endif %}
         {% else %}
             <div class="with-padding"><h3>No tiene miembros asociados.</h3></div>
         {% endif %}

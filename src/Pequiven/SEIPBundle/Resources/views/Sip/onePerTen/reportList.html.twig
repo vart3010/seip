@@ -1,0 +1,116 @@
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+<style>
+    body {
+        font-size: 12px;
+    }
+    .white-gradient {
+        background-color: #535353;
+        color: #ffffff;
+    }
+    .header {
+        text-align: center;
+        font-size: 12px;
+    }
+    .text-center {
+        text-align: center;
+    }
+    .header-tr {
+        background-color: lightgrey;
+        border-bottom: lightgrey;
+        border-style: solid;
+        border-bottom-style: solid;
+    }
+    .content {
+        color: #4a4a4a;
+        font-size: 9px;
+    }
+
+    .title {
+        text-align: center;
+        width: 100%;
+        font-size: 14px;
+        font-weight: bold;
+
+    }
+    .text-left { 
+        text-align: left;
+    }
+    .observation {
+        font-size: 10px;
+    }
+
+    table {
+        font-size: 12px;
+    }
+    table tr {
+        height: 50px;
+    }
+
+    span.bold {
+        font-weight: bold;
+    }
+    .margin-left {
+        margin-left: 10px; 
+    }
+    label.label {
+        font-weight: bold;
+    }
+</style>
+
+
+<br>
+<div class="title">Reporte de 1x10</div>
+<br>
+<table>
+    <tr>
+        <td>
+            <div class="six-columns">
+                <label class="label">Nombre: </label>
+                {{ one.firstname }} {{ one.lastname  }}
+            </div>
+            <div class="six-columns">
+                <label class="label">Cédula </label>
+                {{ one.getIndentification }} 
+            </div>
+        </td>
+        <td>
+            <div class="six-columns">
+                <label class="label">Teléfono: </label>
+                {{ one.cellphone }}
+            </div>
+            <div class="six-columns">
+                <label class="label">Fecha Emisión: </label>
+                {{ "now"|date("d/m/y") }}
+            </div>
+        </td>
+    </tr>
+</table>
+<br>
+<div class="columns">
+    <div class="twelve-columns twelve-columns-mobile">
+        <table class="simple-table responsive-table responsive-table-on">
+            <tr>
+                <th class="header text-center white-gradient" colspan="5">MIEMBROS DE 1X10</th>
+            </tr>
+            <tr class="header-tr">
+                <th scope="col" style="width: 5%; text-align: center;" class="header">Nª</th>
+                <th scope="col" style="width: 10%" class="header">Cédula</th>
+                <th scope="col" style="width: 30%" class=" header">Nombre</th>
+                <th scope="col" style="width: 40%" class=" header">Centro</th>
+                <th scope="col" style="width: 15%" class=" header">Teléfono</th>
+            </tr>
+            {% for member in members %}
+                <tr>
+                    <td style="text-align: center;">{{ loop.index }}</td>
+                    <td style="text-align: center;">{{ member.cedula }}</td>
+                    <td>{{ member.nombre }}</td>
+                    <td>{{ member.nombreCentro }}</td>
+                    <td style="text-align: center;">{{ member.telefono }}</td>
+                </tr>
+            {% endfor%}
+        </table>
+    </div>
+</div>
+
+
