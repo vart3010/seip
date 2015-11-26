@@ -361,6 +361,7 @@ class OnePerTenController extends SEIPController {
 //                    $nombreCentro = $nombreCentro[0]["description"];
                     $members[] = array(
                         "id" => $member->getId(),
+                        "cedula" => $member->getCedula(),
                         "nombre" => $member->getNombre(),
                         "telefono" => $member->getTelefono(),
                         "idCentro" => $member->getCodCentro(),
@@ -373,6 +374,7 @@ class OnePerTenController extends SEIPController {
 
                 $members[] = array(
                     "id" => $onePerTenMembers[0]->getId(),
+                    "cedula" => $onePerTenMembers[0]->getCedula(),
                     "nombre" => $onePerTenMembers[0]->getNombre(),
                     "telefono" => $onePerTenMembers[0]->getTelefono(),
                     "idCentro" => $onePerTenMembers[0]->getCodCentro(),
@@ -380,7 +382,7 @@ class OnePerTenController extends SEIPController {
                 );
             }
         }
-
+        
         $formSearchOne = $this->createForm(new OnePerTenType);
         return $this->render('PequivenSEIPBundle:Sip:onePerTen\show.html.twig', array(
                     "form" => $formSearchOne->createView(),

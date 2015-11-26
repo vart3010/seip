@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Pequiven\SEIPBundle\Entity\Sip\Ubch;
 use Pequiven\SEIPBundle\Form\Sip\Center\UbchType;
+use Pequiven\SEIPBundle\Form\Sip\Center\UbchCargoType;
 
 
 /**
@@ -158,15 +159,17 @@ class UbchController extends SEIPController {
 		$ubch = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Ubch")->findBy(array("codigoCentro" => $codigoCentro));
 
         //Carga de status
-        $ubchCargo = [
-            1 => "Jefe",
-            2 => "Patrullero",            
-        ];
+            foreach (Ubch::getCargoUbch() as $key => $value) {
+                $labelsCargo[] = array(
+                    'id' => $key,
+                    'description' => $this->trans($value, array(), 'PequivenArrangementProgramBundle'),
+                );
+            }
 
 		return $this->render('PequivenSEIPBundle:Sip:Center/Ubch/show.html.twig',array(
 			'center'	=> $center,
 			'ubch'		=> $ubch,
-            'ubchCargo'     => $ubchCargo
+            'ubchCargo' => $labelsCargo
 
 			));
 	}
@@ -263,6 +266,140 @@ class UbchController extends SEIPController {
 
             return $view;
         }
+    }
+
+    /**
+     * 
+     * @param Request $request
+     * @return type
+     */
+    public function formCargoAction(Request $request) {
+
+        $id = $request->get('id');
+
+        $em = $this->getDoctrine()->getEntityManager();
+
+        $cargo = new Ubch();
+
+        $form = $this->createForm(new UbchCargoType(), $cargo);
+        
+        if (isset($request->get('sip_ubch_cargo')['cargo'])) {
+
+            $form->bind($this->getRequest());
+            $cargo = $request->get('sip_ubch_cargo')['cargo'];
+            
+            $ubch = $this->get('pequiven.repository.ubch')->find($id);
+
+            $ubch->setCargo($cargo);
+
+            $em->flush();
+
+            $this->get('session')->getFlashBag()->add('success', "Cargo Actualizado Exitosamente");
+        } else {
+            $view = $this
+                    ->view()
+                    ->setTemplate('PequivenSEIPBundle:Sip:Center/Form/UbchCargo.html.twig')
+                    ->setTemplateVar($this->config->getPluralResourceName())
+                    ->setData(array(
+                    'form' => $form->createView(),
+                    ))
+            ;
+            $view->getSerializationContext()->setGroups(array('id', 'api_list'));
+
+            return $view;
+        }
+    }
+
+    /**
+     *
+     * Exportar reporte ubch
+     *
+     */
+    public function exportAction(Request $request) {
+
+        $id = $request->get('id');
+        
+        $em = $this->getDoctrine()->getManager();
+
+        $center = $this->get('pequiven.repository.center')->find($id);
+
+        $codigoCentro = $center->getCodigoCentro();
+        
+        $ubch = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Ubch")->findBy(array("codigoCentro" => $codigoCentro));
+
+        //Carga de status
+        foreach (Ubch::getCargoUbch() as $key => $value) {
+            $labelsCargo[] = array(
+                'id' => $key,
+                'description' => $this->trans($value, array(), 'PequivenArrangementProgramBundle'),
+            );
+        }
+
+            //Carga de status
+            foreach (Ubch::getCargoUbch() as $key => $value) {
+                $labelsCargo[] = array(
+                    'id' => $key,
+                    'description' => $this->trans($value, array(), 'PequivenArrangementProgramBundle'),
+                );
+            }
+
+        //Periodo
+        $period = $this->getPeriodService()->getPeriodActive();
+        
+        $data = array(
+            'center'    => $center,
+            'ubch'      => $ubch, 
+            'ubchCargo' => $labelsCargo,
+            'period'    => $period
+           
+        );
+
+        $this->generatePdf($data);
+    }
+
+    public function generatePdf($data) {
+        $pdf = new \Pequiven\SEIPBundle\Model\Sip\PDF\UbchPdf('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+        $pdf->setPrintLineFooter(false);
+        $pdf->setContainer($this->container);
+        //$pdf->setPeriod($this->getPeriodService()->getPeriodActive());
+        //$pdf->setFooterText($this->trans('pequiven_seip.message_footer', array(), 'PequivenSEIPBundle'));
+    // set document information
+        $pdf->SetCreator(PDF_CREATOR);
+        $pdf->SetAuthor('SEIP');
+        $pdf->setTitle('');
+        $pdf->SetSubject('Resultados UBCH');
+        $pdf->SetKeywords('PDF, UBCH, Resultados');
+
+        $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+        $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+
+    // set default monospaced font
+        $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+
+    // set margins
+        $pdf->SetMargins(PDF_MARGIN_LEFT, 35, PDF_MARGIN_RIGHT);
+        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+
+    // set auto page breaks
+        $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+
+    // set image scale factor
+        $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+
+    // set font
+    //  $pdf->SetFont('times', 'BI', 12);
+    // add a page        
+        $pdf->AddPage('L');
+
+    // set some text to print 
+        $html = $this->renderView('PequivenSEIPBundle:Sip:Center/Ubch/viewPdf.html.twig', $data);
+
+    // print a block of text using Write()
+        $pdf->writeHTML($html, true, false, true, false, '');
+
+    //            $pdf->Output('Reporte del dia'.'.pdf', 'I');
+        $pdf->Output('Reporte Ubch' . '.pdf', 'D');
     }
 
 	/**
