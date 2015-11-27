@@ -276,7 +276,7 @@ pequiven_sip_center_report_add:
         _format: html
     requirements:
         _format: html|json
-    methods: [GET]
+    methods: [POST]
     options:
         expose: true
 #UBCH

@@ -2961,12 +2961,56 @@ angular.module('seipModule.controllers', [])
                 } else {
                     $scope.openModalAuto();
                 }
-            };         
+            };  
+
+            //Añadir Reporte
+            var addReport = function (save, successCallBack) {
+                var formAddReport = angular.element('#form_sip_center_report');
+                var formData = formAddReport.serialize();
+
+                if (save == undefined) {
+                    var save = false;
+                }
+                if (save == true) {
+                    var url = Routing.generate('pequiven_sip_center_report_add', {idCenter: $scope.idCenter, mesa: $scope.mesa});
+                }
+                notificationBarService.getLoadStatus().loading();
+                return $http({
+                    method: 'POST',
+                    url: url,
+                    data: formData,
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'}  // set the headers so angular passing info as form data (not request payload)
+                }).success(function (data) {
+                    $scope.templateOptions.setVar("form", {errors: {}});
+                    if (successCallBack) {
+                        successCallBack(data);
+                    }
+                    notificationBarService.getLoadStatus().done();
+                    location.reload();
+                    return true;
+                }).error(function (data, status, headers, config) {
+                    $scope.templateOptions.setVar("form", {errors: {}});
+                    if (data.errors) {
+                        if (data.errors.errors) {
+                            $.each(data.errors.errors, function (index, value) {
+                                notifyService.error(Translator.trans(value));
+                            });
+                        }
+                        $scope.templateOptions.setVar("form", {errors: data.errors.children});
+                    }
+                    notificationBarService.getLoadStatus().done();
+                    return false;
+                });
+            };
+
+            $scope.templateOptions.setVar('addReport', addReport);
             var confirmCallBack = function () {
-                location.reload();
+                addReport(true, function (data) {                    
+                });
                 return true;
             };
-            //Formulario Asistencias
+
+            //Formulario reporte de mesas
             $scope.initFormReportCenter = function (resource) {
                 var d = new Date();
                 var numero = d.getTime();

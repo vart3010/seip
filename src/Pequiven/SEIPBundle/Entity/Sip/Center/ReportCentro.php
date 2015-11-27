@@ -38,13 +38,6 @@ class ReportCentro{
     private $mesa;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="day", type="integer")
-     */
-    private $day;
-
-    /**
      * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
      */
     private $deletedAt;
@@ -91,14 +84,6 @@ class ReportCentro{
     
     function getCodigoCentro() {
         return $this->codigoCentro;
-    }
-
-    function setDay($day) {
-        $this->day = $day;
-    }
-    
-    function getDay() {
-        return $this->day;
     }
 
     /**

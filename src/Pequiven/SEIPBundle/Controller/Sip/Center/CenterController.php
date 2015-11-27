@@ -21,6 +21,7 @@ use Pequiven\SEIPBundle\Entity\Sip\Center\StatusCentro;
 use Pequiven\SEIPBundle\Entity\Sip\Ubch;
 
 use Pequiven\SEIPBundle\Form\Sip\Center\ReportCenterType;
+use Pequiven\SEIPBundle\Entity\Sip\Center\ReportCentroNotifications;
 
 /**
  * Controlador Centros
@@ -39,47 +40,73 @@ class CenterController extends SEIPController {
         $em = $this->getDoctrine()->getManager();
         
         $id = $request->get('idCenter');
-        
+
         $mesa = $request->get('mesa');
         
         $center = $this->get('pequiven.repository.center')->find($id);
 
-        $report = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Center\ReportCentro")->findOneBy(array('codigoCentro' => $id, 'day' => 4, 'mesa' => $mesa));
+        $report = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Center\ReportCentro")->findOneBy(array('codigoCentro' => $id, 'mesa' => $mesa));
         
         $notifications = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Center\ReportCentroNotifications")->findBy(array('report' => $report->getId()));
         
-        /*foreach ($report as $value) {
-            foreach ($value->getObservations() as $key) {
-                $obs = $key->getId();
-                //var_dump(count($obs));                
+        if (isset($request->get('report_centro')["day"])) {
+        $notifications = new ReportCentroNotifications();
+
+            if($request->get('sip_center')){
+                $not = 1;
+            }else{
+                $not = 0;
             }
-        }*/
+            $hora = $request->get('report_centro')["day"];
+            
+            $datahora = str_pad($hora["hour"], 2,"0", STR_PAD_LEFT);
+            $dataMin = str_pad($hora["minute"], 2,"0", STR_PAD_LEFT);            
+            $fecha = date("Y-m-d");
+
+            $fecha = $fecha.' '.$datahora.':'.$dataMin;
+            
+            $fecha = date_create_from_format("Y-m-d H:i", $fecha);
+
+            //Validamos venga la categoria
+            if (isset($request->get('report_centro')["categoria"])) {
+                $categoria = $request->get('report_centro')["categoria"];                
+            }else{
+                $categoria = 0;
+            }
+
+            $observations = $request->get('report_centro')["observations"];
+
+            $notifications->setDay($fecha);            
+            $notifications->setNotification($not);
+            $notifications->setCategoria($categoria);
+            $notifications->setObservations($observations);
+            $notifications->setReport($report);
         
-        if ($request->get('status')) {
-            $id = $request->get('id');
-            die();
-            $status = $request->get('status');
-            
-            $report = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Center\ReportCentro")->findOneBy(array('id' => $id, 'status' => 4));
-            
-            $report->setNotification($status);                            
-                    
+            $em->persist($notifications);            
             $em->flush();
             
             die("END");
         }
-        
+
+            //Carga de Categorias
+            foreach (ReportCentroNotifications::getReportCenter() as $key => $value) {
+                $LabelsReport[] = array(
+                    'id' => $key,
+                    'description' => $this->trans($value, array(), 'PequivenArrangementProgramBundle'),
+                );
+            }
+
         $form = $this->createForm(new ReportCenterType());
         $view = $this
                 ->view()
                 ->setTemplate('PequivenSEIPBundle:Sip:Center/Form/ReportCenter.html.twig')
                 ->setTemplateVar($this->config->getPluralResourceName())
                 ->setData(array(
-            'report'        => $report,
-            'center'        => $center,
-            'notifications'  => $notifications,
-            'form' => $form->createView(),            
-            
+                    'report'        => $report,
+                    'center'        => $center,
+                    'notifications'  => $notifications,
+                    'categorias'    => $LabelsReport,
+                    'form' => $form->createView(),   
                 ))
         ;
         $view->getSerializationContext()->setGroups(array('id', 'api_list'));
@@ -668,7 +695,7 @@ class CenterController extends SEIPController {
      * @return type
      */
     public function showAction(Request $request) {
-
+        
         $em = $this->getDoctrine()->getManager();
 
         $id = $request->get('id');
@@ -677,22 +704,24 @@ class CenterController extends SEIPController {
 
         $center = $this->get('pequiven.repository.center')->find($id);
 
-        $reportMesa = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Center\ReportCentro")->findBy(array('codigoCentro' => $center->getCodigoCentro(), 'day' => 4));
-        $reportObservations = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Center\ReportCentroNotifications")->findAll();
+        $reportMesa = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Center\ReportCentro")->findBy(array('codigoCentro' => $center->getCodigoCentro()));
         
-        /*foreach ($reportObservations as $value) {            
-            if($valueObs->getNotification() == 1){                
-                $report[] = $contNot + 1;
-            }else{
-                $report = 0;
+        $report = $cont = $resultM = 0;
+        foreach ($reportMesa as $value) {                        
+            $id = $value->getId();            
+            
+            $reportObservations = $this->get('pequiven.repository.center')->findByNotification($id);
+            
+            if ($reportObservations) {
+                $resultMesa = (int)$reportObservations[0]["notification"];
+                if ($resultMesa === 1) {
+                   $resultM = $resultM + 1; 
+                }                
             }            
-        }*/
-        //$report = count($report);
-        $report = 0;
+            $cont++;
+        }
         
-        
-        //Personal PQV por centro
-        //$result = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Rep")->getPqvCentro($center->getCodigoCentro());
+        //Personal PQV por centro        
         $result = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\NominaCentro")->findBy(array('codigoCentro' => $center->getCodigoCentro()));
         
         $result = count($result);
@@ -772,7 +801,7 @@ class CenterController extends SEIPController {
                     'validacionCutl' => $validacionCutl,
                     'centerAct' => $centerAct,
                     'pqvCentro' => $result,
-                    'report'    => $report,
+                    'report'    => $resultM,
                     'reportMesa'=> $reportMesa
         ));
     }

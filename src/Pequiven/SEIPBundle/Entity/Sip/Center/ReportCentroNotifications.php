@@ -4,6 +4,7 @@ namespace Pequiven\SEIPBundle\Entity\Sip\Center;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Pequiven\SEIPBundle\Model\Sip\Center\CenterReport as modelReport;
 
 /**
  * Report de Centro
@@ -12,7 +13,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @ORM\Entity()
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
-class ReportCentroNotifications{
+class ReportCentroNotifications extends modelReport{
 
     /**
      * @var integer
@@ -24,18 +25,11 @@ class ReportCentroNotifications{
     private $id;
 
     /**
-     * @var integer
+     * @var datetime
      *
-     * @ORM\Column(name="day", type="integer")
+     * @ORM\Column(name="day", type="datetime", nullable=true)
      */
     private $day;
-
-    /**
-     * @var time
-     *
-     * @ORM\Column(name="hora", type="time")
-     */
-    private $hora;
 
     /**
      * @var integer
@@ -43,6 +37,13 @@ class ReportCentroNotifications{
      * @ORM\Column(name="notification", type="integer", nullable=true)
      */
     private $notification;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="categoria", type="integer", nullable=true)
+     */
+    private $categoria;
 
     /**
      * @var text
@@ -91,20 +92,20 @@ class ReportCentroNotifications{
         return $this->day;
     }
 
-    function setHora($hora) {
-        $this->hora = $hora;
-    }
-    
-    function getHora() {
-        return $this->hora;
-    }
-
     function setNotification($notification) {
         $this->notification = $notification;
     }
     
     function getNotification() {
         return $this->notification;
+    }
+
+    function setCategoria($categoria) {
+        $this->categoria = $categoria;
+    }
+    
+    function getCategoria() {
+        return $this->categoria;
     }
 
     function setObservations($observations) {
