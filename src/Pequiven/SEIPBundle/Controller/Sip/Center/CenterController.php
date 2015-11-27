@@ -613,10 +613,19 @@ class CenterController extends SEIPController {
 
         $id = $request->get('id');
 
-        $cantCutl = 0;
+        $cantCutl = $contNot = 0;
 
         $center = $this->get('pequiven.repository.center')->find($id);
 
+        $report = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Center\ReportCentro")->findBy(array('codigoCentro' => $center->getCodigoCentro(), 'status' => 4));
+       
+        foreach ($report as $value) {
+            $report = $value->getNotification();
+            if($report == 1){                
+                $report = $contNot + 1;
+            }            
+        }
+        
         //Personal PQV por centro
         //$result = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Rep")->getPqvCentro($center->getCodigoCentro());
         $result = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\NominaCentro")->findBy(array('codigoCentro' => $center->getCodigoCentro()));
@@ -697,7 +706,8 @@ class CenterController extends SEIPController {
                     'cantCutl'  => $cantCutl,
                     'validacionCutl' => $validacionCutl,
                     'centerAct' => $centerAct,
-                    'pqvCentro' => $result
+                    'pqvCentro' => $result,
+                    'report'    => $report
         ));
     }
 
