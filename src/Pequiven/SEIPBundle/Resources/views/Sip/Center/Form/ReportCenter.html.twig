@@ -92,7 +92,7 @@
                                     {% endif %}
                                     </td>
                                     <td align="justify">{{ reportData.observations }}</td>
-                                    <td align="justify"></td>
+                                    <td align="justify">{{ reportData.day | date("H:i") }}</td>
                                 </tr>                 
                             </tbody>                    
                         {% endfor %}                  
