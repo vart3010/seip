@@ -28,7 +28,15 @@
 
 
     <fieldset class="fieldset">
-        <legend class="legend" >{{ 'sip.center.title'|trans({}) }}&nbsp;</legend>
+        <legend class="legend" >{{ 'sip.center.title'|trans({}) }}&nbsp;</legend>        
+        {% if center.importante == "SI" %}                                        
+            <div class="inline-label">
+                <div class="three-columns red-bg" style="font-size: 20px; font-weight: bold;"align="center">                   
+                    PRIORIZADO
+                </div>              
+            </div>
+        {% endif %}
+        <br>
         <div class="columns">
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
@@ -92,12 +100,6 @@
                         {{ center.centroMisiones }}                    
                 </p>
             </div>
-            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
-                <p class="inline-label">
-                    <label class="label">Importante</label>                    
-                        {{ center.importante }}                    
-                </p>
-            </div>
             {% if center.eje > 0 %}
                 <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                     <p class="inline-label">
@@ -106,7 +108,32 @@
                     </p>
                 </div>
             {% endif %}
+            
         </div>
+        {# validacion de muestra solo para el 4 y 6 de diciembre #}
+        {% set day4 = 04/12/2015 | date("d/m/Y") %}                
+        {% set day6 = 06/12/2015 | date("d/m/Y")%}
+
+        {# Dia actual #}
+        {% set day = "now" | date("d/m/Y") %}
+
+        {% if day4 == day or day6 == day %}
+        <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+            <p class="inline-label">
+                <label class="label">Mesas Activas</label>
+                    {{ report }}
+                    &nbsp;       
+                    {#<a class="button icon-pencil icon-size2" href="" ng-click="loadTemplateReportCenter()" title=""></a>#}
+            </p>
+            &nbsp; 
+        </div>       
+        <div ng-controller="SipCenterReportController">                 
+                {% for reportM in reportMesa %}
+                    <a class="button icon-pencil icon-size2" href="" ng-click="loadTemplateReportCenter(mesa='{{ reportM.mesa }}')" title="">Mesa {{ reportM.mesa }}</a>        
+                    &nbsp; 
+                {% endfor %}            
+        </div>
+        {% endif %}
     </fieldset>  
     <br>
         {% include 'PequivenSEIPBundle:Sip:Center/StatusCenter.html.twig' %}  
@@ -145,9 +172,14 @@
                 </div>
                 <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                     <p class="inline-label">
-                        <label class="label">Telefono:</label>
+                        <label class="label">Teléfono Asignado:</label>
+                        {{ dataCutl.telefonoCutl }}
+                    </p>
+                </div>
+                <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                    <p class="inline-label">
+                        <label class="label">Teléfono Personal:</label>
                         {{ dataCutl.telefonoSeip }}/
-                        {{ dataCutl.telefonoCutl }}/
                         {{ dataCutl.telefonoFirma }}
                     </p>
                 </div>
