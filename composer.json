@@ -27,7 +27,7 @@
         "tecnocreaciones/vzla-government-bundle": "dev-master",
         "tecnocreaciones/ajax-fos-user-bundle": "1.*@dev",
         "tecnocreaciones/install-bundle": "dev-master",
-        "tecnocreaciones/tools-bundle": "dev-master",
+        "tecnocreaciones/tools-bundle": "v0.1",
         "tecnocreaciones/vzla-entity-bundle": "dev-master",
         "tecnocreaciones/vzla-fixtures-bundle": "dev-master",
         "friendsofsymfony/rest-bundle": "@stable",
