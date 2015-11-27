@@ -41,6 +41,6 @@ class ReportType extends AbstractType
      */
     public function getName()
     {
-        return 'sip_report';
+        return 'sip_report'.'_boo';
     }
 }

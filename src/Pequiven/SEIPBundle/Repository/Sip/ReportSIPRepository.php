@@ -60,6 +60,26 @@ order by centro,Fecha';
         return $result;
     }
 
+    public function getAsistHistory() {
+
+        $em = $this->getEntityManager();
+        $db = $em->getConnection();
+
+        $sql = '  
+    SELECT Estado,    Municipio,    Parroquia,    eje,    Codigo,    Centro,    Cedula,    Nombre,    Telefono,
+    Asist08112015,    Asist09112015,    Asist10112015,    Asist11112015,    Asist12112015,    Asist13112015,    Asist14112015,
+    Asist15112015,    Asist16112015,    Asist17112015,    Asist18112015,    Asist19112015,    Asist20112015,    Asist21112015,    
+    Asist22112015,    Asist23112015,    Asist24112015,    Asist25112015,    Asist26112015,    Asist27112015,    Asist28112015,
+    Asist29112015,    Asist30112015,    Asist01122015,    Asist02122015,    Asist03122015,    Asist04122015,    Asist05122015,
+    Asist06122015   FROM    Sip_Historico_Asist';
+
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+
+        return $result;
+    }
+
     protected function getAlias() {
         return "Rep";
     }

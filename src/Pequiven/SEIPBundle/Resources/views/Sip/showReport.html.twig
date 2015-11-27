@@ -1,13 +1,7 @@
 {% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}
-
 {% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
 
 {% trans_default_domain 'sip' %}
-
-{% block javascripts_base %}
-    {{ parent() }}
-    <script src="{{  asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.input.js') }}"></script>
-{% endblock javascripts_base %}
 
 {% block before_body %}
     {{ contentHeader(
@@ -18,53 +12,67 @@
 
 {% block body %}
 
-
     <fieldset class="fieldset">
         <legend class="legend"><b>Asistencias de Cutls</b></legend>
-       
-            <td>
-                <form method="POST" action="{{ path("pequiven_sip_report_asist") }}">
-                    <table class="record_properties" width="80%">
-                        <thead>
-                            <tr>
-                                <th class="header" width="50%">Por Fecha</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <p class="inline-label">
-
-                                    </p>
-                                    <p class="inline-label">
-                                        {{ form_label(form.date) }}
-                                        {{ form_widget(form.date) }}
-                                        {{ form_errors(form.date) }}
-                                    </p>
-                                    <p class="inline-label">
-
-                                    </p>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="text-align:center">
-                                    <div class="field-block button-height">
-                                        <button type="submit" class="button glossy mid-margin-right">
-                                            <span class="button-icon blue-gradient"><span class="icon-download"></span></span>
-                                                {{ 'sip.report.generate'|trans }}
-                                        </button>    
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    {{ form_rest(form) }}
-                </form> 
-
+        <table width="90%">
+            <tbody>
+                <tr>
+                    <td width="50%">
+                        <form method="POST" action="{{ path("pequiven_sip_report_asist") }}">
+                            <table class="record_properties">
+                                <thead>
+                                    <tr>
+                                        <th class="header" style="text-align:left; font-size: medium">Diario</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td> &nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td>  &nbsp;                                          
+                                            Fecha:  <input type="text" name="asist" class="input input-small" id="asist" required="true">  
+                                        </td>
+                                        <td>  &nbsp; 
+                                            <button type="submit" class="button glossy mid-margin-center">
+                                                <span class="button-icon blue-gradient"><span class="icon-download"></span></span>                                                    
+                                            </button>                                        
+                                        </td>
+                                    </tr>                                                             
+                                </tbody>
+                            </table>
+                        </form> 
+                    </td>
+                    <td width="50%">
+                        <form method="POST" action="{{ path("pequiven_sip_report_asisthistory") }}">
+                            <table class="record_properties">
+                                <thead>
+                                    <tr>
+                                        <th class="header" style="text-align:left; font-size: medium">Histórico</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td> &nbsp;</td>
+                                    </tr>
+                                    <tr>                                        
+                                        <td>  &nbsp; 
+                                            <button type="submit" class="button glossy mid-margin-center">
+                                                <span class="button-icon blue-gradient"><span class="icon-download"></span></span>   
+                                                Generar
+                                            </button>                                        
+                                        </td>
+                                    </tr>                                                             
+                                </tbody>
+                            </table>
+                        </form> 
+                    </td>
+                </tr>
+            </tbody>
         </table>
-                
     </fieldset>
-    BOOOOOOOOOOOOOOOOOOOOO
+
+
 
 {% endblock %}
 
@@ -73,8 +81,8 @@
 
         $(document).ready(function () {
 
-            $("#sip_report_date").datepicker({
-                defaultDate: "+1w",
+            $(".input").datepicker({
+                // defaultDate: "+1w",
                 changeMonth: true,
                 numberOfMonths: 1,
                 dateFormat: "dd/mm/yy"
