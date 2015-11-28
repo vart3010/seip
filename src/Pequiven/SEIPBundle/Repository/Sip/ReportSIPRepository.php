@@ -79,6 +79,27 @@ order by centro,Fecha';
 
         return $result;
     }
+    
+     public function getActiveHistory() {
+
+        $em = $this->getEntityManager();
+        $db = $em->getConnection();
+
+        $sql = '  
+    SELECT     Estado,    Municipio,    Parroquia,    eje,    Codigo,    Centro,
+    Status08112015,    Status09112015,    Status10112015,    Status11112015,    Status12112015,    Status13112015,
+    Status14112015,    Status15112015,    Status16112015,    Status17112015,    Status18112015,    Status19112015,
+    Status20112015,    Status21112015,    Status22112015,    Status23112015,    Status24112015,    Status25112015,
+    Status26112015,    Status27112015,    Status28112015,    Status29112015,    Status30112015,    Status01122015,
+    Status02122015,    Status03122015,    Status04122015,    Status05122015,    Status06122015
+    FROM Sip_Historico_Asist GROUP BY Estado , Municipio , Parroquia , eje , Codigo , Centro';
+
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+
+        return $result;
+    }
 
     protected function getAlias() {
         return "Rep";

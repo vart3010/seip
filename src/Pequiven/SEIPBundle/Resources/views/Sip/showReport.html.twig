@@ -13,16 +13,16 @@
 {% block body %}
 
     <fieldset class="fieldset">
-        <legend class="legend"><b>Asistencias de Cutls</b></legend>
-        <table width="90%">
+        <legend class="legend"><b>Centros de Votación</b></legend>
+        <table width="100%">
             <tbody>
                 <tr>
-                    <td width="50%">
+                    <td width="40%">
                         <form method="POST" action="{{ path("pequiven_sip_report_asist") }}">
                             <table class="record_properties">
                                 <thead>
                                     <tr>
-                                        <th class="header" style="text-align:left; font-size: medium">Diario</th>
+                                        <th class="header" style="text-align:left; font-size: medium">Asistencia Diaria</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -43,12 +43,36 @@
                             </table>
                         </form> 
                     </td>
-                    <td width="50%">
+                    <td width="30%">
                         <form method="POST" action="{{ path("pequiven_sip_report_asisthistory") }}">
                             <table class="record_properties">
                                 <thead>
                                     <tr>
-                                        <th class="header" style="text-align:left; font-size: medium">Histórico</th>
+                                        <th class="header" style="text-align:left; font-size: medium">Histórico de Asistencia</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td> &nbsp;</td>
+                                    </tr>
+                                    <tr>                                        
+                                        <td>  &nbsp; 
+                                            <button type="submit" class="button glossy mid-margin-center">
+                                                <span class="button-icon blue-gradient"><span class="icon-download"></span></span>   
+                                                Generar
+                                            </button>                                        
+                                        </td>
+                                    </tr>                                                             
+                                </tbody>
+                            </table>
+                        </form> 
+                    </td>
+                    <td width="30%">
+                        <form method="POST" action="{{ path("pequiven_sip_report_activehistory") }}">
+                            <table class="record_properties">
+                                <thead>
+                                    <tr>
+                                        <th class="header" style="text-align:left; font-size: medium">Histórico de Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -71,6 +95,128 @@
             </tbody>
         </table>
     </fieldset>
+
+    <br><br><br>
+
+    <fieldset class="fieldset">
+        <legend class="legend"><b>Requerimientos e Inventario</b></legend>
+        <table width="100%">
+            <tbody>
+                <tr>
+                    <td width="40%">
+                        <form method="POST" action="{{ path("pequiven_sip_report_asist") }}">
+                            <table class="record_properties">
+                                <thead>
+                                    <tr>
+                                        <th class="header" style="text-align:left; font-size: medium">Requerimientos Diarios</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td> &nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td>  &nbsp;                                          
+                                            Fecha:  <input type="text" name="asist" class="input input-small" id="asist" required="true">  
+                                        </td>
+                                        <td>  &nbsp; 
+                                            {# <button type="submit" class="button glossy mid-margin-center">
+                                                 <span class="button-icon blue-gradient"><span class="icon-download"></span></span>                                                    
+                                             </button> #}                                       
+                                        </td>
+                                    </tr>                                                             
+                                </tbody>
+                            </table>
+                        </form> 
+                    </td>
+                    <td width="30%">
+                        <form method="POST" action="{{ path("pequiven_sip_report_asisthistory") }}">
+                            <table class="record_properties">
+                                <thead>
+                                    <tr>
+                                        <th class="header" style="text-align:left; font-size: medium">Requerimientos Pendientes</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td> &nbsp;</td>
+                                    </tr>
+                                    <tr>                                        
+                                        <td>  &nbsp; 
+                                            {#   <button type="submit" class="button glossy mid-margin-center">
+                                                   <span class="button-icon blue-gradient"><span class="icon-download"></span></span>   
+                                                   Generar
+                                               </button>     #}                                   
+                                        </td>
+                                    </tr>                                                             
+                                </tbody>
+                            </table>
+                        </form> 
+                    </td>
+                    <td width="30%">
+                        <form method="POST" action="{{ path("pequiven_sip_report_activehistory") }}">
+                            <table class="record_properties">
+                                <thead>
+                                    <tr>
+                                        <th class="header" style="text-align:left; font-size: medium">Inventario</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td> &nbsp;</td>
+                                    </tr>
+                                    <tr>                                        
+                                        <td>  &nbsp; 
+                                            {# <button type="submit" class="button glossy mid-margin-center">
+                                                 <span class="button-icon blue-gradient"><span class="icon-download"></span></span>   
+                                                 Generar
+                                             </button>     #}                                   
+                                        </td>
+                                    </tr>                                                             
+                                </tbody>
+                            </table>
+                        </form> 
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </fieldset>
+    <br><br><br>
+
+    <fieldset class="fieldset">
+        <legend class="legend"><b>Avance 1x10</b></legend>
+        <table width="100%">
+            <tbody>
+                <tr>
+                    <td width="40%">
+                        <form method="POST" action="{{ path("pequiven_sip_report_asist") }}">
+                            <table class="record_properties">
+                                <thead>
+                                    <tr>
+                                        <th class="header" style="text-align:left; font-size: medium">Listado</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td> &nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td>  &nbsp; 
+                                            {# <button type="submit" class="button glossy mid-margin-center">
+                                                 <span class="button-icon blue-gradient"><span class="icon-download"></span></span>                                                    
+                                             </button> #}                                       
+                                        </td>
+                                    </tr>                                                             
+                                </tbody>
+                            </table>
+                        </form> 
+                    </td>                    
+                </tr>
+            </tbody>
+        </table>
+    </fieldset>
+
+
 
 
 

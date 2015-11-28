@@ -417,3 +417,12 @@ pequiven_sip_report_asisthistory:
     requirements:
         _format: html|json|xml        
     methods: [GET|POST]  
+    
+pequiven_sip_report_activehistory:
+    path: /Report/Active_History
+    defaults:
+        _controller: pequiven.controller.report:ActiveHistoryAction
+    requirements:
+        _format: html|json|xml        
+    methods: [GET|POST]  
+
