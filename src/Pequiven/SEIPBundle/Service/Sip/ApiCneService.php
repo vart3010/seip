@@ -24,7 +24,7 @@ class ApiCneService {
         /**
          * CONFIGURACION DE PROXY
          */
-        curl_setopt($curl, CURLOPT_PROXY, "http://pqvzivprx.pequiven.com/proxy.pac"); //your proxy url
+        curl_setopt($curl, CURLOPT_PROXY, "http://pqvzivprx02.pequiven.com/proxy.pac"); //your proxy url
         curl_setopt($curl, CURLOPT_PROXYPORT, "8080"); // your proxy port number 
 //        curl_setopt($curl, CURLOPT_PROXYUSERPWD, "username:pass"); //username:pass 
         $cne = '';
