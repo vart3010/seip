@@ -2943,6 +2943,97 @@ angular.module('seipModule.controllers', [])
                 }
             };
         })
+
+        .controller('SipCenterReportController', function ($scope, notificationBarService, $http, notifyService, $filter, $timeout) {
+
+            var isInit = false;
+            //Carga el formulario de las Asistencias
+            $scope.loadTemplateReportCenter = function (resource) {
+                $scope.initFormReportCenter(resource);
+                if (isInit == false) {
+                    isInit = true;
+                }
+                $scope.templateOptions.setTemplate($scope.templates[0]);
+                $scope.templateOptions.setParameterCallBack(resource);
+                if (resource) {
+                    $scope.templateOptions.enableModeEdit();
+                    $scope.openModalAuto();
+                } else {
+                    $scope.openModalAuto();
+                }
+            };  
+
+            //Añadir Reporte
+            var addReport = function (save, successCallBack) {
+                var formAddReport = angular.element('#form_sip_center_report');
+                var formData = formAddReport.serialize();
+
+                if (save == undefined) {
+                    var save = false;
+                }
+                if (save == true) {
+                    var url = Routing.generate('pequiven_sip_center_report_add', {idCenter: $scope.idCenter, mesa: $scope.mesa});
+                }
+                notificationBarService.getLoadStatus().loading();
+                return $http({
+                    method: 'POST',
+                    url: url,
+                    data: formData,
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'}  // set the headers so angular passing info as form data (not request payload)
+                }).success(function (data) {
+                    $scope.templateOptions.setVar("form", {errors: {}});
+                    if (successCallBack) {
+                        successCallBack(data);
+                    }
+                    notificationBarService.getLoadStatus().done();
+                    location.reload();
+                    return true;
+                }).error(function (data, status, headers, config) {
+                    $scope.templateOptions.setVar("form", {errors: {}});
+                    if (data.errors) {
+                        if (data.errors.errors) {
+                            $.each(data.errors.errors, function (index, value) {
+                                notifyService.error(Translator.trans(value));
+                            });
+                        }
+                        $scope.templateOptions.setVar("form", {errors: data.errors.children});
+                    }
+                    notificationBarService.getLoadStatus().done();
+                    return false;
+                });
+            };
+
+            $scope.templateOptions.setVar('addReport', addReport);
+            var confirmCallBack = function () {
+                addReport(true, function (data) {                    
+                });
+                return true;
+            };
+
+            //Formulario reporte de mesas
+            $scope.initFormReportCenter = function (resource) {
+                var d = new Date();
+                var numero = d.getTime();
+                $scope.setHeight(650);
+                var parameters = {
+                    idCenter: $scope.idCenter,                    
+                    mesa: $scope.mesa,
+                    _dc: numero
+                };
+                if (resource) {
+                    parameters.id = resource.id;
+                }
+                var url = Routing.generate('pequiven_sip_center_report', parameters);
+                $scope.templates = [
+                    {
+                        name: 'Reporte Apertura de Mesa',
+                        url: url,
+                        confirmCallBack: confirmCallBack,
+                    }
+                ];
+                $scope.templateOptions.setTemplate($scope.templates[0]);
+            };
+        })
         //fin
         .controller('SipCenterInventoryController', function ($scope, notificationBarService, $http, notifyService, $filter, $timeout) {
 

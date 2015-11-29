@@ -109,24 +109,31 @@
                 </div>
             {% endif %}
             
-            {# validacion de muestra solo para el 4 y 6 de didicmebre #}
-            {% set day4 = 04/12/2015 | date("d/m/Y") %}                
-            {% set day6 = 06/12/2015 | date("d/m/Y")%}
-
-            {# Dia actual #}
-            {% set day = "now" | date("d/m/Y") %}
-
-            {#{% if day4 == day or day6 == day %}#}
-            {#}    <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
-                    <p class="inline-label">
-                        <label class="label">Mesas Activas</label>
-                            {{ report }}
-                            &nbsp;       
-                        <a class="button icon-pencil icon-size2" href="" ng-click="loadTemplateAssists()" title=""></a>                        
-                    </p>
-                </div>#}
-            {#{% endif %}#}
         </div>
+        {# validacion de muestra solo para el 4 y 6 de diciembre #}
+        {% set day4 = 04/12/2015 | date("d/m/Y") %}                
+        {% set day6 = 06/12/2015 | date("d/m/Y")%}
+
+        {# Dia actual #}
+        {% set day = "now" | date("d/m/Y") %}
+
+        {% if day4 == day or day6 == day %}
+        <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+            <p class="inline-label">
+                <label class="label">Mesas Activas</label>
+                    {{ report }}
+                    &nbsp;       
+                    {#<a class="button icon-pencil icon-size2" href="" ng-click="loadTemplateReportCenter()" title=""></a>#}
+            </p>
+            &nbsp; 
+        </div>       
+        <div ng-controller="SipCenterReportController">                 
+                {% for reportM in reportMesa %}
+                    <a class="button icon-pencil icon-size2" href="" ng-click="loadTemplateReportCenter(mesa='{{ reportM.mesa }}')" title="">Mesa {{ reportM.mesa }}</a>        
+                    &nbsp; 
+                {% endfor %}            
+        </div>
+        {% endif %}
     </fieldset>  
     <br>
         {% include 'PequivenSEIPBundle:Sip:Center/StatusCenter.html.twig' %}  

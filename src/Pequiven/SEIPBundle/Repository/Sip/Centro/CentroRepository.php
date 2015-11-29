@@ -12,6 +12,30 @@ use Pequiven\SEIPBundle\Doctrine\ORM\SeipEntityRepository as EntityRepository;
 class CentroRepository extends EntityRepository {
 
     /**
+     * 
+     * 
+     * @param array $criteria
+     * @param array $orderBy
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    function findByNotification($id) {
+        
+        $em = $this->getEntityManager();
+        $db = $em->getConnection();
+
+        $sql = 'SELECT o.notification
+            FROM sip_centro_report_observations AS o            
+            WHERE o.report_id ='.$id.'
+            order by id desc limit 1';            
+
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+        
+        return $result;
+    }  
+
+    /**
      * Crea un paginador para los CUTL
      * 
      * @param array $criteria
