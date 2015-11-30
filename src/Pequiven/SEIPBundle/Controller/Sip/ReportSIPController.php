@@ -155,8 +155,13 @@ class ReportSIPController extends SEIPController {
             $activeSheet->setCellValue('AJ' . $row, $fila["Asist04122015"]);
             $activeSheet->setCellValue('AK' . $row, $fila["Asist05122015"]);
             $activeSheet->setCellValue('AL' . $row, $fila["Asist06122015"]);
-            $activeSheet->setCellValue('AM' . $row, '=CONTAR.SI(J' . $row . ':AL' . $row . ';"P")');
-            $activeSheet->setCellValue('AN' . $row, '=(AM' . $row . '/(($I$3-$G$3)+1))');
+            $asist = array_count_values($fila);
+            $diff = round((strtotime('now') - strtotime("2015/11/07")) / 86400);
+            if (!isset($asist["P"])) {
+                $asist["P"] = 0;
+            }
+            $activeSheet->setCellValue('AM' . $row, $asist["P"]);
+            $activeSheet->setCellValue('AN' . $row, ($asist["P"] / $diff));
 
             $row++;
         }
@@ -246,8 +251,13 @@ class ReportSIPController extends SEIPController {
             $activeSheet->setCellValue('AG' . $row, $fila["Status04122015"]);
             $activeSheet->setCellValue('AH' . $row, $fila["Status05122015"]);
             $activeSheet->setCellValue('AI' . $row, $fila["Status06122015"]);
-            $activeSheet->setCellValue('AJ' . $row, '=CONTAR.SI(G' . $row . ':AI' . $row . ';"A")');
-            $activeSheet->setCellValue('AK' . $row, '=(AJ' . $row . '/(($L$3-$F$3)+1))');
+            $asist = array_count_values($fila);
+            $diff = round((strtotime('now') - strtotime("2015/11/12")) / 86400);
+            if (!isset($asist["A"])) {
+                $asist["A"] = 0;
+            }
+            $activeSheet->setCellValue('AJ' . $row, $asist["A"]);
+            $activeSheet->setCellValue('AK' . $row, ($asist["A"] / $diff));
 
             $row++;
         }
