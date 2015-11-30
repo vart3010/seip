@@ -839,13 +839,32 @@ class CenterController extends SEIPController {
 
         $validacionCutl = $cedula;
         
-            foreach (Observations::getCategoriasObservations() as $key => $value) {
+            /*foreach (Observations::getCategoriasObservations() as $key => $value) {
                 $labelsObservations[] = array(
                     'id' => $key,
                     'description' => $this->trans($value, array(), 'PequivenArrangementProgramBundle'),
                 );
-            }
-
+            }*/
+        $labelsObservations = [
+            1 => 'Propaganda',
+            2 => 'Transporte',
+            3 => 'Hidratación',
+            4 => 'Logistica',
+            //5 => 'Asistencia',
+            6 => 'Telefonia',
+            7 => 'Otros...',
+            8 => 'Servicios de Luz',
+            9 => 'Servicios de Agua',
+            10 => 'Servicios de Aseo',
+            11 => 'Material de Oficina',
+            //12 => 'Cava',
+            //13 => 'Termo De Agua',
+            14 => 'CNE',
+            15 => 'Comida',
+            16 => 'Ayuda Social',
+            17 => 'Infraestructura',
+            //18 => 'Servicios Médicos',
+        ];
             foreach (Observations::getStatusObservations() as $key => $value) {
                 $labelsStatus[] = array(
                     'id' => $key,
