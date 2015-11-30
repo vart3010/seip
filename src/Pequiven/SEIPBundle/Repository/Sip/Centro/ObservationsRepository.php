@@ -48,6 +48,10 @@ class ObservationsRepository extends EntityRepository {
         if (($municipio = $criteria->remove('municipio'))) {
             $queryBuilder->andWhere($queryBuilder->expr()->like('obs.municipio', "'%" . $municipio . "%'"));
         }
+
+        if (($estado = $criteria->remove('estado'))) {
+            $queryBuilder->andWhere($queryBuilder->expr()->like('obs.estado', "'%" . $estado . "%'"));
+        }
         
         parent::applyCriteria($queryBuilder, $criteria->toArray());
     }

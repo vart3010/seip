@@ -64,6 +64,10 @@ class InventoryRepository extends EntityRepository {
         if (($municipio = $criteria->remove('municipio'))) {
             $queryBuilder->andWhere($queryBuilder->expr()->like('inv.municipio', "'%" . $municipio . "%'"));
         }
+
+        if (($estado = $criteria->remove('estado'))) {
+            $queryBuilder->andWhere($queryBuilder->expr()->like('inv.estado', "'%" . $estado . "%'"));
+        }
         
         parent::applyCriteria($queryBuilder, $criteria->toArray());
     }

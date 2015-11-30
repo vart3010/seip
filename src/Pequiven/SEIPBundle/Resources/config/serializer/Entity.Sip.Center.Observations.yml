@@ -28,3 +28,6 @@ Pequiven\SEIPBundle\Entity\Sip\Center\Observations:
         parroquia:
             expose: true
             groups: [api_list]
+        estado:
+            expose: true
+            groups: [api_list]
