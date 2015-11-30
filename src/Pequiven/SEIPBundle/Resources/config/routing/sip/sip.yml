@@ -435,5 +435,38 @@ pequiven_sip_report_activehistory:
         _controller: pequiven.controller.report:ActiveHistoryAction
     requirements:
         _format: html|json|xml        
-    methods: [GET|POST]  
+    methods: [GET|POST] 
+    
+pequiven_sip_report_DailyRequirements:
+    path: /Report/Daily_Requirements
+    defaults:
+        _controller: pequiven.controller.report:DailyRequirementsAction
+    requirements:
+        _format: html|json|xml        
+    methods: [GET|POST]
+        
+pequiven_sip_report_EarringsRequirements:
+    path: /Report/Earrings_Requirements
+    defaults:
+        _controller: pequiven.controller.report:EarringsRequirementsAction
+    requirements:
+        _format: html|json|xml        
+    methods: [GET|POST]
+    
+pequiven_sip_report_Inventory:
+    path: /Report/Inventory
+    defaults:
+        _controller: pequiven.controller.report:InventoryAction
+    requirements:
+        _format: html|json|xml        
+    methods: [GET|POST]
+    
+pequiven_sip_report_OnePerTen:
+    path: /Report/OnePerTen
+    defaults:
+        _controller: pequiven.controller.report:OnePerTenAction
+    requirements:
+        _format: html|json|xml        
+    methods: [GET|POST]
+
 

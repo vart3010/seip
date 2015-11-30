@@ -104,7 +104,7 @@
             <tbody>
                 <tr>
                     <td width="40%">
-                        <form method="POST" action="{{ path("pequiven_sip_report_asist") }}">
+                        <form method="POST" action="{{ path("pequiven_sip_report_DailyRequirements") }}">
                             <table class="record_properties">
                                 <thead>
                                     <tr>
@@ -117,12 +117,12 @@
                                     </tr>
                                     <tr>
                                         <td>  &nbsp;                                          
-                                            Fecha:  <input type="text" name="asist" class="input input-small" id="asist" required="true">  
+                                            Fecha:  <input type="text" name="req" class="input input-small" id="req" required="true">  
                                         </td>
                                         <td>  &nbsp; 
-                                            {# <button type="submit" class="button glossy mid-margin-center">
-                                                 <span class="button-icon blue-gradient"><span class="icon-download"></span></span>                                                    
-                                             </button> #}                                       
+                                            <button type="submit" class="button glossy mid-margin-center">
+                                                <span class="button-icon blue-gradient"><span class="icon-download"></span></span>                                                    
+                                            </button>
                                         </td>
                                     </tr>                                                             
                                 </tbody>
@@ -130,7 +130,7 @@
                         </form> 
                     </td>
                     <td width="30%">
-                        <form method="POST" action="{{ path("pequiven_sip_report_asisthistory") }}">
+                        <form method="POST" action="{{ path("pequiven_sip_report_EarringsRequirements") }}">
                             <table class="record_properties">
                                 <thead>
                                     <tr>
@@ -143,10 +143,10 @@
                                     </tr>
                                     <tr>                                        
                                         <td>  &nbsp; 
-                                            {#   <button type="submit" class="button glossy mid-margin-center">
-                                                   <span class="button-icon blue-gradient"><span class="icon-download"></span></span>   
-                                                   Generar
-                                               </button>     #}                                   
+                                            <button type="submit" class="button glossy mid-margin-center">
+                                                <span class="button-icon blue-gradient"><span class="icon-download"></span></span>   
+                                                Generar
+                                            </button>                                      
                                         </td>
                                     </tr>                                                             
                                 </tbody>
@@ -154,7 +154,7 @@
                         </form> 
                     </td>
                     <td width="30%">
-                        <form method="POST" action="{{ path("pequiven_sip_report_activehistory") }}">
+                        <form method="POST" action="{{ path("pequiven_sip_report_Inventory") }}">
                             <table class="record_properties">
                                 <thead>
                                     <tr>
@@ -167,10 +167,10 @@
                                     </tr>
                                     <tr>                                        
                                         <td>  &nbsp; 
-                                            {# <button type="submit" class="button glossy mid-margin-center">
-                                                 <span class="button-icon blue-gradient"><span class="icon-download"></span></span>   
-                                                 Generar
-                                             </button>     #}                                   
+                                            <button type="submit" class="button glossy mid-margin-center">
+                                                <span class="button-icon blue-gradient"><span class="icon-download"></span></span>   
+                                                Generar
+                                            </button>                                     
                                         </td>
                                     </tr>                                                             
                                 </tbody>
@@ -189,7 +189,7 @@
             <tbody>
                 <tr>
                     <td width="40%">
-                        <form method="POST" action="{{ path("pequiven_sip_report_asist") }}">
+                        <form method="POST" action="{{ path("pequiven_sip_report_OnePerTen") }}">
                             <table class="record_properties">
                                 <thead>
                                     <tr>
@@ -202,9 +202,10 @@
                                     </tr>
                                     <tr>
                                         <td>  &nbsp; 
-                                            {# <button type="submit" class="button glossy mid-margin-center">
-                                                 <span class="button-icon blue-gradient"><span class="icon-download"></span></span>                                                    
-                                             </button> #}                                       
+                                            <button type="submit" class="button glossy mid-margin-center">
+                                                <span class="button-icon blue-gradient"><span class="icon-download"></span></span>   
+                                                Generar
+                                            </button>  
                                         </td>
                                     </tr>                                                             
                                 </tbody>
