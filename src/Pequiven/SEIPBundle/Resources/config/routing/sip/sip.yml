@@ -456,4 +456,10 @@ pequiven_sip_report_voto_search:
     path: /voto/search
     defaults:
         _controller: pequiven.controller.voto:searchAction
-
+pequiven_sip_report_voto_add:
+    path: /voto/save
+    defaults:
+        _controller: pequiven.controller.voto:saveAction
+    methods: [GET|POST]
+    options:
+        expose: true

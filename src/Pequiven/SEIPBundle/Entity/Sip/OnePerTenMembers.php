@@ -150,6 +150,14 @@ class OnePerTenMembers {
      */
     private $deletedAt;
 
+    /**
+     * voto
+     * @var integer
+     *
+     * @ORM\Column(name="voto", type="integer", nullable=true)
+     */
+    private $voto = 0;
+
     function getCodigoParroquia() {
         return $this->codigoParroquia;
     }
@@ -286,5 +294,12 @@ class OnePerTenMembers {
         $this->deletedAt = $deletedAt;
     }
     
+    function setVoto($voto) {
+        $this->voto = $voto;
+    }
+    
+    function getVoto() {
+        return $this->voto;
+    }
 
 }

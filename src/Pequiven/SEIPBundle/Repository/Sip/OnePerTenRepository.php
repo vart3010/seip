@@ -85,6 +85,20 @@ class OnePerTenRepository extends EntityRepository {
         return $q->getResult();
     }
 
+    public function getOnePerTenVoto($cedula) {
+
+        $query = $this->getQueryBuilder();
+
+        $query
+                ->andWhere('opt.cedula = :ced')
+                ->setParameter("ced", $cedula)
+        ;
+
+        $q = $query->getQuery();
+
+        return $q->getResult();
+    }
+
     protected function getAlias() {
         return 'opt';
     }

@@ -72,6 +72,14 @@ class OnePerTen {
     private $deletedAt;
 
     /**
+     * voto
+     * @var integer
+     *
+     * @ORM\Column(name="voto", type="integer", nullable=true)
+     */
+    private $voto = 0;
+
+    /**
      * @var \Pequiven\SEIPBundle\Entity\Sip\OnerPerTenMembers
      * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\Sip\OnePerTenMembers", mappedBy="one", cascade={"persist","remove"})
      */
@@ -159,5 +167,14 @@ class OnePerTen {
     function setDeletedAt($deletedAt) {
         $this->deletedAt = $deletedAt;
     }
+
+    function setVoto($voto) {
+        $this->voto = $voto;
+    }
+    
+    function getVoto() {
+        return $this->voto;
+    }
+
 
 }

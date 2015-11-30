@@ -82,6 +82,14 @@ class Observations extends modelObservations{
      */
     private $parroquia;
 
+    /**
+     * estado
+     * @var string
+     *
+     * @ORM\Column(name="estado", type="string", length=255, nullable=true)
+     */
+    private $estado;
+
      /**
      * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
      */
@@ -156,6 +164,13 @@ class Observations extends modelObservations{
         return $this->parroquia;
     }
 
+    function setEstado($estado) {
+        $this->estado = $estado;
+    }
+    
+    function getEstado() {
+        return $this->estado;
+    }
     /**
      * Set deletedAt
      *
