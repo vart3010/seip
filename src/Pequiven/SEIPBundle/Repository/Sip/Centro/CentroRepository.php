@@ -33,6 +33,30 @@ class CentroRepository extends EntityRepository {
         $result = $stmt->fetchAll();
         
         return $result;
+    } 
+
+    /**
+     * 
+     * 
+     * @param array $criteria
+     * @param array $orderBy
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    function findByVoto($id) {
+        
+        $em = $this->getEntityManager();
+        $db = $em->getConnection();
+
+        $sql = 'SELECT o.votos
+            FROM sip_centro_report_voto AS o            
+            WHERE o.centro_id ='.$id.'
+            order by id desc limit 1';            
+
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+        
+        return $result;
     }  
 
     /**

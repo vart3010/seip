@@ -123,15 +123,26 @@
                 <label class="label">Mesas Activas</label>
                     {{ report }}
                     &nbsp;       
-                    {#<a class="button icon-pencil icon-size2" href="" ng-click="loadTemplateReportCenter()" title=""></a>#}
             </p>
             &nbsp; 
         </div>       
         <div ng-controller="SipCenterReportController">                 
                 {% for reportM in reportMesa %}
-                    <a class="button icon-pencil icon-size2" href="" ng-click="loadTemplateReportCenter(mesa='{{ reportM.mesa }}')" title="">Mesa {{ reportM.mesa }}</a>        
+                    {# red-gradient  green-gradient#}
+                    <a class="button icon-pencil icon-size2" href="" ng-click="loadTemplateReportCenter(mesa='{{ reportM.mesa }}')" title="Cargar Estatus de Mesa">Mesa {{ reportM.mesa }}</a>        
                     &nbsp; 
                 {% endfor %}            
+        </div>
+        {% endif %}
+        &nbsp;  
+        {% if day6 == day %}
+        <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile" ng-controller="SipCenterReportController">
+            <p class="inline-label">
+                <label class="label">Seguimiento Voto</label>
+                    {{ votos[0]["votos"] }}
+                    &nbsp;       
+                    <a class="button icon-add-user icon-size2" href="" ng-click="loadTemplateReportVoto(centro='{{ center.id }}')" title="Cargar Votos Registrados por Centro">Votos</a>        
+            </p>            
         </div>
         {% endif %}
     </fieldset>  

@@ -269,7 +269,7 @@ pequiven_sip_center_export:
     methods: [GET|POST]
     options:
         expose: true
-#Asistencia
+#Reporte de mesas
 pequiven_sip_center_report:
     path: /{idCenter}/center-report.{_format}
     defaults:
@@ -288,6 +288,17 @@ pequiven_sip_center_report_add:
     requirements:
         _format: html|json
     methods: [POST]
+    options:
+        expose: true
+#Reporte de Votos 
+pequiven_sip_center_report_voto:
+    path: /{idCenter}/report-center.{_format}
+    defaults:
+        _controller: pequiven.controller.center:formReportCenterAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET|POST]
     options:
         expose: true
 #UBCH
