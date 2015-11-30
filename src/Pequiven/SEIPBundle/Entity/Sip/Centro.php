@@ -172,6 +172,22 @@ class Centro {
      */
     private $cargoubch;
 
+    /**
+     * Observaciones
+     * 
+     * @var \Pequiven\SEIPBundle\Entity\Sip\Center\ReportCentroVoto
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\Sip\Center\ReportCentroVoto",mappedBy="centro",cascade={"persist","remove"})
+     */
+    protected $report;
+
+    /**
+     * Constructor
+     */
+    public function __construct() {
+
+        $this->report = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
     function getId() {
         return $this->id;
     }
@@ -332,4 +348,34 @@ class Centro {
         $this->cargoubch = $cargoubch;
     }
 
+
+    /**
+     * Add report
+     *
+     * @param \Pequiven\SEIPBundle\Entity\Sip\Center\ReportCentroVoto $report
+     * @return Indicator
+     */
+    public function addReport(\Pequiven\SEIPBundle\Entity\Sip\Center\ReportCentroVoto $report) {
+
+        $this->report->add($report);
+
+        return $this;
+    }
+
+    /**
+     * Remove report
+     *
+     * @param \Pequiven\SEIPBundle\Entity\Sip\Center\ReportCentroVoto $report
+     */
+    public function removeReport(\Pequiven\SEIPBundle\Entity\Sip\Center\ReportCentroVoto $report) {
+        $this->report->removeElement($report);
+    }
+
+    /**
+     * Get report
+     *
+     * @return \Pequiven\SEIPBundle\Entity\Sip\Center\ReportCentroVoto     */
+    public function getReport() {
+        return $this->report;
+    } 
 }

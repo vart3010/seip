@@ -3046,6 +3046,21 @@ angular.module('seipModule.controllers', [])
                 } else {
                     $scope.openModalAuto();
                 }
+            }; 
+            //Carga el formulario Registro de Votos
+            $scope.loadTemplateReportVoto = function (resource) {
+                $scope.initFormReportVoto(resource);
+                if (isInit == false) {
+                    isInit = true;
+                }
+                $scope.templateOptions.setTemplate($scope.templates[0]);
+                $scope.templateOptions.setParameterCallBack(resource);
+                if (resource) {
+                    $scope.templateOptions.enableModeEdit();
+                    $scope.openModalAuto();
+                } else {
+                    $scope.openModalAuto();
+                }
             };  
 
             //Añadir Reporte
@@ -3088,9 +3103,56 @@ angular.module('seipModule.controllers', [])
                 });
             };
 
+            //Añadir Reporte
+            var addVotos = function (save, successCallBack) {
+                var formAddReport = angular.element('#form_sip_center_report_votos');
+                var formData = formAddReport.serialize();
+
+                if (save == undefined) {
+                    var save = false;
+                }
+                if (save == true) {
+                    var url = Routing.generate('pequiven_sip_center_report_voto', {idCenter: $scope.idCenter});
+                }
+                notificationBarService.getLoadStatus().loading();
+                return $http({
+                    method: 'POST',
+                    url: url,
+                    data: formData,
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'}  // set the headers so angular passing info as form data (not request payload)
+                }).success(function (data) {
+                    $scope.templateOptions.setVar("form", {errors: {}});
+                    if (successCallBack) {
+                        successCallBack(data);
+                    }
+                    notificationBarService.getLoadStatus().done();
+                    location.reload();
+                    return true;
+                }).error(function (data, status, headers, config) {
+                    $scope.templateOptions.setVar("form", {errors: {}});
+                    if (data.errors) {
+                        if (data.errors.errors) {
+                            $.each(data.errors.errors, function (index, value) {
+                                notifyService.error(Translator.trans(value));
+                            });
+                        }
+                        $scope.templateOptions.setVar("form", {errors: data.errors.children});
+                    }
+                    notificationBarService.getLoadStatus().done();
+                    return false;
+                });
+            };
+
             $scope.templateOptions.setVar('addReport', addReport);
             var confirmCallBack = function () {
                 addReport(true, function (data) {                    
+                });
+                return true;
+            };
+
+            $scope.templateOptions.setVar('addVotos', addVotos);
+            var confirmCallBackVotos = function () {
+                addVotos(true, function (data) {                    
                 });
                 return true;
             };
@@ -3114,6 +3176,30 @@ angular.module('seipModule.controllers', [])
                         name: 'Reporte Apertura de Mesa',
                         url: url,
                         confirmCallBack: confirmCallBack,
+                    }
+                ];
+                $scope.templateOptions.setTemplate($scope.templates[0]);
+            };
+
+            //Formulario reporte de Votos por Centro
+            $scope.initFormReportVoto = function (resource) {
+                var d = new Date();
+                var numero = d.getTime();
+                $scope.setHeight(350);                   
+                var parameters = {
+                    idCenter: $scope.idCenter, 
+                    mesa: $scope.mesa,
+                    _dc: numero
+                };
+                if (resource) {
+                    parameters.id = resource.id;
+                }
+                var url = Routing.generate('pequiven_sip_center_report_voto', parameters);
+                $scope.templates = [
+                    {
+                        name: 'Reporte de Votos',
+                        url: url,
+                        confirmCallBack: confirmCallBackVotos,
                     }
                 ];
                 $scope.templateOptions.setTemplate($scope.templates[0]);

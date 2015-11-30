@@ -1722,6 +1722,16 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
             $menuSip->addChild($report);
         }
 
+        if ($this->isGranted(array('ROLE_SUPER_ADMIN'))) {
+            //Voto
+            $voto = $this->factory->createItem('sip.voto', $this->getSubLevelOptions(array(
+                                "route" => "pequiven_sip_report_voto",
+                                'labelAttributes' => array('icon' => 'fa fa-pencil-square-o',),
+                            ))
+                    )->setLabel($this->translate(sprintf('6D - Reporte Voto', $section)));
+            $menuSip->addChild($voto);
+        }
+
         $menu->addChild($menuSip);
     }
 

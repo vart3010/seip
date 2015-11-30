@@ -23,6 +23,7 @@ use Pequiven\SEIPBundle\Entity\Sip\Ubch;
 
 use Pequiven\SEIPBundle\Form\Sip\Center\ReportCenterType;
 use Pequiven\SEIPBundle\Entity\Sip\Center\ReportCentroNotifications;
+use Pequiven\SEIPBundle\Entity\Sip\Center\ReportCentroVoto;
 
 /**
  * Controlador Centros
@@ -113,6 +114,50 @@ class CenterController extends SEIPController {
         $view->getSerializationContext()->setGroups(array('id', 'api_list'));
 
         return $view;
+    }
+
+    /**
+     * 
+     * @param Request $request
+     * @return type
+     */
+    public function formReportCenterAction(Request $request) {
+
+        $id = $request->get('idCenter');
+
+        $em = $this->getDoctrine()->getEntityManager();
+
+        $votoCentro = new ReportCentroVoto();
+        //$form = $this->createForm(new RequestEditType(), $observations);
+        if (isset($request->get('report_centro_voto')['voto'])) {
+            
+            $voto = $request->get('report_centro_voto')['voto'];
+            
+            $centro = $this->get('pequiven.repository.center')->findOneBy(array('codigoCentro'=>$id));
+            
+            $votoCentro->setCentro($centro);
+            $votoCentro->setVotos($voto);
+            
+            $em->persist($votoCentro);            
+            $em->flush();
+
+            $this->get('session')->getFlashBag()->add('success', "Votos Registrados Exitosamente");
+           
+            die();
+            return true;
+        } else {
+            $view = $this
+                    ->view()
+                    ->setTemplate('PequivenSEIPBundle:Sip:Center/Form/ReportCenterVoto.html.twig')
+                    ->setTemplateVar($this->config->getPluralResourceName())
+                    ->setData(array(
+                //'form' => $form->createView(),
+                    ))
+            ;
+            $view->getSerializationContext()->setGroups(array('id', 'api_list'));
+
+            return $view;
+        }
     }
 
     /**
@@ -750,6 +795,8 @@ class CenterController extends SEIPController {
 
         $reportMesa = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Center\ReportCentro")->findBy(array('codigoCentro' => $center->getCodigoCentro()));
         
+        $reportVoto = $this->get('pequiven.repository.center')->findByVoto($id);
+
         $report = $cont = $resultM = 0;
         foreach ($reportMesa as $value) {                        
             $id = $value->getId();            
@@ -792,13 +839,32 @@ class CenterController extends SEIPController {
 
         $validacionCutl = $cedula;
         
-            foreach (Observations::getCategoriasObservations() as $key => $value) {
+            /*foreach (Observations::getCategoriasObservations() as $key => $value) {
                 $labelsObservations[] = array(
                     'id' => $key,
                     'description' => $this->trans($value, array(), 'PequivenArrangementProgramBundle'),
                 );
-            }
-
+            }*/
+        $labelsObservations = [
+            1 => 'Propaganda',
+            2 => 'Transporte',
+            3 => 'Hidratación',
+            4 => 'Logistica',
+            //5 => 'Asistencia',
+            6 => 'Telefonia',
+            7 => 'Otros...',
+            8 => 'Servicios de Luz',
+            9 => 'Servicios de Agua',
+            10 => 'Servicios de Aseo',
+            11 => 'Material de Oficina',
+            //12 => 'Cava',
+            //13 => 'Termo De Agua',
+            14 => 'CNE',
+            15 => 'Comida',
+            16 => 'Ayuda Social',
+            17 => 'Infraestructura',
+            //18 => 'Servicios Médicos',
+        ];
             foreach (Observations::getStatusObservations() as $key => $value) {
                 $labelsStatus[] = array(
                     'id' => $key,
@@ -846,7 +912,8 @@ class CenterController extends SEIPController {
                     'centerAct' => $centerAct,
                     'pqvCentro' => $result,
                     'report'    => $resultM,
-                    'reportMesa'=> $reportMesa
+                    'reportMesa'=> $reportMesa,
+                    'votos'     => $reportVoto
         ));
     }
 

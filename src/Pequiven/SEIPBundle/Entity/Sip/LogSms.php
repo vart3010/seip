@@ -51,7 +51,7 @@ class LogSms {
      * mesa
      * @var string
      *
-     * @ORM\Column(name="mesa", type="integer", nullable=true)
+     * @ORM\Column(name="mesa", type="string", nullable=true)
      */
     private $mesa;
 
@@ -94,6 +94,24 @@ class LogSms {
      * @ORM\Column(name="resp", type="string", length=255, nullable=true)
      */
     private $resp;
+    
+    /**
+     * fecha
+     * @var string
+     *
+     * @ORM\Column(name="fecha", type="string", length=255, nullable=false)
+     */
+    private $fecha;
+    
+    function getFecha() {
+        return $this->fecha;
+    }
+
+    function setFecha($fecha) {
+        $this->fecha = $fecha;
+    }
+
+        
 
     function getId() {
         return $this->id;
