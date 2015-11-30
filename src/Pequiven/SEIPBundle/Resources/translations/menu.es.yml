@@ -250,5 +250,9 @@ app:
                         list_inventory: Lista Inventario
                         list_request: Lista Requerimientos
                         report: Reportes
+                        display: Monitores
+                        voto: Voto
+                        voto_pqv: Voto Pequiven
+                        mesa: Mesas Activas
 
                             

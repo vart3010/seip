@@ -1732,6 +1732,25 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
             $menuSip->addChild($voto);
         }
 
+        if ($this->isGranted(array('ROLE_SUPER_ADMIN'))) {
+            //Requerimientos
+            $display = $this->factory->createItem('sip.display', $this->getSubLevelOptions(array(
+                                "route" => "",
+                                'labelAttributes' => array('icon' => 'fa fa-desktop',),
+                            ))
+                    )->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.display', $section)));
+            //Sub menu
+            $displayMenu = $this->factory->createItem('sip.list', $this->getSubLevelOptions(array(
+                                "route" => "",
+                                'labelAttributes' => array('icon' => 'fa fa-area-chart',),
+                            ))
+                    )->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.voto', $section)));
+
+            $display->addChild($displayMenu);            
+
+            $menuSip->addChild($display);
+        }
+
         $menu->addChild($menuSip);
     }
 
