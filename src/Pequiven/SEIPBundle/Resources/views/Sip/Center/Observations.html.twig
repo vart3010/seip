@@ -36,9 +36,11 @@
                                 <span class="select compact">
                                     <a href class="select-value form-edit">{{ 'pequiven.actions'|trans({},'messages') }}</a>
                                 <span class="select-arrow"></span>
-                                    <span class="drop-down">                                    
-                                        <a href ng-click="loadTemplateStatus(Status='{{ dataObs.id }}')" class="button icon-pencil">Revisar</a>             
-                                       
+                                    <span class="drop-down">          
+                                        <a href ng-click="loadTemplateEditRequest(Status='{{ dataObs.id }}')" class="button icon-pencil">Editar</a>
+
+                                        <a href ng-click="loadTemplateStatus(Status='{{ dataObs.id }}')" class="button icon-read">Revisar</a>
+
                                         <a href ng-click="removeObservations(observations='{{ dataObs.id }}')" class="button icon-cross-round">{{ "pequiven.actions.delete"|trans({},"messages") }}</a>
                                     </span>
                                 </span>

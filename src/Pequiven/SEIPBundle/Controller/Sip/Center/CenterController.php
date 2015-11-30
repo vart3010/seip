@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Pequiven\SEIPBundle\Entity\Sip\Center\Observations;
 use Pequiven\SEIPBundle\Form\Sip\Center\ObservationsType;
 use Pequiven\SEIPBundle\Form\Sip\Center\StatusType;
+use Pequiven\SEIPBundle\Form\Sip\Center\RequestEditType;
 
 use Pequiven\SEIPBundle\Entity\Sip\Center\Assists;
 use Pequiven\SEIPBundle\Form\Sip\Center\AssistsType;
@@ -449,7 +450,50 @@ class CenterController extends SEIPController {
         } else {
             $view = $this
                     ->view()
-                    ->setTemplate($this->config->getTemplate('Form/Status.html'))
+                    ->setTemplate($this->config->getTemplate('Form/RequestStatus.html'))
+                    ->setTemplateVar($this->config->getPluralResourceName())
+                    ->setData(array(
+                'form' => $form->createView(),
+                    ))
+            ;
+            $view->getSerializationContext()->setGroups(array('id', 'api_list'));
+
+            return $view;
+        }
+    }
+
+    /**
+     * 
+     * @param Request $request
+     * @return type
+     */
+    public function formEditRequestAction(Request $request) {
+
+        $id = $request->get('idObs');
+
+        $em = $this->getDoctrine()->getEntityManager();
+
+        $observations = new Observations();
+        $form = $this->createForm(new RequestEditType(), $observations);
+        
+        if (isset($request->get('sip_center_request_edit')['categoria'])) {
+            $categoria = $request->get('sip_center_request_edit')['categoria'];
+            
+            $form->bind($this->getRequest());
+            
+            $Observations = $this->get('pequiven.repository.observations')->find($id);
+
+            $Observations->setCategoria($categoria);
+
+            $em->flush();
+
+            $this->get('session')->getFlashBag()->add('success', "Categoria Actualizada Exitosamente");
+            die();
+            return true;
+        } else {
+            $view = $this
+                    ->view()
+                    ->setTemplate($this->config->getTemplate('Form/RequestEdit.html'))
                     ->setTemplateVar($this->config->getPluralResourceName())
                     ->setData(array(
                 'form' => $form->createView(),
@@ -892,6 +936,7 @@ class CenterController extends SEIPController {
         if ($request->get('_format') == 'html') {
             $data = array(
                 'apiDataUrl' => $apiDataUrl,
+                'idCentro' => $idCentro,
                 $this->config->getPluralResourceName() => $resources,
             );
             $view->setData($data);

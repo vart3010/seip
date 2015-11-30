@@ -2408,6 +2408,21 @@ angular.module('seipModule.controllers', [])
                     $scope.openModalAuto();
                 }
             };
+            //Carga el formulario para cambiar las categorias
+            $scope.loadTemplateEditRequest = function (resource) {
+                $scope.initFormEditRequest(resource);
+                if (isInit == false) {
+                    isInit = true;
+                }
+                $scope.templateOptions.setTemplate($scope.templates[0]);
+                $scope.templateOptions.setParameterCallBack(resource);
+                if (resource) {
+                    $scope.templateOptions.enableModeEdit();
+                    $scope.openModalAuto();
+                } else {
+                    $scope.openModalAuto();
+                }
+            };
             //Añadir Observations
             var addObservations = function (save, successCallBack) {
                 var formCauseAnalysis = angular.element('#form_sip_center_observations');
@@ -2567,6 +2582,46 @@ angular.module('seipModule.controllers', [])
                 });
             };
 
+            //Añadir Observations
+            var editRequest = function (save, successCallBack) {
+                var formEditRequest = angular.element('#form_request_edit');
+                var formData = formEditRequest.serialize();                
+                
+                if (save == undefined) {
+                    var save = false;
+                }
+                if (save == true) {                    
+                    var url = Routing.generate('pequiven_sip_center_observations_edit', {idObs: $scope.Status});
+                }
+                notificationBarService.getLoadStatus().loading();
+                return $http({
+                    method: 'POST',
+                    url: url,
+                    data: formData,
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'}  // set the headers so angular passing info as form data (not request payload)
+                }).success(function (data) {
+                    $scope.templateOptions.setVar("form", {errors: {}});
+                    if (successCallBack) {
+                        successCallBack(data);
+                    }
+                    notificationBarService.getLoadStatus().done();
+                    location.reload();
+                    return true;
+                }).error(function (data, status, headers, config) {
+                    $scope.templateOptions.setVar("form", {errors: {}});
+                    if (data.errors) {
+                        if (data.errors.errors) {
+                            $.each(data.errors.errors, function (index, value) {
+                                notifyService.error(Translator.trans(value));
+                            });
+                        }
+                        $scope.templateOptions.setVar("form", {errors: data.errors.children});
+                    }
+                    notificationBarService.getLoadStatus().done();
+                    return false;
+                });
+            };
+
             $scope.templateOptions.setVar('addObservations', addObservations);
             var confirmCallBack = function () {
                 addObservations(true, function (data) {
@@ -2588,6 +2643,12 @@ angular.module('seipModule.controllers', [])
             $scope.templateOptions.setVar('addCargoUbch', addCargoUbch);
             var confirmCallBackCargoUbch = function () {
                 addCargoUbch(true, function (data) {
+                });
+                return true;
+            };
+            $scope.templateOptions.setVar('editRequest', editRequest);
+            var confirmCallBackEditRequest = function () {
+                editRequest(true, function (data) {
                 });
                 return true;
             };
@@ -2631,6 +2692,30 @@ angular.module('seipModule.controllers', [])
                         name: 'Revisión de Requerimiento',
                         url: url,
                         confirmCallBack: confirmCallBackStatus,
+                    }
+                ];
+                $scope.templateOptions.setTemplate($scope.templates[0]);
+            };
+
+            //Formulario editar categoria
+            $scope.initFormEditRequest = function (resource) {
+                var d = new Date();
+                var numero = d.getTime();
+                $scope.setHeight(450);
+                var parameters = {
+                    idObs: $scope.Status,
+                    _dc: numero
+                };
+                if (resource) {
+                    parameters.id = resource.id;
+                }
+
+                var url = Routing.generate('pequiven_sip_center_observations_edit', parameters);
+                $scope.templates = [
+                    {
+                        name: 'Edición Categoria',
+                        url: url,
+                        confirmCallBack: confirmCallBackEditRequest,
                     }
                 ];
                 $scope.templateOptions.setTemplate($scope.templates[0]);

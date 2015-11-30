@@ -92,6 +92,17 @@ pequiven_sip_center_observations_status:
     methods: [GET]
     options:
         expose: true
+#Cambio de Categoria
+pequiven_sip_center_observations_edit:    
+    path: /{idObs}/get-request-edit.{_format}
+    defaults:
+        _controller: pequiven.controller.center:formEditRequestAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET|POST]
+    options:
+        expose: true
 #Guardamos el formulario de las observaciones
 pequiven_sip_center_observations_add:
     path: /{idCenter}/addObservations.{_format}
