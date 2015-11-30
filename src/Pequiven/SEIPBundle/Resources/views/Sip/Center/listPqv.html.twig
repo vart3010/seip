@@ -9,7 +9,7 @@
 
 {% block before_body %}
     {{ contentHeader(
-    	("sip.center.name"|trans ),
+        {(path('pequiven_sip_center_show',{'id':idCentro})): "sip.center.name"|trans},            	
         ("Votantes Pequiven")
     ) }}
 {% endblock %}
