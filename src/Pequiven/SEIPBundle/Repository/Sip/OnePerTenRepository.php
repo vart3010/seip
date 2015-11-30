@@ -10,8 +10,9 @@ use Pequiven\SEIPBundle\Doctrine\ORM\SeipEntityRepository as EntityRepository;
  */
 class OnePerTenRepository extends EntityRepository {
 
-    public function createPaginatorByOnePerTen(array $criteria = null, array $orderBy = null) {
 
+
+    public function createPaginatorByOnePerTen(array $criteria = null, array $orderBy = null) {
 
         return $this->createPaginator($criteria, $orderBy);
     }

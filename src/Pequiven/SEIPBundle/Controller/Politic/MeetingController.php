@@ -580,9 +580,9 @@ class MeetingController extends SEIPController {
 
         $em = $this->getDoctrine()->getManager();
 
-        //Carga de data de Indicador para armar grafica
+        //Carga de data
         $response = new JsonResponse();
-        $phase = $request->get('phase');
+        //$phase = $request->get('phase');
 
         $workService = $this->getWorkStudyCircleService();
 

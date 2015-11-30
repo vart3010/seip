@@ -437,6 +437,12 @@
             </call>
             <tag name="form.type" alias="coordinator_workstudycircle" />
         </service>
+
+        <service id="seip.service.center" class="Pequiven\SEIPBundle\Service\Sip\CenterService">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
         
     </services>
 </container>

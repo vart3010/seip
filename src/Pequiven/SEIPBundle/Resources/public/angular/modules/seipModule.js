@@ -7054,6 +7054,34 @@ angular.module('seipModule.controllers', [])
             //FIN   
         })
 
+        .controller('displayCenterController', function ($scope, ngTableParams, $http, sfTranslator, notifyService) {
+
+            //Charts 
+            $scope.renderChartVotoPqv = function (id, data, categories, caption, typeLabelDisplay) {
+                FusionCharts.ready(function () {
+                    var revenueChart = new FusionCharts({
+                        //"type": "mscolumn3dlinedy",
+                        "type": "pie3d",
+                        "renderAt": id,
+                        "width": "100%",
+                        "height": "100%",
+                        "exportFormats": "PNG= Exportar como PNG|PDF= Exportar como PDF",
+                        "exportFileName": "",
+                        "exporthandler": "http://107.21.74.91/",
+                        "html5exporthandler": "http://107.21.74.91/",
+                        "dataFormat": "json",
+                        "dataSource": {
+                            "chart": data.dataSource.chart,
+                            "dataset": data.dataSource.dataset
+                        }
+                    });
+                    revenueChart.setTransparent(true);
+                    revenueChart.render();
+                })
+            };
+            //FIN   
+        })
+
         .controller('ProductionController', function ($scope, ngTableParams, $http, sfTranslator, notifyService) {
 
 

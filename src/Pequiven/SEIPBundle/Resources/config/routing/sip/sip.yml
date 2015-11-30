@@ -496,3 +496,7 @@ pequiven_sip_report_voto_add:
     methods: [GET|POST]
     options:
         expose: true
+pequiven_sip_display_voto_pqv:
+    path: /display/1
+    defaults:
+        _controller: pequiven.controller.display:votoAction

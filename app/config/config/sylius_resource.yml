@@ -549,3 +549,9 @@ sylius_resource:
                 controller: Pequiven\SEIPBundle\Controller\Sip\Center\CenterReportController                  
                 model: Pequiven\SEIPBundle\Entity\Sip\Center\StatusCentro
                 repository: Pequiven\SEIPBundle\Repository\Sip\Centro\StatusCentroRepository
+        pequiven.display:
+            driver: doctrine/orm
+            classes:
+                controller: Pequiven\SEIPBundle\Controller\Sip\Center\DisplayController                  
+                model: Pequiven\SEIPBundle\Entity\Sip\Center\StatusCentro
+                repository: Pequiven\SEIPBundle\Repository\Sip\Centro\StatusCentroRepository
