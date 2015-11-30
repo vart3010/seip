@@ -79,8 +79,8 @@ order by centro,Fecha';
 
         return $result;
     }
-    
-     public function getActiveHistory() {
+
+    public function getActiveHistory() {
 
         $em = $this->getEntityManager();
         $db = $em->getConnection();
@@ -93,6 +93,143 @@ order by centro,Fecha';
     Status26112015,    Status27112015,    Status28112015,    Status29112015,    Status30112015,    Status01122015,
     Status02122015,    Status03122015,    Status04122015,    Status05122015,    Status06122015
     FROM Sip_Historico_Asist GROUP BY Estado , Municipio , Parroquia , eje , Codigo , Centro';
+
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+
+        return $result;
+    }
+
+    public function getDailyRequirements($fecha) {
+
+        $em = $this->getEntityManager();
+        $db = $em->getConnection();
+
+        $sql = '  
+    SELECT     "' . $fecha . '" AS Fecha,    cent.descriptionEstado AS Estado,    cent.descriptionMunicipio AS Municipio,
+    cent.descriptionParroquia AS Parroquia,    cent.eje AS Eje,    cent.codigoCentro AS Codigo,    cent.description AS Centro,
+    cent.direccion AS Direccion,    UPPER(obs.observations) AS Observaciones,
+    CASE
+        WHEN obs.categoria = 1 THEN "Propaganda"                  WHEN obs.categoria = 2 THEN "Transporte"
+        WHEN obs.categoria = 3 THEN "Hidratación"                  WHEN obs.categoria IN (4 , 12, 13) THEN "Logística"
+        WHEN obs.categoria = 5 THEN "Asistencia"                  WHEN obs.categoria = 6 THEN "Telefonía"
+        WHEN obs.categoria = 7 THEN "Otros"                       WHEN obs.categoria = 8 THEN "Serv. de Luz"
+        WHEN obs.categoria = 9 THEN "Serv. de Agua"               WHEN obs.categoria = 10 THEN "Serv. de Aseo"
+        WHEN obs.categoria = 11 THEN "Material de Oficina"        WHEN obs.categoria = 14 THEN "CNE"
+        WHEN obs.categoria = 15 THEN "Comida"                     WHEN obs.categoria = 16 THEN "Ayuda Social"
+        WHEN obs.categoria = 17 THEN "Infraestructura"            WHEN obs.categoria = 18 THEN "Serv. Médicos"
+        ELSE "Sin Categoria"    END AS Categoria,
+    CASE
+        WHEN obs.status = 1 THEN "Abierto"            WHEN obs.status = 2 THEN "Pendiente"
+        WHEN obs.status = 3 THEN "Seguimiento"        WHEN obs.status = 4 THEN "Cerrado"
+        WHEN obs.status = 5 THEN "Rechazado"          ELSE "Sin Status"
+    END AS Status
+FROM
+    sip_centro_observations AS obs
+        INNER JOIN    sip_centro AS cent ON (obs.codigocentro = cent.codigoCentro)
+        INNER JOIN    sip_parroquia AS parroq ON (cent.codigoParroquia = parroq.id)
+        INNER JOIN    sip_municipio AS municip ON (cent.codigoMunicipio = municip.id)
+        INNER JOIN    sip_estado AS estado ON (cent.codigoEstado = estado.id)
+WHERE
+    obs.deletedAt IS NULL        AND DATE_FORMAT(obs.fecha, \'%d/%m/%Y\') = "' . $fecha . '"
+ORDER BY fecha';
+
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+
+        return $result;
+    }
+
+    public function getEarringsRequirements() {
+
+        $em = $this->getEntityManager();
+        $db = $em->getConnection();
+
+        $sql = '  
+    SELECT 
+    DATE_FORMAT(obs.fecha, \'%d/%m/%Y\') AS Fecha,    cent.descriptionEstado AS Estado,
+    cent.descriptionMunicipio AS Municipio,    cent.descriptionParroquia AS Parroquia,    cent.eje AS Eje,
+    cent.codigoCentro AS Codigo,    cent.description AS Centro,    cent.direccion AS Direccion,
+    UPPER(obs.observations) AS Observaciones,
+    CASE
+        WHEN obs.categoria = 1 THEN "Propaganda"            WHEN obs.categoria = 2 THEN "Transporte"
+        WHEN obs.categoria = 3 THEN "Hidratación"           WHEN obs.categoria IN (4 , 12, 13) THEN "Logística"
+        WHEN obs.categoria = 5 THEN "Asistencia"            WHEN obs.categoria = 6 THEN "Telefonía"
+        WHEN obs.categoria = 7 THEN "Otros"                 WHEN obs.categoria = 8 THEN "Serv. de Luz"
+        WHEN obs.categoria = 9 THEN "Serv. de Agua"         WHEN obs.categoria = 10 THEN "Serv. de Aseo"
+        WHEN obs.categoria = 11 THEN "Material de Oficina"  WHEN obs.categoria = 14 THEN "CNE"
+        WHEN obs.categoria = 15 THEN "Comida"               WHEN obs.categoria = 16 THEN "Ayuda Social"
+        WHEN obs.categoria = 17 THEN "Infraestructura"      WHEN obs.categoria = 18 THEN "Serv. Médicos"
+        ELSE "Sin Categoria"    END AS Categoria,
+    CASE
+        WHEN obs.status = 1 THEN "Abierto"        WHEN obs.status = 2 THEN "Pendiente"
+        WHEN obs.status = 3 THEN "Seguimiento"    WHEN obs.status = 4 THEN "Cerrado"
+        WHEN obs.status = 5 THEN "Rechazado"      ELSE "Sin Status"
+    END AS Status
+FROM
+    sip_centro_observations AS obs
+        INNER JOIN    sip_centro AS cent ON (obs.codigocentro = cent.codigoCentro)
+        INNER JOIN    sip_parroquia AS parroq ON (cent.codigoParroquia = parroq.id)
+        INNER JOIN    sip_municipio AS municip ON (cent.codigoMunicipio = municip.id)
+        INNER JOIN    sip_estado AS estado ON (cent.codigoEstado = estado.id)
+WHERE
+    obs.deletedAt IS NULL        AND obs.status IN (1 , 2)
+ORDER BY fecha';
+
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+
+        return $result;
+    }
+
+    public function getInventory() {
+
+        $em = $this->getEntityManager();
+        $db = $em->getConnection();
+
+        $sql = '  
+    SELECT 
+    DATE_FORMAT(inv.fecha, \'%d/%m/%Y\') AS Fecha,    cent.descriptionEstado AS Estado,
+    cent.descriptionMunicipio AS Municipio,    cent.descriptionParroquia AS Parroquia,    cent.eje AS Eje,
+    cent.codigoCentro AS Codigo,    cent.description AS Centro,    cent.direccion AS Direccion,
+    inv.cantidad AS Cant,    mat.material AS Material,    UPPER(inv.observations) AS Observaciones
+FROM
+    sip_centro_inventory AS inv
+        INNER JOIN    sip_centro AS cent ON (inv.codigocentro = cent.codigoCentro)
+        INNER JOIN    sip_centro_material AS mat ON (inv.material_id = mat.id)
+WHERE    inv.deletedAt IS NULL
+ORDER BY fecha';
+
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+
+        return $result;
+    }
+
+    public function getOnePerTen() {
+
+        $em = $this->getEntityManager();
+        $db = $em->getConnection();
+
+        $sql = '  
+    SELECT 
+    user.identification AS CedulaOne,
+    CASE
+        WHEN user.lastname IS NULL THEN user.firstname
+        ELSE CONCAT(user.firstname, " ", user.lastname)
+    END AS NombreOne,
+    user.cellphone AS TelefonoOne,    ten.cedula AS Cedula,    ten.Nombre AS Nombre,    ten.Telefono,
+    ten.nombreEstado AS Estado,    ten.nombreMunicipio AS Municipio,    ten.nombreParroquia AS Parroquia,
+    ten.nombreCentro AS Centro
+FROM
+    sip_onePerTenMembers AS ten
+        INNER JOIN    sip_onePerTen AS ones ON (ones.id = ten.one_id)
+        INNER JOIN    seip_user AS user ON (ones.user_id = user.id)
+WHERE    ten.deletedAt IS NULL';
 
         $stmt = $db->prepare($sql);
         $stmt->execute();

@@ -45,11 +45,18 @@ class ReportSIPController extends SEIPController {
 
         $activeSheet = $objPHPExcel->getActiveSheet();
 
+        $styleArray = array(
+            'borders' => array(
+                'allborders' => array(
+                    'style' => \PHPExcel_Style_Border::BORDER_THIN
+                )
+        ));
+
         $activeSheet->setCellValue('K2', $date);
         $row = 4; //Fila Inicial del skeleton
 
         foreach ($result as $fila) {
-
+            $activeSheet->getRowDimension($row)->setRowHeight(25);
             $activeSheet->setCellValue('A' . $row, $date);
             $activeSheet->setCellValue('B' . $row, $fila["Estado"]);
             $activeSheet->setCellValue('C' . $row, $fila["Municipio"]);
@@ -67,7 +74,9 @@ class ReportSIPController extends SEIPController {
             $row++;
         }
 
-        $fileName = sprintf('SIP - Asistencia de Cutls %s.xlsx', str_replace("/", "-", $date));
+        $activeSheet->getStyle('A4:N' . ($row - 1))->applyFromArray($styleArray);
+
+        $fileName = sprintf('SIP - Asistencia de Cutls del %s.xlsx', str_replace("/", "-", $date));
 
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="' . $fileName . '"');
@@ -101,13 +110,20 @@ class ReportSIPController extends SEIPController {
         $objPHPExcel
                 ->getProperties()
                 ->setCreator("SEIP")
-                ->setTitle('SIP - Historico de Asistencias ' . $date)
+                ->setTitle('SIP - Historico de Asistencias de Cutls al ' . $date)
                 ->setCreated()
                 ->setLastModifiedBy('SIP')
                 ->setModified()
         ;
         $objPHPExcel
                 ->setActiveSheetIndex(0);
+
+        $styleArray = array(
+            'borders' => array(
+                'allborders' => array(
+                    'style' => \PHPExcel_Style_Border::BORDER_THIN
+                )
+        ));
 
 
         $activeSheet = $objPHPExcel->getActiveSheet();
@@ -116,7 +132,7 @@ class ReportSIPController extends SEIPController {
         $row = 6; //Fila Inicial del skeleton
 
         foreach ($result as $fila) {
-
+            $activeSheet->getRowDimension($row)->setRowHeight(25);
             $activeSheet->setCellValue('A' . $row, $fila["Estado"]);
             $activeSheet->setCellValue('B' . $row, $fila["Municipio"]);
             $activeSheet->setCellValue('C' . $row, $fila["Parroquia"]);
@@ -165,8 +181,8 @@ class ReportSIPController extends SEIPController {
 
             $row++;
         }
-
-        $fileName = sprintf('SIP - Asistencia Historica de Cutls %s.xlsx', str_replace("/", "-", $date));
+        $activeSheet->getStyle('A6:AN' . ($row - 1))->applyFromArray($styleArray);
+        $fileName = sprintf('SIP - Asistencia Historica de Cutls al %s.xlsx', str_replace("/", "-", $date));
 
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="' . $fileName . '"');
@@ -211,11 +227,18 @@ class ReportSIPController extends SEIPController {
 
         $activeSheet = $objPHPExcel->getActiveSheet();
 
+        $styleArray = array(
+            'borders' => array(
+                'allborders' => array(
+                    'style' => \PHPExcel_Style_Border::BORDER_THIN
+                )
+        ));
+
         $activeSheet->setCellValue('L3', $date);
         $row = 6; //Fila Inicial del skeleton
 
         foreach ($result as $fila) {
-
+            $activeSheet->getRowDimension($row)->setRowHeight(25);
             $activeSheet->setCellValue('A' . $row, $fila["Estado"]);
             $activeSheet->setCellValue('B' . $row, $fila["Municipio"]);
             $activeSheet->setCellValue('C' . $row, $fila["Parroquia"]);
@@ -258,11 +281,301 @@ class ReportSIPController extends SEIPController {
             }
             $activeSheet->setCellValue('AJ' . $row, $asist["A"]);
             $activeSheet->setCellValue('AK' . $row, ($asist["A"] / $diff));
+            $row++;
+        }
+        $activeSheet->getStyle('A6:AK' . ($row - 1))->applyFromArray($styleArray);
+        $fileName = sprintf('SIP -  Historico de Actividad de Puntos Rojos al %s.xlsx', str_replace("/", "-", $date));
 
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="' . $fileName . '"');
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+
+        // If you're serving to IE over SSL, then the following may be needed
+        header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT'); // always modified
+        header('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header('Pragma: public'); // HTTP/1.0
+
+        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        $objWriter->setIncludeCharts(TRUE);
+        $objWriter->save('php://output');
+        exit;
+    }
+
+    public function DailyRequirementsAction(Request $request) {
+
+        $em = $this->getDoctrine()->getManager();
+        $em->getConnection()->beginTransaction();
+
+        $date = $request->get("req");
+
+        $result = $this->get('pequiven.repository.report')->getDailyRequirements($date);
+
+        $path = $this->get('kernel')->locateResource('@PequivenSEIPBundle/Resources/Skeleton/Sip/RequerimientosCUTL.xlsx');
+        $objPHPExcel = \PHPExcel_IOFactory::load($path);
+        $objPHPExcel
+                ->getProperties()
+                ->setCreator("SEIP")
+                ->setTitle('SIP - Requerimientos del día ' . $date)
+                ->setCreated()
+                ->setLastModifiedBy('SIP')
+                ->setModified()
+        ;
+        $objPHPExcel
+                ->setActiveSheetIndex(0);
+
+
+        $activeSheet = $objPHPExcel->getActiveSheet();
+
+        $styleArray = array(
+            'borders' => array(
+                'allborders' => array(
+                    'style' => \PHPExcel_Style_Border::BORDER_THIN
+                )
+        ));
+
+        $activeSheet->setCellValue('J2', $date);
+        $row = 4; //Fila Inicial del skeleton
+
+        foreach ($result as $fila) {
+            $activeSheet->getRowDimension($row)->setRowHeight(40);
+            $activeSheet->setCellValue('A' . $row, $date);
+            $activeSheet->setCellValue('B' . $row, $fila["Estado"]);
+            $activeSheet->setCellValue('C' . $row, $fila["Municipio"]);
+            $activeSheet->setCellValue('D' . $row, $fila["Parroquia"]);
+            $activeSheet->setCellValue('E' . $row, $fila["Eje"]);
+            $activeSheet->setCellValue('F' . $row, $fila["Codigo"]);
+            $activeSheet->setCellValue('G' . $row, $fila["Centro"]);
+            $activeSheet->setCellValue('H' . $row, $fila["Direccion"]);
+            $activeSheet->setCellValue('I' . $row, $fila["Observaciones"]);
+            $activeSheet->setCellValue('J' . $row, $fila["Categoria"]);
+            $activeSheet->setCellValue('K' . $row, $fila["Status"]);
             $row++;
         }
 
-        $fileName = sprintf('SIP -  Historico de Actividad de Puntos Rojos %s.xlsx', str_replace("/", "-", $date));
+        $activeSheet->getStyle('A4:K' . ($row - 1))->applyFromArray($styleArray);
+
+        $fileName = sprintf('SIP - Requerimientos de Cutls del %s.xlsx', str_replace("/", "-", $date));
+
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="' . $fileName . '"');
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+
+        // If you're serving to IE over SSL, then the following may be needed
+        header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT'); // always modified
+        header('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header('Pragma: public'); // HTTP/1.0
+
+        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        $objWriter->setIncludeCharts(TRUE);
+        $objWriter->save('php://output');
+        exit;
+    }
+
+    public function EarringsRequirementsAction() {
+
+        $em = $this->getDoctrine()->getManager();
+        $em->getConnection()->beginTransaction();
+
+        $date = date("d/m/Y");
+
+        $result = $this->get('pequiven.repository.report')->getEarringsRequirements();
+
+        $path = $this->get('kernel')->locateResource('@PequivenSEIPBundle/Resources/Skeleton/Sip/RequerimientosPendienteCUTL.xlsx');
+        $objPHPExcel = \PHPExcel_IOFactory::load($path);
+        $objPHPExcel
+                ->getProperties()
+                ->setCreator("SEIP")
+                ->setTitle('SIP - Requerimientos Pendientes al ' . $date)
+                ->setCreated()
+                ->setLastModifiedBy('SIP')
+                ->setModified()
+        ;
+        $objPHPExcel
+                ->setActiveSheetIndex(0);
+
+
+        $activeSheet = $objPHPExcel->getActiveSheet();
+
+        $styleArray = array(
+            'borders' => array(
+                'allborders' => array(
+                    'style' => \PHPExcel_Style_Border::BORDER_THIN
+                )
+        ));
+
+        $activeSheet->setCellValue('J2', $date);
+        $row = 4; //Fila Inicial del skeleton
+
+        foreach ($result as $fila) {
+            $activeSheet->getRowDimension($row)->setRowHeight(40);
+            $activeSheet->setCellValue('A' . $row, $fila["Fecha"]);
+            $activeSheet->setCellValue('B' . $row, $fila["Estado"]);
+            $activeSheet->setCellValue('C' . $row, $fila["Municipio"]);
+            $activeSheet->setCellValue('D' . $row, $fila["Parroquia"]);
+            $activeSheet->setCellValue('E' . $row, $fila["Eje"]);
+            $activeSheet->setCellValue('F' . $row, $fila["Codigo"]);
+            $activeSheet->setCellValue('G' . $row, $fila["Centro"]);
+            $activeSheet->setCellValue('H' . $row, $fila["Direccion"]);
+            $activeSheet->setCellValue('I' . $row, $fila["Observaciones"]);
+            $activeSheet->setCellValue('J' . $row, $fila["Categoria"]);
+            $activeSheet->setCellValue('K' . $row, $fila["Status"]);
+            $row++;
+        }
+
+        $activeSheet->getStyle('A4:K' . ($row - 1))->applyFromArray($styleArray);
+
+        $fileName = sprintf('SIP - Requerimientos de Cutls Pendientes al %s.xlsx', str_replace("/", "-", $date));
+
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="' . $fileName . '"');
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+
+        // If you're serving to IE over SSL, then the following may be needed
+        header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT'); // always modified
+        header('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header('Pragma: public'); // HTTP/1.0
+
+        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        $objWriter->setIncludeCharts(TRUE);
+        $objWriter->save('php://output');
+        exit;
+    }
+
+    public function InventoryAction() {
+
+        $em = $this->getDoctrine()->getManager();
+        $em->getConnection()->beginTransaction();
+
+        $date = date("d/m/Y");
+
+        $result = $this->get('pequiven.repository.report')->getInventory();
+
+        $path = $this->get('kernel')->locateResource('@PequivenSEIPBundle/Resources/Skeleton/Sip/InventarioCUTL.xlsx');
+        $objPHPExcel = \PHPExcel_IOFactory::load($path);
+        $objPHPExcel
+                ->getProperties()
+                ->setCreator("SEIP")
+                ->setTitle('SIP - Inventario en Centros Electorales al ' . $date)
+                ->setCreated()
+                ->setLastModifiedBy('SIP')
+                ->setModified()
+        ;
+        $objPHPExcel
+                ->setActiveSheetIndex(0);
+
+
+        $activeSheet = $objPHPExcel->getActiveSheet();
+
+        $styleArray = array(
+            'borders' => array(
+                'allborders' => array(
+                    'style' => \PHPExcel_Style_Border::BORDER_THIN
+                )
+        ));
+
+        $activeSheet->setCellValue('J2', $date);
+        $row = 4; //Fila Inicial del skeleton
+
+        foreach ($result as $fila) {
+            $activeSheet->getRowDimension($row)->setRowHeight(30);
+            $activeSheet->setCellValue('A' . $row, $fila["Fecha"]);
+            $activeSheet->setCellValue('B' . $row, $fila["Estado"]);
+            $activeSheet->setCellValue('C' . $row, $fila["Municipio"]);
+            $activeSheet->setCellValue('D' . $row, $fila["Parroquia"]);
+            $activeSheet->setCellValue('E' . $row, $fila["Eje"]);
+            $activeSheet->setCellValue('F' . $row, $fila["Codigo"]);
+            $activeSheet->setCellValue('G' . $row, $fila["Centro"]);
+            $activeSheet->setCellValue('H' . $row, $fila["Direccion"]);
+            $activeSheet->setCellValue('I' . $row, $fila["Cant"]);
+            $activeSheet->setCellValue('J' . $row, $fila["Material"]);
+            $activeSheet->setCellValue('K' . $row, $fila["Observaciones"]);
+            $row++;
+        }
+
+        $activeSheet->getStyle('A4:K' . ($row - 1))->applyFromArray($styleArray);
+
+        $fileName = sprintf('SIP - Inventario en Centros Electorales al %s.xlsx', str_replace("/", "-", $date));
+
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="' . $fileName . '"');
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+
+        // If you're serving to IE over SSL, then the following may be needed
+        header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT'); // always modified
+        header('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header('Pragma: public'); // HTTP/1.0
+
+        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        $objWriter->setIncludeCharts(TRUE);
+        $objWriter->save('php://output');
+        exit;
+    }
+
+    public function OnePerTenAction() {
+
+        $em = $this->getDoctrine()->getManager();
+        $em->getConnection()->beginTransaction();
+
+        $date = date("d/m/Y");
+
+        $result = $this->get('pequiven.repository.report')->getOnePerTen();
+
+        $path = $this->get('kernel')->locateResource('@PequivenSEIPBundle/Resources/Skeleton/Sip/UnoporDiez.xlsx');
+        $objPHPExcel = \PHPExcel_IOFactory::load($path);
+        $objPHPExcel
+                ->getProperties()
+                ->setCreator("SEIP")
+                ->setTitle('SIP - Listado 1x10 al ' . $date)
+                ->setCreated()
+                ->setLastModifiedBy('SIP')
+                ->setModified()
+        ;
+        $objPHPExcel
+                ->setActiveSheetIndex(0);
+
+
+        $activeSheet = $objPHPExcel->getActiveSheet();
+
+        $styleArray = array(
+            'borders' => array(
+                'allborders' => array(
+                    'style' => \PHPExcel_Style_Border::BORDER_THIN
+                )
+        ));
+
+        $activeSheet->setCellValue('J2', $date);
+        $row = 5; //Fila Inicial del skeleton
+
+        foreach ($result as $fila) {
+            $activeSheet->getRowDimension($row)->setRowHeight(20);
+            $activeSheet->setCellValue('A' . $row, $fila["CedulaOne"]);
+            $activeSheet->setCellValue('B' . $row, $fila["NombreOne"]);
+            $activeSheet->setCellValue('C' . $row, $fila["TelefonoOne"]);
+            $activeSheet->setCellValue('D' . $row, $fila["Cedula"]);
+            $activeSheet->setCellValue('E' . $row, $fila["Nombre"]);
+            $activeSheet->setCellValue('F' . $row, $fila["Telefono"]);
+            $activeSheet->setCellValue('G' . $row, $fila["Estado"]);
+            $activeSheet->setCellValue('H' . $row, $fila["Municipio"]);
+            $activeSheet->setCellValue('I' . $row, $fila["Parroquia"]);
+            $activeSheet->setCellValue('J' . $row, $fila["Centro"]);
+            $row++;
+        }
+
+        $activeSheet->getStyle('A4:K' . ($row - 1))->applyFromArray($styleArray);
+
+        $fileName = sprintf('SIP - Listado 1x10 al %s.xlsx', str_replace("/", "-", $date));
 
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="' . $fileName . '"');
