@@ -1749,6 +1749,11 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
 
 
             //Menu 3 nivel Voto
+            $displayMenu->addChild('sip.voto_general', array(
+                    'route' => 'pequiven_sip_display_voto_general',
+                    'labelAttributes' => array('icon' => 'fa fa-bar-chart',)
+                ))->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.voto_general', $section)));
+
             $displayMenu->addChild('sip.voto_pqv', array(
                     'route' => 'pequiven_sip_display_voto_pqv',
                     'labelAttributes' => array('icon' => 'fa fa-bar-chart',)

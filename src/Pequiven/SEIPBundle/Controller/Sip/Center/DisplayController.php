@@ -14,6 +14,28 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class DisplayController extends SEIPController {
 
+    /**
+     *
+     *  Voto General
+     *
+     */
+    public function generalAction(Request $request){
+
+        //Carga de data
+        $response = new JsonResponse();
+        
+        $CenterService = $this->getCenterService();
+
+        $dataChart = $CenterService->getDataChartOfVotoGeneral(); //General
+        
+        $dataChartLine = $CenterService->getDataChartOfVotoGeneralLine(); //Linea de Tiempo
+
+        return $this->render('PequivenSEIPBundle:Sip:Center/Display/voto_general.html.twig', array(
+                'data' => $dataChart
+            ));
+        
+    }
+
 	/**
 	 *
 	 *	Voto Pequiven
@@ -28,7 +50,7 @@ class DisplayController extends SEIPController {
 
         $dataChart = $CenterService->getDataChartOfVotoPqv(); //Paso de data        
 
-        return $this->render('PequivenSEIPBundle:Sip:Center/Display/voto.html.twig', array(
+        return $this->render('PequivenSEIPBundle:Sip:Center/Display/voto_pqv.html.twig', array(
                 'data' => $dataChart
             ));
         
