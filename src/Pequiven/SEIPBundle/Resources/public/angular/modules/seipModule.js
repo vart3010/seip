@@ -7056,7 +7056,56 @@ angular.module('seipModule.controllers', [])
 
         .controller('displayCenterController', function ($scope, ngTableParams, $http, sfTranslator, notifyService) {
 
-            //Charts 
+            //Charts Votos General
+            $scope.renderChartVotoGeneral = function (id, data, categories, caption, typeLabelDisplay) {
+                FusionCharts.ready(function () {
+                    var revenueChart = new FusionCharts({
+                        //"type": "mscolumn3dlinedy",
+                        "type": "pie3d",
+                        "renderAt": id,
+                        "width": "230%",
+                        "height": "40%",
+                        "exportFormats": "PNG= Exportar como PNG|PDF= Exportar como PDF",
+                        "exportFileName": "",
+                        "exporthandler": "http://107.21.74.91/",
+                        "html5exporthandler": "http://107.21.74.91/",
+                        "dataFormat": "json",
+                        "dataSource": {
+                            "chart": data.dataSource.chart,
+                            "dataset": data.dataSource.dataset
+                        }
+                    });
+                    revenueChart.setTransparent(true);
+                    revenueChart.render();
+                })
+            };
+
+            //Charts Votos General Horas
+            $scope.renderChartVotoGeneralHours = function (id, data, categories, caption, typeLabelDisplay) {
+                FusionCharts.ready(function () {
+                    var revenueChart = new FusionCharts({
+                        "type": "mscolumn3dlinedy",
+                        //"type": "pie3d",
+                        "renderAt": id,
+                        "width": "230%",
+                        "height": "40%",
+                        "exportFormats": "PNG= Exportar como PNG|PDF= Exportar como PDF",
+                        "exportFileName": "",
+                        "exporthandler": "http://107.21.74.91/",
+                        "html5exporthandler": "http://107.21.74.91/",
+                        "dataFormat": "json",
+                        "dataSource": {
+                            "chart": data.dataSource.chart,
+                            "dataset": data.dataSource.dataset
+                        }
+                    });
+                    revenueChart.setTransparent(true);
+                    revenueChart.render();
+                })
+            };
+            //FIN   
+
+            //Charts Votos PQV
             $scope.renderChartVotoPqv = function (id, data, categories, caption, typeLabelDisplay) {
                 FusionCharts.ready(function () {
                     var revenueChart = new FusionCharts({
