@@ -1733,20 +1733,72 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
         }
 
         if ($this->isGranted(array('ROLE_SUPER_ADMIN'))) {
-            //Requerimientos
+            //
             $display = $this->factory->createItem('sip.display', $this->getSubLevelOptions(array(
                                 "route" => "",
                                 'labelAttributes' => array('icon' => 'fa fa-desktop',),
                             ))
                     )->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.display', $section)));
-            //Sub menu
-            $displayMenu = $this->factory->createItem('sip.list', $this->getSubLevelOptions(array(
-                                "route" => "pequiven_sip_display_voto_pqv",
-                                'labelAttributes' => array('icon' => 'fa fa-area-chart',),
-                            ))
-                    )->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.voto_pqv', $section)));
 
-            $display->addChild($displayMenu);            
+            //Sub menu Voto
+            $displayMenu = $this->factory->createItem('sip.voto', $this->getSubLevelOptions(array(
+                                "route" => "",
+                                'labelAttributes' => array('icon' => '',)
+                            ))
+                    )->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.voto', $section)));
+
+
+            //Menu 3 nivel Voto
+            $displayMenu->addChild('sip.voto_pqv', array(
+                    'route' => 'pequiven_sip_display_voto_pqv',
+                    'labelAttributes' => array('icon' => 'fa fa-bar-chart',)
+                ))->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.voto_pqv', $section)));
+            
+            $displayMenu->addChild('sip.voto_1x10', array(
+                    'route' => '',
+                    'labelAttributes' => array('icon' => 'fa fa-bar-chart',)
+                ))->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.voto_1x10', $section)));
+
+            $displayMenu->addChild('sip.voto_re', array(
+                    'route' => '',
+                    'labelAttributes' => array('icon' => 'fa fa-bar-chart',)
+                ))->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.voto_re', $section)));
+
+            $displayMenu->addChild('sip.voto_cet', array(
+                    'route' => '',
+                    'labelAttributes' => array('icon' => 'fa fa-bar-chart',)
+                ))->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.voto_cet', $section)));
+
+            $display->addChild($displayMenu); 
+
+            //Sub menu Voto
+            $displayList = $this->factory->createItem('sip.list', $this->getSubLevelOptions(array(
+                                "route" => "",
+                                'labelAttributes' => array('icon' => '',)
+                            ))
+                    )->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.list_seg', $section)));
+
+            $displayList->addChild('sip.list_pqv', array(
+                    'route' => 'pequiven_sip_display_voto_pqv',
+                    'labelAttributes' => array('icon' => 'fa fa-list',)
+                ))->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.list_pqv', $section)));
+            
+            $displayList->addChild('sip.list_1x10', array(
+                    'route' => '',
+                    'labelAttributes' => array('icon' => 'fa fa-list',)
+                ))->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.list_1x10', $section)));
+
+            $displayList->addChild('sip.list_re', array(
+                    'route' => '',
+                    'labelAttributes' => array('icon' => 'fa fa-list',)
+                ))->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.list_re', $section)));
+
+            $displayList->addChild('sip.list_cet', array(
+                    'route' => '',
+                    'labelAttributes' => array('icon' => 'fa fa-list',)
+                ))->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.list_cet', $section)));
+
+            $display->addChild($displayList);                        
 
             $menuSip->addChild($display);
         }
