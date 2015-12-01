@@ -2842,6 +2842,20 @@ angular.module('seipModule.controllers', [])
                     $scope.openModalAuto();
                 }
             };    
+            $scope.loadTemplateCenter = function (resource) {
+                $scope.initFormCenter(resource);
+                if (isInit == false) {
+                    isInit = true;
+                }
+                $scope.templateOptions.setTemplate($scope.templates[0]);
+                $scope.templateOptions.setParameterCallBack(resource);
+                if (resource) {
+                    $scope.templateOptions.enableModeEdit();
+                    $scope.openModalAuto();
+                } else {
+                    $scope.openModalAuto();
+                }
+            }; 
             //Carga el formulario de las Asistencias para editar
             $scope.loadTemplateAssistsEdit = function (resource) {
                 $scope.initFormAssistsEdit(resource);
@@ -2938,21 +2952,64 @@ angular.module('seipModule.controllers', [])
                     return false;
                 });
             };
+
+            //Añadir Observations
+            var addCenter = function (save, successCallBack) {
+                var formCauseAnalysis = angular.element('#form_sip_center_add');
+                var formData = formCauseAnalysis.serialize();
+
+                if (save == undefined) {
+                    var save = false;
+                }
+                if (save == true) {
+                    var url = Routing.generate('pequiven_sip_center_activo', {idCenter: $scope.idCenter});
+                }
+                notificationBarService.getLoadStatus().loading();
+                return $http({
+                    method: 'POST',
+                    url: url,
+                    data: formData,
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'}  // set the headers so angular passing info as form data (not request payload)
+                }).success(function (data) {
+                    $scope.templateOptions.setVar("form", {errors: {}});                    
+                    if (successCallBack) {
+                        successCallBack(data);
+                    }
+                    notificationBarService.getLoadStatus().done();
+                    location.reload(); 
+                    return true;
+                }).error(function (data, status, headers, config) {
+                    $scope.templateOptions.setVar("form", {errors: {}});
+                    if (data.errors) {
+                        if (data.errors.errors) {
+                            $.each(data.errors.errors, function (index, value) {
+                                notifyService.error(Translator.trans(value));
+                            });
+                        }
+                        $scope.templateOptions.setVar("form", {errors: data.errors.children});
+                    }                    
+                    notificationBarService.getLoadStatus().done();
+                    return false;
+                });
+            };
             $scope.templateOptions.setVar('addAssists', addAssists);
             $scope.templateOptions.setVar('editAssists', editAssists);
+            $scope.templateOptions.setVar('addCenter', addCenter);
             var confirmCallBack = function () {                
-                addAssists(true, function (data) {
-                    $scope.indicator = data.indicator;
+                addAssists(true, function (data) {                    
                 });
-
                 return true;
             }; 
 
             var confirmCallBackEdit = function () {                
-                editAssists(true, function (data) {
-                    $scope.indicator = data.indicator;
+                editAssists(true, function (data) {                    
                 });
+                return true;
+            }; 
 
+            var confirmCallBackCenter = function () {                
+                addCenter(true, function (data) {                    
+                });
                 return true;
             };           
             //Formulario Asistencias
@@ -2998,12 +3055,35 @@ angular.module('seipModule.controllers', [])
                     }
                 ];
                 $scope.templateOptions.setTemplate($scope.templates[0]);
+            };
+
+            //Formulario centro activo
+            $scope.initFormCenter = function (resource) {
+                var d = new Date();
+                var numero = d.getTime();
+                $scope.setHeight(650);                
+                var parameters = {
+                    idCenter: $scope.idCenter,                    
+                    _dc: numero
+                };
+                if (resource) {
+                    parameters.id = resource.id;
+                }
+                var url = Routing.generate('pequiven_sip_center_activo', parameters);
+                $scope.templates = [
+                    {
+                        name: 'Centro Activo',
+                        url: url,
+                        confirmCallBack: confirmCallBackCenter,
+                    }
+                ];
+                $scope.templateOptions.setTemplate($scope.templates[0]);
             };  
             //Removiendo las asistencias
             $scope.removeAssists = function () {
                 $scope.openModalConfirm('¿Desea eliminar la Asistencia?', function () {
                     notificationBarService.getLoadStatus().loading();
-                    var url = Routing.generate("pequiven_sip_center_assists_delete", {id: $scope.assists});
+                    var url = Routing.generate("pequiven_sip_center_activo", {id: $scope.assists});
                     $http({
                         method: 'GET',
                         url: url,

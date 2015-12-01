@@ -189,6 +189,57 @@ class CenterController extends SEIPController {
         return $view;
     }
 
+    /**
+     * 
+     * @param Request $request
+     * @return type
+     */
+    public function formActivoAction(Request $request) {
+        $em = $this->getDoctrine()->getManager();
+
+        $idCenter = $request->get('idCenter');
+
+        $statusCentro = new StatusCentro(); 
+       
+        if (isset($request->get('sip_center_assists')["obs_centro"])) {
+        
+            $ObsCentro = $request->get('sip_center_assists')["obs_centro"];        
+            $fecha = $request->get('sip_center')['fecha'];
+
+            $arr = explode('/', $fecha);
+            $fechaCons = $arr[2].'-'.$arr[1].'-'.$arr[0];
+            $fecha = date_create_from_format("d/m/Y", $fecha);
+
+            if (isset($request->get('sip_center_assists')["status"])) {
+                $status = 1;
+            } else {
+                $status = 0;
+            }
+
+            $statusCentro = new StatusCentro();
+                $statusCentro->setCodigoCentro($idCenter);
+                $statusCentro->setFecha($fecha);
+                $statusCentro->setStatus($status);
+                $statusCentro->setObservations($ObsCentro);
+
+            $em->persist($statusCentro);
+            $em->flush();
+            
+            $this->get('session')->getFlashBag()->add('success', "Datos Cargados Exitosamente");
+            die();
+        }else{
+            $view = $this
+                    ->view()
+                    ->setTemplate($this->config->getTemplate('Form/CentroActivo.html'))
+                    ->setTemplateVar($this->config->getPluralResourceName())
+                    
+            ;
+            $view->getSerializationContext()->setGroups(array('id', 'api_list'));
+
+            return $view;
+        }
+    }
+
      /**
      * 
      * @param Request $request
@@ -291,7 +342,7 @@ class CenterController extends SEIPController {
      */
     public function addAssistsAction(Request $request) {
 
-        $ObsCentro = $request->get('sip_center_assists')["obs_centro"];
+        //$ObsCentro = $request->get('sip_center_assists')["obs_centro"];
         $fecha = $request->get('sip_center_assists')['fecha'];
 
         $em = $this->getDoctrine()->getManager();
@@ -316,11 +367,11 @@ class CenterController extends SEIPController {
                 $cedula = $value->getCedula();
                 $idAssist = $value->getId();
                 //Status del centro
-                if (isset($request->get('sip_center_assists')["status"])) {
+                /*if (isset($request->get('sip_center_assists')["status"])) {
                     $status = 1;
                 } else {
                     $status = 0;
-                }
+                }*/
 
                 //Carga de Asistencia
                 if (isset($request->get('sip_center_assists')[$idAssist])) {
@@ -353,7 +404,7 @@ class CenterController extends SEIPController {
                     $em->persist($Assists);
                     $em->flush();
 
-                    if ($cont == 1) {
+                    /*if ($cont == 1) {
                         $statusCentro = new StatusCentro();
                         $statusCentro->setCodigoCentro($codigoCentro);
                         $statusCentro->setFecha($fecha);
@@ -362,7 +413,7 @@ class CenterController extends SEIPController {
 
                         $em->persist($statusCentro);
                         $em->flush();
-                    }
+                    }*/
                 }
 
                 try {
