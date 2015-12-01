@@ -1776,7 +1776,28 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                                 "route" => "",
                                 'labelAttributes' => array('icon' => '',)
                             ))
-                    )->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.list', $section)));
+                    )->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.list_seg', $section)));
+
+            $displayList->addChild('sip.list_pqv', array(
+                    'route' => 'pequiven_sip_display_voto_pqv',
+                    'labelAttributes' => array('icon' => 'fa fa-list',)
+                ))->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.list_pqv', $section)));
+            
+            $displayList->addChild('sip.list_1x10', array(
+                    'route' => '',
+                    'labelAttributes' => array('icon' => 'fa fa-list',)
+                ))->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.list_1x10', $section)));
+
+            $displayList->addChild('sip.list_re', array(
+                    'route' => '',
+                    'labelAttributes' => array('icon' => 'fa fa-list',)
+                ))->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.list_re', $section)));
+
+            $displayList->addChild('sip.list_cet', array(
+                    'route' => '',
+                    'labelAttributes' => array('icon' => 'fa fa-list',)
+                ))->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.list_cet', $section)));
+
             $display->addChild($displayList);                        
 
             $menuSip->addChild($display);

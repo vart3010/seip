@@ -246,9 +246,14 @@ app:
                         centros: Centros
                         register: Registrar
                         list: Lista
+                        list_seg: Lista Seguimiento
                         request: Requerimientos
                         list_inventory: Lista Inventario
                         list_request: Lista Requerimientos
+                        list_pqv: Lista Pequiven
+                        list_1x10: Lista 1x10
+                        list_re: Lista Reubicados
+                        list_cet: Lista Coordinador CET
                         report: Reportes
                         display: Monitores
                         voto: Voto
