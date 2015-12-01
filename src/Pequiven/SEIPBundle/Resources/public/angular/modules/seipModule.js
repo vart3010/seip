@@ -3061,7 +3061,7 @@ angular.module('seipModule.controllers', [])
             $scope.initFormCenter = function (resource) {
                 var d = new Date();
                 var numero = d.getTime();
-                $scope.setHeight(650);                
+                $scope.setHeight(350);                
                 var parameters = {
                     idCenter: $scope.idCenter,                    
                     _dc: numero
