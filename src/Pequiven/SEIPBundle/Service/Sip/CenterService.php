@@ -95,43 +95,44 @@ class CenterService implements ContainerAwareInterface {
         $dataSetLocal["seriesname"] = "Voto Pequiven";
         //Personal PQV por centro 
         $result = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\NominaCentro")->findAll();
-		$result = count($result);
+        $result = count($result);
 
         $resultVal = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\NominaCentro")->findBy(array('descriptionEstado' => "EDO. CARABOBO"));
         $votoNo = $votoSi = 0;
 
-        foreach ($resultVal as $value) {        	
-            $cedula = $value->getCedula();
-
-              /*  $voto = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\OnePerTen")->findBy(array('cedula' => $cedula));  
+//        foreach ($resultVal as $value) {        	
+//            $cedula = $value->getCedula();
+//
+//            $voto = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\OnePerTen")->findOneBy(array('cedula' => $cedula));  
+//
+//            foreach ($voto as $key => $data) {
+//                if ($data->getVoto() == 1){
+//                    $votoSi = $votoSi + 1;
+//                }else{
+//                    $votoNo = $votoNo + 1;
+//                }
+//            }
+//        }
             
-        		foreach ($voto as $data) {        		        			        			
-        			if ($data->getVoto() == 1){
-        				$votoSi = $votoSi + 1;
-        			}else{
-        				$votoNo = $votoNo + 1;
-        			}
-        		}*/
-        }
-        	$dataCountV = count($resultVal);
-            /*$label = "EDO. CARABOBO";
-        	$dataLocal["label"] = $label; //Carga de valores        		
-            $dataLocal["value"] = $votoSi; //Carga de valores
-            $dataSetLocal["data"][] = $dataLocal; //data */
+        $dataCountV = count($resultVal);
+        $label = "EDO. CARABOBO";
+        $dataLocal["label"] = $label; //Carga de valores        		
+        $dataLocal["value"] = $votoSi; //Carga de valores
+        $dataSetLocal["data"][] = $dataLocal; //data 
 
 
         $resultZul = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\NominaCentro")->findBy(array('descriptionEstado' => "EDO. ZULIA"));
-        	$label = "EDO. ZULIA";  
-        	$dataCountZ = count($resultZul);      
-        	$dataLocal["label"] = $label; //Carga de valores        		
-        	$dataLocal["value"] = $dataCountZ; //Carga de valores
-            $dataSetLocal["data"][] = $dataLocal; //data
+        $label = "EDO. ZULIA";  
+        $dataCountZ = count($resultZul);      
+        $dataLocal["label"] = $label; //Carga de valores        		
+        $dataLocal["value"] = $dataCountZ; //Carga de valores
+        $dataSetLocal["data"][] = $dataLocal; //data
         
         $otros = $result - ($dataCountV + $dataCountZ);
-            $label = "OTROS";          	
-        	$dataLocal["label"] = $label; //Carga de valores        		
-        	$dataLocal["value"] = $otros; //Carga de valores
-            $dataSetLocal["data"][] = $dataLocal; //data
+        $label = "OTROS";          	
+        $dataLocal["label"] = $label; //Carga de valores        		
+        $dataLocal["value"] = $otros; //Carga de valores
+        $dataSetLocal["data"][] = $dataLocal; //data
         
 
         $data['dataSource']['chart'] = $chart;                
