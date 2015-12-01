@@ -33,7 +33,7 @@ use Pequiven\SEIPBundle\Entity\Sip\Center\ReportCentroVoto;
 class CenterController extends SEIPController {
 
     /**
-     * 
+     * Reporte de Voto por Mesa de Cada centro
      * @param Request $request
      * @return type
      */
@@ -117,7 +117,7 @@ class CenterController extends SEIPController {
     }
 
     /**
-     * 
+     * Reporte de Voto por Centro
      * @param Request $request
      * @return type
      */

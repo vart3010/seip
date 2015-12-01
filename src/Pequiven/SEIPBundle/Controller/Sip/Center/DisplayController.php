@@ -30,10 +30,32 @@ class DisplayController extends SEIPController {
         
         $dataChartLine = $CenterService->getDataChartOfVotoGeneralLine(); //Linea de Tiempo
 
+        $contCons = 0;
+
+        $dataChartEstadoC = $CenterService->getDataChartOfVotoGeneralEstado("EDO. CARABOBO"); //General                    
+        $dataChartEstadoZ = $CenterService->getDataChartOfVotoGeneralEstado("EDO. ZULIA"); //General            
+        $dataChartEstadoA = $CenterService->getDataChartOfVotoGeneralEstado("EDO. ANZOATEGUI"); //General            
+        $dataChartEstadoO = $CenterService->getDataChartOfVotoGeneralEstado("OTROS"); //General            
+
         return $this->render('PequivenSEIPBundle:Sip:Center/Display/voto_general.html.twig', array(
-                'data' => $dataChart
+                'data'      => $dataChart,
+                'dataHours' => $dataChartLine,
+                'dataEstadoC'=> $dataChartEstadoC,
+                'dataEstadoZ'=> $dataChartEstadoZ,
+                'dataEstadoA'=> $dataChartEstadoA,
+                'dataEstadoO'=> $dataChartEstadoO
             ));
         
+    }
+
+    /**
+     *
+     *  General por estado
+     *
+     */
+    public function generalEdoAction(Request $request){
+        
+        return $this->render('PequivenSEIPBundle:Sip:Center/Display/voto_general_edo.html.twig');
     }
 
 	/**

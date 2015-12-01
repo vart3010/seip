@@ -68,7 +68,7 @@ class CenterReportController extends SEIPController {
 	}
 	/**
 	 *
-	 *	Guardando el Miembro de la Ubch
+	 *	Guardando 
 	 *
 	 */ 
 	public function saveAction(Request $request){
@@ -99,7 +99,7 @@ class CenterReportController extends SEIPController {
                 $OnePerTenMembers->setVoto($voto);                
             }else{
                 $voto = 0;
-                var_dump("hola");
+                //var_dump("hola");
             }
         }
         
