@@ -511,6 +511,10 @@ pequiven_sip_display_voto_general:
     path: /display/general
     defaults:
         _controller: pequiven.controller.display:generalAction
+pequiven_sip_display_voto_general_estado:
+    path: /display/general/{edo}
+    defaults:
+        _controller: pequiven.controller.display:generalEdoAction
 pequiven_sip_display_voto_pqv:
     path: /display/pqv
     defaults:
