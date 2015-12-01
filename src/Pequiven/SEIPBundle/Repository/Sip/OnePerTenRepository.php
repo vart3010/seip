@@ -13,17 +13,19 @@ class OnePerTenRepository extends EntityRepository {
 
 
     public function createPaginatorByOnePerTen(array $criteria = null, array $orderBy = null) {
-
+        $criteria['for_one'] = true;
         return $this->createPaginator($criteria, $orderBy);
     }
 
     protected function applyCriteria(\Doctrine\ORM\QueryBuilder $queryBuilder, array $criteria = null) {
         $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
 
-        $queryBuilder
-                ->innerJoin('opt.user', 'u')
-                ->innerJoin('opt.ten', 't')
-        ;
+        if(($for_one = $criteria->remove('for_one')) != null){
+            $queryBuilder
+                    ->innerJoin('opt.user', 'u')
+                    ->innerJoin('opt.ten', 't')
+            ;
+        }
 
         if (($description = $criteria->remove('userName')) != null) {
             $queryBuilder->andWhere($queryBuilder->expr()->orX($queryBuilder->expr()->like('u.firstname', "'%" . $description . "%'"), $queryBuilder->expr()->like('u.lastname', "'%" . $description . "%'")));

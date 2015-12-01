@@ -100,27 +100,27 @@ class CenterService implements ContainerAwareInterface {
         $resultVal = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\NominaCentro")->findBy(array('descriptionEstado' => "EDO. CARABOBO"));
         $votoNo = $votoSi = 0;
 
-        foreach ($resultVal as $value) {
-        	
-        	$voto = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\OnePerTen")->findOneBy(array('cedula' => 12779136 ));
-        	var_dump(count($voto));
-        	die();
+        foreach ($resultVal as $value) {        	
+            $cedula = $value->getCedula();
+
+              /*  $voto = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\OnePerTen")->findBy(array('cedula' => $cedula));  
+            
         		foreach ($voto as $data) {        		        			        			
         			if ($data->getVoto() == 1){
         				$votoSi = $votoSi + 1;
         			}else{
         				$votoNo = $votoNo + 1;
         			}
-        		}
+        		}*/
         }
-        	$label = "EDO. CARABOBO";
         	$dataCountV = count($resultVal);
+            /*$label = "EDO. CARABOBO";
         	$dataLocal["label"] = $label; //Carga de valores        		
             $dataLocal["value"] = $votoSi; //Carga de valores
-            $dataSetLocal["data"][] = $dataLocal; //data 
+            $dataSetLocal["data"][] = $dataLocal; //data */
 
 
-        /*$resultZul = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\NominaCentro")->findBy(array('descriptionEstado' => "EDO. ZULIA"));
+        $resultZul = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\NominaCentro")->findBy(array('descriptionEstado' => "EDO. ZULIA"));
         	$label = "EDO. ZULIA";  
         	$dataCountZ = count($resultZul);      
         	$dataLocal["label"] = $label; //Carga de valores        		
@@ -131,7 +131,7 @@ class CenterService implements ContainerAwareInterface {
             $label = "OTROS";          	
         	$dataLocal["label"] = $label; //Carga de valores        		
         	$dataLocal["value"] = $otros; //Carga de valores
-            $dataSetLocal["data"][] = $dataLocal; //data*/
+            $dataSetLocal["data"][] = $dataLocal; //data
         
 
         $data['dataSource']['chart'] = $chart;                
