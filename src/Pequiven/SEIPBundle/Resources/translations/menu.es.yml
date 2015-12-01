@@ -253,6 +253,9 @@ app:
                         display: Monitores
                         voto: Voto
                         voto_pqv: Voto Pequiven
+                        voto_1x10: Voto 1 x 10
+                        voto_re: Voto Reubicados
+                        voto_cet: Voto Coordinador CET
                         mesa: Mesas Activas
 
                             
