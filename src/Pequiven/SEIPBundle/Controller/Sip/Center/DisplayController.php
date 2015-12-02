@@ -75,7 +75,7 @@ class DisplayController extends SEIPController {
         }elseif($estado == 4){
             $estado = "OTROS";
         }
-        $linkValue = 0;//Validacion de muestra de link para bajar nivel
+        $linkValue = 1;//Validacion de muestra de link para bajar nivel
         $cont = $suma = 0;
 
         $mcpo = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByMunicipios($estado);            
@@ -98,6 +98,15 @@ class DisplayController extends SEIPController {
                 'cantMcpo'      => $cantMcpo
             ));
         
+    }
+
+    /**
+     *
+     * Voto General por Municipio
+     *
+     */
+    public function generalMcpoAction(){
+        return $this->render('PequivenSEIPBundle:Sip:Center/Display/voto_general_mcpo.html.twig');
     }
 
 	/**

@@ -519,12 +519,27 @@ pequiven_sip_display_voto_general_estado:
     path: /display/general/{type}/{edo}
     defaults:
         _controller: pequiven.controller.display:generalEdoAction
-        
+
+pequiven_sip_display_voto_general_mcpo:
+    path: /display/general/mcpo/{type}/{edo}
+    defaults:
+        _controller: pequiven.controller.display:generalMcpoAction
+
 pequiven_sip_display_voto_pqv:
     path: /display/pqv
     defaults:
         _controller: pequiven.controller.display:votoAction
         
+pequiven_sip_display_voto_pqv_edo:
+    path: /display/pqv/{type}/{edo}
+    defaults:
+        _controller: pequiven.controller.display:generalEdoAction
+
+pequiven_sip_display_voto_pqv_mcpo:
+    path: /display/pqv/mcpo/{type}/{edo}
+    defaults:
+        _controller: pequiven.controller.display:generalMcpoAction
+
 pequiven_sip_list_voto_general:
     path: /vote/list/general
     defaults:
@@ -533,9 +548,3 @@ pequiven_sip_list_voto_general:
     requirements:
         _format: html|json|xml        
     methods: [GET|POST]
-    
-pequiven_sip_display_voto_pqv_edo:
-    path: /display/pqv/{type}/{edo}
-    defaults:
-        _controller: pequiven.controller.display:generalEdoAction
-
