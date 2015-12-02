@@ -21,6 +21,7 @@ class DisplayController extends SEIPController {
      */
     public function generalAction(Request $request){
 
+        $linkValue = 1;//Validacion de muestra de link para bajar nivel
         //Carga de data
         $response = new JsonResponse();
         
@@ -32,10 +33,10 @@ class DisplayController extends SEIPController {
 
         $contCons = 0;
 
-        $dataChartEstadoC = $CenterService->getDataChartOfVotoGeneralEstado("EDO. CARABOBO"); //General                    
-        $dataChartEstadoZ = $CenterService->getDataChartOfVotoGeneralEstado("EDO. ZULIA"); //General            
-        $dataChartEstadoA = $CenterService->getDataChartOfVotoGeneralEstado("EDO. ANZOATEGUI"); //General            
-        $dataChartEstadoO = $CenterService->getDataChartOfVotoGeneralEstado("OTROS"); //General            
+        $dataChartEstadoC = $CenterService->getDataChartOfVotoGeneralEstado("EDO. CARABOBO",$linkValue); //General                    
+        $dataChartEstadoZ = $CenterService->getDataChartOfVotoGeneralEstado("EDO. ZULIA",$linkValue); //General            
+        $dataChartEstadoA = $CenterService->getDataChartOfVotoGeneralEstado("EDO. ANZOATEGUI",$linkValue); //General            
+        $dataChartEstadoO = $CenterService->getDataChartOfVotoGeneralEstado("OTROS",$linkValue); //General            
 
         return $this->render('PequivenSEIPBundle:Sip:Center/Display/voto_general.html.twig', array(
                 'data'      => $dataChart,
@@ -55,7 +56,47 @@ class DisplayController extends SEIPController {
      */
     public function generalEdoAction(Request $request){
         
-        return $this->render('PequivenSEIPBundle:Sip:Center/Display/voto_general_edo.html.twig');
+        $em = $this->getDoctrine()->getManager();
+        
+        $CenterService = $this->getCenterService();//Llamado al Servicio de Centro
+
+        $estado = $request->get('edo');
+
+        if ($estado == 1) {
+            $estado = "EDO. CARABOBO";
+        }elseif($estado == 2){
+            $estado = "EDO. ZULIA";
+        }elseif($estado == 3){
+            $estado = "EDO. ANZOATEGUI";
+        }elseif($estado == 4){
+            $estado = "OTROS";
+        }
+        $linkValue = 0;//Validacion de muestra de link para bajar nivel
+        $cont = $suma = 0;
+
+        $mcpo = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByMunicipios($estado);            
+
+        foreach ($mcpo as $key => $value) {
+            $municipio = $mcpo[$cont]["descriptionMunicipio"];
+            $dataChartMcpo[] = $CenterService->getDataChartOfVotoGeneralMunicipio($estado,$linkValue,$municipio); //General            
+            $cont++; 
+        }         
+        
+        //Carga de data
+        $response = new JsonResponse();        
+
+        $contCons = 0;
+
+        $dataChart = $CenterService->getDataChartOfVotoGeneralEstado($estado,$linkValue); //General
+        
+        
+        //$dataChartMunicipio = $CenterService->getDataChartOfVotoGeneralMunicipio($estado,$linkValue); //General
+        
+        return $this->render('PequivenSEIPBundle:Sip:Center/Display/voto_general_edo.html.twig',array(
+                'data'          => $dataChart,
+                'dataChartMcpo' => $dataChartMcpo
+            ));
+        
     }
 
 	/**
