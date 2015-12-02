@@ -443,8 +443,8 @@ class CenterService implements ContainerAwareInterface {
             if (isset($mcpoVoto[0]["Cant"])) {
                 $votoNo = $mcpoVoto[0]["Cant"];                            
             }
-            if (isset($otros[1]["Cant"])) {
-                $votoSi = $otros[1]["Cant"];                
+            if (isset($mcpoVoto[1]["Cant"])) {
+                $votoSi = $mcpoVoto[1]["Cant"];                
             }
         }else{
             $otros = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByEstadoOtros();

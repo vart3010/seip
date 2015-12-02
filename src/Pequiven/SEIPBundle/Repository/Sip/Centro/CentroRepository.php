@@ -192,7 +192,7 @@ class CentroRepository extends EntityRepository {
                 FROM
                     sip_onePerTen AS oxp
                         INNER JOIN
-                    sip_nomina_centro AS nom ON (oxp.cedula = nom.Cedula) 
+                    sip_nomina_centro AS nom ON (oxp.cedula = nom.cedula) 
                     where nom.descriptionMunicipio = "'.$mcpo.'" AND nom.descriptionEstado  ="'.$estado.'"
                 GROUP BY voto';            
 
