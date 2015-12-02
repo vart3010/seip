@@ -105,8 +105,18 @@ class DisplayController extends SEIPController {
      * Voto General por Municipio
      *
      */
-    public function generalMcpoAction(){
-        return $this->render('PequivenSEIPBundle:Sip:Center/Display/voto_general_mcpo.html.twig');
+    public function generalMcpoAction(Request $request){
+        $type = $request->get('type');
+        $estado = $request->get('edo');
+        $mcpo = $request->get('mcpo');
+        $linkValue = 0;
+
+        $em = $this->getDoctrine()->getManager();
+        $CenterService = $this->getCenterService();//Llamado al Servicio de Centro
+
+        $dataChart = $CenterService->getDataChartOfVotoGeneralParroquia($estado, $mcpo, $linkValue, $type); //General
+        
+        return $this->render('PequivenSEIPBundle:Sip:Center/Display/voto_general_mcpo.html.twig', array('data' => $dataChart));
     }
 
 	/**

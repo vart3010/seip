@@ -8,7 +8,14 @@
 {% endblock %}
 
 {% block body %}
-    
+<div class="columns">        
+    <div class="new-row five-columns twelve-columns-mobile">
+        <div  ng-controller="displayCenterController" ng-init="renderChartVotoGeneral('displayVotoGeneral',{{ data }})">
+            <span id="displayVotoGeneral">
+            </span>
+        </div>
+    </div>
+</div>
 
 
 {% endblock body %}

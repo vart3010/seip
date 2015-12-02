@@ -495,7 +495,7 @@ class CenterService implements ContainerAwareInterface {
      *  Grafica General
      *
      */
-    public function getDataChartOfVotoGeneralParroquia($estado,$linkValue,$parroquia) {
+    public function getDataChartOfVotoGeneralParroquia($estado ,$mcpo ,$linkValue, $type) {
 
         $data = array(
             'dataSource' => array(
@@ -508,7 +508,6 @@ class CenterService implements ContainerAwareInterface {
         );
         $chart = array();
 
-        $chart["caption"] = $parroquia;
         $chart["captionFontColor"] = "#e20000";
         $chart["sYAxisName"] = "";
         $chart["sNumberSuffix"] = "";
@@ -555,38 +554,32 @@ class CenterService implements ContainerAwareInterface {
         $em = $this->getDoctrine()->getManager();
 
         $label = $dataLocalidad = array();
-        var_dump($parroquia);
 
         //Carga de Nombres de Labels
         $dataSetLocal["seriesname"] = "Voto Pequiven";
 
         //Personal PQV por centro         
         $votoNo = $votoSi = 0;
-
-        if ($estado != "OTROS") {            
-            $mcpoVoto = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByVotosMunicipios($municipio);            
+        
+        $edoMcpo = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByMcpoAndEdoId($estado, $mcpo);            
+        $estado = $edoMcpo[0]["edo"];
+        $mcpo = $edoMcpo[0]["mcpo"];
+        
+        if ($estado != 30) {            
+            $mcpoVoto = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByVotosMunicipiosId($estado, $mcpo);            
             if (isset($mcpoVoto[0]["Cant"])) {
                 $votoNo = $mcpoVoto[0]["Cant"];                            
             }
-            if (isset($otros[1]["Cant"])) {
-                $votoSi = $otros[1]["Cant"];                
+            if (isset($mcpoVoto[1]["Cant"])) {
+                $votoSi = $mcpoVoto[1]["Cant"];                
             }
         }else{
             $otros = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByEstadoOtros();
             $votoSi = $otros[1]["Cant"];
             $votoNo = $otros[0]["Cant"];
         }
-            //ASIGNO ID A ESTADO ṔARA MEJOR VISTA DE RUTA        
-            if ($estado == "EDO. CARABOBO") {
-                $estado = 1;
-            }elseif ($estado == "EDO. ZULIA") {
-                $estado = 2;
-            }elseif ($estado == "EDO. ANZOATEGUI") {
-                $estado = 3;
-            }elseif($estado == "OTROS"){
-                $estado = 4;
-            }
 
+            $chart["caption"] = $mcpo;
             $label = "";
             $dataLocal["label"] = $label; //Carga de valores                
             $dataLocal["value"] = $votoSi; //Carga de valores
