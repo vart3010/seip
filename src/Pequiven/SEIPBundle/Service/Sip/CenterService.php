@@ -225,7 +225,7 @@ class CenterService implements ContainerAwareInterface {
      *  Grafica General
      *
      */
-    public function getDataChartOfVotoGeneralEstado($estado) {
+    public function getDataChartOfVotoGeneralEstado($estado,$linkValue) {
         
         $data = array(
             'dataSource' => array(
@@ -243,7 +243,6 @@ class CenterService implements ContainerAwareInterface {
         $chart["sYAxisName"] = "";
         $chart["sNumberSuffix"] = "";
         $chart["sYAxisMaxValue"] = "0";
-        $chart["showvalues"]     = "0";
         $chart["paletteColors"] = "#e20000,#0075c2,#1aaf5d,#e20000,#f2c500,#f45b00,#8e0000";
         $chart["bgColor"] = "#ffffff";
         $chart["showBorder"] = "0";
@@ -336,7 +335,13 @@ class CenterService implements ContainerAwareInterface {
             $label = "";
             $dataLocal["label"] = $label; //Carga de valores                
             $dataLocal["value"] = $votoSi; //Carga de valores
+            if ($linkValue == 1) {
             $dataLocal["link"]  = $this->generateUrl('pequiven_sip_display_voto_general_estado',array('edo' => $estado));
+                $chart["showvalues"]     = "0";
+            }else{
+                $chart["showvalues"]     = "1";
+            }
+
             $dataSetLocal["data"][] = $dataLocal; //data 
 
             $label = "";
@@ -348,6 +353,130 @@ class CenterService implements ContainerAwareInterface {
         $data['dataSource']['dataset'][] = $dataSetLocal;
 
         return $data;
+    }
+
+    /**
+     *
+     *  Grafica General
+     *
+     */
+    public function getDataChartOfVotoGeneralMunicipio($estado,$linkValue,$municipio) {
+        
+        $data = array(
+            'dataSource' => array(
+                'chart' => array(),
+                'categories' => array(
+                ),
+                'dataset' => array(
+                ),
+            ),
+        );
+        $chart = array();
+
+        $chart["caption"] = $estado;
+        $chart["captionFontColor"] = "#e20000";
+        $chart["sYAxisName"] = "";
+        $chart["sNumberSuffix"] = "";
+        $chart["sYAxisMaxValue"] = "0";
+        $chart["paletteColors"] = "#e20000,#0075c2,#1aaf5d,#e20000,#f2c500,#f45b00,#8e0000";
+        $chart["bgColor"] = "#ffffff";
+        $chart["showBorder"] = "0";
+        $chart["showCanvasBorder"] = "0";
+        $chart["usePlotGradientColor"] = "0";
+        $chart["plotBorderAlpha"] = "10";
+        $chart["legendBorderAlpha"] = "0";
+        $chart["legendBgAlpha"] = "0";
+        $chart["bgAlpha"] = "0,0";//Fondo 
+        $chart["legendShadow"] = "0";
+        $chart["showHoverEffect"] = "0";
+        $chart["valueFontColor"] = "#000000";
+        $chart["valuePosition"] = "ABOVE";
+        $chart["rotateValues"] = "0";
+        $chart["placeValuesInside"] = "0";
+        $chart["divlineColor"] = "#999999";
+        $chart["divLineDashed"] = "1";
+        $chart["divLineDashLen"] = "1";
+        $chart["divLineGapLen"] = "1";
+        $chart["canvasBgColor"] = "#ffffff";
+        $chart["captionFontSize"] = "20";
+        $chart["subcaptionFontSize"] = "14";
+        $chart["subcaptionFontBold"] = "0";
+        $chart["decimalSeparator"] = ",";
+        $chart["thousandSeparator"] = ".";
+        $chart["inDecimalSeparator"] = ",";
+        $chart["inThousandSeparator"] = ".";
+        $chart["decimals"] = "2";
+        $chart["formatNumberScale"] = "0";
+        $chart["toolTipColor"] = "#ffffff";
+        $chart["toolTipBgColor"] = "#000000";
+        $chart["toolTipBgAlpha"] = "0";
+        $chart["toolTipBorderRadius"] = "2";
+        $chart["toolTipPadding"] = "5";
+        $chart["showLegend"] = "0";
+        $chart["legendBgColor"] = "#ffffff";
+        $chart["legendItemFontSize"] = "10";
+        $chart["legendItemFontColor"] = "#666666";
+
+        //Export
+        $chart["exportenabled"] = "0";
+        $chart["exportatclient"] = "0";
+        $chart["exportFormats"] = "PNG= Exportar como PNG|PDF= Exportar como PDF";
+        $chart["exportFileName"] = "Grafico Resultados ";
+        $chart["exporthandler"] = "http://107.21.74.91/";
+
+        $em = $this->getDoctrine()->getManager();
+
+        $label = $dataLocalidad = array();
+
+        //Carga de Nombres de Labels
+        $dataSetLocal["seriesname"] = "Voto Pequiven";
+        //Personal PQV por centro 
+        $result = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\NominaCentro")->findAll();
+        $votoNo = $votoSi = 0;
+
+        if ($estado != "OTROS") {            
+            $mcpoVoto = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByVotosMunicipios($municipio);            
+        }else{
+            $otros = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByEstadoOtros();
+            $votoSi = $otros[1]["Cant"];
+            $votoNo = $otros[0]["Cant"];
+        }
+
+
+            $result = count($result);
+            //$dataCountV = count($resultVal);
+            if ($estado == "EDO. CARABOBO") {
+                $estado = 1;
+            }elseif ($estado == "EDO. ZULIA") {
+                $estado = 2;
+            }elseif ($estado == "EDO. ANZOATEGUI") {
+                $estado = 3;
+            }elseif($estado == "OTROS"){
+                $estado = 4;
+            }
+
+            $label = "";
+            $dataLocal["label"] = $label; //Carga de valores                
+            $dataLocal["value"] = $votoSi; //Carga de valores
+            if ($linkValue == 1) {
+            $dataLocal["link"]  = $this->generateUrl('pequiven_sip_display_voto_general_estado',array('edo' => $estado));
+                $chart["showvalues"] = "0";
+            }else{
+                $chart["showvalues"] = "1";
+            }
+
+            $dataSetLocal["data"][] = $dataLocal; //data 
+
+            $label = "";
+            $dataLocal["label"] = $label; //Carga de valores                
+            $dataLocal["value"] = $votoNo; //Carga de valores
+            $dataSetLocal["data"][] = $dataLocal; //data 
+
+        $data['dataSource']['chart'] = $chart;                
+        $data['dataSource']['dataset'][] = $dataSetLocal;
+
+        //return $data;
+        return json_encode($data);        
     }
 
     /**

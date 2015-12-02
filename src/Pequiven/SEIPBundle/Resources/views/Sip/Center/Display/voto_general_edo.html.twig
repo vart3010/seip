@@ -8,6 +8,28 @@
 {% endblock %}
 
 {% block body %}
+    <div class="columns">        
+        <div class="new-row five-columns twelve-columns-mobile">
+            <div  ng-controller="displayCenterController" ng-init="renderChartVotoGeneral('displayVotoGeneral',{{ data|json_encode() }})">
+                <span id="displayVotoGeneral">
+                </span>
+            </div>
+        </div>
+    </div>
+
+<div class="columns">
+    {% set cont = 0 %}
+    {% for dataChart in dataChartMcpo %}
+        {#{{ dump(dataChart) }}#}
+    {#<div class="new-row three-columns twelve-columns-mobile new-row-mobile">
+        <div  ng-controller="displayCenterController" ng-init="renderChartVotoGeneralEstados('{{cont}}',{{ data[0]|json_encode() }})">            
+            <span id="{{cont}}">
+            </span>            
+        </div>
+    </div> #}
+    {% set cont = cont + 1 %}
+    {% endfor %}
+</div>
 
 
 {% endblock body %}
