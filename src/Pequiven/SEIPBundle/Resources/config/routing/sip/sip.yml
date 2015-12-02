@@ -496,10 +496,12 @@ pequiven_sip_report_voto:
     path: /voto
     defaults:
         _controller: pequiven.controller.voto:showAction
+        
 pequiven_sip_report_voto_search:
     path: /voto/search
     defaults:
         _controller: pequiven.controller.voto:searchAction
+        
 pequiven_sip_report_voto_add:
     path: /voto/save
     defaults:
@@ -507,24 +509,21 @@ pequiven_sip_report_voto_add:
     methods: [GET|POST]
     options:
         expose: true
-        
+      
 pequiven_sip_display_voto_general:
     path: /display/general
     defaults:
         _controller: pequiven.controller.display:generalAction
-<<<<<<< HEAD
         
-=======
 pequiven_sip_display_voto_general_estado:
     path: /display/general/{type}/{edo}
     defaults:
         _controller: pequiven.controller.display:generalEdoAction
->>>>>>> 7e7cf2bf43e68c63cad780470e17183c9ab51a02
+        
 pequiven_sip_display_voto_pqv:
     path: /display/pqv
     defaults:
         _controller: pequiven.controller.display:votoAction
-<<<<<<< HEAD
         
 pequiven_sip_list_voto_general:
     path: /vote/list/general
@@ -534,9 +533,9 @@ pequiven_sip_list_voto_general:
     requirements:
         _format: html|json|xml        
     methods: [GET|POST]
-=======
+    
 pequiven_sip_display_voto_pqv_edo:
     path: /display/pqv/{type}/{edo}
     defaults:
         _controller: pequiven.controller.display:generalEdoAction
->>>>>>> 7e7cf2bf43e68c63cad780470e17183c9ab51a02
+
