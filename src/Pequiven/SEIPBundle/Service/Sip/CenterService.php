@@ -105,23 +105,15 @@ class CenterService implements ContainerAwareInterface {
 
         //Carga de Nombres de Labels
         $dataSetLocal["seriesname"] = "Voto Pequiven";
-        //Personal PQV por centro 
-        $result = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\NominaCentro")->findAll();
-
-        $resultVal = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\NominaCentro")->findBy(array('descriptionEstado' => "EDO. CARABOBO"));
+        
         $votoNo = $votoSi = 0;
 
-        foreach ($result as $value) {           
-            $cedula = $value->getCedula();
-            $voto = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\OnePerTen")->findOneBy(array('cedula' => $cedula));  
-                if (isset($voto)) {                    
-                    if ($voto->getVoto() == 1){
-                        $votoSi = $votoSi + 1;
-                    }elseif($voto->getVoto() == 0){
-                        $votoNo = $votoNo + 1;
-                    }                
-                }
-        }
+        $resultVal = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByEstado();
+
+        $votoNo = $resultVal[0]["Cant"];
+        $votoSi = $resultVal[1]["Cant"];
+        
+
         if ($type == 1) {
             $caption = "Voto General";
             $votosOneMembers = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByEstadoMembers();
@@ -129,8 +121,8 @@ class CenterService implements ContainerAwareInterface {
             $votoNo = $votoNo + $votosOneMembers[0]["Cant"];            
         }elseif($type == 2){
             $caption = "Voto General PQV";
-
         }
+
         $chart["caption"] = $caption;//Nombre Grafica
 
             $label = "SI";
@@ -451,37 +443,35 @@ class CenterService implements ContainerAwareInterface {
             $votoSi = $otros[1]["Cant"];
             $votoNo = $otros[0]["Cant"];
         }
-            //ASIGNO ID A ESTADO ṔARA MEJOR VISTA DE RUTA        
-            if ($estado == "EDO. CARABOBO") {
-                $estado = 7;
-            }elseif ($estado == "EDO. ZULIA") {
-                $estado = 21;
-            }elseif ($estado == "EDO. ANZOATEGUI") {
-                $estado = 2;
-            }elseif($estado == "OTROS"){
-                $estado = 30;
-            }
 
-            $label = "";
-            $dataLocal["label"] = $label; //Carga de valores                
-            $dataLocal["value"] = $votoSi; //Carga de valores
+        $estado = $this->AsignedIdEdo($estado);//Lamado de Estados Validos
+
+        $label = "";
+        $dataLocal["label"] = $label; //Carga de valores                
+        $dataLocal["value"] = $votoSi; //Carga de valores
             
-            $mcpo = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByMcpoId($municipio, $estado);            
-            $mcpo = $mcpo[0]["id"];
+        $mcpo = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByMcpoId($municipio, $estado);            
+        $mcpo = $mcpo[0]["id"];
             
-            if ($linkValue == 1) {
-                $dataLocal["link"]  = $this->generateUrl('pequiven_sip_display_voto_pqv_mcpo',array('edo' => $estado, 'type' => $type, 'mcpo' => $mcpo));
-                $chart["showvalues"] = "0";
-            }else{
-                $chart["showvalues"] = "1";
-            }
+        if ($type == 1) {
+            $link  = $this->generateUrl('pequiven_sip_display_voto_general_mcpo',array('edo' => $estado, 'type' => $type, 'mcpo' => $mcpo));            
+        }elseif($type == 2){        
+            $link  = $this->generateUrl('pequiven_sip_display_voto_pqv_mcpo',array('edo' => $estado, 'type' => $type, 'mcpo' => $mcpo));
+        }
+            
+        if ($linkValue == 1) {
+            $dataLocal["link"]  = $link;
+            $chart["showvalues"] = "0";
+        }else{
+            $chart["showvalues"] = "1";
+        }
 
-            $dataSetLocal["data"][] = $dataLocal; //data 
+        $dataSetLocal["data"][] = $dataLocal; //data 
 
-            $label = "";
-            $dataLocal["label"] = $label; //Carga de valores                
-            $dataLocal["value"] = $votoNo; //Carga de valores
-            $dataSetLocal["data"][] = $dataLocal; //data 
+        $label = "";
+        $dataLocal["label"] = $label; //Carga de valores                
+        $dataLocal["value"] = $votoNo; //Carga de valores
+        $dataSetLocal["data"][] = $dataLocal; //data 
 
         $data['dataSource']['chart'] = $chart;                
         $data['dataSource']['dataset'][] = $dataSetLocal;

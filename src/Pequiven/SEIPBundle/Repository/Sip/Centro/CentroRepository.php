@@ -98,6 +98,37 @@ class CentroRepository extends EntityRepository {
      * @param array $orderBy
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
+    function findByEstado() {
+        
+        $em = $this->getEntityManager();
+        $db = $em->getConnection();
+
+        $sql = 'SELECT 
+                CASE
+                    WHEN ((oxp.voto = 0) OR (oxp.voto IS NULL)) THEN "No"
+                    ELSE "Si"
+                END AS Voto,
+                COUNT(oxp.voto) AS Cant
+                FROM
+                    sip_onePerTen AS oxp
+                        INNER JOIN
+                    sip_nomina_centro AS nom ON (oxp.cedula = nom.Cedula)                                        
+                GROUP BY voto';            
+
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+        
+        return $result;
+    }
+
+    /**
+     * 
+     * 
+     * @param array $criteria
+     * @param array $orderBy
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
     function findByEstadoMembers() {
         
         $em = $this->getEntityManager();
