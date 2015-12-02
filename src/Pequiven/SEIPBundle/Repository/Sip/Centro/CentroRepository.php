@@ -60,6 +60,150 @@ class CentroRepository extends EntityRepository {
     }  
 
     /**
+     * 
+     * 
+     * @param array $criteria
+     * @param array $orderBy
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    function findByEstadoOtros() {
+        
+        $em = $this->getEntityManager();
+        $db = $em->getConnection();
+
+        $sql = 'SELECT 
+                CASE
+                    WHEN ((oxp.voto = 0) OR (oxp.voto IS NULL)) THEN "No"
+                    ELSE "Si"
+                END AS Voto,
+                COUNT(oxp.voto) AS Cant
+                FROM
+                    sip_onePerTen AS oxp
+                        INNER JOIN
+                    sip_nomina_centro AS nom ON (oxp.cedula = nom.Cedula) 
+                    where nom.descriptionEstado not in ("EDO. CARABOBO", "EDO. ZULIA", "EDO. ANZOATEGUI")                   
+                GROUP BY voto';            
+
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+        
+        return $result;
+    } 
+
+    /**
+     * 
+     * 
+     * @param array $criteria
+     * @param array $orderBy
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    function findByEstadoMembers() {
+        
+        $em = $this->getEntityManager();
+        $db = $em->getConnection();
+
+        $sql = 'SELECT
+                case when voto=0 then "No"
+                else "Si" end as Voto
+                , COUNT(oxp.voto) AS Cant
+                FROM
+                    sip_onePerTenMembers AS oxp                    
+                GROUP BY voto';            
+
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+        
+        return $result;
+    }
+
+    /**
+     * 
+     * 
+     * @param array $criteria
+     * @param array $orderBy
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    function findByEstadoMembersEdo($estado) {
+        
+        $em = $this->getEntityManager();
+        $db = $em->getConnection();
+
+        $sql = 'SELECT
+                case when voto=0 then "No"
+                else "Si" end as Voto
+                , COUNT(oxp.voto) AS Cant
+                FROM
+                    sip_onePerTenMembers AS oxp                    
+                WHERE oxp.nombreEstado ="'.$estado.'"
+                GROUP BY voto';            
+
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+        
+        return $result;
+    } 
+
+    /**
+     * 
+     * 
+     * @param array $criteria
+     * @param array $orderBy
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    function findByMunicipios($estado) {
+        
+        $em = $this->getEntityManager();
+        $db = $em->getConnection();
+
+        $sql = 'SELECT c.descriptionMunicipio
+                FROM
+                sip_centro AS c            
+                WHERE c.descriptionEstado ="'.$estado.'"
+                GROUP BY descriptionMunicipio';            
+
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+        
+        return $result;
+    }
+
+    /**
+     * 
+     * 
+     * @param array $criteria
+     * @param array $orderBy
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    function findByVotosMunicipios($mcpo,$estado) {
+        
+        $em = $this->getEntityManager();
+        $db = $em->getConnection();
+
+        $sql = 'SELECT 
+                CASE
+                    WHEN ((oxp.voto = 0) OR (oxp.voto IS NULL)) THEN "No"
+                    ELSE "Si"
+                END AS Voto,
+                COUNT(oxp.voto) AS Cant
+                FROM
+                    sip_onePerTen AS oxp
+                        INNER JOIN
+                    sip_nomina_centro AS nom ON (oxp.cedula = nom.cedula) 
+                    where nom.descriptionMunicipio = "'.$mcpo.'" AND nom.descriptionEstado  ="'.$estado.'"
+                GROUP BY voto';            
+
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+        
+        return $result;
+    } 
+
+    /**
      * Crea un paginador para los CUTL
      * 
      * @param array $criteria

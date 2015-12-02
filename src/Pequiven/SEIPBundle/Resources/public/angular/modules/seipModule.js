@@ -7143,8 +7143,8 @@ angular.module('seipModule.controllers', [])
                         //"type": "mscolumn3dlinedy",
                         "type": "pie3d",
                         "renderAt": id,
-                        "width": "230%",
-                        "height": "40%",
+                        "width": "120%",
+                        "height": "65%",
                         "exportFormats": "PNG= Exportar como PNG|PDF= Exportar como PDF",
                         "exportFileName": "",
                         "exporthandler": "http://107.21.74.91/",
@@ -7164,11 +7164,59 @@ angular.module('seipModule.controllers', [])
             $scope.renderChartVotoGeneralHours = function (id, data, categories, caption, typeLabelDisplay) {
                 FusionCharts.ready(function () {
                     var revenueChart = new FusionCharts({
-                        "type": "mscolumn3dlinedy",
-                        //"type": "pie3d",
+                        //"type": "mscolumn3dlinedy",
+                        "type": "mscolumnline3d",
                         "renderAt": id,
-                        "width": "230%",
-                        "height": "40%",
+                        "width": "80%",
+                        "height": "65%",
+                        "exportFormats": "PNG= Exportar como PNG|PDF= Exportar como PDF",
+                        "exportFileName": "",
+                        "exporthandler": "http://107.21.74.91/",
+                        "html5exporthandler": "http://107.21.74.91/",
+                        "dataFormat": "json",
+                        "dataSource": {
+                            "chart": data.dataSource.chart,
+                            "categories": data.dataSource.categories,
+                            "dataset": data.dataSource.dataset
+                        }
+                    });
+                    revenueChart.setTransparent(true);
+                    revenueChart.render();
+                })
+            };
+
+            //Charts Votos General
+            $scope.renderChartVotoGeneralEstados = function (id, data, categories, caption, typeLabelDisplay) {
+                FusionCharts.ready(function () {
+                    var revenueChart = new FusionCharts({
+                        //"type": "mscolumn3dlinedy",
+                        "type": "pie3d",
+                        "renderAt": id,
+                        "width": "120%",
+                        //"height": "65%",
+                        "exportFormats": "PNG= Exportar como PNG|PDF= Exportar como PDF",
+                        "exportFileName": "",
+                        "exporthandler": "http://107.21.74.91/",
+                        "html5exporthandler": "http://107.21.74.91/",
+                        "dataFormat": "json",
+                        "dataSource": {
+                            "chart": data.dataSource.chart,
+                            "dataset": data.dataSource.dataset
+                        }
+                    });
+                    revenueChart.setTransparent(true);
+                    revenueChart.render();
+                })
+            };
+
+            //Charts Votos General
+            $scope.renderChartVotoGeneralParroquia = function (id, data, categories, caption, typeLabelDisplay) {
+                FusionCharts.ready(function () {
+                    var revenueChart = new FusionCharts({
+                        "type": "pie3d",
+                        "renderAt": id,
+                        "width": "120%",
+                        //"height": "65%",
                         "exportFormats": "PNG= Exportar como PNG|PDF= Exportar como PDF",
                         "exportFileName": "",
                         "exporthandler": "http://107.21.74.91/",
@@ -7192,8 +7240,8 @@ angular.module('seipModule.controllers', [])
                         //"type": "mscolumn3dlinedy",
                         "type": "pie3d",
                         "renderAt": id,
-                        "width": "100%",
-                        "height": "100%",
+                        "width": "120%",
+                        //"height": "100%",
                         "exportFormats": "PNG= Exportar como PNG|PDF= Exportar como PDF",
                         "exportFileName": "",
                         "exporthandler": "http://107.21.74.91/",
