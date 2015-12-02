@@ -292,21 +292,17 @@ class CenterService implements ContainerAwareInterface {
         $dataSetLocal["seriesname"] = "Voto Pequiven";
         
         $votoNo = $votoSi = 0;
-
+        
         if ($estado != "OTROS") {
-            $resultVal = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\NominaCentro")->findBy(array('descriptionEstado' => $estado));
-            foreach ($resultVal as $value) {           
-                $cedula = $value->getCedula();
-                $voto = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\OnePerTen")->findOneBy(array('cedula' => $cedula));  
-                    if (isset($voto)) {                    
-                        if ($voto->getVoto() == 1){
-                            $votoSi = $votoSi + 1;
-                        }elseif($voto->getVoto() == 0){
-                            $votoNo = $votoNo + 1;
-                        }                
-                    }
-            }
+            $resultVal = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByEstadoData($estado);
             
+            if (isset($resultVal[0]["Cant"])) {
+                $votoNo = $resultVal[0]["Cant"];                
+            }
+            if(isset($resultVal[1]["Cant"])){
+                $votoSi = $resultVal[1]["Cant"];
+            }
+
         }else{
             $otros = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByEstadoOtros();
             $votoSi = $otros[1]["Cant"];
