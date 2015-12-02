@@ -26,13 +26,13 @@ class CenterService implements ContainerAwareInterface {
     public function AsignedIdEdo($estado){
         //ASIGNO ID A ESTADOS PARA MEJOR VISTA DE RUTA
         if ($estado == "EDO. CARABOBO") {
-            $estado = 1;
+            $estado = 7;
         }elseif ($estado == "EDO. ZULIA") {
-            $estado = 2;
+            $estado = 21;
         }elseif ($estado == "EDO. ANZOATEGUI") {
-            $estado = 3;
+            $estado = 2;
         }elseif($estado == "OTROS"){
-            $estado = 4;
+            $estado = 30;
         }
 
         return $estado;

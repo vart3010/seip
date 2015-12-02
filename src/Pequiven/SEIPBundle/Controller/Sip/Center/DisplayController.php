@@ -89,7 +89,7 @@ class DisplayController extends SEIPController {
         
         //Carga de data
         $response = new JsonResponse();        
-
+        $linkValue = 0;
         $dataChart = $CenterService->getDataChartOfVotoGeneralEstado($estado,$linkValue, $type); //General
         
         return $this->render('PequivenSEIPBundle:Sip:Center/Display/voto_general_edo.html.twig',array(
