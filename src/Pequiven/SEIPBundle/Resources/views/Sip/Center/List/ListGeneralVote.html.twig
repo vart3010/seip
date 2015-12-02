@@ -1,0 +1,83 @@
+{#{% extends 'PequivenSEIPBundle:Template:Developer/layoutWithoutMenu.html.twig' %}#}
+{#{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}#}
+{% extends "PequivenSEIPBundle:Template:Developer/Common/tableFormat1.html.twig" %}
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+{% block stylesheets_base %}
+    {{ parent() }}
+   <link rel="stylesheet" href="{{ asset('bundles/pequivenseip/icons/imageMap.css') }}">
+{% endblock %}
+
+{% block body %}
+
+    <div ng-controller="TableFormatController">  
+
+        <div loading-container="tableParams.settings().$loading">
+            <table ng-table="tableParams" show-filter="false" template-pagination="custom/pager" template-header="custom/header" api-data-url="{{ apiDataUrl }}" export-csv="csv" class="table table-responsive table-extra-info" >
+                <tbody> 
+                    <tr ng-repeat="result in $data" data="{$ result|json $}">
+                        {#<td data-title="'Estado'" filter="{'estado' : 'text'}">
+                            <a href="{$ result._links.self.show $}">
+                                {$ result.descriptionEstado $}
+                            </a>
+                        </td>
+                        <td data-title="'Municipio'" filter="{'municipio' : 'text'}">
+                            <a href="{$ result._links.self.show $}">
+                                {$ result.descriptionMunicipio $}
+                            </a>
+                        </td>
+                        <td data-title="'Parroquia'" filter="{'parroquia' : 'text'}">
+                            <a href="{$ result._links.self.show $}">
+                                {$ result.descriptionParroquia $}
+                            </a>
+                        </td>
+                        <td data-title="'Codigo'" filter="{'codigoCentro' : 'text'}">
+                            <a href="{$ result._links.self.show $}">
+                                {$ result.codigoCentro $}
+                            </a>
+                        </td>
+                        <td data-title="'Centro'" filter="{'centro' : 'text'}">
+                            <a href="{$ result._links.self.show $}">
+                                {$ result.description $}
+                            </a>
+                        </td>#}
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+
+
+
+{% endblock body %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/agenda3860.css?v=1') }}">
+    <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/dashboard3860.css?v=1') }}">
+{% endblock stylesheets %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/fusioncharts.js') }}"></script>
+    <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/themes/fusioncharts.theme.fint.js') }}"></script>
+    <script src="{{  asset('bundles/pequivenseip/imageMapResizer/js/imageMapResizer.min.js') }}"></script>
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+    <script type="text/javascript">
+        $(document).ready(function () {});
+    </script>
+    <script type="text/javascript">
+
+        function getTableExtraInfo(data)
+        {
+            var response = '';
+            return response;
+        }
+    </script>
+{% endblock %}
+

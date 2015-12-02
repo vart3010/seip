@@ -555,3 +555,10 @@ sylius_resource:
                 controller: Pequiven\SEIPBundle\Controller\Sip\Center\DisplayController                  
                 model: Pequiven\SEIPBundle\Entity\Sip\Center\StatusCentro
                 repository: Pequiven\SEIPBundle\Repository\Sip\Centro\StatusCentroRepository
+        pequiven.siplist:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:Sip/Center/List
+            classes:
+                controller: Pequiven\SEIPBundle\Controller\Sip\Center\ListController  
+                model: Pequiven\SEIPBundle\Entity\Sip\Centro
+                repository: Pequiven\SEIPBundle\Repository\Sip\Centro\ListRepository
