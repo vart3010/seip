@@ -372,7 +372,7 @@ class CenterService implements ContainerAwareInterface {
      *  Grafica General
      *
      */
-    public function getDataChartOfVotoGeneralMunicipio($estado,$linkValue,$municipio) {
+    public function getDataChartOfVotoGeneralMunicipio($estado,$linkValue,$municipio,$type) {
 
         $data = array(
             'dataSource' => array(
@@ -465,8 +465,9 @@ class CenterService implements ContainerAwareInterface {
             $label = "";
             $dataLocal["label"] = $label; //Carga de valores                
             $dataLocal["value"] = $votoSi; //Carga de valores
+
             if ($linkValue == 1) {
-                $dataLocal["link"]  = $this->generateUrl('pequiven_sip_display_voto_general_estado',array('edo' => $estado));
+                $dataLocal["link"]  = $this->generateUrl('pequiven_sip_display_voto_pqv_mcpo',array('edo' => $estado, 'type' => $type));
                 $chart["showvalues"] = "0";
             }else{
                 $chart["showvalues"] = "1";
