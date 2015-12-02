@@ -201,6 +201,31 @@ class CentroRepository extends EntityRepository {
         $result = $stmt->fetchAll();
         
         return $result;
+    }
+
+    /**
+     * 
+     * 
+     * @param array $criteria
+     * @param array $orderBy
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    function findByMcpoId($municipio, $estado) {
+        
+        $em = $this->getEntityManager();
+        $db = $em->getConnection();
+
+        $sql = 'SELECT c.codigoMunicipio AS id               
+                FROM
+                    sip_centro AS c                   
+                    where c.descriptionMunicipio = "'.$municipio.'" AND c.codigoEstado  ="'.$estado.'"
+                GROUP BY id';            
+
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+        
+        return $result;
     } 
 
     /**

@@ -66,13 +66,13 @@ class DisplayController extends SEIPController {
 
         $estado = $request->get('edo');
 
-        if ($estado == 1) {
+        if ($estado == 7) {
             $estado = "EDO. CARABOBO";
-        }elseif($estado == 2){
+        }elseif($estado == 21){
             $estado = "EDO. ZULIA";
-        }elseif($estado == 3){
+        }elseif($estado == 2){
             $estado = "EDO. ANZOATEGUI";
-        }elseif($estado == 4){
+        }elseif($estado == 30){
             $estado = "OTROS";
         }
         $linkValue = 1;//Validacion de muestra de link para bajar nivel

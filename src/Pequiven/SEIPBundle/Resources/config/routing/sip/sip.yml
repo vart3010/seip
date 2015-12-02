@@ -521,7 +521,7 @@ pequiven_sip_display_voto_general_estado:
         _controller: pequiven.controller.display:generalEdoAction
 
 pequiven_sip_display_voto_general_mcpo:
-    path: /display/general/mcpo/{type}/{edo}
+    path: /display/general/mcpo/{type}/{edo}/{mcpo}
     defaults:
         _controller: pequiven.controller.display:generalMcpoAction
 
@@ -536,7 +536,7 @@ pequiven_sip_display_voto_pqv_edo:
         _controller: pequiven.controller.display:generalEdoAction
 
 pequiven_sip_display_voto_pqv_mcpo:
-    path: /display/pqv/mcpo/{type}/{edo}
+    path: /display/pqv/mcpo/{type}/{edo}/{mcpo}
     defaults:
         _controller: pequiven.controller.display:generalMcpoAction
 
