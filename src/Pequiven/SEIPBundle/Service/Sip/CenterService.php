@@ -23,7 +23,7 @@ class CenterService implements ContainerAwareInterface {
      *	Grafica General
      *
      */
-    public function getDataChartOfVotoGeneral() {
+    public function getDataChartOfVotoGeneral($type) {
         
         $data = array(
             'dataSource' => array(
@@ -35,8 +35,7 @@ class CenterService implements ContainerAwareInterface {
             ),
         );
         $chart = array();
-
-        $chart["caption"] = "Voto General";
+        
         $chart["captionFontColor"] = "#e20000";
         $chart["sYAxisName"] = "";
         $chart["sNumberSuffix"] = "";
@@ -110,12 +109,23 @@ class CenterService implements ContainerAwareInterface {
                     }                
                 }
         }
+        if ($type == 1) {
+            $caption = "Voto General";
+            $votosOneMembers = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByEstadoMembers();
+            $votoSi = $votoSi + $votosOneMembers[1]["Cant"];
+            $votoNo = $votoNo + $votosOneMembers[0]["Cant"];            
+        }elseif($type == 2){
+            $caption = "Voto General PQV";
+
+        }
+        $chart["caption"] = $caption;//Nombre Grafica
+
         
-		    $result = count($result);
-        	$dataCountV = count($resultVal);
+            $result = count($result);
+            $dataCountV = count($resultVal);
 
             $label = "SI";
-        	$dataLocal["label"] = $label; //Carga de valores        		
+            $dataLocal["label"] = $label; //Carga de valores                
             $dataLocal["value"] = $votoSi; //Carga de valores
             $dataSetLocal["data"][] = $dataLocal; //data 
 
@@ -332,27 +342,30 @@ class CenterService implements ContainerAwareInterface {
                 $estado = 4;
             }
 
-            $label = "";
-            $dataLocal["label"] = $label; //Carga de valores                
-            $dataLocal["value"] = $votoSi; //Carga de valores
             if ($linkValue == 1) {
             $dataLocal["link"]  = $this->generateUrl('pequiven_sip_display_voto_general_estado',array('edo' => $estado));
                 $chart["showvalues"]     = "0";
+                $labelSi = "";
+                $labelNo = "";
             }else{
                 $chart["showvalues"]     = "1";
+                $labelSi = "SI";
+                $labelNo = "NO";
             }
 
-            $dataSetLocal["data"][] = $dataLocal; //data 
+            $dataLocal["label"] = $labelSi; //Carga de valores SI               
+            $dataLocal["value"] = $votoSi; //Carga de valores SI
+            $dataSetLocal["data"][] = $dataLocal; //data SI
 
-            $label = "";
-            $dataLocal["label"] = $label; //Carga de valores                
-            $dataLocal["value"] = $votoNo; //Carga de valores
-            $dataSetLocal["data"][] = $dataLocal; //data 
+            $dataLocal["label"] = $labelNo; //Carga de valores NO               
+            $dataLocal["value"] = $votoNo; //Carga de valores NO
+            $dataSetLocal["data"][] = $dataLocal; //data NO
 
         $data['dataSource']['chart'] = $chart;                
         $data['dataSource']['dataset'][] = $dataSetLocal;
 
-        return $data;
+        //return $data;
+        return json_encode($data);                
     }
 
     /**
@@ -373,7 +386,7 @@ class CenterService implements ContainerAwareInterface {
         );
         $chart = array();
 
-        $chart["caption"] = $estado;
+        $chart["caption"] = $municipio;
         $chart["captionFontColor"] = "#e20000";
         $chart["sYAxisName"] = "";
         $chart["sNumberSuffix"] = "";
@@ -418,11 +431,11 @@ class CenterService implements ContainerAwareInterface {
         $chart["legendItemFontColor"] = "#666666";
 
         //Export
-        $chart["exportenabled"] = "0";
-        $chart["exportatclient"] = "0";
-        $chart["exportFormats"] = "PNG= Exportar como PNG|PDF= Exportar como PDF";
-        $chart["exportFileName"] = "Grafico Resultados ";
-        $chart["exporthandler"] = "http://107.21.74.91/";
+        //$chart["exportenabled"] = "0";
+        //$chart["exportatclient"] = "0";
+        //$chart["exportFormats"] = "PNG= Exportar como PNG|PDF= Exportar como PDF";
+        //$chart["exportFileName"] = "Grafico Resultados ";
+        //$chart["exporthandler"] = "http://107.21.74.91/";
 
         $em = $this->getDoctrine()->getManager();
 
@@ -436,6 +449,12 @@ class CenterService implements ContainerAwareInterface {
 
         if ($estado != "OTROS") {            
             $mcpoVoto = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByVotosMunicipios($municipio);            
+            if (isset($mcpoVoto[0]["Cant"])) {
+                $votoNo = $mcpoVoto[0]["Cant"];                            
+            }
+            if (isset($otros[1]["Cant"])) {
+                $votoSi = $otros[1]["Cant"];                
+            }
         }else{
             $otros = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByEstadoOtros();
             $votoSi = $otros[1]["Cant"];
