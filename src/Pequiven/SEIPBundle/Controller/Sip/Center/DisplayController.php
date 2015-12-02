@@ -21,7 +21,9 @@ class DisplayController extends SEIPController {
      */
     public function generalAction(Request $request){
 
-        $linkValue = $type = 1;//Validacion de muestra de link para bajar nivel
+        $type = 1;
+
+        $linkValue = 1;//Validacion de muestra de link para bajar nivel
         //Carga de data
         $response = new JsonResponse();
         
@@ -56,7 +58,7 @@ class DisplayController extends SEIPController {
      */
     public function generalEdoAction(Request $request){
         
-        $type = 1;
+        $type = $request->get('type');
 
         $em = $this->getDoctrine()->getManager();
         
@@ -90,8 +92,6 @@ class DisplayController extends SEIPController {
 
         $dataChart = $CenterService->getDataChartOfVotoGeneralEstado($estado,$linkValue, $type); //General
         
-        //$dataChartMunicipio = $CenterService->getDataChartOfVotoGeneralMunicipio($estado,$linkValue); //General
-        
         return $this->render('PequivenSEIPBundle:Sip:Center/Display/voto_general_edo.html.twig',array(
                 'data'          => $dataChart,
                 'dataChartMcpo' => $dataChartMcpo,
@@ -113,6 +113,7 @@ class DisplayController extends SEIPController {
         $CenterService = $this->getCenterService();
         
         $linkValue = 1;
+        
         $type = 2;
 
         $dataChart = $CenterService->getDataChartOfVotoGeneral($type); //Paso de data  

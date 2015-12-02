@@ -178,7 +178,7 @@ class CentroRepository extends EntityRepository {
      * @param array $orderBy
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
-    function findByVotosMunicipios($mcpo) {
+    function findByVotosMunicipios($mcpo,$estado) {
         
         $em = $this->getEntityManager();
         $db = $em->getConnection();
@@ -193,7 +193,7 @@ class CentroRepository extends EntityRepository {
                     sip_onePerTen AS oxp
                         INNER JOIN
                     sip_nomina_centro AS nom ON (oxp.cedula = nom.Cedula) 
-                    where nom.descriptionMunicipio ="'.$mcpo.'"
+                    where nom.descriptionMunicipio = "'.$mcpo.'" AND nom.descriptionEstado  ="'.$estado.'"
                 GROUP BY voto';            
 
         $stmt = $db->prepare($sql);
