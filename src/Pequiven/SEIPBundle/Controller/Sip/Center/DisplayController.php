@@ -112,7 +112,8 @@ class DisplayController extends SEIPController {
         
         $CenterService = $this->getCenterService();
         
-         $linkValue = $type = 2;
+        $linkValue = 1;
+        $type = 2;
 
         $dataChart = $CenterService->getDataChartOfVotoGeneral($type); //Paso de data  
 

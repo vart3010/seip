@@ -120,10 +120,6 @@ class CenterService implements ContainerAwareInterface {
         }
         $chart["caption"] = $caption;//Nombre Grafica
 
-        
-            $result = count($result);
-            $dataCountV = count($resultVal);
-
             $label = "SI";
             $dataLocal["label"] = $label; //Carga de valores                
             $dataLocal["value"] = $votoSi; //Carga de valores
@@ -235,7 +231,7 @@ class CenterService implements ContainerAwareInterface {
      *  Grafica General
      *
      */
-    public function getDataChartOfVotoGeneralEstado($estado,$linkValue) {
+    public function getDataChartOfVotoGeneralEstado($estado,$linkValue,$type) {
         
         $data = array(
             'dataSource' => array(
@@ -329,9 +325,17 @@ class CenterService implements ContainerAwareInterface {
             $votoNo = $otros[0]["Cant"];
         }
 
-
-            $result = count($result);
-            //$dataCountV = count($resultVal);
+        //SI VIENE DE GENERAL
+        if ($type == 1) {            
+            $votosOneMembersEdo = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByEstadoMembersEdo($estado);
+            if (isset($votosOneMembersEdo[1]["Cant"])) {
+                $votoSi = $votoSi + $votosOneMembersEdo[1]["Cant"];                
+            }
+            if (isset($votosOneMembersEdo[0]["Cant"])) {
+                $votoNo = $votoNo + $votosOneMembersEdo[0]["Cant"];                            
+            }            
+        }
+            //ASIGNO ID A ESTADOS PARA MEJOR VISTA DE RUTA
             if ($estado == "EDO. CARABOBO") {
                 $estado = 1;
             }elseif ($estado == "EDO. ZULIA") {
@@ -343,8 +347,8 @@ class CenterService implements ContainerAwareInterface {
             }
 
             if ($linkValue == 1) {
-            $dataLocal["link"]  = $this->generateUrl('pequiven_sip_display_voto_general_estado',array('edo' => $estado));
-                $chart["showvalues"]     = "0";
+            $dataLocal["link"]  = $this->generateUrl('pequiven_sip_display_voto_general_estado',array('edo' => $estado,'type' => $type));
+                $chart["showvalues"]     = "1";
                 $labelSi = "";
                 $labelNo = "";
             }else{
@@ -460,10 +464,7 @@ class CenterService implements ContainerAwareInterface {
             $votoSi = $otros[1]["Cant"];
             $votoNo = $otros[0]["Cant"];
         }
-
-
-            $result = count($result);
-            //$dataCountV = count($resultVal);
+            //ASIGNO ID A ESTADO ṔARA MEJOR VISTA DE RUTA        
             if ($estado == "EDO. CARABOBO") {
                 $estado = 1;
             }elseif ($estado == "EDO. ZULIA") {
