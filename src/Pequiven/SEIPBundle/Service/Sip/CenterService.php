@@ -617,7 +617,7 @@ class CenterService implements ContainerAwareInterface {
 
     /**
      *
-     *  Grafica de Votos Municipio Barra
+     *  Grafica de Votos Parroquia Barra
      *
      */
     public function getDataChartOfVotoParroquiaData($estado, $mcpo, $linkValue, $type ) {
@@ -643,16 +643,15 @@ class CenterService implements ContainerAwareInterface {
         $chart["yaxisvaluespadding"] = "10";
         $chart["valueFontColor"] = "#000000";
         $chart["rotateValues"]   = "1";
-        $chart["bgAlpha"] = "0,0";//Fondo 
+        $chart["bgAlpha"] = "0,0";//Fondo         
         $chart["theme"]          = "fint";
         $chart["showborder"]     = "0";
         $chart["decimals"]       = "0";
         $chart["legendBgColor"] = "#ffffff";
         $chart["legendItemFontSize"] = "10";
         $chart["legendItemFontColor"] = "#666666";
-        $chart["outCnvBaseFontColor"] = "#000000";
-        $chart["visible"] = "1";
-        $chart["labelDisplay"] = "ROTATE";
+        $chart["baseFontColor"] = "#ffffff";        
+        $chart["outCnvBaseFontColor"] = "#ffffff";
 
         $em = $this->getDoctrine()->getManager();
         $estadoDescription = $estado;
