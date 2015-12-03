@@ -584,6 +584,35 @@ class CentroRepository extends EntityRepository {
     } 
 
     /**
+     * Votos por municipio de PQV
+     * 
+     * @param array $criteria
+     * @param array $orderBy
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    function findByLocalidad($localidad) {
+        
+        $em = $this->getEntityManager();
+        $db = $em->getConnection();
+
+        $sql = 'SELECT
+                    Localidad,
+                      SUM(votoSI),
+                    SUM(votoNO)   
+                FROM
+                    General_Votes
+                WHERE
+                    Localidad ="'.$localidad.'"
+                GROUP BY Localidad';            
+
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+        
+        return $result;
+    }
+
+    /**
      * Crea un paginador para los CUTL
      * 
      * @param array $criteria

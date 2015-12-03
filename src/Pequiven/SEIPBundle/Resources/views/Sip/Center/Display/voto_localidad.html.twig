@@ -11,13 +11,21 @@
 <meta http-equiv="refresh" content="300;">
 
 <div class="columns">        
-    <div class="new-row four-columns orange-bg">4 cols</div>
-    <div class="eight-columns orange-bg">8 cols</div>
+    <div class="new-row five-columns twelve-columns-mobile">
+        <div  ng-controller="displayCenterController" ng-init="renderChartVotoGeneral_3('displayMoron',{{ dataChartLocalidadMoron }})">
+        <span id="displayMoron">
+        </span>
+        </div>
+    </div>        
 </div>
 
 <div class="columns">        
-    <div class="new-row four-columns orange-bg">4 cols</div>
-    <div class="eight-columns orange-bg">8 cols</div>
+    <div class="new-row five-columns twelve-columns-mobile">
+        <div  ng-controller="displayCenterController" ng-init="renderChartVotoGeneral_3('displaySede',{{ dataChartLocalidadSede }})">
+        <span id="displaySede">
+        </span>
+        </div>
+    </div>        
 </div>
 
 {% endblock body %}
