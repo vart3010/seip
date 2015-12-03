@@ -539,6 +539,14 @@ pequiven_sip_display_voto_pqv_mcpo:
     path: /display/pqv/mcpo/{type}/{edo}/{mcpo}
     defaults:
         _controller: pequiven.controller.display:generalMcpoAction
+pequiven_sip_display_voto_circuito_5:
+    path: /display/circuito/5
+    defaults:
+        _controller: pequiven.controller.display:circuitoAction
+pequiven_sip_display_voto_cet:
+    path: /display/general/cet
+    defaults:
+        _controller: pequiven.controller.display:cetAction
 
 pequiven_sip_list_voto_general:
     path: /vote/list/general

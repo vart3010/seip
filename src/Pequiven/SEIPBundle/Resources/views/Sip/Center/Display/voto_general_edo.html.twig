@@ -4,7 +4,7 @@
 
 {% block stylesheets_base %}
     {{ parent() }}
-    <link rel="stylesheet" href="{{ asset('bundles/pequivenseip/icons/imageMap.css') }}">
+    <link rel="stylesheet" href="{{ asset('bundles/pequivenseip/icons/imageMap.css') }}">    
 {% endblock %}
 
 {% block body %}
@@ -14,9 +14,8 @@
                 <span id="displayVotoGeneral">
                 </span>
             </div>
-        </div>
-    
-    <div class="new-row seven-columns twelve-columns-mobile">
+        </div>    
+    <div class="twelve-columns twelve-columns-mobile" style="padding-top:0px;">
         <div  ng-controller="displayCenterController" ng-init="renderChartVotoGeneralMcpo('displayMcpo',{{ dataChartMcpo|json_encode() }})">
             <span id="displayMcpo">
             </span>

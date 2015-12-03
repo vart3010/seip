@@ -224,7 +224,7 @@ class CentroRepository extends EntityRepository {
         $sql = 'SELECT c.descriptionMunicipio
                 FROM
                 sip_centro AS c            
-                WHERE c.descriptionEstado ="'.$estado.'"
+                WHERE c.codigoEstado ="'.$estado.'"
                 GROUP BY descriptionMunicipio';            
 
         $stmt = $db->prepare($sql);
@@ -235,7 +235,7 @@ class CentroRepository extends EntityRepository {
     }
 
     /**
-     * 
+     * Votos por municipio de PQV
      * 
      * @param array $criteria
      * @param array $orderBy
@@ -258,6 +258,34 @@ class CentroRepository extends EntityRepository {
                     sip_nomina_centro AS nom ON (oxp.cedula = nom.cedula) 
                     where nom.descriptionMunicipio = "'.$mcpo.'" AND nom.descriptionEstado  ="'.$estado.'"
                 GROUP BY voto';            
+
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+        
+        return $result;
+    }
+
+    /**
+     * Votos por municipio de General
+     * 
+     * @param array $criteria
+     * @param array $orderBy
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    function findByVotosMunicipiosGeneral($mcpo,$estado) {
+        
+        $em = $this->getEntityManager();
+        $db = $em->getConnection();
+
+        $sql = 'SELECT
+                case when voto=0 then "No"
+                else "Si" end as Voto
+                , COUNT(oxp.voto) AS Cant
+                FROM
+                    sip_onePerTenMembers AS oxp                    
+                where oxp.nombreMunicipio = "'.$mcpo.'" AND oxp.nombreEstado  ="'.$estado.'"
+                GROUP BY voto';
 
         $stmt = $db->prepare($sql);
         $stmt->execute();
@@ -346,7 +374,7 @@ class CentroRepository extends EntityRepository {
                 FROM
                     sip_centro AS c                   
                     where c.descriptionMunicipio = "'.$municipio.'" AND c.codigoEstado  ="'.$estado.'"
-                GROUP BY id';            
+                GROUP BY c.codigoMunicipio';            
 
         $stmt = $db->prepare($sql);
         $stmt->execute();

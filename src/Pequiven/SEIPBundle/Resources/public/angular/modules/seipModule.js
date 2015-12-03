@@ -7214,8 +7214,8 @@ angular.module('seipModule.controllers', [])
                     var revenueChart = new FusionCharts({                        
                         "type": "mscolumnline3d",
                         "renderAt": id,
-                        "width": "90%",
-                        "height": "80%",
+                        "width": "100%",
+                        "height": "90%",
                         "exportFormats": "PNG= Exportar como PNG|PDF= Exportar como PDF",
                         "exportFileName": "",
                         "exporthandler": "http://107.21.74.91/",

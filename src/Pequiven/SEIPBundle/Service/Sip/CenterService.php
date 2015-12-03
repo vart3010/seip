@@ -296,15 +296,13 @@ class CenterService implements ContainerAwareInterface {
         $votoNo = $votoSi = 0;
         
         if ($estado != "OTROS") {
-            $resultVal = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByEstadoData($estado);
-            
+            $resultVal = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByEstadoData($estado);            
             if (isset($resultVal[0]["Cant"])) {
                 $votoNo = $resultVal[0]["Cant"];                
             }
             if(isset($resultVal[1]["Cant"])){
                 $votoSi = $resultVal[1]["Cant"];
             }
-
         }else{
             $otros = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByEstadoOtros();
             $votoSi = $otros[1]["Cant"];
@@ -335,6 +333,12 @@ class CenterService implements ContainerAwareInterface {
                 $chart["showLegend"] = "0";
                 $labelSi = "";
                 $labelNo = "";
+            }elseif($linkValue == 2){
+                $dataLocal["link"] = $this->generateUrl('pequiven_sip_display_voto_cet');
+                $chart["showvalues"]     = "1";
+                $chart["showLegend"] = "1";                
+                $labelSi = "SI";
+                $labelNo = "NO";
             }else{
                 $chart["showvalues"]     = "1";
                 $chart["showLegend"] = "1";                
@@ -483,7 +487,7 @@ class CenterService implements ContainerAwareInterface {
      *  Grafica de Votos Municipio Barra
      *
      */
-    public function getDataChartOfVotoMcpo($estado) {
+    public function getDataChartOfVotoMcpo($estado, $type, $linkValue) {
         
         $data = array(
             'dataSource' => array(
@@ -496,7 +500,7 @@ class CenterService implements ContainerAwareInterface {
         );
         $chart = array();
 
-        $chart["caption"] = "Votos Municipio";
+        $chart["caption"] = "Municipios";
         $chart["captionFontColor"] = "#e20000";
         $chart["captionFontSize"] = "20";                
         $chart["palette"]        = "1";
@@ -518,26 +522,27 @@ class CenterService implements ContainerAwareInterface {
         $chart["labelDisplay"] = "ROTATE";
 
         $em = $this->getDoctrine()->getManager();
+        $estadoDescription = $estado;
+        $estado = $this->AsignedIdEdo($estado);//Id Estado
 
         $label = $dataPlan = $dataReal = array();
-
         //Carga de Nombres de Labels
         $dataSetReal["seriesname"] = "Real";
         $dataSetPlan["seriesname"] = "Plan";
         
         $mcpo = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByMunicipios($estado);            
         $cantMcpo = count($mcpo);
-        $cont = 0;
-        
+        $cont = $municipio = 0;
+
         foreach ($mcpo as $key => $value) {
             //Municipio Para consulta
-            $municipio = $mcpo[$cont]["descriptionMunicipio"];           
+            $municipio = $mcpo[$cont]["descriptionMunicipio"];
             $linea = $municipio;
             $label["label"] = $linea;     
             $category[] = $label;
             
             //Votos por Municipio
-            $mcpoVoto = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByVotosMunicipios($municipio, $estado);            
+            $mcpoVoto = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByVotosMunicipios($municipio, $estadoDescription);            
             if (isset($mcpoVoto[0]["Cant"])) {
                 $dataPlanVoto = $mcpoVoto[0]["Cant"];                                            
             }else{
@@ -547,6 +552,36 @@ class CenterService implements ContainerAwareInterface {
                 $dataRealVoto = $mcpoVoto[1]["Cant"];                
             }else{
                 $dataRealVoto = "0";        
+            }
+
+            $muncpo = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByMcpoId($municipio, $estado);            
+            $muncpo = $muncpo[0]["id"];
+            
+            
+            if ($type == 1) {
+                $mcpoVotoGeneral = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByVotosMunicipiosGeneral($municipio, $estadoDescription);            
+                
+                if (isset($mcpoVotoGeneral[0]["Cant"])) {
+                    $dataPlanVoto = $dataPlanVoto + $mcpoVotoGeneral[0]["Cant"];                                            
+                }else{
+                    $dataPlanVoto = $dataPlanVoto;
+                }
+                if (isset($mcpoVotoGeneral[1]["Cant"])) {
+                    $dataRealVoto = $dataRealVoto + $mcpoVotoGeneral[1]["Cant"];                
+                }else{
+                    $dataRealVoto = $dataRealVoto;        
+                }
+
+                $link = $this->generateUrl('pequiven_sip_display_voto_general_mcpo',array('edo' => $estado, 'type' => $type, 'mcpo' => $muncpo));            
+            }elseif($type == 2){        
+                $link = $this->generateUrl('pequiven_sip_display_voto_pqv_mcpo',array('edo' => $estado, 'type' => $type, 'mcpo' => $muncpo));
+            }
+                
+            if ($linkValue == 1) {
+                $dataReal["link"]  = $link;
+                $chart["showvalues"] = "1";
+            }else{
+                $chart["showvalues"] = "0";
             }
             
             $dataPlan["value"] = $dataPlanVoto + $dataRealVoto;
