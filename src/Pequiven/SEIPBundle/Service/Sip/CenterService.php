@@ -40,6 +40,26 @@ class CenterService implements ContainerAwareInterface {
 
     /**
      *
+     *
+     *
+     */
+    public function AsignedDescriptionEdo($estado){
+        //ASIGNO ID A ESTADOS PARA MEJOR VISTA DE RUTA
+        if ($estado == 7) {
+            $estado = "EDO. CARABOBO";
+        }elseif ($estado == 21) {
+            $estado = "EDO. ZULIA";
+        }elseif ($estado == 2) {
+            $estado = "EDO. ANZOATEGUI";
+        }elseif($estado == 30){
+            $estado = "OTROS";
+        }
+
+        return $estado;
+    }
+
+    /**
+     *
      *	Grafica General
      *
      */
@@ -746,6 +766,146 @@ class CenterService implements ContainerAwareInterface {
 
         //return $data;
         return json_encode($data);        
+    }
+
+    /**
+     *
+     *  Grafica de Votos Municipio Barra
+     *
+     */
+    public function getDataChartOfVotoParroquiaData($estado, $mcpo, $linkValue, $type ) {
+        
+        $data = array(
+            'dataSource' => array(
+                'chart' => array(),
+                'categories' => array(
+                ),
+                'dataset' => array(
+                ),
+            ),
+        );
+        $chart = array();
+
+        $chart["caption"] = "Parroquias";
+        $chart["captionFontColor"] = "#e20000";
+        $chart["captionFontSize"] = "20";                
+        $chart["palette"]        = "1";
+        $chart["showvalues"]     = "1";
+        $chart["paletteColors"]  = "#0075c2,#c90606,#f2c500,#12a830,#1aaf5d";
+        $chart["showBorder"] = "0";
+        $chart["yaxisvaluespadding"] = "10";
+        $chart["valueFontColor"] = "#000000";
+        $chart["rotateValues"]   = "1";
+        $chart["bgAlpha"] = "0,0";//Fondo 
+        $chart["theme"]          = "fint";
+        $chart["showborder"]     = "0";
+        $chart["decimals"]       = "0";
+        $chart["legendBgColor"] = "#ffffff";
+        $chart["legendItemFontSize"] = "10";
+        $chart["legendItemFontColor"] = "#666666";
+        $chart["outCnvBaseFontColor"] = "#000000";
+        $chart["visible"] = "1";
+        $chart["labelDisplay"] = "ROTATE";
+
+        $em = $this->getDoctrine()->getManager();
+        $estadoDescription = $estado;
+        $estado = $this->AsignedIdEdo($estado);//Id Estado
+
+        $label = $dataPlan = $dataReal = array();
+        //Carga de Nombres de Labels
+        $dataSetReal["seriesname"] = "Real";
+        $dataSetPlan["seriesname"] = "Plan";
+        
+        $parroq = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByParroquias($estado, $mcpo);            
+        
+        $cantParroq = count($parroq);
+        $cont = 0;
+
+        foreach ($parroq as $key => $value) {
+            //Municipio Para consulta
+            $parroquia = $parroq[$cont]["descriptionParroquia"];
+            $linea = $parroquia;
+            $label["label"] = $linea;     
+            $category[] = $label;
+            
+            $estado = $this->AsignedDescriptionEdo($estado);
+            //Votos por Parroquia
+            $parroqVoto = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByVotosParroquia($parroquia, $estado);            
+            if (isset($parroqVoto[0]["Cant"])) {
+                $dataPlanVoto = $parroqVoto[0]["Cant"];                                            
+            }else{
+                $dataPlanVoto = "0";
+            }
+            if (isset($parroqVoto[1]["Cant"])) {
+                $dataRealVoto = $parroqVoto[1]["Cant"];                
+            }else{
+                $dataRealVoto = "0";        
+            }
+
+            if ($type == 1) {
+                $parroqGeneral = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByVotosParroquiaGeneral($parroquia, $estado);            
+                
+                if (isset($parroqGeneral[0]["Cant"])) {
+                    $dataPlanVoto = $dataPlanVoto + $parroqGeneral[0]["Cant"];                                            
+                }else{
+                    $dataPlanVoto = $dataPlanVoto;
+                }
+                if (isset($parroqGeneral[1]["Cant"])) {
+                    $dataRealVoto = $dataRealVoto + $parroqGeneral[1]["Cant"];                
+                }else{
+                    $dataRealVoto = $dataRealVoto;        
+                }
+
+                //$link = $this->generateUrl('pequiven_sip_display_voto_general_mcpo',array('edo' => $estado, 'type' => $type, 'mcpo' => $muncpo));            
+            }elseif($type == 2){        
+                //$link = $this->generateUrl('pequiven_sip_display_voto_pqv_mcpo',array('edo' => $estado, 'type' => $type, 'mcpo' => $muncpo));
+            }
+                
+            /*if ($linkValue == 1) {
+                $dataReal["link"]  = $link;
+                $chart["showvalues"] = "1";
+            }else{
+                $chart["showvalues"] = "0";
+            }*/
+            
+            $dataPlan["value"] = $dataPlanVoto + $dataRealVoto;
+            $dataSetPlan["data"][] = $dataPlan; //data Plan
+
+            $dataReal["value"] = $dataRealVoto;
+            $dataSetReal["data"][] = $dataReal; //data Real
+            
+            $cont++;       
+        }
+        if ($estado == 30) {
+            $name = "OTROS";
+            $chart["caption"] = $name;
+            $label["label"] = $name;     
+            $category[] = $label;
+
+            $otros = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByMunicipioOtros();
+            $votoSi = $otros[1]["Cant"];
+            $votoNo = $otros[0]["Cant"];
+
+            $dataPlan["value"] = $votoSi + $votoNo;
+            $dataSetPlan["data"][] = $dataPlan; //data Plan
+
+            $dataReal["value"] = $votoSi;
+            $dataSetReal["data"][] = $dataReal; //data Real
+        }
+            //$dataSetValues['votos'] = array('seriesname' => 'Votos * Horas', 'parentyaxis' => 'S', 'renderas' => 'Line', 'color' => '#dbc903', 'data' => $dataSetLinea['data']);
+            //$dataMeta["value"] = 0;
+            //$dataSetMeta["data"][] = $dataMeta;
+        
+
+        $data['dataSource']['chart'] = $chart;
+        $data['dataSource']['categories'][]["category"] = $category;
+        //$data['dataSource']['dataset'][] = $dataSetValues['votos'];
+        $data['dataSource']['dataset'][] = $dataSetReal;
+        $data['dataSource']['dataset'][] = $dataSetPlan;
+        
+
+        return $data;
+        //return json_encode($data);
     }
 
     /**

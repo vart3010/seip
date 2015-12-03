@@ -110,14 +110,20 @@ class DisplayController extends SEIPController {
         $type = $request->get('type');
         $estado = $request->get('edo');
         $mcpo = $request->get('mcpo');
-        $linkValue = 0;
 
         $em = $this->getDoctrine()->getManager();
         $CenterService = $this->getCenterService();//Llamado al Servicio de Centro
 
+        $linkValue = 1;
+        $dataChartParroquias = $CenterService->getDataChartOfVotoParroquiaData($estado, $mcpo, $linkValue, $type); //General
+        
+        $linkValue = 0;
         $dataChart = $CenterService->getDataChartOfVotoGeneralParroquia($estado, $mcpo, $linkValue, $type); //General
         
-        return $this->render('PequivenSEIPBundle:Sip:Center/Display/voto_general_mcpo.html.twig', array('data' => $dataChart));
+        return $this->render('PequivenSEIPBundle:Sip:Center/Display/voto_general_mcpo.html.twig', array(
+            'data'              => $dataChart,
+            'dataChartParroq'   => $dataChartParroquias
+            ));
     }
 
 	/**
