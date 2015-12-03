@@ -16,7 +16,19 @@ class ListRepository extends EntityRepository {
         $em = $this->getEntityManager();
         $db = $em->getConnection();
 
-        $sql = 'SELECT * FROM sip_centro';
+        $sql = 'SELECT 
+    Estado,
+    Municipio,
+    Parroquia,
+    Centro,
+    SUM(VotoSI) AS Si,
+    SUM(VotoNO) AS No
+FROM
+    General_Votes
+WHERE
+    estado = "EDO. CARABOBO"
+        AND parroquia = "PQ. RAFAEL URDANETA"
+GROUP BY centro';
 
         $stmt = $db->prepare($sql);
         $stmt->execute();

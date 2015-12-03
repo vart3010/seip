@@ -27,6 +27,8 @@ class ListController extends SEIPController {
         $em->getConnection()->beginTransaction();
 
         $repository = $this->get('pequiven.repository.siplist');
+        var_dump($repository);
+        die();
     }
 
     public function ShowListAction($data) {
