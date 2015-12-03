@@ -72,6 +72,12 @@ class OnePerTen {
     private $deletedAt;
 
     /**
+     * fecha voto
+     * @ORM\Column(name="fechaVoto", type="datetime", nullable=true)
+     */
+    private $fechaVoto;
+    
+    /**
      * voto
      * @var integer
      *
@@ -175,6 +181,15 @@ class OnePerTen {
     function getVoto() {
         return $this->voto;
     }
+
+    function getFechaVoto() {
+        return $this->fechaVoto;
+    }
+
+    function setFechaVoto($fechaVoto) {
+        $this->fechaVoto = $fechaVoto;
+    }
+
 
 
 }
