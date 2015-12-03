@@ -12,13 +12,13 @@
 
 <div class="columns">        
     <div class="new-row five-columns twelve-columns-mobile">
-        <div  ng-controller="displayCenterController" ng-init="renderChartVotoPqv('displayVotoPqv',{{ data |json_encode()}})">
+        <div  ng-controller="displayCenterController" ng-init="renderChartVotoPqv('displayVotoPqv',{{ data }})">
             <span id="displayVotoPqv">
             </span>
         </div>
     </div>
     <div class="seven-columns twelve-columns-mobile">
-        <div  ng-controller="displayCenterController" ng-init="renderChartVotoGeneralHours('displayHours',{{ dataHours|json_encode() }})">
+        <div  ng-controller="displayCenterController" ng-init="renderChartVotoGeneralHours('displayHours',{{ dataHours }})">
             <span id="displayHours">
             </span>
         </div>

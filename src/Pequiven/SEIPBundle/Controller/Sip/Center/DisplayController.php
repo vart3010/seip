@@ -77,11 +77,11 @@ class DisplayController extends SEIPController {
         }
         $cont = $suma = 0;
 
+        $response = new JsonResponse();        
         $linkValue = 1;//Validacion de muestra de link para bajar nivel
         $dataChartMcpo = $CenterService->getDataChartOfVotoMcpo($estado, $type, $linkValue); //General
 
         //Carga de data
-        $response = new JsonResponse();        
         $linkValue = 2;
         $dataChart = $CenterService->getDataChartOfVotoGeneralEstado($estado,$linkValue, $type); //General
         
