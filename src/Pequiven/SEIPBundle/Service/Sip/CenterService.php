@@ -746,8 +746,8 @@ class CenterService implements ContainerAwareInterface {
         $data['dataSource']['chart'] = $chart;
         $data['dataSource']['categories'][]["category"] = $category;
         //$data['dataSource']['dataset'][] = $dataSetValues['votos'];
-        $data['dataSource']['dataset'][] = $dataSetReal;
         $data['dataSource']['dataset'][] = $dataSetPlan;
+        $data['dataSource']['dataset'][] = $dataSetReal;
 
         return json_encode($data);
     }
