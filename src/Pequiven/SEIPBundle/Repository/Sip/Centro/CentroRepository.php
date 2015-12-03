@@ -89,6 +89,38 @@ class CentroRepository extends EntityRepository {
         $result = $stmt->fetchAll();
         
         return $result;
+    }
+
+    /**
+     * 
+     * 
+     * @param array $criteria
+     * @param array $orderBy
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    function findByMunicipioOtros() {
+        
+        $em = $this->getEntityManager();
+        $db = $em->getConnection();
+
+        $sql = 'SELECT 
+                CASE
+                    WHEN ((oxp.voto = 0) OR (oxp.voto IS NULL)) THEN "No"
+                    ELSE "Si"
+                END AS Voto,
+                COUNT(oxp.voto) AS Cant
+                FROM
+                    sip_onePerTen AS oxp
+                        INNER JOIN
+                    sip_nomina_centro AS nom ON (oxp.cedula = nom.Cedula) 
+                    where nom.descriptionEstado not in ("EDO. CARABOBO", "EDO. ZULIA", "EDO. ANZOATEGUI")                   
+                GROUP BY voto';            
+
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+        
+        return $result;
     } 
 
     /**
@@ -317,6 +349,36 @@ class CentroRepository extends EntityRepository {
                         INNER JOIN
                     sip_nomina_centro AS nom ON (oxp.cedula = nom.cedula) 
                     where nom.descriptionMunicipio = "'.$mcpo.'" AND nom.descriptionEstado  ="'.$estado.'"
+                GROUP BY voto';            
+
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+        
+        return $result;
+    }
+
+    /**
+     * Consulta de votos por Municipios
+     * 
+     * @param array $criteria
+     * @param array $orderBy
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    function findByVotosMunicipiosIdGeneral($estado, $mcpo) {
+        
+        $em = $this->getEntityManager();
+        $db = $em->getConnection();
+
+        $sql = 'SELECT 
+                CASE
+                    WHEN ((oxp.voto = 0) OR (oxp.voto IS NULL)) THEN "No"
+                    ELSE "Si"
+                END AS Voto,
+                COUNT(oxp.voto) AS Cant
+                FROM
+                    sip_onePerTenMembers AS oxp
+                    where oxp.nombreMunicipio = "'.$mcpo.'" AND oxp.nombreEstado  ="'.$estado.'"
                 GROUP BY voto';            
 
         $stmt = $db->prepare($sql);
