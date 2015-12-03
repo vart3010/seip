@@ -129,16 +129,14 @@ class CenterService implements ContainerAwareInterface {
         $votoNo = $votoSi = 0;
 
         $resultVal = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByEstado();
-
-        $votoNo = $resultVal[0]["Cant"];
-        $votoSi = $resultVal[1]["Cant"];
-        
+        $votoNo = $resultVal[0]["SUM(votoNO)"];
+        $votoSi = $resultVal[0]["SUM(votoSI)"];        
 
         if ($type == 1) {
             $caption = "Voto General";
             $votosOneMembers = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByEstadoMembers();
-            $votoSi = $votoSi + $votosOneMembers[1]["Cant"];
-            $votoNo = $votoNo + $votosOneMembers[0]["Cant"];            
+            $votoNo = $votoNo + $votosOneMembers[0]["SUM(votoNO)"];
+            $votoSi = $votoSi + $votosOneMembers[0]["SUM(votoSI)"];            
         }elseif($type == 2){
             $caption = "Voto General PQV";
         }
@@ -317,33 +315,30 @@ class CenterService implements ContainerAwareInterface {
         
         if ($estado != "OTROS") {
             $resultVal = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByEstadoData($estado);            
-            if (isset($resultVal[0]["Cant"])) {
-                $votoNo = $resultVal[0]["Cant"];                
-            }
-            if(isset($resultVal[1]["Cant"])){
-                $votoSi = $resultVal[1]["Cant"];
-            }
+            $votoSi = $resultVal[0]["SUM(votoSI)"];
+            $votoNo = $resultVal[0]["SUM(votoNO)"];                            
         }else{
-            $otros = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByEstadoOtros();
-            $votoSi = $otros[1]["Cant"];
-            $votoNo = $otros[0]["Cant"];
+            $otros = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByEstadoOtros();            
+            $votoSi = $otros[0]["SUM(votoSI)"];
+            $votoNo = $otros[0]["SUM(votoNO)"];            
         }
 
         //SI VIENE DE GENERAL
-        if ($type == 1) {            
-            $votosOneMembersEdo = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByEstadoMembersEdo($estado);
-            if (isset($votosOneMembersEdo[1]["Cant"])) {
-                $votoSi = $votoSi + $votosOneMembersEdo[1]["Cant"];                
+        if ($type == 1) {    
+            if ($estado == "OTROS") {
+                $votosOneMembersEdo = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByEstadoMembersEdoOtros($estado);
+                $votoSi = $votoSi + $votosOneMembersEdo[0]["SUM(votoSI)"];
+                $votoNo = $votoNo + $votosOneMembersEdo[0]["SUM(votoNO)"];                            
+            }else{
+                $votosOneMembersEdo = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByEstadoMembersEdo($estado);
+                $votoSi = $votoSi + $votosOneMembersEdo[0]["SUM(votoSI)"];
+                $votoNo = $votoNo + $votosOneMembersEdo[0]["SUM(votoNO)"];
             }
-            if (isset($votosOneMembersEdo[0]["Cant"])) {
-                $votoNo = $votoNo + $votosOneMembersEdo[0]["Cant"];                            
-            }            
-            $estado = $this->AsignedIdEdo($estado);
-            
+
+            $estado = $this->AsignedIdEdo($estado);            
             $link  = $this->generateUrl('pequiven_sip_display_voto_general_estado',array('edo' => $estado,'type' => $type));
         }elseif($type == 2){
             $estado = $this->AsignedIdEdo($estado);
-
             $link  = $this->generateUrl('pequiven_sip_display_voto_pqv_edo',array('edo' => $estado,'type' => $type));            
         }
 
@@ -354,7 +349,7 @@ class CenterService implements ContainerAwareInterface {
                 $labelSi = "";
                 $labelNo = "";
             }elseif($linkValue == 2){
-                $dataLocal["link"] = $this->generateUrl('pequiven_sip_display_voto_cet');
+                $dataLocal["link"] = $this->generateUrl('pequiven_sip_display_voto_localidad');
                 $chart["showvalues"]     = "1";
                 $chart["showLegend"] = "1";                
                 $labelSi = "SI";
@@ -530,7 +525,7 @@ class CenterService implements ContainerAwareInterface {
         $chart["yaxisvaluespadding"] = "10";
         $chart["valueFontColor"] = "#000000";
         $chart["rotateValues"]   = "1";
-        $chart["bgAlpha"] = "0,0";//Fondo 
+        $chart["bgAlpha"] = "0,0";//Fondo         
         $chart["theme"]          = "fint";
         $chart["showborder"]     = "0";
         $chart["decimals"]       = "0";

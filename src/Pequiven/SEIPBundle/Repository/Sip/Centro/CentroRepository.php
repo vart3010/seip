@@ -66,7 +66,7 @@ class CentroRepository extends EntityRepository {
      * @param array $orderBy
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
-    function findByEstadoOtros() {
+    function findByEstadoOtrosRes() {
         
         $em = $this->getEntityManager();
         $db = $em->getConnection();
@@ -90,6 +90,65 @@ class CentroRepository extends EntityRepository {
         
         return $result;
     }
+
+    /**
+     * 
+     * 
+     * @param array $criteria
+     * @param array $orderBy
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    function findByEstadoData($estado) {
+        
+        $em = $this->getEntityManager();
+        $db = $em->getConnection();
+
+        $sql = 'SELECT
+                    Estado,
+                      SUM(votoSI),
+                    SUM(votoNO)   
+                FROM
+                    General_Votes
+                WHERE
+                    Estado = "'.$estado.'" AND Tipo = "PQV"
+                GROUP BY Estado';            
+
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+        
+        return $result;
+    }
+
+    /**
+     * 
+     * 
+     * @param array $criteria
+     * @param array $orderBy
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    function findByEstadoOtros() {
+        
+        $em = $this->getEntityManager();
+        $db = $em->getConnection();
+
+        $sql = 'SELECT
+                    Estado,
+                      SUM(votoSI),
+                    SUM(votoNO)   
+                FROM
+                    General_Votes
+                WHERE
+                    Estado not in ("EDO. CARABOBO", "EDO. ZULIA", "EDO. ANZOATEGUI")
+                GROUP BY Estado';            
+
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+        
+        return $result;
+    }
+    
 
     /**
      * 
@@ -135,17 +194,15 @@ class CentroRepository extends EntityRepository {
         $em = $this->getEntityManager();
         $db = $em->getConnection();
 
-        $sql = 'SELECT 
-                CASE
-                    WHEN ((oxp.voto = 0) OR (oxp.voto IS NULL)) THEN "No"
-                    ELSE "Si"
-                END AS Voto,
-                COUNT(oxp.voto) AS Cant
+        $sql = 'SELECT
+                    Estado,
+                    Tipo,
+                      SUM(votoSI),
+                    SUM(votoNO)   
                 FROM
-                    sip_onePerTen AS oxp
-                        INNER JOIN
-                    sip_nomina_centro AS nom ON (oxp.cedula = nom.Cedula)                                        
-                GROUP BY voto';            
+                    General_Votes 
+                WHERE Tipo = "PQV"               
+                GROUP BY Tipo';            
 
         $stmt = $db->prepare($sql);
         $stmt->execute();
@@ -154,37 +211,6 @@ class CentroRepository extends EntityRepository {
         return $result;
     }
 
-    /**
-     * 
-     * 
-     * @param array $criteria
-     * @param array $orderBy
-     * @return \Doctrine\DBAL\Query\QueryBuilder
-     */
-    function findByEstadoData($estado) {
-        
-        $em = $this->getEntityManager();
-        $db = $em->getConnection();
-
-        $sql = 'SELECT 
-                CASE
-                    WHEN ((oxp.voto = 0) OR (oxp.voto IS NULL)) THEN "No"
-                    ELSE "Si"
-                END AS Voto,
-                COUNT(oxp.voto) AS Cant
-                FROM
-                    sip_onePerTen AS oxp
-                        INNER JOIN
-                    sip_nomina_centro AS nom ON (oxp.cedula = nom.Cedula) 
-                    where nom.descriptionEstado ="'.$estado.'"                   
-                GROUP BY voto';            
-
-        $stmt = $db->prepare($sql);
-        $stmt->execute();
-        $result = $stmt->fetchAll();
-        
-        return $result;
-    }
 
     /**
      * 
@@ -199,12 +225,14 @@ class CentroRepository extends EntityRepository {
         $db = $em->getConnection();
 
         $sql = 'SELECT
-                case when voto=0 then "No"
-                else "Si" end as Voto
-                , COUNT(oxp.voto) AS Cant
+                    Estado,
+                    Tipo,
+                      SUM(votoSI),
+                    SUM(votoNO)   
                 FROM
-                    sip_onePerTenMembers AS oxp                    
-                GROUP BY voto';            
+                    General_Votes 
+                WHERE Tipo = "1x10"               
+                GROUP BY Tipo';            
 
         $stmt = $db->prepare($sql);
         $stmt->execute();
@@ -226,13 +254,45 @@ class CentroRepository extends EntityRepository {
         $db = $em->getConnection();
 
         $sql = 'SELECT
-                case when voto=0 then "No"
-                else "Si" end as Voto
-                , COUNT(oxp.voto) AS Cant
+                    Estado,
+                    Tipo,
+                      SUM(votoSI),
+                    SUM(votoNO)   
                 FROM
-                    sip_onePerTenMembers AS oxp                    
-                WHERE oxp.nombreEstado ="'.$estado.'"
-                GROUP BY voto';            
+                    General_Votes
+                WHERE
+                     Estado ="'.$estado.'" AND Tipo = "1x10"
+                GROUP BY Estado';            
+
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+        
+        return $result;
+    }
+
+    /**
+     * 
+     * 
+     * @param array $criteria
+     * @param array $orderBy
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    function findByEstadoMembersEdoOtros() {
+        
+        $em = $this->getEntityManager();
+        $db = $em->getConnection();
+
+        $sql = 'SELECT
+                    Estado,
+                    Tipo,
+                      SUM(votoSI),
+                    SUM(votoNO)   
+                FROM
+                    General_Votes
+                WHERE
+                     Estado not in ("EDO. CARABOBO", "EDO. ZULIA", "EDO. ANZOATEGUI") AND Tipo = "1x10"
+                GROUP BY Estado';            
 
         $stmt = $db->prepare($sql);
         $stmt->execute();

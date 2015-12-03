@@ -7212,7 +7212,7 @@ angular.module('seipModule.controllers', [])
             $scope.renderChartVotoGeneralMcpo = function (id, data, categories, caption, typeLabelDisplay) {
                 FusionCharts.ready(function () {
                     var revenueChart = new FusionCharts({                        
-                        "type": "mscolumnline3d",
+                        "type": "mscolumn3dlinedy",
                         "renderAt": id,
                         "width": "100%",
                         "height": "90%",

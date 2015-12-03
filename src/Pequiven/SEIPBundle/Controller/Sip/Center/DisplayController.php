@@ -80,14 +80,6 @@ class DisplayController extends SEIPController {
         $linkValue = 1;//Validacion de muestra de link para bajar nivel
         $dataChartMcpo = $CenterService->getDataChartOfVotoMcpo($estado, $type, $linkValue); //General
 
-        /*$mcpo = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByMunicipios($estado);            
-
-        foreach ($mcpo as $key => $value) {
-            $municipio = $mcpo[$cont]["descriptionMunicipio"];
-            $dataChartMcpo[1][] = $CenterService->getDataChartOfVotoGeneralMunicipio($estado,$linkValue,$municipio, $type); //General            
-            $cont++; 
-        } 
-        $cantMcpo = count($dataChartMcpo[1]);*/        
         //Carga de data
         $response = new JsonResponse();        
         $linkValue = 2;
@@ -95,8 +87,7 @@ class DisplayController extends SEIPController {
         
         return $this->render('PequivenSEIPBundle:Sip:Center/Display/voto_general_edo.html.twig',array(
                 'data'          => $dataChart,
-                'dataChartMcpo' => $dataChartMcpo,
-                //'cantMcpo'      => $cantMcpo
+                'dataChartMcpo' => $dataChartMcpo,                
             ));
         
     }
@@ -171,6 +162,10 @@ class DisplayController extends SEIPController {
 
     public function cetAction(){
         return  $this->render('PequivenSEIPBundle:Sip:Center/Display/voto_cet.html.twig');
+    }
+
+    public function localidadAction(){
+        return  $this->render('PequivenSEIPBundle:Sip:Center/Display/voto_localidad.html.twig');
     }
 
     protected function getCenterService() {
