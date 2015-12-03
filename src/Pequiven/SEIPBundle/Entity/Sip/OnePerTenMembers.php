@@ -307,5 +307,15 @@ class OnePerTenMembers {
     function getVoto() {
         return $this->voto;
     }
+    
+    function getFechaVoto() {
+        return $this->fechaVoto;
+    }
+
+    function setFechaVoto($fechaVoto) {
+        $this->fechaVoto = $fechaVoto;
+    }
+
+
 
 }
