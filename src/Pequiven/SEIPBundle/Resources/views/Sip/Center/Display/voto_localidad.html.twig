@@ -12,14 +12,23 @@
 
 <div class="columns">        
     <div class="new-row five-columns twelve-columns-mobile">
-    </div>
+        <div  ng-controller="displayCenterController" ng-init="renderChartVotoGeneral_3('displayMoron',{{ dataChartLocalidadMoron }})">
+        <span id="displayMoron">
+        </span>
+        </div>
+    </div>        
 </div>
 
-<div class="five-columns orange-bg">5 col</div>
-<div class="twelve-columns orange-bg">12 cols</div>
+<div class="columns">        
+    <div class="new-row five-columns twelve-columns-mobile">
+        <div  ng-controller="displayCenterController" ng-init="renderChartVotoGeneral_3('displaySede',{{ dataChartLocalidadSede }})">
+        <span id="displaySede">
+        </span>
+        </div>
+    </div>        
+</div>
 
 {% endblock body %}
-
 
 {% block stylesheets %}
     {{ parent() }}

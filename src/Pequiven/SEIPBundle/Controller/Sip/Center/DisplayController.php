@@ -77,11 +77,11 @@ class DisplayController extends SEIPController {
         }
         $cont = $suma = 0;
 
+        $response = new JsonResponse();        
         $linkValue = 1;//Validacion de muestra de link para bajar nivel
         $dataChartMcpo = $CenterService->getDataChartOfVotoMcpo($estado, $type, $linkValue); //General
 
         //Carga de data
-        $response = new JsonResponse();        
         $linkValue = 2;
         $dataChart = $CenterService->getDataChartOfVotoGeneralEstado($estado,$linkValue, $type); //General
         
@@ -165,7 +165,18 @@ class DisplayController extends SEIPController {
     }
 
     public function localidadAction(){
-        return  $this->render('PequivenSEIPBundle:Sip:Center/Display/voto_localidad.html.twig');
+        $CenterService = $this->getCenterService();//Llamado al Servicio de Centro
+        
+        $localidad = "Sede Corporativa";
+        $dataChartLocalidadSede = $CenterService->getDataChartOfLocalidad($localidad); //General
+
+        $localidad = "Complejo Petroquímico Hugo Chávez";
+        $dataChartLocalidadMoron = $CenterService->getDataChartOfLocalidad($localidad); //General
+
+        return  $this->render('PequivenSEIPBundle:Sip:Center/Display/voto_localidad.html.twig',array(
+                'dataChartLocalidadSede' => $dataChartLocalidadSede, 
+                'dataChartLocalidadMoron' => $dataChartLocalidadMoron, 
+                ));
     }
 
     protected function getCenterService() {
