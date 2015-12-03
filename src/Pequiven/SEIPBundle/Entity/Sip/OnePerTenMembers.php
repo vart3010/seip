@@ -149,6 +149,12 @@ class OnePerTenMembers {
      * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
      */
     private $deletedAt;
+    
+    /**
+     * fecha voto
+     * @ORM\Column(name="fechaVoto", type="datetime", nullable=true)
+     */
+    private $fechaVoto;
 
     /**
      * voto
