@@ -21,10 +21,6 @@ class ListRepository extends EntityRepository {
         $stmt = $db->prepare($sql);
         $stmt->execute();
         $result = $stmt->fetchAll();
-//        var_dump($result[0]);
-//        die();
-        
-        $result = array('id' => 1,'nombre' => 'epale');
         
         $pagerfanta = new \Tecnocreaciones\Bundle\ResourceBundle\Model\Paginator\Paginator(new \Pagerfanta\Adapter\ArrayAdapter($result));
         $pagerfanta->setContainer($this->container);
