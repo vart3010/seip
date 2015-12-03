@@ -1764,10 +1764,10 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                     'labelAttributes' => array('icon' => 'fa fa-bar-chart',)
                 ))->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.voto_1x10', $section)));
 
-            $displayMenu->addChild('sip.voto_re', array(
-                    'route' => '',
+            $displayMenu->addChild('sip.voto_circuito', array(
+                    'route' => 'pequiven_sip_display_voto_circuito_5',
                     'labelAttributes' => array('icon' => 'fa fa-bar-chart',)
-                ))->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.voto_re', $section)));
+                ))->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.voto_circuito', $section)));
 
             $displayMenu->addChild('sip.voto_cet', array(
                     'route' => '',
@@ -1793,10 +1793,10 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                     'labelAttributes' => array('icon' => 'fa fa-list',)
                 ))->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.list_1x10', $section)));
 
-            $displayList->addChild('sip.list_re', array(
+            $displayList->addChild('sip.list_circuito', array(
                     'route' => '',
                     'labelAttributes' => array('icon' => 'fa fa-list',)
-                ))->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.list_re', $section)));
+                ))->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.list_circuito', $section)));
 
             $displayList->addChild('sip.list_cet', array(
                     'route' => '',

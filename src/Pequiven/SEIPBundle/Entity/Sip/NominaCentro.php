@@ -78,6 +78,13 @@ class NominaCentro {
      */
     private $nombre;
     
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="localidad", type="string", length=255,nullable=true)
+     */
+    private $localidad;
+    
     function setUserid($userid) {
         $this->userid = $userid;
     }
@@ -150,5 +157,13 @@ class NominaCentro {
     
     function getNombre() {
         return $this->nombre;
+    }
+    
+    function setLocalidad($localidad) {
+        $this->localidad = $localidad;
+    }
+    
+    function getLocalidad() {
+        return $this->localidad;
     }
 }

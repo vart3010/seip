@@ -12,21 +12,14 @@
 
 <div class="columns">        
     <div class="new-row five-columns twelve-columns-mobile">
-        <div  ng-controller="displayCenterController" ng-init="renderChartVotoGeneral_2('displayVotoGeneral',{{ data }})">
-            <span id="displayVotoGeneral">
-            </span>
-        </div>
-    </div>
-    <div class="twelve-columns twelve-columns-mobile" style="padding-top:0px;">
-        <div  ng-controller="displayCenterController" ng-init="renderChartVotoGeneralParroq('displayMcpo',{{ dataChartParroq|json_encode() }})">
-            <span id="displayMcpo">
-            </span>
-        </div>
     </div>
 </div>
 
+<div class="five-columns orange-bg">5 col</div>
+<div class="twelve-columns orange-bg">12 cols</div>
 
 {% endblock body %}
+
 
 {% block stylesheets %}
     {{ parent() }}

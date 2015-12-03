@@ -253,6 +253,7 @@ app:
                         list_pqv: Lista Pequiven
                         list_1x10: Lista 1x10
                         list_re: Lista Reubicados
+                        list_circuito: Circuito 5
                         list_cet: Lista Coordinador CET
                         report: Reportes
                         display: Monitores
@@ -262,6 +263,7 @@ app:
                         voto_1x10: Voto 1 x 10
                         voto_re: Voto Reubicados
                         voto_cet: Voto Coordinador CET
+                        voto_circuito: Circuito 5
                         mesa: Mesas Activas
 
                             

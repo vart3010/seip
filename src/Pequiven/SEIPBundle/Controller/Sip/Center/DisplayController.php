@@ -78,25 +78,16 @@ class DisplayController extends SEIPController {
         $cont = $suma = 0;
 
         $linkValue = 1;//Validacion de muestra de link para bajar nivel
-        $dataChartMcpo = $CenterService->getDataChartOfVotoMcpo($estado); //General
+        $dataChartMcpo = $CenterService->getDataChartOfVotoMcpo($estado, $type, $linkValue); //General
 
-        /*$mcpo = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByMunicipios($estado);            
-
-        foreach ($mcpo as $key => $value) {
-            $municipio = $mcpo[$cont]["descriptionMunicipio"];
-            $dataChartMcpo[1][] = $CenterService->getDataChartOfVotoGeneralMunicipio($estado,$linkValue,$municipio, $type); //General            
-            $cont++; 
-        } 
-        $cantMcpo = count($dataChartMcpo[1]);*/        
         //Carga de data
         $response = new JsonResponse();        
-        $linkValue = 0;
+        $linkValue = 2;
         $dataChart = $CenterService->getDataChartOfVotoGeneralEstado($estado,$linkValue, $type); //General
         
         return $this->render('PequivenSEIPBundle:Sip:Center/Display/voto_general_edo.html.twig',array(
                 'data'          => $dataChart,
-                'dataChartMcpo' => $dataChartMcpo,
-                //'cantMcpo'      => $cantMcpo
+                'dataChartMcpo' => $dataChartMcpo,                
             ));
         
     }
@@ -110,14 +101,20 @@ class DisplayController extends SEIPController {
         $type = $request->get('type');
         $estado = $request->get('edo');
         $mcpo = $request->get('mcpo');
-        $linkValue = 0;
 
         $em = $this->getDoctrine()->getManager();
         $CenterService = $this->getCenterService();//Llamado al Servicio de Centro
 
+        $linkValue = 1;
+        $dataChartParroquias = $CenterService->getDataChartOfVotoParroquiaData($estado, $mcpo, $linkValue, $type); //General
+        
+        $linkValue = 0;
         $dataChart = $CenterService->getDataChartOfVotoGeneralParroquia($estado, $mcpo, $linkValue, $type); //General
         
-        return $this->render('PequivenSEIPBundle:Sip:Center/Display/voto_general_mcpo.html.twig', array('data' => $dataChart));
+        return $this->render('PequivenSEIPBundle:Sip:Center/Display/voto_general_mcpo.html.twig', array(
+            'data'              => $dataChart,
+            'dataChartParroq'   => $dataChartParroquias
+            ));
     }
 
 	/**
@@ -158,6 +155,18 @@ class DisplayController extends SEIPController {
             )); 
         
 	}
+
+    public function circuitoAction(){
+        return  $this->render('PequivenSEIPBundle:Sip:Center/Display/voto_circuito.html.twig');
+    }
+
+    public function cetAction(){
+        return  $this->render('PequivenSEIPBundle:Sip:Center/Display/voto_cet.html.twig');
+    }
+
+    public function localidadAction(){
+        return  $this->render('PequivenSEIPBundle:Sip:Center/Display/voto_localidad.html.twig');
+    }
 
     protected function getCenterService() {
         return $this->container->get('seip.service.center');
