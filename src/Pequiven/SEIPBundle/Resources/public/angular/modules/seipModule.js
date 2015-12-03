@@ -7160,6 +7160,29 @@ angular.module('seipModule.controllers', [])
                 })
             };
 
+            //Charts Votos General
+            $scope.renderChartVotoGeneral_2 = function (id, data, categories, caption, typeLabelDisplay) {
+                FusionCharts.ready(function () {
+                    var revenueChart = new FusionCharts({                        
+                        "type": "pie3d",
+                        "renderAt": id,
+                        "width": "80%",
+                        "height": "35%",
+                        "exportFormats": "PNG= Exportar como PNG|PDF= Exportar como PDF",
+                        "exportFileName": "",
+                        "exporthandler": "http://107.21.74.91/",
+                        "html5exporthandler": "http://107.21.74.91/",
+                        "dataFormat": "json",
+                        "dataSource": {
+                            "chart": data.dataSource.chart,
+                            "dataset": data.dataSource.dataset
+                        }
+                    });
+                    revenueChart.setTransparent(true);
+                    revenueChart.render();
+                })
+            };
+
             //Charts Votos General Horas
             $scope.renderChartVotoGeneralHours = function (id, data, categories, caption, typeLabelDisplay) {
                 FusionCharts.ready(function () {
@@ -7169,6 +7192,30 @@ angular.module('seipModule.controllers', [])
                         "renderAt": id,
                         "width": "80%",
                         "height": "65%",
+                        "exportFormats": "PNG= Exportar como PNG|PDF= Exportar como PDF",
+                        "exportFileName": "",
+                        "exporthandler": "http://107.21.74.91/",
+                        "html5exporthandler": "http://107.21.74.91/",
+                        "dataFormat": "json",
+                        "dataSource": {
+                            "chart": data.dataSource.chart,
+                            "categories": data.dataSource.categories,
+                            "dataset": data.dataSource.dataset
+                        }
+                    });
+                    revenueChart.setTransparent(true);
+                    revenueChart.render();
+                })
+            };
+
+            //Charts Votos General Horas
+            $scope.renderChartVotoGeneralMcpo = function (id, data, categories, caption, typeLabelDisplay) {
+                FusionCharts.ready(function () {
+                    var revenueChart = new FusionCharts({                        
+                        "type": "mscolumnline3d",
+                        "renderAt": id,
+                        "width": "90%",
+                        "height": "80%",
                         "exportFormats": "PNG= Exportar como PNG|PDF= Exportar como PDF",
                         "exportFileName": "",
                         "exporthandler": "http://107.21.74.91/",

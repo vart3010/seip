@@ -10,17 +10,21 @@
 {% block body %}
     <div class="columns">        
         <div class="new-row five-columns twelve-columns-mobile">
-            <div  ng-controller="displayCenterController" ng-init="renderChartVotoGeneral('displayVotoGeneral',{{ data }})">
+            <div  ng-controller="displayCenterController" ng-init="renderChartVotoGeneral_2('displayVotoGeneral',{{ data }})">
                 <span id="displayVotoGeneral">
                 </span>
             </div>
         </div>
-    </div>
-
-<div class="columns">
-
-    {% set cont = 0 %}        
     
+    <div class="new-row seven-columns twelve-columns-mobile">
+        <div  ng-controller="displayCenterController" ng-init="renderChartVotoGeneralMcpo('displayMcpo',{{ dataChartMcpo|json_encode() }})">
+            <span id="displayMcpo">
+            </span>
+        </div>
+    </div>
+</div>
+
+    {#{% set cont = 0 %}
     {% for i in 1..cantMcpo %}        
     {% set dataMcpo = dataChartMcpo[1][cont] %}
     <div class="new-row three-columns twelve-columns-mobile new-row-mobile">
@@ -30,9 +34,7 @@
         </div>
     </div>
     {% set cont = cont + 1 %}
-    {% endfor %}
-</div>
-
+    {% endfor %}#}
 
 {% endblock body %}
 

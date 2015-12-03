@@ -140,7 +140,12 @@ class CenterService implements ContainerAwareInterface {
 
         return $data;
     }
-
+    
+    /**
+     *
+     *  Grafica de Votos por Hora
+     *
+     */
     public function getDataChartOfVotoGeneralLine() {
         
         $data = array(
@@ -166,9 +171,6 @@ class CenterService implements ContainerAwareInterface {
         $chart["rotateValues"]   = "0";
         $chart["bgAlpha"] = "0,0";//Fondo 
         $chart["theme"]          = "fint";
-        //$chart["YAxisMaxValue"] = "150";
-        //$chart["decimalSeparator"] = ",";
-        //$chart["decimals"] = "2";
         $chart["showborder"]     = "0";
         $chart["decimals"]       = "0";
         $chart["legendBgColor"] = "#ffffff";
@@ -225,7 +227,7 @@ class CenterService implements ContainerAwareInterface {
 
     /**
      *
-     *  Grafica General
+     *  Grafica General de Estado
      *
      */
     public function getDataChartOfVotoGeneralEstado($estado,$linkValue,$type) {
@@ -357,7 +359,7 @@ class CenterService implements ContainerAwareInterface {
 
     /**
      *
-     *  Grafica General
+     *  Grafica Municipio por Torta
      *
      */
     public function getDataChartOfVotoGeneralMunicipio($estado,$linkValue,$municipio,$type) {
@@ -478,7 +480,103 @@ class CenterService implements ContainerAwareInterface {
 
     /**
      *
-     *  Grafica General
+     *  Grafica de Votos Municipio Barra
+     *
+     */
+    public function getDataChartOfVotoMcpo($estado) {
+        
+        $data = array(
+            'dataSource' => array(
+                'chart' => array(),
+                'categories' => array(
+                ),
+                'dataset' => array(
+                ),
+            ),
+        );
+        $chart = array();
+
+        $chart["caption"] = "Votos Municipio";
+        $chart["captionFontColor"] = "#e20000";
+        $chart["captionFontSize"] = "20";                
+        $chart["palette"]        = "1";
+        $chart["showvalues"]     = "1";
+        $chart["paletteColors"]  = "#0075c2,#c90606,#f2c500,#12a830,#1aaf5d";
+        $chart["showBorder"] = "0";
+        $chart["yaxisvaluespadding"] = "10";
+        $chart["valueFontColor"] = "#000000";
+        $chart["rotateValues"]   = "1";
+        $chart["bgAlpha"] = "0,0";//Fondo 
+        $chart["theme"]          = "fint";
+        $chart["showborder"]     = "0";
+        $chart["decimals"]       = "0";
+        $chart["legendBgColor"] = "#ffffff";
+        $chart["legendItemFontSize"] = "10";
+        $chart["legendItemFontColor"] = "#666666";
+        $chart["outCnvBaseFontColor"] = "#000000";
+        $chart["visible"] = "1";
+        $chart["labelDisplay"] = "ROTATE";
+
+        $em = $this->getDoctrine()->getManager();
+
+        $label = $dataPlan = $dataReal = array();
+
+        //Carga de Nombres de Labels
+        $dataSetReal["seriesname"] = "Real";
+        $dataSetPlan["seriesname"] = "Plan";
+        
+        $mcpo = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByMunicipios($estado);            
+        $cantMcpo = count($mcpo);
+        $cont = 0;
+        
+        foreach ($mcpo as $key => $value) {
+            //Municipio Para consulta
+            $municipio = $mcpo[$cont]["descriptionMunicipio"];           
+            $linea = $municipio;
+            $label["label"] = $linea;     
+            $category[] = $label;
+            
+            //Votos por Municipio
+            $mcpoVoto = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByVotosMunicipios($municipio, $estado);            
+            if (isset($mcpoVoto[0]["Cant"])) {
+                $dataPlanVoto = $mcpoVoto[0]["Cant"];                                            
+            }else{
+                $dataPlanVoto = "0";
+            }
+            if (isset($mcpoVoto[1]["Cant"])) {
+                $dataRealVoto = $mcpoVoto[1]["Cant"];                
+            }else{
+                $dataRealVoto = "0";        
+            }
+            
+            $dataPlan["value"] = $dataPlanVoto + $dataRealVoto;
+            $dataSetPlan["data"][] = $dataPlan; //data Plan
+
+            $dataReal["value"] = $dataRealVoto;
+            $dataSetReal["data"][] = $dataReal; //data Real
+            
+            $cont++;        
+        }
+        
+            //$dataSetValues['votos'] = array('seriesname' => 'Votos * Horas', 'parentyaxis' => 'S', 'renderas' => 'Line', 'color' => '#dbc903', 'data' => $dataSetLinea['data']);
+            //$dataMeta["value"] = 0;
+            //$dataSetMeta["data"][] = $dataMeta;
+        
+
+        $data['dataSource']['chart'] = $chart;
+        $data['dataSource']['categories'][]["category"] = $category;
+        //$data['dataSource']['dataset'][] = $dataSetValues['votos'];
+        $data['dataSource']['dataset'][] = $dataSetReal;
+        $data['dataSource']['dataset'][] = $dataSetPlan;
+        
+
+        return $data;
+        //return json_encode($data);
+    }
+
+    /**
+     *
+     *  Grafica Parroquia
      *
      */
     public function getDataChartOfVotoGeneralParroquia($estado ,$mcpo ,$linkValue, $type) {
