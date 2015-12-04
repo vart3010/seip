@@ -111,12 +111,12 @@
             
         </div>
         {# validacion de muestra solo para el 4 y 6 de diciembre #}
-        {% set day4 = 04/12/2015 | date("d/m/Y") %}                
-        {% set day6 = 06/12/2015 | date("d/m/Y")%}
+        {% set day3 = "03" %}
+        {% set day4 = "04" %}
+        {% set day6 = "06" %}
 
         {# Dia actual #}
-        {% set day = "now" | date("d/m/Y") %}
-
+        {% set day = "now" | date("d") %}
         {% if day4 == day or day6 == day %}
         <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
             <p class="inline-label">
