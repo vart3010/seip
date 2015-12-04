@@ -175,6 +175,10 @@ class DisplayController extends SEIPController {
         return  $this->render('PequivenSEIPBundle:Sip:Center/Display/voto_cet.html.twig');
     }
 
+    public function onePerTenAction(){
+        return  $this->render('PequivenSEIPBundle:Sip:Center/Display/voto_1x10.html.twig');
+    }
+
     public function localidadAction(){
         $CenterService = $this->getCenterService();//Llamado al Servicio de Centro
         
