@@ -164,7 +164,7 @@ class CenterService implements ContainerAwareInterface {
      *  Grafica de Votos por Hora
      *
      */
-    public function getDataChartOfVotoGeneralLine() {
+    public function getDataChartOfVotoGeneralLine($type) {
         
         $data = array(
             'dataSource' => array(
@@ -208,7 +208,7 @@ class CenterService implements ContainerAwareInterface {
         $cont = $votos = 0;
         $horaIni = $horaReal = 7;
         
-        $resultHoras = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByGeneralHoras(); 
+        $resultHoras = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByGeneralHoras($type); 
         
         if(max($resultHoras) >= 13) {
             $horas = max($resultHoras)["Hora"] - 6;
