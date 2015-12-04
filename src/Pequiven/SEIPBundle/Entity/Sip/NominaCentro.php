@@ -88,9 +88,16 @@ class NominaCentro {
     /**
      * @var \Integer
      * 
-     * @ORM\Column(name="oneid", type="integer")
+     * @ORM\Column(name="oneid", type="integer",nullable=true)
      */
     private $oneid;
+    
+    /**
+     * @var \Integer
+     * 
+     * @ORM\Column(name="centroid", type="integer",nullable=true)
+     */
+    private $centroid;
     
     function setUserid($userid) {
         $this->userid = $userid;
@@ -180,5 +187,13 @@ class NominaCentro {
 
     function getOneid() {
         return $this->oneid;
+    }
+    
+    function setCentroid($centroid) {
+        $this->centroid = $centroid;
+    }
+
+    function getCentroid() {
+        return $this->centroid;
     }
 }
