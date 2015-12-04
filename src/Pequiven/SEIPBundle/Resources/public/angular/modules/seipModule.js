@@ -7190,7 +7190,7 @@ angular.module('seipModule.controllers', [])
                         "type": "pie3d",
                         "renderAt": id,
                         "width": "100%",
-                        "height": "35%",
+                        "height": "45%",
                         "exportFormats": "PNG= Exportar como PNG|PDF= Exportar como PDF",
                         "exportFileName": "",
                         "exporthandler": "http://107.21.74.91/",
@@ -7263,6 +7263,29 @@ angular.module('seipModule.controllers', [])
                         "renderAt": id,
                         "width": "100%",
                         "height": "90%",
+                        "exportFormats": "PNG= Exportar como PNG|PDF= Exportar como PDF",
+                        "exportFileName": "",
+                        "exporthandler": "http://107.21.74.91/",
+                        "html5exporthandler": "http://107.21.74.91/",
+                        "dataFormat": "json",
+                        "dataSource": {
+                            "chart": data.dataSource.chart,
+                            "categories": data.dataSource.categories,
+                            "dataset": data.dataSource.dataset
+                        }
+                    });
+                    revenueChart.setTransparent(true);
+                    revenueChart.render();
+                })
+            };
+            //Grafica de Barras para localidades
+            $scope.renderChartVotoGeneralLocalidad = function (id, data, categories, caption, typeLabelDisplay) {
+                FusionCharts.ready(function () {
+                    var revenueChart = new FusionCharts({                        
+                        "type": "mscolumnline3d",
+                        "renderAt": id,
+                        "width": "100%",
+                        "height": "45%",
                         "exportFormats": "PNG= Exportar como PNG|PDF= Exportar como PDF",
                         "exportFileName": "",
                         "exporthandler": "http://107.21.74.91/",
