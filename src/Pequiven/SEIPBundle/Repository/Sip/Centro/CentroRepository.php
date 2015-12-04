@@ -634,6 +634,66 @@ class CentroRepository extends EntityRepository {
     }
 
     /**
+     * Votos PQV CIRCUITO 5
+     * 
+     * @param array $criteria
+     * @param array $orderBy
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    function findByCircuito5Edo($estado) {
+        
+        $em = $this->getEntityManager();
+        $db = $em->getConnection();
+
+        $sql = 'SELECT
+                    Estado,
+                      SUM(votoSI),
+                    SUM(votoNO)   
+                FROM
+                    General_Votes
+                WHERE
+                    Estado ="'.$estado.'" AND Tipo = "PQV" AND Parroquia in ("PQ. U TOCUYITO", "PQ. U INDEPENDENCIA", 
+                        "PQ. MIGUEL PEÑA", "PQ. RAFAEL URDANETA", "PQ. NEGRO PRIMERO", "PQ. SANTA ROSA")
+                GROUP BY Estado';            
+
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+        
+        return $result;
+    }
+
+    /**
+     * Votos PQV CIRCUITO5 1X10
+     * 
+     * @param array $criteria
+     * @param array $orderBy
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    function findByCircuito5Edo1x10($estado) {
+        
+        $em = $this->getEntityManager();
+        $db = $em->getConnection();
+
+        $sql = 'SELECT
+                    Estado,
+                      SUM(votoSI),
+                    SUM(votoNO)   
+                FROM
+                    General_Votes
+                WHERE
+                    Estado ="'.$estado.'" AND Tipo = "1x10" AND Parroquia in ("PQ. U TOCUYITO", "PQ. U INDEPENDENCIA", 
+                        "PQ. MIGUEL PEÑA", "PQ. RAFAEL URDANETA", "PQ. NEGRO PRIMERO", "PQ. SANTA ROSA")
+                GROUP BY Estado';            
+
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+        
+        return $result;
+    }
+
+    /**
      * Crea un paginador para los CUTL
      * 
      * @param array $criteria

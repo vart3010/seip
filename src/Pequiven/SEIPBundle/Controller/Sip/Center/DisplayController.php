@@ -157,7 +157,16 @@ class DisplayController extends SEIPController {
 	}
 
     public function circuitoAction(){
-        return  $this->render('PequivenSEIPBundle:Sip:Center/Display/voto_circuito.html.twig');
+        $CenterService = $this->getCenterService();//Llamado al Servicio de Centro
+        
+        $estado = "EDO. CARABOBO";
+        $dataChartCircuto = $CenterService->getDataChartOfCircuito5($estado); //General
+        $dataChartCircuto1x10 = $CenterService->getDataChartOfCircuito51x10($estado); //General        
+
+        return  $this->render('PequivenSEIPBundle:Sip:Center/Display/voto_circuito.html.twig',array(
+            'dataChartCircuto'     => $dataChartCircuto,
+            'dataChartCircuto1x10' => $dataChartCircuto1x10
+            ));
     }
 
     public function cetAction(){

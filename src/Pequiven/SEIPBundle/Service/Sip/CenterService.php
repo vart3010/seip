@@ -991,6 +991,191 @@ class CenterService implements ContainerAwareInterface {
     }
 
     /**
+     *
+     *  Grafica de Voto Circuito 5 PQV
+     *
+     */
+    public function getDataChartOfCircuito5($estado) {
+        
+        $data = array(
+            'dataSource' => array(
+                'chart' => array(),
+                'categories' => array(
+                ),
+                'dataset' => array(
+                ),
+            ),
+        );
+        $chart = array();
+
+        $chart["caption"] = "Voto PQV";
+        $chart["captionFontColor"] = "#e20000";
+        $chart["sYAxisName"] = "";
+        $chart["sNumberSuffix"] = "";
+        $chart["sYAxisMaxValue"] = "100";
+        $chart["paletteColors"] = "#e20000,#0075c2,#1aaf5d,#e20000,#f2c500,#f45b00,#8e0000";
+        $chart["bgColor"] = "#ffffff";
+        $chart["showBorder"] = "0";
+        $chart["showCanvasBorder"] = "0";
+        $chart["usePlotGradientColor"] = "0";
+        $chart["plotBorderAlpha"] = "10";
+        $chart["legendBorderAlpha"] = "0";
+        $chart["legendBgAlpha"] = "0";
+        $chart["bgAlpha"] = "0,0";//Fondo 
+        $chart["legendShadow"] = "0";
+        $chart["showHoverEffect"] = "0";
+        $chart["valueFontColor"] = "#ffffff";
+        $chart["valuePosition"] = "ABOVE";
+        $chart["rotateValues"] = "1";
+        $chart["placeValuesInside"] = "0";
+        $chart["divlineColor"] = "#999999";
+        $chart["divLineDashed"] = "1";
+        $chart["divLineDashLen"] = "1";
+        $chart["divLineGapLen"] = "1";
+        $chart["canvasBgColor"] = "#ffffff";
+        $chart["captionFontSize"] = "20";
+        $chart["subcaptionFontSize"] = "14";
+        $chart["subcaptionFontBold"] = "0";
+        $chart["decimalSeparator"] = ",";
+        $chart["thousandSeparator"] = ".";
+        $chart["inDecimalSeparator"] = ",";
+        $chart["inThousandSeparator"] = ".";
+        $chart["decimals"] = "2";
+        $chart["formatNumberScale"] = "0";
+        $chart["toolTipColor"] = "#ffffff";
+        $chart["toolTipBgColor"] = "#000000";
+        $chart["toolTipBgAlpha"] = "0";
+        $chart["toolTipBorderRadius"] = "2";
+        $chart["toolTipPadding"] = "5";
+        $chart["legendBgColor"] = "#ffffff";
+        $chart["legendItemFontSize"] = "10";
+        $chart["legendItemFontColor"] = "#666666";
+
+        $em = $this->getDoctrine()->getManager();
+        
+        $label = $dataLocalidad = array();
+        
+        //Carga de Nombres de Labels
+        $dataSetLocal["seriesname"] = "Voto Pequiven";        
+        
+        $resultEstado = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByCircuito5Edo($estado);
+        $votoNO = $votoSI = 0;
+
+        $votoSI = $resultEstado[0]["SUM(votoSI)"];
+        $votoNO = $resultEstado[0]["SUM(votoNO)"];
+        
+        $chart["showLegend"] = "0";
+        $label = "SI";
+        $dataLocal["label"] = $label; //Carga de valores                
+        $dataLocal["value"] = $votoSI; //Carga de valores
+        $dataSetLocal["data"][] = $dataLocal; //data 
+
+        $label = "NO";
+        $dataLocal["label"] = $label; //Carga de valores                
+        $dataLocal["value"] = $votoNO; //Carga de valores
+        $dataSetLocal["data"][] = $dataLocal; //data 
+        
+
+        $data['dataSource']['chart'] = $chart;                
+        $data['dataSource']['dataset'][] = $dataSetLocal;
+
+        return json_encode($data);        
+    }
+
+
+    /**
+     *
+     *  Grafica de Voto Circuito 5 1x10
+     *
+     */
+    public function getDataChartOfCircuito51x10($estado) {
+        
+        $data = array(
+            'dataSource' => array(
+                'chart' => array(),
+                'categories' => array(
+                ),
+                'dataset' => array(
+                ),
+            ),
+        );
+        $chart = array();
+
+        $chart["caption"] = "Voto 1x10";
+        $chart["captionFontColor"] = "#e20000";
+        $chart["sYAxisName"] = "";
+        $chart["sNumberSuffix"] = "";
+        $chart["sYAxisMaxValue"] = "100";
+        $chart["paletteColors"] = "#e20000,#0075c2,#1aaf5d,#e20000,#f2c500,#f45b00,#8e0000";
+        $chart["bgColor"] = "#ffffff";
+        $chart["showBorder"] = "0";
+        $chart["showCanvasBorder"] = "0";
+        $chart["usePlotGradientColor"] = "0";
+        $chart["plotBorderAlpha"] = "10";
+        $chart["legendBorderAlpha"] = "0";
+        $chart["legendBgAlpha"] = "0";
+        $chart["bgAlpha"] = "0,0";//Fondo 
+        $chart["legendShadow"] = "0";
+        $chart["showHoverEffect"] = "0";
+        $chart["valueFontColor"] = "#ffffff";
+        $chart["valuePosition"] = "ABOVE";
+        $chart["rotateValues"] = "1";
+        $chart["placeValuesInside"] = "0";
+        $chart["divlineColor"] = "#999999";
+        $chart["divLineDashed"] = "1";
+        $chart["divLineDashLen"] = "1";
+        $chart["divLineGapLen"] = "1";
+        $chart["canvasBgColor"] = "#ffffff";
+        $chart["captionFontSize"] = "20";
+        $chart["subcaptionFontSize"] = "14";
+        $chart["subcaptionFontBold"] = "0";
+        $chart["decimalSeparator"] = ",";
+        $chart["thousandSeparator"] = ".";
+        $chart["inDecimalSeparator"] = ",";
+        $chart["inThousandSeparator"] = ".";
+        $chart["decimals"] = "2";
+        $chart["formatNumberScale"] = "0";
+        $chart["toolTipColor"] = "#ffffff";
+        $chart["toolTipBgColor"] = "#000000";
+        $chart["toolTipBgAlpha"] = "0";
+        $chart["toolTipBorderRadius"] = "2";
+        $chart["toolTipPadding"] = "5";
+        $chart["legendBgColor"] = "#ffffff";
+        $chart["legendItemFontSize"] = "10";
+        $chart["legendItemFontColor"] = "#666666";
+
+        $em = $this->getDoctrine()->getManager();
+        
+        $label = $dataLocalidad = array();
+        
+        //Carga de Nombres de Labels
+        $dataSetLocal["seriesname"] = "Voto Pequiven";        
+        
+        $resultCir51x10 = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByCircuito5Edo1x10($estado);
+        $votoNO = $votoSI = 0;
+
+        $votoSI = $resultCir51x10[0]["SUM(votoSI)"];
+        $votoNO = $resultCir51x10[0]["SUM(votoNO)"];
+        
+        $chart["showLegend"] = "0";
+        $label = "SI";
+        $dataLocal["label"] = $label; //Carga de valores                
+        $dataLocal["value"] = $votoSI; //Carga de valores
+        $dataSetLocal["data"][] = $dataLocal; //data 
+
+        $label = "NO";
+        $dataLocal["label"] = $label; //Carga de valores                
+        $dataLocal["value"] = $votoNO; //Carga de valores
+        $dataSetLocal["data"][] = $dataLocal; //data 
+        
+
+        $data['dataSource']['chart'] = $chart;                
+        $data['dataSource']['dataset'][] = $dataSetLocal;
+
+        return json_encode($data);        
+    }
+
+    /**
      * Generates a URL from the given parameters.
      *
      * @param string         $route         The name of the route
