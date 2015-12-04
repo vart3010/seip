@@ -22,9 +22,17 @@
                 </span>
             </div>
         </div>
+        <div class="one-column">
+        </div>
+        <div class="five-columns twelve-columns-mobile">
+            <div  ng-controller="displayCenterController" ng-init="renderChartVotoGeneralHoursCircuito('displayHours',{{ dataHours }})">
+                <span id="displayHours">
+                </span>
+            </div>
+        </div>
 </div>
 <div class="columns"> 
-    <div class="new-row twelve-columns twelve-columns-mobile" style="padding-top:0px;">
+    <div class="twelve-columns twelve-columns-mobile" style="padding-top:0px;">
         <div  ng-controller="displayCenterController" ng-init="renderChartVotoGeneralCircuito5('displayCircuito5',{{ dataChartCircutoBarra }})">
             <span id="displayCircuito5">
             </span>

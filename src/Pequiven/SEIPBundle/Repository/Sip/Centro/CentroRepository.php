@@ -816,20 +816,34 @@ class CentroRepository extends EntityRepository {
      * @param array $orderBy
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
-    function findByGeneralHoras() {
+    function findByGeneralHoras($type) {
         
         $em = $this->getEntityManager();
         $db = $em->getConnection();
 
-        $sql = 'SELECT
+        $sql1 = 'SELECT
                     HOUR(Fecha) AS Hora,
                     SUM(VotoSI) AS Si
                 FROM
                     General_Votes
                 WHERE                    
-                    VotoSI=1 and Fecha is not null
-                GROUP BY Hora
+                    VotoSI=1 AND Fecha is not null';
+
+        if($type == 2) {
+            $sql2 = ' AND Tipo = "PQV"';
+        }elseif($type == 3){
+            $sql2 = ' AND Estado = "EDO. CARABOBO" AND Parroquia in ("PQ. U TOCUYITO", "PQ. U INDEPENDENCIA", 
+                        "PQ. MIGUEL PEÑA", "PQ. RAFAEL URDANETA", "PQ. NEGRO PRIMERO", "PQ. SANTA ROSA")';
+        }elseif($type == 4){
+            $sql2 = ' AND Tipo = "1x10"';
+        }else{
+            $sql2 = '';
+        };
+
+        $sql3 = ' GROUP BY Hora
                 ORDER BY Hora';            
+                
+        $sql = $sql1.$sql2.$sql3;
 
         $stmt = $db->prepare($sql);
         $stmt->execute();
