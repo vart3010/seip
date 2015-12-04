@@ -50,13 +50,13 @@
                 - CI:{{ user.indentification }}</h3>
             {% endif %}                
 
-            {% if(members|length<=12) %}
+            {#{% if(members|length<=12) %}
                 <div class="button-group absolute-right compact">
                     <a class="button icon-list-add " href="{{ path("pequiven_onePerTen_add_member",{idUserOne:user.id})}}"  title="">
                         Agregar Miembro&nbsp;
                     </a>
                 </div>
-            {% endif %}
+            {% endif %}#}
         </div>
         {% if(members|length)>0 %}
             <div class="with-padding">
