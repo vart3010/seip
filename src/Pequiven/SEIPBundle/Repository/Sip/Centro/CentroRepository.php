@@ -338,7 +338,7 @@ class CentroRepository extends EntityRepository {
         $em = $this->getEntityManager();
         $db = $em->getConnection();
 
-        $sql = 'SELECT c.descriptionParroquia
+        $sql = 'SELECT c.descriptionParroquia,c.codigoParroquia
                 FROM
                 sip_centro AS c            
                 WHERE c.codigoEstado ="'.$estado.'" AND c.codigoMunicipio ="'.$mcpo.'"

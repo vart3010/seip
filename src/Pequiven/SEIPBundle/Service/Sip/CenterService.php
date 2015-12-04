@@ -725,6 +725,7 @@ class CenterService implements ContainerAwareInterface {
         foreach ($parroq as $key => $value) {
             //Municipio Para consulta
             $parroquia = $parroq[$cont]["descriptionParroquia"];
+            $codParroquia = $parroq[$cont]["codigoParroquia"];
             $linea = $parroquia;
             $label["label"] = $linea;     
             $category[] = $label;
@@ -757,18 +758,14 @@ class CenterService implements ContainerAwareInterface {
                     $votoNO = $votoNO + 0;
                 }
 
-                //$link = $this->generateUrl('pequiven_sip_display_voto_general_mcpo',array('edo' => $estado, 'type' => $type, 'mcpo' => $muncpo));            
+                $estado = $this->AsignedIdEdo($estado);//Id Estado
+
+                $link = $this->generateUrl('pequiven_sip_list_voto_general',array('edo' =>$estado,'mcpo' => $mcpo, 'type' => $type, 'parroq' => $codParroquia));            
             }elseif($type == 2){        
-                //$link = $this->generateUrl('pequiven_sip_display_voto_pqv_mcpo',array('edo' => $estado, 'type' => $type, 'mcpo' => $muncpo));
+                $link = $this->generateUrl('pequiven_sip_list_voto_general',array('edo' =>$estado,'mcpo' => $mcpo, 'type' => $type, 'parroq' => $codParroquia));
             }
-                
-            /*if ($linkValue == 1) {
-                $dataReal["link"]  = $link;
-                $chart["showvalues"] = "1";
-            }else{
-                $chart["showvalues"] = "0";
-            }*/
             
+            $dataReal["link"]  = $link;                        
             $dataPlan["value"] = $votoSI + $votoNO;
             $dataSetPlan["data"][] = $dataPlan; //data Plan
 

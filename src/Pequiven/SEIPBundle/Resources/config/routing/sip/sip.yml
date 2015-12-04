@@ -557,7 +557,7 @@ pequiven_sip_display_voto_1x10:
         _controller: pequiven.controller.display:onePerTenAction
 
 pequiven_sip_list_voto_general:
-    path: /vote/list/general
+    path: /vote/list/general/{type}/{edo}/{mcpo}/{parroq}
     defaults:
         _format: html
         _controller: pequiven.controller.sipList:ListGeneralVoteAction
