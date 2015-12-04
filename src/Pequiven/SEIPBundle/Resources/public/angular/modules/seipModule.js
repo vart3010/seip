@@ -7237,7 +7237,7 @@ angular.module('seipModule.controllers', [])
                         //"type": "mscolumn3dlinedy",
                         "type": "mscolumnline3d",
                         "renderAt": id,
-                        "width": "80%",
+                        "width": "100%",
                         "height": "65%",
                         "exportFormats": "PNG= Exportar como PNG|PDF= Exportar como PDF",
                         "exportFileName": "",
@@ -7405,7 +7405,32 @@ angular.module('seipModule.controllers', [])
                         "type": "mscolumnline3d",
                         "renderAt": id,
                         "width": "100%",
-                        "height": "80%",
+                        "height": "70%",
+                        "exportFormats": "PNG= Exportar como PNG|PDF= Exportar como PDF",
+                        "exportFileName": "",
+                        "exporthandler": "http://107.21.74.91/",
+                        "html5exporthandler": "http://107.21.74.91/",
+                        "dataFormat": "json",
+                        "dataSource": {
+                            "chart": data.dataSource.chart,
+                            "categories": data.dataSource.categories,
+                            "dataset": data.dataSource.dataset
+                        }
+                    });
+                    revenueChart.setTransparent(true);
+                    revenueChart.render();
+                })
+            };
+
+            //Charts Votos General Horas
+            $scope.renderChartVotoGeneralHoursCircuito = function (id, data, categories, caption, typeLabelDisplay) {
+                FusionCharts.ready(function () {
+                    var revenueChart = new FusionCharts({
+                        //"type": "mscolumn3dlinedy",
+                        "type": "mscolumnline3d",
+                        "renderAt": id,
+                        "width": "100%",
+                        "height": "55%",
                         "exportFormats": "PNG= Exportar como PNG|PDF= Exportar como PDF",
                         "exportFileName": "",
                         "exporthandler": "http://107.21.74.91/",

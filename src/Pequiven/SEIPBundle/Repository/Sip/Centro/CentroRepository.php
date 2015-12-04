@@ -831,6 +831,11 @@ class CentroRepository extends EntityRepository {
 
         if($type == 2) {
             $sql2 = ' AND Tipo = "PQV"';
+        }elseif($type == 3){
+            $sql2 = ' AND Estado = "EDO. CARABOBO" AND Parroquia in ("PQ. U TOCUYITO", "PQ. U INDEPENDENCIA", 
+                        "PQ. MIGUEL PEÑA", "PQ. RAFAEL URDANETA", "PQ. NEGRO PRIMERO", "PQ. SANTA ROSA")';
+        }elseif($type == 4){
+            $sql2 = ' AND Tipo = "1x10"';
         }else{
             $sql2 = '';
         };

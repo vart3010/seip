@@ -1033,7 +1033,7 @@ class CenterService implements ContainerAwareInterface {
         );
         $chart = array();
 
-        $chart["caption"] = "Voto PQV";
+        $chart["caption"] = "Voto Circuito 5 PQV";
         $chart["captionFontColor"] = "#e20000";
         $chart["sYAxisName"] = "";
         $chart["sNumberSuffix"] = "";
@@ -1126,7 +1126,7 @@ class CenterService implements ContainerAwareInterface {
         );
         $chart = array();
 
-        $chart["caption"] = "Voto 1x10";
+        $chart["caption"] = "Voto Circuito 5 1x10";
         $chart["captionFontColor"] = "#e20000";
         $chart["sYAxisName"] = "";
         $chart["sNumberSuffix"] = "";
@@ -1218,7 +1218,7 @@ class CenterService implements ContainerAwareInterface {
         );
         $chart = array();
 
-        $chart["caption"] = "General";
+        //$chart["caption"] = "General";
         $chart["captionFontColor"] = "#e20000";
         $chart["captionFontSize"] = "20";                
         $chart["palette"]        = "1";
@@ -1447,7 +1447,7 @@ class CenterService implements ContainerAwareInterface {
         );
         $chart = array();
 
-        $chart["caption"] = "General 1x10 Estados";
+        //$chart["caption"] = "General 1x10 Estados";
         $chart["captionFontColor"] = "#e20000";
         $chart["captionFontSize"] = "20";                
         $chart["palette"]        = "1";

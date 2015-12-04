@@ -159,15 +159,19 @@ class DisplayController extends SEIPController {
     public function circuitoAction(){
         $CenterService = $this->getCenterService();//Llamado al Servicio de Centro
         
+        $type = 3;
+        $dataChartLine = $CenterService->getDataChartOfVotoGeneralLine($type);
+
         $estado = "EDO. CARABOBO";
         $dataChartCircuto = $CenterService->getDataChartOfCircuito5($estado); //General
         $dataChartCircuto1x10 = $CenterService->getDataChartOfCircuito51x10($estado); //General        
         $dataChartCircutoBarra = $CenterService->getDataChartOfCircuitoBarra($estado); //General        
 
         return  $this->render('PequivenSEIPBundle:Sip:Center/Display/voto_circuito.html.twig',array(
-            'dataChartCircuto'     => $dataChartCircuto,
-            'dataChartCircuto1x10' => $dataChartCircuto1x10,
-            'dataChartCircutoBarra' => $dataChartCircutoBarra
+            'dataChartCircuto'      => $dataChartCircuto,
+            'dataChartCircuto1x10'  => $dataChartCircuto1x10,
+            'dataChartCircutoBarra' => $dataChartCircutoBarra,
+            'dataHours'             => $dataChartLine
             ));
     }
 
@@ -177,13 +181,17 @@ class DisplayController extends SEIPController {
 
     public function onePerTenAction(){
         $CenterService = $this->getCenterService();//Llamado al Servicio de Centro
+
+        $type = 4;
+        $dataChartLine = $CenterService->getDataChartOfVotoGeneralLine($type);
         
         $dataChart1x10 = $CenterService->getDataChartOf1x10(); //General        
         $dataChartBarra = $CenterService->getDataChartOfBarra1x10(); //General        
 
         return  $this->render('PequivenSEIPBundle:Sip:Center/Display/voto_1x10.html.twig',array(
             'dataChart1x10' => $dataChart1x10,
-            'dataChartBarra' => $dataChartBarra
+            'dataChartBarra' => $dataChartBarra,
+            'dataHours'             => $dataChartLine
             ));        
     }
 
