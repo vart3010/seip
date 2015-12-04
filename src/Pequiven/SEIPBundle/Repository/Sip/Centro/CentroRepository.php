@@ -623,7 +623,7 @@ class CentroRepository extends EntityRepository {
                 FROM
                     General_Votes
                 WHERE
-                    Localidad ="'.$localidad.'" AND Tipo = "PQV"
+                    Localidad ="'.$localidad.'" AND Tipo = "1x10"
                 GROUP BY Localidad';            
 
         $stmt = $db->prepare($sql);

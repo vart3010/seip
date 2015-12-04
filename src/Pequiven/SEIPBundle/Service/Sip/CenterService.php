@@ -339,14 +339,13 @@ class CenterService implements ContainerAwareInterface {
             $estado = $this->AsignedIdEdo($estado);
             $link  = $this->generateUrl('pequiven_sip_display_voto_pqv_edo',array('edo' => $estado,'type' => $type));            
         }
-
             if ($linkValue == 1) {
                 $dataLocal["link"] = $link;
                 $chart["showvalues"]     = "0";
                 $chart["showLegend"] = "0";
                 $labelSi = "";
                 $labelNo = "";
-            }elseif($linkValue == 2){
+            }elseif($linkValue == 2 AND $estado == 7){
                 $dataLocal["link"] = $this->generateUrl('pequiven_sip_display_voto_localidad');
                 $chart["showvalues"]     = "1";
                 $chart["showLegend"] = "1";                
@@ -735,8 +734,16 @@ class CenterService implements ContainerAwareInterface {
             
             if ($type == 1) {
                 $parroqGeneral = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByVotosParroquiaGeneral($parroquia, $estado);            
-                $votoSI = $votoSI + $parroqGeneral[0]["SUM(votoSI)"];
-                $votoNO = $votoNO + $parroqGeneral[0]["SUM(votoNO)"];    
+                if (isset($parroqGeneral[0]["SUM(votoSI)"])) {
+                    $votoSI = $votoSI + $parroqGeneral[0]["SUM(votoSI)"];                    
+                }else{
+                    $votoSI = $votoSI + 0;                    
+                }
+                if (isset($parroqGeneral[0]["SUM(votoNO)"])) {
+                    $votoNO = $votoNO + $parroqGeneral[0]["SUM(votoNO)"];                        
+                }else{
+                    $votoNO = $votoNO + 0;
+                }
 
                 //$link = $this->generateUrl('pequiven_sip_display_voto_general_mcpo',array('edo' => $estado, 'type' => $type, 'mcpo' => $muncpo));            
             }elseif($type == 2){        
@@ -858,6 +865,10 @@ class CenterService implements ContainerAwareInterface {
 
         $votoSI = $resultLocalidad[0]["SUM(votoSI)"];
         $votoNO = $resultLocalidad[0]["SUM(votoNO)"];
+        
+        $resultLocalidad1x10 = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByLocalidad1x10($localidad);
+        $votoSI = $votoSI + $resultLocalidad1x10[0]["SUM(votoSI)"];
+        $votoNO = $votoNO + $resultLocalidad1x10[0]["SUM(votoNO)"];
 
         $label = "SI";
         $dataLocal["label"] = $label; //Carga de valores                
@@ -948,7 +959,7 @@ class CenterService implements ContainerAwareInterface {
         //votos
         $label["label"] = "Votos PQV";     
         $category[] = $label;        
-        
+
         $dataReal["value"] = $votoSI; //Carga de valores General
         $dataSetReal["data"][] = $dataReal; //data                 
         $dataPlan["value"] = $votoNO + $votoSI; //Carga de valores General
@@ -963,9 +974,9 @@ class CenterService implements ContainerAwareInterface {
         $label["label"] = "1x10";     
         $category[] = $label;
         
-        $dataReal["value"] = 100; //Carga de valores General
+        $dataReal["value"] = $votoSI; //Carga de valores General
         $dataSetReal["data"][] = $dataReal; //data                 
-        $dataPlan["value"] = 50; //Carga de valores General
+        $dataPlan["value"] = $votoNO + $votoSI; //Carga de valores General
         $dataSetPlan["data"][] = $dataPlan; //data 
 
         $dataSetReal["seriesname"] = "Real";                
