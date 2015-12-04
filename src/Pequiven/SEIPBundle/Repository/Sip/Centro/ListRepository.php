@@ -20,6 +20,7 @@ class ListRepository extends EntityRepository {
     Estado,
     Municipio,
     Parroquia,
+    Codigo,
     Centro,
     SUM(VotoSI) AS Si,
     SUM(VotoNO) AS No
@@ -33,11 +34,8 @@ GROUP BY centro';
         $stmt = $db->prepare($sql);
         $stmt->execute();
         $result = $stmt->fetchAll();
-        
-        $pagerfanta = new \Tecnocreaciones\Bundle\ResourceBundle\Model\Paginator\Paginator(new \Pagerfanta\Adapter\ArrayAdapter($result));
-        $pagerfanta->setContainer($this->container);
-        return $pagerfanta;
 
+        return $result;
     }
 
 }
