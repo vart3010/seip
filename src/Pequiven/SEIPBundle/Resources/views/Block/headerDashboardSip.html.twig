@@ -1,0 +1,16 @@
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+<div class="columns" class="vzla-header" style="height: 54px">
+    <div class="three-columns four-columns-tablet six-columns-mobile" style="margin-bottom: -3px; margin-top: 4px" >
+        <a href="{{ templateConfig.getOption('main_route') != null ? path(templateConfig.getOption('main_route')) : '' }}">
+            <img class="resize-img-140" src="{{ asset('bundles/pequivenseip/logotipos-pqv/logo_menu_seip_transparente.png') }}" width="75px" height="75px" />
+        </a>
+    </div>
+    <div class="six-columns four-columns-tablet six-columns-mobile" style="text-align: center;margin-bottom: 0;margin-top: 10px;">
+    </div>
+    <div class="two-columns tree-columns-tablet hide-768" style="text-align: right;float: right;margin-bottom: 0px;">
+        <a href="{{ templateConfig.getOption('main_route') != null ? path(templateConfig.getOption('main_route')) : '' }}">
+            <img class="resize-img-140" src="{{ asset('bundles/pequivenseip/logotipos-pqv/logo_pqv_transparente.png') }}" height="75px" />
+        </a>
+    </div>
+</div>

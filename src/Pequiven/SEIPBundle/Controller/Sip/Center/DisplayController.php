@@ -169,13 +169,17 @@ class DisplayController extends SEIPController {
         
         $localidad = "Sede Corporativa";
         $dataChartLocalidadSede = $CenterService->getDataChartOfLocalidad($localidad); //General
+        $dataChartLocalidadSedeBar = $CenterService->getDataChartOfLocalidadBar($localidad); //General
 
         $localidad = "Complejo Petroquímico Hugo Chávez";
         $dataChartLocalidadMoron = $CenterService->getDataChartOfLocalidad($localidad); //General
+        $dataChartLocalidadMoronBar = $CenterService->getDataChartOfLocalidadBar($localidad); //General
 
         return  $this->render('PequivenSEIPBundle:Sip:Center/Display/voto_localidad.html.twig',array(
-                'dataChartLocalidadSede' => $dataChartLocalidadSede, 
-                'dataChartLocalidadMoron' => $dataChartLocalidadMoron, 
+                'dataChartLocalidadSede'    => $dataChartLocalidadSede, 
+                'dataChartLocalidadMoron'   => $dataChartLocalidadMoron,
+                'dataChartSede'            => $dataChartLocalidadSedeBar,
+                'dataChartMoron'            => $dataChartLocalidadMoronBar
                 ));
     }
 

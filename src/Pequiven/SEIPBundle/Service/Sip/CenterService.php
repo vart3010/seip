@@ -91,7 +91,7 @@ class CenterService implements ContainerAwareInterface {
         $chart["bgAlpha"] = "0,0";//Fondo 
         $chart["legendShadow"] = "0";
         $chart["showHoverEffect"] = "0";
-        $chart["valueFontColor"] = "#000000";
+        $chart["valueFontColor"] = "#ffffff";
         $chart["valuePosition"] = "ABOVE";
         $chart["rotateValues"] = "1";
         $chart["placeValuesInside"] = "0";
@@ -185,7 +185,7 @@ class CenterService implements ContainerAwareInterface {
         $chart["paletteColors"]  = "#0075c2,#c90606,#f2c500,#12a830,#1aaf5d";
         $chart["showBorder"] = "0";
         $chart["yaxisvaluespadding"] = "10";
-        $chart["valueFontColor"] = "#000000";
+        $chart["valueFontColor"] = "#ffffff";
         $chart["rotateValues"]   = "0";
         $chart["bgAlpha"] = "0,0";//Fondo 
         $chart["theme"]          = "fint";
@@ -398,8 +398,9 @@ class CenterService implements ContainerAwareInterface {
         $chart["showvalues"]     = "1";
         $chart["paletteColors"]  = "#0075c2,#c90606,#f2c500,#12a830,#1aaf5d";
         $chart["showBorder"] = "0";
+        $chart["showCanvasBorder"] = "0";
         $chart["yaxisvaluespadding"] = "10";
-        $chart["valueFontColor"] = "#000000";
+        $chart["valueFontColor"] = "#ffffff";
         $chart["rotateValues"]   = "1";
         $chart["bgAlpha"] = "0,0";//Fondo         
         $chart["theme"]          = "fint";
@@ -410,6 +411,24 @@ class CenterService implements ContainerAwareInterface {
         $chart["legendItemFontColor"] = "#666666";
         $chart["baseFontColor"] = "#ffffff";        
         $chart["outCnvBaseFontColor"] = "#ffffff";
+        $chart["formatNumberScale"] = "0";
+
+        $chart["usePlotGradientColor"] = "0";
+        $chart["plotBorderAlpha"] = "10";
+        $chart["legendBorderAlpha"] = "0";
+        $chart["legendBgAlpha"] = "0";
+        $chart["legendItemFontColor"] = "#ffffff";
+        $chart["baseFontColor"] = "#ffffff";
+        $chart["legendItemFontColor"] = "#ffffff";
+        
+        $chart["divLineDashed"] = "0";
+        $chart["showHoverEffect"] = "1";
+        $chart["valuePosition"] = "ABOVE";
+        $chart["dashed"] = "0";
+        $chart["divLineDashLen"] = "0";
+        $chart["divLineGapLen"] = "0";
+        $chart["canvasBgAlpha"] = "0,0";
+        $chart["toolTipBgColor"] = "#000000";
         //$chart["visible"] = "0";
         //$chart["labelDisplay"] = "ROTATE";
 
@@ -525,7 +544,7 @@ class CenterService implements ContainerAwareInterface {
         $chart["bgAlpha"] = "0,0";//Fondo 
         $chart["legendShadow"] = "0";
         $chart["showHoverEffect"] = "0";
-        $chart["valueFontColor"] = "#000000";
+        $chart["valueFontColor"] = "#ffffff";
         $chart["valuePosition"] = "ABOVE";
         $chart["rotateValues"] = "0";
         $chart["placeValuesInside"] = "0";
@@ -562,39 +581,30 @@ class CenterService implements ContainerAwareInterface {
 
         //Personal PQV por centro         
         $votoNo = $votoSi = 0;
-        
         $edoMcpo = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByMcpoAndEdoId($estado, $mcpo);            
         $estado = $edoMcpo[0]["edo"];
         $mcpo = $edoMcpo[0]["mcpo"];
-        
+
         if ($estado != 30) {            
             $mcpoVoto = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByVotosMunicipiosId($estado, $mcpo);            
-            if (isset($mcpoVoto[0]["Cant"])) {
-                $votoNo = $mcpoVoto[0]["Cant"];                            
-            }
-            if (isset($mcpoVoto[1]["Cant"])) {
-                $votoSi = $mcpoVoto[1]["Cant"];                
-            }
+            $votoSI = $mcpoVoto[0]["SUM(votoSI)"];
+            $votoNO = $mcpoVoto[0]["SUM(votoNO)"];            
         }else{
             $otros = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByEstadoOtros();
-            $votoSi = $otros[1]["Cant"];
-            $votoNo = $otros[0]["Cant"];
+            $votoSI = $otros[1]["Cant"];
+            $votoNO = $otros[0]["Cant"];
         }
 
         if ($type == 1) {            
             $mcpoVotoGeneral = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByVotosMunicipiosIdGeneral($estado, $mcpo);            
-            if (isset($mcpoVotoGeneral[0]["Cant"])) {
-                $votoNo = $votoNo + $mcpoVotoGeneral[0]["Cant"];                            
-            }
-            if (isset($mcpoVotoGeneral[1]["Cant"])) {
-                $votoSi = $votoSi + $mcpoVotoGeneral[1]["Cant"];                
-            }
+            $votoSI = $votoSI + $mcpoVotoGeneral[0]["SUM(votoSI)"];
+            $votoNO = $votoNO + $mcpoVotoGeneral[0]["SUM(votoNO)"];            
         }
 
             $chart["caption"] = $mcpo;
             $label = "";
             $dataLocal["label"] = $label; //Carga de valores                
-            $dataLocal["value"] = $votoSi; //Carga de valores
+            $dataLocal["value"] = $votoSI; //Carga de valores
             if ($linkValue == 1) {
             $dataLocal["link"]  = $this->generateUrl('pequiven_sip_display_voto_general_estado',array('edo' => $estado));
                 $chart["showvalues"] = "0";
@@ -606,7 +616,7 @@ class CenterService implements ContainerAwareInterface {
 
             $label = "";
             $dataLocal["label"] = $label; //Carga de valores                
-            $dataLocal["value"] = $votoNo; //Carga de valores
+            $dataLocal["value"] = $votoNO; //Carga de valores
             $dataSetLocal["data"][] = $dataLocal; //data 
 
         $data['dataSource']['chart'] = $chart;                
@@ -640,8 +650,9 @@ class CenterService implements ContainerAwareInterface {
         $chart["showvalues"]     = "1";
         $chart["paletteColors"]  = "#0075c2,#c90606,#f2c500,#12a830,#1aaf5d";
         $chart["showBorder"] = "0";
+        $chart["showCanvasBorder"] = "0";
         $chart["yaxisvaluespadding"] = "10";
-        $chart["valueFontColor"] = "#000000";
+        $chart["valueFontColor"] = "#ffffff";
         $chart["rotateValues"]   = "1";
         $chart["bgAlpha"] = "0,0";//Fondo         
         $chart["theme"]          = "fint";
@@ -652,9 +663,26 @@ class CenterService implements ContainerAwareInterface {
         $chart["legendItemFontColor"] = "#666666";
         $chart["baseFontColor"] = "#ffffff";        
         $chart["outCnvBaseFontColor"] = "#ffffff";
+        $chart["formatNumberScale"] = "0";
 
-        $em = $this->getDoctrine()->getManager();
-        $estadoDescription = $estado;
+        $chart["usePlotGradientColor"] = "0";
+        $chart["plotBorderAlpha"] = "10";
+        $chart["legendBorderAlpha"] = "0";
+        $chart["legendBgAlpha"] = "0";
+        $chart["legendItemFontColor"] = "#ffffff";
+        $chart["baseFontColor"] = "#ffffff";
+        $chart["legendItemFontColor"] = "#ffffff";
+        
+        $chart["divLineDashed"] = "0";
+        $chart["showHoverEffect"] = "1";
+        $chart["valuePosition"] = "ABOVE";
+        $chart["dashed"] = "0";
+        $chart["divLineDashLen"] = "0";
+        $chart["divLineGapLen"] = "0";
+        $chart["canvasBgAlpha"] = "0,0";
+        $chart["toolTipBgColor"] = "#000000";
+
+        $em = $this->getDoctrine()->getManager();        
         $estado = $this->AsignedIdEdo($estado);//Id Estado
 
         $label = $dataPlan = $dataReal = array();
@@ -662,8 +690,7 @@ class CenterService implements ContainerAwareInterface {
         $dataSetReal["seriesname"] = "Real";
         $dataSetPlan["seriesname"] = "Plan";
         
-        $parroq = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByParroquias($estado, $mcpo);            
-        
+        $parroq = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByParroquias($estado, $mcpo);                    
         $cantParroq = count($parroq);
         $cont = 0;
 
@@ -677,30 +704,19 @@ class CenterService implements ContainerAwareInterface {
             $estado = $this->AsignedDescriptionEdo($estado);
             //Votos por Parroquia
             $parroqVoto = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByVotosParroquia($parroquia, $estado);            
-            if (isset($parroqVoto[0]["Cant"])) {
-                $dataPlanVoto = $parroqVoto[0]["Cant"];                                            
-            }else{
-                $dataPlanVoto = "0";
-            }
-            if (isset($parroqVoto[1]["Cant"])) {
-                $dataRealVoto = $parroqVoto[1]["Cant"];                
-            }else{
-                $dataRealVoto = "0";        
-            }
+            /*if(isset($parroqVoto)){
+                $votoSI = $parroqVoto[0]["SUM(votoSI)"];
+                $votoNO = $parroqVoto[0]["SUM(votoNO)"];
+            }else{*/
+                $votoSI = 0;
+                $votoNO = 0;
+            //}
 
+            
             if ($type == 1) {
                 $parroqGeneral = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByVotosParroquiaGeneral($parroquia, $estado);            
-                
-                if (isset($parroqGeneral[0]["Cant"])) {
-                    $dataPlanVoto = $dataPlanVoto + $parroqGeneral[0]["Cant"];                                            
-                }else{
-                    $dataPlanVoto = $dataPlanVoto;
-                }
-                if (isset($parroqGeneral[1]["Cant"])) {
-                    $dataRealVoto = $dataRealVoto + $parroqGeneral[1]["Cant"];                
-                }else{
-                    $dataRealVoto = $dataRealVoto;        
-                }
+                $votoSI = $votoSI + $parroqGeneral[0]["SUM(votoSI)"];
+                $votoNO = $votoNO + $parroqGeneral[0]["SUM(votoNO)"];    
 
                 //$link = $this->generateUrl('pequiven_sip_display_voto_general_mcpo',array('edo' => $estado, 'type' => $type, 'mcpo' => $muncpo));            
             }elseif($type == 2){        
@@ -714,10 +730,10 @@ class CenterService implements ContainerAwareInterface {
                 $chart["showvalues"] = "0";
             }*/
             
-            $dataPlan["value"] = $dataPlanVoto + $dataRealVoto;
+            $dataPlan["value"] = $votoSI + $votoNO;
             $dataSetPlan["data"][] = $dataPlan; //data Plan
 
-            $dataReal["value"] = $dataRealVoto;
+            $dataReal["value"] = $votoSI;
             $dataSetReal["data"][] = $dataReal; //data Real
             
             $cont++;       
@@ -732,16 +748,12 @@ class CenterService implements ContainerAwareInterface {
             $votoSi = $otros[1]["Cant"];
             $votoNo = $otros[0]["Cant"];
 
-            $dataPlan["value"] = $votoSi + $votoNo;
+            $dataPlan["value"] = $votoSI + $votoNO;
             $dataSetPlan["data"][] = $dataPlan; //data Plan
 
-            $dataReal["value"] = $votoSi;
+            $dataReal["value"] = $votoSI;
             $dataSetReal["data"][] = $dataReal; //data Real
         }
-            //$dataSetValues['votos'] = array('seriesname' => 'Votos * Horas', 'parentyaxis' => 'S', 'renderas' => 'Line', 'color' => '#dbc903', 'data' => $dataSetLinea['data']);
-            //$dataMeta["value"] = 0;
-            //$dataSetMeta["data"][] = $dataMeta;
-        
 
         $data['dataSource']['chart'] = $chart;
         $data['dataSource']['categories'][]["category"] = $category;
@@ -754,7 +766,7 @@ class CenterService implements ContainerAwareInterface {
 
     /**
      *
-     *  Grafica de Voto PQV
+     *  Grafica de Voto Localidad
      *
      */
     public function getDataChartOfLocalidad($localidad) {
@@ -786,7 +798,7 @@ class CenterService implements ContainerAwareInterface {
         $chart["bgAlpha"] = "0,0";//Fondo 
         $chart["legendShadow"] = "0";
         $chart["showHoverEffect"] = "0";
-        $chart["valueFontColor"] = "#000000";
+        $chart["valueFontColor"] = "#ffffff";
         $chart["valuePosition"] = "ABOVE";
         $chart["rotateValues"] = "1";
         $chart["placeValuesInside"] = "0";
@@ -842,6 +854,109 @@ class CenterService implements ContainerAwareInterface {
         $data['dataSource']['dataset'][] = $dataSetLocal;
 
         return json_encode($data);        
+    }
+
+    /**
+     *
+     *  Grafica de Votos Parroquia Barra
+     *
+     */
+    public function getDataChartOfLocalidadBar($localidad) {
+        
+        $data = array(
+            'dataSource' => array(
+                'chart' => array(),
+                'categories' => array(
+                ),
+                'dataset' => array(
+                ),
+            ),
+        );
+        $chart = array();
+
+        //$chart["caption"] = $localidad;
+        $chart["captionFontColor"] = "#e20000";
+        $chart["captionFontSize"] = "20";                
+        $chart["palette"]        = "1";
+        $chart["showvalues"]     = "1";
+        $chart["paletteColors"]  = "#0075c2,#c90606,#f2c500,#12a830,#1aaf5d";
+        $chart["showBorder"] = "0";
+        $chart["showCanvasBorder"] = "0";
+        $chart["yaxisvaluespadding"] = "10";
+        $chart["valueFontColor"] = "#ffffff";
+        $chart["rotateValues"]   = "1";
+        $chart["bgAlpha"] = "0,0";//Fondo         
+        $chart["theme"]          = "fint";
+        $chart["showborder"]     = "0";
+        $chart["decimals"]       = "0";
+        $chart["showLegend"] = "0";
+        $chart["legendBgColor"] = "#ffffff";
+        $chart["legendItemFontSize"] = "10";
+        $chart["legendItemFontColor"] = "#666666";
+        $chart["baseFontColor"] = "#ffffff";        
+        $chart["outCnvBaseFontColor"] = "#ffffff";
+        $chart["formatNumberScale"] = "0";
+
+        $chart["usePlotGradientColor"] = "0";
+        $chart["plotBorderAlpha"] = "10";
+        $chart["legendBorderAlpha"] = "0";
+        $chart["legendBgAlpha"] = "0";
+        $chart["legendItemFontColor"] = "#ffffff";
+        $chart["baseFontColor"] = "#ffffff";
+        $chart["legendItemFontColor"] = "#ffffff";
+        
+        $chart["divLineDashed"] = "0";
+        $chart["showHoverEffect"] = "1";
+        $chart["valuePosition"] = "ABOVE";
+        $chart["dashed"] = "0";
+        $chart["divLineDashLen"] = "0";
+        $chart["divLineGapLen"] = "0";
+        $chart["canvasBgAlpha"] = "0,0";
+        $chart["toolTipBgColor"] = "#000000";
+
+        $em = $this->getDoctrine()->getManager();
+        
+        $label = $dataPlan = $dataReal = array();
+        
+        
+        $resultLocalidad = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByLocalidad($localidad);
+        $votoNO = $votoSI = 0;
+
+        $votoSI = $resultLocalidad[0]["SUM(votoSI)"];
+        $votoNO = $resultLocalidad[0]["SUM(votoNO)"];
+
+        //votos
+        $label["label"] = "Votos PQV";     
+        $category[] = $label;        
+        
+        $dataReal["value"] = $votoSI; //Carga de valores General
+        $dataSetReal["data"][] = $dataReal; //data                 
+        $dataPlan["value"] = $votoNO + $votoSI; //Carga de valores General
+        $dataSetPlan["data"][] = $dataPlan; //data 
+
+
+        //1x10
+        $resultLocalidad = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByLocalidad1x10($localidad);
+        $votoSI = $resultLocalidad[0]["SUM(votoSI)"];
+        $votoNO = $resultLocalidad[0]["SUM(votoNO)"];
+
+        $label["label"] = "1x10";     
+        $category[] = $label;
+        
+        $dataReal["value"] = 100; //Carga de valores General
+        $dataSetReal["data"][] = $dataReal; //data                 
+        $dataPlan["value"] = 50; //Carga de valores General
+        $dataSetPlan["data"][] = $dataPlan; //data 
+
+        $dataSetReal["seriesname"] = "Real";                
+        $dataSetPlan["seriesname"] = "Plan";                
+
+        $data['dataSource']['chart'] = $chart;
+        $data['dataSource']['categories'][]["category"] = $category;
+        $data['dataSource']['dataset'][] = $dataSetPlan;
+        $data['dataSource']['dataset'][] = $dataSetReal;
+
+        return json_encode($data);
     }
 
     /**
