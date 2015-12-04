@@ -28,7 +28,7 @@ class CenterReportController extends SEIPController {
         $cedula = $request->get('ced');
         $datos = array("nombre" => "", "centro" => "", "nameCentro" => "", "msj" => "");
 
-        $onePerTen = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\OnePerTen")->getOnePerTenVoto($cedula);
+        $onePerTen = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\OnePerTen")->findOneBy(array('cedula' => $cedula));
         
         if (count($onePerTen) <= 0) {
                 if ($cedula != "" || $cedula != 0) {
@@ -41,31 +41,25 @@ class CenterReportController extends SEIPController {
                             
                         } else {
                             $members = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\OnePerTenMembers")->findOneBy(array("cedula" => $cedula));
-
                             $datos["nombre"] = $members->getNombre();
                             $datos["cedula"] = $members->getCedula();
                             $datos["telefono"] = $members->getTelefono();
-                            //$datos["centro"] = $members->getCodigoCentro();
-                            //$datos["nameCentro"] = $nameCentro[0]["description"];
+                            $datos["nameCentro"] = $members->getNombreCentro();
                         }                    
                 }            
         } else {
 
-        $onePerTen = $this->get('pequiven.repository.onePerTen')->getOnePerTenVoto($cedula);
-            foreach ($onePerTen as $value) {                                             
-                $datos["nombre"] = $value->getUser()->getOnlyFullNameUser();
-                $datos["cedula"] = $value->getUser()->getIndentification();
-                $datos["telefono"] = $value->getUser()->getCellphone();
-                $datos["id"] = $value->getUser()->getId();
-            }        
-            
-            //$datos["centro"] = $result->getCodigoCentro();
-            //$datos["nameCentro"] = $nameCentro[0]["description"];
+        $onePerTen = $this->get('pequiven.repository.onePerTen')->findOneBy(array('cedula' => $cedula));                                                        
+            $datos["nombre"] = $onePerTen->getUser()->getOnlyFullNameUser();
+            $datos["cedula"] = $onePerTen->getUser()->getIndentification();
+            $datos["telefono"] = $onePerTen->getUser()->getCellphone();
+            $datos["id"] = $onePerTen->getUser()->getId();                            
         }
 
         $response->setData($datos);
         return $response;
 	}
+
 	/**
 	 *
 	 *	Guardando 
@@ -77,17 +71,22 @@ class CenterReportController extends SEIPController {
         
         $id = $request->get("id");
         $cedula = $request->get("cedula");
+
+        $fecha = date("Y-m-d");
+        $fecha = date_create_from_format("Y-m-d", $fecha);
         
         $em->getConnection()->beginTransaction();        
         
         $onePerTenResult = new OnePerTen();
 
-        $onePerTenResult = $this->get('pequiven.repository.onePerTen')->getOnePerTenVoto($cedula);
+        $onePerTenResult = $this->get('pequiven.repository.onePerTen')->findOneBy(array('cedula' => $cedula));
         
         if (count($onePerTenResult) != 0) {
             $voto = 1;
-            $onePerTenResult[0]->setVoto($voto);            
-            $em->persist($onePerTenResult[0]);
+            $onePerTenResult->setVoto($voto);
+            $onePerTenResult->setFechaVoto($fecha);                
+
+            $em->persist($onePerTenResult);
             $em->flush();
             
         }else{
@@ -97,9 +96,9 @@ class CenterReportController extends SEIPController {
             if (count($OnePerTenMembers) != 0) {
                 $voto = 1;
                 $OnePerTenMembers->setVoto($voto);                
+                $OnePerTenMembers->setFechaVoto($fecha);                
             }else{
                 $voto = 0;
-                //var_dump("hola");
             }
         }
         
@@ -125,7 +124,7 @@ class CenterReportController extends SEIPController {
 	 *
 	 */
 	public function showAction(Request $request){
-		
+        
 		return $this->render('PequivenSEIPBundle:Sip:Center/Voto/show.html.twig');
         
 	}
