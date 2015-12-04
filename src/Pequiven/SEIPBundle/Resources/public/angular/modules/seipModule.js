@@ -7262,7 +7262,7 @@ angular.module('seipModule.controllers', [])
                         "type": "mscolumn3dlinedy",
                         "renderAt": id,
                         "width": "100%",
-                        "height": "90%",
+                        "height": "80%",
                         "exportFormats": "PNG= Exportar como PNG|PDF= Exportar como PDF",
                         "exportFileName": "",
                         "exporthandler": "http://107.21.74.91/",

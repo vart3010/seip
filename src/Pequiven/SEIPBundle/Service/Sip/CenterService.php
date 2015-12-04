@@ -193,9 +193,25 @@ class CenterService implements ContainerAwareInterface {
         $chart["decimals"]       = "0";
         $chart["legendBgColor"] = "#ffffff";
         $chart["legendItemFontSize"] = "10";
-        $chart["legendItemFontColor"] = "#666666";
-        $chart["outCnvBaseFontColor"] = "#000000";
+        
+        $chart["outCnvBaseFontColor"] = "#ffffff";
         $chart["visible"] = "1";
+
+        $chart["usePlotGradientColor"] = "0";
+        $chart["plotBorderAlpha"] = "10";
+        $chart["legendBorderAlpha"] = "0";
+        $chart["legendBgAlpha"] = "0";
+        $chart["legendItemFontColor"] = "#ffffff";
+        $chart["baseFontColor"] = "#ffffff";        
+        
+        $chart["divLineDashed"] = "0";
+        $chart["showHoverEffect"] = "1";
+        $chart["valuePosition"] = "ABOVE";
+        $chart["dashed"] = "0";
+        $chart["divLineDashLen"] = "0";
+        $chart["divLineGapLen"] = "0";
+        $chart["canvasBgAlpha"] = "0,0";
+        $chart["toolTipBgColor"] = "#000000";
 
         $em = $this->getDoctrine()->getManager();
 
@@ -209,7 +225,7 @@ class CenterService implements ContainerAwareInterface {
         $horaIni = $horaReal = 7;
         
         $resultHoras = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByGeneralHoras($type); 
-        
+
         if(max($resultHoras) >= 13) {
             $horas = max($resultHoras)["Hora"] - 6;
         }
