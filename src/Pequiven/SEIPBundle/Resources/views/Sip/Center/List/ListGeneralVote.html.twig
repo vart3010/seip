@@ -25,6 +25,7 @@
                 <thead>
                     <tr>
                         <th class="header" align="left">Tipo de Listado:</th>
+                        <th class="header" align="left">Centro:</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -35,6 +36,13 @@
                                 <option value="PQV">Progreso Pequiven</option>
                                 <option value="1X10">Progreso 1x10</option>
                                 <option value="C5">Progreso Circuito 5</option>
+                            </select> 
+                        </td>
+                        <td>
+                            <select class="select2 input-large form-control" style="width: 400px;" required="true">
+                               {% for centros in data %}
+                                <option value="{{centros["Codigo"]}}">{{centros["Codigo"]}} - {{centros["Centro"]}}</option>
+                                {% endfor %}
                             </select> 
                         </td>
                     </tr>
@@ -111,6 +119,10 @@
 
             $("legend.menu").click(function () {
                 $("#filtros").toggle(200);
+            });
+
+            $(".select2").select2({
+                allowClear: true
             });
 
         });
