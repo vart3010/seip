@@ -9,8 +9,8 @@
 {% block before_body %}
     {{ contentHeader(
         'Progreso por Centro',
-        'PQ. ',
-        'TIPO'
+        nombres[2],
+        nombres[3] 
     )}}
 {% endblock %}
 
@@ -31,11 +31,11 @@
                 <tbody>
                     <tr>                        
                         <td>
-                            <select class="select2 input-large form-control" style="width: 300px;" required="true">
-                                <option value="General">Progreso General</option>
-                                <option value="PQV">Progreso Pequiven</option>
-                                <option value="1X10">Progreso 1x10</option>
-                                <option value="C5">Progreso Circuito 5</option>
+                            <select class="select2 input-large form-control" style="width: 300px;" required="true" name="codigoCentro" id="codigoCentro">
+                                <option value="1l">Progreso General</option>
+                                <option value="2">Progreso Pequiven</option>
+                                <option value="3">Progreso 1x10</option>
+                                <option value="4">Progreso Circuito 5</option>
                             </select> 
                         </td>
                         <td>
@@ -50,9 +50,10 @@
             </table>
             <br> <br> <br>
 
-            <input type="text" name="Estado" class="input input-small" id="Estado" required="true" value="Boo1" disabled="true">  
-            <input type="text" name="Municipio" class="input input-small" id="Municipio" required="true" value="Boo2" disabled="true">  
-            <input type="text" name="Parroquia" class="input input-small" id="Parroquia" required="true" value="Boo3" disabled="true"s>  
+            <input type="text" name="Estado" class="input input-small" id="Estado" required="true" value="{{ codigos[0] }}" disabled="true">  
+            <input type="text" name="Municipio" class="input input-small" id="Municipio" required="true" value="{{ codigos[1] }}" disabled="true">  
+            <input type="text" name="Parroquia" class="input input-small" id="Parroquia" required="true" value="{{ codigos[2] }}" disabled="true">  
+            <input type="text" name="Tipo" class="input input-small" id="Tipo" required="true" value="{{ codigos[3] }}" disabled="true">  
             <br><br>
         </div>
     </fieldset> 
