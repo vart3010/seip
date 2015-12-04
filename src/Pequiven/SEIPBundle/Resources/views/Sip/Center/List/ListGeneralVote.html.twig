@@ -6,40 +6,87 @@
     <link rel="stylesheet" href="{{ asset('bundles/pequivenseip/icons/imageMap.css') }}">
 {% endblock %}
 
+{% block before_body %}
+    {{ contentHeader(
+        'Progreso por Centro',
+        'PQ. ',
+        'TIPO'
+    )}}
+{% endblock %}
+
 {% block body %}
+    <br><br>
+
+    <fieldset class="fieldset">
+        <legend class="legend menu" style="cursor: pointer"><b>Filtros  <i class="fa fa-angle-double-down"></i></b>
+        </legend>
+        <div id="filtros" role="button">
+            <table width="100%">
+                <thead>
+                    <tr>
+                        <th class="header" align="left">Tipo de Listado:</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>                        
+                        <td>
+                            <select class="select2 input-large form-control" style="width: 300px;" required="true">
+                                <option value="General">Progreso General</option>
+                                <option value="PQV">Progreso Pequiven</option>
+                                <option value="1X10">Progreso 1x10</option>
+                                <option value="C5">Progreso Circuito 5</option>
+                            </select> 
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <br> <br> <br>
+
+            <input type="text" name="Estado" class="input input-small" id="Estado" required="true" value="Boo1" disabled="true">  
+            <input type="text" name="Municipio" class="input input-small" id="Municipio" required="true" value="Boo2" disabled="true">  
+            <input type="text" name="Parroquia" class="input input-small" id="Parroquia" required="true" value="Boo3" disabled="true"s>  
+            <br><br>
+        </div>
+    </fieldset> 
 
     <fieldset class="fieldset">
         <legend class="legend"><b>Centros de Votación</b></legend>
-
-        <table class="simple-table responsive-table tables-extras" width="80%">
-            <thead>
-                <tr>
-                    <th class="header" width="15%">Progreso</th>
-                    <th class="header" width="10%">Código</th>
-                    <th width="55%">Centro</th>
-                    <th width="10%">Votos</th>
-                    <th class="header" width="10%">Faltan</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for cent in data %}
+        <div style="height:500px; width:auto; overflow:auto;">
+            <table class="simple-table responsive-table tables-extras" width="80%">
+                <thead>
                     <tr>
-                        <td>
-                            {% set advance=(cent["Si"]*100)/(cent["Si"]+cent["No"]) %}
-                            {% include 'PequivenSEIPBundle:Sip:Center/List/percentajeBarResult.html.twig' %}
-                        </td>
-                        <td>{{cent["Codigo"]}}</td>
-                        <td>{{cent["Centro"]}}</td>
-                        <td>{{cent["Si"]}}</td>
-                        <td>{{cent["No"]}}</td>                        
+                        <th class="header" width="20%">Progreso</th>
+                        <th class="header" width="10%">Código</th>
+                        <th class="header" width="50%">Centro</th>
+                        <th class="header" width="10%" align="center">Votos</th>
+                        <th class="header" width="10%" align="center">Faltan</th>
                     </tr>
-                {% endfor %}
-            </tbody>
-        </table>        
+                </thead>
+                <tbody>
+                    {% for cent in data %}
+                        <tr>
+                            <td>
+                                {% set advance=(cent["Si"]*100)/(cent["Si"]+cent["No"]) %}
+                                {% include 'PequivenSEIPBundle:Sip:Center/List/percentajeBarResult.html.twig' %}
+                            </td>
+                            <td>
+                                <a href="{{ path("pequiven_sip_center_show",{id:cent["IdCentro"]}) }}">
+                                    {{cent["Codigo"]}}
+                                </a>
+                            </td>
+                            <td> 
+                                <a href="{{ path("pequiven_sip_center_show",{id:cent["IdCentro"]}) }}">
+                                    {{cent["Centro"]}}
+                                </a>
+                            </td>
+                            <td align="center">{{cent["Si"]}}</td>
+                            <td align="center">{{cent["No"]}}</td>                        
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>    
+        </div>
     </fieldset>
-
-
-
 
 {% endblock body %}
 
@@ -60,15 +107,13 @@
     {{ parent() }}
     <script type="text/javascript">
         $(document).ready(function () {
-        });
-    </script>
-    <script type="text/javascript">
+            $("#filtros").hide();
 
-        function getTableExtraInfo(data)
-        {
-            var response = '';
-            return response;
-        }
+            $("legend.menu").click(function () {
+                $("#filtros").toggle(200);
+            });
+
+        });
     </script>
 {% endblock %}
 

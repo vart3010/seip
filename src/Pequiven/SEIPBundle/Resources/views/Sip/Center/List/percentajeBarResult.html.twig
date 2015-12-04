@@ -3,10 +3,12 @@
         <span class="meter 
               {% if advance < (i*10) %}
                   white-gradient
-              {%else %}
+              {% elseif advance == 0 %}
+                  white-gradient
+              {% else %} 
                   red-gradient
               {% endif %}                          
               "></span>
     {% endfor %}
 </span>
-- {{ advance }}%                        
+- {{ advance|number_format(2, '.', ',') }}%                        

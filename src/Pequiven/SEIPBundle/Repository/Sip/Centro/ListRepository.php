@@ -20,6 +20,7 @@ class ListRepository extends EntityRepository {
     Estado,
     Municipio,
     Parroquia,
+    IdCentro,
     Codigo,
     Centro,
     SUM(VotoSI) AS Si,
@@ -29,7 +30,8 @@ FROM
 WHERE
     estado = "EDO. CARABOBO"
         AND parroquia = "PQ. RAFAEL URDANETA"
-GROUP BY centro';
+GROUP BY centro
+ORDER BY Codigo';
 
         $stmt = $db->prepare($sql);
         $stmt->execute();
