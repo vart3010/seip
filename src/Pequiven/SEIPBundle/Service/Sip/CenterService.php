@@ -230,31 +230,35 @@ class CenterService implements ContainerAwareInterface {
             $horas = max($resultHoras)["Hora"] - 6;
         }
         
-        for ($i=0; $i <=$horas; $i++) { 
-            if ($horaIni == 13) {
-                $horaIni = $horaIni - 12;
-            }          
+        if (isset($resultHoras)) {            
+            for ($i=0; $i <=$horas; $i++) { 
+                if ($horaIni == 13) {
+                    $horaIni = $horaIni - 12;
+                }          
 
-            $linea = $horaIni.":00";                      
-            $label["label"] = $linea;     
-            $category[] = $label;
-            
-            if (isset($resultHoras[$cont]["Hora"])) {
-                $horaSet = (int)$resultHoras[$cont]["Hora"];                                       
+                $linea = $horaIni.":00";                      
+                $label["label"] = $linea;     
+                $category[] = $label;
+                
+                if (isset($resultHoras[$cont]["Hora"])) {
+                    $horaSet = (int)$resultHoras[$cont]["Hora"];                                       
+                }
+
+                if ($horaSet == $horaReal) {
+                    $votos = $votos + $resultHoras[$cont]["Si"];
+                    $cont++;           
+                }else{
+                    $votos = $votos;
+                }
+
+                $dataLinea["value"] = $votos; //Carga de valores
+                $dataSetLinea["data"][] = $dataLinea; //data linea            
+
+                $horaReal++;
+                $horaIni++; 
             }
-
-            if ($horaSet == $horaReal) {
-                $votos = $votos + $resultHoras[$cont]["Si"];
-                $cont++;           
-            }else{
-                $votos = $votos;
-            }
-
-            $dataLinea["value"] = $votos; //Carga de valores
-            $dataSetLinea["data"][] = $dataLinea; //data linea            
-
-            $horaReal++;
-            $horaIni++; 
+        }else{
+            $dataSetLinea["data"][] = 0;
         }
         
             $dataSetValues['votos'] = array('seriesname' => 'Votos * Horas', 'parentyaxis' => 'S', 'renderas' => 'Line', 'color' => '#dbc903', 'data' => $dataSetLinea['data']);
