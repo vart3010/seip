@@ -16,20 +16,28 @@ class ListRepository extends EntityRepository {
         $em = $this->getEntityManager();
         $db = $em->getConnection();
 
-        $sql = 'SELECT * FROM sip_centro';
+        $sql = 'SELECT 
+    Estado,
+    Municipio,
+    Parroquia,
+    IdCentro,
+    Codigo,
+    Centro,
+    SUM(VotoSI) AS Si,
+    SUM(VotoNO) AS No
+FROM
+    General_Votes
+WHERE
+    estado = "EDO. CARABOBO"
+        AND parroquia = "PQ. RAFAEL URDANETA"
+GROUP BY centro
+ORDER BY Codigo';
 
         $stmt = $db->prepare($sql);
         $stmt->execute();
         $result = $stmt->fetchAll();
-//        var_dump($result[0]);
-//        die();
-        
-        $result = array('id' => 1,'nombre' => 'epale');
-        
-        $pagerfanta = new \Tecnocreaciones\Bundle\ResourceBundle\Model\Paginator\Paginator(new \Pagerfanta\Adapter\ArrayAdapter($result));
-        $pagerfanta->setContainer($this->container);
-        return $pagerfanta;
 
+        return $result;
     }
 
 }
