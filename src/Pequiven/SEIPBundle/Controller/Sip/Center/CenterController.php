@@ -73,7 +73,7 @@ class CenterController extends SEIPController {
             if (isset($request->get('report_centro')["categoria"])) {
                 $categoria = $request->get('report_centro')["categoria"];                
             }else{
-                $categoria = 0;
+                $categoria = 1;
             }
 
             $observations = $request->get('report_centro')["observations"];

@@ -168,9 +168,16 @@ class OnePerTenMembers {
      * localidadOne
      * @var string
      *
-     * @ORM\Column(name="localidadOne", type="string")
+     * @ORM\Column(name="localidadOne", type="string", nullable=true)
      */
     private $localidadOne;
+        
+    /**
+     * @var \Integer
+     * 
+     * @ORM\Column(name="centroid", type="integer",nullable=true )
+     */
+    private $centroid;
 
     function getCodigoParroquia() {
         return $this->codigoParroquia;
@@ -332,6 +339,12 @@ class OnePerTenMembers {
         $this->localidadOne = $localidadOne;
     }
 
+    function setCentroid($centroid) {
+        $this->centroid = $centroid;
+    }
 
+    function getCentroid() {
+        return $this->centroid;
+    }
 
 }

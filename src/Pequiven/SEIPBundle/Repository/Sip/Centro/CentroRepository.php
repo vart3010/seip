@@ -623,8 +623,184 @@ class CentroRepository extends EntityRepository {
                 FROM
                     General_Votes
                 WHERE
-                    Localidad ="'.$localidad.'" AND Tipo = "PQV"
+                    Localidad ="'.$localidad.'" AND Tipo = "1x10"
                 GROUP BY Localidad';            
+
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+        
+        return $result;
+    }
+
+    /**
+     * Votos PQV CIRCUITO 5
+     * 
+     * @param array $criteria
+     * @param array $orderBy
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    function findByCircuito5Edo($estado) {
+        
+        $em = $this->getEntityManager();
+        $db = $em->getConnection();
+
+        $sql = 'SELECT
+                    Estado,
+                      SUM(votoSI),
+                    SUM(votoNO)   
+                FROM
+                    General_Votes
+                WHERE
+                    Estado ="'.$estado.'" AND Tipo = "PQV" AND Parroquia in ("PQ. U TOCUYITO", "PQ. U INDEPENDENCIA", 
+                        "PQ. MIGUEL PEÑA", "PQ. RAFAEL URDANETA", "PQ. NEGRO PRIMERO", "PQ. SANTA ROSA")
+                GROUP BY Estado';            
+
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+        
+        return $result;
+    }
+
+    /**
+     * Votos PQV CIRCUITO5 1X10
+     * 
+     * @param array $criteria
+     * @param array $orderBy
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    function findByCircuito5Edo1x10($estado) {
+        
+        $em = $this->getEntityManager();
+        $db = $em->getConnection();
+
+        $sql = 'SELECT
+                    Estado,
+                      SUM(votoSI),
+                    SUM(votoNO)   
+                FROM
+                    General_Votes
+                WHERE
+                    Estado ="'.$estado.'" AND Tipo = "1x10" AND Parroquia in ("PQ. U TOCUYITO", "PQ. U INDEPENDENCIA", 
+                        "PQ. MIGUEL PEÑA", "PQ. RAFAEL URDANETA", "PQ. NEGRO PRIMERO", "PQ. SANTA ROSA")
+                GROUP BY Estado';            
+
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+        
+        return $result;
+    }
+
+    /**
+     * Votos PQV CIRCUITO5 Barra
+     * 
+     * @param array $criteria
+     * @param array $orderBy
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    function findByCircuito5Barra($estado, $parroquia,$tipo) {
+        
+        $em = $this->getEntityManager();
+        $db = $em->getConnection();
+
+        $sql = 'SELECT
+                    Parroquia,
+                      SUM(votoSI),
+                    SUM(votoNO)   
+                FROM
+                    General_Votes
+                WHERE
+                    Estado ="'.$estado.'" AND Tipo = "'.$tipo.'" AND Parroquia = "'.$parroquia.'"
+                GROUP BY Parroquia';            
+
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+        
+        return $result;
+    }
+
+    /**
+     * Votos 1x10
+     * 
+     * @param array $criteria
+     * @param array $orderBy
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    function findBy1x10() {
+        
+        $em = $this->getEntityManager();
+        $db = $em->getConnection();
+
+        $sql = 'SELECT
+                    Tipo,
+                      SUM(votoSI),
+                    SUM(votoNO)   
+                FROM
+                    General_Votes
+                WHERE
+                    Tipo ="1x10"
+                GROUP BY Tipo';            
+
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+        
+        return $result;
+    }
+
+    /**
+     * Votos 1x10 por estado
+     * 
+     * @param array $criteria
+     * @param array $orderBy
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    function findByBarra1x10($estado) {
+        
+        $em = $this->getEntityManager();
+        $db = $em->getConnection();
+
+        $sql = 'SELECT
+                    Tipo,
+                      SUM(votoSI),
+                    SUM(votoNO)   
+                FROM
+                    General_Votes
+                WHERE
+                    Tipo ="1x10" AND Estado = "'.$estado.'"
+                GROUP BY Tipo';            
+
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+        
+        return $result;
+    }
+
+    /**
+     * Votos 1x10 por estado
+     * 
+     * @param array $criteria
+     * @param array $orderBy
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    function findByBarra1x10Otros() {
+        
+        $em = $this->getEntityManager();
+        $db = $em->getConnection();
+
+        $sql = 'SELECT
+                    Tipo,
+                      SUM(votoSI),
+                    SUM(votoNO)   
+                FROM
+                    General_Votes
+                WHERE
+                    Tipo ="1x10" AND Estado not in ("EDO. CARABOBO", "EDO. ZULIA", "EDO. ANZOATEGUI")
+                GROUP BY Tipo';            
 
         $stmt = $db->prepare($sql);
         $stmt->execute();

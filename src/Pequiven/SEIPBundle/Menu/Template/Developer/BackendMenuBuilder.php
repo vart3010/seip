@@ -1760,7 +1760,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                 ))->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.voto_pqv', $section)));
             
             $displayMenu->addChild('sip.voto_1x10', array(
-                    'route' => '',
+                    'route' => 'pequiven_sip_display_voto_1x10',
                     'labelAttributes' => array('icon' => 'fa fa-bar-chart',)
                 ))->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.voto_1x10', $section)));
 

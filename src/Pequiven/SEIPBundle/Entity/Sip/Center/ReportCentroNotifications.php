@@ -43,7 +43,7 @@ class ReportCentroNotifications extends modelReport{
      *
      * @ORM\Column(name="categoria", type="integer", nullable=true)
      */
-    private $categoria;
+    private $categoria = 1;
 
     /**
      * @var text
