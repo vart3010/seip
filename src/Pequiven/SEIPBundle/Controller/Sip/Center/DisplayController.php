@@ -162,10 +162,12 @@ class DisplayController extends SEIPController {
         $estado = "EDO. CARABOBO";
         $dataChartCircuto = $CenterService->getDataChartOfCircuito5($estado); //General
         $dataChartCircuto1x10 = $CenterService->getDataChartOfCircuito51x10($estado); //General        
+        $dataChartCircutoBarra = $CenterService->getDataChartOfCircuitoBarra($estado); //General        
 
         return  $this->render('PequivenSEIPBundle:Sip:Center/Display/voto_circuito.html.twig',array(
             'dataChartCircuto'     => $dataChartCircuto,
-            'dataChartCircuto1x10' => $dataChartCircuto1x10
+            'dataChartCircuto1x10' => $dataChartCircuto1x10,
+            'dataChartCircutoBarra' => $dataChartCircutoBarra
             ));
     }
 

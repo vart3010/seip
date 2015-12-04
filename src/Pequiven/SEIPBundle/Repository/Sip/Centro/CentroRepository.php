@@ -694,6 +694,35 @@ class CentroRepository extends EntityRepository {
     }
 
     /**
+     * Votos PQV CIRCUITO5 Barra
+     * 
+     * @param array $criteria
+     * @param array $orderBy
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    function findByCircuito5Barra($estado, $parroquia,$tipo) {
+        
+        $em = $this->getEntityManager();
+        $db = $em->getConnection();
+
+        $sql = 'SELECT
+                    Parroquia,
+                      SUM(votoSI),
+                    SUM(votoNO)   
+                FROM
+                    General_Votes
+                WHERE
+                    Estado ="'.$estado.'" AND Tipo = "'.$tipo.'" AND Parroquia = "'.$parroquia.'"
+                GROUP BY Parroquia';            
+
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+        
+        return $result;
+    }
+
+    /**
      * Crea un paginador para los CUTL
      * 
      * @param array $criteria
