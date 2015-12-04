@@ -454,16 +454,33 @@ class CenterService implements ContainerAwareInterface {
             
             //Votos por Municipio
             $mcpoVoto = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByVotosMunicipios($municipio, $estadoDescription);            
-            $dataRealVoto = $mcpoVoto[0]["SUM(votoSI)"];
-            $dataPlanVoto = $mcpoVoto[0]["SUM(votoNO)"];
+            if (isset($mcpoVoto[0]["SUM(votoSI)"])) {
+                $dataRealVoto = $mcpoVoto[0]["SUM(votoSI)"];                
+            }else{
+                $dataRealVoto = 0;
+            }
+            if (isset($mcpoVoto[0]["SUM(votoNO)"])) {
+                $dataPlanVoto = $mcpoVoto[0]["SUM(votoNO)"];                
+            }else{
+                $dataPlanVoto = 0;                
+            }
+
 
             $muncpo = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByMcpoId($municipio, $estado);            
             $muncpo = $muncpo[0]["id"];            
             
             if ($type == 1) {
                 $mcpoVotoGeneral = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByVotosMunicipiosGeneral($municipio, $estadoDescription);            
-                $dataRealVoto = $dataRealVoto + $mcpoVotoGeneral[0]["SUM(votoSI)"];
-                $dataPlanVoto = $dataPlanVoto + $mcpoVotoGeneral[0]["SUM(votoNO)"];                                
+                if (isset($mcpoVotoGeneral[0]["SUM(votoSI)"])) {
+                    $dataRealVoto = $dataRealVoto + $mcpoVotoGeneral[0]["SUM(votoSI)"];                    
+                }else{
+                    $dataRealVoto = $dataRealVoto + 0;
+                }
+                if (isset($mcpoVotoGeneral[0]["SUM(votoNO)"])) {
+                    $dataPlanVoto = $dataPlanVoto + $mcpoVotoGeneral[0]["SUM(votoNO)"];                                                        
+                }else{
+                    $dataPlanVoto = $dataPlanVoto + 0;                    
+                }
 
                 $link = $this->generateUrl('pequiven_sip_display_voto_general_mcpo',array('edo' => $estado, 'type' => $type, 'mcpo' => $muncpo));            
             }elseif($type == 2){        
@@ -704,14 +721,17 @@ class CenterService implements ContainerAwareInterface {
             $estado = $this->AsignedDescriptionEdo($estado);
             //Votos por Parroquia
             $parroqVoto = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByVotosParroquia($parroquia, $estado);            
-            /*if(isset($parroqVoto)){
-                $votoSI = $parroqVoto[0]["SUM(votoSI)"];
-                $votoNO = $parroqVoto[0]["SUM(votoNO)"];
-            }else{*/
-                $votoSI = 0;
-                $votoNO = 0;
-            //}
+            if(isset($parroqVoto[0]["SUM(votoSI)"])){
+                $votoSI = $parroqVoto[0]["SUM(votoSI)"];                
+            }else{
+                $votoSI = 0;             
+            }
 
+            if(isset($parroqVoto[0]["SUM(votoNO)"])){                
+                $votoNO = $parroqVoto[0]["SUM(votoNO)"];
+            }else{                
+                $votoNO = 0;
+            }
             
             if ($type == 1) {
                 $parroqGeneral = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByVotosParroquiaGeneral($parroquia, $estado);            
