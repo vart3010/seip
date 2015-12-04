@@ -95,24 +95,20 @@ class LogSms {
      */
     private $resp;
     
-    /**
-     * fecha
-     * @var string
-     *
-     * @ORM\Column(name="fecha", type="string", length=255, nullable=false)
+     /**
+     * fecha 
+     * @ORM\Column(name="fecha", type="datetime", nullable=true)
      */
     private $fecha;
     
-    function getFecha() {
-        return $this->fecha;
-    }
-
-    function setFecha($fecha) {
-        $this->fecha = $fecha;
-    }
-
-        
-
+    /**
+     * telefono
+     * @var string
+     *
+     * @ORM\Column(name="telefono", type="string", length=255, nullable=true)
+     */
+    private $telefono;
+    
     function getId() {
         return $this->id;
     }
@@ -151,6 +147,14 @@ class LogSms {
 
     function getResp() {
         return $this->resp;
+    }
+
+    function getFecha() {
+        return $this->fecha;
+    }
+
+    function getTelefono() {
+        return $this->telefono;
     }
 
     function setId($id) {
@@ -192,6 +196,15 @@ class LogSms {
     function setResp($resp) {
         $this->resp = $resp;
     }
+
+    function setFecha($fecha) {
+        $this->fecha = $fecha;
+    }
+
+    function setTelefono($telefono) {
+        $this->telefono = $telefono;
+    }
+
 
 
 
