@@ -7206,6 +7206,30 @@ angular.module('seipModule.controllers', [])
                 })
             };
 
+            //Charts Votos General
+            $scope.renderChartVotoGeneralCircuito = function (id, data, categories, caption, typeLabelDisplay) {
+                FusionCharts.ready(function () {
+                    var revenueChart = new FusionCharts({
+                        //"type": "mscolumn3dlinedy",
+                        "type": "pie3d",
+                        "renderAt": id,
+                        "width": "150%",
+                        "height": "35%",
+                        "exportFormats": "PNG= Exportar como PNG|PDF= Exportar como PDF",
+                        "exportFileName": "",
+                        "exporthandler": "http://107.21.74.91/",
+                        "html5exporthandler": "http://107.21.74.91/",
+                        "dataFormat": "json",
+                        "dataSource": {
+                            "chart": data.dataSource.chart,
+                            "dataset": data.dataSource.dataset
+                        }
+                    });
+                    revenueChart.setTransparent(true);
+                    revenueChart.render();
+                })
+            };
+
             //Charts Votos General Horas
             $scope.renderChartVotoGeneralHours = function (id, data, categories, caption, typeLabelDisplay) {
                 FusionCharts.ready(function () {
@@ -7255,7 +7279,7 @@ angular.module('seipModule.controllers', [])
                 })
             };
 
-            //Charts Votos General Horas
+            //Charts Votos General Parroquia
             $scope.renderChartVotoGeneralParroq = function (id, data, categories, caption, typeLabelDisplay) {
                 FusionCharts.ready(function () {
                     var revenueChart = new FusionCharts({                        
@@ -7366,6 +7390,30 @@ angular.module('seipModule.controllers', [])
                         "dataFormat": "json",
                         "dataSource": {
                             "chart": data.dataSource.chart,
+                            "dataset": data.dataSource.dataset
+                        }
+                    });
+                    revenueChart.setTransparent(true);
+                    revenueChart.render();
+                })
+            };
+
+            //Charts Votos General Parroquia
+            $scope.renderChartVotoGeneralCircuito5 = function (id, data, categories, caption, typeLabelDisplay) {
+                FusionCharts.ready(function () {
+                    var revenueChart = new FusionCharts({                        
+                        "type": "mscolumnline3d",
+                        "renderAt": id,
+                        "width": "100%",
+                        "height": "80%",
+                        "exportFormats": "PNG= Exportar como PNG|PDF= Exportar como PDF",
+                        "exportFileName": "",
+                        "exporthandler": "http://107.21.74.91/",
+                        "html5exporthandler": "http://107.21.74.91/",
+                        "dataFormat": "json",
+                        "dataSource": {
+                            "chart": data.dataSource.chart,
+                            "categories": data.dataSource.categories,
                             "dataset": data.dataSource.dataset
                         }
                     });
