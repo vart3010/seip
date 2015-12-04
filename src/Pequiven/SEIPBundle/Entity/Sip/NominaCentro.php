@@ -85,6 +85,13 @@ class NominaCentro {
      */
     private $localidad;
     
+    /**
+     * @var \Integer
+     * 
+     * @ORM\Column(name="oneid", type="integer")
+     */
+    private $oneid;
+    
     function setUserid($userid) {
         $this->userid = $userid;
     }
@@ -165,5 +172,13 @@ class NominaCentro {
     
     function getLocalidad() {
         return $this->localidad;
+    }
+    
+    function setOneid($oneid) {
+        $this->oneid = $oneid;
+    }
+
+    function getOneid() {
+        return $this->oneid;
     }
 }

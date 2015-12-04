@@ -163,6 +163,14 @@ class OnePerTenMembers {
      * @ORM\Column(name="voto", type="integer", nullable=true)
      */
     private $voto = 0;
+    
+    /**
+     * localidadOne
+     * @var string
+     *
+     * @ORM\Column(name="localidadOne", type="string")
+     */
+    private $localidadOne;
 
     function getCodigoParroquia() {
         return $this->codigoParroquia;
@@ -186,6 +194,10 @@ class OnePerTenMembers {
 
     function getNombreEstado() {
         return $this->nombreEstado;
+    }
+
+    function getLocalidadOne() {
+        return $this->localidadOne;
     }
 
     function setCodigoParroquia($codigoParroquia) {
@@ -314,6 +326,10 @@ class OnePerTenMembers {
 
     function setFechaVoto($fechaVoto) {
         $this->fechaVoto = $fechaVoto;
+    }
+
+    function setLocalidadOne($localidadOne) {
+        $this->localidadOne = $localidadOne;
     }
 
 
