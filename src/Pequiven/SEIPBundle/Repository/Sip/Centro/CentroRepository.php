@@ -810,6 +810,35 @@ class CentroRepository extends EntityRepository {
     }
 
     /**
+     * Votos Horas
+     * 
+     * @param array $criteria
+     * @param array $orderBy
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    function findByGeneralHoras() {
+        
+        $em = $this->getEntityManager();
+        $db = $em->getConnection();
+
+        $sql = 'SELECT
+                    HOUR(Fecha) AS Hora,
+                    SUM(VotoSI) AS Si
+                FROM
+                    General_Votes
+                WHERE                    
+                    VotoSI=1 and Fecha is not null
+                GROUP BY Hora
+                ORDER BY Hora';            
+
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+        
+        return $result;
+    }
+
+    /**
      * Crea un paginador para los CUTL
      * 
      * @param array $criteria

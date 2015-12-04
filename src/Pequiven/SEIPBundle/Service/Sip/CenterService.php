@@ -205,30 +205,42 @@ class CenterService implements ContainerAwareInterface {
         $dataSetLinea["seriesname"] = "Horas";        
 
         $horas = 13;
-        $cont = 0;
-        $horaIni = 7;
-
-        for ($i=0; $i <= $horas; $i++) {             
-            
+        $cont = $votos = 0;
+        $horaIni = $horaReal = 7;
+        
+        $resultHoras = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByGeneralHoras(); 
+        
+        if(max($resultHoras) >= 13) {
+            $horas = max($resultHoras)["Hora"] - 6;
+        }
+        
+        for ($i=0; $i <=$horas; $i++) { 
             if ($horaIni == 13) {
                 $horaIni = $horaIni - 12;
-            }            
+            }          
 
             $linea = $horaIni.":00";                      
             $label["label"] = $linea;     
             $category[] = $label;
-            $horaIni++;
-            $cont++;
-        
-        }
+            
+            if (isset($resultHoras[$cont]["Hora"])) {
+                $horaSet = (int)$resultHoras[$cont]["Hora"];                                       
+            }
 
-        $votosPrueba = 150;
-        for ($i=0; $i <= $horas; $i++) {             
-          
-            $dataLinea["value"] = $votosPrueba; //Carga de valores
-            $dataSetLinea["data"][] = $dataLinea; //data linea
-            $votosPrueba = $votosPrueba * 1.5;
+            if ($horaSet == $horaReal) {
+                $votos = $votos + $resultHoras[$cont]["Si"];
+                $cont++;           
+            }else{
+                $votos = $votos;
+            }
+
+            $dataLinea["value"] = $votos; //Carga de valores
+            $dataSetLinea["data"][] = $dataLinea; //data linea            
+
+            $horaReal++;
+            $horaIni++; 
         }
+        
             $dataSetValues['votos'] = array('seriesname' => 'Votos * Horas', 'parentyaxis' => 'S', 'renderas' => 'Line', 'color' => '#dbc903', 'data' => $dataSetLinea['data']);
             //$dataMeta["value"] = 0;
             //$dataSetMeta["data"][] = $dataMeta;
