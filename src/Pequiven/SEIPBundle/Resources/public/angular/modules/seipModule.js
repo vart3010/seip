@@ -3083,7 +3083,7 @@ angular.module('seipModule.controllers', [])
             $scope.removeAssists = function () {
                 $scope.openModalConfirm('¿Desea eliminar la Asistencia?', function () {
                     notificationBarService.getLoadStatus().loading();
-                    var url = Routing.generate("pequiven_sip_center_activo", {id: $scope.assists});
+                    var url = Routing.generate("pequiven_sip_center_activo", {idCenter: $scope.idCenter,  id: $scope.assists});
                     $http({
                         method: 'GET',
                         url: url,
