@@ -168,7 +168,7 @@ class OnePerTenMembers {
      * localidadOne
      * @var string
      *
-     * @ORM\Column(name="localidadOne", type="string")
+     * @ORM\Column(name="localidadOne", type="string", nullable=true)
      */
     private $localidadOne;
 
