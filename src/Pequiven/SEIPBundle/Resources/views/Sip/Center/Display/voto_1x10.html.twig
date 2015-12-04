@@ -9,22 +9,17 @@
 
 {% block body %}
 <meta http-equiv="refresh" content="300;">
-<div class="columns">        
+
+<div class="columns"> 
         <div class="new-row three-columns twelve-columns-mobile">
-            <div  ng-controller="displayCenterController" ng-init="renderChartVotoGeneralCircuito('displayVotoGeneral',{{ dataChartCircuto }})">
-                <span id="displayVotoGeneral">
-                </span>
-            </div>
-        </div>
-        <div class="three-columns twelve-columns-mobile">
-            <div  ng-controller="displayCenterController" ng-init="renderChartVotoGeneralCircuito('displayVotoGeneral1x10',{{ dataChartCircuto1x10 }})">
+            <div  ng-controller="displayCenterController" ng-init="renderChartVotoGeneralCircuito('displayVotoGeneral1x10',{{ dataChart1x10 }})">
                 <span id="displayVotoGeneral1x10">
                 </span>
             </div>
         </div>
         <div class="one-column">
         </div>
-        <div class="five-columns twelve-columns-mobile">
+        <div class="seven-columns twelve-columns-mobile">
             <div  ng-controller="displayCenterController" ng-init="renderChartVotoGeneralHoursCircuito('displayHours',{{ dataHours }})">
                 <span id="displayHours">
                 </span>
@@ -32,8 +27,8 @@
         </div>
 </div>
 <div class="columns"> 
-    <div class="twelve-columns twelve-columns-mobile" style="padding-top:0px;">
-        <div  ng-controller="displayCenterController" ng-init="renderChartVotoGeneralCircuito5('displayCircuito5',{{ dataChartCircutoBarra }})">
+    <div class="new-row twelve-columns twelve-columns-mobile" style="padding-top:0px;">
+        <div  ng-controller="displayCenterController" ng-init="renderChartVotoGeneralCircuito5('displayCircuito5',{{ dataChartBarra }})">
             <span id="displayCircuito5">
             </span>
         </div>

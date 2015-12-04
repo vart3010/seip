@@ -338,7 +338,7 @@ class CentroRepository extends EntityRepository {
         $em = $this->getEntityManager();
         $db = $em->getConnection();
 
-        $sql = 'SELECT c.descriptionParroquia
+        $sql = 'SELECT c.descriptionParroquia,c.codigoParroquia
                 FROM
                 sip_centro AS c            
                 WHERE c.codigoEstado ="'.$estado.'" AND c.codigoMunicipio ="'.$mcpo.'"
@@ -714,6 +714,136 @@ class CentroRepository extends EntityRepository {
                 WHERE
                     Estado ="'.$estado.'" AND Tipo = "'.$tipo.'" AND Parroquia = "'.$parroquia.'"
                 GROUP BY Parroquia';            
+
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+        
+        return $result;
+    }
+
+    /**
+     * Votos 1x10
+     * 
+     * @param array $criteria
+     * @param array $orderBy
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    function findBy1x10() {
+        
+        $em = $this->getEntityManager();
+        $db = $em->getConnection();
+
+        $sql = 'SELECT
+                    Tipo,
+                      SUM(votoSI),
+                    SUM(votoNO)   
+                FROM
+                    General_Votes
+                WHERE
+                    Tipo ="1x10"
+                GROUP BY Tipo';            
+
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+        
+        return $result;
+    }
+
+    /**
+     * Votos 1x10 por estado
+     * 
+     * @param array $criteria
+     * @param array $orderBy
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    function findByBarra1x10($estado) {
+        
+        $em = $this->getEntityManager();
+        $db = $em->getConnection();
+
+        $sql = 'SELECT
+                    Tipo,
+                      SUM(votoSI),
+                    SUM(votoNO)   
+                FROM
+                    General_Votes
+                WHERE
+                    Tipo ="1x10" AND Estado = "'.$estado.'"
+                GROUP BY Tipo';            
+
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+        
+        return $result;
+    }
+
+    /**
+     * Votos 1x10 por estado
+     * 
+     * @param array $criteria
+     * @param array $orderBy
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    function findByBarra1x10Otros() {
+        
+        $em = $this->getEntityManager();
+        $db = $em->getConnection();
+
+        $sql = 'SELECT
+                    Tipo,
+                      SUM(votoSI),
+                    SUM(votoNO)   
+                FROM
+                    General_Votes
+                WHERE
+                    Tipo ="1x10" AND Estado not in ("EDO. CARABOBO", "EDO. ZULIA", "EDO. ANZOATEGUI")
+                GROUP BY Tipo';            
+
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+        
+        return $result;
+    }
+
+    /**
+     * Votos Horas
+     * 
+     * @param array $criteria
+     * @param array $orderBy
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    function findByGeneralHoras($type) {
+        
+        $em = $this->getEntityManager();
+        $db = $em->getConnection();
+
+        $sql1 = 'SELECT
+                    HOUR(Fecha) AS Hora,
+                    SUM(VotoSI) AS Si
+                FROM
+                    General_Votes
+                WHERE                    
+                    VotoSI=1 AND Fecha is not null';
+
+        if($type == 2) {
+            $sql2 = ' AND Tipo = "PQV"';
+        }elseif($type == 3){
+            $sql2 = ' AND Estado = "EDO. CARABOBO" AND Parroquia in ("PQ. U TOCUYITO", "PQ. U INDEPENDENCIA", 
+                        "PQ. MIGUEL PEÑA", "PQ. RAFAEL URDANETA", "PQ. NEGRO PRIMERO", "PQ. SANTA ROSA")';
+        }elseif($type == 4){
+            $sql2 = ' AND Tipo = "1x10"';
+        }else{
+            $sql2 = '';
+        };
+
+        $sql3 = ' GROUP BY Hora
+                ORDER BY Hora';            
+                
+        $sql = $sql1.$sql2.$sql3;
 
         $stmt = $db->prepare($sql);
         $stmt->execute();

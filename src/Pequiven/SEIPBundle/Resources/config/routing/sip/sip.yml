@@ -544,16 +544,20 @@ pequiven_sip_display_voto_circuito_5:
     defaults:
         _controller: pequiven.controller.display:circuitoAction
 pequiven_sip_display_voto_cet:
-    path: /display/general/cet
+    path: /display/voto/cet
     defaults:
         _controller: pequiven.controller.display:cetAction
 pequiven_sip_display_voto_localidad:
     path: /display/voto/localidad
     defaults:
         _controller: pequiven.controller.display:localidadAction
+pequiven_sip_display_voto_1x10:
+    path: /display/voto/1x10
+    defaults:
+        _controller: pequiven.controller.display:onePerTenAction
 
 pequiven_sip_list_voto_general:
-    path: /vote/list/general
+    path: /vote/list/general/{type}/{edo}/{mcpo}/{parroq}
     defaults:
         _format: html
         _controller: pequiven.controller.sipList:ListGeneralVoteAction
