@@ -723,6 +723,93 @@ class CentroRepository extends EntityRepository {
     }
 
     /**
+     * Votos 1x10
+     * 
+     * @param array $criteria
+     * @param array $orderBy
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    function findBy1x10() {
+        
+        $em = $this->getEntityManager();
+        $db = $em->getConnection();
+
+        $sql = 'SELECT
+                    Tipo,
+                      SUM(votoSI),
+                    SUM(votoNO)   
+                FROM
+                    General_Votes
+                WHERE
+                    Tipo ="1x10"
+                GROUP BY Tipo';            
+
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+        
+        return $result;
+    }
+
+    /**
+     * Votos 1x10 por estado
+     * 
+     * @param array $criteria
+     * @param array $orderBy
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    function findByBarra1x10($estado) {
+        
+        $em = $this->getEntityManager();
+        $db = $em->getConnection();
+
+        $sql = 'SELECT
+                    Tipo,
+                      SUM(votoSI),
+                    SUM(votoNO)   
+                FROM
+                    General_Votes
+                WHERE
+                    Tipo ="1x10" AND Estado = "'.$estado.'"
+                GROUP BY Tipo';            
+
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+        
+        return $result;
+    }
+
+    /**
+     * Votos 1x10 por estado
+     * 
+     * @param array $criteria
+     * @param array $orderBy
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    function findByBarra1x10Otros() {
+        
+        $em = $this->getEntityManager();
+        $db = $em->getConnection();
+
+        $sql = 'SELECT
+                    Tipo,
+                      SUM(votoSI),
+                    SUM(votoNO)   
+                FROM
+                    General_Votes
+                WHERE
+                    Tipo ="1x10" AND Estado not in ("EDO. CARABOBO", "EDO. ZULIA", "EDO. ANZOATEGUI")
+                GROUP BY Tipo';            
+
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+        
+        return $result;
+    }
+
+    /**
      * Crea un paginador para los CUTL
      * 
      * @param array $criteria

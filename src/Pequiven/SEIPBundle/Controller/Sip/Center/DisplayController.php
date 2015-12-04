@@ -176,7 +176,15 @@ class DisplayController extends SEIPController {
     }
 
     public function onePerTenAction(){
-        return  $this->render('PequivenSEIPBundle:Sip:Center/Display/voto_1x10.html.twig');
+        $CenterService = $this->getCenterService();//Llamado al Servicio de Centro
+        
+        $dataChart1x10 = $CenterService->getDataChartOf1x10(); //General        
+        $dataChartBarra = $CenterService->getDataChartOfBarra1x10(); //General        
+
+        return  $this->render('PequivenSEIPBundle:Sip:Center/Display/voto_1x10.html.twig',array(
+            'dataChart1x10' => $dataChart1x10,
+            'dataChartBarra' => $dataChartBarra
+            ));        
     }
 
     public function localidadAction(){

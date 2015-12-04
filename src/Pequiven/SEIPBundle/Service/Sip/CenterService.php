@@ -1313,6 +1313,212 @@ class CenterService implements ContainerAwareInterface {
     }
 
     /**
+     *
+     *  Grafica de Voto 1x10
+     *
+     */
+    public function getDataChartOf1x10() {
+        
+        $data = array(
+            'dataSource' => array(
+                'chart' => array(),
+                'categories' => array(
+                ),
+                'dataset' => array(
+                ),
+            ),
+        );
+        $chart = array();
+
+        $chart["caption"] = "Voto General 1x10";
+        $chart["captionFontColor"] = "#e20000";
+        $chart["sYAxisName"] = "";
+        $chart["sNumberSuffix"] = "";
+        $chart["sYAxisMaxValue"] = "100";
+        $chart["paletteColors"] = "#e20000,#0075c2,#1aaf5d,#e20000,#f2c500,#f45b00,#8e0000";
+        $chart["bgColor"] = "#ffffff";
+        $chart["showBorder"] = "0";
+        $chart["showCanvasBorder"] = "0";
+        $chart["usePlotGradientColor"] = "0";
+        $chart["plotBorderAlpha"] = "10";
+        $chart["legendBorderAlpha"] = "0";
+        $chart["legendBgAlpha"] = "0";
+        $chart["bgAlpha"] = "0,0";//Fondo 
+        $chart["legendShadow"] = "0";
+        $chart["showHoverEffect"] = "0";
+        $chart["valueFontColor"] = "#ffffff";
+        $chart["valuePosition"] = "ABOVE";
+        $chart["rotateValues"] = "1";
+        $chart["placeValuesInside"] = "0";
+        $chart["divlineColor"] = "#999999";
+        $chart["divLineDashed"] = "1";
+        $chart["divLineDashLen"] = "1";
+        $chart["divLineGapLen"] = "1";
+        $chart["canvasBgColor"] = "#ffffff";
+        $chart["captionFontSize"] = "20";
+        $chart["subcaptionFontSize"] = "14";
+        $chart["subcaptionFontBold"] = "0";
+        $chart["decimalSeparator"] = ",";
+        $chart["thousandSeparator"] = ".";
+        $chart["inDecimalSeparator"] = ",";
+        $chart["inThousandSeparator"] = ".";
+        $chart["decimals"] = "2";
+        $chart["formatNumberScale"] = "0";
+        $chart["toolTipColor"] = "#ffffff";
+        $chart["toolTipBgColor"] = "#000000";
+        $chart["toolTipBgAlpha"] = "0";
+        $chart["toolTipBorderRadius"] = "2";
+        $chart["toolTipPadding"] = "5";
+        $chart["legendBgColor"] = "#ffffff";
+        $chart["legendItemFontSize"] = "10";
+        $chart["legendItemFontColor"] = "#666666";
+
+        $em = $this->getDoctrine()->getManager();
+        
+        $label = $dataLocalidad = array();
+        
+        //Carga de Nombres de Labels
+        $dataSetLocal["seriesname"] = "Voto Pequiven";        
+        
+        $votoNO = $votoSI = 0;
+        $result1x10 = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findBy1x10();
+        $votoSI = $result1x10[0]["SUM(votoSI)"];
+        $votoNO = $result1x10[0]["SUM(votoNO)"];
+        
+        $chart["showLegend"] = "0";
+        $label = "SI";
+        $dataLocal["label"] = $label; //Carga de valores                
+        $dataLocal["value"] = $votoSI; //Carga de valores
+        $dataSetLocal["data"][] = $dataLocal; //data 
+
+        $label = "NO";
+        $dataLocal["label"] = $label; //Carga de valores                
+        $dataLocal["value"] = $votoNO; //Carga de valores
+        $dataSetLocal["data"][] = $dataLocal; //data 
+        
+
+        $data['dataSource']['chart'] = $chart;                
+        $data['dataSource']['dataset'][] = $dataSetLocal;
+
+        return json_encode($data);        
+    }
+
+
+    /**
+     *
+     *  Grafica de Votos Circuito Barra
+     *
+     */
+    public function getDataChartOfBarra1x10() {
+        
+        $data = array(
+            'dataSource' => array(
+                'chart' => array(),
+                'categories' => array(
+                ),
+                'dataset' => array(
+                ),
+            ),
+        );
+        $chart = array();
+
+        $chart["caption"] = "General 1x10 Estados";
+        $chart["captionFontColor"] = "#e20000";
+        $chart["captionFontSize"] = "20";                
+        $chart["palette"]        = "1";
+        $chart["showvalues"]     = "1";
+        $chart["paletteColors"]  = "#0075c2,#c90606,#f2c500,#12a830,#1aaf5d";
+        $chart["showBorder"] = "0";
+        $chart["showCanvasBorder"] = "0";
+        $chart["yaxisvaluespadding"] = "10";
+        $chart["valueFontColor"] = "#ffffff";
+        $chart["rotateValues"]   = "1";
+        $chart["bgAlpha"] = "0,0";//Fondo         
+        $chart["theme"]          = "fint";
+        $chart["showborder"]     = "0";
+        $chart["decimals"]       = "0";
+        $chart["showLegend"] = "0";
+        $chart["legendBgColor"] = "#ffffff";
+        $chart["legendItemFontSize"] = "10";
+        $chart["legendItemFontColor"] = "#666666";
+        $chart["baseFontColor"] = "#ffffff";        
+        $chart["outCnvBaseFontColor"] = "#ffffff";
+        $chart["formatNumberScale"] = "0";
+
+        $chart["usePlotGradientColor"] = "0";
+        $chart["plotBorderAlpha"] = "10";
+        $chart["legendBorderAlpha"] = "0";
+        $chart["legendBgAlpha"] = "0";
+        $chart["legendItemFontColor"] = "#ffffff";
+        $chart["baseFontColor"] = "#ffffff";
+        $chart["legendItemFontColor"] = "#ffffff";
+        
+        $chart["divLineDashed"] = "0";
+        $chart["showHoverEffect"] = "1";
+        $chart["valuePosition"] = "ABOVE";
+        $chart["dashed"] = "0";
+        $chart["divLineDashLen"] = "0";
+        $chart["divLineGapLen"] = "0";
+        $chart["canvasBgAlpha"] = "0,0";
+        $chart["toolTipBgColor"] = "#000000";
+
+        $em = $this->getDoctrine()->getManager();
+        
+        $label = $dataPlan = $dataReal = array();
+        $count = 1;
+        $votoNO = $votoSI = 0;
+
+        $estados = [
+            1 => "EDO. CARABOBO", 
+            2 => "EDO. ZULIA", 
+            3 => "EDO. ANZOATEGUI",
+            4 => "OTROS"             
+        ];
+        
+        foreach ($estados as $value) {
+            $estado = $estados[$count];
+            $label["label"] = $estado;     
+            $category[] = $label;        
+            
+            if ($estado != "OTROS") {
+                $resultEstado = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByBarra1x10($estado);                
+            }else{
+                $resultEstado = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByBarra1x10Otros();                
+            }
+            
+            if (isset($resultEstado[0]["SUM(votoSI)"])) {
+                $votoSI = $resultEstado[0]["SUM(votoSI)"];                
+            }else{
+                $votoSI = 0;
+            }
+
+            if (isset($resultEstado[0]["SUM(votoNO)"])) {
+                $votoNO = $resultEstado[0]["SUM(votoNO)"];                
+            }else{
+                $votoNO = 0;
+            }
+            
+            $dataReal1["value"] = $votoSI; //Carga de valores General
+            $dataSetReal["data"][] = $dataReal1; //data                 
+            
+            $dataPlan1["value"] = $votoNO + $votoSI; //Carga de valores General
+            $dataSetPlan["data"][] = $dataPlan1; //data 
+
+            $count++;        
+        }    
+
+        $dataSetReal["seriesname"] = "Real";                
+        $dataSetPlan["seriesname"] = "Plan";                
+
+        $data['dataSource']['chart'] = $chart;
+        $data['dataSource']['categories'][]["category"] = $category;
+        $data['dataSource']['dataset'][] = $dataSetPlan;
+        $data['dataSource']['dataset'][] = $dataSetReal;
+
+        return json_encode($data);
+    }
+
+    /**
      * Generates a URL from the given parameters.
      *
      * @param string         $route         The name of the route
