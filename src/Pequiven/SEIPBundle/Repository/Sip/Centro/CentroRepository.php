@@ -417,22 +417,19 @@ class CentroRepository extends EntityRepository {
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
     function findByVotosMunicipiosId($estado, $mcpo) {
-        
+
         $em = $this->getEntityManager();
         $db = $em->getConnection();
 
-        $sql = 'SELECT 
-                CASE
-                    WHEN ((oxp.voto = 0) OR (oxp.voto IS NULL)) THEN "No"
-                    ELSE "Si"
-                END AS Voto,
-                COUNT(oxp.voto) AS Cant
+        $sql = 'SELECT
+                    Municipio,
+                      SUM(votoSI),
+                    SUM(votoNO)   
                 FROM
-                    sip_onePerTen AS oxp
-                        INNER JOIN
-                    sip_nomina_centro AS nom ON (oxp.cedula = nom.cedula) 
-                    where nom.descriptionMunicipio = "'.$mcpo.'" AND nom.descriptionEstado  ="'.$estado.'"
-                GROUP BY voto';            
+                    General_Votes
+                WHERE
+                    Estado ="'.$estado.'" AND Municipio = "'.$mcpo.'" AND Tipo = "PQV"
+                GROUP BY Municipio';            
 
         $stmt = $db->prepare($sql);
         $stmt->execute();
@@ -453,16 +450,15 @@ class CentroRepository extends EntityRepository {
         $em = $this->getEntityManager();
         $db = $em->getConnection();
 
-        $sql = 'SELECT 
-                CASE
-                    WHEN ((oxp.voto = 0) OR (oxp.voto IS NULL)) THEN "No"
-                    ELSE "Si"
-                END AS Voto,
-                COUNT(oxp.voto) AS Cant
+        $sql = 'SELECT
+                    Municipio,
+                      SUM(votoSI),
+                    SUM(votoNO)   
                 FROM
-                    sip_onePerTenMembers AS oxp
-                    where oxp.nombreMunicipio = "'.$mcpo.'" AND oxp.nombreEstado  ="'.$estado.'"
-                GROUP BY voto';            
+                    General_Votes
+                WHERE
+                    Estado ="'.$estado.'" AND Municipio = "'.$mcpo.'" AND Tipo = "1x10"
+                GROUP BY Municipio';            
 
         $stmt = $db->prepare($sql);
         $stmt->execute();
@@ -483,18 +479,15 @@ class CentroRepository extends EntityRepository {
         $em = $this->getEntityManager();
         $db = $em->getConnection();
 
-        $sql = 'SELECT 
-                CASE
-                    WHEN ((oxp.voto = 0) OR (oxp.voto IS NULL)) THEN "No"
-                    ELSE "Si"
-                END AS Voto,
-                COUNT(oxp.voto) AS Cant
+        $sql = 'SELECT
+                    Parroquia,
+                      SUM(votoSI),
+                    SUM(votoNO)   
                 FROM
-                    sip_onePerTen AS oxp
-                        INNER JOIN
-                    sip_nomina_centro AS nom ON (oxp.cedula = nom.cedula) 
-                    where nom.descriptionParroquia = "'.$parroquia.'" AND nom.descriptionEstado  ="'.$estado.'"
-                GROUP BY voto';            
+                    General_Votes
+                WHERE
+                    Estado ="'.$estado.'" AND Parroquia = "'.$parroquia.'" AND Tipo = "PQV"
+                GROUP BY Parroquia';            
 
         $stmt = $db->prepare($sql);
         $stmt->execute();
@@ -515,16 +508,15 @@ class CentroRepository extends EntityRepository {
         $em = $this->getEntityManager();
         $db = $em->getConnection();
 
-        $sql = 'SELECT 
-                CASE
-                    WHEN ((oxp.voto = 0) OR (oxp.voto IS NULL)) THEN "No"
-                    ELSE "Si"
-                END AS Voto,
-                COUNT(oxp.voto) AS Cant
+        $sql = 'SELECT
+                    Parroquia,
+                      SUM(votoSI),
+                    SUM(votoNO)   
                 FROM
-                    sip_onePerTenMembers AS oxp                        
-                    where oxp.nombreParroquia = "'.$parroquia.'" AND oxp.nombreEstado  ="'.$estado.'"
-                GROUP BY voto';            
+                    General_Votes
+                WHERE
+                    Estado ="'.$estado.'" AND Parroquia = "'.$parroquia.'" AND Tipo = "1x10"
+                GROUP BY Parroquia';            
 
         $stmt = $db->prepare($sql);
         $stmt->execute();
@@ -584,7 +576,7 @@ class CentroRepository extends EntityRepository {
     } 
 
     /**
-     * Votos por municipio de PQV
+     * Votos PQV MORON Y SEDE
      * 
      * @param array $criteria
      * @param array $orderBy
@@ -602,7 +594,36 @@ class CentroRepository extends EntityRepository {
                 FROM
                     General_Votes
                 WHERE
-                    Localidad ="'.$localidad.'"
+                    Localidad ="'.$localidad.'" AND Tipo = "PQV"
+                GROUP BY Localidad';            
+
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+        
+        return $result;
+    }
+
+    /**
+     * Votos por 1X10 PQV
+     * 
+     * @param array $criteria
+     * @param array $orderBy
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    function findByLocalidad1x10($localidad) {
+        
+        $em = $this->getEntityManager();
+        $db = $em->getConnection();
+
+        $sql = 'SELECT
+                    Localidad,
+                      SUM(votoSI),
+                    SUM(votoNO)   
+                FROM
+                    General_Votes
+                WHERE
+                    Localidad ="'.$localidad.'" AND Tipo = "PQV"
                 GROUP BY Localidad';            
 
         $stmt = $db->prepare($sql);
