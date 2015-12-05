@@ -1749,30 +1749,40 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
 
 
             //Menu 3 nivel Voto
-            $displayMenu->addChild('sip.voto_general', array(
-                    'route' => 'pequiven_sip_display_voto_general',
-                    'labelAttributes' => array('icon' => 'fa fa-bar-chart',)
-                ))->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.voto_general', $section)));
+            if ($this->isGranted(array('ROLE_SEIP_SIP_MONITOR_GENERAL'))) {
+                $displayMenu->addChild('sip.voto_general', array(
+                        'route' => 'pequiven_sip_display_voto_general',
+                        'labelAttributes' => array('icon' => 'fa fa-bar-chart',)
+                    ))->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.voto_general', $section)));
+            }
 
-            $displayMenu->addChild('sip.voto_pqv', array(
-                    'route' => 'pequiven_sip_display_voto_pqv',
-                    'labelAttributes' => array('icon' => 'fa fa-bar-chart',)
-                ))->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.voto_pqv', $section)));
+            if ($this->isGranted(array('ROLE_SEIP_SIP_MONITOR_PQV'))) {
+                $displayMenu->addChild('sip.voto_pqv', array(
+                        'route' => 'pequiven_sip_display_voto_pqv',
+                        'labelAttributes' => array('icon' => 'fa fa-bar-chart',)
+                    ))->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.voto_pqv', $section)));
+            }
             
-            $displayMenu->addChild('sip.voto_1x10', array(
-                    'route' => 'pequiven_sip_display_voto_1x10',
-                    'labelAttributes' => array('icon' => 'fa fa-bar-chart',)
-                ))->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.voto_1x10', $section)));
+            if ($this->isGranted(array('ROLE_SEIP_SIP_MONITOR_1X10'))) {
+                $displayMenu->addChild('sip.voto_1x10', array(
+                        'route' => 'pequiven_sip_display_voto_1x10',
+                        'labelAttributes' => array('icon' => 'fa fa-bar-chart',)
+                    ))->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.voto_1x10', $section)));
+            }
 
-            $displayMenu->addChild('sip.voto_circuito', array(
-                    'route' => 'pequiven_sip_display_voto_circuito_5',
-                    'labelAttributes' => array('icon' => 'fa fa-bar-chart',)
-                ))->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.voto_circuito', $section)));
+            if ($this->isGranted(array('ROLE_SEIP_SIP_MONITOR_CIRCUITO5'))) {
+                $displayMenu->addChild('sip.voto_circuito', array(
+                        'route' => 'pequiven_sip_display_voto_circuito_5',
+                        'labelAttributes' => array('icon' => 'fa fa-bar-chart',)
+                    ))->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.voto_circuito', $section)));
+            }
 
-            $displayMenu->addChild('sip.voto_cet', array(
-                    'route' => '',
-                    'labelAttributes' => array('icon' => 'fa fa-bar-chart',)
-                ))->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.voto_cet', $section)));
+            if ($this->isGranted(array('ROLE_SEIP_SIP_MONITOR_CET'))) {
+                $displayMenu->addChild('sip.voto_cet', array(
+                        'route' => '',
+                        'labelAttributes' => array('icon' => 'fa fa-bar-chart',)
+                    ))->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.voto_cet', $section)));
+            }
 
             $display->addChild($displayMenu); 
 
