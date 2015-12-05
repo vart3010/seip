@@ -23,7 +23,7 @@
                 {% for dataInv  in inventory %}
                     {% set dayShow = dataInv.fecha | date("d") %}
                     {% set monthShow = dataInv.fecha | date("n") %}
-                    {% if (dayShow == "04" and monthShow == "12") or (dayShow == "06" and monthShow == "12") %}
+                    {% if (dayShow == "05" and monthShow == "12") or (dayShow == "06" and monthShow == "12") %}
                         <tbody>
                             <tr>
                                 <td>{{ dataInv.material }}</td>
