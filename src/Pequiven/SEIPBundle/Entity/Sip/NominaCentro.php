@@ -9,7 +9,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * 
  * @author Maximo Sojo maxsojo13@gmail.com
  * @ORM\Table(name="sip_nomina_centro")
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\Sip\NominaCentroRepository")
  * 
  */
 class NominaCentro {
@@ -98,6 +98,14 @@ class NominaCentro {
      * @ORM\Column(name="centroid", type="integer",nullable=true)
      */
     private $centroid;
+    
+    /**
+     * voto
+     * @var integer
+     *
+     * @ORM\Column(name="voto", type="integer", nullable=true)
+     */
+    private $voto = 0;
     
     function setUserid($userid) {
         $this->userid = $userid;
@@ -195,5 +203,13 @@ class NominaCentro {
 
     function getCentroid() {
         return $this->centroid;
+    }
+    
+    function setVoto($voto) {
+        $this->voto = $voto;
+    }
+    
+    function getVoto() {
+        return $this->voto;
     }
 }
