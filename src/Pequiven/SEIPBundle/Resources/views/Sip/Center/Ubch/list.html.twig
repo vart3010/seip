@@ -47,7 +47,7 @@
         </div> 
     </fieldset>
     <HR>
-        <div class="with-padding"> 
+        {#<div class="with-padding"> 
             <h3>Patrulleros</h3>        
             <div style="height:500px;width:auto;overflow:auto;">
             <table class="table responsive-table" id="sorting-example2">
@@ -96,7 +96,7 @@
                                     
                                     <input type="checkbox" name="switch_{{dataUbch.id}}" id="switch_{{dataUbch.id}}" data="{{dataUbch.id}}" class="switch medium mid-margin-right {{checkState}}" {{disabled}} value="{{dataUbch.notification}}" data-text-on="SI" data-text-off="NO" onclick="pasoId()">
 
-                                </p> 
+                                </p> #}
                             {#<div id="carga_{{dataUbch.id}}" style="display:none">
                                 <p class="button-height">
                                     <span class="loader big refreshing"></span>
@@ -107,10 +107,10 @@
                                     <input type="checkbox" name="switch_{{dataUbch.id}}" id="switch_{{dataUbch.id}}" data="{{dataUbch.id}}" class="switch medium mid-margin-right {{checkState}}" {{disabled}} value="{{dataUbch.notification}}" data-text-on="SI" data-text-off="NO" onclick="pasoId()">
 
                                 </p>                            #}
-                            </td>
-                            <td align="justify">
+             {#               </td>
+                            <td align="justify">#}
                                 {#<textarea type="text" id="Obs_" name"Obs_" class="input input-xlarge" onkeypress="pulsar(event)" value="0"></textarea>                         #}
-                                {{ dataUbch.observations }}
+             {#                   {{ dataUbch.observations }}
                             </td>
                             <td class="align-right vertical-center">                          
                                 <span class="select compact">
@@ -131,7 +131,7 @@
                 {% endfor %}
             </table> 
             </div>
-        </div>    
+        </div>    #}
 </div>
 
     
