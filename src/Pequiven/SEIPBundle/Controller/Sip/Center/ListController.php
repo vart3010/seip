@@ -22,28 +22,42 @@ class ListController extends SEIPController {
         $em = $this->getDoctrine()->getManager();
         $em->getConnection()->beginTransaction();
 
-        $codigos = $this->get('pequiven.repository.siplist')->getCodes($request->get("edo"), $request->get("mcpo"), $request->get("parroq"));
+        $cod = $this->get('pequiven.repository.siplist')->getCodes($request->get("edo"), $request->get("mcpo"), $request->get("parroq"));
 
-        if (($request->get("type")) == 1) {
+        if ((($request->get("type2")) != ($request->get("type"))) && ($request->get("type2") != null)) {
+            $bandera = $request->get("type2");
+            $codigos[3] = $request->get("type2");
+        } else {
+            $bandera = $request->get("type");
+            $codigos[3] = $request->get("type");
+        }
+
+        if ($bandera == 1) {
             $tipo = "General";
         }
 
-        if (($request->get("type")) == 2) {
+        if ($bandera == 2) {
             $tipo = "PQV";
         }
 
-        if (($request->get("type")) == 3) {
+        if ($bandera == 3) {
             $tipo = "1x10";
         }
 
-        if (($request->get("type")) == 3) {
-            $tipo = "C5";
+        if ($bandera == 4) {
+            $tipo = "Circuito 5";
         }
 
-        $nombres[0] = $codigos["DescriptionEstado"];
-        $nombres[1] = $codigos["DescriptionMunicipio"];
-        $nombres[2] = $codigos["DescriptionParroquia"];
-        $nombres[3] = $tipo;
+//       var_dump('TypeA' . $request->get("type") . ' typeB' . $request->get("type2"));
+//        //    var_dump($tipo);
+//       die();
+
+        foreach ($cod as $nom) {
+            $nombres[0] = $nom["descriptionEstado"];
+            $nombres[1] = $nom["descriptionMunicipio"];
+            $nombres[2] = $nom["descriptionParroquia"];
+            $nombres[3] = $tipo;
+        }
 
         $codigos[0] = $request->get("edo");
         $codigos[1] = $request->get("mcpo");

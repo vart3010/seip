@@ -19,26 +19,36 @@ class ListRepository extends EntityRepository {
         $sql1 = 'SELECT     Estado,    Municipio,    Parroquia,    IdCentro,    Codigo,    Centro,
             SUM(VotoSI) AS Si,    SUM(VotoNO) AS No
             FROM    General_Votes
-            WHERE
-            Estado = "' . $estado . '"
+            WHERE ';
+
+
+        if (($tipo != "General")and ( $tipo != "Circuito 5")) {
+            $sql2 = 'Estado = "' . $estado . '"
             AND MUNICIPIO = "' . $municipio . '"
             AND Parroquia = "' . $parroquia . '" ';
-
-        if ($tipo != "General") {
-            $sql2 = ' AND Tipo="' . $tipo . '" ';
+            $sql3 = ' AND Tipo="' . $tipo . '" ';
         } else {
-            $sql2 = ' ';
+            if ($tipo == "Circuito 5") {
+                $sql2 = 'Estado="EDO. CARABOBO" AND Parroquia IN ("PQ. SANTA ROSA","PQ. MIGUEL PEÑA", '
+                        . '"PQ. RAFAEL URDANETA","PQ. U INDEPENDENCIA", "PQ. U TOCUYITO", "PQ. NEGRO PRIMERO")';
+                $sql3 = '';
+            } else {
+                $sql2 = 'Estado = "' . $estado . '"
+            AND MUNICIPIO = "' . $municipio . '"
+            AND Parroquia = "' . $parroquia . '" ';
+                $sql3 = ' ';
+            }
         }
 
-        if (isset($codigoCentro)) {
-            $sql2 = ' AND CodigoCentro="' . $codigoCentro . '" ';
+        if ((isset($codigoCentro)) and ( $codigoCentro != "Todos")) {
+            $sql4 = ' AND Codigo="' . $codigoCentro . '" ';
         } else {
-            $sql2 = ' ';
+            $sql4 = '';
         }
 
         $sql3 = ' GROUP BY centro ORDER BY Codigo';
 
-        $sql = $sql1 . $sql2 . $sql3;
+        $sql = $sql1 . $sql2 . $sql3 . $sql4;
 
         $stmt = $db->prepare($sql);
         $stmt->execute();
@@ -58,9 +68,9 @@ class ListRepository extends EntityRepository {
     codigoParroquia,    descriptionParroquia
         FROM    sip_centro
             WHERE
-            Estado = "' . $estado . '"
-            AND MUNICIPIO = "' . $municipio . '"
-            AND Parroquia = "' . $parroquia . '" ';
+            codigoEstado = "' . $estado . '"
+            AND codigoMunicipio = "' . $municipio . '"
+            AND codigoParroquia = "' . $parroquia . '" ';
 
         $stmt = $db->prepare($sql);
         $stmt->execute();
