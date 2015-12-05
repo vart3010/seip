@@ -28,14 +28,29 @@
 
 
     <fieldset class="fieldset">
-        <legend class="legend" >{{ 'sip.center.title'|trans({}) }}&nbsp;</legend>        
-        {% if center.importante == "SI" %}                                        
-            <div class="inline-label">
-                <div class="three-columns red-bg" style="font-size: 20px; font-weight: bold;"align="center">                   
-                    PRIORIZADO
-                </div>              
-            </div>
-        {% endif %}
+        <legend class="legend" >{{ 'sip.center.title'|trans({}) }}&nbsp;</legend>
+        <table width="100%">
+            <tr>
+                <td width="50%">
+                    {% if centerOpen == true %}
+                        <div class="inline-label">
+                            <div class="green-bg" style="font-size: 20px; font-weight: bold;"align="center">
+                                APERTURADO
+                            </div>
+                        </div>
+                    {% endif %}
+                </td>
+                <td width="50%">
+                    {% if center.importante == "SI" %}
+                        <div class="inline-label">
+                            <div class="red-bg" style="font-size: 20px; font-weight: bold;"align="center">
+                                PRIORIZADO
+                            </div>
+                        </div>
+                    {% endif %}
+                </td>
+            </tr>
+        </table>
         <br>
         <div class="columns">
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">

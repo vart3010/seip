@@ -851,7 +851,7 @@ class CenterController extends SEIPController {
         $reportVoto = $this->get('pequiven.repository.center')->findByVoto($id);
 
         $report = $cont = $resultM = 0;
-        foreach ($reportMesa as $value) {                        
+        foreach ($reportMesa as $value) {
             $id = $value->getId();            
             
             $reportObservations = $this->get('pequiven.repository.center')->findByNotification($id);
@@ -864,6 +864,24 @@ class CenterController extends SEIPController {
             }            
             $cont++;
         }
+        
+        //CENTRO APERTURADO
+        $centerOpen = false;
+        $contMesaOpen = 0;
+        $totalMesas = count($reportMesa);
+        foreach($reportMesa as $mesa){
+            $observationsMesa = $mesa->getObservations();
+            foreach($observationsMesa as $observation){
+                if($observation->getNotification() == 1){
+                    $contMesaOpen++;
+                    break;
+                }
+            }
+        }
+        if($contMesaOpen == $totalMesas){
+            $centerOpen = true;
+        }
+        
         
         //Personal PQV por centro        
         $result = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\NominaCentro")->findBy(array('codigoCentro' => $center->getCodigoCentro()));
@@ -967,6 +985,7 @@ class CenterController extends SEIPController {
                     'report'    => $resultM,
                     'reportMesa'=> $reportMesa,
                     'centerService'=> $centerService,
+                    'centerOpen'=> $centerOpen,
                     'votos'     => $reportVoto
         ));
     }

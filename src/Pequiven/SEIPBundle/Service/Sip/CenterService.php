@@ -1561,6 +1561,10 @@ class CenterService implements ContainerAwareInterface {
         
         return $open;
     }
+    
+    public function consultCenterIsOpen(){
+        
+    }
 
     /**
      * Generates a URL from the given parameters.
