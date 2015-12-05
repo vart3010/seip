@@ -113,11 +113,12 @@
         {# validacion de muestra solo para el 4 y 6 de diciembre #}
         {% set day3 = "03" %}
         {% set day4 = "04" %}
+        {% set day5 = "05" %}
         {% set day6 = "06" %}
 
         {# Dia actual #}
         {% set day = "now" | date("d") %}
-        {% if day4 == day or day6 == day %}
+        {% if day5 == day or day6 == day %}
         <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
             <p class="inline-label">
                 <label class="label">Mesas Activas</label>
@@ -135,11 +136,11 @@
         </div>
         {% endif %}
         &nbsp;  
-        {% if day6 == day %}
+        {% if day6 == day or day5 == day %}
         <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile" ng-controller="SipCenterReportController">
             <p class="inline-label">
                 <label class="label">Seguimiento Voto</label>
-                    {{ votos[0]["votos"] }}
+                    {% if votos|length > 0 %} {{ votos[0]["votos"] }} {% endif %}
                     &nbsp;       
                     <a class="button icon-add-user icon-size2" href="" ng-click="loadTemplateReportVoto(centro='{{ center.id }}')" title="Cargar Votos Registrados por Centro">Votos</a>        
             </p>            
@@ -200,8 +201,8 @@
             {% endfor %}
         </div>
     </fieldset> 
-    <br>
-        {% include 'PequivenSEIPBundle:Sip:Center/Ubch/list.html.twig' %}                                 
+    {#<br>
+        {% include 'PequivenSEIPBundle:Sip:Center/Ubch/list.html.twig' %}#}
     <br>   
     {# Asistencias #}                                
         {% include 'PequivenSEIPBundle:Sip:Center/Assists.html.twig' %}                             

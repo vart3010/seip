@@ -21,26 +21,30 @@
                     </tr>
                 </thead>                
                 {% for dataInv  in inventory %}
-                    <tbody>
-                        <tr>
-                            <td>{{ dataInv.material }}</td>            
+                    {% set dayShow = dataInv.fecha | date("d") %}
+                    {% set monthShow = dataInv.fecha | date("n") %}
+                    {% if (dayShow == "04" and monthShow == "12") or (dayShow == "06" and monthShow == "12") %}
+                        <tbody>
+                            <tr>
+                                <td>{{ dataInv.material }}</td>
 
-                            <td align="justify">{{ dataInv.observations }}</td>
+                                <td align="justify">{{ dataInv.observations }}</td>
 
-                            <td>{{ dataInv.cantidad }}</td>
+                                <td>{{ dataInv.cantidad }}</td>
 
-                            <td>{{ dataInv.fecha | date("d/m/Y") }}</td>
-                            <td class="align-right vertical-center">                          
-                                <span class="select compact">
-                                    <a href class="select-value form-edit">{{ 'pequiven.actions'|trans({},'messages') }}</a>
-                                    <span class="select-arrow"></span>
-                                    <span class="drop-down">                                    
-                                        <a href ng-click="removeInventory(inventory='{{ dataInv.id }}')" class="button icon-cross-round">{{ "pequiven.actions.delete"|trans({},"messages") }}</a>             
+                                <td>{{ dataInv.fecha | date("d/m/Y") }}</td>
+                                <td class="align-right vertical-center">
+                                    <span class="select compact">
+                                        <a href class="select-value form-edit">{{ 'pequiven.actions'|trans({},'messages') }}</a>
+                                        <span class="select-arrow"></span>
+                                        <span class="drop-down">
+                                            <a href ng-click="removeInventory(inventory='{{ dataInv.id }}')" class="button icon-cross-round">{{ "pequiven.actions.delete"|trans({},"messages") }}</a>
+                                        </span>
                                     </span>
-                                </span>
-                            </td>   
-                        </tr>
-                    </tbody>                                
+                                </td>
+                            </tr>
+                        </tbody>
+                        {% endif %}
                 {% endfor %}
             </table>
             &nbsp;    

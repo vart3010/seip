@@ -250,6 +250,12 @@ security:
             - ROLE_SEIP_SIP_CUTL
             - ROLE_SEIP_SIP_REQ
             - ROLE_SEIP_SIP_REPORTS
+            - ROLE_SEIP_SIP_REGISTER_VOTE
+            - ROLE_SEIP_SIP_MONITOR
+            - ROLE_SEIP_SIP_MONITOR_ONLY_ZULIA
+            - ROLE_SEIP_SIP_MONITOR_ONLY_ANZOATEGUI
+            - ROLE_SEIP_SIP_MONITOR_ONLY_CARABOBO
+            - ROLE_SEIP_SIP_MONITOR_ONLY_CIRCUITO5
             
             
             

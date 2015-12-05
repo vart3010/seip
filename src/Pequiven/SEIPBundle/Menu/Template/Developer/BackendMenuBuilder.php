@@ -1722,7 +1722,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
             $menuSip->addChild($report);
         }
 
-        if ($this->isGranted(array('ROLE_SUPER_ADMIN'))) {
+        if ($this->isGranted(array('ROLE_SEIP_SIP_REGISTER_VOTE'))) {
             //Voto
             $voto = $this->factory->createItem('sip.voto', $this->getSubLevelOptions(array(
                                 "route" => "pequiven_sip_report_voto",
@@ -1732,7 +1732,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
             $menuSip->addChild($voto);
         }
 
-        if ($this->isGranted(array('ROLE_SUPER_ADMIN'))) {
+        if ($this->isGranted(array('ROLE_SEIP_SIP_MONITOR_*'))) {
             //
             $display = $this->factory->createItem('sip.display', $this->getSubLevelOptions(array(
                                 "route" => "",
@@ -1783,25 +1783,25 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                             ))
                     )->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.list_seg', $section)));
 
-            $displayList->addChild('sip.list_pqv', array(
-                    'route' => 'pequiven_sip_display_voto_pqv',
-                    'labelAttributes' => array('icon' => 'fa fa-list',)
-                ))->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.list_pqv', $section)));
-            
-            $displayList->addChild('sip.list_1x10', array(
-                    'route' => '',
-                    'labelAttributes' => array('icon' => 'fa fa-list',)
-                ))->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.list_1x10', $section)));
-
-            $displayList->addChild('sip.list_circuito', array(
-                    'route' => '',
-                    'labelAttributes' => array('icon' => 'fa fa-list',)
-                ))->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.list_circuito', $section)));
-
-            $displayList->addChild('sip.list_cet', array(
-                    'route' => '',
-                    'labelAttributes' => array('icon' => 'fa fa-list',)
-                ))->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.list_cet', $section)));
+//            $displayList->addChild('sip.list_pqv', array(
+//                    'route' => 'pequiven_sip_display_voto_pqv',
+//                    'labelAttributes' => array('icon' => 'fa fa-list',)
+//                ))->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.list_pqv', $section)));
+//            
+//            $displayList->addChild('sip.list_1x10', array(
+//                    'route' => '',
+//                    'labelAttributes' => array('icon' => 'fa fa-list',)
+//                ))->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.list_1x10', $section)));
+//
+//            $displayList->addChild('sip.list_circuito', array(
+//                    'route' => '',
+//                    'labelAttributes' => array('icon' => 'fa fa-list',)
+//                ))->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.list_circuito', $section)));
+//
+//            $displayList->addChild('sip.list_cet', array(
+//                    'route' => '',
+//                    'labelAttributes' => array('icon' => 'fa fa-list',)
+//                ))->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.list_cet', $section)));
 
             $display->addChild($displayList);                        
 

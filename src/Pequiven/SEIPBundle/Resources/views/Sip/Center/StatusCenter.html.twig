@@ -25,22 +25,25 @@
                     </tr>
                 </thead>                 
                 {% for data in centerAct %}
-                    <tbody align="center">
-                        <tr>                            
-                            <td align="left">{{ data.fecha | date("d/m/Y")  }}</td>
-                            
-                            <td align="left">
-                                {% set status = data.status %}
-                                {% if(status == 1 ) %}
-                                    {% set checkState = "checked" %}
-                                {% else  %}
-                                    {% set checkState = "" %}
-                                {% endif %}
-                                <input type="checkbox" value="{{ data.status  }}" class="switch blue-active mid-margin-right {{ checkState }}"  data-text-on="SI" data-text-off="NO" disabled>
-                            </td> 
-                            <td align="justify">{{ data.observations }}</td>
-                        </tr>                 
-                    </tbody>                    
+                    {% set dayShow = data.fecha | date("d") %}
+                    {% set monthShow = data.fecha | date("d") %}
+                    {% if (dayShow == "04" and monthShow == "12") or (dayShow == "06" and monthShow == "12") %}
+                        <tbody align="center">
+                            <tr>
+                                <td align="left">{{ data.fecha | date("d/m/Y")  }}</td>
+                                <td align="left">
+                                    {% set status = data.status %}
+                                    {% if(status == 1 ) %}
+                                        {% set checkState = "checked" %}
+                                    {% else  %}
+                                        {% set checkState = "" %}
+                                    {% endif %}
+                                    <input type="checkbox" value="{{ data.status  }}" class="switch blue-active mid-margin-right {{ checkState }}"  data-text-on="SI" data-text-off="NO" disabled>
+                                </td> 
+                                <td align="justify">{{ data.observations }}</td>
+                            </tr>
+                        </tbody>
+                    {% endif %}
                 {% endfor %}                 
             </table>             
         </div>
