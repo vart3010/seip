@@ -130,9 +130,9 @@
         <div ng-controller="SipCenterReportController">                 
                 {% for reportM in reportMesa %}
                     {# red-gradient  green-gradient#}
-                    <a class="button icon-pencil icon-size2" href="" ng-click="loadTemplateReportCenter(mesa='{{ reportM.mesa }}')" title="Cargar Estatus de Mesa">Mesa {{ reportM.mesa }}</a>        
+                    <a class="button icon-pencil icon-size2 {% if centerService.consultTableOpen(reportM) == true %} red-gradient {% endif %}" href="" ng-click="loadTemplateReportCenter(mesa='{{ reportM.mesa }}')" title="Cargar Estatus de Mesa">Mesa {{ reportM.mesa }}</a>        
                     &nbsp; 
-                {% endfor %}            
+                {% endfor %}
         </div>
         {% endif %}
         &nbsp;  

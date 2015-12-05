@@ -1547,6 +1547,20 @@ class CenterService implements ContainerAwareInterface {
 
         return json_encode($data);
     }
+    
+    public function consultTableOpen(\Pequiven\SEIPBundle\Entity\Sip\Center\ReportCentro $reportCentro){
+        $observations = $reportCentro->getObservations();
+        
+        $open = false;
+        foreach($observations as $observation){
+            if($observation->getNotification() == 1){
+                $open = true;
+                break;
+            }
+        }
+        
+        return $open;
+    }
 
     /**
      * Generates a URL from the given parameters.

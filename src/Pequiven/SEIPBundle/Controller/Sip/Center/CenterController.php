@@ -839,6 +839,8 @@ class CenterController extends SEIPController {
         $em = $this->getDoctrine()->getManager();
 
         $id = $request->get('id');
+        
+        $centerService = $this->getCenterService();
 
         $cantCutl = $contNot = 0;
 
@@ -964,6 +966,7 @@ class CenterController extends SEIPController {
                     'pqvCentro' => $result,
                     'report'    => $resultM,
                     'reportMesa'=> $reportMesa,
+                    'centerService'=> $centerService,
                     'votos'     => $reportVoto
         ));
     }
@@ -1207,5 +1210,13 @@ class CenterController extends SEIPController {
 
         return $this->handleView($view);
     }
-
+   
+    /**
+     * 
+     * @return \Pequiven\SEIPBundle\Service\Sip\CenterService
+     */
+    protected function getCenterService()
+    {
+        return $this->container->get('seip.service.center');
+    }
 }
