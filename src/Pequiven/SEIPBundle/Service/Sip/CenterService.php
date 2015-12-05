@@ -730,7 +730,8 @@ class CenterService implements ContainerAwareInterface {
         $chart["canvasBgAlpha"] = "0,0";
         $chart["toolTipBgColor"] = "#000000";
 
-        $em = $this->getDoctrine()->getManager();        
+        $em = $this->getDoctrine()->getManager();   
+        $estadoId = $estado;
         $estado = $this->AsignedIdEdo($estado);//Id Estado
 
         $label = $dataPlan = $dataReal = array();
@@ -780,9 +781,9 @@ class CenterService implements ContainerAwareInterface {
 
                 $estado = $this->AsignedIdEdo($estado);//Id Estado
 
-                $link = $this->generateUrl('pequiven_sip_list_voto_general',array('edo' =>$estado,'mcpo' => $mcpo, 'type' => $type, 'parroq' => $codParroquia));            
+                $link = $this->generateUrl('pequiven_sip_list_voto_general',array('edo' =>$estadoId,'mcpo' => $mcpo, 'type' => $type, 'parroq' => $codParroquia));            
             }elseif($type == 2){        
-                $link = $this->generateUrl('pequiven_sip_list_voto_general',array('edo' =>$estado,'mcpo' => $mcpo, 'type' => $type, 'parroq' => $codParroquia));
+                $link = $this->generateUrl('pequiven_sip_list_voto_general',array('edo' =>$estadoId,'mcpo' => $mcpo, 'type' => $type, 'parroq' => $codParroquia));
             }
             
             $dataReal["link"]  = $link;                        
