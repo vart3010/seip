@@ -81,7 +81,6 @@ class DisplayController extends SEIPController {
         
         $dataChartLine = $CenterService->getDataChartOfVotoGeneralLineEstado($type,$estado); //Linea de Tiempo
 
-
         $response = new JsonResponse();         
 
         $linkValue = 1;//Validacion de muestra de link para bajar nivel
@@ -111,6 +110,8 @@ class DisplayController extends SEIPController {
 
         $em = $this->getDoctrine()->getManager();
         $CenterService = $this->getCenterService();//Llamado al Servicio de Centro
+        
+        $dataChartLine = $CenterService->getDataChartOfVotoGeneralLineMcpo($type,$estado,$mcpo); //Linea de Tiempo
 
         $linkValue = 1;
         $dataChartParroquias = $CenterService->getDataChartOfVotoParroquiaData($estado, $mcpo, $linkValue, $type); //General
@@ -120,7 +121,8 @@ class DisplayController extends SEIPController {
         
         return $this->render('PequivenSEIPBundle:Sip:Center/Display/voto_general_mcpo.html.twig', array(
             'data'              => $dataChart,
-            'dataChartParroq'   => $dataChartParroquias
+            'dataChartParroq'   => $dataChartParroquias,
+            'dataHours'    => $dataChartLine
             ));
     }
 

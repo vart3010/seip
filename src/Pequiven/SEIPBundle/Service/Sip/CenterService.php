@@ -477,6 +477,164 @@ class CenterService implements ContainerAwareInterface {
 
     /**
      *
+     *  Grafica de Votos por Hora
+     *
+     */
+    public function getDataChartOfVotoGeneralLineMcpo($type,$estado,$mcpo) {
+        
+        $data = array(
+            'dataSource' => array(
+                'chart' => array(),
+                'categories' => array(
+                ),
+                'dataset' => array(
+                ),
+            ),
+        );
+        $chart = array();
+
+        $chart["caption"] = "Votos por Hora";
+        $chart["captionFontColor"] = "#e20000";
+        $chart["captionFontSize"] = "20";                
+        $chart["palette"]        = "1";
+        $chart["showvalues"]     = "0";
+//        $chart["paletteColors"]  = "#0075c2,#c90606,#f2c500,#12a830,#1aaf5d";
+        $chart["showBorder"] = "0";
+        $chart["yaxisvaluespadding"] = "10";
+        $chart["valueFontColor"] = "#ffffff";
+        $chart["rotateValues"]   = "0";
+        $chart["bgAlpha"] = "0,0";//Fondo 
+        $chart["theme"]          = "fint";
+        $chart["showborder"]     = "0";
+        $chart["decimals"]       = "0";
+        $chart["legendBgColor"] = "#ffffff";
+        $chart["legendItemFontSize"] = "10";
+        
+        $chart["outCnvBaseFontColor"] = "#ffffff";
+        $chart["visible"] = "1";
+
+        $chart["usePlotGradientColor"] = "0";
+        $chart["plotBorderAlpha"] = "10";
+        $chart["legendBorderAlpha"] = "0";
+        $chart["legendBgAlpha"] = "0";
+        $chart["legendItemFontColor"] = "#ffffff";
+        $chart["baseFontColor"] = "#ffffff";        
+        
+        $chart["divLineDashed"] = "0";
+        $chart["showHoverEffect"] = "1";
+        $chart["valuePosition"] = "ABOVE";
+        $chart["dashed"] = "0";
+        $chart["divLineDashLen"] = "0";
+        $chart["divLineGapLen"] = "0";
+        $chart["canvasBgAlpha"] = "0,0";
+        $chart["toolTipBgColor"] = "#000000";
+        $chart["formatNumberScale"] = "0";
+
+        $em = $this->getDoctrine()->getManager();
+
+        $label = $dataLinea = $dataMeta = array();
+
+        //Carga de Nombres de Labels
+        $dataSetLinea["seriesname"] = "Horas";        
+
+        $horas = 9;
+        $votos = $horaSet = 0;
+        $cont = 3;
+        $horaIni = $horaReal = 9;
+        
+        $mcpo = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByMunicipioName($estado,$mcpo);                    
+        $mcpo = $mcpo[0]["descriptionMunicipio"];
+        
+        $estado = $this->AsignedDescriptionEdo($estado);
+        $resultHoras = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByGeneralHorasMcpo($type,$estado,$mcpo); 
+
+        //Sumatoria de Horas
+        $contSuma = $sumaInicio = 0;
+        for ($i=0; $i <4 ; $i++) { 
+            $sumaInicio = $sumaInicio + $resultHoras[$contSuma]["Si"];            
+            $contSuma++;
+        }
+        
+        $mcpoVoto = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByVotosMunicipiosCant($estado, $mcpo, $type);            
+        $votoSI = $mcpoVoto[0]["SUM(votoSI)"];
+        $votoNO = $mcpoVoto[0]["SUM(votoNO)"];
+
+        $cantVoto = $votoSI + $votoNO;
+
+        //plan por tipo
+        $planType = array();
+        $planType[1] = (float)$cantVoto;
+        
+        if(max($resultHoras) >= 12) {
+            $horas = max($resultHoras)["Hora"] - 8;            
+        }        
+        
+        if (isset($resultHoras)) {            
+            for ($i=0; $i <=$horas; $i++) { 
+                
+                if ($horaIni == 13) {
+                    $horaIni = $horaIni - 12;
+                }          
+
+                $linea = $horaIni.":00";                      
+                $label["label"] = $linea;     
+                $category[] = $label;
+                
+                if ($cont == 3) {
+                    $votos = $votos + $sumaInicio;
+                    $cont++;
+                }elseif(isset($resultHoras[$cont]["Hora"])) {
+                    $horaSet = (int)$resultHoras[$cont]["Hora"];                    
+                }      
+                if ($horaSet == $horaReal AND $horaSet != 9) {
+                    $votos = $votos + $resultHoras[$cont]["Si"];                    
+                    $cont++;           
+                }else{
+                    $votos = $votos;
+                }
+                
+                $dataLinea["value"] = $votos;//((float)$votos/(float)41657)*100;//bcdiv($votos, bcadd(41657, 0, 2), 2); //(float)$votos/41657; //Carga de valores
+                $dataSetLinea["data"][] = $dataLinea; //data linea            
+
+                $horaReal++;
+                $horaIni++;                 
+            }
+        }else{
+            $dataSetLinea["data"][] = 0;
+        }
+        
+        $dataSetLinea['plan'][] = array("value" => $planType[1]*(float)((float)5/100));
+        $dataSetLinea['plan'][] = array("value" => $planType[1]*(float)((float)10/100));
+        $dataSetLinea['plan'][] = array("value" => $planType[1]*(float)((float)20/100));
+        $dataSetLinea['plan'][] = array("value" => $planType[1]*(float)((float)35/100));
+        $dataSetLinea['plan'][] = array("value" => $planType[1]*(float)((float)50/100));
+        $dataSetLinea['plan'][] = array("value" => $planType[1]*(float)((float)65/100));
+        $dataSetLinea['plan'][] = array("value" => $planType[1]*(float)((float)80/100));
+        $dataSetLinea['plan'][] = array("value" => $planType[1]*(float)((float)90/100));
+        $dataSetLinea['plan'][] = array("value" => $planType[1]*(float)((float)95/100));
+        $dataSetLinea['plan'][] = array("value" => $planType[1]);
+        $dataSetLinea['plan'][] = array("value" => $planType[1]);
+        $dataSetLinea['plan'][] = array("value" => $planType[1]);
+        $dataSetLinea['plan'][] = array("value" => $planType[1]);
+        $dataSetLinea['plan'][] = array("value" => $planType[1]);
+        $dataSetLinea['plan'][] = array("value" => $planType[1]);
+        
+            $dataSetValues['plan'] = array('seriesname' => 'Plan', 'parentyaxis' => 'S', 'renderas' => 'Line', 'color' => '#ffffff', 'data' => $dataSetLinea['plan']);
+            $dataSetValues['votos'] = array('seriesname' => 'Votos * Horas', 'parentyaxis' => 'S', 'renderas' => 'Line', 'color' => '#ff0000', 'data' => $dataSetLinea['data']);
+            //$dataMeta["value"] = 0;
+            //$dataSetMeta["data"][] = $dataMeta;
+        
+
+        $data['dataSource']['chart'] = $chart;
+        $data['dataSource']['categories'][]["category"] = $category;
+        $data['dataSource']['dataset'][] = $dataSetValues['plan'];
+        $data['dataSource']['dataset'][] = $dataSetValues['votos'];
+        
+        return json_encode($data);
+    }
+
+    /**
+     *
      *  Grafica General de Estado
      *
      */

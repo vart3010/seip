@@ -326,6 +326,31 @@ class CentroRepository extends EntityRepository {
         return $result;
     }
 
+        /**
+     * Consulta de Municipios
+     * 
+     * @param array $criteria
+     * @param array $orderBy
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    function findByMunicipioName($estado, $mcpo) {
+        
+        $em = $this->getEntityManager();
+        $db = $em->getConnection();
+
+        $sql = 'SELECT c.descriptionMunicipio
+                FROM
+                sip_centro AS c            
+                WHERE c.codigoEstado ="'.$estado.'" AND c.codigoMunicipio ="'.$mcpo.'"
+                GROUP BY descriptionMunicipio';            
+
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+        
+        return $result;
+    }
+
     /**
      * Consulta de Parroquias
      * 
@@ -459,6 +484,44 @@ class CentroRepository extends EntityRepository {
                 WHERE
                     Estado ="'.$estado.'" AND Municipio = "'.$mcpo.'" AND Tipo = "1x10"
                 GROUP BY Municipio';            
+
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+        
+        return $result;
+    }
+
+    /**
+     * Consulta de votos por Municipios
+     * 
+     * @param array $criteria
+     * @param array $orderBy
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    function findByVotosMunicipiosCant($estado, $mcpo, $type) {
+
+        $em = $this->getEntityManager();
+        $db = $em->getConnection();
+
+        $sql1 = 'SELECT
+                    Municipio,
+                      SUM(votoSI),
+                    SUM(votoNO)   
+                FROM
+                    General_Votes
+                WHERE
+                    Estado ="'.$estado.'" AND Municipio = "'.$mcpo.'"';       
+        
+        if ($type == 2) {
+            $sql2 = ' AND Tipo = "PQV"';            
+        }else{
+            $type = "";
+        }
+
+        $sql3 = ' GROUP BY Municipio';
+
+        $sql = $sql1.$sql2.$sql3;
 
         $stmt = $db->prepare($sql);
         $stmt->execute();
@@ -891,6 +954,44 @@ class CentroRepository extends EntityRepository {
         $sql3 = ' GROUP BY Hora
                 ORDER BY Hora';            
                 
+        $sql = $sql1.$sql2.$sql3;
+
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+        
+        return $result;
+    }
+
+    /**
+     * Votos Horas
+     * 
+     * @param array $criteria
+     * @param array $orderBy
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    function findByGeneralHorasMcpo($type,$estado,$mcpo) {
+        
+        $em = $this->getEntityManager();
+        $db = $em->getConnection();
+
+        $sql1 = 'SELECT
+                    HOUR(Fecha) AS Hora,
+                    SUM(VotoSI) AS Si
+                FROM
+                    General_Votes
+                WHERE                    
+                    VotoSI=1 AND Estado = "'.$estado.'" AND Municipio ="'.$mcpo.'" AND Fecha is not null';
+        
+        if ($type == 2) {
+            $sql2 = ' AND Tipo = "PQV"';
+        }else{
+            $sql2 = "";
+        }
+        
+        $sql3 = ' GROUP BY Hora
+                ORDER BY Hora';
+        
         $sql = $sql1.$sql2.$sql3;
 
         $stmt = $db->prepare($sql);
