@@ -1692,6 +1692,27 @@ class CenterService implements ContainerAwareInterface {
             
             $dataPlan2["value"] = $votoNO + $votoSI; //Carga de valores General
             $dataSetPlan["data"][] = $dataPlan2; //data 
+
+            //General 1x10            
+            $label["label"] = "Exit Poll";     
+            $category[] = $label;
+            
+            $dataPoll = [
+                1 => 15922,//"PQ. U TOCUYITO", 
+                2 => 4413,//"PQ. U INDEPENDENCIA", 
+                3 => 46566,//"PQ. MIGUEL PEÑA",
+                4 => 13236,//"PQ. RAFAEL URDANETA", 
+                5 => 1540,//"PQ. NEGRO PRIMERO", 
+                6 => 25728//"PQ. SANTA ROSA"
+            ];
+            //Cantidad de Votos
+            $dataM = $dataPoll[$count];
+            $dataReal3["color"] = '#47ac44';            
+            $dataReal3["value"] = $dataM; //Carga de valores General
+            $dataSetReal["data"][] = $dataReal3; //data 
+
+            $dataPlan3["value"] = ""; //Carga de valores General
+            $dataSetPlan["data"][] = $dataPlan3; //data 
             
             $count++;        
         }    
