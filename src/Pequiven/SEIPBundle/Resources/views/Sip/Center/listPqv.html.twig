@@ -32,12 +32,17 @@
                                 {$ result.nombre $}
                             </a>
                         </td>
+                        <td data-title="'Voto'" filter="{'voto' : 'text'}">
+                            <a href="">
+                                {$ result.textoVoto $}
+                            </a>
+                        </td>
                         <td data-title="'Telefono'" filter="{'telefono' : 'text'}">
                             <a href="">
                                 {$ result.telefono $}
                             </a>
                         </td>
-                        <td data-title="'Codigo Centro'" filter="{'codigoCentro' : 'text'}">
+                        {#<td data-title="'Codigo Centro'" filter="{'codigoCentro' : 'text'}">
                             <a href="">
                                 {$ result.codigoCentro $}
                             </a>
@@ -46,7 +51,7 @@
                             <a href="">
                                 {$ result.centro $}
                             </a>
-                        </td>
+                        </td>#}
                     </tr>
                 </tbody>
             </table>

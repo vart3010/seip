@@ -564,3 +564,12 @@ pequiven_sip_list_voto_general:
     requirements:
         _format: html|json|xml        
     methods: [GET|POST]
+    
+pequiven_sip_show_oneperten_pqv:
+    path: /viewonepertenpqv.{_format}
+    defaults: 
+        _controller: pequiven.controller.oneperten:listWithVoteAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+    methods: [GET]

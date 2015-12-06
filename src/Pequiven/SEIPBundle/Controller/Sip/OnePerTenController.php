@@ -73,6 +73,62 @@ class OnePerTenController extends SEIPController {
 
         return $this->handleView($view);
     }
+    
+    /**
+     * Función que devuelve el paginador con las propuestas agrupados por los círculos heredados
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     */
+    public function listWithVoteAction(Request $request) {
+
+        $securityContext = $this->container->get('security.context');
+        $user = $securityContext->getToken()->getUser();
+
+        $criteria = $request->get('filter', $this->config->getCriteria());
+        $sorting = $request->get('sorting', $this->config->getSorting());
+
+        $workStudyCircleParent = $request->get('workStudyCircleParent');
+
+//        $repository = $this->getRepository();
+        $em = $this->getDoctrine()->getManager();
+        $repository = $em->getRepository('PequivenSEIPBundle:Sip\NominaCentro');
+
+        //$criteria['user'] = $user->getId();
+
+        if ($this->config->isPaginated()) {
+            $resources = $this->resourceResolver->getResource(
+                    $repository, 'createPaginatorByCentroWithVotePqv', array($criteria, $sorting)
+            );
+
+            $maxPerPage = $this->config->getPaginationMaxPerPage();
+            if (($limit = $request->query->get('limit')) && $limit > 0) {
+                if ($limit > 100) {
+                    $limit = 100;
+                }
+                $maxPerPage = $limit;
+            }
+            $resources->setCurrentPage($request->get('page', 1), true, true);
+            $resources->setMaxPerPage($maxPerPage);
+        } else {
+            $resources = $this->resourceResolver->getResource(
+                    $repository, 'findBy', array($criteria, $sorting, $this->config->getLimit())
+            );
+        }
+
+        $view = $this
+                ->view()
+                ->setTemplate('PequivenSEIPBundle:Sip:Center/show.html.twig')
+                ->setTemplateVar($this->config->getPluralResourceName())
+        ;
+        $view->getSerializationContext()->setGroups(array('id', 'api_list'));
+        if ($request->get('_format') == 'html') {
+            $view->setData($resources);
+        } else {
+            $formatData = $request->get('_formatData', 'default');
+
+            $view->setData($resources->toArray('', array(), $formatData));
+        }
+        return $this->handleView($view);
+    }
 
     public function createAction(Request $request) {
         $formSearchOne = $this->createForm(new OnePerTenType);

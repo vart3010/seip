@@ -21,6 +21,17 @@ class NominaCentroRepository extends EntityRepository {
     public function createPaginatorByCentroPqv(array $criteria = null, array $orderBy = null) {
         return $this->createPaginator($criteria, $orderBy);
     }
+    
+	/**
+     * Crea un paginador para los Votantes de Personal PQV
+     * 
+     * @param array $criteria
+     * @param array $orderBy
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    public function createPaginatorByCentroWithVotePqv(array $criteria = null, array $orderBy = null) {
+        return $this->createPaginator($criteria, $orderBy);
+    }
 
     protected function applyCriteria(\Doctrine\ORM\QueryBuilder $queryBuilder, array $criteria = null) {
         $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
