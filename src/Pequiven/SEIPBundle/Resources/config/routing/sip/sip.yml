@@ -491,6 +491,16 @@ pequiven_sip_report_OnePerTen:
     requirements:
         _format: html|json|xml        
     methods: [GET|POST]
+    
+pequiven_sip_report_SegVoto:
+    path: /Report/SegVotoReport
+    defaults:
+        _format: html
+        _controller: pequiven.controller.report:SegVotoAction
+    requirements:
+        _format: html|json|xml        
+    methods: [GET|POST]
+    
 #Reporte de voto
 pequiven_sip_report_voto:
     path: /voto
