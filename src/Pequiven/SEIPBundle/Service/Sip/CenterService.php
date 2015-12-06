@@ -251,7 +251,7 @@ class CenterService implements ContainerAwareInterface {
                     $votos = $votos;
                 }
 
-                $dataLinea["value"] = $votos; //Carga de valores
+                $dataLinea["value"] = ((float)$votos/(float)41657)*100;//bcdiv($votos, bcadd(41657, 0, 2), 2); //(float)$votos/41657; //Carga de valores
                 $dataSetLinea["data"][] = $dataLinea; //data linea            
 
                 $horaReal++;
@@ -260,6 +260,8 @@ class CenterService implements ContainerAwareInterface {
         }else{
             $dataSetLinea["data"][] = 0;
         }
+        
+//        var_dump($dataSetLinea['data']);die();
         
         $dataSetLinea['plan'][] = array("value" => 5);
         $dataSetLinea['plan'][] = array("value" => 10);
