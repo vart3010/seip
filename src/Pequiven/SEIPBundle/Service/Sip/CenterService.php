@@ -239,6 +239,7 @@ class CenterService implements ContainerAwareInterface {
         $planType = array();
         $planType[1] = (float)41704;
         $planType[2] = (float)4534;
+        $planType[3] = (float)4328;
         $planType[4] = (float)37170;
 
         
