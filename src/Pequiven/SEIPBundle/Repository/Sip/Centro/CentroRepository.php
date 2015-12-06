@@ -886,7 +886,7 @@ class CentroRepository extends EntityRepository {
             $queryBuilder->andWhere($queryBuilder->expr()->like('ctro.descriptionParroquia', "'%" . $parroquia . "%'"));
         }
         
-        $queryBuilder->andWhere('(ctro.circuito = :circuito AND ctro.codigoEstado = 7) OR (ctro.codigoEstado = 21)')
+        $queryBuilder->andWhere('(ctro.circuito = :circuito AND ctro.codigoEstado = 7) OR (ctro.codigoEstado = 21) OR (ctro.codigoEstado = 2)')
                 ->setParameter('circuito', 5);
         
         parent::applyCriteria($queryBuilder, $criteria->toArray());

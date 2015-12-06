@@ -264,6 +264,8 @@ app:
                         voto_re: Voto Reubicados
                         voto_cet: Voto Coordinador CET
                         voto_circuito: Circuito 5
+                        voto_zulia: Zulia
+                        voto_anzoategui: Anzoátegui
                         mesa: Mesas Activas
 
                             
