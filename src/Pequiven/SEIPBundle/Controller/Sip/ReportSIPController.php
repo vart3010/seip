@@ -649,7 +649,7 @@ class ReportSIPController extends SEIPController {
                 )
         ));
 
-        $activeSheet->setCellValue('O2', $date);
+        $activeSheet->setCellValue('P2', $date);
         $row = 5; //Fila Inicial del skeleton
 
         foreach ($result as $fila) {
@@ -666,14 +666,15 @@ class ReportSIPController extends SEIPController {
             $activeSheet->setCellValue('J' . $row, $fila["Parroquia"]);
             $activeSheet->setCellValue('K' . $row, $fila["Codigo"]);
             $activeSheet->setCellValue('L' . $row, $fila["Cedula"]);
-            $activeSheet->setCellValue('M' . $row, $fila["Nombre"]);            
-            $activeSheet->setCellValue('N' . $row, $fila["Voto"]);
-            $activeSheet->setCellValue('O' . $row, $fila["RespUnoxDiez"]);
+            $activeSheet->setCellValue('M' . $row, $fila["Telefono"]);
+            $activeSheet->setCellValue('N' . $row, $fila["Nombre"]);            
+            $activeSheet->setCellValue('O' . $row, $fila["Voto"]);
+            $activeSheet->setCellValue('P' . $row, $fila["RespUnoxDiez"]);
 
             $row++;
         }
 
-        $activeSheet->getStyle('A5:O' . ($row - 1))->applyFromArray($styleArray);
+        $activeSheet->getStyle('A5:P' . ($row - 1))->applyFromArray($styleArray);
 
         $fileName = sprintf('SIP - Seguimiento al Voto hasta las %s.xlsx' , $date);
 
