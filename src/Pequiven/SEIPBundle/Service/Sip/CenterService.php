@@ -222,23 +222,33 @@ class CenterService implements ContainerAwareInterface {
         $dataSetLinea["seriesname"] = "Horas";        
 
         $horas = 9;
-        $cont = $votos = 0;
+        $votos = 0;
+        $cont = 4;
         $horaIni = $horaReal = 9;
         
         $resultHoras = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByGeneralHoras($type); 
 
+        //Sumatoria de Horas
+        $contSuma = $sumaInicio = 0;
+        for ($i=0; $i <5 ; $i++) { 
+            $sumaInicio = $sumaInicio + $resultHoras[$contSuma]["Si"];            
+            $contSuma++;
+        }
+        
         //plan por tipo
         $planType = array();
         $planType[1] = (float)41704;
         $planType[2] = (float)4534;
         $planType[4] = (float)37170;
+
         
-        if(max($resultHoras) >= 13) {
-            $horas = max($resultHoras)["Hora"] - 6;
-        }
+        if(max($resultHoras) >= 12) {
+            $horas = max($resultHoras)["Hora"] - 8;            
+        }        
         
         if (isset($resultHoras)) {            
             for ($i=0; $i <=$horas; $i++) { 
+                
                 if ($horaIni == 13) {
                     $horaIni = $horaIni - 12;
                 }          
@@ -247,28 +257,30 @@ class CenterService implements ContainerAwareInterface {
                 $label["label"] = $linea;     
                 $category[] = $label;
                 
-                if (isset($resultHoras[$cont]["Hora"])) {
-                    $horaSet = (int)$resultHoras[$cont]["Hora"];                                       
+                if ($cont == 4) {
+                    $votos = $votos + $sumaInicio;
+                    $cont++;
                 }
-
-                if ($horaSet == $horaReal) {
-                    $votos = $votos + $resultHoras[$cont]["Si"];
+                if (isset($resultHoras[$cont]["Hora"])) {
+                    $horaSet = (int)$resultHoras[$cont]["Hora"];                    
+                }                
+                
+                if ($horaSet == $horaReal AND $horaSet != 9) {
+                    $votos = $votos + $resultHoras[$cont]["Si"];                    
                     $cont++;           
                 }else{
                     $votos = $votos;
                 }
-
+                
                 $dataLinea["value"] = $votos;//((float)$votos/(float)41657)*100;//bcdiv($votos, bcadd(41657, 0, 2), 2); //(float)$votos/41657; //Carga de valores
                 $dataSetLinea["data"][] = $dataLinea; //data linea            
 
                 $horaReal++;
-                $horaIni++; 
+                $horaIni++;                 
             }
         }else{
             $dataSetLinea["data"][] = 0;
         }
-        
-//        var_dump($dataSetLinea['data']);die();
         
         $dataSetLinea['plan'][] = array("value" => $planType[$type]*(float)((float)5/100));
         $dataSetLinea['plan'][] = array("value" => $planType[$type]*(float)((float)10/100));

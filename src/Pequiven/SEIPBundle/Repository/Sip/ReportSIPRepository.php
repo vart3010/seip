@@ -244,7 +244,7 @@ WHERE    ten.deletedAt IS NULL';
         $db = $em->getConnection();
 
         $sql1 = 'SELECT Tipo,  ComplejoCET,    cet_codigo,    GerenciaFirst,    GerenciaSecond,    EsCoord,    Coordinador,
-            TelefCoord, Estado, Municipio, Parroquia, Codigo,	 Cedula, Nombre, 	CASE WHEN ((Voto=0)OR(Voto IS NULL)) THEN "No" ELSE "Si" END as Voto,
+            TelefCoord, Estado, Municipio, Parroquia, Codigo,	 Cedula, Nombre, Telefono, 	CASE WHEN ((Voto=0)OR(Voto IS NULL)) THEN "No" ELSE "Si" END as Voto,
             RespUnoxDiez
             FROM    General_VotesbyGerencia
             WHERE ';
