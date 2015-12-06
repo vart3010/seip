@@ -585,6 +585,11 @@ class CenterService implements ContainerAwareInterface {
                 $chart["showLegend"] = "1";                
                 $labelSi = "SI";
                 $labelNo = "NO";
+            }elseif($linkValue == 10){                
+                $chart["showvalues"]     = "0";
+                $chart["showLegend"] = "0";                
+                $labelSi = "";
+                $labelNo = "";
             }else{
                 $chart["showvalues"]     = "1";
                 $chart["showLegend"] = "1";                

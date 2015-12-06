@@ -38,6 +38,8 @@ class DisplayController extends SEIPController {
         $dataChartEstadoC = $CenterService->getDataChartOfVotoGeneralEstado("EDO. CARABOBO",$linkValue, $type); //General                    
         $dataChartEstadoZ = $CenterService->getDataChartOfVotoGeneralEstado("EDO. ZULIA",$linkValue, $type); //General            
         $dataChartEstadoA = $CenterService->getDataChartOfVotoGeneralEstado("EDO. ANZOATEGUI",$linkValue, $type); //General            
+        
+        $linkValue = 10;
         $dataChartEstadoO = $CenterService->getDataChartOfVotoGeneralEstado("OTROS",$linkValue, $type); //General            
 
         return $this->render('PequivenSEIPBundle:Sip:Center/Display/voto_general.html.twig', array(
@@ -59,7 +61,7 @@ class DisplayController extends SEIPController {
     public function generalEdoAction(Request $request){
         
         $type = $request->get('type');
-        
+
         $em = $this->getDoctrine()->getManager();
         
         $CenterService = $this->getCenterService();//Llamado al Servicio de Centro
