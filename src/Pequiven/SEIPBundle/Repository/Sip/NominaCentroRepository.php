@@ -45,6 +45,14 @@ class NominaCentroRepository extends EntityRepository {
         if (($cedula = $criteria->remove('cedula'))) {
             $queryBuilder->andWhere($queryBuilder->expr()->like('nc.cedula', "'%" . $cedula . "%'"));
         }
+        
+        if (($voto = $criteria->remove('voto'))) {
+            $numVoto = 0;
+            if($voto == 'SI'){
+                $numVoto = 1;
+            }
+            $queryBuilder->andWhere('nc.voto = '.$numVoto);
+        }
 
         if (($nombre = $criteria->remove('nombre'))) {
             $queryBuilder->andWhere($queryBuilder->expr()->like('nc.nombre', "'%" . $nombre . "%'"));
