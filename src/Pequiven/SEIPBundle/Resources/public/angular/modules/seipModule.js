@@ -2378,7 +2378,7 @@ angular.module('seipModule.controllers', [])
                     $scope.openModalAuto();
                 }
             };
-             //Carga el formulario cargo ubch
+            //Carga el formulario cargo ubch
             $scope.loadTemplateCargoUbch = function (resource) {
                 $scope.initFormCargoUbch(resource);
                 if (isInit == false) {
@@ -2585,12 +2585,12 @@ angular.module('seipModule.controllers', [])
             //Añadir Observations
             var editRequest = function (save, successCallBack) {
                 var formEditRequest = angular.element('#form_request_edit');
-                var formData = formEditRequest.serialize();                
-                
+                var formData = formEditRequest.serialize();
+
                 if (save == undefined) {
                     var save = false;
                 }
-                if (save == true) {                    
+                if (save == true) {
                     var url = Routing.generate('pequiven_sip_center_observations_edit', {idObs: $scope.Status});
                 }
                 notificationBarService.getLoadStatus().loading();
@@ -2841,7 +2841,7 @@ angular.module('seipModule.controllers', [])
                 } else {
                     $scope.openModalAuto();
                 }
-            };    
+            };
             $scope.loadTemplateCenter = function (resource) {
                 $scope.initFormCenter(resource);
                 if (isInit == false) {
@@ -2855,7 +2855,7 @@ angular.module('seipModule.controllers', [])
                 } else {
                     $scope.openModalAuto();
                 }
-            }; 
+            };
             //Carga el formulario de las Asistencias para editar
             $scope.loadTemplateAssistsEdit = function (resource) {
                 $scope.initFormAssistsEdit(resource);
@@ -2863,15 +2863,15 @@ angular.module('seipModule.controllers', [])
                     isInit = true;
                 }
                 $scope.templateOptions.setTemplate($scope.templates[0]);
-                $scope.templateOptions.setParameterCallBack(resource);                
+                $scope.templateOptions.setParameterCallBack(resource);
                 if (resource) {
                     $scope.templateOptions.enableModeEdit();
                     $scope.openModalAuto();
                 } else {
                     $scope.openModalAuto();
                 }
-            };        
-            
+            };
+
 
             //Añadir Observations
             var addAssists = function (save, successCallBack) {
@@ -2931,12 +2931,12 @@ angular.module('seipModule.controllers', [])
                     data: formData,
                     headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'}  // set the headers so angular passing info as form data (not request payload)
                 }).success(function (data) {
-                    $scope.templateOptions.setVar("form", {errors: {}});                    
+                    $scope.templateOptions.setVar("form", {errors: {}});
                     if (successCallBack) {
                         successCallBack(data);
                     }
                     notificationBarService.getLoadStatus().done();
-                    location.reload(); 
+                    location.reload();
                     return true;
                 }).error(function (data, status, headers, config) {
                     $scope.templateOptions.setVar("form", {errors: {}});
@@ -2947,7 +2947,7 @@ angular.module('seipModule.controllers', [])
                             });
                         }
                         $scope.templateOptions.setVar("form", {errors: data.errors.children});
-                    }                    
+                    }
                     notificationBarService.getLoadStatus().done();
                     return false;
                 });
@@ -2971,12 +2971,12 @@ angular.module('seipModule.controllers', [])
                     data: formData,
                     headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'}  // set the headers so angular passing info as form data (not request payload)
                 }).success(function (data) {
-                    $scope.templateOptions.setVar("form", {errors: {}});                    
+                    $scope.templateOptions.setVar("form", {errors: {}});
                     if (successCallBack) {
                         successCallBack(data);
                     }
                     notificationBarService.getLoadStatus().done();
-                    location.reload(); 
+                    location.reload();
                     return true;
                 }).error(function (data, status, headers, config) {
                     $scope.templateOptions.setVar("form", {errors: {}});
@@ -2987,7 +2987,7 @@ angular.module('seipModule.controllers', [])
                             });
                         }
                         $scope.templateOptions.setVar("form", {errors: data.errors.children});
-                    }                    
+                    }
                     notificationBarService.getLoadStatus().done();
                     return false;
                 });
@@ -2995,23 +2995,23 @@ angular.module('seipModule.controllers', [])
             $scope.templateOptions.setVar('addAssists', addAssists);
             $scope.templateOptions.setVar('editAssists', editAssists);
             $scope.templateOptions.setVar('addCenter', addCenter);
-            var confirmCallBack = function () {                
-                addAssists(true, function (data) {                    
+            var confirmCallBack = function () {
+                addAssists(true, function (data) {
                 });
                 return true;
-            }; 
+            };
 
-            var confirmCallBackEdit = function () {                
-                editAssists(true, function (data) {                    
+            var confirmCallBackEdit = function () {
+                editAssists(true, function (data) {
                 });
                 return true;
-            }; 
+            };
 
-            var confirmCallBackCenter = function () {                
-                addCenter(true, function (data) {                    
+            var confirmCallBackCenter = function () {
+                addCenter(true, function (data) {
                 });
                 return true;
-            };           
+            };
             //Formulario Asistencias
             $scope.initFormAssists = function (resource) {
                 var d = new Date();
@@ -3038,9 +3038,9 @@ angular.module('seipModule.controllers', [])
             $scope.initFormAssistsEdit = function (resource) {
                 var d = new Date();
                 var numero = d.getTime();
-                $scope.setHeight(650);                
+                $scope.setHeight(650);
                 var parameters = {
-                    idCenter: $scope.idCenter,                    
+                    idCenter: $scope.idCenter,
                     _dc: numero
                 };
                 if (resource) {
@@ -3061,9 +3061,9 @@ angular.module('seipModule.controllers', [])
             $scope.initFormCenter = function (resource) {
                 var d = new Date();
                 var numero = d.getTime();
-                $scope.setHeight(350);                
+                $scope.setHeight(350);
                 var parameters = {
-                    idCenter: $scope.idCenter,                    
+                    idCenter: $scope.idCenter,
                     _dc: numero
                 };
                 if (resource) {
@@ -3078,7 +3078,7 @@ angular.module('seipModule.controllers', [])
                     }
                 ];
                 $scope.templateOptions.setTemplate($scope.templates[0]);
-            };  
+            };
             //Removiendo las asistencias
             $scope.removeAssists = function () {
                 $scope.openModalConfirm('¿Desea eliminar la Asistencia?', function () {
@@ -3126,7 +3126,7 @@ angular.module('seipModule.controllers', [])
                 } else {
                     $scope.openModalAuto();
                 }
-            }; 
+            };
             //Carga el formulario Registro de Votos
             $scope.loadTemplateReportVoto = function (resource) {
                 $scope.initFormReportVoto(resource);
@@ -3141,7 +3141,7 @@ angular.module('seipModule.controllers', [])
                 } else {
                     $scope.openModalAuto();
                 }
-            };  
+            };
 
             //Añadir Reporte
             var addReport = function (save, successCallBack) {
@@ -3225,14 +3225,14 @@ angular.module('seipModule.controllers', [])
 
             $scope.templateOptions.setVar('addReport', addReport);
             var confirmCallBack = function () {
-                addReport(true, function (data) {                    
+                addReport(true, function (data) {
                 });
                 return true;
             };
 
             $scope.templateOptions.setVar('addVotos', addVotos);
             var confirmCallBackVotos = function () {
-                addVotos(true, function (data) {                    
+                addVotos(true, function (data) {
                 });
                 return true;
             };
@@ -3243,7 +3243,7 @@ angular.module('seipModule.controllers', [])
                 var numero = d.getTime();
                 $scope.setHeight(650);
                 var parameters = {
-                    idCenter: $scope.idCenter,                    
+                    idCenter: $scope.idCenter,
                     mesa: $scope.mesa,
                     _dc: numero
                 };
@@ -3265,9 +3265,9 @@ angular.module('seipModule.controllers', [])
             $scope.initFormReportVoto = function (resource) {
                 var d = new Date();
                 var numero = d.getTime();
-                $scope.setHeight(350);                   
+                $scope.setHeight(350);
                 var parameters = {
-                    idCenter: $scope.idCenter, 
+                    idCenter: $scope.idCenter,
                     mesa: $scope.mesa,
                     _dc: numero
                 };
@@ -4411,7 +4411,7 @@ angular.module('seipModule.controllers', [])
                 }
             });
         })
-        
+
         .controller('ReportSipController', function ($scope, ngTableParams, $http, sfTranslator, notifyService) {
             var selectComplejo = angular.element("#selectComplejos");
             var selectComplejoId = angular.element("#selectComplejosid");
@@ -4447,32 +4447,32 @@ angular.module('seipModule.controllers', [])
                         });
             };
 
-            //Busca las Gerencias de 1ra Línea
-            $scope.getFirstLineManagement = function (complejo) {
-                var parameters = {
-                    filter: {}
-                };
-                if ($scope.model.complejo != null) {
-                    parameters.filter['complejo'] = $scope.model.complejo.id;
-                }
-                $http.get(Routing.generate('pequiven_seip_first_line_management', parameters))
-                        .success(function (data) {
-                            $scope.data.first_line_managements = data;
-                            if ($scope.model.firstLineManagement != null) {
-                                $scope.setValueSelect2("firstLineManagement", $scope.model.firstLineManagement, $scope.data.first_line_managements, function (selected) {
-                                    $scope.model.firstLineManagement = selected;
-                                });
-                            }
-                        });
-            };
+//            //Busca las Gerencias de 1ra Línea
+//            $scope.getFirstLineManagement = function (complejo) {
+//                var parameters = {
+//                    filter: {}
+//                };
+//                if ($scope.model.complejo != null) {
+//                    parameters.filter['complejo'] = $scope.model.complejo.id;
+//                }
+//                $http.get(Routing.generate('pequiven_seip_first_line_management', parameters))
+//                        .success(function (data) {
+//                            $scope.data.first_line_managements = data;
+//                            if ($scope.model.firstLineManagement != null) {
+//                                $scope.setValueSelect2("firstLineManagement", $scope.model.firstLineManagement, $scope.data.first_line_managements, function (selected) {
+//                                    $scope.model.firstLineManagement = selected;
+//                                });
+//                            }
+//                        });
+//            };
 
             //Busca las Gerencias de 2da Línea
             $scope.getSecondLineManagement = function (gerencia) {
                 var parameters = {
                     filter: {}
                 };
-                if ($scope.model.firstLineManagement != null) {
-                    parameters.filter['gerencia'] = $scope.model.firstLineManagement.id;
+                if ($scope.model.complejo != null) {
+                    parameters.filter['complejo'] = $scope.model.complejo.id;
                 }
 
                 $http.get(Routing.generate('pequiven_seip_second_line_management', parameters))
@@ -4487,55 +4487,57 @@ angular.module('seipModule.controllers', [])
             };
 
             $scope.getComplejos();
-        //    $scope.getFirstLineManagement();
+            //    $scope.getFirstLineManagement();
 //            $scope.getCoordinators();
 
             //Scope de Localidad
             $scope.$watch("model.complejo", function (newParams, oldParams) {
                 if ($scope.model.complejo != null && $scope.model.complejo.id != undefined) {
-                //    $scope.tableParams.$params.filter['complejo'] = $scope.model.complejo.id;
+                    //    $scope.tableParams.$params.filter['complejo'] = $scope.model.complejo.id;
                     selectComplejoId.val($scope.model.complejo.id);
+                    selectSecondLineManagement.select2("enable", true);
+                    selectSecondLineManagement.select2("val", '');
                     //Al cambiar el select de localidad
-                    selectFirstLineManagement.select2("enable", true);
+                    //      selectFirstLineManagement.select2("enable", true);
 //                    selectFirstLineManagement.change(function () {                        
 //                        selectFirstLineManagement.select2("val", '');                        
 //                    });
                 } else {
-                    selectFirstLineManagement.select2("enable", false);
-                    selectFirstLineManagement.select2("val", '');
-                    selectSecondLineManagement.select2("enable", false);
+//                    selectFirstLineManagement.select2("enable", false);
+//                    selectFirstLineManagement.select2("val", '');
+                    // selectSecondLineManagement.select2("enable", false);
                     selectSecondLineManagement.select2("val", '');
 //                    $scope.tableParams.$params.filter['complejo'] = null;
                     selectComplejoId.val('');
-                    
+
                 }
             }
             );
             //Scope de Gerencia de 1ra Línea
-            $scope.$watch("model.firstLineManagement", function (newParams, oldParams) {
-                if ($scope.model.firstLineManagement != null && $scope.model.firstLineManagement.id != undefined) {
-//                    $scope.tableParams.$params.filter['firstLineManagement'] = $scope.model.firstLineManagement.id;
-                    selectFirstLineManagementId.val($scope.model.firstLineManagement.id);
-                    selectSecondLineManagement.select2("enable", true);
-                    //Al cambiar la gerencia de 1ra línea
-                    selectFirstLineManagement.change(function () {
-                        selectSecondLineManagement.select2("val", '');                         
-                    });
-                } else {
-//                    $scope.tableParams.$params.filter['firstLineManagement'] = null;
-                    selectSecondLineManagement.select2("enable", false);
-                    selectSecondLineManagement.select2("val", '');
-                    selectFirstLineManagementId.val('');
-                }
-            });
+//            $scope.$watch("model.firstLineManagement", function (newParams, oldParams) {
+//                if ($scope.model.firstLineManagement != null && $scope.model.firstLineManagement.id != undefined) {
+////                    $scope.tableParams.$params.filter['firstLineManagement'] = $scope.model.firstLineManagement.id;
+//                    selectFirstLineManagementId.val($scope.model.firstLineManagement.id);
+//                    selectSecondLineManagement.select2("enable", true);
+//                    //Al cambiar la gerencia de 1ra línea
+//                    selectFirstLineManagement.change(function () {
+//                        selectSecondLineManagement.select2("val", '');                         
+//                    });
+//                } else {
+////                    $scope.tableParams.$params.filter['firstLineManagement'] = null;
+//                    selectSecondLineManagement.select2("enable", false);
+//                    selectSecondLineManagement.select2("val", '');
+//                    selectFirstLineManagementId.val('');
+//                }
+//            });
             //Scope de Gerencia de 2da Línea
             $scope.$watch("model.secondLineManagement", function (newParams, oldParams) {
                 if ($scope.model.secondLineManagement != null && $scope.model.secondLineManagement.id != undefined) {
 //                    $scope.tableParams.$params.filter['secondLineManagement'] = $scope.model.secondLineManagement.id;
-                        selectSecondLineManagementId.val($scope.model.secondLineManagement.id);
+                    selectSecondLineManagementId.val($scope.model.secondLineManagement.id);
                 } else {
 //                    $scope.tableParams.$params.filter['secondLineManagement'] = null;
-                        selectSecondLineManagementId.val('');
+                    selectSecondLineManagementId.val('');
                 }
             });
         })
@@ -4774,8 +4776,8 @@ angular.module('seipModule.controllers', [])
                             }
                         });
             };
-            
-             //Busca los Círculos de Estudio de Trabajo
+
+            //Busca los Círculos de Estudio de Trabajo
             $scope.getWorkStudyCircle = function (complejo, phase) {
                 var parameters = {
                     filter: {}
@@ -4842,7 +4844,7 @@ angular.module('seipModule.controllers', [])
                 }
             });
 
-           
+
 
             //Scope de Círculo de Estudio de Trabajo
             $scope.$watch("model.workStudyCircle", function (newParams, oldParams) {
@@ -7291,7 +7293,7 @@ angular.module('seipModule.controllers', [])
             //Charts Votos General
             $scope.renderChartVotoGeneral_2 = function (id, data, categories, caption, typeLabelDisplay) {
                 FusionCharts.ready(function () {
-                    var revenueChart = new FusionCharts({                        
+                    var revenueChart = new FusionCharts({
                         "type": "pie3d",
                         "renderAt": id,
                         "width": "80%",
@@ -7314,7 +7316,7 @@ angular.module('seipModule.controllers', [])
             //Charts Votos General
             $scope.renderChartVotoGeneral_3 = function (id, data, categories, caption, typeLabelDisplay) {
                 FusionCharts.ready(function () {
-                    var revenueChart = new FusionCharts({                        
+                    var revenueChart = new FusionCharts({
                         "type": "pie3d",
                         "renderAt": id,
                         "width": "100%",
@@ -7386,7 +7388,7 @@ angular.module('seipModule.controllers', [])
             //Charts Votos General Horas
             $scope.renderChartVotoGeneralMcpo = function (id, data, categories, caption, typeLabelDisplay) {
                 FusionCharts.ready(function () {
-                    var revenueChart = new FusionCharts({                        
+                    var revenueChart = new FusionCharts({
                         "type": "mscolumn3dlinedy",
                         "renderAt": id,
                         "width": "100%",
@@ -7410,7 +7412,7 @@ angular.module('seipModule.controllers', [])
             //Charts Votos General Parroquia
             $scope.renderChartVotoGeneralParroq = function (id, data, categories, caption, typeLabelDisplay) {
                 FusionCharts.ready(function () {
-                    var revenueChart = new FusionCharts({                        
+                    var revenueChart = new FusionCharts({
                         "type": "mscolumnline3d",
                         "renderAt": id,
                         "width": "100%",
@@ -7433,7 +7435,7 @@ angular.module('seipModule.controllers', [])
             //Grafica de Barras para localidades
             $scope.renderChartVotoGeneralLocalidad = function (id, data, categories, caption, typeLabelDisplay) {
                 FusionCharts.ready(function () {
-                    var revenueChart = new FusionCharts({                        
+                    var revenueChart = new FusionCharts({
                         "type": "mscolumnline3d",
                         "renderAt": id,
                         "width": "100%",
@@ -7529,7 +7531,7 @@ angular.module('seipModule.controllers', [])
             //Charts Votos General Parroquia
             $scope.renderChartVotoGeneralCircuito5 = function (id, data, categories, caption, typeLabelDisplay) {
                 FusionCharts.ready(function () {
-                    var revenueChart = new FusionCharts({                        
+                    var revenueChart = new FusionCharts({
                         "type": "mscolumnline3d",
                         "renderAt": id,
                         "width": "100%",

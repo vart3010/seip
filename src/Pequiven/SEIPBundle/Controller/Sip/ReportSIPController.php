@@ -601,7 +601,8 @@ class ReportSIPController extends SEIPController {
         $em->getConnection()->beginTransaction();
 
         $localidad = $request->get("selectComplejosid");
-        $gprimera = $request->get("selectFirstLineManagementid");
+        //$gprimera = $request->get("selectFirstLineManagementid");
+        $gprimera = null;
         $gsegunda = $request->get("selectSecondLineManagementid");
 
         $tipo = $request->get("Tipo");
@@ -611,12 +612,19 @@ class ReportSIPController extends SEIPController {
         } else {
             $voto = 1;
         }
+        
+        
+         if (($request->get("C5")) != null) {
+            $c5 = 1;
+        } else {
+            $c5 = 0;
+        }
 
         $date = date("h:i a");
         
         $date1 = date("h-i a");
 
-        $result = $this->get('pequiven.repository.report')->getSegVoto($localidad, $gprimera, $gsegunda, $tipo, $voto);
+        $result = $this->get('pequiven.repository.report')->getSegVoto($localidad, $gprimera, $gsegunda, $tipo, $c5, $voto);
 
         $path = $this->get('kernel')->locateResource('@PequivenSEIPBundle/Resources/Skeleton/Sip/SegVoto.xlsx');
         $objPHPExcel = \PHPExcel_IOFactory::load($path);
@@ -641,11 +649,11 @@ class ReportSIPController extends SEIPController {
                 )
         ));
 
-        $activeSheet->setCellValue('L2', $date);
+        $activeSheet->setCellValue('O2', $date);
         $row = 5; //Fila Inicial del skeleton
 
         foreach ($result as $fila) {
-            $activeSheet->getRowDimension($row)->setRowHeight(20);
+            $activeSheet->getRowDimension($row)->setRowHeight(25);
             $activeSheet->setCellValue('A' . $row, $fila["Tipo"]);
             $activeSheet->setCellValue('B' . $row, $fila["ComplejoCET"]);
             $activeSheet->setCellValue('C' . $row, $fila["GerenciaFirst"]);
@@ -653,18 +661,21 @@ class ReportSIPController extends SEIPController {
             $activeSheet->setCellValue('E' . $row, $fila["EsCoord"]);
             $activeSheet->setCellValue('F' . $row, $fila["Coordinador"]);
             $activeSheet->setCellValue('G' . $row, $fila["TelefCoord"]);
-            $activeSheet->setCellValue('H' . $row, $fila["Cedula"]);
-            $activeSheet->setCellValue('I' . $row, $fila["Nombre"]);
-            $activeSheet->setCellValue('J' . $row, $fila["Codigo"]);
-            $activeSheet->setCellValue('L' . $row, $fila["Voto"]);
-            $activeSheet->setCellValue('M' . $row, $fila["RespUnoxDiez"]);
+            $activeSheet->setCellValue('H' . $row, $fila["Estado"]);
+            $activeSheet->setCellValue('I' . $row, $fila["Municipio"]);
+            $activeSheet->setCellValue('J' . $row, $fila["Parroquia"]);
+            $activeSheet->setCellValue('K' . $row, $fila["Codigo"]);
+            $activeSheet->setCellValue('L' . $row, $fila["Cedula"]);
+            $activeSheet->setCellValue('M' . $row, $fila["Nombre"]);            
+            $activeSheet->setCellValue('N' . $row, $fila["Voto"]);
+            $activeSheet->setCellValue('O' . $row, $fila["RespUnoxDiez"]);
 
             $row++;
         }
 
-        $activeSheet->getStyle('A4:K' . ($row - 1))->applyFromArray($styleArray);
+        $activeSheet->getStyle('A5:O' . ($row - 1))->applyFromArray($styleArray);
 
-        $fileName = sprintf('SIP - Seguimiento al Voto hasta las ' . $date);
+        $fileName = sprintf('SIP - Seguimiento al Voto hasta las %s.xlsx' , $date);
 
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="' . $fileName . '"');
@@ -673,7 +684,7 @@ class ReportSIPController extends SEIPController {
         header('Cache-Control: max-age=1');
 
         // If you're serving to IE over SSL, then the following may be needed
-        header('Expires: Mon, 27 Jul 1997 05:00:00 GMT'); // Date in the past
+        header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
         header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT'); // always modified
         header('Cache-Control: cache, must-revalidate'); // HTTP/1.1
         header('Pragma: public'); // HTTP/1.0

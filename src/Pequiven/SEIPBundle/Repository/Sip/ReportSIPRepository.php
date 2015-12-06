@@ -238,28 +238,22 @@ WHERE    ten.deletedAt IS NULL';
         return $result;
     }
 
-    function getSegVoto($localidad, $gprimera, $gsegunda, $tipo, $voto) {
+    function getSegVoto($localidad, $gprimera, $gsegunda, $tipo, $c5, $voto) {
 
         $em = $this->getEntityManager();
         $db = $em->getConnection();
 
-        $sql1 = 'SELECT 	Tipo,  ComplejoCET,    cet_codigo,    GerenciaFirst,    GerenciaSecond,    EsCoord,    Coordinador,
-            TelefCoord,    Cedula, Nombre, 	Codigo,	Centro,  CASE WHEN ((Voto=0)OR(Voto IS NULL)) THEN "No" ELSE "Si" END as Voto,
+        $sql1 = 'SELECT Tipo,  ComplejoCET,    cet_codigo,    GerenciaFirst,    GerenciaSecond,    EsCoord,    Coordinador,
+            TelefCoord, Estado, Municipio, Parroquia, Codigo,	 Cedula, Nombre, 	CASE WHEN ((Voto=0)OR(Voto IS NULL)) THEN "No" ELSE "Si" END as Voto,
             RespUnoxDiez
             FROM    General_VotesbyGerencia
             WHERE ';
 
 
         if (($tipo != "General")) {
-            $sql2 = 'Tipo="' . $tipo . '" ';
+            $sql2 = ' Tipo="' . $tipo . '" ';
         } else {
-
-            if ($tipo == "Circuito 5") {
-                $sql2 = 'Estado="EDO. CARABOBO" AND Parroquia IN ("PQ. SANTA ROSA","PQ. MIGUEL PEÑA", '
-                        . '"PQ. RAFAEL URDANETA","PQ. U INDEPENDENCIA", "PQ. U TOCUYITO", "PQ. NEGRO PRIMERO")';
-            } else {
-                $sql2 = 'Tipo IS NOT NULL';
-            }
+            $sql2 = ' Tipo IS NOT NULL ';
         }
 
         if ($localidad != "") {
@@ -268,11 +262,11 @@ WHERE    ten.deletedAt IS NULL';
             $sql3 = '';
         }
 
-        if ($gprimera != "") {
-            $sql4 = ' AND gerencia_id="' . $gprimera . '" ';
-        } else {
-            $sql4 = '';
-        }
+//        if ($gprimera != "") {
+//            $sql4 = ' AND gerencia_id="' . $gprimera . '" ';
+//        } else {
+//            $sql4 = '';
+//        }
 
         if ($gsegunda != "") {
             $sql5 = ' AND gerenciaSecond_id="' . $gsegunda . '" ';
@@ -283,11 +277,19 @@ WHERE    ten.deletedAt IS NULL';
         if ($voto == 1) {
             $sql6 = ' AND Voto="1" ';
         } else {
-            $sql6 = 'AND (Voto=0 or Voto is null)';
+            $sql6 = ' AND (Voto=0 or Voto is null) ';
         }
 
 
-        $sql = $sql1 . $sql2 . $sql3 . $sql4 . $sql5 . $sql6;
+        if ($c5 == 1) {
+            $sql7 = ' AND Estado="EDO. CARABOBO" AND Parroquia IN ("PQ. SANTA ROSA","PQ. MIGUEL PEÑA", '
+                    . '"PQ. RAFAEL URDANETA","PQ. U INDEPENDENCIA", "PQ. U TOCUYITO", "PQ. NEGRO PRIMERO") ';
+        } else {
+            $sql7 = ' ';
+        }
+
+
+        $sql = $sql1 . $sql2 . $sql3 . $sql5 . $sql6 . $sql7;
 
         $stmt = $db->prepare($sql);
         $stmt->execute();
