@@ -182,7 +182,7 @@ class CenterService implements ContainerAwareInterface {
         $chart["captionFontSize"] = "20";                
         $chart["palette"]        = "1";
         $chart["showvalues"]     = "0";
-        $chart["paletteColors"]  = "#0075c2,#c90606,#f2c500,#12a830,#1aaf5d";
+//        $chart["paletteColors"]  = "#0075c2,#c90606,#f2c500,#12a830,#1aaf5d";
         $chart["showBorder"] = "0";
         $chart["yaxisvaluespadding"] = "10";
         $chart["valueFontColor"] = "#ffffff";
