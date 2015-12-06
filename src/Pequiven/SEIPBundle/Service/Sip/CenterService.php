@@ -1588,9 +1588,9 @@ class CenterService implements ContainerAwareInterface {
         );
         $chart = array();
 
-        //$chart["caption"] = "General";
+        $chart["caption"] = "General";
         $chart["captionFontColor"] = "#e20000";
-        $chart["captionFontSize"] = "20";                
+        $chart["captionFontSize"] = "15";                
         $chart["palette"]        = "1";
         $chart["showvalues"]     = "1";
         $chart["paletteColors"]  = "#0075c2,#c90606,#f2c500,#12a830,#1aaf5d";
@@ -1627,7 +1627,13 @@ class CenterService implements ContainerAwareInterface {
         $chart["divLineGapLen"] = "0";
         $chart["canvasBgAlpha"] = "0,0";
         $chart["toolTipBgColor"] = "#000000";
+        
+        $chart["saxisvaluespadding"] = "10";
+        $chart["pYAxisMaxValue"] = "1000";        
 
+        $chart["sYAxisMaxValue"] = "50000";
+        //$chart["sYAxisName"] = "Exit Poll";        
+        
         $em = $this->getDoctrine()->getManager();
         
         $label = $dataPlan = $dataReal = array();
@@ -1663,8 +1669,8 @@ class CenterService implements ContainerAwareInterface {
                 $votoNO = 0;
             }
             
-            $dataReal1["value"] = $votoSI; //Carga de valores General
-            $dataSetReal["data"][] = $dataReal1; //data                 
+            $dataReal["value"] = $votoSI; //Carga de valores General
+            $dataSetReal["data"][] = $dataReal; //data                 
             
             $dataPlan1["value"] = $votoNO + $votoSI; //Carga de valores General
             $dataSetPlan["data"][] = $dataPlan1; //data 
@@ -1687,36 +1693,16 @@ class CenterService implements ContainerAwareInterface {
                 $votoNO = 0;
             }
             
-            $dataReal2["value"] = $votoSI; //Carga de valores General
-            $dataSetReal["data"][] = $dataReal2; //data                 
+            $dataReal["value"] = $votoSI; //Carga de valores General
+            $dataSetReal["data"][] = $dataReal; //data                 
             
             $dataPlan2["value"] = $votoNO + $votoSI; //Carga de valores General
             $dataSetPlan["data"][] = $dataPlan2; //data 
-
-            //General 1x10            
-            $label["label"] = "Exit Poll";     
-            $category[] = $label;
-            
-            $dataPoll = [
-                1 => 15922,//"PQ. U TOCUYITO", 
-                2 => 4413,//"PQ. U INDEPENDENCIA", 
-                3 => 46566,//"PQ. MIGUEL PEÑA",
-                4 => 13236,//"PQ. RAFAEL URDANETA", 
-                5 => 1540,//"PQ. NEGRO PRIMERO", 
-                6 => 25728//"PQ. SANTA ROSA"
-            ];
-            //Cantidad de Votos
-            $dataM = $dataPoll[$count];
-            $dataReal3["color"] = '#47ac44';            
-            $dataReal3["value"] = $dataM; //Carga de valores General
-            $dataSetReal["data"][] = $dataReal3; //data 
-
-            $dataPlan3["value"] = ""; //Carga de valores General
-            $dataSetPlan["data"][] = $dataPlan3; //data 
+             
             
             $count++;        
         }    
-
+        
         $dataSetReal["seriesname"] = "Real";                
         $dataSetPlan["seriesname"] = "Plan";                
 
@@ -1728,6 +1714,124 @@ class CenterService implements ContainerAwareInterface {
         return json_encode($data);
     }
 
+
+    /**
+     *
+     *  Grafica de Votos Circuito Barra
+     *
+     */
+    public function getDataChartOfCircuitoBarraPoll() {
+        
+        $data = array(
+            'dataSource' => array(
+                'chart' => array(),
+                'categories' => array(
+                ),
+                'dataset' => array(
+                ),
+            ),
+        );
+        $chart = array();
+
+        $chart["caption"] = "Exit Poll";
+        $chart["captionFontColor"] = "#e20000";
+        $chart["captionFontSize"] = "15";                
+        $chart["palette"]        = "1";
+        $chart["showvalues"]     = "1";
+        $chart["paletteColors"]  = "#0075c2,#c90606,#f2c500,#12a830,#1aaf5d";
+        $chart["showBorder"] = "0";
+        $chart["showCanvasBorder"] = "0";
+        $chart["yaxisvaluespadding"] = "10";
+        $chart["valueFontColor"] = "#ffffff";
+        $chart["rotateValues"]   = "1";
+        $chart["bgAlpha"] = "0,0";//Fondo         
+        $chart["theme"]          = "fint";
+        $chart["showborder"]     = "0";
+        $chart["decimals"]       = "0";
+        $chart["showLegend"] = "0";
+        $chart["legendBgColor"] = "#ffffff";
+        $chart["legendItemFontSize"] = "10";
+        $chart["legendItemFontColor"] = "#666666";
+        $chart["baseFontColor"] = "#ffffff";        
+        $chart["outCnvBaseFontColor"] = "#ffffff";
+        $chart["formatNumberScale"] = "0";
+
+        $chart["usePlotGradientColor"] = "0";
+        $chart["plotBorderAlpha"] = "10";
+        $chart["legendBorderAlpha"] = "0";
+        $chart["legendBgAlpha"] = "0";
+        $chart["legendItemFontColor"] = "#ffffff";
+        $chart["baseFontColor"] = "#ffffff";
+        $chart["legendItemFontColor"] = "#ffffff";
+        
+        $chart["divLineDashed"] = "0";
+        $chart["showHoverEffect"] = "1";
+        $chart["valuePosition"] = "ABOVE";
+        $chart["dashed"] = "0";
+        $chart["divLineDashLen"] = "0";
+        $chart["divLineGapLen"] = "0";
+        $chart["canvasBgAlpha"] = "0,0";
+        $chart["toolTipBgColor"] = "#000000";
+        
+        //$chart["saxisvaluespadding"] = "10";
+        //$chart["pYAxisMaxValue"] = "1000";        
+
+        //$chart["sYAxisMaxValue"] = "50000";
+        //$chart["sYAxisName"] = "Exit Poll";        
+        
+        $em = $this->getDoctrine()->getManager();
+        
+        $label = $dataPlan = $dataReal = array();
+        $count = 1;
+        $votoNO = $votoSI = 0;
+
+        $parroquias = [
+            1 => "PQ. U TOCUYITO", 
+            2 => "PQ. U INDEPENDENCIA", 
+            3 => "PQ. MIGUEL PEÑA",
+            4 => "PQ. RAFAEL URDANETA", 
+            5 => "PQ. NEGRO PRIMERO", 
+            6 => "PQ. SANTA ROSA"
+        ];
+        
+        foreach ($parroquias as $value) {
+            $parroquia = $parroquias[$count];
+            $label["label"] = $parroquia;     
+            $category[] = $label; 
+            
+            $dataPoll = [
+                1 => 15922,//"PQ. U TOCUYITO", 
+                2 => 4413,//"PQ. U INDEPENDENCIA", 
+                3 => 46566,//"PQ. MIGUEL PEÑA",
+                4 => 13236,//"PQ. RAFAEL URDANETA", 
+                5 => 1540,//"PQ. NEGRO PRIMERO", 
+                6 => 25728//"PQ. SANTA ROSA"
+            ];
+            //Cantidad de Votos
+            $dataM = $dataPoll[$count];            
+            $dataReal3["parentyaxis"] = 'S';                        
+            $dataReal3["renderas"] = 'column';                        
+            $dataReal3["color"] = '#47ac44';            
+            $dataReal3["value"] = $dataM; //Carga de valores General
+            $dataSetReal['data'][] = $dataReal3; //data 
+            //$dataSetReal['data'] = array('parentyaxis' => 'S', 'renderas' => 'column', 'data' => $dataSetReal['data']);            
+
+            $dataPlan3["value"] = ""; //Carga de valores General
+            $dataSetPlan["data"][] = $dataPlan3; //data             
+            
+            $count++;        
+        }    
+        
+        $dataSetReal["seriesname"] = "Real";                
+        $dataSetPlan["seriesname"] = "Plan";                
+
+        $data['dataSource']['chart'] = $chart;
+        $data['dataSource']['categories'][]["category"] = $category;
+        $data['dataSource']['dataset'][] = $dataSetPlan;
+        $data['dataSource']['dataset'][] = $dataSetReal;
+
+        return json_encode($data);
+    }
     /**
      *
      *  Grafica de Voto 1x10
