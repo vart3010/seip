@@ -1111,14 +1111,14 @@ class CenterController extends SEIPController {
         $sorting = $request->get('sorting', $this->config->getSorting());
 
         $repository = $this->getRepository();
-        $repository = $this->get('pequiven.repository.nominaCentro');        
+        $repository = $this->get('pequiven.repository.onepertenmembers');        
         
 
         $criteria['codCentro'] = $codCentro;
 
         if ($this->config->isPaginated()) {
             $resources = $this->resourceResolver->getResource(
-                    $repository, 'createPaginatorByCentroPqv', array($criteria, $sorting)
+                    $repository, 'createPaginatorByCentroOptm', array($criteria, $sorting)
             );
 
             $maxPerPage = $this->config->getPaginationMaxPerPage();
@@ -1140,11 +1140,11 @@ class CenterController extends SEIPController {
             '_format' => 'json',
             'idCentro' => $idCentro
         );
-        $apiDataUrl = $this->generateUrl('pequiven_sip_cutl_list_pqv', $routeParameters);
+        $apiDataUrl = $this->generateUrl('pequiven_sip_cutl_list_optm', $routeParameters);
 
         $view = $this
                 ->view()
-                ->setTemplate($this->config->getTemplate('listPqv.html'))
+                ->setTemplate($this->config->getTemplate('listOnePerTenMembers.html'))
                 ->setTemplateVar($this->config->getPluralResourceName())
         ;
         if ($request->get('_format') == 'html') {
@@ -1155,7 +1155,7 @@ class CenterController extends SEIPController {
             );
             $view->setData($data);
         } else {
-            $view->getSerializationContext()->setGroups(array('id', 'api_list','cedula','nombre', 'codigoCentro'));
+            $view->getSerializationContext()->setGroups(array('id', 'api_list','cedula','nombre', 'codCentro'));
             $formatData = $request->get('_formatData', 'default');
 
             $view->setData($resources->toArray('', array(), $formatData));
