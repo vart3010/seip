@@ -238,6 +238,64 @@ WHERE    ten.deletedAt IS NULL';
         return $result;
     }
 
+    function getSegVoto($localidad, $gprimera, $gsegunda, $tipo, $voto) {
+
+        $em = $this->getEntityManager();
+        $db = $em->getConnection();
+
+        $sql1 = 'SELECT 	Tipo,  ComplejoCET,    cet_codigo,    GerenciaFirst,    GerenciaSecond,    EsCoord,    Coordinador,
+            TelefCoord,    Cedula, Nombre, 	Codigo,	Centro,  CASE WHEN ((Voto=0)OR(Voto IS NULL)) THEN "No" ELSE "Si" END as Voto,
+            RespUnoxDiez
+            FROM    General_VotesbyGerencia
+            WHERE ';
+
+
+        if (($tipo != "General")) {
+            $sql2 = 'Tipo="' . $tipo . '" ';
+        } else {
+
+            if ($tipo == "Circuito 5") {
+                $sql2 = 'Estado="EDO. CARABOBO" AND Parroquia IN ("PQ. SANTA ROSA","PQ. MIGUEL PEÑA", '
+                        . '"PQ. RAFAEL URDANETA","PQ. U INDEPENDENCIA", "PQ. U TOCUYITO", "PQ. NEGRO PRIMERO")';
+            } else {
+                $sql2 = 'Tipo IS NOT NULL';
+            }
+        }
+
+        if ($localidad != "") {
+            $sql3 = ' AND complejo_id="' . $localidad . '" ';
+        } else {
+            $sql3 = '';
+        }
+
+        if ($gprimera != "") {
+            $sql4 = ' AND gerencia_id="' . $gprimera . '" ';
+        } else {
+            $sql4 = '';
+        }
+
+        if ($gsegunda != "") {
+            $sql5 = ' AND gerenciaSecond_id="' . $gsegunda . '" ';
+        } else {
+            $sql5 = '';
+        }
+
+        if ($voto == 1) {
+            $sql6 = ' AND Voto="1" ';
+        } else {
+            $sql6 = 'AND (Voto=0 or Voto is null)';
+        }
+
+
+        $sql = $sql1 . $sql2 . $sql3 . $sql4 . $sql5 . $sql6;
+
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+
+        return $result;
+    }
+
     protected function getAlias() {
         return "Rep";
     }

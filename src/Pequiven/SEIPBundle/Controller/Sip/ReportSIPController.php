@@ -595,4 +595,92 @@ class ReportSIPController extends SEIPController {
         exit;
     }
 
+    public function SegVotoAction(request $request) {
+
+        $em = $this->getDoctrine()->getManager();
+        $em->getConnection()->beginTransaction();
+
+        $localidad = $request->get("selectComplejosid");
+        $gprimera = $request->get("selectFirstLineManagementid");
+        $gsegunda = $request->get("selectSecondLineManagementid");
+
+        $tipo = $request->get("Tipo");
+
+        if (($request->get("Voto")) != null) {
+            $voto = 0;
+        } else {
+            $voto = 1;
+        }
+
+        $date = date("h:i a");
+
+        $result = $this->get('pequiven.repository.report')->getSegVoto($localidad, $gprimera, $gsegunda, $tipo, $voto);
+
+        $path = $this->get('kernel')->locateResource('@PequivenSEIPBundle/Resources/Skeleton/Sip/UnoporDiez.xlsx');
+        $objPHPExcel = \PHPExcel_IOFactory::load($path);
+        $objPHPExcel
+                ->getProperties()
+                ->setCreator("SEIP")
+                ->setTitle('SIP - Seguimiento al Voto hasta las ' . $date)
+                ->setCreated()
+                ->setLastModifiedBy('SIP')
+                ->setModified()
+        ;
+        $objPHPExcel
+                ->setActiveSheetIndex(0);
+
+
+        $activeSheet = $objPHPExcel->getActiveSheet();
+
+        $styleArray = array(
+            'borders' => array(
+                'allborders' => array(
+                    'style' => \PHPExcel_Style_Border::BORDER_THIN
+                )
+        ));
+
+        $activeSheet->setCellValue('J2', $date);
+        $row = 5; //Fila Inicial del skeleton
+
+        foreach ($result as $fila) {
+            $activeSheet->getRowDimension($row)->setRowHeight(20);
+            $activeSheet->setCellValue('A' . $row, $fila["Tipo"]);
+            $activeSheet->setCellValue('B' . $row, $fila["ComplejoCET"]);
+            $activeSheet->setCellValue('C' . $row, $fila["GerenciaFirst"]);
+            $activeSheet->setCellValue('D' . $row, $fila["GerenciaSecond"]);
+            $activeSheet->setCellValue('E' . $row, $fila["EsCoord"]);
+            $activeSheet->setCellValue('F' . $row, $fila["Coordinador"]);
+            $activeSheet->setCellValue('G' . $row, $fila["TelefCoord"]);
+            $activeSheet->setCellValue('H' . $row, $fila["Cedula"]);
+            $activeSheet->setCellValue('I' . $row, $fila["Nombre"]);
+            $activeSheet->setCellValue('J' . $row, $fila["Codigo"]);
+            $activeSheet->setCellValue('K' . $row, $fila["Centro"]);
+            $activeSheet->setCellValue('L' . $row, $fila["Voto"]);
+            $activeSheet->setCellValue('M' . $row, $fila["RespUnoxDiez"]);
+            $activeSheet->setCellValue('N' . $row, $fila["Centro"]);           
+            $row++;
+        }
+
+        $activeSheet->getStyle('A4:K' . ($row - 1))->applyFromArray($styleArray);
+
+        $fileName = sprintf('SIP - Seguimiento al Voto hasta las ' . $date);
+
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="' . $fileName . '"');
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+
+        // If you're serving to IE over SSL, then the following may be needed
+        header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT'); // always modified
+        header('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header('Pragma: public'); // HTTP/1.0
+
+        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        $objWriter->setIncludeCharts(TRUE);
+        $objWriter->save('php://output');
+        exit;
+    }
+
 }
