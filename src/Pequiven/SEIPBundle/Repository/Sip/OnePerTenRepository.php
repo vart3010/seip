@@ -101,7 +101,7 @@ class OnePerTenRepository extends EntityRepository {
 
         return $q->getResult();
     }
-
+    
     protected function getAlias() {
         return 'opt';
     }
