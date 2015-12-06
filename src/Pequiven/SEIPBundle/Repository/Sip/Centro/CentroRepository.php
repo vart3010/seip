@@ -24,9 +24,9 @@ class CentroRepository extends EntityRepository {
         $db = $em->getConnection();
 
         $sql = 'SELECT o.notification
-            FROM sip_centro_report_observations AS o            
-            WHERE o.report_id ='.$id.'
-            order by id desc limit 1';            
+            FROM sip_centro_report_observations AS o 
+            WHERE o.report_id ='.$id.' AND o.deletedAt IS NULL
+            order by id desc limit 1';
 
         $stmt = $db->prepare($sql);
         $stmt->execute();
@@ -886,7 +886,7 @@ class CentroRepository extends EntityRepository {
             $queryBuilder->andWhere($queryBuilder->expr()->like('ctro.descriptionParroquia', "'%" . $parroquia . "%'"));
         }
         
-        $queryBuilder->andWhere('(ctro.circuito = :circuito AND ctro.codigoEstado = 7) OR (ctro.codigoEstado = 21)')
+        $queryBuilder->andWhere('(ctro.circuito = :circuito AND ctro.codigoEstado = 7) OR (ctro.codigoEstado = 21) OR (ctro.codigoEstado = 2)')
                 ->setParameter('circuito', 5);
         
         parent::applyCriteria($queryBuilder, $criteria->toArray());

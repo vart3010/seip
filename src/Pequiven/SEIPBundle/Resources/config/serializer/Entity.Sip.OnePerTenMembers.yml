@@ -1,4 +1,4 @@
-Pequiven\SEIPBundle\Entity\Sip\NominaCentro:
+Pequiven\SEIPBundle\Entity\Sip\OnePerTenMembers:
     exclusion_policy: ALL
     properties:
         id:
@@ -13,10 +13,10 @@ Pequiven\SEIPBundle\Entity\Sip\NominaCentro:
         telefono:
             expose: true
             groups: [api_list]
-        codigoCentro:
+        codCentro:
             expose: true
             groups: [api_list]
-        centro:
+        nombreCentro:
             expose: true
             groups: [api_list]
         voto:

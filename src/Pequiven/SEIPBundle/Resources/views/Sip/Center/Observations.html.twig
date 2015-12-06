@@ -23,7 +23,7 @@
                 {% for dataObs  in observations %}
                     {% set dayShow = dataObs.fecha | date("d") %}
                     {% set monthShow = dataObs.fecha | date("n") %}
-                    {% if (dayShow == "05" and monthShow == "12") or (dayShow == "06" and monthShow == "12") %}
+                    {% if dayShow == "06" and monthShow == "12" %}
                         <tbody>
                             <tr>
                                 <td>{{ dataObs.observations }}</td>

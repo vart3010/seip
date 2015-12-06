@@ -412,6 +412,14 @@ pequiven_sip_cutl_list_pqv:
     requirements:
         _format: html|json|xml        
     methods: [GET]
+pequiven_sip_cutl_list_optm:
+    path: /center/list-optm/{idCentro}.{_format}
+    defaults:
+        _controller: pequiven.controller.center:listOnePerTenMembersAction
+        _format: html
+    requirements:
+        _format: html|json|xml        
+    methods: [GET]
 #Lista de Requerimientos
 pequiven_sip_request_list:
     path: /request/list.{_format}
@@ -574,3 +582,12 @@ pequiven_sip_list_voto_general:
     requirements:
         _format: html|json|xml        
     methods: [GET|POST]
+    
+pequiven_sip_show_oneperten_pqv:
+    path: /viewonepertenpqv.{_format}
+    defaults: 
+        _controller: pequiven.controller.oneperten:listWithVoteAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+    methods: [GET]
