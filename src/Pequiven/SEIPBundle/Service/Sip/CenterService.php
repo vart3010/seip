@@ -212,6 +212,7 @@ class CenterService implements ContainerAwareInterface {
         $chart["divLineGapLen"] = "0";
         $chart["canvasBgAlpha"] = "0,0";
         $chart["toolTipBgColor"] = "#000000";
+        $chart["formatNumberScale"] = "0";
 
         $em = $this->getDoctrine()->getManager();
 
@@ -226,6 +227,12 @@ class CenterService implements ContainerAwareInterface {
         
         $resultHoras = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByGeneralHoras($type); 
 
+        //plan por tipo
+        $planType = array();
+        $planType[1] = (float)41704;
+        $planType[2] = (float)4534;
+        $planType[4] = (float)37170;
+        
         if(max($resultHoras) >= 13) {
             $horas = max($resultHoras)["Hora"] - 6;
         }
@@ -251,7 +258,7 @@ class CenterService implements ContainerAwareInterface {
                     $votos = $votos;
                 }
 
-                $dataLinea["value"] = ((float)$votos/(float)41657)*100;//bcdiv($votos, bcadd(41657, 0, 2), 2); //(float)$votos/41657; //Carga de valores
+                $dataLinea["value"] = $votos;//((float)$votos/(float)41657)*100;//bcdiv($votos, bcadd(41657, 0, 2), 2); //(float)$votos/41657; //Carga de valores
                 $dataSetLinea["data"][] = $dataLinea; //data linea            
 
                 $horaReal++;
@@ -263,21 +270,21 @@ class CenterService implements ContainerAwareInterface {
         
 //        var_dump($dataSetLinea['data']);die();
         
-        $dataSetLinea['plan'][] = array("value" => 5);
-        $dataSetLinea['plan'][] = array("value" => 10);
-        $dataSetLinea['plan'][] = array("value" => 20);
-        $dataSetLinea['plan'][] = array("value" => 35);
-        $dataSetLinea['plan'][] = array("value" => 50);
-        $dataSetLinea['plan'][] = array("value" => 65);
-        $dataSetLinea['plan'][] = array("value" => 80);
-        $dataSetLinea['plan'][] = array("value" => 90);
-        $dataSetLinea['plan'][] = array("value" => 95);
-        $dataSetLinea['plan'][] = array("value" => 100);
-        $dataSetLinea['plan'][] = array("value" => 100);
-        $dataSetLinea['plan'][] = array("value" => 100);
-        $dataSetLinea['plan'][] = array("value" => 100);
-        $dataSetLinea['plan'][] = array("value" => 100);
-        $dataSetLinea['plan'][] = array("value" => 100);
+        $dataSetLinea['plan'][] = array("value" => $planType[$type]*(float)((float)5/100));
+        $dataSetLinea['plan'][] = array("value" => $planType[$type]*(float)((float)10/100));
+        $dataSetLinea['plan'][] = array("value" => $planType[$type]*(float)((float)20/100));
+        $dataSetLinea['plan'][] = array("value" => $planType[$type]*(float)((float)35/100));
+        $dataSetLinea['plan'][] = array("value" => $planType[$type]*(float)((float)50/100));
+        $dataSetLinea['plan'][] = array("value" => $planType[$type]*(float)((float)65/100));
+        $dataSetLinea['plan'][] = array("value" => $planType[$type]*(float)((float)80/100));
+        $dataSetLinea['plan'][] = array("value" => $planType[$type]*(float)((float)90/100));
+        $dataSetLinea['plan'][] = array("value" => $planType[$type]*(float)((float)95/100));
+        $dataSetLinea['plan'][] = array("value" => $planType[$type]);
+        $dataSetLinea['plan'][] = array("value" => $planType[$type]);
+        $dataSetLinea['plan'][] = array("value" => $planType[$type]);
+        $dataSetLinea['plan'][] = array("value" => $planType[$type]);
+        $dataSetLinea['plan'][] = array("value" => $planType[$type]);
+        $dataSetLinea['plan'][] = array("value" => $planType[$type]);
         
             $dataSetValues['plan'] = array('seriesname' => 'Plan', 'parentyaxis' => 'S', 'renderas' => 'Line', 'color' => '#ffffff', 'data' => $dataSetLinea['plan']);
             $dataSetValues['votos'] = array('seriesname' => 'Votos * Horas', 'parentyaxis' => 'S', 'renderas' => 'Line', 'color' => '#ff0000', 'data' => $dataSetLinea['data']);
