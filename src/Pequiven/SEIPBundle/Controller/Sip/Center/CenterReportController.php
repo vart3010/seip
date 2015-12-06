@@ -40,11 +40,14 @@ class CenterReportController extends SEIPController {
                             $datos["msj"] = "La persona no esta registrada.";
                             
                         } else {
-                            $members = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\OnePerTenMembers")->findBy(array("cedula" => $cedula));
-                            $datos["nombre"] = $members[0]->getNombre();
-                            $datos["cedula"] = $members[0]->getCedula();
-                            $datos["telefono"] = $members[0]->getTelefono();
-                            $datos["nameCentro"] = $members[0]->getNombreCentro();
+//                            $members = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\OnePerTenMembers")->findBy(array("cedula" => $cedula));
+                            $members = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\OnePerTenMembers")->getOnePerTenVotoPeople($cedula);
+                            foreach($members as $member){
+                                $datos["nombre"] = $member->getNombre();
+                                $datos["cedula"] = $member->getCedula();
+                                $datos["telefono"] = $member->getTelefono();
+                                $datos["nameCentro"] = $member->getNombreCentro();
+                            }
                         }                    
                 }            
         } else {
@@ -95,7 +98,8 @@ class CenterReportController extends SEIPController {
             
         }else{
 
-            $OnePerTenMembers = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\OnePerTenMembers")->findBy(array("cedula" => $cedula));
+//            $OnePerTenMembers = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\OnePerTenMembers")->findBy(array("cedula" => $cedula));
+            $OnePerTenMembers = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\OnePerTenMembers")->getOnePerTenVotoPeople($cedula);
 
             if (count($OnePerTenMembers) != 0) {
                 $voto = 1;

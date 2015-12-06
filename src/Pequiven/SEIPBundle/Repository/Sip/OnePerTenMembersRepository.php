@@ -62,6 +62,21 @@ class OnePerTenMembersRepository extends EntityRepository {
         parent::applyCriteria($queryBuilder, $criteria->toArray());
     }
     
+        public function getOnePerTenVotoPeople($cedula) {
+
+        $query = $this->getQueryBuilder();
+
+        $query
+                ->andWhere('optm.cedula = :ced')
+                ->setParameter("ced", $cedula)
+        ;
+
+        $q = $query->getQuery();
+
+        return $q->getResult();
+    }
+
+    
     //put your code here
     protected function getAlias() {
         return "optm";
