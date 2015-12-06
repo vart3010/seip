@@ -81,12 +81,16 @@ class CenterReportController extends SEIPController {
 
         $onePerTenResult = $this->get('pequiven.repository.onePerTen')->findOneBy(array('cedula' => $cedula));
         
+        $nominaCentro = $this->get('pequiven.repository.nominaCentro')->findOneBy(array('cedula' => $cedula));
+        
         if (count($onePerTenResult) != 0) {
             $voto = 1;
             $onePerTenResult->setVoto($voto);
-            $onePerTenResult->setFechaVoto($fecha);                
+            $onePerTenResult->setFechaVoto($fecha);
+            $nominaCentro->setVoto($voto);
 
             $em->persist($onePerTenResult);
+            $em->persist($nominaCentro);
             $em->flush();
             
         }else{
@@ -105,9 +109,9 @@ class CenterReportController extends SEIPController {
             }else{
                 $voto = 0;
             }
+            $em->flush();
         }
         
-        $em->flush();
 
         try {   
             $em->flush();
