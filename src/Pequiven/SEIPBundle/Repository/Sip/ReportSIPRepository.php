@@ -257,11 +257,9 @@ WHERE    ten.deletedAt IS NULL';
             if ($tipo == "Circuito 5") {
                 $sql2 = 'Estado="EDO. CARABOBO" AND Parroquia IN ("PQ. SANTA ROSA","PQ. MIGUEL PEÑA", '
                         . '"PQ. RAFAEL URDANETA","PQ. U INDEPENDENCIA", "PQ. U TOCUYITO", "PQ. NEGRO PRIMERO")';
-            }
-            else{
+            } else {
                 $sql2 = 'Tipo IS NOT NULL';
             }
-            
         }
 
         if ($localidad != "") {
@@ -290,9 +288,6 @@ WHERE    ten.deletedAt IS NULL';
 
 
         $sql = $sql1 . $sql2 . $sql3 . $sql4 . $sql5 . $sql6;
-
-        var_dump($sql);
-        die();
 
         $stmt = $db->prepare($sql);
         $stmt->execute();
