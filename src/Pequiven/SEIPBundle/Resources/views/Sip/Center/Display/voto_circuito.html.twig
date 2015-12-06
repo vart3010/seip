@@ -32,9 +32,15 @@
         </div>
 </div>
 <div class="columns"> 
-    <div class="twelve-columns twelve-columns-mobile" style="padding-top:0px;">
+    <div class="eight-columns twelve-columns-mobile" style="padding-top:0px;">
         <div  ng-controller="displayCenterController" ng-init="renderChartVotoGeneralCircuito5('displayCircuito5',{{ dataChartCircutoBarra }})">
             <span id="displayCircuito5">
+            </span>
+        </div>
+    </div>
+    <div class="four-columns twelve-columns-mobile" style="padding-top:0px;">
+        <div  ng-controller="displayCenterController" ng-init="renderChartVotoGeneralCircuitoPoll('poll',{{ dataChartPoll }})">
+            <span id="poll">
             </span>
         </div>
     </div>

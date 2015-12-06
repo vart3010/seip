@@ -239,6 +239,7 @@ class CenterService implements ContainerAwareInterface {
         $planType = array();
         $planType[1] = (float)41704;
         $planType[2] = (float)4534;
+        $planType[3] = (float)4328;
         $planType[4] = (float)37170;
 
         
@@ -476,6 +477,164 @@ class CenterService implements ContainerAwareInterface {
 
     /**
      *
+     *  Grafica de Votos por Hora
+     *
+     */
+    public function getDataChartOfVotoGeneralLineMcpo($type,$estado,$mcpo) {
+        
+        $data = array(
+            'dataSource' => array(
+                'chart' => array(),
+                'categories' => array(
+                ),
+                'dataset' => array(
+                ),
+            ),
+        );
+        $chart = array();
+
+        $chart["caption"] = "Votos por Hora";
+        $chart["captionFontColor"] = "#e20000";
+        $chart["captionFontSize"] = "20";                
+        $chart["palette"]        = "1";
+        $chart["showvalues"]     = "0";
+//        $chart["paletteColors"]  = "#0075c2,#c90606,#f2c500,#12a830,#1aaf5d";
+        $chart["showBorder"] = "0";
+        $chart["yaxisvaluespadding"] = "10";
+        $chart["valueFontColor"] = "#ffffff";
+        $chart["rotateValues"]   = "0";
+        $chart["bgAlpha"] = "0,0";//Fondo 
+        $chart["theme"]          = "fint";
+        $chart["showborder"]     = "0";
+        $chart["decimals"]       = "0";
+        $chart["legendBgColor"] = "#ffffff";
+        $chart["legendItemFontSize"] = "10";
+        
+        $chart["outCnvBaseFontColor"] = "#ffffff";
+        $chart["visible"] = "1";
+
+        $chart["usePlotGradientColor"] = "0";
+        $chart["plotBorderAlpha"] = "10";
+        $chart["legendBorderAlpha"] = "0";
+        $chart["legendBgAlpha"] = "0";
+        $chart["legendItemFontColor"] = "#ffffff";
+        $chart["baseFontColor"] = "#ffffff";        
+        
+        $chart["divLineDashed"] = "0";
+        $chart["showHoverEffect"] = "1";
+        $chart["valuePosition"] = "ABOVE";
+        $chart["dashed"] = "0";
+        $chart["divLineDashLen"] = "0";
+        $chart["divLineGapLen"] = "0";
+        $chart["canvasBgAlpha"] = "0,0";
+        $chart["toolTipBgColor"] = "#000000";
+        $chart["formatNumberScale"] = "0";
+
+        $em = $this->getDoctrine()->getManager();
+
+        $label = $dataLinea = $dataMeta = array();
+
+        //Carga de Nombres de Labels
+        $dataSetLinea["seriesname"] = "Horas";        
+
+        $horas = 9;
+        $votos = $horaSet = 0;
+        $cont = 3;
+        $horaIni = $horaReal = 9;
+        
+        $mcpo = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByMunicipioName($estado,$mcpo);                    
+        $mcpo = $mcpo[0]["descriptionMunicipio"];
+        
+        $estado = $this->AsignedDescriptionEdo($estado);
+        $resultHoras = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByGeneralHorasMcpo($type,$estado,$mcpo); 
+
+        //Sumatoria de Horas
+        $contSuma = $sumaInicio = 0;
+        for ($i=0; $i <4 ; $i++) { 
+            $sumaInicio = $sumaInicio + $resultHoras[$contSuma]["Si"];            
+            $contSuma++;
+        }
+        
+        $mcpoVoto = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByVotosMunicipiosCant($estado, $mcpo, $type);            
+        $votoSI = $mcpoVoto[0]["SUM(votoSI)"];
+        $votoNO = $mcpoVoto[0]["SUM(votoNO)"];
+
+        $cantVoto = $votoSI + $votoNO;
+
+        //plan por tipo
+        $planType = array();
+        $planType[1] = (float)$cantVoto;
+        
+        if(max($resultHoras) >= 12) {
+            $horas = max($resultHoras)["Hora"] - 8;            
+        }        
+        
+        if (isset($resultHoras)) {            
+            for ($i=0; $i <=$horas; $i++) { 
+                
+                if ($horaIni == 13) {
+                    $horaIni = $horaIni - 12;
+                }          
+
+                $linea = $horaIni.":00";                      
+                $label["label"] = $linea;     
+                $category[] = $label;
+                
+                if ($cont == 3) {
+                    $votos = $votos + $sumaInicio;
+                    $cont++;
+                }elseif(isset($resultHoras[$cont]["Hora"])) {
+                    $horaSet = (int)$resultHoras[$cont]["Hora"];                    
+                }      
+                if ($horaSet == $horaReal AND $horaSet != 9) {
+                    $votos = $votos + $resultHoras[$cont]["Si"];                    
+                    $cont++;           
+                }else{
+                    $votos = $votos;
+                }
+                
+                $dataLinea["value"] = $votos;//((float)$votos/(float)41657)*100;//bcdiv($votos, bcadd(41657, 0, 2), 2); //(float)$votos/41657; //Carga de valores
+                $dataSetLinea["data"][] = $dataLinea; //data linea            
+
+                $horaReal++;
+                $horaIni++;                 
+            }
+        }else{
+            $dataSetLinea["data"][] = 0;
+        }
+        
+        $dataSetLinea['plan'][] = array("value" => $planType[1]*(float)((float)5/100));
+        $dataSetLinea['plan'][] = array("value" => $planType[1]*(float)((float)10/100));
+        $dataSetLinea['plan'][] = array("value" => $planType[1]*(float)((float)20/100));
+        $dataSetLinea['plan'][] = array("value" => $planType[1]*(float)((float)35/100));
+        $dataSetLinea['plan'][] = array("value" => $planType[1]*(float)((float)50/100));
+        $dataSetLinea['plan'][] = array("value" => $planType[1]*(float)((float)65/100));
+        $dataSetLinea['plan'][] = array("value" => $planType[1]*(float)((float)80/100));
+        $dataSetLinea['plan'][] = array("value" => $planType[1]*(float)((float)90/100));
+        $dataSetLinea['plan'][] = array("value" => $planType[1]*(float)((float)95/100));
+        $dataSetLinea['plan'][] = array("value" => $planType[1]);
+        $dataSetLinea['plan'][] = array("value" => $planType[1]);
+        $dataSetLinea['plan'][] = array("value" => $planType[1]);
+        $dataSetLinea['plan'][] = array("value" => $planType[1]);
+        $dataSetLinea['plan'][] = array("value" => $planType[1]);
+        $dataSetLinea['plan'][] = array("value" => $planType[1]);
+        
+            $dataSetValues['plan'] = array('seriesname' => 'Plan', 'parentyaxis' => 'S', 'renderas' => 'Line', 'color' => '#ffffff', 'data' => $dataSetLinea['plan']);
+            $dataSetValues['votos'] = array('seriesname' => 'Votos * Horas', 'parentyaxis' => 'S', 'renderas' => 'Line', 'color' => '#ff0000', 'data' => $dataSetLinea['data']);
+            //$dataMeta["value"] = 0;
+            //$dataSetMeta["data"][] = $dataMeta;
+        
+
+        $data['dataSource']['chart'] = $chart;
+        $data['dataSource']['categories'][]["category"] = $category;
+        $data['dataSource']['dataset'][] = $dataSetValues['plan'];
+        $data['dataSource']['dataset'][] = $dataSetValues['votos'];
+        
+        return json_encode($data);
+    }
+
+    /**
+     *
      *  Grafica General de Estado
      *
      */
@@ -584,6 +743,11 @@ class CenterService implements ContainerAwareInterface {
                 $chart["showLegend"] = "1";                
                 $labelSi = "SI";
                 $labelNo = "NO";
+            }elseif($linkValue == 10){                
+                $chart["showvalues"]     = "0";
+                $chart["showLegend"] = "0";                
+                $labelSi = "";
+                $labelNo = "";
             }else{
                 $chart["showvalues"]     = "1";
                 $chart["showLegend"] = "1";                
@@ -1424,9 +1588,9 @@ class CenterService implements ContainerAwareInterface {
         );
         $chart = array();
 
-        //$chart["caption"] = "General";
+        $chart["caption"] = "General";
         $chart["captionFontColor"] = "#e20000";
-        $chart["captionFontSize"] = "20";                
+        $chart["captionFontSize"] = "15";                
         $chart["palette"]        = "1";
         $chart["showvalues"]     = "1";
         $chart["paletteColors"]  = "#0075c2,#c90606,#f2c500,#12a830,#1aaf5d";
@@ -1463,7 +1627,13 @@ class CenterService implements ContainerAwareInterface {
         $chart["divLineGapLen"] = "0";
         $chart["canvasBgAlpha"] = "0,0";
         $chart["toolTipBgColor"] = "#000000";
+        
+        $chart["saxisvaluespadding"] = "10";
+        $chart["pYAxisMaxValue"] = "1000";        
 
+        $chart["sYAxisMaxValue"] = "50000";
+        //$chart["sYAxisName"] = "Exit Poll";        
+        
         $em = $this->getDoctrine()->getManager();
         
         $label = $dataPlan = $dataReal = array();
@@ -1499,8 +1669,8 @@ class CenterService implements ContainerAwareInterface {
                 $votoNO = 0;
             }
             
-            $dataReal1["value"] = $votoSI; //Carga de valores General
-            $dataSetReal["data"][] = $dataReal1; //data                 
+            $dataReal["value"] = $votoSI; //Carga de valores General
+            $dataSetReal["data"][] = $dataReal; //data                 
             
             $dataPlan1["value"] = $votoNO + $votoSI; //Carga de valores General
             $dataSetPlan["data"][] = $dataPlan1; //data 
@@ -1523,15 +1693,16 @@ class CenterService implements ContainerAwareInterface {
                 $votoNO = 0;
             }
             
-            $dataReal2["value"] = $votoSI; //Carga de valores General
-            $dataSetReal["data"][] = $dataReal2; //data                 
+            $dataReal["value"] = $votoSI; //Carga de valores General
+            $dataSetReal["data"][] = $dataReal; //data                 
             
             $dataPlan2["value"] = $votoNO + $votoSI; //Carga de valores General
             $dataSetPlan["data"][] = $dataPlan2; //data 
+             
             
             $count++;        
         }    
-
+        
         $dataSetReal["seriesname"] = "Real";                
         $dataSetPlan["seriesname"] = "Plan";                
 
@@ -1543,6 +1714,124 @@ class CenterService implements ContainerAwareInterface {
         return json_encode($data);
     }
 
+
+    /**
+     *
+     *  Grafica de Votos Circuito Barra
+     *
+     */
+    public function getDataChartOfCircuitoBarraPoll() {
+        
+        $data = array(
+            'dataSource' => array(
+                'chart' => array(),
+                'categories' => array(
+                ),
+                'dataset' => array(
+                ),
+            ),
+        );
+        $chart = array();
+
+        $chart["caption"] = "Exit Poll";
+        $chart["captionFontColor"] = "#e20000";
+        $chart["captionFontSize"] = "15";                
+        $chart["palette"]        = "1";
+        $chart["showvalues"]     = "1";
+        $chart["paletteColors"]  = "#0075c2,#c90606,#f2c500,#12a830,#1aaf5d";
+        $chart["showBorder"] = "0";
+        $chart["showCanvasBorder"] = "0";
+        $chart["yaxisvaluespadding"] = "10";
+        $chart["valueFontColor"] = "#ffffff";
+        $chart["rotateValues"]   = "1";
+        $chart["bgAlpha"] = "0,0";//Fondo         
+        $chart["theme"]          = "fint";
+        $chart["showborder"]     = "0";
+        $chart["decimals"]       = "0";
+        $chart["showLegend"] = "0";
+        $chart["legendBgColor"] = "#ffffff";
+        $chart["legendItemFontSize"] = "10";
+        $chart["legendItemFontColor"] = "#666666";
+        $chart["baseFontColor"] = "#ffffff";        
+        $chart["outCnvBaseFontColor"] = "#ffffff";
+        $chart["formatNumberScale"] = "0";
+
+        $chart["usePlotGradientColor"] = "0";
+        $chart["plotBorderAlpha"] = "10";
+        $chart["legendBorderAlpha"] = "0";
+        $chart["legendBgAlpha"] = "0";
+        $chart["legendItemFontColor"] = "#ffffff";
+        $chart["baseFontColor"] = "#ffffff";
+        $chart["legendItemFontColor"] = "#ffffff";
+        
+        $chart["divLineDashed"] = "0";
+        $chart["showHoverEffect"] = "1";
+        $chart["valuePosition"] = "ABOVE";
+        $chart["dashed"] = "0";
+        $chart["divLineDashLen"] = "0";
+        $chart["divLineGapLen"] = "0";
+        $chart["canvasBgAlpha"] = "0,0";
+        $chart["toolTipBgColor"] = "#000000";
+        
+        //$chart["saxisvaluespadding"] = "10";
+        //$chart["pYAxisMaxValue"] = "1000";        
+
+        //$chart["sYAxisMaxValue"] = "50000";
+        //$chart["sYAxisName"] = "Exit Poll";        
+        
+        $em = $this->getDoctrine()->getManager();
+        
+        $label = $dataPlan = $dataReal = array();
+        $count = 1;
+        $votoNO = $votoSI = 0;
+
+        $parroquias = [
+            1 => "PQ. U TOCUYITO", 
+            2 => "PQ. U INDEPENDENCIA", 
+            3 => "PQ. MIGUEL PEÑA",
+            4 => "PQ. RAFAEL URDANETA", 
+            5 => "PQ. NEGRO PRIMERO", 
+            6 => "PQ. SANTA ROSA"
+        ];
+        
+        foreach ($parroquias as $value) {
+            $parroquia = $parroquias[$count];
+            $label["label"] = $parroquia;     
+            $category[] = $label; 
+            
+            $dataPoll = [
+                1 => 32674,//"PQ. U TOCUYITO", 
+                2 => 7526,//"PQ. U INDEPENDENCIA", 
+                3 => 63054,//"PQ. MIGUEL PEÑA",
+                4 => 25039,//"PQ. RAFAEL URDANETA", 
+                5 => 2056,//"PQ. NEGRO PRIMERO", 
+                6 => 36042//"PQ. SANTA ROSA"
+            ];
+            //Cantidad de Votos
+            $dataM = $dataPoll[$count];            
+            $dataReal3["parentyaxis"] = 'S';                        
+            $dataReal3["renderas"] = 'column';                        
+            $dataReal3["color"] = '#47ac44';            
+            $dataReal3["value"] = $dataM; //Carga de valores General
+            $dataSetReal['data'][] = $dataReal3; //data 
+            //$dataSetReal['data'] = array('parentyaxis' => 'S', 'renderas' => 'column', 'data' => $dataSetReal['data']);            
+
+            $dataPlan3["value"] = ""; //Carga de valores General
+            $dataSetPlan["data"][] = $dataPlan3; //data             
+            
+            $count++;        
+        }    
+        
+        $dataSetReal["seriesname"] = "Real";                
+        $dataSetPlan["seriesname"] = "Plan";                
+
+        $data['dataSource']['chart'] = $chart;
+        $data['dataSource']['categories'][]["category"] = $category;
+        $data['dataSource']['dataset'][] = $dataSetPlan;
+        $data['dataSource']['dataset'][] = $dataSetReal;
+
+        return json_encode($data);
+    }
     /**
      *
      *  Grafica de Voto 1x10

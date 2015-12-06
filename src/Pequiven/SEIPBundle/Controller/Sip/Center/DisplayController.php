@@ -38,6 +38,8 @@ class DisplayController extends SEIPController {
         $dataChartEstadoC = $CenterService->getDataChartOfVotoGeneralEstado("EDO. CARABOBO",$linkValue, $type); //General                    
         $dataChartEstadoZ = $CenterService->getDataChartOfVotoGeneralEstado("EDO. ZULIA",$linkValue, $type); //General            
         $dataChartEstadoA = $CenterService->getDataChartOfVotoGeneralEstado("EDO. ANZOATEGUI",$linkValue, $type); //General            
+        
+        $linkValue = 10;
         $dataChartEstadoO = $CenterService->getDataChartOfVotoGeneralEstado("OTROS",$linkValue, $type); //General            
 
         return $this->render('PequivenSEIPBundle:Sip:Center/Display/voto_general.html.twig', array(
@@ -59,7 +61,7 @@ class DisplayController extends SEIPController {
     public function generalEdoAction(Request $request){
         
         $type = $request->get('type');
-        
+
         $em = $this->getDoctrine()->getManager();
         
         $CenterService = $this->getCenterService();//Llamado al Servicio de Centro
@@ -78,7 +80,6 @@ class DisplayController extends SEIPController {
         $cont = $suma = 0;
         
         $dataChartLine = $CenterService->getDataChartOfVotoGeneralLineEstado($type,$estado); //Linea de Tiempo
-
 
         $response = new JsonResponse();         
 
@@ -109,6 +110,8 @@ class DisplayController extends SEIPController {
 
         $em = $this->getDoctrine()->getManager();
         $CenterService = $this->getCenterService();//Llamado al Servicio de Centro
+        
+        $dataChartLine = $CenterService->getDataChartOfVotoGeneralLineMcpo($type,$estado,$mcpo); //Linea de Tiempo
 
         $linkValue = 1;
         $dataChartParroquias = $CenterService->getDataChartOfVotoParroquiaData($estado, $mcpo, $linkValue, $type); //General
@@ -118,7 +121,8 @@ class DisplayController extends SEIPController {
         
         return $this->render('PequivenSEIPBundle:Sip:Center/Display/voto_general_mcpo.html.twig', array(
             'data'              => $dataChart,
-            'dataChartParroq'   => $dataChartParroquias
+            'dataChartParroq'   => $dataChartParroquias,
+            'dataHours'    => $dataChartLine
             ));
     }
 
@@ -171,12 +175,14 @@ class DisplayController extends SEIPController {
         $dataChartCircuto = $CenterService->getDataChartOfCircuito5($estado); //General
         $dataChartCircuto1x10 = $CenterService->getDataChartOfCircuito51x10($estado); //General        
         $dataChartCircutoBarra = $CenterService->getDataChartOfCircuitoBarra($estado); //General        
+        $dataChartPoll = $CenterService->getDataChartOfCircuitoBarraPoll(); //General        
 
         return  $this->render('PequivenSEIPBundle:Sip:Center/Display/voto_circuito.html.twig',array(
             'dataChartCircuto'      => $dataChartCircuto,
             'dataChartCircuto1x10'  => $dataChartCircuto1x10,
             'dataChartCircutoBarra' => $dataChartCircutoBarra,
-            'dataHours'             => $dataChartLine
+            'dataHours'             => $dataChartLine,
+            'dataChartPoll'         => $dataChartPoll
             ));
     }
 
