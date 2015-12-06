@@ -182,7 +182,7 @@ class CenterService implements ContainerAwareInterface {
         $chart["captionFontSize"] = "20";                
         $chart["palette"]        = "1";
         $chart["showvalues"]     = "0";
-        $chart["paletteColors"]  = "#0075c2,#c90606,#f2c500,#12a830,#1aaf5d";
+//        $chart["paletteColors"]  = "#0075c2,#c90606,#f2c500,#12a830,#1aaf5d";
         $chart["showBorder"] = "0";
         $chart["yaxisvaluespadding"] = "10";
         $chart["valueFontColor"] = "#ffffff";
@@ -280,7 +280,7 @@ class CenterService implements ContainerAwareInterface {
         $dataSetLinea['plan'][] = array("value" => 100);
         
             $dataSetValues['plan'] = array('seriesname' => 'Plan', 'parentyaxis' => 'S', 'renderas' => 'Line', 'color' => '#ffffff', 'data' => $dataSetLinea['plan']);
-            $dataSetValues['votos'] = array('seriesname' => 'Votos * Horas', 'parentyaxis' => 'S', 'renderas' => 'Line', 'color' => '#fad201', 'data' => $dataSetLinea['data']);
+            $dataSetValues['votos'] = array('seriesname' => 'Votos * Horas', 'parentyaxis' => 'S', 'renderas' => 'Line', 'color' => '#ff0000', 'data' => $dataSetLinea['data']);
             //$dataMeta["value"] = 0;
             //$dataSetMeta["data"][] = $dataMeta;
         
