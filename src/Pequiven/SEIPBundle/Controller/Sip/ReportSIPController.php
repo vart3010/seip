@@ -613,15 +613,17 @@ class ReportSIPController extends SEIPController {
         }
 
         $date = date("h:i a");
+        
+        $date1 = date("h-i a");
 
         $result = $this->get('pequiven.repository.report')->getSegVoto($localidad, $gprimera, $gsegunda, $tipo, $voto);
 
-        $path = $this->get('kernel')->locateResource('@PequivenSEIPBundle/Resources/Skeleton/Sip/UnoporDiez.xlsx');
+        $path = $this->get('kernel')->locateResource('@PequivenSEIPBundle/Resources/Skeleton/Sip/SegVoto.xlsx');
         $objPHPExcel = \PHPExcel_IOFactory::load($path);
         $objPHPExcel
                 ->getProperties()
                 ->setCreator("SEIP")
-                ->setTitle('SIP - Seguimiento al Voto hasta las ' . $date)
+                ->setTitle('SIP - Seguimiento al Voto hasta las ' . $date1)
                 ->setCreated()
                 ->setLastModifiedBy('SIP')
                 ->setModified()
@@ -639,7 +641,7 @@ class ReportSIPController extends SEIPController {
                 )
         ));
 
-        $activeSheet->setCellValue('J2', $date);
+        $activeSheet->setCellValue('L2', $date);
         $row = 5; //Fila Inicial del skeleton
 
         foreach ($result as $fila) {
@@ -654,10 +656,9 @@ class ReportSIPController extends SEIPController {
             $activeSheet->setCellValue('H' . $row, $fila["Cedula"]);
             $activeSheet->setCellValue('I' . $row, $fila["Nombre"]);
             $activeSheet->setCellValue('J' . $row, $fila["Codigo"]);
-            $activeSheet->setCellValue('K' . $row, $fila["Centro"]);
             $activeSheet->setCellValue('L' . $row, $fila["Voto"]);
             $activeSheet->setCellValue('M' . $row, $fila["RespUnoxDiez"]);
-            $activeSheet->setCellValue('N' . $row, $fila["Centro"]);           
+
             $row++;
         }
 
@@ -672,7 +673,7 @@ class ReportSIPController extends SEIPController {
         header('Cache-Control: max-age=1');
 
         // If you're serving to IE over SSL, then the following may be needed
-        header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header('Expires: Mon, 27 Jul 1997 05:00:00 GMT'); // Date in the past
         header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT'); // always modified
         header('Cache-Control: cache, must-revalidate'); // HTTP/1.1
         header('Pragma: public'); // HTTP/1.0
