@@ -48,7 +48,7 @@
                     {% for data in assist %}
                         {% set dayShow = data.fecha | date("d") %}
                         {% set monthShow = data.fecha | date("n") %}
-                        {% if (dayShow == "05" and monthShow == "12") or (dayShow == "06" and monthShow == "12") %}
+                        {% if dayShow == "06" and monthShow == "12" %}
                             <tbody align="center">
                                 <tr>
                                     {% if validacionCutl != 0 %}

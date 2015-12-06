@@ -1095,6 +1095,74 @@ class CenterController extends SEIPController {
 
         return $this->handleView($view);
     }
+    
+    /**
+     *
+     *  Lista de Personal PQV
+     *
+     */
+    public function listOnePerTenMembersAction(Request $request) {
+
+        $idCentro = $request->get('idCentro');
+        $center = $this->get('pequiven.repository.center')->find($idCentro);
+        $codCentro = $center->getCodigoCentro(); //Cargo el codigo del centro
+
+        $criteria = $request->get('filter', $this->config->getCriteria());
+        $sorting = $request->get('sorting', $this->config->getSorting());
+
+        $repository = $this->getRepository();
+        $repository = $this->get('pequiven.repository.nominaCentro');        
+        
+
+        $criteria['codCentro'] = $codCentro;
+
+        if ($this->config->isPaginated()) {
+            $resources = $this->resourceResolver->getResource(
+                    $repository, 'createPaginatorByCentroPqv', array($criteria, $sorting)
+            );
+
+            $maxPerPage = $this->config->getPaginationMaxPerPage();
+            if (($limit = $request->query->get('limit')) && $limit > 0) {
+                if ($limit > 100) {
+                    $limit = 100;
+                }
+                $maxPerPage = $limit;
+            }
+            $resources->setCurrentPage($request->get('page', 1), true, true);
+            $resources->setMaxPerPage($maxPerPage);
+        } else {
+            $resources = $this->resourceResolver->getResource(
+                    $repository, 'findBy', array($criteria, $sorting, $this->config->getLimit())
+            );
+        }
+
+        $routeParameters = array(
+            '_format' => 'json',
+            'idCentro' => $idCentro
+        );
+        $apiDataUrl = $this->generateUrl('pequiven_sip_cutl_list_pqv', $routeParameters);
+
+        $view = $this
+                ->view()
+                ->setTemplate($this->config->getTemplate('listPqv.html'))
+                ->setTemplateVar($this->config->getPluralResourceName())
+        ;
+        if ($request->get('_format') == 'html') {
+            $data = array(
+                'apiDataUrl' => $apiDataUrl,
+                'idCentro' => $idCentro,
+                $this->config->getPluralResourceName() => $resources,
+            );
+            $view->setData($data);
+        } else {
+            $view->getSerializationContext()->setGroups(array('id', 'api_list','cedula','nombre', 'codigoCentro'));
+            $formatData = $request->get('_formatData', 'default');
+
+            $view->setData($resources->toArray('', array(), $formatData));
+        }
+
+        return $this->handleView($view);
+    }
 
 
     /**
