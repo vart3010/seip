@@ -658,6 +658,7 @@ class ReportSIPController extends SEIPController {
             $activeSheet->setCellValue('L' . $row, $fila["Voto"]);
             $activeSheet->setCellValue('M' . $row, $fila["RespUnoxDiez"]);
             $activeSheet->setCellValue('N' . $row, $fila["Centro"]);           
+            $row++;
         }
 
         $activeSheet->getStyle('A4:K' . ($row - 1))->applyFromArray($styleArray);
