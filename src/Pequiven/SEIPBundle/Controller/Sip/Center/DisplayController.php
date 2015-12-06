@@ -59,7 +59,7 @@ class DisplayController extends SEIPController {
     public function generalEdoAction(Request $request){
         
         $type = $request->get('type');
-
+        
         $em = $this->getDoctrine()->getManager();
         
         $CenterService = $this->getCenterService();//Llamado al Servicio de Centro
@@ -76,8 +76,12 @@ class DisplayController extends SEIPController {
             $estado = "OTROS";
         }
         $cont = $suma = 0;
+        
+        $dataChartLine = $CenterService->getDataChartOfVotoGeneralLineEstado($type,$estado); //Linea de Tiempo
 
-        $response = new JsonResponse();        
+
+        $response = new JsonResponse();         
+
         $linkValue = 1;//Validacion de muestra de link para bajar nivel
         $dataChartMcpo = $CenterService->getDataChartOfVotoMcpo($estado, $type, $linkValue); //General
 
@@ -87,7 +91,8 @@ class DisplayController extends SEIPController {
         
         return $this->render('PequivenSEIPBundle:Sip:Center/Display/voto_general_edo.html.twig',array(
                 'data'          => $dataChart,
-                'dataChartMcpo' => $dataChartMcpo,                
+                'dataChartMcpo' => $dataChartMcpo,
+                'dataHours' => $dataChartLine,                
             ));
         
     }

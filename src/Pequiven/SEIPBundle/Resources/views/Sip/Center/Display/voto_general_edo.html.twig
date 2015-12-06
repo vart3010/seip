@@ -16,7 +16,17 @@
                 <span id="displayVotoGeneral">
                 </span>
             </div>
-        </div>    
+        </div> 
+        
+        <div class="one-column">
+        </div>
+        <div class="five-columns twelve-columns-mobile">
+            <div  ng-controller="displayCenterController" ng-init="renderChartVotoGeneralHoursCircuito('displayHours',{{ dataHours }})">
+                <span id="displayHours">
+                </span>
+            </div>
+        </div>
+
     <div class="twelve-columns twelve-columns-mobile" style="padding-top:0px;">
         <div  ng-controller="displayCenterController" ng-init="renderChartVotoGeneralMcpo('displayMcpo',{{ dataChartMcpo }})">
             <span id="displayMcpo">

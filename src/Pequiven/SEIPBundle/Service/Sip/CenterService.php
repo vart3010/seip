@@ -312,6 +312,168 @@ class CenterService implements ContainerAwareInterface {
         return json_encode($data);
     }
 
+
+    /**
+     *
+     *  Grafica de Votos por Hora
+     *
+     */
+    public function getDataChartOfVotoGeneralLineEstado($type, $estado) {
+        
+        $data = array(
+            'dataSource' => array(
+                'chart' => array(),
+                'categories' => array(
+                ),
+                'dataset' => array(
+                ),
+            ),
+        );
+        $chart = array();
+
+        $chart["caption"] = "Votos por Hora";
+        $chart["captionFontColor"] = "#e20000";
+        $chart["captionFontSize"] = "20";                
+        $chart["palette"]        = "1";
+        $chart["showvalues"]     = "0";
+//        $chart["paletteColors"]  = "#0075c2,#c90606,#f2c500,#12a830,#1aaf5d";
+        $chart["showBorder"] = "0";
+        $chart["yaxisvaluespadding"] = "10";
+        $chart["valueFontColor"] = "#ffffff";
+        $chart["rotateValues"]   = "0";
+        $chart["bgAlpha"] = "0,0";//Fondo 
+        $chart["theme"]          = "fint";
+        $chart["showborder"]     = "0";
+        $chart["decimals"]       = "0";
+        $chart["legendBgColor"] = "#ffffff";
+        $chart["legendItemFontSize"] = "10";
+        
+        $chart["outCnvBaseFontColor"] = "#ffffff";
+        $chart["visible"] = "1";
+
+        $chart["usePlotGradientColor"] = "0";
+        $chart["plotBorderAlpha"] = "10";
+        $chart["legendBorderAlpha"] = "0";
+        $chart["legendBgAlpha"] = "0";
+        $chart["legendItemFontColor"] = "#ffffff";
+        $chart["baseFontColor"] = "#ffffff";        
+        
+        $chart["divLineDashed"] = "0";
+        $chart["showHoverEffect"] = "1";
+        $chart["valuePosition"] = "ABOVE";
+        $chart["dashed"] = "0";
+        $chart["divLineDashLen"] = "0";
+        $chart["divLineGapLen"] = "0";
+        $chart["canvasBgAlpha"] = "0,0";
+        $chart["toolTipBgColor"] = "#000000";
+        $chart["formatNumberScale"] = "0";
+
+        $em = $this->getDoctrine()->getManager();
+
+        $label = $dataLinea = $dataMeta = array();
+
+        //Carga de Nombres de Labels
+        $dataSetLinea["seriesname"] = "Horas";        
+
+        $horas = 9;
+        $votos = 0;
+        $cont = 4;
+        $horaIni = $horaReal = 9;
+        
+        $resultHoras = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByGeneralHorasEstado(5, $estado); 
+
+        //Sumatoria de Horas
+        $contSuma = $sumaInicio = 0;
+        for ($i=0; $i <5 ; $i++) { 
+            $sumaInicio = $sumaInicio + $resultHoras[$contSuma]["Si"];            
+            $contSuma++;
+        }
+        
+        //plan por tipo
+        $planType = array();
+        if ($type == 1) {
+            $planType["EDO. CARABOBO"] = (float)18179;
+            $planType["EDO. ZULIA"] = (float)16754;
+            $planType["EDO. ANZOATEGUI"] = (float)2579;
+            $planType["OTROS"] = (float)37170;                
+        }elseif ($type == 2) {
+            $planType["EDO. CARABOBO"] = (float)1840;
+            $planType["EDO. ZULIA"] = (float)1850;
+            $planType["EDO. ANZOATEGUI"] = (float)280;
+            $planType["OTROS"] = (float)37170;
+        }
+
+        
+        if(max($resultHoras) >= 12) {
+            $horas = max($resultHoras)["Hora"] - 8;            
+        }        
+        
+        if (isset($resultHoras)) {            
+            for ($i=0; $i <=$horas; $i++) { 
+                
+                if ($horaIni == 13) {
+                    $horaIni = $horaIni - 12;
+                }          
+
+                $linea = $horaIni.":00";                      
+                $label["label"] = $linea;     
+                $category[] = $label;
+                
+                if ($cont == 4) {
+                    $votos = $votos + $sumaInicio;
+                    $cont++;
+                }
+                if (isset($resultHoras[$cont]["Hora"])) {
+                    $horaSet = (int)$resultHoras[$cont]["Hora"];                    
+                }                
+                
+                if ($horaSet == $horaReal AND $horaSet != 9) {
+                    $votos = $votos + $resultHoras[$cont]["Si"];                    
+                    $cont++;           
+                }else{
+                    $votos = $votos;
+                }
+                
+                $dataLinea["value"] = $votos;//((float)$votos/(float)41657)*100;//bcdiv($votos, bcadd(41657, 0, 2), 2); //(float)$votos/41657; //Carga de valores
+                $dataSetLinea["data"][] = $dataLinea; //data linea            
+
+                $horaReal++;
+                $horaIni++;                 
+            }
+        }else{
+            $dataSetLinea["data"][] = 0;
+        }
+        
+        $dataSetLinea['plan'][] = array("value" => $planType[$estado]*(float)((float)5/100));
+        $dataSetLinea['plan'][] = array("value" => $planType[$estado]*(float)((float)10/100));
+        $dataSetLinea['plan'][] = array("value" => $planType[$estado]*(float)((float)20/100));
+        $dataSetLinea['plan'][] = array("value" => $planType[$estado]*(float)((float)35/100));
+        $dataSetLinea['plan'][] = array("value" => $planType[$estado]*(float)((float)50/100));
+        $dataSetLinea['plan'][] = array("value" => $planType[$estado]*(float)((float)65/100));
+        $dataSetLinea['plan'][] = array("value" => $planType[$estado]*(float)((float)80/100));
+        $dataSetLinea['plan'][] = array("value" => $planType[$estado]*(float)((float)90/100));
+        $dataSetLinea['plan'][] = array("value" => $planType[$estado]*(float)((float)95/100));
+        $dataSetLinea['plan'][] = array("value" => $planType[$estado]);
+        $dataSetLinea['plan'][] = array("value" => $planType[$estado]);
+        $dataSetLinea['plan'][] = array("value" => $planType[$estado]);
+        $dataSetLinea['plan'][] = array("value" => $planType[$estado]);
+        $dataSetLinea['plan'][] = array("value" => $planType[$estado]);
+        $dataSetLinea['plan'][] = array("value" => $planType[$estado]);
+        
+            $dataSetValues['plan'] = array('seriesname' => 'Plan', 'parentyaxis' => 'S', 'renderas' => 'Line', 'color' => '#ffffff', 'data' => $dataSetLinea['plan']);
+            $dataSetValues['votos'] = array('seriesname' => 'Votos * Horas', 'parentyaxis' => 'S', 'renderas' => 'Line', 'color' => '#ff0000', 'data' => $dataSetLinea['data']);
+            //$dataMeta["value"] = 0;
+            //$dataSetMeta["data"][] = $dataMeta;
+        
+
+        $data['dataSource']['chart'] = $chart;
+        $data['dataSource']['categories'][]["category"] = $category;
+        $data['dataSource']['dataset'][] = $dataSetValues['plan'];
+        $data['dataSource']['dataset'][] = $dataSetValues['votos'];
+        
+        return json_encode($data);
+    }
+
     /**
      *
      *  Grafica General de Estado
