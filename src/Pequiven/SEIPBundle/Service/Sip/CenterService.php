@@ -220,9 +220,9 @@ class CenterService implements ContainerAwareInterface {
         //Carga de Nombres de Labels
         $dataSetLinea["seriesname"] = "Horas";        
 
-        $horas = 13;
+        $horas = 9;
         $cont = $votos = 0;
-        $horaIni = $horaReal = 7;
+        $horaIni = $horaReal = 9;
         
         $resultHoras = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByGeneralHoras($type); 
 
@@ -261,6 +261,23 @@ class CenterService implements ContainerAwareInterface {
             $dataSetLinea["data"][] = 0;
         }
         
+        $dataSetLinea['plan'][] = array("value" => 5);
+        $dataSetLinea['plan'][] = array("value" => 10);
+        $dataSetLinea['plan'][] = array("value" => 20);
+        $dataSetLinea['plan'][] = array("value" => 35);
+        $dataSetLinea['plan'][] = array("value" => 50);
+        $dataSetLinea['plan'][] = array("value" => 65);
+        $dataSetLinea['plan'][] = array("value" => 80);
+        $dataSetLinea['plan'][] = array("value" => 90);
+        $dataSetLinea['plan'][] = array("value" => 95);
+        $dataSetLinea['plan'][] = array("value" => 100);
+        $dataSetLinea['plan'][] = array("value" => 100);
+        $dataSetLinea['plan'][] = array("value" => 100);
+        $dataSetLinea['plan'][] = array("value" => 100);
+        $dataSetLinea['plan'][] = array("value" => 100);
+        $dataSetLinea['plan'][] = array("value" => 100);
+        
+            $dataSetValues['plan'] = array('seriesname' => 'Plan', 'parentyaxis' => 'S', 'renderas' => 'Line', 'color' => '#dbc903', 'data' => $dataSetLinea['plan']);
             $dataSetValues['votos'] = array('seriesname' => 'Votos * Horas', 'parentyaxis' => 'S', 'renderas' => 'Line', 'color' => '#dbc903', 'data' => $dataSetLinea['data']);
             //$dataMeta["value"] = 0;
             //$dataSetMeta["data"][] = $dataMeta;
@@ -268,6 +285,7 @@ class CenterService implements ContainerAwareInterface {
 
         $data['dataSource']['chart'] = $chart;
         $data['dataSource']['categories'][]["category"] = $category;
+        $data['dataSource']['dataset'][] = $dataSetValues['plan'];
         $data['dataSource']['dataset'][] = $dataSetValues['votos'];
         
         return json_encode($data);
