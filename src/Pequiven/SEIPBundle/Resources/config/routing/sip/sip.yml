@@ -566,7 +566,7 @@ pequiven_sip_display_voto_cet:
     defaults:
         _controller: pequiven.controller.display:cetAction
 pequiven_sip_display_voto_localidad:
-    path: /display/voto/localidad
+    path: /display/voto/localidad/{edo}
     defaults:
         _controller: pequiven.controller.display:localidadAction
 pequiven_sip_display_voto_1x10:

@@ -246,7 +246,7 @@ class CenterService implements ContainerAwareInterface {
         if(max($resultHoras) >= 12) {
             $horas = max($resultHoras)["Hora"] - 8;            
         }        
-        
+
         if (isset($resultHoras)) {            
             for ($i=0; $i <=$horas; $i++) { 
                 
@@ -737,8 +737,8 @@ class CenterService implements ContainerAwareInterface {
                 $chart["showLegend"] = "0";
                 $labelSi = "";
                 $labelNo = "";
-            }elseif($linkValue == 2 AND $estado == 7){
-                $dataLocal["link"] = $this->generateUrl('pequiven_sip_display_voto_localidad');
+            }elseif($linkValue == 2 AND $estado == 7 OR $estado == 21){
+                $dataLocal["link"] = $this->generateUrl('pequiven_sip_display_voto_localidad', array('edo'=> $estado));
                 $chart["showvalues"]     = "1";
                 $chart["showLegend"] = "1";                
                 $labelSi = "SI";
@@ -1800,12 +1800,12 @@ class CenterService implements ContainerAwareInterface {
             $category[] = $label; 
             
             $dataPoll = [
-                1 => 32674,//"PQ. U TOCUYITO", 
-                2 => 7526,//"PQ. U INDEPENDENCIA", 
-                3 => 63054,//"PQ. MIGUEL PEÑA",
-                4 => 25039,//"PQ. RAFAEL URDANETA", 
-                5 => 2056,//"PQ. NEGRO PRIMERO", 
-                6 => 36042//"PQ. SANTA ROSA"
+                1 => 35499,//"PQ. U TOCUYITO", 
+                2 => 8908,//"PQ. U INDEPENDENCIA", 
+                3 => 75132,//"PQ. MIGUEL PEÑA",
+                4 => 25878,//"PQ. RAFAEL URDANETA", 
+                5 => 2186,//"PQ. NEGRO PRIMERO", 
+                6 => 39962//"PQ. SANTA ROSA"
             ];
             //Cantidad de Votos
             $dataM = $dataPoll[$count];            
