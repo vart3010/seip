@@ -16,7 +16,7 @@ class OnePerTenRepository extends EntityRepository {
         $criteria['for_one'] = true;
         return $this->createPaginator($criteria, $orderBy);
     }
-
+    
     protected function applyCriteria(\Doctrine\ORM\QueryBuilder $queryBuilder, array $criteria = null) {
         $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
 
