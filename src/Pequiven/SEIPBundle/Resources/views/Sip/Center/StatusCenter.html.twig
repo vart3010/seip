@@ -27,7 +27,7 @@
                 {% for data in centerAct %}
                     {% set dayShow = data.fecha | date("d") %}
                     {% set monthShow = data.fecha | date("d") %}
-                    {% if dayShow == "06" and monthShow == "12" %}
+                    {% if (dayShow == "06" or dayShow == "6") and monthShow == "12" %}
                         <tbody align="center">
                             <tr>
                                 <td align="left">{{ data.fecha | date("d/m/Y")  }}</td>
