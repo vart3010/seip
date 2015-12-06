@@ -1800,12 +1800,12 @@ class CenterService implements ContainerAwareInterface {
             $category[] = $label; 
             
             $dataPoll = [
-                1 => 15922,//"PQ. U TOCUYITO", 
-                2 => 4413,//"PQ. U INDEPENDENCIA", 
-                3 => 46566,//"PQ. MIGUEL PEÑA",
-                4 => 13236,//"PQ. RAFAEL URDANETA", 
-                5 => 1540,//"PQ. NEGRO PRIMERO", 
-                6 => 25728//"PQ. SANTA ROSA"
+                1 => 32674,//"PQ. U TOCUYITO", 
+                2 => 7526,//"PQ. U INDEPENDENCIA", 
+                3 => 63054,//"PQ. MIGUEL PEÑA",
+                4 => 25039,//"PQ. RAFAEL URDANETA", 
+                5 => 2056,//"PQ. NEGRO PRIMERO", 
+                6 => 36042//"PQ. SANTA ROSA"
             ];
             //Cantidad de Votos
             $dataM = $dataPoll[$count];            
