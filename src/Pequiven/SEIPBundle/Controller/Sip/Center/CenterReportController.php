@@ -91,12 +91,17 @@ class CenterReportController extends SEIPController {
             
         }else{
 
-            $OnePerTenMembers = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\OnePerTenMembers")->findOneBy(array("cedula" => $cedula));
+            $OnePerTenMembers = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\OnePerTenMembers")->findBy(array("cedula" => $cedula));
 
             if (count($OnePerTenMembers) != 0) {
                 $voto = 1;
-                $OnePerTenMembers->setVoto($voto);                
-                $OnePerTenMembers->setFechaVoto($fecha);                
+                foreach($OnePerTenMembers as $onePerTenMember){
+                    $onePerTenMember->setVoto($voto);
+                    $onePerTenMember->setFechaVoto($fecha);
+                    $em->persist($onePerTenMember);
+                }
+//                $OnePerTenMembers->setVoto($voto);                
+//                $OnePerTenMembers->setFechaVoto($fecha);                
             }else{
                 $voto = 0;
             }
