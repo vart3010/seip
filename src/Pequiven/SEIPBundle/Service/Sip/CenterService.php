@@ -279,8 +279,8 @@ class CenterService implements ContainerAwareInterface {
         $dataSetLinea['plan'][] = array("value" => 100);
         $dataSetLinea['plan'][] = array("value" => 100);
         
-            $dataSetValues['plan'] = array('seriesname' => 'Plan', 'parentyaxis' => 'S', 'renderas' => 'Line', 'color' => '#dbc903', 'data' => $dataSetLinea['plan']);
-            $dataSetValues['votos'] = array('seriesname' => 'Votos * Horas', 'parentyaxis' => 'S', 'renderas' => 'Line', 'color' => '#dbc903', 'data' => $dataSetLinea['data']);
+            $dataSetValues['plan'] = array('seriesname' => 'Plan', 'parentyaxis' => 'S', 'renderas' => 'Line', 'color' => '#ffffff', 'data' => $dataSetLinea['plan']);
+            $dataSetValues['votos'] = array('seriesname' => 'Votos * Horas', 'parentyaxis' => 'S', 'renderas' => 'Line', 'color' => '#fad201', 'data' => $dataSetLinea['data']);
             //$dataMeta["value"] = 0;
             //$dataSetMeta["data"][] = $dataMeta;
         
