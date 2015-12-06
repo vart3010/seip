@@ -33,18 +33,18 @@ class CenterReportController extends SEIPController {
         if (count($onePerTen) <= 0) {
                 if ($cedula != "" || $cedula != 0) {
                         //VALIDA CON ONE_PER_TEN_MEMBER
-                        $OnePerTenMembers = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\OnePerTenMembers")->findOneBy(array("cedula" => $cedula));
+                        $OnePerTenMembers = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\OnePerTenMembers")->findBy(array("cedula" => $cedula));
 
                         if (is_null($OnePerTenMembers)) {
                             //VALIDACION CON CNE
                             $datos["msj"] = "La persona no esta registrada.";
                             
                         } else {
-                            $members = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\OnePerTenMembers")->findOneBy(array("cedula" => $cedula));
-                            $datos["nombre"] = $members->getNombre();
-                            $datos["cedula"] = $members->getCedula();
-                            $datos["telefono"] = $members->getTelefono();
-                            $datos["nameCentro"] = $members->getNombreCentro();
+                            $members = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\OnePerTenMembers")->findBy(array("cedula" => $cedula));
+                            $datos["nombre"] = $members[0]->getNombre();
+                            $datos["cedula"] = $members[0]->getCedula();
+                            $datos["telefono"] = $members[0]->getTelefono();
+                            $datos["nameCentro"] = $members[0]->getNombreCentro();
                         }                    
                 }            
         } else {
@@ -91,12 +91,17 @@ class CenterReportController extends SEIPController {
             
         }else{
 
-            $OnePerTenMembers = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\OnePerTenMembers")->findOneBy(array("cedula" => $cedula));
+            $OnePerTenMembers = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\OnePerTenMembers")->findBy(array("cedula" => $cedula));
 
             if (count($OnePerTenMembers) != 0) {
                 $voto = 1;
-                $OnePerTenMembers->setVoto($voto);                
-                $OnePerTenMembers->setFechaVoto($fecha);                
+                foreach($OnePerTenMembers as $onePerTenMember){
+                    $onePerTenMember->setVoto($voto);
+                    $onePerTenMember->setFechaVoto($fecha);
+                    $em->persist($onePerTenMember);
+                }
+//                $OnePerTenMembers->setVoto($voto);                
+//                $OnePerTenMembers->setFechaVoto($fecha);                
             }else{
                 $voto = 0;
             }
