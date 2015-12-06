@@ -612,16 +612,16 @@ class ReportSIPController extends SEIPController {
         } else {
             $voto = 1;
         }
-        
-        
-         if (($request->get("C5")) != null) {
+
+
+        if (($request->get("C5")) != null) {
             $c5 = 1;
         } else {
             $c5 = 0;
         }
 
         $date = date("h:i a");
-        
+
         $date1 = date("h-i a");
 
         $result = $this->get('pequiven.repository.report')->getSegVoto($localidad, $gprimera, $gsegunda, $tipo, $c5, $voto);
@@ -666,8 +666,8 @@ class ReportSIPController extends SEIPController {
             $activeSheet->setCellValue('J' . $row, $fila["Parroquia"]);
             $activeSheet->setCellValue('K' . $row, $fila["Codigo"]);
             $activeSheet->setCellValue('L' . $row, $fila["Cedula"]);
-            $activeSheet->setCellValue('M' . $row, $fila["Telefono"]);
-            $activeSheet->setCellValue('N' . $row, $fila["Nombre"]);            
+            $activeSheet->setCellValue('M' . $row, $fila["Nombre"]);
+            $activeSheet->setCellValue('N' . $row, $fila["Telefono"]);
             $activeSheet->setCellValue('O' . $row, $fila["Voto"]);
             $activeSheet->setCellValue('P' . $row, $fila["RespUnoxDiez"]);
 
@@ -676,7 +676,7 @@ class ReportSIPController extends SEIPController {
 
         $activeSheet->getStyle('A5:P' . ($row - 1))->applyFromArray($styleArray);
 
-        $fileName = sprintf('SIP - Seguimiento al Voto hasta las %s.xlsx' , $date);
+        $fileName = sprintf('SIP - Seguimiento al Voto hasta las %s.xlsx', $date);
 
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="' . $fileName . '"');
