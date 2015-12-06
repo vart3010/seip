@@ -57,6 +57,7 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeCenter', 'class' => 'Pequiven\SEIPBundle\Entity\Sip\Centro', 'format' => 'json'),
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeNominaCentro', 'class' => 'Pequiven\SEIPBundle\Entity\Sip\NominaCentro', 'format' => 'json'),
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeOnePerTen', 'class' => 'Pequiven\SEIPBundle\Entity\Sip\OnePerTen', 'format' => 'json'),
+            array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeOnePerTenMembers', 'class' => 'Pequiven\SEIPBundle\Entity\Sip\OnePerTenMembers', 'format' => 'json'),
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeObservationsSip', 'class' => 'Pequiven\SEIPBundle\Entity\Sip\Center\Observations', 'format' => 'json'),
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeInventorySip', 'class' => 'Pequiven\SEIPBundle\Entity\Sip\Center\Inventory', 'format' => 'json'),
         );
@@ -709,6 +710,20 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
     }
     
     public function onPostSerializeNominaCentro(ObjectEvent $event) {
+        $object = $event->getObject();
+        $textoVoto = 'NO';
+        
+        if($object->getVoto() == 1){
+            $textoVoto = 'SI';
+        }
+        
+//        $links['self']['show'] = $this->generateUrl('pequiven_search_members', array('user' => $user->getID()));
+
+        $event->getVisitor()->addData('textoVoto', $textoVoto);
+//        $event->getVisitor()->addData('_links', $links);
+    }
+    
+    public function onPostSerializeOnePerTenMembers(ObjectEvent $event) {
         $object = $event->getObject();
         $textoVoto = 'NO';
         
