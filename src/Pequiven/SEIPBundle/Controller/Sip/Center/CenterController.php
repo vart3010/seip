@@ -888,6 +888,11 @@ class CenterController extends SEIPController {
         
         $result = count($result);
         
+        //1x10 por centro
+        $resultMembers = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\OnePerTenMembers")->findBy(array('codCentro' => $center->getCodigoCentro()));
+        
+        $resultMembers = count($resultMembers);
+        
         $codigoCentro = $center->getCodigoCentro();
 
         $cutl = $this->get('pequiven.repository.cutl')->findBy(array('codigoCentro' => $codigoCentro));
@@ -982,6 +987,7 @@ class CenterController extends SEIPController {
                     'validacionCutl' => $validacionCutl,
                     'centerAct' => $centerAct,
                     'pqvCentro' => $result,
+                    'optmCentro' => $resultMembers,
                     'report'    => $resultM,
                     'reportMesa'=> $reportMesa,
                     'centerService'=> $centerService,

@@ -531,6 +531,12 @@ sylius_resource:
             classes:
                 model: Pequiven\SEIPBundle\Entity\Sip\NominaCentro
                 repository: Pequiven\SEIPBundle\Repository\Sip\NominaCentroRepository
+        pequiven.onePerTenMembers:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:Sip/onePerTenMembers
+            classes:
+                model: Pequiven\SEIPBundle\Entity\Sip\OnePerTenMembers
+                repository: Pequiven\SEIPBundle\Repository\Sip\OnePerTenMembersRepository
         pequiven.report:
             driver: doctrine/orm
             templates: PequivenSEIPBundle:Sip/Report

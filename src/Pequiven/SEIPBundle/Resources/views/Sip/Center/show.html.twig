@@ -145,6 +145,14 @@
             </div>
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
+                    <label class="label">N° de Electores 1x10</label>
+                    <a target="_blank" href="{{ path("pequiven_sip_cutl_list_pqv",{idCentro:center.id})}}">
+                        {{ optmCentro }}
+                    </a>
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
                     <label class="label">Centro de Misiones</label>                    
                     {{ center.centroMisiones }}                    
                 </p>
@@ -167,7 +175,7 @@
 
         {# Dia actual #}
         {% set day = "now" | date("d") %}
-        {% if day5 == day or day6 == day %}
+        {% if day6 == day %}
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">Mesas Activas</label>
@@ -185,7 +193,7 @@
             </div>
         {% endif %}
         &nbsp;  
-        {% if day6 == day or day5 == day %}
+        {% if day6 == day %}
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile" ng-controller="SipCenterReportController">
                 <p class="inline-label">
                     <label class="label">Seguimiento Voto</label>

@@ -24,9 +24,9 @@ class CentroRepository extends EntityRepository {
         $db = $em->getConnection();
 
         $sql = 'SELECT o.notification
-            FROM sip_centro_report_observations AS o            
-            WHERE o.report_id ='.$id.'
-            order by id desc limit 1';            
+            FROM sip_centro_report_observations AS o 
+            WHERE o.report_id ='.$id.' AND o.deletedAt IS NULL
+            order by id desc limit 1';
 
         $stmt = $db->prepare($sql);
         $stmt->execute();
