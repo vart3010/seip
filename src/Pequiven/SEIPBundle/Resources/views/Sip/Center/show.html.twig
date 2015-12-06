@@ -196,7 +196,7 @@
         {% if day6 == day %}
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile" ng-controller="SipCenterReportController">
                 <p class="inline-label">
-                    <label class="label">Seguimiento Voto</label>
+                    <label class="label">Exit Poll</label>
                     {% if votos|length > 0 %} {{ votos[0]["votos"] }} {% endif %}
                     &nbsp;       
                     <a class="button icon-add-user icon-size2" href="" ng-click="loadTemplateReportVoto(centro='{{ center.id }}')" title="Cargar Votos Registrados por Centro">Votos</a>        

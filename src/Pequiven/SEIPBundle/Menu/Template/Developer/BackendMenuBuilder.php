@@ -1791,6 +1791,14 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                         'labelAttributes' => array('icon' => 'fa fa-bar-chart',)
                     ))->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.voto_zulia', $section)));
             }
+            
+            if ($this->isGranted(array('ROLE_SEIP_SIP_MONITOR_ONLY_ANZOATEGUI'))) {
+                $displayMenu->addChild('sip.voto_anzoategui', array(
+                        'route' => 'pequiven_sip_display_voto_general_estado',
+                        'routeParameters' => array('type' => 1, 'edo' => 2),
+                        'labelAttributes' => array('icon' => 'fa fa-bar-chart',)
+                    ))->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.voto_anzoategui', $section)));
+            }
 
             $display->addChild($displayMenu); 
 
