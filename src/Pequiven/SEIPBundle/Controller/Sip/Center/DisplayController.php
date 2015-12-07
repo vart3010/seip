@@ -216,6 +216,10 @@ class DisplayController extends SEIPController {
             $localidad = "Complejo Petroquímico Hugo Chávez";
             $dataChartLocalidadMoron = $CenterService->getDataChartOfLocalidad($localidad); //General
             $dataChartLocalidadMoronBar = $CenterService->getDataChartOfLocalidadBar($localidad); //General
+        }elseif ($estado == 2) {
+            $localidad = "Complejo Petroquímico GD José Antonio Anzoátegui";
+            $dataChartLocalidadMoron = "";
+            $dataChartLocalidadMoronBar = "";
         }else{
             $localidad = "Complejo Petroquímico Ana Maria Campos";
             $dataChartLocalidadMoron = "";

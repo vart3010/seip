@@ -737,7 +737,7 @@ class CenterService implements ContainerAwareInterface {
                 $chart["showLegend"] = "0";
                 $labelSi = "";
                 $labelNo = "";
-            }elseif($linkValue == 2 AND $estado == 7 OR $estado == 21){
+            }elseif($linkValue == 2 AND $estado == 7 OR $estado == 21 OR $estado == 2){
                 $dataLocal["link"] = $this->generateUrl('pequiven_sip_display_voto_localidad', array('edo'=> $estado));
                 $chart["showvalues"]     = "1";
                 $chart["showLegend"] = "1";                
