@@ -320,7 +320,7 @@ class CenterService implements ContainerAwareInterface {
      *
      */
     public function getDataChartOfVotoGeneralLineEstado($type, $estado) {
-        
+
         $data = array(
             'dataSource' => array(
                 'chart' => array(),
@@ -381,7 +381,7 @@ class CenterService implements ContainerAwareInterface {
         $cont = 4;
         $horaIni = $horaReal = 9;
         
-        $resultHoras = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByGeneralHorasEstado(5, $estado); 
+        $resultHoras = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Centro")->findByGeneralHorasEstado($type, $estado); 
 
         //Sumatoria de Horas
         $contSuma = $sumaInicio = 0;
@@ -1800,12 +1800,12 @@ class CenterService implements ContainerAwareInterface {
             $category[] = $label; 
             
             $dataPoll = [
-                1 => 35499,//"PQ. U TOCUYITO", 
-                2 => 8908,//"PQ. U INDEPENDENCIA", 
-                3 => 75132,//"PQ. MIGUEL PEÑA",
-                4 => 25878,//"PQ. RAFAEL URDANETA", 
-                5 => 2186,//"PQ. NEGRO PRIMERO", 
-                6 => 39962//"PQ. SANTA ROSA"
+                1 => 15620,//"PQ. U TOCUYITO", 
+                2 => 9631,//"PQ. U INDEPENDENCIA", 
+                3 => 100929,//"PQ. MIGUEL PEÑA",
+                4 => 43263,//"PQ. RAFAEL URDANETA", 
+                5 => 3700,//"PQ. NEGRO PRIMERO", 
+                6 => 17334//"PQ. SANTA ROSA"
             ];
             //Cantidad de Votos
             $dataM = $dataPoll[$count];            
