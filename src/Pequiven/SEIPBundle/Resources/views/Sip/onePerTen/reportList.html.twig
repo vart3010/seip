@@ -121,20 +121,6 @@
                 <label class="label">¿Coordinador?: </label>
                 {{ isCoordinator }}
             </div>
-            <div class="six-columns">
-                <label class="label">¿Internas Oposición?: </label>
-                {{ texts[object.intOpo] }}
-            </div>
-        </td>
-        <td>
-            <div class="six-columns">
-                <label class="label">¿PSUV?: </label>
-                {{ texts[object.psuv] }}
-            </div>
-            <div class="six-columns">
-                <label class="label">¿Internas PSUV?: </label>
-                {{ texts[object.intPsuv] }}
-            </div>
         </td>
     </tr>
 </table>
@@ -170,5 +156,63 @@
         </table>
     </div>
 </div>
+<br>
+<div class="title">Perfil Político</div>
+<br>
+<table>
+    <tr>
+        <td>
+            <div class="six-columns">
+                <label class="label">¿Reubicado?: </label>
+                {{ texts[object.reubicado] }}
+            </div>
+            <div class="six-columns">
+                <label class="label">¿Votó Internas Oposición?: </label>
+                {{ texts[object.intOpo] }}
+            </div>
+        </td>
+        <td>
+            <div class="six-columns">
+                <label class="label">¿Inscrito en PSUV?: </label>
+                {{ texts[object.psuv] }}
+            </div>
+            <div class="six-columns">
+                <label class="label">¿Votó Internas PSUV?: </label>
+                {{ texts[object.intPsuv] }}
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <div class="six-columns">
+                <label class="label">¿Firmó Decreto Esperanza?: </label>
+                {{ texts[object.esperanza] }}
+            </div>
+            <div class="six-columns">
+                <label class="label">¿Votó Presidenciales 2012?: </label>
+                {{ texts[object.vpresidencial1] }}
+            </div>
+        </td>
+        <td>
+            <div class="six-columns">
+                <label class="label">¿Votó Regionales 2012?: </label>
+                {{ texts[object.vregionales] }}
+            </div>
+            <div class="six-columns">
+                <label class="label">¿Votó Presidenciales 2013?: </label>
+                {{ texts[object.vpresidencial2] }}
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <div class="six-columns">
+                <label class="label">¿Votó Municipales 2013?: </label>
+                {{ texts[object.vmunicipales] }}
+            </div>
+        </td>
+    </tr>
+</table>
+
 
 

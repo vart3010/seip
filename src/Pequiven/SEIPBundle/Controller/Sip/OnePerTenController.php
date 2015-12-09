@@ -448,6 +448,11 @@ class OnePerTenController extends SEIPController {
             }
         }
 
+        $texts = array();
+        $texts[-1] = 'Sin Información';
+        $texts[0] = 'No';
+        $texts[1] = 'Si';
+        
         $formSearchOne = $this->createForm(new OnePerTenType);
         return $this->render('PequivenSEIPBundle:Sip:onePerTen\show.html.twig', array(
                     "form" => $formSearchOne->createView(),
@@ -455,6 +460,7 @@ class OnePerTenController extends SEIPController {
                     "isCoordinator" => $isCoordinator,
                     "onePerTen" => $onePerTen,
                     "workStudyCircle" => $workStudyCircle,
+                    "texts" => $texts,
                     "members" => $members
         ));
     }
