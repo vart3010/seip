@@ -406,6 +406,13 @@ class OnePerTenController extends SEIPController {
         }
         $user = $em->getRepository("\Pequiven\SEIPBundle\Entity\User")->findOneBy(array("id" => $idUser));
 
+        $workStudyCircle = $user->getWorkStudyCircle();
+        
+        $isCoordinator = 'NO';
+        if($workStudyCircle->getCoordinator()->getId() == $user->getId()){
+            $isCoordinator = 'SI';
+        }
+        
 
         $members = array();
         $onePerTen = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\OnePerTen")->findOneBy(array("user" => $idUser));
@@ -445,7 +452,9 @@ class OnePerTenController extends SEIPController {
         return $this->render('PequivenSEIPBundle:Sip:onePerTen\show.html.twig', array(
                     "form" => $formSearchOne->createView(),
                     "user" => $user,
+                    "isCoordinator" => $isCoordinator,
                     "onePerTen" => $onePerTen,
+                    "workStudyCircle" => $workStudyCircle,
                     "members" => $members
         ));
     }
@@ -472,6 +481,11 @@ class OnePerTenController extends SEIPController {
         $one = $onePerTen[0]->getUser();
         $voto = $onePerTen[0]->getVoto();
         $workStudyCircle = $one->getWorkStudyCircle();
+        
+        $isCoordinator = 'NO';
+        if($workStudyCircle->getCoordinator()->getId() == $one->getId()){
+            $isCoordinator = 'SI';
+        }
 
         $pdf = new \Pequiven\SEIPBundle\Model\PDF\SipPdf('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
         $pdf->setPrintLineFooter(false);
@@ -501,6 +515,7 @@ class OnePerTenController extends SEIPController {
             "one" => $one,
             "workStudyCircle" => $workStudyCircle,
             "voto" => $voto,
+            "isCoordinator" => $isCoordinator,
             "members" => $members
         );
         $html = $this->renderView('PequivenSEIPBundle:Sip:onePerTen/reportList.html.twig', $data);
