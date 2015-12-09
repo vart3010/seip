@@ -445,6 +445,7 @@ class OnePerTenController extends SEIPController {
         return $this->render('PequivenSEIPBundle:Sip:onePerTen\show.html.twig', array(
                     "form" => $formSearchOne->createView(),
                     "user" => $user,
+                    "onePerTen" => $onePerTen,
                     "members" => $members
         ));
     }
@@ -469,6 +470,8 @@ class OnePerTenController extends SEIPController {
         $onePerTen = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\OnePerTen")->getOnePerTen($request->get("idOne"));
         $members = $onePerTen[0]->getTen();
         $one = $onePerTen[0]->getUser();
+        $voto = $onePerTen[0]->getVoto();
+        $workStudyCircle = $one->getWorkStudyCircle();
 
         $pdf = new \Pequiven\SEIPBundle\Model\PDF\SeipPdf('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
         $pdf->setPrintLineFooter(false);
@@ -496,6 +499,8 @@ class OnePerTenController extends SEIPController {
 
         $data = array(
             "one" => $one,
+            "workStudyCircle" => $workStudyCircle,
+            "voto" => $voto,
             "members" => $members
         );
         $html = $this->renderView('PequivenSEIPBundle:Sip:onePerTen/reportList.html.twig', $data);

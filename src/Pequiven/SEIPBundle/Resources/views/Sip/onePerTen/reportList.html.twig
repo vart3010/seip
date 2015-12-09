@@ -84,6 +84,21 @@
                 {{ "now"|date("d/m/y") }}
             </div>
         </td>
+        <td>
+            <div class="six-columns">
+                <label class="label">Votó: </label>
+                {% set textoVoto = 'NO' %}
+                {% if voto == 1 %}
+                    {% set textoVoto = 'SI' %}
+                {% endif %}
+                {{ textoVoto }}
+            </div>
+            <div class="six-columns">
+                <label class="label">Círculo de Estudio y Trabajo: </label>
+                {{ workStudyCircle.codigo }} {{ workStudyCircle.name }}
+            </div>
+        </td>
+        
     </tr>
 </table>
 <br>
@@ -97,7 +112,8 @@
                 <th scope="col" style="width: 5%; text-align: center;" class="header">Nª</th>
                 <th scope="col" style="width: 10%" class="header">Cédula</th>
                 <th scope="col" style="width: 30%" class=" header">Nombre</th>
-                <th scope="col" style="width: 40%" class=" header">Centro</th>
+                <th scope="col" style="width: 30%" class=" header">Centro</th>
+                <th scope="col" style="width: 10%" class=" header">Votó</th>
                 <th scope="col" style="width: 15%" class=" header">Teléfono</th>
             </tr>
             {% for member in members %}
@@ -106,6 +122,11 @@
                     <td style="text-align: center;">{{ member.cedula }}</td>
                     <td>{{ member.nombre }}</td>
                     <td>{{ member.nombreCentro }}</td>
+                    {% set textoVoto = 'NO' %}
+                    {% if member.voto == 1 %}
+                        {% set textoVoto = 'SI' %}
+                    {% endif %}
+                    <td>{{ textoVoto }}</td>
                     <td style="text-align: center;">{{ member.telefono }}</td>
                 </tr>
             {% endfor%}
