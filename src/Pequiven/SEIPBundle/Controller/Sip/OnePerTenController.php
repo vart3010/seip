@@ -454,6 +454,8 @@ class OnePerTenController extends SEIPController {
                 );
             }
         }
+        
+        
 
         $texts = array();
         $texts[-1] = 'Sin Información';
