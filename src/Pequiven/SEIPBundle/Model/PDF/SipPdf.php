@@ -54,7 +54,7 @@ class SipPdf extends TCPDF implements ContainerAwareInterface{
         // Page number
 //        $this->Cell(0, 10, 'Página '.$this->getAliasNumPage().'/'.$this->getAliasNbPages(), 0, false, 'C', 0, '', 0, false, 'T', 'M');
         
-        $footer = '<div align="center"><span style="color: red;font-size: 1.3em;font-weight: bold;font-variant: small-caps;">'.$this->footerText.'</span><br><span>'.$this->trans('pequiven_seip.pdf.pageFooter', array('%page%' => $this->getAliasNumPage(),'%totalPage%' => $this->getAliasNbPages()),'PequivenSEIPBundle').'</span></div>';
+        $footer = '<div align="center"><span style="color: red;font-size: 1.3em;font-weight: bold;font-variant: small-caps;">Sala de Gestión de Información Política</span><br><span>'.$this->trans('pequiven_seip.pdf.pageFooter', array('%page%' => $this->getAliasNumPage(),'%totalPage%' => $this->getAliasNbPages()),'PequivenSEIPBundle').'</span></div>';
         $this->writeHTML($footer);
         
         //Línea HR
