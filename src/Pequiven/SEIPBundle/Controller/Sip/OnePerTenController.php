@@ -480,6 +480,7 @@ class OnePerTenController extends SEIPController {
         $members = $onePerTen[0]->getTen();
         $one = $onePerTen[0]->getUser();
         $voto = $onePerTen[0]->getVoto();
+        $object = $onePerTen[0];
         $workStudyCircle = $one->getWorkStudyCircle();
         
         $isCoordinator = 'NO';
@@ -510,11 +511,18 @@ class OnePerTenController extends SEIPController {
         $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
 
         $pdf->AddPage();
+        
+        $texts = array();
+        $texts[-1] = 'Sin Información';
+        $texts[0] = 'No';
+        $texts[1] = 'Si';
 
         $data = array(
             "one" => $one,
             "workStudyCircle" => $workStudyCircle,
             "voto" => $voto,
+            "object" => $object,
+            "texts" => $texts,
             "isCoordinator" => $isCoordinator,
             "members" => $members
         );
@@ -524,8 +532,8 @@ class OnePerTenController extends SEIPController {
 
         $pdf->Output('Reporte de 1x10' . '.pdf', 'D');
 
-        var_dump();
-        die();
+//        var_dump();
+//        die();
     }
 
     protected function getCneService() {
