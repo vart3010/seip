@@ -473,7 +473,7 @@ class OnePerTenController extends SEIPController {
         $voto = $onePerTen[0]->getVoto();
         $workStudyCircle = $one->getWorkStudyCircle();
 
-        $pdf = new \Pequiven\SEIPBundle\Model\PDF\SeipPdf('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+        $pdf = new \Pequiven\SEIPBundle\Model\PDF\SipPdf('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
         $pdf->setPrintLineFooter(false);
         $pdf->setContainer($this->container);
         $pdf->setPeriod($this->getPeriodService()->getPeriodActive());
