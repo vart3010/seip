@@ -260,6 +260,7 @@ security:
             - ROLE_SEIP_SIP_MONITOR_ONLY_ANZOATEGUI
             - ROLE_SEIP_SIP_MONITOR_ONLY_CARABOBO
             - ROLE_SEIP_SIP_MONITOR_ONLY_CIRCUITO5
+            - ROLE_SEIP_SIP_SEACH_EMPLOYEES
             
             
             

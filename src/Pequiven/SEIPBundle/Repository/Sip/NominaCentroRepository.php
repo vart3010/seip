@@ -70,6 +70,10 @@ class NominaCentroRepository extends EntityRepository {
             $queryBuilder->andWhere($queryBuilder->expr()->like('nc.codigoCentro', "'%" . $codigoCentro . "%'"));
         }
         
+        if (($localidad = $criteria->remove('localidad'))) {
+            $queryBuilder->andWhere($queryBuilder->expr()->like('nc.localidad', "'%" . $localidad . "%'"));
+        }
+        
         parent::applyCriteria($queryBuilder, $criteria->toArray());
     }
 

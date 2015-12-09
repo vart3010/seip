@@ -22,7 +22,7 @@
             <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager" template-header="custom/header" api-data-url="{{ apiDataUrl }}" export-csv="csv" class="table table-responsive table-extra-info" >
                 <tbody> 
                     <tr ng-repeat="result in $data" data="{$ result|json $}">
-                        <td data-title="'Cedula'" filter="{'cedula' : 'text'}">
+                        <td data-title="'Cédula'" filter="{'cedula' : 'text'}">
                             <a href="">
                                 {$ result.cedula $}
                             </a>

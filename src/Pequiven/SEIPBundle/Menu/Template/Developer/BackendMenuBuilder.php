@@ -1620,6 +1620,13 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                         ))
                 )->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.main', $section)));
 
+        
+        if($this->isGranted(array('ROLE_SEIP_SIP_SEACH_EMPLOYEES'))){
+            $menuSip->addChild('sip.list_pqv', array(
+                'route' => 'pequiven_onePerTen_list',
+                'labelAttributes' => array('icon' => 'fa fa-table',)
+            ))->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.list_pqv', $section)));
+        }
 
         if ($this->isGranted(array('ROLE_SEIP_SIP_CENTRO'))) {
             //Centro

@@ -65,10 +65,11 @@
                         <tr>
                             <th scope="col" width="2%" class="header">Nro</th>
                             <th scope="col" width="15%" class="header">Cedula</th>
-                            <th scope="col" width="28%" class="header">Nombre</th>
-                            <th scope="col" width="28%" class="header">Centro</th>
-                            <th scope="col" width="30%" class="header">Telefono</th>
-                            <th scope="col" width="30%" class="header">Acciones</th>
+                            <th scope="col" width="38%" class="header">Nombre</th>
+                            <th scope="col" width="38%" class="header">Centro</th>
+                            <th scope="col" width="10%" class="header">Votó</th>
+                            <th scope="col" width="30%" class="header">Teléfono</th>
+{#                            <th scope="col" width="10%" class="header">Acciones</th>#}
                         </tr>
                     </thead>
                     <tbody>
@@ -79,10 +80,11 @@
                                 <td>{{ member.cedula}}</td>
                                 <td>{{ member.nombre}}</td>
                                 <td>{{ member.centro}}</td>
+                                <td>{{ member.voto}}</td>
                                 <td>{{ member.telefono}}</td>
-                                <td> 
+                                {#<td> 
                                     <button  class="button del" data="{{ member.id  }}" type="button">Eliminar</button>
-                                </td>
+                                </td>#}
                             </tr>
                         {% endfor %}
 

@@ -9,7 +9,7 @@
 
 {% block before_body %}
     {{ contentHeader(
-    	("sip.onePerTen"|trans ),
+    	"Votantes Pequiven",
         ("sip.list"|trans )
     ) }}
 {% endblock %}
@@ -91,14 +91,29 @@
                     <tbody> 
                         <tr ng-repeat="result in $data" data="{$ result|json $}">
 
-                            <td data-title="'Cedula'" filter="{'cedula' : 'text'}">
+                            <td data-title="'Localidad'">
+                                <a href="{$ result._links.self.show $}">
+                                    {$ result.localidad $}
+                                </a>
+                            </td>
+                            <td data-title="'Gerencia'" >
+                                <a href="{$ result._links.self.show $}">
+                                    {$ result.gerencia $}
+                                </a>
+                            </td>
+                            <td data-title="'Cédula'" filter="{'cedula' : 'text'}">
                                 <a href="{$ result._links.self.show $}">
                                     {$ result.cedula $}
                                 </a>
                             </td>
-                            <td data-title="'Usuario'" filter="{'userName' : 'text'}">
+                            <td data-title="'Nombre'" filter="{'userName' : 'text'}">
                                 <a href="{$ result._links.self.show $}">
                                     {$ result.userName $}
+                                </a>
+                            </td>
+                            <td data-title="'Votó'" filter="{'voto' : 'text'}">
+                                <a href="{$ result._links.self.show $}">
+                                    {$ result.textoVoto $}
                                 </a>
                             </td>
 

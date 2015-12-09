@@ -1,4 +1,13 @@
 ## SIP
+pequiven_sip_oneperten_pqv_list:
+    path: /oneperten-pqv/list.{_format}
+    defaults:
+        _controller: pequiven.controller.center:listPqvAllAction
+        _format: html
+    requirements:
+        _format: html|json|xml        
+    methods: [GET]
+
 pequiven_onePerTen_add_member:
     path: /1x10/add/{idUserOne}
     defaults:

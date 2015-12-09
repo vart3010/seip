@@ -421,6 +421,7 @@ class OnePerTenController extends SEIPController {
                         "nombre" => $member->getNombre(),
                         "telefono" => $member->getTelefono(),
                         "idCentro" => $member->getCodCentro(),
+                        "voto" => $member->getVoto() == 0 ? 'NO' : 'SI',
                         "centro" => $member->getNombreCentro()
                     );
                 }
@@ -434,6 +435,7 @@ class OnePerTenController extends SEIPController {
                     "nombre" => $onePerTenMembers[0]->getNombre(),
                     "telefono" => $onePerTenMembers[0]->getTelefono(),
                     "idCentro" => $onePerTenMembers[0]->getCodCentro(),
+                    "voto" => $member->getVoto() == 0 ? 'NO' : 'SI',
                     "centro" => $onePerTenMembers[0]->getNombreCentro()
                 );
             }

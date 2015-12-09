@@ -703,24 +703,50 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
     public function onPostSerializeOnePerTen(ObjectEvent $event) {
         $object = $event->getObject();
         $user = $this->container->get('pequiven.repository.user')->findOneBy(array('id' => $object->getUser()));
-        $links['self']['show'] = $this->generateUrl('pequiven_search_members', array('user' => $user->getID()));
+        $links['self']['show'] = $this->generateUrl('pequiven_search_members', array('user' => $user->getId()));
+        
+        $gerencia = '';
+        if($user->getGerencia() != null){
+            $gerencia = $user->getGerencia()->getDescription();
+        }
+        
+        $localidad = '';
+        if($user->getComplejo() != null){
+            $localidad = $user->getComplejo()->getDescription();
+        }
+        
+        $textoVoto = 'NO';
+        if($object->getVoto() == 1){
+            $textoVoto = 'SI';
+        }
 
         $event->getVisitor()->addData('userName', $user->getFirstName() . " " . $user->getLastName());
+        $event->getVisitor()->addData('textoVoto', $textoVoto);
+        $event->getVisitor()->addData('gerencia', $gerencia);
+        $event->getVisitor()->addData('localidad', $localidad);
         $event->getVisitor()->addData('_links', $links);
     }
     
     public function onPostSerializeNominaCentro(ObjectEvent $event) {
         $object = $event->getObject();
+        $user = $this->container->get('pequiven.repository.user')->findOneBy(array('id' => $object->getUserid()));
+        $gerencia = '';
+        
+        if($user->getGerencia() != null){
+            $gerencia = $user->getGerencia()->getDescription();
+        }
+        
         $textoVoto = 'NO';
         
         if($object->getVoto() == 1){
             $textoVoto = 'SI';
         }
         
-//        $links['self']['show'] = $this->generateUrl('pequiven_search_members', array('user' => $user->getID()));
+        $links['self']['show'] = $this->generateUrl('pequiven_search_members', array('user' => $user->getId()));
 
         $event->getVisitor()->addData('textoVoto', $textoVoto);
-//        $event->getVisitor()->addData('_links', $links);
+        $event->getVisitor()->addData('gerencia', $gerencia);
+        $event->getVisitor()->addData('_links', $links);
     }
     
     public function onPostSerializeOnePerTenMembers(ObjectEvent $event) {

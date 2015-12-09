@@ -23,7 +23,7 @@ class OnePerTenRepository extends EntityRepository {
         if(($for_one = $criteria->remove('for_one')) != null){
             $queryBuilder
                     ->innerJoin('opt.user', 'u')
-                    ->innerJoin('opt.ten', 't')
+//                    ->innerJoin('opt.ten', 't')
             ;
         }
         
@@ -55,6 +55,14 @@ class OnePerTenRepository extends EntityRepository {
                     ->andWhere('u.workStudyCircle = :workStudyCircle')
                     ->setParameter('workStudyCircle', $workStudyCircle)
             ;
+        }
+        
+        if (($voto = $criteria->remove('voto'))) {
+            $numVoto = 0;
+            if($voto == 'SI'){
+                $numVoto = 1;
+            }
+            $queryBuilder->andWhere('opt.voto = '.$numVoto);
         }
 
         parent::applyCriteria($queryBuilder, $criteria->toArray());

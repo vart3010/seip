@@ -19,6 +19,9 @@ Pequiven\SEIPBundle\Entity\Sip\NominaCentro:
         centro:
             expose: true
             groups: [api_list]
+        localidad:
+            expose: true
+            groups: [api_list]
         voto:
             expose: true
             groups: [api_list]
