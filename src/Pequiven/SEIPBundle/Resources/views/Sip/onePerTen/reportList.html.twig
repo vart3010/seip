@@ -100,6 +100,20 @@
                 {{ workStudyCircle.codigo }} {{ workStudyCircle.name }}
             </div>
         </td>
+        <td>
+            <div class="six-columns">
+                <label class="label">Localidad: </label>
+                {% if one.complejo != null %}
+                    {{ one.complejo.description }}
+                {% endif %}
+            </div>
+            <div class="six-columns">
+                <label class="label">Gerencia: </label>
+                {% if one.gerencia != null %}
+                    {{ one.gerencia.description }}
+                {% endif %}
+            </div>
+        </td>
     </tr>
 </table>
 <br>
