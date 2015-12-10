@@ -72,11 +72,11 @@ class ArrangementProgramManager implements ContainerAwareInterface
             }
 
             if($entity->getType() === ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC 
-                && $configuration->getArrangementProgramUsersToApproveTactical()->contains($user) === true){
+                && $configuration->getArrangementProgramUsersToApproveTactical()->contains($user) === true && $entity->getTacticalObjective()->getStatus() == true){
                 $valid = true;
             }
             if($entity->getType() === ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE 
-                && $configuration->getArrangementProgramUsersToApproveOperative()->contains($user) === true){
+                && $configuration->getArrangementProgramUsersToApproveOperative()->contains($user) === true && $entity->getTacticalObjective()->getStatus() == true && $entity->getOperationalObjective()->getStatus() == true){
                 $valid = true;
             }
         } else{
