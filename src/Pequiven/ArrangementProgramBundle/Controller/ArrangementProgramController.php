@@ -774,6 +774,7 @@ class ArrangementProgramController extends SEIPController {
         $view = $form->createView();
         return array(
             'entity' => $entity,
+            'mov' => 0,
             'form' => $view,
         );
     }

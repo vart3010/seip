@@ -92,8 +92,10 @@
         jQuery('#goalForms select').select2();
         
         applyDatePickerDatePG = function(){
-            var defaultStartDate = '{{ 'now'|date('Y') }}-01-01';
-            var defaultEndDate = '{{ 'now'|date('Y') }}-12-31';
+            var defaultStartDate = '{{ yearActive }}-01-01';
+            var defaultEndDate = '{{ yearActive }}-12-31';
+            {#var defaultStartDate = '{{ 'now'|date('Y') }}-01-01';
+            var defaultEndDate = '{{ 'now'|date('Y') }}-12-31';#}
             jQuery( "#goal_startDate" ).datepicker({
                 defaultDate: defaultStartDate,
                 changeMonth: true,
