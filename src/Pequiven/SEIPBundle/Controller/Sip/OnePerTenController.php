@@ -410,16 +410,16 @@ class OnePerTenController extends SEIPController {
 
         $workStudyCircle = $user->getWorkStudyCircle();
         
-        $isCoordinator = 'NO';
+        $isCoordinator = 'No';
         if($workStudyCircle->getCoordinator()->getId() == $user->getId()){
-            $isCoordinator = 'SI';
+            $isCoordinator = 'Sí';
         }
         
         $cutl = $repositoryCutl->getCutlData($user->getIndentification());
 //        var_dump(count($cutl));die();
-        $isCutl = 'NO';
+        $isCutl = 'No';
         if(count($cutl) > 0){
-            $isCutl = 'SI';
+            $isCutl = 'Sí';
         }
 
         $members = array();
@@ -436,7 +436,7 @@ class OnePerTenController extends SEIPController {
                         "nombre" => $member->getNombre(),
                         "telefono" => $member->getTelefono(),
                         "idCentro" => $member->getCodCentro(),
-                        "voto" => $member->getVoto() == 0 ? 'NO' : 'SI',
+                        "voto" => $member->getVoto() == 0 ? 'No' : 'Sí',
                         "centro" => $member->getNombreCentro()
                     );
                 }
@@ -450,7 +450,7 @@ class OnePerTenController extends SEIPController {
                     "nombre" => $onePerTenMembers[0]->getNombre(),
                     "telefono" => $onePerTenMembers[0]->getTelefono(),
                     "idCentro" => $onePerTenMembers[0]->getCodCentro(),
-                    "voto" => $member->getVoto() == 0 ? 'NO' : 'SI',
+                    "voto" => $member->getVoto() == 0 ? 'No' : 'Sí',
                     "centro" => $onePerTenMembers[0]->getNombreCentro()
                 );
             }
@@ -461,7 +461,7 @@ class OnePerTenController extends SEIPController {
         $texts = array();
         $texts[-1] = 'Sin Información';
         $texts[0] = 'No';
-        $texts[1] = 'Si';
+        $texts[1] = 'Sí';
         
         $formSearchOne = $this->createForm(new OnePerTenType);
         return $this->render('PequivenSEIPBundle:Sip:onePerTen\show.html.twig', array(
@@ -500,18 +500,18 @@ class OnePerTenController extends SEIPController {
         $object = $onePerTen[0];
         $workStudyCircle = $one->getWorkStudyCircle();
         
-        $isCoordinator = 'NO';
+        $isCoordinator = 'No';
         if($workStudyCircle->getCoordinator()->getId() == $one->getId()){
-            $isCoordinator = 'SI';
+            $isCoordinator = 'Sí';
         }
         
         $repositoryCutl = $this->get('pequiven.repository.cutl');
         
          $cutl = $repositoryCutl->getCutlData($one->getIndentification());
 //        var_dump(count($cutl));die();
-        $isCutl = 'NO';
+        $isCutl = 'No';
         if(count($cutl) > 0){
-            $isCutl = 'SI';
+            $isCutl = 'Sí';
         }
 
         $pdf = new \Pequiven\SEIPBundle\Model\PDF\SipPdf('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
@@ -541,7 +541,7 @@ class OnePerTenController extends SEIPController {
         $texts = array();
         $texts[-1] = 'Sin Información';
         $texts[0] = 'No';
-        $texts[1] = 'Si';
+        $texts[1] = 'Sí';
 
         $data = array(
             "one" => $one,

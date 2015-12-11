@@ -145,9 +145,9 @@
                     <td style="text-align: center;">{{ member.cedula }}</td>
                     <td>{{ member.nombre }}</td>
                     <td>{{ member.nombreCentro }}</td>
-                    {% set textoVoto = 'NO' %}
+                    {% set textoVoto = 'No' %}
                     {% if member.voto == 1 %}
-                        {% set textoVoto = 'SI' %}
+                        {% set textoVoto = 'Sí' %}
                     {% endif %}
                     <td>{{ textoVoto }}</td>
                     <td style="text-align: center;">{{ member.telefono }}</td>
