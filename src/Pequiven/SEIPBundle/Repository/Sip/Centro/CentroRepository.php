@@ -516,7 +516,7 @@ class CentroRepository extends EntityRepository {
         if ($type == 2) {
             $sql2 = ' AND Tipo = "PQV"';            
         }else{
-            $type = "";
+            $sql2 = "";
         }
 
         $sql3 = ' GROUP BY Municipio';
