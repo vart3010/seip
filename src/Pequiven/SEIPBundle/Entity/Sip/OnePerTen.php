@@ -156,6 +156,46 @@ class OnePerTen {
      * @ORM\Column(name="vmunicipales", type="integer", nullable=true)
      */
     private $vmunicipales;
+    
+    /**
+     * fref
+     * @var integer
+     *
+     * @ORM\Column(name="fref", type="integer", nullable=true)
+     */
+    private $fref;
+    
+    /**
+     * vanguardia
+     * @var integer
+     *
+     * @ORM\Column(name="vanguardia", type="integer", nullable=true)
+     */
+    private $vanguardia;
+    
+    /**
+     * ubch
+     * @var integer
+     *
+     * @ORM\Column(name="ubch", type="integer", nullable=true)
+     */
+    private $ubch;
+    
+    /**
+     * miembroOnePerTen
+     * @var integer
+     *
+     * @ORM\Column(name="miembroOnePerTen", type="integer", nullable=true)
+     */
+    private $miembroOnePerTen;
+    
+    /**
+     * militante
+     * @var integer
+     *
+     * @ORM\Column(name="militante", type="integer", nullable=true)
+     */
+    private $militante;
 
     /**
      * @var \Pequiven\SEIPBundle\Entity\Sip\OnerPerTenMembers
@@ -332,6 +372,46 @@ class OnePerTen {
 
     function setVmunicipales($vmunicipales) {
         $this->vmunicipales = $vmunicipales;
+    }
+    
+    function getFref() {
+        return $this->fref;
+    }
+
+    function setFref($fref) {
+        $this->fref = $fref;
+    }
+    
+    function getVanguardia() {
+        return $this->vanguardia;
+    }
+
+    function setVanguardia($vanguardia) {
+        $this->vanguardia = $vanguardia;
+    }
+    
+    function getUbch() {
+        return $this->ubch;
+    }
+
+    function setUbch($ubch) {
+        $this->ubch = $ubch;
+    }
+    
+    function getMiembroOnePerTen() {
+        return $this->miembroOnePerTen;
+    }
+
+    function setMiembroOnePerTen($miembroOnePerTen) {
+        $this->miembroOnePerTen = $miembroOnePerTen;
+    }
+       
+    function getMilitante() {
+        return $this->militante;
+    }
+
+    function setMilitante($militante) {
+        $this->militante = $militante;
     }
 
 }
