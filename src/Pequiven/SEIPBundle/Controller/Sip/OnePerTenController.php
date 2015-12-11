@@ -406,7 +406,7 @@ class OnePerTenController extends SEIPController {
         }
         $user = $em->getRepository("\Pequiven\SEIPBundle\Entity\User")->findOneBy(array("id" => $idUser));
         
-//        $repositoryCutl = $this->getRepository('pequiven.repository.cutl');
+        $repositoryCutl = $this->get('pequiven.repository.cutl');
 
         $workStudyCircle = $user->getWorkStudyCircle();
         
@@ -415,11 +415,12 @@ class OnePerTenController extends SEIPController {
             $isCoordinator = 'SI';
         }
         
-//        $cutl = $repositoryCutl->getCutlData($user->getIndentification());
-        $isCutl = '';
-//        if(count($cutl) > 0){
-//            $isCutl = 'SI';
-//        }
+        $cutl = $repositoryCutl->getCutlData($user->getIndentification());
+//        var_dump(count($cutl));die();
+        $isCutl = 'NO';
+        if(count($cutl) > 0){
+            $isCutl = 'SI';
+        }
 
         $members = array();
         $onePerTen = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\OnePerTen")->findOneBy(array("user" => $idUser));
@@ -503,6 +504,15 @@ class OnePerTenController extends SEIPController {
         if($workStudyCircle->getCoordinator()->getId() == $one->getId()){
             $isCoordinator = 'SI';
         }
+        
+        $repositoryCutl = $this->get('pequiven.repository.cutl');
+        
+         $cutl = $repositoryCutl->getCutlData($one->getIndentification());
+//        var_dump(count($cutl));die();
+        $isCutl = 'NO';
+        if(count($cutl) > 0){
+            $isCutl = 'SI';
+        }
 
         $pdf = new \Pequiven\SEIPBundle\Model\PDF\SipPdf('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
         $pdf->setPrintLineFooter(false);
@@ -539,6 +549,7 @@ class OnePerTenController extends SEIPController {
             "voto" => $voto,
             "object" => $object,
             "texts" => $texts,
+            "isCutl" => $isCutl,
             "isCoordinator" => $isCoordinator,
             "members" => $members
         );

@@ -172,7 +172,7 @@ services:
     sonata.admin.arrangement_program.arrangement_program:
         class: Pequiven\MasterBundle\Admin\ArrangementProgram\ArrangementProgramAdmin
         tags:
-            - { name: sonata.admin, manager_type: orm, group: "Programa de gestion", label: "Programa de gestion" }
+            - { name: sonata.admin, manager_type: orm, group: "Programa de gestión", label: "Programa de gestión" }
         arguments:
             - ~
             - Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram
@@ -183,7 +183,7 @@ services:
     sonata.admin.arrangement_program.goal:
         class: Pequiven\MasterBundle\Admin\ArrangementProgram\GoalAdmin
         tags:
-            - { name: sonata.admin, manager_type: orm, group: "Programa de gestion", label: "Metas" }
+            - { name: sonata.admin, manager_type: orm, group: "Programa de gestión", label: "Metas" }
         arguments:
             - ~
             - Pequiven\ArrangementProgramBundle\Entity\Goal
@@ -194,7 +194,7 @@ services:
     sonata.admin.arrangement_program.goal_details:
         class: Pequiven\MasterBundle\Admin\ArrangementProgram\GoalDetailsAdmin
         tags:
-            - { name: sonata.admin, manager_type: orm, group: "Programa de gestion", label: "Detalles de metas" }
+            - { name: sonata.admin, manager_type: orm, group: "Programa de gestión", label: "Detalles de metas" }
         arguments:
             - ~
             - Pequiven\ArrangementProgramBundle\Entity\GoalDetails
@@ -205,7 +205,7 @@ services:
     sonata.admin.arrangement_program.timeline:
         class: Pequiven\MasterBundle\Admin\ArrangementProgram\TimelineAdmin
         tags:
-            - { name: sonata.admin, manager_type: orm, group: "Programa de gestion", label: "Linea de tiempo" }
+            - { name: sonata.admin, manager_type: orm, group: "Programa de gestión", label: "Linea de tiempo" }
         arguments:
             - ~
             - Pequiven\ArrangementProgramBundle\Entity\Timeline
@@ -216,7 +216,7 @@ services:
     sonata.admin.arrangement_range.arrangement_range:
         class: Pequiven\MasterBundle\Admin\ArrangementRangeAdmin
         tags:
-            - { name: sonata.admin, manager_type: orm, group: "Rango de gestion", label: "Rango de gestión" }
+            - { name: sonata.admin, manager_type: orm, group: "Rango de gestión", label: "Rango de gestión" }
         arguments:
             - ~
             - Pequiven\ArrangementBundle\Entity\ArrangementRange
