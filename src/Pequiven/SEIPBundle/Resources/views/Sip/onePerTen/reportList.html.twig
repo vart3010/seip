@@ -88,7 +88,7 @@
     <tr>
         <td>
             <div class="six-columns">
-                <label class="label">Votó: </label>
+                <label class="label">¿Reportó Voto Elecciones Asamblea Nacional 2015?: </label>
                 {% set textoVoto = 'NO' %}
                 {% if voto == 1 %}
                     {% set textoVoto = 'SI' %}
@@ -118,7 +118,7 @@
     <tr>
         <td>
             <div class="six-columns">
-                <label class="label">¿Coordinador?: </label>
+                <label class="label">¿Es Coordinador de su CET?: </label>
                 {{ isCoordinator }}
             </div>
         </td>
@@ -163,7 +163,7 @@
     <tr>
         <td>
             <div class="six-columns">
-                <label class="label">¿Reubicado?: </label>
+                <label class="label">¿Fue Reubicado para las Elecciones Asamblea Nacional 2015?: </label>
                 {{ texts[object.reubicado] }}
             </div>
             <div class="six-columns">
@@ -206,6 +206,10 @@
     </tr>
     <tr>
         <td>
+            <div class="six-columns">
+                <label class="label">¿Votó Municipales 2013?: </label>
+                {{ texts[object.vmunicipales] }}
+            </div>
             <div class="six-columns">
                 <label class="label">¿Votó Municipales 2013?: </label>
                 {{ texts[object.vmunicipales] }}

@@ -406,7 +406,7 @@ class OnePerTenController extends SEIPController {
         }
         $user = $em->getRepository("\Pequiven\SEIPBundle\Entity\User")->findOneBy(array("id" => $idUser));
         
-//        $repositoryCutl = $this->getRepository('pequiven.repository.cutl');
+        $repositoryCutl = $this->get('pequiven.repository.cutl');
 
         $workStudyCircle = $user->getWorkStudyCircle();
         
@@ -415,11 +415,12 @@ class OnePerTenController extends SEIPController {
             $isCoordinator = 'SI';
         }
         
-//        $cutl = $repositoryCutl->getCutlData($user->getIndentification());
-        $isCutl = '';
-//        if(count($cutl) > 0){
-//            $isCutl = 'SI';
-//        }
+        $cutl = $repositoryCutl->getCutlData($user->getIndentification());
+//        var_dump(count($cutl));die();
+        $isCutl = 'NO';
+        if(count($cutl) > 0){
+            $isCutl = 'SI';
+        }
 
         $members = array();
         $onePerTen = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\OnePerTen")->findOneBy(array("user" => $idUser));
