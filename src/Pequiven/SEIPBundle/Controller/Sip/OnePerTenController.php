@@ -504,6 +504,15 @@ class OnePerTenController extends SEIPController {
         if($workStudyCircle->getCoordinator()->getId() == $one->getId()){
             $isCoordinator = 'SI';
         }
+        
+        $repositoryCutl = $this->get('pequiven.repository.cutl');
+        
+         $cutl = $repositoryCutl->getCutlData($user->getIndentification());
+//        var_dump(count($cutl));die();
+        $isCutl = 'NO';
+        if(count($cutl) > 0){
+            $isCutl = 'SI';
+        }
 
         $pdf = new \Pequiven\SEIPBundle\Model\PDF\SipPdf('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
         $pdf->setPrintLineFooter(false);
@@ -540,6 +549,7 @@ class OnePerTenController extends SEIPController {
             "voto" => $voto,
             "object" => $object,
             "texts" => $texts,
+            "isCutl" => $isCutl,
             "isCoordinator" => $isCoordinator,
             "members" => $members
         );
