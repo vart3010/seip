@@ -73,10 +73,10 @@
             </div>
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
-                    <label class="label">Votó</label>
-                    {% set textoVoto = 'NO' %}
+                    <label class="label">¿Reportó Voto Elecciones Asamblea Nacional 2015?</label>
+                    {% set textoVoto = 'No' %}
                     {% if onePerTen.voto == 1 %}
-                        {% set textoVoto = 'SI' %}
+                        {% set textoVoto = 'Sí' %}
                     {% endif %}
                     {{ textoVoto }}
                 </p>
@@ -89,7 +89,7 @@
             </div>
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
-                    <label class="label">Coordinador</label>
+                    <label class="label">¿Es Coordinador de su CET?</label>
                     {{ isCoordinator }}
                 </p>
             </div>
@@ -169,7 +169,7 @@
         <div class="columns">
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
-                    <label class="label">¿Reubicado?</label>
+                    <label class="label">¿Fue Reubicado para las Elecciones Asamblea Nacional 2015?</label>
                     {{ texts[onePerTen.reubicado] }}
                 </p>
             </div>
@@ -181,7 +181,7 @@
             </div>
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
-                    <label class="label">¿Inscrito PSUV?</label>
+                    <label class="label">¿Inscrito en el Gran Polo Patriótico?</label>
                     {{ texts[onePerTen.psuv] }}
                 </p>
             </div>
@@ -223,7 +223,7 @@
             </div>
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
-                    <label class="label">¿Fue CUTL?</label>
+                    <label class="label">¿Fue CUTL en las Elecciones Asamblea Nacional 2015?</label>
                     {{ isCutl }}
                 </p>
             </div>

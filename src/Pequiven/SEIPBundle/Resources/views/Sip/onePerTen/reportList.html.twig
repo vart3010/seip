@@ -88,7 +88,7 @@
     <tr>
         <td>
             <div class="six-columns">
-                <label class="label">Votó: </label>
+                <label class="label">¿Reportó Voto Elecciones Asamblea Nacional 2015?: </label>
                 {% set textoVoto = 'NO' %}
                 {% if voto == 1 %}
                     {% set textoVoto = 'SI' %}
@@ -118,7 +118,7 @@
     <tr>
         <td>
             <div class="six-columns">
-                <label class="label">¿Coordinador?: </label>
+                <label class="label">¿Es Coordinador de su CET?: </label>
                 {{ isCoordinator }}
             </div>
         </td>
@@ -145,9 +145,9 @@
                     <td style="text-align: center;">{{ member.cedula }}</td>
                     <td>{{ member.nombre }}</td>
                     <td>{{ member.nombreCentro }}</td>
-                    {% set textoVoto = 'NO' %}
+                    {% set textoVoto = 'No' %}
                     {% if member.voto == 1 %}
-                        {% set textoVoto = 'SI' %}
+                        {% set textoVoto = 'Sí' %}
                     {% endif %}
                     <td>{{ textoVoto }}</td>
                     <td style="text-align: center;">{{ member.telefono }}</td>
@@ -163,7 +163,7 @@
     <tr>
         <td>
             <div class="six-columns">
-                <label class="label">¿Reubicado?: </label>
+                <label class="label">¿Fue Reubicado para las Elecciones Asamblea Nacional 2015?: </label>
                 {{ texts[object.reubicado] }}
             </div>
             <div class="six-columns">
@@ -173,7 +173,7 @@
         </td>
         <td>
             <div class="six-columns">
-                <label class="label">¿Inscrito en PSUV?: </label>
+                <label class="label">¿Inscrito en el Gran Polo Patriótico?: </label>
                 {{ texts[object.psuv] }}
             </div>
             <div class="six-columns">
@@ -209,6 +209,10 @@
             <div class="six-columns">
                 <label class="label">¿Votó Municipales 2013?: </label>
                 {{ texts[object.vmunicipales] }}
+            </div>
+            <div class="six-columns">
+                <label class="label">¿Fue CUTL en las Elecciones Asamblea Nacional 2015?: </label>
+                {{ isCutl }}
             </div>
         </td>
     </tr>
