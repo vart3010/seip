@@ -507,7 +507,7 @@ class OnePerTenController extends SEIPController {
         
         $repositoryCutl = $this->get('pequiven.repository.cutl');
         
-         $cutl = $repositoryCutl->getCutlData($user->getIndentification());
+         $cutl = $repositoryCutl->getCutlData($one->getIndentification());
 //        var_dump(count($cutl));die();
         $isCutl = 'NO';
         if(count($cutl) > 0){
