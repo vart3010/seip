@@ -1647,12 +1647,12 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
             $menuSip->addChild($centro);
         }
 
-        if ($this->isGranted(array('ROLE_SEIP_SIP_ONEPERTEN'))) {
-            $onePerTen = $this->factory->createItem('onePerTen', $this->getSubLevelOptions(array(
-                                'uri' => null,
-                                'labelAttributes' => array('icon' => 'fa fa-ticket'),
-                            ))
-                    )->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.onePerTen', $section)));
+//        if ($this->isGranted(array('ROLE_SEIP_SIP_ONEPERTEN'))) {
+//            $onePerTen = $this->factory->createItem('onePerTen', $this->getSubLevelOptions(array(
+//                                'uri' => null,
+//                                'labelAttributes' => array('icon' => 'fa fa-ticket'),
+//                            ))
+//                    )->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.onePerTen', $section)));
 
 
 //            $register = $this->factory->createItem('RegisterOnePerTen', $this->getSubLevelOptions(array(
@@ -1670,8 +1670,8 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
 //                $onePerTen->addChild($list);
 //            }
 
-            $menuSip->addChild($onePerTen);
-        }
+//            $menuSip->addChild($onePerTen);
+//        }
 
         if ($this->isGranted(array('ROLE_SEIP_SIP_CUTL'))) {
             //CUTL
