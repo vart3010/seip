@@ -124,7 +124,7 @@ class GoalController extends \Pequiven\SEIPBundle\Controller\SEIPController
         $entity = new Goal();
         $form = $this->createCreateForm($entity,$typeForm);
         $form->remove('responsibles');
-        
+            
         $periodService = $this->getPeriodService();
         $periodActive = $periodService->getPeriodActive();
         $dateStart = $periodActive->getDateStart();

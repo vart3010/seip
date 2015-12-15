@@ -88,7 +88,7 @@
                                 <a href ng-click="loadTemplateMeta(goal,fIndex + 1)" class="button icon-pencil">{{ "pequiven.actions.edit"|trans({},"messages") }}</a>
                                 <a href ng-click="removeGoal(goal)" class="button icon-trash with-tooltip confirm">{{ "pequiven.actions.delete"|trans({},"messages") }}</a>
                                 {# VERIFICO QUE EL USUARIO TENGA PERMISO DE MOVEMENTEMPLOYEE. VALOR TRAIDO DEL CONTROLADOR EN updateAction #}
-                                {% if (mov == 1)%}
+                                {% if ((mov == 1)and(entity.getTimeline.getArrangementProgram.status==3))%}
                                     <a href ng-click="getUrlMovement(goal.id,'{{ path("goal_movement") }}')" class="button icon-users with-tooltip confirm">
                                         {{ "pequiven.actions.mov"|trans({},"messages") }}
                                     </a>
