@@ -81,6 +81,13 @@
                         <span ng-bind-html='printFormErrors(form.children.timeline.children.goals.children[$index].children.responsibles)'></span>
                     </td>
                     <td class="align-right vertical-center">
+                        {# Verifico que la meta no venga nula (Creación) y que el Programa este Aprobado = 3 (Edición) #}
+                        {% if ((entity.getTimeline != null)and(entity.getTimeline.getArrangementProgram.status == 3))%}
+                            {% set aproved = 1 %}
+                        {% else %}
+                            {% set aproved = 0 %}
+                        {% endif %}
+                        <input type="hidden" id ="AprovedAP" value ="{{ aproved }}" >
                         <span class="select compact">
                             <a href class="select-value form-edit">{{ 'pequiven.actions'|trans({},'messages') }}</a>
                             <span class="select-arrow"></span>
