@@ -25,6 +25,8 @@ class ReportTemplateController extends SEIPController {
         $criteria = $request->get('filter', $this->config->getCriteria());
         $sorting = $request->get('sorting', $this->config->getSorting());
         $repository = $this->getRepository();
+        
+        $criteria['applyPeriodCriteria'] = true;
 
         $resources = $this->resourceResolver->getResource(
                 $repository, 'createPaginatorByUser', array($criteria, $sorting)
@@ -85,7 +87,7 @@ class ReportTemplateController extends SEIPController {
         return $this->handleView($view);
     }
 
-    public function showAction(Request $request) {
+    public function showAction(Request $request) {        
         $reportTemplate = $this->getRepository()->find($request->get("id"));
         $plantReports = $reportTemplate->getPlantReports();
 
