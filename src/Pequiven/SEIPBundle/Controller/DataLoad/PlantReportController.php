@@ -39,6 +39,7 @@ class PlantReportController extends SEIPController {
         $sorting = $request->get('sorting', $this->config->getSorting());
         $repository = $this->getRepository();
 
+        $criteria['applyPeriodCriteria'] = true;
 
         $resources = $this->resourceResolver->getResource(
                 $repository, 'createPaginatorByUser', array($criteria, $sorting)
