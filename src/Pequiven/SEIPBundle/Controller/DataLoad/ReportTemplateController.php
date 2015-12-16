@@ -96,7 +96,7 @@ class ReportTemplateController extends SEIPController {
         $groupNames = "";
         foreach ($plantReports as $plantReport) {
             $childrens = $plantReport->getPlant()->getChildrens();
-
+            
             if (count($childrens) == 0) { //SIN HIJOS
                 $arrayPlants[] = array(
                     "id" => $plantReport->getPlant()->getId(),

@@ -18,7 +18,7 @@ class PlantReportType extends SeipAbstractForm
         $entity = $builder->getData();
         
         $location = $entity->getReportTemplate()->getLocation();
-        
+
         $parametersPreSet = array(
             'label_attr' => array('class' => 'label'),
             "empty_value" => "",
@@ -53,6 +53,18 @@ class PlantReportType extends SeipAbstractForm
                 'label_attr' => array('class' => 'label'),
                 "attr" => array("class" => "switch medium mid-margin-right","data-text-on"=>"Si","data-text-off"=>"No"),
                 "required" => false,
+            ))
+            ->add('period',null,array(
+                'label'=>'Periodo',
+                'label_attr' => array('class' => 'label'),
+                "empty_value" => "",
+                "attr" => array(
+                    "class"     => "select2 input-large",
+                    'required'  => true
+                ),
+                "query_builder" => function (\Pequiven\SEIPBundle\Repository\PeriodRepository $repository){
+                    return $repository->getPeriodValid();
+                }          
             ))
         ;
     }
