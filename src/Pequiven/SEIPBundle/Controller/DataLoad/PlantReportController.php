@@ -15,6 +15,8 @@ use Pequiven\SEIPBundle\Controller\SEIPController;
 use Symfony\Component\HttpFoundation\Request;
 use Pequiven\SEIPBundle\Model\Common\CommonObject;
 
+use Pequiven\SEIPBundle\Form\DataLoad\PlantReportType;
+
 /**
  * Reporte de planta
  *
@@ -32,48 +34,6 @@ class PlantReportController extends SEIPController {
             $entity->init($reportTemplate);
         }
         return $entity;
-    }
-
-    /**
-     * @param Request $request
-     *
-     * @return RedirectResponse|Response
-     */
-    public function createAction(Request $request)
-    {   
-        $saveAndClose = $request->get("save_and_close");
-
-        $resource = $this->createNew();
-        $form = $this->getForm($resource);
-
-        if ($request->isMethod('POST') && $form->submit($request)->isValid()) {
-            $resource = $this->domainManager->create($resource);
-
-            if (null === $resource) {
-                return $this->redirectHandler->redirectToIndex();
-            }
-
-            if($saveAndClose !== null) {
-                return $this->redirectHandler->redirectTo($resource);
-            }else {
-                return $this->redirectHandler->redirectToRoute($this->config->getRedirectRoute('update'),['id' => $resource->getId()]);
-            }
-        }
-
-        if ($this->config->isApiRequest()) {
-            return $this->handleView($this->view($form));
-        }
-
-        $view = $this
-            ->view()
-            ->setTemplate($this->config->getTemplate('create.html'))
-            ->setData(array(
-                $this->config->getResourceName() => $resource,
-                'form'                           => $form->createView()
-            ))
-        ;
-
-        return $this->handleView($view);
     }
 
     public function indexAction(Request $request) {
