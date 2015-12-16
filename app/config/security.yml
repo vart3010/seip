@@ -263,6 +263,8 @@ security:
             - ROLE_SEIP_SIP_MONITOR_ONLY_CIRCUITO5
             - ROLE_SEIP_SIP_SEACH_EMPLOYEES
             
+            - ROLE_SEIP_VIEW_ALL_PERIODS
+            
             
             
             # Permisos especiales
