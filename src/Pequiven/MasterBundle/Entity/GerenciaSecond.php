@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Pequiven\MasterBundle\Model\GerenciaSecond as modelGerenciaSecond;
 use Pequiven\MasterBundle\Model\Evaluation\AuditableInterface;
+use Pequiven\MasterBundle\Entity\Coordinacion;
 
 /**
  * Gerencia de segunda linea
@@ -15,9 +16,8 @@ use Pequiven\MasterBundle\Model\Evaluation\AuditableInterface;
  * @ORM\Entity(repositoryClass="Pequiven\MasterBundle\Repository\GerenciaSecondRepository")
  * @author matias
  */
-class GerenciaSecond extends modelGerenciaSecond 
-{
-    
+class GerenciaSecond extends modelGerenciaSecond {
+
     /**
      * @var integer
      *
@@ -40,7 +40,7 @@ class GerenciaSecond extends modelGerenciaSecond
      * @ORM\Column(name="updated_at", type="datetime")
      */
     private $updatedAt;
-    
+
     /**
      * User
      * @var \Pequiven\SEIPBundle\Entity\User
@@ -48,7 +48,7 @@ class GerenciaSecond extends modelGerenciaSecond
      * @ORM\JoinColumn(name="fk_user_created_at", referencedColumnName="id")
      */
     private $userCreatedAt;
-    
+
     /**
      * User
      * @var \Pequiven\SEIPBundle\Entity\User
@@ -63,28 +63,28 @@ class GerenciaSecond extends modelGerenciaSecond
      * @ORM\Column(name="description", type="string", length=100)
      */
     protected $description;
-    
+
     /** Complejo
      * @var=\Pequiven\MasterBundle\Entity\Complejo
      * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Complejo")
      * @ORM\JoinColumn(name="fk_complejo", referencedColumnName="id")
      */
     private $complejo;
-    
+
     /** Gerencia
      * @var=\Pequiven\MasterBundle\Entity\Gerencia
      * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Gerencia")
      * @ORM\JoinColumn(name="fk_gerencia", referencedColumnName="id")
      */
     private $gerencia;
-    
+
     /**
      * @var string
      *
      * @ORM\Column(name="ref", type="string", length=100, nullable=true)
      */
     private $ref;
-    
+
     /**
      * Abreviatura
      * @var string
@@ -92,14 +92,14 @@ class GerenciaSecond extends modelGerenciaSecond
      * @ORM\Column(name="abbreviation", type="string", length=100, nullable=true)
      */
     private $abbreviation;
-    
+
     /**
      * @var boolean
      *
      * @ORM\Column(name="modular", type="boolean", nullable=true)
      */
     private $modular = false;
-    
+
     /**
      * @var boolean
      *
@@ -113,7 +113,7 @@ class GerenciaSecond extends modelGerenciaSecond
      * @ORM\Column(name="enabled", type="boolean")
      */
     private $enabled = true;
-    
+
     /**
      * Configuracion de la gerencia
      * 
@@ -121,7 +121,7 @@ class GerenciaSecond extends modelGerenciaSecond
      * @ORM\OneToOne(targetEntity="Pequiven\MasterBundle\Entity\Gerencia\Configuration")
      */
     protected $configuration;
-    
+
     /**
      * Objetivos operativos de la gerencia de segunda linea
      * 
@@ -129,7 +129,7 @@ class GerenciaSecond extends modelGerenciaSecond
      * @ORM\OneToMany(targetEntity="Pequiven\ObjetiveBundle\Entity\Objetive",mappedBy="gerenciaSecond")
      */
     private $operationalObjectives;
-    
+
     /**
      * Gerencia Vinculante
      * 
@@ -137,7 +137,7 @@ class GerenciaSecond extends modelGerenciaSecond
      * @ORM\ManyToMany(targetEntity="\Pequiven\MasterBundle\Entity\Gerencia", mappedBy="gerenciaSecondVinculants")
      */
     private $gerenciaVinculants;
-    
+
     /**
      * Gerencia Apoyo
      * 
@@ -145,14 +145,20 @@ class GerenciaSecond extends modelGerenciaSecond
      * @ORM\ManyToMany(targetEntity="\Pequiven\MasterBundle\Entity\Gerencia", mappedBy="gerenciaSecondSupports")
      */
     private $gerenciaSupports;
-    
+
+    /**
+     * @var \Pequiven\MasterBundle\Entity\Coordinacion
+     * @ORM\OneToMany(targetEntity="\Pequiven\MasterBundle\Entity\Coordinacion", mappedBy="gerenciaSecond",cascade={"persist","remove"})
+     */
+    private $coordinaciones;
+
     /**
      * Es valida la uditoria para ser evaluado
      * @var boolean
      * @ORM\Column(name="validAudit",type="boolean")
      */
     private $validAudit = true;
-    
+
     /**
      * @ORM\ManyToMany(targetEntity="\Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle", mappedBy="gerenciaSeconds")
      */
@@ -164,15 +170,15 @@ class GerenciaSecond extends modelGerenciaSecond
         $this->gerenciaVinculants = new ArrayCollection();
         $this->gerenciaSupports = new ArrayCollection();
         $this->workStudyCircles = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->coordinaciones = new ArrayCollection();
     }
-    
+
     /**
      * Get id
      *
      * @return integer 
      */
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
 
@@ -182,8 +188,7 @@ class GerenciaSecond extends modelGerenciaSecond
      * @param \DateTime $createdAt
      * @return GerenciaSecond
      */
-    public function setCreatedAt($createdAt)
-    {
+    public function setCreatedAt($createdAt) {
         $this->createdAt = $createdAt;
 
         return $this;
@@ -194,8 +199,7 @@ class GerenciaSecond extends modelGerenciaSecond
      *
      * @return \DateTime 
      */
-    public function getCreatedAt()
-    {
+    public function getCreatedAt() {
         return $this->createdAt;
     }
 
@@ -205,8 +209,7 @@ class GerenciaSecond extends modelGerenciaSecond
      * @param \DateTime $updatedAt
      * @return GerenciaSecond
      */
-    public function setUpdatedAt($updatedAt)
-    {
+    public function setUpdatedAt($updatedAt) {
         $this->updatedAt = $updatedAt;
 
         return $this;
@@ -217,8 +220,7 @@ class GerenciaSecond extends modelGerenciaSecond
      *
      * @return \DateTime 
      */
-    public function getUpdatedAt()
-    {
+    public function getUpdatedAt() {
         return $this->updatedAt;
     }
 
@@ -228,8 +230,7 @@ class GerenciaSecond extends modelGerenciaSecond
      * @param string $description
      * @return GerenciaSecond
      */
-    public function setDescription($description)
-    {
+    public function setDescription($description) {
         $this->description = $description;
 
         return $this;
@@ -240,8 +241,7 @@ class GerenciaSecond extends modelGerenciaSecond
      *
      * @return string 
      */
-    public function getDescription()
-    {
+    public function getDescription() {
         return $this->description;
     }
 
@@ -251,8 +251,7 @@ class GerenciaSecond extends modelGerenciaSecond
      * @param boolean $enabled
      * @return GerenciaSecond
      */
-    public function setEnabled($enabled)
-    {
+    public function setEnabled($enabled) {
         $this->enabled = $enabled;
 
         return $this;
@@ -263,8 +262,7 @@ class GerenciaSecond extends modelGerenciaSecond
      *
      * @return boolean 
      */
-    public function getEnabled()
-    {
+    public function getEnabled() {
         return $this->enabled;
     }
 
@@ -274,8 +272,7 @@ class GerenciaSecond extends modelGerenciaSecond
      * @param \Pequiven\SEIPBundle\Entity\User $userCreatedAt
      * @return GerenciaSecond
      */
-    public function setUserCreatedAt(\Pequiven\SEIPBundle\Entity\User $userCreatedAt = null)
-    {
+    public function setUserCreatedAt(\Pequiven\SEIPBundle\Entity\User $userCreatedAt = null) {
         $this->userCreatedAt = $userCreatedAt;
 
         return $this;
@@ -286,8 +283,7 @@ class GerenciaSecond extends modelGerenciaSecond
      *
      * @return \Pequiven\SEIPBundle\Entity\User 
      */
-    public function getUserCreatedAt()
-    {
+    public function getUserCreatedAt() {
         return $this->userCreatedAt;
     }
 
@@ -297,8 +293,7 @@ class GerenciaSecond extends modelGerenciaSecond
      * @param \Pequiven\SEIPBundle\Entity\User $userUpdatedAt
      * @return GerenciaSecond
      */
-    public function setUserUpdatedAt(\Pequiven\SEIPBundle\Entity\User $userUpdatedAt = null)
-    {
+    public function setUserUpdatedAt(\Pequiven\SEIPBundle\Entity\User $userUpdatedAt = null) {
         $this->userUpdatedAt = $userUpdatedAt;
 
         return $this;
@@ -309,8 +304,7 @@ class GerenciaSecond extends modelGerenciaSecond
      *
      * @return \Pequiven\SEIPBundle\Entity\User 
      */
-    public function getUserUpdatedAt()
-    {
+    public function getUserUpdatedAt() {
         return $this->userUpdatedAt;
     }
 
@@ -320,8 +314,7 @@ class GerenciaSecond extends modelGerenciaSecond
      * @param \Pequiven\MasterBundle\Entity\Gerencia $gerencia
      * @return GerenciaSecond
      */
-    public function setGerencia(\Pequiven\MasterBundle\Entity\Gerencia $gerencia = null)
-    {
+    public function setGerencia(\Pequiven\MasterBundle\Entity\Gerencia $gerencia = null) {
         $this->gerencia = $gerencia;
 
         return $this;
@@ -332,8 +325,7 @@ class GerenciaSecond extends modelGerenciaSecond
      *
      * @return \Pequiven\MasterBundle\Entity\Gerencia 
      */
-    public function getGerencia()
-    {
+    public function getGerencia() {
         return $this->gerencia;
     }
 
@@ -343,8 +335,7 @@ class GerenciaSecond extends modelGerenciaSecond
      * @param string $ref
      * @return GerenciaSecond
      */
-    public function setRef($ref)
-    {
+    public function setRef($ref) {
         $this->ref = $ref;
 
         return $this;
@@ -355,8 +346,7 @@ class GerenciaSecond extends modelGerenciaSecond
      *
      * @return string 
      */
-    public function getRef()
-    {
+    public function getRef() {
         return $this->ref;
     }
 
@@ -366,8 +356,7 @@ class GerenciaSecond extends modelGerenciaSecond
      * @param \Pequiven\MasterBundle\Entity\Complejo $complejo
      * @return GerenciaSecond
      */
-    public function setComplejo(\Pequiven\MasterBundle\Entity\Complejo $complejo = null)
-    {
+    public function setComplejo(\Pequiven\MasterBundle\Entity\Complejo $complejo = null) {
         $this->complejo = $complejo;
 
         return $this;
@@ -378,8 +367,7 @@ class GerenciaSecond extends modelGerenciaSecond
      *
      * @return \Pequiven\MasterBundle\Entity\Complejo 
      */
-    public function getComplejo()
-    {
+    public function getComplejo() {
         return $this->complejo;
     }
 
@@ -389,8 +377,7 @@ class GerenciaSecond extends modelGerenciaSecond
      * @param boolean $modular
      * @return GerenciaSecond
      */
-    public function setModular($modular)
-    {
+    public function setModular($modular) {
         $this->modular = $modular;
 
         return $this;
@@ -401,8 +388,7 @@ class GerenciaSecond extends modelGerenciaSecond
      *
      * @return boolean 
      */
-    public function getModular()
-    {
+    public function getModular() {
         return $this->modular;
     }
 
@@ -412,8 +398,7 @@ class GerenciaSecond extends modelGerenciaSecond
      * @param boolean $vinculante
      * @return GerenciaSecond
      */
-    public function setVinculante($vinculante)
-    {
+    public function setVinculante($vinculante) {
         $this->vinculante = $vinculante;
 
         return $this;
@@ -424,8 +409,7 @@ class GerenciaSecond extends modelGerenciaSecond
      *
      * @return boolean 
      */
-    public function getVinculante()
-    {
+    public function getVinculante() {
         return $this->vinculante;
     }
 
@@ -435,8 +419,7 @@ class GerenciaSecond extends modelGerenciaSecond
      * @param string $abbreviation
      * @return GerenciaSecond
      */
-    public function setAbbreviation($abbreviation)
-    {
+    public function setAbbreviation($abbreviation) {
         $this->abbreviation = $abbreviation;
 
         return $this;
@@ -447,8 +430,7 @@ class GerenciaSecond extends modelGerenciaSecond
      *
      * @return string 
      */
-    public function getAbbreviation()
-    {
+    public function getAbbreviation() {
         return $this->abbreviation;
     }
 
@@ -458,8 +440,7 @@ class GerenciaSecond extends modelGerenciaSecond
      * @param \Pequiven\MasterBundle\Entity\Gerencia\Configuration $configuration
      * @return GerenciaSecond
      */
-    public function setConfiguration(\Pequiven\MasterBundle\Entity\Gerencia\Configuration $configuration = null)
-    {
+    public function setConfiguration(\Pequiven\MasterBundle\Entity\Gerencia\Configuration $configuration = null) {
         $this->configuration = $configuration;
 
         return $this;
@@ -470,8 +451,7 @@ class GerenciaSecond extends modelGerenciaSecond
      *
      * @return \Pequiven\MasterBundle\Entity\Gerencia\Configuration 
      */
-    public function getConfiguration()
-    {
+    public function getConfiguration() {
         return $this->configuration;
     }
 
@@ -481,8 +461,7 @@ class GerenciaSecond extends modelGerenciaSecond
      * @param \Pequiven\ObjetiveBundle\Entity\Objetive $operationalObjectives
      * @return GerenciaSecond
      */
-    public function addOperationalObjective(\Pequiven\ObjetiveBundle\Entity\Objetive $operationalObjectives)
-    {
+    public function addOperationalObjective(\Pequiven\ObjetiveBundle\Entity\Objetive $operationalObjectives) {
         $this->operationalObjectives->add($operationalObjectives);
 
         return $this;
@@ -493,8 +472,7 @@ class GerenciaSecond extends modelGerenciaSecond
      *
      * @param \Pequiven\ObjetiveBundle\Entity\Objetive $operationalObjectives
      */
-    public function removeOperationalObjective(\Pequiven\ObjetiveBundle\Entity\Objetive $operationalObjectives)
-    {
+    public function removeOperationalObjective(\Pequiven\ObjetiveBundle\Entity\Objetive $operationalObjectives) {
         $this->operationalObjectives->removeElement($operationalObjectives);
     }
 
@@ -503,8 +481,7 @@ class GerenciaSecond extends modelGerenciaSecond
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getOperationalObjectives()
-    {
+    public function getOperationalObjectives() {
         return $this->operationalObjectives;
     }
 
@@ -514,8 +491,7 @@ class GerenciaSecond extends modelGerenciaSecond
      * @param \Pequiven\MasterBundle\Entity\Gerencia $gerenciaVinculants
      * @return GerenciaSecond
      */
-    public function addGerenciaVinculant(\Pequiven\MasterBundle\Entity\Gerencia $gerenciaVinculants)
-    {
+    public function addGerenciaVinculant(\Pequiven\MasterBundle\Entity\Gerencia $gerenciaVinculants) {
         $gerenciaVinculants->addGerenciaSecond($this);
         $this->gerenciaVinculants[] = $gerenciaVinculants;
 
@@ -527,8 +503,7 @@ class GerenciaSecond extends modelGerenciaSecond
      *
      * @param \Pequiven\MasterBundle\Entity\Gerencia $gerenciaVinculants
      */
-    public function removeGerenciaVinculant(\Pequiven\MasterBundle\Entity\Gerencia $gerenciaVinculants)
-    {
+    public function removeGerenciaVinculant(\Pequiven\MasterBundle\Entity\Gerencia $gerenciaVinculants) {
         $this->gerenciaVinculants->removeElement($gerenciaVinculants);
     }
 
@@ -537,8 +512,7 @@ class GerenciaSecond extends modelGerenciaSecond
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getGerenciaVinculants()
-    {
+    public function getGerenciaVinculants() {
         return $this->gerenciaVinculants;
     }
 
@@ -548,8 +522,7 @@ class GerenciaSecond extends modelGerenciaSecond
      * @param \Pequiven\MasterBundle\Entity\Gerencia $gerenciaSupports
      * @return GerenciaSecond
      */
-    public function addGerenciaSupport(\Pequiven\MasterBundle\Entity\Gerencia $gerenciaSupports)
-    {
+    public function addGerenciaSupport(\Pequiven\MasterBundle\Entity\Gerencia $gerenciaSupports) {
         $gerenciaSupports->addGerenciaSecond($this);
         $this->gerenciaSupports[] = $gerenciaSupports;
 
@@ -561,8 +534,7 @@ class GerenciaSecond extends modelGerenciaSecond
      *
      * @param \Pequiven\MasterBundle\Entity\Gerencia $gerenciaSupports
      */
-    public function removeGerenciaSupport(\Pequiven\MasterBundle\Entity\Gerencia $gerenciaSupports)
-    {
+    public function removeGerenciaSupport(\Pequiven\MasterBundle\Entity\Gerencia $gerenciaSupports) {
         $this->gerenciaSupports->removeElement($gerenciaSupports);
     }
 
@@ -571,19 +543,17 @@ class GerenciaSecond extends modelGerenciaSecond
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getGerenciaSupports()
-    {
+    public function getGerenciaSupports() {
         return $this->gerenciaSupports;
     }
-    
+
     /**
      * Set validAudit
      *
      * @param boolean $validAudit
      * @return GerenciaSecond
      */
-    public function setValidAudit($validAudit)
-    {
+    public function setValidAudit($validAudit) {
         $this->validAudit = $validAudit;
 
         return $this;
@@ -594,8 +564,7 @@ class GerenciaSecond extends modelGerenciaSecond
      *
      * @return boolean 
      */
-    public function getValidAudit()
-    {
+    public function getValidAudit() {
         return $this->validAudit;
     }
 
@@ -604,8 +573,36 @@ class GerenciaSecond extends modelGerenciaSecond
      *
      * @return boolean 
      */
-    public function isValidAudit()
-    {
+    public function isValidAudit() {
         return $this->validAudit;
     }
+
+    /**
+     * 
+     * @return type
+     */
+    function getCoordinaciones() {
+        return $this->coordinaciones;
+    }
+
+    /**
+     * 
+     * @param Coordinacion $coordinaciones
+     * @return \Pequiven\MasterBundle\Entity\GerenciaSecond
+     */
+    function addCoordinaciones(Coordinacion $coordinaciones) {
+        $this->coordinaciones->add($coordinaciones);
+        return $this;
+    }
+
+    /**
+     * 
+     * @param Coordinacion $coordinaciones
+     * @return \Pequiven\MasterBundle\Entity\GerenciaSecond
+     */
+    function removeCoordinaciones(Coordinacion $coordinaciones) {
+        $this->coordinaciones->removeElement($coordinaciones);
+        return $this;
+    }
+
 }
