@@ -49,19 +49,19 @@ class Coordinacion {
     private $deletedAt;
 
     /**
+     * Gerencia de 2da Línea
+     * @var \Pequiven\MasterBundle\Entity\GerenciaSecond
+     * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\GerenciaSecond",inversedBy="coordinaciones")     
+     */
+    private $gerenciasecond;
+
+    /**
      * Descripción
      * @var string
      *
      * @ORM\Column(name="description", type="string", length=100)
      */
     protected $description;
-
-    /**
-     * Gerencia de 2da Línea
-     * @var \Pequiven\MasterBundle\Entity\GerenciaSecond
-     * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\GerenciaSecond",inversedBy="coordinaciones")     
-     */
-    private $gerenciasecond;
 
     /**
      * @var string
