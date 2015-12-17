@@ -96,5 +96,95 @@ class FeeStructure {
      * @ORM\OneToMany(targetEntity="\Pequiven\MasterBundle\Entity\FeeStructure",mappedBy="parent",cascade={"persist"}))
      */
     protected $children;
+    
+    function getId() {
+        return $this->id;
+    }
+
+    function getCreatedAt() {
+        return $this->createdAt;
+    }
+
+    function getUpdatedAt() {
+        return $this->updatedAt;
+    }
+
+    function getDeletedAt() {
+        return $this->deletedAt;
+    }
+
+    function getCodigo() {
+        return $this->codigo;
+    }
+
+    function getCharge() {
+        return $this->charge;
+    }
+
+    function getUser() {
+        return $this->User;
+    }
+
+    function getStaff() {
+        return $this->staff;
+    }
+
+    function getEnabled() {
+        return $this->enabled;
+    }
+
+    function getParent() {
+        return $this->parent;
+    }
+
+    function getChildren() {
+        return $this->children;
+    }
+
+    function setId($id) {
+        $this->id = $id;
+    }
+
+    function setCreatedAt($createdAt) {
+        $this->createdAt = $createdAt;
+    }
+
+    function setUpdatedAt($updatedAt) {
+        $this->updatedAt = $updatedAt;
+    }
+
+    function setDeletedAt($deletedAt) {
+        $this->deletedAt = $deletedAt;
+    }
+
+    function setCodigo($codigo) {
+        $this->codigo = $codigo;
+    }
+
+    function setCharge($charge) {
+        $this->charge = $charge;
+    }
+
+    function setUser($User) {
+        $this->User = $User;
+    }
+
+    function setStaff($staff) {
+        $this->staff = $staff;
+    }
+
+    function setEnabled($enabled) {
+        $this->enabled = $enabled;
+    }
+
+    function setParent($parent) {
+        $this->parent = $parent;
+    }
+
+    function setChildren(\Pequiven\MasterBundle\Entity\FeeStructure $children) {
+        $this->children = $children;
+    }
+
+
 
 }

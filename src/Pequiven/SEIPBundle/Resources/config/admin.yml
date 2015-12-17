@@ -649,3 +649,15 @@ services:
             - ~
         calls:
             - [ setTranslationDomain, [SonataAdminBundle]]
+            
+            
+    sonata.admin.user.cargos:
+        class: Pequiven\MasterBundle\Admin\User\CargosAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "%sonata.user.admin.groupname%" ,label_catalogue: "SonataUserBundle", label: "Estructura de Cargos" }
+        arguments:
+            - ~
+            - Pequiven\MasterBundle\Entity\FeeStructure
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
