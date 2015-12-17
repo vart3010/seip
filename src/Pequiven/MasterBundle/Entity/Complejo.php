@@ -82,7 +82,7 @@ class Complejo extends modelComplejo {
      * @ORM\OneToMany(targetEntity="Pequiven\MasterBundle\Entity\Gerencia",mappedBy="complejo")
      */
     private $gerencias;
-    
+
     /**
      * @var \Pequiven\MasterBundle\Entity\Coordinacion
      * @ORM\OneToMany(targetEntity="\Pequiven\MasterBundle\Entity\Coordinacion", mappedBy="complejo",cascade={"persist","remove"})
@@ -295,9 +295,10 @@ class Complejo extends modelComplejo {
         return $this->coordinaciones;
     }
 
-    /***
+    /*     * *
      * 
      */
+
     function addCoordinaciones(Coordinacion $coordinaciones) {
         $this->coordinaciones->add($coordinaciones);
         return $this;

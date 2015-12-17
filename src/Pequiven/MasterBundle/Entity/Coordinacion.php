@@ -18,8 +18,8 @@ use Pequiven\MasterBundle\Entity\GerenciaSecond;
  * @author Gilbert <glavrjk@gmail.com>
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
-class Coordinacion
-{
+class Coordinacion {
+
     /**
      * @var integer
      *
@@ -42,12 +42,12 @@ class Coordinacion
      * @ORM\Column(name="updated_at", type="datetime")
      */
     private $updatedAt;
-    
+
     /**
      * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
      */
     private $deletedAt;
-    
+
     /**
      * Descripción
      * @var string
@@ -55,37 +55,47 @@ class Coordinacion
      * @ORM\Column(name="description", type="string", length=100)
      */
     protected $description;
-    
-    /** 
+
+    /**
      * Complejo
      * @var \Pequiven\MasterBundle\Entity\Complejo
      * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Complejo",inversedBy="coordinaciones")
      * @ORM\JoinColumn(name="complejo_id", referencedColumnName="id")
      */
     private $complejo;
-    
-  /** 
+
+    /**
      * Complejo
      * @var \Pequiven\MasterBundle\Entity\GerenciaSecond
      * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\GerenciaSecond",inversedBy="coordinaciones")
      * @ORM\JoinColumn(name="gerenciaSecond_id", referencedColumnName="id")
      */
     private $gerenciaSecond;
-    
+
     /**
      * @var string
      *
      * @ORM\Column(name="sumary", type="string", length=100, nullable=true)
      */
     private $sumary;
-    
+
     /**
      * @var boolean
      *
      * @ORM\Column(name="enabled", type="boolean")
      */
-    private $enabled = true;  
-    
+    private $enabled = true;
+
+    /**
+     * @var \Pequiven\MasterBundle\Entity\FeeStructure
+     * @ORM\OneToMany(targetEntity="\Pequiven\MasterBundle\Entity\FeeStructure", mappedBy="coordinacion",cascade={"persist","remove"})
+     */
+    private $feeStructure;
+
+    public function __construct() {
+        $this->feeStructure = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
     function getId() {
         return $this->id;
     }
@@ -156,6 +166,6 @@ class Coordinacion
 
     function setEnabled($enabled) {
         $this->enabled = $enabled;
-    }    
-    
+    }
+
 }

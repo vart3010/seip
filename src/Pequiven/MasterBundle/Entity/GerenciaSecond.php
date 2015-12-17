@@ -164,6 +164,12 @@ class GerenciaSecond extends modelGerenciaSecond {
      */
     private $workStudyCircles;
 
+    /**
+     * @var \Pequiven\MasterBundle\Entity\FeeStructure
+     * @ORM\OneToMany(targetEntity="\Pequiven\MasterBundle\Entity\FeeStructure", mappedBy="gerenciaSecond",cascade={"persist","remove"})
+     */
+    private $feeStructure;
+
     public function __construct() {
         parent::__construct();
         $this->operationalObjectives = new ArrayCollection();
@@ -171,6 +177,7 @@ class GerenciaSecond extends modelGerenciaSecond {
         $this->gerenciaSupports = new ArrayCollection();
         $this->workStudyCircles = new \Doctrine\Common\Collections\ArrayCollection();
         $this->coordinaciones = new ArrayCollection();
+        $this->feeStructure = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**

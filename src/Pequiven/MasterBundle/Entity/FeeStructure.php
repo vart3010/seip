@@ -49,6 +49,30 @@ class FeeStructure {
     private $deletedAt;
 
     /**
+     * Complejo
+     * @var \Pequiven\MasterBundle\Entity\Gerencia
+     * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Gerencia",inversedBy="feeStructure")
+     * @ORM\JoinColumn(name="gerencia_id", referencedColumnName="id", nullable=true)
+     */
+    private $gerencia;
+
+    /**
+     * Complejo
+     * @var \Pequiven\MasterBundle\Entity\GerenciaSecond
+     * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\GerenciaSecond",inversedBy="feeStructure")
+     * @ORM\JoinColumn(name="gerenciaSecond_id", referencedColumnName="id", nullable=true)
+     */
+    private $gerenciaSecond;
+
+    /**
+     * Complejo
+     * @var \Pequiven\MasterBundle\Entity\Coordinacion
+     * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Coordinacion",inversedBy="feeStructure")
+     * @ORM\JoinColumn(name="coordinacion_id", referencedColumnName="id", nullable=true)
+     */
+    private $coordinacion;
+
+    /**
      * 
      * @var string
      *
@@ -96,7 +120,7 @@ class FeeStructure {
      * @ORM\OneToMany(targetEntity="\Pequiven\MasterBundle\Entity\FeeStructure",mappedBy="parent",cascade={"persist"}))
      */
     protected $children;
-    
+
     function getId() {
         return $this->id;
     }
@@ -185,6 +209,28 @@ class FeeStructure {
         $this->children = $children;
     }
 
+    function getGerencia() {
+        return $this->gerencia;
+    }
 
+    function getCoordinacion() {
+        return $this->coordinacion;
+    }
+
+    function getGerenciaSecond() {
+        return $this->gerenciaSecond;
+    }
+
+    function setGerencia(\Pequiven\MasterBundle\Entity\Gerencia $gerencia) {
+        $this->gerencia = $gerencia;
+    }
+
+    function setGerenciaSecond(\Pequiven\MasterBundle\Entity\GerenciaSecond $gerenciaSecond) {
+        $this->gerenciaSecond = $gerenciaSecond;
+    }
+
+    function setCoordinacion(\Pequiven\MasterBundle\Entity\Coordinacion $coordinacion) {
+        $this->coordinacion = $coordinacion;
+    }
 
 }

@@ -41,7 +41,8 @@ class CoordinacionAdmin extends Admin {
                 ->add('gerenciaSecond','sonata_type_model_autocomplete',array(
                     'property' => array('description'),
                     'multiple' => false,
-                    "required" => false,
+                    "required" => true,
+                    'attr' => array('class' => 'input input-large'),
                  ))
                 ->add('complejo')
                 ->add('enabled')
@@ -54,7 +55,10 @@ class CoordinacionAdmin extends Admin {
                 ->add('id')
                 ->add('complejo')
                 ->add('gerenciaSecond','doctrine_orm_model_autocomplete',array(),null,array(
-                    'property' => array('description')
+                    'property' => array('description'),
+                    'multiple' => false,
+                    "required" => false,
+                    'attr' => array('class' => 'input input-large'),
                 ))
                 ->add('enabled')
         ;
