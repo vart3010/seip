@@ -69,7 +69,7 @@ class CoreExtension extends \Twig_Extension {
         }
         $periodService = $this->getPeriodService();
 
-        if (!$this->isGranted('ROLE_SEIP_PLANNING_*') && $type == \Pequiven\SEIPBundle\Entity\Period::VIEW_ALL_PERIODS) {
+        if (!$this->isGranted('ROLE_SEIP_VIEW_ALL_PERIODS') && $type == \Pequiven\SEIPBundle\Entity\Period::VIEW_ALL_PERIODS) {
 
             //Si tiene un solo rol y es personal PQV --> $FORCEALLPERIODS = TRUE
             $groupsUsers = $this->getUser()->getGroups();
