@@ -19,7 +19,19 @@ use Pequiven\SEIPBundle\Doctrine\ORM\SeipEntityRepository;
  * @author Carlos Mendoza <inhack20@gmail.com>
  */
 class PlantReportRepository extends SeipEntityRepository 
-{
+{   
+    public function findByPlantReport() 
+    {
+        $queryBuilder = $this->getQueryBuilder();
+        $queryBuilder
+            ->select('pr')
+            ->andWhere('pr.period = :period')
+            ->setParameter('period',2)
+            ;
+
+        return $queryBuilder;
+    }
+
     public function findInnerProductsReport($plantReport,$productsReport) 
     {
         $qb = $this->getQueryBuilder();
