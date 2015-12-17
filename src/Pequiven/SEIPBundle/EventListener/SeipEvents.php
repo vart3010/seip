@@ -93,7 +93,7 @@ final class SeipEvents
     const REPORT_TEMPLATE_PRE_CREATE = 'pequiven.report_template.pre_create';
 
     /**
-     * El pequiven.plant_report.pre_create este evento es lanzado antes de crear una plantilla de reporte
+     * El pequiven.plant_report.pre_create este evento es lanzado antes de crear una planta
      * en el sistema.
      *
     
@@ -103,7 +103,19 @@ final class SeipEvents
      * @var string
      */
     const REPORT_PLANT_PRE_CREATE = 'pequiven.plant_report.pre_create';
+
+     /**
+     * El pequiven.unrealized_production.pre_create este evento es lanzado antes de crear cargar PNR
+     * en el sistema.
+     *
     
+     *  * The event listener receives an
+     * Sylius\Bundle\ResourceBundle\Event\ResourceEvent instance.
+     *
+     * @var string
+     */
+    const REPORT_UNREALIZED_PRODUCT_PRE_CREATE = 'pequiven.unrealized_production.pre_create';
+
     
     /**
      * El pequiven.product_report.pre_create este evento es lanzado antes de crear un producto de un reporte
