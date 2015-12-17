@@ -26,7 +26,7 @@ class CargosAdmin extends Admin {
     protected function configureShowFields(\Sonata\AdminBundle\Show\ShowMapper $show) {
         $show
                 ->add('id')
-                ->add('gerenciaSecond')
+                ->add('gerenciasecond')
                 ->add('codigo')
                 ->addIdentifier('charge')
                 ->add('User')
@@ -42,7 +42,7 @@ class CargosAdmin extends Admin {
                     "required" => true,
                     'attr' => array('class' => 'input input-large'),
                 ))
-                ->add('gerenciaSecond', 'sonata_type_model_autocomplete', array(
+                ->add('gerenciasecond', 'sonata_type_model_autocomplete', array(
                     'property' => array('description'),
                     'multiple' => false,
                     "required" => true,
@@ -69,7 +69,7 @@ class CargosAdmin extends Admin {
                     "required" => false,
                     'attr' => array('class' => 'input input-large'),
                 ))
-                ->add('gerenciaSecond', 'doctrine_orm_model_autocomplete', array(), null, array(
+                ->add('gerenciasecond', 'doctrine_orm_model_autocomplete', array(), null, array(
                     'property' => array('description'),
                     'multiple' => false,
                     "required" => false,
@@ -85,7 +85,7 @@ class CargosAdmin extends Admin {
 
     protected function configureListFields(ListMapper $list) {
         $list
-                ->add('gerenciaSecond')
+                ->add('gerenciasecond')
                 ->addIdentifier('charge')
                 ->add('User')
                 ->add('staff')
