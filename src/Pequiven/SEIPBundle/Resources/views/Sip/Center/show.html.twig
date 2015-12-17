@@ -171,7 +171,7 @@
         {% set day3 = "03" %}
         {% set day4 = "04" %}
         {% set day5 = "05" %}
-        {% set day6 = "06" %}
+        {% set day6 = "17" %}
 
         {# Dia actual #}
         {% set day = "now" | date("d") %}
@@ -180,20 +180,20 @@
                 <p class="inline-label">
                     <label class="label">Mesas Activas</label>
                     {{ report }}
-                    &nbsp;       
+                    &nbsp;
                 </p>
-                &nbsp; 
-            </div>       
-            <div ng-controller="SipCenterReportController">                 
+                &nbsp;
+            </div>
+            <div ng-controller="SipCenterReportController">
                 {% for reportM in reportMesa %}
                     {# red-gradient  green-gradient#}
-                    <a class="button icon-pencil icon-size2 {% if centerService.consultTableOpen(reportM) == true %} red-gradient {% endif %}" href="" ng-click="loadTemplateReportCenter(mesa='{{ reportM.mesa }}')" title="Cargar Estatus de Mesa">Mesa {{ reportM.mesa }}</a>        
-                    &nbsp; 
+                    <a class="button icon-pencil icon-size2 {% if centerService.consultTableOpen(reportM) == true %} red-gradient {% endif %}" href="" ng-click="loadTemplateReportCenter(mesa='{{ reportM.mesa }}')" title="Cargar Estatus de Mesa">Mesa {{ reportM.mesa }}</a>
+                    &nbsp;
                 {% endfor %}
             </div>
         {% endif %}
-        &nbsp;  
-        {% if day6 == day %}
+        &nbsp;
+        {#{% if day6 == day %}
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile" ng-controller="SipCenterReportController">
                 <p class="inline-label">
                     <label class="label">Exit Poll</label>
@@ -202,17 +202,105 @@
                     <a class="button icon-add-user icon-size2" href="" ng-click="loadTemplateReportVoto(centro='{{ center.id }}')" title="Cargar Votos Registrados por Centro">Votos</a>        
                 </p>            
             </div>
-        {% endif %}
-    </fieldset>  
+        {% endif %}#}
+    </fieldset>
+    <HR>
+    
+    {#<div class="with-padding"> 
+            <h3>Patrulleros</h3>        
+            <div style="height:500px;width:auto;overflow:auto;">
+            <table class="table responsive-table" id="sorting-example2">
+                <thead>
+                    <tr>
+                        <th scope="col" width="15%" class="header" align="left">
+                            Mesa
+                        </th>                    
+                        <th scope="col" width="30%" class="header" align="left">
+                            Nombre
+                        </th>
+                        <th scope="col" width="15%" class="header" align="left">
+                            Telefono
+                        </th> 
+                        <th scope="col" width="15%" class="header" align="left">
+                            Cargo
+                        </th>                         
+                        <th scope="col" width="30%" class="header" align="center">
+                            Registro de 1x10
+                        </th>
+                        <th scope="col" width="40%" class="header" align="center">
+                            Observación
+                        </th>
+                        <th scope="col" width="20%" class="header" align="center">
+                        </th>                         
+                    </tr>
+                </thead>  
+                {% for dataUbch in ubch %}
+                    <tbody align="center">
+                        <tr>
+                            <td align="left">V-{{ dataUbch.cedula }}</td>                            
+                            <td align="left">{{ dataUbch.nombre }}</td>                            
+                            <td align="left">{{ dataUbch.telefono }}</td> 
+                            <td align="left">{{ ubchCargo[dataUbch.cargo - 1].description }}</td>
+                            <td>
+                                {% set notification = dataUbch.notification %}
+                                {% if notification == 1 %}
+                                    {% set checkState = "checked" %}
+                                    {% set disabled = "disabled" %}
+                                {% else  %}
+                                    {% set checkState = "" %}
+                                    {% set disabled = "disabled" %}                                        
+                                {% endif %}
+
+                                <p class="switchAssistance button-height" id="p_{{dataUbch.id}}">
+                                    
+                                    <input type="checkbox" name="switch_{{dataUbch.id}}" id="switch_{{dataUbch.id}}" data="{{dataUbch.id}}" class="switch medium mid-margin-right {{checkState}}" {{disabled}} value="{{dataUbch.notification}}" data-text-on="SI" data-text-off="NO" onclick="pasoId()">
+
+                                </p>
+                            <div id="carga_{{dataUbch.id}}" style="display:none">
+                                <p class="button-height">
+                                    <span class="loader big refreshing"></span>
+                                </p>
+                            </div>
+                                <p class="switchAssistance button-height" id="p_{{dataUbch.id}}">
+                                    
+                                    <input type="checkbox" name="switch_{{dataUbch.id}}" id="switch_{{dataUbch.id}}" data="{{dataUbch.id}}" class="switch medium mid-margin-right {{checkState}}" {{disabled}} value="{{dataUbch.notification}}" data-text-on="SI" data-text-off="NO" onclick="pasoId()">
+
+                                </p>
+                            </td>
+                            <td align="justify">
+                                <textarea type="text" id="Obs_" name"Obs_" class="input input-xlarge" onkeypress="pulsar(event)" value="0"></textarea>
+                                {{ dataUbch.observations }}
+                            </td>
+                            <td class="align-right vertical-center">                          
+                                <span class="select compact">
+                                    <a href class="select-value form-edit">{{ 'pequiven.actions'|trans({},'messages') }}</a>
+                                    <span class="select-arrow"></span>
+                                    <span class="drop-down"> 
+                                        {% if notification == 0%}               
+                                            <a href ng-click="loadTemplateOnePerTen(ubch='{{ dataUbch.id }}')" class="button icon-pencil">Cargar</a> 
+                                        {% endif %}
+                                        <a href ng-click="loadTemplateCargoUbch(id='{{ dataUbch.id }}')" class="button icon-pencil">Editar</a> 
+
+                                        <a href ng-click="removeUbch(ubch='{{ dataUbch.id }}')" class="button icon-cross-round">{{ "pequiven.actions.delete"|trans({},"messages") }}</a>             
+                                    </span>
+                                </span>
+                            </td>                            
+                        </tr>                 
+                    </tbody> 
+                {% endfor %}
+            </table> 
+            </div>
+        </div>
+    #}
     <br>
-    {% include 'PequivenSEIPBundle:Sip:Center/StatusCenter.html.twig' %}  
+    {% include 'PequivenSEIPBundle:Sip:Center/StatusCenter.html.twig' %}
     <br>
     <fieldset class="fieldset">
         <legend class="legend" >CUTL&nbsp;</legend>
         <div class="columns">
             {% set cont = 0 %}
             {% for dataCutl in  cutl %}
-                {% if cont == 1 %}    
+                {% if cont == 1 %}
                     <HR>
                 {% endif %}
                 <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
@@ -225,7 +313,7 @@
                     <p class="inline-label">
                         <label class="label">Nombre</label>
                         {{ dataCutl.nombre }}
-                    </p> 
+                    </p>
                 </div>
                 <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                     <p class="inline-label">
