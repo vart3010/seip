@@ -82,6 +82,13 @@ class Complejo extends modelComplejo {
      * @ORM\OneToMany(targetEntity="Pequiven\MasterBundle\Entity\Gerencia",mappedBy="complejo")
      */
     private $gerencias;
+    
+    /**
+     * Localidad
+     * @var \Pequiven\MasterBundle\Entity\Coordinacion
+     * @ORM\OneToMany(targetEntity="Pequiven\MasterBundle\Entity\Coordinacion",mappedBy="complejo")
+     */
+    private $coordinaciones; 
 
     /**
      * @var \Pequiven\MasterBundle\Entity\Coordinacion
