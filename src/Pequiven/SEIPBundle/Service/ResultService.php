@@ -752,17 +752,38 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
 
         if ($tendency->getRef() == Tendency::TENDENCY_EST) {
             $varToCatch = bcadd($arrangementRange->getRankTopMixedBottom(), $arrangementRange->getRankTopMixedTop(), 2) / 2;
+
             if ($result > $varToCatch) {
                 $varSum = bcadd($varToCatch, $varToCatch, 2);
                 $varResult = bcadd($result, 0, 2);
-                $varMinus = bcsub($varSum, $varResult, 2);
-                $varMulti = $varMinus * 100;
+                
+                if ($varSum < $varResult) {
+                    $varMinus = bcsub($varResult, $varSum, 2);
+                } else {
+                    $varMinus = bcsub($varSum, $varResult, 2);
+                }
+
+                if ($varToCatch >= -1 && $varToCatch <= 1) {
+                    $varMulti = $varMinus;
+                    $varToCatch = 1;
+                } else {
+                    $varMulti = $varMinus * 100;
+                }
+                
                 $result = bcdiv($varMulti, $varToCatch, 2);
+                
             } else {
                 $varResult = bcadd($result, 0, 2);
                 $varMinus = bcsub($varToCatch, $varResult, 2);
-                $varMulti = $varMinus * 100;
+                if ($varToCatch >= -1 && $varToCatch <= 1) {
+                    $varMulti = $varMinus;
+                    $varToCatch = 1;
+                } else {
+                    $varMulti = $varMinus * 100;
+                }
                 $varDiv = bcdiv($varMulti, $varToCatch, 2);
+
+
                 $result = bcsub(100, $varDiv, 2);
             }
         } else if ($tendency->getRef() == Tendency::TENDENCY_MAX) {
