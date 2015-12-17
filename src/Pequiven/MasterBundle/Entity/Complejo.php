@@ -84,6 +84,12 @@ class Complejo extends modelComplejo {
     private $gerencias;
 
     /**
+     * @var \Pequiven\MasterBundle\Entity\FeeStructure
+     * @ORM\OneToMany(targetEntity="\Pequiven\MasterBundle\Entity\FeeStructure", mappedBy="complejo",cascade={"persist","remove"})
+     */
+    private $feeStructure;
+
+    /**
      * Get id
      *
      * @return integer 
@@ -279,6 +285,14 @@ class Complejo extends modelComplejo {
      */
     public function getGerencias() {
         return $this->gerencias;
-    }    
+    }
+
+    function getFeeStructure() {
+        return $this->feeStructure;
+    }
+
+    function setFeeStructure(\Pequiven\MasterBundle\Entity\FeeStructure $feeStructure) {
+        $this->feeStructure = $feeStructure;
+    }
 
 }

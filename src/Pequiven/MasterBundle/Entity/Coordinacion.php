@@ -57,7 +57,7 @@ class Coordinacion {
     protected $description;
 
     /**
-     * Complejo
+     * Gerencia de 2da Línea
      * @var \Pequiven\MasterBundle\Entity\GerenciaSecond
      * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\GerenciaSecond",inversedBy="coordinaciones")
      * @ORM\JoinColumn(name="gerenciaSecond_id", referencedColumnName="id")
@@ -108,10 +108,6 @@ class Coordinacion {
         return $this->description;
     }
 
-    function getComplejo() {
-        return $this->complejo;
-    }
-
     function getGerenciaSecond() {
         return $this->gerenciaSecond;
     }
@@ -142,10 +138,6 @@ class Coordinacion {
 
     function setDescription($description) {
         $this->description = $description;
-    }
-
-    function setComplejo(\Pequiven\MasterBundle\Entity\Complejo $complejo) {
-        $this->complejo = $complejo;
     }
 
     function setGerenciaSecond(\Pequiven\MasterBundle\Entity\GerenciaSecond $gerenciaSecond) {
