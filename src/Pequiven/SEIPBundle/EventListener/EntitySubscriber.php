@@ -28,6 +28,7 @@ class EntitySubscriber extends BaseEventListerner
             SeipEvents::REPORT_PLANT_PRE_CREATE => "onReportPlantPreCreate",
             SeipEvents::PRODUCT_REPORT_PRE_CREATE => "onReportProductPreCreate",
             SeipEvents::REPORT_UNREALIZED_PRODUCT_PRE_CREATE => "onReportUnrealizedProductPreCreate",
+            SeipEvents::REPORT_INVENTORY_PRE_CREATE => "onReportInventoryProductPreCreate",
         );
     }
     
@@ -47,6 +48,12 @@ class EntitySubscriber extends BaseEventListerner
     }
 
     public function onReportUnrealizedProductPreCreate(\Sylius\Bundle\ResourceBundle\Event\ResourceEvent $event)
+    {
+        $entity = $event->getSubject();        
+        $entity->setPeriod($this->getPeriodService()->getPeriodActive());                
+    }
+
+    public function onReportInventoryProductPreCreate(\Sylius\Bundle\ResourceBundle\Event\ResourceEvent $event)
     {
         $entity = $event->getSubject();        
         $entity->setPeriod($this->getPeriodService()->getPeriodActive());                
