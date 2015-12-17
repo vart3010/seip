@@ -32,7 +32,7 @@ class EntitySubscriber extends BaseEventListerner
     {
         $entity = $event->getSubject();
         
-        $entity->setPeriod($this->getPeriodService()->getPeriodActive(true));
+        $entity->setPeriod($this->getPeriodService()->getPeriodActive());
         $entity->setRef($this->getSequenceGenerator()->getNextRefReportTemplate($entity));
         
     }

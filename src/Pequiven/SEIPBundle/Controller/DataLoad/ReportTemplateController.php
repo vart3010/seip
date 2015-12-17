@@ -21,7 +21,7 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class ReportTemplateController extends SEIPController {
 
-    public function indexAction(Request $request) {
+    public function indexAction(Request $request) {        
         $criteria = $request->get('filter', $this->config->getCriteria());
         $sorting = $request->get('sorting', $this->config->getSorting());
         $repository = $this->getRepository();

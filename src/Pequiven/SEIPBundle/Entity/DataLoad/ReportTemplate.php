@@ -99,7 +99,7 @@ class ReportTemplate extends BaseModel
     /**
      * Nombre Corto del reporte
      * @var string
-     * @ORM\Column(name="shortName")
+     * @ORM\Column(name="shortName", nullable=true)
      */
     private $shortName;
     
@@ -108,7 +108,7 @@ class ReportTemplate extends BaseModel
      * 
      * @var string
      * 
-     * @ORM\Column(name="icon",type="text")
+     * @ORM\Column(name="icon",type="text", nullable=true)
      */
     protected $icon;
 
