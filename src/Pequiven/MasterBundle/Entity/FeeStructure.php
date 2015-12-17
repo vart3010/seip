@@ -124,6 +124,12 @@ class FeeStructure {
      */
     private $User;
 
+    /**
+     * @var \Pequiven\MasterBundle\Entity\MovementFeeStructure
+     * @ORM\OneToMany(targetEntity="\Pequiven\MasterBundle\Entity\MovementFeeStructure",mappedBy="feestructure",cascade={"persist"}))
+     */
+    protected $movementFeeStructure;
+
     function getId() {
         return $this->id;
     }

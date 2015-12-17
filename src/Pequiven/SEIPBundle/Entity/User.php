@@ -242,6 +242,12 @@ class User extends BaseUser implements UserInterface, UserBoxInterface, PeriodIt
      * @ORM\OneToMany(targetEntity="\Pequiven\MasterBundle\Entity\FeeStructure", mappedBy="User")
      * */
     private $feeStructure;
+    
+    /**
+     * @var \Pequiven\MasterBundle\Entity\MovementFeeStructure
+     * @ORM\OneToMany(targetEntity="\Pequiven\MasterBundle\Entity\MovementFeeStructure",mappedBy="User",cascade={"persist"}))
+     */
+    protected $movementFeeStructure;
 
     /**
      * Constructor
