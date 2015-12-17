@@ -206,92 +206,84 @@
     </fieldset>
     <HR>
     
-    {#<div class="with-padding"> 
-            <h3>Patrulleros</h3>        
-            <div style="height:500px;width:auto;overflow:auto;">
-            <table class="table responsive-table" id="sorting-example2">
-                <thead>
+    <div class="with-padding"> 
+        <h3>Resultados</h3>        
+        <div style="height:500px;width:auto;overflow:auto;">
+        <table class="table responsive-table" id="sorting-example2">
+            <thead>
+                <tr>
+                    <th scope="col" width="20%" class="header" align="left">
+                        Mesa
+                    </th>                    
+                    <th scope="col" width="20%" class="header" align="left">
+                        N° Votos
+                    </th>
+                    <th scope="col" width="20%" class="header" align="left">
+                        Porcentaje
+                    </th> 
+                    <th scope="col" width="40%" class="header" align="left">
+                        Partido
+                    </th>                         
+                </tr>
+            </thead>  
+            {#{% for dataUbch in ubch %}
+                <tbody align="center">
                     <tr>
-                        <th scope="col" width="15%" class="header" align="left">
-                            Mesa
-                        </th>                    
-                        <th scope="col" width="30%" class="header" align="left">
-                            Nombre
-                        </th>
-                        <th scope="col" width="15%" class="header" align="left">
-                            Telefono
-                        </th> 
-                        <th scope="col" width="15%" class="header" align="left">
-                            Cargo
-                        </th>                         
-                        <th scope="col" width="30%" class="header" align="center">
-                            Registro de 1x10
-                        </th>
-                        <th scope="col" width="40%" class="header" align="center">
-                            Observación
-                        </th>
-                        <th scope="col" width="20%" class="header" align="center">
-                        </th>                         
-                    </tr>
-                </thead>  
-                {% for dataUbch in ubch %}
-                    <tbody align="center">
-                        <tr>
-                            <td align="left">V-{{ dataUbch.cedula }}</td>                            
-                            <td align="left">{{ dataUbch.nombre }}</td>                            
-                            <td align="left">{{ dataUbch.telefono }}</td> 
-                            <td align="left">{{ ubchCargo[dataUbch.cargo - 1].description }}</td>
-                            <td>
-                                {% set notification = dataUbch.notification %}
-                                {% if notification == 1 %}
-                                    {% set checkState = "checked" %}
-                                    {% set disabled = "disabled" %}
-                                {% else  %}
-                                    {% set checkState = "" %}
-                                    {% set disabled = "disabled" %}                                        
-                                {% endif %}
+                        <td align="left">V-{{ dataUbch.cedula }}</td>                            
+                        <td align="left">{{ dataUbch.nombre }}</td>                            
+                        <td align="left">{{ dataUbch.telefono }}</td> 
+                        <td align="left">{{ ubchCargo[dataUbch.cargo - 1].description }}</td>
+                        <td>
+                            {% set notification = dataUbch.notification %}
+                            {% if notification == 1 %}
+                                {% set checkState = "checked" %}
+                                {% set disabled = "disabled" %}
+                            {% else  %}
+                                {% set checkState = "" %}
+                                {% set disabled = "disabled" %}                                        
+                            {% endif %}
 
-                                <p class="switchAssistance button-height" id="p_{{dataUbch.id}}">
-                                    
-                                    <input type="checkbox" name="switch_{{dataUbch.id}}" id="switch_{{dataUbch.id}}" data="{{dataUbch.id}}" class="switch medium mid-margin-right {{checkState}}" {{disabled}} value="{{dataUbch.notification}}" data-text-on="SI" data-text-off="NO" onclick="pasoId()">
+                            <p class="switchAssistance button-height" id="p_{{dataUbch.id}}">
 
-                                </p>
-                            <div id="carga_{{dataUbch.id}}" style="display:none">
-                                <p class="button-height">
-                                    <span class="loader big refreshing"></span>
-                                </p>
-                            </div>
-                                <p class="switchAssistance button-height" id="p_{{dataUbch.id}}">
-                                    
-                                    <input type="checkbox" name="switch_{{dataUbch.id}}" id="switch_{{dataUbch.id}}" data="{{dataUbch.id}}" class="switch medium mid-margin-right {{checkState}}" {{disabled}} value="{{dataUbch.notification}}" data-text-on="SI" data-text-off="NO" onclick="pasoId()">
+                                <input type="checkbox" name="switch_{{dataUbch.id}}" id="switch_{{dataUbch.id}}" data="{{dataUbch.id}}" class="switch medium mid-margin-right {{checkState}}" {{disabled}} value="{{dataUbch.notification}}" data-text-on="SI" data-text-off="NO" onclick="pasoId()">
 
-                                </p>
-                            </td>
-                            <td align="justify">
-                                <textarea type="text" id="Obs_" name"Obs_" class="input input-xlarge" onkeypress="pulsar(event)" value="0"></textarea>
-                                {{ dataUbch.observations }}
-                            </td>
-                            <td class="align-right vertical-center">                          
-                                <span class="select compact">
-                                    <a href class="select-value form-edit">{{ 'pequiven.actions'|trans({},'messages') }}</a>
-                                    <span class="select-arrow"></span>
-                                    <span class="drop-down"> 
-                                        {% if notification == 0%}               
-                                            <a href ng-click="loadTemplateOnePerTen(ubch='{{ dataUbch.id }}')" class="button icon-pencil">Cargar</a> 
-                                        {% endif %}
-                                        <a href ng-click="loadTemplateCargoUbch(id='{{ dataUbch.id }}')" class="button icon-pencil">Editar</a> 
+                            </p>
+                        <div id="carga_{{dataUbch.id}}" style="display:none">
+                            <p class="button-height">
+                                <span class="loader big refreshing"></span>
+                            </p>
+                        </div>
+                            <p class="switchAssistance button-height" id="p_{{dataUbch.id}}">
 
-                                        <a href ng-click="removeUbch(ubch='{{ dataUbch.id }}')" class="button icon-cross-round">{{ "pequiven.actions.delete"|trans({},"messages") }}</a>             
-                                    </span>
+                                <input type="checkbox" name="switch_{{dataUbch.id}}" id="switch_{{dataUbch.id}}" data="{{dataUbch.id}}" class="switch medium mid-margin-right {{checkState}}" {{disabled}} value="{{dataUbch.notification}}" data-text-on="SI" data-text-off="NO" onclick="pasoId()">
+
+                            </p>
+                        </td>
+                        <td align="justify">
+                            <textarea type="text" id="Obs_" name"Obs_" class="input input-xlarge" onkeypress="pulsar(event)" value="0"></textarea>
+                            {{ dataUbch.observations }}
+                        </td>
+                        <td class="align-right vertical-center">                          
+                            <span class="select compact">
+                                <a href class="select-value form-edit">{{ 'pequiven.actions'|trans({},'messages') }}</a>
+                                <span class="select-arrow"></span>
+                                <span class="drop-down"> 
+                                    {% if notification == 0%}               
+                                        <a href ng-click="loadTemplateOnePerTen(ubch='{{ dataUbch.id }}')" class="button icon-pencil">Cargar</a> 
+                                    {% endif %}
+                                    <a href ng-click="loadTemplateCargoUbch(id='{{ dataUbch.id }}')" class="button icon-pencil">Editar</a> 
+
+                                    <a href ng-click="removeUbch(ubch='{{ dataUbch.id }}')" class="button icon-cross-round">{{ "pequiven.actions.delete"|trans({},"messages") }}</a>             
                                 </span>
-                            </td>                            
-                        </tr>                 
-                    </tbody> 
-                {% endfor %}
-            </table> 
-            </div>
+                            </span>
+                        </td>                            
+                    </tr>                 
+                </tbody> 
+            {% endfor %}#}
+        </table> 
         </div>
-    #}
+    </div>
+    
     <br>
     {% include 'PequivenSEIPBundle:Sip:Center/StatusCenter.html.twig' %}
     <br>

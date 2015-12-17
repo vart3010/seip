@@ -851,7 +851,7 @@ class CenterController extends SEIPController {
         $reportVoto = $this->get('pequiven.repository.center')->findByVoto($id);
         
         $resultByMesas = $this->get('pequiven.repository.center')->findResultByMesas($center->getCodigoCentro());
-//        var_dump(count($resultByMesas));
+//        var_dump($resultByMesas);
 //        die();
 
         $report = $cont = $resultM = 0;
