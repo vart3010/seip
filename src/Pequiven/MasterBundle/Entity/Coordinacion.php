@@ -59,10 +59,9 @@ class Coordinacion {
     /**
      * Gerencia de 2da Línea
      * @var \Pequiven\MasterBundle\Entity\GerenciaSecond
-     * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\GerenciaSecond",inversedBy="coordinaciones")
-     * @ORM\JoinColumn(name="gerenciaSecond_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\GerenciaSecond",inversedBy="coordinaciones")     
      */
-    private $gerenciaSecond;
+    private $gerenciasecond;
 
     /**
      * @var string
