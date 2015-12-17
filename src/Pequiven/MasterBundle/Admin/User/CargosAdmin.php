@@ -26,19 +26,36 @@ class CargosAdmin extends Admin {
     protected function configureShowFields(\Sonata\AdminBundle\Show\ShowMapper $show) {
         $show
                 ->add('id')
+                ->add('gerenciasecond')
                 ->add('codigo')
-                ->add('charge')
-                ->add('user')
+                ->addIdentifier('charge')
+                ->add('User')
                 ->add('staff')
-                ->add('enabled')
         ;
     }
 
     protected function configureFormFields(FormMapper $form) {
         $form
+                ->add('gerencia', 'sonata_type_model_autocomplete', array(
+                    'property' => array('description'),
+                    'multiple' => false,
+                    "required" => true,
+                    'attr' => array('class' => 'input input-large'),
+                ))
+                ->add('gerenciasecond', 'sonata_type_model_autocomplete', array(
+                    'property' => array('description'),
+                    'multiple' => false,
+                    "required" => true,
+                    'attr' => array('class' => 'input input-large'),
+                ))
+                ->add('coordinacion')
+                ->add('parent')
                 ->add('codigo')
                 ->add('charge')
-                ->add('user')
+                ->add('User', 'sonata_type_model_autocomplete', array(
+                    'property' => 'firstname',
+                    'multiple' => false,
+                ))
                 ->add('staff')
                 ->add('enabled')
         ;
@@ -46,9 +63,21 @@ class CargosAdmin extends Admin {
 
     protected function configureDatagridFilters(DatagridMapper $filter) {
         $filter
+                ->add('gerencia', 'doctrine_orm_model_autocomplete', array(), null, array(
+                    'property' => array('description'),
+                    'multiple' => false,
+                    "required" => false,
+                    'attr' => array('class' => 'input input-large'),
+                ))
+                ->add('gerenciasecond', 'doctrine_orm_model_autocomplete', array(), null, array(
+                    'property' => array('description'),
+                    'multiple' => false,
+                    "required" => false,
+                    'attr' => array('class' => 'input input-large'),
+                ))
                 ->add('codigo')
                 ->add('charge')
-                ->add('user')
+                ->add('User')
                 ->add('parent')
                 ->add('enabled')
         ;
@@ -56,10 +85,10 @@ class CargosAdmin extends Admin {
 
     protected function configureListFields(ListMapper $list) {
         $list
+                ->add('gerenciasecond')
                 ->addIdentifier('charge')
-                ->add('user')
-                ->add('enabled')
-
+                ->add('User')
+                ->add('staff')
         ;
     }
 

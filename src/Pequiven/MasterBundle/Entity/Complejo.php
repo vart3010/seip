@@ -82,12 +82,12 @@ class Complejo extends modelComplejo {
      * @ORM\OneToMany(targetEntity="Pequiven\MasterBundle\Entity\Gerencia",mappedBy="complejo")
      */
     private $gerencias;
-    
+
     /**
-     * @var \Pequiven\MasterBundle\Entity\Coordinacion
-     * @ORM\OneToMany(targetEntity="\Pequiven\MasterBundle\Entity\Coordinacion", mappedBy="complejo",cascade={"persist","remove"})
+     * @var \Pequiven\MasterBundle\Entity\FeeStructure
+     * @ORM\OneToMany(targetEntity="\Pequiven\MasterBundle\Entity\FeeStructure", mappedBy="complejo",cascade={"persist","remove"})
      */
-    private $coordinaciones;
+    private $feeStructure;
 
     /**
      * Get id
@@ -287,30 +287,12 @@ class Complejo extends modelComplejo {
         return $this->gerencias;
     }
 
-    /**
-     * 
-     * @return type
-     */
-    function getCoordinaciones() {
-        return $this->coordinaciones;
+    function getFeeStructure() {
+        return $this->feeStructure;
     }
 
-    /***
-     * 
-     */
-    function addCoordinaciones(Coordinacion $coordinaciones) {
-        $this->coordinaciones->add($coordinaciones);
-        return $this;
-    }
-
-    /**
-     * 
-     * @param \Pequiven\MasterBundle\Entity\Coordinacion $coordinaciones
-     * @return \Pequiven\MasterBundle\Entity\Complejo
-     */
-    function removeCoordinaciones(Coordinacion $coordinaciones) {
-        $this->coordinaciones->removeElement($coordinaciones);
-        return $this;
+    function setFeeStructure(\Pequiven\MasterBundle\Entity\FeeStructure $feeStructure) {
+        $this->feeStructure = $feeStructure;
     }
 
 }
