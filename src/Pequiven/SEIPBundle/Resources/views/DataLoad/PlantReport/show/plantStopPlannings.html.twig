@@ -10,11 +10,11 @@
             {% endif %}
         </h3>
         <div class="button-group absolute-right compact">
-            {% if periodService().isAllowPlanningReport %}
+            {#{% if periodService().isAllowPlanningReport %}#}
                 {% if(plant_report.plant.childrens|length == 0) %}
                     <a class="button icon-list-add" href="{{ path('pequiven_plant_stop_planning_create',{plantReport: plant_report.id}) }}">{{ 'pequiven.add'|trans({},'messages') }}</a>
                 {% endif %}
-            {% endif %}
+            {#{% endif %}#}
         </div>
     </div>
     <div class="with-padding">

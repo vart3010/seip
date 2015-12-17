@@ -25,6 +25,8 @@ class EntitySubscriber extends BaseEventListerner
             SeipEvents::PRODUCT_RANGE_CREATE => "onProductRangePreCreate",
             SeipEvents::PRODUCT_PRODUCT_DETAIL_DAILY_MONTH_PRE_CREATE => "onDetailDailyMonthPreCreate",
             SeipEvents::PLANT_STOP_PLANNING_PRE_UPDATE => "onPlantStopPlanningPreUpdate",
+            SeipEvents::REPORT_PLANT_PRE_CREATE => "onReportPlantPreCreate",
+            SeipEvents::PRODUCT_REPORT_PRE_CREATE => "onReportProductPreCreate",
         );
     }
     
@@ -35,6 +37,18 @@ class EntitySubscriber extends BaseEventListerner
         $entity->setPeriod($this->getPeriodService()->getPeriodActive());
         $entity->setRef($this->getSequenceGenerator()->getNextRefReportTemplate($entity));
         
+    }
+
+    public function onReportPlantPreCreate(\Sylius\Bundle\ResourceBundle\Event\ResourceEvent $event)
+    {
+        $entity = $event->getSubject();        
+        $entity->setPeriod($this->getPeriodService()->getPeriodActive());                
+    }
+
+    public function onReportProductPreCreate(\Sylius\Bundle\ResourceBundle\Event\ResourceEvent $event)
+    {
+        $entity = $event->getSubject();        
+        $entity->setPeriod($this->getPeriodService()->getPeriodActive());                
     }
     
     public function onProductPlanningPreCreate(\Sylius\Bundle\ResourceBundle\Event\ResourceEvent $event)
