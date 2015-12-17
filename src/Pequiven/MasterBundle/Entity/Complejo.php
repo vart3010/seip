@@ -84,12 +84,6 @@ class Complejo extends modelComplejo {
     private $gerencias;
 
     /**
-     * @var \Pequiven\MasterBundle\Entity\Coordinacion
-     * @ORM\OneToMany(targetEntity="\Pequiven\MasterBundle\Entity\Coordinacion", mappedBy="complejo",cascade={"persist","remove"})
-     */
-    private $coordinaciones;
-
-    /**
      * Get id
      *
      * @return integer 
@@ -285,33 +279,6 @@ class Complejo extends modelComplejo {
      */
     public function getGerencias() {
         return $this->gerencias;
-    }
-
-    /**
-     * 
-     * @return type
-     */
-    function getCoordinaciones() {
-        return $this->coordinaciones;
-    }
-
-    /*     * *
-     * 
-     */
-
-    function addCoordinaciones(Coordinacion $coordinaciones) {
-        $this->coordinaciones->add($coordinaciones);
-        return $this;
-    }
-
-    /**
-     * 
-     * @param \Pequiven\MasterBundle\Entity\Coordinacion $coordinaciones
-     * @return \Pequiven\MasterBundle\Entity\Complejo
-     */
-    function removeCoordinaciones(Coordinacion $coordinaciones) {
-        $this->coordinaciones->removeElement($coordinaciones);
-        return $this;
-    }
+    }    
 
 }

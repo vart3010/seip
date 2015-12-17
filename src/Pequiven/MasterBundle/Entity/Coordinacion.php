@@ -58,14 +58,6 @@ class Coordinacion {
 
     /**
      * Complejo
-     * @var \Pequiven\MasterBundle\Entity\Complejo
-     * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Complejo",inversedBy="coordinaciones")
-     * @ORM\JoinColumn(name="complejo_id", referencedColumnName="id")
-     */
-    private $complejo;
-
-    /**
-     * Complejo
      * @var \Pequiven\MasterBundle\Entity\GerenciaSecond
      * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\GerenciaSecond",inversedBy="coordinaciones")
      * @ORM\JoinColumn(name="gerenciaSecond_id", referencedColumnName="id")
