@@ -117,6 +117,12 @@ class FeeStructure {
      */
     private $charge;
 
+    /**
+     * @var boolean
+     * @ORM\Column(name="encargado", type="boolean")
+     */
+    private $encargado = false;
+
     /** ID USUARIO
      *
      * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\User",inversedBy="feeStructure")
