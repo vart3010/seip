@@ -99,7 +99,7 @@ class ReportTemplate extends BaseModel
     /**
      * Nombre Corto del reporte
      * @var string
-     * @ORM\Column(name="shortName")
+     * @ORM\Column(name="shortName", nullable=true)
      */
     private $shortName;
     
@@ -108,9 +108,16 @@ class ReportTemplate extends BaseModel
      * 
      * @var string
      * 
-     * @ORM\Column(name="icon",type="text")
+     * @ORM\Column(name="icon",type="text", nullable=true)
      */
     protected $icon;
+
+    /**
+     * @var \Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate
+     * @ORM\OneToOne(targetEntity="\Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate")
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", nullable=true)
+     */
+    private $parent;
     
     /**
      * Constructor
@@ -343,6 +350,28 @@ class ReportTemplate extends BaseModel
      */
     public function setIcon($icon) {
         $this->icon = $icon;
+    }
+
+
+    /**
+     * Set parent
+     *
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate $parent
+     * @return Indicator
+     */
+    public function setParent(\Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate $parent = null) {
+        $this->parent = $parent;
+
+        return $this;
+    }
+
+    /**
+     * Get parent
+     *
+     * @return \Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate 
+     */
+    public function getParent() {
+        return $this->parent;
     }
 
 

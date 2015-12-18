@@ -103,6 +103,15 @@ class RawMaterialConsumptionPlanning extends BaseModel
     private $automaticCalculationPlan = true;
 
     /**
+     * Periodo.
+     * 
+     * @var \Pequiven\SEIPBundle\Entity\Period
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\Period")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $period;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -349,5 +358,28 @@ class RawMaterialConsumptionPlanning extends BaseModel
         $this->setTotalPlan($totalPlan);
         $this->setTotalReal($totalReal);
         $this->setPercentage($percentage);
+    }
+
+    /**
+     * Set period
+     *
+     * @param \Pequiven\SEIPBundle\Entity\Period $period
+     * @return Objetive
+     */
+    public function setPeriod(\Pequiven\SEIPBundle\Entity\Period $period = null)
+    {
+        $this->period = $period;
+
+        return $this;
+    }
+
+    /**
+     * Get period
+     *
+     * @return \Pequiven\SEIPBundle\Entity\Period 
+     */
+    public function getPeriod()
+    {
+        return $this->period;
     }
 }

@@ -31,6 +31,31 @@ class PeriodRepository extends SeipEntityRepository
         $qb = $this->getQueryBuilder();
         return $qb;
     }
+
+    public function getPeriodActive() {
+        
+        $queryBuilder = $this->getQueryBuilder();
+        $queryBuilder
+
+                ->addSelect('p')
+                ->andWhere('p.status = 1')                
+        ;
+        
+        return $queryBuilder;
+    }
+
+    public function getPeriodValid() {
+        
+        $queryBuilder = $this->getQueryBuilder();
+        $queryBuilder
+
+                ->addSelect('p')
+                //->andWhere('p.status = 1')                
+                ->andWhere('p.parent IS NOT NULL')                                
+        ;
+        
+        return $queryBuilder;
+    }
     
     /**
      * Devuelve todos los periodos disponibles para consultas de resultados

@@ -55,6 +55,21 @@ class User extends AbstractType {
                 'group_by' => 'reportTemplate'
                 )
             )
+            /*->add('plantReports', null, array(
+                    'query_builder' => function(\Pequiven\SEIPBundle\Repository\DataLoad\PlantReportRepository $repository) {
+                        return $repository->findByPlantReport();
+                    },                               
+                    'label' => 'Reportes de plantas',
+                    'label_attr' => array('class' => 'label'),
+                    'attr' => array(
+                        'class' => "input-xlarge select2",                        
+                        //'style' => 'width: 270px',
+                        //'multiple' => 'multiple'
+                    ),
+                    'multiple' => true,
+                    'group_by' => 'reportTemplate',
+                    'required' => true,
+            ))*/
             ->add('reportTemplates','entity',array(
                 'class' => 'Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate',
                 'property' => 'name',

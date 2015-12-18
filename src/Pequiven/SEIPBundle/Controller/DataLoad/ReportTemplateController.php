@@ -22,9 +22,12 @@ use Symfony\Component\HttpFoundation\Request;
 class ReportTemplateController extends SEIPController {
 
     public function indexAction(Request $request) {
+        
         $criteria = $request->get('filter', $this->config->getCriteria());
         $sorting = $request->get('sorting', $this->config->getSorting());
         $repository = $this->getRepository();
+        
+        $criteria['applyPeriodCriteria'] = true;
 
         $resources = $this->resourceResolver->getResource(
                 $repository, 'createPaginatorByUser', array($criteria, $sorting)
@@ -85,7 +88,7 @@ class ReportTemplateController extends SEIPController {
         return $this->handleView($view);
     }
 
-    public function showAction(Request $request) {
+    public function showAction(Request $request) {        
         $reportTemplate = $this->getRepository()->find($request->get("id"));
         $plantReports = $reportTemplate->getPlantReports();
 
@@ -94,7 +97,7 @@ class ReportTemplateController extends SEIPController {
         $groupNames = "";
         foreach ($plantReports as $plantReport) {
             $childrens = $plantReport->getPlant()->getChildrens();
-
+            
             if (count($childrens) == 0) { //SIN HIJOS
                 $arrayPlants[] = array(
                     "id" => $plantReport->getPlant()->getId(),

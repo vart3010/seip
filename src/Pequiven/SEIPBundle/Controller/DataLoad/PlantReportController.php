@@ -15,6 +15,8 @@ use Pequiven\SEIPBundle\Controller\SEIPController;
 use Symfony\Component\HttpFoundation\Request;
 use Pequiven\SEIPBundle\Model\Common\CommonObject;
 
+use Pequiven\SEIPBundle\Form\DataLoad\PlantReportType;
+
 /**
  * Reporte de planta
  *
@@ -39,6 +41,7 @@ class PlantReportController extends SEIPController {
         $sorting = $request->get('sorting', $this->config->getSorting());
         $repository = $this->getRepository();
 
+        $criteria['applyPeriodCriteria'] = true;
 
         $resources = $this->resourceResolver->getResource(
                 $repository, 'createPaginatorByUser', array($criteria, $sorting)
