@@ -117,12 +117,24 @@ class FeeStructure {
      */
     private $charge;
 
+    /**
+     * @var boolean
+     * @ORM\Column(name="encargado", type="boolean")
+     */
+    private $encargado = false;
+
     /** ID USUARIO
      *
      * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\User",inversedBy="feeStructure")
      * @ORM\JoinColumn(nullable=true)
      */
     private $User;
+
+    /**
+     * @var \Pequiven\MasterBundle\Entity\MovementFeeStructure
+     * @ORM\OneToMany(targetEntity="\Pequiven\MasterBundle\Entity\MovementFeeStructure",mappedBy="feestructure",cascade={"persist"}))
+     */
+    protected $movementFeeStructure;
 
     function getId() {
         return $this->id;
