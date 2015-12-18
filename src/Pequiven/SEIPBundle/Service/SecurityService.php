@@ -129,12 +129,22 @@ class SecurityService implements ContainerAwareInterface
     function evaluateObjetiveApproved($rol,Objetive $objetive) 
     {
         $result = false;
-        if($objetive->getStatus() == Objetive::STATUS_DRAFT && $objetive->getPeriod()->isActive() === true){
-            $result = true;
-        } elseif($objetive->getStatus() == Objetive::STATUS_DRAFT && $objetive->getPeriod()->getParent()->isActive()){
-            $result = true;            
+        if($objetive->getPeriod()->getParent() == null){
+            if($objetive->getStatus() == Objetive::STATUS_DRAFT && $objetive->getPeriod()->isActive() === true){
+                $result = true;
+            } elseif($objetive->getStatus() == Objetive::STATUS_DRAFT){
+                $result = true;
+            } else{
+                $result = false;
+            }
         } else{
-            $result = false;
+            if($objetive->getStatus() == Objetive::STATUS_DRAFT && $objetive->getPeriod()->isActive() === true){
+                $result = true;
+            } elseif($objetive->getStatus() == Objetive::STATUS_DRAFT && $objetive->getPeriod()->getParent()->isActive()){
+                $result = true;            
+            } else{
+                $result = false;
+            }
         }
         
         return $result;
@@ -149,12 +159,22 @@ class SecurityService implements ContainerAwareInterface
     function evaluateIndicatorApproved($rol,Indicator $indicator)
     {
         $result = false;
-        if($indicator->getStatus() == Indicator::STATUS_DRAFT && $indicator->getPeriod()->isActive() === true){
-            $result = true;
-        } elseif($indicator->getStatus() == Indicator::STATUS_DRAFT && $indicator->getPeriod()->getParent()->isActive()){
-            $result = true;            
+        if($indicator->getPeriod()->getParent() == null){
+            if($indicator->getStatus() == Indicator::STATUS_DRAFT && $indicator->getPeriod()->isActive() === true){
+                $result = true;
+            } elseif($indicator->getStatus() == Indicator::STATUS_DRAFT){
+                $result = true;            
+            } else{
+                $result = false;
+            }
         } else{
-            $result = false;
+            if($indicator->getStatus() == Indicator::STATUS_DRAFT && $indicator->getPeriod()->isActive() === true){
+                $result = true;
+            } elseif($indicator->getStatus() == Indicator::STATUS_DRAFT && $indicator->getPeriod()->getParent()->isActive()){
+                $result = true;            
+            } else{
+                $result = false;
+            }
         }
         
         return $result;
@@ -567,12 +587,22 @@ class SecurityService implements ContainerAwareInterface
     private function evaluateObjetiveEdit($rol,Objetive $objective)
     {
         $result = false;
-        if($objective->getPeriod()->isActive() === true || $objective->getPeriod()->getParent()->isOpened() == true){
-            if($objective->getStatus() == Objetive::STATUS_DRAFT){
-                $result = true;
+        if($objective->getPeriod()->getParent() == null){
+            if($objective->getPeriod()->isActive() === true){
+                if($objective->getStatus() == Objetive::STATUS_DRAFT){
+                    $result = true;
+                }
+            }else{
+                $result = false;
             }
-        }else{
-            $result = false;
+        } else{
+            if($objective->getPeriod()->isActive() === true || $objective->getPeriod()->getParent()->isOpened() == true){
+                if($objective->getStatus() == Objetive::STATUS_DRAFT){
+                    $result = true;
+                }
+            }else{
+                $result = false;
+            }
         }
         return $result;
     }
@@ -586,12 +616,22 @@ class SecurityService implements ContainerAwareInterface
     private function evaluateObjetiveDelete($rol,Objetive $objective)
     {
         $result = false;
-        if($objective->getPeriod()->isActive() === true || $objective->getPeriod()->getParent()->isOpened() == true){
-            if($objective->getStatus() == Objetive::STATUS_DRAFT){
-                $result = true;
+        if($objective->getPeriod()->getParent() == null){
+            if($objective->getPeriod()->isActive() === true){
+                if($objective->getStatus() == Objetive::STATUS_DRAFT){
+                    $result = true;
+                }
+            }else{
+                $result = false;
             }
-        }else{
-            $result = false;
+        } else{
+            if($objective->getPeriod()->isActive() === true || $objective->getPeriod()->getParent()->isOpened() == true){
+                if($objective->getStatus() == Objetive::STATUS_DRAFT){
+                    $result = true;
+                }
+            }else{
+                $result = false;
+            }
         }
         return $result;
     }
@@ -615,23 +655,44 @@ class SecurityService implements ContainerAwareInterface
         $value = $indicatorService->isIndicatorHasParentsEstrategic($indicator);//Llamando al metodo
         
         $result = false;
-        if($indicator->getPeriod()->isActive() === true || $indicator->getPeriod()->getParent()->isOpened() == true){
-            if($this->isGranted($roleEditByLevel[$indicator->getIndicatorLevel()->getLevel()])){
-                if($indicator->getStatus() == Indicator::STATUS_DRAFT){
-                    if ($value === false) {
-                        if ($this->isGranted('ROLE_SEIP_PLANNING_INDICATOR_EDIT')) {
-                            $result = true;
+        if($indicator->getPeriod()->getParent() == null){
+            if($indicator->getPeriod()->isActive() === true){
+                if($this->isGranted($roleEditByLevel[$indicator->getIndicatorLevel()->getLevel()])){
+                    if($indicator->getStatus() == Indicator::STATUS_DRAFT){
+                        if ($value === false) {
+                            if ($this->isGranted('ROLE_SEIP_PLANNING_INDICATOR_EDIT')) {
+                                $result = true;
+                            }else{
+                                $result = false;                            
+                            }
                         }else{
-                            $result = false;                            
+                            $result = true;                        
                         }
-                    }else{
-                        $result = true;                        
                     }
                 }
-            }
-        }else{
-            $result = false;
-        }        
+            }else{
+                $result = false;
+            }     
+        } else{
+            if($indicator->getPeriod()->isActive() === true || $indicator->getPeriod()->getParent()->isOpened() == true){
+                if($this->isGranted($roleEditByLevel[$indicator->getIndicatorLevel()->getLevel()])){
+                    if($indicator->getStatus() == Indicator::STATUS_DRAFT){
+                        if ($value === false) {
+                            if ($this->isGranted('ROLE_SEIP_PLANNING_INDICATOR_EDIT')) {
+                                $result = true;
+                            }else{
+                                $result = false;                            
+                            }
+                        }else{
+                            $result = true;                        
+                        }
+                    }
+                }
+            }else{
+                $result = false;
+            }     
+        }
+           
         return $result;
     }
     
@@ -650,14 +711,26 @@ class SecurityService implements ContainerAwareInterface
         );
         
         $result = false;
-        if($indicator->getPeriod()->isActive() === true || $indicator->getPeriod()->getParent()->isOpened() == true){
-            if($this->isGranted($roleDeleteByLevel[$indicator->getIndicatorLevel()->getLevel()])){
-                if($indicator->getStatus() == Indicator::STATUS_DRAFT){
-                    $result = true;
+        if($indicator->getPeriod()->getParent() == null){
+            if($indicator->getPeriod()->isActive() === true){
+                if($this->isGranted($roleDeleteByLevel[$indicator->getIndicatorLevel()->getLevel()])){
+                    if($indicator->getStatus() == Indicator::STATUS_DRAFT){
+                        $result = true;
+                    }
                 }
+            }else{
+                $result = false;
             }
-        }else{
-            $result = false;
+        } else{
+            if($indicator->getPeriod()->isActive() === true || $indicator->getPeriod()->getParent()->isOpened() == true){
+                if($this->isGranted($roleDeleteByLevel[$indicator->getIndicatorLevel()->getLevel()])){
+                    if($indicator->getStatus() == Indicator::STATUS_DRAFT){
+                        $result = true;
+                    }
+                }
+            }else{
+                $result = false;
+            }
         }
         return $result;
     }
