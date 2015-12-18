@@ -995,6 +995,7 @@ class CenterController extends SEIPController {
                     'report'    => $resultM,
                     'reportMesa'=> $reportMesa,
                     'centerService'=> $centerService,
+                    'resultByMesas'=> $resultByMesas,
                     'centerOpen'=> $centerOpen,
                     'votos'     => $reportVoto
         ));

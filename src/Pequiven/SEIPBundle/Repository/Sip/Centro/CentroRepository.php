@@ -26,7 +26,7 @@ class CentroRepository extends EntityRepository {
         $sql = 'SELECT m.*
         FROM datosMesa AS m
         WHERE m.centro = '.$codigoCentro.'
-        ORDER BY m.centro,m.mesa,m.porc';
+        ORDER BY m.centro,m.mesa ASC,m.porc DESC';
 
         $stmt = $db->prepare($sql);
         $stmt->execute();
