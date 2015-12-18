@@ -1,0 +1,169 @@
+{% extends "PequivenSEIPBundle:Template:Developer/Common/tableFormat1.html.twig" %}
+
+{% trans_default_domain 'sip' %}
+
+{% block javascripts_base %}
+    {{ parent() }}
+    <script src="{{  asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.input.js') }}"></script>
+{% endblock javascripts_base %}
+
+{% block before_body %}
+    {{ contentHeader(
+    	"Votantes Pequiven",
+        ("sip.list"|trans )
+    ) }}
+{% endblock %}
+
+{% block body %}
+
+    <div ng-controller="TableFormatController">
+        <div ng-controller="TableOnePerTenController">
+            <details class="details margin-bottom" open="">
+                <summary role="button" aria-expanded="true">
+                    {{ 'pequiven.filters'|trans({},'messages') }}
+                </summary>
+
+                <div class="with-padding">
+                    <div class="columns">
+
+                        <!-- Filtro Localidad -->
+                        <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                            <label class="bold">{{ 'pequiven_seip.filters.complejo'|trans({},'PequivenSEIPBundle') }}</label>
+                            <br/>
+                            <div class="with-mid-padding">
+                                <select class="select2 input-xlarge" id="selectComplejos" ng-model="model.complejo" ng-change="getFirstLineManagement()" ng-options="value as value.description for (key,value) in data.complejos">
+                                    <option value=''></option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Filtro Gerencia 1ra Línea -->
+                        <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                            <label class="bold">{{ 'pequiven_seip.filters.first_line_management'|trans({},'PequivenSEIPBundle') }}</label>
+                            <br/>
+                            <div class="with-mid-padding">
+                                <select class="select2 input-xlarge" id="selectFirstLineManagement" ng-change="getSecondLineManagement()" ng-model="model.firstLineManagement" ng-options="value as value.description group by model.complejo.description for (key,value) in data.first_line_managements" >
+                                    <option value=''></option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Filtro Gerencia 2da Línea -->
+                        <div class="new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                            <label class="bold">{{ 'pequiven_seip.filters.management_second_line'|trans({},'PequivenSEIPBundle') }}</label>
+                            <br/>
+                            <div class="with-mid-padding">
+                                <select class="select2 input-xlarge" id="selectSecondLineManagement" ng-model="model.secondLineManagement" ng-options="value as value.description group by (value.complejo.ref + ' - '+value.gerencia.description) for (key,value) in data.second_line_managements" >
+                                    <option value=''></option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Filtro Círculos de Estudio de Trabajo -->
+                        <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                            <label class="bold">{{ 'pequiven_seip.filters.work_study_circle'|trans({},'PequivenSEIPBundle') }}</label>
+                            <br/>
+                            <div class="with-mid-padding">
+                                <select class="select2 input-xlarge" id="selectWorkStudyCircle" ng-model="model.workStudyCircle" ng-init="getWorkStudyCircle('model.complejo.id','1')" ng-options="value as value.name group by model.complejo.description for (key,value) in data.work_study_circles" >
+                                    <option value=''></option>
+                                </select>
+                            </div>
+                        </div>
+                        {#<!-- Filtro de Centros Completos -->
+                        <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                            <label class="bold">Cargados</label>
+                            <br/>
+                            <div class="with-mid-padding">
+                                <select class="select2 input-xlarge" id="selectWorkStudyCircle" ng-model="model.workStudyCircle" ng-init="getWorkStudyCircle('model.complejo.id','1')" ng-options="value as value.name group by model.complejo.description for (key,value) in data.work_study_circles" >
+                                    <option value=''></option>
+                                </select>
+                            </div>
+                        </div>#}
+
+                    </div>
+                </div>
+            </details>
+
+
+            <div loading-container="tableParams.settings().$loading">
+                <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager" template-header="custom/header"
+                       api-data-url="{{ apiDataUrl }}" export-csv="csv" class="table table-responsive table-extra-info" >
+                    <tbody> 
+                        <tr ng-repeat="result in $data" data="{$ result|json $}">
+
+                            <td data-title="'Localidad'">
+                                <a href="{$ result._links.self.show $}">
+                                    {$ result.localidad $}
+                                </a>
+                            </td>
+                            <td data-title="'Gerencia'" >
+                                <a href="{$ result._links.self.show $}">
+                                    {$ result.gerencia $}
+                                </a>
+                            </td>
+                            <td data-title="'Cédula'" filter="{'cedula' : 'text'}">
+                                <a href="{$ result._links.self.show $}">
+                                    {$ result.cedula $}
+                                </a>
+                            </td>
+                            <td data-title="'Nombre'" filter="{'userName' : 'text'}">
+                                <a href="{$ result._links.self.show $}">
+                                    {$ result.userName $}
+                                </a>
+                            </td>
+                            <td data-title="'Votó'" filter="{'voto' : 'text'}">
+                                <a href="{$ result._links.self.show $}">
+                                    {$ result.textoVoto $}
+                                </a>
+                            </td>
+
+                            {#  <td data-title="'Cedula'" filter="{'cedula' : 'text'}">
+                                  <a href="{$ result._links.self.show $}">
+                                      {$ result.cedula $}
+                                  </a>
+                              </td>
+                              <td data-title="'Nombre'" filter="{'nombre' : 'text'}">
+                                  <a href="{$ result._links.self.show $}">
+                                      {$ result.nombre $}
+                                  </a>
+                              </td>                        
+                              <td data-title="'Centro'" filter="{'centro' : 'text'}">
+                                  <a href="{$ result._links.self.show $}">
+                                      {$ result.centro $}
+                                  </a>
+                              </td>#}
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+    <script type="text/javascript">
+
+function getTableExtraInfo(data)
+{
+    var response = '';
+
+    return response;
+}
+function charge() {
+    $('.select2').select2({
+        allowClear: true
+    });
+}
+
+
+$(document).ready(function () {
+    charge();
+
+
+});
+    </script>
+
+{% endblock %}

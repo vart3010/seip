@@ -1,0 +1,10 @@
+Pequiven\SEIPBundle\Entity\Politic\MeetingFile:
+    exclusion_policy: ALL
+    properties:
+        id:
+            expose: true
+            groups: [id]
+        nameFile:
+            expose: true
+            groups: [api_list]
+        

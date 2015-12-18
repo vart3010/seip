@@ -8,10 +8,14 @@
 
 <fieldset class="fieldset fields-list" {% if formErrors is defined %}ng-init="form={{formErrors|serialize}}"{% endif %}>
     <legend class="legend">{{ 'pequiven.arrangement_program.arrangement_program'|trans }}&nbsp;<b>{{ entity.getTypeLabel|trans }}</b></legend>
-    
+
     <div class="field-block button-height" ng-init="setEntityType({{ entity.type }})" >
         <label class="label">{{ "pequiven.form.period"|trans }}</label>
-        <b>{{ entity.period }}</b>
+        <b>{{ entity.period }} </b>
+    </div>
+    <div class="field-block button-height" ng-init="setEntityType({{ entity.type }})" >
+        <label class="label">{{ "pequiven.form.ref"|trans }}</label>
+        {{ entity.ref }}
     </div>
     {% if appConfiguration.isSupportIntegratedManagementSystem == true %}
         <div class="field-block button-height">
@@ -50,7 +54,7 @@
     {% endif %}
     <div class="field-block button-height">
         <label class="label">{{ "pequiven.form.location"|trans }}</label>
-        <span ng-if="!complejo" class="tag orange-bg">Seleccione el objetivo</span>
+        <span ng-if="!complejo" class="tag orange-bg">Seleccione el Objetivo</span>
         {$ complejo.description $}
     </div>
     {% if appConfiguration.isSupportIntegratedManagementSystem == true %}
@@ -61,18 +65,49 @@
         </div>
     {% endif %}
     <div class="field-block button-height">
-        <label class="label" for="arrangementprogram_responsibles">{{ 'pequiven.form.responsibles'|trans({},'PequivenArrangementProgramBundle') }}</label>
-        <div id="arrangementprogram_responsibles" style='width: 270px' ng-init="setPreselectedData('arrangementprogram_responsibles',{{ entity.responsibles|serialize('json',serialization_context().setGroups(['id','api_list','sonata_api_read'])) }},'arrangementprogramResponsibles');" ></div>
-        <input ng-repeat="user in model.arrangementprogramResponsibles" type="hidden" name="arrangementprogram[responsibles][{$ $index $}]" value="{$ user.id $}" />
+        <label class="label" for="arrangementprogram_responsibles">
+            {{ 'pequiven.form.responsibles'|trans({},'PequivenArrangementProgramBundle') }}
+        </label>
+        {% if ((mov == 1) and (entity.status == 3))%}
+            <center>
+                <table width="95%">
+                    <tr>
+                        <td width="60%">
+                            <table class="simple-table responsive-table" width="90%">                                
+                                {% for responsable in entity.getresponsibles %}
+                                    <tr>
+                                        <td> 
+                                            {{ responsable.getOnlyFullNameUser }} </br> 
+                                        </td>
+                                    </tr>
+                                {% endfor %}                                
+                            </table>
+                        </td>
+                        <td width="40%" style="vertical-align: middle">
+                            <div class="six-columns" style="width:50%;">
+                                <a href ng-click="getUrlMovementAP({{ entity.id }},'{{ path("AP_movement") }}')" class="button icon-users with-tooltip confirm">
+                                    {{ "pequiven.actions.mov"|trans({},"messages") }}
+                                </a>  
+                            </div>
+                        </td>
+                    </tr>
+                </table>        
+                <div id="arrangementprogram_responsibles" style='width: 270px; display: none;' ng-init="setPreselectedData('arrangementprogram_responsibles',{{ entity.responsibles|serialize('json',serialization_context().setGroups(['id','api_list','sonata_api_read'])) }},'arrangementprogramResponsibles');" hidden="true" ></div>
+                <input ng-repeat="user in model.arrangementprogramResponsibles" type="hidden" name="arrangementprogram[responsibles][{$ $index $}]" value="{$ user.id $}" />
+            </center>
+        {% else%}
+            <div id="arrangementprogram_responsibles" style='width: 270px' ng-init="setPreselectedData('arrangementprogram_responsibles',{{ entity.responsibles|serialize('json',serialization_context().setGroups(['id','api_list','sonata_api_read'])) }},'arrangementprogramResponsibles');" ></div>
+            <input ng-repeat="user in model.arrangementprogramResponsibles" type="hidden" name="arrangementprogram[responsibles][{$ $index $}]" value="{$ user.id $}" />
+        {% endif %}
         {#{{ form_label(form.responsibles) }}
         {{ form_widget(form.responsibles) }}
         {{ form_errors(form.responsibles) }}#}
     </div>
     <div class="field-block button-height">
-            {{ form_label(form.description) }}
-            {{ form_widget(form.description) }}
-            {{ form_errors(form.description) }}
-        </div>
+        {{ form_label(form.description) }}
+        {{ form_widget(form.description) }}
+        {{ form_errors(form.description) }}
+    </div>
     <div class="field-block button-height">
         <label class="label">{{ "pequiven.form.total_weight"|trans }}</label>
         <span ng-if="getTotalWeight() == 0" class="tag">{$ getTotalWeight() $}/100 %</span>
@@ -81,16 +116,16 @@
         <span ng-if="getTotalWeight() > 100" class="tag red-bg">{$ getTotalWeight() $}/100 %</span>
     </div>
 </fieldset>
-    {% include 'PequivenArrangementProgramBundle:ArrangementProgram:form/timelines.html.twig' %}
+{% include 'PequivenArrangementProgramBundle:ArrangementProgram:form/timelines.html.twig' %}
 <input type="hidden" name="autoOpenOnSave" id="autoOpenOnSave" value="0" />
 {{ form_row(form._token) }}
 
 <script type="text/javascript">
-    $(document).ready(function(){
+    $(document).ready(function () {
         var parametersUsers = {
             minimumInputLength: 1,
             multiple: true,
-            ajax: { // instead of writing the function to execute the request we use Select2's convenient helper
+            ajax: {// instead of writing the function to execute the request we use Select2's convenient helper
                 url: '{{ url_responsible }}',
                 dataType: 'json',
                 quietMillis: 250,
@@ -101,15 +136,17 @@
                 },
                 results: function (data, page) { // parse the results into the format expected by Select2.
                     // since we are using custom formatting functions we do not need to alter the remote JSON data
-                    return { results: data };
+                    return {results: data};
                 },
                 cache: true
             },
-            initSelection: function(element, callback){
+            initSelection: function (element, callback) {
             },
             formatResult: responsiblesFormatResult, // omitted for brevity, see the source of this page
-            formatSelection: responsiblesFormatResult,  // omitted for brevity, see the source of this page
-            escapeMarkup: function (m) { return m; } // we do not want to escape markup since we are displaying html in results
+            formatSelection: responsiblesFormatResult, // omitted for brevity, see the source of this page
+            escapeMarkup: function (m) {
+                return m;
+            } // we do not want to escape markup since we are displaying html in results
         };
 
         $("#arrangementprogram_responsibles").select2(parametersUsers);

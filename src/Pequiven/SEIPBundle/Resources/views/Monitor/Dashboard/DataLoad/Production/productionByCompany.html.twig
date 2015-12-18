@@ -1,0 +1,27 @@
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+<!-- Sección Lateral Izquierda -->
+<div {#class="with-padding"#} ng-controller="ChartsDashboardController">
+    <div class="columns">
+        <div class="twelve-columns twelve-columns-tablet twelve-columns-mobile new-row-mobile dashboard" style="background: -webkit-linear-gradient(left, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0) 60%, rgba(0, 0, 0, 0.25)), -webkit-linear-gradient(top, #5e6165, #33373a);">
+            {% if typeViews.view_type_pqv == true %}
+                    <div id="id-{{ constant('Pequiven\\SEIPBundle\\Model\\CEI\\Company::TYPE_OF_COMPANY_MATRIZ') }}" ng-init="chargeChartProductionReportTemplateByDateGroupByCompany({{ constant('Pequiven\\SEIPBundle\\Model\\CEI\\Company::TYPE_OF_COMPANY_MATRIZ') }},'{{ "now"|date('Y-m-d') }}','grafico-{{ constant('Pequiven\\SEIPBundle\\Model\\CEI\\Company::TYPE_OF_COMPANY_MATRIZ') }}','100','500')">
+                        <span id="grafico-{{ constant('Pequiven\\SEIPBundle\\Model\\CEI\\Company::TYPE_OF_COMPANY_MATRIZ') }}"></span>
+                    </div>
+            {% endif %}
+            {% if typeViews.view_type_eemm == true %}
+                    <div id="id-{{ constant('Pequiven\\SEIPBundle\\Model\\CEI\\Company::TYPE_OF_COMPANY_AFFILIATED_MIXTA') }}" ng-init="chargeChartProductionReportTemplateByDateGroupByCompany({{ constant('Pequiven\\SEIPBundle\\Model\\CEI\\Company::TYPE_OF_COMPANY_AFFILIATED_MIXTA') }},'{{ "now"|date('Y-m-d') }}','grafico-{{ constant('Pequiven\\SEIPBundle\\Model\\CEI\\Company::TYPE_OF_COMPANY_AFFILIATED_MIXTA') }}','100','500')">
+                        <span id="grafico-{{ constant('Pequiven\\SEIPBundle\\Model\\CEI\\Company::TYPE_OF_COMPANY_AFFILIATED_MIXTA') }}"></span>
+                    </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% block javascript %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            
+        });
+    </script>
+{% endblock javascript %}

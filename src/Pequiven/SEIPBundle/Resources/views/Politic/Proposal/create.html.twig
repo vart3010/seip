@@ -1,0 +1,227 @@
+{# empty Twig template #}
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayout.html.twig' %}
+
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
+
+{% block before_body %}
+    {{ contentHeader(
+        ("workStudyCircle.title"|trans({},'workStudyCircle') ),
+        ("pequiven_seip.politic.proposal"|trans ),
+        ( 'pequiven.add'|trans({},'messages') )
+    ) }}
+{% endblock %}
+
+{% block body -%}
+    <form method="POST" action="{{ path("pequiven_proposal_create",{workStudyCircle_id:workStudyCircle.id}) }}">
+        {{ form_top(form) }}
+        <br /><br />
+        <fieldset class="fieldset fields-list">
+            <legend class="legend">{{ 'pequiven_seip.politic.proposal'|trans }}</legend>
+            {#<div class="field-block button-height">
+                {{ form_widget(form) }}
+            </div>#}
+            <div class="field-block button-height">
+                {{ form_label(form.lineStrategic) }}
+                {{ form_widget(form.lineStrategic) }}
+                {{ form_errors(form.lineStrategic) }}
+                <span class="info-spot">
+                    <span class="icon-info-round"></span>
+                    <span class="info-bubble">Sólo debe ingresar 3 propuestas por línea estratégica</span>
+                </span>
+            </div>
+            <div class="field-block" id="objetives">
+            </div>
+            <div class="field-block button-height">
+                {{ form_label(form.description1) }}
+                {{ form_widget(form.description1) }}
+                {{ form_errors(form.description1) }}
+                <span class="info-spot">
+                    <span class="icon-info-round"></span>
+                    <span class="info-bubble">La propuesta debe contener 20 caracteres como mínimo</span>
+                </span>
+            </div>
+            <div class="field-block button-height">
+                {{ form_label(form.description2) }}
+                {{ form_widget(form.description2) }}
+                {{ form_errors(form.description2) }}
+                <span class="info-spot">
+                    <span class="icon-info-round"></span>
+                    <span class="info-bubble">La propuesta debe contener 20 caracteres como mínimo</span>
+                </span>
+            </div>
+            <div class="field-block button-height">
+                {{ form_label(form.description3) }}
+                {{ form_widget(form.description3) }}
+                {{ form_errors(form.description3) }}
+                <span class="info-spot">
+                    <span class="icon-info-round"></span>
+                    <span class="info-bubble">La propuesta debe contener 20 caracteres como mínimo</span>
+                </span>
+            </div>
+            <div class="field-block button-height">
+                {{ form_label(form.description4) }}
+                {{ form_widget(form.description4) }}
+                {{ form_errors(form.description4) }}
+                <span class="info-spot">
+                    <span class="icon-info-round"></span>
+                    <span class="info-bubble">La propuesta debe contener 20 caracteres como mínimo</span>
+                </span>
+            </div>
+            <div class="field-block button-height">
+                {{ form_label(form.description5) }}
+                {{ form_widget(form.description5) }}
+                {{ form_errors(form.description5) }}
+                <span class="info-spot">
+                    <span class="icon-info-round"></span>
+                    <span class="info-bubble">La propuesta debe contener 20 caracteres como mínimo</span>
+                </span>
+            </div>
+            <div class="field-block button-height">
+                {{ form_label(form.description6) }}
+                {{ form_widget(form.description6) }}
+                {{ form_errors(form.description6) }}
+                <span class="info-spot">
+                    <span class="icon-info-round"></span>
+                    <span class="info-bubble">La propuesta debe contener 20 caracteres como mínimo</span>
+                </span>
+            </div>
+            <div class="field-block button-height">
+                {{ form_label(form.description7) }}
+                {{ form_widget(form.description7) }}
+                {{ form_errors(form.description7) }}
+                <span class="info-spot">
+                    <span class="icon-info-round"></span>
+                    <span class="info-bubble">La propuesta debe contener 20 caracteres como mínimo</span>
+                </span>
+            </div>
+            <div class="field-block button-height">
+                {{ form_label(form.description8) }}
+                {{ form_widget(form.description8) }}
+                {{ form_errors(form.description8) }}
+                <span class="info-spot">
+                    <span class="icon-info-round"></span>
+                    <span class="info-bubble">La propuesta debe contener 20 caracteres como mínimo</span>
+                </span>
+            </div>
+            <div class="field-block button-height">
+                {{ form_label(form.description9) }}
+                {{ form_widget(form.description9) }}
+                {{ form_errors(form.description9) }}
+                <span class="info-spot">
+                    <span class="icon-info-round"></span>
+                    <span class="info-bubble">La propuesta debe contener 20 caracteres como mínimo</span>
+                </span>
+            </div>
+            <div class="field-block button-height">
+                {{ form_label(form.description10) }}
+                {{ form_widget(form.description10) }}
+                {{ form_errors(form.description10) }}
+                <span class="info-spot">
+                    <span class="icon-info-round"></span>
+                    <span class="info-bubble">La propuesta debe contener 20 caracteres como mínimo</span>
+                </span>
+            </div>
+        </fieldset>
+
+        {#<div class="columns">
+            <div class="twelve-columns" id="objetives" style="text-align: center;">
+            </div>
+        </div>#}
+
+        {{ actions.create() }}
+
+        {{ form_rest(form) }}
+    </form>
+{% endblock %}
+
+{% block javascript %}
+    <script type="text/javascript">
+        var selectLineStrategic = $("#proposal_data_lineStrategic");
+
+        function statusFieldsProposal(band) {
+            $("#proposal_data_description1").prop("disabled", band);
+            $("#proposal_data_description2").prop("disabled", band);
+            $("#proposal_data_description3").prop("disabled", band);
+            $("#proposal_data_description4").prop("disabled", band);
+            $("#proposal_data_description5").prop("disabled", band);
+            $("#proposal_data_description6").prop("disabled", band);
+            $("#proposal_data_description7").prop("disabled", band);
+            $("#proposal_data_description8").prop("disabled", band);
+            $("#proposal_data_description9").prop("disabled", band);
+            $("#proposal_data_description10").prop("disabled", band);
+        }
+
+        {# function validTextArea(text) {
+             $(text).blur(function () {
+                 var val = $(this).val();
+                 var len = val.length;
+                 if (len < 20) {
+                     alert("La propuesta debe contener 20 caracteres como mínimo.");
+                     $(this).focus();
+                 }
+             });
+         }#}
+
+             $(document).ready(function () {
+
+                 //validTextArea("#proposal_data_description1");
+                 //validTextArea("#proposal_data_description2");
+
+                 selectLineStrategic.select2({allowClear: true});
+                 statusFieldsProposal(true);
+                 $(".select2").change(function () {
+                     var val = $(this).val();
+                     if (val > 0) {
+                         statusFieldsProposal(false);
+                     } else {
+                         statusFieldsProposal(true);
+                     }
+                 });
+
+                 var valueInitSelect = selectLineStrategic.val();
+
+                 if (valueInitSelect > 0) {
+                     statusFieldsProposal(false);
+                 } else {
+                     statusFieldsProposal(true);
+                 }
+             });
+             selectLineStrategic.change(function () {
+                 displayObjetivesFromLineStrategic();
+             });
+
+             //Función que muestra los objetivos estratégicos de acuerdo a la línea estratégica seleccionada
+             function displayObjetivesFromLineStrategic() {
+                 var data = {
+                     lineStrategicId: $.trim(selectLineStrategic.val()),
+                 };
+                 $.ajax({
+                     type: 'post',
+                     url: '{{ path("pequiven_proposal_show_objetives") }}',
+                     data: data,
+                     success: function (data) {
+
+                         if (data.length > 1) {
+                             var text = '<label class="label" style="color:#FF0004;text-transform:uppercase">Objetivos Estratégicos</label>';
+                             var totalObjetiveStrategics = data.length;
+                             text = text + '<div style="margin-left:20px;;padding:10px;border-width:4px;border-style:double;border-color:#FF0004">';
+                             for (var i = 0, total = data.length; i < total; i++) {
+                                 text = text + '<span>' + data[i].ref + data[i].description + '</span><br>';
+                             }
+                         } else {
+                             var text = '<label class="label" style="color:#FF0004;text-transform:uppercase"></label>';
+                             text = text + '<div style="margin-left:20px;;padding:10px;border-width:4px;border-style:double;border-color:#FF0004">';
+                             text = text + '<span>' + "Selecione Linea Estratégica" + '</span>';
+                         }
+                         text = text + '</div>';
+                         $('#objetives').fadeOut("slow", function () {
+                             $('#objetives').html(text);
+                             $('#objetives').fadeIn();
+                         });
+                     }
+                 });
+             }
+    </script>
+{% endblock javascript %}

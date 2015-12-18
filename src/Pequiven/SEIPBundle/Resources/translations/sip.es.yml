@@ -1,0 +1,38 @@
+sip:
+    create: Registro de 1x10
+    consulta: Consulta de 1x10
+    onePerTen: 1x10
+    list: Lista
+    list_inventory: Lista Inventario
+    cedula: Cédula
+    centro: Centro
+    nombre: Nombre
+    telefono: Teléfono
+    miembros: Miembros
+    miembro: Miembro
+    busqueda: Búsqueda
+    cutl:
+        title: CUTL        
+        list: Listado de CUTL
+    center:
+        title: Datos del Centro
+        name: Centro de Votación
+        code: Código del Centro
+        list: Listado de Centros
+    assists: Asistencias
+    observations: Requerimientos
+    inventory: Inventario
+    
+    export:
+        exportpdf: Exportar a PDF
+        
+    report:
+        date_start: Desde
+        date_finish: Hasta
+        date: Fecha
+        reports: Reportes
+        menu: Menu
+        list: Lista
+        generate: Generar
+
+

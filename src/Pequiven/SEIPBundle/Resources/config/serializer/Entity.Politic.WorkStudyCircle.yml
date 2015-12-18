@@ -1,0 +1,23 @@
+Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle:
+    exclusion_policy: ALL
+    properties:
+        id:
+            expose: true
+            groups: [id]
+        name:
+            expose: true
+            groups: [api_list]
+        codigo:
+            expose: true
+            groups: [api_list]
+        complejo:
+            expose: true
+            groups: [complejo]
+        region:
+            expose: true
+            groups: [region]
+        proposals:
+            expose: true
+            groups: [proposal]
+            
+        

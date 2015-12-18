@@ -1,0 +1,158 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
+{% trans_default_domain 'workStudyCircle' %}
+
+{% block javascripts_base %}
+    {{ parent() }}
+    <script src="{{  asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.input.js') }}"></script>
+{% endblock javascripts_base %}
+{% set circle = meeting.workStudyCircle.id %}
+{% if meeting.workStudyCircle.phase > 1 %}
+    {% set route_index = 'pequiven_work_study_circle_show_phase' %}
+{% else %}
+    {% set route_index = 'pequiven_work_study_circle_show' %}
+{% endif %}
+
+{% block before_body %}
+    {{ contentHeader(
+        { ( path(route_index, { id:circle }) ): ("workStudyCircle.title"|trans )},
+        ("workStudyCircle.meetings.title"|trans )
+    ) }}
+{% endblock %}
+
+{% block body %}
+
+
+    <fieldset class="fieldset">
+        <legend class="legend">{{ 'workStudyCircle.form.nombre'|trans }}&nbsp;</legend>
+        <div class="new-row-mobile twelve-columns-mobile twelve-columns-tablet twelve-columns-mobile">
+            <p class="inline-label">
+                <label class="label">{{ 'workStudyCircle.form.nombre'|trans }}</label>
+                <a href="{{ path(route_index,{id:circle }) }}">
+                    ({{ meeting.workStudyCircle.codigo }})                    
+                    {{ meeting.workStudyCircle.name }}
+                </a>
+            </p>
+        </div>
+    </fieldset>
+    <br>
+    <fieldset class="fieldset">
+        <legend class="legend">{{ 'workStudyCircle.meetings.titleSingle'|trans }}&nbsp;</legend>
+        <div class="columns">
+            <div class="new-row-mobile twelve-columns-mobile twelve-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'workStudyCircle.meetings.date'|trans }}</label>
+                    {{ meeting.date|date('Y-m-d') }}
+                </p>
+            </div>
+            <div class="new-row-mobile twelve-columns-mobile twelve-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'workStudyCircle.meetings.duration'|trans }}</label>
+                    {{ meeting.duration|date("H:i") }}
+                </p>
+            </div>
+            <div class="new-row-mobile twelve-columns-mobile twelve-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'workStudyCircle.meetings.place'|trans }}</label>
+                    {{ meeting.place }}
+                </p>
+            </div>
+            <div class="new-row-mobile twelve-columns-mobile twelve-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'workStudyCircle.meetings.subject'|trans }}</label>
+                    {{ meeting.subject }}
+                </p>
+            </div>
+            <div class="new-row-mobile twelve-columns-mobile twelve-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'workStudyCircle.meetings.observation'|trans }}</label>
+                    {{ meeting.observation }}
+                </p>
+            </div>
+        </div>
+    </fieldset>
+    <br>
+    {% include 'PequivenSEIPBundle:Politic:Meeting/assistance.html.twig' %}
+    <br>    
+    {% include 'PequivenSEIPBundle:Politic:Meeting/meetingFiles.html.twig' %}
+    <br>
+    {% set routeConfig = path('pequiven_meeting_export_pdf',{idmeeting:meeting.id}) %}
+    {% if(is_granted(["ROLE_SEIP_MEETING_EXPORT_REPORT"])) %}
+        <div class="align-right">
+            {{ buttons.generic(
+                    (routeConfig),
+                    ('workStudyCircle.meetings.exportpdf'|trans({})),
+                    'icon-download'
+                 ) 
+            }}
+        </div>
+    {% endif %}
+
+{% endblock %}
+
+
+{% block javascript %}
+    <script type="text/javascript">
+
+
+        function openFile(idFile) {
+            var data = {
+                id: idFile
+            };
+            $.ajax({
+                type: 'get',
+                url: '{{ path("pequiven_work_study_circle_get_url_file") }}',
+                data: data,
+                success: function (data) {
+                    //window.open(data["url"]);
+                    //window.location = data["url"];
+                    window.open(data["url"], '_blank');
+                }
+            });
+
+        }
+
+        $(document).ready(function () {
+
+            $("button#downloadFile").click(function () {
+                var idFile = $(this).attr("data");
+                openFile(idFile);
+            });
+
+            $('#switch-mode').change(function () {
+                $('.switch-wrapper')[this.checked ? 'addClass' : 'removeClass']('reversed-switches');
+            });
+            $("p.assistance input").change(function () {
+                var data = $(this).attr("data");
+                var meeting = $(this).attr("data-meeting");
+                var value = $(this).val();
+                var obj = $(this);
+                var data = {
+                    user_id: data,
+                    value: value,
+                    meeting: meeting
+                };
+                $.ajax({
+                    type: 'get',
+                    url: '{{ path("pequiven_assistance_edit") }}',
+                    data: data,
+                    success: function (data) {
+                        console.log(data["value"]);
+                        obj.val(data["value"]);
+                    }
+                });
+            });
+
+            $("input#meetingFilePdf").change(function () {
+                $("form#forma").submit();
+            });
+
+            $("#clickUploadFile").click(function () {
+                $("input#meetingFilePdf").click();
+            });
+
+
+
+        });
+    </script>
+{% endblock %}

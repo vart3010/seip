@@ -1,0 +1,13 @@
+## YAML Template.
+---
+pequiven_data_load_dashboard_production:
+    path: /production/{typeView}
+    defaults:
+        _controller: pequiven.controller.seipmonitor:displayDashboardProductionAction
+    methods: [GET|POST]
+    
+pequiven_data_load_dashboard_production_report_template:
+    path: /production/reportTemplate/{reportTemplateId}/{typeView}
+    defaults:
+        _controller: pequiven.controller.seipmonitor:displayDashboardProductionReportTemplateAction
+    methods: [GET|POST]

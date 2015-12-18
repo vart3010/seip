@@ -1,0 +1,77 @@
+workStudyCircle:
+    title: Círculo de Estudio y Trabajo
+    circle_list: Círculos de Estudio y Trabajo
+    phases: Fases
+    phase_number: Fase %phase%
+    form:
+        code: Código
+        nombre: Nombre de Círculo
+        region: Región
+        complejo: Complejo
+        gerenciaFirst: Gerencia de Primera Línea
+        gerenciaSecond: Gerencia de Segunda Línea
+        superintendencia: Superintendencia
+        supervision: Supervisión 
+        departamento: Departamento
+        proposalsInherited: Propuestas Heredadas
+        proposalsPhaseOne: Propuestas Fase 1
+        proposalsPhaseTwo: Propuestas Fase 2
+        proposalsPhaseThree: Propuestas Fase 3
+        proposalsPhaseFour: Propuestas Fase 4
+        
+        coordinador:
+            title: Datos del Coordinador
+            nombre: Nombre
+            telefono: Teléfono
+            ext: Extensión
+        coordinatorDiscussion:
+            title: Datos del Coordinador de Debate
+            nombre: Nombre
+            telefono: Teléfono
+            ext: Extensión
+    coordinator:
+        add: Añadir Coordinador
+    coordinatorDiscussion:
+        add: Añadir Coordinador de Debate
+    members:
+        title: Miembros
+        add: Añadir Miembros
+        edit: Editar
+    
+    general: General
+    list: Lista
+    export:
+        exportPdf: Exportar Inf. Círculo
+        
+    proposals:
+        title: Propuestas
+        add: Añadir Propuesta
+        exportpdf: Exportar Propuestas
+        
+    meetings:
+        title: Reuniones
+        titleSingle: Reuniones
+        add: Añadir Reunión
+        dataMeeting: Información de Reunión
+        date: Fecha Reunión
+        place: Lugar  
+        subject: Tema
+        observation: Observaciones
+        edit: Editar Reunión
+        duration: Duración (Hrs)
+        exportpdf: Exportar Asistencias
+        
+    assistances:
+        dataAssistances: Participantes
+        user: Participante
+        assistance: Asistió
+        observation: Observación
+        
+    files:
+        add: Agregar Documento
+        attachment: Documentos
+        name: Nombre
+        load: Carga de Documentos
+        download: Descargar
+        file: Archivo
+        category: Categoria

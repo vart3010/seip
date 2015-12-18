@@ -1,5 +1,9 @@
 {#{% extends "PequivenSEIPBundle:Template:Developer/Common/tableFormat1.html.twig" %}#}
-{% extends "PequivenSEIPBundle:Template:Developer/layout.html.twig" %}
+{#{% extends is_granted('ROLE_SEIP_OPERATION_VIEW_MONITOR_PRODUCTION') 
+    ? 'PequivenSEIPBundle:Template:Developer/layoutMenuHidden.html.twig' 
+    : 'PequivenSEIPBundle:Template:Developer/layout.html.twig' %}#}
+
+{% extends 'PequivenSEIPBundle:Template:Developer/layout.html.twig' %}
 
 {% trans_default_domain 'PequivenSEIPBundle' %}
 
@@ -17,14 +21,36 @@
         <br />
     {% endif %}
 
-{{ renderArea(constant('Pequiven\\SEIPBundle\\Model\\Box\\AreasBox::DASHBOARD')) }}
+    {% if(buttonItems) %}
+        <div style="text-align: left; margin-left:15px;">
+            <a class="button"  id="showItems"  href="javascript:void(0)">
+                <span class="button-icon"><span class="icon-list"></span></span>
+                <span class="title">Ver Resumen de Gestión </span>
+                <span class="title" style="display: none">Ocultar Resumen de Gestión </span>
+            </a>
+        </div>
 
-<div class="with-padding">
-    <div class="columns">
-        {{ renderArea(constant('Pequiven\\SEIPBundle\\Model\\Box\\AreasBox::PRINCIPAL')) }}
-    </div>
-</div>
-    
+        {#        <button class="button compact" id="showItems" type="button">Visualizar Items</button>#}
+        <div id="userItems" style="display: none;">
+            {{ renderArea(constant('Pequiven\\SEIPBundle\\Model\\Box\\AreasBox::ITEMS')) }}
+        </div>
+
+        <div id="dashboard" style="display: block;">
+            {{ renderArea(constant('Pequiven\\SEIPBundle\\Model\\Box\\AreasBox::DASHBOARD')) }}
+            <div class="with-padding">
+                <div class="columns">
+                    {{ renderArea(constant('Pequiven\\SEIPBundle\\Model\\Box\\AreasBox::PRINCIPAL')) }}
+                </div>
+            </div>
+        </div>
+    {% else %}
+        {{ renderArea(constant('Pequiven\\SEIPBundle\\Model\\Box\\AreasBox::ITEMS')) }}
+    {% endif %}
+
+
+
+
+
 {% endblock body %}
 
 {% block stylesheets %}
@@ -42,4 +68,13 @@
 
 {% block javascript %}
     {{ parent() }}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("a#showItems").click(function () {
+                $("#userItems").toggle("slow");
+                $("#dashboard").toggle("slow");
+                $("a#showItems span.title ").toggle();
+            });
+        });
+    </script>
 {% endblock %}

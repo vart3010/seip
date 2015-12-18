@@ -135,6 +135,85 @@ class ObjetiveRepository extends EntityRepository {
     }
 
     /**
+     * Crea un paginador para los objetivos de acuerdo al sistema de la calidad
+     * Filtrados por Programas de Gestión
+     * @param array $criteria
+     * @param array $orderBy
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    function createPaginatorByLevelSIG(array $criteria = null, array $orderBy = null) {
+        
+        $criteria['for_viewsig'] = true;
+        $orderBy['o.ref'] = 'ASC';
+        
+        return $this->createPaginator($criteria, $orderBy);
+    }
+
+    protected function applyCriteria(\Doctrine\ORM\QueryBuilder $queryBuilder, array $criteria = null) {
+        $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
+
+        //Visualización SIG
+        if(($forviewSig = $criteria->remove('for_viewsig')) != null){
+            //$queryBuilder->addSelect('ms');
+
+            $queryBuilder
+                ->andWhere('o.deletedAt IS NULL')
+                ->innerJoin('o.managementSystems', 'ms');
+
+            //Filtro de Sistemas de Gestión
+            if(($managementSystems = $criteria->remove('managementSystems')) != null){
+                $queryBuilder  
+                    ->andWhere('ms.id = :managementSystems')
+                    ->setParameter('managementSystems', $managementSystems)
+                    ;
+            }
+        }  
+
+        //Filtro Gerencia 1ra Línea
+        if(($gerencia =  $criteria->remove('firstLineManagement')) !== null){
+            $queryBuilder->andWhere('o.gerencia = ' . $gerencia);
+        }
+        //Filtro Gerencia 2da Línea
+        if(($gerenciaSecond = $criteria->remove('secondLineManagement')) !== null){
+            $queryBuilder->andWhere("o.gerenciaSecond = " . $gerenciaSecond);
+        }      
+
+        $applyPeriodCriteria = $criteria->remove('applyPeriodCriteria');
+        parent::applyCriteria($queryBuilder, $criteria->toArray());
+        
+        if($applyPeriodCriteria){
+           $this->applyPeriodCriteria($queryBuilder);
+        }  
+    }
+
+    /**
+     * Devuelve todos los objetivos tacticos filtrados por sistema de la calidad, periodo.
+     * @author Maximo Sojo <maxsojo13@gmail.com>
+     * @param array $criteria
+     * @param array $orderBy
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    function getObjetivesManagementSystem($managementSystem) {
+        
+        $queryBuilder = $this->getQueryBuilder();
+        $queryBuilder
+                ->select('o')
+                //->where('o.managementSystems = :managementSystemId')
+                ->andWhere('ms.id = :managementSystemId')
+                ->andWhere('o.period = :per')
+                ->andWhere('o.objetiveLevel = :level')
+                ->andWhere('o.deletedAt IS NULL')
+                ->innerJoin('o.managementSystems', 'ms')
+                //->innerJoin('o.managementSystems', 'ms')
+                ->setParameter('managementSystemId', $managementSystem)
+                ->setParameter('per',$this->getPeriodService()->getPeriodActive())
+                ->setParameter('level',\Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_TACTICO)
+        ;
+        
+        return $queryBuilder->getQuery()->getResult();
+    }
+    
+    /**
      * Crea un paginador para los objetivos de acuerdo al nivel del mismo
      * 
      * @param array $criteria
@@ -343,10 +422,10 @@ class ObjetiveRepository extends EntityRepository {
         } elseif ($securityContext->isGranted(array('ROLE_MANAGER_SECOND', 'ROLE_MANAGER_SECOND_AUX'))) {
             $queryBuilder->andWhere('o.gerenciaSecond = ' . $user->getGerenciaSecond()->getId());
         } elseif ($securityContext->isGranted(array('ROLE_GENERAL_COMPLEJO', 'ROLE_GENERAL_COMPLEJO_AUX'))) {
-            $queryBuilder->innerJoin('o.gerenciaSecond', 'gs');
+//            $queryBuilder->innerJoin('o.gerenciaSecond', 'gs');
             $queryBuilder->andWhere('o.gerencia = ' . $user->getGerencia()->getId());
-            $queryBuilder->andWhere('gs.modular =:modular');
-            $queryBuilder->setParameter('modular', true);
+//            $queryBuilder->andWhere('gs.modular =:modular');
+//            $queryBuilder->setParameter('modular', true);
         } elseif($user->getGerencia()){
             $queryBuilder->andWhere('o.gerencia = ' . $user->getGerencia()->getId());
         }

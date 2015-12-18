@@ -27,7 +27,7 @@ abstract class Detail extends BaseModel
      * @var float
      * @ORM\Column(name="month_budget",type="float")
      */
-    protected $monthBudget;
+    protected $monthBudget = 0;
     
     /**
      * Mes
@@ -2112,6 +2112,48 @@ abstract class Detail extends BaseModel
 //        var_dump($totalReal);
 //        var_dump($percentage);
 //        die;
+    }
+    
+    /**
+     * Retorna el total del avance de un dia
+     * @param type $day
+     * @param type $prefix
+     * @return int
+     */
+    public function getTotalPercentajeOf($day) 
+    {
+        $nameReal = 'getDay'.$day.'Real';
+        $namePlan = 'getDay'.$day.'Plan';
+        $plan = $this->$namePlan();
+        $real = $this->$nameReal();
+        if($plan != 0){
+            $total = ($real * 100 / $plan);
+        }else{
+            $total = 0;
+        }
+        return $total;
+    }
+    
+    /**
+     * Retorna el total del avance de un dia
+     * @param type $day
+     * @param type $prefix
+     * @return int
+     */
+    public function getTotalToDay($day) 
+    {
+        $plan = $real = 0.0;
+        for($i=1; $i <= $day; $i++){
+            $nameReal = 'getDay'.$i.'Real';
+            $namePlan = 'getDay'.$i.'Plan';
+            $plan = $plan + $this->$namePlan();
+            $real = $real + $this->$nameReal();
+        }
+        
+        return [
+            'tp' => $plan,
+            'tr' => $real,
+        ];
     }
     
     public function __toString() {

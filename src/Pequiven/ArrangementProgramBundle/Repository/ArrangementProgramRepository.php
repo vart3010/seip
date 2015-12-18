@@ -452,6 +452,9 @@ class ArrangementProgramRepository extends EntityRepository
             ->innerJoin('ap.timeline', 't')
             ->innerJoin('t.goals', 't_g')
             ->innerJoin('t_g.responsibles', 't_g_r')
+            ->innerJoin('ap.categoryArrangementProgram', 'cap')
+            ->andWhere('cap.id = :idCategoryArrangementProgram')
+            ->setParameter('idCategoryArrangementProgram', ArrangementProgram::ASSOCIATE_ARRANGEMENT_PROGRAM_PLA)
             ;
         
         if(($period = $criteria->remove('ap.period')) != null){
@@ -523,6 +526,10 @@ class ArrangementProgramRepository extends EntityRepository
             $queryBuilder->andWhere($queryBuilder->expr()->like('p.name',"'%".$period."%'"));
         }
         
+        if(($prog_description = $criteria->remove('ap.description'))){
+            $queryBuilder->andWhere($queryBuilder->expr()->like('ap.description',"'%".$prog_description."%'"));
+        }
+        
         if(($complejo = $criteria->remove('complejo')) != null && $complejo > 0){
             $queryBuilder
                     ->andWhere('to_g.complejo = :complejo')
@@ -574,8 +581,7 @@ class ArrangementProgramRepository extends EntityRepository
         if(($secondLineManagement = $criteria->remove('secondLineManagement')) != null){
             $queryBuilder
                     ->andWhere('gs.id = :secondLineManagement')
-                ->setParameter('secondLineManagement', $secondLineManagement)
-                ;
+                ->setParameter('secondLineManagement', $secondLineManagement);
         }
         //Filtro de gerencia de segunda linea modular y vinculante
         if(($typeManagement = $criteria->remove('typeManagement')) != null){
@@ -640,9 +646,69 @@ class ArrangementProgramRepository extends EntityRepository
         
         parent::applyCriteria($queryBuilder, $criteria->toArray());
         $this->applyPeriodCriteria($queryBuilder);
+        //print_r($queryBuilder->getQuery()->getSQL());
+        //die();
     }
     protected function applySorting(\Doctrine\ORM\QueryBuilder $queryBuilder, array $sorting = null) {
         parent::applySorting($queryBuilder, $sorting);
+    }
+
+    /**
+     * Retorna los programas de gestion los cuales tengo asignados y Filtrados por hallasgos SIG
+     * 
+     * @param array $criteria
+     * @param array $orderBy
+     * @return type
+     */
+    public function createPaginatorByAssignedSigResponsibles(array $criteria = null, array $orderBy = null) {
+        
+        $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
+        
+        $qb = $this->getQueryBuilder();
+        $qb
+            ->innerJoin('ap.responsibles', 'ap_r')
+            ->innerJoin('ap.timeline', 't')
+            ->innerJoin('t.goals', 't_g')
+            ->innerJoin('t_g.responsibles', 't_g_r')
+            ->innerJoin('ap.categoryArrangementProgram', 'cap')
+            ->andWhere('cap.id = :idCategoryArrangementProgram')
+            ->setParameter('idCategoryArrangementProgram', ArrangementProgram::ASSOCIATE_ARRANGEMENT_PROGRAM_SIG)
+            ;
+        
+        if(($period = $criteria->remove('ap.period')) != null){
+            $qb
+                ->andWhere('ap.period = :period')
+                ->setParameter('period', $period)
+                ;
+        }
+        if(($user = $criteria->remove('ap.user')) != null){
+            $qb
+               ->andWhere($qb->expr()->orX('ap_r.id = :responsible','t_g_r.id = :responsible'))
+               ->setParameter('responsible', $user)
+                ;
+        }
+        
+        $this->applyCriteria($qb,$criteria->toArray());
+        $this->applySorting($qb, $orderBy);
+        
+        return $this->getPaginator($qb);
+
+    }
+    
+    function verificationAPUser(User $user, $AP, Period $period) {
+
+        $qb = $this->getQueryBuilder();
+        $qb
+                ->innerJoin('ap.responsibles', 'resp')
+                ->andWhere('ap.period = :per')
+                ->andWhere('ap.id = :ide')
+                ->andWhere('resp.id = :responsible')
+                ->setParameter('responsible', $user)
+                ->setParameter('per', $period)
+                ->setParameter('ide', $AP)
+        ;
+
+        return $qb->getQuery()->getResult();
     }
     
     protected function getAlias() {

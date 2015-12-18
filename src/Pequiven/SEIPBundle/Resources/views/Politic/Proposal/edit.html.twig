@@ -1,0 +1,88 @@
+{# empty Twig template #}
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayout.html.twig' %}
+
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
+
+{% block before_body %}
+    {{ contentHeader(
+        ("pequiven_seip.politic.work_study_circle"|trans ),
+        ("pequiven_seip.politic.proposal"|trans ),
+        ( 'pequiven.edit'|trans({},'messages') )
+    ) }}
+{% endblock %}
+
+{% block body -%}
+    
+    <form method="POST" action="{{ path("pequiven_proposal_view_edit",{id:proposal.id }) }}">
+        <br /><br />
+        
+            <fieldset class="fieldset fields-list">
+            <legend class="legend">Datos de la Propuesta</legend>
+            <div class="field-block button-height">
+                <label class="label">Línea Estratégica</label>
+                    <div style="font-weight: bold">
+                        {{ proposal.lineStrategic.ref }}{{ proposal.lineStrategic.description }}
+                    </div>
+                {# form para edicion de linea#}
+                {#{{ form_label(form.lineStrategic) }}
+                {{ form_widget(form.lineStrategic) }}
+                {{ form_errors(form.lineStrategic) }}
+                <span class="info-spot">
+                    <span class="icon-info-round"></span>
+                    <span class="info-bubble">Seleccione Linea Estrategica</span>
+                </span>
+            </div>
+            <div class="field-block" id="objetives">
+            </div>#}
+            </div>
+            <div class="field-block button-height">
+                <label class="label">Propuesta</label>
+                <textarea class="input" cols="80" rows="10" style="text-transform: uppercase;" id="description" name="proposal_data[description]">{{ proposal.description }}</textarea>
+            </div>
+
+        </fieldset>
+
+        {{ actions.create() }}
+    </form>    
+
+{% endblock %}
+
+{% block javascript %}
+
+    <script type="text/javascript">
+        var selectLineStrategic = $("#proposal_data_lineStrategic");
+        
+        $(document).ready(function () {
+            selectLineStrategic.select2({allowClear: true});
+        });
+        
+        selectLineStrategic.change(function() {
+           displayObjetivesFromLineStrategic();
+        });
+        
+        //Función que muestra los objetivos estratégicos de acuerdo a la línea estratégica seleccionada
+        function displayObjetivesFromLineStrategic(){
+            var data = {
+               lineStrategicId: $.trim(selectLineStrategic.val()),
+            };
+            $.ajax({
+                type: 'post',
+                url: '{{ path("pequiven_proposal_show_objetives") }}',
+                data: data,
+                success: function(data) {
+                    var text = '<label class="label" style="color:#FF0004">Objetivos Estratégicos</label><br>';
+                    for(var i=0, total = data.length; i<total; i++){
+                        text = text + '<span>' + data[i].ref + data[i].description + '</span><br>';
+                    }
+                    $('#objetives').fadeOut("slow",function(){
+                        $('#objetives').html(text);
+                        $('#objetives').fadeIn();
+                    });
+               }
+            });
+        }
+    </script>
+
+{% endblock javascript %}

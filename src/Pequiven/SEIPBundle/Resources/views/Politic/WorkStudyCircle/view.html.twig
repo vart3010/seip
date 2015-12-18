@@ -1,0 +1,250 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
+{% trans_default_domain 'workStudyCircle' %}
+
+{% block before_body %}
+    {{ contentHeader(
+        {(path('pequiven_work_study_circle_general')):("workStudyCircle.title"|trans)},("workStudyCircle.general"|trans )        
+    ) }}
+{% endblock %}
+
+{% block body %}
+
+    <div class="block">
+        <div class="block-title">
+            <h3 class="ng-binding">Estadísticas</h3>
+        </div>
+        <div class="with-padding">
+            <div class="standard-tabs margin-bottom" id="add-tabs">
+
+                <ul class="tabs">
+                    <li class="active"><a href="#tab-1">Por Círculo</a></li>
+                    <li><a href="#tab-2">Por Empleados</a></li>
+                </ul>
+                <div class="tabs-content">
+                    <div id="tab-1" class="with-padding">
+                        <div class="columns">
+                            <div class="twelve-columns"> 
+                                <div  ng-controller="graphicsWorkStudyCircle" ng-init="renderMultiSerie3d('graphicCircle',{{ graphicCircle }},'100%','400')">
+                                    <span id="graphicCircle"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="tab-2" class="with-padding">
+                        <div class="columns">
+                            <div class="twelve-columns"> 
+                                <div  ng-controller="graphicsWorkStudyCircle" ng-init="renderMultiSerie3d('graphicUser',{{ graphicUser }},'100%','400')">
+                                    <span id="graphicUser"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+    <br>
+    <br>
+
+
+    {% set colspan = 5 %}
+    {% set count = 0 %}
+
+    {% set CirMet = 0 %}
+    {% set CirReg = 0 %}
+    {% set EmpMet = 0 %}
+    {% set EmpReg = 0 %}  
+
+    {% for dataComplejo in complejo %}
+
+        <div class="block">
+            <div class="block-title">
+                <h3 class="ng-binding">{{ dataComplejo.description }}</h3>
+            </div>
+
+            <div class="with-padding">
+                <table class="simple-table responsive-table tables-extras" id="sorting-example2">
+                    <thead>
+                        <tr>
+                            <th scope="col" width="50%" class="header">
+                                Circulos
+                            </th>                    
+                            <th scope="col" width="50%" class="header">
+                                Empleados
+                            </th>  
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>                		
+                                <table class="simple-table responsive-table tables-extras" id="sorting-example2">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col" width="50%" class="header">
+                                                Meta
+                                            </th>                    
+                                            <th scope="col" width="50%" class="header">
+                                                Registrados
+                                            </th>  
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    <td>
+
+                                        {{ (users[count] / 12) |round(0, 'floor')}}
+                                        {% set CirMet = CirMet + ((users[count] / 12) |round(0, 'floor'))%}
+                                    </td>
+                                    <td>
+                                        {{ complejosCant[count] }}
+                                        {% set CirReg = CirReg + complejosCant[count]%}
+                                    </td>                		                	            	
+                    </tbody>
+                </table>
+                </td>
+
+                <td>                		
+                    <table class="simple-table responsive-table tables-extras" id="sorting-example2">
+                        <thead>
+                            <tr>
+                                <th scope="col" width="50%" class="header">
+                                    Meta 
+                                </th>                    
+                                <th scope="col" width="50%" class="header">
+                                    Registrados
+                                </th>  
+                            </tr>
+                        </thead>
+                        <tbody>             			
+                        <td>
+                            {{ users[count] }}
+                            {% set EmpMet = EmpMet + users[count]%}
+                        </td>
+                        <td>
+                            {{ cantNotNull[count] }}
+                            {% set EmpReg = EmpReg + cantNotNull[count]%}
+                        </td>                		                	            	
+                        </tbody>
+                    </table>
+                </td>
+                </tr>
+                </tbody>
+                </table>
+            </div>
+        </div>
+        <br>
+        {% set count = count + 1 %}
+    {% endfor %}
+
+
+
+
+    <br>
+    <HR width=100% align="center">
+    <HR width=100% align="center">
+    <br>
+
+    <!--TABLA DE TOTALES -->  
+    <div class="block">
+        <div class="block-title">
+            <h3 class="ng-binding">Números Totales</h3>
+        </div>
+
+        <div class="with-padding">
+            <table class="simple-table responsive-table tables-extras" id="sorting-example2">
+                <thead>
+                    <tr>
+                        <th scope="col" width="50%" class="header">
+                            Circulos
+                        </th>                    
+                        <th scope="col" width="50%" class="header">
+                            Empleados
+                        </th>  
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>                		
+                            <table class="simple-table responsive-table tables-extras" id="sorting-example2">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" width="50%" class="header">
+                                            Meta
+                                        </th>                    
+                                        <th scope="col" width="50%" class="header">
+                                            Registrados
+                                        </th>  
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            {{ CirMet }}
+                                        </td>
+                                        <td>
+                                            {{ CirReg }}
+                                        </td>       
+                                    <tr>                                
+                                </tbody>
+                            </table>
+                        </td>
+                        <td>                		
+                            <table class="simple-table responsive-table tables-extras" id="sorting-example2">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" width="50%" class="header">
+                                            Meta 
+                                        </th>                    
+                                        <th scope="col" width="50%" class="header">
+                                            Registrados
+                                        </th>  
+                                    </tr>
+                                </thead>
+                                <tbody>   
+                                    <tr>                                    
+                                        <td>
+                                            {{ EmpMet }}
+                                        </td>
+                                        <td>
+                                            {{ EmpReg }}
+                                        </td>     
+                                    <tr>                                
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <br>
+    <HR width=100% align="center">
+    {% set pdf=0 %} 
+    {% set routeConfig = path('pequiven_work_study_circle_general',{'phase':phase,'pdf':pdf}) %}
+    {% if(is_granted(["ROLE_SEIP_WORK_STUDY_CIRCLES_EXPORT_REPORT"])) %}
+        <div class="align-right">
+            {{ buttons.generic(
+                    (routeConfig),
+                    ('workStudyCircle.export.exportPdf'|trans({})),
+                    'icon-download'
+                 ) 
+            }}
+        </div>
+    {% endif %}
+
+
+
+    {% block javascripts %}
+        {{ parent() }}
+        <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/fusioncharts.js') }}"></script>
+        <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/themes/fusioncharts.theme.fint.js') }}"></script>
+
+
+    {% endblock %}
+
+
+{% endblock %}

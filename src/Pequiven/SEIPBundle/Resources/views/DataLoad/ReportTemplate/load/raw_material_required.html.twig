@@ -1,0 +1,30 @@
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+<fieldset class="fieldset fields-list">
+    <legend class="legend">{{ 'pequiven_seip.cause_of_PNR'|trans }}</legend>
+    <div class="field-block button-height">
+        {{ form_label(form.rawMaterial) }}
+        {{ form_widget(form.rawMaterial) }}
+        {{ form_errors(form.rawMaterial) }}
+    </div>
+    <div class="field-block button-height">
+        {{ form_label(form.requiredAmount) }}
+        {{ form_widget(form.requiredAmount) }}
+        {{ form_errors(form.requiredAmount) }}
+    </div>
+    <div class="field-block button-height">
+        {{ form_label(form.amountNotAvailable) }}
+        {{ form_widget(form.amountNotAvailable) }}
+        {{ form_errors(form.amountNotAvailable) }}
+    </div>
+    <div class="field-block button-height">
+        {{ form_label(form.mount) }}
+        {{ form_widget(form.mount) }}
+        {{ form_errors(form.mount) }}
+    </div>
+    <div class="field-block button-height">
+        {{ form_label(form.unitMeasure) }}
+        {{ form_widget(form.unitMeasure) }}
+        {{ form_errors(form.unitMeasure) }}
+    </div>
+</fieldset>

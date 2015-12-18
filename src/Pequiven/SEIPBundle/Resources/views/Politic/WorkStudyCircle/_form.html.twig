@@ -1,0 +1,47 @@
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+<fieldset class="fieldset fields-list">
+    <legend class="legend">{{ 'pequiven_seip.politic.work_study_circle'|trans }}</legend>
+    <div class="field-block button-height">
+        {{ form_label(form.name) }}
+        {{ form_widget(form.name) }}
+        {{ form_errors(form.name) }}
+    </div>
+    <div class="field-block button-height">
+        {{ form_label(form.region) }}
+        {{ form_widget(form.region) }}
+        {{ form_errors(form.region) }}
+    </div>
+    <div class="field-block button-height">
+        {{ form_label(form.ref) }}
+        {{ form_widget(form.ref) }}
+        {{ form_errors(form.ref) }}
+    </div>
+     <div class="field-block button-height">
+        {{ form_label(form.members) }}
+        {{ form_widget(form.members) }}
+        {{ form_errors(form.members) }}
+    </div>
+</fieldset>
+{#        {{ dump(_context|keys) }}#}
+<script type="text/javascript">
+    var dateFormat = "dd-mm-yy";
+    $(document).ready(function(){
+        
+        {#var selectEntity = $("#pequiven_seipbundle_dataload_plantreport_entity");
+        var selectPlant = $("#pequiven_seipbundle_dataload_plantreport_plant");
+        
+        var urlGetPlant = "{{ path("pequiven_seip_plant_by_entity") }}";
+        
+        ajaxToSelect.formaterData = function(response){
+            return response.name;
+        };
+        selectEntity.on("change",function(){
+            ajaxToSelect2(urlGetPlant,selectPlant,{ entity: selectEntity.val() });
+        });
+        {% if plant_report.id <= 0 %}
+            selectPlant.empty();
+            selectPlant.select2('disable');
+        {% endif  %}#}
+    });
+</script>

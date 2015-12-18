@@ -36,6 +36,11 @@ abstract class Company extends BaseModel
     const TYPE_OF_COMPANY_MIXTA = 2;
     
     /**
+     * Tipo de compañia mixta o filial
+     */
+    const TYPE_OF_COMPANY_AFFILIATED_MIXTA = 3;
+    
+    /**
      * Proceso de produccion
      */
     const TYPE_PROCESS_PRODUCTION = 0;

@@ -13,6 +13,11 @@
         {{ form_errors(form.service) }}
     </div>
     <div class="field-block button-height">
+        {{ form_label(form.aliquot) }}
+        {{ form_widget(form.aliquot) }}
+        {{ form_errors(form.aliquot) }}
+    </div>
+    <div class="field-block button-height">
         {{ form_label(form.enabled) }}
         {{ form_widget(form.enabled) }}
         {{ form_errors(form.enabled) }}

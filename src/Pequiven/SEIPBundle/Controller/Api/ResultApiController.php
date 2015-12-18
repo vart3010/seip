@@ -71,6 +71,8 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
                 '%period%' => $periodName
             ));
         }
+        
+        $periodActual = $period;
         $canBeEvaluated = $isValidAudit = true;
         if(count($this->errors) == 0){
             //Repositorios
@@ -110,7 +112,7 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
                 $arrangementPrograms[$key] = array(
                     'id' => sprintf('PG-%s',$arrangementProgram->getId()),
                     'description' => $arrangementProgram->getRef(),
-                    'result' => $this->formatResult($arrangementProgram->getResult()),
+                    'result' => $arrangementProgram->getUpdateResultByAdmin() ? $this->formatResult($arrangementProgram->getResultModified()) : $this->formatResult($arrangementProgram->getResult()),
                     'dateStart' => array(
                         'plan' => $this->formatDateTime($planDateStart),
                         'real' => $this->formatDateTime($realDateStart)
@@ -135,11 +137,15 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
                $this->addErrorTrans('pequiven_seip.errors.the_second_line_management_no_audit',array("%gerenciaSecond%" => $gerenciaSecond->getGerencia()));
                $status = self::RESULT_NO_AUDIT;
             }
-            
-            if($user->getLevelRealByGroup() == \Pequiven\MasterBundle\Model\Rol::ROLE_MANAGER_FIRST || $user->getLevelRealByGroup() == \Pequiven\MasterBundle\Model\Rol::ROLE_GENERAL_COMPLEJO) {
+
+            if(($user->getLevelRealByGroup() == \Pequiven\MasterBundle\Model\Rol::ROLE_MANAGER_FIRST ) || $user->getLevelRealByGroup() == \Pequiven\MasterBundle\Model\Rol::ROLE_GENERAL_COMPLEJO) {
                 if($gerenciaFirst){
                     foreach ($gerenciaFirst->getTacticalObjectives() as $objetive) {
-                        $objetives[$objetive->getId()] = $objetive;
+                        if($objetive->getObjetiveLevel()->getLevel() == \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_TACTICO){
+                            if($objetive->getPeriod()->getId() == $periodActual->getId()){
+                                $objetives[$objetive->getId()] = $objetive;
+                            }
+                        }
                     }
                 }else{
                     $this->addErrorTrans('pequiven_seip.errors.the_user_is_not_assigned_first_line_management',array(
@@ -150,7 +156,9 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
             } else if($user->getLevelRealByGroup() == \Pequiven\MasterBundle\Model\Rol::ROLE_MANAGER_SECOND) {
                 if($gerenciaSecond){
                     foreach ($gerenciaSecond->getOperationalObjectives() as $objetive) {
-                        $objetives[$objetive->getId()] = $objetive;
+                        if($objetive->getPeriod()->getId() == $periodActual->getId()){
+                            $objetives[$objetive->getId()] = $objetive;
+                        }
                     }
                 }else{
                     $this->addErrorTrans('pequiven_seip.errors.the_user_is_not_assigned_second_line_management',array(
@@ -161,7 +169,9 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
             }else if($user->getLevelRealByGroup() == \Pequiven\MasterBundle\Model\Rol::ROLE_DIRECTIVE){
                 $objetivesStrategic = $this->get('pequiven.repository.objetive')->findAllStrategicByPeriod($period);
                 foreach ($objetivesStrategic as $objetive) {
-                    $objetives[$objetive->getId()] = $objetive;
+                    if($objetive->getPeriod()->getId() == $periodActual->getId()){
+                        $objetives[$objetive->getId()] = $objetive;
+                    }
                 }
             }
             
@@ -175,13 +185,13 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
                     $allArrangementPrograms[$arrangementProgram->getId()] = $arrangementProgram;
                 }
                 foreach ($objetive->getIndicators() as $indicator) {
-                    $allIndicators[$indicator->getId()] = $indicator;;
+                    $allIndicators[$indicator->getId()] = $indicator;
                 }
                 
                 $data = array(
                     'id' => sprintf('OB-%s',$objetive->getId()),
                     'description' => $objetive->getDescription(),
-                    'result' => $this->formatResult($objetive->getResult()),
+                    'result' => $objetive->getUpdateResultByAdmin() ? $this->formatResult($objetive->getResultModified()) : $this->formatResult($objetive->getResult()),
                     'dateStart' => array(
                         'plan' => $this->formatDateTime($planDateStart),
                         'real' => $this->formatDateTime($planDateStart)
@@ -216,7 +226,7 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
                 $goals[$key] = array(
                     'id' => sprintf('ME-%s',$goal->getId()),
                     'description' => $goal->getName(),
-                    'result' => $this->formatResult($goal->getResult()),
+                    'result' => $goal->getUpdateResultByAdmin() ? $this->formatResult($goal->getResultModified()) : $this->formatResult($goal->getResult()),
                     'dateStart' => array(
                         'plan' => $this->formatDateTime($planDateStart),
                         'real' => $this->formatDateTime($realDateStart)
@@ -329,6 +339,116 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
         
         return $this->handleView($view);
     }
+    
+    
+    function getItemsSaiAction(\Symfony\Component\HttpFoundation\Request $request){
+        
+        $this->errors= array();
+        $periodName = $request->get('period');
+        $typeGerencia = $request->get('typeGerencia');
+        $codeGerencia = $request->get('codeGerencia');
+
+        $objetives = $objetivesOO = $objetivesOT = $objetivesOE = array();
+        
+        if($periodName === null){
+            $this->addErrorTrans('pequiven_seip.errors.you_must_specify_the_period_inquiry');
+        }
+        if($typeGerencia === null){
+            $this->addErrorTrans('pequiven_seip.errors.you_must_specify_type_gerencia');
+        }
+        if($codeGerencia === null){
+            $this->addErrorTrans('pequiven_seip.errors.you_must_specify_code_gerencia');
+        }
+        
+        $period = $this->container->get('pequiven.repository.period')->findOneBy(array(
+            'name' => $periodName,
+        ));
+        if($typeGerencia == 1){
+            $gerencia = $this->container->get('pequiven.repository.gerenciafirst')->findOneBy(array(
+                'abbreviation' => $codeGerencia,
+            ));
+        } else{
+            $gerencia = $this->container->get('pequiven.repository.gerenciasecond')->findOneBy(array(
+                'abbreviation' => $codeGerencia,
+            ));
+        }
+        
+        $periodActual = $period;
+        $totalItems = 0;
+        
+        if($typeGerencia == 1){
+            foreach ($gerencia->getTacticalObjectives() as $objetive) {
+//                if($objetive->getObjetiveLevel()->getLevel() == \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_TACTICO){
+                if($objetive->getPeriod()->getId() == $periodActual->getId()){
+                    $objetives[$objetive->getId()] = $objetive;
+                }
+//                }
+            }
+        } else{
+            foreach ($gerencia->getOperationalObjectives() as $objetive) {
+                if($objetive->getPeriod()->getId() == $periodActual->getId()){
+                    $objetives[$objetive->getId()] = $objetive;
+                }
+            }
+        }
+
+//        $objetivesStrategic = $this->get('pequiven.repository.objetive')->findAllStrategicByPeriod($period);
+//        foreach ($objetivesStrategic as $objetive) {
+//            if($objetive->getPeriod()->getId() == $periodActual->getId()){
+//                $objetives[$objetive->getId()] = $objetive;
+//            }
+//        }
+        
+        //Recorrer todos los objetivos
+        foreach ($objetives as $key => $objetive) {
+            $period = $objetive->getPeriod();
+
+            $data = array(
+                'ref' => sprintf('OB-%s',$objetive->getRef()),
+                'description' => $objetive->getDescription(),
+//                'result' => $objetive->getUpdateResultByAdmin() ? $this->formatResult($objetive->getResultModified()) : $this->formatResult($objetive->getResult()),
+                'result' => $this->formatResult($objetive->getResult()),
+                'level' => $objetive->getObjetiveLevel()->getDescription(),
+//                'dateStart' => array(
+//                    'plan' => $this->formatDateTime($planDateStart),
+//                    'real' => $this->formatDateTime($planDateStart)
+//                ),
+//                'dateEnd' => array(
+//                    'plan' => $this->formatDateTime($planDateEnd),
+//                    'real' => $this->formatDateTime($planDateEnd)
+//                ),
+            );
+            if($objetive->getObjetiveLevel()->getLevel() == \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_OPERATIVO){
+                $objetivesOO[$objetive->getId()] = $data;
+            }else if($objetive->getObjetiveLevel()->getLevel() == \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_TACTICO){
+                $objetivesOT[$objetive->getId()] = $data;
+            }else if($objetive->getObjetiveLevel()->getLevel() == \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_ESTRATEGICO){
+                $objetivesOE[$objetive->getId()] = $data;
+            }
+            $totalItems++;
+        }
+        
+        $data = array(
+            'data' => array(
+                'gerencia' => $gerencia->getDescription(),
+                'performance' => array(
+                    'objetives' => array(
+                        'OO' => $objetivesOO,
+                        'OT' => $objetivesOT,
+                        'OE' => $objetivesOE,
+                    ),
+                ),
+            'quantityItems' => $totalItems,
+            ),
+            'errors' => $this->errors,
+            'success' => true,
+        );
+        
+        $view = $this->view($data);
+        $view->getSerializationContext()->setGroups(array('api_list','api_result','sonata_api_read'));
+        
+        return $this->handleView($view);
+    }
 
     /**
      * Buscar objetivos del programa de gestion
@@ -380,7 +500,7 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
      */
     private function getResultService(){
         return $this->container->get('seip.service.result');
-}
+    }
     
     protected function trans($id,array $parameters = array(), $domain = 'messages')
     {

@@ -16,6 +16,11 @@ pequiven:
         valid_product_planning:
             incorrect_valid_capacity: La capacidad de producción diaria no puede ser mayor al presupuesto del mes.
             you_can_production_month_without_adding_gross_production_budget: No puede agregar la producción neta del mes "%month%", sin agregar su presupuesto de producción bruta.
+        product_detail_daily_month:
+            net_production_can_not_exceed_gross: 'La producción neta(%net%) no puede ser mayor a la bruta(%gross%) en el producto "%product%".'
+            long_observation: La observación no puede contener mas de 255 caracteres
+        plant_stop_planning:
+           total_number_stops_not_greater_than_indicated: 'El total de paradas(%totalDaysStops%) no puede ser mayor al indicado(%totalStops%).'
 fos_user:
     password:
         mismatch: Las contraseñas introducidas no coinciden

@@ -45,10 +45,12 @@
     {% include 'PequivenSEIPBundle:DataLoad:Plant/PlantStopPlanning/show/dayStops.html.twig' %}
     <br /><br />
     <p class="button-height align-right">
-        &nbsp;
-        {{ buttons.generic(path('pequiven_plant_stop_planning_update', { 'id': plant_stop_planning.id }),('pequiven.edit'|trans({},'messages'))) }}
-        &nbsp;
-        {{ buttons.delete(path('pequiven_plant_stop_planning_delete', { 'id': plant_stop_planning.id })) }}
+        {% if periodService().isAllowPlanningReport %}
+            &nbsp;
+            {{ buttons.generic(path('pequiven_plant_stop_planning_update', { 'id': plant_stop_planning.id }),('pequiven.edit'|trans({},'messages'))) }}
+            &nbsp;
+            {{ buttons.delete(path('pequiven_plant_stop_planning_delete', { 'id': plant_stop_planning.id })) }}
+        {% endif %}
     </p>
                     
 {% endblock %}

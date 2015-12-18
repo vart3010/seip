@@ -18,6 +18,8 @@ use Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram;
 use Pequiven\IndicatorBundle\Entity\Indicator;
 use Pequiven\MasterBundle\Entity\Rol;
 use Pequiven\ObjetiveBundle\Entity\Objetive;
+use Pequiven\SIGBundle\Entity\ManagementSystem;
+use Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle;
 use Pequiven\SEIPBundle\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -53,6 +55,7 @@ class SecurityService implements ContainerAwareInterface
             'ROLE_SEIP_INDICATOR_VIEW_STRATEGIC' => 'evaluateStrategicIndicator',
             'ROLE_SEIP_INDICATOR_VIEW_TACTIC' => 'evaluateTacticIndicator',
             'ROLE_SEIP_INDICATOR_VIEW_OPERATIVE' => 'evaluateOperativeIndicator',
+            'ROLE_SEIP_SIG_INDICATOR_VIEW' => 'evaluateSIGIndicator',
             
             'ROLE_SEIP_RESULT_VIEW_TACTIC' => 'evaluateTacticResult',
             'ROLE_SEIP_RESULT_VIEW_OPERATIVE' => 'evaluateTacticResult',
@@ -85,7 +88,36 @@ class SecurityService implements ContainerAwareInterface
             'ROLE_SEIP_INDICATOR_APPROVED_STRATEGIC' => 'evaluateIndicatorApproved',
             'ROLE_SEIP_INDICATOR_APPROVED_TACTIC' => 'evaluateIndicatorApproved',
             'ROLE_SEIP_INDICATOR_APPROVED_OPERATIVE' => 'evaluateIndicatorApproved',
+            
+            'ROLE_SEIP_WORK_STUDY_CIRCLE_VIEW' => 'evaluateWorkStudyCircle',
         );
+    }
+    
+    /**
+     * Evalúa si el CET (Cualquier fase) puede ser visto
+     * @param type $rol
+     * @param WorkStudyCircle $workStudyCircle
+     * @return boolean
+     */
+    function evaluateWorkStudyCircle($rol, WorkStudyCircle $workStudyCircle) 
+    {
+        $result = false;
+        $user = $this->getUser();
+        if($this->isGranted('ROLE_SEIP_WORK_STUDY_CIRCLES_VIEW_ALL_PHASE')){
+            $result = true;
+        }elseif($workStudyCircle->getPhase() == WorkStudyCircle::PHASE_ONE){
+            if($workStudyCircle->getId() == $user->getWorkStudyCircle()->getId()){
+                $result = true;
+            }
+        } elseif($workStudyCircle->getPhase() == WorkStudyCircle::PHASE_TWO || $workStudyCircle->getPhase() == WorkStudyCircle::PHASE_THREE || $workStudyCircle->getPhase() == WorkStudyCircle::PHASE_FOUR){
+            foreach($user->getWorkStudyCircles() as $workStudyCircleObject){
+                if($workStudyCircle->getId() == $workStudyCircleObject->getId()){
+                    $result = true;
+                }
+            }
+        }
+        
+        return $result;
     }
     
     /**
@@ -99,7 +131,9 @@ class SecurityService implements ContainerAwareInterface
         $result = false;
         if($objetive->getStatus() == Objetive::STATUS_DRAFT && $objetive->getPeriod()->isActive() === true){
             $result = true;
-        }else{
+        } elseif($objetive->getStatus() == Objetive::STATUS_DRAFT && $objetive->getPeriod()->getParent()->isActive()){
+            $result = true;            
+        } else{
             $result = false;
         }
         
@@ -117,7 +151,9 @@ class SecurityService implements ContainerAwareInterface
         $result = false;
         if($indicator->getStatus() == Indicator::STATUS_DRAFT && $indicator->getPeriod()->isActive() === true){
             $result = true;
-        }else{
+        } elseif($indicator->getStatus() == Indicator::STATUS_DRAFT && $indicator->getPeriod()->getParent()->isActive()){
+            $result = true;            
+        } else{
             $result = false;
         }
         
@@ -222,7 +258,7 @@ class SecurityService implements ContainerAwareInterface
     {
         $user = $this->getUser();
         $valid = false;
-        $rol = $user->getLevelRealByGroup();
+        $rol = $user->getLevelByGroup(\Pequiven\SEIPBundle\Model\Common\CommonObject::TYPE_LEVEL_USER_ALL);
         if($rol === Rol::ROLE_DIRECTIVE){
             $valid = true;
         }else{
@@ -255,6 +291,25 @@ class SecurityService implements ContainerAwareInterface
     }
 
     /**
+     * Evalúa si el usuario tiene permiso para ver los Indicadores que pertenecen a SIG
+     * @param type $rol
+     * @param Indicator $indicator
+     */
+    private function evaluateSIGIndicator($rol, Indicator $indicator)
+    {
+        $user = $this->getUser();
+        $valid = false;
+        $rol = $user->getLevelRealByGroup();
+        
+        $managementSystems = $indicator->getManagementSystems();
+        if(count($managementSystems) > 0){
+            $valid = true;
+        }
+
+        return $valid;
+    }
+    
+    /**
      * Evalúa si el usuario tiene permiso para ver los Indicadores Estratégicos
      * @param type $rol
      * @param Indicator $indicator
@@ -266,8 +321,29 @@ class SecurityService implements ContainerAwareInterface
         $rol = $user->getLevelRealByGroup();
         if($rol === Rol::ROLE_DIRECTIVE){
             $valid = true;
+        }elseif($user->getId() == 1381 OR $user->getId() == 5318 OR $user->getId() == 1334 OR $user->getId() == 1338 OR $user->getId() == 1383 OR $user->getId() == 1385){
+            
+            foreach ($indicator->getObjetives() as $value) {
+                foreach ($value->getLineStrategics() as $line) {
+                    if($line->getId() === 2){
+                        $valid = true;
+                    }                                    
+                }
+            }
+
+        }elseif($user->getId() == 871 OR $user->getId() == 887 OR $user->getId() == 4531){
+            
+            foreach ($indicator->getObjetives() as $value) {
+                foreach ($value->getLineStrategics() as $line) {
+                    if($line->getId() === 5){
+                        $valid = true;
+                    }                                    
+                }
+            }
+
         }else{
         }
+
         if(!$valid){
             $this->checkSecurity();
         } else{
@@ -284,7 +360,8 @@ class SecurityService implements ContainerAwareInterface
     {
         $valid = false;
         $user = $this->getUser();
-        $rol = $user->getLevelRealByGroup();
+//        $rol = $user->getLevelRealByGroup();
+        $rol = $user->getLevelAllByGroup();
         if($rol === Rol::ROLE_DIRECTIVE){
             $valid = true;
         }else{
@@ -340,6 +417,10 @@ class SecurityService implements ContainerAwareInterface
                     break;
                 }
             }
+        }
+        
+        if($this->isGranted('ROLE_SEIP_INDICATOR_VIEW_OPERATIVE')){
+            $valid = true;
         }
         
         if(!$valid){
@@ -486,7 +567,7 @@ class SecurityService implements ContainerAwareInterface
     private function evaluateObjetiveEdit($rol,Objetive $objective)
     {
         $result = false;
-        if($objective->getPeriod()->isActive() === true){
+        if($objective->getPeriod()->isActive() === true || $objective->getPeriod()->getParent()->isOpened() == true){
             if($objective->getStatus() == Objetive::STATUS_DRAFT){
                 $result = true;
             }
@@ -505,7 +586,7 @@ class SecurityService implements ContainerAwareInterface
     private function evaluateObjetiveDelete($rol,Objetive $objective)
     {
         $result = false;
-        if($objective->getPeriod()->isActive() === true){
+        if($objective->getPeriod()->isActive() === true || $objective->getPeriod()->getParent()->isOpened() == true){
             if($objective->getStatus() == Objetive::STATUS_DRAFT){
                 $result = true;
             }
@@ -523,14 +604,34 @@ class SecurityService implements ContainerAwareInterface
      */
     private function evaluateIndicatorEdit($rol,  Indicator $indicator)
     {
+        $indicatorService = $this->getIndicatorService();//Llamado al servicio
+        
+        $roleEditByLevel = array(
+            \Pequiven\IndicatorBundle\Entity\IndicatorLevel::LEVEL_ESTRATEGICO => "ROLE_SEIP_INDICATOR_EDIT_STRATEGIC",
+            \Pequiven\IndicatorBundle\Entity\IndicatorLevel::LEVEL_TACTICO => "ROLE_SEIP_INDICATOR_EDIT_TACTIC",
+            \Pequiven\IndicatorBundle\Entity\IndicatorLevel::LEVEL_OPERATIVO => "ROLE_SEIP_INDICATOR_EDIT_OPERATIVE"
+        );
+       
+        $value = $indicatorService->isIndicatorHasParentsEstrategic($indicator);//Llamando al metodo
+        
         $result = false;
-        if($indicator->getPeriod()->isActive() === true){
-            if($indicator->getStatus() == Indicator::STATUS_DRAFT){
-                $result = true;
+        if($indicator->getPeriod()->isActive() === true || $indicator->getPeriod()->getParent()->isOpened() == true){
+            if($this->isGranted($roleEditByLevel[$indicator->getIndicatorLevel()->getLevel()])){
+                if($indicator->getStatus() == Indicator::STATUS_DRAFT){
+                    if ($value === false) {
+                        if ($this->isGranted('ROLE_SEIP_PLANNING_INDICATOR_EDIT')) {
+                            $result = true;
+                        }else{
+                            $result = false;                            
+                        }
+                    }else{
+                        $result = true;                        
+                    }
+                }
             }
         }else{
             $result = false;
-        }
+        }        
         return $result;
     }
     
@@ -542,16 +643,24 @@ class SecurityService implements ContainerAwareInterface
      */
     private function evaluateIndicatorDelete($rol,  Indicator $indicator)
     {
+        $roleDeleteByLevel = array(
+            \Pequiven\IndicatorBundle\Entity\IndicatorLevel::LEVEL_ESTRATEGICO => "ROLE_SEIP_INDICATOR_DELETE_STRATEGIC",
+            \Pequiven\IndicatorBundle\Entity\IndicatorLevel::LEVEL_TACTICO => "ROLE_SEIP_INDICATOR_DELETE_TACTIC",
+            \Pequiven\IndicatorBundle\Entity\IndicatorLevel::LEVEL_OPERATIVO => "ROLE_SEIP_INDICATOR_DELETE_OPERATIVE"
+        );
+        
         $result = false;
-        if($indicator->getPeriod()->isActive() === true){
-            if($indicator->getStatus() == Indicator::STATUS_DRAFT){
-                $result = true;
+        if($indicator->getPeriod()->isActive() === true || $indicator->getPeriod()->getParent()->isOpened() == true){
+            if($this->isGranted($roleDeleteByLevel[$indicator->getIndicatorLevel()->getLevel()])){
+                if($indicator->getStatus() == Indicator::STATUS_DRAFT){
+                    $result = true;
+                }
             }
         }else{
             $result = false;
         }
         return $result;
-    }    
+    }
 
     /**
      * Evalua que el usuario tenga acceso a la seccion especifica, ademas se valida con un segundo metodo
@@ -577,6 +686,40 @@ class SecurityService implements ContainerAwareInterface
                     return $valid;
                 }
             }
+            $methodValidMap = $this->getMethodValidMap();
+            if($quantityRoles == 1 && isset($methodValidMap[$rol])){
+                $method = $methodValidMap[$rol];
+                $valid = call_user_func_array(array($this,$method),array($rol,$parameters));
+                if(!$valid){
+                    if($throwException === true){
+                        throw $this->createAccessDeniedHttpException($this->buildMessage($rol));
+                    }else{
+                        return $valid;
+                    }
+                }
+            }
+        }
+        return $valid;
+    }
+    
+    public function checkMethodSecurity($rol = null,$parameters = null,$throwException = true){
+        if($rol === null){
+            throw $this->createAccessDeniedHttpException($this->trans('pequiven_seip.security.permission_denied'));
+        }
+        $roles = $rol;
+        if(!is_array($rol)){
+            $roles = array($rol);
+        }
+        $valid = false;
+        $quantityRoles = count($roles);
+        foreach ($roles as $rol) {
+//            if(!$valid){
+//                if($throwException === true){
+//                    throw $this->createAccessDeniedHttpException($this->buildMessage($rol));
+//                }else{
+//                    return $valid;
+//                }
+//            }
             $methodValidMap = $this->getMethodValidMap();
             if($quantityRoles == 1 && isset($methodValidMap[$rol])){
                 $method = $methodValidMap[$rol];
@@ -727,5 +870,13 @@ class SecurityService implements ContainerAwareInterface
     public function getPeriodService()
     {
         return $this->container->get('pequiven_seip.service.period');
+    }
+
+    /**
+     * 
+     * @return \Pequiven\IndicatorBundle\Service\IndicatorService
+     */
+    protected function getIndicatorService() {
+        return $this->container->get('pequiven_indicator.service.inidicator');
     }
 }

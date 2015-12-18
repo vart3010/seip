@@ -1,0 +1,58 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutSIG.html.twig' %}
+
+{% block body %}
+{% trans_default_domain 'sip' %}    
+        
+        <form method="POST" id="form_sip_ubch_OnePerTen">
+            <fieldset class="fieldset fields-list">
+                <legend class="legend">Reporte 1 x 10</legend>
+                    
+                    <div class="field-block button-height" >
+                            <p class="assistance button-height">
+
+                            <label class="label">Reporte de 1 x 10  </label> 
+                            <p class="assistanc button-height"> 
+                                <input type="checkbox" name="sip_ubch[notification]" data="" value="0" class="switch blue-active mid-margin-right "  data-text-on="SI" data-text-off="NO">
+                            <span class="info-spot">
+                                <span class="icon-info-round"></span>
+                                <span class="info-bubble">Seleccione si ya reporto su 1 x 10</span>
+                            </span> 
+                            </p>         
+                    </div>
+
+                    {{ form_errors(form) }} 
+                    <div class="field-block button-height" >
+                        {{ form_widget(form) }}
+                        {{ form_errors(form) }}
+                    </div>                   
+                    {{ form_rest(form) }}
+            
+            </fieldset>
+        </form>       
+
+{% endblock %}
+
+{% block javascript_base %}
+    <script type="text/javascript">
+        
+        $(document).ready(function () {
+
+            $('#switch-mode').change(function () {
+                $('.switch-wrapper')[this.checked ? 'addClass' : 'removeClass']('reversed-switches');
+            });
+
+            $("p.assistanc input").change(function () {
+                var value = $(this).val();
+                var assists = $(this).attr("data");
+                if (value == 1) {
+                    $(this).val(0);                                        
+                } else {
+                    $(this).val(1);                    
+                }
+                console.log((value));
+            });
+            
+            
+        });
+    </script>
+{% endblock %}

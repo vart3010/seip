@@ -1,0 +1,151 @@
+
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
+
+{% trans_default_domain 'workStudyCircle' %}
+
+{% block javascripts_base %}
+    {{ parent() }}
+    <script src="{{  asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.input.js') }}"></script>
+{% endblock javascripts_base %}
+
+{% block before_body %}
+    {{ contentHeader(
+        ("workStudyCircle.title"|trans ),
+        ("workStudyCircle.meetings.title"|trans ),
+        ("workStudyCircle.meetings.add"|trans )
+    ) }}
+{% endblock %}
+
+{% block body %}
+    <form method="POST" id="form_meeting" action="{{ path("pequiven_meeting_create",{workStudyCircle_id:workStudyCircle.id}) }}">
+        <br /><br />
+        {{ form_top(form) }}
+        <fieldset class="fieldset fields-list">
+            <legend class="legend">{{ 'workStudyCircle.meetings.dataMeeting'|trans }}</legend>
+            <div class="field-block button-height">
+                {{ form_label(form.date) }}
+                {{ form_widget(form.date) }}
+                {{ form_errors(form.date) }}
+                <span class="info-spot">
+                    <span class="icon-info-round"></span>
+                    <span class="info-bubble">Fecha de la Reunión</span>
+                </span>
+            </div>
+            <div class="field-block button-height">
+                {{ form_label(form.duration) }}
+                {{ form_widget(form.duration) }}
+                {{ form_errors(form.duration) }}
+            </div>
+            <div class="field-block button-height">
+                {{ form_label(form.place) }}
+                {{ form_widget(form.place) }}
+                {{ form_errors(form.place) }}
+                <span class="info-spot">
+                    <span class="icon-info-roun"d></span>
+                    <span class="info-bubble">Lugar de Reunión (Ejem. Auditorio, Sala, etc.)</span>
+                </span>
+            </div>
+            <div class="field-block button-height">
+                {{ form_label(form.subject) }}
+                {{ form_widget(form.subject) }}
+                {{ form_errors(form.subject) }}
+                <span class="info-spot">
+                    <span class="icon-info-round"></span>
+                    <span class="info-bubble">Tema de la Reunión</span>
+                </span>
+            </div>
+            <div class="field-block button-height">
+                {{ form_label(form.observation) }}
+                {{ form_widget(form.observation) }}
+                {{ form_errors(form.observation) }}
+                <span class="info-spot">
+                    <span class="icon-info-round"></span>
+                    <span class="info-bubble">Observaciones</span>
+                </span>
+            </div>
+        </fieldset>
+        <br>
+        <fieldset class="fieldset">
+            <legend class="legend">{{ 'workStudyCircle.members.add'|trans }}</legend>
+            <div class="columns">
+                <div class="twelve-columns">
+                    <table class="simple-table responsive-table tables-extras" id="sorting-example2">
+                        <thead>
+                            <tr>
+                                <th scope="col" width="2%" class="header">{{ 'seip.table.header.nro'|trans({},'PequivenArrangementProgramBundle') }}</th>
+                                <th scope="col" width="40%" class="header">{{ 'workStudyCircle.assistances.user'|trans }}</th>
+                                <th scope="col" width="20%" class="hide-on-tablet header">{{ 'workStudyCircle.assistances.assistance'|trans }}</th>
+                                <th scope="col" width="40%" class="hide-on-tablet header">{{ 'workStudyCircle.assistances.observation'|trans }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {#{% set userCreatedId = workStudyCircle.coordinator.id %}#}
+                            {% for member in members %}
+                                {#                                {% set nameCheck = "meeting_data[user_"~member.id~"]" %}#}
+                                <tr>
+                                    <td>{{ loop.index  }}</td>
+                                    <td>{{ member.getFullNameUser }}</td>
+                                    <td>
+                                        <p class="assistance button-height">
+                                            <input type="checkbox"  name="meeting_extra[member_{{ member.id }}]" data="{{ member.id}}" value="0" class="switch blue-active mid-margin-right"  data-text-on="SI" data-text-off="NO">
+                                        </p>
+                                    </td>
+                                    <td>
+                                        <input type="textarea" required="required"  id="obs_{{ member.id }}" name="meeting_extra[obs_{{ member.id }}]" class=" input input-xlarge">
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </fieldset>
+
+
+        {{ actions.create() }}
+
+        {{ form_rest(form) }}
+    </form>
+
+
+
+
+{% endblock %}
+{% block javascript %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $('#switch-mode').change(function () {
+                $('.switch-wrapper')[this.checked ? 'addClass' : 'removeClass']('reversed-switches');
+            });
+            $("p.assistance input").change(function () {
+                var value = $(this).val();
+                var memeber = $(this).attr("data");
+                if (value == 1) {
+                    $(this).val(0);
+                    $("#obs_" + memeber).attr("disabled", false);
+                    $("#obs_" + memeber).attr("required", true);
+                } else {
+                    $(this).val(1);
+                    $("#obs_" + memeber).val("");
+                    $("#obs_" + memeber).attr("disabled", true);
+                    $("#obs_" + memeber).attr("required", true);
+                }
+                console.log((value));
+            });
+
+
+            $("#meeting_data_date").datepicker({
+                defaultDate: "+1w",
+                changeMonth: true,
+                numberOfMonths: 1,
+                dateFormat: "dd/mm/yy"
+            });
+        });
+
+    </script>
+{% endblock %}

@@ -1,3 +1,7 @@
+pequiven_sig:
+    resource: "@PequivenSIGBundle/Resources/config/routing/indicator/indicator.yml"
+    prefix:   /sig
+
 pequiven_planning_main:
     resource: "@PequivenSEIPBundle/Resources/config/routing/planning/main.yml"
     prefix:   /planning
@@ -56,3 +60,24 @@ pequiven_chart:
 pequiven_data_load:
     resource: "@PequivenSEIPBundle/Resources/config/routing/dataLoad/main.yml"
     prefix:   /data-load
+    
+pequiven_politic_workstudycircle:
+    resource: "@PequivenSEIPBundle/Resources/config/routing/politic/work_study_circle.yml"
+    prefix:   /workstudycircle
+    
+pequiven_politic_proposal:
+    resource: "@PequivenSEIPBundle/Resources/config/routing/politic/proposal.yml"
+    prefix:   /proposal
+    
+pequiven_politic_meetingl:
+    resource: "@PequivenSEIPBundle/Resources/config/routing/politic/meeting.yml"
+    prefix:   /meeting
+    
+pequiven_politic_assistance:
+    resource: "@PequivenSEIPBundle/Resources/config/routing/politic/assistance.yml"
+    prefix:   /assistance
+
+###SISTEMA DE INFORMACION POLIICA
+pequiven_sip:
+    resource: "@PequivenSEIPBundle/Resources/config/routing/sip/sip.yml"
+    prefix:   /sip

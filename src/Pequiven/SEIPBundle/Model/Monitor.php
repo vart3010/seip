@@ -13,6 +13,18 @@ namespace Pequiven\SEIPBundle\Model;
  *
  * @author matias
  */
-class Monitor {
+abstract class Monitor {
     //put your code here
+    
+    //Tipos de vista del monitor de producción
+    
+    /**
+     * 
+     */
+    const MONITOR_PRODUCTION_VIEW_STATUS_CHARGE = 0;
+    
+    /**
+     * 
+     */
+    const MONITOR_PRODUCTION_VIEW_COMPLIANCE = 1;
 }

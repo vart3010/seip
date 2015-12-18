@@ -1,0 +1,66 @@
+{% extends "PequivenSEIPBundle:Template:Developer/Common/tableFormat1.html.twig" %}
+
+{% trans_default_domain 'PequivenSIGBundle' %}
+
+
+
+{% block title %}- Matriz de Objetivos SIG{% endblock %}
+
+
+{% block before_body %}
+    {{ contentHeader(
+        ('pequiven_objetive.title_matriz'|trans),
+        ('pequiven_indicator.list'|trans)
+    ) }}
+{% endblock %}
+
+{% block body %}
+     <div ng-controller="TableFormatController">
+        <div ng-controller="TableGerenciaController">
+
+            <div loading-container="tableParams.settings().$loading">
+                <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager"  template-header="custom/header" api-data-url="{{ path('pequiven_objetives_gerencia_list_sig',{_format:'json'}) }}" export-csv="csv" class="table table-responsive table-extra-info">
+                    <tr ng-repeat="result in $data | filter:tableParams.search " data="{$ result|json $}">                        
+                        <td data-title="'{{ 'form.list.managementSystem'|trans({},'PequivenSIGBundle') }}'" sortable="'description'">
+                           - <a href="{$ result._links.self.href $}">{$result.description$}</a>
+                        </td>
+                        <td align="center" width="25%">
+                            <a href="{$ result.id $}/export" ng-click="exportToXLS(result.id)" class="button">
+                                <span class="button-icon"><span class="icon-download"></span></span>
+                                {{ 'pequiven_seip.buttons.export_xls'|trans({},'PequivenSEIPBundle') }}
+                            </a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+    <script type="text/javascript">
+        
+        $(document).ready(function()
+        {
+            charge();
+            
+            function charge(){
+               $('.select2').select2({
+                allowClear: true
+                });
+            }
+        });
+        
+        function getTableExtraInfo(data)
+            {
+                var response = '';
+
+                response = response + 'Fórmula: ' + data.formula.equation;
+                
+                return response;
+            }
+    </script>
+    
+{% endblock %}

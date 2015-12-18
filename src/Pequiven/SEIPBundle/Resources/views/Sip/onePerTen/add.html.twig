@@ -1,0 +1,170 @@
+
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
+
+
+
+{% trans_default_domain 'sip' %}
+
+{% set route_index = 'pequiven_search_members' %}
+{% block before_body %}
+    {{ contentHeader(
+    ("sip.onePerTen"|trans ),
+     {( path(route_index, { user:idUserOne }) ):   ("sip.create"|trans )}
+    ) }}
+{% endblock %}
+
+{% block body %}
+
+    <fieldset class="fieldset">
+        <legend class="legend" >{{ "sip.miembro"|trans }}</legend>
+        <div class="columns">
+            <div class="new-row-mobile three-columns three-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ ("sip.cedula"|trans ) }}</label>
+                    <input class="input" id="cedulaSearch" type="text">
+                </p>
+            </div>
+            <div class="new-row-mobile two-columns two-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <button id="search" class="button" type="button">Consultar</button>
+                    <img id="loading" style="display: none;" src="{{ asset("bundles/tecnocreacionesvzlagovernment/template/developer/img/standard/loaders/loading16.gif") }}" width="18">
+                </p>
+            </div>
+            <div class="new-row-mobile two-columns two-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                </p>
+            </div>
+            <div class="new-row-mobile three-columns three-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                <div style="color: #dc6262; font-weight: bold; margin-top: -20px" id="msj"></div>
+                </p>
+            </div>
+
+        </div>
+
+        <div class="columns" id="details" style="margin-top: 15px;">
+            <div class="new-row-mobile three-columnsfour-columns-tablet three-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ ("sip.nombre"|trans ) }}:</label>
+                <p class="name"></p>
+            </div>
+            <div class="new-row-mobile three-columns three-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ ("sip.centro"|trans ) }}:</label>
+                <p class="centro"></p>
+                </p>
+            </div>
+            <div class="new-row-mobile three-columns three-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ ("sip.telefono"|trans ) }}:</label>
+                <p>
+                <form action="{{ path("save_onePerTen") }}" method="POST" id="saveOne">
+                    <input type="hidden" name="nombre" id="nombre">
+                    <input type="hidden" name="cedula" id="cedula">
+
+                    <input type="hidden" name="codCentro" id="codCentro">
+                    <input type="hidden" name="nombreCentro" id="nombreCentro">
+                    <input type="hidden" name="codParroquia" id="codParroquia">
+                    <input type="hidden" name="nombreParroquia" id="nombreParroquia">
+                    <input type="hidden" name="codMunicpio" id="codMunicpio">
+                    <input type="hidden" name="nombreMunicipio" id="nombreMunicipio">
+                    <input type="hidden" name="codEstado" id="codEstado">
+                    <input type="hidden" name="nombreEstado" id="nombreEstado">
+
+                    <input type="hidden" name="idUserOne" id="idUserName" value=" {{ idUserOne }}">
+                    <input id="telefono" name="telefono" style="display: none;"  type="text" class="input ">
+                </form>
+                </p>
+                </p>
+            </div>
+            <div class="new-row-mobile three-columns three-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <button id="save" class="button margin-top" style="display: none;" type="button">Guardar</button>
+                </p>
+            </div>
+        </div>
+
+    </fieldset>
+
+
+{% endblock %}
+
+
+{% block javascript %}
+    <script src="{{  asset('bundles/pequivenseip/jQuery-Mask-Plugin-master/jquery.mask.min.js') }}"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $('#cedulaSearch').mask('00000000');
+            $('#telefono').mask('0000-0000000');
+
+            $("#cedulaSearch").keypress(function (e) {
+                if (e.which == 13) {
+                    $("#search").click();
+                }
+            });
+            $("#save").click(function () {
+                var tlf = $("#telefono").val();
+                if (tlf != "") {
+                    $("form#saveOne").submit();
+                } else {
+                    alert("Debe Ingresar el Telefono.");
+                }
+            });
+
+
+            $("#search").click(function () {
+                $(this).hide();
+                $("img#loading").show();
+                //$("#details").hide();
+                if ($("#cedulaSearch").val() != "") {
+                    var data = {
+                        ced: $("#cedulaSearch").val(),
+                        idUserOne: $("#idUserName").val()
+                    };
+                    $.ajax({
+                        type: 'post',
+                        url: '{{ path("search_one_por_cedula") }}',
+                        data: data,
+                        success: function (data) {
+                            $("#search").show();
+                            $("img#loading").hide();
+
+                            $("p.name").html(data["nombre"]);
+                            $("p.centro").html(data["nameCentro"]);
+
+                            $("input#codCentro").val(data["centro"]);
+                            $("input#nombreCentro").val(data["nameCentro"]);
+                            $("input#codParroquia").val(data["codigoParroquia"]);
+                            $("input#nombreParroquia").val(data["nombreParroquia"]);
+                            $("input#codMunicipio").val(data["codigoMunicipio"]);
+                            $("input#nombreMunicipio").val(data["nombreMunicipio"]);
+                            $("input#codEstado").val(data["codigoEstado"]);
+                            $("input#nombreEstado").val(data["nombreEstado"]);
+
+                            $("input#nombre").val(data["nombre"]);
+                            $("input#cedula").val(data["cedula"]);
+                            $("div#msj").html(data["msj"]);
+                            if (data["nombre"] != "" || data["nameCentro"]) {
+                                $("button#save").show();
+                                $("input#telefono").show();
+                                $("#details").show();
+                            } else {
+                                $("#details").hide();
+                            }
+                            console.log(data);
+                        }
+                    });
+
+                } else {
+                    alert("Debe Ingresar una Cédula.");
+                }
+            });
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,307 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayout.html.twig' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
+
+{% import 'PequivenSIGBundle:Template:Buttons/buttons.html.twig' as buttons %}
+
+{% block javascripts_base %}
+    {{ parent() }}
+    <script src="{{  asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.input.js') }}"></script>
+{% endblock javascripts_base %}
+
+{% trans_default_domain 'PequivenSIGBundle' %}
+
+{% set labelHeader = {
+        (constant('Pequiven\\IndicatorBundle\\Model\\IndicatorLevel::LEVEL_ESTRATEGICO')):'pequiven_indicator.indicator_strategic',
+        (constant('Pequiven\\IndicatorBundle\\Model\\IndicatorLevel::LEVEL_TACTICO')):'pequiven_indicator.indicator_tactic',
+        (constant('Pequiven\\IndicatorBundle\\Model\\IndicatorLevel::LEVEL_OPERATIVO')):'pequiven_indicator.indicator_operative',
+    } %}
+
+{% set level = indicator_sig.indicatorLevel.level %}
+    
+
+{% block before_body %}
+    {{ contentHeader(
+        {(path('pequiven_indicatorsig_list',{'level':level})):(labelHeader[level])|trans},
+        { (path('pequiven_indicator_show',{'id':indicator_sig.id})): (indicator_sig.ref)},
+        ('pequiven.evolution'|trans({},'messages'))
+    ) }}
+{% endblock %} 
+
+{% block body %}
+    <div class="" ng-init="urlValueLastIndicatorForm='{{ path('pequiven_indicator_last_period_form',{'idIndicator':indicator_sig.id }) }}'">
+    <div class="block_id" ng-init="id_indicator='{{ indicator_sig.id }}'"></div>
+    <div class="block_id" ng-init="typeObj='{{ typeObject }}'"></div>    
+    
+    {% if is_granted('ROLE_SEIP_SIG_EVOLUTION_LAST_PERIOD') %}  
+
+    <div ng-controller="TableFormatController">
+        {# <div ng-controller="IndicatorSigEvolutionController"> #}
+        <div ng-controller="IndicatorLastPeriodController">
+        <!-- <div ng-controller="EvolutionIndicatorFilters"> -->
+
+        {# Carga del formulario de relacion del indicador #}
+            {% if indicator_sig.indicatorlastPeriod %}
+                <div class="block block-title">
+                    <h3>El Indicador tiene relación con el indicador del 2014</h3>
+                    <div class="button-group absolute-right compact">
+                        <a class="button icon-list-add " href="" ng-click="removeLastPeriod(idIndicator='{{ indicator_sig.id }}')" title="">{{ 'pequiven.delete'|trans({},'messages')  }}</a>
+                    </div>
+                </div>
+            {% else %}
+                <div class="block block-title">
+                    <h3>El Indicador no tiene relación con el indicador del 2014</h3>
+                    <div class="button-group absolute-right compact">
+                        <a class="button icon-list-add " href="" ng-click="loadTemplateIndicatorlastPeriod()" title="">{{ 'pequiven.add'|trans({},'messages')  }}</a>
+                    </div>
+                </div>
+           {% endif %}
+            {# fin Button formulario relacion lastperiod #}
+        </div>
+    </div>
+    {% endif %}
+   </div>
+   <br>
+
+        <fieldset class="fieldset">
+            <legend class="legend">{{ indicator_sig }}&nbsp;</legend>
+            <div class="columns">
+                <!-- Referencia del Indicador -->
+                <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                    <p class="inline-label">
+                        <label class="label">{{ 'pequiven.ref'|trans({},'messages') }}</label>
+                        {{ generateLink(indicator_sig) }}
+                    </p>
+                </div>
+                <!-- Objetivo al que impacta el indicador -->
+                <div class="inline-label">
+                    <label class="label">{{ 'form.objetives'|trans }}</label>
+                    <ul class="fa-ul">
+                        {% for objetive in indicator_sig.objetives %}
+                            <li>{{ generateLink(objetive) }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            {# Sistemas de la Calidad al que pertenece #}
+            {% if  indicator_sig.managementSystems | length > 0 %}
+                <div class="inline-label">
+                        <label class="label">{{ 'form.systems'|trans }}</label>
+                        <ul class="fa-ul">
+                            {% for managementSystem in indicator_sig.managementSystems %}
+                                <li>{{ managementSystem.description }}</li>
+                            {% endfor %}
+                        </ul>
+                </div>
+            {% endif %}
+            
+            {% include 'PequivenSIGBundle:Template:base_month.html.twig' %} 
+                        
+        </fieldset>
+  
+        {# Graficos #}
+        <div class="columns with-padding"> 
+            <h4 align="center">Gráfica de Datos y Tendencia de Proceso</h4>                
+            <div ng-controller="ChartsSigController" class="dashboard_sig" ng-init="renderChartEvolutionSig('chartContainerResult', {{ data|json_encode() }},'{{ urlExportFromChart }}')" style="width: 95%;" align="center">
+                {# señalización tendencia #}
+                <div class="position">
+                        {{ font["text"]}}
+                        <i class="fa fa-{{ font["icon"] }} fa-2x position"> &nbsp;</i>
+                </div>
+
+                <div class="nine-columns twelve-columns-mobile" id="chartContainerResult">
+                <!-- This div will hold the chart generated in the footer -->
+                </div>                                
+                <input id='exportpng' type='hidden' value='Exportar Informe' />
+            {#{% if is_granted('ROLE_SEIP_SIG_EVOLUTION_LAST_PERIOD') %}                
+                <div ng-controller="EvolutionIndicatorConfig"> 
+                    <div class="button-group button-config">
+                        <a class="button icon-list-add " href="" ng-click="loadTemplateConfig()" title="">{{ 'pequiven_indicator.config'|trans({},'PequivenSIGBundle')  }}</a>
+                    </div>
+                </div>
+            {% endif %}#}
+               
+            </div>  
+        </div>  
+        {# Analisi de tendencia #}
+        {% if is_granted('ROLE_SEIP_SIG_EVOLUTION_VIEW') %}
+            {# Analisis de Tendencia #}    
+            <br /><br />
+            {% include 'PequivenSIGBundle:Indicator:show/analysis_trend.html.twig' %} 
+            &nbsp; 
+        {% endif %}
+
+        <div class="columns with-padding">
+                <h4 align="center">Causas de Desviación</h4>                
+                <div ng-controller="ChartsSigController" class="dashboard_sig" ng-init="renderChartSigCs('chartContainerResultCs', {{ dataCause|json_encode()}},'{{ urlExportFromChart }}')" style="width: 95%; height:55%;" align="center">
+                <div class="nine-columns twelve-columns-mobile" id="chartContainerResultCs">
+                <!-- This div will hold the chart generated in the footer -->
+                </div>
+                <input id='export_causespng' type='hidden' value='Exportar Informe' />
+                </div>
+        </div> 
+        <br>        
+        {# Fin de Graficos #}
+
+    
+    {# Analisis de Causas #}
+    {% if is_granted('ROLE_SEIP_SIG_EVOLUTION_CAUSE') %}    
+            <br /><br />
+            {% include 'PequivenSIGBundle:Indicator:show/analysis_cause.html.twig' %} 
+            <br /><br />            
+            {% include 'PequivenSIGBundle:Indicator:show/causes_list.html.twig' %} 
+            &nbsp;
+    {% endif %}
+    
+    {% if is_granted('ROLE_SEIP_SIG_EVOLUTION_ACTION') %}
+    {# Plan de accion y seguimiento #}
+            <br /><br />
+            {% include 'PequivenSIGBundle:Indicator:show/action.html.twig' %}
+            &nbsp;
+        {% if dataAction["values"] and is_granted('ROLE_SEIP_SIG_EVOLUTION_ACTION_VERIFICATION')%}
+
+            {% include 'PequivenSIGBundle:Indicator:show/verification.html.twig' %}            
+
+        {% endif %}        
+            &nbsp;
+
+    {% endif %}
+    
+    <p class="button-height align-right">  
+        
+        <div style="text-align: left; margin-left:15px;">
+            <a class="button"  id="showItems"  href="javascript:void(0)">
+                <span class="button-icon left-side red-gradient">
+                    <span class="fa fa-history fa-1"></span>
+                </span>
+                <span class="title">{{('pequiven.view_evolution_history'|trans({},'messages'))}}</span>
+                <span class="title" style="display: none">{{('pequiven.hide_evolution_history'|trans({},'messages'))}} </span>
+            </a>
+        
+        {% if is_granted('ROLE_SEIP_SIG_EVOLUTION_DOWNLOAD') %}                       
+            {# Descarga de Informe de Evolución#}
+            {% set typeObj = 1 %}
+            &nbsp;
+            {{ buttons.generic_download }}        
+        {% endif %}
+
+        </div>
+    </p>
+        {# Box historico informe de Evolución #}
+        <div id="evolutionItems" style="display: none;">
+            {% set data = indicator_sig.id %}
+             
+            {{ renderArea(constant('Pequiven\\SEIPBundle\\Model\\Box\\AreasBox::ITEMS_EVOLUTION')) }}
+            
+        </div>  
+    
+
+{% endblock body %}
+
+{% block stylesheets %}
+  {{ parent() }}
+    
+<style type="text/css">
+    
+    .position{        
+        margin-right: 20px;
+        margin-top: 20px;
+        color: #1d1c1c;
+        float: right;
+        font-size: 150%;
+    }
+    .button-config{
+        margin-right: 20px;
+        margin-top: 0px;
+        margin-bottom: 15px;
+        color: #1d1c1c;
+        float: right;
+        /*font-size: 150%;*/
+    }
+
+    /* dashboard sig */
+    .dashboard_sig {
+        padding: 20px;
+        position: relative;
+        zoom: 1;
+        color: white;
+        border-top: 1px solid #666666;
+        border-bottom: 1px solid #666666;
+        border-color: #000000;
+    }
+    .dashboard_sig a {
+        color: white;
+    }    
+
+</style>
+
+{% endblock stylesheets %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/fusioncharts.js') }}"></script>
+    <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/themes/fusioncharts.theme.fint.js') }}"></script>
+
+    <script type="text/javascript">
+        
+        $(document).ready(function () {
+            $("a#showItems").click(function () {
+                $("#evolutionItems").toggle("slow");
+                $("a#showItems span.title ").toggle();
+            });
+        });
+
+        //Carga de Archivo pdf
+        function uploadFilePdf(id) {
+            $("input#indicatorFilePdf_" + id).click();
+            console.log(id);
+        }
+
+        //Visualización
+        function openFile(valueCauseId) {
+            valueCauseId = valueCauseId.split("_");
+            var data = {
+                id: valueCauseId[1]
+            };
+            $.ajax({
+                type: 'get',
+                url: '{{ path("pequiven_cause_vizualice_file") }}',
+                data: data,
+                success: function (data) {
+                    window.open(data["url"]);
+                }
+            });
+
+        }
+        //set url
+        function getUrl(data) {
+            
+            var rs;
+            return rs;
+        }
+        //envio
+        function submitUploadFile(valueCauseId) {
+            valueCauseId = valueCauseId.split("_");
+            $("#field_" + valueCauseId[1]).val(valueCauseId[1]);
+            $("#form_" + valueCauseId[1]).submit();
+        }
+        
+        //Carga de Evento de Descarga de Grafica de Indicador
+        function downloadEvolution(){            
+            var button = document.getElementById("exportpng");
+            if (button){
+               button.click();   
+               window.setTimeout(downloadCause,800);               
+            }            
+        }
+        //Carga de Evento de Descarga de Grafica de Causas del Indicador
+        function downloadCause(){
+            var button_cause = document.getElementById("export_causespng");
+            if (button_cause){
+                button_cause.click();                
+            }
+        }
+
+    </script>
+    
+{% endblock %}

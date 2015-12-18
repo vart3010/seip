@@ -1,0 +1,72 @@
+{% trans_default_domain 'PequivenSIGBundle' %}
+<div class="block">
+<div ng-controller="IndicatorSigEvolutionCauseController"> 
+    <div class="block-title">
+        <h3 class="ng-binding">{{ 'sig.analysis_causes'|trans ({}, 'messages') }}</h3>
+        {% if analysis %}
+            {% for data in analysis %}
+                {% set dataAnalysis = data.id %}
+                <div class="button-group absolute-right compact">
+                    <span ng-app class="button icon-outbox" onClick="uploadFilePdf(this.id)" id="{$ data.id $}" >{{ "pequiven.actions.upload_file"|trans({},"messages") }}
+                    </span>            
+                </div>  
+                {# form carga de archivo #}
+                <div ng-controller="ToolsController">
+                    <form style="display: none" id="form_{$ valueCauseId.id $}" action="{{ path(route,{id: id, month:month, cause:dataAnalysis, uploadFile:(true)}) }}" method="POST" enctype="multipart/form-data">
+                    
+                       <input name="archivo" onChange="submitUploadFile(this.id)" id="indicatorFilePdf_{$ idCause $}" type="file">
+                             
+                       <input type="hidden" name="valueCauseId" id="field_{$ idCause $}" value="">
+                    </form>
+                </div> 
+                {# end form #}
+                {# Descarga #}
+                {% if data.valueCauseFile %}
+                    <div class="button-group absolute-right compact">
+                        <span ng-app ng-init="validLoad()" class=" button icon-download" onClick="openFile(this.id)" id="open_{{ data.id }}">{{ "pequiven.actions.download_file"|trans({},"messages") }}
+                        </span>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% else %}
+        <div class="button-group absolute-right compact">
+            <a class="button icon-list-add " href="" ng-click="loadTemplateCausesAnalysis()" title="">{{ 'pequiven.add'|trans({},'messages') }}&nbsp;</a>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="with-padding">
+        {% set colspan = 5 %}
+        <table class="simple-table responsive-table tables-extras" id="sorting-example2">
+            <thead>
+                <tr>
+                    <th scope="col" width="150%" class="header">
+                        {{ 'form.causes_analysis'|trans({},'PequivenSIGBundle') }}
+                    </th>                    
+                </tr>
+            </thead>
+        {% for data in analysis %}
+            <tbody>
+                <tr>
+                    <td align="justify">
+                        {{ data.description }}
+                    </td>
+                    {% if is_granted('ROLE_SEIP_SIG_EVOLUTION_DELETE_CAUSE_ANALYSIS') %}  
+                        <th class="align-right vertical-center">                          
+                            <span class="select compact">
+                            <a href class="select-value form-edit">{{ 'pequiven.actions'|trans({},'messages') }}</a>
+                            <span class="select-arrow"></span>
+                                <span class="drop-down">                                    
+                                    <a href ng-click="removeAnalysisCause(data_cause='{{ data.id }}')" class="button icon-cross-round">{{ "pequiven.actions.delete"|trans({},"messages") }}</a>             
+                                </span>
+                            </span>
+                        </th>  
+                    {% endif %}                     
+                </tr>
+            </tbody>        
+        {% endfor %}
+        </table>
+                
+    </div>
+</div>
+</div>

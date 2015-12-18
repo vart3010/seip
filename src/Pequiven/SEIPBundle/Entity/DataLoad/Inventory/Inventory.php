@@ -40,6 +40,15 @@ class Inventory extends DetailValue
      * @ORM\JoinColumn(nullable=false)
      */
     protected $productReport;
+
+    /**
+     * Periodo.
+     * 
+     * @var \Pequiven\SEIPBundle\Entity\Period
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\Period")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $period;
     
     /**
      * Get id
@@ -58,5 +67,28 @@ class Inventory extends DetailValue
     public function calculate()
     {
         parent::calculate();
+    }
+
+    /**
+     * Set period
+     *
+     * @param \Pequiven\SEIPBundle\Entity\Period $period
+     * @return Objetive
+     */
+    public function setPeriod(\Pequiven\SEIPBundle\Entity\Period $period = null)
+    {
+        $this->period = $period;
+
+        return $this;
+    }
+
+    /**
+     * Get period
+     *
+     * @return \Pequiven\SEIPBundle\Entity\Period 
+     */
+    public function getPeriod()
+    {
+        return $this->period;
     }
 }

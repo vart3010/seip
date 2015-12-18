@@ -18,7 +18,7 @@ class PlantReportType extends SeipAbstractForm
         $entity = $builder->getData();
         
         $location = $entity->getReportTemplate()->getLocation();
-        
+
         $parametersPreSet = array(
             'label_attr' => array('class' => 'label'),
             "empty_value" => "",
@@ -45,6 +45,10 @@ class PlantReportType extends SeipAbstractForm
                 },
             ))
             ->add('plant',null,$parametersToSet)
+            ->add('currentCapacity',null,array(
+                'label_attr' => array('class' => 'label'),
+                "attr" => array("class" => "input"),
+            ))
             ->add('enabled',null,array(
                 'label_attr' => array('class' => 'label'),
                 "attr" => array("class" => "switch medium mid-margin-right","data-text-on"=>"Si","data-text-off"=>"No"),

@@ -59,7 +59,8 @@ class LevelRolesResponsibleValidator extends ConstraintValidator implements Cont
                                 if($groupResponsibleGoal->getLevel() == 7000 || $groupResponsibleGoal->getLevel() == 8000 || $groupResponsibleGoal->getTypeRol() == \Pequiven\MasterBundle\Entity\Rol::TYPE_ROL_SPECIAL){
                                     continue;
                                 }
-                                if($groupResponsibleGoal->getLevel() > $group->getLevel()){
+//                                if($groupResponsibleGoal->getLevel() > $group->getLevel()){
+                                if($groupResponsibleGoal->getLevel() > $topLevel){
                                     $errors[$goalResponsible->getId()] = array('%responsibleProgram%' => $responsible,'%responsibleGoals%' => $goalResponsible, '%goal%' => $goal);
                                 }
                             }

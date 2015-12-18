@@ -48,4 +48,59 @@ abstract class RawMaterialConsumptionPlanning extends BaseModel
         }
         return $label;
     }
+    
+    function getDetailByMonth()
+    {
+        $detailRawMaterialConsumptions = $this->getDetailRawMaterialConsumptions();
+        $result = array();
+        foreach ($detailRawMaterialConsumptions as $detailRawMaterialConsumption) {
+            $result[$detailRawMaterialConsumption->getMonth()] = $detailRawMaterialConsumption;
+        }
+        ksort($result);
+        return $result;
+    }
+    
+    /**
+     * Retorna un resumen
+     * @param \DateTime $date
+     * @return type
+     */
+    public function getSummary(\DateTime $date)
+    {
+        $month = (int)$date->format("m");
+        $day = (int)$date->format("d");
+        
+        $totalDay = $totalMonth = $totalYear = $totalDayPlan = $totalMonthPlan = $totalYearPlan = 0.0;
+        $details = $this->getDetailByMonth();
+        foreach ($details as $monthDetail => $detail) {
+                $totalYear = $totalYear + $detail->getTotalReal();
+                $totalYearPlan = $totalYearPlan + $detail->getTotalPlan();
+                
+                if($monthDetail > $month){
+                    continue;
+                }
+
+                if($month == $monthDetail){
+                    $totalDayName = 'getDay'.$day.'Real';
+                    $totalDayPlanName = 'getDay'.$day.'Plan';
+                    
+                    $totalDay = $detail->$totalDayName();
+                    $totalDayPlan = $detail->$totalDayPlanName();
+                    
+                    $totalMonth = $totalMonth + $detail->getTotalReal();
+                    $totalMonthPlan = $totalMonthPlan + $detail->getTotalPlan();
+                }
+        }
+        
+        $total = array(
+            'total_day' => $totalDay,
+            'total_month' => $totalMonth,
+            'total_year' => $totalYear,
+            
+            'total_day_plan' => $totalDayPlan,
+            'total_month_plan' => $totalMonthPlan,
+            'total_year_plan' => $totalYearPlan,
+        );
+        return $total;
+    }
 }

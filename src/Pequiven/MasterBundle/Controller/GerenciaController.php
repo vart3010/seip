@@ -252,7 +252,7 @@ class GerenciaController extends baseController {
         
 //        $activeSheet->setTitle($gerencia->getDescription());
         //Gerencia de la matriz de objetivos e indicadores
-        $activeSheet->setCellValue('A3', $gerencia->getDescription());
+        $activeSheet->setCellValue('A3', $gerencia->getDescription().'. '.$this->getPeriodService()->getPeriodActive());
         
         $row = 8;//Fila Inicial del skeleton
         $contResult = 0;//Contador de resultados totales
@@ -284,6 +284,8 @@ class GerenciaController extends baseController {
                             $activeSheet->setCellValue('R'.$row, $indicatorOperative->getRef().' '.$indicatorOperative->getDescription());//Seteamos el Indicador Operativo
                             $activeSheet->setCellValue('S'.$row, $indicatorOperative->getFormula()->getEquation());//Seteamos la Fórmula del Indicador Operativo
                             $activeSheet->setCellValue('U'.$row, $indicatorOperative->getWeight());//Seteamos el Peso del Indicador Operativo
+                            
+                            $activeSheet->mergeCells(sprintf('S%s:T%s',($row),($row)));
                             $row++;
                             $contResult++;
                         }
@@ -291,6 +293,9 @@ class GerenciaController extends baseController {
                         $activeSheet->setCellValue('R'.$row, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
                         $activeSheet->setCellValue('S'.$row, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
                         $activeSheet->setCellValue('U'.$row, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
+                        
+                        $activeSheet->mergeCells(sprintf('S%s:T%s',($row),($row)));
+                        
                         $row++;
                         $contResult++;
                     }
@@ -337,10 +342,11 @@ class GerenciaController extends baseController {
                         $activeSheet->setCellValue('I'.$rowIndTac, $indicatorTactic->getRef().' '.$indicatorTactic->getDescription());//Seteamos el Indicador Táctico
                         $activeSheet->setCellValue('J'.$rowIndTac, $indicatorTactic->getFormula()->getEquation());//Seteamos la Fórmula del Indicador Táctico
                         $activeSheet->setCellValue('L'.$rowIndTac, $indicatorTactic->getWeight());//Seteamos el Peso del Indicador Táctico
+                        $activeSheet->mergeCells(sprintf('J%s:K%s',($rowIndTac),($rowIndTac)));
                         $contIndTac++;
                         if($contIndTac == $totalIndicatorTactics && $rowIndTac <= $rowFinTac){
                             $activeSheet->mergeCells(sprintf('I%s:I%s',($rowIndTac),($rowFinTac)));
-                            $activeSheet->mergeCells(sprintf('J%s:J%s',($rowIndTac),($rowFinTac)));
+                            $activeSheet->mergeCells(sprintf('J%s:K%s',($rowIndTac),($rowFinTac)));
                             $activeSheet->mergeCells(sprintf('L%s:L%s',($rowIndTac),($rowFinTac)));
                         }
                         $rowIndTac++;
@@ -353,7 +359,7 @@ class GerenciaController extends baseController {
                         $activeSheet->mergeCells(sprintf('P%s:P%s',($rowIniOpe),($rowFinTac)));
                         $activeSheet->mergeCells(sprintf('Q%s:Q%s',($rowIniOpe),($rowFinTac)));
                         $activeSheet->mergeCells(sprintf('R%s:R%s',($rowIniOpe),($rowFinTac)));
-                        $activeSheet->mergeCells(sprintf('S%s:S%s',($rowIniOpe),($rowFinTac)));
+                        $activeSheet->mergeCells(sprintf('S%s:T%s',($rowIniOpe),($rowFinTac)));
                         $activeSheet->mergeCells(sprintf('U%s:U%s',($rowIniOpe),($rowFinTac)));
                         $activeSheet->mergeCells(sprintf('V%s:V%s',($rowIniOpe),($rowFinTac)));
                     }
@@ -362,9 +368,10 @@ class GerenciaController extends baseController {
                     $activeSheet->setCellValue('I'.$rowIniTac, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
                     $activeSheet->setCellValue('J'.$rowIniTac, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
                     $activeSheet->setCellValue('L'.$rowIniTac, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
-
+                    $activeSheet->mergeCells(sprintf('J%s:K%s',($rowIniTac),($rowIniTac)));
+                    
                     $activeSheet->mergeCells(sprintf('I%s:I%s',($rowIniTac),($rowFinTac)));
-                    $activeSheet->mergeCells(sprintf('J%s:J%s',($rowIniTac),($rowFinTac)));
+                    $activeSheet->mergeCells(sprintf('J%s:K%s',($rowIniTac),($rowFinTac)));
                     $activeSheet->mergeCells(sprintf('L%s:L%s',($rowIniTac),($rowFinTac)));
                 }
             } else{//En caso de que el objetivo táctico no tenga objetivos operativos
@@ -377,6 +384,8 @@ class GerenciaController extends baseController {
                 $activeSheet->setCellValue('U'.$rowIniTac, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
                 $activeSheet->setCellValue('V'.$rowIniTac, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
                 
+                $activeSheet->mergeCells(sprintf('S%s:T%s',($rowIniTac),($rowIniTac)));
+                
                 if($totalIndicatorTactics > 0){//Si el Objetivo Táctico tiene Indicadores Táctico
                     $rowIndTac = $rowIniTac;
                     $rowFinTac = $rowIniTac + $totalIndicatorTactics - 1;
@@ -385,6 +394,8 @@ class GerenciaController extends baseController {
                         $activeSheet->setCellValue('I'.$rowIndTac, $indicatorTactic->getRef().' '.$indicatorTactic->getDescription());//Seteamos el Indicador Táctico
                         $activeSheet->setCellValue('J'.$rowIndTac, $indicatorTactic->getFormula()->getEquation());//Seteamos la Fórmula del Indicador Táctico
                         $activeSheet->setCellValue('L'.$rowIndTac, $indicatorTactic->getWeight());//Seteamos el Peso del Indicador Táctico
+                        $activeSheet->mergeCells(sprintf('J%s:K%s',($rowIndTac),($rowIndTac)));
+                        
                         $contIndTac++;
 
                         $rowIndTac++;
@@ -395,7 +406,8 @@ class GerenciaController extends baseController {
                     $activeSheet->setCellValue('I'.$rowIniTac, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
                     $activeSheet->setCellValue('J'.$rowIniTac, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
                     $activeSheet->setCellValue('L'.$rowIniTac, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
-
+                    $activeSheet->mergeCells(sprintf('J%s:K%s',($rowIniTac),($rowIniTac)));
+                    
                     $row++;
                     $contResult++;
                 }
@@ -474,7 +486,7 @@ class GerenciaController extends baseController {
         }
         $row = $rowFinTac + 1;
         $activeSheet->setCellValue(sprintf('A%s',$row),'NIVEL DE REVISION: 1');
-        $activeSheet->setCellValue(sprintf('V%s',$row),'C-CP-DM-OI-R-001');
+        $activeSheet->setCellValue(sprintf('V%s',$row),'C-PG-DM-OI-R-001');
         $activeSheet->getStyle(sprintf('A%s:V%s',$row,$row))->getFont()->setSize(8);
         
         $fileName = sprintf('SEIP-Matriz de Objetivos-%s-%s.xls',$gerencia->getDescription(),$now->format('Ymd-His'));

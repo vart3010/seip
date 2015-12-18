@@ -138,6 +138,38 @@ class Formula extends modelFormula implements \Pequiven\SEIPBundle\Entity\Period
      */
     private $sourceEquationPlan;
     
+    /**
+     * Ecuacion para calcular el valor real a mostrar en los gráficos tipo dona, r/p por frecuencia de notificación (Se pueden usar las variables de la formula)
+     * 
+     * @var string
+     * @ORM\Column(name="dashboardEquationReal", type="text",nullable=true)
+     */
+    private $dashboardEquationReal;
+    
+    /**
+     * Ecuacion para calcular el valor plan a mostrar en los gráficos tipo dona, r/p por frecuencia de notificación (Se pueden usar las variables de la formula)
+     * 
+     * @var string
+     * @ORM\Column(name="dashboardEquationPlan", type="text",nullable=true)
+     */
+    private $dashboardEquationPlan;
+    
+    /**
+     * Ecuacion para calcular el valor real a mostrar en la ficha del indicador, para cuando este activado el isValueRealFromEquationRealFormula del indicador
+     * 
+     * @var string
+     * @ORM\Column(name="cardEquationReal", type="text",nullable=true)
+     */
+    private $cardEquationReal;
+    
+    /**
+     * Ecuacion para calcular el valor plan a mostrar en la ficha del indicador, para cuando este activado el isValuePlanFromEquationPlanFormula del indicador
+     * 
+     * @var string
+     * @ORM\Column(name="cardEquationPlan", type="text",nullable=true)
+     */
+    private $cardEquationPlan;
+    
      /**
      * Periodo.
      * 
@@ -560,5 +592,97 @@ class Formula extends modelFormula implements \Pequiven\SEIPBundle\Entity\Period
     public function getIndicators()
     {
         return $this->indicators;
+    }
+    
+    /**
+     * Set dashboardEquationReal
+     *
+     * @param text $dashboardEquationReal
+     * @return Formula
+     */
+    public function setDashboardEquationReal($dashboardEquationReal)
+    {
+        $this->dashboardEquationReal = $dashboardEquationReal;
+
+        return $this;
+    }
+
+    /**
+     * Get dashboardEquationReal
+     *
+     * @return text
+     */
+    public function getDashboardEquationReal()
+    {
+        return $this->dashboardEquationReal;
+    }
+    
+    /**
+     * Set dashboardEquationPlan
+     *
+     * @param text $dashboardEquationPlan
+     * @return Formula
+     */
+    public function setDashboardEquationPlan($dashboardEquationPlan)
+    {
+        $this->dashboardEquationPlan = $dashboardEquationPlan;
+
+        return $this;
+    }
+
+    /**
+     * Get dashboardEquationPlan
+     *
+     * @return text
+     */
+    public function getDashboardEquationPlan()
+    {
+        return $this->dashboardEquationPlan;
+    }
+    
+    /**
+     * Set cardEquationReal
+     *
+     * @param text $cardEquationReal
+     * @return Formula
+     */
+    public function setCardEquationReal($cardEquationReal)
+    {
+        $this->cardEquationReal = $cardEquationReal;
+
+        return $this;
+    }
+
+    /**
+     * Get cardEquationReal
+     *
+     * @return text
+     */
+    public function getCardEquationReal()
+    {
+        return $this->cardEquationReal;
+    }
+    
+    /**
+     * Set cardEquationPlan
+     *
+     * @param text $cardEquationPlan
+     * @return Formula
+     */
+    public function setCardEquationPlan($cardEquationPlan)
+    {
+        $this->cardEquationPlan = $cardEquationPlan;
+
+        return $this;
+    }
+
+    /**
+     * Get cardEquationPlan
+     *
+     * @return text
+     */
+    public function getCardEquationPlan()
+    {
+        return $this->cardEquationPlan;
     }
 }

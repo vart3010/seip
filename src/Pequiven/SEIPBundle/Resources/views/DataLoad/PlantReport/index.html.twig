@@ -1,0 +1,36 @@
+{% extends "PequivenSEIPBundle:Template:Developer/Common/tableFormat1.html.twig" %}
+
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
+
+{% block before_body %}
+    {{ contentHeader(
+        ("Plant"|trans ),
+        ( 'pequiven.list'|trans({},'messages') )
+    ) }}
+{% endblock %}
+
+{% block body %}
+    <div ng-controller="TableFormatController">
+        <div ng-controller="ReportTemplateIndexActionController">
+{#            {% include 'PequivenSEIPBundle:DataLoad/ReportTemplate:filters.html.twig' %}#}
+
+            <div loading-container="tableParams.settings().$loading">
+                <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager"  template-header="custom/header" api-data-url="{{ path('pequiven_plant_report_index',{_format:'json' }) }}" export-csv="csv" class="table table-responsive">
+                    <tr ng-repeat="result in $data | filter:tableParams.search" data="{$ result|json $}">
+                        <td data-title="'{{ 'Plant'|trans }}'" filter="{ 'pr.plant.name': 'text' }">
+                            <a href="{$ result._links.load $}">{$ result.plant.name $}</a>
+                        </td>
+                        <td data-title="'{{ 'pequiven.ref'|trans({},'messages') }}'" filter="{ 'pr.reportTemplate': 'text' }">
+                            <a href="{$ result._links.load $}">{$ result.reportTemplate.ref $}&nbsp;({$ result.reportTemplate.name $})</a>
+                        </td>
+                        <td data-title="'{{ 'Location'|trans }}'">
+                            {$ result.location.name $}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

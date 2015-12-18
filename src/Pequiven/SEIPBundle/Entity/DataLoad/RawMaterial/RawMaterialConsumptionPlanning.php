@@ -54,7 +54,7 @@ class RawMaterialConsumptionPlanning extends BaseModel
      * Presupuesto de Materias prima
      * @var \Pequiven\SEIPBundle\Entity\DataLoad\RawMaterial\DetailRawMaterialConsumption
      *
-     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\RawMaterial\DetailRawMaterialConsumption",mappedBy="rawMaterialConsumptionPlanning")
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\RawMaterial\DetailRawMaterialConsumption",mappedBy="rawMaterialConsumptionPlanning",cascade={"remove","persist"})
      */
     private $detailRawMaterialConsumptions;
     
@@ -87,6 +87,29 @@ class RawMaterialConsumptionPlanning extends BaseModel
      * @ORM\Column(name="percentage",type="float")
      */
     private $percentage = 0;
+    
+    /**
+     * Alicuota de lo que se necesita para una tonelada
+     * @var float
+     * @ORM\Column(name="aliquot",type="float")
+     */
+    private $aliquot = 0;
+    
+    /**
+     * ¿Cálculo de plan automático?
+     * @var boolean 
+     * @ORM\Column(name="automaticCalculationPlan",type="boolean")
+     */
+    private $automaticCalculationPlan = true;
+
+    /**
+     * Periodo.
+     * 
+     * @var \Pequiven\SEIPBundle\Entity\Period
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\Period")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $period;
 
     /**
      * Constructor
@@ -279,6 +302,31 @@ class RawMaterialConsumptionPlanning extends BaseModel
         return $this->productReport;
     }
     
+    function getAutomaticCalculationPlan() {
+        return $this->automaticCalculationPlan;
+    }
+    function isAutomaticCalculationPlan() {
+        return $this->automaticCalculationPlan;
+    }
+
+    function setAutomaticCalculationPlan($automaticCalculationPlan) {
+        $this->automaticCalculationPlan = $automaticCalculationPlan;
+        
+        return $this;
+    }
+    
+    function getAliquot() {
+        return $this->aliquot;
+    }
+
+    function setAliquot($aliquot) 
+    {
+        $this->aliquot = $aliquot;
+        
+        return $this;
+    }
+
+        
     public function __toString() {
         $_toString = "-";
         if($this->getProduct()){
@@ -295,18 +343,43 @@ class RawMaterialConsumptionPlanning extends BaseModel
     {
         $detailRawMaterialConsumptions = $this->getDetailRawMaterialConsumptions();
         $totalPlan = $totalReal = 0.0;
-        foreach ($detailRawMaterialConsumptions as $detailRawMaterialConsumption) {
+        foreach ($detailRawMaterialConsumptions as $detailRawMaterialConsumption) 
+        {
+            $detailRawMaterialConsumption->totalize();
             $totalPlan += $detailRawMaterialConsumption->getTotalPlan();
             $totalReal += $detailRawMaterialConsumption->getTotalReal();
         }
-        $percentage = ($totalReal * 100) / $totalPlan;
+        if($totalPlan > 0){
+            $percentage = ($totalReal * 100) / $totalPlan;
+        }else{
+            $percentage = 0;
+        }
         
         $this->setTotalPlan($totalPlan);
         $this->setTotalReal($totalReal);
         $this->setPercentage($percentage);
-//        var_dump($totalPlan);
-//        var_dump($totalReal);
-//        var_dump($percentage);
-//        die;
+    }
+
+    /**
+     * Set period
+     *
+     * @param \Pequiven\SEIPBundle\Entity\Period $period
+     * @return Objetive
+     */
+    public function setPeriod(\Pequiven\SEIPBundle\Entity\Period $period = null)
+    {
+        $this->period = $period;
+
+        return $this;
+    }
+
+    /**
+     * Get period
+     *
+     * @return \Pequiven\SEIPBundle\Entity\Period 
+     */
+    public function getPeriod()
+    {
+        return $this->period;
     }
 }

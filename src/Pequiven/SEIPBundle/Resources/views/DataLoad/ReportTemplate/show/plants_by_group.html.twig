@@ -1,0 +1,48 @@
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+<div class="block">
+    <div class="block-title">
+        <h3> {{ 'pequiven_seip.plants_groups'|trans }}&nbsp;({{ plantsGroup|length }})</h3>
+        <div class="button-group absolute-right compact">
+            <a class="button icon-list-add" href="{{ path('pequiven_plant_report_create',{reportTemplate: app.request.get('id')}) }}">
+                {{ 'pequiven.add'|trans({},'messages') }}
+            </a>
+        </div>
+    </div>
+    <div class="with-padding">
+        <table class="simple-table responsive-table tables-extras" id="sorting-example2">
+            <thead>
+                <tr>
+                    <th scope="col" width="35%">{{ 'Plant'|trans }}</th>
+                    <th scope="col" width="10%" class="hide-on-mobile-portrait">{{ 'Entity'|trans }}</th>
+                    <th scope="col" width="10%" class="hide-on-tablet">{{ 'pequiven_seip.products'|trans }}</th>
+                    <th scope="col" width="10%">&nbsp;</th>
+                </tr>
+            </thead>
+            {% set colspan = 6 %}
+            <tbody>
+                {% for plant in plantsGroup %}
+                    <tr>
+                        <td title="{{ plant.groups }}">
+                            {{ loop.index }} - 
+                            <a href="{{ path("pequiven_plant_report_show",{id:plant.plantReportId})}}">
+                                {{ plant.entity }}
+                            </a>
+                            <br>
+                            <small style="margin-left: 25px;">{{ plant.groups }}</small>
+                        </td>
+                        <th scope="row">
+                            {{ plant.alias }}
+                        </th>
+                        <td>{{ plant.products|length }}</td>
+                        <td class="low-padding align-center">
+                            {#                            <a href="{{ path("pequiven_plant_report_update",{id: plant.id}) }}" class="button compact icon-pencil">{{ "pequiven_seip.actions.edit"|trans }}</a>#}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+</div>
+

@@ -16,7 +16,6 @@ use Tecnocreaciones\Bundle\BoxBundle\Model\GenericBox;
 /**
  * Description of GenericDashboardBox
  *
- * @author Carlos Mendoza <inhack20@gmail.com>
  */
 class GenericDashboardBox extends GenericBox
 {

@@ -30,9 +30,13 @@ Pequiven\ArrangementProgramBundle\Entity\Goal:
         advance:
             expose: true
             groups: [api_list]
+        penalty:
+            expose: true
+            groups: [api_list]
         timeline:
             expose: true
             groups: [details]
         goalDetails:
             expose: true
             groups: [goalDetails]
+     

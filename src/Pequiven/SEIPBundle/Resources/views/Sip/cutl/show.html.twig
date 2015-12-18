@@ -1,0 +1,150 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
+
+{% trans_default_domain 'sip' %}
+
+{% block javascripts_base %}
+    {{ parent() }}
+    <script src="{{  asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.input.js') }}"></script>
+{% endblock javascripts_base %}
+
+{% block before_body %}
+    {{ contentHeader( 
+        {(path('pequiven_sip_cutl_list')): "sip.cutl.title"|trans},
+        ('pequiven.show'|trans({},'messages'))
+    )}}    
+{% endblock %}
+
+{% block body %}
+    {% set show = 2 %}
+        
+     <fieldset class="fieldset">
+        <legend class="legend" >CUTL&nbsp;</legend>
+        <div class="columns">
+                <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                    <p class="inline-label">
+                        <label class="label">Cedula</label>
+                        {{ cutl.cedula }}
+                    </p>
+                </div>
+                <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                    <p class="inline-label">
+                        <label class="label">Nombre</label>
+                        {{ cutl.nombre }}
+                    </p> 
+                </div>
+                <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                    <p class="inline-label">
+                        <label class="label">Gerencia de Primera Linea</label>
+                        {{ cutl.gerenciafirst }}
+                    </p>
+                </div>
+                <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                    <p class="inline-label">
+                        <label class="label">Gerencia de Segunda Linea</label>
+                        {{ cutl.gerenciaSecond }}
+                    </p>
+                </div>
+                <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                    <p class="inline-label">
+                        <label class="label">Teléfono Asignado:</label>
+                        {{ cutl.telefonoCutl }}
+                    </p>
+                </div>
+                <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                    <p class="inline-label">
+                        <label class="label">Teléfono Personal:</label>
+                        {{ cutl.telefonoSeip }}/
+                        {{ cutl.telefonoFirma }}
+                    </p>
+                </div>
+                <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                </div>
+        </div>
+    </fieldset> 
+    <fieldset class="fieldset">
+        <legend class="legend" >{{ 'sip.center.title'|trans({}) }}&nbsp;</legend>
+        <div class="columns">
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Estado</label>
+                    {{ center.descriptionEstado }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Municipio</label>
+                    {{ center.descriptionMunicipio }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Parroquia</label>
+                    {{ center.descriptionParroquia }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Código Centro</label>
+                    <a href="{{path('pequiven_sip_center_show',{'id':center.id})}}">
+                    {{ center.codigoCentro }}
+                    </a>
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Centro</label>
+                    {{ center.description }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Dirección</label>
+                    {{ center.direccion }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">N° de Mesas</label>
+                    {{ center.mesas }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">N° de Electores</label>
+                    {{ center.electores }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Centro de Misiones</label>                    
+                        {{ center.centroMisiones }}                    
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Importante</label>                    
+                        {{ center.importante }}                    
+                </p>
+            </div>
+            {% if center.eje > 0 %}
+                <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                    <p class="inline-label">
+                        <label class="label">Eje en la Parroquia</label>
+                        {{ center.eje }}
+                    </p>
+                </div>
+            {% endif %} 
+        </div>        
+    </fieldset>       
+    <br>    
+    {# Asistencias #}
+    {% include 'PequivenSEIPBundle:Sip:Center/Assists.html.twig' %}                             
+    
+{% endblock %}
+
+{% block javascript %}
+        
+{% endblock %}
+

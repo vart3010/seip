@@ -1,5 +1,5 @@
 {% trans_default_domain 'PequivenSEIPBundle' %}
-                
+
 <div class="block">
     <div class="block-title">
         <h3> {{ 'pequiven_seip.plants'|trans }}&nbsp;({{ report_template.plantReports|length }})</h3>
@@ -19,29 +19,43 @@
             </thead>
             {% set colspan = 6 %}
             <tbody>
-
-                {% for plantReport in report_template.plantReports %}
+                {% for plant in plants %}
                     <tr>
-                        <td>{{ loop.index }} - 
-                            {{ generateLink(plantReport) }}
-                        </td>
+                        <td>{{ loop.index }} - {{ generateLink(plant.entity) }}</td>
                         <th scope="row">
-                            {{ plantReport.entity }}
+                            {{ plant.alias }}
                         </th>
-                        <td>{{ plantReport.productsReport|length }}</td>
+                        <td>{{ plant.entity.productsReport|length }}</td>
                         <td class="low-padding align-center">
-                            <a href="{{ path("pequiven_plant_report_update",{id: plantReport.id}) }}" class="button compact icon-pencil">{{ "pequiven_seip.actions.edit"|trans }}</a>
-                        </td>
-                    </tr>
-                {% else %}
-                    <tr >
-                        <td colspan="{{ colspan }}" class="empty_row">
-                            {{ "empty.plant_reports"|trans }}
+                            <a href="{{ path("pequiven_plant_report_update",{id: plant.plantReportId}) }}" class="button compact icon-pencil">{{ "pequiven_seip.actions.edit"|trans }}</a>
                         </td>
                     </tr>
                 {% endfor %}
+                {# {% for plantReport in report_template.plantReports %}
+                     {% if (plantReport.getPlant.getChildrens | length) == 0 %}
+                         <tr>
+                             <td>{{ loop.index }} - 
+                                 {{ generateLink(plantReport) }}
+                             </td>
+                             <th scope="row">
+                                 {{ plantReport.entity }}
+                             </th>
+                             <td>{{ plantReport.productsReport|length }}</td>
+                             <td class="low-padding align-center">
+                                 <a href="{{ path("pequiven_plant_report_update",{id: plantReport.id}) }}" class="button compact icon-pencil">{{ "pequiven_seip.actions.edit"|trans }}</a>
+                             </td>
+                         </tr>
+                     {% endif %}
+                 {% else %}
+                     <tr >
+                         <td colspan="{{ colspan }}" class="empty_row">
+                             {{ "empty.plant_reports"|trans }}
+                         </td>
+                     </tr>
+                 {% endfor %}#}
             </tbody>
         </table>
-        
+
+
     </div>
 </div>

@@ -8,6 +8,7 @@
 
 namespace Pequiven\IndicatorBundle\Repository;
 
+use Pequiven\SIGBundle\Entity\ManagementSystem;
 use Pequiven\IndicatorBundle\Entity\Indicator;
 use Pequiven\IndicatorBundle\Entity\IndicatorLevel;
 use Pequiven\MasterBundle\Entity\Gerencia;
@@ -19,7 +20,8 @@ use Pequiven\SEIPBundle\Doctrine\ORM\SeipEntityRepository as EntityRepository;
  * @author matias
  */
 class IndicatorRepository extends EntityRepository 
-{
+{   
+
     public function getByOptionRef($options = array()){
     
         $em = $this->getEntityManager();
@@ -111,6 +113,25 @@ class IndicatorRepository extends EntityRepository
         
         return $queryBuilder;
     }
+
+    function getLastPeriod($period) {
+        //Chuleta: se necesita el id del period, no la descripcion.
+        $queryBuilder = $this->getQueryBuilder();
+        $queryBuilder
+
+                ->addSelect('i')
+                ->andWhere('i.enabled = 1')
+                ->andWhere('i.period = :periodo')
+                ->andWhere('i.enabled = 1')
+                ->andWhere('i.tmp = 0')
+                ->orderBy('i.ref')
+                ->setParameter('periodo', $period)
+        ;
+        //$queryBuilder->groupBy('i.ref');
+        //$queryBuilder->orderBy('i.ref');
+        
+        return $queryBuilder;
+    }
     
     /**
      * Crea un paginador para los indicadores de acuerdo al nivel del mismo
@@ -122,6 +143,21 @@ class IndicatorRepository extends EntityRepository
     function createPaginatorByLevel(array $criteria = null, array $orderBy = null) {
         $criteria['for_view'] = true;
         $orderBy['i.ref'] = 'ASC';
+        return $this->createPaginator($criteria, $orderBy);
+    }
+
+    /**
+     * Crea un paginador para los indicadores de acuerdo al nivel del mismo
+     * Filtrados por Programas de Gestión
+     * @param array $criteria
+     * @param array $orderBy
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    function createPaginatorByLevelSIG(array $criteria = null, array $orderBy = null) {
+        
+        $criteria['for_viewsig'] = true;
+        $orderBy['i.ref'] = 'ASC';
+        
         return $this->createPaginator($criteria, $orderBy);
     }
     
@@ -161,12 +197,12 @@ class IndicatorRepository extends EntityRepository
 
         if(isset($criteria['indicatorLevel'])){
             $queryBuilder->andWhere("i.indicatorLevel = " . $criteria['indicatorLevel']);
-        }
+        }        
         $queryBuilder->groupBy('i.ref');
         $queryBuilder->orderBy('i.ref');
 
         $this->applyCriteria($queryBuilder, $criteria);
-        $this->applySorting($queryBuilder, $orderBy);
+        $this->applySorting($queryBuilder, $orderBy); 
         
         return $this->getPaginator($queryBuilder);
     }
@@ -400,12 +436,30 @@ class IndicatorRepository extends EntityRepository
     
     protected function applyCriteria(\Doctrine\ORM\QueryBuilder $queryBuilder, array $criteria = null) {
         $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
-        
+
         //Vinculación con el objetivo al que esta vinculado el indicador
+
         $queryBuilder
-                ->andWhere('i.tmp = 0')
-                ;
-        
+                ->andWhere('i.tmp = 0');
+        //Visualización SIG
+        if(($forviewSig = $criteria->remove('for_viewsig')) != null){
+            //$queryBuilder->addSelect('ms');
+
+            $queryBuilder
+                ->innerJoin('i.objetives', 'o')
+                ->andWhere('o.deletedAt IS NULL')
+                ->andWhere('i.deletedAt IS NULL')
+                ->innerJoin('i.managementSystems', 'ms');
+
+            //Filtro de Sistemas de Gestión
+            if(($managementSystems = $criteria->remove('managementSystems')) != null){
+                $queryBuilder  
+                    ->andWhere('ms.id = :managementSystems')
+                    ->setParameter('managementSystems', $managementSystems)
+                    ;
+            }
+        }
+        // Visualización SEIP
         if(($forView = $criteria->remove('for_view')) !== null){
             $queryBuilder
                     ->innerJoin('i.objetives', 'o')
@@ -413,7 +467,6 @@ class IndicatorRepository extends EntityRepository
                     ->andWhere('i.deletedAt IS NULL')
                     ;
         }
-        
         //Filtro por referencia o descripción
         if(($description = $criteria->remove('description')) !== null){
             $queryBuilder->andWhere($queryBuilder->expr()->orX($queryBuilder->expr()->like('i.description', "'%".$description."%'"),$queryBuilder->expr()->like('i.ref', "'%".$description."%'")));
@@ -443,6 +496,12 @@ class IndicatorRepository extends EntityRepository
             $queryBuilder->andWhere('o.gerencia = ' . $gerencia);
         }
         
+        //Filtro Frecuencia de Notificación del Indicador
+        if(($frequencyNotification = $criteria->remove('frequencyNotification')) !== null){
+            $queryBuilder->leftJoin('i.frequencyNotificationIndicator', 'fn');
+            $queryBuilder->andWhere("i.frequencyNotificationIndicator = " . $frequencyNotification);
+        }
+        
         //Filtro Gerencia 2da Línea
         if(($gerenciaSecond = $criteria->remove('secondLineManagement')) !== null){
             $queryBuilder->andWhere("o.gerenciaSecond = " . $gerenciaSecond);
@@ -457,6 +516,11 @@ class IndicatorRepository extends EntityRepository
             } elseif($miscellaneous == Indicator::INDICATOR_WITHOUT_RESULT){
                 $queryBuilder->andWhere('i.progressToDate = 0');
                 $queryBuilder->andWhere('i.lastDateCalculateResult IS NULL');
+            } elseif($miscellaneous == Indicator::INDICATOR_WITHOUT_FREQUENCY_NOTIFICATION){
+                if($frequencyNotification == null){
+                    $queryBuilder->leftJoin('i.frequencyNotificationIndicator', 'fn');
+                }
+                $queryBuilder->andWhere('i.frequencyNotificationIndicator IS NULL');
             }
             
         }
@@ -494,12 +558,15 @@ class IndicatorRepository extends EntityRepository
                 }
             }
         }
+
         $applyPeriodCriteria = $criteria->remove('applyPeriodCriteria');
         parent::applyCriteria($queryBuilder, $criteria->toArray());
-        
+        //print_r($this->applyPeriodCriteria($queryBuilder));
+        //print_r($queryBuilder->getQuery()->getSQL());
+        //die();
         if($applyPeriodCriteria){
-            $this->applyPeriodCriteria($queryBuilder);
-        }
+           $this->applyPeriodCriteria($queryBuilder);
+        }  
     }
     
     protected function applySorting(\Doctrine\ORM\QueryBuilder $queryBuilder, array $sorting = null) {

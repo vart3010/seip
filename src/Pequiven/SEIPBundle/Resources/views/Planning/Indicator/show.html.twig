@@ -20,7 +20,7 @@
 {% block before_body %}
     {{ contentHeader(
         {(path('pequiven_indicator_list',{'level':level})):(labelHeader[level])|trans},
-        { (path('pequiven_indicator_show',{'id':indicator.id})): (indicator.ref)},
+        {(path('pequiven_indicator_show',{'id':indicator.id})): (indicator.ref)},
         ('pequiven.show'|trans({},'messages'))
     ) }}
 {% endblock %}
@@ -29,244 +29,382 @@
     {% set labelTypeDetailValue = indicator.getLabelTypeDetailValue|trans %}
     {% set showIndicatorConfigButton = false %}
     {% set isValueIndicatorConfig = false %}
-    
+
+
+
+
     <div ng-controller="IndicatorResultController">
-    {% if indicator.typeDetailValue != constant('Pequiven\\IndicatorBundle\\Model\\Indicator::TYPE_DETAIL_NONE') and indicator.valueIndicatorConfig is null %}
-        {% set errorFormula = 'pequiven_indicator.errors.the_indicator_xrequires_configuration_details_results'|trans({'%typeDetailValue%': (labelTypeDetailValue|lower) }) %}
-    {% endif %}
-    {% if indicator.typeDetailValue != constant('Pequiven\\IndicatorBundle\\Model\\Indicator::TYPE_DETAIL_NONE') %}
-        {% set showIndicatorConfigButton = true %}
-    {% endif %}
-    
-    {% if indicator.valueIndicatorConfig is not null and indicator.typeDetailValue == constant('Pequiven\\IndicatorBundle\\Model\\Indicator::TYPE_DETAIL_DAILY_LOAD_PRODUCTION') %}
-        {% set isValueIndicatorConfig = true %}
-    {% endif %}
-    {% if errorFormula != null %}
-        {{ print_error(errorFormula) }}
-    {% endif  %}
-    
-    {% set indicatorDetails = indicator.details %}
-    
-    <fieldset class="fieldset">
-        <legend class="legend" ng-init="indicator = {{ indicator|serialize('json',serialization_context().setGroups(['id','api_list','valuesIndicator','api_details','sonata_api_read','featuresIndicator','valueIndicatorDetail'])) }}">{{ indicator }}&nbsp;</legend>
-                <p class="inline-label">
-                    <label class="label">{{ 'pequiven_seip.results.result'|trans({},'PequivenSEIPBundle') }}</label>
+        {% if indicator.typeDetailValue != constant('Pequiven\\IndicatorBundle\\Model\\Indicator::TYPE_DETAIL_NONE') and indicator.valueIndicatorConfig is null %}
+            {% set errorFormula = 'pequiven_indicator.errors.the_indicator_xrequires_configuration_details_results'|trans({'%typeDetailValue%': (labelTypeDetailValue|lower) }) %}
+        {% endif %}
+        {% if indicator.typeDetailValue != constant('Pequiven\\IndicatorBundle\\Model\\Indicator::TYPE_DETAIL_NONE') %}
+            {% set showIndicatorConfigButton = true %}
+        {% endif %}
 
-                    {% set advances = indicator.progressToDate|myNumberFormat %}
-                    {% set advancesClass = 'red-gradient' %}
-                    
-                    {% if indicatorRange|length > 0 and indicatorRange.good == true  %}
-                        {% set advancesClass = 'green-gradient' %}
+        {% if indicator.valueIndicatorConfig is not null and indicator.typeDetailValue == constant('Pequiven\\IndicatorBundle\\Model\\Indicator::TYPE_DETAIL_DAILY_LOAD_PRODUCTION') %}
+            {% set isValueIndicatorConfig = true %}
+        {% endif %}
+        {% if errorFormula != null %}
+            {{ print_error(errorFormula) }}
+        {% endif  %}
 
-                    {% elseif indicatorRange|length > 0 and indicatorRange.middle == true %}
-                        {% set advancesClass = 'orange-gradient' %}
-                    {% endif %}
-                    <span style="max-width: 400px" class="progress" data-progress-options='{"size":false,"barClasses":["{{ advancesClass }}","glossy"],"innerMarks":25,"topMarks":25,"topLabel":"[value]%","bottomMarks":[{"value":0,"label":"{{ 'pequiven.advances.nope'|trans({},'messages') }}"},{"value":50,"label":"{{ 'pequiven.advances.better'|trans({},'messages') }}"},{"value":100,"label":"{{ 'pequiven.advances.complete'|trans({},'messages') }}"}],"insetExtremes":true}'>{{ advances }}%</span>
-                </p>
-        <br/>
-         <div class="columns">
-            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
-                <p class="inline-label">
-                    <label class="label">{{ 'pequiven.ref'|trans({},'messages') }}</label>
-                    {{ generateLink(indicator) }}
-                </p>
-            </div>
-            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
-                <p class="inline-label">
-                    <label class="label">{{ 'form.formula'|trans }}</label>
-                    {% set formula = indicator.formula %}
-                    {% if formula %}
-                        <span title="{{ formula.getTypeOfCalculationLabel|trans }}" class="with-tooltip">{{ indicator.formula.equation }}</span>
-                    {% else %}
-                        <span class="tag red-bg">{{ 'pequiven_indicator.errors.formula_unassigned'|trans }}</span>
-                    {% endif %}
-                </p>
-            </div>
-            <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
-                <p class="inline-label">
-                    <label class="label">{{ 'form.weight'|trans }}</label>
-                    <span class="tag">{{ indicator.weight?indicator.weight ~ '%':(('form.no_appy'|trans)) }}</span>
-                </p>
-            </div>
-            <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
-                <p class="inline-label">
-                    <label class="label">{{ 'pequiven_indicator.type_calculation.main'|trans }}</label>
-                    {{ indicator.typeOfCalculationLabel|trans }}
-                    {% set validChild = indicatorService.validateIndicatorParent(indicator) %}
-                    {% if  validChild != null %}
-                        <span class="tag red-bg">{{ validChild }}</span>
-                    {% endif %}
-                </p>
-            </div>
-            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
-                <p class="inline-label">
-                    <label class="label">{{ 'form.frequencyNotificationIndicator'|trans }}</label>
-                    {% set frequencyNotificationIndicator = indicator.frequencyNotificationIndicator %}
-                    {% if frequencyNotificationIndicator != null %}
-                        {{ frequencyNotificationIndicator }}
-                    {% else %}
-                        <span class="tag red-bg">{{ ('pequiven.no_assigned'|trans({},'messages')) }}</span>
-                    {% endif %}
-                </p>
-            </div>
-            {% if indicator.isShowRealValue == true %}
+        {% set indicatorDetails = indicator.details %}
+
+        <fieldset class="fieldset">
+            <legend class="legend" ng-init="indicator = {{ indicator|serialize('json',serialization_context().setGroups(['id','api_list','valuesIndicator','api_details','sonata_api_read','featuresIndicator','valueIndicatorDetail'])) }}">{{ indicator }}&nbsp;</legend>
+            <p class="inline-label">
+                <label class="label">{{ 'pequiven_seip.results.result'|trans({},'PequivenSEIPBundle') }}</label>
+
+                {% set advances = indicator.progressToDate|myNumberFormat %}
+                {% set advancesClass = 'red-gradient' %}
+
+                {% if indicatorRange|length > 0 and indicatorRange.good == true  %}
+                    {% set advancesClass = 'green-gradient' %}
+
+                {% elseif indicatorRange|length > 0 and indicatorRange.middle == true %}
+                    {% set advancesClass = 'orange-gradient' %}
+                {% endif %}
+                <span style="max-width: 400px" class="progress" data-progress-options='{"size":false,"barClasses":["{{ advancesClass }}","glossy"],"innerMarks":25,"topMarks":25,"topLabel":"[value]%","bottomMarks":[{"value":0,"label":"{{ 'pequiven.advances.nope'|trans({},'messages') }}"},{"value":50,"label":"{{ 'pequiven.advances.better'|trans({},'messages') }}"},{"value":100,"label":"{{ 'pequiven.advances.complete'|trans({},'messages') }}"}],"insetExtremes":true}'>{{ advances }}%</span>
+            </p>
+            <br/>
+            <div class="columns">
+                <!-- Referencia del Indicador -->
                 <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                     <p class="inline-label">
-                        <label class="label">{{ 'pequiven_indicator.value'|trans }}</label>
-                        {$ indicator.valueFinal|myNumberFormat:2 $}&nbsp;{% if indicatorDetails.resultRealUnit != '' %}({{ indicatorDetails.resultRealUnit }}){% endif %}
+                        <label class="label">{{ 'pequiven.ref'|trans({},'messages') }}</label>
+                        {{ generateLink(indicator) }}
                     </p>
                 </div>
-            {% endif %}
-            {% if indicator.isShowPlanValue == true %}
+
+                <!-- Fórmula del Indicador -->
+                <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                    <p class="inline-label">
+                        <label class="label">{{ 'form.formula'|trans }}</label>
+                        {% set formula = indicator.formula %}
+                        {% if formula %}
+                            <span title="{{ formula.getTypeOfCalculationLabel|trans }}" class="with-tooltip">{{ indicator.formula.equation }}</span>
+                        {% else %}
+                            <span class="tag red-bg">{{ 'pequiven_indicator.errors.formula_unassigned'|trans }}</span>
+                        {% endif %}
+                    </p>
+                </div>
+
+                <!-- Peso del Indicador -->
                 <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                     <p class="inline-label">
-                        <label class="label">{{ 'form.total_plan'|trans }}</label>
-                        {% if indicator.totalPlan != 0 %}
-                            {{ indicator.totalPlan|myNumberFormat }}&nbsp;{% if indicatorDetails.resultPlanUnit != '' %}({{ indicatorDetails.resultPlanUnit }}){% endif %}
+                        <label class="label">{{ 'form.weight'|trans }}</label>
+                        <span class="tag">{{ indicator.weight?indicator.weight ~ '%':(('form.no_appy'|trans)) }}</span>
+                    </p>
+                </div>
+
+                <!-- Tipo de cálculo del Indicador  -->
+                <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                    <p class="inline-label">
+                        <label class="label">{{ 'pequiven_indicator.type_calculation.main'|trans }}</label>
+                        {{ indicator.typeOfCalculationLabel|trans }}
+                        {% set validChild = indicatorService.validateIndicatorParent(indicator) %}
+                        {% if  validChild != null %}
+                            <span class="tag red-bg">{{ validChild }}</span>
+                        {% endif %}
+                    </p>
+                </div>
+
+                <!-- Frecuencia de notificación del Indicador -->
+                <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                    <p class="inline-label">
+                        <label class="label">{{ 'form.frequencyNotificationIndicator'|trans }}</label>
+                        {% set frequencyNotificationIndicator = indicator.frequencyNotificationIndicator %}
+                        {% if frequencyNotificationIndicator != null %}
+                            {{ frequencyNotificationIndicator }}
                         {% else %}
                             <span class="tag red-bg">{{ ('pequiven.no_assigned'|trans({},'messages')) }}</span>
                         {% endif %}
                     </p>
                 </div>
-            {% endif %}
-            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
-                <p class="inline-label">
-                    <label class="label">{{ 'form.tendency'|trans }}</label>
-                    {% if indicator.tendency != null %}
-                        {{ indicator.tendency }}
-                    {% else %}
-                        <span class="tag red-bg">{{ ('pequiven.no_assigned'|trans({},'messages')) }}</span>
-                    {% endif %}
-                </p>
-            </div>
-            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
-                <p class="inline-label">
-                    <label class="label">{{ 'form.typeDetailValue'|trans }}</label>
-                    {% if labelTypeDetailValue != null %}
-                        {{ labelTypeDetailValue }}
-                    {% else %}
-                        <span class="tag red-bg">{{ ('pequiven.no_assigned'|trans({},'messages')) }}</span>
-                    {% endif %}
-                </p>
-            </div>
-            {% set resultReal = indicator.resultReal %}
-            <div class="new-row-mobile twelve-columns six-columns-tablet twelve-columns-mobile" {% if resultReal is not null and errorArrangementRange is null %} ng-controller="DashboardController" ng-init="renderWidgetRange('chartContainerResult',{{ data|json_encode() }})" {% endif %}>
-                <p class="inline-label">
-                    <label class="label">{{ 'form.resultReal'|trans }}</label>
-                    {% if resultReal is not null and errorArrangementRange is null %}
-                        <span id="chartContainerResult"></span>
-                    {% else %}
-                        {% if errorArrangementRange != null %}
-                            <span class="tag red-bg">{{ errorArrangementRange }}</span>
+
+                <!-- Valor Real -->
+                {% if indicator.isShowRealValue == true %}
+                    <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                        <p class="inline-label">
+                            <label class="label">
+                                {% if indicator.getIsValueFromTextReal == true  %} 
+                                    {{ indicator.getTextValueFromVariableReal }}
+                                {% else %}
+                                    {{ 'pequiven_indicator.value'|trans }}
+                                {% endif %}
+                            </label>
+                            {% if indicator.getDetails.getIsCheckReal == true %}
+                                {{ indicatorService.getValueOfVariableFromValueIndicator(indicator,indicator.getDetails.getVarIndicatorReal)|myNumberFormat }}
+                            {% elseif indicator.isValueRealFromEquationRealFormula == true %}
+                                {{ indicatorService.getValueFromEquationFormula(indicator,{'typeValue':'real'})|myNumberFormat }}
+                            {% else %}
+                                {$ indicator.valueFinal|myNumberFormat:2 $}&nbsp;
+                                {% if indicatorDetails.resultRealUnit != '' %}({{ indicatorDetails.resultRealUnit }}){% endif %}
+                            {% endif %}
+
+                        </p>
+                    </div>
+                {% endif %}
+
+                <!-- Valor Plan -->
+                {% if indicator.isShowPlanValue == true %}
+                    <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                        <p class="inline-label">
+                            <label class="label">
+                                {% if indicator.getIsValueFromTextPlan == true  %} 
+                                    {{ indicator.getTextValueFromVariablePlan }}
+                                {% else %}
+                                    {{ 'form.total_plan'|trans }}
+                                {% endif%}
+                            </label>
+
+                            {% if indicator.totalPlan != 0 %}
+                                {% if  indicator.getDetails.getIsCheckPlan == true %}
+                                    {{ indicatorService.getValueOfVariableFromValueIndicator(indicator,indicator.getDetails.getVarIndicatorPlan)|myNumberFormat }}
+                                {% elseif indicator.isValuePlanFromEquationPlanFormula == true %}
+                                    {{ indicatorService.getValueFromEquationFormula(indicator,{'typeValue':'plan'})|myNumberFormat }}
+                                {% else %}
+                                    {{ indicator.totalPlan|myNumberFormat }}&nbsp;{% if indicatorDetails.resultPlanUnit != '' %}({{ indicatorDetails.resultPlanUnit }}){% endif %}
+                                {% endif %}
+                            {% else %}
+                                <span class="tag red-bg">{{ ('pequiven.no_assigned'|trans({},'messages')) }}</span>
+                            {% endif %}
+                        </p>
+                    </div>
+                {% endif %}
+
+                <!-- Tendencia del Indicador -->
+                <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                    <p class="inline-label">
+                        <label class="label">{{ 'form.tendency'|trans }}</label>
+                        {% if indicator.tendency != null %}
+                            {{ indicator.tendency }}
                         {% else %}
                             <span class="tag red-bg">{{ ('pequiven.no_assigned'|trans({},'messages')) }}</span>
                         {% endif %}
-                    {% endif %}
-                </p>
-            </div>
-            <div class="inline-label">
-                <label class="label">{{ 'form.objetives'|trans }}</label>
-                <ul class="fa-ul">
-                    {% for objetive in indicator.objetives %}
-                        <li>{{ generateLink(objetive) }}</li>
-                    {% endfor %}
-                </ul>
-            </div>
-            {% if indicator.parent %}
+                    </p>
+                </div>
+
+                <!-- Período del Indicador -->
+                <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                    <p class="inline-label">
+                        <label class="label">{{ 'pequiven.period'|trans({},'messages') }}</label>
+                        {{ indicator.period }}
+                    </p>
+                </div>
+
+                <!-- Detalle de los valores del Indicador -->
+                <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                    <p class="inline-label">
+                        <label class="label">{{ 'form.typeDetailValue'|trans }}</label>
+                        {% if labelTypeDetailValue != null %}
+                            {{ labelTypeDetailValue }}
+                        {% else %}
+                            <span class="tag red-bg">{{ ('pequiven.no_assigned'|trans({},'messages')) }}</span>
+                        {% endif %}
+                    </p>
+                </div>
+
+                <!-- Gerencia de 1ra Línea que impacta el Indicador -->
+                {% if level > constant('Pequiven\\IndicatorBundle\\Model\\IndicatorLevel::LEVEL_ESTRATEGICO') %}
+                    <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                        <p class="inline-label">
+                            <label class="label">{{ 'form.gerencia'|trans }}</label>
+                            {% set lo = indicator.objetives | length %}
+                            {{ indicator.objetives[lo-1].getGerencia() }} 
+                        </p>
+                    </div>
+                {% endif%}
+
+                <!-- Gerencia de 2da Línea que impacta el Indicador -->
+                {% if level == constant('Pequiven\\IndicatorBundle\\Model\\IndicatorLevel::LEVEL_OPERATIVO') %}
+                    <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                        <p class="inline-label">
+                            <label class="label">{{ 'form.gerenciaSecond'|trans }}</label>
+                            {% set lo = indicator.objetives | length %}
+                            {{ indicator.objetives[lo-1].getGerenciaSecond() }} 
+                        </p>
+                    </div>
+                {% endif%}
+
+                <!-- Rango de gestión del Indicador -->
+                {% if (indicator.showRange) %}
+                    {% set resultReal = indicator.resultReal %}
+                    <div class="new-row-mobile twelve-columns six-columns-tablet twelve-columns-mobile" {% if resultReal is not null and errorArrangementRange is null %} ng-controller="DashboardController" ng-init="renderWidgetRange('chartContainerResult',{{ data|json_encode() }})" {% endif %}>
+                        <p class="inline-label">
+                            <label class="label">{{ 'form.resultReal'|trans }}</label>
+                            {% if resultReal is not null and errorArrangementRange is null %}
+                                <span id="chartContainerResult"></span>
+                            {% else %}
+                                {% if errorArrangementRange != null %}
+                                    <span class="tag red-bg">{{ errorArrangementRange }}</span>
+                                {% else %}
+                                    <span class="tag red-bg">{{ ('pequiven.no_assigned'|trans({},'messages')) }}</span>
+                                {% endif %}
+                            {% endif %}
+                        </p>
+                    </div>
+                {% endif %}
+
+                <!-- Objetivo al que impacta el indicador -->
                 <div class="inline-label">
-                    <label class="label">{{ 'form.parent_indicator'|trans }}</label>
-                    {% set childrens = [indicator.parent] %}
-                    {% set indicatorWeight = true %}
-                    {% include 'PequivenObjetiveBundle:Common:indicators.html.twig' %}
+                    <label class="label">{{ 'form.objetives'|trans }}</label>
+                    <ul class="fa-ul">
+                        {% for objetive in indicator.objetives %}
+                            <li>{{ generateLink(objetive) }}</li>
+                            {% endfor %}
+                    </ul>
+                </div>
+
+                <!-- Indicador Padre al que impacta el indicador -->
+                {% if indicator.parent %}
+                    <div class="inline-label">
+                        <label class="label">{{ 'form.parent_indicator'|trans }}</label>
+                        {% set childrens = [indicator.parent] %}
+                        {% set indicatorWeight = true %}
+                        {% include 'PequivenObjetiveBundle:Common:indicators.html.twig' %}
+                    </div>
+                {% endif %}
+
+                <!-- Indicadores asociados de los que se alimenta el indicador -->
+                {% if (indicator.childrens | length) > 0 %}
+                    <div class="inline-label">
+                        <label class="label">{{ 'form.associated_indicators'|trans }}</label>
+                        {% set childrens = indicator.childrens %}
+                        {% set indicatorWeight = true %}
+                        {% include 'PequivenObjetiveBundle:Common:indicators.html.twig' %}
+                    </div>
+                {% endif %}
+            </div>
+            {# Sistemas de Gestión del Indicador #}
+            {#{% if  indicator.managementSystems | length > 0 and is_granted('ROLE_SEIP_SIG_EVOLUTION_VIEW') %}#}
+            {% if  indicator.managementSystems | length > 0 %}
+                <div class="inline-label">
+                        <label class="label">{{ 'form.systems'|trans }}</label>
+                        <ul class="fa-ul">
+                            {% for managementSystem in indicator.managementSystems %}
+                                <li>{{ managementSystem.description }}</li>
+                            {% endfor %}
+                        </ul>
                 </div>
             {% endif %}
-            {% if (indicator.childrens | length) > 0 %}
-                <div class="inline-label">
-                    <label class="label">{{ 'form.associated_indicators'|trans }}</label>
-                    {% set childrens = indicator.childrens %}
-                    {% set indicatorWeight = true %}
-                    {% include 'PequivenObjetiveBundle:Common:indicators.html.twig' %}
-                </div>
-            {% endif %}
-        </div>
-    </fieldset>
-    {% if indicator.tagsIndicator|length > 0 %}    
-        <br /><br />
-        <fieldset class="fieldset">
-            <legend class="legend">{{ ('pequiven_indicator.tagIndicators'|trans) }}&nbsp;</legend>
-            {% include 'PequivenIndicatorBundle:Common:tagIndicators.html.twig' %}
+            {# Fin carga de sistemas de Gestión #}
         </fieldset>
-    {% endif %}
-        {% if indicator.showResults %}
+
+        <!-- Etiquetas del Indicador -->
+        {% if indicator.tagsIndicator|length > 0 and indicator.showTags == true %}    
             <br /><br />
-            {% include 'PequivenSEIPBundle:Planning:Indicator/show/results.html.twig' %}
+            <fieldset class="fieldset">
+                <legend class="legend">{{ ('pequiven_indicator.tagIndicators'|trans) }}&nbsp;</legend>
+                {% include 'PequivenIndicatorBundle:Common:tagIndicators.html.twig' %}
+            </fieldset>
         {% endif %}
+
+        {% if(indicator.frequencyNotificationIndicator is not  null) %}
+            <!-- Resultados del Indicador -->
+            {% if indicator.showResults %}
+                <br /><br />
+                {% include 'PequivenSEIPBundle:Planning:Indicator/show/results.html.twig' %}
+            {% endif %}
+        {% else %}
+            <div class="block">
+                <div class="block-title">
+                    <h3>Resultados </h3>
+                </div>
+                <div class="with-padding">
+                    <strong>El Indicador no tiene configurada ninguna frecuencia de notificación.
+{#                        {{ dump(is_granted('ROLE_SONATA_ADMIN_INDICATOR_INDICATOR_EDIT')) }}#}
+{#                        {% if(is_granted(["ROLE_SONATA_ADMIN_INDICATOR_INDICATOR_EDIT"])) %}#}
+                        <a href="{{ path("admin_pequiven_indicator_indicator_edit",{id:indicator.id}) }}">
+                            Haga click aquí
+                        </a>
+                        para configurarla. 
+                        
+                    </strong>
+                </div>
+            </div>
+        {% endif %}
+
+        <!-- Características del Indicador -->
         {% if indicator.showFeatures %}
             <br /><br />
             {% include 'PequivenSEIPBundle:Planning:Indicator/show/features.html.twig' %}
         {% endif %}
         <br /><br />
+
+        <!-- Historial de eventos del Indicador -->
         {% include 'PequivenSEIPBundle:Planning:Indicator/show/history.html.twig' with {'entity':indicator} %}
     </div>
-<p class="button-height align-right">
-    {% if is_granted('ROLE_WORKER_PLANNING') %}
-        {% set filedObservation = '<br/><br/><textarea name="observation" class="input" placeholder="' ~ ('pequiven.arrangement_program.write_observation'|trans({},'PequivenArrangementProgramBundle')) ~ '" required="required" cols="28" rows="10" ></textarea>' %}
 
-        {{ buttons.generic_modal(path('pequiven_indicator_add_observation', { 'id': indicator.id }),('pequiven.add_observation'|trans({},'messages')),{'icon':'icon-speech','content':('pequiven_indicator.indicator.add_observation'|trans({},'PequivenIndicatorBundle')) ~ filedObservation}) }}
-        &nbsp;
-        {{ buttons.generic_modal(path('pequiven_indicator_remove_values', { 'id': indicator.id }),('pequiven_indicator.indicator.buttons.remove_values'|trans({},'PequivenIndicatorBundle')), {'icon':'icon-trash','content':('pequiven_indicator.indicator.remove_values'|trans({},'PequivenIndicatorBundle')), 'gradient':'red-gradient'} ) }}
-        {% if showIndicatorConfigButton == true %}
+    <p class="button-height align-right">
+
+    {# Visualizacion de Indice de evolucion #}      
+        {% include 'PequivenSIGBundle:Template:base_evolution_nav.html.twig' %}        
+    {# end #}
+
+        {% if is_granted(['ROLE_WORKER_PLANNING','ROLE_SEIP_INDICATOR_ADD_OBSERVATION']) %}
+            {% set filedObservation = '<br/><br/><textarea name="observation" class="input" placeholder="' ~ ('pequiven.arrangement_program.write_observation'|trans({},'PequivenArrangementProgramBundle')) ~ '" required="required" cols="28" rows="10" ></textarea>' %}
+
+            {{ buttons.generic_modal(path('pequiven_indicator_add_observation', { 'id': indicator.id }),('pequiven.add_observation'|trans({},'messages')),{'icon':'icon-speech','content':('pequiven_indicator.indicator.add_observation'|trans({},'PequivenIndicatorBundle')) ~ filedObservation}) }}
             &nbsp;
-            {% if indicator.valueIndicatorConfig is null %}
-                {% set routeConfig = (path('pequiven_value_indicator_config_create', { 'indicator_id': indicator.id } )) %}
-            {% else %}
-                {% set routeConfig = (path('pequiven_value_indicator_config_update', { 'id': indicator.valueIndicatorConfig.id } )) %}
-            {% endif %}
-            {{ buttons.generic(
+            {{ buttons.generic_modal(path('pequiven_indicator_remove_values', { 'id': indicator.id }),('pequiven_indicator.indicator.buttons.remove_values'|trans({},'PequivenIndicatorBundle')), {'icon':'icon-trash','content':('pequiven_indicator.indicator.remove_values'|trans({},'PequivenIndicatorBundle')), 'gradient':'red-gradient'} ) }}
+            {% if showIndicatorConfigButton == true %}
+                &nbsp;
+                {% if indicator.valueIndicatorConfig is null %}
+                    {% set routeConfig = (path('pequiven_value_indicator_config_create', { 'indicator_id': indicator.id } )) %}
+                {% else %}
+                    {% set routeConfig = (path('pequiven_value_indicator_config_update', { 'id': indicator.valueIndicatorConfig.id } )) %}
+                {% endif %}
+                {{ buttons.generic(
                     (routeConfig),
                     ('pequiven_indicator.indicator.buttons.configure_details_results'|trans({},'PequivenIndicatorBundle')),
                     'fa fa-wrench'
                  ) 
-            }}
+                }}
+            {% endif %}
         {% endif %}
-    {% endif %}
-    &nbsp;
-    {% include 'PequivenSEIPBundle:Planning:Update/buttons.html.twig' with (
+        &nbsp;
+        {% include 'PequivenSEIPBundle:Planning:Update/buttons.html.twig' with (
             {
                 routeUpdateResult: 'pequiven_planning_update_result_indicator',
                 entity: indicator,
                 urlUpdateResulReferral: (path('pequiven_indicator_show',{id:indicator.id}))
             }
         )
-    %}
-    
-{% if hasPermissionToUpdate is not defined %}
-    {% set hasPermissionToUpdate = false %}
-{% endif %}
-{% if isAllowToDelete is not defined %}
-    {% set isAllowToDelete = false %}
-{% endif %}
+        %}
 
-{% if hasPermissionToApproved is not defined %}
-    {% set hasPermissionToApproved = false %}
-{% endif %}
+        {% if hasPermissionToUpdate is not defined %}
+            {% set hasPermissionToUpdate = false %}
+        {% endif %}
+        {% if isAllowToDelete is not defined %}
+            {% set isAllowToDelete = false %}
+        {% endif %}
 
-{% if  hasPermissionToApproved == true %}
-    &nbsp;
-    {{ buttons.generic_modal(path('pequiven_indicator_approved', { 'id': indicator.id }),('pequiven.arrangement_program.buttons.approved'|trans({},'PequivenArrangementProgramBundle')), {content:("pequiven_objetive.question.approved_indicator"|trans({},"PequivenObjetiveBundle")),icon: "icon-tick",gradient:"green-gradient"}) }}
-{% endif %}
+        {% if hasPermissionToApproved is not defined %}
+            {% set hasPermissionToApproved = false %}
+        {% endif %}
 
-{% if  hasPermissionToUpdate == true %}
-    &nbsp;
-    {{ buttons.generic(path('pequiven_indicator_update', { 'id': indicator.id }),('pequiven.edit'|trans({},'messages'))) }}
-{% endif %}
+        {% if isAllowToDownload == true %}
+            &nbsp;
+            {{ buttons.downloadLastFile(valueIndicatorIdDownload) }}
+        {% endif %}
 
-{% if isAllowToDelete == true %}
-    &nbsp;
-    {% set redirectUrl = (path("pequiven_seip_default_index")) %}
-    {{ buttons.delete(path('pequiven_indicator_delete', { 'id': indicator.id,"redirectUrl": redirectUrl })) }}
-{% endif %}
-</p>
+        {% if  hasPermissionToApproved == true %}
+            &nbsp;
+            {{ buttons.generic_modal(path('pequiven_indicator_approved', { 'id': indicator.id }),('pequiven.arrangement_program.buttons.approved'|trans({},'PequivenArrangementProgramBundle')), {content:("pequiven_objetive.question.approved_indicator"|trans({},"PequivenObjetiveBundle")),icon: "icon-tick",gradient:"green-gradient"}) }}
+        {% endif %}
+
+        {% if  hasPermissionToUpdate == true %}
+            &nbsp;
+            {{ buttons.generic(path('pequiven_indicator_update', { 'id': indicator.id }),('pequiven.edit'|trans({},'messages'))) }}
+        {% endif %}
+
+        {% if isAllowToDelete == true %}
+            &nbsp;
+            {% set redirectUrl = (path("pequiven_seip_default_index")) %}
+            {{ buttons.delete(path('pequiven_indicator_delete', { 'id': indicator.id,"redirectUrl": redirectUrl })) }}
+        {% endif %}
+    </p>
 
 {% endblock %}
 
@@ -278,9 +416,50 @@
 
 {% block javascript %}
     <script type="text/javascript">
-        jQuery(document).ready(function(){
-             // Progress
-            $('.progress').progress();
-        });
+function uploadFilePdf(valueIndicatorId) {
+    $("input#indicatorFilePdf_" + valueIndicatorId).click();
+//$("#form_"+valueIndicatorId).submit();
+}
+function openFile(valueIndicatorId) {
+//var obj = $("span#" + valueIndicatorId);
+//var url = obj.attr("data");
+    valueIndicatorId = valueIndicatorId.split("_");
+
+    var data = {
+        id: valueIndicatorId[1]
+    };
+    $.ajax({
+        type: 'get',
+        url: '{{ path("pequiven_indicator_get_url_file") }}',
+        data: data,
+        success: function (data) {
+//alert(data["url"]);
+            window.open(data["url"]);
+        }
+    });
+
+}
+
+function getUrl(data) {
+    var rs;
+
+    return rs;
+}
+
+function submitUploadFile(valueIndicatorId) {
+    valueIndicatorId = valueIndicatorId.split("_");
+    $("#field_" + valueIndicatorId[1]).val(valueIndicatorId[1]);
+    $("#form_" + valueIndicatorId[1]).submit();
+}
+
+$(document).ready(function () {
+
+// Progress
+    $('.progress').progress();
+
+        {#$("a.uploadFileButton").click(function () {
+            alert("hola");
+        });#}
+            });
     </script>
 {% endblock javascript %}

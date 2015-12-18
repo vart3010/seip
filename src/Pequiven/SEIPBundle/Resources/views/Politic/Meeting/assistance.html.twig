@@ -1,0 +1,59 @@
+{% trans_default_domain 'workStudyCircle' %}
+
+
+<div class="block" >
+    <div class="block-title">
+        <h3 class="ng-binding">{{ "workStudyCircle.assistances.dataAssistances"|trans }}</h3>    
+    </div>
+    <div class="with-padding" ng-controller="WorkStudyCircleController">
+        <table class="simple-table responsive-table tables-extras" id="sorting-example2">
+            <thead>
+                <tr>
+                    <th scope="col" width="2%" class="header">{{ 'seip.table.header.nro'|trans({},'PequivenArrangementProgramBundle') }}</th>
+                    <th scope="col" width="40%" class="header">{{ 'workStudyCircle.assistances.user'|trans }}</th>
+                    <th scope="col" width="20%" class="hide-on-tablet header">{{ 'workStudyCircle.assistances.assistance'|trans }}</th>
+                    <th scope="col" width="40%" class="hide-on-tablet header">{{ 'workStudyCircle.assistances.observation'|trans }}</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                {% set checkState = "" %}
+                {% set checkValue = 0 %}
+                {% set checkDisabled = "disabled" %}
+                {#{% set userCreatedId = workStudyCircle.coordinator.id %}#}
+                {% for member in members %}
+                    {#                    {% if(is_granted("ROLE_SEIP_MEETING_EDIT_ASSISTANCE") or (userCreatedId==user.id)) %}#}
+                    {#{% if(is_granted("ROLE_SEIP_MEETING_EDIT_ASSISTANCE")) %}
+                        {% set checkDisabled = "" %}
+                    {% endif %}#}
+                    {#                    {% if(userCreatedId != member.id) %}#}
+                    <tr>
+                        <td>{{ loop.index  }}</td>
+                        <td>{{ member.getFullNameUser }}</td>
+                        <td>
+                            <p class="assistance button-height">
+                                {% set checkValue =  assistanceIds[member.id] %}
+                                {% if(checkValue != 1 ) %}
+                                    {% set checkValue = 0 %}
+                                {% endif %}
+
+                                {% if(checkValue == 1 ) %}
+                                    {% set checkState = "checked" %}
+                                {% else  %}
+                                    {% set checkState = "" %}
+                                {% endif %}
+                                <input type="checkbox" name="switchAssistance"  data-meeting="{{ meeting.id }}" data="{{ member.id }}" value="{{ checkValue }}" class="switch blue-active mid-margin-right {{ checkDisabled }} {{ checkState }}"  data-text-on="SI" data-text-off="NO">
+                            </p>
+                        </td>
+                        <td>
+                            {{ assistanceObs[member.id] }}
+                        </td>
+                    </tr>
+                    {#                    {% endif %}#}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+

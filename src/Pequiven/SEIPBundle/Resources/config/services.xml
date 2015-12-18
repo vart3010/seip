@@ -29,12 +29,22 @@
                 <argument type="service" id="service_container" />
             </call>
         </service>
+        <service id="seip.service.report" class="Pequiven\SEIPBundle\Service\Reports\ReportService">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
+        <service id="seip.service.evaluation_details" class="Pequiven\SEIPBundle\Service\User\EvaluationDetailsService">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
         <!-- Formulario de registro de usuario  -->
         <service id="pequiven_seip.registration.form.type" class="Pequiven\SEIPBundle\Form\Type\RegistrationFormType">
             <tag name="form.type" alias="pequiven_seip_user_registration" />
             <argument>%fos_user.model.user.class%</argument>
         </service>
-         <service id="pequiven_seip.mailer.twig_swift" class="Pequiven\SEIPBundle\Service\TwigSwiftMailer">
+        <service id="pequiven_seip.mailer.twig_swift" class="Pequiven\SEIPBundle\Service\TwigSwiftMailer">
             <argument type="service" id="mailer" />
             <argument type="service" id="twig" />
         </service>
@@ -90,12 +100,23 @@
             </call>
         </service>
         
+        <!-- Servicio del ReportTemplate -->
+        <service id="data_load.service.report_template" class="Pequiven\SEIPBundle\Service\DataLoad\ReportTemplateService">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
+        
         <!-- Repositorio de Monitor -->
         <service id="pequiven.repository.seipmonitor" class="Pequiven\SEIPBundle\Repository\MonitorRepository">
             <call method="setContainer">
                 <argument type="service" id="service_container" />
             </call>
             <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\Monitor" />
+        </service>
+        <!-- Repositorio de Detalle de Evaluación del Usuario -->
+        <service id="pequiven.repository.evaluation_details" class="Pequiven\SEIPBundle\Repository\User\EvaluationDetailsRepository">
+            <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\User\EvaluationDetails" />
         </service>
         
         <service id="pequiven.repository.user" class="Pequiven\SEIPBundle\Repository\UserRepository">
@@ -168,6 +189,22 @@
         <service id="pequiven_seip.box.genericdashboardbox" class="Pequiven\SEIPBundle\Model\Box\Dashboard\GenericDashboardBox">
             <tag name="tecnocreaciones_box.box" />
         </service>
+        <!-- Box Dashboard Producción -->
+        <service id="dashboard.data_load.box.production" class="Pequiven\SEIPBundle\Model\Box\Dashboard\DataLoad\ProductionBox">
+            <tag name="tecnocreaciones_box.box" />
+        </service>
+        <!-- Box Dashboard Producción Por Tipo de Compañía-->
+        <service id="dashboard.data_load.box.production_by_company" class="Pequiven\SEIPBundle\Model\Box\Dashboard\DataLoad\ProductionByCompanyBox">
+            <tag name="tecnocreaciones_box.box" />
+        </service>
+        <!-- Box Dashboard Producción de la Corporación-->
+        <service id="dashboard.data_load.box.production_corporation" class="Pequiven\SEIPBundle\Model\Box\Dashboard\DataLoad\ProductionCorporationBox">
+            <tag name="tecnocreaciones_box.box" />
+        </service>
+        <!-- Box Dashboard Nivel Plantilla de Reporte Producción -->
+        <service id="dashboard.data_load.box.production_report_template" class="Pequiven\SEIPBundle\Model\Box\Dashboard\DataLoad\Production\ReportTemplateBox">
+            <tag name="tecnocreaciones_box.box" />
+        </service>
         <!-- Box donde se definen las Áreas del sistema para en un futuro separar todo tipo frames -->
         <service id="pequiven_seip.area_definition" class="Pequiven\SEIPBundle\Model\Box\AreaDefinition">
             <tag name="tecnocreaciones_box.area" />
@@ -191,17 +228,32 @@
             <tag name="tecnocreaciones_box.box" />
         </service>
         <!-- Box con la base del dashboard de un indicador -->
-        <service id="pequiven_seip.box.indicators_dashboard" class="Pequiven\SEIPBundle\Model\Box\Indicator\IndicatorsDashboardBox">
+        <service id="pequiven_seip_box_indicators_dashboard" class="Pequiven\SEIPBundle\Model\Box\Indicator\IndicatorsDashboardBox">
             <tag name="tecnocreaciones_box.box" />
         </service>
-         <!-- Box donde se renderizan las líneas estratégicas en formato de íconos para el dashboard a nivel estratégico --> 
+        <!-- Box donde se renderizan las líneas estratégicas en formato de íconos para el dashboard a nivel estratégico --> 
         <service id="pequiven_seip.box.linestrategic.icons_dashboard" class="Pequiven\SEIPBundle\Model\Box\LineStrategic\IconsBox">
             <tag name="tecnocreaciones_box.box" />
         </service>
-         <!-- Box donde se renderizan las líneas estratégicas en formato de barra de navegación --> 
+        <!-- Box donde se renderizan las líneas estratégicas en formato de barra de navegación --> 
         <service id="pequiven_seip.box.linestrategic.icons_nav_bar" class="Pequiven\SEIPBundle\Model\Box\LineStrategic\IconsNavBarBox">
             <tag name="tecnocreaciones_box.box" />
         </service>
+        
+        <!-- Box para rederizar grafica de PNR -->
+        <service id="pequiven_seip_box_unrealized_production" class="Pequiven\SEIPBundle\Model\Box\UnrealizedProduction\UnrealizedProductionBox">
+            <tag name="tecnocreaciones_box.box" />
+        </service>
+        
+        
+        <service id="pequiven_seip_box_user_summary_items" class="Pequiven\SEIPBundle\Model\Box\UserSummary\UserSummaryItemsBox">
+            <tag name="tecnocreaciones_box.box" />
+        </service>
+
+        <service id="pequiven_seip_box_evolution_items" class="Pequiven\SEIPBundle\Model\Box\EvolutionHistory\EvolutionHistoryItemsBox">
+            <tag name="tecnocreaciones_box.box" />
+        </service>
+        
         
         <!-- Servicio de USER -->
         <service id="pequiven.repository.user" class="Pequiven\SEIPBundle\Repository\UserRepository">
@@ -219,7 +271,7 @@
             </call>
             <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\Result" />
         </service>
-<!--        <service id="pequiven.form.user" class="Pequiven\SEIPBundle\Form\User">
+        <!--        <service id="pequiven.form.user" class="Pequiven\SEIPBundle\Form\User">
             <tag name="form.type" alias="pequiven_seipbundle_user" />
         </service>-->
         <service id="pequiven_arrangement_program.form.localization" class="Pequiven\SEIPBundle\Form\User\LocalizationType">
@@ -290,11 +342,20 @@
                 <argument type="service" id="service_container" />
             </call>
         </service>
+        
         <service id="seip.service.security" class="Pequiven\SEIPBundle\Service\SecurityService">
             <call method="setContainer">
                 <argument type="service" id="service_container" />
             </call>
         </service>
+        
+        <service id="seip.service.apiCne" class="Pequiven\SEIPBundle\Service\Sip\ApiCneService">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
+        
+        
         <service id="app.twig_string_loader" class="Twig_Loader_String"></service>
         <service id="app.twig_string" class="%twig.class%">
             <argument type="service" id="app.twig_string_loader" />
@@ -329,5 +390,59 @@
         <service id="pequiven.repository.entity" class="Pequiven\SEIPBundle\Repository\CEI\EntityRepository">
             <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\CEI\Entity" />
         </service>
+        <service id="seip.service.causefail" class="Pequiven\SEIPBundle\Service\CEI\CauseFailService">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
+        
+        <service id="seip.service.unrealizedProduction" class="Pequiven\SEIPBundle\Service\DataLoad\UnrealizedProductionService">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
+        
+        <service id="seip.service.productReport" class="Pequiven\SEIPBundle\Service\ProductReportService">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
+        
+        <service id="seip.service.workStudyCircle" class="Pequiven\SEIPBundle\Service\Politic\WorkStudyCircleService">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
+        
+        <service id="pequiven.repository.plant_report" class="Pequiven\SEIPBundle\Repository\DataLoad\PlantReportRepository">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+            <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\DataLoad\PlantReport" />
+        </service>
+        
+        <!-- Formulario del Círculo de Estudio de Trabajo -->
+        <service id="pequiven.form.work_study_circle" class="Pequiven\SEIPBundle\Form\Politic\WorkStudyCircleType">
+            <tag name="form.type" alias="pequiven_seipbundle_politic_workstudycircle" />
+        </service>
+        
+        <!-- Formulario de la Propuesta del Círculo de Estudio de Trabajo -->
+        <service id="pequiven.form.proposal" class="Pequiven\SEIPBundle\Form\Politic\ProposalType">
+            <tag name="form.type" alias="pequiven_seipbundle_politic_proposal" />
+        </service>
+        
+        <service id="pequiven.form.coordinator_workstudycircle" class="Pequiven\SEIPBundle\Form\CoordinatorType">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+            <tag name="form.type" alias="coordinator_workstudycircle" />
+        </service>
+
+        <service id="seip.service.center" class="Pequiven\SEIPBundle\Service\Sip\CenterService">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
+        
     </services>
 </container>

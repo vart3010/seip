@@ -65,6 +65,18 @@ services:
             - [ setTranslationDomain, [SonataAdminBundle]]
             - [ setContainer, [@service_container]]
             
+    sonata.admin.indicator.indicator_chart_details:
+        class: Pequiven\MasterBundle\Admin\Indicator\IndicatorChartDetailsAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Indicador" ,label_catalogue: "SonataUserBundle", label: "Detalles de los gráficos del indicador" }
+        arguments:
+            - ~
+            - Pequiven\IndicatorBundle\Entity\Indicator\IndicatorChartDetails
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
+            - [ setContainer, [@service_container]]
+            
     sonata.admin.indicator.type_feature_indicator:
         class: Pequiven\MasterBundle\Admin\Indicator\TypeFeatureIndicatorAdmin
         tags:
@@ -160,7 +172,7 @@ services:
     sonata.admin.arrangement_program.arrangement_program:
         class: Pequiven\MasterBundle\Admin\ArrangementProgram\ArrangementProgramAdmin
         tags:
-            - { name: sonata.admin, manager_type: orm, group: "Programa de gestion", label: "Programa de gestion" }
+            - { name: sonata.admin, manager_type: orm, group: "Programa de gestión", label: "Programa de gestión" }
         arguments:
             - ~
             - Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram
@@ -171,7 +183,7 @@ services:
     sonata.admin.arrangement_program.goal:
         class: Pequiven\MasterBundle\Admin\ArrangementProgram\GoalAdmin
         tags:
-            - { name: sonata.admin, manager_type: orm, group: "Programa de gestion", label: "Metas" }
+            - { name: sonata.admin, manager_type: orm, group: "Programa de gestión", label: "Metas" }
         arguments:
             - ~
             - Pequiven\ArrangementProgramBundle\Entity\Goal
@@ -182,7 +194,7 @@ services:
     sonata.admin.arrangement_program.goal_details:
         class: Pequiven\MasterBundle\Admin\ArrangementProgram\GoalDetailsAdmin
         tags:
-            - { name: sonata.admin, manager_type: orm, group: "Programa de gestion", label: "Detalles de metas" }
+            - { name: sonata.admin, manager_type: orm, group: "Programa de gestión", label: "Detalles de metas" }
         arguments:
             - ~
             - Pequiven\ArrangementProgramBundle\Entity\GoalDetails
@@ -193,7 +205,7 @@ services:
     sonata.admin.arrangement_program.timeline:
         class: Pequiven\MasterBundle\Admin\ArrangementProgram\TimelineAdmin
         tags:
-            - { name: sonata.admin, manager_type: orm, group: "Programa de gestion", label: "Linea de tiempo" }
+            - { name: sonata.admin, manager_type: orm, group: "Programa de gestión", label: "Linea de tiempo" }
         arguments:
             - ~
             - Pequiven\ArrangementProgramBundle\Entity\Timeline
@@ -204,7 +216,7 @@ services:
     sonata.admin.arrangement_range.arrangement_range:
         class: Pequiven\MasterBundle\Admin\ArrangementRangeAdmin
         tags:
-            - { name: sonata.admin, manager_type: orm, group: "Rango de gestion", label: "Rango de gestión" }
+            - { name: sonata.admin, manager_type: orm, group: "Rango de gestión", label: "Rango de gestión" }
         arguments:
             - ~
             - Pequiven\ArrangementBundle\Entity\ArrangementRange
@@ -370,7 +382,9 @@ services:
             - ~
         calls:
             - [ setTranslationDomain, [SonataAdminBundle]]
-           
+            - [ setModelManager, [@seip.model.manager]]
+            - [ setContainer, [@service_container]]
+            
     sonata.admin.cei.product:
         class: Pequiven\MasterBundle\Admin\CEI\ProductAdmin
         tags:
@@ -567,6 +581,60 @@ services:
         arguments:
             - ~
             - Pequiven\SIGBundle\Entity\PoliticManagementSystem
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
+    # Procesos de los Sistemas de Getión
+    sonata.admin.sig_process_management_system:
+        class: Pequiven\MasterBundle\Admin\SIG\ProcessManagementSystemAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "SIG" ,label: "Procesos de los Sistemas de Getión" }
+        arguments:
+            - ~
+            - Pequiven\SIGBundle\Entity\ProcessManagementSystem
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
+    # Tipos de plan de acción del informe de evolución
+    sonata.admin.sig_typeaction_management_system:
+        class: Pequiven\MasterBundle\Admin\SIG\TypeActionManagementSystemAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "SIG" ,label: "Tipos de Acciones del Plan de Acción" }
+        arguments:
+            - ~
+            - Pequiven\SIGBundle\Entity\TypeActionManagementSystem
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
+    # Tipos de Verificación para el plan de acción y seguimiento
+    sonata.admin.sig_typeverification_management_system:
+        class: Pequiven\MasterBundle\Admin\SIG\TypeVerificationManagementSystemAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "SIG" ,label: "Tipos de Verificaciones Plan de Acción" }
+        arguments:
+            - ~
+            - Pequiven\SIGBundle\Entity\TypeVerificationManagementSystem
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
+            
+    sonata.admin.workstudycircle.categoryfile:
+        class: Pequiven\MasterBundle\Admin\Politic\CategoryFileAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Círculo de Estudio y Trabajo", label: "Etiquetas de Archivos" }
+        arguments:
+            - ~
+            - Pequiven\SEIPBundle\Entity\Politic\CategoryFile
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
+    sonata.admin.sip.material:
+        class: Pequiven\MasterBundle\Admin\Sip\SipMaterialAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Sip", label: "Material CUTL" }
+        arguments:
+            - ~
+            - Pequiven\SEIPBundle\Entity\Sip\Center\Material
             - ~
         calls:
             - [ setTranslationDomain, [SonataAdminBundle]]

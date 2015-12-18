@@ -1,0 +1,88 @@
+pequiven_meeting_create:
+    path: /create/{workStudyCircle_id}
+    defaults:
+        _controller: pequiven.controller.meeting:createAction
+    methods: [GET|POST]
+    options:
+        expose: true
+        
+pequiven_meeting_list:
+    path: /list/{phase}.{_format}
+    defaults:
+        _controller: pequiven.controller.meeting:listAction  
+        _format: html
+        phase: 1
+    requirements:
+        _format: html|json|xml
+        phase: "\d+"
+    methods: [GET]   
+
+pequiven_meeting_view:
+    path: /view/{phase}
+    defaults:
+        _controller: pequiven.controller.meeting:viewAction
+        phase: 1
+    requirements:
+        phase: "\d+"
+    methods: [GET|POST]
+    options:
+        expose: true
+pequiven_meeting_edit:
+    path: /edit/{meeting_id}
+    defaults:
+        _controller: pequiven.controller.meeting:editAction
+    methods: [GET|POST]
+    options:
+        expose: true
+        
+pequiven_meeting_show:
+    path: /{id}
+    defaults:
+        _controller: pequiven.controller.meeting:showAction
+    methods: [GET|POST]
+    options:
+        expose: true
+        
+pequiven_meeting_export_pdf:
+    path: /{idmeeting}/export.{_format}
+    defaults:
+        _controller: pequiven.controller.meeting:exportAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET|POST]
+    options:
+        expose: true   
+               
+pequiven_all_meetings_export_pdf:
+    path: /{idWorkStudyCircle}/exportAll.{_format}
+    defaults:
+        _controller: pequiven.controller.meeting:exportAllAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET|POST]
+    options:
+        expose: true
+        
+pequiven_meeting_upload_form:
+    path: /{idMeeting}/formFile.{_format}
+    defaults:
+        _controller: pequiven.controller.meeting:uploadFilesAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET|POST]
+    options:
+        expose: true
+        
+pequiven_meeting_upload:
+    path: /{idMeeting}/upload.{_format}
+    defaults:
+        _controller: pequiven.controller.meeting:uploadAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET|POST]
+    options:
+        expose: true

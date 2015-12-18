@@ -1,0 +1,151 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+{#{% block stylesheets_base %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('bundles/pequivenseip/icons/imageMap.css') }}">
+{% endblock %}#}
+
+{#{% block before_body %}
+    {{ contentHeader(
+        'Progreso por Centro',
+        nombres[2],
+        nombres[3] 
+    )}}
+{% endblock %}#}
+
+{% block body %}
+    
+    <hgroup id="main-title" class="thin breadcrumb">
+        <h1>
+        <span class="thin"><a href="">Progreso por Centro</a></span><span class="icon-forward"></span>
+        <span class="thin">{{ nombres[2] }}</span><span class="icon-forward"></span>
+        <span class="thin">{{ nombres[3] }}</span>
+        </h1>
+    </hgroup>
+    <br><br>
+    
+    
+    <form id="forma" method="POST" action="{{ path("pequiven_sip_list_voto_general",{type:codigos[3],edo:codigos[0],mcpo:codigos[1],parroq:codigos[2]}) }}">
+        <fieldset class="fieldset">
+            <legend class="legend menu" style="cursor: pointer"><b>Filtros  <i class="fa fa-angle-double-down"></i></b>
+            </legend>
+            <div id="filtros" role="button">
+                <table width="100%">
+                    <thead>
+                        <tr>
+                            <th class="header" align="left">Tipo de Listado:</th>
+                            <th class="header" align="left">Centro:</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>                        
+                            <td>
+                                <select class="select2 input-large form-control" style="width: 300px;" required="true" name="type2" id="type2">
+                                    
+                                    <option value="1">Progreso General</option>
+                                    <option value="2">Progreso Pequiven</option>
+                                    <option value="3">Progreso 1x10</option>
+                                    <option value="4">Progreso Circuito 5</option>
+                                </select> 
+                            </td>
+                            <td>
+                                <select class="select2 input-large form-control" style="width: 400px;" name="codigoCentro" required="true">
+                                   <option value="Todos">Todos</option>
+                                    {% for centros in data %}
+                                    <option value="{{centros["Codigo"]}}">{{centros["Codigo"]}} - {{centros["Centro"]}}</option>
+                                    {% endfor %}
+                                </select> 
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <br> <br> <br>                               
+            </div>
+        </fieldset> 
+    </form>
+
+    <fieldset class="fieldset">
+        <legend class="legend"><b>Centros de Votación</b></legend>
+        <div style="height:500px; width:auto; overflow:auto;">
+            <table class="simple-table responsive-table tables-extras" width="80%">
+                <thead>
+                    <tr>
+                        <th class="header" width="20%">Progreso</th>
+                        <th class="header" width="10%">Código</th>
+                        <th class="header" width="50%">Centro</th>
+                        <th class="header" width="10%" align="center">Votos</th>
+                        <th class="header" width="10%" align="center">Faltan</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for cent in data %}
+                        <tr>
+                            <td>
+                                {% set advance=(cent["Si"]*100)/(cent["Si"]+cent["No"]) %}
+                                {% include 'PequivenSEIPBundle:Sip:Center/List/percentajeBarResult.html.twig' %}
+                            </td>
+                            <td>
+                                <a href="{{ path("pequiven_sip_center_show",{id:cent["IdCentro"]}) }}">
+                                    {{cent["Codigo"]}}
+                                </a>
+                            </td>
+                            <td> 
+                                <a href="{{ path("pequiven_sip_center_show",{id:cent["IdCentro"]}) }}">
+                                    {{cent["Centro"]}}
+                                </a>
+                            </td>
+                            <td align="center">{{cent["Si"]}}</td>
+                            <td align="center">{{cent["No"]}}</td>                        
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>    
+        </div>
+    </fieldset>
+
+{% endblock body %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/agenda3860.css?v=1') }}">
+    <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/dashboard3860.css?v=1') }}">
+{% endblock stylesheets %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/fusioncharts.js') }}"></script>
+    <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/themes/fusioncharts.theme.fint.js') }}"></script>
+    <script src="{{  asset('bundles/pequivenseip/imageMapResizer/js/imageMapResizer.min.js') }}"></script>
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            {% if( codigos[4] != "" ) %}
+                $("#filtros").show();
+            {% endif %}
+                
+            $("#type2").change(function(){
+                $("form#forma").submit();
+            });
+            
+            $("#codigoCentro").change(function(){
+                $("form#forma").submit();
+            });
+            
+            $("#filtros").hide();
+
+            $("legend.menu").click(function () {
+                $("#filtros").toggle(200);
+            });
+
+            $(".select2").select2({
+                allowClear: true
+            });
+
+        });
+    </script>
+{% endblock %}
+

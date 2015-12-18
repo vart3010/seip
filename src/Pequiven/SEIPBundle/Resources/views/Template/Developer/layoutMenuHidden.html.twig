@@ -1,0 +1,189 @@
+{% extends "PequivenSEIPBundle:Template:Developer/baseMenuHidden.html.twig" %}
+
+{% block head_base %}
+    <script>
+    // include angular loader, which allows the files to load in any order
+
+/*
+ AngularJS v1.2.21
+ (c) 2010-2014 Google, Inc. http://angularjs.org
+ License: MIT
+*/
+(function(){'use strict';function d(a){return function(){var c=arguments[0],b,c="["+(a?a+":":"")+c+"] http://errors.angularjs.org/1.2.21/"+(a?a+"/":"")+c;for(b=1;b<arguments.length;b++)c=c+(1==b?"?":"&")+"p"+(b-1)+"="+encodeURIComponent("function"==typeof arguments[b]?arguments[b].toString().replace(/ \{[\s\S]*$/,""):"undefined"==typeof arguments[b]?"undefined":"string"!=typeof arguments[b]?JSON.stringify(arguments[b]):arguments[b]);return Error(c)}}(function(a){var c=d("$injector"),b=d("ng");a=a.angular||
+(a.angular={});a.$$minErr=a.$$minErr||d;return a.module||(a.module=function(){var a={};return function(e,d,f){if("hasOwnProperty"===e)throw b("badname","module");d&&a.hasOwnProperty(e)&&(a[e]=null);return a[e]||(a[e]=function(){function a(c,d,e){return function(){b[e||"push"]([c,d,arguments]);return g}}if(!d)throw c("nomod",e);var b=[],h=[],k=a("$injector","invoke"),g={_invokeQueue:b,_runBlocks:h,requires:d,name:e,provider:a("$provide","provider"),factory:a("$provide","factory"),service:a("$provide",
+"service"),value:a("$provide","value"),constant:a("$provide","constant","unshift"),animation:a("$animateProvider","register"),filter:a("$filterProvider","register"),controller:a("$controllerProvider","register"),directive:a("$compileProvider","directive"),config:k,run:function(a){h.push(a);return this}};f&&k(f);return g}())}}())})(window)})(window);
+//# sourceMappingURL={{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/bower_components/angular-loader/angular-loader.min.js.map') }}
+
+        // include a third-party async loader library
+        /*!
+          * $script.js JS loader & dependency manager
+          * https://github.com/ded/script.js
+          * (c) Dustin Diaz 2014 | License MIT
+          */
+        (function(e,t){typeof module!="undefined"&&module.exports?module.exports=t():typeof define=="function"&&define.amd?define(t):this[e]=t()})("$script",function(){function p(e,t){for(var n=0,i=e.length;n<i;++n)if(!t(e[n]))return r;return 1}function d(e,t){p(e,function(e){return!t(e)})}function v(e,t,n){function g(e){return e.call?e():u[e]}function y(){if(!--h){u[o]=1,s&&s();for(var e in f)p(e.split("|"),g)&&!d(f[e],g)&&(f[e]=[])}}e=e[i]?e:[e];var r=t&&t.call,s=r?t:n,o=r?e.join(""):t,h=e.length;return setTimeout(function(){d(e,function t(e,n){if(e===null)return y();e=!n&&e.indexOf(".js")===-1&&!/^https?:\/\//.test(e)&&c?c+e+".js":e;if(l[e]){o&&(a[o]=1);if(l[e]!=2)return setTimeout(function(){t(e,!0)},0);y()}l[e]=1,o&&(a[o]=1),m(e,y)})},0),v}function m(n,r){var i=e.createElement("script"),u;i.onload=i.onerror=i[o]=function(){if(i[s]&&!/^c|loade/.test(i[s])||u)return;i.onload=i[o]=null,u=1,l[n]=2,r()},i.async=1,i.src=h?n+(n.indexOf("?")===-1?"?":"&")+h:n,t.insertBefore(i,t.lastChild)}var e=document,t=e.getElementsByTagName("head")[0],n="string",r=!1,i="push",s="readyState",o="onreadystatechange",u={},a={},f={},l={},c,h;return v.get=m,v.order=function(e,t,n){(function r(i){i=e.shift(),e.length?v(i,r):v(i,t,n)})()},v.path=function(e){c=e},v.urlArgs=function(e){h=e},v.ready=function(e,t,n){e=e[i]?e:[e];var r=[];return!d(e,function(e){u[e]||r[i](e)})&&p(e,function(e){return u[e]})?t():!function(e){f[e]=f[e]||[],f[e][i](t),n&&n(r)}(e.join("|")),v},v.done=function(e){v([null],e)},v})
+        // load all of the dependencies asynchronously.
+        var interpolateStartSymbol = "{$";
+        var interpolateEndSymbol = "$}";
+        
+        var baseDependeciesLayout = [
+            {% javascripts 
+                   output='compiled/baseDependecies.js'  
+                   filter='uglifyjs2' 
+
+                   'bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/bower_components/ng-table/ng-table.js'
+                   'bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/bower_components/ng-table-export/ng-table-export.js'
+                   'bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/bower_components/angular-route/angular-route.min.js'
+                   'bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/bower_components/angular-sanitize/angular-sanitize.min.js'
+                   'bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/bower_components/angular-resource/angular-resource.min.js'
+                %}
+                 '{{ asset_url }}',
+            {% endjavascripts %}
+        ];
+        
+        var baseDependecies = baseDependeciesLayout;
+        var dependencies = [
+                {% javascripts output='compiled/seip_angular_modules.js' 
+                   filter='uglifyjs2' 
+                    'bundles/pequivenseip/jquery-number-master/jquery.number.min.js'
+                    'bundles/pequivenseip/angular/modules/seipModule.js'
+                    'bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/bower_components/angular-cookies/angular-cookies.min.js'
+                    '@TecnocreacionesVzlaGovernmentBundle/Resources/public/template/developer/angular/app/js/modules/tableFormat1Module.js'
+                    '@TecnocreacionesVzlaGovernmentBundle/Resources/public/template/developer/angular/app/js/modules/sfTranslatorModule.js'
+                    '@TecnocreacionesVzlaGovernmentBundle/Resources/public/template/developer/angular/app/js/modules/notificationBarModule/notificationBarModule.js'
+                    '@TecnocreacionesVzlaGovernmentBundle/Resources/public/template/developer/angular/app/js/modules/notifyModule.js'
+                    'bundles/pequivenseip/fusioncharts/angularjs-plugin/wrappers/angularjs/angular-fusioncharts.min.js'
+                    '@TecnocreacionesVzlaGovernmentBundle/Resources/public/template/developer/angular/app/js/services.js'
+                    '@TecnocreacionesVzlaGovernmentBundle/Resources/public/template/developer/angular/app/js/controllers.js'
+                    '@TecnocreacionesVzlaGovernmentBundle/Resources/public/template/developer/angular/app/js/filters.js'
+                    '@TecnocreacionesVzlaGovernmentBundle/Resources/public/template/developer/angular/app/js/directives.js'
+                    '@TecnocreacionesVzlaGovernmentBundle/Resources/public/template/developer/angular/app/js/mainApp.js'
+                %}
+                  '{{ asset_url }}',
+                {% endjavascripts %}
+        ];
+        
+        {# Agrego las dependencias de modulos de angularjs del proyecto #}
+        var myDependencies = {{ templateConfig.getTemplateOption('developer','angular_dependencies')|json_encode()|raw }};
+        var joinDependencias = [];
+        joinDependencias = joinDependencias.concat(baseDependecies);
+        joinDependencias = joinDependencias.concat(myDependencies);
+        joinDependencias = joinDependencias.concat(dependencies);
+        $script('{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/bower_components/angular/angular.min.js') }}','base');
+        
+        var extraAngularDependencies = {{ templateConfig.getTemplateOption('developer','angular_modules')|json_encode()|raw }};
+        $script.ready('base',function(){
+            
+            $script(joinDependencias,'bundle');
+            $script.ready('bundle', function() {
+                jQuery(document).ready(function(){
+                    // when all is done, execute bootstrap angular application
+                    angular.element(document).ready(function() {
+                        angular.bootstrap(document, ['mainApp']);
+                    });//fin boot angular
+                });//fin ready jquery
+            });//fin bundle
+        });
+      </script>
+{% endblock head_base %}
+
+{% block stylesheets_base %}
+    {{ parent() }}
+    <!-- jquery-ui -->
+    <link rel="stylesheet" href="{{ asset('bundles/pequivenseip/jquery-ui.custom/jquery-ui.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('bundles/pequivenseip/main.css') }}">
+    <link rel="stylesheet" href="{{ asset('bundles/pequivenseip/font-awesome/css/font-awesome.min.css') }}">
+{% endblock stylesheets_base %}
+
+{% block javascripts_base %}
+    {{ parent() }}
+    {# Generador de rutas desde javascript #}
+    <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+    <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
+    <script src="{{ asset('bundles/bazingajstranslation/js/translator.min.js') }}"></script>
+    <script src="{{ url('bazinga_jstranslation_js') }}"></script>
+    
+    <script src="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/setup.js') }}"></script>
+    
+{% endblock javascripts_base %}
+
+{% block javascripts_core %}
+    <!-- jQuery-ui -->
+    <script src="{{ asset('bundles/pequivenseip/jquery-ui.custom/jquery-ui.min.js?v=1') }}"></script>
+    {% javascripts 
+       '@TecnocreacionesVzlaGovernmentBundle/Resources/assets/js/main.js'
+       'bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.navigable.js'
+       'bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.scroll.js'
+       'bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.tooltip.js'
+       'bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.modal.js'
+       'bundles/tecnocreacionesvzlagovernment/template/developer/js/libs/tinycon.min.js'
+       'bundles/pequivenseip/jquery-ui.custom/i18n/datepicker-es.js'
+       'bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.tabs.js'
+       '@PequivenSEIPBundle/Resources/public/javascript.js'
+        
+        filter='uglifyjs2' 
+        output='compiled/seip_javascript_base.js'
+    %}
+        <script src="{{ asset_url }}"></script>
+      {% endjavascripts %}
+{% endblock  %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $.datepicker.regional['es'] = {
+                closeText: 'Cerrar',
+                prevText: '&#x3C;Ant',
+                nextText: 'Sig&#x3E;',
+                currentText: 'Hoy',
+                monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
+                'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
+                monthNamesShort: ['Ene','Feb','Mar','Abr','May','Jun',
+                'Jul','Ago','Sep','Oct','Nov','Dic'],
+                dayNames: ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'],
+                dayNamesShort: ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'],
+                dayNamesMin: ['D','L','M','X','J','V','S'],
+                weekHeader: 'Sm',
+{#                dateFormat: 'dd/mm/yy',#}
+                firstDay: 1,
+                isRTL: false,
+                showMonthAfterYear: false,
+                yearSuffix: ''};
+            $.datepicker.setDefaults($.datepicker.regional['es']);
+        });
+        var responsiblesFormatResult = function(object){
+                  var value = '';
+                  if(object.firstname){
+                      value += object.firstname;
+                  }
+                  if(object.lastname){
+                      value +=  ' '+ object.lastname;
+                  }
+                  if(object.numPersonal){
+                      value +=  " ("+object.numPersonal+")";
+                  }
+                  return value;
+              };
+        var responsiblesFormatResultDetails = function(object){
+                  var value = '';
+                  if(object.firstname){
+                      value += object.firstname;
+                  }
+                  if(object.lastname){
+                      value +=  ' '+ object.lastname;
+                  }
+                  if(object.numPersonal){
+                      value +=  " ("+object.numPersonal+")";
+                  }
+                  
+                  value +=  " | "+object.username;
+                  
+                  return value;
+              };
+    </script>
+{% endblock javascripts %}
+
+{% block before_body %}
+    {{ contentHeader() }}
+    <br/>
+{% endblock %}

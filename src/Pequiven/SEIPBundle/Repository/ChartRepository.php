@@ -13,7 +13,7 @@ use Pequiven\SEIPBundle\Doctrine\ORM\SeipEntityRepository as EntityRepository;
 /**
  * Description of Chart(pequiven.repository.chart)
  *
- * @author matias
+ * @author victor tortolero
  */
 class ChartRepository extends EntityRepository 
 {

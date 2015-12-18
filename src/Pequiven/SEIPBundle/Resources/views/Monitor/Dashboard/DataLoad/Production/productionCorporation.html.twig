@@ -1,0 +1,23 @@
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+{#<div class="with-padding" ng-controller="ChartsDashboardController">#}
+    <div class="columns" ng-controller="ChartsDashboardController">
+{#        <div class="twelve-columns twelve-columns-tablet twelve-columns-mobile new-row-mobile dashboard" style="background: -webkit-linear-gradient(left, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0) 60%, rgba(0, 0, 0, 0.25)), -webkit-linear-gradient(top, #5e6165, #33373a);">#}
+        <div class="twelve-columns twelve-columns-tablet twelve-columns-mobile new-row-mobile">
+            <div id="id-corporation" ng-init="chargeChartProductionReportTemplateByDateCorporation('{{ "now"|date('Y-m-d') }}','grafico-corporation','100','500',{{ typeView }})">
+                <span id="grafico-corporation"></span>
+            </div>
+            <div align="center">
+                {% include 'PequivenSEIPBundle:Monitor:Dashboard/DataLoad/Production/legendSection.html.twig' %}
+            </div>
+        </div>
+    </div>
+{#</div>#}
+
+{% block javascript %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            
+        });
+    </script>
+{% endblock javascript %}

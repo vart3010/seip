@@ -85,16 +85,47 @@ class ReportTemplate extends BaseModel
     /**
      * Plantillas de plantas
      * @var \Pequiven\SEIPBundle\Entity\DataLoad\PlantReport
-     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\PlantReport",mappedBy="reportTemplate")
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\PlantReport",mappedBy="reportTemplate",cascade={"remove"})
      */
     private $plantReports;
+    
+    /**
+     * Usuarios
+     * @var type 
+     * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\User",mappedBy="reportTemplates")
+     */
+    private $users;
+    
+    /**
+     * Nombre Corto del reporte
+     * @var string
+     * @ORM\Column(name="shortName", nullable=true)
+     */
+    private $shortName;
+    
+    /**
+     * Ícono del ReportTemplate
+     * 
+     * @var string
+     * 
+     * @ORM\Column(name="icon",type="text", nullable=true)
+     */
+    protected $icon;
 
+    /**
+     * @var \Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate
+     * @ORM\OneToOne(targetEntity="\Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate")
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", nullable=true)
+     */
+    private $parent;
+    
     /**
      * Constructor
      */
     public function __construct()
     {
         $this->plantReports = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->users = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -277,9 +308,71 @@ class ReportTemplate extends BaseModel
     {
         return $this->plantReports;
     }
+
+    public function getReportTemplateWithName()
+    {
+        $full = sprintf("%s (%s)",$this->getName(),$this->getRef());
+        return $full;
+    }
     
     public function __toString() 
     {
         return $this->getRef() ?: "-";
     }
+    
+    public function recalculate()
+    {
+        foreach ($this->plantReports as $plantReport) {
+            $plantReport->recalculate();
+        }
+    }
+    
+    
+    function getShortName() {
+        return $this->shortName;
+    }
+
+    function setShortName($shortName) {
+        $this->shortName = $shortName;
+    }
+    
+    /**
+     * 
+     * @return type
+     */
+    public function getIcon() {
+        return $this->icon;
+    }
+
+    /**
+     * 
+     * @param type $icon
+     */
+    public function setIcon($icon) {
+        $this->icon = $icon;
+    }
+
+
+    /**
+     * Set parent
+     *
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate $parent
+     * @return Indicator
+     */
+    public function setParent(\Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate $parent = null) {
+        $this->parent = $parent;
+
+        return $this;
+    }
+
+    /**
+     * Get parent
+     *
+     * @return \Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate 
+     */
+    public function getParent() {
+        return $this->parent;
+    }
+
+
 }

@@ -8,12 +8,16 @@
 
 namespace Pequiven\MasterBundle\Repository;
 
-use Doctrine\ORM\EntityRepository;
+use Tecnocreaciones\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
 /**
  * Description of FormulaRepository
  *
  * @author matias
  */
 class FormulaRepository extends EntityRepository {
-    //put your code here
+    
+    
+    protected function getAlias() {
+        return 'f';
+    }
 }

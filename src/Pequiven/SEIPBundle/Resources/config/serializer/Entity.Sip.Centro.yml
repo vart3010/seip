@@ -1,0 +1,21 @@
+Pequiven\SEIPBundle\Entity\Sip\Centro:
+    exclusion_policy: ALL
+    properties:
+        id:
+            expose: true
+            groups: [id]
+        codigoCentro:
+            expose: true
+            groups: [codigoCentro]
+        description:
+            expose: true
+            groups: [api_list]
+        descriptionEstado:
+            expose: true
+            groups: [api_list]
+        descriptionMunicipio:
+            expose: true
+            groups: [api_list]
+        descriptionParroquia:
+            expose: true
+            groups: [api_list]

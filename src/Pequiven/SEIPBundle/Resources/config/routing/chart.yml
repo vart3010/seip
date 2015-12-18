@@ -1,8 +1,44 @@
-
-getDataChartDoughnut:
-    path: /getDataChartDoughnut/{id}
+#0
+getDataChartDoughnutIndicatorsAssociated:
+    path: /getDataChartDoughnutIndicatorsAssociated/{id}
     defaults:
-        _controller: pequiven.controller.seipchart:getDataChartTypeDoughnutAction
+        _controller: pequiven.controller.seipchart:getDataChartTypeDoughnutIndicatorsAssociatedAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
+
+#1        
+getDataChartColumnLineDualAxisIndicatorsAssociated:
+    path: /getDataChartColumnLineDualAxisIndicatorsAssociated/{id}
+    defaults:
+        _controller: pequiven.controller.seipchart:getDataChartTypeColumnLineDualAxisIndicatorsAssociatedAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
+
+#2
+getDataChartDoughnutWithVariablesRealPlan:
+    path: /getDataChartDoughnutWithVariablesRealPlan/{id}
+    defaults:
+        _controller: pequiven.controller.seipchart:getDataChartTypeDoughnutWithVariablesRealPlanAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
+
+#3
+getDataChartPieVariablesMarkedReal:
+    path: /getDataChartPieVariablesMarkedReal/{id}
+    defaults:
+        _controller: pequiven.controller.seipchart:getDataChartPieVariablesMarkedRealAction
         _format: json
     requirements:
         _format: "json|xml"
@@ -10,10 +46,358 @@ getDataChartDoughnut:
     options:
         expose: true
         
-getDataChartColumnLineDualAxis:
-    path: /getDataChartColumnLineDualAxis/{id}
+#4
+getDataChartColumnLineDualAxisRealPlan:
+    path: /getDataChartColumnLineDualAxisRealPlan/{id}
     defaults:
-        _controller: pequiven.controller.seipchart:getDataChartTypeColumnLineDualAxisAction
+        _controller: pequiven.controller.seipchart:getDataChartTypeColumnLineDualAxisRealPlanAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
+        
+#5
+getDataChartPieVariablesMarkedPlan:
+    path: /getDataChartPieVariablesMarkedPlan/{id}
+    defaults:
+        _controller: pequiven.controller.seipchart:getDataChartPieVariablesMarkedPlanAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
+        
+#6
+getDataChartBarsAreaVariablesRealPlanByFrequencyNotification:
+    path: /getDataChartBarsAreaVariablesRealPlanByFrequencyNotification/{id}
+    defaults:
+        _controller: pequiven.controller.seipchart:getDataChartBarsAreaVariablesRealPlanByFrequencyNotificationAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
+
+#7
+getDataChartPieVariablesPlanFromEquation:
+    path: /getDataChartPieVariablesPlanFromEquation/{id}
+    defaults:
+        _controller: pequiven.controller.seipchart:getDataChartPieVariablesPlanFromEquationAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
+
+#8
+getDataChartPieVariablesRealFromEquation:
+    path: /getDataChartPieVariablesRealFromEquation/{id}
+    defaults:
+        _controller: pequiven.controller.seipchart:getDataChartPieVariablesRealFromEquationAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
+
+#9
+getDataChartColumnLineDualAxisByFrequencyNotification:
+    path: /getDataChartColumnLineDualAxisByFrequencyNotification/{id}
+    defaults:
+        _controller: pequiven.controller.seipchart:getDataChartColumnLineDualAxisByFrequencyNotificationAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
+        
+#10
+getDataChartBarsAreaVariablesMarkedRealPlanByFrequencyNotification:
+    path: /getDataChartBarsAreaVariablesMarkedRealPlanByFrequencyNotification/{id}
+    defaults:
+        _controller: pequiven.controller.seipchart:getDataChartBarsAreaVariablesMarkedRealPlanByFrequencyNotificationAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
+        
+#11
+getDataChartColumnVariablesMarkedRealPlanByFrequencyNotification:
+    path: /getDataChartColumnVariablesMarkedRealPlanByFrequencyNotification/{id}
+    defaults:
+        _controller: pequiven.controller.seipchart:getDataChartColumnVariablesMarkedRealPlanByFrequencyNotificationAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
+        
+#12
+getDataChartVariablesRealPlanFromDashboardEquationDoughnut:
+    path: /getDataChartVariablesRealPlanFromDashboardEquationDoughnut/{id}
+    defaults:
+        _controller: pequiven.controller.seipchart:getDataChartVariablesRealPlanFromDashboardEquationDoughnutAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
+        
+#13
+getDataChartColumnRealPlanIndicatorsAssociatedFromDashboardEquation:
+    path: /getDataChartColumnRealPlanIndicatorsAssociatedFromDashboardEquation/{id}
+    defaults:
+        _controller: pequiven.controller.seipchart:getDataChartColumnRealPlanIndicatorsAssociatedFromDashboardEquationAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
+        
+#14
+getDataChartColumnRealPlanByFrequencyNotificationFromDashboardEquation:
+    path: /getDataChartColumnRealPlanByFrequencyNotificationFromDashboardEquation/{id}
+    defaults:
+        _controller: pequiven.controller.seipchart:getDataChartColumnRealPlanByFrequencyNotificationFromDashboardEquationAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
+        
+#15
+getDataChartStackedColumnVariableByFrequencyNotificationWithTotal:
+    path: /getDataChartStackedColumnVariableByFrequencyNotificationWithTotal/{id}
+    defaults:
+        _controller: pequiven.controller.seipchart:getDataChartStackedColumnVariableByFrequencyNotificationWithTotalAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
+        
+#16
+getDataChartColumnResultIndicatorsAssociatedWithTotalByMonth:
+    path: /getDataChartColumnResultIndicatorsAssociatedWithTotalByMonth/{id}/{month}
+    defaults:
+        _controller: pequiven.controller.seipchart:getDataChartColumnResultIndicatorsAssociatedWithTotalByMonthAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
+        
+#16
+getDataChartColumnResultIndicatorsAssociatedWithTotalByMonth:
+    path: /getDataChartColumnResultIndicatorsAssociatedWithTotalByMonth/{id}/{month}
+    defaults:
+        _controller: pequiven.controller.seipchart:getDataChartColumnResultIndicatorsAssociatedWithTotalByMonthAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
+        
+#17
+getDataChartColumnResultIndicatorsAssociatedGroupByTypeCompanyWithTotalByMonth:
+    path: /getDataChartColumnResultIndicatorsAssociatedGroupByTypeCompanyWithTotalByMonth/{id}/{month}
+    defaults:
+        _controller: pequiven.controller.seipchart:getDataChartColumnResultIndicatorsAssociatedGroupByTypeCompanyWithTotalByMonthAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
+        
+#18
+getDataChartMultiSeriesLineIndicatorPersonalInjuryWithAccumulatedTime:
+    path: /getDataChartMultiSeriesLineIndicatorPersonalInjuryWithAccumulatedTime/{id}
+    defaults:
+        _controller: pequiven.controller.seipchart:getDataChartMultiSeriesLineIndicatorPersonalInjuryWithAccumulatedTimeAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
+       
+#19
+getDataChartMultiSeriesLineIndicatorPersonalInjuryWithoutAccumulatedTime:
+    path: /getDataChartMultiSeriesLineIndicatorPersonalInjuryWithoutAccumulatedTime/{id}
+    defaults:
+        _controller: pequiven.controller.seipchart:getDataChartMultiSeriesLineIndicatorPersonalInjuryWithoutAccumulatedTimeAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
+        
+#20
+getDataChartMultiSeriesLineIndicatorPersonalInjuryWithAndWithoutAccumulatedTimeFromChildrens:
+    path: /getDataChartMultiSeriesLineIndicatorPersonalInjuryWithAndWithoutAccumulatedTimeFromChildrens/{id}
+    defaults:
+        _controller: pequiven.controller.seipchart:getDataChartMultiSeriesLineIndicatorPersonalInjuryWithAndWithoutAccumulatedTimeFromChildrensAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
+        
+#21
+getDataChartMultiSeriesLineIndicatorLostDaysAccumulatedTime:
+    path: /getDataChartMultiSeriesLineIndicatorLostDaysAccumulatedTime/{id}
+    defaults:
+        _controller: pequiven.controller.seipchart:getDataChartMultiSeriesLineIndicatorLostDaysAccumulatedTimeAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
+        
+#22
+getDataChartMultiSeriesIndicatorAssociatedPersonalInjuryWithAndWithoutAndLostDaysByPeriodWithAccumulated:
+    path: /getDataChartMultiSeriesIndicatorAssociatedPersonalInjuryWithAndWithoutAndLostDaysByPeriodWithAccumulated/{id}
+    defaults:
+        _controller: pequiven.controller.seipchart:getDataChartMultiSeriesIndicatorAssociatedPersonalInjuryWithAndWithoutAndLostDaysByPeriodWithAccumulatedAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
+        
+#23
+getDataChartMultiSeriesColumnLineIndicatorPersonalInjuryWithAndWithoutAndLostDaysByFrequencyNotificationByPeriodGroupByCompanyWithAccumulated:
+    path: /getDataChartMultiSeriesColumnLineIndicatorPersonalInjuryWithAndWithoutAndLostDaysByFrequencyNotificationByPeriodGroupByCompanyWithAccumulated/{id}
+    defaults:
+        _controller: pequiven.controller.seipchart:getDataChartMultiSeriesColumnLineIndicatorPersonalInjuryWithAndWithoutAndLostDaysByFrequencyNotificationByPeriodGroupByCompanyWithAccumulatedAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
+        
+#24
+getDataChartMultiSeriesColumnLineIndicatorPersonalInjuryWithLostTimeByFrequencyNotificationByPeriodWithAccumulated:
+    path: /getDataChartMultiSeriesColumnLineIndicatorPersonalInjuryWithLostTimeByFrequencyNotificationByPeriodWithAccumulated/{id}
+    defaults:
+        _controller: pequiven.controller.seipchart:getDataChartMultiSeriesColumnLineIndicatorPersonalInjuryWithLostTimeByFrequencyNotificationByPeriodWithAccumulatedAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
+        
+#25
+getDataChartMultiSeriesColumnLineIndicatorPersonalInjuryWithoutLostTimeByFrequencyNotificationByPeriodWithAccumulated:
+    path: /getDataChartMultiSeriesColumnLineIndicatorPersonalInjuryWithoutLostTimeByFrequencyNotificationByPeriodWithAccumulated/{id}
+    defaults:
+        _controller: pequiven.controller.seipchart:getDataChartMultiSeriesColumnLineIndicatorPersonalInjuryWithoutLostTimeByFrequencyNotificationByPeriodWithAccumulatedAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
+        
+#26
+getDataChartMultiSeriesColumnLineIndicatorLostDaysByFrequencyNotificationByPeriodWithAccumulated:
+    path: /getDataChartMultiSeriesColumnLineIndicatorLostDaysByFrequencyNotificationByPeriodWithAccumulated/{id}
+    defaults:
+        _controller: pequiven.controller.seipchart:getDataChartMultiSeriesColumnLineIndicatorLostDaysByFrequencyNotificationByPeriodWithAccumulatedAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
+        
+#27
+getDataChartChartProgressProjectsByFrequencyNotification:
+    path: /getDataChartChartProgressProjectsByFrequencyNotification/{id}
+    defaults:
+        _controller: pequiven.controller.seipchart:getDataChartChartProgressProjectsByFrequencyNotificationAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
+
+#PRO_RT_PQV
+getDataChartProductionReportTemplateByDate:
+    path: /getDataChartProductionReportTemplateByDate/{id}
+    defaults:
+        _controller: pequiven.controller.seipchart:getDataChartProductionReportTemplateByDateAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
+
+#PRO_RT_PQV
+getDataChartProductionReportTemplateByDateGroupByCompany:
+    path: /getDataChartProductionReportTemplateByDateGroupByCompany/{typeCompany}
+    defaults:
+        _controller: pequiven.controller.seipchart:getDataChartProductionReportTemplateByDateGroupByCompanyAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
+
+#PRO_RT_PQV
+getDataChartProductionReportTemplateByDateCorporation:
+    path: /getDataChartProductionReportTemplateByDateCorporation
+    defaults:
+        _controller: pequiven.controller.seipchart:getDataChartProductionReportTemplateByDateCorporationAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
+        
+getDataChartProductionByReportTemplateByDate:
+    path: /getDataChartProductionByReportTemplateByDate
+    defaults:
+        _controller: pequiven.controller.seipchart:getDataChartProductionByReportTemplateByDateAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
+
+#PRO_RT_EEMM_FIL
+getDataChartProductionGroupByReportTemplateByDate:
+    path: /getDataChartProductionGroupByReportTemplateByDate/{id}
+    defaults:
+        _controller: pequiven.controller.seipchart:getDataChartProductionGroupByReportTemplateByDateAction
         _format: json
     requirements:
         _format: "json|xml"

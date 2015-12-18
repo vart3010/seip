@@ -1,0 +1,62 @@
+{% trans_default_domain 'workStudyCircle' %}
+
+<div ng-controller="MeetingController">
+    <div class="block" ng-init="idMeeting='{{ meeting.id }}'" > 
+        {#    <div class="block" >#}
+        <div class="block-title" >
+            <h3 class="ng-binding">{{ "workStudyCircle.files.attachment"|trans }}</h3>
+            <div class="button-group absolute-right compact">
+                {% if(is_granted(["ROLE_SEIP_WORK_STUDY_CIRCLES_DOCUMENTS_UPLOAD"])) %}
+                    <a class="button icon-list-add " ng-click="loadUploadFileMetting()" title="">
+                        {{ "workStudyCircle.files.add"|trans }}&nbsp
+                        {# <a class="button icon-list-add " id="clickUploadFile" title="">
+                             {{ "workStudyCircle.files.add"|trans }}&nbsp
+                         </a>#}
+                    </a>
+                {% endif %}
+
+                <form style="display: none" id="forma" action="{{ path('pequiven_meeting_show',{id:meeting.id})}}" method="POST" enctype="multipart/form-data">
+                    <input name="fileUpload" id="meetingFilePdf" type="file">
+                </form>
+            </div>
+        </div>
+        <div class="with-padding">
+            <table class="simple-table responsive-table tables-extras" id="sorting-example2">
+                <thead>
+                    <tr>
+                        <th scope="col" width="10%" class="header">#</th>
+                        <th scope="col" width="40%" class="header">{{ 'workStudyCircle.files.name'|trans }}</th>
+                        <th scope="col" width="35%" class="header">Categorias</th>
+                        <th scope="col" width="15%" class="header">{{ 'workStudyCircle.files.download'|trans }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% set cont = 1 %}
+                    {% for file in files %}
+                        {# {% set totalCat = "" %}
+                         {% for cat in file.categoryFile %}
+                              {% set totalCat = totalCat ~ "," ~ cat.description %}
+                         {% endfor %}#}
+                        <tr>
+                            <td>{{ cont }}</td>
+                            <td> {{ file.nameFile }} </td>
+                            <td>
+                                {% for cat in file.categoryFile %}
+                                    <span class="tag blue-bg">{{ cat.description }}</span>
+                                {% endfor %}
+                                {#<span title="{{ totalCat }}">{{ totalCat|slice(1,26) }}</span>#}
+                            </td>
+                            <td>
+                                <button id="downloadFile" data="{{ file.id }}" class="button compact" type="button">
+                                    {{ 'workStudyCircle.files.download'|trans }}
+                                </button>
+                            </td>
+
+                        </tr>
+                        {% set cont = cont + 1 %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

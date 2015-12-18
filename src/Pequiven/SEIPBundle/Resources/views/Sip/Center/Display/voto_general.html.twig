@@ -1,0 +1,78 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/layoutWithoutMenuBlack.html.twig' %}
+
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+{% block stylesheets_base %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('bundles/pequivenseip/icons/imageMap.css') }}">
+{% endblock %}
+
+{% block body %}
+{#<meta http-equiv="refresh" content="300;">#}
+
+    <div class="columns">        
+        <div class="new-row five-columns twelve-columns-mobile">
+            <div  ng-controller="displayCenterController" ng-init="renderChartVotoGeneral('displayVotoGeneral',{{ data }})">
+                <span id="displayVotoGeneral">
+                </span>
+            </div>
+        </div>
+
+        <div class="seven-columns twelve-columns-mobile">
+            <div  ng-controller="displayCenterController" ng-init="renderChartVotoGeneralHours('displayHours',{{ dataHours }})">
+                <span id="displayHours">
+                </span>
+            </div>
+        </div>
+    </div>
+
+<div class="columns">
+    <div class="new-row three-columns twelve-columns-mobile new-row-mobile">
+        <div  ng-controller="displayCenterController" ng-init="renderChartVotoGeneralEstados('1',{{ dataEstadoC }})">            
+            <span id="1">
+            </span>            
+        </div>
+    </div>    
+    <div class="three-columns twelve-columns-mobile new-row-mobile">
+        <div  ng-controller="displayCenterController" ng-init="renderChartVotoGeneralEstados('2',{{ dataEstadoZ }})">
+            <span id="2">
+            </span>
+        </div>
+    </div>
+    <div class="three-columns twelve-columns-mobile new-row-mobile">
+        <div  ng-controller="displayCenterController" ng-init="renderChartVotoGeneralEstados('3',{{ dataEstadoA }})">
+            <span id="3">
+            </span>
+        </div>
+    </div>
+    <div class="three-columns twelve-columns-mobile new-row-mobile">
+        <div  ng-controller="displayCenterController" ng-init="renderChartVotoGeneralEstados('4',{{ dataEstadoO}})">
+            <span id="4">
+            </span>
+        </div>
+    </div>
+</div>
+
+
+{% endblock body %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/agenda3860.css?v=1') }}">
+    <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/dashboard3860.css?v=1') }}">
+{% endblock stylesheets %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/fusioncharts.js') }}"></script>
+    <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/themes/fusioncharts.theme.fint.js') }}"></script>
+    <script src="{{  asset('bundles/pequivenseip/imageMapResizer/js/imageMapResizer.min.js') }}"></script>
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+    <script type="text/javascript">
+        $(document).ready(function () {
+        });
+    </script>
+{% endblock %}

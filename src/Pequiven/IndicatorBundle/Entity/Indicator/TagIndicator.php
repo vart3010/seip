@@ -142,6 +142,13 @@ class TagIndicator extends Model implements \Pequiven\SEIPBundle\Entity\PeriodIt
     private $showInIndicatorResult = false;
     
     /**
+     * ¿Se mostrará la etiqueta en vez del resultado de medición en el dashboard del indicador?
+     * @var boolean
+     * @ORM\Column(name="showInIndicatorDashboardResult",type="boolean")
+     */
+    private $showInIndicatorDashboardResult = false;
+    
+    /**
      * Unidad del resultado
      * @var string
      * @ORM\Column(name="unitResult",type="string",length=90, nullable=true)
@@ -504,6 +511,27 @@ class TagIndicator extends Model implements \Pequiven\SEIPBundle\Entity\PeriodIt
      */
     public function getShowInIndicatorResult() {
         return $this->showInIndicatorResult;
+    }
+    
+    /**
+     * Set showInIndicatorDashboardResult
+     *
+     * @param boolean $showInIndicatorDashboardResult
+     * @return Indicator
+     */
+    public function setShowInIndicatorDashboardResult($showInIndicatorDashboardResult) {
+        $this->showInIndicatorDashboardResult = $showInIndicatorDashboardResult;
+
+        return $this;
+    }
+
+    /**
+     * Get showInIndicatorDashboardResult
+     *
+     * @return boolean 
+     */
+    public function getShowInIndicatorDashboardResult() {
+        return $this->showInIndicatorDashboardResult;
     }
     
     function getUnitResult() {

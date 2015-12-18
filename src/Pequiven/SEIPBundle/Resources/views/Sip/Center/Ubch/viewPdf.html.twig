@@ -1,0 +1,157 @@
+<style type="text/css">
+
+    td{
+        vertical-align: middle;
+    }
+    .title_bold {
+        font-weight: bold;
+        font-size: 14px;
+    }
+    .subtittle{
+        background-color: #F2F2F2;
+        vertical-align: middle;
+        font-weight: bold;
+        font-size: 12px;
+    }
+
+    .div{
+        /*background: blue;*/
+        border: 1px solid #000000;
+        border-spacing: 1px;
+        margin: 1px;
+        border-color: #000000;
+        padding: 20px;
+        float:left;
+        width: 35%;
+        /*text-align: center;*/
+    }
+
+    .box{
+        width:200px;
+        height:200px;
+        background:#999;
+        float:left;
+        border:1px solid #444;
+    }
+    .table-charts {
+        /*width: 60%;*/
+        border: 1px solid #000000;
+        /*float:left;*/
+        padding: 0px;
+        margin: 12px;
+        text-align: justify;
+    }
+    .table {
+        /*width: 50%;*/
+        border: 1px solid #000000;
+        /*float:left;*/
+        padding: 5px;
+        margin: 12px;
+        text-align: justify;
+    }
+    .table-planning{
+        width: 100%;
+        border: 1px solid #000000;
+        float:left;
+        padding: 5px;
+        margin: 10px;   
+        text-align: justify;       
+    }
+    .table-th {
+        background-color: #a2a2a2; 
+        border: 1px solid #000000;
+        text-align: center;
+        font-size: 14px;
+        font-weight: bold;        
+    }
+    .table-planning-th {
+        background-color: #a2a2a2; 
+        border: 1px solid #000000;
+        text-align: center;
+        font-size: 14px;
+        font-weight: bold;          
+    }
+    td {
+        font-size: 12px;
+    }
+    .td-tittle{
+        font-size: 14px;
+    }
+
+    #page {
+    width: 500px;
+    margin: 0 auto;
+    background: #FFFFFF;
+    border: 10px #FFFFFF solid;
+    text-align: center;
+    }
+    
+</style>
+<table width="100%" style="padding:5px;">
+    <tbody>
+        <tr>
+            <th class="table-th">UBCH</th>
+            <th class="table-th">ESTADO</th>
+            <th class="table-th">MUNICIPIO</th>
+            <th class="table-th">PARROQUIA</th>
+        </tr>
+        <tr>
+            <td border="1">{{ center.codigoCentro }}</td>
+            <td border="1">{{ center.descriptionEstado }}</td>
+            <td border="1">{{ center.descriptionMunicipio }}</td>
+            <td border="1">{{ center.descriptionParroquia }}</td>
+            <td border="1"></td>
+        </tr>
+        <tr>
+            <td border="1" width="100%">{{ center.description }}</td>            
+        </tr>
+    </tbody>
+</table>
+<br>
+<br>
+<table width="100%" style="padding:5px;">
+    <tbody>
+        <tr>
+            <th class="table-th" style="background-color: #d93333;color:#ffffff;">JEFA O JEFE DE UBCH</th>
+        </tr>
+        <tr>
+            <th class="table-th" width="40%">JEFA O JEFE DE UBCH</th>
+            <th class="table-th" width="30%">CEDULA</th>
+            <th class="table-th" width="30%">TELEFONO</th>
+        </tr>
+        <tr>
+            <td border="1">{{ center.nombreubch }}</td>            
+            <td border="1">{{ center.cedulaubch }}</td>            
+            <td border="1">{{ center.telefonoubch }}</td>            
+        </tr>
+    </tbody>
+</table>
+<br>
+<br>
+<table width="100%" style="padding:5px;">
+    <tbody>
+        <tr>
+            <th class="table-th" width="5%">#</th>
+            <th class="table-th" width="35%">NOMBRES Y APELLIDOS</th>
+            <th class="table-th" width="25%">JEFE O JEFA DE PATRULLA DE:</th>
+            <th class="table-th" width="15%">REPORTE 1X10</th>
+            <th class="table-th" width="10%">CEDULA</th>
+            <th class="table-th" width="10%">TELEFONO</th>
+        </tr>
+        {% for data in ubch %}
+            <tr {{ cycle(["even", "odd"], loop.index) }}>
+                <td border="1">{{ loop.index }}</td>            
+                <td border="1">&nbsp;{{ data.nombre }}</td>            
+                <td border="1">&nbsp;{{ ubchCargo[data.cargo - 1].description | upper }}</td>
+                {% if data.notification == 1 %}
+                    {% set notification = "SI" %}
+                {% else %}
+                    {% set notification = "NO" %}
+                {% endif %}
+                <td border="1">&nbsp;{{ notification }}</td>            
+                <td border="1">&nbsp;{{ data.cedula }}</td>            
+                <td border="1">&nbsp;{{ data.telefono }}</td>            
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

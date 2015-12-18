@@ -21,8 +21,8 @@
 {% endblock %}
 
 {% block body %}
-<form method="POST" action="{{ path("pequiven_indicator_update",{id:indicator.id}) }}">
-    <fieldset class="fieldset fields-list">
+    <form method="POST" action="{{ path("pequiven_indicator_update",{id:indicator.id}) }}">
+        <fieldset class="fieldset fields-list">
             <legend class="legend">{{ 'form.indicator'|trans }}</legend>
             <div class="field-block button-height">
                 {{ form_label(form.description) }}
@@ -60,6 +60,19 @@
                     <span class="info-bubble">{{ 'form.info.indicator.total_plan'|trans }}</span>
                 </span>
             </div>
+
+            <div class="field-block button-height">
+                {{ form_label(form.frequencyNotificationIndicator) }}
+                {{ form_widget(form.frequencyNotificationIndicator) }}
+                {{ form_errors(form.frequencyNotificationIndicator) }}
+                <span class="info-spot">
+                    <span class="icon-info-round"></span>
+                    <span class="info-bubble">{{ 'form.info.indicator.frequencyNotification'|trans }}</span>
+                </span>
+            </div>
+
+
+
             <div class="field-block button-height">
                 {{ form_label(form.summary) }}
                 {{ form_widget(form.summary) }}
@@ -69,8 +82,8 @@
                     <span class="info-bubble">{{ 'form.info.indicator.summary'|trans }}</span>
                 </span>
             </div>
-    </fieldset>
-    {{ form_rest(form) }}
-    {{ actions.update() }}
-</form>
+        </fieldset>
+        {{ form_rest(form) }}
+        {{ actions.update() }}
+    </form>
 {% endblock body %}

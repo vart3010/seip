@@ -19,14 +19,14 @@ use Pequiven\SEIPBundle\Model\DataLoad\ProductReport as BaseModel;
  *
  * @author Carlos Mendoza <inhack20@gmail.com>
  * @ORM\Table(name="seip_report_product_report")
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\DataLoad\ProductReportRepository")
  */
 class ProductReport extends BaseModel
 {
     /**
      * @var integer
      *
-     * @ORM\Column(name="id", type="integer")
+     * @ORM\Column(name="id",length=6, type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
@@ -44,7 +44,7 @@ class ProductReport extends BaseModel
     /**
      * Producto
      * @var \Pequiven\SEIPBundle\Entity\CEI\Product
-     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Product")
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Product",inversedBy="productReports")
      * @ORM\JoinColumn(nullable=false)
      */
     private $product;
@@ -53,14 +53,14 @@ class ProductReport extends BaseModel
      * Presupuesto de Materias prima
      * @var \Pequiven\SEIPBundle\Entity\DataLoad\RawMaterial\RawMaterialConsumptionPlanning
      *
-     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\RawMaterial\RawMaterialConsumptionPlanning",mappedBy="productReport")
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\RawMaterial\RawMaterialConsumptionPlanning",mappedBy="productReport",cascade={"remove"})
      */
     private $rawMaterialConsumptionPlannings;
     
     /**
      * Planificacion de productos
      * @var Production\ProductPlanning
-     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductPlanning",mappedBy="productReport",cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductPlanning",mappedBy="productReport",cascade={"remove","persist"})
      */
     protected $productPlannings;
     
@@ -74,16 +74,41 @@ class ProductReport extends BaseModel
     /**
      * Inventarios
      * @var Inventory\Inventory
-     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Inventory\Inventory",mappedBy="productReport")
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Inventory\Inventory",mappedBy="productReport",cascade={"remove"})
      */
     private $inventorys;
     
     /**
      * Produccion no realizada
      * @var Production\UnrealizedProduction
-     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Production\UnrealizedProduction",mappedBy="productReport")
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Production\UnrealizedProduction",mappedBy="productReport",cascade={"remove"})
      */
     private $unrealizedProductions;
+    
+    /**
+     * Indicador
+     * @var \Pequiven\IndicatorBundle\Entity\Indicator
+     * @ORM\ManyToOne(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator")
+     */
+    private $indicator;
+
+    /**
+     * Periodo.
+     * 
+     * @var \Pequiven\SEIPBundle\Entity\Period
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\Period")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $period;
+
+    /**
+     * @var \Pequiven\SEIPBundle\Entity\DataLoad\ProductReport
+     * @ORM\OneToOne(targetEntity="\Pequiven\SEIPBundle\Entity\DataLoad\ProductReport")
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", nullable=true)
+     */
+    private $parent;
+    
+    private $name = '';
 
     public function __construct() {
         $this->productPlannings = new \Doctrine\Common\Collections\ArrayCollection();
@@ -365,6 +390,51 @@ class ProductReport extends BaseModel
         ksort($sorted);
         return $sorted;
     }
+
+    /**
+     * Set indicator
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator $indicator
+     * @return ProductReport
+     */
+    public function setIndicator(\Pequiven\IndicatorBundle\Entity\Indicator $indicator = null)
+    {
+        $this->indicator = $indicator;
+
+        return $this;
+    }
+
+    /**
+     * Get indicator
+     *
+     * @return \Pequiven\IndicatorBundle\Entity\Indicator 
+     */
+    public function getIndicator()
+    {
+        return $this->indicator;
+    }
+    
+    public function recalculate()
+    {
+        foreach ($this->rawMaterialConsumptionPlannings as $value) {
+            $value->calculate();
+        }
+        foreach ($this->inventorys as $value) {
+            $value->calculate();
+        }
+        foreach ($this->unrealizedProductions as $value) {
+            $value->calculate();
+        }
+    }
+    
+    public function getName(){
+        $name = '';
+        if($this->getProduct() && $this->getPlantReport()){
+            $name = $this->getPlantReport()->getPlant()->getName().' - '.$this->getProduct()->getName();
+        }
+        $this->name = $name;
+        return $this->name;
+    }
     
     public function __toString() 
     {
@@ -372,6 +442,51 @@ class ProductReport extends BaseModel
         if($this->getProduct()){
             $_toString = sprintf("%s",(string)$this->getProduct());
         }
+        
         return $_toString;
+    }
+
+    /**
+     * Set period
+     *
+     * @param \Pequiven\SEIPBundle\Entity\Period $period
+     * @return Objetive
+     */
+    public function setPeriod(\Pequiven\SEIPBundle\Entity\Period $period = null)
+    {
+        $this->period = $period;
+
+        return $this;
+    }
+
+    /**
+     * Get period
+     *
+     * @return \Pequiven\SEIPBundle\Entity\Period 
+     */
+    public function getPeriod()
+    {
+        return $this->period;
+    }
+
+    /**
+     * Set parent
+     *
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\ProductReport $parent
+     * @return Indicator
+     */
+    public function setParent(\Pequiven\SEIPBundle\Entity\DataLoad\ProductReport $parent = null) {
+        $this->parent = $parent;
+
+        return $this;
+    }
+
+    /**
+     * Get parent
+     *
+     * @return \Pequiven\SEIPBundle\Entity\DataLoad\ProductReport 
+     */
+    public function getParent() {
+        return $this->parent;
     }
 }

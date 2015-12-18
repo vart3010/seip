@@ -1,0 +1,132 @@
+{% extends "PequivenSEIPBundle:Template:Developer/Common/tableFormat1.html.twig" %}
+
+{% trans_default_domain 'workStudyCircle' %}
+
+{% block title %}- {{ 'workStudyCircle.title'|trans }}{% endblock %}
+
+{% block before_body %}
+    {{ contentHeader(
+        ('workStudyCircle.circle_list'|trans),
+        ('workStudyCircle.meetings.title'|trans),
+        ('workStudyCircle.list'|trans)
+    ) }}
+{% endblock %}
+
+{% block body %}
+
+<div ng-controller="TableFormatController">
+    <div ng-controller="TableProposalController">
+        <details class="details margin-bottom" open="">
+            <summary role="button" aria-expanded="true">
+                {{ 'pequiven.filters'|trans({},'messages') }}
+            </summary>
+                
+            <div class="with-padding">
+                <div class="columns">
+                        
+                    <!-- Filtro Localidad -->
+                    <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                        <label class="bold">{{ 'pequiven_seip.filters.complejo'|trans({},'PequivenSEIPBundle') }}</label>
+                        <br/>
+                        <div class="with-mid-padding">
+                            <select class="select2 input-xlarge" id="selectComplejos" ng-model="model.complejo" ng-change="getFirstLineManagement();getWorkStudyCircle('model.complejo.id',{{ phase }});" ng-options="value as value.description for (key,value) in data.complejos">
+                                <option value=''></option>
+                            </select>
+                        </div>
+                    </div>
+        
+                    {% if phase == constant('Pequiven\\SEIPBundle\\Entity\\Politic\\WorkStudyCircle::PHASE_ONE') %}
+                        <!-- Filtro Gerencia 1ra Línea -->
+                        <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                            <label class="bold">{{ 'pequiven_seip.filters.first_line_management'|trans({},'PequivenSEIPBundle') }}</label>
+                            <br/>
+                            <div class="with-mid-padding">
+                                <select class="select2 input-xlarge" id="selectFirstLineManagement" ng-change="getSecondLineManagement()" ng-model="model.firstLineManagement" ng-options="value as value.description group by model.complejo.description for (key,value) in data.first_line_managements" >
+                                    <option value=''></option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Filtro Gerencia 2da Línea -->
+                        <div class="new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                            <label class="bold">{{ 'pequiven_seip.filters.management_second_line'|trans({},'PequivenSEIPBundle') }}</label>
+                            <br/>
+                            <div class="with-mid-padding">
+                                <select class="select2 input-xlarge" id="selectSecondLineManagement" ng-model="model.secondLineManagement" ng-options="value as value.description group by (value.complejo.ref + ' - '+value.gerencia.description) for (key,value) in data.second_line_managements" >
+                                    <option value=''></option>
+                                </select>
+                            </div>
+                        </div>    
+                    {% endif %}
+                    
+                    <!-- Filtro Círculos de Estudio de Trabajo -->
+                    <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                            <label class="bold">{{ 'pequiven_seip.filters.work_study_circle'|trans({},'PequivenSEIPBundle') }}</label>
+                        <br/>
+                        <div class="with-mid-padding">
+                            <select class="select2 input-xlarge" id="selectWorkStudyCircle" ng-model="model.workStudyCircle" ng-init="getWorkStudyCircle('model.complejo.id',{{ phase }})" ng-options="value as value.name group by model.complejo.description for (key,value) in data.work_study_circles" >
+                                <option value=''></option>
+                            </select>
+                        </div>
+                    </div>
+                        
+                </div>
+            </div>
+
+        </details>              
+        <div loading-container="tableParams.settings().$loading">
+            <table ng-table="tableParams" template-pagination="custom/pager" template-header="custom/header" api-data-url="{{ apiDataUrl }}" export-csv="csv" class="table table-responsive table-extra-info" >
+                <tbody>
+                        
+                    <tr ng-repeat="result in $data | filter:tableParams.search" data="{$ result|json $}">
+                        <td data-title="'Localidad'">
+                            <a href="{$ result._links.self.show $}">
+                                {$ result.workStudyCircle.complejo.description $}
+                            </a>
+                        </td>
+                        <td data-title="'Tema'">
+                            <a href="{$ result._links.self.show $}">
+                                {$ result.subject $}
+                            </a>
+                        </td>
+                        <td data-title="'Fecha'">
+                            <a href="{$ result._links.self.show $}">
+                                {$ result.date $}
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+    <script type="text/javascript">
+        
+        $(document).ready(function()
+        {
+            charge();
+            $('#selectWorkStudyCircle').select2({
+                minimumInputLength: 2,
+                allowClear: true,
+            })
+            
+            function charge(){
+               $('.select2').select2({
+                allowClear: true
+                });
+            }
+            
+        });
+        
+        function getTableExtraInfo(data)
+            {
+                var response = '';
+                return response;
+            }
+    </script>
+    
+{% endblock %}

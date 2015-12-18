@@ -1,0 +1,56 @@
+{% extends "PequivenSEIPBundle:Template:Developer/Common/tableFormat1.html.twig" %}
+
+{% trans_default_domain 'sip' %}
+
+{% block javascripts_base %}
+    {{ parent() }}
+    <script src="{{  asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.input.js') }}"></script>
+{% endblock javascripts_base %}
+
+{% block before_body %}
+    {{ contentHeader(
+    	("sip.cutl.title"|trans ),
+        ("sip.list"|trans )
+    ) }}
+{% endblock %}
+
+{% block body %}
+
+    <div ng-controller="TableFormatController">  
+        <div loading-container="tableParams.settings().$loading">
+            <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager" template-header="custom/header" api-data-url="{{ apiDataUrl }}" export-csv="csv" class="table table-responsive table-extra-info" >
+                <tbody> 
+                    <tr ng-repeat="result in $data" data="{$ result|json $}">
+                        <td data-title="'Municipio'" filter="{'municipio' : 'text'}">
+                            <a href="{$ result._links.self.show $}">
+                                {$ result.municipio $}
+                            </a>
+                        </td>
+                        <td data-title="'Parroquia'" filter="{'parroquia' : 'text'}">
+                            <a href="{$ result._links.self.show $}">
+                                {$ result.parroquia $}
+                            </a>
+                        </td>
+                        <td data-title="'Cedula'" filter="{'cedula' : 'text'}">
+                            <a href="{$ result._links.self.show $}">
+                                {$ result.cedula $}
+                            </a>
+                        </td>
+                        <td data-title="'Nombre'" filter="{'nombre' : 'text'}">
+                            <a href="{$ result._links.self.show $}">
+                                {$ result.nombre $}
+                            </a>
+                        </td>                        
+                        <td data-title="'Centro'" filter="{'centro' : 'text'}">
+                            <a href="{$ result._links.self.show $}">
+                                {$ result.centro $}
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+{% endblock %}

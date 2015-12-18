@@ -18,6 +18,11 @@
     </services>
     -->
     <services>
+        <service id="pequiven.service.arrangementprogram" class="Pequiven\ArrangementProgramBundle\Service\ArrangementProgramService">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
         <service id="pequiven_seip.repository.arrangementprogram_template" class="Pequiven\ArrangementProgramBundle\Repository\ArrangementProgramTemplateRepository">
             <tag name="app.repository" class="Pequiven\ArrangementProgramBundle\Entity\ArrangementProgramTemplate" />
         </service>
@@ -38,6 +43,12 @@
         </service>
         <service id="pequiven.orm.validator.valid_product_planning" class="Pequiven\SEIPBundle\Validator\Constraints\ValidProductPlanningValidator">
             <tag name="validator.constraint_validator" alias="pequiven.orm.validator.valid_product_planning" />
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
+        <service id="pequiven.orm.validator.product_detail_daily_month" class="Pequiven\SEIPBundle\Validator\Constraints\DataLoad\ProductDetailDailyMonthValidator">
+            <tag name="validator.constraint_validator" alias="pequiven.orm.validator.product_detail_daily_month" />
             <call method="setContainer">
                 <argument type="service" id="service_container" />
             </call>

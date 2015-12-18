@@ -7,16 +7,21 @@
     <p class="wrapped align-center button-height">
         <button type="button" class="button blue-gradient glossy" onclick="recalculateIndicator()">Recalcular <span id="spanIndicator"></span> indicadores</button>
     </p>
+    <p class="wrapped align-center button-height">
+        <button type="button" class="button blue-gradient glossy" onclick="recalculateUserEvaluationDetails()">Recalcular <span id="spanUserEvaluationDetails"></span> usuarios</button>
+    </p>
 {% endblock body %}
 
 {% block javascript %}
     <script type="text/javascript">
         var resultsArrangementprogram = {{ resultsArrangementprogram|json_encode()|raw }};
         var resultsIndicator = {{ resultsIndicator|json_encode()|raw }};
+        var resultsUserEvaluationDetails = {{ resultsUserEvaluationDetails|json_encode()|raw }};
         var cancelAjax = false;
         $(document).ready(function(){
             $('#spanArrangementprogram').html("#"+resultsArrangementprogram.length);
             $('#spanIndicator').html("#"+resultsIndicator.length);
+            $('#spanUserEvaluationDetails').html("#"+resultsUserEvaluationDetails.length);
         });
         function recalculateArrangementprogram()
         {
@@ -27,6 +32,11 @@
         {
             cancelAjax = false;
             openLoadingModal(resultsIndicator,2);
+        }
+        function recalculateUserEvaluationDetails()
+        {
+            cancelAjax = false;
+            openLoadingModal(resultsUserEvaluationDetails,3);
         }
         
         // Demo loading modal
@@ -118,8 +128,13 @@
                         {
                            loaded = (100 * i) / data.length;
                            progress.setProgressValue(loaded.toFixed(2) + '%', true);
-                           var ref = data[i].ref;
-                           status.text('('+i+'/'+(data.length)+')Recalculando '+ref+'...');
+                           if(type == 3){
+                               var numPersonal = data[i].numPersonal;
+                               status.text('('+i+'/'+(data.length)+')Recalculando '+numPersonal+'...');
+                           } else{
+                               var ref = data[i].ref;
+                               status.text('('+i+'/'+(data.length)+')Recalculando '+ref+'...');
+                           }
                            var url = Routing.generate('pequiven_result_recalculate',{id:data[i].id,type: type,_format:'json'});
                             $.ajax({
                                 type: "POST",

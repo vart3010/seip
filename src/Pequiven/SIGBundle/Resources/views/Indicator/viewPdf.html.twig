@@ -1,0 +1,295 @@
+<style type="text/css">
+
+    td{
+        vertical-align: middle;
+    }
+    .title_bold {
+        font-weight: bold;
+        font-size: 14px;
+    }
+    .subtittle{
+        background-color: #F2F2F2;
+        vertical-align: middle;
+        font-weight: bold;
+        font-size: 12px;
+    }
+
+    .div{
+        /*background: blue;*/
+        border: 1px solid #000000;
+        border-spacing: 1px;
+        margin: 1px;
+        border-color: #000000;
+        padding: 20px;
+        float:left;
+        width: 35%;
+        /*text-align: center;*/
+    }
+
+    .box{
+        width:200px;
+        height:200px;
+        background:#999;
+        float:left;
+        border:1px solid #444;
+    }
+    .table-charts {
+        /*width: 60%;*/
+        border: 1px solid #000000;
+        /*float:left;*/
+        padding: 0px;
+        margin: 12px;
+        text-align: justify;
+    }
+    .table {
+        /*width: 50%;*/
+        border: 1px solid #000000;
+        /*float:left;*/
+        padding: 5px;
+        margin: 12px;
+        text-align: justify;
+    }
+    .table-planning{
+        width: 100%;
+        border: 1px solid #000000;
+        float:left;
+        padding: 5px;
+        margin: 10px;   
+        text-align: justify;       
+    }
+    .table-th {
+        background-color: #A9E2F3; 
+        border: 1px solid #000000;
+        text-align: center;
+        font-size: 14px;
+        font-weight: bold;        
+    }
+    .table-planning-th {
+        background-color: #A9E2F3; 
+        border: 1px solid #000000;
+        text-align: center;
+        font-size: 14px;
+        font-weight: bold;  
+    }
+    td {
+        font-size: 12px;
+    }
+    .td-tittle{
+        font-size: 14px;
+    }
+
+    #page {
+    width: 500px;
+    margin: 0 auto;
+    background: #FFFFFF;
+    border: 10px #FFFFFF solid;
+    text-align: center;
+    }
+    
+</style>
+
+{% block body %}
+    <br/><br/>    
+    {% if month == 1 %}
+        {% set setmonth = "Enero" %} 
+    {% elseif month == 2 %}
+        {% set setmonth = "Febrero" %}
+    {% elseif month == 3 %}
+        {% set setmonth = "Marzo" %}
+    {% elseif month == 4 %}
+        {% set setmonth = "Abril" %}
+    {% elseif month == 5 %}
+        {% set setmonth = "Mayo" %}
+    {% elseif month == 6 %}
+        {% set setmonth = "Junio" %}
+    {% elseif month == 7 %}
+        {% set setmonth = "Julio" %}
+    {% elseif month == 8 %}
+        {% set setmonth = "Agosto" %}
+    {% elseif month == 9 %}
+        {% set setmonth = "Septiembre" %}
+    {% elseif month == 10 %}
+        {% set setmonth = "Octubre" %}
+    {% elseif month == 11 %}
+        {% set setmonth = "Noviembre" %}
+    {% elseif month == 12 %}
+        {% set setmonth = "Diciembre" %}
+    {% endif %}         
+    
+    <table width="95%">
+        <tbody>
+            <tr>
+                <td class="subtittle" width="15%">ASOCIADO A: </td>
+                <td class="td-tittle" width="85%"> {{ obj }}</td>
+            </tr>
+           
+            <tr>
+                <td class="subtittle" width="15%">ÍNDICE DE: </td>
+                <td class="td-tittle" width="85%"> {{ name }}</td>                
+            </tr>
+            <tr>
+                <td class="subtittle" width="15%">MES DEL INFORME: </td>
+                <td class="td-tittle" width="85%"> {{ setmonth  }} del {{ period }}</td>
+            </tr>
+        </tbody>
+    </table>    
+    
+    <!-- Informe de Evolución Grafica de Indicador -->    
+    <div id="page">        
+        <table>
+        <tr>
+            <td>
+                <h4 align="center">GRÁFICA DE DATOS Y TENDENCIA DE PROCESO</h4>
+            </td>
+            <td>
+                <h4 align="center">CAUSAS DE DESVIACIÓN</h4>
+            </td>
+        </tr>
+        <tr>
+            <td border="1">
+                <h5 align="right">MEJOR HACIA... 
+               {#<img src="{{ font }}" width="15px" height="15px">#}
+                </h5>
+                <h5 align="left">Fórmula de Medición: {{ formula }}</h5>                
+                <img src="{{ nameSVG }}" width="430px" height="220px">
+            </td>
+
+            <td border="1">
+                <div>&nbsp;</div>
+                <div>&nbsp;</div>
+                <img src="{{ chartCause }}" width="430px" height="210px">
+            </td>
+        </tr>
+        </table>
+    </div>    
+   
+    <table width="100%" style="padding:5px;">
+        <tr>
+            <td>
+                <table class="table" width="100%">
+                    <tbody>
+                        <tr>
+                            <th class="table-th">ANALISIS DE TENDENCIA</th>
+                        </tr>
+                        <tr>
+                            {% if trend|length >1020 %}
+                            <td>{{ trend[:1020] }}... Para más Información Consultar el SEIP</td>
+                            {% else %}
+                            <td>{{ trend }}</td>
+                            {% endif %}
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+
+            <td>                
+                <table class="table" width="100%">
+                    <tbody>
+                        <tr>
+                            <th class="table-th">ANALISIS DE CAUSAS</th>
+                        </tr>
+                        <tr>
+                            {% if causeAnalysis|length >1020 %}
+                            <td>{{ causeAnalysis[:1020]}}... Para más Información Consultar el SEIP</td>
+                            {% else %}
+                            <td>{{ causeAnalysis}}</td>    
+                            {% endif %}
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+    </table>
+    <!--<table style=" page-break-before: always;"></table>-->
+    <br><br>
+    <table class="table-planning">
+        <tbody>
+            <tr>
+                <th class="table-planning-th" colspan="10">PLAN DE ACCION Y SEGUIMIENTO</th>
+            </tr>        
+            <tr align="center">
+                <td width="5%" class="subtittle" >Nro</td>
+                <td width="30%" class="subtittle" >Acción</td>
+                <td width="10%" class="subtittle" >Tipo de<br>Acción</td>
+                <td width="10%" class="subtittle" >Fecha Inicio</td>
+                <td width="10%" class="subtittle" >Fecha Cierre</td>
+                <td width="10%" class="subtittle" >Avance</td>
+                <td width="10%" class="subtittle" >Responsable</td>
+                <td width="15%" class="subtittle" >Observaciones</td>
+            </tr>
+
+            {% for data in dataAction %} 
+                <tr {{ cycle(["even", "odd"], loop.index) }} align="center"> 
+                    <td>{{ loop.index }}</td>
+                    <td style="text-align: justify">{{ data.actionValue.action }}</td>
+                    <td>{{ data.actionValue.indicatorAction.ref }}</td>
+                    <td>{{ data.actionValue.dateStart | date("d/m/Y") }}</td>
+                    <td>{{ data.actionValue.dateEnd | date("d/m/Y") }}</td>
+                    <td>{{ data.advance }}%</td>
+                    <td>
+                        {% for resp in data.actionValue.responsible %}
+                          {{ resp.firstname }} {{ resp.lastname }}
+                        {% endfor %}
+                    </td>
+                    <td>{{ data.observations }}</td>
+                </tr>            
+            {% endfor %}
+            <tr>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td colspan="8">
+                    <table width="100%">
+                        <tbody>
+                            <tr>
+                                <td align="left" style="width: 30%; font-weight: bold;">Revisado Por: ______________________</td>
+                                <td align="left" style="width: 20%; font-weight: bold;">Fecha: _________________</td>                
+                                <td align="left" style="width: 30%; font-weight: bold;">Aprobado Por: ______________________</td>
+                                <td align="left" style="width: 20%; font-weight: bold;">Fecha: _________________</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </tbody>
+    </table> 
+    <table>
+        <tr>
+            <td align="left">Nivel de Revisión: 2</td>
+            <td>&nbsp;</td>
+            <td align="right">C-SI-GI-PG-R-004</td>
+        </tr>
+    </table>
+
+    {# verificatión #}
+    {# <table style=" page-break-before: always;"></table>#}
+    <br><br><br>
+    <table class="table-planning">
+        <tbody>
+            <tr>
+                <th class="table-planning-th" colspan="10">VERIFICACION DE LA EFICACIA</th>
+            </tr>        
+            <tr align="center">
+                <td width="5%" class="subtittle">Nro</td>
+                <td width="35%" class="subtittle">Comentarios</td>
+                <td width="20%" class="subtittle">Verificado Por</td>
+                <td width="10%" class="subtittle">Fecha</td>
+                <td width="20%" class="subtittle">Acción</td>
+                <td width="10%" class="subtittle">Verificación</td>
+            </tr>
+            {% for data in verification %} 
+                <tr {{ cycle(["even", "odd"], loop.index) }} align="center"> 
+                    <td>{{ loop.index }}</td>
+                    <td align="left">{{ data.comment }}</td>
+                    <td>
+                        {{ data.createdBy.firstname }} {{ data.createdBy.lastname }}                   
+                    </td>
+                    <td>{{ data.createdAt | date("d/m/Y") }}</td>
+                    <td>{{ data.actionPlan.ref }}</td>
+                    <td>{{ data.typeVerification.ref }}</td>
+                </tr>            
+            {% endfor %}
+        </tbody>
+    </table>     
+
+{% endblock %}

@@ -14,7 +14,14 @@ Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductPlanning:
         validCapacity:
             - "True":
                 message: pequiven.validators.valid_product_planning.incorrect_valid_capacity
-            
+    properties:
+        netProductionPercentage:
+             - Range:
+                min: 0
+                max: 100
+                minMessage: 'El valor minimo es 0%'
+                maxMessage: 'El valor maximo es 100%'
+                
 Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram:
     constraints:
         - Pequiven\ArrangementProgramBundle\Validator\Constraints\MaximumGoalResponsible:
@@ -230,3 +237,35 @@ Pequiven\ArrangementProgramBundle\Entity\GoalDetails:
                 minMessage: pequiven.validators.goals_details.min_value
                 max: 100
                 maxMessage: pequiven.validators.goals_details.max_value
+                
+Pequiven\ObjetiveBundle\Entity\Objetive:
+    properties:
+        lineStrategics:
+            - NotNull:
+                message: pequiven.validators.arrangement_program.responsible_person
+                groups: [base]
+                
+Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductDetailDailyMonth:
+    constraints:
+        - Pequiven\SEIPBundle\Validator\Constraints\DataLoad\ProductDetailDailyMonth:
+                groups: [load]
+                
+Pequiven\SEIPBundle\Entity\DataLoad\Plant\PlantStopPlanning:
+    constraints:
+        - Pequiven\SEIPBundle\Validator\Constraints\DataLoad\Plant\PlantStopPlanning:
+    properties:
+        totalStops:
+             - Range:
+                min: 1
+                max: 31
+                minMessage: 'El minimo de dias de parada es 1.'
+                maxMessage: 'El maximo de dias de parada es 31.'
+                
+#Pequiven\SEIPBundle\Entity\DataLoad\PlantReport:
+#    properties:
+#        percentageCurrentCapacity:
+#             - Range:
+#                min: 0
+#                max: 100
+#                minMessage: 'El valor minimo de la capacidad es 0%'
+#                maxMessage: 'El valor maximo de la capacidad es 100%'

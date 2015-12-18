@@ -1,0 +1,45 @@
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+<div class="block">
+    <div class="block-title">
+        <h3> {{ 'pequiven_seip.productsGroups'|trans }}&nbsp;
+            ({{ groupsProducts|length }})
+        </h3>
+        <div class="button-group absolute-right compact">
+            {% if periodService().isAllowPlanningReport %}
+                <a class="button icon-list-add" href="{{ path('pequiven_product_report_create',{plantReport: plant_report.id}) }}">{{ 'pequiven.add'|trans({},'messages') }}</a>
+            {% endif %}
+        </div>
+    </div>
+    <div class="with-padding">
+        <table class="simple-table responsive-table tables-extras" id="sorting-example2">
+            <thead>
+                <tr>
+                    <th scope="col" width="35%">{{ 'Product'|trans }}</th>
+                    <th scope="col" width="10%" class="hide-on-mobile-portrait">{{ 'Production line'|trans }}</th>
+                    <th scope="col" width="10%" class="hide-on-tablet">{{ 'Product unit'|trans }}</th>
+                    <th scope="col" width="10%">&nbsp;</th>
+                </tr>
+            </thead>
+            {% set colspan = 6 %}
+            <tbody>
+                {% for product in groupsProducts %}
+                    <tr>
+                        <td>{{ loop.index }} - 
+                            <a href="{{ path('pequiven_product_report_show_groups',{id:product.entityProductReport.id})}}">
+                                <i class="fa fa-tags"></i>&nbsp;&nbsp;
+                                {{ product.name }}
+                            </a>
+                            <br>
+                            <small style="margin-left: 50px;">{{ product.groupsProducts }}</small>
+                        </td>
+                        <td>{{ product.line }}</td>
+                        <td>{{ product.unit }}</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+</div>

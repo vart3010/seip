@@ -1,0 +1,64 @@
+{% trans_default_domain 'workStudyCircle' %}
+
+{#{% set userCreatedId = workStudyCircle.getCreatedBy.id %}#}
+{% if workStudyCircle.coordinator != null %}
+    {% set userCoordinator = workStudyCircle.coordinator.id %}
+{% else %}
+    {% set userCoordinator = null %}
+{% endif %}
+
+<div class="block" >
+    <div class="block-title">
+        <h3 class="ng-binding">{{ "workStudyCircle.proposals.title"|trans }}</h3>    
+        {% if( isAllowToAddProposals == true) %}
+            <div class="button-group absolute-right compact">
+                <a class="button icon-list-add " href="{{ path("pequiven_proposal_create",{workStudyCircle_id:workStudyCircle.id})}}"  title="">
+                    {{ "workStudyCircle.proposals.add"|trans }}&nbsp;
+                </a>
+            </div>
+        {% endif %}
+    </div>
+    <div class="with-padding" ng-controller="WorkStudyCircleController">
+        <table class="simple-table responsive-table tables-extras" id="sorting-example2">
+            <thead>
+                <tr>
+                    <th scope="col" width="2%" class="header">{{ 'seip.table.header.nro'|trans({},'PequivenArrangementProgramBundle') }}</th>
+                    <th scope="col" width="30%" class="header">Línea Estratégica</th>
+                    <th scope="col" width="60%" class="hide-on-tablet header">Propuesta</th>
+                    <th scope="col" width="15%" class="hide-on-mobile-portrait header">&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                {% set cont = 1 %}
+
+                {% for proposal in proposals %}
+                    <tr>
+                        <td>{{ cont }}</td>
+                        <td>{{ proposal.lineStrategic }}</td>
+                        <td style="text-align: justify">
+                            <a href="{{ path('pequiven_proposal_show',{ id:proposal.id }) }}">{{ proposal.description|upper }}</a>
+                        </td>
+                        <td class="align-right vertical-center">
+                            {% if( isAllowToEditProposals == true) %}
+                                <div ng-controller="ToolsController" id="target_{$ paso+1 $}">
+                                    <span class="select compact">
+                                        <a href="{{ path('pequiven_proposal_view_edit',{ id:proposal.id }) }}" class="select-value form-edit">
+                                            {{ 'workStudyCircle.members.edit'|trans }}
+                                        </a>
+                                        <span class="select-arrow"></span>
+                                    </span>
+                                </div>
+                            {% else  %}
+                                &nbsp;
+                            {% endif %}
+
+                        </td>
+                        {% set cont = cont + 1 %}
+                    </tr>
+                {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,109 @@
+{% import 'PequivenSIGBundle:Template:Buttons/buttons.html.twig' as buttons %}
+
+{% trans_default_domain 'PequivenArrangementProgramBundle' %}
+
+<div class="">
+    <div class="">
+        <div class="">
+           
+                <h3 class="thin underline text-center">Historico Informe de Evolución</h3>
+                <fieldset class="fieldset">
+                    {% set month = "now"|date("m") %}
+                    {% set year = "now"|date("Y") %}  
+                    
+                    {# Carga del tipo de objeto para setear la ruta del historico #}
+                    {% set typeObjet = typeObject %}
+                    {% if typeObjet == 1 %}
+                        {% set route = "pequiven_indicator_evolution" %}
+                    {% elseif typeObject == 2 %}
+                        {% set route = "pequiven_seip_arrangementprogram_evolution_sig" %}
+                    {% endif %}
+                                
+                        {% for data in listMonth %} 
+
+                            {% if data == 1 %} 
+                                {% set name = "Enero" %}
+                                {% set dataMonth = "01" %}                                
+                            {% elseif data == 2 %} 
+                                {% set name = "Febrero" %}
+                                {% set dataMonth = "02" %}                                
+                            {% elseif data == 3 %} 
+                                {% set name = "Marzo" %}
+                                {% set dataMonth = "03" %}                                
+                            {% elseif data == 4 %} 
+                                {% set name = "Abril" %}
+                                {% set dataMonth = "04" %}                                
+                            {% elseif data == 5 %} 
+                                {% set name = "Mayo" %}
+                                {% set dataMonth = "05" %}
+                            {% elseif data == 6 %} 
+                                {% set name = "Junio" %}
+                                {% set dataMonth = "06" %}
+                            {% elseif data == 7 %} 
+                                {% set name = "Julio" %}
+                                {% set dataMonth = "07" %}
+                            {% elseif data == 8 %} 
+                                {% set name = "Agosto" %}
+                                {% set dataMonth = "08" %}
+                            {% elseif data == 9 %} 
+                                {% set name = "Septiembre" %}
+                                {% set dataMonth = "09" %}
+                            {% elseif data == 10 %} 
+                                {% set name = "Octubre" %}
+                                {% set dataMonth = "10" %}
+                            {% elseif data == 11 %} 
+                                {% set name = "Noviembre" %}
+                                {% set dataMonth = "11" %}
+                            {% elseif data == 12 %} 
+                                {% set name = "Diciembre" %}
+                                {% set dataMonth = "12" %}                                    
+                            {% endif %}
+
+                            {% if data > 8 and year == 2015 %}
+                                {% set disabled = TRUE %}
+
+                                {{ buttons.generic_history(path( route, { 'id': Box_indicator , 'month': dataMonth }),( name )) }}
+
+                            {% elseif year != 2015 %}    
+
+                                {{ buttons.generic_history(path( route, { 'id': Box_indicator , 'month': dataMonth }),( name )) }}
+
+                            {% endif %}                            
+                        
+                        {% endfor %}
+                        <br>
+                </fieldset>
+
+
+         </div>
+     </div>
+ </div>
+
+{% block javascript %}
+    
+{% endblock javascript %}
+
+
+{% block stylesheets %}
+
+    <!-- Additional styles -->
+    <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/form3860.css?v=1') }}">
+
+    <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/switches3860.css?v=1') }}">
+
+    <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/table3860.css?v=1') }}">
+
+    <!-- Select2 -->
+    <link rel="stylesheet" href="{{ asset('bundles/pequivenseip/select2-3.5.0/select2.css') }}">
+       
+
+{% endblock %}
+
+{% block javascripts %}
+
+    <!-- Select2 -->
+    <script src="{{ asset('bundles/pequivenseip/select2-3.5.0/select2.min.js') }}"></script>
+    <!-- jQuery-ui -->
+    <script src="{{ asset('bundles/pequivenseip/jquery-ui.custom/jquery-ui.js?v=1') }}"></script>
+   
+{% endblock %}

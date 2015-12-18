@@ -110,6 +110,8 @@ app:
                             objective_tactic: Objetivos Tácticos
                             objective_operative: Objetivos Operativos
                             arrangement_program: Programas de Gestión
+                        user:
+                            item_user_list: Consulta de Gestion
                     users:
                         main: Usuarios SEIP
                         real: Lista
@@ -142,6 +144,11 @@ app:
                             visualize:
                                 main: Visualizar
                                 listAll: Lista
+                                assigned: Asignados
+                                pending: Pendientes
+                                for_reviewing: Por revisar
+                                for_approving: Por aprobar
+                                for_notifying: Por notificar
                     results:
                         main: Resultados
                         visualize:
@@ -155,6 +162,7 @@ app:
                             operative: Operativo
                             by_gerencia: Por gerencia
                             by_lineStrategic: Por Línea Estratégica
+                            item_user_list: Consulta de Gestion
                         notify:
                             main: Notificar
                             indicators: Indicadores
@@ -181,4 +189,83 @@ app:
                         sales: Ventas
                         finance: Finanzas
                         notification: Notificación
+                    operations:
+                        main: Operaciones
+                        reports:
+                            main: Reportes
+                            production: Producción
+                        planning:
+                            main: Planificación
+                            production: Producción
+                        notification:
+                            main: Notificación
+                            production: Producción
+                        monitor:
+                            main: Monitor
+                            production: 
+                                main: Producción
+                                statusCharge: Status de Carga
+                                compliance: % Cumplimiento
+                    work_study_circles:
+                        main: Círculos de Estudio de Trabajo
+                        phase_one: Fase 1
+                        phase_two: Fase 2
+                        phase_three: Fase 3
+                        phase_four: Fase 4
+                        register: 
+                            main: Registro
+                            phase_one: Fase 1
+                            phase_two: Fase 2
+                        vizualice:
+                            main: Visualizar
+                            phase_one: Fase 1
+                            phase_two: Fase 2
+                            phase_three: Fase 3
+                            phase_four: Fase 4
+                        reports:
+                            main: Reportes
+                            phase_one: Fase 1
+                            phase_two: Fase 2
+                            phase_three: Fase 3
+                            phase_four: Fase 4
+                        strategic_plan:
+                            main: Plan Estratégico
+                            phase_one: Fase 1
+                            phase_two: Fase 2
+                            phase_three: Fase 3
+                            phase_four: Fase 4
+                        visualize: Visualizar
+                        general: General
+                        list: Lista
+                        documents: Documentos
+                        meeting: Reuniones
+                    sip:
+                        main: Sistema de Información Política
+                        onePerTen: 1 x 10
+                        cutl: CUTL
+                        centros: Centros
+                        register: Registrar
+                        list: Lista
+                        list_seg: Lista Seguimiento
+                        request: Requerimientos
+                        list_inventory: Lista Inventario
+                        list_request: Lista Requerimientos
+                        list_pqv: Lista Pequiven
+                        list_1x10: Lista 1x10
+                        list_re: Lista Reubicados
+                        list_circuito: Circuito 5
+                        list_cet: Lista Coordinador CET
+                        report: Reportes
+                        display: Monitores
+                        voto: Voto
+                        voto_pqv: Voto Pequiven
+                        voto_general: General
+                        voto_1x10: Voto 1 x 10
+                        voto_re: Voto Reubicados
+                        voto_cet: Voto Coordinador CET
+                        voto_circuito: Circuito 5
+                        voto_zulia: Zulia
+                        voto_anzoategui: Anzoátegui
+                        mesa: Mesas Activas
+
                             

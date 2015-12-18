@@ -7,7 +7,7 @@ pequiven:
         may: May
         june: Jun
         july: Jul
-        august: Ago
+        august: Agoº
         september: Sep
         october: Oct
         november: Nov
@@ -18,6 +18,8 @@ pequiven:
         third: III Trimestre
         fourth: IV Trimestre
     name: Nombre
+    level: Nivel
+    typeRol: Tipo de Rol
     start_date: Fecha inicio
     end_date: Fecha fin
     weight: Peso de la meta
@@ -25,6 +27,9 @@ pequiven:
     actions:
         edit: Editar
         delete: Eliminar
+        upload_file: Subir Archivo
+        download_file: Descargar Archivo
+        mov: Asignar
     modal:
         title:
             goal: Meta

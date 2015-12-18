@@ -1,0 +1,74 @@
+{% trans_default_domain 'sip' %}
+
+<div class="block">
+    <div ng-controller="SipCenterObservationController">
+
+        <div class="block-title">
+            <h3 class="ng-binding">{{ 'sip.observations'|trans({}) }}</h3>
+            <div class="button-group absolute-right compact">
+                <a class="button icon-list-add " href="" ng-click="loadTemplateObservations()" title="">{{ 'pequiven.add'|trans({},'messages')  }}</a>
+            </div>
+        </div>
+        <div class="with-padding">
+            <table class="table responsive-table" id="sorting-example2">
+                <thead>
+                    <tr>
+                        <th scope="col" width="55%" class="header">Requerimiento</th>
+                        <th scope="col" width="15%" class="header">Categoria</th>
+                        <th scope="col" width="10%" class="header">Fecha</th>
+                        <th scope="col" width="15%" class="header">Status</th>
+                        <th scope="col" width="10%" class="header"></th>
+                    </tr>
+                </thead>
+                {% for dataObs  in observations %}
+                    {% set dayShow = dataObs.fecha | date("d") %}
+                    {% set monthShow = dataObs.fecha | date("n") %}
+                    {% if dayShow == "06" and monthShow == "12" %}
+                        <tbody>
+                            <tr>
+                                <td>{{ dataObs.observations }}</td>
+                                <td>{{ catObs[dataObs.categoria] }}</td>
+
+                                <td>{{ dataObs.fecha | date("d/m/Y") }}</td>
+                                <td>
+                                    <div style="color:#ffffff; border-radius: 15px 15px 15px 15px; font-weight: bold; background:{{colorStatus[dataObs.status]}}; border-color:{{colorStatus[dataObs.status]}};" align="center">
+                                        {{ status[dataObs.status - 1].description }}
+                                    </div>
+                                </td>
+                                <td class="align-right vertical-center">
+                                    <span class="select compact">
+                                        <a href class="select-value form-edit">{{ 'pequiven.actions'|trans({},'messages') }}</a>
+                                    <span class="select-arrow"></span>
+                                        <span class="drop-down">
+                                            <a href ng-click="loadTemplateEditRequest(Status='{{ dataObs.id }}')" class="button icon-pencil">Editar</a>
+
+                                            <a href ng-click="loadTemplateStatus(Status='{{ dataObs.id }}')" class="button icon-read">Revisar</a>
+
+                                            <a href ng-click="removeObservations(observations='{{ dataObs.id }}')" class="button icon-cross-round">{{ "pequiven.actions.delete"|trans({},"messages") }}</a>
+                                        </span>
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    {% endif %}
+                {% endfor %}
+            </table> 
+             &nbsp;    
+                  {#{% if(is_granted(["ROLE_SEIP_WORK_STUDY_CIRCLES_EXPORT_REPORT"])) %}#}
+        <div class="align-left">
+                    
+            {% set routeExport = path('pequiven_sip_center_export',{idCenter:center.id, type:3}) %}
+
+            {{ buttons.generic(
+                    (routeExport),
+                    ('sip.export.exportpdf'|trans({})),
+                    'icon-download'
+                 ) 
+            }}
+           
+        </div>              
+            {#{% endif %}#}
+        </div>
+      
+    </div>
+</div>

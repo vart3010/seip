@@ -1,0 +1,24 @@
+Pequiven\SEIPBundle\Entity\Politic\Meeting:
+    exclusion_policy: ALL
+    properties:
+        id:
+            expose: true
+            groups: [id]
+        description:
+            expose: true
+            groups: [api_list] 
+        place:
+            expose: true
+            groups: [api_list]   
+        subject:
+            expose: true
+            groups: [api_list]   
+        date:
+            expose: true
+            groups: [api_list]   
+        workStudyCircle:
+            expose: true
+            groups: [workStudyCircle]
+        complejo:
+            expose: true
+            groups: [complejo]    

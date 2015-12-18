@@ -1,0 +1,55 @@
+{% trans_default_domain 'PequivenSIGBundle' %}
+
+<div ng-controller="IndicatorSigEvolutionController"> 
+
+    <div class="block">
+        <div class="block-title">
+            <h3 class="ng-binding">{$ indicator_sig.featuresIndicator.length $} {{ 'sig.trend_analysis'|trans ({}, 'messages') }}</h3>
+            {% if trend %}
+                {#<div class="button-group absolute-right compact">
+                    <a href="javascript:void(0);" class="button icon-pencil">Edit</a>
+                    <a href="javascript:void(0);" class="button icon-gear with-tooltip" title="Other actions"></a>
+                    <a href="javascript:void(0);" class="button icon-trash with-tooltip confirm" title="Delete"></a>
+                </div>#}
+            {% else %}
+                <div class="button-group absolute-right compact">
+                    <a class="button icon-list-add " href="" ng-click="loadTemplateAnalysisTrend()" title="">{{ 'pequiven.add'|trans({},'messages') }}&nbsp;</a>
+                </div>
+            {% endif %}
+
+        </div>
+
+        <div class="with-padding">
+            {% set colspan = 5 %}
+            <table class="simple-table responsive-table tables-extras" id="sorting-example2">
+                <thead>
+                    <tr>
+                        <th scope="col" width="150%" class="header">
+                            {{ 'form.trend_analysis'|trans({},'PequivenSIGBundle') }}
+                        </th>                                     
+                    </tr>
+                </thead>
+            {% for data in trend %}
+                <tbody>
+                    <tr>
+                        <td align="justify">
+                            {{ data.description }}
+                        </td> 
+                        {% if is_granted('ROLE_SEIP_SIG_EVOLUTION_DELETE_TREND_ANALYSIS') %}  
+                            <th class="align-right vertical-center">                          
+                                <span class="select compact">
+                                    <a href class="select-value form-edit">{{ 'pequiven.actions'|trans({},'messages') }}</a>
+                                <span class="select-arrow"></span>
+                                    <span class="drop-down">                                    
+                                        <a href ng-click="removeAnalysisTrend(data_trend='{{ data.id }}')" class="button icon-cross-round">{{ "pequiven.actions.delete"|trans({},"messages") }}</a>             
+                                    </span>
+                                </span>
+                            </th>
+                        {% endif %}
+                    </tr>
+                </tbody>
+            {% endfor %}
+            </table>                    
+        </div>
+    </div>
+</div>

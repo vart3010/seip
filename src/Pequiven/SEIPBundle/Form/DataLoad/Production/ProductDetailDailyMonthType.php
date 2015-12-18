@@ -25,6 +25,7 @@ class ProductDetailDailyMonthType extends AbstractType
                 "choices" => \Pequiven\SEIPBundle\Service\ToolService::getMonthsLabels(),
                 "empty_value" => "",
             ))
+            // Bruta
             ->add('day1GrossPlan',null,$paramateretsDays)
             ->add('day1GrossReal',null,$paramateretsDays)
             ->add('day2GrossPlan',null,$paramateretsDays)
@@ -87,7 +88,7 @@ class ProductDetailDailyMonthType extends AbstractType
             ->add('day30GrossReal',null,$paramateretsDays)
             ->add('day31GrossPlan',null,$paramateretsDays)
             ->add('day31GrossReal',null,$paramateretsDays)
-                
+//            Neta
             ->add('day1NetPlan',null,$paramateretsDays)
             ->add('day1NetReal',null,$paramateretsDays)
             ->add('day2NetPlan',null,$paramateretsDays)

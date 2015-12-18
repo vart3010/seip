@@ -1,0 +1,45 @@
+{# empty Twig template #}
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayout.html.twig' %}
+
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
+
+{% block before_body %}
+    {{ contentHeader(
+        ("pequiven_seip.politic.work_study_circle"|trans ),
+        ( 'pequiven.add'|trans({},'messages') )
+    ) }}
+{% endblock %}
+
+{% block body -%}
+    <form method="POST" action="{{ path("pequiven_work_study_circle_member_edit",{idUser:user.id }) }}">
+        {{ form_errors(form_user) }}
+        <br /><br />
+
+        <fieldset class="fieldset fields-list">
+            <legend class="legend">Datos de Miembro</legend>
+            <div class="field-block button-height">
+                <label class="label">Coordinador Lider</label>
+                <input class="input input-large" disabled type="text" value="{{ user.getOnlyFullNameUser }}">
+            </div>    
+            <div class="field-block button-height">
+                <label class="label">Numero de Personal</label>
+                <input class="input input-large" disabled type="text" value="{{ user.numPersonal }}">
+            </div>
+            <div class="field-block button-height">
+                {{ form_widget(form_user) }}
+            </div>
+
+        </fieldset>
+
+        {{ actions.create() }}
+    </form>
+{% endblock %}
+
+{% block javascript %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+        });
+    </script>
+{% endblock javascript %}

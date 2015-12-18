@@ -1,0 +1,136 @@
+{% trans_default_domain 'workStudyCircle' %}
+{% if (workStudyCircle.getphase < 4) %}
+{% if workStudyCircle.getphase > 1 %}
+    {% set userCreatedId = workStudyCircle.getCoordinator.id %}
+{% else %}
+    {% set userCreatedId = workStudyCircle.getCreatedBy.id %}
+{% endif %}
+{% endif %}
+
+<style>
+    .body {
+        font-size: 8px;
+    }
+    .title_bold {
+        font-weight: bold;
+    }
+    table tr {
+        padding: 15px;
+    }
+    .alin_font {
+        text-align: justify;
+    }
+</style>
+{% block body %}
+    <table width="100%">
+        <tr>
+            <th class="title_bold">1. Datos del Círculo de Estudio</th>
+        </tr>
+    </table> 
+
+    <br/><br/>
+
+    <table width="100%"> 
+        <tr>
+            <td class="title_bold" bgcolor="#F2F2F2" width="30%">{{ "workStudyCircle.form.code"|trans }}:</td>
+            <td width="70%"> {{ workStudyCircle.codigo }}</td>                        
+        </tr>
+        <tr>
+            <td class="title_bold" bgcolor="#F2F2F2" width="30%">{{ "workStudyCircle.form.nombre"|trans }}:</td>
+            <td width="70%"> {{ workStudyCircle.name }}</td>
+        </tr>
+        <tr>
+            <td class="title_bold" bgcolor="#F2F2F2" width="30%">{{ "workStudyCircle.form.complejo"|trans }}:</td>
+            <td width="70%"> {{ workStudyCircle.complejo.description}}</td>
+        </tr>
+        {% if workStudyCircle.phase == 1 %}
+            <tr>
+                <td class="title_bold" bgcolor="#F2F2F2" width="30%">{{ "workStudyCircle.form.gerenciaFirst"|trans }}:</td>
+                <td width="70%"> {% for gerencia in  workStudyCircle.gerencias %} - {{ gerencia }}<br/> {% endfor %}</td>
+            </tr>
+
+            <tr>
+                <td class="title_bold" bgcolor="#F2F2F2" width="30%">{{ "workStudyCircle.form.gerenciaSecond"|trans }}:</td>
+                <td width="70%"> {% for gerencia in  workStudyCircle.gerenciaSeconds %} - {{ gerencia }}<br> {% endfor %}</td>
+            </tr>
+        {% endif %}
+    </table>
+
+    <br/><br/><br/>
+
+    <table width="100%">
+        <tr>
+            <th class="title_bold">2. Propuestas Elaboradas</th>
+        </tr>
+    </table> 
+
+    <br/><br/>  
+
+
+    {% for key,value in lineas %}        
+        <table width="100%"> 
+            <tr>
+                <td bgcolor="#F2F2F2" width="100%"><b>Línea Estratégica: </b>{{ key }}</td>
+            </tr>
+        </table>
+        {% for prop in proposals %}
+            {% if prop.lineStrategic.description==key %}
+                <table width="100%">
+                    <tr>
+                        <td width="100%" style="text-align: justify; font-size: 10px"><b>Propuesta {{loop.index}}:</b> {{prop.getDescription()|upper|raw|nl2br}}</td>                                
+                    </tr>
+                </table>
+                <br/><br/>       
+            {% endif %}
+        {% endfor%}
+        <br/>
+    {% endfor %} 
+
+    <br/>
+
+    <table width="95%">
+        <tr>
+            <th class="title_bold">3. Aceptación de los Miembros del Círculo de Estudio de Trabajo</th>
+        </tr>
+    </table>    
+
+    <br/><br/>
+
+    <table width="95%" class="simple-table responsive-table tables-extras">  
+        <thead>
+            <tr>
+                <th scope="col"  width="5%" bgcolor="#F2F2F2" class="title_bold"> N° </th>
+                <th scope="col"  width="15%" bgcolor="#F2F2F2" class="title_bold"> C.I. </th>
+                <th scope="col"  width="50%" bgcolor="#F2F2F2" class="title_bold"> Nombre </th>
+                <th scope="col"  width="30%" bgcolor="#F2F2F2" class="title_bold"> Firma </th>                
+            </tr>
+            <tr>
+                <td width="5%" >  </td>                        
+            </tr>
+
+
+        </thead>
+        <tbody>
+            {% if workStudyCircle.phase > 1 %}
+                {% set users = workStudyCircle.getMembers %}
+            {% else %}
+                {% set users = workStudyCircle.userWorkerId %}
+            {% endif %}
+            {% set count = 0 %}
+            {% for miembro in users %}
+                {% set count= count + 1%}
+
+                <tr>
+                    <td width="5%" > {{ count }} </td>
+                    <td width="15%" > {{ miembro.getIndentification|number_format(0, ',', '.') }} </td>
+                    <td width="50%" > {{ miembro.firstname | ucwords}} {{ miembro.lastname | ucwords}}</td>
+                    <td width="30%"  style="text-align: center"> _____________________ </td>
+                </tr>
+                <tr>
+                    <td width="5%" >  </td>                        
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

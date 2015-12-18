@@ -1,0 +1,24 @@
+Pequiven\SEIPBundle\Entity\Sip\OnePerTenMembers:
+    exclusion_policy: ALL
+    properties:
+        id:
+            expose: true
+            groups: [id]
+        nombre:
+            expose: true
+            groups: [api_list]
+        cedula:
+            expose: true
+            groups: [api_list]
+        telefono:
+            expose: true
+            groups: [api_list]
+        codCentro:
+            expose: true
+            groups: [api_list]
+        nombreCentro:
+            expose: true
+            groups: [api_list]
+        voto:
+            expose: true
+            groups: [api_list]

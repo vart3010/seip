@@ -1,0 +1,86 @@
+
+{#<div class="one-column one-column-tablet one-column-mobile">
+    <div style="margin-top: 1%;position: fixed;z-index: 10000;float: left;left: 0px;">
+        <ul>
+            <li#} {#class="linestrategic-active"#} {#style="display: table-row; float: none;">
+                <a href="#" data-toggle="tab">
+                    <img style="padding-top: 10px;" class="snapshot-box-icon-header" src="{{ asset(iconsLineStrategic[1]) }}">
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>#}
+
+{#<div class="eleven-columns eleven-columns-tablet eleven-columns-mobile new-row-mobile no-margin-left">
+    <div class="columns">#}
+        <!-- Día -->
+        <div id="chart-report-template-day" class="eight-columns eight-columns-tablet eight-columns-mobile new-row-mobile" style="text-align: center; {#display: none;#}">
+            <span class="title-dashboard">Día</span>
+            <div id="id-report-template-day" ng-init="chargeChartProductionByReportTemplateByDate('{{ reportTemplateId }}','{{ "now"|date('Y-m-d') }}','report-template-day','100','400',{{ typeView }},'day')">
+                <span id="report-template-day"></span>
+            </div>
+        </div>
+        <!-- Observaciones -->
+        <div class="four-columns four-columns-tablet four-columns-mobile new-row-mobile" style="text-align: center;">
+            <span class="title-dashboard with-padding">Observaciones</span>
+            <div class="columns with-padding {#scroll-vertical#}" {#style="overflow-y: scroll; height: 300px;"#}>
+                <div id="product" style="text-align: justify;" class="four-columns bold"></div>
+                <div id="observation" style="text-align: justify;" class="eight-columns"></div>
+            </div>
+        </div>
+{#    </div>
+</div>#}
+
+<input id="" type="hidden" value="{{ observations|length }}">
+
+{% if typeView == constant('Pequiven\\SEIPBundle\\Entity\\Monitor::MONITOR_PRODUCTION_VIEW_COMPLIANCE')%}
+    <!-- Mes -->
+    <div id="chart-report-template-month" class="six-columns six-columns-tablet six-columns-mobile new-row-mobile" style="text-align: center; {#display: none;#}">
+        <span class="title-dashboard">Mes</span>
+        <div id="id-report-template-month" ng-init="chargeChartProductionByReportTemplateByDate('{{ reportTemplateId }}','{{ "now"|date('Y-m-d') }}','report-template-month','100','400',{{ typeView }},'month')">
+            <span id="report-template-month"></span>
+        </div>
+    </div>
+    <!-- Año -->
+    <div id="chart-report-template-year" class="six-columns six-columns-tablet six-columns-mobile new-row-mobile" style="text-align: center; {#display: none;#}">
+        <span class="title-dashboard">Año</span>
+        <div id="id-report-template-year" ng-init="chargeChartProductionByReportTemplateByDate('{{ reportTemplateId }}','{{ "now"|date('Y-m-d') }}','report-template-year','100','400',{{ typeView }},'year')">
+            <span id="report-template-year"></span>
+        </div>
+    </div>
+{% endif %}
+
+{% block javascript %}
+    <script type="text/javascript">
+
+        var cont = 0;
+        var sizeObservations = {{ observations|length }};
+        
+        var dataObservations = {{(observations|json_encode()|raw)}};
+        
+        function showDetail() {
+            $('#product').fadeOut("slow",function(){
+                $('#product').html(dataObservations[cont].product);
+                $('#product').fadeIn();
+            });
+            
+            $('#observation').fadeOut("slow",function(){
+                $('#observation').html(dataObservations[cont].observation);
+                $('#observation').fadeIn();
+            });
+            cont++;
+            if(cont == sizeObservations){
+                cont = 0;
+            }
+        }
+
+        $(document).ready(function () {
+            {#$('chart-report-template-day').fadeOut("slow",function() {
+               $(this).attr("display","block"); 
+            });#}
+            showDetail();
+            setInterval('showDetail()',45000);
+        });
+        
+    </script>
+{% endblock javascript %}

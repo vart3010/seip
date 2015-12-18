@@ -48,7 +48,7 @@ pequiven_indicator:
     save: Guardar
     cancel: Cancelar
     type_calculation:
-        main: Tipo de calculo
+        main: Tipo de cálculo
         formula_manually: Fórmula manual
         formula_automatic: Fórmula automatica
         formula_automatic_from_eq: Fórmula automatica (Ecuación)
@@ -57,6 +57,13 @@ pequiven_indicator:
         real_automatic: Real automático
         accumulate: Acumulativo de cada carga
         real_and_plan_from_eq: Plan y real a partir de ecuación
+    type_result_section:
+        main: Sección de resultados
+        production_gross: Producción Bruta
+        production_net: Producción Neta
+        unrealized_production: Producción No Realizada
+        raw_material: Materia Prima
+        services: Servicios
     type_detail:
         none: Ninguno
         daily_load_production: Producción diaria
@@ -82,6 +89,7 @@ pequiven_indicator:
         without_formula: Sin Fórmula de Evaluación
         with_result: Con Resultado Notificados
         without_result: Sin Resultados Notificados
+        without_frequency_notification: Sin Frecuencia de Notificación
     errors:
         frequency_not_assigned_parent: Frecuencia no asignada al padre.
         formula_unassigned_parent: Fórmula no asignada al padre.
@@ -94,7 +102,7 @@ pequiven_indicator:
         the_formula_should_only_have_two_defined_variables: La fórmula solo debe tener dos variables definidas (plan y real).
         the_formula_must_have_the_variables_defined_plan_and_real: La fórmula debe tener las variables definidas plan y real.
         the_indicator_xrequires_configuration_details_results: La "%typeDetailValue%", requiere la configuración de los detalles de resultados.
-        indicatorNoEvaluateInPeriod: El indicador no será evaludo en el período actual
+        indicatorNoEvaluateInPeriod: El indicador no será evaluado en el período actual
     type_tag:
         tagNumeric: Numérica
         tagText: Texto
@@ -118,6 +126,7 @@ form:
     location: Localidad
     complejo: Complejo
     gerencia: Gerencia
+    gerenciaSecond: Gerencia 2da Línea
     weight: Peso
     weightIndicatorStrategic: Peso del Indicador Estratégico
     weightIndicatorTactic: Peso del Indicador Táctico
@@ -142,6 +151,8 @@ form:
     associated_indicators: Indicadores asociados
     parent_indicator: Indicador padre
     total_plan: Plan anual
+    frequencyNotification : Frecuencia de Notificación
+    systems: Sistema de Gestión del Indicador
     
     arrangementRangeType: Tipo de Rango
     arrangementRangeTypeTop: Tipo de Rango Alto
@@ -200,6 +211,7 @@ form:
             goal: Meta anual del indicador, este valor normalmente es cien (100) pero sino lo conoce coloque cero (0).
             total_plan: Plan anual del indicador, este valor normalmente es cien (100) pero sino lo conoce coloque cero (0).
             summary: Resumen del enunciado, este debe ser lo mas corto posible.
+            frequencyNotification : Frecuencia de Notificación
         lineStrategic: Línea estratégica que seguirá el objetivo
         objetiveStrategic: Objetivo estratégico que seguirá el objetivo
         objetiveTactic: Objetivo táctico que seguirá el objetivo
@@ -224,6 +236,7 @@ form:
         formulaIndicatorStrategic: Fórmula de evaluación del Indicador Estratégico
         formulaIndicatorTactic: Fórmula de evaluación del Indicador Táctico
         formulaIndicatorOperative: Fórmula de evaluación del Indicador Operativo
+        frecuency_tooltip: Frecuencia de de Notificación del Indicador
         arrangementRangeType: Seleccione el tipo de rango
         arrangementRangeTypeTop: Seleccione el tipo de rango Alto
         arrangementRangeTypeMiddleTop: Seleccione el tipo de rango Medio Alto
@@ -241,6 +254,7 @@ form:
         rankBottomBottom: Rango bajo-bajo del semáforo de evaluación de gestión
         evalSimpleAverage: Seleccione si el resultado será obtenido por un promedio simple
         evalWeightedAverage: Seleccione si el resultado será obtenido por el promedio ponderado (peso)
+        
     
     ref_info: Nro. de Referencia del indicador
     description_info: Nombre del indicador
@@ -315,3 +329,6 @@ action:
         registerIndicatorStrategicSuccessfull: Indicador Estratégico registrado exitosamente
         registerIndicatorTacticSuccessfull: Indicador Táctico registrado exitosamente
         registerIndicatorOperativeSuccessfull: Indicador Operativo registrado exitosamente
+        InvalidFile: Tipo de archivo invalido
+        saveFileSuccess: Archivo guardado correctamente
+        errorFileUpload: Error al subir archivo

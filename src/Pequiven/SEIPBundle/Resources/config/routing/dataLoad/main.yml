@@ -49,3 +49,7 @@ pequiven_data_load_unrealized_production:
 pequiven_data_load_detail_consumer_planning_service:
     resource: "@PequivenSEIPBundle/Resources/config/routing/dataLoad/detail_consumer_planning_service.yml"
     prefix:   /detail-consumer-planning-service
+    
+pequiven_data_load_dashboard:
+    resource: "@PequivenSEIPBundle/Resources/config/routing/dataLoad/dashboard.yml"
+    prefix:   /dashboard

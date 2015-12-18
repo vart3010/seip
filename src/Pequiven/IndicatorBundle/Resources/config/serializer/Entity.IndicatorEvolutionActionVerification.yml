@@ -1,0 +1,21 @@
+Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionActionVerification:
+    exclusion_policy: ALL
+    properties:
+        id:
+            expose: true
+            groups: [id]
+        ref:
+            expose: true
+            groups: [ref]
+        createdAt:
+            expose: true
+            groups: [api_list]
+        updatedAt:
+            expose: true
+            groups: [api_details]
+        createdBy:
+            expose: true
+            groups: [api_details]
+        actionPlan:
+            expose: true
+            groups: [actionPlan]

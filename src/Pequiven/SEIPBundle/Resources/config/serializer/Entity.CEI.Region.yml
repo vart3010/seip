@@ -1,0 +1,9 @@
+Pequiven\SEIPBundle\Entity\CEI\Region:
+    exclusion_policy: ALL
+    properties:
+        id:
+            expose: true
+            groups: [id]
+        name:
+            expose: true
+            groups: [api_list]

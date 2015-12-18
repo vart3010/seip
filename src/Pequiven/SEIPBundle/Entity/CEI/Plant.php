@@ -21,8 +21,8 @@ use Pequiven\SEIPBundle\Model\BaseModel;
  * @ORM\Table(name="seip_cei_Plant")
  * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\CEI\PlantRepository")
  */
-class Plant extends BaseModel
-{
+class Plant extends BaseModel {
+
     /**
      * @var integer
      *
@@ -31,14 +31,14 @@ class Plant extends BaseModel
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-    
+
     /**
      * Entidad a la que pertenece
      * @var Entity
      * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Entity")
      */
     protected $entity;
-    
+
     /**
      * Nombre
      * 
@@ -46,14 +46,14 @@ class Plant extends BaseModel
      * @ORM\Column(name="name",type="string",nullable=false)
      */
     private $name;
-    
+
     /**
      * Alias corto de la planta
      * @var string
      * @ORM\Column(name="alias",type="string",length=20)
      */
     private $alias;
-    
+
     /**
      * Capacidad de diseño
      * 
@@ -77,7 +77,7 @@ class Plant extends BaseModel
      * @ORM\JoinTable(name="plants_products")
      */
     private $products;
-    
+
     /**
      * Servicios que consume la planta
      * @var \Pequiven\SEIPBundle\Entity\CEI\Service
@@ -86,23 +86,44 @@ class Plant extends BaseModel
      * @ORM\JoinTable(name="plants_services")
      */
     private $services;
-    
+
+    /**
+     * Reporte de Planta
+     * @var \Pequiven\SEIPBundle\Entity\DataLoad\PlantReport
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\PlantReport",mappedBy="plant",cascade={"remove"})
+     */
+    private $plantReport;
+
+    /**
+     * 
+     * @var \Pequiven\SEIPBundle\Entity\CEI\Plant
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Plant",inversedBy="childrens",cascade={"persist"})
+     */
+    private $parent;
+
+    /**
+     * 
+     * @var \Pequiven\SEIPBundle\Entity\CEI\Plant
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Plant",mappedBy="parent",cascade={"persist"})
+     */
+    private $childrens;
+
     /**
      * Constructor
      */
-    public function __construct()
-    {
+    public function __construct() {
         $this->products = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->childrens = new \Doctrine\Common\Collections\ArrayCollection();
         $this->services = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->plantReport = new \Doctrine\Common\Collections\ArrayCollection();
     }
-    
+
     /**
      * Get id
      *
      * @return integer 
      */
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
 
@@ -112,8 +133,7 @@ class Plant extends BaseModel
      * @param string $name
      * @return Plant
      */
-    public function setName($name)
-    {
+    public function setName($name) {
         $this->name = $name;
 
         return $this;
@@ -124,19 +144,17 @@ class Plant extends BaseModel
      *
      * @return string 
      */
-    public function getName()
-    {
+    public function getName() {
         return $this->name;
     }
-    
+
     /**
      * Set designCapacity
      *
      * @param float $designCapacity
      * @return Plant
      */
-    public function setDesignCapacity($designCapacity)
-    {
+    public function setDesignCapacity($designCapacity) {
         $this->designCapacity = $designCapacity;
 
         return $this;
@@ -147,19 +165,17 @@ class Plant extends BaseModel
      *
      * @return float 
      */
-    public function getDesignCapacity()
-    {
+    public function getDesignCapacity() {
         return $this->designCapacity;
     }
-    
+
     /**
      * Set unitMeasure
      *
      * @param \Pequiven\SEIPBundle\Entity\CEI\UnitMeasure $unitMeasure
      * @return Plant
      */
-    public function setUnitMeasure(\Pequiven\SEIPBundle\Entity\CEI\UnitMeasure $unitMeasure = null)
-    {
+    public function setUnitMeasure(\Pequiven\SEIPBundle\Entity\CEI\UnitMeasure $unitMeasure = null) {
         $this->unitMeasure = $unitMeasure;
 
         return $this;
@@ -171,8 +187,7 @@ class Plant extends BaseModel
      * @param string $alias
      * @return Plant
      */
-    public function setAlias($alias)
-    {
+    public function setAlias($alias) {
         $this->alias = $alias;
 
         return $this;
@@ -183,29 +198,26 @@ class Plant extends BaseModel
      *
      * @return string 
      */
-    public function getAlias()
-    {
+    public function getAlias() {
         return $this->alias;
     }
-    
+
     /**
      * Get unitMeasure
      *
      * @return \Pequiven\SEIPBundle\Entity\CEI\UnitMeasure 
      */
-    public function getUnitMeasure()
-    {
+    public function getUnitMeasure() {
         return $this->unitMeasure;
     }
-    
+
     /**
      * Add products
      *
      * @param \Pequiven\SEIPBundle\Entity\CEI\Product $products
      * @return Plant
      */
-    public function addProduct(\Pequiven\SEIPBundle\Entity\CEI\Product $products)
-    {
+    public function addProduct(\Pequiven\SEIPBundle\Entity\CEI\Product $products) {
         $this->products[] = $products;
 
         return $this;
@@ -216,8 +228,7 @@ class Plant extends BaseModel
      *
      * @param \Pequiven\SEIPBundle\Entity\CEI\Product $products
      */
-    public function removeProduct(\Pequiven\SEIPBundle\Entity\CEI\Product $products)
-    {
+    public function removeProduct(\Pequiven\SEIPBundle\Entity\CEI\Product $products) {
         $this->products->removeElement($products);
     }
 
@@ -226,8 +237,7 @@ class Plant extends BaseModel
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getProducts()
-    {
+    public function getProducts() {
         return $this->products;
     }
 
@@ -237,8 +247,7 @@ class Plant extends BaseModel
      * @param \Pequiven\SEIPBundle\Entity\CEI\Service $services
      * @return Plant
      */
-    public function addService(\Pequiven\SEIPBundle\Entity\CEI\Service $services)
-    {
+    public function addService(\Pequiven\SEIPBundle\Entity\CEI\Service $services) {
         $this->services[] = $services;
 
         return $this;
@@ -249,9 +258,83 @@ class Plant extends BaseModel
      *
      * @param \Pequiven\SEIPBundle\Entity\CEI\Service $services
      */
-    public function removeService(\Pequiven\SEIPBundle\Entity\CEI\Service $services)
-    {
+    public function removeService(\Pequiven\SEIPBundle\Entity\CEI\Service $services) {
         $this->services->removeElement($services);
+    }
+
+    /**
+     * 
+     * @param \Pequiven\SEIPBundle\Entity\CEI\Plant $plant
+     * @return \Pequiven\SEIPBundle\Entity\CEI\Plant
+     */
+    public function setParent(Plant $plant = null) {
+        $this->parent = $plant;
+        return $this;
+    }
+
+    /**
+     * 
+     * @return type
+     */
+    public function getParent() {
+        return $this->parent;
+    }
+
+    /**
+     * Add Children
+     * @param \Pequiven\SEIPBundle\Entity\CEI\Plant $childrens
+     * @return \Pequiven\SEIPBundle\Entity\CEI\Plant
+     */
+    public function addChildren(\Pequiven\SEIPBundle\Entity\CEI\Plant $childrens) {
+        $childrens->setParent($this);
+        $this->childrens->add($childrens);
+
+        return $this;
+    }
+
+    /**
+     * Remove children
+     * @param \Pequiven\SEIPBundle\Entity\CEI\Plant $childrens
+     */
+    public function removeChildren(\Pequiven\SEIPBundle\Entity\CEI\Plant $childrens) {
+        $this->childrens->removeElement($childrens);
+    }
+
+    /**
+     * Get childrens
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getChildrens() {
+        return $this->childrens;
+    }
+
+    /**
+     * 
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\lo$ plantReport
+     * @return \Pequiven\SEIPBundle\Entity\CEI\Plant
+     */
+    public function addPlantReport(\Pequiven\SEIPBundle\Entity\DataLoad\PlantReport $plantReport) {
+        $plantReport->setParent($this);
+        $this->plantReport->add($plantReport);
+
+        return $this;
+    }
+
+    /**
+     * 
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\PlantReport $plantReport
+     */
+    public function removePlantReport(\Pequiven\SEIPBundle\Entity\DataLoad\PlantReport $plantReport) {
+        $this->plantReport->removeElement($plantReport);
+    }
+
+    /**
+     * 
+     * @return type
+     */
+    public function getPlantReport() {
+        return $this->plantReport;
     }
 
     /**
@@ -259,19 +342,17 @@ class Plant extends BaseModel
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getServices()
-    {
+    public function getServices() {
         return $this->services;
     }
-    
+
     /**
      * Set entity
      *
      * @param \Pequiven\SEIPBundle\Entity\CEI\Entity $entity
      * @return Plant
      */
-    public function setEntity(\Pequiven\SEIPBundle\Entity\CEI\Entity $entity = null)
-    {
+    public function setEntity(\Pequiven\SEIPBundle\Entity\CEI\Entity $entity = null) {
         $this->entity = $entity;
 
         return $this;
@@ -282,19 +363,18 @@ class Plant extends BaseModel
      *
      * @return \Pequiven\SEIPBundle\Entity\CEI\Entity 
      */
-    public function getEntity()
-    {
+    public function getEntity() {
         return $this->entity;
     }
-    
-    public function __toString() 
-    {
+
+    public function __toString() {
         $_toString = "-";
-        if($this->getAlias() != ""){
+        if ($this->getAlias() != "") {
             $_toString = $this->getAlias();
-        }else{
+        } else {
             $_toString = $this->getName();
         }
         return $_toString;
     }
+
 }

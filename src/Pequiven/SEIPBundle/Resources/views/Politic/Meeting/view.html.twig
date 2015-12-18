@@ -1,0 +1,63 @@
+
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
+
+{% trans_default_domain 'workStudyCircle' %}
+
+{% block javascripts_base %}
+    {{ parent() }}
+    <script src="{{  asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.input.js') }}"></script>
+{% endblock javascripts_base %}
+
+{% block before_body %}
+    {{ contentHeader(
+        ("workStudyCircle.title"|trans ),
+        ("workStudyCircle.meetings.title"|trans )
+    ) }}
+{% endblock %}
+
+{% block body %}
+
+    <div class="block">
+        <div class="block-title">
+            <h3 class="ng-binding">Estadísticas</h3>
+        </div>
+        <div class="with-padding">
+            <div class="standard-tabs margin-bottom" id="add-tabs">
+
+                <ul class="tabs">
+                    <li class="active"><a href="#tab-1">Por Localidad</a></li>                    
+                </ul>
+                <div class="tabs-content">
+                    <div id="tab-1" class="with-padding">
+                        <div class="columns">
+                            <div class="twelve-columns"> 
+                              <div  ng-controller="ChartsMeetingsController" ng-init="renderChartMeetings('graphicProposal',{{ data|json_encode() }},'250%','750')">
+                                    <span id="graphicProposal">
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>                    
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <HR width=100% align="center">
+
+
+    {% block javascripts %}
+        {{ parent() }}
+        <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/fusioncharts.js') }}"></script>
+        <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/themes/fusioncharts.theme.fint.js') }}"></script>
+
+
+    {% endblock %}
+
+    
+{% endblock %}
+

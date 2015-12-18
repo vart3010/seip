@@ -2,6 +2,7 @@ sylius_resource:
     resources:
         pequiven.seipmonitor:
             driver: doctrine/orm
+            templates: PequivenSEIPBundle:Monitor
             classes:
                 model: Pequiven\SEIPBundle\Entity\Monitor
                 controller: Pequiven\SEIPBundle\Controller\MonitorController
@@ -134,6 +135,13 @@ sylius_resource:
                 controller: Pequiven\ArrangementProgramBundle\Controller\GoalController
                 model: Pequiven\ArrangementProgramBundle\Entity\Goal
                 repository: Pequiven\ArrangementProgramBundle\Repository\GoalRepository
+        #MOVIMIENTO DE EMPLEADOS
+        pequiven_seip.arrangementprogram_movement:
+            driver: doctrine/orm
+            classes:
+                controller: Pequiven\ArrangementProgramBundle\Controller\MovementEmployee\MovementEmployeeController
+                model: Pequiven\ArrangementProgramBundle\Entity\MovementEmployee\MovementEmployee
+                repository: Pequiven\ArrangementProgramBundle\Repository\MovementEmployee\MovementEmployeeRepository                
         pequiven_seip.complejo:
             driver: doctrine/orm
             classes:
@@ -224,7 +232,14 @@ sylius_resource:
             classes:
                 model: Pequiven\SEIPBundle\Entity\DataLoad\ProductReport
                 controller: Pequiven\SEIPBundle\Controller\DataLoad\ProductReportController
+                repository: Pequiven\SEIPBundle\Repository\DataLoad\ProductReportRepository
                 
+        pequiven.indicator_value_result:
+            driver: doctrine/orm
+            classes:
+                model: Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator
+                repository: Pequiven\IndicatorBundle\Repository\Indicator\ValueIndicatorRepository
+
         pequiven.sig_management_system:
             driver: doctrine/orm
             classes:
@@ -236,6 +251,80 @@ sylius_resource:
             classes:
                 model: Pequiven\SIGBundle\Entity\PoliticManagementSystem
                 repository: Pequiven\SIGBundle\Repository\PoliticManagementSystemRepository
+       
+        #IndicatorSIG
+        pequiven.indicator_sig:
+            driver: doctrine/orm            
+            templates: PequivenSIGBundle:Indicator/
+            classes:
+                controller: Pequiven\SIGBundle\Controller\IndicatorSigController
+                model: Pequiven\IndicatorBundle\Entity\Indicator
+                repository: Pequiven\IndicatorBundle\Repository\IndicatorRepository
+        pequiven.arrangementprogram_sig:
+            driver: doctrine/orm            
+            templates: PequivenSIGBundle:ArrangementProgram/
+            classes:
+                controller: Pequiven\SIGBundle\Controller\ArrangementProgramSigController
+                model: Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram
+                repository: Pequiven\ArrangementProgramBundle\Repository\ArrangementProgramRepository
+                        
+        pequiven.managementsystem_sig:
+            driver: doctrine/orm
+            classes:
+                model: Pequiven\SIGBundle\Entity\TypeActionManagementSystem
+                repository: Pequiven\SIGBundle\Repository\TypeActionManagementSystemRepository
+        pequiven.managementsystem_sig_verification:
+            driver: doctrine/orm
+            classes:
+                model: Pequiven\SIGBundle\Entity\TypeVerificationManagementSystem
+                repository: Pequiven\SIGBundle\Repository\TypeVerificationManagementSystemRepository
+        pequiven.managementsystem_sig_objetives:
+            driver: doctrine/orm
+            templates: PequivenSIGBundle:Objetives/
+            classes:
+                controller: Pequiven\SIGBundle\Controller\ObjetivesController
+                model: Pequiven\ObjetiveBundle\Entity\Objetive
+                repository: Pequiven\ObjetiveBundle\Repository\ObjetiveRepository                
+        #Causas de Desviación del indicador
+        pequiven.sig_causes_report_evolution:
+            driver: doctrine/orm
+            templates: PequivenSIGBundle:Indicator/
+            classes:
+                controller: Pequiven\SIGBundle\Controller\SigEvolutionReport\ReportEvolutionCausesController                
+                model: Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCause
+                repository: Pequiven\IndicatorBundle\Repository\Indicator\EvolutionIndicator\EvolutionCauseRepository
+        #Plan de Acción de las Causas de Desviación del indicador
+        pequiven.sig_action_indicator:
+            driver: doctrine/orm
+            classes:
+                model: Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionAction
+                repository: Pequiven\IndicatorBundle\Repository\Indicator\EvolutionIndicator\EvolutionActionRepository
+        #Valor de las Acciones
+        pequiven.sig_action_value_indicator:
+            driver: doctrine/orm            
+            classes:
+                model: Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionActionValue
+                repository: Pequiven\IndicatorBundle\Repository\Indicator\EvolutionIndicator\EvolutionActionValueRepository
+        #Analisis de la tendencia del indicador
+        pequiven.sig_trend_report_evolution:
+            driver: doctrine/orm
+            templates: PequivenSIGBundle:Indicator/
+            classes:
+                controller: Pequiven\SIGBundle\Controller\SigEvolutionReport\ReportEvolutionController                
+                model: Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionTrend
+                repository: Pequiven\IndicatorBundle\Repository\Indicator\EvolutionIndicator\EvolutionTrendRepository
+        #Analisis de las causas de desviación
+        pequiven.sig_causes_analysis:
+            driver: doctrine/orm
+            classes:
+                model: Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCauseAnalysis
+                repository: Pequiven\IndicatorBundle\Repository\Indicator\EvolutionIndicator\EvolutionCauseAnalysisRepository
+        #Verificacion SIG
+        pequiven.sig_action_verification:
+            driver: doctrine/orm
+            classes:
+                model: Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionActionVerification
+                repository: Pequiven\IndicatorBundle\Repository\Indicator\EvolutionIndicator\ActionVerificationRepository
         
         pequiven.category_arrangement_program:
             driver: doctrine/orm
@@ -304,9 +393,178 @@ sylius_resource:
             classes:
                 model: Pequiven\SEIPBundle\Entity\DataLoad\Production\UnrealizedProduction
                 controller: Pequiven\SEIPBundle\Controller\DataLoad\Production\UnrealizedProductionController
+                repository: Pequiven\SEIPBundle\Repository\DataLoad\Production\UnrealizedProductionRepository
         pequiven.detail_consumer_planning_service:
             driver: doctrine/orm
             templates: PequivenSEIPBundle:DataLoad/Service/DetailConsumerPlanningService
             classes:
                 model: Pequiven\SEIPBundle\Entity\DataLoad\Service\DetailConsumerPlanningService
                 controller: Pequiven\SEIPBundle\Controller\DataLoad\Service\DetailConsumerPlanningServiceController
+        pequiven.formula:
+            driver: doctrine/orm
+            classes:
+                model: Pequiven\Pequiven\MasterBundle\Entity\Formula
+                repository: Pequiven\MasterBundle\Repository\FormulaRepository
+        pequiven.variable:
+            driver: doctrine/orm
+            classes:
+                model: Pequiven\MasterBundle\Entity\Formula\Variable
+                repository: Pequiven\MasterBundle\Repository\VariableRepository
+        pequiven.work_study_circle:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:Politic/WorkStudyCircle
+            classes:
+                controller: Pequiven\SEIPBundle\Controller\Politic\WorkStudyCircleController
+                model: Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle
+                repository: Pequiven\SEIPBundle\Repository\Politic\WorkStudyCircleRepository
+        pequiven.proposal:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:Politic/Proposal
+            classes:
+                controller: Pequiven\SEIPBundle\Controller\Politic\ProposalController
+                model: Pequiven\SEIPBundle\Entity\Politic\Proposal
+                repository: Pequiven\SEIPBundle\Repository\Politic\ProposalRepository
+        pequiven.meeting:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:Politic/Meeting
+            classes:
+                controller: Pequiven\SEIPBundle\Controller\Politic\MeetingController
+                model: Pequiven\SEIPBundle\Entity\Politic\Meeting
+                repository: Pequiven\SEIPBundle\Repository\Politic\MeetingRepository
+        pequiven.assistance:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:Politic/Assistance
+            classes:
+                controller: Pequiven\SEIPBundle\Controller\Politic\AssistanceController
+                model: Pequiven\SEIPBundle\Entity\Politic\Assistance
+                repository: Pequiven\SEIPBundle\Repository\Politic\AssistanceRepository
+        
+        pequiven.workStudyCircleFile:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:Politic/WorkStudyCircle/File
+            classes:
+                controller: Pequiven\SEIPBundle\Controller\Politic\WorkStudyCircleFileController
+                model: Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircleFile
+                repository: Pequiven\SEIPBundle\Repository\Politic\WorkStudyCircleFileRepository
+        
+        pequiven_seip.categoryFile:
+            driver: doctrine/orm
+            classes:
+                controller: Pequiven\ArrangementProgramBundle\Controller\GenericDataController
+                model: Pequiven\SEIPBundle\Entity\Politic\CategoryFile
+                repository: Pequiven\SEIPBundle\Repository\Politic\CategoryFileRepository
+                
+        pequiven.meetingFile:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:Politic/Meeting
+            classes:
+                controller: Pequiven\SEIPBundle\Controller\Politic\MeetingFileController
+                model: Pequiven\SEIPBundle\Entity\Politic\MeetingFile
+                repository: Pequiven\SEIPBundle\Repository\Politic\MeetingFileRepository
+        #SIP
+        pequiven.onePerTen:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:Sip/onePerTen
+            classes:
+                controller: Pequiven\SEIPBundle\Controller\Sip\OnePerTenController
+                model: Pequiven\SEIPBundle\Entity\Sip\OnePerTen
+                repository: Pequiven\SEIPBundle\Repository\Sip\OnePerTenRepository
+                 
+        pequiven.cutl:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:Sip/cutl
+            classes:
+                controller: Pequiven\SEIPBundle\Controller\Sip\Cutl\CutlController
+                model: Pequiven\SEIPBundle\Entity\Sip\Cutl
+                repository: Pequiven\SEIPBundle\Repository\Sip\Cutl\CutlRepository
+        pequiven.center:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:Sip/Center
+            classes:
+                controller: Pequiven\SEIPBundle\Controller\Sip\Center\CenterController
+                model: Pequiven\SEIPBundle\Entity\Sip\Centro
+                repository: Pequiven\SEIPBundle\Repository\Sip\Centro\CentroRepository
+        pequiven.ubch:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:Sip/Center/Ubch
+            classes:
+                controller: Pequiven\SEIPBundle\Controller\Sip\Center\UbchController
+                model: Pequiven\SEIPBundle\Entity\Sip\Ubch
+                repository: Pequiven\SEIPBundle\Repository\Sip\UbchRepository
+        pequiven.estado:
+            driver: doctrine/orm
+            classes:
+                model: Pequiven\SEIPBundle\Entity\Sip\Estado
+                repository: Pequiven\SEIPBundle\Repository\Sip\EstadoRepository
+        pequiven.municipio:
+            driver: doctrine/orm
+            classes:
+                model: Pequiven\SEIPBundle\Entity\Sip\Municipio
+                repository: Pequiven\SEIPBundle\Repository\Sip\MunicipioRepository
+        pequiven.parroquia:
+            driver: doctrine/orm
+            classes:
+                model: Pequiven\SEIPBundle\Entity\Sip\Parroquia
+                repository: Pequiven\SEIPBundle\Repository\Sip\ParroquiaRepository
+        pequiven.assists:
+            driver: doctrine/orm
+            classes:
+                model: Pequiven\SEIPBundle\Entity\Sip\Center\Assists
+                repository: Pequiven\SEIPBundle\Repository\Sip\Centro\AssistsRepository
+        pequiven.observations:
+            driver: doctrine/orm
+            classes:
+                model: Pequiven\SEIPBundle\Entity\Sip\Center\Observations
+                repository: Pequiven\SEIPBundle\Repository\Sip\Centro\ObservationsRepository
+        pequiven.inventory_center:
+            driver: doctrine/orm
+            classes:
+                model: Pequiven\SEIPBundle\Entity\Sip\Center\Inventory
+                repository: Pequiven\SEIPBundle\Repository\Sip\Centro\InventoryRepository
+        pequiven.material:
+            driver: doctrine/orm
+            classes:
+                model: Pequiven\SEIPBundle\Entity\Sip\Center\Material
+                repository: Pequiven\SEIPBundle\Repository\Sip\Centro\MaterialRepository
+        pequiven.nominaCentro:
+            driver: doctrine/orm
+            classes:
+                model: Pequiven\SEIPBundle\Entity\Sip\NominaCentro
+                repository: Pequiven\SEIPBundle\Repository\Sip\NominaCentroRepository
+        pequiven.onePerTenMembers:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:Sip/onePerTenMembers
+            classes:
+                model: Pequiven\SEIPBundle\Entity\Sip\OnePerTenMembers
+                repository: Pequiven\SEIPBundle\Repository\Sip\OnePerTenMembersRepository
+        pequiven.report:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:Sip/Report
+            classes:
+                controller: Pequiven\SEIPBundle\Controller\Sip\ReportSIPController  
+                model: Pequiven\SEIPBundle\Entity\Sip\Centro
+                repository: Pequiven\SEIPBundle\Repository\Sip\ReportSIPRepository
+        pequiven.statusCentro:
+            driver: doctrine/orm
+            classes:
+                model: Pequiven\SEIPBundle\Entity\Sip\Center\StatusCentro
+                repository: Pequiven\SEIPBundle\Repository\Sip\Centro\StatusCentroRepository
+        pequiven.voto:
+            driver: doctrine/orm
+            classes:
+                controller: Pequiven\SEIPBundle\Controller\Sip\Center\CenterReportController                  
+                model: Pequiven\SEIPBundle\Entity\Sip\Center\StatusCentro
+                repository: Pequiven\SEIPBundle\Repository\Sip\Centro\StatusCentroRepository
+        pequiven.display:
+            driver: doctrine/orm
+            classes:
+                controller: Pequiven\SEIPBundle\Controller\Sip\Center\DisplayController                  
+                model: Pequiven\SEIPBundle\Entity\Sip\Center\StatusCentro
+                repository: Pequiven\SEIPBundle\Repository\Sip\Centro\StatusCentroRepository
+        pequiven.siplist:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:Sip/Center/List
+            classes:
+                controller: Pequiven\SEIPBundle\Controller\Sip\Center\ListController  
+                model: Pequiven\SEIPBundle\Entity\Sip\Centro
+                repository: Pequiven\SEIPBundle\Repository\Sip\Centro\ListRepository

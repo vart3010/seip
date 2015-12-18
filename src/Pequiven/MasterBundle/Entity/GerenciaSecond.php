@@ -11,7 +11,7 @@ use Pequiven\MasterBundle\Model\Evaluation\AuditableInterface;
 /**
  * Gerencia de segunda linea
  *
- * @ORM\Table(name="seip_c_gerencia_second",uniqueConstraints={@ORM\UniqueConstraint(name="abbreviation_idx", columns={"abbreviation"})})
+ * @ORM\Table(name="seip_c_gerencia_second",uniqueConstraints={@ORM\UniqueConstraint(name="abbreviation_second_idx", columns={"abbreviation"})})
  * @ORM\Entity(repositoryClass="Pequiven\MasterBundle\Repository\GerenciaSecondRepository")
  * @author matias
  */
@@ -152,12 +152,18 @@ class GerenciaSecond extends modelGerenciaSecond
      * @ORM\Column(name="validAudit",type="boolean")
      */
     private $validAudit = true;
+    
+    /**
+     * @ORM\ManyToMany(targetEntity="\Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle", mappedBy="gerenciaSeconds")
+     */
+    private $workStudyCircles;
 
     public function __construct() {
         parent::__construct();
         $this->operationalObjectives = new ArrayCollection();
         $this->gerenciaVinculants = new ArrayCollection();
         $this->gerenciaSupports = new ArrayCollection();
+        $this->workStudyCircles = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**

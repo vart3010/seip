@@ -31,4 +31,12 @@ class ProductDetailDailyMonthController extends SEIPController
         $this->domainManager->delete($resource);
         return $this->redirect($url);
     }
+    
+    public function calculateAction(\Symfony\Component\HttpFoundation\Request $request)
+    {
+        $resource = $this->findOr404($request);
+        $resource->preUpdate();
+        $this->save($resource,true);
+        return $this->redirectHandler->redirectTo($resource);
+    }
 }

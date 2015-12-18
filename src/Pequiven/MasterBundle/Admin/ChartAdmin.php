@@ -20,7 +20,6 @@ class ChartAdmin extends Admin implements \Symfony\Component\DependencyInjection
         $show
             ->add('alias')
             ->add('description')
-            ->add('name')
             ->add('typeOfChart','choice',array(
                 'choices' => \Pequiven\SEIPBundle\Entity\Chart::getLabelsTypeOfChart(),
                 'translation_domain' => 'PequivenSEIPBundle'
@@ -34,11 +33,11 @@ class ChartAdmin extends Admin implements \Symfony\Component\DependencyInjection
             ->add('alias')
             ->add('description')
             ->add('shortDescription')
-            ->add('name')
             ->add('typeOfChart','choice',array(
                 'choices' => \Pequiven\SEIPBundle\Entity\Chart::getLabelsTypeOfChart(),
                 'translation_domain' => 'PequivenSEIPBundle'
             ))
+            ->add('nameFunctionAngular')
             ;
     }
     
@@ -50,7 +49,6 @@ class ChartAdmin extends Admin implements \Symfony\Component\DependencyInjection
             ))
             ->add('alias')
             ->add('description')
-            ->add('name')
             ->add('typeOfChart', null, array(), 'choice',array(
                 'choices' => \Pequiven\SEIPBundle\Entity\Chart::getLabelsTypeOfChart(),
                 'translation_domain' => 'PequivenSEIPBundle'
@@ -64,7 +62,7 @@ class ChartAdmin extends Admin implements \Symfony\Component\DependencyInjection
             ->add('alias')
             ->add('description')
             ->add('shortDescription')
-            ->add('name')
+            ->add('typeOfChart')
             ;
     }
     

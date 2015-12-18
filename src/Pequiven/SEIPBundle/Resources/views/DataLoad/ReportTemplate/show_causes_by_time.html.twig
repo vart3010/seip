@@ -1,0 +1,245 @@
+{# empty Twig template #}
+{#@author Victor Tortolero <vart.10.30@gmail.com>#}
+
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}
+
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+{% block before_body %}
+    {{ contentHeader(
+        {(path('pequiven_report_template_vizualice')):("Product Report"|trans)},("pequiven_seip.visualizePnrTime.reportPnr"|trans )
+    ) }}
+{% endblock %}
+
+{% block body %}
+
+
+    <fieldset class="fieldset">
+        <legend class="legend">Informacion</legend>
+        <div class="columns">
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ "Product" |trans }}</label>
+                    {{ product.getname }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ "Fecha de consulta" |trans }}</label>
+                    {{ dateReport|date('d/m/Y') }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ "Plant" |trans }}</label>
+                    {{ reportTemplate.name }}
+                </p>    
+            </div>
+        </div>
+    </fieldset>
+
+    <fieldset class="fieldset">
+        <legend class="legend">Detalle</legend>
+        <p class="inline-label">
+
+        <table class="simple-table responsive-table" id="">
+            <thead>
+                <tr>
+                    <th scope="col">{{ 'pequiven_seip.cause_of_PNR' | trans }}</th>
+                    <th scope="col" width="23%" class="">{{ "Day" | trans }}</th>
+                    <th scope="col" width="23%" class="">{{ "Month" | trans }}</th>
+                    <th scope="col" width="23%" class="">{{ "Year" | trans }}</th>
+                </tr>
+            </thead>
+
+            {#<tfoot>
+                <tr>
+                    <th> colspan="5">
+                        6 entries found
+                    </th>
+                </tr>
+            </tfoot>#}  
+           
+
+            <tbody>
+                <!-- CAUSAS INTERNAS -->
+                <tr>
+                    <th scope="row" >
+                        <span style="margin-left: 18px;font-size: 15px;" class="bold">
+                            {{ labelsTypesFailsPNR[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_INTERNAL')] | trans }}
+                        </span>
+                    </th>
+                    <th colspan="3"></th>
+                </tr>
+                {% for failInternal in failsInternal %}
+                    <tr>
+                        <th scope="row">
+                            <span>{{ failInternal.name }}</span>
+                        </th>
+                        <th>{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_INTERNAL')][failInternal.name]['day'] }}</th>
+                        <th>{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_INTERNAL')][failInternal.name]['month'] }}</th>
+                        <th>{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_INTERNAL')][failInternal.name]['year'] }}</th>
+                    </tr>
+                {% endfor %}
+                <tr>
+                    <th scope="row" class="with-tooltip" title="{{ 'pequiven_seip.totalCauseFailExternal' | trans }}">
+                        <span style="margin-left: 18px;font-size: 15px;" class="bold">
+                            {{ 'pequiven_seip.total' | trans }}
+                        </span>
+                    </th>
+                    <th><span class="bold">{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_INTERNAL')]['total']['day'] }}</span></th>
+                    <th><span class="bold">{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_INTERNAL')]['total']['month'] }}</span></th>
+                    <th><span class="bold">{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_INTERNAL')]['total']['year'] }}</span></th>
+                </tr>
+                <tr>
+                    <th colspan="4"></th>
+                </tr>
+                
+                <!-- CAUSAS EXTERNAS -->
+                <tr>
+                    <th scope="row">
+                        <span style="margin-left: 18px;font-size: 15px;" class="bold">
+                            {{ labelsTypesFailsPNR[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_EXTERNAL')] | trans }}
+                        </span>
+                    </th>
+                    <th colspan="3"></th>
+                </tr>
+                {% for failExternal in failsExternal %}
+                    <tr>
+                        <th scope="row">
+                            <span>{{ failExternal.name }}</span>
+                        </th>
+                        <th>{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_EXTERNAL')][failExternal.name]['day'] }}</th>
+                        <th>{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_EXTERNAL')][failExternal.name]['month'] }}</th>
+                        <th>{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_EXTERNAL')][failExternal.name]['year'] }}</th>
+                    </tr>
+                {% endfor %}
+                <tr>
+                    <th scope="row" class="with-tooltip" title="{{ 'pequiven_seip.totalCauseFailExternal' | trans }}">
+                        <span style="margin-left: 18px;font-size: 15px;" class="bold">
+                            {{ 'pequiven_seip.total' | trans }}
+                        </span>
+                    </th>
+                    <th><span class="bold">{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_EXTERNAL')]['total']['day'] }}</span></th>
+                    <th><span class="bold">{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_EXTERNAL')]['total']['month'] }}</span></th>
+                    <th><span class="bold">{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_EXTERNAL')]['total']['year'] }}</span></th>
+                </tr>
+                <tr>
+                    <th colspan="4"></th>
+                </tr>
+                
+                <!-- CAUSAS INTERNAS MP -->
+                <tr>
+                    <th scope="row">
+                        <span style="margin-left: 18px;font-size: 15px;" class="bold">
+                            {{ labelsTypesFailsPNR[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_INTERNAL_MP')] | trans }}
+                        </span>
+                    </th>
+                    <th colspan="3"></th>
+                </tr>
+                {% if internalRawMaterials|length > 0 %}
+                    {% for internalRawMaterial in internalRawMaterials %}
+                        <tr>
+                            <th scope="row">
+                                <span class="bold">{{ internalRawMaterial }}</span>
+                            </th>
+                            <th>{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_INTERNAL_MP')][internalRawMaterial.name]['day'] }}</th>
+                            <th>{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_INTERNAL_MP')][internalRawMaterial.name]['month'] }}</th>
+                            <th>{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_INTERNAL_MP')][internalRawMaterial.name]['year'] }}</th>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <th scope="row">
+                            <span class="bold">{{ 'Ninguna' | trans }}</span>
+                        </th>
+                        <th>{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_INTERNAL_MP')]['empty']['day'] }}</th>
+                        <th>{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_INTERNAL_MP')]['empty']['month'] }}</th>
+                        <th>{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_INTERNAL_MP')]['empty']['year'] }}</th>
+                    </tr>
+                {% endif %}
+                <tr>
+                    <th scope="row" class="with-tooltip" title="{{ 'pequiven_seip.totalCauseFailInternalMP' | trans }}">
+                        <span style="margin-left: 18px;font-size: 15px;" class="bold">
+                            {{ 'pequiven_seip.total' | trans }}
+                        </span>
+                    </th>
+                    <th><span class="bold">{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_INTERNAL_MP')]['total']['day'] }}</span></th>
+                    <th><span class="bold">{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_INTERNAL_MP')]['total']['month'] }}</span></th>
+                    <th><span class="bold">{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_INTERNAL_MP')]['total']['year'] }}</span></th>
+                </tr>
+                <tr>
+                    <th colspan="4"></th>
+                </tr>
+                
+                <!-- CAUSAS EXTERNAS MP -->
+                <tr>
+                    <th scope="row">
+                        <span style="margin-left: 18px;font-size: 15px;" class="bold">
+                            {{ labelsTypesFailsPNR[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_EXTERNAL_MP')] | trans }}
+                        </span>
+                    </th>
+                    <th colspan="3"></th>
+                </tr>
+                {% if externalRawMaterials|length > 0 %}
+                    {% for externalRawMaterial in externalRawMaterials %}
+                        <tr>
+                            <th scope="row">
+                                <span class="bold">{{ externalRawMaterial }}</span>
+                            </th>
+                            <th>{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_EXTERNAL_MP')][externalRawMaterial.name]['day'] }}</th>
+                            <th>{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_EXTERNAL_MP')][externalRawMaterial.name]['month'] }}</th>
+                            <th>{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_EXTERNAL_MP')][externalRawMaterial.name]['year'] }}</th>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <th scope="row">
+                            <span class="bold">{{ 'Ninguna' | trans }}</span>
+                        </th>
+                        <th>{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_EXTERNAL_MP')]['empty']['day'] }}</th>
+                        <th>{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_EXTERNAL_MP')]['empty']['month'] }}</th>
+                        <th>{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_EXTERNAL_MP')]['empty']['year'] }}</th>
+                    </tr>
+                {% endif %}
+                <tr>
+                    <th scope="row" class="with-tooltip" title="{{ 'pequiven_seip.totalCauseFailExternalMP' | trans }}">
+                        <span style="margin-left: 18px;font-size: 15px;" class="bold">
+                            {{ 'pequiven_seip.total' | trans }}
+                        </span>
+                    </th>
+                    <th><span class="bold">{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_EXTERNAL_MP')]['total']['day'] }}</span></th>
+                    <th><span class="bold">{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_EXTERNAL_MP')]['total']['month'] }}</span></th>
+                    <th><span class="bold">{{ result[constant('Pequiven\\SEIPBundle\\Entity\\CEI\\Fail::TYPE_FAIL_EXTERNAL_MP')]['total']['year'] }}</span></th>
+                </tr>
+                <tr>
+                    <th colspan="4"></th>
+                </tr>
+            </tbody>
+        </table>
+
+    </p>
+    <form id="frmPnr" action="{{ path("pequiven_report_template_visualize_pnr_time",{idProduct:productReport.product.id,idReportTemplate: (productReport.plantReport.reportTemplate.id),idProductReport: (productReport.id),dateReport: (dateReport|date('d/m/Y'))}) }}" method="POST">
+        <input type="hidden" name="exportExcel" id="exportExcel" value="0">
+    </form>
+    {% if is_granted(['ROLE_SEIP_OPERATION_EXPORT_EXCEL_PRODUCTION_PNR_BY_TIME']) %}
+        <p class="button-height float-right">
+            <a id="btnExportToExcelPnr" href="#" class="button">
+                <span class="button-icon"><span class="icon-download"></span></span>
+                    {{ "pequiven_seip.buttons.export_xls"|trans }}
+            </a>
+        </p>
+    {% endif %}
+</fieldset>
+{% endblock%}
+
+{% block javascript %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#btnExportToExcelPnr").click(function () {
+                $("#exportExcel").val("1");
+                $("#frmPnr").submit();
+            });
+        });
+    </script>
+{% endblock %}

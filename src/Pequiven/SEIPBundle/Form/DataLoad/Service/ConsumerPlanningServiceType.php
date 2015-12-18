@@ -34,6 +34,10 @@ class ConsumerPlanningServiceType extends SeipAbstractForm
                     return $repository->findQueryByPlant($plant);
                 },
             ))
+            ->add('aliquot',null,array(
+                'label_attr' => array('class' => 'label'),
+                "attr" => array("class" => "input"),
+            ))
             ->add('enabled',null,array(
                 'label_attr' => array('class' => 'label'),
                 "attr" => array("class" => "switch medium mid-margin-right","data-text-on"=>"Si","data-text-off"=>"No"),

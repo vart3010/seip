@@ -18,6 +18,13 @@
         {{ form_widget(form.dailyProductionCapacity) }}
         {{ form_errors(form.dailyProductionCapacity) }}
     </div>
+    {% if form.netProductionPercentage is defined %}
+        <div class="field-block button-height">
+            {{ form_label(form.netProductionPercentage) }}
+            {{ form_widget(form.netProductionPercentage) }}%
+            {{ form_errors(form.netProductionPercentage) }}
+        </div>
+    {% endif %}
     <div class="field-block button-height">
         {{ form_label(form.ranges) }}
         <ul class="ranges unstyled-list padding-left-40" data-prototype="{% filter escape %}{% include 'PequivenSEIPBundle:DataLoad/Production/Range:_form.html.twig' with {form: form.ranges.vars.prototype} %}{% endfilter %}">
@@ -83,12 +90,13 @@
             var monthOfPlanning = selectMonth.val();
             var date = new Date();
             if(monthOfPlanning != ""){
+                monthOfPlanning = monthOfPlanning - 1;
                 date.setMonth(monthOfPlanning);
             }
             
             $( "#"+idDateFrom ).datepicker({
               defaultDate: date,
-              changeMonth: false,
+              changeMonth: true,
               numberOfMonths: 1,
               stepMonths: 0,
               onClose: function( selectedDate ) {
@@ -98,7 +106,7 @@
             });
             $( "#"+idDateEnd ).datepicker({
               defaultDate: date,
-              changeMonth: false,
+              changeMonth: true,
               numberOfMonths: 1,
               stepMonths: 0,
               onClose: function( selectedDate ) {
@@ -158,17 +166,17 @@
             addRangeForm($collectionHolderRange, $newLinkLiRange);
         });
         $( ".date-from").datepicker({
-          changeMonth: false,
+          changeMonth: true,
           numberOfMonths: 1,
           dateFormat: dateFormat
         });
         $( ".date-end").datepicker({
-          changeMonth: false,
+          changeMonth: true,
           numberOfMonths: 1,
           dateFormat: dateFormat
         });
         $( ".date-day").datepicker({
-          changeMonth: false,
+          changeMonth: true,
           numberOfMonths: 1,
           dateFormat: dateFormat
         });

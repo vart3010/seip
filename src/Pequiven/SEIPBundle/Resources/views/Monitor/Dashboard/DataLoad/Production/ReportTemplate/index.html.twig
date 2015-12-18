@@ -1,0 +1,46 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/layoutWithoutMenu.html.twig' %}
+
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+{% block stylesheets_base %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('bundles/pequivenseip/icons/icons.css') }}">
+{% endblock %}
+
+{% block body %}
+    
+{#    {{ boxRender.renderBox('dashboard_data_load_production')|raw }}#}
+{#    {{ boxRender.renderBox('dashboard_data_load_production_by_company')|raw }}#}
+{#        {{ boxRender.renderBox('dashboard_data_load_production_corporation')|raw }}#}
+
+<div class="columns" ng-controller="ChartsDashboardController">
+    <div class="twelve-columns twelve-columns-tablet twelve-columns-mobile new-row-mobile" style="text-align: center">
+        <span class="title-monitor">
+            {{ 'monitor.productionReportTemplate'|trans({'%reportTemplate%': (reportTemplate.shortName) }) }}
+        </span>
+    </div>
+    {{ boxRender.renderBox('dashboard_data_load_production_report_template')|raw }}
+</div>
+ 
+{% endblock body %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/agenda3860.css?v=1') }}">
+    <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/dashboard3860.css?v=1') }}">
+{% endblock stylesheets %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/fusioncharts.js') }}"></script>
+    <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/themes/fusioncharts.theme.fint.js') }}"></script>
+    <script src="{{  asset('bundles/pequivenseip/imageMapResizer/js/imageMapResizer.min.js') }}"></script>
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+    <script type="text/javascript">
+        $(document).ready(function () {
+        });
+    </script>
+{% endblock %}

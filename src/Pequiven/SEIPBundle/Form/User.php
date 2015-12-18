@@ -42,6 +42,46 @@ class User extends AbstractType {
             ->add('gerencia','entity',array('class' => 'Pequiven\MasterBundle\Entity\Gerencia','property' => 'description','required' => false,'empty_data' => null,'empty_value' => 'Ninguna','label' => 'pequiven_seip.gerenciaFirst','translation_domain' => 'PequivenSEIPBundle','attr' => array('class' => 'select2 input-xlarge')))
             ->add('gerenciaSecond','entity',array('class' => 'Pequiven\MasterBundle\Entity\GerenciaSecond','property' => 'description','required' => false,'empty_data' => null,'empty_value' => 'Ninguna', 'required' => false ,'label' => 'pequiven_seip.gerenciaSecond','translation_domain' => 'PequivenSEIPBundle','attr' => array('class' => 'select2 input-xlarge')))
             ->add('direction',null,array('label' => 'pequiven_seip.direction','translation_domain' => 'PequivenSEIPBundle'))
+            ->add('plantReports','entity',array(
+                'class' => 'Pequiven\SEIPBundle\Entity\DataLoad\PlantReport',
+                'property' => 'plant',
+                'required' => false,
+                'empty_data' => null,
+                'empty_value' => 'Ninguna',
+//                'label' => 'pequiven_seip.gerenciaFirst',
+                'translation_domain' => 'PequivenSEIPBundle',
+                'attr' => array('class' => 'select2 input-xlarge'),
+                'multiple' => true,
+                'group_by' => 'reportTemplate'
+                )
+            )
+            /*->add('plantReports', null, array(
+                    'query_builder' => function(\Pequiven\SEIPBundle\Repository\DataLoad\PlantReportRepository $repository) {
+                        return $repository->findByPlantReport();
+                    },                               
+                    'label' => 'Reportes de plantas',
+                    'label_attr' => array('class' => 'label'),
+                    'attr' => array(
+                        'class' => "input-xlarge select2",                        
+                        //'style' => 'width: 270px',
+                        //'multiple' => 'multiple'
+                    ),
+                    'multiple' => true,
+                    'group_by' => 'reportTemplate',
+                    'required' => true,
+            ))*/
+            ->add('reportTemplates','entity',array(
+                'class' => 'Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate',
+                'property' => 'name',
+                'required' => false,
+                'empty_data' => null,
+                'empty_value' => 'Ninguna',
+//                'label' => 'pequiven_seip.gerenciaFirst',
+                'translation_domain' => 'PequivenSEIPBundle',
+                'attr' => array('class' => 'select2 input-xlarge'),
+                'multiple' => true,
+                )
+            )
             ->add('groups','entity',$parametersUser)
             ->add('roles', 'choice', array(
                 'label' => 'pequiven_seip.group_roles',

@@ -21,6 +21,8 @@ pequiven_master:
             matriz: Matriz
             affiliated: Filial
             mixta: Mixta
+            affiliated_mixta: EM/FIL.
+            pqv: PQV
         process:
             production: Producción
 
@@ -74,3 +76,9 @@ action:
 Objetive: Objetivo
 Indicator: Indicador
 TypeRangeTop: Rango Alto
+
+roles:
+    rol_owner: Propetario
+    rol_aux: Auxiliar
+    rol_special: Especial
+    

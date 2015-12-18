@@ -105,6 +105,70 @@ class Period extends Base implements \Serializable
     private $dateEndLoadArrangementProgram;
 
     /**
+     * Fecha inicio de carga de programas de gestion.
+     * @var \DateTime
+     *
+     * @ORM\Column(name="dateStartLoadSigArrangementProgram", type="date", nullable=true)
+     */
+    private $dateStartLoadSigArrangementProgram;
+
+    /**
+     * Fecha fin de carga de programas de gestión.
+     * @var \DateTime
+     *
+     * @ORM\Column(name="dateEndLoadSigArrangementProgram", type="date", nullable=true)
+     */
+    private $dateEndLoadSigArrangementProgram;
+    
+    /**
+     * Fecha inicio de carga de objetivos.
+     * @var \DateTime
+     *
+     * @ORM\Column(name="dateStartLoadObjetive", type="date", nullable=true)
+     */
+    private $dateStartLoadObjetive;
+
+    /**
+     * Fecha fin de carga de objetivos.
+     * @var \DateTime
+     *
+     * @ORM\Column(name="dateEndLoadObjetive", type="date", nullable=true)
+     */
+    private $dateEndLoadObjetive;
+    
+     /**
+     * Fecha inicio de carga de indicadores.
+     * @var \DateTime
+     *
+     * @ORM\Column(name="dateStartLoadIndicator", type="date", nullable=true)
+     */
+    private $dateStartLoadIndicator;
+    
+    /**
+     * Fecha fin de carga de indicadores.
+     * @var \DateTime
+     *
+     * @ORM\Column(name="dateEndLoadIndicator", type="date", nullable=true)
+     */
+    private $dateEndLoadIndicator;
+
+    /**
+     * Fecha inicio de carga de circulos de estudio.
+     * @var \DateTime
+     *
+     * @ORM\Column(name="dateStartLoadWorkStudyCircle", type="date", nullable=true)
+     */
+    private $dateStartLoadWorkStudyCircle;
+    
+    /**
+     * Fecha fin de carga de circulos de estudio.
+     * @var \DateTime
+     *
+     * @ORM\Column(name="dateEndLoadWorkStudyCircle", type="date", nullable=true)
+     */
+    private $dateEndLoadWorkStudyCircle;
+
+    /**
      * Fecha inicio de holgura de notificación de programas de gestion
      * @var \DateTime
      *
@@ -163,6 +227,50 @@ class Period extends Base implements \Serializable
      * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
      */
     private $deletedAt;
+    
+    
+    //****CHECKS PARA ACTIVAR O DESACTIVAR UN TRIMESTRE***/////
+    /**
+     * @ORM\Column(name="isLoadIndicatorTrim1", type="boolean", nullable=true)
+     */
+    private $isLoadIndicatorTrim1 = false;
+    
+    /**
+     * @ORM\Column(name="isLoadIndicatorTrim2", type="boolean", nullable=true)
+     */
+    private $isLoadIndicatorTrim2 = false;
+    
+    /**
+     * @ORM\Column(name="isLoadIndicatorTrim3", type="boolean", nullable=true)
+     */
+    private $isLoadIndicatorTrim3 = false;
+    
+    /**
+     * @ORM\Column(name="isLoadIndicatorTrim4", type="boolean", nullable=true)
+     */
+    private $isLoadIndicatorTrim4 = false;
+    
+    //********************************************//
+    
+    /**
+     * Fecha inicio de planificacion de reportes
+     * @var \DateTime
+     * @ORM\Column(name="dateStartPlanningReport", type="date", nullable=true)
+     */
+    private $dateStartPlanningReport;
+    
+    /**
+     * Fecha fin de planificacion de reportes
+     * @var \DateTime
+     * @ORM\Column(name="dateEndPlanningReport", type="date", nullable=true)
+     */
+    private $dateEndPlanningReport;
+    
+    /**
+     * ¿Habilita la planificacion?
+     * @ORM\Column(name="isPlanningReportEnabled", type="boolean", nullable=true)
+     */
+    private $isPlanningReportEnabled = false;
 
     /**
      * Get id
@@ -372,6 +480,190 @@ class Period extends Base implements \Serializable
     {
         return $this->dateEndLoadArrangementProgram;
     }
+    
+    /**
+     * Set dateStartLoadSigArrangementProgram
+     *
+     * @param \DateTime $dateStartLoadSigArrangementProgram
+     * @return Period
+     */
+    public function setDateStartLoadSigArrangementProgram($dateStartLoadSigArrangementProgram)
+    {
+        $this->dateStartLoadSigArrangementProgram = $dateStartLoadSigArrangementProgram;
+
+        return $this;
+    }
+
+    /**
+     * Get dateStartLoadSigArrangementProgram
+     *
+     * @return \DateTime 
+     */
+    public function getDateStartLoadSigArrangementProgram()
+    {
+        return $this->dateStartLoadSigArrangementProgram;
+    }
+
+    /**
+     * Set dateEndLoadSigArrangementProgram
+     *
+     * @param \DateTime $dateEndLoadSigArrangementProgram
+     * @return Period
+     */
+    public function setDateEndLoadSigArrangementProgram($dateEndLoadSigArrangementProgram)
+    {
+        $this->dateEndLoadSigArrangementProgram = $dateEndLoadSigArrangementProgram;
+
+        return $this;
+    }
+
+    /**
+     * Get dateEndLoadSigArrangementProgram
+     *
+     * @return \DateTime 
+     */
+    public function getDateEndLoadSigArrangementProgram()
+    {
+        return $this->dateEndLoadSigArrangementProgram;
+    }    
+    
+    /**
+     * Set dateStartLoadObjetive
+     *
+     * @param \DateTime $dateStartLoadObjetive
+     * @return Period
+     */
+    public function setDateStartLoadObjetive($dateStartLoadObjetive)
+    {
+        $this->dateStartLoadObjetive = $dateStartLoadObjetive;
+
+        return $this;
+    }
+
+    /**
+     * Get dateStartLoadObjetive
+     *
+     * @return \DateTime 
+     */
+    public function getDateStartLoadObjetive()
+    {
+        return $this->dateStartLoadObjetive;
+    }
+    
+    /**
+     * Set dateEndLoadObjetive
+     *
+     * @param \DateTime $dateEndLoadObjetive
+     * @return Period
+     */
+    public function setDateEndLoadObjetive($dateEndLoadObjetive)
+    {
+        $this->dateEndLoadObjetive = $dateEndLoadObjetive;
+
+        return $this;
+    }
+
+    /**
+     * Get dateEndLoadObjetive
+     *
+     * @return \DateTime 
+     */
+    public function getDateEndLoadObjetive()
+    {
+        return $this->dateEndLoadObjetive;
+    }
+    
+    /**
+     * Set dateStartLoadIndicator
+     *
+     * @param \DateTime $dateStartLoadIndicator
+     * @return Period
+     */
+    public function setDateStartLoadIndicator($dateStartLoadIndicator)
+    {
+        $this->dateStartLoadIndicator= $dateStartLoadIndicator;
+
+        return $this;
+    }
+
+    /**
+     * Get dateStartLoadIndicator
+     *
+     * @return \DateTime 
+     */
+    public function getDateStartLoadIndicator()
+    {
+        return $this->dateStartLoadIndicator;
+    }
+    
+    /**
+     * Set dateEndLoadIndicator
+     *
+     * @param \DateTime $dateEndLoadIndicator
+     * @return Period
+     */
+    public function setDateEndLoadIndicator($dateEndLoadIndicator)
+    {
+        $this->dateEndLoadIndicator = $dateEndLoadIndicator;
+
+        return $this;
+    }
+
+    /**
+     * Get dateEndLoadIndicator
+     *
+     * @return \DateTime 
+     */
+    public function getDateEndLoadIndicator()
+    {
+        return $this->dateEndLoadIndicator;
+    }
+
+    /**
+     * Set dateStartLoadWorkStudyCircle
+     *
+     * @param \DateTime $dateStartLoadWorkStudyCircle
+     * @return Period
+     */
+    public function setDateStartLoadWorkStudyCircle($dateStartLoadWorkStudyCircle)
+    {
+        $this->dateStartLoadWorkStudyCircle= $dateStartLoadWorkStudyCircle;
+
+        return $this;
+    }
+
+    /**
+     * Get dateStartLoadWorkStudyCircle
+     *
+     * @return \DateTime 
+     */
+    public function getDateStartLoadWorkStudyCircle()
+    {
+        return $this->dateStartLoadWorkStudyCircle;
+    }
+    
+    /**
+     * Set dateEndLoadWorkStudyCircle
+     *
+     * @param \DateTime $dateEndLoadWorkStudyCircle
+     * @return Period
+     */
+    public function setDateEndLoadWorkStudyCircle($dateEndLoadWorkStudyCircle)
+    {
+        $this->dateEndLoadWorkStudyCircle = $dateEndLoadWorkStudyCircle;
+
+        return $this;
+    }
+
+    /**
+     * Get dateEndLoadWorkStudyCircle
+     *
+     * @return \DateTime 
+     */
+    public function getDateEndLoadWorkStudyCircle()
+    {
+        return $this->dateEndLoadWorkStudyCircle;
+    }
 
     /**
      * Set dateStartClearanceNotificationArrangementProgram
@@ -556,6 +848,80 @@ class Period extends Base implements \Serializable
     {
         return $this->percentagePenalty;
     }
+    
+    
+    /**
+     * 
+     * @return type
+     */
+    public function getIsLoadIndicatorTrim1()
+    {
+        return $this->isLoadIndicatorTrim1;
+    }
+    /**
+     * 
+     * @param type $isLoadIndicatorTrim1
+     */
+    public function setIsLoadIndicatorTrim1($isLoadIndicatorTrim1)
+    {
+        $this->isLoadIndicatorTrim1 = $isLoadIndicatorTrim1;
+    }
+    
+    /**
+     * 
+     * @return type
+     */
+    public function getIsLoadIndicatorTrim2()
+    {
+        return $this->isLoadIndicatorTrim2;
+    }
+    /**
+     * 
+     * @param type $isLoadIndicatorTrim2
+     */
+    public function setIsLoadIndicatorTrim2($isLoadIndicatorTrim2)
+    {
+        $this->isLoadIndicatorTrim2 = $isLoadIndicatorTrim2;
+    }
+    
+    /**
+     * 
+     * @return type
+     */
+    public function getIsLoadIndicatorTrim3()
+    {
+        return $this->isLoadIndicatorTrim3;
+    }
+    /**
+     * 
+     * @param type $isLoadIndicatorTrim3
+     */
+    public function setIsLoadIndicatorTrim3($isLoadIndicatorTrim3)
+    {
+        $this->isLoadIndicatorTrim3 = $isLoadIndicatorTrim3;
+    }
+    
+    /**
+     * 
+     * @return type
+     */
+    public function getIsLoadIndicatorTrim4()
+    {
+        return $this->isLoadIndicatorTrim4;
+    }
+    
+    /**
+     * 
+     * @param type $isLoadIndicatorTrim4
+     */
+    public function setIsLoadIndicatorTrim4($isLoadIndicatorTrim4)
+    {
+        $this->isLoadIndicatorTrim4 = $isLoadIndicatorTrim4;
+    }
+    
+    
+    
+    
     //TODO Objeto falla al ser serializado
     public function serialize() {
         $data = serialize(array(
@@ -568,6 +934,8 @@ class Period extends Base implements \Serializable
             $this->dateEndNotificationArrangementProgram,
             $this->dateStartLoadArrangementProgram,
             $this->dateEndLoadArrangementProgram,
+            $this->dateStartLoadSigArrangementProgram,
+            $this->dateEndLoadSigArrangementProgram,
             $this->dateStartClearanceNotificationArrangementProgram,
             $this->dateStartPenalty,
             $this->dateEndPenalty,
@@ -605,6 +973,8 @@ class Period extends Base implements \Serializable
             $this->dateEndNotificationArrangementProgram,
             $this->dateStartLoadArrangementProgram,
             $this->dateEndLoadArrangementProgram,
+            $this->dateStartLoadSigArrangementProgram,
+            $this->dateEndLoadSigArrangementProgram,
             $this->dateStartClearanceNotificationArrangementProgram,
             $this->dateStartPenalty,
             $this->dateEndPenalty,
@@ -633,6 +1003,31 @@ class Period extends Base implements \Serializable
         $this->opened = $opened;
     }
     
+    function getDateStartPlanningReport() {
+        return $this->dateStartPlanningReport;
+    }
+
+    function getDateEndPlanningReport() {
+        return $this->dateEndPlanningReport;
+    }
+
+    function getIsPlanningReportEnabled() {
+        return $this->isPlanningReportEnabled;
+    }
+
+    function setDateStartPlanningReport(\DateTime $dateStartPlanningReport) {
+        $this->dateStartPlanningReport = $dateStartPlanningReport;
+    }
+
+    function setDateEndPlanningReport(\DateTime $dateEndPlanningReport) {
+        $this->dateEndPlanningReport = $dateEndPlanningReport;
+    }
+
+    function setIsPlanningReportEnabled($isPlanningReportEnabled) {
+        $this->isPlanningReportEnabled = $isPlanningReportEnabled;
+    }
+
+        
     public function __toString() {
         return $this->getDescription()?:'-';
     }

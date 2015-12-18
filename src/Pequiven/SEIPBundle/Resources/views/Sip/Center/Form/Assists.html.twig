@@ -1,0 +1,96 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutSIG.html.twig' %}
+
+{% block body %}
+{% trans_default_domain 'sip' %}    
+       <form method="POST" id="form_sip_center_assists">
+            <fieldset class="fieldset fields-list">
+                <legend class="legend">{{ 'sip.assists'|trans ({}) }}</legend>
+                    {{ form_errors(form) }} 
+
+                    <div class="field-block button-height" >
+                        {{ form_label(form.fecha) }}                        
+                        {{ form_widget(form.fecha) }}
+                        {{ form_errors(form.fecha) }}
+                    </div>                    
+                    
+                    {#<div class="field-block button-height" >
+                            <p class="assistance button-height">
+
+                            <label class="label">Centro Activo</label> 
+                            <p class="assistanc button-height"> 
+                                <textarea required="required"  id="obs_centro" name="sip_center_assists[obs_centro]" class=" input input-xlarge"></textarea> 
+
+                                <input type="checkbox" name="sip_center_assists[status]" data="" value="0" class="switch blue-active mid-margin-right "  data-text-on="SI" data-text-off="NO">
+                            <span class="info-spot">
+                                <span class="icon-info-round"></span>
+                                <span class="info-bubble">Seleccion si el punto estaba activado o no dependiendo de su caso</span>
+                            </span> 
+                            </p>         
+                    </div>   #} 
+                    
+                    {{ form_rest(form) }}
+                    
+                    <div class="field-block button-height" >
+                    </div>
+
+                    {% for dataCutl in cutl %}
+                        <div class="field-block button-height" >
+                            <p class="assistance button-height">
+
+                            <label class="label">Cutl</label>                            
+                            
+                            {{ dataCutl.nombre }}
+                            
+                            <input type="checkbox" name="sip_center_assists[{{ dataCutl.id }}]" data="{{ dataCutl.id }}" value="0" class="switch blue-active mid-margin-right "  data-text-on="SI" data-text-off="NO">
+                            </p> 
+                            
+                            <textarea required="required"  id="obs_{{ dataCutl.id }}" name="sip_center_assists[obs_{{ dataCutl.id }}]" class=" input input-xlarge"></textarea>        
+                        </div>                        
+                    {% endfor %}
+            
+            </fieldset>
+        </form>         
+
+{% endblock %}
+
+{% block javascript_base %}
+    <script type="text/javascript">
+        
+        $(document).ready(function () {
+
+            $('#switch-mode').change(function () {
+                $('.switch-wrapper')[this.checked ? 'addClass' : 'removeClass']('reversed-switches');
+            });
+            $("p.assistance input").change(function () {
+                var value = $(this).val();
+                var assists = $(this).attr("data");
+                if (value == 1) {
+                    $(this).val(0);
+                    //$("#obs_" + assists).attr("disabled", false);
+                    //$("#obs_" + assists).attr("required", true);                    
+                } else {
+                    $(this).val(1);
+                    //$("#obs_" + assists).val("");
+                    //$("#obs_" + assists).attr("disabled", true);
+                    //$("#obs_" + assists).attr("required", true);                    
+                }
+                //console.log((value));
+            });
+
+            $("p.assistanc input").change(function () {
+                var value = $(this).val();
+                var assists = $(this).attr("data");
+                if (value == 1) {
+                    $(this).val(0);
+                    //$("#obs_centro").attr("disabled", false);
+                    //$("#obs_centro").attr("required", true);                    
+                } else {
+                    $(this).val(1);                    
+                }
+                //console.log((value));
+            });
+            
+            
+        });
+    </script>
+{% endblock %}

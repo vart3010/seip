@@ -1,0 +1,60 @@
+{% trans_default_domain 'workStudyCircle' %}
+<div ng-controller="TableWorkStudyCircleFileController">
+    <form action="{{ path('pequiven_meeting_show',{'id':data}) }}" method="POST" id="formFile" enctype="multipart/form-data">
+        <fieldset class="fieldset fields-list">
+            <legend class="legend">{{ "workStudyCircle.files.add"|trans }}</legend>
+            <div class="columns">
+                <div class="field-block button-height">
+                    {{ form_label(form.nameFile) }}
+                    {{ form_widget(form.nameFile) }}
+                    {{ form_errors(form.nameFile) }}
+                </div>
+                <div class="field-block button-height">
+                    {{ form_label(form.meeting) }}
+                    {{ form_widget(form.meeting) }}
+                    {{ form_errors(form.meeting) }}
+                    <span class="info-spot">
+                        <span class="icon-info-round"></span>
+                        <span class="info-bubble">Categorias de Archivos</span>
+                    </span>
+                </div>
+            </div>
+
+        </fieldset>
+
+        {#<fieldset class="fieldset">
+            <legend class="legend">{{ "workStudyCircle.files.add"|trans }}</legend>
+            <div class="new-row-mobile twelve-columns-mobile twelve-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ "workStudyCircle.files.file"|trans }}</label>
+                    <input required type="file" name="meetingFile">
+                </p>
+                <p class="inline-label">
+                    <label class="label">{{ "workStudyCircle.files.category"|trans }}</label>
+                    <select multiple="true" required  class="select2 input-xlarge" name="selectCategoryFile" id="selectCategoryFile" ng-model="model.category" ng-options="value as value.description for (key,value) in data.category">
+                        <option value=''></option>
+                    </select>
+                </p>
+            </div>
+        </fieldset>#}
+        <input style="display: none;" type="submit" id="saveFile">
+        {{ form_rest(form) }}
+    </form>
+</div>
+
+{% block javascript %}
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            charge();
+
+            function charge() {
+                $('.select2').select2({
+                    allowClear: true
+                });
+            }
+        });
+
+    </script>
+
+{% endblock %}

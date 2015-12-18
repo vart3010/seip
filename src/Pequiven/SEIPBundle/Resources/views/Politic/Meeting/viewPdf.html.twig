@@ -1,0 +1,112 @@
+{% trans_default_domain 'workStudyCircle' %}
+
+<style>
+    .body {
+        font-size: 10px;
+    }
+    .title_bold {
+        font-weight: bold;
+        background-color: #F2F2F2;        
+    }
+
+    .title {
+        font-weight: bold;        
+    }
+
+    table tr {
+        padding: 15px;
+    }
+    .alin_font {
+        text-align: justify;
+    }
+</style>
+
+{% block body %}
+
+    <table width="100%">
+        <tr>
+            <th class="title">1. Datos de la Reunión</th>
+        </tr>
+    </table> 
+
+
+    <br/><br/>
+
+    <table width="100%"> 
+        <tr>
+            <td class="title_bold" width="20%">Fecha: </td>
+            <td width="80%"> {{ meeting.date|date('Y-m-d') }} </td>                        
+        </tr>
+        <tr>
+            <td class="title_bold" width="20%">Lugar: </td>
+            <td width="80%"> {{ meeting.place|ucwords }}</td>
+        </tr>
+        <tr>
+            <td class="title_bold" width="20%">Puntos Tratados: </td>
+            <td width="80%"> {{ meeting.subject|ucwords }}</td>
+        </tr>
+        <tr>
+            <td class="title_bold" width="20%">Observaciones: </td>
+            <td width="80%"> {{ meeting.observation|ucwords }}</td>
+        </tr>
+    </table>
+
+    <br/><br/><br/>
+
+    <table width="100%">
+        <tr>
+            <th class="title">2. Asistencia</th>
+        </tr>
+    </table> 
+
+    <br/><br/>
+
+    <table width="90%">
+        <thead>
+            <tr>
+                <th class="title_bold" width="5%" style="text-align: left">N°</th>
+                <th class="title_bold" width="25%" style="text-align: left">C.I.</th>
+                <th class="title_bold" width="65%" style="text-align: left">Nombre y Apellido</th>
+                <th class="title_bold" width="15%" style="text-align: left">Presente</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for member in members %}
+                <tr>
+                    <td width="5%" style="text-align: left">{{ loop.index  }}</td>
+                    <td width="25%"style="text-align: left">{{ member.getIndentification|number_format(0, ',', '.') }}</td>
+                    <td width="65%">{{ member.firstname | ucwords}} {{ member.lastname | ucwords}}</td>
+                    {% if assistanceIds[member.id]== 1 %}
+                        <td width="10%" style="text-align: left"> SI </td>
+                    {% else %}
+                        <td width="15%"> NO </td>  
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </tbody>
+</table>
+
+<br/><br/><br/>
+
+<table width="100%">
+    <tr>
+        <th class="title">3. Observaciones</th>
+    </tr>
+</table> 
+
+<br/><br/>
+
+<table width="90%">
+    <tbody>
+        {% for obs in assistanceObs %}
+            <tr>
+                <td width="100%" style="text-align: justify">- {{ obs }}</td>
+
+            </tr>
+        {% endfor %}
+    </tbody>
+</tbody>
+</table>
+
+{% endblock %}

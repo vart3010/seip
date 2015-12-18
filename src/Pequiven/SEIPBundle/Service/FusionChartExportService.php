@@ -40,6 +40,7 @@ public $exportObject;
 public $exportedStatus;
 
     public function exportFusionChart($post) {
+        
         define("SAVE_PATH", "php-export-handler/ExportedImages/");
     
         define("HTTP_URI", "ExportedImages/");
@@ -61,16 +62,17 @@ public $exportedStatus;
         define('TEMP_PATH', 'temp/');
         define('INKSCAPE_PATH', '/usr/bin/inkscape');
         define('CONVERT_PATH', '/usr/bin/convert'); // imagemagic
-
+        
+        $type = $post['charttype'];
         $this->exportRequestStream = $post;
         $this->exportData = $this->parseExportRequestStream($this->exportRequestStream);
         $this->exporterResource = $this->getExporter($this->exportData ['parameters'] ["exportformat"], $this->exportData ["streamtype"]);
     //    
-    //    if (!@include( $this->exporterResource )) {
-    //        raise_error(404, true);
-    //    }
+//        if (!@include( $this->exporterResource )) {
+//            raise_error(404, true);
+//        }
     //    
-        $this->exportObject = $this->exportProcessor($this->exportData ['stream'], $this->exportData ['meta'], $this->exportData ['parameters']);
+        $this->exportObject = $this->exportProcessor($this->exportData ['stream'], $this->exportData ['meta'], $this->exportData ['parameters'], $type);
         if(strlen($this->exportObject) > 0){
             return $this->exportObject;
         } else{
@@ -103,7 +105,7 @@ public $exportedStatus;
         }
         else {
         	//raise error as this export handler only accepts SVG as the input stream.
-            raise_error("Invalid input stream type. Only SVG is accepted.");
+            $this->raise_error("Invalid input stream type. Only SVG is accepted.");
         }
     }
 
@@ -111,12 +113,12 @@ public $exportedStatus;
     // halt with error message  if stream is not found
     $exportData ['stream'] = (string)@$exportRequestStream ['stream']
             or $exportData ['stream'] = (string)@$exportRequestStream ['svg'] // backward compatible
-            or raise_error(100, true);
+            or $this->raise_error(100, true);
 
     // get all export related parameters and parse to validate and process these
     // add notice if 'parameters' is not retrieved. In that case default values would be taken
     if (!@$exportRequestStream['parameters'])
-        raise_error(102);
+        $this->raise_error(102);
 
     // parse parameters
     $exportData ['parameters'] = $this->parseExportParams(@$exportRequestStream ['parameters'], @$exportRequestStream);
@@ -126,9 +128,9 @@ public $exportedStatus;
     // halt with error message  if width/height is/are not retrieved
     $exportData ['meta']['width'] = (int) @$exportRequestStream ['meta_width']
             or $exportData ['meta']['width'] = (int) @$exportRequestStream ['width'] // backward compatible
-            or raise_error(101);
+            or $this->raise_error(101);
     $exportData ['meta']['height'] = (int) @$exportRequestStream ['meta_height']
-            or raise_error(101);
+            or $this->raise_error(101);
 
     // get background color of chart
     // add notice if background color is not retrieved
@@ -137,7 +139,7 @@ public $exportedStatus;
     // chart DOMId
     $exportData ['meta']['DOMId'] = @$exportRequestStream ['meta_DOMId'];
 
-    // return collected and processed data
+    // return collected and processed data    
     return $exportData;
 }
 
@@ -350,7 +352,7 @@ function setupServer($exportFile, $exportType, $target = "_self") {
     $path = preg_replace('/([^\/]$)/i', '${1}/', SAVE_PATH);
     // check whether directory exists
     // raise error and halt execution if directory does not exists
-    $fe = file_exists(realpath($path)) or raise_error(" Server Directory does not exist.", true);
+    $fe = file_exists(realpath($path)) or $this->raise_error(" Server Directory does not exist.", true);
 
     // check if directory is writable or not
     $dirWritable = is_writable(realpath($path));
@@ -545,41 +547,128 @@ function raise_error($code, $halt = false) {
 
     // If halt is true stop execution and send response back to chart/output stream
     if ($halt) {
-        flushStatus(false, '', $err_message);
+        $this->flushStatus(false, '', $err_message);
     } else {
         // otherwise add the message into global notice repository
         $notices .= $err_message;
     }
 }
-function exportProcessor($stream, $meta, $exportParams) {
-
+function exportProcessor($stream, $meta, $exportParams, $type) {
+    
     // get mime type list parsing MIMETYPES constant declared in Export Resource PHP file
     $ext = strtolower($exportParams["exportformat"]);
+
     $ext2 = '';
     $mimeList = $this->bang(@MIMETYPES);
     $mimeType = $mimeList[$ext];
-
+    
     // prepare variables
     if (get_magic_quotes_gpc()) {
         $stream = stripslashes($stream);
     }
 
-    // create a new export data
-    $tempFileName = md5(rand());
+    //Creación nombre de Archivo relacionado al usuario que consulta
+    $user = $this->getUser()->getId();//Id Usuario    
+    $user = str_pad($user, 6,"0", STR_PAD_LEFT);
+    $cadena = $user."-".md5(rand())."-".$type;
+    
+    // create a new export data    
+    $tempFileName = $cadena;
+    
     if ('jpeg' == $ext || 'jpg' == $ext) {
         $ext = 'png';
         $ext2 = 'jpg';
     }
 
     $tempInputSVGFile =  $this->container->getParameter('kernel.root_dir')."/../web/php-export-handler/" . TEMP_PATH . "{$tempFileName}.svg";
-
-    $tempOutputFile = $this->container->getParameter('kernel.root_dir')."/../web/php-export-handler/" . TEMP_PATH . "/{$tempFileName}.{$ext}";
+    
+    $tempOutputFile = $this->container->getParameter('kernel.root_dir')."/../web/php-export-handler/" . TEMP_PATH . "{$tempFileName}.{$ext}";
+    
     $tempOutputJpgFile = realpath(TEMP_PATH) . "/{$tempFileName}.jpg";
-    $tempOutputPngFile = realpath(TEMP_PATH) . "/{$tempFileName}.png";
+    $tempOutputPngFile = realpath(TEMP_PATH) . "/{$tempFileName}.png";        
+         
 
     if ($ext != 'svg') {
-
+        
         // width format for batik
+        $width = @$meta['width'];
+        $height = @$meta['height'];
+
+        $size = '';
+        if (!empty($width) && !empty($height)) {
+            $size = "-w {$width} -h {$height}";
+        }
+        // override the size in case of pdf output
+        if ('pdf' == $ext) {
+            $size = '';
+        }
+
+        //batik bg color format
+        $bg = @$meta['bgColor'];
+        if ($bg) {
+            $bg = " --export-background=".$bg;
+        }
+
+        $nameSVG = '';
+        
+        $routingTemp = $this->container->getParameter('kernel.root_dir')."/../web/php-export-handler/*";
+
+        // generate the temporary file
+        if (!file_put_contents($tempInputSVGFile, $stream)) {
+            die("Couldn't create temporary file. Check that the directory permissions for
+            the " . TEMP_PATH . " directory are set to 777.");
+        } else{
+            $nameSVG = "{$tempFileName}.svg";
+        }        
+        
+        $nameTemp = $nameSVG;        
+        //return $nameSVG;
+        // do the conversion
+        $width = 950;
+        $height = 750;
+        $size = "-w {$width} -h {$height}";
+        $command = INKSCAPE_PATH . "$bg --without-gui {$tempInputSVGFile} --export-{$ext} $tempOutputFile {$size}";
+        $output = shell_exec($command);        
+        //shell_exec("chmod -R 777".$ext.$tempOutputFile);
+        
+        if ('jpg' == $ext2) {
+            $comandJpg = CONVERT_PATH . " -quality 100 $tempOutputFile $tempOutputJpgFile";
+            $tempOutputFile = $tempOutputJpgFile;
+
+            $output .= shell_exec($comandJpg);
+        }
+
+        shell_exec("rm $tempInputSVGFile");
+        
+        $nameSVG = $tempOutputFile;                
+        //return $nameSVG;
+
+        // catch error
+        if (!is_file($tempOutputFile) || filesize($tempOutputFile) < 10) {
+            $return_binary = $output;
+            $this->raise_error($output, true);
+        }
+        // stream it
+        else {
+            $return_binary = file_get_contents($tempOutputFile);
+        }
+        // delete temp files
+        /*if (file_exists($nameTemp)) {
+            unlink($nameTemp);            
+        }
+        if (file_exists($tempOutputFile)) {
+            unlink($tempOutputFile);
+        }
+        if (file_exists($tempOutputPngFile)) {
+            unlink($tempOutputPngFile);
+        }*/
+        
+        return $nameSVG;
+
+    // SVG can be streamed back directly
+    } else if ($ext == 'svg') {
+      
+       // width format for batik
         $width = @$meta['width'];
         $height = @$meta['height'];
 
@@ -602,21 +691,23 @@ function exportProcessor($stream, $meta, $exportParams) {
         // generate the temporary file
         if (!file_put_contents($tempInputSVGFile, $stream)) {
             die("Couldn't create temporary file. Check that the directory permissions for
-			the " . TEMP_PATH . " directory are set to 777.");
+            the " . TEMP_PATH . " directory are set to 777.");
         } else{
             $nameSVG = "{$tempFileName}.svg";
         }
         
-        shell_exec("chmod 777 -R ".$this->container->getParameter('kernel.root_dir')."/../web/php-export-handler/*");
+        shell_exec("chmod -R 777".$this->container->getParameter('kernel.root_dir')."/../web/php-export-handler/*");
 
-        return $nameSVG;
+        //return $nameSVG;
         // do the conversion
         $command = INKSCAPE_PATH . "$bg --without-gui {$tempInputSVGFile} --export-{$ext} $tempOutputFile {$size}";
-
         $output = shell_exec($command);
-        shell_exec("chmod 777 -R ".$ext.$tempOutputFile);
+        shell_exec("chmod -R 777".$ext.$tempOutputFile);
         
-        if ('jpg' == $ext2) {
+        return $nameSVG;
+        //return $tempOutputFile;//Dirección completa con svg        
+        
+        if ('svg' == $ext2) {
             $comandJpg = CONVERT_PATH . " -quality 100 $tempOutputFile $tempOutputJpgFile";
             $tempOutputFile = $tempOutputJpgFile;
 
@@ -626,7 +717,7 @@ function exportProcessor($stream, $meta, $exportParams) {
         // catch error
         if (!is_file($tempOutputFile) || filesize($tempOutputFile) < 10) {
             $return_binary = $output;
-            raise_error($output, true);
+            $this->raise_error($output, true);
         }
         // stream it
         else {
@@ -643,12 +734,13 @@ function exportProcessor($stream, $meta, $exportParams) {
         if (file_exists($tempOutputPngFile)) {
             unlink($tempOutputPngFile);
         }
-
-        // SVG can be streamed back directly
-    } else if ($ext == 'svg') {
-        $return_binary = $stream;
+        // stream it
+        else {
+            $return_binary = file_get_contents($tempOutputFile);
+        }
+        //$return_binary = $stream;
     } else {
-        raise_error("Invalid Export Format.", true);
+        $this->raise_error("Invalid Export Format.", true);
     }
     // return export ready binary data
     return @$return_binary;
@@ -734,4 +826,29 @@ function hex2rgb($h, $sep = "") {
     }
     return $rgb;
 }
+
+    /**
+     * Get a user from the Security Context
+     *
+     * @return mixed
+     *
+     * @throws \LogicException If SecurityBundle is not available
+     *
+     * @see Symfony\Component\Security\Core\Authentication\Token\TokenInterface::getUser()
+     */
+    protected function getUser() {
+        if (!$this->container->has('security.context')) {
+            throw new \LogicException('The SecurityBundle is not registered in your application.');
+        }
+
+        if (null === $token = $this->container->get('security.context')->getToken()) {
+            return;
+        }
+
+        if (!is_object($user = $token->getUser())) {
+            return;
+        }
+
+        return $user;
+    }
 }

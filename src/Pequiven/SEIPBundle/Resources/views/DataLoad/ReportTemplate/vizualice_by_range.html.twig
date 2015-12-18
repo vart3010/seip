@@ -1,0 +1,289 @@
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+
+{% if production is not empty %}
+
+    <div class="columns">
+        <div class="twelve-columns twelve-columns-mobile">
+            <h3 class="thin underline text-center">OPERACIÓN</h3>
+        </div>
+    </div>
+    {% set dateReport = null %}
+    <div class="columns">
+        <div class="twelve-columns twelve-columns-mobile">
+            <div class="columns">
+                <div class="twelve-columns"> 
+                    <div  ng-controller="ProductionController" ng-init="renderChartColumn3dLinedy('graphicRange',{{ graphicRange }},'100','500')">
+                        <span id="graphicRange"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% if showProduction %}
+            {% if showDay  %}
+                <div class="twelve-columns twelve-columns-mobile">
+                    <table class="simple-table responsive-table responsive-table-on">
+                        <thead>
+                            <tr>
+                                <th class="header text-center white-gradient" colspan="5">
+                                    PRODUCCIÓN<br>
+                                    {{ "Desde "~dateFrom|date('d-m-Y')~" Hasta "~ dateEnd|date('d-m-Y')}}
+                                </th>
+                            </tr>
+                            <tr>
+                                <th scope="col" style="width: 7%" class="header">PRODUCTO</th>
+                                <th scope="col" style="width: 7%" class="header">PPTO</th>
+                                <th scope="col" style="width: 7%" class=" header">REAL</th>
+                                <th scope="col" style="width: 7%" class=" header">EJEC&nbsp;(%)</th>
+                                <th scope="col" width="15%" class=" header">VAR</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for prod in production %}
+                                <tr>
+                                    <th>{{ prod.productName}}</th>
+                                    <th>{{ prod.plan|number_format(2, '.', ',') }}</th>
+                                    <th>{{ prod.real|number_format(2, '.', ',') }}</th>
+                                    <th>{{ prod.percentage|number_format(2, '.', ',') }}%</th>
+                                    <th>{{ prod.pnr|number_format(2, '.', ',') }}</th>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>Totales</th>
+                                    {% for totals in totalProduction %}
+                                    <th>{{ totals|number_format(2, '.', ',') }}</th>
+                                    {% endfor %}
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            {% endif %}
+        {% endif %}  
+    </div>
+
+
+    {% if (showRawMaterial or showService ) %}
+        <div class="columns">
+            <div class="twelve-columns twelve-columns-mobile">
+                <h3 class="thin underline text-center">CONSUMOS</h3>
+            </div>
+        </div>
+    {% endif %}
+    {% if showRawMaterial %}
+        <div class="twelve-columns twelve-columns-mobile">
+            <table class="simple-table responsive-table responsive-table-on">
+                <thead>
+                    <tr>
+                        <th class="header text-center white-gradient" colspan="5">
+                            CONSUMO DE MATERIA PRIMA<br>
+                            {{ "Desde "~dateFrom|date('d-m-Y')~" Hasta "~ dateEnd|date('d-m-Y')}}
+                        </th>
+                    </tr>
+                    <tr>
+                        <th scope="col" style="width: 7%" class="header">PRODUCTO</th>
+                        <th scope="col" style="width: 7%" class="header">PLAN</th>
+                        <th scope="col" style="width: 7%" class=" header">REAL</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for raw in rawMaterial %}
+                        <tr>
+                            <th>{{ raw.productName}}</th>
+                            <th>{{ raw.planRaw|number_format(2, '.', ',') }}</th>
+                            <th>{{ raw.realRaw|number_format(2, '.', ',') }}</th>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>Totales</th>
+                            {% for totals in totalRawMaterial %}
+                            <th>{{ totals|number_format(2, '.', ',') }}</th>
+                            {% endfor %}
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    {% endif %}
+
+    {% if showService %}
+        <div class="twelve-columns twelve-columns-mobile">
+            <table class="simple-table responsive-table responsive-table-on">
+                <thead>
+                    <tr>
+                        <th class="header text-center white-gradient" colspan="5">
+                            CONSUMO DE SERVICIOS<br>
+                            {{ "Desde "~dateFrom|date('d-m-Y')~" Hasta "~ dateEnd|date('d-m-Y')}}
+                        </th>
+                    </tr>
+                    <tr>
+                        <th scope="col" style="width: 7%" class="header">PRODUCTO</th>
+                        <th scope="col" style="width: 7%" class="header">PLAN</th>
+                        <th scope="col" style="width: 7%" class=" header">REAL</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% set totalPlan = 0 %}
+                    {% set totalReal = 0 %}
+                    {% for consumer in consumerPlanning %}
+                        <tr>
+                            <th>{{ consumer.productName }}</th>
+                            <th>{{ consumer.plan|number_format(2, '.', ',') }}</th>
+                            <th>{{ consumer.real|number_format(2, '.', ',') }}</th>
+                        </tr>
+                        {% set totalPlan = totalPlan + consumer.plan %}
+                        {% set totalReal = totalReal + consumer.real %}
+                    {% endfor %}
+
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>Totales</th>
+                        <th>{{ totalPlan|number_format(2, '.', ',') }}</th>
+                        <th>{{ totalReal|number_format(2, '.', ',') }}</th>
+                    </tr>
+                </tfoot>
+
+            </table>
+        </div>
+    {% endif %}
+
+    {% if showPnr %}
+        <div class="twelve-columns twelve-columns-mobile">
+            <table class="simple-table responsive-table responsive-table-on">
+                <thead>
+                    <tr>
+                        <th class="header text-center white-gradient" colspan="5">
+                            PRODUCCION NO REALIZADA<br>
+                            {{ "Desde "~dateFrom|date('d-m-Y')~" Hasta "~ dateEnd|date('d-m-Y')}}
+                        </th>
+                    </tr>
+                    <tr>
+                        <th scope="col" style="width: 7%" class="header">PRODUCTO</th>
+                        <th scope="col" style="width: 7%" class="header">TOTAL</th>
+                    </tr>
+                </thead> 
+                <tbody>
+                    {% set totalPnr = 0 %}
+                    {% for unrealized in unrealizedProduction %}
+                        {% set totalPnr = totalPnr + unrealized.total %}
+                        <tr>
+                            <th>
+                                <a href="{{ path("pequiven_report_template_visualize_pnr_range_time",{
+                                idProduct:unrealized.idProduct,
+                                idProductReport:unrealized.idProductReport,
+                                startDate:dateFrom|date('d-m-Y'),
+                                endDate:dateEnd|date('d-m-Y'),
+                                idReportTemplate:unrealized.idReportTemplate    
+                                }) }}">
+                                    {{ unrealized.productName | upper}}
+                                </a>
+
+                            </th>
+                            <th>{{ unrealized.total|number_format(2, '.', ',') }}</th>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>Totales</th>
+                        <th>{{ totalPnr|number_format(2, '.', ',') }}</th>
+
+                    </tr>
+                </tfoot>
+
+            </table>
+        </div>
+    {% endif %}
+
+    {% if showInventory %}
+        <div class="twelve-columns twelve-columns-mobile">
+            <table class="simple-table responsive-table responsive-table-on">
+                <thead>
+                    <tr>
+                        <th class="header text-center white-gradient" colspan="5">
+                            INVENTARIO<br>
+                            {{ "Desde "~dateFrom|date('d-m-Y')~" Hasta "~ dateEnd|date('d-m-Y')}}
+                        </th>
+                    </tr>
+                    <tr>
+                        <th scope="col" style="width: 7%" class="header">PRODUCTO</th>
+                        <th scope="col" style="width: 7%" class="header">TOTAL</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {#                {% set totalInv = 0 %}#}
+                    {% for inv in inventory %}
+                        {#                    {% set totalInv = totalInv + inv.total %}#}
+                        <tr>
+                            <th>{{ inv.productName }}</th>
+                            <th>{{ inv.total|number_format(2, '.', ',') }}</th>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+                {#<tfoot>
+                    <tr>
+                        <th>Totales</th>
+                        <th>{{ totalInv }}</th>
+                    </tr>
+                </tfoot>#}
+
+            </table>
+        </div>
+    {% endif %}
+
+    {% if showObservation %}
+        <div class="twelve-columns twelve-columns-mobile">
+            <table class="simple-table responsive-table responsive-table-on">
+                <thead>
+                    <tr>
+                        <th class="header text-center white-gradient" colspan="5">
+                            OBSERVACIONES<br>
+                            {{ "Desde "~dateFrom|date('d-m-Y')~" Hasta "~ dateEnd|date('d-m-Y')}}
+                        </th>
+                    </tr>
+                    <tr>
+                        <th scope="col" style="width: 15%" class="header">PRODUCTO</th>
+                        <th scope="col" style="width: 15%" class="header">DIA</th>
+                        <th scope="col" style="width: auto" class="header">OBSERVACIÓN</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for obs in observation %}
+                        <tr>
+                            <th>{{ obs.productName }}</th>
+                            <th>{{ obs.day|date('d-m-Y') }}</th>
+                            <th>{{ (obs.observation is null ? ("pequiven_seip.comment_none"|trans):obs.observation) |upper }}</th>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+
+            </table>
+        </div>
+
+    {% endif %}
+
+
+
+
+    <p class="button-height float-right">
+        <a id="btnExportToPdf" href="#" class="button">
+            <span class="button-icon"><span class="icon-download"></span></span>
+                {{ "pequiven_seip.buttons.export_pdf"|trans }}
+        </a>
+    </p>
+
+    {% if is_granted(['ROLE_SEIP_OPERATION_EXPORT_EXCEL_PRODUCTION']) %}
+        <p class="button-height float-right">
+            <a id="btnExportToExcel" href="#" class="button">
+                <span class="button-icon"><span class="icon-download"></span></span>
+                    {{ "pequiven_seip.buttons.export_xls"|trans }}
+            </a>
+        </p>
+    {% endif %}
+
+{% else %}
+    <h2 class="text-center">{{ "Select the plant"|trans }}</h2>
+{% endif %}

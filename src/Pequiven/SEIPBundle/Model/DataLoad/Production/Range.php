@@ -65,7 +65,7 @@ abstract class Range extends BaseModel implements RangeInterface
         $type = $this->getType();
         $valueUnit = "";
         if($type == self::TYPE_FIXED_VALUE){
-            $valueUnit = $this->getProductPlanning()->getProductReport()->getProductUnit();
+            $valueUnit = $this->getProductPlanning()->getProductReport()->getProduct()->getProductUnit();
         }else if($type == self::TYPE_CAPACITY_FACTOR){
             $valueUnit = "%";
         }

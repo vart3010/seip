@@ -1,0 +1,636 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}
+
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
+
+{% block before_body %}
+    {{ contentHeader(
+        ("pequiven_seip.report_template.load.notification"|trans ),
+        ("pequiven_seip.report_template.load.production"|trans )
+    ) }}
+{% endblock %}
+
+{% block body %}
+    <fieldset class="fieldset">
+        <legend class="legend">{{ 'pequiven_seip.report_template.report_template'|trans }}</legend>
+        <div class="columns">
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'pequiven.ref'|trans({},'messages') }}</label>
+                    {{ generateLink(report_template) }}
+                </p>
+            </div>
+            <div class="new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                <p class="inline-label">
+                    <label class="label">{{ 'pequiven_seip.period'|trans }}</label>
+                    {{ report_template.period }}
+                </p>
+            </div>
+            <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                <p class="inline-label">
+                    <label class="label">{{ 'pequiven_seip.name'|trans }}</label>
+                    {{ report_template.name }}
+                </p>
+            </div>
+            <div class="new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                <p class="inline-label">
+                    <label class="label">{{ 'Company'|trans }}</label>
+                    {{ report_template.company }}
+                </p>
+            </div>
+            <div class="new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                <p class="inline-label">
+                    <label class="label">{{ 'Location'|trans }}</label>
+                    {{ report_template.location }}
+                </p>
+            </div>
+            <div class="new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                <p class="inline-label">
+                    <label class="label">{{ 'Region'|trans }}</label>
+                    {{ report_template.region }}
+                </p>
+            </div>
+        </div>
+    </fieldset>
+    {% set hasPermission = is_granted("ROLE_SEIP_DATA_LOAD_CHANGE_DATE") %}
+    <form id="template-load" action="{{ path('pequiven_report_template_load',{id: report_template.id}) }}" method="POST">
+        <input type="hidden" name="plant_report" value="{{ app.request.get("plant_report") }}">
+        {{ form_errors(form) }}
+        
+        <div class="with-padding">
+             <p class="inline-label"><label class="label">{{ "pequiven_seip.date_of_notification"|trans }}</label>
+                 {% if hasPermission %}
+                     <a href="{{ path("pequiven_report_template_load",{id:report_template.id, dateNotification: (dateNotification|date_modify("-1 day")|date('d/m/Y')),plant_report: app.request.get("plant_report") } ) }}" ><i class="fa fa-chevron-left fa-2x"></i></a>&nbsp;
+                 {% endif %}
+                 <input type="text" id="dateNotification" name="dateNotification" class="input" value="{{ dateNotification|date('d/m/Y') }}" />&nbsp;
+                 {% if hasPermission %}
+                     <a href="{{ path("pequiven_report_template_load",{id:report_template.id, dateNotification: (dateNotification|date_modify("+1 day")|date('d/m/Y')),plant_report: app.request.get("plant_report") }) }}" class="navigate-date"><i class="fa fa-chevron-right fa-2x"></i></a>
+                 {% endif %}
+             </p>
+         </div>
+         {% set day = dateNotification|date('d')|round %}
+         {% set grossPlan = 'day' ~ day ~ 'GrossPlan' %}
+         {% set grossReal = 'day' ~ day ~ 'GrossReal' %}
+
+         {% set netPlan = 'day' ~ day ~ 'NetPlan' %}
+         {% set netReal = 'day' ~ day ~ 'NetReal' %}
+
+         {% set observation = 'day' ~ day ~ 'Observation' %}
+         {% set dayN = 'day' ~ day %}
+         {% set dayNPlan = 'day' ~ day ~ 'Plan' %}
+         {% set dayNReal = 'day' ~ day ~ 'Real' %}
+
+         {% set dayNDetails = 'day' ~ day ~ 'Details' %}
+         
+         {% for plantReport in form.plantReports %}
+
+             <details class="details margin-bottom" open>
+                 <summary><strong class="font-20">{{ "Plant"|trans }}&nbsp;-&nbsp;{{ plantReport.vars.data }}</strong></summary>
+                 <dl class="accordion same-height">
+                     {% for productReport in plantReport.productsReport %}
+                         <dt><i class="fa fa-cog"></i>&nbsp;<strong>{{ "Product"|trans }}&nbsp;-&nbsp;{{ productReport.vars.data }}&nbsp;({{ productReport.vars.data.product.productionLine }})</strong></dt>
+                         <dd>
+                             <div class="with-padding">
+                                 <div class="columns">
+                                     <div class="twelve-columns twelve-columns-mobile">
+                                         <h3 class="thin underline text-center">Producción e Inventario</h3>
+                                     </div>
+                                 </div>
+                                 <div class="columns">
+                                     <div class="five-columns twelve-columns-mobile">
+                                         <table class="simple-table responsive-table responsive-table-on" id="sorting-example2">
+                                             <thead>
+                                                 <tr>
+                                                     <th class="header text-center white-gradient" colspan="4">{{ "pequiven_seip.report_template.load.production"|trans }}&nbsp;{{ "pequiven_seip.gross"|trans }}</th>
+                                                 </tr>
+                                                 <tr>
+                                                     <th scope="col" style="width: 7%" class="header">Plan</th>
+                                                     <th scope="col" style="width: 7%" class=" header">Real</th>
+                                                     <th scope="col" style="width: 7%" class=" header">%</th>
+                                                     <th scope="col" width="15%" class=" header">PNR</th>
+                                                 </tr>
+                                             </thead>
+                                             <tbody>
+                                                 {% for productDetailDailyMonth in productReport.productDetailDailyMonths %}
+                                                     {% set productDetailDailyMonthIdTR = "gross-product-detail-daily-month-" ~ productDetailDailyMonth.vars.data.id %}
+                                                     <tr id="{{ productDetailDailyMonthIdTR }}">
+                                                         <th scope="row">
+                                                             {{ attribute(productDetailDailyMonth.vars.data,grossPlan) }}
+                                                         </th>
+                                                         <td>
+                                                             {{ form_widget(attribute(productDetailDailyMonth,grossReal)) }}
+                                                             {{ form_errors(attribute(productDetailDailyMonth,grossReal)) }}
+                                                         </td>
+                                                         <td>{{ attribute(productDetailDailyMonth.vars.data,'getTotalPercentajeOf',[day,'Gross'])|myNumberFormat }}</td>
+                                                         <td>
+                                                             {% for unrealizedProduction in productReport.unrealizedProductions %}
+                                                                 {{ form_widget(attribute(unrealizedProduction,dayN)) }}
+                                                                 {% set idPnrForm = 'dialog-form-pnr-' ~ unrealizedProduction.vars.data.id %}
+                                                                 {% set idPnrButtom = 'dialog-button-pnr-' ~ unrealizedProduction.vars.data.id %}
+                                                                 {% set idPnrDiv = 'dialog-button-div-' ~ unrealizedProduction.vars.data.id %}
+                                                                 {% set idDialogBox = 'dialogBox' ~ unrealizedProduction.vars.data.id %}
+                                                                 {% set conentDialogBox = 'contentDialogBox' ~ unrealizedProduction.vars.data.id %}
+                                                                 {% set builDialogBox = 'buildDialogBox' ~ unrealizedProduction.vars.data.id %}
+                                                                 
+                                                                 {% set pnrDay = attribute(unrealizedProduction.vars.data,dayN) %}
+                                                                 
+                                                                 &nbsp;<a href="#" id="{{ idPnrButtom }}" class="btn-open-pnr {% if pnrDay <= 0 %}hidden{% endif %}"><i class="fa fa-cog fa-2x"></i></a>
+                                                                 {{ form_errors(attribute(unrealizedProduction,dayN)) }}
+                                                                 <div class="hidden">
+                                                                     <div id="{{ idPnrForm }}" title="{{ 'pequiven_seip.cause_of_PNR'|trans }}">
+                                                                        <p>{{ "pequiven_seip.total_pnr"|trans }}:&nbsp;
+                                                                            <b><span>0</span>/<span id="span-{{ productDetailDailyMonthIdTR }}">0</span></b>
+                                                                        </p>
+
+                                                                       {% set dayDetails = attribute(unrealizedProduction,dayNDetails) %}
+                                                                       <ul class="internalCauses unstyled-list" data-prototype="{% filter escape %}{% include 'PequivenSEIPBundle:DataLoad/ReportTemplate/load:cause_fail.html.twig' with {form: dayDetails.internalCauses.vars.prototype, type: constant('Pequiven\\SEIPBundle\\Model\\CEI\\Fail::TYPE_FAIL_INTERNAL')} %}{% endfilter %}" >
+                                                                           {% for internalCause in dayDetails.internalCauses %}
+                                                                               <li>{% include 'PequivenSEIPBundle:DataLoad/ReportTemplate/load:cause_fail.html.twig' with {form: internalCause, type: constant('Pequiven\\SEIPBundle\\Model\\CEI\\Fail::TYPE_FAIL_INTERNAL')} %}</li>
+                                                                           {% endfor %}
+                                                                       </ul>
+                                                                       <br/>
+                                                                       <ul class="externalCauses unstyled-list" data-prototype="{% filter escape %}{% include 'PequivenSEIPBundle:DataLoad/ReportTemplate/load:cause_fail.html.twig' with {form: dayDetails.externalCauses.vars.prototype, type: constant('Pequiven\\SEIPBundle\\Model\\CEI\\Fail::TYPE_FAIL_EXTERNAL') } %}{% endfilter %}">
+                                                                           {% for externalCause in dayDetails.externalCauses %}
+                                                                               <li>{% include 'PequivenSEIPBundle:DataLoad/ReportTemplate/load:cause_fail.html.twig' with {form: externalCause, type: constant('Pequiven\\SEIPBundle\\Model\\CEI\\Fail::TYPE_FAIL_EXTERNAL')} %}</li>
+                                                                           {% endfor %}
+                                                                       </ul>
+                                                                       <br/>
+                                                                       <ul class="internalCausesMp unstyled-list" data-prototype="{% filter escape %}{% include 'PequivenSEIPBundle:DataLoad/ReportTemplate/load:raw_material_required.html.twig' with {form: dayDetails.internalCausesMp.vars.prototype} %}{% endfilter %}" >
+                                                                           {% for internalCauseMp in dayDetails.internalCausesMp %}
+                                                                               <li>{% include 'PequivenSEIPBundle:DataLoad/ReportTemplate/load:raw_material_required.html.twig' with {form: internalCauseMp} %}</li>
+                                                                           {% endfor %}
+                                                                       </ul>
+                                                                       <br/>
+                                                                       <ul class="externalCausesMp unstyled-list" data-prototype="{% filter escape %}{% include 'PequivenSEIPBundle:DataLoad/ReportTemplate/load:raw_material_required.html.twig' with {form: dayDetails.externalCausesMp.vars.prototype} %}{% endfilter %}">
+                                                                           {% for externalCauseMp in dayDetails.externalCausesMp %}
+                                                                               <li>{% include 'PequivenSEIPBundle:DataLoad/ReportTemplate/load:raw_material_required.html.twig' with {form: externalCauseMp} %}</li>
+                                                                           {% endfor %}
+                                                                       </ul>
+                                                                     </div>
+                                                                 </div>
+                                                                 
+                                                                 <script type="text/javascript">
+                                                                     $(function(){
+                                                                           var {{ conentDialogBox }} = null;
+                                                                           
+                                                                           var {{ builDialogBox }} = function(){
+                                                                               var {{ idDialogBox }} = $( "#{{ idPnrForm }}" ).dialog({
+                                                                                    autoOpen: false,
+                                                                                    height: 600,
+                                                                                    width: 650,
+                                                                                    modal: true,
+                                                                                    buttons: {
+                                                                                      "{{ "pequiven_seip.save"|trans }}": function(){
+                                                                                          {{ idDialogBox }}.dialog( "close" );
+                                                                                          {{ conentDialogBox }} = {{ idDialogBox }};
+                                                                                          $("#{{ idPnrDiv }}").html({{ idDialogBox }});
+                                                                                          {{ idDialogBox }}.dialog( "destroy") ;
+                                                                                      },
+                                                                                      "{{ "pequiven_seip.cancel"|trans }}": function() {
+                                                                                        {{ idDialogBox }}.dialog( "close" );
+                                                                                      }
+                                                                                    },
+                                                                                    close: function() {
+                                                                                      //form[ 0 ].reset();
+                                                                                      //allFields.removeClass( "ui-state-error" );
+                                                                                    }
+                                                                                  });
+                                                                                  return {{ idDialogBox }};
+                                                                           };
+                                                                           
+                                                                          
+                                                                                  
+                                                                           $( "#{{ idPnrButtom }}" ).on( "click", function() {
+                                                                              var tr = $("#{{ productDetailDailyMonthIdTR }}").children();
+                                                                              var pnr = $(tr[3]).find('input').val();
+                                                                              $("#span-{{ productDetailDailyMonthIdTR }}").html(pnr);
+                                                                              
+                                                                              {{ builDialogBox }}().dialog( "open" );
+                                                                           });
+                                                                     });
+                                                                 </script>
+                                                                 <div id="{{ idPnrDiv }}" class="hidden"></div>
+                                                             {% endfor %}
+                                                         </td>
+                                                     </tr>
+                                                 {% else %}
+                                                     <tr>
+                                                        <td colspan="4" class="empty_row">
+                                                            {{ "empty.not_budgeted_gross_production"|trans }}
+                                                        </td>
+                                                    </tr>
+                                                 {% endfor %}
+                                             </tbody>
+                                         </table>
+                                     </div>
+                                     <div class="four-columns twelve-columns-mobile">
+                                         <table class="simple-table responsive-table responsive-table-on" id="sorting-example2">
+                                             <thead>
+                                                 <tr>
+                                                     <th class="header text-center silver-gradient" colspan="3">{{ "pequiven_seip.report_template.load.production"|trans }}&nbsp;{{ "pequiven_seip.net"|trans }}</th>
+                                                 </tr>
+                                                 <tr>
+                                                     <th scope="col" style="width: 7%">Plan</th>
+                                                     <th scope="col" style="width: 7%" class=" header">Real</th>
+                                                     <th scope="col" style="width: 7%" class=" header">%</th>
+                                                 </tr>
+                                             </thead>
+                                             <tbody>
+                                                 {% for productDetailDailyMonth in productReport.productDetailDailyMonths %}
+                                                     <tr>
+                                                         <th scope="row">
+                                                             {{ attribute(productDetailDailyMonth.vars.data,netPlan) }}
+                                                         </th>
+                                                         <td>
+                                                             {{ form_widget(attribute(productDetailDailyMonth,netReal)) }}
+                                                             {{ form_errors(attribute(productDetailDailyMonth,netReal)) }}
+                                                         </td>
+                                                         <td>{{ attribute(productDetailDailyMonth.vars.data,'getTotalPercentajeOf',[day,'Net'])|myNumberFormat }}</td>
+                                                     </tr>
+                                                 {% else %}
+                                                     <tr>
+                                                        <td colspan="3" class="empty_row">
+                                                            {{ "empty.not_budgeted_net_production"|trans }}
+                                                        </td>
+                                                    </tr>
+                                                 {% endfor %}
+                                             </tbody>
+                                         </table>
+                                     </div>
+                                     <div class="three-columns twelve-columns-mobile">
+                                         <table class="simple-table responsive-table responsive-table-on" id="sorting-example2">
+                                             <thead>
+                                                 <tr>
+                                                     <th class="header text-center grey-gradient" >{{ "pequiven_seip.inventory"|trans }}</th>
+                                                 </tr>
+                                                 <tr>
+                                                     <th scope="col" style="width: 7%" class=" header">Real</th>
+                                                 </tr>
+                                             </thead>
+                                             <tbody>
+                                                 {% if productReport.productDetailDailyMonths|length > 0 %}
+                                                     {% for inventory in productReport.inventorys %}
+                                                         <tr>
+                                                             <th scope="row">
+                                                                 {{ form_widget(attribute(inventory,dayN)) }}
+                                                                 {{ form_errors(attribute(inventory,dayN)) }}
+                                                             </th>
+                                                         </tr>
+                                                     {% else %}
+                                                         <tr>
+                                                            <td class="empty_row">
+                                                                {{ "empty.no_handles_inventory"|trans }}
+                                                            </td>
+                                                        </tr>
+                                                     {% endfor %}
+                                                 {% else %}
+                                                     <tr>
+                                                        <td class="empty_row">
+                                                            {{ "empty.no_details_of_production"|trans }}
+                                                        </td>
+                                                    </tr>
+                                                 {% endif %}
+                                             </tbody>
+                                         </table>
+                                     </div>
+                                 </div>
+                                 <div class="columns">
+                                     <div class="twelve-columns twelve-columns-mobile">
+                                         <h3 class="thin underline text-center">Consumo y Observaciones</h3>
+                                     </div>
+                                 </div>
+                                 <div class="columns">
+                                     <div class="six-columns twelve-columns-mobile">
+                                         <table class="simple-table responsive-table responsive-table-on" id="sorting-example2">
+                                             <thead>
+                                                 <tr>
+                                                     <th class="header text-center silver-gradient" colspan="4">{{ "pequiven_seip.report_template.raw_material"|trans }}</th>
+                                                 </tr>
+                                                 <tr>
+                                                     <th scope="col" style="width: 15%">{{ "Product"|trans }}</th>
+                                                     <th scope="col" style="width: 7%">Plan</th>
+                                                     <th scope="col" style="width: 7%" class=" header">Real</th>
+                                                     <th scope="col" style="width: 7%" class=" header">%</th>
+                                                 </tr>
+                                             </thead>
+                                             <tbody>
+                                                 {% set renderedError = false %}
+                                                 {% for rawMaterialConsumptionPlanning in productReport.rawMaterialConsumptionPlannings %}
+                                                     {% for detailRawMaterialConsumption in rawMaterialConsumptionPlanning.detailRawMaterialConsumptions %}
+                                                         <tr>
+                                                             <th scope="row">
+                                                                 {{ rawMaterialConsumptionPlanning.vars.data }}&nbsp;({{ rawMaterialConsumptionPlanning.vars.data.getTypeLabel|trans }})
+                                                             </th>
+                                                             <td>{{ attribute(detailRawMaterialConsumption.vars.data,dayNPlan) }}</td>
+                                                             <td>
+                                                                 {{ form_widget(attribute(detailRawMaterialConsumption,dayNReal)) }}
+                                                                 {{ form_errors(attribute(detailRawMaterialConsumption,dayNReal)) }}
+                                                             </td>
+                                                             <td>{{ attribute(detailRawMaterialConsumption.vars.data,'getTotalPercentajeOf',[day])|myNumberFormat }}</td>
+                                                         </tr>
+                                                         {% else %}
+                                                             {% if renderedError == false %}
+                                                                 {% set renderedError = true %}
+                                                                 <tr>
+                                                                    <td colspan="4" class="empty_row">
+                                                                        {{ "empty.no_details_of_production"|trans }}
+                                                                    </td>
+                                                                </tr>
+                                                            {% endif %}
+                                                     {% endfor %}
+                                                 {% else %}
+                                                     <tr>
+                                                         <td colspan="4" class="empty_row">
+                                                             {{ "empty.no_details_of_raw_material"|trans }}
+                                                         </td>
+                                                     </tr>
+                                                 {% endfor %}
+                                             </tbody>
+                                         </table>
+                                     </div>
+                                     <div class="six-columns twelve-columns-mobile">
+                                         {% for productDetailDailyMonth in productReport.productDetailDailyMonths %}
+                                             {{ form_widget(attribute(productDetailDailyMonth,observation)) }}
+                                             {{ form_errors(attribute(productDetailDailyMonth,observation)) }}
+                                         {% endfor %}
+                                     </div>
+                                 </div>
+                             </div>
+                         </dd>
+                     {% endfor  %}
+                 </dl>
+             </details>
+
+         {% endfor %}
+
+         {% include 'PequivenSEIPBundle:DataLoad:ReportTemplate/load/services.html.twig' %}
+         <br /><br />
+         <div class="field-block button-height">
+             <a id="btn-save" class="button glossy mid-margin-right save">
+                 <span class="button-icon green-gradient"><span class="icon-tick"></span></span>{{ 'pequiven_seip.save'|trans }}</a>
+             &nbsp;
+             <a id="btn-save-slope" class="button glossy mid-margin-right save">
+                <span class="button-icon"><span class="icon-tick"></span></span>
+                {{ "pequiven_seip.buttons.save_slope"|trans }}
+            </a>
+            <a href="{{ path("pequiven_plant_report_index") }}" class="button glossy cancel">
+                <span class="button-icon red-gradient"><span class="icon-cross-round"></span></span>
+                {{ 'pequiven_seip.cancel'|trans }}
+            </a>
+         </div>
+        <div class="hidden">
+             {{ form_rest(form) }}
+        </div>
+    </form>
+             
+             
+{% endblock %}
+
+{% block javascript %}
+    <script type="text/javascript">
+        $(document).ready(function(){
+            var form = $("#template-load");
+            $("#btn-save").on("click",function(){
+                $('.detail-status').val({{ constant('Pequiven\\SEIPBundle\\Model\\DataLoad\\Production\\ProductDetailDailyMonth::STATUS_SAVE') }});
+                form.submit();
+            });
+            $("#btn-save-slope").on("click",function(){
+                $('.detail-status').val({{ constant('Pequiven\\SEIPBundle\\Model\\DataLoad\\Production\\ProductDetailDailyMonth::STATUS_SAVE_PENDING') }});
+                form.submit();
+            });
+            {% if (is_granted("ROLE_SEIP_DATA_LOAD_CHANGE_DATE") and is_granted("ROLE_SEIP_OPERATION_LOAD_FIVE_DAYS") and is_granted("ROLE_SEIP_OPERATION_LOAD_MONTH")) or (is_granted("ROLE_SEIP_DATA_LOAD_CHANGE_DATE")) %}
+                $('#dateNotification').datepicker({
+                     changeMonth: true,
+                     dateFormat: "dd/mm/yy"
+                }).on("change",function(){
+                    var changeToDate = $(this).val();
+                    var url = Routing.generate("pequiven_report_template_load",{id: "{{ report_template.id }}" ,dateNotification:changeToDate,plant_report: "{{ app.request.get("plant_report") }}" });
+                    window.location.href = url;
+                });
+            {% elseif (is_granted("ROLE_SEIP_OPERATION_LOAD_FIVE_DAYS")) %}
+                //var startDate = '03/10/2015';
+                var startDate = '{{ startDate }}';
+                //var endDate = '08/10/2015';
+                var endDate = '{{ endDate }}';
+                //console.log(endDate);
+                
+                $('#dateNotification').datepicker({
+                     changeMonth: true,
+                     dateFormat: "dd/mm/yy"
+                }).on("change",function(){
+                    var changeToDate = $(this).val();
+                    var url = Routing.generate("pequiven_report_template_load",{id: "{{ report_template.id }}" ,dateNotification:changeToDate,plant_report: "{{ app.request.get("plant_report") }}" });
+                    window.location.href = url;
+                });
+                jQuery("#dateNotification").datepicker( "option", "minDate", startDate );
+                jQuery("#dateNotification").datepicker( "option", "maxDate", endDate );
+
+            {% elseif (is_granted("ROLE_SEIP_OPERATION_LOAD_MONTH")) %}
+                //var startDate = '03/10/2015';
+                var startDate = '{{ startDayMonth }}';
+                var endDate = '{{ endDayMonth }}';
+                console.log(startDate);
+                console.log(endDate);
+                
+                
+                $('#dateNotification').datepicker({
+                     changeMonth: true,
+                     dateFormat: "dd/mm/yy"
+                }).on("change",function(){
+                    var changeToDate = $(this).val();
+                    var url = Routing.generate("pequiven_report_template_load",{id: "{{ report_template.id }}" ,dateNotification:changeToDate,plant_report: "{{ app.request.get("plant_report") }}" });
+                    window.location.href = url;
+                });
+                jQuery("#dateNotification").datepicker( "option", "minDate", startDate );
+                jQuery("#dateNotification").datepicker( "option", "maxDate", endDate );
+            {% endif %}
+                
+           
+            
+            
+            var calculateTotalPnrAcumulate = function(data,useData){
+                    var $this = $(this);
+                    
+                    if(useData == true){
+                        $this = data;
+                    }
+                    var parent = $this.closest('ul').closest('div');
+                    var total = 0;
+                    var totalChild = 0;
+                    $.each(parent.find('ul.internalCauses').children(),function(index,object){
+                        totalChild = $(object).find('input.cause-fail').val();
+                        if(totalChild != undefined){
+                           total = total +  parseFloat(totalChild);
+                        }
+                    });
+                    $.each(parent.find('ul.externalCauses').children(),function(index,object){
+                        totalChild = $(object).find('input.cause-fail').val();
+                        if(totalChild != undefined){
+                           total = total +  parseFloat(totalChild);
+                        }
+                    });
+                    var spanTotal = parent.find('p > b').children();
+                    $(spanTotal[0]).html(myNumberFormat(parseFloat(total)));
+                };
+            
+            //internalCauses
+            var buildCollection = function ($collectionHolder,newLinkLi,$addXLink){
+                 // add a delete link to all of the existing tag form li elements
+                $collectionHolder.find('li').each(function() {
+                    addTagFormDeleteLink($(this));
+                });
+
+                // add the "add a tag" anchor and li to the tags ul
+                $collectionHolder.append(newLinkLi);
+                
+
+                // count the current form inputs we have (e.g. 2), use that as the new
+                // index when inserting a new item (e.g. 2)
+                $collectionHolder.data('index', $collectionHolder.find(':input').length);
+                
+                $addXLink.on('click', function(e) {
+                    // prevent the link from creating a "#" on the URL
+                    e.preventDefault();
+
+                    // add a new tag form (see next code block)
+                    addTagForm($collectionHolder, newLinkLi);
+                });
+                
+            };
+            
+            function addTagForm($collectionHolder, newLinkLi) {
+                // Get the data-prototype explained earlier
+                var prototype = $collectionHolder.data('prototype');
+
+                // get the new index
+                var index = $collectionHolder.data('index');
+
+                // Replace '__name__' in the prototype's HTML to
+                // instead be a number based on how many items we have
+                var newForm = prototype.replace(/__name__/g, index);
+
+                // increase the index with one for the next item
+                $collectionHolder.data('index', index + 1);
+
+                // Display the form in the page in an li, before the "Add a tag" link li
+                var $newFormLi = $('<li></li>').append(newForm);
+                $newFormLi.find('select').select2();
+                $newFormLi.find('.cause-fail').on("keyup",calculateTotalPnrAcumulate);
+                
+                // add a delete link to the new form
+                addTagFormDeleteLink($newFormLi);
+                
+                newLinkLi.before($newFormLi);
+                
+            }
+            
+            function addTagFormDeleteLink($tagFormLi) {
+                var $removeFormA = $('<a href="#" class="float-right icon-trash icon-size2">{{ "pequiven_seip.buttons.delete_cause"|trans }}</a>');
+                $tagFormLi.append($removeFormA);
+                $removeFormA.on('click', function(e) {
+                    // prevent the link from creating a "#" on the URL
+                    e.preventDefault();
+
+                    var parent = $tagFormLi.parent();
+                    // remove the li for the tag form
+                    $tagFormLi.remove();
+                    
+                    calculateTotalPnrAcumulate(parent,true);
+                });
+            }
+            
+            $.each($('ul.internalCauses'),function(key,value){
+                var $collectionHolder = $(value);
+                var $addInternalCauseLink = $('<a href="#" class="add_internal_cause_link icon-list-add icon-size2 tracked">{{ 'pequiven_seip.buttons.add_internal_cause'|trans }}</a>');
+                var $newLinkLi = $('<li></li>').append($addInternalCauseLink);
+                buildCollection($collectionHolder,$newLinkLi,$addInternalCauseLink);
+            });
+            $.each($('ul.externalCauses'),function(key,value){
+                var $collectionHolder = $(value);
+                var $addInternalCauseLink = $('<a href="#" class="add_external_cause_link icon-list-add icon-size2 tracked">{{ 'pequiven_seip.buttons.add_external_cause'|trans }}</a>');
+                var $newLinkLi = $('<li></li>').append($addInternalCauseLink);
+                buildCollection($collectionHolder,$newLinkLi,$addInternalCauseLink);
+            });
+            $.each($('ul.internalCausesMp'),function(key,value){
+                var $collectionHolder = $(value);
+                var $addInternalCauseLink = $('<a href="#" class="add_internal_causes_mp_link icon-list-add icon-size2 tracked">{{ 'pequiven_seip.buttons.add_internal_cause_mp'|trans }}</a>');
+                var $newLinkLi = $('<li></li>').append($addInternalCauseLink);
+                buildCollection($collectionHolder,$newLinkLi,$addInternalCauseLink);
+            });
+            $.each($('ul.externalCausesMp'),function(key,value){
+                var $collectionHolder = $(value);
+                var $addInternalCauseLink = $('<a href="#" class="add_internal_causes_mp_link icon-list-add icon-size2 tracked">{{ 'pequiven_seip.buttons.add_external_cause_mp'|trans }}</a>');
+                var $newLinkLi = $('<li></li>').append($addInternalCauseLink);
+                buildCollection($collectionHolder,$newLinkLi,$addInternalCauseLink);
+            });
+            $('.select-cause-fail').select2();
+            
+            //Calculos
+            //Calculo produccion bruta
+            $('.grossReal').on('keyup',function(){
+                var $this = $(this);
+                var tr = $this.closest("tr").children();
+                var real = parseFloat($this.val());
+                var plan = parseFloat($(tr[0]).html());
+                var percentaje = 0;
+                percentaje = (real * 100 / plan);
+                var pnr = plan - real;
+                if(pnr > 0){
+                    $(tr[3]).find('.btn-open-pnr').removeClass("hidden");
+                } else{
+                    $(tr[3]).find('.btn-open-pnr').addClass("hidden");
+                }
+                if(isNaN(pnr)){
+                    pnr = 0;
+                }
+                if(pnr < 0){
+                    pnr = 0;
+                }
+                $(tr[2]).html(myNumberFormat(percentaje));
+                $(tr[3]).find('input').val(pnr);
+            });
+            $('.pnrClass').on('keyup',function(){
+                var $this = $(this);
+                var tr = $this.closest("tr").children();
+                var pnr = parseFloat($this.val());
+                if(pnr > 0){
+                    $(tr[3]).find('.btn-open-pnr').removeClass("hidden");
+                }else{
+                    $(tr[3]).find('.btn-open-pnr').addClass("hidden");
+                }
+            });
+            //Calculo produccion neta
+            $('.netReal').on('keyup',function(){
+                var $this = $(this);
+                var tr = $this.closest("tr").children();
+                var real = parseFloat($this.val());
+                var plan = parseFloat($(tr[0]).html());
+                var percentaje = 0;
+                percentaje = (real * 100 / plan);
+                $(tr[2]).html(myNumberFormat(percentaje));
+            });
+            //Calculo consumo de materia prima
+            $('.rawMaterialConsumption').on('keyup',function(){
+                var $this = $(this);
+                var tr = $this.closest("tr").children();
+                var real = parseFloat($this.val());
+                var plan = parseFloat($(tr[1]).html());
+                var percentaje = 0;
+                percentaje = (real * 100 / plan);
+                $(tr[3]).html(myNumberFormat(percentaje));
+            });
+            //Calculo de consumo de servicios
+            $('.consumerPlanningService').on('keyup',function(){
+                var $this = $(this);
+                var tr = $this.closest("tr").children();
+                var real = parseFloat($this.val());
+                var plan = parseFloat($(tr[1]).find('span').html());
+                var percentaje = 0;
+                percentaje = (real * 100 / plan);
+                $(tr[3]).html(myNumberFormat(percentaje));
+            });
+        });
+    </script>
+{% endblock %}

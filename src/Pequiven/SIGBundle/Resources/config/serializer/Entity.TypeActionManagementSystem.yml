@@ -1,0 +1,26 @@
+Pequiven\SIGBundle\Entity\TypeActionManagementSystem:
+    exclusion_policy: ALL
+    properties:
+        id:
+            expose: true
+            groups: [id]
+        createdAt:
+            expose: true
+            groups: [api_list]
+        updatedAt:
+            expose: true
+            groups: [api_details]
+        description:
+            expose: true
+            groups: [api_list]
+        ref:
+            expose: true
+            groups: [api_list]
+        indicatorAction:
+            expose: true
+            groups: [indicatorAction]
+        typeAction:
+            expose: true
+            groups: [typeAction]
+            
+       

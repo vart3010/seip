@@ -1,0 +1,288 @@
+{% trans_default_domain 'workStudyCircle' %}
+{% if (workStudyCircle.getphase < 4) %}
+    {% if (workStudyCircle.getphase > 1) %}
+        {% set userCreatedId = workStudyCircle.getCoordinator.id %}
+    {% else %}
+        {% set userCreatedId = workStudyCircle.getCreatedBy.id %}
+    {% endif %}
+{% endif %}
+
+<style>
+    .body {
+        font-size: 8px;
+    }
+    .title_bold {
+        font-weight: bold;
+    }
+    table tr {
+        padding: 15px;
+    }
+    .alin_font {
+        text-align: justify;
+    }
+</style>
+{% block body %}
+    <table width="100%">
+        <tr>
+            <th class="title_bold">1. Datos del Círculo de Estudio y Trabajo</th>
+        </tr>
+    </table>
+
+    <br/><br/>
+
+    <table width="95%" class="simple-table responsive-table tables-extras"> 
+        <tr>
+            <td class="title_bold" bgcolor="#F2F2F2" width="35%">{{ "workStudyCircle.form.code"|trans }}:</td>
+            <td width="65%"> {{ workStudyCircle.codigo }}</td>                        
+        </tr>
+        <tr>
+            <td class="title_bold" bgcolor="#F2F2F2" width="35%">Fase o Etapa:</td>
+            <td width="65%"> {{ workStudyCircle.phase }}</td>
+        </tr>
+        <tr>
+            <td class="title_bold" bgcolor="#F2F2F2" width="35%">{{ "workStudyCircle.form.nombre"|trans }}:</td>
+            <td width="65%"> {{ workStudyCircle.name }}</td>
+        </tr>
+        <tr>
+            <td class="title_bold" bgcolor="#F2F2F2" width="35%">{{ "workStudyCircle.form.region"|trans }}:</td>
+            <td width="65%"> {{ workStudyCircle.region.name }}</td>
+        </tr>
+        <tr>
+            <td class="title_bold" bgcolor="#F2F2F2" width="35%">{{ "workStudyCircle.form.complejo"|trans }}:</td>
+            <td width="65%"> {{ workStudyCircle.complejo.description}}</td>
+        </tr>
+        {% if workStudyCircle.phase == 1 %}
+            <tr>
+                <td class="title_bold" bgcolor="#F2F2F2" width="35%">{{ "workStudyCircle.form.gerenciaFirst"|trans }}:</td>
+                <td width="65%"> {% for gerencia in  workStudyCircle.gerencias %} - {{ gerencia }}<br> {% endfor %}</td>
+            </tr>
+
+            <tr>
+                <td class="title_bold" bgcolor="#F2F2F2" width="35%">{{ "workStudyCircle.form.gerenciaSecond"|trans }}:</td>
+                <td width="65%"> {% for gerencia in  workStudyCircle.gerenciaSeconds %} - {{ gerencia }}<br> {% endfor %}</td>
+            </tr>
+
+            <tr>
+                <td class="title_bold" bgcolor="#F2F2F2" width="35%">{{ "workStudyCircle.form.superintendencia"|trans }}:</td>
+                <td width="65%"> {{ workStudyCircle.superintendencia}}</td>
+            </tr>
+
+            <tr>
+                <td class="title_bold" bgcolor="#F2F2F2" width="35%">{{ "workStudyCircle.form.supervision"|trans }}:</td>
+                <td width="65%"> {{ workStudyCircle.supervision}}</td>
+            </tr>
+
+            <tr>
+                <td class="title_bold" bgcolor="#F2F2F2" width="35%">{{ "workStudyCircle.form.departamento"|trans }}:</td>
+                <td width="65%"> {{ workStudyCircle.departamento}}</td>
+            </tr>
+        {% endif %}
+
+    </table>
+
+    <br/><br/><br/>
+
+    <table width="100%">
+        <tr>
+            <th class="title_bold">2. Datos del Coordinador o Líder </th>
+        </tr>
+    </table>
+
+    <br/><br/>
+
+    {% if workStudyCircle.getphase < 4 %}
+
+        <table width="95%" class="simple-table responsive-table tables-extras" > 
+            <tr>
+                <td class="title_bold" bgcolor="#F2F2F2" width="35%">{{ "workStudyCircle.form.coordinador.nombre"|trans }}:</td>
+                <td width="65%"> {{ workStudyCircle.getCoordinator.getFullNameUser |upper}}</td>                        
+            </tr>
+            <tr>
+                <td class="title_bold" bgcolor="#F2F2F2" width="35%">{{ "workStudyCircle.form.coordinador.telefono"|trans }}:</td>
+                <td width="65%"> {{ workStudyCircle.getCoordinator.cellphone }}</td>
+            </tr>
+            <tr>
+                <td class="title_bold" bgcolor="#F2F2F2" width="35%">{{ "workStudyCircle.form.coordinador.ext"|trans }}:</td>
+                <td width="65%"> {{ workStudyCircle.getCoordinator.ext }}</td>
+            </tr>
+        </table>
+
+        <br/><br/><br/>
+
+        <table width="100%">
+            <tr>
+                <th class="title_bold">2.1 Datos del Coordinador o Líder de Debate </th>
+            </tr>
+        </table>
+
+        <br/><br/>
+        <table width="95%" class="simple-table responsive-table tables-extras" > 
+            <tr>
+                <td class="title_bold" bgcolor="#F2F2F2" width="35%">{{ "workStudyCircle.form.coordinador.nombre"|trans }}:</td>
+                <td width="65%"> {{ workStudyCircle.coordinatorDiscussion.getFullNameUser |upper}}</td>                        
+            </tr>
+            <tr>
+                <td class="title_bold" bgcolor="#F2F2F2" width="35%">{{ "workStudyCircle.form.coordinador.telefono"|trans }}:</td>
+                <td width="65%"> {{ workStudyCircle.coordinatorDiscussion.cellphone }}</td>
+            </tr>
+            <tr>
+                <td class="title_bold" bgcolor="#F2F2F2" width="35%">{{ "workStudyCircle.form.coordinador.ext"|trans }}:</td>
+                <td width="65%"> {{ workStudyCircle.coordinatorDiscussion.ext }}</td>
+            </tr> 
+        </table>
+        <br/><br/><br/>
+
+    {% else %}
+        <table width="95%" class="simple-table responsive-table tables-extras" > 
+            <tr>
+                <td class="title_bold" bgcolor="#F2F2F2" width="60%"> Nombre y Apellido </td>
+                <td class="title_bold" bgcolor="#F2F2F2" width="40%"> Cargo </td>                
+            </tr>
+            <tr>
+                <td>JUANCARLO DEPABLOS</td>
+                <td>PRESIDENTE</td>
+            </tr>
+            <tr>
+
+                <td>NATASHA CASTILLO</td>
+                <td>VICE - PRESIDENTE</td>
+            </tr>
+            <tr>
+
+                <td>FRANCISCO MEJÍAS</td>
+                <td>DIRECTOR</td>
+            </tr>
+            <tr>
+
+                <td>JORGE PERDOMO</td>
+                <td>DIRECTOR</td>
+            </tr>
+            <tr>
+
+                <td>EDUARDO CASAÑAS</td>
+                <td>DIRECTOR</td>
+            </tr>
+            <tr>
+
+                <td>JOSÉ LUIS PÉREZ</td>
+                <td>DIRECTOR</td>
+            </tr>
+        </table>
+
+        <br/><br/><br/>
+    {% endif %}
+
+    <table width="95%">
+        <tr>
+            <th class="title_bold">3. Miembros del Círculo de Estudio de Trabajo</th>
+        </tr>
+    </table>    
+
+    <br/><br/>
+
+    <table width="95%" class="simple-table responsive-table tables-extras">  
+        <thead>
+            <tr>
+                <th scope="col" width="5%" bgcolor="#F2F2F2" class="title_bold"> N° </th>
+                <th scope="col" width="20%" bgcolor="#F2F2F2" class="title_bold"> C.I. </th>
+                <th scope="col" width="45%" bgcolor="#F2F2F2" class="title_bold"> Nombre </th>
+                <th scope="col" width="20%" bgcolor="#F2F2F2" class="title_bold"> Teléfono </th>
+                <th scope="col" width="10%" bgcolor="#F2F2F2" class="title_bold"> Ext. </th>                    
+            </tr>
+        </thead>
+        <tbody>
+            {% if workStudyCircle.phase > 1 %}
+                {% set users = workStudyCircle.getMembers %}
+            {% else %}
+                {% set users = workStudyCircle.userWorkerId %}
+            {% endif %}
+            {% set count = 0 %}
+            {% for miembro in users %}
+                {% set count= count + 1%}
+                {% if workStudyCircle.phase == 4 %}
+                    <tr>
+                        <td width="5%"> {{ count }} </td>
+                        <td width="20%"> {{ miembro.getIndentification|number_format(0, ',', '.') }} </td>
+                        <td width="45%"> {{ miembro.firstname | upper}} {{ miembro.lastname | upper}}</td>
+                        <td width="20%"> {{ miembro.cellphone }} </td>
+                        <td width="10%"> {{ miembro.ext }} </td>
+                    </tr>
+                {%else%}
+                    {% if (userCreatedId != miembro.id) %}
+                        <tr>
+                            <td width="5%"> {{ count }} </td>
+                            <td width="20%"> {{ miembro.getIndentification|number_format(0, ',', '.') }} </td>
+                            <td width="45%"> {{ miembro.firstname | upper}} {{ miembro.lastname | upper}}</td>
+                            <td width="20%"> {{ miembro.cellphone }} </td>
+                            <td width="10%"> {{ miembro.ext }} </td>
+                        </tr>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <br/><br/><br/>
+
+    <table width="100%">
+        <tr>
+            <th class="title_bold">4. Propuestas Elaboradas</th>
+        </tr>
+    </table>
+
+    <br/><br/>
+    {% if ((lineas!=null)and(proposals!=null)) %}
+        {% for key,value in lineas %}        
+            <table width="100%"> 
+                <tr>
+                    <td bgcolor="#F2F2F2" width="100%"><b>Línea Estratégica: </b>{{ key }}</td>
+                </tr>
+            </table>
+            {% for prop in proposals %}
+                {% if prop.lineStrategic.description==key %}
+                    <table width="100%">
+                        <tr>
+                            <td width="100%" style="text-align: justify; font-size: 10px"><b>Propuesta {{loop.index}}: </b> {{prop.getDescription()|upper|raw|nl2br}}</td>                                
+                        </tr>
+                    </table>
+                    <br/><br/>       
+                {% endif %}
+            {% endfor%}
+            <br/>
+        {% endfor %} 
+    {% endif %}
+    <br/>
+
+    <table width="100%">
+        <tr>
+            <th class="title_bold">5. Reuniones Realizadas</th>
+        </tr>
+    </table>
+
+    <br/><br/>
+
+    <table width="100%" class="simple-table responsive-table tables-extras"> 
+        <thead>
+            <tr>
+                <th width="15%" bgcolor="#F2F2F2" class="title_bold"> Fecha </th>
+                <th width="30%" bgcolor="#F2F2F2" class="title_bold"> Lugar </th>
+                <th width="55%" bgcolor="#F2F2F2" class="title_bold"> Puntos Tratados </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if meetings!=null%}
+                {% for reunion in meetings %}
+                    <tr>
+                        <td width="15%">{{ reunion.date|date('d-m-Y') }}</td>                
+                        <td width="30%">{{ reunion.place | ucwords }}</td>                
+                        <td width="55%" class="alin_font">{{ reunion.subject | ucwords }}</td>                
+                    </tr>
+                {% endfor %}
+            {%endif%}
+        </tbody>
+    </table>
+
+
+
+{% endblock %}
+

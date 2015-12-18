@@ -120,8 +120,8 @@ class ValueIndicatorController extends \Pequiven\SEIPBundle\Controller\SEIPContr
             ->setTemplate($this->config->getTemplate('form.html'))
             ->setTemplateVar($this->config->getPluralResourceName())
             ->setData(array(
-                'indicator' => $indicator,
-                'form' => $form->createView(),
+                'indicator'      => $indicator,
+                'form'           => $form->createView(),
                 'valueIndicator' => $valueIndicator
             ))
         ;
@@ -151,6 +151,59 @@ class ValueIndicatorController extends \Pequiven\SEIPBundle\Controller\SEIPContr
             ->setData(array(
                 'result' => $value,
             ))
+        ;
+        return $view;
+    }
+    
+    /**
+     * 
+     * @param Request $request
+     * @return type
+     */
+    public function obtainValuesAction(Request $request){
+        $indicator = $this->findIndicatorOr404($request);
+        $indicatorService = $this->getIndicatorService();
+        $formula = $indicator->getFormula();
+        
+        $parameters = array();
+        $parameters['result'] = 0;
+        $parameters['showBoth'] = 1;
+        
+        if($indicator->getTypeDetailValue() == \Pequiven\IndicatorBundle\Entity\Indicator::TYPE_DETAIL_DAILY_LOAD_PRODUCTION){
+        
+            if($formula->getTypeOfCalculation() != \Pequiven\MasterBundle\Entity\Formula::TYPE_CALCULATION_SIMPLE_AVERAGE){
+                $varPlanName = $formula->getVariableToPlanValue()->getName();
+                $parameters['varPlanName'] = $varPlanName;
+                $varRealName = $formula->getVariableToRealValue()->getName();
+                $parameters['varRealName'] = $varRealName;
+            } else{
+                $varRealName = 'real';
+                $parameters['varRealName'] = $varRealName;
+            }
+
+            $valueIndicator = $this->resourceResolver->getResource(
+                $this->getRepository(),
+                'findOneBy',
+                array(array('id' => $request->get('id',0))));
+
+            if(!$valueIndicator){
+                $valueIndicator = new \Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator();
+            }
+
+            //Método para obtener el orden del valor del indicador
+            $options['typeOfResultSection'] = $indicator->getTypeOfResultSection();
+            $results = $indicatorService->getValuesFromReportTemplate($indicator, $valueIndicator, $options);
+
+            $parameters['real'] = $results[$varRealName];
+            if($formula->getTypeOfCalculation() != \Pequiven\MasterBundle\Entity\Formula::TYPE_CALCULATION_SIMPLE_AVERAGE){
+                $parameters['plan'] = $results[$varPlanName];
+            } else{
+                $parameters['showBoth'] = 0;
+            }
+        }
+        $view = $this
+            ->view()
+            ->setData($parameters)
         ;
         return $view;
     }
@@ -421,6 +474,38 @@ class ValueIndicatorController extends \Pequiven\SEIPBundle\Controller\SEIPContr
                 $form->add($name,$type,$parameters);
             }
         }
+        return $form->getForm();
+    }
+
+    /**
+     * Construye el formulario para la rerlacion con el indicador 2014
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicatorAction $action
+     * @return type
+     */
+    private function buildActionForm() 
+    {
+       
+        $form = $this->createFormBuilder(array(
+            'csrf_protection' => false,
+        ));
+
+                $description = "Accion: ";
+                $editable = true;
+                $name = "action";
+                $type = 'text';
+
+                $parameters = array(
+                    'label' => $description,
+                    'label_attr' => array(
+                        'class' => 'label'
+                    ),
+                    'attr' => array(
+                        'class' => 'input'
+                    ),
+                    'disabled' => !$editable,
+                );
+                $form->add($name,$type,$parameters);
+
         return $form->getForm();
     }
     

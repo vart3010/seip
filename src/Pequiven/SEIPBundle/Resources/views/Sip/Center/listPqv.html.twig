@@ -1,0 +1,75 @@
+{% extends "PequivenSEIPBundle:Template:Developer/Common/tableFormat1.html.twig" %}
+
+{% trans_default_domain 'sip' %}
+
+{% block javascripts_base %}
+    {{ parent() }}
+    <script src="{{  asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.input.js') }}"></script>
+{% endblock javascripts_base %}
+
+{% block before_body %}
+    {{ contentHeader(
+        {(path('pequiven_sip_center_show',{'id':idCentro})): "sip.center.name"|trans},            	
+        ("Votantes Pequiven")
+    ) }}
+{% endblock %}
+
+{% block body %}
+    
+    <div ng-controller="TableFormatController">  
+
+		<div loading-container="tableParams.settings().$loading">
+            <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager" template-header="custom/header" api-data-url="{{ apiDataUrl }}" export-csv="csv" class="table table-responsive table-extra-info" >
+                <tbody> 
+                    <tr ng-repeat="result in $data" data="{$ result|json $}">
+                        <td data-title="'Cédula'" filter="{'cedula' : 'text'}">
+                            <a href="">
+                                {$ result.cedula $}
+                            </a>
+                        </td>
+                        <td data-title="'Nombre'" filter="{'nombre' : 'text'}">
+                            <a href="">
+                                {$ result.nombre $}
+                            </a>
+                        </td>
+                        <td data-title="'Voto'" filter="{'voto' : 'text'}">
+                            <a href="">
+                                {$ result.textoVoto $}
+                            </a>
+                        </td>
+                        <td data-title="'Teléfono'" filter="{'telefono' : 'text'}">
+                            <a href="">
+                                {$ result.telefono $}
+                            </a>
+                        </td>
+                        {#<td data-title="'Codigo Centro'" filter="{'codigoCentro' : 'text'}">
+                            <a href="">
+                                {$ result.codigoCentro $}
+                            </a>
+                        </td>
+                        <td data-title="'Centro'" filter="{'centro' : 'text'}">
+                            <a href="">
+                                {$ result.centro $}
+                            </a>
+                        </td>#}
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+     </div>
+
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+    <script type="text/javascript">
+        
+        function getTableExtraInfo(data)
+            {
+                var response = '';
+                return response;
+            }
+    </script>
+    
+{% endblock %}

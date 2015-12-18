@@ -51,9 +51,17 @@ class ConsumerPlanningService extends BaseModel
     /**
      * Detalles
      * @var DetailConsumerPlanningService
-     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Service\DetailConsumerPlanningService",mappedBy="consumerPlanningService")
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Service\DetailConsumerPlanningService",mappedBy="consumerPlanningService",cascade={"persist","remove"})
      */
     private $detailConsumerPlanningServices;
+    
+    
+    /**
+     * Alicuota de lo que se necesita para una tonelada
+     * @var float
+     * @ORM\Column(name="aliquot",type="float")
+     */
+    private $aliquot = 0;
 
     /**
      * Constructor
@@ -128,7 +136,7 @@ class ConsumerPlanningService extends BaseModel
     public function addDetailConsumerPlanningService(\Pequiven\SEIPBundle\Entity\DataLoad\Service\DetailConsumerPlanningService $detailConsumerPlanningServices)
     {
         $detailConsumerPlanningServices->setConsumerPlanningService($this);
-        $this->detailConsumerPlanningServices[] = $detailConsumerPlanningServices;
+        $this->detailConsumerPlanningServices->add($detailConsumerPlanningServices);
 
         return $this;
     }
@@ -158,11 +166,121 @@ class ConsumerPlanningService extends BaseModel
         return $this->detailConsumerPlanningServices;
     }
     
+    /**
+     * 
+     * @return DetailConsumerPlanningService
+     */
+    public function getDetailsByMonth() 
+    {
+        $details = array();
+        foreach ($this->getDetails() as $detail) {
+            $details[$detail->getMonth()] = $detail;
+        }
+        ksort($details);
+        return $details;
+    }
+    
+    function getAliquot() {
+        return $this->aliquot;
+    }
+
+    function setAliquot($aliquot) {
+        $this->aliquot = $aliquot;
+    }
+        
     public function __toString() {
         $_toString = "-";
         if($this->getService()){
             $_toString = (string)$this->getService();
         }
         return $_toString;
+    }
+    
+    function getTotalToDay()
+    {
+        $now = new \DateTime();
+        $month = (int)$now->format("m");
+        $day = (int)$now->format("d");
+        
+        $details = $this->getDetailsByMonth();
+        $totalPlan = $totalReal = $totalPlanBefore = $totalRealBefore = 0.0;
+        foreach ($details as $monthDetail => $detail) {
+                if($monthDetail > $month){
+                    break;
+                }
+
+                if($month == $monthDetail){
+                    $totalToDay = $detail->getTotalToDay($day);
+                    $totalPlan = $totalPlan + $totalToDay['tp'];
+                    $totalReal = $totalReal + $totalToDay['tr'];
+                }else{
+                    $totalPlan = $totalPlan + $detail->getTotalPlan();
+                    $totalReal = $totalReal + $detail->getTotalReal();
+                    
+                    $totalPlanBefore = $totalPlan;
+                    $totalRealBefore = $totalReal;
+                }
+        }
+        $percentage = $percentageBefore = 0;
+        if($totalPlan > 0){
+            $percentage = ($totalReal * 100) / $totalPlan;
+        }
+        if($totalPlanBefore > 0){
+            $percentageBefore = ($totalRealBefore * 100) / $totalPlanBefore;
+        }
+        $total = array(
+            'tp' => $totalPlan,
+            'tr' => $totalReal,
+            'percentage' => $percentage,
+            
+            'tp_b' => $totalPlanBefore,
+            'tr_b' => $totalRealBefore,
+            'percentage_b' => $percentageBefore,
+        );
+        return $total;
+    }
+    
+    /**
+     * Retorna el resumen
+     * @param \DateTime $date
+     * @return type
+     */
+    public function getSummary(\DateTime $date)
+    {
+        $month = (int)$date->format("m");
+        $day = (int)$date->format("d");
+        
+        $totalDay = $totalMonth = $totalYear = $totalDayPlan = $totalMonthPlan = $totalYearPlan = 0.0;
+        $details = $this->getDetailsByMonth();
+        foreach ($details as $monthDetail => $detail) {
+                $totalYear = $totalYear + $detail->getTotalReal();
+                $totalYearPlan = $totalYearPlan + $detail->getTotalPlan();
+                
+                if($monthDetail > $month){
+                    break;
+                }
+
+                if($month == $monthDetail){
+                    $totalDayName = 'getDay'.$day.'Real';
+                    $totalDayPlanName = 'getDay'.$day.'Plan';
+                    
+                    $totalDay = $detail->$totalDayName();
+                    $totalDayPlan = $detail->$totalDayPlanName();
+                    
+                    $totalMonth = $totalMonth + $detail->getTotalReal();
+                    $totalMonthPlan = $totalMonthPlan + $detail->getTotalPlan();
+                }
+        }
+        
+        $total = array(
+            'total_day' => $totalDay,
+            'total_month' => $totalMonth,
+            'total_year' => $totalYear,
+            
+            'total_day_plan' => $totalDayPlan,
+            'total_month_plan' => $totalMonthPlan,
+            'total_year_plan' => $totalYearPlan,
+        );
+        return $total;
     }
 }

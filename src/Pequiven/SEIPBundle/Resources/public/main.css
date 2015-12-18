@@ -79,3 +79,31 @@ select.xxlarge {
 .inline-div {
     display: inline-block;
 }
+.font-20 {
+    font-size: 20px;
+}
+.title-monitor{
+    fill: rgb(255, 255, 255);
+    display: inline-block;
+    text-anchor: middle;
+    font-family: Verdana, sans;
+    font-size: 24px;
+    font-weight: bold;
+}
+.title-dashboard{
+    fill: rgb(255, 255, 255);
+    display: inline-block;
+    text-anchor: middle;
+    font-family: Verdana, sans;
+    font-size: 18px;
+    font-weight: bold;
+}
+.scroll-vertical{
+    scrollbar-face-color: #6685CA; 
+    scrollbar-highlight-color: #6685CA; 
+    scrollbar-shadow-color: #6685CA; 
+    scrollbar-3dlight-color:#FFFFFF;
+    scrollbar-arrow-color:#FFFFFF; 
+    scrollbar-track-color:#E5E5E5; 
+    scrollbar-drakshadow-color:#000000;
+}

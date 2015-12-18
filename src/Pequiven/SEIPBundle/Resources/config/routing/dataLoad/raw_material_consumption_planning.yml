@@ -20,6 +20,12 @@ pequiven_raw_material_consumption_planning_update:
             form: pequiven_seipbundle_dataload_rawmaterial_rawmaterialconsumptionplanning
     methods: [GET|POST]
     
+pequiven_raw_material_consumption_planning_calculate:
+    path: /{id}/calculate
+    defaults:
+        _controller: pequiven.controller.raw_material_consumption_planning:calculateAction
+    methods: [GET]
+    
 pequiven_raw_material_consumption_planning_delete:
     path: /{id}/delete
     defaults:

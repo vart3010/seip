@@ -281,7 +281,7 @@ class Objetive extends modelObjetive implements ResultItemInterface,PeriodItemIn
     protected $requiredToImport = false;
     
     /**
-    * @ORM\ManyToMany(targetEntity="Pequiven\SIGBundle\Entity\ManagementSystem", inversedBy="objetives", cascade={"persist","remove"})
+    * @ORM\ManyToMany(targetEntity="Pequiven\SIGBundle\Entity\ManagementSystem", inversedBy="objetives")
     * @ORM\JoinTable(name="seip_objetives_management_systems")
     */
     private $managementSystems;
@@ -295,6 +295,30 @@ class Objetive extends modelObjetive implements ResultItemInterface,PeriodItemIn
     protected $details;
     
     /**
+     * ¿El resultado que irá a evaluaciones, será colocado manualmente? Quiere decir que de acuerdo a previa solicitud y justificación se puede editar el resultado del objetivo.
+     * 
+     * @var boolean
+     * @ORM\Column(name="updateResultByAdmin",type="boolean")
+     */
+    protected $updateResultByAdmin = false;
+    
+    /**
+     * Resultado modificado
+     * 
+     * @var float
+     * @ORM\Column(name="resultModified",type="float")
+     */
+    protected $resultModified = 0; 
+
+    /**
+     * ProcessManagementSystem
+     * 
+     * @ORM\ManyToMany(targetEntity="Pequiven\SIGBundle\Entity\ProcessManagementSystem", inversedBy="objetive")
+     * @ORM\JoinTable(name="management_systems_objetive_process")
+     */
+    protected $processManagementSystem;
+    
+    /**
      * Constructor
      */
     public function __construct() {
@@ -304,6 +328,7 @@ class Objetive extends modelObjetive implements ResultItemInterface,PeriodItemIn
         $this->lineStrategics = new \Doctrine\Common\Collections\ArrayCollection();
         $this->results = new \Doctrine\Common\Collections\ArrayCollection();
         $this->managementSystems = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->processManagementSystem = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -1161,9 +1186,13 @@ class Objetive extends modelObjetive implements ResultItemInterface,PeriodItemIn
             $this->updatedAt = null;
             $this->userCreatedAt = null;
             $this->ref = null;
+            $this->details = null;
             
             $this->childrens = new ArrayCollection();
             $this->parents = new ArrayCollection();
+            
+            $this->managementSystems = new ArrayCollection();
+            $this->processManagementSystem = new ArrayCollection();
             
             $this->period = null;
             $this->reviewedBy = null;
@@ -1256,5 +1285,83 @@ class Objetive extends modelObjetive implements ResultItemInterface,PeriodItemIn
     public function getManagementSystems()
     {
         return $this->managementSystems;
+    }
+    
+    /**
+     * Set updateResultByAdmin
+     *
+     * @param boolean $updateResultByAdmin
+     * @return Objetive
+     */
+    public function setUpdateResultByAdmin($updateResultByAdmin)
+    {
+        $this->updateResultByAdmin = $updateResultByAdmin;
+
+        return $this;
+    }
+
+    /**
+     * Get updateResultByAdmin
+     *
+     * @return boolean 
+     */
+    public function getUpdateResultByAdmin()
+    {
+        return $this->updateResultByAdmin;
+    }
+    
+    /**
+     * Set resultModified
+     * @param float $resultModified
+     * @return Objetive
+     */
+    public function setResultModified($resultModified)
+    {
+        $this->resultModified = $resultModified;
+
+        return $this;
+    }
+
+    /**
+     * Get resultModified
+     *
+     * @return float 
+     */
+    public function getResultModified()
+    {
+        return $this->resultModified;
+    }
+
+    /**
+     * Add processManagementSystem
+     *
+     * @param \Pequiven\SIGBundle\Entity\ProcessManagementSystem $processManagementSystem
+     * @return Objetive
+     */
+    public function addProcessManagementSystem(\Pequiven\SIGBundle\Entity\ProcessManagementSystem $processManagementSystem)
+    {
+        $this->processManagementSystem[] = $processManagementSystem;
+
+        return $this;
+    }
+
+    /**
+     * Remove processManagementSystem
+     *
+     * @param \Pequiven\SIGBundle\Entity\ManagementSystem $processManagementSystem
+     */
+    public function removeProcessManagementSystem(\Pequiven\SIGBundle\Entity\ProcessManagementSystem $processManagementSystem)
+    {
+        $this->processManagementSystem->removeElement($processManagementSystem);
+    }
+
+    /**
+     * Get processManagementSystem
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getProcessManagementSystem()
+    {
+        return $this->processManagementSystem;
     }
 }

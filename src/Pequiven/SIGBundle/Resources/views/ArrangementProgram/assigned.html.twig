@@ -1,0 +1,25 @@
+{% extends "PequivenSEIPBundle:Template:Developer/Common/tableFormat1.html.twig" %}
+
+{% trans_default_domain 'PequivenArrangementProgramBundle' %}
+
+{% block before_body %}
+    {{ contentHeader(
+        { ( path('pequiven_seip_arrangementprogram_assigned_sig') ): ( 'pequiven.arrangement_program.arrangement_program'|trans ) },
+         ( 'pequiven.arrangement_program.assigned'|trans({},'PequivenArrangementProgramBundle') )
+    ) }}
+{% endblock %}
+
+{% block body -%}
+   {% include 'PequivenSIGBundle:ArrangementProgram:_index.html.twig' %}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('.select2').select2({
+                allowClear: true
+            });
+        });
+    </script>
+{% endblock javascripts %}

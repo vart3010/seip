@@ -1,0 +1,302 @@
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+<style>
+    body {
+        font-size: 12px;
+    }
+    .white-gradient {
+        background-color: #535353;
+        color: #ffffff;
+    }
+    .header {
+        text-align: center;
+        font-size: 12px;
+    }
+    .text-center {
+        text-align: center;
+    }
+    .header-tr {
+        background-color: lightgrey;
+        border-bottom: lightgrey;
+        border-style: solid;
+        border-bottom-style: solid;
+    }
+    .content {
+        color: #4a4a4a;
+        font-size: 9px;
+    }
+
+    .title {
+        text-align: center;
+        width: 100%;
+        font-size: 12px;
+        font-weight: bold;
+
+    }
+    .text-left { 
+        text-align: left;
+    }
+    .observation {
+        font-size: 10px;
+    }
+</style>
+
+
+{% if production is not empty %}
+    <br>
+    <div class="title">Reporte de Producción</div>
+    <br>
+    <table style="text-align: center; width: 100%">
+        <tr>
+            <td class="text-left" style="font-weight: bold; width: 50%">
+                {% if plantsNames|length > 0 %}
+                    Complejos:
+                {% else %}
+                    Complejo:    
+                {% endif %}
+            </td>
+            <td class="text-center" style="font-weight: bold; width: 25%; ">Fecha Emision: </td>
+            <td class="text-center" style="font-weight: bold;width: 25%; ">Fecha Reporte</td>
+        </tr>
+        <tr>
+            <td class="text-left">
+                {% for plant in plantsNames%}
+                    {{ plant }}
+                {% endfor %}
+            </td>
+            <td class="text-center">{{ "now"|date("d/m/Y") }}</td>
+            <td class="text-center">
+                Desde {{ dateFrom|date("d/m/Y") }}<br>
+                Hasta {{ dateEnd|date("d/m/Y") }}
+            </td>
+        </tr>
+    </table>
+    <br>
+    {% if showProduction %}
+        <div class="title">Producción</div>
+        {% set dateReport = null %}
+        <div class="columns">
+            {% if showDay  %}
+                <div class="twelve-columns twelve-columns-mobile">
+                    <table class="simple-table responsive-table responsive-table-on text-center">
+
+                        <tr>
+                            <th class="header text-center white-gradient" colspan="5">
+                                PRODUCCIÓN<br>
+                                {{ "Desde "~dateFrom|date('d-m-Y')~" Hasta "~ dateEnd|date('d-m-Y')}}
+                            </th>
+                        </tr>
+                        <tr class="header-tr">
+                            <th scope="col" style="width: 40%; text-align: left;" class="header">PRODUCTO</th>
+                            <th scope="col" style="width: 15%" class="header">PPTO</th>
+                            <th scope="col" style="width: 15%" class=" header">REAL</th>
+                            <th scope="col" style="width: 15%" class=" header">EJEC&nbsp;(%)</th>
+                            <th scope="col" style="width: 15%" class=" header">VAR</th>
+                        </tr>
+
+
+                        {% for prod in production %}
+                            <tr>
+                                <th style="text-align: left;">{{ prod.productName}}</th>
+                                <th>{{ prod.plan|number_format(2, ',', '.') }}</th>
+                                <th>{{ prod.real|number_format(2, ',', '.') }}</th>
+                                <th>{{ prod.percentage|number_format(2, ',', '.') }}%</th>
+                                <th>{{ prod.pnr|number_format(2, ',', '.') }}</th>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+
+                        <tr>
+                            <th style="text-align: left;">Totales</th>
+                                {% for totals in totalProduction %}
+                                <th>{{ totals|number_format(2, ',', '.') }}</th>
+                                {% endfor %}
+                        </tr>
+
+                    </table>
+                </div>
+            {% endif %}
+
+        </div>
+    {% endif %}
+
+    {% if (showRawMaterial or showService ) %}
+        <div class="title">Consumo</div>
+    {% endif %}
+
+    {% if showRawMaterial %}
+        <div class="twelve-columns twelve-columns-mobile">
+            <table class="simple-table responsive-table responsive-table-on text-center">
+
+                <tr>
+                    <th class="header text-center white-gradient" colspan="5">
+                        CONSUMO DE MATERIA PRIMA<br>
+                        {{ "Desde "~dateFrom|date('d-m-Y')~" Hasta "~ dateEnd|date('d-m-Y')}}
+                    </th>
+                </tr>
+                <tr class="header-tr">
+                    <th scope="col" style="width: 50%; text-align: left;" class="header">PRODUCTO</th>
+                    <th scope="col" style="width: 25%" class="header">PLAN</th>
+                    <th scope="col" style="width: 25%" class=" header">REAL</th>
+                </tr>
+
+
+                {% for raw in rawMaterial %}
+                    <tr>
+                        <th style="text-align: left;">{{ raw.productName}}</th>
+                        <th>{{ raw.planRaw|number_format(2, ',', '.') }}</th>
+                        <th>{{ raw.realRaw|number_format(2, ',', '.') }}</th>
+                    </tr>
+                {% endfor %}
+
+                <tr>
+                    <th style="text-align: left;" >Totales</th>
+                        {% for totals in totalRawMaterial %}
+                        <th>{{ totals|number_format(2, ',', '.') }}</th>
+                        {% endfor %}
+                </tr>
+
+            </table>
+        </div>
+    {% endif %}
+
+    {% if showService %}
+        <div class="twelve-columns twelve-columns-mobile">
+            <table class="simple-table responsive-table responsive-table-on text-center">
+                <tr>
+                    <th class="header text-center white-gradient" colspan="5">
+                        CONSUMO DE SERVICIOS<br>
+                        {{ "Desde "~dateFrom|date('d-m-Y')~" Hasta "~ dateEnd|date('d-m-Y')}}
+                    </th>
+                </tr>
+                <tr class="header-tr">
+                    <th scope="col" style="width: 50%; text-align: left;" class="header">PRODUCTO</th>
+                    <th scope="col" style="width: 25%" class="header">PLAN</th>
+                    <th scope="col" style="width: 25%" class=" header">REAL</th>
+                </tr>
+                {% set totalPlan = 0 %}
+                {% set totalReal = 0 %}
+                {% for consumer in consumerPlanning %}
+                    <tr>
+                        <th style="text-align: left;">{{ consumer.productName }}</th>
+                        <th>{{ consumer.plan|number_format(2, ',', '.') }}</th>
+                        <th>{{ consumer.real|number_format(2, ',', '.') }}</th>
+                    </tr>
+                    {% set totalPlan = totalPlan + consumer.plan %}
+                    {% set totalReal = totalReal + consumer.real %}
+                {% endfor %}
+                <tr>
+                    <th style="text-align: left;">Totales</th>
+                    <th>{{ totalPlan }}</th>
+                    <th>{{ totalReal }}</th>
+                </tr>
+
+
+
+            </table>
+        </div>
+    {% endif %}
+
+    {% if showPnr %}
+        <div class="twelve-columns twelve-columns-mobile">
+            <table class="simple-table responsive-table responsive-table-on text-center">
+
+                <tr>
+                    <th class="header text-center white-gradient" colspan="5">
+                        PRODUCCION NO REALIZADA<br>
+                        {{ "Desde "~dateFrom|date('d-m-Y')~" Hasta "~ dateEnd|date('d-m-Y')}}
+                    </th>
+                </tr>
+                <tr class="header-tr">
+                    <th scope="col" style="width: 55%; text-align: left;" class="header">PRODUCTO</th>
+                    <th scope="col" style="width: 45%" class="header">TOTAL</th>
+                </tr>
+
+
+                {% set totalPnr = 90 %}
+                {% for unrealized in unrealizedProduction %}
+                    {% set totalPnr = totalPnr + unrealized.total %}
+                    <tr>
+                        <th style="text-align: left;">{{ unrealized.productName }}</th>
+                        <th>{{ unrealized.total|number_format(2, ',', '.') }}</th>
+                    </tr>
+                {% endfor %}
+
+                <tr>
+                    <th style="text-align: left;">Totales</th>
+                    <th>{{ totalPnr|number_format(2, ',', '.') }}</th>
+
+                </tr>
+
+
+
+            </table>
+        </div>
+
+    {% endif %}
+
+    {% if showInventory %}
+        <div class="twelve-columns twelve-columns-mobile">
+            <table class="simple-table responsive-table responsive-table-on text-center">
+
+                <tr>
+                    <th class="header text-center white-gradient" colspan="5">
+                        INVENTARIO<br>
+                        {{ "Desde "~dateFrom|date('d-m-Y')~" Hasta "~ dateEnd|date('d-m-Y')}}
+                    </th>
+                </tr>
+                <tr class="header-tr">
+                    <th scope="col" style="width: 55%; text-align: left;" class="header">PRODUCTO</th>
+                    <th scope="col" style="width: 45%" class="header">TOTAL</th>
+                </tr>
+
+                {#            {% set totalInv = 0 %}#}
+                {% for inv in inventory %}
+                    {#                {% set totalInv = totalInv + inv.total %}#}
+                    <tr>
+                        <th style="text-align: left;" >{{ inv.productName }}</th>
+                        <th>{{ inv.total|number_format(2, ',', '.') }}</th>
+                    </tr>
+                {% endfor %}
+                {#<tr>
+                    <th>Totales</th>
+                    <th>{{ totalInv }}</th>
+                </tr>#}
+
+
+            </table>
+        </div>
+    {% endif %}
+
+
+    {% if showObservation %}
+        <div class="twelve-columns twelve-columns-mobile">
+            <table class="text-center observation" border="1"  style="width: 100%">
+
+                <tr>
+                    <th class="header text-center white-gradient" colspan="5">
+                        PUNTOS DE ATENCIÓN<br>
+                        {{ "Desde "~dateFrom|date('d-m-Y')~" Hasta "~ dateEnd|date('d-m-Y')}}
+                    </th>
+                </tr>
+                <tr class="header-tr">
+                    <th scope="col" style="width: 20%; text-align: left; " class="header">PRODUCTO</th>
+                    <th scope="col" style="width: 10%;text-align: left; " class="header">DIA</th>
+                    <th scope="col" style="width: 70%; text-align: left;" class="header">OBSERVACIÓN</th>
+                </tr>
+
+                {% for obs in observation %}
+                    <tr>
+                        <th style="text-align: left;" scope="col">{{ obs.productName }}</th>
+                        <th scope="col">{{ obs.day|date('d-m-Y') }}</th>
+                        <th style="text-align: justify; width: 70%;" scope="col">{{ (obs.observation is null ? ("pequiven_seip.comment_none"|trans):obs.observation) |upper }}</th>
+                    </tr>
+                {% endfor %}
+
+            </table>
+        </div>
+    {% endif %}
+
+{% else %}
+    <h2 class="text-center">{{ "Select the plant"|trans }}</h2>
+{% endif %}

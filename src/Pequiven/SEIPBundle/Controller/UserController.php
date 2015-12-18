@@ -12,13 +12,14 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
 use Tecnocreaciones\Bundle\ResourceBundle\Controller\ResourceController as baseController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+
 /**
  * Description of UserController
  *
  * @author matias
  */
 class UserController extends baseController {
-    
+
     /**
      * Función que retorna la vista con la lista de los usuarios
      * @Template("PequivenSEIPBundle:User:list.html.twig")
@@ -28,7 +29,7 @@ class UserController extends baseController {
         return array(
         );
     }
-    
+
     /**
      * Función que retorna la vista con la lista de los usuarios
      * @Template("PequivenSEIPBundle:User:listAux.html.twig")
@@ -38,7 +39,7 @@ class UserController extends baseController {
         return array(
         );
     }
-    
+
     /**
      * Función que devuelve el paginador con los objetivos operativos
      * @param \Symfony\Component\HttpFoundation\Request $request
@@ -78,7 +79,7 @@ class UserController extends baseController {
                 ->setTemplate($this->config->getTemplate('list.html'))
                 ->setTemplateVar($this->config->getPluralResourceName())
         ;
-        $view->getSerializationContext()->setGroups(array('id','api_list','complejo','gerencia','gerenciaSecond','rol','sonata_api_read'));
+        $view->getSerializationContext()->setGroups(array('id', 'api_list', 'complejo', 'gerencia', 'gerenciaSecond', 'rol', 'sonata_api_read'));
         if ($request->get('_format') == 'html') {
             $view->setData($resources);
         } else {
@@ -87,7 +88,7 @@ class UserController extends baseController {
         }
         return $this->handleView($view);
     }
-    
+
     /**
      * Función que devuelve el paginador con los objetivos operativos
      * @param \Symfony\Component\HttpFoundation\Request $request
@@ -127,7 +128,7 @@ class UserController extends baseController {
                 ->setTemplate($this->config->getTemplate('listAux.html'))
                 ->setTemplateVar($this->config->getPluralResourceName())
         ;
-        $view->getSerializationContext()->setGroups(array('id','api_list','complejo','gerencia','gerenciaSecond','rol','sonata_api_read'));
+        $view->getSerializationContext()->setGroups(array('id', 'api_list', 'complejo', 'gerencia', 'gerenciaSecond', 'rol', 'sonata_api_read'));
         if ($request->get('_format') == 'html') {
             $view->setData($resources);
         } else {
@@ -136,27 +137,26 @@ class UserController extends baseController {
         }
         return $this->handleView($view);
     }
-    
+
     public function showAction(Request $request) {
         $view = $this
-            ->view()
-            ->setTemplate($this->config->getTemplate('show.html'))
-            ->setTemplateVar($this->config->getResourceName())
-            ->setData($this->findOr404($request))
+                ->view()
+                ->setTemplate($this->config->getTemplate('show.html'))
+                ->setTemplateVar($this->config->getResourceName())
+                ->setData($this->findOr404($request))
         ;
 //        $groups = array_merge(array('api_list'), $request->get('_groups',array()));
 //        $view->getSerializationContext()->setGroups($groups);
         return $this->handleView($view);
     }
-    
+
     /**
      * Busca un usuario
      * 
      * @param Request $request
      * @return type
      */
-    function searchAction(Request $request)
-    {
+    function searchAction(Request $request) {
         $query = $request->get('query');
         $criteria = array(
             'username' => $query,
@@ -165,18 +165,106 @@ class UserController extends baseController {
             'numPersonal' => $query,
         );
         $results = $this->get('pequiven_seip.repository.user')->searchUserByCriteria($criteria);
-        
+
         $view = $this->view();
         $view->setData($results);
-        $view->getSerializationContext()->setGroups(array('id','api_list','sonata_api_read'));
+        $view->getSerializationContext()->setGroups(array('id', 'api_list', 'sonata_api_read'));
         return $this->handleView($view);
     }
     
+    /**
+     * Busca un coordinador
+     * 
+     * @param Request $request
+     * @return type
+     */
+    function searchCoordinatorAction(Request $request) {
+        $query = $request->get('query');
+        $criteria = array(
+            'username' => $query,
+            'firstname' => $query,
+            'lastname' => $query,
+            'numPersonal' => $query,
+        );
+        $results = $this->get('pequiven_seip.repository.user')->searchCoordinator($criteria);
+
+        $view = $this->view();
+        $view->setData($results);
+        $view->getSerializationContext()->setGroups(array('id', 'api_list', 'sonata_api_read'));
+        return $this->handleView($view);
+    }
+    
+    /**
+     * Busca un coordinador
+     * 
+     * @param Request $request
+     * @return type
+     */
+    function searchOnlyCoordinatorAction(Request $request) {
+        
+        $query = $request->get('query');
+        $criteria = array(
+            'username' => $query,
+            'firstname' => $query,
+            'lastname' => $query,
+            'numPersonal' => $query,
+        );
+        
+        $criteria['workStudyCircleId'] = $request->get('workStudyCircleId');
+        
+        $results = $this->get('pequiven_seip.repository.user')->searchOnlyCoordinator($criteria);
+
+        $view = $this->view();
+        $view->setData($results);
+        $view->getSerializationContext()->setGroups(array('id', 'api_list', 'sonata_api_read'));
+        return $this->handleView($view);
+    }
+    
+    
+
+    /**
+     * Filtra los usuarios que esten por debajo
+     * @param Request $request
+     * @return type
+     * 
+     */
+    function searchFilterAction(Request $request) {
+        $query = $request->get('query');
+        $criteria = array(
+            'username' => $query,
+            'firstname' => $query,
+            'lastname' => $query,
+            'numPersonal' => $query,
+        
+        );
+        $user = $this->getUser();
+        $securityService = $this->getSecurityService();
+        //Si tiene el rol para ver la gestiòn de todos (preferiblemente ROLE_SEIP_PLANNING_VIEW_ALL_MANAGEMENT_USER) no envias el levelUser
+        if (!$securityService->isGranted('ROLE_SEIP_PLANNING_VIEW_ALL_MANAGEMENT_USER_ITEMS')) {
+            $levelUser = $user->getLevelRealByGroup();
+            $criteria['levelUser'] = $levelUser;
+            if($levelUser == \Pequiven\MasterBundle\Entity\Rol::ROLE_MANAGER_FIRST || $levelUser == \Pequiven\MasterBundle\Entity\Rol::ROLE_GENERAL_COMPLEJO){
+                $criteria['idGerenciaUser'] = $this->getUser()->getGerencia()->getId();
+            } elseif($levelUser == \Pequiven\MasterBundle\Entity\Rol::ROLE_MANAGER_SECOND){
+                $criteria['idGerenciaUser'] = $this->getUser()->getGerencia()->getId();
+                $criteria['idGerenciaSecondUser'] = $this->getUser()->getGerenciaSecond()->getId();
+            }
+            $results = $this->get('pequiven_seip.repository.user')->searchUserByCriteriaUnder($criteria);
+        } else {
+            $results = $this->get('pequiven_seip.repository.user')->searchUserByCriteriaUnder($criteria);
+        }
+        $view = $this->view();
+        $view->setData($results);
+        $view->getSerializationContext()->setGroups(array('id', 'api_list', 'sonata_api_read'));
+        return $this->handleView($view);
+    }
+
     /*
      * Función que devuelve la(s) gerencias de 2da línea asociada a las gerencias de 1ra línea cargadas de acuerdo al objetivo táctico seleccionado
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
+
     public function selectGerenciaSecondListAction(Request $request) {
         $response = new JsonResponse();
         $gerenciaSecondChildren = array();
@@ -184,9 +272,9 @@ class UserController extends baseController {
 
         $gerencia = $request->request->get('gerencia');
 
-        if((int)$gerencia == 0){
+        if ((int) $gerencia == 0) {
             $results = $this->get('pequiven.repository.gerenciasecond')->findBy(array('enabled' => true));
-        } else{
+        } else {
             $results = $this->get('pequiven.repository.gerenciasecond')->findBy(array('enabled' => true, 'gerencia' => $gerencia));
         }
 
@@ -205,13 +293,22 @@ class UserController extends baseController {
 
         return $response;
     }
-    
+
     function addConfigurationAction(Request $request) {
         $resource = $this->findOr404($request);
-        if($resource->getConfiguration() == null){
+        if ($resource->getConfiguration() == null) {
             $resource->setConfiguration(new \Pequiven\SEIPBundle\Entity\User\Configuration());
             $this->domainManager->update($resource);
         }
         return $this->redirectHandler->redirectTo($resource);
     }
+
+    /**
+     * 
+     * @return \Pequiven\SEIPBundle\Service\SecurityService
+     */
+    protected function getSecurityService() {
+        return $this->container->get('seip.service.security');
+    }
+
 }

@@ -57,6 +57,28 @@ class UserManager implements ContainerAwareInterface
         return false;
     }
     
+    /**
+     * Retorna si tiene permiso para acceder a una plantilla de reporte, de acuerdo 
+     * @param User $user
+     * @param type $typeOfCompany
+     * @return boolean
+     */
+    public function hasReportTemplatesByTypeOfCompany(User $user, $typeOfCompany = \Pequiven\SEIPBundle\Entity\CEI\Company::TYPE_OF_COMPANY_MATRIZ){
+        $hasReportTemplateByTypeCompany = false;
+        $reportTemplates = $user->getReportTemplates();
+        foreach($reportTemplates as $reportTemplate){
+            if($reportTemplate->getCompany()->getTypeOfCompany() == $typeOfCompany){
+                $hasReportTemplateByTypeCompany = true;
+                break;
+            }
+        }
+        return $hasReportTemplateByTypeCompany;
+    }
+    
+    protected function getSecurityService() {
+        return $this->container->get('seip.service.security');
+    }
+    
     public function setContainer(ContainerInterface $container = null) {
         $this->container = $container;
     }

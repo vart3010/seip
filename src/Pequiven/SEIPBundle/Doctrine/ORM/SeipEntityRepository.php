@@ -22,6 +22,13 @@ use Tecnocreaciones\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
  */
 class SeipEntityRepository extends EntityRepository
 {
+    public function getQueryPeriod()
+    {
+        $qb = $this->getQueryBuilder();
+        $this->applyPeriodCriteria($qb);
+        return $qb;
+    }    
+    
     /**
      * 
      * @return QueryBuilder
@@ -36,9 +43,34 @@ class SeipEntityRepository extends EntityRepository
         return $qb;
     }
     
+    /**
+     * @return array
+     */
+    public function getAllActive()
+    {
+        return $this
+            ->getQueryBuilder()
+        ;
+    }
+    
     public function getAllEnabled()
     {
         $qb = $this->getQueryAllEnabled();
+        return $qb->getQuery()->getResult();
+    }
+    
+    public function findSearch(array $criteria,$options = array())
+    {
+        $name = $criteria['name'];
+        $property = 'name';
+        if(isset($options['property'])){
+            $property = $options['property'];
+        }
+        $qb = $this->getQueryAllEnabled();
+        $qb
+            ->andWhere($qb->expr()->like($this->getAlias().".".$property, "'%$name%'"))
+            ;
+        $qb->setMaxResults(20);
         return $qb->getQuery()->getResult();
     }
 
@@ -50,8 +82,8 @@ class SeipEntityRepository extends EntityRepository
         }
         $periodId = $this->getRequest()->get("_period");
         $queryBuilder->andWhere($alias.'.period = :period');
-        
         $periodValid = null;
+        
         if($periodId !== null){
             $periodService = $this->getPeriodService();
             $period = $periodService->find($periodId);
@@ -66,7 +98,7 @@ class SeipEntityRepository extends EntityRepository
         }else{
             $this->setParameterPeriod($queryBuilder);
         }
-    }
+    } 
     
     protected function setParameterPeriod(QueryBuilder &$queryBuilder)
     {
@@ -75,6 +107,7 @@ class SeipEntityRepository extends EntityRepository
                 ->setParameter('period', $periodService->getPeriodActive())
                 ;
     }
+    
     /**
      * @return PeriodService
      */

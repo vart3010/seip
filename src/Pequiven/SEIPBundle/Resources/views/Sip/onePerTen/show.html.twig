@@ -1,0 +1,314 @@
+
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
+
+{% trans_default_domain 'sip' %}
+
+{% block javascripts_base %}
+    {{ parent() }}
+    <script src="{{  asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.input.js') }}"></script>
+{% endblock javascripts_base %}
+
+{% block before_body %}
+    {{ contentHeader(
+        ("sip.consulta"|trans )
+    ) }}
+{% endblock %}
+
+{% block body %}
+    {#<form action="{{ path("pequiven_search_members") }}" method="POST" id="search">
+        <fieldset class="fieldset">
+            <legend class="legend" >{{ "sip.consulta"|trans }}</legend>
+            <div class="columns">
+                <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                    <p class="inline-label">
+                        <label class="label">{{ ("sip.busqueda"|trans ) }}</label>
+                        {{ form_widget(form.user) }}
+                        {{ form_errors(form.user) }}
+                    </p>
+                </div>#}
+                {#<div class="new-row-mobile three-columns three-columns-tablet twelve-columns-mobile">
+                    <p class="inline-label">
+                        <input class="button margin-top" type="submit" value="Guardar">
+                    </p>
+                </div>#}
+    {#    </fieldset>
+    </form>#}
+
+    <br>
+    
+    <fieldset class="fieldset">
+        <legend class="legend" >Perfil</legend>
+        <div class="columns">
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Nombre</label>
+                    {{ user.firstname }} {{ user.lastname }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Cédula</label>
+                    {{ user.indentification }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Localidad</label>
+                    {% if user.complejo != null %}
+                        {{ user.complejo.description }}
+                    {% endif %}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Gerencia</label>
+                    {% if user.gerencia != null %}
+                        {{ user.gerencia.description }}
+                    {% endif %}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">¿Reportó Voto Elecciones Asamblea Nacional 2015?</label>
+                    {% set textoVoto = 'No' %}
+                    {% if onePerTen.voto == 1 %}
+                        {% set textoVoto = 'Sí' %}
+                    {% endif %}
+                    {{ textoVoto }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Círculo de Estudio y Trabajo</label>
+                    {{ workStudyCircle.codigo }} {{ workStudyCircle.name }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">¿Es Coordinador de su CET?</label>
+                    {{ isCoordinator }}
+                </p>
+            </div>
+        </div>
+    </fieldset>
+
+    <div class="block" >
+        <div class="block-title">
+
+            <h3 class="ng-binding">1x10 de {{ user }} - Teléfono: {{ user.cellphone }}</h3>
+
+
+            {% if user.indentification %}
+                - CI:{{ user.indentification }}</h3>
+            {% endif %}                
+
+            {#{% if(members|length<=12) %}
+                <div class="button-group absolute-right compact">
+                    <a class="button icon-list-add " href="{{ path("pequiven_onePerTen_add_member",{idUserOne:user.id})}}"  title="">
+                        Agregar Miembro&nbsp;
+                    </a>
+                </div>
+            {% endif %}#}
+        </div>
+        {% if(members|length)>0 %}
+            <div class="with-padding">
+                <table class="simple-table responsive-table tables-extras" id="sorting-example2">
+                    <thead>
+                        <tr>
+                            <th scope="col" width="2%" class="header">Nro</th>
+                            <th scope="col" width="15%" class="header">Cedula</th>
+                            <th scope="col" width="38%" class="header">Nombre</th>
+                            <th scope="col" width="38%" class="header">Centro</th>
+                            <th scope="col" width="10%" class="header">Votó</th>
+                            <th scope="col" width="30%" class="header">Teléfono</th>
+{#                            <th scope="col" width="10%" class="header">Acciones</th>#}
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        {% for member  in members %}
+                            <tr class="row_{{ member.id }}">
+                                <td>{{ loop.index }}</td>
+                                <td>{{ member.cedula}}</td>
+                                <td>{{ member.nombre}}</td>
+                                <td>{{ member.centro}}</td>
+                                <td>{{ member.voto}}</td>
+                                <td>{{ member.telefono}}</td>
+                                {#<td> 
+                                    <button  class="button del" data="{{ member.id  }}" type="button">Eliminar</button>
+                                </td>#}
+                            </tr>
+                        {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="with-padding"><h3>No tiene miembros asociados.</h3></div>
+        {% endif %}
+        {% if is_granted(['ROLE_SEIP_SIP_ONEPERTEN_EXPORT']) %}
+        <p class="button-height float-right" style="margin: 2px;">
+            <a id="btnExportToExcel" href="{{ path("pequiven_export_onePerTen",{idOne:user.id}) }}" class="button">
+                <span class="button-icon"><span class="icon-download"></span></span>
+                    {{ "sip.export.exportpdf"|trans }}
+            </a>
+        </p>
+    {% endif %}
+    </div>
+
+
+    <br>
+    <br>
+    
+    <fieldset class="fieldset">
+        <legend class="legend" >Perfil Político</legend>
+        <div class="columns">
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">¿Fue Reubicado para las Elecciones Asamblea Nacional 2015?</label>
+                    {{ texts[onePerTen.reubicado] }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">¿Votó Internas Oposición?</label>
+                    {{ texts[onePerTen.intOpo] }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">¿Inscrito en el Gran Polo Patriótico?</label>
+                    {{ texts[onePerTen.psuv] }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">¿Votó Internas PSUV?</label>
+                    {{ texts[onePerTen.intPsuv] }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">¿Votó Presidenciales 2012?</label>
+                    {{ texts[onePerTen.vpresidencial1] }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">¿Votó Regionales 2012?</label>
+                    {{ texts[onePerTen.vregionales] }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">¿Votó Presidenciales 2013?</label>
+                    {{ texts[onePerTen.vpresidencial2] }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">¿Votó Municipales 2013?</label>
+                    {{ texts[onePerTen.vmunicipales] }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">¿Firmó Decreto Esperanza?</label>
+                    {{ texts[onePerTen.esperanza] }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">¿Fue CUTL en las Elecciones Asamblea Nacional 2015?</label>
+                    {{ isCutl }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">¿Vanguardia?</label>
+                    {{ texts[onePerTen.vanguardia] }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">¿Pertenece a alguna UBCH?</label>
+                    {{ texts[onePerTen.ubch] }}
+                </p>
+            </div>
+        </div>
+    </fieldset>
+
+{% endblock %}
+
+
+{% block javascript %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $("#onePerTen_search_user").select2({allowClear: true});
+            $("#onePerTen_search_user").change(function () {
+                $("#search").submit();
+            });
+
+            $("button.del").click(function () {
+                var id = $(this).attr("data");
+                //alert(idUser);
+                var data = {
+                    id: id
+                };
+                $.ajax({
+                    type: 'post',
+                    url: '{{ path("pequiven_delete_member") }}',
+                    data: data,
+                    success: function (data) {
+                        $("tr.row_" + id).remove();
+                        console.log(data);
+                    }
+                });
+
+            });
+
+            $("#save").click(function () {
+                var tlf = $("#telefono").val();
+                if (tlf != "") {
+                    $("form#saveOne").submit();
+                } else {
+                    alert("Debe Ingresar el Telefono.");
+                }
+            });
+
+
+            $("#search").click(function () {
+                if ($("#cedula").val() != "") {
+                    var data = {
+                        ced: $("#cedula").val()
+                    };
+                    $.ajax({
+                        type: 'post',
+                        url: '{{ path("search_one_por_cedula") }}',
+                        data: data,
+                        success: function (data) {
+                            $("p.name").html(data["nombre"]);
+                            $("p.centro").html(data["nameCentro"]);
+                            $("input#codCentro").val(data["centro"]);
+                            $("input#nombre").val(data["nombre"]);
+                            $("input#cedula").val(data["cedula"]);
+                            if (data["nombre"] != "" || data["nameCentro"]) {
+                                $("button#save").show();
+                                $("input#telefono").show();
+                            }
+                            console.log(data);
+                        }
+                    });
+
+                } else {
+                    alert("Debe Ingresar una Cédula.");
+                }
+            });
+        });
+    </script>
+{% endblock %}

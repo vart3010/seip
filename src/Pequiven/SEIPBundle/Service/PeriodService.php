@@ -76,9 +76,94 @@ class PeriodService extends ContainerAware
         $period = $this->getPeriodActive();
         $now = new \DateTime();
         
-        if($now >= $period->getDateStartLoadArrangementProgram() && $now <= $period->getDateEndLoadArrangementProgram()){
+        if(($now >= $period->getDateStartLoadArrangementProgram() && $now <= $period->getDateEndLoadArrangementProgram()) || $period->getId() == 3){
             $result = true;
         }
+        return $result;
+    }
+
+    /**
+     * Retorna si se encuetra habilitada la carga de programa de gestion para SIG en el periodo activo.
+     * @return boolean
+     */
+    function isAllowLoadSigArrangementProgram()
+    {
+        $result = false;
+        $period = $this->getPeriodActive();
+        $now = new \DateTime();
+        
+        if($now >= $period->getDateStartLoadSigArrangementProgram() && $now <= $period->getDateEndLoadSigArrangementProgram()){
+            $result = true;
+        }
+        return $result;
+    }
+    
+    /**
+     * Retorna si se encuetra habilitada la carga de objetivos para el periodo activo.
+     * @return boolean
+     */
+    function isAllowLoadObjetive()
+    {
+        $result = false;
+        $period = $this->getPeriodActive();
+        $now = new \DateTime();
+        
+        if($now >= $period->getDateStartLoadObjetive() && $now <= $period->getDateEndLoadObjetive()){
+            $result = true;
+        }
+        
+        return $result;
+    }
+    
+    
+    /**
+     * Retorna si se encuetra habilitada la carga de indicadores para el periodo activo.
+     * @return boolean
+     */
+    function isAllowLoadIndicator()
+    {
+        $result = false;
+        $period = $this->getPeriodActive();
+        $now = new \DateTime();
+        
+        if($now >= $period->getDateStartLoadIndicator() && $now <= $period->getDateEndLoadIndicator()){
+            $result = true;
+        }
+        
+        return $result;
+    }
+
+    /**
+     * Retorna si se encuetra habilitada la carga de Circulos de Estudio y Trabajo para el periodo activo.
+     * @return boolean
+     */
+    function isAllowLoadWorkStudyCircle()
+    {
+        $result = false;
+        $period = $this->getPeriodActive();
+        $now = new \DateTime();
+        
+        if($now >= $period->getDateStartLoadWorkStudyCircle() && $now <= $period->getDateEndLoadWorkStudyCircle()){
+            $result = true;
+        }
+        
+        return $result;
+    }
+    
+    /**
+     * Retorna si se encuetra habilitada la carga de planificacion de plantas
+     * @return boolean
+     */
+    function isAllowPlanningReport()
+    {
+        $result = false;
+        $period = $this->getPeriodActive();
+        $now = new \DateTime();
+        
+        if($period->getIsPlanningReportEnabled() === true && $now >= $period->getDateStartPlanningReport() && $now <= $period->getDateEndPlanningReport()){
+            $result = true;
+        }
+        
         return $result;
     }
     

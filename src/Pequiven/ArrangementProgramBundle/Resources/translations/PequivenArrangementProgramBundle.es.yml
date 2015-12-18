@@ -11,11 +11,12 @@ pequiven:
         write_observation: Escriba una observación
         arrangement_program: Programa de Gestión
         arrangement_programs: Programas de Gestión
-        description_none: Ninguna
+        description_none: No cargado
         description: Descripción
         nameOfProgram: Nombre del Programa
         managementSystem: Sistema de Calidad
         period: Período
+        prog_description: Nombre del Programa
         process: Proceso
         management: Gerencia
         management_second_line: Gerencia de segunda línea
@@ -31,7 +32,8 @@ pequiven:
         start_date: Fecha inicio
         end_date: Fecha fin
         weight: Peso
-        advances: Avances
+        advances: Avances Hasta la Fecha
+        advance: Avance
         advances_in_details: Avances del programa de gestión hasta la fecha
         observations: Observaciones
         revision_date: Fecha de revisión
@@ -116,11 +118,13 @@ pequiven:
         managementSystem: Sistema de Gestión
         tactical_objective: Objetivo Táctico
         operational_objective: Objetivo Operativo
+        strategic_objective: Objetivo Estratégico
         operating_indicator: Indicador Operativo
         location: Localidad
         process: Proceso
         responsibles: Responsable(s) del programa
         period: Periodo
+        ref: Referencia
         name: Nombre
         type_goal: Tipo de Actividad
         not_applicable: No Aplica
@@ -134,6 +138,7 @@ pequiven:
             responsible: Responsable(s) de la Meta
         description: Descripción
         nameOfProgram: Nombre del Programa
+        exportItemsToPdf: Descargar Resumen de Gestión
     goals:
         goal: Meta
         goals: Meta(s)

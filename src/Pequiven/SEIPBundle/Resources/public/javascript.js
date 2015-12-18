@@ -1,3 +1,11 @@
+var ajaxFormaterSelect2 = function(response){
+    return response.text;
+};
+
+var ajaxToSelect = {
+    formaterData: ajaxFormaterSelect2,
+    addEmptyValue: true
+};
 var ajaxToSelect2 = function(url,selectDestination,parameters){
     selectDestination.empty();
     selectDestination.select2('disable');
@@ -14,14 +22,16 @@ var ajaxToSelect2 = function(url,selectDestination,parameters){
 var setDataSelect2 = function(select,data,callData){
     //var myData = [];
     select.empty();
-    select.append('<option value=""></option>');
+    if(ajaxToSelect.addEmptyValue === true){
+        select.append('<option value=""></option>');
+    }
     $.each(data,function(index,value){
         var response = {
             id: value.id,
             text: value.name
         };
         //myData.push(response);
-        select.append('<option value="' + response.id + '">' + response.text + '</option>');
+        select.append('<option value="' + response.id + '">' + ajaxToSelect.formaterData(value) + '</option>');
     });
     if(data.length > 0){
         select.select2('enable');
@@ -29,6 +39,14 @@ var setDataSelect2 = function(select,data,callData){
     }else{
         select.select2('disable');
     }
+};
+
+var myNumberFormat = function(numberToFormat,limit){
+    if(limit == undefined){
+        var limit = 2;
+    }
+    var numberFormat = $.number(numberToFormat, limit, ',', '.');
+    return numberFormat;
 };
 
 $(function() {

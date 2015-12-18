@@ -23,9 +23,11 @@ class SeipPdf extends TCPDF implements ContainerAwareInterface{
     
     protected $footerText;
     
-    
+    private $printLineFooter = true;
+
     //Header del documento pdf de resultados
     public function Header() {
+        
         // Logo SEIP
         $image_file = $this->generateAsset('bundles/pequivenseip/logotipos-pqv/logo_menu_seip.png'); //K_PATH_IMAGES.'logo_example.jpg';
         $this->Image($image_file, 10, 10, 15, '', 'PNG', '', 'T', false, 300, '', false, false, 0, false, false, false);
@@ -37,7 +39,7 @@ class SeipPdf extends TCPDF implements ContainerAwareInterface{
         $this->writeHTML($text);
         // Logo Pqv
         $image_file = $this->generateAsset('bundles/pequivenseip/logotipos-pqv/logo_pqv2.gif'); //K_PATH_IMAGES.'logo_example.jpg';
-        $this->Image($image_file, 270, 10, 15, '', 'GIF', '', 'T', false, 300, '', false, false, 0, false, false, false);
+        $this->Image($image_file, 190, 10, 15, '', 'GIF', '', 'T', false, 300, '', false, false, 0, false, false, false);
         // Línea HR
         $lineRed = array('width' => 1.0, 'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(255, 0, 0));
         $this->Line(0, 27, 300, 27, $lineRed);
@@ -57,7 +59,9 @@ class SeipPdf extends TCPDF implements ContainerAwareInterface{
         
         //Línea HR
         $lineRed = array('width' => 1.0, 'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(255, 0, 0));
-        $this->Line(0, 190, 300, 190, $lineRed);
+        if($this->printLineFooter === true){
+            $this->Line(0, 190, 300, 190, $lineRed);
+        }
 
     }
     
@@ -101,5 +105,9 @@ class SeipPdf extends TCPDF implements ContainerAwareInterface{
     public function setContainer(ContainerInterface $container = null) {
         $this->container = $container
         ;
+    }
+    
+    function setPrintLineFooter($printLineFooter) {
+        $this->printLineFooter = $printLineFooter;
     }
 }

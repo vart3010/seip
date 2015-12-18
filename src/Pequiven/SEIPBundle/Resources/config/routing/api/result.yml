@@ -6,3 +6,12 @@ seip_api_result_useritems:
     requirements:
         _format: "json|xml"
     methods: [GET]
+    
+seip_api_result_items_sai:
+    path: /result/items-sai.{_format}
+    defaults: 
+        _controller: PequivenSEIPBundle:Api/ResultApi:getItemsSai
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]

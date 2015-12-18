@@ -1,0 +1,130 @@
+{% extends "PequivenSEIPBundle:Template:Developer/Common/tableFormat1.html.twig" %}
+
+{% trans_default_domain 'PequivenSIGBundle' %}
+
+
+
+{% block title %}- Objetivos SIG{% endblock %}
+
+{% set route_index = 'pequiven_indicator_menu_list_strategic' %}
+{% set levelStrategic = constant('Pequiven\\ObjetiveBundle\\Entity\\ObjetiveLevel::LEVEL_ESTRATEGICO') %}
+{% set levelTactic = constant('Pequiven\\ObjetiveBundle\\Entity\\ObjetiveLevel::LEVEL_TACTICO') %}
+{% set levelOperative = constant('Pequiven\\ObjetiveBundle\\Entity\\ObjetiveLevel::LEVEL_OPERATIVO') %}
+
+{% set labelHeader = {
+        (constant('Pequiven\\ObjetiveBundle\\Model\\ObjetiveLevel::LEVEL_ESTRATEGICO')):'pequiven_objetive.objetive_strategic',
+        (constant('Pequiven\\ObjetiveBundle\\Model\\ObjetiveLevel::LEVEL_TACTICO')):'pequiven_objetive.objetive_tactic',
+        (constant('Pequiven\\ObjetiveBundle\\Model\\ObjetiveLevel::LEVEL_OPERATIVO')):'pequiven_objetive.objetive_operative',
+    } %}
+
+{% block before_body %}
+    {{ contentHeader(
+        ((labelHeader[level])|trans),
+        ('pequiven_indicator.list'|trans)
+    ) }}
+{% endblock %}
+
+{% block body %}
+<input type="hidden" id="level" value="{{ level }}">
+    <div ng-controller="TableFormatController">
+        <div ng-controller="TableIndicatorController">
+
+            <details class="details margin-bottom" open="">
+                <summary role="button" aria-expanded="true">
+                    {{ 'pequiven.filters'|trans({},'messages') }}
+                </summary>
+                
+                <div class="with-padding">
+                    <div class="columns">
+                            {% if (level == levelTactic) %}
+                                <!-- Filtro Gerencia 1ra Línea -->
+                                <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                                    <label class="bold">{{ 'pequiven_seip.filters.first_line_management'|trans({},'PequivenSEIPBundle') }}</label>
+                                    <br/>
+                                    <div class="with-mid-padding">
+                                        <select class="select2 input-xlarge" id="selectFirstLineManagement" {% if (level > levelTactic) %} ng-change="getSecondLineManagement()" {% endif %} ng-model="model.firstLineManagement" ng-options="value as value.description group by model.complejo.description for (key,value) in data.first_line_managements" >
+                                            <option value=''></option>
+                                        </select>
+                                    </div>
+                                </div>
+                            {% endif %}
+                             {% if (level == levelOperative) %}
+                                <!-- Filtro Gerencia 1ra Línea -->
+                                <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                                    <label class="bold">{{ 'pequiven_seip.filters.first_line_management'|trans({},'PequivenSEIPBundle') }}</label>
+                                    <br/>
+                                    <div class="with-mid-padding">
+                                        <select class="select2 input-xlarge" id="selectFirstLineManagement" {% if (level > levelTactic) %} ng-change="getSecondLineManagement()" {% endif %} ng-model="model.firstLineManagement" ng-options="value as value.description group by model.complejo.description for (key,value) in data.first_line_managements" >
+                                            <option value=''></option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <!-- Filtro Gerencia 2da Línea -->
+                                <div class="new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                                    <label class="bold">{{ 'pequiven_seip.filters.management_second_line'|trans({},'PequivenSEIPBundle') }}</label>
+                                    <br/>
+                                    <div class="with-mid-padding">
+                                        <select class="select2 input-xlarge" id="selectSecondLineManagement" ng-model="model.secondLineManagement" ng-options="value as value.description group by (value.complejo.ref + ' - '+value.gerencia.description) for (key,value) in data.second_line_managements" >
+                                            <option value=''></option>
+                                        </select>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        <!-- Filter ManagementSystem -->
+                            <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                                <label class="bold">{{ 'pequiven_seip.filters.management_system'|trans({},'PequivenSEIPBundle') }}</label>
+                                <br/>
+                                <div class="with-mid-padding">
+                                    <select class="select2 input-xlarge" id="selectManagementSystems" ng-model="model.managementSystem" ng-options="value as value.description for (key,value) in data.managementSystems" >
+                                    <option value=''></option>
+                                </select>
+                                </div>
+                            </div>
+                        
+                    </div>
+                </div>
+
+            </details>
+
+            <div loading-container="tableParams.settings().$loading">
+                <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager" template-header="custom/header" api-data-url="{{ apiDataUrl }}" export-csv="csv" class="table table-responsive table-extra-info">
+                    <tbody>
+                        <tr ng-repeat="result in $data" data="{$ result|json $}">
+                            <td data-title="'{{ (labelHeader[level])|trans }}'" sortable="'ref'" filter="{'description' : 'text'}">
+                                <a href="{$ result._links.self.href $}">{$ result.ref+result.description $} </a>
+                            </td>                            
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+    <script type="text/javascript">
+        
+        $(document).ready(function()
+        {
+            charge();
+            
+            function charge(){
+               $('.select2').select2({
+                allowClear: true
+                });
+            }
+        });
+        
+        function getTableExtraInfo(data)
+            {
+                var response = '';
+
+                response = response + 'Fórmula: ' + data.formula.equation;
+                
+                return response;
+            }
+    </script>
+    
+{% endblock %}
