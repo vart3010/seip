@@ -849,6 +849,10 @@ class CenterController extends SEIPController {
         $reportMesa = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Center\ReportCentro")->findBy(array('codigoCentro' => $center->getCodigoCentro()));
         
         $reportVoto = $this->get('pequiven.repository.center')->findByVoto($id);
+        
+        $resultByMesas = $this->get('pequiven.repository.center')->findResultByMesas($center->getCodigoCentro());
+//        var_dump($resultByMesas);
+//        die();
 
         $report = $cont = $resultM = 0;
         foreach ($reportMesa as $value) {
@@ -991,6 +995,7 @@ class CenterController extends SEIPController {
                     'report'    => $resultM,
                     'reportMesa'=> $reportMesa,
                     'centerService'=> $centerService,
+                    'resultByMesas'=> $resultByMesas,
                     'centerOpen'=> $centerOpen,
                     'votos'     => $reportVoto
         ));
