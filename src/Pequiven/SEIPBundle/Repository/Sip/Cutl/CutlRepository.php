@@ -52,6 +52,20 @@ class CutlRepository extends EntityRepository {
 
         parent::applyCriteria($queryBuilder, $criteria->toArray());
     }
+    
+    public function getCutlData($cedula) {
+
+        $query = $this->getQueryBuilder();
+
+        $query
+                ->andWhere('ct.cedula = :ced')
+                ->setParameter("ced", $cedula)
+        ;
+
+        $q = $query->getQuery();
+
+        return $q->getResult();
+    }
 
     protected function getAlias() {
         return "ct";

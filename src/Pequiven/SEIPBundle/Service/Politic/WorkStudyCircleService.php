@@ -632,6 +632,8 @@ class WorkStudyCircleService implements ContainerAwareInterface {
             if(($this->getSecurityContext()->isGranted(array('ROLE_SEIP_PROPOSAL_EDIT')) || $workStudyCircle->getCoordinator()->getId() == $user->getId())){
                 $valid = true;
             }
+        } elseif($this->getSecurityContext()->isGranted(array('ROLE_SEIP_PROPOSAL_EDIT'))){
+            $valid = true;
         }
         
         return $valid;

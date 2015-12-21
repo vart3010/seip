@@ -12,16 +12,14 @@ use Pequiven\ArrangementProgramBundle\Form\GoalType;
 /**
  * Goal controller.
  */
-class GoalController extends \Pequiven\SEIPBundle\Controller\SEIPController
-{
+class GoalController extends \Pequiven\SEIPBundle\Controller\SEIPController {
 
     /**
      * Lists all Goal entities.
      * 
      * @Template()
      */
-    public function indexAction(Request $request)
-    {
+    public function indexAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
 
         $entities = $em->getRepository('PequivenArrangementProgramBundle:Goal')->findAll();
@@ -30,13 +28,13 @@ class GoalController extends \Pequiven\SEIPBundle\Controller\SEIPController
             'entities' => $entities,
         );
     }
+
     /**
      * Creates a new Goal entity.
      *
      * @Template("PequivenArrangementProgramBundle:Goal:new.html.twig")
      */
-    public function createAction(Request $request)
-    {
+    public function createAction(Request $request) {
         $entity = new Goal();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
@@ -52,7 +50,7 @@ class GoalController extends \Pequiven\SEIPBundle\Controller\SEIPController
 
         return array(
             'entity' => $entity,
-            'form'   => $form->createView(),
+            'form' => $form->createView(),
         );
     }
 
@@ -63,8 +61,7 @@ class GoalController extends \Pequiven\SEIPBundle\Controller\SEIPController
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createCreateForm(Goal $entity,$typeForm = \Pequiven\ArrangementProgramBundle\Entity\GOAL_TYPE_FORM)
-    {
+    private function createCreateForm(Goal $entity, $typeForm = \Pequiven\ArrangementProgramBundle\Entity\GOAL_TYPE_FORM) {
         $form = $this->createForm(new GoalType($typeForm), $entity, array(
             'action' => $this->generateUrl('goal_create'),
             'method' => 'POST',
@@ -80,24 +77,22 @@ class GoalController extends \Pequiven\SEIPBundle\Controller\SEIPController
      *
      * @Template()
      */
-    public function newAction()
-    {
+    public function newAction() {
         $entity = new Goal();
-        $form   = $this->createCreateForm($entity);
+        $form = $this->createCreateForm($entity);
 
         return array(
             'entity' => $entity,
-            'form'   => $form->createView(),
+            'form' => $form->createView(),
         );
     }
-    
+
     /**
      * Finds and displays a Goal entity.
      *
      * @Template()
      */
-    public function showAction(Request $request)
-    {
+    public function showAction(Request $request) {
         $id = $request->get("id");
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('PequivenArrangementProgramBundle:Goal')->find($id);
@@ -109,11 +104,11 @@ class GoalController extends \Pequiven\SEIPBundle\Controller\SEIPController
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
-            'entity'      => $entity,
+            'entity' => $entity,
             'delete_form' => $deleteForm->createView(),
         );
     }
-    
+
     /**
      * Displays a form to edit an existing Goal entity.
      *
@@ -122,10 +117,21 @@ class GoalController extends \Pequiven\SEIPBundle\Controller\SEIPController
     public function getFormAction($typeForm)
     {
         $entity = new Goal();
-        $form = $this->createCreateForm($entity,$typeForm);
+        $form = $this->createCreateForm($entity, $typeForm);
         $form->remove('responsibles');
+
+        $periodService = $this->getPeriodService();
+        $periodActive = $periodService->getPeriodActive();
+        $dateStart = $periodActive->getDateStart();
+        $dateEnd = $periodActive->getDateEnd();
+
+        $yearActive = $dateStart->format('Y');
+
         return array(
             'goal' => $form->createView(),
+            'yearActive' => $yearActive,
+            'dateStart' => $dateStart,
+            'dateEnd' => $dateEnd
         );
     }
 
@@ -136,8 +142,7 @@ class GoalController extends \Pequiven\SEIPBundle\Controller\SEIPController
      * @Method("GET")
      * @Template()
      */
-    public function editAction($id)
-    {
+    public function editAction($id) {
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('PequivenArrangementProgramBundle:Goal')->find($id);
@@ -150,37 +155,37 @@ class GoalController extends \Pequiven\SEIPBundle\Controller\SEIPController
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
+            'entity' => $entity,
+            'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         );
     }
 
     /**
-    * Creates a form to edit a Goal entity.
-    *
-    * @param Goal $entity The entity
-    *
-    * @return \Symfony\Component\Form\Form The form
-    */
-    private function createEditForm(Goal $entity)
-    {
+     * Creates a form to edit a Goal entity.
+     *
+     * @param Goal $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createEditForm(Goal $entity) {
+
         $form = $this->createForm(new GoalType(), $entity, array(
             'action' => $this->generateUrl('goal_update', array('id' => $entity->getId())),
-            'method' => 'PUT',
+            'method' => 'PUT',            
         ));
 
         $form->add('submit', 'submit', array('label' => 'Update'));
 
         return $form;
     }
+
     /**
      * Edits an existing Goal entity.
      *
      * @Template("PequivenArrangementProgramBundle:Goal:edit.html.twig")
      */
-    public function updateAction(Request $request)
-    {
+    public function updateAction(Request $request) {
         $id = $request->get("id");
         $em = $this->getDoctrine()->getManager();
 
@@ -201,17 +206,17 @@ class GoalController extends \Pequiven\SEIPBundle\Controller\SEIPController
         }
 
         return array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
+            'entity' => $entity,
+            'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         );
     }
+
     /**
      * Deletes a Goal entity.
      *
      */
-    public function deleteAction(Request $request)
-    {
+    public function deleteAction(Request $request) {
         $id = $request->get("id");
         $form = $this->createDeleteForm($id);
         $form->handleRequest($request);
@@ -238,21 +243,20 @@ class GoalController extends \Pequiven\SEIPBundle\Controller\SEIPController
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm($id)
-    {
+    private function createDeleteForm($id) {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('goal_delete', array('id' => $id)))
-            ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
-            ->getForm()
+                        ->setAction($this->generateUrl('goal_delete', array('id' => $id)))
+                        ->setMethod('DELETE')
+                        ->add('submit', 'submit', array('label' => 'Delete'))
+                        ->getForm()
         ;
     }
-    
+
     /**
      * @return \Pequiven\SEIPBundle\Service\PeriodService
      */
-    protected function getPeriodService()
-    {
+    protected function getPeriodService() {
         return $this->container->get('pequiven_seip.service.period');
     }
+
 }

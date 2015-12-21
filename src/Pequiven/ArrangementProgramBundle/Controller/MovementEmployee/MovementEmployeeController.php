@@ -234,16 +234,16 @@ class MovementEmployeeController extends SEIPController {
 
         $em = $this->getDoctrine()->getManager();
         $securityService = $this->getSecurityService();
-
-        if (!is_null($request->get('idGoal'))) {
-            $id = $request->get('idGoal');
-            $tipo = 'Goal';
-        }
-
-        if (!is_null($request->get('idAP'))) {
-            $id = $request->get('idAP');
-            $tipo = 'AP';
-        }
+//
+//        if (!is_null($request->get('idGoal'))) {
+//            $id = $request->get('idGoal');
+//            $tipo = 'Goal';
+//        }
+//
+//        if (!is_null($request->get('idAP'))) {
+//            $id = $request->get('idAP');
+//            $tipo = 'AP';
+//        }
 
 
         //VALIDO PERMISOLOGÍA POR SI ACASO SE ACCEDE DESDE URL DIRECTA
@@ -364,7 +364,7 @@ class MovementEmployeeController extends SEIPController {
                             $movement->setrealAdvance($datos['realResult']);
                             $movement->setPentalty($datos['penalty']);
                             $movement->setPlanned($datos['plannedResult']);
-                            $movement->setTypeMov('Goal');
+                            $movement->setTypeMov($tipo);
                             $movement->setUser($user);
                             $movement->setPeriod($this->getPeriodService()->getPeriodActive());
                             $em->persist($movement);
@@ -397,14 +397,24 @@ class MovementEmployeeController extends SEIPController {
      * @return type
      */
     public function exportAction(Request $request) {
-
+         
+        if (!is_null($request->get('idGoal'))) {
         $id = $request->get('idGoal');
         $reportService = $this->container->get('seip.service.report');
-        $route = "MovementEmployee/Movimiento-en-Meta.jrxml";
+        $route = "MovementEmployee/Goal_Movement.jrxml";
         $parameters = array("idGoal" => $id);
         $reportService->DownloadReportService($parameters, $route);
-
         return $this->redirect($this->generateUrl('goal_movement', array('idGoal' => $id)));
+        }
+        
+        if (!is_null($request->get('idAP'))) {
+        $id = $request->get('idAP');
+        $reportService = $this->container->get('seip.service.report');
+        $route = "MovementEmployee/AP_Movement.jrxml";
+        $parameters = array("idAP" => $id);
+        $reportService->DownloadReportService($parameters, $route);
+        return $this->redirect($this->generateUrl('goal_movement', array('idAP' => $id)));
+        }
     }
 
     /**

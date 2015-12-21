@@ -21,8 +21,10 @@ class MovementEmployeeRepository extends EntityRepository {
         $qb
                 ->Select('mov')
                 ->andWhere('mov.id_affected= :goals')
+                ->andWhere('mov.typeMov= :type')
                 ->orderBy('mov.date')
                 ->setParameter('goals', $idGoal)
+                ->setParameter('type', "Goal")
 
         ;
         return $qb->getQuery()->getResult();
@@ -33,8 +35,10 @@ class MovementEmployeeRepository extends EntityRepository {
         $qb
                 ->Select('mov')
                 ->andWhere('mov.id_affected= :AP')
+                ->andWhere('mov.typeMov= :type')
                 ->orderBy('mov.date')
                 ->setParameter('AP', $idAP)
+                ->setParameter('type', "AP")
 
         ;
         return $qb->getQuery()->getResult();

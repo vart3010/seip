@@ -84,6 +84,118 @@ class OnePerTen {
      * @ORM\Column(name="voto", type="integer", nullable=true)
      */
     private $voto = 0;
+    
+    /**
+     * psuv
+     * @var integer
+     *
+     * @ORM\Column(name="psuv", type="integer", nullable=true)
+     */
+    private $psuv;
+    
+    /**
+     * intPsuv
+     * @var integer
+     *
+     * @ORM\Column(name="intPsuv", type="integer", nullable=true)
+     */
+    private $intPsuv;
+    
+    /**
+     * intOpo
+     * @var integer
+     *
+     * @ORM\Column(name="intOpo", type="integer", nullable=true)
+     */
+    private $intOpo;
+    
+    /**
+     * reubicado
+     * @var integer
+     *
+     * @ORM\Column(name="reubicado", type="integer", nullable=true)
+     */
+    private $reubicado;
+    
+    /**
+     * esperanza
+     * @var integer
+     *
+     * @ORM\Column(name="esperanza", type="integer", nullable=true)
+     */
+    private $esperanza;
+    
+    /**
+     * vpresidencial1
+     * @var integer
+     *
+     * @ORM\Column(name="vpresidencial1", type="integer", nullable=true)
+     */
+    private $vpresidencial1;
+    
+    /**
+     * vregionales
+     * @var integer
+     *
+     * @ORM\Column(name="vregionales", type="integer", nullable=true)
+     */
+    private $vregionales;
+    
+    /**
+     * vpresidencial2
+     * @var integer
+     *
+     * @ORM\Column(name="vpresidencial2", type="integer", nullable=true)
+     */
+    private $vpresidencial2;
+    
+    /**
+     * vmunicipales
+     * @var integer
+     *
+     * @ORM\Column(name="vmunicipales", type="integer", nullable=true)
+     */
+    private $vmunicipales;
+    
+    /**
+     * fref
+     * @var integer
+     *
+     * @ORM\Column(name="fref", type="integer", nullable=true)
+     */
+    private $fref;
+    
+    /**
+     * vanguardia
+     * @var integer
+     *
+     * @ORM\Column(name="vanguardia", type="integer", nullable=true)
+     */
+    private $vanguardia;
+    
+    /**
+     * ubch
+     * @var integer
+     *
+     * @ORM\Column(name="ubch", type="integer", nullable=true)
+     */
+    private $ubch;
+    
+    /**
+     * miembroOnePerTen
+     * @var integer
+     *
+     * @ORM\Column(name="miembroOnePerTen", type="integer", nullable=true)
+     */
+    private $miembroOnePerTen;
+    
+    /**
+     * militante
+     * @var integer
+     *
+     * @ORM\Column(name="militante", type="integer", nullable=true)
+     */
+    private $militante;
 
     /**
      * @var \Pequiven\SEIPBundle\Entity\Sip\OnerPerTenMembers
@@ -190,6 +302,116 @@ class OnePerTen {
         $this->fechaVoto = $fechaVoto;
     }
 
+    function getPsuv() {
+        return $this->psuv;
+    }
 
+    function setPsuv($psuv) {
+        $this->psuv = $psuv;
+    }
+    
+    function getIntPsuv() {
+        return $this->intPsuv;
+    }
+
+    function setIntPsuv($intPsuv) {
+        $this->intPsuv = $intPsuv;
+    }
+    
+    function getIntOpo() {
+        return $this->intOpo;
+    }
+
+    function setIntOpo($intOpo) {
+        $this->intOpo = $intOpo;
+    }
+    
+    function getReubicado() {
+        return $this->reubicado;
+    }
+
+    function setReubicado($reubicado) {
+        $this->reubicado = $reubicado;
+    }
+    
+    function getEsperanza() {
+        return $this->esperanza;
+    }
+
+    function setEsperanza($esperanza) {
+        $this->esperanza = $esperanza;
+    }
+    
+    function getVpresidencial1() {
+        return $this->vpresidencial1;
+    }
+
+    function setVpresidencial1($vpresidencial1) {
+        $this->vpresidencial1 = $vpresidencial1;
+    }
+    
+    function getVregionales() {
+        return $this->vregionales;
+    }
+
+    function setVregionales($vregionales) {
+        $this->vregionales = $vregionales;
+    }
+    
+    function getVpresidencial2() {
+        return $this->vpresidencial2;
+    }
+
+    function setVpresidencial2($vpresidencial2) {
+        $this->vpresidencial2 = $vpresidencial2;
+    }
+    
+    function getVmunicipales() {
+        return $this->vmunicipales;
+    }
+
+    function setVmunicipales($vmunicipales) {
+        $this->vmunicipales = $vmunicipales;
+    }
+    
+    function getFref() {
+        return $this->fref;
+    }
+
+    function setFref($fref) {
+        $this->fref = $fref;
+    }
+    
+    function getVanguardia() {
+        return $this->vanguardia;
+    }
+
+    function setVanguardia($vanguardia) {
+        $this->vanguardia = $vanguardia;
+    }
+    
+    function getUbch() {
+        return $this->ubch;
+    }
+
+    function setUbch($ubch) {
+        $this->ubch = $ubch;
+    }
+    
+    function getMiembroOnePerTen() {
+        return $this->miembroOnePerTen;
+    }
+
+    function setMiembroOnePerTen($miembroOnePerTen) {
+        $this->miembroOnePerTen = $miembroOnePerTen;
+    }
+       
+    function getMilitante() {
+        return $this->militante;
+    }
+
+    function setMilitante($militante) {
+        $this->militante = $militante;
+    }
 
 }

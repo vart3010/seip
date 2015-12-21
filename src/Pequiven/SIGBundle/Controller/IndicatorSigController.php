@@ -698,7 +698,10 @@ class IndicatorSigController extends ResourceController {
             'font'          => $font
         );
 
-        $this->generatePdf($data);
+        //Solo si existen las dos graficas
+        if (isset($chartEvolution) && isset($chartCause)) {
+            $this->generatePdf($data);            
+        }
     }
 
     public function generatePdf($data) {

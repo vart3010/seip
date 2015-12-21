@@ -235,6 +235,19 @@ class User extends BaseUser implements UserInterface, UserBoxInterface, PeriodIt
      * @ORM\OneToMany(targetEntity="Pequiven\ArrangementProgramBundle\Entity\MovementEmployee\MovementEmployee", mappedBy="User")
      * */
     private $movementEmployee;
+    
+    
+    /**
+     * @var Pequiven\MasterBundle\Entity\FeeStructure
+     * @ORM\OneToMany(targetEntity="\Pequiven\MasterBundle\Entity\FeeStructure", mappedBy="User")
+     * */
+    private $feeStructure;
+    
+    /**
+     * @var \Pequiven\MasterBundle\Entity\MovementFeeStructure
+     * @ORM\OneToMany(targetEntity="\Pequiven\MasterBundle\Entity\MovementFeeStructure",mappedBy="User",cascade={"persist"}))
+     */
+    protected $movementFeeStructure;
 
     /**
      * Constructor
@@ -252,6 +265,7 @@ class User extends BaseUser implements UserInterface, UserBoxInterface, PeriodIt
         $this->reportTemplates = new \Doctrine\Common\Collections\ArrayCollection();
         $this->workStudyCircles = new \Doctrine\Common\Collections\ArrayCollection();
         $this->evolutionAction = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->feeStructure = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**

@@ -18,6 +18,30 @@ class CentroRepository extends EntityRepository {
      * @param array $orderBy
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
+    function findResultByMesas($codigoCentro) {
+        
+        $em = $this->getEntityManager();
+        $db = $em->getConnection();
+
+        $sql = 'SELECT m.*
+        FROM datosMesa AS m
+        WHERE m.centro = '.$codigoCentro.'
+        ORDER BY m.centro,m.mesa ASC,m.porc DESC';
+
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+        
+        return $result;
+    }
+    
+    /**
+     * 
+     * 
+     * @param array $criteria
+     * @param array $orderBy
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
     function findByNotification($id) {
         
         $em = $this->getEntityManager();
@@ -516,7 +540,7 @@ class CentroRepository extends EntityRepository {
         if ($type == 2) {
             $sql2 = ' AND Tipo = "PQV"';            
         }else{
-            $type = "";
+            $sql2 = "";
         }
 
         $sql3 = ' GROUP BY Municipio';

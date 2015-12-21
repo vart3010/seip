@@ -20,7 +20,7 @@ class GoalType extends AbstractType
      * @param array $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
-    {
+    {        
         $builder
             ->add('name',null,array(
                 'label' => 'pequiven.form.goal.name',
@@ -65,6 +65,7 @@ class GoalType extends AbstractType
                 'required' => true,
                 'format' => 'yyyy-MM-dd'
             ));
+                
         if($this->typeForm == \Pequiven\ArrangementProgramBundle\Entity\GOAL_TYPE_FORM){
             $builder
                 ->add('responsibles',null,array(

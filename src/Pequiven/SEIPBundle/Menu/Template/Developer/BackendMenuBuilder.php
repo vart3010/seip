@@ -1215,7 +1215,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
         }
 
         if ($this->isGranted('ROLE_SEIP_ARRANGEMENT_PROGRAM_CREATE_*')) {
-            if ($this->isGranted('ROLE_SEIP_ARRANGEMENT_PROGRAM_CREATE_SPECIAL')) {
+//            if ($this->isGranted('ROLE_SEIP_ARRANGEMENT_PROGRAM_CREATE_SPECIAL')) {
                 $subchild = $this->factory->createItem('arrangement_programs.add.main', $this->getSubLevelOptions(array(
                                     'uri' => null,
                                     'labelAttributes' => array('icon' => 'icon-book',),
@@ -1246,7 +1246,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                 }
 
                 $child->addChild($subchild);
-            }
+//            }
         }
 
         $menu->addChild($child);
@@ -1611,7 +1611,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
      * @param type $section
      */
     public function addMenuSip(ItemInterface $menu, $section) {
-//        $user = $this->getUser();
+        $user = $this->getUser();
 //        $workStudyCircleService = $this->getWorkStudyCircleService();
 
         $menuSip = $this->factory->createItem('menu_sip', $this->getSubLevelOptions(array(
@@ -1621,7 +1621,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                 )->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.main', $section)));
 
         
-        if($this->isGranted(array('ROLE_SEIP_SIP_SEACH_EMPLOYEES'))){
+        if($this->isGranted(array('ROLE_SEIP_SIP_SEACH_EMPLOYEES')) && ($user->getId() == 112 || $user->getId() == 70 || $user->getId() == 22 || $user->getId() == 79 || $user->getId() == 1640 || $user->getId() == 1668)){
             $menuSip->addChild('sip.list_pqv', array(
                 'route' => 'pequiven_onePerTen_list',
                 'labelAttributes' => array('icon' => 'fa fa-table',)
@@ -1647,12 +1647,12 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
             $menuSip->addChild($centro);
         }
 
-        if ($this->isGranted(array('ROLE_SEIP_SIP_ONEPERTEN'))) {
-            $onePerTen = $this->factory->createItem('onePerTen', $this->getSubLevelOptions(array(
-                                'uri' => null,
-                                'labelAttributes' => array('icon' => 'fa fa-ticket'),
-                            ))
-                    )->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.onePerTen', $section)));
+//        if ($this->isGranted(array('ROLE_SEIP_SIP_ONEPERTEN'))) {
+//            $onePerTen = $this->factory->createItem('onePerTen', $this->getSubLevelOptions(array(
+//                                'uri' => null,
+//                                'labelAttributes' => array('icon' => 'fa fa-ticket'),
+//                            ))
+//                    )->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.onePerTen', $section)));
 
 
 //            $register = $this->factory->createItem('RegisterOnePerTen', $this->getSubLevelOptions(array(
@@ -1662,16 +1662,16 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
 //
 //            $onePerTen->addChild($register);
 
-            if ($this->isGranted(array('ROLE_SEIP_SIP_ONEPERTEN_LIST'))) {
-                $list = $this->factory->createItem('listOnePerTen', $this->getSubLevelOptions(array(
-                                    'route' => 'pequiven_onePerTen_list',
-                                ))
-                        )->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.list', $section)));
-                $onePerTen->addChild($list);
-            }
+//            if ($this->isGranted(array('ROLE_SEIP_SIP_ONEPERTEN_LIST'))) {
+//                $list = $this->factory->createItem('listOnePerTen', $this->getSubLevelOptions(array(
+//                                    'route' => 'pequiven_onePerTen_list',
+//                                ))
+//                        )->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.list', $section)));
+//                $onePerTen->addChild($list);
+//            }
 
-            $menuSip->addChild($onePerTen);
-        }
+//            $menuSip->addChild($onePerTen);
+//        }
 
         if ($this->isGranted(array('ROLE_SEIP_SIP_CUTL'))) {
             //CUTL

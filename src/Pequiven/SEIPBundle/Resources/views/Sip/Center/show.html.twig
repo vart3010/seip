@@ -171,7 +171,7 @@
         {% set day3 = "03" %}
         {% set day4 = "04" %}
         {% set day5 = "05" %}
-        {% set day6 = "06" %}
+        {% set day6 = "17" %}
 
         {# Dia actual #}
         {% set day = "now" | date("d") %}
@@ -180,20 +180,20 @@
                 <p class="inline-label">
                     <label class="label">Mesas Activas</label>
                     {{ report }}
-                    &nbsp;       
+                    &nbsp;
                 </p>
-                &nbsp; 
-            </div>       
-            <div ng-controller="SipCenterReportController">                 
+                &nbsp;
+            </div>
+            <div ng-controller="SipCenterReportController">
                 {% for reportM in reportMesa %}
                     {# red-gradient  green-gradient#}
-                    <a class="button icon-pencil icon-size2 {% if centerService.consultTableOpen(reportM) == true %} red-gradient {% endif %}" href="" ng-click="loadTemplateReportCenter(mesa='{{ reportM.mesa }}')" title="Cargar Estatus de Mesa">Mesa {{ reportM.mesa }}</a>        
-                    &nbsp; 
+                    <a class="button icon-pencil icon-size2 {% if centerService.consultTableOpen(reportM) == true %} red-gradient {% endif %}" href="" ng-click="loadTemplateReportCenter(mesa='{{ reportM.mesa }}')" title="Cargar Estatus de Mesa">Mesa {{ reportM.mesa }}</a>
+                    &nbsp;
                 {% endfor %}
             </div>
         {% endif %}
-        &nbsp;  
-        {% if day6 == day %}
+        &nbsp;
+        {#{% if day6 == day %}
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile" ng-controller="SipCenterReportController">
                 <p class="inline-label">
                     <label class="label">Exit Poll</label>
@@ -202,17 +202,53 @@
                     <a class="button icon-add-user icon-size2" href="" ng-click="loadTemplateReportVoto(centro='{{ center.id }}')" title="Cargar Votos Registrados por Centro">Votos</a>        
                 </p>            
             </div>
-        {% endif %}
-    </fieldset>  
+        {% endif %}#}
+    </fieldset>
+    <HR>
+    
+    <div class="with-padding"> 
+        <h3>Resultados</h3>        
+        <div style="height:500px;width:auto;overflow:auto;">
+        <table class="table responsive-table" id="sorting-example2">
+            <thead>
+                <tr>
+                    <th scope="col" width="20%" class="header" align="left">
+                        Mesa
+                    </th>                    
+                    <th scope="col" width="20%" class="header" align="left">
+                        N° Votos
+                    </th>
+                    <th scope="col" width="20%" class="header" align="left">
+                        Porcentaje
+                    </th> 
+                    <th scope="col" width="40%" class="header" align="left">
+                        Partido
+                    </th>                         
+                </tr>
+            </thead>  
+            {% for key,value in resultByMesas %}
+                <tbody align="center">
+                    <tr>
+                        <td align="left">{{ value['mesa'] }}</td>                            
+                        <td align="left">{{ value['voto'] }}</td>                            
+                        <td align="left">{{ value['porc'] }}</td> 
+                        <td align="left">{{ value['partido'] }}</td>                         
+                    </tr>                 
+                </tbody> 
+            {% endfor %}
+        </table> 
+        </div>
+    </div>
+    
     <br>
-    {% include 'PequivenSEIPBundle:Sip:Center/StatusCenter.html.twig' %}  
+    {% include 'PequivenSEIPBundle:Sip:Center/StatusCenter.html.twig' %}
     <br>
     <fieldset class="fieldset">
         <legend class="legend" >CUTL&nbsp;</legend>
         <div class="columns">
             {% set cont = 0 %}
             {% for dataCutl in  cutl %}
-                {% if cont == 1 %}    
+                {% if cont == 1 %}
                     <HR>
                 {% endif %}
                 <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
@@ -225,7 +261,7 @@
                     <p class="inline-label">
                         <label class="label">Nombre</label>
                         {{ dataCutl.nombre }}
-                    </p> 
+                    </p>
                 </div>
                 <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                     <p class="inline-label">

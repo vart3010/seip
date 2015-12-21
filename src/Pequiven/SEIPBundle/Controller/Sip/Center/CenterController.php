@@ -736,7 +736,7 @@ class CenterController extends SEIPController {
 
         $em = $this->getDoctrine()->getManager();
 
-        $results = $this->get('pequiven.repository.inventory')->find($id);
+        $results = $this->get('pequiven.repository.inventory_center')->find($id);
 
         if ($results) {
 
@@ -757,7 +757,7 @@ class CenterController extends SEIPController {
 
         $id = $request->get('id');
         
-        $inventory = $this->get('pequiven.repository.inventory')->findOneBy(array('id' => $id));
+        $inventory = $this->get('pequiven.repository.inventory_center')->findOneBy(array('id' => $id));
 
         $center  = $this->get('pequiven.repository.center')->findOneBy(array('codigoCentro' => $inventory->getCodigoCentro()));
         
@@ -849,6 +849,10 @@ class CenterController extends SEIPController {
         $reportMesa = $em->getRepository("\Pequiven\SEIPBundle\Entity\Sip\Center\ReportCentro")->findBy(array('codigoCentro' => $center->getCodigoCentro()));
         
         $reportVoto = $this->get('pequiven.repository.center')->findByVoto($id);
+        
+        $resultByMesas = $this->get('pequiven.repository.center')->findResultByMesas($center->getCodigoCentro());
+//        var_dump($resultByMesas);
+//        die();
 
         $report = $cont = $resultM = 0;
         foreach ($reportMesa as $value) {
@@ -969,7 +973,7 @@ class CenterController extends SEIPController {
 
         $observations = $this->get('pequiven.repository.observations')->findBy(array('codigoCentro' => $codigoCentro));
         
-        $inventory = $this->get('pequiven.repository.inventory')->findBy(array('codigoCentro' => $codigoCentro));
+        $inventory = $this->get('pequiven.repository.inventory_center')->findBy(array('codigoCentro' => $codigoCentro));
 
         return $this->render('PequivenSEIPBundle:Sip:Center\show.html.twig', array(
                     'center'    => $center,
@@ -991,6 +995,7 @@ class CenterController extends SEIPController {
                     'report'    => $resultM,
                     'reportMesa'=> $reportMesa,
                     'centerService'=> $centerService,
+                    'resultByMesas'=> $resultByMesas,
                     'centerOpen'=> $centerOpen,
                     'votos'     => $reportVoto
         ));
@@ -1314,7 +1319,7 @@ class CenterController extends SEIPController {
         $sorting = $request->get('sorting', $this->config->getSorting());
 
         $repository = $this->getRepository();
-        $repository = $this->get('pequiven.repository.inventory');        
+        $repository = $this->get('pequiven.repository.inventory_center');        
         
         //$criteria['codCentro'] = $codCentro;
 

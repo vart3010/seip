@@ -22,9 +22,12 @@ use Symfony\Component\HttpFoundation\Request;
 class ReportTemplateController extends SEIPController {
 
     public function indexAction(Request $request) {
+
         $criteria = $request->get('filter', $this->config->getCriteria());
         $sorting = $request->get('sorting', $this->config->getSorting());
         $repository = $this->getRepository();
+
+        $criteria['applyPeriodCriteria'] = true;
 
         $resources = $this->resourceResolver->getResource(
                 $repository, 'createPaginatorByUser', array($criteria, $sorting)
@@ -1898,14 +1901,14 @@ class ReportTemplateController extends SEIPController {
             );
 
 //TOTALES MONTH PRODUCCTIONS
-            if ($MonthPlanAcumulated - $MonthRealAcumualated) {
+            if ($MonthPlanAcumulated - $MonthRealAcumualated < 0) {
                 $varMonth = 0;
             } else {
                 $varMonth = $MonthPlanAcumulated - $MonthRealAcumualated;
             }
 
             if ($MonthRealAcumualated != 0) {
-                $ejecutionMonth = ($MonthPlanAcumulated * 100) / $MonthRealAcumualated;
+                $ejecutionMonth = ($MonthRealAcumualated * 100) / $MonthPlanAcumulated;
             } else {
                 $ejecutionMonth = 0.0;
             }
@@ -1926,7 +1929,7 @@ class ReportTemplateController extends SEIPController {
             }
 
             if ($yearRealAcumualated != 0) {
-                $ejecutionYear = ($yearPlanAcumulated * 100) / $yearRealAcumualated;
+                $ejecutionYear = ($yearRealAcumualated * 100) / $yearPlanAcumulated;
             } else {
                 $ejecutionYear = 0.0;
             }

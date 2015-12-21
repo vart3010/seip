@@ -9,7 +9,7 @@ services:
     sonata.admin.formula:
         class: Pequiven\MasterBundle\Admin\FormulaAdmin
         tags:
-            - { name: sonata.admin, manager_type: orm, group: "Indicador", label: "Formula" }
+            - { name: sonata.admin, manager_type: orm, group: "Indicador", label: "Fórmula" }
         arguments:
             - ~
             - Pequiven\MasterBundle\Entity\Formula
@@ -21,7 +21,7 @@ services:
     sonata.admin.formula.variable:
         class: Pequiven\MasterBundle\Admin\Formula\VariableAdmin
         tags:
-            - { name: sonata.admin, manager_type: orm, group: "Indicador", label: "Variable de Formula" }
+            - { name: sonata.admin, manager_type: orm, group: "Indicador", label: "Variable de Fórmulas" }
         arguments:
             - ~
             - Pequiven\MasterBundle\Entity\Formula\Variable
@@ -33,7 +33,7 @@ services:
     sonata.admin.formula.formula_detail:
         class: Pequiven\MasterBundle\Admin\Formula\FormulaDetailAdmin
         tags:
-            - { name: sonata.admin, manager_type: orm, group: "Indicador", label: "Detalle de formula del indicador" }
+            - { name: sonata.admin, manager_type: orm, group: "Indicador", label: "Detalle de Fórmula del indicador" }
         arguments:
             - ~
             - Pequiven\MasterBundle\Entity\Formula\FormulaDetail
@@ -45,7 +45,7 @@ services:
     sonata.admin.indicator.value_indicator:
         class: Pequiven\MasterBundle\Admin\Indicator\ValueIndicatorAdmin
         tags:
-            - { name: sonata.admin, manager_type: orm, group: "Indicador" ,label_catalogue: "SonataUserBundle", label: "Valor de indicador" }
+            - { name: sonata.admin, manager_type: orm, group: "Indicador" ,label_catalogue: "SonataUserBundle", label: "Valor de Indicador" }
         arguments:
             - ~
             - Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator
@@ -56,7 +56,7 @@ services:
     sonata.admin.indicator.tag_indicator:
         class: Pequiven\MasterBundle\Admin\Indicator\TagIndicatorAdmin
         tags:
-            - { name: sonata.admin, manager_type: orm, group: "Indicador" ,label_catalogue: "SonataUserBundle", label: "Etiqueta del indicador" }
+            - { name: sonata.admin, manager_type: orm, group: "Indicador" ,label_catalogue: "SonataUserBundle", label: "Etiqueta del Indicador" }
         arguments:
             - ~
             - Pequiven\IndicatorBundle\Entity\Indicator\TagIndicator
@@ -68,7 +68,7 @@ services:
     sonata.admin.indicator.indicator_chart_details:
         class: Pequiven\MasterBundle\Admin\Indicator\IndicatorChartDetailsAdmin
         tags:
-            - { name: sonata.admin, manager_type: orm, group: "Indicador" ,label_catalogue: "SonataUserBundle", label: "Detalles de los gráficos del indicador" }
+            - { name: sonata.admin, manager_type: orm, group: "Indicador" ,label_catalogue: "SonataUserBundle", label: "Detalles de los Gráficos del Indicador" }
         arguments:
             - ~
             - Pequiven\IndicatorBundle\Entity\Indicator\IndicatorChartDetails
@@ -80,7 +80,7 @@ services:
     sonata.admin.indicator.type_feature_indicator:
         class: Pequiven\MasterBundle\Admin\Indicator\TypeFeatureIndicatorAdmin
         tags:
-            - { name: sonata.admin, manager_type: orm, group: "Indicador" ,label_catalogue: "SonataUserBundle", label: "Tipo de punto de atención" }
+            - { name: sonata.admin, manager_type: orm, group: "Indicador" ,label_catalogue: "SonataUserBundle", label: "Tipo de Punto de Atención" }
         arguments:
             - ~
             - Pequiven\MasterBundle\Entity\Indicator\TypeFeatureIndicator
@@ -113,7 +113,7 @@ services:
     sonata.admin.indicator.frequency_notification:
         class: Pequiven\MasterBundle\Admin\Indicator\FrequencyNotificationIndicatorAdmin
         tags:
-            - { name: sonata.admin, manager_type: orm, group: "Indicador", label: "Frecuencia de notificación" }
+            - { name: sonata.admin, manager_type: orm, group: "Indicador", label: "Frecuencia de Notificación" }
         arguments:
             - ~
             - Pequiven\IndicatorBundle\Entity\Indicator\FrequencyNotificationIndicator
@@ -149,7 +149,7 @@ services:
     sonata.admin.indicator.report_template:
         class: Pequiven\MasterBundle\Admin\DataLoad\ReportTemplateAdmin
         tags:
-            - { name: sonata.admin, manager_type: orm, group: "Indicador", label: "Plantilla de reporte" }
+            - { name: sonata.admin, manager_type: orm, group: "Indicador", label: "Plantilla de Reportes" }
         arguments:
             - ~
             - Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate
@@ -160,7 +160,7 @@ services:
     sonata.admin.core.period:
         class: Pequiven\MasterBundle\Admin\PeriodAdmin
         tags:
-            - { name: sonata.admin, manager_type: orm, group: "Core", label: "Periodo" }
+            - { name: sonata.admin, manager_type: orm, group: "Core", label: "Período" }
         arguments:
             - ~
             - Pequiven\SEIPBundle\Entity\Period
@@ -172,7 +172,7 @@ services:
     sonata.admin.arrangement_program.arrangement_program:
         class: Pequiven\MasterBundle\Admin\ArrangementProgram\ArrangementProgramAdmin
         tags:
-            - { name: sonata.admin, manager_type: orm, group: "Programa de gestion", label: "Programa de gestion" }
+            - { name: sonata.admin, manager_type: orm, group: "Programa de gestión", label: "Programa de Gestión" }
         arguments:
             - ~
             - Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram
@@ -183,7 +183,7 @@ services:
     sonata.admin.arrangement_program.goal:
         class: Pequiven\MasterBundle\Admin\ArrangementProgram\GoalAdmin
         tags:
-            - { name: sonata.admin, manager_type: orm, group: "Programa de gestion", label: "Metas" }
+            - { name: sonata.admin, manager_type: orm, group: "Programa de gestión", label: "Metas" }
         arguments:
             - ~
             - Pequiven\ArrangementProgramBundle\Entity\Goal
@@ -194,7 +194,7 @@ services:
     sonata.admin.arrangement_program.goal_details:
         class: Pequiven\MasterBundle\Admin\ArrangementProgram\GoalDetailsAdmin
         tags:
-            - { name: sonata.admin, manager_type: orm, group: "Programa de gestion", label: "Detalles de metas" }
+            - { name: sonata.admin, manager_type: orm, group: "Programa de gestión", label: "Detalles de Metas" }
         arguments:
             - ~
             - Pequiven\ArrangementProgramBundle\Entity\GoalDetails
@@ -205,7 +205,7 @@ services:
     sonata.admin.arrangement_program.timeline:
         class: Pequiven\MasterBundle\Admin\ArrangementProgram\TimelineAdmin
         tags:
-            - { name: sonata.admin, manager_type: orm, group: "Programa de gestion", label: "Linea de tiempo" }
+            - { name: sonata.admin, manager_type: orm, group: "Programa de gestión", label: "Línea de Tiempo" }
         arguments:
             - ~
             - Pequiven\ArrangementProgramBundle\Entity\Timeline
@@ -216,7 +216,7 @@ services:
     sonata.admin.arrangement_range.arrangement_range:
         class: Pequiven\MasterBundle\Admin\ArrangementRangeAdmin
         tags:
-            - { name: sonata.admin, manager_type: orm, group: "Rango de gestion", label: "Rango de gestión" }
+            - { name: sonata.admin, manager_type: orm, group: "Rango de gestión", label: "Rango de Gestión" }
         arguments:
             - ~
             - Pequiven\ArrangementBundle\Entity\ArrangementRange
@@ -264,7 +264,7 @@ services:
     sonata.admin.user.gerencia:
         class: Pequiven\MasterBundle\Admin\User\GerenciaAdmin
         tags:
-            - { name: sonata.admin, manager_type: orm, group: "%sonata.user.admin.groupname%" ,label_catalogue: "SonataUserBundle", label: "Gerencia de primera" }
+            - { name: sonata.admin, manager_type: orm, group: "%sonata.user.admin.groupname%" ,label_catalogue: "SonataUserBundle", label: "Gerencia de 1ra Línea" }
         arguments:
             - ~
             - Pequiven\MasterBundle\Entity\Gerencia
@@ -275,7 +275,7 @@ services:
     sonata.admin.user.gerencia_second:
         class: Pequiven\MasterBundle\Admin\User\GerenciaSecondAdmin
         tags:
-            - { name: sonata.admin, manager_type: orm, group: "%sonata.user.admin.groupname%" ,label_catalogue: "SonataUserBundle", label: "Gerencia de segunda" }
+            - { name: sonata.admin, manager_type: orm, group: "%sonata.user.admin.groupname%" ,label_catalogue: "SonataUserBundle", label: "Gerencia de 2da Línea" }
         arguments:
             - ~
             - Pequiven\MasterBundle\Entity\GerenciaSecond
@@ -286,10 +286,21 @@ services:
     sonata.admin.user.gerencia_group:
         class: Pequiven\MasterBundle\Admin\User\GerenciaGroupAdmin
         tags:
-            - { name: sonata.admin, manager_type: orm, group: "%sonata.user.admin.groupname%" ,label_catalogue: "SonataUserBundle", label: "Grupo de Gerencia" }
+            - { name: sonata.admin, manager_type: orm, group: "%sonata.user.admin.groupname%" ,label_catalogue: "SonataUserBundle", label: "Grupo de Gerencias" }
         arguments:
             - ~
             - Pequiven\MasterBundle\Entity\GerenciaGroup
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
+
+    sonata.admin.user.coordinacion:
+        class: Pequiven\MasterBundle\Admin\User\CoordinacionAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "%sonata.user.admin.groupname%" ,label_catalogue: "SonataUserBundle", label: "Coordinación" }
+        arguments:
+            - ~
+            - Pequiven\MasterBundle\Entity\Coordinacion
             - ~
         calls:
             - [ setTranslationDomain, [SonataAdminBundle]]
@@ -297,7 +308,7 @@ services:
     sonata.admin.indicator.value_indicator:
         class: Pequiven\MasterBundle\Admin\Indicator\ValueIndicatorAdmin
         tags:
-            - { name: sonata.admin, manager_type: orm, group: "Indicador" ,label_catalogue: "SonataUserBundle", label: "Valor de indicador" }
+            - { name: sonata.admin, manager_type: orm, group: "Indicador" ,label_catalogue: "SonataUserBundle", label: "Valor de Indicador" }
         arguments:
             - ~
             - Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator
@@ -308,7 +319,7 @@ services:
     sonata.admin.indicator.tag_indicator:
         class: Pequiven\MasterBundle\Admin\Indicator\TagIndicatorAdmin
         tags:
-            - { name: sonata.admin, manager_type: orm, group: "Indicador" ,label_catalogue: "SonataUserBundle", label: "Etiqueta del indicador" }
+            - { name: sonata.admin, manager_type: orm, group: "Indicador" ,label_catalogue: "SonataUserBundle", label: "Etiqueta del Indicador" }
         arguments:
             - ~
             - Pequiven\IndicatorBundle\Entity\Indicator\TagIndicator
@@ -320,7 +331,7 @@ services:
     sonata.admin.indicator.type_feature_indicator:
         class: Pequiven\MasterBundle\Admin\Indicator\TypeFeatureIndicatorAdmin
         tags:
-            - { name: sonata.admin, manager_type: orm, group: "Indicador" ,label_catalogue: "SonataUserBundle", label: "Tipo de punto de atención" }
+            - { name: sonata.admin, manager_type: orm, group: "Indicador" ,label_catalogue: "SonataUserBundle", label: "Tipo de Punto de Atención" }
         arguments:
             - ~
             - Pequiven\MasterBundle\Entity\Indicator\TypeFeatureIndicator
@@ -331,7 +342,7 @@ services:
     sonata.admin.cei.cause_stop:
         class: Pequiven\MasterBundle\Admin\CEI\CauseStopAdmin
         tags:
-            - { name: sonata.admin, manager_type: orm, group: "Control Estadistico e Información" ,label: "Causa de parada" }
+            - { name: sonata.admin, manager_type: orm, group: "Control Estadistico e Información" ,label: "Causa de Parada" }
         arguments:
             - ~
             - Pequiven\SEIPBundle\Entity\CEI\CauseStop
@@ -410,7 +421,7 @@ services:
     sonata.admin.cei.country:
         class: Pequiven\MasterBundle\Admin\CEI\CountryAdmin
         tags:
-            - { name: sonata.admin, manager_type: orm, group: "Control Estadistico e Información" ,label: "Pais" }
+            - { name: sonata.admin, manager_type: orm, group: "Control Estadistico e Información" ,label: "País" }
         arguments:
             - ~
             - Pequiven\SEIPBundle\Entity\CEI\Country
@@ -432,7 +443,7 @@ services:
     sonata.admin.cei.production_line:
         class: Pequiven\MasterBundle\Admin\CEI\ProductionLineAdmin
         tags:
-            - { name: sonata.admin, manager_type: orm, group: "Control Estadistico e Información" ,label: "Linea de producto" }
+            - { name: sonata.admin, manager_type: orm, group: "Control Estadistico e Información" ,label: "Linea de Producto" }
         arguments:
             - ~
             - Pequiven\SEIPBundle\Entity\CEI\ProductionLine
@@ -443,7 +454,7 @@ services:
     sonata.admin.cei.record_type:
         class: Pequiven\MasterBundle\Admin\CEI\RecordTypeAdmin
         tags:
-            - { name: sonata.admin, manager_type: orm, group: "Control Estadistico e Información" ,label: "Tipo de registro" }
+            - { name: sonata.admin, manager_type: orm, group: "Control Estadistico e Información" ,label: "Tipo de Registro" }
         arguments:
             - ~
             - Pequiven\SEIPBundle\Entity\CEI\RecordType
@@ -465,7 +476,7 @@ services:
     sonata.admin.cei.sub_sector:
         class: Pequiven\MasterBundle\Admin\CEI\SubSectorAdmin
         tags:
-            - { name: sonata.admin, manager_type: orm, group: "Control Estadistico e Información" ,label: "Sub sector" }
+            - { name: sonata.admin, manager_type: orm, group: "Control Estadistico e Información" ,label: "Sub-Sector" }
         arguments:
             - ~
             - Pequiven\SEIPBundle\Entity\CEI\SubSector
@@ -476,7 +487,7 @@ services:
     sonata.admin.cei.type_incidence:
         class: Pequiven\MasterBundle\Admin\CEI\TypeIncidenceAdmin
         tags:
-            - { name: sonata.admin, manager_type: orm, group: "Control Estadistico e Información" ,label: "Tipo de incidencia" }
+            - { name: sonata.admin, manager_type: orm, group: "Control Estadistico e Información" ,label: "Tipo de Incidencia" }
         arguments:
             - ~
             - Pequiven\SEIPBundle\Entity\CEI\TypeIncidence
@@ -487,7 +498,7 @@ services:
     sonata.admin.cei.type_location:
         class: Pequiven\MasterBundle\Admin\CEI\TypeLocationAdmin
         tags:
-            - { name: sonata.admin, manager_type: orm, group: "Control Estadistico e Información" ,label: "Tipo de sede" }
+            - { name: sonata.admin, manager_type: orm, group: "Control Estadistico e Información" ,label: "Tipo de Sede" }
         arguments:
             - ~
             - Pequiven\SEIPBundle\Entity\CEI\TypeLocation
@@ -509,7 +520,7 @@ services:
     sonata.admin.cei.unit_measure:
         class: Pequiven\MasterBundle\Admin\CEI\UnitMeasureAdmin
         tags:
-            - { name: sonata.admin, manager_type: orm, group: "Control Estadistico e Información" ,label: "Unidad de medida" }
+            - { name: sonata.admin, manager_type: orm, group: "Control Estadistico e Información" ,label: "Unidad de Medida" }
         arguments:
             - ~
             - Pequiven\SEIPBundle\Entity\CEI\UnitMeasure
@@ -531,7 +542,7 @@ services:
     sonata.admin.cei.stop_time:
         class: Pequiven\MasterBundle\Admin\CEI\StopTimeAdmin
         tags:
-            - { name: sonata.admin, manager_type: orm, group: "Control Estadistico e Información" ,label: "Hora de parada" }
+            - { name: sonata.admin, manager_type: orm, group: "Control Estadistico e Información" ,label: "Hora de Parada" }
         arguments:
             - ~
             - Pequiven\SEIPBundle\Entity\CEI\StopTime
@@ -635,6 +646,18 @@ services:
         arguments:
             - ~
             - Pequiven\SEIPBundle\Entity\Sip\Center\Material
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
+            
+            
+    sonata.admin.user.cargos:
+        class: Pequiven\MasterBundle\Admin\User\CargosAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "%sonata.user.admin.groupname%" ,label_catalogue: "SonataUserBundle", label: "Estructura de Cargos" }
+        arguments:
+            - ~
+            - Pequiven\MasterBundle\Entity\FeeStructure
             - ~
         calls:
             - [ setTranslationDomain, [SonataAdminBundle]]

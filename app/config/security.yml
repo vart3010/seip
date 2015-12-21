@@ -227,6 +227,7 @@ security:
             - ROLE_SEIP_WORK_STUDY_CIRCLES_VIEW
             - ROLE_SEIP_WORK_STUDY_CIRCLES_INACTIVE_VALIDATION_MEMBERS
             - ROLE_SEIP_PROPOSAL_ADD
+            - ROLE_SEIP_PROPOSAL_EDIT
             
             #REUNIONES
             - ROLE_SEIP_MEETING_LIST
@@ -261,6 +262,8 @@ security:
             - ROLE_SEIP_SIP_MONITOR_ONLY_CARABOBO
             - ROLE_SEIP_SIP_MONITOR_ONLY_CIRCUITO5
             - ROLE_SEIP_SIP_SEACH_EMPLOYEES
+            
+            - ROLE_SEIP_VIEW_ALL_PERIODS
             
             
             

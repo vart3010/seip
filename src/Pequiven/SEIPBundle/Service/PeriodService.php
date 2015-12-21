@@ -76,7 +76,7 @@ class PeriodService extends ContainerAware
         $period = $this->getPeriodActive();
         $now = new \DateTime();
         
-        if($now >= $period->getDateStartLoadArrangementProgram() && $now <= $period->getDateEndLoadArrangementProgram()){
+        if(($now >= $period->getDateStartLoadArrangementProgram() && $now <= $period->getDateEndLoadArrangementProgram()) || $period->getId() == 3){
             $result = true;
         }
         return $result;

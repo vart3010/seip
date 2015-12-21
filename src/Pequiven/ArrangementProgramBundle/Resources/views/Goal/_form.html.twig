@@ -21,16 +21,12 @@
         {{ form_widget(goal.endDate) }}
         {{ form_errors(goal.endDate) }}
     </div>
-    {% if goal.includeResponsibleManagement is defined %}
-        <div class="field-block button-height">
+    {% if (goal.includeResponsibleManagement is defined) %}
+        <div class="field-block button-height" id="respon">
             <label class="label">{{ 'pequiven.form.goal.responsible'|trans({},'PequivenArrangementProgramBundle') }}</label>
-            <div id="div_goal_responsibles" style='width: 270px'></div>
-            
+            <div id="div_goal_responsibles" style='width: 270px'></div>            
             <div class="page-input-sub">{{ form_widget(goal.includeResponsibleManagement) }}&nbsp;{{ form_label(goal.includeResponsibleManagement) }}&nbsp;<b>{$ gerenciaOfObjetive.description $}</b></div>
-            <span style="display: none">
-                
-            </span>
-{#            {{ form_errors(goal.responsibles) }}#}
+            <span style="display: none"></span>            
         </div>
     {% endif %}
     <div class="field-block button-height">
@@ -48,87 +44,99 @@
     var applyDatePickerDatePG = null;
     var urlResponsibles = '';
     var idCategoryArrangementProgram = $('#categoryArrangementProgramValue').val();
-    var setUrlResponsibles = function(data){
-              if(data == undefined){
-                  data = [];
-              }
-              $("#div_goal_responsibles").select2({
-                minimumInputLength: 1,
-                multiple: true,
-                ajax: { // instead of writing the function to execute the request we use Select2's convenient helper
-                    url: urlResponsibles,
-                    dataType: 'json',
-                    quietMillis: 250,
-                    data: function (term, page) {
-                        return {
-                            query: term, // search term
-                        };
-                    },
-                    results: function (data, page) { // parse the results into the format expected by Select2.
-                        // since we are using custom formatting functions we do not need to alter the remote JSON data
-                        return { results: data };
-                    },
-                    cache: true
-                },
-                initSelection: function(element, callback){
-                },
-                formatResult: responsiblesFormatResult, // omitted for brevity, see the source of this page
-                formatSelection: responsiblesFormatResult,  // omitted for brevity, see the source of this page
-                escapeMarkup: function (m) { return m; } // we do not want to escape markup since we are displaying html in results
-            });
+    var AprovedAP = $('#AprovedAP');
 
-            if(data != undefined){
-                var preselected = [];
-                 $.each(data,function(index,value){
-                     preselected.push(value.id);
-                 });
-                $('#div_goal_responsibles').select2('data', data);
-                $('#div_goal_responsibles').select2('val', preselected);
-            }
+    var setUrlResponsibles = function (data) {
+        if (data == undefined) {
+            data = [];
+        }
+        $("#div_goal_responsibles").select2({
+            minimumInputLength: 1,
+            multiple: true,
+            ajax: {// instead of writing the function to execute the request we use Select2's convenient helper
+                url: urlResponsibles,
+                dataType: 'json',
+                quietMillis: 250,
+                data: function (term, page) {
+                    return {
+                        query: term, // search term
+                    };
+                },
+                results: function (data, page) { // parse the results into the format expected by Select2.
+                    // since we are using custom formatting functions we do not need to alter the remote JSON data
+                    return {results: data};
+                },
+                cache: true
+            },
+            initSelection: function (element, callback) {
+            },
+            formatResult: responsiblesFormatResult, // omitted for brevity, see the source of this page
+            formatSelection: responsiblesFormatResult, // omitted for brevity, see the source of this page
+            escapeMarkup: function (m) {
+                return m;
+            } // we do not want to escape markup since we are displaying html in results
+        });
+
+        if (data != undefined) {
+            var preselected = [];
+            $.each(data, function (index, value) {
+                preselected.push(value.id);
+            });
+            $('#div_goal_responsibles').select2('data', data);
+            $('#div_goal_responsibles').select2('val', preselected);
+        }
     };
-    
-    jQuery(document).ready(function(){
-        jQuery('#goalForms').validationEngine('attach', {promptPosition : "centerRight", scroll: false,autoHidePrompt:true,autoHideDelay:1500,showOneMessage:true});
+
+    jQuery(document).ready(function () {
+        jQuery('#goalForms').validationEngine('attach', {promptPosition: "centerRight", scroll: false, autoHidePrompt: true, autoHideDelay: 1500, showOneMessage: true});
         jQuery('#goalForms select').select2();
-        
-        applyDatePickerDatePG = function(){
-            var defaultStartDate = '{{ 'now'|date('Y') }}-01-01';
-            var defaultEndDate = '{{ 'now'|date('Y') }}-12-31';
-            jQuery( "#goal_startDate" ).datepicker({
-                defaultDate: defaultStartDate,
-                changeMonth: true,
-                numberOfMonths: 1,
-                dateFormat: "yy-mm-dd",
-                onClose: function( selectedDate ) {
-                  jQuery( "#goal_endDate" ).datepicker( "option", "minDate", selectedDate );
-                }
-              });
-              jQuery( "#goal_endDate" ).datepicker({
-                defaultDate: defaultEndDate,
-                changeMonth: true,
-                numberOfMonths: 1,
-                dateFormat: "yy-mm-dd",
-                onClose: function( selectedDate ) {
-                  jQuery( "#goal_startDate" ).datepicker( "option", "maxDate", selectedDate );
-                }
-              });
-              
-              jQuery( "#goal_startDate" ).datepicker( "option", "maxDate", defaultEndDate );
-              jQuery( "#goal_endDate" ).datepicker( "option", "minDate", defaultStartDate );
-              
-              var changeArrangementprogramResponsibles = function(){
-                  var reponsibleId = arrangementprogramResponsibles.val();
-                  urlResponsibles = Routing.generate("pequiven_arrangementprogram_data_responsible_goals", {responsibles: reponsibleId, idCategoryArrangementProgram: idCategoryArrangementProgram});
-                  setUrlResponsibles();
-              };
-              
-              var arrangementprogramResponsibles = $('#arrangementprogram_responsibles');
-              arrangementprogramResponsibles.on('change',function(){
+                
+        if ((AprovedAP.val()) == 1) {
+            $('#respon').hide();
+        } else {
+            $('#respon').show();
+        }
+        ;
+        applyDatePickerDatePG = function () {
+            var defaultStartDate = '{{ yearActive }}-01-01';
+            var defaultEndDate = '{{ yearActive }}-12-31';
+    {#var defaultStartDate = '{{ 'now'|date('Y') }}-01-01';
+    var defaultEndDate = '{{ 'now'|date('Y') }}-12-31';#}
+                jQuery("#goal_startDate").datepicker({
+                    defaultDate: defaultStartDate,
+                    changeMonth: true,
+                    numberOfMonths: 1,
+                    dateFormat: "yy-mm-dd",
+                    onClose: function (selectedDate) {
+                        jQuery("#goal_endDate").datepicker("option", "minDate", selectedDate);
+                    }
+                });
+                jQuery("#goal_endDate").datepicker({
+                    defaultDate: defaultEndDate,
+                    changeMonth: true,
+                    numberOfMonths: 1,
+                    dateFormat: "yy-mm-dd",
+                    onClose: function (selectedDate) {
+                        jQuery("#goal_startDate").datepicker("option", "maxDate", selectedDate);
+                    }
+                });
+
+                jQuery("#goal_startDate").datepicker("option", "maxDate", defaultEndDate);
+                jQuery("#goal_endDate").datepicker("option", "minDate", defaultStartDate);
+
+                var changeArrangementprogramResponsibles = function () {
+                    var reponsibleId = arrangementprogramResponsibles.val();
+                    urlResponsibles = Routing.generate("pequiven_arrangementprogram_data_responsible_goals", {responsibles: reponsibleId, idCategoryArrangementProgram: idCategoryArrangementProgram});
+                    setUrlResponsibles();
+                };
+
+                var arrangementprogramResponsibles = $('#arrangementprogram_responsibles');
+                arrangementprogramResponsibles.on('change', function () {
+                    changeArrangementprogramResponsibles();
+                });
+
                 changeArrangementprogramResponsibles();
-              });
-              
-              changeArrangementprogramResponsibles();
-        };
-        applyDatePickerDatePG();
-    });
+            };
+            applyDatePickerDatePG();
+        });
 </script>

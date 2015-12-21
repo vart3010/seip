@@ -516,7 +516,7 @@ sylius_resource:
             classes:
                 model: Pequiven\SEIPBundle\Entity\Sip\Center\Observations
                 repository: Pequiven\SEIPBundle\Repository\Sip\Centro\ObservationsRepository
-        pequiven.inventory:
+        pequiven.inventory_center:
             driver: doctrine/orm
             classes:
                 model: Pequiven\SEIPBundle\Entity\Sip\Center\Inventory

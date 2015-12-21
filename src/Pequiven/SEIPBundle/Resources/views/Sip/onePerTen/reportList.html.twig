@@ -41,7 +41,7 @@
     }
 
     table {
-        font-size: 12px;
+        font-size: 8px;
     }
     table tr {
         height: 50px;
@@ -62,31 +62,74 @@
 <br>
 <div class="title">Reporte de 1x10</div>
 <br>
-<table>
+<table style="border-style:solid;border-top-width: 1px; border-right-width: 1px; border-bottom-width: 1px; border-left-width: 1px;border-color:red;border-radius: 10px;">
     <tr>
         <td>
-            <div class="six-columns">
-                <label class="label">Nombre: </label>
-                {{ one.firstname }} {{ one.lastname  }}
-            </div>
-            <div class="six-columns">
-                <label class="label">Cédula </label>
-                {{ one.getIndentification }} 
-            </div>
-        </td>
-        <td>
-            <div class="six-columns">
-                <label class="label">Teléfono: </label>
-                {{ one.cellphone }}
-            </div>
-            <div class="six-columns">
-                <label class="label">Fecha Emisión: </label>
-                {{ "now"|date("d/m/y") }}
-            </div>
+            <table>
+                <tr>
+                    <td>
+                        <div class="six-columns">
+                            <label class="label">Nombre: </label>
+                            {{ one.firstname }} {{ one.lastname  }}
+                        </div>
+                        <div class="six-columns">
+                            <label class="label">Cédula </label>
+                            {{ one.getIndentification }} 
+                        </div>
+                    </td>
+                    <td>
+                        <div class="six-columns">
+                            <label class="label">Teléfono: </label>
+                            {{ one.cellphone }}
+                        </div>
+                        <div class="six-columns">
+                            <label class="label">Fecha Emisión: </label>
+                            {{ "now"|date("d/m/y") }}
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="six-columns">
+                            <label class="label">¿Reportó Voto Elecciones Asamblea Nacional 2015?: </label>
+                            {% set textoVoto = 'NO' %}
+                            {% if voto == 1 %}
+                                {% set textoVoto = 'SI' %}
+                            {% endif %}
+                            {{ textoVoto }}
+                        </div>
+                        <div class="six-columns">
+                            <label class="label">Círculo de Estudio y Trabajo: </label>
+                            {{ workStudyCircle.codigo }} {{ workStudyCircle.name }}
+                        </div>
+                    </td>
+                    <td>
+                        <div class="six-columns">
+                            <label class="label">Localidad: </label>
+                            {% if one.complejo != null %}
+                                {{ one.complejo.description }}
+                            {% endif %}
+                        </div>
+                        <div class="six-columns">
+                            <label class="label">Gerencia: </label>
+                            {% if one.gerencia != null %}
+                                {{ one.gerencia.description }}
+                            {% endif %}
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="six-columns">
+                            <label class="label">¿Es Coordinador de su CET?: </label>
+                            {{ isCoordinator }}
+                        </div>
+                    </td>
+                </tr>
+            </table>
         </td>
     </tr>
 </table>
-<br>
 <div class="columns">
     <div class="twelve-columns twelve-columns-mobile">
         <table class="simple-table responsive-table responsive-table-on">
@@ -97,7 +140,8 @@
                 <th scope="col" style="width: 5%; text-align: center;" class="header">Nª</th>
                 <th scope="col" style="width: 10%" class="header">Cédula</th>
                 <th scope="col" style="width: 30%" class=" header">Nombre</th>
-                <th scope="col" style="width: 40%" class=" header">Centro</th>
+                <th scope="col" style="width: 30%" class=" header">Centro</th>
+                <th scope="col" style="width: 10%" class=" header">Votó</th>
                 <th scope="col" style="width: 15%" class=" header">Teléfono</th>
             </tr>
             {% for member in members %}
@@ -106,11 +150,93 @@
                     <td style="text-align: center;">{{ member.cedula }}</td>
                     <td>{{ member.nombre }}</td>
                     <td>{{ member.nombreCentro }}</td>
+                    {% set textoVoto = 'No' %}
+                    {% if member.voto == 1 %}
+                        {% set textoVoto = 'Sí' %}
+                    {% endif %}
+                    <td>{{ textoVoto }}</td>
                     <td style="text-align: center;">{{ member.telefono }}</td>
                 </tr>
             {% endfor%}
         </table>
     </div>
 </div>
+<div class="title">Perfil Político</div>
+<br>
+<table style="border-style:solid;border-top-width: 1px; border-right-width: 1px; border-bottom-width: 1px; border-left-width: 1px;border-color:red;border-radius: 10px;">
+    <tr>
+        <td>
+            <table>
+                <tr>
+                    <td>
+                        <div class="six-columns">
+                            <label class="label">¿Fue Reubicado para las Elecciones Asamblea Nacional 2015?: </label>
+                            {{ texts[object.reubicado] }}
+                        </div>
+                        <div class="six-columns">
+                            <label class="label">¿Votó Internas Oposición?: </label>
+                            {{ texts[object.intOpo] }}
+                        </div>
+                    </td>
+                    <td>
+                        <div class="six-columns">
+                            <label class="label">¿Inscrito en el Gran Polo Patriótico?: </label>
+                            {{ texts[object.psuv] }}
+                        </div>
+                        <div class="six-columns">
+                            <label class="label">¿Votó Internas PSUV?: </label>
+                            {{ texts[object.intPsuv] }}
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="six-columns">
+                            <label class="label">¿Firmó Decreto Esperanza?: </label>
+                            {{ texts[object.esperanza] }}
+                        </div>
+                        <div class="six-columns">
+                            <label class="label">¿Votó Presidenciales 2012?: </label>
+                            {{ texts[object.vpresidencial1] }}
+                        </div>
+                    </td>
+                    <td>
+                        <div class="six-columns">
+                            <label class="label">¿Votó Regionales 2012?: </label>
+                            {{ texts[object.vregionales] }}
+                        </div>
+                        <div class="six-columns">
+                            <label class="label">¿Votó Presidenciales 2013?: </label>
+                            {{ texts[object.vpresidencial2] }}
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="six-columns">
+                            <label class="label">¿Votó Municipales 2013?: </label>
+                            {{ texts[object.vmunicipales] }}
+                        </div>
+                        <div class="six-columns">
+                            <label class="label">¿Fue CUTL en las Elecciones Asamblea Nacional 2015?: </label>
+                            {{ isCutl }}
+                        </div>
+                    </td>
+                    <td>
+                        <div class="six-columns">
+                            <label class="label">¿Vanguardia?: </label>
+                            {{ texts[object.vanguardia] }}
+                        </div>
+                        <div class="six-columns">
+                            <label class="label">¿Pertenece a alguna UBCH?: </label>
+                            {{ texts[object.ubch] }}
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+
 
 
