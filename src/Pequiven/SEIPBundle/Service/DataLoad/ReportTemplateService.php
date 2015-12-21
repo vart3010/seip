@@ -255,7 +255,9 @@ class ReportTemplateService implements ContainerAwareInterface {
             $dataSerialized = $this->getDataSerialized($reportTemplate, array('consolidateCorporationStatusCharge' => true, 'dateSearch' => $options['dateSearch'], 'reportTemplates' => $reportTemplates));
             
             foreach($reportTemplates as $reportTemplate) {
-                $category[] = array('label' => $reportTemplate->getLocation()->getAlias());
+                if ($reportTemplate->getPeriod() == $this->getPeriodService()->getPeriodActive()) {
+                    $category[] = array('label' => $reportTemplate->getLocation()->getAlias());                    
+                }
             }
             
             $dataRealValues = $dataPlanValues = array();
@@ -497,7 +499,9 @@ class ReportTemplateService implements ContainerAwareInterface {
             $dataSerialized = $this->getDataSerialized($reportTemplate, array('consolidateCorporationCompliance' => true, 'dateSearch' => $options['dateSearch'], 'reportTemplates' => $reportTemplates));
             
             foreach($reportTemplates as $reportTemplate) {
-                $category[] = array('label' => $reportTemplate->getLocation()->getAlias());
+                if ($reportTemplate->getPeriod() == $this->getPeriodService()->getPeriodActive()) {
+                    $category[] = array('label' => $reportTemplate->getLocation()->getAlias());                    
+                }
             }
             
             $dataRealValues = $dataPlanValues = $dataComplianceValues = array();
@@ -947,6 +951,14 @@ class ReportTemplateService implements ContainerAwareInterface {
     private function getUserManager() 
     {
         return $this->container->get('seip.user_manager');
+    }
+
+    /**
+     *  Period
+     *
+     */
+    protected function getPeriodService() {
+        return $this->container->get('pequiven_seip.service.period');
     }
     
     /**
