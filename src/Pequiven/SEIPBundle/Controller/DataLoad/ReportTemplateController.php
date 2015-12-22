@@ -135,9 +135,6 @@ class ReportTemplateController extends SEIPController {
             }
         }
 
-
-
-
         $data = array(
             "report_template" => $reportTemplate,
             "plants" => $arrayPlants,
@@ -1715,6 +1712,7 @@ class ReportTemplateController extends SEIPController {
                     $varYear = $summaryYear["plan_acumulated"] - $summaryYear["real_acumulated"];
                 }
 
+
                 if ($summaryYear["plan_acumulated"] > 0) {
                     $ejecutionYear = ($summaryYear["real_acumulated"] * 100) / $summaryYear["plan_acumulated"];
                 } else {
@@ -1878,10 +1876,6 @@ class ReportTemplateController extends SEIPController {
             }
 
 
-
-
-
-
 //TOTALES YEAR PRODUCTIONS
             if ($dayPlan - $dayReal < 0) {
                 $varDay = 0;
@@ -1889,9 +1883,9 @@ class ReportTemplateController extends SEIPController {
                 $varDay = $dayPlan - $dayReal;
             }
             if ($dayReal != 0) {
-                $ejecutionDay = ($dayPlan * 100) / $dayReal;
+                $ejecutionDay = ($dayReal * 100) / $dayPlan;
             } else {
-                $ejecutionDay = 0.0;
+                $ejecutionDay = 0;
             }
             $summaryProducctionTotals["day"] = array(
                 "plan_total" => number_format($dayPlan, 2, ',', '.'),
@@ -1910,7 +1904,7 @@ class ReportTemplateController extends SEIPController {
             if ($MonthRealAcumualated != 0) {
                 $ejecutionMonth = ($MonthRealAcumualated * 100) / $MonthPlanAcumulated;
             } else {
-                $ejecutionMonth = 0.0;
+                $ejecutionMonth = 0;
             }
             $summaryProducctionTotals["month"] = array(
                 "plan_total" => number_format($MonthPlan, 2, ',', '.'),
@@ -1931,7 +1925,7 @@ class ReportTemplateController extends SEIPController {
             if ($yearRealAcumualated != 0) {
                 $ejecutionYear = ($yearRealAcumualated * 100) / $yearPlanAcumulated;
             } else {
-                $ejecutionYear = 0.0;
+                $ejecutionYear = 0;
             }
             $summaryProducctionTotals["year"] = array(
                 "plan_total" => number_format($yearPlan, 2, ',', '.'),
@@ -2021,7 +2015,7 @@ class ReportTemplateController extends SEIPController {
 // set document information
             $pdf->SetCreator(PDF_CREATOR);
             $pdf->SetAuthor('SEIP');
-            $pdf->setTitle('Reporte del día');
+            $pdf->setTitle('Reporte de Produccion');
             $pdf->SetSubject('Resultados SEIP');
             $pdf->SetKeywords('PDF, SEIP, Resultados');
 
@@ -2057,7 +2051,7 @@ class ReportTemplateController extends SEIPController {
             $pdf->writeHTML($html, true, false, true, false, '');
 
 //            $pdf->Output('Reporte del dia'.'.pdf', 'I');
-            $pdf->Output('Reporte del dia' . '.pdf', 'D');
+            $pdf->Output('Reporte de Produccion' . '.pdf', 'D');
         } else if ($exportToPdf == "2") {
             if ($byRange) {
                 $production = array(
@@ -2150,15 +2144,10 @@ class ReportTemplateController extends SEIPController {
                 "color" => "55b34a"
             );
 
-
             $this->setFormatTitle($impressOperacion, $activeSheet, $row);
             $row = $this->setTitlesRows($activeSheet, $impressOperacion, $row);
-
-
-
             $production = $data["production"];
             $totalProduction = $data["totalProduction"];
-
 
             foreach ($production as $prod) {
                 for ($i = 0; $i < count($impressOperacion["col"]); $i++) {
@@ -2186,7 +2175,6 @@ class ReportTemplateController extends SEIPController {
                 )
             );
 
-            $t = 0;
             $activeSheet->getStyle("B" . $row . ":" . "F" . $row)->applyFromArray($styleArray);
 
             for ($x = 0; $x < count($impressOperacion["col"]); $x++) {
@@ -2214,9 +2202,6 @@ class ReportTemplateController extends SEIPController {
             );
             $this->setFormatTitle($rawMaterialData, $activeSheet, $row);
             $row = $this->setTitlesRows($activeSheet, $rawMaterialData, $row);
-
-
-
 
             $rawMaterial = $data["rawMaterial"];
             foreach ($rawMaterial as $raw) {
@@ -2248,8 +2233,6 @@ class ReportTemplateController extends SEIPController {
 
             $this->setFormatTitle($consumerServiceData, $activeSheet, $row);
             $row = $this->setTitlesRows($activeSheet, $consumerServiceData, $row);
-
-
 
             $consumerPlanningService = $data["consumerPlanningServices"];
             foreach ($consumerPlanningService as $consume) {
@@ -2425,8 +2408,6 @@ class ReportTemplateController extends SEIPController {
             }
         }
 
-
-
         $fileName = sprintf("Reporte de Producción " . date("d-m-Y") . ".xls");
 
         header('Content-Type: application/vnd.ms-excel');
@@ -2459,7 +2440,6 @@ class ReportTemplateController extends SEIPController {
         );
 
         $path = $this->get('kernel')->locateResource('@PequivenObjetiveBundle/Resources/skeleton/reporte_produccion.xls');
-        $now = new \DateTime();
         $objPHPExcel = \PHPExcel_IOFactory::load($path);
         $objPHPExcel
                 ->getProperties()
@@ -2741,10 +2721,6 @@ class ReportTemplateController extends SEIPController {
                 $contRow++;
             }
             $rowCont++;
-
-
-
-
 //**********************************/
         }
 
@@ -2854,9 +2830,6 @@ class ReportTemplateController extends SEIPController {
                     'vertical' => \PHPExcel_Style_Alignment::VERTICAL_CENTER
                 ),
             );
-
-
-
 
             foreach ($productsReport as $productReport) {
                 $name[] = $productReport->getProduct()->getName();
@@ -3110,8 +3083,6 @@ class ReportTemplateController extends SEIPController {
 //var_dump($rawMaterialConsumption->getSummary($dateReport));
         }
 
-
-
         return $this->getArrayTable($productsReport, $dateReport, $productos, $totalDay, $totalMonth, $totalYear);
     }
 
@@ -3148,6 +3119,27 @@ class ReportTemplateController extends SEIPController {
         $day = array();
         $month = array();
         $year = array();
+        var_dump($arrayData);die();
+        foreach ($productos as $prod) {
+            $tDay = 0;
+            $tMonth = 0;
+            $tYear = 0;
+            
+            
+            
+            $tDay =  $totalDay[$prod->getId()];
+            $tMonth =  $totalMonth[$prod->getId()];
+            if (count($totalYear) > 0) {
+                $tYear = $tYear + $totalYear[$prod->getId()];
+            }
+            
+            $day[] = $tDay;
+            $month[] = $tMonth;
+            if (count($totalYear) > 0) {
+                $year[] = $tYear;
+            }
+        }
+
 
         foreach (array_unique($productos) as $prod) {
             $rep = array_keys($productos, $prod);
@@ -3175,7 +3167,8 @@ class ReportTemplateController extends SEIPController {
                 }
             }
         }
-        $consumos[] = array_unique($productos);
+        //$consumos[] = array_unique($productos);
+        $consumos[] = $productos;
         $consumos[] = $day;
         $consumos[] = $month;
         $consumos[] = $year;

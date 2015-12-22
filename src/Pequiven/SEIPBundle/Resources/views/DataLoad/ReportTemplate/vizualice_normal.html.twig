@@ -413,10 +413,11 @@
                         <tr>
                             <th scope="col" width="40%" class="header">PRODUCTO</th>
                                 {%  if showDay %}
-                                <th scope="col" width="30%" class="header text-right">DÍA</th>
+                                <th scope="col" width="20%" class="header text-right">DÍA</th>
                                 {% endif %}
                                 {%  if showMonth %}
-                                <th scope="col" width="30%" class="header text-right">DÍA ANTERIOR</th>
+                                <th scope="col" width="20%" class="header text-right">DÍA ANTERIOR</th>
+                                <th scope="col" width="20%" class="header text-right">VARIACIÓN</th>
                                 {% endif %}
                         </tr>
                     </thead>
@@ -426,10 +427,11 @@
                             <tr>
                                 <th scope="col" width="40%" class="header">{{ inventory.productName|upper }}</th>
                                     {%  if showDay %}
-                                    <td scope="col" width="30%" class="text-right">{{ inventory.day|myNumberFormat }}</td>
+                                    <td scope="col" width="20%" class="text-right">{{ inventory.day|myNumberFormat }}</td>
                                 {% endif %}
                                 {%  if showMonth %}
-                                    <td scope="col" width="30%" class="text-right">{{ inventory.day_preview|myNumberFormat }}</td>
+                                    <td scope="col" width="20%" class="text-right">{{ inventory.day_preview|myNumberFormat }}</td>
+                                    <td scope="col" width="20%" class="text-right">{{ (inventory.day_preview-inventory.day)|myNumberFormat }}</td>
                                 {% endif %}
                             </tr>
                         {% endfor %}
@@ -438,8 +440,9 @@
                         <tr>
                             <th width="40%" class="header">TOTALES</th>
                                 {% for totals in totalInventorys %}
-                                <th scope="col" width="30%" class="header" style="text-align: right;">{{ totals|myNumberFormat }}</th>
+                                <th scope="col" width="20%" class="header" style="text-align: right;">{{ totals|myNumberFormat }}</th>
                                 {% endfor %}
+                            <th scope="col" width="20%" class="header" style="text-align: right;">-</th>
                         </tr>
                     </tfoot>
                 </table>

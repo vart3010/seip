@@ -83,216 +83,230 @@
         </div>
     {% endif %}
     {% if showRawMaterial %}
-        <div class="twelve-columns twelve-columns-mobile">
-            <table class="simple-table responsive-table responsive-table-on">
-                <thead>
-                    <tr>
-                        <th class="header text-center white-gradient" colspan="5">
-                            CONSUMO DE MATERIA PRIMA {{ tipoProd }}<br>
-                            {{ "Desde "~dateFrom|date('d-m-Y')~" Hasta "~ dateEnd|date('d-m-Y')}}
-                        </th>
-                    </tr>
-                    <tr>
-                        <th scope="col" width="40%" class="header">PRODUCTO</th>
-                        <th scope="col" width="20%" class="header text-right">PLAN</th>
-                        <th scope="col" width="20%" class="header text-right">REAL</th>
-                        <th scope="col" width="20%" class="header text-right">%</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for raw in rawMaterial %}
+        <div class="columns">
+            <div class="twelve-columns-mobile">               
+                <table class="simple-table responsive-table responsive-table-on">
+                    <thead>
                         <tr>
-                            <th scope="col" width="40%" class="header">{{ raw.productName|upper}}</th>
-                            <td scope="col" width="20%" class="text-right">{{ raw.planRaw|number_format(2, ',', '.') }}</td>
-                            <td scope="col" width="20%" class="text-right">{{ raw.realRaw|number_format(2, ',', '.') }}</td>
-                            {% if raw.planRaw>0%}
-                                <td scope="col" width="20%" class="text-right">{{ ((raw.realRaw*100)/raw.planRaw)|number_format(2, ',', '.') }}</td>
-                            {% else %}
-                                <td scope="col" width="20%" class="text-right">-</td>
-                            {% endif%}
-
+                            <th class="header text-center white-gradient" colspan="5">
+                                CONSUMO DE MATERIA PRIMA {{ tipoProd }}<br>
+                                {{ "Desde "~dateFrom|date('d-m-Y')~" Hasta "~ dateEnd|date('d-m-Y')}}
+                            </th>
                         </tr>
-                    {% endfor %}
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <th scope="col" width="40%" class="header">TOTALES</th>                        
-                            {% for totals in totalRawMaterial %}
-                            <th scope="col" width="20%" class="header" style="text-align: right;">{{ totals|number_format(2, ',', '.') }}</th>                            
-                            {% endfor %}
-                        <th scope="col" width="20%" class="header" style="text-align: right;">-</th>
-                    </tr>
-                </tfoot>
-            </table>
+                        <tr>
+                            <th scope="col" width="40%" class="header">PRODUCTO</th>
+                            <th scope="col" width="15%" class="header text-right">PLAN</th>
+                            <th scope="col" width="15%" class="header text-right">REAL</th>
+                            <th scope="col" width="15%" class="header text-right">%</th>
+                            <th scope="col" width="15%" class="header text-right">VARIACIÓN</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for raw in rawMaterial %}
+                            <tr>
+                                <th scope="col" width="40%" class="header">{{ raw.productName|upper}}</th>
+                                <td scope="col" width="15%" class="text-right">{{ raw.planRaw|number_format(2, ',', '.') }}</td>
+                                <td scope="col" width="15%" class="text-right">{{ raw.realRaw|number_format(2, ',', '.') }}</td>
+                                {% if raw.planRaw>0%}
+                                    <td scope="col" width="15%" class="text-right">{{ ((raw.realRaw*100)/raw.planRaw)|number_format(2, ',', '.') }}</td>
+                                    <td scope="col" width="15%" class="text-right">{{ (raw.planRaw-raw.realRaw)|number_format(2, ',', '.') }}</td>
+                                {% else %}
+                                    <td scope="col" width="15%" class="text-right">-</td>
+                                    <td scope="col" width="15%" class="text-right">-</td>
+                                {% endif%}
+
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th scope="col" width="40%" class="header">TOTALES</th>                        
+                                {% for totals in totalRawMaterial %}
+                                <th scope="col" width="15%" class="header" style="text-align: right;">{{ totals|number_format(2, ',', '.') }}</th>                            
+                                {% endfor %}
+                            <th scope="col" width="15%" class="header" style="text-align: right;">-</th>
+                            <th scope="col" width="15%" class="header" style="text-align: right;">-</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
         </div>
     {% endif %}
     <br>
     {% if showService %}
-        <div class="twelve-columns twelve-columns-mobile">
-            <table class="simple-table responsive-table responsive-table-on">
-                <thead>
-                    <tr>
-                        <th class="header text-center white-gradient" colspan="5">
-                            CONSUMO DE SERVICIOS {{ tipoProd }}<br>
-                            {{ "Desde "~dateFrom|date('d-m-Y')~" Hasta "~ dateEnd|date('d-m-Y')}}
-                        </th>
-                    </tr>
-                    <tr>
-                        <th scope="col" width="40%" class="header">PRODUCTO</th>
-                        <th scope="col" width="20%" class="header text-right">PLAN</th>
-                        <th scope="col" width="20%" class="header text-right">REAL</th>
-                        <th scope="col" width="20%" class="header text-right">%</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% set totalPlan = 0 %}
-                    {% set totalReal = 0 %}
-                    {% for consumer in consumerPlanning %}
+        <div class="columns">
+            <div class="twelve-columns twelve-columns-mobile">
+                <table class="simple-table responsive-table responsive-table-on">
+                    <thead>
                         <tr>
-                            <th scope="col" width="40%" class="header">{{ consumer.productName|upper }}</th>
-                            <td scope="col" width="20%" class="text-right">{{ consumer.plan|number_format(2, ',', '.') }}</td>
-                            <td scope="col" width="20%" class="text-right">{{ consumer.real|number_format(2, ',', '.') }}</td>
-                            {% if consumer.plan>0%}
-                                <td scope="col" width="20%" class="text-right">{{ ((consumer.real*100)/consumer.plan)|number_format(2, ',', '.') }}</td>
-                            {% else %}
-                                <td scope="col" width="20%" class="text-right">-</td>
-                            {% endif%}
+                            <th class="header text-center white-gradient" colspan="5">
+                                CONSUMO DE SERVICIOS {{ tipoProd }}<br>
+                                {{ "Desde "~dateFrom|date('d-m-Y')~" Hasta "~ dateEnd|date('d-m-Y')}}
+                            </th>
                         </tr>
-                        {% set totalPlan = totalPlan + consumer.plan %}
-                        {% set totalReal = totalReal + consumer.real %}
-                    {% endfor %}
+                        <tr>
+                            <th scope="col" width="40%" class="header">PRODUCTO</th>
+                            <th scope="col" width="15%" class="header text-right">PLAN</th>
+                            <th scope="col" width="15%" class="header text-right">REAL</th>
+                            <th scope="col" width="15%" class="header text-right">%</th>
+                            <th scope="col" width="15%" class="header text-right">VARIACIÓN</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% set totalPlan = 0 %}
+                        {% set totalReal = 0 %}
+                        {% for consumer in consumerPlanning %}
+                            <tr>
+                                <th scope="col" width="40%" class="header">{{ consumer.productName|upper }}</th>
+                                <td scope="col" width="15%" class="text-right">{{ consumer.plan|number_format(2, ',', '.') }}</td>
+                                <td scope="col" width="15%" class="text-right">{{ consumer.real|number_format(2, ',', '.') }}</td>
+                                {% if consumer.plan>0%}
+                                    <td scope="col" width="15%" class="text-right">{{ ((consumer.real*100)/consumer.plan)|number_format(2, ',', '.') }}</td>
+                                    <td scope="col" width="15%" class="text-right">{{ (consumer.plan-consumer.real)|number_format(2, ',', '.') }}</td>
+                                {% else %}
+                                    <td scope="col" width="15%" class="text-right">-</td>
+                                    <td scope="col" width="15%" class="text-right">-</td>
+                                {% endif%}
+                            </tr>
+                            {% set totalPlan = totalPlan + consumer.plan %}
+                            {% set totalReal = totalReal + consumer.real %}
+                        {% endfor %}
 
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <th scope="col" width="40%" class="header">TOTALES</th>
-                        <th scope="col" width="20%" class="header" style="text-align: right;">{{ totalPlan|number_format(2, ',', '.') }}</th>
-                        <th scope="col" width="20%" class="header" style="text-align: right;">{{ totalReal|number_format(2, ',', '.') }}</th>
-                        <th scope="col" width="20%" class="header" style="text-align: right;">{{ ((totalReal*100)/totalPlan)|number_format(2, ',', '.') }}</th>
-                    </tr>
-                </tfoot>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th scope="col" width="40%" class="header">TOTALES</th>
+                            <th scope="col" width="15%" class="header" style="text-align: right;">{{ totalPlan|number_format(2, ',', '.') }}</th>
+                            <th scope="col" width="15%" class="header" style="text-align: right;">{{ totalReal|number_format(2, ',', '.') }}</th>
+                            <th scope="col" width="15%" class="header" style="text-align: right;">{{ ((totalReal*100)/totalPlan)|number_format(2, ',', '.') }}</th>
+                            <th scope="col" width="15%" class="header" style="text-align: right;">{{ (totalPlan-totalReal)|number_format(2, ',', '.') }}</th>
+                        </tr>
+                    </tfoot>
 
-            </table>
+                </table>
+            </div>
         </div>
     {% endif %}
     <br>
     {% if showPnr %}
-        <div class="twelve-columns twelve-columns-mobile">
-            <table class="simple-table responsive-table responsive-table-on">
-                <thead>
-                    <tr>
-                        <th class="header text-center white-gradient" colspan="5">
-                            PRODUCCION NO REALIZADA {{ tipoProd }}<br>
-                            {{ "Desde "~dateFrom|date('d-m-Y')~" Hasta "~ dateEnd|date('d-m-Y')}}
-                        </th>
-                    </tr>
-                    <tr>
-                        <th scope="col" width="60%" class="header">PRODUCTO</th>
-                        <th scope="col" width="40%" class="header text-right">TOTAL</th>
-                    </tr>
-                </thead> 
-                <tbody>
-                    {% set totalPnr = 0 %}
-                    {% for unrealized in unrealizedProduction %}
-                        {% set totalPnr = totalPnr + unrealized.total %}
+        <div class="columns">
+            <div class="twelve-columns twelve-columns-mobile">
+                <table class="simple-table responsive-table responsive-table-on">
+                    <thead>
                         <tr>
-                            <th scope="col" width="60%" class="header">
-                                <a href="{{ path("pequiven_report_template_visualize_pnr_range_time",{
+                            <th class="header text-center white-gradient" colspan="5">
+                                PRODUCCION NO REALIZADA {{ tipoProd }}<br>
+                                {{ "Desde "~dateFrom|date('d-m-Y')~" Hasta "~ dateEnd|date('d-m-Y')}}
+                            </th>
+                        </tr>
+                        <tr>
+                            <th scope="col" width="60%" class="header">PRODUCTO</th>
+                            <th scope="col" width="40%" class="header text-right">TOTAL</th>
+                        </tr>
+                    </thead> 
+                    <tbody>
+                        {% set totalPnr = 0 %}
+                        {% for unrealized in unrealizedProduction %}
+                            {% set totalPnr = totalPnr + unrealized.total %}
+                            <tr>
+                                <th scope="col" width="60%" class="header">
+                                    <a href="{{ path("pequiven_report_template_visualize_pnr_range_time",{
                                 idProduct:unrealized.idProduct,
                                 idProductReport:unrealized.idProductReport,
                                 startDate:dateFrom|date('d-m-Y'),
                                 endDate:dateEnd|date('d-m-Y'),
                                 idReportTemplate:unrealized.idReportTemplate    
                                 }) }}">
-                                    {{ unrealized.productName | upper}}
-                                </a>
+                                        {{ unrealized.productName | upper}}
+                                    </a>
 
-                            </th>
-                            <td scope="col" width="40%" class="text-right">{{ unrealized.total|number_format(2, ',', '.') }}</td>
+                                </th>
+                                <td scope="col" width="40%" class="text-right">{{ unrealized.total|number_format(2, ',', '.') }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th scope="col" width="60%" class="header">TOTALES</th>
+                            <th scope="col" width="40%" class="header" style="text-align: right;">{{ totalPnr|number_format(2, ',', '.') }}</th>
+
                         </tr>
-                    {% endfor %}
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <th scope="col" width="60%" class="header">TOTALES</th>
-                        <th scope="col" width="40%" class="header" style="text-align: right;">{{ totalPnr|number_format(2, ',', '.') }}</th>
+                    </tfoot>
 
-                    </tr>
-                </tfoot>
-
-            </table>
+                </table>
+            </div>
         </div>
     {% endif %}
     <br>
     {% if showInventory %}
-        <div class="twelve-columns twelve-columns-mobile">
-            <table class="simple-table responsive-table responsive-table-on">
-                <thead>
-                    <tr>
-                        <th class="header text-center white-gradient" colspan="5">
-                            INVENTARIO {{ tipoProd }}<br>
-                            {{ "Desde "~dateFrom|date('d-m-Y')~" Hasta "~ dateEnd|date('d-m-Y')}}
-                        </th>
-                    </tr>
-                    <tr>
-                        <th scope="col" width="60%" class="header">PRODUCTO</th>
-                        <th scope="col" width="40%" class="header text-right">TOTAL</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {#                {% set totalInv = 0 %}#}
-                    {% for inv in inventory %}
-                        {#                    {% set totalInv = totalInv + inv.total %}#}
+        <div class="columns">
+            <div class="twelve-columns twelve-columns-mobile">
+                <table class="simple-table responsive-table responsive-table-on">
+                    <thead>
                         <tr>
-                            <th scope="col" width="60%" class="header">{{ inv.productName|upper }}</th>
-                            <td scope="col" width="40%" class="text-right">{{ inv.total|number_format(2, ',', '.') }}</td>
+                            <th class="header text-center white-gradient" colspan="5">
+                                INVENTARIO {{ tipoProd }}<br>
+                                {{ "Desde "~dateFrom|date('d-m-Y')~" Hasta "~ dateEnd|date('d-m-Y')}}
+                            </th>
                         </tr>
-                    {% endfor %}
-                </tbody>
-                {#<tfoot>
-                    <tr>
-                        <th>Totales</th>
-                        <th>{{ totalInv }}</th>
-                    </tr>
-                </tfoot>#}
+                        <tr>
+                            <th scope="col" width="60%" class="header">PRODUCTO</th>
+                            <th scope="col" width="40%" class="header text-right">TOTAL</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {#                {% set totalInv = 0 %}#}
+                        {% for inv in inventory %}
+                            {#                    {% set totalInv = totalInv + inv.total %}#}
+                            <tr>
+                                <th scope="col" width="60%" class="header">{{ inv.productName|upper }}</th>
+                                <td scope="col" width="40%" class="text-right">{{ inv.total|number_format(2, ',', '.') }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                    {#<tfoot>
+                        <tr>
+                            <th>Totales</th>
+                            <th>{{ totalInv }}</th>
+                        </tr>
+                    </tfoot>#}
 
-            </table>
+                </table>
+            </div>
         </div>
     {% endif %}
     <br>
     {% if showObservation %}
-        <div class="twelve-columns twelve-columns-mobile">
-            <table class="simple-table responsive-table responsive-table-on">
-                <thead>
-                    <tr>
-                        <th class="header text-center white-gradient" colspan="5">
-                            OBSERVACIONES<br>
-                            {{ "Desde "~dateFrom|date('d-m-Y')~" Hasta "~ dateEnd|date('d-m-Y')}}
-                        </th>
-                    </tr>
-                    <tr>
-                        <th scope="col" width="35%" class="header">PRODUCTO</th>
-                        <th scope="col" width="10%" class="header text-center">DIA</th>
-                        <th scope="col" width="55%" class="header">OBSERVACIÓN</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for obs in observation %}
+        <div class="columns">
+            <div class="twelve-columns twelve-columns-mobile">
+                <table class="simple-table responsive-table responsive-table-on">
+                    <thead>
                         <tr>
-                            <th scope="col" width="35%" class="header">{{ obs.productName|upper }}</th>
-                            <td scope="col" width="10%" class="text-center">{{ obs.day|date('d-m-Y') }}</td>
-                            <td scope="col" width="55%">{{ (obs.observation is null ? ("pequiven_seip.comment_none"|trans):obs.observation) |upper }}</td>
+                            <th class="header text-center white-gradient" colspan="5">
+                                OBSERVACIONES<br>
+                                {{ "Desde "~dateFrom|date('d-m-Y')~" Hasta "~ dateEnd|date('d-m-Y')}}
+                            </th>
                         </tr>
-                    {% endfor %}
-                </tbody>
+                        <tr>
+                            <th scope="col" width="35%" class="header">PRODUCTO</th>
+                            <th scope="col" width="10%" class="header text-center">DIA</th>
+                            <th scope="col" width="55%" class="header">OBSERVACIÓN</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for obs in observation %}
+                            <tr>
+                                <th scope="col" width="35%" class="header">{{ obs.productName|upper }}</th>
+                                <td scope="col" width="10%" class="text-center">{{ obs.day|date('d-m-Y') }}</td>
+                                <td scope="col" width="55%">{{ (obs.observation is null ? ("pequiven_seip.comment_none"|trans):obs.observation) |upper }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
 
-            </table>
+                </table>
+            </div>
         </div>
-
     {% endif %}
-
-
-
 
     <p class="button-height float-right">
         <a id="btnExportToPdf" href="#" class="button">
