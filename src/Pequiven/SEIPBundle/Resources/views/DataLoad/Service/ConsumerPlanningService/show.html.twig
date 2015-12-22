@@ -46,7 +46,7 @@
     {% include 'PequivenSEIPBundle:DataLoad/Service/ConsumerPlanningService:show/detail_raw_material_consumptions.html.twig' %}
     <br /><br />
     {% set details = consumer_planning_service.getDetailsByMonth %}
-    {% set title_top = ('pequiven_seip.report_template.details_raw_material'|trans) %}
+    {% set title_top = ('pequiven_seip.consumer_planning_service.details_consumer_planning_service'|trans) %}
     {% set unit = consumer_planning_service.service.serviceUnit %}
     {% include 'PequivenSEIPBundle:DataLoad/RawMaterial/RawMaterialConsumptionPlanning:show/detail_tabs_raw_material_consumptions.html.twig' %}
     <br /><br />
