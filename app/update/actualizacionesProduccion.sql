@@ -104,3 +104,38 @@ UPDATE seip_report_plant_service_planning AS r SET r.plantReport_id =
 (SELECT p.id FROM seip_report_plant AS p 
 WHERE p.parent_id = r.plantReport_id)
 WHERE r.period_id = 3;
+
+-- ACTUALIZAR EL PERÍODO DEL DETALLE DE LOS SERVICIOS DE LA PLANTA
+UPDATE seip_report_plant_service_detail_consumer SET period_id = 2;
+
+-- CURSOR DEL DETALLE DE LOS SERVICIOS DE LA PLANTA
+BEGIN
+  DECLARE flag INT DEFAULT FALSE;
+  DECLARE idReportPlantServiceDetailConsumer,monthSDC,idConsumerPlanningService INT;
+  DECLARE monthBudgetSDC,totalPlanSDC,day1PlanSDC,day2PlanSDC,day3PlanSDC,day4PlanSDC,day5PlanSDC,day6PlanSDC,day7PlanSDC,day8PlanSDC,day9PlanSDC,day10PlanSDC,day11PlanSDC,day12PlanSDC,day13PlanSDC,day14PlanSDC,day15PlanSDC,day16PlanSDC,day17PlanSDC,day18PlanSDC,day19PlanSDC,day20PlanSDC,day21PlanSDC,day22PlanSDC,day23PlanSDC,day24PlanSDC,day25PlanSDC,day26PlanSDC,day27PlanSDC,day28PlanSDC,day29PlanSDC,day30PlanSDC,day31PlanSDC FLOAT;
+  DECLARE curReportPlantServiceDetailConsumer CURSOR FOR SELECT r.id,r.`month`,r.month_budget,r.totalPlan,r.day1Plan,r.day2Plan,r.day3Plan,r.day4Plan,r.day5Plan,r.day6Plan,r.day7Plan,r.day8Plan,r.day9Plan,r.day10Plan,r.day11Plan,r.day12Plan,r.day13Plan,r.day14Plan,r.day15Plan,r.day16Plan,r.day17Plan,r.day18Plan,r.day19Plan,r.day20Plan,r.day21Plan,r.day22Plan,r.day23Plan,r.day24Plan,r.day25Plan,r.day26Plan,r.day27Plan,r.day28Plan,r.day29Plan,r.day30Plan,r.day31Plan,r.consumerPlanningService_id FROM seip_report_plant_service_detail_consumer AS r;
+  DECLARE CONTINUE HANDLER FOR NOT FOUND SET flag = TRUE;
+
+  OPEN curReportPlantServiceDetailConsumer;
+
+  read_loop: LOOP
+    FETCH curReportPlantServiceDetailConsumer INTO idReportPlantServiceDetailConsumer,monthSDC,monthBudgetSDC,totalPlanSDC,day1PlanSDC,day2PlanSDC,day3PlanSDC,day4PlanSDC,day5PlanSDC,day6PlanSDC,day7PlanSDC,day8PlanSDC,day9PlanSDC,day10PlanSDC,day11PlanSDC,day12PlanSDC,day13PlanSDC,day14PlanSDC,day15PlanSDC,day16PlanSDC,day17PlanSDC,day18PlanSDC,day19PlanSDC,day20PlanSDC,day21PlanSDC,day22PlanSDC,day23PlanSDC,day24PlanSDC,day25PlanSDC,day26PlanSDC,day27PlanSDC,day28PlanSDC,day29PlanSDC,day30PlanSDC,day31PlanSDC,idConsumerPlanningService;
+    IF flag THEN
+      LEAVE read_loop;
+    END IF;
+    INSERT INTO seip_report_plant_service_detail_consumer(month_budget,`month`,totalPlan,totalReal,percentage,day1Plan,day1Real,day2Plan,day2Real,day3Plan,day3Real,day4Plan,day4Real,day5Plan,day5Real,day6Plan,day6Real,day7Plan,day7Real,day8Plan,day8Real,day9Plan,day9Real,day10Plan,day10Real,day11Plan,day11Real,day12Plan,day12Real,day13Plan,day13Real,day14Plan,day14Real,day15Plan,day15Real,day16Plan,day16Real,day17Plan,day17Real,day18Plan,day18Real,day19Plan,day19Real,day20Plan,day20Real,day21Plan,day21Real,day22Plan,day22Real,day23Plan,day23Real,day24Plan,day24Real,day25Plan,day25Real,day26Plan,day26Real,day27Plan,day27Real,day28Plan,day28Real,day29Plan,day29Real,day30Plan,day30Real,day31Plan,day31Real,enabled,createdAt,updatedAt,deletedAt,consumerPlanningService_id,parent_id,period_id) 
+VALUES(monthBudgetSDC,monthSDC,totalPlanSDC,0,0,day1PlanSDC,0,day2PlanSDC,0,day3PlanSDC,0,day4PlanSDC,0,day5PlanSDC,0,day6PlanSDC,0,day7PlanSDC,0,day8PlanSDC,0,day9PlanSDC,0,day10PlanSDC,0,day11PlanSDC,0,day12PlanSDC,0,day13PlanSDC,0,day14PlanSDC,0,day15PlanSDC,0,day16PlanSDC,0,day17PlanSDC,0,day18PlanSDC,0,day19PlanSDC,0,day20PlanSDC,0,day21PlanSDC,0,day22PlanSDC,0,day23PlanSDC,0,day24PlanSDC,0,day25PlanSDC,0,day26PlanSDC,0,day27PlanSDC,0,day28PlanSDC,0,day29PlanSDC,0,day30PlanSDC,0,day31PlanSDC,0,1,NOW(),NOW(),null,idConsumerPlanningService,idReportPlantServiceDetailConsumer,3);
+        
+  END LOOP;
+
+  CLOSE curReportPlantServiceDetailConsumer;
+END
+
+-- EJECUTAR CURSOR DEL DETALLE DE LOS SERVICIOS DE LA PLANTA
+CALL CursorReportPlantServiceDetailConsumer();
+
+-- ACTUALIZAR IDREPORTPLANTSERVICEPLANNING DEL DETALLE DE LOS SERVICIOS DE LA PLANTA
+UPDATE seip_report_plant_service_detail_consumer AS r SET r.consumerPlanningService_id = 
+(SELECT p.id FROM seip_report_plant_service_planning AS p 
+WHERE p.parent_id = r.consumerPlanningService_id)
+WHERE r.period_id = 3;
