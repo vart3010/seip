@@ -2026,7 +2026,7 @@ class ReportTemplateController extends SEIPController {
             $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
 
 // set margins
-            $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+            $pdf->SetMargins(PDF_MARGIN_LEFT, 35, PDF_MARGIN_RIGHT);
             $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
             $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
 
@@ -2542,7 +2542,7 @@ class ReportTemplateController extends SEIPController {
                     if ($productReport->getProduct()->getIsCheckToReportProduction()) {
                         $rowData = array();
 
-                        array_push($rowData, $productReport->getProduct()->getName() . " (" . $productReport->getProduct()->getProductUnit() . ")");
+                        array_push($rowData, $productReport->getPlantReport()->getPlant()->getName().' - '.$productReport->getProduct()->getName() . " (" . $productReport->getProduct()->getProductUnit() . ")");
 
                         if (array_key_exists("plan_time", $imp)) {
                             array_push($rowData, number_format((float) $typeVar[$imp["plan_time"]], 2, ',', '.'));
@@ -3075,7 +3075,7 @@ class ReportTemplateController extends SEIPController {
         $totalYear = array();
 
         foreach ($productsReport as $rs) {
-            $productos[] = $rs->getProduct()->getName() . " (" . $rs->getProduct()->getProductUnit() . ")";
+            $productos[] = $rs->getPlantReport()->getPlant()->getName().' - '.$rs->getProduct()->getName() . " (" . $rs->getProduct()->getProductUnit() . ")";
 //$productos[] = $rs->$name;
             array_push($totalDay, $rs->getSummaryUnrealizedProductions($dateReport)["total_day"]);
             array_push($totalMonth, $rs->getSummaryUnrealizedProductions($dateReport)["total_month"]);
@@ -3094,7 +3094,7 @@ class ReportTemplateController extends SEIPController {
         $totalYear = array();
 
         foreach ($productsReport as $rs) {
-            $productos[] = $rs->getProduct()->getName() . " (" . $rs->getProduct()->getProductUnit() . ")";
+            $productos[] = $rs->getPlantReport()->getPlant()->getName().' - '.$rs->getProduct()->getName() . " (" . $rs->getProduct()->getProductUnit() . ")";
 //$productos[] = $rs->$name;
             array_push($totalDay, number_format($rs->getSummaryInventory($dateReport)["total_day"], 2, ',', '.'));
             array_push($totalMonth, number_format($rs->getSummaryInventory($dateReport)["total_month"], 2, ',', '.'));
@@ -3120,32 +3120,42 @@ class ReportTemplateController extends SEIPController {
         $month = array();
         $year = array();
         
-        foreach (array_unique($productos) as $prod) {
-            $rep = array_keys($productos, $prod);
-            $tDay = 0;
-            $tMonth = 0;
-            $tYear = 0;
-            if ($rep > 0) {
-                foreach ($rep as $r) {
-                    $tDay = $tDay + $totalDay[$r];
-                    $tMonth = $tMonth + $totalMonth[$r];
-                    if (count($totalYear) > 0) {
-                        $tYear = $tYear + $totalYear[$r];
-                    }
-                }
-                $day[] = $tDay;
-                $month[] = $tMonth;
-                if (count($totalYear) > 0) {
-                    $year[] = $tYear;
-                }
-            } else {
-                $day[] = $totalDay[$r];
-                $month[] = $totalMonth[$r];
-                if (count($totalYear) > 0) {
-                    $year[] = $totalYear[$r];
-                }
+        $cont=0;
+        foreach ($productos as $prod) {
+            $day[] = $totalDay[$cont];
+            $month[] = $totalMonth[$cont];
+            if (count($totalYear) > 0) {
+                $year[] = $totalYear[$cont];
             }
+            $cont++;
         }
+                  
+//        foreach (array_unique($productos) as $prod) {
+//            $rep = array_keys($productos, $prod);
+//            $tDay = 0;
+//            $tMonth = 0;
+//            $tYear = 0;
+//            if ($rep > 0) {
+//                foreach ($rep as $r) {
+//                    $tDay = $tDay + $totalDay[$r];
+//                    $tMonth = $tMonth + $totalMonth[$r];
+//                    if (count($totalYear) > 0) {
+//                        $tYear = $tYear + $totalYear[$r];
+//                    }
+//                }
+//                $day[] = $tDay;
+//                $month[] = $tMonth;
+//                if (count($totalYear) > 0) {
+//                    $year[] = $tYear;
+//                }
+//            } else {
+//                $day[] = $totalDay[$r];
+//                $month[] = $totalMonth[$r];
+//                if (count($totalYear) > 0) {
+//                    $year[] = $totalYear[$r];
+//                }
+//            }
+//        }
         //$consumos[] = array_unique($productos);
         $consumos[] = $productos;
         $consumos[] = $day;

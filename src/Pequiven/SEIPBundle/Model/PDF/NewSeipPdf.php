@@ -33,7 +33,6 @@ class NewSeipPdf extends TCPDF implements ContainerAwareInterface {
         $tittle = $this->title;
         $period = $this->period->getDescription();
 
-
         // Set font
         $this->SetFont('helvetica', 'B', 8);
         $this->SetTextColor(0, 0, 0);
@@ -41,42 +40,46 @@ class NewSeipPdf extends TCPDF implements ContainerAwareInterface {
         $text = '
         <table width="100%">
             <tr>
-                <td width="60%"><img src="'.$logopqv .'" width=150 height=25></td>
-                <td width="30%" style="text-align: rigth;"><br><br><br>Sistema Estadístico de Información Petroquímica</td>
-                <td width="10%"><img src="'.$logoseip.'" width=5 height=5></td>
+                <td width="60%"><img src="'.$logopqv .'" width="500px" height="100px"></td>
+                <td width="30%" style="text-align: rigth; padding: 20px;"><br><br><br>Sistema Estadístico de Información Petroquímica</td>
+                <td width="10%" style="text-align: rigth;"><br><br><img src="'.$logoseip.'" width="50px" height="50px"></td>
             </tr>
         </table>
-        
+        <br>
         <table width="100%">
             <tr>
-                <td width="100%" style="text-align: center; font-size: large">'.$tittle.' - '.$period.'</td>
+                <td width="100%" style="text-align: center; font-size: 12; color: #bb0707;">'.$tittle.'. '.$period.'</td>
             </tr>
         </table>
-        <br>';
+        ';
         $this->writeHTML($text);
-        // Logo Pqv
-//        $this->Image($image_file, 190, 13, 15, 15, 'jpg', '', 'T', false, 300, '', false, false, 0, false, false, false);
-        // Línea HR
-//        $lineRed = array('width' => 1.0, 'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(255, 0, 0));
-//        $this->Line(0, 27, 300, 27, $lineRed);
+
     }
 
     // Footer del pdf de resultados
     public function Footer() {
         // Position at 27 mm from bottom
-        $this->SetY(-15);
+        $this->SetY(-15);        
         // Set font
         $this->SetFont('helvetica', 'I', 8);
+        $logoeslogan = $this->generateAsset('bundles/pequivenseip/logotipos-pqv/logotipos-pdf/Eslogan.jpg'); //K_PATH_IMAGES.'logo_example.jpg';
         // Page number
-//        $this->Cell(0, 10, 'Página '.$this->getAliasNumPage().'/'.$this->getAliasNbPages(), 0, false, 'C', 0, '', 0, false, 'T', 'M');
 
-        $footer = '<div align="center"><span style="color: red;font-size: 1.3em;font-weight: bold;font-variant: small-caps;">' . $this->footerText . '</span><br><span>' . $this->trans('pequiven_seip.pdf.pageFooter', array('%page%' => $this->getAliasNumPage(), '%totalPage%' => $this->getAliasNbPages()), 'PequivenSEIPBundle') . '</span></div>';
+        $footer = '<table width="100%">'                
+                    . '<tr>'
+                       
+                        . '<td width="85%" style="text-align: center; font-size: 10; font-weight: bold; color: #bb0707;">'.$this->footerText.'</td>'
+                        . '<td width="15%" style="text-align: rigth;">'.$this->getAliasNumPage().' de '.$this->getAliasNbPages(). '</td>'
+                    . '</tr>'
+                . '</table>';                
+//                . '<span style="color: #bb0707; font-size: 1.3em;font-weight: bold;font-variant: small-caps;">' . $this->footerText . '</span><br><span>' . $this->trans('pequiven_seip.pdf.pageFooter', array('%page%' => $this->getAliasNumPage(), '%totalPage%' => $this->getAliasNbPages()), 'PequivenSEIPBundle') . '</span></div>';
         $this->writeHTML($footer);
 
         //Línea HR
-        $lineRed = array('width' => 1.0, 'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(255, 0, 0));
+        $lineRed = array('width' => 1.0, 'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(187, 7, 7));
+        $this->Line(0, 280, 300, 280, $lineRed);
         if ($this->printLineFooter === true) {
-            $this->Line(0, 190, 300, 190, $lineRed);
+            
         }
     }
 
