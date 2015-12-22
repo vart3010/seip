@@ -83,6 +83,13 @@ class PlantStopPlanning extends ModelBaseMaster
      * @ORM\JoinColumn(nullable=true)
      */
     private $period;
+    
+    /**
+     * @var \Pequiven\SEIPBundle\Entity\DataLoad\Plant\PlantStopPlanning
+     * @ORM\OneToOne(targetEntity="\Pequiven\SEIPBundle\Entity\DataLoad\Plant\PlantStopPlanning")
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", nullable=true)
+     */
+    private $parent;
 
     /**
      * Constructor
@@ -337,5 +344,26 @@ class PlantStopPlanning extends ModelBaseMaster
     public function getPeriod()
     {
         return $this->period;
+    }
+    
+    /**
+     * Set parent
+     *
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\Plant\PlantStopPlanning $parent
+     * @return Indicator
+     */
+    public function setParent(\Pequiven\SEIPBundle\Entity\DataLoad\Plant\PlantStopPlanning $parent = null) {
+        $this->parent = $parent;
+
+        return $this;
+    }
+
+    /**
+     * Get parent
+     *
+     * @return \Pequiven\SEIPBundle\Entity\DataLoad\Plant\PlantStopPlanning
+     */
+    public function getParent() {
+        return $this->parent;
     }
 }
