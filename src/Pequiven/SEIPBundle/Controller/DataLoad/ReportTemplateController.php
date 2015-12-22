@@ -3120,25 +3120,6 @@ class ReportTemplateController extends SEIPController {
         $month = array();
         $year = array();
         
-        foreach ($productos as $prod) {
-            $tDay = 0;
-            $tMonth = 0;
-            $tYear = 0;
-            
-            $tDay =  $totalDay[$prod->getId()];
-            $tMonth =  $totalMonth[$prod->getId()];
-            if (count($totalYear) > 0) {
-                $tYear = $tYear + $totalYear[$prod->getId()];
-            }
-            
-            $day[] = $tDay;
-            $month[] = $tMonth;
-            if (count($totalYear) > 0) {
-                $year[] = $tYear;
-            }
-        }
-
-
         foreach (array_unique($productos) as $prod) {
             $rep = array_keys($productos, $prod);
             $tDay = 0;
