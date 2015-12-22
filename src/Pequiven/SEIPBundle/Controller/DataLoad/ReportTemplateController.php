@@ -2006,7 +2006,7 @@ class ReportTemplateController extends SEIPController {
 
 
         if ($exportToPdf == "1") {
-            $pdf = new \Pequiven\SEIPBundle\Model\PDF\SeipPdf('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+            $pdf = new \Pequiven\SEIPBundle\Model\PDF\NewSeipPdf('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
             $pdf->setPrintLineFooter(false);
             $pdf->setContainer($this->container);
             $pdf->setPeriod($this->getPeriodService()->getPeriodActive());
@@ -3119,13 +3119,11 @@ class ReportTemplateController extends SEIPController {
         $day = array();
         $month = array();
         $year = array();
-        var_dump($arrayData);die();
+        
         foreach ($productos as $prod) {
             $tDay = 0;
             $tMonth = 0;
             $tYear = 0;
-            
-            
             
             $tDay =  $totalDay[$prod->getId()];
             $tMonth =  $totalMonth[$prod->getId()];
