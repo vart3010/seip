@@ -69,3 +69,38 @@ WHERE r.period_id = 3;
 
 -- ACTUALIZAR LA FECHA DE LOS DÍAS DE PARADAS DE PLANTA CREADOS
 UPDATE seip_report_product_report_day_stop SET `day` = CONCAT('2016',DATE_FORMAT(`day`,'-%c-%d %H:%i:%S')) WHERE period_id = 3;
+
+-- ACTUALIZAR EL PERÍODO DE LOS SERVICIOS DE LA PLANTA
+UPDATE seip_report_plant_service_planning SET period_id = 2;
+
+-- CURSOR DE LOS SERVICIOS DE LA PLANTA
+BEGIN
+  DECLARE flag INT DEFAULT FALSE;
+  DECLARE idReportPlantServicePlanning,idService,idPlantReport INT;
+  DECLARE aliquotRPSP FLOAT;
+  DECLARE curReportPlantServicePlanning CURSOR FOR SELECT r.id,r.service_id,r.plantReport_id,aliquot FROM seip_report_plant_service_planning AS r;
+  DECLARE CONTINUE HANDLER FOR NOT FOUND SET flag = TRUE;
+
+  OPEN curReportPlantServicePlanning;
+
+  read_loop: LOOP
+    FETCH curReportPlantServicePlanning INTO idReportPlantServicePlanning,idService,idPlantReport,aliquotRPSP;
+    IF flag THEN
+      LEAVE read_loop;
+    END IF;
+    INSERT INTO seip_report_plant_service_planning(service_id,enabled,createdAt,updatedAt,deletedAt,plantReport_id,aliquot,parent_id,period_id) 
+VALUES(idService,1,NOW(),NOW(),null,idPlantReport,aliquotRPSP,idReportPlantServicePlanning,3);
+        
+  END LOOP;
+
+  CLOSE curReportPlantServicePlanning;
+END
+
+-- EJECUTAR CURSOR DE LOS SERVICIOS DE LA PLANTA
+CALL CursorReportPlantServicePlanning();
+
+-- ACTUALIZAR IDPLANTREPORT EN LOS SERVICIOS DE LA PLANTA
+UPDATE seip_report_plant_service_planning AS r SET r.plantReport_id = 
+(SELECT p.id FROM seip_report_plant AS p 
+WHERE p.parent_id = r.plantReport_id)
+WHERE r.period_id = 3;
