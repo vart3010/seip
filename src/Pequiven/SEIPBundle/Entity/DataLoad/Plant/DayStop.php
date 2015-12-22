@@ -69,6 +69,15 @@ class DayStop extends BaseModel
      * @ORM\JoinColumn(nullable=false)
      */
     private $plantStopPlanning;
+    
+    /**
+     * Periodo.
+     * 
+     * @var \Pequiven\SEIPBundle\Entity\Period
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\Period")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $period;
 
     /**
      * Get id
@@ -211,5 +220,28 @@ class DayStop extends BaseModel
             $hours = $this->stopTime->getHours();
         }
         $this->hours = $hours;
+    }
+    
+    /**
+     * Set period
+     *
+     * @param \Pequiven\SEIPBundle\Entity\Period $period
+     * @return Objetive
+     */
+    public function setPeriod(\Pequiven\SEIPBundle\Entity\Period $period = null)
+    {
+        $this->period = $period;
+
+        return $this;
+    }
+
+    /**
+     * Get period
+     *
+     * @return \Pequiven\SEIPBundle\Entity\Period 
+     */
+    public function getPeriod()
+    {
+        return $this->period;
     }
 }
