@@ -426,7 +426,7 @@ class PlantReport extends ModelBaseMaster {
      * Set period
      *
      * @param \Pequiven\SEIPBundle\Entity\Period $period
-     * @return Objetive
+     * @return PlantReport
      */
     public function setPeriod(\Pequiven\SEIPBundle\Entity\Period $period = null)
     {

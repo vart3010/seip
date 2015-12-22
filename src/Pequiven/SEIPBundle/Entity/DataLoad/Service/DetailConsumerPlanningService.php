@@ -47,6 +47,22 @@ class DetailConsumerPlanningService extends Detail
      * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Service\Range",mappedBy="detailConsumerPlanningService",cascade={"persist","remove"})
      */
     protected $ranges;
+    
+    /**
+     * @var \Pequiven\SEIPBundle\Entity\DataLoad\Service\DetailConsumerPlanningService
+     * @ORM\OneToOne(targetEntity="\Pequiven\SEIPBundle\Entity\DataLoad\Service\DetailConsumerPlanningService")
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", nullable=true)
+     */
+    private $parent;
+    
+    /**
+     * Periodo.
+     * 
+     * @var \Pequiven\SEIPBundle\Entity\Period
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\Period")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $period;
 
     /**
      * Constructor
@@ -130,5 +146,50 @@ class DetailConsumerPlanningService extends Detail
     public function totalize()
     {
         parent::totalize();
+    }
+    
+        
+    /**
+     * Set parent
+     *
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\Service\DetailConsumerPlanningService $parent
+     * @return DetailConsumerPlanningService
+     */
+    public function setParent(\Pequiven\SEIPBundle\Entity\DataLoad\Service\DetailConsumerPlanningService $parent = null) {
+        $this->parent = $parent;
+
+        return $this;
+    }
+
+    /**
+     * Get parent
+     *
+     * @return \Pequiven\SEIPBundle\Entity\DataLoad\Service\DetailConsumerPlanningService 
+     */
+    public function getParent() {
+        return $this->parent;
+    }
+    
+    /**
+     * Set period
+     *
+     * @param \Pequiven\SEIPBundle\Entity\Period $period
+     * @return DetailConsumerPlanningService
+     */
+    public function setPeriod(\Pequiven\SEIPBundle\Entity\Period $period = null)
+    {
+        $this->period = $period;
+
+        return $this;
+    }
+
+    /**
+     * Get period
+     *
+     * @return \Pequiven\SEIPBundle\Entity\Period 
+     */
+    public function getPeriod()
+    {
+        return $this->period;
     }
 }
