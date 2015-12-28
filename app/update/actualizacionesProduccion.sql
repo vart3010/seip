@@ -179,6 +179,28 @@ WHERE r.period_id = 3;
 UPDATE seip_report_product_report_range SET period_id = 2;
 
 -- CURSOR DEL RANGO DE LA PLANIFICACIÓN DEL PRODUCTO
+BEGIN
+  DECLARE flag INT DEFAULT FALSE;
+  DECLARE dateFromRPRR,dateEndRPRR VARCHAR(20);
+  DECLARE idPlanningProduct,typeRPRR INT;
+	DECLARE valueRPRR FLOAT;
+  DECLARE curReportProductReportRange CURSOR FOR SELECT r.date_from,r.date_end,r.type,r.`value`,r.productPlanning_id FROM seip_report_product_report_range AS r;
+  DECLARE CONTINUE HANDLER FOR NOT FOUND SET flag = TRUE;
+
+  OPEN curReportProductReportRange;
+
+  read_loop: LOOP
+    FETCH curReportProductReportRange INTO dateFromRPRR,dateEndRPRR,typeRPRR,valueRPRR,idPlanningProduct;
+    IF flag THEN
+      LEAVE read_loop;
+    END IF;
+    INSERT INTO seip_report_product_report_range(date_from,date_end,type,`value`,enabled,createdAt,updatedAt,deletedAt,productPlanning_id,period_id) 
+VALUES(dateFromRPRR,dateEndRPRR,typeRPRR,valueRPRR,1,NOW(),NOW(),null,idPlanningProduct,3);
+        
+  END LOOP;
+
+  CLOSE curReportProductReportRange;
+END
 
 -- EJECUTAR CURSOR DEL RANGO DE LA PLANIFICACIÓN DEL PRODUCTO
 CALL CursorReportProductReportRange();
