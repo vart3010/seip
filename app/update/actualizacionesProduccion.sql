@@ -139,3 +139,56 @@ UPDATE seip_report_plant_service_detail_consumer AS r SET r.consumerPlanningServ
 (SELECT p.id FROM seip_report_plant_service_planning AS p 
 WHERE p.parent_id = r.consumerPlanningService_id)
 WHERE r.period_id = 3;
+
+-- ACTUALIZAR EL PERÍODO DE LA PLANIFICACIÓN DEL PRODUCTO
+UPDATE seip_report_product_report_product_planning SET period_id = 2;
+
+-- CURSOR DE LA PLANIFICACIÓN DEL PRODUCTO
+BEGIN
+  DECLARE flag INT DEFAULT FALSE;
+  DECLARE idRPPP,idProductReport,monthRPPP,typeRPPP INT;
+	DECLARE totalMonthRPPP,dailyProductionCapacityRPPP,netProductionPercentageRPPP FLOAT;
+  DECLARE curReportProductPlanningProduct CURSOR FOR SELECT r.id,r.`month`,r.type,r.total_month,r.daily_production_capacity,r.productReport_id,r.net_production_percentage FROM seip_report_product_report_product_planning AS r;
+  DECLARE CONTINUE HANDLER FOR NOT FOUND SET flag = TRUE;
+
+  OPEN curReportProductPlanningProduct;
+
+  read_loop: LOOP
+    FETCH curReportProductPlanningProduct INTO idRPPP,monthRPPP,typeRPPP,totalMonthRPPP,dailyProductionCapacityRPPP,idProductReport,netProductionPercentageRPPP;
+    IF flag THEN
+      LEAVE read_loop;
+    END IF;
+    INSERT INTO seip_report_product_report_product_planning(`month`,type,total_month,daily_production_capacity,enabled,createdAt,updatedAt,deletedAt,productReport_id,net_production_percentage,period_id,parent_id) 
+VALUES(monthRPPP,typeRPPP,totalMonthRPPP,dailyProductionCapacityRPPP,1,NOW(),NOW(),null,idProductReport,netProductionPercentageRPPP,3,idRPPP);
+        
+  END LOOP;
+
+  CLOSE curReportProductPlanningProduct;
+END
+
+-- EJECUTAR CURSOR DE LA PLANIFICACIÓN DEL PRODUCTO
+CALL CursorReportProductPlanningProduct();
+
+-- ACTUALIZAR IDPRODUCTREPORT DE LA PLANIFICACIÓN DEL PRODUCTO
+UPDATE seip_report_product_report_product_planning AS r SET r.productReport_id = 
+(SELECT p.id FROM seip_report_product_report AS p 
+WHERE p.parent_id = r.productReport_id)
+WHERE r.period_id = 3;
+
+-- ACTUALIZAR EL PERÍODO DEL RANGO DE LA PLANIFICACIÓN DEL PRODUCTO
+UPDATE seip_report_product_report_range SET period_id = 2;
+
+-- CURSOR DEL RANGO DE LA PLANIFICACIÓN DEL PRODUCTO
+
+-- EJECUTAR CURSOR DEL RANGO DE LA PLANIFICACIÓN DEL PRODUCTO
+CALL CursorReportProductReportRange();
+
+-- ACTUALIZAR IDPLANNINGPRODUCT DEL RANGO DE LA PLANIFICACIÓN DEL PRODUCTO
+UPDATE seip_report_product_report_range AS r SET r.productPlanning_id = 
+(SELECT p.id FROM seip_report_product_report_product_planning AS p 
+WHERE p.parent_id = r.productPlanning_id)
+WHERE r.period_id = 3;
+
+-- ACTUALIZAR LA FECHA DE LOS DÍAS DEL RANGO DE LA PLANIFICACIÓN DEL PRODUCTO
+UPDATE seip_report_product_report_range SET `date_from` = CONCAT('2016',DATE_FORMAT(`date_from`,'-%c-%d %H:%i:%S')) WHERE period_id = 3;
+UPDATE seip_report_product_report_range SET `date_end` = CONCAT('2016',DATE_FORMAT(`date_end`,'-%c-%d %H:%i:%S')) WHERE period_id = 3;
