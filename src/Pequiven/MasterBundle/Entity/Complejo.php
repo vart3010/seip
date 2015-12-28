@@ -84,8 +84,8 @@ class Complejo extends modelComplejo {
     private $gerencias;
 
     /**
-     * @var \Pequiven\MasterBundle\Entity\FeeStructure
-     * @ORM\OneToMany(targetEntity="\Pequiven\MasterBundle\Entity\FeeStructure", mappedBy="complejo",cascade={"persist","remove"})
+     * @var \Pequiven\SEIPBundle\Entity\User\FeeStructure
+     * @ORM\OneToMany(targetEntity="\Pequiven\SEIPBundle\Entity\User\FeeStructure", mappedBy="complejo",cascade={"persist","remove"})
      */
     private $feeStructure;
 
@@ -291,7 +291,7 @@ class Complejo extends modelComplejo {
         return $this->feeStructure;
     }
 
-    function setFeeStructure(\Pequiven\MasterBundle\Entity\FeeStructure $feeStructure) {
+    function setFeeStructure(\Pequiven\SEIPBundle\Entity\User\FeeStructure $feeStructure) {
         $this->feeStructure = $feeStructure;
     }
 

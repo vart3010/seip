@@ -78,8 +78,8 @@ class Coordinacion {
     private $enabled = true;
 
     /**
-     * @var \Pequiven\MasterBundle\Entity\FeeStructure
-     * @ORM\OneToMany(targetEntity="\Pequiven\MasterBundle\Entity\FeeStructure", mappedBy="coordinacion",cascade={"persist","remove"})
+     * @var \Pequiven\SEIPBundle\Entity\User\FeeStructure
+     * @ORM\OneToMany(targetEntity="\Pequiven\SEIPBundle\Entity\User\FeeStructure", mappedBy="coordinacion",cascade={"persist","remove"})
      */
     private $feeStructure;
 

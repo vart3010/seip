@@ -1,6 +1,6 @@
 <?php
 
-namespace Pequiven\MasterBundle\Entity;
+namespace Pequiven\SEIPBundle\Entity\User;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -87,14 +87,15 @@ class FeeStructure {
     private $coordinacion;
 
     /**
-     * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\FeeStructure",inversedBy="children")
+     * ID DEL PADRE O JEFE DIRECTO EN LA ENTRUCTURA 
+     * @ORM\ManyToOne(targetEntity="\Pequiven\SEIPBundle\Entity\User\FeeStructure",inversedBy="children")
      * @ORM\JoinColumn(name="parent_id", nullable=true)
      */
     private $parent;
 
     /**
-     * @var \Pequiven\MasterBundle\Entity\FeeStructure
-     * @ORM\OneToMany(targetEntity="\Pequiven\MasterBundle\Entity\FeeStructure",mappedBy="parent",cascade={"persist"}))
+     * @var \Pequiven\Pequiven\SEIPBundle\Entity\User\FeeStructure
+     * @ORM\OneToMany(targetEntity="\Pequiven\SEIPBundle\Entity\User\FeeStructure",mappedBy="parent",cascade={"persist"}))
      */
     protected $children;
 
@@ -111,6 +112,13 @@ class FeeStructure {
     private $codigo;
 
     /**
+     * Nivel Jerárquico
+     * @var string
+     * @ORM\Column(name="chargelvl", type="string", nullable=true)
+     */
+    private $chargelvl;
+
+    /**
      * Cargo
      * @var string
      * @ORM\Column(name="charge", type="string")
@@ -118,6 +126,7 @@ class FeeStructure {
     private $charge;
 
     /**
+     * SI ES TEMPORAL O NO
      * @var boolean
      * @ORM\Column(name="encargado", type="boolean")
      */
@@ -131,8 +140,8 @@ class FeeStructure {
     private $User;
 
     /**
-     * @var \Pequiven\MasterBundle\Entity\MovementFeeStructure
-     * @ORM\OneToMany(targetEntity="\Pequiven\MasterBundle\Entity\MovementFeeStructure",mappedBy="feestructure",cascade={"persist"}))
+     * @var \Pequiven\Pequiven\SEIPBundle\Entity\User\MovementFeeStructure
+     * @ORM\OneToMany(targetEntity="\Pequiven\SEIPBundle\Entity\User\MovementFeeStructure",mappedBy="feestructure",cascade={"persist"}))
      */
     protected $movementFeeStructure;
 
@@ -220,7 +229,7 @@ class FeeStructure {
         $this->parent = $parent;
     }
 
-    function setChildren(\Pequiven\MasterBundle\Entity\FeeStructure $children) {
+    function setChildren(\Pequiven\SEIPBundle\Entity\User\FeeStructure $children) {
         $this->children = $children;
     }
 
@@ -254,6 +263,29 @@ class FeeStructure {
 
     function setCoordinacion(\Pequiven\MasterBundle\Entity\Coordinacion $coordinacion) {
         $this->coordinacion = $coordinacion;
+    }
+    function getChargelvl() {
+        return $this->chargelvl;
+    }
+
+    function getEncargado() {
+        return $this->encargado;
+    }
+
+    function getMovementFeeStructure() {
+        return $this->movementFeeStructure;
+    }
+
+    function setChargelvl($chargelvl) {
+        $this->chargelvl = $chargelvl;
+    }
+
+    function setEncargado($encargado) {
+        $this->encargado = $encargado;
+    }
+
+    function setMovementFeeStructure(\Pequiven\SEIPBundle\Entity\User\MovementFeeStructure $movementFeeStructure) {
+        $this->movementFeeStructure = $movementFeeStructure;
     }
 
 }

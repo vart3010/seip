@@ -1,6 +1,6 @@
 <?php
 
-namespace Pequiven\MasterBundle\Entity;
+namespace Pequiven\SEIPBundle\Entity\User;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -76,7 +76,7 @@ class MovementFeeStructure {
     /**
      * ID AFECTADO EN FeeStructure
      * @var integer
-     * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\FeeStructure",inversedBy="movementFeeStructure")
+     * @ORM\ManyToOne(targetEntity="\Pequiven\SEIPBundle\Entity\User\FeeStructure",inversedBy="movementFeeStructure")
      * @ORM\JoinColumn(nullable=false)
      */
     private $feestructure;

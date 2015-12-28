@@ -9,6 +9,12 @@ pequiven_user_aux_list:
     defaults:
         _controller: pequiven_seip.controller.user:listAuxAction
     methods: [GET]
+    
+pequiven_user_feestructure:
+    path: /view/feeStructure
+    defaults:
+        _controller: pequiven_seip.controller.feestructure:showAction
+    methods: [GET]
         
 #Devuelve el paginador con la data de los usuarios
 userList:

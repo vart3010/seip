@@ -165,8 +165,8 @@ class GerenciaSecond extends modelGerenciaSecond {
     private $workStudyCircles;
 
     /**
-     * @var \Pequiven\MasterBundle\Entity\FeeStructure
-     * @ORM\OneToMany(targetEntity="\Pequiven\MasterBundle\Entity\FeeStructure", mappedBy="gerenciasecond",cascade={"persist","remove"})
+     * @var \Pequiven\SEIPBundle\Entity\User\FeeStructure
+     * @ORM\OneToMany(targetEntity="\Pequiven\SEIPBundle\Entity\User\FeeStructure", mappedBy="gerenciasecond",cascade={"persist","remove"})
      */
     private $feeStructure;
 
