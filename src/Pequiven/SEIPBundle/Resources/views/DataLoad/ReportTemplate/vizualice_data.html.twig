@@ -374,7 +374,7 @@
                         <td scope="col" width="40%" class="product">{{ inventory.productName|upper }}</td>
                         <td scope="col" width="20%" class="values">{{ inventory.day|myNumberFormat }}</td>
                         <td scope="col" width="20%" class="values">{{ inventory.day_preview|myNumberFormat }}</td>
-                        <td scope="col" width="20%" class="values">{{ (inventory.day_preview-inventory.day)|myNumberFormat }}</td>
+                        <td scope="col" width="20%" class="values">{{ (inventory.day-inventory.day_preview)|myNumberFormat }}</td>
                     </tr>
                 {% endfor %}
             </tbody>
