@@ -359,3 +359,37 @@ WHERE r.period_id = 3;
 -- ACTUALIZAR LA FECHA DE LOS DÍAS DEL RANGO DE LA PLANIFICACIÓN DEL PRODUCTO
 UPDATE seip_report_raw_material_consumption_report_range SET `date_from` = CONCAT('2016',DATE_FORMAT(`date_from`,'-%c-%d %H:%i:%S')) WHERE period_id = 3;
 UPDATE seip_report_raw_material_consumption_report_range SET `date_end` = CONCAT('2016',DATE_FORMAT(`date_end`,'-%c-%d %H:%i:%S')) WHERE period_id = 3;
+
+-- ACTUALIZAR EL PERÍODO DEL INVENTARIO DEL PRODUCTO
+UPDATE seip_report_product_inventory SET period_id = 2;
+
+-- CURSOR DEL INVENTARIO DEL PRODUCTO
+BEGIN
+  DECLARE flag INT DEFAULT FALSE;
+  DECLARE monthRPI,idProductReport INT;
+  DECLARE curReportProductInventory CURSOR FOR SELECT r.`month`,r.productReport_id FROM seip_report_product_inventory AS r;
+  DECLARE CONTINUE HANDLER FOR NOT FOUND SET flag = TRUE;
+
+  OPEN curReportProductInventory;
+
+  read_loop: LOOP
+    FETCH curReportProductInventory INTO monthRPI,idProductReport;
+    IF flag THEN
+      LEAVE read_loop;
+    END IF;
+    INSERT INTO seip_report_product_inventory(`month`,total,day1,day2,day3,day4,day5,day6,day7,day8,day9,day10,day11,day12,day13,day14,day15,day16,day17,day18,day19,day20,day21,day22,day23,day24,day25,day26,day27,day28,day29,day30,day31,enabled,createdAt,updatedAt,deletedAt,productReport_id,period_id) 
+VALUES(monthRPI,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,NOW(),NOW(),null,idProductReport,3);
+        
+  END LOOP;
+
+  CLOSE curReportProductInventory;
+END
+
+-- EJECUTAR CURSOR DEL INVENTARIO DEL PRODUCTO
+CALL CursorReportProductInventory();
+
+-- ACTUALIZAR IDPRODUCTREPORT DEL INVENTARIO DEL PRODUCTO
+UPDATE seip_report_product_inventory AS r SET r.productReport_id = 
+(SELECT p.id FROM seip_report_product_report AS p 
+WHERE p.parent_id = r.productReport_id)
+WHERE r.period_id = 3;
