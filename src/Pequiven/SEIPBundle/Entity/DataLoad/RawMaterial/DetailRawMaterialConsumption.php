@@ -58,6 +58,13 @@ class DetailRawMaterialConsumption extends Detail
     private $period;
     
     /**
+     * @var \Pequiven\SEIPBundle\Entity\DataLoad\RawMaterial\DetailRawMaterialConsumption
+     * @ORM\OneToOne(targetEntity="\Pequiven\SEIPBundle\Entity\DataLoad\RawMaterial\DetailRawMaterialConsumption")
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", nullable=true)
+     */
+    private $parent;
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -170,5 +177,26 @@ class DetailRawMaterialConsumption extends Detail
     public function getPeriod()
     {
         return $this->period;
+    }
+        
+    /**
+     * Set parent
+     *
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\RawMaterial\DetailRawMaterialConsumption $parent
+     * @return DetailRawMaterialConsumption
+     */
+    public function setParent(\Pequiven\SEIPBundle\Entity\DataLoad\RawMaterial\DetailRawMaterialConsumption $parent = null) {
+        $this->parent = $parent;
+
+        return $this;
+    }
+
+    /**
+     * Get parent
+     *
+     * @return \Pequiven\SEIPBundle\Entity\DataLoad\RawMaterial\DetailRawMaterialConsumption 
+     */
+    public function getParent() {
+        return $this->parent;
     }
 }
