@@ -110,6 +110,13 @@ class RawMaterialConsumptionPlanning extends BaseModel
      * @ORM\JoinColumn(nullable=true)
      */
     private $period;
+    
+    /**
+     * @var \Pequiven\SEIPBundle\Entity\DataLoad\RawMaterial\RawMaterialConsumptionPlanning
+     * @ORM\OneToOne(targetEntity="\Pequiven\SEIPBundle\Entity\DataLoad\RawMaterial\RawMaterialConsumptionPlanning")
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", nullable=true)
+     */
+    private $parent;
 
     /**
      * Constructor
@@ -381,5 +388,26 @@ class RawMaterialConsumptionPlanning extends BaseModel
     public function getPeriod()
     {
         return $this->period;
+    }
+    
+    /**
+     * Set parent
+     *
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\RawMaterial\RawMaterialConsumptionPlanning $parent
+     * @return RawMaterialConsumptionPlanning
+     */
+    public function setParent(\Pequiven\SEIPBundle\Entity\DataLoad\RawMaterial\RawMaterialConsumptionPlanning $parent = null) {
+        $this->parent = $parent;
+
+        return $this;
+    }
+
+    /**
+     * Get parent
+     *
+     * @return \Pequiven\SEIPBundle\Entity\DataLoad\RawMaterial\RawMaterialConsumptionPlanning 
+     */
+    public function getParent() {
+        return $this->parent;
     }
 }
