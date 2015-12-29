@@ -249,3 +249,109 @@ UPDATE seip_report_product_report_product_detail_daily_month AS r SET r.productR
 (SELECT p.id FROM seip_report_product_report AS p 
 WHERE p.parent_id = r.productReport_id)
 WHERE r.period_id = 3;
+
+-- ACTUALIZAR EL PERÍODO DE LA PLANIFICACIÓN DEL CONSUMO DE MATERIA PRIMA
+UPDATE seip_report_product_raw_material_consumption_planning SET period_id = 2;
+
+-- CURSOR DE LA PLANIFICACIÓN DEL CONSUMO DE MATERIA PRIMA
+BEGIN
+  DECLARE flag INT DEFAULT FALSE;
+  DECLARE idRPRMCP,idProduct,typeRPRMCP,idProductReport,automaticCalculationPlanRPRMCP INT;
+  DECLARE totalPlanRPRMCP,aliquotRPRMCP FLOAT;
+  DECLARE curReportProductRawMaterialConsumptionPlanning CURSOR FOR SELECT r.id,r.product_id,r.type,r.productReport_id,r.automaticCalculationPlan,r.totalPlan,r.aliquot FROM seip_report_product_raw_material_consumption_planning AS r;
+  DECLARE CONTINUE HANDLER FOR NOT FOUND SET flag = TRUE;
+
+  OPEN curReportProductRawMaterialConsumptionPlanning;
+
+  read_loop: LOOP
+    FETCH curReportProductRawMaterialConsumptionPlanning INTO idRPRMCP,idProduct,typeRPRMCP,idProductReport,automaticCalculationPlanRPRMCP,totalPlanRPRMCP,aliquotRPRMCP;
+    IF flag THEN
+      LEAVE read_loop;
+    END IF;
+    INSERT INTO seip_report_product_raw_material_consumption_planning(product_id,type,totalPlan,totalReal,percentage,enabled,createdAt,updatedAt,deletedAt,productReport_id,aliquot,automaticCalculationPlan,period_id,parent_id) 
+VALUES(idProduct,typeRPRMCP,totalPlanRPRMCP,0,0,1,NOW(),NOW(),null,idProductReport,aliquotRPRMCP,automaticCalculationPlanRPRMCP,3,idRPRMCP);
+        
+  END LOOP;
+
+  CLOSE curReportProductRawMaterialConsumptionPlanning;
+END
+
+-- EJECUTAR CURSOR DE LA PLANIFICACIÓN DEL CONSUMO DE MATERIA PRIMA
+CALL CursorReportProductRawMaterialConsumptionPlanning(); 
+
+-- ACTUALIZAR IDPRODUCTREPORT DE LA PLANFICIACIÓN DEL CONSUMO DE MATERIA PRIMA
+UPDATE seip_report_product_raw_material_consumption_planning AS r SET r.productReport_id = 
+(SELECT p.id FROM seip_report_product_report AS p 
+WHERE p.parent_id = r.productReport_id)
+WHERE r.period_id = 3;
+
+-- ACTUALIZAR EL PERÍODO DEL DETALLE DEL CONSUMO DE MATERIA PRIMA
+UPDATE seip_report_product_raw_material_consumption SET period_id = 2;
+
+-- CURSOR DEL DETALLE DEL CONSUMO DE MATERIA PRIMA
+BEGIN
+  DECLARE flag INT DEFAULT FALSE;
+  DECLARE idRPDRMC,monthRPDRMC,idRawMaterialConsumptionPlanning INT;
+  DECLARE monthBudgetRPDRMC,totalPlanRPDRMC,day1PlanRPDRMC,day2PlanRPDRMC,day3PlanRPDRMC,day4PlanRPDRMC,day5PlanRPDRMC,day6PlanRPDRMC,day7PlanRPDRMC,day8PlanRPDRMC,day9PlanRPDRMC,day10PlanRPDRMC,day11PlanRPDRMC,day12PlanRPDRMC,day13PlanRPDRMC,day14PlanRPDRMC,day15PlanRPDRMC,day16PlanRPDRMC,day17PlanRPDRMC,day18PlanRPDRMC,day19PlanRPDRMC,day20PlanRPDRMC,day21PlanRPDRMC,day22PlanRPDRMC,day23PlanRPDRMC,day24PlanRPDRMC,day25PlanRPDRMC,day26PlanRPDRMC,day27PlanRPDRMC,day28PlanRPDRMC,day29PlanRPDRMC,day30PlanRPDRMC,day31PlanRPDRMC FLOAT;
+  DECLARE curReportProductDetailRawMaterialConsumption CURSOR FOR SELECT r.id,r.`month`,r.rawMaterialConsumptionPlanning_id,r.month_budget,r.totalPlan,r.day1Plan,r.day2Plan,r.day3Plan,r.day4Plan,r.day5Plan,r.day6Plan,r.day7Plan,r.day8Plan,r.day9Plan,r.day10Plan,r.day11Plan,r.day12Plan,r.day13Plan,r.day14Plan,r.day15Plan,r.day16Plan,r.day17Plan,r.day18Plan,r.day19Plan,r.day20Plan,r.day21Plan,r.day22Plan,r.day23Plan,r.day24Plan,r.day25Plan,r.day26Plan,r.day27Plan,r.day28Plan,r.day29Plan,r.day30Plan,r.day31Plan FROM seip_report_product_raw_material_consumption AS r;
+  DECLARE CONTINUE HANDLER FOR NOT FOUND SET flag = TRUE;
+
+  OPEN curReportProductDetailRawMaterialConsumption;
+
+  read_loop: LOOP
+    FETCH curReportProductDetailRawMaterialConsumption INTO idRPDRMC,monthRPDRMC,idRawMaterialConsumptionPlanning,monthBudgetRPDRMC,totalPlanRPDRMC,day1PlanRPDRMC,day2PlanRPDRMC,day3PlanRPDRMC,day4PlanRPDRMC,day5PlanRPDRMC,day6PlanRPDRMC,day7PlanRPDRMC,day8PlanRPDRMC,day9PlanRPDRMC,day10PlanRPDRMC,day11PlanRPDRMC,day12PlanRPDRMC,day13PlanRPDRMC,day14PlanRPDRMC,day15PlanRPDRMC,day16PlanRPDRMC,day17PlanRPDRMC,day18PlanRPDRMC,day19PlanRPDRMC,day20PlanRPDRMC,day21PlanRPDRMC,day22PlanRPDRMC,day23PlanRPDRMC,day24PlanRPDRMC,day25PlanRPDRMC,day26PlanRPDRMC,day27PlanRPDRMC,day28PlanRPDRMC,day29PlanRPDRMC,day30PlanRPDRMC,day31PlanRPDRMC;
+    IF flag THEN
+      LEAVE read_loop;
+    END IF;
+    INSERT INTO seip_report_product_raw_material_consumption(month_budget,`month`,totalPlan,totalReal,percentage,day1Plan,day1Real,day2Plan,day2Real,day3Plan,day3Real,day4Plan,day4Real,day5Plan,day5Real,day6Plan,day6Real,day7Plan,day7Real,day8Plan,day8Real,day9Plan,day9Real,day10Plan,day10Real,day11Plan,day11Real,day12Plan,day12Real,day13Plan,day13Real,day14Plan,day14Real,day15Plan,day15Real,day16Plan,day16Real,day17Plan,day17Real,day18Plan,day18Real,day19Plan,day19Real,day20Plan,day20Real,day21Plan,day21Real,day22Plan,day22Real,day23Plan,day23Real,day24Plan,day24Real,day25Plan,day25Real,day26Plan,day26Real,day27Plan,day27Real,day28Plan,day28Real,day29Plan,day29Real,day30Plan,day30Real,day31Plan,day31Real,enabled,createdAt,updatedAt,deletedAt,rawMaterialConsumptionPlanning_id,period_id,parent_id) 
+VALUES(monthBudgetRPDRMC,monthRPDRMC,totalPlanRPDRMC,0,0,day1PlanRPDRMC,0,day2PlanRPDRMC,0,day3PlanRPDRMC,0,day4PlanRPDRMC,0,day5PlanRPDRMC,0,day6PlanRPDRMC,0,day7PlanRPDRMC,0,day8PlanRPDRMC,0,day9PlanRPDRMC,0,day10PlanRPDRMC,0,day11PlanRPDRMC,0,day12PlanRPDRMC,0,day13PlanRPDRMC,0,day14PlanRPDRMC,0,day15PlanRPDRMC,0,day16PlanRPDRMC,0,day17PlanRPDRMC,0,day18PlanRPDRMC,0,day19PlanRPDRMC,0,day20PlanRPDRMC,0,day21PlanRPDRMC,0,day22PlanRPDRMC,0,day23PlanRPDRMC,0,day24PlanRPDRMC,0,day25PlanRPDRMC,0,day26PlanRPDRMC,0,day27PlanRPDRMC,0,day28PlanRPDRMC,0,day29PlanRPDRMC,0,day30PlanRPDRMC,0,day31PlanRPDRMC,0,1,NOW(),NOW(),null,idRawMaterialConsumptionPlanning,3,idRPDRMC);
+        
+  END LOOP;
+
+  CLOSE curReportProductDetailRawMaterialConsumption;
+END
+
+-- EJECUTAR CURSOR DEL DETALLE DEL CONSUMO DE MATERIA PRIMA
+CALL CursorReportProductDetailRawMaterialConsumption();
+
+-- ACTUALIZAR IDRAWMATERIALCONSUMPTIONPLANNING DEL DETALLE DEL CONSUMO DE MATERIA PRIMA
+UPDATE seip_report_product_raw_material_consumption AS r SET r.rawMaterialConsumptionPlanning_id = 
+(SELECT p.id FROM seip_report_product_raw_material_consumption_planning AS p 
+WHERE p.parent_id = r.rawMaterialConsumptionPlanning_id)
+WHERE r.period_id = 3;
+
+-- ACTUALIZAR EL PERÍODO DEL RANGO DE DISTRIBUCIÓN DEL DETALLE DEL CONSUMO DE MATERIA PRIMA
+UPDATE seip_report_raw_material_consumption_report_range SET period_id = 2;
+
+-- CURSOR DEL RANGO DE DISTRIBUCIÓN DEL DETALLE DEL CONSUMO DE MATERIA PRIMA
+BEGIN
+  DECLARE flag INT DEFAULT FALSE;
+  DECLARE dateFromRRMCRR,dateEndRRMCRR VARCHAR(20);
+  DECLARE typeRRMCRR,idDetailRawMaterialConsumption INT;
+  DECLARE valueRRMCRR FLOAT;
+  DECLARE curReportRawMaterialConsumptionReportRange CURSOR FOR SELECT r.date_from,r.date_end,r.type,r.detailRawMaterialConsumption_id,r.`value` FROM seip_report_raw_material_consumption_report_range AS r;
+  DECLARE CONTINUE HANDLER FOR NOT FOUND SET flag = TRUE;
+
+  OPEN curReportRawMaterialConsumptionReportRange;
+
+  read_loop: LOOP
+    FETCH curReportRawMaterialConsumptionReportRange INTO dateFromRRMCRR,dateEndRRMCRR,typeRRMCRR,idDetailRawMaterialConsumption,valueRRMCRR;
+    IF flag THEN
+      LEAVE read_loop;
+    END IF;
+    INSERT INTO seip_report_raw_material_consumption_report_range(date_from,date_end,type,`value`,enabled,createdAt,updatedAt,deletedAt,detailRawMaterialConsumption_id,period_id) 
+VALUES(dateFromRRMCRR,dateEndRRMCRR,typeRRMCRR,valueRRMCRR,1,NOW(),NOW(),null,idDetailRawMaterialConsumption,3);
+        
+  END LOOP;
+
+  CLOSE curReportRawMaterialConsumptionReportRange;
+END
+
+-- EJECUTAR EL CURSOR DEL RANGO DE DISTRIBUCIÓN DEL DETALLE DEL CONSUMO DE MATERIA PRIMA
+CALL CursorReportRawMaterialConsumptionReportRange();
+
+-- ACTUALIZAR IDDETAILRAWMATERIALCONSUMPTION DEL RANGO DE DISTRIBUCIÓN DEL DETALLE DEL CONSUMO DE MATERIA PRIMA
+UPDATE seip_report_raw_material_consumption_report_range AS r SET r.detailRawMaterialConsumption_id = 
+(SELECT p.id FROM seip_report_product_raw_material_consumption AS p 
+WHERE p.parent_id = r.detailRawMaterialConsumption_id)
+WHERE r.period_id = 3;
