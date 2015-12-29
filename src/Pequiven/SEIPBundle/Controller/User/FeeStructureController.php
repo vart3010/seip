@@ -8,21 +8,36 @@ use Pequiven\SEIPBundle\Entity\User;
 use Pequiven\SEIPBundle\Entity\User\FeeStructure;
 use Pequiven\SEIPBundle\Entity\User\MovementFeeStructure;
 
+/**
+ * GESTION EN LA ESTRUCTURA DE CARGOS SEIP
+ */
 class FeeStructureController extends SEIPController {
 
     public function showAction(Request $request) {
-       
-var_dump('Hola');
-die();
-//        return $this->render('SeipBundle:User/FeeStructure:show.html.twig', array(
-//                    'goal' => $entity,
-//                    'user' => $this->getUser(),
-//                    'assign' => $formassign->createView(),
-//                    'remove' => $formremove->createView(),
-//                    'responsibles' => $responsibles,
-//                    'movements' => $movements,
-//                    'causes' => $causes
-//        ));
-    }   
+
+        $array = array();
+        $structure = $this->GenerateTree(1, $array);
+    
+        return $this->render('PequivenSEIPBundle:User:FeeStructure/show.html.twig', array(
+                    'user' => $this->getUser(),
+                    'structure' => $structure,
+        ));
+    }
+
+    public function GenerateTree($padre, $array) {
+
+        $children = $this->get('pequiven_seip.repository.feestructure')->getChildren($padre);
+
+        if ($children == null) {
+            return $array;
+        }
+
+        foreach ($children as $child) {
+            $array[] = $child;            
+            $array=$this->GenerateTree($child->getid(),$array) ;
+        }
+
+        return $array;
+    }
 
 }

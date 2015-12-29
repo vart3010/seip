@@ -16,7 +16,16 @@ use Pequiven\SEIPBundle\Doctrine\ORM\SeipEntityRepository as EntityRepository;
  */
 class FeeStructureRepository extends EntityRepository {
 
-   
+    function getChildren($idParent) {
+        $qb = $this->getQueryBuilder();
+        $qb
+                ->Select('FeeStr')
+                ->andWhere('FeeStr.parent= :Parent')                
+                ->orderBy('FeeStr.gerencia')
+                ->setParameter('Parent', $idParent)
+        ;
+        return $qb->getQuery()->getResult();
+    }
 
     function getAlias() {
         return 'FeeStr';

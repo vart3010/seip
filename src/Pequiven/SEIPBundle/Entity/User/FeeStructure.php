@@ -145,6 +145,10 @@ class FeeStructure {
      */
     protected $movementFeeStructure;
 
+    public function __construct() {        
+        $this->children = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
     function getId() {
         return $this->id;
     }
@@ -264,6 +268,7 @@ class FeeStructure {
     function setCoordinacion(\Pequiven\MasterBundle\Entity\Coordinacion $coordinacion) {
         $this->coordinacion = $coordinacion;
     }
+
     function getChargelvl() {
         return $this->chargelvl;
     }

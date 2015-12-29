@@ -162,6 +162,7 @@ sylius_resource:
             classes:
                 controller: Pequiven\SEIPBundle\Controller\User\FeeStructureController
                 model: Pequiven\SEIPBundle\Entity\User\FeeStructure                 
+                repository: Pequiven\SEIPBundle\Repository\User\FeeStructureRepository
         pequiven_seip.generic_data:
             driver: doctrine/orm
             classes:
