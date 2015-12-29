@@ -355,3 +355,7 @@ UPDATE seip_report_raw_material_consumption_report_range AS r SET r.detailRawMat
 (SELECT p.id FROM seip_report_product_raw_material_consumption AS p 
 WHERE p.parent_id = r.detailRawMaterialConsumption_id)
 WHERE r.period_id = 3;
+
+-- ACTUALIZAR LA FECHA DE LOS DÍAS DEL RANGO DE LA PLANIFICACIÓN DEL PRODUCTO
+UPDATE seip_report_raw_material_consumption_report_range SET `date_from` = CONCAT('2016',DATE_FORMAT(`date_from`,'-%c-%d %H:%i:%S')) WHERE period_id = 3;
+UPDATE seip_report_raw_material_consumption_report_range SET `date_end` = CONCAT('2016',DATE_FORMAT(`date_end`,'-%c-%d %H:%i:%S')) WHERE period_id = 3;
