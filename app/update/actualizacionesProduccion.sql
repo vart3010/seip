@@ -393,3 +393,40 @@ UPDATE seip_report_product_inventory AS r SET r.productReport_id =
 (SELECT p.id FROM seip_report_product_report AS p 
 WHERE p.parent_id = r.productReport_id)
 WHERE r.period_id = 3;
+
+-- ACTUALIZAR EL PERÍODO DE LA PNR DEL PRODUCTO
+UPDATE seip_report_product_unrealized_production SET period_id = 2;
+
+-- CURSOR DE LA PNR DEL PRODUCTO
+BEGIN
+  DECLARE flag INT DEFAULT FALSE;
+  DECLARE monthRPUP,idProductReport INT;
+  DECLARE curReportProductUnrealizedProduction CURSOR FOR SELECT r.`month`,r.productReport_id FROM seip_report_product_unrealized_production AS r;
+  DECLARE CONTINUE HANDLER FOR NOT FOUND SET flag = TRUE;
+
+  OPEN curReportProductUnrealizedProduction;
+
+  read_loop: LOOP
+    FETCH curReportProductUnrealizedProduction INTO monthRPUP,idProductReport;
+    IF flag THEN
+      LEAVE read_loop;
+    END IF;
+    INSERT INTO seip_report_product_unrealized_production(`month`,total,day1,day2,day3,day4,day5,day6,day7,day8,day9,day10,day11,day12,day13,day14,day15,day16,day17,day18,day19,day20,day21,day22,day23,day24,day25,day26,day27,day28,day29,day30,day31,enabled,createdAt,updatedAt,deletedAt,productReport_id,day1Details_id,day2Details_id,day3Details_id,day4Details_id,day5Details_id,day6Details_id,day7Details_id,day8Details_id,day9Details_id,day10Details_id,day11Details_id,day12Details_id,day13Details_id,day14Details_id,day15Details_id,day16Details_id,day17Details_id,day18Details_id,day19Details_id,day20Details_id,day21Details_id,day22Details_id,day23Details_id,day24Details_id,day25Details_id,day26Details_id,day27Details_id,day28Details_id,day29Details_id,day30Details_id,day31Details_id,period_id) 
+VALUES(monthRPUP,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,NOW(),NOW(),null,idProductReport,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,3);
+        
+  END LOOP;
+
+  CLOSE curReportProductUnrealizedProduction;
+END
+
+-- EJECUTAR CURSOR DE LA PNR DEL PRODUCTO
+CALL CursorReportProductUnrealizedProduct();
+
+-- ACTUALIZAR IDPRODUCTREPORT DE LA PNR DEL PRODUCTO
+UPDATE seip_report_product_unrealized_production AS r SET r.productReport_id = 
+(SELECT p.id FROM seip_report_product_report AS p 
+WHERE p.parent_id = r.productReport_id)
+WHERE r.period_id = 3;
+
+-- ACTUALIZAR OTRAS TABLAS DE PNR
+UPDATE seip_report_product_unrealized_production_raw_material_required SET period_id = 2;
