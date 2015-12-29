@@ -427,3 +427,6 @@ UPDATE seip_report_product_unrealized_production AS r SET r.productReport_id =
 (SELECT p.id FROM seip_report_product_report AS p 
 WHERE p.parent_id = r.productReport_id)
 WHERE r.period_id = 3;
+
+-- ACTUALIZAR OTRAS TABLAS DE PNR
+UPDATE seip_report_product_unrealized_production_raw_material_required SET period_id = 2;
