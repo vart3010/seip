@@ -3908,8 +3908,9 @@ class IndicatorService implements ContainerAwareInterface {
         $dataSetReal["seriesname"] = "Real";
         $dataSetPlan["seriesname"] = "Plan";
         $dataSetAcum["seriesname"] = "Acumulado";
-        $dataSetAnt["seriesname"]  = "2014";
+        $dataSetAnt["seriesname"]  = "Periodos";
         $labelAntper = "2014";
+        $labelAnt2015 = "2015";
         $labelProm   = "Promedio o Acumulado";
         $labelobj    = "Objetivo 2015";
 
@@ -3917,33 +3918,34 @@ class IndicatorService implements ContainerAwareInterface {
         $labelAnt["label"] = $labelAntper; //Label del 2014
         $category[] = $labelAnt; //Label del 2014
 
+        if ($indicator->getPeriod()->getId() == 3) {
+            $labelAnt2["label"] = $labelAnt2015; //Label del 2015
+            $category[] = $labelAnt2; //Label del 2015
+        }
+
         if ($totalNumValues > 0) {
             $indicatorValues = $indicator->getValuesIndicator();
             $contMonth = 1;
 
             foreach ($indicatorValues as $indicatorValue) {
-                $formulaParameters = $indicatorValue->getFormulaParameters();
-                
-                if ($resultNumbers >= $contMonth) {
-                    
+                $formulaParameters = $indicatorValue->getFormulaParameters();                
+                if ($resultNumbers >= $contMonth) {                    
                     //if ($labelsFrequencyNotificationArray === 0) {                     
                         $label["label"] = $labelsFrequencyNotificationArray[$contMonth];                        
                     //}                    
-
                     $contCant = $contMonth; //Contando la Cantidad de valores
-
                     $category[] = $label;
                 }
-
                 $contMonth++;
             }
             
             $labelp["label"] = $labelProm; //Label del Prom
             $category[] = $labelp; //Label del Prom
+            
             //Label Obj Acum
             $labelo["label"] = $labelobj; //Label del ObjAcum
             $category[] = $labelo; //Label del ObjAcum
-            //Fin carga de labels
+            
             //Data 2014            
             $acumLast = $cant = $promLast = 0;
             $indicatorlast = $indicator->getindicatorLastPeriod();
@@ -3956,12 +3958,23 @@ class IndicatorService implements ContainerAwareInterface {
                 $value = round($indicatorlast->getResultReal());
                 $dataAnt["value"] = $value; //Pasando data a Data2014                
             }
-
             //Data 2014
             $dataAnt["color"] = '#f2c500';
-            $dataSetAnt["showvalues"] = "1";
-            //$dataAnt["link"]  = $this->generateUrl('pequiven_indicator_show', array('id' => $indicatorlast->getId()));            
+            $dataSetAnt["showvalues"] = "1";            
             $dataSetAnt["data"][] = $dataAnt; //2014
+            
+            if ($indicator->getPeriod()->getId() == 3) {
+                //Data 2015
+                $dataAnt2015["value"] = 0;                
+                $dataAnt2015["color"] = '#f2c500';
+                $dataSetAnt["showvalues"] = "1";
+                $dataSetAnt["data"][] = $dataAnt2015; //2015                
+                
+                $dataSetTend["data"][] = array('value' => '');
+                $dataSetReal["data"][] = array('value' => '');
+                $dataSetLine["data"][] = array('value' => ''); //Valor vacio para saltar 2015
+            }
+            
             //Pasando espacios vacios para desarrollo de la gráfica
             $dataSetTend["data"][] = array('value' => '');
             $dataSetReal["data"][] = array('value' => '');
@@ -4017,6 +4030,7 @@ class IndicatorService implements ContainerAwareInterface {
         $data['dataSource']['dataset'][] = $dataSetValues['tendencia'];
         $data['dataSource']['dataset'][] = $dataSetReal;
         $data['dataSource']['dataset'][] = $dataSetAnt;
+        //$data['dataSource']['dataset'][] = $dataSetAnt2015;
         $data['dataSource']['dataset'][] = $dataSetV['data'];
 
         return $data;

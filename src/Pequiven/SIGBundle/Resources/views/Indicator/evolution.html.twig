@@ -40,17 +40,23 @@
         <div ng-controller="IndicatorLastPeriodController">
         <!-- <div ng-controller="EvolutionIndicatorFilters"> -->
 
-        {# Carga del formulario de relacion del indicador #}
-            {% if indicator_sig.indicatorlastPeriod %}
+        {# Carga del formulario de relacion del indicador #}        
+            {% if indicator_sig.period.id == 2 %}
+                {% set period = "2014" %}
+            {% elseif indicator_sig.period.id == 3 %}
+                {% set period = "2015" %}
+            {% endif %}
+
+            {% if indicator_sig.indicatorlastPeriod and indicator_sig.period.id == 2 %}
                 <div class="block block-title">
-                    <h3>El Indicador tiene relación con el indicador del 2014</h3>
+                    <h3>El Indicador tiene relación con el indicador del {{ period }}</h3>
                     <div class="button-group absolute-right compact">
                         <a class="button icon-list-add " href="" ng-click="removeLastPeriod(idIndicator='{{ indicator_sig.id }}')" title="">{{ 'pequiven.delete'|trans({},'messages')  }}</a>
                     </div>
                 </div>
-            {% else %}
+            {% elseif indicator_sig.indicatorlastPeriod == false and indicator_sig.period.id == 2 %}
                 <div class="block block-title">
-                    <h3>El Indicador no tiene relación con el indicador del 2014</h3>
+                    <h3>El Indicador no tiene relación con el indicador del {{ period }}</h3>
                     <div class="button-group absolute-right compact">
                         <a class="button icon-list-add " href="" ng-click="loadTemplateIndicatorlastPeriod()" title="">{{ 'pequiven.add'|trans({},'messages')  }}</a>
                     </div>
