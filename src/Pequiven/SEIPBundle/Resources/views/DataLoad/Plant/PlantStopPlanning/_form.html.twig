@@ -202,15 +202,16 @@
             
             var monthOfPlanning = selectMonth.val();
             var date = new Date();
+            //console.log(date);
             if(monthOfPlanning != ""){
                 monthOfPlanning = monthOfPlanning - 1;
                 date.setMonth(monthOfPlanning);
             }
             
             $( "#"+idDateFrom ).datepicker({
-              defaultDate: date,
+              //defaultDate: date,
               changeMonth: false,
-              numberOfMonths: 1,
+              numberOfMonths: 2,
               stepMonths: 0,
               onClose: function( selectedDate ) {
                  $( "#"+idDateEnd ).datepicker( "option", "minDate", selectedDate );
@@ -218,9 +219,9 @@
               dateFormat: dateFormat
             });
             $( "#"+idDateEnd ).datepicker({
-              defaultDate: date,
+              //defaultDate: date,
               changeMonth: false,
-              numberOfMonths: 1,
+              numberOfMonths: 2,
               stepMonths: 0,
               onClose: function( selectedDate ) {
                 $( "#"+idDateFrom ).datepicker( "option", "maxDate", selectedDate );
