@@ -97,9 +97,12 @@
             $( "#"+idDateFrom ).datepicker({
               defaultDate: date,
               changeMonth: true,
+              changeYear: true,
               numberOfMonths: 1,
               stepMonths: 0,
+              yearRange: '2015:2016', //ESTO HAY QUQ COMENTARLO EN EL 2016
               onClose: function( selectedDate ) {
+                  console.log("olas");
                  $( "#"+idDateEnd ).datepicker( "option", "minDate", selectedDate );
               },
               dateFormat: dateFormat
@@ -107,8 +110,10 @@
             $( "#"+idDateEnd ).datepicker({
               defaultDate: date,
               changeMonth: true,
+              changeYear: true,
               numberOfMonths: 1,
               stepMonths: 0,
+              yearRange: '2015:2016', //ESTO HAY QUQ COMENTARLO EN EL 2016
               onClose: function( selectedDate ) {
                 $( "#"+idDateFrom ).datepicker( "option", "maxDate", selectedDate );
               },
