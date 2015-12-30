@@ -252,6 +252,9 @@ class ProductReportController extends SEIPController {
 //Calcular produccion neta en base al porcentaje de la bruta
                 $total = ($dailyProductionCapacity * $netProductionPercentage) / 100;
                 $productPlanningsNet[$productPlanningGross->getMonth()]->setDailyProductionCapacity($total);
+                $presupuestoTotalBrutaMes = $productPlanningGross->getTotalMonth();
+                $totalPresupuestoNetaMes = ($presupuestoTotalBrutaMes * $netProductionPercentage) / 100;
+                $productPlanningsNet[$productPlanningGross->getMonth()]->setTotalMonth($totalPresupuestoNetaMes);
 
                 if(count($productPlanningsNet[$productPlanningGross->getMonth()]->getRanges()) > 0){
                     foreach ($productPlanningsNet[$productPlanningGross->getMonth()]->getRanges() as $range) {
@@ -277,7 +280,7 @@ class ProductReportController extends SEIPController {
                 if ($netProductionPercentage == 0) {
                     $productPlanningsNet[$productPlanningGross->getMonth()]->setTotalMonth(0);
                 }
-                $this->save($productPlanningsNet[$productPlanningGross->getMonth()]);
+                $this->save($productPlanningsNet[$productPlanningGross->getMonth()],true);
                 
             }
         }
