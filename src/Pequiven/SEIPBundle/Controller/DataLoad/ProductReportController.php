@@ -215,7 +215,7 @@ class ProductReportController extends SEIPController {
      */
     public function runPlanningAction(Request $request) {
         set_time_limit(0);
-
+        
         $resource = $this->findOr404($request);
         $productPlanningsNet = $resource->getProductPlanningsNet(); //Presupuesto de produccion neto
         $productPlanningsGross = $resource->getProductPlanningsGross(); //Presupuesto de bruta
@@ -244,6 +244,41 @@ class ProductReportController extends SEIPController {
                 if ($netProductionPercentage == 0) {
                     $cloneNet->setTotalMonth(0);
                 }
+            } else{
+
+//Porcentaje de la produccion bruta que va para la neta
+                $netProductionPercentage = $productPlanningGross->getNetProductionPercentage();
+                $dailyProductionCapacity = $productPlanningGross->getDailyProductionCapacity();
+//Calcular produccion neta en base al porcentaje de la bruta
+                $total = ($dailyProductionCapacity * $netProductionPercentage) / 100;
+                $productPlanningsNet[$productPlanningGross->getMonth()]->setDailyProductionCapacity($total);
+
+                if(count($productPlanningsNet[$productPlanningGross->getMonth()]->getRanges()) > 0){
+                    foreach ($productPlanningsNet[$productPlanningGross->getMonth()]->getRanges() as $range) {
+                        if ($range->getType() == \Pequiven\SEIPBundle\Model\DataLoad\Production\Range::TYPE_FIXED_VALUE) {
+                            $range->setValue($total);
+                        } elseif ($range->getType() == \Pequiven\SEIPBundle\Model\DataLoad\Production\Range::TYPE_CAPACITY_FACTOR) {
+                            $range->setValue($netProductionPercentage);
+                        }
+                    }
+                } 
+                else{
+                    foreach ($productPlanningGross->getRanges() as $range) {
+                        $cloneRange = clone $range;
+                        if ($cloneRange->getType() == \Pequiven\SEIPBundle\Model\DataLoad\Production\Range::TYPE_FIXED_VALUE) {
+                            $cloneRange->setValue($total);
+                        } elseif ($cloneRange->getType() == \Pequiven\SEIPBundle\Model\DataLoad\Production\Range::TYPE_CAPACITY_FACTOR) {
+                            $cloneRange->setValue($netProductionPercentage);
+                        }
+                        $productPlanningsNet[$productPlanningGross->getMonth()]->addRange($cloneRange);
+                    }
+                }
+                
+                if ($netProductionPercentage == 0) {
+                    $productPlanningsNet[$productPlanningGross->getMonth()]->setTotalMonth(0);
+                }
+                $this->save($productPlanningsNet[$productPlanningGross->getMonth()]);
+                
             }
         }
         $this->save($resource);
