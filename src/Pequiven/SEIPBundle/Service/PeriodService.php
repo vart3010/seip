@@ -29,11 +29,21 @@ class PeriodService extends ContainerAware
         $period = $this->getPeriodActive();
         $now = new \DateTime();
         
+        $periodsAll = $this->getPeriodsAvailableConsultation();
         if(
             ($now >= $period->getDateStartNotificationArrangementProgram() && $now <= $period->getDateEndNotificationArrangementProgram())
           ){
             $result = true;
+        } else{
+            foreach($periodsAll as $itemPeriod){
+                if($period->getId() == $itemPeriod->getId()){
+                    if($itemPeriod->getStatus() == 1){
+                        $result = true;
+                    }
+                }
+            }
         }
+
         return $result;
     }
     /**

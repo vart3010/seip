@@ -236,7 +236,6 @@ class ArrangementProgramManager implements ContainerAwareInterface
                     && $entity->getStatus() == ArrangementProgram::STATUS_APPROVED
                     && ($details->getLastNotificationInProgressByUser() === null || $entity->getResult() == 0 || (($entity->getResult() > 0 || $entity->getResult() < 0) && $details->getNotificationInProgressByUser() === null) || ((($entity->getResult() > 0 || $entity->getResult() < 0) && $details->getNotificationInProgressByUser()->getId() === $user->getId())))
                 ) {
-
                 if($periodService->isAllowNotifyArrangementProgramInClearance() === true){
                     $valid = true;
                 }elseif($periodService->isAllowNotifyArrangementProgram() === true){
@@ -263,10 +262,10 @@ class ArrangementProgramManager implements ContainerAwareInterface
                 $valid = true;
             }
         }
-        if($this->isGranted('ROLE_SEIP_PLANNING_OPERATION_ARRANGEMENT_PROGRAM_NOTIFY'))
-        {
-            $valid = true;
-        }
+//        if($this->isGranted('ROLE_SEIP_PLANNING_OPERATION_ARRANGEMENT_PROGRAM_NOTIFY'))
+//        {
+//            $valid = true;
+//        }
 //        if($this->isGranted('ROLE_SEIP_ARRANGEMENT_PROGRAM_CHARGE_PLAN'))
 //        {
 //            $valid = true;
