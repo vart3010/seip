@@ -394,18 +394,18 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
             }
         }
 
-        $details = $arrangementProgram->getDetails();
-        $user = $this->getUser();
-        if($details->getNotificationInProgressByUser() != null){
-//            if($details->getNotificationInProgressByUser()->getId() === $user->getId() && (($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC && $arrangementProgram->getTacticalObjective()->getGerencia()->getId() == 9) || ($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE && $arrangementProgram->getOperationalObjective()->getGerenciaSecond()->getGerencia()->getId() == 9))){
-            if($details->getNotificationInProgressByUser()->getId() === $user->getId() && (($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC && $arrangementProgram->getTacticalObjective()->getGerencia()->getId() == 20) || ($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE && $arrangementProgram->getOperationalObjective()->getGerencia()->getId() == 20))){
-                $data['julyReal']['isEnabled'] = true;
-                $data['augustReal']['isEnabled'] = true;
-                $data['septemberReal']['isEnabled'] = true;
-            }
-        }
-
-        $event->getVisitor()->addData('_data', $data);
+//        $details = $arrangementProgram->getDetails();
+//        $user = $this->getUser();
+//        if($details->getNotificationInProgressByUser() != null){
+////            if($details->getNotificationInProgressByUser()->getId() === $user->getId() && (($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC && $arrangementProgram->getTacticalObjective()->getGerencia()->getId() == 9) || ($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE && $arrangementProgram->getOperationalObjective()->getGerenciaSecond()->getGerencia()->getId() == 9))){
+//            if($details->getNotificationInProgressByUser()->getId() === $user->getId() && (($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC && $arrangementProgram->getTacticalObjective()->getGerencia()->getId() == 20) || ($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE && $arrangementProgram->getOperationalObjective()->getGerencia()->getId() == 20))){
+//                $data['julyReal']['isEnabled'] = true;
+//                $data['augustReal']['isEnabled'] = true;
+//                $data['septemberReal']['isEnabled'] = true;
+//            }
+//        }
+//
+//        $event->getVisitor()->addData('_data', $data);
     }
 
     public function onPostSerializeArrangementProgram(ObjectEvent $event) {
