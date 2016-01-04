@@ -1,8 +1,0 @@
-pequiven_seip_feestructure_show:
-    path: /.{_format}
-    defaults:
-        _controller: pequiven_seip.controller.arrangementprogram:showAction
-        _format: html
-    requirements:
-        _format: html|json|xml
-    methods: [GET]

@@ -14,7 +14,7 @@ pequiven_user_feestructure:
     path: /view/feeStructure
     defaults:
         _controller: pequiven_seip.controller.feestructure:showAction
-    methods: [GET]
+    methods: [GET|POST]
         
 #Devuelve el paginador con la data de los usuarios
 userList:

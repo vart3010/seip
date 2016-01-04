@@ -133,9 +133,9 @@ class GerenciaRepository extends EntityRepository {
     public function getgerencias() {
         $qb = $this->getQueryBuilder();
         $qb
-                ->select('g')
-                ->from('\Pequiven\MasterBundle\Entity\Gerencia', 'g')
-                ->andWhere('g.enabled = ' . 1);
+                ->select('g')                
+                ->andWhere('g.enabled= :Enabled')
+                ->setParameter('Enabled', 1);
         return $qb->getQuery()->getResult();
     }
 

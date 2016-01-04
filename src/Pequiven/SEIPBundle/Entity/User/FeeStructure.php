@@ -93,14 +93,7 @@ class FeeStructure {
      */
     private $parent;
     
-    /**
-     * ID DEL PADRE O JEFE DIRECTO EN LA ENTRUCTURA 
-     * @ORM\ManyToOne(targetEntity="\Pequiven\SEIPBundle\Entity\User\FeeStructure",inversedBy="children")
-     * @ORM\JoinColumn(name="vinculanteparent_id", nullable=true)
-     */
-    private $vinculante_parent;
-
-    /**
+     /**
      * @var \Pequiven\Pequiven\SEIPBundle\Entity\User\FeeStructure
      * @ORM\OneToMany(targetEntity="\Pequiven\SEIPBundle\Entity\User\FeeStructure",mappedBy="parent",cascade={"persist"}))
      */

@@ -21,7 +21,7 @@ class FeeStructureRepository extends EntityRepository {
         $qb
                 ->Select('FeeStr')
                 ->andWhere('FeeStr.parent= :Parent')                
-                ->orderBy('FeeStr.gerencia')
+                ->orderBy('FeeStr.charge')
                 ->setParameter('Parent', $idParent)
         ;
         return $qb->getQuery()->getResult();

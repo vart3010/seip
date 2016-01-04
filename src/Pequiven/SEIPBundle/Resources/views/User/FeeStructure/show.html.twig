@@ -14,96 +14,107 @@
 
     <script type='text/javascript'>//<![CDATA[ 
         $(window).load(function () {
-            var options = new primitives.orgdiagram.Config();
-            var items = [
-
+        var options = new primitives.orgdiagram.Config();
+                var items = [
+        {% set i = 1 %}
         {% for struct in structure %}
-                        new primitives.orgdiagram.ItemConfig({
-                        id:{{ struct.getid }},
-                                parent:{{ struct.getparent.getid }},
-                                title: "{% if struct.getuser==null %}Sin Asignar{% else %}{{ struct.getuser.getfullname|ucwords }}{% endif %}",
-                                description: "{{struct.getcharge }}",{% if struct.getstaff==1 %}
-                                itemType: primitives.orgdiagram.ItemType.Assistant,{% endif %}
-                                image: "{{  asset('bundles/pequivenseip/basic-primitives/demo/images/photos/user.png') }}",
-                                itemTitleColor: "#FE2E2E"
-                    }),{% endfor %}
-            ];
-                    var buttons = [];
-            buttons.push(new primitives.orgdiagram.ButtonConfig("delete", "ui-icon-close", "Retirar"));
-            buttons.push(new primitives.orgdiagram.ButtonConfig("add", "ui-icon-person", "Asignar"));
-
-            options.items = items;
-            options.cursorItem = 0;
-            options.buttons = buttons;
-            options.hasButtons = primitives.common.Enabled.True;
-            options.hasSelectorCheckbox = primitives.common.Enabled.False;
-            options.onButtonClick = function (e, data) {
-                var message = "User clicked '" + data.name + "' button for item '" + data.context.title + "'.";
-                alert(message);
-            };
-
-            options.hasSelectorCheckbox = primitives.common.Enabled.False;
-            options.arrowsDirection = primitives.common.GroupByType.Children;
-            jQuery("#basicdiagram").orgDiagram(options);
-
-            $(window).resize(function () {
+                            new primitives.orgdiagram.ItemConfig({
+                            id:{{ struct.getid }},
+                                    parent:{% if (struct.getparent is not null) %} {{ struct.getparent.getid }} {% else %} null{% endif %},
+                                    title: "{% if struct.getuser==null %}Sin Asignar{% else %}{{ struct.getuser.getfullname|ucwords }}{% endif %}",
+            {% if (struct.getgerenciasecond!=null) %}childrenPlacementType: primitives.common.ChildrenPlacementType.Matrix,{% endif %}
+                                        description: "{{struct.getcharge }}",{% if struct.getstaff==1 %} itemType: primitives.orgdiagram.ItemType.SubAssistant,
+            {% if (i is divisible by(2))%}adviserPlacementType: primitives.common.AdviserPlacementType.Left{% else %}adviserPlacementType: primitives.common.AdviserPlacementType.Right{% endif %}{% set i = i+1 %},{% endif %}
+                                        image: "{{  asset('bundles/pequivenseip/basic-primitives/demo/images/photos/user.png') }}",
+                                        itemTitleColor: "#FE2E2E",
+                                }),{% endfor %}
+                        ];
+                        var buttons = [];
+                        buttons.push(new primitives.orgdiagram.ButtonConfig("delete", "ui-icon-close", "Retirar"));
+                        buttons.push(new primitives.orgdiagram.ButtonConfig("add", "ui-icon-person", "Asignar"));
+                        options.items = items;
+                        options.cursorItem = 0;
+                        options.buttons = buttons;
+                        options.hasButtons = primitives.common.Enabled.True;
+                        options.hasSelectorCheckbox = primitives.common.Enabled.False;
+                        options.onButtonClick = function (e, data) {
+                        var message = "User clicked '" + data.name + "' button for item '" + data.context.title + "'.";
+                                alert(message);
+                        };
+                        options.hasSelectorCheckbox = primitives.common.Enabled.False;
+                        options.arrowsDirection = primitives.common.GroupByType.Children;
+                        jQuery("#basicdiagram").orgDiagram(options);
+                        $(window).resize(function () {
                 onWindowResize();
-            });
-            });
-                    function onWindowResize() {
+                });
+                });
+                        function onWindowResize() {
                         if (m_timer == null) {
-                            m_timer = window.setTimeout(function () {
-                                ResizePlaceholder();
+                        m_timer = window.setTimeout(function () {
+                        ResizePlaceholder();
                                 jQuery("#orgdiagram").orgDiagram("update", primitives.orgdiagram.UpdateMode.Refresh)
                                 window.clearTimeout(m_timer);
                                 m_timer = null;
-                            }, 300);
+                        }, 300);
                         }
-                    }
+                        }
 
-            function ResizePlaceholder() {
+                function ResizePlaceholder() {
                 var bodyWidth = $(window).width() - 40
-                var bodyHeight = $(window).height() - 20
-                jQuery("#orgdiagram").css(
-                        {
-                            "width": bodyWidth + "px",
-                            "height": bodyHeight + "px"
-                        });
-            }
+                        var bodyHeight = $(window).height() - 20
+                        jQuery("#orgdiagram").css(
+                {
+                "width": bodyWidth + "px",
+                        "height": bodyHeight + "px"
+                });
+                }
 
-        </script>
-        {% endblock javascripts %}
+            </script>
+            {% endblock javascripts %}
 
-            {% block before_body %}
-                {{ contentHeader("Gestión de Cargos")   }}
-            {% endblock %}
-            {% block body %}
-
-
-                <form method="POST" action="{{ path("pequiven_sip_report_SegVoto") }}">
-
-                    <details class="details margin-bottom" open="">
-                        <summary role="button" aria-expanded="true">
-                            <b>Filtros</b>
-                        </summary>
-
-                        <div class="with-padding">
-                            <div class="columns">                                        
-                                <!-- Filtro Gerencia 1ra Línea -->
-                                <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
-                                    <label class="bold">Gerencia de 1ra Línea</label>
+                {% block before_body %}
+                    {{ contentHeader("Gestión de Cargos")   }}
+                {% endblock %}
+                {% block body %}
 
 
+                    <form method="POST" action="{{ path("pequiven_sip_report_SegVoto") }}">
+
+                        <details class="details margin-bottom" open="">
+                            <summary role="button" aria-expanded="true">
+                                <b>Filtros</b>
+                            </summary>
+
+                            <div class="with-padding">
+                                <div class="columns">
+                                    <form method="POST" action="{{ path("AP_movement_assign",{idAP:AP.id}) }}">
+                                    <!-- Filtro Gerencia 1ra Línea -->
+                                    <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                                        <label class="bold">Gerencia de 1ra Línea</label><br>
+                                        <select class="select2">
+                                            {% for gerencia in gerencias %}
+                                                <option value="{{gerencia.id}}">{{gerencia.description}}</option>                                           
+                                            {% endfor %}
+                                        </select> 
+                                    </div>
+                                    <!-- Filtro Gerencia 2da Línea -->
+                                    <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                                        <label class="bold">Gerencia de 2da Línea</label><br>
+                                        <select class="select2">
+                                            {% for gerencia2 in gerencias2 %}
+                                                <option value="{{gerencia2.id}}">{{gerencia2.description}}</option>                                           
+                                            {% endfor %}
+                                        </select> 
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                    </details>                   
+                        </details>                   
 
-                </form>      
-                <fieldset class="fieldset">
-                    <legend class="legend"><b>Estructura Organizativa Actual</b></legend>
-                    <div id="basicdiagram" style="width: 100%; height: 800px; border-style: dotted; border-width: 1px;" />
-                </fieldset>
+                    </form>      
+                    <fieldset class="fieldset">
+                        <legend class="legend"><b>Estructura Organizativa Actual</b></legend>
+                        <div id="basicdiagram" style="width: 100%; height: 1000px; border-style: dotted; border-width: 1px;" />
+                    </fieldset>
 
-            {% endblock %}
+                {% endblock %}
