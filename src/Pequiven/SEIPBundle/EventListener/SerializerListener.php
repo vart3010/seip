@@ -404,8 +404,8 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
 //                $data['septemberReal']['isEnabled'] = true;
 //            }
 //        }
-//
-//        $event->getVisitor()->addData('_data', $data);
+
+        $event->getVisitor()->addData('_data', $data);
     }
 
     public function onPostSerializeArrangementProgram(ObjectEvent $event) {
