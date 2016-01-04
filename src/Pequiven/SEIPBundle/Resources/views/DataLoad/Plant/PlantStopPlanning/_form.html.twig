@@ -210,8 +210,7 @@
             
             $( "#"+idDateFrom ).datepicker({
               //defaultDate: date,
-              changeMonth: false,
-              numberOfMonths: 2,
+              changeMonth: true,
               stepMonths: 0,
               onClose: function( selectedDate ) {
                  $( "#"+idDateEnd ).datepicker( "option", "minDate", selectedDate );
@@ -220,8 +219,7 @@
             });
             $( "#"+idDateEnd ).datepicker({
               //defaultDate: date,
-              changeMonth: false,
-              numberOfMonths: 2,
+              changeMonth: true,
               stepMonths: 0,
               onClose: function( selectedDate ) {
                 $( "#"+idDateFrom ).datepicker( "option", "maxDate", selectedDate );
