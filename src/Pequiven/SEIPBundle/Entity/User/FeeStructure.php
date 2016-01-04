@@ -92,6 +92,13 @@ class FeeStructure {
      * @ORM\JoinColumn(name="parent_id", nullable=true)
      */
     private $parent;
+    
+    /**
+     * ID DEL PADRE O JEFE DIRECTO EN LA ENTRUCTURA 
+     * @ORM\ManyToOne(targetEntity="\Pequiven\SEIPBundle\Entity\User\FeeStructure",inversedBy="children")
+     * @ORM\JoinColumn(name="vinculanteparent_id", nullable=true)
+     */
+    private $vinculante_parent;
 
     /**
      * @var \Pequiven\Pequiven\SEIPBundle\Entity\User\FeeStructure
@@ -292,5 +299,6 @@ class FeeStructure {
     function setMovementFeeStructure(\Pequiven\SEIPBundle\Entity\User\MovementFeeStructure $movementFeeStructure) {
         $this->movementFeeStructure = $movementFeeStructure;
     }
+    
 
 }

@@ -17,6 +17,8 @@ class FeeStructureController extends SEIPController {
 
         $array = array();
         $structure = $this->GenerateTree(1, $array);
+        
+        //$gerencias=$this->get('pequiven_seip.feestructure.repository')->getChildren($padre);
     
         return $this->render('PequivenSEIPBundle:User:FeeStructure/show.html.twig', array(
                     'user' => $this->getUser(),
