@@ -297,7 +297,7 @@ services:
     sonata.admin.user.coordinacion:
         class: Pequiven\MasterBundle\Admin\User\CoordinacionAdmin
         tags:
-            - { name: sonata.admin, manager_type: orm, group: "%sonata.user.admin.groupname%" ,label_catalogue: "SonataUserBundle", label: "Coordinación" }
+            - { name: sonata.admin, manager_type: orm, group: "%sonata.user.admin.groupname%" ,label_catalogue: "SonataUserBundle", label: "Superintendencia/Coordinación" }
         arguments:
             - ~
             - Pequiven\MasterBundle\Entity\Coordinacion
