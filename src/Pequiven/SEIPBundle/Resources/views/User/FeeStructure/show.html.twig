@@ -22,7 +22,7 @@
                             id:{{ struct.getid }},
                                     parent:{% if (struct.getparent is not null) %} {{ struct.getparent.getid }} {% else %} null{% endif %},
                                     title: "{% if struct.getuser==null %}Sin Asignar{% else %}{{ struct.getuser.getfullname|ucwords }}{% endif %}",
-            {% if (struct.getgerenciasecond!=null) %}childrenPlacementType: primitives.common.ChildrenPlacementType.Matrix,{% endif %}
+            {% if ((struct.getgerenciasecond!=null)) %}childrenPlacementType: primitives.common.ChildrenPlacementType.Matrix,{% endif %}
                                         description: "{{struct.getcharge }}",{% if struct.getstaff==1 %} itemType: primitives.orgdiagram.ItemType.SubAssistant,
             {% if (i is divisible by(2))%}adviserPlacementType: primitives.common.AdviserPlacementType.Left{% else %}adviserPlacementType: primitives.common.AdviserPlacementType.Right{% endif %}{% set i = i+1 %},{% endif %}
                                         image: "{{  asset('bundles/pequivenseip/basic-primitives/demo/images/photos/user.png') }}",
@@ -87,7 +87,7 @@
 
                             <div class="with-padding">
                                 <div class="columns">
-                                    <form method="POST" action="{{ path("AP_movement_assign",{idAP:AP.id}) }}">
+                                    {#<form method="POST" action="{{ path("AP_movement_assign",{idAP:AP.id}) }}">#}
                                     <!-- Filtro Gerencia 1ra Línea -->
                                     <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
                                         <label class="bold">Gerencia de 1ra Línea</label><br>
@@ -114,7 +114,7 @@
                     </form>      
                     <fieldset class="fieldset">
                         <legend class="legend"><b>Estructura Organizativa Actual</b></legend>
-                        <div id="basicdiagram" style="width: 100%; height: 1000px; border-style: dotted; border-width: 1px;" />
+                        <div id="basicdiagram" style="width: 100%; height: 1200px; border-style: dotted; border-width: 1px;" />
                     </fieldset>
 
                 {% endblock %}

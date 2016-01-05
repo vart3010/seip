@@ -19,16 +19,12 @@ class FeeStructureController extends SEIPController {
         $array = array();
         $idGerente = 1;
         $array[] = $this->getRepository()->find($idGerente);
-
-        $ger = new \Pequiven\MasterBundle\Entity\Gerencia;
-
+        $structure = $this->GenerateTree($idGerente, $array);        
+        
+        //OPCIONES PARA LOS FILTROS
         $em = $this->getDoctrine()->getManager();
         $gerencias = $em->getRepository('PequivenMasterBundle:Gerencia')->getgerencias();
-        $gerencias2 = $em->getRepository('PequivenMasterBundle:GerenciaSecond')->getgerenciasSecond();
-
-        $structure = $this->GenerateTree($idGerente, $array);
-
-        //$gerencias=$this->get('pequiven_seip.feestructure.repository')->getChildren($padre);
+        $gerencias2 = $em->getRepository('PequivenMasterBundle:GerenciaSecond')->getgerenciasSecond();        
 
         return $this->render('PequivenSEIPBundle:User:FeeStructure/show.html.twig', array(
                     'gerencias' => $gerencias,
@@ -38,6 +34,12 @@ class FeeStructureController extends SEIPController {
         ));
     }
 
+    /**
+     * GENERA EL ARBOL DE SUBORDINADOS EN LA ESTRUCTURA ORGANIZATIVA
+     * @param type $padre
+     * @param type $array
+     * @return type
+     */
     public function GenerateTree($padre, $array) {
 
         $children = $this->get('pequiven_seip.repository.feestructure')->getChildren($padre);
