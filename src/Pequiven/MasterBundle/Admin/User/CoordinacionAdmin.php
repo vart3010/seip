@@ -28,8 +28,7 @@ class CoordinacionAdmin extends Admin {
                 ->add('id')
                 ->add('description')
                 ->add('sumary')
-                ->add('gerenciasecond')
-                ->add('complejo')                
+                ->add('gerenciasecond')                
                 ->add('enabled')
         ;
     }
@@ -43,8 +42,7 @@ class CoordinacionAdmin extends Admin {
                     'multiple' => false,
                     "required" => true,
                     'attr' => array('class' => 'input input-large'),
-                 ))
-                ->add('complejo')
+                 ))                
                 ->add('enabled')
         ;
 //                ->add('gerenciaSecond')
@@ -52,8 +50,7 @@ class CoordinacionAdmin extends Admin {
 
     protected function configureDatagridFilters(DatagridMapper $filter) {
         $filter
-                ->add('id')
-                ->add('complejo')
+                ->add('id')                
                 ->add('gerenciasecond','doctrine_orm_model_autocomplete',array(),null,array(
                     'property' => array('description'),
                     'multiple' => false,
@@ -67,8 +64,7 @@ class CoordinacionAdmin extends Admin {
 
     protected function configureListFields(ListMapper $list) {
         $list
-                ->addIdentifier('description')
-                ->add('complejo')
+                ->addIdentifier('description')                
                 ->add('gerenciaSecond')
                 ->add('enabled')
 
