@@ -1,0 +1,29 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutModalBase.html.twig' %}
+
+{% block body %}
+{% trans_default_domain 'PequivenIndicatorBundle' %}    
+    <form method="POST" id="form_asoc_last_period">
+        <fieldset class="fieldset fields-list">
+            <legend class="legend">Asignación Cargo</legend>
+            {{ form_errors(form) }} 
+                <div class="field-block button-height" >                    
+                    {{ form_label(form.date) }}
+                    {{ form_widget(form.date) }}
+                </div>  
+                <div class="field-block button-height" >                    
+                    {{ form_label(form.cause) }}
+                    {{ form_widget(form.cause) }}
+                </div> 
+                <div class="field-block button-height" >                    
+                    {{ form_label(form.type) }}
+                    {{ form_widget(form.type) }}
+                </div> 
+                <div class="field-block button-height" >                    
+                    {{ form_label(form.observations) }}
+                    {{ form_widget(form.observations) }}
+                </div>  
+            
+            {{ form_rest(form) }}                              
+        </fieldset>
+    </form>                       
+{% endblock %}

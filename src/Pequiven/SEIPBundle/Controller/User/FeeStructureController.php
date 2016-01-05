@@ -8,6 +8,7 @@ use Pequiven\SEIPBundle\Entity\User;
 use Pequiven\SEIPBundle\Entity\User\FeeStructure;
 use Pequiven\SEIPBundle\Entity\User\MovementFeeStructure;
 use Pequiven\MasterBundle\Model\Gerencia;
+use Pequiven\SEIPBundle\Form\User\MovementFeeStructureType;
 
 /**
  * GESTION EN LA ESTRUCTURA DE CARGOS SEIP
@@ -54,6 +55,46 @@ class FeeStructureController extends SEIPController {
         }
 
         return $array;
+    }
+
+    /**
+     * Insert
+     * @return type
+     */
+    public function createAction(Request $request) {
+        
+        $feeStructure = new MovementFeeStructure();
+        $form = $this->createForm(new MovementFeeStructureType(), $feeStructure);
+        $view = $this
+                ->view()
+                ->setTemplate($this->config->getTemplate('_form.html'))
+                ->setTemplateVar($this->config->getPluralResourceName())        
+                ->setData(array(            
+                    'form' => $form->createView(),
+                ))
+        ;
+        $view->getSerializationContext()->setGroups(array('id', 'api_list'));
+        return $view;
+    }
+
+    /**
+     * Remove
+     * @return type
+     */
+    public function removeAction(Request $request) {
+        
+        $feeStructure = new MovementFeeStructure();
+        $form = $this->createForm(new MovementFeeStructureType(), $feeStructure);
+        $view = $this
+                ->view()
+                ->setTemplate($this->config->getTemplate('Form/form.html'))
+                ->setTemplateVar($this->config->getPluralResourceName())        
+                ->setData(array(            
+                    'form' => $form->createView(),
+                ))
+        ;
+        $view->getSerializationContext()->setGroups(array('id', 'api_list'));
+        return $view;
     }
 
 }
