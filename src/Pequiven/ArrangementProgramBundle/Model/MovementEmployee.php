@@ -10,13 +10,13 @@ abstract class MovementEmployee {
     const ASIGNACION = 1;
     const SUSTITUCION = 2;
     const REINTEGRO = 3;
-    const TRANSFERENCIA = 4;
+    const TRANSFERENCIA_IN = 4;
     const NUEVO_INGRESO = 5;
 
     /**
      * MAESTROS DE SALIDA
      */
-    const TRANSFERENCIA = 11;
+    const TRANSFERENCIA_OUT = 11;
     const RETIRO = 12;
     const AUSENCIA_TEMPORAL = 13;
     const CULMINACION_DE_ASIGNACION = 14;
@@ -62,7 +62,7 @@ abstract class MovementEmployee {
             self::ASIGNACION => 'Asignación',
             self::SUSTITUCION => 'Sustitución',
             self::REINTEGRO => 'Reincorporación',
-            self::TRANSFERENCIA => 'Transferencia',
+            self::TRANSFERENCIA_IN => 'Transferencia',
             self::NUEVO_INGRESO => 'Nuevo Ingreso'
         ];
         return $array;
@@ -78,7 +78,7 @@ abstract class MovementEmployee {
             self::CULMINACION_DE_ASIGNACION => 'Culminación de Asignación',
             self::AUSENCIA_TEMPORAL => 'Ausencia Temporal',
             self::CULMINACION_DE_SUSTITUCION => 'Culminación de Sustitución',
-            self::TRANSFERENCIA => 'Transferencia',
+            self::TRANSFERENCIA_OUT => 'Transferencia',
             self::RETIRO => 'Retiro de la Empresa'
         ];
         return $array;
@@ -89,12 +89,12 @@ abstract class MovementEmployee {
             self::ASIGNACION => 'Asignación',
             self::SUSTITUCION => 'Sustitución',
             self::REINTEGRO => 'Reincorporación',
-            self::TRANSFERENCIA => 'Transferencia',
+            self::TRANSFERENCIA_IN => 'Transferencia Ingreso',
             self::NUEVO_INGRESO => 'Nuevo Ingreso',
             self::CULMINACION_DE_ASIGNACION => 'Culminación de Asignación',
             self::AUSENCIA_TEMPORAL => 'Ausencia Temporal',
             self::CULMINACION_DE_SUSTITUCION => 'Culminación de Sustitución',
-            self::TRANSFERENCIA => 'Transferencia',
+            self::TRANSFERENCIA_OUT => 'Transferencia Egreso',
             self::RETIRO => 'Retiro de la Empresa'
         ];
         return $array;
