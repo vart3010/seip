@@ -107,8 +107,8 @@ class Coordinacion {
         return $this->description;
     }
 
-    function getGerenciaSecond() {
-        return $this->gerenciaSecond;
+    function getGerenciasecond() {
+        return $this->gerenciasecond;
     }
 
     function getSumary() {
@@ -139,8 +139,8 @@ class Coordinacion {
         $this->description = $description;
     }
 
-    function setGerenciaSecond(\Pequiven\MasterBundle\Entity\GerenciaSecond $gerenciaSecond) {
-        $this->gerenciaSecond = $gerenciaSecond;
+    function setGerenciasecond(\Pequiven\MasterBundle\Entity\GerenciaSecond $gerenciasecond) {
+        $this->gerenciasecond = $gerenciasecond;
     }
 
     function setSumary($sumary) {

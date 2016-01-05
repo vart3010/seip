@@ -65,7 +65,7 @@ class CoordinacionAdmin extends Admin {
     protected function configureListFields(ListMapper $list) {
         $list
                 ->addIdentifier('description')                
-                ->add('gerenciaSecond')
+                ->add('gerenciasecond')
                 ->add('enabled')
 
         ;
