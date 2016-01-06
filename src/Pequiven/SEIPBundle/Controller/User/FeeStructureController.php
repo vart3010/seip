@@ -87,7 +87,7 @@ class FeeStructureController extends SEIPController {
         $form = $this->createForm(new MovementFeeStructureType(), $feeStructure);
         $view = $this
                 ->view()
-                ->setTemplate($this->config->getTemplate('Form/form.html'))
+                ->setTemplate($this->config->getTemplate('_form.html'))
                 ->setTemplateVar($this->config->getPluralResourceName())        
                 ->setData(array(            
                     'form' => $form->createView(),
