@@ -1218,8 +1218,8 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
             $visualize->addChild($pending);
             $child->addChild($visualize);
         }
-
-        if ($this->isGranted('ROLE_SEIP_ARRANGEMENT_PROGRAM_CREATE_*')) {
+        
+        if (($this->isGranted('ROLE_SEIP_ARRANGEMENT_PROGRAM_CREATE_*') && $this->getPeriodService()->isAllowLoadArrangementProgram()) || $this->isGranted('ROLE_SEIP_ARRANGEMENT_PROGRAM_CREATE_SPECIAL')) {
 //            if ($this->isGranted('ROLE_SEIP_ARRANGEMENT_PROGRAM_CREATE_SPECIAL')) {
                 $subchild = $this->factory->createItem('arrangement_programs.add.main', $this->getSubLevelOptions(array(
                                     'uri' => null,
