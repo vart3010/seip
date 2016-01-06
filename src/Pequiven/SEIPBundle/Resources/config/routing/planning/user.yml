@@ -9,7 +9,32 @@ pequiven_user_aux_list:
     defaults:
         _controller: pequiven_seip.controller.user:listAuxAction
     methods: [GET]
-        
+    
+pequiven_user_feestructure:
+    path: /view/feeStructure
+    defaults:
+        _controller: pequiven_seip.controller.feestructure:showAction
+    methods: [GET|POST]
+pequiven_user_feestructure_add:
+    path: /{id}/get-form.{_format}
+    defaults:
+        _controller: pequiven_seip.controller.feestructure:createAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET]
+    options:
+        expose: true 
+pequiven_user_feestructure_remove:
+    path: /{id}/remove-form.{_format}
+    defaults:
+        _controller: pequiven_seip.controller.feestructure:removeAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET]
+    options:
+        expose: true        
 #Devuelve el paginador con la data de los usuarios
 userList:
     path: /list

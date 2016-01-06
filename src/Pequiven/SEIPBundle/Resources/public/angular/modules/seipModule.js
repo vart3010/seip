@@ -3538,6 +3538,91 @@ angular.module('seipModule.controllers', [])
 
 
         })
+        .controller('FeeStructureController', function ($scope, notificationBarService, $http, notifyService, $filter, $timeout) {
+
+            var isInit = false;
+            //Carga del formulario
+            $scope.addCargo = function (resource) {
+                $scope.initForm(resource);
+                if (isInit == false) {
+                    isInit = true;
+                }
+                $scope.templateOptions.setTemplate($scope.templates[0]);
+                $scope.templateOptions.setParameterCallBack(resource);
+                if (resource) {
+                    $scope.templateOptions.enableModeEdit();
+                    $scope.openModalAuto();
+                } else {
+                    $scope.openModalAuto();
+                }
+            };
+
+            //Carga del formulario Remove
+            $scope.removeCargo = function (resource) {
+                $scope.initFormRemove(resource);
+                if (isInit == false) {
+                    isInit = true;
+                }
+                $scope.templateOptions.setTemplate($scope.templates[0]);
+                $scope.templateOptions.setParameterCallBack(resource);
+                if (resource) {
+                    $scope.templateOptions.enableModeEdit();
+                    $scope.openModalAuto();
+                } else {
+                    $scope.openModalAuto();
+                }
+            };
+            
+            var confirmCallBack = function () {
+                return true;
+            };
+
+            //Carga del fomrulario
+            $scope.initForm = function (resource) {
+                var d = new Date();
+                var numero = d.getTime();
+                //$scope.setHeight(350);
+                var parameters = {  
+                    id: 111,                  
+                    _dc: numero
+                };
+                if (resource) {
+                    parameters.id = resource.id;
+                }
+                var url = Routing.generate('pequiven_user_feestructure_add', parameters);
+                $scope.templates = [
+                    {
+                        name: 'Asignación Cargo',
+                        url: url,
+                        confirmCallBack: confirmCallBack,
+                    }
+                ];
+                $scope.templateOptions.setTemplate($scope.templates[0]);
+            };
+
+            //Carga del fomrulario Remove
+            $scope.initFormRemove = function (resource) {
+                var d = new Date();
+                var numero = d.getTime();
+                //$scope.setHeight(350);
+                var parameters = {  
+                    id: 111,                  
+                    _dc: numero
+                };
+                if (resource) {
+                    parameters.id = resource.id;
+                }
+                var url = Routing.generate('pequiven_user_feestructure_remove', parameters);
+                $scope.templates = [
+                    {
+                        name: 'Remover Cargo',
+                        url: url,
+                        confirmCallBack: confirmCallBack,
+                    }
+                ];
+                $scope.templateOptions.setTemplate($scope.templates[0]);
+            };
+        })
 
         .controller('IndicatorResultController', function ($scope, notificationBarService, $http, notifyService, $filter) {
 

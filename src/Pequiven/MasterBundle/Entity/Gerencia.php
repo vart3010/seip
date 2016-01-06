@@ -173,8 +173,8 @@ class Gerencia extends modelGerencia implements AuditableInterface
     private $workStudyCircles;
     
     /**
-     * @var \Pequiven\MasterBundle\Entity\FeeStructure
-     * @ORM\OneToMany(targetEntity="\Pequiven\MasterBundle\Entity\FeeStructure", mappedBy="gerencia",cascade={"persist","remove"})
+     * @var \Pequiven\SEIPBundle\Entity\User\FeeStructure
+     * @ORM\OneToMany(targetEntity="\Pequiven\SEIPBundle\Entity\User\FeeStructure", mappedBy="gerencia",cascade={"persist","remove"})
      */
     private $feeStructure;
 
@@ -663,7 +663,7 @@ class Gerencia extends modelGerencia implements AuditableInterface
         return $this->feeStructure;
     }
 
-    function setFeeStructure(\Pequiven\MasterBundle\Entity\FeeStructure $feeStructure) {
+    function setFeeStructure(\Pequiven\SEIPBundle\Entity\User\FeeStructure $feeStructure) {
         $this->feeStructure = $feeStructure;
     }
 
