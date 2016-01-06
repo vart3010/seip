@@ -6,6 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Pequiven\SEIPBundle\Repository\UserRepository;
 
 class MovementFeeStructureType extends AbstractType {
@@ -35,6 +36,19 @@ class MovementFeeStructureType extends AbstractType {
                 'label_attr' => array('class' => 'label'),
                 'attr' => array('class' => 'input input-large')               
             ))
+            ->add('User', null, array(
+                    'query_builder' => function(\Pequiven\SEIPBundle\Repository\UserRepository $repository) {
+                        return $repository->findQueryUsersByCriteria();
+                    },                               
+                    'label' => 'Personal',
+                    'label_attr' => array('class' => 'label'),
+                    'attr' => array(
+                        'class' => "input-large select2",                        
+                        'style' => 'width: 270px',                        
+                    ),
+                    //'empty_value' => 'Seleccione...',
+                    'required' => true,
+                ))
         ;
     }
 
