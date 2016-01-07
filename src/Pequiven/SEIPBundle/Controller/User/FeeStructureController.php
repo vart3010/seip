@@ -61,8 +61,11 @@ class FeeStructureController extends SEIPController {
      * Insert
      * @return type
      */
-    public function createAction(Request $request) {
+    public function assignAction(Request $request) {
         
+        $period = $this->getPeriodService()->getPeriodActive(true);
+        $period = $period->getId();
+
         $feeStructure = new MovementFeeStructure();
         $form = $this->createForm(new MovementFeeStructureType(), $feeStructure);
         $view = $this
@@ -95,6 +98,14 @@ class FeeStructureController extends SEIPController {
         ;
         $view->getSerializationContext()->setGroups(array('id', 'api_list'));
         return $view;
+    }
+
+    /**
+     *  Period
+     *
+     */
+    protected function getPeriodService() {
+        return $this->container->get('pequiven_seip.service.period');
     }
 
 }

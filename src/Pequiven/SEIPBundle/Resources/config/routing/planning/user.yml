@@ -18,7 +18,7 @@ pequiven_user_feestructure:
 pequiven_user_feestructure_add:
     path: /{id}/get-form.{_format}
     defaults:
-        _controller: pequiven_seip.controller.feestructure:createAction
+        _controller: pequiven_seip.controller.feestructure:assignAction
         _format: html
     requirements:
         _format: html|json

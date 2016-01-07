@@ -3540,9 +3540,11 @@ angular.module('seipModule.controllers', [])
         })
         .controller('FeeStructureController', function ($scope, notificationBarService, $http, notifyService, $filter, $timeout) {
 
-            var isInit = false;
+            var isInit = false;   
+            var valueChar = angular.element('#value');         
             //Carga del formulario
             $scope.addCargo = function (resource) {
+                console.log(valueChar);
                 $scope.initForm(resource);
                 if (isInit == false) {
                     isInit = true;
