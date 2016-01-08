@@ -49,6 +49,7 @@
                                 var button = document.getElementById("add");
                                 button.click();
                             }else if(data.name == "delete"){
+                                document.getElementById("value").value = data.context.id;                                
                                 var button = document.getElementById("delete");
                                 button.click();  
                                 //alert("Intenta Eliminar el Cargo");

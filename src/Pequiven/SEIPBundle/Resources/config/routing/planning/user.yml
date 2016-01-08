@@ -22,7 +22,7 @@ pequiven_user_feestructure_add:
         _format: html
     requirements:
         _format: html|json
-    methods: [GET]
+    methods: [GET|POST]
     options:
         expose: true 
 pequiven_user_feestructure_remove:

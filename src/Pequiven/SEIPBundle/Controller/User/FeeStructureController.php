@@ -64,20 +64,34 @@ class FeeStructureController extends SEIPController {
     public function assignAction(Request $request) {
         
         $period = $this->getPeriodService()->getPeriodActive(true);
-        $period = $period->getId();
+        //$period = $period->getId();
 
         $feeStructure = new MovementFeeStructure();
         $form = $this->createForm(new MovementFeeStructureType(), $feeStructure);
-        $view = $this
+
+
+        if (isset($request->get('fee_structure_add')["_token"])) {
+            $em = $this->getDoctrine()->getManager();
+
+            $form->bind($this->getRequest());
+            $feeStructure = $form->getData();            
+            
+            $feeStructure->setPeriod($period);
+            $em->persist($feeStructure);
+            $em->flush();
+            
+        }else{
+            $view = $this
                 ->view()
                 ->setTemplate($this->config->getTemplate('_form.html'))
                 ->setTemplateVar($this->config->getPluralResourceName())        
                 ->setData(array(            
                     'form' => $form->createView(),
                 ))
-        ;
-        $view->getSerializationContext()->setGroups(array('id', 'api_list'));
-        return $view;
+            ;
+            $view->getSerializationContext()->setGroups(array('id', 'api_list'));
+            return $view;
+        }
     }
 
     /**
