@@ -243,7 +243,9 @@ class ReportTemplateService implements ContainerAwareInterface {
             
             $reportTemplates = array();
 
-            $resultReportTemplates = $repositoryReportTemplate->findAll();
+//            $resultReportTemplates = $repositoryReportTemplate->findAll();
+            $resultReportTemplates = $repositoryReportTemplate->findReportTemplatesByPeriod(3);
+//           var_dump(count($resultReportTemplates));die();
             //Seteamos sólo los reportTemplates de PQV, ya que los de la EEMM y Filiales se buscan directo en el controlador del gráfico
             foreach($resultReportTemplates as $resultReportTemplate){
                 if(!array_key_exists($resultReportTemplate->getLocation()->getAlias(),$reportTemplatesExclude)){
@@ -255,9 +257,10 @@ class ReportTemplateService implements ContainerAwareInterface {
             $dataSerialized = $this->getDataSerialized($reportTemplate, array('consolidateCorporationStatusCharge' => true, 'dateSearch' => $options['dateSearch'], 'reportTemplates' => $reportTemplates));
             
             foreach($reportTemplates as $reportTemplate) {
-                if ($reportTemplate->getPeriod() == $this->getPeriodService()->getPeriodActive()) {
+// TODO: DEJARLO COMO ESTA LÍNEA                if ($reportTemplate->getPeriod() == $this->getPeriodService()->getPeriodActive()) {
+                
                     $category[] = array('label' => $reportTemplate->getLocation()->getAlias());                    
-                }
+                
             }
             
             $dataRealValues = $dataPlanValues = array();
@@ -477,7 +480,8 @@ class ReportTemplateService implements ContainerAwareInterface {
             
             $reportTemplates = array();
 
-            $resultReportTemplates = $repositoryReportTemplate->findAll();
+//            $resultReportTemplates = $repositoryReportTemplate->findAll();
+            $resultReportTemplates = $repositoryReportTemplate->findReportTemplatesByPeriod(3);
             
             if($securityContext->isGranted(array('ROLE_SEIP_OPERATION_REPORT_TEMPLATES_ALL'))){
                 $userReportTemplates = $resultReportTemplates;
@@ -499,9 +503,10 @@ class ReportTemplateService implements ContainerAwareInterface {
             $dataSerialized = $this->getDataSerialized($reportTemplate, array('consolidateCorporationCompliance' => true, 'dateSearch' => $options['dateSearch'], 'reportTemplates' => $reportTemplates));
             
             foreach($reportTemplates as $reportTemplate) {
-                if ($reportTemplate->getPeriod() == $this->getPeriodService()->getPeriodActive()) {
+//                if ($reportTemplate->getPeriod() == $this->getPeriodService()->getPeriodActive()) {
+                
                     $category[] = array('label' => $reportTemplate->getLocation()->getAlias());                    
-                }
+                
             }
             
             $dataRealValues = $dataPlanValues = $dataComplianceValues = array();
