@@ -3540,9 +3540,11 @@ angular.module('seipModule.controllers', [])
         })
         .controller('FeeStructureController', function ($scope, notificationBarService, $http, notifyService, $filter, $timeout) {
 
-            var isInit = false;
+            var isInit = false;   
+            var valueChar = angular.element('#value');
             //Carga del formulario
             $scope.addCargo = function (resource) {
+                console.log(valueChar);
                 $scope.initForm(resource);
                 if (isInit == false) {
                     isInit = true;
@@ -3559,6 +3561,7 @@ angular.module('seipModule.controllers', [])
 
             //Carga del formulario Remove
             $scope.removeCargo = function (resource) {
+                //console.log(valueChar);                
                 $scope.initFormRemove(resource);
                 if (isInit == false) {
                     isInit = true;
@@ -3572,8 +3575,50 @@ angular.module('seipModule.controllers', [])
                     $scope.openModalAuto();
                 }
             };
-            
+
+            //Añadir Observations
+            var addCargoData = function (save, successCallBack) {
+                var formDataAssing = angular.element('#form_fee_structure_assign');
+                var formData = formDataAssing.serialize(); 
+                var valueChar = angular.element('#value').val();
+                if (save == undefined) {
+                    var save = false;
+                }
+                if (save == true) {                    
+                    var url = Routing.generate('pequiven_user_feestructure_add', {id: valueChar});
+                }
+                notificationBarService.getLoadStatus().loading();
+                return $http({
+                    method: 'POST',
+                    url: url,
+                    data: formData,
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'}  // set the headers so angular passing info as form data (not request payload)
+                }).success(function (data) {
+                    $scope.templateOptions.setVar("form", {errors: {}});
+                    if (successCallBack) {
+                        successCallBack(data);
+                    }
+                    notificationBarService.getLoadStatus().done();
+                    //location.reload();
+                    return true;
+                }).error(function (data, status, headers, config) {
+                    $scope.templateOptions.setVar("form", {errors: {}});
+                    if (data.errors) {
+                        if (data.errors.errors) {
+                            $.each(data.errors.errors, function (index, value) {
+                                notifyService.error(Translator.trans(value));
+                            });
+                        }
+                        $scope.templateOptions.setVar("form", {errors: data.errors.children});
+                    }
+                    notificationBarService.getLoadStatus().done();
+                    return false;
+                });
+            };
+            $scope.templateOptions.setVar('addCargoData', addCargoData);
             var confirmCallBack = function () {
+                addCargoData(true, function (data) {
+                });
                 return true;
             };
 
@@ -3581,9 +3626,9 @@ angular.module('seipModule.controllers', [])
             $scope.initForm = function (resource) {
                 var d = new Date();
                 var numero = d.getTime();
-                //$scope.setHeight(350);
+                //$scope.setHeight(350);                
                 var parameters = {  
-                    id: 111,                  
+                    id: valueChar,                  
                     _dc: numero
                 };
                 if (resource) {
