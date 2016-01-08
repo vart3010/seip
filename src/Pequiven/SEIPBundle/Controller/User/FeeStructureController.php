@@ -21,7 +21,7 @@ class FeeStructureController extends SEIPController {
         $idGerente = 1;
         $array[] = $this->getRepository()->find($idGerente);
         $structure = $this->GenerateTree($idGerente, $array);        
-        
+
         //OPCIONES PARA LOS FILTROS
         $em = $this->getDoctrine()->getManager();
         $gerencias = $em->getRepository('PequivenMasterBundle:Gerencia')->getgerencias();
@@ -64,20 +64,28 @@ class FeeStructureController extends SEIPController {
     public function assignAction(Request $request) {
         
         $period = $this->getPeriodService()->getPeriodActive(true);
-        //$period = $period->getId();
-
-        $feeStructure = new MovementFeeStructure();
-        $form = $this->createForm(new MovementFeeStructureType(), $feeStructure);
-
+        
+        $movementFeeStructure = new MovementFeeStructure();
+        $form = $this->createForm(new MovementFeeStructureType(), $movementFeeStructure);
 
         if (isset($request->get('fee_structure_add')["_token"])) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->getDoctrine()->getManager();            
+            $structure = $this->get('pequiven_seip.repository.feestructure')->find($request->get('id'));
 
             $form->bind($this->getRequest());
-            $feeStructure = $form->getData();            
+            $movementFeeStructure = $form->getData();            
             
-            $feeStructure->setPeriod($period);
-            $em->persist($feeStructure);
+            $movementFeeStructure->setPeriod($period);
+            $movementFeeStructure->setType(1);
+            $movementFeeStructure->setCreatedBy($this->getUser());
+            $movementFeeStructure->setFeestructure($structure);
+            
+            //Asignación de Usuario
+            $UserAssigned = $request->get('fee_structure_add')["User"];
+            $UserAssigned = $this->get('pequiven.repository.user')->find($UserAssigned);            
+            $structure->setUser($UserAssigned);//Actualización de Cargo
+
+            $em->persist($movementFeeStructure);
             $em->flush();
             
         }else{

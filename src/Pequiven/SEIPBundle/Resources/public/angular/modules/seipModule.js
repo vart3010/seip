@@ -3541,7 +3541,7 @@ angular.module('seipModule.controllers', [])
         .controller('FeeStructureController', function ($scope, notificationBarService, $http, notifyService, $filter, $timeout) {
 
             var isInit = false;   
-            var valueChar = angular.element('#value');         
+            var valueChar = angular.element('#value');
             //Carga del formulario
             $scope.addCargo = function (resource) {
                 console.log(valueChar);
@@ -3579,7 +3579,8 @@ angular.module('seipModule.controllers', [])
             //Añadir Observations
             var addCargoData = function (save, successCallBack) {
                 var formDataAssing = angular.element('#form_fee_structure_assign');
-                var formData = formDataAssing.serialize();                  
+                var formData = formDataAssing.serialize(); 
+                var valueChar = angular.element('#value').val();
                 if (save == undefined) {
                     var save = false;
                 }
