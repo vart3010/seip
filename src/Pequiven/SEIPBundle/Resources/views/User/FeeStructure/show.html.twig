@@ -1,16 +1,20 @@
 {% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}
-{% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
-{% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
 
+{#{% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}#}
+{% trans_default_domain 'sip' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{  asset('bundles/pequivenseip/basic-primitives/demo/js/jquery/ui-lightness/jquery-ui-1.10.2.custom.css') }}" />
+    <link href="{{  asset('bundles/pequivenseip/basic-primitives/demo/css/primitives.latest.css') }}" media="screen" rel="stylesheet" type="text/css" />
+{% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
-    <link rel="stylesheet" href="{{  asset('bundles/pequivenseip/basic-primitives/demo/js/jquery/ui-lightness/jquery-ui-1.10.2.custom.css') }}" />
-    <script type="text/javascript"  src="{{  asset('bundles/pequivenseip/basic-primitives/demo/js/jquery/jquery-1.9.1.js') }}"></script>
-    <script type="text/javascript"  src="{{  asset('bundles/pequivenseip/basic-primitives/demo/js/jquery/jquery-ui-1.10.2.custom.min.js') }}"></script>    
+    {#<script type="text/javascript"  src="{{  asset('bundles/pequivenseip/basic-primitives/demo/js/jquery/jquery-1.9.1.js') }}"></script>
+    <script type="text/javascript"  src="{{  asset('bundles/pequivenseip/basic-primitives/demo/js/jquery/jquery-ui-1.10.2.custom.min.js') }}"></script>    #}
     <script type="text/javascript"  src="{{  asset('bundles/pequivenseip/basic-primitives/demo/js/primitives.min.js') }}"></script>    
-    <link href="{{  asset('bundles/pequivenseip/basic-primitives/demo/css/primitives.latest.css') }}" media="screen" rel="stylesheet" type="text/css" /> #}
-
 
     <script type='text/javascript'>
         var m_timer = null;
@@ -81,17 +85,28 @@
                 "width": bodyWidth + "px",
                         "height": bodyHeight + "px"
                 });
-                }
-
+                }                
             </script>
-{% endblock javascripts %}
+
+    <script type="text/javascript">        
+        $(document).ready(function()
+        {
+            charge();            
+            function charge(){
+               $('.select2').select2({
+                allowClear: true
+                });
+            }
+        });
+    </script>
+{% endblock %}
 
 {% block before_body %}
     {{ contentHeader("Gestión de Cargos")   }}
 {% endblock %}
 {% block body %}
 <div ng-controller="FeeStructureController">                    
-    <input id='add' type='hidden' value='Añadir Cargo' ng-click='addCargo()'/>
+    <input id='add' type='button' value='Añadir Cargo' ng-click='addCargo()'/>
     <input id='delete' type='hidden' value='Eliminar Cargo' ng-click='removeCargo()'/>
     <input id='value' type='hidden' value=''/>
 
@@ -106,20 +121,20 @@
                     <!-- Filtro Gerencia 1ra Línea -->
                     <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
                     <label class="bold">Gerencia de 1ra Línea</label><br>
-                    <select class="select2">
-                    {% for gerencia in gerencias %}
-                        <option value="{{gerencia.id}}">{{gerencia.description}}</option>                                           
-                    {% endfor %}
+                    <select class="select2 input-xlarge">
+                        {% for gerencia in gerencias %}
+                            <option value="{{gerencia.id}}">{{gerencia.description}}</option>                                           
+                        {% endfor %}
                     </select> 
                     </div>
                     <!-- Filtro Gerencia 2da Línea -->
                     <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
-                        <label class="bold">Gerencia de 2da Línea</label><br>
-                            <select class="select2">
-                            {% for gerencia2 in gerencias2 %}
-                                <option value="{{gerencia2.id}}">{{gerencia2.description}}</option>                                           
-                            {% endfor %}
-                        </select> 
+                    <label class="bold">Gerencia de 2da Línea</label><br>
+                    <select class="select2 input-xlarge">
+                        {% for gerencia2 in gerencias2 %}
+                            <option value="{{gerencia2.id}}">{{gerencia2.description}}</option>                                           
+                        {% endfor %}
+                    </select> 
                     </div>
                 </div>
             </div>
@@ -130,6 +145,4 @@
                 <div id="basicdiagram" style="width: 100%; height: 1200px; border-style: dotted; border-width: 1px;" />
         </fieldset>
 </div>
-{% endblock %}
-
-  
+{% endblock %} 

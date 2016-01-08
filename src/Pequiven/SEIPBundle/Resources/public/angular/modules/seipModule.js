@@ -3544,7 +3544,7 @@ angular.module('seipModule.controllers', [])
             var valueChar = angular.element('#value');
             //Carga del formulario
             $scope.addCargo = function (resource) {
-                console.log(valueChar);
+                //console.log(valueChar);
                 $scope.initForm(resource);
                 if (isInit == false) {
                     isInit = true;
@@ -3599,7 +3599,7 @@ angular.module('seipModule.controllers', [])
                         successCallBack(data);
                     }
                     notificationBarService.getLoadStatus().done();
-                    //location.reload();
+                    location.reload();
                     return true;
                 }).error(function (data, status, headers, config) {
                     $scope.templateOptions.setVar("form", {errors: {}});

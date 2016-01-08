@@ -87,6 +87,8 @@ class FeeStructureController extends SEIPController {
 
             $em->persist($movementFeeStructure);
             $em->flush();
+
+            die();
             
         }else{
             $view = $this
