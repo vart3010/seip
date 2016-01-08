@@ -9,7 +9,7 @@
     <script type="text/javascript"  src="{{  asset('bundles/pequivenseip/basic-primitives/demo/js/jquery/jquery-1.9.1.js') }}"></script>
     <script type="text/javascript"  src="{{  asset('bundles/pequivenseip/basic-primitives/demo/js/jquery/jquery-ui-1.10.2.custom.min.js') }}"></script>    
     <script type="text/javascript"  src="{{  asset('bundles/pequivenseip/basic-primitives/demo/js/primitives.min.js') }}"></script>    
-    <link href="{{  asset('bundles/pequivenseip/basic-primitives/demo/css/primitives.latest.css') }}" media="screen" rel="stylesheet" type="text/css" /> 
+    <link href="{{  asset('bundles/pequivenseip/basic-primitives/demo/css/primitives.latest.css') }}" media="screen" rel="stylesheet" type="text/css" /> #}
 
 
     <script type='text/javascript'>
@@ -84,54 +84,52 @@
                 }
 
             </script>
-            {% endblock javascripts %}
+{% endblock javascripts %}
 
-                {% block before_body %}
-                    {{ contentHeader("Gestión de Cargos")   }}
-                {% endblock %}
-                {% block body %}
-        <div ng-controller="FeeStructureController">                    
-                <input id='add' type='hidden' value='Añadir Cargo' ng-click='addCargo()'/>
-                <input id='delete' type='hidden' value='Eliminar Cargo' ng-click='removeCargo()'/>
-                <input id='value' type='hidden' value=''/>
+{% block before_body %}
+    {{ contentHeader("Gestión de Cargos")   }}
+{% endblock %}
+{% block body %}
+<div ng-controller="FeeStructureController">                    
+    <input id='add' type='hidden' value='Añadir Cargo' ng-click='addCargo()'/>
+    <input id='delete' type='hidden' value='Eliminar Cargo' ng-click='removeCargo()'/>
+    <input id='value' type='hidden' value=''/>
 
-                    <form method="POST" action="{{ path("pequiven_sip_report_SegVoto") }}">
-
-                        <details class="details margin-bottom" open="">
-                            <summary role="button" aria-expanded="true">
-                                <b>Filtros</b>
-                            </summary>
-
-                            <div class="with-padding">
-                                <div class="columns">
-                                    {#<form method="POST" action="{{ path("AP_movement_assign",{idAP:AP.id}) }}">#}
-                                    <!-- Filtro Gerencia 1ra Línea -->
-                                    <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
-                                        <label class="bold">Gerencia de 1ra Línea</label><br>
-                                        <select class="select2">
-                                            {% for gerencia in gerencias %}
-                                                <option value="{{gerencia.id}}">{{gerencia.description}}</option>                                           
-                                            {% endfor %}
-                                        </select> 
-                                    </div>
-                                    <!-- Filtro Gerencia 2da Línea -->
-                                    <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
-                                        <label class="bold">Gerencia de 2da Línea</label><br>
-                                        <select class="select2">
-                                            {% for gerencia2 in gerencias2 %}
-                                                <option value="{{gerencia2.id}}">{{gerencia2.description}}</option>                                           
-                                            {% endfor %}
-                                        </select> 
-                                    </div>
-                                </div>
-                            </div>
-                        </details>
-                    </form>      
-                    <fieldset class="fieldset">
-                        <legend class="legend"><b>Estructura Organizativa Actual</b></legend>
-                        <div id="basicdiagram" style="width: 100%; height: 1200px; border-style: dotted; border-width: 1px;" />
-                    </fieldset>
-        </div>
+    <form method="POST" action="{{ path("pequiven_sip_report_SegVoto") }}">
+        <details class="details margin-bottom" open="">
+            <summary role="button" aria-expanded="true">
+                <b>Filtros</b>
+            </summary>
+            <div class="with-padding">
+                <div class="columns">
+                    {#<form method="POST" action="{{ path("AP_movement_assign",{idAP:AP.id}) }}">#}
+                    <!-- Filtro Gerencia 1ra Línea -->
+                    <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                    <label class="bold">Gerencia de 1ra Línea</label><br>
+                    <select class="select2">
+                    {% for gerencia in gerencias %}
+                        <option value="{{gerencia.id}}">{{gerencia.description}}</option>                                           
+                    {% endfor %}
+                    </select> 
+                    </div>
+                    <!-- Filtro Gerencia 2da Línea -->
+                    <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                        <label class="bold">Gerencia de 2da Línea</label><br>
+                            <select class="select2">
+                            {% for gerencia2 in gerencias2 %}
+                                <option value="{{gerencia2.id}}">{{gerencia2.description}}</option>                                           
+                            {% endfor %}
+                        </select> 
+                    </div>
+                </div>
+            </div>
+        </details>
+    </form>      
+        <fieldset class="fieldset">
+            <legend class="legend"><b>Estructura Organizativa Actual</b></legend>
+                <div id="basicdiagram" style="width: 100%; height: 1200px; border-style: dotted; border-width: 1px;" />
+        </fieldset>
+</div>
 {% endblock %}
 
   
