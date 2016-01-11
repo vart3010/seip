@@ -89,15 +89,18 @@ class FeeStructureController extends SEIPController {
             $em->persist($movementFeeStructure);
             $em->flush();
 
+            $this->get('session')->getFlashBag()->add('success', 'Cargo Asignado Exitosamente.');
             die();
             
         }else{
+            $formAction = "form_fee_structure_assign";
             $user = true;
             $view = $this
                 ->view()
                 ->setTemplate($this->config->getTemplate('_form.html'))
                 ->setTemplateVar($this->config->getPluralResourceName())        
-                ->setData(array(     
+                ->setData(array(  
+                    'formAction'   => $formAction,
                     'user' => $user,
                     'form' => $form->createView(),
                 ))
@@ -113,21 +116,49 @@ class FeeStructureController extends SEIPController {
      */
     public function removeAction(Request $request) {
         
-        $feeStructure = new MovementFeeStructure();
-        $form = $this->createForm(new MovementFeeStructureOutType(), $feeStructure);
+        $period = $this->getPeriodService()->getPeriodActive(true);
+
+        $movementFeeStructure = new MovementFeeStructure();
+        $form = $this->createForm(new MovementFeeStructureOutType(), $movementFeeStructure);
         
-        $user = false;
-        $view = $this
-                ->view()
-                ->setTemplate($this->config->getTemplate('_form.html'))
-                ->setTemplateVar($this->config->getPluralResourceName())        
-                ->setData(array( 
-                    'user' => $user,
-                    'form' => $form->createView(),
-                ))
-        ;
-        $view->getSerializationContext()->setGroups(array('id', 'api_list'));
-        return $view;
+        if (isset($request->get('fee_structure_add')["_token"])) {
+            $em = $this->getDoctrine()->getManager();            
+            $structure = $this->get('pequiven_seip.repository.feestructure')->find($request->get('id'));
+
+            $form->bind($this->getRequest());
+            $movementFeeStructure = $form->getData();            
+            
+            $movementFeeStructure->setPeriod($period);
+            $movementFeeStructure->setType('O');
+            $movementFeeStructure->setCreatedBy($this->getUser());
+            $movementFeeStructure->setFeestructure($structure);            
+
+            //Asignación de Usuario
+            $UserAssigned = NULL;
+            $structure->setUser($UserAssigned);//Actualización de Cargo
+
+            $em->persist($movementFeeStructure);
+            $em->flush();
+            
+            $this->get('session')->getFlashBag()->add('success', 'Cargo Removido Exitosamente.');
+            die();
+
+        }else{
+            $formAction = "form_fee_structure_remove";
+            $user = false;
+            $view = $this
+                    ->view()
+                    ->setTemplate($this->config->getTemplate('_form.html'))
+                    ->setTemplateVar($this->config->getPluralResourceName())        
+                    ->setData(array( 
+                        'formAction' => $formAction,
+                        'user' => $user,
+                        'form' => $form->createView(),
+                    ))
+            ;
+            $view->getSerializationContext()->setGroups(array('id', 'api_list'));
+            return $view;
+        }
     }
 
     /**

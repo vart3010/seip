@@ -3615,9 +3615,55 @@ angular.module('seipModule.controllers', [])
                     return false;
                 });
             };
+
+            //Añadir Observations
+            var removeCargoData = function (save, successCallBack) {
+                var formDataAssing = angular.element('#form_fee_structure_remove');
+                var formData = formDataAssing.serialize(); 
+                var valueChar = angular.element('#value').val();
+                if (save == undefined) {
+                    var save = false;
+                }
+                if (save == true) {                    
+                    var url = Routing.generate('pequiven_user_feestructure_remove', {id: valueChar});
+                }
+                notificationBarService.getLoadStatus().loading();
+                return $http({
+                    method: 'POST',
+                    url: url,
+                    data: formData,
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'}  // set the headers so angular passing info as form data (not request payload)
+                }).success(function (data) {
+                    $scope.templateOptions.setVar("form", {errors: {}});
+                    if (successCallBack) {
+                        successCallBack(data);
+                    }
+                    notificationBarService.getLoadStatus().done();
+                    location.reload();
+                    return true;
+                }).error(function (data, status, headers, config) {
+                    $scope.templateOptions.setVar("form", {errors: {}});
+                    if (data.errors) {
+                        if (data.errors.errors) {
+                            $.each(data.errors.errors, function (index, value) {
+                                notifyService.error(Translator.trans(value));
+                            });
+                        }
+                        $scope.templateOptions.setVar("form", {errors: data.errors.children});
+                    }
+                    notificationBarService.getLoadStatus().done();
+                    return false;
+                });
+            };
             $scope.templateOptions.setVar('addCargoData', addCargoData);
+            $scope.templateOptions.setVar('removeCargoData', removeCargoData);
             var confirmCallBack = function () {
                 addCargoData(true, function (data) {
+                });
+                return true;
+            };
+             var confirmCallBackRemove = function () {
+                removeCargoData(true, function (data) {
                 });
                 return true;
             };
@@ -3662,7 +3708,7 @@ angular.module('seipModule.controllers', [])
                     {
                         name: 'Remover Cargo',
                         url: url,
-                        confirmCallBack: confirmCallBack,
+                        confirmCallBack: confirmCallBackRemove,
                     }
                 ];
                 $scope.templateOptions.setTemplate($scope.templates[0]);
