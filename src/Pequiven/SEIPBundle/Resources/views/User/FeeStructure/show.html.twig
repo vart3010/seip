@@ -43,7 +43,7 @@
                         options.buttons = buttons;
                         options.hasButtons = primitives.common.Enabled.True;
                         options.hasSelectorCheckbox = primitives.common.Enabled.False;
-                        options.onButtonClick = function (e, data) {
+                        options.onButtonClick = function (e, data) {                            
                             if (data.name == "add") {                                
                                 document.getElementById("value").value = data.context.id;
                                 var button = document.getElementById("add");

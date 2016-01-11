@@ -69,9 +69,10 @@ class FeeStructureController extends SEIPController {
         $movementFeeStructure = new MovementFeeStructure();
         $form = $this->createForm(new MovementFeeStructureInType(), $movementFeeStructure);
 
+        $structure = $this->get('pequiven_seip.repository.feestructure')->find($request->get('id'));
+
         if (isset($request->get('fee_structure_add')["_token"])) {
             $em = $this->getDoctrine()->getManager();            
-            $structure = $this->get('pequiven_seip.repository.feestructure')->find($request->get('id'));
 
             $form->bind($this->getRequest());
             $movementFeeStructure = $form->getData();            
@@ -92,6 +93,9 @@ class FeeStructureController extends SEIPController {
             $this->get('session')->getFlashBag()->add('success', 'Cargo Asignado Exitosamente.');
             die();
             
+        }elseif($structure->getUser() != null){
+            echo "El Cargo ya esta Asignado!";
+            die();
         }else{
             $formAction = "form_fee_structure_assign";
             $user = true;
@@ -121,9 +125,10 @@ class FeeStructureController extends SEIPController {
         $movementFeeStructure = new MovementFeeStructure();
         $form = $this->createForm(new MovementFeeStructureOutType(), $movementFeeStructure);
         
+        $structure = $this->get('pequiven_seip.repository.feestructure')->find($request->get('id'));
+        
         if (isset($request->get('fee_structure_add')["_token"])) {
             $em = $this->getDoctrine()->getManager();            
-            $structure = $this->get('pequiven_seip.repository.feestructure')->find($request->get('id'));
 
             $form->bind($this->getRequest());
             $movementFeeStructure = $form->getData();            
@@ -143,6 +148,9 @@ class FeeStructureController extends SEIPController {
             $this->get('session')->getFlashBag()->add('success', 'Cargo Removido Exitosamente.');
             die();
 
+        }elseif($structure->getUser() === null){
+            echo "El Cargo no esta Asignado!";
+            die();
         }else{
             $formAction = "form_fee_structure_remove";
             $user = false;
