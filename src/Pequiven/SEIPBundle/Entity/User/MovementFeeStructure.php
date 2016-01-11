@@ -54,7 +54,7 @@ class MovementFeeStructure {
     /** ID USUARIO
      *
      * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\User",inversedBy="movementFeeStructure")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $User;
 

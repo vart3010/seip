@@ -152,7 +152,8 @@ class productReportService implements ContainerAwareInterface {
         $chart["exportatclient"] = "0";
         $chart["exportFormats"] = "PNG= Exportar como PNG|PDF= Exportar como PDF";
         $chart["exportFileName"] = "Grafico Resultados ";
-        $chart["exporthandler"] = "http://107.21.74.91/";
+//        $chart["exporthandler"] = "http://107.21.74.91/";
+//        $chart["html5exporthandler"] = "http://107.21.74.91/";
 
 
         //$chart["legendItemFontSize"] = "15";

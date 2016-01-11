@@ -8,8 +8,9 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Pequiven\SEIPBundle\Repository\UserRepository;
+use Pequiven\SEIPBundle\Model\User\MovementFeeStructure;
 
-class MovementFeeStructureType extends AbstractType {
+class MovementFeeStructureOutType extends AbstractType {
 
     public function buildForm(FormBuilderInterface $builder, array $options) {
         
@@ -21,22 +22,23 @@ class MovementFeeStructureType extends AbstractType {
                 'widget' => 'single_text',
                 'attr' => array('class' => 'input input-large')               
             ))
-            ->add('cause', 'text', array(
-                'label'=>'Causa',
+            ->add('cause', 'choice', array(
+                'label' => 'Causa ',                
+                'choices' => MovementFeeStructure::getCauseout(),
                 'label_attr' => array('class' => 'label'),
-                'attr' => array('class' => 'input input-large')               
-            ))
-            ->add('type', 'text', array(
-                'label'=>'Tipo',
-                'label_attr' => array('class' => 'label'),
-                'attr' => array('class' => 'input input-large')               
-            ))
+                'attr' => array(
+                    'class' => 'select2 input-large form-control',
+                    'style' => 'width: 300px',
+                    ),
+                'required' => true,
+                'empty_value' => 'Seleccione...',
+            ))            
             ->add('observations', 'textarea', array(
                 'label'=>'Observación',
                 'label_attr' => array('class' => 'label'),
                 'attr' => array('class' => 'input input-large')               
             ))
-            ->add('User', null, array(
+            /*->add('User', null, array(
                     'query_builder' => function(\Pequiven\SEIPBundle\Repository\UserRepository $repository) {
                         return $repository->findQueryUsersByCriteria();
                     },                               
@@ -46,9 +48,9 @@ class MovementFeeStructureType extends AbstractType {
                         'class' => "input-large select2",                        
                         'style' => 'width: 270px',                        
                     ),
-                    //'empty_value' => 'Seleccione...',
+                    'empty_value' => 'Seleccione...',
                     'required' => true,
-                ))
+                ))*/
         ;
     }
 

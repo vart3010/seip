@@ -1,15 +1,11 @@
-
-
 {% trans_default_domain 'PequivenSEIPBundle' %}
 
 {% block stylesheets %}
     <!-- Select2 -->
-    <link rel="stylesheet" href="{{ asset('bundles/pequivenseip/select2-3.5.0/select2.css') }}">
-      
+    <link rel="stylesheet" href="{{ asset('bundles/pequivenseip/select2-3.5.0/select2.css') }}">      
 {% endblock %}
 
 {% block javascripts_base %}
-
     <script type="text/javascript">
         $(document).ready(function(){
             $.datepicker.regional['es'] = {
@@ -34,31 +30,35 @@
         });
 
     </script>
-
 {% endblock javascripts_base %}
     
 {% block body %}
 
 {% endblock %}
 
-{% block javascripts %}
-    
+{% block javascripts %}    
     <script type="text/javascript">
         
-        $(document).ready(function(){
+        /*$(document).ready(function(){
             // Form validation
             $('form').validationEngine();
-        });
-        $.fn.styleSelect.defaults.allValuesText = '{{ 'pequiven_seip.all'|trans }}';
-        $.fn.styleSelect.defaults.multipleValuesText = '%d {{ 'pequiven_seip.selected'|trans }}';
-        $.fn.styleSelect.defaults.searchText = '{{ 'pequiven_seip.search'|trans }}';
-        $(".select2").select2({
+        });*/
+        //$.fn.styleSelect.defaults.allValuesText = '{{ 'pequiven_seip.all'|trans }}';
+        //$.fn.styleSelect.defaults.multipleValuesText = '%d {{ 'pequiven_seip.selected'|trans }}';
+        //$.fn.styleSelect.defaults.searchText = '{{ 'pequiven_seip.search'|trans }}';
+        /*$(".select2").select2({
             allowClear: true
-        });
+        });*/
         
         $(document).ready(function () {
             $("#fee_structure_add_User").select2({
                 minimumInputLength: 3,
+            });
+        });
+
+        $(document).ready(function () {
+            $("#fee_structure_add_cause").select2({
+                //minimumInputLength: 3,
             });
         });
         

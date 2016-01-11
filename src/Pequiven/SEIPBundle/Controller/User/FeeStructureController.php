@@ -8,7 +8,8 @@ use Pequiven\SEIPBundle\Entity\User;
 use Pequiven\SEIPBundle\Entity\User\FeeStructure;
 use Pequiven\SEIPBundle\Entity\User\MovementFeeStructure;
 use Pequiven\MasterBundle\Model\Gerencia;
-use Pequiven\SEIPBundle\Form\User\MovementFeeStructureType;
+use Pequiven\SEIPBundle\Form\User\MovementFeeStructureInType;
+use Pequiven\SEIPBundle\Form\User\MovementFeeStructureOutType;
 
 /**
  * GESTION EN LA ESTRUCTURA DE CARGOS SEIP
@@ -21,7 +22,7 @@ class FeeStructureController extends SEIPController {
         $idGerente = 1;
         $array[] = $this->getRepository()->find($idGerente);
         $structure = $this->GenerateTree($idGerente, $array);        
-        
+
         //OPCIONES PARA LOS FILTROS
         $em = $this->getDoctrine()->getManager();
         $gerencias = $em->getRepository('PequivenMasterBundle:Gerencia')->getgerencias();
@@ -61,20 +62,52 @@ class FeeStructureController extends SEIPController {
      * Insert
      * @return type
      */
-    public function createAction(Request $request) {
+    public function assignAction(Request $request) {
         
-        $feeStructure = new MovementFeeStructure();
-        $form = $this->createForm(new MovementFeeStructureType(), $feeStructure);
-        $view = $this
+        $period = $this->getPeriodService()->getPeriodActive(true);
+        
+        $movementFeeStructure = new MovementFeeStructure();
+        $form = $this->createForm(new MovementFeeStructureInType(), $movementFeeStructure);
+
+        if (isset($request->get('fee_structure_add')["_token"])) {
+            $em = $this->getDoctrine()->getManager();            
+            $structure = $this->get('pequiven_seip.repository.feestructure')->find($request->get('id'));
+
+            $form->bind($this->getRequest());
+            $movementFeeStructure = $form->getData();            
+            
+            $movementFeeStructure->setPeriod($period);
+            $movementFeeStructure->setType('I');
+            $movementFeeStructure->setCreatedBy($this->getUser());
+            $movementFeeStructure->setFeestructure($structure);
+            
+            //Asignación de Usuario
+            $UserAssigned = $request->get('fee_structure_add')["User"];
+            $UserAssigned = $this->get('pequiven.repository.user')->find($UserAssigned);            
+            $structure->setUser($UserAssigned);//Actualización de Cargo
+
+            $em->persist($movementFeeStructure);
+            $em->flush();
+
+            $this->get('session')->getFlashBag()->add('success', 'Cargo Asignado Exitosamente.');
+            die();
+            
+        }else{
+            $formAction = "form_fee_structure_assign";
+            $user = true;
+            $view = $this
                 ->view()
                 ->setTemplate($this->config->getTemplate('_form.html'))
                 ->setTemplateVar($this->config->getPluralResourceName())        
-                ->setData(array(            
+                ->setData(array(  
+                    'formAction'   => $formAction,
+                    'user' => $user,
                     'form' => $form->createView(),
                 ))
-        ;
-        $view->getSerializationContext()->setGroups(array('id', 'api_list'));
-        return $view;
+            ;
+            $view->getSerializationContext()->setGroups(array('id', 'api_list'));
+            return $view;
+        }
     }
 
     /**
@@ -83,18 +116,57 @@ class FeeStructureController extends SEIPController {
      */
     public function removeAction(Request $request) {
         
-        $feeStructure = new MovementFeeStructure();
-        $form = $this->createForm(new MovementFeeStructureType(), $feeStructure);
-        $view = $this
-                ->view()
-                ->setTemplate($this->config->getTemplate('_form.html'))
-                ->setTemplateVar($this->config->getPluralResourceName())        
-                ->setData(array(            
-                    'form' => $form->createView(),
-                ))
-        ;
-        $view->getSerializationContext()->setGroups(array('id', 'api_list'));
-        return $view;
+        $period = $this->getPeriodService()->getPeriodActive(true);
+
+        $movementFeeStructure = new MovementFeeStructure();
+        $form = $this->createForm(new MovementFeeStructureOutType(), $movementFeeStructure);
+        
+        if (isset($request->get('fee_structure_add')["_token"])) {
+            $em = $this->getDoctrine()->getManager();            
+            $structure = $this->get('pequiven_seip.repository.feestructure')->find($request->get('id'));
+
+            $form->bind($this->getRequest());
+            $movementFeeStructure = $form->getData();            
+            
+            $movementFeeStructure->setPeriod($period);
+            $movementFeeStructure->setType('O');
+            $movementFeeStructure->setCreatedBy($this->getUser());
+            $movementFeeStructure->setFeestructure($structure);            
+
+            //Asignación de Usuario
+            $UserAssigned = NULL;
+            $structure->setUser($UserAssigned);//Actualización de Cargo
+
+            $em->persist($movementFeeStructure);
+            $em->flush();
+            
+            $this->get('session')->getFlashBag()->add('success', 'Cargo Removido Exitosamente.');
+            die();
+
+        }else{
+            $formAction = "form_fee_structure_remove";
+            $user = false;
+            $view = $this
+                    ->view()
+                    ->setTemplate($this->config->getTemplate('_form.html'))
+                    ->setTemplateVar($this->config->getPluralResourceName())        
+                    ->setData(array( 
+                        'formAction' => $formAction,
+                        'user' => $user,
+                        'form' => $form->createView(),
+                    ))
+            ;
+            $view->getSerializationContext()->setGroups(array('id', 'api_list'));
+            return $view;
+        }
+    }
+
+    /**
+     *  Period
+     *
+     */
+    protected function getPeriodService() {
+        return $this->container->get('pequiven_seip.service.period');
     }
 
 }

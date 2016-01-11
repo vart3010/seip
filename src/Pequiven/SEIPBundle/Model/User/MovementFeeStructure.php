@@ -1,6 +1,6 @@
 <?php
 
-namespace Pequiven\SEIPBundle\Model;
+namespace Pequiven\SEIPBundle\Model\User;
 
 abstract class MovementFeeStructure {
 
