@@ -1,0 +1,67 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}
+
+{#{% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}#}
+{% trans_default_domain 'sip' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{  asset('bundles/pequivenseip/basic-primitives/demo/js/jquery/ui-lightness/jquery-ui-1.10.2.custom.css') }}" />
+    <link href="{{  asset('bundles/pequivenseip/basic-primitives/demo/css/primitives.latest.css') }}" media="screen" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript">
+        $(document).ready(function ()
+        {
+            charge();
+            function charge() {
+                $('.select2').select2({
+                    allowClear: true
+                });
+            }
+        });
+    </script>
+{% endblock %}
+
+{% block before_body %}
+    {{ contentHeader("Gestión de Cargos")   }}
+{% endblock %}
+{% block body %}
+
+    <form method="POST" action="{{ path("pequiven_sip_report_SegVoto") }}">
+        <details class="details margin-bottom" open="">
+            <summary role="button" aria-expanded="true">
+                <b>Filtros</b>
+            </summary>
+            <div class="with-padding">
+                <div class="columns">                                        
+                    <!-- Filtro Gerencia 2da Línea -->
+                    <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                        <label class="bold">Gerencia de 2da Línea</label><br>
+                        <select class="select2 input-xlarge">
+                            {% for gerencia2 in gerencias2 %}
+                                <option value="{{gerencia2.id}}">{{gerencia2.description}}</option>                                           
+                            {% endfor %}
+                        </select> 
+                    </div>
+                </div>
+            </div>
+        </details>
+    </form>      
+    <fieldset class="fieldset">
+        <legend class="legend"><b>Estructura Organizativa Actual</b></legend>
+        <table width="100%">
+            <tr>
+                <td>
+                    hola
+                </td>
+                <td>
+                    que haces
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+
+{% endblock %} 
