@@ -2641,11 +2641,12 @@ class ReportTemplateController extends SEIPController {
             $dataMateriaPrima = array(
                 "row" => $rowCont,
                 "title" => "Consumo Materia Prima",
-                "col" => array("B", "C", "D", "E"),
-                "campos" => array("Producto", "DIA", "MES", "AÑO"),
+                "col" => array("B", "C", "D", "E", "F", "G", "H"),
+                "campos" => array("Producto", "PPTO-DIA", "REAL-DIA", "PPTO-MES", "REAL-MES", "PPTO-AÑO", "REAL-AÑO"),
                 "color" => "ffaa15"
             );
-
+//            var_dump($matPrima);
+//            die();
             $this->setFormatTitle($dataMateriaPrima, $activeSheet, $rowCont);
             $rowCont = $this->setTitlesRows($activeSheet, $dataMateriaPrima, $rowCont);
 //$activeSheet->setCellValue("B".$rowCont,"holas");
@@ -2675,8 +2676,8 @@ class ReportTemplateController extends SEIPController {
             $dataConsumo = array(
                 "row" => $rowCont + 1,
                 "title" => "Servicios",
-                "col" => array("B", "C", "D", "E"),
-                "campos" => array("Producto", "DIA", "MES", "AÑO"),
+                "col" => array("B", "C", "D", "E", "F", "G", "H"),
+                "campos" => array("Producto", "PPTO-DIA", "REAL-DIA", "PPTO-MES", "REAL-MES", "PPTO-AÑO", "REAL-AÑO"),
                 "color" => "98bfbf"
             );
 
@@ -3032,19 +3033,27 @@ class ReportTemplateController extends SEIPController {
         $totalDay = array();
         $totalMonth = array();
         $totalYear = array();
+        $totalDayPlan = array();
+        $totalMonthPlan = array();
+        $totalYearPlan = array();
 
         foreach ($rawMaterial as $rs) {
 
             $productos[] = $rs->getProduct()->getName() . " (" . $rs->getProduct()->getProductUnit() . ")";
 //$productos[] = $rs->$name;
+            //REAL
             array_push($totalDay, $rs->getSummary($dateReport)["total_day"]);
             array_push($totalMonth, $rs->getSummary($dateReport)["total_month"]);
             array_push($totalYear, $rs->getSummary($dateReport)["total_year"]);
+            //PLAN
+            array_push($totalDayPlan, $rs->getSummary($dateReport)["total_day_plan"]);
+            array_push($totalMonthPlan, $rs->getSummary($dateReport)["total_month_plan"]);
+            array_push($totalYearPlan, $rs->getSummary($dateReport)["total_year_plan"]);
             $idsPlanta[] = $rs->getProductReport()->getPlantReport()->getPlant()->getId();
 //var_dump($rawMaterialConsumption->getSummary($dateReport));
         }
 
-        return $this->getArrayTable($rawMaterial, $dateReport, $productos, $idsPlanta, $totalDay, $totalMonth, $totalYear);
+        return $this->getArrayTable($rawMaterial, $dateReport, $productos, $idsPlanta, $totalDay, $totalMonth, $totalYear, $totalDayPlan, $totalMonthPlan, $totalYearPlan);
     }
 
     public function getDataConsumerPlanning($consumerPlanning, $dateReport) {
@@ -3053,21 +3062,30 @@ class ReportTemplateController extends SEIPController {
         $totalDay = array();
         $totalMonth = array();
         $totalYear = array();
+        
+        $totalDayPlan = array();
+        $totalMonthPlan = array();
+        $totalYearPlan = array();
 
         foreach ($consumerPlanning as $rs) {
             $productos[] = $rs->getService()->getName() . " (" . $rs->getService()->getServiceUnit() . ")";
 //$productos[] = $rs->$name;
             $plant[] = $rs->getPlantReport()->getPlant()->getId();
+            //REAL
             array_push($totalDay, $rs->getSummary($dateReport)["total_day"]);
             array_push($totalMonth, $rs->getSummary($dateReport)["total_month"]);
             array_push($totalYear, $rs->getSummary($dateReport)["total_year"]);
+            //PLAN
+            array_push($totalDayPlan, $rs->getSummary($dateReport)["total_day_plan"]);
+            array_push($totalMonthPlan, $rs->getSummary($dateReport)["total_month_plan"]);
+            array_push($totalYearPlan, $rs->getSummary($dateReport)["total_year_plan"]);
 //var_dump($rawMaterialConsumption->getSummary($dateReport));
             $idsPlanta[] = $rs->getPlantReport()->getPlant()->getId();
         }
 
 
 
-        return $this->getArrayTable($consumerPlanning, $dateReport, $productos, $idsPlanta, $totalDay, $totalMonth, $totalYear);
+        return $this->getArrayTable($consumerPlanning, $dateReport, $productos, $idsPlanta, $totalDay, $totalMonth, $totalYear,$totalDayPlan,$totalMonthPlan,$totalYearPlan);
     }
 
     public function getDataUnrealizedProduction($productsReport, $dateReport) {
@@ -3081,7 +3099,6 @@ class ReportTemplateController extends SEIPController {
             $productos[] = $rs->getProduct()->getName() . " (" . $rs->getProduct()->getProductUnit() . ")";
             //$productos[] = $rs->getProduct()->getName() . " (" . $rs->getProduct()->getProductUnit() . ")";
             //$productos[] = $rs->$name;
-
             array_push($totalDay, $rs->getSummaryUnrealizedProductions($dateReport)["total_day"]);
             array_push($totalMonth, $rs->getSummaryUnrealizedProductions($dateReport)["total_month"]);
             array_push($totalYear, $rs->getSummaryUnrealizedProductions($dateReport)["total_year"]);
@@ -3116,28 +3133,49 @@ class ReportTemplateController extends SEIPController {
      * @param type $arrayData
      * @return array
      */
-    public function getArrayTable($arrayData, $dateReport, $productos, $idsPlanta, $totalDay, $totalMonth, $totalYear) {
+    public function getArrayTable($arrayData, $dateReport, $productos, $idsPlanta, $totalDay, $totalMonth, $totalYear, $totalDayPlan = array(), $totalMonthPlan = array(), $totalYearPlan = array()) {
 
         $consumos = array();
-
+        //REAL
         $day = array();
         $month = array();
         $year = array();
+        //PLAN
+        $dayPlan = array();
+        $monthPlan = array();
+        $yearPlan = array();
 
 
+        //AL SER LAS PLANTAS DE METOR Y SUPERMETANOL NO AGRUPA PRODUCTOS
         if (in_array("62", $idsPlanta) || in_array("63", $idsPlanta)) {
             $cont = 0;
             foreach ($productos as $prod) {
                 $day[] = $totalDay[$cont];
                 $month[] = $totalMonth[$cont];
+                if (count($totalDayPlan) > 0) {
+                    $dayPlan[] = $totalDayPlan[$cont];
+                    $monthPlan[] = $totalMonthPlan[$cont];
+                }
                 if (count($totalYear) > 0) {
                     $year[] = $totalYear[$cont];
+                    if (count($totalDayPlan) > 0) {
+                        $yearPlan[] = $totalYearPlan[$cont];
+                    }
                 }
                 $cont++;
             }
             $consumos[] = $productos;
+            if (count($totalDayPlan) > 0) {
+                $consumos[] = $dayPlan;
+            }
             $consumos[] = $day;
+            if (count($totalDayPlan) > 0) {
+                $consumos[] = $monthPlan;
+            }
             $consumos[] = $month;
+            if (count($totalDayPlan) > 0) {
+                $consumos[] = $yearPlan;
+            }
             $consumos[] = $year;
         } else {
 
@@ -3146,30 +3184,63 @@ class ReportTemplateController extends SEIPController {
                 $tDay = 0;
                 $tMonth = 0;
                 $tYear = 0;
+                $tDayPlan = 0;
+                $tMonthPlan = 0;
+                $tYearPlan = 0;
                 if ($rep > 0) {
                     foreach ($rep as $r) {
                         $tDay = $tDay + $totalDay[$r];
                         $tMonth = $tMonth + $totalMonth[$r];
+                        if (count($totalDayPlan) > 0) {
+                            $tDayPlan = $tDayPlan + $totalDayPlan[$r];
+                            $tMonthPlan = $tMonthPlan + $totalMonthPlan[$r];
+                        }
                         if (count($totalYear) > 0) {
                             $tYear = $tYear + $totalYear[$r];
+                            if (count($totalDayPlan) > 0) {
+                                $tYearPlan = $tYearPlan + $totalYearPlan[$r];
+                            }
                         }
                     }
                     $day[] = $tDay;
                     $month[] = $tMonth;
+                    if (count($totalDayPlan) > 0) {
+                        $dayPlan[] = $tDayPlan;
+                        $monthPlan[] = $tMonthPlan;
+                    }
                     if (count($totalYear) > 0) {
                         $year[] = $tYear;
+                        if (count($totalDayPlan) > 0) {
+                            $yearPlan[] = $tYearPlan;
+                        }
                     }
                 } else {
                     $day[] = $totalDay[$r];
                     $month[] = $totalMonth[$r];
+                    if (count($totalDayPlan) > 0) {
+                        $dayPlan[] = $totalDayPlan[$r];
+                        $monthPlan[] = $totalMonthPlan[$r];
+                    }
                     if (count($totalYear) > 0) {
                         $year[] = $totalYear[$r];
+                        if (count($totalDayPlan) > 0) {
+                            $yearPlan[] = $totalYearPlan[$r];
+                        }
                     }
                 }
             }
             $consumos[] = array_unique($productos);
+            if (count($totalDayPlan) > 0) {
+                $consumos[] = $dayPlan;
+            }
             $consumos[] = $day;
+            if (count($totalDayPlan) > 0) {
+                $consumos[] = $monthPlan;
+            }
             $consumos[] = $month;
+            if (count($totalDayPlan) > 0) {
+                $consumos[] = $yearPlan;
+            }
             $consumos[] = $year;
         }
 //        

@@ -32,31 +32,26 @@
             {% if (i is divisible by(2))%}adviserPlacementType: primitives.common.AdviserPlacementType.Left{% else %}adviserPlacementType: primitives.common.AdviserPlacementType.Right{% endif %}{% set i = i+1 %},{% endif %}
                                         image: "{{  asset('bundles/pequivenseip/basic-primitives/demo/images/photos/user.png') }}",
                                         itemTitleColor: "#FE2E2E",
-                                }),{% endfor %}
+                                }),                
+        {% endfor %}
                         ];                        
-                        var buttons = [];
-                        buttons.push(new primitives.orgdiagram.ButtonConfig("delete", "ui-icon-close", "Retirar"));
-                        buttons.push(new primitives.orgdiagram.ButtonConfig("add", "ui-icon-person", "Asignar"));
+                        var buttons = [];                        
+                        buttons.push(new primitives.orgdiagram.ButtonConfig("add", "ui-icon-person", "Asignar"));                        
+                        buttons.push(new primitives.orgdiagram.ButtonConfig("delete", "ui-icon-close", "Retirar"));                                                
                         options.items = items;
                         options.cursorItem = 0;
                         options.buttons = buttons;
                         options.hasButtons = primitives.common.Enabled.True;
                         options.hasSelectorCheckbox = primitives.common.Enabled.False;
-                        options.onButtonClick = function (e, data) {
-                            if (data.name == "add") {
-                                //var message = "User clicked '" + data.context.id + "' button for item '" + data.context.title + "'.";
-                                //alert(message);                          
-                                //document.getElementById("add").value = data.context.id;
-                                //var msj = document.getElementById("add").value;
-                                //alert(msj);
+                        options.onButtonClick = function (e, data) {                            
+                            if (data.name == "add") {                                
                                 document.getElementById("value").value = data.context.id;
                                 var button = document.getElementById("add");
                                 button.click();
                             }else if(data.name == "delete"){
                                 document.getElementById("value").value = data.context.id;                                
                                 var button = document.getElementById("delete");
-                                button.click();  
-                                //alert("Intenta Eliminar el Cargo");
+                                button.click();                                  
                             };                        
                         };
                         options.hasSelectorCheckbox = primitives.common.Enabled.False;
@@ -86,7 +81,7 @@
                         "height": bodyHeight + "px"
                 });
                 }                
-            </script>
+    </script>
 
     <script type="text/javascript">        
         $(document).ready(function()
@@ -106,7 +101,7 @@
 {% endblock %}
 {% block body %}
 <div ng-controller="FeeStructureController">                    
-    <input id='add' type='button' value='Añadir Cargo' ng-click='addCargo()'/>
+    <input id='add' type='hidden' value='Añadir Cargo' ng-click='addCargo()'/>
     <input id='delete' type='hidden' value='Eliminar Cargo' ng-click='removeCargo()'/>
     <input id='value' type='hidden' value=''/>
 
