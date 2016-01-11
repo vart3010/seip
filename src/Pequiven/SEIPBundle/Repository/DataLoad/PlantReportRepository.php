@@ -78,6 +78,8 @@ class PlantReportRepository extends SeipEntityRepository
                 ;
         }
         
+        $this->applyPeriodCriteria($queryBuilder);
+        
         return $queryBuilder;
     }
     
