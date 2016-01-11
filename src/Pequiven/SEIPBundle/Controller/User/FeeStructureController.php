@@ -8,7 +8,8 @@ use Pequiven\SEIPBundle\Entity\User;
 use Pequiven\SEIPBundle\Entity\User\FeeStructure;
 use Pequiven\SEIPBundle\Entity\User\MovementFeeStructure;
 use Pequiven\MasterBundle\Model\Gerencia;
-use Pequiven\SEIPBundle\Form\User\MovementFeeStructureType;
+use Pequiven\SEIPBundle\Form\User\MovementFeeStructureInType;
+use Pequiven\SEIPBundle\Form\User\MovementFeeStructureOutType;
 
 /**
  * GESTION EN LA ESTRUCTURA DE CARGOS SEIP
@@ -66,7 +67,7 @@ class FeeStructureController extends SEIPController {
         $period = $this->getPeriodService()->getPeriodActive(true);
         
         $movementFeeStructure = new MovementFeeStructure();
-        $form = $this->createForm(new MovementFeeStructureType(), $movementFeeStructure);
+        $form = $this->createForm(new MovementFeeStructureInType(), $movementFeeStructure);
 
         if (isset($request->get('fee_structure_add')["_token"])) {
             $em = $this->getDoctrine()->getManager();            
@@ -76,7 +77,7 @@ class FeeStructureController extends SEIPController {
             $movementFeeStructure = $form->getData();            
             
             $movementFeeStructure->setPeriod($period);
-            $movementFeeStructure->setType(1);
+            $movementFeeStructure->setType('I');
             $movementFeeStructure->setCreatedBy($this->getUser());
             $movementFeeStructure->setFeestructure($structure);
             
@@ -91,11 +92,13 @@ class FeeStructureController extends SEIPController {
             die();
             
         }else{
+            $user = true;
             $view = $this
                 ->view()
                 ->setTemplate($this->config->getTemplate('_form.html'))
                 ->setTemplateVar($this->config->getPluralResourceName())        
-                ->setData(array(            
+                ->setData(array(     
+                    'user' => $user,
                     'form' => $form->createView(),
                 ))
             ;
@@ -111,12 +114,15 @@ class FeeStructureController extends SEIPController {
     public function removeAction(Request $request) {
         
         $feeStructure = new MovementFeeStructure();
-        $form = $this->createForm(new MovementFeeStructureType(), $feeStructure);
+        $form = $this->createForm(new MovementFeeStructureOutType(), $feeStructure);
+        
+        $user = false;
         $view = $this
                 ->view()
                 ->setTemplate($this->config->getTemplate('_form.html'))
                 ->setTemplateVar($this->config->getPluralResourceName())        
-                ->setData(array(            
+                ->setData(array( 
+                    'user' => $user,
                     'form' => $form->createView(),
                 ))
         ;

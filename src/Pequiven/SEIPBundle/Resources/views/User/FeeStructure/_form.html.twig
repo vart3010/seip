@@ -9,10 +9,12 @@
                     {{ form_label(form.date) }}
                     {{ form_widget(form.date) }}
                 </div> 
+                {% if user == true %}
                 <div class="field-block button-height" >                    
                     {{ form_label(form.User) }}
                     {{ form_widget(form.User) }}
                 </div>  
+                {% endif %}
                 <div class="field-block button-height" >                    
                     {{ form_label(form.cause) }}
                     {{ form_widget(form.cause) }}
