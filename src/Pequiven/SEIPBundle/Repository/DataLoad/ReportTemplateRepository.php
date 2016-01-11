@@ -122,6 +122,8 @@ class ReportTemplateRepository extends SeipEntityRepository
                 ;
        }
        
+       $this->applyPeriodCriteria($queryBuilder);
+       
        return $queryBuilder;
     }
     
