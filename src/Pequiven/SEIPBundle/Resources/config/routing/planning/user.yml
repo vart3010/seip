@@ -32,7 +32,7 @@ pequiven_user_feestructure_remove:
         _format: html
     requirements:
         _format: html|json
-    methods: [GET]
+    methods: [GET|POST]
     options:
         expose: true        
 #Devuelve el paginador con la data de los usuarios

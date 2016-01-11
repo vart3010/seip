@@ -1,7 +1,7 @@
 {% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutModalBase.html.twig' %}
 
 {% block body %}   
-    <form method="POST" id="form_fee_structure_assign">
+    <form method="POST" id="{{ formAction }}">
         <fieldset class="fieldset fields-list">
             <legend class="legend">Asignación Cargo</legend>
             {{ form_errors(form) }} 
