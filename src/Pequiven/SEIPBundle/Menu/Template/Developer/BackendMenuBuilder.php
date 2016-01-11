@@ -525,6 +525,11 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                             'route' => 'pequiven_user_feestructure',
                         ))
                         ->setLabel($this->translate(sprintf('app.backend.menu.%s.users.feeStructure', $section)));
+                
+                $subchild->addChild('planning.visualize.users.loadfeestructure', array(
+                            'route' => 'pequiven_user_loadfeestructure',
+                        ))
+                        ->setLabel($this->translate(sprintf('app.backend.menu.%s.users.loadfeeStructure', $section)));
 
                 $visualize->addChild($subchild);
             }

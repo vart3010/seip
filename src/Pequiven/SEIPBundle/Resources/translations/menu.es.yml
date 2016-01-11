@@ -116,7 +116,8 @@ app:
                         main: Usuarios SEIP
                         real: Lista
                         aux: Auxiliares
-                        feeStructure: Estructura de Cargos
+                        feeStructure: Asignación de Cargos
+                        loadfeeStructure: Cargar Estructura de Cargos
                     objetives:
                         main: Objetivos
                         visualize:
