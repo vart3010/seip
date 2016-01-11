@@ -2642,7 +2642,7 @@ class ReportTemplateController extends SEIPController {
                 "row" => $rowCont,
                 "title" => "Consumo Materia Prima",
                 "col" => array("B", "C", "D", "E", "F", "G", "H"),
-                "campos" => array("Producto", "PPTO-DIA", "DIA", "PPTO-MES", "MES", "PPTO-AÑO", "AÑO"),
+                "campos" => array("Producto", "PPTO-DIA", "REAL-DIA", "PPTO-MES", "REAL-MES", "PPTO-AÑO", "REAL-AÑO"),
                 "color" => "ffaa15"
             );
 //            var_dump($matPrima);
@@ -2676,8 +2676,8 @@ class ReportTemplateController extends SEIPController {
             $dataConsumo = array(
                 "row" => $rowCont + 1,
                 "title" => "Servicios",
-                "col" => array("B", "C", "D", "E"),
-                "campos" => array("Producto", "DIA", "MES", "AÑO"),
+                "col" => array("B", "C", "D", "E", "F", "G", "H"),
+                "campos" => array("Producto", "PPTO-DIA", "REAL-DIA", "PPTO-MES", "REAL-MES", "PPTO-AÑO", "REAL-AÑO"),
                 "color" => "98bfbf"
             );
 
@@ -3062,21 +3062,30 @@ class ReportTemplateController extends SEIPController {
         $totalDay = array();
         $totalMonth = array();
         $totalYear = array();
+        
+        $totalDayPlan = array();
+        $totalMonthPlan = array();
+        $totalYearPlan = array();
 
         foreach ($consumerPlanning as $rs) {
             $productos[] = $rs->getService()->getName() . " (" . $rs->getService()->getServiceUnit() . ")";
 //$productos[] = $rs->$name;
             $plant[] = $rs->getPlantReport()->getPlant()->getId();
+            //REAL
             array_push($totalDay, $rs->getSummary($dateReport)["total_day"]);
             array_push($totalMonth, $rs->getSummary($dateReport)["total_month"]);
             array_push($totalYear, $rs->getSummary($dateReport)["total_year"]);
+            //PLAN
+            array_push($totalDayPlan, $rs->getSummary($dateReport)["total_day_plan"]);
+            array_push($totalMonthPlan, $rs->getSummary($dateReport)["total_month_plan"]);
+            array_push($totalYearPlan, $rs->getSummary($dateReport)["total_year_plan"]);
 //var_dump($rawMaterialConsumption->getSummary($dateReport));
             $idsPlanta[] = $rs->getPlantReport()->getPlant()->getId();
         }
 
 
 
-        return $this->getArrayTable($consumerPlanning, $dateReport, $productos, $idsPlanta, $totalDay, $totalMonth, $totalYear);
+        return $this->getArrayTable($consumerPlanning, $dateReport, $productos, $idsPlanta, $totalDay, $totalMonth, $totalYear,$totalDayPlan,$totalMonthPlan,$totalYearPlan);
     }
 
     public function getDataUnrealizedProduction($productsReport, $dateReport) {
