@@ -235,6 +235,11 @@
                 }).on("change", function () {
                 });
         {% endif %}
+            
+                var startDate = '{{ startDatePeriod }}';
+                var endDate = '{{ endDatePeriod }}';
+                jQuery("#form_dateReport").datepicker( "option", "minDate", startDate );
+                jQuery("#form_dateReport").datepicker( "option", "maxDate", endDate );
 
                 $("#form_dateFrom").datepicker({
                     defaultDate: "+1w",
