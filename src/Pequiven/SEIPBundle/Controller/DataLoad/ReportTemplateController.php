@@ -152,7 +152,7 @@ class ReportTemplateController extends SEIPController {
     }
 
     /**
-     * Notificar produccion
+     * Notificar producción
      * @param Request $request
      * @return type
      * @throws type
@@ -280,7 +280,7 @@ class ReportTemplateController extends SEIPController {
         $fecha = date('d/m/Y');
 
         /**
-         * CODIGO PARA HABILITAR LA NOTIFICACION POR UN MES COMPLETO
+         * Código para habilitar la notificación por 1 mes completo.
          */
         $monthActive = "";
 
@@ -313,9 +313,8 @@ class ReportTemplateController extends SEIPController {
     }
 
     /**
-     * CODIGO QUE VALIDA LOS DIAS PARA NOTIFICAR LA PRODUCCION
-     * SI TIENE EL ROL "ROLE_SEIP_OPERATION_LOAD_FIVE_DAYS"
-     * DEJA CARGAR 5 DIAS ANTES DEL DIA ACTUAL
+     * Código que válida los días para notificar la producción,
+     * si tiene el rol "ROLE_SEIP_OPERATION_LOAD_FIVE_DAYS" deja cargar 5 días antes del día actual
      */
     function getTransfDate($fecha, $dia) {
         list($day, $mon, $year) = explode('/', $fecha);
@@ -341,7 +340,7 @@ class ReportTemplateController extends SEIPController {
             \Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL => "TYPE_FAIL_EXTERNAL",
         );
 
-//Obtenemos las etiquetas de los tipos de falla por PRN
+        //Obtenemos las etiquetas de los tipos de falla por PRN
         $labelsTypesFailsPNR = \Pequiven\SEIPBundle\Entity\CEI\Fail::getTypeFailsLabels();
 
         //Seteamos el total por tipo de causa de PNR
@@ -376,14 +375,14 @@ class ReportTemplateController extends SEIPController {
         //Obtenemos el producto
         $product = $em->getRepository("Pequiven\SEIPBundle\Entity\CEI\Product")->find($request->get("idProduct"));
 
-//Obtenemos el Reporte del Producto
+            //Obtenemos el Reporte del Producto
         $productReportId = $request->get('idProductReport');
         $productReport = $this->container->get('pequiven.repository.product_report')->find($productReportId);
 
         //Obtenemos las producciones no realizadas, asociadas al Reporte del Producto
         $unrealizedProductions = $productReport->getUnrealizedProductions();
 
-//Obtenemos las categorías de las causas de PNR por fallas por tipo Interna y Externa
+        //Obtenemos las categorías de las causas de PNR por fallas por tipo Interna y Externa
         $failsInternal = $causeFailService->getFails(\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL);
         $failsExternal = $causeFailService->getFails(\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL);
 
@@ -392,7 +391,7 @@ class ReportTemplateController extends SEIPController {
             $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL][$failInternal->getName()]['total'] = 0.0;
         }
 
-//Seteamos en el arreglo, la sección Causas Externas
+        //Seteamos en el arreglo, la sección Causas Externas
         foreach ($failsExternal as $failExternal) {
             $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL][$failExternal->getName()]['total'] = 0.0;
         }
@@ -427,7 +426,7 @@ class ReportTemplateController extends SEIPController {
         $externalRawMaterials = $rawMaterials[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL_MP];
         $internalRawMaterials = $rawMaterials[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL_MP];
 
-//Seteamos en el arreglo la sección Causas Internas MP
+        //Seteamos en el arreglo la sección Causas Internas MP
         if (count($internalRawMaterials) > 0) {
             foreach ($internalRawMaterials as $internalRawMaterial) {
                 $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL_MP][$internalRawMaterial->getName()]['total'] = 0.0;
@@ -436,7 +435,7 @@ class ReportTemplateController extends SEIPController {
             $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL_MP]['empty']['total'] = 0.0;
         }
 
-//Seteamos en el arreglo la sección Causas Externa MP
+        //Seteamos en el arreglo la sección Causas Externa MP
         if (count($externalRawMaterials) > 0) {
             foreach ($externalRawMaterials as $externalRawMaterial) {
                 $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL_MP][$externalRawMaterial->getName()]['total'] = 0.0;
@@ -449,7 +448,7 @@ class ReportTemplateController extends SEIPController {
         foreach ($unrealizedProductions as $unrealizedProduction) {
             $monthUnrealizedProduction = $unrealizedProduction->getMonth();
 
-//Seteamos el valor dia y mes
+            //Seteamos el valor dia y mes
             if ($monthUnrealizedProduction >= $startMonth && $monthUnrealizedProduction <= $endMonth) {
                 $daysMonth = $causeFailService->getDaysMonth($unrealizedProduction);
                 $pnrByCausesIntExt = $causeFailService->getFailsCause($unrealizedProduction);
@@ -616,12 +615,12 @@ class ReportTemplateController extends SEIPController {
             \Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL => "TYPE_FAIL_EXTERNAL",
         );
 
-//Obtenemos las etiquetas de los tipos de falla por PRN
+        //Obtenemos las etiquetas de los tipos de falla por PRN
         $labelsTypesFailsPNR = \Pequiven\SEIPBundle\Entity\CEI\Fail::getTypeFailsLabels();
 
         $result = array();
 
-//Seteamos el total por tipo de causa de PNR
+        //Seteamos el total por tipo de causa de PNR
         $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['day'] = 0.0;
         $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['month'] = 0.0;
         $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL]['total']['year'] = 0.0;
@@ -635,7 +634,7 @@ class ReportTemplateController extends SEIPController {
         $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL_MP]['total']['month'] = 0.0;
         $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL_MP]['total']['year'] = 0.0;
 
-//SECCIÓN FECHA
+        //SECCIÓN FECHA
         $dateReport = $request->get('dateReport', null);
 
         $dateNotification = null;
@@ -652,38 +651,38 @@ class ReportTemplateController extends SEIPController {
         $monthWithZero = date_format($dateReport, 'm');
         $year = date_format($dateReport, 'Y');
 
-//Obtenemos la plantilla del reporte
+        //Obtenemos la plantilla del reporte
         $reportTemplateId = $request->get('idReportTemplate');
         $reportTemplate = $this->container->get('pequiven.repository.report_template')->findOneBy(array('id' => $reportTemplateId));
 
-//Obtenemos el producto
+        //Obtenemos el producto
         $product = $em->getRepository("Pequiven\SEIPBundle\Entity\CEI\Product")->find($request->get("idProduct"));
 
-//Obtenemos el Reporte del Producto
+        //Obtenemos el Reporte del Producto
         $productReportId = $request->get('idProductReport');
         $productReport = $this->container->get('pequiven.repository.product_report')->find($productReportId);
 
-//Obtenemos las producciones no realizadas, asociadas al Reporte del Producto
+        //Obtenemos las producciones no realizadas, asociadas al Reporte del Producto
         $unrealizedProductions = $productReport->getUnrealizedProductions();
 
-//Obtenemos las categorías de las causas de PNR por fallas por tipo Interna y Externa
+        //Obtenemos las categorías de las causas de PNR por fallas por tipo Interna y Externa
         $failsInternal = $causeFailService->getFails(\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL);
         $failsExternal = $causeFailService->getFails(\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL);
 
-//Seteamos en el arreglo, la sección Causas Internas
+        //Seteamos en el arreglo, la sección Causas Internas
         foreach ($failsInternal as $failInternal) {
             $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL][$failInternal->getName()]['day'] = 0.0;
             $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL][$failInternal->getName()]['month'] = 0.0;
             $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL][$failInternal->getName()]['year'] = 0.0;
         }
-//Seteamos en el arreglo, la sección Causas Externas
+        //Seteamos en el arreglo, la sección Causas Externas
         foreach ($failsExternal as $failExternal) {
             $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL][$failExternal->getName()]['day'] = 0.0;
             $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL][$failExternal->getName()]['month'] = 0.0;
             $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL][$failExternal->getName()]['year'] = 0.0;
         }
 
-//Seteamos los productos de materia prima, por los cuales existió PNR.
+        //Seteamos los productos de materia prima, por los cuales existió PNR.
         foreach ($unrealizedProductions as $unrealizedProduction) {
             if ($unrealizedProduction->getMonth() <= $month) {
                 $rawMaterialsArray = $causeFailService->getRawMaterialsByFails($unrealizedProduction);
@@ -713,7 +712,7 @@ class ReportTemplateController extends SEIPController {
         $externalRawMaterials = $rawMaterials[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL_MP];
         $internalRawMaterials = $rawMaterials[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL_MP];
 
-//Seteamos en el arreglo la sección Causas Internas MP
+        //Seteamos en el arreglo la sección Causas Internas MP
         if (count($internalRawMaterials) > 0) {
             foreach ($internalRawMaterials as $internalRawMaterial) {
                 $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL_MP][$internalRawMaterial->getName()]['day'] = 0.0;
@@ -726,7 +725,7 @@ class ReportTemplateController extends SEIPController {
             $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_INTERNAL_MP]['empty']['year'] = 0.0;
         }
 
-//Seteamos en el arreglo la sección Causas Externa MP
+        //Seteamos en el arreglo la sección Causas Externa MP
         if (count($externalRawMaterials) > 0) {
             foreach ($externalRawMaterials as $externalRawMaterial) {
                 $result[\Pequiven\SEIPBundle\Entity\CEI\Fail::TYPE_FAIL_EXTERNAL_MP][$externalRawMaterial->getName()]['day'] = 0.0;
@@ -742,11 +741,11 @@ class ReportTemplateController extends SEIPController {
 //        var_dump($internalRawMaterials);
 //        var_dump($externalRawMaterials);
 //        die();
-//Recorremos las producciones no realizadas
+        //Recorremos las producciones no realizadas
         foreach ($unrealizedProductions as $unrealizedProduction) {
             $monthUnrealizedProduction = $unrealizedProduction->getMonth();
 
-//Seteamos el valor dia y mes
+            //Seteamos el valor dia y mes
             if ($month == $unrealizedProduction->getMonth()) {
                 $pnrByCausesIntExt = $causeFailService->getFailsCause($unrealizedProduction);
                 $pnrByCausesMP = $causeFailService->getPNRByFailsCauseMp($unrealizedProduction, $rawMaterials);
@@ -789,7 +788,7 @@ class ReportTemplateController extends SEIPController {
             }
 
 
-//Seteamos el valor año
+            //Seteamos el valor año
             if ($monthUnrealizedProduction <= $month) {
                 $pnrByCausesIntExt = $causeFailService->getFailsCause($unrealizedProduction);
                 $pnrByCausesMP = $causeFailService->getPNRByFailsCauseMp($unrealizedProduction, $rawMaterials);
@@ -867,7 +866,7 @@ class ReportTemplateController extends SEIPController {
         );
 
 
-//VERIFICA SI VIENE DE REPORTE DE PRODUCCION O SE LE DA AL BOTON PARA GENERAR REPORTE
+        //Verifica si viene de reporte de producción o se le da al botón para generar reporte.
         if ($request->get("exportExcel") == null || $request->get("exportExcel") == '0') {
             $view = $this
                     ->view()
@@ -1014,10 +1013,10 @@ class ReportTemplateController extends SEIPController {
             header('Content-Type: application/vnd.ms-excel');
             header('Content-Disposition: attachment;filename="' . $fileName . '"');
             header('Cache-Control: max-age=0');
-// If you're serving to IE 9, then the following may be needed
+            // If you're serving to IE 9, then the following may be needed
             header('Cache-Control: max-age=1');
 
-// If you're serving to IE over SSL, then the following may be needed
+            // If you're serving to IE over SSL, then the following may be needed
             header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
             header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT'); // always modified
             header('Cache-Control: cache, must-revalidate'); // HTTP/1.1
@@ -1030,7 +1029,7 @@ class ReportTemplateController extends SEIPController {
     }
 
     /**
-     * Vizualizar la planificacion
+     * Vizualizar la planificación
      * @param Request $request
      * @return type
      */
@@ -1043,6 +1042,12 @@ class ReportTemplateController extends SEIPController {
                 $plantReportId = (int) $formData['plantReport'];
             }
         }
+        
+        $periodActive = $this->getPeriodService()->getPeriodActive();
+        $yearPeriodSelected = date("Y",$periodActive->getDateStart()->getTimestamp());
+        
+        $startDatePeriod = "01/01/".$yearPeriodSelected;
+        $endDatePeriod = "31/12/".$yearPeriodSelected;
 
         $dateReport = new \DateTime(date("Y-m-d", strtotime("-1 day")));
 
@@ -1187,7 +1192,7 @@ class ReportTemplateController extends SEIPController {
                     'data' => $defaultShow,
                 ])
                 ->add('showPnr', 'checkbox', [
-                    'label_attr' => array('class' => 'label bold'),
+         //           'label_attr' => array('class' => 'label bold'),
                     'required' => false,
                     'translation_domain' => 'PequivenSEIPBundle',
                     'data' => $defaultShow,
@@ -1269,32 +1274,32 @@ class ReportTemplateController extends SEIPController {
         }
 
 
-//PRODUCTION
+        //PRODUCTION
         $arrayProduction = array();
         $totalProdPlan = 0.0;
         $totalProdReal = 0.0;
-//RAWMATERIAL
+        
+        //RAWMATERIAL
         $arrayRawMaterial = array();
         $totalRawPlan = 0.0;
         $totalRawReal = 0.0;
 
-//CONSUMO DE MATERIA PRIMA
+        //CONSUMO DE MATERIA PRIMA
         $arrayProdServices = array();
         $arrayConsumerServices = array();
 
-//PRODUCION NO REALIZADA
+        //PRODUCION NO REALIZADA
         $arrayUnrealizedProduction = array();
         $arrayNamesUnrealizedProduction = array();
 
-//invetario
+        //INVENTARIO
         $arrayInventory = array();
         $arrayNamesInventory = array();
 
-//OBSERVACIONES
+        //OBSERVACIONES
         $arrayObservation = array();
 
-
-//COMPLEJOS CONSULTADOS
+        //COMPLEJOS CONSULTADOS
         $plants = array();
 
         $exportToPdf = $request->get('exportToPdf', false);
@@ -1319,7 +1324,7 @@ class ReportTemplateController extends SEIPController {
 //$totalRawPlan = $totalRawReal = 0.0;
                     while ($i != ($dateHasta + 86400)) {
                         $timeNormal = new \DateTime(date("Y-m-d", $i));
-//RESULTADOS DE PRODUCCION
+                        //RESULTADOS DE PRODUCCION
                         $rs = $productReport->getSummaryDay($timeNormal, $typeReport);
                         $totalPlan += $rs["plan"];
                         $totalReal += $rs["real"];
@@ -1344,7 +1349,7 @@ class ReportTemplateController extends SEIPController {
                             $rs["pnr"] = 0.0;
                         }
 
-//VERIFICA SI VA A EXPORTAR Y OBVIA LAS OBSERVACIONES VACIAS
+                        //Verifica si va a exportar y obvia las observaciones vacías.
                         if ($exportToPdf) {
                             if ($rs["observation"] != "") {
                                 $arrayObservation[] = array("day" => $timeNormal, "productName" => $productReport->getProduct()->getName() . " (" . $productReport->getPlantReport()->getPlant()->getName() . ")", "observation" => $rs["observation"]);
@@ -1358,13 +1363,13 @@ class ReportTemplateController extends SEIPController {
 
                         $i = $i + 86400; //VOY RECORRIENDO DIA POR DIA
                     }
-//PRODUCTION 
+                    //PRODUCTION 
                     $rs["productName"] = $productReport->getProduct()->getName() . " (" . $productReport->getProduct()->getProductUnit()->getUnit() . ")";
 
                     $arrayProduction[] = $rs;
 
-//CONSUMO DE MATERIA PRIMA
-//VERIFICA SI EL PRODUCTO ES MATERIA PRIMA
+                    //CONSUMO DE MATERIA PRIMA
+                    //VERIFICA SI EL PRODUCTO ES MATERIA PRIMA
                     $i = $dateDesde;
 //if ($productReport->getProduct()->getIsRawMaterial()) {
 //                    var_dump($i);
@@ -1405,7 +1410,7 @@ class ReportTemplateController extends SEIPController {
 //}
                 }
 //                die();
-//CONSUMO DE SERVICIOS
+                //CONSUMO DE SERVICIOS
                 foreach ($planReport->getConsumerPlanningServices() as $consumerPlanningService) {
                     $i = $dateDesde;
                     $serviceName = $consumerPlanningService->getService()->getName() . " (" . $consumerPlanningService->getService()->getServiceUnit() . ")";
@@ -1427,7 +1432,7 @@ class ReportTemplateController extends SEIPController {
                     }
                 }
 
-//PRODUCION NO REALIZADA
+                //PRODUCION NO REALIZADA
                 $i = $dateDesde;
 
                 foreach ($planReport->getProductsReport() as $productReport) {
@@ -1533,7 +1538,9 @@ class ReportTemplateController extends SEIPController {
                 "graphicRange" => $graphicProducctionRange,
                 "securityService" => $this->getSecurityService(),
                 "plant" => $plant,
-                "tools" => $tools
+                "tools" => $tools,
+                "startDatePeriod" => $startDatePeriod,
+                "endDatePeriod" => $endDatePeriod
             );
 
             $view = $this
@@ -1984,7 +1991,9 @@ class ReportTemplateController extends SEIPController {
                 "graphicsYear" => $graphicsYear,
                 "securityService" => $this->getSecurityService(),
                 "plant" => $plant,
-                "tools" => $tools
+                "tools" => $tools,
+                "startDatePeriod" => $startDatePeriod,
+                "endDatePeriod" => $endDatePeriod
             );
 
             $view = $this
