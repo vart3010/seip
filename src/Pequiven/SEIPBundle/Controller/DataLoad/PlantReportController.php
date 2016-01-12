@@ -260,7 +260,7 @@ class PlantReportController extends SEIPController {
                 "hours" => $totalHours[$i]
             );
         }
-
+        //var_dump($plantReport);die();
         $data = array(
             "plant_report" => $plantReport,
             "childs" => $childs,
