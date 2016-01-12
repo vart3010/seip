@@ -16,7 +16,7 @@ pequiven_user_feestructure:
         _controller: pequiven_seip.controller.feestructure:showAction
     methods: [GET|POST]
 pequiven_user_feestructure_add:
-    path: /{id}/get-form.{_format}
+    path: /{id}/add-form.{_format}
     defaults:
         _controller: pequiven_seip.controller.feestructure:assignAction
         _format: html

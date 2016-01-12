@@ -69,10 +69,10 @@ class FeeStructureController extends SEIPController {
         $movementFeeStructure = new MovementFeeStructure();
         $form = $this->createForm(new MovementFeeStructureInType(), $movementFeeStructure);
 
+        $structure = $this->get('pequiven_seip.repository.feestructure')->find($request->get('id'));
+
         if (isset($request->get('fee_structure_add')["_token"])) {
             $em = $this->getDoctrine()->getManager();            
-            $structure = $this->get('pequiven_seip.repository.feestructure')->find($request->get('id'));
-
             $form->bind($this->getRequest());
             $movementFeeStructure = $form->getData();            
             
@@ -81,10 +81,17 @@ class FeeStructureController extends SEIPController {
             $movementFeeStructure->setCreatedBy($this->getUser());
             $movementFeeStructure->setFeestructure($structure);
             
+            if ($request->get('fee_structure_add_encargado')) {
+                $encargado = 1;    
+            }else{
+                $encargado = 0;
+            }            
+            
             //Asignación de Usuario
             $UserAssigned = $request->get('fee_structure_add')["User"];
             $UserAssigned = $this->get('pequiven.repository.user')->find($UserAssigned);            
             $structure->setUser($UserAssigned);//Actualización de Cargo
+            $structure->setEncargado($encargado);//Actualización de Cargo
 
             $em->persist($movementFeeStructure);
             $em->flush();
@@ -92,17 +99,21 @@ class FeeStructureController extends SEIPController {
             $this->get('session')->getFlashBag()->add('success', 'Cargo Asignado Exitosamente.');
             die();
             
+        }elseif($structure->getUser() != null){
+            echo "El Cargo ya esta Asignado!";
+            die();
         }else{
             $formAction = "form_fee_structure_assign";
-            $user = true;
+            $check = $user = true;             
             $view = $this
                 ->view()
                 ->setTemplate($this->config->getTemplate('_form.html'))
                 ->setTemplateVar($this->config->getPluralResourceName())        
                 ->setData(array(  
-                    'formAction'   => $formAction,
-                    'user' => $user,
-                    'form' => $form->createView(),
+                    'formAction'    => $formAction,
+                    'user'          => $user,
+                    'check'         => $check,
+                    'form'          => $form->createView(),
                 ))
             ;
             $view->getSerializationContext()->setGroups(array('id', 'api_list'));
@@ -121,9 +132,10 @@ class FeeStructureController extends SEIPController {
         $movementFeeStructure = new MovementFeeStructure();
         $form = $this->createForm(new MovementFeeStructureOutType(), $movementFeeStructure);
         
+        $structure = $this->get('pequiven_seip.repository.feestructure')->find($request->get('id'));
+        
         if (isset($request->get('fee_structure_add')["_token"])) {
             $em = $this->getDoctrine()->getManager();            
-            $structure = $this->get('pequiven_seip.repository.feestructure')->find($request->get('id'));
 
             $form->bind($this->getRequest());
             $movementFeeStructure = $form->getData();            
@@ -136,6 +148,7 @@ class FeeStructureController extends SEIPController {
             //Asignación de Usuario
             $UserAssigned = NULL;
             $structure->setUser($UserAssigned);//Actualización de Cargo
+            $structure->setEncargado($UserAssigned);//
 
             $em->persist($movementFeeStructure);
             $em->flush();
@@ -143,17 +156,21 @@ class FeeStructureController extends SEIPController {
             $this->get('session')->getFlashBag()->add('success', 'Cargo Removido Exitosamente.');
             die();
 
+        }elseif($structure->getUser() === null){
+            echo "El Cargo no esta Asignado!";
+            die();
         }else{
             $formAction = "form_fee_structure_remove";
-            $user = false;
+            $check = $user = false;                         
             $view = $this
                     ->view()
                     ->setTemplate($this->config->getTemplate('_form.html'))
                     ->setTemplateVar($this->config->getPluralResourceName())        
                     ->setData(array( 
-                        'formAction' => $formAction,
-                        'user' => $user,
-                        'form' => $form->createView(),
+                        'formAction'    => $formAction,
+                        'user'          => $user,
+                        'check'         => $check,
+                        'form'          => $form->createView(),
                     ))
             ;
             $view->getSerializationContext()->setGroups(array('id', 'api_list'));

@@ -3541,7 +3541,7 @@ angular.module('seipModule.controllers', [])
         .controller('FeeStructureController', function ($scope, notificationBarService, $http, notifyService, $filter, $timeout) {
 
             var isInit = false;   
-            var valueChar = angular.element('#value');
+            var valueChar = angular.element('#value').val();            
             //Carga del formulario
             $scope.addCargo = function (resource) {
                 //console.log(valueChar);
@@ -3672,6 +3672,7 @@ angular.module('seipModule.controllers', [])
             $scope.initForm = function (resource) {
                 var d = new Date();
                 var numero = d.getTime();
+                var valueChar = angular.element('#value').val();                
                 //$scope.setHeight(350);                
                 var parameters = {  
                     id: valueChar,                  
@@ -3695,9 +3696,10 @@ angular.module('seipModule.controllers', [])
             $scope.initFormRemove = function (resource) {
                 var d = new Date();
                 var numero = d.getTime();
+                var valueChar = angular.element('#value').val();                
                 //$scope.setHeight(350);
                 var parameters = {  
-                    id: 111,                  
+                    id: valueChar,                  
                     _dc: numero
                 };
                 if (resource) {
