@@ -14,22 +14,28 @@ class EvolutionHistoryItemsBox extends \Tecnocreaciones\Bundle\BoxBundle\Model\G
     }
 
     public function getParameters() {
-
-       $idIndicator = $this->getRequest()->get('id');
-       
+        
+        $idIndicator = $this->getRequest()->get('id');
+        
+        $em = $this->getDoctrine()->getManager();
+        $ind = $em->getRepository("\Pequiven\IndicatorBundle\Entity\Indicator")->find($idIndicator);
+        
         $month = date("m");//Carga del mes "Automatico"
         $mesData = date("F");//Data mes
         
-        $labelMonth = $this->getMonths();
-       
+        if ($ind->getPeriod()->getId() == 2) {
+            $year = 2015;            
+            $month = "12";
+        }else{
+            $year = 2016;
+        }        
         
+        $labelMonth = $this->getMonths();       
         $count = 1;
         
-        for ($i=0; $i < $month; $i++) { 
-       
+        for ($i=0; $i < $month; $i++) {        
               $setMonth[] = $count;
               $count = $count + 1;
-
         }  
           
         $indicator = $idIndicator;
@@ -42,7 +48,8 @@ class EvolutionHistoryItemsBox extends \Tecnocreaciones\Bundle\BoxBundle\Model\G
             'Box_month'     => $boxmonth,
             'listMonth'     => $listMonth,
             'labelsMonths'  => $labelMonth,
-            'typeObject'    => $typeObject
+            'typeObject'    => $typeObject,
+            'year'          => $year
             );
         
     }
