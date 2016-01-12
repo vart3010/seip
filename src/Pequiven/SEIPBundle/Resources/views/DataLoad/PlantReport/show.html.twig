@@ -57,13 +57,13 @@
             <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">{{ 'Design capacity'|trans }}</label>
-                    {% if (plant_report.plant.childrens) %}
+                    {% if (plant_report.plant.childrens|length  >0) %}
                         {% set totalDesignCap = 0 %}
                         {% for childrens in plant_report.plant.childrens %}
                             {% set totalDesignCap = childrens.designCapacity  %}
                         {% endfor %}
                         {{ totalDesignCap | myNumberFormat }}
-
+                        xxx
                     {% else %}
                         {{ plant_report.plant.designCapacity|myNumberFormat }}
                     {% endif %}
@@ -72,26 +72,35 @@
             <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">{{ 'Current capacity'|trans }}</label>
-                    {% set totalCurrentCap = 0 %}
-                    {% for childrens in plant_report.plant.childrens %}
-                        {% for plantReport in childrens.plantReport %}
-                            {% set totalCurrentCap = plantReport.currentCapacity  %}
+                    {% if(plant_report.plant.childrens|length>0) %}
+                        {% set totalCurrentCap = 0 %}
+                        {% for childrens in plant_report.plant.childrens %}
+                            {% for plantReport in childrens.plantReport %}
+                                {% set totalCurrentCap = plantReport.currentCapacity  %}
+                            {% endfor %}
                         {% endfor %}
-                    {% endfor %}
-                    {{ totalCurrentCap|myNumberFormat }}
-                    {#                     {{ plant_report.currentCapacity|myNumberFormat }}#}
+                        {{ totalCurrentCap|myNumberFormat }}
+                        {#                     {{ plant_report.currentCapacity|myNumberFormat }}#}
+                    {% else %}
+                        {{ plant_report.currentCapacity|myNumberFormat }}
+                    {% endif %}
+
                 </p>
             </div>
             <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">{{ 'Percentage current capacity'|trans }}</label>
-                    {% set percentajeCap = 0 %}
-                    {% for childrens in plant_report.plant.childrens %}
-                        {% for plantReport in childrens.plantReport %}
-                            {% set percentajeCap = plantReport.percentageCurrentCapacity  %}
+                    {% if(plant_report.plant.childrens|length>0) %}
+                        {% set percentajeCap = 0 %}
+                        {% for childrens in plant_report.plant.childrens %}
+                            {% for plantReport in childrens.plantReport %}
+                                {% set percentajeCap = plantReport.percentageCurrentCapacity  %}
+                            {% endfor %}
                         {% endfor %}
-                    {% endfor %}
-                    {{ percentajeCap|myNumberFormat }}%
+                        {{ percentajeCap|myNumberFormat }}%
+                    {% else %}
+                        {{ plant_report.percentageCurrentCapacity | myNumberFormat }}%
+                    {% endif %}
                     {#                    {{ plant_report.percentageCurrentCapacity|myNumberFormat }}%#}
                 </p>
             </div>
@@ -110,11 +119,11 @@
     {% include 'PequivenSEIPBundle:DataLoad:PlantReport/show/products.html.twig' %}
     <br /><br />
 
-{#    {% if(groupsProducts|length>0) %}#}
-        <br /><br />
-        {% include 'PequivenSEIPBundle:DataLoad:PlantReport/show/groupsProducts.html.twig' %}
-        <br /><br />
-{#    {% endif %}#}
+    {#    {% if(groupsProducts|length>0) %}#}
+    <br /><br />
+    {% include 'PequivenSEIPBundle:DataLoad:PlantReport/show/groupsProducts.html.twig' %}
+    <br /><br />
+    {#    {% endif %}#}
     {% include 'PequivenSEIPBundle:DataLoad:PlantReport/show/services.html.twig' %}
     <br /><br />
     {% if(plant_report.plant.childrens|length==0) %}
