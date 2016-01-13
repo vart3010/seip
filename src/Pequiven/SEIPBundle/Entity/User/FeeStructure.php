@@ -17,6 +17,7 @@ use Pequiven\MasterBundle\Entity\GerenciaSecond;
  * @ORM\Entity
  * @author Gilbert <glavrjk@gmail.com>
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
+ * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\User\FeeStructureRepository") 
  */
 class FeeStructure {
 
@@ -92,8 +93,8 @@ class FeeStructure {
      * @ORM\JoinColumn(name="parent_id", nullable=true)
      */
     private $parent;
-    
-     /**
+
+    /**
      * @var \Pequiven\Pequiven\SEIPBundle\Entity\User\FeeStructure
      * @ORM\OneToMany(targetEntity="\Pequiven\SEIPBundle\Entity\User\FeeStructure",mappedBy="parent",cascade={"persist"}))
      */
@@ -145,7 +146,13 @@ class FeeStructure {
      */
     protected $movementFeeStructure;
 
-    public function __construct() {        
+    /**
+     * PROPIEDAD PARA MOSTRAR LOS CARGOS VACANTES Y CON USUARIOS ASIGNADOS
+     * @var type 
+     */
+    protected $Listado_Cargos_Usuarios = '';
+
+    public function __construct() {
         $this->children = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -292,6 +299,18 @@ class FeeStructure {
     function setMovementFeeStructure(\Pequiven\SEIPBundle\Entity\User\MovementFeeStructure $movementFeeStructure) {
         $this->movementFeeStructure = $movementFeeStructure;
     }
-    
+
+    /**
+     * FUNCION PARA LOS CARGOS Y SU USUARIO ASIGNADO
+     * @return type
+     */
+    public function getListadoCargosUsuarios() {
+        if ($this->getUser() == null) {
+            $this->Listado_Cargos_Usuarios = $this->getCharge() . '- Sin Asignar';
+        } else {
+            $this->Listado_Cargos_Usuarios = $this->getCharge() . ' - ' . $this->getUser()->getOnlyFullNameUser();
+        }
+        return $this->Listado_Cargos_Usuarios;
+    }
 
 }

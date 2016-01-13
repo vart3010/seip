@@ -151,4 +151,9 @@ class Coordinacion {
         $this->enabled = $enabled;
     }
 
+    public function getgerenciaSegunda() {
+        $full = sprintf("%s", $this->getGerenciasecond()->getDescription());
+        return $full;
+    }
+
 }

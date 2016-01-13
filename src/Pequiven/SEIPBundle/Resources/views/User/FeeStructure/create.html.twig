@@ -1,7 +1,6 @@
 {% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}
-
-{#{% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
-{% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}#}
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
 {% trans_default_domain 'sip' %}
 
 {% block stylesheets %}
@@ -20,6 +19,10 @@
                 $('.select2').select2({
                     allowClear: true
                 });
+
+                $("#feestructurecreate_parent").select2({
+                    minimumInputLength: 3
+                });
             }
         });
     </script>
@@ -30,65 +33,66 @@
 {% endblock %}
 {% block body %}
 
-    <form method="POST" action="{{ path("pequiven_sip_report_SegVoto") }}">
-        <details class="details margin-bottom" open="">
-            <summary role="button" aria-expanded="true">
-                <b>Filtros</b>
-            </summary>
+    <fieldset class="fieldset">
+        <legend class="legend"><b>Creación de Cargos</b></legend>
+        <form method="POST" action="{{ path("pequiven_user_loadfeestructure")}}">
             <div class="with-padding">
-                <div class="columns">                                        
-                    <!-- Filtro Gerencia 2da Línea -->
-                    <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
-                        <label class="bold">Gerencia de 2da Línea</label><br>
-                        <select class="select2 input-xlarge">
-                            {% for gerencia2 in gerencias2 %}
-                                <option value="{{gerencia2.id}}">{{gerencia2.description}}</option>                                           
-                            {% endfor %}
-                        </select> 
+                <div class="columns">   
+                    <div class="new-row two-columns bold">
+                        {{ form_label(form_create.gerencia) }}
+                    </div>
+                    <div class="four-columns">
+                        {{ form_widget(form_create.gerencia) }}
+                        {{ form_errors(form_create.gerencia) }}
+                    </div>
+                    <div class="two-columns bold">
+                        {{ form_label(form_create.gerenciasecond) }}
+                    </div>
+                    <div class="four-columns">
+                        {{ form_widget(form_create.gerenciasecond) }}
+                        {{ form_errors(form_create.gerenciasecond) }}
+                    </div>
+                    <div class="new-row two-columns bold">
+                        {{ form_label(form_create.coordinacion) }}
+                    </div>
+                    <div class="four-columns">
+                        {{ form_widget(form_create.coordinacion) }}
+                        {{ form_errors(form_create.coordinacion) }}
+                    </div>
+                    <div class="two-columns bold">
+                        {{ form_label(form_create.charge) }}
+                    </div>
+                    <div class="four-columns">
+                        {{ form_widget(form_create.charge) }}
+                        {{ form_errors(form_create.charge) }}
+                    </div>
+                    <div class="two-columns bold">
+                        {{ form_label(form_create.parent) }}
+                    </div>
+                    <div class="four-columns">
+                        {{ form_widget(form_create.parent) }}
+                        {{ form_errors(form_create.parent) }}
+                    </div>
+                    <div class="new-row two-columns bold">
+                        {{ form_label(form_create.staff) }}
+                    </div>
+                    <div class="two-columns">
+                        {{ form_widget(form_create.staff) }}
+                        {{ form_errors(form_create.staff) }}
+                    </div>
+                    <div class="two-columns bold">
+                        ¿Cuántos Cargos desea Crear?:
+                    </div>
+                    <div class="two-columns">
+                        <input type="number" class="input-mini" name="repeat" value="1">
+                    </div>
+                    <div class="four-columns">
+                        {{ actions.createonly() }}   
+                        {{ form_rest(form_create) }}
                     </div>
                 </div>
             </div>
-        </details>
-    </form>      
-    <fieldset class="fieldset">
-        <legend class="legend"><b>Estructura Organizativa Actual</b></legend>
-        <table width="100%">
-            <tr>
-                <td>
-                    <p class="inline-label">
-                        {{ form_label(form_create.gerencia) }}
-                        {{ form_widget(form_create.gerencia) }}
-                        {{ form_errors(form_create.gerencia) }}
-                    </p>
-                    <p class="inline-label">
-                        {{ form_label(form_create.gerenciasecond) }}
-                        {{ form_widget(form_create.gerenciasecond) }}
-                        {{ form_errors(form_create.gerenciasecond) }}
-                    </p>
-                    <p class="inline-label">
-                        {{ form_label(form_create.charge) }}
-                        {{ form_widget(form_create.charge) }}
-                        {{ form_errors(form_create.charge) }}
-                    </p>
-                    <p class="inline-label">
-                        {{ form_label(form_create.parent) }}
-                        {{ form_widget(form_create.parent) }}
-                        {{ form_errors(form_create.parent) }}
-                    </p>
-                    <p class="inline-label">
-                        {{ form_label(form_create.staff) }}
-                        {{ form_widget(form_create.staff) }}
-                        {{ form_errors(form_create.staff) }}
-                    </p>
-                    <p class="inline-label">
-
-                    </p>
-                </td>
-                <td>
-                    que haces
-                </td>
-            </tr>
-        </table>
+        </form>
     </fieldset>
 
 {% endblock %} 

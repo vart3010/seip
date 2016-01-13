@@ -2,10 +2,6 @@
 
 namespace Pequiven\SEIPBundle\Repository\User;
 
-use Pequiven\SEIPBundle\Entity\Period;
-use Pequiven\SEIPBundle\Entity\User;
-use Pequiven\SEIPBundle\Entity\User\FeeStructure;
-use Pequiven\SEIPBundle\Entity\User\MovementFeeStructure;
 use Pequiven\SEIPBundle\Doctrine\ORM\SeipEntityRepository as EntityRepository;
 
 /**
@@ -42,17 +38,16 @@ class FeeStructureRepository extends EntityRepository {
         ;
         return $qb->getQuery()->getResult();
     }
-    
-    function getAll() {
+
+    function getAllfeeStructure() {
         $qb = $this->getQueryBuilder();
         $qb
-                ->Select('FeeStr')                
-                ->andWhere('FeeStr.enabled= :staff')                
-                ->orderBy('FeeStr.charge')                
-                ->setParameter('staff', 1)
-
+                ->Select('FeeStr')
+                ->andWhere('FeeStr.enabled= :enabled')
+                ->orderBy('FeeStr.charge')
+                ->setParameter('enabled', 1)
         ;
-        return $qb->getQuery()->getResult();
+        return $qb;
     }
 
     function getAlias() {
