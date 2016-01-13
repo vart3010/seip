@@ -4,10 +4,8 @@ namespace Pequiven\SEIPBundle\Controller\User;
 
 use Pequiven\SEIPBundle\Controller\SEIPController;
 use Symfony\Component\HttpFoundation\Request;
-use Pequiven\SEIPBundle\Entity\User;
 use Pequiven\SEIPBundle\Entity\User\FeeStructure;
 use Pequiven\SEIPBundle\Entity\User\MovementFeeStructure;
-use Pequiven\MasterBundle\Model\Gerencia;
 use Pequiven\SEIPBundle\Form\User\MovementFeeStructureInType;
 use Pequiven\SEIPBundle\Form\User\MovementFeeStructureOutType;
 use Pequiven\SEIPBundle\Form\User\CreateFeeStructureType;
@@ -20,20 +18,40 @@ class FeeStructureController extends SEIPController {
     public function showAction(Request $request) {
 
         $array = array();
-        $idGerente = 1;
-        $array[] = $this->getRepository()->find($idGerente);
-        $structure = $this->GenerateTree($idGerente, $array);
+        $structure = array();
+        $em = $this->getDoctrine()->getManager();
+
+        if ($request->get('gerencia') != null) {
+            $gerencia = $request->get('gerencia');
+        } else {
+            $gerencia = 14;
+        }
+
+        $gerenciaobj = $em->getRepository('PequivenMasterBundle:Gerencia')->findOneById($gerencia);
+        $feestructure = new FeeStructure();
+        $formCreate = $this->createForm(new CreateFeeStructureType($gerencia), $feestructure);
+        $formCreate->handleRequest($request);
+
+        $Gte = $this->get('pequiven_seip.repository.feestructure')->getGerente($gerencia);
+
+        if ($Gte != null) {
+            foreach ($Gte as $g) {
+                $Gerente = $g;
+            }
+            $array[] = $this->getRepository()->find($Gerente->getid());
+            $structure = $this->GenerateTree($Gerente->getid(), $array);
+        }
+
+        $gerencias = $em->getRepository('PequivenMasterBundle:Gerencia')->getgerencias();
 
 //OPCIONES PARA LOS FILTROS
-        $em = $this->getDoctrine()->getManager();
-        $gerencias = $em->getRepository('PequivenMasterBundle:Gerencia')->getgerencias();
-        $gerencias2 = $em->getRepository('PequivenMasterBundle:GerenciaSecond')->getgerenciasSecond();
 
         return $this->render('PequivenSEIPBundle:User:FeeStructure/show.html.twig', array(
-                    'gerencias' => $gerencias,
-                    'gerencias2' => $gerencias2,
                     'user' => $this->getUser(),
+                    'gerencias' => $gerencias,
                     'structure' => $structure,
+                    'form_create' => $formCreate->createView(),
+                    'gerencia_ant' => $gerenciaobj
         ));
     }
 
@@ -185,65 +203,91 @@ class FeeStructureController extends SEIPController {
     public function CreateAction(Request $request) {
 
         $array = array();
-/*
+        $structure = array();
+
         //DATOS AUDITORIA
-        $login = $this->getUser();
         $em = $this->getDoctrine()->getManager();
         $em->getConnection()->beginTransaction();
 
-        $em = $this->getDoctrine()->getManager();
-        $securityService = $this->getSecurityService();
+        if ($request->get('gerencia') != null) {
+            $gerencia = $request->get('gerencia');
+        } 
 
+        $gerenciaobj = $em->getRepository('PequivenMasterBundle:Gerencia')->findOneById($gerencia);
         $feestructure = new FeeStructure();
-        $formCreate = $this->createForm(new CreateFeeStructureType(), $feestructure);
+        $formCreate = $this->createForm(new CreateFeeStructureType($gerencia), $feestructure);
         $formCreate->handleRequest($request);
 
-        $em->getConnection()->beginTransaction();
+        if (($formCreate->isSubmitted()) && ($request->get("feestructurecreate")["charge"] != '')) {
 
-        if ($formCreate->isSubmitted()) {
             //DATOS DEL FORMULARIO
-            $gerenciaform = $request->get("feestructurecreate")["gerencia"];
+
             if ($request->get("feestructurecreate")["gerenciasecond"] == '') {
                 $gerenciaform2 = null;
             } else {
                 $gerenciaform2 = $request->get("feestructurecreate")["gerenciasecond"];
             }
+
+            if ($request->get("feestructurecreate")["coordinacion"] == '') {
+                $coord = null;
+            } else {
+                $coord = $request->get("feestructurecreate")["coordinacion"];
+            }
+
+            if (isset($request->get("feestructurecreate")["staff"])) {
+                $staff = 1;
+            } else {
+                $staff = 0;
+            }
+
+            $repeat = $request->get('repeat');
             $charge = $request->get("feestructurecreate")["charge"];
             $parent = $request->get("feestructurecreate")["parent"];
-            $staff = $request->get("feestructurecreate")["staff"];
-            $repeat = $request->get('repeat');
+
+            //INSTANCIACION DE OBJETOS            
+            $complejoobj = $gerenciaobj->getcomplejo();
+            $gerencia2obj = $em->getRepository('PequivenMasterBundle:GerenciaSecond')->findOneById($gerenciaform2);
+            $coordobj = $em->getRepository('PequivenMasterBundle:Coordinacion')->findOneById($coord);
+            $parentobj = $this->getRepository()->findOneById($parent);
 
             for ($i = 1; $i <= $repeat; $i++) {
                 $feestructure = new FeeStructure();
-                $feestructure->setCreatedBy($login);
-                $feestructure->setGerencia($gerenciaform);
-                $feestructure->setGerenciasecond($gerenciaform2);
+                $feestructure->setComplejo($complejoobj);
+                $feestructure->setGerencia($gerenciaobj);
+                if ($gerencia2obj != null) {
+                    $feestructure->setGerenciasecond($gerencia2obj);
+                }
+                if ($coordobj != null) {
+                    $feestructure->setCoordinacion($coordobj);
+                }
                 $feestructure->setCharge($charge);
-                $feestructure->setParent($parent);
+                $feestructure->setParent($parentobj);
                 $feestructure->setStaff($staff);
+                $feestructure->setEnabled(1);
+                $feestructure->setEncargado(0);
+                $em->persist($feestructure);
             }
-        }*/
 
-        $gerencia = 14;
-        $Gte = $this->get('pequiven_seip.repository.feestructure')->getGerente($gerencia);
-        foreach ($Gte as $g) {
-            $Gerente = $g;
+            try {
+                $em->flush();
+                $em->getConnection()->commit();
+            } catch (Exception $e) {
+                $em->getConnection()->rollback();
+                throw $e;
+            }
         }
 
-        $array[] = $this->getRepository()->find($Gerente->getid());
-        $structure = $this->GenerateTree($Gerente->getid(), $array);
+        $Gte = $this->get('pequiven_seip.repository.feestructure')->getGerente($gerencia);
 
-
-
-//FORMULARIO DE CREACIÓN
-        $feeStructure = new FeeStructure();
-        $formCreate = $this->createForm(new CreateFeeStructureType(), $feeStructure);
-
-        return $this->render('PequivenSEIPBundle:User:FeeStructure/create.html.twig', array(                    
-                    'user' => $this->getUser(),
-                    'structure' => $structure,
-                    'form_create' => $formCreate->createView(),
-        ));
+        if ($Gte != null) {
+            foreach ($Gte as $g) {
+                $Gerente = $g;
+            }
+            $array[] = $this->getRepository()->find($Gerente->getid());
+            $structure = $this->GenerateTree($Gerente->getid(), $array);
+        }             
+        
+        return $this->redirect($this->generateUrl('pequiven_user_feestructure', array('gerencia' => $gerencia)));     
     }
 
     /**

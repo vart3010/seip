@@ -17,6 +17,7 @@ use Pequiven\MasterBundle\Entity\GerenciaSecond;
  * @ORM\Entity
  * @author Gilbert <glavrjk@gmail.com>
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
+ * @ORM\Entity(repositoryClass="Pequiven\MasterBundle\Repository\CoordinacionRepository")
  */
 class Coordinacion {
 
@@ -87,6 +88,7 @@ class Coordinacion {
         $this->feeStructure = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
+    
     function getId() {
         return $this->id;
     }

@@ -85,7 +85,7 @@ class FeeStructure {
      * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Coordinacion",inversedBy="feeStructure")
      * @ORM\JoinColumn(nullable=true)
      */
-    private $coordinacion;
+    private $coordinacion = null;
 
     /**
      * ID DEL PADRE O JEFE DIRECTO EN LA ENTRUCTURA 
@@ -111,13 +111,6 @@ class FeeStructure {
      * @ORM\Column(name="codigo", type="string", length=100, nullable=true)
      */
     private $codigo;
-
-    /**
-     * Nivel Jerárquico
-     * @var string
-     * @ORM\Column(name="chargelvl", type="string", nullable=true)
-     */
-    private $chargelvl;
 
     /**
      * Cargo
@@ -269,15 +262,11 @@ class FeeStructure {
     }
 
     function setGerenciasecond(\Pequiven\MasterBundle\Entity\GerenciaSecond $gerenciasecond) {
-        $this->gerenciaSecond = $gerenciasecond;
+        $this->gerenciasecond = $gerenciasecond;
     }
 
     function setCoordinacion(\Pequiven\MasterBundle\Entity\Coordinacion $coordinacion) {
         $this->coordinacion = $coordinacion;
-    }
-
-    function getChargelvl() {
-        return $this->chargelvl;
     }
 
     function getEncargado() {
@@ -286,10 +275,6 @@ class FeeStructure {
 
     function getMovementFeeStructure() {
         return $this->movementFeeStructure;
-    }
-
-    function setChargelvl($chargelvl) {
-        $this->chargelvl = $chargelvl;
     }
 
     function setEncargado($encargado) {

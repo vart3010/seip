@@ -6,17 +6,22 @@ use Pequiven\SEIPBundle\Doctrine\ORM\SeipEntityRepository as EntityRepository;
 
 class CoordinacionRepository extends EntityRepository {
 
-    public function getcoordinacionQueryBuilder() {
+    public function getcoordinacionQueryBuilder($gerencia) {
+        
         $qb = $this->getQueryBuilder();
         $qb
-                ->select('coord')
+                ->select('coord')                
+                ->innerJoin('coord.gerenciasecond', 'gerenciasecond')
+                ->innerJoin('gerenciasecond.gerencia', 'gerencia')                
                 ->andWhere('coord.enabled= :Enabled')
-                ->setParameter('Enabled', 1);
+                ->andWhere('gerencia.id= :gerencia')
+                ->setParameter('Enabled', 1)
+                ->setParameter('gerencia', $gerencia);
         return $qb;
     }
 
-    public function getcoordinacion() {
-        $qb = $this->getcoordinacionQueryBuilder();
+    public function getcoordinacion($gerencia) {
+        $qb = $this->getcoordinacionQueryBuilder($gerencia);
         return $qb->getQuery()->getResult();
     }
 

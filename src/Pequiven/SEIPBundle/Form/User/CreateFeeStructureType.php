@@ -14,27 +14,16 @@ class CreateFeeStructureType extends AbstractType {
 
     public function buildForm(FormBuilderInterface $builder, array $options) {
 
-        $builder
-                ->add('gerencia', null, array(
-                    'label' => 'Gerencia de 1ra Línea',
-                    'empty_value' => 'Seleccione...',
-                    'required' => true,
-                    'query_builder' => function(GerenciaRepository $repo) {
-                        return $repo->getQueryAllEnabled();
-                    },
-                    'label_attr' => array('class' => 'label'),
-                    'attr' => array(
-                        'class' => 'select2 input-large form-control',
-                        'style' => 'width: 80%'
-                    ),
-                ))
+        $gerencia = $this->gerencia;
+         
+        $builder               
                 ->add('gerenciasecond', 'entity', array(
                     'class' => 'Pequiven\MasterBundle\Entity\GerenciaSecond',
                     'label' => 'Gerencia de 2da Línea',
                     'empty_value' => 'No Aplica',
                     'required' => false,
-                    'query_builder' => function(GerenciaSecondRepository $repository) {
-                        return $repository->getgerenciasSecondQueryBuilder();
+                    'query_builder' => function(GerenciaSecondRepository $repository) use ($gerencia) {
+                        return $repository->getgerenciasSecondQueryBuilder($gerencia);
                     },
                     'label_attr' => array('class' => 'label'),
                     'attr' => array(
@@ -47,9 +36,10 @@ class CreateFeeStructureType extends AbstractType {
                     'class' => 'Pequiven\MasterBundle\Entity\Coordinacion',
                     'label' => 'Superintendencia o Coordinación',
                     'empty_value' => 'No Aplica',
+                    'property' => 'Description',
                     'required' => false,
-                    'query_builder' => function(CoordinacionRepository $rep) {
-                        return $rep->getcoordinacionQueryBuilder();
+                    'query_builder' => function(CoordinacionRepository $rep) use ($gerencia)  {
+                        return $rep->getcoordinacionQueryBuilder($gerencia);
                     },
                     'label_attr' => array('class' => 'label'),
                     'attr' => array(
@@ -67,7 +57,7 @@ class CreateFeeStructureType extends AbstractType {
                 ))
                 ->add('parent', null, array(
                     'label' => 'Jefe o Línea Superior',
-                    'empty_value' => 'No Aplica...',
+                    'empty_value' => 'Seleccione...',
                     'required' => true,
                     'property' => 'Listado_Cargos_Usuarios',
                     'query_builder' => function(FeeStructureRepository $rep) {
@@ -94,6 +84,10 @@ class CreateFeeStructureType extends AbstractType {
 
     public function getName() {
         return 'feestructurecreate';
+    }
+    
+     public function __construct($gerencia) {
+        $this->gerencia = $gerencia;        
     }
 
 }
