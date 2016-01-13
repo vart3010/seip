@@ -9,7 +9,6 @@
                 <h3 class="thin underline text-center">Historico Informe de Evolución</h3>
                 <fieldset class="fieldset">
                     {% set month = "now"|date("m") %}
-                    {% set year = "now"|date("Y") %}  
                     
                     {# Carga del tipo de objeto para setear la ruta del historico #}
                     {% set typeObjet = typeObject %}
@@ -18,7 +17,7 @@
                     {% elseif typeObject == 2 %}
                         {% set route = "pequiven_seip_arrangementprogram_evolution_sig" %}
                     {% endif %}
-                                
+                        
                         {% for data in listMonth %} 
 
                             {% if data == 1 %} 
@@ -58,16 +57,12 @@
                                 {% set name = "Diciembre" %}
                                 {% set dataMonth = "12" %}                                    
                             {% endif %}
-
+                            
                             {% if data > 8 and year == 2015 %}
                                 {% set disabled = TRUE %}
-
                                 {{ buttons.generic_history(path( route, { 'id': Box_indicator , 'month': dataMonth }),( name )) }}
-
                             {% elseif year != 2015 %}    
-
                                 {{ buttons.generic_history(path( route, { 'id': Box_indicator , 'month': dataMonth }),( name )) }}
-
                             {% endif %}                            
                         
                         {% endfor %}
