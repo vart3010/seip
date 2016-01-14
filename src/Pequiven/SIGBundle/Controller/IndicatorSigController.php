@@ -588,7 +588,7 @@ class IndicatorSigController extends ResourceController {
         
         //Buscando los Archivos por Codigo
         $nameSVG = glob("$routing");
-        
+
         $user = $this->getUser()->getId();//Id Usuario    
         $user = str_pad($user, 6,"0", STR_PAD_LEFT);
 
@@ -598,27 +598,23 @@ class IndicatorSigController extends ResourceController {
             $pos = strpos($nameSVG[$cont], $user);            
             if ($pos !== false) {                                 
                 if (strpos($nameSVG[$cont], "mscolumnline3d")) {                    
-                    $chartEvolution = $nameSVG[$cont];
-                    $contImg ++;
-                }elseif (strpos($nameSVG[$cont], "stackedbar3d")) {
-                    $chartCause = $nameSVG[$cont];
+                    $chartEvolution = $nameSVG[$cont];                    
+                    $contImg ++;                    
+                }
+                if (strpos($nameSVG[$cont], "stackedbar3d")) {
+                    $chartCause = $nameSVG[$cont];                                        
                 }
             }
-
             $cont ++;
         }        
         
         $dataAction = $this->findEvolutionCause($request); //Carga la data de las causas y sus acciones relacionadas
-
         $month = $request->get('month'); //El mes pasado por parametro
-
         $typeObject = $request->get('typeObj'); //Tipo de objeto (1 = Indicador/2 = Programa G.) 
-
         $id = $request->get('id'); //id 
-
+        
         $font = "";
         if ($typeObject == 1) {
-
             $indicator = $this->get('pequiven.repository.indicator')->find($id); //Obtenemos el indicador
             $name = $indicator->getRef() . ' ' . $indicator->getDescription(); //Nombre del Indicador
             $type = "indicator";
@@ -699,7 +695,7 @@ class IndicatorSigController extends ResourceController {
         );
 
         //Solo si existen las dos graficas
-        if (isset($chartEvolution) && isset($chartCause)) {
+        if (isset($chartEvolution) AND isset($chartCause)) {
             $this->generatePdf($data);            
         }
     }
