@@ -133,6 +133,9 @@
                     {% endif %}
                 </li>
             {% endfor  %}
+            <li>
+                <b>Resultado Total del Objetivo:</b> {{entity.resultOfObjetive|number_format(2)}}%                
+            </li>
         {% else %}
             <li>
                 <b>{{ 'pequiven_seip.results.no_results'|trans({},'PequivenSEIPBundle') }}</b>
