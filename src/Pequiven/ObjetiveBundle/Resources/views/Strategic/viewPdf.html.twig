@@ -1,0 +1,143 @@
+{% trans_default_domain 'PequivenObjetiveBundle' %}
+<style>
+    .body {
+        font-size: 8pt;
+    }
+    .title {
+        font-weight: bold;
+        font-size: 9pt;
+    }
+    .title_bold {
+        font-weight: bold;
+        font-size: 7pt;
+    }
+    table tr {
+        padding: 15px;
+    }
+    .alin_font {
+        text-align: justify;
+    }
+    table td {
+        font-size: 7pt;
+    }
+    table{
+        border-spacing:  0px 2px;
+    }
+    li {
+        font-size: 7pt;
+    }
+</style>
+{% block body %}
+    <table width="100%">
+        <tr>
+            <th class="title">- Datos del Objetivo:</th>
+        </tr>
+    </table>    
+    <br>
+    <table width="95%" class="simple-table responsive-table tables-extras"> 
+        <tr>
+            <td class="title_bold" bgcolor="#F2F2F2" width="15%">Línea Estratégica:</td>
+            <td width="75%">  {{ entity.lineStrategics[0].ref }} {{ entity.lineStrategics[0].description }} </td>                        
+        </tr>
+        <tr>
+            <td class="title_bold" bgcolor="#F2F2F2" width="10%">Enunciado:</td>
+            <td width="90%"> {{ entity.description }}</td>                        
+        </tr>        
+        <tr>
+            <td class="title_bold" bgcolor="#F2F2F2" width="10%">Período: </td>
+            <td width="45%"> {{ entity.period }}</td>
+            <td class="title_bold" bgcolor="#F2F2F2" width="10%">Status: </td>
+            <td width="40%">{{ entity.getLabelStatus | trans({},'PequivenObjetiveBundle') }}</td>
+        </tr>
+        <tr>
+            <td class="title_bold" bgcolor="#F2F2F2" width="35%">¿Evaluado por Objetivos Tácticos?: </td>
+            <td width="20%"> {{ entity.childrens|length > 0 ? 'pequiven_objetive.yes'|trans : 'pequiven_objetive.no'|trans }}</td>
+            <td class="title_bold" bgcolor="#F2F2F2" width="35%">¿Evaluado por Indicadores Estratégicos?</td>
+            <td width="20%"> {{ entity.indicators|length > 0 ? 'pequiven_objetive.yes'|trans : 'pequiven_objetive.no'|trans }}</td>
+        </tr>        
+    </table>
+    <br><br>
+
+    {% if entity.childrens|length > 0 %}
+        <table width="100%">
+            <tr>
+                <th class="title">- Objetivos Tácticos Asociados:</th>
+            </tr>
+        </table> 
+        <br>
+        <table width="95%" class="simple-table responsive-table tables-extras"> 
+            <tr>                
+                <td class="title_bold" bgcolor="#F2F2F2" width="8%" style="text-align: center;">Ref</td>                
+                <td class="title_bold" bgcolor="#F2F2F2" width="82%" style="text-align: center;">Enunciado</td>                
+                <td class="title_bold" bgcolor="#F2F2F2" width="10%" style="text-align: right;">Avance</td>
+            </tr>
+            {% for children in entity.childrens %}
+                {% if (children.enabled) %}
+                    <tr>                        
+                        <td width="8%" style="text-align: justify;"><b>{{ children.ref}}</b></td>
+                        <td width="82%" style="text-align: justify;">{{children.description}}</td>
+                        <td width="10%" style="text-align: right;">{{ children.getResult|number_format(2,',','.') }} % </td>
+                    </tr>
+                {% endif %}
+            {% endfor  %}
+        </table>
+        <br><br>
+    {% endif %}
+
+    {% if entity.indicators|length > 0 %}
+        <table width="100%">
+            <tr>
+                <th class="title">- Indicadores Estratégicos Asociados:</th>
+            </tr>
+        </table> 
+        <br>
+        <table width="95%" class="simple-table responsive-table tables-extras"> 
+            <tr>                
+                <td class="title_bold" bgcolor="#F2F2F2" width="60%" style="text-align: center;">Enunciado</td>                
+                <td class="title_bold" bgcolor="#F2F2F2" width="20%" style="text-align: right;">Peso</td>                
+                <td class="title_bold" bgcolor="#F2F2F2" width="20%" style="text-align: right;">Avance</td>
+            </tr>
+            {% for indicator in entity.indicators %}                
+                <tr>                        
+                    <td width="60%" style="text-align: justify;"><b>{{ indicator.ref}}</b> - {{indicator.description}}</td>
+                            {% if indicatorWeight is defined %}
+                        <td width="20%" style="text-align: right;">{{ indicator.indicatorWeight|number_format(1,',','.') }} % </td>
+                    {% else %}
+                        <td width="20%" style="text-align: right;">{{ indicator.weight|number_format(1,',','.') }} % </td>
+                    {% endif %}
+                    <td width="20%" style="text-align: right;">{{ indicator.getResult|number_format(2,',','.') }} % </td>
+                </tr>                
+            {% endfor  %}
+        </table>
+        <br><br>
+    {% endif %}
+
+    <table width="100%">
+        <tr>
+            <th class="title">- Resultados:</th>
+        </tr>
+    </table>     
+    <ul>
+        {% if entity.results|length > 0 %}
+            {% for result in entity.results %}
+                <li>
+                    <b>{{ result.getResult|number_format(2,',','.') }}%</b> - {{ result }} | <b>Peso:</b> {{ result.weight|number_format(0,',','.') }}%
+                    {% if result.childrens.count > 0 %}
+                        <ul>
+                            {% for child in result.childrens %}
+                                <li>
+                                    <b>{{ child.getResult|number_format(2,',','.') }}%</b> - {{ child }} | <b>Peso:</b> {{ child.weight|number_format(0,',','.') }}%                            
+                                </li>
+                            {% endfor%}
+                        </ul>
+                    {% endif %}
+                </li>
+            {% endfor  %}
+        {% else %}
+            <li>
+                <b>{{ 'pequiven_seip.results.no_results'|trans({},'PequivenSEIPBundle') }}</b>
+            </li>
+        {% endif %}
+    </ul>
+
+{% endblock %}    
