@@ -9,10 +9,10 @@ use Pequiven\SEIPBundle\Model\CEI\SupplyCenter as Model;
  * Centro de Acopio
  *
  * @author Victor Tortolero <vart10..30@gmail.com>
- * @ORM\Table(name="seip_cei_supplyCenter")
-
+ * @ORM\Table(name="seip_cei_SupplyCenter")
+ * @ORM\Entity()
  */
-class SupplyCenter extends Model {
+class SupplyCenter extends Model {  
 
     /**
      * @var integer
@@ -33,21 +33,21 @@ class SupplyCenter extends Model {
     /**
      * alias de centro 
      * @var String 
-     * @ORM\Column(name="alias",type="text",nullable=true)
+     * @ORM\Column(name="alias",type="string",nullable=true)
      */
     private $alias;
 
     /**
      * codigo ("sap") -> segun matias
      * @var String 
-     * @ORM\Column(name="codigo",type="text",nullable=true)
+     * @ORM\Column(name="codigo",type="string",nullable=true)
      */
     private $codigo;
 
     /**
      * clasificacion
      * @var String 
-     * @ORM\Column(name="clasificacion",type="text",nullable=true)
+     * @ORM\Column(name="clasificacion",type="string",nullable=true)
      */
     private $clasificacion = null;
 
