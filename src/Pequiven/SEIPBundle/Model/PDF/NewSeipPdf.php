@@ -48,7 +48,7 @@ class NewSeipPdf extends TCPDF implements ContainerAwareInterface {
         <br>
         <table width="100%">
             <tr>
-                <td width="100%" style="text-align: center; font-size: 12; color: #bb0707;">'.$tittle.'. '.$period.'</td>
+                <td width="100%" style="text-align: center; font-size: 12; color: #bb0707;">'.$tittle.'</td>
             </tr>
         </table>
         ';

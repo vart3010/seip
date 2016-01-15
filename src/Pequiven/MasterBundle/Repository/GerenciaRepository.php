@@ -129,13 +129,18 @@ class GerenciaRepository extends EntityRepository {
 
         return $qb->getQuery()->getOneOrNullResult();
     }
-
-    public function getgerencias() {
+    
+    public function getgerenciasQueryBuilder() {
         $qb = $this->getQueryBuilder();
         $qb
                 ->select('g')                
                 ->andWhere('g.enabled= :Enabled')
                 ->setParameter('Enabled', 1);
+        return $qb;
+    }
+
+    public function getgerencias() {
+        $qb = $this->getgerenciasQueryBuilder();
         return $qb->getQuery()->getResult();
     }
 
