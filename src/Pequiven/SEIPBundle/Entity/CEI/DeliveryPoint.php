@@ -27,7 +27,7 @@ class DeliveryPoint {
     /**
      * Nombre del punto de despacho 
      * @var String 
-     * @ORM\Column(name="descripcion",type="text",nullable=false)
+     * @ORM\Column(name="descripcion",type="string",nullable=false)
      */
     private $descripcion;
 
