@@ -153,9 +153,9 @@
     {# Analisis de Causas #}
     {% if is_granted('ROLE_SEIP_SIG_EVOLUTION_CAUSE') %}    
             <br /><br />
-            {% include 'PequivenSIGBundle:Indicator:show/analysis_cause.html.twig' %} 
-            <br /><br />            
             {% include 'PequivenSIGBundle:Indicator:show/causes_list.html.twig' %} 
+            <br /><br />            
+            {% include 'PequivenSIGBundle:Indicator:show/analysis_cause.html.twig' %} 
             &nbsp;
     {% endif %}
     
