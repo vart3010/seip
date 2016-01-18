@@ -17,6 +17,7 @@ use Pequiven\MasterBundle\Entity\GerenciaSecond;
  * @ORM\Entity
  * @author Gilbert <glavrjk@gmail.com>
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
+ * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\User\FeeStructureRepository") 
  */
 class FeeStructure {
 
@@ -84,7 +85,7 @@ class FeeStructure {
      * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Coordinacion",inversedBy="feeStructure")
      * @ORM\JoinColumn(nullable=true)
      */
-    private $coordinacion;
+    private $coordinacion = null;
 
     /**
      * ID DEL PADRE O JEFE DIRECTO EN LA ENTRUCTURA 
@@ -92,8 +93,8 @@ class FeeStructure {
      * @ORM\JoinColumn(name="parent_id", nullable=true)
      */
     private $parent;
-    
-     /**
+
+    /**
      * @var \Pequiven\Pequiven\SEIPBundle\Entity\User\FeeStructure
      * @ORM\OneToMany(targetEntity="\Pequiven\SEIPBundle\Entity\User\FeeStructure",mappedBy="parent",cascade={"persist"}))
      */
@@ -110,13 +111,6 @@ class FeeStructure {
      * @ORM\Column(name="codigo", type="string", length=100, nullable=true)
      */
     private $codigo;
-
-    /**
-     * Nivel Jerárquico
-     * @var string
-     * @ORM\Column(name="chargelvl", type="string", nullable=true)
-     */
-    private $chargelvl;
 
     /**
      * Cargo
@@ -145,8 +139,18 @@ class FeeStructure {
      */
     protected $movementFeeStructure;
 
-    public function __construct() {        
+    /**
+     * PROPIEDAD PARA MOSTRAR LOS CARGOS VACANTES Y CON USUARIOS ASIGNADOS
+     * @var type 
+     */
+    protected $Listado_Cargos_Usuarios = '';
+
+    public function __construct() {
         $this->children = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    public function __toString() {
+        return $this->getCharge();
     }
 
     function getId() {
@@ -262,15 +266,11 @@ class FeeStructure {
     }
 
     function setGerenciasecond(\Pequiven\MasterBundle\Entity\GerenciaSecond $gerenciasecond) {
-        $this->gerenciaSecond = $gerenciasecond;
+        $this->gerenciasecond = $gerenciasecond;
     }
 
     function setCoordinacion(\Pequiven\MasterBundle\Entity\Coordinacion $coordinacion) {
         $this->coordinacion = $coordinacion;
-    }
-
-    function getChargelvl() {
-        return $this->chargelvl;
     }
 
     function getEncargado() {
@@ -281,10 +281,6 @@ class FeeStructure {
         return $this->movementFeeStructure;
     }
 
-    function setChargelvl($chargelvl) {
-        $this->chargelvl = $chargelvl;
-    }
-
     function setEncargado($encargado) {
         $this->encargado = $encargado;
     }
@@ -292,6 +288,18 @@ class FeeStructure {
     function setMovementFeeStructure(\Pequiven\SEIPBundle\Entity\User\MovementFeeStructure $movementFeeStructure) {
         $this->movementFeeStructure = $movementFeeStructure;
     }
-    
+
+    /**
+     * FUNCION PARA LOS CARGOS Y SU USUARIO ASIGNADO
+     * @return type
+     */
+    public function getListadoCargosUsuarios() {
+        if ($this->getUser() == null) {
+            $this->Listado_Cargos_Usuarios = $this->getCharge() . '- Sin Asignar';
+        } else {
+            $this->Listado_Cargos_Usuarios = $this->getCharge() . ' - ' . $this->getUser()->getOnlyFullNameUser();
+        }
+        return $this->Listado_Cargos_Usuarios;
+    }
 
 }

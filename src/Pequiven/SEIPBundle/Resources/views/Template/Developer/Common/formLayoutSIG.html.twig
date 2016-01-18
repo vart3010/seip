@@ -1,15 +1,11 @@
-
-
 {% trans_default_domain 'PequivenSEIPBundle' %}
 
 {% block stylesheets %}
     <!-- Select2 -->
-    <link rel="stylesheet" href="{{ asset('bundles/pequivenseip/select2-3.5.0/select2.css') }}">
-      
+    <link rel="stylesheet" href="{{ asset('bundles/pequivenseip/select2-3.5.0/select2.css') }}">      
 {% endblock %}
 
 {% block javascripts_base %}
-
     <script type="text/javascript">
         $(document).ready(function(){
             $.datepicker.regional['es'] = {

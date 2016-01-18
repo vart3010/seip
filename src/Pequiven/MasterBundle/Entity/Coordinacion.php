@@ -17,6 +17,7 @@ use Pequiven\MasterBundle\Entity\GerenciaSecond;
  * @ORM\Entity
  * @author Gilbert <glavrjk@gmail.com>
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
+ * @ORM\Entity(repositoryClass="Pequiven\MasterBundle\Repository\CoordinacionRepository")
  */
 class Coordinacion {
 
@@ -86,7 +87,11 @@ class Coordinacion {
     public function __construct() {
         $this->feeStructure = new \Doctrine\Common\Collections\ArrayCollection();
     }
-
+    
+    public function __toString() {
+        return $this->getDescription();
+    }
+            
     function getId() {
         return $this->id;
     }
@@ -149,6 +154,11 @@ class Coordinacion {
 
     function setEnabled($enabled) {
         $this->enabled = $enabled;
+    }
+
+    public function getgerenciaSegunda() {
+        $full = sprintf("%s", $this->getGerenciasecond()->getDescription());
+        return $full;
     }
 
 }

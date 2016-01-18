@@ -28,7 +28,7 @@ class CoordinacionAdmin extends Admin {
                 ->add('id')
                 ->add('description')
                 ->add('sumary')
-                ->add('gerenciasecond')                
+                ->add('gerenciasecond')
                 ->add('enabled')
         ;
     }
@@ -37,38 +37,51 @@ class CoordinacionAdmin extends Admin {
         $form
                 ->add('description')
                 ->add('sumary')
-                ->add('gerenciasecond','sonata_type_model_autocomplete',array(
+                ->add('gerenciasecond', 'sonata_type_model_autocomplete', array(
                     'property' => array('description'),
                     'multiple' => false,
                     "required" => true,
                     'attr' => array('class' => 'input input-large'),
-                 ))                
-                ->add('enabled')
+                ))
+                ->add('enabled', null, array(
+                    'required' => false,
+                ))
         ;
 //                ->add('gerenciaSecond')
     }
 
     protected function configureDatagridFilters(DatagridMapper $filter) {
         $filter
-                ->add('id')                
-                ->add('gerenciasecond','doctrine_orm_model_autocomplete',array(),null,array(
+                ->add('id')
+                ->add('gerenciasecond', 'doctrine_orm_model_autocomplete', array(), null, array(
                     'property' => array('description'),
                     'multiple' => false,
                     "required" => false,
                     'attr' => array('class' => 'input input-large'),
                 ))
-                ->add('enabled')
+                ->add('description')                
         ;
 //                ->add('gerenciaSecond')
     }
 
     protected function configureListFields(ListMapper $list) {
         $list
-                ->addIdentifier('description')                
+                ->add('id')
+                ->addIdentifier('description')
                 ->add('gerenciasecond')
-                ->add('enabled')
+                ->add('enabled', null, array(
+                    'editable' => true
+                ))
 
         ;
+    }
+
+    public function toString($object) {
+        $toString = '-';
+        if ($object->getId() > 0) {
+            $toString = $object->getDescription() . ' (' . $object->getGerenciasecond()->getDescription() . ')';
+        }
+        return \Pequiven\SEIPBundle\Service\ToolService::truncate($toString, array('limit' => 100));
     }
 
 }

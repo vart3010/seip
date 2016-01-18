@@ -2,10 +2,6 @@
 
 namespace Pequiven\SEIPBundle\Repository\User;
 
-use Pequiven\SEIPBundle\Entity\Period;
-use Pequiven\SEIPBundle\Entity\User;
-use Pequiven\SEIPBundle\Entity\User\FeeStructure;
-use Pequiven\SEIPBundle\Entity\User\MovementFeeStructure;
 use Pequiven\SEIPBundle\Doctrine\ORM\SeipEntityRepository as EntityRepository;
 
 /**
@@ -20,11 +16,38 @@ class FeeStructureRepository extends EntityRepository {
         $qb = $this->getQueryBuilder();
         $qb
                 ->Select('FeeStr')
-                ->andWhere('FeeStr.parent= :Parent')                
+                ->andWhere('FeeStr.parent= :Parent')
                 ->orderBy('FeeStr.charge')
                 ->setParameter('Parent', $idParent)
         ;
         return $qb->getQuery()->getResult();
+    }
+
+    function getGerente($idGerencia) {
+        $qb = $this->getQueryBuilder();
+        $qb
+                ->Select('FeeStr')
+                ->andWhere('FeeStr.gerencia= :Gerencia')
+                ->andWhere('FeeStr.staff= :staff')
+                ->andWhere($qb->expr()->isNull('FeeStr.gerenciasecond'))
+                ->andWhere($qb->expr()->isNull('FeeStr.coordinacion'))
+                ->orderBy('FeeStr.charge')
+                ->setParameter('Gerencia', $idGerencia)
+                ->setParameter('staff', 0)
+
+        ;
+        return $qb->getQuery()->getResult();
+    }
+
+    function getAllfeeStructure() {
+        $qb = $this->getQueryBuilder();
+        $qb
+                ->Select('FeeStr')
+                ->andWhere('FeeStr.enabled= :enabled')
+                ->orderBy('FeeStr.charge')
+                ->setParameter('enabled', 1)
+        ;
+        return $qb;
     }
 
     function getAlias() {

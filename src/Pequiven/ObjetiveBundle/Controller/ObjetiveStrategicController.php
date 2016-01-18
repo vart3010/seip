@@ -22,42 +22,40 @@ class ObjetiveStrategicController extends baseController {
      * Función que retorna la vista con la lista de los objetivos estratégicos
      * @return type
      */
-    public function listAction() 
-    {
+    public function listAction() {
         $this->getSecurityService()->checkSecurity('ROLE_SEIP_OBJECTIVE_LIST_STRATEGIC');
-        
+
         return $this->render("PequivenObjetiveBundle:Strategic:list.html.twig");
     }
-    
+
     /**
      * Finds and displays a Objetive entity of level Strategic by Id.
      *
      * @Template("PequivenObjetiveBundle:Strategic:show.html.twig")
      */
-    public function showAction(Request $request)
-    {
+    public function showAction(Request $request) {
         $securityService = $this->getSecurityService();
-        $securityService->checkSecurity(array('ROLE_SEIP_OBJECTIVE_VIEW_STRATEGIC','ROLE_SEIP_PLANNING_VIEW_OBJECTIVE_STRATEGIC'));
-        
+        $securityService->checkSecurity(array('ROLE_SEIP_OBJECTIVE_VIEW_STRATEGIC', 'ROLE_SEIP_PLANNING_VIEW_OBJECTIVE_STRATEGIC'));
+
         $id = $request->get("id");
         $em = $this->getDoctrine()->getManager();
-        
+
         $entity = $em->getRepository('PequivenObjetiveBundle:Objetive')->find($id);
-        
+
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Objetive entity.');
         }
-        if(!$securityService->isGranted('ROLE_SEIP_PLANNING_VIEW_OBJECTIVE_STRATEGIC')){
-            $securityService->checkSecurity('ROLE_SEIP_OBJECTIVE_VIEW_STRATEGIC',$entity);
+        if (!$securityService->isGranted('ROLE_SEIP_PLANNING_VIEW_OBJECTIVE_STRATEGIC')) {
+            $securityService->checkSecurity('ROLE_SEIP_OBJECTIVE_VIEW_STRATEGIC', $entity);
         }
-        
+
         $indicatorService = $this->getIndicatorService();
-        $hasPermissionToApproved = $securityService->isGrantedFull("ROLE_SEIP_OBJECTIVE_APPROVED_STRATEGIC",$entity);
-        $hasPermissionToUpdate = $securityService->isGrantedFull("ROLE_SEIP_OBJECTIVE_EDIT_STRATEGIC",$entity);
-        $isAllowToDelete = $securityService->isGrantedFull("ROLE_SEIP_OBJECTIVE_DELETE_STRATEGIC",$entity);
-        
+        $hasPermissionToApproved = $securityService->isGrantedFull("ROLE_SEIP_OBJECTIVE_APPROVED_STRATEGIC", $entity);
+        $hasPermissionToUpdate = $securityService->isGrantedFull("ROLE_SEIP_OBJECTIVE_EDIT_STRATEGIC", $entity);
+        $isAllowToDelete = $securityService->isGrantedFull("ROLE_SEIP_OBJECTIVE_DELETE_STRATEGIC", $entity);
+
         return array(
-            'entity'      => $entity,
+            'entity' => $entity,
             'indicatorService' => $indicatorService,
             'hasPermissionToUpdate' => $hasPermissionToUpdate,
             'isAllowToDelete' => $isAllowToDelete,
@@ -66,21 +64,46 @@ class ObjetiveStrategicController extends baseController {
     }
 
     /**
+     * FUNCION QUE EXPORTA LA FICHA DEL OBJETIVO A PDF
+     * @param Request $request
+     * @return type
+     * @throws type
+     */
+    public function exportAction(Request $request) {
+        $id = $request->get("id");
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('PequivenObjetiveBundle:Objetive')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Objetive entity.');
+        }
+
+        $indicatorService = $this->getIndicatorService();
+
+        $data=array(
+            'entity' => $entity,
+            'indicatorService' => $indicatorService,
+        );
+
+        $this->generatePdf($data, 'Ficha de Objetivo Estratégico', 'PequivenObjetiveBundle:Strategic:viewPdf.html.twig');
+    }
+
+    /**
      * Función que devuelve el paginador con los objetivos estratégicos
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
-    public function objetiveListAction(Request $request)
-    {
+    public function objetiveListAction(Request $request) {
         $this->getSecurityService()->checkSecurity('ROLE_SEIP_OBJECTIVE_LIST_STRATEGIC');
-        
+
         $criteria = $request->get('filter', $this->config->getCriteria());
         $sorting = $request->get('sorting', $this->config->getSorting());
         $repository = $this->getRepository();
 
         $criteria['objetiveLevel'] = ObjetiveLevel::LEVEL_ESTRATEGICO;
         $resources = $this->resourceResolver->getResource(
-            $repository, 'createPaginatorStrategic', array($criteria, $sorting)
+                $repository, 'createPaginatorStrategic', array($criteria, $sorting)
         );
 
         $maxPerPage = $this->config->getPaginationMaxPerPage();
@@ -98,7 +121,7 @@ class ObjetiveStrategicController extends baseController {
                 ->setTemplate($this->config->getTemplate('list.html'))
                 ->setTemplateVar($this->config->getPluralResourceName())
         ;
-        $view->getSerializationContext()->setGroups(array('id','api_list','indicators','formula'));
+        $view->getSerializationContext()->setGroups(array('id', 'api_list', 'indicators', 'formula'));
         if ($request->get('_format') == 'html') {
             $view->setData($resources);
         } else {
@@ -116,14 +139,13 @@ class ObjetiveStrategicController extends baseController {
      * @return type
      * @throws \Pequiven\ObjetiveBundle\Controller\Exception
      */
-    public function createAction(Request $request) 
-    {
+    public function createAction(Request $request) {
         $this->getPeriodService()->checkIsOpen();
-        
+
         $this->getSecurityService()->checkSecurity('ROLE_SEIP_OBJECTIVE_CREATE_STRATEGIC');
-        
+
         $form = $this->createForm($this->get('pequiven_objetive.strategic.registration.form.type'));
-        
+
         //Obtenemos el valor del nivel del objetivo
         $em = $this->getDoctrine()->getManager();
         $securityContext = $this->container->get('security.context');
@@ -134,7 +156,7 @@ class ObjetiveStrategicController extends baseController {
             $object = $form->getData();
             $data = $this->container->get('request')->get("pequiven_objetive_strategic_registration");
 
-            $data['tendency'] = (int)$data['tendency'];
+            $data['tendency'] = (int) $data['tendency'];
             $object->setGoal(bcadd(str_replace(',', '.', $data['goal']), '0', 3));
             $object->setUserCreatedAt($user);
             $ref = $data['ref'];
@@ -191,7 +213,7 @@ class ObjetiveStrategicController extends baseController {
         $em = $this->getDoctrine()->getManager();
         $em->getConnection()->beginTransaction();
 //        $totalObjetives = count($objetives);
-        
+
         $arrangementRange->setObjetive($objetive);
         $arrangementRange->setPeriod($this->getPeriodService()->getPeriodActive());
 
@@ -237,12 +259,12 @@ class ObjetiveStrategicController extends baseController {
             $arrangementRange->setRankBottomBasic(bcadd(str_replace(',', '.', $data['rankBottomBasic']), '0', 3));
             $arrangementRange->setOpRankBottomBasic($em->getRepository('PequivenMasterBundle:Operator')->findOneBy(array('id' => $data['opRankBottomBasic'])));
         } else if ($data['typeArrangementRangeTypeBottom'] == 'BOTTOM_MIXED') {
-            if($data['tendency'] < 3){//Comportamiento No Estable
+            if ($data['tendency'] < 3) {//Comportamiento No Estable
                 $arrangementRange->setRankBottomMixedTop(bcadd(str_replace(',', '.', $data['rankBottomMixedTop']), '0', 3));
                 $arrangementRange->setOpRankBottomMixedTop($em->getRepository('PequivenMasterBundle:Operator')->findOneBy(array('id' => $data['opRankBottomMixedTop'])));
                 $arrangementRange->setRankBottomMixedBottom(bcadd(str_replace(',', '.', $data['rankBottomMixedBottom']), '0', 3));
                 $arrangementRange->setOpRankBottomMixedBottom($em->getRepository('PequivenMasterBundle:Operator')->findOneBy(array('id' => $data['opRankBottomMixedBottom'])));
-            } else{ //Comportamiento Estable
+            } else { //Comportamiento Estable
                 //Rango Bajo-Alto
                 $arrangementRange->setRankBottomMixedTop(bcadd(str_replace(',', '.', $data['rankBottomTopBasic']), '0', 3));
                 $arrangementRange->setOpRankBottomMixedTop($em->getRepository('PequivenMasterBundle:Operator')->findOneBy(array('id' => $data['opRankBottomTopBasic'])));
@@ -251,7 +273,7 @@ class ObjetiveStrategicController extends baseController {
                 $arrangementRange->setOpRankBottomMixedBottom($em->getRepository('PequivenMasterBundle:Operator')->findOneBy(array('id' => $data['opRankBottomBottomBasic'])));
             }
         }
-        
+
         $em->persist($arrangementRange);
 
 //        if ($totalObjetives > 0) {
@@ -312,30 +334,54 @@ class ObjetiveStrategicController extends baseController {
 
         return $ref;
     }
-    
+
     /**
      * @return \Pequiven\SEIPBundle\Service\PeriodService
      */
-    protected function getPeriodService()
-    {
+    protected function getPeriodService() {
         return $this->container->get('pequiven_seip.service.period');
     }
-    
+
     /**
      * 
      * @return \Pequiven\SEIPBundle\Service\SecurityService
      */
-    protected function getSecurityService()
-    {
+    protected function getSecurityService() {
         return $this->container->get('seip.service.security');
     }
-    
+
     /**
      * 
      * @return \Pequiven\IndicatorBundle\Service\IndicatorService
      */
-    private function getIndicatorService()
-    {
+    private function getIndicatorService() {
         return $this->container->get('pequiven_indicator.service.inidicator');
     }
+
+    public function generatePdf($data, $title, $template) {
+        
+        $pdf = new \Pequiven\SEIPBundle\Model\PDF\NewSeipPdf('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+        $pdf->setPrintLineFooter(false);
+        $pdf->setContainer($this->container);
+        $pdf->setPeriod($this->getPeriodService()->getPeriodActive());
+        $pdf->setFooterText($this->trans('pequiven_seip.message_footer', array(), 'PequivenSEIPBundle'));
+        $pdf->SetCreator(PDF_CREATOR);
+        $pdf->SetAuthor('SEIP');
+        $pdf->setTitle($title);
+        $pdf->SetSubject('Resultados SEIP');
+        $pdf->SetKeywords('PDF, SEIP, Resultados');
+        $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+        $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+        $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+        $pdf->SetMargins(PDF_MARGIN_LEFT, 35, PDF_MARGIN_RIGHT);
+        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+        $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+        $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+        $pdf->AddPage();       
+        $html = $this->renderView($template, $data);
+        $pdf->writeHTML($html, true, false, true, false, '');
+        $pdf->Output(utf8_decode($title). '.pdf', 'D');
+    }
+
 }

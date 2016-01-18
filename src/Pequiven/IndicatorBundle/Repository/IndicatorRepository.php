@@ -514,8 +514,9 @@ class IndicatorRepository extends EntityRepository
             } elseif ($miscellaneous == Indicator::INDICATOR_WITH_RESULT){
                 $queryBuilder->andWhere($queryBuilder->expr()->orX('i.progressToDate > 0','i.lastDateCalculateResult IS NOT NULL'));
             } elseif($miscellaneous == Indicator::INDICATOR_WITHOUT_RESULT){
-                $queryBuilder->andWhere('i.progressToDate = 0');
-                $queryBuilder->andWhere('i.lastDateCalculateResult IS NULL');
+                $queryBuilder->andWhere($queryBuilder->expr()->orX('i.progressToDate = 0','i.lastDateCalculateResult IS NULL'));
+//                $queryBuilder->andWhere('i.progressToDate = 0');
+//                $queryBuilder->andWhere('i.lastDateCalculateResult IS NULL');
             } elseif($miscellaneous == Indicator::INDICATOR_WITHOUT_FREQUENCY_NOTIFICATION){
                 if($frequencyNotification == null){
                     $queryBuilder->leftJoin('i.frequencyNotificationIndicator', 'fn');

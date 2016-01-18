@@ -191,4 +191,14 @@ monitorTacticList:
     defaults: 
         _controller: pequiven.controller.seipmonitor:monitorTacticListAction
         _sylius:
-            method: createPaginatorTactic
+            method: createPaginatorTactic            
+            
+objetiveStrategic_Export:
+    path: /objetives/Strategic/export/{id}.{_format}
+    defaults:
+        _controller: pequiven.controller.objetivestrategic:exportAction
+        _format: html
+    requirements:
+        id: "\d+"
+        _format: html|json
+    methods: [GET|POST]

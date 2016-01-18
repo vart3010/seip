@@ -612,4 +612,9 @@ class GerenciaSecond extends modelGerenciaSecond {
         return $this;
     }
 
+    public function getgerenciaPrimera() {
+        $full = sprintf("%s", $this->getGerencia()->getDescription());
+        return $full;
+    }
+
 }

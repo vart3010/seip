@@ -215,12 +215,19 @@ class GerenciaSecondRepository extends EntityRepository {
         return $qb->getQuery()->getOneOrNullResult();
     }
 
-    public function getgerenciasSecond() {
+    public function getgerenciasSecondQueryBuilder($gerencia) {
         $qb = $this->getQueryBuilder();
         $qb
                 ->select('gs')
                 ->andWhere('gs.enabled= :Enabled')
-                ->setParameter('Enabled', 1);
+                ->andWhere('gs.gerencia= :gerencia')
+                ->setParameter('Enabled', 1)
+                ->setParameter('gerencia', $gerencia);
+        return $qb;
+    }
+
+    public function getgerenciasSecond($gerencia) {
+        $qb = $this->getgerenciasSecondQueryBuilder($gerencia);
         return $qb->getQuery()->getResult();
     }
 

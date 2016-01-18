@@ -15,6 +15,13 @@ pequiven_user_feestructure:
     defaults:
         _controller: pequiven_seip.controller.feestructure:showAction
     methods: [GET|POST]
+
+pequiven_user_loadfeestructure:
+    path: /view/loadfeeStructure
+    defaults:
+        _controller: pequiven_seip.controller.feestructure:createAction
+    methods: [GET|POST]
+    
 pequiven_user_feestructure_add:
     path: /{id}/add-form.{_format}
     defaults:
@@ -25,6 +32,7 @@ pequiven_user_feestructure_add:
     methods: [GET|POST]
     options:
         expose: true 
+
 pequiven_user_feestructure_remove:
     path: /{id}/remove-form.{_format}
     defaults:
