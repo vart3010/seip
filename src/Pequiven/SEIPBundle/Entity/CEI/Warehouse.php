@@ -50,7 +50,7 @@ class Warehouse {
         $this->id = $id;
     }
 
-    function setDescripcion(String $descripcion) {
+    function setDescripcion($descripcion) {
         $this->descripcion = $descripcion;
     }
     

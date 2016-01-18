@@ -75,19 +75,19 @@ class SupplyCenter extends Model {
         $this->id = $id;
     }
 
-    function setName(String $name) {
+    function setName($name) {
         $this->name = $name;
     }
 
-    function setAlias(String $alias) {
+    function setAlias($alias) {
         $this->alias = $alias;
     }
 
-    function setCodigo(String $codigo) {
+    function setCodigo($codigo) {
         $this->codigo = $codigo;
     }
 
-    function setClasificacion(String $clasificacion) {
+    function setClasificacion($clasificacion) {
         $this->clasificacion = $clasificacion;
     }
 
