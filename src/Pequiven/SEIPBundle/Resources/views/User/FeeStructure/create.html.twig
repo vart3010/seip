@@ -1,0 +1,62 @@
+<form name="formula" method="POST" action="{{ path("pequiven_user_loadfeestructure")}}">
+    <div class="with-padding">
+        <div class="columns">   
+            <div class="new-row two-columns bold">
+                Gerencia de 1ra Línea
+            </div>
+            <div class="four-columns">
+                <select onchange="this.form.submit();" name="gerencia" class="select2 input-large form-control" style="width: 80%">
+                    <option value="{{gerencia_ant.id}}" selected>{{gerencia_ant.description}}</option>                                           
+                    {% for gerencia in gerencias %}
+                        <option value="{{gerencia.id}}">{{gerencia.description}}</option>                                           
+                    {% endfor %}
+                </select> 
+            </div>
+            <div class="two-columns bold">
+                {{ form_label(form_create.gerenciasecond) }}
+            </div>
+            <div class="four-columns">
+                {{ form_widget(form_create.gerenciasecond) }}
+                {{ form_errors(form_create.gerenciasecond) }}
+            </div>
+            <div class="new-row two-columns bold">
+                {{ form_label(form_create.coordinacion) }}
+            </div>
+            <div class="four-columns">
+                {{ form_widget(form_create.coordinacion) }}
+                {{ form_errors(form_create.coordinacion) }}
+            </div>
+            <div class="two-columns bold">
+                {{ form_label(form_create.charge) }}
+            </div>
+            <div class="four-columns">
+                {{ form_widget(form_create.charge) }}
+                {{ form_errors(form_create.charge) }}
+            </div>
+            <div class="two-columns bold">
+                {{ form_label(form_create.parent) }}
+            </div>
+            <div class="four-columns">
+                {{ form_widget(form_create.parent) }}
+                {{ form_errors(form_create.parent) }}
+            </div>
+            <div class="two-columns bold">
+                {{ form_label(form_create.staff) }}
+            </div>
+            <div class="one-column">
+                {{ form_widget(form_create.staff) }}
+                {{ form_errors(form_create.staff) }}
+            </div>
+            <div class="two-columns bold">
+                ¿Cuántos Cargos desea Crear?:
+            </div>
+            <div class="one-column">
+                <input type="number" class="input-mini" name="repeat" value="1">
+            </div>
+            <div class="new-row twelve-columns align-right">
+                {{ actions.createonly() }}   
+                {{ form_rest(form_create) }}
+            </div>
+        </div>
+    </div>
+</form>
