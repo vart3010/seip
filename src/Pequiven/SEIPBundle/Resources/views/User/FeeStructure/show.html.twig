@@ -33,9 +33,11 @@
                                 }),                
         {% endfor %}
                         ];                        
-                        var buttons = [];                        
+                        var buttons = [];
+                        {% if(is_granted('ROLE_SEIP_PLANNING_LIST_USER_FEESTRUCTURE_MOVEMENT')) %}
                         buttons.push(new primitives.orgdiagram.ButtonConfig("add", "ui-icon-person", "Asignar"));                        
-                        buttons.push(new primitives.orgdiagram.ButtonConfig("delete", "ui-icon-close", "Retirar"));                                                
+                        buttons.push(new primitives.orgdiagram.ButtonConfig("delete", "ui-icon-close", "Retirar"));  
+                        {% endif %}
                         options.items = items;
                         options.cursorItem = 0;
                         options.buttons = buttons;
@@ -107,7 +109,7 @@
     <input id='delete' type='hidden' value='Eliminar Cargo' ng-click='removeCargo()'/>
     <input id='value' type='hidden' value=''/>
 </div>
-    
+    {% if(is_granted('ROLE_SEIP_PLANNING_LIST_USER_FEESTRUCTURE_CREATE')) %}
         <details class="details margin-bottom" open="">
             <summary role="button" aria-expanded="true">
                 <b>Creación y Búsqueda de Cargos</b>
@@ -117,7 +119,8 @@
                   {% include 'PequivenSEIPBundle:User:FeeStructure/create.html.twig' %}
                 </div>
             </div>
-        </details>
+        </details>                
+    {% endif %}
     
         <fieldset class="fieldset">
             <legend class="legend"><b>Estructura Organizativa Actual</b></legend>

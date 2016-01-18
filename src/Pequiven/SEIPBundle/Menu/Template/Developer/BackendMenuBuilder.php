@@ -103,6 +103,10 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
             $this->addMenuWorkStudyCircles($menu, $section);
         }
 
+        if ($this->isGranted('ROLE_SEIP_PLANNING_LIST_USER_FEESTRUCTURE*')) {
+            $this->addMenuUsuarios($menu, $section);
+        }
+
         //Menú Sistema de Informacion Politica
         if ($this->isGranted('ROLE_SEIP_SIP_*')) {
             $this->addMenuSip($menu, $section);
@@ -114,6 +118,8 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                 'labelAttributes' => array('icon' => 'icon-card'),
             ))->setLabel($this->translate(sprintf('app.backend.menu.%s.admin.main', $section)));
         }
+
+        //Menú Usuarios
 
         return $menu;
     }
@@ -520,12 +526,14 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                             'route' => 'pequiven_user_aux_list',
                         ))
                         ->setLabel($this->translate(sprintf('app.backend.menu.%s.users.aux', $section)));
-                
-                $subchild->addChild('planning.visualize.users.feestructure', array(
-                            'route' => 'pequiven_user_feestructure',
-                        ))
-                        ->setLabel($this->translate(sprintf('app.backend.menu.%s.users.feeStructure', $section)));
 
+                if ($this->isGranted('ROLE_SEIP_PLANNING_LIST_USER_FEESTRUCTURE*')) {
+
+                    $subchild->addChild('planning.visualize.users.feestructure', array(
+                                'route' => 'pequiven_user_feestructure',
+                            ))
+                            ->setLabel($this->translate(sprintf('app.backend.menu.%s.users.feeStructure', $section)));
+                }
                 $visualize->addChild($subchild);
             }
 
@@ -1218,39 +1226,39 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
             $visualize->addChild($pending);
             $child->addChild($visualize);
         }
-        
+
         if (($this->isGranted('ROLE_SEIP_ARRANGEMENT_PROGRAM_CREATE_*') && $this->getPeriodService()->isAllowLoadArrangementProgram()) || $this->isGranted('ROLE_SEIP_ARRANGEMENT_PROGRAM_CREATE_SPECIAL')) {
 //            if ($this->isGranted('ROLE_SEIP_ARRANGEMENT_PROGRAM_CREATE_SPECIAL')) {
-                $subchild = $this->factory->createItem('arrangement_programs.add.main', $this->getSubLevelOptions(array(
-                                    'uri' => null,
-                                    'labelAttributes' => array('icon' => 'icon-book',),
-                                ))
-                        )->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_programs.add.main', $section)));
-
-                if ($this->isGranted('ROLE_SEIP_ARRANGEMENT_PROGRAM_CREATE_TACTIC')) {
-                    $subchild
-                            ->addChild('arrangement_programs.tactic', array(
-                                'route' => 'pequiven_arrangementprogram_create',
-                                'routeParameters' => array('type' => \Pequiven \ArrangementProgramBundle\Entity\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC, 'associate' => \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::ASSOCIATE_ARRANGEMENT_PROGRAM_PLA),
+            $subchild = $this->factory->createItem('arrangement_programs.add.main', $this->getSubLevelOptions(array(
+                                'uri' => null,
+                                'labelAttributes' => array('icon' => 'icon-book',),
                             ))
-                            ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_programs.add.tactic', $section)));
-                }
-                if ($this->isGranted('ROLE_SEIP_ARRANGEMENT_PROGRAM_CREATE_OPERATIVE')) {
-                    $subchild->addChild('arrangement_programs.operative', array(
-                                'route' => 'pequiven_arrangementprogram_create',
-                                'routeParameters' => array('type' => \Pequiven \ArrangementProgramBundle\Entity\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE, 'associate' => \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::ASSOCIATE_ARRANGEMENT_PROGRAM_PLA),
-                            ))
-                            ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_programs.add.operative', $section)));
-                }
+                    )->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_programs.add.main', $section)));
 
-                if ($this->isGranted('ROLE_SEIP_ARRANGEMENT_PROGRAM_CREATE_FROM_TEMPLATE')) {
-                    $subchild->addChild('arrangement_programs.temaplate', array(
-                                'route' => 'pequiven_seip_arrangementprogram_template_index',
-                            ))
-                            ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_programs.temaplate', $section)));
-                }
+            if ($this->isGranted('ROLE_SEIP_ARRANGEMENT_PROGRAM_CREATE_TACTIC')) {
+                $subchild
+                        ->addChild('arrangement_programs.tactic', array(
+                            'route' => 'pequiven_arrangementprogram_create',
+                            'routeParameters' => array('type' => \Pequiven \ArrangementProgramBundle\Entity\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC, 'associate' => \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::ASSOCIATE_ARRANGEMENT_PROGRAM_PLA),
+                        ))
+                        ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_programs.add.tactic', $section)));
+            }
+            if ($this->isGranted('ROLE_SEIP_ARRANGEMENT_PROGRAM_CREATE_OPERATIVE')) {
+                $subchild->addChild('arrangement_programs.operative', array(
+                            'route' => 'pequiven_arrangementprogram_create',
+                            'routeParameters' => array('type' => \Pequiven \ArrangementProgramBundle\Entity\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE, 'associate' => \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::ASSOCIATE_ARRANGEMENT_PROGRAM_PLA),
+                        ))
+                        ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_programs.add.operative', $section)));
+            }
 
-                $child->addChild($subchild);
+            if ($this->isGranted('ROLE_SEIP_ARRANGEMENT_PROGRAM_CREATE_FROM_TEMPLATE')) {
+                $subchild->addChild('arrangement_programs.temaplate', array(
+                            'route' => 'pequiven_seip_arrangementprogram_template_index',
+                        ))
+                        ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_programs.temaplate', $section)));
+            }
+
+            $child->addChild($subchild);
 //            }
         }
 
@@ -1625,8 +1633,8 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                         ))
                 )->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.main', $section)));
 
-        
-        if($this->isGranted(array('ROLE_SEIP_SIP_SEACH_EMPLOYEES')) && ($user->getId() == 112 || $user->getId() == 22 || $user->getId() == 1668)){
+
+        if ($this->isGranted(array('ROLE_SEIP_SIP_SEACH_EMPLOYEES')) && ($user->getId() == 112 || $user->getId() == 22 || $user->getId() == 1668)) {
             $menuSip->addChild('sip.list_pqv', array(
                 'route' => 'pequiven_onePerTen_list',
                 'labelAttributes' => array('icon' => 'fa fa-table',)
@@ -1658,15 +1666,12 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
 //                                'labelAttributes' => array('icon' => 'fa fa-ticket'),
 //                            ))
 //                    )->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.onePerTen', $section)));
-
-
 //            $register = $this->factory->createItem('RegisterOnePerTen', $this->getSubLevelOptions(array(
 //                                'route' => 'pequiven_search_members',
 //                            ))
 //                    )->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.register', $section)));
 //
 //            $onePerTen->addChild($register);
-
 //            if ($this->isGranted(array('ROLE_SEIP_SIP_ONEPERTEN_LIST'))) {
 //                $list = $this->factory->createItem('listOnePerTen', $this->getSubLevelOptions(array(
 //                                    'route' => 'pequiven_onePerTen_list',
@@ -1674,7 +1679,6 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
 //                        )->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.list', $section)));
 //                $onePerTen->addChild($list);
 //            }
-
 //            $menuSip->addChild($onePerTen);
 //        }
 
@@ -1763,30 +1767,30 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
             //Menu 3 nivel Voto
             if ($this->isGranted(array('ROLE_SEIP_SIP_MONITOR_GENERAL'))) {
                 $displayMenu->addChild('sip.voto_general', array(
-                        'route' => 'pequiven_sip_display_voto_general',
-                        'labelAttributes' => array('icon' => 'fa fa-bar-chart',)
-                    ))->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.voto_general', $section)));
+                    'route' => 'pequiven_sip_display_voto_general',
+                    'labelAttributes' => array('icon' => 'fa fa-bar-chart',)
+                ))->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.voto_general', $section)));
             }
 
             if ($this->isGranted(array('ROLE_SEIP_SIP_MONITOR_PQV'))) {
                 $displayMenu->addChild('sip.voto_pqv', array(
-                        'route' => 'pequiven_sip_display_voto_pqv',
-                        'labelAttributes' => array('icon' => 'fa fa-bar-chart',)
-                    ))->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.voto_pqv', $section)));
+                    'route' => 'pequiven_sip_display_voto_pqv',
+                    'labelAttributes' => array('icon' => 'fa fa-bar-chart',)
+                ))->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.voto_pqv', $section)));
             }
-            
+
             if ($this->isGranted(array('ROLE_SEIP_SIP_MONITOR_1X10'))) {
                 $displayMenu->addChild('sip.voto_1x10', array(
-                        'route' => 'pequiven_sip_display_voto_1x10',
-                        'labelAttributes' => array('icon' => 'fa fa-bar-chart',)
-                    ))->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.voto_1x10', $section)));
+                    'route' => 'pequiven_sip_display_voto_1x10',
+                    'labelAttributes' => array('icon' => 'fa fa-bar-chart',)
+                ))->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.voto_1x10', $section)));
             }
 
             if ($this->isGranted(array('ROLE_SEIP_SIP_MONITOR_ONLY_CIRCUITO5'))) {
                 $displayMenu->addChild('sip.voto_circuito', array(
-                        'route' => 'pequiven_sip_display_voto_circuito_5',
-                        'labelAttributes' => array('icon' => 'fa fa-bar-chart',)
-                    ))->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.voto_circuito', $section)));
+                    'route' => 'pequiven_sip_display_voto_circuito_5',
+                    'labelAttributes' => array('icon' => 'fa fa-bar-chart',)
+                ))->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.voto_circuito', $section)));
             }
 
 //            if ($this->isGranted(array('ROLE_SEIP_SIP_MONITOR_CET'))) {
@@ -1795,24 +1799,24 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
 //                        'labelAttributes' => array('icon' => 'fa fa-bar-chart',)
 //                    ))->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.voto_cet', $section)));
 //            }
-            
+
             if ($this->isGranted(array('ROLE_SEIP_SIP_MONITOR_ONLY_ZULIA'))) {
                 $displayMenu->addChild('sip.voto_zulia', array(
-                        'route' => 'pequiven_sip_display_voto_general_estado',
-                        'routeParameters' => array('type' => 1, 'edo' => 21),
-                        'labelAttributes' => array('icon' => 'fa fa-bar-chart',)
-                    ))->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.voto_zulia', $section)));
-            }
-            
-            if ($this->isGranted(array('ROLE_SEIP_SIP_MONITOR_ONLY_ANZOATEGUI'))) {
-                $displayMenu->addChild('sip.voto_anzoategui', array(
-                        'route' => 'pequiven_sip_display_voto_general_estado',
-                        'routeParameters' => array('type' => 1, 'edo' => 2),
-                        'labelAttributes' => array('icon' => 'fa fa-bar-chart',)
-                    ))->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.voto_anzoategui', $section)));
+                    'route' => 'pequiven_sip_display_voto_general_estado',
+                    'routeParameters' => array('type' => 1, 'edo' => 21),
+                    'labelAttributes' => array('icon' => 'fa fa-bar-chart',)
+                ))->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.voto_zulia', $section)));
             }
 
-            $display->addChild($displayMenu); 
+            if ($this->isGranted(array('ROLE_SEIP_SIP_MONITOR_ONLY_ANZOATEGUI'))) {
+                $displayMenu->addChild('sip.voto_anzoategui', array(
+                    'route' => 'pequiven_sip_display_voto_general_estado',
+                    'routeParameters' => array('type' => 1, 'edo' => 2),
+                    'labelAttributes' => array('icon' => 'fa fa-bar-chart',)
+                ))->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.voto_anzoategui', $section)));
+            }
+
+            $display->addChild($displayMenu);
 
             //Sub menu Voto
             $displayList = $this->factory->createItem('sip.list', $this->getSubLevelOptions(array(
@@ -1841,12 +1845,35 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
 //                    'labelAttributes' => array('icon' => 'fa fa-list',)
 //                ))->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.list_cet', $section)));
 
-            $display->addChild($displayList);                        
+            $display->addChild($displayList);
 
             $menuSip->addChild($display);
         }
 
         $menu->addChild($menuSip);
+    }
+
+    /**
+     * CONSTRUYE EL MENU DE EMPLEADOS PARA LA ESTRUCTURA DE CARGOS
+     * @param ItemInterface $menu
+     * @param type $section
+     */
+    private function addMenuUsuarios(ItemInterface $menu, $section) {
+
+        $child = $this->factory->createItem('usuarios', $this->getSubLevelOptions(array(
+                            'uri' => null,
+                            'labelAttributes' => array('icon' => 'fa fa-user',),
+                        ))
+                )
+                ->setLabel($this->translate(sprintf('Empleados', $section)));
+
+        $child->addChild('planning.visualize.users.feestructure', array(
+                    'route' => 'pequiven_user_feestructure',
+                    'labelAttributes' => array('icon' => 'fa fa-list',),
+                ))
+                ->setLabel($this->translate(sprintf('app.backend.menu.%s.users.feeStructure', $section)));
+
+        $menu->addChild($child);
     }
 
     /**
