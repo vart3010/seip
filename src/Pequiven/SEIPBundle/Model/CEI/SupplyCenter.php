@@ -19,9 +19,9 @@ abstract class SupplyCenter extends BaseModel {
 
     public static function getTypesSupplyCenter() {
         return array(
-            self::PRIVADO => 'pequiven_master.company.type.matriz',
-            self::PUBLICO => 'pequiven_master.company.type.affiliated',
-            self::COMERCIALES => 'pequiven_master.company.type.affiliated',
+            self::PUBLICO => 'pequiven_seip.supply_center.public',
+            self::PRIVADO => 'pequiven_seip.supply_center.private',
+            self::COMERCIALES => 'pequiven_seip.supply_center.trade',
         );
     }
 

@@ -458,6 +458,11 @@ pequiven_seip:
     politic:
         work_study_circle: Círculo de Estudio de Trabajo
         proposal: Propuesta
+    
+    supply_center:
+        private: "Privado"
+        public: "Público"
+        trade: "Comerciales"
             
 "Bad credentials": Nombre de usuario o contraseña invalida
 "User account is disabled.": Cuenta de usuario desactivada
@@ -612,6 +617,8 @@ chart:
         indicatorLostDaysByFrequencyNotificationByPeriodWithAccumulated: Días perdidos del indicador, con los valores del mes además del período actual y del período anterior (línea) y del acumulado por período (columna).
         typeChartProgressProjectsByFrequencyNotification: Avance de los proyectos por frecuencia de notificación
         example: Ejemplo
+        
+    
 
 Name: Nombre
 nro: "#"
