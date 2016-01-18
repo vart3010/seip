@@ -531,6 +531,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
 
                     $subchild->addChild('planning.visualize.users.feestructure', array(
                                 'route' => 'pequiven_user_feestructure',
+                                'labelAttributes' => array('icon' => 'fa fa-sitemap'),
                             ))
                             ->setLabel($this->translate(sprintf('app.backend.menu.%s.users.feeStructure', $section)));
                 }
@@ -1633,8 +1634,8 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                         ))
                 )->setLabel($this->translate(sprintf('app.backend.menu.%s.sip.main', $section)));
 
-        
-        if($this->isGranted(array('ROLE_SEIP_SIP_SEACH_EMPLOYEES')) && ($user->getId() == 112 || $user->getId() == 22 || $user->getId() == 1668 || $user->getId() == 70 || $user->getId() == 1640)){
+
+        if ($this->isGranted(array('ROLE_SEIP_SIP_SEACH_EMPLOYEES')) && ($user->getId() == 112 || $user->getId() == 22 || $user->getId() == 1668 || $user->getId() == 70 || $user->getId() == 1640)) {
             $menuSip->addChild('sip.list_pqv', array(
                 'route' => 'pequiven_onePerTen_list',
                 'labelAttributes' => array('icon' => 'fa fa-table',)
@@ -1869,7 +1870,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
 
         $child->addChild('planning.visualize.users.feestructure', array(
                     'route' => 'pequiven_user_feestructure',
-                    'labelAttributes' => array('icon' => 'fa fa-list',),
+                    'labelAttributes' => array('icon' => 'fa fa-sitemap'),
                 ))
                 ->setLabel($this->translate(sprintf('app.backend.menu.%s.users.feeStructure', $section)));
 

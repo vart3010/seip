@@ -333,7 +333,6 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             $amountPenalty = $periodService->getPeriodActive()->getPercentagePenalty();
         }
 
-
         //RECALCULO LOS VALORES ORIGINALES DE LAS METAS SIN PENALIZAR
         $arrangementProgram->getSummary(array(
             'limitMonthToNow' => true,
@@ -353,38 +352,54 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         $this->setPenaltiesbyGoal($arrangementProgram, $amountPenalty);
 
         //PENALIZO LAS METAS
+        $totalAP = 0;
         foreach ($arrangementProgram->getTimeline()->getGoals() as $goal) {
             $advance = $goal->getResult();
             $penalties = $goal->getPenalty() + $goal->getPercentagepenalty();
-            if (($advance - $penalties) < 0) {
-                $goal->setResult(0);
-                $goal->setResultReal(0);
+            if ((($advance - $penalties) < 0) || (($advance - $penalties) >= 120)) {
+                if (($advance - $penalties) < 0) {
+                    $valor = 0;
+                } else {
+                    $valor = 120 - $penalties;
+                }
             } else {
-                $goal->setResult(($advance - $penalties));
-                $goal->setResultReal($advance - $penalties);
+                $valor = $advance - $penalties;
             }
+            $goal->setResult($valor);
+            $goal->setResultReal($valor);
+            $totalAP = $totalAP + ($valor * ($goal->getWeight() / 100));
+
+            //SALVO EL VALOR DE LA META PENALIZADA SIN RESTRICCIONES DE RANGO ES DECIR >120%
+            $goal->setresultBeforepenalty($advance - $penalties);
+
             $em->persist($goal);
         }
 
-        //OBTENGO LOS NUEVOS VALORES DEL PROGRAMA DE GESTIÓN
-        $newsummary = $arrangementProgram->getSummary(array(
-            'limitMonthToNow' => true,
-            'refresh' => false,
-                ), $em);
 
-        //PENALIZO LOS PROGRAMAS DE GESTION. EN CASO DE SER NEGATIVO EL RESULTADO SE ESTABLECE COMO CERO
-        if ($newsummary['advances'] < 0) {
-            $arrangementProgram->setResult(0);
-            $arrangementProgram->setResultReal(0);
-            $arrangementProgram->setTotalAdvance(0);
+        $em->flush();
+
+        //ACTUALIZO LOS PROGRAMAS DE GESTION. EN CASO DE SER NEGATIVO EL RESULTADO SE ESTABLECE COMO CERO. SI ES MAYOR A 120, SE ESTABLECE COMO 120
+        if (($totalAP < 0) || ($totalAP >= 120)) {
+            if ($totalAP < 0) {
+                $arrangementProgram->setResult(0);
+                $arrangementProgram->setResultReal(0);
+                $arrangementProgram->setTotalAdvance(0);
+            } else {
+                $arrangementProgram->setResult(120);
+                $arrangementProgram->setResultReal(120);
+                $arrangementProgram->setTotalAdvance(120);
+            }
         } else {
-            $arrangementProgram->setResult($newsummary['advances']);
-            $arrangementProgram->setResultReal($newsummary['advances']);
-            $arrangementProgram->setTotalAdvance($newsummary['advances']);
+            $arrangementProgram->setResult($totalAP);
+            $arrangementProgram->setResultReal($totalAP);
+            $arrangementProgram->setTotalAdvance($totalAP);
         }
 
+        //SALVO EL VALOR DEL PROGRAMA CUANDO ESTE SOBREPASA LOS 120% DE CUMPLIMIENTO O QUEDA COMO NEGATIVO
+        $arrangementProgram->setRealResult($totalAP);
+
         //CALCULO Y GUARDO EL VALOR DE LA PENALIZACIÓN DEL AP
-        $arrangementProgram->setPenalty($beforepenaltyAP['advances'] - $newsummary['advances']);
+        $arrangementProgram->setPenalty($beforepenaltyAP['advances'] - $totalAP);
 
         //INGRESO LOS DATOS DE AUDITORIA
         $arrangementProgram->updateLastDateCalculateResult();
@@ -482,10 +497,15 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             $planned[12] = $sump;
             $real[12] = $sumr;
 
-            if ((date("n") == 1) || (date("n") == 12)) {
-                $mes = date("n");
+
+            if ((new \DateTime()) >= ($timeline_goals->getperiod()->getDateEnd())) {
+                $mes = 12;
             } else {
-                $mes = date("n") - 1;
+                if ((date("n") == 1) || (date("n") == 12)) {
+                    $mes = date("n");
+                } else {
+                    $mes = date("n") - 1;
+                }
             }
 
             $mayor = 0;
@@ -756,7 +776,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             if ($result > $varToCatch) {
                 $varSum = bcadd($varToCatch, $varToCatch, 2);
                 $varResult = bcadd($result, 0, 2);
-                
+
                 if ($varSum < $varResult) {
                     $varMinus = bcsub($varResult, $varSum, 2);
                 } else {
@@ -769,9 +789,8 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 } else {
                     $varMulti = $varMinus * 100;
                 }
-                
+
                 $result = bcdiv($varMulti, $varToCatch, 2);
-                
             } else {
                 $varResult = bcadd($result, 0, 2);
                 $varMinus = bcsub($varToCatch, $varResult, 2);

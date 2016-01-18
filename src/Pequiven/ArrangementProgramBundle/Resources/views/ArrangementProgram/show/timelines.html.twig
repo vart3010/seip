@@ -9,6 +9,10 @@
         color: red;
     }
     
+    .fa-hand-o-right{
+        color: orange;
+    }
+    
 </style>
 
 <div class="block">
@@ -53,7 +57,8 @@
                         {% if ((isAllowSuperAdmin == true) or (is_granted('ROLE_SEIP_ARRANGEMENT_PROGRAM_VIEW_PENALIZED_GOALS'))) %}
                             <br>
                             <span ng-class="getPenaltyForm(goal.penalty)"><center><i class="fa fa-exclamation-triangle"></i> : {$ goal.penalty $}%</center></span>                            
-                        {%endif%}
+                        {%endif%}                        
+                            <span ng-class="getOverflowForm(goal.realresult)"><center><i class="fa fa-hand-o-right"></i> Real: {$ goal.realresult $}%</center></span>                              
                     </td>
                     <th scope="row">
                         {$ goal.name $}<br>

@@ -16,15 +16,12 @@ namespace Pequiven\SEIPBundle\Model\Box;
  *
  * @author Carlos Mendoza <inhack20@gmail.com>
  */
-final class AreasBox 
-{
-    const DASHBOARD = 'pequiven_seip.area.dashboard';
-    
-    const PRINCIPAL = 'pequiven_seip.area.main';
-    
-    const EVENTS = 'pequiven_seip.area.events';
-    
-     const ITEMS = 'pequiven_seip.area.user_items';
+final class AreasBox {
 
-     const ITEMS_EVOLUTION = 'pequiven_seip.area.evolution_items';
+    const DASHBOARD = 'pequiven_seip.area.dashboard';
+    const PRINCIPAL = 'pequiven_seip.area.main';
+    const EVENTS = 'pequiven_seip.area.events';
+    const ITEMS = 'pequiven_seip.area.user_items';
+    const ITEMS_EVOLUTION = 'pequiven_seip.area.evolution_items';
+
 }
