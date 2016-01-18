@@ -87,8 +87,11 @@ class Coordinacion {
     public function __construct() {
         $this->feeStructure = new \Doctrine\Common\Collections\ArrayCollection();
     }
-
     
+    public function __toString() {
+        return $this->getDescription();
+    }
+            
     function getId() {
         return $this->id;
     }
