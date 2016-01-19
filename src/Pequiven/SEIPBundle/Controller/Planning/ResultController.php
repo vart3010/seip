@@ -141,7 +141,7 @@ class ResultController extends ResourceController {
 
         $datosUser = array();
         $period = $this->getPeriodService()->getPeriodActive()->getName();
-        
+
 //        if ($this->getRequest()->get('numPersonal') != null) {
         if ($this->getRequest()->get('idUser') != null) {
 //            $numPersonal = $this->getRequest()->get('numPersonal');
@@ -199,7 +199,6 @@ class ResultController extends ResourceController {
         return $response;
     }
 
-   
     /**
      * Función que renderiza el Monitor de Objetivos Operativos
      * 
@@ -298,7 +297,7 @@ class ResultController extends ResourceController {
 
         //Configuramos el alto del gráfico
         $totalObjects = count($objetives);
-        $heightChart = ($totalObjects * 30) + 150;
+        $heightChart = ($totalObjects * 40) + 200;
 
         //Data del gráfico
         foreach ($objetives as $objetive) {
@@ -401,6 +400,7 @@ class ResultController extends ResourceController {
             'linkToExportResult' => $linkToExportResult,
             'urlExportFromChart' => $urlExportFromChart,
             'level' => $level,
+            'period' => $subCaption,
         );
     }
 
@@ -413,7 +413,7 @@ class ResultController extends ResourceController {
      */
     public function recalculateAction(Request $request) {
         $this->getSecurityService()->checkSecurity('ROLE_SEIP_PLANNING_OPERATION_RECALCULATE_RESULT');
-        
+
         $period = $this->getPeriodService()->getPeriodActive();
 
         $view = $this
@@ -440,11 +440,11 @@ class ResultController extends ResourceController {
                 } elseif ($type == 2) {
                     $resource = $indicatorRepository->find($id);
                     $resultService->refreshValueIndicator($resource);
-                } elseif ($type == 3){
+                } elseif ($type == 3) {
                     $evaluationDetailsService = $this->getEvaluationDetailsService();
                     $resource = $userRepository->findBy(array('id' => $id));
 //                    $resource = $userRepository->find($id);
-                    $evaluationDetailsService->refreshValueEvaluation($resource[0],$period->getParent());
+                    $evaluationDetailsService->refreshValueEvaluation($resource[0], $period->getParent());
                 }
                 $data['success'] = true;
             } catch (\Exception $exc) {
@@ -485,8 +485,8 @@ class ResultController extends ResourceController {
      * @param Request $request
      */
     public function exportAction(Request $request) {
-        
-        if($request->isMethod('POST')){
+
+        if ($request->isMethod('POST')) {
             $exportRequestStream = $request->request->all();
             $request->request->remove('charttype');
             $request->request->remove('stream');
@@ -498,29 +498,29 @@ class ResultController extends ResourceController {
             $request->request->remove('meta_height');
             $request->request->remove('parameters');
             $fusionchartService = $this->getFusionChartExportService();
-            $fileSVG = $fusionchartService->exportFusionChart($exportRequestStream);              
+            $fileSVG = $fusionchartService->exportFusionChart($exportRequestStream);
         }
 
         //Busqueda de la Imagen Descargada
 //        $routing = "/var/www/html/seip";
         $routing = $this->container->getParameter('kernel.root_dir');
         $nameSVG = glob("$routing/../web/php-export-handler/temp/*.png");
-        
-        $user = $this->getUser()->getId();//Id Usuario    
-        $user = str_pad($user, 6,"0", STR_PAD_LEFT);
+
+        $user = $this->getUser()->getId(); //Id Usuario    
+        $user = str_pad($user, 6, "0", STR_PAD_LEFT);
 
         $cont = 0;
         $contImg = 1;
-        foreach ($nameSVG as $value) {            
-            $pos = strpos($nameSVG[$cont], $user);            
-            if ($pos !== false) {                                 
-                if (strpos($nameSVG[$cont], "stackedbar3d")) {                    
+        foreach ($nameSVG as $value) {
+            $pos = strpos($nameSVG[$cont], $user);
+            if ($pos !== false) {
+                if (strpos($nameSVG[$cont], "stackedbar3d")) {
                     $chartName = $nameSVG[$cont];
                     $contImg ++;
                 }
             }
             $cont ++;
-        }       
+        }
 
         $showResultObjetives = false;
         $level = $request->get('level');
@@ -586,7 +586,7 @@ class ResultController extends ResourceController {
         $pdf->SetAuthor('SEIP');
         $pdf->setTitle($title);
         $pdf->SetSubject('Resultados SEIP');
-        $pdf->SetKeywords('PDF, SEIP, Resultados');        
+        $pdf->SetKeywords('PDF, SEIP, Resultados');
 
         // set default header data
 //        $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PDF_HEADER_STRING);
@@ -616,12 +616,12 @@ class ResultController extends ResourceController {
 
         // set some text to print
         $html = $this->renderView('PequivenSEIPBundle:Result:viewPdf.html.twig', array(
-            'chartName'     => $chartName,
-            'entity'        => $entity,
-            'tree'          => $tree,
-            'level'         => $level,
+            'chartName' => $chartName,
+            'entity' => $entity,
+            'tree' => $tree,
+            'level' => $level,
             'resultService' => $resultService,
-            'images'        => $images));
+            'images' => $images));
 
         // print a block of text using Write()
         $pdf->writeHTML($html, true, false, true, false);
@@ -629,7 +629,6 @@ class ResultController extends ResourceController {
         $pdf->Output($namePdf . '.pdf', 'D');
 
         $this->rmTempFile($chartName);
-
     }
 
     /**
@@ -637,12 +636,10 @@ class ResultController extends ResourceController {
      *  Eliminación de Imagen Temporal
      *
      */
-    public function rmTempFile($chartName)
-    {   
-        $imgChart = $chartName;//Ruta              
-        
-        shell_exec("rm $imgChart");//Eliminamos
+    public function rmTempFile($chartName) {
+        $imgChart = $chartName; //Ruta              
 
+        shell_exec("rm $imgChart"); //Eliminamos
     }
 
     /**
@@ -757,7 +754,7 @@ class ResultController extends ResourceController {
     private function getResultService() {
         return $this->container->get('seip.service.result');
     }
-    
+
     /**
      * Servicio del detalle de las evaluaciones
      * @return \Pequiven\SEIPBundle\Service\User\EvaluationDetailsService
