@@ -5,12 +5,26 @@
                 Gerencia de 1ra Línea
             </div>
             <div class="four-columns">
-                <select onchange="this.form.submit();" name="gerencia" class="select2 input-large form-control" style="width: 80%">
-                    <option value="{{gerencia_ant.id}}" selected>{{gerencia_ant.description}}</option>                                           
-                    {% for gerencia in gerencias %}
-                        <option value="{{gerencia.id}}">{{gerencia.description}}</option>                                           
-                    {% endfor %}
-                </select> 
+                {% if(is_granted('ROLE_SEIP_PLANNING_LIST_USER_FEESTRUCTURE_CREATE_ALL')) %}                
+                    <select onchange="this.form.submit();" name="gerencia" class="select2 input-large form-control" style="width: 80%">
+                        {% if(gerencia_ant) %}
+                        <option value="{{gerencia_ant.id}}" selected>{{gerencia_ant.description}}</option>                                           
+                        {% else %}
+                        <option value="" selected>Usted No Posee Gerencia de 1ra Línea Asignada</option>
+                        {% endif %}
+                        
+                        {% for gerencia in gerencias %}
+                            <option value="{{gerencia.id}}">{{gerencia.description}}</option>                                           
+                        {% endfor %}
+                    </select> 
+                {% else %}
+                    <select disabled onchange="this.form.submit();" name="gerencia" class="select2 input-large form-control" style="width: 80%">
+                        <option value="{{gerencia_ant.id}}" selected>{{gerencia_ant.description}}</option>                                           
+                        {% for gerencia in gerencias %}
+                            <option value="{{gerencia.id}}">{{gerencia.description}}</option>                                           
+                        {% endfor %}
+                    </select> 
+                {% endif %}
             </div>
             <div class="two-columns bold">
                 {{ form_label(form_create.gerenciasecond) }}

@@ -14,8 +14,8 @@ use Pequiven\SEIPBundle\Entity\PeriodItemInterface;
  * @ORM\Entity(repositoryClass="Pequiven\ArrangementProgramBundle\Repository\ArrangementProgramRepository")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
-class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Result\ResultItemInterface,PeriodItemInterface
-{
+class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Result\ResultItemInterface, PeriodItemInterface {
+
     /**
      * @var integer
      *
@@ -40,7 +40,7 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\JoinColumn(nullable=false)
      */
     private $period;
-    
+
     /**
      * Objetivo táctico
      * @var \Pequiven\ObjetiveBundle\Entity\Objetive
@@ -74,7 +74,7 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\Column(name="description", type="text", nullable=true)
      */
     private $description;
-    
+
     /**
      * Estatus del programa de gestion
      * @var integer
@@ -82,7 +82,7 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\Column(name="status", type="integer")
      */
     protected $status = self::STATUS_DRAFT;
-    
+
     /**
      * Responsables del programa
      * @var \Pequiven\SEIPBundle\Entity\User
@@ -90,7 +90,7 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\User",inversedBy="arrangementPrograms")
      */
     protected $responsibles;
-    
+
     /**
      * Linea de tiempo
      * @var \Pequiven\ArrangementProgramBundle\Entity\Timeline
@@ -99,7 +99,7 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\JoinColumn(nullable=false)
      */
     protected $timeline;
-    
+
     /**
      * Creado por
      * @var \Pequiven\SEIPBundle\Entity\User
@@ -108,7 +108,7 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\JoinColumn(nullable=false)
      */
     private $createdBy;
-    
+
     /**
      * @var \DateTime
      * @Gedmo\Timestampable(on="create")
@@ -122,7 +122,7 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\Column(name="updatedAt", type="datetime")
      */
     private $updatedAt;
-    
+
     /**
      * Detalles del programa de gestion
      * 
@@ -131,7 +131,7 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\Joincolumn(nullable=false)
      */
     protected $details;
-    
+
     /**
      * Historiales 
      * 
@@ -139,7 +139,7 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\Historical",cascade={"persist","remove"})
      */
     protected $histories;
-    
+
     /**
      * Observaciones
      * 
@@ -147,14 +147,14 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\OneToMany(targetEntity="Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram\Observation",mappedBy="arrangementProgram",cascade={"persist","remove"})
      */
     protected $observations;
-    
-     /**
+
+    /**
      * Avance total del programa
      * @var float
      * @ORM\Column(name="totalAdvance",type="float")
      */
     protected $totalAdvance = 0;
-    
+
     /**
      * Avance del programa hasta la fecha
      * 
@@ -162,39 +162,39 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\Column(name="progressToDate",type="float")
      */
     protected $progressToDate = 0;
-    
+
     /**
      * @var \DateTime
      * @ORM\Column(name="lastDateCalculateResult", type="datetime",nullable=true)
      */
     private $lastDateCalculateResult;
-    
+
     /**
      *
      * @var boolean
      * @ORM\Column(name="isAvailableInResult",type="boolean")
      */
     private $isAvailableInResult = true;
-    
+
     /**
      * ¿Se puede penalizar el resultado?
      * @var boolean
      * @ORM\Column(name="couldBePenalized",type="boolean")
      */
     private $couldBePenalized = true;
-    
+
     /**
      * ¿Forzar la penalizacion del resultado?
      * @var boolean
      * @ORM\Column(name="forcePenalize",type="boolean")
      */
     private $forcePenalize = false;
-    
+
     /**
      * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
      */
     private $deletedAt;
-    
+
     /**
      * Resultado original
      * 
@@ -202,7 +202,15 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\Column(name="resultReal",type="float")
      */
     protected $resultReal = 0;
-    
+
+    /**
+     * Resultado REAL DEL PROGRAMA
+     * 
+     * @var float
+     * @ORM\Column(name="RealResultAP",type="float")
+     */
+    protected $realResult = 0;
+
     /**
      * ¿El resultado que irá a evaluaciones, será colocado manualmente? Quiere decir que de acuerdo a previa solicitud y justificación se puede editar el resultado del programa de gestión.
      * 
@@ -210,30 +218,30 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\Column(name="updateResultByAdmin",type="boolean")
      */
     protected $updateResultByAdmin = false;
-    
+
     /**
      * Resultado modificado
      * 
      * @var float
      * @ORM\Column(name="resultModified",type="float")
      */
-    protected $resultModified = 0; 
-    
+    protected $resultModified = 0;
+
     /**
      * Penalización
      * 
      * @var float
      * @ORM\Column(name="penalty",type="float")
      */
-    protected $penalty = 0; 
-    
+    protected $penalty = 0;
+
     /**
      * Resultado antes de la Penalización
      * 
      * @var float
      * @ORM\Column(name="resultbeforepenalty",type="float")
      */
-    protected $resultBeforepenalty = 0; 
+    protected $resultBeforepenalty = 0;
 
     /**
      * ¿Mostar navegación al informe de evolución?
@@ -266,14 +274,14 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
      */
     protected $arrangementProgramCausesAnalysis;
 
-     /**
+    /**
      * Analisis de Tendencia del Programa
      * 
      * @var \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCause
      * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionActionVerification",mappedBy="arrangementProgram",cascade={"persist","remove"})
      */
     protected $arrangementProgramVerification;
-    
+
     public function __construct() {
         $this->responsibles = new \Doctrine\Common\Collections\ArrayCollection();
         $this->histories = new \Doctrine\Common\Collections\ArrayCollection();
@@ -283,14 +291,13 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
         $this->arrangementProgramCausesAnalysis = new \Doctrine\Common\Collections\ArrayCollection();
         $this->arrangementProgramVerification = new \Doctrine\Common\Collections\ArrayCollection();
     }
-    
+
     /**
      * Get id
      *
      * @return integer 
      */
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
 
@@ -300,8 +307,7 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
      * @param string $process
      * @return ArrangementProgram
      */
-    public function setProcess($process)
-    {
+    public function setProcess($process) {
         $this->process = $process;
 
         return $this;
@@ -312,8 +318,7 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
      *
      * @return string 
      */
-    public function getProcess()
-    {
+    public function getProcess() {
         return $this->process;
     }
 
@@ -323,8 +328,7 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
      * @param \Pequiven\SEIPBundle\Entity\Period $period
      * @return ArrangementProgram
      */
-    public function setPeriod(\Pequiven\SEIPBundle\Entity\Period $period = null)
-    {
+    public function setPeriod(\Pequiven\SEIPBundle\Entity\Period $period = null) {
         $this->period = $period;
 
         return $this;
@@ -335,8 +339,7 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
      *
      * @return \Pequiven\SEIPBundle\Entity\Period 
      */
-    public function getPeriod()
-    {
+    public function getPeriod() {
         return $this->period;
     }
 
@@ -346,8 +349,7 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
      * @param \Pequiven\ObjetiveBundle\Entity\Objetive $tacticalObjective
      * @return ArrangementProgram
      */
-    public function setTacticalObjective(\Pequiven\ObjetiveBundle\Entity\Objetive $tacticalObjective = null)
-    {
+    public function setTacticalObjective(\Pequiven\ObjetiveBundle\Entity\Objetive $tacticalObjective = null) {
         $this->tacticalObjective = $tacticalObjective;
 
         return $this;
@@ -358,8 +360,7 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
      *
      * @return \Pequiven\ObjetiveBundle\Entity\Objetive 
      */
-    public function getTacticalObjective()
-    {
+    public function getTacticalObjective() {
         return $this->tacticalObjective;
     }
 
@@ -369,8 +370,7 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
      * @param \Pequiven\ObjetiveBundle\Entity\Objetive $operationalObjective
      * @return ArrangementProgram
      */
-    public function setOperationalObjective(\Pequiven\ObjetiveBundle\Entity\Objetive $operationalObjective = null)
-    {
+    public function setOperationalObjective(\Pequiven\ObjetiveBundle\Entity\Objetive $operationalObjective = null) {
         $this->operationalObjective = $operationalObjective;
 
         return $this;
@@ -381,8 +381,7 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
      *
      * @return \Pequiven\ObjetiveBundle\Entity\Objetive 
      */
-    public function getOperationalObjective()
-    {
+    public function getOperationalObjective() {
         return $this->operationalObjective;
     }
 
@@ -401,8 +400,7 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
      * @param string $ref
      * @return ArrangementProgram
      */
-    public function setRef($ref)
-    {
+    public function setRef($ref) {
         $this->ref = $ref;
 
         return $this;
@@ -413,8 +411,7 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
      *
      * @return string 
      */
-    public function getRef()
-    {
+    public function getRef() {
         return $this->ref;
     }
 
@@ -424,8 +421,7 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
      * @param integer $status
      * @return ArrangementProgram
      */
-    public function setStatus($status)
-    {
+    public function setStatus($status) {
         $this->status = $status;
 
         return $this;
@@ -436,8 +432,7 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
      *
      * @return integer 
      */
-    public function getStatus()
-    {
+    public function getStatus() {
         return $this->status;
     }
 
@@ -447,8 +442,7 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
      * @param \Pequiven\ArrangementProgramBundle\Entity\Timeline $timeline
      * @return ArrangementProgram
      */
-    public function setTimeline(\Pequiven\ArrangementProgramBundle\Entity\Timeline $timeline = null)
-    {
+    public function setTimeline(\Pequiven\ArrangementProgramBundle\Entity\Timeline $timeline = null) {
         $timeline->setArrangementProgram($this);
         $this->timeline = $timeline;
 
@@ -460,8 +454,7 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
      *
      * @return \Pequiven\ArrangementProgramBundle\Entity\Timeline 
      */
-    public function getTimeline()
-    {
+    public function getTimeline() {
         return $this->timeline;
     }
 
@@ -471,8 +464,7 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
      * @param \DateTime $createdAt
      * @return ArrangementProgram
      */
-    public function setCreatedAt($createdAt)
-    {
+    public function setCreatedAt($createdAt) {
         $this->createdAt = $createdAt;
 
         return $this;
@@ -483,8 +475,7 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
      *
      * @return \DateTime 
      */
-    public function getCreatedAt()
-    {
+    public function getCreatedAt() {
         return $this->createdAt;
     }
 
@@ -494,8 +485,7 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
      * @param \DateTime $updatedAt
      * @return ArrangementProgram
      */
-    public function setUpdatedAt($updatedAt)
-    {
+    public function setUpdatedAt($updatedAt) {
         $this->updatedAt = $updatedAt;
 
         return $this;
@@ -506,8 +496,7 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
      *
      * @return \DateTime 
      */
-    public function getUpdatedAt()
-    {
+    public function getUpdatedAt() {
         return $this->updatedAt;
     }
 
@@ -641,8 +630,7 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
      * @param \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram\Details $details
      * @return ArrangementProgram
      */
-    public function setDetails(\Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram\Details $details)
-    {
+    public function setDetails(\Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram\Details $details) {
         $this->details = $details;
 
         return $this;
@@ -653,8 +641,7 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
      *
      * @return \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram\Details 
      */
-    public function getDetails()
-    {
+    public function getDetails() {
         return $this->details;
     }
 
@@ -664,8 +651,7 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
      * @param \Pequiven\SEIPBundle\Entity\Historical $histories
      * @return ArrangementProgram
      */
-    public function addHistory(\Pequiven\SEIPBundle\Entity\Historical $history)
-    {
+    public function addHistory(\Pequiven\SEIPBundle\Entity\Historical $history) {
         $this->histories->add($history);
 
         return $this;
@@ -676,8 +662,7 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
      *
      * @param \Pequiven\SEIPBundle\Entity\Historical $histories
      */
-    public function removeHistory(\Pequiven\SEIPBundle\Entity\Historical $histories)
-    {
+    public function removeHistory(\Pequiven\SEIPBundle\Entity\Historical $histories) {
         $this->histories->removeElement($histories);
     }
 
@@ -686,8 +671,7 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getHistories()
-    {
+    public function getHistories() {
         return $this->histories;
     }
 
@@ -697,8 +681,7 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
      * @param \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram\Observation $observations
      * @return ArrangementProgram
      */
-    public function addObservation(\Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram\Observation $observation)
-    {
+    public function addObservation(\Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram\Observation $observation) {
         $observation->setArrangementProgram($this);
         $this->observations->add($observation);
 
@@ -710,8 +693,7 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
      *
      * @param \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram\Observation $observations
      */
-    public function removeObservation(\Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram\Observation $observations)
-    {
+    public function removeObservation(\Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram\Observation $observations) {
         $this->observations->removeElement($observations);
     }
 
@@ -720,19 +702,17 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getObservations()
-    {
+    public function getObservations() {
         return $this->observations;
     }
-    
+
     /**
      * Add responsibles
      *
      * @param \Pequiven\SEIPBundle\Entity\User $responsibles
      * @return ArrangementProgram
      */
-    public function addResponsible(\Pequiven\SEIPBundle\Entity\User $responsibles)
-    {
+    public function addResponsible(\Pequiven\SEIPBundle\Entity\User $responsibles) {
         $this->responsibles->add($responsibles);
 
         return $this;
@@ -743,8 +723,7 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
      *
      * @param \Pequiven\SEIPBundle\Entity\User $responsibles
      */
-    public function removeResponsible(\Pequiven\SEIPBundle\Entity\User $responsibles)
-    {
+    public function removeResponsible(\Pequiven\SEIPBundle\Entity\User $responsibles) {
         $this->responsibles->removeElement($responsibles);
     }
 
@@ -753,22 +732,21 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getResponsibles()
-    {
+    public function getResponsibles() {
         return $this->responsibles;
     }
-    
+
     public function __toString() {
         return $this->getRef();
     }
+
     /**
      * Set totalAdvance
      *
      * @param float $totalAdvance
      * @return ArrangementProgram
      */
-    public function setTotalAdvance($totalAdvance)
-    {
+    public function setTotalAdvance($totalAdvance) {
         $this->totalAdvance = $totalAdvance;
 
         return $this;
@@ -779,8 +757,7 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
      *
      * @return float 
      */
-    public function getTotalAdvance()
-    {
+    public function getTotalAdvance() {
         return $this->totalAdvance;
     }
 
@@ -790,8 +767,7 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
      * @param float $progressToDate
      * @return ArrangementProgram
      */
-    public function setProgressToDate($progressToDate)
-    {
+    public function setProgressToDate($progressToDate) {
         $this->progressToDate = $progressToDate;
 
         return $this;
@@ -802,11 +778,10 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
      *
      * @return float 
      */
-    public function getProgressToDate()
-    {
+    public function getProgressToDate() {
         return $this->progressToDate;
     }
-    
+
     /**
      * Devuelve el valor que sera tomado en cuenta para los resuldatos
      * @return type
@@ -814,25 +789,32 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
     public function getResult() {
         return $this->progressToDate;
     }
-    
-    public function setResult($result) 
-    {
+
+    public function setResult($result) {
         $this->progressToDate = $result;
     }
-    
+
     /**
      * Set resultReal
-     *indicators
+     * indicators
      * @param float $resultReal
      * @return Indicator
      */
-    public function setResultReal($resultReal)
-    {
+    public function setResultReal($resultReal) {
         $this->resultReal = $resultReal;
 
         return $this;
     }
+    
+    function getRealResult() {
+        return $this->realResult;
+    }
 
+    function setRealResult($realResult) {
+        $this->realResult = $realResult;
+    }
+
+    
     public function getWeight() {
         return null;
     }
@@ -841,25 +823,23 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
         $result = ( $this->getResult() * $this->getWeight()) / 100;
         return $result;
     }
-    
-    public function updateLastDateCalculateResult() 
-    {
+
+    public function updateLastDateCalculateResult() {
         $this->lastDateCalculateResult = new \DateTime();
     }
-    public function clearLastDateCalculateResult() 
-    {
+
+    public function clearLastDateCalculateResult() {
         $this->lastDateCalculateResult = null;
     }
-    
-    public function isAvailableInResult() 
-    {
+
+    public function isAvailableInResult() {
         $valid = $this->isAvailableInResult;
-        if($this->getStatus() == self::STATUS_REJECTED){
+        if ($this->getStatus() == self::STATUS_REJECTED) {
             $valid = false;
         }
         return $valid;
     }
-    
+
     function getDescription() {
         return $this->description;
     }
@@ -876,38 +856,32 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
         $this->isAvailableInResult = $isAvailableInResult;
     }
 
-    function getDeletedAt() 
-    {
+    function getDeletedAt() {
         return $this->deletedAt;
     }
 
-    function setDeletedAt($deletedAt) 
-    {
+    function setDeletedAt($deletedAt) {
         $this->deletedAt = $deletedAt;
         return $this;
     }
-    
-    function isCouldBePenalized() 
-    {
+
+    function isCouldBePenalized() {
         return $this->couldBePenalized;
     }
 
-    function isForcePenalize() 
-    {
+    function isForcePenalize() {
         return $this->forcePenalize;
     }
 
-    function setCouldBePenalized($couldBePenalized) 
-    {
+    function setCouldBePenalized($couldBePenalized) {
         $this->couldBePenalized = $couldBePenalized;
-        
+
         return $this;
     }
 
-    function setForcePenalize($forcePenalize) 
-    {
+    function setForcePenalize($forcePenalize) {
         $this->forcePenalize = $forcePenalize;
-        
+
         return $this;
     }
 
@@ -922,15 +896,14 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
     function setShowEvolutionView($showEvolutionView) {
         $this->showEvolutionView = $showEvolutionView;
     }
-    
+
     /**
      * Set updateResultByAdmin
      *
      * @param boolean $updateResultByAdmin
      * @return ArrangementProgram
      */
-    public function setUpdateResultByAdmin($updateResultByAdmin)
-    {
+    public function setUpdateResultByAdmin($updateResultByAdmin) {
         $this->updateResultByAdmin = $updateResultByAdmin;
 
         return $this;
@@ -941,18 +914,16 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
      *
      * @return boolean 
      */
-    public function getUpdateResultByAdmin()
-    {
+    public function getUpdateResultByAdmin() {
         return $this->updateResultByAdmin;
     }
-    
+
     /**
      * Set resultModified
      * @param float $resultModified
      * @return ArrangementProgram
      */
-    public function setResultModified($resultModified)
-    {
+    public function setResultModified($resultModified) {
         $this->resultModified = $resultModified;
 
         return $this;
@@ -963,11 +934,10 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
      *
      * @return float 
      */
-    public function getResultModified()
-    {
+    public function getResultModified() {
         return $this->resultModified;
     }
-    
+
     /**
      * Set penalty
      * @param integer $penalty
@@ -1008,20 +978,19 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
         return $this->resultBeforepenalty;
     }
 
-    public function __clone() 
-    {
-        if($this->id){
+    public function __clone() {
+        if ($this->id) {
             $this->id = null;
             $this->ref = null;
             $this->period = null;
             $this->description = null;
             $this->status = self::STATUS_DRAFT;
-            
+
             $this->timeline = new Timeline();
             $this->createdBy = null;
             $this->createdAt = null;
             $this->updatedAt = null;
-            
+
             $this->details = new ArrangementProgram\Details();
             $this->histories = new \Doctrine\Common\Collections\ArrayCollection();
             $this->observations = new \Doctrine\Common\Collections\ArrayCollection();
@@ -1030,5 +999,5 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
             $this->lastDateCalculateResult = null;
         }
     }
-    
+
 }

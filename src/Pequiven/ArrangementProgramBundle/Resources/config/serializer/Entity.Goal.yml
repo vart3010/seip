@@ -39,4 +39,7 @@ Pequiven\ArrangementProgramBundle\Entity\Goal:
         goalDetails:
             expose: true
             groups: [goalDetails]
+        realResult:
+            expose: true
+            groups: [api_list]
      
