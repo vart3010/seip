@@ -158,6 +158,7 @@ app:
                             strategics: Estratégicos
                             indicator:
                                 strategics: Indicadores Estratégicos
+                                cpjaa: Indicadores CPJAA
                             objetive:
                                 strategics: Objetivos Estratégicos
                             tactic: Táctico
