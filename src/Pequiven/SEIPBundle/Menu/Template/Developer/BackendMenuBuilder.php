@@ -860,22 +860,35 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                 $visualize->addChild($itemByGerenciaVisualize);
             }
 
-            if ($this->isGranted('ROLE_SEIP_RESULT_LIST_STRATEGICS')) {
+//            if ($this->isGranted('ROLE_SEIP_RESULT_LIST_STRATEGICS')) {
+            if ($this->isGranted('ROLE_SEIP_RESULT_VIEW_BY_LINE_STRATEGICS')) {
                 $itemStrategicsVisualize = $this->factory->createItem('results.visualize.by_lineStrategic', array(
-                            'route' => 'pequiven_line_strategic_view_dashboard',
-                        ))->setLabel($this->translate(sprintf('app.backend.menu.%s.results.visualize.by_lineStrategic', $section)));
+                    'route' => 'pequiven_line_strategic_view_dashboard',
+                    ))->setLabel($this->translate(sprintf('app.backend.menu.%s.results.visualize.by_lineStrategic', $section)));
                 $visualize->addChild($itemStrategicsVisualize);
+            }
 
-                $itemStrategicsVisualize = $this->factory->createItem('results.visualize.indicator.strategics', array(
-                            'route' => 'pequiven_line_strategic_indicators_strategics',
-                        ))->setLabel($this->translate(sprintf('app.backend.menu.%s.results.visualize.indicator.strategics', $section)));
-                $visualize->addChild($itemStrategicsVisualize);
+            if ($this->isGranted('ROLE_SEIP_RESULT_VIEW_BY_INDICATORS_STRATEGICS')) {
+                $itemStrategicsIndicators = $this->factory->createItem('results.visualize.indicator.strategics', array(
+                    'route' => 'pequiven_line_strategic_indicators_strategics',
+                    ))->setLabel($this->translate(sprintf('app.backend.menu.%s.results.visualize.indicator.strategics', $section)));
+                $visualize->addChild($itemStrategicsIndicators);
+            }
 
+            if ($this->isGranted('ROLE_SEIP_RESULT_VIEW_BY_OBJETIVES_STRATEGICS')) {
                 $itemStrategicsObjetives = $this->factory->createItem('results.visualize.objetive.strategics', array(
-                            'route' => 'pequiven_line_strategic_view_objetives_strategics',
-                        ))->setLabel($this->translate(sprintf('app.backend.menu.%s.results.visualize.objetive.strategics', $section)));
+                    'route' => 'pequiven_line_strategic_view_objetives_strategics',
+                    ))->setLabel($this->translate(sprintf('app.backend.menu.%s.results.visualize.objetive.strategics', $section)));
                 $visualize->addChild($itemStrategicsObjetives);
             }
+            
+            if ($this->isGranted('ROLE_SEIP_RESULT_VIEW_BY_INDICATORS_CPJAA') && $this->getPeriodService()->getPeriodActive()->getName() == '2015') {
+                $itemStrategicsIndicatorsCpjaa = $this->factory->createItem('results.visualize.indicator.cpjaa', array(
+                    'route' => '',
+                    ))->setLabel($this->translate(sprintf('app.backend.menu.%s.results.visualize.indicator.cpjaa', $section)));
+                $visualize->addChild($itemStrategicsIndicatorsCpjaa);
+            }
+//            }
 
             $itemPeriod = $this->factory->createItem('results.period', $this->getSubLevelOptions())
                     ->setLabel($this->translate(sprintf('app.backend.menu.%s.results.period.main', $section)));
