@@ -122,6 +122,7 @@ pequiven_seip:
         results: Resultados
         resultsStrategics: Resultados Estratégicos
         resultsIndicatorsStrategics: Indicadores Estratégicos
+        resultsIndicatorsCPJAA: Indicadores CPJAA
         resultsObjetivesStrategics: Objetivos Estratégicos
         resultsByGerencia: Resultados %gerencia%
         resultsByLineStrategic: Resultados %linea_estrategica%

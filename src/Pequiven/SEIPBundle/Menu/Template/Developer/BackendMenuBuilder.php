@@ -884,7 +884,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
             
             if ($this->isGranted('ROLE_SEIP_RESULT_VIEW_BY_INDICATORS_CPJAA') && $this->getPeriodService()->getPeriodActive()->getName() == '2015') {
                 $itemStrategicsIndicatorsCpjaa = $this->factory->createItem('results.visualize.indicator.cpjaa', array(
-                    'route' => '',
+                    'route' => 'pequiven_line_strategic_indicators_specific',
                     ))->setLabel($this->translate(sprintf('app.backend.menu.%s.results.visualize.indicator.cpjaa', $section)));
                 $visualize->addChild($itemStrategicsIndicatorsCpjaa);
             }

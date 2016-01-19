@@ -383,7 +383,7 @@ class IndicatorRepository extends EntityRepository
      * @param type $idLineStrategic
      * @param type $orderBy
      */
-    public function findByLineStrategicAndOrderShowFromParent($idLineStrategic, $orderBy = 'ASC'){
+    public function findByLineStrategicAndOrderShowFromParent($idLineStrategic, $orderBy = 'ASC',$specific = false){
         $qb = $this->getQueryBuilder();
         $qb
                 ->innerJoin('i.lineStrategics','ls')
@@ -392,6 +392,11 @@ class IndicatorRepository extends EntityRepository
                 ->setParameter('idLineStrategic', $idLineStrategic)
                 ->orderBy('i.orderShowFromParent', $orderBy)
         ;
+        if($specific){
+            $qb->andWhere('i.showByDashboardSpecific = 1');
+        } else{
+            $qb->andWhere('i.showByDashboardSpecific = 0');
+        }
         $this->applyPeriodCriteria($qb);
         
         return $qb->getQuery()->getResult();

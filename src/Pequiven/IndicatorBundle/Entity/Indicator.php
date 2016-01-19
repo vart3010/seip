@@ -648,6 +648,13 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      */
     private $showColumnPlanAtTheEnd = false;
     
+    /**
+     * ¿EL indicador esta disponible para verse en el dashboard de tipo específico?
+     * @var boolean
+     *  @ORM\Column(name="showByDashboardSpecific",type="boolean")
+     */
+    private $showByDashboardSpecific = false;
+    
 
     /**
      * Constructor
@@ -2619,6 +2626,25 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      */
     public function getResultIsFromChildrensResult() {
         return $this->resultIsFromChildrensResult;
+    }
+
+    /**
+     * 
+     * @param type $showByDashboardSpecific
+     * @return \Pequiven\IndicatorBundle\Entity\Indicator
+     */
+    public function setShowByDashboardSpecific($showByDashboardSpecific) {
+        $this->showByDashboardSpecific = $showByDashboardSpecific;
+
+        return $this;
+    }
+
+    /**
+     * 
+     * @return type
+     */
+    public function getShowByDashboardSpecific() {
+        return $this->showByDashboardSpecific;
     }
 
     /**

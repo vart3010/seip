@@ -3602,33 +3602,35 @@ class IndicatorService implements ContainerAwareInterface {
      * <b> 2: </b> Cálculo de acuerdo al color del resultado de medición de los indicadores
      * @return type
      */
-    public function calculateSimpleAverage(LineStrategic &$lineStrategic, $mode = 1) {
+    public function calculateSimpleAverage(LineStrategic &$lineStrategic, $mode = 1, $specific = false) {
         $indicators = $lineStrategic->getIndicators();
         $quantity = count($indicators);
         $resultService = $this->getResultService();
         $arrangementRangeService = $this->getArrangementRangeService();
         $value = 0.0;
         foreach ($indicators as $indicator) {
-            if ($mode == 1) {
-                $value += $indicator->getResultReal();
-            } else {
-                $arrangementRange = $indicator->getArrangementRange();
-                if ($arrangementRange !== null) {
-                    $errorArrangementRange = null;
-                    if ($errorArrangementRange == null) {
-                        $tendency = $indicator->getTendency();
-                        if ($resultService->calculateRangeGood($indicator, $tendency, CommonObject::TYPE_RESULT_ARRANGEMENT)) {
-                            $value += 1;
-                        } elseif ($resultService->calculateRangeMiddle($indicator, $tendency, CommonObject::TYPE_RESULT_ARRANGEMENT)) {
-                            $value += 2;
-                        } elseif ($resultService->calculateRangeBad($indicator, $tendency, CommonObject::TYPE_RESULT_ARRANGEMENT)) {
-                            $value += 3;
+            if($indicator->getShowByDashboardSpecific() == $specific){
+                if ($mode == 1) {
+                    $value += $indicator->getResultReal();
+                } else {
+                    $arrangementRange = $indicator->getArrangementRange();
+                    if ($arrangementRange !== null) {
+                        $errorArrangementRange = null;
+                        if ($errorArrangementRange == null) {
+                            $tendency = $indicator->getTendency();
+                            if ($resultService->calculateRangeGood($indicator, $tendency, CommonObject::TYPE_RESULT_ARRANGEMENT)) {
+                                $value += 1;
+                            } elseif ($resultService->calculateRangeMiddle($indicator, $tendency, CommonObject::TYPE_RESULT_ARRANGEMENT)) {
+                                $value += 2;
+                            } elseif ($resultService->calculateRangeBad($indicator, $tendency, CommonObject::TYPE_RESULT_ARRANGEMENT)) {
+                                $value += 3;
+                            }
+                        } else {
+                            $value += 4;
                         }
                     } else {
                         $value += 4;
                     }
-                } else {
-                    $value += 4;
                 }
             }
         }
