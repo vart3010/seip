@@ -572,61 +572,41 @@ class ResultController extends ResourceController {
             $entity = $gerenciaSecond;
         }
 
-        $pdf = new SeipPdfH('L', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+        $pdf = new \Pequiven\SEIPBundle\Model\PDF\NewSeipPdf('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+        $pdf->setPrintLineFooter(false);
         $pdf->setContainer($this->container);
-        $pdf->setPeriod($periodService->getPeriodActive());
+        $pdf->setPeriod($this->getPeriodService()->getPeriodActive());
         $pdf->setFooterText($this->trans('pequiven_seip.message_footer', array(), 'PequivenSEIPBundle'));
-
-        $namePdf = $this->trans('pequiven_seip.results.resultsByGerencia', array('%gerencia%' => $entity->getDescription()), 'PequivenSEIPBundle');
-//        $title = $this->trans('pequiven_seip.results.results',array(),'PequivenSEIPBundle');
-        $title = $namePdf;
-
-        // set document information
         $pdf->SetCreator(PDF_CREATOR);
         $pdf->SetAuthor('SEIP');
-        $pdf->setTitle($title);
+        $pdf->setTitle('Resultados de Objetivos por Gerencia');
         $pdf->SetSubject('Resultados SEIP');
         $pdf->SetKeywords('PDF, SEIP, Resultados');
-
-        // set default header data
-//        $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PDF_HEADER_STRING);
-        // set header and footer fonts
         $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
         $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
-
-        // set default monospaced font
         $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
-
-        // set margins
-        $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+        $pdf->SetMargins(PDF_MARGIN_LEFT, 35, PDF_MARGIN_RIGHT);
         $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
         $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-
-        // set auto page breaks
         $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
-
-        // set image scale factor
         $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
-
-        // set font
-        $pdf->SetFont('times', 'BI', 12);
-
-        // add a page
         $pdf->AddPage();
+        $namePdf = $entity->getDescription();
+        $period = $this->getPeriodService()->getEntityPeriodActive();        
 
-        // set some text to print
         $html = $this->renderView('PequivenSEIPBundle:Result:viewPdf.html.twig', array(
             'chartName' => $chartName,
             'entity' => $entity,
             'tree' => $tree,
             'level' => $level,
             'resultService' => $resultService,
-            'images' => $images));
+            'images' => $images,
+            'period' => $period));
 
         // print a block of text using Write()
         $pdf->writeHTML($html, true, false, true, false);
 
-        $pdf->Output($namePdf . '.pdf', 'D');
+        $pdf->Output('Resultados - ' . $namePdf . '.pdf', 'D');
 
         $this->rmTempFile($chartName);
     }
