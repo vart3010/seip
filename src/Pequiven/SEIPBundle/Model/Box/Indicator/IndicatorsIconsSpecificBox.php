@@ -28,6 +28,8 @@ class IndicatorsIconsSpecificBox extends GenericBox
         
         $em = $this->getDoctrine()->getManager();
         
+        $idComplejo = $this->getRequest()->get('complejo');        
+        
         $iconsLineStrategic = LineStrategic::getIcons();
         $linesStrategics = $this->container->get('pequiven.repository.linestrategic')->findBy(array('deletedAt' => null),array('orderShow' => 'ASC'));
         $tree = $data = $style = array();
@@ -42,11 +44,9 @@ class IndicatorsIconsSpecificBox extends GenericBox
 //        var_dump(count($indicators));die();
         
         foreach($linesStrategics as $lineStrategic){
-//            $indicators = $lineStrategic->getIndicators();
-//            $indicators = $this->container->get('pequiven.repository.linestrategic')->findIndicatorsByOrderToShow($lineStrategic->getId());
-            $indicators = $this->container->get('pequiven.repository.indicator')->findByLineStrategicAndOrderShowFromParent($lineStrategic->getId(),'ASC',true);
-//            $indicators = $this->container->get('pequiven.repository.indicator')->findBy(array('deletedAt' => null,'lineStrategics' => $lineStrategic),array('orderShowFromParent' => 'ASC'));
-            $valueIndicators = $indicatorService->calculateSimpleAverage($lineStrategic,2,true);
+            $indicators = $this->container->get('pequiven.repository.indicator')->findByLineStrategicAndOrderShowFromParent($lineStrategic->getId(),'ASC',array('specific' => true,'complejo' => $idComplejo));
+            
+            $valueIndicators = $indicatorService->calculateSimpleAverage($lineStrategic,2,array('specific' => true));
             if(count($indicators) > 0){
             $type = $resultService->evaluateRangeByTotal($valueIndicators,count($indicators));
             } else{

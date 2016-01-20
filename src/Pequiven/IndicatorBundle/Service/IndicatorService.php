@@ -3602,7 +3602,15 @@ class IndicatorService implements ContainerAwareInterface {
      * <b> 2: </b> Cálculo de acuerdo al color del resultado de medición de los indicadores
      * @return type
      */
-    public function calculateSimpleAverage(LineStrategic &$lineStrategic, $mode = 1, $specific = false) {
+    public function calculateSimpleAverage(LineStrategic &$lineStrategic, $mode = 1, $parameters = array()) {
+        $parameters = new \Doctrine\Common\Collections\ArrayCollection($parameters);
+        
+        if(($specific = $parameters->remove('specific')) != null){
+            $complejo = $parameters->remove('complejo');
+        } else{
+            $specific = false;
+        }
+        
         $indicators = $lineStrategic->getIndicators();
         $quantity = count($indicators);
         $resultService = $this->getResultService();

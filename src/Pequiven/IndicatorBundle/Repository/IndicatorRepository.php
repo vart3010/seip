@@ -383,7 +383,9 @@ class IndicatorRepository extends EntityRepository
      * @param type $idLineStrategic
      * @param type $orderBy
      */
-    public function findByLineStrategicAndOrderShowFromParent($idLineStrategic, $orderBy = 'ASC',$specific = false){
+    public function findByLineStrategicAndOrderShowFromParent($idLineStrategic, $orderBy = 'ASC',$parameters = array()){
+        $parameters = new \Doctrine\Common\Collections\ArrayCollection($parameters);
+        
         $qb = $this->getQueryBuilder();
         $qb
                 ->innerJoin('i.lineStrategics','ls')
@@ -392,11 +394,19 @@ class IndicatorRepository extends EntityRepository
                 ->setParameter('idLineStrategic', $idLineStrategic)
                 ->orderBy('i.orderShowFromParent', $orderBy)
         ;
-        if($specific){
+        
+        if(($specific = $parameters->remove('specific')) != null){
             $qb->andWhere('i.showByDashboardSpecific = 1');
         } else{
             $qb->andWhere('i.showByDashboardSpecific = 0');
         }
+        
+        if(($complejo = $parameters->remove('')) != null){
+            $qb->andWhere('i.complejoDashboardSpecific = :complejo')
+               ->setParameter('complejo', $complejo)
+            ;                    ;
+        }
+        
         $this->applyPeriodCriteria($qb);
         
         return $qb->getQuery()->getResult();
