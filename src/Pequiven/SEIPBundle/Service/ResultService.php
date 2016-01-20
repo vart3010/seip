@@ -9,6 +9,7 @@ use Pequiven\MasterBundle\Entity\ArrangementRangeType;
 use Pequiven\MasterBundle\Entity\Operator;
 use Pequiven\SEIPBundle\Model\Common\CommonObject;
 use Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram;
+use Pequiven\ArrangementProgramBundle\Entity\MovementEmployee\MovementEmployee;
 
 /**
  * Servicio que se encarga de actualizar los resultados
@@ -2008,8 +2009,13 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 $realDateEnd = $summary['dateEndReal'];
 
                 $advanceToDate = 0.0;
-                $today = date("m");
+
                 foreach ($arrangementProgram->getTimeLine()->getGoals() as $goal) {
+                    if ((new \DateTime()) >= ($goal->getperiod()->getDateEnd())) {
+                        $today = 12;
+                    } else {
+                        $today = date("m");
+                    }
                     $advanceToDate = $advanceToDate + $goal->getGoalDetails()->getPlannedTotal($today) * $goal->getWeight() / 100;
                 }
 
@@ -2096,6 +2102,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
 
                 $data = array(
                     'id' => sprintf('OB-%s', $objetive->getId()),
+                    'ref' => sprintf('%s', $objetive->getRef()),
                     'description' => $objetive->getDescription(),
                     'result' => $objetive->getUpdateResultByAdmin() ? ToolService::formatResult($objetive->getResultModified()) : ToolService::formatResult($objetive->getResult()),
                     'dateStart' => array(
@@ -2105,7 +2112,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                     'dateEnd' => array(
                         'plan' => ToolService::formatDateTime($planDateEnd),
                         'real' => ToolService::formatDateTime($planDateEnd)
-                    ),
+                    )
                 );
                 if ($objetive->getObjetiveLevel()->getLevel() == \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_OPERATIVO) {
                     $objetivesOO[$objetive->getId()] = $data;
@@ -2128,9 +2135,63 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 $realDateEnd = clone($planDateEnd);
                 $realDateEnd->setDate($realDateEnd->format('Y'), $summary['realMonthDateEnd'], \Pequiven\SEIPBundle\Service\ToolService::getLastDayMonth($realDateEnd->format('Y'), $summary['realMonthDateEnd']));
 
-                $fecha = date('Y-m-j');
-                $fecha = strtotime('-1 month', strtotime($fecha));
-                $fecha = date('m', $fecha);
+                if ((new \DateTime()) >= ($goal->getperiod()->getDateEnd())) {
+                    $fecha = 12;
+                } else {
+                    $fecha = date("m");
+                }
+
+
+                //LOCALIZO MOVIMIENTOS DE ENTRADA A LA META
+                $em = $this->getDoctrine()->getManager();
+
+                // $movements = new MovementEmployee();
+                $movements = $em->getRepository('PequivenArrangementProgramBundle:MovementEmployee\MovementEmployee')->FindMovementDetailsbyGoalbyUser($goal->getid(), $user->getid());
+                //$movements = $em->getRepository('pequiven_seip.repository.arrangementprogram_movement')->FindMovementDetailsbyGoalbyUser($goal->getId());              
+
+                $valores = array();
+                $tipos = array();
+                $i = 1;
+                $aporte = 0;
+
+                foreach ($movements as $mov) {
+                    $valores[$i] = $mov->getRealAdvance();
+                    $tipos[$i] = $mov->getType();
+                    $i++;
+                }
+
+                if ($tipos != null) {
+
+                    if ((reset($tipos) == 'O')) {
+                        array_unshift($tipos, 'I');
+                        array_unshift($valores, 0);
+                    }
+
+                    if (($tipos[$i - 1] == 'I')) {
+                        $tipos[] = 'O';
+                        $valores[] = $goal->getUpdateResultByAdmin() ? ToolService::formatResult($goal->getResultModified()) : ToolService::formatResult($goal->getResult());
+                    }
+
+                    for ($i = 1; $i <= count($valores); $i++) {
+                        if ($tipos[$i] == 'I') {
+                            $aporte = $aporte - $valores[$i];
+                        }
+                        if ($tipos[$i] == 'O') {
+                            $aporte = $aporte + $valores[$i];
+                        }
+                    }
+
+                    if ($aporte < 0) {
+                        $aporte = 0;
+                    }
+
+//                    var_dump('aporte: ' . $aporte);
+                } else {
+                    $aporte = $goal->getUpdateResultByAdmin() ? ToolService::formatResult($goal->getResultModified()) : ToolService::formatResult($goal->getResult());
+                }
+
+//                var_dump($tipos);
+//                var_dump($valores);
 
 
                 $goals[$key] = array(
@@ -2147,8 +2208,11 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                         'plan' => ToolService::formatDateTime($planDateEnd),
                         'real' => ToolService::formatDateTime($realDateEnd)
                     ),
+                    'aporte' => $aporte,
+                    'observaciones' => $movements,
                 );
             }
+
             $referenceType = \Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_URL;
             foreach ($allArrangementPrograms as $arrangementProgram) {
                 $details = $arrangementProgram->getDetails();

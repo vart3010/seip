@@ -30,6 +30,21 @@ class MovementEmployeeRepository extends EntityRepository {
         return $qb->getQuery()->getResult();
     }
 
+    function FindMovementDetailsbyGoalbyUser($idGoal, $idUser) {
+        $qb = $this->getQueryBuilder();
+        $qb
+                ->Select('mov')
+                ->andWhere('mov.id_affected= :goals')
+                ->andWhere('mov.typeMov= :type')
+                ->andWhere('mov.User= :user')
+                ->orderBy('mov.date')
+                ->setParameter('goals', $idGoal)
+                ->setParameter('user', $idUser)
+                ->setParameter('type', "Goal")
+        ;
+        return $qb->getQuery()->getResult();
+    }
+
     function FindMovementDetailsbyAP($idAP) {
         $qb = $this->getQueryBuilder();
         $qb

@@ -10,8 +10,9 @@ use Gedmo\Mapping\Annotation as Gedmo;
 /**
  * MOVIMIENTO DE EMPLEADOS EN METAS Y PROGRAMAS DE GESTIÓN DURANTE EL PERÍODO
  * @author Gilbert <glavrjk@gmail.com>
- * @ORM\Entity()
+ * @ORM\Entity
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
+ * @ORM\Entity("Pequiven\ArrangementProgramBundle\Repository\MovementEmployee\MovementEmployeeRepository")
  * @ORM\HasLifecycleCallbacks()
  */
 class MovementEmployee {
