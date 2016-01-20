@@ -155,7 +155,6 @@ class IndicatorSigController extends ResourceController {
                 $this->redirect($this->generateUrl("pequiven_indicator_evolution", array("id" => $request->get("id"), "month" => $month)));
             }
         }
-        //fin de la carga
         //Url export
         $urlExportFromChart = $this->generateUrl('pequiven_indicator_evolution_export', array('id' => $idIndicator, 'month' => $month, 'typeObj' => 1));
         //Carga de data de Indicador para armar grafica
@@ -178,12 +177,10 @@ class IndicatorSigController extends ResourceController {
 
         //Carga el analisis de la tendencia
         $trend = $this->get('pequiven.repository.sig_trend_report_evolution')->findBy(array('indicator' => $indicator, 'month' => $month, 'typeObject' => 1));
-
         //Carga del analisis de las causas
         $causeAnalysis = $this->get('pequiven.repository.sig_causes_analysis')->findBy(array('indicator' => $indicator, 'month' => $month));
-
         //Carga de la señalización de la tendencia de la grafica
-        //$tendency = $indicator->getIndicatorSigTendency();
+        
         $tendency = $indicator->getTendency()->getId();
 
         $font = array();
@@ -218,7 +215,6 @@ class IndicatorSigController extends ResourceController {
             'action' => $data["action"],
             'values' => $data["actionValue"]
         ];
-
 
         $view = $this
                 ->view()
@@ -338,18 +334,15 @@ class IndicatorSigController extends ResourceController {
         $idIndicator = $request->get('idIndicator');
 
         $lastPeriod = $request->get('lastPeriod')['indicatorlastPeriod'];
-
+        
         $em = $this->getDoctrine()->getManager();
-
         $indicatorRel = $this->get('pequiven.repository.sig_indicator')->find($idIndicator);
 
         if ($indicatorRel) {
-
             $dataLast = $this->get('pequiven.repository.sig_indicator')->find($lastPeriod);
         }
 
         $indicatorRel->setIndicatorLastPeriod($dataLast);
-
         $em->flush();
         $this->get('session')->getFlashBag()->add('success', "Relación Cargada Correctamente");
     }
@@ -364,11 +357,9 @@ class IndicatorSigController extends ResourceController {
         $idIndicator = $request->get('id');
 
         $em = $this->getDoctrine()->getManager();
-
         $indicatorRel = $this->get('pequiven.repository.sig_indicator')->find($idIndicator);
 
         if ($indicatorRel) {
-
             $dataLast = NULL;
         }
 
@@ -376,79 +367,6 @@ class IndicatorSigController extends ResourceController {
 
         $em->flush();
         $this->get('session')->getFlashBag()->add('success', "Relación Eliminada Correctamente");
-    }
-
-    /**
-     * Retorna el formulario de la configuración de la Gráfica
-     * 
-     * @param Request $request
-     * @return type
-     */
-    function getFormConfigAction(Request $request) {
-        $indicator = $this->findIndicatorOr404($request);
-
-        $config = new Indicator();
-        $form = $this->createForm(new IndicatorConfigSigType(), $config);
-
-        $view = $this
-                ->view()
-                ->setTemplate($this->config->getTemplate('form/form_config_chart.html'))
-                ->setTemplateVar($this->config->getPluralResourceName())
-                ->setData(array(
-            'indicator' => $indicator,
-            'form' => $form->createView(),
-                ))
-        ;
-        $view->getSerializationContext()->setGroups(array('id', 'api_list'));
-        return $view;
-    }
-
-    /**
-     * Añade la configuración
-     * 
-     * @param Request $request
-     * @return type
-     */
-    public function addConfigChartAction(Request $request) {
-        $idIndicator = $request->get('idIndicator');
-        //var_dump($request->get('lastPeriod')['indicatorlastPeriod']);
-        //var_dump($request);
-        //die();
-        $medition = $request->get('configSig')['indicatorSigMedition'];
-        //$objetive = $request->get('configSig')['indicatorSigObjetive'];
-        //$tendency = $request->get('configSig')['indicatorSigTendency'];
-
-        $em = $this->getDoctrine()->getManager();
-
-        $indicatorConfig = $this->get('pequiven.repository.sig_indicator')->find($idIndicator);
-
-        /* if ($indicatorConfig) {
-
-          $dataLast = $this->get('pequiven.repository.sig_indicator')->find($lastPeriod);
-
-          } */
-
-        $indicatorConfig->setIndicatorSigMedition($medition);
-        //$indicatorConfig->setIndicatorSigObjetive($objetive);
-        //$indicatorConfig->setIndicatorSigTendency($tendency);
-
-        $em->flush(); //Carga de Datos a DB
-    }
-
-    /**
-     * Busca las Causas del indicador para filtrarlas para el plan de acción
-     * @param type $param
-     */
-    function getCausesEvolutionAction(\Symfony\Component\HttpFoundation\Request $request) {
-
-        $idIndicator = $request->get('idIndicator'); //Recibiendo indicator
-
-        $results = $this->get('pequiven.repository.sig_causes_report_evolution')->findBy(array('indicator' => $idIndicator));
-
-        $view = $this->view();
-        $view->setData($results);
-        $view->getSerializationContext()->setGroups(array('id', 'api_list', 'ref', 'description'));
-        return $this->handleView($view);
     }
 
     /**
