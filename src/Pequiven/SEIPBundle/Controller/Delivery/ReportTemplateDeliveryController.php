@@ -43,7 +43,7 @@ class ReportTemplateDeliveryController extends SEIPController {
             $view->setData($resources);
         } else {
             $formatData = $request->get('_formatData', 'default');
-            $view->setData($resources->toArray($this->config->getRedirectRoute('index'), array(), $formatData));
+            $view->setData($resources->toArray('', array(), $formatData));
         }
         return $this->handleView($view);
     }

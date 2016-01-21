@@ -40,17 +40,11 @@ class ReportTemplateDeliveryRepository extends SeipEntityRepository {
         return $this->createPaginator($criteria, $orderBy);
     }
 
-//    protected function applyCriteria(QueryBuilder $queryBuilder, array $criteria = null) {
-//        $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
-//
-//        $applyPeriodCriteria = $criteria->remove('applyPeriodCriteria');
-//
-//        parent::applyCriteria($queryBuilder, $criteria->toArray());
-//
-//        if ($applyPeriodCriteria) {
-//            $this->applyPeriodCriteria($queryBuilder);
-//        }
-//    }
+    protected function applyCriteria(\Doctrine\ORM\QueryBuilder $queryBuilder, array $criteria = null) {
+        $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
+
+        parent::applyCriteria($queryBuilder, $criteria->toArray());
+    }
 
     protected function getAlias() {
         return "rtd";
