@@ -627,6 +627,22 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      */
     private $showColumnPlanAtTheEnd = false;
     
+    /**
+     * ¿EL indicador esta disponible para verse en el dashboard de tipo específico?
+     * @var boolean
+     *  @ORM\Column(name="showByDashboardSpecific",type="boolean")
+     */
+    private $showByDashboardSpecific = false;
+    
+    /**
+     * Complejo
+     * 
+     * @var \Pequiven\MasterBundle\Entity\Complejo
+     * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Complejo")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $complejoDashboardSpecific;
+    
 
     /**
      * Constructor
@@ -2539,6 +2555,25 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
 
     /**
      * 
+     * @param type $showByDashboardSpecific
+     * @return \Pequiven\IndicatorBundle\Entity\Indicator
+     */
+    public function setShowByDashboardSpecific($showByDashboardSpecific) {
+        $this->showByDashboardSpecific = $showByDashboardSpecific;
+
+        return $this;
+    }
+
+    /**
+     * 
+     * @return type
+     */
+    public function getShowByDashboardSpecific() {
+        return $this->showByDashboardSpecific;
+    }
+
+    /**
+     * 
      * @param type $resultsAdditionalInDashboardColumn
      * @return \Pequiven\IndicatorBundle\Entity\Indicator
      */
@@ -2555,5 +2590,25 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     public function getResultsAdditionalInDashboardColumn() {
         return $this->resultsAdditionalInDashboardColumn;
     }
+    
+    /**
+     * Set complejoDashboardSpecific
+     *
+     * @param \Pequiven\MasterBundle\Entity\Complejo $complejoDashboardSpecific
+     * @return Indicator
+     */
+    public function setComplejoDashboardSpecific(\Pequiven\MasterBundle\Entity\Complejo $complejoDashboardSpecific = null) {
+        $this->complejoDashboardSpecific = $complejoDashboardSpecific;
 
+        return $this;
+    }
+
+    /**
+     * Get complejoDashboardSpecific
+     *
+     * @return \Pequiven\MasterBundle\Entity\Complejo 
+     */
+    public function getComplejoDashboardSpecific() {
+        return $this->complejoDashboardSpecific;
+    }
 }

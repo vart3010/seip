@@ -223,6 +223,10 @@
         <service id="pequiven_seip.box.linestrategic.icons_indicator_dashboard" class="Pequiven\SEIPBundle\Model\Box\Indicator\IndicatorsIconsBox">
             <tag name="tecnocreaciones_box.box" />
         </service>
+        <!-- Box donde se renderizan los indicatores específicos en formato de íconos -->
+        <service id="pequiven_seip.box.linestrategic.icons_indicator_specific_dashboard" class="Pequiven\SEIPBundle\Model\Box\Indicator\IndicatorsIconsSpecificBox">
+            <tag name="tecnocreaciones_box.box" />
+        </service>
         <!-- Box donde se renderizan los indicatores estratégicos en formato de íconos de acuerdo a una línea estratégica seleccionada -->
         <service id="pequiven_seip.box.linestrategic.icons_indicator_by_line_dashboard" class="Pequiven\SEIPBundle\Model\Box\Indicator\IndicatorsIconsByLineBox">
             <tag name="tecnocreaciones_box.box" />
