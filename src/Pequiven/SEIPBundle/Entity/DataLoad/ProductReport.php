@@ -11,7 +11,7 @@
 
 namespace Pequiven\SEIPBundle\Entity\DataLoad;
 
-use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping as ORM;   
 use Pequiven\SEIPBundle\Model\DataLoad\ProductReport as BaseModel;
 
 /**
