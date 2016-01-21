@@ -397,14 +397,13 @@ class IndicatorRepository extends EntityRepository
         
         if(($specific = $parameters->remove('specific')) != null){
             $qb->andWhere('i.showByDashboardSpecific = 1');
+            if(($complejo = $parameters->remove('complejo')) != null){
+                $qb->andWhere('i.complejoDashboardSpecific = :complejo')
+                   ->setParameter('complejo', $complejo)
+                ;
+            }
         } else{
             $qb->andWhere('i.showByDashboardSpecific = 0');
-        }
-        
-        if(($complejo = $parameters->remove('')) != null){
-            $qb->andWhere('i.complejoDashboardSpecific = :complejo')
-               ->setParameter('complejo', $complejo)
-            ;                    ;
         }
         
         $this->applyPeriodCriteria($qb);
