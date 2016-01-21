@@ -379,6 +379,7 @@ pequiven_seip:
     report_template:
         report_template: Planificación de producción
         report_day: Reporte del día
+        report_template_delivery: Planificación de Despacho
         load:
             notification: Notificacion
             production: Producción

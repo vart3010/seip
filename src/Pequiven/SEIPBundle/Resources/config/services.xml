@@ -381,6 +381,9 @@
         <service id="pequiven.repository.report_template" class="Pequiven\SEIPBundle\Repository\DataLoad\ReportTemplateRepository">
             <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate" />
         </service>
+        <service id="pequiven.repository.report_template_delivery" class="Pequiven\SEIPBundle\Repository\Delivery\ReportTemplateDeliveryRepository">
+            <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\Delivery\ReportTemplateDelivery" />
+        </service>
         <service id="pequiven.repository.region" class="Pequiven\SEIPBundle\Repository\CEI\RegionRepository">
             <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\CEI\Region" />
         </service>
