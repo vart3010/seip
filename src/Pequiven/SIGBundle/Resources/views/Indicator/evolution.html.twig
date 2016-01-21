@@ -88,7 +88,13 @@
                         {% endfor %}
                     </ul>
                 </div>
-            </div>
+                <!-- Periodo del indicador -->                
+                <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                    <p class="inline-label">
+                        <label class="label">{{ 'pequiven.period'|trans({},'messages') }}</label>
+                        {{ indicator_sig.period }}
+                    </p>
+                </div>
             {# Sistemas de la Calidad al que pertenece #}
             {% if  indicator_sig.managementSystems | length > 0 %}
                 <div class="inline-label">
@@ -100,6 +106,7 @@
                         </ul>
                 </div>
             {% endif %}
+            </div>
             
             {% include 'PequivenSIGBundle:Template:base_month.html.twig' %} 
                         
