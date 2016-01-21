@@ -13,6 +13,11 @@
             
             {{ form_errors(form) }} 
                     <div class="field-block button-height" >
+                        {{ form_label(form.actionPlan) }}
+                        {{ form_widget(form.actionPlan) }}
+                        {{ form_errors(form.actionPlan) }}
+                    </div>
+                    <div class="field-block button-height" >
                         {{ form_label(form.comment) }}
                         {{ form_widget(form.comment) }}
                         {{ form_errors(form.comment) }}
@@ -21,11 +26,6 @@
                         {{ form_label(form.typeVerification) }}
                         {{ form_widget(form.typeVerification) }}
                         {{ form_errors(form.typeVerification) }}
-                    </div>
-                    <div class="field-block button-height" >
-                        {{ form_label(form.actionPlan) }}
-                        {{ form_widget(form.actionPlan) }}
-                        {{ form_errors(form.actionPlan) }}
                     </div>
 
             {{ form_rest(form) }}
