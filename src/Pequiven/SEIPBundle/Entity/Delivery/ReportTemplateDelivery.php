@@ -19,10 +19,10 @@ use Pequiven\SEIPBundle\Model\DataLoad\ReportTemplate as BaseModel;
  *
  * @author Victor Tortolero <vart10.30@gmail.com>
  * @ORM\Table(name="seip_delivery_report_template")
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\Delivery\ReportTemplateDeliveryRepository")
  */
-class ReportTemplateDelivery extends BaseModel
-{
+class ReportTemplateDelivery extends BaseModel {
+
     /**
      * @var integer
      *
@@ -31,21 +31,21 @@ class ReportTemplateDelivery extends BaseModel
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-    
+
     /**
      * Referencia
      * @var string
      * @ORM\Column(name="ref",nullable=false)
      */
     private $ref;
-    
+
     /**
      * Nombre del reporte
      * @var string
      * @ORM\Column(name="name")
      */
     private $name;
-    
+
     /**
      * Periodo.
      * @var \Pequiven\SEIPBundle\Entity\Period
@@ -54,7 +54,7 @@ class ReportTemplateDelivery extends BaseModel
      * @ORM\JoinColumn(nullable=false)
      */
     private $period;
-    
+
     /**
      * Empresa.
      * @var \Pequiven\SEIPBundle\Entity\CEI\Company
@@ -63,7 +63,7 @@ class ReportTemplateDelivery extends BaseModel
      * @ORM\JoinColumn(nullable=false)
      */
     private $company;
-    
+
     /**
      * Localidad.
      * @var \Pequiven\SEIPBundle\Entity\CEI\Location
@@ -72,7 +72,7 @@ class ReportTemplateDelivery extends BaseModel
      * @ORM\JoinColumn(nullable=false)
      */
     private $location;
-    
+
     /**
      * Region
      * @var \Pequiven\SEIPBundle\Entity\CEI\Region
@@ -81,28 +81,28 @@ class ReportTemplateDelivery extends BaseModel
      * @ORM\JoinColumn(nullable=false)
      */
     private $region;
-    
+
     /**
      * Plantillas de plantas
      * @var \Pequiven\SEIPBundle\Entity\Delivery\ProductGroupDelivery
      * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\Delivery\ProductGroupDelivery",mappedBy="reportTemplateDelivery",cascade={"remove"})
      */
     private $productGroupDelivery;
-    
+
     /**
      * Usuarios
      * @var type 
-     * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\User",mappedBy="reportTemplates")
+     * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\User",mappedBy="reportTemplatesDelivery")
      */
     private $users;
-    
+
     /**
      * Nombre Corto del reporte
      * @var string
      * @ORM\Column(name="shortName", nullable=true)
      */
     private $shortName;
-    
+
     /**
      * Ícono del ReportTemplate
      * 
@@ -118,14 +118,40 @@ class ReportTemplateDelivery extends BaseModel
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", nullable=true)
      */
     private $parent;
-    
+
     /**
      * Constructor
      */
-    public function __construct()
-    {
+    public function __construct() {
         $this->productGroupDelivery = new \Doctrine\Common\Collections\ArrayCollection();
         $this->users = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * 
+     * @param \Pequiven\SEIPBundle\Entity\Delivery\Pequiven\SEIPBundle\Entity\User $user
+     * @return \Pequiven\SEIPBundle\Entity\Delivery\ReportTemplateDelivery
+     */
+    public function addUser(Pequiven\SEIPBundle\Entity\User $user) {
+        $this->user[] = $user;
+
+        return $this;
+    }
+
+    /**
+     * 
+     * @param \Pequiven\SEIPBundle\Entity\Delivery\Pequiven\SEIPBundle\Entity\User $user
+     */
+    public function removeUser(Pequiven\SEIPBundle\Entity\User $user) {
+        $this->user->removeElement($user);
+    }
+
+    /**
+     * 
+     * @return type
+     */
+    public function getUser() {
+        return $this->users;
     }
 
     /**
@@ -133,8 +159,7 @@ class ReportTemplateDelivery extends BaseModel
      *
      * @return integer 
      */
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
 
@@ -144,8 +169,7 @@ class ReportTemplateDelivery extends BaseModel
      * @param string $name
      * @return ReportTemplate
      */
-    public function setName($name)
-    {
+    public function setName($name) {
         $this->name = $name;
 
         return $this;
@@ -156,8 +180,7 @@ class ReportTemplateDelivery extends BaseModel
      *
      * @return string 
      */
-    public function getName()
-    {
+    public function getName() {
         return $this->name;
     }
 
@@ -167,8 +190,7 @@ class ReportTemplateDelivery extends BaseModel
      * @param string $ref
      * @return ReportTemplate
      */
-    public function setRef($ref)
-    {
+    public function setRef($ref) {
         $this->ref = $ref;
 
         return $this;
@@ -179,8 +201,7 @@ class ReportTemplateDelivery extends BaseModel
      *
      * @return string 
      */
-    public function getRef()
-    {
+    public function getRef() {
         return $this->ref;
     }
 
@@ -190,8 +211,7 @@ class ReportTemplateDelivery extends BaseModel
      * @param \Pequiven\SEIPBundle\Entity\Period $period
      * @return ReportTemplate
      */
-    public function setPeriod(\Pequiven\SEIPBundle\Entity\Period $period)
-    {
+    public function setPeriod(\Pequiven\SEIPBundle\Entity\Period $period) {
         $this->period = $period;
 
         return $this;
@@ -202,8 +222,7 @@ class ReportTemplateDelivery extends BaseModel
      *
      * @return \Pequiven\SEIPBundle\Entity\Period 
      */
-    public function getPeriod()
-    {
+    public function getPeriod() {
         return $this->period;
     }
 
@@ -213,8 +232,7 @@ class ReportTemplateDelivery extends BaseModel
      * @param \Pequiven\SEIPBundle\Entity\CEI\Company $company
      * @return ReportTemplate
      */
-    public function setCompany(\Pequiven\SEIPBundle\Entity\CEI\Company $company)
-    {
+    public function setCompany(\Pequiven\SEIPBundle\Entity\CEI\Company $company) {
         $this->company = $company;
 
         return $this;
@@ -225,8 +243,7 @@ class ReportTemplateDelivery extends BaseModel
      *
      * @return \Pequiven\SEIPBundle\Entity\CEI\Company 
      */
-    public function getCompany()
-    {
+    public function getCompany() {
         return $this->company;
     }
 
@@ -236,8 +253,7 @@ class ReportTemplateDelivery extends BaseModel
      * @param \Pequiven\SEIPBundle\Entity\CEI\Location $location
      * @return ReportTemplate
      */
-    public function setLocation(\Pequiven\SEIPBundle\Entity\CEI\Location $location)
-    {
+    public function setLocation(\Pequiven\SEIPBundle\Entity\CEI\Location $location) {
         $this->location = $location;
 
         return $this;
@@ -248,19 +264,17 @@ class ReportTemplateDelivery extends BaseModel
      *
      * @return \Pequiven\SEIPBundle\Entity\CEI\Location 
      */
-    public function getLocation()
-    {
+    public function getLocation() {
         return $this->location;
     }
-    
+
     /**
      * Set region
      *
      * @param \Pequiven\SEIPBundle\Entity\CEI\Region $region
      * @return ReportTemplate
      */
-    public function setRegion(\Pequiven\SEIPBundle\Entity\CEI\Region $region)
-    {
+    public function setRegion(\Pequiven\SEIPBundle\Entity\CEI\Region $region) {
         $this->region = $region;
 
         return $this;
@@ -271,61 +285,52 @@ class ReportTemplateDelivery extends BaseModel
      *
      * @return \Pequiven\SEIPBundle\Entity\CEI\Region 
      */
-    public function getRegion()
-    {
+    public function getRegion() {
         return $this->region;
     }
-    
-   /**
-    * 
-    * @param \Pequiven\SEIPBundle\Entity\Delivery\ProductGroupDelivery $productGroupDelivery
-    * @return \Pequiven\SEIPBundle\Entity\Delivery\ReportTemplateDelivery
-    */
-    public function addPlantReportsDelivery(ProductGroupDelivery $productGroupDelivery)
-    {
+
+    /**
+     * 
+     * @param \Pequiven\SEIPBundle\Entity\Delivery\ProductGroupDelivery $productGroupDelivery
+     * @return \Pequiven\SEIPBundle\Entity\Delivery\ReportTemplateDelivery
+     */
+    public function addPlantReportsDelivery(ProductGroupDelivery $productGroupDelivery) {
         $this->productGroupDelivery[] = $productGroupDelivery;
 
         return $this;
     }
+
     /**
      * 
      * @param \Pequiven\SEIPBundle\Entity\Delivery\ProductGroupDelivery $productReportDelivery
      */
-    public function removeProductGroupDelivery(ProductGroupDelivery $productReportDelivery)
-    {
+    public function removeProductGroupDelivery(ProductGroupDelivery $productReportDelivery) {
         $this->productGroupDelivery->removeElement($productReportDelivery);
     }
 
-   /**
-    * 
-    * @return type
-    */
-    public function getProductGroupDelivery()
-    {
+    /**
+     * 
+     * @return type
+     */
+    public function getProductGroupDelivery() {
         return $this->productGroupDelivery;
     }
 
-    
-    
-    public function getReportTemplateWithName()
-    {
-        $full = sprintf("%s (%s)",$this->getName(),$this->getRef());
+    public function getReportTemplateWithName() {
+        $full = sprintf("%s (%s)", $this->getName(), $this->getRef());
         return $full;
     }
-    
-    public function __toString() 
-    {
-        return $this->getRef() ?: "-";
+
+    public function __toString() {
+        return $this->getRef() ? : "-";
     }
-    
-    public function recalculate()
-    {
+
+    public function recalculate() {
         foreach ($this->plantReports as $plantReport) {
             $plantReport->recalculate();
         }
     }
-    
-    
+
     function getShortName() {
         return $this->shortName;
     }
@@ -333,7 +338,7 @@ class ReportTemplateDelivery extends BaseModel
     function setShortName($shortName) {
         $this->shortName = $shortName;
     }
-    
+
     /**
      * 
      * @return type
@@ -349,7 +354,6 @@ class ReportTemplateDelivery extends BaseModel
     public function setIcon($icon) {
         $this->icon = $icon;
     }
-
 
     /**
      * Set parent
@@ -371,6 +375,5 @@ class ReportTemplateDelivery extends BaseModel
     public function getParent() {
         return $this->parent;
     }
-
 
 }
