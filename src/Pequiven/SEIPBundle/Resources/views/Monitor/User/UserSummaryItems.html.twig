@@ -79,12 +79,13 @@
                         <table ng-init="" class="simple-table responsive-table" id="sorting-example2">
 
                             <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th scope="col" width="60%" >Nombre</th>
-                                    <th style="text-align: center" scope="col" width="10%" >Peso</th>
-                                    <th scope="col" width="25%" >Avance</th>    
-                                    <th scope="col" width="5%" >Aporte</th>    
+                                <tr style="vertical-align: middle;">
+                                    <th style="vertical-align: middle;" width="2%">#</th>
+                                    <th style="vertical-align: middle;" scope="col" width="55%" >Descripción de la Meta</th>
+                                    <th style="vertical-align: middle; text-align: center" scope="col" width="10%" >Peso</th>
+                                    <th style="vertical-align: middle;" scope="col" width="18%" colspan="2">Avance hasta la Fecha</th>    
+                                    <th style="vertical-align: middle; text-align: center" scope="col" width="10%" >Aporte</th>    
+                                    <th style="vertical-align: middle; text-align: center" scope="col" width="5%" >Eval.</th>    
                                 </tr>
                             </thead>
 
@@ -97,38 +98,64 @@
                                     {% else %}    
                                         {% set porc = 0 %}
                                     {% endif %}
-                                    {% set class = "red-gradient"%}
-                                    {% if(porc>=50 and porc<100) %}
-                                        {% set class = "orange-gradient"%}
-                                    {% elseif (porc>=100)  %}
-                                        {% set class = "green-gradient"%}
+                                    {% if goal.tipo == 'Pasada' %}
+                                        {% set class = "grey-gradient"%}
+                                    {% else %}
+                                        {% set class = "red-gradient"%}
+                                        {% if(porc>=50 and porc<100) %}
+                                            {% set class = "orange-gradient"%}
+                                        {% elseif (porc>=100)  %}
+                                            {% set class = "green-gradient"%}
+                                        {% endif %}
                                     {% endif %}
                                     <tr style="min-height: 50px">
                                         <td>{{ cont }}-</td>
-                                        <td  style="color: #607890; font-weight: bold">{{ goal.description }}
+                                        <td  style="color: #607890; font-weight: bold; text-align: justify">{{ goal.description }}
                                             {% if goal.observaciones %}
                                                 <br>
                                                 <small>
                                                     {% for obs in goal.observaciones %}
                                                         {% if obs.type== 'I' %}
-                                                            Ingresado desde el {{ obs.date| date("d/m/Y") }} con un {{ obs.realAdvance |number_format(2,',','.') }}% de Avance <br>
+                                                            Ingresado desde el desde el {{ obs.date| date("d/m/Y") }} <b>Avance:</b> {{ obs.realAdvance |number_format(2,',','.') }}% , <b>Planeado:</b>{{ obs.planned |number_format(2,',','.') }}%.
                                                         {% endif %}
                                                         {% if obs.type== 'O' %}
-                                                            Egresado de la Meta desde el {{ obs.date| date("d/m/Y") }} con un {{ obs.realAdvance |number_format(2,',','.') }}% de Avance <br>
+                                                            Egresado de la Meta desde el {{ obs.date| date("d/m/Y") }} <b>Avance:</b> {{ obs.realAdvance |number_format(2,',','.') }}% , <b>Planeado:</b>{{ obs.planned |number_format(2,',','.') }}%.
                                                         {% endif %}
+                                                        <br>
                                                     {%endfor%}
                                                 </small>
                                             {% endif %}
                                         </td>
                                         <td style="text-align: center" >{{ goal.weight }}%</td>
-                                        <td  scope="row">
+                                        <td  scope="row" width="8%">
                                             <span ng-class="getClassForMeter({{ goal.result }},1)"></span>
                                             <span ng-class="getClassForMeter({{ goal.result }},2)"></span>
                                             <span ng-class="getClassForMeter({{ goal.result }},3)"></span>
-                                            {{ goal.result }}% &nbsp;
-                                            <span class="tag {{ class }}">{{ goal.result }} de {{ goal.resultToDate }}%</span>
+                                            {{ goal.result }}% &nbsp;                                            
                                         </td>
-                                        <td style="text-align: center">{{ goal.aporte |number_format(2,',','.') }}%</td>
+                                        <td width="10%">
+                                            <span class="tag {{ class }}">
+                                                {{ goal.result }} de {{ goal.resultToDate }}
+                                            </span>
+                                        </td>
+                                        {% if ((goal.eval=="N/A")and((goal.eval| is_string)==1)) %}
+                                            <td style="text-align: center">
+                                                No<br>Aplica
+                                            </td>
+                                        {%else%} 
+                                            <td style="text-align: center">
+                                                {{ goal.aporte |number_format(2,',','.') }} de<br>{{ goal.aportePlan |number_format(2,',','.') }}
+                                            </td>
+                                        {% endif %}
+                                        {% if ((goal.eval=="N/A")and((goal.eval| is_string)==1)) %}
+                                            <td style="text-align: center">
+                                                No Aplica
+                                            </td>
+                                        {%else%} 
+                                            <td style="text-align: center">
+                                                {{ goal.eval |number_format(2,',','.') }}%
+                                            </td>
+                                        {%endif%}
                                     </tr>
                                     {% set cont = cont + 1 %}
                                 {% endfor %}
@@ -158,7 +185,7 @@
                         </thead>
                         <tbody>
                             {% for objetivesOE in objetives["OE"] %}
-                                <tr style="min-height: 50px;">
+                                <tr style="height: 50px;">
                                     <td style="color: #607890; text-align: center;">{{ objetivesOE.ref }}</td>
                                     <td style="text-align: justify">{{ objetivesOE.description }}</td>
                                     <td style="text-align: center">
@@ -195,7 +222,7 @@
                         </thead>
                         <tbody>
                             {% for objetivesOT in objetives["OT"] %}                                
-                                <tr style="min-height: 50px;">
+                                <tr style="height: 50px;">
                                     <td style="color: #607890; text-align: center;">{{ objetivesOT.ref }}</td>
                                     <td style="text-align: justify">{{ objetivesOT.description }}</td>
                                     <td style="text-align: center">
@@ -232,7 +259,7 @@
                         </thead>
                         <tbody>
                             {% for objetivesOO in objetives["OO"] %}                             
-                                <tr style="min-height: 50px;">
+                                <tr style="height: 50px;">
                                     <td style="color: #607890; text-align: center;">{{ objetivesOO.ref }}</td>
                                     <td style="text-align: justify">{{ objetivesOO.description }}</td>
                                     <td style="text-align: center">

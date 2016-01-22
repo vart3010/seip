@@ -59,6 +59,29 @@ class GoalRepository extends EntityRepository {
         return $qb->getQuery()->getResult();
     }
 
+    /**
+     * RETORNA LOS ID DE LAS METAS EN LAS CUALES FUE DESINCORPORADO
+     * @param type $user
+     * @param type $goal
+     * @param type $period
+     */
+    function getDivestedIdGoalsbyUser($user, $period) {
+
+        $em = $this->getEntityManager();
+        $db = $em->getConnection();
+
+        $sql = 'SELECT mov.id_affected FROM  MovementEmployee AS mov
+            WHERE  mov.typeMov = \'Goal\' AND mov.User_id = ' . $user . ' AND mov.period_id = ' . $period . '
+                AND mov.id_affected NOT IN (SELECT goal_id FROM goals_users WHERE user_id = ' . $user . ')'
+        ;
+
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+
+        return $result;
+    }
+
     protected function getAlias() {
         return 'g';
     }

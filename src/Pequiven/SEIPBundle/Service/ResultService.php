@@ -1995,6 +1995,14 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 $allArrangementPrograms[$arrangementProgram->getId()] = $arrangementProgram;
             }
 
+            //METAS EN LAS CUALES YA NO SE ENCUENTRA ASIGNADO
+            $goalsPast = $goalRepository->getDivestedIdGoalsbyUser($idUser, $period->getid());
+            $em = $this->getDoctrine()->getManager();
+
+            foreach ($goalsPast as $goal) {
+                $goals[$goal["id_affected"]] = $em->getRepository('Pequiven\ArrangementProgramBundle\Entity\Goal')->find($goal["id_affected"]);
+            }
+
             ToolService::getObjetiveFromPrograms($arrangementProgramsForObjetives, $objetives);
 
             foreach ($arrangementProgramsObjects as $key => $arrangementProgram) {
@@ -2141,57 +2149,117 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                     $fecha = date("m");
                 }
 
-
-                //LOCALIZO MOVIMIENTOS DE ENTRADA A LA META
+                //LOCALIZO MOVIMIENTOS DE PERSONAL EN LA META
                 $em = $this->getDoctrine()->getManager();
-
-                // $movements = new MovementEmployee();
                 $movements = $em->getRepository('PequivenArrangementProgramBundle:MovementEmployee\MovementEmployee')->FindMovementDetailsbyGoalbyUser($goal->getid(), $user->getid());
-                //$movements = $em->getRepository('pequiven_seip.repository.arrangementprogram_movement')->FindMovementDetailsbyGoalbyUser($goal->getId());              
 
                 $valores = array();
                 $tipos = array();
-                $i = 1;
+                $planeado = array();
+                $idarray = 0;
                 $aporte = 0;
+                $aportePlan = 0;
 
+                //ALMACENO EN ARRAYS LOS VALORES DE PLAN, REAL Y TIPO
                 foreach ($movements as $mov) {
-                    $valores[$i] = $mov->getRealAdvance();
-                    $tipos[$i] = $mov->getType();
-                    $i++;
+                    $valores[$idarray] = $mov->getRealAdvance();
+                    $planeado[$idarray] = $mov->getplanned();
+                    $tipos[$idarray] = $mov->getType();
+                    $idarray++;
                 }
 
+                //SI LA META TIENE MOVIMIENTOS
                 if ($tipos != null) {
 
-                    if ((reset($tipos) == 'O')) {
-                        array_unshift($tipos, 'I');
-                        array_unshift($valores, 0);
-                    }
-
-                    if (($tipos[$i - 1] == 'I')) {
-                        $tipos[] = 'O';
-                        $valores[] = $goal->getUpdateResultByAdmin() ? ToolService::formatResult($goal->getResultModified()) : ToolService::formatResult($goal->getResult());
-                    }
-
-                    for ($i = 1; $i <= count($valores); $i++) {
-                        if ($tipos[$i] == 'I') {
-                            $aporte = $aporte - $valores[$i];
-                        }
-                        if ($tipos[$i] == 'O') {
-                            $aporte = $aporte + $valores[$i];
-                        }
-                    }
-
-                    if ($aporte < 0) {
+                    //NO SE TOMA EN CUENTA PARA EVALUACIONES CUANDO.
+                    //SI EL EMPLEADO AL FINAL SALE DE LA META DE PLAN 0%
+                    //SI EL EMPLEADO AL PRINCIPIO ENTRA CON UNA META DE REAL 100%
+                    if ((($tipos[count($tipos) - 1] == 'O') && ($planeado[count($tipos) - 1] == 0)) || ((reset($tipos) == 'I') && (reset($valores) == 100))) {
+                        $eval = "N/A";
                         $aporte = 0;
+                        $aportePlan = 0;
+                    } else {
+                        $evalI = 0;
+                        $eval = 0;
+                        //SI LOS MOVIMIENTOS COMIENZAN CON UNA SALIDA, SE AÑADE LA ENTRADA A LA META INICIALIZADA EN CERO
+                        //PORQUE EL EMPLEADO SE ENCUENTRA DESDE QUE SE CREO EL PROGRAMA
+                        if ((reset($tipos) == 'O')) {
+                            $status = 'Pasada';
+                            array_unshift($tipos, 'I');
+                            array_unshift($valores, 0);
+                            array_unshift($planeado, 0);
+                        }
+
+                        //SI LOS MOVIMIENTOS CONCLUYEN CON UNA ENTRADA, SE AÑADE LA SALIDA A LA META CON EL VALOR ACTUAL DE LA MISMA
+                        //PORQUE EL EMPLEADO SE MANTUVO COMO RESPONSABLE HASTA EL FINAL DEL PERIODO
+                        if (($tipos[count($tipos) - 1] == 'I')) {
+                            $status = 'Actual';
+                            $tipos[] = 'O';
+                            $valores[] = $goal->getUpdateResultByAdmin() ? ToolService::formatResult($goal->getResultModified()) : ToolService::formatResult($goal->getResult());
+                            $planeado[] = $goal->getGoalDetails()->getPlannedTotal($fecha);
+                        }
+
+                        //DETERMINO LA CANTIDAD DE MOVIMIENTOS EN LA META
+                        $cant_mov = count($valores);
+                        $noaplican = 0;
+
+                        for ($i = 0; $i < $cant_mov; $i++) {
+                            //PARA EL CALCULO DEL APORTE SE APLICA DISTANCIA ENTRE DOS PUNTOS EN UNA RECTA REAL LA FORMULA ES DESTINO MENOS ORIGEN                            
+                            if ($tipos[$i] == 'I') {
+                                //UNA ENTRADA ES CONSIDERADA ORIGEN
+                                $aporte = $aporte - $valores[$i];
+                                $aportePlan = $aportePlan - $planeado[$i];
+                            }
+                            if ($tipos[$i] == 'O') {
+                                //UNA SALIDA ES CONSIDERADA DESTINO
+                                $aporte = $aporte + $valores[$i];
+                                $aportePlan = $aportePlan + $planeado[$i];
+                            }
+
+                            //SE CONTRUYEN INTERVALOS DE EVALUACIÓN YA QUE TODA SALIDA TENDRÁ SU CORRESPONDIENTE ENTRADA O VICEVERSA
+                            if ($i % 2 != 0) {
+                                //SI NO EXISTE UNA VARIACION EN EL PLAN DENTRO DEL INTERVALO, NO SE TOMA EN CUENTA PARA EVALUARLO
+                                if ($planeado[$i] == $planeado[$i - 1]) {
+                                    //SIN EMBARGO SI EXISTE UN AVANCE EN EL REAL SI SE TOMA EN CUENTA Y SE ASUME COMO EL 100% DE CUMPLIMIENTO
+                                    if ($valores[$i] > $valores[$i - 1]) {
+                                        $evalI = 100;
+                                    } else {
+                                        $evalI = 0;
+                                        //SE SUMAN DOS YA QUE LOS INTERVALOS CONTIENEN DOS ELEMENTOS
+                                        $noaplican = $noaplican + 2;
+                                    }
+                                } else {
+                                    //CALCULO LA EVALUACION INDIVIDUAL POR MOVIMIENTO CON UNA ENTRADA Y UNA SALIDA. OSEA POR INTERVALO, EXTREMO MENOS ORIGEN
+                                    $evalI = (100 * (($valores[$i] - $valores[$i - 1]) / ($planeado[$i] - $planeado[$i - 1])));
+                                }
+                            }
+                            $eval = $eval + $evalI;
+                        }
+
+                        //SI LA CANTIDAD DE MOVIMIENTOS COINCIDE CON LA CANTIDAD DE ELEMENTOS QUE NO APLICAN NO SE EVALUA LA META
+                        if ($cant_mov == $noaplican) {
+                            $eval = "N/A";
+                        } else {
+                            //SE DETERMINA UN PROMEDIO SIMPLE DE LAS EVALUACIONES INDIVIDUALES POR INTERVALO, TOMANDO EN CONSIDERACIÓN LAS QUE APLIQUEN
+                            $eval = $eval / (($cant_mov - $noaplican) / 2);
+                            //SI LA EVALUACION SUPERA EL 120% SE REDIMENSIONA AL MAXIMO PERMITIDO.
+                            if ($eval > 120) {
+                                $eval = 120;
+                            }
+                        }
+
+                        //SE REDIMENSIONAN LOS APORTES Y EVALUACIONES QUE DIERON RESULTADO NEGATIVO. SUCEDE CUANDO LA META 
+                        //ACTUALMENTE ESTA POR DEBAJO DE CUANDO ENTRO DEBIDO A LAS PENALIZACIONES
+                        if (($aporte < 0) || ($eval < 0)) {
+                            $aporte = 0;
+                            $eval = 0;
+                        }
                     }
-
-//                    var_dump('aporte: ' . $aporte);
                 } else {
-                    $aporte = $goal->getUpdateResultByAdmin() ? ToolService::formatResult($goal->getResultModified()) : ToolService::formatResult($goal->getResult());
+                    //SI LA META NO TIENE MOVIMIENTOS, LOS VALORES ACTUALES SON LOS VALORES DE LA EVALUACION
+                    $status = 'Actual';
+                    $eval = $aporte = $goal->getUpdateResultByAdmin() ? ToolService::formatResult($goal->getResultModified()) : ToolService::formatResult($goal->getResult());
                 }
-
-//                var_dump($tipos);
-//                var_dump($valores);
 
 
                 $goals[$key] = array(
@@ -2209,7 +2277,10 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                         'real' => ToolService::formatDateTime($realDateEnd)
                     ),
                     'aporte' => $aporte,
+                    'aportePlan' => $aportePlan,
+                    'eval' => $eval,
                     'observaciones' => $movements,
+                    'tipo' => $status,
                 );
             }
 
