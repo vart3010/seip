@@ -26,7 +26,7 @@ class SupplyCenter extends Model {
     /**
      * Nombre del centro
      * @var String 
-     * @ORM\Column(name="name",type="text",nullable=false)
+     * @ORM\Column(name="name",type="string",nullable=false)
      */
     private $name;
 
@@ -38,7 +38,7 @@ class SupplyCenter extends Model {
     private $alias;
 
     /**
-     * codigo ("sap") -> segun matias
+     * codigo ("sap") 
      * @var String 
      * @ORM\Column(name="codigo",type="string",nullable=true)
      */

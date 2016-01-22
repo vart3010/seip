@@ -34,7 +34,7 @@
         selectCompany.on("change", function () {
             ajaxToSelect2(urlGetLocation, selectLocation, {company: selectCompany.val()});
         });
-    {% if report_template.id <= 0 %}
+    {% if report_template_delivery.id <= 0 %}
                 selectLocation.empty();
                 selectLocation.select2('disable');
     {% endif  %}

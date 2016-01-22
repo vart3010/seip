@@ -290,6 +290,9 @@
         <service id="pequiven.form.report_template" class="Pequiven\SEIPBundle\Form\DataLoad\ReportTemplateType">
             <tag name="form.type" alias="pequiven_seipbundle_dataload_reporttemplate" />
         </service>
+        <service id="pequiven.form.report_template_delivery" class="Pequiven\SEIPBundle\Form\Delivery\ReportTemplateDeliveryType">
+            <tag name="form.type" alias="pequiven_seipbundle_dataload_reporttemplatedelivery" />
+        </service>
         <service id="pequiven.form.product_report" class="Pequiven\SEIPBundle\Form\DataLoad\ProductReportType">
             <tag name="form.type" alias="pequiven_seipbundle_dataload_productreport" />
         </service>
@@ -384,6 +387,9 @@
         </service>
         <service id="pequiven.repository.report_template" class="Pequiven\SEIPBundle\Repository\DataLoad\ReportTemplateRepository">
             <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate" />
+        </service>
+        <service id="pequiven.repository.report_template_delivery" class="Pequiven\SEIPBundle\Repository\Delivery\ReportTemplateDeliveryRepository">
+            <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\Delivery\ReportTemplateDelivery" />
         </service>
         <service id="pequiven.repository.region" class="Pequiven\SEIPBundle\Repository\CEI\RegionRepository">
             <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\CEI\Region" />

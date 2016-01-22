@@ -863,15 +863,15 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
 //            if ($this->isGranted('ROLE_SEIP_RESULT_LIST_STRATEGICS')) {
             if ($this->isGranted('ROLE_SEIP_RESULT_VIEW_BY_LINE_STRATEGICS')) {
                 $itemStrategicsVisualize = $this->factory->createItem('results.visualize.by_lineStrategic', array(
-                    'route' => 'pequiven_line_strategic_view_dashboard',
-                    ))->setLabel($this->translate(sprintf('app.backend.menu.%s.results.visualize.by_lineStrategic', $section)));
+                            'route' => 'pequiven_line_strategic_view_dashboard',
+                        ))->setLabel($this->translate(sprintf('app.backend.menu.%s.results.visualize.by_lineStrategic', $section)));
                 $visualize->addChild($itemStrategicsVisualize);
             }
 
             if ($this->isGranted('ROLE_SEIP_RESULT_VIEW_BY_INDICATORS_STRATEGICS')) {
                 $itemStrategicsIndicators = $this->factory->createItem('results.visualize.indicator.strategics', array(
-                    'route' => 'pequiven_line_strategic_indicators_strategics',
-                    ))->setLabel($this->translate(sprintf('app.backend.menu.%s.results.visualize.indicator.strategics', $section)));
+                            'route' => 'pequiven_line_strategic_indicators_strategics',
+                        ))->setLabel($this->translate(sprintf('app.backend.menu.%s.results.visualize.indicator.strategics', $section)));
                 $visualize->addChild($itemStrategicsIndicators);
             }
 
@@ -887,6 +887,14 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                     'route' => 'pequiven_line_strategic_indicators_specific',
                     'routeParameters' => array('complejo' => 3),
                     ))->setLabel($this->translate(sprintf('app.backend.menu.%s.results.visualize.indicator.cpjaa', $section)));
+                $visualize->addChild($itemStrategicsIndicatorsCpjaa);
+            }
+//            }
+
+            if ($this->isGranted('ROLE_SEIP_RESULT_VIEW_BY_INDICATORS_CPJAA') && $this->getPeriodService()->getPeriodActive()->getName() == '2015') {
+                $itemStrategicsIndicatorsCpjaa = $this->factory->createItem('results.visualize.indicator.cpjaa', array(
+                            'route' => '',
+                        ))->setLabel($this->translate(sprintf('app.backend.menu.%s.results.visualize.indicator.cpjaa', $section)));
                 $visualize->addChild($itemStrategicsIndicatorsCpjaa);
             }
 //            }
@@ -1049,13 +1057,19 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                     )->setLabel($this->translate(sprintf('app.backend.menu.%s.operations.reports.main', $section)));
 
             if ($this->isGranted(array('ROLE_SEIP_OPERATION_LIST_REPORT_PRODUCTION', 'ROLE_SEIP_OPERATION_LIST_REPORT_PRODUCTION_TEMPLATES_ALL'))) {
-                $production = $this->factory->createItem('operations.reports.production', $this->getSubLevelOptions(array("route" => "pequiven_report_template_vizualice",
+                $production = $this->factory->createItem('operations.reports.production', $this->getSubLevelOptions(array("route" => "",
                                 ))
                         )->setLabel($this->translate(sprintf('app.backend.menu.%s.operations.reports.production', $section)));
 
                 $reports->addChild($production);
             }
+            if ($this->isGranted(array('ROLE_SEIP_OPERATION_LIST_REPORT_PRODUCTION'))) {
+                $delivery = $this->factory->createItem('operations.reports.delivery', $this->getSubLevelOptions(array("route" => "",
+                                ))
+                        )->setLabel($this->translate(sprintf('app.backend.menu.%s.operations.reports.delivery', $section)));
 
+                $reports->addChild($delivery);
+            }
             $menuOperations->addChild($reports);
         }
 
@@ -1075,6 +1089,14 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                 $planning->addChild($production);
             }
 
+            if ($this->isGranted(array('ROLE_SEIP_OPERATION_LIST_PLANNING_PRODUCTION'))) {
+                $delivery = $this->factory->createItem('operations.planning.delivery', $this->getSubLevelOptions(array("route" => "pequiven_report_template_delivery_index",
+                                ))
+                        )->setLabel($this->translate(sprintf('app.backend.menu.%s.operations.planning.delivery', $section)));
+
+                $planning->addChild($delivery);
+            }
+
             $menuOperations->addChild($planning);
         }
 
@@ -1092,6 +1114,14 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                         )->setLabel($this->translate(sprintf('app.backend.menu.%s.operations.notification.production', $section)));
 
                 $notification->addChild($production);
+            }
+
+            if ($this->isGranted(array('ROLE_SEIP_OPERATION_LIST_NOTIFICATION_DELIVERY'))) {
+                $delivery = $this->factory->createItem('operations.notification.delivery', $this->getSubLevelOptions(array("route" => "",
+                                ))
+                        )->setLabel($this->translate(sprintf('app.backend.menu.%s.operations.notification.delivery', $section)));
+
+                $notification->addChild($delivery);
             }
 
             $menuOperations->addChild($notification);
