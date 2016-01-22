@@ -188,6 +188,11 @@ security:
             - ROLE_SEIP_OPERATION_EXPORT_EXCEL_PRODUCTION
             - ROLE_SEIP_OPERATION_EXPORT_EXCEL_PRODUCTION_PNR_BY_TIME
             
+            #DESPACHO
+            - ROLE_SEIP_OPERATION_LIST_REPORT_DELIVERY
+            - ROLE_SEIP_OPERATION_LIST_PLANNING_PRODUCTION
+            - ROLE_SEIP_OPERATION_LIST_NOTIFICATION_DELIVERY
+            
             # MONITORES
             - ROLE_SEIP_OPERATION_VIEW_MONITOR_PRODUCTION
             - ROLE_SEIP_OPERATION_VIEW_MONITOR_PRODUCTION_STATUS_CHARGE
@@ -248,7 +253,9 @@ security:
             - ROLE_SEIP_SIP_MONITOR_ONLY_CIRCUITO5
             - ROLE_SEIP_SIP_SEACH_EMPLOYEES           
             - ROLE_SEIP_VIEW_ALL_PERIODS
-                        
+                
+            
+               
             # Permisos especiales
             - ROLE_SEIP_UPDATE_RESULT_OBJECTS
             

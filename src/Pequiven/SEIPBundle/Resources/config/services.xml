@@ -223,6 +223,10 @@
         <service id="pequiven_seip.box.linestrategic.icons_indicator_dashboard" class="Pequiven\SEIPBundle\Model\Box\Indicator\IndicatorsIconsBox">
             <tag name="tecnocreaciones_box.box" />
         </service>
+        <!-- Box donde se renderizan los indicatores específicos en formato de íconos -->
+        <service id="pequiven_seip.box.linestrategic.icons_indicator_specific_dashboard" class="Pequiven\SEIPBundle\Model\Box\Indicator\IndicatorsIconsSpecificBox">
+            <tag name="tecnocreaciones_box.box" />
+        </service>
         <!-- Box donde se renderizan los indicatores estratégicos en formato de íconos de acuerdo a una línea estratégica seleccionada -->
         <service id="pequiven_seip.box.linestrategic.icons_indicator_by_line_dashboard" class="Pequiven\SEIPBundle\Model\Box\Indicator\IndicatorsIconsByLineBox">
             <tag name="tecnocreaciones_box.box" />
@@ -285,6 +289,9 @@
         </service>
         <service id="pequiven.form.report_template" class="Pequiven\SEIPBundle\Form\DataLoad\ReportTemplateType">
             <tag name="form.type" alias="pequiven_seipbundle_dataload_reporttemplate" />
+        </service>
+        <service id="pequiven.form.report_template_delivery" class="Pequiven\SEIPBundle\Form\Delivery\ReportTemplateDeliveryType">
+            <tag name="form.type" alias="pequiven_seipbundle_dataload_reporttemplatedelivery" />
         </service>
         <service id="pequiven.form.product_report" class="Pequiven\SEIPBundle\Form\DataLoad\ProductReportType">
             <tag name="form.type" alias="pequiven_seipbundle_dataload_productreport" />
@@ -380,6 +387,9 @@
         </service>
         <service id="pequiven.repository.report_template" class="Pequiven\SEIPBundle\Repository\DataLoad\ReportTemplateRepository">
             <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate" />
+        </service>
+        <service id="pequiven.repository.report_template_delivery" class="Pequiven\SEIPBundle\Repository\Delivery\ReportTemplateDeliveryRepository">
+            <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\Delivery\ReportTemplateDelivery" />
         </service>
         <service id="pequiven.repository.region" class="Pequiven\SEIPBundle\Repository\CEI\RegionRepository">
             <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\CEI\Region" />

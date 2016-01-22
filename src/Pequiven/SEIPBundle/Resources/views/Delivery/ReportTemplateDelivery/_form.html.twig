@@ -1,0 +1,42 @@
+{% trans_default_domain 'PequivenSEIPBundle' %}
+<fieldset class="fieldset fields-list">
+    <legend class="legend">{{ 'pequiven_seip.report_template.report_template'|trans }}</legend>
+    <div class="field-block button-height">
+        {{ form_label(form.name) }}
+        {{ form_widget(form.name) }}
+        {{ form_errors(form.name) }}
+    </div>
+    <div class="field-block button-height">
+        {{ form_label(form.company) }}
+        {{ form_widget(form.company) }}
+        {{ form_errors(form.company) }}
+    </div>
+    <div class="field-block button-height">
+        {{ form_label(form.location) }}
+        {{ form_widget(form.location) }}
+        {{ form_errors(form.location) }}
+    </div>
+    <div class="field-block button-height">
+        {{ form_label(form.region) }}
+        {{ form_widget(form.region) }}
+        {{ form_errors(form.region) }}
+    </div>
+</fieldset>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var selectCompany = $("#pequiven_seipbundle_dataload_reporttemplate_company");
+        var selectLocation = $("#pequiven_seipbundle_dataload_reporttemplate_location");
+
+        var urlGetLocation = "{{ path("pequiven_seip_location_by_company") }}";
+        ajaxToSelect.formaterData = function (response) {
+            return response.name;
+        };
+        selectCompany.on("change", function () {
+            ajaxToSelect2(urlGetLocation, selectLocation, {company: selectCompany.val()});
+        });
+    {% if report_template_delivery.id <= 0 %}
+                selectLocation.empty();
+                selectLocation.select2('disable');
+    {% endif  %}
+            });
+</script>

@@ -1695,18 +1695,23 @@ angular.module('seipModule.controllers', [])
             $scope.templateOptions.setVar('addAction', addAction);
             $scope.templateOptions.setVar('addActionValues', addActionValues);
             $scope.templateOptions.setVar('addTrendEvolution', addTrendEvolution);
-            var confirmCallBack = function () {
-                addCause(true, function (data) {
-                    $scope.indicator = data.indicator;
+            var confirmCallBackCauses = function () {
+                addCause(true, function (data) {                
+                });                
+                return true;
+            };
+            var confirmCallBackAction = function () {
+                addAction(true, function (data) {                    
                 });
-                addAction(true, function (data) {
-                    $scope.indicator = data.indicator;
+                return true;
+            };
+            var confirmCallBackActionValues = function () {
+                addActionValues(true, function (data) {                
                 });
-                addActionValues(true, function (data) {
-                    $scope.indicator = data.indicator;
-                });
-                addTrendEvolution(true, function (data) {
-                    $scope.indicator = data.indicator;
+                return true;
+            };
+            var confirmCallBackTrend = function () {
+                addTrendEvolution(true, function (data) {                
                 });
                 return true;
             };
@@ -1729,7 +1734,7 @@ angular.module('seipModule.controllers', [])
                     {
                         name: 'Analisis de la Tendencia',
                         url: url,
-                        confirmCallBack: confirmCallBack,
+                        confirmCallBack: confirmCallBackTrend,
                     }
                 ];
                 $scope.templateOptions.setTemplate($scope.templates[0]);
@@ -1753,7 +1758,7 @@ angular.module('seipModule.controllers', [])
                     {
                         name: 'Plan de Acción',
                         url: url,
-                        confirmCallBack: confirmCallBack,
+                        confirmCallBack: confirmCallBackAction,
                     }
                 ];
                 $scope.templateOptions.setTemplate($scope.templates[0]);
@@ -1776,7 +1781,7 @@ angular.module('seipModule.controllers', [])
                     {
                         name: 'Carga de Avance y Observaciones',
                         url: url,
-                        confirmCallBack: confirmCallBack,
+                        confirmCallBack: confirmCallBackActionValues,
                     }
                 ];
                 $scope.templateOptions.setTemplate($scope.templates[0]);
@@ -1801,7 +1806,7 @@ angular.module('seipModule.controllers', [])
                     {
                         name: 'Causas de Desviación del Indicador',
                         url: url,
-                        confirmCallBack: confirmCallBack,
+                        confirmCallBack: confirmCallBackCauses,
                     }
                 ];
                 $scope.templateOptions.setTemplate($scope.templates[0]);

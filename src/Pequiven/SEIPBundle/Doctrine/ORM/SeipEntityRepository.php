@@ -78,12 +78,12 @@ class SeipEntityRepository extends EntityRepository
     protected function applyPeriodCriteria(QueryBuilder &$queryBuilder, $alias = null) 
     {
         if($alias === null){
+        
             $alias = $this->getAlias();
         }
         $periodId = $this->getRequest()->get("_period");
         $queryBuilder->andWhere($alias.'.period = :period');
         $periodValid = null;
-        
         if($periodId !== null){
             $periodService = $this->getPeriodService();
             $period = $periodService->find($periodId);
@@ -91,6 +91,7 @@ class SeipEntityRepository extends EntityRepository
                 $periodValid = $period;
             }
         }
+        
         if($periodValid !== null){
             $queryBuilder
             ->setParameter('period',$periodValid)

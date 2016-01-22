@@ -40,6 +40,8 @@ class IndicatorsDashboardBox extends GenericBox {
         ksort($labelsMonths);
 //        var_dump($labelsMonths);
 //        die();
+        
+        if($indicatorService->isIndicatorHasParents($indicator)){
 
         //Comparamos el nivel del indicador y asi obtener el id de la Línea Estratégica a la cual esta alineada el mismo
         if ($indicator->getIndicatorLevel()->getLevel() == IndicatorLevel::LEVEL_ESTRATEGICO) {
@@ -77,7 +79,7 @@ class IndicatorsDashboardBox extends GenericBox {
                 }
             }
         }
-
+        }
 
         //Obtenemos la data para los widget en forma de bulbo de la barra lateral izquierda
         foreach ($indicatorsGroup as $indicatorGroup) {

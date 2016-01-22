@@ -298,6 +298,24 @@ class SequenceGenerator
         ));
     }
     
+    /**
+     * Genera la secuencia de plantilla de reporte
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate $reportTemplate
+     * @return type
+     */
+    public function getNextRefReportTemplateDelivery(\Pequiven\SEIPBundle\Entity\Delivery\ReportTemplateDelivery $reportTemplateDeivery)
+    {
+        $qb = $this->sequenceGenerator->createQueryBuilder();
+        $qb
+            ->from('Pequiven\SEIPBundle\Entity\Delivery\ReportTemplateDelivery', 'rt')
+            ;
+        $mask = 'R-{year}-{000}';
+        $year = $reportTemplateDeivery->getPeriod()->getYear();
+        return $this->sequenceGenerator->generateNext($qb,$mask,'ref',array(
+            'year' => $year,
+        ));
+    }
+    
     public function setSequenceGenerator(\Tecnocreaciones\Bundle\ToolsBundle\Service\SequenceGenerator $sequenceGenerator) {
         $this->sequenceGenerator = $sequenceGenerator;
     }
