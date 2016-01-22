@@ -81,8 +81,8 @@
                                         <span style="width: 220px" class="progress" data-progress-options='{"size":false,"barClasses":["{{ advancesClass }}","glossy"],"bottomMarks":[{"value":0,"label":"{{ 'pequiven.advances.nope'|trans({},'messages') }}"},{"value":50,"label":"{{ 'pequiven.advances.better'|trans({},'messages') }}"},{"value":100,"label":"{{ 'pequiven.advances.complete'|trans({},'messages') }}"}],"insetExtremes":true}'>{{ advances }}%</span>                                        
                                         {#<span style="max-width: 220px" class="progress" data-progress-options='{"size":false,"barClasses":["{{ advancesClass }}","glossy"],"bottomMarks":[{"value":0,"label":"{{ 'pequiven.advances.nope'|trans({},'messages') }}"},{"value":50,"label":"{{ 'pequiven.advances.better'|trans({},'messages') }}"},{"value":100,"label":"{{ 'pequiven.advances.complete'|trans({},'messages') }}"}],"insetExtremes":true}'>{{ advances }}%</span>#}
                                     </td>
-                                    <td width="10%">
-                                        <span class="tag {{ advancesClass }}" >{{ pg.result }} de {{ pg.resulToDate }}%
+                                    <td width="10%" style="text-align: center;">
+                                        <span class="tag {{ advancesClass }}" >{{ pg.result }}% de<br> {{ pg.resulToDate }}%
                                         </span>
                                     </td>
                                     {% if ((pg.eval=="N/A")and((pg.eval| is_string)==1)) %}
