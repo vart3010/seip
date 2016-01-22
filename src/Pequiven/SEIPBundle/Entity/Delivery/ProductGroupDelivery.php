@@ -142,26 +142,7 @@ class ProductGroupDelivery extends ModelBaseMaster {
         return $this->id;
     }
 
-    /**
-     * Set reportTemplate
-     *
-     * @param \Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate $reportTemplate
-     * @return PlantReport
-     */
-    public function setReportTemplate(\Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate $reportTemplate) {
-        $this->reportTemplate = $reportTemplate;
-
-        return $this;
-    }
-
-    /**
-     * Get reportTemplate
-     *
-     * @return \Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate 
-     */
-    public function getReportTemplate() {
-        return $this->reportTemplate;
-    }
+    
 
     /**
      * Add productsReport
