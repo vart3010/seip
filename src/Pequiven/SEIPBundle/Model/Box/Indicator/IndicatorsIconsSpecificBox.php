@@ -80,6 +80,7 @@ class IndicatorsIconsSpecificBox extends GenericBox
             'tree' => $tree,
             'data' => $data,
             'style' => $style,
+            'indicatorService' => $indicatorService,
         );
     }
     

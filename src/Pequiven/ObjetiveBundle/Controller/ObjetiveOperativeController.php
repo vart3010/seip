@@ -60,6 +60,7 @@ class ObjetiveOperativeController extends baseController
         }
         $indicatorService = $this->getIndicatorService();
         
+        //TODO: Colocar la validación de si el objetivo táctico está aprobado
         $hasPermissionToApproved = $securityService->isGrantedFull("ROLE_SEIP_OBJECTIVE_APPROVED_OPERATIVE",$resource);
         $hasPermissionToUpdate = $securityService->isGrantedFull("ROLE_SEIP_OBJECTIVE_EDIT_OPERATIVE",$resource);
         $isAllowToDelete = $securityService->isGrantedFull("ROLE_SEIP_OBJECTIVE_DELETE_OPERATIVE",$resource);
