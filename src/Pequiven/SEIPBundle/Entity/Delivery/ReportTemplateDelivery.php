@@ -129,10 +129,10 @@ class ReportTemplateDelivery extends BaseModel {
 
     /**
      * 
-     * @param \Pequiven\SEIPBundle\Entity\Delivery\Pequiven\SEIPBundle\Entity\User $user
+     * @param \Pequiven\SEIPBundle\Entity\User $user
      * @return \Pequiven\SEIPBundle\Entity\Delivery\ReportTemplateDelivery
      */
-    public function addUser(Pequiven\SEIPBundle\Entity\User $user) {
+    public function addUser(\Pequiven\SEIPBundle\Entity\User $user) {
         $this->users[] = $user;
 
         return $this;
@@ -140,9 +140,9 @@ class ReportTemplateDelivery extends BaseModel {
 
     /**
      * 
-     * @param \Pequiven\SEIPBundle\Entity\Delivery\Pequiven\SEIPBundle\Entity\User $user
+     * @param \Pequiven\SEIPBundle\Entity\User $user
      */
-    public function removeUser(Pequiven\SEIPBundle\Entity\User $user) {
+    public function removeUser(\Pequiven\SEIPBundle\Entity\User $user) {
         $this->users->removeElement($user);
     }
 
