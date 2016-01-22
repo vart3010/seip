@@ -52,6 +52,10 @@ pequiven_planning_arrangement_program:
 pequiven_data_load:
     resource: "@PequivenSEIPBundle/Resources/config/routing/dataLoad/data_load.yml"
     prefix:   /data-load
+    
+pequiven_delivery:
+    resource: "@PequivenSEIPBundle/Resources/config/routing/delivery/main.yml"
+    prefix:   /delivery
 
 pequiven_chart:
     resource: "@PequivenSEIPBundle/Resources/config/routing/chart.yml"

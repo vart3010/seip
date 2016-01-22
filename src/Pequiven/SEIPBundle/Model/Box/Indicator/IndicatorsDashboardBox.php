@@ -108,16 +108,20 @@ class IndicatorsDashboardBox extends GenericBox {
         $arrayIdProduccion[] = 1043;
 
         if ($indicator->getIndicatorLevel()->getLevel() == IndicatorLevel::LEVEL_TACTICO) {
-            if (in_array($indicator->getParent()->getId(), $arrayIdProduccion)) {
-                $seeInColumn = true;
-                $dataChartColumn = $indicatorService->getChartColumnLineDualAxis($indicator);
+            if($indicator->getParent() != null){
+                if (in_array($indicator->getParent()->getId(), $arrayIdProduccion)) {
+                    $seeInColumn = true;
+                    $dataChartColumn = $indicatorService->getChartColumnLineDualAxis($indicator);
+                }
             }
         } elseif ($indicator->getIndicatorLevel()->getLevel() == IndicatorLevel::LEVEL_OPERATIVO) {
-            if (count($indicator->getParent()->getParent()) > 0) {
-                if (in_array($indicator->getParent()->getParent()->getId(), $arrayIdProduccion)) {
-                    $seeInColumn = true;
-                    $seeInColumnSingleAxis = true;
-                    $dataChartColumn = $indicatorService->getDataChartOfResultIndicator($indicator);
+            if($indicator->getParent() != null){
+                if (count($indicator->getParent()->getParent()) > 0) {
+                    if (in_array($indicator->getParent()->getParent()->getId(), $arrayIdProduccion)) {
+                        $seeInColumn = true;
+                        $seeInColumnSingleAxis = true;
+                        $dataChartColumn = $indicatorService->getDataChartOfResultIndicator($indicator);
+                    }
                 }
             }
         }

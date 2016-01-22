@@ -48,4 +48,20 @@ class ReportTemplateDeliveryController extends SEIPController {
         return $this->handleView($view);
     }
 
+    public function showAction(Request $request) {
+        $reportTemplateDelivery = $this->getRepository()->find($request->get("id"));
+
+        $data = array(
+            "reportTemplateDelivery" => $reportTemplateDelivery
+        );
+        $view = $this
+                ->view()
+                ->setTemplate($this->config->getTemplate('show.html'))
+                ->setTemplateVar($this->config->getResourceName())
+                ->setData($data)
+        ;
+
+        return $this->handleView($view);
+    }
+
 }
