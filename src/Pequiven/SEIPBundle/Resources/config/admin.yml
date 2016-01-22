@@ -550,6 +550,40 @@ services:
         calls:
             - [ setTranslationDomain, [SonataAdminBundle]]
             
+    sonata.admin.cei.supply_center:
+        class: Pequiven\MasterBundle\Admin\CEI\SupplyCenterAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Control Estadistico e Información" ,label: "Centro de Acopio" }
+        arguments:
+            - ~
+            - Pequiven\SEIPBundle\Entity\CEI\SupplyCenter
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
+            
+            
+    sonata.admin.cei.Warehouse:
+        class: Pequiven\MasterBundle\Admin\CEI\WarehouseAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Control Estadistico e Información" ,label: "Almacén" }
+        arguments:
+            - ~
+            - Pequiven\SEIPBundle\Entity\CEI\Warehouse
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
+            
+    sonata.admin.cei.delivery_point:
+        class: Pequiven\MasterBundle\Admin\CEI\DeliveryPointAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Control Estadistico e Información" ,label: "Punto de Despacho" }
+        arguments:
+            - ~
+            - Pequiven\SEIPBundle\Entity\CEI\DeliveryPoint
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
+            
     sonata.admin.configuration:
         class: Tecnocreaciones\Bundle\ToolsBundle\Admin\Configuration\ConfigurationAdmin
         tags:
