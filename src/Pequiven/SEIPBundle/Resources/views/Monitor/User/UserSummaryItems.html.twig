@@ -28,22 +28,47 @@
 
                         <thead>
                             <tr>
-                                <th scope="col" width="15%" style="text-align: center">{{ 'pequiven.ref'|trans({},'messages') }}</th>
-                                <th scope="col" width="35%" >{{ 'pequiven.arrangement_program.nameOfProgram'|trans }}</th>                                
-                                <th scope="col" width="25%" style="text-align: center" colspan="2" >{{ 'pequiven.arrangement_program.advances'|trans }}</th>
-                                <th scope="col" width="5%" >Aporte</th>
-
+                                <th style="vertical-align: middle;" width="2%">#</th>                                
+                                <th style="vertical-align: middle; text-align: center" scope="col" width="15%" >Referencia</th>
+                                <th style="vertical-align: middle;" scope="col" width="50%" >Nombre del Programa</th>
+                                <th style="vertical-align: middle;" scope="col" width="18%" colspan="2">Avance hasta la Fecha</th>    
+                                <th style="vertical-align: middle; text-align: center" scope="col" width="10%" >Aporte</th>    
+                                <th style="vertical-align: middle; text-align: center" scope="col" width="5%" >Eval.</th>  
                             </tr>
                         </thead>
-
                         <tbody>
+                            {% set cont = 1 %}
                             {% for pg in  (management["arrangementPrograms"]) %} 
                                 <tr style="height: 50px;">
+                                    <td>{{cont}}-</td>
                                     <th style="color: #607890;" scope="row">
                                         <i class="fa fa-tasks"></i>
                                         {{ pg.ref }}
                                     </th>                                    
-                                    <td>{{ pg.description }}</td>
+                                    <td>
+                                        <b>
+                                            {% if (pg.description==null) %}
+                                                No Cargado
+                                            {% else %}
+                                                {{ pg.description }}
+                                            {%endif%}
+                                        </b>
+                                        {% if pg.observaciones %}
+                                            <br>
+                                            <small>
+                                                {% for obs in pg.observaciones %}
+                                                    {% if obs.type== 'I' %}
+                                                        Ingresado desde el desde el {{ obs.date| date("d/m/Y") }} <b>Avance:</b> {{ obs.realAdvance |number_format(2,',','.') }}% , <b>Planeado: </b>{{ obs.planned |number_format(2,',','.') }}%.
+                                                    {% endif %}
+                                                    {% if obs.type== 'O' %}
+                                                        Egresado del Programa desde el {{ obs.date| date("d/m/Y") }} <b>Avance:</b> {{ obs.realAdvance |number_format(2,',','.') }}% , <b>Planeado: </b>{{ obs.planned |number_format(2,',','.') }}%.
+                                                    {% endif %}
+                                                    <br>
+                                                {%endfor%}
+                                            </small>
+                                        {% endif %}
+
+                                    </td>
                                     <td width="15%" style="text-align: center">
                                         {% set advances = pg.result %}
                                         {% set advancesClass = 'red-gradient' %}
@@ -60,10 +85,26 @@
                                         <span class="tag {{ advancesClass }}" >{{ pg.result }} de {{ pg.resulToDate }}%
                                         </span>
                                     </td>
-                                    <td>
-                                        aport
-                                    </td>
+                                    {% if ((pg.eval=="N/A")and((pg.eval| is_string)==1)) %}
+                                        <td style="text-align: center">
+                                            No<br>Aplica
+                                        </td>
+                                    {%else%} 
+                                        <td style="text-align: center">
+                                            {{ pg.aporte |number_format(2,',','.') }} de<br>{{ pg.aportePlan |number_format(2,',','.') }}
+                                        </td>
+                                    {% endif %}
+                                    {% if ((pg.eval=="N/A")and((pg.eval| is_string)==1)) %}
+                                        <td style="text-align: center">
+                                            No Aplica
+                                        </td>
+                                    {%else%} 
+                                        <td style="text-align: center">
+                                            {{ pg.eval |number_format(2,',','.') }}%
+                                        </td>
+                                    {%endif%}
                                 </tr>
+                                {% set cont = cont+1 %}
                             {% endfor %}
                         </tbody>
 
@@ -116,10 +157,10 @@
                                                 <small>
                                                     {% for obs in goal.observaciones %}
                                                         {% if obs.type== 'I' %}
-                                                            Ingresado desde el desde el {{ obs.date| date("d/m/Y") }} <b>Avance:</b> {{ obs.realAdvance |number_format(2,',','.') }}% , <b>Planeado:</b>{{ obs.planned |number_format(2,',','.') }}%.
+                                                            Ingresado desde el desde el {{ obs.date| date("d/m/Y") }} <b>Avance:</b> {{ obs.realAdvance |number_format(2,',','.') }}% , <b>Planeado: </b>{{ obs.planned |number_format(2,',','.') }}%.
                                                         {% endif %}
                                                         {% if obs.type== 'O' %}
-                                                            Egresado de la Meta desde el {{ obs.date| date("d/m/Y") }} <b>Avance:</b> {{ obs.realAdvance |number_format(2,',','.') }}% , <b>Planeado:</b>{{ obs.planned |number_format(2,',','.') }}%.
+                                                            Egresado de la Meta desde el {{ obs.date| date("d/m/Y") }} <b>Avance:</b> {{ obs.realAdvance |number_format(2,',','.') }}% , <b>Planeado: </b>{{ obs.planned |number_format(2,',','.') }}%.
                                                         {% endif %}
                                                         <br>
                                                     {%endfor%}

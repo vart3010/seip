@@ -805,7 +805,7 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
 
         return $this;
     }
-    
+
     function getRealResult() {
         return $this->realResult;
     }
@@ -814,7 +814,6 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
         $this->realResult = $realResult;
     }
 
-    
     public function getWeight() {
         return null;
     }
@@ -976,6 +975,14 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
      */
     public function getresultBeforepenalty() {
         return $this->resultBeforepenalty;
+    }
+
+    /**
+     * 
+     * @return type
+     */
+    function getResultReal() {
+        return $this->resultReal;
     }
 
     public function __clone() {

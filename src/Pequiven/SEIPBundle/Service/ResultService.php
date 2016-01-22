@@ -2020,18 +2020,132 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
 
                 foreach ($arrangementProgram->getTimeLine()->getGoals() as $goal) {
                     if ((new \DateTime()) >= ($goal->getperiod()->getDateEnd())) {
-                        $today = 12;
+                        $fecha = 12;
                     } else {
-                        $today = date("m");
+                        $fecha = date("m");
                     }
-                    $advanceToDate = $advanceToDate + $goal->getGoalDetails()->getPlannedTotal($today) * $goal->getWeight() / 100;
+                    $advanceToDate = $advanceToDate + $goal->getGoalDetails()->getPlannedTotal($fecha) * $goal->getWeight() / 100;
                 }
+
+                //LOCALIZO MOVIMIENTOS DE PERSONAL EN EL PROGRAMA DE GESTION
+                $em = $this->getDoctrine()->getManager();
+                $movements = $em->getRepository('PequivenArrangementProgramBundle:MovementEmployee\MovementEmployee')->FindMovementDetailsbyAPbyUser($arrangementProgram->getid(), $user->getid());
+
+                $valores = array();
+                $tipos = array();
+                $planeado = array();
+                $idarray = 0;
+                $aporte = 0;
+                $aportePlan = 0;
+
+                //ALMACENO EN ARRAYS LOS VALORES DE PLAN, REAL Y TIPO
+                foreach ($movements as $mov) {
+                    $valores[$idarray] = $mov->getRealAdvance();
+                    $planeado[$idarray] = $mov->getplanned();
+                    $tipos[$idarray] = $mov->getType();
+                    $idarray++;
+                }
+
+                //SI EL PROGRAMA DE GESTION TIENE MOVIMIENTOS
+                if ($tipos != null) {
+
+                    //NO SE TOMA EN CUENTA PARA EVALUACIONES CUANDO.
+                    //SI EL EMPLEADO AL FINAL SALE DEL PROGRAMA DE GESTION DE PLAN 0%
+                    //SI EL EMPLEADO AL PRINCIPIO ENTRA CON UN PROGRAMA DE GESTION DE REAL 100%
+                    if ((($tipos[count($tipos) - 1] == 'O') && ($planeado[count($tipos) - 1] == 0)) || ((reset($tipos) == 'I') && (reset($valores) == 100))) {
+                        $eval = "N/A";
+                        $aporte = 0;
+                        $aportePlan = 0;
+                    } else {
+                        $evalI = 0;
+                        $eval = 0;
+                        //SI LOS MOVIMIENTOS COMIENZAN CON UNA SALIDA, SE AÑADE LA ENTRADA AL PROGRAMA DE GESTION INICIALIZADO EN CERO
+                        //PORQUE EL EMPLEADO SE ENCUENTRA DESDE QUE SE CREO EL PROGRAMA
+                        if ((reset($tipos) == 'O')) {
+                            $status = 'Pasada';
+                            array_unshift($tipos, 'I');
+                            array_unshift($valores, 0);
+                            array_unshift($planeado, 0);
+                        }
+
+                        //SI LOS MOVIMIENTOS CONCLUYEN CON UNA ENTRADA, SE AÑADE LA SALIDA DEL PROGRAMA DE GESTION CON EL VALOR ACTUAL DEL MISMO
+                        //PORQUE EL EMPLEADO SE MANTUVO COMO RESPONSABLE HASTA EL FINAL DEL PERIODO
+                        if (($tipos[count($tipos) - 1] == 'I')) {
+                            $status = 'Actual';
+                            $tipos[] = 'O';
+                            $valores[] = $arrangementProgram->getUpdateResultByAdmin() ? ToolService::formatResult($arrangementProgram->getResultModified()) : ToolService::formatResult($arrangementProgram->getResultReal());
+                            $planeado[] = $advanceToDate;
+                        }
+
+                        //DETERMINO LA CANTIDAD DE MOVIMIENTOS EN EL PROGRAMA DE GESTION
+                        $cant_mov = count($valores);
+                        $noaplican = 0;
+
+                        for ($i = 0; $i < $cant_mov; $i++) {
+                            //PARA EL CALCULO DEL APORTE SE APLICA DISTANCIA ENTRE DOS PUNTOS EN UNA RECTA REAL LA FORMULA ES DESTINO MENOS ORIGEN                            
+                            if ($tipos[$i] == 'I') {
+                                //UNA ENTRADA ES CONSIDERADA ORIGEN
+                                $aporte = $aporte - $valores[$i];
+                                $aportePlan = $aportePlan - $planeado[$i];
+                            }
+                            if ($tipos[$i] == 'O') {
+                                //UNA SALIDA ES CONSIDERADA DESTINO
+                                $aporte = $aporte + $valores[$i];
+                                $aportePlan = $aportePlan + $planeado[$i];
+                            }
+
+                            //SE CONTRUYEN INTERVALOS DE EVALUACIÓN YA QUE TODA SALIDA TENDRÁ SU CORRESPONDIENTE ENTRADA O VICEVERSA
+                            if ($i % 2 != 0) {
+                                //SI NO EXISTE UNA VARIACION EN EL PLAN DENTRO DEL INTERVALO, NO SE TOMA EN CUENTA PARA EVALUARLO
+                                if ($planeado[$i] == $planeado[$i - 1]) {
+                                    //SIN EMBARGO SI EXISTE UN AVANCE EN EL REAL SI SE TOMA EN CUENTA Y SE ASUME COMO EL 100% DE CUMPLIMIENTO
+                                    if ($valores[$i] > $valores[$i - 1]) {
+                                        $evalI = 100;
+                                    } else {
+                                        $evalI = 0;
+                                        //SE SUMAN DOS YA QUE LOS INTERVALOS CONTIENEN DOS ELEMENTOS
+                                        $noaplican = $noaplican + 2;
+                                    }
+                                } else {
+                                    //CALCULO LA EVALUACION INDIVIDUAL POR MOVIMIENTO CON UNA ENTRADA Y UNA SALIDA. OSEA POR INTERVALO, EXTREMO MENOS ORIGEN
+                                    $evalI = (100 * (($valores[$i] - $valores[$i - 1]) / ($planeado[$i] - $planeado[$i - 1])));
+                                }
+                            }
+                            $eval = $eval + $evalI;
+                        }
+
+                        //SI LA CANTIDAD DE MOVIMIENTOS COINCIDE CON LA CANTIDAD DE ELEMENTOS QUE NO APLICAN NO SE EVALUA LA META
+                        if ($cant_mov == $noaplican) {
+                            $eval = "N/A";
+                        } else {
+                            //SE DETERMINA UN PROMEDIO SIMPLE DE LAS EVALUACIONES INDIVIDUALES POR INTERVALO, TOMANDO EN CONSIDERACIÓN LAS QUE APLIQUEN
+                            $eval = $eval / (($cant_mov - $noaplican) / 2);
+                            //SI LA EVALUACION SUPERA EL 120% SE REDIMENSIONA AL MAXIMO PERMITIDO.
+                            if ($eval > 120) {
+                                $eval = 120;
+                            }
+                        }
+
+                        //SE REDIMENSIONAN LOS APORTES Y EVALUACIONES QUE DIERON RESULTADO NEGATIVO. SUCEDE CUANDO EL PROGRAMA DE GESTION
+                        //ACTUALMENTE ESTA POR DEBAJO DE CUANDO ENTRO DEBIDO A LAS PENALIZACIONES
+                        if (($aporte < 0) || ($eval < 0)) {
+                            $aporte = 0;
+                            $eval = 0;
+                        }
+                    }
+                } else {
+                    //SI EL PROGRAMA DE GESTION NO TIENE MOVIMIENTOS, LOS VALORES ACTUALES SON LOS VALORES DE LA EVALUACION
+                    $status = 'Actual';
+                    $eval = $aporte = $arrangementProgram->getUpdateResultByAdmin() ? ToolService::formatResult($arrangementProgram->getResultModified()) : ToolService::formatResult($arrangementProgram->getResultReal());
+                    $aportePlan = $advanceToDate;
+                }
+
 
                 $arrangementPrograms[$key] = array(
                     'id' => sprintf('PG-%s', $arrangementProgram->getId()),
                     'ref' => $arrangementProgram->getRef(),
                     'description' => $arrangementProgram->getDescription(),
-                    'result' => $arrangementProgram->getUpdateResultByAdmin() ? ToolService::formatResult($arrangementProgram->getResultModified()) : ToolService::formatResult($arrangementProgram->getResult()),
+                    'result' => $arrangementProgram->getUpdateResultByAdmin() ? ToolService::formatResult($arrangementProgram->getResultModified()) : ToolService::formatResult($arrangementProgram->getResultReal()),
                     'resulToDate' => $advanceToDate,
                     'dateStart' => array(
                         'plan' => ToolService::formatDateTime($planDateStart),
@@ -2041,6 +2155,11 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                         'plan' => ToolService::formatDateTime($planDateEnd),
                         'real' => ToolService::formatDateTime($realDateEnd)
                     ),
+                    'aporte' => $aporte,
+                    'aportePlan' => $aportePlan,
+                    'eval' => $eval,
+                    'observaciones' => $movements,
+                    'tipo' => $status,
                 );
             }
 
@@ -2259,6 +2378,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                     //SI LA META NO TIENE MOVIMIENTOS, LOS VALORES ACTUALES SON LOS VALORES DE LA EVALUACION
                     $status = 'Actual';
                     $eval = $aporte = $goal->getUpdateResultByAdmin() ? ToolService::formatResult($goal->getResultModified()) : ToolService::formatResult($goal->getResult());
+                    $aportePlan = $goal->getGoalDetails()->getPlannedTotal($fecha);
                 }
 
 
