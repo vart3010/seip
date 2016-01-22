@@ -24,7 +24,7 @@ class ReportTemplateDeliveryRepository extends SeipEntityRepository {
     public function createPaginatorByUser(array $criteria = null, array $orderBy = null) {
 
         $queryBuilder = $this->getCollectionQueryBuilder();
-//        $user = $this->getUser();
+        $user = $this->getUser();
 //        //if(!$this->getSecurityContext()->isGranted(array('ROLE_SEIP_OPERATION_LIST_PLANNING_PRODUCTION_TEMPLATES_ALL'))){
 //        $queryBuilder
 //                ->innerJoin("rtd.users", 'rt_u')
@@ -41,13 +41,19 @@ class ReportTemplateDeliveryRepository extends SeipEntityRepository {
 
     protected function applyCriteria(\Doctrine\ORM\QueryBuilder $queryBuilder, array $criteria = null) {
         $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
+
+        if (($ref = $criteria->remove("rtd.ref"))) {
+            $queryBuilder->andWhere($queryBuilder->expr()->like("rtd.ref", "'%" . $ref . "%'"));
+        }
+        if (($name = $criteria->remove("rtd.name"))) {
+            $queryBuilder->andWhere($queryBuilder->expr()->like("rtd.name", "'%" . $name . "%'"));
+        }
         $applyPeriodCriteria = $criteria->remove('applyPeriodCriteria');
 
         parent::applyCriteria($queryBuilder, $criteria->toArray());
 
         if ($applyPeriodCriteria) {
             $this->applyPeriodCriteria($queryBuilder);
-        
         }
     }
 

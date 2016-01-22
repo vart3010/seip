@@ -17,13 +17,13 @@ class ReportTemplateDeliveryController extends SEIPController {
         $criteria = $request->get('filter', $this->config->getCriteria());
         $sorting = $request->get('sorting', $this->config->getSorting());
         $repository = $this->getRepository();
-        
+
         $criteria['applyPeriodCriteria'] = true;
-        
+
         $resources = $this->resourceResolver->getResource(
                 $repository, 'createPaginatorByUser', array($criteria, $sorting)
         );
-        
+
         $maxPerPage = $this->config->getPaginationMaxPerPage();
         if (($limit = $request->query->get('limit')) && $limit > 0) {
             if ($limit > 100) {

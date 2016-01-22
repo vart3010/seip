@@ -35,7 +35,7 @@ class ReportTemplateDelivery extends BaseModel {
     /**
      * Referencia
      * @var string
-     * @ORM\Column(name="ref",nullable=false)
+     * @ORM\Column(name="ref",nullable=true)
      */
     private $ref;
 

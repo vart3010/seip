@@ -286,6 +286,9 @@
         <service id="pequiven.form.report_template" class="Pequiven\SEIPBundle\Form\DataLoad\ReportTemplateType">
             <tag name="form.type" alias="pequiven_seipbundle_dataload_reporttemplate" />
         </service>
+        <service id="pequiven.form.report_template_delivery" class="Pequiven\SEIPBundle\Form\Delivery\ReportTemplateDeliveryType">
+            <tag name="form.type" alias="pequiven_seipbundle_dataload_reporttemplatedelivery" />
+        </service>
         <service id="pequiven.form.product_report" class="Pequiven\SEIPBundle\Form\DataLoad\ProductReportType">
             <tag name="form.type" alias="pequiven_seipbundle_dataload_productreport" />
         </service>

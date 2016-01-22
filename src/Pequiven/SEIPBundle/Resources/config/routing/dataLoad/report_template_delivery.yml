@@ -7,3 +7,18 @@ pequiven_report_template_delivery_index:
         _format: json|html
     methods: [GET]
     
+pequiven_report_template_delivery_create:
+    path: /create
+    defaults:
+        _controller: pequiven.controller.report_template_delivery:createAction
+        _sylius:
+            form: pequiven_seipbundle_dataload_reporttemplatedelivery
+    methods: [GET|POST]
+    
+pequiven_report_template_delivery_update:
+    path: /{id}/update
+    defaults:
+        _controller: pequiven.controller.report_template_delivery:updateAction
+        _sylius:
+            form: pequiven_seipbundle_dataload_reporttemplatedelivery
+    methods: [GET|POST|PUT]

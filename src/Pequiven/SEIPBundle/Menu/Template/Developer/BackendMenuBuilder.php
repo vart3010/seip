@@ -1054,13 +1054,13 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
 
                 $reports->addChild($production);
             }
-            
-             $delivery = $this->factory->createItem('operations.reports.delivery', $this->getSubLevelOptions(array("route" => "",
+            if ($this->isGranted(array('ROLE_SEIP_OPERATION_LIST_REPORT_PRODUCTION'))) {
+                $delivery = $this->factory->createItem('operations.reports.delivery', $this->getSubLevelOptions(array("route" => "",
                                 ))
                         )->setLabel($this->translate(sprintf('app.backend.menu.%s.operations.reports.delivery', $section)));
 
                 $reports->addChild($delivery);
-
+            }
             $menuOperations->addChild($reports);
         }
 
@@ -1080,11 +1080,13 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                 $planning->addChild($production);
             }
 
-            $delivery = $this->factory->createItem('operations.planning.delivery', $this->getSubLevelOptions(array("route" => "pequiven_report_template_delivery_index",
-                            ))
-                    )->setLabel($this->translate(sprintf('app.backend.menu.%s.operations.planning.delivery', $section)));
+            if ($this->isGranted(array('ROLE_SEIP_OPERATION_LIST_PLANNING_PRODUCTION'))) {
+                $delivery = $this->factory->createItem('operations.planning.delivery', $this->getSubLevelOptions(array("route" => "pequiven_report_template_delivery_index",
+                                ))
+                        )->setLabel($this->translate(sprintf('app.backend.menu.%s.operations.planning.delivery', $section)));
 
-            $planning->addChild($delivery);
+                $planning->addChild($delivery);
+            }
 
             $menuOperations->addChild($planning);
         }
@@ -1104,12 +1106,14 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
 
                 $notification->addChild($production);
             }
-            
-            $delivery = $this->factory->createItem('operations.notification.delivery', $this->getSubLevelOptions(array("route" => "",
+
+            if ($this->isGranted(array('ROLE_SEIP_OPERATION_LIST_NOTIFICATION_DELIVERY'))) {
+                $delivery = $this->factory->createItem('operations.notification.delivery', $this->getSubLevelOptions(array("route" => "",
                                 ))
                         )->setLabel($this->translate(sprintf('app.backend.menu.%s.operations.notification.delivery', $section)));
 
                 $notification->addChild($delivery);
+            }
 
             $menuOperations->addChild($notification);
         }
