@@ -306,7 +306,7 @@ class ProductGroupDelivery extends ModelBaseMaster {
     }
 
    
-    function setReportTemplateDelivery(ReportTemplate $reportTemplateDelivery) {
+    function setReportTemplateDelivery(ReportTemplateDelivery $reportTemplateDelivery) {
         $this->reportTemplateDelivery = $reportTemplateDelivery;
     }
 

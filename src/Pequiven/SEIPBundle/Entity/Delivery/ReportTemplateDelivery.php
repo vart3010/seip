@@ -12,7 +12,7 @@
 namespace Pequiven\SEIPBundle\Entity\Delivery;
 
 use Doctrine\ORM\Mapping as ORM;
-use Pequiven\SEIPBundle\Model\DataLoad\ReportTemplate as BaseModel;
+use Pequiven\SEIPBundle\Model\Delivery\ReportTemplateDelivery as BaseModel;
 
 /**
  * Reporte plantilla de ventas
