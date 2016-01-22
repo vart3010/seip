@@ -322,7 +322,7 @@ class ReportTemplateDelivery extends BaseModel {
     }
 
     public function __toString() {
-        return $this->getRef() ? : "-";
+       return $this->getRef() ? : "-"; 
     }
 
     public function recalculate() {

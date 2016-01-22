@@ -25,13 +25,13 @@ class ReportTemplateDeliveryRepository extends SeipEntityRepository {
 
         $queryBuilder = $this->getCollectionQueryBuilder();
         $user = $this->getUser();
-//        //if(!$this->getSecurityContext()->isGranted(array('ROLE_SEIP_OPERATION_LIST_PLANNING_PRODUCTION_TEMPLATES_ALL'))){
-//        $queryBuilder
-//                ->innerJoin("rtd.users", 'rt_u')
-//                ->andWhere("rt_u.id = :user")
-//                ->setParameter("user", $user)
-//        ;
-//        // }
+        if (!$this->getSecurityContext()->isGranted(array('ROLE_SEIP_OPERATION_LIST_PLANNING_DELIVERY_TEMPLATES_ALL'))) {
+            $queryBuilder
+                    ->innerJoin("rtd.users", 'rt_u')
+                    ->andWhere("rt_u.id = :user")
+                    ->setParameter("user", $user)
+            ;
+        }
         $this->applyCriteria($queryBuilder, $criteria);
         $this->applySorting($queryBuilder, $orderBy);
 
