@@ -1504,7 +1504,9 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                             $childValueParameter = $resultItem->getParameter($nameParameter);
                             if ($childValueParameter !== null) {
                                 if ($variable->isStaticValue()) {//En caso de que la variable sea "estática" y tenga que obtener el valor del indicador hijo
-                                    $valueParameter = $childValueParameter;
+                                    if(!$indicator->getValidVariableStaticValue()){
+                                        $valueParameter = $childValueParameter;
+                                    }
                                 } else {
                                     $valueParameter += $childValueParameter;
                                 }

@@ -643,6 +643,12 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      */
     private $complejoDashboardSpecific;
     
+    /**
+     * ¿EL indicador tomará en cuenta las variables de valor estático?
+     * @var boolean
+     *  @ORM\Column(name="validVariableStaticValue",type="boolean")
+     */
+    private $validVariableStaticValue = false;
 
     /**
      * Constructor
@@ -2589,6 +2595,25 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      */
     public function getResultsAdditionalInDashboardColumn() {
         return $this->resultsAdditionalInDashboardColumn;
+    }
+
+    /**
+     * 
+     * @param type $validVariableStaticValue
+     * @return \Pequiven\IndicatorBundle\Entity\Indicator
+     */
+    public function setValidVariableStaticValue($validVariableStaticValue) {
+        $this->validVariableStaticValue = $validVariableStaticValue;
+
+        return $this;
+    }
+
+    /**
+     * 
+     * @return type
+     */
+    public function getValidVariableStaticValue() {
+        return $this->validVariableStaticValue;
     }
     
     /**
