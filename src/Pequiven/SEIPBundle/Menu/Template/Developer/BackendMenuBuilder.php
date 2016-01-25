@@ -846,7 +846,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                         ))
                 )
                 ->setLabel($this->translate(sprintf('app.backend.menu.%s.results.main', $section)));
-        if ($this->isGranted(array('ROLE_SEIP_RESULT_LIST_*', 'ROLE_SEIP_RESULT_MANAGEMENT_CONSULTING_USER'))) {
+        if ($this->isGranted(array('ROLE_SEIP_RESULT_LIST_*', 'ROLE_SEIP_RESULT_MANAGEMENT_CONSULTING_USER','ROLE_SEIP_RESULT_VIEW_BY_INDICATORS_CPJAA'))) {
             //Menú Nivel 2: Visualizar
             $visualize = $this->factory->createItem('results.visualize', $this->getSubLevelOptions(array('uri' => 'objetive',
                                 'labelAttributes' => array('icon' => '',),
