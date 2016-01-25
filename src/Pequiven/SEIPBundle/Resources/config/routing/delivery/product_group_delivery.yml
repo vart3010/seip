@@ -1,0 +1,7 @@
+pequiven_product_group_delivery:
+    path: /{productGroup}/create
+    defaults:
+        _controller: pequiven.controller.product_group_delivery:createAction
+        _sylius:
+            form: pequiven_seipbundle_delivery_productgroup
+    methods: [GET|POST]

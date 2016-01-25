@@ -36,6 +36,7 @@ pequiven_seip:
     details: Detalles
     plants: Plantas
     plants_groups: Grupos de Plantas
+    product_group: Grupos de Productos
     inventory: Inventario
     date_of_notification: Fecha de notificación
     date_of_report: Fecha de reporte

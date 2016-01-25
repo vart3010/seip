@@ -26,7 +26,7 @@ class ProductGroupDelivery extends ModelBaseMaster {
 
     /**
      * Reporte de plantilla
-     * @var ReportTemplate
+     * @var \Pequiven\SEIPBundle\Entity\Delivery\ReportTemplateDelivery
      * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\Delivery\ReportTemplateDelivery",inversedBy="productGroupDelivery")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -196,10 +196,9 @@ class ProductGroupDelivery extends ModelBaseMaster {
     }
 
     /**
-     * Set location
-     *
+     * 
      * @param \Pequiven\SEIPBundle\Entity\CEI\Location $location
-     * @return PlantReport
+     * @return \Pequiven\SEIPBundle\Entity\Delivery\ProductGroupDelivery
      */
     public function setLocation(\Pequiven\SEIPBundle\Entity\CEI\Location $location) {
         $this->location = $location;
@@ -208,10 +207,10 @@ class ProductGroupDelivery extends ModelBaseMaster {
     }
 
     /**
-     * Get location
-     *
-     * @return \Pequiven\SEIPBundle\Entity\CEI\Location 
+     * 
+     * @return type
      */
+    
     public function getLocation() {
         return $this->location;
     }
