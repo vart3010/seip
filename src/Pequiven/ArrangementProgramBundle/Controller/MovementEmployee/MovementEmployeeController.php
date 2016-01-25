@@ -178,7 +178,7 @@ class MovementEmployeeController extends SEIPController {
                     $movement->setId_Affected($id);
                     $movement->setCause($cause);
                     $movement->setObservations($obs);
-                    $movement->setrealAdvance($datos['realResult']);
+                    $movement->setrealAdvance($datos['realResult']-$datos['penalty']);
                     $movement->setPentalty($datos['penalty']);
                     $movement->setPlanned($datos['plannedResult']);
                     $movement->setTypeMov($tipo);
@@ -202,7 +202,7 @@ class MovementEmployeeController extends SEIPController {
                         $movement->setId_Affected($id);
                         $movement->setCause($cause);
                         $movement->setObservations($obs);
-                        $movement->setrealAdvance($datos['realResult']);
+                        $movement->setrealAdvance($datos['realResult']-$datos['penalty']);
                         $movement->setPentalty($datos['penalty']);
                         $movement->setPlanned($datos['plannedResult']);
                         $movement->setTypeMov($tipo);
@@ -336,7 +336,7 @@ class MovementEmployeeController extends SEIPController {
                         $movement->setId_Affected($id);
                         $movement->setCause($cause);
                         $movement->setObservations($obs);
-                        $movement->setrealAdvance($datos['realResult']);
+                        $movement->setrealAdvance($datos['realResult']-$datos['penalty']);
                         $movement->setPentalty($datos['penalty']);
                         $movement->setPlanned($datos['plannedResult']);
                         $movement->setTypeMov($tipo);
@@ -360,7 +360,7 @@ class MovementEmployeeController extends SEIPController {
                             $movement->setId_Affected($id);
                             $movement->setCause($cause);
                             $movement->setObservations($obs);
-                            $movement->setrealAdvance($datos['realResult']);
+                            $movement->setrealAdvance($datos['realResult']-$datos['penalty']);
                             $movement->setPentalty($datos['penalty']);
                             $movement->setPlanned($datos['plannedResult']);
                             $movement->setTypeMov($tipo);
@@ -511,8 +511,8 @@ class MovementEmployeeController extends SEIPController {
         $real[12] = $sumr;
 
         $mes = date_format($date, 'n');
-
         $mayor = 0;
+        
         for ($i = 1; $i <= $mes; $i++) {
             $penal = 0;
             for ($j = $i; $j <= $mes; $j++) {

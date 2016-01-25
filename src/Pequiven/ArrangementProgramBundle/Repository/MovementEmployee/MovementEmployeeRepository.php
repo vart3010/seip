@@ -58,7 +58,7 @@ class MovementEmployeeRepository extends EntityRepository {
         ;
         return $qb->getQuery()->getResult();
     }
-    
+
     function FindMovementDetailsbyAPbyUser($idAP, $idUser) {
         $qb = $this->getQueryBuilder();
         $qb
