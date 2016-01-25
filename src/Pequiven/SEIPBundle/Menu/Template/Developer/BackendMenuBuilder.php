@@ -1048,7 +1048,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                     )->setLabel($this->translate(sprintf('app.backend.menu.%s.operations.reports.main', $section)));
 
             if ($this->isGranted(array('ROLE_SEIP_OPERATION_LIST_REPORT_PRODUCTION', 'ROLE_SEIP_OPERATION_LIST_REPORT_PRODUCTION_TEMPLATES_ALL'))) {
-                $production = $this->factory->createItem('operations.reports.production', $this->getSubLevelOptions(array("route" => "",
+                $production = $this->factory->createItem('operations.reports.production', $this->getSubLevelOptions(array("route" => "pequiven_report_template_vizualice",
                                 ))
                         )->setLabel($this->translate(sprintf('app.backend.menu.%s.operations.reports.production', $section)));
 
