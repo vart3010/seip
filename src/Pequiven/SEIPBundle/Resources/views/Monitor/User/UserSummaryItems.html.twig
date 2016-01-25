@@ -28,24 +28,48 @@
 
                         <thead>
                             <tr>
-                                <th scope="col" width="10%" >{{ 'pequiven.ref'|trans({},'messages') }}</th>
-                                <th scope="col" width="20%" >{{ 'pequiven.arrangement_program.nameOfProgram'|trans }}</th>
-                                <th scope="col" width="30%" >{{ 'pequiven.arrangement_program.description'|trans }}</th>
-                                <th scope="col" colspan="2" style="text-align: center" width="20%" >{{ 'pequiven.arrangement_program.advances'|trans }}</th>
-
+                                <th style="vertical-align: middle;" width="2%">#</th>                                
+                                <th style="vertical-align: middle; text-align: center" scope="col" width="15%" >Referencia</th>
+                                <th style="vertical-align: middle;" scope="col" width="50%" >Nombre del Programa</th>
+                                <th style="vertical-align: middle;" scope="col" width="18%" colspan="2">Avance hasta la Fecha</th>    
+                                <th style="vertical-align: middle; text-align: center" scope="col" width="10%" >Aporte</th>    
+                                <th style="vertical-align: middle; text-align: center" scope="col" width="5%" >Eval.</th>  
                             </tr>
                         </thead>
-
                         <tbody>
+                            {% set cont = 1 %}
                             {% for pg in  (management["arrangementPrograms"]) %} 
-                                <tr style="height: 50px">
+                                <tr style="height: 50px;">
+                                    <td>{{cont}}-</td>
                                     <th style="color: #607890;" scope="row">
                                         <i class="fa fa-tasks"></i>
-                                        {{ pg.id }}
-                                    </th>
-                                    <td>{{ pg.ref }}</td>
-                                    <td>{{ pg.description }}</td>
-                                    <td style="text-align: center">
+                                        {{ pg.ref }}
+                                    </th>                                    
+                                    <td>
+                                        <b>
+                                            {% if (pg.description==null) %}
+                                                No Cargado
+                                            {% else %}
+                                                {{ pg.description }}
+                                            {%endif%}
+                                        </b>
+                                        {% if pg.observaciones %}
+                                            <br>
+                                            <small>
+                                                {% for obs in pg.observaciones %}
+                                                    {% if obs.type== 'I' %}
+                                                        Ingresado desde el desde el {{ obs.date| date("d/m/Y") }} <b>Avance:</b> {{ obs.realAdvance |number_format(2,',','.') }}% , <b>Planeado: </b>{{ obs.planned |number_format(2,',','.') }}%.
+                                                    {% endif %}
+                                                    {% if obs.type== 'O' %}
+                                                        Egresado del Programa desde el {{ obs.date| date("d/m/Y") }} <b>Avance:</b> {{ obs.realAdvance |number_format(2,',','.') }}% , <b>Planeado: </b>{{ obs.planned |number_format(2,',','.') }}%.
+                                                    {% endif %}
+                                                    <br>
+                                                {%endfor%}
+                                            </small>
+                                        {% endif %}
+
+                                    </td>
+                                    <td width="15%" style="text-align: center">
                                         {% set advances = pg.result %}
                                         {% set advancesClass = 'red-gradient' %}
                                         {% if advances >= 50 and advances < 100 %}
@@ -53,12 +77,34 @@
                                         {% elseif advances >= 100 %}
                                             {% set advancesClass = 'green-gradient' %}
                                         {% endif %}
-                                        <span style="width: 180px; max-width: 400px" class="progress" data-progress-options='{"size":false,"barClasses":["{{ advancesClass }}","glossy"],"insetExtremes":true}'>{{ advances }}%</span>
-
-                                        {#                                            <span style="max-width: 220px" class="progress" data-progress-options='{"size":false,"barClasses":["{{ advancesClass }}","glossy"],"bottomMarks":[{"value":0,"label":"{{ 'pequiven.advances.nope'|trans({},'messages') }}"},{"value":50,"label":"{{ 'pequiven.advances.better'|trans({},'messages') }}"},{"value":100,"label":"{{ 'pequiven.advances.complete'|trans({},'messages') }}"}],"insetExtremes":true}'>{{ advances }}%</span>#}
+                                        {#<span style="max-width: 400px" class="progress" data-progress-options='{"size":false,"barClasses":["{{ advancesClass }}","glossy"],"insetExtremes":true}'>{{ advances }}%</span>#}
+                                        <span style="width: 220px" class="progress" data-progress-options='{"size":false,"barClasses":["{{ advancesClass }}","glossy"],"bottomMarks":[{"value":0,"label":"{{ 'pequiven.advances.nope'|trans({},'messages') }}"},{"value":50,"label":"{{ 'pequiven.advances.better'|trans({},'messages') }}"},{"value":100,"label":"{{ 'pequiven.advances.complete'|trans({},'messages') }}"}],"insetExtremes":true}'>{{ advances }}%</span>                                        
+                                        {#<span style="max-width: 220px" class="progress" data-progress-options='{"size":false,"barClasses":["{{ advancesClass }}","glossy"],"bottomMarks":[{"value":0,"label":"{{ 'pequiven.advances.nope'|trans({},'messages') }}"},{"value":50,"label":"{{ 'pequiven.advances.better'|trans({},'messages') }}"},{"value":100,"label":"{{ 'pequiven.advances.complete'|trans({},'messages') }}"}],"insetExtremes":true}'>{{ advances }}%</span>#}
                                     </td>
-                                    <td><span class="tag {{ advancesClass }}" >{{ pg.result }}/{{ pg.resulToDate }}%</span></td>
+                                    <td width="10%" style="text-align: center;">
+                                        <span class="tag {{ advancesClass }}" >{{ pg.result }}% de<br> {{ pg.resulToDate }}%
+                                        </span>
+                                    </td>
+                                    {% if ((pg.eval=="N/A")and((pg.eval| is_string)==1)) %}
+                                        <td style="text-align: center">
+                                            No<br>Aplica
+                                        </td>
+                                    {%else%} 
+                                        <td style="text-align: center">
+                                            {{ pg.aporte |number_format(2,',','.') }} de<br>{{ pg.aportePlan |number_format(2,',','.') }}
+                                        </td>
+                                    {% endif %}
+                                    {% if ((pg.eval=="N/A")and((pg.eval| is_string)==1)) %}
+                                        <td style="text-align: center">
+                                            No Aplica
+                                        </td>
+                                    {%else%} 
+                                        <td style="text-align: center">
+                                            {{ pg.eval |number_format(2,',','.') }}%
+                                        </td>
+                                    {%endif%}
                                 </tr>
+                                {% set cont = cont+1 %}
                             {% endfor %}
                         </tbody>
 
@@ -74,12 +120,13 @@
                         <table ng-init="" class="simple-table responsive-table" id="sorting-example2">
 
                             <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th scope="col" width="60%" >Nombre</th>
-                                    <th style="text-align: center" scope="col" width="10%" >Peso</th>
-                                    <th scope="col" width="30%" >Avance</th>    
-
+                                <tr style="vertical-align: middle;">
+                                    <th style="vertical-align: middle;" width="2%">#</th>
+                                    <th style="vertical-align: middle;" scope="col" width="55%" >Descripción de la Meta</th>
+                                    <th style="vertical-align: middle; text-align: center" scope="col" width="10%" >Peso</th>
+                                    <th style="vertical-align: middle;" scope="col" width="18%" colspan="2">Avance hasta la Fecha</th>    
+                                    <th style="vertical-align: middle; text-align: center" scope="col" width="10%" >Aporte</th>    
+                                    <th style="vertical-align: middle; text-align: center" scope="col" width="5%" >Eval.</th>    
                                 </tr>
                             </thead>
 
@@ -92,24 +139,64 @@
                                     {% else %}    
                                         {% set porc = 0 %}
                                     {% endif %}
-                                    {% set class = "red-gradient"%}
-                                    {% if(porc>=50 and porc<100) %}
-                                        {% set class = "orange-gradient"%}
-                                    {% elseif (porc>=100)  %}
-                                        {% set class = "green-gradient"%}
+                                    {% if goal.tipo == 'Pasada' %}
+                                        {% set class = "grey-gradient"%}
+                                    {% else %}
+                                        {% set class = "red-gradient"%}
+                                        {% if(porc>=50 and porc<100) %}
+                                            {% set class = "orange-gradient"%}
+                                        {% elseif (porc>=100)  %}
+                                            {% set class = "green-gradient"%}
+                                        {% endif %}
                                     {% endif %}
-                                    <tr style="height: 50px">
+                                    <tr style="min-height: 50px">
                                         <td>{{ cont }}-</td>
-                                        <td  style="color: #607890; font-weight: bold">{{ goal.description }}</td>
+                                        <td  style="color: #607890; font-weight: bold; text-align: justify">{{ goal.description }}
+                                            {% if goal.observaciones %}
+                                                <br>
+                                                <small>
+                                                    {% for obs in goal.observaciones %}
+                                                        {% if obs.type== 'I' %}
+                                                            Ingresado desde el desde el {{ obs.date| date("d/m/Y") }} <b>Avance:</b> {{ obs.realAdvance |number_format(2,',','.') }}% , <b>Planeado: </b>{{ obs.planned |number_format(2,',','.') }}%.
+                                                        {% endif %}
+                                                        {% if obs.type== 'O' %}
+                                                            Egresado de la Meta desde el {{ obs.date| date("d/m/Y") }} <b>Avance:</b> {{ obs.realAdvance |number_format(2,',','.') }}% , <b>Planeado: </b>{{ obs.planned |number_format(2,',','.') }}%.
+                                                        {% endif %}
+                                                        <br>
+                                                    {%endfor%}
+                                                </small>
+                                            {% endif %}
+                                        </td>
                                         <td style="text-align: center" >{{ goal.weight }}%</td>
-                                        <td  scope="row">
-
+                                        <td  scope="row" width="8%">
                                             <span ng-class="getClassForMeter({{ goal.result }},1)"></span>
                                             <span ng-class="getClassForMeter({{ goal.result }},2)"></span>
                                             <span ng-class="getClassForMeter({{ goal.result }},3)"></span>
-                                            {{ goal.result }}% 
-                                            <span class="tag {{ class }}">{{ goal.result }}/{{ goal.resultToDate }}%</span>
+                                            {{ goal.result }}% &nbsp;                                            
                                         </td>
+                                        <td width="10%">
+                                            <span class="tag {{ class }}">
+                                                {{ goal.result }} de {{ goal.resultToDate }}
+                                            </span>
+                                        </td>
+                                        {% if ((goal.eval=="N/A")and((goal.eval| is_string)==1)) %}
+                                            <td style="text-align: center">
+                                                No<br>Aplica
+                                            </td>
+                                        {%else%} 
+                                            <td style="text-align: center">
+                                                {{ goal.aporte |number_format(2,',','.') }} de<br>{{ goal.aportePlan |number_format(2,',','.') }}
+                                            </td>
+                                        {% endif %}
+                                        {% if ((goal.eval=="N/A")and((goal.eval| is_string)==1)) %}
+                                            <td style="text-align: center">
+                                                No Aplica
+                                            </td>
+                                        {%else%} 
+                                            <td style="text-align: center">
+                                                {{ goal.eval |number_format(2,',','.') }}%
+                                            </td>
+                                        {%endif%}
                                     </tr>
                                     {% set cont = cont + 1 %}
                                 {% endfor %}
@@ -139,9 +226,9 @@
                         </thead>
                         <tbody>
                             {% for objetivesOE in objetives["OE"] %}
-                                <tr>
-                                    <td style="color: #607890; text-align: center;">{{ objetivesOE.id }}</td>
-                                    <td style="font-weight: bold;">{{ objetivesOE.description }}</td>
+                                <tr style="height: 50px;">
+                                    <td style="color: #607890; text-align: center;">{{ objetivesOE.ref }}</td>
+                                    <td style="text-align: justify">{{ objetivesOE.description }}</td>
                                     <td style="text-align: center">
                                         {% set advances = objetivesOE.result %}
                                         {% set advancesClass = 'red-gradient' %}
@@ -151,9 +238,8 @@
                                         {% elseif advances >= 100 %}
                                             {% set advancesClass = 'green-gradient' %}
                                         {% endif %}
-                                        <span style="max-width: 220px" class="progress" data-progress-options='{"size":false,"barClasses":["{{ advancesClass }}","glossy"],"bottomMarks":[{"value":0,"label":"{{ 'pequiven.advances.nope'|trans({},'messages') }}"},{"value":50,"label":"{{ 'pequiven.advances.better'|trans({},'messages') }}"},{"value":100,"label":"{{ 'pequiven.advances.complete'|trans({},'messages') }}"}],"insetExtremes":true}'>{{ advances }}%</span>
+                                        <span style="width: 220px" class="progress" data-progress-options='{"size":false,"barClasses":["{{ advancesClass }}","glossy"],"bottomMarks":[{"value":0,"label":"{{ 'pequiven.advances.nope'|trans({},'messages') }}"},{"value":50,"label":"{{ 'pequiven.advances.better'|trans({},'messages') }}"},{"value":100,"label":"{{ 'pequiven.advances.complete'|trans({},'messages') }}"}],"insetExtremes":true}'>{{ advances }}%</span>
                                     </td>
-
                                 </tr>
                             {% endfor %}
                         </tbody>
@@ -176,10 +262,10 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for objetivesOT in objetives["OT"] %}
-                                <tr>
-                                    <td style="color: #607890; text-align: center;">{{ objetivesOT.id }}</td>
-                                    <td style="font-weight: bold;">{{ objetivesOT.description }}</td>
+                            {% for objetivesOT in objetives["OT"] %}                                
+                                <tr style="height: 50px;">
+                                    <td style="color: #607890; text-align: center;">{{ objetivesOT.ref }}</td>
+                                    <td style="text-align: justify">{{ objetivesOT.description }}</td>
                                     <td style="text-align: center">
                                         {% set advances = objetivesOT.result %}
                                         {% set advancesClass = 'red-gradient' %}
@@ -189,7 +275,7 @@
                                         {% elseif advances >= 100 %}
                                             {% set advancesClass = 'green-gradient' %}
                                         {% endif %}
-                                        <span style="max-width: 220px" class="progress" data-progress-options='{"size":false,"barClasses":["{{ advancesClass }}","glossy"],"bottomMarks":[{"value":0,"label":"{{ 'pequiven.advances.nope'|trans({},'messages') }}"},{"value":50,"label":"{{ 'pequiven.advances.better'|trans({},'messages') }}"},{"value":100,"label":"{{ 'pequiven.advances.complete'|trans({},'messages') }}"}],"insetExtremes":true}'>{{ advances }}%</span>
+                                        <span style="width: 220px" class="progress" data-progress-options='{"size":false,"barClasses":["{{ advancesClass }}","glossy"],"bottomMarks":[{"value":0,"label":"{{ 'pequiven.advances.nope'|trans({},'messages') }}"},{"value":50,"label":"{{ 'pequiven.advances.better'|trans({},'messages') }}"},{"value":100,"label":"{{ 'pequiven.advances.complete'|trans({},'messages') }}"}],"insetExtremes":true}'>{{ advances }}%</span>                                        
                                     </td>
                                 </tr>
                             {% endfor %}
@@ -213,10 +299,10 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for objetivesOO in objetives["OO"] %}
-                                <tr>
-                                    <td style="color: #607890; text-align: center;">{{ objetivesOO.id }}</td>
-                                    <td style="font-weight: bold;">{{ objetivesOO.description }}</td>
+                            {% for objetivesOO in objetives["OO"] %}                             
+                                <tr style="height: 50px;">
+                                    <td style="color: #607890; text-align: center;">{{ objetivesOO.ref }}</td>
+                                    <td style="text-align: justify">{{ objetivesOO.description }}</td>
                                     <td style="text-align: center">
                                         {% set advances = objetivesOO.result %}
                                         {% set advancesClass = 'red-gradient' %}
@@ -226,9 +312,9 @@
                                         {% elseif advances >= 100 %}
                                             {% set advancesClass = 'green-gradient' %}
                                         {% endif %}
-                                        <span style="max-width: 220px" class="progress" data-progress-options='{"size":false,"barClasses":["{{ advancesClass }}","glossy"],"bottomMarks":[{"value":0,"label":"{{ 'pequiven.advances.nope'|trans({},'messages') }}"},{"value":50,"label":"{{ 'pequiven.advances.better'|trans({},'messages') }}"},{"value":100,"label":"{{ 'pequiven.advances.complete'|trans({},'messages') }}"}],"insetExtremes":true}'>{{ advances }}%</span>
+                                        <span style="width: 220px" class="progress" data-progress-options='{"size":false,"barClasses":["{{ advancesClass }}","glossy"],"bottomMarks":[{"value":0,"label":"{{ 'pequiven.advances.nope'|trans({},'messages') }}"},{"value":50,"label":"{{ 'pequiven.advances.better'|trans({},'messages') }}"},{"value":100,"label":"{{ 'pequiven.advances.complete'|trans({},'messages') }}"}],"insetExtremes":true}'>{{ advances }}%</span>
                                     </td>
-                                </tr>
+                                </tr>                                
                             {% endfor %}
                         </tbody>
 
@@ -243,7 +329,7 @@
             <div class="twelve-columns" style="text-align: right">
                 <a class="button" id="downloadPdf" href="javascript:void(0)">
                     <span class="button-icon"><span class="icon-download"></span></span>
-                    {{ 'pequiven.form.exportItemsToPdf'|trans }}
+                        {{ 'pequiven.form.exportItemsToPdf'|trans }}
                 </a>
                 <form id="formExportPdf" action="{{ path("pequiven_download_list_user_items",{'idUser':datosUser.getId}) }}" method="POST"></form>
             </div>

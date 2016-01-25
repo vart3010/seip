@@ -234,17 +234,16 @@ class MovementEmployeeController extends SEIPController {
 
         $em = $this->getDoctrine()->getManager();
         $securityService = $this->getSecurityService();
-//
-//        if (!is_null($request->get('idGoal'))) {
-//            $id = $request->get('idGoal');
-//            $tipo = 'Goal';
-//        }
-//
-//        if (!is_null($request->get('idAP'))) {
-//            $id = $request->get('idAP');
-//            $tipo = 'AP';
-//        }
 
+        if (!is_null($request->get('idGoal'))) {
+            $id = $request->get('idGoal');
+            $tipo = 'Goal';
+        }
+
+        if (!is_null($request->get('idAP'))) {
+            $id = $request->get('idAP');
+            $tipo = 'AP';
+        }
 
         //VALIDO PERMISOLOGÍA POR SI ACASO SE ACCEDE DESDE URL DIRECTA
         if ((($securityService->isGranted(array("ROLE_SEIP_ARRANGEMENT_PROGRAM_MOVEMENT_GOALS")))) || ($securityService->isGranted(array("ROLE_SEIP_ARRANGEMENT_PROGRAM_MOVEMENT_GOALS_POST_MORTEM")))) {
