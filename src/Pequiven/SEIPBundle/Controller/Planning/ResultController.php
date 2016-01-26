@@ -130,7 +130,7 @@ class ResultController extends ResourceController {
             'period' => $period,
         );
 
-        $this->generatePdf($data, 'Evaluación de Desempeño', 'PequivenSEIPBundle:Monitor/User:UserSummaryItemsPdfFormat.html.twig');
+        $this->generatePdf($data, 'Resultados de Gestión', 'PequivenSEIPBundle:Monitor/User:UserSummaryItemsPdfFormat.html.twig');
     }
 
     /**
@@ -154,7 +154,7 @@ class ResultController extends ResourceController {
         $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
         $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
         $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
-        $pdf->SetMargins(PDF_MARGIN_LEFT, 35, PDF_MARGIN_RIGHT);
+        $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
         $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
         $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
         $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);

@@ -428,11 +428,11 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         $this->updateResultOfObjects($arrangementProgram->getObjetiveByType());
 
         //TRAIGO LOS MOVIMIENTOS DEL PROGRAMA
-        $movements = $em->getRepository('PequivenArrangementProgramBundle:MovementEmployee\MovementEmployee')->FindMovementDetailsbyAP($arrangementProgram->getId());
+        $movementsAP = $em->getRepository('PequivenArrangementProgramBundle:MovementEmployee\MovementEmployee')->FindMovementDetailsbyAP($arrangementProgram->getId());
 
         //ACTUALIZO LOS MOVIMIENTOS CON LOS VALORES ACTUALIZADOS DE LA META POR FECHA DE EMISION
-        if ($movements != null) {
-            foreach ($movements as $mov) {
+        if ($movementsAP != null) {
+            foreach ($movementsAP as $mov) {
                 $datos = $this->CalculateAdvancePenaltyAP($arrangementProgram, $mov->getDate());
                 if (($datos['realResult'] - $datos['penalty']) < 0) {
                     $mov->setrealAdvance(0);

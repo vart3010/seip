@@ -45,22 +45,21 @@
         {% set tipoProd='(PRODUCCIÓN NETA)'%}
     {% else %}
         {% set tipoProd='(PRODUCCIÓN BRUTA)'%}
-    {% endif %}
-    <br><br>
+    {% endif %}    
     <table style="text-align: center; width: 100%">
         <tr>
-            <th width="50%" style="font-weight: bold; font-size: 9pt; text-align: left;">Complejo:</th>            
-            <th width="25%" style="font-weight: bold; font-size: 9pt; text-align: left;">Producción hasta</th>
-            <th width="25%" style="font-weight: bold; font-size: 9pt; text-align: left;">Emision: </th>
+            <th width="70%" style="font-weight: bold; font-size: 9pt; text-align: left;">Complejo:</th>            
+            <th width="15%" style="font-weight: bold; font-size: 9pt; text-align: left;">Producción del</th>
+            <th width="15%" style="font-weight: bold; font-size: 9pt; text-align: left;">Emision: </th>
         </tr>
         <tr>
-            <td width="50%" style="font-size: 8pt; text-align: left;">
+            <td width="75%" style="font-size: 8pt; text-align: left;">
                 {% for plant in plantsNames%}
                     {{ plant }}. <br>
                 {% endfor %}
             </td>
-            <td width="25%" style="font-size: 8pt; text-align: left;">el {{ dateReport|date("d/m/Y") }}</td>
-            <td width="25%" style="font-size: 8pt; text-align: left;">{{ "now"|date("d/m/Y") }}</td>
+            <td width="15%" style="font-size: 8pt; text-align: left;">{{ dateReport|date("d/m/Y") }}</td>
+            <td width="15%" style="font-size: 8pt; text-align: left;">{{ "now"|date("d/m/Y") }}</td>
         </tr>
     </table>
     <br>    
