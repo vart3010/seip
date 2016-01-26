@@ -218,6 +218,18 @@ class SecurityService implements ContainerAwareInterface
             }
             
             if($valid === false){
+                if($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC){
+                    if($this->isGranted('ROLE_SEIP_ARRANGEMENT_PROGRAM_MANAGER_FIRST_CLONE_VIEW_TACTIC')){
+                        $valid = true;
+                    }
+                }
+                
+                if($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE){
+                    if($this->isGranted('ROLE_SEIP_ARRANGEMENT_PROGRAM_MANAGER_FIRST_CLONE_VIEW_OPERATIVE')){
+                        $valid = true;
+                    }
+                }
+                
                 //Evaluo si soy responsable del programa de gestion
                 if($arrangementProgram->getResponsibles()->contains($user) === true){
                     $valid = true;
