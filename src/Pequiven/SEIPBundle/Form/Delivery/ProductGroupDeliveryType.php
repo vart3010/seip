@@ -14,6 +14,8 @@ class ProductGroupDeliveryType extends SeipAbstractForm {
      */
     public function buildForm(FormBuilderInterface $builder, array $options) {
         $entity = $builder->getData();
+        var_dump($entity);die();
+        
         $location = $entity->getReportTemplateDelivery()->getLocation();
 
         $parametersPreSet = array(
@@ -54,7 +56,7 @@ class ProductGroupDeliveryType extends SeipAbstractForm {
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver) {
         $resolver->setDefaults(array(
-            'data_class' => 'Pequiven\SEIPBundle\Entity\DataLoad\PlantReport',
+            'data_class' => 'Pequiven\SEIPBundle\Entity\Delivery\ProductGroupDelivery',
             "translation_domain" => "PequivenSEIPBundle",
         ));
     }

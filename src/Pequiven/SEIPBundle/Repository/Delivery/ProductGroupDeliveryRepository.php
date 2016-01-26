@@ -10,5 +10,9 @@ use Pequiven\SEIPBundle\Doctrine\ORM\SeipEntityRepository;
  * @author Victor Tortolero <vart10.30@gmail.com>
  */
 class ProductGroupDeliveryRepository extends SeipEntityRepository {
-    
+
+    protected function getAlias() {
+        return 'pgr';
+    }
+
 }

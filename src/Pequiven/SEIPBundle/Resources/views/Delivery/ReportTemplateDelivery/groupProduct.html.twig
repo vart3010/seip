@@ -4,7 +4,7 @@
     <div class="block-title">
         <h3> {{ 'pequiven_seip.product_group'|trans }}&nbsp;({{ reportTemplateDelivery.productGroupDelivery|length }})</h3>
         <div class="button-group absolute-right compact">
-            <a class="button icon-list-add" href="{{ path('pequiven_product_group_delivery',{productGroup: app.request.get('id')}) }}">{{ 'pequiven.add'|trans({},'messages') }}</a>
+            <a class="button icon-list-add" href="{{ path('pequiven_product_group_delivery',{"reportTemplateDelivery": app.request.get('id')}) }}">{{ 'pequiven.add'|trans({},'messages') }}</a>
         </div>
     </div>
     <div class="with-padding">

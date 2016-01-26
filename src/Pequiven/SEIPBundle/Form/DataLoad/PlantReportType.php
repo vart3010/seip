@@ -16,9 +16,8 @@ class PlantReportType extends SeipAbstractForm
     {
         //$entity = new \Pequiven\SEIPBundle\Entity\DataLoad\PlantReport();
         $entity = $builder->getData();
-        
         $location = $entity->getReportTemplate()->getLocation();
-
+        
         $parametersPreSet = array(
             'label_attr' => array('class' => 'label'),
             "empty_value" => "",
