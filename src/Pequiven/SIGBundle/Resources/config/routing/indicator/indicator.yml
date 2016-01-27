@@ -94,7 +94,7 @@ pequiven_config_chart_get_form:
         _format: html
     requirements:
         _format: html|json
-    methods: [GET]
+    methods: [GET|POST]
     options:
         expose: true
 #Guardamos el formulario de la relacion del indicador

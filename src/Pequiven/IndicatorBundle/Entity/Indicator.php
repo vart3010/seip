@@ -651,6 +651,13 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     private $validVariableStaticValue = false;
 
     /**
+     * @var integer
+     * 
+     * @ORM\Column(name="indicator_sig_medition", type="integer", nullable=true)
+     */
+    private $indicatorSigMedition = 1;
+
+    /**
      * Constructor
      */
     public function __construct() {
@@ -2635,5 +2642,26 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      */
     public function getComplejoDashboardSpecific() {
         return $this->complejoDashboardSpecific;
+    }
+
+    /**
+     * Set indicatorSigMedition
+     *
+     * @param float $indicatorSigMedition
+     * @return Indicator
+     */
+    public function setIndicatorSigMedition($indicatorSigMedition) {
+        $this->indicatorSigMedition = $indicatorSigMedition;
+
+        return $this;
+    }
+
+    /**
+     * Get indicatorSigMedition
+     *
+     * @return float 
+     */
+    public function getIndicatorSigMedition() {
+        return $this->indicatorSigMedition;
     }
 }
