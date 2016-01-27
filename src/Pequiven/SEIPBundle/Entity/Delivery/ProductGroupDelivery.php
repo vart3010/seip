@@ -224,7 +224,7 @@ class ProductGroupDelivery extends ModelBaseMaster {
         $this->plant = $plant;
     }
 
-    function setUsers(type $users) {
+    function setUsers(\Pequiven\SEIPBundle\Entity\User $users) {
         $this->users = $users;
     }
 
