@@ -32,13 +32,13 @@ class ProductReportDelivery extends ModelBaseMaster {
      */
     private $productGroupDelivery;
 
-//    /**
-//     * Producto
-//     * @var \Pequiven\SEIPBundle\Entity\CEI\Product
-//     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Product",inversedBy="productReports")
-//     * @ORM\JoinColumn(nullable=false)
-//     */
-//    private $product;
+    /**
+     * Producto
+     * @var \Pequiven\SEIPBundle\Entity\CEI\Product
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Product",inversedBy="productReports")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $product;
 
     /**
      * Indicador
@@ -114,6 +114,14 @@ class ProductReportDelivery extends ModelBaseMaster {
 
     function setProductGroupDelivery(\Pequiven\SEIPBundle\Entity\Delivery\ProductGroupDelivery $productGroupDelivery) {
         $this->productGroupDelivery = $productGroupDelivery;
+    }
+
+    function getProduct() {
+        return $this->product;
+    }
+
+    function setProduct(\Pequiven\SEIPBundle\Entity\CEI\Product $product) {
+        $this->product = $product;
     }
 
 }

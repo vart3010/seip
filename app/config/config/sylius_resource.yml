@@ -584,3 +584,11 @@ sylius_resource:
                 model: Pequiven\SEIPBundle\Entity\Delivery\ReportTemplateDelivery
                 controller: Pequiven\SEIPBundle\Controller\Delivery\ReportTemplateDeliveryController
                 repository: Pequiven\SEIPBundle\Repository\Delivery\ReportTemplateDeliveryRepository
+        
+        pequiven.product_group_delivery:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:Delivery/ProductGroupDelivery
+            classes:
+                model: Pequiven\SEIPBundle\Entity\Delivery\ProductGroupDelivery
+                controller: Pequiven\SEIPBundle\Controller\Delivery\ProductGroupDeliveryController
+                repository: Pequiven\SEIPBundle\Repository\Delivery\ProductGroupDeliveryRepository
