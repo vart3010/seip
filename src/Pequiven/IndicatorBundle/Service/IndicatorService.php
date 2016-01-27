@@ -3919,6 +3919,13 @@ class IndicatorService implements ContainerAwareInterface {
         $category = $dataSetReal = $dataSetPlan = $dataSetAcum = array();
         $label = $dataReal = $dataPlan = $dataAcum = $dataMedition = array();
 
+        //Promedio o Acumulado
+        if ($indicator->getIndicatorSigMedition() == 0) {
+            $medition = "Acumulado";
+        }else{
+            $medition = "Promedio";
+        }
+
         //Carga de Nombres de Labels
         $dataSetReal["seriesname"] = "Real";
         $dataSetPlan["seriesname"] = "Plan";
@@ -3926,7 +3933,7 @@ class IndicatorService implements ContainerAwareInterface {
         $dataSetAnt["seriesname"]  = "Periodo";
         $labelAntper = "2014";
         $labelAnt2015 = "2015";
-        $labelProm   = "Promedio o Acumulado";
+        $labelProm   = $medition;
         $labelobj    = "Objetivo 2015";
 
         //Carga de datos del label principal Periodo-2015

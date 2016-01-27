@@ -387,13 +387,8 @@ class IndicatorSigController extends ResourceController {
         if ($request->get('configSig')) {
             $em = $this->getDoctrine()->getManager();
             $indicatorRel = $this->get('pequiven.repository.sig_indicator')->find($id);
-
-            $medition = $request->get('configSig');
-            if ($medition == 1) {
-                $medition = 1;
-            }else{
-                $medition = 0;
-            }
+            
+            $medition = $request->get('configSig')['indicatorSigMedition'];
 
             $indicatorRel->setIndicatorSigMedition($medition);
             $em->flush();

@@ -2187,6 +2187,7 @@ angular.module('seipModule.controllers', [])
                     }
                     notificationBarService.getLoadStatus().done();
                     //$timeout(callAtTimeout, 3000);
+                    location.reload();
                     return true;
                 }).error(function (data, status, headers, config) {
                     $scope.templateOptions.setVar("form", {errors: {}});
