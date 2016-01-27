@@ -63,7 +63,7 @@ class ProductGroupDelivery extends ModelBaseMaster {
      * 
      * @var \Pequiven\SEIPBundle\Entity\CEI\Plant
      * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Plant",inversedBy="plantReport")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $plant;
 
@@ -89,7 +89,7 @@ class ProductGroupDelivery extends ModelBaseMaster {
      * @ORM\JoinColumn(nullable=true)
      */
     private $period;
-    
+
     /**
      * Production line.
      * 
@@ -133,21 +133,21 @@ class ProductGroupDelivery extends ModelBaseMaster {
         $this->productsReportDelivery->removeElement($productsReportDelivery);
     }
 
-   /**
-    * 
-    * @return type
-    */
+    /**
+     * 
+     * @return type
+     */
     public function getProductsReportDelivery() {
         return $this->productsReportDelivery;
     }
 
-//    public function __toString() {
-//        $_toString = "-";
-//        if ($this->getPlant()) {
-//            $_toString = (string) $this->getPlant();
-//        }
-//        return $_toString;
-//    }
+    public function __toString() {
+        $_toString = "-";
+        if ($this->getProductionLine()) {
+            $_toString = (string) $this->getProductionLine();
+        }
+        return $_toString;
+    }
 
     /**
      * 
@@ -231,7 +231,6 @@ class ProductGroupDelivery extends ModelBaseMaster {
     function setPeriod(\Pequiven\SEIPBundle\Entity\Period $period) {
         $this->period = $period;
     }
-    
 
     function getProductionLine() {
         return $this->productionLine;

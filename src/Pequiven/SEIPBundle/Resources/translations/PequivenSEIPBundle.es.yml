@@ -392,6 +392,10 @@ pequiven_seip:
             raw_materials: Consumo de materia prima
         raw_material: Consumo de Materia prima
         details_raw_material: Detalle de consumo de materia prima
+    
+    product_group_delivery:
+        product_group: Linea de Negocio
+        
     product_report:
         product_report: Producto
         inventory:

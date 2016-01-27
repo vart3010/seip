@@ -14,7 +14,7 @@ class ProductGroupDeliveryType extends SeipAbstractForm {
      */
     public function buildForm(FormBuilderInterface $builder, array $options) {
         $entity = $builder->getData();
-        
+
         $location = $entity->getReportTemplateDelivery()->getLocation();
 
         $parametersPreSet = array(
@@ -42,6 +42,8 @@ class ProductGroupDeliveryType extends SeipAbstractForm {
                 return $repository->findQueryByLocation($location);
             },
                 ))
+                //->add('plant', null, $parametersToSet)
+                ->add('productionLine', null, $parametersToSet)
                 ->add('enabled', null, array(
                     'label_attr' => array('class' => 'label'),
                     "attr" => array("class" => "switch medium mid-margin-right", "data-text-on" => "Si", "data-text-off" => "No"),
