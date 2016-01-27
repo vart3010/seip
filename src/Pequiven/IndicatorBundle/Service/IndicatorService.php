@@ -3861,6 +3861,44 @@ class IndicatorService implements ContainerAwareInterface {
         return $results;
     }
 
+    public function IndicatorCalculeTendency($indicator)
+    {   
+        $cont = 1;
+        foreach ($indicator->getValuesIndicator() as $value) {
+                    $data = $value->getValueOfIndicator();
+                    
+                    $dataX[] = $cont;//X
+                    $dataY[] = $data;//Y
+                    $dataXY[] = $data * $cont;//X*Y
+                    $dataXX[] = $cont * $cont;//X2
+            $cont++;            
+        }
+        echo "X"; var_dump($dataX);                    
+        echo "Cantidad"; var_dump(count($dataX));                    
+
+        echo "Y"; var_dump($dataY);
+        echo "X*Y"; var_dump($dataXY);
+        echo "X2"; var_dump($dataXX);
+
+        $sumaX = array_sum($dataX);                
+        $sumaY = array_sum($dataY);                
+        //echo "suma X"; var_dump($suma);
+        //echo "prom X"; var_dump($suma/count($dataX));
+        
+        $b = ((count($dataX)*array_sum($dataXY))-(array_sum($dataX)*array_sum($dataY)));
+        $c = ((count($dataX)*array_sum($dataXX))-(array_sum($dataX)*array_sum($dataX)));
+        $B = $b/$c;
+        
+        $a = (($sumaY/count($dataY)))-($B*($sumaX/count($dataX)));
+
+        echo "B1"; var_dump($b);
+        echo "C1"; var_dump($c);
+
+        echo "B";  var_dump($B);
+        echo "a";  var_dump($a);
+        die();
+    }
+
     /**
      * Gráfico de Columna para informe de Evolución
      * @param Indicator $indicator
@@ -3905,7 +3943,10 @@ class IndicatorService implements ContainerAwareInterface {
         $chart["exporthandler"]  = $urlExportFromChart;
 
         //Lamado de promedio
-        $prom = $this->getPromdIndicator($indicator);        
+        $prom = $this->getPromdIndicator($indicator);
+        $valueTendency =  $this->IndicatorCalculeTendency($indicator);
+        var_dump($valueTendency);
+        die();
         //$prom = $indicator->getResultReal(); //Carga del resultado real cargado del indicador        
 
         //Lamado obj 2015
