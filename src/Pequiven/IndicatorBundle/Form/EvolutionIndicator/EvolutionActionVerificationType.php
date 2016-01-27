@@ -17,8 +17,8 @@ class EvolutionActionVerificationType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $id = $this->id;
-        $typeObject = $this->typeObject;
+        //$id = $this->id;
+        //$typeObject = $this->typeObject;
 
         $builder            
             ->add('comment', 'textarea', array(
@@ -82,12 +82,12 @@ class EvolutionActionVerificationType extends AbstractType
         return 'actionVerification';
     }
 
-    protected $id;
+    /*protected $id;
     protected $typeObject;
     
     public function __construct ($id, $typeObject)
     {
         $this->id = $id;       
         $this->typeObject = $typeObject; 
-    }
+    }*/
 }

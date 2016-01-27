@@ -2155,8 +2155,7 @@ angular.module('seipModule.controllers', [])
                     isInit = true;
                 }
                 $scope.templateOptions.setTemplate($scope.templates[0]);
-                $scope.templateOptions.setParameterCallBack(resource);
-                //$scope.templateOptions.setVar('evaluationResult', 0);
+                $scope.templateOptions.setParameterCallBack(resource);                
                 if (resource) {
                     $scope.templateOptions.enableModeEdit();
                     $scope.openModalAuto();
@@ -2173,7 +2172,7 @@ angular.module('seipModule.controllers', [])
                     var save = false;
                 }
                 if (save == true) {
-                    var url = Routing.generate('pequiven_config_chart_evolution_add', {idIndicator: $scope.id_indicator});
+                    var url = Routing.generate('pequiven_config_chart_get_form', {idIndicator: $scope.id_indicator});
                 }
                 notificationBarService.getLoadStatus().loading();
                 return $http({
@@ -2182,12 +2181,13 @@ angular.module('seipModule.controllers', [])
                     data: formData,
                     headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'}  // set the headers so angular passing info as form data (not request payload)
                 }).success(function (data) {
-                    $scope.templateOptions.setVar("form", {errors: {}});
-                    //$scope.templateOptions.setVar('evaluationResult', data.result);
+                    $scope.templateOptions.setVar("form", {errors: {}});                    
                     if (successCallBack) {
                         successCallBack(data);
                     }
                     notificationBarService.getLoadStatus().done();
+                    //$timeout(callAtTimeout, 3000);
+                    location.reload();
                     return true;
                 }).error(function (data, status, headers, config) {
                     $scope.templateOptions.setVar("form", {errors: {}});
@@ -2202,6 +2202,9 @@ angular.module('seipModule.controllers', [])
                     notificationBarService.getLoadStatus().done();
                     return false;
                 });
+                function callAtTimeout() {
+                    location.reload();
+                }
             };
             $scope.templateOptions.setVar('addConfig', addConfig);
             var confirmCallBack = function () {
@@ -2215,8 +2218,7 @@ angular.module('seipModule.controllers', [])
 
                 var d = new Date();
                 var numero = d.getTime();
-                var width = 60;
-                var heigth = 60;
+                $scope.setHeight(350);                
 
                 var parameters = {
                     idIndicator: $scope.id_indicator,
@@ -2228,8 +2230,6 @@ angular.module('seipModule.controllers', [])
                 var url = Routing.generate('pequiven_config_chart_get_form', parameters);
                 $scope.templates = [
                     {
-                        width: width,
-                        height: heigth,
                         name: 'Configuración Gráfica Informe de Evolución',
                         url: url,
                         confirmCallBack: confirmCallBack,

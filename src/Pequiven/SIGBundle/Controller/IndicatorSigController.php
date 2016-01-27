@@ -370,6 +370,46 @@ class IndicatorSigController extends ResourceController {
     }
 
     /**
+     * Retorna el formulario de Verificación del Plan de Acción
+     * 
+     * @param Request $request
+     * @return type
+     */
+    function getFormConfigAction(Request $request)
+    {
+        $id = $request->get('idIndicator');        
+        //$typeObject = $request->get('typeObj');
+        //$month = $request->get('evolutiontrend')['month'];//Carga de Mes pasado        
+        
+        $indicator = new indicator();
+        $form  = $this->createForm(new IndicatorConfigSigType(), $indicator);
+        
+        if ($request->get('configSig')) {
+            $em = $this->getDoctrine()->getManager();
+            $indicatorRel = $this->get('pequiven.repository.sig_indicator')->find($id);
+            
+            $medition = $request->get('configSig')['indicatorSigMedition'];
+
+            $indicatorRel->setIndicatorSigMedition($medition);
+            $em->flush();
+
+            $this->get('session')->getFlashBag()->add('success', "Configuración de Medición Cargada Correctamente");
+            die();
+        }
+
+        $view = $this
+            ->view()
+            ->setTemplate($this->config->getTemplate('form/form_config_chart.html'))
+            ->setTemplateVar($this->config->getPluralResourceName())
+            ->setData(array(                
+                'form' => $form->createView(),
+            ))
+        ;
+        $view->getSerializationContext()->setGroups(array('id','api_list'));
+        return $view;
+    }
+
+    /**
      * Buscamos las acciones de las causas
      * @param Request $request
      * @return \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCauses

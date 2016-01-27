@@ -121,11 +121,18 @@
                     {{ font["text"]}}
                     <i class="fa fa-{{ font["icon"] }} fa-2x position"> &nbsp;</i>
                 </div>
-
                 <div class="nine-columns twelve-columns-mobile" id="chartContainerResult">
-                <!-- This div will hold the chart generated in the footer -->
+                    <!-- This div will hold the chart generated in the footer -->
                 </div>                                
                 <input id='exportpng' type='hidden' value='Exportar Informe' />
+                {# Configuracion de medicion del indicador #}
+                {% if is_granted('ROLE_SEIP_SIG_EVOLUTION_LAST_PERIOD') %}                
+                    <div ng-controller="EvolutionIndicatorConfig"> 
+                        <div class="button-group button-config">
+                            <a class="button icon-list-add " href="" ng-click="loadTemplateConfig()" title="">{{ 'pequiven_indicator.config'|trans({},'PequivenSIGBundle')  }}</a>
+                        </div>
+                    </div>
+                {% endif %}
             </div>  
         </div>  
         {# Analisi de tendencia #}

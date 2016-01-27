@@ -3727,9 +3727,8 @@ class IndicatorService implements ContainerAwareInterface {
 
         $result = $acum = $sum = 0;
         $calc = $indicator->getIndicatorSigMedition();
-        $contMonth = 1;
-        //var_dump($calc);
-        //die();
+        $contMonth = 1;        
+        
         if ($calc === null) {
             $calc = 1;
         }
@@ -3741,23 +3740,26 @@ class IndicatorService implements ContainerAwareInterface {
 
             $data = $value->getValueOfIndicator();
             $cant = $labelsFrequencyNotificationArray[$contMonth];
-            //var_dump($data);
-            //die();
+            
             $contMonth++;
             $sum = $sum + $data;
             $acum = $acum + $data;
         }
+        
         //Data Prom
         if ($contMonth == 1) {
             $contMonth = 2;
         }
 
         if ($calc === 1) {
-
-            $result = $acum / ($contMonth - 1); //Calculo de Promedio
-            $value = ceil($result); //Paso de promedio
+            if ($indicator->getId() == 1655) {
+                $result = $acum / ($contMonth - 1); //Calculo de Promedio                
+            }else{
+                $result = $indicator->getResultReal();
+            }
+            //$value = ceil($result); //Paso de promedio
+            $value = $result; //Paso de promedio
         } elseif ($calc === 0) {
-
             $value = $sum; //Paso de sumatoria
         }
         return $value;
@@ -3903,8 +3905,9 @@ class IndicatorService implements ContainerAwareInterface {
         $chart["exporthandler"]  = $urlExportFromChart;
 
         //Lamado de promedio
-        //$prom = $this->getPromdIndicator($indicator);
-        $prom = $indicator->getResultReal(); //Carga del resultado real cargado del indicador        
+        $prom = $this->getPromdIndicator($indicator);        
+        //$prom = $indicator->getResultReal(); //Carga del resultado real cargado del indicador        
+
         //Lamado obj 2015
         $obj = $this->getObjIndicator($indicator);
         //Paso de Valores Validos
@@ -3919,6 +3922,13 @@ class IndicatorService implements ContainerAwareInterface {
         $category = $dataSetReal = $dataSetPlan = $dataSetAcum = array();
         $label = $dataReal = $dataPlan = $dataAcum = $dataMedition = array();
 
+        //Promedio o Acumulado
+        if ($indicator->getIndicatorSigMedition() == 0) {
+            $medition = "Acumulado";
+        }else{
+            $medition = "Promedio";
+        }
+
         //Carga de Nombres de Labels
         $dataSetReal["seriesname"] = "Real";
         $dataSetPlan["seriesname"] = "Plan";
@@ -3926,7 +3936,7 @@ class IndicatorService implements ContainerAwareInterface {
         $dataSetAnt["seriesname"]  = "Periodo";
         $labelAntper = "2014";
         $labelAnt2015 = "2015";
-        $labelProm   = "Promedio o Acumulado";
+        $labelProm   = $medition;
         $labelobj    = "Objetivo 2015";
 
         //Carga de datos del label principal Periodo-2015
