@@ -1,0 +1,59 @@
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+<fieldset class="fieldset fields-list">
+    <legend class="legend">{{ 'pequiven_seip.plant_report.plant_report'|trans }}</legend>
+    <div class="field-block button-height">
+        {{ form_label(form.reportTemplateDelivery) }}
+        {{ form_widget(form.reportTemplateDelivery) }}
+        {{ form_errors(form.reportTemplateDelivery) }}
+    </div>
+    <div class="field-block button-height">
+        {{ form_label(form.company) }}
+        {{ form_widget(form.company) }}
+        {{ form_errors(form.company) }}
+    </div>
+    <div class="field-block button-height">
+        {{ form_label(form.location) }}
+        {{ form_widget(form.location) }}
+        {{ form_errors(form.location) }}
+    </div>
+    <div class="field-block button-height">
+        {{ form_label(form.entity) }}
+        {{ form_widget(form.entity) }}
+        {{ form_errors(form.entity) }}
+    </div>
+    {#<div class="field-block button-height">
+        {{ form_label(form.plant) }}
+        {{ form_widget(form.plant) }}
+        {{ form_errors(form.plant) }}
+    </div>#}
+    <div class="field-block button-height">
+        {{ form_label(form.productionLine) }}
+        {{ form_widget(form.productionLine) }}
+        {{ form_errors(form.productionLine) }}
+    </div>
+    <div class="field-block button-height">
+        {{ form_label(form.enabled) }}
+        {{ form_widget(form.enabled) }}
+        {{ form_errors(form.enabled) }}
+    </div>
+</fieldset>
+{#        {{ dump(_context|keys) }}#}
+<script type="text/javascript">
+    var dateFormat = "dd-mm-yy";
+    $(document).ready(function(){
+        
+        var selectEntity = $("#pequiven_seipbundle_dataload_plantreport_entity");
+        var selectPlant = $("#pequiven_seipbundle_dataload_plantreport_plant");
+        
+        var urlGetPlant = "{{ path("pequiven_seip_plant_by_entity") }}";
+        
+        ajaxToSelect.formaterData = function(response){
+            return response.name;
+        };
+        selectEntity.on("change",function(){
+            ajaxToSelect2(urlGetPlant,selectPlant,{ entity: selectEntity.val() });
+        });
+        
+    });
+</script>

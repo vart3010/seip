@@ -1,3 +1,7 @@
 pequiven_delivery:
     resource: "@PequivenSEIPBundle/Resources/config/routing/delivery/report_template_delivery.yml"
     prefix:   /report-template-delivery
+    
+pequiven_product_group_delivery:
+    resource: "@PequivenSEIPBundle/Resources/config/routing/delivery/product_group_delivery.yml"
+    prefix:   /product-group-delivery
