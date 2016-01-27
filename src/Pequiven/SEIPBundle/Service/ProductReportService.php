@@ -90,7 +90,7 @@ class productReportService implements ContainerAwareInterface {
                 'data' => $rs
             ),
         );
-        
+
         return json_encode($chart);
         //return $pie;
     }
@@ -154,8 +154,6 @@ class productReportService implements ContainerAwareInterface {
         $chart["exportFileName"] = "Grafico Resultados ";
 //        $chart["exporthandler"] = "http://107.21.74.91/";
 //        $chart["html5exporthandler"] = "http://107.21.74.91/";
-
-
         //$chart["legendItemFontSize"] = "15";
 
 
@@ -216,14 +214,14 @@ class productReportService implements ContainerAwareInterface {
         $desplazamiento = 0;
         foreach (array_unique($arrayCategories) as $categories) {
             $categoriesGraphic[] = array("label" => $categories);
-
             $rep = array_keys($arrayCategories, $categories);
 
-
             if (count($rep) > 1) {
+
                 if (count($rep) > $desplazamiento) {
-                    $desplazamiento = count($rep)-1;
+                    $desplazamiento = $desplazamiento + count($rep) - 1;
                 }
+
                 $totalPlan = 0;
                 $totalReal = 0;
                 $totalPerc = 0;
@@ -238,22 +236,26 @@ class productReportService implements ContainerAwareInterface {
                 }
 
                 $percentaje[] = array("value" => number_format($totalPerc, 2, ',', '.'));
-
                 $valuesReal[] = array("value" => number_format($totalReal / $division, 2, ',', '.'));
                 $valuesPlan[] = array("value" => number_format($totalPlan / $division, 2, ',', '.'));
-                $cont++;
             } else {
                 $valuesReal[] = array("value" => number_format($arrayReal[$cont + $desplazamiento] / $division, 2, ',', '.'));
                 $valuesPlan[] = array("value" => number_format($arrayPlan[$cont + $desplazamiento] / $division, 2, ',', '.'));
                 $perc = 0;
+
                 if ($arrayPlan[$cont + $desplazamiento] > 0) {
                     $perc = ($arrayReal[$cont + $desplazamiento] * 100) / $arrayPlan[$cont + $desplazamiento];
                 }
+
                 $percentaje[] = array("value" => number_format($perc, 2, ',', '.'));
-                $cont++;
             }
+            //    var_dump($cont."-".$desplazamiento);
+            //var_dump($cont + $desplazamiento);
+            $cont++;
         }
-        
+//       var_dump($arrayReal);
+//       die();
+
 
 
         $data["dataSource"]["chart"] = $chart;
@@ -338,15 +340,14 @@ class productReportService implements ContainerAwareInterface {
         $chart["exporthandler"] = "http://107.21.74.91/";
 
         $categoriesGraphic = $valuesPlan = $valuesReal = $percentaje = array();
-        
+
         foreach ($production as $prod) {
             $categoriesGraphic[] = array("label" => $prod["productName"]);
-             $valuesReal[] = array("value" => number_format($prod["real"], 2, ',', '.'));
-             $valuesPlan[] = array("value" => number_format($prod["plan"], 2, ',', '.'));
-             $percentaje[] = array("value" => number_format($prod["percentage"], 2, ',', '.'));
-            
+            $valuesReal[] = array("value" => number_format($prod["real"], 2, ',', '.'));
+            $valuesPlan[] = array("value" => number_format($prod["plan"], 2, ',', '.'));
+            $percentaje[] = array("value" => number_format($prod["percentage"], 2, ',', '.'));
         }
-        
+
 
         $data["dataSource"]["chart"] = $chart;
         $data["dataSource"]["categories"][]["category"] = $categoriesGraphic;
