@@ -241,6 +241,10 @@ class ProductGroupDelivery extends ModelBaseMaster {
         $this->productionLine = $productionLine;
     }
 
-
+    public function init(\Pequiven\SEIPBundle\Entity\Delivery\ReportTemplateDelivery $reportTemplateDelivery) {
+        $this->setReportTemplateDelivery($reportTemplateDelivery);
+        $this->setCompany($reportTemplateDelivery->getCompany());
+        $this->setLocation($reportTemplateDelivery->getLocation());
+    }
 
 }

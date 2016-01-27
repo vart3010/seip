@@ -14,4 +14,16 @@ use Pequiven\SEIPBundle\Form\DataLoad\PlantReportType;
  */
 class ProductGroupDeliveryController extends SEIPController {
     
+     public function createNew() {
+        $entity = parent::createNew();
+        $request = $this->getRequest();
+        $reportTemplateDeliveryId = $request->get("reportTemplateDelivery");
+        if ($reportTemplateDeliveryId > 0) {
+            $em = $this->getDoctrine()->getManager();
+            $reportTemplateDelivery = $em->find("Pequiven\SEIPBundle\Entity\Delivery\ReportTemplateDelivery", $reportTemplateDeliveryId);
+            $entity->init($reportTemplateDelivery);
+        }
+        return $entity;
+    }
+    
 }

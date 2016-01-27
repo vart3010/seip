@@ -8,7 +8,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class PlantReportType extends SeipAbstractForm
 {
-        /**
+    /**
      * @param FormBuilderInterface $builder
      * @param array $options
      */

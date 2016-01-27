@@ -14,7 +14,6 @@ class ProductGroupDeliveryType extends SeipAbstractForm {
      */
     public function buildForm(FormBuilderInterface $builder, array $options) {
         $entity = $builder->getData();
-        var_dump($entity);die();
         
         $location = $entity->getReportTemplateDelivery()->getLocation();
 
