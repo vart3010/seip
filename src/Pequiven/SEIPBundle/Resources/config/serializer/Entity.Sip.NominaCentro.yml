@@ -1,0 +1,27 @@
+Pequiven\SEIPBundle\Entity\Sip\NominaCentro:
+    exclusion_policy: ALL
+    properties:
+        id:
+            expose: true
+            groups: [id]
+        nombre:
+            expose: true
+            groups: [api_list]
+        cedula:
+            expose: true
+            groups: [api_list]
+        telefono:
+            expose: true
+            groups: [api_list]
+        codigoCentro:
+            expose: true
+            groups: [api_list]
+        centro:
+            expose: true
+            groups: [api_list]
+        localidad:
+            expose: true
+            groups: [api_list]
+        voto:
+            expose: true
+            groups: [api_list]

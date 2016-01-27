@@ -13,6 +13,10 @@
         <label class="label">{{ "pequiven.form.period"|trans }}</label>
         <b>{{ entity.period }} </b>
     </div>
+    <div class="field-block button-height" ng-init="setEntityType({{ entity.type }})" >
+        <label class="label">{{ "pequiven.form.ref"|trans }}</label>
+        {{ entity.ref }}
+    </div>
     {% if appConfiguration.isSupportIntegratedManagementSystem == true %}
         <div class="field-block button-height">
             {{ form_label(form.categoryArrangementProgram) }}
@@ -61,13 +65,39 @@
         </div>
     {% endif %}
     <div class="field-block button-height">
-        <label class="label" for="arrangementprogram_responsibles">{{ 'pequiven.form.responsibles'|trans({},'PequivenArrangementProgramBundle') }}</label>
-        <div id="arrangementprogram_responsibles" style='width: 270px' ng-init="setPreselectedData('arrangementprogram_responsibles',{{ entity.responsibles|serialize('json',serialization_context().setGroups(['id','api_list','sonata_api_read'])) }},'arrangementprogramResponsibles');" ></div>
-        <input ng-repeat="user in model.arrangementprogramResponsibles" type="hidden" name="arrangementprogram[responsibles][{$ $index $}]" value="{$ user.id $}" />
-        {% if (mov == 1)%}
-            <a href ng-click="getUrlMovementAP({{ entity.id }},'{{ path("AP_movement") }}')" class="button icon-users with-tooltip confirm">
-                {{ "pequiven.actions.mov"|trans({},"messages") }}
-            </a>
+        <label class="label" for="arrangementprogram_responsibles">
+            {{ 'pequiven.form.responsibles'|trans({},'PequivenArrangementProgramBundle') }}
+        </label>
+        {% if ((mov == 1) and (entity.status == 3))%}
+            <center>
+                <table width="95%">
+                    <tr>
+                        <td width="60%">
+                            <table class="simple-table responsive-table" width="90%">                                
+                                {% for responsable in entity.getresponsibles %}
+                                    <tr>
+                                        <td> 
+                                            {{ responsable.getOnlyFullNameUser }} </br> 
+                                        </td>
+                                    </tr>
+                                {% endfor %}                                
+                            </table>
+                        </td>
+                        <td width="40%" style="vertical-align: middle">
+                            <div class="six-columns" style="width:50%;">
+                                <a href ng-click="getUrlMovementAP({{ entity.id }},'{{ path("AP_movement") }}')" class="button icon-users with-tooltip confirm">
+                                    {{ "pequiven.actions.mov"|trans({},"messages") }}
+                                </a>  
+                            </div>
+                        </td>
+                    </tr>
+                </table>        
+                <div id="arrangementprogram_responsibles" style='width: 270px; display: none;' ng-init="setPreselectedData('arrangementprogram_responsibles',{{ entity.responsibles|serialize('json',serialization_context().setGroups(['id','api_list','sonata_api_read'])) }},'arrangementprogramResponsibles');" hidden="true" ></div>
+                <input ng-repeat="user in model.arrangementprogramResponsibles" type="hidden" name="arrangementprogram[responsibles][{$ $index $}]" value="{$ user.id $}" />
+            </center>
+        {% else%}
+            <div id="arrangementprogram_responsibles" style='width: 270px' ng-init="setPreselectedData('arrangementprogram_responsibles',{{ entity.responsibles|serialize('json',serialization_context().setGroups(['id','api_list','sonata_api_read'])) }},'arrangementprogramResponsibles');" ></div>
+            <input ng-repeat="user in model.arrangementprogramResponsibles" type="hidden" name="arrangementprogram[responsibles][{$ $index $}]" value="{$ user.id $}" />
         {% endif %}
         {#{{ form_label(form.responsibles) }}
         {{ form_widget(form.responsibles) }}

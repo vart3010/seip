@@ -1,0 +1,80 @@
+{% extends "PequivenSEIPBundle:Template:Developer/Common/tableFormat1.html.twig" %}
+
+{% trans_default_domain 'sip' %}
+
+{% block javascripts_base %}
+    {{ parent() }}
+    <script src="{{  asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.input.js') }}"></script>
+{% endblock javascripts_base %}
+
+{% block before_body %}
+    {{ contentHeader(
+    	("sip.center.name"|trans ),
+        ("Lista de Inventario")
+    ) }}
+{% endblock %}
+
+{% block body %}
+    
+    <div ng-controller="TableFormatController">  
+
+		<div loading-container="tableParams.settings().$loading">
+            <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager" template-header="custom/header" api-data-url="{{ apiDataUrl }}" export-csv="csv" class="table table-responsive table-extra-info" >
+                <tbody> 
+                    <tr ng-repeat="result in $data" data="{$ result|json $}">
+                        <td data-title="'Material'" filter="{'material.description' : 'text'}">
+                            <a href="{$ result.id $}/show">
+                                {$ result.material.description $}
+                            </a>
+                        </td>
+                        <td data-title="'Cantidad'" filter="{'cantidad' : 'text'}" align="center">
+                            <a href="{$ result.id $}/show">
+                                {$ result.cantidad $}
+                            </a>
+                        </td>
+                        <td data-title="'Fecha'" filter="{'fecha' : 'text'}">
+                            <a href="{$ result.id $}/show">                                
+                                {$ result.fecha $}                                
+                            </a>
+                        </td>
+                        <td data-title="'Codigo Centro'" filter="{'codigoCentro' : 'text'}">
+                            <a href="{$ result.id $}/show">
+                                {$ result.codigoCentro $}
+                            </a>
+                        </td>
+                        <td data-title="'Estado'" filter="{'estado' : 'text'}">
+                            <a href="{$ result.id $}/show">
+                                {$ result.estado $}
+                            </a>
+                        </td>
+                        <td data-title="'Municipio'" filter="{'municipio' : 'text'}">
+                            <a href="{$ result.id $}/show">
+                                {$ result.municipio $}
+                            </a>
+                        </td>
+                         <td data-title="'Parroquia'" filter="{'parroquia' : 'text'}">
+                            <a href="{$ result.id $}/show">
+                                {$ result.parroquia $}
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+     </div>
+
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+    <script type="text/javascript">
+        
+        function getTableExtraInfo(data)
+            {
+                var response = '';
+                return response;
+            }
+    </script>
+    
+{% endblock %}

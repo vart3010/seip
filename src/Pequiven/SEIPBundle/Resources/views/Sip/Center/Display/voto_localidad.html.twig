@@ -1,0 +1,67 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/layoutWithoutMenuBlack.html.twig' %}
+
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+{% block stylesheets_base %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('bundles/pequivenseip/icons/imageMap.css') }}">
+{% endblock %}
+
+{% block body %}
+{#<meta http-equiv="refresh" content="300;">#}
+<br>
+<br>
+<br>
+<br>
+<div class="columns">        
+    <div class="new-row five-columns twelve-columns-mobile">
+        <div  ng-controller="displayCenterController" ng-init="renderChartVotoGeneral_3('displayMoron',{{ dataChartLocalidadMoron }})">
+        <span id="displayMoron">
+        </span>
+        </div>
+    </div> 
+    <div class="seven-columns twelve-columns-mobile">
+        <div  ng-controller="displayCenterController" ng-init="renderChartVotoGeneralLocalidad('chartMoron',{{ dataChartMoron }})">
+        <span id="chartMoron">
+        </span>
+        </div>
+    </div>        
+</div>
+
+<div class="columns">        
+    <div class="new-row five-columns twelve-columns-mobile">
+        <div  ng-controller="displayCenterController" ng-init="renderChartVotoGeneral_3('displaySede',{{ dataChartLocalidadSede }})">
+        <span id="displaySede">
+        </span>
+        </div>
+    </div> 
+    <div class="seven-columns twelve-columns-mobile">
+        <div  ng-controller="displayCenterController" ng-init="renderChartVotoGeneralLocalidad('chartSede',{{ dataChartSede }})">
+        <span id="chartSede">
+        </span>
+        </div>
+    </div>       
+</div>
+
+{% endblock body %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/agenda3860.css?v=1') }}">
+    <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/dashboard3860.css?v=1') }}">
+{% endblock stylesheets %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/fusioncharts.js') }}"></script>
+    <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/themes/fusioncharts.theme.fint.js') }}"></script>
+    <script src="{{  asset('bundles/pequivenseip/imageMapResizer/js/imageMapResizer.min.js') }}"></script>
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+    <script type="text/javascript">
+        $(document).ready(function () {
+        });
+    </script>
+{% endblock %}

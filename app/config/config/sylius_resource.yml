@@ -155,6 +155,14 @@ sylius_resource:
                 controller: Pequiven\SEIPBundle\Controller\UserController
                 model: Pequiven\SEIPBundle\Entity\User
                 repository: Pequiven\SEIPBundle\Repository\UserRepository
+        #ESTRUCTURA DE CARGOS
+        pequiven_seip.feestructure:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:User/FeeStructure
+            classes:
+                controller: Pequiven\SEIPBundle\Controller\User\FeeStructureController
+                model: Pequiven\SEIPBundle\Entity\User\FeeStructure                 
+                repository: Pequiven\SEIPBundle\Repository\User\FeeStructureRepository
         pequiven_seip.generic_data:
             driver: doctrine/orm
             classes:
@@ -467,7 +475,9 @@ sylius_resource:
             templates: PequivenSEIPBundle:Sip/onePerTen
             classes:
                 controller: Pequiven\SEIPBundle\Controller\Sip\OnePerTenController
-                model: Pequiven\SEIPBundle\Entity\Sip\onePerTen\OnePerTenRepository
+                model: Pequiven\SEIPBundle\Entity\Sip\OnePerTen
+                repository: Pequiven\SEIPBundle\Repository\Sip\OnePerTenRepository
+                 
         pequiven.cutl:
             driver: doctrine/orm
             templates: PequivenSEIPBundle:Sip/cutl
@@ -475,3 +485,102 @@ sylius_resource:
                 controller: Pequiven\SEIPBundle\Controller\Sip\Cutl\CutlController
                 model: Pequiven\SEIPBundle\Entity\Sip\Cutl
                 repository: Pequiven\SEIPBundle\Repository\Sip\Cutl\CutlRepository
+        pequiven.center:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:Sip/Center
+            classes:
+                controller: Pequiven\SEIPBundle\Controller\Sip\Center\CenterController
+                model: Pequiven\SEIPBundle\Entity\Sip\Centro
+                repository: Pequiven\SEIPBundle\Repository\Sip\Centro\CentroRepository
+        pequiven.ubch:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:Sip/Center/Ubch
+            classes:
+                controller: Pequiven\SEIPBundle\Controller\Sip\Center\UbchController
+                model: Pequiven\SEIPBundle\Entity\Sip\Ubch
+                repository: Pequiven\SEIPBundle\Repository\Sip\UbchRepository
+        pequiven.estado:
+            driver: doctrine/orm
+            classes:
+                model: Pequiven\SEIPBundle\Entity\Sip\Estado
+                repository: Pequiven\SEIPBundle\Repository\Sip\EstadoRepository
+        pequiven.municipio:
+            driver: doctrine/orm
+            classes:
+                model: Pequiven\SEIPBundle\Entity\Sip\Municipio
+                repository: Pequiven\SEIPBundle\Repository\Sip\MunicipioRepository
+        pequiven.parroquia:
+            driver: doctrine/orm
+            classes:
+                model: Pequiven\SEIPBundle\Entity\Sip\Parroquia
+                repository: Pequiven\SEIPBundle\Repository\Sip\ParroquiaRepository
+        pequiven.assists:
+            driver: doctrine/orm
+            classes:
+                model: Pequiven\SEIPBundle\Entity\Sip\Center\Assists
+                repository: Pequiven\SEIPBundle\Repository\Sip\Centro\AssistsRepository
+        pequiven.observations:
+            driver: doctrine/orm
+            classes:
+                model: Pequiven\SEIPBundle\Entity\Sip\Center\Observations
+                repository: Pequiven\SEIPBundle\Repository\Sip\Centro\ObservationsRepository
+        pequiven.inventory_center:
+            driver: doctrine/orm
+            classes:
+                model: Pequiven\SEIPBundle\Entity\Sip\Center\Inventory
+                repository: Pequiven\SEIPBundle\Repository\Sip\Centro\InventoryRepository
+        pequiven.material:
+            driver: doctrine/orm
+            classes:
+                model: Pequiven\SEIPBundle\Entity\Sip\Center\Material
+                repository: Pequiven\SEIPBundle\Repository\Sip\Centro\MaterialRepository
+        pequiven.nominaCentro:
+            driver: doctrine/orm
+            classes:
+                model: Pequiven\SEIPBundle\Entity\Sip\NominaCentro
+                repository: Pequiven\SEIPBundle\Repository\Sip\NominaCentroRepository
+        pequiven.onePerTenMembers:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:Sip/onePerTenMembers
+            classes:
+                model: Pequiven\SEIPBundle\Entity\Sip\OnePerTenMembers
+                repository: Pequiven\SEIPBundle\Repository\Sip\OnePerTenMembersRepository
+        pequiven.report:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:Sip/Report
+            classes:
+                controller: Pequiven\SEIPBundle\Controller\Sip\ReportSIPController  
+                model: Pequiven\SEIPBundle\Entity\Sip\Centro
+                repository: Pequiven\SEIPBundle\Repository\Sip\ReportSIPRepository
+        pequiven.statusCentro:
+            driver: doctrine/orm
+            classes:
+                model: Pequiven\SEIPBundle\Entity\Sip\Center\StatusCentro
+                repository: Pequiven\SEIPBundle\Repository\Sip\Centro\StatusCentroRepository
+        pequiven.voto:
+            driver: doctrine/orm
+            classes:
+                controller: Pequiven\SEIPBundle\Controller\Sip\Center\CenterReportController                  
+                model: Pequiven\SEIPBundle\Entity\Sip\Center\StatusCentro
+                repository: Pequiven\SEIPBundle\Repository\Sip\Centro\StatusCentroRepository
+        pequiven.display:
+            driver: doctrine/orm
+            classes:
+                controller: Pequiven\SEIPBundle\Controller\Sip\Center\DisplayController                  
+                model: Pequiven\SEIPBundle\Entity\Sip\Center\StatusCentro
+                repository: Pequiven\SEIPBundle\Repository\Sip\Centro\StatusCentroRepository
+        pequiven.siplist:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:Sip/Center/List
+            classes:
+                controller: Pequiven\SEIPBundle\Controller\Sip\Center\ListController  
+                model: Pequiven\SEIPBundle\Entity\Sip\Centro
+                repository: Pequiven\SEIPBundle\Repository\Sip\Centro\ListRepository
+        #DESPACHO
+        pequiven.report_template_delivery:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:Delivery/ReportTemplateDelivery
+            classes:
+                model: Pequiven\SEIPBundle\Entity\Delivery\ReportTemplateDelivery
+                controller: Pequiven\SEIPBundle\Controller\Delivery\ReportTemplateDeliveryController
+                repository: Pequiven\SEIPBundle\Repository\Delivery\ReportTemplateDeliveryRepository

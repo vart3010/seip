@@ -1,0 +1,59 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutModalBase.html.twig' %}
+
+{% block body %}   
+    <form method="POST" id="{{ formAction }}">
+        <fieldset class="fieldset fields-list">
+            <legend class="legend">Asignación Cargo</legend>
+            {{ form_errors(form) }} 
+                <div class="field-block button-height" >                    
+                    {{ form_label(form.date) }}
+                    {{ form_widget(form.date) }}
+                </div> 
+                {% if user == true %}
+                    <div class="field-block button-height" >                    
+                        {{ form_label(form.User) }}
+                        {{ form_widget(form.User) }}
+                    </div>  
+                {% endif %}
+                <div class="field-block button-height" >                    
+                    {{ form_label(form.cause) }}
+                    {{ form_widget(form.cause) }}
+                </div> 
+                {% if check == true %}
+                    <div class="field-block button-height" >
+                        <p class="assistance button-height">
+                        <label class="label">Encargado</label>                                                        
+                        <input type="checkbox" name="fee_structure_add_encargado" id="fee_structure_add[encargado]" data="" value="0" class="switch blue-active mid-margin-right "  data-text-on="SI" data-text-off="NO">
+                        </p>                                                         
+                    </div> 
+                {% endif %}                
+                <div class="field-block button-height" >                    
+                    {{ form_label(form.observations) }}
+                    {{ form_widget(form.observations) }}
+                </div>  
+            
+            {{ form_rest(form) }}                              
+        </fieldset>
+    </form>                       
+{% endblock %}
+
+{% block javascript_base %}
+    <script type="text/javascript">        
+        $(document).ready(function () {
+            $('#switch-mode').change(function () {
+                $('.switch-wrapper')[this.checked ? 'addClass' : 'removeClass']('reversed-switches');
+            });
+            $("p.assistance input").change(function () {
+                var value = $(this).val();
+                var assists = $(this).attr("data");
+                if (value == 1) {
+                    $(this).val(0);                   
+                } else {
+                    $(this).val(1);                    
+                }
+                console.log((value));
+            });            
+        });
+    </script>
+{% endblock %}
+

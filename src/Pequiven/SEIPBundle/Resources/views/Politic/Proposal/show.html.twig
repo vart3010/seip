@@ -5,7 +5,7 @@
 {% set circle = proposal.workStudyCircle.id %}
 {% if proposal.workStudyCircle.phase == 1 %}
     {% set route_index = 'pequiven_work_study_circle_show' %}
-{% elseif  proposal.workStudyCircle.phase == 2 %}
+{% else %}
     {% set route_index = 'pequiven_work_study_circle_show_phase' %}
 {% endif %}
 {% block before_body %}

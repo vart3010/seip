@@ -15,6 +15,8 @@ use Pequiven\SEIPBundle\Controller\SEIPController;
 use Symfony\Component\HttpFoundation\Request;
 use Pequiven\SEIPBundle\Model\Common\CommonObject;
 
+use Pequiven\SEIPBundle\Form\DataLoad\PlantReportType;
+
 /**
  * Reporte de planta
  *
@@ -39,6 +41,7 @@ class PlantReportController extends SEIPController {
         $sorting = $request->get('sorting', $this->config->getSorting());
         $repository = $this->getRepository();
 
+        $criteria['applyPeriodCriteria'] = true;
 
         $resources = $this->resourceResolver->getResource(
                 $repository, 'createPaginatorByUser', array($criteria, $sorting)
@@ -257,7 +260,7 @@ class PlantReportController extends SEIPController {
                 "hours" => $totalHours[$i]
             );
         }
-
+        //var_dump($plantReport);die();
         $data = array(
             "plant_report" => $plantReport,
             "childs" => $childs,
@@ -479,6 +482,44 @@ class PlantReportController extends SEIPController {
 //        die;
         $this->flush();
         return $this->redirectHandler->redirectTo($resource);
+    }
+    
+    /**
+     * @param Request $request
+     *
+     * @return RedirectResponse|Response
+     */
+    public function updateAction(Request $request)
+    {
+        
+        $resource = $this->findOr404($request);
+        $form = $this->createForm(new \Pequiven\SEIPBundle\Form\DataLoad\PlantReportType(), $resource);
+//        $form = $this->createForm($this->container->get('pequiven_seipbundle_dataload_plantreport'), $resource);
+        
+//        $form = $this->getForm($resource);
+        $method = $request->getMethod();
+
+        if (in_array($method, array('POST', 'PUT', 'PATCH')) &&
+            $form->submit($request, !$request->isMethod('PATCH'))->isValid()) {
+            $this->domainManager->update($resource);
+
+            return $this->redirectHandler->redirectTo($resource);
+        }
+
+        if ($this->config->isApiRequest()) {
+            return $this->handleView($this->view($form));
+        }
+
+        $view = $this
+            ->view()
+            ->setTemplate($this->config->getTemplate('update.html'))
+            ->setData(array(
+                $this->config->getResourceName() => $resource,
+                'form'                           => $form->createView()
+            ))
+        ;
+
+        return $this->handleView($view);
     }
 
     public function deleteAction(Request $request) {

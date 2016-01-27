@@ -103,6 +103,22 @@ class RawMaterialConsumptionPlanning extends BaseModel
     private $automaticCalculationPlan = true;
 
     /**
+     * Periodo.
+     * 
+     * @var \Pequiven\SEIPBundle\Entity\Period
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\Period")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $period;
+    
+    /**
+     * @var \Pequiven\SEIPBundle\Entity\DataLoad\RawMaterial\RawMaterialConsumptionPlanning
+     * @ORM\OneToOne(targetEntity="\Pequiven\SEIPBundle\Entity\DataLoad\RawMaterial\RawMaterialConsumptionPlanning")
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", nullable=true)
+     */
+    private $parent;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -349,5 +365,49 @@ class RawMaterialConsumptionPlanning extends BaseModel
         $this->setTotalPlan($totalPlan);
         $this->setTotalReal($totalReal);
         $this->setPercentage($percentage);
+    }
+
+    /**
+     * Set period
+     *
+     * @param \Pequiven\SEIPBundle\Entity\Period $period
+     * @return Objetive
+     */
+    public function setPeriod(\Pequiven\SEIPBundle\Entity\Period $period = null)
+    {
+        $this->period = $period;
+
+        return $this;
+    }
+
+    /**
+     * Get period
+     *
+     * @return \Pequiven\SEIPBundle\Entity\Period 
+     */
+    public function getPeriod()
+    {
+        return $this->period;
+    }
+    
+    /**
+     * Set parent
+     *
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\RawMaterial\RawMaterialConsumptionPlanning $parent
+     * @return RawMaterialConsumptionPlanning
+     */
+    public function setParent(\Pequiven\SEIPBundle\Entity\DataLoad\RawMaterial\RawMaterialConsumptionPlanning $parent = null) {
+        $this->parent = $parent;
+
+        return $this;
+    }
+
+    /**
+     * Get parent
+     *
+     * @return \Pequiven\SEIPBundle\Entity\DataLoad\RawMaterial\RawMaterialConsumptionPlanning 
+     */
+    public function getParent() {
+        return $this->parent;
     }
 }

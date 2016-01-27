@@ -116,6 +116,8 @@ app:
                         main: Usuarios SEIP
                         real: Lista
                         aux: Auxiliares
+                        feeStructure: Asignación de Cargos
+                        loadfeeStructure: Cargar Estructura de Cargos
                     objetives:
                         main: Objetivos
                         visualize:
@@ -156,6 +158,7 @@ app:
                             strategics: Estratégicos
                             indicator:
                                 strategics: Indicadores Estratégicos
+                                cpjaa: Indicadores CPJAA
                             objetive:
                                 strategics: Objetivos Estratégicos
                             tactic: Táctico
@@ -194,12 +197,15 @@ app:
                         reports:
                             main: Reportes
                             production: Producción
+                            delivery: Despacho
                         planning:
                             main: Planificación
                             production: Producción
+                            delivery: Despacho
                         notification:
                             main: Notificación
                             production: Producción
+                            delivery: Despacho
                         monitor:
                             main: Monitor
                             production: 
@@ -243,7 +249,29 @@ app:
                         main: Sistema de Información Política
                         onePerTen: 1 x 10
                         cutl: CUTL
+                        centros: Centros
                         register: Registrar
                         list: Lista
+                        list_seg: Lista Seguimiento
+                        request: Requerimientos
+                        list_inventory: Lista Inventario
+                        list_request: Lista Requerimientos
+                        list_pqv: Lista Pequiven
+                        list_1x10: Lista 1x10
+                        list_re: Lista Reubicados
+                        list_circuito: Circuito 5
+                        list_cet: Lista Coordinador CET
+                        report: Reportes
+                        display: Monitores
+                        voto: Voto
+                        voto_pqv: Voto Pequiven
+                        voto_general: General
+                        voto_1x10: Voto 1 x 10
+                        voto_re: Voto Reubicados
+                        voto_cet: Voto Coordinador CET
+                        voto_circuito: Circuito 5
+                        voto_zulia: Zulia
+                        voto_anzoategui: Anzoátegui
+                        mesa: Mesas Activas
 
                             

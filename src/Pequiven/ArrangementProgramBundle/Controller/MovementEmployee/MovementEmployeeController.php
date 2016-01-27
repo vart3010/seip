@@ -2,7 +2,6 @@
 
 namespace Pequiven\ArrangementProgramBundle\Controller\MovementEmployee;
 
-use DateTime;
 use Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram;
 use Pequiven\ArrangementProgramBundle\Entity\Goal;
 use Pequiven\ArrangementProgramBundle\Entity\MovementEmployee\MovementEmployee;
@@ -179,7 +178,7 @@ class MovementEmployeeController extends SEIPController {
                     $movement->setId_Affected($id);
                     $movement->setCause($cause);
                     $movement->setObservations($obs);
-                    $movement->setrealAdvance($datos['realResult']);
+                    $movement->setrealAdvance($datos['realResult']-$datos['penalty']);
                     $movement->setPentalty($datos['penalty']);
                     $movement->setPlanned($datos['plannedResult']);
                     $movement->setTypeMov($tipo);
@@ -203,7 +202,7 @@ class MovementEmployeeController extends SEIPController {
                         $movement->setId_Affected($id);
                         $movement->setCause($cause);
                         $movement->setObservations($obs);
-                        $movement->setrealAdvance($datos['realResult']);
+                        $movement->setrealAdvance($datos['realResult']-$datos['penalty']);
                         $movement->setPentalty($datos['penalty']);
                         $movement->setPlanned($datos['plannedResult']);
                         $movement->setTypeMov($tipo);
@@ -245,7 +244,6 @@ class MovementEmployeeController extends SEIPController {
             $id = $request->get('idAP');
             $tipo = 'AP';
         }
-
 
         //VALIDO PERMISOLOGÍA POR SI ACASO SE ACCEDE DESDE URL DIRECTA
         if ((($securityService->isGranted(array("ROLE_SEIP_ARRANGEMENT_PROGRAM_MOVEMENT_GOALS")))) || ($securityService->isGranted(array("ROLE_SEIP_ARRANGEMENT_PROGRAM_MOVEMENT_GOALS_POST_MORTEM")))) {
@@ -314,6 +312,18 @@ class MovementEmployeeController extends SEIPController {
                 $responsibles = $entity->getresponsibles();
 
                 if (count($responsibles) <= 1) {
+                    foreach ($responsibles as $resp) {
+                        if (($resp->getid()) != ($user->getid())) {
+                            $va = 1;
+                        } else {
+                            $va = 0;
+                        }
+                    }
+                } else {
+                    $va = 1;
+                }
+
+                if ($va == 0) {
                     $this->get('session')->getFlashBag()->add('error', "NO Puede quedar sin Responsables, Por favor Asigne un Empleado antes de Retirar");
                 } else {
                     //SI EL EMPLEADO ENCUENTRA ASIGNADO A LA META
@@ -326,7 +336,7 @@ class MovementEmployeeController extends SEIPController {
                         $movement->setId_Affected($id);
                         $movement->setCause($cause);
                         $movement->setObservations($obs);
-                        $movement->setrealAdvance($datos['realResult']);
+                        $movement->setrealAdvance($datos['realResult']-$datos['penalty']);
                         $movement->setPentalty($datos['penalty']);
                         $movement->setPlanned($datos['plannedResult']);
                         $movement->setTypeMov($tipo);
@@ -350,10 +360,10 @@ class MovementEmployeeController extends SEIPController {
                             $movement->setId_Affected($id);
                             $movement->setCause($cause);
                             $movement->setObservations($obs);
-                            $movement->setrealAdvance($datos['realResult']);
+                            $movement->setrealAdvance($datos['realResult']-$datos['penalty']);
                             $movement->setPentalty($datos['penalty']);
                             $movement->setPlanned($datos['plannedResult']);
-                            $movement->setTypeMov('Goal');
+                            $movement->setTypeMov($tipo);
                             $movement->setUser($user);
                             $movement->setPeriod($this->getPeriodService()->getPeriodActive());
                             $em->persist($movement);
@@ -386,14 +396,24 @@ class MovementEmployeeController extends SEIPController {
      * @return type
      */
     public function exportAction(Request $request) {
-
+         
+        if (!is_null($request->get('idGoal'))) {
         $id = $request->get('idGoal');
         $reportService = $this->container->get('seip.service.report');
-        $route = "MovementEmployee/Movimiento-en-Meta.jasper";
+        $route = "MovementEmployee/Goal_Movement.jrxml";
         $parameters = array("idGoal" => $id);
         $reportService->DownloadReportService($parameters, $route);
-
         return $this->redirect($this->generateUrl('goal_movement', array('idGoal' => $id)));
+        }
+        
+        if (!is_null($request->get('idAP'))) {
+        $id = $request->get('idAP');
+        $reportService = $this->container->get('seip.service.report');
+        $route = "MovementEmployee/AP_Movement.jrxml";
+        $parameters = array("idAP" => $id);
+        $reportService->DownloadReportService($parameters, $route);
+        return $this->redirect($this->generateUrl('goal_movement', array('idAP' => $id)));
+        }
     }
 
     /**
@@ -491,8 +511,8 @@ class MovementEmployeeController extends SEIPController {
         $real[12] = $sumr;
 
         $mes = date_format($date, 'n');
-
         $mayor = 0;
+        
         for ($i = 1; $i <= $mes; $i++) {
             $penal = 0;
             for ($j = $i; $j <= $mes; $j++) {

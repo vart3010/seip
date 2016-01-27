@@ -16,6 +16,7 @@ use JMS\Serializer\EventDispatcher\PreSerializeEvent;
 use Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram;
 use Pequiven\ArrangementProgramBundle\Entity\GoalDetails;
 use Pequiven\ObjetiveBundle\Entity\ObjetiveLevel;
+use Pequiven\SEIPBundle\Entity\Sip\Center\Observations;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -47,12 +48,19 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeGerenciaSecond', 'class' => 'Pequiven\MasterBundle\Entity\GerenciaSecond', 'format' => 'json'),
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeGoal', 'class' => 'Pequiven\ArrangementProgramBundle\Entity\Goal', 'format' => 'json'),
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeReportTemplate', 'class' => 'Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate', 'format' => 'json'),
+            array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeReportTemplateDelivery', 'class' => 'Pequiven\SEIPBundle\Entity\Delivery\ReportTemplateDelivery', 'format' => 'json'),
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializePlantReport', 'class' => 'Pequiven\SEIPBundle\Entity\DataLoad\PlantReport', 'format' => 'json'),
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeWorkStudyCircle', 'class' => 'Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle', 'format' => 'json'),
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeProposal', 'class' => 'Pequiven\SEIPBundle\Entity\Politic\Proposal', 'format' => 'json'),
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeMeeting', 'class' => 'Pequiven\SEIPBundle\Entity\Politic\Meeting', 'format' => 'json'),
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeMeetingFile', 'class' => 'Pequiven\SEIPBundle\Entity\Politic\MeetingFile', 'format' => 'json'),
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeCutl', 'class' => 'Pequiven\SEIPBundle\Entity\Sip\Cutl', 'format' => 'json'),
+            array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeCenter', 'class' => 'Pequiven\SEIPBundle\Entity\Sip\Centro', 'format' => 'json'),
+            array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeNominaCentro', 'class' => 'Pequiven\SEIPBundle\Entity\Sip\NominaCentro', 'format' => 'json'),
+            array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeOnePerTen', 'class' => 'Pequiven\SEIPBundle\Entity\Sip\OnePerTen', 'format' => 'json'),
+            array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeOnePerTenMembers', 'class' => 'Pequiven\SEIPBundle\Entity\Sip\OnePerTenMembers', 'format' => 'json'),
+            array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeObservationsSip', 'class' => 'Pequiven\SEIPBundle\Entity\Sip\Center\Observations', 'format' => 'json'),
+            array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeInventorySip', 'class' => 'Pequiven\SEIPBundle\Entity\Sip\Center\Inventory', 'format' => 'json'),
         );
     }
 
@@ -391,7 +399,13 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
 //        $user = $this->getUser();
 //        if($details->getNotificationInProgressByUser() != null){
 ////            if($details->getNotificationInProgressByUser()->getId() === $user->getId() && (($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC && $arrangementProgram->getTacticalObjective()->getGerencia()->getId() == 9) || ($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE && $arrangementProgram->getOperationalObjective()->getGerenciaSecond()->getGerencia()->getId() == 9))){
-//            if($details->getNotificationInProgressByUser()->getId() === $user->getId() && (($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC && $arrangementProgram->getTacticalObjective()->getGerencia()->getId() == 29) || ($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE && $arrangementProgram->getOperationalObjective()->getGerencia()->getId() == 29))){
+//            if($details->getNotificationInProgressByUser()->getId() === $user->getId() && (($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC && $arrangementProgram->getTacticalObjective()->getGerencia()->getId() == 22) || ($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE && $arrangementProgram->getOperationalObjective()->getGerencia()->getId() == 22))){
+//                $data['januaryReal']['isEnabled'] = true;
+//                $data['februaryReal']['isEnabled'] = true;
+//                $data['marchReal']['isEnabled'] = true;
+//                $data['aprilReal']['isEnabled'] = true;
+//                $data['mayReal']['isEnabled'] = true;
+//                $data['juneReal']['isEnabled'] = true;
 //                $data['julyReal']['isEnabled'] = true;
 //                $data['augustReal']['isEnabled'] = true;
 //                $data['septemberReal']['isEnabled'] = true;
@@ -596,6 +610,17 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
         $event->getVisitor()->addData('_links', $links);
     }
 
+    public function onPostSerializeReportTemplateDelivery(ObjectEvent $event) {
+        $object = $event->getObject();
+        $links = array(
+            "self" => array(),
+        );
+        $links['self']['show'] = $this->generateUrl('pequiven_report_template_delivery_update', array('id' => $object->getId()));
+        $links['self']['update'] = $this->generateUrl('pequiven_report_template_delivery_update', array('id' => $object->getId()));
+        //$links['self']['load'] = $this->generateUrl('pequiven_report_template_delivery_load', array('id' => $object->getId()));
+        $event->getVisitor()->addData('_links', $links);
+    }
+
     public function onPostSerializePlantReport(ObjectEvent $event) {
         $object = $event->getObject();
         $reportTemplate = $object->getReportTemplate();
@@ -657,7 +682,7 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
 
         $event->getVisitor()->addData('_links', $links);
     }
-    
+
     public function onPostSerializeMeeting(ObjectEvent $event) {
         $object = $event->getObject();
 
@@ -671,6 +696,115 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
 
         $links['self']['show'] = $this->generateUrl('pequiven_sip_cutl_show', array('id' => $object->getId()));
 
+        $event->getVisitor()->addData('_links', $links);
+    }
+
+    public function onPostSerializeCenter(ObjectEvent $event) {
+        $object = $event->getObject();
+
+//        $codEstado = $object->getCodigoEstado();
+//        $codMunicipio = $object->getCodigoMunicipio();
+//        $codParroquia = $object->getCodigoParroquia();
+//        $estado = $this->container->get('pequiven.repository.estado')->findOneBy(array('id' => $codEstado));
+//        $municipio = $this->container->get('pequiven.repository.municipio')->findOneBy(array('codigoMunicipio' => $codMunicipio));
+//        $parroquia = $this->container->get('pequiven.repository.parroquia')->findOneBy(array('codigoParroquia' => $codParroquia, 'codigoMunicipio' => $codMunicipio));
+
+        $links['self']['show'] = $this->generateUrl('pequiven_sip_center_show', array('id' => $object->getId()));
+
+        $event->getVisitor()->addData('_links', $links);
+//        $event->getVisitor()->addData('estado', $estado->getDescription());
+//        $event->getVisitor()->addData('municipio', $municipio->getDescription());
+//        $event->getVisitor()->addData('parroquia', $parroquia->getDescription());
+    }
+
+    public function onPostSerializeOnePerTen(ObjectEvent $event) {
+        $object = $event->getObject();
+        $user = $this->container->get('pequiven.repository.user')->findOneBy(array('id' => $object->getUser()));
+        $links['self']['show'] = $this->generateUrl('pequiven_search_members', array('user' => $user->getId()));
+
+        $gerencia = '';
+        if ($user->getGerencia() != null) {
+            $gerencia = $user->getGerencia()->getDescription();
+        }
+
+        $localidad = '';
+        if ($user->getComplejo() != null) {
+            $localidad = $user->getComplejo()->getDescription();
+        }
+
+        $textoVoto = 'NO';
+        if ($object->getVoto() == 1) {
+            $textoVoto = 'SI';
+        }
+
+        $event->getVisitor()->addData('userName', $user->getFirstName() . " " . $user->getLastName());
+        $event->getVisitor()->addData('textoVoto', $textoVoto);
+        $event->getVisitor()->addData('gerencia', $gerencia);
+        $event->getVisitor()->addData('localidad', $localidad);
+        $event->getVisitor()->addData('_links', $links);
+    }
+
+    public function onPostSerializeNominaCentro(ObjectEvent $event) {
+        $object = $event->getObject();
+        $user = $this->container->get('pequiven.repository.user')->findOneBy(array('id' => $object->getUserid()));
+        $gerencia = '';
+
+        if ($user->getGerencia() != null) {
+            $gerencia = $user->getGerencia()->getDescription();
+        }
+
+        $textoVoto = 'NO';
+
+        if ($object->getVoto() == 1) {
+            $textoVoto = 'SI';
+        }
+
+        $links['self']['show'] = $this->generateUrl('pequiven_search_members', array('user' => $user->getId()));
+
+        $event->getVisitor()->addData('textoVoto', $textoVoto);
+        $event->getVisitor()->addData('gerencia', $gerencia);
+        $event->getVisitor()->addData('_links', $links);
+    }
+
+    public function onPostSerializeOnePerTenMembers(ObjectEvent $event) {
+        $object = $event->getObject();
+        $textoVoto = 'NO';
+
+        if ($object->getVoto() == 1) {
+            $textoVoto = 'SI';
+        }
+
+//        $links['self']['show'] = $this->generateUrl('pequiven_search_members', array('user' => $user->getID()));
+
+        $event->getVisitor()->addData('textoVoto', $textoVoto);
+//        $event->getVisitor()->addData('_links', $links);
+    }
+
+    public function onPostSerializeObservationsSip(ObjectEvent $event) {
+
+        $object = $event->getObject();
+
+        $links['self']['show'] = "";
+
+        //$arrayLabel = Observations::getCategoriasObservations();
+        //$arrayStatus = Observations::getStatusObservations();
+        //$event->getVisitor()->addData('nombreCategoria', $arrayLabel[$object->getCategoria()]);
+        //$event->getVisitor()->addData('nombreStatus', $arrayStatus[$object->getStatus()]);
+        $event->getVisitor()->addData('_links', $links);
+    }
+
+    public function onPostSerializeInventorySip(ObjectEvent $event) {
+
+        $object = $event->getObject();
+
+        $inventory = $this->container->get('pequiven.repository.inventory')->findAll();
+
+        $links['self']['show'] = "";
+
+        //$arrayLabel = Observations::getCategoriasObservations();
+        //$arrayStatus = Observations::getStatusObservations();
+        //$event->getVisitor()->addData('nombreCategoria', $arrayLabel[$object->getCategoria()]);
+        //$event->getVisitor()->addData('nombreStatus', $arrayStatus[$object->getStatus()]);
         $event->getVisitor()->addData('_links', $links);
     }
 

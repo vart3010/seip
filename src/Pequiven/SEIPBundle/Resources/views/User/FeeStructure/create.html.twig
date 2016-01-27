@@ -1,0 +1,76 @@
+<form name="formula" method="POST" action="{{ path("pequiven_user_loadfeestructure")}}">
+    <div class="with-padding">
+        <div class="columns">   
+            <div class="new-row two-columns bold">
+                Gerencia de 1ra Línea
+            </div>
+            <div class="four-columns">
+                {% if(is_granted('ROLE_SEIP_PLANNING_LIST_USER_FEESTRUCTURE_CREATE_ALL')) %}                
+                    <select onchange="this.form.submit();" name="gerencia" class="select2 input-large form-control" style="width: 80%">
+                        {% if(gerencia_ant) %}
+                        <option value="{{gerencia_ant.id}}" selected>{{gerencia_ant.description}}</option>                                           
+                        {% else %}
+                        <option value="" selected>Usted No Posee Gerencia de 1ra Línea Asignada</option>
+                        {% endif %}
+                        
+                        {% for gerencia in gerencias %}
+                            <option value="{{gerencia.id}}">{{gerencia.description}}</option>                                           
+                        {% endfor %}
+                    </select> 
+                {% else %}
+                    <select disabled onchange="this.form.submit();" name="gerencia" class="select2 input-large form-control" style="width: 80%">
+                        <option value="{{gerencia_ant.id}}" selected>{{gerencia_ant.description}}</option>                                           
+                        {% for gerencia in gerencias %}
+                            <option value="{{gerencia.id}}">{{gerencia.description}}</option>                                           
+                        {% endfor %}
+                    </select> 
+                {% endif %}
+            </div>
+            <div class="two-columns bold">
+                {{ form_label(form_create.gerenciasecond) }}
+            </div>
+            <div class="four-columns">
+                {{ form_widget(form_create.gerenciasecond) }}
+                {{ form_errors(form_create.gerenciasecond) }}
+            </div>
+            <div class="new-row two-columns bold">
+                {{ form_label(form_create.coordinacion) }}
+            </div>
+            <div class="four-columns">
+                {{ form_widget(form_create.coordinacion) }}
+                {{ form_errors(form_create.coordinacion) }}
+            </div>
+            <div class="two-columns bold">
+                {{ form_label(form_create.charge) }}
+            </div>
+            <div class="four-columns">
+                {{ form_widget(form_create.charge) }}
+                {{ form_errors(form_create.charge) }}
+            </div>
+            <div class="two-columns bold">
+                {{ form_label(form_create.parent) }}
+            </div>
+            <div class="four-columns">
+                {{ form_widget(form_create.parent) }}
+                {{ form_errors(form_create.parent) }}
+            </div>
+            <div class="two-columns bold">
+                {{ form_label(form_create.staff) }}
+            </div>
+            <div class="one-column">
+                {{ form_widget(form_create.staff) }}
+                {{ form_errors(form_create.staff) }}
+            </div>
+            <div class="two-columns bold">
+                ¿Cuántos Cargos desea Crear?:
+            </div>
+            <div class="one-column">
+                <input type="number" class="input-mini" name="repeat" value="1">
+            </div>
+            <div class="new-row twelve-columns align-right">
+                {{ actions.createonly() }}   
+                {{ form_rest(form_create) }}
+            </div>
+        </div>
+    </div>
+</form>

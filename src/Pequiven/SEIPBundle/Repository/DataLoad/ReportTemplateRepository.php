@@ -74,6 +74,14 @@ class ReportTemplateRepository extends SeipEntityRepository
         return $qb->getQuery()->getOneOrNullResult();
     }
     
+    public function findReportTemplatesByPeriod($period){
+        $qb = $this->getQueryBuilder();
+        
+        $qb->andWhere("rt.period = ".$period);
+        
+        return $qb->getQuery()->getResult();
+    }
+    
     /**
      * Retorna las plantillas a las cuales el usuario tiene acceso
      * @param array $criteria
@@ -113,6 +121,8 @@ class ReportTemplateRepository extends SeipEntityRepository
                 ->setParameter("user", $user)
                 ;
        }
+       
+       $this->applyPeriodCriteria($queryBuilder);
        
        return $queryBuilder;
     }
@@ -173,7 +183,15 @@ class ReportTemplateRepository extends SeipEntityRepository
             }
         }
         
-        return parent::applyCriteria($queryBuilder, $criteria->toArray());
+        //return parent::applyCriteria($queryBuilder, $criteria->toArray());
+        
+        $applyPeriodCriteria = $criteria->remove('applyPeriodCriteria');
+        
+        parent::applyCriteria($queryBuilder, $criteria->toArray());
+        
+        if($applyPeriodCriteria){
+           $this->applyPeriodCriteria($queryBuilder);
+        }
     }
     
     protected function getAlias() {

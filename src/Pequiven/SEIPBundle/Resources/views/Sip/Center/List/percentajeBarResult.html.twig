@@ -1,0 +1,14 @@
+<span>
+    {% for i in 0..10 %}
+        <span class="meter 
+              {% if advance < (i*10) %}
+                  white-gradient
+              {% elseif advance == 0 %}
+                  white-gradient
+              {% else %} 
+                  red-gradient
+              {% endif %}                          
+              "></span>
+    {% endfor %}
+</span>
+- {{ advance|number_format(2, '.', ',') }}%                        

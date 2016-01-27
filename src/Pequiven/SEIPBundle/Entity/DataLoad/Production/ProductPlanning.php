@@ -80,6 +80,22 @@ class ProductPlanning extends BaseModel
      * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Production\Range",mappedBy="productPlanning",cascade={"persist","remove"})
      */
     protected $ranges;
+    
+    /**
+     * Periodo.
+     * 
+     * @var \Pequiven\SEIPBundle\Entity\Period
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\Period")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $period;
+
+    /**
+     * @var \Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductPlanning
+     * @ORM\OneToOne(targetEntity="\Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductPlanning")
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", nullable=true)
+     */
+    private $parent;
 
     /**
      * Constructor
@@ -271,5 +287,49 @@ class ProductPlanning extends BaseModel
                 $this->addRange(clone($range));
             }
         }
+    }
+    
+    /**
+     * Set period
+     *
+     * @param \Pequiven\SEIPBundle\Entity\Period $period
+     * @return ProductPlanning
+     */
+    public function setPeriod(\Pequiven\SEIPBundle\Entity\Period $period = null)
+    {
+        $this->period = $period;
+
+        return $this;
+    }
+
+    /**
+     * Get period
+     *
+     * @return \Pequiven\SEIPBundle\Entity\Period 
+     */
+    public function getPeriod()
+    {
+        return $this->period;
+    }
+
+    /**
+     * Set parent
+     *
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductPlanning $parent
+     * @return ProductPlanning
+     */
+    public function setParent(\Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductPlanning $parent = null) {
+        $this->parent = $parent;
+
+        return $this;
+    }
+
+    /**
+     * Get parent
+     *
+     * @return \Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductPlanning 
+     */
+    public function getParent() {
+        return $this->parent;
     }
 }

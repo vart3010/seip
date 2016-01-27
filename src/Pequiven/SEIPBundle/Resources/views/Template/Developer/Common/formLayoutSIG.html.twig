@@ -1,15 +1,11 @@
-
-
 {% trans_default_domain 'PequivenSEIPBundle' %}
 
 {% block stylesheets %}
     <!-- Select2 -->
-    <link rel="stylesheet" href="{{ asset('bundles/pequivenseip/select2-3.5.0/select2.css') }}">
-      
+    <link rel="stylesheet" href="{{ asset('bundles/pequivenseip/select2-3.5.0/select2.css') }}">      
 {% endblock %}
 
 {% block javascripts_base %}
-
     <script type="text/javascript">
         $(document).ready(function(){
             $.datepicker.regional['es'] = {
@@ -82,14 +78,37 @@
         });
 
         $("#actionResults_dateStart").datepicker({
-                defaultDate: "+1w",
+                //defaultDate: "+1w",
                 changeMonth: true,
                 numberOfMonths: 1,
                 dateFormat: "dd/mm/yy"
         });
 
         $("#actionResults_dateEnd").datepicker({
-                defaultDate: "+1w",
+                //defaultDate: "+1w",
+                changeMonth: true,
+                numberOfMonths: 1,
+                dateFormat: "dd/mm/yy"
+        });
+
+        $("#sip_center_observations_fecha").datepicker({                
+                changeMonth: true,
+                numberOfMonths: 1,
+                dateFormat: "dd/mm/yy"
+        });
+        
+        $("#sip_center_assists_fecha").datepicker({                
+                changeMonth: true,
+                numberOfMonths: 1,
+                dateFormat: "dd/mm/yy"
+        });
+
+        $("#sip_center_inventory_fecha").datepicker({                
+                changeMonth: true,
+                numberOfMonths: 1,
+                dateFormat: "dd/mm/yy"
+        });
+        $("#sip_center_fecha").datepicker({                
                 changeMonth: true,
                 numberOfMonths: 1,
                 dateFormat: "dd/mm/yy"
@@ -102,4 +121,7 @@
     <!-- Select2 -->
     <script src="{{ asset('bundles/pequivenseip/select2-3.5.0/select2.min.js') }}"></script>
     <!-- Select2 -->   
+    {% block javascript_base %}
+    {% endblock %}
+
 {% endblock javascripts %}

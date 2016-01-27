@@ -559,6 +559,14 @@ class WorkStudyCircleService implements ContainerAwareInterface {
         $valid = false;
         $user = $this->getUser();
         
+        if($workStudyCircle->getPhase() == WorkStudyCircle::PHASE_ONE){
+            if($workStudyCircle->getCoordinator()->getId() == $user->getId()){
+                $valid = true;
+            }
+        } else{
+            $valid = false;
+        }
+        
         return $valid;
     }
     
@@ -602,7 +610,7 @@ class WorkStudyCircleService implements ContainerAwareInterface {
         $user = $this->getUser();
         
         if($workStudyCircle->getCoordinator()){
-            if(($this->getSecurityContext()->isGranted(array('ROLE_SEIP_PROPOSAL_ADD')) || $workStudyCircle->getCoordinator()->getId() == $user->getId()) && $workStudyCircle->getPhase() == WorkStudyCircle::PHASE_FOUR){
+            if(($this->getSecurityContext()->isGranted(array('ROLE_SEIP_PROPOSAL_ADD')) || $workStudyCircle->getCoordinator()->getId() == $user->getId())){
 //            if(($this->getSecurityContext()->isGranted(array('ROLE_SEIP_PROPOSAL_ADD')) || $workStudyCircle->getCoordinator()->getId() == $user->getId()) && ($workStudyCircle->getId() == 440 || $workStudyCircle->getId() == 441)){
                 $valid = true;
             }
@@ -621,9 +629,11 @@ class WorkStudyCircleService implements ContainerAwareInterface {
         $user = $this->getUser();
         
         if($workStudyCircle->getCoordinator()){
-            if(($this->getSecurityContext()->isGranted(array('ROLE_SEIP_PROPOSAL_EDIT')) || $workStudyCircle->getCoordinator()->getId() == $user->getId()) && $workStudyCircle->getPhase() == WorkStudyCircle::PHASE_FOUR){
+            if(($this->getSecurityContext()->isGranted(array('ROLE_SEIP_PROPOSAL_EDIT')) || $workStudyCircle->getCoordinator()->getId() == $user->getId())){
                 $valid = true;
             }
+        } elseif($this->getSecurityContext()->isGranted(array('ROLE_SEIP_PROPOSAL_EDIT'))){
+            $valid = true;
         }
         
         return $valid;

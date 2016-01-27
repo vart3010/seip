@@ -40,6 +40,8 @@ class IndicatorsDashboardBox extends GenericBox {
         ksort($labelsMonths);
 //        var_dump($labelsMonths);
 //        die();
+        
+        if($indicatorService->isIndicatorHasParents($indicator)){
 
         //Comparamos el nivel del indicador y asi obtener el id de la Línea Estratégica a la cual esta alineada el mismo
         if ($indicator->getIndicatorLevel()->getLevel() == IndicatorLevel::LEVEL_ESTRATEGICO) {
@@ -77,7 +79,7 @@ class IndicatorsDashboardBox extends GenericBox {
                 }
             }
         }
-
+        }
 
         //Obtenemos la data para los widget en forma de bulbo de la barra lateral izquierda
         foreach ($indicatorsGroup as $indicatorGroup) {
@@ -106,16 +108,20 @@ class IndicatorsDashboardBox extends GenericBox {
         $arrayIdProduccion[] = 1043;
 
         if ($indicator->getIndicatorLevel()->getLevel() == IndicatorLevel::LEVEL_TACTICO) {
-            if (in_array($indicator->getParent()->getId(), $arrayIdProduccion)) {
-                $seeInColumn = true;
-                $dataChartColumn = $indicatorService->getChartColumnLineDualAxis($indicator);
+            if($indicator->getParent() != null){
+                if (in_array($indicator->getParent()->getId(), $arrayIdProduccion)) {
+                    $seeInColumn = true;
+                    $dataChartColumn = $indicatorService->getChartColumnLineDualAxis($indicator);
+                }
             }
         } elseif ($indicator->getIndicatorLevel()->getLevel() == IndicatorLevel::LEVEL_OPERATIVO) {
-            if (count($indicator->getParent()->getParent()) > 0) {
-                if (in_array($indicator->getParent()->getParent()->getId(), $arrayIdProduccion)) {
-                    $seeInColumn = true;
-                    $seeInColumnSingleAxis = true;
-                    $dataChartColumn = $indicatorService->getDataChartOfResultIndicator($indicator);
+            if($indicator->getParent() != null){
+                if (count($indicator->getParent()->getParent()) > 0) {
+                    if (in_array($indicator->getParent()->getParent()->getId(), $arrayIdProduccion)) {
+                        $seeInColumn = true;
+                        $seeInColumnSingleAxis = true;
+                        $dataChartColumn = $indicatorService->getDataChartOfResultIndicator($indicator);
+                    }
                 }
             }
         }

@@ -8,16 +8,19 @@ abstract class MovementEmployee {
      * MAESTROS DE ENTRADA
      */
     const ASIGNACION = 1;
-    const SUPLENCIA = 2;
+    const SUSTITUCION = 2;
     const REINTEGRO = 3;
+    const TRANSFERENCIA_IN = 4;
+    const NUEVO_INGRESO = 5;
 
     /**
      * MAESTROS DE SALIDA
      */
-    const CAMBIO = 11;
+    const TRANSFERENCIA_OUT = 11;
     const RETIRO = 12;
-    const REPOSO = 13;
-    const FINAL_SUPLENCIA = 14;
+    const AUSENCIA_TEMPORAL = 13;
+    const CULMINACION_DE_ASIGNACION = 14;
+    const CULMINACION_DE_SUSTITUCION = 15;
 
     /**
      * @var integer
@@ -57,8 +60,10 @@ abstract class MovementEmployee {
     static function getCausein() {
         static $array = [
             self::ASIGNACION => 'Asignación',
-            self::SUPLENCIA => 'Suplencia',
-            self::REINTEGRO => 'Reintegro por Reposo'
+            self::SUSTITUCION => 'Sustitución',
+            self::REINTEGRO => 'Reincorporación',
+            self::TRANSFERENCIA_IN => 'Transferencia',
+            self::NUEVO_INGRESO => 'Nuevo Ingreso'
         ];
         return $array;
     }
@@ -70,10 +75,11 @@ abstract class MovementEmployee {
      */
     static function getCauseout() {
         static $array = [
-            self::CAMBIO => 'Cambio',
-            self::FINAL_SUPLENCIA => 'Culminación de Suplencia',
-            self::REPOSO => 'Reposo',
-            self::RETIRO => 'Retiro',
+            self::CULMINACION_DE_ASIGNACION => 'Culminación de Asignación',
+            self::AUSENCIA_TEMPORAL => 'Ausencia Temporal',
+            self::CULMINACION_DE_SUSTITUCION => 'Culminación de Sustitución',
+            self::TRANSFERENCIA_OUT => 'Transferencia',
+            self::RETIRO => 'Retiro de la Empresa'
         ];
         return $array;
     }
@@ -81,12 +87,15 @@ abstract class MovementEmployee {
     static function getAllCauses() {
         static $array = [
             self::ASIGNACION => 'Asignación',
-            self::SUPLENCIA => 'Suplencia',
-            self::REINTEGRO => 'Reintegro por Reposo',
-            self::FINAL_SUPLENCIA => 'Culminación de Suplencia',
-            self::CAMBIO => 'Cambio',
-            self::RETIRO => 'Retiro',
-            self::REPOSO => 'Reposo'
+            self::SUSTITUCION => 'Sustitución',
+            self::REINTEGRO => 'Reincorporación',
+            self::TRANSFERENCIA_IN => 'Transferencia Ingreso',
+            self::NUEVO_INGRESO => 'Nuevo Ingreso',
+            self::CULMINACION_DE_ASIGNACION => 'Culminación de Asignación',
+            self::AUSENCIA_TEMPORAL => 'Ausencia Temporal',
+            self::CULMINACION_DE_SUSTITUCION => 'Culminación de Sustitución',
+            self::TRANSFERENCIA_OUT => 'Transferencia Egreso',
+            self::RETIRO => 'Retiro de la Empresa'
         ];
         return $array;
     }

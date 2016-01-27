@@ -1,0 +1,399 @@
+{#{% extends 'PequivenSEIPBundle:Template:Developer/Common/tableFormat1.html.twig' %}#}
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
+
+{% trans_default_domain 'sip' %}
+
+{#{% block stylesheets %}
+    {{ parent() }}
+    <!-- Additional styles -->
+    <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/form3860.css?v=1') }}">
+    <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/switches3860.css?v=1') }}">
+    
+    <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/table3860.css?v=1') }}">
+    <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/progress-slider3860.css?v=1') }}">
+    
+    <!-- Select2 -->
+    <link rel="stylesheet" href="{{ asset('bundles/pequivenseip/select2-3.5.0/select2.css') }}">
+    
+    <!-- jQuery Form Validation -->
+    <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/libs/formValidator/developr.validationEngine3860.css?v=1') }}">    
+    
+{% endblock %}#}
+
+{#{% block javascripts %}
+    {{ parent() }}
+    <script src="{{  asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/libs/jquery.tablesorter.min.js') }}"></script>
+    <script src="{{  asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.progress-slider.js') }}"></script>
+    <script src="{{  asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/libs/DataTables/jquery.dataTables.min.js') }}"></script>
+    <!-- Select2 -->
+    <script src="{{ asset('bundles/pequivenseip/select2-3.5.0/select2.min.js') }}"></script>
+    <!-- jQuery-ui -->
+    <script src="{{ asset('bundles/pequivenseip/jquery-ui.custom/jquery-ui.js?v=1') }}"></script>
+    
+    <script src="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/libs/formValidator/jquery.validationEngine3860.js?v=1') }}"></script>
+    <script src="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/libs/formValidator/languages/jquery.validationEngine-' ~ app.request.locale ~ '3860.js?v=1') }}"></script>
+    
+    <script src="{{  asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.tabs.js') }}"></script>
+{% endblock %}#}
+
+{% block javascripts_base %}
+    {{ parent() }}
+    <script src="{{  asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.input.js') }}"></script>
+{% endblock javascripts_base %}
+
+{% block before_body %}
+    {{ contentHeader(
+        {(path('pequiven_sip_center_list')): "sip.center.name"|trans},        
+        ('pequiven.show'|trans({},'messages'))
+    )}}
+{% endblock %}
+
+{% block body %}
+    {% set show = 1 %}
+
+    <div class="block_id" ng-init="idCenter='{{ center.codigoCentro }}'"></div>    
+    {% if(assist == 1 ) %}
+        {% set checkState = "checked" %}
+    {% else  %}
+        {% set checkState = "" %}
+    {% endif %}
+
+
+    <fieldset class="fieldset">
+        <legend class="legend" >{{ 'sip.center.title'|trans({}) }}&nbsp;</legend>
+        <table width="100%">
+            <tr>
+                <td width="50%">
+                    {% if centerOpen == true %}
+                        <div class="inline-label">
+                            <div class="green-bg" style="font-size: 20px; font-weight: bold;"align="center">
+                                APERTURADO
+                            </div>
+                        </div>
+                    {% endif %}
+                </td>
+                <td width="50%">
+                    {% if center.importante == "SI" %}
+                        <div class="inline-label">
+                            <div class="red-bg" style="font-size: 20px; font-weight: bold;"align="center">
+                                PRIORIZADO
+                            </div>
+                        </div>
+                    {% endif %}
+                </td>
+            </tr>
+        </table>
+        <br>
+        <div class="columns">
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Estado</label>
+                    {{ center.descriptionEstado }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Municipio</label>
+                    {{ center.descriptionMunicipio }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Parroquia</label>
+                    {{ center.descriptionParroquia }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Código Centro</label>
+                    {{ center.codigoCentro }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Centro</label>
+                    {{ center.description }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Dirección</label>
+                    {{ center.direccion }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">N° de Mesas</label>
+                    {{ center.mesas }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">N° de Electores</label>
+                    {{ center.electores }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">N° de Electores Pequiven</label>
+                    <a target="_blank" href="{{ path("pequiven_sip_cutl_list_pqv",{idCentro:center.id})}}">
+                        {{ pqvCentro }}
+                    </a>
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">N° de Electores 1x10</label>
+                    <a target="_blank" href="{{ path("pequiven_sip_cutl_list_optm",{idCentro:center.id})}}">
+                        {{ optmCentro }}
+                    </a>
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Centro de Misiones</label>                    
+                    {{ center.centroMisiones }}                    
+                </p>
+            </div>
+            {% if center.eje > 0 %}
+                <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                    <p class="inline-label">
+                        <label class="label">Eje en la Parroquia</label>
+                        {{ center.eje }}
+                    </p>
+                </div>
+            {% endif %}
+
+        </div>
+        {# validacion de muestra solo para el 4 y 6 de diciembre #}
+        {% set day3 = "03" %}
+        {% set day4 = "04" %}
+        {% set day5 = "05" %}
+        {% set day6 = "17" %}
+
+        {# Dia actual #}
+        {% set day = "now" | date("d") %}
+        {% if day6 == day %}
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">Mesas Activas</label>
+                    {{ report }}
+                    &nbsp;
+                </p>
+                &nbsp;
+            </div>
+            <div ng-controller="SipCenterReportController">
+                {% for reportM in reportMesa %}
+                    {# red-gradient  green-gradient#}
+                    <a class="button icon-pencil icon-size2 {% if centerService.consultTableOpen(reportM) == true %} red-gradient {% endif %}" href="" ng-click="loadTemplateReportCenter(mesa='{{ reportM.mesa }}')" title="Cargar Estatus de Mesa">Mesa {{ reportM.mesa }}</a>
+                    &nbsp;
+                {% endfor %}
+            </div>
+        {% endif %}
+        &nbsp;
+        {#{% if day6 == day %}
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile" ng-controller="SipCenterReportController">
+                <p class="inline-label">
+                    <label class="label">Exit Poll</label>
+                    {% if votos|length > 0 %} {{ votos[0]["votos"] }} {% endif %}
+                    &nbsp;       
+                    <a class="button icon-add-user icon-size2" href="" ng-click="loadTemplateReportVoto(centro='{{ center.id }}')" title="Cargar Votos Registrados por Centro">Votos</a>        
+                </p>            
+            </div>
+        {% endif %}#}
+    </fieldset>
+    <HR>
+    
+    <div class="with-padding"> 
+        <h3>Resultados</h3>        
+        <div style="height:500px;width:auto;overflow:auto;">
+        <table class="table responsive-table" id="sorting-example2">
+            <thead>
+                <tr>
+                    <th scope="col" width="20%" class="header" align="left">
+                        Mesa
+                    </th>                    
+                    <th scope="col" width="20%" class="header" align="left">
+                        N° Votos
+                    </th>
+                    <th scope="col" width="20%" class="header" align="left">
+                        Porcentaje
+                    </th> 
+                    <th scope="col" width="40%" class="header" align="left">
+                        Partido
+                    </th>                         
+                </tr>
+            </thead>  
+            {% for key,value in resultByMesas %}
+                <tbody align="center">
+                    <tr>
+                        <td align="left">{{ value['mesa'] }}</td>                            
+                        <td align="left">{{ value['voto'] }}</td>                            
+                        <td align="left">{{ value['porc'] }}</td> 
+                        <td align="left">{{ value['partido'] }}</td>                         
+                    </tr>                 
+                </tbody> 
+            {% endfor %}
+        </table> 
+        </div>
+    </div>
+    
+    <br>
+    {% include 'PequivenSEIPBundle:Sip:Center/StatusCenter.html.twig' %}
+    <br>
+    <fieldset class="fieldset">
+        <legend class="legend" >CUTL&nbsp;</legend>
+        <div class="columns">
+            {% set cont = 0 %}
+            {% for dataCutl in  cutl %}
+                {% if cont == 1 %}
+                    <HR>
+                {% endif %}
+                <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                    <p class="inline-label">
+                        <label class="label">Cedula</label>
+                        {{ dataCutl.cedula }}
+                    </p>
+                </div>
+                <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                    <p class="inline-label">
+                        <label class="label">Nombre</label>
+                        {{ dataCutl.nombre }}
+                    </p>
+                </div>
+                <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                    <p class="inline-label">
+                        <label class="label">Gerencia de Primera Linea</label>
+                        {{ dataCutl.gerenciafirst }}
+                    </p>
+                </div>
+                <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                    <p class="inline-label">
+                        <label class="label">Gerencia de Segunda Linea</label>
+                        {{ dataCutl.gerenciaSecond }}
+                    </p>
+                </div>
+                <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                    <p class="inline-label">
+                        <label class="label">Teléfono Asignado:</label>
+                        {{ dataCutl.telefonoCutl }}
+                    </p>
+                </div>
+                <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                    <p class="inline-label">
+                        <label class="label">Teléfono Personal:</label>
+                        {{ dataCutl.telefonoSeip }}/
+                        {{ dataCutl.telefonoFirma }}
+                    </p>
+                </div>
+                <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                </div>
+                {% set cont = cont + 1 %}                    
+            {% endfor %}
+        </div>
+    </fieldset> 
+    <br>
+    {% include 'PequivenSEIPBundle:Sip:Center/Ubch/list.html.twig' %}
+    <br>   
+    {# Asistencias #}                                
+    {% include 'PequivenSEIPBundle:Sip:Center/Assists.html.twig' %}                             
+
+    <br>
+    {# Observaciones #}
+    {% include 'PequivenSEIPBundle:Sip:Center/Observations.html.twig' %} 
+    <br>
+    {# Inventario #}
+    {% include 'PequivenSEIPBundle:Sip:Center/Inventory.html.twig' %}
+
+    {#<fieldset class="fieldset">
+        <legend class="legend" >Votantes PQV</legend>
+
+        <div ng-controller="TableFormatController">
+
+                <div loading-container="tableParams.settings().$loading">
+                    <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager" template-header="custom/header" api-data-url="{{ path('pequiven_sip_show_oneperten_pqv',{_format:'json'}) }}" class="table table-responsive table-extra-info" >
+                        <tbody> 
+                            <tr ng-repeat="result in $data" data="{$ result|json $}">
+                                <td data-title="'Cedula'" filter="{'cedula' : 'text'}">
+                                    <a href="">
+                                        {$ result.cedula $}
+                                    </a>
+                                </td>
+                                <td data-title="'Nombre'" filter="{'nombre' : 'text'}">
+                                    <a href="">
+                                        {$ result.nombre $}
+                                    </a>
+                                </td>
+                                <td data-title="'Voto'" filter="{'voto' : 'text'}">
+                                    <a href="">
+                                        {$ result.textoVoto $}
+                                    </a>
+                                </td>
+                                <td data-title="'Telefono'" filter="{'telefono' : 'text'}">
+                                    <a href="">
+                                        {$ result.telefono $}
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+        </div>
+    </fieldset>#}
+
+{% endblock %}
+
+{% block javascript %}
+    <script type="text/javascript">
+
+$(document).ready(function () {
+
+    $('#switch-mode').change(function () {
+        $('.switch-wrapper')[this.checked ? 'addClass' : 'removeClass']('reversed-switches');
+    });
+
+    $("p.switchAssistance input").change(function () {
+        var idMember = $(this).attr("data");
+        //var value = $(this).val();              
+        var value = $("#switch_" + idMember).val();
+        //var id = document.getElementById("#switch_" + idMember);  
+        var idMemberd = $(this).attr("data");
+
+        if (value == 1) {
+            $(this).val(0);
+        } else {
+            $("#switch_" + idMember).prop("disabled", true);
+            $(this).val(1);
+        }
+        var value = $("#switch_" + idMember).val();
+        var data = {
+            idMember: idMember,
+            status: value,
+        };
+        //console.log(data);
+
+        $.ajax({
+            type: 'get',
+            url: '{{ path("update_assistance_ubch") }}',
+            data: data,
+            beforeSend: function (objeto) {
+                $('#carga_' + idMember).css({display: 'block'});
+                $('#p_' + idMember).css('display', 'none');
+            },
+            complete: function () {
+                $('#carga_' + idMember).css('display', 'none');
+                $('#p_' + idMember).css('display', 'block');
+            },
+            success: function (data) {
+                $(location).attr('href', data["url"]);
+            }
+        });
+
+    });
+
+});
+    </script>
+{% endblock %}
+

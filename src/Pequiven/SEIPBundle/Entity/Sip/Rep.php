@@ -1,6 +1,6 @@
 <?php
 
-namespace Pequiven\SEIPBundle\Sip\Entity;
+namespace Pequiven\SEIPBundle\Entity\Sip;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -10,8 +10,8 @@ use Gedmo\Mapping\Annotation as Gedmo;
 /**
  * Rep
  *
- * @ORM\Table(name="sip_rep")
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\Sip\RepRepository")
+ * @ORM\Table(name="sip_rep",indexes={@ORM\Index(name="rep_idx", columns={"cedula","codigoMunicipio","codigoParroquia","codigoEstado","codigoCentro","circuito"})})
  */
 class Rep {
 
@@ -40,6 +40,13 @@ class Rep {
     /**
      * @var string
      *
+     * @ORM\Column(name="nombre", type="string")
+     */
+    private $nombre;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="fecha_nac", type="string")
      */
     private $fechaNac;
@@ -54,7 +61,7 @@ class Rep {
     /**
      * @var string
      *
-     * @ORM\Column(name="psuv", type="string")
+     * @ORM\Column(name="psuv", type="string", nullable=true)
      */
     private $psuv;
 
@@ -96,16 +103,24 @@ class Rep {
     /**
      * @var string
      *
-     * @ORM\Column(name="direccion", type="string")
+     * @ORM\Column(name="direccion", type="string", nullable=true)
      */
     private $direccion;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="mesa", type="string")
+     * @ORM\Column(name="mesa", type="string", nullable=true)
      */
     private $mesa;
+
+    function getNombre() {
+        return $this->nombre;
+    }
+
+    function setNombre($nombre) {
+        $this->nombre = $nombre;
+    }
 
     function getIdCedula() {
         return $this->idCedula;
@@ -183,23 +198,23 @@ class Rep {
         $this->psuv = $psuv;
     }
 
-    function setCodigoEstado(interger $codigoEstado) {
+    function setCodigoEstado($codigoEstado) {
         $this->codigoEstado = $codigoEstado;
     }
 
-    function setCodigoMunicipio(interger $codigoMunicipio) {
+    function setCodigoMunicipio($codigoMunicipio) {
         $this->codigoMunicipio = $codigoMunicipio;
     }
 
-    function setCodigoParroquia(interger $codigoParroquia) {
+    function setCodigoParroquia($codigoParroquia) {
         $this->codigoParroquia = $codigoParroquia;
     }
 
-    function setCircuito(interger $circuito) {
+    function setCircuito($circuito) {
         $this->circuito = $circuito;
     }
 
-    function setCodigoCentro(interger $codigoCentro) {
+    function setCodigoCentro($codigoCentro) {
         $this->codigoCentro = $codigoCentro;
     }
 

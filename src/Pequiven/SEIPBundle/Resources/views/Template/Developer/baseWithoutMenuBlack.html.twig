@@ -1,0 +1,262 @@
+{# empty Twig template #}
+{# empty Twig template #}
+{% trans_default_domain 'PequivenSEIPBundle' %}
+{% spaceless %}
+<!DOCTYPE html>
+
+<!--[if IEMobile 7]><html class="no-js iem7 oldie"><![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html class="no-js ie7 oldie" lang="{{ app.request.locale }}"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html class="no-js ie8 oldie" lang="{{ app.request.locale }}"><![endif]-->
+<!--[if (IE 9)&!(IEMobile)]><html class="no-js ie9" lang="{{ app.request.locale }}"><![endif]-->
+<!--[if (gt IE 9)|(gt IEMobile 7)]><!--><html class="no-js linen" lang="{{ app.request.locale }}" style="background: #33373a;"><!--<![endif]-->
+
+    <head>
+        <meta charset="utf-8">
+        <style>
+          [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+          display: none !important;
+        }
+      </style>
+      <script type="text/javascript">
+          var assetPasePath = '{{ asset('') }}';
+      </script>
+      <script src="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/libs/jquery-1.8.2.min.js') }}"></script>
+      {% javascripts 
+            'bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.notify.js' 
+            filter='uglifyjs2' 
+            output='compiled/main_base.js'
+      %}
+            <script src="{{ asset_url }}"></script>
+      {% endjavascripts %}
+      
+    {% block head_base '' %}
+    {% block head '' %}
+        
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+        <title>  {{ templateConfig.getTemplateOption('developer','app_title') }} {% block title ''%}</title>
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <!-- <link rel="icon" type="image/png" href="{#{ asset('bundles/pequivenseip/logotipos-pqv/title_seip2.png') }#}" /> -->
+        <!-- http://davidbcalhoun.com/2010/viewport-metatag -->
+        <meta name="HandheldFriendly" content="True">
+        <meta name="MobileOptimized" content="320">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        
+        
+        
+        <!-- For all browsers -->
+        {% stylesheets 
+             'bundles/tecnocreacionesvzlagovernment/template/developer/css/reset3860.css'
+             'bundles/tecnocreacionesvzlagovernment/template/developer/css/style3860.css'
+             'bundles/tecnocreacionesvzlagovernment/template/developer/css/colors3860.css'
+             'bundles/tecnocreacionesvzlagovernment/template/developer/css/4803860.css'
+             'bundles/tecnocreacionesvzlagovernment/template/developer/css/7683860.css'
+             'bundles/tecnocreacionesvzlagovernment/template/developer/css/9923860.css'
+             'bundles/tecnocreacionesvzlagovernment/template/developer/css/12003860.css'
+             'bundles/tecnocreacionesvzlagovernment/template/developer/css/2x3860.css'
+             'bundles/tecnocreacionesvzlagovernment/template/developer/css/print3860.css'
+
+             filter='cssrewrite'
+             filter='uglifycss'
+             output='compiled/main_base.css'
+            %}
+             <link rel="stylesheet" href="{{ asset_url }}" />
+        {% endstylesheets %}
+        
+        <!-- Webfonts -->
+        {% if app.debug %}
+            <link href='{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/fonts/font.css?v=1') }}' rel='stylesheet' type='text/css'>
+        {% else %}
+            <link href='{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/fonts/font.css?v=1') }}' rel='stylesheet' type='text/css'>
+{#            <link href='http://fonts.googleapis.com/css?family=Open+Sans:300' rel='stylesheet' type='text/css'>#}
+        {% endif  %}
+
+        <!-- Additional styles -->
+        {% block stylesheets_base '' %}
+            {% stylesheets output='compiled/seip_main_developer.css' filter='uglifycss' 
+                '@TecnocreacionesVzlaGovernmentBundle/Resources/assets/css/main.css'
+                '@TecnocreacionesVzlaGovernmentBundle/Resources/assets/css/gobierno-vzla.css'
+                'bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/modal3860.css'
+                'bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/js/modules/notificationBarModule/notificationBarModule.css'
+                'bundles/pequivenseip/login/fonts/header.css'
+            %}
+                <link rel="stylesheet" href="{{ asset_url }}" />
+            {% endstylesheets %}
+        {% block stylesheets '' %}
+
+        <!-- JavaScript at bottom except for Modernizr -->
+        <script src="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/libs/modernizr.custom.js') }}"></script>
+        <!-- For Modern Browsers -->
+        <link rel="shortcut icon" href="{{ asset('bundles/pequivenseip/logotipos-pqv/logo_menu_seip.ico') }}">
+        <!-- For everything else -->
+        <link rel="shortcut icon" href="{{ asset('bundles/pequivenseip/logotipos-pqv/logo_menu_seip.ico') }}">
+        <!-- For retina screens -->
+        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/img/favicons/apple-touch-icon-retina.png') }}">
+        <!-- For iPad 1-->
+        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/img/favicons/apple-touch-icon-ipad.png') }}">
+        <!-- For iPhone 3G, iPod Touch and Android -->
+        <link rel="apple-touch-icon-precomposed" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/img/favicons/apple-touch-icon.png') }}">
+
+        <!-- iOS web-app metas -->
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+        <!-- Startup image for web apps -->
+        <link rel="apple-touch-startup-image" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/img/splash/ipad-landscape.png') }}" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:landscape)">
+        <link rel="apple-touch-startup-image" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/img/splash/ipad-portrait.png') }}" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:portrait)">
+        <link rel="apple-touch-startup-image" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/img/splash/iphone.png') }}" media="screen and (max-device-width: 320px)">
+
+        <!-- Microsoft clear type rendering -->
+        <meta http-equiv="cleartype" content="on">
+
+        <!-- IE9 Pinned Sites: http://msdn.microsoft.com/en-us/library/gg131029.aspx -->
+        <meta name="application-name" content="">
+        <meta name="msapplication-tooltip" content="Cross-platform admin template.">
+        <meta name="msapplication-starturl" content="http://www.display-inline.fr/demo/developr">
+        <!-- These custom tasks are examples, you need to edit them to show actual pages -->
+        <meta name="msapplication-task" content="name=Agenda;action-uri=http://www.display-inline.fr/demo/developr/agenda.html;icon-uri=http://www.display-inline.fr/demo/developr/img/favicons/favicon.ico">
+        <meta name="msapplication-task" content="name=My profile;action-uri=http://www.display-inline.fr/demo/developr/profile.html;icon-uri=http://www.display-inline.fr/demo/developr/img/favicons/favicon.ico">
+    </head>
+
+    <body ng-controller="MainController" class="clearfix ng-scope dashboard" style="background: #33373a; -webkit-linear-gradient(top, #5e6165, #33373a); border-color: #33373a">
+        {% block content %}
+        <!-- Prompt IE 6 users to install Chrome Frame -->
+        <!--[if lt IE 7]><p class="message red-gradient simpler">Your browser is <em>ancient!</em> <a href="http://browsehappy.com/">Upgrade to a different browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to experience this site.</p><![endif]-->
+        
+        <!-- Title bar -->
+            <header role="banner" id="title-bar" class="hidden-on-desktop">
+                <h2 style="font-family: 'Neuropol';">{% block appTitle %}{{ templateConfig.getTemplateOption('developer','app_title') }}{% endblock %}</h2>
+            </header>
+        <!-- Button to open/hide menu -->
+{#        <a href="javascript:void(0);" id="open-menu"><span>Menu</span></a>#}
+        
+        <!-- Button to open/hide shortcuts -->
+        <div class="hidden-on-desktop">
+            <img class="logo-menu-mobile" src="{{ asset('bundles/pequivenseip/logotipos-pqv/logo_menu_seip.ico') }}" height="24px" width="24px" />
+        </div>
+        <div class="message-loading {$ notificationBarService.getLoadStatus().error_class $}" ng-show="notificationBarService.getLoadStatus().showStatus">
+                <span ng-hide="true" >Cargando...</span>
+                <span ng-cloak>{$ notificationBarService.getLoadStatus().text $}</span>
+                <span class="loader"></span>
+        </div>
+        <div id="message-errors"></div>
+        <!-- Main content -->
+        <section ng-cloak ng-controller="MainContentController" role="main" id="main" class="main-frontend">
+            <noscript class="message black-gradient simpler">Your browser does not support JavaScript! Some features won't work as expected...</noscript>
+            {% include 'PequivenSEIPBundle:Block:headerDashboardSip.html.twig' %}
+            <div  class="content-container">
+                {% block before_body '' %}
+                {% block body %}
+                    {% block mainTitle %}
+
+                        <hgroup id="main-title" class="thin">
+                                <h1>Dashboard</h1>
+                                <h2>nov <strong>10</strong></h2>
+                        </hgroup>
+                    {% endblock %}
+                    Contenido (Sobrescribir el bloque "body")
+                {% endblock %}
+                {% block after_body '' %}
+            </div>
+{#            {% include 'PequivenSEIPBundle:Block:footer.html.twig' %}#}
+            <div id="dialog-confirm" style="display: none;" title="{$ dialog.confirm.title $}">
+                <p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>{$ dialog.confirm.content $}</p>
+            </div>
+            <div id="dialog-form">
+                <div ng-include="template.url" onload="templateLoad(template)"></div>
+            </div>
+        </section>
+        <!-- End main content -->
+        
+        <!-- Side tabs shortcuts -->
+{#        {% include 'TecnocreacionesVzlaGovernmentBundle:Template/Developer/Layout:_side-tabs-shortcuts.html.twig' %}#}
+
+        
+        <!-- Sidebar/drop-down menu -->
+        {#{% block sidebar %}
+            {% include 'PequivenSEIPBundle:Template/Developer/Layout:_sidebar-drop-down-menu.html.twig' %}
+        {% endblock sidebar %}#}
+        <!-- End sidebar/drop-down menu -->
+
+        <!-- JavaScript at the bottom for fast page loading -->
+
+        <!-- Scripts -->
+        <script type="text/javascript">
+                var ConfApp = {};
+                ConfApp.assetPath = "{{ asset('') }}";
+        </script>
+        {% endblock content %}
+            {# Bloque para cargar archivos javascript bases #}
+        
+            {# Template base functions #}
+            {% block javascripts_base '' %}
+            {% block javascripts_core %}
+                {% javascripts 
+                   '@TecnocreacionesVzlaGovernmentBundle/Resources/assets/js/main.js'
+                   'bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.navigable.js'
+                   'bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.scroll.js'
+                   'bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.tooltip.js'
+                   'bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.modal.js'
+                   'bundles/tecnocreacionesvzlagovernment/template/developer/js/libs/tinycon.min.js'
+                    filter='uglifyjs2' 
+                    output='compiled/javascript_base.js'
+                %}
+                        <script src="{{ asset_url }}"></script>
+                  {% endjavascripts %}
+            {% endblock  %}
+            
+            {# Bloque para cargar archivos javascript adicionales despues del core #}
+            {% block javascripts '' %}
+        {# Bloque para escribir javascript #}    
+        {% block javascript '' %}
+        <script>
+            window.notify.defaults.textOneSimilar = '{{ 'tecnocreaciones_vzla_government.notify.one_similar_notification'|trans({},'TecnocreacionesVzlaGovernmentBundle') }}';
+            window.notify.defaults.textSeveralSimilars = '{{ 'tecnocreaciones_vzla_government.notify.n_similar_notifications'|trans({},'TecnocreacionesVzlaGovernmentBundle') }}';
+            window.notify.defaults.textOneMore = '{{ 'tecnocreaciones_vzla_government.notify.one_more_notification'|trans({},'TecnocreacionesVzlaGovernmentBundle') }}';
+            window.notify.defaults.textSeveralMore = '{{ 'tecnocreaciones_vzla_government.notify.n_more_notifications'|trans({},'TecnocreacionesVzlaGovernmentBundle') }}';
+            // Call template init (optional, but faster if called manually)
+            $.template.init();
+            // If the browser support the Notification API, ask user for permission (with a little delay)
+            if (notify.hasNotificationAPI() && !notify.isNotificationPermissionSet())
+            {
+                setTimeout(function()
+                {
+                    notify.showNotificationPermission('Your browser supports desktop notification, click here to enable them.', function()
+                    {
+                        // Confirmation message
+                        if (notify.hasNotificationPermission())
+                        {
+                            notify('Notifications API enabled!', 'You can now see notifications even when the application is in background', {
+                                icon: '{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/img/demo/icon.png') }}',
+                                system: true
+                            });
+                        }
+                        else
+                        {
+                            notify('Notifications API disabled!', 'Desktop notifications will not be used.', {
+                                icon: '{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/img/demo/icon.png') }}'
+                            });
+                        }
+                    });
+
+                }, 2000);
+            }
+            {% for type in ['success', 'error'] %}
+                {% for message in app.session.flashbag.get(type) %}
+                    // Gather options
+                    notify('{{ message }}','', {
+                            system:		false,   
+                            autoClose:		7000,
+                            icon:               '{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/img/icons/icon-'~ type ~'.png') }}',
+                            iconOutside:        false,
+                            closeButton:        true,
+                            showCloseOnHover:	false,
+                            groupSimilar:	true
+                    });
+                {% endfor %}
+            {% endfor %}
+        </script>
+    </body>
+</html>
+{% endspaceless %}

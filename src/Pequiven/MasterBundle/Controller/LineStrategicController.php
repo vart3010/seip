@@ -57,6 +57,25 @@ class LineStrategicController extends SEIPController {
         return $this->handleView($view);
     }
     
+    /**
+     * Retorna el Tablero con los indicadores especificos
+     * @param Request $request
+     * @return type
+     */
+    public function viewOnlyIndicatorSpecificAction(Request $request){
+        $boxRender = $this->get('tecnocreaciones_box.render');
+        
+        $view = $this
+                ->view()
+                ->setTemplate($this->config->getTemplate('viewByIndicatorSpecific.html'))
+                ->setData(array(
+                    'boxRender' => $boxRender
+                ))
+                ;
+        
+        return $this->handleView($view);
+    }
+    
     public function showAction(Request $request) {
         
         $resource = $this->findOr404($request);

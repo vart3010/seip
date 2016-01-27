@@ -1,0 +1,123 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutSIG.html.twig' %}
+
+{% block body %}
+{% trans_default_domain 'sip' %}    
+        
+        <form method="POST" id="form_sip_center_report">
+            <fieldset class="fieldset fields-list">
+                <legend class="legend">Reporte apertura de Mesa &nbsp; {{ report.mesa }}</legend>
+                    {{ form_errors(form) }} 
+                    <div class="field-block button-height" >                            
+                                              
+                            <label class="label">Mesa: &nbsp; {{ report.mesa }}</label> 
+                            <p class="assistanc button-height"> 
+                                <input type="checkbox" name="sip_center[rep_{{ report.id}}]" id="switch_{{ report.id }}" data="{{ report.id }}" value="0" class="switch blue-active mid-margin-right" data-text-on="SI" data-text-off="NO">
+
+                            <span class="info-spot">
+                                <span class="icon-info-round"></span>
+                                <span class="info-bubble">Seleccione si la mesa ha sido aperturada</span>
+                            </span> 
+                            </p> 
+                    
+                    </div>
+                    <div class="field-block button-height" >    
+                        {{ form_label(form.day) }}                        
+                        {{ form_widget(form.day) }}
+                        {{ form_errors(form.day) }}
+                    </div>
+                    <div class="field-block button-height" >    
+                        {{ form_label(form.categoria) }}                        
+                        {{ form_widget(form.categoria) }}
+                        {{ form_errors(form.categoria) }}
+                            <span class="info-spot">
+                                <span class="icon-info-round"></span>
+                                <span class="info-bubble">Seleccione solo si la mesa no ha sido aperturada</span>
+                            </span> 
+                    </div>
+                    <div class="field-block button-height" >    
+                        {{ form_label(form.observations) }}                        
+                        {{ form_widget(form.observations) }}
+                        {{ form_errors(form.observations) }}
+                    </div>
+                    {{ form_rest(form) }}
+            </fieldset>
+        </form>   
+            &nbsp;    
+            <fieldset class="fieldset fields-list">
+                <legend class="legend">Registro Mesa &nbsp; {{ report.mesa }}</legend>
+                    <div class="with-padding">            
+                    <table class="table responsive-table" id="sorting-example2">
+                        <thead>
+                            <tr>
+                                <th scope="col" width="5%" class="header" align="left">
+                                    #
+                                </th>                    
+                                <th scope="col" width="10%" class="header" align="left">
+                                    Notificación
+                                </th>    
+                                <th scope="col" width="15%" class="header" align="left">
+                                    Categoria
+                                </th> 
+                                <th scope="col" width="40%" class="header" align="left">
+                                    Observación
+                                </th> 
+                                
+                                <th scope="col" width="10%" class="header" align="left">
+                                    Hora
+                                </th>     
+                                
+                            </tr>
+                        </thead> 
+                        
+                        {% for reportData in notifications %} 
+                            <tbody align="center">
+                                <tr {{ cycle(["even", "odd"], loop.index) }}>
+                                    <td align="left">{{ loop.index }}</td>
+                                    <td align="left">
+                                        <p class="assistanc button-height"> 
+                                            {% if reportData.notification == 1 %}
+                                                {% set checkState = "checked" %}
+                                                {% set disabled = "disabled" %}
+                                            {% else  %}
+                                                {% set checkState = "" %}
+                                                {% set disabled = "disabled" %}         
+                                            {% endif %}
+
+                                            <input type="checkbox" name="sip_center[rep_{{ reportData.id}}]" id="switch_{{ reportData.id }}" data="{{ reportData.id }}" value="0" class="switch blue-active mid-margin-right" {{ checkState }}  data-text-on="SI" data-text-off="NO" {{ disabled }}>
+                                        </p> 
+                                    </td> 
+                                    <td align="left">
+                                    {% if reportData.categoria > 0 %}
+                                        {{ categorias[reportData.categoria - 1].description }}
+                                    {% endif %}
+                                    </td>
+                                    <td align="justify">{{ reportData.observations }}</td>
+                                    <td align="justify">{{ reportData.day | date("H:i") }}</td>
+                                </tr>                 
+                            </tbody>                    
+                        {% endfor %}                  
+                    </table>          
+                </div>
+            
+            </fieldset>
+
+{% endblock %}
+
+{% block javascript_base %}
+    <script type="text/javascript">
+    
+        $("p.assistanc input").change(function () {
+                var value = $(this).val();
+                var mesa = $(this).attr("data");
+                if (value == 1) {
+                    $(this).val(0);
+                    //$("#obs_centro").attr("required", true);                    
+                    $("#report_centro_categoria").attr("disabled", false);                    
+                } else {
+                    $(this).val(1);                    
+                    $("#report_centro_categoria").attr("disabled", true);
+                }
+                console.log((value));
+        });
+    </script>
+{% endblock %}

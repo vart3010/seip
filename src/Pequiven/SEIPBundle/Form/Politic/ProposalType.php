@@ -32,6 +32,7 @@ class ProposalType extends AbstractType {
                         'class' => 'label'
                     ),
                     'mapped' => false,
+                    'required' => false,
                     'attr' => array(
 //                    'class' => 'input input-large',
                         'cols' => '80',
@@ -44,6 +45,7 @@ class ProposalType extends AbstractType {
                         'class' => 'label',
                     ),
                     'mapped' => false,
+                    'required' => false,
                     'attr' => array(
                         'cols' => '80',
                         'rows' => '10',
@@ -55,6 +57,91 @@ class ProposalType extends AbstractType {
                         'class' => 'label',
                     ),
                     'mapped' => false,
+                    'required' => false,
+                    'attr' => array(
+                        'cols' => '80',
+                        'rows' => '10',
+                        'style' => 'text-transform:uppercase'
+            )))
+                ->add('description4', 'textarea', array(
+                    'label' => 'Propuesta 4',
+                    'label_attr' => array(
+                        'class' => 'label',
+                    ),
+                    'mapped' => false,
+                    'required' => false,
+                    'attr' => array(
+                        'cols' => '80',
+                        'rows' => '10',
+                        'style' => 'text-transform:uppercase'
+            )))
+                ->add('description5', 'textarea', array(
+                    'label' => 'Propuesta 5',
+                    'label_attr' => array(
+                        'class' => 'label',
+                    ),
+                    'mapped' => false,
+                    'required' => false,
+                    'attr' => array(
+                        'cols' => '80',
+                        'rows' => '10',
+                        'style' => 'text-transform:uppercase'
+            )))
+                ->add('description6', 'textarea', array(
+                    'label' => 'Propuesta 6',
+                    'label_attr' => array(
+                        'class' => 'label',
+                    ),
+                    'mapped' => false,
+                    'required' => false,
+                    'attr' => array(
+                        'cols' => '80',
+                        'rows' => '10',
+                        'style' => 'text-transform:uppercase'
+            )))
+                ->add('description7', 'textarea', array(
+                    'label' => 'Propuesta 7',
+                    'label_attr' => array(
+                        'class' => 'label',
+                    ),
+                    'mapped' => false,
+                    'required' => false,
+                    'attr' => array(
+                        'cols' => '80',
+                        'rows' => '10',
+                        'style' => 'text-transform:uppercase'
+            )))
+                ->add('description8', 'textarea', array(
+                    'label' => 'Propuesta 8',
+                    'label_attr' => array(
+                        'class' => 'label',
+                    ),
+                    'mapped' => false,
+                    'required' => false,
+                    'attr' => array(
+                        'cols' => '80',
+                        'rows' => '10',
+                        'style' => 'text-transform:uppercase'
+            )))
+                ->add('description9', 'textarea', array(
+                    'label' => 'Propuesta 9',
+                    'label_attr' => array(
+                        'class' => 'label',
+                    ),
+                    'mapped' => false,
+                    'required' => false,
+                    'attr' => array(
+                        'cols' => '80',
+                        'rows' => '10',
+                        'style' => 'text-transform:uppercase'
+            )))
+                ->add('description10', 'textarea', array(
+                    'label' => 'Propuesta 10',
+                    'label_attr' => array(
+                        'class' => 'label',
+                    ),
+                    'mapped' => false,
+                    'required' => false,
                     'attr' => array(
                         'cols' => '80',
                         'rows' => '10',

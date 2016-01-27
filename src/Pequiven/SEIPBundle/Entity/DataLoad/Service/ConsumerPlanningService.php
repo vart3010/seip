@@ -62,6 +62,22 @@ class ConsumerPlanningService extends BaseModel
      * @ORM\Column(name="aliquot",type="float")
      */
     private $aliquot = 0;
+    
+    /**
+     * @var \Pequiven\SEIPBundle\Entity\DataLoad\Service\ConsumerPlanningService
+     * @ORM\OneToOne(targetEntity="\Pequiven\SEIPBundle\Entity\DataLoad\Service\ConsumerPlanningService")
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", nullable=true)
+     */
+    private $parent;
+    
+    /**
+     * Periodo.
+     * 
+     * @var \Pequiven\SEIPBundle\Entity\Period
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\Period")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $period;
 
     /**
      * Constructor
@@ -282,5 +298,49 @@ class ConsumerPlanningService extends BaseModel
             'total_year_plan' => $totalYearPlan,
         );
         return $total;
+    }
+    
+    /**
+     * Set parent
+     *
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\Service\ConsumerPlanningService $parent
+     * @return ConsumerPlanningService
+     */
+    public function setParent(\Pequiven\SEIPBundle\Entity\DataLoad\Service\ConsumerPlanningService $parent = null) {
+        $this->parent = $parent;
+
+        return $this;
+    }
+
+    /**
+     * Get parent
+     *
+     * @return \Pequiven\SEIPBundle\Entity\DataLoad\Service\ConsumerPlanningService 
+     */
+    public function getParent() {
+        return $this->parent;
+    }
+    
+    /**
+     * Set period
+     *
+     * @param \Pequiven\SEIPBundle\Entity\Period $period
+     * @return ConsumerPlanningService
+     */
+    public function setPeriod(\Pequiven\SEIPBundle\Entity\Period $period = null)
+    {
+        $this->period = $period;
+
+        return $this;
+    }
+
+    /**
+     * Get period
+     *
+     * @return \Pequiven\SEIPBundle\Entity\Period 
+     */
+    public function getPeriod()
+    {
+        return $this->period;
     }
 }

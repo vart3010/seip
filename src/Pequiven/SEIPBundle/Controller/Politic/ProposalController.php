@@ -43,29 +43,45 @@ class ProposalController extends SEIPController {
             $proposal1 = strtoupper($request->get("proposal_data")["description1"]);
             $proposal2 = strtoupper($request->get("proposal_data")["description2"]);
             $proposal3 = strtoupper($request->get("proposal_data")["description3"]);
+            $proposal4 = strtoupper($request->get("proposal_data")["description4"]);
+            $proposal5 = strtoupper($request->get("proposal_data")["description5"]);
+            $proposal6 = strtoupper($request->get("proposal_data")["description6"]);
+            $proposal7 = strtoupper($request->get("proposal_data")["description7"]);
+            $proposal8 = strtoupper($request->get("proposal_data")["description8"]);
+            $proposal9 = strtoupper($request->get("proposal_data")["description9"]);
+            $proposal10 = strtoupper($request->get("proposal_data")["description10"]);
 
-            if (strlen($proposal1) > 20 && strlen($proposal2) > 20 && strlen($proposal3) > 20) {
+//            if (strlen($proposal1) > 20 && strlen($proposal2) > 20 && strlen($proposal3) > 20) {
                 $proposals = array();
                 array_push($proposals, $proposal1);
                 array_push($proposals, $proposal2);
                 array_push($proposals, $proposal3);
+                array_push($proposals, $proposal4);
+                array_push($proposals, $proposal5);
+                array_push($proposals, $proposal6);
+                array_push($proposals, $proposal7);
+                array_push($proposals, $proposal8);
+                array_push($proposals, $proposal9);
+                array_push($proposals, $proposal10);
 
                 //Obtenemos Línea Estratégica
                 $LineStrategicRepository = $em->getRepository('PequivenMasterBundle:LineStrategic');
                 $lineStrategicObject = $LineStrategicRepository->findOneBy(array('id' => $request->get("proposal_data")["lineStrategic"]));
 
-                if (strlen($proposal1) > 0 && strlen($proposal2) > 0 && strlen($proposal3) > 0) {
-                    if (array_key_exists($request->get("proposal_data")["lineStrategic"], $proposalsArray)) {
-                        $this->get('session')->getFlashBag()->add('error', 'La Línea Estratégica ya tiene sus 2 propuestas');
-                    } else {
-                        for ($i = 1; $i <= 3; $i++) {
-                            $proposalObject = new Proposal();
-                            $proposalObject->setCreatedBy($user);
-                            $proposalObject->setPeriod($period = $this->getPeriodService()->getPeriodActive());
-                            $proposalObject->setWorkStudyCircle($workStudyCircle);
-                            $proposalObject->setLineStrategic($lineStrategicObject);
-                            $proposalObject->setDescription($proposals[$i - 1]);
-                            $em->persist($proposalObject);
+//                if (strlen($proposal1) > 0 && strlen($proposal2) > 0 && strlen($proposal3) > 0 && strlen($proposal4) > 0 && strlen($proposal5) > 0) {
+//                    if (array_key_exists($request->get("proposal_data")["lineStrategic"], $proposalsArray)) {
+//                        $this->get('session')->getFlashBag()->add('error', 'La Línea Estratégica ya tiene sus 5 propuestas');
+//                    } else {
+                        for ($i = 1; $i <= 10; $i++) {
+                            if(strlen($proposals[$i-1]) > 0){
+                                $proposalObject = new Proposal();
+                                $proposalObject->setCreatedBy($user);
+                                $proposalObject->setPeriod($period = $this->getPeriodService()->getPeriodActive());
+                                $proposalObject->setWorkStudyCircle($workStudyCircle);
+                                $proposalObject->setLineStrategic($lineStrategicObject);
+                                $proposalObject->setDescription($proposals[$i - 1]);
+                                $em->persist($proposalObject);
+                            }
                         }
 
                         $em->flush();
@@ -81,13 +97,13 @@ class ProposalController extends SEIPController {
                         $this->get('session')->getFlashBag()->add('success', 'Propuestas guardadas correctamente');
 
                         return $this->redirect($this->generateUrl('pequiven_work_study_circle_show_phase', array("id" => $workStudyCircle->getId())));
-                    }
-                } else {
-                    $this->get('session')->getFlashBag()->add('error', 'Debe agregar 3 propuestas por línea estratégica');
-                }
-            } else {
-                $this->get('session')->getFlashBag()->add('error', 'Las propuestas deben tener 20 caracteres como mínimo');
-            }
+//                    }
+//                } else {
+//                    $this->get('session')->getFlashBag()->add('error', 'Debe agregar 5 propuestas por línea estratégica');
+//                }
+//            } else {
+//                $this->get('session')->getFlashBag()->add('error', 'Las propuestas deben tener 20 caracteres como mínimo');
+//            }
         }
 
         return $this->render('PequivenSEIPBundle:Politic:Proposal\create.html.twig', array(
@@ -162,7 +178,7 @@ class ProposalController extends SEIPController {
             }
 
             $this->get('session')->getFlashBag()->add('success', 'Propuesta Actualizada Correctamente');
-            return $this->redirect($this->generateUrl('pequiven_work_study_circle_show', array("id" => $idCircle)));
+            return $this->redirect($this->generateUrl('pequiven_work_study_circle_show_phase', array("id" => $idCircle)));
         }
 
         return $this->render('PequivenSEIPBundle:Politic:Proposal/edit.html.twig', array(
@@ -206,7 +222,7 @@ class ProposalController extends SEIPController {
 
         //AGRUPO EL ARREGLO POR LINEA, ES DECIR UN REGISTRO POR CADA LINEA QUE TENGA PROPUESTA. 
         //KEY->DESCRIPCION LINEA y VALUE->FRECUENCIA (CUANTAS VECES SE REPITE)
-        
+
         $lineas = array_count_values($lineStrategics);
 
         $data = array(
@@ -258,7 +274,7 @@ class ProposalController extends SEIPController {
         $sorting = $request->get('sorting', $this->config->getSorting());
         $repository = $this->getRepository();
         $phase = $request->get('phase');
-        
+
         $criteria['phase'] = $phase;
 
         if ($this->config->isPaginated()) {
@@ -306,36 +322,34 @@ class ProposalController extends SEIPController {
         }
         return $this->handleView($view);
     }
-    
+
     /**
      * Función que devuelve el paginador con las propuestas agrupados por los círculos heredados
      * @param \Symfony\Component\HttpFoundation\Request $request
      */
-    public function listPhaseAction(Request $request){
-        
+    public function listPhaseAction(Request $request) {
+
         $securityContext = $this->container->get('security.context');
         $user = $securityContext->getToken()->getUser();
-        
-        $criteria = $request->get('filter',$this->config->getCriteria());
-        $sorting = $request->get('sorting',$this->config->getSorting());
-        
+
+        $criteria = $request->get('filter', $this->config->getCriteria());
+        $sorting = $request->get('sorting', $this->config->getSorting());
+
         $workStudyCircleParent = $request->get('workStudyCircleParent');
-        
+
         $repository = $this->getRepository();
         $criteria['workStudyCircleParent'] = $workStudyCircleParent;
-        
+
         //$criteria['user'] = $user->getId();
-        
+
         if ($this->config->isPaginated()) {
             $resources = $this->resourceResolver->getResource(
-                $repository,
-                'createPaginatorInheritedByWorkStudyCircle',
-                array($criteria, $sorting)
+                    $repository, 'createPaginatorInheritedByWorkStudyCircle', array($criteria, $sorting)
             );
-            
+
             $maxPerPage = $this->config->getPaginationMaxPerPage();
-            if(($limit = $request->query->get('limit')) && $limit > 0){
-                if($limit > 100){
+            if (($limit = $request->query->get('limit')) && $limit > 0) {
+                if ($limit > 100) {
                     $limit = 100;
                 }
                 $maxPerPage = $limit;
@@ -344,24 +358,22 @@ class ProposalController extends SEIPController {
             $resources->setMaxPerPage($maxPerPage);
         } else {
             $resources = $this->resourceResolver->getResource(
-                $repository,
-                'findBy',
-                array($criteria, $sorting, $this->config->getLimit())
+                    $repository, 'findBy', array($criteria, $sorting, $this->config->getLimit())
             );
         }
 
         $view = $this
-            ->view()
-            ->setTemplate('PequivenSEIPBundle:Politic:WorkStudyCircle/showPhase.html.twig')
-            ->setTemplateVar($this->config->getPluralResourceName())
+                ->view()
+                ->setTemplate('PequivenSEIPBundle:Politic:WorkStudyCircle/showPhase.html.twig')
+                ->setTemplateVar($this->config->getPluralResourceName())
         ;
-        $view->getSerializationContext()->setGroups(array('id','api_list','workStudyCircle','lineStrategic'));
-        if($request->get('_format') == 'html'){
+        $view->getSerializationContext()->setGroups(array('id', 'api_list', 'workStudyCircle', 'lineStrategic'));
+        if ($request->get('_format') == 'html') {
             $view->setData($resources);
-        }else{
-            $formatData = $request->get('_formatData','default');
+        } else {
+            $formatData = $request->get('_formatData', 'default');
 
-            $view->setData($resources->toArray('',array(),$formatData));
+            $view->setData($resources->toArray('', array(), $formatData));
         }
         return $this->handleView($view);
     }

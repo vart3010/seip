@@ -119,6 +119,22 @@ class PlantReport extends ModelBaseMaster {
     private $users;
 
     /**
+     * Periodo.
+     * 
+     * @var \Pequiven\SEIPBundle\Entity\Period
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\Period")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $period;
+
+    /**
+     * @var \Pequiven\SEIPBundle\Entity\DataLoad\PlantReport
+     * @ORM\OneToOne(targetEntity="\Pequiven\SEIPBundle\Entity\DataLoad\PlantReport")
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", nullable=true)
+     */
+    private $parent;
+
+    /**
      * Constructor
      */
     public function __construct() {
@@ -404,6 +420,50 @@ class PlantReport extends ModelBaseMaster {
         foreach ($this->productsReport as $productReport) {
             $productReport->recalculate();
         }
+    }
+
+    /**
+     * Set period
+     *
+     * @param \Pequiven\SEIPBundle\Entity\Period $period
+     * @return PlantReport
+     */
+    public function setPeriod(\Pequiven\SEIPBundle\Entity\Period $period = null)
+    {
+        $this->period = $period;
+
+        return $this;
+    }
+
+    /**
+     * Get period
+     *
+     * @return \Pequiven\SEIPBundle\Entity\Period 
+     */
+    public function getPeriod()
+    {
+        return $this->period;
+    }
+
+    /**
+     * Set parent
+     *
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\PlantReport $parent
+     * @return Indicator
+     */
+    public function setParent(\Pequiven\SEIPBundle\Entity\DataLoad\PlantReport $parent = null) {
+        $this->parent = $parent;
+
+        return $this;
+    }
+
+    /**
+     * Get parent
+     *
+     * @return \Pequiven\SEIPBundle\Entity\DataLoad\PlantReport 
+     */
+    public function getParent() {
+        return $this->parent;
     }
 
 }

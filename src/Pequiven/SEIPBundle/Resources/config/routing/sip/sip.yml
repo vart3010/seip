@@ -1,14 +1,23 @@
 ## SIP
-pequiven_onePerTen_create:
-    path: /1x10/create
+pequiven_sip_oneperten_pqv_list:
+    path: /oneperten-pqv/list.{_format}
     defaults:
-        _controller: pequiven.controller.onePerTen:createAction
+        _controller: pequiven.controller.center:listPqvAllAction
+        _format: html
+    requirements:
+        _format: html|json|xml        
+    methods: [GET]
+
+pequiven_onePerTen_add_member:
+    path: /1x10/add/{idUserOne}
+    defaults:
+        _controller: pequiven.controller.onePerTen:addMemberAction
     methods: [GET|POST]
     options:
         expose: true
         
 search_one_por_cedula:
-    path: /sip/search_one_per_cedula
+    path: /1x10/search_one_per_cedula
     defaults:
         _controller: pequiven.controller.onePerTen:searchAction
         
@@ -27,10 +36,567 @@ pequiven_sip_cutl_list:
     methods: [GET]
     
 pequiven_sip_cutl_show:
-    path: /cult/{id}
+    path: /cutl/{id}
     defaults:
         _controller: pequiven.controller.cutl:showAction
     methods: [GET|POST]
     options:
+        expose: true      
+        
+save_onePerTen:
+    path: /1x10/save
+    defaults:
+        _controller: pequiven.controller.onePerTen:saveAction
+    methods: [GET|POST]
+    options:
+        expose: true
+        
+pequiven_search_members:
+    path: /1x10/search
+    defaults:
+        _controller: pequiven.controller.onePerTen:searchMembersAction
+        
+pequiven_delete_member:
+    path: /1x10/delMember
+    defaults:
+        _controller: pequiven.controller.onePerTen:deleteMemeberAction
+        
+
+pequiven_onePerTen_list:
+    path: /1x10/list.{_format}
+    defaults:
+        _controller: pequiven.controller.onePerTen:listAction
+        _format: html
+    requirements:
+        _format: html|json|xml        
+    methods: [GET]
+ 
+pequiven_export_onePerTen:
+    path: /1x10/export/{idOne}
+    defaults:
+        _controller: pequiven.controller.onePerTen:exportAction
+    methods: [GET|POST]
+    options:
         expose: true
 
+#Centro 
+pequiven_sip_center_observations:    
+    path: /{idCenter}/get-form_add.{_format}
+    defaults:
+        _controller: pequiven.controller.center:formObservationsAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET]
+    options:
+        expose: true
+#Revisión Cambio de status
+pequiven_sip_center_observations_status:    
+    path: /{idObs}/get-status_add.{_format}
+    defaults:
+        _controller: pequiven.controller.center:formStatusAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET]
+    options:
+        expose: true
+#Cambio de Categoria
+pequiven_sip_center_observations_edit:    
+    path: /{idObs}/get-request-edit.{_format}
+    defaults:
+        _controller: pequiven.controller.center:formEditRequestAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET|POST]
+    options:
+        expose: true
+#Guardamos el formulario de las observaciones
+pequiven_sip_center_observations_add:
+    path: /{idCenter}/addObservations.{_format}
+    defaults:
+        _controller: pequiven.controller.center:addObservationsAction
+        _format: json
+    requirements:
+        _format: json
+    methods: [POST]
+    options:
+        expose: true
+#Guardamos la revisión
+pequiven_sip_center_observations_add_status:
+    path: /{idObs}/addStatus.{_format}
+    defaults:
+        _controller: pequiven.controller.center:formStatusAction
+        _format: json
+    requirements:
+        _format: json
+    methods: [POST]
+    options:
+        expose: true
+#Eliminacion de Observación
+pequiven_sip_center_observations_delete:
+    path: /{id}/delObservations.{_format}
+    defaults:
+        _controller: pequiven.controller.center:delObservationsAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET]
+    options:
+        expose: true
+pequiven_sip_center_request_show:
+    path: /request/{id}/show
+    defaults:
+        _controller: pequiven.controller.center:showRequestAction
+    methods: [GET|POST]
+    options:
+        expose: true 
+#Asistencia
+pequiven_sip_center_assists:
+    path: /{idCenter}/assists.{_format}
+    defaults:
+        _controller: pequiven.controller.center:formAssistsAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET]
+    options:
+        expose: true
+#Asistencia
+pequiven_sip_center_assists_edit:
+    path: /{idCenter}/assists-edit.{_format}
+    defaults:
+        _controller: pequiven.controller.center:formAssistsEditAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET]
+    options:
+        expose: true
+#Guardamos el formulario de las asistencias
+pequiven_sip_center_assists_add:
+    path: /{idCenter}/addAssists.{_format}
+    defaults:
+        _controller: pequiven.controller.center:addAssistsAction
+        _format: json
+    requirements:
+        _format: json
+    methods: [POST]
+    options:
+        expose: true
+#Guardamos la edicion de las asistencias
+pequiven_sip_center_assists_edit_center:
+    path: /{idCenter}/addAssists-edit.{_format}
+    defaults:
+        _controller: pequiven.controller.center:formAssistsEditAction
+        _format: json
+    requirements:
+        _format: json
+    methods: [POST]
+    options:
+        expose: true
+#Eliminacion de Asistencias
+pequiven_sip_center_assists_delete:
+    path: /{id}/delAssists.{_format}
+    defaults:
+        _controller: pequiven.controller.center:delAssistsAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET]
+    options:
+        expose: true
+#Asistencia
+pequiven_sip_center_activo:
+    path: /{idCenter}/center-activo.{_format}
+    defaults:
+        _controller: pequiven.controller.center:formActivoAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET|POST]
+    options:
+        expose: true
+#Inventario
+pequiven_sip_center_inventory:
+    path: /{idCenter}/inventory.{_format}
+    defaults:
+        _controller: pequiven.controller.center:formInventoryAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET]
+    options:
+        expose: true
+pequiven_sip_center_inventory_show:
+    path: /inventory/{id}/show
+    defaults:
+        _controller: pequiven.controller.center:showInventoryAction
+    methods: [GET|POST]
+    options:
+        expose: true 
+pequiven_sip_request_list_inventory:
+    path: /inventory/list.{_format}
+    defaults:
+        _controller: pequiven.controller.center:listInventoryAction
+        _format: html
+    requirements:
+        _format: html|json|xml        
+    methods: [GET]
+#Guardamos el formulario del inventario
+pequiven_sip_center_inventory_add:
+    path: /{idCenter}/addInventory.{_format}
+    defaults:
+        _controller: pequiven.controller.center:formInventoryAction
+        _format: json
+    requirements:
+        _format: json
+    methods: [POST]
+    options:
+        expose: true
+#Eliminacion de Inventario
+pequiven_sip_center_inventory_delete:
+    path: /{id}/delInventory.{_format}
+    defaults:
+        _controller: pequiven.controller.center:delInventoryAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET]
+    options:
+        expose: true
+pequiven_sip_center_list:
+    path: /center/list.{_format}
+    defaults:
+        _controller: pequiven.controller.center:listAction
+        _format: html
+    requirements:
+        _format: html|json|xml        
+    methods: [GET]
+pequiven_sip_center_show:
+    path: /center/{id}
+    defaults:
+        _controller: pequiven.controller.center:showAction
+    methods: [GET|POST]
+    options:
+        expose: true
+        
+pequiven_sip_center_export:
+    path: /center/{idCenter}/Type/{type}
+    defaults:
+        _controller: pequiven.controller.center:exportAction
+    methods: [GET|POST]
+    options:
+        expose: true
+#Reporte de mesas
+pequiven_sip_center_report:
+    path: /{idCenter}/center-report.{_format}
+    defaults:
+        _controller: pequiven.controller.center:formCenterReportAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET]
+    options:
+        expose: true
+pequiven_sip_center_report_add:
+    path: /center-report-add
+    defaults:
+        _controller: pequiven.controller.center:formCenterReportAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [POST]
+    options:
+        expose: true
+#Reporte de Votos 
+pequiven_sip_center_report_voto:
+    path: /{idCenter}/report-center.{_format}
+    defaults:
+        _controller: pequiven.controller.center:formReportCenterAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET|POST]
+    options:
+        expose: true
+#UBCH
+pequiven_ubch_add_member:
+    path: /ubch/add/{idCentro}
+    defaults:
+        _controller: pequiven.controller.ubch:addMemberAction
+    methods: [GET|POST]
+    options:
+        expose: true
+pequiven_ubch_member_search:
+    path: /ubch/search
+    defaults:
+        _controller: pequiven.controller.ubch:searchAction
+pequiven_ubch_member_save:
+    path: /ubch/save
+    defaults:
+        _controller: pequiven.controller.ubch:saveAction
+    methods: [GET|POST]
+    options:
+        expose: true
+pequiven_ubch_show:
+    path: /ubch/show/{id}
+    defaults:
+        _controller: pequiven.controller.ubch:showAction
+    methods: [GET|POST]
+    options:
+        expose: true
+#Eliminacion de miembro
+pequiven_ubch_delete_member:
+    path: /{id}/delUbch.{_format}
+    defaults:
+        _controller: pequiven.controller.ubch:delUbchAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET]
+    options:
+        expose: true
+update_assistance_ubch:
+    path: /sip/ubch/update
+    defaults:
+        _controller: pequiven.controller.ubch:updateAssistance
+pequiven_sip_ubch_form_report:    
+    path: /{id}/get-form_ubch.{_format}
+    defaults:
+        _controller: pequiven.controller.ubch:formUbchAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET]
+    options:
+        expose: true
+#Guardamos el formulario de las observaciones
+pequiven_sip_ubch_add_report:
+    path: /{id}/addUbchReport.{_format}
+    defaults:
+        _controller: pequiven.controller.ubch:formUbchAction
+        _format: json
+    requirements:
+        _format: json
+    methods: [POST]
+    options:
+        expose: true
+#Form Cargo de ubch
+pequiven_sip_ubch_cargo_edit:    
+    path: /{id}/get-cargo-ucbh.{_format}
+    defaults:
+        _controller: pequiven.controller.ubch:formCargoAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET]
+    options:
+        expose: true
+#Actualizamos el cargo de los Ubch
+pequiven_sip_ubch_cargo_update:
+    path: /{id}/add-cargo.{_format}
+    defaults:
+        _controller: pequiven.controller.ubch:formCargoAction
+        _format: json
+    requirements:
+        _format: json
+    methods: [POST]
+    options:
+        expose: true
+#Reporte UBCH
+pequiven_ubch_report_export:
+    path: /export-ubch/{id}
+    defaults:
+        _controller: pequiven.controller.ubch:exportAction
+    methods: [GET|POST]
+    options:
+        expose: true
+pequiven_sip_cutl_list_pqv:
+    path: /center/list-pqv/{idCentro}.{_format}
+    defaults:
+        _controller: pequiven.controller.center:listPqvAction
+        _format: html
+    requirements:
+        _format: html|json|xml        
+    methods: [GET]
+pequiven_sip_cutl_list_optm:
+    path: /center/list-optm/{idCentro}.{_format}
+    defaults:
+        _controller: pequiven.controller.center:listOnePerTenMembersAction
+        _format: html
+    requirements:
+        _format: html|json|xml        
+    methods: [GET]
+#Lista de Requerimientos
+pequiven_sip_request_list:
+    path: /request/list.{_format}
+    defaults:
+        _controller: pequiven.controller.center:listRequestAction
+        _format: html
+    requirements:
+        _format: html|json|xml        
+    methods: [GET]
+    
+pequiven_sip_request_list_inventory:
+    path: /inventory/list.{_format}
+    defaults:
+        _controller: pequiven.controller.center:listInventoryAction
+        _format: html
+    requirements:
+        _format: html|json|xml        
+    methods: [GET]    
+pequiven_sip_report:
+    path: /Report
+    defaults:
+        _controller: pequiven.controller.report:showAction
+
+#Reportes Excel
+pequiven_sip_report_asist:
+    path: /Report/Asist
+    defaults:
+        _controller: pequiven.controller.report:AssistAction
+    requirements:
+        _format: html|json|xml        
+    methods: [GET|POST]   
+    
+pequiven_sip_report_asisthistory:
+    path: /Report/Asist_History
+    defaults:
+        _controller: pequiven.controller.report:AssistHistoryAction
+    requirements:
+        _format: html|json|xml        
+    methods: [GET|POST]  
+    
+pequiven_sip_report_activehistory:
+    path: /Report/Active_History
+    defaults:
+        _controller: pequiven.controller.report:ActiveHistoryAction
+    requirements:
+        _format: html|json|xml        
+    methods: [GET|POST] 
+    
+pequiven_sip_report_DailyRequirements:
+    path: /Report/Daily_Requirements
+    defaults:
+        _controller: pequiven.controller.report:DailyRequirementsAction
+    requirements:
+        _format: html|json|xml        
+    methods: [GET|POST]
+        
+pequiven_sip_report_EarringsRequirements:
+    path: /Report/Earrings_Requirements
+    defaults:
+        _controller: pequiven.controller.report:EarringsRequirementsAction
+    requirements:
+        _format: html|json|xml        
+    methods: [GET|POST]
+    
+pequiven_sip_report_Inventory:
+    path: /Report/Inventory
+    defaults:
+        _controller: pequiven.controller.report:InventoryAction
+    requirements:
+        _format: html|json|xml        
+    methods: [GET|POST]
+    
+pequiven_sip_report_OnePerTen:
+    path: /Report/OnePerTen
+    defaults:
+        _controller: pequiven.controller.report:OnePerTenAction
+    requirements:
+        _format: html|json|xml        
+    methods: [GET|POST]
+    
+pequiven_sip_report_SegVoto:
+    path: /Report/SegVotoReport
+    defaults:
+        _format: html
+        _controller: pequiven.controller.report:SegVotoAction
+    requirements:
+        _format: html|json|xml        
+    methods: [GET|POST]
+    
+#Reporte de voto
+pequiven_sip_report_voto:
+    path: /voto
+    defaults:
+        _controller: pequiven.controller.voto:showAction
+        
+pequiven_sip_report_voto_search:
+    path: /voto/search
+    defaults:
+        _controller: pequiven.controller.voto:searchAction
+        
+pequiven_sip_report_voto_add:
+    path: /voto/save
+    defaults:
+        _controller: pequiven.controller.voto:saveAction
+    methods: [GET|POST]
+    options:
+        expose: true
+      
+pequiven_sip_display_voto_general:
+    path: /display/general
+    defaults:
+        _controller: pequiven.controller.display:generalAction
+        
+pequiven_sip_display_voto_general_estado:
+    path: /display/general/{type}/{edo}
+    defaults:
+        _controller: pequiven.controller.display:generalEdoAction
+
+pequiven_sip_display_voto_general_mcpo:
+    path: /display/general/mcpo/{type}/{edo}/{mcpo}
+    defaults:
+        _controller: pequiven.controller.display:generalMcpoAction
+
+pequiven_sip_display_voto_pqv:
+    path: /display/pqv
+    defaults:
+        _controller: pequiven.controller.display:votoAction
+        
+pequiven_sip_display_voto_pqv_edo:
+    path: /display/pqv/{type}/{edo}
+    defaults:
+        _controller: pequiven.controller.display:generalEdoAction
+
+pequiven_sip_display_voto_pqv_mcpo:
+    path: /display/pqv/mcpo/{type}/{edo}/{mcpo}
+    defaults:
+        _controller: pequiven.controller.display:generalMcpoAction
+pequiven_sip_display_voto_circuito_5:
+    path: /display/circuito/5
+    defaults:
+        _controller: pequiven.controller.display:circuitoAction
+pequiven_sip_display_voto_cet:
+    path: /display/voto/cet
+    defaults:
+        _controller: pequiven.controller.display:cetAction
+pequiven_sip_display_voto_localidad:
+    path: /display/voto/localidad/{edo}
+    defaults:
+        _controller: pequiven.controller.display:localidadAction
+pequiven_sip_display_voto_1x10:
+    path: /display/voto/1x10
+    defaults:
+        _controller: pequiven.controller.display:onePerTenAction
+
+pequiven_sip_list_voto_general:
+    path: /vote/list/general/{type}/{edo}/{mcpo}/{parroq}
+    defaults:
+        _format: html
+        _controller: pequiven.controller.sipList:ListGeneralVoteAction
+    requirements:
+        _format: html|json|xml        
+    methods: [GET|POST]
+    
+pequiven_sip_show_oneperten_pqv:
+    path: /viewonepertenpqv.{_format}
+    defaults: 
+        _controller: pequiven.controller.oneperten:listWithVoteAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+    methods: [GET]

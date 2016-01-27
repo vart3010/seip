@@ -1,0 +1,67 @@
+{% trans_default_domain 'sip' %}
+
+<div class="block">    
+    <div ng-controller="SipCenterInventoryController"> 
+
+        <div class="block-title">
+            <h3 class="ng-binding">{{ 'sip.inventory'|trans({}) }}</h3>             
+            <div class="button-group absolute-right compact">
+                <a class="button icon-list-add " href="" ng-click="loadTemplateInventory()" title="">{{ 'pequiven.add'|trans({},'messages')  }}</a>
+            </div>       
+        </div>
+        <div class="with-padding">            
+            <table class="table responsive-table" id="sorting-example2">
+                <thead>
+                    <tr> 
+                        <th scope="col" width="20%" class="header">Material</th>
+                        <th scope="col" width="50%" class="header">Observación</th>
+                        <th scope="col" width="15%" class="header">Cantidad</th>
+                        <th scope="col" width="15%" class="header">Fecha</th>
+                        <th scope="col" width="15%" class="header"></th>
+                    </tr>
+                </thead>                
+                {% for dataInv  in inventory %}
+                    {% set dayShow = dataInv.fecha | date("d") %}
+                    {% set monthShow = dataInv.fecha | date("n") %}
+                    {% if dayShow == "06" and monthShow == "12" %}
+                        <tbody>
+                            <tr>
+                                <td>{{ dataInv.material }}</td>
+
+                                <td align="justify">{{ dataInv.observations }}</td>
+
+                                <td>{{ dataInv.cantidad }}</td>
+
+                                <td>{{ dataInv.fecha | date("d/m/Y") }}</td>
+                                <td class="align-right vertical-center">
+                                    <span class="select compact">
+                                        <a href class="select-value form-edit">{{ 'pequiven.actions'|trans({},'messages') }}</a>
+                                        <span class="select-arrow"></span>
+                                        <span class="drop-down">
+                                            <a href ng-click="removeInventory(inventory='{{ dataInv.id }}')" class="button icon-cross-round">{{ "pequiven.actions.delete"|trans({},"messages") }}</a>
+                                        </span>
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                        {% endif %}
+                {% endfor %}
+            </table>
+            &nbsp;    
+            {#{% if(is_granted(["ROLE_SEIP_WORK_STUDY_CIRCLES_EXPORT_REPORT"])) %}#}
+            <div class="align-left">
+
+                {% set routeExport = path('pequiven_sip_center_export',{idCenter:center.id, type:4}) %}
+
+                {{ buttons.generic(
+                    (routeExport),
+                    ('sip.export.exportpdf'|trans({})),
+                    'icon-download'
+                 ) 
+                }}
+
+            </div>              
+            {#{% endif %}#}
+        </div>
+    </div>
+</div>

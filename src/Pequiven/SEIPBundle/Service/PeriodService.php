@@ -29,11 +29,21 @@ class PeriodService extends ContainerAware
         $period = $this->getPeriodActive();
         $now = new \DateTime();
         
+        $periodsAll = $this->getPeriodsAvailableConsultation();
         if(
             ($now >= $period->getDateStartNotificationArrangementProgram() && $now <= $period->getDateEndNotificationArrangementProgram())
           ){
             $result = true;
+        } else{
+            foreach($periodsAll as $itemPeriod){
+                if($period->getId() == $itemPeriod->getId()){
+                    if($itemPeriod->getStatus() == 1){
+                        $result = true;
+                    }
+                }
+            }
         }
+
         return $result;
     }
     /**
@@ -75,9 +85,18 @@ class PeriodService extends ContainerAware
         $result = false;
         $period = $this->getPeriodActive();
         $now = new \DateTime();
+        $periodsAll = $this->getPeriodsAvailableConsultation();
         
-        if($now >= $period->getDateStartLoadArrangementProgram() && $now <= $period->getDateEndLoadArrangementProgram()){
+        if(($now >= $period->getDateStartLoadArrangementProgram() && $now <= $period->getDateEndLoadArrangementProgram())){
             $result = true;
+        } else{
+            foreach($periodsAll as $itemPeriod){
+                if($itemPeriod->getOpened() == 1 && $itemPeriod->getId() == $period->getId()){
+                    if($now >= $itemPeriod->getDateStartLoadArrangementProgram() && $now <= $itemPeriod->getDateEndLoadArrangementProgram()){
+                        $result = true;
+                    }
+                }
+            }
         }
         return $result;
     }
@@ -108,8 +127,17 @@ class PeriodService extends ContainerAware
         $period = $this->getPeriodActive();
         $now = new \DateTime();
         
+        $periodsAll = $this->getPeriodsAvailableConsultation();
         if($now >= $period->getDateStartLoadObjetive() && $now <= $period->getDateEndLoadObjetive()){
             $result = true;
+        } else{
+            foreach($periodsAll as $itemPeriod){
+                if($itemPeriod->getOpened() == 1 && $itemPeriod->getId() == $period->getId()){
+                    if($now >= $itemPeriod->getDateStartLoadObjetive() && $now <= $itemPeriod->getDateEndLoadObjetive()){
+                        $result = true;
+                    }
+                }
+            }
         }
         
         return $result;
@@ -126,10 +154,19 @@ class PeriodService extends ContainerAware
         $period = $this->getPeriodActive();
         $now = new \DateTime();
         
+        $periodsAll = $this->getPeriodsAvailableConsultation();
         if($now >= $period->getDateStartLoadIndicator() && $now <= $period->getDateEndLoadIndicator()){
             $result = true;
+        } else{
+            foreach($periodsAll as $itemPeriod){
+                if($itemPeriod->getOpened() == 1 && $itemPeriod->getId() == $period->getId()){
+                    if($now >= $itemPeriod->getDateStartLoadIndicator() && $now <= $itemPeriod->getDateEndLoadIndicator()){
+                        $result = true;
+                    }
+                }
+            }
         }
-        
+
         return $result;
     }
 

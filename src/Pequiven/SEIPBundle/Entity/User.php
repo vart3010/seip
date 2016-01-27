@@ -189,6 +189,13 @@ class User extends BaseUser implements UserInterface, UserBoxInterface, PeriodIt
     private $reportTemplates;
 
     /**
+     * Reportes de plantas de despacho que puede carga el usuario
+     * @var Delivery\ReportTemplateDelivery
+     * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\Delivery\ReportTemplateDelivery",inversedBy="users")
+     */
+    private $reportTemplatesDelivery;
+
+    /**
      * @ORM\ManyToOne(targetEntity="\Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle", inversedBy="userWorkerId")
      * @ORM\JoinColumn(name="workStudyCircle_id", referencedColumnName="id")
      * */
@@ -228,13 +235,25 @@ class User extends BaseUser implements UserInterface, UserBoxInterface, PeriodIt
      * 
      */
     private $evolutionAction;
-    
-     /**
+
+    /**
 
      * @var Pequiven\ArrangementProgramBundle\Entity\MovementEmployee\MovementEmployee
      * @ORM\OneToMany(targetEntity="Pequiven\ArrangementProgramBundle\Entity\MovementEmployee\MovementEmployee", mappedBy="User")
      * */
     private $movementEmployee;
+
+    /**
+     * @var Pequiven\SEIPBundle\Entity\User\FeeStructure
+     * @ORM\OneToMany(targetEntity="\Pequiven\SEIPBundle\Entity\User\FeeStructure", mappedBy="User")
+     * */
+    private $feeStructure;
+
+    /**
+     * @var Pequiven\SEIPBundle\Entity\User\MovementFeeStructure
+     * @ORM\OneToMany(targetEntity="\Pequiven\SEIPBundle\Entity\User\MovementFeeStructure",mappedBy="User",cascade={"persist"}))
+     */
+    protected $movementFeeStructure;
 
     /**
      * Constructor
@@ -250,8 +269,10 @@ class User extends BaseUser implements UserInterface, UserBoxInterface, PeriodIt
         $this->groups = new \Doctrine\Common\Collections\ArrayCollection();
         $this->plantReports = new \Doctrine\Common\Collections\ArrayCollection();
         $this->reportTemplates = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->reportTemplatesDelivery = new \Doctrine\Common\Collections\ArrayCollection();
         $this->workStudyCircles = new \Doctrine\Common\Collections\ArrayCollection();
         $this->evolutionAction = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->feeStructure = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -877,6 +898,33 @@ class User extends BaseUser implements UserInterface, UserBoxInterface, PeriodIt
 
     /**
      * 
+     * @param \Pequiven\SEIPBundle\Entity\Delivery\ReportTemplateDelivery $reportTemplatesDelivery
+     * @return \Pequiven\SEIPBundle\Entity\User
+     */
+    public function addReportTemplatesDelivery(\Pequiven\SEIPBundle\Entity\Delivery\ReportTemplateDelivery $reportTemplatesDelivery) {
+        $this->reportTemplatesDelivery[] = $reportTemplatesDelivery;
+
+        return $this;
+    }
+
+    /**
+     * 
+     * @param \Pequiven\SEIPBundle\Entity\Delivery\ReportTemplateDelivery $reportTemplatesDelivery
+     */
+    public function removeReportTemplatesDelivery(\Pequiven\SEIPBundle\Entity\Delivery\ReportTemplateDelivery $reportTemplatesDelivery) {
+        $this->reportTemplatesDelivery->removeElement($reportTemplatesDelivery);
+    }
+
+    /**
+     * 
+     * @return type
+     */
+    public function getReportTemplatesDelivery() {
+        return $this->reportTemplatesDelivery;
+    }
+
+    /**
+     * 
      * @return type
      */
     public function setWorkStudyCircle(Politic\WorkStudyCircle $workStudyCircle = null) {
@@ -946,7 +994,6 @@ class User extends BaseUser implements UserInterface, UserBoxInterface, PeriodIt
     public function getWorkStudyCircles() {
         return $this->workStudyCircles;
     }
-
 
     /**
      * Add evolutionAction

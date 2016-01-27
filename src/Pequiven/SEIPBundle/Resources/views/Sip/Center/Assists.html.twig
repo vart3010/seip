@@ -1,0 +1,103 @@
+{% trans_default_domain 'sip' %}
+
+<div class="block">
+    <div ng-controller="SipCenterAssistsController"> 
+
+        <div class="block-title">
+            <h3 class="ng-binding">{{ 'sip.assists'|trans({}) }}</h3> 
+            {# añadir asistencia #}
+            {% if show == 1 %}
+            <div class="button-group absolute-right compact">
+                <a class="button icon-list-add " href="" ng-click="loadTemplateAssists()" title="">{{ 'pequiven.add'|trans({},'messages')  }}</a>
+                {% for data in assist %}
+                    
+                    {% set fecha = data.fecha | date("d/m/Y") %}
+                    {% set day = "now"|date("d/m/Y") %}
+
+                {% if fecha == day %}   
+                    <a href="" ng-click="loadTemplateAssistsEdit()" class="button icon-pencil ">Editar</a>
+                {% endif %}
+                {% endfor %} 
+
+            </div>       
+            {% endif %}
+        </div>
+
+        <div class="with-padding">            
+            <table class="table responsive-table" id="sorting-example2">
+                <thead>
+                    <tr>
+                        <th scope="col" width="30%" class="header" align="left">
+                            CUTL
+                        </th>                    
+                        <th scope="col" width="10%" class="header" align="left">
+                            Fecha
+                        </th>    
+                        <th scope="col" width="10%" class="header" align="left">
+                            Asistencia
+                        </th> 
+                        <th scope="col" width="30%" class="header" align="left">
+                            Observación
+                        </th> 
+                        {% if show == 1 %} 
+                        <th scope="col" width="15%" class="header" align="left"></th>     
+                        {% endif %}
+                    </tr>
+                </thead> 
+                {% if cantCutl != 0 %}
+                    {% for data in assist %}
+                        {% set dayShow = data.fecha | date("d") %}
+                        {% set monthShow = data.fecha | date("n") %}
+                        {% if dayShow == "06" and monthShow == "12" %}
+                            <tbody align="center">
+                                <tr>
+                                    {% if validacionCutl != 0 %}
+                                    <td align="left">{{ nomCutl[data.cedula]  }}</td>
+                                    {% else %}
+                                    <td align="left"></td>
+                                    {% endif %}
+                                    <td align="left">{{ data.fecha | date("d/m/Y")  }}</td>
+                                    <td align="left">
+                                        {% set assist = data.assists %}
+                                        {% if(assist == 1 ) %}
+                                            {% set checkState = "checked" %}
+                                        {% else  %}
+                                            {% set checkState = "" %}
+                                        {% endif %}
+                                        <input type="checkbox" value="{{ data.assists  }}" class="switch blue-active mid-margin-right {{ checkState }}"  data-text-on="SI" data-text-off="NO" disabled>
+                                    </td>
+                                    <td align="justify">{{ data.observations }}</td>
+                                    {% if show == 1 %}
+                                    <td class="align-right vertical-center">
+                                        <span class="select compact">
+                                            <a href class="select-value form-edit">{{ 'pequiven.actions'|trans({},'messages') }}</a>
+                                            <span class="select-arrow"></span>
+                                            <span class="drop-down">
+                                                <a href ng-click="removeAssists(assists='{{ data.id }}')" class="button icon-cross-round">{{ "pequiven.actions.delete"|trans({},"messages") }}</a>
+                                            </span>
+                                        </span>
+                                    </td>
+                                    {% endif %}
+                                </tr>
+                            </tbody>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            </table> 
+            &nbsp;  
+            {% if show == 1 %} 
+            <div class="align-left">
+
+                {% set routeExport = path('pequiven_sip_center_export',{idCenter:center.id, type:2}) %}
+
+                {{ buttons.generic(
+                    (routeExport),
+                    ('sip.export.exportpdf'|trans({})),
+                    'icon-download'
+                 ) 
+                }}
+            </div>
+            {% endif %}          
+        </div>
+    </div>
+</div>

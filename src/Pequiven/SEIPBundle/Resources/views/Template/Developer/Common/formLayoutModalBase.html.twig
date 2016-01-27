@@ -1,0 +1,70 @@
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+{% block stylesheets %}
+    <!-- Select2 -->
+    <link rel="stylesheet" href="{{ asset('bundles/pequivenseip/select2-3.5.0/select2.css') }}">      
+{% endblock %}
+
+{% block javascripts_base %}
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $.datepicker.regional['es'] = {
+                closeText: 'Cerrar',
+                prevText: '&#x3C;Ant',
+                nextText: 'Sig&#x3E;',
+                currentText: 'Hoy',
+                monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
+                'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
+                monthNamesShort: ['Ene','Feb','Mar','Abr','May','Jun',
+                'Jul','Ago','Sep','Oct','Nov','Dic'],
+                dayNames: ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'],
+                dayNamesShort: ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'],
+                dayNamesMin: ['D','L','M','X','J','V','S'],
+                weekHeader: 'Sm',
+{#                dateFormat: 'dd/mm/yy',#}
+                firstDay: 1,
+                isRTL: false,
+                showMonthAfterYear: false,
+                yearSuffix: ''};
+            $.datepicker.setDefaults($.datepicker.regional['es']);
+        });
+
+    </script>
+{% endblock javascripts_base %}
+    
+{% block body %}
+
+{% endblock %}
+
+{% block javascripts %}    
+    <script type="text/javascript">
+        
+        $(document).ready(function () {
+            $("#fee_structure_add_User").select2({
+                minimumInputLength: 3,
+            });
+        });
+
+        $(document).ready(function () {
+            $("#fee_structure_add_cause").select2({
+                //minimumInputLength: 3,
+            });
+        });
+        
+        $("#fee_structure_add_date").datepicker({                
+                changeMonth: true,
+                numberOfMonths: 1,
+                dateFormat: "dd/mm/yy"
+        });
+
+    </script>
+   
+    <script src="{{ asset('bundles/pequivenseip/jquery-ui.custom/i18n/datepicker-es.js') }}"></script>
+    
+    <!-- Select2 -->
+    <script src="{{ asset('bundles/pequivenseip/select2-3.5.0/select2.min.js') }}"></script>
+    <!-- Select2 -->   
+    {% block javascript_base %}
+    {% endblock %}
+
+{% endblock javascripts %}

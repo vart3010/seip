@@ -11,7 +11,7 @@ use Pequiven\IndicatorBundle\Model\Indicator\EvolutionIndicator\EvolutionAction 
  *
  * @author Maximo Sojo <maxsojo13@gmail.com>
  * @ORM\Table(name="seip_report_evolution_action")
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="Pequiven\IndicatorBundle\Repository\Indicator\EvolutionIndicator\EvolutionActionRepository") 
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
 class EvolutionAction extends Model {

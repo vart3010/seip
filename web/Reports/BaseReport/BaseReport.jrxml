@@ -96,7 +96,7 @@
 		<band height="19" splitType="Stretch"/>
 	</columnHeader>
 	<detail>
-		<band height="12" splitType="Stretch"/>
+		<band height="25" splitType="Stretch"/>
 	</detail>
 	<columnFooter>
 		<band height="14" splitType="Stretch"/>
@@ -130,6 +130,6 @@
 		</band>
 	</pageFooter>
 	<summary>
-		<band height="9" splitType="Stretch"/>
+		<band height="17" splitType="Stretch"/>
 	</summary>
 </jasperReport>

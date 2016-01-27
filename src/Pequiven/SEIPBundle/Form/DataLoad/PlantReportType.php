@@ -18,7 +18,7 @@ class PlantReportType extends SeipAbstractForm
         $entity = $builder->getData();
         
         $location = $entity->getReportTemplate()->getLocation();
-        
+
         $parametersPreSet = array(
             'label_attr' => array('class' => 'label'),
             "empty_value" => "",

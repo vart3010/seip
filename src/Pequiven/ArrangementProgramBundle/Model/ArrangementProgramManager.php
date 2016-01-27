@@ -72,11 +72,11 @@ class ArrangementProgramManager implements ContainerAwareInterface
             }
 
             if($entity->getType() === ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC 
-                && $configuration->getArrangementProgramUsersToApproveTactical()->contains($user) === true){
+                && $configuration->getArrangementProgramUsersToApproveTactical()->contains($user) === true && $entity->getTacticalObjective()->getStatus() == true){
                 $valid = true;
             }
             if($entity->getType() === ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE 
-                && $configuration->getArrangementProgramUsersToApproveOperative()->contains($user) === true){
+                && $configuration->getArrangementProgramUsersToApproveOperative()->contains($user) === true && $entity->getTacticalObjective()->getStatus() == true && $entity->getOperationalObjective()->getStatus() == true){
                 $valid = true;
             }
         } else{
@@ -236,15 +236,15 @@ class ArrangementProgramManager implements ContainerAwareInterface
                     && $entity->getStatus() == ArrangementProgram::STATUS_APPROVED
                     && ($details->getLastNotificationInProgressByUser() === null || $entity->getResult() == 0 || (($entity->getResult() > 0 || $entity->getResult() < 0) && $details->getNotificationInProgressByUser() === null) || ((($entity->getResult() > 0 || $entity->getResult() < 0) && $details->getNotificationInProgressByUser()->getId() === $user->getId())))
                 ) {
-
                 if($periodService->isAllowNotifyArrangementProgramInClearance() === true){
                     $valid = true;
                 }elseif($periodService->isAllowNotifyArrangementProgram() === true){
                     $valid = true;
                 }
-            } elseif($entity->getStatus() == ArrangementProgram::STATUS_DRAFT && $this->isGranted('ROLE_SEIP_ARRANGEMENT_PROGRAM_CHARGE_PLAN')){
-                $valid = true;
-            }
+            } 
+//            elseif($entity->getStatus() == ArrangementProgram::STATUS_DRAFT && $this->isGranted('ROLE_SEIP_ARRANGEMENT_PROGRAM_CHARGE_PLAN')){
+//                $valid = true;
+//            }
         } else{
             $gerencia = $this->container->get('pequiven.repository.gerenciafirst')->findOneBy(array('abbreviation' => 'sigco'));
             $configuration = $gerencia->getConfiguration();

@@ -289,7 +289,7 @@ abstract class ArrangementProgram {
         );
 
         $refresh = false;
-        if (isset($options['refresh']) && $options['refresh'] === true) {
+        if (isset($options['refresh']) && $options['refresh'] == true) {
             $refresh = true;
         }
 
@@ -382,20 +382,16 @@ abstract class ArrangementProgram {
                     }
                 }
 
-                if (($refresh === true) and ( $em <> null)) {
+                if (($refresh == true) && ( $em <> null)) {
                     //RESTAURO EL VALOR DE LA META
                     $goal->setAdvance($advanceRealGoal);
                     $goal->setResultReal($advanceRealGoal);
-                                        
-                    //GUARDO EL VALOR EN EL CAMPO DE RESPALDO
-                    $goal->setresultBeforepenalty($advanceRealGoal);
+
+                    //SALVO EL VALOR DE LA META CUANDO ESTA SOBREPASA LOS 120% DE CUMPLIMIENTO O QUEDA COMO NEGATIVO
+                    $goal->setRealResult($advanceRealGoal);
                     $em->persist($goal);
                     $em->flush();
-                }
-                
-                if(($refresh === false) and ( $em <> null)){ 
-                $advancesReal = $advancesReal - (($goal->getPenalty()*$weight)/100);
-                }
+                }             
             }
         }
 
@@ -411,6 +407,7 @@ abstract class ArrangementProgram {
         if ($realMonthDateEnd != -1) {
             $dateEndReal->setDate($dateEndReal->format('Y'), $realMonthDateEnd, \Pequiven\SEIPBundle\Service\ToolService::getLastDayMonth($dateEndReal->format('Y'), $realMonthDateEnd));
         }
+
 //        die;
         $summary['advances'] = $advancesReal;
         $summary['weight'] = $totalWeight;

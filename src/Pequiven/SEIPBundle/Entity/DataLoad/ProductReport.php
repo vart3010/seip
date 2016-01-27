@@ -11,7 +11,7 @@
 
 namespace Pequiven\SEIPBundle\Entity\DataLoad;
 
-use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping as ORM;   
 use Pequiven\SEIPBundle\Model\DataLoad\ProductReport as BaseModel;
 
 /**
@@ -91,6 +91,22 @@ class ProductReport extends BaseModel
      * @ORM\ManyToOne(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator")
      */
     private $indicator;
+
+    /**
+     * Periodo.
+     * 
+     * @var \Pequiven\SEIPBundle\Entity\Period
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\Period")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $period;
+
+    /**
+     * @var \Pequiven\SEIPBundle\Entity\DataLoad\ProductReport
+     * @ORM\OneToOne(targetEntity="\Pequiven\SEIPBundle\Entity\DataLoad\ProductReport")
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", nullable=true)
+     */
+    private $parent;
     
     private $name = '';
 
@@ -428,5 +444,49 @@ class ProductReport extends BaseModel
         }
         
         return $_toString;
+    }
+
+    /**
+     * Set period
+     *
+     * @param \Pequiven\SEIPBundle\Entity\Period $period
+     * @return Objetive
+     */
+    public function setPeriod(\Pequiven\SEIPBundle\Entity\Period $period = null)
+    {
+        $this->period = $period;
+
+        return $this;
+    }
+
+    /**
+     * Get period
+     *
+     * @return \Pequiven\SEIPBundle\Entity\Period 
+     */
+    public function getPeriod()
+    {
+        return $this->period;
+    }
+
+    /**
+     * Set parent
+     *
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\ProductReport $parent
+     * @return Indicator
+     */
+    public function setParent(\Pequiven\SEIPBundle\Entity\DataLoad\ProductReport $parent = null) {
+        $this->parent = $parent;
+
+        return $this;
+    }
+
+    /**
+     * Get parent
+     *
+     * @return \Pequiven\SEIPBundle\Entity\DataLoad\ProductReport 
+     */
+    public function getParent() {
+        return $this->parent;
     }
 }

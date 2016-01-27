@@ -1395,6 +1395,15 @@ class ProductDetailDailyMonth extends BaseModel
      * @ORM\Column(name="day31_status",type="integer",length=1,nullable=false)
      */
     private $day31Status= 0;
+
+    /**
+     * Periodo.
+     * 
+     * @var \Pequiven\SEIPBundle\Entity\Period
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\Period")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $period;
     
     /**
      * Get id
@@ -5957,5 +5966,28 @@ class ProductDetailDailyMonth extends BaseModel
             $_toString = $this->getMonthLabel();
         }
         return $_toString;
+    }
+
+    /**
+     * Set period
+     *
+     * @param \Pequiven\SEIPBundle\Entity\Period $period
+     * @return Objetive
+     */
+    public function setPeriod(\Pequiven\SEIPBundle\Entity\Period $period = null)
+    {
+        $this->period = $period;
+
+        return $this;
+    }
+
+    /**
+     * Get period
+     *
+     * @return \Pequiven\SEIPBundle\Entity\Period 
+     */
+    public function getPeriod()
+    {
+        return $this->period;
     }
 }

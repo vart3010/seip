@@ -14,8 +14,8 @@ use Pequiven\MasterBundle\Model\Complejo as modelComplejo;
  * @ORM\Table(name="seip_c_complejo")
  * @ORM\Entity(repositoryClass="Pequiven\MasterBundle\Repository\ComplejoRepository")
  */
-class Complejo extends modelComplejo
-{
+class Complejo extends modelComplejo {
+
     /**
      * @var integer
      *
@@ -38,7 +38,7 @@ class Complejo extends modelComplejo
      * @ORM\Column(name="updated_at", type="datetime")
      */
     private $updatedAt;
-    
+
     /**
      * User
      * @var \Pequiven\SEIPBundle\Entity\User
@@ -46,7 +46,7 @@ class Complejo extends modelComplejo
      * @ORM\JoinColumn(name="fk_user_created_at", referencedColumnName="id")
      */
     private $userCreatedAt;
-    
+
     /**
      * User
      * @var \Pequiven\SEIPBundle\Entity\User
@@ -54,14 +54,14 @@ class Complejo extends modelComplejo
      * @ORM\JoinColumn(name="fk_user_updated_at", referencedColumnName="id")
      */
     private $userUpdatedAt;
-    
+
     /**
      * @var string
      *
      * @ORM\Column(name="description", type="string", length=100)
      */
     private $description;
-    
+
     /**
      * @var string
      *
@@ -84,12 +84,17 @@ class Complejo extends modelComplejo
     private $gerencias;
 
     /**
+     * @var \Pequiven\SEIPBundle\Entity\User\FeeStructure
+     * @ORM\OneToMany(targetEntity="\Pequiven\SEIPBundle\Entity\User\FeeStructure", mappedBy="complejo",cascade={"persist","remove"})
+     */
+    private $feeStructure;
+
+    /**
      * Get id
      *
      * @return integer 
      */
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
 
@@ -99,8 +104,7 @@ class Complejo extends modelComplejo
      * @param \DateTime $createdAt
      * @return Complejo
      */
-    public function setCreatedAt($createdAt)
-    {
+    public function setCreatedAt($createdAt) {
         $this->createdAt = $createdAt;
 
         return $this;
@@ -111,8 +115,7 @@ class Complejo extends modelComplejo
      *
      * @return \DateTime 
      */
-    public function getCreatedAt()
-    {
+    public function getCreatedAt() {
         return $this->createdAt;
     }
 
@@ -122,8 +125,7 @@ class Complejo extends modelComplejo
      * @param \DateTime $updatedAt
      * @return Complejo
      */
-    public function setUpdatedAt($updatedAt)
-    {
+    public function setUpdatedAt($updatedAt) {
         $this->updatedAt = $updatedAt;
 
         return $this;
@@ -134,8 +136,7 @@ class Complejo extends modelComplejo
      *
      * @return \DateTime 
      */
-    public function getUpdatedAt()
-    {
+    public function getUpdatedAt() {
         return $this->updatedAt;
     }
 
@@ -145,8 +146,7 @@ class Complejo extends modelComplejo
      * @param string $description
      * @return Complejo
      */
-    public function setDescription($description)
-    {
+    public function setDescription($description) {
         $this->description = $description;
 
         return $this;
@@ -157,8 +157,7 @@ class Complejo extends modelComplejo
      *
      * @return string 
      */
-    public function getDescription()
-    {
+    public function getDescription() {
         return $this->description;
     }
 
@@ -168,8 +167,7 @@ class Complejo extends modelComplejo
      * @param boolean $enabled
      * @return Complejo
      */
-    public function setEnabled($enabled)
-    {
+    public function setEnabled($enabled) {
         $this->enabled = $enabled;
 
         return $this;
@@ -180,8 +178,7 @@ class Complejo extends modelComplejo
      *
      * @return boolean 
      */
-    public function getEnabled()
-    {
+    public function getEnabled() {
         return $this->enabled;
     }
 
@@ -191,8 +188,7 @@ class Complejo extends modelComplejo
      * @param \Pequiven\SEIPBundle\Entity\User $userCreatedAt
      * @return Complejo
      */
-    public function setUserCreatedAt(\Pequiven\SEIPBundle\Entity\User $userCreatedAt = null)
-    {
+    public function setUserCreatedAt(\Pequiven\SEIPBundle\Entity\User $userCreatedAt = null) {
         $this->userCreatedAt = $userCreatedAt;
 
         return $this;
@@ -203,8 +199,7 @@ class Complejo extends modelComplejo
      *
      * @return \Pequiven\SEIPBundle\Entity\User 
      */
-    public function getUserCreatedAt()
-    {
+    public function getUserCreatedAt() {
         return $this->userCreatedAt;
     }
 
@@ -214,8 +209,7 @@ class Complejo extends modelComplejo
      * @param \Pequiven\SEIPBundle\Entity\User $userUpdatedAt
      * @return Complejo
      */
-    public function setUserUpdatedAt(\Pequiven\SEIPBundle\Entity\User $userUpdatedAt = null)
-    {
+    public function setUserUpdatedAt(\Pequiven\SEIPBundle\Entity\User $userUpdatedAt = null) {
         $this->userUpdatedAt = $userUpdatedAt;
 
         return $this;
@@ -226,8 +220,7 @@ class Complejo extends modelComplejo
      *
      * @return \Pequiven\SEIPBundle\Entity\User 
      */
-    public function getUserUpdatedAt()
-    {
+    public function getUserUpdatedAt() {
         return $this->userUpdatedAt;
     }
 
@@ -237,8 +230,7 @@ class Complejo extends modelComplejo
      * @param string $ref
      * @return Complejo
      */
-    public function setRef($ref)
-    {
+    public function setRef($ref) {
         $this->ref = $ref;
 
         return $this;
@@ -249,22 +241,20 @@ class Complejo extends modelComplejo
      *
      * @return string 
      */
-    public function getRef()
-    {
+    public function getRef() {
         return $this->ref;
     }
-    
+
     public function __toString() {
         return $this->description;
     }
+
     /**
      * Constructor
      */
-    public function __construct()
-    {
+    public function __construct() {
         parent::__construct();
         $this->gerencias = new \Doctrine\Common\Collections\ArrayCollection();
-        
     }
 
     /**
@@ -273,8 +263,7 @@ class Complejo extends modelComplejo
      * @param \Pequiven\MasterBundle\Entity\Gerencia $gerencias
      * @return Complejo
      */
-    public function addGerencia(\Pequiven\MasterBundle\Entity\Gerencia $gerencias)
-    {
+    public function addGerencia(\Pequiven\MasterBundle\Entity\Gerencia $gerencias) {
         $this->gerencias[] = $gerencias;
 
         return $this;
@@ -285,8 +274,7 @@ class Complejo extends modelComplejo
      *
      * @param \Pequiven\MasterBundle\Entity\Gerencia $gerencias
      */
-    public function removeGerencia(\Pequiven\MasterBundle\Entity\Gerencia $gerencias)
-    {
+    public function removeGerencia(\Pequiven\MasterBundle\Entity\Gerencia $gerencias) {
         $this->gerencias->removeElement($gerencias);
     }
 
@@ -295,8 +283,16 @@ class Complejo extends modelComplejo
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getGerencias()
-    {
+    public function getGerencias() {
         return $this->gerencias;
     }
+
+    function getFeeStructure() {
+        return $this->feeStructure;
+    }
+
+    function setFeeStructure(\Pequiven\SEIPBundle\Entity\User\FeeStructure $feeStructure) {
+        $this->feeStructure = $feeStructure;
+    }
+
 }

@@ -1,0 +1,130 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{  asset('bundles/pequivenseip/basic-primitives/demo/js/jquery/ui-lightness/jquery-ui-1.10.2.custom.css') }}" />
+    <link href="{{  asset('bundles/pequivenseip/basic-primitives/demo/css/primitives.latest.css') }}" media="screen" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {#<script type="text/javascript"  src="{{  asset('bundles/pequivenseip/basic-primitives/demo/js/jquery/jquery-1.9.1.js') }}"></script>
+    <script type="text/javascript"  src="{{  asset('bundles/pequivenseip/basic-primitives/demo/js/jquery/jquery-ui-1.10.2.custom.min.js') }}"></script>    #}
+    <script type="text/javascript"  src="{{  asset('bundles/pequivenseip/basic-primitives/demo/js/primitives.min.js') }}"></script>    
+
+    <script type='text/javascript'>
+        var m_timer = null;
+        $(window).load(function () {
+        var options = new primitives.orgdiagram.Config();
+                var items = [
+        {% set i = 1 %}
+        {% for struct in structure %}
+                            new primitives.orgdiagram.ItemConfig({
+                            id:{{ struct.getid }},
+                                    parent:{% if (struct.getparent is not null) %} {{ struct.getparent.getid }} {% else %} null{% endif %},
+                                    title: "{% if struct.getuser==null %}Sin Asignar{% else %}{{ struct.getuser.getfullname|ucwords }}{% endif %}{% if struct.getencargado==1 %} (E){% endif %}",
+            {% if ((struct.getgerenciasecond!=null)) %}childrenPlacementType: primitives.common.ChildrenPlacementType.Matrix,{% endif %}
+                                        description: "{{struct.getcharge }}",{% if struct.getstaff==1 %} itemType: primitives.orgdiagram.ItemType.SubAssistant,
+            {% if (i is divisible by(2))%}adviserPlacementType: primitives.common.AdviserPlacementType.Left{% else %}adviserPlacementType: primitives.common.AdviserPlacementType.Right{% endif %}{% set i = i+1 %},{% endif %}
+                                        image: "{{  asset('bundles/pequivenseip/basic-primitives/demo/images/photos/user.png') }}",
+                                        itemTitleColor: "#FE2E2E",
+                                }),                
+        {% endfor %}
+                        ];                        
+                        var buttons = [];
+                        {% if(is_granted('ROLE_SEIP_PLANNING_LIST_USER_FEESTRUCTURE_MOVEMENT')) %}
+                        buttons.push(new primitives.orgdiagram.ButtonConfig("add", "ui-icon-person", "Asignar"));                        
+                        buttons.push(new primitives.orgdiagram.ButtonConfig("delete", "ui-icon-close", "Retirar"));  
+                        {% endif %}
+                        options.items = items;
+                        options.cursorItem = 0;
+                        options.buttons = buttons;
+                        options.hasButtons = primitives.common.Enabled.True;
+                        options.hasSelectorCheckbox = primitives.common.Enabled.False;
+                        options.onButtonClick = function (e, data) {                            
+                            if (data.name == "add") {                                
+                                document.getElementById("value").value = data.context.id;
+                                var button = document.getElementById("add");
+                                button.click();
+                            }else if(data.name == "delete"){
+                                document.getElementById("value").value = data.context.id;                                
+                                var button = document.getElementById("delete");
+                                button.click();                                  
+                            };                        
+                        };
+                        options.hasSelectorCheckbox = primitives.common.Enabled.False;
+                        options.arrowsDirection = primitives.common.GroupByType.Children;
+                        jQuery("#basicdiagram").orgDiagram(options);
+                        $(window).resize(function () {
+                onWindowResize();
+                });
+                });
+                        function onWindowResize() {
+                        if (m_timer == null) {
+                        m_timer = window.setTimeout(function () {
+                        ResizePlaceholder();
+                                jQuery("#orgdiagram").orgDiagram("update", primitives.orgdiagram.UpdateMode.Refresh)
+                                window.clearTimeout(m_timer);
+                                m_timer = null;
+                        }, 300);
+                        }
+                        }
+
+                function ResizePlaceholder() {
+                var bodyWidth = $(window).width() - 40
+                        var bodyHeight = $(window).height() - 20
+                        jQuery("#orgdiagram").css(
+                {
+                "width": bodyWidth + "px",
+                        "height": bodyHeight + "px"
+                });
+                }                
+    </script>
+
+    <script type="text/javascript">        
+        $(document).ready(function()
+        {
+            charge();            
+            function charge(){
+               $('.select2').select2({
+                allowClear: true
+                });
+               
+                $("#feestructurecreate_parent").select2({
+                    minimumInputLength: 3
+                });
+            }
+        });
+    </script>    
+{% endblock %}
+
+{% block before_body %}
+    {{ contentHeader("Gestión de Cargos")   }}
+{% endblock %}
+{% block body %}
+<div ng-controller="FeeStructureController">                    
+    <input id='add' type='hidden' value='Añadir Cargo' ng-click='addCargo()'/>
+    <input id='delete' type='hidden' value='Eliminar Cargo' ng-click='removeCargo()'/>
+    <input id='value' type='hidden' value=''/>
+</div>
+    {% if(is_granted('ROLE_SEIP_PLANNING_LIST_USER_FEESTRUCTURE_CREATE')) %}
+        <details class="details margin-bottom" open="">
+            <summary role="button" aria-expanded="true">
+                <b>Creación y Búsqueda de Cargos</b>
+            </summary>
+            <div class="with-padding">
+                <div class="columns">
+                  {% include 'PequivenSEIPBundle:User:FeeStructure/create.html.twig' %}
+                </div>
+            </div>
+        </details>                
+    {% endif %}
+    
+        <fieldset class="fieldset">
+            <legend class="legend"><b>Estructura Organizativa Actual</b></legend>
+                <div id="basicdiagram" style="width: 100%; height: 1200px; border-style: dotted; border-width: 1px;" />
+        </fieldset>
+
+{% endblock %} 

@@ -1,0 +1,69 @@
+{% extends "PequivenSEIPBundle:Template:Developer/Common/tableFormat1.html.twig" %}
+
+{% trans_default_domain 'sip' %}
+
+{% block javascripts_base %}
+    {{ parent() }}
+    <script src="{{  asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.input.js') }}"></script>
+{% endblock javascripts_base %}
+
+{% block before_body %}
+    {{ contentHeader(
+        ("Votantes Pequiven")
+    ) }}
+{% endblock %}
+
+{% block body %}
+    
+    <div ng-controller="TableFormatController">
+        <div ng-controller="TableOnePerTenController">
+            <div loading-container="tableParams.settings().$loading">
+                <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager" template-header="custom/header" api-data-url="{{ apiDataUrl }}" export-csv="csv" class="table table-responsive table-extra-info" >
+                    <tbody> 
+                        <tr ng-repeat="result in $data" data="{$ result|json $}">
+                            <td data-title="'Localidad'" filter="{'localidad' : 'text'}">
+                                <a target="_blank" href="{$ result._links.self.show $}">
+                                    {$ result.localidad $}
+                                </a>
+                            </td>
+                            <td data-title="'Gerencia'" filter="{'gerencia' : 'text'}">
+                                <a target="_blank" href="{$ result._links.self.show $}">
+                                    {$ result.gerencia $}
+                                </a>
+                            </td>
+                            <td data-title="'Cédula'" filter="{'cedula' : 'text'}">
+                                <a target="_blank" href="{$ result._links.self.show $}">
+                                    {$ result.cedula $}
+                                </a>
+                            </td>
+                            <td data-title="'Nombre'" filter="{'nombre' : 'text'}">
+                                <a target="_blank" href="{$ result._links.self.show $}">
+                                    {$ result.nombre $}
+                                </a>
+                            </td>
+                            <td data-title="'Votó'" filter="{'voto' : 'text'}">
+                                <a target="_blank" href="{$ result._links.self.show $}">
+                                    {$ result.textoVoto $}
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+     </div>
+
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+    <script type="text/javascript">
+        
+        function getTableExtraInfo(data)
+            {
+                var response = '';
+                return response;
+            }
+    </script>
+    
+{% endblock %}

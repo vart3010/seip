@@ -105,7 +105,7 @@ class Period extends Base implements \Serializable
     private $dateEndLoadArrangementProgram;
 
     /**
-     * Fecha inicio de carga de programas de gestion.
+     * Fecha inicio de carga de programas de gestion para SIG.
      * @var \DateTime
      *
      * @ORM\Column(name="dateStartLoadSigArrangementProgram", type="date", nullable=true)
@@ -113,7 +113,7 @@ class Period extends Base implements \Serializable
     private $dateStartLoadSigArrangementProgram;
 
     /**
-     * Fecha fin de carga de programas de gestión.
+     * Fecha fin de carga de programas de gestión para SIG.
      * @var \DateTime
      *
      * @ORM\Column(name="dateEndLoadSigArrangementProgram", type="date", nullable=true)
@@ -229,7 +229,7 @@ class Period extends Base implements \Serializable
     private $deletedAt;
     
     
-    //****CHECKS PARA ACTIVAR O DESACTIVAR UN TRIMESTRE***/////
+    //****CHECKS PARA ACTIVAR O DESACTIVAR UN TRIMESTRE (Notificación de Indicadores)***/////
     /**
      * @ORM\Column(name="isLoadIndicatorTrim1", type="boolean", nullable=true)
      */

@@ -171,6 +171,12 @@ class Gerencia extends modelGerencia implements AuditableInterface
      * @ORM\ManyToMany(targetEntity="\Pequiven\SEIPBundle\Entity\Politic\WorkStudyCircle", mappedBy="gerencias")
      */
     private $workStudyCircles;
+    
+    /**
+     * @var \Pequiven\SEIPBundle\Entity\User\FeeStructure
+     * @ORM\OneToMany(targetEntity="\Pequiven\SEIPBundle\Entity\User\FeeStructure", mappedBy="gerencia",cascade={"persist","remove"})
+     */
+    private $feeStructure;
 
     /**
      * Constructor
@@ -181,6 +187,7 @@ class Gerencia extends modelGerencia implements AuditableInterface
         $this->gerenciaSecondSupports = new \Doctrine\Common\Collections\ArrayCollection();
         $this->tacticalObjectives = new \Doctrine\Common\Collections\ArrayCollection();
         $this->workStudyCircles = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->feeStructure = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**
@@ -651,4 +658,15 @@ class Gerencia extends modelGerencia implements AuditableInterface
     {
         return $this->validAudit;
     }
+    
+    function getFeeStructure() {
+        return $this->feeStructure;
+    }
+
+    function setFeeStructure(\Pequiven\SEIPBundle\Entity\User\FeeStructure $feeStructure) {
+        $this->feeStructure = $feeStructure;
+    }
+
+
 }
+

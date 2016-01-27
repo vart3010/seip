@@ -33,7 +33,7 @@
                     {{ workStudyCircle.name }}
                 </p>
             </div>
-            {#<div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">{{ "workStudyCircle.form.region"|trans }}</label>
                     {{ workStudyCircle.region.name }}
@@ -45,48 +45,80 @@
                     {{ workStudyCircle.complejo.description}}
                 </p>
             </div>
-            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
-                <p class="inline-label">
-                    <label class="label">{{ "workStudyCircle.form.gerenciaFirst"|trans }}</label>
-                    {% for gerencia in  workStudyCircle.gerencias %}
-                        {{ gerencia }}<br>
-                    {% endfor %}
-                </p>
-            </div>
-            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
-                <p class="inline-label">
-                    <label class="label">{{ "workStudyCircle.form.gerenciaSecond"|trans }}</label>
-                    {% for gerenciaSecond in  workStudyCircle.gerenciaSeconds %}
-                        {{ gerenciaSecond }}<br>
-                    {% endfor %}
-                </p>
-            </div>
-            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
-                <p class="inline-label">
-                    <label class="label">{{ "workStudyCircle.form.superintendencia"|trans }}</label>
-                    {{ workStudyCircle.superintendencia }}
-                </p>
-            </div>
-            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
-                <p class="inline-label">
-                    <label class="label">{{ "workStudyCircle.form.supervision"|trans }}</label>
-                    {{ workStudyCircle.supervision }}
-                </p>
-            </div>
-            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
-                <p class="inline-label">
-                    <label class="label">{{ "workStudyCircle.form.departamento"|trans }}</label>
-                    {{ workStudyCircle.departamento}}
-                </p>
-            </div>#}
+            {#
+        <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+            <p class="inline-label">
+                <label class="label">{{ "workStudyCircle.form.gerenciaFirst"|trans }}</label>
+                {% for gerencia in  workStudyCircle.gerencias %}
+                    {{ gerencia }}<br>
+                {% endfor %}
+            </p>
+        </div>
+        <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+            <p class="inline-label">
+                <label class="label">{{ "workStudyCircle.form.gerenciaSecond"|trans }}</label>
+                {% for gerenciaSecond in  workStudyCircle.gerenciaSeconds %}
+                    {{ gerenciaSecond }}<br>
+                {% endfor %}
+            </p>
+        </div>
+        <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+            <p class="inline-label">
+                <label class="label">{{ "workStudyCircle.form.superintendencia"|trans }}</label>
+                {{ workStudyCircle.superintendencia }}
+            </p>
+        </div>
+        <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+            <p class="inline-label">
+                <label class="label">{{ "workStudyCircle.form.supervision"|trans }}</label>
+                {{ workStudyCircle.supervision }}
+            </p>
+        </div>
+        <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+            <p class="inline-label">
+                <label class="label">{{ "workStudyCircle.form.departamento"|trans }}</label>
+                {{ workStudyCircle.departamento}}
+            </p>
+        </div>#}
         </div>
     </fieldset>
 
 
     <fieldset class="fieldset">
         <legend class="legend" >{{ "workStudyCircle.form.coordinador.title"|trans }}&nbsp;</legend>
-        {% if workStudyCircle.coordinator != null %}
-            {% if workStudyCircle.phase != 4 %}
+        {% if workStudyCircle.phase == 4 %}
+            <table width="90%" class="simple-table responsive-table tables-extras" > 
+                <tr>
+                    <td class="label" width="50%" style="font-weight: bold">Nombre y Apellido</td>
+                    <td class="label"width="50%" style="font-weight: bold">Cargo</td>                
+                </tr>
+                <tr>
+                    <td>JUANCARLO DEPABLOS</td>
+                    <td>PRESIDENTE</td>
+                </tr>
+                <tr>
+                    <td>NATASHA CASTILLO</td>
+                    <td>VICE - PRESIDENTE</td>
+                </tr>
+                <tr>
+                    <td>FRANCISCO MEJÍAS</td>
+                    <td>DIRECTOR</td>
+                </tr>
+                <tr>
+                    <td>JORGE PERDOMO</td>
+                    <td>DIRECTOR</td>
+                </tr>
+                <tr>
+                    <td>EDUARDO CASAÑAS</td>
+                    <td>DIRECTOR</td>
+                </tr>
+                <tr>
+                    <td>JOSÉ LUIS PÉREZ</td>
+                    <td>DIRECTOR</td>
+                </tr>
+            </table>            
+        {% else %}
+            {% if workStudyCircle.coordinator != null %}
                 <div class="columns">
                     <div class="new-row-mobile twelve-columns twelve-columns-tablet twelve-columns-mobile">
                         <p class="inline-label">
@@ -108,29 +140,6 @@
                     </div>
                 </div>
             {% else %}
-                <div class="columns">
-                    <div class="new-row-mobile twelve-columns twelve-columns-tablet twelve-columns-mobile">
-                        <p class="inline-label">
-                            <label class="label">{{ "workStudyCircle.form.coordinador.nombre"|trans }}</label>
-                            POR DEFINIR
-                        </p>
-                    </div>
-                    <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
-                        <p class="inline-label">
-                            <label class="label">{{ "workStudyCircle.form.coordinador.telefono"|trans }}</label>
-                            POR DEFINIR
-                        </p>
-                    </div>
-                    <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
-                        <p class="inline-label">
-                            <label class="label">{{ "workStudyCircle.form.coordinador.ext"|trans }}</label>
-                            POR DEFINIR
-                        </p>
-                    </div>
-                </div>
-            {% endif %}
-        {% else %}
-            {% if workStudyCircle.phase != 4 %}
                 <div class="block" >
                     <div class="block-title">
                         <div class="button-group absolute-left compact">
@@ -147,7 +156,6 @@
         <fieldset class="fieldset">
             <legend class="legend" >{{ "workStudyCircle.form.coordinatorDiscussion.title"|trans }}&nbsp;</legend>
             {% if workStudyCircle.coordinatorDiscussion != null %}
-
                 <div class="columns">
                     <div class="new-row-mobile twelve-columns twelve-columns-tablet twelve-columns-mobile">
                         <p class="inline-label">

@@ -13,6 +13,15 @@
 </div>
 {% endmacro %}
 
+{% macro createonly(url) %}
+<div class="field-block button-height">
+    <button type="submit" class="button glossy mid-margin-right save">
+        <span class="button-icon"><span class="icon-tick"></span></span>
+        {{ 'pequiven_seip.register'|trans }}
+    </button>    
+</div>
+{% endmacro %}
+
 {% macro assign(url) %}
 <div class="field-block button-height">
     <button type="submit" class="button glossy mid-margin-right">

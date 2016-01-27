@@ -35,6 +35,7 @@ class CoreExtension extends \Twig_Extension {
                     }),
             new \Twig_SimpleFilter('myNumberFormat', array($this, 'myNumberFormat')),
             new \Twig_SimpleFilter('ucwords', array($this, 'ucwords')),
+            new \Twig_SimpleFilter('is_string', array($this, 'is_string')),
             new \Twig_SimpleFilter('myFormatDateTime', array($this, 'myFormatDateTime')),
             new \Twig_SimpleFilter('myFormatDate', array($this, 'myFormatDate')),
             new \Twig_SimpleFilter('render_yes_no', array($this, 'renderYesNo'), array('is_safe' => array('html'))),
@@ -69,7 +70,7 @@ class CoreExtension extends \Twig_Extension {
         }
         $periodService = $this->getPeriodService();
 
-        if (!$this->isGranted('ROLE_SEIP_PLANNING_*') && $type == \Pequiven\SEIPBundle\Entity\Period::VIEW_ALL_PERIODS) {
+        if (!$this->isGranted('ROLE_SEIP_VIEW_ALL_PERIODS') && $type == \Pequiven\SEIPBundle\Entity\Period::VIEW_ALL_PERIODS) {
 
             //Si tiene un solo rol y es personal PQV --> $FORCEALLPERIODS = TRUE
             $groupsUsers = $this->getUser()->getGroups();
@@ -124,6 +125,15 @@ class CoreExtension extends \Twig_Extension {
      */
     function ucwords($value) {
         return ucwords(mb_strtolower($value, 'UTF-8'));
+    }
+    
+    /**
+     * Filtro para Determinar si la Entrada es String o No
+     * @param type $value
+     * @return type
+     */
+    function is_string($value) {
+        return is_string($value);
     }
 
     /**

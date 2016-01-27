@@ -40,17 +40,23 @@
         <div ng-controller="IndicatorLastPeriodController">
         <!-- <div ng-controller="EvolutionIndicatorFilters"> -->
 
-        {# Carga del formulario de relacion del indicador #}
-            {% if indicator_sig.indicatorlastPeriod %}
+        {# Carga del formulario de relacion del indicador #}        
+            {% if indicator_sig.period.id == 2 %}
+                {% set period = "2014" %}
+            {% elseif indicator_sig.period.id == 3 %}
+                {% set period = "2015" %}
+            {% endif %}
+
+            {% if indicator_sig.indicatorlastPeriod and indicator_sig.period.id == 2 %}
                 <div class="block block-title">
-                    <h3>El Indicador tiene relación con el indicador del 2014</h3>
+                    <h3>El Indicador tiene relación con el indicador del {{ period }}</h3>
                     <div class="button-group absolute-right compact">
                         <a class="button icon-list-add " href="" ng-click="removeLastPeriod(idIndicator='{{ indicator_sig.id }}')" title="">{{ 'pequiven.delete'|trans({},'messages')  }}</a>
                     </div>
                 </div>
-            {% else %}
+            {% elseif indicator_sig.indicatorlastPeriod == false and indicator_sig.period.id == 2 %}
                 <div class="block block-title">
-                    <h3>El Indicador no tiene relación con el indicador del 2014</h3>
+                    <h3>El Indicador no tiene relación con el indicador del {{ period }}</h3>
                     <div class="button-group absolute-right compact">
                         <a class="button icon-list-add " href="" ng-click="loadTemplateIndicatorlastPeriod()" title="">{{ 'pequiven.add'|trans({},'messages')  }}</a>
                     </div>
@@ -82,7 +88,13 @@
                         {% endfor %}
                     </ul>
                 </div>
-            </div>
+                <!-- Periodo del indicador -->                
+                <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                    <p class="inline-label">
+                        <label class="label">{{ 'pequiven.period'|trans({},'messages') }}</label>
+                        {{ indicator_sig.period }}
+                    </p>
+                </div>
             {# Sistemas de la Calidad al que pertenece #}
             {% if  indicator_sig.managementSystems | length > 0 %}
                 <div class="inline-label">
@@ -94,6 +106,7 @@
                         </ul>
                 </div>
             {% endif %}
+            </div>
             
             {% include 'PequivenSIGBundle:Template:base_month.html.twig' %} 
                         
@@ -105,22 +118,21 @@
             <div ng-controller="ChartsSigController" class="dashboard_sig" ng-init="renderChartEvolutionSig('chartContainerResult', {{ data|json_encode() }},'{{ urlExportFromChart }}')" style="width: 95%;" align="center">
                 {# señalización tendencia #}
                 <div class="position">
-                        {{ font["text"]}}
-                        <i class="fa fa-{{ font["icon"] }} fa-2x position"> &nbsp;</i>
+                    {{ font["text"]}}
+                    <i class="fa fa-{{ font["icon"] }} fa-2x position"> &nbsp;</i>
                 </div>
-
                 <div class="nine-columns twelve-columns-mobile" id="chartContainerResult">
-                <!-- This div will hold the chart generated in the footer -->
+                    <!-- This div will hold the chart generated in the footer -->
                 </div>                                
                 <input id='exportpng' type='hidden' value='Exportar Informe' />
-            {#{% if is_granted('ROLE_SEIP_SIG_EVOLUTION_LAST_PERIOD') %}                
-                <div ng-controller="EvolutionIndicatorConfig"> 
-                    <div class="button-group button-config">
-                        <a class="button icon-list-add " href="" ng-click="loadTemplateConfig()" title="">{{ 'pequiven_indicator.config'|trans({},'PequivenSIGBundle')  }}</a>
+                {# Configuracion de medicion del indicador #}
+                {% if is_granted('ROLE_SEIP_SIG_EVOLUTION_LAST_PERIOD') %}                
+                    <div ng-controller="EvolutionIndicatorConfig"> 
+                        <div class="button-group button-config">
+                            <a class="button icon-list-add " href="" ng-click="loadTemplateConfig()" title="">{{ 'pequiven_indicator.config'|trans({},'PequivenSIGBundle')  }}</a>
+                        </div>
                     </div>
-                </div>
-            {% endif %}#}
-               
+                {% endif %}
             </div>  
         </div>  
         {# Analisi de tendencia #}
@@ -147,9 +159,9 @@
     {# Analisis de Causas #}
     {% if is_granted('ROLE_SEIP_SIG_EVOLUTION_CAUSE') %}    
             <br /><br />
-            {% include 'PequivenSIGBundle:Indicator:show/analysis_cause.html.twig' %} 
-            <br /><br />            
             {% include 'PequivenSIGBundle:Indicator:show/causes_list.html.twig' %} 
+            <br /><br />            
+            {% include 'PequivenSIGBundle:Indicator:show/analysis_cause.html.twig' %} 
             &nbsp;
     {% endif %}
     
@@ -291,7 +303,7 @@
             var button = document.getElementById("exportpng");
             if (button){
                button.click();   
-               //window.setTimeout(downloadCause,800);               
+               window.setTimeout(downloadCause,50);               
             }            
         }
         //Carga de Evento de Descarga de Grafica de Causas del Indicador
