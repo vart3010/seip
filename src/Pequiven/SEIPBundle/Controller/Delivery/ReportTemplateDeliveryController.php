@@ -50,9 +50,11 @@ class ReportTemplateDeliveryController extends SEIPController {
 
     public function showAction(Request $request) {
         $reportTemplateDelivery = $this->getRepository()->find($request->get("id"));
+        $productGroup = $reportTemplateDelivery->getProductGroupDelivery();
 
         $data = array(
-            "reportTemplateDelivery" => $reportTemplateDelivery
+            "reportTemplateDelivery" => $reportTemplateDelivery,
+            "productGroup" => $productGroup
         );
         $view = $this
                 ->view()
