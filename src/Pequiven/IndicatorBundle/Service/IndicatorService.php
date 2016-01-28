@@ -3734,12 +3734,11 @@ class IndicatorService implements ContainerAwareInterface {
         }
 
         //Recibiendo la frecuencia de calculo del indicador
-        $labelsFrequencyNotificationArray = $this->getLabelsByIndicatorFrequencyNotification($indicator);
+        //$labelsFrequencyNotificationArray = $this->getLabelsByIndicatorFrequencyNotification($indicator);
 
         foreach ($indicator->getValuesIndicator() as $value) {
-
             $data = $value->getValueOfIndicator();
-            $cant = $labelsFrequencyNotificationArray[$contMonth];
+            //$cant = $labelsFrequencyNotificationArray[$contMonth];
             
             $contMonth++;
             $sum = $sum + $data;
@@ -3762,6 +3761,7 @@ class IndicatorService implements ContainerAwareInterface {
         } elseif ($calc === 0) {
             $value = $sum; //Paso de sumatoria
         }
+
         return $value;
     }
 
@@ -3779,25 +3779,17 @@ class IndicatorService implements ContainerAwareInterface {
         //var_dump($trend);
         //Creciente
         if ($trend === 1) {
-
             $obj = $indicator->getArrangementRange()->getRankTopBasic();
-
             //Decreciente            
         } elseif ($trend === 2) {
-
             $obj = $indicator->getArrangementRange()->getRankBottomBasic();
-
             //Estable
         } elseif ($trend === 3) {
-
             $value1 = $indicator->getArrangementRange()->getRankTopMixedTop();
             $value2 = $indicator->getArrangementRange()->getRankTopMixedBottom();
-
             $obj = (($value2 - $value1) / 2) + $value1;
-
             //Sin tendencia
         } else {
-
             $obj = 0;
         }
 
@@ -3815,23 +3807,18 @@ class IndicatorService implements ContainerAwareInterface {
         $var = FALSE;
 
         if ($indicator->getFormula()->getTypeOfCalculation() == Formula::TYPE_CALCULATION_SIMPLE_AVERAGE) {
-
             //$arrayVariables = $this->getArrayVariablesFormulaWithData($indicator, array('viewVariablesRealPlanAutomaticByFrequencyNotification' => true));
             $var = FALSE;
         } elseif ($indicator->getFormula()->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC) {
-
             $arrayVariables = $this->getArrayVariablesFormulaWithData($indicator, array('viewVariablesRealPlanAutomaticByFrequencyNotification' => true));
             $var = TRUE;
         } elseif ($indicator->getFormula()->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AUTOMATIC) {
-
             //$arrayVariables = $this->getArrayVariablesFormulaWithData($indicator, array('viewVariablesRealPlanAutomaticByFrequencyNotification' => true));
             $var = FALSE;
         } elseif ($indicator->getFormula()->getTypeOfCalculation() == Formula::TYPE_CALCULATION_ACCUMULATE) {
-
             //$arrayVariables = $this->getArrayVariablesFormulaWithData($indicator, array('viewVariablesRealPlanAutomaticByFrequencyNotification' => true));
             $var = FALSE;
         } elseif ($indicator->getFormula()->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_FROM_EQ) {
-
             $arrayVariables = $this->getArrayVariablesFormulaWithData($indicator, array('viewVariablesRealPlanFromEquationByFrequencyNotification' => true));
             $var = TRUE;
         }
@@ -3842,7 +3829,6 @@ class IndicatorService implements ContainerAwareInterface {
 
         $resultNumbers = 1;
         if ($var === TRUE) {
-
             for ($i = 0; $i < $totalValueIndicators; $i++) {
                 if ($arrayVariables['valueReal'][$i] != 0 || $arrayVariables['valuePlan'][$i] != 0) {
                     $resultNumbers = $i + 1;
@@ -3850,7 +3836,6 @@ class IndicatorService implements ContainerAwareInterface {
             }
         } else {
             foreach ($indicator->getValuesIndicator() as $value) {
-
                 $cont++;
                 $resultNumbers = $cont;
             }
@@ -3861,42 +3846,55 @@ class IndicatorService implements ContainerAwareInterface {
         return $results;
     }
 
-    public function IndicatorCalculeTendency($indicator)
+    public function IndicatorCalculateTendency($indicator)
     {   
         $cont = 1;
-        foreach ($indicator->getValuesIndicator() as $value) {
-                    $data = $value->getValueOfIndicator();
-                    
-                    $dataX[] = $cont;//X
-                    $dataY[] = $data;//Y
-                    $dataXY[] = $data * $cont;//X*Y
-                    $dataXX[] = $cont * $cont;//X2
-            $cont++;            
+        $values = count($indicator->getValuesIndicator());        
+        $dataX = $dataY = $dataXY = $dataXX = [];
+        $dataTendency = 0;
+        
+        if ($values != 0 ) {            
+            foreach ($indicator->getValuesIndicator() as $value) {
+                        $data = $value->getValueOfIndicator();
+
+                        $dataX[] = $cont;//X
+                        $dataY[] = $data;//Y
+                        $dataXY[] = $data * $cont;//X*Y
+                        $dataXX[] = $cont * $cont;//X2
+                $cont++;            
+            }
+            //echo "X"; var_dump($dataX);                    
+            //echo "Cantidad"; var_dump(count($dataX));                    
+            //echo "Y"; var_dump($dataY);
+            //echo "X*Y"; var_dump($dataXY);
+            //echo "X2"; var_dump($dataXX);
+
+            $sumaX = array_sum($dataX);                
+            $sumaY = array_sum($dataY);                
+            //echo "suma X"; var_dump($suma);
+            //echo "prom X"; var_dump($suma/count($dataX));
+            
+            
+            $d = ((count($dataX)*array_sum($dataXY))-(array_sum($dataX)*array_sum($dataY)));
+            $c = ((count($dataX)*array_sum($dataXX))-(array_sum($dataX)*array_sum($dataX)));
+            $b = $d/$c;
+            
+            $a = (($sumaY/count($dataY)))-($b*($sumaX/count($dataX)));
+            
+            $dataTendency = [ 
+                    'a'   =>  $a,
+                    'b'   =>  $b
+            ];   
         }
-        echo "X"; var_dump($dataX);                    
-        echo "Cantidad"; var_dump(count($dataX));                    
+        //echo "B1"; var_dump($b);
+        //echo "C1"; var_dump($c);
+        //y = a + bx
 
-        echo "Y"; var_dump($dataY);
-        echo "X*Y"; var_dump($dataXY);
-        echo "X2"; var_dump($dataXX);
+        //echo "b";  var_dump($b);
+        //echo "a";  var_dump($a);
 
-        $sumaX = array_sum($dataX);                
-        $sumaY = array_sum($dataY);                
-        //echo "suma X"; var_dump($suma);
-        //echo "prom X"; var_dump($suma/count($dataX));
-        
-        $b = ((count($dataX)*array_sum($dataXY))-(array_sum($dataX)*array_sum($dataY)));
-        $c = ((count($dataX)*array_sum($dataXX))-(array_sum($dataX)*array_sum($dataX)));
-        $B = $b/$c;
-        
-        $a = (($sumaY/count($dataY)))-($B*($sumaX/count($dataX)));
-
-        echo "B1"; var_dump($b);
-        echo "C1"; var_dump($c);
-
-        echo "B";  var_dump($B);
-        echo "a";  var_dump($a);
-        die();
+        //$y = $a + ($b * 1);
+        return $dataTendency;
     }
 
     /**
@@ -3944,9 +3942,7 @@ class IndicatorService implements ContainerAwareInterface {
 
         //Lamado de promedio
         $prom = $this->getPromdIndicator($indicator);
-        $valueTendency =  $this->IndicatorCalculeTendency($indicator);
-        var_dump($valueTendency);
-        die();
+        $dataTendency =  $this->IndicatorCalculateTendency($indicator);
         //$prom = $indicator->getResultReal(); //Carga del resultado real cargado del indicador        
 
         //Lamado obj 2015
@@ -3992,7 +3988,6 @@ class IndicatorService implements ContainerAwareInterface {
         if ($totalNumValues > 0) {
             $indicatorValues = $indicator->getValuesIndicator();
             $contMonth = 1;
-
             foreach ($indicatorValues as $indicatorValue) {
                 $formulaParameters = $indicatorValue->getFormulaParameters();                
                 if ($resultNumbers >= $contMonth) {                    
@@ -4059,7 +4054,9 @@ class IndicatorService implements ContainerAwareInterface {
                 if ($resultNumbers >= $contValue) {
                     $dataReal["value"] = $value->getValueOfIndicator(); //Carga de valores del indicador
                     $dataSetReal["data"][] = $dataReal; //Data Real
-                    $dataSetTend["data"][] = $dataReal; //Data Real Tendencia
+
+                    $dataRealTendency["value"] = $dataTendency['a'] + ($dataTendency['b'] * $contValue);
+                    $dataSetTend["data"][] = $dataRealTendency; //Data Real Tendencia
                     $contValue = $contValue;
                 }
                 $contValue++;
