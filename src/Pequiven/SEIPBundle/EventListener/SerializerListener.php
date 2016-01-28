@@ -220,11 +220,11 @@ class SerializerListener implements EventSubscriberInterface, ContainerAwareInte
         $isEnabledLoadByQuarterThirdReal = false;
 
         //Habilitar la carga del cuarto trimestre (Requiere isEnabledLoadByQuarter)
-        $isEnabledLoadByQuarterFourth = true;
+        $isEnabledLoadByQuarterFourth = false;
         //Habilitar la carga de valores planificados del cuarto trimestre (Requiere isEnabledLoadByQuarterFourth)
         $isEnabledLoadByQuarterFourthPlanned = false;
         //Habilitar la carga de valores reales del cuarto trimestre (Requiere isEnabledLoadByQuarterFourth)
-        $isEnabledLoadByQuarterFourthReal = true;
+        $isEnabledLoadByQuarterFourthReal = false;
 
         $month = $date->format('m');
 

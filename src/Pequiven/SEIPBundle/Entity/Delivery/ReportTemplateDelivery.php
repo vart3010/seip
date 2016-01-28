@@ -294,7 +294,7 @@ class ReportTemplateDelivery extends BaseModel {
      * @param \Pequiven\SEIPBundle\Entity\Delivery\ProductGroupDelivery $productGroupDelivery
      * @return \Pequiven\SEIPBundle\Entity\Delivery\ReportTemplateDelivery
      */
-    public function addPlantReportsDelivery(ProductGroupDelivery $productGroupDelivery) {
+    public function addProductGroupDeliveryDelivery(ProductGroupDelivery $productGroupDelivery) {
         $this->productGroupDelivery[] = $productGroupDelivery;
 
         return $this;
