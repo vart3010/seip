@@ -3860,7 +3860,7 @@ class IndicatorService implements ContainerAwareInterface {
                         $dataX[] = $cont;//X
                         $dataY[] = $data;//Y
                         $dataXY[] = $data * $cont;//X*Y
-                        $dataXX[] = $cont * $cont;//X2
+                        $dataXX[] = $cont * $cont;//X^2
                 $cont++;            
             }
             //echo "X"; var_dump($dataX);                    
