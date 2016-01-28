@@ -202,6 +202,30 @@ class OnePerTen {
      * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\Sip\OnePerTenMembers", mappedBy="one", cascade={"persist","remove"})
      */
     private $ten;
+    
+    /**
+     * vasamblea6
+     * @var integer
+     *
+     * @ORM\Column(name="vasamblea6", type="integer", nullable=true)
+     */
+    private $vasamblea6;
+    
+    /**
+     * onePerTenPsuv
+     * @var integer
+     *
+     * @ORM\Column(name="onePerTenPsuv", type="integer", nullable=true)
+     */
+    private $onePerTenPsuv;
+    
+    /**
+     * memberOnePerTenPsuv
+     * @var integer
+     *
+     * @ORM\Column(name="memberOnePerTenPsuv", type="integer", nullable=true)
+     */
+    private $memberOnePerTenPsuv;
 
     public function __construct() {
         $this->ten = new \Doctrine\Common\Collections\ArrayCollection();
@@ -412,6 +436,30 @@ class OnePerTen {
 
     function setMilitante($militante) {
         $this->militante = $militante;
+    }
+    
+    function getVasamblea6() {
+        return $this->vasamblea6;
+    }
+
+    function setVasamblea6($vasamblea6) {
+        $this->vasamblea6 = $vasamblea6;
+    }
+    
+    function getOnePerTenPsuv() {
+        return $this->onePerTenPsuv;
+    }
+
+    function setOnePerTenPsuv($onePerTenPsuv) {
+        $this->onePerTenPsuv = $onePerTenPsuv;
+    }
+    
+    function getMemberOnePerTenPsuv() {
+        return $this->memberOnePerTenPsuv;
+    }
+
+    function setMemberOnePerTenPsuv($memberOnePerTenPsuv) {
+        $this->memberOnePerTenPsuv = $memberOnePerTenPsuv;
     }
 
 }
