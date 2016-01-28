@@ -8,11 +8,11 @@
     .fa-exclamation-triangle{
         color: red;
     }
-    
+
     .fa-hand-o-right{
         color: orange;
     }
-    
+
 </style>
 
 <div class="block">
@@ -54,11 +54,11 @@
                         <span ng-class="getClassForMeter(goal.advance,3)"></span>
                         {$ goal.advance $}%
 
-                        {% if ((isAllowSuperAdmin == true) or (is_granted('ROLE_SEIP_ARRANGEMENT_PROGRAM_VIEW_PENALIZED_GOALS'))) %}
+                        {% if ((entity.status==1)and((isAllowSuperAdmin == true) or (is_granted('ROLE_SEIP_ARRANGEMENT_PROGRAM_VIEW_PENALIZED_GOALS')))) %}
                             <br>
                             <span ng-class="getPenaltyForm(goal.penalty)"><center><i class="fa fa-exclamation-triangle"></i> : {$ goal.penalty $}%</center></span>                            
-                        {%endif%}                        
-                        <span ng-class="getOverflowForm(goal.realResult-goal.penalty)"><center><i class="fa fa-hand-o-right"></i><b> Real:</b> {$ goal.realResult-goal.penalty $}%</center></span>                              
+                            <span ng-class="getOverflowForm(goal.realResult-goal.penalty)"><center><i class="fa fa-hand-o-right"></i><b> Real:</b> {$ goal.realResult-goal.penalty $}%</center></span>                              
+                                    {% endif %}
                     </td>
                     <th scope="row">
                         {$ goal.name $}<br>
