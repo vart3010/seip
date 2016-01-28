@@ -1685,6 +1685,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                     }
                     $nameParameter = $variable->getName();
                     $valueParameter = $valueIndicator->getParameter($nameParameter, 0);
+                    $valueParameterInit = $valueParameter;
                     $results = $resultsItems[$i];
                     if ($variable->isFromEQ()) {
                         $parametersForTemplate = array(
@@ -1696,19 +1697,31 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                     } else {
                         if (!$variable->isStaticValue()) {
                             $valueParameter = 0;
+                        } else{
+                            if($indicator->getValidVariableStaticValue()){
+                                $valueParameter = 0;
+                            }
                         }
                         foreach ($results as $resultItem) {
                             $childValueParameter = $resultItem->getParameter($nameParameter);
                             if ($childValueParameter !== null) {
                                 if ($variable->isStaticValue()) {//En caso de que la variable sea "estática" y tenga que obtener el valor del indicador hijo
-                                    if (!$indicator->getValidVariableStaticValue()) {
+                                    if (count($indicator->getChildrens()) == 1) {
                                         $valueParameter = $childValueParameter;
+                                    } else{
+                                        $valueParameter += $childValueParameter;
                                     }
                                 } else {
                                     $valueParameter += $childValueParameter;
                                 }
                             }
                         }
+                        
+//                        if ($variable->isStaticValue() && $indicator->getValidVariableStaticValue()) {
+//                            if($valueParameterInit != $valueParameter){
+//                                
+//                            }
+//                        }
                     }
                     $valueIndicator->setParameter($nameParameter, $valueParameter);
                 }
