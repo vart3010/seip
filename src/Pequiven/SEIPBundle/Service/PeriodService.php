@@ -34,15 +34,16 @@ class PeriodService extends ContainerAware
             ($now >= $period->getDateStartNotificationArrangementProgram() && $now <= $period->getDateEndNotificationArrangementProgram())
           ){
             $result = true;
-        } else{
-            foreach($periodsAll as $itemPeriod){
-                if($period->getId() == $itemPeriod->getId()){
-                    if($itemPeriod->getStatus() == 1){
-                        $result = true;
-                    }
-                }
-            }
-        }
+        } 
+//        else{
+//            foreach($periodsAll as $itemPeriod){
+//                if($period->getId() == $itemPeriod->getId()){
+//                    if($itemPeriod->getStatus() == 1){
+//                        $result = true;
+//                    }
+//                }
+//            }
+//        }
 
         return $result;
     }

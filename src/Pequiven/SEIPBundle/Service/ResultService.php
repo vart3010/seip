@@ -452,6 +452,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
      * 
      * @param Request $request
      */
+
     public function setPenaltiesbyGoal(ArrangementProgram $resource, $porcentaje) {
 
         $real = array();
@@ -2437,14 +2438,21 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                     'dateEnd' => array(
                         'plan' => ToolService::formatDateTime($planDateEnd),
                         'real' => ToolService::formatDateTime($planDateEnd)
-                    )
+                    ),
+                    'gerencia' => $objetive->getgerencia(),
                 );
                 if ($objetive->getObjetiveLevel()->getLevel() == \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_OPERATIVO) {
-                    $objetivesOO[$objetive->getId()] = $data;
+                    if ($objetive->getgerencia() == $user->getgerencia()) {
+                        $objetivesOO[$objetive->getId()] = $data;
+                    }
                 } else if ($objetive->getObjetiveLevel()->getLevel() == \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_TACTICO) {
-                    $objetivesOT[$objetive->getId()] = $data;
+                    if ($objetive->getgerencia() == $user->getgerencia()) {
+                        $objetivesOT[$objetive->getId()] = $data;
+                    }
                 } else if ($objetive->getObjetiveLevel()->getLevel() == \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_ESTRATEGICO) {
-                    $objetivesOE[$objetive->getId()] = $data;
+                    if ($objetive->getgerencia() == $user->getgerencia()) {
+                        $objetivesOE[$objetive->getId()] = $data;
+                    }
                 }
             }
 
