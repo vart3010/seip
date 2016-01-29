@@ -18,10 +18,17 @@
                 </tr>
             </thead>
             {% set colspan = 6 %}
+
             <tbody>
                 {% for group in productGroup %}
                     <tr>
-                        <td>{{ loop.index }} - {{ generateLink(group) }}  </td>
+                        {#                        <td>{{ loop.index }} - {{ generateLink(group) }} #}
+                        <td>
+                            <a href="{{ path("pequiven_product_group_delivery_show",{id:group.id})}}">
+                                {{ loop.index }} - <i class="fa fa-file-o"></i> {{ group }}
+                            </a>
+                        </td>
+                        </td>
                         <th scope="row">
                             {{ group.productionLine.name }}
                         </th>

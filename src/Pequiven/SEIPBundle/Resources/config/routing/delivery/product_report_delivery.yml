@@ -1,0 +1,7 @@
+pequiven_product_group_report_create:
+    path: /{productGroup}/create
+    defaults:
+        _controller: pequiven.controller.product_group_report:createAction
+        _sylius:
+            form: pequiven_seipbundle_dataload_productreport
+    methods: [GET|POST]
