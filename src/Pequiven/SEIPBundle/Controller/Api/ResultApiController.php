@@ -201,12 +201,18 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
                         'real' => $this->formatDateTime($planDateEnd)
                     ),
                 );
-                if($objetive->getObjetiveLevel()->getLevel() == \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_OPERATIVO){
-                    $objetivesOO[$objetive->getId()] = $data;
-                }else if($objetive->getObjetiveLevel()->getLevel() == \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_TACTICO){
-                    $objetivesOT[$objetive->getId()] = $data;
-                }else if($objetive->getObjetiveLevel()->getLevel() == \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_ESTRATEGICO){
-                    $objetivesOE[$objetive->getId()] = $data;
+                if ($objetive->getObjetiveLevel()->getLevel() == \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_OPERATIVO) {
+                    if ($objetive->getgerencia() == $user->getgerencia()) {
+                        $objetivesOO[$objetive->getId()] = $data;
+                    }
+                } else if ($objetive->getObjetiveLevel()->getLevel() == \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_TACTICO) {
+                    if ($objetive->getgerencia() == $user->getgerencia()) {
+                        $objetivesOT[$objetive->getId()] = $data;
+                    }
+                } else if ($objetive->getObjetiveLevel()->getLevel() == \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_ESTRATEGICO) {
+                    if ($objetive->getgerencia() == $user->getgerencia()) {
+                        $objetivesOE[$objetive->getId()] = $data;
+                    }
                 }
             }
 
