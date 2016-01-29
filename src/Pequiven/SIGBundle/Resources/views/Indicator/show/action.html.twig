@@ -90,7 +90,7 @@
                                     <span class="select-arrow"></span>
                                     <span class="drop-down">
                                         <a href ng-click="removeActionEvolution(action_data='{{ action.actionValue.id }}')" class="button icon-cross-round">{{ "pequiven.actions.delete"|trans({},"messages") }}</a>
-                                        {% if action.observations == null %}
+                                        {% if action.observations == null and action.advance < 100 %}
                                             <a href ng-click="loadTemplateActionAdd(idAction='{{ action.actionValue.id }}',month='{{ month }}')" class="button icon-pencil">{{ "pequiven_indicator.upload_data"|trans({},"PequivenSIGBundle") }}</a>
                                         {% endif %}
                                     </span>
