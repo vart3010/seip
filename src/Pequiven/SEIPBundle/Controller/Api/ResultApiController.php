@@ -11,6 +11,8 @@
 
 namespace Pequiven\SEIPBundle\Controller\Api;
 
+use Pequiven\SEIPBundle\Service\ToolService;
+
 /**
  * API de Resultados
  *
@@ -97,7 +99,21 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController {
                 $arrangementProgramsForObjetives[$arrangementProgram->getId()] = $arrangementProgram;
                 $allArrangementPrograms[$arrangementProgram->getId()] = $arrangementProgram;
             }
-            $this->getObjetiveFromPrograms($arrangementProgramsForObjetives, $objetives);
+
+            //METAS EN LAS CUALES YA NO SE ENCUENTRA ASIGNADO
+            $goalsPast = $goalRepository->getDivestedIdGoalsbyUser($user->getId(), $period->getid());
+            $em = $this->getDoctrine()->getManager();
+            foreach ($goalsPast as $goal) {
+                $goals[$goal["id_affected"]] = $em->getRepository('Pequiven\ArrangementProgramBundle\Entity\Goal')->find($goal["id_affected"]);
+            }
+
+            //PROGRAMAS EN LOS CUALES YA NO SE ENCUENTRA ASIGNADO
+            $arrangementprogramPast = $arrangementProgramRepository->getDivestedIdAPbyUser($user->getId(), $period->getid());
+            foreach ($arrangementprogramPast as $ap) {
+                $arrangementProgramsObjects[$ap["id_affected"]] = $em->getRepository('Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram')->find($ap["id_affected"]);
+            }
+
+            ToolService::getObjetiveFromPrograms($arrangementProgramsForObjetives, $objetives);
 
             foreach ($arrangementProgramsObjects as $key => $arrangementProgram) {
                 $period = $arrangementProgram->getPeriod();
@@ -234,24 +250,29 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController {
                     $aportePlan = $advanceToDate;
                 }
 
-                $arrangementPrograms[$key] = array(
-                    'id' => sprintf('PG-%s', $arrangementProgram->getId()),
-                    'description' => $arrangementProgram->getRef(),
-                    'result' => $arrangementProgram->getUpdateResultByAdmin() ? $this->formatResult($arrangementProgram->getResultModified()) : $this->formatResult($arrangementProgram->getResult()),
-                    'dateStart' => array(
-                        'plan' => $this->formatDateTime($planDateStart),
-                        'real' => $this->formatDateTime($realDateStart)
-                    ),
-                    'dateEnd' => array(
-                        'plan' => $this->formatDateTime($planDateEnd),
-                        'real' => $this->formatDateTime($realDateEnd)
-                    ),
-                    'aporte' => $aporte,
-                    'aportePlan' => $aportePlan,
-                    'eval' => $eval,
-                    'observaciones' => $movements,
-                    'tipo' => $status,
-                );
+                 if ($eval == "N/A") {
+                    unset($arrangementPrograms[$key]);
+                } else {
+                    $arrangementPrograms[$key] = array(
+                        'id' => sprintf('PG-%s', $arrangementProgram->getId()),
+                        'ref' => $arrangementProgram->getref(),
+                        'description' => $arrangementProgram->getdescription(),
+                        'result' => number_format($eval, 2),
+                        'dateStart' => array(
+                            'plan' => $this->formatDateTime($planDateStart),
+                            'real' => $this->formatDateTime($realDateStart)
+                        ),
+                        'dateEnd' => array(
+                            'plan' => $this->formatDateTime($planDateEnd),
+                            'real' => $this->formatDateTime($realDateEnd)
+                        ),
+                        'aporte' => $aporte,
+                        'aportePlan' => $aportePlan,
+                            //'eval' => $eval,
+                            //'observaciones' => $movements,
+                            //'tipo' => $status,
+                    );
+                }
             }
 
             $gerenciaFirst = $user->getGerencia();
@@ -477,25 +498,28 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController {
                     $aportePlan = $goal->getGoalDetails()->getPlannedTotal($fecha);
                 }
 
-
-                $goals[$key] = array(
-                    'id' => sprintf('ME-%s', $goal->getId()),
-                    'description' => $goal->getName(),
-                    'result' => $goal->getUpdateResultByAdmin() ? $this->formatResult($goal->getResultModified()) : $this->formatResult($goal->getResult()),
-                    'dateStart' => array(
-                        'plan' => $this->formatDateTime($planDateStart),
-                        'real' => $this->formatDateTime($realDateStart)
-                    ),
-                    'dateEnd' => array(
-                        'plan' => $this->formatDateTime($planDateEnd),
-                        'real' => $this->formatDateTime($realDateEnd)
-                    ),
-                    'aporte' => $aporte,
-                    'aportePlan' => $aportePlan,
-                    'eval' => $eval,
-                    'observaciones' => $movements,
-                    'tipo' => $status,
-                );
+                if ($eval == "N/A") {
+                    unset($goals[$key]);
+                } else {
+                    $goals[$key] = array(
+                        'id' => sprintf('ME-%s', $goal->getId()),
+                        'description' => $goal->getName(),
+                        'result' => number_format($eval, 2),
+                        'dateStart' => array(
+                            'plan' => $this->formatDateTime($planDateStart),
+                            'real' => $this->formatDateTime($realDateStart)
+                        ),
+                        'dateEnd' => array(
+                            'plan' => $this->formatDateTime($planDateEnd),
+                            'real' => $this->formatDateTime($realDateEnd)
+                        ),
+                        'aporte' => $aporte,
+                        'aportePlan' => $aportePlan,
+                            // 'eval' => $eval,
+                            //'observaciones' => $movements,
+                            //'tipo' => $status,
+                    );
+                }
             }
             $referenceType = \Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_URL;
             foreach ($allArrangementPrograms as $arrangementProgram) {

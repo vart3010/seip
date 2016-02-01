@@ -125,12 +125,16 @@
             <tbody>
                 {% set cont = 1 %}
                 {% for pg in  (userItems.data.evaluation.management["arrangementPrograms"]) %} 
-                    {% set advances = pg.result %}
-                    {% set advancesClass = 'resultred' %}
-                    {% if advances >= 50 and advances < 100 %}
-                        {% set advancesClass = 'resultyellow' %}
-                    {% elseif advances >= 100 %}
-                        {% set advancesClass = 'resultgreen' %}
+                    {% if pg.tipo == 'Pasada' %}
+                        {% set advancesClass = "resultgrey"%}
+                    {% else %}
+                        {% set advances = pg.result %}
+                        {% set advancesClass = 'resultred' %}
+                        {% if advances >= 50 and advances < 100 %}
+                            {% set advancesClass = 'resultyellow' %}
+                        {% elseif advances >= 100 %}
+                            {% set advancesClass = 'resultgreen' %}
+                        {% endif %}
                     {% endif %}
                     <tr style="height: 50px;">
                         <td width="5%"style="text-align: center;">{{cont}}-</td>

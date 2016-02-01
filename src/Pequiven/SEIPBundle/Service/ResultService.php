@@ -10,7 +10,6 @@ use Pequiven\MasterBundle\Entity\Operator;
 use Pequiven\SEIPBundle\Model\Common\CommonObject;
 use Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram;
 use Pequiven\ArrangementProgramBundle\Entity\Goal;
-use Pequiven\ArrangementProgramBundle\Entity\MovementEmployee\MovementEmployee;
 
 /**
  * Servicio que se encarga de actualizar los resultados
@@ -1697,7 +1696,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                     } else {
                         if (!$variable->isStaticValue()) {
                             $valueParameter = 0;
-                        } 
+                        }
 //                        else{
 //                            if($indicator->getValidVariableStaticValue()){
 //                                $valueParameter = 0;
@@ -1718,7 +1717,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                                 }
                             }
                         }
-                        
+
 //                        if ($variable->isStaticValue() && $indicator->getValidVariableStaticValue()) {
 //                            if($valueParameterInit != $valueParameter){
 //                                
@@ -2212,11 +2211,16 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             //METAS EN LAS CUALES YA NO SE ENCUENTRA ASIGNADO
             $goalsPast = $goalRepository->getDivestedIdGoalsbyUser($idUser, $period->getid());
             $em = $this->getDoctrine()->getManager();
-
             foreach ($goalsPast as $goal) {
                 $goals[$goal["id_affected"]] = $em->getRepository('Pequiven\ArrangementProgramBundle\Entity\Goal')->find($goal["id_affected"]);
             }
 
+            //PROGRAMAS EN LOS CUALES YA NO SE ENCUENTRA ASIGNADO
+            $arrangementprogramPast = $arrangementProgramRepository->getDivestedIdAPbyUser($idUser, $period->getid());
+            foreach ($arrangementprogramPast as $ap) {
+                $arrangementProgramsObjects[$ap["id_affected"]]= $em->getRepository('Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram')->find($ap["id_affected"]);               
+            }            
+            
             ToolService::getObjetiveFromPrograms($arrangementProgramsForObjetives, $objetives);
 
             foreach ($arrangementProgramsObjects as $key => $arrangementProgram) {
