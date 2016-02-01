@@ -292,6 +292,13 @@ class ReportTemplateController extends SEIPController {
         $daysMonth = cal_days_in_month(CAL_GREGORIAN, $monthActive, $year);
         $startDayMonth = "01/" . $monthActive . "/" . $year;
         $endDayMonth = $daysMonth . "/" . $monthActive . "/" . $year;
+        
+        $periodActive = $this->getPeriodService()->getPeriodActive();
+        $yearPeriodSelected = date("Y",$periodActive->getDateStart()->getTimestamp());
+        
+        $startDateQuarter = "01/10/".$yearPeriodSelected;
+        $endDateQuarter = "31/12/".$yearPeriodSelected;
+
 
 
         $view = $this
@@ -305,6 +312,9 @@ class ReportTemplateController extends SEIPController {
             'endDate' => $this->getTransfDate($fecha, -1),
             'startDayMonth' => $startDayMonth,
             'endDayMonth' => $endDayMonth,
+            'startDateQuarter' => $startDateQuarter,
+            'endDateQuarter' => $endDateQuarter,
+            'yearPeriodSelected' => $yearPeriodSelected,
             'form' => $form->createView(),
                 ))
         ;
