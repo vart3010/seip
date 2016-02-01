@@ -15,7 +15,7 @@
 
 <div class="columns" ng-controller="ChartsDashboardController">
     <div class="twelve-columns twelve-columns-tablet twelve-columns-mobile new-row-mobile" style="text-align: center">
-        <span class="title-monitor">
+        <span class="title-monitor">            
             {{ 'monitor.productionReportTemplate'|trans({'%reportTemplate%': (reportTemplate.shortName) }) }}
         </span>
     </div>
@@ -42,5 +42,23 @@
     <script type="text/javascript">
         $(document).ready(function () {
         });
+    </script>
+
+    <script type="text/javascript"> 
+        
+        var array = {{reportArray}};
+        var cant = [array.length-1];
+        var indice = array.indexOf({{ reportTemplate.id }})  + 1;        
+        if (indice > cant) {
+            var indice = 0;
+        };
+        var idReport = array[indice];
+        console.log(idReport);                     
+
+        var page = "http://localhost/seip/web/app_dev.php/data-load/dashboard/production/reportTemplate/" + idReport + "/1"
+            function redireccionar(){
+                location.href= page
+            } 
+        setTimeout ("redireccionar()", 80000);
     </script>
 {% endblock %}

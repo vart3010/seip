@@ -656,12 +656,15 @@ class MonitorController extends baseController {
         
         $reportTemplateRepository = $this->container->get('pequiven.repository.report_template');
         
-        $reportTemplate = $reportTemplateRepository->find($reportTemplateId);
+        $reportTemplate = $reportTemplateRepository->find($reportTemplateId);        
         
+        $reportArray = $this->reportTemplateArray($reportTemplateRepository);
+
         $data = array(
-            'boxRender' => $boxRender,
-            'typeView' => $typeView,
-            'reportTemplate' => $reportTemplate,
+            'boxRender'       => $boxRender,
+            'typeView'        => $typeView,
+            'reportTemplate'  => $reportTemplate,
+            'reportArray'     => $reportArray
         );
         
         $view = $this
@@ -672,5 +675,45 @@ class MonitorController extends baseController {
         ;
 
         return $this->handleView($view);
+    }
+
+    /**
+     * Función que retorna un arreglo con las plantas a mostrar 
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return type
+     */
+    public function reportTemplateArray($reportTemplateRepository){
+
+        $reportTemplateArray = $reportTemplateRepository->findBy(array('period' => $this->getPeriodService()->getPeriodActive()));        
+        $reportArray = [];
+        $reportUser = $this->getUser()->getReportTemplates();
+        
+        if($this->getSecurityService()->isGranted(array('ROLE_SEIP_OPERATION_REPORT_TEMPLATES_ALL'))){
+            foreach ($reportTemplateArray as $valueReport) {
+                $reportArray[] = $valueReport->getId();                            
+            } 
+        }else{
+            foreach ($reportUser as $value) {                    
+                $reportArray[] = $value->getId();                                            
+            }            
+        }
+        
+        return json_encode($reportArray);
+    }
+
+    /**
+     * @return \Pequiven\SEIPBundle\Service\PeriodService
+     */
+    protected function getPeriodService()
+    {
+        return $this->container->get('pequiven_seip.service.period');
+    }
+
+     /**
+     * 
+     * @return \Pequiven\SEIPBundle\Service\SecurityService
+     */
+    protected function getSecurityService() {
+        return $this->container->get('seip.service.security');
     }
 }
