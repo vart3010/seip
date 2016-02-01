@@ -286,6 +286,9 @@
         </service>
         <service id="pequiven.indicator.form.value_indicator_config" class="Pequiven\IndicatorBundle\Form\Indicator\ValueIndicator\ValueIndicatorConfigType">
             <tag name="form.type" alias="pequiven_indicatorbundle_indicator_valueindicator_valueindicatorconfig" />
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
         </service>
         <service id="pequiven.form.report_template" class="Pequiven\SEIPBundle\Form\DataLoad\ReportTemplateType">
             <tag name="form.type" alias="pequiven_seipbundle_dataload_reporttemplate" />
