@@ -29,6 +29,15 @@ class ProductReportRepository extends SeipEntityRepository {
         ;
         return $qb->getQuery()->getResult();
     }
+    
+    public function findQueryByPeriod($period){
+        $qb = $this->getQueryAllEnabled();
+        $qb
+            ->andWhere("pr.period = :period")
+            ->setParameter("period", $period)
+            ;
+        return $qb;
+    }
 
     protected function getAlias() {
         return 'pr';
