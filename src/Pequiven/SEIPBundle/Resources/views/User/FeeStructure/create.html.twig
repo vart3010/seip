@@ -18,11 +18,8 @@
                         {% endfor %}
                     </select> 
                 {% else %}
-                    <select disabled onchange="this.form.submit();" name="gerencia" class="select2 input-large form-control" style="width: 80%">
-                        <option value="{{gerencia_ant.id}}" selected>{{gerencia_ant.description}}</option>                                           
-                        {% for gerencia in gerencias %}
-                            <option value="{{gerencia.id}}">{{gerencia.description}}</option>                                           
-                        {% endfor %}
+                    <select onchange="this.form.submit();" name="gerencia" class="select2 input-large form-control" style="width: 80%">
+                        <option value="{{gerencia_ant.id}}" selected>{{gerencia_ant.description}}</option>                                                                  
                     </select> 
                 {% endif %}
             </div>
