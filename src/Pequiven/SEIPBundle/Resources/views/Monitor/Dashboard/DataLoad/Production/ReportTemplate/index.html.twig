@@ -55,7 +55,8 @@
         var idReport = array[indice];
         console.log(idReport);                     
 
-        var page = "http://172.20.124.129/data-load/dashboard/production/reportTemplate/" + idReport + "/1"
+        //var page = "http://localhost/seip/web/app_dev.php/data-load/dashboard/production/reportTemplate/" + idReport + "/1"
+        var page = "http://{{ host }}/data-load/dashboard/production/reportTemplate/" + idReport + "/1"
             function redireccionar(){
                 location.href= page
             } 

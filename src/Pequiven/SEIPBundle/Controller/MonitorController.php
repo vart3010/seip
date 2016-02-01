@@ -659,12 +659,14 @@ class MonitorController extends baseController {
         $reportTemplate = $reportTemplateRepository->find($reportTemplateId);        
         
         $reportArray = $this->reportTemplateArray($reportTemplateRepository);
+        $host= $_SERVER["HTTP_HOST"];
 
         $data = array(
             'boxRender'       => $boxRender,
             'typeView'        => $typeView,
             'reportTemplate'  => $reportTemplate,
-            'reportArray'     => $reportArray
+            'reportArray'     => $reportArray,
+            'host'            => $host
         );
         
         $view = $this
@@ -683,6 +685,8 @@ class MonitorController extends baseController {
      * @return type
      */
     public function reportTemplateArray($reportTemplateRepository){
+        //$host= $_SERVER["HTTP_HOST"];
+        //$url= $_SERVER["REQUEST_URI"];
 
         $reportTemplateArray = $reportTemplateRepository->findBy(array('period' => $this->getPeriodService()->getPeriodActive()));        
         $reportArray = [];
@@ -697,7 +701,7 @@ class MonitorController extends baseController {
                 $reportArray[] = $value->getId();                                            
             }            
         }
-        
+
         return json_encode($reportArray);
     }
 
