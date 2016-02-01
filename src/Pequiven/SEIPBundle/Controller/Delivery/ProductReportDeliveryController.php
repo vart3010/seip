@@ -25,12 +25,14 @@ class ProductReportDeliveryController extends SEIPController {
     public function createNew() {
         $entity = parent::createNew();
         $request = $this->getRequest();
-        $productGroupDeliveryId = $request->get("productGroupDelivery");
+        $productGroupDeliveryId = $request->get("productGroup");
+        
         if ($productGroupDeliveryId > 0) {
             $em = $this->getDoctrine()->getManager();
-            $plantReport = $em->find("Pequiven\SEIPBundle\Entity\Delivery\productGroupDelivery", $productGroupDeliveryId);
-            $entity->setPlantReport($plantReport);
+            $productGroupDelivery = $em->find("Pequiven\SEIPBundle\Entity\Delivery\productGroupDelivery", $productGroupDeliveryId);
+            $entity->setProductGroupDelivery($productGroupDelivery);
         }
+        
         return $entity;
     }
 

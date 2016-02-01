@@ -39,14 +39,15 @@ class ProductReportDelivery extends ModelBaseMaster {
      * @ORM\JoinColumn(nullable=false)
      */
     private $product;
-
-    /**
-     * Indicador
-     * @var \Pequiven\IndicatorBundle\Entity\Indicator
-     * @ORM\ManyToOne(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator")
-     */
-    private $indicator;
-
+//
+//    /**
+//     * Indicador
+//     * @var \Pequiven\IndicatorBundle\Entity\Indicator
+//     * @ORM\ManyToOne(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator")
+//     */
+//    private $indicator;
+//
+//    
     /**
      * Periodo.
      * 
@@ -72,9 +73,9 @@ class ProductReportDelivery extends ModelBaseMaster {
         return $this->id;
     }
 
-    function getIndicator() {
-        return $this->indicator;
-    }
+//    function getIndicator() {
+//        return $this->indicator;
+//    }
 
     function getPeriod() {
         return $this->period;
@@ -92,9 +93,9 @@ class ProductReportDelivery extends ModelBaseMaster {
         $this->id = $id;
     }
 
-    function setIndicator(\Pequiven\IndicatorBundle\Entity\Indicator $indicator) {
-        $this->indicator = $indicator;
-    }
+//    function setIndicator(\Pequiven\IndicatorBundle\Entity\Indicator $indicator) {
+//        $this->indicator = $indicator;
+//    }
 
     function setPeriod(\Pequiven\SEIPBundle\Entity\Period $period) {
         $this->period = $period;
