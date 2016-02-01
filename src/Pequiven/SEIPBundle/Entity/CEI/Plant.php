@@ -50,7 +50,7 @@ class Plant extends BaseModel {
     /**
      * Alias corto de la planta
      * @var string
-     * @ORM\Column(name="alias",type="string",length=20)
+     * @ORM\Column(name="alias",type="string",length=200)
      */
     private $alias;
 
