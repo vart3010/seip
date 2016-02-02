@@ -649,7 +649,7 @@ class MonitorController extends baseController {
      * @return type
      */
     public function displayDashboardProductionReportTemplateAction(Request $request){
-        $res = $request->get('r');
+        $answer = $request->get('r');        
         $typeView = $request->get('typeView');
         $reportTemplateId = $request->get('reportTemplateId');
         $boxRender = $this->get('tecnocreaciones_box.render');
@@ -667,7 +667,7 @@ class MonitorController extends baseController {
             'reportTemplate'  => $reportTemplate,
             'reportArray'     => $reportArray,
             'host'            => $host,
-            'r'               => $res
+            'answer'          => $answer
         );
         
         $view = $this
