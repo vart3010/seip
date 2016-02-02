@@ -961,10 +961,9 @@ class ArrangementProgramController extends SEIPController {
                 $data['formErrors'] = $editForm;
             }
         }//Fin isMethodPost
-        
         //VALIDO QUE TENGA PERMISOS PARA MOVER EMPLEADOS EN METAS         
         $securityService = $this->getSecurityService();
-         if ((($securityService->isGranted(array("ROLE_SEIP_ARRANGEMENT_PROGRAM_MOVEMENT_GOALS")))) || ($securityService->isGranted(array("ROLE_SEIP_ARRANGEMENT_PROGRAM_MOVEMENT_GOALS_POST_MORTEM")))) {
+        if ((($securityService->isGranted(array("ROLE_SEIP_ARRANGEMENT_PROGRAM_MOVEMENT_GOALS")))) || ($securityService->isGranted(array("ROLE_SEIP_ARRANGEMENT_PROGRAM_MOVEMENT_GOALS_POST_MORTEM")))) {
             $MovementEmployee = true;
         } else {
             $MovementEmployee = false;
@@ -1566,7 +1565,7 @@ class ArrangementProgramController extends SEIPController {
         $observations = $resource->getObservations();
         $reference = $resource->getRef();
         $observationString = '';
-        $count=0;
+        $count = 0;
         foreach ($observations as $observation) {
             $count++;
             $observationString .= sprintf("%d.- %s. \n", $count, $observation->getDescription());
@@ -1605,7 +1604,7 @@ class ArrangementProgramController extends SEIPController {
                 ->setCellValue('AI' . $rowDetails, $approvalDate)
         ;
         $row = $rowDetails + 3;
-        $merge = 'B'.$row.':H'.$row.'';
+        $merge = 'B' . $row . ':H' . $row . '';
         $activeSheet->mergeCells($merge);
         $activeSheet->setCellValue(sprintf('B%s', $row), 'NIVEL DE REVISION: 1');
         $activeSheet->setCellValue(sprintf('AI%s', $row), 'C-PG-DM-OI-R-002');
