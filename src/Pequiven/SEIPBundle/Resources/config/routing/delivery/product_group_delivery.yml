@@ -1,0 +1,21 @@
+pequiven_product_group_delivery_create:
+    path: /{reportTemplateDelivery}/create
+    defaults:
+        _controller: pequiven.controller.product_group_delivery:createAction
+        _sylius:
+            form: pequiven_seipbundle_delivery_productgroup
+    methods: [GET|POST]
+    
+pequiven_product_group_delivery_update:
+    path: /{id}/update
+    defaults:
+        _controller: pequiven.controller.product_group_delivery:updateAction
+        _sylius:
+            form: pequiven_seipbundle_delivery_productgroup
+    methods: [GET|POST]
+
+pequiven_product_group_delivery_show:
+    path: /{id}/show
+    defaults:
+        _controller: pequiven.controller.product_group_delivery:showAction
+    methods: [GET]

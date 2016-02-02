@@ -36,6 +36,7 @@ pequiven_seip:
     details: Detalles
     plants: Plantas
     plants_groups: Grupos de Plantas
+    product_group: Grupos de Productos
     inventory: Inventario
     date_of_notification: Fecha de notificación
     date_of_report: Fecha de reporte
@@ -391,6 +392,10 @@ pequiven_seip:
             raw_materials: Consumo de materia prima
         raw_material: Consumo de Materia prima
         details_raw_material: Detalle de consumo de materia prima
+    
+    product_group_delivery:
+        product_group: Linea de Negocio
+        
     product_report:
         product_report: Producto
         inventory:
@@ -409,7 +414,7 @@ pequiven_seip:
             materiaPrimaExt: Materia Prima Externa
         question:
             delete: Desea eliminar este detalle de producción
-            
+        
     raw_material:
         type:
             internal: Interna
@@ -697,3 +702,4 @@ Unit: Unidad
 'Show inventory': Inventario
 'Show observation': Puntos de Atención
 'Show pnr': PNR
+'production_line': Linea de Producto

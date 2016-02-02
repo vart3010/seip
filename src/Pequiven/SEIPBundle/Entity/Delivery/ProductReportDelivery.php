@@ -32,21 +32,22 @@ class ProductReportDelivery extends ModelBaseMaster {
      */
     private $productGroupDelivery;
 
-//    /**
-//     * Producto
-//     * @var \Pequiven\SEIPBundle\Entity\CEI\Product
-//     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Product",inversedBy="productReports")
-//     * @ORM\JoinColumn(nullable=false)
-//     */
-//    private $product;
-
     /**
-     * Indicador
-     * @var \Pequiven\IndicatorBundle\Entity\Indicator
-     * @ORM\ManyToOne(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator")
+     * Producto
+     * @var \Pequiven\SEIPBundle\Entity\CEI\Product
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Product",inversedBy="productReports")
+     * @ORM\JoinColumn(nullable=false)
      */
-    private $indicator;
-
+    private $product;
+//
+//    /**
+//     * Indicador
+//     * @var \Pequiven\IndicatorBundle\Entity\Indicator
+//     * @ORM\ManyToOne(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator")
+//     */
+//    private $indicator;
+//
+//    
     /**
      * Periodo.
      * 
@@ -72,9 +73,9 @@ class ProductReportDelivery extends ModelBaseMaster {
         return $this->id;
     }
 
-    function getIndicator() {
-        return $this->indicator;
-    }
+//    function getIndicator() {
+//        return $this->indicator;
+//    }
 
     function getPeriod() {
         return $this->period;
@@ -92,9 +93,9 @@ class ProductReportDelivery extends ModelBaseMaster {
         $this->id = $id;
     }
 
-    function setIndicator(\Pequiven\IndicatorBundle\Entity\Indicator $indicator) {
-        $this->indicator = $indicator;
-    }
+//    function setIndicator(\Pequiven\IndicatorBundle\Entity\Indicator $indicator) {
+//        $this->indicator = $indicator;
+//    }
 
     function setPeriod(\Pequiven\SEIPBundle\Entity\Period $period) {
         $this->period = $period;
@@ -114,6 +115,14 @@ class ProductReportDelivery extends ModelBaseMaster {
 
     function setProductGroupDelivery(\Pequiven\SEIPBundle\Entity\Delivery\ProductGroupDelivery $productGroupDelivery) {
         $this->productGroupDelivery = $productGroupDelivery;
+    }
+
+    function getProduct() {
+        return $this->product;
+    }
+
+    function setProduct(\Pequiven\SEIPBundle\Entity\CEI\Product $product) {
+        $this->product = $product;
     }
 
 }

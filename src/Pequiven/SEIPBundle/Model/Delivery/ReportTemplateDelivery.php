@@ -9,6 +9,6 @@ use Pequiven\SEIPBundle\Model\BaseModel;
  *
  * @author Victor Tortolero <vart10.30@gmail.com>
  */
-abstract class ReportTemplateDelivery extends BaseModel {
+abstract class ReportTemplateDelivery extends BaseModel  {
     
 }
