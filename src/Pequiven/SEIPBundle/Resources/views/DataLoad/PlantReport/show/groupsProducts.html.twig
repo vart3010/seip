@@ -3,7 +3,8 @@
 <div class="block">
     <div class="block-title">
         <h3> {{ 'pequiven_seip.productsGroups'|trans }}&nbsp;
-            ({{ groupsProducts|length }})
+{#            ({{ groupsProducts|length }})#}
+            ({{ totalGroups|length }})
         </h3>
         <div class="button-group absolute-right compact">
             {% if periodService().isAllowPlanningReport %}
@@ -23,7 +24,7 @@
             </thead>
             {% set colspan = 6 %}
             <tbody>
-                {% for product in groupsProducts %}
+                {% for product in totalGroups %}
                     <tr>
                         <td>{{ loop.index }} - 
                             <a href="{{ path('pequiven_product_report_show_groups',{id:product.entityProductReport.id})}}">

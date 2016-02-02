@@ -56,6 +56,11 @@ class ProductReportType extends SeipAbstractForm
                     return $repository->getQueryPeriod();
                 },
             ))
+            ->add('isGroup',null,array(
+                'label_attr' => array('class' => 'label'),
+                "attr" => array("class" => "switch medium mid-margin-right","data-text-on"=>"Si","data-text-off"=>"No"),
+                "required" => false,
+            ))
             ->add('enabled',null,array(
                 'label_attr' => array('class' => 'label'),
                 "attr" => array("class" => "switch medium mid-margin-right","data-text-on"=>"Si","data-text-off"=>"No"),
@@ -63,6 +68,8 @@ class ProductReportType extends SeipAbstractForm
             ))
         ;
     }
+    
+    
     
     /**
      * @param OptionsResolverInterface $resolver

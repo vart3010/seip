@@ -14,7 +14,6 @@ namespace Pequiven\SEIPBundle\Controller\DataLoad;
 use Pequiven\SEIPBundle\Controller\SEIPController;
 use Symfony\Component\HttpFoundation\Request;
 use Pequiven\SEIPBundle\Model\Common\CommonObject;
-
 use Pequiven\SEIPBundle\Form\DataLoad\PlantReportType;
 
 /**
@@ -102,6 +101,7 @@ class PlantReportController extends SEIPController {
         $totalStops = array();
         $totalHours = array();
         $totalProducts = array();
+        $totalP = array();
         $totalGroupsProducts = array();
         $totalServices = array();
 
@@ -109,7 +109,7 @@ class PlantReportController extends SEIPController {
 
         $totalStops = CommonObject::fillArrayMonth($totalStops);
         $totalHours = CommonObject::fillArrayMonth($totalHours);
-        
+
         $hasGroupProducts = false;
 
         /**
@@ -119,18 +119,57 @@ class PlantReportController extends SEIPController {
          * PRODUCTOS Y 
          * SERVICIOS
          */
-        if (count($childs) > 0) {
-            
-            $productReports = $plantReport->getProductsReport();
-            if(count($productReports) > 0){
-                foreach($productReports as $productReport){
-                    if(count($productReport->getProduct()->getComponents()) > 0){
-                        $hasGroupProducts = true;
-                        break;
+        $productReports = $plantReport->getProductsReport();
+        foreach ($productReports as $productReport) {
+            $product = $productReport->getproduct();
+            if ($productReport->getIsGroup()) {
+                //SE EXTRAEN LOS SUBPRODUCTOS PARA MOSTRAR ABAJO DE ETIQUETA
+                $groupNames = "";
+                 $cont = 0;
+                foreach ($product->getComponents() as $productChildren) {
+                    if ($cont == 0) {
+                        $groupNames .= $productChildren->getName();
+                    } else {
+                        $groupNames .= "," . $productChildren->getName();
                     }
+                    $cont++;
+                }
+
+                $totalGroups[] = array(
+                    "id" => $product->getId(),
+                    "name" => $product->getName(),
+                    "line" => $product->getProductionLine(),
+                    "unit" => $product->getProductUnit(),
+                    "entityProductReport" => $productReport,
+                    "groupsProducts" => $groupNames
+                );
+            } else {
+                if (!CommonObject::validIdExist($product->getId(), $totalP)) {
+                    //if (!$this->validIdExist($product->getId(), $totalProducts)) {
+                    //PRODUCTOS
+                    $totalP[] = array(
+                        "id" => $product->getId(),
+                        "name" => $product->getName(),
+                        "line" => $product->getProductionLine(),
+                        "unit" => $product->getProductUnit(),
+                        "entityProductReport" => $productReport
+                    );
                 }
             }
-            
+        }
+
+
+        if (count($childs) > 0) {
+
+//            $productReports = $plantReport->getProductsReport();
+//            if (count($productReports) > 0) {
+//                foreach ($productReports as $productReport) {
+//                    if (count($productReport->getProduct()->getComponents()) > 0) {
+//                        $hasGroupProducts = true;
+//                        break;
+//                    }
+//                }
+//            }
             //SECCIÒN PRODUCTOS HEREDADOS
             foreach ($childs as $child) {
                 foreach ($child->getPlantReport() as $plantReportByChild) {
@@ -168,17 +207,17 @@ class PlantReportController extends SEIPController {
 //                                "groupsProducts" => $groupNames
 //                            );
 //                        } else {
-                            if (!CommonObject::validIdExist($product->getId(), $totalProducts)) {
-                                //if (!$this->validIdExist($product->getId(), $totalProducts)) {
-                                //PRODUCTOS
-                                $totalProducts[] = array(
-                                    "id" => $product->getId(),
-                                    "name" => $product->getName(),
-                                    "line" => $product->getProductionLine(),
-                                    "unit" => $product->getProductUnit(),
-                                    "entityProductReport" => $productReports
-                                );
-                            }
+                        if (!CommonObject::validIdExist($product->getId(), $totalProducts)) {
+                            //if (!$this->validIdExist($product->getId(), $totalProducts)) {
+                            //PRODUCTOS
+                            $totalProducts[] = array(
+                                "id" => $product->getId(),
+                                "name" => $product->getName(),
+                                "line" => $product->getProductionLine(),
+                                "unit" => $product->getProductUnit(),
+                                "entityProductReport" => $productReports
+                            );
+                        }
 //                        }
                     }
 
@@ -201,51 +240,51 @@ class PlantReportController extends SEIPController {
                     }
                 }
             }
-            
-            if($hasGroupProducts){
-                foreach ($plantReport->getProductsReport() as $productReports) {
-                    $product = $productReports->getProduct();
-                    //SE LLENAN LOS DOS VECTORES DE PRODUCTOS
-                    if (count($product->getComponents()) > 0) {
-                        $cont = 0;
-                        $groupNames = "";
-                        foreach ($product->getComponents() as $productChildren) {
-                            if ($cont == 0) {
-                                $groupNames .= $productChildren->getName();
-                            } else {
-                                $groupNames .= "," . $productChildren->getName();
-                            }
-                            $cont++;
-                        }
-                        //PRODUCTOS POR GRUPOS
-                        $totalGroupsProducts[] = array(
-                            "id" => $product->getId(),
-                            "name" => $product->getName(),
-                            "line" => $product->getProductionLine(),
-                            "unit" => $product->getProductUnit(),
-                            "entityProductReport" => $productReports,
-                            "groupsProducts" => $groupNames
-                        );
-                    }
-                }
-            }
+
+//            if ($hasGroupProducts) {
+//                foreach ($plantReport->getProductsReport() as $productReports) {
+//                    $product = $productReports->getProduct();
+//                    //SE LLENAN LOS DOS VECTORES DE PRODUCTOS
+//                    if (count($product->getComponents()) > 0) {
+//                        $cont = 0;
+//                        $groupNames = "";
+//                        foreach ($product->getComponents() as $productChildren) {
+//                            if ($cont == 0) {
+//                                $groupNames .= $productChildren->getName();
+//                            } else {
+//                                $groupNames .= "," . $productChildren->getName();
+//                            }
+//                            $cont++;
+//                        }
+//                        //PRODUCTOS POR GRUPOS
+//                        $totalGroupsProducts[] = array(
+//                            "id" => $product->getId(),
+//                            "name" => $product->getName(),
+//                            "line" => $product->getProductionLine(),
+//                            "unit" => $product->getProductUnit(),
+//                            "entityProductReport" => $productReports,
+//                            "groupsProducts" => $groupNames
+//                        );
+//                    }
+//                }
+//            }
         } else {
             foreach ($plantReport->getProductsReport() as $productReports) {
                 $product = $productReports->getProduct();
 
 //                if (count($product->getComponents()) == "0") {
-                    //var_dump(count($product->getComponents()));
-                    if (!CommonObject::validIdExist($product->getId(), $totalProducts)) {
-                        //if (!$this->validIdExist($product->getId(), $totalProducts)) {
-                        //PRODUCTOS
-                        $totalProducts[] = array(
-                            "id" => $product->getId(),
-                            "name" => $product->getName(),
-                            "line" => $product->getProductionLine(),
-                            "unit" => $product->getProductUnit(),
-                            "entityProductReport" => $productReports
-                        );
-                    }
+                //var_dump(count($product->getComponents()));
+                if (!CommonObject::validIdExist($product->getId(), $totalProducts)) {
+                    //if (!$this->validIdExist($product->getId(), $totalProducts)) {
+                    //PRODUCTOS
+                    $totalProducts[] = array(
+                        "id" => $product->getId(),
+                        "name" => $product->getName(),
+                        "line" => $product->getProductionLine(),
+                        "unit" => $product->getProductUnit(),
+                        "entityProductReport" => $productReports
+                    );
+                }
 //                }
             }
         }
@@ -265,8 +304,10 @@ class PlantReportController extends SEIPController {
             "plant_report" => $plantReport,
             "childs" => $childs,
             "stopPlanning" => $stopPlanningTable,
-            "products" => $totalProducts,
-            "groupsProducts" => $totalGroupsProducts,
+            //"products" => $totalProducts,
+            "products" => $totalP,
+            //"groupsProducts" => $totalGroupsProducts,
+            "totalGroups" => $totalGroups,
             "services" => $totalServices,
             "alicuota" => $alicuota
         );
@@ -483,24 +524,22 @@ class PlantReportController extends SEIPController {
         $this->flush();
         return $this->redirectHandler->redirectTo($resource);
     }
-    
+
     /**
      * @param Request $request
      *
      * @return RedirectResponse|Response
      */
-    public function updateAction(Request $request)
-    {
-        
+    public function updateAction(Request $request) {
+
         $resource = $this->findOr404($request);
         $form = $this->createForm(new \Pequiven\SEIPBundle\Form\DataLoad\PlantReportType(), $resource);
 //        $form = $this->createForm($this->container->get('pequiven_seipbundle_dataload_plantreport'), $resource);
-        
 //        $form = $this->getForm($resource);
         $method = $request->getMethod();
 
         if (in_array($method, array('POST', 'PUT', 'PATCH')) &&
-            $form->submit($request, !$request->isMethod('PATCH'))->isValid()) {
+                $form->submit($request, !$request->isMethod('PATCH'))->isValid()) {
             $this->domainManager->update($resource);
 
             return $this->redirectHandler->redirectTo($resource);
@@ -511,12 +550,12 @@ class PlantReportController extends SEIPController {
         }
 
         $view = $this
-            ->view()
-            ->setTemplate($this->config->getTemplate('update.html'))
-            ->setData(array(
-                $this->config->getResourceName() => $resource,
-                'form'                           => $form->createView()
-            ))
+                ->view()
+                ->setTemplate($this->config->getTemplate('update.html'))
+                ->setData(array(
+            $this->config->getResourceName() => $resource,
+            'form' => $form->createView()
+                ))
         ;
 
         return $this->handleView($view);
