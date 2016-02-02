@@ -1054,7 +1054,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
 
                 $reports->addChild($production);
             }
-            if ($this->isGranted(array('ROLE_SEIP_OPERATION_LIST_REPORT_PRODUCTION'))) {
+            if ($this->isGranted(array('ROLE_SEIP_OPERATION_LIST_REPORT_DELIVERY'))) {
                 $delivery = $this->factory->createItem('operations.reports.delivery', $this->getSubLevelOptions(array("route" => "",
                                 ))
                         )->setLabel($this->translate(sprintf('app.backend.menu.%s.operations.reports.delivery', $section)));
@@ -1080,7 +1080,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                 $planning->addChild($production);
             }
 
-            if ($this->isGranted(array('ROLE_SEIP_OPERATION_LIST_PLANNING_PRODUCTION'))) {
+            if ($this->isGranted(array('ROLE_SEIP_OPERATION_LIST_PLANNING_DELIVERY'))) {
                 $delivery = $this->factory->createItem('operations.planning.delivery', $this->getSubLevelOptions(array("route" => "pequiven_report_template_delivery_index",
                                 ))
                         )->setLabel($this->translate(sprintf('app.backend.menu.%s.operations.planning.delivery', $section)));
