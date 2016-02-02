@@ -159,7 +159,7 @@ class ReportTemplateController extends SEIPController {
      */
     public function loadAction(Request $request) {
         $dateString = null;
-        if ($this->getSecurityService()->isGranted(array('ROLE_SEIP_DATA_LOAD_CHANGE_DATE', 'ROLE_SEIP_OPERATION_LOAD_FIVE_DAYS'))) {
+        if ($this->getSecurityService()->isGranted(array('ROLE_SEIP_DATA_LOAD_CHANGE_DATE', 'ROLE_SEIP_OPERATION_LOAD_FIVE_DAYS','ROLE_SEIP_OPERATION_LOAD_QUARTER'))) {
             $dateString = $request->get('dateNotification', null);
         }
         $plantReportToLoad = $request->get('plant_report', null);
