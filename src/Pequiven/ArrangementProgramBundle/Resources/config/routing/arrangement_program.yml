@@ -227,11 +227,3 @@ AP_movement_remove:
     methods: [GET|POST]
     options:
         expose: true
-        
-AP_movement_export:
-    path: /export/{idAP}
-    defaults:
-        _controller: pequiven_seip.controller.arrangementprogram_movement:exportAction
-    methods: [GET|POST]
-    options:
-        expose: true
