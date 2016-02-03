@@ -3,7 +3,7 @@
 <div class="block" ng-init="{% if entity.categoryArrangementProgram %}getTypeGoal('{{ entity.categoryArrangementProgram.id }}');model.arrangementProgram.categoryArrangementProgram={{ entity.categoryArrangementProgram.id }}{% endif %} ">
     <div class="block-title">
         <h3>{$ goals.length $} {{ 'pequiven.goals.goals'|trans }}</h3>
-        {% if(is_granted('ROLE_SEIP_PLANNING_ARRANGEMENT_PROGRAM_EDIT')) %}
+        {% if(is_granted('ROLE_SEIP_PLANNING_ARRANGEMENT_PROGRAM_EDIT')or(entity.getTimeline.getArrangementProgram.status != 3)) %}
             <div class="button-group absolute-right compact">
                 <a href="" ng-click="loadTemplateMeta(null,goals.length + 1)" id="loadTemplateMeta" class="button icon-list-add">{{ 'pequiven.add'|trans({},'messages') }}</a>
             </div>

@@ -40,7 +40,7 @@
         {% endif %}
     {% endif %}
     {% if form.tacticalObjective is defined %}
-        {% if(is_granted('ROLE_SEIP_PLANNING_ARRANGEMENT_PROGRAM_EDIT')) %}
+        {% if(is_granted('ROLE_SEIP_PLANNING_ARRANGEMENT_PROGRAM_EDIT')or(entity.status != 3)) %}
             <div class="field-block button-height">
                 {{ form_label(form.tacticalObjective) }}
                 {{ form_widget(form.tacticalObjective) }}
@@ -59,7 +59,7 @@
         {% endif %}
     {% endif %}
     {% if form.operationalObjective is defined %}
-        {% if(is_granted('ROLE_SEIP_PLANNING_ARRANGEMENT_PROGRAM_EDIT')) %}
+        {% if(is_granted('ROLE_SEIP_PLANNING_ARRANGEMENT_PROGRAM_EDIT')or(entity.status != 3)) %}
             <div class="field-block button-height">
                 {{ form_label(form.operationalObjective) }}
                 {{ form_widget(form.operationalObjective) }}
@@ -128,7 +128,7 @@
         {{ form_widget(form.responsibles) }}
         {{ form_errors(form.responsibles) }}#}
     </div>
-    {% if(is_granted('ROLE_SEIP_PLANNING_ARRANGEMENT_PROGRAM_EDIT')) %}
+    {% if(is_granted('ROLE_SEIP_PLANNING_ARRANGEMENT_PROGRAM_EDIT')or(entity.status != 3)) %}
         <div class="field-block button-height">
             {{ form_label(form.description) }}
             {{ form_widget(form.description) }}
