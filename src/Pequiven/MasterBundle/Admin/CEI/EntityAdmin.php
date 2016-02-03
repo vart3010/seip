@@ -67,6 +67,7 @@ class EntityAdmin extends BaseAdmin
             ->addIdentifier("name")
             ->add("location")
             ->add("alias")
+            ->add('canBeNetProductionGreaterThanGross', null, array('editable' => true, 'required' => false))
             ;
         parent::configureListFields($list);
     }
