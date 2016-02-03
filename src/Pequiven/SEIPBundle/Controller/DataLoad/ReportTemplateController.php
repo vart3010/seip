@@ -296,10 +296,30 @@ class ReportTemplateController extends SEIPController {
         $periodActive = $this->getPeriodService()->getPeriodActive();
         $yearPeriodSelected = date("Y",$periodActive->getDateStart()->getTimestamp());
         
-        $startDateQuarter = "01/10/".$yearPeriodSelected;
-        $endDateQuarter = "31/12/".$yearPeriodSelected;
-
-
+        $startDateQuarter = $this->getTransfDate($fecha, -1);
+        $endDateQuarter = $this->getTransfDate($fecha, -1);
+        
+        $user = $this->getUser();
+        if(($quarterToLoad = $user->getQuarterToLoadOperationProduction()) > 0){
+            switch ($quarterToLoad){
+                case 1:
+                    $startDateQuarter = "01/01/".$yearPeriodSelected;
+                    $endDateQuarter = "31/03/".$yearPeriodSelected;
+                    break;
+                case 2:
+                    $startDateQuarter = "01/04/".$yearPeriodSelected;
+                    $endDateQuarter = "30/06/".$yearPeriodSelected;
+                    break;
+                case 3:
+                    $startDateQuarter = "01/07/".$yearPeriodSelected;
+                    $endDateQuarter = "30/09/".$yearPeriodSelected;
+                    break;
+                case 4:
+                    $startDateQuarter = "01/10/".$yearPeriodSelected;
+                    $endDateQuarter = "31/12/".$yearPeriodSelected;
+                    break;
+            }
+        }
 
         $view = $this
                 ->view()
