@@ -103,6 +103,8 @@ class PlantReportController extends SEIPController {
         $totalProducts = array();
         $totalP = array();
         $totalGroupsProducts = array();
+        $totalGroups= array();
+        
         $totalServices = array();
 
         $alicuota = array();
