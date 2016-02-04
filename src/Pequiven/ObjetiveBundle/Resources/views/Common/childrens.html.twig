@@ -1,7 +1,10 @@
 <ul class="fa-ul">
     {% for children in entity.childrens %}
         {% if (children.enabled) %}
-            <li>{% set avancedUsed = children.getResult %}
+            
+            <li>
+                {{ loop.index|str_pad(2,'0') }}&nbsp-&nbsp;
+                {% set avancedUsed = children.getResult %}
                 {% include 'PequivenObjetiveBundle:Common:percentajeBarResult.html.twig' %}
                 {{ generateLink(children) }}{% if children.weight > 0 %}&nbsp;({{ 'pequiven_seip.results.weight'|trans({},'PequivenSEIPBundle') }} {{ children.weight }}%){% endif %}
             </li>

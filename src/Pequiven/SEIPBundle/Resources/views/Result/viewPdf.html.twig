@@ -104,7 +104,7 @@
                 {% if ((avancedUsed > 30)and(avancedUsed < 70)) %}
                     <span class="resultyellow">{{ avancedUsed|number_format(2,',','.') }}% </span>
                 {% endif %}
-                {% if (avancedUsed > 70) %}
+                {% if (avancedUsed >= 70) %}
                     <span class="resultgreen">{{ avancedUsed|number_format(2,',','.') }}% </span>
                 {% endif %}
                 {% set parentSummary = resultService.getResultChildresObjetives(p,t['child']) %}
@@ -127,7 +127,7 @@
                             {% if ((avancedUsed > 30)and(avancedUsed < 70)) %}
                                 <span class="resultyellow">{{ avancedUsed|number_format(2,',','.') }}% </span>
                             {% endif %}
-                            {% if (avancedUsed > 70) %}
+                            {% if (avancedUsed >= 70) %}
                                 <span class="resultgreen">{{ avancedUsed|number_format(2,',','.') }}% </span>
                             {% endif %}
                             <b>
@@ -147,7 +147,7 @@
                                         {% if ((avancedUsed > 30)and(avancedUsed < 70)) %}
                                             <span class="resultyellow">{{ avancedUsed|number_format(2,',','.') }}% </span>
                                         {% endif %}
-                                        {% if (avancedUsed > 70) %}
+                                        {% if (avancedUsed >= 70) %}
                                             <span class="resultgreen">{{ avancedUsed|number_format(2,',','.') }}% </span>
                                         {% endif %}
                                         <b>
