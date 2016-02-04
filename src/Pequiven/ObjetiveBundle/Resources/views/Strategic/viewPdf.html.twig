@@ -26,6 +26,19 @@
     li {
         font-size: 7pt;
     }
+    .resultred{
+        color: #FF0000;        
+        font-weight: bold;
+    }
+    .resultgreen{
+
+        color: #04B404; 
+        font-weight: bold;
+    }
+    .resultyellow{        
+        color: #DBA901;                
+        font-weight: bold;
+    }
 </style>
 {% block body %}
     <table width="100%">
@@ -66,17 +79,30 @@
         </table> 
         <br>
         <table width="95%" class="simple-table responsive-table tables-extras"> 
-            <tr>                
+            <tr>
+                <td class="title_bold" bgcolor="#F2F2F2" width="5%" style="text-align: center;">Nro.</td>             
                 <td class="title_bold" bgcolor="#F2F2F2" width="8%" style="text-align: center;">Ref</td>                
-                <td class="title_bold" bgcolor="#F2F2F2" width="82%" style="text-align: center;">Enunciado</td>                
+                <td class="title_bold" bgcolor="#F2F2F2" width="77%" style="text-align: center;">Enunciado</td>                
                 <td class="title_bold" bgcolor="#F2F2F2" width="10%" style="text-align: right;">Avance</td>
             </tr>
             {% for children in entity.childrens %}
                 {% if (children.enabled) %}
+                    {% set avancedUsed = children.getResult %}
                     <tr>                        
-                        <td width="8%" style="text-align: justify;"><b>{{ children.ref}}</b></td>
-                        <td width="82%" style="text-align: justify;">{{children.description}}</td>
-                        <td width="10%" style="text-align: right;">{{ children.getResult|number_format(2,',','.') }} % </td>
+                        <td width="5%" style="text-align: center;">{{ loop.index|str_pad(2,'0') }}</td>
+                        <td width="8%" style="text-align: justify;  color: #2E64FE;"><b>{{ children.ref}}</b></td>
+                        <td width="77%" style="text-align: justify;">{{children.description}}</td>
+                        <td width="10%" style="text-align: right;">
+                            {% if (avancedUsed <= 30) %}
+                                <span class="resultred">{{ avancedUsed|number_format(2,',','.') }} %</span>
+                            {% endif %}
+                            {% if ((avancedUsed > 30)and(avancedUsed < 70)) %}
+                                <span class="resultyellow">{{ avancedUsed|number_format(2,',','.') }} %</span>
+                            {% endif %}
+                            {% if (avancedUsed >= 70) %}
+                                <span class="resultgreen">{{ avancedUsed|number_format(2,',','.') }} %</span>
+                            {% endif %}
+                        </td>
                     </tr>
                 {% endif %}
             {% endfor  %}
@@ -92,20 +118,23 @@
         </table> 
         <br>
         <table width="95%" class="simple-table responsive-table tables-extras"> 
-            <tr>                
+            <tr>  
+                <td class="title_bold" bgcolor="#F2F2F2" width="5%" style="text-align: center;">Nro.</td>             
                 <td class="title_bold" bgcolor="#F2F2F2" width="60%" style="text-align: center;">Enunciado</td>                
-                <td class="title_bold" bgcolor="#F2F2F2" width="20%" style="text-align: right;">Peso</td>                
+                <td class="title_bold" bgcolor="#F2F2F2" width="15%" style="text-align: right;">Peso</td>                
                 <td class="title_bold" bgcolor="#F2F2F2" width="20%" style="text-align: right;">Avance</td>
             </tr>
-            {% for indicator in entity.indicators %}                
-                <tr>                        
-                    <td width="60%" style="text-align: justify;"><b>{{ indicator.ref}}</b> - {{indicator.description}}</td>
-                            {% if indicatorWeight is defined %}
+            {% for indicator in entity.indicators %}    
+
+                <tr>    
+                    <td width="5%" style="text-align: center;">{{ loop.index|str_pad(2,'0') }}</td>                    
+                    <td width="60%" style="text-align: justify;"><span style="color: #2E64FE; font-weight: bold">{{ indicator.ref}}</span> - {{indicator.description}}</td>
+                    {% if indicatorWeight is defined %}
                         <td width="20%" style="text-align: right;">{{ indicator.indicatorWeight|number_format(1,',','.') }} % </td>
                     {% else %}
-                        <td width="20%" style="text-align: right;">{{ indicator.weight|number_format(1,',','.') }} % </td>
+                        <td width="15%" style="text-align: right;">{{ indicator.weight|number_format(1,',','.') }} % </td>
                     {% endif %}
-                    <td width="20%" style="text-align: right;">{{ indicator.getResult|number_format(2,',','.') }} % </td>
+                    <td width="20%" style="text-align: right;">{{ indicator.getResult|number_format(2,',','.') }} %</td>
                 </tr>                
             {% endfor  %}
         </table>

@@ -39,13 +39,15 @@ class FeeStructureRepository extends EntityRepository {
         return $qb->getQuery()->getResult();
     }
 
-    function getAllfeeStructure() {
+    function getAllfeeStructure($idGerencia) {
         $qb = $this->getQueryBuilder();
         $qb
                 ->Select('FeeStr')
+                ->andWhere('FeeStr.gerencia= :Gerencia')
                 ->andWhere('FeeStr.enabled= :enabled')
                 ->orderBy('FeeStr.charge')
                 ->setParameter('enabled', 1)
+                ->setParameter('Gerencia', $idGerencia)
         ;
         return $qb;
     }

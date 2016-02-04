@@ -4,6 +4,7 @@
 {% endif %}
 {% for indicator in childrens %}
     <li>
+        {{ loop.index|str_pad(2,'0') }}&nbsp-&nbsp;
         {% set avancedUsed = indicator.getResult %}
         {% include 'PequivenObjetiveBundle:Common:percentajeBarResult.html.twig' %}
         {% if indicatorWeight is defined %}
