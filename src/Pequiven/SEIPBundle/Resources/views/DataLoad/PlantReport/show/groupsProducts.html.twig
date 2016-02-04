@@ -3,12 +3,12 @@
 <div class="block">
     <div class="block-title">
         <h3> {{ 'pequiven_seip.productsGroups'|trans }}&nbsp;
-{#            ({{ groupsProducts|length }})#}
+            {#            ({{ groupsProducts|length }})#}
             ({{ totalGroups|length }})
         </h3>
         <div class="button-group absolute-right compact">
             {% if periodService().isAllowPlanningReport %}
-                <a class="button icon-list-add" href="{{ path('pequiven_product_report_create',{plantReport: plant_report.id}) }}">{{ 'pequiven.add'|trans({},'messages') }}</a>
+                <a class="button icon-list-add" href="{{ path('pequiven_product_report_group_create',{plantReport: plant_report.id}) }}">{{ 'pequiven.add'|trans({},'messages') }}</a>
             {% endif %}
         </div>
     </div>
@@ -32,10 +32,22 @@
                                 {{ product.name }}
                             </a>
                             <br>
-                            <small style="margin-left: 50px;">{{ product.groupsProducts }}</small>
+                            <small style="margin-left: 50px;">
+                                {% for gp in product.groupsProducts  %}
+                                    {{ gp }}
+                                {% endfor %}
+                            </small>
                         </td>
-                        <td>{{ product.line }}</td>
-                        <td>{{ product.unit }}</td>
+                        <td>
+                            {% for l in product.line  %}
+                                {{ l }}
+                            {% endfor %}
+                        </td>
+                        <td>
+                            {% for u in product.unit  %}
+                                {{ u }}
+                            {% endfor %}
+                        </td>
                         <td>&nbsp;</td>
                     </tr>
                 {% endfor %}

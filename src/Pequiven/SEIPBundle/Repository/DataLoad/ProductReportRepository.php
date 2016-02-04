@@ -20,14 +20,19 @@ use Pequiven\SEIPBundle\Doctrine\ORM\SeipEntityRepository;
  */
 class ProductReportRepository extends SeipEntityRepository {
 
-    public function findByPlantReport($plantReport) {
+    public function findByPlantReport($plantReport, $resultType = false) {
         $qb = $this->getQueryBuilder();
         $qb
                 ->innerJoin('pr.plantReport', 'pr_pr')
                 ->andWhere('pr_pr.id = :plantReport')
                 ->setParameter('plantReport', $plantReport)
         ;
-        return $qb->getQuery()->getResult();
+        
+        if ($resultType) {
+            return $qb;
+        } else {
+            return $qb->getQuery()->getResult();
+        }
     }
 
     protected function getAlias() {

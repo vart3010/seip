@@ -31,6 +31,13 @@ class ProductReport extends BaseModel {
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+    
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="nameGroup",type="string",length=255,nullable=true)
+     */
+    private $nameGroup;
 
     /**
      * Plantilla de planta
@@ -45,7 +52,7 @@ class ProductReport extends BaseModel {
      * Producto
      * @var \Pequiven\SEIPBundle\Entity\CEI\Product
      * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Product",inversedBy="productReports")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $product;
 
@@ -109,12 +116,22 @@ class ProductReport extends BaseModel {
     private $parent;
 
     /**
+     * @ORM\ManyToMany(targetEntity="\Pequiven\SEIPBundle\Entity\DataLoad\ProductReport")
+     */
+    protected $parentGroup;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="\Pequiven\SEIPBundle\Entity\DataLoad\ProductReport")
+     * @ORM\JoinTable(name="seip_product_report_groups")
+     */
+    protected $childrensGroup;
+
+    /**
      * @var boolean
      *
      * @ORM\Column(name="isGroup", type="boolean")
      */
     private $isGroup = false;
-    
     private $name = '';
 
     public function __construct() {
@@ -123,6 +140,64 @@ class ProductReport extends BaseModel {
         $this->rawMaterialConsumptionPlannings = new \Doctrine\Common\Collections\ArrayCollection();
         $this->inventorys = new \Doctrine\Common\Collections\ArrayCollection();
         $this->unrealizedProductions = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->childrensGroup = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->parentGroup = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * 
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\ProductReport $childrens
+     * @return \Pequiven\SEIPBundle\Entity\DataLoad\ProductReport
+     */
+    public function addParentGroup(\Pequiven\SEIPBundle\Entity\DataLoad\ProductReport $childrens) {
+        $childrens->setParent($this);
+        $this->parentGroup->add($childrens);
+
+        return $this;
+    }
+
+    /**
+     * 
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\ProductReport $childrens
+     */
+    public function removeParentGroup(\Pequiven\SEIPBundle\Entity\DataLoad\ProductReport $childrens) {
+        $this->parentGroup->removeElement($childrens);
+    }
+
+    /**
+     * 
+     * @return type
+     */
+    public function getParentGroup() {
+        return $this->parentGroup;
+    }
+
+    /**
+     * 
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\ProductReport $childrens
+     * @return \Pequiven\SEIPBundle\Entity\DataLoad\ProductReport
+     */
+    public function addChildrenGroup(\Pequiven\SEIPBundle\Entity\DataLoad\ProductReport $childrens) {
+        $childrens->setParent($this);
+        $this->childrensGroup->add($childrens);
+
+        return $this;
+    }
+
+    /**
+     * 
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\ProductReport $childrens
+     */
+    public function removeChildrenGroup(\Pequiven\SEIPBundle\Entity\DataLoad\ProductReport $childrens) {
+        $this->childrensGroup->removeElement($childrens);
+    }
+
+    /**
+     * 
+     * @return type
+     */
+    public function getChildrensGroup() {
+        return $this->childrensGroup;
     }
 
     /**
@@ -467,13 +542,21 @@ class ProductReport extends BaseModel {
     public function getParent() {
         return $this->parent;
     }
-    
+
     function getIsGroup() {
         return $this->isGroup;
     }
 
     function setIsGroup($isGroup) {
         $this->isGroup = $isGroup;
+    }
+    
+    function getNameGroup() {
+        return $this->nameGroup;
+    }
+
+    function setNameGroup($nameGroup) {
+        $this->nameGroup = $nameGroup;
     }
 
 

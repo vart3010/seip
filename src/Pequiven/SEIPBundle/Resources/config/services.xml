@@ -294,6 +294,11 @@
         <service id="pequiven.form.product_report" class="Pequiven\SEIPBundle\Form\DataLoad\ProductReportType">
             <tag name="form.type" alias="pequiven_seipbundle_dataload_productreport" />
         </service>
+        
+        <service id="pequiven.form.product_group_report" class="Pequiven\SEIPBundle\Form\DataLoad\ProductReportGroupType">
+            <tag name="form.type" alias="pequiven_seipbundle_dataload_productreportgroup" />
+        </service>
+        
         <service id="pequiven.form.product_planning" class="Pequiven\SEIPBundle\Form\DataLoad\Production\ProductPlanningType">
             <tag name="form.type" alias="pequiven_seipbundle_dataload_production_productplanning" />
         </service>

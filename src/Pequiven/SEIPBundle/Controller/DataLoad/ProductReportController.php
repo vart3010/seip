@@ -115,80 +115,89 @@ class ProductReportController extends SEIPController {
         /**
          * SE RECORREN LOS HIJOS DE PRODUCTOS
          */
-        $productsChilds = $productReport->getProduct()->getComponents();
-        
-        foreach ($productsChilds as $product) {
-                //var_dump($product->getId());
-            foreach ($product->getProductReports() as $productsReport) {
-               
-                /**
-                 * PRODUCCION NETA Y BRUTA
-                 */
-                foreach ($productsReport->getProductPlannings() as $productPlanning) {
-                    if ($productPlanning->getType() == \Pequiven\SEIPBundle\Model\DataLoad\Production\ProductPlanning::TYPE_GROSS) {
-                        $arrayProductGross[$productPlanning->getMonth()]["idMonth"] = $labelsMonths[$productPlanning->getMonth()];
-                        $arrayProductGross[$productPlanning->getMonth()]["unit"] = $product->getProductUnit()->getUnit();
-                        $arrayProductGross[$productPlanning->getMonth()]["month"] += $productPlanning->getTotalMonth();
-                        $arrayProductGross[$productPlanning->getMonth()]["daily"] += $productPlanning->getDailyProductionCapacity();
-                    } else if ($productPlanning->getType() == \Pequiven\SEIPBundle\Model\DataLoad\Production\ProductPlanning::TYPE_NET) {
-                        $arrayProductNet[$productPlanning->getMonth()]["idMonth"] = $labelsMonths[$productPlanning->getMonth()];
-                        $arrayProductNet[$productPlanning->getMonth()]["unit"] = $product->getProductUnit()->getUnit();
-                        $arrayProductNet[$productPlanning->getMonth()]["month"] += $productPlanning->getTotalMonth();
-                        $arrayProductNet[$productPlanning->getMonth()]["daily"] += $productPlanning->getDailyProductionCapacity();
-                    }
-                }
-                /**
-                 * DETALLES DE PRODUCCION
-                 */
-                foreach ($productsReport->getProductDetailDailyMonthsSortByMonth() as $detailDailyMonth) {
-                    $arrayDetailProducction[$detailDailyMonth->getMonth()]["idMonth"] = $labelsMonths[$detailDailyMonth->getMonth()];
-                    $arrayDetailProducction[$detailDailyMonth->getMonth()]["tpGross"] += $detailDailyMonth->getTotalGrossPlan();
-                    $arrayDetailProducction[$detailDailyMonth->getMonth()]["trGross"] += $detailDailyMonth->getTotalGrossReal();
-                    $arrayDetailProducction[$detailDailyMonth->getMonth()]["tpNet"] += $detailDailyMonth->getTotalNetPlan();
-                    $arrayDetailProducction[$detailDailyMonth->getMonth()]["trNet"] += $detailDailyMonth->getTotalNetReal();
-                }
+        $productsChilds = $productReport->getChildrensGroup();
 
-                /**
-                 * CONSUMO DE MATERIA PRIMA
-                 */
-                foreach ($productsReport->getRawMaterialConsumptionPlannings() as $rawMaterial) {
+        foreach ($productsChilds as $productsReport) {
+            //var_dump($product->getId());
+            // foreach ($product->getProductReports() as $productsReport) {
 
-                    if (!array_key_exists($rawMaterial->getId(), $arrayRawMaterial)) {
-                        $arrayRawMaterial[$rawMaterial->getProduct()->getId()]["name"] = $rawMaterial->getProduct()->getname();
-                        $arrayRawMaterial[$rawMaterial->getProduct()->getId()]["tp"] = $rawMaterial->getTotalPlan();
-                        $arrayRawMaterial[$rawMaterial->getProduct()->getId()]["tr"] = $rawMaterial->getTotalReal();
-                        $arrayRawMaterial[$rawMaterial->getProduct()->getId()]["aliquot"] = $rawMaterial->getAliquot();
-                    } else {
-                        $arrayRawMaterial[$rawMaterial->getProduct()->getId()]["name"] = $rawMaterial->getProduct()->getname();
-                        $arrayRawMaterial[$rawMaterial->getProduct()->getId()]["tp"] += $rawMaterial->getTotalPlan();
-                        $arrayRawMaterial[$rawMaterial->getProduct()->getId()]["tr"] += $rawMaterial->getTotalReal();
-                        $arrayRawMaterial[$rawMaterial->getProduct()->getId()]["aliquot"] += $rawMaterial->getAliquot();
-                    }
-                }
-                /**
-                 * PRODUCCION NO REALIZADA
-                 */
-                $contMonthPnr = 1;
-                foreach ($productsReport->getUnrealizedProductionsSortByMonth() as $unrealizedProduction) {
-                    $arrayUnrealizedProduction[$contMonthPnr]["month"] = $labelsMonths[$contMonthPnr];
-                    $arrayUnrealizedProduction[$contMonthPnr]["total"] += $unrealizedProduction->getTotal();
-                    $contMonthPnr++;
-                }
-                /**
-                 * INVENTARIO
-                 */
-                $contMonthInventory = 1;
-                foreach ($productsReport->getInventorySortByMonth() as $inventory) {
-                    $arrayInventory[$contMonthInventory]["month"] = $labelsMonths[$contMonthInventory];
-                    $arrayInventory[$contMonthInventory]["total"] += $inventory->getTotal();
-                    $contMonthInventory++;
+            /**
+             * PRODUCCION NETA Y BRUTA
+             */
+            foreach ($productsReport->getProductPlannings() as $productPlanning) {
+                if ($productPlanning->getType() == \Pequiven\SEIPBundle\Model\DataLoad\Production\ProductPlanning::TYPE_GROSS) {
+                    $arrayProductGross[$productPlanning->getMonth()]["idMonth"] = $labelsMonths[$productPlanning->getMonth()];
+                    //$arrayProductGross[$productPlanning->getMonth()]["unit"] = $product->getProductUnit()->getUnit();
+                    $arrayProductGross[$productPlanning->getMonth()]["month"] += $productPlanning->getTotalMonth();
+                    $arrayProductGross[$productPlanning->getMonth()]["daily"] += $productPlanning->getDailyProductionCapacity();
+                } else if ($productPlanning->getType() == \Pequiven\SEIPBundle\Model\DataLoad\Production\ProductPlanning::TYPE_NET) {
+                    $arrayProductNet[$productPlanning->getMonth()]["idMonth"] = $labelsMonths[$productPlanning->getMonth()];
+                    //$arrayProductNet[$productPlanning->getMonth()]["unit"] = $product->getProductUnit()->getUnit();
+                    $arrayProductNet[$productPlanning->getMonth()]["month"] += $productPlanning->getTotalMonth();
+                    $arrayProductNet[$productPlanning->getMonth()]["daily"] += $productPlanning->getDailyProductionCapacity();
                 }
             }
+            /**
+             * DETALLES DE PRODUCCION
+             */
+            foreach ($productsReport->getProductDetailDailyMonthsSortByMonth() as $detailDailyMonth) {
+                $arrayDetailProducction[$detailDailyMonth->getMonth()]["idMonth"] = $labelsMonths[$detailDailyMonth->getMonth()];
+                $arrayDetailProducction[$detailDailyMonth->getMonth()]["tpGross"] += $detailDailyMonth->getTotalGrossPlan();
+                $arrayDetailProducction[$detailDailyMonth->getMonth()]["trGross"] += $detailDailyMonth->getTotalGrossReal();
+                $arrayDetailProducction[$detailDailyMonth->getMonth()]["tpNet"] += $detailDailyMonth->getTotalNetPlan();
+                $arrayDetailProducction[$detailDailyMonth->getMonth()]["trNet"] += $detailDailyMonth->getTotalNetReal();
+            }
+
+            /**
+             * CONSUMO DE MATERIA PRIMA
+             */
+            foreach ($productsReport->getRawMaterialConsumptionPlannings() as $rawMaterial) {
+
+                if (!array_key_exists($rawMaterial->getId(), $arrayRawMaterial)) {
+                    $arrayRawMaterial[$rawMaterial->getProduct()->getId()]["name"] = $rawMaterial->getProduct()->getname();
+                    $arrayRawMaterial[$rawMaterial->getProduct()->getId()]["tp"] = $rawMaterial->getTotalPlan();
+                    $arrayRawMaterial[$rawMaterial->getProduct()->getId()]["tr"] = $rawMaterial->getTotalReal();
+                    $arrayRawMaterial[$rawMaterial->getProduct()->getId()]["aliquot"] = $rawMaterial->getAliquot();
+                } else {
+                    $arrayRawMaterial[$rawMaterial->getProduct()->getId()]["name"] = $rawMaterial->getProduct()->getname();
+                    $arrayRawMaterial[$rawMaterial->getProduct()->getId()]["tp"] += $rawMaterial->getTotalPlan();
+                    $arrayRawMaterial[$rawMaterial->getProduct()->getId()]["tr"] += $rawMaterial->getTotalReal();
+                    $arrayRawMaterial[$rawMaterial->getProduct()->getId()]["aliquot"] += $rawMaterial->getAliquot();
+                }
+            }
+            /**
+             * PRODUCCION NO REALIZADA
+             */
+            $contMonthPnr = 1;
+            foreach ($productsReport->getUnrealizedProductionsSortByMonth() as $unrealizedProduction) {
+                $arrayUnrealizedProduction[$contMonthPnr]["month"] = $labelsMonths[$contMonthPnr];
+                $arrayUnrealizedProduction[$contMonthPnr]["total"] += $unrealizedProduction->getTotal();
+                $contMonthPnr++;
+            }
+            /**
+             * INVENTARIO
+             */
+            $contMonthInventory = 1;
+            foreach ($productsReport->getInventorySortByMonth() as $inventory) {
+                $arrayInventory[$contMonthInventory]["month"] = $labelsMonths[$contMonthInventory];
+                $arrayInventory[$contMonthInventory]["total"] += $inventory->getTotal();
+                $contMonthInventory++;
+            }
+            //}
         }
 
         //die();
-
-        $productReport = $this->get("pequiven.repository.product_report")->findOneBy(array("id" => $request->get("id")));
+        //$productReport = $this->get("pequiven.repository.product_report")->findOneBy(array("id" => $request->get("id")));
+        $lines = array();
+        foreach ($productReport as $productReport) {
+            if (!in_array($productReport->getProduct()->getProductionLine(), $lines)) {
+                $lines[] = $productReport->getProduct()->getProductionLine();
+            }
+        }
+        $productionLines = "";
+        foreach ($lines[] as $line) {
+            $productionLines .=$line . "<br>";
+        }
 
         $view = $this
                 ->view()
@@ -203,7 +212,8 @@ class ProductReportController extends SEIPController {
             'totalDetailProducction' => $arrayDetailProducction,
             'rawMaterial' => $arrayRawMaterial,
             'unrealizedProduction' => $arrayUnrealizedProduction,
-            'inventory' => $arrayInventory
+            'inventory' => $arrayInventory,
+            "productionLines" => $productionLines
                 ])
         ;
 
@@ -445,6 +455,42 @@ class ProductReportController extends SEIPController {
 
         $this->domainManager->delete($resource);
         return $this->redirect($url);
+    }
+
+    public function createActionGroup(Request $request) {
+        $saveAndClose = $request->get("save_and_close");
+
+        $resource = $this->createNew();
+        $form = $this->getForm($resource);
+
+        if ($request->isMethod('POST') && $form->submit($request)->isValid()) {
+            $resource = $this->domainManager->create($resource);
+
+            if (null === $resource) {
+                return $this->redirectHandler->redirectToIndex();
+            }
+
+            if ($saveAndClose !== null) {
+                return $this->redirectHandler->redirectTo($resource);
+            } else {
+                return $this->redirectHandler->redirectToRoute($this->config->getRedirectRoute('update'), ['id' => $resource->getId()]);
+            }
+        }
+
+        if ($this->config->isApiRequest()) {
+            return $this->handleView($this->view($form));
+        }
+
+        $view = $this
+                ->view()
+                ->setTemplate($this->config->getTemplate('group/create.html'))
+                ->setData(array(
+            $this->config->getResourceName() => $resource,
+            'form' => $form->createView()
+                ))
+        ;
+
+        return $this->handleView($view);
     }
 
 }

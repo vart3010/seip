@@ -5,6 +5,7 @@
 {% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
 
 {% block body %}
+    {% set productsReports = product_report.ChildrensGroup %}
 
     <fieldset class="fieldset">
         <legend class="legend">{{ 'pequiven_seip.product_report.product_report'|trans }}</legend>
@@ -14,7 +15,7 @@
                     <label class="label">{{ 'pequiven_seip.plant_report.plant_report'|trans }}</label>
                     <a href="{{ path("pequiven_plant_report_show",{id:product_report.plantReport.id}) }}">
                         <i class=""></i>&nbsp;&nbsp;
-                        {{ product_report.product.name }}
+                        {{ product_report.nameGroup }}
                     </a>
                 </p>
             </div>
@@ -27,16 +28,21 @@
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">{{ 'Production line'|trans }}</label>
-                    {{ product_report.product.productionLine }}
+                    {{ productionLines }}
+                    {# {% for productReport in productsReports%}
+                         {{ productReport.product.productionLine }}<br>
+                     {% endfor %}#}
                 </p>
             </div>
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">{{ 'pequiven_seip.products'|trans }}</label>
-
-                    {% for product in product_report.product.components %}
-                        {{ product }}<br>
+                    {% for productReport in productsReports%}
+                        {{ productReport.product.name }}<br>
                     {% endfor %}
+                    {# {% for product in product_report.product.components %}
+                         {{ product }}<br>
+                     {% endfor %}#}
                 </p>
             </div>
             {#<div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
@@ -109,13 +115,13 @@
     {% include 'PequivenSEIPBundle:DataLoad:ProductReport/showGroups/products_groups_planning.html.twig' %}
     <br /><br />
 
-    {% include 'PequivenSEIPBundle:DataLoad:ProductReport/showGroups/products_groups_details_daily_months.html.twig' %}
-    <br /><br />
-    {% include 'PequivenSEIPBundle:DataLoad:ProductReport/showGroups/raw_materials_groups_consumption.html.twig' %}
-    <br /><br />
-    {% include 'PequivenSEIPBundle:DataLoad:ProductReport/showGroups/unrealized_productions_groups.html.twig' %}
-    <br /><br />
-    {% include 'PequivenSEIPBundle:DataLoad:ProductReport/showGroups/inventorys_groups.html.twig' %}
+    {# {% include 'PequivenSEIPBundle:DataLoad:ProductReport/showGroups/products_groups_details_daily_months.html.twig' %}
+     <br /><br />
+     {% include 'PequivenSEIPBundle:DataLoad:ProductReport/showGroups/raw_materials_groups_consumption.html.twig' %}
+     <br /><br />
+     {% include 'PequivenSEIPBundle:DataLoad:ProductReport/showGroups/unrealized_productions_groups.html.twig' %}
+     <br /><br />
+     {% include 'PequivenSEIPBundle:DataLoad:ProductReport/showGroups/inventorys_groups.html.twig' %}#}
 
 
 {% endblock %}
