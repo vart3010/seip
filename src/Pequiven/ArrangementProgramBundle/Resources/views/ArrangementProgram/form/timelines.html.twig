@@ -94,7 +94,7 @@
                             <a href class="select-value form-edit">{{ 'pequiven.actions'|trans({},'messages') }}</a>
                             <span class="select-arrow"></span>
                             <span class="drop-down">
-                                {% if(is_granted({'ROLE_ARRANGEMENT_PROGRAM_EDIT','ROLE_SEIP_PLANNING_ARRANGEMENT_PROGRAM_EDIT'}) and entity.getTimeline.getArrangementProgram.status == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::STATUS_DRAFT')) %}
+                                {% if(is_granted('ROLE_ARRANGEMENT_PROGRAM_EDIT','ROLE_SEIP_PLANNING_ARRANGEMENT_PROGRAM_EDIT') and entity.getTimeline.getArrangementProgram.status == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::STATUS_DRAFT')) %}
                                     <a href ng-click="loadTemplateMeta(goal,fIndex + 1)" class="button icon-pencil">{{ "pequiven.actions.edit"|trans({},"messages") }}</a>
                                     <a href ng-click="removeGoal(goal)" class="button icon-trash with-tooltip confirm">{{ "pequiven.actions.delete"|trans({},"messages") }}</a>
                                 {% endif %}
