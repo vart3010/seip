@@ -254,6 +254,14 @@ class User extends BaseUser implements UserInterface, UserBoxInterface, PeriodIt
      * @ORM\OneToMany(targetEntity="\Pequiven\SEIPBundle\Entity\User\MovementFeeStructure",mappedBy="User",cascade={"persist"}))
      */
     protected $movementFeeStructure;
+    
+    /**
+     * Trimestre que esta permitido notificar en el Módulo de Operaciones/Producción
+     * @var integer
+     *
+     * @ORM\Column(name="quarterToLoadOperationProduction", type="integer")
+     */
+    protected $quarterToLoadOperationProduction = 0;
 
     /**
      * Constructor
@@ -1023,6 +1031,23 @@ class User extends BaseUser implements UserInterface, UserBoxInterface, PeriodIt
      */
     public function getEvolutionAction() {
         return $this->evolutionAction;
+    }
+    
+    /**
+     * 
+     * @param type $quarterToLoadOperationProduction
+     * @return 
+     */
+    public function setQuarterToLoadOperationProduction($quarterToLoadOperationProduction) {
+        $this->quarterToLoadOperationProduction = $quarterToLoadOperationProduction;
+    }
+
+    /**
+     * Get quarterToLoadOperationProduction
+     * @return integer
+     */
+    public function getQuarterToLoadOperationProduction() {
+        return $this->quarterToLoadOperationProduction;
     }
 
 }
