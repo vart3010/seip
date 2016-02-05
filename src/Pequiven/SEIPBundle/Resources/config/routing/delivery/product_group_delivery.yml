@@ -14,3 +14,8 @@ pequiven_product_group_delivery_update:
             form: pequiven_seipbundle_delivery_productgroup
     methods: [GET|POST]
 
+pequiven_product_group_delivery_show:
+    path: /{id}/show
+    defaults:
+        _controller: pequiven.controller.product_group_delivery:showAction
+    methods: [GET]
