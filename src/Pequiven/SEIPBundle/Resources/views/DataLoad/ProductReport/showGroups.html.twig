@@ -14,8 +14,8 @@
                 <p class="inline-label">
                     <label class="label">{{ 'pequiven_seip.plant_report.plant_report'|trans }}</label>
                     <a href="{{ path("pequiven_plant_report_show",{id:product_report.plantReport.id}) }}">
-                        <i class=""></i>&nbsp;&nbsp;
-                        {{ groupName }}
+                       <i class="fa fa-tags"></i>&nbsp;&nbsp;
+                        {{ product_report.plantReport.plant.name  }}
                     </a>
                 </p>
             </div>
