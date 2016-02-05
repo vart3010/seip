@@ -55,6 +55,8 @@ class ProductReportController extends SEIPController {
         $productReport = $this->get("pequiven.repository.product_report")->findOneBy(array("id" => $request->get("id")));
         $periodService = $this->getPeriodService();
         $labelsMonths = CommonObject::getLabelsMonths();
+        $nameGroup = $productReport->getNameGroup();
+        
         /**
          * SE HACE LA SUMATORIA DE TODOS LOS PRODUCTOS DE ESE GRUPO DE PRODUCTOS
          * 
@@ -189,14 +191,10 @@ class ProductReportController extends SEIPController {
         //die();
         //$productReport = $this->get("pequiven.repository.product_report")->findOneBy(array("id" => $request->get("id")));
         $lines = array();
-        foreach ($productReport as $productReport) {
-            if (!in_array($productReport->getProduct()->getProductionLine(), $lines)) {
-                $lines[] = $productReport->getProduct()->getProductionLine();
+        foreach ($productsChilds as $productReport) {
+            if (!in_array($productReport->getProduct()->getProductionLine()->getName(), $lines)) {
+                $lines[] = $productReport->getProduct()->getProductionLine()->getName();
             }
-        }
-        $productionLines = "";
-        foreach ($lines[] as $line) {
-            $productionLines .=$line . "<br>";
         }
 
         $view = $this
@@ -213,7 +211,9 @@ class ProductReportController extends SEIPController {
             'rawMaterial' => $arrayRawMaterial,
             'unrealizedProduction' => $arrayUnrealizedProduction,
             'inventory' => $arrayInventory,
-            "productionLines" => $productionLines
+            "productionLines" => $lines,
+            "productChildrens" => $productsChilds,
+            "groupName" => $nameGroup
                 ])
         ;
 
