@@ -65,6 +65,17 @@ pequiven_work_study_circle_add_coordinator:
     options:
         expose: true
         
+pequiven_work_study_circle_export_BackRestpdf:
+    path: /{idWorkStudyCircle}/exportBR.{_format}
+    defaults:
+        _controller: pequiven.controller.work_study_circle:exportBackRestAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET|POST]
+    options:
+        expose: true
+        
 pequiven_work_study_circle_export_pdf:
     path: /{idWorkStudyCircle}/export.{_format}
     defaults:

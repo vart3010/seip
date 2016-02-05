@@ -42,6 +42,7 @@ workStudyCircle:
     list: Lista
     export:
         exportPdf: Exportar Inf. Círculo
+        exportBackRest: Exportar Documento
         
     proposals:
         title: Propuestas
