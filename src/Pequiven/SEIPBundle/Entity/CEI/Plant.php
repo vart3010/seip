@@ -109,6 +109,13 @@ class Plant extends BaseModel {
     private $childrens;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="permitGroupProduct", type="boolean")
+     */
+    private $permitGroupProduct = false;
+
+    /**
      * Constructor
      */
     public function __construct() {
@@ -375,6 +382,14 @@ class Plant extends BaseModel {
             $_toString = $this->getName();
         }
         return $_toString;
+    }
+
+    function getPermitGroupProduct() {
+        return $this->permitGroupProduct;
+    }
+
+    function setPermitGroupProduct($permitGroupProduct) {
+        $this->permitGroupProduct = $permitGroupProduct;
     }
 
 }

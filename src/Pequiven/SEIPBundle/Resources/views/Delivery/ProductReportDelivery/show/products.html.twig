@@ -1,0 +1,41 @@
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+<div class="block">
+    <div class="block-title">
+        <h3> {{ 'pequiven_seip.products'|trans }}&nbsp;
+            ({{ product|length}})
+        </h3>
+        <div class="button-group absolute-right compact">
+{#            {% if periodService().isAllowPlanningReport %}#}
+{#                {% if(plant_report.plant.childrens|length==0) %}#}
+                    <a class="button icon-list-add" href="{{ path("pequiven_product_group_report_create",{"productGroup":product_group_delivery.id}) }}">{{ 'pequiven.add'|trans({},'messages') }}</a>
+{#                {% endif %}#}
+{#            {% endif %}#}
+        </div>
+    </div>
+        
+    <div class="with-padding">
+        <table class="simple-table responsive-table tables-extras" id="sorting-example2">
+            <thead>
+                <tr>
+                    <th scope="col" width="35%">{{ 'Product'|trans }}</th>
+                    <th scope="col" width="10%" class="hide-on-mobile-portrait">{{ 'Production line'|trans }}</th>
+                    <th scope="col" width="10%" class="hide-on-tablet">{{ 'Product unit'|trans }}</th>
+                    <th scope="col" width="10%">&nbsp;</th>
+                </tr>
+            </thead>
+            {% set colspan = 6 %}
+            <tbody>
+                {#  {% for product in products %}
+                      <tr>
+                          <td>{{ loop.index }} - {{ generateLink(product.entityProductReport) }}</td>
+                          <td>{{ product.line }}</td>
+                          <td>{{ product.unit }}</td>
+                          <td>&nbsp;</td>
+                      </tr>
+                  {% endfor %}#}
+            </tbody>
+        </table>
+
+    </div>
+</div>

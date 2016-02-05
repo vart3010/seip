@@ -7,7 +7,7 @@ use Pequiven\SEIPBundle\Form\SeipAbstractForm;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class ProductReportType extends SeipAbstractForm {
+class ProductReportGroupType extends SeipAbstractForm {
 
     /**
      * @param FormBuilderInterface $builder
@@ -16,33 +16,40 @@ class ProductReportType extends SeipAbstractForm {
     public function buildForm(FormBuilderInterface $builder, array $options) {
         //$entity = new \Pequiven\SEIPBundle\Entity\DataLoad\ProductReport();
         $entity = $builder->getData();
-        
         $plantReport = $plant = null;
         if ($entity != null) {
             $plantReport = $entity->getPlantReport();
+            $plantReportId = $plantReport->getId();
             $plant = $plantReport->getPlant();
             $permitGroup = $plant->getPermitGroupProduct();
         }
-        
 
         $queryBuilderEnable = $this->getQueryBuilderEnabled();
         $builder
                 ->add('plantReport', null, array(
                     'label_attr' => array('class' => 'label'),
                     "empty_value" => "",
-                    "attr" => array("class" => "select2 input-large"),
+                    "attr" => array("class" => "select2 input-xlarge"),
                     "disabled" => true,
                     "query_builder" => $queryBuilderEnable,
                 ))
-                ->add('product', null, array(
+                ->add("nameGroup", null, array(
+                    'label' => 'Nombre de Grupo',
+                    'label_attr' => array('class' => 'label'),
+                    'attr' => array('class' => 'input small-margin-right'),
+                    'required'=>true
+                ))
+                ->add('childrensGroup', null, array(
+                    'label' => 'Productos',
                     'label_attr' => array('class' => 'label'),
                     "empty_value" => "",
+                     'required'=>true,
                     "attr" => array("class" => "select2 input-large"),
                     //"property" => array("name"),
                     //"entity_alias" => "products_alias",
                     //"callback" => $queryBuilderEnable
-                    "query_builder" => function(\Pequiven\SEIPBundle\Repository\CEI\ProductRepository $repository) use ($plant) {
-                return $repository->findQueryByPlant($plant);
+                    "query_builder" => function(\Pequiven\SEIPBundle\Repository\DataLoad\ProductReportRepository $repository) use ($plantReportId) {
+                return $repository->findByPlantReport($plantReportId, true);
             },
                 ))
                 ->add('indicator', 'tecno_ajax_autocomplete', array(
@@ -66,7 +73,7 @@ class ProductReportType extends SeipAbstractForm {
         ;
         $builder
                 ->add('isGroup', null, array(
-                    'label'=>"Permitir Subproductos",
+                    'label' => "Permitir Subproductos",
                     'label_attr' => array('class' => 'label'),
                     "attr" => array("class" => "switch medium mid-margin-right", "data-text-on" => "Si", "data-text-off" => "No"),
                     "required" => false,
@@ -88,7 +95,7 @@ class ProductReportType extends SeipAbstractForm {
      * @return string
      */
     public function getName() {
-        return 'pequiven_seipbundle_dataload_productreport';
+        return 'pequiven_seipbundle_dataload_productreportgroup';
     }
 
 }

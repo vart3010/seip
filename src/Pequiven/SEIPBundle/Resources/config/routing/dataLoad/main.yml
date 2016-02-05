@@ -6,6 +6,10 @@ pequiven_product_report:
     resource: "@PequivenSEIPBundle/Resources/config/routing/dataLoad/product_report.yml"
     prefix:   /product-report
     
+pequiven_product_report_group:
+    resource: "@PequivenSEIPBundle/Resources/config/routing/dataLoad/product_report_group.yml"
+    prefix:   /product-report-group
+    
 pequiven_plant_report:
     resource: "@PequivenSEIPBundle/Resources/config/routing/dataLoad/plant_report.yml"
     prefix:   /plant-report
