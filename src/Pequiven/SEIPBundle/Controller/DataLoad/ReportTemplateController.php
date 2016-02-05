@@ -299,6 +299,8 @@ class ReportTemplateController extends SEIPController {
         $startDateQuarter = $this->getTransfDate($fecha, -1);
         $endDateQuarter = $this->getTransfDate($fecha, -1);
         
+        
+        //Notificación por Trimestre del Período 2015
         $user = $this->getUser();
         if(($quarterToLoad = $user->getQuarterToLoadOperationProduction()) > 0){
             switch ($quarterToLoad){

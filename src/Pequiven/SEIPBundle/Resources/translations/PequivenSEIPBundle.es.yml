@@ -414,7 +414,7 @@ pequiven_seip:
             materiaPrimaExt: Materia Prima Externa
         question:
             delete: Desea eliminar este detalle de producción
-            
+        
     raw_material:
         type:
             internal: Interna
@@ -702,3 +702,4 @@ Unit: Unidad
 'Show inventory': Inventario
 'Show observation': Puntos de Atención
 'Show pnr': PNR
+'production_line': Linea de Producto

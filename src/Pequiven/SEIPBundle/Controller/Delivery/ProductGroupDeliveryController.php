@@ -13,8 +13,8 @@ use Pequiven\SEIPBundle\Form\DataLoad\PlantReportType;
  * @author Victor Tortolero <vart10.30@gmail.com>
  */
 class ProductGroupDeliveryController extends SEIPController {
-    
-     public function createNew() {
+
+    public function createNew() {
         $entity = parent::createNew();
         $request = $this->getRequest();
         $reportTemplateDeliveryId = $request->get("reportTemplateDelivery");
@@ -25,5 +25,25 @@ class ProductGroupDeliveryController extends SEIPController {
         }
         return $entity;
     }
-    
+
+    public function showAction(Request $request) {
+        $productGroupDelivery = $this->getRepository()->findOneBy(array("id" => $request->get("id")));
+        $products = $productGroupDelivery->getProductsReportDelivery();
+
+
+        $data = array(
+            "product_group_delivery" => $productGroupDelivery,
+            "product" => $products
+        );
+
+        $view = $this
+                ->view()
+                ->setTemplate($this->config->getTemplate('show.html'))
+                ->setTemplateVar($this->config->getResourceName())
+                ->setData($data)
+        ;
+
+        return $this->handleView($view);
+    }
+
 }
