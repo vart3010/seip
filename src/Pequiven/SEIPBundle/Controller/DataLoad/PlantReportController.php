@@ -97,6 +97,7 @@ class PlantReportController extends SEIPController {
     public function showAction(Request $request) {
 
         $plantReport = $this->getRepository()->find($request->get("id"));
+
         $childs = $plantReport->getPlant()->getChildrens();
         $totalStops = array();
         $totalHours = array();
@@ -114,6 +115,8 @@ class PlantReportController extends SEIPController {
 
         $hasGroupProducts = false;
 
+
+
         /**
          * METODO PARA CUANDO HAY GRUPO DE PLANTAS
          * SACO LOS HIJOS Y LUEGO LOS REPORTPLANT DE CADA UNO Y RECORRO ACUMULANDO
@@ -122,13 +125,13 @@ class PlantReportController extends SEIPController {
          * SERVICIOS
          */
         $productReports = $plantReport->getProductsReport();
+        
         foreach ($productReports as $productReport) {
             //$product = $productReport->getproduct();
 
             if ($productReport->getIsGroup()) {
                 $productReportChildrens = $productReport->getChildrensGroup();
                 //SE EXTRAEN LOS SUBPRODUCTOS PARA MOSTRAR ABAJO DE ETIQUETA
-                $groupNames = "";
                 $groupNames = array();
                 $units = array();
                 $lines = array();
@@ -163,17 +166,6 @@ class PlantReportController extends SEIPController {
                     "entityProductReport" => $productReport,
                     "groupsProducts" => ""
                 );
-//                if (!CommonObject::validIdExist($product->getId(), $totalP)) {
-//                    //if (!$this->validIdExist($product->getId(), $totalProducts)) {
-//                    //PRODUCTOS
-//                    $totalP[] = array(
-//                        "id" => $product->getId(),
-//                        "name" => $product->getName(),
-//                        "line" => $product->getProductionLine(),
-//                        "unit" => $product->getProductUnit(),
-//                        "entityProductReport" => $productReport
-//                    );
-//                }
             }
         }
 
