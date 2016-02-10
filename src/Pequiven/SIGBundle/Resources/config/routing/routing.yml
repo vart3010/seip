@@ -38,5 +38,26 @@ pequiven_sig_gerenciafirst_export:
     methods: [GET]
     options:
         expose: true
-
-
+#listado de sistemas de la calidad para lista de seguimiento
+pequiven_sig_monitoring_list:
+    path: /sig/monitoring/list.{_format}
+    defaults:
+        _controller: pequiven.controller.monitoring_sig:listAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET]
+    options:
+        expose: true
+pequiven_sig_monitoring_show:
+    path: /sig/monitoring/{id}
+    defaults:
+        _controller: pequiven.controller.monitoring_sig:showAction
+        _format: html    
+    methods: [GET]
+pequiven_sig_monitoring_export:
+    path: /sig/export/{id}
+    defaults:
+        _controller: pequiven.controller.monitoring_sig:exportAction
+        _format: html    
+    methods: [GET]

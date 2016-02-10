@@ -1,0 +1,29 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayout.html.twig' %}
+
+{% import 'PequivenSIGBundle:Template:Buttons/buttons.html.twig' as buttons %}
+
+{% block before_body %}
+    {{ contentHeader(
+        ('Seguimiento y Eficacia de las Acciones'),        
+        ('show'|trans({},'messages'))
+    ) }}
+{% endblock %} 
+
+{% block body %}
+<fieldset class="fieldset">
+            <legend class="legend">{{ data }}&nbsp;</legend>
+            <div class="columns">
+                <!-- Sistema -->
+                <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                    <p class="inline-label">
+                        <label class="label">Sistema de la Calidad</label>
+                        {{ data.description }}
+                    </p>
+                </div>                
+            </div>
+                        
+</fieldset>	
+
+{% set setmonth = "11" %}
+{{ buttons.generic_ext_sv(path('pequiven_sig_monitoring_export', { 'id': data.id }),('Descargar'|trans({},'messages'))) }}
+{% endblock %}

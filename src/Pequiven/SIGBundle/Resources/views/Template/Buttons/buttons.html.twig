@@ -54,3 +54,20 @@
     </a>
 
 {% endmacro %}
+
+{% macro generic_ext_sv(url, message='generic', icon = 'fa fa-download fa-1', parameters = {}) %}
+
+    {% set gradient = 'red-gradient' %}
+    {% set translation_domain = 'messages' %}
+    {% if parameters['translation_domain'] is defined %}
+        {% set translation_domain = parameters['translation_domain'] %}
+    {% endif  %}
+    {% if parameters['gradient'] is defined %}
+        {% set gradient = parameters['gradient'] %}
+    {% endif  %}
+    <a href="{{ url }}" class="button">
+        <span class="button-icon left-side {{ gradient }}"><span class="{{ icon }}"></span></span>
+        {{ message|trans({},translation_domain) }}
+    </a>
+
+{% endmacro %}
