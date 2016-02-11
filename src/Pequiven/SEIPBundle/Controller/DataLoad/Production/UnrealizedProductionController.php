@@ -113,6 +113,8 @@ class UnrealizedProductionController extends SEIPController {
 
         $urealizedService = $this->getUnrealizedProductionService();
         $failsNames = $urealizedService->getCauseValueDay();
+        
+//        var_dump($resource->getId());die();
 
 
         $causeFailService = $this->getCauseFailService();
@@ -128,6 +130,7 @@ class UnrealizedProductionController extends SEIPController {
 
 
         $mp = $causeFailService->getFailsCauseMp($resource);
+//        var_dump($mp);die();
         $datacharInternalMp = $datacharExternalMp = "";
         if (count($mp) > 0) {
             $InternalCategoriesMp = array();
