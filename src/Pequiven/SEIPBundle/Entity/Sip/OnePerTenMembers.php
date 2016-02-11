@@ -165,6 +165,14 @@ class OnePerTenMembers {
     private $voto = 0;
     
     /**
+     * vasamblea6
+     * @var integer
+     *
+     * @ORM\Column(name="vasamblea6", type="integer", nullable=true)
+     */
+    private $vasamblea6 = 0;
+    
+    /**
      * localidadOne
      * @var string
      *
@@ -345,6 +353,14 @@ class OnePerTenMembers {
 
     function getCentroid() {
         return $this->centroid;
+    }
+
+    function setVasamblea6($vasamblea6) {
+        $this->vasamblea6 = $vasamblea6;
+    }
+
+    function getVasamblea6() {
+        return $this->vasamblea6;
     }
 
 }
