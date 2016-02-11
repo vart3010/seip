@@ -1,0 +1,137 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayout.html.twig' %}
+
+{% block before_body %}
+    {{ contentHeader(
+        ('Estadistica Informe de Evolución' |trans({},'messages')) ,        
+        ('Carga'|trans({},'messages'))
+    ) }}
+{% endblock %} 
+
+{% block body %}
+<fieldset class="fieldset">
+    <legend class="legend">Estadistica Carga de Informes de Evolución&nbsp;</legend>
+
+		{% set cont = 1 %}                          
+        {% for datas in levels %}
+		{% set min = data.dataTotal[cont] / 4 %}
+    	<div class="columns">        	
+        	<div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+            	<p class="inline-label">                	
+                    <p class="inline-medium-label button-height">
+						<span class="label">{{ levels[cont] }}</span>
+						<span class="progress" style="width: 200%">
+
+							<!-- inner progression marks -->
+							{# <span class="inner-mark" style="left: {{ min|round }}"></span>
+							<span class="inner-mark" style="left: {{ (min * 2)|round }}"></span>
+							<span class="inner-mark" style="left: {{ (min * 3)|round }}"></span> #}
+							
+							<!-- top and bottom progression marks -->
+							<span class="top-mark" style="left: 1px"><span class="mark-label align-right">0</span></span>
+							<span class="top-mark" style="left: 25%"><span class="mark-label"></span></span>
+							<span class="top-mark" style="left: 50%"><span class="mark-label"></span></span>
+							<span class="top-mark" style="left: 75%"><span class="mark-label"></span></span>
+							<span class="top-mark" style="left: 100%"><span class="mark-label align-left">{{ data.dataTotal[cont] }}</span></span>
+							
+							<span class="bottom-mark" style="left: 1px"><span class="mark-label align-right">Nada</span></span>
+							<span class="bottom-mark" style="left: 25%"><span class="mark-label"></span></span>
+							<span class="bottom-mark" style="left: 50%"><span class="mark-label"></span></span>
+							<span class="bottom-mark" style="left: 75%"><span class="mark-label"></span></span>
+							<span class="bottom-mark" style="left: 100%"><span class="mark-label align-left">Total</span></span>
+
+							<!-- background-text, revealed when progress bar is too small -->
+							<span class="progress-text">{{ data.dataIndicators[cont] }}</span>
+							<!-- progress bar with foreground text -->
+							<span class="progress-bar red-gradient glossy" style="width: {{ (data.dataIndicators[cont] / data.dataTotal[cont]) * 100 }}%">
+								<span class="progress-text">{{ data.dataIndicators[cont] }}</span>
+							</span>
+						</span>
+					</p>
+                </p>
+				{% if data.dataIndicators[cont] != 0 %}
+                <p>
+					<a href="" id="plus_{{cont}}" onclick="show_{{cont}}()"><i class="fa fa-plus fa-lg"></i> Lista de {{ levels[cont] }}</a>
+					<a href="" id="minus_{{cont}}" onclick="hide_{{cont}}()" style='display:none;'><i class="fa fa-minus fa-lg"></i> Lista de {{ levels[cont] }}</a>
+				</p>
+					<p class="inline-label" id="indicatorList_{{ cont }}" style='display:none;'> 
+	                	<label class="label">Lista de Indicadores</label>
+							{% for dataIndicators in data.indicators[cont] %}
+								<a href="">{{dataIndicators}}</a><br>
+							{% endfor %}
+					</p>
+				{% endif %}
+			</div>
+		</div>    
+		{% set cont = cont + 1 %}                  
+		{% endfor %} 
+</fieldset>
+
+<fieldset class="fieldset">
+    <legend class="legend">Estadistica General&nbsp;</legend>
+    <div class="columns">        	
+        <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+        	{% for i in 1..4 %}
+        	<p class="inline-label">  
+        		<span class="label">
+        			<i class="fa fa-bar-chart fa-lg"></i>&nbsp; 
+        		</span>
+    			{{ data.dataGeneral[i] }}<br>
+            </p>
+			{% endfor %}              	
+    	</div>
+    </div>
+</fieldset>
+
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}	
+    <!-- Additional styles -->
+    
+    <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/progress-slider3860.css?v=1') }}">
+    
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script type="text/javascript">
+        function show_1(){
+            document.getElementById('indicatorList_1').style.display = 'block';            
+            document.getElementById('plus_1').style.display = 'none';            
+            document.getElementById('minus_1').style.display = 'block';            
+        }
+        function show_2(){
+            document.getElementById('indicatorList_2').style.display = 'block';            
+            document.getElementById('plus_2').style.display = 'none';            
+            document.getElementById('minus_2').style.display = 'block';            
+        }
+        function show_3(){
+            document.getElementById('indicatorList_3').style.display = 'block'; 
+            document.getElementById('plus_3').style.display = 'none';            
+            document.getElementById('minus_3').style.display = 'block';                       
+        }
+        function hide_1(){
+            document.getElementById('indicatorList_1').style.display = 'none';        
+            document.getElementById('plus_1').style.display = 'block';            
+            document.getElementById('minus_1').style.display = 'none';            
+        }
+        function hide_2(){         
+            document.getElementById('indicatorList_2').style.display = 'none'; 
+            document.getElementById('plus_2').style.display = 'block';            
+            document.getElementById('minus_2').style.display = 'none';           
+        }
+        function hide_3(){            
+            document.getElementById('indicatorList_3').style.display = 'none';
+            document.getElementById('plus_3').style.display = 'block';            
+            document.getElementById('minus_3').style.display = 'none';
+        }
+    </script>
+
+    <script src="{{  asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.progress-slider.js') }}"></script>
+    
+    <!-- jQuery-ui -->
+    <script src="{{ asset('bundles/pequivenseip/jquery-ui.custom/jquery-ui.js?v=1') }}"></script>
+
+    <script src="{{  asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.tabs.js') }}"></script>
+{% endblock %}
