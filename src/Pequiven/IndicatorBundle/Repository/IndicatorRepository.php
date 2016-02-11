@@ -593,6 +593,22 @@ class IndicatorRepository extends EntityRepository
         
         parent::applySorting($queryBuilder, $sorting);
     }
+
+    public function findQueryIndicatorValid($period, $level)
+    {   
+        $queryBuilder = $this->getQueryBuilder();
+        $queryBuilder
+            ->select('i')
+            ->andWhere('i.period = :period')
+            ->andWhere('i.indicatorLevel = :level')                        
+            ->andWhere('i.showEvolutionView = :show')                        
+            ->setParameter('period', $period)
+            ->setParameter('level', $level)
+            ->setParameter('show', 1)
+            ;
+        
+        return $queryBuilder->getQuery()->getResult();
+    }
     
     protected function getAlias() {
         return 'i';

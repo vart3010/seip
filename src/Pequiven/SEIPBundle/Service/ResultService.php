@@ -813,9 +813,9 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             if ($error == null) {
                 if ($indicator->hasNotification()) {
                     if ($this->calculateRangeGood($indicator, $tendenty)) {//Rango Verde R*100% (Máximo 100)
-                        if ($result > 100) {
+//                        if ($result > 100) {
                             $result = 100;
-                        }
+//                        }
                     } else if ($this->calculateRangeMiddle($indicator, $tendenty)) {//Rango Medio R*50%
                         $result = $this->recalculateResultByRange($indicator, $tendenty);
                         $value = $result;
@@ -846,13 +846,14 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             if ($error == null) {
                 if ($indicator->hasNotification()) {
                     if ($this->calculateRangeGood($indicator, $tendenty)) {//Rango Verde R*100% (Máximo 100)
-                        if ($result > 100) {
-                            $result = 100;
-                        }
-                        $result = 100 - $result;
-                        if ($result > 100) {
-                            $result = 100;
-                        }
+//                        if ($result > 100) {
+//                            $result = 100;
+//                        }
+//                        $result = 100 - $result;
+//                        if ($result > 100) {
+//                            $result = 100;
+//                        }
+                        $result = 100;
                     } else if ($this->calculateRangeMiddle($indicator, $tendenty)) {//Rango Medio R*50%
                         $result = 100 - $result;
                         $varMulti = 10 * $result;

@@ -129,6 +129,7 @@ app:
                             Matrices de objetivos
                     sig:
                         main: Sistema Integrado de Gestión
+                        evolution: Carga Informe de Evolución
                         objective:
                             main: Objetivos
                             visualize: Visualizar

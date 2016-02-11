@@ -548,6 +548,12 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                         ->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.user.item_user_list', $section)));
             }
 
+            $visualize->addChild('planning.visualize.user.list.user.items', array(
+                        'route' => 'pequiven_indicator_evolution_load',
+                        'labelAttributes' => array('icon' => 'fa fa-bar-chart')
+                    ))
+                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.evolution', $section)));            
+
 
             //Fin sub Ver - menu objetivos
             //Menu de carga de datos
