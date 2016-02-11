@@ -3850,10 +3850,11 @@ class IndicatorService implements ContainerAwareInterface {
     {   
         $cont = 1;
         $values = count($indicator->getValuesIndicator());        
+
         $dataX = $dataY = $dataXY = $dataXX = [];
         $dataTendency = 0;
         
-        if ($values != 0 ) {            
+        if (count($values) >= 3) {            
             foreach ($indicator->getValuesIndicator() as $value) {
                         $data = $value->getValueOfIndicator();
 
