@@ -2,12 +2,12 @@
 
 {% trans_default_domain 'PequivenSIGBundle' %}
 
-{% block title %}- SIG Monitoring {% endblock %}
+{% block title %}- {{('monitoring.title'|trans)}} {% endblock %}
 
 {% block before_body %}
     {{ contentHeader(
-        ('Monitoring'|trans),
-        ('list'|trans)
+        ('monitoring.title'|trans),
+        ('pequiven_indicator.list'|trans)
     ) }}
 {% endblock %}
 

@@ -2,10 +2,12 @@
 
 {% import 'PequivenSIGBundle:Template:Buttons/buttons.html.twig' as buttons %}
 
+{% trans_default_domain 'PequivenSIGBundle' %}
+
 {% block before_body %}
     {{ contentHeader(
-        ('Seguimiento y Eficacia de las Acciones'),        
-        ('show'|trans({},'messages'))
+        ('monitoring.title'|trans),        
+        ('pequiven_indicator.show'|trans)
     ) }}
 {% endblock %} 
 
