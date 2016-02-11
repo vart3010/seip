@@ -3854,7 +3854,7 @@ class IndicatorService implements ContainerAwareInterface {
         $dataX = $dataY = $dataXY = $dataXX = [];
         $dataTendency = 0;
         
-        if (count($values) >= 3) {            
+        if ($values != 0 ) {            
             foreach ($indicator->getValuesIndicator() as $value) {
                         $data = $value->getValueOfIndicator();
 
@@ -3941,9 +3941,9 @@ class IndicatorService implements ContainerAwareInterface {
         $chart["exportFileName"] = "Grafico Resultados ";
         $chart["exporthandler"]  = $urlExportFromChart;
 
+        $dataTendency = 0;
         //Lamado de promedio
         $prom = $this->getPromdIndicator($indicator);
-        $dataTendency =  $this->IndicatorCalculateTendency($indicator);
         //$prom = $indicator->getResultReal(); //Carga del resultado real cargado del indicador        
 
         //Lamado obj 2015
@@ -3955,6 +3955,9 @@ class IndicatorService implements ContainerAwareInterface {
 
         //Número de indicadores asociados
         $totalNumValues = count($indicator->getValuesIndicator());
+        if ($totalNumValues >= 3) {
+            $dataTendency =  $this->IndicatorCalculateTendency($indicator);
+        }            
 
         //Inicialización
         $category = $dataSetReal = $dataSetPlan = $dataSetAcum = array();
