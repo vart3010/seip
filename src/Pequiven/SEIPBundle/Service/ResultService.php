@@ -9,6 +9,7 @@ use Pequiven\MasterBundle\Entity\ArrangementRangeType;
 use Pequiven\MasterBundle\Entity\Operator;
 use Pequiven\SEIPBundle\Model\Common\CommonObject;
 use Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram;
+use Pequiven\ArrangementProgramBundle\Entity\Goal;
 
 /**
  * Servicio que se encarga de actualizar los resultados
@@ -333,7 +334,6 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             $amountPenalty = $periodService->getPeriodActive()->getPercentagePenalty();
         }
 
-
         //RECALCULO LOS VALORES ORIGINALES DE LAS METAS SIN PENALIZAR
         $arrangementProgram->getSummary(array(
             'limitMonthToNow' => true,
@@ -353,38 +353,71 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         $this->setPenaltiesbyGoal($arrangementProgram, $amountPenalty);
 
         //PENALIZO LAS METAS
+        $totalAP = 0;
         foreach ($arrangementProgram->getTimeline()->getGoals() as $goal) {
             $advance = $goal->getResult();
             $penalties = $goal->getPenalty() + $goal->getPercentagepenalty();
-            if (($advance - $penalties) < 0) {
-                $goal->setResult(0);
-                $goal->setResultReal(0);
+            if ((($advance - $penalties) < 0) || (($advance - $penalties) >= 120)) {
+                if (($advance - $penalties) < 0) {
+                    $valor = 0;
+                } else {
+                    $valor = 120 - $penalties;
+                }
             } else {
-                $goal->setResult(($advance - $penalties));
-                $goal->setResultReal($advance - $penalties);
+                $valor = $advance - $penalties;
             }
+            $goal->setResult($valor);
+            $goal->setResultReal($valor);
+            $totalAP = $totalAP + ($valor * ($goal->getWeight() / 100));
+
+            //SALVO EL VALOR DE LA META PENALIZADA SIN RESTRICCIONES DE RANGO ES DECIR >120%
+            $goal->setresultBeforepenalty($advance - $penalties);
+
             $em->persist($goal);
+
+            //TRAIGO LOS MOVIMIENTOS DE LA META
+            $movements = $em->getRepository('PequivenArrangementProgramBundle:MovementEmployee\MovementEmployee')->FindMovementDetailsbyGoal($goal->getId());
+
+            //ACTUALIZO LOS MOVIMIENTOS CON LOS VALORES ACTUALIZADOS DE LA META POR FECHA DE EMISION
+            if ($movements != null) {
+                foreach ($movements as $mov) {
+                    $datos = $this->CalculateAdvancePenalty($goal, $mov->getDate());
+                    if (($datos['realResult'] - $datos['penalty']) < 0) {
+                        $mov->setrealAdvance(0);
+                    } else {
+                        $mov->setrealAdvance($datos['realResult'] - $datos['penalty']);
+                    }
+                    $mov->setPentalty($datos['penalty']);
+                    $mov->setPlanned($datos['plannedResult']);
+                    $em->persist($mov);
+                }
+            }
         }
 
-        //OBTENGO LOS NUEVOS VALORES DEL PROGRAMA DE GESTIÓN
-        $newsummary = $arrangementProgram->getSummary(array(
-            'limitMonthToNow' => true,
-            'refresh' => false,
-                ), $em);
+        $em->flush();
 
-        //PENALIZO LOS PROGRAMAS DE GESTION. EN CASO DE SER NEGATIVO EL RESULTADO SE ESTABLECE COMO CERO
-        if ($newsummary['advances'] < 0) {
-            $arrangementProgram->setResult(0);
-            $arrangementProgram->setResultReal(0);
-            $arrangementProgram->setTotalAdvance(0);
+        //ACTUALIZO LOS PROGRAMAS DE GESTION. EN CASO DE SER NEGATIVO EL RESULTADO SE ESTABLECE COMO CERO. SI ES MAYOR A 120, SE ESTABLECE COMO 120
+        if (($totalAP < 0) || ($totalAP >= 120)) {
+            if ($totalAP < 0) {
+                $arrangementProgram->setResult(0);
+                $arrangementProgram->setResultReal(0);
+                $arrangementProgram->setTotalAdvance(0);
+            } else {
+                $arrangementProgram->setResult(120);
+                $arrangementProgram->setResultReal(120);
+                $arrangementProgram->setTotalAdvance(120);
+            }
         } else {
-            $arrangementProgram->setResult($newsummary['advances']);
-            $arrangementProgram->setResultReal($newsummary['advances']);
-            $arrangementProgram->setTotalAdvance($newsummary['advances']);
+            $arrangementProgram->setResult($totalAP);
+            $arrangementProgram->setResultReal($totalAP);
+            $arrangementProgram->setTotalAdvance($totalAP);
         }
+
+        //SALVO EL VALOR DEL PROGRAMA CUANDO ESTE SOBREPASA LOS 120% DE CUMPLIMIENTO O QUEDA COMO NEGATIVO
+        $arrangementProgram->setRealResult($totalAP);
 
         //CALCULO Y GUARDO EL VALOR DE LA PENALIZACIÓN DEL AP
-        $arrangementProgram->setPenalty($beforepenaltyAP['advances'] - $newsummary['advances']);
+        $arrangementProgram->setPenalty($beforepenaltyAP['advances'] - $totalAP);
 
         //INGRESO LOS DATOS DE AUDITORIA
         $arrangementProgram->updateLastDateCalculateResult();
@@ -392,6 +425,24 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         $em->persist($arrangementProgram);
 
         $this->updateResultOfObjects($arrangementProgram->getObjetiveByType());
+
+        //TRAIGO LOS MOVIMIENTOS DEL PROGRAMA
+        $movementsAP = $em->getRepository('PequivenArrangementProgramBundle:MovementEmployee\MovementEmployee')->FindMovementDetailsbyAP($arrangementProgram->getId());
+
+        //ACTUALIZO LOS MOVIMIENTOS CON LOS VALORES ACTUALIZADOS DE LA META POR FECHA DE EMISION
+        if ($movementsAP != null) {
+            foreach ($movementsAP as $mov) {
+                $datos = $this->CalculateAdvancePenaltyAP($arrangementProgram, $mov->getDate());
+                if (($datos['realResult'] - $datos['penalty']) < 0) {
+                    $mov->setrealAdvance(0);
+                } else {
+                    $mov->setrealAdvance($datos['realResult'] - $datos['penalty']);
+                }
+                $mov->setPentalty($datos['penalty']);
+                $mov->setPlanned($datos['plannedResult']);
+                $em->persist($mov);
+            }
+        }
 
         $em->flush();
     }
@@ -482,10 +533,15 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             $planned[12] = $sump;
             $real[12] = $sumr;
 
-            if ((date("n") == 1) || (date("n") == 12)) {
-                $mes = date("n");
+
+            if ((new \DateTime()) >= ($timeline_goals->getperiod()->getDateEnd())) {
+                $mes = 12;
             } else {
-                $mes = date("n") - 1;
+                if ((date("n") == 1) || (date("n") == 12)) {
+                    $mes = date("n");
+                } else {
+                    $mes = date("n") - 1;
+                }
             }
 
             $mayor = 0;
@@ -515,6 +571,167 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             $em->persist($timeline_goals);
         }
         $em->flush();
+    }
+
+    /**
+     * CALCULA EL AVANCE, REAL Y PENALIZACIONES DE METAS A UNA FECHA
+     * @param Goal $goal
+     * @param type $date
+     * @return array
+     */
+    function CalculateAdvancePenalty(Goal $goal, $date) {
+
+        $real = array();
+        $planned = array();
+
+        $periodService = $this->getPeriodService();
+        $amountPenalty = 0;
+
+        $arrangementProgram = $goal->getTimeline()->getArrangementProgram();
+
+        $lastNotificationInProgressDate = $arrangementProgram->getDetails()->getLastNotificationInProgressDate();
+
+        if ($arrangementProgram->isCouldBePenalized() && ($periodService->isPenaltyInResult($lastNotificationInProgressDate) === true || $arrangementProgram->isForcePenalize() === true)) {
+            $amountPenalty = $periodService->getPeriodActive()->getPercentagePenalty();
+        }
+
+        //ENERO
+        $sump = $goal->getGoalDetails()->getJanuaryPlanned();
+        $sumr = $goal->getGoalDetails()->getJanuaryReal();
+        $planned[1] = $sump;
+        $real[1] = $sumr;
+
+        //+FEBRERO
+        $sump += $goal->getGoalDetails()->getFebruaryPlanned();
+        $sumr += $goal->getGoalDetails()->getFebruaryReal();
+        $planned[2] = $sump;
+        $real[2] = $sumr;
+
+        //+MARZO
+        $sump += $goal->getGoalDetails()->getMarchPlanned();
+        $sumr += $goal->getGoalDetails()->getMarchReal();
+        $planned[3] = $sump;
+        $real[3] = $sumr;
+
+        //+ABRIL
+        $sump += $goal->getGoalDetails()->getAprilPlanned();
+        $sumr += $goal->getGoalDetails()->getAprilReal();
+        $planned[4] = $sump;
+        $real[4] = $sumr;
+
+        //+MAYO
+        $sump += $goal->getGoalDetails()->getMayPlanned();
+        $sumr += $goal->getGoalDetails()->getMayReal();
+        $planned[5] = $sump;
+        $real[5] = $sumr;
+
+        //+JUNIO
+        $sump += $goal->getGoalDetails()->getJunePlanned();
+        $sumr += $goal->getGoalDetails()->getJuneReal();
+        $planned[6] = $sump;
+        $real[6] = $sumr;
+
+        //+JULIO
+        $sump += $goal->getGoalDetails()->getJulyPlanned();
+        $sumr += $goal->getGoalDetails()->getJulyReal();
+        $planned[7] = $sump;
+        $real[7] = $sumr;
+
+        //+AGOSTO
+        $sump += $goal->getGoalDetails()->getAugustPlanned();
+        $sumr += $goal->getGoalDetails()->getAugustReal();
+        $planned[8] = $sump;
+        $real[8] = $sumr;
+
+        //+SEPTIEMBRE
+        $sump += $goal->getGoalDetails()->getSeptemberPlanned();
+        $sumr += $goal->getGoalDetails()->getSeptemberReal();
+        $planned[9] = $sump;
+        $real[9] = $sumr;
+
+        //+OCTUBRE
+        $sump += $goal->getGoalDetails()->getOctoberPlanned();
+        $sumr += $goal->getGoalDetails()->getOctoberReal();
+        $planned[10] = $sump;
+        $real[10] = $sumr;
+
+        //+NOVIEMBRE
+        $sump += $goal->getGoalDetails()->getNovemberPlanned();
+        $sumr += $goal->getGoalDetails()->getNovemberReal();
+        $planned[11] = $sump;
+        $real[11] = $sumr;
+
+        //+DICIEMBRE
+        $sump += $goal->getGoalDetails()->getDecemberPlanned();
+        $sumr += $goal->getGoalDetails()->getDecemberReal();
+        $planned[12] = $sump;
+        $real[12] = $sumr;
+
+        $mes = date_format($date, 'n');
+        $mayor = 0;
+
+        for ($i = 1; $i <= $mes; $i++) {
+            $penal = 0;
+            for ($j = $i; $j <= $mes; $j++) {
+                if ($real [$j] < $planned[$i]) {
+                    $penal++;
+                } else {
+                    break;
+                }
+            }
+
+            if ($penal > $mayor) {
+                $mayor = $penal;
+            }
+
+            if ($planned [$i] == 100) {
+                break;
+            }
+        }
+
+        if ($mayor == null) {
+            $mayor = 0;
+        }
+        if ($real [$mes] == null) {
+            $real[$mes] = 0;
+        }
+        if ($planned [$mes] == null) {
+            $planned[$mes] = 0;
+        }
+
+        $retorno = array(
+            'penalty' => ($mayor + $amountPenalty),
+            'realResult' => $real[$mes],
+            'plannedResult' => $planned[$mes]
+        );
+
+        return $retorno;
+    }
+
+    function CalculateAdvancePenaltyAP(ArrangementProgram $AP, $date) {
+
+        $realResult = 0;
+        $penalty = 0;
+        $plannedResult = 0;
+
+        //DETERMINO LAS METAS PERTENECIENTES AL AP
+        foreach ($AP->getTimeline()->getGoals() as $meta) {
+            //CALCULO PENALIZACIONES Y AVANCES PARA LA FECHA Y VOY SUMANDO POR META
+            $datosAP = $this->CalculateAdvancePenalty($meta, $date);
+
+            $realResult+=(($datosAP['realResult'] * $meta->getWeight())) / 100;
+            $penalty+=(($datosAP['penalty'] * $meta->getWeight())) / 100;
+            $plannedResult+=(($datosAP['plannedResult'] * $meta->getWeight())) / 100;
+        }
+
+        $advance = $realResult - $penalty;
+        $retorno = array(
+            'penalty' => $penalty,
+            'realResult' => $advance,
+            'plannedResult' => $plannedResult
+        );
+
+        return $retorno;
     }
 
     /**
@@ -596,9 +813,9 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             if ($error == null) {
                 if ($indicator->hasNotification()) {
                     if ($this->calculateRangeGood($indicator, $tendenty)) {//Rango Verde R*100% (Máximo 100)
-                        if ($result > 100) {
+//                        if ($result > 100) {
                             $result = 100;
-                        }
+//                        }
                     } else if ($this->calculateRangeMiddle($indicator, $tendenty)) {//Rango Medio R*50%
                         $result = $this->recalculateResultByRange($indicator, $tendenty);
                         $value = $result;
@@ -629,13 +846,14 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             if ($error == null) {
                 if ($indicator->hasNotification()) {
                     if ($this->calculateRangeGood($indicator, $tendenty)) {//Rango Verde R*100% (Máximo 100)
-                        if ($result > 100) {
-                            $result = 100;
-                        }
-                        $result = 100 - $result;
-                        if ($result > 100) {
-                            $result = 100;
-                        }
+//                        if ($result > 100) {
+//                            $result = 100;
+//                        }
+//                        $result = 100 - $result;
+//                        if ($result > 100) {
+//                            $result = 100;
+//                        }
+                        $result = 100;
                     } else if ($this->calculateRangeMiddle($indicator, $tendenty)) {//Rango Medio R*50%
                         $result = 100 - $result;
                         $varMulti = 10 * $result;
@@ -756,7 +974,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             if ($result > $varToCatch) {
                 $varSum = bcadd($varToCatch, $varToCatch, 2);
                 $varResult = bcadd($result, 0, 2);
-                
+
                 if ($varSum < $varResult) {
                     $varMinus = bcsub($varResult, $varSum, 2);
                 } else {
@@ -769,9 +987,8 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 } else {
                     $varMulti = $varMinus * 100;
                 }
-                
+
                 $result = bcdiv($varMulti, $varToCatch, 2);
-                
             } else {
                 $varResult = bcadd($result, 0, 2);
                 $varMinus = bcsub($varToCatch, $varResult, 2);
@@ -1468,6 +1685,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                     }
                     $nameParameter = $variable->getName();
                     $valueParameter = $valueIndicator->getParameter($nameParameter, 0);
+                    $valueParameterInit = $valueParameter;
                     $results = $resultsItems[$i];
                     if ($variable->isFromEQ()) {
                         $parametersForTemplate = array(
@@ -1480,16 +1698,32 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                         if (!$variable->isStaticValue()) {
                             $valueParameter = 0;
                         }
+//                        else{
+//                            if($indicator->getValidVariableStaticValue()){
+//                                $valueParameter = 0;
+//                            }
+//                        }
                         foreach ($results as $resultItem) {
                             $childValueParameter = $resultItem->getParameter($nameParameter);
                             if ($childValueParameter !== null) {
                                 if ($variable->isStaticValue()) {//En caso de que la variable sea "estática" y tenga que obtener el valor del indicador hijo
-                                    $valueParameter = $childValueParameter;
+                                    if (count($indicator->getChildrens()) == 1) {
+                                        $valueParameter = $childValueParameter;
+                                    }
+//                                    else{
+//                                        $valueParameter += $childValueParameter;
+//                                    }
                                 } else {
                                     $valueParameter += $childValueParameter;
                                 }
                             }
                         }
+
+//                        if ($variable->isStaticValue() && $indicator->getValidVariableStaticValue()) {
+//                            if($valueParameterInit != $valueParameter){
+//                                
+//                            }
+//                        }
                     }
                     $valueIndicator->setParameter($nameParameter, $valueParameter);
                 }
@@ -1975,6 +2209,19 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 $allArrangementPrograms[$arrangementProgram->getId()] = $arrangementProgram;
             }
 
+            //METAS EN LAS CUALES YA NO SE ENCUENTRA ASIGNADO
+            $goalsPast = $goalRepository->getDivestedIdGoalsbyUser($idUser, $period->getid());
+            $em = $this->getDoctrine()->getManager();
+            foreach ($goalsPast as $goal) {
+                $goals[$goal["id_affected"]] = $em->getRepository('Pequiven\ArrangementProgramBundle\Entity\Goal')->find($goal["id_affected"]);
+            }
+
+            //PROGRAMAS EN LOS CUALES YA NO SE ENCUENTRA ASIGNADO
+            $arrangementprogramPast = $arrangementProgramRepository->getDivestedIdAPbyUser($idUser, $period->getid());
+            foreach ($arrangementprogramPast as $ap) {
+                $arrangementProgramsObjects[$ap["id_affected"]]= $em->getRepository('Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram')->find($ap["id_affected"]);               
+            }            
+            
             ToolService::getObjetiveFromPrograms($arrangementProgramsForObjetives, $objetives);
 
             foreach ($arrangementProgramsObjects as $key => $arrangementProgram) {
@@ -1989,16 +2236,135 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 $realDateEnd = $summary['dateEndReal'];
 
                 $advanceToDate = 0.0;
-                $today = date("m");
+
                 foreach ($arrangementProgram->getTimeLine()->getGoals() as $goal) {
-                    $advanceToDate = $advanceToDate + $goal->getGoalDetails()->getPlannedTotal($today) * $goal->getWeight() / 100;
+                    if ((new \DateTime()) >= ($goal->getperiod()->getDateEnd())) {
+                        $fecha = 12;
+                    } else {
+                        $fecha = date("m");
+                    }
+                    $advanceToDate = $advanceToDate + $goal->getGoalDetails()->getPlannedTotal($fecha) * $goal->getWeight() / 100;
                 }
+
+                //LOCALIZO MOVIMIENTOS DE PERSONAL EN EL PROGRAMA DE GESTION
+                $em = $this->getDoctrine()->getManager();
+                $movements = $em->getRepository('PequivenArrangementProgramBundle:MovementEmployee\MovementEmployee')->FindMovementDetailsbyAPbyUser($arrangementProgram->getid(), $user->getid());
+
+                $valores = array();
+                $tipos = array();
+                $planeado = array();
+                $idarray = 0;
+                $aporte = 0;
+                $aportePlan = 0;
+
+                //ALMACENO EN ARRAYS LOS VALORES DE PLAN, REAL Y TIPO
+                foreach ($movements as $mov) {
+                    $valores[$idarray] = $mov->getRealAdvance();
+                    $planeado[$idarray] = $mov->getplanned();
+                    $tipos[$idarray] = $mov->getType();
+                    $idarray++;
+                }
+
+                //SI EL PROGRAMA DE GESTION TIENE MOVIMIENTOS
+                if ($tipos != null) {
+
+                    //NO SE TOMA EN CUENTA PARA EVALUACIONES CUANDO.
+                    //SI EL EMPLEADO AL FINAL SALE DEL PROGRAMA DE GESTION DE PLAN 0%
+                    //SI EL EMPLEADO AL PRINCIPIO ENTRA CON UN PROGRAMA DE GESTION DE REAL 100%
+                    if ((($tipos[count($tipos) - 1] == 'O') && ($planeado[count($tipos) - 1] == 0)) || ((reset($tipos) == 'I') && (reset($valores) == 100))) {
+                        $eval = "N/A";
+                        $aporte = 0;
+                        $aportePlan = 0;
+                    } else {
+                        $evalI = 0;
+                        $eval = 0;
+                        //SI LOS MOVIMIENTOS COMIENZAN CON UNA SALIDA, SE AÑADE LA ENTRADA AL PROGRAMA DE GESTION INICIALIZADO EN CERO
+                        //PORQUE EL EMPLEADO SE ENCUENTRA DESDE QUE SE CREO EL PROGRAMA
+                        if ((reset($tipos) == 'O')) {
+                            $status = 'Pasada';
+                            array_unshift($tipos, 'I');
+                            array_unshift($valores, 0);
+                            array_unshift($planeado, 0);
+                        }
+
+                        //SI LOS MOVIMIENTOS CONCLUYEN CON UNA ENTRADA, SE AÑADE LA SALIDA DEL PROGRAMA DE GESTION CON EL VALOR ACTUAL DEL MISMO
+                        //PORQUE EL EMPLEADO SE MANTUVO COMO RESPONSABLE HASTA EL FINAL DEL PERIODO
+                        if (($tipos[count($tipos) - 1] == 'I')) {
+                            $status = 'Actual';
+                            $tipos[] = 'O';
+                            $valores[] = $arrangementProgram->getUpdateResultByAdmin() ? ToolService::formatResult($arrangementProgram->getResultModified()) : ToolService::formatResult($arrangementProgram->getResultReal());
+                            $planeado[] = $advanceToDate;
+                        }
+
+                        //DETERMINO LA CANTIDAD DE MOVIMIENTOS EN EL PROGRAMA DE GESTION
+                        $cant_mov = count($valores);
+                        $noaplican = 0;
+
+                        for ($i = 0; $i < $cant_mov; $i++) {
+                            //PARA EL CALCULO DEL APORTE SE APLICA DISTANCIA ENTRE DOS PUNTOS EN UNA RECTA REAL LA FORMULA ES DESTINO MENOS ORIGEN                            
+                            if ($tipos[$i] == 'I') {
+                                //UNA ENTRADA ES CONSIDERADA ORIGEN
+                                $aporte = $aporte - $valores[$i];
+                                $aportePlan = $aportePlan - $planeado[$i];
+                            }
+                            if ($tipos[$i] == 'O') {
+                                //UNA SALIDA ES CONSIDERADA DESTINO
+                                $aporte = $aporte + $valores[$i];
+                                $aportePlan = $aportePlan + $planeado[$i];
+                            }
+
+                            //SE CONTRUYEN INTERVALOS DE EVALUACIÓN YA QUE TODA SALIDA TENDRÁ SU CORRESPONDIENTE ENTRADA O VICEVERSA
+                            if ($i % 2 != 0) {
+                                //SI NO EXISTE UNA VARIACION EN EL PLAN DENTRO DEL INTERVALO, NO SE TOMA EN CUENTA PARA EVALUARLO
+                                if ($planeado[$i] == $planeado[$i - 1]) {
+                                    //SIN EMBARGO SI EXISTE UN AVANCE EN EL REAL SI SE TOMA EN CUENTA Y SE ASUME COMO EL 100% DE CUMPLIMIENTO
+                                    if ($valores[$i] > $valores[$i - 1]) {
+                                        $evalI = 100;
+                                    } else {
+                                        $evalI = 0;
+                                        //SE SUMAN DOS YA QUE LOS INTERVALOS CONTIENEN DOS ELEMENTOS
+                                        $noaplican = $noaplican + 2;
+                                    }
+                                } else {
+                                    //CALCULO LA EVALUACION INDIVIDUAL POR MOVIMIENTO CON UNA ENTRADA Y UNA SALIDA. OSEA POR INTERVALO, EXTREMO MENOS ORIGEN
+                                    $evalI = (100 * (($valores[$i] - $valores[$i - 1]) / ($planeado[$i] - $planeado[$i - 1])));
+                                }
+                            }
+                            $eval = $eval + $evalI;
+                        }
+
+                        //SI LA CANTIDAD DE MOVIMIENTOS COINCIDE CON LA CANTIDAD DE ELEMENTOS QUE NO APLICAN NO SE EVALUA LA META
+                        if ($cant_mov == $noaplican) {
+                            $eval = "N/A";
+                        } else {
+                            //SE DETERMINA UN PROMEDIO SIMPLE DE LAS EVALUACIONES INDIVIDUALES POR INTERVALO, TOMANDO EN CONSIDERACIÓN LAS QUE APLIQUEN
+                            $eval = $eval / (($cant_mov - $noaplican) / 2);
+                            //SI LA EVALUACION SUPERA EL 120% SE REDIMENSIONA AL MAXIMO PERMITIDO.
+                            if ($eval > 120) {
+                                $eval = 120;
+                            }
+                        }
+
+                        //SE REDIMENSIONAN LOS APORTES Y EVALUACIONES QUE DIERON RESULTADO NEGATIVO. SUCEDE CUANDO EL PROGRAMA DE GESTION
+                        //ACTUALMENTE ESTA POR DEBAJO DE CUANDO ENTRO DEBIDO A LAS PENALIZACIONES
+                        if (($aporte < 0) || ($eval < 0)) {
+                            $aporte = 0;
+                            $eval = 0;
+                        }
+                    }
+                } else {
+                    //SI EL PROGRAMA DE GESTION NO TIENE MOVIMIENTOS, LOS VALORES ACTUALES SON LOS VALORES DE LA EVALUACION
+                    $status = 'Actual';
+                    $eval = $aporte = $arrangementProgram->getUpdateResultByAdmin() ? ToolService::formatResult($arrangementProgram->getResultModified()) : ToolService::formatResult($arrangementProgram->getResultReal());
+                    $aportePlan = $advanceToDate;
+                }
+
 
                 $arrangementPrograms[$key] = array(
                     'id' => sprintf('PG-%s', $arrangementProgram->getId()),
                     'ref' => $arrangementProgram->getRef(),
                     'description' => $arrangementProgram->getDescription(),
-                    'result' => $arrangementProgram->getUpdateResultByAdmin() ? ToolService::formatResult($arrangementProgram->getResultModified()) : ToolService::formatResult($arrangementProgram->getResult()),
+                    'result' => $arrangementProgram->getUpdateResultByAdmin() ? ToolService::formatResult($arrangementProgram->getResultModified()) : ToolService::formatResult($arrangementProgram->getResultReal()),
                     'resulToDate' => $advanceToDate,
                     'dateStart' => array(
                         'plan' => ToolService::formatDateTime($planDateStart),
@@ -2008,6 +2374,11 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                         'plan' => ToolService::formatDateTime($planDateEnd),
                         'real' => ToolService::formatDateTime($realDateEnd)
                     ),
+                    'aporte' => $aporte,
+                    'aportePlan' => $aportePlan,
+                    'eval' => $eval,
+                    'observaciones' => $movements,
+                    'tipo' => $status,
                 );
             }
 
@@ -2077,6 +2448,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
 
                 $data = array(
                     'id' => sprintf('OB-%s', $objetive->getId()),
+                    'ref' => sprintf('%s', $objetive->getRef()),
                     'description' => $objetive->getDescription(),
                     'result' => $objetive->getUpdateResultByAdmin() ? ToolService::formatResult($objetive->getResultModified()) : ToolService::formatResult($objetive->getResult()),
                     'dateStart' => array(
@@ -2087,13 +2459,20 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                         'plan' => ToolService::formatDateTime($planDateEnd),
                         'real' => ToolService::formatDateTime($planDateEnd)
                     ),
+                    'gerencia' => $objetive->getgerencia(),
                 );
                 if ($objetive->getObjetiveLevel()->getLevel() == \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_OPERATIVO) {
-                    $objetivesOO[$objetive->getId()] = $data;
+                    if ($objetive->getgerencia() == $user->getgerencia()) {
+                        $objetivesOO[$objetive->getId()] = $data;
+                    }
                 } else if ($objetive->getObjetiveLevel()->getLevel() == \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_TACTICO) {
-                    $objetivesOT[$objetive->getId()] = $data;
+                    if ($objetive->getgerencia() == $user->getgerencia()) {
+                        $objetivesOT[$objetive->getId()] = $data;
+                    }
                 } else if ($objetive->getObjetiveLevel()->getLevel() == \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_ESTRATEGICO) {
-                    $objetivesOE[$objetive->getId()] = $data;
+                    if ($objetive->getgerencia() == $user->getgerencia()) {
+                        $objetivesOE[$objetive->getId()] = $data;
+                    }
                 }
             }
 
@@ -2109,9 +2488,124 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 $realDateEnd = clone($planDateEnd);
                 $realDateEnd->setDate($realDateEnd->format('Y'), $summary['realMonthDateEnd'], \Pequiven\SEIPBundle\Service\ToolService::getLastDayMonth($realDateEnd->format('Y'), $summary['realMonthDateEnd']));
 
-                $fecha = date('Y-m-j');
-                $fecha = strtotime('-1 month', strtotime($fecha));
-                $fecha = date('m', $fecha);
+                if ((new \DateTime()) >= ($goal->getperiod()->getDateEnd())) {
+                    $fecha = 12;
+                } else {
+                    $fecha = date("m");
+                }
+
+                //LOCALIZO MOVIMIENTOS DE PERSONAL EN LA META
+                $em = $this->getDoctrine()->getManager();
+                $movements = $em->getRepository('PequivenArrangementProgramBundle:MovementEmployee\MovementEmployee')->FindMovementDetailsbyGoalbyUser($goal->getid(), $user->getid());
+
+                $valores = array();
+                $tipos = array();
+                $planeado = array();
+                $idarray = 0;
+                $aporte = 0;
+                $aportePlan = 0;
+
+                //ALMACENO EN ARRAYS LOS VALORES DE PLAN, REAL Y TIPO
+                foreach ($movements as $mov) {
+                    $valores[$idarray] = $mov->getRealAdvance();
+                    $planeado[$idarray] = $mov->getplanned();
+                    $tipos[$idarray] = $mov->getType();
+                    $idarray++;
+                }
+
+                //SI LA META TIENE MOVIMIENTOS
+                if ($tipos != null) {
+
+                    //NO SE TOMA EN CUENTA PARA EVALUACIONES CUANDO.
+                    //SI EL EMPLEADO AL FINAL SALE DE LA META DE PLAN 0%
+                    //SI EL EMPLEADO AL PRINCIPIO ENTRA CON UNA META DE REAL 100%
+                    if ((($tipos[count($tipos) - 1] == 'O') && ($planeado[count($tipos) - 1] == 0)) || ((reset($tipos) == 'I') && (reset($valores) == 100))) {
+                        $eval = "N/A";
+                        $aporte = 0;
+                        $aportePlan = 0;
+                    } else {
+                        $evalI = 0;
+                        $eval = 0;
+                        //SI LOS MOVIMIENTOS COMIENZAN CON UNA SALIDA, SE AÑADE LA ENTRADA A LA META INICIALIZADA EN CERO
+                        //PORQUE EL EMPLEADO SE ENCUENTRA DESDE QUE SE CREO EL PROGRAMA
+                        if ((reset($tipos) == 'O')) {
+                            $status = 'Pasada';
+                            array_unshift($tipos, 'I');
+                            array_unshift($valores, 0);
+                            array_unshift($planeado, 0);
+                        }
+
+                        //SI LOS MOVIMIENTOS CONCLUYEN CON UNA ENTRADA, SE AÑADE LA SALIDA A LA META CON EL VALOR ACTUAL DE LA MISMA
+                        //PORQUE EL EMPLEADO SE MANTUVO COMO RESPONSABLE HASTA EL FINAL DEL PERIODO
+                        if (($tipos[count($tipos) - 1] == 'I')) {
+                            $status = 'Actual';
+                            $tipos[] = 'O';
+                            $valores[] = $goal->getUpdateResultByAdmin() ? ToolService::formatResult($goal->getResultModified()) : ToolService::formatResult($goal->getResult());
+                            $planeado[] = $goal->getGoalDetails()->getPlannedTotal($fecha);
+                        }
+
+                        //DETERMINO LA CANTIDAD DE MOVIMIENTOS EN LA META
+                        $cant_mov = count($valores);
+                        $noaplican = 0;
+
+                        for ($i = 0; $i < $cant_mov; $i++) {
+                            //PARA EL CALCULO DEL APORTE SE APLICA DISTANCIA ENTRE DOS PUNTOS EN UNA RECTA REAL LA FORMULA ES DESTINO MENOS ORIGEN                            
+                            if ($tipos[$i] == 'I') {
+                                //UNA ENTRADA ES CONSIDERADA ORIGEN
+                                $aporte = $aporte - $valores[$i];
+                                $aportePlan = $aportePlan - $planeado[$i];
+                            }
+                            if ($tipos[$i] == 'O') {
+                                //UNA SALIDA ES CONSIDERADA DESTINO
+                                $aporte = $aporte + $valores[$i];
+                                $aportePlan = $aportePlan + $planeado[$i];
+                            }
+
+                            //SE CONTRUYEN INTERVALOS DE EVALUACIÓN YA QUE TODA SALIDA TENDRÁ SU CORRESPONDIENTE ENTRADA O VICEVERSA
+                            if ($i % 2 != 0) {
+                                //SI NO EXISTE UNA VARIACION EN EL PLAN DENTRO DEL INTERVALO, NO SE TOMA EN CUENTA PARA EVALUARLO
+                                if ($planeado[$i] == $planeado[$i - 1]) {
+                                    //SIN EMBARGO SI EXISTE UN AVANCE EN EL REAL SI SE TOMA EN CUENTA Y SE ASUME COMO EL 100% DE CUMPLIMIENTO
+                                    if ($valores[$i] > $valores[$i - 1]) {
+                                        $evalI = 100;
+                                    } else {
+                                        $evalI = 0;
+                                        //SE SUMAN DOS YA QUE LOS INTERVALOS CONTIENEN DOS ELEMENTOS
+                                        $noaplican = $noaplican + 2;
+                                    }
+                                } else {
+                                    //CALCULO LA EVALUACION INDIVIDUAL POR MOVIMIENTO CON UNA ENTRADA Y UNA SALIDA. OSEA POR INTERVALO, EXTREMO MENOS ORIGEN
+                                    $evalI = (100 * (($valores[$i] - $valores[$i - 1]) / ($planeado[$i] - $planeado[$i - 1])));
+                                }
+                            }
+                            $eval = $eval + $evalI;
+                        }
+
+                        //SI LA CANTIDAD DE MOVIMIENTOS COINCIDE CON LA CANTIDAD DE ELEMENTOS QUE NO APLICAN NO SE EVALUA LA META
+                        if ($cant_mov == $noaplican) {
+                            $eval = "N/A";
+                        } else {
+                            //SE DETERMINA UN PROMEDIO SIMPLE DE LAS EVALUACIONES INDIVIDUALES POR INTERVALO, TOMANDO EN CONSIDERACIÓN LAS QUE APLIQUEN
+                            $eval = $eval / (($cant_mov - $noaplican) / 2);
+                            //SI LA EVALUACION SUPERA EL 120% SE REDIMENSIONA AL MAXIMO PERMITIDO.
+                            if ($eval > 120) {
+                                $eval = 120;
+                            }
+                        }
+
+                        //SE REDIMENSIONAN LOS APORTES Y EVALUACIONES QUE DIERON RESULTADO NEGATIVO. SUCEDE CUANDO LA META 
+                        //ACTUALMENTE ESTA POR DEBAJO DE CUANDO ENTRO DEBIDO A LAS PENALIZACIONES
+                        if (($aporte < 0) || ($eval < 0)) {
+                            $aporte = 0;
+                            $eval = 0;
+                        }
+                    }
+                } else {
+                    //SI LA META NO TIENE MOVIMIENTOS, LOS VALORES ACTUALES SON LOS VALORES DE LA EVALUACION
+                    $status = 'Actual';
+                    $eval = $aporte = $goal->getUpdateResultByAdmin() ? ToolService::formatResult($goal->getResultModified()) : ToolService::formatResult($goal->getResult());
+                    $aportePlan = $goal->getGoalDetails()->getPlannedTotal($fecha);
+                }
 
 
                 $goals[$key] = array(
@@ -2128,8 +2622,14 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                         'plan' => ToolService::formatDateTime($planDateEnd),
                         'real' => ToolService::formatDateTime($realDateEnd)
                     ),
+                    'aporte' => $aporte,
+                    'aportePlan' => $aportePlan,
+                    'eval' => $eval,
+                    'observaciones' => $movements,
+                    'tipo' => $status,
                 );
             }
+
             $referenceType = \Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_URL;
             foreach ($allArrangementPrograms as $arrangementProgram) {
                 $details = $arrangementProgram->getDetails();

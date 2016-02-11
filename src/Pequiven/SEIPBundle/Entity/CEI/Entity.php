@@ -68,6 +68,13 @@ class Entity extends BaseModel
      * @ORM\ManyToOne(targetEntity="Tecnocreaciones\Vzla\EntityBundle\Entity\State")
      */
     private $state;
+    
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="canBeNetProductionGreaterThanGross", type="boolean")
+     */
+    private $canBeNetProductionGreaterThanGross = false;
 
     /**
      * Get id
@@ -192,6 +199,27 @@ class Entity extends BaseModel
     public function getState()
     {
         return $this->state;
+    }
+    
+    /**
+     * Set canBeNetProductionGreaterThanGross
+     *
+     * @param boolean $canBeNetProductionGreaterThanGross
+     * @return Entity
+     */
+    public function setCanBeNetProductionGreaterThanGross($canBeNetProductionGreaterThanGross) {
+        $this->canBeNetProductionGreaterThanGross = $canBeNetProductionGreaterThanGross;
+
+        return $this;
+    }
+
+    /**
+     * Get canBeNetProductionGreaterThanGross
+     *
+     * @return boolean 
+     */
+    public function getCanBeNetProductionGreaterThanGross() {
+        return $this->canBeNetProductionGreaterThanGross;
     }
     
     public function __toString() 

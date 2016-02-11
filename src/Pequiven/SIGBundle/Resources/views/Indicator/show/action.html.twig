@@ -16,6 +16,7 @@
             <table class="simple-table responsive-table tables-extras" id="sorting-example2">
                 <thead>
                     <tr>
+                        {#<th scope="col" width="2%" class="hide-on-mobile-portrait header">Estatus</th>#}
                         <th scope="col" width="10%" class="header" align="center">
                             {{ 'seip.table.header.nro'|trans({},'PequivenSIGBundle') }}
                         </th>
@@ -35,7 +36,7 @@
                             Avance
                         </th>
                         <th scope="col" width="25%" class="hide-on-mobile-portrait header">
-                            {{ 'seip.table.header.responsible'|trans({},'PequivenSIGBundle') }}
+                            {{ 'seip.table.header.responsible'|trans({},'PequivenSIGBundle') }}(s)
                         </th>
                         <th scope="col" width="20%" class="hide-on-mobile-portrait header">
                             {{ 'seip.table.header.observations'|trans({},'PequivenSIGBundle') }}
@@ -46,8 +47,17 @@
                 </thead>
                 {% set count =  0 %}
                 {% for  action in dataAction["values"] %}
+                    {% if action.actionValue.status != 1 %}
+                        {% set color = "fc0101" %}
+                        {% set icon = "fa fa-exclamation-triangle" %}
+                        {% set title = ""%}
+                    {% else %}
+                        {% set color = "008eff" %}
+                        {% set icon = "fa fa-check-square" %}                            
+                        {% set title = "Verificado"%}                            
+                    {% endif %}
                     <tbody align="center">
-                        <tr>
+                            {#<tr><td rowspan="2" style="color:#{{color}};" title="{{title}}"><i class="{{icon}} fa-1g"></i></td>#}
                             <td rowspan="2">{{ action.actionValue.ref }}</td>
                             <td rowspan="2" align="justify">{{ action.actionValue.action }}</td>
                             <td rowspan="2">{{ action.actionValue.indicatorAction.ref }}</td>
@@ -80,7 +90,7 @@
                                     <span class="select-arrow"></span>
                                     <span class="drop-down">
                                         <a href ng-click="removeActionEvolution(action_data='{{ action.actionValue.id }}')" class="button icon-cross-round">{{ "pequiven.actions.delete"|trans({},"messages") }}</a>
-                                        {% if action.observations == null %}
+                                        {% if action.observations == null and action.advance < 100 %}
                                             <a href ng-click="loadTemplateActionAdd(idAction='{{ action.actionValue.id }}',month='{{ month }}')" class="button icon-pencil">{{ "pequiven_indicator.upload_data"|trans({},"PequivenSIGBundle") }}</a>
                                         {% endif %}
                                     </span>

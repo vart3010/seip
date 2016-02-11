@@ -1,0 +1,66 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}
+
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
+
+
+{% block body %}
+
+    <fieldset class="fieldset">
+        <legend class="legend">{{ 'pequiven_seip.product_group_delivery.product_group'|trans }}</legend>
+        <div class="columns">
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'pequiven_seip.product_group_delivery.product_group'|trans }}</label>
+                    <a href="{{ path("pequiven_report_template_delivery_show",{"id":product_group_delivery.reportTemplateDelivery.id}) }}">
+                        <i class="fa fa-file-o"></i>&nbsp;
+                        {{ product_group_delivery.reportTemplateDelivery }}
+                    </a>
+                </p>
+            </div>    
+            <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'production_line'|trans }}</label>
+                    {{ product_group_delivery.productionLine }}
+                </p>
+            </div>
+            <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'Company'|trans }}</label>
+                    {{ product_group_delivery.company }}
+                </p>
+            </div>
+            <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'Location'|trans }}</label>
+                    {{ product_group_delivery.location }}
+                </p>
+            </div>
+            <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'Entity'|trans }}</label>
+                    {{ product_group_delivery.entity }}
+                </p>
+            </div>
+            <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'Enabled'|trans }}</label>
+                    {{ product_group_delivery.enabled |render_yes_no }}
+                </p>
+            </div>
+            {#<div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'Entity'|trans }}</label>
+                    {{ product_group_delivery.plant }}
+                </p>
+            </div>#}
+        </div>
+    </fieldset>
+{#            {{ dump(product|length) }}#}
+
+    {% include 'PequivenSEIPBundle:Delivery:ProductReportDelivery/show/products.html.twig' %}
+    <br /><br />
+
+
+{% endblock %}

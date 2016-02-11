@@ -36,6 +36,7 @@ class MovementFeeStructureInType extends AbstractType {
             ->add('observations', 'textarea', array(
                 'label'=>'Observación',
                 'label_attr' => array('class' => 'label'),
+                'required' => false,
                 'attr' => array('class' => 'input input-large')               
             ))
             ->add('User', null, array(

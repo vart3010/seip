@@ -59,9 +59,7 @@ class MovementEmployeeController extends SEIPController {
         $id = $request->get('idAP');
 
         $em = $this->getDoctrine()->getManager();
-
         $type = 'AP';
-
         $entity = $em->getRepository('PequivenArrangementProgramBundle:arrangementprogram')->find($id);
 
         //INSTANCIACIÓN DE ENTIDADES
@@ -97,6 +95,28 @@ class MovementEmployeeController extends SEIPController {
                     'movements' => $movements,
                     'causes' => $causes
         ));
+    }
+
+    public function deleteAction(Request $request) {
+
+        $em = $this->getDoctrine()->getManager();
+
+        $id = $request->get('idMov');
+        $type = $request->get('type');
+        $idAffected = $request->get('idAffected');
+
+        $mov = $em->getRepository('PequivenArrangementProgramBundle:MovementEmployee\MovementEmployee')->find($id);
+        $em->remove($mov);
+        $em->flush();        
+        
+        $this->get('session')->getFlashBag()->add('success', "Movimiento Eliminado Exitosamente");
+
+        if ($type == 'Goal') {
+            return $this->redirect($this->generateUrl('goal_movement', array('idGoal' => $idAffected)));
+        }
+        if ($type == 'AP') {
+            return $this->redirect($this->generateUrl('AP_movement', array('idAP' => $idAffected)));
+        }
     }
 
     public function assignAction(Request $request) {
@@ -178,7 +198,7 @@ class MovementEmployeeController extends SEIPController {
                     $movement->setId_Affected($id);
                     $movement->setCause($cause);
                     $movement->setObservations($obs);
-                    $movement->setrealAdvance($datos['realResult']);
+                    $movement->setrealAdvance($datos['realResult'] - $datos['penalty']);
                     $movement->setPentalty($datos['penalty']);
                     $movement->setPlanned($datos['plannedResult']);
                     $movement->setTypeMov($tipo);
@@ -202,7 +222,7 @@ class MovementEmployeeController extends SEIPController {
                         $movement->setId_Affected($id);
                         $movement->setCause($cause);
                         $movement->setObservations($obs);
-                        $movement->setrealAdvance($datos['realResult']);
+                        $movement->setrealAdvance($datos['realResult'] - $datos['penalty']);
                         $movement->setPentalty($datos['penalty']);
                         $movement->setPlanned($datos['plannedResult']);
                         $movement->setTypeMov($tipo);
@@ -234,17 +254,16 @@ class MovementEmployeeController extends SEIPController {
 
         $em = $this->getDoctrine()->getManager();
         $securityService = $this->getSecurityService();
-//
-//        if (!is_null($request->get('idGoal'))) {
-//            $id = $request->get('idGoal');
-//            $tipo = 'Goal';
-//        }
-//
-//        if (!is_null($request->get('idAP'))) {
-//            $id = $request->get('idAP');
-//            $tipo = 'AP';
-//        }
 
+        if (!is_null($request->get('idGoal'))) {
+            $id = $request->get('idGoal');
+            $tipo = 'Goal';
+        }
+
+        if (!is_null($request->get('idAP'))) {
+            $id = $request->get('idAP');
+            $tipo = 'AP';
+        }
 
         //VALIDO PERMISOLOGÍA POR SI ACASO SE ACCEDE DESDE URL DIRECTA
         if ((($securityService->isGranted(array("ROLE_SEIP_ARRANGEMENT_PROGRAM_MOVEMENT_GOALS")))) || ($securityService->isGranted(array("ROLE_SEIP_ARRANGEMENT_PROGRAM_MOVEMENT_GOALS_POST_MORTEM")))) {
@@ -337,7 +356,7 @@ class MovementEmployeeController extends SEIPController {
                         $movement->setId_Affected($id);
                         $movement->setCause($cause);
                         $movement->setObservations($obs);
-                        $movement->setrealAdvance($datos['realResult']);
+                        $movement->setrealAdvance($datos['realResult'] - $datos['penalty']);
                         $movement->setPentalty($datos['penalty']);
                         $movement->setPlanned($datos['plannedResult']);
                         $movement->setTypeMov($tipo);
@@ -361,7 +380,7 @@ class MovementEmployeeController extends SEIPController {
                             $movement->setId_Affected($id);
                             $movement->setCause($cause);
                             $movement->setObservations($obs);
-                            $movement->setrealAdvance($datos['realResult']);
+                            $movement->setrealAdvance($datos['realResult'] - $datos['penalty']);
                             $movement->setPentalty($datos['penalty']);
                             $movement->setPlanned($datos['plannedResult']);
                             $movement->setTypeMov($tipo);
@@ -397,23 +416,23 @@ class MovementEmployeeController extends SEIPController {
      * @return type
      */
     public function exportAction(Request $request) {
-         
+
         if (!is_null($request->get('idGoal'))) {
-        $id = $request->get('idGoal');
-        $reportService = $this->container->get('seip.service.report');
-        $route = "MovementEmployee/Goal_Movement.jrxml";
-        $parameters = array("idGoal" => $id);
-        $reportService->DownloadReportService($parameters, $route);
-        return $this->redirect($this->generateUrl('goal_movement', array('idGoal' => $id)));
+            $id = $request->get('idGoal');
+            $reportService = $this->container->get('seip.service.report');
+            $route = "MovementEmployee/Goal_Movement.jrxml";
+            $parameters = array("idGoal" => $id);
+            $reportService->DownloadReportService($parameters, $route);
+            return $this->redirect($this->generateUrl('goal_movement', array('idGoal' => $id)));
         }
-        
+
         if (!is_null($request->get('idAP'))) {
-        $id = $request->get('idAP');
-        $reportService = $this->container->get('seip.service.report');
-        $route = "MovementEmployee/AP_Movement.jrxml";
-        $parameters = array("idAP" => $id);
-        $reportService->DownloadReportService($parameters, $route);
-        return $this->redirect($this->generateUrl('goal_movement', array('idAP' => $id)));
+            $id = $request->get('idAP');
+            $reportService = $this->container->get('seip.service.report');
+            $route = "MovementEmployee/AP_Movement.jrxml";
+            $parameters = array("idAP" => $id);
+            $reportService->DownloadReportService($parameters, $route);
+            return $this->redirect($this->generateUrl('goal_movement', array('idAP' => $id)));
         }
     }
 
@@ -512,8 +531,8 @@ class MovementEmployeeController extends SEIPController {
         $real[12] = $sumr;
 
         $mes = date_format($date, 'n');
-
         $mayor = 0;
+
         for ($i = 1; $i <= $mes; $i++) {
             $penal = 0;
             for ($j = $i; $j <= $mes; $j++) {

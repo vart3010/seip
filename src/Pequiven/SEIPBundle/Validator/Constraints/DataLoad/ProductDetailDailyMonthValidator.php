@@ -30,10 +30,15 @@ class ProductDetailDailyMonthValidator extends BaseConstraintValidator {
             $dateNotification = \DateTime::createFromFormat('d/m/Y', $dateString);
         }
         $day = (int) $dateNotification->format("d");
-
         
-
-        $isValidNet = $value->isValidNet($day);
+        $canBeNetProductionGreaterThanGross = $value->getProductReport()->getPlantReport()->getEntity()->getCanBeNetProductionGreaterThanGross();
+        
+        if($canBeNetProductionGreaterThanGross === true){
+            $isValidNet = true;
+        } else {
+            $isValidNet = $value->isValidNet($day);
+        }
+        
         if ($isValidNet === false) {
             $this->context->addViolation('pequiven.validators.product_detail_daily_month.net_production_can_not_exceed_gross', array(
                 '%gross%' => $value->getValueGrossByDay($day),

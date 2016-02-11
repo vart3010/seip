@@ -159,7 +159,7 @@ class ReportTemplateController extends SEIPController {
      */
     public function loadAction(Request $request) {
         $dateString = null;
-        if ($this->getSecurityService()->isGranted(array('ROLE_SEIP_DATA_LOAD_CHANGE_DATE', 'ROLE_SEIP_OPERATION_LOAD_FIVE_DAYS'))) {
+        if ($this->getSecurityService()->isGranted(array('ROLE_SEIP_DATA_LOAD_CHANGE_DATE', 'ROLE_SEIP_OPERATION_LOAD_FIVE_DAYS','ROLE_SEIP_OPERATION_LOAD_QUARTER'))) {
             $dateString = $request->get('dateNotification', null);
         }
         $plantReportToLoad = $request->get('plant_report', null);
@@ -292,7 +292,36 @@ class ReportTemplateController extends SEIPController {
         $daysMonth = cal_days_in_month(CAL_GREGORIAN, $monthActive, $year);
         $startDayMonth = "01/" . $monthActive . "/" . $year;
         $endDayMonth = $daysMonth . "/" . $monthActive . "/" . $year;
-
+        
+        $periodActive = $this->getPeriodService()->getPeriodActive();
+        $yearPeriodSelected = date("Y",$periodActive->getDateStart()->getTimestamp());
+        
+        $startDateQuarter = $this->getTransfDate($fecha, -1);
+        $endDateQuarter = $this->getTransfDate($fecha, -1);
+        
+        
+        //Notificación por Trimestre del Período 2015
+        $user = $this->getUser();
+        if(($quarterToLoad = $user->getQuarterToLoadOperationProduction()) > 0){
+            switch ($quarterToLoad){
+                case 1:
+                    $startDateQuarter = "01/01/".$yearPeriodSelected;
+                    $endDateQuarter = "31/03/".$yearPeriodSelected;
+                    break;
+                case 2:
+                    $startDateQuarter = "01/04/".$yearPeriodSelected;
+                    $endDateQuarter = "30/06/".$yearPeriodSelected;
+                    break;
+                case 3:
+                    $startDateQuarter = "01/07/".$yearPeriodSelected;
+                    $endDateQuarter = "30/09/".$yearPeriodSelected;
+                    break;
+                case 4:
+                    $startDateQuarter = "01/10/".$yearPeriodSelected;
+                    $endDateQuarter = "31/12/".$yearPeriodSelected;
+                    break;
+            }
+        }
 
         $view = $this
                 ->view()
@@ -305,6 +334,9 @@ class ReportTemplateController extends SEIPController {
             'endDate' => $this->getTransfDate($fecha, -1),
             'startDayMonth' => $startDayMonth,
             'endDayMonth' => $endDayMonth,
+            'startDateQuarter' => $startDateQuarter,
+            'endDateQuarter' => $endDateQuarter,
+            'yearPeriodSelected' => $yearPeriodSelected,
             'form' => $form->createView(),
                 ))
         ;

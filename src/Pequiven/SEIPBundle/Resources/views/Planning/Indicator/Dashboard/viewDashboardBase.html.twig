@@ -25,9 +25,10 @@
 </div>
 <hr class="hr-linestrategic-icons" />
 
-<!-- Sección Lateral Izquierda -->
+
 <div class="with-padding">
     <div class="columns">
+        <!-- Sección Lateral Izquierda -->
         <div class="three-columns three-columns-tablet six-columns-mobile new-row-mobile" style="overflow-y: scroll; height: 450px;">
             <div class="with-padding">
                 <div class="columns">
@@ -44,10 +45,13 @@
                 </div>
             </div>
         </div>
-
+        
+        <!-- Sección Central -->
         <div class="nine-columns nine-columns-tablet six-columns-mobile new-row-mobile">
 
-            {{ indicatorService.getArrowOfIndicator(indicator)|raw }}
+{#            {% if indicatorService.isIndicatorHasParents(indicator) == true %}#}
+                {{ indicatorService.getArrowOfIndicator(indicator)|raw }}
+{#            {% endif %}#}
 
             {% if indicator.showCharts %}{# En caso de que sólo se necesite ver el gráfico #}
                 <div ng-controller="ChartsDashboardController">

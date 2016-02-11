@@ -1,0 +1,66 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}
+
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
+
+{% block before_body %}
+    {{ contentHeader(
+        ("pequiven_seip.report_template.report_template_delivery"|trans )
+    ) }}
+{% endblock %}
+
+{% block body %}
+    <fieldset class="fieldset">
+        <legend class="legend">{{ 'pequiven_seip.report_template.report_template_delivery'|trans }}</legend>
+        <div class="columns">
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'pequiven.ref'|trans({},'messages') }}</label>
+                    {{ generateLink(reportTemplateDelivery) }}
+                </p>
+            </div>
+            <div class="new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                <p class="inline-label">
+                    <label class="label">{{ 'pequiven_seip.period'|trans }}</label>
+                    {{ reportTemplateDelivery.period }}
+                </p>
+            </div>
+            <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                <p class="inline-label">
+                    <label class="label">{{ 'pequiven_seip.name'|trans }}</label>
+                    {{ reportTemplateDelivery.name }}
+                </p>
+            </div>
+            <div class="new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                <p class="inline-label">
+                    <label class="label">{{ 'Company'|trans }}</label>
+                    {{ reportTemplateDelivery.company }}
+                </p>
+            </div>
+            <div class="new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                <p class="inline-label">
+                    <label class="label">{{ 'Location'|trans }}</label>
+                    {{ reportTemplateDelivery.location }}
+                </p>
+            </div>
+            <div class="new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                <p class="inline-label">
+                    <label class="label">{{ 'Region'|trans }}</label>
+                    {{ reportTemplateDelivery.region }}
+                </p>
+            </div>
+        </div>
+    </fieldset>
+
+    {% include 'PequivenSEIPBundle:Delivery:ProductGroupDelivery/groupProduct.html.twig' %}
+    <br /><br />
+
+
+    <br /><br />
+    <p class="button-height align-right">
+        {{ buttons.generic(path('pequiven_report_template_delivery_update', { 'id': reportTemplateDelivery.id }),('pequiven.edit'|trans({},'messages'))) }}
+        &nbsp;
+        {{ buttons.delete(path('pequiven_report_template_delivery_delete', { 'id': reportTemplateDelivery.id })) }}
+    </p>
+{% endblock %}

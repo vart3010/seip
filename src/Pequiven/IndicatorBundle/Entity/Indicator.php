@@ -122,27 +122,6 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     private $tmp = false;
 
     /**
-     * @var integer
-     * 
-     * @ORM\Column(name="indicator_sig_medition", type="integer", nullable=true)
-     */
-    private $indicatorSigMedition;
-
-    /**
-     * @var integer
-     * 
-     * @ORM\Column(name="indicator_sig_objetive", type="integer", nullable=true)
-     */
-    private $indicatorSigObjetive;
-
-    /**
-     * @var integer
-     * 
-     * @ORM\Column(name="indicator_sig_tendency", type="integer", nullable=true)
-     */
-    private $indicatorSigTendency;
-
-    /**
      * Formula
      * @var \Pequiven\MasterBundle\Entity\Formula
      * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Formula",inversedBy="indicators")
@@ -648,6 +627,35 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      */
     private $showColumnPlanAtTheEnd = false;
     
+    /**
+     * ¿EL indicador esta disponible para verse en el dashboard de tipo específico?
+     * @var boolean
+     *  @ORM\Column(name="showByDashboardSpecific",type="boolean")
+     */
+    private $showByDashboardSpecific = false;
+    
+    /**
+     * Complejo
+     * 
+     * @var \Pequiven\MasterBundle\Entity\Complejo
+     * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Complejo")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $complejoDashboardSpecific;
+    
+    /**
+     * ¿EL indicador tomará en cuenta las variables de valor estático?
+     * @var boolean
+     *  @ORM\Column(name="validVariableStaticValue",type="boolean")
+     */
+    private $validVariableStaticValue = false;
+
+    /**
+     * @var integer
+     * 
+     * @ORM\Column(name="indicator_sig_medition", type="integer", nullable=true)
+     */
+    private $indicatorSigMedition = 1;
 
     /**
      * Constructor
@@ -793,69 +801,6 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      */
     public function getGoal() {
         return $this->goal;
-    }
-
-    /**
-     * Set indicatorSigMedition
-     *
-     * @param float $indicatorSigMedition
-     * @return Indicator
-     */
-    public function setIndicatorSigMedition($indicatorSigMedition) {
-        $this->indicatorSigMedition = $indicatorSigMedition;
-
-        return $this;
-    }
-
-    /**
-     * Get indicatorSigMedition
-     *
-     * @return float 
-     */
-    public function getIndicatorSigMedition() {
-        return $this->indicatorSigMedition;
-    }
-
-    /**
-     * Set indicatorSigObjetive
-     *
-     * @param float $indicatorSigObjetive
-     * @return Indicator
-     */
-    public function setIndicatorSigObjetive($indicatorSigObjetive) {
-        $this->indicatorSigObjetive = $indicatorSigObjetive;
-
-        return $this;
-    }
-
-    /**
-     * Get indicatorSigObjetive
-     *
-     * @return float 
-     */
-    public function getIndicatorSigObjetive() {
-        return $this->indicatorSigObjetive;
-    }
-
-    /**
-     * Set indicatorSigTendency
-     *
-     * @param float $indicatorSigTendency
-     * @return Indicator
-     */
-    public function setIndicatorSigTendency($indicatorSigTendency) {
-        $this->indicatorSigTendency = $indicatorSigTendency;
-
-        return $this;
-    }
-
-    /**
-     * Get indicatorSigTendency
-     *
-     * @return float 
-     */
-    public function getIndicatorSigTendency() {
-        return $this->indicatorSigTendency;
     }
 
     /**
@@ -2623,6 +2568,25 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
 
     /**
      * 
+     * @param type $showByDashboardSpecific
+     * @return \Pequiven\IndicatorBundle\Entity\Indicator
+     */
+    public function setShowByDashboardSpecific($showByDashboardSpecific) {
+        $this->showByDashboardSpecific = $showByDashboardSpecific;
+
+        return $this;
+    }
+
+    /**
+     * 
+     * @return type
+     */
+    public function getShowByDashboardSpecific() {
+        return $this->showByDashboardSpecific;
+    }
+
+    /**
+     * 
      * @param type $resultsAdditionalInDashboardColumn
      * @return \Pequiven\IndicatorBundle\Entity\Indicator
      */
@@ -2640,4 +2604,64 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
         return $this->resultsAdditionalInDashboardColumn;
     }
 
+    /**
+     * 
+     * @param type $validVariableStaticValue
+     * @return \Pequiven\IndicatorBundle\Entity\Indicator
+     */
+    public function setValidVariableStaticValue($validVariableStaticValue) {
+        $this->validVariableStaticValue = $validVariableStaticValue;
+
+        return $this;
+    }
+
+    /**
+     * 
+     * @return type
+     */
+    public function getValidVariableStaticValue() {
+        return $this->validVariableStaticValue;
+    }
+    
+    /**
+     * Set complejoDashboardSpecific
+     *
+     * @param \Pequiven\MasterBundle\Entity\Complejo $complejoDashboardSpecific
+     * @return Indicator
+     */
+    public function setComplejoDashboardSpecific(\Pequiven\MasterBundle\Entity\Complejo $complejoDashboardSpecific = null) {
+        $this->complejoDashboardSpecific = $complejoDashboardSpecific;
+
+        return $this;
+    }
+
+    /**
+     * Get complejoDashboardSpecific
+     *
+     * @return \Pequiven\MasterBundle\Entity\Complejo 
+     */
+    public function getComplejoDashboardSpecific() {
+        return $this->complejoDashboardSpecific;
+    }
+
+    /**
+     * Set indicatorSigMedition
+     *
+     * @param float $indicatorSigMedition
+     * @return Indicator
+     */
+    public function setIndicatorSigMedition($indicatorSigMedition) {
+        $this->indicatorSigMedition = $indicatorSigMedition;
+
+        return $this;
+    }
+
+    /**
+     * Get indicatorSigMedition
+     *
+     * @return float 
+     */
+    public function getIndicatorSigMedition() {
+        return $this->indicatorSigMedition;
+    }
 }

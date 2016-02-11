@@ -17,11 +17,10 @@ class EvolutionActionVerificationType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
-            /*->add('ref', 'text', array(
-                'label' => 'Referencia',
-                'label_attr' => array('class' => 'label'),
-                'attr'=> array('class'=> 'input input-large ' ))) */
+        //$id = $this->id;
+        //$typeObject = $this->typeObject;
+
+        $builder            
             ->add('comment', 'textarea', array(
                 'label' => 'Comentario',
                 'label_attr' => array('class' => 'label'),
@@ -49,8 +48,8 @@ class EvolutionActionVerificationType extends AbstractType
                 ),
                                )) 
             /*->add('actionPlan', null, array(
-                    'query_builder' => function(\Pequiven\IndicatorBundle\Repository\Indicator\EvolutionIndicator\EvolutionActionRespository $repository) {
-                        return $repository->findQueryActionPlan();
+                    'query_builder' => function(\Pequiven\IndicatorBundle\Repository\Indicator\EvolutionIndicator\EvolutionActionRepository $repository) use($id, $typeObject) {
+                        return $repository->getQueryActionPlan($id, $typeObject);
                     },                               
                     'label' => 'Plan de Acción',
                     'label_attr' => array('class' => 'label'),
@@ -82,4 +81,13 @@ class EvolutionActionVerificationType extends AbstractType
     {
         return 'actionVerification';
     }
+
+    /*protected $id;
+    protected $typeObject;
+    
+    public function __construct ($id, $typeObject)
+    {
+        $this->id = $id;       
+        $this->typeObject = $typeObject; 
+    }*/
 }

@@ -15,8 +15,8 @@ class CreateFeeStructureType extends AbstractType {
     public function buildForm(FormBuilderInterface $builder, array $options) {
 
         $gerencia = $this->gerencia;
-         
-        $builder               
+
+        $builder
                 ->add('gerenciasecond', 'entity', array(
                     'class' => 'Pequiven\MasterBundle\Entity\GerenciaSecond',
                     'label' => 'Gerencia de 2da Línea',
@@ -38,7 +38,7 @@ class CreateFeeStructureType extends AbstractType {
                     'empty_value' => 'No Aplica',
                     'property' => 'Description',
                     'required' => false,
-                    'query_builder' => function(CoordinacionRepository $rep) use ($gerencia)  {
+                    'query_builder' => function(CoordinacionRepository $rep) use ($gerencia) {
                         return $rep->getcoordinacionQueryBuilder($gerencia);
                     },
                     'label_attr' => array('class' => 'label'),
@@ -60,8 +60,8 @@ class CreateFeeStructureType extends AbstractType {
                     'empty_value' => 'Seleccione...',
                     'required' => true,
                     'property' => 'Listado_Cargos_Usuarios',
-                    'query_builder' => function(FeeStructureRepository $rep) {
-                        return $rep->getAllfeeStructure();
+                    'query_builder' => function(FeeStructureRepository $rep) use ($gerencia) {
+                        return $rep->getAllfeeStructure($gerencia);
                     },
                     'label_attr' => array('class' => 'label'),
                     'attr' => array(
@@ -85,9 +85,9 @@ class CreateFeeStructureType extends AbstractType {
     public function getName() {
         return 'feestructurecreate';
     }
-    
-     public function __construct($gerencia) {
-        $this->gerencia = $gerencia;        
+
+    public function __construct($gerencia) {
+        $this->gerencia = $gerencia;
     }
 
 }

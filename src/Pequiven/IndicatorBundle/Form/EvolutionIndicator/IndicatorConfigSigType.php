@@ -18,7 +18,7 @@ class IndicatorConfigSigType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder            
-            /*->add('indicatorSigMedition','text',array(
+            ->add('indicatorSigMedition','text',array(
                 'label' => 'Formula de Medición',
                 'label_attr' => array('class' => 'label'),
                 //'class' => 'Pequiven\IndicatorBundle\Entity\Indicator',
@@ -27,7 +27,7 @@ class IndicatorConfigSigType extends AbstractType
                 'class'=> 'input input-large form-control',
                 //'ng-model' => 'model.lastPeriod',
                 //'ng-options' => 'value as value.ref for (key,value) in data.lastPeriod'
-                )))            */
+                )))            
             /*->add('indicatorSigObjetive','text',array(
                 'label' => 'Valor Objetivo 2015',
                 'label_attr' => array('class' => 'label'),

@@ -229,6 +229,17 @@ angular.module('seipModule.controllers', [])
 
             };
 
+            //FUNCIÓN UTILIZADA PARA VER EL VALOR REAL SI LA META SOBREPASA EL 120% O CON VALOR NEGATIVO
+            $scope.getOverflowForm = function (overflow) {
+
+                if ((overflow < 0)||(overflow>120)) {
+                    return "";
+                } else {
+                    return "hideClass";
+                }
+
+            };
+
             $scope.getUrlMovement = function (idGoal, url) {
 
                 var redirect = url + "?idGoal=" + idGoal;
@@ -1684,18 +1695,23 @@ angular.module('seipModule.controllers', [])
             $scope.templateOptions.setVar('addAction', addAction);
             $scope.templateOptions.setVar('addActionValues', addActionValues);
             $scope.templateOptions.setVar('addTrendEvolution', addTrendEvolution);
-            var confirmCallBack = function () {
-                addCause(true, function (data) {
-                    $scope.indicator = data.indicator;
+            var confirmCallBackCauses = function () {
+                addCause(true, function (data) {                
+                });                
+                return true;
+            };
+            var confirmCallBackAction = function () {
+                addAction(true, function (data) {                    
                 });
-                addAction(true, function (data) {
-                    $scope.indicator = data.indicator;
+                return true;
+            };
+            var confirmCallBackActionValues = function () {
+                addActionValues(true, function (data) {                
                 });
-                addActionValues(true, function (data) {
-                    $scope.indicator = data.indicator;
-                });
-                addTrendEvolution(true, function (data) {
-                    $scope.indicator = data.indicator;
+                return true;
+            };
+            var confirmCallBackTrend = function () {
+                addTrendEvolution(true, function (data) {                
                 });
                 return true;
             };
@@ -1718,7 +1734,7 @@ angular.module('seipModule.controllers', [])
                     {
                         name: 'Analisis de la Tendencia',
                         url: url,
-                        confirmCallBack: confirmCallBack,
+                        confirmCallBack: confirmCallBackTrend,
                     }
                 ];
                 $scope.templateOptions.setTemplate($scope.templates[0]);
@@ -1742,7 +1758,7 @@ angular.module('seipModule.controllers', [])
                     {
                         name: 'Plan de Acción',
                         url: url,
-                        confirmCallBack: confirmCallBack,
+                        confirmCallBack: confirmCallBackAction,
                     }
                 ];
                 $scope.templateOptions.setTemplate($scope.templates[0]);
@@ -1765,7 +1781,7 @@ angular.module('seipModule.controllers', [])
                     {
                         name: 'Carga de Avance y Observaciones',
                         url: url,
-                        confirmCallBack: confirmCallBack,
+                        confirmCallBack: confirmCallBackActionValues,
                     }
                 ];
                 $scope.templateOptions.setTemplate($scope.templates[0]);
@@ -1790,7 +1806,7 @@ angular.module('seipModule.controllers', [])
                     {
                         name: 'Causas de Desviación del Indicador',
                         url: url,
-                        confirmCallBack: confirmCallBack,
+                        confirmCallBack: confirmCallBackCauses,
                     }
                 ];
                 $scope.templateOptions.setTemplate($scope.templates[0]);
@@ -2139,8 +2155,7 @@ angular.module('seipModule.controllers', [])
                     isInit = true;
                 }
                 $scope.templateOptions.setTemplate($scope.templates[0]);
-                $scope.templateOptions.setParameterCallBack(resource);
-                //$scope.templateOptions.setVar('evaluationResult', 0);
+                $scope.templateOptions.setParameterCallBack(resource);                
                 if (resource) {
                     $scope.templateOptions.enableModeEdit();
                     $scope.openModalAuto();
@@ -2157,7 +2172,7 @@ angular.module('seipModule.controllers', [])
                     var save = false;
                 }
                 if (save == true) {
-                    var url = Routing.generate('pequiven_config_chart_evolution_add', {idIndicator: $scope.id_indicator});
+                    var url = Routing.generate('pequiven_config_chart_get_form', {idIndicator: $scope.id_indicator});
                 }
                 notificationBarService.getLoadStatus().loading();
                 return $http({
@@ -2166,12 +2181,13 @@ angular.module('seipModule.controllers', [])
                     data: formData,
                     headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'}  // set the headers so angular passing info as form data (not request payload)
                 }).success(function (data) {
-                    $scope.templateOptions.setVar("form", {errors: {}});
-                    //$scope.templateOptions.setVar('evaluationResult', data.result);
+                    $scope.templateOptions.setVar("form", {errors: {}});                    
                     if (successCallBack) {
                         successCallBack(data);
                     }
                     notificationBarService.getLoadStatus().done();
+                    //$timeout(callAtTimeout, 3000);
+                    location.reload();
                     return true;
                 }).error(function (data, status, headers, config) {
                     $scope.templateOptions.setVar("form", {errors: {}});
@@ -2186,6 +2202,9 @@ angular.module('seipModule.controllers', [])
                     notificationBarService.getLoadStatus().done();
                     return false;
                 });
+                function callAtTimeout() {
+                    location.reload();
+                }
             };
             $scope.templateOptions.setVar('addConfig', addConfig);
             var confirmCallBack = function () {
@@ -2199,8 +2218,7 @@ angular.module('seipModule.controllers', [])
 
                 var d = new Date();
                 var numero = d.getTime();
-                var width = 60;
-                var heigth = 60;
+                $scope.setHeight(350);                
 
                 var parameters = {
                     idIndicator: $scope.id_indicator,
@@ -2212,8 +2230,6 @@ angular.module('seipModule.controllers', [])
                 var url = Routing.generate('pequiven_config_chart_get_form', parameters);
                 $scope.templates = [
                     {
-                        width: width,
-                        height: heigth,
                         name: 'Configuración Gráfica Informe de Evolución',
                         url: url,
                         confirmCallBack: confirmCallBack,
@@ -3540,8 +3556,8 @@ angular.module('seipModule.controllers', [])
         })
         .controller('FeeStructureController', function ($scope, notificationBarService, $http, notifyService, $filter, $timeout) {
 
-            var isInit = false;   
-            var valueChar = angular.element('#value').val();            
+            var isInit = false;
+            var valueChar = angular.element('#value').val();
             //Carga del formulario
             $scope.addCargo = function (resource) {
                 //console.log(valueChar);
@@ -3579,12 +3595,12 @@ angular.module('seipModule.controllers', [])
             //Añadir Observations
             var addCargoData = function (save, successCallBack) {
                 var formDataAssing = angular.element('#form_fee_structure_assign');
-                var formData = formDataAssing.serialize(); 
+                var formData = formDataAssing.serialize();
                 var valueChar = angular.element('#value').val();
                 if (save == undefined) {
                     var save = false;
                 }
-                if (save == true) {                    
+                if (save == true) {
                     var url = Routing.generate('pequiven_user_feestructure_add', {id: valueChar});
                 }
                 notificationBarService.getLoadStatus().loading();
@@ -3619,12 +3635,12 @@ angular.module('seipModule.controllers', [])
             //Añadir Observations
             var removeCargoData = function (save, successCallBack) {
                 var formDataAssing = angular.element('#form_fee_structure_remove');
-                var formData = formDataAssing.serialize(); 
+                var formData = formDataAssing.serialize();
                 var valueChar = angular.element('#value').val();
                 if (save == undefined) {
                     var save = false;
                 }
-                if (save == true) {                    
+                if (save == true) {
                     var url = Routing.generate('pequiven_user_feestructure_remove', {id: valueChar});
                 }
                 notificationBarService.getLoadStatus().loading();
@@ -3662,7 +3678,7 @@ angular.module('seipModule.controllers', [])
                 });
                 return true;
             };
-             var confirmCallBackRemove = function () {
+            var confirmCallBackRemove = function () {
                 removeCargoData(true, function (data) {
                 });
                 return true;
@@ -3672,10 +3688,10 @@ angular.module('seipModule.controllers', [])
             $scope.initForm = function (resource) {
                 var d = new Date();
                 var numero = d.getTime();
-                var valueChar = angular.element('#value').val();                
+                var valueChar = angular.element('#value').val();
                 //$scope.setHeight(350);                
-                var parameters = {  
-                    id: valueChar,                  
+                var parameters = {
+                    id: valueChar,
                     _dc: numero
                 };
                 if (resource) {
@@ -3696,10 +3712,10 @@ angular.module('seipModule.controllers', [])
             $scope.initFormRemove = function (resource) {
                 var d = new Date();
                 var numero = d.getTime();
-                var valueChar = angular.element('#value').val();                
+                var valueChar = angular.element('#value').val();
                 //$scope.setHeight(350);
-                var parameters = {  
-                    id: valueChar,                  
+                var parameters = {
+                    id: valueChar,
                     _dc: numero
                 };
                 if (resource) {
@@ -6879,11 +6895,9 @@ angular.module('seipModule.controllers', [])
                                 var addListener = function (elem, evt, fn) {
                                     if (elem && elem.addEventListener) {
                                         elem.addEventListener(evt, fn);
-                                    }
-                                    else if (elem && elem.attachEvent) {
+                                    } else if (elem && elem.attachEvent) {
                                         elem.attachEvent("on" + evt, fn);
-                                    }
-                                    else {
+                                    } else {
                                         elem["on" + evt] = fn;
                                     }
                                 };
@@ -7266,11 +7280,9 @@ angular.module('seipModule.controllers', [])
                                 var addListener = function (elem, evt, fn) {
                                     if (elem && elem.addEventListener) {
                                         elem.addEventListener(evt, fn);
-                                    }
-                                    else if (elem && elem.attachEvent) {
+                                    } else if (elem && elem.attachEvent) {
                                         elem.attachEvent("on" + evt, fn);
-                                    }
-                                    else {
+                                    } else {
                                         elem["on" + evt] = fn;
                                     }
                                 };
@@ -7326,11 +7338,9 @@ angular.module('seipModule.controllers', [])
                                 var addListener = function (elem, evt, fn) {
                                     if (elem && elem.addEventListener) {
                                         elem.addEventListener(evt, fn);
-                                    }
-                                    else if (elem && elem.attachEvent) {
+                                    } else if (elem && elem.attachEvent) {
                                         elem.attachEvent("on" + evt, fn);
-                                    }
-                                    else {
+                                    } else {
                                         elem["on" + evt] = fn;
                                     }
                                 };

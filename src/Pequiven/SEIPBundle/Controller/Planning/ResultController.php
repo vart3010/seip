@@ -100,89 +100,69 @@ class ResultController extends ResourceController {
 //                ->setData(array("numPersonal"=>$request->get("numPersonal")))
         ;
 
-
         return $this->handleView($view);
     }
 
+    /**
+     * EXPORTA LA EVALUACION DE GESTION DE UN USUARIO 
+     * @param Request $request
+     */
     public function exportManagementUserListItem(Request $request) {
-        $pdf = new \Pequiven\SEIPBundle\Model\PDF\SeipPdfH('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-        $pdf->setPrintLineFooter(false);
-        $pdf->setContainer($this->container);
-        $pdf->setPeriod($this->getPeriodService()->getPeriodActive());
-        //$pdf->setFooterText($this->trans('pequiven_seip.message_footer', array(), 'PequivenSEIPBundle'));
-// set document information
-        $pdf->SetCreator(PDF_CREATOR);
-        $pdf->SetAuthor('SEIP');
-        $pdf->setTitle('Gestión de Usuario');
-        //$pdf->SetSubject('Resultados SEIP');
-        $pdf->SetKeywords('PDF, SEIP, Resultados');
-
-        $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
-        $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
-
-// set default monospaced font
-        $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
-
-// set margins
-        $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
-        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
-        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-
-// set auto page breaks
-        $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
-
-// set image scale factor
-        $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
-
-// set font
-//            $pdf->SetFont('times', 'BI', 12);
-// add a page
-        $pdf->AddPage();
 
         $datosUser = array();
         $period = $this->getPeriodService()->getPeriodActive()->getName();
-        
-//        if ($this->getRequest()->get('numPersonal') != null) {
+
+
         if ($this->getRequest()->get('idUser') != null) {
-//            $numPersonal = $this->getRequest()->get('numPersonal');
             $idUser = $this->getRequest()->get('idUser');
-
-            //USUARIO BUSCADO Pequiven\SEIPBundle\Repository
-            //$em = $this->getDoctrine()->getManager();
-//            $searchUser = $this->container->get("pequiven.repository.user")->findUserByNumPersonal($numPersonal);
             $searchUser = $this->container->get("pequiven.repository.user")->find($idUser);
-
             $datosUser = array("nombre" => $searchUser->getFullNameUser());
         } else {
-//            $numPersonal = $this->getUser()->getNumPersonal();
             $idUser = $this->getUser()->getId();
         }
+
         $resultService = $this->getResultService();
-//        $userItems = $resultService->getUserItems($numPersonal, $period);
         $userItems = $resultService->getUserItems($idUser, $period);
 
-//        $groupsUsers = $this->getUser()->getGroups();
-//        $securityService = $this->getSecurityService();
-
-
-
         $data = array(
-            'management' => $userItems["data"]["evaluation"]["management"],
-            'objetives' => $userItems["data"]["evaluation"]["results"]["objetives"],
-            //'error' => $userItems["errors"],
-            'datosUser' => $userItems["data"]['user'],
-            'userItems' => $userItems
+            'user' => $searchUser,
+            'userItems' => $userItems,
+            'period' => $period,
         );
 
+        $this->generatePdf($data, 'Resultados de Gestión', 'PequivenSEIPBundle:Monitor/User:UserSummaryItemsPdfFormat.html.twig');
+    }
 
-// set some text to print
-        $html = $this->renderView('PequivenSEIPBundle:Monitor/User:UserSummaryItemsPdfFormat.html.twig', $data);
+    /**
+     * GENERA EL PDF
+     * @param type $data
+     * @param type $title
+     * @param type $template
+     */
+    public function generatePdf($data, $title, $template) {
 
-// print a block of text using Write()
+        $pdf = new \Pequiven\SEIPBundle\Model\PDF\NewSeipPdf('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+        $pdf->setPrintLineFooter(false);
+        $pdf->setContainer($this->container);
+        $pdf->setPeriod($this->getPeriodService()->getPeriodActive());
+        $pdf->setFooterText($this->trans('pequiven_seip.message_footer', array(), 'PequivenSEIPBundle'));
+        $pdf->SetCreator(PDF_CREATOR);
+        $pdf->SetAuthor('SEIP');
+        $pdf->setTitle($title);
+        $pdf->SetSubject('Resultados SEIP');
+        $pdf->SetKeywords('PDF, SEIP, Resultados');
+        $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+        $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+        $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+        $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+        $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+        $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+        $pdf->AddPage();
+        $html = $this->renderView($template, $data);
         $pdf->writeHTML($html, true, false, true, false, '');
-
-//            $pdf->Output('Reporte del dia'.'.pdf', 'I');
-        $pdf->Output('Gestion de Usuario' . '.pdf', 'D');
+        $pdf->Output(utf8_decode($title) . '.pdf', 'D');
     }
 
     /**
@@ -199,7 +179,6 @@ class ResultController extends ResourceController {
         return $response;
     }
 
-   
     /**
      * Función que renderiza el Monitor de Objetivos Operativos
      * 
@@ -298,7 +277,7 @@ class ResultController extends ResourceController {
 
         //Configuramos el alto del gráfico
         $totalObjects = count($objetives);
-        $heightChart = ($totalObjects * 30) + 150;
+        $heightChart = ($totalObjects * 40) + 200;
 
         //Data del gráfico
         foreach ($objetives as $objetive) {
@@ -401,6 +380,7 @@ class ResultController extends ResourceController {
             'linkToExportResult' => $linkToExportResult,
             'urlExportFromChart' => $urlExportFromChart,
             'level' => $level,
+            'period' => $subCaption,
         );
     }
 
@@ -413,7 +393,7 @@ class ResultController extends ResourceController {
      */
     public function recalculateAction(Request $request) {
         $this->getSecurityService()->checkSecurity('ROLE_SEIP_PLANNING_OPERATION_RECALCULATE_RESULT');
-        
+
         $period = $this->getPeriodService()->getPeriodActive();
 
         $view = $this
@@ -440,11 +420,11 @@ class ResultController extends ResourceController {
                 } elseif ($type == 2) {
                     $resource = $indicatorRepository->find($id);
                     $resultService->refreshValueIndicator($resource);
-                } elseif ($type == 3){
+                } elseif ($type == 3) {
                     $evaluationDetailsService = $this->getEvaluationDetailsService();
                     $resource = $userRepository->findBy(array('id' => $id));
 //                    $resource = $userRepository->find($id);
-                    $evaluationDetailsService->refreshValueEvaluation($resource[0],$period->getParent());
+                    $evaluationDetailsService->refreshValueEvaluation($resource[0], $period->getParent());
                 }
                 $data['success'] = true;
             } catch (\Exception $exc) {
@@ -485,8 +465,8 @@ class ResultController extends ResourceController {
      * @param Request $request
      */
     public function exportAction(Request $request) {
-        
-        if($request->isMethod('POST')){
+
+        if ($request->isMethod('POST')) {
             $exportRequestStream = $request->request->all();
             $request->request->remove('charttype');
             $request->request->remove('stream');
@@ -498,29 +478,29 @@ class ResultController extends ResourceController {
             $request->request->remove('meta_height');
             $request->request->remove('parameters');
             $fusionchartService = $this->getFusionChartExportService();
-            $fileSVG = $fusionchartService->exportFusionChart($exportRequestStream);              
+            $fileSVG = $fusionchartService->exportFusionChart($exportRequestStream);
         }
 
         //Busqueda de la Imagen Descargada
 //        $routing = "/var/www/html/seip";
         $routing = $this->container->getParameter('kernel.root_dir');
         $nameSVG = glob("$routing/../web/php-export-handler/temp/*.png");
-        
-        $user = $this->getUser()->getId();//Id Usuario    
-        $user = str_pad($user, 6,"0", STR_PAD_LEFT);
+
+        $user = $this->getUser()->getId(); //Id Usuario    
+        $user = str_pad($user, 6, "0", STR_PAD_LEFT);
 
         $cont = 0;
         $contImg = 1;
-        foreach ($nameSVG as $value) {            
-            $pos = strpos($nameSVG[$cont], $user);            
-            if ($pos !== false) {                                 
-                if (strpos($nameSVG[$cont], "stackedbar3d")) {                    
+        foreach ($nameSVG as $value) {
+            $pos = strpos($nameSVG[$cont], $user);
+            if ($pos !== false) {
+                if (strpos($nameSVG[$cont], "stackedbar3d")) {
                     $chartName = $nameSVG[$cont];
                     $contImg ++;
                 }
             }
             $cont ++;
-        }       
+        }
 
         $showResultObjetives = false;
         $level = $request->get('level');
@@ -572,64 +552,43 @@ class ResultController extends ResourceController {
             $entity = $gerenciaSecond;
         }
 
-        $pdf = new SeipPdfH('L', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+        $pdf = new \Pequiven\SEIPBundle\Model\PDF\NewSeipPdf('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+        $pdf->setPrintLineFooter(false);
         $pdf->setContainer($this->container);
-        $pdf->setPeriod($periodService->getPeriodActive());
+        $pdf->setPeriod($this->getPeriodService()->getPeriodActive());
         $pdf->setFooterText($this->trans('pequiven_seip.message_footer', array(), 'PequivenSEIPBundle'));
-
-        $namePdf = $this->trans('pequiven_seip.results.resultsByGerencia', array('%gerencia%' => $entity->getDescription()), 'PequivenSEIPBundle');
-//        $title = $this->trans('pequiven_seip.results.results',array(),'PequivenSEIPBundle');
-        $title = $namePdf;
-
-        // set document information
         $pdf->SetCreator(PDF_CREATOR);
         $pdf->SetAuthor('SEIP');
-        $pdf->setTitle($title);
+        $pdf->setTitle('Resultados de Objetivos por Gerencia');
         $pdf->SetSubject('Resultados SEIP');
-        $pdf->SetKeywords('PDF, SEIP, Resultados');        
-
-        // set default header data
-//        $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PDF_HEADER_STRING);
-        // set header and footer fonts
+        $pdf->SetKeywords('PDF, SEIP, Resultados');
         $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
         $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
-
-        // set default monospaced font
         $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
-
-        // set margins
-        $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+        $pdf->SetMargins(PDF_MARGIN_LEFT, 35, PDF_MARGIN_RIGHT);
         $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
         $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-
-        // set auto page breaks
         $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
-
-        // set image scale factor
         $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
-
-        // set font
-        $pdf->SetFont('times', 'BI', 12);
-
-        // add a page
         $pdf->AddPage();
+        $namePdf = $entity->getDescription();
+        $period = $this->getPeriodService()->getEntityPeriodActive();
 
-        // set some text to print
         $html = $this->renderView('PequivenSEIPBundle:Result:viewPdf.html.twig', array(
-            'chartName'     => $chartName,
-            'entity'        => $entity,
-            'tree'          => $tree,
-            'level'         => $level,
+            'chartName' => $chartName,
+            'entity' => $entity,
+            'tree' => $tree,
+            'level' => $level,
             'resultService' => $resultService,
-            'images'        => $images));
+            'images' => $images,
+            'period' => $period));
 
         // print a block of text using Write()
         $pdf->writeHTML($html, true, false, true, false);
 
-        $pdf->Output($namePdf . '.pdf', 'D');
+        $pdf->Output('Resultados - ' . $namePdf . '.pdf', 'D');
 
         $this->rmTempFile($chartName);
-
     }
 
     /**
@@ -637,12 +596,10 @@ class ResultController extends ResourceController {
      *  Eliminación de Imagen Temporal
      *
      */
-    public function rmTempFile($chartName)
-    {   
-        $imgChart = $chartName;//Ruta              
-        
-        shell_exec("rm $imgChart");//Eliminamos
+    public function rmTempFile($chartName) {
+        $imgChart = $chartName; //Ruta              
 
+        shell_exec("rm $imgChart"); //Eliminamos
     }
 
     /**
@@ -757,7 +714,7 @@ class ResultController extends ResourceController {
     private function getResultService() {
         return $this->container->get('seip.service.result');
     }
-    
+
     /**
      * Servicio del detalle de las evaluaciones
      * @return \Pequiven\SEIPBundle\Service\User\EvaluationDetailsService

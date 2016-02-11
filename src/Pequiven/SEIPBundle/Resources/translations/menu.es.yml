@@ -158,6 +158,7 @@ app:
                             strategics: Estratégicos
                             indicator:
                                 strategics: Indicadores Estratégicos
+                                cpjaa: Indicadores CPJAA
                             objetive:
                                 strategics: Objetivos Estratégicos
                             tactic: Táctico
@@ -196,12 +197,15 @@ app:
                         reports:
                             main: Reportes
                             production: Producción
+                            delivery: Despacho
                         planning:
                             main: Planificación
                             production: Producción
+                            delivery: Despacho
                         notification:
                             main: Notificación
                             production: Producción
+                            delivery: Despacho
                         monitor:
                             main: Monitor
                             production: 

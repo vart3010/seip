@@ -100,6 +100,13 @@ class Product extends BaseModel
      * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\ProductReport",mappedBy="product")
      */
     private $productReports;
+//    
+//    /**
+//     * Reporte de productos
+//     * @var \Pequiven\SEIPBundle\Entity\DataLoad\ProductReport
+//     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\ProductReport",mappedBy="product")
+//     */
+//    private $productReports;
     
     /**
      * ¿va a estar en los graficos de reporte de produccion?

@@ -161,11 +161,11 @@ if (!defined('PDF_MARGIN_HEADER')) {
 }
 
 if (!defined('PDF_MARGIN_FOOTER')) {
-	define ('PDF_MARGIN_FOOTER', 10);
+	define ('PDF_MARGIN_FOOTER', 0);
 }
 
 if (!defined('PDF_MARGIN_TOP')) {
-	define ('PDF_MARGIN_TOP', 27);
+	define ('PDF_MARGIN_TOP', 32);
 }
 
 if (!defined('PDF_MARGIN_BOTTOM')) {
@@ -173,11 +173,11 @@ if (!defined('PDF_MARGIN_BOTTOM')) {
 }
 
 if (!defined('PDF_MARGIN_LEFT')) {
-	define ('PDF_MARGIN_LEFT', 15);
+	define ('PDF_MARGIN_LEFT', 9);
 }
 
 if (!defined('PDF_MARGIN_RIGHT')) {
-	define ('PDF_MARGIN_RIGHT', 15);
+	define ('PDF_MARGIN_RIGHT', 9);
 }
 
 if (!defined('PDF_FONT_NAME_MAIN')) {

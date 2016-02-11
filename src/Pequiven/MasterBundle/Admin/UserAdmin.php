@@ -131,6 +131,10 @@ class UserAdmin extends Base
                 ->add('impersonating', 'string', array('template' => 'SonataUserBundle:Admin:Field/impersonating.html.twig'))
             ;
         }
+        
+        if ($this->isGranted('ROLE_SUPER_ADMIN')){
+            $listMapper->add('quarterToLoadOperationProduction',null, array('editable' => true));
+        }
     }
     
     /**

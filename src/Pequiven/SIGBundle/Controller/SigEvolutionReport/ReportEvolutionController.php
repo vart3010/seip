@@ -460,13 +460,14 @@ class ReportEvolutionController extends ResourceController
     function getFormVerificationAction(Request $request)
     {
         $id = $request->get('id');        
+        $typeObject = $request->get('typeObj');
         
         $month = $request->get('evolutiontrend')['month'];//Carga de Mes pasado
         
         $user = $this->getUser();        
         
         $verification = new EvolutionActionVerification();
-        $form  = $this->createForm(new EvolutionActionVerificationType(), $verification);
+        $form  = $this->createForm(new EvolutionActionVerificationType($id, $typeObject), $verification);
         
         $view = $this
             ->view()

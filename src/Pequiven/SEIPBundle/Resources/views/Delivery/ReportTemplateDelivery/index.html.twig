@@ -1,0 +1,49 @@
+{% extends "PequivenSEIPBundle:Template:Developer/Common/tableFormat1.html.twig" %}
+
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
+
+{% block before_body %}
+    {{ contentHeader(
+        ("pequiven_seip.report_template.report_template_delivery"|trans ),
+        ( 'pequiven.list'|trans({},'messages') )
+    ) }}
+{% endblock %}
+
+{% block body %}
+    <div ng-controller="TableFormatController">
+        <div ng-controller="ReportTemplateIndexActionController">
+            {#            {% include 'PequivenSEIPBundle:DataLoad/ReportTemplate:filters.html.twig' %}#}
+
+            <div loading-container="tableParams.settings().$loading">
+                <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager"  template-header="custom/header" api-data-url="{{ path('pequiven_report_template_delivery_index',{_format:'json' }) }}" export-csv="csv" class="table table-responsive">
+                    <tr ng-repeat="result in $data | filter:tableParams.search" data="{$ result|json $}">
+                        <td data-title="'{{ 'pequiven.ref'|trans({},'messages') }}'" sortable="'ref'" filter="{ 'rtd.ref': 'text' }">
+                            <a href="{$ result.id $}/show ">{$ result.ref $}</a>
+                        </td>
+                        <td data-title="'{{ 'pequiven_seip.name'|trans }}'" sortable="'period'" filter="{ 'rtd.name': 'text' }">
+                            {$ result.name $}
+                        </td>
+                        <td data-title="'{{ 'Location'|trans }}'">
+                            {$ result.location.name $}
+                        </td>
+                        <td data-title="'{{ 'Region'|trans }}'">
+                            {$ result.region.name $}
+                        </td>
+                        <td data-title="'{{ 'pequiven_seip.period'|trans }}'">
+                            {$ result.period.name $}
+                        </td>
+                        <td class="low-padding align-center">
+                            <a href=" {$ result.id $}/update " class="button compact icon-pencil">{{ "pequiven_seip.actions.edit"|trans }}</a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <br/><br/>
+    <p class="button-height align-right">
+        {{ buttons.generic(path('pequiven_report_template_delivery_create'),('pequiven.add'|trans({},'messages')),'icon-tick' ) }}
+    </p>
+{% endblock %}

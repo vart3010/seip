@@ -14,12 +14,14 @@ class ValueIndicatorConfigType extends AbstractType
      * @param array $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
-    {
+    {   
         //Se comento por error en la busqueda de ajax no esta seteado el indicador
 //        $data = $builder->getData();
 //        $typeDetailValue = $data->getIndicator()->getTypeDetailValue();
 //        if($typeDetailValue == Indicator::TYPE_DETAIL_DAILY_LOAD_PRODUCTION){
         $emptyValue = "Seleccione";
+//        $period = $this->getPeriodService()->getPeriodActive();
+        $period = 3;
 //            $builder
 //                ->add('products','entity',array(
 //                    'label_attr' => array('class' => 'label bold'),
@@ -63,6 +65,9 @@ class ValueIndicatorConfigType extends AbstractType
                     'translation_domain' => 'PequivenSEIPBundle',
                     'attr' => array('class' => 'select2 input-xlarge'),
                     'multiple' => true,
+                    "query_builder" => function (\Pequiven\SEIPBundle\Repository\DataLoad\ProductReportRepository $repository) use ($period){
+                        return $repository->findQueryByPeriod($period);
+                    },
                         ))
                         ;
 //        }
@@ -78,7 +83,7 @@ class ValueIndicatorConfigType extends AbstractType
             'translation_domain' => 'PequivenIndicatorBundle',
         ));
     }
-
+    
     /**
      * @return string
      */
