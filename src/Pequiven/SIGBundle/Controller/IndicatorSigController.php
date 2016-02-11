@@ -735,6 +735,109 @@ class IndicatorSigController extends ResourceController {
         return $indicator;
     }
 
+    public function loadAction(Request $request){
+        
+        $levels = [
+            1 => "Indicadores Estratégicos",
+            2 => "Indicadores Tácticos",
+            3 => "Indicadores Operativos",            
+        ];
+        
+        $cont = $trendData = $causeData = $cause = $actionData = $level = 0;
+        $dataStrategic = $dataTactic = $dataOperative = $totalStrategic = $totalTactic = $totalOperative = 0;
+        $indicatorsStrategic = $indicatorsTactic = $indicatorsOperatives = [];
+        
+        for ($i=1; $i <= count($levels); $i++) { 
+            
+            $indicators = $this->get('pequiven.repository.indicator')->findQueryIndicatorValid($this->getPeriodService()->getPeriodActive(), $i);                                    
+            foreach ($indicators as $valueIndicator) {
+                $trendAnalysis = $this->get('pequiven.repository.sig_trend_report_evolution')->findBy(array('indicator' => $valueIndicator->getId(), /*'month' => 11,*/ 'typeObject' => 1));        
+                if ($trendAnalysis) {
+                    $trendData = $trendData + count($trendAnalysis);
+                }
+                if ($i == 1) {
+                    $totalStrategic++;
+                    if ($trendAnalysis) {
+                        $dataStrategic = $dataStrategic + 1;                                    
+                        $indicatorsStrategic[] = $valueIndicator;                    
+                    }
+                }elseif ($i == 2) {
+                    $totalTactic++;
+                    if ($trendAnalysis) {
+                        $dataTactic = $dataTactic + 1;                                    
+                        $indicatorsTactic[] = $valueIndicator;                                            
+                    }
+                }elseif ($i == 3) {
+                    $totalOperative++;
+                    if ($trendAnalysis) {
+                        $dataOperative = $dataOperative + 1;                        
+                        $indicatorsOperatives[] = $valueIndicator;                                            
+                    }
+                }
+                $causeAnalysis = $this->get('pequiven.repository.sig_causes_analysis')->findBy(array('indicator' => $valueIndicator->getId()/*, 'month' => 11*/));
+                if ($causeAnalysis) {
+                    $causeData = $causeData + count($causeAnalysis);                
+                    //$causeData = $causeData + count($causeAnalysis);
+                }
+
+                $causes = $this->get('pequiven.repository.sig_causes_report_evolution')->findBy(array('indicator' => $valueIndicator->getId()/*, 'month' => 11*/));                                    
+                if ($causes) {
+                    $cause = $cause + count($causes);
+                    //$cause = $cause + count($causes);
+                }
+                foreach ($causes as $key => $valueCause) {
+                    $action = $this->get('pequiven.repository.sig_action_indicator')->findBy(array('evolutionCause' => $valueCause->getId()));
+                    if ($action) {
+                        $actionData = $actionData + count($action);
+                        //$actionData = $actionData + count($action);
+                    }
+                }
+                $cont++;                                           
+            }
+        }
+        
+        $dataIndicators = [
+            1 => $dataStrategic,
+            2 => $dataTactic,
+            3 => $dataOperative
+        ];
+
+        $dataTotal = [
+            1 => $totalStrategic, 
+            2 => $totalTactic,
+            3 => $totalOperative
+        ];
+
+        $indicators = [
+            1 => $indicatorsStrategic,
+            2 => $indicatorsTactic,
+            3 => $indicatorsOperatives
+        ];
+
+        $dataGeneral = [
+            1 => "Analisis de Tendencias Cargados: " . $trendData,
+            2 => "Analisis de Causas Cargados: " . $causeData,
+            3 => "Causas Cargadas: " . $cause,
+            4 => "Planes de Acción Cargados: " . $actionData
+        ];
+        $data = [                                    
+            'dataIndicators' => $dataIndicators,
+            'dataTotal'      => $dataTotal,
+            'indicators'     => $indicators,
+            'dataGeneral'    => $dataGeneral
+        ];
+
+        //echo "Indicadores Cargados: " . $trendData . "<br>";
+        //echo "Analisis de Tendencias Cargados: " . $trendData . "<br>";
+        //echo "Analisis de Causas Cargados: " . $causeData . "<br>";
+        //echo "Causas: " . $cause . "<br>";
+        //echo "Planes de Acción Cargados: " . $actionData . "<br>";
+        //echo "Total Esperado: " . $cont . "<br>";
+        //die();
+        
+        return $this->render('PequivenSIGBundle:Indicator:load.html.twig', array('data' => $data, 'levels' => $levels));
+    }
+
     /**
      * 
      * @return \Pequiven\SEIPBundle\Service\SecurityService
