@@ -739,7 +739,7 @@ class IndicatorSigController extends ResourceController {
         
         $levels = [
             1 => "Indicadores Estratégicos",
-            2 => "Indicadores Tacticos",
+            2 => "Indicadores Tácticos",
             3 => "Indicadores Operativos",            
         ];
         

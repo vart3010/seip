@@ -2,14 +2,14 @@
 
 {% block before_body %}
     {{ contentHeader(
-        ('Estadistica Informe de Evolución' |trans({},'messages')) ,        
+        ('Estadística Informe de Evolución' |trans({},'messages')) ,        
         ('Carga'|trans({},'messages'))
     ) }}
 {% endblock %} 
 
 {% block body %}
 <fieldset class="fieldset">
-    <legend class="legend">Estadistica Carga de Informes de Evolución&nbsp;</legend>
+    <legend class="legend">Estadística Carga de Informes de Evolución&nbsp;</legend>
 
 		{% set cont = 1 %}                          
         {% for datas in levels %}
