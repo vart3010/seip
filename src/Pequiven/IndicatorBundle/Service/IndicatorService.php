@@ -2484,7 +2484,7 @@ class IndicatorService implements ContainerAwareInterface {
             }
 
             //Seteamos el arreglo a devolver para cada serie
-            $showUntilMonth = 9; //TODO: Ponerlo por el administrador del indicador
+            $showUntilMonth = 12; //TODO: Ponerlo por el administrador del indicador
             $showValue = 1;
             for ($i = 1; $i <= $numberResults; $i++) {
 //                $showValue = $i <= $showUntilMonth ? 1 : 0;
@@ -2720,7 +2720,7 @@ class IndicatorService implements ContainerAwareInterface {
                 $contLastPeriodValueIndicator++;
             }
 
-            $showUntilMonth = 9; //TODO: Ponerlo por el administrador del indicador
+            $showUntilMonth = 12; //TODO: Ponerlo por el administrador del indicador
             //Seteamos el acumulado para cada serie
             for ($i = 1; $i <= $numberResults; $i++) {
                 if ($i <= $showUntilMonth) {
