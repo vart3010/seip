@@ -204,6 +204,22 @@ class PeriodService extends ContainerAware
         
         return $result;
     }
+    /**
+     * Retorna si se encuetra habilitada la carga de grupos de productos 
+     * @return boolean
+     */
+    function isAllowPlanningGroupProduct()
+    {
+        $result = false;
+        $period = $this->getPeriodActive();
+        $now = new \DateTime();
+        
+        if($period->getIsLoadGroupProductEnabled() === true && $now >= $period->getDateStartLoadGroupProduct() && $now <= $period->getDateEndLoadGroupProduct()){
+            $result = true;
+        }
+        
+        return $result;
+    }
     
     /**
      * Retorna el periodo activo
@@ -226,7 +242,7 @@ class PeriodService extends ContainerAware
 //                }
 //            }
 //        }
-        if(!$period && $type == \Pequiven\SEIPBundle\Entity\Period::VIEW_ALL_PERIODS){
+        if(!$period && (($type == \Pequiven\SEIPBundle\Entity\Period::VIEW_ALL_PERIODS)||($type == \Pequiven\SEIPBundle\Entity\Period::VIEW_ONLY_PERIOD_ACTIVE))){
             $period = $this->getUser()->getPeriod();
         }
         if(!$period){
