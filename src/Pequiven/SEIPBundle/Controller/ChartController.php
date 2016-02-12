@@ -488,7 +488,7 @@ class ChartController extends SEIPController {
 
         $indicator = $this->get('pequiven.repository.indicator')->find($idIndicator); //Obtenemos el indicador
 
-        $dataChart = $indicatorService->getChartColumnLineDualAxis($indicator, array('resultIndicatorPersonalInjuryWithAndWithoutAndLostDaysByFrequencyNotificationByPeriodGroupByCompanyAccumulated' => true, 'variables' => array("lesionados_con_tiempo_perdido" => true, "lesiones_con_tiempo_perdido" => true, "lesionados_sin_tiempo_perdido" => true, "dias_perdidos" => true), 'path_array' => 'resultIndicatorPersonalInjuryWithAndWithoutAndLostDaysByFrequencyNotificationByPeriodGroupByCompanyAccumulated')); //Obtenemos la data del gráfico de acuerdo al indicador
+        $dataChart = $indicatorService->getChartColumnLineDualAxis($indicator, array('resultIndicatorPersonalInjuryWithAndWithoutAndLostDaysByFrequencyNotificationByPeriodGroupByCompanyAccumulated' => true, 'variables' => array("lesionados_con_tiempo_perdido" => true, "lesiones_con_tiempo_perdido" => true, "lesionados_sin_tiempo_perdido" => true, "dias_perdidos" => true, "dias_perdidos_severidad" => true), 'path_array' => 'resultIndicatorPersonalInjuryWithAndWithoutAndLostDaysByFrequencyNotificationByPeriodGroupByCompanyAccumulated')); //Obtenemos la data del gráfico de acuerdo al indicador
 
         $response->setData($dataChart); //Seteamos la data del gráfico en Json
 
