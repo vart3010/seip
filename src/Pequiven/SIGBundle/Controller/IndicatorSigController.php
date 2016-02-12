@@ -784,6 +784,7 @@ class IndicatorSigController extends ResourceController {
         
         $cont = $trendData = $causeData = $cause = $actionData = $level = 0;
         $dataStrategic = $dataTactic = $dataOperative = $totalStrategic = $totalTactic = $totalOperative = 0;
+        $dataStrategicIn = $dataTacticIn = $dataOperativeIn = [];
         $indicatorsStrategic = $indicatorsTactic = $indicatorsOperatives = [];
         
         for ($i=1; $i <= count($levels); $i++) { 
@@ -799,18 +800,24 @@ class IndicatorSigController extends ResourceController {
                     if ($trendAnalysis) {
                         $dataStrategic = $dataStrategic + 1;                                    
                         $indicatorsStrategic[] = $valueIndicator;                    
+                    }else{
+                        $dataStrategicIn[] = $valueIndicator;
                     }
                 }elseif ($i == 2) {
                     $totalTactic++;
                     if ($trendAnalysis) {
                         $dataTactic = $dataTactic + 1;                                    
                         $indicatorsTactic[] = $valueIndicator;                                            
+                    }else{
+                        $dataTacticIn[] = $valueIndicator;
                     }
                 }elseif ($i == 3) {
                     $totalOperative++;
                     if ($trendAnalysis) {
                         $dataOperative = $dataOperative + 1;                        
                         $indicatorsOperatives[] = $valueIndicator;                                            
+                    }else{
+                        $dataOperativeIn[] = $valueIndicator;
                     }
                 }
                 $causeAnalysis = $this->get('pequiven.repository.sig_causes_analysis')->findBy(array('indicator' => $valueIndicator->getId()/*, 'month' => 11*/));
@@ -841,6 +848,12 @@ class IndicatorSigController extends ResourceController {
             3 => $dataOperative
         ];
 
+        $dataIndicatorsInLoad = [
+            1 => $dataStrategicIn,
+            2 => $dataTacticIn,
+            3 => $dataOperativeIn
+        ];
+
         $dataTotal = [
             1 => $totalStrategic, 
             2 => $totalTactic,
@@ -860,10 +873,11 @@ class IndicatorSigController extends ResourceController {
             4 => "Planes de Acción Cargados: " . $actionData
         ];
         $data = [                                    
-            'dataIndicators' => $dataIndicators,
-            'dataTotal'      => $dataTotal,
-            'indicators'     => $indicators,
-            'dataGeneral'    => $dataGeneral
+            'dataIndicators'       => $dataIndicators,
+            'dataTotal'            => $dataTotal,
+            'indicators'           => $indicators,
+            'dataGeneral'          => $dataGeneral,
+            'dataIndicatorsInLoad' => $dataIndicatorsInLoad
         ];
 
         //echo "Indicadores Cargados: " . $trendData . "<br>";
