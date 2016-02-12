@@ -127,11 +127,13 @@
             </div>                                
             <input id='exportpng' type='hidden' value='Exportar Informe' />
             {# Configuracion de medicion del indicador #}
-            {% if is_granted('ROLE_SEIP_SIG_EVOLUTION_LAST_PERIOD') %}                
+            {% if is_granted('ROLE_SEIP_SIG_EVOLUTION_CONFIG') %}                
                 <div ng-controller="EvolutionIndicatorConfig"> 
                     <div class="button-group button-config">
-                        <a class="button icon-list-add" href="" ng-click="loadTemplateConfig()" title="">{{ 'pequiven_indicator.config'|trans({},'PequivenSIGBundle')  }}</a>
-                        <a class="button icon-pages" href="" ng-click="loadTemplateCloning()" title="">Clonar</a>
+                            <a class="button icon-list-add" href="" ng-click="loadTemplateConfig()" title="">{{ 'pequiven_indicator.config'|trans({},'PequivenSIGBundle')  }}</a>
+                        {% if is_granted('ROLE_SEIP_SIG_EVOLUTION_CLONING') %}                
+                            <a class="button icon-pages" href="" ng-click="loadTemplateCloning()" title="">Clonar</a>
+                        {% endif %}
                     </div>
                 </div>
             {% endif %}
