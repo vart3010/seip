@@ -14,16 +14,13 @@
 {%  set mes  = 'pequiven_seip.month.' ~ unrealized_production.month %}
 
 {% block body %}
-
-
     <fieldset class="fieldset">
         <legend class="legend">{{ 'pequiven_seip.product_report.product_detail_daily_month'|trans }}</legend>
         <div class="columns">
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">{{ 'pequiven_seip.product_report.product_report'|trans }}</label>
-                    {{ unrealized_production.productReport }} 
-
+                    {{ unrealized_production.productReport }}
                 </p>
             </div>
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
@@ -58,10 +55,8 @@
                     {% endfor %}    
                 </p>
             </div>
-
         </div>
     </fieldset>
-
 
     <fieldset class="fieldset">
         <legend class="legend">{{ 'pequiven_seip.product_report.unrealized_production.unrealized_production'|trans }}</legend>
@@ -72,55 +67,46 @@
                 <li><a style="font-weight: bold;" href="#tab-3">{{ "pequiven_seip.product_report.unrealized_production.materiaPrimaInt"|trans }}</a></li>
                 <li><a style="font-weight: bold;" href="#tab-4">{{ "pequiven_seip.product_report.unrealized_production.materiaPrimaExt"|trans }}</a></li>
             </ul>
-
             {#            {% set causes = causeFailService.getFailsCause(unrealized_production) %}#}
             {% set daysMonth = causeFailService.getDaysMonth(unrealized_production) %}
-
-
-
             <div class="tabs-content">
                 <div id="tab-1" class="with-padding">
                     <div class="columns">
                         <div class="six-columns">
-
                             <table class="simple-table responsive-table tables-extras"  >
                                 <thead>
                                     <tr>
                                         <th>{{ 'pequiven_seip.day'|trans }}</th>
                                             {% for interc in internalCauses %}
-                                            <th scope="col" width="5%">{{interc}}</th>
+                                                <th scope="col" align="right">{{interc}}</th>
                                             {% endfor %}
                                         <th scope="col" width="5%" class="hide-on-mobile-portrait">{{ 'Mount'|trans }}</th>
                                     </tr>
                                 </thead>
-                                <tbody>                           
-
+                                <tbody>          
                                     {% for i in 1..daysMonth %}
                                         <tr>
                                             <td>{{ loop.index }}</td>
                                             {% for interc in internalCauses %}
-                                                <td>{{ causes["TYPE_FAIL_INTERNAL"][interc][i] }}</td>
+                                                <td align="right">{{ causes["TYPE_FAIL_INTERNAL"][interc][i] }}</td>
                                             {% endfor %}
-                                            <td>{{ causes["TYPE_FAIL_INTERNAL"]['total'][i] }}</td>
+                                            <td align="right">{{ causes["TYPE_FAIL_INTERNAL"]['total'][i] }}</td>
                                         </tr>
                                     {% endfor %}
                                     {% set totals = causeFailService.getArrayTotals(unrealized_production,causes['TYPE_FAIL_INTERNAL'],internalCauses) %}
-                                    <tr>
-                                        <th>{{ 'pequiven_seip.totals'|trans }}</th>
-                                            {% for t in totals %}
-                                            <th>{{ t }}</th>
-                                            {% endfor %}
+                                    <tr style="font-weight: bold;">
+                                        <td align="left">{{ 'pequiven_seip.totals'|trans }}</td>
+                                        {% for t in totals %}
+                                            <td align="right">{{ t }}</td>
+                                        {% endfor %}
                                     <tr>
                                 </tbody>
                             </table>
                         </div>
-                        <div class="six-columns">
-
-                            {#                                {{ boxRender.renderBox('pequiven_seip_box_unrealized_production')|raw }}#}
+                        <div class="six-columns">                            
                             <div  ng-controller="DashboardController" ng-init="renderChartPie2d('unrelizedInternal', {{ dataInternal }},'100%','500')">
                                 <span id="unrelizedInternal"></span>
                             </div>
-
                         </div>
                     </div>
                 </div>          
@@ -128,34 +114,32 @@
                 <div id="tab-2" class="with-padding">
                     <div class="columns">
                         <div class="six-columns">
-
                             <table class="simple-table responsive-table tables-extras"  >
                                 <thead>
                                     <tr>
                                         <th>{{ 'pequiven_seip.day'|trans }}</th>
                                             {% for interc in externalCauses %}
-                                            <th scope="col" >{{interc}}</th>
+                                                <th scope="col" align="right">{{interc}}</th>
                                             {% endfor %}
                                         <th scope="col" width="5%" class="hide-on-mobile-portrait">{{ 'Mount'|trans }}</th>
                                     </tr>
                                 </thead>
-                                <tbody>                           
-
+                                <tbody>  
                                     {% for i in 1..daysMonth %}
                                         <tr>
                                             <td>{{ loop.index }}</td>
                                             {% for interc in externalCauses %}
-                                                <td>{{ causes["TYPE_FAIL_EXTERNAL"][interc][i] }}</td>
+                                                <td align="right">{{ causes["TYPE_FAIL_EXTERNAL"][interc][i] }}</td>
                                             {% endfor %}
-                                            <td>{{ causes["TYPE_FAIL_EXTERNAL"]['total'][i] }}</td>
+                                            <td align="right">{{ causes["TYPE_FAIL_EXTERNAL"]['total'][i] }}</td>
                                         </tr>
                                     {% endfor %}
                                     {% set totals = causeFailService.getArrayTotals(unrealized_production,causes['TYPE_FAIL_EXTERNAL'],externalCauses) %}
-                                    <tr>
-                                        <th>{{ 'pequiven_seip.totals'|trans }}</th>
-                                            {% for t in totals %}
-                                            <th>{{ t }}</th>
-                                            {% endfor %}
+                                    <tr style="font-weight: bold;">
+                                        <td align="left">{{ 'pequiven_seip.totals'|trans }}</td>
+                                        {% for t in totals %}
+                                            <td align="right">{{ t }}</td>
+                                        {% endfor %}
                                     <tr>
                                 </tbody>
                             </table>
@@ -169,22 +153,17 @@
                 </div>
 
                 {#{% set mp = causeFailService.getFailsCauseMp(unrealized_production) %}#}
-              
-                 
                 <div id="tab-3" class="with-padding">
                     <div class="columns">   
-                       
-                          
                         {% if mp["getInternalCausesMp"] is defined %}
                             <div class="six-columns">
-
                                 <table class="simple-table responsive-table tables-extras"  >
                                     <thead>
                                         <tr>
                                             <th>{{ 'pequiven_seip.day'|trans }}</th>
                                                 {% for internalMp in mp["getInternalCausesMp"]|keys %}
                                                     {% if (internalMp != "total") %}
-                                                    <th scope="col" >{{ internalMp }}</th>
+                                                        <th scope="col" align="right">{{ internalMp }}</th>
                                                     {% endif %}
                                                 {% endfor %}
                                             <th>Total</th>
@@ -196,53 +175,46 @@
                                                 <td>{{ loop.index }}</td>
                                                 {% for intercMp in mp["getInternalCausesMp"]|keys %}
                                                     {% if (intercMp != "total") %}
-                                                        <td>{{ mp["getInternalCausesMp"][intercMp][i] }}</td>
+                                                        <td align="right">{{ mp["getInternalCausesMp"][intercMp][i] }}</td>
                                                     {% endif %} 
                                                 {% endfor %}
-                                                <td>{{ mp["getInternalCausesMp"]["total"][i] }}</td>
+                                                <td align="right">{{ mp["getInternalCausesMp"]["total"][i] }}</td>
                                             </tr>
                                         {% endfor %}
-                                        <tr>
+                                        <tr style="font-weight: bold;">
                                             {% set totals =  causeFailService.getArrayTotalsMp(unrealized_production,mp,"getInternalCausesMp") %}
-                                            <th>{{ 'pequiven_seip.totals'|trans }}</th>
-                                                {% for t in  totals %}
-                                                <th>{{ t }}</th>
-                                                {% endfor %}
+                                            <td align="left">{{ 'pequiven_seip.totals'|trans }}</td>
+                                            {% for t in  totals %}
+                                                <td align="right">{{ t }}</td>
+                                            {% endfor %}
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="six-columns">
-                                  
+                            <div class="six-columns">                                  
                                 <div  ng-controller="DashboardController" ng-init="renderChartPie2d('unrelizedInternalMp', {{ dataInternalMp|json_encode() }},'100%','500')">
                                     <span id="unrelizedInternalMp"></span>
                                 </div>
-
                             </div>
-                        {% else %}
-                            <div>
-                                <p class="big-message">
-                                    <strong>No hay PNR por Materia Prima Interna</strong>
-                                </p>
-                            </div>
+                        {% else %}                            
+                            <div class="new-row twelve-columns empty_row" align="center">                                 
+                                <br>No hay PNR por Materia Prima Interna                                
+                            </div>                            
                         {% endif %}
                     </div>
-
                 </div>  
                 <div id="tab-4" class="with-padding">
-                    <div class="columns">
-                        
+                    <div class="columns">                        
                         {% if mp["getExternalCausesMp"] is defined %}
                             <div class="six-columns">
                                 {% set mp = causeFailService.getFailsCauseMp(unrealized_production) %}
-
                                 <table class="simple-table responsive-table tables-extras"  >
                                     <thead>
                                         <tr>
                                             <th>{{ 'pequiven_seip.day'|trans }}</th>
                                                 {% for ExternalMp in mp["getExternalCausesMp"]|keys %}
                                                     {% if (ExternalMp != "total") %}
-                                                    <th scope="col" >{{ ExternalMp }}</th>
+                                                        <th scope="col" align="right">{{ ExternalMp }}</th>
                                                     {% endif %}
                                                 {% endfor %}
                                             <th>Total</th>
@@ -254,43 +226,38 @@
                                                 <td>{{ loop.index }}</td>
                                                 {% for ExtercMp in mp["getExternalCausesMp"]|keys %}
                                                     {% if (ExtercMp != "total") %}
-                                                        <td>{{ mp["getExternalCausesMp"][ExtercMp][i] }}</td>
+                                                        <td align="right">{{ mp["getExternalCausesMp"][ExtercMp][i] }}</td>
                                                     {% endif %} 
                                                 {% endfor %}
-                                                <td>{{ mp["getExternalCausesMp"]["total"][i] }}</td>
+                                                <td align="right">{{ mp["getExternalCausesMp"]["total"][i] }}</td>
                                             </tr>
                                         {% endfor %}
                                         {% set totals =  causeFailService.getArrayTotalsMp(unrealized_production,mp,"getExternalCausesMp") %}
-                                    <th>{{ 'pequiven_seip.totals'|trans }}</th>
-                                        {% for t in  totals %}
-                                        <th>{{ t }}</th>
-                                        {% endfor %}
+                                        <tr style="font-weight: bold;">
+                                            <td align="left">{{ 'pequiven_seip.totals'|trans }}</td>
+                                            {% for t in  totals %}
+                                                <td align="right">{{ t }}</td>
+                                            {% endfor %}
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
                             <div class="six-columns">
-
                                 <div  ng-controller="DashboardController" ng-init="renderChartPie2d('unrelizedExternalMp', {{ dataExternalMp|json_encode() }},'100%','500')">
                                     <span id="unrelizedExternalMp"></span>
                                 </div>
-
                             </div>
                         {% else %}
-                            <div>
-                                <p class="big-message">
-                                    <strong>No hay PNR por Materia Prima Externa</strong>
-                                </p>
+                           <div class="new-row twelve-columns empty_row" align="center">                                 
+                                <br>No hay PNR por Materia Prima Externa                                
                             </div>
                         {% endif %}
                     </div>
-
                 </div> 
             </div>
         </div>
     </fieldset>
-
 {% endblock %}
-
 {% block javascripts %}
     {{ parent() }}
     <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/fusioncharts.js') }}"></script>

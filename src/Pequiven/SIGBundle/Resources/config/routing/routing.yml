@@ -3,7 +3,7 @@ pequiven_sig_homepage:
     defaults: { _controller: PequivenSIGBundle:Default:index }
 #Listado general de objetivos marcados con magementsystem
 pequiven_objetives_list_sig:
-    path: /{level}/list/sig.{_format}
+    path: /sig/{level}/list.{_format}
     defaults:
         _controller: pequiven.controller.managementsystem_sig_objetives:ObjetiveslistAction
         _format: html
@@ -39,4 +39,8 @@ pequiven_sig_gerenciafirst_export:
     options:
         expose: true
 
-
+#Seguimiento a Carga de informes de evolución
+pequiven_indicator_evolution_load:
+    path: /indicator/sig/load
+    defaults: 
+        _controller: pequiven.controller.indicator_sig:loadAction
