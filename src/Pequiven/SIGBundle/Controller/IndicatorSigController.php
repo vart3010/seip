@@ -798,7 +798,7 @@ class IndicatorSigController extends ResourceController {
                 }
                 if ($i == 1) {
                     $totalStrategic++;
-                    if ($trendAnalysis) {
+                    if ($trendAnalysis or $valueIndicator->getParentCloning()) {
                         $dataStrategic = $dataStrategic + 1;                                    
                         $indicatorsStrategic[] = $valueIndicator;                    
                     }else{
@@ -806,7 +806,7 @@ class IndicatorSigController extends ResourceController {
                     }
                 }elseif ($i == 2) {
                     $totalTactic++;
-                    if ($trendAnalysis) {
+                    if ($trendAnalysis or $valueIndicator->getParentCloning()) {
                         $dataTactic = $dataTactic + 1;                                    
                         $indicatorsTactic[] = $valueIndicator;                                            
                     }else{
@@ -814,7 +814,7 @@ class IndicatorSigController extends ResourceController {
                     }
                 }elseif ($i == 3) {
                     $totalOperative++;
-                    if ($trendAnalysis) {
+                    if ($trendAnalysis or $valueIndicator->getParentCloning()) {
                         $dataOperative = $dataOperative + 1;                        
                         $indicatorsOperatives[] = $valueIndicator;                                            
                     }else{
