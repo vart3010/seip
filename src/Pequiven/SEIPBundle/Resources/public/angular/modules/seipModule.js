@@ -2163,6 +2163,21 @@ angular.module('seipModule.controllers', [])
                     $scope.openModalAuto();
                 }
             };
+            //Carga el formulario para clonar informe de evolucion
+            $scope.loadTemplateCloning = function (resource) {
+                $scope.initFormCloning(resource);
+                if (isInit == false) {
+                    isInit = true;
+                }
+                $scope.templateOptions.setTemplate($scope.templates[0]);
+                $scope.templateOptions.setParameterCallBack(resource);                
+                if (resource) {
+                    $scope.templateOptions.enableModeEdit();
+                    $scope.openModalAuto();
+                } else {
+                    $scope.openModalAuto();
+                }
+            };
             //Añadir Causa de Desviación
             var addConfig = function (save, successCallBack) {
                 var formConfig = angular.element('#form_config_sig');
@@ -2206,10 +2221,58 @@ angular.module('seipModule.controllers', [])
                     location.reload();
                 }
             };
+
+            //Añadir padre cloning
+            var addCloning = function (save, successCallBack) {
+                var formConfig = angular.element('#form_cloning');
+                var formData = formConfig.serialize();
+                if (save == undefined) {
+                    var save = false;
+                }
+                if (save == true) {
+                    var url = Routing.generate('pequiven_indicator_clonig_data_evolution', {id: $scope.id_indicator});
+                }
+                notificationBarService.getLoadStatus().loading();
+                return $http({
+                    method: 'POST',
+                    url: url,
+                    data: formData,
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'}  // set the headers so angular passing info as form data (not request payload)
+                }).success(function (data) {
+                    $scope.templateOptions.setVar("form", {errors: {}});                    
+                    if (successCallBack) {
+                        successCallBack(data);
+                    }
+                    notificationBarService.getLoadStatus().done();
+                    //$timeout(callAtTimeout, 3000);
+                    location.reload();
+                    return true;
+                }).error(function (data, status, headers, config) {
+                    $scope.templateOptions.setVar("form", {errors: {}});
+                    if (data.errors) {
+                        if (data.errors.errors) {
+                            $.each(data.errors.errors, function (index, value) {
+                                notifyService.error(Translator.trans(value));
+                            });
+                        }
+                        $scope.templateOptions.setVar("form", {errors: data.errors.children});
+                    }
+                    notificationBarService.getLoadStatus().done();
+                    return false;
+                });
+                function callAtTimeout() {
+                    location.reload();
+                }
+            };
             $scope.templateOptions.setVar('addConfig', addConfig);
             var confirmCallBack = function () {
-                addConfig(true, function (data) {
-                    $scope.indicator = data.indicator;
+                addConfig(true, function (data) {                   
+                });
+                return true;
+            };
+            $scope.templateOptions.setVar('addCloning', addCloning);
+            var confirmCallBackCloning = function () {
+                addCloning(true, function (data) {                   
                 });
                 return true;
             };
@@ -2233,6 +2296,31 @@ angular.module('seipModule.controllers', [])
                         name: 'Configuración Gráfica Informe de Evolución',
                         url: url,
                         confirmCallBack: confirmCallBack,
+                    }
+                ];
+                $scope.templateOptions.setTemplate($scope.templates[0]);
+            };
+
+            //Formulario Cloning
+            $scope.initFormCloning = function (resource) {
+
+                var d = new Date();
+                var numero = d.getTime();
+                $scope.setHeight(350);                
+
+                var parameters = {
+                    id: $scope.id_indicator,
+                    _dc: numero
+                };
+                if (resource) {
+                    parameters.id = resource.id;
+                }
+                var url = Routing.generate('pequiven_indicator_clonig_data_evolution', parameters);
+                $scope.templates = [
+                    {
+                        name: 'Clonar Informe de Evolución',
+                        url: url,
+                        confirmCallBack: confirmCallBackCloning,
                     }
                 ];
                 $scope.templateOptions.setTemplate($scope.templates[0]);

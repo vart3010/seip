@@ -656,6 +656,22 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\Column(name="indicator_sig_medition", type="integer", nullable=true)
      */
     private $indicatorSigMedition = 1;
+    
+    /**
+     * Indicador
+     * 
+     * @var \Pequiven\IndicatorBundle\Entity\Indicator
+     * @ORM\ManyToOne(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator",inversedBy="indicatorEvolutionCloning",cascade={"persist"})
+     */
+    protected $parentCloning;
+
+    /**
+     * @var \Pequiven\IndicatorBundle\Entity\Indicator
+     *
+     * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator",mappedBy="parentCloning",cascade={"persist"}))          
+     */
+    private $indicatorEvolutionCloning;
+
 
     /**
      * Constructor
@@ -2664,4 +2680,59 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     public function getIndicatorSigMedition() {
         return $this->indicatorSigMedition;
     }
+
+    /**
+     * Set parentCloning
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator $parentCloning
+     * @return Indicator
+     */
+    public function setParentCloning(\Pequiven\IndicatorBundle\Entity\Indicator $parentCloning = null) {
+        $this->parentCloning = $parentCloning;
+
+        return $this;
+    }
+
+    /**
+     * Get parentCloning
+     *
+     * @return \Pequiven\IndicatorBundle\Entity\Indicator 
+     */
+    public function getParentCloning() {
+        return $this->parentCloning;
+    }
+
+    /**
+     * Add indicatorEvolutionCloning
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator
+     * @return Indicator
+     */
+    public function addIndicatorEvolutionCloning(\Pequiven\IndicatorBundle\Entity\Indicator $indicatorEvolutionCloning) {
+        $indicatorEvolutionCloning->addParentCloning($this);
+        $this->indicatorEvolutionCloning->add($indicatorEvolutionCloning);
+
+        return $this;
+    }
+
+    /**
+     * Remove indicatorEvolutionCloning
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator $indicatorEvolutionCloning
+     */
+    public function removeIndicatorEvolutionCloning(\Pequiven\IndicatorBundle\Entity\Indicator $indicatorEvolutionCloning) {
+        $this->indicatorEvolutionCloning->removeElement($indicatorEvolutionCloning);
+    }
+
+    /**
+     * Get indicatorEvolutionCloning
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getindIcatorEvolutionCloning() {
+        return $this->indicatorEvolutionCloning;
+    }
+
+
+
 }
