@@ -258,7 +258,7 @@ class ArrangementProgramManager implements ContainerAwareInterface {
             }
         }
         
-        if($user->getId() == 1 || $user->getId() == 137){
+        if($user->getId() == 1){
             $valid = true;
         }
 //        if($this->isGranted('ROLE_SEIP_PLANNING_OPERATION_ARRANGEMENT_PROGRAM_NOTIFY'))
