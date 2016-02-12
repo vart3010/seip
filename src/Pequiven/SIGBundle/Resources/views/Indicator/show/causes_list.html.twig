@@ -4,7 +4,7 @@
 
         <div class="block-title">
             <h3 class="ng-binding">{{ 'sig.causes_desviation'|trans ({}, 'messages') }}</h3>
-            {% if sumCause < 100 %}        
+            {% if sumCause < 100 and not indicator_sig.parentCloning %}        
                 <div class="button-group absolute-right compact">
                     <a class="button icon-list-add " href="" ng-click="loadTemplateCausesDesviation()" title="">{{ 'pequiven.add'|trans({},'messages')  }}</a>
                 </div>  
@@ -44,30 +44,19 @@
                                 {{ cause_data.createdBy.firstname }} {{ cause_data.createdBy.lastname }}
                                 <small class="tag">({{ cause_data.createdBy.username }})</small>
                             </td>
+                            {% if not indicator_sig.parentCloning %}
                             <td class="align-right vertical-center">
                                 <div >
                                     <span class="select compact">
                                         <a href class="select-value form-edit">{{ 'pequiven.actions'|trans({},'messages') }}</a>
                                         <span class="select-arrow"></span>
                                         <span class="drop-down">
-
-                                            {#<a href ng-click="loadTemplateCausesDesviation(cause_data)" class="button icon-pencil">{{ "pequiven.actions.edit"|trans({},"messages") }}</a>#}
-
                                             <a href ng-click="removeCausesEvolution(cause_data='{{ cause_data.id }}')" 
                                                class="button icon-cross-round">{{ "pequiven.actions.delete"|trans({},"messages") }}</a>
-                                            {#
-                                            <span ng-app class=" button icon-outbox" onClick="uploadFilePdf(this.id)" id="{$ cause_data.id $}" >{{ "pequiven.actions.upload_file"|trans({},"messages") }}
-                                                {% set data = cause_data.id %}
-                                            </span>
-        
-                                            {% if cause_data.valueCauseFile %}
-                                                <span ng-app ng-init="validLoad(cause_data.id)" class=" button icon-download" onClick="openFile(this.id)" id="open_{{ cause_data.id }}">{{ "pequiven.actions.download_file"|trans({},"messages") }}
-                                                </span>
-                                            {% endif %}#}
-
                                         </span>
                                     </span>
                             </td>
+                            {% endif %}
                         </tr>
                     </tbody>
                 {% endfor %}
