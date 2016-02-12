@@ -164,3 +164,10 @@ showButtonDownload:
     methods: [GET]
     options:
         expose: true
+        
+        
+getIndicatorPnr:
+    path: /indicatorPnr
+    defaults:
+        _controller: pequiven.controller.indicator:getIndicatorPnrAction
+       

@@ -159,7 +159,7 @@ class ReportTemplateController extends SEIPController {
      */
     public function loadAction(Request $request) {
         $dateString = null;
-        if ($this->getSecurityService()->isGranted(array('ROLE_SEIP_DATA_LOAD_CHANGE_DATE', 'ROLE_SEIP_OPERATION_LOAD_FIVE_DAYS','ROLE_SEIP_OPERATION_LOAD_QUARTER'))) {
+        if ($this->getSecurityService()->isGranted(array('ROLE_SEIP_DATA_LOAD_CHANGE_DATE', 'ROLE_SEIP_OPERATION_LOAD_FIVE_DAYS', 'ROLE_SEIP_OPERATION_LOAD_QUARTER'))) {
             $dateString = $request->get('dateNotification', null);
         }
         $plantReportToLoad = $request->get('plant_report', null);
@@ -292,33 +292,33 @@ class ReportTemplateController extends SEIPController {
         $daysMonth = cal_days_in_month(CAL_GREGORIAN, $monthActive, $year);
         $startDayMonth = "01/" . $monthActive . "/" . $year;
         $endDayMonth = $daysMonth . "/" . $monthActive . "/" . $year;
-        
+
         $periodActive = $this->getPeriodService()->getPeriodActive();
-        $yearPeriodSelected = date("Y",$periodActive->getDateStart()->getTimestamp());
-        
+        $yearPeriodSelected = date("Y", $periodActive->getDateStart()->getTimestamp());
+
         $startDateQuarter = $this->getTransfDate($fecha, -1);
         $endDateQuarter = $this->getTransfDate($fecha, -1);
-        
-        
+
+
         //Notificación por Trimestre del Período 2015
         $user = $this->getUser();
-        if(($quarterToLoad = $user->getQuarterToLoadOperationProduction()) > 0){
-            switch ($quarterToLoad){
+        if (($quarterToLoad = $user->getQuarterToLoadOperationProduction()) > 0) {
+            switch ($quarterToLoad) {
                 case 1:
-                    $startDateQuarter = "01/01/".$yearPeriodSelected;
-                    $endDateQuarter = "31/03/".$yearPeriodSelected;
+                    $startDateQuarter = "01/01/" . $yearPeriodSelected;
+                    $endDateQuarter = "31/03/" . $yearPeriodSelected;
                     break;
                 case 2:
-                    $startDateQuarter = "01/04/".$yearPeriodSelected;
-                    $endDateQuarter = "30/06/".$yearPeriodSelected;
+                    $startDateQuarter = "01/04/" . $yearPeriodSelected;
+                    $endDateQuarter = "30/06/" . $yearPeriodSelected;
                     break;
                 case 3:
-                    $startDateQuarter = "01/07/".$yearPeriodSelected;
-                    $endDateQuarter = "30/09/".$yearPeriodSelected;
+                    $startDateQuarter = "01/07/" . $yearPeriodSelected;
+                    $endDateQuarter = "30/09/" . $yearPeriodSelected;
                     break;
                 case 4:
-                    $startDateQuarter = "01/10/".$yearPeriodSelected;
-                    $endDateQuarter = "31/12/".$yearPeriodSelected;
+                    $startDateQuarter = "01/10/" . $yearPeriodSelected;
+                    $endDateQuarter = "31/12/" . $yearPeriodSelected;
                     break;
             }
         }
@@ -407,7 +407,7 @@ class ReportTemplateController extends SEIPController {
         //Obtenemos el producto
         $product = $em->getRepository("Pequiven\SEIPBundle\Entity\CEI\Product")->find($request->get("idProduct"));
 
-            //Obtenemos el Reporte del Producto
+        //Obtenemos el Reporte del Producto
         $productReportId = $request->get('idProductReport');
         $productReport = $this->container->get('pequiven.repository.product_report')->find($productReportId);
 
@@ -1074,12 +1074,12 @@ class ReportTemplateController extends SEIPController {
                 $plantReportId = (int) $formData['plantReport'];
             }
         }
-        
+
         $periodActive = $this->getPeriodService()->getPeriodActive();
-        $yearPeriodSelected = date("Y",$periodActive->getDateStart()->getTimestamp());
-        
-        $startDatePeriod = "01/01/".$yearPeriodSelected;
-        $endDatePeriod = "31/12/".$yearPeriodSelected;
+        $yearPeriodSelected = date("Y", $periodActive->getDateStart()->getTimestamp());
+
+        $startDatePeriod = "01/01/" . $yearPeriodSelected;
+        $endDatePeriod = "31/12/" . $yearPeriodSelected;
 
         $dateReport = new \DateTime(date("Y-m-d", strtotime("-1 day")));
 
@@ -1224,7 +1224,7 @@ class ReportTemplateController extends SEIPController {
                     'data' => $defaultShow,
                 ])
                 ->add('showPnr', 'checkbox', [
-         //           'label_attr' => array('class' => 'label bold'),
+                    //           'label_attr' => array('class' => 'label bold'),
                     'required' => false,
                     'translation_domain' => 'PequivenSEIPBundle',
                     'data' => $defaultShow,
@@ -1310,7 +1310,7 @@ class ReportTemplateController extends SEIPController {
         $arrayProduction = array();
         $totalProdPlan = 0.0;
         $totalProdReal = 0.0;
-        
+
         //RAWMATERIAL
         $arrayRawMaterial = array();
         $totalRawPlan = 0.0;
@@ -1582,7 +1582,6 @@ class ReportTemplateController extends SEIPController {
             $view->setData($data);
         } else {
 
-
             $productsReport = new \Doctrine\Common\Collections\ArrayCollection();
             $consumerPlanningServices = new \Doctrine\Common\Collections\ArrayCollection();
             $rawMaterialConsumptionPlannings = new \Doctrine\Common\Collections\ArrayCollection();
@@ -1675,6 +1674,7 @@ class ReportTemplateController extends SEIPController {
             $summaryProducctionTotals = array();
 
             $observations = array();
+            $arrayIdProducts = array();
 
             foreach ($productsReport as $productReport) {
 //PRODUCCTION DAY
@@ -1771,22 +1771,47 @@ class ReportTemplateController extends SEIPController {
 
 //RAW MATERIAL 
 //if ($productReport->getProduct()->getIsRawMaterial()) {
+
                 foreach ($productReport->getRawMaterialConsumptionPlannings() as $rawMaterial) {
                     if ($rawMaterial->getProduct()->getIsRawMaterial()) {
                         $rawMaterialResult = $rawMaterial->getSummary($dateReport);
-                        $arrayRawMaterial[] = array(
-                            "productName" => $rawMaterial->getProduct()->getName() . " (" . $rawMaterial->getProduct()->getProductUnit()->getUnit() . ")",
-                            "plan" => number_format($rawMaterialResult["total_day_plan"], 2, ',', '.'),
-                            "real" => number_format($rawMaterialResult["total_day"], 2, ',', '.'),
-                            "plan_month" => number_format($rawMaterialResult["total_month_plan"], 2, ',', '.'),
-                            "real_month" => number_format($rawMaterialResult["total_month"], 2, ',', '.'),
-                            "plan_year" => number_format($rawMaterialResult["total_year_plan"], 2, ',', '.'),
-                            "real_year" => number_format($rawMaterialResult["total_year"], 2, ',', '.')
-                        );
+                        $idProduct = $rawMaterial->getProduct()->getId();
+
+//                        if (!in_array($idProduct, $arrayIdProducts)) {
+//                            $arrayIdProducts[] = $idProduct;
+
+                            $arrayRawMaterial[] = array(
+                                "id" => $rawMaterial->getProduct()->getId(),
+                                "productName" => $rawMaterial->getProduct()->getName() . " (" . $rawMaterial->getProduct()->getProductUnit()->getUnit() . ")",
+                                "plan" => number_format($rawMaterialResult["total_day_plan"], 2, ',', '.'),
+                                "real" => number_format($rawMaterialResult["total_day"], 2, ',', '.'),
+                                "plan_month" => number_format($rawMaterialResult["total_month_plan"], 2, ',', '.'),
+                                "real_month" => number_format($rawMaterialResult["total_month"], 2, ',', '.'),
+                                "plan_year" => number_format($rawMaterialResult["total_year_plan"], 2, ',', '.'),
+                                "real_year" => number_format($rawMaterialResult["total_year"], 2, ',', '.')
+                            );
+//                        } else {
+//                            $indice = array_search($idProduct, $arrayIdProducts);
+//                            //var_dump($indice);
+//                            
+//                            $arrayRawMaterial[$indice] = array(
+//                                "id" => $rawMaterial->getProduct()->getId(),
+//                                "productName" => $rawMaterial->getProduct()->getName() . " (" . $rawMaterial->getProduct()->getProductUnit()->getUnit() . ")",
+//                                "plan" => number_format($arrayRawMaterial[$indice]["plan"] + $rawMaterialResult["total_day_plan"], 2, ',', '.'),
+//                                "real" => number_format($rawMaterialResult["total_day"], 2, ',', '.'),
+//                                "plan_month" => number_format($rawMaterialResult["total_month_plan"], 2, ',', '.'),
+//                                "real_month" => number_format($rawMaterialResult["total_month"], 2, ',', '.'),
+//                                "plan_year" => number_format($rawMaterialResult["total_year_plan"], 2, ',', '.'),
+//                                "real_year" => number_format($rawMaterialResult["total_year"], 2, ',', '.')
+//                            );
+//                        }
                     }
                 }
 //}
             }
+
+//            var_dump($arrayRawMaterial);
+//            die();
 //CONSUME SERVICES
 //            $totalConsumerServices = array();
             if ($showDay) {
@@ -1922,7 +1947,11 @@ class ReportTemplateController extends SEIPController {
                 $varDay = $dayPlan - $dayReal;
             }
             if ($dayReal != 0) {
-                $ejecutionDay = ($dayReal * 100) / $dayPlan;
+                if ($dayPlan <= 0) {
+                    $ejecutionDay = 0;
+                } else {
+                    $ejecutionDay = ($dayReal * 100) / $dayPlan;
+                }
             } else {
                 $ejecutionDay = 0;
             }
@@ -3103,7 +3132,7 @@ class ReportTemplateController extends SEIPController {
         $totalDay = array();
         $totalMonth = array();
         $totalYear = array();
-        
+
         $totalDayPlan = array();
         $totalMonthPlan = array();
         $totalYearPlan = array();
@@ -3126,7 +3155,7 @@ class ReportTemplateController extends SEIPController {
 
 
 
-        return $this->getArrayTable($consumerPlanning, $dateReport, $productos, $idsPlanta, $totalDay, $totalMonth, $totalYear,$totalDayPlan,$totalMonthPlan,$totalYearPlan);
+        return $this->getArrayTable($consumerPlanning, $dateReport, $productos, $idsPlanta, $totalDay, $totalMonth, $totalYear, $totalDayPlan, $totalMonthPlan, $totalYearPlan);
     }
 
     public function getDataUnrealizedProduction($productsReport, $dateReport) {
