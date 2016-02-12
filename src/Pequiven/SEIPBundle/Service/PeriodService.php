@@ -242,7 +242,7 @@ class PeriodService extends ContainerAware
 //                }
 //            }
 //        }
-        if(!$period && $type == \Pequiven\SEIPBundle\Entity\Period::VIEW_ALL_PERIODS){
+        if(!$period && (($type == \Pequiven\SEIPBundle\Entity\Period::VIEW_ALL_PERIODS)||($type == \Pequiven\SEIPBundle\Entity\Period::VIEW_ONLY_PERIOD_ACTIVE))){
             $period = $this->getUser()->getPeriod();
         }
         if(!$period){
