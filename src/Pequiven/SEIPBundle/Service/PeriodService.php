@@ -204,6 +204,22 @@ class PeriodService extends ContainerAware
         
         return $result;
     }
+    /**
+     * Retorna si se encuetra habilitada la carga de grupos de productos 
+     * @return boolean
+     */
+    function isAllowPlanningGroupProduct()
+    {
+        $result = false;
+        $period = $this->getPeriodActive();
+        $now = new \DateTime();
+        
+        if($period->getIsLoadGroupProductEnabled() === true && $now >= $period->getDateStartLoadGroupProduct() && $now <= $period->getDateEndLoadGroupProduct()){
+            $result = true;
+        }
+        
+        return $result;
+    }
     
     /**
      * Retorna el periodo activo

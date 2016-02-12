@@ -14,6 +14,9 @@
 {%  set mes  = 'pequiven_seip.month.' ~ unrealized_production.month %}
 
 {% block body %}
+    
+    {% set daysMonth = causeFailService.getDaysMonth(unrealized_production) %}
+
     <fieldset class="fieldset">
         <legend class="legend">{{ 'pequiven_seip.product_report.product_detail_daily_month'|trans }}</legend>
         <div class="columns">
@@ -57,6 +60,51 @@
             </div>
         </div>
     </fieldset>
+                
+    <fieldset class="fieldset">
+        <legend class="legend">Días Diferentes</legend>
+        
+        <div class="columns">
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+            	<p class="inline-label">
+                    <p>
+                        <a href="" id="plusDiv" onclick="showDiv()"><i class="fa fa-plus fa-lg"></i> Hay {{ numDaysDifferent }} días diferentes</a>
+                        <a href="" id="minusDiv" onclick="hideDiv()" style='display:none;'><i class="fa fa-minus fa-lg"></i> Hay {{ numDaysDifferent }} días diferentes</a>
+                    </p>
+                    <p class="inline-label" id="differentDays" style='display:none;'>
+                        <label class="label"></label>
+                        <div class="columns" id="titleDifferentDays" style="display:none;">
+                            <div class="new-row-mobile two-columns">
+                                <b>Día</b>
+                            </div>
+                            <div class="new-row-mobile two-columns">
+                                <b>Cargado</b>
+                            </div>
+                            <div class="new-row-mobile two-columns">
+                                <b>Clasificado</b>
+                            </div>
+                        </div>
+                        {% for i in 1..daysMonth %}
+                            {% if arrayDays[i] == 0 %}
+                                {% set nameMethod = 'getDay'~i %}
+                            <div class="columns" id="contentDifferentDays_{{i}}" style="display: none;">
+                                <div class="new-row-mobile two-columns">
+                                    <a href="">{{i}}:</a>
+                                </div>
+                                <div class="new-row-mobile two-columns">
+                                    {{arrayDetailDays[i]}}
+                                </div>
+                                <div class="new-row-mobile two-columns">
+                                    {{ arrayTotalDays[i] }}
+                                </div>
+                            </div>
+                            {% endif %}
+                        {% endfor %}
+                    </p>
+                </p>
+            </div>
+        </div>
+    </fieldset>
 
     <fieldset class="fieldset">
         <legend class="legend">{{ 'pequiven_seip.product_report.unrealized_production.unrealized_production'|trans }}</legend>
@@ -68,7 +116,7 @@
                 <li><a style="font-weight: bold;" href="#tab-4">{{ "pequiven_seip.product_report.unrealized_production.materiaPrimaExt"|trans }}</a></li>
             </ul>
             {#            {% set causes = causeFailService.getFailsCause(unrealized_production) %}#}
-            {% set daysMonth = causeFailService.getDaysMonth(unrealized_production) %}
+
             <div class="tabs-content">
                 <div id="tab-1" class="with-padding">
                     <div class="columns">
@@ -248,18 +296,46 @@
                                 </div>
                             </div>
                         {% else %}
-                           <div class="new-row twelve-columns empty_row" align="center">                                 
-                                <br>No hay PNR por Materia Prima Externa                                
+                           <div class="new-row twelve-columns empty_row" align="center">
+                                <br>No hay PNR por Materia Prima Externa
                             </div>
                         {% endif %}
                     </div>
-                </div> 
+                </div>
             </div>
         </div>
     </fieldset>
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}
+    
+    <script type="text/javascript">
+        var daysMonth = {{ causeFailService.getDaysMonth(unrealized_production) }};
+        var arrayDays = {{ (arrayDays|json_encode()|raw) }};
+        function showDiv(){
+            document.getElementById('differentDays').style.display = 'block';
+            document.getElementById('titleDifferentDays').style.display = 'block';
+            for (i = 1; i <= daysMonth; i++) {
+                if (arrayDays[i] == 0){
+                    document.getElementById('contentDifferentDays_'+i).style.display = 'block';
+                }
+            }
+            document.getElementById('plusDiv').style.display = 'none';
+            document.getElementById('minusDiv').style.display = 'block';
+        }
+        function hideDiv(){
+            document.getElementById('differentDays').style.display = 'none';
+            document.getElementById('titleDifferentDays').style.display = 'none';
+            for (i = 1; i <= daysMonth; i++) {
+                if (arrayDays[i] == 0){
+                    document.getElementById('contentDifferentDays_'+i).style.display = 'none';
+                }
+            }
+            document.getElementById('plusDiv').style.display = 'block';
+            document.getElementById('minusDiv').style.display = 'none';
+        }
+    </script>
+    
     <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/fusioncharts.js') }}"></script>
     <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/themes/fusioncharts.theme.fint.js') }}"></script>
 {% endblock %}

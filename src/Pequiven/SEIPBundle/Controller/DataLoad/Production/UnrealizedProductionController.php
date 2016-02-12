@@ -127,10 +127,51 @@ class UnrealizedProductionController extends SEIPController {
 
         $datosServicesExternal = array("data" => $causeFailService->getArrayTotals($resource, $causes["TYPE_FAIL_EXTERNAL"], $failsNames[1]));
         $datacharExternal = $causeFailService->generatePieTotals($resource, $datosServicesExternal);
+        
+        $daysOfMonth = $causeFailService->getDaysMonth($resource);
+        
+        $arrayTotalDays = array();
+        $arrayDays = array();
+        $arrayDetailDays = array();
+        for ($i = 1;$i <= $daysOfMonth; $i++){
+            $arrayTotalDays[$i] = 0.0;
+            $arrayDays[$i] = 0;
+        }
+        //SUMAMOS LAS INTERNAS Y EXTERNAS
+        for ($i = 1; $i <= $daysOfMonth; $i++){
+            $arrayTotalDays[$i] = $arrayTotalDays[$i] + $causes["TYPE_FAIL_INTERNAL"]["total"][$i] + $causes["TYPE_FAIL_EXTERNAL"]["total"][$i];
+        }
+        //SUMAMOS LAS INTERNAS POR MP
+        if(isset($mp["getInternalCausesMp"])){
+            for ($i = 1; $i <= $daysOfMonth; $i++){
+                $arrayTotalDays[$i] = $arrayTotalDays[$i] + $mp["getInternalCausesMp"]["total"][$i];
+            }
+        }
+        //SUMAMOS LAS EXTERNAS POR MP
+        if(isset($mp["getExternalCausesMp"])){
+            for ($i = 1; $i <= $daysOfMonth; $i++){
+                $arrayTotalDays[$i] = $arrayTotalDays[$i] + $mp["getExternalCausesMp"]["total"][$i];
+            }
+        }
+        
+        for ($i = 1; $i <= $daysOfMonth; $i++){
+            $nameMethod = 'getDay'.$i;
+            $arrayDetailDays[$i] = $resource->{$nameMethod}();
+            if($arrayTotalDays[$i] == $resource->{$nameMethod}()){
+                $arrayDays[$i] = 1;
+            }
+        }
+//        var_dump($arrayTotalDays[30]);var_dump($resource->getDay30());die();
+//        var_dump($arrayDays);die();
+        
+        $numDaysDifferent = 0;
+        for($i = 1; $i<= $daysOfMonth; $i++){
+            if($arrayDays[$i] == 0){
+                $numDaysDifferent++;
+            }
+        }
 
-
-        $mp = $causeFailService->getFailsCauseMp($resource);
-//        var_dump($mp);die();
+//        $mp = $causeFailService->getFailsCauseMp($resource);
         $datacharInternalMp = $datacharExternalMp = "";
         if (count($mp) > 0) {
             $InternalCategoriesMp = array();
@@ -174,6 +215,9 @@ class UnrealizedProductionController extends SEIPController {
                 }
             }
         }
+        
+//        var_dump($arrayDays);die();
+        
         $view = $this
                 ->view()
                 ->setTemplate($this->config->getTemplate('show.html'))
@@ -182,6 +226,10 @@ class UnrealizedProductionController extends SEIPController {
             "internalCauses" => $failsNames[0],
             "externalCauses" => $failsNames[1],
             "causeFailService" => $causeFailService,
+            "arrayDays" => $arrayDays,
+            "arrayTotalDays" => $arrayTotalDays,
+            "arrayDetailDays" => $arrayDetailDays,
+            "numDaysDifferent" => $numDaysDifferent,
             "causes" => $causes,
             "mp" => $mp,
             "dataInternal" => json_encode($datacharInternal),

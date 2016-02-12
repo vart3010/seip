@@ -7,7 +7,7 @@
             ({{ totalGroups|length }})
         </h3>
         <div class="button-group absolute-right compact">
-            {% if periodService().isAllowPlanningReport %}
+            {% if periodService().isAllowPlanningGroupProduct %}
                 <a class="button icon-list-add" href="{{ path('pequiven_product_report_group_create',{plantReport: plant_report.id}) }}">{{ 'pequiven.add'|trans({},'messages') }}</a>
             {% endif %}
         </div>
