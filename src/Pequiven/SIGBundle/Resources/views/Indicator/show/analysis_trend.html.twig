@@ -11,7 +11,7 @@
                     <a href="javascript:void(0);" class="button icon-gear with-tooltip" title="Other actions"></a>
                     <a href="javascript:void(0);" class="button icon-trash with-tooltip confirm" title="Delete"></a>
                 </div>#}
-            {% else %}
+            {% elseif not indicator_sig.parentCloning %}
                 <div class="button-group absolute-right compact">
                     <a class="button icon-list-add " href="" ng-click="loadTemplateAnalysisTrend()" title="">{{ 'pequiven.add'|trans({},'messages') }}&nbsp;</a>
                 </div>
@@ -35,7 +35,7 @@
                         <td align="justify">
                             {{ data.description }}
                         </td> 
-                        {% if is_granted('ROLE_SEIP_SIG_EVOLUTION_DELETE_TREND_ANALYSIS') %}  
+                        {% if is_granted('ROLE_SEIP_SIG_EVOLUTION_DELETE_TREND_ANALYSIS') and not indicator_sig.parentCloning %}  
                             <th class="align-right vertical-center">                          
                                 <span class="select compact">
                                     <a href class="select-value form-edit">{{ 'pequiven.actions'|trans({},'messages') }}</a>

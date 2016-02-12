@@ -116,18 +116,25 @@ class IndicatorSigController extends ResourceController {
      * @return RedirectResponse|Response
      */
     public function evolutionAction(Request $request) {
+        
         $resource = $this->findOr404($request);
-
         $form = $this->getForm($resource);
 
-        $sumCause = 0; //Declaración de Variable
+        $sumCause = 0; $typeObject = 1;
 
         $idIndicator = $request->get('id');
-        $typeObject = 1;
+
+        $indicator = $this->get('pequiven.repository.indicator')->find($idIndicator); //Obtenemos el indicador        
+        $indicatorBase = $indicator;
+        //Seteo de Indicador a clonar
+        if ($indicator->getParentCloning()) {
+            $indicator = $indicator->getParentCloning();    
+        }
+        
+        $idIndicator = $indicator->getId();
 
         $month = $request->get('month'); //El mes pasado por parametro
-
-        $data = $this->findEvolutionCause($request, $typeObject); //Carga la data de las causas y sus acciones relacionadas
+        $data = $this->findEvolutionCause($indicator, $request); //Carga la data de las causas y sus acciones relacionadas
        
         //Validación de que el mes pasado este entre los validos
         if ($month > 12) {
@@ -141,7 +148,6 @@ class IndicatorSigController extends ResourceController {
         $uploadFile = $request->get("uploadFile"); //Recibiendo archivo
         //SI SE SUBIO EL ARCHIVO SE PROCEDE A GUARDARLO
         if ($uploadFile != null) {
-
             $band = false;
             //VALIDACION QUE SEA UN ARCHIVO PERMITIDO
             foreach ($request->files as $file) {
@@ -158,14 +164,13 @@ class IndicatorSigController extends ResourceController {
         }
         //Url export
         $urlExportFromChart = $this->generateUrl('pequiven_indicator_evolution_export', array('id' => $idIndicator, 'month' => $month, 'typeObj' => 1));
+
         //Carga de data de Indicador para armar grafica
         $response = new JsonResponse();
 
         $indicatorService = $this->getIndicatorService(); //Obtenemos el servicio del indicador
 
-        $indicator = $this->get('pequiven.repository.indicator')->find($idIndicator); //Obtenemos el indicador
-
-        $dataChart = $indicatorService->getDataChartOfIndicatorEvolution($indicator,$urlExportFromChart, array('withVariablesRealPLan' => true)); //Obtenemos la data del gráfico de acuerdo al indicador
+        $dataChart = $indicatorService->getDataChartOfIndicatorEvolution($indicatorBase,$urlExportFromChart, array('withVariablesRealPLan' => true)); //Obtenemos la data del gráfico de acuerdo al indicador
         //Carga de los datos de la grafica de las Causas de Desviación
         $dataCause = $indicatorService->getDataChartOfCausesIndicatorEvolution($indicator, $month, $urlExportFromChart); //Obtenemos la data del grafico de las causas de desviación
 
@@ -454,8 +459,8 @@ class IndicatorSigController extends ResourceController {
      * @return \Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionCauses
      * @throws type
      */
-    private function findEvolutionCause(Request $request) {
-        $id = $request->get('id');
+    private function findEvolutionCause($indicator, $request) {
+        $id = $indicator->getId();
         $typeObject = $request->get('typeObj');
 
         if ($typeObject === NULL) {
@@ -470,6 +475,7 @@ class IndicatorSigController extends ResourceController {
         $opc = false;
         $idAction = $actionResult = 0;
         $idCons = [0];
+
         //$results = $this->get('pequiven.repository.sig_causes_report_evolution')->findBy(array('indicator' => $idIndicator,'month'=> $month));
         if ($typeObject == 1) {
             $results = $this->get('pequiven.repository.sig_causes_report_evolution')->findBy(array('indicator' => $id));
@@ -499,7 +505,6 @@ class IndicatorSigController extends ResourceController {
 
         //Carga de las acciones para sacar la verificaciones realizadas
         if ($action) {
-
             foreach ($action as $value) {
                 $relation = $value->getRelactionValue();
                 foreach ($relation as $value) {
@@ -514,7 +519,6 @@ class IndicatorSigController extends ResourceController {
             }
             $actionResult = $this->get('pequiven.repository.sig_action_indicator')->findBy(array('id' => $idCons));
         }
-
 //        $actionsValues = EvolutionActionValue::getActionValues($idCons, $month);          
         $actionsValues = $this->get('pequiven.repository.sig_action_value_indicator')->findBy(array('actionValue' => $idCons, 'month' => $month));
         $cant = count($actionResult);
@@ -523,19 +527,15 @@ class IndicatorSigController extends ResourceController {
             $idAction = null;
         }
         if ($typeObject == 1) {
-
             $verification = $this->get('pequiven.repository.sig_action_verification')->findBy(array('indicator' => $id, 'month' => $month));
         } elseif ($typeObject == 2) {
-
             $verification = $this->get('pequiven.repository.sig_action_verification')->findBy(array('arrangementProgram' => $id, 'month' => $month));
         }
 
         //Carga de array con la data
         $data = [
-
             'action' => $actionResult, //Pasando la data de las acciones si las hay
-            'verification' => $verification, //Pasando la data de las verificaciones
-            //'results'     => $results //Pasando la data de las causas si las hay
+            'verification' => $verification, //Pasando la data de las verificaciones            
             'actionValue' => $actionsValues,
             'cant' => $cant
         ];

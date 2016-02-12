@@ -101,6 +101,14 @@
                     </ul>
             </div>
         {% endif %}
+         {% if  indicator_sig.parentCloning %}
+            <div class="inline-label">
+                <label class="label">Informe de Evolución Clonado</label>
+                    <ul class="fa-ul">
+                        <li>{{ generateLink(indicator_sig.parentCloning) }}</li>
+                    </ul>
+            </div>
+        {% endif %}
         </div>            
             {% include 'PequivenSIGBundle:Template:base_month.html.twig' %}                         
 </fieldset>

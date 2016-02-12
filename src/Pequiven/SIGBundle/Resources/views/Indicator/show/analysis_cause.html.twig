@@ -1,9 +1,9 @@
 {% trans_default_domain 'PequivenSIGBundle' %}
 <div class="block">
-<div ng-controller="IndicatorSigEvolutionCauseController"> 
-    <div class="block-title">
+    <div ng-controller="IndicatorSigEvolutionCauseController"> 
+        <div class="block-title">
         <h3 class="ng-binding">{{ 'sig.analysis_causes'|trans ({}, 'messages') }}</h3>
-        {% if analysis %}
+        {% if analysis and not indicator_sig.parentCloning %}
             {% for data in analysis %}
                 {% set dataAnalysis = data.id %}
                 <div class="button-group absolute-right compact">
@@ -28,13 +28,12 @@
                     </div>
                 {% endif %}
             {% endfor %}
-        {% else %}
-        <div class="button-group absolute-right compact">
-            <a class="button icon-list-add " href="" ng-click="loadTemplateCausesAnalysis()" title="">{{ 'pequiven.add'|trans({},'messages') }}&nbsp;</a>
-        </div>
+        {% elseif not indicator_sig.parentCloning %}
+            <div class="button-group absolute-right compact">
+                <a class="button icon-list-add " href="" ng-click="loadTemplateCausesAnalysis()" title="">{{ 'pequiven.add'|trans({},'messages') }}&nbsp;</a>
+            </div>
         {% endif %}
     </div>
-
     <div class="with-padding">
         {% set colspan = 5 %}
         <table class="simple-table responsive-table tables-extras" id="sorting-example2">
@@ -51,7 +50,7 @@
                     <td align="justify">
                         {{ data.description }}
                     </td>
-                    {% if is_granted('ROLE_SEIP_SIG_EVOLUTION_DELETE_CAUSE_ANALYSIS') %}  
+                    {% if is_granted('ROLE_SEIP_SIG_EVOLUTION_DELETE_CAUSE_ANALYSIS') and not indicator_sig.parentCloning %}  
                         <th class="align-right vertical-center">                          
                             <span class="select compact">
                             <a href class="select-value form-edit">{{ 'pequiven.actions'|trans({},'messages') }}</a>
