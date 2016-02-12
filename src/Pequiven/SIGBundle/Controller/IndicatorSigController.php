@@ -370,7 +370,7 @@ class IndicatorSigController extends ResourceController {
     }
 
     /**
-     * Retorna el formulario de Verificación del Plan de Acción
+     * Retorna el formulario de configuracion de la grafica del infome de evolución
      * 
      * @param Request $request
      * @return type
@@ -400,6 +400,46 @@ class IndicatorSigController extends ResourceController {
         $view = $this
             ->view()
             ->setTemplate($this->config->getTemplate('form/form_config_chart.html'))
+            ->setTemplateVar($this->config->getPluralResourceName())
+            ->setData(array(                
+                'form' => $form->createView(),
+            ))
+        ;
+        $view->getSerializationContext()->setGroups(array('id','api_list'));
+        return $view;
+    }
+
+    /**
+     * Retorna el formulario de Carga de Indicador al que se clonara el informe de evolución
+     * 
+     * @param Request $request
+     * @return type
+     */
+    function getFormCloningAction(Request $request)
+    {
+        $id = $request->get('id');        
+        //$typeObject = $request->get('typeObj');
+        //$month = $request->get('evolutiontrend')['month'];//Carga de Mes pasado        
+        
+        $indicator = new indicator();
+        $form  = $this->createForm(new IndicatorConfigSigType(), $indicator);
+        
+        if ($request->get('configSig')) {
+            $em = $this->getDoctrine()->getManager();
+            $indicatorRel = $this->get('pequiven.repository.sig_indicator')->find($id);
+            
+            $medition = $request->get('configSig')['indicatorSigMedition'];
+
+            $indicatorRel->setIndicatorSigMedition($medition);
+            $em->flush();
+
+            $this->get('session')->getFlashBag()->add('success', "Configuración de Medición Cargada Correctamente");
+            die();
+        }
+
+        $view = $this
+            ->view()
+            ->setTemplate($this->config->getTemplate('form/form_cloning.html'))
             ->setTemplateVar($this->config->getPluralResourceName())
             ->setData(array(                
                 'form' => $form->createView(),

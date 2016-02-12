@@ -2163,6 +2163,21 @@ angular.module('seipModule.controllers', [])
                     $scope.openModalAuto();
                 }
             };
+            //Carga el formulario para clonar informe de evolucion
+            $scope.loadTemplateCloning = function (resource) {
+                $scope.initFormCloning(resource);
+                if (isInit == false) {
+                    isInit = true;
+                }
+                $scope.templateOptions.setTemplate($scope.templates[0]);
+                $scope.templateOptions.setParameterCallBack(resource);                
+                if (resource) {
+                    $scope.templateOptions.enableModeEdit();
+                    $scope.openModalAuto();
+                } else {
+                    $scope.openModalAuto();
+                }
+            };
             //Añadir Causa de Desviación
             var addConfig = function (save, successCallBack) {
                 var formConfig = angular.element('#form_config_sig');
@@ -2231,6 +2246,31 @@ angular.module('seipModule.controllers', [])
                 $scope.templates = [
                     {
                         name: 'Configuración Gráfica Informe de Evolución',
+                        url: url,
+                        confirmCallBack: confirmCallBack,
+                    }
+                ];
+                $scope.templateOptions.setTemplate($scope.templates[0]);
+            };
+
+            //Formulario Cloning
+            $scope.initFormCloning = function (resource) {
+
+                var d = new Date();
+                var numero = d.getTime();
+                $scope.setHeight(350);                
+
+                var parameters = {
+                    id: $scope.id_indicator,
+                    _dc: numero
+                };
+                if (resource) {
+                    parameters.id = resource.id;
+                }
+                var url = Routing.generate('pequiven_indicator_clonig_data_evolution', parameters);
+                $scope.templates = [
+                    {
+                        name: 'Clonar Informe de Evolución',
                         url: url,
                         confirmCallBack: confirmCallBack,
                     }
