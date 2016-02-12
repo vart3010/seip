@@ -16,13 +16,15 @@ class EvolutionIndicatorCloningType extends AbstractType
      * @param array $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
-    {
+    {   
+        $period = $this->period;
+
         $builder            
             ->add('parentCloning', null, array(
-                    'query_builder' => function(\Pequiven\IndicatorBundle\Repository\IndicatorRepository $repository) {
-                        return $repository->getLastPeriod(1);
+                    'query_builder' => function(\Pequiven\IndicatorBundle\Repository\IndicatorRepository $repository) use($period){
+                        return $repository->getLastPeriod($period);
                     },
-                    'label' => 'Padre a Clonar Informe de Evolución',
+                    'label' => 'Padre a Clonar',
                     'label_attr' => array('class' => 'label'),
                     'attr' => array(
                         'class' => "input-xlarge select2",
@@ -51,5 +53,12 @@ class EvolutionIndicatorCloningType extends AbstractType
     public function getName()
     {
         return 'indicatoCloning';
+    }
+
+    protected $period;    
+    
+    public function __construct ($period)
+    {
+        $this->period = $period;               
     }
 }

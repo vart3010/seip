@@ -2221,10 +2221,58 @@ angular.module('seipModule.controllers', [])
                     location.reload();
                 }
             };
+
+            //Añadir padre cloning
+            var addCloning = function (save, successCallBack) {
+                var formConfig = angular.element('#form_cloning');
+                var formData = formConfig.serialize();
+                if (save == undefined) {
+                    var save = false;
+                }
+                if (save == true) {
+                    var url = Routing.generate('pequiven_indicator_clonig_data_evolution', {id: $scope.id_indicator});
+                }
+                notificationBarService.getLoadStatus().loading();
+                return $http({
+                    method: 'POST',
+                    url: url,
+                    data: formData,
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'}  // set the headers so angular passing info as form data (not request payload)
+                }).success(function (data) {
+                    $scope.templateOptions.setVar("form", {errors: {}});                    
+                    if (successCallBack) {
+                        successCallBack(data);
+                    }
+                    notificationBarService.getLoadStatus().done();
+                    //$timeout(callAtTimeout, 3000);
+                    //location.reload();
+                    return true;
+                }).error(function (data, status, headers, config) {
+                    $scope.templateOptions.setVar("form", {errors: {}});
+                    if (data.errors) {
+                        if (data.errors.errors) {
+                            $.each(data.errors.errors, function (index, value) {
+                                notifyService.error(Translator.trans(value));
+                            });
+                        }
+                        $scope.templateOptions.setVar("form", {errors: data.errors.children});
+                    }
+                    notificationBarService.getLoadStatus().done();
+                    return false;
+                });
+                function callAtTimeout() {
+                    location.reload();
+                }
+            };
             $scope.templateOptions.setVar('addConfig', addConfig);
             var confirmCallBack = function () {
-                addConfig(true, function (data) {
-                    $scope.indicator = data.indicator;
+                addConfig(true, function (data) {                   
+                });
+                return true;
+            };
+            $scope.templateOptions.setVar('addCloning', addCloning);
+            var confirmCallBackCloning = function () {
+                addCloning(true, function (data) {                   
                 });
                 return true;
             };
@@ -2272,7 +2320,7 @@ angular.module('seipModule.controllers', [])
                     {
                         name: 'Clonar Informe de Evolución',
                         url: url,
-                        confirmCallBack: confirmCallBack,
+                        confirmCallBack: confirmCallBackCloning,
                     }
                 ];
                 $scope.templateOptions.setTemplate($scope.templates[0]);

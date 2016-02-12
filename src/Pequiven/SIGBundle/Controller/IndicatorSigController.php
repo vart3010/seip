@@ -16,6 +16,7 @@ use Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionTrend;
 use Pequiven\IndicatorBundle\Form\EvolutionIndicator\EvolutionTrendType;
 use Pequiven\IndicatorBundle\Form\EvolutionIndicator\IndicatorLastPeriodType;
 use Pequiven\IndicatorBundle\Form\EvolutionIndicator\IndicatorConfigSigType;
+use Pequiven\IndicatorBundle\Form\EvolutionIndicator\EvolutionIndicatorCloningType;
 
 /**
  * Controlador Informe de Evolución del Indicador
@@ -418,22 +419,20 @@ class IndicatorSigController extends ResourceController {
     function getFormCloningAction(Request $request)
     {
         $id = $request->get('id');        
-        //$typeObject = $request->get('typeObj');
-        //$month = $request->get('evolutiontrend')['month'];//Carga de Mes pasado        
-        
-        $indicator = new indicator();
-        $form  = $this->createForm(new IndicatorConfigSigType(), $indicator);
-        
-        if ($request->get('configSig')) {
-            $em = $this->getDoctrine()->getManager();
-            $indicatorRel = $this->get('pequiven.repository.sig_indicator')->find($id);
-            
-            $medition = $request->get('configSig')['indicatorSigMedition'];
+        $indicatorData = $this->get('pequiven.repository.sig_indicator')->find($id);                    
+        $period = $indicatorData->getPeriod()->getId();
 
-            $indicatorRel->setIndicatorSigMedition($medition);
+        $indicator = new indicator();
+        $form  = $this->createForm(new EvolutionIndicatorCloningType($period), $indicator);
+        
+        if ($request->get('indicatoCloning')['parentCloning']) {
+            $em = $this->getDoctrine()->getManager();            
+            $indicatorCloning = $this->get('pequiven.repository.sig_indicator')->find($request->get('indicatoCloning')['parentCloning']);                                
+
+            $indicatorData->setParentCloning($indicatorCloning);
             $em->flush();
 
-            $this->get('session')->getFlashBag()->add('success', "Configuración de Medición Cargada Correctamente");
+            $this->get('session')->getFlashBag()->add('success', "Datos Cargados Correctamente");
             die();
         }
 
