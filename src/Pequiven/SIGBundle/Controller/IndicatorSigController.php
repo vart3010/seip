@@ -129,9 +129,9 @@ class IndicatorSigController extends ResourceController {
         //Seteo de Indicador a clonar
         if ($indicator->getParentCloning()) {
             $indicator = $indicator->getParentCloning();    
+            $idIndicator = $indicator->getId();
         }
         
-        $idIndicator = $indicator->getId();
 
         $month = $request->get('month'); //El mes pasado por parametro
         $data = $this->findEvolutionCause($indicator, $request); //Carga la data de las causas y sus acciones relacionadas
@@ -163,7 +163,7 @@ class IndicatorSigController extends ResourceController {
             }
         }
         //Url export
-        $urlExportFromChart = $this->generateUrl('pequiven_indicator_evolution_export', array('id' => $idIndicator, 'month' => $month, 'typeObj' => 1));
+        $urlExportFromChart = $this->generateUrl('pequiven_indicator_evolution_export', array('id' => $indicatorBase->getId(), 'month' => $month, 'typeObj' => 1));
 
         //Carga de data de Indicador para armar grafica
         $response = new JsonResponse();
@@ -573,19 +573,14 @@ class IndicatorSigController extends ResourceController {
      */
     public function exportAction(Request $request) {
 
-        //$chartEvolution = $chartCause = "";
-
         $em = $this->getDoctrine()->getManager();
-        //$chart = $request->get('stream');
         $routing = $this->container->getParameter('kernel.root_dir')."/../web/php-export-handler/temp/*.png";
         if($request->isMethod('POST')){
           $fileSVG = $this->exportChrat($request);
         
-        }
-        
+        }        
         //Buscando los Archivos por Codigo
         $nameSVG = glob("$routing");
-
         $user = $this->getUser()->getId();//Id Usuario    
         $user = str_pad($user, 6,"0", STR_PAD_LEFT);
 
@@ -605,17 +600,23 @@ class IndicatorSigController extends ResourceController {
             $cont ++;
         }        
         
-        $dataAction = $this->findEvolutionCause($request); //Carga la data de las causas y sus acciones relacionadas
+        $id = $request->get('id'); //id         
+        $indicator = $this->get('pequiven.repository.indicator')->find($id); //Obtenemos el indicador
+        $indicatorBase = $indicator;
+
+        if ($indicator->getParentCloning()) {
+            $id = $indicator->getParentCloning()->getId();            
+            $indicator = $indicator->getParentCloning();
+        }
+
+        $dataAction = $this->findEvolutionCause($indicator, $request); //Carga la data de las causas y sus acciones relacionadas
         $month = $request->get('month'); //El mes pasado por parametro
         $typeObject = $request->get('typeObj'); //Tipo de objeto (1 = Indicador/2 = Programa G.) 
-        $id = $request->get('id'); //id 
         
         $font = "";
-        if ($typeObject == 1) {
-            $indicator = $this->get('pequiven.repository.indicator')->find($id); //Obtenemos el indicador
-            $name = $indicator->getRef() . ' ' . $indicator->getDescription(); //Nombre del Indicador
+        if ($typeObject == 1) {            
+            $name = $indicatorBase->getRef() . ' ' . $indicatorBase->getDescription(); //Nombre del Indicador
             $type = "indicator";
-
             //Relación - Objetivo
             foreach ($indicator->getObjetives() as $value) {
                 $objRel = $value->getDescription();
@@ -797,7 +798,7 @@ class IndicatorSigController extends ResourceController {
                 }
                 if ($i == 1) {
                     $totalStrategic++;
-                    if ($trendAnalysis) {
+                    if ($trendAnalysis or $valueIndicator->getParentCloning()) {
                         $dataStrategic = $dataStrategic + 1;                                    
                         $indicatorsStrategic[] = $valueIndicator;                    
                     }else{
@@ -805,7 +806,7 @@ class IndicatorSigController extends ResourceController {
                     }
                 }elseif ($i == 2) {
                     $totalTactic++;
-                    if ($trendAnalysis) {
+                    if ($trendAnalysis or $valueIndicator->getParentCloning()) {
                         $dataTactic = $dataTactic + 1;                                    
                         $indicatorsTactic[] = $valueIndicator;                                            
                     }else{
@@ -813,7 +814,7 @@ class IndicatorSigController extends ResourceController {
                     }
                 }elseif ($i == 3) {
                     $totalOperative++;
-                    if ($trendAnalysis) {
+                    if ($trendAnalysis or $valueIndicator->getParentCloning()) {
                         $dataOperative = $dataOperative + 1;                        
                         $indicatorsOperatives[] = $valueIndicator;                                            
                     }else{
