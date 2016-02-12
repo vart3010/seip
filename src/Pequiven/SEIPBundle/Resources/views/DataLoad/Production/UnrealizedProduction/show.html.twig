@@ -87,7 +87,7 @@
                         {% for i in 1..daysMonth %}
                             {% if arrayDays[i] == 0 %}
                                 {% set nameMethod = 'getDay'~i %}
-                            <div class="columns" id="contentDifferentDays" style="display: none;">
+                            <div class="columns" id="contentDifferentDays_{{i}}" style="display: none;">
                                 <div class="new-row-mobile two-columns">
                                     <a href="">{{i}}:</a>
                                 </div>
@@ -310,17 +310,27 @@
     {{ parent() }}
     
     <script type="text/javascript">
+        var daysMonth = {{ causeFailService.getDaysMonth(unrealized_production) }};
+        var arrayDays = {{ (arrayDays|json_encode()|raw) }};
         function showDiv(){
             document.getElementById('differentDays').style.display = 'block';
             document.getElementById('titleDifferentDays').style.display = 'block';
-            document.getElementById('contentDifferentDays').style.display = 'block';
+            for (i = 1; i <= daysMonth; i++) {
+                if (arrayDays[i] == 0){
+                    document.getElementById('contentDifferentDays_'+i).style.display = 'block';
+                }
+            }
             document.getElementById('plusDiv').style.display = 'none';
             document.getElementById('minusDiv').style.display = 'block';
         }
         function hideDiv(){
             document.getElementById('differentDays').style.display = 'none';
             document.getElementById('titleDifferentDays').style.display = 'none';
-            document.getElementById('contentDifferentDays').style.display = 'none';
+            for (i = 1; i <= daysMonth; i++) {
+                if (arrayDays[i] == 0){
+                    document.getElementById('contentDifferentDays_'+i).style.display = 'none';
+                }
+            }
             document.getElementById('plusDiv').style.display = 'block';
             document.getElementById('minusDiv').style.display = 'none';
         }
