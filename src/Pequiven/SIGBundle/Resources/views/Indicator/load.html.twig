@@ -48,53 +48,83 @@
 						</span>
 					</p>
                 </p>
+            </div>            
+            <div class="twelve-columns">
     			{% if data.dataIndicators[cont] != 0 %}
                 <p>
-					<a href="" id="plus_{{cont}}" onclick="show_{{cont}}()"><i class="fa fa-plus fa-lg"></i> Lista de {{ levels[cont] }}</a>
-					<a href="" id="minus_{{cont}}" onclick="hide_{{cont}}()" style='display:none;'><i class="fa fa-minus fa-lg"></i> Lista de {{ levels[cont] }}</a>
+					<a href="" id="plus_{{cont}}" onclick="show_{{cont}}()"><i class="fa fa-plus fa-lg"></i> {{ levels[cont] }} Cargados</a>
+					<a href="" id="minus_{{cont}}" onclick="hide_{{cont}}()" style='display:none;'><i class="fa fa-minus fa-lg"></i> {{ levels[cont] }} Cargados</a>
 				</p>
 	       		{% endif %}
-            </div>            
-            <div class="twelve-columns" id="indicatorList_{{ cont }}" style='display:none;'> 
-               <div class="panel panel-default">
-                    <div class="panel-heading">        
-                        <table id="indicator_{{ cont }}" class="table table-striped table-bordered" cellspacing="0" width="100%">          
-                            <thead>
-                                <tr>
-                                    <th>Indicadores Cargados</th>
-                                </tr>
-                            </thead>
-                            <tbody>  
-                                {% for dataIndicators in data.indicators[cont] %}
-                                    <tr> 
-                                        <td><a href="{{ path('pequiven_indicator_show', {'id' : dataIndicators.id}) }}">{{dataIndicators}}</a></td>       
+                <div class="" id="indicatorList_{{ cont }}" style='display:none;'> 
+                   <div class="panel panel-default">
+                        <div class="panel-heading">        
+                            <table id="indicator_{{ cont }}" class="table table-striped table-bordered" cellspacing="0" width="100%">          
+                                <thead>
+                                    <tr>
+                                        <th>Indicadores Cargados</th>
                                     </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>                                 
+                                </thead>
+                                <tbody>  
+                                    {% for dataIndicators in data.indicators[cont] %}
+                                        <tr> 
+                                            <td><a href="{{ path('pequiven_indicator_show', {'id' : dataIndicators.id}) }}">{{dataIndicators}}</a></td>       
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>                                 
+                </div>
+            </div>
+            <div class="twelve-columns">
+                {% if data.dataIndicators[cont] != 0 %}
+                <p>
+                    <a href="" id="plusIn_{{cont}}" onclick="showIn_{{cont}}()"><i class="fa fa-plus fa-lg"></i> {{ levels[cont] }} Sin Cargar</a>
+                    <a href="" id="minusIn_{{cont}}" onclick="hideIn_{{cont}}()" style='display:none;'><i class="fa fa-minus fa-lg"></i> {{ levels[cont] }} Sin Cargar</a>
+                </p>
+                {% endif %}
+                <div class="" id="indicatorListIn_{{ cont }}" style='display:none;'> 
+                   <div class="panel panel-default">
+                        <div class="panel-heading">        
+                            <table id="indicatorIn_{{ cont }}" class="table table-striped table-bordered" cellspacing="0" width="100%">          
+                                <thead>
+                                    <tr>
+                                        <th>Indicadores Sin Cargar</th>
+                                    </tr>
+                                </thead>
+                                <tbody>  
+                                    {% for dataIndicatorsIn in data.dataIndicatorsInLoad[cont] %}
+                                        <tr> 
+                                            <td><a href="{{ path('pequiven_indicator_show', {'id' : dataIndicatorsIn.id}) }}">{{dataIndicatorsIn}}</a></td>       
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>                                 
+                </div>
             </div>
 		</div>    
 		{% set cont = cont + 1 %}                  
 		{% endfor %} 
 </fieldset>
 
-<fieldset class="fieldset">
+{#<fieldset class="fieldset">
     <legend class="legend">Estadistica General&nbsp;</legend>
     <div class="columns">        	
         <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
         	{% for i in 1..4 %}
         	<p class="inline-label">  
         		<span class="label">
-        			{# <i class="fa fa-bar-chart fa-lg"></i> #}&nbsp; 
-        		</span>
+        			{# <i class="fa fa-bar-chart fa-lg"></i> #}
+        	{#	</span>
     			{{ data.dataGeneral[i] }}<br>
             </p>
 			{% endfor %}              	
     	</div>
     </div>
-</fieldset>
+</fieldset>#}
 
 {% endblock %}
 
@@ -143,6 +173,37 @@
             document.getElementById('plus_3').style.display = 'block';            
             document.getElementById('minus_3').style.display = 'none';
         }
+        //
+        function showIn_1(){
+            document.getElementById('indicatorListIn_1').style.display = 'block';            
+            document.getElementById('plusIn_1').style.display = 'none';            
+            document.getElementById('minusIn_1').style.display = 'block';            
+        }
+        function showIn_2(){
+            document.getElementById('indicatorListIn_2').style.display = 'block';            
+            document.getElementById('plusIn_2').style.display = 'none';            
+            document.getElementById('minusIn_2').style.display = 'block';            
+        }
+        function showIn_3(){
+            document.getElementById('indicatorListIn_3').style.display = 'block'; 
+            document.getElementById('plusIn_3').style.display = 'none';            
+            document.getElementById('minusIn_3').style.display = 'block';                       
+        }
+        function hideIn_1(){
+            document.getElementById('indicatorListIn_1').style.display = 'none';        
+            document.getElementById('plusIn_1').style.display = 'block';            
+            document.getElementById('minusIn_1').style.display = 'none';            
+        }
+        function hideIn_2(){         
+            document.getElementById('indicatorListIn_2').style.display = 'none'; 
+            document.getElementById('plusIn_2').style.display = 'block';            
+            document.getElementById('minusIn_2').style.display = 'none';           
+        }
+        function hideIn_3(){            
+            document.getElementById('indicatorListIn_3').style.display = 'none';
+            document.getElementById('plusIn_3').style.display = 'block';            
+            document.getElementById('minusIn_3').style.display = 'none';
+        }
     </script>
 
     <script src="{{  asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.progress-slider.js') }}"></script>
@@ -160,6 +221,9 @@
             $('#indicator_1').DataTable();
             $('#indicator_2').DataTable();
             $('#indicator_3').DataTable();
+            $('#indicatorIn_1').DataTable();
+            $('#indicatorIn_2').DataTable();
+            $('#indicatorIn_3').DataTable();
         } );
     </script>
 {% endblock %}
