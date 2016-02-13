@@ -1334,12 +1334,16 @@ class ReportTemplateController extends SEIPController {
         //COMPLEJOS CONSULTADOS
         $plants = array();
 
+
+
         $exportToPdf = $request->get('exportToPdf', false);
 
         if ($byRange === true) {
 
             $dateDesde = $dateFrom->format("U");
             $dateHasta = $dateEnd->format("U");
+
+            $arrayIdProductsByRange = array();
 
             foreach ($plantReports as $planReport) {
                 if (!in_array($plantReport->getReportTemplate()->getName(), $plants)) {
@@ -1403,9 +1407,7 @@ class ReportTemplateController extends SEIPController {
                     //CONSUMO DE MATERIA PRIMA
                     //VERIFICA SI EL PRODUCTO ES MATERIA PRIMA
                     $i = $dateDesde;
-//if ($productReport->getProduct()->getIsRawMaterial()) {
-//                    var_dump($i);
-//                    var_dump($dateHasta);
+
                     foreach ($productReport->getRawMaterialConsumptionPlannings() as $rawMaterial) {
                         $totalRawDayPlan = 0.0;
                         $totalRawDayReal = 0.0;
@@ -1421,19 +1423,27 @@ class ReportTemplateController extends SEIPController {
                                 $totalRawPlan += $rawMaterialResult["total_day_plan"];
                                 $totalRawReal += $rawMaterialResult["total_day"];
 
-
                                 $i = $i + 86400; //VOY RECORRIENDO DIA POR DIA
                             }
-//                            var_dump($rawMaterial->getProduct()->getName());
+                            $idProduct = $rawMaterial->getProduct()->getId();
 
+                            if (!in_array($idProduct, $arrayIdProductsByRange)) {
+                                $arrayIdProductsByRange[] = $idProduct;
 
-                            $arrayRawMaterial[] = array(
-                                "productName" => $rawMaterial->getProduct()->getName() . " (" . $rawMaterial->getProduct()->getProductUnit()->getUnit() . ")",
-                                "planRaw" => $totalRawDayPlan,
-                                "realRaw" => $totalRawDayReal
-                            );
+                                $arrayRawMaterial[] = array(
+                                    "productName" => $rawMaterial->getProduct()->getName() . " (" . $rawMaterial->getProduct()->getProductUnit()->getUnit() . ")",
+                                    "planRaw" => $totalRawDayPlan,
+                                    "realRaw" => $totalRawDayReal
+                                );
+                            } else {
+                                $indice = array_search($idProduct, $arrayIdProductsByRange);
+
+                                $arrayRawMaterial[$indice]["planRaw"] = $arrayRawMaterial[$indice]["planRaw"] + $totalRawDayPlan;
+                                $arrayRawMaterial[$indice]["realRaw"] = $arrayRawMaterial[$indice]["realRaw"] + $totalRawDayReal;
+                            }
                         }
                     }
+
 //                    $arrayRawMaterial[] = array(
 //                        "productName" => $productReport->getProduct()->getName() . " (" . $productReport->getProduct()->getProductUnit()->getUnit() . ")",
 //                        "planRaw" => $totalRawDayPlan,
@@ -1441,7 +1451,8 @@ class ReportTemplateController extends SEIPController {
 //                    );
 //}
                 }
-//                die();
+
+
                 //CONSUMO DE SERVICIOS
                 foreach ($planReport->getConsumerPlanningServices() as $consumerPlanningService) {
                     $i = $dateDesde;
@@ -1504,9 +1515,8 @@ class ReportTemplateController extends SEIPController {
                     $arrayInventory[] = array("productName" => $productReport->getProduct()->getName() . " (" . $productReport->getProduct()->getProductUnit()->getUnit() . ")", "total" => $Inventory["total_day"]);
                 }
             }
-
-
-
+//            var_dump($arrayRawMaterial);
+//            die();
 //TOTALES DE PRODUCCION
             $subTotalProdPlan = 0;
             if ($totalProdPlan > 0) {
@@ -1676,6 +1686,7 @@ class ReportTemplateController extends SEIPController {
             $observations = array();
             $arrayIdProducts = array();
 
+
             foreach ($productsReport as $productReport) {
 //PRODUCCTION DAY
                 $summaryDay = $productReport->getSummaryDay($dateReport, $typeReport);
@@ -1770,48 +1781,53 @@ class ReportTemplateController extends SEIPController {
                 );
 
 //RAW MATERIAL 
-//if ($productReport->getProduct()->getIsRawMaterial()) {
 
                 foreach ($productReport->getRawMaterialConsumptionPlannings() as $rawMaterial) {
                     if ($rawMaterial->getProduct()->getIsRawMaterial()) {
                         $rawMaterialResult = $rawMaterial->getSummary($dateReport);
                         $idProduct = $rawMaterial->getProduct()->getId();
 
-//                        if (!in_array($idProduct, $arrayIdProducts)) {
-//                            $arrayIdProducts[] = $idProduct;
+                        if (!in_array($idProduct, $arrayIdProducts)) {
+                            $arrayIdProducts[] = $idProduct;
 
                             $arrayRawMaterial[] = array(
                                 "id" => $rawMaterial->getProduct()->getId(),
                                 "productName" => $rawMaterial->getProduct()->getName() . " (" . $rawMaterial->getProduct()->getProductUnit()->getUnit() . ")",
-                                "plan" => number_format($rawMaterialResult["total_day_plan"], 2, ',', '.'),
-                                "real" => number_format($rawMaterialResult["total_day"], 2, ',', '.'),
-                                "plan_month" => number_format($rawMaterialResult["total_month_plan"], 2, ',', '.'),
-                                "real_month" => number_format($rawMaterialResult["total_month"], 2, ',', '.'),
-                                "plan_year" => number_format($rawMaterialResult["total_year_plan"], 2, ',', '.'),
-                                "real_year" => number_format($rawMaterialResult["total_year"], 2, ',', '.')
+                                "plan" => $rawMaterialResult["total_day_plan"],
+                                "real" => $rawMaterialResult["total_day"],
+                                "plan_month" => $rawMaterialResult["total_month_plan"],
+                                "real_month" => $rawMaterialResult["total_month"],
+                                "plan_year" => $rawMaterialResult["total_year_plan"],
+                                "real_year" => $rawMaterialResult["total_year"]
                             );
-//                        } else {
-//                            $indice = array_search($idProduct, $arrayIdProducts);
-//                            //var_dump($indice);
-//                            
-//                            $arrayRawMaterial[$indice] = array(
-//                                "id" => $rawMaterial->getProduct()->getId(),
-//                                "productName" => $rawMaterial->getProduct()->getName() . " (" . $rawMaterial->getProduct()->getProductUnit()->getUnit() . ")",
-//                                "plan" => number_format($arrayRawMaterial[$indice]["plan"] + $rawMaterialResult["total_day_plan"], 2, ',', '.'),
-//                                "real" => number_format($rawMaterialResult["total_day"], 2, ',', '.'),
-//                                "plan_month" => number_format($rawMaterialResult["total_month_plan"], 2, ',', '.'),
-//                                "real_month" => number_format($rawMaterialResult["total_month"], 2, ',', '.'),
-//                                "plan_year" => number_format($rawMaterialResult["total_year_plan"], 2, ',', '.'),
-//                                "real_year" => number_format($rawMaterialResult["total_year"], 2, ',', '.')
-//                            );
-//                        }
+                        } else {
+                            $indice = array_search($idProduct, $arrayIdProducts);
+
+                            //var_dump($rawMaterial->getProduct()->getName() . " | nuevo: " . $arrayRawMaterial[$indice]["real_year"] . "- suma: " . $rawMaterialResult["total_year"]);
+
+                            $arrayRawMaterial[$indice]["plan"] = $arrayRawMaterial[$indice]["plan"] + $rawMaterialResult["total_day_plan"];
+                            $arrayRawMaterial[$indice]["real"] = $arrayRawMaterial[$indice]["real"] + $rawMaterialResult["total_day"];
+                            $arrayRawMaterial[$indice]["plan_month"] = $arrayRawMaterial[$indice]["plan_month"] + $rawMaterialResult["total_month_plan"];
+                            $arrayRawMaterial[$indice]["real_month"] = $arrayRawMaterial[$indice]["real_month"] + $rawMaterialResult["total_month"];
+                            $arrayRawMaterial[$indice]["plan_year"] = $arrayRawMaterial[$indice]["plan_year"] + $rawMaterialResult["total_year_plan"];
+                            $arrayRawMaterial[$indice]["real_year"] = $arrayRawMaterial[$indice]["real_year"] + $rawMaterialResult["total_year"];
+                        }
                     }
                 }
-//}
             }
 
-//            var_dump($arrayRawMaterial);
-//            die();
+            $cont = 0;
+            foreach ($arrayRawMaterial as $rawMaterial) {
+                $arrayRawMaterial[$cont]["plan"] = number_format($rawMaterial["plan"], 2, ",", ".");
+                $arrayRawMaterial[$cont]["real"] = number_format($rawMaterial["real"], 2, ",", ".");
+                $arrayRawMaterial[$cont]["plan_month"] = number_format($rawMaterial["plan_month"], 2, ",", ".");
+                $arrayRawMaterial[$cont]["real_month"] = number_format($rawMaterial["real_month"], 2, ",", ".");
+                $arrayRawMaterial[$cont]["plan_year"] = number_format($rawMaterial["plan_year"], 2, ",", ".");
+                $arrayRawMaterial[$cont]["real_year"] = number_format($rawMaterial["real_year"], 2, ",", ".");
+                $cont++;
+            }
+
+
 //CONSUME SERVICES
 //            $totalConsumerServices = array();
             if ($showDay) {
