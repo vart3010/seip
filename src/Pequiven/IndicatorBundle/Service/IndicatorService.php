@@ -2333,6 +2333,7 @@ class IndicatorService implements ContainerAwareInterface {
 
             $childrens = $indicator->getChildrens();
             $variables = $formula->getVariables();
+            
 
             $labelsTypesOfCompanies = Indicator::getTypesOfCompanies();
 
@@ -2341,7 +2342,7 @@ class IndicatorService implements ContainerAwareInterface {
             $arrayVariables['PERIODO_ACTUAL'] = array('seriesname' => $indicator->getPeriod()->getName(), 'data' => array());
             $arrayVariables['PERIODO_ANTERIOR'] = array('seriesname' => $indicator->getPeriod()->getParent()->getName(), 'data' => array());
 
-            $arrayVarsSpecific = array("lesionados_con_tiempo_perdido" => true, "lesiones_con_tiempo_perdido" => true, "lesionados_sin_tiempo_perdido" => true, "dias_perdidos" => true);
+            $arrayVarsSpecific = array("lesionados_con_tiempo_perdido" => true, "lesiones_con_tiempo_perdido" => true, "lesionados_sin_tiempo_perdido" => true, "dias_perdidos" => true, "dias_perdidos_severidad" => true);
             $numberResults = $indicator->getFrequencyNotificationIndicator()->getNumberResultsFrequency();
 
             //Seteamos por defecto los valores por número de resultados totales
@@ -2349,8 +2350,10 @@ class IndicatorService implements ContainerAwareInterface {
                 $result['MATRIZ']['value'][$i] = 0.0;
                 $result['AFILIADA_MIXTA']['value'][$i] = 0.0;
                 $result['PERIODO_ACTUAL']['value'][$i] = 0.0;
+//                var_dump($result['PERIODO_ACTUAL']['value'][$i]);
                 $result['PERIODO_ANTERIOR']['value'][$i] = 0.0;
             }
+//            die();
 
             //Recorremos los hijos para acumular los valores por número de resultados totales
             foreach ($childrens as $children) {
