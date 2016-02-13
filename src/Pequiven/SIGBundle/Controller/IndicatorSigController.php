@@ -776,7 +776,7 @@ class IndicatorSigController extends ResourceController {
     }
 
     public function loadAction(Request $request){
-        
+
         $levels = [
             1 => "Indicadores Estratégicos",
             2 => "Indicadores Tácticos",
@@ -788,106 +788,107 @@ class IndicatorSigController extends ResourceController {
         $dataStrategicIn = $dataTacticIn = $dataOperativeIn = [];
         $indicatorsStrategic = $indicatorsTactic = $indicatorsOperatives = [];
         
-        for ($i=1; $i <= count($levels); $i++) { 
-            
-            $indicators = $this->get('pequiven.repository.indicator')->findQueryIndicatorValid($this->getPeriodService()->getPeriodActive(), $i);                                    
-            foreach ($indicators as $valueIndicator) {
-                $trendAnalysis = $this->get('pequiven.repository.sig_trend_report_evolution')->findBy(array('indicator' => $valueIndicator->getId(), /*'month' => 11,*/ 'typeObject' => 1));        
-                if ($trendAnalysis) {
-                    $trendData = $trendData + count($trendAnalysis);
-                }
-                if ($i == 1) {
-                    $totalStrategic++;
-                    if ($trendAnalysis or $valueIndicator->getParentCloning()) {
-                        $dataStrategic = $dataStrategic + 1;                                    
-                        $indicatorsStrategic[] = $valueIndicator;                    
-                    }else{
-                        $dataStrategicIn[] = $valueIndicator;
+        if ($request->get('m')) {            
+            for ($i=1; $i <= count($levels); $i++) {             
+                $indicators = $this->get('pequiven.repository.indicator')->findQueryIndicatorValid($this->getPeriodService()->getPeriodActive(), $i);                                    
+                foreach ($indicators as $valueIndicator) {
+                    $trendAnalysis = $this->get('pequiven.repository.sig_trend_report_evolution')->findBy(array('indicator' => $valueIndicator->getId(), 'month' => $request->get('m'), 'typeObject' => 1));        
+                    if ($trendAnalysis) {
+                        $trendData = $trendData + count($trendAnalysis);
                     }
-                }elseif ($i == 2) {
-                    $totalTactic++;
-                    if ($trendAnalysis or $valueIndicator->getParentCloning()) {
-                        $dataTactic = $dataTactic + 1;                                    
-                        $indicatorsTactic[] = $valueIndicator;                                            
-                    }else{
-                        $dataTacticIn[] = $valueIndicator;
+                    if ($i == 1) {
+                        $totalStrategic++;
+                        if ($trendAnalysis or $valueIndicator->getParentCloning()) {
+                            $dataStrategic = $dataStrategic + 1;                                    
+                            $indicatorsStrategic[] = $valueIndicator;                    
+                        }else{
+                            $dataStrategicIn[] = $valueIndicator;
+                        }
+                    }elseif ($i == 2) {
+                        $totalTactic++;
+                        if ($trendAnalysis or $valueIndicator->getParentCloning()) {
+                            $dataTactic = $dataTactic + 1;                                    
+                            $indicatorsTactic[] = $valueIndicator;                                            
+                        }else{
+                            $dataTacticIn[] = $valueIndicator;
+                        }
+                    }elseif ($i == 3) {
+                        $totalOperative++;
+                        if ($trendAnalysis or $valueIndicator->getParentCloning()) {
+                            $dataOperative = $dataOperative + 1;                        
+                            $indicatorsOperatives[] = $valueIndicator;                                            
+                        }else{
+                            $dataOperativeIn[] = $valueIndicator;
+                        }
                     }
-                }elseif ($i == 3) {
-                    $totalOperative++;
-                    if ($trendAnalysis or $valueIndicator->getParentCloning()) {
-                        $dataOperative = $dataOperative + 1;                        
-                        $indicatorsOperatives[] = $valueIndicator;                                            
-                    }else{
-                        $dataOperativeIn[] = $valueIndicator;
+                    $causeAnalysis = $this->get('pequiven.repository.sig_causes_analysis')->findBy(array('indicator' => $valueIndicator->getId(), 'month' => $request->get('m')));
+                    if ($causeAnalysis) {
+                        $causeData = $causeData + count($causeAnalysis);                
+                        //$causeData = $causeData + count($causeAnalysis);
                     }
-                }
-                $causeAnalysis = $this->get('pequiven.repository.sig_causes_analysis')->findBy(array('indicator' => $valueIndicator->getId()/*, 'month' => 11*/));
-                if ($causeAnalysis) {
-                    $causeData = $causeData + count($causeAnalysis);                
-                    //$causeData = $causeData + count($causeAnalysis);
-                }
 
-                $causes = $this->get('pequiven.repository.sig_causes_report_evolution')->findBy(array('indicator' => $valueIndicator->getId()/*, 'month' => 11*/));                                    
-                if ($causes) {
-                    $cause = $cause + count($causes);
-                    //$cause = $cause + count($causes);
-                }
-                foreach ($causes as $key => $valueCause) {
-                    $action = $this->get('pequiven.repository.sig_action_indicator')->findBy(array('evolutionCause' => $valueCause->getId()));
-                    if ($action) {
-                        $actionData = $actionData + count($action);
-                        //$actionData = $actionData + count($action);
+                    $causes = $this->get('pequiven.repository.sig_causes_report_evolution')->findBy(array('indicator' => $valueIndicator->getId(), 'month' => $request->get('m')));                                    
+                    if ($causes) {
+                        $cause = $cause + count($causes);
+                        //$cause = $cause + count($causes);
                     }
+                    foreach ($causes as $key => $valueCause) {
+                        $action = $this->get('pequiven.repository.sig_action_indicator')->findBy(array('evolutionCause' => $valueCause->getId()));
+                        if ($action) {
+                            $actionData = $actionData + count($action);
+                            //$actionData = $actionData + count($action);
+                        }
+                    }
+                    $cont++;                                           
                 }
-                $cont++;                                           
             }
-        }
-        
-        $dataIndicators = [
-            1 => $dataStrategic,
-            2 => $dataTactic,
-            3 => $dataOperative
-        ];
+            
+            $dataIndicators = [
+                1 => $dataStrategic,
+                2 => $dataTactic,
+                3 => $dataOperative
+            ];
 
-        $dataIndicatorsInLoad = [
-            1 => $dataStrategicIn,
-            2 => $dataTacticIn,
-            3 => $dataOperativeIn
-        ];
+            $dataIndicatorsInLoad = [
+                1 => $dataStrategicIn,
+                2 => $dataTacticIn,
+                3 => $dataOperativeIn
+            ];
 
-        $dataTotal = [
-            1 => $totalStrategic, 
-            2 => $totalTactic,
-            3 => $totalOperative
-        ];
+            $dataTotal = [
+                1 => $totalStrategic, 
+                2 => $totalTactic,
+                3 => $totalOperative
+            ];
 
-        $indicators = [
-            1 => $indicatorsStrategic,
-            2 => $indicatorsTactic,
-            3 => $indicatorsOperatives
-        ];
+            $indicators = [
+                1 => $indicatorsStrategic,
+                2 => $indicatorsTactic,
+                3 => $indicatorsOperatives
+            ];
 
-        $dataGeneral = [
-            1 => "Analisis de Tendencias Cargados: " . $trendData,
-            2 => "Analisis de Causas Cargados: " . $causeData,
-            3 => "Causas Cargadas: " . $cause,
-            4 => "Planes de Acción Cargados: " . $actionData
-        ];
-        $data = [                                    
-            'dataIndicators'       => $dataIndicators,
-            'dataTotal'            => $dataTotal,
-            'indicators'           => $indicators,
-            'dataGeneral'          => $dataGeneral,
-            'dataIndicatorsInLoad' => $dataIndicatorsInLoad
-        ];
-
-        //echo "Indicadores Cargados: " . $trendData . "<br>";
-        //echo "Analisis de Tendencias Cargados: " . $trendData . "<br>";
-        //echo "Analisis de Causas Cargados: " . $causeData . "<br>";
-        //echo "Causas: " . $cause . "<br>";
-        //echo "Planes de Acción Cargados: " . $actionData . "<br>";
-        //echo "Total Esperado: " . $cont . "<br>";
-        //die();
+            $dataGeneral = [
+                1 => "Analisis de Tendencias Cargados: " . $trendData,
+                2 => "Analisis de Causas Cargados: " . $causeData,
+                3 => "Causas Cargadas: " . $cause,
+                4 => "Planes de Acción Cargados: " . $actionData
+            ];
+            $data = [                                    
+                'dataIndicators'       => $dataIndicators,
+                'dataTotal'            => $dataTotal,
+                'indicators'           => $indicators,
+                'dataGeneral'          => $dataGeneral,
+                'dataIndicatorsInLoad' => $dataIndicatorsInLoad,
+                'value'                => 1,
+                'month'                => $request->get('m'),
+                'host'  => $_SERVER["HTTP_HOST"]
+            ];
+        }else{
+            $data = [
+                'value' => 0,
+                'host'  => $_SERVER["HTTP_HOST"]
+            ];            
+        }        
         
         return $this->render('PequivenSIGBundle:Indicator:load.html.twig', array('data' => $data, 'levels' => $levels));
     }

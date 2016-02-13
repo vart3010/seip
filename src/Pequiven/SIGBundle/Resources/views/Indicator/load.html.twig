@@ -8,9 +8,29 @@
 {% endblock %} 
 
 {% block body %}
+<fieldset class="fieldset"> 
+    <p class="inline-label">    
+        <label class="label">Mes a Consultar</label>
+        <select id="month" name="month" class="select2 input-xlarge form-control" onchange="month()">
+            <option value="">Seleccione un mes a consultar...</option>
+            <option value="01">Enero</option>
+            <option value="02">Febrero</option>
+            <option value="03">Marzo</option>
+            <option value="04">Abril</option>
+            <option value="05">Mayo</option>
+            <option value="06">Junio</option>
+            <option value="07">Julio</option>
+            <option value="08">Agosto</option>
+            <option value="09">Septiembre</option>
+            <option value="10">Octubre</option>
+            <option value="11">Noviembre</option>
+            <option value="12">Diciembre</option>
+        </select>
+    </p>
+</fieldset>
 <fieldset class="fieldset">
     <legend class="legend">Estadística Carga de Informes de Evolución&nbsp;</legend>
-
+{% if data['value'] != 0 %}
 		{% set cont = 1 %}                          
         {% for datas in levels %}
 		{% set min = data.dataTotal[cont] / 4 %}
@@ -67,8 +87,8 @@
                                 </thead>
                                 <tbody>  
                                     {% for dataIndicators in data.indicators[cont] %}
-                                        <tr> 
-                                            <td><a href="{{ path('pequiven_indicator_show', {'id' : dataIndicators.id}) }}">{{dataIndicators}}</a></td>       
+                                        <tr>
+                                            <td><a href="{{ path('pequiven_indicator_evolution', {'id' : dataIndicators.id, 'month': data['month'] }) }}" target="_blank">{{dataIndicators}}</a></td>       
                                         </tr>
                                     {% endfor %}
                                 </tbody>
@@ -96,7 +116,7 @@
                                 <tbody>  
                                     {% for dataIndicatorsIn in data.dataIndicatorsInLoad[cont] %}
                                         <tr> 
-                                            <td><a href="{{ path('pequiven_indicator_show', {'id' : dataIndicatorsIn.id}) }}">{{dataIndicatorsIn}}</a></td>       
+                                            <td><a href="{{ path('pequiven_indicator_evolution', {'id' : dataIndicatorsIn.id, 'month': data['month'] }) }}" target="_blank">{{dataIndicatorsIn}}</a></td>       
                                         </tr>
                                     {% endfor %}
                                 </tbody>
@@ -107,7 +127,12 @@
             </div>
 		</div>    
 		{% set cont = cont + 1 %}                  
-		{% endfor %} 
+		{% endfor %}
+{% else %} 
+    <div class="new-row twelve-columns empty_row" align="center">                                 
+        <br>Debe seleccionar un mes
+    </div>
+{% endif %}
 </fieldset>
 
 {#<fieldset class="fieldset">
@@ -205,7 +230,16 @@
             document.getElementById('minusIn_3').style.display = 'none';
         }
     </script>
-
+    <script type="text/javascript">
+        function month(){
+            var value = document.getElementById('month').value;
+            if (value > 0) {
+                //document.location.href="http://localhost/seip/web/app_dev.php/indicator/sig/load?m="+value;
+                
+                document.location.href="http://{{ data['host'] }}/indicator/sig/load?m="+value;
+            };                        
+        }
+    </script>
     <script src="{{  asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.progress-slider.js') }}"></script>
     
     <!-- jQuery-ui -->
