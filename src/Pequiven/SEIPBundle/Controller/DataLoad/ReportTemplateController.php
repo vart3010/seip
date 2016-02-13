@@ -1406,13 +1406,15 @@ class ReportTemplateController extends SEIPController {
 
                     //CONSUMO DE MATERIA PRIMA
                     //VERIFICA SI EL PRODUCTO ES MATERIA PRIMA
-                    $i = $dateDesde;
+
 
                     foreach ($productReport->getRawMaterialConsumptionPlannings() as $rawMaterial) {
-                        $totalRawDayPlan = 0.0;
-                        $totalRawDayReal = 0.0;
-
                         if ($rawMaterial->getProduct()->getIsRawMaterial()) {
+                            $totalRawDayPlan = 0.0;
+                            $totalRawDayReal = 0.0;
+
+                            $i = $dateDesde;
+
 
                             while ($i != ($dateHasta + 86400)) {
                                 $timeNormal = new \DateTime(date("Y-m-d", $i));
@@ -1426,12 +1428,13 @@ class ReportTemplateController extends SEIPController {
                                 $i = $i + 86400; //VOY RECORRIENDO DIA POR DIA
                             }
                             $idProduct = $rawMaterial->getProduct()->getId();
-
+                            
                             if (!in_array($idProduct, $arrayIdProductsByRange)) {
                                 $arrayIdProductsByRange[] = $idProduct;
-
+                                //$n = $rawMaterial->getProductReport()->getPlantReport()->getPlant()->getName();
                                 $arrayRawMaterial[] = array(
                                     "productName" => $rawMaterial->getProduct()->getName() . " (" . $rawMaterial->getProduct()->getProductUnit()->getUnit() . ")",
+                                    "productId" => $rawMaterial->getProduct()->getId(),
                                     "planRaw" => $totalRawDayPlan,
                                     "realRaw" => $totalRawDayReal
                                 );
@@ -1451,6 +1454,7 @@ class ReportTemplateController extends SEIPController {
 //                    );
 //}
                 }
+
 
 
                 //CONSUMO DE SERVICIOS
@@ -1515,8 +1519,9 @@ class ReportTemplateController extends SEIPController {
                     $arrayInventory[] = array("productName" => $productReport->getProduct()->getName() . " (" . $productReport->getProduct()->getProductUnit()->getUnit() . ")", "total" => $Inventory["total_day"]);
                 }
             }
-//            var_dump($arrayRawMaterial);
-//            die();
+
+
+
 //TOTALES DE PRODUCCION
             $subTotalProdPlan = 0;
             if ($totalProdPlan > 0) {
@@ -1789,10 +1794,11 @@ class ReportTemplateController extends SEIPController {
 
                         if (!in_array($idProduct, $arrayIdProducts)) {
                             $arrayIdProducts[] = $idProduct;
-
+                            //$n = $rawMaterial->getProductReport()->getPlantReport()->getPlant();
                             $arrayRawMaterial[] = array(
                                 "id" => $rawMaterial->getProduct()->getId(),
                                 "productName" => $rawMaterial->getProduct()->getName() . " (" . $rawMaterial->getProduct()->getProductUnit()->getUnit() . ")",
+                                //"productName" => $n,
                                 "plan" => $rawMaterialResult["total_day_plan"],
                                 "real" => $rawMaterialResult["total_day"],
                                 "plan_month" => $rawMaterialResult["total_month_plan"],
@@ -1815,6 +1821,7 @@ class ReportTemplateController extends SEIPController {
                     }
                 }
             }
+            //var_dump($arrayRawMaterial);die();
 
             $cont = 0;
             foreach ($arrayRawMaterial as $rawMaterial) {
