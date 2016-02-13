@@ -6462,6 +6462,29 @@ angular.module('seipModule.controllers', [])
                     });
                 });
             }
+            
+            //28-Gráfico para mostrar información de 2 variables (respecto al eje izquierdo) y el resultado de la medición (respecto al eje derecho en valor porcentual), del indicador
+            $scope.chargeChartColumnLineDualAxisByDifferentFrequencyNotification = function (indicatorId, render, width, height) {
+                var getDataChartColumnLineDualAxisByDifferentFrequencyNotification = Routing.generate("getDataChartColumnLineDualAxisByDifferentFrequencyNotification", {id: indicatorId});
+                $http.get(getDataChartColumnLineDualAxisByDifferentFrequencyNotification).success(function (data) {
+                    FusionCharts.ready(function () {
+                        var revenueChartColumnLineDualAxisByDifferentFrequencyNotification = new FusionCharts({
+                            "type": "mscolumn3dlinedy",
+                            "renderAt": render,
+                            "width": width + "%",
+                            "height": height,
+                            "dataFormat": "json",
+                            "dataSource": {
+                                "chart": data.dataSource.chart,
+                                "categories": data.dataSource.categories,
+                                "dataset": data.dataSource.dataset
+                            }
+                        });
+                        revenueChartColumnLineDualAxisByDifferentFrequencyNotification.setTransparent(true);
+                        revenueChartColumnLineDualAxisByDifferentFrequencyNotification.render();
+                    });
+                });
+            }
 
             //PRO_RT_PQV-Gráfico para ver la producción consolidada por los ReportTemplates de PQV
             $scope.chargeChartProductionReportTemplateByDate = function (reportTemplateId, dateSearch, render, width, height) {

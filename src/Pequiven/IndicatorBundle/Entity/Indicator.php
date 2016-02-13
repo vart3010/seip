@@ -671,6 +671,13 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator",mappedBy="parentCloning",cascade={"persist"}))          
      */
     private $indicatorEvolutionCloning;
+    
+    /**
+     * ¿El indicador esta disponible para verse en el dashboard de forma trimestral? (Para aquellos cuya frecuencia de notificación sea mensual)
+     * @var boolean
+     *  @ORM\Column(name="showDashboardByQuarter",type="boolean")
+     */
+    private $showDashboardByQuarter = false;
 
 
     /**
@@ -2599,6 +2606,25 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      */
     public function getShowByDashboardSpecific() {
         return $this->showByDashboardSpecific;
+    }
+
+    /**
+     * 
+     * @param type $showDashboardByQuarter
+     * @return \Pequiven\IndicatorBundle\Entity\Indicator
+     */
+    public function setShowDashboardByQuarter($showDashboardByQuarter) {
+        $this->showDashboardByQuarter = $showDashboardByQuarter;
+
+        return $this;
+    }
+
+    /**
+     * 
+     * @return type
+     */
+    public function getShowDashboardByQuarter() {
+        return $this->showDashboardByQuarter;
     }
 
     /**

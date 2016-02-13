@@ -345,6 +345,18 @@ getDataChartChartProgressProjectsByFrequencyNotification:
     methods: [GET]
     options:
         expose: true
+        
+#28
+getDataChartColumnLineDualAxisByDifferentFrequencyNotification:
+    path: /getDataChartColumnLineDualAxisByDifferentFrequencyNotification/{id}
+    defaults:
+        _controller: pequiven.controller.seipchart:getDataChartColumnLineDualAxisByDifferentFrequencyNotificationAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
 
 #PRO_RT_PQV
 getDataChartProductionReportTemplateByDate:

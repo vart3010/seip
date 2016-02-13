@@ -131,7 +131,7 @@
                 <div ng-controller="EvolutionIndicatorConfig"> 
                     <div class="button-group button-config">
                             <a class="button icon-list-add" href="" ng-click="loadTemplateConfig()" title="">{{ 'pequiven_indicator.config'|trans({},'PequivenSIGBundle')  }}</a>
-                        {% if is_granted('ROLE_SEIP_SIG_EVOLUTION_CLONING') %}                
+                        {% if is_granted('ROLE_SEIP_SIG_EVOLUTION_CLONING') and level != 3 %}                
                             <a class="button icon-pages" href="" ng-click="loadTemplateCloning()" title="">Clonar</a>
                         {% endif %}
                     </div>
@@ -278,7 +278,7 @@
             var button = document.getElementById("exportpng");
             if (button){
                button.click();   
-               window.setTimeout(downloadCause,50);               
+               window.setTimeout(downloadCause,10);               
             }            
         }
         //Carga de Evento de Descarga de Grafica de Causas del Indicador

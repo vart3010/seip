@@ -129,7 +129,11 @@ class IndicatorSigController extends ResourceController {
         //Seteo de Indicador a clonar
         if ($indicator->getParentCloning()) {
             $indicator = $indicator->getParentCloning();    
-            $idIndicator = $indicator->getId();
+            $idIndicator = $indicator->getId();                
+                if ($indicator->getParentCloning()) {                    
+                    $indicator = $indicator->getParentCloning();
+                    $idIndicator = $indicator->getId();                
+                }            
         }
         
 
@@ -572,13 +576,14 @@ class IndicatorSigController extends ResourceController {
      *
      */
     public function exportAction(Request $request) {
-
+        
         $em = $this->getDoctrine()->getManager();
         $routing = $this->container->getParameter('kernel.root_dir')."/../web/php-export-handler/temp/*.png";
-        if($request->isMethod('POST')){
-          $fileSVG = $this->exportChrat($request);
         
+        if($request->isMethod('POST')){
+          $fileSVG = $this->exportChrat($request);        
         }        
+
         //Buscando los Archivos por Codigo
         $nameSVG = glob("$routing");
         $user = $this->getUser()->getId();//Id Usuario    
@@ -604,9 +609,15 @@ class IndicatorSigController extends ResourceController {
         $indicator = $this->get('pequiven.repository.indicator')->find($id); //Obtenemos el indicador
         $indicatorBase = $indicator;
 
+        //si el indicador es clonado
         if ($indicator->getParentCloning()) {
             $id = $indicator->getParentCloning()->getId();            
             $indicator = $indicator->getParentCloning();
+            //Si el indicador es clonado y viene del estratetico
+            if ($indicator->getParentCloning()) {
+                $id = $indicator->getParentCloning()->getId();
+                $indicator = $indicator->getParentCloning();
+            }
         }
 
         $dataAction = $this->findEvolutionCause($indicator, $request); //Carga la data de las causas y sus acciones relacionadas
@@ -640,13 +651,11 @@ class IndicatorSigController extends ResourceController {
             $font = $routing.$routingTendency.$font;            
 
         } elseif ($typeObject == 2) {
-
             $ArrangementProgram = $em->getRepository('PequivenArrangementProgramBundle:ArrangementProgram')->findWithData($id);
             $type = "arrangementProgram";
             $name = $ArrangementProgram->getRef() . '' . $ArrangementProgram->getDescription();
             //Relacion
             $objRel = $ArrangementProgram->getTacticalObjective()->getDescription();
-
         }
         
         $formula = $indicator->getFormula();
@@ -677,23 +686,24 @@ class IndicatorSigController extends ResourceController {
         //Periodo
         $period = $this->getPeriodService()->getPeriodActive();
         
-        $data = array(
-            'formula'       => $formula,            
-            'nameSVG'       => $chartEvolution,
-            'chartCause'    => $chartCause,
-            'month'         => $month,
-            'name'          => $name,
-            'trend'         => $trendDescription,
-            'causeAnalysis' => $causeA,
-            'dataAction'    => $dataAction["actionValue"],
-            'obj'           => $objRel,
-            'verification'  => $verification,
-            'period'        => $period,
-            'font'          => $font
-        );
+            $data = array(
+                'formula'       => $formula,            
+                'nameSVG'       => $chartEvolution,
+                'chartCause'    => $chartCause,
+                'month'         => $month,
+                'name'          => $name,
+                'trend'         => $trendDescription,
+                'causeAnalysis' => $causeA,
+                'dataAction'    => $dataAction["actionValue"],
+                'obj'           => $objRel,
+                'verification'  => $verification,
+                'period'        => $period,
+                'font'          => $font
+            );
 
         //Solo si existen las dos graficas
         if (isset($chartEvolution) AND isset($chartCause)) {
+            $dataChart = 
             $this->generatePdf($data);            
         }
     }
