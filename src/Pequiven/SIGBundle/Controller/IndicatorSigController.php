@@ -575,7 +575,7 @@ class IndicatorSigController extends ResourceController {
      *
      */
     public function exportAction(Request $request) {
-        $chartEvolution = $chartCause = 0;
+        
         $em = $this->getDoctrine()->getManager();
         $routing = $this->container->getParameter('kernel.root_dir')."/../web/php-export-handler/temp/*.png";
         
@@ -702,6 +702,7 @@ class IndicatorSigController extends ResourceController {
 
         //Solo si existen las dos graficas
         if (isset($chartEvolution) AND isset($chartCause)) {
+            $dataChart = 
             $this->generatePdf($data);            
         }
     }
