@@ -195,9 +195,10 @@ class LineStrategicController extends SEIPController {
             'resultService' => $resultService,
             'boxRender' => $boxRender,
             'answer'    => $answer,
-            'id'        => $request->get('id')
+            'id'        => $request->get('id'),
+            'host'      => $host
         );
-        
+
         $view = $this
                 ->view()
                 ->setTemplate($this->config->getTemplate('show.html'))

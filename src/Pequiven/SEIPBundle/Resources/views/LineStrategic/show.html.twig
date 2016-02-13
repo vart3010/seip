@@ -67,7 +67,7 @@
 {% block javascript %}
     {{ parent() }}
     
-    {#{% if answer == null  %}
+    {% if answer == null  %}
         <script type="text/javascript">        
             $(document).ready(function openConfirm(){
                 options = {
@@ -75,11 +75,11 @@
                     textCancel : "No"
                 };
                 $.modal.confirm('Desea realizar una vista dinamica?', function(){                               
-                    //document.location.href="http://{#{{ host }}#}/data-load/dashboard/production/reportTemplate/" + {#{{ reportTemplate.id }}#} {#+ "/1?r=1";
-                    document.location.href="http://localhost/seip/web/app_dev.php/line-strategic/" + {{ id }} + "?r=1";
+                    document.location.href="http://{{ host }}/line-strategic/" + {{ id }} + "?r=1";
+                    {#document.location.href="http://localhost/seip/web/app_dev.php/line-strategic/" + {{ id }} + "?r=1";#}
                 }, function(){                
-                    //document.location.href="http://{#{{host}}#}{#/data-load/dashboard/production/reportTemplate/" + {#{{ reportTemplate.id }} #}{#+ "/1?r=0";
-                    document.location.href="http://localhost/seip/web/app_dev.php/line-strategic/" + {{ id }} + "?r=0";                    
+                    document.location.href="http://{{ host }}/line-strategic/" + {{ id }} + "?r=0";                    
+                    {#document.location.href="http://localhost/seip/web/app_dev.php/line-strategic/" + {{ id }} + "?r=0";                    #}
                 }, options);
             });
         </script>    
@@ -92,13 +92,13 @@
             if (id > 7) {
                 id = 1;
             };
-            var page = "http://localhost/seip/web/app_dev.php/line-strategic/" + id + "?r=" + {{ answer }}
-            {#var page = "http://{{ host }}/data-load/dashboard/production/reportTemplate/" + id + "/1" + "?r=" + {{ answer }}#}
-                {#function redireccionar(){
+            {#var page = "http://localhost/seip/web/app_dev.php/line-strategic/" + id + "?r=" + {{ answer }}#}
+            var page = "http://{{ host }}/line-strategic/" + id + "?r=" + {{ answer }}#}
+                function redireccionar(){
                     location.href= page
                 } 
             setTimeout ("redireccionar()", 80000);
         </script>    
-    {% endif %}#}
+    {% endif %}
 
 {% endblock %}

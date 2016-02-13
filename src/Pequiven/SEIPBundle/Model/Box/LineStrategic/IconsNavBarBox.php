@@ -29,8 +29,9 @@ class IconsNavBarBox extends GenericBox
         
         return array(
             'iconsLineStrategic' => $iconsLineStrategic,
-            'linesStrategics' => $linesStrategics,
-            'idLineStrategic' => $idLineStrategic,
+            'linesStrategics'    => $linesStrategics,
+            'idLineStrategic'    => $idLineStrategic,
+            'answer'             => $this->getRequest()->get('r')
         );
     }
     
