@@ -26,7 +26,7 @@
             <option value="11">Noviembre</option>
             <option value="12">Diciembre</option>
         </select>
-    </p>
+    </p>    
 </fieldset>
 <fieldset class="fieldset">
     <legend class="legend">Estadística Carga de Informes de Evolución&nbsp;</legend>
@@ -238,6 +238,12 @@
                 
                 document.location.href="http://{{ data['host'] }}/indicator/sig/load?m="+value;
             };                        
+        }
+        function view(){
+            document.getElementById("month").selected = "02";            
+            var x = document.getElementById("month").selectedIndex;
+            var y = document.getElementById("month").options;                
+            //alert("Index: " + y[x].index + " is " + y[x].text);
         }
     </script>
     <script src="{{  asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.progress-slider.js') }}"></script>
