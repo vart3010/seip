@@ -880,11 +880,13 @@ class IndicatorSigController extends ResourceController {
                 'dataGeneral'          => $dataGeneral,
                 'dataIndicatorsInLoad' => $dataIndicatorsInLoad,
                 'value'                => 1,
-                'month'                => $request->get('m')
+                'month'                => $request->get('m'),
+                'host'  => $_SERVER["HTTP_HOST"]
             ];
         }else{
             $data = [
-                'value' => 0
+                'value' => 0,
+                'host'  => $_SERVER["HTTP_HOST"]
             ];            
         }        
         
