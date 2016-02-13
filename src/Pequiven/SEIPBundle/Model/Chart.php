@@ -153,6 +153,11 @@ abstract class Chart
      */
     const TYPE_CHART_PROGRESS_PROJECTS_BY_FREQUENCY_NOTIFICATION = 27;
     
+/**
+     * Gráfico tipo barras vertical para mostrar el real/plan de los resultados respecto al eje izquierdo y el resultado de la medición en valor porcentual respecto al lado derecho, de acuerdo a una frecuencia de notificación diferente a la del indicador
+     */
+    const TYPE_CHART_COLUMN_REAL_PLAN_BY_DIFFERENT_FREQUENCY_NOTIFICATION = 28;
+    
     const TYPE_EXAMPLE = 100;
        
     /**
@@ -219,6 +224,7 @@ abstract class Chart
             self::TYPE_CHART_MULTI_SERIES_COLUMN_LINE_INDICATOR_PERSONAL_INJURY_WITHOUT_LOST_TIME_BY_FREQUENCY_NOTIFICATION_BY_PERIOD_WITH_ACCUMULATED => 'chart.type.indicatorPersonalInjuryWithoutLostTimeByFrequencyNotificationByPeriodWithAccumulated',
             self::TYPE_CHART_MULTI_SERIES_COLUMN_LINE_INDICATOR_LOST_DAYS_BY_FREQUENCY_NOTIFICATION_BY_PERIOD_WITH_ACCUMULATED => 'chart.type.indicatorLostDaysByFrequencyNotificationByPeriodWithAccumulated',
             self::TYPE_CHART_PROGRESS_PROJECTS_BY_FREQUENCY_NOTIFICATION => 'chart.type.typeChartProgressProjectsByFrequencyNotification',
+            self::TYPE_CHART_COLUMN_REAL_PLAN_BY_DIFFERENT_FREQUENCY_NOTIFICATION => 'chart.type.indicatorsVariablesRealPlanByDifferentFrequencyNotification',
             self::TYPE_EXAMPLE => 'chart.type.example',
         );
          
