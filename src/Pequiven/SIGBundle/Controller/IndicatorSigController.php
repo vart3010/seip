@@ -129,7 +129,7 @@ class IndicatorSigController extends ResourceController {
         //Seteo de Indicador a clonar
         if ($indicator->getParentCloning()) {
             $indicator = $indicator->getParentCloning();    
-                if ($indicator->getParentCloning()) {
+                if ($indicator->getParentCloning()) {                    
                     $indicator = $indicator->getParentCloning();
                     $idIndicator = $indicator->getId();                
                 }            
