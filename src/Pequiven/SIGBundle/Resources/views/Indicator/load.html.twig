@@ -235,7 +235,7 @@
             var value = document.getElementById('month').value;
             if (value > 0) {
                 //document.location.href="http://localhost/seip/web/app_dev.php/indicator/sig/load?m="+value;
-                //{{ host }}
+                
                 document.location.href="http://{{ data['host'] }}/indicator/sig/load?m="+value;
             };                        
         }
