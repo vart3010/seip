@@ -3074,19 +3074,19 @@ class IndicatorService implements ContainerAwareInterface {
                 $labelsFrequencyNotificationArray = $this->getLabelsFrequencyNotificationByDaysOfFrequency(90);
                 
                 for($i = 1; $i <= $maxVisualizeNumberResults; $i++){
-                    $arrayVariablesResultsGroup['valuaReal'][$i] = 0.0;
-                    $arrayVariablesResultsGroup['valuaPlan'][$i] = 0.0;
+                    $arrayVariablesResultsGroup['valueReal'][$i] = 0.0;
+                    $arrayVariablesResultsGroup['valuePlan'][$i] = 0.0;
                     $arrayVariablesResultsGroup['medition'][$i] = 0.0;
                 }
             }
-
+            
             $resultNumbers = 1;
             for ($i = 0; $i < $totalValueIndicators; $i++) {
                 if ($arrayVariables['valueReal'][$i] != 0 || $arrayVariables['valuePlan'][$i] != 0) {
                     $resultNumbers = $i + 1;
                 }
             }
-            var_dump($resultNumbers);die();
+//            var_dump($resultNumbers);die();
             
             $contStep = 1;
             $numberOfStep = 1;
@@ -3094,26 +3094,26 @@ class IndicatorService implements ContainerAwareInterface {
             $valTempPlan = 0.0;
             $valTempMedition = 0.0;
             for ($i = 0; $i < $resultNumbers; $i++) {
+                $valTempReal = $valTempReal + $arrayVariables['valueReal'][$i];
+                $valTempPlan = $valTempPlan + $arrayVariables['valuePlan'][$i];
+                $valTempMedition = $valTempMedition + $arrayVariables['medition'][$i];
                 if($contStep == $step){
                     $arrayVariablesResultsGroup['valueReal'][$numberOfStep] = $arrayVariablesResultsGroup['valueReal'][$numberOfStep] + $valTempReal;
                     $arrayVariablesResultsGroup['valuePlan'][$numberOfStep] = $arrayVariablesResultsGroup['valuePlan'][$numberOfStep] + $valTempPlan;
                     $arrayVariablesResultsGroup['medition'][$numberOfStep] = $arrayVariablesResultsGroup['medition'][$numberOfStep] + $valTempMedition;
                     $valTempReal = $valTempPlan = $valTempMedition = 0.0;
                     $numberOfStep++;
-                    $contStep = 1;
+                    $contStep = 0;
                 }
-                $valTempReal = $valTempReal + $arrayVariables['valueReal'][$i];
-                $valTempPlan = $valTempPlan + $arrayVariables['valuePlan'][$i];
-                $valTempMedition = $valTempMedition + $arrayVariables['medition'][$i];
                 $contStep++;
             }
-            
-            for ($i = 0; $i < $resultNumbers; $i++) {
+//            var_dump($arrayVariablesResultsGroup);die();
+            for ($i = 1; $i <= $maxVisualizeNumberResults; $i++) {
                 $label = $dataReal = $dataPlan = $dataMedition = array();
-                $label["label"] = $labelsFrequencyNotificationArray[$numberOfStep];
-                $dataReal["value"] = number_format($arrayVariablesResultsGroup['valueReal'][$i+1], 2, ',', '.');
-                $dataPlan["value"] = number_format($arrayVariablesResultsGroup['valuePlan'][$i+1], 2, ',', '.');
-                $dataMedition["value"] = number_format($arrayVariablesResultsGroup['medition'][$i+1], 2, ',', '.');
+                $label["label"] = $labelsFrequencyNotificationArray[$i];
+                $dataReal["value"] = number_format($arrayVariablesResultsGroup['valueReal'][$i], 2, ',', '.');
+                $dataPlan["value"] = number_format($arrayVariablesResultsGroup['valuePlan'][$i], 2, ',', '.');
+                $dataMedition["value"] = number_format($arrayVariablesResultsGroup['medition'][$i], 2, ',', '.');
 
                 $category[] = $label;
                 $dataSetReal["data"][] = $dataReal;
