@@ -1277,14 +1277,14 @@ class IndicatorService implements ContainerAwareInterface {
             $result[1497]['real'] = array(1 => 0.0, 2 => 2629.0, 3 => 3870.0);
             $result[1498]['real'] = array(1 => 0.0, 2 => 1397.0, 3 => 7987.0);
             //CPAMC
-            $result[1503]['real'] = array(1 => 0.0, 2 => 14749.0, 3 => 15177.0);
-            $result[1504]['real'] = array(1 => 0.0, 2 => 15973.0, 3 => 16606.0);
-            $result[1505]['real'] = array(1 => 0.0, 2 => 27139.0, 3 => 28044.0);
-            $result[1506]['real'] = array(1 => 0.0, 2 => 0.0, 3 => 0.0);
-            $result[1507]['real'] = array(1 => 0.0, 2 => 0.0, 3 => 0.0);
-            $result[1508]['real'] = array(1 => 0.0, 2 => 0.0, 3 => 0.0);
-            $result[1509]['real'] = array(1 => 0.0, 2 => 6789.0, 3 => 8579.0);
-            $result[1510]['real'] = array(1 => 0.0, 2 => 11697, 3 => 13714.0);
+            $result[1503]['real'] = array(1 => 0.0, 2 => 14749.0, 3 => 15177.0, 4 => 18122.0);
+            $result[1504]['real'] = array(1 => 0.0, 2 => 15973.0, 3 => 16606.0, 4 => 18343);
+            $result[1505]['real'] = array(1 => 0.0, 2 => 27139.0, 3 => 28044.0, 4 => 31695);
+            $result[1506]['real'] = array(1 => 0.0, 2 => 0.0, 3 => 0.0, 4 => 0.0);
+            $result[1507]['real'] = array(1 => 0.0, 2 => 0.0, 3 => 0.0, 4 => 0.0);
+            $result[1508]['real'] = array(1 => 0.0, 2 => 0.0, 3 => 0.0, 4 => 0.0);
+            $result[1509]['real'] = array(1 => 0.0, 2 => 6789.0, 3 => 8579.0, 4 => 12976);
+            $result[1510]['real'] = array(1 => 0.0, 2 => 11697, 3 => 13714.0, 4 => 16967);
 
             $dataSetPlan["seriesname"] = $arrayVariables['descriptionPlan'];
             $dataSetPlan["showValues"] = "1";
