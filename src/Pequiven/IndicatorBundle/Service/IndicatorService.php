@@ -3052,6 +3052,8 @@ class IndicatorService implements ContainerAwareInterface {
             }
 
             $dataSetReal["seriesname"] = $arrayVariables['descriptionReal'];
+            $dataSetReal["color"] = "#298A08";
+            $dataSetPlan["color"] = "#0101DF";
             $dataSetPlan["seriesname"] = $arrayVariables['descriptionPlan'];
             $medition["seriesname"] = $indicator->getSummary();
             $medition["renderas"] = "line";
