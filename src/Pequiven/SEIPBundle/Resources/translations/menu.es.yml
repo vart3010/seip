@@ -274,5 +274,9 @@ app:
                         voto_zulia: Zulia
                         voto_anzoategui: Anzoátegui
                         mesa: Mesas Activas
-
+                    modules:
+                        ventas: Ventas
+                        despachos: Despachos
+                        contrataciones: Contrataciones
+                        proyectos: Proyectos
                             

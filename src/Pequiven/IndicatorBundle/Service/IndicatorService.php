@@ -578,9 +578,9 @@ class IndicatorService implements ContainerAwareInterface {
                                 if ($tagIndicator->getTypeTag() == Indicator\TagIndicator::TAG_TYPE_NUMERIC) {
                                     $value = $tagIndicator->getValueOfTag();
                                 } else {
-                                    $value = $tagIndicator->getTextOfTag();
+                                    $value = $tagIndicator->getTextOfTag();                                    
                                 }
-                                $value = $tagIndicator->getUnitResult() != "" ? number_format($value, 2, ',', '.') . ' ' . strtoupper($tagIndicator->getUnitResultValue()) : number_format($value, 2, ',', '.') . '%';
+                                $value = $tagIndicator->getUnitResult() != "" ? number_format($value, 2, ',', '.') . ' ' . strtoupper($tagIndicator->getUnitResultValue()) : number_format($value, 2, ',', '.') . '%';                            
                             }
                         }
                     }
@@ -603,7 +603,7 @@ class IndicatorService implements ContainerAwareInterface {
         } else {
             $colorData["code"] = "#000000";
             $colorData["label"] = $this->trans('pequiven_indicator.errors.arrangementRange_not_assigned', array(), 'PequivenIndicatorBundle');
-        }
+        }        
 
         $color[] = $colorData;
         $data['dataSource']['chart'] = $chart;

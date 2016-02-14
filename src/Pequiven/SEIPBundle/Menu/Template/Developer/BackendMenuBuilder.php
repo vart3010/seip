@@ -111,6 +111,10 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
         if ($this->isGranted('ROLE_SEIP_SIP_*')) {
             $this->addMenuSip($menu, $section);
         }
+
+        //Modulos en Construcción        
+        $this->addMenuModules($menu, $section);
+
         //Menú Administración
         if ($this->securityContext->isGranted(array('ROLE_SONATA_ADMIN'))) {
             $menu->addChild('admin', array(
@@ -1914,6 +1918,47 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                     'labelAttributes' => array('icon' => 'fa fa-sitemap'),
                 ))
                 ->setLabel($this->translate(sprintf('app.backend.menu.%s.users.feeStructure', $section)));
+
+        $menu->addChild($child);
+    }
+
+    /**
+     * Modulos en Contrucción
+     * @param ItemInterface $menu
+     * @param type $section
+     */
+    private function addMenuModules(ItemInterface $menu, $section) {
+
+        $child = $this->factory->createItem('Modulos en Contrucción', $this->getSubLevelOptions(array(
+                            'uri' => null,
+                            'labelAttributes' => array('icon' => 'fa fa-exclamation-triangle',),
+                        ))
+                )
+                ->setLabel($this->translate(sprintf('Modulos en Contrucción', $section)));
+
+        $child->addChild('planning.visualize.modules.ventas', array(
+                    'route' => 'pequiven_seip_modules_ventas',
+                    'labelAttributes' => array('icon' => ''),
+                ))
+                ->setLabel($this->translate(sprintf('app.backend.menu.%s.modules.ventas', $section)));
+        
+        $child->addChild('planning.visualize.modules.despachos', array(
+                    'route' => 'pequiven_seip_modules_despacho',
+                    'labelAttributes' => array('icon' => ''),
+                ))
+                ->setLabel($this->translate(sprintf('app.backend.menu.%s.modules.despachos', $section)));
+        
+        $child->addChild('planning.visualize.modules.contrataciones', array(
+                    'route' => 'pequiven_seip_modules_contrataciones',
+                    'labelAttributes' => array('icon' => ''),
+                ))
+                ->setLabel($this->translate(sprintf('app.backend.menu.%s.modules.contrataciones', $section)));
+
+        $child->addChild('planning.visualize.modules.proyectos', array(
+                    'route' => 'pequiven_seip_modules_proyectos',
+                    'labelAttributes' => array('icon' => ''),
+                ))
+                ->setLabel($this->translate(sprintf('app.backend.menu.%s.modules.proyectos', $section)));
 
         $menu->addChild($child);
     }
