@@ -3062,90 +3062,83 @@ class IndicatorService implements ContainerAwareInterface {
             $totalValueIndicators = count($indicator->getValuesIndicator());
             $realAccumulated = $planAccumulated = 0.0;
             
-            $realNumberResults = 0;
-            $maxVisualizeNumberResults = 0;
-            $arrayVariablesResultsGroup = array();
-            $step = 0;
-            if($indicator->getShowDashboardByQuarter()){
+            $realNumberResults = 0;//Número Reales de Valores del Indicador
+            $maxVisualizeNumberResults = 0;//Máximo Número de Valores del Indicador
+            $arrayVariablesResultsGroup = array();//ARreglo de Resultados Agrupados por la Frecuencia Seleccionada
+            $step = 0;//Paso o Salto de acuerdo a la Frecuencia seleccionada
+            if($indicator->getShowDashboardByQuarter()){//COnsultados si el indicador será mostrado de acuerdo a una frecuencia trimestral
                 $realNumberResults = count($indicator->getValuesIndicator());
                 $step = 3;
                 $maxVisualizeNumberResults = (int)($realNumberResults/$step);
-                
                 $labelsFrequencyNotificationArray = $this->getLabelsFrequencyNotificationByDaysOfFrequency(90);
+                if($indicator->getResultIsAccumulative()){
+                    $labelsFrequencyNotificationArray = $this->setLabelsFrequencyNotificationByNumbersOfResults(4,$labelsFrequencyNotificationArray,'until');
+                }
                 
                 for($i = 1; $i <= $maxVisualizeNumberResults; $i++){
-                    $arrayVariablesResultsGroup['valuaReal'][$i] = 0.0;
-                    $arrayVariablesResultsGroup['valuaPlan'][$i] = 0.0;
+                    $arrayVariablesResultsGroup['valueReal'][$i] = 0.0;
+                    $arrayVariablesResultsGroup['valuePlan'][$i] = 0.0;
                     $arrayVariablesResultsGroup['medition'][$i] = 0.0;
                 }
             }
-
+            
             $resultNumbers = 1;
             for ($i = 0; $i < $totalValueIndicators; $i++) {
                 if ($arrayVariables['valueReal'][$i] != 0 || $arrayVariables['valuePlan'][$i] != 0) {
                     $resultNumbers = $i + 1;
                 }
             }
-            var_dump($resultNumbers);die();
-            
-            for ($i = 0; $i < $resultNumbers; $i++) {
-                $arrayVariablesResultsGroup['valueReal'][$i+1] = $arrayVariablesResultsGroup['valueReal'][$i+1] + $arrayVariables['valueReal'][$i];
-                $arrayVariablesResultsGroup['valuePlan'][$i+1] = $arrayVariablesResultsGroup['valuePlan'][$i+1] + $arrayVariables['valuePlan'][$i];
-                $arrayVariablesResultsGroup['medition'][$i+1] = $arrayVariablesResultsGroup['medition'][$i+1] + $arrayVariables['medition'][$i];
-            }
+//            var_dump($resultNumbers);die();
             
             $contStep = 1;
             $numberOfStep = 1;
+            $valTempReal = 0.0;
+            $valTempPlan = 0.0;
+            $valTempMedition = 0.0;
             for ($i = 0; $i < $resultNumbers; $i++) {
-                
-                
+                $valTempReal = $valTempReal + $arrayVariables['valueReal'][$i];
+                $valTempPlan = $valTempPlan + $arrayVariables['valuePlan'][$i];
+                $valTempMedition = $valTempMedition + $arrayVariables['medition'][$i];
                 if($contStep == $step){
-                    $label = $dataReal = $dataPlan = $dataMedition = array();
-                    $label["label"] = $labelsFrequencyNotificationArray[$numberOfStep];
-                    $dataReal["value"] = number_format($arrayVariablesResultsGroup['valueReal'][$i+1], 2, ',', '.');
-                    $dataPlan["value"] = number_format($arrayVariablesResultsGroup['valuePlan'][$i+1], 2, ',', '.');
-                    $dataMedition["value"] = number_format($arrayVariablesResultsGroup['medition'][$i+1], 2, ',', '.');
-                    
+                    $arrayVariablesResultsGroup['valueReal'][$numberOfStep] = $arrayVariablesResultsGroup['valueReal'][$numberOfStep] + $valTempReal;
+                    $arrayVariablesResultsGroup['valuePlan'][$numberOfStep] = $arrayVariablesResultsGroup['valuePlan'][$numberOfStep] + $valTempPlan;
+                    $arrayVariablesResultsGroup['medition'][$numberOfStep] = $arrayVariablesResultsGroup['medition'][$numberOfStep] + $valTempMedition;
+                    $valTempReal = $valTempPlan = $valTempMedition = 0.0;
                     $numberOfStep++;
+                    $contStep = 0;
                 }
-                
-//                $label["label"] = $i;
-//                $label["link"] = $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicatorChildren->getId()));
-//                $dataReal["link"] = $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicatorChildren->getId()));
-//                $dataPlan["link"] = $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicatorChildren->getId()));
-
-                $realAccumulated = $realAccumulated + $arrayVariables['valueReal'][$i];
-                $planAccumulated = $planAccumulated + $arrayVariables['valuePlan'][$i];
+                $contStep++;
+            }
+//            var_dump($arrayVariablesResultsGroup);die();
+            for ($i = 1; $i <= $maxVisualizeNumberResults; $i++) {
+                $label = $dataReal = $dataPlan = $dataMedition = array();
+                $label["label"] = $labelsFrequencyNotificationArray[$i];
+                if($indicator->getResultIsAccumulative()){
+                    $varTempReal = 0.0;
+                    $varTempPlan = 0.0;
+                    $varTempMedition = 0.0;
+                    for($j = 1; $j <= $i; $j++){
+                        $varTempReal = $varTempReal + $arrayVariablesResultsGroup['valueReal'][$j];
+                        $varTempPlan = $varTempPlan + $arrayVariablesResultsGroup['valuePlan'][$j];
+                        $varTempMedition = $varTempMedition + $arrayVariablesResultsGroup['medition'][$j];
+                    }
+                    $dataReal["value"] = number_format($varTempReal, 2, ',', '.');
+                    $dataPlan["value"] = number_format($varTempPlan, 2, ',', '.');
+                    $dataMedition["value"] = number_format($varTempMedition, 2, ',', '.');
+                } else{
+                    $dataReal["value"] = number_format($arrayVariablesResultsGroup['valueReal'][$i], 2, ',', '.');
+                    $dataPlan["value"] = number_format($arrayVariablesResultsGroup['valuePlan'][$i], 2, ',', '.');
+                    $dataMedition["value"] = number_format($arrayVariablesResultsGroup['medition'][$i], 2, ',', '.');
+                }
 
                 $category[] = $label;
                 $dataSetReal["data"][] = $dataReal;
-                if (!$indicator->getShowColumnPlanOneTimeInDashboard()) {
-                    $dataSetPlan["data"][] = $dataPlan;
-                }
+                $dataSetPlan["data"][] = $dataPlan;
                 $medition["data"][] = $dataMedition;
-                $contStep++;
             }
-
-            if ($indicator->getShowColumnAccumulativeInDashboard()) {
-                $category[] = array('label' => 'Acumulado');
-                $dataSetReal["data"][] = array('value' => number_format($realAccumulated, 2, ',', '.'));
-                $dataSetPlan["data"][] = array('value' => number_format($planAccumulated, 2, ',', '.'));
-            }
-
-            if ($indicator->getShowColumnPlanOneTimeInDashboard() || $indicator->getShowColumnPlanAtTheEnd()) {
-                $category[] = array('label' => 'Plan Anual');
-                $valuePlanAtTheEnd = $arrayVariables['valuePlan'][2];
-                if(array_key_exists($indicator->getId(), $arrayIndicators)){
-                    $valuePlanAtTheEnd = $arrayIndicators[$indicator->getId()];
-                }
-                $dataSetReal["data"][] = array('value' => number_format($valuePlanAtTheEnd, 2, ',', '.'), 'color' => '#E91212');
-            }
-
 
             $data['dataSource']['dataset'][] = $dataSetReal;
-            if (!$indicator->getShowColumnPlanOneTimeInDashboard()) {
-                $data['dataSource']['dataset'][] = $dataSetPlan;
-            }
+            $data['dataSource']['dataset'][] = $dataSetPlan;
             $data['dataSource']['dataset'][] = $medition;
         } elseif (isset($options['resultIndicatorPersonalInjuryWithAndWithoutAndLostDaysByFrequencyNotificationByPeriodGroupByCompanyAccumulated']) && array_key_exists('resultIndicatorPersonalInjuryWithAndWithoutAndLostDaysByFrequencyNotificationByPeriodGroupByCompanyAccumulated', $options)) {
             unset($options[$options['path_array']]);
@@ -3432,6 +3425,48 @@ class IndicatorService implements ContainerAwareInterface {
         }
 
         return $labelsFrequencyArray;
+    }
+    
+        /**
+     * Función que redefine las etiquetas por frecuencia de notificación de acuerdo al tipo de resultado del indicador
+     * @param Indicator $indicator
+     */
+    public function setLabelsFrequencyNotificationByNumbersOfResults($numberResults, $labelsFrequencyArray = array(), $type = "from") {
+        
+        $labelIni = explode('-', $labelsFrequencyArray[1])[0];
+        $labelsArray = array();
+        
+        if ($numberResults == 12) {
+            for ($i = 1; $i <= $numberResults; $i++) {
+                if ($type == "from") {
+                    $labelsArray[$i] = $labelsFrequencyArray[$i];
+                } elseif ($type == "until") {
+                    $labelsArray[$i] = "a " . $labelsFrequencyArray[$i];
+                }
+            }
+        } else {
+            
+            //Recorremos de acuerdo al número de resultados por frecuencia
+            for ($i = 1; $i <= $numberResults; $i++) {
+                $labelActually = explode('-', $labelsFrequencyArray[$i])[1];
+                if ($i > 1) {
+                    if ($type == "from") {
+                        $labelsArray[$i] = $labelIni . '-' . $labelActually;
+                    } elseif ($type == "until") {
+                        $labelsArray[$i] = "a " . $labelActually;
+                    }
+                } else {
+                    if ($type == "from") {
+                        $labelsArray[$i] = $labelsFrequencyArray[$i];
+                    } elseif ($type == "until") {
+                        $labelsArray[$i] = "a " . $labelActually;
+                    }
+                }
+            }
+        }
+        
+        
+        return $labelsArray;
     }
 
     /**
