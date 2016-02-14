@@ -1,5 +1,6 @@
 {% trans_default_domain 'PequivenSEIPBundle' %}
 {% spaceless %}
+    
 <!DOCTYPE html>
 
 <!--[if IEMobile 7]><html class="no-js iem7 oldie"><![endif]-->
@@ -10,10 +11,10 @@
 
     <head>
         <meta charset="utf-8">
-        <style>
+        <style type="text/css">
           [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
           display: none !important;
-        }
+        }               
       </style>
       <script type="text/javascript">
           var assetPasePath = '{{ asset('') }}';
@@ -117,7 +118,7 @@
         <meta name="msapplication-task" content="name=My profile;action-uri=http://www.display-inline.fr/demo/developr/profile.html;icon-uri=http://www.display-inline.fr/demo/developr/img/favicons/favicon.ico">
     </head>
 
-    <body ng-controller="MainController" class="clearfix with-menu " >
+    <body ng-controller="MainController" class="clearfix with-menu menu-hidden height-control">
         {% block content %}
         <!-- Prompt IE 6 users to install Chrome Frame -->
         <!--[if lt IE 7]><p class="message red-gradient simpler">Your browser is <em>ancient!</em> <a href="http://browsehappy.com/">Upgrade to a different browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to experience this site.</p><![endif]-->
@@ -143,7 +144,7 @@
         <section ng-cloak ng-controller="MainContentController" role="main" id="main" class="block main-frontend">
             <noscript class="message black-gradient simpler">Your browser does not support JavaScript! Some features won't work as expected...</noscript>
             {% include 'PequivenSEIPBundle:Block:headerGestion.html.twig' %}
-            <div  class="content-container">
+            <div  class="content-container" style="min-height: 675px;">
                 {% block before_body '' %}
                 {% block body %}
                     {% block mainTitle %}
