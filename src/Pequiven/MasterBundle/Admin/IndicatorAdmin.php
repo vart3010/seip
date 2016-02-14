@@ -61,6 +61,7 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                 ->add('showCharts')
                 ->add('showEvolutionView')
                 ->add('showTags')
+                ->add('notshowIndicatorNoEvaluateInPeriod')                
                 ->add('requiredToImport')
                 ->add('details')
                 ->add('typeOfCompany', 'choice', array(
@@ -163,6 +164,9 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                     'required' => false,
                 ))
                 ->add('evaluateInPeriod', null, array(
+                    'required' => false,
+                ))
+                ->add('notshowIndicatorNoEvaluateInPeriod', null, array(
                     'required' => false,
                 ))
                 ->add('forcePenalize', null, array(

@@ -54,7 +54,9 @@ class IndicatorsIconsByLineBox extends GenericBox
                 }
                 $tree[(string)$lineStrategic]['child'][(string)$indicator] = $indicator;
                 //$data[(string)$lineStrategic->getRef()][(string)$indicator->getRef()] = $indicator->getEvaluateInPeriod() == true ? $indicatorService->getDataWidgetAngularGauge($indicator) : $indicatorService->getDataDashboardWidgetBulb($indicator);
-                $data[(string)$lineStrategic->getRef()][(string)$indicator->getRef()] = $indicatorService->getDataDashboardWidgetBulb($indicator);                 
+                if ($indicator->getNotShowIndicatorNoEvaluateInPeriod() != true) {
+                    $data[(string)$lineStrategic->getRef()][(string)$indicator->getRef()] = $indicatorService->getDataDashboardWidgetBulb($indicator);                                     
+                }
             }
         
         return array(

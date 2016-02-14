@@ -679,6 +679,13 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      */
     private $showDashboardByQuarter = false;
 
+    /**
+     * ¿Mostrar notificacion de indicador no evaluado en periodo actual?
+     * @var boolean
+     *  @ORM\Column(name="notshowIndicatorNoEvaluateInPeriod",type="boolean")
+     */
+    private $notshowIndicatorNoEvaluateInPeriod = false;
+
 
     /**
      * Constructor
@@ -2757,6 +2764,25 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      */
     public function getindIcatorEvolutionCloning() {
         return $this->indicatorEvolutionCloning;
+    }
+
+    /**
+     * 
+     * @param type $notshowIndicatorNoEvaluateInPeriod
+     * @return \Pequiven\IndicatorBundle\Entity\Indicator
+     */
+    public function setNotshowIndicatorNoEvaluateInPeriod($notshowIndicatorNoEvaluateInPeriod) {
+        $this->notshowIndicatorNoEvaluateInPeriod = $notshowIndicatorNoEvaluateInPeriod;
+
+        return $this;
+    }
+
+    /**
+     * 
+     * @return type
+     */
+    public function getNotshowIndicatorNoEvaluateInPeriod() {
+        return $this->notshowIndicatorNoEvaluateInPeriod;
     }
 
 
