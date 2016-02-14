@@ -229,6 +229,9 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                 ->add('resultIsFromChildrensResult', null, array(
                     'required' => false,
                 ))
+                ->add('ignoredByParentResult', null, array(
+                    'required' => false,
+                ))
                 ->end()
                 ->with('Gráficos del Indicador')
                 ->add('resultIsAccumulative', null, array(

@@ -686,6 +686,12 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      */
     private $notshowIndicatorNoEvaluateInPeriod = false;
 
+    /**
+     * ¿EL indicador será ignorado para el resultado del indicador padre?
+     * @var boolean
+     *  @ORM\Column(name="ignoredByParentResult",type="boolean")
+     */
+    private $ignoredByParentResult = false;
 
     /**
      * Constructor
@@ -2785,6 +2791,25 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
         return $this->notshowIndicatorNoEvaluateInPeriod;
     }
 
+    /**
+     * Set ignoredByParentResult
+     *
+     * @param boolean $ignoredByParentResult
+     * @return Indicator
+     */
+    public function setIgnoredByParentResult($ignoredByParentResult) {
+        $this->ignoredByParentResult = $ignoredByParentResult;
 
+        return $this;
+    }
+
+    /**
+     * Get ignoredByParentResult
+     *
+     * @return boolean 
+     */
+    public function getIgnoredByParentResult() {
+        return $this->ignoredByParentResult;
+    }
 
 }

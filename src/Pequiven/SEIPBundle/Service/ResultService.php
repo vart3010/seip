@@ -1484,39 +1484,41 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         foreach ($childrens as $child) {
             $i = 0;
 
-            foreach ($child->getValuesIndicator() as $valueIndicator) {
+            if(!$child->getIgnoredByParentResult()){
+                foreach ($child->getValuesIndicator() as $valueIndicator) {
 
-                $plan = $real = 0.0;
-                $formulaParameters = $valueIndicator->getFormulaParameters();
+                    $plan = $real = 0.0;
+                    $formulaParameters = $valueIndicator->getFormulaParameters();
 
-                if ($formula->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC) {
-                    $variableToPlanValueName = $formula->getVariableToPlanValue()->getName();
-                    $variableToRealValueName = $formula->getVariableToRealValue()->getName();
-                    if (!isset($resultsItems[$i])) {
-                        $resultsItems[$i] = array($variableToPlanValueName => 0.0, $variableToRealValueName => 0.0);
-                    }
-                    if (isset($formulaParameters[$variableToPlanValueName])) {
-                        $plan = $formulaParameters[$variableToPlanValueName];
-                    }
-                    if (isset($formulaParameters[$variableToRealValueName])) {
-                        $real = $formulaParameters[$variableToRealValueName];
-                    }
+                    if ($formula->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC) {
+                        $variableToPlanValueName = $formula->getVariableToPlanValue()->getName();
+                        $variableToRealValueName = $formula->getVariableToRealValue()->getName();
+                        if (!isset($resultsItems[$i])) {
+                            $resultsItems[$i] = array($variableToPlanValueName => 0.0, $variableToRealValueName => 0.0);
+                        }
+                        if (isset($formulaParameters[$variableToPlanValueName])) {
+                            $plan = $formulaParameters[$variableToPlanValueName];
+                        }
+                        if (isset($formulaParameters[$variableToRealValueName])) {
+                            $real = $formulaParameters[$variableToRealValueName];
+                        }
 
-                    $resultsItems[$i][$variableToPlanValueName] = $resultsItems[$i][$variableToPlanValueName] + $plan;
-                    $resultsItems[$i][$variableToRealValueName] = $resultsItems[$i][$variableToRealValueName] + $real;
-                } elseif ($formula->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_FROM_EQ) {
-                    if (!isset($resultsItems[$i])) {
-                        $resultsItems[$i] = array(Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN => 0.0, Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL => 0.0);
-                    }
-                    $result = $this->getFormulaResultFromEQ($formula, $formulaParameters);
-                    $plan = $result[Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN];
-                    $real = $result[Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL];
+                        $resultsItems[$i][$variableToPlanValueName] = $resultsItems[$i][$variableToPlanValueName] + $plan;
+                        $resultsItems[$i][$variableToRealValueName] = $resultsItems[$i][$variableToRealValueName] + $real;
+                    } elseif ($formula->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_FROM_EQ) {
+                        if (!isset($resultsItems[$i])) {
+                            $resultsItems[$i] = array(Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN => 0.0, Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL => 0.0);
+                        }
+                        $result = $this->getFormulaResultFromEQ($formula, $formulaParameters);
+                        $plan = $result[Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN];
+                        $real = $result[Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL];
 
-                    $resultsItems[$i][Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN] = $resultsItems[$i][Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN] + $plan;
-                    $resultsItems[$i][Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL] = $resultsItems[$i][Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL] + $real;
-                }
-                $i++;
-            }//fin for each
+                        $resultsItems[$i][Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN] = $resultsItems[$i][Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN] + $plan;
+                        $resultsItems[$i][Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL] = $resultsItems[$i][Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL] + $real;
+                    }
+                    $i++;
+                }//fin for each
+            }
         }//fin for each childrens
 
         $details = $indicator->getDetails();
