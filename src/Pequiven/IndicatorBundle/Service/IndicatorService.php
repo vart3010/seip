@@ -3123,6 +3123,8 @@ class IndicatorService implements ContainerAwareInterface {
                         $varTempMedition = $varTempMedition + $arrayVariablesResultsGroup['medition'][$j];
                     }
                     $dataReal["value"] = number_format($varTempReal, 2, ',', '.');
+                    $dataReal["color"] = "#298A08";
+                    $dataPlan["color"] = "#0101DF";
                     $dataPlan["value"] = number_format($varTempPlan, 2, ',', '.');
                     $dataMedition["value"] = number_format($varTempMedition, 2, ',', '.');
                 } else{
