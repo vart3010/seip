@@ -3059,6 +3059,7 @@ class IndicatorService implements ContainerAwareInterface {
             $medition["renderas"] = "line";
             $medition["parentYAxis"] = "S";
             $medition["showValues"] = "0";
+            $medition["color"] = "#B40404";
             
             $labelsFrequencyNotificationArray = $this->getLabelsByIndicatorFrequencyNotification($indicator);
             $totalValueIndicators = count($indicator->getValuesIndicator());
@@ -3129,6 +3130,7 @@ class IndicatorService implements ContainerAwareInterface {
                     $dataPlan["color"] = "#0101DF";
                     $dataPlan["value"] = number_format($varTempPlan, 2, ',', '.');
                     $dataMedition["value"] = number_format($varTempMedition, 2, ',', '.');
+                    $dataMedition["color"] = "#B40404";
                 } else{
                     $dataReal["value"] = number_format($arrayVariablesResultsGroup['valueReal'][$i], 2, ',', '.');
                     $dataPlan["value"] = number_format($arrayVariablesResultsGroup['valuePlan'][$i], 2, ',', '.');
