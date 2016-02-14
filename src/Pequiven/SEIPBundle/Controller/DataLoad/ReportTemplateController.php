@@ -1340,6 +1340,7 @@ class ReportTemplateController extends SEIPController {
 
         if ($byRange === true) {
 
+
             $dateDesde = $dateFrom->format("U");
             $dateHasta = $dateEnd->format("U");
 
@@ -1352,97 +1353,98 @@ class ReportTemplateController extends SEIPController {
 
 
                 foreach ($planReport->getProductsReport() as $productReport) {
-
+                    if (!$productReport->getIsGroup()) {
 //var_dump($productReport->getname());
-                    $i = $dateDesde;
-                    $rs = array();
-                    $totalPlan = $totalReal = $totalPercentaje = $totalPnr = 0.0;
+                        $i = $dateDesde;
+                        $rs = array();
+                        $totalPlan = $totalReal = $totalPercentaje = $totalPnr = 0.0;
 //$totalRawPlan = $totalRawReal = 0.0;
-                    while ($i != ($dateHasta + 86400)) {
-                        $timeNormal = new \DateTime(date("Y-m-d", $i));
-                        //RESULTADOS DE PRODUCCION
-                        $rs = $productReport->getSummaryDay($timeNormal, $typeReport);
-                        $totalPlan += $rs["plan"];
-                        $totalReal += $rs["real"];
-                        $totalProdPlan += $rs["plan"];
-                        $totalProdReal += $rs["real"];
+                        while ($i != ($dateHasta + 86400)) {
+                            $timeNormal = new \DateTime(date("Y-m-d", $i));
+                            //RESULTADOS DE PRODUCCION
+                            $rs = $productReport->getSummaryDay($timeNormal, $typeReport);
+                            $totalPlan += $rs["plan"];
+                            $totalReal += $rs["real"];
+                            $totalProdPlan += $rs["plan"];
+                            $totalProdReal += $rs["real"];
 
 
-                        $totalPercentaje += $rs["percentage"];
-                        $totalPnr += $rs["pnr"];
-                        $rs["plan"] = $totalPlan;
-                        $rs["real"] = $totalReal;
-                        if ($totalPlan > 0) {
-                            $rs["percentage"] = ($totalReal * 100) / $totalPlan;
-                        } else {
-                            $rs["percentage"] = 0.0;
-                            $rs["pnr"] = 0.0;
-                        }
-                        $pnr = $totalPlan - $totalReal;
-                        if ($pnr > 0) {
-                            $rs["pnr"] = $pnr;
-                        } else {
-                            $rs["pnr"] = 0.0;
-                        }
+                            $totalPercentaje += $rs["percentage"];
+                            $totalPnr += $rs["pnr"];
+                            $rs["plan"] = $totalPlan;
+                            $rs["real"] = $totalReal;
+                            if ($totalPlan > 0) {
+                                $rs["percentage"] = ($totalReal * 100) / $totalPlan;
+                            } else {
+                                $rs["percentage"] = 0.0;
+                                $rs["pnr"] = 0.0;
+                            }
+                            $pnr = $totalPlan - $totalReal;
+                            if ($pnr > 0) {
+                                $rs["pnr"] = $pnr;
+                            } else {
+                                $rs["pnr"] = 0.0;
+                            }
 
-                        //Verifica si va a exportar y obvia las observaciones vacías.
-                        if ($exportToPdf) {
-                            if ($rs["observation"] != "") {
+                            //Verifica si va a exportar y obvia las observaciones vacías.
+                            if ($exportToPdf) {
+                                if ($rs["observation"] != "") {
+                                    $arrayObservation[] = array("day" => $timeNormal, "productName" => $productReport->getProduct()->getName() . " (" . $productReport->getPlantReport()->getPlant()->getName() . ")", "observation" => $rs["observation"]);
+                                }
+                            } else {
                                 $arrayObservation[] = array("day" => $timeNormal, "productName" => $productReport->getProduct()->getName() . " (" . $productReport->getPlantReport()->getPlant()->getName() . ")", "observation" => $rs["observation"]);
                             }
-                        } else {
-                            $arrayObservation[] = array("day" => $timeNormal, "productName" => $productReport->getProduct()->getName() . " (" . $productReport->getPlantReport()->getPlant()->getName() . ")", "observation" => $rs["observation"]);
+
+
+
+
+                            $i = $i + 86400; //VOY RECORRIENDO DIA POR DIA
                         }
+                        //PRODUCTION 
+                        $rs["productName"] = $productReport->getProduct()->getName() . " (" . $productReport->getProduct()->getProductUnit()->getUnit() . ")";
+
+                        $arrayProduction[] = $rs;
+
+                        //CONSUMO DE MATERIA PRIMA
+                        //VERIFICA SI EL PRODUCTO ES MATERIA PRIMA
 
 
+                        foreach ($productReport->getRawMaterialConsumptionPlannings() as $rawMaterial) {
+                            if ($rawMaterial->getProduct()->getIsRawMaterial()) {
+                                $totalRawDayPlan = 0.0;
+                                $totalRawDayReal = 0.0;
+
+                                $i = $dateDesde;
 
 
-                        $i = $i + 86400; //VOY RECORRIENDO DIA POR DIA
-                    }
-                    //PRODUCTION 
-                    $rs["productName"] = $productReport->getProduct()->getName() . " (" . $productReport->getProduct()->getProductUnit()->getUnit() . ")";
+                                while ($i != ($dateHasta + 86400)) {
+                                    $timeNormal = new \DateTime(date("Y-m-d", $i));
+                                    $rawMaterialResult = $rawMaterial->getSummary($timeNormal);
 
-                    $arrayProduction[] = $rs;
+                                    $totalRawDayPlan += $rawMaterialResult["total_day_plan"];
+                                    $totalRawDayReal += $rawMaterialResult["total_day"];
+                                    $totalRawPlan += $rawMaterialResult["total_day_plan"];
+                                    $totalRawReal += $rawMaterialResult["total_day"];
 
-                    //CONSUMO DE MATERIA PRIMA
-                    //VERIFICA SI EL PRODUCTO ES MATERIA PRIMA
+                                    $i = $i + 86400; //VOY RECORRIENDO DIA POR DIA
+                                }
+                                $idProduct = $rawMaterial->getProduct()->getId();
 
+                                if (!in_array($idProduct, $arrayIdProductsByRange)) {
+                                    $arrayIdProductsByRange[] = $idProduct;
+                                    //$n = $rawMaterial->getProductReport()->getPlantReport()->getPlant()->getName();
+                                    $arrayRawMaterial[] = array(
+                                        "productName" => $rawMaterial->getProduct()->getName() . " (" . $rawMaterial->getProduct()->getProductUnit()->getUnit() . ")",
+                                        "productId" => $rawMaterial->getProduct()->getId(),
+                                        "planRaw" => $totalRawDayPlan,
+                                        "realRaw" => $totalRawDayReal
+                                    );
+                                } else {
+                                    $indice = array_search($idProduct, $arrayIdProductsByRange);
 
-                    foreach ($productReport->getRawMaterialConsumptionPlannings() as $rawMaterial) {
-                        if ($rawMaterial->getProduct()->getIsRawMaterial()) {
-                            $totalRawDayPlan = 0.0;
-                            $totalRawDayReal = 0.0;
-
-                            $i = $dateDesde;
-
-
-                            while ($i != ($dateHasta + 86400)) {
-                                $timeNormal = new \DateTime(date("Y-m-d", $i));
-                                $rawMaterialResult = $rawMaterial->getSummary($timeNormal);
-
-                                $totalRawDayPlan += $rawMaterialResult["total_day_plan"];
-                                $totalRawDayReal += $rawMaterialResult["total_day"];
-                                $totalRawPlan += $rawMaterialResult["total_day_plan"];
-                                $totalRawReal += $rawMaterialResult["total_day"];
-
-                                $i = $i + 86400; //VOY RECORRIENDO DIA POR DIA
-                            }
-                            $idProduct = $rawMaterial->getProduct()->getId();
-                            
-                            if (!in_array($idProduct, $arrayIdProductsByRange)) {
-                                $arrayIdProductsByRange[] = $idProduct;
-                                //$n = $rawMaterial->getProductReport()->getPlantReport()->getPlant()->getName();
-                                $arrayRawMaterial[] = array(
-                                    "productName" => $rawMaterial->getProduct()->getName() . " (" . $rawMaterial->getProduct()->getProductUnit()->getUnit() . ")",
-                                    "productId" => $rawMaterial->getProduct()->getId(),
-                                    "planRaw" => $totalRawDayPlan,
-                                    "realRaw" => $totalRawDayReal
-                                );
-                            } else {
-                                $indice = array_search($idProduct, $arrayIdProductsByRange);
-
-                                $arrayRawMaterial[$indice]["planRaw"] = $arrayRawMaterial[$indice]["planRaw"] + $totalRawDayPlan;
-                                $arrayRawMaterial[$indice]["realRaw"] = $arrayRawMaterial[$indice]["realRaw"] + $totalRawDayReal;
+                                    $arrayRawMaterial[$indice]["planRaw"] = $arrayRawMaterial[$indice]["planRaw"] + $totalRawDayPlan;
+                                    $arrayRawMaterial[$indice]["realRaw"] = $arrayRawMaterial[$indice]["realRaw"] + $totalRawDayReal;
+                                }
                             }
                         }
                     }
@@ -1483,27 +1485,29 @@ class ReportTemplateController extends SEIPController {
                 $i = $dateDesde;
 
                 foreach ($planReport->getProductsReport() as $productReport) {
-                    //$productId = $productReport->getProduct()->getId();
-                    $productReportId = $productReport->getId();
-                    //var_dump($productReport->getName());
-                    if (!in_array($productReportId, $arrayNamesUnrealizedProduction)) {
-                        $arrayNamesUnrealizedProduction[] = $productReportId;
-                        $arrayUnrealizedProduction[$productReportId] = array(
-                            "productName" => $productReport->getName() . " (" . $productReport->getProduct()->getProductUnit()->getUnit() . ")",
-                            "idProduct" => $productReport->getProduct()->getId(),
-                            "idProductReport" => $productReport->getId(),
-                            "idReportTemplate" => $planReport->getReportTemplate()->getId(),
-                            "total" => 0.0
-                        );
-                    }
+                    if (!$productReport->getIsGroup()) {
+                        //$productId = $productReport->getProduct()->getId();
+                        $productReportId = $productReport->getId();
+                        //var_dump($productReport->getName());
+                        if (!in_array($productReportId, $arrayNamesUnrealizedProduction)) {
+                            $arrayNamesUnrealizedProduction[] = $productReportId;
+                            $arrayUnrealizedProduction[$productReportId] = array(
+                                "productName" => $productReport->getName() . " (" . $productReport->getProduct()->getProductUnit()->getUnit() . ")",
+                                "idProduct" => $productReport->getProduct()->getId(),
+                                "idProductReport" => $productReport->getId(),
+                                "idReportTemplate" => $planReport->getReportTemplate()->getId(),
+                                "total" => 0.0
+                            );
+                        }
 
-                    while ($i != ($dateHasta + 86400)) {
-                        $timeNormal = new \DateTime(date("Y-m-d", $i));
-                        $unrealizedProduction = $productReport->getSummaryUnrealizedProductions($timeNormal);
+                        while ($i != ($dateHasta + 86400)) {
+                            $timeNormal = new \DateTime(date("Y-m-d", $i));
+                            $unrealizedProduction = $productReport->getSummaryUnrealizedProductions($timeNormal);
 //            var_dump($unrealizedProduction);
-                        $arrayUnrealizedProduction[$productReportId]["total"] += $unrealizedProduction["total_day"];
+                            $arrayUnrealizedProduction[$productReportId]["total"] += $unrealizedProduction["total_day"];
 
-                        $i += 86400; //VOY RECORRIENDO DIA POR DIA
+                            $i += 86400; //VOY RECORRIENDO DIA POR DIA
+                        }
                     }
                 }
 
@@ -1513,10 +1517,12 @@ class ReportTemplateController extends SEIPController {
 //INVENTARIO
 
                 foreach ($planReport->getProductsReport() as $productReport) {
-                    $productId = $productReport->getProduct()->getId();
-                    $timeNormal = new \DateTime(date("Y-m-d", $dateHasta));
-                    $Inventory = $productReport->getSummaryInventory($timeNormal);
-                    $arrayInventory[] = array("productName" => $productReport->getProduct()->getName() . " (" . $productReport->getProduct()->getProductUnit()->getUnit() . ")", "total" => $Inventory["total_day"]);
+                    if (!$productReport->getIsGroup()) {
+                        $productId = $productReport->getProduct()->getId();
+                        $timeNormal = new \DateTime(date("Y-m-d", $dateHasta));
+                        $Inventory = $productReport->getSummaryInventory($timeNormal);
+                        $arrayInventory[] = array("productName" => $productReport->getProduct()->getName() . " (" . $productReport->getProduct()->getProductUnit()->getUnit() . ")", "total" => $Inventory["total_day"]);
+                    }
                 }
             }
 
@@ -1609,20 +1615,25 @@ class ReportTemplateController extends SEIPController {
                 }
 
                 foreach ($plantReport->getProductsReport() as $productReport) {
-                    $product = $productReport->getProduct();
-                    if (!isset($productsReportByIdProduct[$product->getId()])) {
-                        $productsReportByIdProduct[$product->getId()] = array();
-                    }
-                    $productsReportByIdProduct[$product->getId()][] = $productReport;
 
-                    foreach ($productReport->getRawMaterialConsumptionPlannings() as $rawMaterialConsumptionPlanning) {
-                        $product = $rawMaterialConsumptionPlanning->getProduct();
-                        if (!isset($rawMaterialConsumptionPlanningsById[$product->getId()])) {
-                            $rawMaterialConsumptionPlanningsById[$product->getId()] = array();
+                    if (!$productReport->getIsGroup()) {
+                        //var_dump($productReport->getId());
+                        $product = $productReport->getProduct();
+                        if (!isset($productsReportByIdProduct[$product->getId()])) {
+                            $productsReportByIdProduct[$product->getId()] = array();
                         }
-                        $rawMaterialConsumptionPlanningsById[$product->getId()][] = $rawMaterialConsumptionPlanning;
+                        $productsReportByIdProduct[$product->getId()][] = $productReport;
+
+                        foreach ($productReport->getRawMaterialConsumptionPlannings() as $rawMaterialConsumptionPlanning) {
+                            $product = $rawMaterialConsumptionPlanning->getProduct();
+                            if (!isset($rawMaterialConsumptionPlanningsById[$product->getId()])) {
+                                $rawMaterialConsumptionPlanningsById[$product->getId()] = array();
+                            }
+                            $rawMaterialConsumptionPlanningsById[$product->getId()][] = $rawMaterialConsumptionPlanning;
+                        }
                     }
                 }
+
 
                 foreach ($plantReport->getConsumerPlanningServices() as $consumerPlanningService) {
                     $service = $consumerPlanningService->getService();
@@ -1633,13 +1644,17 @@ class ReportTemplateController extends SEIPController {
                 }
             }
 
+
             foreach ($productsReportByIdProduct as $id => $groups) {
                 foreach ($groups as $productReport) {
-                    if (!$productsReport->contains($productReport)) {
-                        $productsReport->add($productReport);
+                    if (!$productReport->getIsGroup()) {
+                        if (!$productsReport->contains($productReport)) {
+                            $productsReport->add($productReport);
+                        }
                     }
                 }
             }
+
 
             foreach ($consumerPlanningServicesByIdService as $id => $groups) {
                 foreach ($groups as $consumerPlanningService) {
@@ -1659,18 +1674,20 @@ class ReportTemplateController extends SEIPController {
 //Filtrar productos que quiere el usuario
             if ($productsReportConsulting && count($productsReportConsulting) > 0) {
                 foreach ($productsReport as $productReport) {
-                    if (!$productsReportConsulting->contains($productReport)) {
-                        $productsReport->removeElement($productReport);
+                    if (!$productReport->getIsGroup()) {
+                        if (!$productsReportConsulting->contains($productReport)) {
+                            $productsReport->removeElement($productReport);
+                        }
                     }
                 }
             }
 
-            $reportService = $this->getProductReportService();
 
+
+            $reportService = $this->getProductReportService();
             $graphicsDays = $reportService->generateColumn3dLinery(array("caption" => "Producción por Dia", "subCaption" => "Valores Expresados en TM"), $productsReport, array("range" => $byRange, "dateFrom" => $dateFrom, "dateEnd" => $dateEnd), $dateReport, $typeReport, "getSummaryDay", "plan", "real");
             $graphicsMonth = $reportService->generateColumn3dLinery(array("caption" => "Producción por Mes", "subCaption" => "Valores Expresados en TM"), $productsReport, array("range" => $byRange, "dateFrom" => $dateFrom, "dateEnd" => $dateEnd), $dateReport, $typeReport, "getSummaryMonth", "plan_acumulated", "real_acumulated");
             $graphicsYear = $reportService->generateColumn3dLinery(array("caption" => "Producción por Año", "subCaption" => "Valores Expresados en MTM"), $productsReport, array("range" => $byRange, "dateFrom" => $dateFrom, "dateEnd" => $dateEnd), $dateReport, $typeReport, "getSummaryYear", "plan_acumulated", "real_acumulated", 1000);
-
 //PRODUCTION
             $dayPlan = 0.0;
             $dayReal = 0.0;
@@ -1823,6 +1840,8 @@ class ReportTemplateController extends SEIPController {
             }
             //var_dump($arrayRawMaterial);die();
 
+
+
             $cont = 0;
             foreach ($arrayRawMaterial as $rawMaterial) {
                 $arrayRawMaterial[$cont]["plan"] = number_format($rawMaterial["plan"], 2, ",", ".");
@@ -1921,44 +1940,48 @@ class ReportTemplateController extends SEIPController {
 //PRODUCION NO REALIZADA
 
                 foreach ($planReport->getProductsReport() as $productReport) {
-                    $productId = $productReport->getProduct()->getId();
-                    $productReportId = $productReport->getId();
+                    if (!$productReport->getIsGroup()) {
+                        $productId = $productReport->getProduct()->getId();
+                        $productReportId = $productReport->getId();
 
 //                    if (!in_array($productReportId, $arrayNamesUnrealizedProduction)) {
 //                        $arrayNamesUnrealizedProduction[] = $productId;
-                    $arrayUnrealizedProduction[$productReportId] = array(
-                        "productName" => $productReport->getName() . " (" . $productReport->getProduct()->getProductUnit()->getUnit() . ")",
-                        //ID DEL PRODUCT_REPORT
-                        "productId" => $productReport->getId(),
-                        "reportTemplateId" => $productReport->getPlantReport()->getReportTemplate()->getId(),
-                        //ID DEL PRODUCTO
-                        "idProduct" => $productId
-                    );
-                    // }
+                        $arrayUnrealizedProduction[$productReportId] = array(
+                            "productName" => $productReport->getName() . " (" . $productReport->getProduct()->getProductUnit()->getUnit() . ")",
+                            //ID DEL PRODUCT_REPORT
+                            "productId" => $productReport->getId(),
+                            "reportTemplateId" => $productReport->getPlantReport()->getReportTemplate()->getId(),
+                            //ID DEL PRODUCTO
+                            "idProduct" => $productId
+                        );
+                        // }
 
-                    $unrealizedProduction = $productReport->getSummaryUnrealizedProductions($dateReport);
+                        $unrealizedProduction = $productReport->getSummaryUnrealizedProductions($dateReport);
 
-                    $arrayUnrealizedProduction[$productReportId]["day"] = $unrealizedProduction["total_day"];
-                    $arrayUnrealizedProduction[$productReportId]["month"] = $unrealizedProduction["total_month"];
-                    $arrayUnrealizedProduction[$productReportId]["year"] = $unrealizedProduction["total_year"];
+                        $arrayUnrealizedProduction[$productReportId]["day"] = $unrealizedProduction["total_day"];
+                        $arrayUnrealizedProduction[$productReportId]["month"] = $unrealizedProduction["total_month"];
+                        $arrayUnrealizedProduction[$productReportId]["year"] = $unrealizedProduction["total_year"];
 
-                    $totalUnrealizedProduction["day"] += $unrealizedProduction["total_day"];
-                    $totalUnrealizedProduction["month"] += $unrealizedProduction["total_month"];
-                    $totalUnrealizedProduction["year"] += $unrealizedProduction["total_year"];
+                        $totalUnrealizedProduction["day"] += $unrealizedProduction["total_day"];
+                        $totalUnrealizedProduction["month"] += $unrealizedProduction["total_month"];
+                        $totalUnrealizedProduction["year"] += $unrealizedProduction["total_year"];
+                    }
                 }
 
 
                 foreach ($planReport->getProductsReport() as $productReport) {
-                    $productId = $productReport->getProduct()->getId();
-                    $Inventory = $productReport->getSummaryInventory($dateReport);
-                    $totalInventory["day"] += $Inventory["total_day"];
-                    $totalInventory["day_preview"] += $Inventory["total_month"];
+                    if (!$productReport->getIsGroup()) {
+                        $productId = $productReport->getProduct()->getId();
+                        $Inventory = $productReport->getSummaryInventory($dateReport);
+                        $totalInventory["day"] += $Inventory["total_day"];
+                        $totalInventory["day_preview"] += $Inventory["total_month"];
 
-                    $arrayInventory[] = array(
-                        "productName" => $productReport->getProduct()->getName() . " (" . $productReport->getProduct()->getProductUnit()->getUnit() . ")",
-                        "day" => $Inventory["total_day"],
-                        "day_preview" => $Inventory["total_month"]
-                    );
+                        $arrayInventory[] = array(
+                            "productName" => $productReport->getProduct()->getName() . " (" . $productReport->getProduct()->getProductUnit()->getUnit() . ")",
+                            "day" => $Inventory["total_day"],
+                            "day_preview" => $Inventory["total_month"]
+                        );
+                    }
                 }
             }
 
