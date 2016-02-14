@@ -80,3 +80,18 @@ listArrangementProgramByGroup:
     requirements:
         idGerencia: "\d+"
     methods: [GET]
+
+pequiven_seip_modules_ventas:
+    path:     /module/ventas
+    defaults: { _controller: PequivenSEIPBundle:Default:module }
+pequiven_seip_modules_despacho:
+    path:     /module/despachos
+    defaults: { _controller: PequivenSEIPBundle:Default:module }
+pequiven_seip_modules_contrataciones:
+    path:     /module/contrataciones
+    defaults: { _controller: PequivenSEIPBundle:Default:module }
+pequiven_seip_modules_proyectos:
+    path:     /module/proyectos
+    defaults: { _controller: PequivenSEIPBundle:Default:module }
+    
+
