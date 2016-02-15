@@ -61,7 +61,7 @@
                 {% elseif indicatorRange|length > 0 and indicatorRange.middle == true %}
                     {% set advancesClass = 'orange-gradient' %}
                 {% endif %}
-                <span style="max-width: 400px" class="progress" data-progress-options='{"size":false,"barClasses":["{{ advancesClass }}","glossy"],"innerMarks":25,"topMarks":25,"topLabel":"[value]%","bottomMarks":[{"value":0,"label":"{{ 'pequiven.advances.nope'|trans({},'messages') }}"},{"value":50,"label":"{{ 'pequiven.advances.better'|trans({},'messages') }}"},{"value":100,"label":"{{ 'pequiven.advances.complete'|trans({},'messages') }}"}],"insetExtremes":true}'>{{ advances }}%</span>
+                <span style="max-width: 400px; " class="progress" data-progress-options='{"size":false,"barClasses":["{{ advancesClass }}","glossy"],"innerMarks":25,"topMarks":25,"topLabel":"[value]%","bottomMarks":[{"value":0,"label":"{{ 'pequiven.advances.nope'|trans({},'messages') }}"},{"value":50,"label":"{{ 'pequiven.advances.better'|trans({},'messages') }}"},{"value":100,"label":"{{ 'pequiven.advances.complete'|trans({},'messages') }}"}],"insetExtremes":true}'>{{ advances }}%</span>
             </p>
             <br/>
             <div class="columns">
@@ -277,12 +277,12 @@
             {#{% if  indicator.managementSystems | length > 0 and is_granted('ROLE_SEIP_SIG_EVOLUTION_VIEW') %}#}
             {% if  indicator.managementSystems | length > 0 %}
                 <div class="inline-label">
-                        <label class="label">{{ 'form.systems'|trans }}</label>
-                        <ul class="fa-ul">
-                            {% for managementSystem in indicator.managementSystems %}
-                                <li>{{ managementSystem.description }}</li>
+                    <label class="label">{{ 'form.systems'|trans }}</label>
+                    <ul class="fa-ul">
+                        {% for managementSystem in indicator.managementSystems %}
+                            <li>{{ managementSystem.description }}</li>
                             {% endfor %}
-                        </ul>
+                    </ul>
                 </div>
             {% endif %}
             {# Fin carga de sistemas de Gestión #}
@@ -310,13 +310,13 @@
                 </div>
                 <div class="with-padding">
                     <strong>El Indicador no tiene configurada ninguna frecuencia de notificación.
-{#                        {{ dump(is_granted('ROLE_SONATA_ADMIN_INDICATOR_INDICATOR_EDIT')) }}#}
-{#                        {% if(is_granted(["ROLE_SONATA_ADMIN_INDICATOR_INDICATOR_EDIT"])) %}#}
+                        {#                        {{ dump(is_granted('ROLE_SONATA_ADMIN_INDICATOR_INDICATOR_EDIT')) }}#}
+                        {#                        {% if(is_granted(["ROLE_SONATA_ADMIN_INDICATOR_INDICATOR_EDIT"])) %}#}
                         <a href="{{ path("admin_pequiven_indicator_indicator_edit",{id:indicator.id}) }}">
                             Haga click aquí
                         </a>
                         para configurarla. 
-                        
+
                     </strong>
                 </div>
             </div>
@@ -329,15 +329,18 @@
         {% endif %}
         <br /><br />
 
+        {% include 'PequivenSEIPBundle:Planning:Indicator/show/files.html.twig' %}
+        <br /><br />
+
         <!-- Historial de eventos del Indicador -->
         {% include 'PequivenSEIPBundle:Planning:Indicator/show/history.html.twig' with {'entity':indicator} %}
     </div>
 
     <p class="button-height align-right">
 
-    {# Visualizacion de Indice de evolucion #}      
+        {# Visualizacion de Indice de evolucion #}      
         {% include 'PequivenSIGBundle:Template:base_evolution_nav.html.twig' %}        
-    {# end #}
+        {# end #}
 
         {% if is_granted(['ROLE_WORKER_PLANNING','ROLE_SEIP_INDICATOR_ADD_OBSERVATION']) %}
             {% set filedObservation = '<br/><br/><textarea name="observation" class="input" placeholder="' ~ ('pequiven.arrangement_program.write_observation'|trans({},'PequivenArrangementProgramBundle')) ~ '" required="required" cols="28" rows="10" ></textarea>' %}
@@ -448,8 +451,23 @@ function submitUploadFile(valueIndicatorId) {
     $("#field_" + valueIndicatorId[1]).val(valueIndicatorId[1]);
     $("#form_" + valueIndicatorId[1]).submit();
 }
+function openImg(rutaImg) {
+    var url = "<div align='center'><img src='" + rutaImg + "' class='img-responsive'  style='max-width: 100%;  height: auto;'></div>";
+    $.modal({
+        title: "",
+        content: url
+    });
+
+}
 
 $(document).ready(function () {
+    $("a#loadFileIndicator").click(function () {
+        $("input#fileIndicator").click();
+    });
+
+    $("input#fileIndicator").change(function () {
+        $("form#loadFileForm").submit();
+    });
 
 // Progress
     $('.progress').progress();
