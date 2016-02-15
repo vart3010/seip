@@ -155,6 +155,7 @@ class IndicatorSigController extends ResourceController {
             $this->get('session')->getFlashBag()->add('error', "El mes consultado no es un mes valido!");
             $month = 01;
         }
+
         //Cargando el Archivo
         $uploadFile = $request->get("uploadFile"); //Recibiendo archivo
         //SI SE SUBIO EL ARCHIVO SE PROCEDE A GUARDARLO
@@ -173,20 +174,21 @@ class IndicatorSigController extends ResourceController {
                 $this->redirect($this->generateUrl("pequiven_indicator_evolution", array("id" => $request->get("id"), "month" => $month)));
             }
         }
+
         //Url export
         $urlExportFromChart = $this->generateUrl('pequiven_indicator_evolution_export', array('id' => $indicatorBase->getId(), 'month' => $month, 'typeObj' => 1));
-
+        
         //Carga de data de Indicador para armar grafica
         $response = new JsonResponse();
 
         $indicatorService = $this->getIndicatorService(); //Obtenemos el servicio del indicador
-
-        $dataChart = $indicatorService->getDataChartOfIndicatorEvolution($indicatorBase,$urlExportFromChart, array('withVariablesRealPLan' => true)); //Obtenemos la data del gráfico de acuerdo al indicador
+        
+        $dataChart = $indicatorService->getDataChartOfIndicatorEvolution($indicatorBase,$urlExportFromChart,$month); //Obtenemos la data del gráfico de acuerdo al indicador
+        
         //Carga de los datos de la grafica de las Causas de Desviación
         $dataCause = $indicatorService->getDataChartOfCausesIndicatorEvolution($indicator, $month, $urlExportFromChart); //Obtenemos la data del grafico de las causas de desviación
-
+        
         $results = $this->get('pequiven.repository.sig_causes_report_evolution')->findBy(array('indicator' => $idIndicator, 'month' => $month));
-
         foreach ($results as $value) {
             $dataCa = $value->getValueOfCauses();
             $sumCause = $sumCause + $dataCa;
@@ -196,10 +198,8 @@ class IndicatorSigController extends ResourceController {
         $trend = $this->get('pequiven.repository.sig_trend_report_evolution')->findBy(array('indicator' => $indicator, 'month' => $month, 'typeObject' => 1));
         //Carga del analisis de las causas
         $causeAnalysis = $this->get('pequiven.repository.sig_causes_analysis')->findBy(array('indicator' => $indicator, 'month' => $month));
-        //Carga de la señalización de la tendencia de la grafica
-        
+        //Carga de la señalización de la tendencia de la grafica        
         $tendency = $indicator->getTendency()->getId();
-
         $font = array();
         switch ($tendency) {
             case 0:

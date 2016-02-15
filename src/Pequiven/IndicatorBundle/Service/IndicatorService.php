@@ -4136,8 +4136,8 @@ class IndicatorService implements ContainerAwareInterface {
      * @param Indicator $indicator
      * @return type
      */
-    public function getDataChartOfIndicatorEvolution(Indicator $indicator, $urlExportFromChart) {
-
+    public function getDataChartOfIndicatorEvolution(Indicator $indicator, $urlExportFromChart, $month) {
+        
         $period = $indicator->getPeriod()->getDescription();
         
         $em = $this->getDoctrine();        
@@ -4177,17 +4177,14 @@ class IndicatorService implements ContainerAwareInterface {
         $dataTendency = 0;
         //Lamado de promedio
         $prom = $this->getPromdIndicator($indicator);
-        //$prom = $indicator->getResultReal(); //Carga del resultado real cargado del indicador        
-
         //Lamado obj 2015
         $obj = $this->getObjIndicator($indicator);
         //Paso de Valores Validos
         $resultNumbers = $this->getIndicatorHasResultValid($indicator);
         //Llamado de frecuencia de Notificacion del Indicador
         $labelsFrequencyNotificationArray = $this->getLabelsByIndicatorFrequencyNotification($indicator);
-
         //Número de indicadores asociados
-        $totalNumValues = count($indicator->getValuesIndicator());
+        $totalNumValues = count($indicator->getValuesIndicator());        
         if ($totalNumValues >= 3) {
             $dataTendency =  $this->IndicatorCalculateTendency($indicator);
         }            
@@ -4227,12 +4224,10 @@ class IndicatorService implements ContainerAwareInterface {
             $contMonth = 1;
             foreach ($indicatorValues as $indicatorValue) {
                 $formulaParameters = $indicatorValue->getFormulaParameters();                
-                if ($resultNumbers >= $contMonth) {                    
-                    //if ($labelsFrequencyNotificationArray === 0) {                     
-                        $label["label"] = $labelsFrequencyNotificationArray[$contMonth];                        
-                    //}                    
-                    $contCant = $contMonth; //Contando la Cantidad de valores
-                    $category[] = $label;
+                if ($resultNumbers >= $contMonth) {                                        
+                        $label["label"] = $labelsFrequencyNotificationArray[$contMonth];                                            
+                        $contCant = $contMonth; //Contando la Cantidad de valores
+                        $category[] = $label;
                 }
                 $contMonth++;
             }
@@ -4247,7 +4242,6 @@ class IndicatorService implements ContainerAwareInterface {
             //Data 2014            
             $acumLast = $cant = $promLast = 0;
             $indicatorlast = $indicator->getindicatorLastPeriod();
-
             
             if ($indicator->getPeriod()->getId() == 3) {
                 if ($indicatorPeriod15->getindicatorLastPeriod() === null) {
@@ -4280,8 +4274,7 @@ class IndicatorService implements ContainerAwareInterface {
                 $dataSetTend["data"][] = array('value' => '');
                 $dataSetReal["data"][] = array('value' => '');
                 $dataSetLine["data"][] = array('value' => ''); //Valor vacio para saltar 2015
-            }
-            
+            }            
             //Pasando espacios vacios para desarrollo de la gráfica
             $dataSetTend["data"][] = array('value' => '');
             $dataSetReal["data"][] = array('value' => '');
