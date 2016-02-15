@@ -174,7 +174,9 @@
                 {% endif %}
                 {% set addImg = false %}
                 {% if is_granted(['ROLE_SEIP_INDICATOR_UPLOAD_FILES']) %}
-                    {% include 'PequivenSEIPBundle:Planning:Indicator/show/files.html.twig' %}
+                    {% if indicator.loadFiles %}
+                        {% include 'PequivenSEIPBundle:Planning:Indicator/show/files.html.twig' %}
+                    {% endif %}
                 {% endif %}
                 <br /><br />
 
