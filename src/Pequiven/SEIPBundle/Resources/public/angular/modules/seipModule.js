@@ -6485,6 +6485,29 @@ angular.module('seipModule.controllers', [])
                     });
                 });
             }
+            
+            //29-Gráfico tipo multiseries de línea, con un trendline de forma horizontal
+            $scope.chargeChartMultiSeriesLineIndicatorWithTrendlineHorizontal = function (indicatorId, render, width, height) {
+                var getDataChartMultiSeriesLineIndicatorWithTrendlineHorizontal = Routing.generate("getDataChartMultiSeriesLineIndicatorWithTrendlineHorizontal", {id: indicatorId});
+                $http.get(getDataChartMultiSeriesLineIndicatorWithTrendlineHorizontal).success(function (data) {
+                    FusionCharts.ready(function () {
+                        var revenueChartMultiSeriesLineIndicatorWithTrendlineHorizontal = new FusionCharts({
+                            "type": "msline",
+                            "renderAt": render,
+                            "width": width + "%",
+                            "height": height,
+                            "dataFormat": "json",
+                            "dataSource": {
+                                "chart": data.dataSource.chart,
+                                "categories": data.dataSource.categories,
+                                "dataset": data.dataSource.dataset
+                            }
+                        });
+                        revenueChartMultiSeriesLineIndicatorWithTrendlineHorizontal.setTransparent(true);
+                        revenueChartMultiSeriesLineIndicatorWithTrendlineHorizontal.render();
+                    });
+                });
+            }
 
             //PRO_RT_PQV-Gráfico para ver la producción consolidada por los ReportTemplates de PQV
             $scope.chargeChartProductionReportTemplateByDate = function (reportTemplateId, dateSearch, render, width, height) {

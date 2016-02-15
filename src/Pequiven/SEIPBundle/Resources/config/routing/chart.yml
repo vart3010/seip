@@ -357,6 +357,18 @@ getDataChartColumnLineDualAxisByDifferentFrequencyNotification:
     methods: [GET]
     options:
         expose: true
+        
+#29
+getDataChartMultiSeriesLineIndicatorWithTrendlineHorizontal:
+    path: /getDataChartMultiSeriesLineIndicatorWithTrendlineHorizontal/{id}
+    defaults:
+        _controller: pequiven.controller.seipchart:getDataChartMultiSeriesLineIndicatorWithTrendlineHorizontalAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
 
 #PRO_RT_PQV
 getDataChartProductionReportTemplateByDate:
