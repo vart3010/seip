@@ -1934,7 +1934,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                             'labelAttributes' => array('icon' => 'fa fa-exclamation-triangle',),
                         ))
                 )
-                ->setLabel($this->translate(sprintf('Modulos en Contrucción', $section)));
+                ->setLabel($this->translate(sprintf('Modulos en Construcción', $section)));
 
         $child->addChild('planning.visualize.modules.ventas', array(
                     'route' => 'pequiven_seip_modules_ventas',
