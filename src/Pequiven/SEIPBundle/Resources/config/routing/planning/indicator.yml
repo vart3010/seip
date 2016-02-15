@@ -165,9 +165,14 @@ showButtonDownload:
     options:
         expose: true
         
-        
-getIndicatorPnr:
-    path: /indicatorPnr
-    defaults:
-        _controller: pequiven.controller.indicator:getIndicatorPnrAction
+             
        
+loadFile:
+    path: /{id}/loadFile
+    defaults:
+        _controller: pequiven.controller.indicator:loadFileAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+        id: \d+
+    methods: [GET|POST]

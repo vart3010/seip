@@ -176,6 +176,14 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     protected $valuesIndicator;
 
     /**
+     * Archivos de indicador
+     * 
+     * @var \Pequiven\IndicatorBundle\Entity\Indicator\IndicatorFile
+     * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\IndicatorFile",mappedBy="indicator",cascade={"persist","remove"})
+     */
+    protected $indicatorFiles;
+
+    /**
      * Valor (Evaluado a partir de todos los valores y formula)
      * 
      * @var decimal
@@ -619,21 +627,21 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\EvolutionIndicator\EvolutionActionVerification",mappedBy="indicator",cascade={"persist","remove"})
      */
     protected $indicatorVerification;
-    
+
     /**
      * ¿En los gráficos de columna, se mostrará una columna plan, al final y con el valor de 'plan anual' que es el mismo?
      * @var boolean
      *  @ORM\Column(name="showColumnPlanAtTheEnd",type="boolean")
      */
     private $showColumnPlanAtTheEnd = false;
-    
+
     /**
      * ¿EL indicador esta disponible para verse en el dashboard de tipo específico?
      * @var boolean
      *  @ORM\Column(name="showByDashboardSpecific",type="boolean")
      */
     private $showByDashboardSpecific = false;
-    
+
     /**
      * Complejo
      * 
@@ -642,7 +650,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\JoinColumn(nullable=true)
      */
     private $complejoDashboardSpecific;
-    
+
     /**
      * ¿EL indicador tomará en cuenta las variables de valor estático?
      * @var boolean
@@ -656,7 +664,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\Column(name="indicator_sig_medition", type="integer", nullable=true)
      */
     private $indicatorSigMedition = 1;
-    
+
     /**
      * Indicador
      * 
@@ -671,7 +679,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator",mappedBy="parentCloning",cascade={"persist"}))          
      */
     private $indicatorEvolutionCloning;
-    
+
     /**
      * ¿El indicador esta disponible para verse en el dashboard de forma trimestral? (Para aquellos cuya frecuencia de notificación sea mensual)
      * @var boolean
@@ -2563,7 +2571,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     public function getShowColumnPlanAtTheEnd() {
         return $this->showColumnPlanAtTheEnd;
     }
-    
+
     /**
      * 
      * @param type $showColumnPlanAtTheEnd
@@ -2677,7 +2685,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     public function getValidVariableStaticValue() {
         return $this->validVariableStaticValue;
     }
-    
+
     /**
      * Set complejoDashboardSpecific
      *
@@ -2811,5 +2819,38 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     public function getIgnoredByParentResult() {
         return $this->ignoredByParentResult;
     }
+    
+    /**
+     * Add rawMaterialConsumptionPlannings
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator\IndicatorFile
+     * @return Indicator
+     */
+    public function addIndicatorFiles(\Pequiven\IndicatorBundle\Entity\Indicator\IndicatorFile $indicatorFiles) {
+        $indicatorFiles->setIndicator($this);
+        $this->indicatorFiles->add($indicatorFiles);
+
+        return $this;
+    }
+
+    /**
+     * Remove indicatorFiles
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator\IndicatorFile $indicatorFiles
+     */
+    public function removeIndicatorFiles(\Pequiven\IndicatorBundle\Entity\Indicator\IndicatorFile $indicatorFiles) {
+        $this->indicatorFiles->removeElement($indicatorFiles);
+    }
+
+    /**
+     * Get indicatorFiles
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getIndicatorFiles() {
+        return $this->indicatorFiles;
+    }
+
+   
 
 }
