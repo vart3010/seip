@@ -1923,18 +1923,18 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
     }
 
     /**
-     * Modulos en Contrucción
+     * Modulos en Construcción
      * @param ItemInterface $menu
      * @param type $section
      */
     private function addMenuModules(ItemInterface $menu, $section) {
 
-        $child = $this->factory->createItem('Modulos en Contrucción', $this->getSubLevelOptions(array(
+        $child = $this->factory->createItem('Modulos en Construcción', $this->getSubLevelOptions(array(
                             'uri' => null,
                             'labelAttributes' => array('icon' => 'fa fa-exclamation-triangle',),
                         ))
                 )
-                ->setLabel($this->translate(sprintf('Modulos en Contrucción', $section)));
+                ->setLabel($this->translate(sprintf('Modulos en Construcción', $section)));
 
         $child->addChild('planning.visualize.modules.ventas', array(
                     'route' => 'pequiven_seip_modules_ventas',
