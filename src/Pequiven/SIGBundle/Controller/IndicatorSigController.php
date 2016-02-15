@@ -590,7 +590,7 @@ class IndicatorSigController extends ResourceController {
         if($request->isMethod('POST')){
           $fileSVG = $this->exportChrat($request);        
         }        
-
+        
         //Buscando los Archivos por Codigo
         $nameSVG = glob("$routing");
         $user = $this->getUser()->getId();//Id Usuario    
@@ -603,10 +603,12 @@ class IndicatorSigController extends ResourceController {
             if ($pos !== false) {                                 
                 if (strpos($nameSVG[$cont], "mscolumnline3d")) {                    
                     $chartEvolution = $nameSVG[$cont];                    
-                    $contImg ++;                    
+                    $contImg ++;
+                    //var_dump("1");
                 }
                 if (strpos($nameSVG[$cont], "stackedbar3d")) {
                     $chartCause = $nameSVG[$cont];                                        
+                    //var_dump("2");
                 }
             }
             $cont ++;
