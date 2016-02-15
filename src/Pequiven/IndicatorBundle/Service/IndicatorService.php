@@ -1748,7 +1748,8 @@ class IndicatorService implements ContainerAwareInterface {
             $arrayVariables = array();
             
             $numberResults = $indicator->getFrequencyNotificationIndicator()->getNumberResultsFrequency();
-            $labelsFrequencyNotificationArray = $this->getLabelsByIndicatorFrequencyNotificationWithoutValidation($indicator);
+//            $labelsFrequencyNotificationArray = $this->getLabelsByIndicatorFrequencyNotificationWithoutValidation($indicator);
+            $labelsFrequencyNotificationArray = $this->getLabelsByIndicatorFrequencyNotification($indicator);
             
             //Añadimos los valores, por frecuencia de notificación
             for ($i = 0; $i < $numberResults; $i++) {
@@ -1759,9 +1760,9 @@ class IndicatorService implements ContainerAwareInterface {
             }
             
             if($indicator->getId() == 1427){
-                $arrayVariables['GRUPO1'] = array('seriesname' => 'Mayores Deudores: Tripoliven, Ferralca', 'data' => array());
-                $arrayVariables['GRUPO2'] = array('seriesname' => 'Mayores Deudores: Soca', 'data' => array());
-                $arrayVariables['CONSTANT'] = array('seriesname' => 'Meta Días de Rotación', 'data' => array());
+                $arrayVariables['GRUPO1'] = array('seriesname' => 'Mayores Deudores más Tripoliven, Ferralca', 'data' => array());
+                $arrayVariables['GRUPO2'] = array('seriesname' => 'Mayores Deudores más Soca', 'data' => array());
+//                $arrayVariables['CONSTANT'] = array('seriesname' => 'Meta Días de Rotación', 'data' => array());
                 
                 $arrayVariables['GRUPO1']['data'][] = array('value' => 56, 'showValue' => 1);
                 $arrayVariables['GRUPO1']['data'][] = array('value' => 84, 'showValue' => 1);
@@ -1771,21 +1772,21 @@ class IndicatorService implements ContainerAwareInterface {
                 $arrayVariables['GRUPO2']['data'][] = array('value' => 57, 'showValue' => 1);
                 $arrayVariables['GRUPO2']['data'][] = array('value' => 36, 'showValue' => 1);
                 $arrayVariables['GRUPO2']['data'][] = array('value' => 55, 'showValue' => 1);
-                $arrayVariables['CONSTANT']['data'][] = array('value' => 45, 'showValue' => 0);
-                $arrayVariables['CONSTANT']['data'][] = array('value' => 45, 'showValue' => 0);
-                $arrayVariables['CONSTANT']['data'][] = array('value' => 45, 'showValue' => 0);
-                $arrayVariables['CONSTANT']['data'][] = array('value' => 45, 'showValue' => 0);
+//                $arrayVariables['CONSTANT']['data'][] = array('value' => 45, 'showValue' => 0);
+//                $arrayVariables['CONSTANT']['data'][] = array('value' => 45, 'showValue' => 0);
+//                $arrayVariables['CONSTANT']['data'][] = array('value' => 45, 'showValue' => 0);
+//                $arrayVariables['CONSTANT']['data'][] = array('value' => 45, 'showValue' => 0);
                 
-                $dataSetValues['GRUPO1'] = array('seriesname' => $arrayVariables['GRUPO1']['seriesname'], 'data' => $arrayVariables['GRUPO1']['data']);
-                $dataSetValues['GRUPO2'] = array('seriesname' => $arrayVariables['GRUPO2']['seriesname'], 'data' => $arrayVariables['GRUPO2']['data']);
-                $dataSetValues['CONSTANT'] = array('seriesname' => $arrayVariables['CONSTANT']['seriesname'], 'data' => $arrayVariables['CONSTANT']['data']);
+                $dataSetValues['GRUPO1'] = array('seriesname' => $arrayVariables['GRUPO1']['seriesname'], 'data' => $arrayVariables['GRUPO1']['data'], 'color' => "#0174DF");
+                $dataSetValues['GRUPO2'] = array('seriesname' => $arrayVariables['GRUPO2']['seriesname'], 'data' => $arrayVariables['GRUPO2']['data'], 'color' => "#FFBF00");
+//                $dataSetValues['CONSTANT'] = array('seriesname' => $arrayVariables['CONSTANT']['seriesname'], 'data' => $arrayVariables['CONSTANT']['data']);
                 
                 $data['dataSource']['dataset'][] = $dataSetValues['GRUPO1'];
                 $data['dataSource']['dataset'][] = $dataSetValues['GRUPO2'];
-                $data['dataSource']['dataset'][] = $dataSetValues['CONSTANT'];
-//                $line = array();
-//                $line[] = array("startvalue" => "45","color" => "#DF013A", "valueOnRight" => "1");
-//                $data['dataSource']['trendlines'][] = array("line" => $line);
+//                $data['dataSource']['dataset'][] = $dataSetValues['CONSTANT'];
+                $line = array();
+                $line[] = array("startvalue" => "45","color" => "#088A08", "valueOnRight" => "1", "displayvalue" => "Meta Días de Rotación", "thickness" => "3");
+                $data['dataSource']['trendlines'][] = array("line" => $line);
 //                "trendlines": [
 //                    {
 //                        "line": [

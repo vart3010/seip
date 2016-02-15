@@ -6500,7 +6500,8 @@ angular.module('seipModule.controllers', [])
                             "dataSource": {
                                 "chart": data.dataSource.chart,
                                 "categories": data.dataSource.categories,
-                                "dataset": data.dataSource.dataset
+                                "dataset": data.dataSource.dataset,
+                                "trendlines": data.dataSource.trendlines
                             }
                         });
                         revenueChartMultiSeriesLineIndicatorWithTrendlineHorizontal.setTransparent(true);
