@@ -3,14 +3,16 @@
 <div class="block" ng-init="urlValueIndicatorForm='{{ path('pequiven_feature_indicator_get_form',{'idIndicator':indicator.id}) }}'">
     <div class="block-title">
         <h3 class="ng-binding">Archivos ({{ indicator.indicatorFiles|length  }})</h3>
-        {% if addImg %}
-            <div class="button-group absolute-right compact">
-                <form  id="loadFileForm" action="{{ path("loadFile",{"id":indicator.id}) }}" method="POST" enctype="multipart/form-data">
-                    <input style="display: none;" type="file" name="fileIndicator" id="fileIndicator" >
+        {% if is_granted(['ROLE_SEIP_INDICATOR_UPLOAD_FILES']) %}
+            {% if addImg %}
+                <div class="button-group absolute-right compact">
+                    <form  id="loadFileForm" action="{{ path("loadFile",{"id":indicator.id}) }}" method="POST" enctype="multipart/form-data">
+                        <input style="display: none;" type="file" name="fileIndicator" id="fileIndicator" >
 
-                    <a class="button icon-list-add" id="loadFileIndicator" href="" ng-click="" title="">{{ 'pequiven.add'|trans({},'messages') }}&nbsp;</a>
-                </form>
-            </div>
+                        <a class="button icon-list-add" id="loadFileIndicator" href="" ng-click="" title="">{{ 'pequiven.add'|trans({},'messages') }}&nbsp;</a>
+                    </form>
+                </div>
+            {% endif %}
         {% endif %}
 
     </div>
