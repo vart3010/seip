@@ -1742,6 +1742,22 @@ class IndicatorService implements ContainerAwareInterface {
 
             $data['dataSource']['dataset'][] = $dataSetValues['PERIODO_ACTUAL'];
             $data['dataSource']['dataset'][] = $dataSetValues['PERIODO_ANTERIOR'];
+        } elseif((isset($options['resultIndicatorWithTrendlineHorizontal']) && array_key_exists('resultIndicatorWithTrendlineHorizontal', $options))){
+            unset($options[$options['resultIndicatorWithTrendlineHorizontal']]);
+            
+            $arrayVariables = array();
+            
+            $numberResults = $indicator->getFrequencyNotificationIndicator()->getNumberResultsFrequency();
+            $labelsFrequencyNotificationArray = $this->getLabelsByIndicatorFrequencyNotification($indicator);
+            
+            if($indicator->getId() == 1){
+                $arrayVariables['GRUPO1'] = array('seriesname' => 'Grupo 1', 'data' => array());
+                $arrayVariables['GRUPO2'] = array('seriesname' => 'Grupo 2', 'data' => array());
+//                $arrayVariables['PERIODO_ACTUAL']['data'][] = array('value' => $result['PERIODO_ACTUAL']['value'][$i], 'showValue' => $showValue);
+                
+                $data['dataSource']['dataset'][] = $dataSetValues['GRUPO1'];
+                $data['dataSource']['dataset'][] = $dataSetValues['GRUPO2'];
+            }
         }
 
         $data['dataSource']['chart'] = $chart;
