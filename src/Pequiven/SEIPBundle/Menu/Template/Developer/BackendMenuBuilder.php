@@ -47,7 +47,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
      */
     public function createSidebarMenu(Request $request) {
         $seipConfiguration = $this->getSeipConfiguration();
-
+$user = $this->getUser();
         $menu = $this->factory->createItem('root', array(
             'childrenAttributes' => array(
                 'class' => 'big-menu',
@@ -108,7 +108,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
         }
 
         //Menú Sistema de Informacion Politica
-        if ($this->isGranted('ROLE_SEIP_SIP_*')) {
+        if ($this->isGranted('ROLE_SEIP_SIP_*') && $user->getId() != 5942) {
             $this->addMenuSip($menu, $section);
         }
 
@@ -116,7 +116,8 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
         $this->addMenuModules($menu, $section);
 
         //Menú Administración
-        if ($this->securityContext->isGranted(array('ROLE_SONATA_ADMIN'))) {
+        
+        if ($this->securityContext->isGranted(array('ROLE_SONATA_ADMIN')) && $user->getId() != 5942) {
             $menu->addChild('admin', array(
                 'route' => 'sonata_admin_dashboard',
                 'labelAttributes' => array('icon' => 'icon-card'),
