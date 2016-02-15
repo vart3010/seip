@@ -1759,9 +1759,9 @@ class IndicatorService implements ContainerAwareInterface {
             }
             
             if($indicator->getId() == 1427){
-                $arrayVariables['GRUPO1'] = array('seriesname' => 'Grupo 1', 'data' => array());
-                $arrayVariables['GRUPO2'] = array('seriesname' => 'Grupo 2', 'data' => array());
-                $arrayVariables['CONSTANT'] = array('seriesname' => 'Días de Rotación', 'data' => array());
+                $arrayVariables['GRUPO1'] = array('seriesname' => 'Mayores Deudores: Tripoliven, Ferralca', 'data' => array());
+                $arrayVariables['GRUPO2'] = array('seriesname' => 'Mayores Deudores: Soca', 'data' => array());
+                $arrayVariables['CONSTANT'] = array('seriesname' => 'Meta Días de Rotación', 'data' => array());
                 
                 $arrayVariables['GRUPO1']['data'][] = array('value' => 56, 'showValue' => 1);
                 $arrayVariables['GRUPO1']['data'][] = array('value' => 84, 'showValue' => 1);
