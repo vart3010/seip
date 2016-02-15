@@ -702,6 +702,13 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     private $ignoredByParentResult = false;
 
     /**
+     * check para activar la carga de  archivos
+     * @var boolean
+     *  @ORM\Column(name="loadFiles",type="boolean")
+     */
+    private $loadFiles = false;
+
+    /**
      * Constructor
      */
     public function __construct() {
@@ -2819,7 +2826,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     public function getIgnoredByParentResult() {
         return $this->ignoredByParentResult;
     }
-    
+
     /**
      * Add rawMaterialConsumptionPlannings
      *
@@ -2851,6 +2858,12 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
         return $this->indicatorFiles;
     }
 
-   
+    function getLoadFiles() {
+        return $this->loadFiles;
+    }
+
+    function setLoadFiles($loadFiles) {
+        $this->loadFiles = $loadFiles;
+    }
 
 }

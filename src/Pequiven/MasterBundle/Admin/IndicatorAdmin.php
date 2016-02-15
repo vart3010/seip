@@ -61,7 +61,7 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                 ->add('showCharts')
                 ->add('showEvolutionView')
                 ->add('showTags')
-                ->add('notshowIndicatorNoEvaluateInPeriod')                
+                ->add('notshowIndicatorNoEvaluateInPeriod')
                 ->add('requiredToImport')
                 ->add('details')
                 ->add('typeOfCompany', 'choice', array(
@@ -305,11 +305,14 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                 ->add('managementSystems', 'sonata_type_model_autocomplete', array(
                     'property' => array('description'),
                     'multiple' => true,
-                    'required' => false,                    
+                    'required' => false,
                 ))
                 ->add('showEvolutionView', null, array(
                     'required' => false,
-                ))                
+                ))
+                ->add('loadFiles', null, array(
+                    'required' => false,
+                ))
                 ->end()
                 ->end()
         ;
