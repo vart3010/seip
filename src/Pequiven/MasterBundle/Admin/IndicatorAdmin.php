@@ -61,6 +61,7 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                 ->add('showCharts')
                 ->add('showEvolutionView')
                 ->add('showTags')
+                ->add('notshowIndicatorNoEvaluateInPeriod')                
                 ->add('requiredToImport')
                 ->add('details')
                 ->add('typeOfCompany', 'choice', array(
@@ -165,6 +166,9 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                 ->add('evaluateInPeriod', null, array(
                     'required' => false,
                 ))
+                ->add('notshowIndicatorNoEvaluateInPeriod', null, array(
+                    'required' => false,
+                ))
                 ->add('forcePenalize', null, array(
                     'required' => false,
                 ))
@@ -225,6 +229,9 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                 ->add('resultIsFromChildrensResult', null, array(
                     'required' => false,
                 ))
+                ->add('ignoredByParentResult', null, array(
+                    'required' => false,
+                ))
                 ->end()
                 ->with('Gráficos del Indicador')
                 ->add('resultIsAccumulative', null, array(
@@ -243,6 +250,9 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                     'required' => false,
                 ))
                 ->add('showColumnPlanAtTheEnd', null, array(
+                    'required' => false,
+                ))
+                ->add('showDashboardByQuarter', null, array(
                     'required' => false,
                 ))
                 ->end()

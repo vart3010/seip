@@ -182,7 +182,10 @@ class LineStrategicController extends SEIPController {
         $resultService = $this->getResultService();
         
         $boxRender = $this->get('tecnocreaciones_box.render');
-        
+
+        $answer = $request->get('r');
+        $host = $_SERVER["HTTP_HOST"];
+
         $dataArray =  array(
             $this->config->getResourceName() => $resource,
             'object' => $objetives,
@@ -190,9 +193,12 @@ class LineStrategicController extends SEIPController {
             'heightChart' => $heightChart,
             'data' => $data,
             'resultService' => $resultService,
-            'boxRender' => $boxRender
+            'boxRender' => $boxRender,
+            'answer'    => $answer,
+            'id'        => $request->get('id'),
+            'host'      => $host
         );
-        
+
         $view = $this
                 ->view()
                 ->setTemplate($this->config->getTemplate('show.html'))

@@ -1,0 +1,64 @@
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+{% if app.user != null %}
+    <table width="100%">
+        <tr bgcolor="#FFFFFF">
+            <td width="12%" height="85px" style="text-align: center; vertical-align: middle; background-color: #B00000;">
+                <img src="{{ asset('bundles/pequivenseip/logotipos-pqv/logotipos-pdf/PQV_Diamante.png') }} " width="70px" height="75px">
+            </td>
+            <td width="76%" height="85px" style="text-align: center; vertical-align: middle; background-color: #B00000; color: #FFFFFF; font-weight: bold; font-style: oblique; font-family: serif; font-size: 20pt;">
+                Sistema Estadístico de Información Petroquímica
+            </td>
+            <td width="12%" height="85px" style="text-align: center; vertical-align: middle; font-size: 3pt; background-color: #B00000;">
+                <img src="{{ asset('bundles/pequivenseip/logotipos-pqv/logotipos-pdf/SEIP_Blanco.png') }} " width="75px" height="75px">
+            </td>
+        </tr>
+    </table>
+
+    <table width="100%">
+        <tr>
+            <td width="100%" height="30px" style="text-align: center; font-size: large; color: #FFFFFF; vertical-align: middle; font-family: sans-serif; background-color: #424242">
+            COMITÉ DE GESTIÓN. AÑO {{ app.user.period.name }}
+            </td>
+        </tr>
+    </table>
+    {#<div class="columns" class="vzla-header" style="height: 54px">
+        <div class="three-columns four-columns-tablet six-columns-mobile" style="margin-bottom: -3px;" >
+            <img class="resize-img-140" src="{{ asset('bundles/pequivenseip/logotipos-pqv/logo_menu_seip.png') }}" width="50px" height="50px" />
+        </div>
+        <div class="six-columns four-columns-tablet six-columns-mobile" style="text-align: center;margin-bottom: 0;margin-top: 10px;">#}
+    <!--<div class="vzla-header-column-2">-->
+        <!-- <img src="{#{ asset('bundles/pequivenseip/logotipos-pqv/header_center_seip3.png') }#}" height="50px" width="500px" /> -->
+    {#{ 'tecnocreaciones_vzla_government.message_header_center'|trans|raw }#}
+    <!--</div>-->
+    {#<span class="header-seip">{{ 'pequiven_seip.message_header_center'|trans|raw }}</span>#}
+    {#</div>#}
+    {#<div class="two-columns tree-columns-tablet hide-768" style="text-align: right;float: right;margin-bottom: 0px;">#}
+    {#        <img class="resize-img-140" src="{{ asset('bundles/tecnocreacionesvzlagovernment/logotipos-vzla/venezuela-ahora-es-todos.png') }}" width="80px" />#}
+    {#<img class="resize-img-140" src="{{ asset('bundles/pequivenseip/logotipos-pqv/logotipos-pdf/SEIP_Blanco.png') }}" height="50px" />
+</div>#}
+    {#    </div>
+        <hr class="hr-line-vzla-red" style="margin-top:0px;margin-bottom: 4px;" />    #}
+{% else %}
+    <div class="columns" class="vzla-header" style="height: 54px">
+        <div class="three-columns four-columns-tablet six-columns-mobile" style="margin-bottom: -3px;" >
+            <img class="resize-img-140" src="{{ asset('bundles/pequivenseip/logotipos-pqv/logo_menu_seip.png') }}" width="50px" height="50px" />
+        </div>
+        <div class="six-columns four-columns-tablet six-columns-mobile" style="text-align: center;margin-bottom: 0;margin-top: 10px;">
+            <!--<div class="vzla-header-column-2">-->
+                <!-- <img src="{#{ asset('bundles/pequivenseip/logotipos-pqv/header_center_seip3.png') }#}" height="50px" width="500px" /> -->
+            {#{ 'tecnocreaciones_vzla_government.message_header_center'|trans|raw }#}
+            <!--</div>-->
+            <span class="header-seip">{{ 'pequiven_seip.message_header_center'|trans|raw }}</span>
+        </div>
+        <div class="two-columns tree-columns-tablet hide-768" style="text-align: right;float: right;margin-bottom: 0px;">
+            {#        <img class="resize-img-140" src="{{ asset('bundles/tecnocreacionesvzlagovernment/logotipos-vzla/venezuela-ahora-es-todos.png') }}" width="80px" />#}
+            <img class="resize-img-140" src="{{ asset('bundles/pequivenseip/logotipos-pqv/logo_pqv3.gif') }}" height="50px" />
+        </div>
+    </div>
+    <hr class="hr-line-vzla-red" style="margin-top:0px;margin-bottom: 4px;" />
+{% endif %}
+
+
+
+{#{ locale_switcher(null,null,'TecnocreacionesVzlaGovernmentBundle:Template/Developer/Switcher:switcher_links.html.twig') }#}

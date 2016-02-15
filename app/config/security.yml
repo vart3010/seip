@@ -9,7 +9,8 @@ security:
     role_hierarchy:
         ROLE_SEIP:
             - ROLE_SEIP_UNLOCKED_USER
-            
+#            Rol Dashboard
+            - ROLE_ICONS_LINE_NAV_BAR
 #            Menu pre-planificacion
             - ROLE_SEIP_PRE_PLANNING_CREATE_TACTIC
             - ROLE_SEIP_PRE_PLANNING_CREATE_OPERATIVE
@@ -89,7 +90,8 @@ security:
             - ROLE_SEIP_INDICATOR_APPROVED_OPERATIVE            
             - ROLE_SEIP_INDICATOR_ADD_OBSERVATION            
             - ROLE_SEIP_INDICATOR_ADD_NOTIFICATION_SPECIAL
-            - ROLE_SEIP_INDICATOR_EDIT_SPECIAL            
+            - ROLE_SEIP_INDICATOR_EDIT_SPECIAL      
+            - ROLE_SEIP_INDICATOR_UPLOAD_FILES      
             - ROLE_SEIP_VIEW_RESULT_BY_LINE_STRATEGIC_SPECIAL
             
 #            Menú de resultados
@@ -180,6 +182,8 @@ security:
             - ROLE_SEIP_SIG_MONITORING
             - ROLE_SEIP_SIG_MONITORING_LIST
             - ROLE_SEIP_SIG_MONITORING_SHOW
+            - ROLE_SEIP_SIG_EVOLUTION_CONFIG  
+            - ROLE_SEIP_SIG_EVOLUTION_CLONING  
             
             # PRODUCCIÓN
             - ROLE_SEIP_OPERATION_LIST_REPORT_PRODUCTION

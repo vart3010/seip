@@ -578,9 +578,9 @@ class IndicatorService implements ContainerAwareInterface {
                                 if ($tagIndicator->getTypeTag() == Indicator\TagIndicator::TAG_TYPE_NUMERIC) {
                                     $value = $tagIndicator->getValueOfTag();
                                 } else {
-                                    $value = $tagIndicator->getTextOfTag();
+                                    $value = $tagIndicator->getTextOfTag();                                    
                                 }
-                                $value = $tagIndicator->getUnitResult() != "" ? number_format($value, 2, ',', '.') . ' ' . strtoupper($tagIndicator->getUnitResultValue()) : number_format($value, 2, ',', '.') . '%';
+                                $value = $tagIndicator->getUnitResult() != "" ? number_format($value, 2, ',', '.') . ' ' . strtoupper($tagIndicator->getUnitResultValue()) : number_format($value, 2, ',', '.') . '%';                            
                             }
                         }
                     }
@@ -603,7 +603,7 @@ class IndicatorService implements ContainerAwareInterface {
         } else {
             $colorData["code"] = "#000000";
             $colorData["label"] = $this->trans('pequiven_indicator.errors.arrangementRange_not_assigned', array(), 'PequivenIndicatorBundle');
-        }
+        }        
 
         $color[] = $colorData;
         $data['dataSource']['chart'] = $chart;
@@ -1266,25 +1266,25 @@ class IndicatorService implements ContainerAwareInterface {
             //$result[indicator.id][real][numero_resultado] = valor
             $result = array();
             //CPHC
-            $result[1489]['real'] = array(1 => 0.0, 2 => 11789.0, 3 => 10273.0);
-            $result[1490]['real'] = array(1 => 0.0, 2 => 65389.0, 3 => 40249.0);
-            $result[1491]['real'] = array(1 => 0.0, 2 => 6957.0, 3 => 15243.0);
-            $result[1492]['real'] = array(1 => 0.0, 2 => 9975.0, 3 => 17873.0);
-            $result[1493]['real'] = array(1 => 0.0, 2 => 2340.0, 3 => 3798.0);
-            $result[1494]['real'] = array(1 => 0.0, 2 => 2866.0, 3 => 5174.0);
-            $result[1495]['real'] = array(1 => 0.0, 2 => 11461.0, 3 => 8738.0);
-            $result[1496]['real'] = array(1 => 0.0, 2 => 0.0, 3 => 15146.0);
-            $result[1497]['real'] = array(1 => 0.0, 2 => 2629.0, 3 => 3870.0);
-            $result[1498]['real'] = array(1 => 0.0, 2 => 1397.0, 3 => 7987.0);
+            $result[1489]['real'] = array(1 => 0.0, 2 => 11789.0, 3 => 10273.0, 4 => 12329);
+            $result[1490]['real'] = array(1 => 0.0, 2 => 65389.0, 3 => 40249.0, 4 => 33910);
+            $result[1491]['real'] = array(1 => 0.0, 2 => 6957.0, 3 => 15243.0, 4 => 24557);
+            $result[1492]['real'] = array(1 => 0.0, 2 => 9975.0, 3 => 17873.0, 4 => 27348);
+            $result[1493]['real'] = array(1 => 0.0, 2 => 2340.0, 3 => 3798.0, 4 => 4980);
+            $result[1494]['real'] = array(1 => 0.0, 2 => 2866.0, 3 => 5174.0, 4 => 7166);
+            $result[1495]['real'] = array(1 => 0.0, 2 => 11461.0, 3 => 8738.0, 4 => 12221);
+            $result[1496]['real'] = array(1 => 0.0, 2 => 0.0, 3 => 15146.0, 4 => 17763);
+            $result[1497]['real'] = array(1 => 0.0, 2 => 2629.0, 3 => 3870.0, 4 => 4918);
+            $result[1498]['real'] = array(1 => 0.0, 2 => 1397.0, 3 => 7987.0, 4 => 10390);
             //CPAMC
-            $result[1503]['real'] = array(1 => 0.0, 2 => 14749.0, 3 => 15177.0);
-            $result[1504]['real'] = array(1 => 0.0, 2 => 15973.0, 3 => 16606.0);
-            $result[1505]['real'] = array(1 => 0.0, 2 => 27139.0, 3 => 28044.0);
-            $result[1506]['real'] = array(1 => 0.0, 2 => 0.0, 3 => 0.0);
-            $result[1507]['real'] = array(1 => 0.0, 2 => 0.0, 3 => 0.0);
-            $result[1508]['real'] = array(1 => 0.0, 2 => 0.0, 3 => 0.0);
-            $result[1509]['real'] = array(1 => 0.0, 2 => 6789.0, 3 => 8579.0);
-            $result[1510]['real'] = array(1 => 0.0, 2 => 11697, 3 => 13714.0);
+            $result[1503]['real'] = array(1 => 0.0, 2 => 14749.0, 3 => 15177.0, 4 => 18122.0);
+            $result[1504]['real'] = array(1 => 0.0, 2 => 15973.0, 3 => 16606.0, 4 => 18343);
+            $result[1505]['real'] = array(1 => 0.0, 2 => 27139.0, 3 => 28044.0, 4 => 31695);
+            $result[1506]['real'] = array(1 => 0.0, 2 => 0.0, 3 => 0.0, 4 => 0.0);
+            $result[1507]['real'] = array(1 => 0.0, 2 => 0.0, 3 => 0.0, 4 => 0.0);
+            $result[1508]['real'] = array(1 => 0.0, 2 => 0.0, 3 => 0.0, 4 => 0.0);
+            $result[1509]['real'] = array(1 => 0.0, 2 => 6789.0, 3 => 8579.0, 4 => 12976);
+            $result[1510]['real'] = array(1 => 0.0, 2 => 11697, 3 => 13714.0, 4 => 16967);
 
             $dataSetPlan["seriesname"] = $arrayVariables['descriptionPlan'];
             $dataSetPlan["showValues"] = "1";
@@ -1742,6 +1742,63 @@ class IndicatorService implements ContainerAwareInterface {
 
             $data['dataSource']['dataset'][] = $dataSetValues['PERIODO_ACTUAL'];
             $data['dataSource']['dataset'][] = $dataSetValues['PERIODO_ANTERIOR'];
+        } elseif((isset($options['resultIndicatorWithTrendlineHorizontal']) && array_key_exists('resultIndicatorWithTrendlineHorizontal', $options))){
+            unset($options[$options['resultIndicatorWithTrendlineHorizontal']]);
+            
+            $arrayVariables = array();
+            
+            $numberResults = $indicator->getFrequencyNotificationIndicator()->getNumberResultsFrequency();
+            $labelsFrequencyNotificationArray = $this->getLabelsByIndicatorFrequencyNotificationWithoutValidation($indicator);
+            
+            //Añadimos los valores, por frecuencia de notificación
+            for ($i = 0; $i < $numberResults; $i++) {
+                $label = array();
+                $label["label"] = $labelsFrequencyNotificationArray[($i + 1)];
+
+                $category[] = $label;
+            }
+            
+            if($indicator->getId() == 1427){
+                $arrayVariables['GRUPO1'] = array('seriesname' => 'Mayores Deudores más Tripoliven, Ferralca', 'data' => array());
+                $arrayVariables['GRUPO2'] = array('seriesname' => 'Mayores Deudores más Soca', 'data' => array());
+                $arrayVariables['CONSTANT'] = array('seriesname' => 'Meta Días de Rotación', 'data' => array());
+                
+                $arrayVariables['GRUPO1']['data'][] = array('value' => 56, 'showValue' => 1);
+                $arrayVariables['GRUPO1']['data'][] = array('value' => 84, 'showValue' => 1);
+                $arrayVariables['GRUPO1']['data'][] = array('value' => 59, 'showValue' => 1);
+                $arrayVariables['GRUPO1']['data'][] = array('value' => 77, 'showValue' => 1);
+                $arrayVariables['GRUPO2']['data'][] = array('value' => 32, 'showValue' => 1);
+                $arrayVariables['GRUPO2']['data'][] = array('value' => 57, 'showValue' => 1);
+                $arrayVariables['GRUPO2']['data'][] = array('value' => 36, 'showValue' => 1);
+                $arrayVariables['GRUPO2']['data'][] = array('value' => 55, 'showValue' => 1);
+                $arrayVariables['CONSTANT']['data'][] = array('value' => 45, 'showValue' => 0);
+                $arrayVariables['CONSTANT']['data'][] = array('value' => 45, 'showValue' => 0);
+                $arrayVariables['CONSTANT']['data'][] = array('value' => 45, 'showValue' => 0);
+                $arrayVariables['CONSTANT']['data'][] = array('value' => 45, 'showValue' => 0);
+                
+                $dataSetValues['GRUPO1'] = array('seriesname' => $arrayVariables['GRUPO1']['seriesname'], 'data' => $arrayVariables['GRUPO1']['data']);
+                $dataSetValues['GRUPO2'] = array('seriesname' => $arrayVariables['GRUPO2']['seriesname'], 'data' => $arrayVariables['GRUPO2']['data']);
+                $dataSetValues['CONSTANT'] = array('seriesname' => $arrayVariables['CONSTANT']['seriesname'], 'data' => $arrayVariables['CONSTANT']['data']);
+                
+                $data['dataSource']['dataset'][] = $dataSetValues['GRUPO1'];
+                $data['dataSource']['dataset'][] = $dataSetValues['GRUPO2'];
+                $data['dataSource']['dataset'][] = $dataSetValues['CONSTANT'];
+//                $line = array();
+//                $line[] = array("startvalue" => "45","color" => "#DF013A", "valueOnRight" => "1");
+//                $data['dataSource']['trendlines'][] = array("line" => $line);
+//                "trendlines": [
+//                    {
+//                        "line": [
+//                            {
+//                                "startvalue": "17022",
+//                                "color": "#6baa01",
+//                                "valueOnRight": "1",
+//                                "displayvalue": "Average"
+//                            }
+//                        ]
+//                    }
+//                ]
+            }
         }
 
         $data['dataSource']['chart'] = $chart;
@@ -2333,6 +2390,7 @@ class IndicatorService implements ContainerAwareInterface {
 
             $childrens = $indicator->getChildrens();
             $variables = $formula->getVariables();
+            
 
             $labelsTypesOfCompanies = Indicator::getTypesOfCompanies();
 
@@ -2341,7 +2399,7 @@ class IndicatorService implements ContainerAwareInterface {
             $arrayVariables['PERIODO_ACTUAL'] = array('seriesname' => $indicator->getPeriod()->getName(), 'data' => array());
             $arrayVariables['PERIODO_ANTERIOR'] = array('seriesname' => $indicator->getPeriod()->getParent()->getName(), 'data' => array());
 
-            $arrayVarsSpecific = array("lesionados_con_tiempo_perdido" => true, "lesiones_con_tiempo_perdido" => true, "lesionados_sin_tiempo_perdido" => true, "dias_perdidos" => true);
+            $arrayVarsSpecific = array("lesionados_con_tiempo_perdido" => true, "lesiones_con_tiempo_perdido" => true, "lesionados_sin_tiempo_perdido" => true, "dias_perdidos" => true, "dias_perdidos_severidad" => true);
             $numberResults = $indicator->getFrequencyNotificationIndicator()->getNumberResultsFrequency();
 
             //Seteamos por defecto los valores por número de resultados totales
@@ -2349,8 +2407,10 @@ class IndicatorService implements ContainerAwareInterface {
                 $result['MATRIZ']['value'][$i] = 0.0;
                 $result['AFILIADA_MIXTA']['value'][$i] = 0.0;
                 $result['PERIODO_ACTUAL']['value'][$i] = 0.0;
+//                var_dump($result['PERIODO_ACTUAL']['value'][$i]);
                 $result['PERIODO_ANTERIOR']['value'][$i] = 0.0;
             }
+//            die();
 
             //Recorremos los hijos para acumular los valores por número de resultados totales
             foreach ($childrens as $children) {
@@ -2409,7 +2469,7 @@ class IndicatorService implements ContainerAwareInterface {
             }
 
             //Seteamos el arreglo a devolver para cada serie
-            $showUntilMonth = 9; //TODO: Ponerlo por el administrador del indicador
+            $showUntilMonth = 12; //TODO: Ponerlo por el administrador del indicador
             $showValue = 1;
             for ($i = 1; $i <= $numberResults; $i++) {
 //                $showValue = $i <= $showUntilMonth ? 1 : 0;
@@ -2484,7 +2544,7 @@ class IndicatorService implements ContainerAwareInterface {
             }
 
             //Seteamos el arreglo a devolver para cada serie
-            $showUntilMonth = 9; //TODO: Ponerlo por el administrador del indicador
+            $showUntilMonth = 12; //TODO: Ponerlo por el administrador del indicador
             $showValue = 1;
             for ($i = 1; $i <= $numberResults; $i++) {
 //                $showValue = $i <= $showUntilMonth ? 1 : 0;
@@ -2639,7 +2699,7 @@ class IndicatorService implements ContainerAwareInterface {
                 }
             }
 
-            $showUntilMonth = 9; //TODO: Ponerlo por el administrador del indicador
+            $showUntilMonth = 12; //TODO: Ponerlo por el administrador del indicador
             //Seteamos el acumulado para cada serie
             for ($i = 1; $i <= $numberResults; $i++) {
                 if ($i <= $showUntilMonth) {
@@ -2720,7 +2780,7 @@ class IndicatorService implements ContainerAwareInterface {
                 $contLastPeriodValueIndicator++;
             }
 
-            $showUntilMonth = 9; //TODO: Ponerlo por el administrador del indicador
+            $showUntilMonth = 12; //TODO: Ponerlo por el administrador del indicador
             //Seteamos el acumulado para cada serie
             for ($i = 1; $i <= $numberResults; $i++) {
                 if ($i <= $showUntilMonth) {
@@ -3035,6 +3095,114 @@ class IndicatorService implements ContainerAwareInterface {
                 $data['dataSource']['dataset'][] = $dataSetPlan;
             }
             $data['dataSource']['dataset'][] = $medition;
+        } elseif (isset($options['byDifferentFrequencyNotification']) && array_key_exists('byDifferentFrequencyNotification', $options)) {
+            
+            unset($options['byDifferentFrequencyNotification']);
+            if ($indicator->getDetails()) {
+                $chart["pYAxisName"] = $indicator->getDetails()->getResultManagementUnit();
+            }
+            $arrayVariables = array();
+            if ($indicator->getFormula()->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_FROM_EQ) {
+                $arrayVariables = $this->getArrayVariablesFormulaWithData($indicator, array('viewVariablesRealPlanFromEquationByFrequencyNotification' => true));
+            } elseif ($indicator->getFormula()->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC) {
+                $arrayVariables = $this->getArrayVariablesFormulaWithData($indicator, array('viewVariablesRealPlanAutomaticByFrequencyNotification' => true));
+            }
+
+            $dataSetReal["seriesname"] = $arrayVariables['descriptionReal'];
+            $dataSetReal["color"] = "#298A08";
+            $dataSetPlan["color"] = "#0101DF";
+            $dataSetPlan["seriesname"] = $arrayVariables['descriptionPlan'];
+            $medition["seriesname"] = $indicator->getSummary();
+            $medition["renderas"] = "line";
+            $medition["parentYAxis"] = "S";
+            $medition["showValues"] = "0";
+            $medition["color"] = "#B40404";
+            
+            $labelsFrequencyNotificationArray = $this->getLabelsByIndicatorFrequencyNotification($indicator);
+            $totalValueIndicators = count($indicator->getValuesIndicator());
+            $realAccumulated = $planAccumulated = 0.0;
+            
+            $realNumberResults = 0;//Número Reales de Valores del Indicador
+            $maxVisualizeNumberResults = 0;//Máximo Número de Valores del Indicador
+            $arrayVariablesResultsGroup = array();//ARreglo de Resultados Agrupados por la Frecuencia Seleccionada
+            $step = 0;//Paso o Salto de acuerdo a la Frecuencia seleccionada
+            if($indicator->getShowDashboardByQuarter()){//COnsultados si el indicador será mostrado de acuerdo a una frecuencia trimestral
+                $realNumberResults = count($indicator->getValuesIndicator());
+                $step = 3;
+                $maxVisualizeNumberResults = (int)($realNumberResults/$step);
+                $labelsFrequencyNotificationArray = $this->getLabelsFrequencyNotificationByDaysOfFrequency(90);
+                if($indicator->getResultIsAccumulative()){
+                    $labelsFrequencyNotificationArray = $this->setLabelsFrequencyNotificationByNumbersOfResults(4,$labelsFrequencyNotificationArray,'until');
+                }
+                
+                for($i = 1; $i <= $maxVisualizeNumberResults; $i++){
+                    $arrayVariablesResultsGroup['valueReal'][$i] = 0.0;
+                    $arrayVariablesResultsGroup['valuePlan'][$i] = 0.0;
+                    $arrayVariablesResultsGroup['medition'][$i] = 0.0;
+                }
+            }
+            
+            $resultNumbers = 1;
+            for ($i = 0; $i < $totalValueIndicators; $i++) {
+                if ($arrayVariables['valueReal'][$i] != 0 || $arrayVariables['valuePlan'][$i] != 0) {
+                    $resultNumbers = $i + 1;
+                }
+            }
+//            var_dump($resultNumbers);die();
+            
+            $contStep = 1;
+            $numberOfStep = 1;
+            $valTempReal = 0.0;
+            $valTempPlan = 0.0;
+            $valTempMedition = 0.0;
+            for ($i = 0; $i < $resultNumbers; $i++) {
+                $valTempReal = $valTempReal + $arrayVariables['valueReal'][$i];
+                $valTempPlan = $valTempPlan + $arrayVariables['valuePlan'][$i];
+                $valTempMedition = $valTempMedition + $arrayVariables['medition'][$i];
+                if($contStep == $step){
+                    $arrayVariablesResultsGroup['valueReal'][$numberOfStep] = $arrayVariablesResultsGroup['valueReal'][$numberOfStep] + $valTempReal;
+                    $arrayVariablesResultsGroup['valuePlan'][$numberOfStep] = $arrayVariablesResultsGroup['valuePlan'][$numberOfStep] + $valTempPlan;
+                    $arrayVariablesResultsGroup['medition'][$numberOfStep] = $arrayVariablesResultsGroup['medition'][$numberOfStep] + $valTempMedition;
+                    $valTempReal = $valTempPlan = $valTempMedition = 0.0;
+                    $numberOfStep++;
+                    $contStep = 0;
+                }
+                $contStep++;
+            }
+//            var_dump($arrayVariablesResultsGroup);die();
+            for ($i = 1; $i <= $maxVisualizeNumberResults; $i++) {
+                $label = $dataReal = $dataPlan = $dataMedition = array();
+                $label["label"] = $labelsFrequencyNotificationArray[$i];
+                if($indicator->getResultIsAccumulative()){
+                    $varTempReal = 0.0;
+                    $varTempPlan = 0.0;
+                    $varTempMedition = 0.0;
+                    for($j = 1; $j <= $i; $j++){
+                        $varTempReal = $varTempReal + $arrayVariablesResultsGroup['valueReal'][$j];
+                        $varTempPlan = $varTempPlan + $arrayVariablesResultsGroup['valuePlan'][$j];
+                        $varTempMedition = $varTempMedition + $arrayVariablesResultsGroup['medition'][$j];
+                    }
+                    $dataReal["value"] = number_format($varTempReal, 2, ',', '.');
+                    $dataReal["color"] = "#298A08";
+                    $dataPlan["color"] = "#0101DF";
+                    $dataPlan["value"] = number_format($varTempPlan, 2, ',', '.');
+                    $dataMedition["value"] = number_format($varTempMedition, 2, ',', '.');
+                    $dataMedition["color"] = "#B40404";
+                } else{
+                    $dataReal["value"] = number_format($arrayVariablesResultsGroup['valueReal'][$i], 2, ',', '.');
+                    $dataPlan["value"] = number_format($arrayVariablesResultsGroup['valuePlan'][$i], 2, ',', '.');
+                    $dataMedition["value"] = number_format($arrayVariablesResultsGroup['medition'][$i], 2, ',', '.');
+                }
+
+                $category[] = $label;
+                $dataSetReal["data"][] = $dataReal;
+                $dataSetPlan["data"][] = $dataPlan;
+                $medition["data"][] = $dataMedition;
+            }
+
+            $data['dataSource']['dataset'][] = $dataSetReal;
+            $data['dataSource']['dataset'][] = $dataSetPlan;
+            $data['dataSource']['dataset'][] = $medition;
         } elseif (isset($options['resultIndicatorPersonalInjuryWithAndWithoutAndLostDaysByFrequencyNotificationByPeriodGroupByCompanyAccumulated']) && array_key_exists('resultIndicatorPersonalInjuryWithAndWithoutAndLostDaysByFrequencyNotificationByPeriodGroupByCompanyAccumulated', $options)) {
             unset($options[$options['path_array']]);
 
@@ -3297,6 +3465,71 @@ class IndicatorService implements ContainerAwareInterface {
         $data['dataSource']['categories'][]["category"] = $category;
 
         return $data;
+    }
+    
+    /**
+     * Función que retorna las etiquetas de los rangos de la frecuencia de notificación del indicador
+     * @param Indicator $indicator
+     * @return array
+     */
+    public function getLabelsFrequencyNotificationByDaysOfFrequency($days) {
+        $labelsFrequencyArray = array();
+        
+        if ($days == 30) {
+            $labelsFrequencyArray = CommonObject::getLabelsMonths();
+        } elseif ($days == 60) {
+            $labelsFrequencyArray = CommonObject::getLabelsBimonthly();
+        } elseif ($days == 90) {
+            $labelsFrequencyArray = CommonObject::getLabelsTrimonthly();
+        } elseif ($days == 120) {
+            $labelsFrequencyArray = CommonObject::getLabelsFourmonthly();
+        } elseif ($days == 180) {
+            $labelsFrequencyArray = CommonObject::getLabelsSixmonthly();
+        }
+
+        return $labelsFrequencyArray;
+    }
+    
+        /**
+     * Función que redefine las etiquetas por frecuencia de notificación de acuerdo al tipo de resultado del indicador
+     * @param Indicator $indicator
+     */
+    public function setLabelsFrequencyNotificationByNumbersOfResults($numberResults, $labelsFrequencyArray = array(), $type = "from") {
+        
+        $labelIni = explode('-', $labelsFrequencyArray[1])[0];
+        $labelsArray = array();
+        
+        if ($numberResults == 12) {
+            for ($i = 1; $i <= $numberResults; $i++) {
+                if ($type == "from") {
+                    $labelsArray[$i] = $labelsFrequencyArray[$i];
+                } elseif ($type == "until") {
+                    $labelsArray[$i] = "a " . $labelsFrequencyArray[$i];
+                }
+            }
+        } else {
+            
+            //Recorremos de acuerdo al número de resultados por frecuencia
+            for ($i = 1; $i <= $numberResults; $i++) {
+                $labelActually = explode('-', $labelsFrequencyArray[$i])[1];
+                if ($i > 1) {
+                    if ($type == "from") {
+                        $labelsArray[$i] = $labelIni . '-' . $labelActually;
+                    } elseif ($type == "until") {
+                        $labelsArray[$i] = "a " . $labelActually;
+                    }
+                } else {
+                    if ($type == "from") {
+                        $labelsArray[$i] = $labelsFrequencyArray[$i];
+                    } elseif ($type == "until") {
+                        $labelsArray[$i] = "a " . $labelActually;
+                    }
+                }
+            }
+        }
+        
+        
+        return $labelsArray;
     }
 
     /**

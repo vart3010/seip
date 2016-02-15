@@ -164,3 +164,15 @@ showButtonDownload:
     methods: [GET]
     options:
         expose: true
+        
+             
+       
+loadFile:
+    path: /{id}/loadFile
+    defaults:
+        _controller: pequiven.controller.indicator:loadFileAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+        id: \d+
+    methods: [GET|POST]

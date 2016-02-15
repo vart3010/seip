@@ -250,3 +250,14 @@ pequiven_indicator_evolution_export:
     methods: [GET|POST]
     options:
         expose: true
+#Carga de formulario para clonar el informe de evolucion
+pequiven_indicator_clonig_data_evolution:
+    path: /{id}/get-form_cloning.{_format}
+    defaults:
+        _controller: pequiven.controller.indicator_sig:getFormCloningAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET|POST]
+    options:
+        expose: true
