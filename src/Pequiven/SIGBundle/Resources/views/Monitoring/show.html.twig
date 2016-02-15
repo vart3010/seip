@@ -1,5 +1,4 @@
 {% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayout.html.twig' %}
-
 {% import 'PequivenSIGBundle:Template:Buttons/buttons.html.twig' as buttons %}
 
 {% trans_default_domain 'PequivenSIGBundle' %}
@@ -26,6 +25,13 @@
                         
 </fieldset>	
 
-{% set setmonth = "11" %}
-{{ buttons.generic_ext_sv(path('pequiven_sig_monitoring_export', { 'id': data.id }),('Descargar'|trans({},'messages'))) }}
+{% include 'PequivenSIGBundle:Monitoring:Standardization/show.html.twig' %}                         
+<br><br>
+{% include 'PequivenSIGBundle:Monitoring:Maintenance/show.html.twig' %}                         
+
+<p class="button-height align-right">          
+    <div style="text-align: right; margin-left:15px;">
+        {{ buttons.generic_ext_sv(path('pequiven_sig_monitoring_export', { 'id': data.id }),('Descargar'|trans({},'messages'))) }}
+    </div>
+</p>
 {% endblock %}
