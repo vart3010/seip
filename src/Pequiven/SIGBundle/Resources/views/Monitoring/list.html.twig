@@ -19,7 +19,7 @@
                 <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager" template-header="custom/header" api-data-url="{{ apiDataUrl }}" export-csv="csv" class="table table-responsive table-extra-info">
                     <tbody>
                         <tr ng-repeat="result in $data" data="{$ result|json $}">
-                            <td data-title="''" sortable="'ref'" filter="{'description' : 'text'}">
+                            <td data-title="'Sistemas de la Calidad'" sortable="'description'" filter="{'description' : 'text'}">
                                 - <a href="{$ result.id $}">{$ result.ref+result.description $} </a>
                             </td>                            
                         </tr>
@@ -27,6 +27,5 @@
                 </table>
             </div>
         </div>
-    </div>
-    
+    </div>    
 {% endblock %}

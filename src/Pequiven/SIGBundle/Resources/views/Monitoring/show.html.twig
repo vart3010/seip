@@ -5,24 +5,23 @@
 
 {% block before_body %}
     {{ contentHeader(
-        ('monitoring.title'|trans),        
+        {(path('pequiven_sig_monitoring_list')):('monitoring.title'|trans)},        
         ('pequiven_indicator.show'|trans)
     ) }}
 {% endblock %} 
 
 {% block body %}
 <fieldset class="fieldset">
-            <legend class="legend">{{ data }}&nbsp;</legend>
-            <div class="columns">
-                <!-- Sistema -->
-                <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
-                    <p class="inline-label">
-                        <label class="label">Sistema de la Calidad</label>
-                        {{ data.description }}
-                    </p>
-                </div>                
-            </div>
-                        
+    <legend class="legend">{{ data }}&nbsp;</legend>
+    <div class="columns">
+        <!-- Sistema -->
+        <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+            <p class="inline-label">
+                <label class="label">Sistema de la Calidad</label>
+                    {{ data.description }}
+            </p>
+        </div>                
+    </div>                        
 </fieldset>	
 
 {% include 'PequivenSIGBundle:Monitoring:Standardization/show.html.twig' %}                         

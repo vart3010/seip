@@ -125,6 +125,13 @@ class IndicatorSigController extends ResourceController {
         $idIndicator = $request->get('id');
 
         $indicator = $this->get('pequiven.repository.indicator')->find($idIndicator); //Obtenemos el indicador        
+
+        //Validación para Visualizar informe de Evolución
+        if (!$indicator->getShowEvolutionView()) {
+            $this->get('session')->getFlashBag()->add('success', 'Indicador no Habilitado para Visualizar Informe de Evolución');
+            return $this->redirect($this->generateUrl("pequiven_indicator_show", array("id" => $indicator->getId())));         
+        }
+
         $indicatorBase = $indicator;
         //Seteo de Indicador a clonar
         if ($indicator->getParentCloning()) {
