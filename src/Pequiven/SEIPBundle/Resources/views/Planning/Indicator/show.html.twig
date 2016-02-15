@@ -328,7 +328,7 @@
             {% include 'PequivenSEIPBundle:Planning:Indicator/show/features.html.twig' %}
         {% endif %}
         <br /><br />
-
+        {% set addImg = true %}
         {% if is_granted(['ROLE_SEIP_INDICATOR_UPLOAD_FILES']) %}
             {% include 'PequivenSEIPBundle:Planning:Indicator/show/files.html.twig' %}
         {% endif %}
