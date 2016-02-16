@@ -734,6 +734,7 @@ class ReportEvolutionController extends ResourceController
             $cause = $this->get('pequiven.repository.sig_causes_report_evolution')->findBy(array('arrangementProgram' => $id));
             $complejo = "S/C";
             $gerencia = "S/G";
+            $cantAction = 0;
         }
 
         $monthSet = $monthSet.''."-";

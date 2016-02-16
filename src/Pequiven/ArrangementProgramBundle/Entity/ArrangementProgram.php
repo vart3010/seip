@@ -244,6 +244,12 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
     protected $resultBeforepenalty = 0;
 
     /**
+     * @ORM\ManyToMany(targetEntity="Pequiven\SIGBundle\Entity\ManagementSystem", inversedBy="arrangementprogram", cascade={"persist","remove"})
+     * @ORM\JoinTable(name="seip_arrangementprogram_management_systems")
+     */
+    private $managementSystems;
+
+    /**
      * ¿Mostar navegación al informe de evolución?
      * @var boolean
      * @ORM\Column(name="showEvolutionView",type="boolean")
@@ -282,6 +288,7 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
      */
     protected $arrangementProgramVerification;
 
+
     public function __construct() {
         $this->responsibles = new \Doctrine\Common\Collections\ArrayCollection();
         $this->histories = new \Doctrine\Common\Collections\ArrayCollection();
@@ -290,6 +297,7 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
         $this->arrangementProgramCauses = new \Doctrine\Common\Collections\ArrayCollection();
         $this->arrangementProgramCausesAnalysis = new \Doctrine\Common\Collections\ArrayCollection();
         $this->arrangementProgramVerification = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->managementSystems = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -897,6 +905,36 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
     }
 
     /**
+     * Add managementSystems
+     *
+     * @param \Pequiven\SIGBundle\Entity\ManagementSystem $managementSystems
+     * @return Indicator
+     */
+    public function addManagementSystem(\Pequiven\SIGBundle\Entity\ManagementSystem $managementSystems) {
+        $this->managementSystems[] = $managementSystems;
+
+        return $this;
+    }
+
+    /**
+     * Remove managementSystems
+     *
+     * @param \Pequiven\SIGBundle\Entity\ManagementSystem $managementSystems
+     */
+    public function removeManagementSystem(\Pequiven\SIGBundle\Entity\ManagementSystem $managementSystems) {
+        $this->managementSystems->removeElement($managementSystems);
+    }
+
+    /**
+     * Get managementSystems
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getManagementSystems() {
+        return $this->managementSystems;
+    }
+
+    /**
      * Set updateResultByAdmin
      *
      * @param boolean $updateResultByAdmin
@@ -1004,6 +1042,8 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
             $this->totalAdvance = 0;
             $this->progressToDate = 0;
             $this->lastDateCalculateResult = null;
+
+            $this->managementSystems = new ArrayCollection();
         }
     }
 

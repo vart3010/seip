@@ -4,7 +4,7 @@
     <div ng-controller="IndicatorSigEvolutionController"> 
         <div class="block-title">
             <h3 class="ng-binding">{$ indicator_sig.featuresIndicator.length $} {{ 'form.messages.action_plan'|trans({},'PequivenSIGBundle') }}</h3> 
-            {% if not indicator_sig.parentCloning %}            
+            {% if not cloning %}            
                 <div class="button-group absolute-right compact">
                     <a class="button icon-list-add " href="" ng-click="loadTemplateActionEvolution()" title="">{{ 'pequiven.add'|trans({},'messages')  }}</a>
                 </div>       
@@ -82,7 +82,7 @@
                                 {% endif %}
                             </td>
                         </tr>
-                        {% if not indicator_sig.parentCloning %}
+                        {% if not cloning %}
                             <tr>
                                 <td class="vertical-center" height="15">
                                     <span class="select compact">

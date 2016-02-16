@@ -77,6 +77,11 @@ class ManagementSystem extends modelManagementSystem
     private $indicators;
 
     /**
+    * @ORM\ManyToMany(targetEntity="\Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram", mappedBy="managementSystems")
+    */
+    private $arrangementprogram;
+
+    /**
      * @ORM\ManyToMany(targetEntity="Pequiven\SIGBundle\Entity\ProcessManagementSystem", mappedBy="managementSystem")
      * 
      */
@@ -92,6 +97,7 @@ class ManagementSystem extends modelManagementSystem
         $this->objetives = new \Doctrine\Common\Collections\ArrayCollection();
         $this->indicators = new \Doctrine\Common\Collections\ArrayCollection();
         $this->processManagementSystem = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->arrangementprogram = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**
@@ -310,6 +316,39 @@ class ManagementSystem extends modelManagementSystem
     public function getIndicators()
     {
         return $this->indicators;
+    }
+
+    /**
+    * Add arrangementprogram
+    *
+    * @param \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram $arrangementprogram
+    * @return ManagementSystem
+    */
+    public function addArrangementProgram(\Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram $arrangementprogram)
+    {
+        $this->arrangementprogram[] = $arrangementprogram;
+
+        return $this;
+    }
+
+    /**
+    * Remove arrangementprogram
+    *
+    * @param \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram $arrangementprogram
+    */
+    public function removeArrangementProgram(\Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram $arrangementprogram)
+    {
+        $this->arrangementprogram->removeElement($arrangementprogram);
+    }
+
+    /**
+    * Get arrangementprogram
+    *
+    * @return \Doctrine\Common\Collections\Collection 
+    */
+    public function getArrangementPrograms()
+    {
+        return $this->arrangementprogram;
     }
 
     /**
