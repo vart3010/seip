@@ -21,18 +21,24 @@
         <table class="simple-table responsive-table tables-extras" id="sorting-example2">
             <thead>
                 <tr>
-                    <th scope="col" width="20%" class="header">Imagen</th>
-                    <th scope="col" width="60%" class="header">Nombre </th>
-                        {#                    <th scope="col" width="20%" class="header">Fecha</th>#}
+                    <th scope="col" width="10%" class="header">Imagen</th>
+                    <th scope="col" width="90%" class="header"></th>
                 </tr>
             </thead>
             <tbody>
                 {% for files in indicator.indicatorFiles %}
                     {% set url = files.path~"/"~files.nameFile %}
                     <tr>
-                        <td><img  src="{{ asset(url) }}" id="{{ asset(url) }}"  onclick="openImg(this.id)"  class="img-responsive" alt="Cinque Terre" style="width: 80%;  height: auto; cursor: pointer;"></td>
-                        <td scope="col" width="60%" class="header">{{ files.nameFileOriginal }}<br><b>Fecha:</b> {{ files.createdAt|date('d/m/Y') }}</td>
-                                {#                        <td scope="col" width="20%" class="header">{{ files.createdAt|date('d/m/Y') }}</td>#}
+                        <td><img  src="{{ asset(url) }}" id="{{ asset(url) }}"  onclick="openImg(this.id)"  class="img-responsive" alt="{{ files.nameFileOriginal }}" style="width: 80%;  height: auto; cursor: pointer;"></td>
+                        <td scope="col" width="60%" class="header">
+                            {#{{ files.nameFileOriginal }}#}
+{#                            <br>#}
+                            <b>Descripción:</b><p> {{ files.description }}</p>
+                            
+                            <b>Fecha:</b> {{ files.createdAt|date('d/m/Y') }}
+
+                        </td>
+                        {#                        <td scope="col" width="20%" class="header">{{ files.createdAt|date('d/m/Y') }}</td>#}
                     </tr>
                 {% endfor %}
             </tbody>
