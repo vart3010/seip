@@ -101,49 +101,44 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
 
         $form
                 ->tab('General')
-                ->add('ref')
-                ->add('description')
-                ->add('summary', null, array(
-                    'required' => false,
-                ))
-                ->add('orderShowFromParent')
-                ->add('typeOfCalculation', 'choice', array(
-                    'choices' => \Pequiven\IndicatorBundle\Entity\Indicator::getTypesOfCalculation(),
-                    'translation_domain' => 'PequivenIndicatorBundle'
-                ))
-                ->add('typeOfResultSection', 'choice', array(
-                    'choices' => \Pequiven\IndicatorBundle\Entity\Indicator::getTypesOfResultSection(),
-                    'translation_domain' => 'PequivenIndicatorBundle',
-                    'required' => false,
-                ))
-                ->add('calculationMethod', 'choice', array(
-                    'choices' => \Pequiven\IndicatorBundle\Entity\Indicator::getLabelsCalculationMethod(),
-                    'translation_domain' => 'PequivenIndicatorBundle'
-                ))
-                ->add('typeDetailValue', 'choice', array(
-                    'choices' => \Pequiven\IndicatorBundle\Entity\Indicator::getLabelsTypeDetail(),
-                    'translation_domain' => 'PequivenIndicatorBundle'
-                ))
-                ->add('refParent')
-                ->add('totalPlan')
-                ->add('weight')
-                ->add('indicatorWeight')
-                ->add('goal')
-                ->add('formula')
-                ->add('tendency')
-                ->add('frequencyNotificationIndicator')
-                ->add('valueFinal')
-                ->add('charts', 'sonata_type_model_autocomplete', array(
-                    'property' => array('alias', 'description'),
-                    'multiple' => true,
-                    'required' => false,
-                ))
-                ->add('childrens', 'sonata_type_model_autocomplete', $childrensParameters);
-//        if ($object != null && $object->getId() !== null) {
-//            if ($object->getIndicatorLevel()->getLevel() == IndicatorLevel::LEVEL_ESTRATEGICO) {
-//                $form->add('lineStrategics');
-//            }
-//        }
+                    ->add('ref')
+                    ->add('description')
+                    ->add('summary', null, array(
+                        'required' => false,
+                    ))
+                    ->add('typeOfCalculation', 'choice', array(
+                        'choices' => \Pequiven\IndicatorBundle\Entity\Indicator::getTypesOfCalculation(),
+                        'translation_domain' => 'PequivenIndicatorBundle'
+                    ))
+                    ->add('typeOfResultSection', 'choice', array(
+                        'choices' => \Pequiven\IndicatorBundle\Entity\Indicator::getTypesOfResultSection(),
+                        'translation_domain' => 'PequivenIndicatorBundle',
+                        'required' => false,
+                    ))
+                    ->add('calculationMethod', 'choice', array(
+                        'choices' => \Pequiven\IndicatorBundle\Entity\Indicator::getLabelsCalculationMethod(),
+                        'translation_domain' => 'PequivenIndicatorBundle'
+                    ))
+                    ->add('typeDetailValue', 'choice', array(
+                        'choices' => \Pequiven\IndicatorBundle\Entity\Indicator::getLabelsTypeDetail(),
+                        'translation_domain' => 'PequivenIndicatorBundle'
+                    ))
+                    ->add('refParent')
+                    ->add('totalPlan')
+                    ->add('weight')
+                    ->add('indicatorWeight')
+                    ->add('goal')
+                    ->add('formula')
+                    ->add('tendency')
+                    ->add('frequencyNotificationIndicator')
+                    ->add('valueFinal')
+                    ->add('charts', 'sonata_type_model_autocomplete', array(
+                        'property' => array('alias', 'description'),
+                        'multiple' => true,
+                        'required' => false,
+                    ))
+                    ->add('childrens', 'sonata_type_model_autocomplete', $childrensParameters)
+                ;
         $form
                 ->add('formulaDetails', 'sonata_type_collection', array(
                     'cascade_validation' => true,
@@ -201,6 +196,28 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                 ->end()
                 ->end()
         ;
+        
+        $form->tab('Dashboards (Tableros)');
+        if ($object != null && $object->getId() !== null) {
+            if ($object->getIndicatorLevel()->getLevel() == IndicatorLevel::LEVEL_ESTRATEGICO) {
+                $form
+                    ->with('Estratégico')
+                    ->add('lineStrategics')
+                    ->add('orderShowFromParent')
+                    ->end();
+            }
+        }
+        $form
+            ->with('Gráficos Personalizados')
+            ->add('lineStrategics')
+            ->add('complejoDashboardSpecific','sonata_type_model_autocomplete',array(
+                'property' => array('description')
+            ))
+            ->add('showByDashboardSpecific', null, array(
+                'required' => false,
+            ))
+            ->end()
+        ->end();
 
 
         $form
@@ -252,15 +269,6 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                     'required' => false,
                 ))
                 ->add('showDashboardByQuarter', null, array(
-                    'required' => false,
-                ))
-                ->end()
-                ->with('Gráficos Personalizados')
-                ->add('lineStrategics')
-                ->add('complejoDashboardSpecific','sonata_type_model_autocomplete',array(
-                    'property' => array('description')
-                ))
-                ->add('showByDashboardSpecific', null, array(
                     'required' => false,
                 ))
                 ->end()
