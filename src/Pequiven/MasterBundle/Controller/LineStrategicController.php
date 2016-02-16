@@ -64,12 +64,16 @@ class LineStrategicController extends SEIPController {
      */
     public function viewOnlyIndicatorSpecificAction(Request $request){
         $boxRender = $this->get('tecnocreaciones_box.render');
+        $idComplejo = $request->get('complejo');
+        
+        $labelsSummary = \Pequiven\MasterBundle\Entity\Complejo::getLabelsSummary();
         
         $view = $this
                 ->view()
                 ->setTemplate($this->config->getTemplate('viewByIndicatorSpecific.html'))
                 ->setData(array(
-                    'boxRender' => $boxRender
+                    'boxRender' => $boxRender,
+                    'summaryComplejo' => $labelsSummary[$idComplejo]
                 ))
                 ;
         

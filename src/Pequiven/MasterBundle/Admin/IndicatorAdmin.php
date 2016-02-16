@@ -106,7 +106,6 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                 ->add('summary', null, array(
                     'required' => false,
                 ))
-                ->add('lineStrategics')
                 ->add('orderShowFromParent')
                 ->add('typeOfCalculation', 'choice', array(
                     'choices' => \Pequiven\IndicatorBundle\Entity\Indicator::getTypesOfCalculation(),
@@ -253,6 +252,15 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                     'required' => false,
                 ))
                 ->add('showDashboardByQuarter', null, array(
+                    'required' => false,
+                ))
+                ->end()
+                ->with('Gráficos Personalizados')
+                ->add('lineStrategics')
+                ->add('complejoDashboardSpecific','sonata_type_model_autocomplete',array(
+                    'property' => array('description')
+                ))
+                ->add('showByDashboardSpecific', null, array(
                     'required' => false,
                 ))
                 ->end()

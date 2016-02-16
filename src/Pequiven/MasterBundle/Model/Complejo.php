@@ -20,8 +20,8 @@ class Complejo {
     const COMPLEJO_CPAMC = 2;
     const COMPLEJO_CPJAA = 3;
     const COMPLEJO_PRONAVAY = 4;
-    const COMPLEJO_PROPARAGUANA = 5;
-    const COMPLEJO_ZIV = 6;
+    const COMPLEJO_ZIV = 5;
+    const COMPLEJO_PROPARAGUANA = 6;
     
     public $refName = array();
     
@@ -31,8 +31,8 @@ class Complejo {
         $this->refName[self::COMPLEJO_CPAMC] = 'CPAMC';
         $this->refName[self::COMPLEJO_CPJAA] = 'CPJAA';
         $this->refName[self::COMPLEJO_PRONAVAY] = 'NAVAY';
-        $this->refName[self::COMPLEJO_PROPARAGUANA] = 'PARAGUANA';
         $this->refName[self::COMPLEJO_ZIV] = 'CORP.';
+        $this->refName[self::COMPLEJO_PROPARAGUANA] = 'PARAGUANA';
     }
     
     /**
@@ -41,5 +41,22 @@ class Complejo {
      */
     public function getRefNameArray() {
         return $this->refName ;
+    }
+    
+    /**
+     * Retorna las etiquetas definidas para los tipos de resumen
+     * 
+     * @staticvar array $labelsStatus
+     * @return string
+     */
+    static function getLabelsSummary() {
+        static $labelsStatus = array(
+            self::COMPLEJO_CPMORON => 'CPHC',
+            self::COMPLEJO_CPAMC => 'CPAMC',
+            self::COMPLEJO_CPJAA => 'CPJAA',
+            self::COMPLEJO_PRONAVAY => 'NAVAY',
+            self::COMPLEJO_ZIV => 'ZIV',
+        );
+        return $labelsStatus;
     }
 }

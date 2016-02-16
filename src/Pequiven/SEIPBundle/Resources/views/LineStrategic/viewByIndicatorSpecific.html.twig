@@ -1,5 +1,6 @@
 {#Indicadores Estratégicos de acuerdo a el reporte ejecutivo#}
-{% extends "PequivenSEIPBundle:Template:Developer/layout.html.twig" %}
+{#{% extends "PequivenSEIPBundle:Template:Developer/layout.html.twig" %}#}
+{% extends "PequivenSEIPBundle:Template:Developer/layoutGestion.html.twig" %}
 {% trans_default_domain 'PequivenSEIPBundle' %}
 
 {% block stylesheets_base %}
@@ -9,7 +10,7 @@
 
 {% block before_body %}
     {{ contentHeader(
-        ("pequiven_seip.results.resultsIndicatorsCPJAA"|trans)
+        ("complejo.dashboardIndicator"|trans ({'%complejo%': summaryComplejo},'complejo'))
     ) }}
 {% endblock %}
 

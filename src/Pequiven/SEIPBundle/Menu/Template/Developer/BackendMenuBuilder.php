@@ -893,6 +893,22 @@ $user = $this->getUser();
                 $visualize->addChild($itemStrategicsObjetives);
             }
             
+            if ($this->isGranted('ROLE_SEIP_RESULT_VIEW_BY_INDICATORS_CPHC') && $this->getPeriodService()->getPeriodActive()->getName() == '2015') {
+                $itemStrategicsIndicatorsCphc = $this->factory->createItem('results.visualize.indicator.cphc', array(
+                    'route' => 'pequiven_line_strategic_indicators_specific',
+                    'routeParameters' => array('complejo' => 1),
+                    ))->setLabel($this->translate(sprintf('app.backend.menu.%s.results.visualize.indicator.cphc', $section)));
+                $visualize->addChild($itemStrategicsIndicatorsCphc);
+            }
+            
+            if ($this->isGranted('ROLE_SEIP_RESULT_VIEW_BY_INDICATORS_CPAMC') && $this->getPeriodService()->getPeriodActive()->getName() == '2015') {
+                $itemStrategicsIndicatorsCpamc = $this->factory->createItem('results.visualize.indicator.cpamc', array(
+                    'route' => 'pequiven_line_strategic_indicators_specific',
+                    'routeParameters' => array('complejo' => 2),
+                    ))->setLabel($this->translate(sprintf('app.backend.menu.%s.results.visualize.indicator.cpamc', $section)));
+                $visualize->addChild($itemStrategicsIndicatorsCpamc);
+            }
+            
             if ($this->isGranted('ROLE_SEIP_RESULT_VIEW_BY_INDICATORS_CPJAA') && $this->getPeriodService()->getPeriodActive()->getName() == '2015') {
                 $itemStrategicsIndicatorsCpjaa = $this->factory->createItem('results.visualize.indicator.cpjaa', array(
                     'route' => 'pequiven_line_strategic_indicators_specific',
