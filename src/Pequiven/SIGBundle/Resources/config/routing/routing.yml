@@ -61,6 +61,16 @@ pequiven_sig_monitoring_export:
         _controller: pequiven.controller.monitoring_sig:exportAction
         _format: html    
     methods: [GET]
+pequiven_sig_monitoring_add:
+    path: /{id}/get-monitoring.{_format}
+    defaults:
+        _controller: pequiven.controller.monitoring_sig:addAction
+        _format: html
+    requirements:
+        _format: html|json
+    methods: [GET|POST]
+    options:
+        expose: true
 #Seguimiento a Carga de informes de evolución
 pequiven_indicator_evolution_load:
     path: /indicator/sig/load

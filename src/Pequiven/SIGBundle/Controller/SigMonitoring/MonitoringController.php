@@ -83,6 +83,11 @@ class MonitoringController extends ResourceController
     	return $this->render('PequivenSIGBundle:Monitoring:show.html.twig', array('data' => $managemensystems));
     }
 
+    public function addAction(Request $request){
+        var_dump("Carga de Fomulario de Monitoreo");
+        die();
+    }
+
     public function exportAction(Request $request){
         $id = $request->get('id');
         $managemensystems = $this->container->get('pequiven.repository.sig_management_system')->find($id); 

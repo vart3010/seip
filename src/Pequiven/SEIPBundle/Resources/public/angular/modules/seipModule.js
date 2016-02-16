@@ -2446,6 +2446,99 @@ angular.module('seipModule.controllers', [])
                 $scope.templateOptions.setTemplate($scope.templates[0]);
             };
         })
+
+        .controller('MonitoringTracingSigController', function ($scope, notificationBarService, $http, notifyService, $filter) {
+
+            var isInit = false;
+            //Carga el formulario
+            $scope.loadTemplateTracing = function (resource) {
+                $scope.initFormTracing(resource);
+                if (isInit == false) {
+                    isInit = true;
+                }
+                $scope.templateOptions.setTemplate($scope.templates[0]);
+                $scope.templateOptions.setParameterCallBack(resource);                
+                if (resource) {
+                    $scope.templateOptions.enableModeEdit();
+                    $scope.openModalAuto();
+                } else {
+                    $scope.openModalAuto();
+                }
+            };
+
+            //Añadir
+            var addConfig = function (save, successCallBack) {
+                var formConfig = angular.element('#form_config_sig');
+                var formData = formConfig.serialize();
+
+                if (save == undefined) {
+                    var save = false;
+                }
+                if (save == true) {
+                    var url = Routing.generate('pequiven_config_chart_get_form', {idIndicator: $scope.id_indicator});
+                }
+                notificationBarService.getLoadStatus().loading();
+                return $http({
+                    method: 'POST',
+                    url: url,
+                    data: formData,
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'}  // set the headers so angular passing info as form data (not request payload)
+                }).success(function (data) {
+                    $scope.templateOptions.setVar("form", {errors: {}});                    
+                    if (successCallBack) {
+                        successCallBack(data);
+                    }
+                    notificationBarService.getLoadStatus().done();
+                    //$timeout(callAtTimeout, 3000);
+                    location.reload();
+                    return true;
+                }).error(function (data, status, headers, config) {
+                    $scope.templateOptions.setVar("form", {errors: {}});
+                    if (data.errors) {
+                        if (data.errors.errors) {
+                            $.each(data.errors.errors, function (index, value) {
+                                notifyService.error(Translator.trans(value));
+                            });
+                        }
+                        $scope.templateOptions.setVar("form", {errors: data.errors.children});
+                    }
+                    notificationBarService.getLoadStatus().done();
+                    return false;
+                });
+                function callAtTimeout() {
+                    location.reload();
+                }
+            };
+            $scope.templateOptions.setVar('addConfig', addConfig);
+            var confirmCallBack = function () {
+                addConfig(true, function (data) {                   
+                });
+                return true;
+            };
+            //Formulario Tracing
+            $scope.initFormTracing = function (resource) {
+                var d = new Date();
+                var numero = d.getTime();
+                $scope.setHeight(350);                
+                var parameters = {
+                    //id: $scope.id_managementSystem,
+                    id: 1,
+                    _dc: numero
+                };
+                if (resource) {
+                    parameters.id = resource.id;
+                }
+                var url = Routing.generate('pequiven_sig_monitoring_add', parameters);
+                $scope.templates = [
+                    {
+                        name: 'Tracing',
+                        url: url,
+                        confirmCallBack: confirmCallBack,
+                    }
+                ];
+                $scope.templateOptions.setTemplate($scope.templates[0]);
+            };
+        })
         //Fin controladores SIG
 
         //Controlador SIP Centro
