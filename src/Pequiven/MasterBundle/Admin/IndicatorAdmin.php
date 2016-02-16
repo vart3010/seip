@@ -139,11 +139,11 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                     'required' => false,
                 ))
                 ->add('childrens', 'sonata_type_model_autocomplete', $childrensParameters);
-        if ($object != null && $object->getId() !== null) {
-            if ($object->getIndicatorLevel()->getLevel() == IndicatorLevel::LEVEL_ESTRATEGICO) {
-                $form->add('lineStrategics');
-            }
-        }
+//        if ($object != null && $object->getId() !== null) {
+//            if ($object->getIndicatorLevel()->getLevel() == IndicatorLevel::LEVEL_ESTRATEGICO) {
+//                $form->add('lineStrategics');
+//            }
+//        }
         $form
                 ->add('formulaDetails', 'sonata_type_collection', array(
                     'cascade_validation' => true,
