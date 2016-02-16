@@ -141,7 +141,7 @@ services:
             - Pequiven\IndicatorBundle\Entity\Indicator
             - ~
         calls:
-            - [ setTranslationDomain, [SonataAdminBundle]]
+            - [ setTranslationDomain, [PequivenIndicatorBundle]]
             - [ setModelManager, [@seip.model.manager]]
             - [ setContainer, [@service_container]]
             

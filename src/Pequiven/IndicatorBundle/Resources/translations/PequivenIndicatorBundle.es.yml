@@ -332,3 +332,15 @@ action:
         InvalidFile: Tipo de archivo invalido
         saveFileSuccess: Archivo guardado correctamente
         errorFileUpload: Error al subir archivo
+
+'Details': Detalles
+'Ref': Referencia
+'Description': Nombre
+'Summary': Resumen
+'Type Of Calculation': Tipo de Cálculo
+'Calculation Method': Método de Cálculo de las variables
+'Line Strategics': Líneas Estratégicas
+'Order Show From Parent': Orden en el dashboard de indicadores estratégicos
+'Complejo Dashboard Specific': Complejo dónde se mostrará en el dashboard
+'Show By Dashboard Specific': ¿El indicador será mostrado en un dashboard específico? (Omitiendo el de los Indicadores Estratégicos)
+'Type Detail Value': Tipo de Detalle del valor obtenido de los módulos de estadística
