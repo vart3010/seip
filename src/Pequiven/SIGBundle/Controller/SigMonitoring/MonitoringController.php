@@ -7,6 +7,9 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Tecnocreaciones\Bundle\ResourceBundle\Controller\ResourceController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
+use Pequiven\SIGBundle\Entity\Tracing\Standardization;
+use Pequiven\SIGBundle\Form\Tracing\StandardizationType;
+
 /**
  * Controlador Seguimiento y Eficacia
  *
@@ -84,8 +87,33 @@ class MonitoringController extends ResourceController
     }
 
     public function addAction(Request $request){
-        var_dump("Carga de Fomulario de Monitoreo");
-        die();
+        
+        $id = $request->get('id');  
+
+        $standardization = new standardization();
+        $form  = $this->createForm(new StandardizationType(), $standardization);
+        
+        if ($request->isMethod('POST')) {
+            $form->handleRequest($request);
+
+            $em = $this->getDoctrine()->getManager();                        
+            $em->persist($standardization);            
+            $em->flush();
+
+            $this->get('session')->getFlashBag()->add('success', "Datos Cargados Exitosamente");
+            die();
+        }                
+
+        $view = $this
+            ->view()
+            ->setTemplate($this->config->getTemplate('Tracing/Form/_form.html'))
+            ->setTemplateVar($this->config->getPluralResourceName())
+            ->setData(array(                
+                'form' => $form->createView(),
+            ))
+        ;
+        $view->getSerializationContext()->setGroups(array('id','api_list'));
+        return $view;
     }
 
     public function exportAction(Request $request){

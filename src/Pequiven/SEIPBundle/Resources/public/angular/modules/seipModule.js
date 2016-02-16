@@ -2467,15 +2467,15 @@ angular.module('seipModule.controllers', [])
             };
 
             //Añadir
-            var addConfig = function (save, successCallBack) {
-                var formConfig = angular.element('#form_config_sig');
+            var addStandardization = function (save, successCallBack) {
+                var formConfig = angular.element('#form_tracing_add');
                 var formData = formConfig.serialize();
-
                 if (save == undefined) {
                     var save = false;
                 }
                 if (save == true) {
-                    var url = Routing.generate('pequiven_config_chart_get_form', {idIndicator: $scope.id_indicator});
+                    //var url = Routing.generate('pequiven_sig_monitoring_add', {id: $scope.id_indicator});
+                    var url = Routing.generate('pequiven_sig_monitoring_add', {id: 1});
                 }
                 notificationBarService.getLoadStatus().loading();
                 return $http({
@@ -2490,7 +2490,7 @@ angular.module('seipModule.controllers', [])
                     }
                     notificationBarService.getLoadStatus().done();
                     //$timeout(callAtTimeout, 3000);
-                    location.reload();
+                    //location.reload();
                     return true;
                 }).error(function (data, status, headers, config) {
                     $scope.templateOptions.setVar("form", {errors: {}});
@@ -2509,9 +2509,9 @@ angular.module('seipModule.controllers', [])
                     location.reload();
                 }
             };
-            $scope.templateOptions.setVar('addConfig', addConfig);
+            $scope.templateOptions.setVar('addStandardization', addStandardization);
             var confirmCallBack = function () {
-                addConfig(true, function (data) {                   
+                addStandardization(true, function (data) {                   
                 });
                 return true;
             };
