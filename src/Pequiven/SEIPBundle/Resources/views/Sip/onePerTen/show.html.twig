@@ -101,10 +101,11 @@
 
             <h3 class="ng-binding">1x10 de {{ user }} - Teléfono: {{ user.cellphone }}</h3>
 
-
             {% if user.indentification %}
                 - CI:{{ user.indentification }}</h3>
-            {% endif %}                
+            {% endif %}
+            
+        <div class="absolute-right"><h3>Efectividad Voto 1x10= {{ efectividad }}</h3></div>
 
             {#{% if(members|length<=12) %}
                 <div class="button-group absolute-right compact">
@@ -121,10 +122,11 @@
                         <tr>
                             <th scope="col" width="2%" class="header">Nro</th>
                             <th scope="col" width="15%" class="header">Cedula</th>
-                            <th scope="col" width="38%" class="header">Nombre</th>
-                            <th scope="col" width="38%" class="header">Centro</th>
+                            <th scope="col" width="35%" class="header">Nombre</th>
+                            <th scope="col" width="35%" class="header">Centro</th>
+                            <th scope="col" width="10%" class="header">Reportó Voto</th>
                             <th scope="col" width="10%" class="header">Votó</th>
-                            <th scope="col" width="30%" class="header">Teléfono</th>
+                            <th scope="col" width="26%" class="header">Teléfono</th>
 {#                            <th scope="col" width="10%" class="header">Acciones</th>#}
                         </tr>
                     </thead>
@@ -136,6 +138,7 @@
                                 <td>{{ member.cedula}}</td>
                                 <td>{{ member.nombre}}</td>
                                 <td>{{ member.centro}}</td>
+                                <td>{{ member.reporteVoto}}</td>
                                 <td>{{ member.voto}}</td>
                                 <td>{{ member.telefono}}</td>
                                 {#<td> 
