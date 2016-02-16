@@ -162,6 +162,8 @@ app:
                             strategics: Estratégicos
                             indicator:
                                 strategics: Indicadores Estratégicos
+                                cphc: Indicadores CPHC
+                                cpamc: Indicadores CPAMC
                                 cpjaa: Indicadores CPJAA
                             objetive:
                                 strategics: Objetivos Estratégicos

@@ -329,9 +329,11 @@
         {% endif %}
         <br /><br />
         {% set addImg = true %}
-        {% if is_granted(['ROLE_SEIP_INDICATOR_UPLOAD_FILES']) %}
+
+        {% if indicator.loadFiles %}
             {% include 'PequivenSEIPBundle:Planning:Indicator/show/files.html.twig' %}
         {% endif %}
+
         <br /><br />
 
 

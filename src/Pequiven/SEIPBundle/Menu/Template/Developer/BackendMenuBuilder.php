@@ -47,7 +47,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
      */
     public function createSidebarMenu(Request $request) {
         $seipConfiguration = $this->getSeipConfiguration();
-
+$user = $this->getUser();
         $menu = $this->factory->createItem('root', array(
             'childrenAttributes' => array(
                 'class' => 'big-menu',
@@ -108,7 +108,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
         }
 
         //Menú Sistema de Informacion Politica
-        if ($this->isGranted('ROLE_SEIP_SIP_*')) {
+        if ($this->isGranted('ROLE_SEIP_SIP_*') && $user->getId() != 5942) {
             $this->addMenuSip($menu, $section);
         }
 
@@ -116,7 +116,8 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
         $this->addMenuModules($menu, $section);
 
         //Menú Administración
-        if ($this->securityContext->isGranted(array('ROLE_SONATA_ADMIN'))) {
+        
+        if ($this->securityContext->isGranted(array('ROLE_SONATA_ADMIN')) && $user->getId() != 5942) {
             $menu->addChild('admin', array(
                 'route' => 'sonata_admin_dashboard',
                 'labelAttributes' => array('icon' => 'icon-card'),
@@ -910,7 +911,23 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                 $visualize->addChild($itemStrategicsObjetives);
             }
             
-            if ($this->isGranted('ROLE_SEIP_RESULT_VIEW_BY_INDICATORS_CPJAA') && $this->getPeriodService()->getPeriodActive()->getName() == '2015') {
+            if ($this->isGranted('ROLE_SEIP_RESULT_VIEW_BY_INDICATORS_CPHC')) {
+                $itemStrategicsIndicatorsCphc = $this->factory->createItem('results.visualize.indicator.cphc', array(
+                    'route' => 'pequiven_line_strategic_indicators_specific',
+                    'routeParameters' => array('complejo' => 1),
+                    ))->setLabel($this->translate(sprintf('app.backend.menu.%s.results.visualize.indicator.cphc', $section)));
+                $visualize->addChild($itemStrategicsIndicatorsCphc);
+            }
+            
+            if ($this->isGranted('ROLE_SEIP_RESULT_VIEW_BY_INDICATORS_CPAMC')) {
+                $itemStrategicsIndicatorsCpamc = $this->factory->createItem('results.visualize.indicator.cpamc', array(
+                    'route' => 'pequiven_line_strategic_indicators_specific',
+                    'routeParameters' => array('complejo' => 2),
+                    ))->setLabel($this->translate(sprintf('app.backend.menu.%s.results.visualize.indicator.cpamc', $section)));
+                $visualize->addChild($itemStrategicsIndicatorsCpamc);
+            }
+            
+            if ($this->isGranted('ROLE_SEIP_RESULT_VIEW_BY_INDICATORS_CPJAA')) {
                 $itemStrategicsIndicatorsCpjaa = $this->factory->createItem('results.visualize.indicator.cpjaa', array(
                     'route' => 'pequiven_line_strategic_indicators_specific',
                     'routeParameters' => array('complejo' => 3),
