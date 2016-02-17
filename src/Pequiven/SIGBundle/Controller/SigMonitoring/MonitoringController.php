@@ -79,11 +79,19 @@ class MonitoringController extends ResourceController
     }
 
     public function showAction(Request $request){
-    	
-    	$id = $request->get('id');
+        
+        $id = $request->get('id');
+
+        $em = $this->getDoctrine()->getManager();                        
+
     	$managemensystems = $this->container->get('pequiven.repository.sig_management_system')->find($id); 
-    	
-    	return $this->render('PequivenSIGBundle:Monitoring:show.html.twig', array('data' => $managemensystems));
+        
+        $standardization = $em->getRepository("\Pequiven\SIGBundle\Entity\Tracing\Standardization")->findBy(array('managementSystem' => $id));
+        
+    	return $this->render('PequivenSIGBundle:Monitoring:show.html.twig', array(
+            'data' => $managemensystems,
+            'standardization' => $standardization
+            ));
     }
 
     public function addAction(Request $request){
@@ -95,8 +103,11 @@ class MonitoringController extends ResourceController
         
         if ($request->isMethod('POST')) {
             $form->handleRequest($request);
+            $managemensystems = $this->container->get('pequiven.repository.sig_management_system')->find($id); 
 
             $em = $this->getDoctrine()->getManager();                        
+
+            $standardization->setManagementSystem($managemensystems);
             $em->persist($standardization);            
             $em->flush();
 

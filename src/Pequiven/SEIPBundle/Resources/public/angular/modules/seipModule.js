@@ -2474,8 +2474,7 @@ angular.module('seipModule.controllers', [])
                     var save = false;
                 }
                 if (save == true) {
-                    //var url = Routing.generate('pequiven_sig_monitoring_add', {id: $scope.id_indicator});
-                    var url = Routing.generate('pequiven_sig_monitoring_add', {id: 1});
+                    var url = Routing.generate('pequiven_sig_monitoring_add', {id: $scope.id_managementSystem});                    
                 }
                 notificationBarService.getLoadStatus().loading();
                 return $http({
@@ -2490,7 +2489,7 @@ angular.module('seipModule.controllers', [])
                     }
                     notificationBarService.getLoadStatus().done();
                     //$timeout(callAtTimeout, 3000);
-                    //location.reload();
+                    location.reload();
                     return true;
                 }).error(function (data, status, headers, config) {
                     $scope.templateOptions.setVar("form", {errors: {}});
@@ -2519,10 +2518,9 @@ angular.module('seipModule.controllers', [])
             $scope.initFormTracing = function (resource) {
                 var d = new Date();
                 var numero = d.getTime();
-                $scope.setHeight(350);                
+                $scope.setHeight(650);                
                 var parameters = {
-                    //id: $scope.id_managementSystem,
-                    id: 1,
+                    id: $scope.id_managementSystem,                    
                     _dc: numero
                 };
                 if (resource) {

@@ -3,7 +3,28 @@
     <fieldset class="fieldset fields-list">
         <legend class="legend">Estandarización</legend>
             <div class="field-block button-height" >            
-                {{ form_widget(form) }}            
+                {{ form_label(form.area) }}            
+                {{ form_widget(form.area) }}            
+            </div>  
+            <div class="field-block button-height" >            
+                {{ form_label(form.detection) }}            
+                {{ form_widget(form.detection) }}            
+            </div>  
+            <div class="field-block button-height" >            
+                {{ form_label(form.code) }}            
+                {{ form_widget(form.code) }}            
+            </div>  
+            <div class="field-block button-height" >            
+                {{ form_label(form.type) }}            
+                {{ form_widget(form.type) }}            
+            </div>  
+            <div class="field-block button-height" >            
+                {{ form_label(form.description) }}            
+                {{ form_widget(form.description) }}            
+            </div>  
+            <div class="field-block button-height" >            
+                {{ form_label(form.treatment) }}            
+                {{ form_widget(form.treatment) }}            
             </div>                
     </fieldset>
 </form>    

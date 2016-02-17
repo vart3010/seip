@@ -6,8 +6,52 @@
             </div>                   
     </div>
     <div class="with-padding">
-	    <div class="new-row twelve-columns empty_row" align="center">                                 
+        {% if standardization %}
+	       <div class="new-row twelve-columns">                                                 
+                <div class="panel panel-default">
+                    <div class="panel-heading">        
+                        <table id="table_data" class="table table-striped table-bordered" cellspacing="0" width="100%">          
+                            <thead>
+                                <tr>                                
+                                    <th scope="col" width="2%" class="header">#</th>                                     
+                                    <th scope="col" width="30%" class="header">Area o Proceso</th>                                     
+                                    <th scope="col" width="10%" class="header">Detección</th>                                     
+                                    <th scope="col" width="10%" class="header">Codigo RNC</th>                                     
+                                    <th scope="col" width="10%" class="header">Tipo de NC</th>                                     
+                                    <th scope="col" width="30%" class="header">Descripción</th>                                     
+                                    <th scope="col" width="10%" class="header">Tratamiento</th>                                     
+                                    <th scope="col" width="10%" class="header"></th>                                     
+                                </tr>
+                            </thead>
+                            <tbody>  
+                                {% for dataStandardization in standardization %}
+                                    <tr {{ cycle(["even", "odd"], loop.index) }}>
+                                        <td>{{ loop.index }}</td>
+                                        <td>{{ dataStandardization.area }}</td>
+                                        <td>{{ dataStandardization.detection }}</td>
+                                        <td>{{ dataStandardization.code }}</td>
+                                        <td>{{ dataStandardization.type }}</td>
+                                        <td>{{ dataStandardization.description }}</td>
+                                        <td>{{ dataStandardization.treatment }}</td>                            
+                                        <th class="align-right vertical-center">                          
+                                            <span class="select compact">
+                                                <a href class="select-value form-edit">{{ 'pequiven.actions'|trans({},'messages') }}</a>
+                                            <span class="select-arrow"></span>
+                                                <span class="drop-down">                                    
+                                                    <a href ng-click="removeAnalysisTrend(data_trend='{{ data.id }}')" class="button icon-cross-round">{{ "pequiven.actions.delete"|trans({},"messages") }}</a>             
+                                                </span>
+                                            </span>
+                                        </th>                        
+                                    </tr>                                    
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>                 
+        {% else %}
+        <div class="new-row twelve-columns empty_row" align="center">
 			<br>No hay Carga                                
+        {% endif %}
 		</div> 
 	</div>
 </div>

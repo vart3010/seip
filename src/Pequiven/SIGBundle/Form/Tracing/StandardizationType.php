@@ -20,27 +20,30 @@ class StandardizationType extends AbstractType
             ->add('area', 'text', array(
                 'label' => 'Área o Proceso',
                 'label_attr' => array('class' => 'label'),
-                'attr'=> array('class'=> 'input input-large ' ))) 
-            ->add('detection', 'text', array(
+                'attr'=> array('class'=> 'input input-xlarge ' ))) 
+            ->add('detection', 'choice', array(            
                 'label' => 'Detección',
                 'label_attr' => array('class' => 'label'),
-                'attr'=> array('class'=> 'input input-large ' )))                        
+                'attr'=> array('class'=> 'select2 input-xlarge form-control' ),
+                    "choices" => \Pequiven\SIGBundle\Entity\Tracing\Standardization::getDetectionArray(),                     
+                    'required' => true,
+            ))                         
             ->add('code', 'text', array(
                 'label' => 'Codigo',
                 'label_attr' => array('class' => 'label'),
-                'attr'=> array('class'=> 'input input-large ' ))) 
+                'attr'=> array('class'=> 'input input-xlarge ' ))) 
             ->add('type', 'text', array(
                 'label' => 'Tipo de NC',
                 'label_attr' => array('class' => 'label'),
-                'attr'=> array('class'=> 'input input-large ' ))) 
-            ->add('description', 'text', array(
+                'attr'=> array('class'=> 'input input-xlarge ' ))) 
+            ->add('description', 'textarea', array(
                 'label' => 'Descripción de la NC',
                 'label_attr' => array('class' => 'label'),
-                'attr'=> array('class'=> 'input input-large ' ))) 
+                'attr'=> array('class'=> 'input input-xlarge ' ))) 
             ->add('treatment', 'text', array(
                 'label' => 'Tratamiento',
                 'label_attr' => array('class' => 'label'),
-                'attr'=> array('class'=> 'input input-large ' )))
+                'attr'=> array('class'=> 'input input-xlarge ' )))
         ;
     }
     

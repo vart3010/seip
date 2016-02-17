@@ -4,15 +4,16 @@ namespace Pequiven\SIGBundle\Entity\Tracing;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Pequiven\SIGBundle\Model\Tracing\Standardization as model;
 
 /**
  * Sistema de gestión
  *
- * @ORM\Table()
- * @ORM\Entity(repositoryClass="Pequiven\SIGBundle\Repository\Tracing\StandartizationRepository")
+ * @ORM\Table(name="ManagementSystem_Monitoring_Standardization") 
+ * @ORM\Entity(repositoryClass="Pequiven\SIGBundle\Repository\Tracing\StandardizationRepository")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
-class Standardization 
+class Standardization extends model
 {
     /**
      * @var integer
@@ -29,13 +30,6 @@ class Standardization
      * @ORM\Column(name="area",type="string",length=150)
      */
     private $area;
-
-    /**
-     * Detection
-     * @var string
-     * @ORM\Column(name="detection",type="string",length=150)
-     */
-    private $detection;
 
     /**
      * Code
@@ -92,6 +86,13 @@ class Standardization
      * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
      */
     private $deletedAt;
+
+    /**
+     * Sistemas de la Calidad
+     * @var \Pequiven\SIGBundle\Entity\ManagementSystem
+     * @ORM\ManyToOne(targetEntity="Pequiven\SIGBundle\Entity\ManagementSystem")
+     */
+    protected $managementSystem;
     
     /**
      * Constructor
@@ -131,29 +132,6 @@ class Standardization
     public function getArea()
     {
         return $this->area;
-    }
-
-    /**
-     * Set detection
-     *
-     * @param string $detection
-     * @return ManagementSystem
-     */
-    public function setDetection($detection)
-    {
-        $this->detection = $detection;
-
-        return $this;
-    }
-
-    /**
-     * Get detection
-     *
-     * @return string 
-     */
-    public function getDetection()
-    {
-        return $this->detection;
     }
 
     /**
@@ -342,6 +320,29 @@ class Standardization
     
     public function __toString() {
         return $this->getDescription()?:'-';
+    }
+
+     /**
+     * Set managementSystem
+     *
+     * @param \Pequiven\SIGBundle\Entity\ManagementSystem $managementSystem
+     * @return ManagementSystem
+     */
+    public function setManagementSystem(\Pequiven\SIGBundle\Entity\ManagementSystem $managementSystem = null)
+    {
+        $this->managementSystem = $managementSystem;
+
+        return $this;
+    }
+
+    /**
+     * Get managementSystem
+     *
+     * @return \Pequiven\SIGBundle\Entity\ManagementSystem 
+     */
+    public function getManagementSystem()
+    {
+        return $this->managementSystem;
     }
     
 }
