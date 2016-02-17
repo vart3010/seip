@@ -2447,7 +2447,7 @@ angular.module('seipModule.controllers', [])
             };
         })
 
-        .controller('MonitoringTracingSigController', function ($scope, notificationBarService, $http, notifyService, $filter) {
+        .controller('MonitoringTracingSigController', function ($scope, notificationBarService, $http, notifyService, $filter, $timeout) {
 
             var isInit = false;
             //Carga el formulario
@@ -2464,6 +2464,36 @@ angular.module('seipModule.controllers', [])
                 } else {
                     $scope.openModalAuto();
                 }
+            };
+
+            //Removiendo 
+            $scope.removeStandardization = function (AnalysisTrend) {
+                $scope.openModalConfirm('¿Desea eliminar el registro?', function () {
+                    notificationBarService.getLoadStatus().loading();
+                    var url = Routing.generate("pequiven_sig_monitoring_delete", {id: $scope.dataMonitoring});
+                    $http({
+                        method: 'GET',
+                        url: url,
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'}  // set the headers so angular passing info as form data (not request payload)
+                    }).success(function (data) {
+                        return true;
+                    }).error(function (data, status, headers, config) {
+                        if (data.errors) {
+                            if (data.errors.errors) {
+                                $.each(data.errors.errors, function (index, value) {
+                                    notifyService.error(Translator.trans(value));
+                                });
+                            }
+                        }
+                        notificationBarService.getLoadStatus().done();
+                        return false;
+                    });
+                    $timeout(callAtTimeout, 1000);                    
+                });
+                function callAtTimeout() {
+                    location.reload();
+                }
+                
             };
 
             //Añadir
@@ -2503,10 +2533,7 @@ angular.module('seipModule.controllers', [])
                     }
                     notificationBarService.getLoadStatus().done();
                     return false;
-                });
-                function callAtTimeout() {
-                    location.reload();
-                }
+                });                
             };
             $scope.templateOptions.setVar('addStandardization', addStandardization);
             var confirmCallBack = function () {

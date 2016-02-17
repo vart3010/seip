@@ -51,6 +51,13 @@ class Standardization extends model
      * @ORM\Column(name="treatment",type="string")
      */
     private $treatment;
+
+    /**
+     * status
+     * @var integer
+     * @ORM\Column(name="status",type="integer")
+     */
+    private $status = 0;
     
     /**
      * Habilitado para consultas
@@ -108,7 +115,7 @@ class Standardization extends model
      * Set area
      *
      * @param string $area
-     * @return ManagementSystem
+     * @return 
      */
     public function setArea($area)
     {
@@ -131,7 +138,7 @@ class Standardization extends model
      * Set code
      *
      * @param string $code
-     * @return ManagementSystem
+     * @return 
      */
     public function setCode($code)
     {
@@ -154,7 +161,7 @@ class Standardization extends model
      * Set description
      *
      * @param string $description
-     * @return ManagementSystem
+     * @return 
      */
     public function setDescription($description)
     {
@@ -177,7 +184,7 @@ class Standardization extends model
      * Set treatment
      *
      * @param string $treatment
-     * @return ManagementSystem
+     * @return treatment
      */
     public function setTreatment($treatment)
     {
@@ -197,10 +204,33 @@ class Standardization extends model
     }
 
     /**
+     * Set status
+     *
+     * @param string $status
+     * @return Status
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get status
+     *
+     * @return string 
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
      * Set createdAt
      *
      * @param \DateTime $createdAt
-     * @return ManagementSystem
+     * @return 
      */
     public function setCreatedAt($createdAt)
     {
@@ -223,7 +253,7 @@ class Standardization extends model
      * Set updatedAt
      *
      * @param \DateTime $updatedAt
-     * @return ManagementSystem
+     * @return 
      */
     public function setUpdatedAt($updatedAt)
     {
@@ -246,7 +276,7 @@ class Standardization extends model
      * Set deletedAt
      *
      * @param \DateTime $deletedAt
-     * @return ManagementSystem
+     * @return 
      */
     public function setDeletedAt($deletedAt)
     {
@@ -269,7 +299,7 @@ class Standardization extends model
      * Set enabled
      *
      * @param boolean $enabled
-     * @return ManagementSystem
+     * @return 
      */
     public function setEnabled($enabled)
     {

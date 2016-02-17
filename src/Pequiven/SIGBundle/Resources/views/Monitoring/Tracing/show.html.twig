@@ -13,34 +13,34 @@
                         <table id="table_data" class="table table-striped table-bordered" cellspacing="0" width="100%">          
                             <thead>
                                 <tr>                                
-                                    <th scope="col" width="2%" class="header">#</th>                                     
-                                    <th scope="col" width="30%" class="header">Area o Proceso</th>                                     
-                                    <th scope="col" width="10%" class="header">Detección</th>                                     
-                                    <th scope="col" width="10%" class="header">Codigo RNC</th>                                     
-                                    <th scope="col" width="10%" class="header">Tipo de NC</th>                                     
-                                    <th scope="col" width="30%" class="header">Descripción</th>                                     
-                                    <th scope="col" width="10%" class="header">Tratamiento</th>                                     
-                                    <th scope="col" width="10%" class="header"></th>                                     
+                                    <th scope="col"  class="header">#</th>                                     
+                                    <th scope="col"  class="header">Area o Proceso</th>                                     
+                                    <th scope="col"  class="header">Detección</th>                                     
+                                    <th scope="col"  class="header">Codigo RNC</th>                                     
+                                    <th scope="col"  class="header">Tipo de NC</th>                                     
+                                    <th scope="col"  class="header">Descripción</th>                                     
+                                    <th scope="col"  class="header">Tratamiento</th>                                     
+                                    <th scope="col"  class="header">Estatus</th>                                     
+                                    <th scope="col"  class="header"></th>                                     
                                 </tr>
                             </thead>
                             <tbody>  
                                 {% for dataStandardization in standardization %}
                                     <tr {{ cycle(["even", "odd"], loop.index) }}>
-                                        <td>{{ loop.index }}</td>
+                                        <td width="3%"><B>{{ loop.index }}</B></td>
                                         <td>{{ dataStandardization.area }}</td>
                                         <td>{{ detection[dataStandardization.detection - 1].description }}</td>
                                         <td>{{ dataStandardization.code }}</td>
                                         <td>{{ labelsTypeNc[dataStandardization.type - 1].description }}</td>
                                         <td>{{ dataStandardization.description }}</td>
                                         <td>{{ dataStandardization.treatment }}</td>                            
-                                        <th class="align-right vertical-center">                          
-                                            <span class="select compact">
-                                                <a href class="select-value form-edit">{{ 'pequiven.actions'|trans({},'messages') }}</a>
-                                            <span class="select-arrow"></span>
-                                                <span class="drop-down">                                    
-                                                    <a href ng-click="removeAnalysisTrend(data_trend='{{ data.id }}')" class="button icon-cross-round">{{ "pequiven.actions.delete"|trans({},"messages") }}</a>             
-                                                </span>
-                                            </span>
+                                        <td><B>{{ status[dataStandardization.status] }}</B></td>
+                                        <th class="align-right vertical-center" width="8%">  
+                                            {% if dataStandardization.status == 0 %}
+                                                <a href  class="button icon-pencil with-tooltip" title="Editar"></a>
+                                                <a href="{{ path('pequiven_sig_monitoring_notification',{'id':dataStandardization.id, 'idManagement': data.id })}}" class="button icon-bell with-tooltip" title="Notificar"></a>
+                                                <a href ng-click="removeStandardization(dataMonitoring='{{ dataStandardization.id }}')" class="button icon-trash with-tooltip confirm" title="Eliminar"></a>                                            
+                                            {% endif %}
                                         </th>                        
                                     </tr>                                    
                                 {% endfor %}
@@ -55,3 +55,4 @@
 		</div> 
 	</div>
 </div>
+

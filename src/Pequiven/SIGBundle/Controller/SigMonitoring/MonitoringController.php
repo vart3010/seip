@@ -101,12 +101,17 @@ class MonitoringController extends ResourceController
                     'description' => $this->trans($value, array(), 'PequivenSIGBundle'),
                 );
             }
+        $status = [
+            0 => "Sin Notificar",
+            1 => "Notificado"            
+        ];
 
     	return $this->render('PequivenSIGBundle:Monitoring:show.html.twig', array(
             'data'              => $managemensystems,
             'standardization'   => $standardization,
             'detection'         => $labelsDetection,
-            'labelsTypeNc'      => $labelsTypeNc
+            'labelsTypeNc'      => $labelsTypeNc,
+            'status'            => $status
             ));
     }
 
@@ -141,6 +146,42 @@ class MonitoringController extends ResourceController
         ;
         $view->getSerializationContext()->setGroups(array('id','api_list'));
         return $view;
+    }
+
+    public function notificationAction(Request $request){
+        
+        $em = $this->getDoctrine()->getManager();                        
+                    
+        $id = $request->get('id');
+
+        $standardization = $em->getRepository("\Pequiven\SIGBundle\Entity\Tracing\Standardization")->find($id);
+        
+        if($standardization){                   
+            $standardization->setStatus(1);        
+            $em->flush();
+            $this->get('session')->getFlashBag()->add('success', "Notificación Enviada Exitosamente");
+        }else{
+            $this->get('session')->getFlashBag()->add('success', "Notificación no procesada");            
+        }            
+        return $this->redirect($this->generateUrl("pequiven_sig_monitoring_show", array("id" => $request->get('idManagement'))));         
+        die();        
+    }
+
+    public function deleteAction(Request $request){
+        
+        $em = $this->getDoctrine()->getManager();
+        
+        $id = $request->get('id');
+
+        $standardization = $em->getRepository("\Pequiven\SIGBundle\Entity\Tracing\Standardization")->find($id);
+        
+        if($standardization){            
+            $em->remove($standardization);
+            $em->flush();
+            $this->get('session')->getFlashBag()->add('success', "Registro Eliminado Exitosamente");
+            die();
+        }  
+
     }
 
     public function exportAction(Request $request){
