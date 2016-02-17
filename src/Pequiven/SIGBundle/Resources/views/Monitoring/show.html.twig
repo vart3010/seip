@@ -44,6 +44,13 @@
 
 {% block javascripts %}
     {{ parent() }}    
+    <script type="text/javascript">
+    $(document).ready(function () {
+        $("#sig_standardization_detection").select2({        
+        });
+    });
+    </script>
+
     <!-- datatable -->
     <script src="{{  asset('bundles/pequivenseip/dataTable/dataTables.bootstrap.min.js') }}"></script>
     <script src="{{  asset('bundles/pequivenseip/dataTable/jquery.dataTables.min.js') }}"></script>

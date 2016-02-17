@@ -35,6 +35,25 @@ abstract class Standardization
      * @ORM\Column(name="detection", type="integer")
      */
     protected $detection;
+
+    /**
+     *  Tipo de no Conformidad
+     *
+     */
+    const TYPE_RE = 1;
+
+    /**
+     *  Tipo de no conformidad
+     *
+     */
+    const TYPE_PO = 2;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="type_nc", type="integer")
+     */
+    protected $type;
     
     /**
      * 
@@ -57,6 +76,27 @@ abstract class Standardization
         return $this->detection;
     }
 
+    /**
+     * 
+     * 
+     * @param integer
+     * @return 
+     */
+    function setType($type) {
+        $this->type = $type;
+        return $this;
+    }
+
+    /**
+     * 
+     * 
+     * @param integer
+     * @return 
+     */
+    function getType() {       
+        return $this->type;
+    }
+
     static function getDetectionArray()
     {
         static $getDetectionArray = [
@@ -65,6 +105,15 @@ abstract class Standardization
             self::DETECTION_AE => 'Auditoria Externa',           
         ];
         return $getDetectionArray;
+    }   
+
+    static function getTypeNcArray()
+    {
+        static $getTypeNcArray = [
+            self::TYPE_RE => 'Reales',
+            self::TYPE_PO => 'Potenciales',
+        ];
+        return $getTypeNcArray;
     }   
     
 }

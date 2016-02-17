@@ -88,9 +88,25 @@ class MonitoringController extends ResourceController
         
         $standardization = $em->getRepository("\Pequiven\SIGBundle\Entity\Tracing\Standardization")->findBy(array('managementSystem' => $id));
         
+        foreach (Standardization::getDetectionArray() as $key => $value) {
+                $labelsDetection[] = array(
+                    'id' => $key,
+                    'description' => $this->trans($value, array(), 'PequivenSIGBundle'),
+                );
+            }
+
+        foreach (Standardization::getTypeNcArray() as $key => $value) {
+                $labelsTypeNc[] = array(
+                    'id' => $key,
+                    'description' => $this->trans($value, array(), 'PequivenSIGBundle'),
+                );
+            }
+
     	return $this->render('PequivenSIGBundle:Monitoring:show.html.twig', array(
-            'data' => $managemensystems,
-            'standardization' => $standardization
+            'data'              => $managemensystems,
+            'standardization'   => $standardization,
+            'detection'         => $labelsDetection,
+            'labelsTypeNc'      => $labelsTypeNc
             ));
     }
 

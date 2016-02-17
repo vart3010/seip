@@ -28,9 +28,9 @@
                                     <tr {{ cycle(["even", "odd"], loop.index) }}>
                                         <td>{{ loop.index }}</td>
                                         <td>{{ dataStandardization.area }}</td>
-                                        <td>{{ dataStandardization.detection }}</td>
+                                        <td>{{ detection[dataStandardization.detection - 1].description }}</td>
                                         <td>{{ dataStandardization.code }}</td>
-                                        <td>{{ dataStandardization.type }}</td>
+                                        <td>{{ labelsTypeNc[dataStandardization.type - 1].description }}</td>
                                         <td>{{ dataStandardization.description }}</td>
                                         <td>{{ dataStandardization.treatment }}</td>                            
                                         <th class="align-right vertical-center">                          

@@ -39,13 +39,6 @@ class Standardization extends model
     private $code;
 
     /**
-     * type
-     * @var string
-     * @ORM\Column(name="type",type="string",length=150)
-     */
-    private $type;
-
-    /**
      * description
      * @var string
      * @ORM\Column(name="description",type="string")
@@ -155,29 +148,6 @@ class Standardization extends model
     public function getCode()
     {
         return $this->code;
-    }
-
-    /**
-     * Set type
-     *
-     * @param string $type
-     * @return ManagementSystem
-     */
-    public function setType($type)
-    {
-        $this->type = $type;
-
-        return $this;
-    }
-
-    /**
-     * Get type
-     *
-     * @return string 
-     */
-    public function getType()
-    {
-        return $this->type;
     }
 
     /**

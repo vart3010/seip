@@ -32,10 +32,13 @@ class StandardizationType extends AbstractType
                 'label' => 'Codigo',
                 'label_attr' => array('class' => 'label'),
                 'attr'=> array('class'=> 'input input-xlarge ' ))) 
-            ->add('type', 'text', array(
+            ->add('type', 'choice', array(            
                 'label' => 'Tipo de NC',
                 'label_attr' => array('class' => 'label'),
-                'attr'=> array('class'=> 'input input-xlarge ' ))) 
+                'attr'=> array('class'=> 'select2 input-xlarge form-control' ),
+                    "choices" => \Pequiven\SIGBundle\Entity\Tracing\Standardization::getTypeNcArray(),                     
+                    'required' => true,
+            )) 
             ->add('description', 'textarea', array(
                 'label' => 'Descripción de la NC',
                 'label_attr' => array('class' => 'label'),
