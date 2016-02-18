@@ -41,6 +41,19 @@ class UserController extends baseController {
     }
 
     /**
+     *
+     *
+     */
+    public function notificationAction(){
+        $securityContext = $this->container->get('security.context');        
+        $em = $this->getDoctrine()->getManager();                
+
+        $notification = $em->getRepository("\Pequiven\SEIPBundle\Entity\User\Notification")->findBy(array('user' => $securityContext->getToken()->getUser()));
+
+        return $this->render('PequivenSEIPBundle:User:notification.html.twig', array('notifications' => $notification));
+    }
+
+    /**
      * Función que devuelve el paginador con los objetivos operativos
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @return \Symfony\Component\HttpFoundation\JsonResponse

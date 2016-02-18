@@ -156,9 +156,13 @@ class MonitoringController extends ResourceController
 
         $standardization = $em->getRepository("\Pequiven\SIGBundle\Entity\Tracing\Standardization")->find($id);
         
-        if($standardization){                   
+        if($standardization){ 
+
             $standardization->setStatus(1);        
-            $em->flush();
+            $em->flush();            
+            
+            $notification = $this->getNotificationService()->setDataNotification('Estandarizacion', 'La data de estandarizacion ha sido cargada puede verificar', 5 ,1);            
+            
             $this->get('session')->getFlashBag()->add('success', "Notificación Enviada Exitosamente");
         }else{
             $this->get('session')->getFlashBag()->add('success', "Notificación no procesada");            
@@ -247,5 +251,13 @@ class MonitoringController extends ResourceController
         $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
         $objWriter->save('php://output');
         exit;
+    }
+
+    /**
+     *  Notification
+     *
+     */
+    protected function getNotificationService() {
+        return $this->container->get('seip.service.notification');
     }
 }

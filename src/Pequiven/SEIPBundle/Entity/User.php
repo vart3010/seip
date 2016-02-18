@@ -237,7 +237,6 @@ class User extends BaseUser implements UserInterface, UserBoxInterface, PeriodIt
     private $evolutionAction;
 
     /**
-
      * @var Pequiven\ArrangementProgramBundle\Entity\MovementEmployee\MovementEmployee
      * @ORM\OneToMany(targetEntity="Pequiven\ArrangementProgramBundle\Entity\MovementEmployee\MovementEmployee", mappedBy="User")
      * */
@@ -264,6 +263,18 @@ class User extends BaseUser implements UserInterface, UserBoxInterface, PeriodIt
     protected $quarterToLoadOperationProduction = 0;
 
     /**
+     * @ORM\Column(name="notify",type="integer",nullable=true)
+     */
+    private $notify;
+
+    /**
+     *
+     * @var \Pequiven\SEIPBundle\Entity\User\Notification
+     * @ORM\OneToMany(targetEntity="\Pequiven\SEIPBundle\Entity\User\Notification", mappedBy="user") 
+     */
+    private $notification;
+
+    /**
      * Constructor
      */
     public function __construct() {
@@ -281,6 +292,8 @@ class User extends BaseUser implements UserInterface, UserBoxInterface, PeriodIt
         $this->workStudyCircles = new \Doctrine\Common\Collections\ArrayCollection();
         $this->evolutionAction = new \Doctrine\Common\Collections\ArrayCollection();
         $this->feeStructure = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->notification = new ArrayCollection();
+
     }
 
     /**
@@ -1048,6 +1061,23 @@ class User extends BaseUser implements UserInterface, UserBoxInterface, PeriodIt
      */
     public function getQuarterToLoadOperationProduction() {
         return $this->quarterToLoadOperationProduction;
+    }
+
+    /**
+     * 
+     * @param type $notify
+     * @return 
+     */
+    public function setNotify($notify) {
+        $this->notify = $notify;
+    }
+
+    /**
+     * Get notify
+     * @return integer
+     */
+    public function getNotify() {
+        return $this->notify;
     }
 
 }

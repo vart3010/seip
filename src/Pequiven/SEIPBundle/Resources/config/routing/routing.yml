@@ -93,5 +93,10 @@ pequiven_seip_modules_contrataciones:
 pequiven_seip_modules_proyectos:
     path:     /module/proyectos
     defaults: { _controller: PequivenSEIPBundle:Default:module }
+
+pequiven_user_notification_data:
+    path: /user/notification
+    defaults:
+        _controller: pequiven_seip.controller.user:notificationAction  
     
 

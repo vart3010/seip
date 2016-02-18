@@ -1,0 +1,54 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}
+
+{% block before_body %}
+    {{ contentHeader(
+        ('Notificaciones'|trans)        
+    ) }}
+{% endblock %} 
+
+{% block body %}	
+<br>	
+<div class="with-padding">			
+	<div class="content-panel margin-bottom">
+		<div class="panel-navigation silver-gradient">
+			<div class="panel-control">
+				<a href="javascript:void(0);" class="button icon-undo">Refresh</a>
+			</div>
+			<div class="panel-load-target scrollable" style="height:490px">
+				<div class="navigable">
+					<ul class="unstyled-list open-on-panel-content">
+					{% for notification in notifications %}	
+						<li class="message-menu">
+							<span class="message-status">								
+								{% if notification.readNotification != true %}
+								<a href="javascript:void(0);" class="new-message" title="Mark as read">New</a>
+								{% endif %}
+							</span>
+							<span class="message-info">
+								<span class="blue">{{ notification.updatedAt | date("d/m/Y") }}</span>								
+							</span>
+							<a href title="Read message">
+								<strong class="blue">{{ notification.title }}</strong><br>
+								<strong>{{ notification.status }}</strong>
+							</a>
+						</li>
+					{% endfor %}	
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="panel-content linen">
+			<div class="panel-control align-right">				
+			</div>
+			<div class="panel-load-target scrollable with-padding" style="height:450px">				
+				<div class="large-box-shadow white-gradient with-border">
+					<div class="with-padding">
+						<p>Hello,</p>
+						<p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>								
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

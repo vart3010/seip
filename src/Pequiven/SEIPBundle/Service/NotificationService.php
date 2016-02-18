@@ -1,0 +1,81 @@
+<?php
+
+namespace Pequiven\SEIPBundle\Service;
+
+use Doctrine\Bundle\DoctrineBundle\Registry;
+use ErrorException;
+use Exception;
+use LogicException;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+
+use Pequiven\SEIPBundle\Entity\User\Notification;
+use Pequiven\SEIPBundle\Entity\User;
+
+
+/**
+ * Servicios para las notificaciones
+ * 
+ * 
+ * @author Máxmimo Sojo <maxsojo13@gmail.com>
+ */
+class NotificationService implements ContainerAwareInterface {
+
+    private $container;
+
+    /**
+     * 
+     * @param Notification
+     */
+    public function setDataNotification($title, $message, $type, $status) {
+        
+        $securityContext = $this->container->get('security.context');        
+        $em = $this->getDoctrine()->getManager();                
+        
+        $notificacion = new Notification();                
+
+        $notificacion->setTitle($title);
+        $notificacion->setDescription($message);        
+        $notificacion->setType($type);                                      
+        $notificacion->setStatus($status);                                      
+        $notificacion->setUser($securityContext->getToken()->getUser());                
+
+        $em->persist($notificacion);
+        $em->flush();            
+
+        $this->setUserNotification();
+    }
+
+    public function setUserNotification(){
+    	$securityContext = $this->container->get('security.context');
+    	$em = $this->getDoctrine()->getManager();                
+
+    	$user = $this->container->get('pequiven.repository.user')->find($securityContext->getToken()->getUser()->getId()); 
+    	$dataNotification = $user->getNotify() + 1;
+
+    	$user->setNotify($dataNotification);
+        $em->flush();                	
+    	
+    }
+
+    public function setContainer(ContainerInterface $container = null) {
+        $this->container = $container;
+    }
+	
+	/**
+     * Shortcut to return the Doctrine Registry service.
+     *
+     * @return Registry
+     *
+     * @throws LogicException If DoctrineBundle is not available
+     */
+    public function getDoctrine() {
+        if (!$this->container->has('doctrine')) {
+            throw new LogicException('The DoctrineBundle is not registered in your application.');
+        }
+
+        return $this->container->get('doctrine');
+    }
+
+}
+
