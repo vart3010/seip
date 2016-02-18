@@ -134,13 +134,14 @@
     <div class="twelve-columns twelve-columns-mobile">
         <table class="simple-table responsive-table responsive-table-on">
             <tr>
-                <th class="header text-center white-gradient" colspan="5">MIEMBROS DE 1X10</th>
+                <th class="header text-center white-gradient" colspan="5">MIEMBROS DE 1X10<div>Efectividad Voto 1x10= {{ efectividad }}</div></th>
             </tr>
             <tr class="header-tr">
                 <th scope="col" style="width: 5%; text-align: center;" class="header">Nª</th>
                 <th scope="col" style="width: 10%" class="header">Cédula</th>
-                <th scope="col" style="width: 30%" class=" header">Nombre</th>
-                <th scope="col" style="width: 30%" class=" header">Centro</th>
+                <th scope="col" style="width: 25%" class=" header">Nombre</th>
+                <th scope="col" style="width: 25%" class=" header">Centro</th>
+                <th scope="col" style="width: 10%" class=" header">Reportó Voto</th>
                 <th scope="col" style="width: 10%" class=" header">Votó</th>
                 <th scope="col" style="width: 15%" class=" header">Teléfono</th>
             </tr>
@@ -150,8 +151,13 @@
                     <td style="text-align: center;">{{ member.cedula }}</td>
                     <td>{{ member.nombre }}</td>
                     <td>{{ member.nombreCentro }}</td>
-                    {% set textoVoto = 'No' %}
+                    {% set textoReporteVoto = 'No' %}
                     {% if member.voto == 1 %}
+                        {% set textoReporteVoto = 'Sí' %}
+                    {% endif %}
+                    <td>{{ textoReporteVoto }}</td>
+                    {% set textoVoto = 'No' %}
+                    {% if member.vasamblea6 == 1 %}
                         {% set textoVoto = 'Sí' %}
                     {% endif %}
                     <td>{{ textoVoto }}</td>

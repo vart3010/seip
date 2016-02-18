@@ -44,6 +44,7 @@ class IndicatorFileAdmin extends \Pequiven\MasterBundle\Admin\BaseAdmin {
         ;
         parent::configureFormFields($form);
     }
+    
 
     protected function configureDatagridFilters(DatagridMapper $filter) {
         $filter
