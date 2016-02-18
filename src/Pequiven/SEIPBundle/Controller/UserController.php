@@ -46,11 +46,18 @@ class UserController extends baseController {
      */
     public function notificationAction(){
         $securityContext = $this->container->get('security.context');        
-        $em = $this->getDoctrine()->getManager();                
+        $em = $this->getDoctrine()->getManager();  
+
+        $types = [
+            1 => "Objetivos",
+            2 => "Programas",
+            3 => "Indicadores",
+            4 => "Seguimiento y Eficacia",
+        ];
 
         $notification = $em->getRepository("\Pequiven\SEIPBundle\Entity\User\Notification")->findBy(array('user' => $securityContext->getToken()->getUser()));
 
-        return $this->render('PequivenSEIPBundle:User:notification.html.twig', array('notifications' => $notification));
+        return $this->render('PequivenSEIPBundle:User:notification.html.twig', array('notifications' => $notification, 'types' => $types));
     }
 
     /**

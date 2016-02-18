@@ -6,33 +6,51 @@
     ) }}
 {% endblock %} 
 
-{% block body %}	
+{% block body %}
 <br>	
 <div class="with-padding">			
 	<div class="content-panel margin-bottom">
 		<div class="panel-navigation silver-gradient">
 			<div class="panel-control">
-				<a href="javascript:void(0);" class="button icon-undo">Refresh</a>
+				<a href class="button icon-undo" onclick="reload();">Actualizar</a>
 			</div>
 			<div class="panel-load-target scrollable" style="height:490px">
 				<div class="navigable">
 					<ul class="unstyled-list open-on-panel-content">
-					{% for notification in notifications %}	
-						<li class="message-menu">
-							<span class="message-status">								
-								{% if notification.readNotification != true %}
-								<a href="javascript:void(0);" class="new-message" title="Mark as read">New</a>
+						{% set cont = 1 %}
+						{% for type in types %}
+						<li class="big-menu grey-gradient with-right-arrow">
+							<span><span class="list-count">0</span>{{ types[cont] }}</span>	
+							<ul class="message-menu">
+							{% for notification in notifications %}
+								{% if notification.type == cont %}
+								<li>
+									<span class="message-status">								
+										{% if notification.readNotification != true %}
+											<a href="javascript:void(0);" class="new-message" title="Mensaje sin leer">Read</a>
+										{% endif %}
+											{% if notification.status == 1 %}
+												{% set color = "#f80000" %}
+											{% elseif notification.status == 2 %}
+												{% set color = "#0083c6" %}									
+											{% elseif notification.status == 3 %}
+												{% set color = "#3bc600" %}									
+											{% endif %}									
+											<a href="javascript:void(0);" class="" style="color:{{color}};"><i class="fa fa-tag"></i></a>		
+									</span>
+									<span class="message-info">
+										<span class="blue">{{ notification.updatedAt | date("d/m/Y") }}</span>								
+									</span>
+									<a href title="Read message">
+										<strong class="blue">{{ notification.title }}</strong><br>								
+									</a>
+								</li>
 								{% endif %}
-							</span>
-							<span class="message-info">
-								<span class="blue">{{ notification.updatedAt | date("d/m/Y") }}</span>								
-							</span>
-							<a href title="Read message">
-								<strong class="blue">{{ notification.title }}</strong><br>
-								<strong>{{ notification.status }}</strong>
-							</a>
+							{% endfor %}	
+							</ul>
 						</li>
-					{% endfor %}	
+						{% set cont = cont + 1 %}							
+						{% endfor %}
 					</ul>
 				</div>
 			</div>
@@ -43,12 +61,19 @@
 			<div class="panel-load-target scrollable with-padding" style="height:450px">				
 				<div class="large-box-shadow white-gradient with-border">
 					<div class="with-padding">
-						<p>Hello,</p>
-						<p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>								
+						<p>Selecciones un mensaje.</p>													
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
+{% endblock %}
+
+{% block javascript %}
+	<script type="text/javascript">
+	function reload(){
+		location.reload();
+	}
+	</script>
 {% endblock %}
