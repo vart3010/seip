@@ -157,6 +157,14 @@ class Goal implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface {
     protected $updateResultByAdmin = false;
 
     /**
+     * ¿La Meta Será Notificada Individualmente?
+     * 
+     * @var boolean
+     * @ORM\Column(name="notificationInd",type="boolean",nullable=true)
+     */
+    protected $notificationInd = false;
+
+    /**
      * Resultado modificado
      * 
      * @var float
@@ -605,6 +613,14 @@ class Goal implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface {
 
     function setRealResult($realResult) {
         $this->realResult = $realResult;
+    }
+
+    function getNotificationInd() {
+        return $this->notificationInd;
+    }
+
+    function setNotificationInd($notificationInd) {
+        $this->notificationInd = $notificationInd;
     }
 
     public function __clone() {

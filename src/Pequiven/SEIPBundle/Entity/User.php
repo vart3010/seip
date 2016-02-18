@@ -254,7 +254,7 @@ class User extends BaseUser implements UserInterface, UserBoxInterface, PeriodIt
      * @ORM\OneToMany(targetEntity="\Pequiven\SEIPBundle\Entity\User\MovementFeeStructure",mappedBy="User",cascade={"persist"}))
      */
     protected $movementFeeStructure;
-    
+
     /**
      * Trimestre que esta permitido notificar en el Módulo de Operaciones/Producción
      * @var integer
@@ -262,6 +262,14 @@ class User extends BaseUser implements UserInterface, UserBoxInterface, PeriodIt
      * @ORM\Column(name="quarterToLoadOperationProduction", type="integer")
      */
     protected $quarterToLoadOperationProduction = 0;
+
+    /**
+     * Metas Individuales
+     * 
+     * @var \Pequiven\ArrangementProgramBundle\Entity\GoalDetailsInd
+     * @ORM\OneToMany(targetEntity="Pequiven\ArrangementProgramBundle\Entity\GoalDetailsInd",mappedBy="user",cascade={"persist","remove"})
+     */
+    protected $goalDetailsInd;
 
     /**
      * Constructor
@@ -282,6 +290,8 @@ class User extends BaseUser implements UserInterface, UserBoxInterface, PeriodIt
         $this->evolutionAction = new \Doctrine\Common\Collections\ArrayCollection();
         $this->feeStructure = new \Doctrine\Common\Collections\ArrayCollection();
     }
+    
+    
 
     /**
      * Get id
@@ -1032,7 +1042,7 @@ class User extends BaseUser implements UserInterface, UserBoxInterface, PeriodIt
     public function getEvolutionAction() {
         return $this->evolutionAction;
     }
-    
+
     /**
      * 
      * @param type $quarterToLoadOperationProduction

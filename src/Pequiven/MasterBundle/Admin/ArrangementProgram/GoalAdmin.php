@@ -21,42 +21,42 @@ use Sonata\AdminBundle\Form\FormMapper;
  *
  * @author Carlos Mendoza <inhack20@gmail.com>
  */
-class GoalAdmin extends Admin
-{
-    protected function configureShowFields(\Sonata\AdminBundle\Show\ShowMapper $show)
-    {
+class GoalAdmin extends Admin {
+
+    protected function configureShowFields(\Sonata\AdminBundle\Show\ShowMapper $show) {
         $show
-            ->add('name')
-            ->add('startDate')
-            ->add('endDate')
-            ->add('weight')
-            ->add('goalDetails')
-            ->add('observations')
-            ->add('responsibles')
-                ;
-        if ($this->isGranted('ROLE_SEIP_UPDATE_RESULT_OBJECTS')){
+                ->add('name')
+                ->add('startDate')
+                ->add('endDate')
+                ->add('weight')
+                ->add('goalDetails')
+                ->add('observations')
+                ->add('responsibles')
+                ->add('notificationInd')
+        ;
+        if ($this->isGranted('ROLE_SEIP_UPDATE_RESULT_OBJECTS')) {
             $show
-                ->add('updateResultByAdmin')
-                ->add('resultModified')
-                    ;
+                    ->add('updateResultByAdmin')
+                    ->add('resultModified')
+            ;
         }
     }
-    
-    protected function configureFormFields(FormMapper $form) 
-    {
+
+    protected function configureFormFields(FormMapper $form) {
         $object = $this->getSubject();
         $form
-            ->add('name')
-            ->add('startDate','sonata_type_date_picker',array())
-            ->add('endDate','sonata_type_date_picker',array())
-            ->add('weight')
-            ->add('responsibles','sonata_type_model_autocomplete',array(
-                'property' => 'username',
-                'multiple' => true,
-            ))
-            ->add('observations')
-            ;
-        if ($this->isGranted('ROLE_SEIP_UPDATE_RESULT_OBJECTS')){
+                ->add('name')
+                ->add('startDate', 'sonata_type_date_picker', array())
+                ->add('endDate', 'sonata_type_date_picker', array())
+                ->add('weight')
+                ->add('notificationInd')
+                ->add('responsibles', 'sonata_type_model_autocomplete', array(
+                    'property' => 'username',
+                    'multiple' => true,
+                ))
+                ->add('observations')
+        ;
+        if ($this->isGranted('ROLE_SEIP_UPDATE_RESULT_OBJECTS')) {
             $form->add('updateResultByAdmin', null, array(
                 'required' => false,
             ));
@@ -67,35 +67,36 @@ class GoalAdmin extends Admin
             }
         }
     }
-    
-    protected function configureDatagridFilters(DatagridMapper $filter)
-    {
+
+    protected function configureDatagridFilters(DatagridMapper $filter) {
         $filter
-            ->add('name')
-            ->add('startDate')
-            ->add('endDate')
-            ->add('weight')
-            ->add("period")
-                ;
-        if ($this->isGranted('ROLE_SEIP_UPDATE_RESULT_OBJECTS')){
+                ->add('name')
+                ->add('startDate')
+                ->add('endDate')
+                ->add('weight')
+                ->add("period")
+                ->add('notificationInd')
+        ;
+        if ($this->isGranted('ROLE_SEIP_UPDATE_RESULT_OBJECTS')) {
             $filter->add('updateResultByAdmin');
         }
     }
-    
-    protected function configureListFields(ListMapper $list)
-    {
+
+    protected function configureListFields(ListMapper $list) {
         $list
-            ->addIdentifier('name')
-            ->add('startDate')
-            ->add('endDate')
-            ->add('weight')
-                ;
-        if ($this->isGranted('ROLE_SEIP_UPDATE_RESULT_OBJECTS')){
-            $list->add('updateResultByAdmin',null, array('editable' => true));
+                ->addIdentifier('name')
+                ->add('startDate')
+                ->add('endDate')
+                ->add('weight')
+                ->add('notificationInd')
+        ;
+        if ($this->isGranted('ROLE_SEIP_UPDATE_RESULT_OBJECTS')) {
+            $list->add('updateResultByAdmin', null, array('editable' => true));
         }
     }
-    
+
     protected function configureRoutes(\Sonata\AdminBundle\Route\RouteCollection $collection) {
         $collection->remove('create');
     }
+
 }

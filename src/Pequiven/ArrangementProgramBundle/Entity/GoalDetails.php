@@ -5,6 +5,7 @@ namespace Pequiven\ArrangementProgramBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Tpg\ExtjsBundle\Annotation as Extjs;
 use Pequiven\ArrangementProgramBundle\Model\GoalDetails as Base;
+use Pequiven\ArrangementProgramBundle\Entity\GoalDetailsInd;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
@@ -259,6 +260,14 @@ class GoalDetails extends Base {
      * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
      */
     private $deletedAt;
+
+    /**
+     * Metas Individuales
+     * 
+     * @var \Pequiven\ArrangementProgramBundle\Entity\GoalDetailsInd
+     * @ORM\OneToMany(targetEntity="Pequiven\ArrangementProgramBundle\Entity\GoalDetailsInd",mappedBy="goalDetails",cascade={"persist","remove"})
+     */
+    protected $goalDetailsInd;
 
     /**
      * Get id
@@ -824,7 +833,40 @@ class GoalDetails extends Base {
 
         return $this;
     }
+    
+    function getGoalWeight() {
+        return $this->goalWeight;
+    }
 
+    function getGoalDateStart() {
+        return $this->goalDateStart;
+    }
+
+    function getGoalDateEnd() {
+        return $this->goalDateEnd;
+    }
+
+    function getGoalDetailsInd() {
+        return $this->GoalDetailsInd;
+    }
+
+    function setGoalWeight($goalWeight) {
+        $this->goalWeight = $goalWeight;
+    }
+
+    function setGoalDateStart($goalDateStart) {
+        $this->goalDateStart = $goalDateStart;
+    }
+
+    function setGoalDateEnd($goalDateEnd) {
+        $this->goalDateEnd = $goalDateEnd;
+    }
+
+    function setGoalDetailsInd(\Pequiven\ArrangementProgramBundle\Entity\GoalDetailsInd $GoalDetailsInd) {
+        $this->GoalDetailsInd = $GoalDetailsInd;
+    }
+
+    
     public function __toString() {
         $toString = $this->getId() ? '' . $this->getId() : '-';
         return $toString;
@@ -839,13 +881,12 @@ class GoalDetails extends Base {
         $planTotal = 0;
         $months = self::getMonthsPlanned();
         $format = "get%s";
-        
+
         foreach ($months as $key => $value) {
             if ($month >= $value) {
-                $getPlanningMethod = sprintf($format,$key);
+                $getPlanningMethod = sprintf($format, $key);
                 $plan = $this->$getPlanningMethod();
                 $planTotal = $planTotal + $plan;
-                
             }
         }
         return $planTotal;
