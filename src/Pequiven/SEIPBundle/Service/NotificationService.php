@@ -58,6 +58,10 @@ class NotificationService implements ContainerAwareInterface {
     	
     }
 
+    public function getUserNotificationStandardization(){
+        
+    }
+
     public function setContainer(ContainerInterface $container = null) {
         $this->container = $container;
     }
