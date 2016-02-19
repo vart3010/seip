@@ -203,7 +203,6 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                 $form
                     ->with('Estratégico')
                     ->add('lineStrategics')
-                    ->add('orderShowFromParent')
                     ->end();
             }
         }
@@ -214,6 +213,7 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                 'property' => array('description'),
                 'required' => false,
             ))
+            ->add('orderShowFromParent')
             ->add('showByDashboardSpecific', null, array(
                 'required' => false,
             ))
