@@ -840,8 +840,9 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             }
         } else if ($tendenty->getRef() == \Pequiven\MasterBundle\Model\Tendency::TENDENCY_MIN) {//Decreciente
             $result = $indicator->getResult();
-            $resultValue = $indicator->getResult();
+//            $resultValue = $indicator->getResult();
             $indicator->setResultReal($result);
+//            var_dump($result);var_dump($indicator->getId());die();
 
             if ($error == null) {
                 if ($indicator->hasNotification()) {
@@ -855,13 +856,15 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
 //                        }
                         $result = 100;
                     } else if ($this->calculateRangeMiddle($indicator, $tendenty)) {//Rango Medio R*50%
-                        $result = 100 - $result;
+                        $result = $this->recalculateResultByRange($indicator, $tendenty);
                         $varMulti = 10 * $result;
                         $varDiv = bcdiv($varMulti, 100, 2);
                         $result = bcsub($result, $varDiv, 2);
 //                        $result = $result/2;
                     } else if ($this->calculateRangeBad($indicator, $tendenty)) {//Rango Rojo R*0%
-                        $result = 100 - $result;
+                        
+                        $result = $this->recalculateResultByRange($indicator, $tendenty);
+//                        var_dump($result);die();
                         $varMulti = 20 * $result;
                         $varDiv = bcdiv($varMulti, 100, 2);
                         $result = bcsub($result, $varDiv, 2);
@@ -1012,6 +1015,16 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 $varToCatch = $arrangementRange->getRankTopMixedTop();
                 $varMulti = $result * 100;
                 $result = bcdiv($varMulti, $varToCatch, 2);
+            }
+        } elseif ($tendency->getRef() == Tendency::TENDENCY_MIN){
+            if ($arrangementRange->getTypeRangeBottom() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_BOTTOM_BASIC]) {
+                $varToCatch = $arrangementRange->getRankBottomBasic();
+                $varMulti = $varToCatch * 100;
+                $result = bcdiv($varMulti, $result, 2);
+            } elseif ($arrangementRange->getTypeRangeBottom() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_BOTTOM_MIXED]) {
+                $varToCatch = $arrangementRange->getRankBottomMixedTop();
+                $varMulti = $varToCatch * 100;
+                $result = bcdiv($varMulti, $result, 2);
             }
         }
 
