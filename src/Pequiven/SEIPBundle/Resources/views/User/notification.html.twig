@@ -11,51 +11,63 @@
 <div class="with-padding">			
 	<div class="content-panel margin-bottom">
 		<div class="panel-navigation silver-gradient">
-			<div class="panel-control">
-				<a href class="button icon-undo" onclick="reload();">Actualizar</a>
-			</div>
+			<div class="panel-control"><a href class="button icon-undo" onclick="reload();">Actualizar</a></div>
 			<div class="panel-load-target scrollable" style="height:490px">
 				<div class="navigable">
-					<ul class="unstyled-list open-on-panel-content">
-						{% set cont = 1 %}
-						{% for type in types %}
-						<li class="big-menu grey-gradient with-right-arrow">
-							<span class="blue-gradient"><span class="list-count">0</span>{{ types[cont] }}</span>	
-							<ul class="message-menu">
-							{% for notification in notifications %}
-								{% if notification.type == cont %}
-								<li id="iMessage_{{ notification.id }}">
-									<span class="message-status">								
-										{% if notification.readNotification != true %}
-											{% set font = "fa-envelope" %}
-										{% else %}	
-											{% set font = "fa-envelope-o" %}
-										{% endif %}
-										<a href="javascript:void(0);" style="color:#ebd106;" id="" title="Mensaje sin leer">
-											<i class="fa {{ font }}" id="new-message_{{ notification.id }}"></i>
-											<i class="fa fa-envelope-o" id="out-message_{{ notification.id }}"  style='display:none;'></i>
-										</a>
-
-										{% if notification.status == 1 %}
-											{% set color = "#f80000" %}
-										{% elseif notification.status == 2 %}
-											{% set color = "#0083c6" %}									
-										{% elseif notification.status == 3 %}
-											{% set color = "#3bc600" %}									
-										{% endif %}									
-										<a href="javascript:void(0);" class="" style="color:{{color}};"><i class="fa fa-tag"></i></a>		
-									</span>
-									<a href title="Leer Notificación" id="title" onclick="showMessage({{ notification.id }});">
-										<strong class="blue">{{ notification.title }}</strong><br>	
-										<strong>{{ notification.createdAt | date("d/m/Y - H:i") }}</strong>							
-									</a>
+					<ul class="big-menu">
+						<li class="with-right-arrow">
+							<span class="blue-gradient"><span class="list-count">{{ app.user.notify }}</span><i class="fa fa-bell"></i>&nbsp;Recibidas</span>	
+								<ul class="big-menu menu_level_1">
+								{% set cont = 1 %}
+								{% for type in types %}
+								<li class="big-menu grey-gradient with-right-arrow">
+									<span class="blue-gradient"><span class="list-count">0</span>{{ types[cont] }}</span>	
+									<ul class="message-menu">
+										{% for notification in notifications %}
+											{% if notification.type == cont %}
+											<li id="iMessage_{{ notification.id }}">
+												<span class="message-status">								
+													{% if notification.readNotification != true %}
+														{% set font = "fa-envelope" %}
+													{% else %}	
+														{% set font = "fa-envelope-o" %}
+													{% endif %}
+													<a href="javascript:void(0);" style="color:#ebd106;" id="" title="Mensaje sin leer">
+														<i class="fa {{ font }}" id="new-message_{{ notification.id }}"></i>
+														<i class="fa fa-envelope-o" id="out-message_{{ notification.id }}"  style='display:none;'></i>
+													</a>
+													{% if notification.status == 1 %}
+														{% set color = "#f80000" %}
+													{% elseif notification.status == 2 %}
+														{% set color = "#0083c6" %}									
+													{% elseif notification.status == 3 %}
+														{% set color = "#3bc600" %}									
+													{% endif %}									
+													<a href="javascript:void(0);" class="" style="color:{{color}};"><i class="fa fa-tag"></i></a>		
+												</span>
+												<a href title="Leer Notificación" id="title" onclick="showMessage({{ notification.id }});">
+													<strong class="blue">{{ notification.title }}</strong><br>	
+													<strong>{{ notification.createdAt | date("d/m/Y - H:i") }}</strong>							
+												</a>
+											</li>
+											{% endif %}
+										{% endfor %}	
+									</ul>
 								</li>
-								{% endif %}
-							{% endfor %}	
+								{% set cont = cont + 1 %}							
+								{% endfor %}
 							</ul>
 						</li>
-						{% set cont = cont + 1 %}							
-						{% endfor %}
+						<li class="big-menu grey-gradient with-right-arrow">
+							<span class="blue-gradient"><span class="list-count">0</span><i class="fa fa-flag"></i>&nbsp;Importantes</span>	
+								<ul class="message-menu">
+								</ul>
+						</li>
+						<li class="big-menu grey-gradient with-right-arrow">
+							<span class="blue-gradient"><span class="list-count">0</span><i class="fa fa-trash"></i>&nbsp;Papelera</span>	
+								<ul class="message-menu">
+								</ul>
+						</li>
 					</ul>
 				</div>
 			</div>
@@ -70,7 +82,7 @@
 						<span class="button-group children-tooltip" id="sectionButton"></span>
 					</div>
 					<div class="with-padding">
-						<p id="messageNone">Selecciones un mensaje.</p>	
+						<p id="messageNone">Bienvenido a la Sección  de notificaciones del SEIP, Selecciones un mensaje.</p>	
 					</div>
 				</div>
 			</div>
@@ -107,6 +119,8 @@
                         $('#out-message_' + id).css('display','block');
                         $('#buttonToll').css('display', 'block');                        
                         document.getElementById("messageNone").innerHTML = data;
+                        //document.getElementById("messageNone").innerHTML = "<a href=\"{{ path('pequiven_sig_monitoring_show',{'id': 1 })}}\">Ver</a>";
+
                         document.getElementById("sectionButton").innerHTML = '<a href class="button" title="Eliminar" onclick="deleteMessage('+id+');"><span class="icon-trash"></span></a><a href class="button" title="Marcar como Importante"><span class="icon-flag"></span></a>';                                                
                     }
             });
