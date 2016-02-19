@@ -47,19 +47,45 @@ class NotificationService implements ContainerAwareInterface {
     }
 
     public function setUserNotification(){
-    	$securityContext = $this->container->get('security.context');
+    	
+        $securityContext = $this->container->get('security.context');
     	$em = $this->getDoctrine()->getManager();                
 
     	$user = $this->container->get('pequiven.repository.user')->find($securityContext->getToken()->getUser()->getId()); 
-    	$dataNotification = $user->getNotify() + 1;
 
+        $dataNotification = $user->getNotify() + 1;            
     	$user->setNotify($dataNotification);
-        $em->flush();                	
-    	
+        $em->flush();               	        
+
     }
 
     public function getUserNotificationStandardization(){
+
+    }
+
+    public function findMessageUser(){
         
+        $securityContext = $this->container->get('security.context');
+        $em = $this->getDoctrine()->getManager();                
+
+        $user = $this->container->get('pequiven.repository.user')->find($securityContext->getToken()->getUser()->getId()); 
+        
+        if ($user->getNotify() > 0) {
+            $dataNotification = $user->getNotify() - 1;
+            $user->setNotify($dataNotification);
+            $em->flush();      
+        }
+    }
+
+    public function findReadNotification($id){
+        
+        $em = $this->getDoctrine()->getManager();                
+
+        $notification = $em->getRepository("\Pequiven\SEIPBundle\Entity\User\Notification")->find($id);        
+        
+        $notification->setReadNotification(true);
+
+        $em->flush();      
     }
 
     public function setContainer(ContainerInterface $container = null) {

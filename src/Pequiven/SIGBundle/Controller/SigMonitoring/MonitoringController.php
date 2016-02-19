@@ -161,7 +161,7 @@ class MonitoringController extends ResourceController
             $standardization->setStatus(1);        
             $em->flush();            
             
-            $notification = $this->getNotificationService()->setDataNotification('Estandarizacion', 'La data de estandarizacion ha sido cargada puede verificar', 4 ,1);            
+            $notification = $this->getNotificationService()->setDataNotification('Estandarizacion', "La data de estandarizacion ha sido cargada puede verificar. <a href=''>Ver</a>", 4 , 1);            
             
             $this->get('session')->getFlashBag()->add('success', "Notificación Enviada Exitosamente");
         }else{
@@ -257,7 +257,7 @@ class MonitoringController extends ResourceController
      *  Notification
      *
      */
-    protected function getNotificationService() {
+    protected function getNotificationService() {        
         return $this->container->get('seip.service.notification');
     }
 }

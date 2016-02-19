@@ -97,6 +97,16 @@ pequiven_seip_modules_proyectos:
 pequiven_user_notification_data:
     path: /user/notification
     defaults:
-        _controller: pequiven_seip.controller.user:notificationAction  
+        _controller: pequiven_seip.controller.user:notificationAction 
+
+seip_notification_view_message:
+    path: /user/get-message
+    defaults:
+        _controller: pequiven_seip.controller.user:getNotificationAction
+
+seip_notification_delete_message:
+    path: /user/delete-message
+    defaults:
+        _controller: pequiven_seip.controller.user:delNotificationAction   
     
 

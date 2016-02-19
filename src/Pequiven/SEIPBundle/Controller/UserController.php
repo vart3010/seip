@@ -55,9 +55,49 @@ class UserController extends baseController {
             4 => "Seguimiento y Eficacia",
         ];
 
-        $notification = $em->getRepository("\Pequiven\SEIPBundle\Entity\User\Notification")->findBy(array('user' => $securityContext->getToken()->getUser()));
+        $notification = $em->getRepository("\Pequiven\SEIPBundle\Entity\User\Notification")->findBy(array('user' => $securityContext->getToken()->getUser()), array('createdAt' => 'DESC'));
 
         return $this->render('PequivenSEIPBundle:User:notification.html.twig', array('notifications' => $notification, 'types' => $types));
+    }
+    
+    /**
+     *
+     *
+     */
+    public function getNotificationAction(Request $request){
+        $response = new JsonResponse();        
+        
+        $em = $this->getDoctrine()->getManager();   
+
+        $notification = $em->getRepository("\Pequiven\SEIPBundle\Entity\User\Notification")->find($request->get('idMessage'));
+        
+        if ($notification->getReadNotification() != true) {
+            $this->getNotificationService()->findMessageUser();        
+            $this->getNotificationService()->findReadNotification($request->get('idMessage'));            
+        }
+        
+        $response->setData($notification->getDescription());
+
+        return $response;        
+    }
+
+    /**
+     *
+     *
+     */
+    public function delNotificationAction(Request $request){
+        $response = new JsonResponse();        
+        
+        $em = $this->getDoctrine()->getManager();   
+
+        $notification = $em->getRepository("\Pequiven\SEIPBundle\Entity\User\Notification")->find($request->get('idMessage'));
+        
+        $em->remove($notification);
+        $em->flush();
+        
+        $response->setData($notification->getDescription());
+
+        return $response;        
     }
 
     /**
@@ -329,6 +369,14 @@ class UserController extends baseController {
      */
     protected function getSecurityService() {
         return $this->container->get('seip.service.security');
+    }
+
+    /**
+     *  Notification
+     *
+     */
+    protected function getNotificationService() {        
+        return $this->container->get('seip.service.notification');        
     }
 
 }
