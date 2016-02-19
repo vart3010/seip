@@ -161,7 +161,7 @@ class PlantReportController extends SEIPController {
                 $totalP[] = array(
                     "id" => $productReport->getId(),
                     "name" => $productReport->getName(),
-                    "line" => $productReport->getProduct()->getName(),
+                    "line" => $productReport->getProduct()->getProductionLine(),
                     "unit" => $productReport->getProduct()->getProductUnit(),
                     "entityProductReport" => $productReport,
                     "groupsProducts" => ""
