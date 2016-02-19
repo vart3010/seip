@@ -27,8 +27,8 @@ class NotificationService implements ContainerAwareInterface {
      * 
      * @param Notification
      */
-    public function setDataNotification($title, $message, $type, $status) {
-        
+    public function setDataNotification($title, $message, $type, $status, $path) {
+
         $securityContext = $this->container->get('security.context');        
         $em = $this->getDoctrine()->getManager();                
         
@@ -38,6 +38,7 @@ class NotificationService implements ContainerAwareInterface {
         $notificacion->setDescription($message);        
         $notificacion->setType($type);                                      
         $notificacion->setStatus($status);                                      
+        $notificacion->setPath($path);                                      
         $notificacion->setUser($securityContext->getToken()->getUser());                
 
         $em->persist($notificacion);

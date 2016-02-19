@@ -79,6 +79,7 @@
 			<div class="panel-load-target scrollable with-padding no-margin-top" style="height:450px;background-color:#b8b8b8;">				
 				<div class="large-box-shadow white-gradient with-border">
 					<div class="button-height with-mid-padding silver-gradient no-margin-top" id="buttonToll" style='display:none;'>
+						<a id="href"></a>
 						<span class="button-group children-tooltip" id="sectionButton"></span>
 					</div>
 					<div class="with-padding">
@@ -118,9 +119,10 @@
                         $('#new-message_' + id).css('display','none');                        
                         $('#out-message_' + id).css('display','block');
                         $('#buttonToll').css('display', 'block');                        
-                        document.getElementById("messageNone").innerHTML = data;
+                        document.getElementById("messageNone").innerHTML = data['description'];
                         //document.getElementById("messageNone").innerHTML = "<a href=\"{{ path('pequiven_sig_monitoring_show',{'id': 1 })}}\">Ver</a>";
-
+                        console.log(data['path']);
+                        
                         document.getElementById("sectionButton").innerHTML = '<a href class="button" title="Eliminar" onclick="deleteMessage('+id+');"><span class="icon-trash"></span></a><a href class="button" title="Marcar como Importante"><span class="icon-flag"></span></a>';                                                
                     }
             });

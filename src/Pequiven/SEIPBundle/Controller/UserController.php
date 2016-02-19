@@ -76,7 +76,12 @@ class UserController extends baseController {
             $this->getNotificationService()->findReadNotification($request->get('idMessage'));            
         }
         
-        $response->setData($notification->getDescription());
+        $data = [
+            'description' => $notification->getDescription(),
+            'path'        => $notification->getPath()
+        ];
+
+        $response->setData($data);
 
         return $response;        
     }

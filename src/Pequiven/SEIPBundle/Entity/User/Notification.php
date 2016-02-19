@@ -78,6 +78,11 @@ class Notification {
      */
     private $status;
 
+    /**
+     * @ORM\Column(name="path", type="string", nullable=true)
+     */
+    private $path;
+
     /** 
      *
      * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\User",inversedBy="notification")
@@ -163,6 +168,14 @@ class Notification {
 
     function setStatus($status) {
         $this->status = $status;
+    }
+
+    function getPath() {
+        return $this->path;
+    }
+
+    function setPath($path) {
+        $this->path = $path;
     }
     
 }
