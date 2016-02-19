@@ -1019,10 +1019,18 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         } elseif ($tendency->getRef() == Tendency::TENDENCY_MIN){
             if ($arrangementRange->getTypeRangeBottom() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_BOTTOM_BASIC]) {
                 $varToCatch = $arrangementRange->getRankBottomBasic();
+                if($varToCatch == 0){
+                    $varToCatch = $varToCatch + 1;
+                    $result = $result + 1;
+                }
                 $varMulti = $varToCatch * 100;
                 $result = bcdiv($varMulti, $result, 2);
             } elseif ($arrangementRange->getTypeRangeBottom() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_BOTTOM_MIXED]) {
                 $varToCatch = $arrangementRange->getRankBottomMixedTop();
+                if($varToCatch == 0){
+                    $varToCatch = $varToCatch + 1;
+                    $result = $result + 1;
+                }
                 $varMulti = $varToCatch * 100;
                 $result = bcdiv($varMulti, $result, 2);
             }
