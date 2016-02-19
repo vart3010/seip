@@ -121,8 +121,9 @@
                         $('#buttonToll').css('display', 'block');                        
                         document.getElementById("messageNone").innerHTML = data['description'];
                         //document.getElementById("messageNone").innerHTML = "<a href=\"{{ path('pequiven_sig_monitoring_show',{'id': 1 })}}\">Ver</a>";
-                        console.log(data['path']);
-                        
+                        var path = data['path'];
+                        console.log(path);
+                        document.getElementById("href").innerHTML = "<a href='{{ path('pequiven_sig_monitoring_show',{'id': 1 })}}' class='button red-gradient float-right with-tooltip' title='Visualizar'>Visualizar</a>";
                         document.getElementById("sectionButton").innerHTML = '<a href class="button" title="Eliminar" onclick="deleteMessage('+id+');"><span class="icon-trash"></span></a><a href class="button" title="Marcar como Importante"><span class="icon-flag"></span></a>';                                                
                     }
             });
