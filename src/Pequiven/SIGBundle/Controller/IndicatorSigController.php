@@ -125,7 +125,7 @@ class IndicatorSigController extends ResourceController {
         $idIndicator = $request->get('id');
 
         $indicator = $this->get('pequiven.repository.indicator')->find($idIndicator); //Obtenemos el indicador        
-
+        
         //Validación para Visualizar informe de Evolución
         if (!$indicator->getShowEvolutionView()) {
             $this->get('session')->getFlashBag()->add('success', 'Indicador no Habilitado para Visualizar Informe de Evolución');
@@ -176,7 +176,7 @@ class IndicatorSigController extends ResourceController {
         }
 
         //Url export
-        $urlExportFromChart = $this->generateUrl('pequiven_indicator_evolution_export', array('id' => $indicatorBase->getId(), 'month' => $month, 'typeObj' => 1));
+        $urlExportFromChart = $this->generateUrl('pequiven_indicator_evolution_export_chart', array('id' => $request->get("id"), 'month' => $month, 'typeObj' => 1));
         
         //Carga de data de Indicador para armar grafica
         $response = new JsonResponse();
@@ -561,6 +561,7 @@ class IndicatorSigController extends ResourceController {
      */
     public function exportChrat(Request $request)
     {          
+        if($request->isMethod('POST')){
           $exportRequestStream = $request->request->all();          
           $request->request->remove('charttype');
           $request->request->remove('stream');
@@ -572,9 +573,12 @@ class IndicatorSigController extends ResourceController {
           $request->request->remove('meta_height');
           $request->request->remove('parameters');
           $fusionchartService = $this->getFusionChartExportService();          
-          $fileSVG = $fusionchartService->exportFusionChart($exportRequestStream);                                    
+          $fileSVG = $fusionchartService->exportFusionChart($exportRequestStream);           
+        }        
 
-        return $fileSVG;
+        //return $fileSVG;
+        $this->exportAction($request);            
+
     }
 
     /**
@@ -587,15 +591,13 @@ class IndicatorSigController extends ResourceController {
         $em = $this->getDoctrine()->getManager();
         $routing = $this->container->getParameter('kernel.root_dir')."/../web/php-export-handler/temp/*.png";
         
-        if($request->isMethod('POST')){
-          $fileSVG = $this->exportChrat($request);        
-        }        
-        
+        //$fileSVG = $this->exportChrat($request);        
+        sleep(1);
         //Buscando los Archivos por Codigo
         $nameSVG = glob("$routing");
         $user = $this->getUser()->getId();//Id Usuario    
         $user = str_pad($user, 6,"0", STR_PAD_LEFT);
-
+        
         $cont = 0;
         $contImg = 1;
         foreach ($nameSVG as $value) {            
@@ -711,10 +713,9 @@ class IndicatorSigController extends ResourceController {
             );
 
         //Solo si existen las dos graficas
-        if (isset($chartEvolution) AND isset($chartCause)) {
-            $dataChart = 
+        //if (isset($chartEvolution) AND isset($chartCause)) {            
             $this->generatePdf($data);            
-        }
+        //}
     }
 
     public function generatePdf($data) {
